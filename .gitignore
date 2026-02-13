@@ -1,0 +1,26 @@
+# Reference codebases - not to be committed
+_kode/
+
+# IDE
+.vscode/
+.idea/
+
+# Dependencies
+/vendor/
+node_modules/
+
+# Environment
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+build/
+*.log
+
+# Testing
+coverage/
