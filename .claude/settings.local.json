@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(robocopy:*)",
+      "Bash(git clone:*)"
+    ]
+  }
+}
