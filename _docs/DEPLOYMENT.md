@@ -64,8 +64,8 @@ Render Blueprint memungkinkan deploy semua services sekaligus dari file `render.
 3. Name: `kateglo-public`
 4. Region: Singapore
 5. Branch: `main`
-6. Build Command: `npm install --prefix frontend-public && npm run build --prefix frontend-public`
-7. Publish Directory: `frontend-public/dist`
+6. Build Command: `npm install --prefix frontend && npm run build --prefix frontend`
+7. Publish Directory: `frontend/dist`
 8. Environment Variables:
    ```
    VITE_API_URL=https://kateglo-api.onrender.com
@@ -80,8 +80,8 @@ Render Blueprint memungkinkan deploy semua services sekaligus dari file `render.
 3. Name: `kateglo-admin`
 4. Region: Singapore
 5. Branch: `main`
-6. Build Command: `npm install --prefix frontend-admin && npm run build --prefix frontend-admin`
-7. Publish Directory: `frontend-admin/dist`
+6. Build Command: `npm install --prefix admin && npm run build --prefix admin`
+7. Publish Directory: `admin/dist`
 8. Environment Variables:
    ```
    VITE_API_URL=https://kateglo-api.onrender.com
@@ -189,8 +189,8 @@ Upgrade ke Paid Plan untuk:
 Check package.json dependencies:
 ```bash
 npm install --prefix backend
-npm install --prefix frontend-public
-npm install --prefix frontend-admin
+npm install --prefix frontend
+npm install --prefix admin
 ```
 
 ### CORS Error

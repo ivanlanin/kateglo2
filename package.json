@@ -5,21 +5,21 @@
   "private": true,
   "workspaces": [
     "backend",
-    "frontend-public",
-    "frontend-admin",
+    "frontend",
+    "admin",
     "shared"
   ],
   "scripts": {
-    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend-public\" \"npm run dev --prefix frontend-admin\"",
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\" \"npm run dev --prefix admin\"",
     "dev:backend": "npm run dev --prefix backend",
-    "dev:public": "npm run dev --prefix frontend-public",
-    "dev:admin": "npm run dev --prefix frontend-admin",
-    "build": "npm run build --prefix backend && npm run build --prefix frontend-public && npm run build --prefix frontend-admin",
+    "dev:public": "npm run dev --prefix frontend",
+    "dev:admin": "npm run dev --prefix admin",
+    "build": "npm run build --prefix backend && npm run build --prefix frontend && npm run build --prefix admin",
     "build:backend": "npm run build --prefix backend",
-    "build:public": "npm run build --prefix frontend-public",
-    "build:admin": "npm run build --prefix frontend-admin",
-    "test": "npm run test --prefix backend && npm run test --prefix frontend-public && npm run test --prefix frontend-admin",
-    "lint": "npm run lint --prefix backend && npm run lint --prefix frontend-public && npm run lint --prefix frontend-admin"
+    "build:public": "npm run build --prefix frontend",
+    "build:admin": "npm run build --prefix admin",
+    "test": "npm run test --prefix backend && npm run test --prefix frontend && npm run test --prefix admin",
+    "lint": "npm run lint --prefix backend && npm run lint --prefix frontend && npm run lint --prefix admin"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
