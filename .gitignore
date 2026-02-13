@@ -1,5 +1,6 @@
 # Reference codebases - not to be committed
 _kode/
+_data/
 
 # IDE
 .vscode/
