@@ -29,8 +29,8 @@ services:
     name: kateglo-public
     env: static
     region: singapore
-    buildCommand: npm install --prefix frontend-public && npm run build --prefix frontend-public
-    staticPublishPath: ./frontend-public/dist
+    buildCommand: npm install --prefix frontend && npm run build --prefix frontend
+    staticPublishPath: ./frontend/dist
     envVars:
       - key: VITE_API_URL
         value: https://kateglo-api.onrender.com
@@ -51,8 +51,8 @@ services:
     name: kateglo-admin
     env: static
     region: singapore
-    buildCommand: npm install --prefix frontend-admin && npm run build --prefix frontend-admin
-    staticPublishPath: ./frontend-admin/dist
+    buildCommand: npm install --prefix admin && npm run build --prefix admin
+    staticPublishPath: ./admin/dist
     envVars:
       - key: VITE_API_URL
         value: https://kateglo-api.onrender.com

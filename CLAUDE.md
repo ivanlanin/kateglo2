@@ -19,13 +19,13 @@ kateglo2/
 │   ├── middleware/       # Auth, validation
 │   └── db/               # PostgreSQL connection
 │
-├── frontend-public/      # Public website (Port 5173)
+├── frontend/      # Public website (Port 5173)
 │   └── src/
 │       ├── pages/        # Page components
 │       ├── components/   # Reusable components
 │       └── api/          # API client
 │
-├── frontend-admin/       # Admin dashboard (Port 5174)
+├── admin/       # Admin dashboard (Port 5174)
 │   └── src/
 │       ├── pages/        # Admin pages
 │       ├── components/   # Admin components
@@ -125,8 +125,8 @@ npm install
 
 # Setup environment variables
 cp backend/.env.example backend/.env
-cp frontend-public/.env.example frontend-public/.env
-cp frontend-admin/.env.example frontend-admin/.env
+cp frontend/.env.example frontend/.env
+cp admin/.env.example admin/.env
 
 # Edit .env files with your values
 ```
@@ -158,8 +158,8 @@ npm test
 
 # Test specific workspace
 npm run test --prefix backend
-npm run test --prefix frontend-public
-npm run test --prefix frontend-admin
+npm run test --prefix frontend
+npm run test --prefix admin
 ```
 
 ## 📚 Reference Code

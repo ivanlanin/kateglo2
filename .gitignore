@@ -6,6 +6,9 @@ _data/
 .vscode/
 .idea/
 
+# Claude Code
+.claude/settings.local.json
+
 # Dependencies
 /vendor/
 node_modules/

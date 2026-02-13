@@ -7,8 +7,8 @@ Kamus, Tesaurus, dan Glosarium Bahasa Indonesia - Versi Modern
 Monorepo dengan 3 aplikasi terpisah:
 
 - **backend/** - API Server (Express.js + PostgreSQL)
-- **frontend-public/** - Situs Publik (React + Vite)
-- **frontend-admin/** - Panel Admin (React + Vite)
+- **frontend/** - Situs Publik (React + Vite)
+- **admin/** - Panel Admin (React + Vite)
 - **shared/** - Utilities & Types bersama
 
 ## Tech Stack
@@ -46,8 +46,8 @@ npm install
 
 # Install dependencies per workspace
 npm install --prefix backend
-npm install --prefix frontend-public
-npm install --prefix frontend-admin
+npm install --prefix frontend
+npm install --prefix admin
 ```
 
 ### Running Development
@@ -83,12 +83,12 @@ Project ini di-deploy sebagai 3 services terpisah di Render:
    - Start: `npm start --prefix backend`
 
 2. **kateglo-public** - Frontend Public (Static Site)
-   - Build: `npm run build --prefix frontend-public`
-   - Publish: `frontend-public/dist`
+   - Build: `npm run build --prefix frontend`
+   - Publish: `frontend/dist`
 
 3. **kateglo-admin** - Frontend Admin (Static Site)
-   - Build: `npm run build --prefix frontend-admin`
-   - Publish: `frontend-admin/dist`
+   - Build: `npm run build --prefix admin`
+   - Publish: `admin/dist`
 
 ## Project Structure
 
@@ -103,14 +103,14 @@ kateglo2/
 │   ├── middleware/       # Auth, validation, etc
 │   └── db/               # Database connection
 │
-├── frontend-public/      # Public website
+├── frontend/      # Public website
 │   ├── src/
 │   │   ├── pages/        # Page components
 │   │   ├── components/   # Reusable components
 │   │   └── api/          # API client
 │   └── public/
 │
-├── frontend-admin/       # Admin dashboard
+├── admin/       # Admin dashboard
 │   ├── src/
 │   │   ├── pages/        # Admin pages
 │   │   ├── components/   # Admin components
