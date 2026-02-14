@@ -6,4 +6,5 @@
 - Mengimpor basis data dari kateglo.lostfocus.org
 - Mengatur tampilan standar yang kurang lebih sama dengan versi lama
 - Menstandarkan _style_ dan menerapkan pilihan mode gelap/terang
-- Menjalankan `lint` dan menyiapan infrastruktur tes
+- Menjalankan `lint` dan menyiapkan infrastruktur tes
+- Menyederhanakan struktur tabel kamus menjadi lema, makna, contoh, dan label

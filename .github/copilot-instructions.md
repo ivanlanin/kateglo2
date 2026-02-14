@@ -15,6 +15,7 @@
 - Architecture Overview
 - Project Infrastructure
 - Shell & CLI Conventions
+- Python Runtime & Diagnostics
 - Database Connection & Schema
 - Backend Architecture Pattern
 - Frontend Guidelines
@@ -96,6 +97,50 @@ kateglo2/
 - **Navigation**: Gunakan `Set-Location` atau `cd`, hindari `cd /d` (CMD-only)
 - **Chaining**: Gunakan `;` untuk chaining commands
 - **File Search**: `Select-String -Path "pattern" -Pattern "search"` (PowerShell equivalent of grep)
+
+## Python Runtime & Diagnostics
+
+### Prinsip Umum
+- Selalu gunakan interpreter dari virtual environment workspace.
+- Hindari one-liner Python yang terlalu panjang di PowerShell (rawan gagal quoting).
+- Untuk pemeriksaan data SQLite, utamakan snippet kecil (1-2 query per eksekusi).
+
+### Interpreter Standar Workspace
+
+```powershell
+$py = "C:/Kode/Kateglo/kateglo2/.venv/Scripts/python.exe"
+```
+
+### Diagnostik Cepat (Wajib sebelum analisis/migrasi SQLite)
+
+```powershell
+Set-Location "C:/Kode/Kateglo/kateglo2"
+$py = "C:/Kode/Kateglo/kateglo2/.venv/Scripts/python.exe"
+
+# 1) Cek runtime
+& $py --version
+
+# 2) Cek sqlite module + versi sqlite
+& $py -c "import sqlite3; print(sqlite3.sqlite_version)"
+
+# 3) Cek akses file db + query dasar
+$code = @"
+import sqlite3
+conn = sqlite3.connect('_data/kbbi4.db')
+cur = conn.cursor()
+print('tables', cur.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table'").fetchone()[0])
+print('entri', cur.execute("SELECT COUNT(*) FROM entri").fetchone()[0])
+conn.close()
+print('diagnostic=OK')
+"@
+& $py -c $code
+```
+
+### Jika Eksekusi Sering "request cancelled"
+- Pecah query besar menjadi beberapa query kecil.
+- Gunakan file script sementara di `backend/` (prefix `check_`/`temp_`) daripada one-liner.
+- Saat memakai PowerShell, pakai here-string (`@" ... "@`) untuk kode multi-baris.
+- Setelah selesai, hapus script sementara (jangan commit).
 
 ## Database Connection & Schema
 
@@ -381,6 +426,12 @@ Set-Location backend; npx jest --no-watch
 
 # Run frontend build check
 Set-Location frontend; npm run build
+
+# Python diagnostics (SQLite source)
+Set-Location "C:/Kode/Kateglo/kateglo2"
+$py = "C:/Kode/Kateglo/kateglo2/.venv/Scripts/python.exe"
+& $py --version
+& $py -c "import sqlite3; print(sqlite3.sqlite_version)"
 ```
 
 ## Reference Code
