@@ -26,38 +26,38 @@ function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-14">
+    <nav className="navbar-root">
+      <div className="navbar-container">
+        <div className="navbar-inner">
           {/* Logo */}
-          <Link to="/" className="text-xl font-bold text-blue-700 shrink-0">
+          <Link to="/" className="navbar-logo">
             Kateglo
           </Link>
 
           {/* Pencarian (desktop) */}
-          <form onSubmit={handleCari} className="hidden md:flex items-center flex-1 max-w-md mx-6">
+          <form onSubmit={handleCari} className="navbar-search-desktop">
             <input
               type="text"
               placeholder="Cari kata..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-l-md focus:outline-none focus:border-blue-500"
+              className="navbar-search-input"
             />
             <button
               type="submit"
-              className="px-4 py-1.5 text-sm bg-blue-600 text-white rounded-r-md hover:bg-blue-700 shrink-0"
+              className="navbar-search-button"
             >
               Cari
             </button>
           </form>
 
           {/* Menu (desktop) */}
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="navbar-menu-desktop">
             {menuItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className="px-3 py-2 text-sm text-gray-700 rounded-md hover:bg-gray-100 hover:text-blue-700 transition-colors"
+                className="navbar-menu-link"
               >
                 {item.label}
               </Link>
@@ -68,10 +68,10 @@ function Navbar() {
           <button
             type="button"
             onClick={() => setMenuTerbuka(!menuTerbuka)}
-            className="md:hidden p-2 text-gray-600 hover:text-gray-900"
+            className="navbar-toggle"
             aria-label="Toggle menu"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="navbar-toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {menuTerbuka ? (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               ) : (
@@ -83,18 +83,18 @@ function Navbar() {
 
         {/* Menu mobile */}
         {menuTerbuka && (
-          <div className="md:hidden pb-4 border-t border-gray-100">
-            <form onSubmit={handleCari} className="flex items-center mt-3 mb-2">
+          <div className="navbar-mobile-panel">
+            <form onSubmit={handleCari} className="navbar-search-mobile">
               <input
                 type="text"
                 placeholder="Cari kata..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-l-md focus:outline-none focus:border-blue-500"
+                className="navbar-search-input"
               />
               <button
                 type="submit"
-                className="px-4 py-2 text-sm bg-blue-600 text-white rounded-r-md hover:bg-blue-700"
+                className="navbar-search-button navbar-search-button-mobile"
               >
                 Cari
               </button>
@@ -104,7 +104,7 @@ function Navbar() {
                 key={item.path}
                 to={item.path}
                 onClick={() => setMenuTerbuka(false)}
-                className="block px-3 py-2 text-sm text-gray-700 rounded-md hover:bg-gray-100"
+                className="navbar-mobile-link"
               >
                 {item.label}
               </Link>

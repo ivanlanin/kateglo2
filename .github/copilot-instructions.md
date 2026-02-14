@@ -258,6 +258,9 @@ function SearchResults({ query }) {
 - Gunakan utility classes dari TailwindCSS
 - Responsive: `sm:`, `md:`, `lg:` breakpoints
 - Warna utama: blue-600/700 untuk actions, gray-50/100 untuk background
+- Pusatkan styling komponen di `frontend/src/styles/index.css` (gunakan class semantik via `@layer components`)
+- Hindari styling manual di file JSX/skrip untuk komponen layout utama
+- Aktifkan dark mode dengan strategi class (`darkMode: 'class'`) dan sediakan toggle di footer setelah teks `Kateglo <versi>`
 
 ## API Routes Structure
 
