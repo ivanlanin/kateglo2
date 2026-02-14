@@ -9,13 +9,13 @@ const router = express.Router();
 
 router.get('/', async (_req, res, next) => {
   try {
-    const [statistik, lemaAcak, salahEja, populer] = await Promise.all([
+    const [statistik, lemaAcak, rujukan, populer] = await Promise.all([
       ModelBeranda.ambilStatistik(),
       ModelBeranda.ambilLemaAcak(10),
-      ModelBeranda.ambilSalahEja(5),
+      ModelBeranda.ambilRujukan(5),
       ModelBeranda.ambilPopuler(5),
     ]);
-    return res.json({ statistik, lemaAcak, salahEja, populer });
+    return res.json({ statistik, lemaAcak, rujukan, populer });
   } catch (error) {
     return next(error);
   }

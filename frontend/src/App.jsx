@@ -3,9 +3,9 @@ import TataLetak from './komponen/TataLetak';
 import Beranda from './halaman/Beranda';
 import Kamus from './halaman/Kamus';
 import KamusDetail from './halaman/KamusDetail';
+import Tesaurus from './halaman/Tesaurus';
+import TesaurusDetail from './halaman/TesaurusDetail';
 import Glosarium from './halaman/Glosarium';
-import Peribahasa from './halaman/Peribahasa';
-import Singkatan from './halaman/Singkatan';
 
 function App() {
   return (
@@ -13,10 +13,12 @@ function App() {
       <Route element={<TataLetak />}>
         <Route path="/" element={<Beranda />} />
         <Route path="/kamus" element={<Kamus />} />
-        <Route path="/kamus/:slug" element={<KamusDetail />} />
+        <Route path="/kamus/cari/:kata" element={<Kamus />} />
+        <Route path="/kamus/detail/:entri" element={<KamusDetail />} />
+        <Route path="/tesaurus" element={<Tesaurus />} />
+        <Route path="/tesaurus/cari/:kata" element={<Tesaurus />} />
+        <Route path="/tesaurus/:kata" element={<TesaurusDetail />} />
         <Route path="/glosarium" element={<Glosarium />} />
-        <Route path="/peribahasa" element={<Peribahasa />} />
-        <Route path="/singkatan" element={<Singkatan />} />
       </Route>
     </Routes>
   );

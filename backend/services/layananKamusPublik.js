@@ -2,7 +2,7 @@
  * @fileoverview Layanan kamus publik — business logic untuk pencarian dan detail kamus
  */
 
-const ModelFrasa = require('../models/modelFrasa');
+const ModelLema = require('../models/modelLema');
 
 function normalizeLimit(value, fallback = 20, max = 50) {
   const parsed = Number.parseInt(value, 10);
@@ -10,60 +10,76 @@ function normalizeLimit(value, fallback = 20, max = 50) {
   return Math.min(parsed, max);
 }
 
-function kelompokkanRelasi(relations) {
-  return relations.reduce((acc, row) => {
-    const key = row.rel_type;
-    if (!acc[key]) {
-      acc[key] = { nama: row.rel_type_name || key, daftar: [] };
-    }
-    acc[key].daftar.push(row.related_phrase);
-    return acc;
-  }, {});
-}
-
 async function cariKamus(query, limit) {
   const trimmed = (query || '').trim();
   if (!trimmed) return [];
   const safeLimit = normalizeLimit(limit, 20, 50);
-  return ModelFrasa.cariKamus(trimmed, safeLimit);
+  return ModelLema.cariLema(trimmed, safeLimit);
 }
 
-async function ambilDetailKamus(slug) {
-  const decodedSlug = decodeURIComponent((slug || '').trim());
-  if (!decodedSlug) return null;
+async function ambilDetailKamus(entri) {
+  const decodedEntri = decodeURIComponent((entri || '').trim());
+  if (!decodedEntri) return null;
 
-  const entry = await ModelFrasa.ambilFrasa(decodedSlug);
-  if (!entry) return null;
+  const lema = await ModelLema.ambilLema(decodedEntri);
+  if (!lema) return null;
 
-  const canonicalPhrase = entry.actual_phrase || entry.phrase;
-  const [definisi, relasi, peribahasa, terjemahan, tautan, kataDasar] = await Promise.all([
-    ModelFrasa.ambilDefinisi(canonicalPhrase),
-    ModelFrasa.ambilRelasi(canonicalPhrase),
-    ModelFrasa.ambilPeribahasa(canonicalPhrase),
-    ModelFrasa.ambilTerjemahan(canonicalPhrase),
-    ModelFrasa.ambilTautan(canonicalPhrase),
-    ModelFrasa.ambilKataDasar(canonicalPhrase),
+  // Jika ini rujukan, kembalikan info rujukan
+  if (lema.jenis_rujuk && lema.lema_rujuk) {
+    return {
+      lema: lema.lema,
+      jenis: lema.jenis,
+      jenis_rujuk: lema.jenis_rujuk,
+      lema_rujuk: lema.lema_rujuk,
+      rujukan: true,
+    };
+  }
+
+  const [maknaList, sublema, induk, terjemahan] = await Promise.all([
+    ModelLema.ambilMakna(lema.id),
+    ModelLema.ambilSublema(lema.id),
+    ModelLema.ambilInduk(lema.induk),
+    ModelLema.ambilTerjemahan(lema.lema),
   ]);
 
+  // Ambil contoh untuk semua makna
+  const maknaIds = maknaList.map((m) => m.id);
+  const contohList = await ModelLema.ambilContoh(maknaIds);
+
+  // Kelompokkan contoh per makna
+  const contohPerMakna = new Map();
+  for (const c of contohList) {
+    if (!contohPerMakna.has(c.makna_id)) {
+      contohPerMakna.set(c.makna_id, []);
+    }
+    contohPerMakna.get(c.makna_id).push(c);
+  }
+
+  const makna = maknaList.map((m) => ({
+    ...m,
+    contoh: contohPerMakna.get(m.id) || [],
+  }));
+
+  // Kelompokkan sublema per jenis
+  const sublemaPerJenis = {};
+  for (const s of sublema) {
+    if (!sublemaPerJenis[s.jenis]) {
+      sublemaPerJenis[s.jenis] = [];
+    }
+    sublemaPerJenis[s.jenis].push(s);
+  }
+
   return {
-    frasa: entry.phrase,
-    frasaAktual: entry.actual_phrase,
-    kelasLeksikal: entry.lex_class,
-    namaKelasLeksikal: entry.lex_class_name,
-    tipeFrasa: entry.phrase_type,
-    namaTipeFrasa: entry.phrase_type_name,
-    pelafalan: entry.pronounciation,
-    etimologi: entry.etymology,
-    info: entry.info,
-    catatan: entry.notes,
-    sumber: entry.ref_source,
-    namaSumber: entry.ref_source_name,
-    definisi,
-    relasi: kelompokkanRelasi(relasi),
-    peribahasa,
+    lema: lema.lema,
+    jenis: lema.jenis,
+    pemenggalan: lema.pemenggalan,
+    lafal: lema.lafal,
+    varian: lema.varian,
+    induk: induk ? { id: induk.id, lema: induk.lema } : null,
+    makna,
+    sublema: sublemaPerJenis,
     terjemahan,
-    tautan,
-    kataDasar,
+    rujukan: false,
   };
 }
 

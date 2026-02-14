@@ -1,5 +1,5 @@
 /**
- * @fileoverview Halaman Beranda — statistik, lema acak, salah eja, kata populer
+ * @fileoverview Halaman Beranda — statistik, lema acak, rujukan, kata populer
  */
 
 import { useState } from 'react';
@@ -21,12 +21,12 @@ function Beranda() {
     e.preventDefault();
     const trimmed = query.trim();
     if (!trimmed) return;
-    navigate(`/kamus?q=${encodeURIComponent(trimmed)}`);
+    navigate(`/kamus/cari/${encodeURIComponent(trimmed)}`);
   };
 
   const statistik = data?.statistik;
   const lemaAcak = data?.lemaAcak || [];
-  const salahEja = data?.salahEja || [];
+  const rujukan = data?.rujukan || [];
   const populer = data?.populer || [];
 
   return (
@@ -40,9 +40,8 @@ function Beranda() {
         {statistik && (
           <p className="beranda-stats">
             <Link to="/kamus" className="beranda-stats-link">{statistik.kamus.toLocaleString('id-ID')} lema</Link>,{' '}
-            <Link to="/glosarium" className="beranda-stats-link">{statistik.glosarium.toLocaleString('id-ID')} glosarium</Link>,{' '}
-            <Link to="/peribahasa" className="beranda-stats-link">{statistik.peribahasa.toLocaleString('id-ID')} peribahasa</Link>,{' '}
-            <Link to="/singkatan" className="beranda-stats-link">{statistik.singkatan.toLocaleString('id-ID')} singkatan</Link>
+            <Link to="/tesaurus" className="beranda-stats-link">{statistik.tesaurus.toLocaleString('id-ID')} tesaurus</Link>,{' '}
+            <Link to="/glosarium" className="beranda-stats-link">{statistik.glosarium.toLocaleString('id-ID')} glosarium</Link>
           </p>
         )}
 
@@ -71,7 +70,7 @@ function Beranda() {
           <h3 className="beranda-feature-title">Kamus</h3>
           <p className="beranda-feature-desc">Definisi dan makna kata</p>
         </Link>
-        <Link to="/kamus" className="beranda-feature-card">
+        <Link to="/tesaurus" className="beranda-feature-card">
           <div className="beranda-feature-icon">🔗</div>
           <h3 className="beranda-feature-title">Tesaurus</h3>
           <p className="beranda-feature-desc">Sinonim, antonim, dan relasi kata</p>
@@ -80,11 +79,6 @@ function Beranda() {
           <div className="beranda-feature-icon">🌐</div>
           <h3 className="beranda-feature-title">Glosarium</h3>
           <p className="beranda-feature-desc">Istilah teknis dari berbagai bidang</p>
-        </Link>
-        <Link to="/peribahasa" className="beranda-feature-card">
-          <div className="beranda-feature-icon">💬</div>
-          <h3 className="beranda-feature-title">Peribahasa</h3>
-          <p className="beranda-feature-desc">Pepatah dan peribahasa Indonesia</p>
         </Link>
       </div>
 
@@ -98,32 +92,32 @@ function Beranda() {
               <div className="beranda-tag-list">
                 {lemaAcak.map((item) => (
                   <Link
-                    key={item.phrase}
-                    to={`/kamus/${encodeURIComponent(item.phrase)}`}
+                    key={item.id}
+                    to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
                     className="beranda-tag-link"
                   >
-                    {item.phrase}
+                    {item.lema}
                   </Link>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Salah Eja */}
-          {salahEja.length > 0 && (
+          {/* Rujukan */}
+          {rujukan.length > 0 && (
             <div className="beranda-info-card">
-              <h3 className="beranda-info-title">Salah Eja</h3>
+              <h3 className="beranda-info-title">Rujukan</h3>
               <ul className="beranda-list">
-                {salahEja.map((item) => (
-                  <li key={item.phrase} className="beranda-list-item">
+                {rujukan.map((item) => (
+                  <li key={item.lema} className="beranda-list-item">
+                    <span className="beranda-wrong-text">{item.lema}</span>
+                    <span className="beranda-list-separator">→</span>
                     <Link
-                      to={`/kamus/${encodeURIComponent(item.actual_phrase)}`}
+                      to={`/kamus/detail/${encodeURIComponent(item.lema_rujuk)}`}
                       className="beranda-correct-link"
                     >
-                      ✓ {item.actual_phrase}
+                      {item.lema_rujuk}
                     </Link>
-                    <span className="beranda-list-separator">bukan</span>
-                    <span className="beranda-wrong-text">{item.phrase}</span>
                   </li>
                 ))}
               </ul>
@@ -138,7 +132,7 @@ function Beranda() {
                 {populer.map((item) => (
                   <li key={item.phrase}>
                     <Link
-                      to={`/kamus/${encodeURIComponent(item.phrase)}`}
+                      to={`/kamus/detail/${encodeURIComponent(item.phrase)}`}
                       className="beranda-popular-link"
                     >
                       {item.phrase}

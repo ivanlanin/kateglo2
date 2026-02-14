@@ -11,17 +11,27 @@ export async function ambilDataBeranda() {
   return response.data;
 }
 
-// === KAMUS (PENCARIAN & DETAIL) ===
+// === KAMUS ===
 
-export async function cariKamus(query, limit = 20) {
-  const response = await klien.get('/api/public/pencarian', {
-    params: { q: query, limit },
-  });
+export async function cariKamus(kata) {
+  const response = await klien.get(`/api/public/kamus/cari/${encodeURIComponent(kata)}`);
   return response.data;
 }
 
-export async function ambilDetailKamus(slug) {
-  const response = await klien.get(`/api/public/kamus/${encodeURIComponent(slug)}`);
+export async function ambilDetailKamus(entri) {
+  const response = await klien.get(`/api/public/kamus/detail/${encodeURIComponent(entri)}`);
+  return response.data;
+}
+
+// === TESAURUS ===
+
+export async function cariTesaurus(kata) {
+  const response = await klien.get(`/api/public/tesaurus/cari/${encodeURIComponent(kata)}`);
+  return response.data;
+}
+
+export async function ambilDetailTesaurus(kata) {
+  const response = await klien.get(`/api/public/tesaurus/${encodeURIComponent(kata)}`);
   return response.data;
 }
 
@@ -41,23 +51,5 @@ export async function ambilDaftarBidang() {
 
 export async function ambilDaftarSumber() {
   const response = await klien.get('/api/public/glosarium/sumber');
-  return response.data;
-}
-
-// === PERIBAHASA ===
-
-export async function cariPeribahasa({ q = '', limit = 20, offset = 0 } = {}) {
-  const response = await klien.get('/api/public/peribahasa', {
-    params: { q, limit, offset },
-  });
-  return response.data;
-}
-
-// === SINGKATAN ===
-
-export async function cariSingkatan({ q = '', kependekan = '', tag = '', limit = 20, offset = 0 } = {}) {
-  const response = await klien.get('/api/public/singkatan', {
-    params: { q, kependekan, tag, limit, offset },
-  });
   return response.data;
 }
