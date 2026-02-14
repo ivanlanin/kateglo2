@@ -67,10 +67,6 @@ kateglo2/
 │       ├── pages/        # Admin pages
 │       └── styles/       # Admin styles
 │
-├── shared/               # Shared utilities & constants
-│   ├── constants.js
-│   └── utils.js
-│
 ├── _kode/                # Reference code (NOT committed)
 │   ├── kateglo/          # Old PHP codebase (reference)
 │   └── narakita/         # Modern reference project (patterns)
@@ -78,8 +74,6 @@ kateglo2/
 ├── _data/                # Data migration scripts
 ├── _docs/                # Documentation + SQL migrations + struktur data
 │
-├── CLAUDE.md             # Claude Code quick reference
-├── render.yaml           # Render deployment config
 └── package.json          # Root workspace configuration
 ```
 
@@ -466,5 +460,3 @@ Deploy ke Render dengan 3 services:
 - `kateglo-api` — Backend (Web Service)
 - `kateglo-public` — Frontend Public (Static Site)
 - `kateglo-admin` — Frontend Admin (Static Site)
-
-Lihat `render.yaml` untuk detail.
