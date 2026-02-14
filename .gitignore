@@ -1,6 +1,7 @@
-# Reference codebases - not to be committed
+# References & Temporaries
 _kode/
 _data/
+.tmp/
 
 # IDE
 .vscode/
