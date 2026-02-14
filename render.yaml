@@ -8,8 +8,8 @@ services:
     env: node
     region: singapore
     plan: starter
-    buildCommand: npm install --prefix backend
-    startCommand: npm start --prefix backend
+    buildCommand: npm install
+    startCommand: npm start --workspace=backend
     envVars:
       - key: NODE_ENV
         value: production
@@ -29,7 +29,7 @@ services:
     name: kateglo-public
     env: static
     region: singapore
-    buildCommand: npm install --prefix frontend && npm run build --prefix frontend
+    buildCommand: npm install && npm run build --workspace=frontend
     staticPublishPath: ./frontend/dist
     envVars:
       - key: VITE_API_URL
@@ -51,7 +51,7 @@ services:
     name: kateglo-admin
     env: static
     region: singapore
-    buildCommand: npm install --prefix admin && npm run build --prefix admin
+    buildCommand: npm install && npm run build --workspace=admin
     staticPublishPath: ./admin/dist
     envVars:
       - key: VITE_API_URL
