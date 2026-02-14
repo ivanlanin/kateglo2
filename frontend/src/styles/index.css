@@ -9,6 +9,15 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  @apply bg-gray-50 text-gray-900;
+}
+
+.dark body {
+  @apply bg-dark-bg text-dark-text;
+}
+
+.dark {
+  color-scheme: dark;
 }
 
 code {
@@ -17,24 +26,380 @@ code {
 }
 
 @layer components {
+  .navbar-root {
+    @apply sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm;
+  }
+
+  .dark .navbar-root {
+    @apply bg-dark-bg-elevated border-dark-border;
+  }
+
+  .navbar-container {
+    @apply container mx-auto px-4;
+  }
+
+  .navbar-inner {
+    @apply flex items-center justify-between h-14;
+  }
+
+  .navbar-logo {
+    @apply text-xl font-bold text-blue-700 shrink-0;
+  }
+
+  .dark .navbar-logo {
+    @apply text-blue-300;
+  }
+
+  .navbar-search-desktop {
+    @apply hidden md:flex items-center flex-1 max-w-md mx-6;
+  }
+
+  .navbar-search-mobile {
+    @apply flex items-center mt-3 mb-2;
+  }
+
+  .navbar-search-input {
+    @apply w-full px-3 py-1.5 text-sm border border-gray-300 rounded-l-md bg-white text-gray-800;
+  }
+
+  .navbar-search-input:focus {
+    @apply outline-none border-blue-500;
+  }
+
+  .dark .navbar-search-input {
+    @apply bg-dark-bg-input border-dark-border text-dark-text;
+  }
+
+  .navbar-search-button {
+    @apply px-4 py-1.5 text-sm bg-blue-600 text-white rounded-r-md hover:bg-blue-700 shrink-0;
+  }
+
+  .dark .navbar-search-button {
+    @apply bg-blue-500 hover:bg-blue-400 text-dark-bg;
+  }
+
+  .navbar-search-button-mobile {
+    @apply py-2;
+  }
+
+  .navbar-menu-desktop {
+    @apply hidden md:flex items-center space-x-1;
+  }
+
+  .navbar-menu-link {
+    @apply px-3 py-2 text-sm text-gray-700 rounded-md hover:bg-gray-100 hover:text-blue-700 transition-colors;
+  }
+
+  .dark .navbar-menu-link {
+    @apply text-dark-text hover:bg-dark-bg-hover hover:text-blue-300;
+  }
+
+  .navbar-toggle {
+    @apply md:hidden p-2 text-gray-600 hover:text-gray-900;
+  }
+
+  .dark .navbar-toggle {
+    @apply text-dark-text-muted hover:text-dark-text;
+  }
+
+  .navbar-toggle-icon {
+    @apply w-6 h-6;
+  }
+
+  .navbar-mobile-panel {
+    @apply md:hidden pb-4 border-t border-gray-100;
+  }
+
+  .dark .navbar-mobile-panel {
+    @apply border-dark-border;
+  }
+
+  .navbar-mobile-link {
+    @apply block px-3 py-2 text-sm text-gray-700 rounded-md hover:bg-gray-100;
+  }
+
+  .dark .navbar-mobile-link {
+    @apply text-dark-text hover:bg-dark-bg-hover;
+  }
+
+  .beranda-container {
+    @apply container mx-auto px-4;
+  }
+
+  .beranda-hero {
+    @apply text-center py-16 md:py-24;
+  }
+
+  .beranda-title {
+    @apply text-5xl md:text-6xl font-bold text-gray-900 mb-4;
+  }
+
+  .dark .beranda-title {
+    @apply text-dark-text;
+  }
+
+  .beranda-subtitle {
+    @apply text-lg text-gray-600 mb-2 max-w-2xl mx-auto;
+  }
+
+  .dark .beranda-subtitle {
+    @apply text-dark-text-muted;
+  }
+
+  .beranda-stats {
+    @apply text-sm text-gray-500 mb-8;
+  }
+
+  .dark .beranda-stats {
+    @apply text-dark-text-muted;
+  }
+
+  .beranda-stats-link {
+    @apply text-blue-600 hover:underline;
+  }
+
+  .dark .beranda-stats-link {
+    @apply text-blue-400;
+  }
+
+  .beranda-search-form {
+    @apply max-w-xl mx-auto relative;
+  }
+
+  .beranda-search-input {
+    @apply w-full px-6 py-4 text-lg border-2 border-gray-300 rounded-xl bg-white text-gray-900 shadow-sm;
+  }
+
+  .beranda-search-input:focus {
+    @apply outline-none border-blue-500;
+  }
+
+  .dark .beranda-search-input {
+    @apply bg-dark-bg-input border-dark-border text-dark-text;
+  }
+
+  .beranda-search-button {
+    @apply absolute right-2 top-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors;
+  }
+
+  .dark .beranda-search-button {
+    @apply bg-blue-500 text-dark-bg hover:bg-blue-400;
+  }
+
+  .beranda-feature-grid {
+    @apply grid grid-cols-1 md:grid-cols-4 gap-4 mb-12;
+  }
+
+  .beranda-feature-card {
+    @apply p-5 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-200 transition-all;
+  }
+
+  .dark .beranda-feature-card {
+    @apply bg-dark-bg-elevated border-dark-border hover:border-blue-700 shadow-none;
+  }
+
+  .beranda-feature-icon {
+    @apply text-3xl mb-2;
+  }
+
+  .beranda-feature-title {
+    @apply font-semibold text-gray-900;
+  }
+
+  .beranda-feature-card:hover .beranda-feature-title {
+    @apply text-blue-700;
+  }
+
+  .dark .beranda-feature-title {
+    @apply text-dark-text;
+  }
+
+  .dark .beranda-feature-card:hover .beranda-feature-title {
+    @apply text-blue-300;
+  }
+
+  .beranda-feature-desc {
+    @apply text-sm text-gray-500 mt-1;
+  }
+
+  .dark .beranda-feature-desc {
+    @apply text-dark-text-muted;
+  }
+
+  .beranda-info-grid {
+    @apply grid grid-cols-1 md:grid-cols-3 gap-6 mb-12;
+  }
+
+  .beranda-info-card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-5;
+  }
+
+  .dark .beranda-info-card {
+    @apply bg-dark-bg-elevated border-dark-border shadow-none;
+  }
+
+  .beranda-info-title {
+    @apply font-semibold text-gray-800 mb-3;
+  }
+
+  .dark .beranda-info-title {
+    @apply text-dark-text;
+  }
+
+  .beranda-tag-list {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .beranda-tag-link {
+    @apply inline-block px-3 py-1 text-sm bg-blue-50 text-blue-700 rounded-full hover:bg-blue-100 transition-colors;
+  }
+
+  .dark .beranda-tag-link {
+    @apply bg-blue-900/30 text-blue-300 hover:bg-blue-900/50;
+  }
+
+  .beranda-list {
+    @apply space-y-2 text-sm;
+  }
+
+  .beranda-list-item {
+    @apply flex items-center gap-2;
+  }
+
+  .beranda-correct-link {
+    @apply text-green-700 font-medium hover:underline;
+  }
+
+  .dark .beranda-correct-link {
+    @apply text-green-400;
+  }
+
+  .beranda-list-separator {
+    @apply text-gray-400;
+  }
+
+  .dark .beranda-list-separator {
+    @apply text-dark-text-muted;
+  }
+
+  .beranda-wrong-text {
+    @apply text-red-600 line-through;
+  }
+
+  .dark .beranda-wrong-text {
+    @apply text-red-400;
+  }
+
+  .beranda-ordered-list {
+    @apply space-y-2 text-sm list-decimal list-inside;
+  }
+
+  .beranda-popular-link {
+    @apply text-blue-700 hover:underline;
+  }
+
+  .dark .beranda-popular-link {
+    @apply text-blue-300;
+  }
+
+  .kateglo-layout-root {
+    @apply min-h-screen bg-gray-50;
+  }
+
+  .dark .kateglo-layout-root {
+    @apply bg-dark-bg;
+  }
+
+  .kateglo-footer {
+    @apply border-t border-gray-200 bg-white mt-12;
+  }
+
+  .dark .kateglo-footer {
+    @apply border-dark-border bg-dark-bg-elevated;
+  }
+
+  .kateglo-footer-content {
+    @apply container mx-auto px-4 py-6 text-sm flex items-center justify-center gap-3;
+  }
+
+  .kateglo-version-button {
+    @apply text-blue-600 hover:underline;
+  }
+
+  .dark .kateglo-version-button {
+    @apply text-blue-400;
+  }
+
+  .kateglo-theme-toggle {
+    @apply inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-base border border-gray-200 transition-colors;
+  }
+
+  .kateglo-theme-toggle:hover {
+    @apply bg-gray-200;
+  }
+
+  .dark .kateglo-theme-toggle {
+    @apply bg-dark-bg-input border-dark-border;
+  }
+
+  .dark .kateglo-theme-toggle:hover {
+    @apply bg-dark-bg-hover;
+  }
+
   .modal-overlay {
     @apply fixed inset-0 bg-black/50 flex items-center justify-center z-50;
   }
 
+  .modal-overlay-kateglo {
+    @apply p-4;
+  }
+
   .modal-container-kateglo {
-    @apply w-full max-w-4xl bg-white rounded-xl shadow-xl border border-gray-200 flex flex-col;
+    @apply w-full max-w-4xl h-[85vh] bg-white rounded-xl shadow-xl border border-gray-200 flex flex-col;
+  }
+
+  .dark .modal-container-kateglo {
+    @apply bg-dark-bg-elevated border-dark-border;
   }
 
   .modal-header-kateglo {
-    @apply border-b border-gray-200;
+    @apply border-b border-gray-200 mb-0 flex items-center justify-between px-5 py-3;
+  }
+
+  .dark .modal-header-kateglo {
+    @apply border-dark-border;
+  }
+
+  .modal-tab-group {
+    @apply flex gap-2;
+  }
+
+  .modal-body-kateglo {
+    @apply flex-1 overflow-y-auto px-5 py-4;
   }
 
   .modal-footer-kateglo {
-    @apply border-t border-gray-200 flex justify-end;
+    @apply border-t border-gray-200 flex justify-end px-5 py-3;
+  }
+
+  .dark .modal-footer-kateglo {
+    @apply border-dark-border;
   }
 
   .modal-close-button {
-    @apply text-gray-500 hover:text-gray-700 transition-colors;
+    @apply text-gray-500 hover:text-gray-700 text-2xl leading-none transition-colors;
+  }
+
+  .dark .modal-close-button {
+    @apply text-dark-text-muted hover:text-dark-text;
+  }
+
+  .modal-close-action {
+    @apply px-4 py-2 text-sm rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200;
+  }
+
+  .dark .modal-close-action {
+    @apply bg-dark-bg-input text-dark-text hover:bg-dark-bg-hover;
   }
 
   .tab-button-pills-compact {
@@ -45,12 +410,24 @@ code {
     @apply bg-blue-100 text-blue-700 border border-blue-200;
   }
 
+  .dark .tab-button-pills-active {
+    @apply bg-blue-900/30 text-blue-300 border-blue-700;
+  }
+
   .tab-button-pills-inactive {
     @apply bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800;
   }
 
+  .dark .tab-button-pills-inactive {
+    @apply bg-dark-bg-input text-dark-text-muted hover:bg-dark-bg-hover hover:text-dark-text;
+  }
+
   .loading-spinner {
     @apply inline-flex items-center text-gray-600 bg-white px-4 py-2 rounded-lg shadow;
+  }
+
+  .dark .loading-spinner {
+    @apply text-dark-text bg-dark-bg-input;
   }
 
   .changelog-content ul {
@@ -75,28 +452,56 @@ code {
     padding-left: 1.25rem;
   }
 
+  .dark .changelog-content li {
+    @apply text-dark-text;
+  }
+
   .changelog-content p {
     @apply mb-3 text-gray-700 leading-relaxed;
+  }
+
+  .dark .changelog-content p {
+    @apply text-dark-text;
   }
 
   .changelog-content h1 {
     @apply text-xl font-bold mb-4 text-gray-900 mt-4;
   }
 
+  .dark .changelog-content h1 {
+    @apply text-dark-text;
+  }
+
   .changelog-content h2 {
     @apply text-lg font-semibold mb-3 text-gray-900 mt-3;
+  }
+
+  .dark .changelog-content h2 {
+    @apply text-dark-text;
   }
 
   .changelog-content h3 {
     @apply text-base font-medium mb-2 text-gray-900 mt-3;
   }
 
+  .dark .changelog-content h3 {
+    @apply text-dark-text;
+  }
+
   .changelog-content code {
     @apply text-sm px-1 py-0.5 rounded bg-gray-100 text-gray-800;
   }
 
+  .dark .changelog-content code {
+    @apply bg-dark-bg-input text-dark-text;
+  }
+
   .changelog-content pre {
     @apply p-4 rounded-lg bg-gray-100 overflow-x-auto mb-4;
+  }
+
+  .dark .changelog-content pre {
+    @apply bg-dark-bg-input;
   }
 
   .changelog-content pre code {
@@ -105,5 +510,9 @@ code {
 
   .changelog-content a {
     @apply text-blue-600 hover:text-blue-700 underline;
+  }
+
+  .dark .changelog-content a {
+    @apply text-blue-400 hover:text-blue-300;
   }
 }
