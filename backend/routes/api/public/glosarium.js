@@ -3,7 +3,7 @@
  */
 
 const express = require('express');
-const ModelGlosarium = require('../../../models/ModelGlosarium');
+const ModelGlosarium = require('../../../models/modelGlosarium');
 
 const router = express.Router();
 

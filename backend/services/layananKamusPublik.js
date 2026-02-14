@@ -2,7 +2,7 @@
  * @fileoverview Layanan kamus publik — business logic untuk pencarian dan detail kamus
  */
 
-const ModelFrasa = require('../models/ModelFrasa');
+const ModelFrasa = require('../models/modelFrasa');
 
 function normalizeLimit(value, fallback = 20, max = 50) {
   const parsed = Number.parseInt(value, 10);

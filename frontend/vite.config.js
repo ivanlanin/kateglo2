@@ -1,7 +1,17 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
+const buildTimestamp = (() => {
+  const now = new Date();
+  const date = now.toLocaleDateString('sv-SE', { timeZone: 'Asia/Jakarta' }).replace(/-/g, '');
+  const time = now.toLocaleTimeString('sv-SE', { timeZone: 'Asia/Jakarta', hour12: false }).slice(0, 5).replace(/:/g, '');
+  return `${date}.${time}`;
+})();
+
 export default defineConfig({
+  define: {
+    __APP_TIMESTAMP__: JSON.stringify(buildTimestamp),
+  },
   plugins: [react()],
   server: {
     port: 5173,
