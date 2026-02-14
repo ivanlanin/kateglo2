@@ -31,5 +31,19 @@
     "jest": "^29.7.0",
     "supertest": "^7.0.0",
     "eslint": "^8.57.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": ["<rootDir>/jest.setup.js"],
+    "testTimeout": 10000,
+    "forceExit": true,
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!node_modules/**",
+      "!coverage/**",
+      "!__tests__/**",
+      "!index.js",
+      "!jest.setup.js"
+    ]
   }
 }
