@@ -159,7 +159,42 @@ npm test
 npm run test --prefix backend
 npm run test --prefix frontend
 npm run test --prefix admin
+
+# Test dengan coverage
+npm run test:coverage --prefix backend
+npm run test:coverage --prefix frontend
+npm run test:coverage --prefix admin
+
+# Test file spesifik
+npx jest __tests__/middleware/errorHandler.test.js    # backend
+npx vitest run __tests__/komponen/Navbar.test.jsx     # frontend
 ```
+
+### Konvensi Testing
+
+**Struktur folder test:**
+```
+workspace/
+├── __tests__/
+│   ├── _support/         # Setup, helpers, mocks
+│   │   └── setup.js
+│   ├── models/           # Test model (backend)
+│   ├── middleware/        # Test middleware (backend)
+│   ├── db/               # Test database layer (backend)
+│   ├── komponen/          # Test komponen (frontend)
+│   └── halaman/           # Test halaman (frontend)
+```
+
+**Pola penulisan test:**
+- Mock hoisting: semua `vi.mock()` / `jest.mock()` SEBELUM import
+- Satu `describe` per modul/komponen
+- Nama test dalam bahasa Indonesia
+- Gunakan `createMockReqRes()` helper untuk test Express middleware/route
+- Prefiks `_` untuk parameter yang wajib ada tapi tidak dipakai
+
+**Framework:**
+- Backend: Jest + Supertest
+- Frontend/Admin: Vitest + Testing Library
 
 ## 📚 Reference Code
 
