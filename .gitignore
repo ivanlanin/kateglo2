@@ -3,12 +3,10 @@ _kode/
 _data/
 .tmp/
 
-# IDE
+# System
 .vscode/
 .idea/
-
-# Claude Code
-.claude/settings.local.json
+.claude/
 
 # Dependencies
 /vendor/
