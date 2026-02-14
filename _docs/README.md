@@ -31,6 +31,9 @@ Contoh:
 
 ## Akses Cepat
 
+- [Changelog](../frontend/public/changelog.md) — perubahan user-facing
+- [Todo](../frontend/public/todo.md) — daftar pekerjaan aktif
+
 ### Februari 2026
 - [Migrasi varchar ke text & optimasi indeks](202602/20260214_migrasi-database-v2.md)
 

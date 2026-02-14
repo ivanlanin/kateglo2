@@ -21,6 +21,7 @@
 - API Routes Structure
 - Error Handling & Security
 - Development Workflow
+- Changelog
 - Cheat-sheet (Quick Commands)
 
 ## Architecture Overview
@@ -177,7 +178,7 @@ router.get('/', async (req, res) => {
 
 ### Model Pattern Example
 ```javascript
-// backend/models/ModelFrasa.js
+// backend/models/modelFrasa.js
 const db = require('../db');
 
 class ModelFrasa {
@@ -342,6 +343,16 @@ npm run dev:admin         # Port 5174
   ```
 - **Cleanup**: WAJIB hapus setelah selesai (jangan commit ke git)
 
+## Changelog
+
+- Catatan perubahan user-facing disimpan di `frontend/public/changelog.md`.
+- Daftar pekerjaan aktif disimpan di `frontend/public/todo.md`.
+- Untuk perubahan teknis detail, tetap buat dokumen periodik di `_docs/YYYYMM/`.
+
+## Changelog Manual Edit Policy
+
+- Abaikan perubahan tak terduga pada `frontend/public/changelog.md` karena user dapat mengubahnya secara manual.
+
 ## Cheat-sheet (Quick Commands)
 
 ```powershell
@@ -377,7 +388,7 @@ Gunakan `_kode/` sebagai referensi:
 ## Important Conventions
 
 ### Naming
-- **Files**: camelCase untuk JS files (e.g., `ModelFrasa.js`, `apiPublik.js`)
+- **Files**: camelCase untuk JS files (e.g., `modelFrasa.js`, `apiPublik.js`)
 - **Components**: PascalCase (e.g., `SearchBar.jsx`, `DictionaryDetail.jsx`)
 - **Constants**: camelCase (NOT SCREAMING_SNAKE_CASE)
 - **Database**: snake_case (matching PostgreSQL convention)

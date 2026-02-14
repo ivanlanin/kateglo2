@@ -3,7 +3,7 @@
  */
 
 const express = require('express');
-const ModelBeranda = require('../../../models/ModelBeranda');
+const ModelBeranda = require('../../../models/modelBeranda');
 
 const router = express.Router();
 

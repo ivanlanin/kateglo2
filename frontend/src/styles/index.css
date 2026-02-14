@@ -15,3 +15,95 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@layer components {
+  .modal-overlay {
+    @apply fixed inset-0 bg-black/50 flex items-center justify-center z-50;
+  }
+
+  .modal-container-kateglo {
+    @apply w-full max-w-4xl bg-white rounded-xl shadow-xl border border-gray-200 flex flex-col;
+  }
+
+  .modal-header-kateglo {
+    @apply border-b border-gray-200;
+  }
+
+  .modal-footer-kateglo {
+    @apply border-t border-gray-200 flex justify-end;
+  }
+
+  .modal-close-button {
+    @apply text-gray-500 hover:text-gray-700 transition-colors;
+  }
+
+  .tab-button-pills-compact {
+    @apply py-1.5 px-4 text-sm font-medium rounded-full transition-all whitespace-nowrap;
+  }
+
+  .tab-button-pills-active {
+    @apply bg-blue-100 text-blue-700 border border-blue-200;
+  }
+
+  .tab-button-pills-inactive {
+    @apply bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800;
+  }
+
+  .loading-spinner {
+    @apply inline-flex items-center text-gray-600 bg-white px-4 py-2 rounded-lg shadow;
+  }
+
+  .changelog-content ul {
+    @apply mb-4 space-y-1;
+    list-style-type: disc;
+    list-style-position: inside;
+    padding-left: 0;
+    margin-left: 0;
+  }
+
+  .changelog-content ol {
+    @apply mb-4 space-y-1;
+    list-style-type: decimal;
+    list-style-position: inside;
+    padding-left: 0;
+    margin-left: 0;
+  }
+
+  .changelog-content li {
+    @apply text-gray-700;
+    text-indent: -1.25rem;
+    padding-left: 1.25rem;
+  }
+
+  .changelog-content p {
+    @apply mb-3 text-gray-700 leading-relaxed;
+  }
+
+  .changelog-content h1 {
+    @apply text-xl font-bold mb-4 text-gray-900 mt-4;
+  }
+
+  .changelog-content h2 {
+    @apply text-lg font-semibold mb-3 text-gray-900 mt-3;
+  }
+
+  .changelog-content h3 {
+    @apply text-base font-medium mb-2 text-gray-900 mt-3;
+  }
+
+  .changelog-content code {
+    @apply text-sm px-1 py-0.5 rounded bg-gray-100 text-gray-800;
+  }
+
+  .changelog-content pre {
+    @apply p-4 rounded-lg bg-gray-100 overflow-x-auto mb-4;
+  }
+
+  .changelog-content pre code {
+    @apply bg-transparent p-0;
+  }
+
+  .changelog-content a {
+    @apply text-blue-600 hover:text-blue-700 underline;
+  }
+}

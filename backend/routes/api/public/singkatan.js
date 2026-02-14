@@ -3,7 +3,7 @@
  */
 
 const express = require('express');
-const ModelSingkatan = require('../../../models/ModelSingkatan');
+const ModelSingkatan = require('../../../models/modelSingkatan');
 
 const router = express.Router();
 

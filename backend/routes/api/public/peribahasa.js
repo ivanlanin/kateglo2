@@ -3,7 +3,7 @@
  */
 
 const express = require('express');
-const ModelPeribahasa = require('../../../models/ModelPeribahasa');
+const ModelPeribahasa = require('../../../models/modelPeribahasa');
 
 const router = express.Router();
 
