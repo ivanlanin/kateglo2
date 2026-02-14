@@ -231,6 +231,29 @@ function Dictionary({ slug }) {
 }
 ```
 
+## 🔧 Linting
+
+**WAJIB**: Jalankan lint setelah setiap perubahan kode.
+
+```bash
+# Lint semua workspace
+npm run lint
+
+# Lint per workspace
+npm run lint --prefix backend
+npm run lint --prefix frontend
+npm run lint --prefix admin
+
+# Auto-fix
+npm run lint:fix --prefix backend
+npm run lint:fix --prefix frontend
+npm run lint:fix --prefix admin
+```
+
+- Semua warning dan error harus diperbaiki sebelum commit
+- Variabel yang tidak dipakai harus dihapus (atau diberi prefiks `_` jika memang diperlukan sebagai parameter)
+- Konfigurasi ESLint ada di `.eslintrc.json` masing-masing workspace
+
 ## 🚨 Important Rules
 
 ### Authentication
