@@ -7,6 +7,9 @@ import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { cariSingkatan } from '../api/apiPublik';
 import Paginasi from '../komponen/Paginasi';
+import HalamanDasar from '../komponen/HalamanDasar';
+import { EmptyInfoCard, QueryFeedback, TableResultCard } from '../komponen/StatusKonten';
+import { updateSearchParams, updateSearchParamsWithOffset } from '../utils/searchParams';
 
 function Singkatan() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -28,56 +31,54 @@ function Singkatan() {
 
   const handleCari = (e) => {
     e.preventDefault();
-    const params = {};
-    if (inputQuery.trim()) params.q = inputQuery.trim();
-    if (inputKependekan.trim()) params.kependekan = inputKependekan.trim();
-    setSearchParams(params);
+    updateSearchParams(setSearchParams, {
+      q: inputQuery,
+      kependekan: inputKependekan,
+    });
   };
 
   const handleOffset = (newOffset) => {
-    const params = {};
-    if (qParam) params.q = qParam;
-    if (kependekanParam) params.kependekan = kependekanParam;
-    if (newOffset > 0) params.offset = String(newOffset);
-    setSearchParams(params);
+    updateSearchParamsWithOffset(setSearchParams, {
+      q: qParam,
+      kependekan: kependekanParam,
+    }, newOffset);
   };
 
   const results = data?.data || [];
   const total = data?.total || 0;
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Singkatan &amp; Akronim</h1>
+    <HalamanDasar judul="Singkatan & Akronim">
 
       {/* Panel pencarian */}
-      <form onSubmit={handleCari} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
+      <form onSubmit={handleCari} className="content-card p-4 mb-6">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <label htmlFor="abbr-q" className="block text-xs font-medium text-gray-600 mb-1">Singkatan</label>
+            <label htmlFor="abbr-q" className="form-label">Singkatan</label>
             <input
               id="abbr-q"
               type="text"
               value={inputQuery}
               onChange={(e) => setInputQuery(e.target.value)}
               placeholder="Mis. BUMN, UNESCO..."
-              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+              className="form-input"
             />
           </div>
           <div>
-            <label htmlFor="abbr-kepanjangan" className="block text-xs font-medium text-gray-600 mb-1">Kepanjangan</label>
+            <label htmlFor="abbr-kepanjangan" className="form-label">Kepanjangan</label>
             <input
               id="abbr-kepanjangan"
               type="text"
               value={inputKependekan}
               onChange={(e) => setInputKependekan(e.target.value)}
               placeholder="Cari dalam kepanjangan..."
-              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+              className="form-input"
             />
           </div>
           <div className="flex items-end">
             <button
               type="submit"
-              className="w-full px-5 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              className="btn-primary w-full"
             >
               Cari
             </button>
@@ -85,25 +86,30 @@ function Singkatan() {
         </div>
       </form>
 
-      {isLoading && <p className="text-gray-600">Mencari singkatan...</p>}
-      {isError && <p className="text-red-600">Gagal mengambil data.</p>}
+      <QueryFeedback
+        isLoading={isLoading}
+        isError={isError}
+        loadingText="Mencari singkatan..."
+        errorText="Gagal mengambil data."
+      />
 
       {!sedangMencari && !isLoading && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <p className="text-gray-500">Gunakan kolom pencarian di atas untuk mencari singkatan atau akronim.</p>
-        </div>
+        <EmptyInfoCard text="Gunakan kolom pencarian di atas untuk mencari singkatan atau akronim." />
       )}
 
       {sedangMencari && !isLoading && !isError && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          {results.length === 0 && (
-            <p className="p-4 text-gray-500">Tidak ada singkatan yang ditemukan.</p>
+        <TableResultCard
+          isEmpty={results.length === 0}
+          emptyText="Tidak ada singkatan yang ditemukan."
+          footer={(
+            <div className="px-4 pb-4">
+              <Paginasi total={total} limit={limit} offset={offsetParam} onChange={handleOffset} />
+            </div>
           )}
-          {results.length > 0 && (
-            <>
+        >
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
-                  <thead className="bg-gray-50 text-gray-600 text-left">
+                  <thead className="data-table-head">
                     <tr>
                       <th className="px-4 py-3 font-medium">Singkatan</th>
                       <th className="px-4 py-3 font-medium">Kepanjangan (ID)</th>
@@ -111,15 +117,15 @@ function Singkatan() {
                       <th className="px-4 py-3 font-medium hidden lg:table-cell">Jenis</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100">
+                  <tbody className="data-table-body">
                     {results.map((item) => (
-                      <tr key={item.abbr_idx} className="hover:bg-gray-50">
-                        <td className="px-4 py-3 font-medium text-gray-900">{item.abbr_key}</td>
-                        <td className="px-4 py-3 text-gray-700">{item.abbr_id || '-'}</td>
-                        <td className="px-4 py-3 text-gray-500 hidden md:table-cell">{item.abbr_en || '-'}</td>
+                      <tr key={item.abbr_idx} className="data-table-row">
+                        <td className="px-4 py-3 cell-primary">{item.abbr_key}</td>
+                        <td className="px-4 py-3 cell-text">{item.abbr_id || '-'}</td>
+                        <td className="px-4 py-3 cell-muted hidden md:table-cell">{item.abbr_en || '-'}</td>
                         <td className="px-4 py-3 hidden lg:table-cell">
                           {item.abbr_type && (
-                            <span className="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded">
+                            <span className="tag-subtle">
                               {item.abbr_type}
                             </span>
                           )}
@@ -129,14 +135,9 @@ function Singkatan() {
                   </tbody>
                 </table>
               </div>
-              <div className="px-4 pb-4">
-                <Paginasi total={total} limit={limit} offset={offsetParam} onChange={handleOffset} />
-              </div>
-            </>
-          )}
-        </div>
+        </TableResultCard>
       )}
-    </div>
+    </HalamanDasar>
   );
 }
 

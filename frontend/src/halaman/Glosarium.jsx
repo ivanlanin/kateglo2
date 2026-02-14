@@ -7,6 +7,9 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { cariGlosarium, ambilDaftarBidang, ambilDaftarSumber } from '../api/apiPublik';
 import Paginasi from '../komponen/Paginasi';
+import HalamanDasar from '../komponen/HalamanDasar';
+import { QueryFeedback, TableResultCard } from '../komponen/StatusKonten';
+import { updateSearchParams, updateSearchParamsWithOffset } from '../utils/searchParams';
 
 function Glosarium() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -42,50 +45,48 @@ function Glosarium() {
 
   const handleCari = (e) => {
     e.preventDefault();
-    const params = {};
-    if (inputQuery.trim()) params.q = inputQuery.trim();
-    if (inputBidang) params.bidang = inputBidang;
-    if (inputSumber) params.sumber = inputSumber;
-    setSearchParams(params);
+    updateSearchParams(setSearchParams, {
+      q: inputQuery,
+      bidang: inputBidang,
+      sumber: inputSumber,
+    });
   };
 
   const handleOffset = (newOffset) => {
-    const params = {};
-    if (qParam) params.q = qParam;
-    if (bidangParam) params.bidang = bidangParam;
-    if (sumberParam) params.sumber = sumberParam;
-    if (newOffset > 0) params.offset = String(newOffset);
-    setSearchParams(params);
+    updateSearchParamsWithOffset(setSearchParams, {
+      q: qParam,
+      bidang: bidangParam,
+      sumber: sumberParam,
+    }, newOffset);
   };
 
   const results = data?.data || [];
   const total = data?.total || 0;
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Glosarium</h1>
+    <HalamanDasar judul="Glosarium">
 
       {/* Panel pencarian */}
-      <form onSubmit={handleCari} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
+      <form onSubmit={handleCari} className="content-card p-4 mb-6">
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
           <div>
-            <label htmlFor="glo-q" className="block text-xs font-medium text-gray-600 mb-1">Lema</label>
+            <label htmlFor="glo-q" className="form-label">Lema</label>
             <input
               id="glo-q"
               type="text"
               value={inputQuery}
               onChange={(e) => setInputQuery(e.target.value)}
               placeholder="Cari istilah..."
-              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+              className="form-input"
             />
           </div>
           <div>
-            <label htmlFor="glo-bidang" className="block text-xs font-medium text-gray-600 mb-1">Bidang</label>
+            <label htmlFor="glo-bidang" className="form-label">Bidang</label>
             <select
               id="glo-bidang"
               value={inputBidang}
               onChange={(e) => setInputBidang(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+              className="form-input"
             >
               <option value="">Semua</option>
               {(bidangList || []).map((b) => (
@@ -94,12 +95,12 @@ function Glosarium() {
             </select>
           </div>
           <div>
-            <label htmlFor="glo-sumber" className="block text-xs font-medium text-gray-600 mb-1">Sumber</label>
+            <label htmlFor="glo-sumber" className="form-label">Sumber</label>
             <select
               id="glo-sumber"
               value={inputSumber}
               onChange={(e) => setInputSumber(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+              className="form-input"
             >
               <option value="">Semua</option>
               {(sumberList || []).map((s) => (
@@ -110,7 +111,7 @@ function Glosarium() {
           <div className="flex items-end">
             <button
               type="submit"
-              className="w-full px-5 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              className="btn-primary w-full"
             >
               Cari
             </button>
@@ -118,21 +119,25 @@ function Glosarium() {
         </div>
       </form>
 
-      {isLoading && <p className="text-gray-600">Mencari data...</p>}
-      {isError && <p className="text-red-600">Gagal mengambil data.</p>}
+      <QueryFeedback
+        isLoading={isLoading}
+        isError={isError}
+        loadingText="Mencari data..."
+        errorText="Gagal mengambil data."
+      />
 
       {/* Browse index */}
       {!sedangMencari && !isLoading && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
+        <div className="content-card p-6 space-y-4">
           {bidangList?.length > 0 && (
             <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-2">Menurut bidang:</h3>
+              <h3 className="section-heading">Menurut bidang:</h3>
               <div className="flex flex-wrap gap-2">
                 {bidangList.map((b) => (
                   <Link
                     key={b.discipline}
                     to={`/glosarium?bidang=${encodeURIComponent(b.discipline)}`}
-                    className="text-sm text-blue-700 hover:underline"
+                    className="glosarium-browse-link"
                   >
                     {b.discipline_name} ({b.glossary_count})
                   </Link>
@@ -142,13 +147,13 @@ function Glosarium() {
           )}
           {sumberList?.length > 0 && (
             <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-2">Menurut sumber:</h3>
+              <h3 className="section-heading">Menurut sumber:</h3>
               <div className="flex flex-wrap gap-2">
                 {sumberList.map((s) => (
                   <Link
                     key={s.ref_source}
                     to={`/glosarium?sumber=${encodeURIComponent(s.ref_source)}`}
-                    className="text-sm text-blue-700 hover:underline"
+                    className="glosarium-browse-link"
                   >
                     {s.ref_source_name} ({s.glossary_count})
                   </Link>
@@ -161,15 +166,18 @@ function Glosarium() {
 
       {/* Hasil tabel */}
       {sedangMencari && !isLoading && !isError && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          {results.length === 0 && (
-            <p className="p-4 text-gray-500">Tidak ada entri glosarium yang ditemukan.</p>
+        <TableResultCard
+          isEmpty={results.length === 0}
+          emptyText="Tidak ada entri glosarium yang ditemukan."
+          footer={(
+            <div className="px-4 pb-4">
+              <Paginasi total={total} limit={limit} offset={offsetParam} onChange={handleOffset} />
+            </div>
           )}
-          {results.length > 0 && (
-            <>
+        >
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
-                  <thead className="bg-gray-50 text-gray-600 text-left">
+                  <thead className="data-table-head">
                     <tr>
                       <th className="px-4 py-3 font-medium">Bahasa Indonesia</th>
                       <th className="px-4 py-3 font-medium">Bahasa Asing</th>
@@ -177,33 +185,28 @@ function Glosarium() {
                       <th className="px-4 py-3 font-medium hidden lg:table-cell">Sumber</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100">
+                  <tbody className="data-table-body">
                     {results.map((item) => (
-                      <tr key={item.glo_uid} className="hover:bg-gray-50">
+                      <tr key={item.glo_uid} className="data-table-row">
                         <td className="px-4 py-3">
                           <Link
                             to={`/kamus/${encodeURIComponent(item.phrase)}`}
-                            className="text-blue-700 hover:underline"
+                            className="link-primary"
                           >
                             {item.phrase}
                           </Link>
                         </td>
-                        <td className="px-4 py-3 text-gray-700">{item.original}</td>
-                        <td className="px-4 py-3 text-gray-500 hidden md:table-cell">{item.discipline_name || '-'}</td>
-                        <td className="px-4 py-3 text-gray-500 hidden lg:table-cell">{item.ref_source_name || '-'}</td>
+                        <td className="px-4 py-3 cell-text">{item.original}</td>
+                        <td className="px-4 py-3 cell-muted hidden md:table-cell">{item.discipline_name || '-'}</td>
+                        <td className="px-4 py-3 cell-muted hidden lg:table-cell">{item.ref_source_name || '-'}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-              <div className="px-4 pb-4">
-                <Paginasi total={total} limit={limit} offset={offsetParam} onChange={handleOffset} />
-              </div>
-            </>
-          )}
-        </div>
+        </TableResultCard>
       )}
-    </div>
+    </HalamanDasar>
   );
 }
 

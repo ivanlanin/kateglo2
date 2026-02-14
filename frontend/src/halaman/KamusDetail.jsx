@@ -6,6 +6,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ambilDetailKamus } from '../api/apiPublik';
 import PanelLipat from '../komponen/PanelLipat';
+import HalamanDasar from '../komponen/HalamanDasar';
 
 function KamusDetail() {
   const { slug } = useParams();
@@ -18,20 +19,20 @@ function KamusDetail() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <p className="text-gray-600">Memuat detail...</p>
-      </div>
+      <HalamanDasar>
+        <p className="secondary-text">Memuat detail...</p>
+      </HalamanDasar>
     );
   }
 
   if (isError || !data) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <p className="text-red-600">Entri tidak ditemukan.</p>
-        <Link to="/kamus" className="text-blue-600 hover:underline text-sm mt-2 inline-block">
+      <HalamanDasar>
+        <p className="error-text">Entri tidak ditemukan.</p>
+        <Link to="/kamus" className="link-action text-sm mt-2 inline-block">
           ← Kembali ke pencarian
         </Link>
-      </div>
+      </HalamanDasar>
     );
   }
 
@@ -57,32 +58,32 @@ function KamusDetail() {
   const infoTags = data.info ? data.info.split(',').map((t) => t.trim()).filter(Boolean) : [];
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <HalamanDasar>
       {/* Breadcrumb */}
-      <nav className="text-sm text-gray-500 mb-4">
-        <Link to="/kamus" className="hover:text-blue-600">Kamus</Link>
+      <nav className="kamus-detail-breadcrumb">
+        <Link to="/kamus" className="kamus-detail-breadcrumb-link">Kamus</Link>
         <span className="mx-2">›</span>
-        <span className="text-gray-900">{data.frasa}</span>
+        <span className="kamus-detail-breadcrumb-current">{data.frasa}</span>
       </nav>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Kolom utama: definisi */}
         <div className="lg:col-span-2 space-y-6">
           {/* Header */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h1 className="text-3xl font-bold text-gray-900">
+          <div className="content-card p-6">
+            <h1 className="kamus-detail-heading">
               {data.frasa}
               {data.pelafalan && (
-                <span className="text-lg font-normal text-gray-500 ml-3">/{data.pelafalan}/</span>
+                <span className="kamus-detail-pronunciation">/{data.pelafalan}/</span>
               )}
             </h1>
 
             {data.frasaAktual && data.frasaAktual !== data.frasa && (
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="kamus-detail-subtext">
                 Bentuk baku:{' '}
                 <Link
                   to={`/kamus/${encodeURIComponent(data.frasaAktual)}`}
-                  className="text-blue-600 hover:underline font-medium"
+                  className="kamus-detail-actual-link"
                 >
                   {data.frasaAktual}
                 </Link>
@@ -92,22 +93,22 @@ function KamusDetail() {
             {/* Label & tag */}
             <div className="flex flex-wrap gap-2 mt-3">
               {data.namaKelasLeksikal && (
-                <span className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">
+                <span className="kamus-detail-tag-blue">
                   {data.namaKelasLeksikal}
                 </span>
               )}
               {data.namaTipeFrasa && (
-                <span className="text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded">
+                <span className="kamus-detail-tag-purple">
                   {data.namaTipeFrasa}
                 </span>
               )}
               {data.namaSumber && (
-                <span className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded">
+                <span className="kamus-detail-tag-green">
                   {data.namaSumber}
                 </span>
               )}
               {infoTags.map((tag) => (
-                <span key={tag} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                <span key={tag} className="kamus-detail-tag-gray">
                   {tag}
                 </span>
               ))}
@@ -115,34 +116,34 @@ function KamusDetail() {
           </div>
 
           {/* Definisi */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">Definisi</h2>
+          <div className="content-card p-6">
+            <h2 className="kamus-detail-section-title">Definisi</h2>
 
             {Object.keys(definisiPerKelas).length === 0 && (
-              <p className="text-gray-500 text-sm">Belum tersedia.</p>
+              <p className="muted-text text-sm">Belum tersedia.</p>
             )}
 
             {Object.entries(definisiPerKelas).map(([kelas, group]) => (
               <div key={kelas} className="mb-4 last:mb-0">
-                <h3 className="text-sm font-semibold text-gray-600 mb-2">
-                  {group.nama} <span className="text-gray-400">({kelas})</span>
+                <h3 className="kamus-detail-def-class">
+                  {group.nama} <span className="kamus-detail-def-class-code">({kelas})</span>
                 </h3>
-                <ol className="list-decimal list-inside space-y-2 text-gray-800">
+                <ol className="kamus-detail-def-list">
                   {group.daftar.map((def) => (
                     <li key={def.def_uid} className="text-sm leading-relaxed">
                       {def.discipline_name && (
-                        <em className="text-gray-500">[{def.discipline_name}] </em>
+                        <em className="kamus-detail-def-discipline">[{def.discipline_name}] </em>
                       )}
                       {def.def_text}
                       {def.sample && (
-                        <span className="text-gray-500 italic ml-1">: {def.sample}</span>
+                        <span className="kamus-detail-def-sample">: {def.sample}</span>
                       )}
                       {def.see && (
                         <span className="ml-2">
                           →{' '}
                           <Link
                             to={`/kamus/${encodeURIComponent(def.see)}`}
-                            className="text-blue-600 hover:underline"
+                            className="link-action"
                           >
                             {def.see}
                           </Link>
@@ -157,17 +158,17 @@ function KamusDetail() {
 
           {/* Info tambahan: etimologi, catatan */}
           {(data.etimologi || data.catatan || data.kataDasar?.length > 0) && (
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div className="content-card p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {data.kataDasar?.length > 0 && (
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-600 mb-1">Kata Dasar</h3>
+                    <h3 className="kamus-detail-info-label">Kata Dasar</h3>
                     <div className="flex flex-wrap gap-1">
                       {data.kataDasar.map((kd) => (
                         <Link
                           key={kd}
                           to={`/kamus/${encodeURIComponent(kd)}`}
-                          className="text-sm text-blue-700 hover:underline"
+                          className="kamus-detail-info-link"
                         >
                           {kd}
                         </Link>
@@ -177,14 +178,14 @@ function KamusDetail() {
                 )}
                 {data.etimologi && (
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-600 mb-1">Etimologi</h3>
-                    <p className="text-sm text-gray-700">{data.etimologi}</p>
+                    <h3 className="kamus-detail-info-label">Etimologi</h3>
+                    <p className="kamus-detail-info-text">{data.etimologi}</p>
                   </div>
                 )}
                 {data.catatan && (
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-600 mb-1">Catatan</h3>
-                    <p className="text-sm text-gray-700">{data.catatan}</p>
+                    <h3 className="kamus-detail-info-label">Catatan</h3>
+                    <p className="kamus-detail-info-text">{data.catatan}</p>
                   </div>
                 )}
               </div>
@@ -204,13 +205,13 @@ function KamusDetail() {
               <div className="space-y-3">
                 {relasiEntries.map(([tipe, group]) => (
                   <div key={tipe}>
-                    <h4 className="text-xs font-semibold text-gray-500 uppercase mb-1">{group.nama}</h4>
+                    <h4 className="kamus-detail-relation-type">{group.nama}</h4>
                     <div className="flex flex-wrap gap-1">
                       {group.daftar.map((kata) => (
                         <Link
                           key={kata}
                           to={`/kamus/${encodeURIComponent(kata)}`}
-                          className="text-sm text-blue-700 hover:underline"
+                          className="kamus-detail-relation-link"
                         >
                           {kata}
                         </Link>
@@ -228,8 +229,8 @@ function KamusDetail() {
               <ul className="space-y-2">
                 {data.peribahasa.map((p) => (
                   <li key={p.prv_uid} className="text-sm">
-                    <p className="font-medium text-gray-800">{p.proverb}</p>
-                    {p.meaning && <p className="text-gray-500 mt-0.5">{p.meaning}</p>}
+                    <p className="kamus-detail-proverb-text">{p.proverb}</p>
+                    {p.meaning && <p className="kamus-detail-proverb-meaning">{p.meaning}</p>}
                   </li>
                 ))}
               </ul>
@@ -241,10 +242,10 @@ function KamusDetail() {
             <PanelLipat judul="Terjemahan" jumlah={data.terjemahan.length}>
               <ul className="space-y-1 text-sm">
                 {data.terjemahan.map((t, i) => (
-                  <li key={i} className="text-gray-700">
+                  <li key={i} className="kamus-detail-translation">
                     {t.translation}
                     {t.ref_source_name && (
-                      <span className="text-gray-400 ml-1">({t.ref_source_name})</span>
+                      <span className="kamus-detail-translation-source">({t.ref_source_name})</span>
                     )}
                   </li>
                 ))}
@@ -262,7 +263,7 @@ function KamusDetail() {
                       href={t.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline"
+                      className="link-action"
                     >
                       {t.label || t.url}
                     </a>
@@ -273,7 +274,7 @@ function KamusDetail() {
           )}
         </div>
       </div>
-    </div>
+    </HalamanDasar>
   );
 }
 

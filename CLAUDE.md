@@ -224,6 +224,11 @@ Lihat `_kode/kateglo/docs/data/kateglo.sql` untuk schema lengkap.
 
 ## 🎨 Frontend Guidelines
 
+### Styling Conventions (WAJIB)
+
+- Hindari inline style pada komponen React (`style={...}` tidak digunakan).
+- Semua styling komponen/layout dipusatkan di `frontend/src/styles/index.css` melalui class semantik (`@layer components`).
+
 ### Component Structure
 
 ```jsx

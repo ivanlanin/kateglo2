@@ -24,23 +24,23 @@ function Paginasi({ total, limit, offset, onChange }) {
   }
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4">
-      <p className="text-sm text-gray-600">
+    <div className="paginasi-container">
+      <p className="paginasi-info">
         Menampilkan {mulai}–{akhir} dari {total.toLocaleString('id-ID')} entri
       </p>
-      <div className="flex items-center gap-1">
+      <div className="paginasi-controls">
         <button
           type="button"
           onClick={() => keHalaman(halamanSaatIni - 1)}
           disabled={halamanSaatIni <= 1}
-          className="px-3 py-1.5 text-sm border border-gray-300 rounded-md disabled:opacity-40 hover:bg-gray-100"
+          className="paginasi-btn"
         >
           ‹
         </button>
         {halamanTampil[0] > 1 && (
           <>
-            <button type="button" onClick={() => keHalaman(1)} className="px-3 py-1.5 text-sm border border-gray-300 rounded-md hover:bg-gray-100">1</button>
-            {halamanTampil[0] > 2 && <span className="px-1 text-gray-400">…</span>}
+            <button type="button" onClick={() => keHalaman(1)} className="paginasi-btn">1</button>
+            {halamanTampil[0] > 2 && <span className="paginasi-ellipsis">…</span>}
           </>
         )}
         {halamanTampil.map((h) => (
@@ -48,26 +48,22 @@ function Paginasi({ total, limit, offset, onChange }) {
             key={h}
             type="button"
             onClick={() => keHalaman(h)}
-            className={`px-3 py-1.5 text-sm border rounded-md ${
-              h === halamanSaatIni
-                ? 'bg-blue-600 text-white border-blue-600'
-                : 'border-gray-300 hover:bg-gray-100'
-            }`}
+            className={`paginasi-btn ${h === halamanSaatIni ? 'paginasi-btn-active' : ''}`}
           >
             {h}
           </button>
         ))}
         {halamanTampil[halamanTampil.length - 1] < totalHalaman && (
           <>
-            {halamanTampil[halamanTampil.length - 1] < totalHalaman - 1 && <span className="px-1 text-gray-400">…</span>}
-            <button type="button" onClick={() => keHalaman(totalHalaman)} className="px-3 py-1.5 text-sm border border-gray-300 rounded-md hover:bg-gray-100">{totalHalaman}</button>
+            {halamanTampil[halamanTampil.length - 1] < totalHalaman - 1 && <span className="paginasi-ellipsis">…</span>}
+            <button type="button" onClick={() => keHalaman(totalHalaman)} className="paginasi-btn">{totalHalaman}</button>
           </>
         )}
         <button
           type="button"
           onClick={() => keHalaman(halamanSaatIni + 1)}
           disabled={halamanSaatIni >= totalHalaman}
-          className="px-3 py-1.5 text-sm border border-gray-300 rounded-md disabled:opacity-40 hover:bg-gray-100"
+          className="paginasi-btn"
         >
           ›
         </button>
