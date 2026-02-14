@@ -1,17 +1,24 @@
 import { Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
+import TataLetak from './komponen/TataLetak';
+import Beranda from './halaman/Beranda';
+import Kamus from './halaman/Kamus';
+import KamusDetail from './halaman/KamusDetail';
+import Glosarium from './halaman/Glosarium';
+import Peribahasa from './halaman/Peribahasa';
+import Singkatan from './halaman/Singkatan';
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        {/* TODO: Add more routes */}
-        {/* <Route path="/kamus/:slug" element={<Dictionary />} /> */}
-        {/* <Route path="/glosarium" element={<Glossary />} /> */}
-        {/* <Route path="/peribahasa" element={<Proverb />} /> */}
-      </Routes>
-    </div>
+    <Routes>
+      <Route element={<TataLetak />}>
+        <Route path="/" element={<Beranda />} />
+        <Route path="/kamus" element={<Kamus />} />
+        <Route path="/kamus/:slug" element={<KamusDetail />} />
+        <Route path="/glosarium" element={<Glosarium />} />
+        <Route path="/peribahasa" element={<Peribahasa />} />
+        <Route path="/singkatan" element={<Singkatan />} />
+      </Route>
+    </Routes>
   );
 }
 

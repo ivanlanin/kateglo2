@@ -6,13 +6,44 @@
 const { Pool } = require('pg');
 const logger = require('../config/logger');
 
+const databaseUrl = process.env.DATABASE_URL || '';
+const shouldUseSsl =
+  process.env.DATABASE_SSL === 'true' ||
+  process.env.PGSSLMODE === 'require' ||
+  databaseUrl.includes('render.com');
+
 // Create connection pool
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+  connectionString: databaseUrl,
+  ssl: shouldUseSsl ? { rejectUnauthorized: false } : false,
+  max: Number.parseInt(process.env.DB_POOL_MAX || '8', 10),
+  idleTimeoutMillis: Number.parseInt(process.env.DB_IDLE_TIMEOUT_MS || '15000', 10),
+  connectionTimeoutMillis: Number.parseInt(process.env.DB_CONNECTION_TIMEOUT_MS || '15000', 10),
+  keepAlive: true,
 });
+
+function isRetryableConnectionError(error) {
+  if (!error) return false;
+  const message = (error.message || '').toLowerCase();
+  return (
+    message.includes('connection terminated due to connection timeout') ||
+    message.includes('timeout expired') ||
+    message.includes('the database system is starting up')
+  );
+}
+
+async function queryWithRetry(text, params, retries = 1) {
+  try {
+    return await pool.query(text, params);
+  } catch (error) {
+    if (retries > 0 && isRetryableConnectionError(error)) {
+      logger.warn('Retrying PostgreSQL query after transient connection error');
+      return queryWithRetry(text, params, retries - 1);
+    }
+
+    throw error;
+  }
+}
 
 // Test connection
 pool.on('connect', () => {
@@ -129,7 +160,7 @@ const db = {
    * Execute raw SQL query
    */
   async query(text, params) {
-    const result = await pool.query(text, params);
+    const result = await queryWithRetry(text, params, 1);
     return result;
   },
 
@@ -137,7 +168,7 @@ const db = {
    * Execute query and return rows
    */
   async execute(text, params) {
-    const result = await pool.query(text, params);
+    const result = await queryWithRetry(text, params, 1);
     return { data: result.rows, count: result.rowCount };
   },
 
