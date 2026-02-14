@@ -48,7 +48,13 @@ export default defineConfig({
         'node_modules/',
         '**/*.test.{js,jsx}',
         '**/main.jsx'
-      ]
+      ],
+      thresholds: {
+        statements: 80,
+        branches: 80,
+        functions: 80,
+        lines: 80,
+      },
     }
   }
 });

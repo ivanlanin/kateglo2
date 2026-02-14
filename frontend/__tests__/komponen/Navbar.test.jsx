@@ -82,4 +82,29 @@ describe('Navbar', () => {
     const linksAfter = screen.getAllByText('Kamus');
     expect(linksAfter.length).toBeGreaterThan(countBefore);
   });
+
+  it('klik link mobile menutup menu', () => {
+    render(<Navbar />);
+    const toggleBtn = screen.getByLabelText('Toggle menu');
+    fireEvent.click(toggleBtn);
+
+    const mobileLinks = screen.getAllByText('Glosarium');
+    const mobileLink = mobileLinks[mobileLinks.length - 1];
+    fireEvent.click(mobileLink);
+
+    const linksAfter = screen.getAllByText('Glosarium');
+    expect(linksAfter.length).toBe(1);
+  });
+
+  it('submit pencarian dari form mobile melakukan navigasi', () => {
+    render(<Navbar />);
+    fireEvent.click(screen.getByLabelText('Toggle menu'));
+
+    const inputs = screen.getAllByPlaceholderText('Cari kata...');
+    const mobileInput = inputs[inputs.length - 1];
+    fireEvent.change(mobileInput, { target: { value: 'mobile kata' } });
+    fireEvent.submit(mobileInput.closest('form'));
+
+    expect(mockNavigate).toHaveBeenCalledWith('/kamus?q=mobile%20kata');
+  });
 });

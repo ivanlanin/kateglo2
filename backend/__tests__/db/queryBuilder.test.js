@@ -15,24 +15,38 @@ jest.mock('../../config/logger', () => ({
 
 // Mock pg Pool
 const mockQuery = jest.fn();
+const mockOn = jest.fn();
+const mockEnd = jest.fn();
+const poolEventHandlers = {};
+
+mockOn.mockImplementation((event, handler) => {
+  poolEventHandlers[event] = handler;
+});
+
 jest.mock('pg', () => ({
   Pool: jest.fn(() => ({
     query: mockQuery,
-    on: jest.fn(),
-    end: jest.fn()
+    on: mockOn,
+    end: mockEnd
   }))
 }));
 
 // Setelah mock pg, require db module (yang akan pakai mock Pool)
 let db;
+let logger;
 beforeAll(() => {
   // Unmock db/index.js supaya kita dapat real QueryBuilder
   jest.unmock('../../db/index.js');
   db = require('../../db/index.js');
+  logger = require('../../config/logger');
 });
 
 beforeEach(() => {
   mockQuery.mockReset();
+  mockEnd.mockReset();
+  logger.warn.mockReset();
+  logger.info.mockReset();
+  logger.error.mockReset();
   mockQuery.mockResolvedValue({ rows: [], rowCount: 0 });
 });
 
@@ -190,6 +204,66 @@ describe('QueryBuilder', () => {
 
       expect(mockQuery).toHaveBeenCalledWith('SELECT * FROM phrases WHERE phrase = $1', ['kata']);
       expect(result.rows).toEqual([{ phrase: 'kata' }]);
+    });
+
+    it('retry 1x saat terjadi transient connection error', async () => {
+      mockQuery
+        .mockRejectedValueOnce(new Error('connection terminated due to connection timeout'))
+        .mockResolvedValueOnce({ rows: [{ ok: true }], rowCount: 1 });
+
+      const result = await db.query('SELECT 1', []);
+
+      expect(mockQuery).toHaveBeenCalledTimes(2);
+      expect(logger.warn).toHaveBeenCalledWith('Retrying PostgreSQL query after transient connection error');
+      expect(result.rows).toEqual([{ ok: true }]);
+    });
+
+    it('tidak retry untuk error non-transient', async () => {
+      const hardError = new Error('syntax error at or near SELECT');
+      mockQuery.mockRejectedValue(hardError);
+
+      await expect(db.query('SELECT broken', [])).rejects.toThrow('syntax error at or near SELECT');
+      expect(mockQuery).toHaveBeenCalledTimes(1);
+      expect(logger.warn).not.toHaveBeenCalled();
+    });
+
+    it('db.execute mengembalikan format {data, count}', async () => {
+      mockQuery.mockResolvedValue({ rows: [{ id: 1 }], rowCount: 1 });
+
+      const result = await db.execute('SELECT id FROM phrases', []);
+
+      expect(result).toEqual({ data: [{ id: 1 }], count: 1 });
+    });
+
+    it('db.close memanggil pool.end', async () => {
+      mockEnd.mockResolvedValue();
+
+      await db.close();
+
+      expect(mockEnd).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('pool event handlers', () => {
+    it('handler connect menulis log info', () => {
+      expect(typeof poolEventHandlers.connect).toBe('function');
+
+      poolEventHandlers.connect();
+
+      expect(logger.info).toHaveBeenCalledWith('🗄️  PostgreSQL connected');
+    });
+
+    it('handler error menulis log error dan exit process', () => {
+      const exitSpy = jest.spyOn(process, 'exit').mockImplementation(() => undefined);
+      const err = new Error('idle client error');
+
+      expect(typeof poolEventHandlers.error).toBe('function');
+      poolEventHandlers.error(err);
+
+      expect(logger.error).toHaveBeenCalledWith('Unexpected error on idle client', err);
+      expect(exitSpy).toHaveBeenCalledWith(-1);
+
+      exitSpy.mockRestore();
     });
   });
 });
