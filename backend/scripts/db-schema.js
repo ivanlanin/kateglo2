@@ -9,11 +9,11 @@
  *
  * USAGE:
  * ```bash
- * # Export schema ke file (default: _sql/tables.sql)
+ * # Export schema ke file (default: _docs/struktur-data.sql)
  * node backend/scripts/db-schema.js
  *
  * # Export dengan custom output
- * DB_OUTPUT_FILE=../_sql/schema_backup.sql node backend/scripts/db-schema.js
+ * DB_OUTPUT_FILE=../_docs/schema_backup.sql node backend/scripts/db-schema.js
  * ```
  *
  * ENVIRONMENT VARIABLES:
@@ -22,7 +22,7 @@
  * - DB_ORDER_BY: Table ordering ('alphabetical' | 'dependency', default: 'alphabetical')
  * - DB_SYNTAX: Output syntax style ('verbose' | 'simplified', default: 'simplified')
  * - DB_INCLUDE_SCHEMA: Include schema prefix in names ('true' | 'false', default: 'false')
- * - DB_OUTPUT_FILE: Output file path relative to backend/ (default: '../_sql/tables.sql')
+ * - DB_OUTPUT_FILE: Output file path relative to backend/ (default: '../_docs/struktur-data.sql')
  *
  * @requires pg
  * @version 1.0.0
@@ -54,7 +54,7 @@ const SCHEMA_NAME = process.env.DB_SCHEMA || 'public';
 const ORDER_BY = process.env.DB_ORDER_BY || 'alphabetical';
 const SYNTAX_STYLE = process.env.DB_SYNTAX || 'simplified';
 const INCLUDE_SCHEMA_PREFIX = process.env.DB_INCLUDE_SCHEMA === 'true';
-const OUTPUT_FILE = process.env.DB_OUTPUT_FILE || '../_sql/tables.sql';
+const OUTPUT_FILE = process.env.DB_OUTPUT_FILE || '../_docs/struktur-data.sql';
 
 /**
  * Extract complete database schema

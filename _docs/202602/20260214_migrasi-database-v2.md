@@ -20,7 +20,7 @@ Dua migrasi database untuk meningkatkan fleksibilitas dan kinerja:
 
 **Cakupan:** Seluruh 21 tabel — total ~80 kolom diubah.
 
-**Migrasi:** `_sql/202602/20260214_alter_character_varying_to_text.sql`
+**Migrasi:** `_docs/202602/20260214_alter_character_varying_to_text.sql`
 
 ### 2. Optimasi Indeks Database
 
@@ -54,7 +54,7 @@ Dua migrasi database untuk meningkatkan fleksibilitas dan kinerja:
 
 **Catatan:** Membutuhkan ekstensi `pg_trgm` (sudah termasuk di PostgreSQL standar).
 
-**Migrasi:** `_sql/202602/20260214_optimize_indexes.sql`
+**Migrasi:** `_docs/202602/20260214_optimize_indexes.sql`
 
 ## Dampak
 
@@ -73,7 +73,7 @@ node -e "
   require('dotenv').config({ path: '.env' });
   const db = require('./db');
   const fs = require('fs');
-  const sql = fs.readFileSync('../_sql/202602/20260214_alter_character_varying_to_text.sql', 'utf8');
+  const sql = fs.readFileSync('../_docs/202602/20260214_alter_character_varying_to_text.sql', 'utf8');
   db.query(sql)
     .then(() => { console.log('Migration 1 OK'); return db.close(); })
     .catch(e => { console.error('FAIL:', e.message); db.close(); });
@@ -84,7 +84,7 @@ node -e "
   require('dotenv').config({ path: '.env' });
   const db = require('./db');
   const fs = require('fs');
-  const sql = fs.readFileSync('../_sql/202602/20260214_optimize_indexes.sql', 'utf8');
+  const sql = fs.readFileSync('../_docs/202602/20260214_optimize_indexes.sql', 'utf8');
   db.query(sql)
     .then(() => { console.log('Migration 2 OK'); return db.close(); })
     .catch(e => { console.error('FAIL:', e.message); db.close(); });
@@ -112,7 +112,7 @@ ORDER BY tablename, indexname;
 
 ## Berkas Terkait
 
-- `_sql/202602/20260214_alter_character_varying_to_text.sql` — Migrasi tipe kolom
-- `_sql/202602/20260214_optimize_indexes.sql` — Migrasi indeks
-- `_sql/tables.sql` — Master schema (regenerate setelah migrasi)
+- `_docs/202602/20260214_alter_character_varying_to_text.sql` — Migrasi tipe kolom
+- `_docs/202602/20260214_optimize_indexes.sql` — Migrasi indeks
+- `_docs/struktur-data.sql` — Struktur data (regenerate setelah migrasi)
 - `backend/scripts/db-schema.js` — Script untuk generate schema

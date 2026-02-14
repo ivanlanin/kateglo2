@@ -54,8 +54,8 @@ kateglo2/
 ├── frontend/             # Public website (Port 5173)
 │   └── src/
 │       ├── api/          # API client (axios + publicApi)
-│       ├── components/   # Reusable components
-│       ├── pages/        # Page components
+│       ├── komponen/     # Reusable components
+│       ├── halaman/      # Page components
 │       └── styles/       # TailwindCSS styles
 │
 ├── admin/                # Admin dashboard (Port 5174)
@@ -74,8 +74,7 @@ kateglo2/
 │   └── narakita/         # Modern reference project (patterns)
 │
 ├── _data/                # Data migration scripts
-├── _docs/                # Documentation
-├── _sql/                 # Database schemas (tables.sql)
+├── _docs/                # Documentation + SQL migrations + struktur data
 │
 ├── CLAUDE.md             # Claude Code quick reference
 ├── render.yaml           # Render deployment config
@@ -83,12 +82,12 @@ kateglo2/
 ```
 
 ### Key Files for AI Reference
-- **Database Schema**: `_sql/tables.sql` — MANDATORY reference before any DB work
+- **Database Schema**: `_docs/struktur-data.sql` — MANDATORY reference before any DB work
 - **Backend DB**: `backend/db/index.js` — PostgreSQL pool + query builder
 - **Backend Models**: `backend/models/` — Fat model layer (all DB queries here)
 - **API Routes**: `backend/routes/api/public/` — Public endpoints
-- **Frontend API**: `frontend/src/api/publicApi.js` — API call functions
-- **Frontend Pages**: `frontend/src/pages/` — React page components
+- **Frontend API**: `frontend/src/api/apiPublik.js` — API call functions
+- **Frontend Pages**: `frontend/src/halaman/` — React page components
 
 ## Shell & CLI Conventions
 
@@ -133,9 +132,9 @@ const result = await db.query(
 ```
 
 ### Database Schema Reference (MANDATORY)
-- **ALWAYS CHECK SCHEMA FIRST**: Sebelum membuat migration, query, atau mengubah model, WAJIB check `_sql/tables.sql`
+- **ALWAYS CHECK SCHEMA FIRST**: Sebelum membuat migration, query, atau mengubah model, WAJIB check `_docs/struktur-data.sql`
 - **Generate/Update Schema**: `Set-Location backend; node scripts/db-schema.js`
-- **Quick Search**: `Select-String -Path "_sql/tables.sql" -Pattern "create table phrase"`
+- **Quick Search**: `Select-String -Path "_docs/struktur-data.sql" -Pattern "create table phrase"`
 
 ### Core Tables
 | Table | Purpose | Key Columns |
@@ -178,10 +177,10 @@ router.get('/', async (req, res) => {
 
 ### Model Pattern Example
 ```javascript
-// backend/models/PhraseModel.js
+// backend/models/ModelFrasa.js
 const db = require('../db');
 
-class PhraseModel {
+class ModelFrasa {
   static async searchDictionary(query, limit = 20) {
     // Prefix search first, then contains fallback
     const prefixResult = await db.query(
@@ -323,8 +322,8 @@ npm run dev:admin         # Port 5174
 ```
 
 ### Database Work
-1. **Check schema first**: `Select-String -Path "_sql/tables.sql" -Pattern "table_name"`
-2. **Create migration**: Add SQL file to `_sql/YYYYMM/` with format `YYYYMMDD_nama-migrasi.sql`
+1. **Check schema first**: `Select-String -Path "_docs/struktur-data.sql" -Pattern "table_name"`
+2. **Create migration**: Add SQL file to `_docs/YYYYMM/` with format `YYYYMMDD_nama-migrasi.sql`
 3. **Run migration**: Use temp script in `backend/`
 4. **Regenerate schema**: `Set-Location backend; node scripts/db-schema.js`
 5. **Update models**: Update relevant model files
@@ -356,7 +355,7 @@ npm run dev
 Set-Location backend; node scripts/db-schema.js
 
 # Check schema for a table
-Select-String -Path "_sql/tables.sql" -Pattern "create table phrase"
+Select-String -Path "_docs/struktur-data.sql" -Pattern "create table phrase"
 
 # Kill port conflicts
 npx kill-port 3000; npx kill-port 5173; npx kill-port 5174
@@ -378,12 +377,12 @@ Gunakan `_kode/` sebagai referensi:
 ## Important Conventions
 
 ### Naming
-- **Files**: camelCase untuk JS files (e.g., `PhraseModel.js`, `publicApi.js`)
+- **Files**: camelCase untuk JS files (e.g., `ModelFrasa.js`, `apiPublik.js`)
 - **Components**: PascalCase (e.g., `SearchBar.jsx`, `DictionaryDetail.jsx`)
 - **Constants**: camelCase (NOT SCREAMING_SNAKE_CASE)
 - **Database**: snake_case (matching PostgreSQL convention)
 - **Changelog docs**: `YYYYMMDD_nama-topik.md` (di `_docs/YYYYMM/`)
-- **SQL migration files**: `YYYYMMDD_nama-migrasi.sql` (di `_sql/YYYYMM/`)
+- **SQL migration files**: `YYYYMMDD_nama-migrasi.sql` (di `_docs/YYYYMM/`)
 
 ### Language
 - **Code**: English (variable names, functions, comments in code)
@@ -401,4 +400,4 @@ Deploy ke Render dengan 3 services:
 - `kateglo-public` — Frontend Public (Static Site)
 - `kateglo-admin` — Frontend Admin (Static Site)
 
-Lihat `render.yaml` dan `_docs/DEPLOYMENT.md` untuk detail.
+Lihat `render.yaml` untuk detail.

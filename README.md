@@ -105,8 +105,8 @@ kateglo2/
 │
 ├── frontend/      # Public website
 │   ├── src/
-│   │   ├── pages/        # Page components
-│   │   ├── components/   # Reusable components
+│   │   ├── halaman/      # Page components
+│   │   ├── komponen/     # Reusable components
 │   │   └── api/          # API client
 │   └── public/
 │
@@ -122,8 +122,7 @@ kateglo2/
 │   ├── types.ts          # TypeScript types
 │   └── utils.js          # Utilities
 │
-├── _docs/                # Documentation
-├── _sql/                 # Database schemas & migrations
+├── _docs/                # Documentation + SQL migrations + struktur data
 └── _kode/                # Reference code (not committed)
 ```
 
