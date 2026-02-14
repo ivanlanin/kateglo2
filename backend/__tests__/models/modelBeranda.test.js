@@ -13,7 +13,7 @@ describe('ModelBeranda', () => {
 
   it('ambilStatistik mengubah nilai count string menjadi number', async () => {
     db.query.mockResolvedValue({
-      rows: [{ kamus: '10', glosarium: '2', peribahasa: '3', singkatan: '4' }]
+      rows: [{ kamus: '10', glosarium: '2', tesaurus: '3' }]
     });
 
     const result = await ModelBeranda.ambilStatistik();
@@ -22,18 +22,17 @@ describe('ModelBeranda', () => {
     expect(result).toEqual({
       kamus: 10,
       glosarium: 2,
-      peribahasa: 3,
-      singkatan: 4
+      tesaurus: 3
     });
   });
 
   it('ambilLemaAcak mengembalikan rows dari query', async () => {
-    const rows = [{ phrase: 'akar', lex_class: 'n' }];
+    const rows = [{ id: 1, lema: 'akar', kelas_kata: 'nomina' }];
     db.query.mockResolvedValue({ rows });
 
     const result = await ModelBeranda.ambilLemaAcak(7);
 
-    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM phrase'), [7]);
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM lema'), [7]);
     expect(result).toEqual(rows);
   });
 
@@ -42,25 +41,25 @@ describe('ModelBeranda', () => {
 
     await ModelBeranda.ambilLemaAcak();
 
-    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM phrase'), [10]);
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM lema'), [10]);
   });
 
-  it('ambilSalahEja mengembalikan rows dari query', async () => {
-    const rows = [{ phrase: 'aktip', actual_phrase: 'aktif' }];
+  it('ambilRujukan mengembalikan rows dari query', async () => {
+    const rows = [{ lema: 'abadiat', lema_rujuk: 'abadiah' }];
     db.query.mockResolvedValue({ rows });
 
-    const result = await ModelBeranda.ambilSalahEja(5);
+    const result = await ModelBeranda.ambilRujukan(5);
 
-    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('actual_phrase'), [5]);
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('lema_rujuk'), [5]);
     expect(result).toEqual(rows);
   });
 
-  it('ambilSalahEja memakai default jumlah=5', async () => {
+  it('ambilRujukan memakai default jumlah=5', async () => {
     db.query.mockResolvedValue({ rows: [] });
 
-    await ModelBeranda.ambilSalahEja();
+    await ModelBeranda.ambilRujukan();
 
-    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('actual_phrase'), [5]);
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('lema_rujuk'), [5]);
   });
 
   it('ambilPopuler mengembalikan rows dari query', async () => {

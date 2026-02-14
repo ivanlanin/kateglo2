@@ -1,35 +1,30 @@
 /**
- * @fileoverview Halaman pencarian/browse kamus — hasil pencarian dari query string ?q=
+ * @fileoverview Halaman pencarian/browse kamus — path-based: /kamus/cari/:kata
  */
 
-import { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { cariKamus } from '../api/apiPublik';
 import HalamanDasar from '../komponen/HalamanDasar';
 import { EmptyResultText, QueryFeedback } from '../komponen/StatusKonten';
-import { updateSearchParams } from '../utils/searchParams';
 
 function Kamus() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const qParam = searchParams.get('q') || '';
-  const [inputQuery, setInputQuery] = useState(qParam);
-
-  useEffect(() => {
-    setInputQuery(qParam);
-  }, [qParam]);
+  const { kata } = useParams();
+  const navigate = useNavigate();
+  const [inputQuery, setInputQuery] = useState(kata || '');
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['cari-kamus', qParam],
-    queryFn: () => cariKamus(qParam, 50),
-    enabled: Boolean(qParam),
+    queryKey: ['cari-kamus', kata],
+    queryFn: () => cariKamus(kata),
+    enabled: Boolean(kata),
   });
 
   const handleCari = (e) => {
     e.preventDefault();
     const trimmed = inputQuery.trim();
     if (!trimmed) return;
-    updateSearchParams(setSearchParams, { q: trimmed });
+    navigate(`/kamus/cari/${encodeURIComponent(trimmed)}`);
   };
 
   const results = data?.data || [];
@@ -69,7 +64,7 @@ function Kamus() {
       />
 
       {/* Tanpa pencarian — browse index */}
-      {!qParam && !isLoading && (
+      {!kata && !isLoading && (
         <div className="content-card p-6">
           <p className="secondary-text mb-4">Gunakan kolom pencarian di atas untuk mencari kata dalam kamus.</p>
           <div className="mb-4">
@@ -78,7 +73,7 @@ function Kamus() {
               {'-ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((huruf) => (
                 <Link
                   key={huruf}
-                  to={`/kamus?q=${huruf === '-' ? '-' : huruf.toLowerCase()}`}
+                  to={`/kamus/cari/${huruf === '-' ? '-' : huruf.toLowerCase()}`}
                   className="kamus-abjad-link"
                 >
                   {huruf}
@@ -90,38 +85,43 @@ function Kamus() {
       )}
 
       {/* Hasil pencarian */}
-      {qParam && !isLoading && !isError && (
+      {kata && !isLoading && !isError && (
         <div className="content-card p-4">
           <h2 className="kamus-result-heading">
-            Hasil pencarian &ldquo;{qParam}&rdquo; — {results.length} entri
+            Hasil pencarian &ldquo;{kata}&rdquo; — {results.length} entri
           </h2>
 
-          {results.length === 0 && <EmptyResultText text="Frasa yang dicari tidak ditemukan. Coba kata lain?" />}
+          {results.length === 0 && <EmptyResultText text="Lema yang dicari tidak ditemukan. Coba kata lain?" />}
 
           {results.length > 0 && (
             <div className="result-divider">
               {results.map((item) => (
-                <div key={item.phrase} className="py-3 first:pt-0 last:pb-0">
+                <div key={item.id} className="py-3 first:pt-0 last:pb-0">
                   <div className="flex items-baseline gap-2">
                     <Link
-                      to={`/kamus/${encodeURIComponent(item.phrase)}`}
+                      to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
                       className="kamus-result-link"
                     >
-                      {item.phrase}
+                      {item.lema}
                     </Link>
-                    {item.lex_class && (
+                    {item.preview_kelas_kata && (
                       <span className="tag-subtle">
-                        {item.lex_class}
+                        {item.preview_kelas_kata}
                       </span>
                     )}
-                    {item.actual_phrase && item.actual_phrase !== item.phrase && (
+                    {item.jenis !== 'dasar' && (
+                      <span className="tag-subtle">
+                        {item.jenis}
+                      </span>
+                    )}
+                    {item.jenis_rujuk && item.lema_rujuk && (
                       <span className="kamus-result-redirect">
-                        → {item.actual_phrase}
+                        → {item.lema_rujuk}
                       </span>
                     )}
                   </div>
-                  {item.definition_preview && (
-                    <p className="kamus-result-preview">{item.definition_preview}</p>
+                  {item.preview_makna && (
+                    <p className="kamus-result-preview">{item.preview_makna}</p>
                   )}
                 </div>
               ))}

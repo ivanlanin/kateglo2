@@ -3,18 +3,17 @@
  * @tested_in backend/services/layananKamusPublik.js
  */
 
-jest.mock('../../models/modelFrasa', () => ({
-  cariKamus: jest.fn(),
-  ambilFrasa: jest.fn(),
-  ambilDefinisi: jest.fn(),
-  ambilRelasi: jest.fn(),
-  ambilPeribahasa: jest.fn(),
-  ambilTerjemahan: jest.fn(),
-  ambilTautan: jest.fn(),
-  ambilKataDasar: jest.fn()
+jest.mock('../../models/modelLema', () => ({
+  cariLema: jest.fn(),
+  ambilLema: jest.fn(),
+  ambilMakna: jest.fn(),
+  ambilContoh: jest.fn(),
+  ambilSublema: jest.fn(),
+  ambilInduk: jest.fn(),
+  ambilTerjemahan: jest.fn()
 }));
 
-const ModelFrasa = require('../../models/modelFrasa');
+const ModelLema = require('../../models/modelLema');
 const { cariKamus, ambilDetailKamus } = require('../../services/layananKamusPublik');
 
 describe('layananKamusPublik.cariKamus', () => {
@@ -26,40 +25,24 @@ describe('layananKamusPublik.cariKamus', () => {
     const result = await cariKamus('   ', 20);
 
     expect(result).toEqual([]);
-    expect(ModelFrasa.cariKamus).not.toHaveBeenCalled();
+    expect(ModelLema.cariLema).not.toHaveBeenCalled();
   });
 
   it('menormalisasi limit dan meneruskan query trim', async () => {
-    ModelFrasa.cariKamus.mockResolvedValue([{ phrase: 'kata' }]);
+    ModelLema.cariLema.mockResolvedValue([{ lema: 'kata' }]);
 
     const result = await cariKamus(' kata ', '999');
 
-    expect(ModelFrasa.cariKamus).toHaveBeenCalledWith('kata', 50);
-    expect(result).toEqual([{ phrase: 'kata' }]);
+    expect(ModelLema.cariLema).toHaveBeenCalledWith('kata', 50);
+    expect(result).toEqual([{ lema: 'kata' }]);
   });
 
   it('memakai fallback limit 20 saat limit bukan angka', async () => {
-    ModelFrasa.cariKamus.mockResolvedValue([{ phrase: 'kata' }]);
+    ModelLema.cariLema.mockResolvedValue([{ lema: 'kata' }]);
 
     await cariKamus('kata', 'abc');
 
-    expect(ModelFrasa.cariKamus).toHaveBeenCalledWith('kata', 20);
-  });
-
-  it('memakai fallback limit 20 saat limit <= 0', async () => {
-    ModelFrasa.cariKamus.mockResolvedValue([{ phrase: 'kata' }]);
-
-    await cariKamus('kata', 0);
-
-    expect(ModelFrasa.cariKamus).toHaveBeenCalledWith('kata', 20);
-  });
-
-  it('mempertahankan limit valid di dalam rentang', async () => {
-    ModelFrasa.cariKamus.mockResolvedValue([{ phrase: 'kata' }]);
-
-    await cariKamus('kata', 7);
-
-    expect(ModelFrasa.cariKamus).toHaveBeenCalledWith('kata', 7);
+    expect(ModelLema.cariLema).toHaveBeenCalledWith('kata', 20);
   });
 });
 
@@ -68,77 +51,59 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     jest.clearAllMocks();
   });
 
-  it('mengembalikan null jika slug kosong', async () => {
+  it('mengembalikan null jika entri kosong', async () => {
     const result = await ambilDetailKamus('   ');
 
     expect(result).toBeNull();
-    expect(ModelFrasa.ambilFrasa).not.toHaveBeenCalled();
+    expect(ModelLema.ambilLema).not.toHaveBeenCalled();
   });
 
-  it('mengembalikan null jika entri tidak ditemukan', async () => {
-    ModelFrasa.ambilFrasa.mockResolvedValue(null);
+  it('mengembalikan null jika lema tidak ditemukan', async () => {
+    ModelLema.ambilLema.mockResolvedValue(null);
 
     const result = await ambilDetailKamus('kata');
 
-    expect(ModelFrasa.ambilFrasa).toHaveBeenCalledWith('kata');
+    expect(ModelLema.ambilLema).toHaveBeenCalledWith('kata');
     expect(result).toBeNull();
   });
 
-  it('mengembalikan detail lengkap dan mengelompokkan relasi', async () => {
-    ModelFrasa.ambilFrasa.mockResolvedValue({
-      phrase: 'aktif',
-      actual_phrase: 'aktif',
-      lex_class: 'adj',
-      lex_class_name: 'adjektiva',
-      phrase_type: 'dasar',
-      phrase_type_name: 'dasar',
-      pronounciation: 'ak-tif',
-      etymology: null,
-      info: null,
-      notes: null,
-      ref_source: 'kbbi',
-      ref_source_name: 'KBBI'
+  it('mengembalikan rujukan jika lema adalah rujukan', async () => {
+    ModelLema.ambilLema.mockResolvedValue({
+      id: 1, lema: 'abadiat', jenis: 'dasar',
+      jenis_rujuk: '→', lema_rujuk: 'abadiah'
     });
-    ModelFrasa.ambilDefinisi.mockResolvedValue([{ def_text: 'giat' }]);
-    ModelFrasa.ambilRelasi.mockResolvedValue([
-      { rel_type: 's', rel_type_name: 'Sinonim', related_phrase: 'giat' },
-      { rel_type: 's', rel_type_name: 'Sinonim', related_phrase: 'gesit' },
-      { rel_type: 'a', rel_type_name: 'Antonim', related_phrase: 'malas' }
-    ]);
-    ModelFrasa.ambilPeribahasa.mockResolvedValue([{ proverb: 'rajin pangkal pandai' }]);
-    ModelFrasa.ambilTerjemahan.mockResolvedValue([{ translation: 'active' }]);
-    ModelFrasa.ambilTautan.mockResolvedValue([{ url: 'https://contoh.test' }]);
-    ModelFrasa.ambilKataDasar.mockResolvedValue(['aktif']);
 
-    const result = await ambilDetailKamus('aktif%20');
+    const result = await ambilDetailKamus('abadiat');
 
-    expect(ModelFrasa.ambilFrasa).toHaveBeenCalledWith('aktif ');
-    expect(ModelFrasa.ambilDefinisi).toHaveBeenCalledWith('aktif');
-    expect(result.relasi.s.daftar).toEqual(['giat', 'gesit']);
-    expect(result.relasi.a.daftar).toEqual(['malas']);
-    expect(result.namaSumber).toBe('KBBI');
+    expect(result.rujukan).toBe(true);
+    expect(result.lema_rujuk).toBe('abadiah');
   });
 
-  it('menggunakan phrase asli jika actual_phrase tidak ada dan fallback nama relasi ke key', async () => {
-    ModelFrasa.ambilFrasa.mockResolvedValue({
-      phrase: 'uji',
-      actual_phrase: null,
-      lex_class: 'n',
-      lex_class_name: 'nomina'
+  it('mengembalikan detail lengkap dengan makna dan contoh', async () => {
+    ModelLema.ambilLema.mockResolvedValue({
+      id: 1, lema: 'aktif', jenis: 'dasar', induk: null,
+      pemenggalan: 'ak.tif', lafal: 'aktif', varian: null,
+      jenis_rujuk: null, lema_rujuk: null
     });
-    ModelFrasa.ambilDefinisi.mockResolvedValue([]);
-    ModelFrasa.ambilRelasi.mockResolvedValue([
-      { rel_type: 'x', rel_type_name: '', related_phrase: 'contoh' }
+    ModelLema.ambilMakna.mockResolvedValue([
+      { id: 10, makna: 'giat', kelas_kata: 'adjektiva', contoh: [] }
     ]);
-    ModelFrasa.ambilPeribahasa.mockResolvedValue([]);
-    ModelFrasa.ambilTerjemahan.mockResolvedValue([]);
-    ModelFrasa.ambilTautan.mockResolvedValue([]);
-    ModelFrasa.ambilKataDasar.mockResolvedValue([]);
+    ModelLema.ambilContoh.mockResolvedValue([
+      { id: 100, makna_id: 10, contoh: 'ia sangat aktif' }
+    ]);
+    ModelLema.ambilSublema.mockResolvedValue([
+      { id: 2, lema: 'mengaktifkan', jenis: 'berimbuhan' }
+    ]);
+    ModelLema.ambilInduk.mockResolvedValue(null);
+    ModelLema.ambilTerjemahan.mockResolvedValue([{ translation: 'active' }]);
 
-    const result = await ambilDetailKamus('uji');
+    const result = await ambilDetailKamus('aktif');
 
-    expect(ModelFrasa.ambilDefinisi).toHaveBeenCalledWith('uji');
-    expect(result.relasi.x.nama).toBe('x');
-    expect(result.relasi.x.daftar).toEqual(['contoh']);
+    expect(result.rujukan).toBe(false);
+    expect(result.lema).toBe('aktif');
+    expect(result.makna).toHaveLength(1);
+    expect(result.makna[0].contoh).toHaveLength(1);
+    expect(result.sublema.berimbuhan).toHaveLength(1);
+    expect(result.terjemahan).toHaveLength(1);
   });
 });

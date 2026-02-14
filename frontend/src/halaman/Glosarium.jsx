@@ -90,7 +90,7 @@ function Glosarium() {
             >
               <option value="">Semua</option>
               {(bidangList || []).map((b) => (
-                <option key={b.discipline} value={b.discipline}>{b.discipline_name}</option>
+                <option key={b.discipline} value={b.discipline}>{b.discipline}</option>
               ))}
             </select>
           </div>
@@ -104,7 +104,7 @@ function Glosarium() {
             >
               <option value="">Semua</option>
               {(sumberList || []).map((s) => (
-                <option key={s.ref_source} value={s.ref_source}>{s.ref_source_name}</option>
+                <option key={s.ref_source} value={s.ref_source}>{s.ref_source}</option>
               ))}
             </select>
           </div>
@@ -139,7 +139,7 @@ function Glosarium() {
                     to={`/glosarium?bidang=${encodeURIComponent(b.discipline)}`}
                     className="glosarium-browse-link"
                   >
-                    {b.discipline_name} ({b.glossary_count})
+                    {b.discipline} ({b.jumlah})
                   </Link>
                 ))}
               </div>
@@ -155,7 +155,7 @@ function Glosarium() {
                     to={`/glosarium?sumber=${encodeURIComponent(s.ref_source)}`}
                     className="glosarium-browse-link"
                   >
-                    {s.ref_source_name} ({s.glossary_count})
+                    {s.ref_source} ({s.jumlah})
                   </Link>
                 ))}
               </div>
@@ -190,15 +190,15 @@ function Glosarium() {
                       <tr key={item.glo_uid} className="data-table-row">
                         <td className="px-4 py-3">
                           <Link
-                            to={`/kamus/${encodeURIComponent(item.phrase)}`}
+                            to={`/kamus/detail/${encodeURIComponent(item.phrase)}`}
                             className="link-primary"
                           >
                             {item.phrase}
                           </Link>
                         </td>
                         <td className="px-4 py-3 cell-text">{item.original}</td>
-                        <td className="px-4 py-3 cell-muted hidden md:table-cell">{item.discipline_name || '-'}</td>
-                        <td className="px-4 py-3 cell-muted hidden lg:table-cell">{item.ref_source_name || '-'}</td>
+                        <td className="px-4 py-3 cell-muted hidden md:table-cell">{item.discipline || '-'}</td>
+                        <td className="px-4 py-3 cell-muted hidden lg:table-cell">{item.ref_source || '-'}</td>
                       </tr>
                     ))}
                   </tbody>

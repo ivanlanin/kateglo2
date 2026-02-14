@@ -74,22 +74,22 @@ describe('ModelGlosarium', () => {
   });
 
   it('ambilDaftarBidang mengembalikan rows', async () => {
-    const rows = [{ discipline: 'ling', discipline_name: 'Linguistik' }];
+    const rows = [{ discipline: 'ling', jumlah: 10 }];
     db.query.mockResolvedValue({ rows });
 
     const result = await ModelGlosarium.ambilDaftarBidang();
 
-    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM discipline d'));
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('GROUP BY discipline'));
     expect(result).toEqual(rows);
   });
 
   it('ambilDaftarSumber mengembalikan rows', async () => {
-    const rows = [{ ref_source: 'kbbi', ref_source_name: 'KBBI' }];
+    const rows = [{ ref_source: 'kbbi', jumlah: 5 }];
     db.query.mockResolvedValue({ rows });
 
     const result = await ModelGlosarium.ambilDaftarSumber();
 
-    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM ref_source rs'));
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('GROUP BY ref_source'));
     expect(result).toEqual(rows);
   });
 });

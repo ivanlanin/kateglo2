@@ -1,5 +1,5 @@
 /**
- * @fileoverview Halaman detail kamus — definisi, relasi, peribahasa, terjemahan
+ * @fileoverview Halaman detail kamus — makna, contoh, sublema, terjemahan
  */
 
 import { Link, useParams } from 'react-router-dom';
@@ -9,12 +9,12 @@ import PanelLipat from '../komponen/PanelLipat';
 import HalamanDasar from '../komponen/HalamanDasar';
 
 function KamusDetail() {
-  const { slug } = useParams();
+  const { entri } = useParams();
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['kamus-detail', slug],
-    queryFn: () => ambilDetailKamus(slug),
-    enabled: Boolean(slug),
+    queryKey: ['kamus-detail', entri],
+    queryFn: () => ambilDetailKamus(entri),
+    enabled: Boolean(entri),
   });
 
   if (isLoading) {
@@ -36,26 +36,43 @@ function KamusDetail() {
     );
   }
 
-  // Kelompokkan definisi per kelas leksikal
-  const definisiPerKelas = {};
-  (data.definisi || []).forEach((def) => {
-    const kelas = def.lex_class || '-';
-    if (!definisiPerKelas[kelas]) {
-      definisiPerKelas[kelas] = {
-        nama: def.lex_class_name || kelas,
-        daftar: [],
-      };
+  // Jika ini rujukan, tampilkan redirect
+  if (data.rujukan) {
+    return (
+      <HalamanDasar>
+        <nav className="kamus-detail-breadcrumb">
+          <Link to="/kamus" className="kamus-detail-breadcrumb-link">Kamus</Link>
+          <span className="mx-2">›</span>
+          <span className="kamus-detail-breadcrumb-current">{data.lema}</span>
+        </nav>
+        <div className="content-card p-6">
+          <h1 className="kamus-detail-heading">{data.lema}</h1>
+          <p className="mt-2">
+            → Lihat{' '}
+            <Link
+              to={`/kamus/detail/${encodeURIComponent(data.lema_rujuk)}`}
+              className="link-action font-semibold"
+            >
+              {data.lema_rujuk}
+            </Link>
+          </p>
+        </div>
+      </HalamanDasar>
+    );
+  }
+
+  // Kelompokkan makna per kelas kata
+  const maknaPerKelas = {};
+  (data.makna || []).forEach((m) => {
+    const kelas = m.kelas_kata || '-';
+    if (!maknaPerKelas[kelas]) {
+      maknaPerKelas[kelas] = [];
     }
-    definisiPerKelas[kelas].daftar.push(def);
+    maknaPerKelas[kelas].push(m);
   });
 
-  const relasiEntries = Object.entries(data.relasi || {});
-  const adaPeribahasa = data.peribahasa?.length > 0;
+  const sublemaEntries = Object.entries(data.sublema || {});
   const adaTerjemahan = data.terjemahan?.length > 0;
-  const adaTautan = data.tautan?.length > 0;
-
-  // Info tags
-  const infoTags = data.info ? data.info.split(',').map((t) => t.trim()).filter(Boolean) : [];
 
   return (
     <HalamanDasar>
@@ -63,91 +80,100 @@ function KamusDetail() {
       <nav className="kamus-detail-breadcrumb">
         <Link to="/kamus" className="kamus-detail-breadcrumb-link">Kamus</Link>
         <span className="mx-2">›</span>
-        <span className="kamus-detail-breadcrumb-current">{data.frasa}</span>
+        {data.induk && (
+          <>
+            <Link
+              to={`/kamus/detail/${encodeURIComponent(data.induk.lema)}`}
+              className="kamus-detail-breadcrumb-link"
+            >
+              {data.induk.lema}
+            </Link>
+            <span className="mx-2">›</span>
+          </>
+        )}
+        <span className="kamus-detail-breadcrumb-current">{data.lema}</span>
       </nav>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Kolom utama: definisi */}
+        {/* Kolom utama: makna */}
         <div className="lg:col-span-2 space-y-6">
           {/* Header */}
           <div className="content-card p-6">
             <h1 className="kamus-detail-heading">
-              {data.frasa}
-              {data.pelafalan && (
-                <span className="kamus-detail-pronunciation">/{data.pelafalan}/</span>
+              {data.lema}
+              {data.lafal && (
+                <span className="kamus-detail-pronunciation">/{data.lafal}/</span>
               )}
             </h1>
 
-            {data.frasaAktual && data.frasaAktual !== data.frasa && (
+            {data.pemenggalan && data.pemenggalan !== data.lema && (
               <p className="kamus-detail-subtext">
-                Bentuk baku:{' '}
-                <Link
-                  to={`/kamus/${encodeURIComponent(data.frasaAktual)}`}
-                  className="kamus-detail-actual-link"
-                >
-                  {data.frasaAktual}
-                </Link>
+                {data.pemenggalan}
               </p>
             )}
 
-            {/* Label & tag */}
+            {/* Label jenis */}
             <div className="flex flex-wrap gap-2 mt-3">
-              {data.namaKelasLeksikal && (
-                <span className="kamus-detail-tag-blue">
-                  {data.namaKelasLeksikal}
-                </span>
-              )}
-              {data.namaTipeFrasa && (
+              {data.jenis && data.jenis !== 'dasar' && (
                 <span className="kamus-detail-tag-purple">
-                  {data.namaTipeFrasa}
+                  {data.jenis}
                 </span>
               )}
-              {data.namaSumber && (
-                <span className="kamus-detail-tag-green">
-                  {data.namaSumber}
+              {data.varian && (
+                <span className="kamus-detail-tag-gray">
+                  varian: {data.varian}
                 </span>
               )}
-              {infoTags.map((tag) => (
-                <span key={tag} className="kamus-detail-tag-gray">
-                  {tag}
-                </span>
-              ))}
             </div>
           </div>
 
-          {/* Definisi */}
+          {/* Makna */}
           <div className="content-card p-6">
-            <h2 className="kamus-detail-section-title">Definisi</h2>
+            <h2 className="kamus-detail-section-title">Makna</h2>
 
-            {Object.keys(definisiPerKelas).length === 0 && (
+            {Object.keys(maknaPerKelas).length === 0 && (
               <p className="muted-text text-sm">Belum tersedia.</p>
             )}
 
-            {Object.entries(definisiPerKelas).map(([kelas, group]) => (
+            {Object.entries(maknaPerKelas).map(([kelas, daftarMakna]) => (
               <div key={kelas} className="mb-4 last:mb-0">
-                <h3 className="kamus-detail-def-class">
-                  {group.nama} <span className="kamus-detail-def-class-code">({kelas})</span>
-                </h3>
+                {kelas !== '-' && (
+                  <h3 className="kamus-detail-def-class">{kelas}</h3>
+                )}
                 <ol className="kamus-detail-def-list">
-                  {group.daftar.map((def) => (
-                    <li key={def.def_uid} className="text-sm leading-relaxed">
-                      {def.discipline_name && (
-                        <em className="kamus-detail-def-discipline">[{def.discipline_name}] </em>
+                  {daftarMakna.map((m) => (
+                    <li key={m.id} className="text-sm leading-relaxed">
+                      {m.bidang && (
+                        <em className="kamus-detail-def-discipline">[{m.bidang}] </em>
                       )}
-                      {def.def_text}
-                      {def.sample && (
-                        <span className="kamus-detail-def-sample">: {def.sample}</span>
+                      {m.ragam && (
+                        <em className="kamus-detail-def-discipline">{m.ragam} </em>
                       )}
-                      {def.see && (
-                        <span className="ml-2">
-                          →{' '}
-                          <Link
-                            to={`/kamus/${encodeURIComponent(def.see)}`}
-                            className="link-action"
-                          >
-                            {def.see}
-                          </Link>
-                        </span>
+                      {m.kiasan === 1 && (
+                        <em className="kamus-detail-def-discipline">ki </em>
+                      )}
+                      <span dangerouslySetInnerHTML={{ __html: m.makna }} />
+                      {m.tipe_penyingkat && (
+                        <span className="tag-subtle ml-1">{m.tipe_penyingkat}</span>
+                      )}
+                      {m.ilmiah && (
+                        <span className="kamus-detail-def-sample"> [{m.ilmiah}]</span>
+                      )}
+                      {m.kimia && (
+                        <span className="kamus-detail-def-sample"> ({m.kimia})</span>
+                      )}
+                      {/* Contoh */}
+                      {m.contoh?.length > 0 && (
+                        <ul className="mt-1 ml-4">
+                          {m.contoh.map((c) => (
+                            <li key={c.id} className="kamus-detail-def-sample">
+                              <span dangerouslySetInnerHTML={{ __html: c.contoh }} />
+                              {c.makna_contoh && (
+                                <span> — {c.makna_contoh}</span>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
                       )}
                     </li>
                   ))}
@@ -155,87 +181,31 @@ function KamusDetail() {
               </div>
             ))}
           </div>
-
-          {/* Info tambahan: etimologi, catatan */}
-          {(data.etimologi || data.catatan || data.kataDasar?.length > 0) && (
-            <div className="content-card p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {data.kataDasar?.length > 0 && (
-                  <div>
-                    <h3 className="kamus-detail-info-label">Kata Dasar</h3>
-                    <div className="flex flex-wrap gap-1">
-                      {data.kataDasar.map((kd) => (
-                        <Link
-                          key={kd}
-                          to={`/kamus/${encodeURIComponent(kd)}`}
-                          className="kamus-detail-info-link"
-                        >
-                          {kd}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {data.etimologi && (
-                  <div>
-                    <h3 className="kamus-detail-info-label">Etimologi</h3>
-                    <p className="kamus-detail-info-text">{data.etimologi}</p>
-                  </div>
-                )}
-                {data.catatan && (
-                  <div>
-                    <h3 className="kamus-detail-info-label">Catatan</h3>
-                    <p className="kamus-detail-info-text">{data.catatan}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
         </div>
 
-        {/* Sidebar: relasi, peribahasa, terjemahan, tautan */}
+        {/* Sidebar: sublema, terjemahan */}
         <div className="space-y-4">
-          {/* Kata Terkait */}
-          {relasiEntries.length > 0 && (
+          {/* Sublema per jenis */}
+          {sublemaEntries.map(([jenis, daftar]) => (
             <PanelLipat
-              judul="Kata Terkait"
-              jumlah={relasiEntries.reduce((sum, [, v]) => sum + v.daftar.length, 0)}
+              key={jenis}
+              judul={jenis.charAt(0).toUpperCase() + jenis.slice(1)}
+              jumlah={daftar.length}
               terbukaAwal={true}
             >
-              <div className="space-y-3">
-                {relasiEntries.map(([tipe, group]) => (
-                  <div key={tipe}>
-                    <h4 className="kamus-detail-relation-type">{group.nama}</h4>
-                    <div className="flex flex-wrap gap-1">
-                      {group.daftar.map((kata) => (
-                        <Link
-                          key={kata}
-                          to={`/kamus/${encodeURIComponent(kata)}`}
-                          className="kamus-detail-relation-link"
-                        >
-                          {kata}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
+              <div className="flex flex-wrap gap-1">
+                {daftar.map((s) => (
+                  <Link
+                    key={s.id}
+                    to={`/kamus/detail/${encodeURIComponent(s.lema)}`}
+                    className="kamus-detail-relation-link"
+                  >
+                    {s.lema}
+                  </Link>
                 ))}
               </div>
             </PanelLipat>
-          )}
-
-          {/* Peribahasa */}
-          {adaPeribahasa && (
-            <PanelLipat judul="Peribahasa" jumlah={data.peribahasa.length}>
-              <ul className="space-y-2">
-                {data.peribahasa.map((p) => (
-                  <li key={p.prv_uid} className="text-sm">
-                    <p className="kamus-detail-proverb-text">{p.proverb}</p>
-                    {p.meaning && <p className="kamus-detail-proverb-meaning">{p.meaning}</p>}
-                  </li>
-                ))}
-              </ul>
-            </PanelLipat>
-          )}
+          ))}
 
           {/* Terjemahan */}
           {adaTerjemahan && (
@@ -244,8 +214,8 @@ function KamusDetail() {
                 {data.terjemahan.map((t, i) => (
                   <li key={i} className="kamus-detail-translation">
                     {t.translation}
-                    {t.ref_source_name && (
-                      <span className="kamus-detail-translation-source">({t.ref_source_name})</span>
+                    {t.ref_source && (
+                      <span className="kamus-detail-translation-source">({t.ref_source})</span>
                     )}
                   </li>
                 ))}
@@ -253,25 +223,15 @@ function KamusDetail() {
             </PanelLipat>
           )}
 
-          {/* Tautan Luar */}
-          {adaTautan && (
-            <PanelLipat judul="Tautan Luar" jumlah={data.tautan.length}>
-              <ul className="space-y-1 text-sm">
-                {data.tautan.map((t) => (
-                  <li key={t.ext_uid}>
-                    <a
-                      href={t.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="link-action"
-                    >
-                      {t.label || t.url}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </PanelLipat>
-          )}
+          {/* Link ke Tesaurus */}
+          <div className="content-card p-4">
+            <Link
+              to={`/tesaurus/${encodeURIComponent(data.lema)}`}
+              className="link-action text-sm"
+            >
+              Lihat di Tesaurus →
+            </Link>
+          </div>
         </div>
       </div>
     </HalamanDasar>

@@ -1,15 +1,15 @@
 /**
- * @fileoverview Route kamus publik (pencarian + detail)
+ * @fileoverview Route tesaurus publik
  */
 
 const express = require('express');
-const { cariKamus, ambilDetailKamus } = require('../../../services/layananKamusPublik');
+const { cariTesaurus, ambilDetailTesaurus } = require('../../../services/layananTesaurusPublik');
 
 const router = express.Router();
 
 router.get('/cari/:kata', async (req, res, next) => {
   try {
-    const results = await cariKamus(req.params.kata);
+    const results = await cariTesaurus(req.params.kata);
     return res.json({
       query: req.params.kata,
       count: results.length,
@@ -20,13 +20,13 @@ router.get('/cari/:kata', async (req, res, next) => {
   }
 });
 
-router.get('/detail/:entri', async (req, res, next) => {
+router.get('/:kata', async (req, res, next) => {
   try {
-    const data = await ambilDetailKamus(req.params.entri);
+    const data = await ambilDetailTesaurus(req.params.kata);
     if (!data) {
       return res.status(404).json({
         error: 'Tidak Ditemukan',
-        message: 'Entri tidak ditemukan',
+        message: 'Entri tesaurus tidak ditemukan',
       });
     }
     return res.json(data);

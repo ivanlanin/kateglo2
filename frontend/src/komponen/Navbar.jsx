@@ -7,9 +7,8 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const menuItems = [
   { path: '/kamus', label: 'Kamus' },
+  { path: '/tesaurus', label: 'Tesaurus' },
   { path: '/glosarium', label: 'Glosarium' },
-  { path: '/peribahasa', label: 'Peribahasa' },
-  { path: '/singkatan', label: 'Singkatan' },
 ];
 
 function Navbar() {
@@ -22,7 +21,7 @@ function Navbar() {
     const trimmed = query.trim();
     if (!trimmed) return;
     setMenuTerbuka(false);
-    navigate(`/kamus?q=${encodeURIComponent(trimmed)}`);
+    navigate(`/kamus/cari/${encodeURIComponent(trimmed)}`);
   };
 
   return (

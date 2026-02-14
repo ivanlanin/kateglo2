@@ -14,14 +14,8 @@ router.get('/health', (_req, res) => {
 });
 
 router.use('/beranda', require('./beranda'));
-router.use('/pencarian', require('./pencarian'));
 router.use('/kamus', require('./kamus'));
+router.use('/tesaurus', require('./tesaurus'));
 router.use('/glosarium', require('./glosarium'));
-router.use('/peribahasa', require('./peribahasa'));
-router.use('/singkatan', require('./singkatan'));
-
-// Legacy aliases (backward compatibility)
-router.use('/search', require('./pencarian'));
-router.use('/dictionary', require('./kamus'));
 
 module.exports = router;

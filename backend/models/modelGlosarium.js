@@ -54,11 +54,8 @@ class ModelGlosarium {
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-      `SELECT g.glo_uid, g.phrase, g.original, g.discipline, g.lang, g.ref_source,
-              d.discipline_name, rs.ref_source_name
+      `SELECT g.glo_uid, g.phrase, g.original, g.discipline, g.lang, g.ref_source
        FROM glossary g
-       LEFT JOIN discipline d ON g.discipline = d.discipline
-       LEFT JOIN ref_source rs ON g.ref_source = rs.ref_source
        ${whereClause}
        ORDER BY g.phrase ASC
        LIMIT $${idx} OFFSET $${idx + 1}`,
@@ -74,10 +71,11 @@ class ModelGlosarium {
    */
   static async ambilDaftarBidang() {
     const result = await db.query(
-      `SELECT d.discipline, d.discipline_name, d.glossary_count
-       FROM discipline d
-       WHERE d.glossary_count > 0
-       ORDER BY d.discipline_name`
+      `SELECT discipline, COUNT(*) as jumlah
+       FROM glossary
+       WHERE discipline IS NOT NULL AND discipline != ''
+       GROUP BY discipline
+       ORDER BY discipline`
     );
     return result.rows;
   }
@@ -88,10 +86,11 @@ class ModelGlosarium {
    */
   static async ambilDaftarSumber() {
     const result = await db.query(
-      `SELECT rs.ref_source, rs.ref_source_name, rs.glossary_count
-       FROM ref_source rs
-       WHERE rs.glossary = 1 AND rs.glossary_count > 0
-       ORDER BY rs.ref_source_name`
+      `SELECT ref_source, COUNT(*) as jumlah
+       FROM glossary
+       WHERE ref_source IS NOT NULL AND ref_source != ''
+       GROUP BY ref_source
+       ORDER BY ref_source`
     );
     return result.rows;
   }
