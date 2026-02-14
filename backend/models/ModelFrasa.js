@@ -1,6 +1,5 @@
 /**
  * @fileoverview Model untuk entri kamus (frasa, definisi, relasi)
- * Port dari PhraseModel.js dengan penamaan Indonesia
  */
 
 const db = require('../db');

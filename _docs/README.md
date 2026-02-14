@@ -5,9 +5,10 @@
 ```
 _docs/
 ├── README.md               # Dokumen ini
-├── DEPLOYMENT.md           # Panduan deployment
+├── struktur-data.sql       # Struktur database (hasil generate)
 └── YYYYMM/                 # Catatan perubahan per bulan
-    └── YYYYMMDD_nama-topik.md
+    ├── YYYYMMDD_nama-topik.md
+    └── YYYYMMDD_nama-migrasi.sql
 ```
 
 ## Konvensi Penamaan

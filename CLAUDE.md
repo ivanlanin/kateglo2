@@ -21,8 +21,8 @@ kateglo2/
 │
 ├── frontend/      # Public website (Port 5173)
 │   └── src/
-│       ├── pages/        # Page components
-│       ├── components/   # Reusable components
+│       ├── halaman/      # Page components
+│       ├── komponen/     # Reusable components
 │       └── api/          # API client
 │
 ├── admin/       # Admin dashboard (Port 5174)
@@ -39,8 +39,7 @@ kateglo2/
 │   ├── kateglo/          # Old PHP codebase
 │   └── narakita/         # Modern reference project
 │
-├── _docs/                # Documentation
-├── _sql/                 # Database schemas & migrations
+├── _docs/                # Documentation + SQL migrations + struktur data
 └── render.yaml           # Render deployment config
 ```
 
@@ -145,9 +144,9 @@ npm run dev:admin         # Port 5174
 
 ### Database Work
 
-1. **Check schema first**: `code _sql/tables.sql`
-2. **Create migration**: Add SQL file to `_sql/YYYYMM/` dengan format `YYYYMMDD_nama-migrasi.sql`
-3. **Run migration**: `psql $DATABASE_URL < _sql/YYYYMM/YYYYMMDD_nama-migrasi.sql`
+1. **Check schema first**: `code _docs/struktur-data.sql`
+2. **Create migration**: Add SQL file to `_docs/YYYYMM/` dengan format `YYYYMMDD_nama-migrasi.sql`
+3. **Run migration**: `psql $DATABASE_URL < _docs/YYYYMM/YYYYMMDD_nama-migrasi.sql`
 4. **Update models**: Update relevant model files
 
 ### Testing
@@ -264,7 +263,7 @@ Deploy ke Render dengan 3 services:
 - `kateglo-public` - Frontend Public (Static Site)
 - `kateglo-admin` - Frontend Admin (Static Site)
 
-Lihat `_docs/DEPLOYMENT.md` untuk detail.
+Lihat `render.yaml` untuk detail.
 
 ## 🔍 Troubleshooting
 
@@ -288,7 +287,6 @@ Check CORS_ORIGIN in backend .env matches frontend URL.
 ## 📖 Documentation
 
 - README.md - Project overview
-- _docs/DEPLOYMENT.md - Deployment guide
 - _kode/narakita/CLAUDE.md - Advanced patterns
 - _kode/kateglo/README.md - Legacy system reference
 
