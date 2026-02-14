@@ -7,6 +7,9 @@ import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { cariPeribahasa } from '../api/apiPublik';
 import Paginasi from '../komponen/Paginasi';
+import HalamanDasar from '../komponen/HalamanDasar';
+import { EmptyInfoCard, EmptyResultText, QueryFeedback } from '../komponen/StatusKonten';
+import { updateSearchParams, updateSearchParamsWithOffset } from '../utils/searchParams';
 
 function Peribahasa() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -24,24 +27,20 @@ function Peribahasa() {
 
   const handleCari = (e) => {
     e.preventDefault();
-    const q = inputQuery.trim();
-    if (q) {
-      setSearchParams({ q });
-    }
+    const trimmed = inputQuery.trim();
+    if (!trimmed) return;
+    updateSearchParams(setSearchParams, { q: trimmed });
   };
 
   const handleOffset = (newOffset) => {
-    const params = { q: qParam };
-    if (newOffset > 0) params.offset = String(newOffset);
-    setSearchParams(params);
+    updateSearchParamsWithOffset(setSearchParams, { q: qParam }, newOffset);
   };
 
   const results = data?.data || [];
   const total = data?.total || 0;
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Peribahasa</h1>
+    <HalamanDasar judul="Peribahasa">
 
       {/* Panel pencarian */}
       <form onSubmit={handleCari} className="flex gap-2 mb-6">
@@ -50,41 +49,41 @@ function Peribahasa() {
           value={inputQuery}
           onChange={(e) => setInputQuery(e.target.value)}
           placeholder="Cari peribahasa..."
-          className="flex-1 px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+          className="peribahasa-search-input flex-1"
         />
         <button
           type="submit"
-          className="px-6 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          className="peribahasa-search-button"
         >
           Cari
         </button>
       </form>
 
-      {isLoading && <p className="text-gray-600">Mencari peribahasa...</p>}
-      {isError && <p className="text-red-600">Gagal mengambil data.</p>}
+      <QueryFeedback
+        isLoading={isLoading}
+        isError={isError}
+        loadingText="Mencari peribahasa..."
+        errorText="Gagal mengambil data."
+      />
 
       {!qParam && !isLoading && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <p className="text-gray-500">Gunakan kolom pencarian di atas untuk mencari peribahasa.</p>
-        </div>
+        <EmptyInfoCard text="Gunakan kolom pencarian di atas untuk mencari peribahasa." />
       )}
 
       {qParam && !isLoading && !isError && (
         <div className="space-y-3">
-          {results.length === 0 && (
-            <p className="text-gray-500">Tidak ada peribahasa yang ditemukan.</p>
-          )}
+          {results.length === 0 && <EmptyResultText text="Tidak ada peribahasa yang ditemukan." />}
           {results.map((item) => (
-            <div key={item.prv_uid} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-              <p className="text-base font-semibold text-gray-900 mb-1">{item.proverb}</p>
+            <div key={item.prv_uid} className="content-card p-4">
+              <p className="peribahasa-title">{item.proverb}</p>
               {item.meaning && (
-                <p className="text-sm text-gray-600">
-                  <span className="font-medium text-gray-500">Makna:&nbsp;</span>
+                <p className="peribahasa-meaning">
+                  <span className="peribahasa-meaning-label">Makna:&nbsp;</span>
                   {item.meaning}
                 </p>
               )}
               {item.prv_type && (
-                <span className="inline-block mt-2 px-2 py-0.5 text-xs bg-amber-100 text-amber-700 rounded">
+                <span className="peribahasa-type-tag">
                   {item.prv_type}
                 </span>
               )}
@@ -96,7 +95,7 @@ function Peribahasa() {
           )}
         </div>
       )}
-    </div>
+    </HalamanDasar>
   );
 }
 

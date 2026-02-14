@@ -515,4 +515,449 @@ code {
   .dark .changelog-content a {
     @apply text-blue-400 hover:text-blue-300;
   }
+
+  /* ===== Shared: Content Card ===== */
+
+  .content-card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100;
+  }
+
+  .dark .content-card {
+    @apply bg-dark-bg-elevated shadow-none border-dark-border;
+  }
+
+  /* ===== Shared: Typography ===== */
+
+  .page-title {
+    @apply text-2xl font-bold text-gray-900 mb-6;
+  }
+
+  .section-heading {
+    @apply text-sm font-semibold text-gray-700 mb-2;
+  }
+
+  .secondary-text {
+    @apply text-gray-600;
+  }
+
+  .muted-text {
+    @apply text-gray-500;
+  }
+
+  .error-text {
+    @apply text-red-600;
+  }
+
+  .dark .error-text {
+    @apply text-red-400;
+  }
+
+  /* ===== Shared: Links ===== */
+
+  .link-primary,
+  .kamus-result-link,
+  .kamus-detail-info-link,
+  .kamus-detail-relation-link,
+  .glosarium-browse-link {
+    @apply text-blue-700 hover:underline;
+  }
+
+  .dark .link-primary,
+  .dark .kamus-result-link,
+  .dark .kamus-detail-info-link,
+  .dark .kamus-detail-relation-link,
+  .dark .glosarium-browse-link {
+    @apply text-blue-300;
+  }
+
+  .link-action,
+  .kamus-detail-actual-link {
+    @apply text-blue-600 hover:underline;
+  }
+
+  .dark .link-action,
+  .dark .kamus-detail-actual-link {
+    @apply text-blue-400;
+  }
+
+  /* ===== Shared: Forms ===== */
+
+  .form-input {
+    @apply w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-blue-500;
+  }
+
+  .dark .form-input,
+  .dark .peribahasa-search-input {
+    @apply bg-dark-bg-input border-dark-border text-dark-text;
+  }
+
+  .form-label {
+    @apply block text-xs font-medium text-gray-600 mb-1;
+  }
+
+  .dark .form-label {
+    @apply text-dark-text-muted;
+  }
+
+  .btn-primary {
+    @apply px-5 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors;
+  }
+
+  /* ===== Shared: Tags ===== */
+
+  .tag-subtle {
+    @apply text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded;
+  }
+
+  .dark .tag-subtle {
+    @apply bg-dark-bg-input text-dark-text-muted;
+  }
+
+  /* ===== Shared: Data Tables ===== */
+
+  .data-table-head {
+    @apply bg-gray-50 text-gray-600 text-left;
+  }
+
+  .dark .data-table-head {
+    @apply bg-dark-bg-input text-dark-text-muted;
+  }
+
+  .data-table-body,
+  .result-divider {
+    @apply divide-y divide-gray-100;
+  }
+
+  .dark .data-table-body,
+  .dark .result-divider {
+    @apply divide-dark-border;
+  }
+
+  .cell-primary {
+    @apply font-medium text-gray-900;
+  }
+
+  .cell-text {
+    @apply text-gray-700;
+  }
+
+  .cell-muted {
+    @apply text-gray-500;
+  }
+
+  .data-table-row {
+    @apply hover:bg-gray-50;
+  }
+
+  .dark .data-table-row {
+    @apply hover:bg-dark-bg-hover;
+  }
+
+  /* ===== PanelLipat ===== */
+
+  .panel-lipat-root {
+    @apply border border-gray-200 rounded-lg overflow-hidden;
+  }
+
+  .dark .panel-lipat-root {
+    @apply border-dark-border;
+  }
+
+  .panel-lipat-trigger {
+    @apply w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors text-left;
+  }
+
+  .dark .panel-lipat-trigger {
+    @apply bg-dark-bg-elevated hover:bg-dark-bg-hover;
+  }
+
+  .panel-lipat-label {
+    @apply font-medium text-gray-800;
+  }
+
+  .panel-lipat-count {
+    @apply ml-2 text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full;
+  }
+
+  .dark .panel-lipat-count {
+    @apply bg-blue-900/30 text-blue-300;
+  }
+
+  .panel-lipat-icon {
+    @apply w-5 h-5 text-gray-500 transition-transform;
+  }
+
+  .dark .panel-lipat-icon {
+    @apply text-dark-text-muted;
+  }
+
+  .panel-lipat-body {
+    @apply px-4 py-3 border-t border-gray-200;
+  }
+
+  .dark .panel-lipat-body {
+    @apply border-dark-border;
+  }
+
+  /* ===== Paginasi ===== */
+
+  .paginasi-container {
+    @apply flex flex-col sm:flex-row items-center justify-between gap-3 mt-4;
+  }
+
+  .paginasi-info {
+    @apply text-sm text-gray-600;
+  }
+
+  .paginasi-controls {
+    @apply flex items-center gap-1;
+  }
+
+  .paginasi-btn {
+    @apply px-3 py-1.5 text-sm border border-gray-300 rounded-md disabled:opacity-40 hover:bg-gray-100;
+  }
+
+  .dark .paginasi-btn {
+    @apply border-dark-border hover:bg-dark-bg-hover text-dark-text;
+  }
+
+  .paginasi-btn-active {
+    @apply bg-blue-600 text-white border-blue-600 hover:bg-blue-600;
+  }
+
+  .dark .paginasi-btn-active {
+    @apply text-white border-blue-600;
+  }
+
+  .paginasi-ellipsis {
+    @apply px-1 text-gray-400;
+  }
+
+
+  /* ===== Kamus ===== */
+
+  .kamus-search-label {
+    @apply text-sm font-medium text-gray-700 shrink-0;
+  }
+
+  .kamus-abjad-link {
+    @apply px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-blue-100 hover:text-blue-700 transition-colors;
+  }
+
+  .dark .kamus-abjad-link {
+    @apply bg-dark-bg-input text-dark-text hover:bg-blue-900/30 hover:text-blue-300;
+  }
+
+  .kamus-result-heading {
+    @apply text-sm font-semibold text-gray-600 mb-4;
+  }
+
+  .kamus-result-link {
+    @apply font-semibold;
+  }
+
+  .kamus-result-redirect {
+    @apply text-xs text-gray-500;
+  }
+
+  .kamus-result-preview {
+    @apply text-sm text-gray-600 mt-1 line-clamp-2;
+  }
+
+  /* ===== KamusDetail ===== */
+
+  .kamus-detail-breadcrumb {
+    @apply text-sm text-gray-500 mb-4;
+  }
+
+  .kamus-detail-breadcrumb-link {
+    @apply hover:text-blue-600;
+  }
+
+  .dark .kamus-detail-breadcrumb-link {
+    @apply hover:text-blue-400;
+  }
+
+  .kamus-detail-breadcrumb-current {
+    @apply text-gray-900;
+  }
+
+  .kamus-detail-heading {
+    @apply text-3xl font-bold text-gray-900;
+  }
+
+  .kamus-detail-pronunciation {
+    @apply text-lg font-normal text-gray-500 ml-3;
+  }
+
+  .dark .kamus-detail-pronunciation {
+    @apply text-dark-text-muted;
+  }
+
+  .kamus-detail-subtext {
+    @apply text-sm text-gray-500 mt-1;
+  }
+
+  .kamus-detail-actual-link {
+    @apply font-medium;
+  }
+
+  .kamus-detail-tag-blue {
+    @apply text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded;
+  }
+
+  .dark .kamus-detail-tag-blue {
+    @apply bg-blue-900/30 text-blue-300;
+  }
+
+  .kamus-detail-tag-purple {
+    @apply text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded;
+  }
+
+  .dark .kamus-detail-tag-purple {
+    @apply bg-purple-900/30 text-purple-300;
+  }
+
+  .kamus-detail-tag-green {
+    @apply text-xs bg-green-50 text-green-700 px-2 py-1 rounded;
+  }
+
+  .dark .kamus-detail-tag-green {
+    @apply bg-green-900/30 text-green-300;
+  }
+
+  .kamus-detail-tag-gray {
+    @apply text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded;
+  }
+
+  .dark .kamus-detail-tag-gray {
+    @apply bg-dark-bg-input text-dark-text-muted;
+  }
+
+  .kamus-detail-section-title {
+    @apply text-lg font-semibold text-gray-800 mb-4;
+  }
+
+  .kamus-detail-def-class {
+    @apply text-sm font-semibold text-gray-600 mb-2;
+  }
+
+  .kamus-detail-def-class-code {
+    @apply text-gray-400;
+  }
+
+  .kamus-detail-def-list {
+    @apply list-decimal list-inside space-y-2 text-gray-800;
+  }
+
+  .kamus-detail-def-discipline {
+    @apply text-gray-500;
+  }
+
+  .kamus-detail-def-sample {
+    @apply text-gray-500 italic ml-1;
+  }
+
+  .kamus-detail-info-label {
+    @apply text-sm font-semibold text-gray-600 mb-1;
+  }
+
+  .kamus-detail-info-text {
+    @apply text-sm text-gray-700;
+  }
+
+  .kamus-detail-info-link,
+  .kamus-detail-relation-link {
+    @apply text-sm;
+  }
+
+  .kamus-detail-relation-type {
+    @apply text-xs font-semibold text-gray-500 uppercase mb-1;
+  }
+
+  .kamus-detail-proverb-text {
+    @apply font-medium text-gray-800;
+  }
+
+  .kamus-detail-proverb-meaning {
+    @apply text-gray-500 mt-0.5;
+  }
+
+  .kamus-detail-translation {
+    @apply text-gray-700;
+  }
+
+  .kamus-detail-translation-source {
+    @apply text-gray-400 ml-1;
+  }
+
+  /* ===== Peribahasa ===== */
+
+  .peribahasa-search-input {
+    @apply px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500;
+  }
+
+  .peribahasa-search-button {
+    @apply px-6 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors;
+  }
+
+  .peribahasa-title {
+    @apply text-base font-semibold text-gray-900 mb-1;
+  }
+
+  .peribahasa-meaning {
+    @apply text-sm text-gray-600;
+  }
+
+  .peribahasa-meaning-label {
+    @apply font-medium text-gray-500;
+  }
+
+  .peribahasa-type-tag {
+    @apply inline-block mt-2 px-2 py-0.5 text-xs bg-amber-100 text-amber-700 rounded;
+  }
+
+  .dark .peribahasa-type-tag {
+    @apply bg-amber-900/30 text-amber-300;
+  }
+
+  .dark .page-title,
+  .dark .section-heading,
+  .dark .cell-primary,
+  .dark .cell-text,
+  .dark .panel-lipat-label,
+  .dark .kamus-search-label,
+  .dark .kamus-detail-breadcrumb-current,
+  .dark .kamus-detail-heading,
+  .dark .kamus-detail-section-title,
+  .dark .kamus-detail-def-list,
+  .dark .kamus-detail-info-text,
+  .dark .kamus-detail-proverb-text,
+  .dark .kamus-detail-translation,
+  .dark .peribahasa-title {
+    @apply text-dark-text;
+  }
+
+  .dark .secondary-text,
+  .dark .muted-text,
+  .dark .paginasi-info,
+  .dark .paginasi-ellipsis,
+  .dark .kamus-result-heading,
+  .dark .kamus-result-redirect,
+  .dark .kamus-result-preview,
+  .dark .kamus-detail-breadcrumb,
+  .dark .kamus-detail-subtext,
+  .dark .kamus-detail-def-class,
+  .dark .kamus-detail-def-class-code,
+  .dark .kamus-detail-def-discipline,
+  .dark .kamus-detail-def-sample,
+  .dark .kamus-detail-info-label,
+  .dark .kamus-detail-relation-type,
+  .dark .kamus-detail-proverb-meaning,
+  .dark .kamus-detail-translation-source,
+  .dark .peribahasa-meaning,
+  .dark .peribahasa-meaning-label,
+  .dark .cell-muted {
+    @apply text-dark-text-muted;
+  }
 }
