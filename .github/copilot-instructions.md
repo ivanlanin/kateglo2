@@ -324,7 +324,7 @@ npm run dev:admin         # Port 5174
 
 ### Database Work
 1. **Check schema first**: `Select-String -Path "_sql/tables.sql" -Pattern "table_name"`
-2. **Create migration**: Add SQL file to `_sql/migrations/`
+2. **Create migration**: Add SQL file to `_sql/YYYYMM/` with format `YYYYMMDD_nama-migrasi.sql`
 3. **Run migration**: Use temp script in `backend/`
 4. **Regenerate schema**: `Set-Location backend; node scripts/db-schema.js`
 5. **Update models**: Update relevant model files
@@ -382,6 +382,8 @@ Gunakan `_kode/` sebagai referensi:
 - **Components**: PascalCase (e.g., `SearchBar.jsx`, `DictionaryDetail.jsx`)
 - **Constants**: camelCase (NOT SCREAMING_SNAKE_CASE)
 - **Database**: snake_case (matching PostgreSQL convention)
+- **Changelog docs**: `YYYYMMDD_nama-topik.md` (di `_docs/YYYYMM/`)
+- **SQL migration files**: `YYYYMMDD_nama-migrasi.sql` (di `_sql/YYYYMM/`)
 
 ### Language
 - **Code**: English (variable names, functions, comments in code)

@@ -1,228 +1,245 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-14T02:08:36.480Z
+-- Generated: 2026-02-14T02:37:53.074Z
 
 -- ============================================
 -- TABLES
 -- ============================================
 
 create table _thesaurus (
-  lemma character varying(32) default ''::character varying,
-  synonym character varying(1000) not null,
-  antonym character varying(1000) default NULL::character varying,
-  parent character varying(32) default NULL::character varying
+  lemma text default ''::text,
+  synonym text not null,
+  antonym text,
+  parent text
 );
 
 create table abbr_entry (
   abbr_idx serial primary key,
-  abbr_key character varying(255) default NULL::character varying,
-  abbr_id character varying(4000) default NULL::character varying,
-  abbr_en character varying(4000) default NULL::character varying,
-  abbr_type character varying(255) default NULL::character varying,
-  lang character varying(16) default NULL::character varying,
-  redirect_to character varying(255) default NULL::character varying,
-  source character varying(16) default NULL::character varying,
-  url character varying(255) default NULL::character varying,
-  notes character varying(4000) default NULL::character varying
+  abbr_key text,
+  abbr_id text,
+  abbr_en text,
+  abbr_type text,
+  lang text,
+  redirect_to text,
+  source text,
+  url text,
+  notes text
 );
+create index idx_abbr_entry_trgm on abbr_entry using gin (abbr_key gin_trgm_ops);
 create index idx_abbr_key on abbr_entry using btree (abbr_key);
 
 create table definition (
   def_uid serial primary key,
-  phrase character varying(255) not null,
+  phrase text not null,
   def_num smallint not null default '1'::smallint,
-  lex_class character varying(16) default NULL::character varying,
-  def_text character varying(4000) not null,
-  discipline character varying(32) default NULL::character varying,
-  sample character varying(4000) default NULL::character varying,
-  see character varying(255) default NULL::character varying,
+  lex_class text,
+  def_text text not null,
+  discipline text,
+  sample text,
+  see text,
   updated timestamp without time zone,
-  updater character varying(32) default NULL::character varying,
+  updater text,
   wikipedia_updated timestamp without time zone
 );
+create index idx_definition_discipline on definition using btree (discipline);
+create index idx_definition_lex_class on definition using btree (lex_class);
 create index idx_definition_phrase on definition using btree (phrase);
+create index idx_definition_phrase_lower on definition using btree (lower(phrase));
+create index idx_definition_phrase_order on definition using btree (phrase, def_num, def_uid);
 
 create table discipline (
-  discipline character varying(32),
-  discipline_name character varying(255) not null,
+  discipline text,
+  discipline_name text not null,
   glossary_count integer not null default 0,
   updated timestamp without time zone,
-  updater character varying(32) default NULL::character varying
+  updater text
 );
 
 create table external_ref (
   ext_uid serial primary key,
-  phrase character varying(255) not null,
-  label character varying(255) default NULL::character varying,
-  url character varying(255) not null,
+  phrase text not null,
+  label text,
+  url text not null,
   updated timestamp without time zone,
-  updater character varying(32) default NULL::character varying
+  updater text
 );
+create index idx_external_ref_phrase_lower on external_ref using btree (lower(phrase));
 
 create table glossary (
   glo_uid serial primary key,
-  phrase character varying(255) not null,
-  original character varying(255) not null,
-  discipline character varying(32) default NULL::character varying,
-  lang character varying(16) not null default 'en'::character varying,
-  ref_source character varying(16) default NULL::character varying,
-  wpid character varying(255) default NULL::character varying,
-  wpen character varying(255) default NULL::character varying,
+  phrase text not null,
+  original text not null,
+  discipline text,
+  lang text not null default 'en'::text,
+  ref_source text,
+  wpid text,
+  wpen text,
   updated timestamp without time zone,
-  updater character varying(32) not null,
+  updater text not null,
   wikipedia_updated timestamp without time zone
 );
 create index idx_glossary_discipline on glossary using btree (discipline);
 create index idx_glossary_original on glossary using btree (original);
+create index idx_glossary_original_trgm on glossary using gin (original gin_trgm_ops);
 create index idx_glossary_phrase on glossary using btree (phrase);
+create index idx_glossary_phrase_trgm on glossary using gin (phrase gin_trgm_ops);
 create index idx_glossary_ref_source on glossary using btree (ref_source);
 
 create table language (
-  lang character varying(16),
-  lang_name character varying(255) default NULL::character varying,
+  lang text,
+  lang_name text,
   updated timestamp without time zone,
-  updater character varying(32) not null
+  updater text not null
 );
 
 create table lexical_class (
-  lex_class character varying(16),
-  lex_class_name character varying(255) not null,
-  lex_class_ref character varying(255) default NULL::character varying,
+  lex_class text,
+  lex_class_name text not null,
+  lex_class_ref text,
   sort_order smallint not null default '1'::smallint,
   updated timestamp without time zone,
-  updater character varying(32) default NULL::character varying
+  updater text
 );
 
 create table new_lemma (
-  new_lemma character varying(255),
+  new_lemma text,
   glossary_count integer not null default 0,
   is_exists smallint not null default '0'::smallint,
   is_valid smallint not null default '0'::smallint
 );
 
 create table phrase (
-  phrase character varying(255),
-  phrase_type character varying(16) not null default 'r'::character varying,
-  lex_class character varying(16) not null,
-  roget_class character varying(16) default NULL::character varying,
-  pronounciation character varying(4000) default NULL::character varying,
-  etymology character varying(4000) default NULL::character varying,
-  ref_source character varying(16) default NULL::character varying,
+  phrase text,
+  phrase_type text not null default 'r'::text,
+  lex_class text not null,
+  roget_class text,
+  pronounciation text,
+  etymology text,
+  ref_source text,
   def_count integer not null default 0,
-  actual_phrase character varying(255) default NULL::character varying,
-  info character varying(255) default NULL::character varying,
-  notes character varying(4000) default NULL::character varying,
+  actual_phrase text,
+  info text,
+  notes text,
   updated timestamp without time zone,
-  updater character varying(32) default NULL::character varying,
+  updater text,
   created timestamp without time zone,
-  creator character varying(32) not null,
+  creator text not null,
   proverb_updated timestamp without time zone,
   wikipedia_updated timestamp without time zone,
   kbbi_updated timestamp without time zone
 );
+create index idx_phrase_actual on phrase using btree (actual_phrase) WHERE ((actual_phrase IS NOT NULL) AND (actual_phrase <> ''::text));
+create index idx_phrase_lower on phrase using btree (lower(phrase));
+create index idx_phrase_trgm on phrase using gin (phrase gin_trgm_ops);
+create index idx_phrase_type on phrase using btree (phrase_type);
 
 create table phrase_type (
-  phrase_type character varying(16),
-  phrase_type_name character varying(255) not null,
+  phrase_type text,
+  phrase_type_name text not null,
   sort_order smallint not null default '1'::smallint,
   updated timestamp without time zone,
-  updater character varying(32) not null
+  updater text not null
 );
 
 create table proverb (
   prv_uid serial primary key,
-  phrase character varying(255) not null,
-  proverb character varying(4000) not null,
-  meaning character varying(4000) default NULL::character varying,
+  phrase text not null,
+  proverb text not null,
+  meaning text,
   prv_type integer not null default 0,
   updated timestamp without time zone,
-  updater character varying(32) not null
+  updater text not null
 );
+create index idx_proverb_phrase_lower on proverb using btree (lower(phrase));
+create index idx_proverb_trgm on proverb using gin (proverb gin_trgm_ops);
 
 create table ref_source (
-  ref_source character varying(16),
-  ref_source_name character varying(255) not null,
+  ref_source text,
+  ref_source_name text not null,
   dictionary smallint not null default '0'::smallint,
   glossary smallint not null default '0'::smallint,
   translation smallint not null default '0'::smallint,
   glossary_count integer not null default 0,
   updated timestamp without time zone,
-  updater character varying(32) not null
+  updater text not null
 );
 
 create table relation (
   rel_uid serial primary key,
-  root_phrase character varying(255) not null,
-  related_phrase character varying(255) not null,
-  rel_type character varying(16) not null,
+  root_phrase text not null,
+  related_phrase text not null,
+  rel_type text not null,
   updated timestamp without time zone,
-  updater character varying(32) default NULL::character varying
+  updater text
 );
 create index idx_relation_related on relation using btree (related_phrase);
 create index idx_relation_root on relation using btree (root_phrase);
+create index idx_relation_root_lower on relation using btree (lower(root_phrase));
 create unique index idx_relation_unique on relation using btree (root_phrase, related_phrase, rel_type);
 
 create table relation_type (
-  rel_type character varying(16),
-  rel_type_name character varying(255) not null,
+  rel_type text,
+  rel_type_name text not null,
   sort_order smallint not null default '1'::smallint,
   updated timestamp without time zone,
-  updater character varying(32) default NULL::character varying
+  updater text
 );
 
 create table roget_class (
-  roget_class character varying(16),
-  number character varying(16) default NULL::character varying,
-  suffix character varying(16) default NULL::character varying,
-  roget_name character varying(255) default NULL::character varying,
-  english_name character varying(255) default NULL::character varying,
-  asterix character varying(16) default NULL::character varying,
-  caret character varying(16) default NULL::character varying,
+  roget_class text,
+  number text,
+  suffix text,
+  roget_name text,
+  english_name text,
+  asterix text,
+  caret text,
   class_num smallint,
   division_num smallint,
   section_num smallint
 );
 
 create table searched_phrase (
-  phrase character varying(255),
+  phrase text,
   search_count integer not null default 0,
   last_searched timestamp without time zone not null
 );
 create index idx_searched_phrase on searched_phrase using btree (search_count DESC);
+create unique index idx_searched_phrase_phrase on searched_phrase using btree (phrase);
 
 create table sys_abbrev (
-  abbrev character varying(16),
-  label character varying(255) default NULL::character varying,
-  type character varying(16) default NULL::character varying,
+  abbrev text,
+  label text,
+  type text,
   updated timestamp without time zone,
-  updater character varying(32) default NULL::character varying
+  updater text
 );
 
 create table sys_comment (
   comment_id serial primary key,
-  ses_id character varying(32) default NULL::character varying,
-  sender_name character varying(255) not null,
-  sender_email character varying(255) not null,
-  url character varying(255) default NULL::character varying,
+  ses_id text,
+  sender_name text not null,
+  sender_email text not null,
+  url text,
   status smallint not null default '1'::smallint,
   sent_date timestamp without time zone not null,
-  comment_text character varying(4000) default NULL::character varying,
-  response character varying(4000) default NULL::character varying
+  comment_text text,
+  response text
 );
 
 create table sys_user (
-  user_id character varying(32),
-  pass_key character varying(32) not null,
-  full_name character varying(255) default NULL::character varying,
+  user_id text,
+  pass_key text not null,
+  full_name text,
   last_access timestamp without time zone,
   updated timestamp without time zone,
-  updater character varying(32) not null
+  updater text not null
 );
 
 create table translation (
-  lemma character varying(255),
-  ref_source character varying(16),
-  translation character varying(4000) default NULL::character varying
+  lemma text,
+  ref_source text,
+  translation text
 );
+create index idx_translation_lemma_lower on translation using btree (lower(lemma));
 
 -- Schema extraction completed successfully
