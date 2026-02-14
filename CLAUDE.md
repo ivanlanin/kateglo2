@@ -146,8 +146,8 @@ npm run dev:admin         # Port 5174
 ### Database Work
 
 1. **Check schema first**: `code _sql/tables.sql`
-2. **Create migration**: Add SQL file to `_sql/migrations/`
-3. **Run migration**: `psql $DATABASE_URL < _sql/migrations/xxx.sql`
+2. **Create migration**: Add SQL file to `_sql/YYYYMM/` dengan format `YYYYMMDD_nama-migrasi.sql`
+3. **Run migration**: `psql $DATABASE_URL < _sql/YYYYMM/YYYYMMDD_nama-migrasi.sql`
 4. **Update models**: Update relevant model files
 
 ### Testing
