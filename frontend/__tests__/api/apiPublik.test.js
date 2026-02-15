@@ -18,8 +18,6 @@ import {
   cariGlosarium,
   ambilDaftarBidang,
   ambilDaftarSumber,
-  cariPeribahasa,
-  cariSingkatan,
 } from '../../src/api/apiPublik';
 
 describe('apiPublik', () => {
@@ -36,21 +34,21 @@ describe('apiPublik', () => {
 
   it('cariKamus mengirim params query + limit', async () => {
     klien.get.mockResolvedValue({ data: { data: [] } });
-    await cariKamus('kata', 10);
-    expect(klien.get).toHaveBeenCalledWith('/api/public/pencarian', { params: { q: 'kata', limit: 10 } });
+    await cariKamus('kata', { limit: 10, offset: 5 });
+    expect(klien.get).toHaveBeenCalledWith('/api/public/kamus/cari/kata', { params: { limit: 10, offset: 5 } });
   });
 
   it('ambilDetailKamus melakukan encode slug', async () => {
     klien.get.mockResolvedValue({ data: { frasa: 'anak' } });
     await ambilDetailKamus('anak ibu');
-    expect(klien.get).toHaveBeenCalledWith('/api/public/kamus/anak%20ibu');
+    expect(klien.get).toHaveBeenCalledWith('/api/public/kamus/detail/anak%20ibu');
   });
 
   it('cariGlosarium memakai default params', async () => {
     klien.get.mockResolvedValue({ data: { data: [], total: 0 } });
-    await cariGlosarium();
-    expect(klien.get).toHaveBeenCalledWith('/api/public/glosarium', {
-      params: { q: '', bidang: '', sumber: '', bahasa: '', limit: 20, offset: 0 },
+    await cariGlosarium('istilah');
+    expect(klien.get).toHaveBeenCalledWith('/api/public/glosarium/cari/istilah', {
+      params: { limit: 100, offset: 0 },
     });
   });
 
@@ -62,16 +60,4 @@ describe('apiPublik', () => {
     expect(klien.get).toHaveBeenNthCalledWith(2, '/api/public/glosarium/sumber');
   });
 
-  it('cariPeribahasa dan cariSingkatan mengirim parameter pencarian', async () => {
-    klien.get.mockResolvedValue({ data: { data: [] } });
-    await cariPeribahasa({ q: 'buah', limit: 5, offset: 1 });
-    await cariSingkatan({ q: 'bumn', kependekan: 'badan', tag: 'instansi', limit: 7, offset: 2 });
-
-    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/public/peribahasa', {
-      params: { q: 'buah', limit: 5, offset: 1 },
-    });
-    expect(klien.get).toHaveBeenNthCalledWith(2, '/api/public/singkatan', {
-      params: { q: 'bumn', kependekan: 'badan', tag: 'instansi', limit: 7, offset: 2 },
-    });
-  });
 });

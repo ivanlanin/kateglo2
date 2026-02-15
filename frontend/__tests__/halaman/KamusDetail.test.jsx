@@ -15,7 +15,7 @@ vi.mock('@tanstack/react-query', () => ({
 
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
-  useParams: () => ({ slug: 'kata' }),
+  useParams: () => ({ entri: 'kata' }),
 }));
 
 describe('KamusDetail', () => {
@@ -43,41 +43,28 @@ describe('KamusDetail', () => {
         isLoading: false,
         isError: false,
         data: {
-          frasa: 'kata',
-          frasaAktual: 'kata',
-          namaKelasLeksikal: 'nomina',
-          namaTipeFrasa: 'dasar',
-          namaSumber: 'KBBI',
-          pelafalan: 'ka-ta',
-          info: 'ragam, umum',
-          definisi: [{ def_uid: 1, lex_class: 'n', lex_class_name: 'nomina', def_text: 'unsur bahasa' }],
-          relasi: { s: { nama: 'Sinonim', daftar: ['istilah'] } },
-          peribahasa: [{ prv_uid: 1, proverb: 'buah bibir', meaning: 'bahan pembicaraan' }],
-          terjemahan: [{ translation: 'word', ref_source_name: 'Oxford' }],
-          tautan: [{ ext_uid: 1, url: 'https://contoh.test', label: 'Contoh' }],
-          kataDasar: ['kata'],
-          etimologi: 'serapan',
-          catatan: 'catatan uji',
+          lema: 'kata',
+          lafal: 'ka-ta',
+          pemenggalan: 'ka-ta',
+          jenis: 'dasar',
+          makna: [{ id: 1, kelas_kata: 'n', makna: 'unsur bahasa' }],
+          sublema: {
+            turunan: [{ id: 7, lema: 'berkata' }],
+          },
+          terjemahan: [{ translation: 'word', ref_source: 'Oxford' }],
         },
       };
     });
 
     render(<KamusDetail />);
 
-    expect(screen.getByRole('heading', { name: /kata\/ka-ta\//i })).toBeInTheDocument();
-    expect(screen.getByText('Definisi')).toBeInTheDocument();
-    expect(screen.getByText('Kata Terkait')).toBeInTheDocument();
-    expect(screen.getByText('Peribahasa')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /kata/i })).toBeInTheDocument();
+    expect(screen.getByText('/ka-ta/')).toBeInTheDocument();
     expect(screen.getByText('Terjemahan')).toBeInTheDocument();
-    expect(screen.getByText('Tautan Luar')).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole('button', { name: /Peribahasa/i }));
     fireEvent.click(screen.getByRole('button', { name: /Terjemahan/i }));
-    fireEvent.click(screen.getByRole('button', { name: /Tautan Luar/i }));
 
-    expect(screen.getByText('buah bibir')).toBeInTheDocument();
+    expect(screen.getByText('berkata')).toBeInTheDocument();
     expect(screen.getByText('word')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Contoh' })).toBeInTheDocument();
     expect(ambilDetailKamus).toHaveBeenCalledWith('kata');
   });
 
@@ -86,32 +73,24 @@ describe('KamusDetail', () => {
       isLoading: false,
       isError: false,
       data: {
-        frasa: 'aktip',
-        frasaAktual: 'aktif',
-        namaKelasLeksikal: 'adjektiva',
-        definisi: [
+        lema: 'aktip',
+        varian: 'aktif',
+        makna: [
           {
-            def_uid: 2,
-            lex_class: 'adj',
-            lex_class_name: 'adjektiva',
-            def_text: 'giat',
-            sample: 'anak aktif',
-            see: 'enerjik',
-            discipline_name: 'Psikologi',
+            id: 2,
+            kelas_kata: 'adj',
+            bidang: 'Psikologi',
+            makna: 'giat',
           },
         ],
-        relasi: {},
-        peribahasa: [],
+        sublema: {},
         terjemahan: [],
-        tautan: [],
       },
     });
 
     render(<KamusDetail />);
 
-    expect(screen.getByText(/Bentuk baku/i)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'aktif' })).toBeInTheDocument();
+    expect(screen.getByText(/varian: aktif/i)).toBeInTheDocument();
     expect(screen.getByText('[Psikologi]', { exact: false })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'enerjik' })).toBeInTheDocument();
   });
 });
