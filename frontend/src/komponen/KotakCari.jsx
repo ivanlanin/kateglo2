@@ -7,9 +7,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { autocomplete } from '../api/apiPublik';
 
 const opsiKategori = [
-  { value: 'kamus', label: 'Kamus' },
-  { value: 'tesaurus', label: 'Tesaurus' },
-  { value: 'glosarium', label: 'Glosarium' },
+  { value: 'kamus', label: 'Kamus', placeholder: 'Cari kata \u2026' },
+  { value: 'tesaurus', label: 'Tesaurus', placeholder: 'Cari relasi \u2026' },
+  { value: 'glosarium', label: 'Glosarium', placeholder: 'Cari istilah \u2026' },
 ];
 
 function deteksiKategori(pathname) {
@@ -47,7 +47,7 @@ function navigasiCari(navigate, kategori, kata) {
   }
 }
 
-function KotakCari({ varian = 'navbar' }) {
+function KotakCari({ varian = 'navbar', autoFocus = false }) {
   const location = useLocation();
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
@@ -57,11 +57,19 @@ function KotakCari({ varian = 'navbar' }) {
   const [indeksAktif, setIndeksAktif] = useState(-1);
 
   const wrapperRef = useRef(null);
+  const inputRef = useRef(null);
   const timerRef = useRef(null);
 
   useEffect(() => {
     setKategori(deteksiKategori(location.pathname));
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (autoFocus && inputRef.current) {
+      const id = setTimeout(() => inputRef.current.focus(), 100);
+      return () => clearTimeout(id);
+    }
+  }, [autoFocus]);
 
   // Tutup dropdown saat klik di luar
   useEffect(() => {
@@ -148,6 +156,7 @@ function KotakCari({ varian = 'navbar' }) {
   };
 
   const adalahBeranda = varian === 'beranda';
+  const placeholder = opsiKategori.find((o) => o.value === kategori)?.placeholder;
 
   return (
     <form
@@ -166,8 +175,9 @@ function KotakCari({ varian = 'navbar' }) {
       </select>
       <div className="kotak-cari-input-wrapper">
         <input
+          ref={inputRef}
           type="text"
-          placeholder="Cari kata..."
+          placeholder={placeholder}
           value={query}
           onChange={handleChange}
           onKeyDown={handleKeyDown}

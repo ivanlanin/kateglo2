@@ -27,7 +27,7 @@ function KamusDetail() {
   if (isLoading) {
     return (
       <HalamanDasar>
-        <p className="secondary-text">Memuat detail...</p>
+        <p className="secondary-text">Memuat detail …</p>
       </HalamanDasar>
     );
   }

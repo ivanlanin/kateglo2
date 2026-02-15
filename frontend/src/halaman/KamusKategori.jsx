@@ -56,7 +56,7 @@ function KamusKategori() {
       <QueryFeedback
         isLoading={isLoading}
         isError={isError}
-        loadingText="Memuat data..."
+        loadingText="Memuat data …"
         errorText="Gagal mengambil data. Coba lagi."
       />
 

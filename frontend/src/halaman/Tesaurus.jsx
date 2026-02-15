@@ -25,7 +25,7 @@ function Tesaurus() {
       <QueryFeedback
         isLoading={isLoading}
         isError={isError}
-        loadingText="Mencari data..."
+        loadingText="Mencari data …"
         errorText="Gagal mengambil data. Coba lagi."
       />
 
@@ -58,7 +58,7 @@ function Tesaurus() {
                   {item.sinonim && (
                     <p className="kamus-result-preview">
                       Sinonim: {item.sinonim.split(';').slice(0, 5).join('; ')}
-                      {item.sinonim.split(';').length > 5 && ' ...'}
+                      {item.sinonim.split(';').length > 5 && ' …'}
                     </p>
                   )}
                 </div>
