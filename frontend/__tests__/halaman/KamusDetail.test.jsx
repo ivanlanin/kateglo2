@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import KamusDetail from '../../src/halaman/KamusDetail';
 import { ambilDetailKamus } from '../../src/api/apiPublik';
@@ -53,7 +53,6 @@ describe('KamusDetail', () => {
           sublema: {
             turunan: [{ id: 7, lema: 'berkata' }],
           },
-          terjemahan: [{ translation: 'word', ref_source: 'Oxford' }],
           tesaurus: { sinonim: ['ucapan'], antonim: [] },
           glosarium: [{ phrase: 'kata kunci', original: 'keyword' }],
         },
@@ -64,11 +63,8 @@ describe('KamusDetail', () => {
 
     expect(screen.getByRole('heading', { name: /kata/i })).toBeInTheDocument();
     expect(screen.getByText('/ka-ta/')).toBeInTheDocument();
-    expect(screen.getByText('Terjemahan')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: /Terjemahan/i }));
 
     expect(screen.getByText('berkata')).toBeInTheDocument();
-    expect(screen.getByText('word')).toBeInTheDocument();
     expect(screen.getByText('Tesaurus')).toBeInTheDocument();
     expect(screen.getByText('Glosarium')).toBeInTheDocument();
     expect(ambilDetailKamus).toHaveBeenCalledWith('kata');
@@ -90,7 +86,6 @@ describe('KamusDetail', () => {
           },
         ],
         sublema: {},
-        terjemahan: [],
         tesaurus: { sinonim: [], antonim: [] },
         glosarium: [],
       },
@@ -139,7 +134,6 @@ describe('KamusDetail', () => {
           sublema: {
             turunan: [{ id: 21, lema: 'berkata' }, { id: 22, lema: 'perkataan' }],
           },
-          terjemahan: [{ translation: 'word', ref_source: '' }],
           tesaurus: { sinonim: ['sinonim satu'], antonim: ['antonim satu'] },
           glosarium: [{ phrase: 'kata dasar', original: 'base word' }],
         },
@@ -181,7 +175,6 @@ describe('KamusDetail', () => {
         lema: 'tanpa-makna',
         makna: [],
         sublema: {},
-        terjemahan: [],
         tesaurus: { sinonim: [], antonim: [] },
         glosarium: [],
       },
@@ -199,7 +192,6 @@ describe('KamusDetail', () => {
       isError: false,
       data: {
         lema: 'fallback',
-        terjemahan: [],
         tesaurus: { sinonim: [], antonim: [] },
         glosarium: [],
       },
@@ -219,7 +211,6 @@ describe('KamusDetail', () => {
         lema: 'tunggal',
         makna: [{ id: 1, kelas_kata: '-', makna: 'hanya satu makna' }],
         sublema: {},
-        terjemahan: [],
         tesaurus: { sinonim: [], antonim: [] },
         glosarium: [],
       },
@@ -239,7 +230,6 @@ describe('KamusDetail', () => {
         lema: 'satu-kategori',
         makna: [{ id: 1, kelas_kata: '-', makna: 'makna contoh' }],
         sublema: {},
-        terjemahan: [],
         tesaurus: { sinonim: ['setara'], antonim: [] },
         glosarium: [],
       },

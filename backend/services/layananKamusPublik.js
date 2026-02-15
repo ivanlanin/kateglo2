@@ -50,11 +50,10 @@ async function ambilDetailKamus(entri) {
     };
   }
 
-  const [maknaList, sublema, induk, terjemahan, tesaurusDetail, glosarium] = await Promise.all([
+  const [maknaList, sublema, induk, tesaurusDetail, glosarium] = await Promise.all([
     ModelLema.ambilMakna(lema.id),
     ModelLema.ambilSublema(lema.id),
     ModelLema.ambilInduk(lema.induk),
-    ModelLema.ambilTerjemahan(lema.lema),
     ModelTesaurus.ambilDetail(lema.lema),
     ModelGlosarium.cariFrasaMengandungKataUtuh(lema.lema),
   ]);
@@ -102,7 +101,6 @@ async function ambilDetailKamus(entri) {
     induk: induk ? { id: induk.id, lema: induk.lema } : null,
     makna,
     sublema: sublemaPerJenis,
-    terjemahan,
     tesaurus,
     glosarium,
     rujukan: false,

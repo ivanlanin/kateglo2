@@ -140,20 +140,6 @@ class ModelLema {
     return result.rows[0] || null;
   }
 
-  /**
-   * Ambil terjemahan terkait lema
-   * @param {string} lema - Teks lema
-   * @returns {Promise<Array>} Daftar terjemahan
-   */
-  static async ambilTerjemahan(lema) {
-    const result = await db.query(
-      `SELECT lemma, ref_source, translation
-       FROM translation
-       WHERE LOWER(lemma) = LOWER($1)`,
-      [lema]
-    );
-    return result.rows;
-  }
 }
 
 module.exports = ModelLema;

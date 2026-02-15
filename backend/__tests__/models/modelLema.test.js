@@ -180,13 +180,4 @@ describe('ModelLema', () => {
     expect(result).toBeNull();
   });
 
-  it('ambilTerjemahan mengembalikan rows', async () => {
-    const rows = [{ lemma: 'kata', translation: 'word' }];
-    db.query.mockResolvedValue({ rows });
-
-    const result = await ModelLema.ambilTerjemahan('kata');
-
-    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM translation'), ['kata']);
-    expect(result).toEqual(rows);
-  });
 });
