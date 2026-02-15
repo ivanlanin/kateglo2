@@ -160,7 +160,7 @@ const db = {
    * Execute raw SQL query
    */
   async query(text, params) {
-    const result = await queryWithRetry(text, params, 1);
+    const result = await queryWithRetry(text, params);
     return result;
   },
 
@@ -168,7 +168,7 @@ const db = {
    * Execute query and return rows
    */
   async execute(text, params) {
-    const result = await queryWithRetry(text, params, 1);
+    const result = await queryWithRetry(text, params);
     return { data: result.rows, count: result.rowCount };
   },
 

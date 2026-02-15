@@ -11,6 +11,49 @@ describe('ModelGlosarium', () => {
     db.query.mockReset();
   });
 
+  it('autocomplete mengembalikan kosong jika query kosong', async () => {
+    const result = await ModelGlosarium.autocomplete('   ', 10);
+
+    expect(db.query).not.toHaveBeenCalled();
+    expect(result).toEqual([]);
+  });
+
+  it('autocomplete melakukan prefix search dengan limit dibatasi', async () => {
+    db.query.mockResolvedValue({
+      rows: [
+        { phrase: 'kata', original: 'word' },
+        { phrase: 'katalog', original: null },
+      ],
+    });
+
+    const result = await ModelGlosarium.autocomplete(' ka ', 99);
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('WHERE phrase ILIKE $1 OR original ILIKE $1'),
+      ['ka%', 20]
+    );
+    expect(result).toEqual([
+      { value: 'kata', original: 'word' },
+      { value: 'katalog', original: null },
+    ]);
+  });
+
+  it('autocomplete memakai fallback limit default saat limit tidak valid', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    await ModelGlosarium.autocomplete('ka', 0);
+
+    expect(db.query).toHaveBeenCalledWith(expect.any(String), ['ka%', 8]);
+  });
+
+  it('autocomplete memakai parameter default saat limit tidak diberikan', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    await ModelGlosarium.autocomplete('ka');
+
+    expect(db.query).toHaveBeenCalledWith(expect.any(String), ['ka%', 8]);
+  });
+
   it('cari dengan semua filter termasuk bahasa id', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '2' }] })
@@ -51,6 +94,25 @@ describe('ModelGlosarium', () => {
       [20, 0]
     );
     expect(result.total).toBe(1);
+  });
+
+  it('cari dengan bahasa selain id/en tidak menambah filter bahasa', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ glo_uid: 3, phrase: 'term' }] });
+
+    await ModelGlosarium.cari({ bahasa: 'semua', limit: 5, offset: 2 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.not.stringContaining("g.lang = 'id'"),
+      []
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.not.stringContaining("g.lang = 'en'"),
+      [5, 2]
+    );
   });
 
   it('cari tanpa filter menghasilkan whereClause kosong', async () => {
