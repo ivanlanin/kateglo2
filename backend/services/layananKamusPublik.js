@@ -4,17 +4,10 @@
 
 const ModelLema = require('../models/modelLema');
 
-function normalizeLimit(value, fallback = 20, max = 50) {
-  const parsed = Number.parseInt(value, 10);
-  if (Number.isNaN(parsed) || parsed <= 0) return fallback;
-  return Math.min(parsed, max);
-}
-
-async function cariKamus(query, limit) {
+async function cariKamus(query, { limit = 100, offset = 0 } = {}) {
   const trimmed = (query || '').trim();
-  if (!trimmed) return [];
-  const safeLimit = normalizeLimit(limit, 20, 50);
-  return ModelLema.cariLema(trimmed, safeLimit);
+  if (!trimmed) return { data: [], total: 0 };
+  return ModelLema.cariLema(trimmed, limit, offset);
 }
 
 async function ambilDetailKamus(entri) {

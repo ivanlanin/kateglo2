@@ -19,7 +19,7 @@ const NAMA_KATEGORI = {
   bidang: 'Bidang',
 };
 
-const limit = 20;
+const limit = 100;
 
 function KamusKategori() {
   const { kategori, kode } = useParams();
@@ -38,20 +38,23 @@ function KamusKategori() {
 
   const namaKategori = NAMA_KATEGORI[kategori] || kategori;
   const namaLabel = label?.nama || decodeURIComponent(kode);
-  const judul = `${namaKategori}: ${namaLabel}`;
+  const labelKapital = namaLabel.charAt(0).toUpperCase() + namaLabel.slice(1);
+  const judul = `${namaKategori} ${labelKapital}`;
 
   const handleOffset = (newOffset) => {
     updateSearchParamsWithOffset(setSearchParams, {}, newOffset);
   };
 
-  return (
-    <HalamanDasar judul={`${judul} — Kamus`}>
+  const breadcrumb = (
+    <div className="kamus-detail-breadcrumb">
+      <Link to="/kamus" className="kamus-detail-breadcrumb-link">Kamus</Link>
+      {' › '}
+      <span className="kamus-detail-breadcrumb-current">{judul}</span>
+    </div>
+  );
 
-      <div className="kamus-detail-breadcrumb mb-4">
-        <Link to="/kamus" className="kamus-detail-breadcrumb-link">Kamus</Link>
-        {' › '}
-        <span className="kamus-detail-breadcrumb-current">{namaKategori}: {namaLabel}</span>
-      </div>
+  return (
+    <HalamanDasar judul={judul} breadcrumb={breadcrumb}>
 
       <QueryFeedback
         isLoading={isLoading}
@@ -61,45 +64,20 @@ function KamusKategori() {
       />
 
       {!isLoading && !isError && (
-        <div className="content-card p-4">
-          <h2 className="kamus-result-heading">
-            {namaLabel} — {total} entri
-          </h2>
-
+        <>
           {results.length === 0 && <EmptyResultText text="Tidak ada entri untuk kategori ini." />}
 
           {results.length > 0 && (
             <>
-              <div className="result-divider">
+              <div className="kamus-kategori-grid">
                 {results.map((item) => (
-                  <div key={item.id} className="py-3 first:pt-0 last:pb-0">
-                    <div className="flex items-baseline gap-2">
-                      <Link
-                        to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
-                        className="kamus-result-link"
-                      >
-                        {item.lema}
-                      </Link>
-                      {item.preview_kelas_kata && (
-                        <span className="tag-subtle">
-                          {item.preview_kelas_kata}
-                        </span>
-                      )}
-                      {item.jenis !== 'dasar' && (
-                        <span className="tag-subtle">
-                          {item.jenis}
-                        </span>
-                      )}
-                      {item.jenis_rujuk && item.lema_rujuk && (
-                        <span className="kamus-result-redirect">
-                          → {item.lema_rujuk}
-                        </span>
-                      )}
-                    </div>
-                    {item.preview_makna && (
-                      <p className="kamus-result-preview">{item.preview_makna}</p>
-                    )}
-                  </div>
+                  <Link
+                    key={item.id}
+                    to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
+                    className="kamus-kategori-grid-link"
+                  >
+                    {item.lema}
+                  </Link>
                 ))}
               </div>
               <div className="mt-4">
@@ -107,7 +85,7 @@ function KamusKategori() {
               </div>
             </>
           )}
-        </div>
+        </>
       )}
     </HalamanDasar>
   );

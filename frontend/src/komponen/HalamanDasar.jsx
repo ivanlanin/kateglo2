@@ -4,7 +4,7 @@
 
 import { useEffect } from 'react';
 
-function HalamanDasar({ judul, children }) {
+function HalamanDasar({ judul, breadcrumb, children }) {
   useEffect(() => {
     document.title = judul
       ? `${judul} — Kateglo`
@@ -13,6 +13,7 @@ function HalamanDasar({ judul, children }) {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {breadcrumb}
       {judul && <h1 className="page-title">{judul}</h1>}
       {children}
     </div>

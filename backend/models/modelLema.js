@@ -17,61 +17,42 @@ class ModelLema {
    * @param {number} limit - Batas hasil
    * @returns {Promise<Array>} Daftar lema dengan preview makna
    */
-  static async cariLema(query, limit = 20) {
+  static async cariLema(query, limit = 100, offset = 0) {
     const normalizedQuery = query.trim();
-    const cappedLimit = Math.min(Math.max(Number(limit) || 20, 1), 50);
+    const cappedLimit = Math.min(Math.max(Number(limit) || 100, 1), 200);
+    const safeOffset = Math.max(Number(offset) || 0, 0);
 
-    const prefixRows = await db.query(
-      `SELECT id, lema, jenis, lafal, jenis_rujuk, lema_rujuk
-       FROM lema
-       WHERE lema ILIKE $1 AND aktif = 1
-       ORDER BY
-         CASE WHEN LOWER(lema) = LOWER($2) THEN 0 ELSE 1 END,
-         lema ASC
-       LIMIT $3`,
-      [`${normalizedQuery}%`, normalizedQuery, cappedLimit]
+    // Gunakan UNION untuk menggabungkan prefix dan contains dengan urutan stabil
+    const baseSql = `
+      WITH hasil AS (
+        SELECT id, lema, jenis, lafal, jenis_rujuk, lema_rujuk,
+               CASE WHEN LOWER(lema) = LOWER($1) THEN 0
+                    WHEN lema ILIKE $2 THEN 1
+                    ELSE 2 END AS prioritas
+        FROM lema
+        WHERE lema ILIKE $3 AND aktif = 1
+      )`;
+
+    const countResult = await db.query(
+      `${baseSql} SELECT COUNT(*) AS total FROM hasil`,
+      [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`]
     );
+    const total = parseInt(countResult.rows[0].total, 10);
 
-    let combinedRows = prefixRows.rows;
-
-    if (combinedRows.length < cappedLimit) {
-      const remaining = cappedLimit - combinedRows.length;
-      const containsRows = await db.query(
-        `SELECT id, lema, jenis, lafal, jenis_rujuk, lema_rujuk
-         FROM lema
-         WHERE lema ILIKE $1
-           AND lema NOT ILIKE $2
-           AND aktif = 1
-         ORDER BY lema ASC
-         LIMIT $3`,
-        [`%${normalizedQuery}%`, `${normalizedQuery}%`, remaining]
-      );
-      combinedRows = combinedRows.concat(containsRows.rows);
+    if (total === 0) {
+      return { data: [], total: 0 };
     }
 
-    if (combinedRows.length === 0) {
-      return [];
-    }
-
-    // Ambil preview makna pertama untuk setiap lema
-    const lemaIds = combinedRows.map((row) => row.id);
-    const maknaRows = await db.query(
-      `SELECT DISTINCT ON (lema_id) lema_id, makna, kelas_kata
-       FROM makna
-       WHERE lema_id = ANY($1::int[])
-       ORDER BY lema_id, urutan ASC, id ASC`,
-      [lemaIds]
+    const dataResult = await db.query(
+      `${baseSql}
+       SELECT id, lema, jenis, lafal, jenis_rujuk, lema_rujuk
+       FROM hasil
+       ORDER BY prioritas, lema ASC
+       LIMIT $4 OFFSET $5`,
+      [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`, cappedLimit, safeOffset]
     );
 
-    const previewByLema = new Map(
-      maknaRows.rows.map((row) => [row.lema_id, { makna: row.makna, kelas_kata: row.kelas_kata }])
-    );
-
-    return combinedRows.map((row) => ({
-      ...row,
-      preview_makna: previewByLema.get(row.id)?.makna || null,
-      preview_kelas_kata: previewByLema.get(row.id)?.kelas_kata || null,
-    }));
+    return { data: dataResult.rows, total };
   }
 
   /**

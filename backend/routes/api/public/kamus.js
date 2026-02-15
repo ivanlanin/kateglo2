@@ -20,7 +20,7 @@ router.get('/kategori', async (_req, res, next) => {
 
 router.get('/kategori/:kategori/:kode', async (req, res, next) => {
   try {
-    const limit = Math.min(Math.max(Number(req.query.limit) || 20, 1), 50);
+    const limit = Math.min(Math.max(Number(req.query.limit) || 100, 1), 200);
     const offset = Math.max(Number(req.query.offset) || 0, 0);
     const data = await ModelLabel.cariLemaPerLabel(
       req.params.kategori,
@@ -45,11 +45,13 @@ router.get('/autocomplete/:kata', async (req, res, next) => {
 
 router.get('/cari/:kata', async (req, res, next) => {
   try {
-    const results = await cariKamus(req.params.kata);
+    const limit = Math.min(Math.max(Number(req.query.limit) || 100, 1), 200);
+    const offset = Math.max(Number(req.query.offset) || 0, 0);
+    const result = await cariKamus(req.params.kata, { limit, offset });
     return res.json({
       query: req.params.kata,
-      count: results.length,
-      data: results,
+      total: result.total,
+      data: result.data,
     });
   } catch (error) {
     return next(error);
