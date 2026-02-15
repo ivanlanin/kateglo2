@@ -162,6 +162,13 @@ describe('ModelGlosarium', () => {
     expect(result).toEqual([]);
   });
 
+  it('cariFrasaMengandungKataUtuh mengembalikan kosong jika token terlalu pendek', async () => {
+    const result = await ModelGlosarium.cariFrasaMengandungKataUtuh('ab', 20);
+
+    expect(db.query).not.toHaveBeenCalled();
+    expect(result).toEqual([]);
+  });
+
   it('cariFrasaMengandungKataUtuh menjalankan query dengan limit yang dibatasi', async () => {
     db.query.mockResolvedValue({
       rows: [{ indonesia: 'zat aktif', asing: 'active substance' }],
