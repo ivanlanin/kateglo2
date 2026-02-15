@@ -5,6 +5,7 @@ import TataLetak from '../../src/komponen/TataLetak';
 vi.mock('../../src/komponen/Navbar', () => ({ default: () => <div>Navbar Mock</div> }));
 vi.mock('react-router-dom', () => ({
   Outlet: () => <div>Outlet Mock</div>,
+  useLocation: () => ({ pathname: '/kamus' }),
 }));
 
 describe('TataLetak', () => {
@@ -17,12 +18,12 @@ describe('TataLetak', () => {
 
     expect(screen.getByText('Navbar Mock')).toBeInTheDocument();
     expect(screen.getByText('Outlet Mock')).toBeInTheDocument();
-    expect(screen.getByLabelText('Ganti mode tema')).toBeInTheDocument();
+    expect(screen.getByTitle(/Mode gelap|Mode terang/)).toBeInTheDocument();
   });
 
   it('toggle tema menyimpan preferensi ke localStorage', () => {
     render(<TataLetak />);
-    fireEvent.click(screen.getByLabelText('Ganti mode tema'));
+    fireEvent.click(screen.getByTitle(/Mode gelap|Mode terang/));
     expect(localStorage.setItem).toHaveBeenCalled();
   });
 

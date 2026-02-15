@@ -23,6 +23,7 @@ function Glosarium() {
   const limit = 100;
 
   const sedangMencari = Boolean(kata || bidang || sumber);
+  const modeCariKata = Boolean(kata);
 
   const { data: bidangList } = useQuery({
     queryKey: ['glosarium-bidang'],
@@ -61,19 +62,21 @@ function Glosarium() {
   const bidangDekode = bidang ? decodeURIComponent(bidang) : '';
   const sumberDekode = sumber ? decodeURIComponent(sumber) : '';
 
-  const judulHalaman = kataDekode
+  const judulHalaman = modeCariKata
     ? `Hasil Pencarian “${kataDekode}”`
     : bidangDekode
-      ? `Hasil Pencarian “${bidangDekode}”`
+      ? `Bidang ${bidangDekode}`
       : sumberDekode
-        ? `Hasil Pencarian “${sumberDekode}”`
+        ? `Sumber ${sumberDekode}`
         : 'Glosarium';
 
   const breadcrumbPencarian = sedangMencari ? (
     <div className="kamus-detail-breadcrumb">
       <Link to="/glosarium" className="kamus-detail-breadcrumb-link">Glosarium</Link>
       {' › '}
-      <span className="kamus-detail-breadcrumb-current">Pencarian</span>
+      <span className="kamus-detail-breadcrumb-current">
+        {modeCariKata ? 'Pencarian' : judulHalaman}
+      </span>
     </div>
   ) : null;
 
@@ -125,7 +128,7 @@ function Glosarium() {
         </div>
       )}
 
-      {/* Hasil pencarian */}
+      {/* Hasil pencarian kata */}
       {sedangMencari && !isLoading && !isError && (
         <>
           {results.length === 0 && <EmptyResultText text="Tidak ada entri glosarium yang ditemukan." />}
@@ -142,9 +145,6 @@ function Glosarium() {
                       {item.phrase}
                     </Link>
                     {item.original && <span className="glosarium-result-original"> ({item.original})</span>}
-                    {item.discipline && (
-                      <span className="glosarium-result-badge">{item.discipline}</span>
-                    )}
                   </div>
                 ))}
               </div>

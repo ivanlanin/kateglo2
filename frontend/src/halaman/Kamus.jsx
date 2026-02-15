@@ -1,10 +1,10 @@
 /**
- * @fileoverview Halaman pencarian/browse kamus — path-based: /kamus/cari/:kata
+ * @fileoverview Halaman kamus — browse, pencarian, dan daftar kategori
  */
 
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { cariKamus, ambilKategoriKamus } from '../api/apiPublik';
+import { cariKamus, ambilKategoriKamus, ambilLemaPerKategori } from '../api/apiPublik';
 import Paginasi from '../komponen/Paginasi';
 import HalamanDasar from '../komponen/HalamanDasar';
 import { EmptyResultText, QueryFeedback } from '../komponen/StatusKonten';
@@ -24,39 +24,77 @@ const URUTAN_KATEGORI = ['abjad', 'jenis', 'kelas_kata', 'ragam', 'bahasa', 'bid
 const limit = 100;
 
 function Kamus() {
-  const { kata } = useParams();
+  const { kata, kategori, kode } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const offsetParam = parseInt(searchParams.get('offset') || '0', 10);
+  const modePencarian = Boolean(kata);
+  const modeKategori = Boolean(!kata && kategori && kode);
+  const modeBrowse = !modePencarian && !modeKategori;
 
-  const { data, isLoading, isError } = useQuery({
+  const {
+    data: dataPencarian,
+    isLoading: isLoadingPencarian,
+    isError: isErrorPencarian,
+  } = useQuery({
     queryKey: ['cari-kamus', kata, offsetParam],
     queryFn: () => cariKamus(kata, { limit, offset: offsetParam }),
-    enabled: Boolean(kata),
+    enabled: modePencarian,
   });
 
   const { data: kategoriData } = useQuery({
     queryKey: ['kamus-kategori'],
     queryFn: ambilKategoriKamus,
     staleTime: 5 * 60 * 1000,
-    enabled: !kata,
+    enabled: modeBrowse,
   });
 
-  const results = data?.data || [];
-  const total = data?.total || 0;
+  const {
+    data: dataKategori,
+    isLoading: isLoadingKategori,
+    isError: isErrorKategori,
+  } = useQuery({
+    queryKey: ['kamus-kategori-lema', kategori, kode, offsetParam],
+    queryFn: () => ambilLemaPerKategori(kategori, kode, { limit, offset: offsetParam }),
+    enabled: modeKategori,
+  });
+
+  const resultsPencarian = dataPencarian?.data || [];
+  const totalPencarian = dataPencarian?.total || 0;
+  const resultsKategori = dataKategori?.data || [];
+  const totalKategori = dataKategori?.total || 0;
+  const labelKategori = dataKategori?.label;
+
+  const isLoading = isLoadingPencarian || isLoadingKategori;
+  const isError = isErrorPencarian || isErrorKategori;
 
   const handleOffset = (newOffset) => {
     updateSearchParamsWithOffset(setSearchParams, {}, newOffset);
   };
 
-  const judulHalaman = kata
-    ? `Hasil Pencarian \u201c${decodeURIComponent(kata)}\u201d`
-    : 'Kamus';
+  const namaKategori = NAMA_KATEGORI[kategori] || kategori;
+  const namaLabelRaw = labelKategori?.nama || (kode ? decodeURIComponent(kode) : '');
+  const namaLabel = namaLabelRaw
+    ? namaLabelRaw.charAt(0).toUpperCase() + namaLabelRaw.slice(1)
+    : '';
+  const judulKategori = modeKategori ? `${namaKategori} ${namaLabel}` : '';
 
-  const breadcrumbPencarian = kata ? (
+  const judulHalaman = modePencarian
+    ? `Hasil Pencarian “${decodeURIComponent(kata)}”`
+    : modeKategori
+      ? judulKategori
+      : 'Kamus';
+
+  const breadcrumbPencarian = modePencarian ? (
     <div className="kamus-detail-breadcrumb">
       <Link to="/kamus" className="kamus-detail-breadcrumb-link">Kamus</Link>
       {' › '}
       <span className="kamus-detail-breadcrumb-current">Pencarian</span>
+    </div>
+  ) : modeKategori ? (
+    <div className="kamus-detail-breadcrumb">
+      <Link to="/kamus" className="kamus-detail-breadcrumb-link">Kamus</Link>
+      {' › '}
+      <span className="kamus-detail-breadcrumb-current">{judulKategori}</span>
     </div>
   ) : null;
 
@@ -67,12 +105,12 @@ function Kamus() {
       <QueryFeedback
         isLoading={isLoading}
         isError={isError}
-        loadingText="Mencari data …"
+        loadingText={modeKategori ? 'Memuat data …' : 'Mencari data …'}
         errorText="Gagal mengambil data. Coba lagi."
       />
 
       {/* Tanpa pencarian — browse kategori */}
-      {!kata && !isLoading && kategoriData && (
+      {modeBrowse && !isLoading && kategoriData && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           {URUTAN_KATEGORI.map((kat) => {
             const labels = kategoriData[kat];
@@ -98,14 +136,14 @@ function Kamus() {
       )}
 
       {/* Hasil pencarian */}
-      {kata && !isLoading && !isError && (
+      {modePencarian && !isLoading && !isError && (
         <>
-          {results.length === 0 && <EmptyResultText text="Lema yang dicari tidak ditemukan. Coba kata lain?" />}
+          {resultsPencarian.length === 0 && <EmptyResultText text="Lema yang dicari tidak ditemukan. Coba kata lain?" />}
 
-          {results.length > 0 && (
+          {resultsPencarian.length > 0 && (
             <>
               <div className="kamus-kategori-grid">
-                {results.map((item) => (
+                {resultsPencarian.map((item) => (
                   <Link
                     key={item.id}
                     to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
@@ -116,7 +154,33 @@ function Kamus() {
                 ))}
               </div>
               <div className="mt-4">
-                <Paginasi total={total} limit={limit} offset={offsetParam} onChange={handleOffset} />
+                <Paginasi total={totalPencarian} limit={limit} offset={offsetParam} onChange={handleOffset} />
+              </div>
+            </>
+          )}
+        </>
+      )}
+
+      {/* Hasil kategori */}
+      {modeKategori && !isLoading && !isError && (
+        <>
+          {resultsKategori.length === 0 && <EmptyResultText text="Tidak ada entri untuk kategori ini." />}
+
+          {resultsKategori.length > 0 && (
+            <>
+              <div className="kamus-kategori-grid">
+                {resultsKategori.map((item) => (
+                  <Link
+                    key={item.id}
+                    to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
+                    className="kamus-kategori-grid-link"
+                  >
+                    {item.lema}
+                  </Link>
+                ))}
+              </div>
+              <div className="mt-4">
+                <Paginasi total={totalKategori} limit={limit} offset={offsetParam} onChange={handleOffset} />
               </div>
             </>
           )}

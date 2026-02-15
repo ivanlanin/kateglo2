@@ -366,6 +366,18 @@ npm run dev:public        # Port 5173
 npm run dev:admin         # Port 5174
 ```
 
+### Validation Policy (Wajib Setelah Perubahan)
+- Setelah selesai mengubah kode, **WAJIB jalankan lint dan test** untuk area yang diubah.
+- **Tidak perlu menjalankan build** sebagai langkah default validasi perubahan.
+- Prioritaskan validasi terarah dulu (misalnya per package yang terdampak), baru meluas jika diperlukan.
+
+Contoh per package:
+```bash
+Set-Location backend; npm run lint; npm run test
+Set-Location frontend; npm run lint; npm run test
+Set-Location admin; npm run lint; npm run test
+```
+
 ### Database Work
 1. **Check schema first**: `Select-String -Path "_docs/struktur-data.sql" -Pattern "table_name"`
 2. **Create migration**: Add SQL file to `_docs/YYYYMM/` with format `YYYYMMDD_nama-migrasi.sql`
@@ -418,8 +430,9 @@ npx kill-port 3000; npx kill-port 5173; npx kill-port 5174
 # Run backend tests
 Set-Location backend; npx jest --no-watch
 
-# Run frontend build check
-Set-Location frontend; npm run build
+# Run lint + tests (recommended after changes)
+Set-Location frontend; npm run lint; npm run test
+Set-Location backend; npm run lint; npm run test
 
 # Python diagnostics (SQLite source)
 Set-Location "C:/Kode/Kateglo/kateglo2"
