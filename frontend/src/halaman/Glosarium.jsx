@@ -63,32 +63,32 @@ function Glosarium() {
       {!sedangMencari && !isLoading && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           {bidangList?.length > 0 && (
-            <div className="beranda-feature-card">
-              <h3 className="beranda-info-title">Menurut bidang</h3>
-              <div className="flex flex-wrap gap-2">
+            <div className="beranda-feature-card text-center">
+              <h3 className="beranda-info-title">Bidang</h3>
+              <div className="flex flex-wrap justify-center gap-2">
                 {bidangList.map((b) => (
                   <Link
                     key={b.discipline}
                     to={`/glosarium?bidang=${encodeURIComponent(b.discipline)}`}
                     className="beranda-tag-link"
                   >
-                    {b.discipline} ({b.jumlah})
+                    {b.discipline}
                   </Link>
                 ))}
               </div>
             </div>
           )}
           {sumberList?.length > 0 && (
-            <div className="beranda-feature-card">
-              <h3 className="beranda-info-title">Menurut sumber</h3>
-              <div className="flex flex-wrap gap-2">
+            <div className="beranda-feature-card text-center">
+              <h3 className="beranda-info-title">Sumber</h3>
+              <div className="flex flex-wrap justify-center gap-2">
                 {sumberList.map((s) => (
                   <Link
                     key={s.ref_source}
                     to={`/glosarium?sumber=${encodeURIComponent(s.ref_source)}`}
                     className="beranda-tag-link"
                   >
-                    {s.ref_source} ({s.jumlah})
+                    {s.ref_source}
                   </Link>
                 ))}
               </div>

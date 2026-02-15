@@ -13,6 +13,18 @@ export async function ambilDataBeranda() {
 
 // === KAMUS ===
 
+export async function ambilKategoriKamus() {
+  const response = await klien.get('/api/public/kamus/kategori');
+  return response.data;
+}
+
+export async function ambilLemaPerKategori(kategori, kode, { limit = 20, offset = 0 } = {}) {
+  const response = await klien.get(`/api/public/kamus/kategori/${encodeURIComponent(kategori)}/${encodeURIComponent(kode)}`, {
+    params: { limit, offset },
+  });
+  return response.data;
+}
+
 export async function cariKamus(kata) {
   const response = await klien.get(`/api/public/kamus/cari/${encodeURIComponent(kata)}`);
   return response.data;
