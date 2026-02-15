@@ -21,6 +21,9 @@ function App() {
         <Route path="/tesaurus/cari/:kata" element={<Tesaurus />} />
         <Route path="/tesaurus/:kata" element={<TesaurusDetail />} />
         <Route path="/glosarium" element={<Glosarium />} />
+        <Route path="/glosarium/cari/:kata" element={<Glosarium />} />
+        <Route path="/glosarium/bidang/:bidang" element={<Glosarium />} />
+        <Route path="/glosarium/sumber/:sumber" element={<Glosarium />} />
       </Route>
     </Routes>
   );

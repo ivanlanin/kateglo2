@@ -51,9 +51,7 @@ export async function ambilDetailTesaurus(kata) {
 
 export async function autocomplete(kategori, kata) {
   if (!kata || kata.length < 2) return [];
-  const url = kategori === 'glosarium'
-    ? `/api/public/glosarium/autocomplete?q=${encodeURIComponent(kata)}`
-    : `/api/public/${kategori}/autocomplete/${encodeURIComponent(kata)}`;
+  const url = `/api/public/${kategori}/autocomplete/${encodeURIComponent(kata)}`;
   const response = await klien.get(url);
   return response.data.data.map((item) =>
     typeof item === 'string' ? { value: item } : item
@@ -62,9 +60,23 @@ export async function autocomplete(kategori, kata) {
 
 // === GLOSARIUM ===
 
-export async function cariGlosarium({ q = '', bidang = '', sumber = '', bahasa = '', limit = 20, offset = 0 } = {}) {
-  const response = await klien.get('/api/public/glosarium', {
-    params: { q, bidang, sumber, bahasa, limit, offset },
+export async function cariGlosarium(kata, { limit = 20, offset = 0 } = {}) {
+  const response = await klien.get(`/api/public/glosarium/cari/${encodeURIComponent(kata)}`, {
+    params: { limit, offset },
+  });
+  return response.data;
+}
+
+export async function ambilGlosariumPerBidang(bidang, { limit = 20, offset = 0 } = {}) {
+  const response = await klien.get(`/api/public/glosarium/bidang/${encodeURIComponent(bidang)}`, {
+    params: { limit, offset },
+  });
+  return response.data;
+}
+
+export async function ambilGlosariumPerSumber(sumber, { limit = 20, offset = 0 } = {}) {
+  const response = await klien.get(`/api/public/glosarium/sumber/${encodeURIComponent(sumber)}`, {
+    params: { limit, offset },
   });
   return response.data;
 }

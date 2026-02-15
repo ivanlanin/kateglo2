@@ -18,6 +18,12 @@ function deteksiKategori(pathname) {
   return 'kamus';
 }
 
+function ekstrakQuery(pathname) {
+  const match = pathname.match(/^\/(kamus|tesaurus|glosarium)\/cari\/(.+)$/);
+  if (match) return decodeURIComponent(match[2]);
+  return '';
+}
+
 /**
  * Tebalkan bagian teks yang cocok dengan query pencarian
  */
@@ -40,17 +46,13 @@ function SorotTeks({ teks, query, italic = false }) {
 }
 
 function navigasiCari(navigate, kategori, kata) {
-  if (kategori === 'glosarium') {
-    navigate(`/glosarium?q=${encodeURIComponent(kata)}`);
-  } else {
-    navigate(`/${kategori}/cari/${encodeURIComponent(kata)}`);
-  }
+  navigate(`/${kategori}/cari/${encodeURIComponent(kata)}`);
 }
 
-function KotakCari({ varian = 'navbar', autoFocus = false }) {
+function KotakCari({ varian = 'navbar', autoFocus = true }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(() => ekstrakQuery(location.pathname));
   const [kategori, setKategori] = useState(() => deteksiKategori(location.pathname));
   const [saran, setSaran] = useState([]);
   const [tampilSaran, setTampilSaran] = useState(false);
@@ -62,6 +64,7 @@ function KotakCari({ varian = 'navbar', autoFocus = false }) {
 
   useEffect(() => {
     setKategori(deteksiKategori(location.pathname));
+    setQuery(ekstrakQuery(location.pathname));
   }, [location.pathname]);
 
   useEffect(() => {

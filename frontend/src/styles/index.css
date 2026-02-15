@@ -209,7 +209,7 @@ code {
   }
 
   .kotak-cari-input {
-    @apply w-full px-3 py-2 text-sm bg-transparent text-gray-900 border-none;
+    @apply w-full pl-3 pr-8 py-2 text-sm bg-transparent text-gray-900 border-none;
   }
 
   .kotak-cari-input:focus {
@@ -221,11 +221,11 @@ code {
   }
 
   .kotak-cari-beranda .kotak-cari-input {
-    @apply px-4 py-3 text-lg;
+    @apply pl-4 pr-9 py-3 text-lg;
   }
 
   .kotak-cari-hapus {
-    @apply px-2 text-gray-400 hover:text-gray-600 text-lg leading-none;
+    @apply absolute right-1 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 text-lg leading-none;
   }
 
   .dark .kotak-cari-hapus {
