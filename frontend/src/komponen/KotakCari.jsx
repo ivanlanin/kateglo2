@@ -2,8 +2,8 @@
  * @fileoverview Komponen kotak pencarian yang dipakai bersama di Beranda dan Navbar
  */
 
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const opsiKategori = [
   { value: 'kamus', label: 'Kamus' },
@@ -11,10 +11,21 @@ const opsiKategori = [
   { value: 'glosarium', label: 'Glosarium' },
 ];
 
+function deteksiKategori(pathname) {
+  if (pathname.startsWith('/tesaurus')) return 'tesaurus';
+  if (pathname.startsWith('/glosarium')) return 'glosarium';
+  return 'kamus';
+}
+
 function KotakCari({ varian = 'navbar' }) {
+  const location = useLocation();
   const [query, setQuery] = useState('');
-  const [kategori, setKategori] = useState('kamus');
+  const [kategori, setKategori] = useState(() => deteksiKategori(location.pathname));
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setKategori(deteksiKategori(location.pathname));
+  }, [location.pathname]);
 
   const handleCari = (e) => {
     e.preventDefault();

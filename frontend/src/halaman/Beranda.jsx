@@ -2,10 +2,15 @@
  * @fileoverview Halaman Beranda
  */
 
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import KotakCari from '../komponen/KotakCari';
 
 function Beranda() {
+  useEffect(() => {
+    document.title = 'Kateglo — Kamus, Tesaurus, dan Glosarium Bahasa Indonesia';
+  }, []);
+
   return (
     <div className="beranda-container">
       {/* Hero / Jumbotron */}

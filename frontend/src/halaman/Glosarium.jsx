@@ -2,14 +2,13 @@
  * @fileoverview Halaman Glosarium — browse dan cari istilah teknis bilingual
  */
 
-import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { cariGlosarium, ambilDaftarBidang, ambilDaftarSumber } from '../api/apiPublik';
 import Paginasi from '../komponen/Paginasi';
 import HalamanDasar from '../komponen/HalamanDasar';
 import { QueryFeedback, TableResultCard } from '../komponen/StatusKonten';
-import { updateSearchParams, updateSearchParamsWithOffset } from '../utils/searchParams';
+import { updateSearchParamsWithOffset } from '../utils/searchParams';
 
 function Glosarium() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -18,10 +17,6 @@ function Glosarium() {
   const sumberParam = searchParams.get('sumber') || '';
   const offsetParam = parseInt(searchParams.get('offset') || '0', 10);
   const limit = 20;
-
-  const [inputQuery, setInputQuery] = useState(qParam);
-  const [inputBidang, setInputBidang] = useState(bidangParam);
-  const [inputSumber, setInputSumber] = useState(sumberParam);
 
   const sedangMencari = Boolean(qParam || bidangParam || sumberParam);
 
@@ -43,15 +38,6 @@ function Glosarium() {
     enabled: sedangMencari,
   });
 
-  const handleCari = (e) => {
-    e.preventDefault();
-    updateSearchParams(setSearchParams, {
-      q: inputQuery,
-      bidang: inputBidang,
-      sumber: inputSumber,
-    });
-  };
-
   const handleOffset = (newOffset) => {
     updateSearchParamsWithOffset(setSearchParams, {
       q: qParam,
@@ -66,59 +52,6 @@ function Glosarium() {
   return (
     <HalamanDasar judul="Glosarium">
 
-      {/* Panel pencarian */}
-      <form onSubmit={handleCari} className="content-card p-4 mb-6">
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
-          <div>
-            <label htmlFor="glo-q" className="form-label">Lema</label>
-            <input
-              id="glo-q"
-              type="text"
-              value={inputQuery}
-              onChange={(e) => setInputQuery(e.target.value)}
-              placeholder="Cari istilah..."
-              className="form-input"
-            />
-          </div>
-          <div>
-            <label htmlFor="glo-bidang" className="form-label">Bidang</label>
-            <select
-              id="glo-bidang"
-              value={inputBidang}
-              onChange={(e) => setInputBidang(e.target.value)}
-              className="form-input"
-            >
-              <option value="">Semua</option>
-              {(bidangList || []).map((b) => (
-                <option key={b.discipline} value={b.discipline}>{b.discipline}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="glo-sumber" className="form-label">Sumber</label>
-            <select
-              id="glo-sumber"
-              value={inputSumber}
-              onChange={(e) => setInputSumber(e.target.value)}
-              className="form-input"
-            >
-              <option value="">Semua</option>
-              {(sumberList || []).map((s) => (
-                <option key={s.ref_source} value={s.ref_source}>{s.ref_source}</option>
-              ))}
-            </select>
-          </div>
-          <div className="flex items-end">
-            <button
-              type="submit"
-              className="btn-primary w-full"
-            >
-              Cari
-            </button>
-          </div>
-        </div>
-      </form>
-
       <QueryFeedback
         isLoading={isLoading}
         isError={isError}
@@ -126,18 +59,18 @@ function Glosarium() {
         errorText="Gagal mengambil data."
       />
 
-      {/* Browse index */}
+      {/* Browse index — dua kotak terpisah */}
       {!sedangMencari && !isLoading && (
-        <div className="content-card p-6 space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           {bidangList?.length > 0 && (
-            <div>
-              <h3 className="section-heading">Menurut bidang:</h3>
+            <div className="beranda-feature-card">
+              <h3 className="beranda-info-title">Menurut bidang</h3>
               <div className="flex flex-wrap gap-2">
                 {bidangList.map((b) => (
                   <Link
                     key={b.discipline}
                     to={`/glosarium?bidang=${encodeURIComponent(b.discipline)}`}
-                    className="glosarium-browse-link"
+                    className="beranda-tag-link"
                   >
                     {b.discipline} ({b.jumlah})
                   </Link>
@@ -146,14 +79,14 @@ function Glosarium() {
             </div>
           )}
           {sumberList?.length > 0 && (
-            <div>
-              <h3 className="section-heading">Menurut sumber:</h3>
+            <div className="beranda-feature-card">
+              <h3 className="beranda-info-title">Menurut sumber</h3>
               <div className="flex flex-wrap gap-2">
                 {sumberList.map((s) => (
                   <Link
                     key={s.ref_source}
                     to={`/glosarium?sumber=${encodeURIComponent(s.ref_source)}`}
-                    className="glosarium-browse-link"
+                    className="beranda-tag-link"
                   >
                     {s.ref_source} ({s.jumlah})
                   </Link>

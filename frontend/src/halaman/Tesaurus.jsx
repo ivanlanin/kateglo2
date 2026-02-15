@@ -2,8 +2,7 @@
  * @fileoverview Halaman pencarian tesaurus — path-based: /tesaurus/cari/:kata
  */
 
-import { useState } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { cariTesaurus } from '../api/apiPublik';
 import HalamanDasar from '../komponen/HalamanDasar';
@@ -11,8 +10,6 @@ import { EmptyResultText, QueryFeedback } from '../komponen/StatusKonten';
 
 function Tesaurus() {
   const { kata } = useParams();
-  const navigate = useNavigate();
-  const [inputQuery, setInputQuery] = useState(kata || '');
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['cari-tesaurus', kata],
@@ -20,40 +17,10 @@ function Tesaurus() {
     enabled: Boolean(kata),
   });
 
-  const handleCari = (e) => {
-    e.preventDefault();
-    const trimmed = inputQuery.trim();
-    if (!trimmed) return;
-    navigate(`/tesaurus/cari/${encodeURIComponent(trimmed)}`);
-  };
-
   const results = data?.data || [];
 
   return (
-    <HalamanDasar judul="Tesaurus">
-
-      {/* Panel pencarian */}
-      <form onSubmit={handleCari} className="content-card p-4 mb-6">
-        <div className="flex items-center gap-2">
-          <label htmlFor="pencarian-tesaurus" className="kamus-search-label">
-            Kata
-          </label>
-          <input
-            id="pencarian-tesaurus"
-            type="text"
-            placeholder="Ketik kata yang dicari..."
-            value={inputQuery}
-            onChange={(e) => setInputQuery(e.target.value)}
-            className="form-input flex-1"
-          />
-          <button
-            type="submit"
-            className="btn-primary shrink-0"
-          >
-            Cari
-          </button>
-        </div>
-      </form>
+    <HalamanDasar judul={kata ? `Cari "${decodeURIComponent(kata)}" — Tesaurus` : 'Tesaurus'}>
 
       <QueryFeedback
         isLoading={isLoading}
