@@ -26,12 +26,12 @@ function unikTanpaBedaKapitalisasi(items) {
   return hasil;
 }
 
-function ambilNomorHomonim(lema = '') {
+function ambilNomorHomonim(lema) {
   const match = lema.match(/\((\d+)\)\s*$/);
   return match ? Number(match[1]) : Number.MAX_SAFE_INTEGER;
 }
 
-function normalisasiUrutSerupa(lema = '') {
+function normalisasiUrutSerupa(lema) {
   return lema
     .toLowerCase()
     .replace(/\s*\(\d+\)\s*$/, '')
@@ -49,7 +49,7 @@ function urutkanSerupaNatural(items) {
     const keyB = normalisasiUrutSerupa(b.lema);
     if (keyA !== keyB) return keyA.localeCompare(keyB, 'id');
 
-    return (a.lema || '').localeCompare(b.lema || '', 'id');
+    return a.lema.localeCompare(b.lema, 'id');
   });
 }
 
@@ -143,7 +143,7 @@ async function ambilDetailKamus(entri) {
     .filter((item) => item.id !== lema.id)
     .map((item) => ({
       id: item.id,
-      lema: item.lema,
+      lema: item.lema || '',
       lafal: item.lafal || null,
     })));
 

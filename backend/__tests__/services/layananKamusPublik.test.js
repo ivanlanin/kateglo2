@@ -294,4 +294,125 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
       { id: 13, lema: 'per (3)', lafal: 'per' },
     ]);
   });
+
+  it('merapikan serupa untuk cabang nomor tak ada, key berbeda, dan tidak override lafal existing', async () => {
+    ModelLema.ambilLema.mockResolvedValue({
+      id: 20,
+      lema: 'dasar (1)',
+      jenis: 'dasar',
+      induk: null,
+      pemenggalan: null,
+      lafal: null,
+      varian: null,
+      jenis_rujuk: null,
+      lema_rujuk: null,
+    });
+    ModelLema.ambilMakna.mockResolvedValue([]);
+    ModelLema.ambilContoh.mockResolvedValue([]);
+    ModelLema.ambilSublema.mockResolvedValue([]);
+    ModelLema.ambilInduk.mockResolvedValue(null);
+    ModelTesaurus.ambilDetail.mockResolvedValue(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+    ModelLema.ambilLemaSerupa.mockResolvedValue([
+      { id: 20, lema: 'dasar (1)', lafal: null },
+      { id: 21, lema: 'alpha', lafal: null },
+      { id: 22, lema: 'beta', lafal: null },
+      { id: 23, lema: 'beta', lafal: 'be.ta' },
+      { id: 24, lema: 'beta', lafal: null },
+    ]);
+
+    const result = await ambilDetailKamus('dasar (1)');
+
+    expect(result.serupa).toEqual([
+      { id: 21, lema: 'alpha', lafal: null },
+      { id: 23, lema: 'beta', lafal: 'be.ta' },
+    ]);
+  });
+
+  it('menggunakan fallback serupa kosong saat model mengembalikan null', async () => {
+    ModelLema.ambilLema.mockResolvedValue({
+      id: 31,
+      lema: 'uji',
+      jenis: 'dasar',
+      induk: null,
+      pemenggalan: null,
+      lafal: null,
+      varian: null,
+      jenis_rujuk: null,
+      lema_rujuk: null,
+    });
+    ModelLema.ambilMakna.mockResolvedValue([]);
+    ModelLema.ambilContoh.mockResolvedValue([]);
+    ModelLema.ambilSublema.mockResolvedValue([]);
+    ModelLema.ambilInduk.mockResolvedValue(null);
+    ModelTesaurus.ambilDetail.mockResolvedValue(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+    ModelLema.ambilLemaSerupa.mockResolvedValue(null);
+
+    const result = await ambilDetailKamus('uji');
+
+    expect(result.serupa).toEqual([]);
+  });
+
+  it('mengurutkan serupa dengan tie-breaker lema mentah saat normalisasi sama', async () => {
+    ModelLema.ambilLema.mockResolvedValue({
+      id: 40,
+      lema: 'dasar',
+      jenis: 'dasar',
+      induk: null,
+      pemenggalan: null,
+      lafal: null,
+      varian: null,
+      jenis_rujuk: null,
+      lema_rujuk: null,
+    });
+    ModelLema.ambilMakna.mockResolvedValue([]);
+    ModelLema.ambilContoh.mockResolvedValue([]);
+    ModelLema.ambilSublema.mockResolvedValue([]);
+    ModelLema.ambilInduk.mockResolvedValue(null);
+    ModelTesaurus.ambilDetail.mockResolvedValue(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+    ModelLema.ambilLemaSerupa.mockResolvedValue([
+      { id: 41, lema: 'per- (2)', lafal: null },
+      { id: 42, lema: 'per (2)', lafal: null },
+    ]);
+
+    const result = await ambilDetailKamus('dasar');
+
+    expect(result.serupa).toEqual([
+      { id: 42, lema: 'per (2)', lafal: null },
+      { id: 41, lema: 'per- (2)', lafal: null },
+    ]);
+  });
+
+  it('menangani item serupa tanpa lema (fallback key/default param)', async () => {
+    ModelLema.ambilLema.mockResolvedValue({
+      id: 50,
+      lema: 'dasar',
+      jenis: 'dasar',
+      induk: null,
+      pemenggalan: null,
+      lafal: null,
+      varian: null,
+      jenis_rujuk: null,
+      lema_rujuk: null,
+    });
+    ModelLema.ambilMakna.mockResolvedValue([]);
+    ModelLema.ambilContoh.mockResolvedValue([]);
+    ModelLema.ambilSublema.mockResolvedValue([]);
+    ModelLema.ambilInduk.mockResolvedValue(null);
+    ModelTesaurus.ambilDetail.mockResolvedValue(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+    ModelLema.ambilLemaSerupa.mockResolvedValue([
+      { id: 51, lema: undefined, lafal: null },
+      { id: 52, lema: 'alpha', lafal: null },
+    ]);
+
+    const result = await ambilDetailKamus('dasar');
+
+    expect(result.serupa).toEqual([
+      { id: 51, lema: '', lafal: null },
+      { id: 52, lema: 'alpha', lafal: null },
+    ]);
+  });
 });
