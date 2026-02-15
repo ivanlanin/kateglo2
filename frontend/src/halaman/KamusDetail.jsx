@@ -2,6 +2,7 @@
  * @fileoverview Halaman detail kamus — makna, contoh, sublema, terjemahan
  */
 
+import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ambilDetailKamus } from '../api/apiPublik';
@@ -10,6 +11,12 @@ import HalamanDasar from '../komponen/HalamanDasar';
 
 function KamusDetail() {
   const { entri } = useParams();
+
+  useEffect(() => {
+    document.title = entri
+      ? `${decodeURIComponent(entri)} — Kamus — Kateglo`
+      : 'Kamus — Kateglo';
+  }, [entri]);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['kamus-detail', entri],

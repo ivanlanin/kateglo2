@@ -2,6 +2,7 @@
  * @fileoverview Halaman detail tesaurus — sinonim, antonim, turunan, gabungan, berkaitan
  */
 
+import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ambilDetailTesaurus } from '../api/apiPublik';
@@ -29,6 +30,12 @@ function DaftarKata({ judul, daftar }) {
 
 function TesaurusDetail() {
   const { kata } = useParams();
+
+  useEffect(() => {
+    document.title = kata
+      ? `${decodeURIComponent(kata)} — Tesaurus — Kateglo`
+      : 'Tesaurus — Kateglo';
+  }, [kata]);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['tesaurus-detail', kata],

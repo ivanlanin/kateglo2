@@ -4,6 +4,7 @@
 
 - Menyederhanakan tampilan beranda
 - Memberikan pilihan pencarian kamus, tesaurus, dan glosarium di kotak cari
+- Memberikan judul unik untuk tiap halaman
 
 ## 2026-02-14 Sabtu
 
