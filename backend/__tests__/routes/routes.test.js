@@ -81,13 +81,16 @@ describe('routes backend', () => {
   });
 
   it('GET /api/public/kamus/cari/:kata mengembalikan hasil', async () => {
-    layananKamusPublik.cariKamus.mockResolvedValue([{ lema: 'kata' }]);
+    layananKamusPublik.cariKamus.mockResolvedValue({
+      data: [{ lema: 'kata' }],
+      total: 1,
+    });
 
     const response = await request(createApp()).get('/api/public/kamus/cari/kata');
 
     expect(response.status).toBe(200);
-    expect(layananKamusPublik.cariKamus).toHaveBeenCalledWith('kata');
-    expect(response.body.count).toBe(1);
+    expect(layananKamusPublik.cariKamus).toHaveBeenCalledWith('kata', { limit: 100, offset: 0 });
+    expect(response.body.total).toBe(1);
   });
 
   it('GET /api/public/kamus/detail/:entri mengembalikan 404 saat data null', async () => {
@@ -109,13 +112,16 @@ describe('routes backend', () => {
   });
 
   it('GET /api/public/tesaurus/cari/:kata mengembalikan hasil', async () => {
-    layananTesaurusPublik.cariTesaurus.mockResolvedValue([{ lema: 'aktif' }]);
+    layananTesaurusPublik.cariTesaurus.mockResolvedValue({
+      data: [{ lema: 'aktif' }],
+      total: 1,
+    });
 
     const response = await request(createApp()).get('/api/public/tesaurus/cari/aktif');
 
     expect(response.status).toBe(200);
-    expect(layananTesaurusPublik.cariTesaurus).toHaveBeenCalledWith('aktif');
-    expect(response.body.count).toBe(1);
+    expect(layananTesaurusPublik.cariTesaurus).toHaveBeenCalledWith('aktif', { limit: 100, offset: 0 });
+    expect(response.body.total).toBe(1);
   });
 
   it('GET /api/public/tesaurus/:kata mengembalikan 404 saat data null', async () => {

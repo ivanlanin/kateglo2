@@ -857,6 +857,24 @@ code {
     @apply text-blue-700 hover:underline truncate;
   }
 
+  /* ===== Tesaurus hasil pencarian ===== */
+
+  .tesaurus-result-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1;
+  }
+
+  .tesaurus-result-row {
+    @apply min-w-0 truncate text-base;
+  }
+
+  .tesaurus-result-sinonim {
+    @apply text-gray-600;
+  }
+
+  .dark .tesaurus-result-sinonim {
+    @apply text-dark-text-muted;
+  }
+
   /* ===== KamusDetail ===== */
 
   .kamus-detail-breadcrumb {

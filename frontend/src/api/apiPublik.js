@@ -39,8 +39,10 @@ export async function ambilDetailKamus(entri) {
 
 // === TESAURUS ===
 
-export async function cariTesaurus(kata) {
-  const response = await klien.get(`/api/public/tesaurus/cari/${encodeURIComponent(kata)}`);
+export async function cariTesaurus(kata, { limit = 100, offset = 0 } = {}) {
+  const response = await klien.get(`/api/public/tesaurus/cari/${encodeURIComponent(kata)}`, {
+    params: { limit, offset },
+  });
   return response.data;
 }
 
