@@ -16,38 +16,41 @@ class ModelTesaurus {
    * @param {number} limit - Batas hasil
    * @returns {Promise<Array>} Daftar entri tesaurus
    */
-  static async cari(query, limit = 20) {
+  static async cari(query, limit = 100, offset = 0) {
     const normalizedQuery = query.trim();
-    const cappedLimit = Math.min(Math.max(Number(limit) || 20, 1), 50);
+    const cappedLimit = Math.min(Math.max(Number(limit) || 100, 1), 200);
+    const safeOffset = Math.max(Number(offset) || 0, 0);
 
-    const prefixRows = await db.query(
-      `SELECT id, lema, sinonim, antonim
-       FROM tesaurus
-       WHERE lema ILIKE $1
-       ORDER BY
-         CASE WHEN LOWER(lema) = LOWER($2) THEN 0 ELSE 1 END,
-         lema ASC
-       LIMIT $3`,
-      [`${normalizedQuery}%`, normalizedQuery, cappedLimit]
+    const baseSql = `
+      WITH hasil AS (
+        SELECT id, lema, sinonim, antonim,
+               CASE WHEN LOWER(lema) = LOWER($1) THEN 0
+                    WHEN lema ILIKE $2 THEN 1
+                    ELSE 2 END AS prioritas
+        FROM tesaurus
+        WHERE lema ILIKE $3
+      )`;
+
+    const countResult = await db.query(
+      `${baseSql} SELECT COUNT(*) AS total FROM hasil`,
+      [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`]
     );
+    const total = parseInt(countResult.rows[0].total, 10);
 
-    let combinedRows = prefixRows.rows;
-
-    if (combinedRows.length < cappedLimit) {
-      const remaining = cappedLimit - combinedRows.length;
-      const containsRows = await db.query(
-        `SELECT id, lema, sinonim, antonim
-         FROM tesaurus
-         WHERE lema ILIKE $1
-           AND lema NOT ILIKE $2
-         ORDER BY lema ASC
-         LIMIT $3`,
-        [`%${normalizedQuery}%`, `${normalizedQuery}%`, remaining]
-      );
-      combinedRows = combinedRows.concat(containsRows.rows);
+    if (total === 0) {
+      return { data: [], total: 0 };
     }
 
-    return combinedRows;
+    const dataResult = await db.query(
+      `${baseSql}
+       SELECT id, lema, sinonim, antonim
+       FROM hasil
+       ORDER BY prioritas, lema ASC
+       LIMIT $4 OFFSET $5`,
+      [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`, cappedLimit, safeOffset]
+    );
+
+    return { data: dataResult.rows, total };
   }
 
   /**

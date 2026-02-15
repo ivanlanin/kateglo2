@@ -19,11 +19,13 @@ router.get('/autocomplete/:kata', async (req, res, next) => {
 
 router.get('/cari/:kata', async (req, res, next) => {
   try {
-    const results = await cariTesaurus(req.params.kata);
+    const limit = Math.min(Math.max(Number(req.query.limit) || 100, 1), 200);
+    const offset = Math.max(Number(req.query.offset) || 0, 0);
+    const result = await cariTesaurus(req.params.kata, { limit, offset });
     return res.json({
       query: req.params.kata,
-      count: results.length,
-      data: results,
+      total: result.total,
+      data: result.data,
     });
   } catch (error) {
     return next(error);

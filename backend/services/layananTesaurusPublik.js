@@ -4,22 +4,15 @@
 
 const ModelTesaurus = require('../models/modelTesaurus');
 
-function normalizeLimit(value, fallback = 20, max = 50) {
-  const parsed = Number.parseInt(value, 10);
-  if (Number.isNaN(parsed) || parsed <= 0) return fallback;
-  return Math.min(parsed, max);
-}
-
 function parseRelasi(teks) {
   if (!teks) return [];
   return teks.split(';').map((s) => s.trim()).filter(Boolean);
 }
 
-async function cariTesaurus(query, limit) {
+async function cariTesaurus(query, { limit = 100, offset = 0 } = {}) {
   const trimmed = (query || '').trim();
-  if (!trimmed) return [];
-  const safeLimit = normalizeLimit(limit, 20, 50);
-  return ModelTesaurus.cari(trimmed, safeLimit);
+  if (!trimmed) return { data: [], total: 0 };
+  return ModelTesaurus.cari(trimmed, limit, offset);
 }
 
 async function ambilDetailTesaurus(kata) {
