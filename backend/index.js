@@ -26,9 +26,6 @@ const frontendSharedKey = process.env.FRONTEND_SHARED_KEY || '';
 const corsOptions = {
   origin: (origin, callback) => {
     if (!origin) {
-      if (requireOrigin) {
-        return callback(new Error('CORS origin is required'));
-      }
       return callback(null, true);
     }
 
