@@ -22,6 +22,14 @@ vi.mock('@tanstack/react-query', () => ({
   useQuery: (...args) => mockUseQuery(...args),
 }));
 
+vi.mock('../../src/komponen/Paginasi', () => ({
+  default: ({ onChange }) => (
+    <button type="button" onClick={() => onChange(100)}>
+      Ubah halaman
+    </button>
+  ),
+}));
+
 describe('Kamus', () => {
   beforeEach(() => {
     mockUseQuery.mockReset();
@@ -30,7 +38,9 @@ describe('Kamus', () => {
   });
 
   it('menampilkan browse kategori saat tanpa pencarian', () => {
-    mockUseQuery.mockImplementation(({ queryKey }) => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const { queryKey } = options;
       if (queryKey[0] === 'kamus-kategori') {
         return {
           data: { abjad: [{ kode: 'A', nama: 'A' }], jenis: [{ kode: 'dasar', nama: 'dasar' }] },
@@ -50,7 +60,9 @@ describe('Kamus', () => {
   it('menampilkan hasil pencarian kata', () => {
     mockParams = { kata: 'kata' };
 
-    mockUseQuery.mockImplementation(({ queryKey }) => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const { queryKey } = options;
       if (queryKey[0] === 'cari-kamus') {
         return {
           data: { data: [{ id: 1, lema: 'kata' }], total: 1 },
@@ -70,7 +82,9 @@ describe('Kamus', () => {
   it('menampilkan hasil kategori dari route /kamus/:kategori/:kode', () => {
     mockParams = { kategori: 'abjad', kode: 'a' };
 
-    mockUseQuery.mockImplementation(({ queryKey }) => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const { queryKey } = options;
       if (queryKey[0] === 'kamus-kategori-lema') {
         return {
           data: {
@@ -91,6 +105,46 @@ describe('Kamus', () => {
     expect(screen.getByRole('link', { name: 'akar' })).toBeInTheDocument();
   });
 
+  it('mode kategori memakai fallback nama kategori, decode label, dan empty result', () => {
+    mockParams = { kategori: 'khusus', kode: 'kata%20dasar' };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryFn) options.queryFn();
+      const { queryKey } = options;
+      if (queryKey[0] === 'kamus-kategori-lema') {
+        return {
+          data: {
+            data: [],
+            total: 0,
+            label: null,
+          },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      if (queryKey[0] === 'kamus-kategori') {
+        return {
+          data: {
+            abjad: [],
+            jenis: [],
+            kelas_kata: [],
+            ragam: [],
+            bahasa: [],
+            bidang: [],
+          },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Kamus />);
+
+    expect(screen.getByRole('heading', { name: 'khusus Kata dasar' })).toBeInTheDocument();
+    expect(screen.getByText(/Tidak ada entri untuk kategori ini/i)).toBeInTheDocument();
+  });
+
   it('menampilkan pesan kosong saat hasil tidak ditemukan', () => {
     mockParams = { kata: 'zzz' };
 
@@ -104,6 +158,28 @@ describe('Kamus', () => {
     render(<Kamus />);
 
     expect(screen.getByText(/Lema yang dicari tidak ditemukan/i)).toBeInTheDocument();
+  });
+
+  it('mengubah offset saat paginasi dipicu', () => {
+    mockParams = { kata: 'kata' };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const { queryKey } = options;
+      if (queryKey[0] === 'cari-kamus') {
+        return {
+          data: { data: [{ id: 1, lema: 'kata' }], total: 300 },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Kamus />);
+    screen.getByRole('button', { name: 'Ubah halaman' }).click();
+
+    expect(mockSetSearchParams).toHaveBeenCalledWith({ offset: '100' });
   });
 
   it('menampilkan pesan error saat query gagal', () => {

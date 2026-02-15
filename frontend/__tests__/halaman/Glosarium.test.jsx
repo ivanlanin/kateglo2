@@ -32,6 +32,14 @@ vi.mock('@tanstack/react-query', () => ({
   useQuery: (...args) => mockUseQuery(...args),
 }));
 
+vi.mock('../../src/komponen/Paginasi', () => ({
+  default: ({ onChange }) => (
+    <button type="button" onClick={() => onChange(100)}>
+      Halaman glosarium berikut
+    </button>
+  ),
+}));
+
 describe('Glosarium', () => {
   beforeEach(() => {
     mockUseQuery.mockReset();
@@ -48,7 +56,7 @@ describe('Glosarium', () => {
 
   it('menampilkan browse bidang/sumber saat belum mencari', () => {
     mockUseQuery.mockImplementation((options) => {
-      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      if (options?.queryFn) options.queryFn();
       const key = options?.queryKey?.[0];
       if (key === 'glosarium-bidang') return { data: [{ discipline: 'ling' }], isLoading: false, isError: false };
       if (key === 'glosarium-sumber') return { data: [{ ref_source: 'kbbi' }], isLoading: false, isError: false };
@@ -87,6 +95,9 @@ describe('Glosarium', () => {
     expect(screen.getByRole('link', { name: 'istilah' })).toBeInTheDocument();
     expect(screen.getByText('(term)')).toBeInTheDocument();
     expect(cariGlosarium).toHaveBeenCalledWith('istilah', { limit: 100, offset: 0 });
+
+    screen.getByRole('button', { name: 'Halaman glosarium berikut' }).click();
+    expect(mockSetSearchParams).toHaveBeenCalledWith({ offset: '100' });
   });
 
   it('menampilkan hasil mode bidang', () => {
