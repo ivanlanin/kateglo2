@@ -52,7 +52,7 @@ function KamusDetail() {
           <span className="mx-2">›</span>
           <span className="kamus-detail-breadcrumb-current">{data.lema}</span>
         </nav>
-        <div className="content-card p-6">
+        <div>
           <h1 className="kamus-detail-heading">{data.lema}</h1>
           <p className="mt-2">
             → Lihat{' '}
@@ -80,6 +80,10 @@ function KamusDetail() {
 
   const sublemaEntries = Object.entries(data.sublema || {});
   const adaTerjemahan = data.terjemahan?.length > 0;
+  const tesaurus = data.tesaurus || [];
+  const glosarium = data.glosarium || [];
+  const tampilNomorMakna = (data.makna || []).length > 1;
+  let nomorMakna = 0;
 
   return (
     <HalamanDasar>
@@ -103,9 +107,8 @@ function KamusDetail() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Kolom utama: makna */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Header */}
-          <div className="content-card p-6">
+        <div className="lg:col-span-2">
+          <div>
             <h1 className="kamus-detail-heading">
               {data.lema}
               {data.lafal && (
@@ -132,61 +135,59 @@ function KamusDetail() {
                 </span>
               )}
             </div>
-          </div>
 
-          {/* Makna */}
-          <div className="content-card p-6">
-            <h2 className="kamus-detail-section-title">Makna</h2>
+            <div className="mt-6">
+              {Object.keys(maknaPerKelas).length === 0 && (
+                <p className="muted-text text-sm">Belum tersedia.</p>
+              )}
 
-            {Object.keys(maknaPerKelas).length === 0 && (
-              <p className="muted-text text-sm">Belum tersedia.</p>
-            )}
-
-            {Object.entries(maknaPerKelas).map(([kelas, daftarMakna]) => (
-              <div key={kelas} className="mb-4 last:mb-0">
-                {kelas !== '-' && (
-                  <h3 className="kamus-detail-def-class">{kelas}</h3>
-                )}
-                <ol className="kamus-detail-def-list">
-                  {daftarMakna.map((m) => (
-                    <li key={m.id} className="text-sm leading-relaxed">
-                      {m.bidang && (
-                        <em className="kamus-detail-def-discipline">[{m.bidang}] </em>
-                      )}
-                      {m.ragam && (
-                        <em className="kamus-detail-def-discipline">{m.ragam} </em>
-                      )}
-                      {m.kiasan === 1 && (
-                        <em className="kamus-detail-def-discipline">ki </em>
-                      )}
-                      <span dangerouslySetInnerHTML={{ __html: m.makna }} />
-                      {m.tipe_penyingkat && (
-                        <span className="tag-subtle ml-1">{m.tipe_penyingkat}</span>
-                      )}
-                      {m.ilmiah && (
-                        <span className="kamus-detail-def-sample"> [{m.ilmiah}]</span>
-                      )}
-                      {m.kimia && (
-                        <span className="kamus-detail-def-sample"> ({m.kimia})</span>
-                      )}
-                      {/* Contoh */}
-                      {m.contoh?.length > 0 && (
-                        <ul className="mt-1 ml-4">
-                          {m.contoh.map((c) => (
-                            <li key={c.id} className="kamus-detail-def-sample">
-                              <span dangerouslySetInnerHTML={{ __html: c.contoh }} />
-                              {c.makna_contoh && (
-                                <span> — {c.makna_contoh}</span>
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            ))}
+              {Object.entries(maknaPerKelas).map(([kelas, daftarMakna]) => (
+                <div key={kelas} className="mb-4 last:mb-0">
+                  {kelas !== '-' && (
+                    <h3 className="kamus-detail-def-class">{kelas}</h3>
+                  )}
+                  <ol className="kamus-detail-def-list">
+                    {daftarMakna.map((m) => (
+                      <li key={m.id} className="kamus-detail-def-item">
+                        {tampilNomorMakna && (
+                          <span className="kamus-detail-def-number">{++nomorMakna}.</span>
+                        )}
+                        <span className="kamus-detail-def-content">
+                          {m.bidang && (
+                            <em className="kamus-detail-def-discipline">[{m.bidang}] </em>
+                          )}
+                          {m.ragam && (
+                            <em className="kamus-detail-def-discipline">{m.ragam} </em>
+                          )}
+                          {m.kiasan === 1 && (
+                            <em className="kamus-detail-def-discipline">ki </em>
+                          )}
+                          <span dangerouslySetInnerHTML={{ __html: m.makna }} />
+                          {m.tipe_penyingkat && (
+                            <span className="tag-subtle ml-1">{m.tipe_penyingkat}</span>
+                          )}
+                          {m.ilmiah && (
+                            <span className="kamus-detail-def-sample"> [{m.ilmiah}]</span>
+                          )}
+                          {m.kimia && (
+                            <span className="kamus-detail-def-sample"> ({m.kimia})</span>
+                          )}
+                          {m.contoh?.length > 0 && (
+                            <span className="kamus-detail-def-sample">: {m.contoh.map((c, i) => (
+                              <span key={c.id}>
+                                <span dangerouslySetInnerHTML={{ __html: c.contoh }} />
+                                {c.makna_contoh && <span> — {c.makna_contoh}</span>}
+                                {i < m.contoh.length - 1 && <span>; </span>}
+                              </span>
+                            ))}</span>
+                          )}
+                        </span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -232,15 +233,43 @@ function KamusDetail() {
             </PanelLipat>
           )}
 
-          {/* Link ke Tesaurus */}
-          <div className="content-card p-4">
-            <Link
-              to={`/tesaurus/detail/${encodeURIComponent(data.lema)}`}
-              className="link-action text-sm"
-            >
-              Lihat di Tesaurus →
-            </Link>
-          </div>
+          {tesaurus.length > 0 && (
+            <PanelLipat judul="Tesaurus" jumlah={tesaurus.length} terbukaAwal={true}>
+              <div className="flex flex-wrap gap-1">
+                {tesaurus.map((kata, i) => (
+                  <span key={`${kata}-${i}`}>
+                    <Link
+                      to={`/tesaurus/detail/${encodeURIComponent(kata)}`}
+                      className="kamus-detail-relation-link"
+                    >
+                      {kata}
+                    </Link>
+                    {i < tesaurus.length - 1 && <span className="secondary-text">;</span>}
+                  </span>
+                ))}
+              </div>
+            </PanelLipat>
+          )}
+
+          {glosarium.length > 0 && (
+            <PanelLipat judul="Glosarium" jumlah={glosarium.length} terbukaAwal={true}>
+              <div className="text-sm leading-relaxed">
+                {glosarium.map((item, i) => (
+                  <span key={`${item.phrase}-${item.original}-${i}`}>
+                    <span>{item.phrase}</span>
+                    {item.original && (
+                      <>
+                        <span> (</span>
+                        <em>{item.original}</em>
+                        <span>)</span>
+                      </>
+                    )}
+                    {i < glosarium.length - 1 && <span>; </span>}
+                  </span>
+                ))}
+              </div>
+            </PanelLipat>
+          )}
         </div>
       </div>
     </HalamanDasar>

@@ -985,7 +985,19 @@ code {
   }
 
   .kamus-detail-def-list {
-    @apply list-decimal list-inside space-y-2 text-gray-800;
+    @apply space-y-2 text-gray-800;
+  }
+
+  .kamus-detail-def-item {
+    @apply flex items-start text-base leading-relaxed;
+  }
+
+  .kamus-detail-def-number {
+    @apply w-7 shrink-0 text-gray-700;
+  }
+
+  .kamus-detail-def-content {
+    @apply min-w-0 flex-1;
   }
 
   .kamus-detail-def-discipline {
@@ -993,7 +1005,7 @@ code {
   }
 
   .kamus-detail-def-sample {
-    @apply text-gray-500 italic ml-1;
+    @apply text-gray-500 italic;
   }
 
   .kamus-detail-info-label {

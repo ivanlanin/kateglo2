@@ -114,6 +114,34 @@ class ModelGlosarium {
     );
     return result.rows;
   }
+
+  /**
+   * Ambil entri glosarium yang mengandung kata utuh pada kolom phrase
+   * @param {string} kata - Kata target (word boundary)
+   * @param {number} limit - Batas hasil
+   * @returns {Promise<Array>} Daftar phrase + original
+   */
+  static async cariFrasaMengandungKataUtuh(kata, limit = 50) {
+    const trimmed = (kata || '').trim();
+    if (!trimmed) return [];
+
+    const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
+
+    const result = await db.query(
+      `SELECT DISTINCT g.phrase, g.original
+       FROM glossary g
+       WHERE LOWER(g.phrase) ~ (
+         '(^|[^[:alnum:]_])' ||
+         regexp_replace(LOWER($1), '([.^$|()\\[\\]{}*+?\\\\-])', '\\\\\\1', 'g') ||
+         '([^[:alnum:]_]|$)'
+       )
+       ORDER BY g.phrase ASC, g.original ASC
+       LIMIT $2`,
+      [trimmed, cappedLimit]
+    );
+
+    return result.rows;
+  }
 }
 
 module.exports = ModelGlosarium;

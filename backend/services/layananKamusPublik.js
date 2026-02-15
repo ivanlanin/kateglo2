@@ -3,6 +3,13 @@
  */
 
 const ModelLema = require('../models/modelLema');
+const ModelTesaurus = require('../models/modelTesaurus');
+const ModelGlosarium = require('../models/modelGlosarium');
+
+function parseDaftarRelasi(teks) {
+  if (!teks) return [];
+  return teks.split(';').map((item) => item.trim()).filter(Boolean);
+}
 
 async function cariKamus(query, { limit = 100, offset = 0 } = {}) {
   const trimmed = (query || '').trim();
@@ -28,11 +35,13 @@ async function ambilDetailKamus(entri) {
     };
   }
 
-  const [maknaList, sublema, induk, terjemahan] = await Promise.all([
+  const [maknaList, sublema, induk, terjemahan, tesaurusDetail, glosarium] = await Promise.all([
     ModelLema.ambilMakna(lema.id),
     ModelLema.ambilSublema(lema.id),
     ModelLema.ambilInduk(lema.induk),
     ModelLema.ambilTerjemahan(lema.lema),
+    ModelTesaurus.ambilDetail(lema.lema),
+    ModelGlosarium.cariFrasaMengandungKataUtuh(lema.lema),
   ]);
 
   // Ambil contoh untuk semua makna
@@ -62,6 +71,20 @@ async function ambilDetailKamus(entri) {
     sublemaPerJenis[s.jenis].push(s);
   }
 
+  const tesaurus = tesaurusDetail
+    ? [
+      ...parseDaftarRelasi(tesaurusDetail.sinonim),
+      ...parseDaftarRelasi(tesaurusDetail.antonim),
+      ...parseDaftarRelasi(tesaurusDetail.turunan),
+      ...parseDaftarRelasi(tesaurusDetail.gabungan),
+      ...parseDaftarRelasi(tesaurusDetail.berkaitan),
+    ]
+    : [];
+
+  const tesaurusUnik = [...new Set(tesaurus.map((item) => item.toLowerCase()))]
+    .map((lowered) => tesaurus.find((item) => item.toLowerCase() === lowered))
+    .filter(Boolean);
+
   return {
     lema: lema.lema,
     jenis: lema.jenis,
@@ -72,6 +95,8 @@ async function ambilDetailKamus(entri) {
     makna,
     sublema: sublemaPerJenis,
     terjemahan,
+    tesaurus: tesaurusUnik,
+    glosarium,
     rujukan: false,
   };
 }
