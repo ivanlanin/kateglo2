@@ -3,8 +3,13 @@
  */
 
 const db = require('../db');
+const autocomplete = require('../db/autocomplete');
 
 class ModelGlosarium {
+  static async autocomplete(query, limit = 8) {
+    return autocomplete('glossary', 'phrase', query, { limit });
+  }
+
   /**
    * Cari glosarium dengan filter
    * @param {Object} params - Parameter pencarian

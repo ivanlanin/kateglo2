@@ -2,8 +2,9 @@
  * @fileoverview Komponen kotak pencarian yang dipakai bersama di Beranda dan Navbar
  */
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { autocomplete } from '../api/apiPublik';
 
 const opsiKategori = [
   { value: 'kamus', label: 'Kamus' },
@@ -17,34 +18,125 @@ function deteksiKategori(pathname) {
   return 'kamus';
 }
 
+function navigasiCari(navigate, kategori, kata) {
+  if (kategori === 'glosarium') {
+    navigate(`/glosarium?q=${encodeURIComponent(kata)}`);
+  } else {
+    navigate(`/${kategori}/cari/${encodeURIComponent(kata)}`);
+  }
+}
+
 function KotakCari({ varian = 'navbar' }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const [query, setQuery] = useState('');
   const [kategori, setKategori] = useState(() => deteksiKategori(location.pathname));
-  const navigate = useNavigate();
+  const [saran, setSaran] = useState([]);
+  const [tampilSaran, setTampilSaran] = useState(false);
+  const [indeksAktif, setIndeksAktif] = useState(-1);
+
+  const wrapperRef = useRef(null);
+  const timerRef = useRef(null);
 
   useEffect(() => {
     setKategori(deteksiKategori(location.pathname));
   }, [location.pathname]);
 
+  // Tutup dropdown saat klik di luar
+  useEffect(() => {
+    function handleClickLuar(e) {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setTampilSaran(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickLuar);
+    return () => document.removeEventListener('mousedown', handleClickLuar);
+  }, []);
+
+  const ambilSaran = useCallback(async (kata, kat) => {
+    if (kata.length < 2) {
+      setSaran([]);
+      setTampilSaran(false);
+      return;
+    }
+    try {
+      const hasil = await autocomplete(kat, kata);
+      setSaran(hasil);
+      setTampilSaran(hasil.length > 0);
+      setIndeksAktif(-1);
+    } catch {
+      setSaran([]);
+      setTampilSaran(false);
+    }
+  }, []);
+
+  const handleChange = (e) => {
+    const nilai = e.target.value;
+    setQuery(nilai);
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => ambilSaran(nilai.trim(), kategori), 300);
+  };
+
+  const handleHapus = () => {
+    setQuery('');
+    setSaran([]);
+    setTampilSaran(false);
+  };
+
+  const handlePilihSaran = (kata) => {
+    setQuery(kata);
+    setSaran([]);
+    setTampilSaran(false);
+    navigasiCari(navigate, kategori, kata);
+  };
+
   const handleCari = (e) => {
     e.preventDefault();
     const trimmed = query.trim();
     if (!trimmed) return;
-    if (kategori === 'glosarium') {
-      navigate(`/glosarium?q=${encodeURIComponent(trimmed)}`);
-    } else {
-      navigate(`/${kategori}/cari/${encodeURIComponent(trimmed)}`);
+    setTampilSaran(false);
+    navigasiCari(navigate, kategori, trimmed);
+  };
+
+  const handleKeyDown = (e) => {
+    if (!tampilSaran || saran.length === 0) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setIndeksAktif((prev) => (prev < saran.length - 1 ? prev + 1 : 0));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setIndeksAktif((prev) => (prev > 0 ? prev - 1 : saran.length - 1));
+    } else if (e.key === 'Enter' && indeksAktif >= 0) {
+      e.preventDefault();
+      handlePilihSaran(saran[indeksAktif]);
+    } else if (e.key === 'Escape') {
+      setTampilSaran(false);
+    }
+  };
+
+  const handleGantiKategori = (e) => {
+    const kat = e.target.value;
+    setKategori(kat);
+    setSaran([]);
+    setTampilSaran(false);
+    clearTimeout(timerRef.current);
+    if (query.trim().length >= 2) {
+      timerRef.current = setTimeout(() => ambilSaran(query.trim(), kat), 300);
     }
   };
 
   const adalahBeranda = varian === 'beranda';
 
   return (
-    <form onSubmit={handleCari} className={adalahBeranda ? 'kotak-cari kotak-cari-beranda' : 'kotak-cari kotak-cari-navbar'}>
+    <form
+      ref={wrapperRef}
+      onSubmit={handleCari}
+      className={adalahBeranda ? 'kotak-cari kotak-cari-beranda' : 'kotak-cari kotak-cari-navbar'}
+    >
       <select
         value={kategori}
-        onChange={(e) => setKategori(e.target.value)}
+        onChange={handleGantiKategori}
         className="kotak-cari-select"
       >
         {opsiKategori.map((opsi) => (
@@ -56,18 +148,37 @@ function KotakCari({ varian = 'navbar' }) {
           type="text"
           placeholder="Cari kata..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          onFocus={() => saran.length > 0 && setTampilSaran(true)}
           className="kotak-cari-input"
+          autoComplete="off"
         />
         {query && (
           <button
             type="button"
-            onClick={() => setQuery('')}
+            onClick={handleHapus}
             className="kotak-cari-hapus"
             aria-label="Hapus"
           >
             ×
           </button>
+        )}
+        {tampilSaran && saran.length > 0 && (
+          <ul className="kotak-cari-saran" role="listbox">
+            {saran.map((item, idx) => (
+              <li
+                key={item}
+                role="option"
+                aria-selected={idx === indeksAktif}
+                className={`kotak-cari-saran-item${idx === indeksAktif ? ' kotak-cari-saran-item-aktif' : ''}`}
+                onMouseDown={() => handlePilihSaran(item)}
+                onMouseEnter={() => setIndeksAktif(idx)}
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
         )}
       </div>
       <button type="submit" className="kotak-cari-tombol" aria-label="Cari">

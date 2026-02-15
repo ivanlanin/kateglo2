@@ -5,6 +5,7 @@
 const express = require('express');
 const { cariKamus, ambilDetailKamus } = require('../../../services/layananKamusPublik');
 const ModelLabel = require('../../../models/modelLabel');
+const ModelLema = require('../../../models/modelLema');
 
 const router = express.Router();
 
@@ -28,6 +29,15 @@ router.get('/kategori/:kategori/:kode', async (req, res, next) => {
       offset
     );
     return res.json(data);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.get('/autocomplete/:kata', async (req, res, next) => {
+  try {
+    const data = await ModelLema.autocomplete(req.params.kata);
+    return res.json({ data });
   } catch (error) {
     return next(error);
   }

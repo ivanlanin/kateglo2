@@ -4,8 +4,13 @@
  */
 
 const db = require('../db');
+const autocomplete = require('../db/autocomplete');
 
 class ModelLema {
+  static async autocomplete(query, limit = 8) {
+    return autocomplete('lema', 'lema', query, { limit, extraWhere: 'aktif = 1' });
+  }
+
   /**
    * Cari lema di kamus dengan strategi prefix-first + contains-fallback
    * @param {string} query - Kata pencarian

@@ -24,6 +24,15 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+router.get('/autocomplete', async (req, res, next) => {
+  try {
+    const data = await ModelGlosarium.autocomplete(req.query.q || '');
+    return res.json({ data });
+  } catch (error) {
+    return next(error);
+  }
+});
+
 router.get('/bidang', async (_req, res, next) => {
   try {
     const data = await ModelGlosarium.ambilDaftarBidang();
