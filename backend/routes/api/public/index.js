@@ -13,7 +13,6 @@ router.get('/health', (_req, res) => {
   });
 });
 
-router.use('/beranda', require('./beranda'));
 router.use('/kamus', require('./kamus'));
 router.use('/tesaurus', require('./tesaurus'));
 router.use('/glosarium', require('./glosarium'));

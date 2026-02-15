@@ -101,13 +101,12 @@ Gabungan data dari tabel `relation` (267K) dan `_thesaurus`.
 
 | Tabel | Keterangan |
 |-------|------------|
-| glossary | Glosarium istilah teknis bilingual (231K entri) |
-| translation | Terjemahan kata |
-| searched_phrase | Statistik pencarian |
+| glosarium | Glosarium istilah teknis bilingual |
+| searched_phrase | Statistik pencarian (historis; tracking nonaktif) |
 
 ### Tabel yang Dihapus
 
-phrase, definition, proverb, abbr_entry, relation, _thesaurus, phrase_type, lexical_class, discipline, language, ref_source, relation_type, roget_class, external_ref, new_lemma, sys_comment, sys_user, sys_abbrev
+phrase, definition, proverb, translation, abbr_entry, relation, _thesaurus, phrase_type, lexical_class, discipline, language, ref_source, relation_type, roget_class, external_ref, new_lemma, sys_comment, sys_user, sys_abbrev
 
 ---
 
@@ -124,7 +123,7 @@ phrase, definition, proverb, abbr_entry, relation, _thesaurus, phrase_type, lexi
 ### Routing Frontend
 
 ```
-/                           → Beranda (statistik, kata acak, populer)
+/                           → Beranda (landing + pencarian)
 /kamus                      → Landing kamus (browse A-Z)
 /kamus/cari/:kata           → Hasil pencarian kamus
 /kamus/detail/:entri        → Detail lema (makna, contoh, peribahasa terkait)
@@ -138,7 +137,6 @@ phrase, definition, proverb, abbr_entry, relation, _thesaurus, phrase_type, lexi
 ### API Backend
 
 ```
-GET /api/public/beranda                 → Statistik dan data beranda
 GET /api/public/kamus/cari/:kata        → Pencarian kamus
 GET /api/public/kamus/detail/:entri     → Detail lema lengkap
 GET /api/public/tesaurus/cari/:kata     → Pencarian tesaurus
@@ -156,16 +154,14 @@ backend/
 ├── models/
 │   ├── modelLema.js          ← baru (ganti modelFrasa)
 │   ├── modelTesaurus.js      ← baru
-│   ├── modelGlosarium.js     ← tetap
-│   └── modelBeranda.js       ← refaktor
+│   └── modelGlosarium.js     ← tetap
 ├── services/
 │   ├── layananKamusPublik.js  ← refaktor
 │   └── layananTesaurusPublik.js ← baru
 ├── routes/api/public/
 │   ├── kamus.js              ← refaktor
 │   ├── tesaurus.js           ← baru
-│   ├── glosarium.js          ← tetap
-│   └── beranda.js            ← refaktor
+│   └── glosarium.js          ← tetap
 
 frontend/src/
 ├── halaman/

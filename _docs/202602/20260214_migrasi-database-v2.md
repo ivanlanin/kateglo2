@@ -47,7 +47,7 @@ Dua migrasi database untuk meningkatkan fleksibilitas dan kinerja:
 | `proverb` | `idx_proverb_trgm` | gin(trgm) | Pencarian ILIKE peribahasa |
 | `translation` | `idx_translation_lemma_lower` | btree(LOWER) | Lookup terjemahan case-insensitive |
 | `external_ref` | `idx_external_ref_phrase_lower` | btree(LOWER) | Lookup tautan luar |
-| `searched_phrase` | `idx_searched_phrase_phrase` | unique btree | Upsert pencarian populer |
+| `searched_phrase` | `idx_searched_phrase_phrase` | unique btree | Upsert pencarian populer (historis; logic nonaktif) |
 | `abbr_entry` | `idx_abbr_entry_trgm` | gin(trgm) | Pencarian ILIKE singkatan |
 | `glossary` | `idx_glossary_phrase_trgm` | gin(trgm) | Pencarian ILIKE glosarium |
 | `glossary` | `idx_glossary_original_trgm` | gin(trgm) | Pencarian ILIKE bahasa asing |

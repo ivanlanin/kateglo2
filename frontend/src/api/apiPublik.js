@@ -4,13 +4,6 @@
 
 import klien from './klien';
 
-// === BERANDA ===
-
-export async function ambilDataBeranda() {
-  const response = await klien.get('/api/public/beranda');
-  return response.data;
-}
-
 // === KAMUS ===
 
 export async function ambilKategoriKamus() {

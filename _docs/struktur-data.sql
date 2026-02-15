@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-15T13:47:38.904Z
+-- Generated: 2026-02-15T19:21:22.677Z
 
 -- ============================================
 -- TABLES
@@ -45,25 +45,6 @@ create table contoh (
 create unique index contoh_legacy_cid_key on contoh using btree (legacy_cid);
 create index idx_contoh_makna on contoh using btree (makna_id, urutan);
 
-create table definition (
-  def_uid serial primary key,
-  phrase text not null,
-  def_num smallint not null default '1'::smallint,
-  lex_class text,
-  def_text text not null,
-  discipline text,
-  sample text,
-  see text,
-  updated timestamp without time zone,
-  updater text,
-  wikipedia_updated timestamp without time zone
-);
-create index idx_definition_discipline on definition using btree (discipline);
-create index idx_definition_lex_class on definition using btree (lex_class);
-create index idx_definition_phrase on definition using btree (phrase);
-create index idx_definition_phrase_lower on definition using btree (lower(phrase));
-create index idx_definition_phrase_order on definition using btree (phrase, def_num, def_uid);
-
 create table discipline (
   discipline text,
   discipline_name text not null,
@@ -95,14 +76,14 @@ create table glosarium (
   updater text not null,
   wikipedia_updated timestamp without time zone
 );
-create index idx_glosarium_bidang on glosarium using btree (bidang);
 create index idx_glosarium_asing on glosarium using btree (asing);
 create index idx_glosarium_asing_trgm on glosarium using gin (asing gin_trgm_ops);
+create index idx_glosarium_bidang on glosarium using btree (bidang);
 create index idx_glosarium_indonesia on glosarium using btree (indonesia);
-create index idx_glosarium_indonesia_trgm on glosarium using gin (indonesia gin_trgm_ops);
-create index idx_glosarium_sumber on glosarium using btree (sumber);
 create index idx_glosarium_indonesia_lower_trgm on glosarium using gin (lower(indonesia) gin_trgm_ops);
+create index idx_glosarium_indonesia_trgm on glosarium using gin (indonesia gin_trgm_ops);
 create index idx_glosarium_indonesia_tsv_simple on glosarium using gin (to_tsvector('simple'::regconfig, indonesia));
+create index idx_glosarium_sumber on glosarium using btree (sumber);
 
 create table label (
   id serial primary key,
@@ -116,13 +97,6 @@ create table label (
 );
 create index idx_label_kategori_nama on label using btree (kategori, nama);
 create unique index label_kategori_kode_key on label using btree (kategori, kode);
-
-create table language (
-  lang text,
-  lang_name text,
-  updated timestamp without time zone,
-  updater text not null
-);
 
 create table lema (
   id serial primary key,
@@ -149,15 +123,6 @@ create index idx_lema_lower on lema using btree (lower(lema));
 create index idx_lema_serupa_norm_aktif on lema using btree (lower(regexp_replace(replace(lema, '-'::text, ''::text), '\s*\([0-9]+\)\s*$'::text, ''::text))) WHERE (aktif = 1);
 create index idx_lema_trgm on lema using gin (lema gin_trgm_ops);
 create unique index lema_legacy_eid_key on lema using btree (legacy_eid);
-
-create table lexical_class (
-  lex_class text,
-  lex_class_name text not null,
-  lex_class_ref text,
-  sort_order smallint not null default '1'::smallint,
-  updated timestamp without time zone,
-  updater text
-);
 
 create table makna (
   id serial primary key,
@@ -190,51 +155,6 @@ create table new_lemma (
   is_exists smallint not null default '0'::smallint,
   is_valid smallint not null default '0'::smallint
 );
-
-create table phrase (
-  phrase text,
-  phrase_type text not null default 'r'::text,
-  lex_class text not null,
-  roget_class text,
-  pronounciation text,
-  etymology text,
-  ref_source text,
-  def_count integer not null default 0,
-  actual_phrase text,
-  info text,
-  notes text,
-  updated timestamp without time zone,
-  updater text,
-  created timestamp without time zone,
-  creator text not null,
-  proverb_updated timestamp without time zone,
-  wikipedia_updated timestamp without time zone,
-  kbbi_updated timestamp without time zone
-);
-create index idx_phrase_actual on phrase using btree (actual_phrase) WHERE ((actual_phrase IS NOT NULL) AND (actual_phrase <> ''::text));
-create index idx_phrase_lower on phrase using btree (lower(phrase));
-create index idx_phrase_trgm on phrase using gin (phrase gin_trgm_ops);
-create index idx_phrase_type on phrase using btree (phrase_type);
-
-create table phrase_type (
-  phrase_type text,
-  phrase_type_name text not null,
-  sort_order smallint not null default '1'::smallint,
-  updated timestamp without time zone,
-  updater text not null
-);
-
-create table proverb (
-  prv_uid serial primary key,
-  phrase text not null,
-  proverb text not null,
-  meaning text,
-  prv_type integer not null default 0,
-  updated timestamp without time zone,
-  updater text not null
-);
-create index idx_proverb_phrase_lower on proverb using btree (lower(phrase));
-create index idx_proverb_trgm on proverb using gin (proverb gin_trgm_ops);
 
 create table ref_source (
   ref_source text,
@@ -289,35 +209,6 @@ create table searched_phrase (
 create index idx_searched_phrase on searched_phrase using btree (search_count DESC);
 create unique index idx_searched_phrase_phrase on searched_phrase using btree (phrase);
 
-create table sys_abbrev (
-  abbrev text,
-  label text,
-  type text,
-  updated timestamp without time zone,
-  updater text
-);
-
-create table sys_comment (
-  comment_id serial primary key,
-  ses_id text,
-  sender_name text not null,
-  sender_email text not null,
-  url text,
-  status smallint not null default '1'::smallint,
-  sent_date timestamp without time zone not null,
-  comment_text text,
-  response text
-);
-
-create table sys_user (
-  user_id text,
-  pass_key text not null,
-  full_name text,
-  last_access timestamp without time zone,
-  updated timestamp without time zone,
-  updater text not null
-);
-
 create table tesaurus (
   id serial primary key,
   lema text not null,
@@ -331,12 +222,5 @@ create table tesaurus (
 create index idx_tesaurus_lema_lower on tesaurus using btree (lower(lema));
 create index idx_tesaurus_lema_trgm on tesaurus using gin (lema gin_trgm_ops);
 create unique index tesaurus_lema_key on tesaurus using btree (lema);
-
-create table translation (
-  lemma text,
-  ref_source text,
-  translation text
-);
-create index idx_translation_lemma_lower on translation using btree (lower(lemma));
 
 -- Schema extraction completed successfully
