@@ -1130,10 +1130,10 @@ code {
   }
 
   .kamus-badge-penyingkat {
-    @apply bg-gray-100 text-gray-600;
+    @apply bg-cyan-50 text-cyan-700;
   }
   .dark .kamus-badge-penyingkat {
-    @apply bg-dark-bg-input text-dark-text-muted;
+    @apply bg-cyan-900/30 text-cyan-300;
   }
 
   .kamus-detail-def-extra {
