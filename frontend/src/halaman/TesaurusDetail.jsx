@@ -14,14 +14,16 @@ function DaftarKata({ judul, daftar }) {
     <div className="mb-4">
       <h3 className="section-heading">{judul}</h3>
       <div className="flex flex-wrap gap-1">
-        {daftar.map((kata) => (
-          <Link
-            key={kata}
-            to={`/tesaurus/detail/${encodeURIComponent(kata)}`}
-            className="kamus-detail-relation-link"
-          >
-            {kata}
-          </Link>
+        {daftar.map((kata, i) => (
+          <span key={kata}>
+            <Link
+              to={`/tesaurus/detail/${encodeURIComponent(kata)}`}
+              className="kamus-detail-relation-link"
+            >
+              {kata}
+            </Link>
+            {i < daftar.length - 1 && <span className="secondary-text">;</span>}
+          </span>
         ))}
       </div>
     </div>
