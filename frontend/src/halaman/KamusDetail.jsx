@@ -235,7 +235,7 @@ function KamusDetail() {
               terbukaAwal={true}
               aksen={true}
             >
-              <div className="flex flex-wrap gap-1">
+              <div className="kamus-detail-relations-flow">
                 {daftar.map((s, i) => (
                   <span key={s.id}>
                     <Link
@@ -244,7 +244,7 @@ function KamusDetail() {
                     >
                       {s.lema}
                     </Link>
-                    {i < daftar.length - 1 && <span className="secondary-text">;</span>}
+                    {i < daftar.length - 1 && <span className="secondary-text">; </span>}
                   </span>
                 ))}
               </div>
@@ -254,7 +254,7 @@ function KamusDetail() {
           {adaTesaurus && (
             <PanelLipat judul="Tesaurus" jumlah={tesaurusSinonim.length + tesaurusAntonim.length} terbukaAwal={true} aksen={true}>
               {tesaurusSinonim.length > 0 && tesaurusAntonim.length > 0 ? (
-                <ul className="list-disc list-inside text-sm space-y-1 leading-relaxed">
+                <ul className="kamus-detail-thesaurus-list">
                   <li>
                     <span className="font-medium">Sinonim:</span>{' '}
                     {renderDaftarTesaurus(tesaurusSinonim)}
