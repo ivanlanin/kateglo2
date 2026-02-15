@@ -17,7 +17,7 @@ function DaftarKata({ judul, daftar }) {
         {daftar.map((kata) => (
           <Link
             key={kata}
-            to={`/tesaurus/${encodeURIComponent(kata)}`}
+            to={`/tesaurus/detail/${encodeURIComponent(kata)}`}
             className="kamus-detail-relation-link"
           >
             {kata}
