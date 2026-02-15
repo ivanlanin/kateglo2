@@ -13,13 +13,14 @@ import {
 } from '../api/apiPublik';
 import Paginasi from '../komponen/Paginasi';
 import HalamanDasar from '../komponen/HalamanDasar';
-import { QueryFeedback, TableResultCard } from '../komponen/StatusKonten';
+import { EmptyResultText, QueryFeedback } from '../komponen/StatusKonten';
+import { updateSearchParamsWithOffset } from '../utils/searchParams';
 
 function Glosarium() {
   const { kata, bidang, sumber } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const offsetParam = parseInt(searchParams.get('offset') || '0', 10);
-  const limit = 20;
+  const limit = 100;
 
   const sedangMencari = Boolean(kata || bidang || sumber);
 
@@ -50,14 +51,34 @@ function Glosarium() {
   });
 
   const handleOffset = (newOffset) => {
-    setSearchParams(newOffset > 0 ? { offset: String(newOffset) } : {});
+    updateSearchParamsWithOffset(setSearchParams, {}, newOffset);
   };
 
   const results = data?.data || [];
   const total = data?.total || 0;
 
+  const kataDekode = kata ? decodeURIComponent(kata) : '';
+  const bidangDekode = bidang ? decodeURIComponent(bidang) : '';
+  const sumberDekode = sumber ? decodeURIComponent(sumber) : '';
+
+  const judulHalaman = kataDekode
+    ? `Hasil Pencarian “${kataDekode}”`
+    : bidangDekode
+      ? `Hasil Pencarian “${bidangDekode}”`
+      : sumberDekode
+        ? `Hasil Pencarian “${sumberDekode}”`
+        : 'Glosarium';
+
+  const breadcrumbPencarian = sedangMencari ? (
+    <div className="kamus-detail-breadcrumb">
+      <Link to="/glosarium" className="kamus-detail-breadcrumb-link">Glosarium</Link>
+      {' › '}
+      <span className="kamus-detail-breadcrumb-current">Pencarian</span>
+    </div>
+  ) : null;
+
   return (
-    <HalamanDasar judul="Glosarium">
+    <HalamanDasar judul={judulHalaman} breadcrumb={breadcrumbPencarian}>
 
       <QueryFeedback
         isLoading={isLoading}
@@ -104,47 +125,35 @@ function Glosarium() {
         </div>
       )}
 
-      {/* Hasil tabel */}
+      {/* Hasil pencarian */}
       {sedangMencari && !isLoading && !isError && (
-        <TableResultCard
-          isEmpty={results.length === 0}
-          emptyText="Tidak ada entri glosarium yang ditemukan."
-          footer={(
-            <div className="px-4 pb-4">
-              <Paginasi total={total} limit={limit} offset={offsetParam} onChange={handleOffset} />
-            </div>
-          )}
-        >
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead className="data-table-head">
-                    <tr>
-                      <th className="px-4 py-3 font-medium">Bahasa Indonesia</th>
-                      <th className="px-4 py-3 font-medium">Bahasa Asing</th>
-                      <th className="px-4 py-3 font-medium hidden md:table-cell">Bidang</th>
-                      <th className="px-4 py-3 font-medium hidden lg:table-cell">Sumber</th>
-                    </tr>
-                  </thead>
-                  <tbody className="data-table-body">
-                    {results.map((item) => (
-                      <tr key={item.glo_uid} className="data-table-row">
-                        <td className="px-4 py-3">
-                          <Link
-                            to={`/kamus/detail/${encodeURIComponent(item.phrase)}`}
-                            className="link-primary"
-                          >
-                            {item.phrase}
-                          </Link>
-                        </td>
-                        <td className="px-4 py-3 cell-text">{item.original}</td>
-                        <td className="px-4 py-3 cell-muted hidden md:table-cell">{item.discipline || '-'}</td>
-                        <td className="px-4 py-3 cell-muted hidden lg:table-cell">{item.ref_source || '-'}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+        <>
+          {results.length === 0 && <EmptyResultText text="Tidak ada entri glosarium yang ditemukan." />}
+
+          {results.length > 0 && (
+            <>
+              <div className="glosarium-result-grid">
+                {results.map((item) => (
+                  <div key={item.glo_uid} className="glosarium-result-row">
+                    <Link
+                      to={`/kamus/detail/${encodeURIComponent(item.phrase)}`}
+                      className="kamus-kategori-grid-link"
+                    >
+                      {item.phrase}
+                    </Link>
+                    {item.original && <span className="glosarium-result-original"> ({item.original})</span>}
+                    {item.discipline && (
+                      <span className="glosarium-result-badge">{item.discipline}</span>
+                    )}
+                  </div>
+                ))}
               </div>
-        </TableResultCard>
+              <div className="mt-4">
+                <Paginasi total={total} limit={limit} offset={offsetParam} onChange={handleOffset} />
+              </div>
+            </>
+          )}
+        </>
       )}
     </HalamanDasar>
   );
