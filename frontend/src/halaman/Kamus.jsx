@@ -4,9 +4,20 @@
 
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { cariKamus } from '../api/apiPublik';
+import { cariKamus, ambilKategoriKamus } from '../api/apiPublik';
 import HalamanDasar from '../komponen/HalamanDasar';
 import { EmptyResultText, QueryFeedback } from '../komponen/StatusKonten';
+
+const NAMA_KATEGORI = {
+  abjad: 'Abjad',
+  jenis: 'Jenis',
+  kelas_kata: 'Kelas Kata',
+  ragam: 'Ragam',
+  bahasa: 'Bahasa',
+  bidang: 'Bidang',
+};
+
+const URUTAN_KATEGORI = ['abjad', 'jenis', 'kelas_kata', 'ragam', 'bahasa', 'bidang'];
 
 function Kamus() {
   const { kata } = useParams();
@@ -15,6 +26,13 @@ function Kamus() {
     queryKey: ['cari-kamus', kata],
     queryFn: () => cariKamus(kata),
     enabled: Boolean(kata),
+  });
+
+  const { data: kategoriData } = useQuery({
+    queryKey: ['kamus-kategori'],
+    queryFn: ambilKategoriKamus,
+    staleTime: 5 * 60 * 1000,
+    enabled: !kata,
   });
 
   const results = data?.data || [];
@@ -30,24 +48,29 @@ function Kamus() {
         errorText="Gagal mengambil data. Coba lagi."
       />
 
-      {/* Tanpa pencarian — browse index */}
-      {!kata && !isLoading && (
-        <div className="content-card p-6">
-          <p className="secondary-text mb-4">Gunakan kolom pencarian di atas untuk mencari kata dalam kamus.</p>
-          <div className="mb-4">
-            <h3 className="section-heading">Menurut abjad:</h3>
-            <div className="flex flex-wrap gap-1">
-              {'-ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((huruf) => (
-                <Link
-                  key={huruf}
-                  to={`/kamus/cari/${huruf === '-' ? '-' : huruf.toLowerCase()}`}
-                  className="kamus-abjad-link"
-                >
-                  {huruf}
-                </Link>
-              ))}
-            </div>
-          </div>
+      {/* Tanpa pencarian — browse kategori */}
+      {!kata && !isLoading && kategoriData && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          {URUTAN_KATEGORI.map((kat) => {
+            const labels = kategoriData[kat];
+            if (!labels || labels.length === 0) return null;
+            return (
+              <div key={kat} className="beranda-feature-card text-center">
+                <h3 className="beranda-info-title">{NAMA_KATEGORI[kat] || kat}</h3>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {labels.map((l) => (
+                    <Link
+                      key={l.kode}
+                      to={`/kamus/${kat}/${encodeURIComponent(l.kode)}`}
+                      className="beranda-tag-link"
+                    >
+                      {l.nama}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
 

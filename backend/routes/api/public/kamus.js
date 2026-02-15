@@ -1,11 +1,37 @@
 /**
- * @fileoverview Route kamus publik (pencarian + detail)
+ * @fileoverview Route kamus publik (pencarian + detail + kategori)
  */
 
 const express = require('express');
 const { cariKamus, ambilDetailKamus } = require('../../../services/layananKamusPublik');
+const ModelLabel = require('../../../models/modelLabel');
 
 const router = express.Router();
+
+router.get('/kategori', async (_req, res, next) => {
+  try {
+    const data = await ModelLabel.ambilSemuaKategori();
+    return res.json(data);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.get('/kategori/:kategori/:kode', async (req, res, next) => {
+  try {
+    const limit = Math.min(Math.max(Number(req.query.limit) || 20, 1), 50);
+    const offset = Math.max(Number(req.query.offset) || 0, 0);
+    const data = await ModelLabel.cariLemaPerLabel(
+      req.params.kategori,
+      decodeURIComponent(req.params.kode),
+      limit,
+      offset
+    );
+    return res.json(data);
+  } catch (error) {
+    return next(error);
+  }
+});
 
 router.get('/cari/:kata', async (req, res, next) => {
   try {
