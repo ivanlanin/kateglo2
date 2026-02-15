@@ -1,5 +1,10 @@
 # Riwayat Perubahan
 
+## 2026-02-16 Senin
+
+- Menampilkan superskrip untuk judul entri
+- Menampilkan kotak "Serupa" untuk menampung homonim dan homograf di detail kamus
+
 ## 2026-02-15 Minggu
 
 - Menyederhanakan tampilan beranda

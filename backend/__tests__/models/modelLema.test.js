@@ -38,6 +38,11 @@ describe('ModelLema', () => {
     });
   });
 
+  it('normalisasiKunciLema mengembalikan string kosong untuk input falsy', () => {
+    expect(ModelLema.normalisasiKunciLema(undefined)).toBe('');
+    expect(ModelLema.normalisasiKunciLema(null)).toBe('');
+  });
+
   it('normalisasiKunciLema menghapus nomor homonim dan tanda hubung', () => {
     expect(ModelLema.normalisasiKunciLema(' Per- (2) ')).toBe('per');
     expect(ModelLema.normalisasiKunciLema('dara (10)')).toBe('dara');
@@ -122,6 +127,33 @@ describe('ModelLema', () => {
     const result = await ModelLema.ambilLema('kata');
 
     expect(result).toEqual({ id: 1, lema: 'kata' });
+  });
+
+  it('ambilLemaSerupa mengembalikan array kosong jika kunci kosong', async () => {
+    const result = await ModelLema.ambilLemaSerupa('   ');
+
+    expect(result).toEqual([]);
+    expect(db.query).not.toHaveBeenCalled();
+  });
+
+  it('ambilLemaSerupa clamp limit maksimum dan fallback non-angka', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ id: 1, lema: 'per (1)', lafal: 'per' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 2, lema: 'per (2)', lafal: null }] });
+
+    await ModelLema.ambilLemaSerupa('per (1)', 999);
+    await ModelLema.ambilLemaSerupa('per (1)', 'abc');
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('LIMIT $3'),
+      ['per', 'per (1)', 100]
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $3'),
+      ['per', 'per (1)', 20]
+    );
   });
 
   it('ambilLemaSerupa mengembalikan array kosong jika kunci kosong', async () => {

@@ -52,7 +52,7 @@ describe('KamusDetail', () => {
           makna: [{ id: 1, kelas_kata: 'n', makna: 'unsur bahasa' }],
           serupa: [
             { id: 11, lema: 'kata (1)', lafal: null },
-            { id: 12, lema: 'kata- (2)', lafal: 'ka.ta' },
+            { lema: 'kata- (2)', lafal: 'ka.ta' },
           ],
           sublema: {
             turunan: [{ id: 7, lema: 'berkata' }],
