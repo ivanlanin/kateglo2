@@ -92,6 +92,15 @@ kateglo2/
 - **Chaining**: Gunakan `;` untuk chaining commands
 - **File Search**: `Select-String -Path "pattern" -Pattern "search"` (PowerShell equivalent of grep)
 
+### JSON Escape Safety (Wajib untuk Agent/Tool Payload)
+- Hindari path Windows mentah dengan backslash tunggal di payload JSON (contoh rawan: `C:\Kode\...` jika tidak di-escape benar).
+- Untuk mencegah `Bad Unicode escape in JSON`, gunakan salah satu pola aman:
+  - Ganti ke slash (`C:/Kode/Kateglo/kateglo2/...`), atau
+  - Escape backslash ganda secara konsisten (`C:\\Kode\\Kateglo\\kateglo2\\...`).
+- Jangan menulis sequence escape parsial seperti `\u`, `\x`, `\U` di string JSON kecuali memang escape valid lengkap.
+- Saat menulis patch/tool input besar, pecah perubahan per blok kecil agar error encoding/escape mudah dilokalisasi.
+- Setelah setiap patch signifikan, validasi cepat dengan lint/test terarah sebelum lanjut perubahan berikutnya.
+
 ## Python Runtime & Diagnostics
 
 ### Prinsip Umum

@@ -54,6 +54,8 @@ describe('KamusDetail', () => {
             turunan: [{ id: 7, lema: 'berkata' }],
           },
           terjemahan: [{ translation: 'word', ref_source: 'Oxford' }],
+          tesaurus: ['ucapan'],
+          glosarium: [{ phrase: 'kata kunci', original: 'keyword' }],
         },
       };
     });
@@ -67,6 +69,8 @@ describe('KamusDetail', () => {
 
     expect(screen.getByText('berkata')).toBeInTheDocument();
     expect(screen.getByText('word')).toBeInTheDocument();
+    expect(screen.getByText('Tesaurus')).toBeInTheDocument();
+    expect(screen.getByText('Glosarium')).toBeInTheDocument();
     expect(ambilDetailKamus).toHaveBeenCalledWith('kata');
   });
 
@@ -87,6 +91,8 @@ describe('KamusDetail', () => {
         ],
         sublema: {},
         terjemahan: [],
+        tesaurus: [],
+        glosarium: [],
       },
     });
 
@@ -134,6 +140,8 @@ describe('KamusDetail', () => {
             turunan: [{ id: 21, lema: 'berkata' }, { id: 22, lema: 'perkataan' }],
           },
           terjemahan: [{ translation: 'word', ref_source: '' }],
+          tesaurus: ['sinonim satu', 'sinonim dua'],
+          glosarium: [{ phrase: 'kata dasar', original: 'base word' }],
         },
       });
 
@@ -146,14 +154,17 @@ describe('KamusDetail', () => {
 
     expect(screen.getByText('ka ta')).toBeInTheDocument();
     expect(screen.getByText('turunan')).toBeInTheDocument();
-    expect(screen.getByText('kata dasar')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'kata dasar' })).toHaveAttribute('href', '/kamus/detail/kata%20dasar');
     expect(screen.getByText('cak', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('ki', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('akr')).toBeInTheDocument();
     expect(screen.getByText('[species]', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('(H2O)', { exact: false })).toBeInTheDocument();
     expect(screen.getByText(/arti contoh/i)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Lihat di Tesaurus/i })).toHaveAttribute('href', '/tesaurus/detail/kata');
+    expect(screen.getByText('Tesaurus')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'sinonim satu' })).toHaveAttribute('href', '/tesaurus/detail/sinonim%20satu');
+    expect(screen.getByText('Glosarium')).toBeInTheDocument();
+    expect(screen.getByText('base word')).toBeInTheDocument();
   });
 
   it('menggunakan judul default saat entri kosong dan menampilkan makna kosong', () => {
@@ -166,6 +177,8 @@ describe('KamusDetail', () => {
         makna: [],
         sublema: {},
         terjemahan: [],
+        tesaurus: [],
+        glosarium: [],
       },
     });
 
@@ -182,6 +195,8 @@ describe('KamusDetail', () => {
       data: {
         lema: 'fallback',
         terjemahan: [],
+        tesaurus: [],
+        glosarium: [],
       },
     });
 
@@ -189,5 +204,25 @@ describe('KamusDetail', () => {
 
     expect(screen.getByText('Belum tersedia.')).toBeInTheDocument();
     expect(screen.queryByText('Turunan')).not.toBeInTheDocument();
+  });
+
+  it('tidak menampilkan nomor makna jika hanya satu makna', () => {
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        lema: 'tunggal',
+        makna: [{ id: 1, kelas_kata: '-', makna: 'hanya satu makna' }],
+        sublema: {},
+        terjemahan: [],
+        tesaurus: [],
+        glosarium: [],
+      },
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.queryByText(/^1\.$/)).not.toBeInTheDocument();
+    expect(screen.getByText('hanya satu makna')).toBeInTheDocument();
   });
 });
