@@ -9,6 +9,14 @@ import { ambilDetailKamus } from '../api/apiPublik';
 import PanelLipat from '../komponen/PanelLipat';
 import HalamanDasar from '../komponen/HalamanDasar';
 
+/** Konversi markdown ringan (*italic* dan **bold**) ke HTML inline */
+function renderMarkdown(teks) {
+  if (!teks) return '';
+  return teks
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>');
+}
+
 function KamusDetail() {
   const { entri } = useParams();
 
@@ -179,7 +187,7 @@ function KamusDetail() {
                           {m.kiasan === 1 && (
                             <em className="kamus-detail-def-discipline">ki </em>
                           )}
-                          <span dangerouslySetInnerHTML={{ __html: m.makna }} />
+                          <span dangerouslySetInnerHTML={{ __html: renderMarkdown(m.makna) }} />
                           {m.tipe_penyingkat && (
                             <span className="tag-subtle ml-1">{m.tipe_penyingkat}</span>
                           )}
@@ -192,7 +200,7 @@ function KamusDetail() {
                           {m.contoh?.length > 0 && (
                             <span className="kamus-detail-def-sample">: {m.contoh.map((c, i) => (
                               <span key={c.id}>
-                                <span dangerouslySetInnerHTML={{ __html: c.contoh }} />
+                                <span dangerouslySetInnerHTML={{ __html: renderMarkdown(c.contoh) }} />
                                 {c.makna_contoh && <span> — {c.makna_contoh}</span>}
                                 {i < m.contoh.length - 1 && <span>; </span>}
                               </span>
