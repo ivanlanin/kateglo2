@@ -4,6 +4,7 @@ import KamusDetail from '../../src/halaman/KamusDetail';
 import { ambilDetailKamus } from '../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
+let mockParams = { entri: 'kata' };
 
 vi.mock('../../src/api/apiPublik', () => ({
   ambilDetailKamus: vi.fn().mockResolvedValue(null),
@@ -15,13 +16,14 @@ vi.mock('@tanstack/react-query', () => ({
 
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
-  useParams: () => ({ entri: 'kata' }),
+  useParams: () => mockParams,
 }));
 
 describe('KamusDetail', () => {
   beforeEach(() => {
     mockUseQuery.mockReset();
     ambilDetailKamus.mockClear();
+    mockParams = { entri: 'kata' };
   });
 
   it('menampilkan loading state', () => {
@@ -92,5 +94,100 @@ describe('KamusDetail', () => {
 
     expect(screen.getByText(/varian: aktif/i)).toBeInTheDocument();
     expect(screen.getByText('[Psikologi]', { exact: false })).toBeInTheDocument();
+  });
+
+  it('menampilkan mode rujukan dan metadata makna opsional', () => {
+    mockUseQuery
+      .mockReturnValueOnce({
+        isLoading: false,
+        isError: false,
+        data: {
+          lema: 'aktip',
+          rujukan: true,
+          lema_rujuk: 'aktif',
+        },
+      })
+      .mockReturnValueOnce({
+        isLoading: false,
+        isError: false,
+        data: {
+          lema: 'kata',
+          pemenggalan: 'ka ta',
+          jenis: 'turunan',
+          induk: { lema: 'kata dasar' },
+          makna: [
+            {
+              id: 11,
+              kelas_kata: null,
+              ragam: 'cak',
+              kiasan: 1,
+              makna: 'contoh <b>makna</b>',
+              tipe_penyingkat: 'akr',
+              ilmiah: 'species',
+              kimia: 'H2O',
+              contoh: [
+                { id: 1, contoh: 'contoh kalimat', makna_contoh: 'arti contoh' },
+              ],
+            },
+          ],
+          sublema: {
+            turunan: [{ id: 21, lema: 'berkata' }, { id: 22, lema: 'perkataan' }],
+          },
+          terjemahan: [{ translation: 'word', ref_source: '' }],
+        },
+      });
+
+    const { rerender } = render(<KamusDetail />);
+
+    expect(screen.getByText(/Lihat/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'aktif' })).toHaveAttribute('href', '/kamus/detail/aktif');
+
+    rerender(<KamusDetail />);
+
+    expect(screen.getByText('ka ta')).toBeInTheDocument();
+    expect(screen.getByText('turunan')).toBeInTheDocument();
+    expect(screen.getByText('kata dasar')).toBeInTheDocument();
+    expect(screen.getByText('cak', { exact: false })).toBeInTheDocument();
+    expect(screen.getByText('ki', { exact: false })).toBeInTheDocument();
+    expect(screen.getByText('akr')).toBeInTheDocument();
+    expect(screen.getByText('[species]', { exact: false })).toBeInTheDocument();
+    expect(screen.getByText('(H2O)', { exact: false })).toBeInTheDocument();
+    expect(screen.getByText(/arti contoh/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Lihat di Tesaurus/i })).toHaveAttribute('href', '/tesaurus/detail/kata');
+  });
+
+  it('menggunakan judul default saat entri kosong dan menampilkan makna kosong', () => {
+    mockParams = {};
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        lema: 'tanpa-makna',
+        makna: [],
+        sublema: {},
+        terjemahan: [],
+      },
+    });
+
+    render(<KamusDetail />);
+
+    expect(document.title).toBe('Kamus — Kateglo');
+    expect(screen.getByText('Belum tersedia.')).toBeInTheDocument();
+  });
+
+  it('menggunakan fallback makna/sublema saat field tidak tersedia', () => {
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        lema: 'fallback',
+        terjemahan: [],
+      },
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByText('Belum tersedia.')).toBeInTheDocument();
+    expect(screen.queryByText('Turunan')).not.toBeInTheDocument();
   });
 });

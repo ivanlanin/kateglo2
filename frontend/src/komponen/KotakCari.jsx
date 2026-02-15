@@ -227,4 +227,11 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
   );
 }
 
+export {
+  deteksiKategori,
+  ekstrakQuery,
+  SorotTeks,
+  navigasiCari,
+};
+
 export default KotakCari;

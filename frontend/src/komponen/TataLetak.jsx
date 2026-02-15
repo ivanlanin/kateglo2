@@ -21,9 +21,7 @@ function TataLetak() {
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
 
-  const appTimestamp = typeof __APP_TIMESTAMP__ !== 'undefined'
-    ? __APP_TIMESTAMP__
-    : `${new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Jakarta' }).replace(/-/g, '')}.${new Date().toLocaleTimeString('sv-SE', { timeZone: 'Asia/Jakarta', hour12: false }).slice(0, 5).replace(/:/g, '')}`;
+  const appTimestamp = __APP_TIMESTAMP__;
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', modeGelap);

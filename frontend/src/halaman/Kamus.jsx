@@ -117,7 +117,7 @@ function Kamus() {
             if (!labels || labels.length === 0) return null;
             return (
               <div key={kat} className="beranda-feature-card text-center">
-                <h3 className="beranda-info-title">{NAMA_KATEGORI[kat] || kat}</h3>
+                <h3 className="beranda-info-title">{NAMA_KATEGORI[kat]}</h3>
                 <div className="flex flex-wrap justify-center gap-2">
                   {labels.map((l) => (
                     <Link
