@@ -2,11 +2,13 @@
  * @fileoverview Halaman pencarian/browse kamus — path-based: /kamus/cari/:kata
  */
 
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { cariKamus, ambilKategoriKamus } from '../api/apiPublik';
+import Paginasi from '../komponen/Paginasi';
 import HalamanDasar from '../komponen/HalamanDasar';
 import { EmptyResultText, QueryFeedback } from '../komponen/StatusKonten';
+import { updateSearchParamsWithOffset } from '../utils/searchParams';
 
 const NAMA_KATEGORI = {
   abjad: 'Abjad',
@@ -19,12 +21,16 @@ const NAMA_KATEGORI = {
 
 const URUTAN_KATEGORI = ['abjad', 'jenis', 'kelas_kata', 'ragam', 'bahasa', 'bidang'];
 
+const limit = 100;
+
 function Kamus() {
   const { kata } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const offsetParam = parseInt(searchParams.get('offset') || '0', 10);
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['cari-kamus', kata],
-    queryFn: () => cariKamus(kata),
+    queryKey: ['cari-kamus', kata, offsetParam],
+    queryFn: () => cariKamus(kata, { limit, offset: offsetParam }),
     enabled: Boolean(kata),
   });
 
@@ -36,9 +42,26 @@ function Kamus() {
   });
 
   const results = data?.data || [];
+  const total = data?.total || 0;
+
+  const handleOffset = (newOffset) => {
+    updateSearchParamsWithOffset(setSearchParams, {}, newOffset);
+  };
+
+  const judulHalaman = kata
+    ? `Hasil Pencarian \u201c${decodeURIComponent(kata)}\u201d`
+    : 'Kamus';
+
+  const breadcrumbPencarian = kata ? (
+    <div className="kamus-detail-breadcrumb">
+      <Link to="/kamus" className="kamus-detail-breadcrumb-link">Kamus</Link>
+      {' › '}
+      <span className="kamus-detail-breadcrumb-current">Pencarian</span>
+    </div>
+  ) : null;
 
   return (
-    <HalamanDasar judul={kata ? `Cari "${decodeURIComponent(kata)}" — Kamus` : 'Kamus'}>
+    <HalamanDasar judul={judulHalaman} breadcrumb={breadcrumbPencarian}>
 
       {/* Pesan loading / error */}
       <QueryFeedback
@@ -76,48 +99,28 @@ function Kamus() {
 
       {/* Hasil pencarian */}
       {kata && !isLoading && !isError && (
-        <div className="content-card p-4">
-          <h2 className="kamus-result-heading">
-            Hasil pencarian &ldquo;{kata}&rdquo; — {results.length} entri
-          </h2>
-
+        <>
           {results.length === 0 && <EmptyResultText text="Lema yang dicari tidak ditemukan. Coba kata lain?" />}
 
           {results.length > 0 && (
-            <div className="result-divider">
-              {results.map((item) => (
-                <div key={item.id} className="py-3 first:pt-0 last:pb-0">
-                  <div className="flex items-baseline gap-2">
-                    <Link
-                      to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
-                      className="kamus-result-link"
-                    >
-                      {item.lema}
-                    </Link>
-                    {item.preview_kelas_kata && (
-                      <span className="tag-subtle">
-                        {item.preview_kelas_kata}
-                      </span>
-                    )}
-                    {item.jenis !== 'dasar' && (
-                      <span className="tag-subtle">
-                        {item.jenis}
-                      </span>
-                    )}
-                    {item.jenis_rujuk && item.lema_rujuk && (
-                      <span className="kamus-result-redirect">
-                        → {item.lema_rujuk}
-                      </span>
-                    )}
-                  </div>
-                  {item.preview_makna && (
-                    <p className="kamus-result-preview">{item.preview_makna}</p>
-                  )}
-                </div>
-              ))}
-            </div>
+            <>
+              <div className="kamus-kategori-grid">
+                {results.map((item) => (
+                  <Link
+                    key={item.id}
+                    to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
+                    className="kamus-kategori-grid-link"
+                  >
+                    {item.lema}
+                  </Link>
+                ))}
+              </div>
+              <div className="mt-4">
+                <Paginasi total={total} limit={limit} offset={offsetParam} onChange={handleOffset} />
+              </div>
+            </>
           )}
-        </div>
+        </>
       )}
     </HalamanDasar>
   );

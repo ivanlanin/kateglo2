@@ -25,8 +25,10 @@ export async function ambilLemaPerKategori(kategori, kode, { limit = 20, offset 
   return response.data;
 }
 
-export async function cariKamus(kata) {
-  const response = await klien.get(`/api/public/kamus/cari/${encodeURIComponent(kata)}`);
+export async function cariKamus(kata, { limit = 100, offset = 0 } = {}) {
+  const response = await klien.get(`/api/public/kamus/cari/${encodeURIComponent(kata)}`, {
+    params: { limit, offset },
+  });
   return response.data;
 }
 
