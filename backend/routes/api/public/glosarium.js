@@ -7,27 +7,31 @@ const ModelGlosarium = require('../../../models/modelGlosarium');
 
 const router = express.Router();
 
-router.get('/', async (req, res, next) => {
+function parsePagination(query) {
+  return {
+    limit: Math.min(parseInt(query.limit, 10) || 20, 100),
+    offset: parseInt(query.offset, 10) || 0,
+  };
+}
+
+router.get('/autocomplete/:kata', async (req, res, next) => {
   try {
-    const { q = '', bidang = '', sumber = '', bahasa = '', limit = '20', offset = '0' } = req.query;
-    const result = await ModelGlosarium.cari({
-      q,
-      bidang,
-      sumber,
-      bahasa,
-      limit: Math.min(parseInt(limit, 10) || 20, 100),
-      offset: parseInt(offset, 10) || 0,
-    });
-    return res.json(result);
+    const data = await ModelGlosarium.autocomplete(req.params.kata);
+    return res.json({ data });
   } catch (error) {
     return next(error);
   }
 });
 
-router.get('/autocomplete', async (req, res, next) => {
+router.get('/cari/:kata', async (req, res, next) => {
   try {
-    const data = await ModelGlosarium.autocomplete(req.query.q || '');
-    return res.json({ data });
+    const { limit, offset } = parsePagination(req.query);
+    const result = await ModelGlosarium.cari({
+      q: req.params.kata,
+      limit,
+      offset,
+    });
+    return res.json(result);
   } catch (error) {
     return next(error);
   }
@@ -42,10 +46,38 @@ router.get('/bidang', async (_req, res, next) => {
   }
 });
 
+router.get('/bidang/:bidang', async (req, res, next) => {
+  try {
+    const { limit, offset } = parsePagination(req.query);
+    const result = await ModelGlosarium.cari({
+      bidang: decodeURIComponent(req.params.bidang),
+      limit,
+      offset,
+    });
+    return res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+});
+
 router.get('/sumber', async (_req, res, next) => {
   try {
     const data = await ModelGlosarium.ambilDaftarSumber();
     return res.json(data);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.get('/sumber/:sumber', async (req, res, next) => {
+  try {
+    const { limit, offset } = parsePagination(req.query);
+    const result = await ModelGlosarium.cari({
+      sumber: decodeURIComponent(req.params.sumber),
+      limit,
+      offset,
+    });
+    return res.json(result);
   } catch (error) {
     return next(error);
   }

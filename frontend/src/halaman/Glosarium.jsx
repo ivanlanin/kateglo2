@@ -2,23 +2,26 @@
  * @fileoverview Halaman Glosarium — browse dan cari istilah teknis bilingual
  */
 
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { cariGlosarium, ambilDaftarBidang, ambilDaftarSumber } from '../api/apiPublik';
+import {
+  cariGlosarium,
+  ambilGlosariumPerBidang,
+  ambilGlosariumPerSumber,
+  ambilDaftarBidang,
+  ambilDaftarSumber,
+} from '../api/apiPublik';
 import Paginasi from '../komponen/Paginasi';
 import HalamanDasar from '../komponen/HalamanDasar';
 import { QueryFeedback, TableResultCard } from '../komponen/StatusKonten';
-import { updateSearchParamsWithOffset } from '../utils/searchParams';
 
 function Glosarium() {
+  const { kata, bidang, sumber } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const qParam = searchParams.get('q') || '';
-  const bidangParam = searchParams.get('bidang') || '';
-  const sumberParam = searchParams.get('sumber') || '';
   const offsetParam = parseInt(searchParams.get('offset') || '0', 10);
   const limit = 20;
 
-  const sedangMencari = Boolean(qParam || bidangParam || sumberParam);
+  const sedangMencari = Boolean(kata || bidang || sumber);
 
   const { data: bidangList } = useQuery({
     queryKey: ['glosarium-bidang'],
@@ -32,18 +35,22 @@ function Glosarium() {
     staleTime: 5 * 60 * 1000,
   });
 
+  const queryFn = () => {
+    const opts = { limit, offset: offsetParam };
+    if (kata) return cariGlosarium(kata, opts);
+    if (bidang) return ambilGlosariumPerBidang(bidang, opts);
+    if (sumber) return ambilGlosariumPerSumber(sumber, opts);
+    return Promise.resolve({ data: [], total: 0 });
+  };
+
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['glosarium', qParam, bidangParam, sumberParam, offsetParam],
-    queryFn: () => cariGlosarium({ q: qParam, bidang: bidangParam, sumber: sumberParam, limit, offset: offsetParam }),
+    queryKey: ['glosarium', kata || '', bidang || '', sumber || '', offsetParam],
+    queryFn,
     enabled: sedangMencari,
   });
 
   const handleOffset = (newOffset) => {
-    updateSearchParamsWithOffset(setSearchParams, {
-      q: qParam,
-      bidang: bidangParam,
-      sumber: sumberParam,
-    }, newOffset);
+    setSearchParams(newOffset > 0 ? { offset: String(newOffset) } : {});
   };
 
   const results = data?.data || [];
@@ -69,7 +76,7 @@ function Glosarium() {
                 {bidangList.map((b) => (
                   <Link
                     key={b.discipline}
-                    to={`/glosarium?bidang=${encodeURIComponent(b.discipline)}`}
+                    to={`/glosarium/bidang/${encodeURIComponent(b.discipline)}`}
                     className="beranda-tag-link"
                   >
                     {b.discipline}
@@ -85,7 +92,7 @@ function Glosarium() {
                 {sumberList.map((s) => (
                   <Link
                     key={s.ref_source}
-                    to={`/glosarium?sumber=${encodeURIComponent(s.ref_source)}`}
+                    to={`/glosarium/sumber/${encodeURIComponent(s.ref_source)}`}
                     className="beranda-tag-link"
                   >
                     {s.ref_source}
