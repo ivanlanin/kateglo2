@@ -6,6 +6,7 @@
 - Memberikan pilihan pencarian kamus, tesaurus, dan glosarium di kotak cari
 - Memberikan judul unik untuk tiap halaman
 - Menampilkan kategori di halaman kamus
+- Mengamankan API dengan CORS dan kunci bersama (opsional)
 
 ## 2026-02-14 Sabtu
 
