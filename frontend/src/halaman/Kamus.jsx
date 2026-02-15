@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { cariKamus, ambilKategoriKamus, ambilLemaPerKategori } from '../api/apiPublik';
 import Paginasi from '../komponen/Paginasi';
 import HalamanDasar from '../komponen/HalamanDasar';
+import TeksLema from '../komponen/TeksLema';
 import { EmptyResultText, QueryFeedback } from '../komponen/StatusKonten';
 import { updateSearchParamsWithOffset } from '../utils/searchParams';
 
@@ -149,7 +150,7 @@ function Kamus() {
                     to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
                     className="kamus-kategori-grid-link"
                   >
-                    {item.lema}
+                    <TeksLema lema={item.lema} />
                   </Link>
                 ))}
               </div>
@@ -175,7 +176,7 @@ function Kamus() {
                     to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
                     className="kamus-kategori-grid-link"
                   >
-                    {item.lema}
+                    <TeksLema lema={item.lema} />
                   </Link>
                 ))}
               </div>

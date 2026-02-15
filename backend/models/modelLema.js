@@ -7,6 +7,15 @@ const db = require('../db');
 const autocomplete = require('../db/autocomplete');
 
 class ModelLema {
+  static normalisasiKunciLema(teks) {
+    if (!teks) return '';
+    return teks
+      .trim()
+      .toLowerCase()
+      .replace(/\s*\(\d+\)\s*$/, '')
+      .replace(/-/g, '');
+  }
+
   static async autocomplete(query, limit = 8) {
     return autocomplete('lema', 'lema', query, { limit, extraWhere: 'aktif = 1' });
   }
@@ -70,6 +79,34 @@ class ModelLema {
       [teks]
     );
     return result.rows[0] || null;
+  }
+
+  /**
+   * Ambil daftar lema serupa (homonim/homofon/homograf berbasis normalisasi)
+   * @param {string} teks - Teks lema acuan
+   * @param {number} limit - Batas hasil
+   * @returns {Promise<Array>} Daftar lema ringkas {id, lema, lafal}
+   */
+  static async ambilLemaSerupa(teks, limit = 20) {
+    const kunci = ModelLema.normalisasiKunciLema(teks);
+    if (!kunci) return [];
+
+    const cappedLimit = Math.min(Math.max(Number(limit) || 20, 1), 100);
+
+    const result = await db.query(
+      `SELECT id, lema, lafal
+       FROM lema
+       WHERE aktif = 1
+         AND LOWER(REGEXP_REPLACE(REPLACE(lema, '-', ''), '\\s*\\([0-9]+\\)\\s*$', '')) = $1
+       ORDER BY
+         CASE WHEN LOWER(lema) = LOWER($2) THEN 0 ELSE 1 END,
+         COALESCE(((regexp_match(lema, '\\(([0-9]+)\\)\\s*$'))[1])::int, 2147483647),
+         lema ASC
+       LIMIT $3`,
+      [kunci, teks, cappedLimit]
+    );
+
+    return result.rows;
   }
 
   /**

@@ -38,6 +38,11 @@ describe('ModelLema', () => {
     });
   });
 
+  it('normalisasiKunciLema menghapus nomor homonim dan tanda hubung', () => {
+    expect(ModelLema.normalisasiKunciLema(' Per- (2) ')).toBe('per');
+    expect(ModelLema.normalisasiKunciLema('dara (10)')).toBe('dara');
+  });
+
   it('cariLema mengembalikan kosong saat total 0', async () => {
     db.query.mockResolvedValueOnce({ rows: [{ total: '0' }] });
 
@@ -117,6 +122,25 @@ describe('ModelLema', () => {
     const result = await ModelLema.ambilLema('kata');
 
     expect(result).toEqual({ id: 1, lema: 'kata' });
+  });
+
+  it('ambilLemaSerupa mengembalikan array kosong jika kunci kosong', async () => {
+    const result = await ModelLema.ambilLemaSerupa('   ');
+
+    expect(result).toEqual([]);
+    expect(db.query).not.toHaveBeenCalled();
+  });
+
+  it('ambilLemaSerupa menjalankan query normalisasi dengan limit', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 1, lema: 'per (1)', lafal: 'per' }] });
+
+    const result = await ModelLema.ambilLemaSerupa('per- (2)', 9);
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining("LOWER(REGEXP_REPLACE(REPLACE(lema, '-', ''),"),
+      ['per', 'per- (2)', 9]
+    );
+    expect(result).toEqual([{ id: 1, lema: 'per (1)', lafal: 'per' }]);
   });
 
   it('ambilMakna mengembalikan rows', async () => {

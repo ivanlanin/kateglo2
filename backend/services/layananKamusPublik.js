@@ -26,6 +26,52 @@ function unikTanpaBedaKapitalisasi(items) {
   return hasil;
 }
 
+function ambilNomorHomonim(lema = '') {
+  const match = lema.match(/\((\d+)\)\s*$/);
+  return match ? Number(match[1]) : Number.MAX_SAFE_INTEGER;
+}
+
+function normalisasiUrutSerupa(lema = '') {
+  return lema
+    .toLowerCase()
+    .replace(/\s*\(\d+\)\s*$/, '')
+    .replace(/-/g, '')
+    .trim();
+}
+
+function urutkanSerupaNatural(items) {
+  return [...items].sort((a, b) => {
+    const nomorA = ambilNomorHomonim(a.lema);
+    const nomorB = ambilNomorHomonim(b.lema);
+    if (nomorA !== nomorB) return nomorA - nomorB;
+
+    const keyA = normalisasiUrutSerupa(a.lema);
+    const keyB = normalisasiUrutSerupa(b.lema);
+    if (keyA !== keyB) return keyA.localeCompare(keyB, 'id');
+
+    return (a.lema || '').localeCompare(b.lema || '', 'id');
+  });
+}
+
+function unikSerupa(items) {
+  const byLema = new Map();
+
+  for (const item of items) {
+    const key = (item.lema || '').toLowerCase();
+    const existing = byLema.get(key);
+    if (!existing) {
+      byLema.set(key, item);
+      continue;
+    }
+
+    if (!existing.lafal && item.lafal) {
+      byLema.set(key, item);
+    }
+  }
+
+  return urutkanSerupaNatural(Array.from(byLema.values()));
+}
+
 async function cariKamus(query, { limit = 100, offset = 0 } = {}) {
   const trimmed = (query || '').trim();
   if (!trimmed) return { data: [], total: 0 };
@@ -50,12 +96,13 @@ async function ambilDetailKamus(entri) {
     };
   }
 
-  const [maknaList, sublema, induk, tesaurusDetail, glosarium] = await Promise.all([
+  const [maknaList, sublema, induk, tesaurusDetail, glosarium, lemaSerupa] = await Promise.all([
     ModelLema.ambilMakna(lema.id),
     ModelLema.ambilSublema(lema.id),
     ModelLema.ambilInduk(lema.induk),
     ModelTesaurus.ambilDetail(lema.lema),
     ModelGlosarium.cariFrasaMengandungKataUtuh(lema.lema),
+    ModelLema.ambilLemaSerupa(lema.lema),
   ]);
 
   // Ambil contoh untuk semua makna
@@ -92,6 +139,14 @@ async function ambilDetailKamus(entri) {
     }
     : { sinonim: [], antonim: [] };
 
+  const serupa = unikSerupa((lemaSerupa || [])
+    .filter((item) => item.id !== lema.id)
+    .map((item) => ({
+      id: item.id,
+      lema: item.lema,
+      lafal: item.lafal || null,
+    })));
+
   return {
     lema: lema.lema,
     jenis: lema.jenis,
@@ -102,6 +157,7 @@ async function ambilDetailKamus(entri) {
     makna,
     sublema: sublemaPerJenis,
     tesaurus,
+    serupa,
     glosarium,
     rujukan: false,
   };
