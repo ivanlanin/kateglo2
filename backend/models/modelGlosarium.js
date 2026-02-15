@@ -3,11 +3,26 @@
  */
 
 const db = require('../db');
-const autocomplete = require('../db/autocomplete');
 
 class ModelGlosarium {
   static async autocomplete(query, limit = 8) {
-    return autocomplete('glossary', 'phrase', query, { limit });
+    const trimmed = query.trim();
+    if (!trimmed) return [];
+    const cappedLimit = Math.min(Math.max(Number(limit) || 8, 1), 20);
+
+    const result = await db.query(
+      `SELECT DISTINCT phrase, original
+       FROM glossary
+       WHERE phrase ILIKE $1 OR original ILIKE $1
+       ORDER BY phrase ASC
+       LIMIT $2`,
+      [`${trimmed}%`, cappedLimit]
+    );
+
+    return result.rows.map((row) => ({
+      value: row.phrase,
+      original: row.original || null,
+    }));
   }
 
   /**

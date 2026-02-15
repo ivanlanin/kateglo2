@@ -18,6 +18,27 @@ function deteksiKategori(pathname) {
   return 'kamus';
 }
 
+/**
+ * Tebalkan bagian teks yang cocok dengan query pencarian
+ */
+function SorotTeks({ teks, query, italic = false }) {
+  const Tag = italic ? 'em' : 'span';
+  if (!query) return <Tag>{teks}</Tag>;
+
+  const idx = teks.toLowerCase().indexOf(query.toLowerCase());
+  if (idx === -1) return <Tag>{teks}</Tag>;
+
+  const sebelum = teks.slice(0, idx);
+  const cocok = teks.slice(idx, idx + query.length);
+  const sesudah = teks.slice(idx + query.length);
+
+  return (
+    <Tag>
+      {sebelum}<strong>{cocok}</strong>{sesudah}
+    </Tag>
+  );
+}
+
 function navigasiCari(navigate, kategori, kata) {
   if (kategori === 'glosarium') {
     navigate(`/glosarium?q=${encodeURIComponent(kata)}`);
@@ -83,11 +104,11 @@ function KotakCari({ varian = 'navbar' }) {
     setTampilSaran(false);
   };
 
-  const handlePilihSaran = (kata) => {
-    setQuery(kata);
+  const handlePilihSaran = (item) => {
+    setQuery(item.value);
     setSaran([]);
     setTampilSaran(false);
-    navigasiCari(navigate, kategori, kata);
+    navigasiCari(navigate, kategori, item.value);
   };
 
   const handleCari = (e) => {
@@ -168,14 +189,17 @@ function KotakCari({ varian = 'navbar' }) {
           <ul className="kotak-cari-saran" role="listbox">
             {saran.map((item, idx) => (
               <li
-                key={item}
+                key={item.value}
                 role="option"
                 aria-selected={idx === indeksAktif}
                 className={`kotak-cari-saran-item${idx === indeksAktif ? ' kotak-cari-saran-item-aktif' : ''}`}
                 onMouseDown={() => handlePilihSaran(item)}
                 onMouseEnter={() => setIndeksAktif(idx)}
               >
-                {item}
+                <SorotTeks teks={item.value} query={query} />
+                {item.original && (
+                  <> (<SorotTeks teks={item.original} query={query} italic />)</>
+                )}
               </li>
             ))}
           </ul>
