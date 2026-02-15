@@ -114,7 +114,7 @@ function TataLetak() {
 
             <div className="modal-body-kateglo">
               {sedangMemuat ? (
-                <div className="loading-spinner">Memuat...</div>
+                <div className="loading-spinner">Memuat …</div>
               ) : (
                 <div className="changelog-content">
                   <ReactMarkdown>

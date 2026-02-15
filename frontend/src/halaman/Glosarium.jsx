@@ -55,7 +55,7 @@ function Glosarium() {
       <QueryFeedback
         isLoading={isLoading}
         isError={isError}
-        loadingText="Mencari data..."
+        loadingText="Mencari data …"
         errorText="Gagal mengambil data."
       />
 

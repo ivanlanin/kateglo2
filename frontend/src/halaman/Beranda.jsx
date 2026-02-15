@@ -20,7 +20,7 @@ function Beranda() {
           Kamus, tesaurus, dan glosarium bahasa Indonesia
         </p>
         {/* Pencarian Utama */}
-        <KotakCari varian="beranda" />
+        <KotakCari varian="beranda" autoFocus />
       </div>
 
       {/* Kartu fitur */}

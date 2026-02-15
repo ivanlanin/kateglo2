@@ -141,11 +141,21 @@ code {
   /* ===== KotakCari (shared search box) ===== */
 
   .kotak-cari {
-    @apply flex items-stretch border border-gray-300 bg-white;
+    @apply flex items-stretch border border-gray-300 bg-white transition-colors;
+  }
+
+  .kotak-cari:focus-within {
+    @apply border-blue-500;
+    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.2), 0 4px 6px -4px rgba(59, 130, 246, 0.2);
   }
 
   .dark .kotak-cari {
     @apply border-dark-border bg-dark-bg-input;
+  }
+
+  .dark .kotak-cari:focus-within {
+    @apply border-blue-400;
+    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.5), 0 4px 6px -4px rgba(59, 130, 246, 0.5);
   }
 
   .kotak-cari-beranda {
