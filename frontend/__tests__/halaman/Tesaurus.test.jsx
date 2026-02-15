@@ -156,4 +156,28 @@ describe('Tesaurus', () => {
     expect(screen.getByText(/kecil; mungil/)).toBeInTheDocument();
     expect(screen.queryByText('≈')).not.toBeInTheDocument();
   });
+
+  it('tidak menampilkan relasi saat sinonim dan antonim kosong', () => {
+    mockParams = { kata: 'hampa' };
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      return {
+        data: {
+          data: [
+            { id: 3, lema: 'hampa', sinonim: ' ; ', antonim: '' },
+          ],
+          total: 1,
+        },
+        isLoading: false,
+        isError: false,
+      };
+    });
+
+    render(<Tesaurus />);
+
+    expect(screen.getByRole('link', { name: 'hampa' })).toHaveAttribute('href', '/kamus/detail/hampa');
+    expect(screen.queryByText('≈')).not.toBeInTheDocument();
+    expect(screen.queryByText('≠')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '»' })).not.toBeInTheDocument();
+  });
 });
