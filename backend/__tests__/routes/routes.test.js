@@ -315,12 +315,12 @@ describe('routes backend', () => {
   });
 
   it('GET /api/public/glosarium/bidang mengembalikan daftar bidang', async () => {
-    ModelGlosarium.ambilDaftarBidang.mockResolvedValue([{ discipline: 'ling', jumlah: 10 }]);
+    ModelGlosarium.ambilDaftarBidang.mockResolvedValue([{ bidang: 'ling', jumlah: 10 }]);
 
     const response = await request(createApp()).get('/api/public/glosarium/bidang');
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual([{ discipline: 'ling', jumlah: 10 }]);
+    expect(response.body).toEqual([{ bidang: 'ling', jumlah: 10 }]);
   });
 
   it('GET /api/public/glosarium/bidang meneruskan error', async () => {
@@ -356,12 +356,12 @@ describe('routes backend', () => {
   });
 
   it('GET /api/public/glosarium/sumber mengembalikan daftar sumber', async () => {
-    ModelGlosarium.ambilDaftarSumber.mockResolvedValue([{ ref_source: 'kbbi', jumlah: 5 }]);
+    ModelGlosarium.ambilDaftarSumber.mockResolvedValue([{ sumber: 'kbbi', jumlah: 5 }]);
 
     const response = await request(createApp()).get('/api/public/glosarium/sumber');
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual([{ ref_source: 'kbbi', jumlah: 5 }]);
+    expect(response.body).toEqual([{ sumber: 'kbbi', jumlah: 5 }]);
   });
 
   it('GET /api/public/glosarium/sumber meneruskan error', async () => {

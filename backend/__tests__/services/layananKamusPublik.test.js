@@ -134,7 +134,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
       berkaitan: null,
     });
     ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([
-      { phrase: 'zat aktif', original: 'active substance' }
+      { indonesia: 'zat aktif', asing: 'active substance' }
     ]);
 
     const result = await ambilDetailKamus('aktif');
@@ -146,7 +146,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     expect(result.sublema.berimbuhan).toHaveLength(1);
     expect(result.tesaurus).toEqual({ sinonim: ['aktif', 'giat'], antonim: ['pasif'] });
     expect(result.serupa).toEqual([{ id: 3, lema: 'aktip', lafal: null }]);
-    expect(result.glosarium).toEqual([{ phrase: 'zat aktif', original: 'active substance' }]);
+    expect(result.glosarium).toEqual([{ indonesia: 'zat aktif', asing: 'active substance' }]);
   });
 
   it('mendekode entri URL dan menyusun induk jika tersedia', async () => {

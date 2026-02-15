@@ -82,25 +82,26 @@ create table external_ref (
 );
 create index idx_external_ref_phrase_lower on external_ref using btree (lower(phrase));
 
-create table glossary (
-  glo_uid serial primary key,
-  phrase text not null,
-  original text not null,
-  discipline text,
-  lang text not null default 'en'::text,
-  ref_source text,
+create table glosarium (
+  id serial primary key,
+  indonesia text not null,
+  asing text not null,
+  bidang text,
+  bahasa text not null default 'en'::text,
+  sumber text,
   wpid text,
   wpen text,
   updated timestamp without time zone,
   updater text not null,
   wikipedia_updated timestamp without time zone
 );
-create index idx_glossary_discipline on glossary using btree (discipline);
-create index idx_glossary_original on glossary using btree (original);
-create index idx_glossary_original_trgm on glossary using gin (original gin_trgm_ops);
-create index idx_glossary_phrase on glossary using btree (phrase);
-create index idx_glossary_phrase_trgm on glossary using gin (phrase gin_trgm_ops);
-create index idx_glossary_ref_source on glossary using btree (ref_source);
+create index idx_glosarium_bidang on glosarium using btree (bidang);
+create index idx_glosarium_asing on glosarium using btree (asing);
+create index idx_glosarium_asing_trgm on glosarium using gin (asing gin_trgm_ops);
+create index idx_glosarium_indonesia on glosarium using btree (indonesia);
+create index idx_glosarium_indonesia_trgm on glosarium using gin (indonesia gin_trgm_ops);
+create index idx_glosarium_sumber on glosarium using btree (sumber);
+create index idx_glosarium_indonesia_lower_trgm on glosarium using gin (lower(indonesia) gin_trgm_ops);
 
 create table label (
   id serial primary key,

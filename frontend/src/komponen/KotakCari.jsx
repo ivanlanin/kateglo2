@@ -210,8 +210,8 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
                 onMouseEnter={() => setIndeksAktif(idx)}
               >
                 <SorotTeks teks={item.value} query={query} />
-                {item.original && (
-                  <> (<SorotTeks teks={item.original} query={query} italic />)</>
+                {item.asing && (
+                  <> (<SorotTeks teks={item.asing} query={query} italic />)</>
                 )}
               </li>
             ))}

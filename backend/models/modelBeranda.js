@@ -13,7 +13,7 @@ class ModelBeranda {
     const result = await db.query(`
       SELECT
         (SELECT COUNT(*) FROM lema WHERE aktif = 1) AS kamus,
-        (SELECT COUNT(*) FROM glossary) AS glosarium,
+        (SELECT COUNT(*) FROM glosarium) AS glosarium,
         (SELECT COUNT(*) FROM tesaurus) AS tesaurus
     `);
     const row = result.rows[0];

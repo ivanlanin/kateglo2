@@ -11,17 +11,17 @@ class ModelGlosarium {
     const cappedLimit = Math.min(Math.max(Number(limit) || 8, 1), 20);
 
     const result = await db.query(
-      `SELECT DISTINCT phrase, original
-       FROM glossary
-       WHERE phrase ILIKE $1 OR original ILIKE $1
-       ORDER BY phrase ASC
+      `SELECT DISTINCT indonesia, asing
+       FROM glosarium
+       WHERE indonesia ILIKE $1 OR asing ILIKE $1
+       ORDER BY indonesia ASC
        LIMIT $2`,
       [`${trimmed}%`, cappedLimit]
     );
 
     return result.rows.map((row) => ({
-      value: row.phrase,
-      original: row.original || null,
+      value: row.indonesia,
+      asing: row.asing || null,
     }));
   }
 
@@ -29,8 +29,8 @@ class ModelGlosarium {
    * Cari glosarium dengan filter
    * @param {Object} params - Parameter pencarian
    * @param {string} params.q - Kata pencarian
-   * @param {string} params.bidang - Filter bidang/discipline
-   * @param {string} params.sumber - Filter sumber/ref_source
+  * @param {string} params.bidang - Filter bidang
+  * @param {string} params.sumber - Filter sumber
    * @param {string} params.bahasa - Filter bahasa (id/en/semua)
    * @param {number} params.limit - Batas hasil
    * @param {number} params.offset - Offset untuk pagination
@@ -42,42 +42,42 @@ class ModelGlosarium {
     let idx = 1;
 
     if (q) {
-      conditions.push(`(g.phrase ILIKE $${idx} OR g.original ILIKE $${idx})`);
+      conditions.push(`(g.indonesia ILIKE $${idx} OR g.asing ILIKE $${idx})`);
       params.push(`%${q}%`);
       idx++;
     }
 
     if (bidang) {
-      conditions.push(`g.discipline = $${idx}`);
+      conditions.push(`g.bidang = $${idx}`);
       params.push(bidang);
       idx++;
     }
 
     if (sumber) {
-      conditions.push(`g.ref_source = $${idx}`);
+      conditions.push(`g.sumber = $${idx}`);
       params.push(sumber);
       idx++;
     }
 
     if (bahasa === 'id') {
-      conditions.push(`g.lang = 'id'`);
+      conditions.push(`g.bahasa = 'id'`);
     } else if (bahasa === 'en') {
-      conditions.push(`g.lang = 'en'`);
+      conditions.push(`g.bahasa = 'en'`);
     }
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
     const countResult = await db.query(
-      `SELECT COUNT(*) as total FROM glossary g ${whereClause}`,
+      `SELECT COUNT(*) as total FROM glosarium g ${whereClause}`,
       params
     );
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-      `SELECT g.glo_uid, g.phrase, g.original, g.discipline, g.lang, g.ref_source
-       FROM glossary g
+      `SELECT g.id, g.indonesia, g.asing, g.bidang, g.bahasa, g.sumber
+       FROM glosarium g
        ${whereClause}
-       ORDER BY g.phrase ASC
+       ORDER BY g.indonesia ASC
        LIMIT $${idx} OFFSET $${idx + 1}`,
       [...params, limit, offset]
     );
@@ -86,16 +86,16 @@ class ModelGlosarium {
   }
 
   /**
-   * Ambil daftar bidang/discipline yang memiliki entri glosarium
+  * Ambil daftar bidang yang memiliki entri glosarium
    * @returns {Promise<Array>}
    */
   static async ambilDaftarBidang() {
     const result = await db.query(
-      `SELECT discipline, COUNT(*) as jumlah
-       FROM glossary
-       WHERE discipline IS NOT NULL AND discipline != ''
-       GROUP BY discipline
-       ORDER BY discipline`
+      `SELECT bidang, COUNT(*) as jumlah
+        FROM glosarium
+       WHERE bidang IS NOT NULL AND bidang != ''
+       GROUP BY bidang
+       ORDER BY bidang`
     );
     return result.rows;
   }
@@ -106,20 +106,20 @@ class ModelGlosarium {
    */
   static async ambilDaftarSumber() {
     const result = await db.query(
-      `SELECT ref_source, COUNT(*) as jumlah
-       FROM glossary
-       WHERE ref_source IS NOT NULL AND ref_source != ''
-       GROUP BY ref_source
-       ORDER BY ref_source`
+      `SELECT sumber, COUNT(*) as jumlah
+       FROM glosarium
+       WHERE sumber IS NOT NULL AND sumber != ''
+       GROUP BY sumber
+       ORDER BY sumber`
     );
     return result.rows;
   }
 
   /**
-   * Ambil entri glosarium yang mengandung kata utuh pada kolom phrase
+  * Ambil entri glosarium yang mengandung kata utuh pada kolom indonesia
    * @param {string} kata - Kata target (word boundary)
    * @param {number} limit - Batas hasil
-   * @returns {Promise<Array>} Daftar phrase + original
+  * @returns {Promise<Array>} Daftar indonesia + asing
    */
   static async cariFrasaMengandungKataUtuh(kata, limit = 50) {
     const trimmed = (kata || '').trim();
@@ -128,14 +128,15 @@ class ModelGlosarium {
     const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
 
     const result = await db.query(
-      `SELECT DISTINCT g.phrase, g.original
-       FROM glossary g
-       WHERE LOWER(g.phrase) ~ (
+      `SELECT DISTINCT g.indonesia, g.asing
+       FROM glosarium g
+       WHERE LOWER(g.indonesia) LIKE ('%' || LOWER($1) || '%')
+         AND LOWER(g.indonesia) ~ (
          '(^|[^[:alnum:]_])' ||
          regexp_replace(LOWER($1), '([.^$|()\\[\\]{}*+?\\\\-])', '\\\\\\1', 'g') ||
          '([^[:alnum:]_]|$)'
        )
-       ORDER BY g.phrase ASC, g.original ASC
+       ORDER BY g.indonesia ASC, g.asing ASC
        LIMIT $2`,
       [trimmed, cappedLimit]
     );

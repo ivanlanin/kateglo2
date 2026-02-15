@@ -21,20 +21,20 @@ describe('ModelGlosarium', () => {
   it('autocomplete melakukan prefix search dengan limit dibatasi', async () => {
     db.query.mockResolvedValue({
       rows: [
-        { phrase: 'kata', original: 'word' },
-        { phrase: 'katalog', original: null },
+        { indonesia: 'kata', asing: 'word' },
+        { indonesia: 'katalog', asing: null },
       ],
     });
 
     const result = await ModelGlosarium.autocomplete(' ka ', 99);
 
     expect(db.query).toHaveBeenCalledWith(
-      expect.stringContaining('WHERE phrase ILIKE $1 OR original ILIKE $1'),
+      expect.stringContaining('WHERE indonesia ILIKE $1 OR asing ILIKE $1'),
       ['ka%', 20]
     );
     expect(result).toEqual([
-      { value: 'kata', original: 'word' },
-      { value: 'katalog', original: null },
+      { value: 'kata', asing: 'word' },
+      { value: 'katalog', asing: null },
     ]);
   });
 
@@ -57,7 +57,7 @@ describe('ModelGlosarium', () => {
   it('cari dengan semua filter termasuk bahasa id', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '2' }] })
-      .mockResolvedValueOnce({ rows: [{ glo_uid: 1, phrase: 'kata' }] });
+      .mockResolvedValueOnce({ rows: [{ id: 1, indonesia: 'kata' }] });
 
     const result = await ModelGlosarium.cari({
       q: 'kat',
@@ -70,27 +70,27 @@ describe('ModelGlosarium', () => {
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
-      expect.stringContaining('SELECT COUNT(*) as total FROM glossary g WHERE'),
+      expect.stringContaining('SELECT COUNT(*) as total FROM glosarium g WHERE'),
       ['%kat%', 'ling', 'kbbi']
     );
     expect(db.query).toHaveBeenNthCalledWith(
       2,
-      expect.stringContaining("g.lang = 'id'"),
+      expect.stringContaining("g.bahasa = 'id'"),
       ['%kat%', 'ling', 'kbbi', 10, 5]
     );
-    expect(result).toEqual({ data: [{ glo_uid: 1, phrase: 'kata' }], total: 2 });
+    expect(result).toEqual({ data: [{ id: 1, indonesia: 'kata' }], total: 2 });
   });
 
   it('cari dengan bahasa en', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '1' }] })
-      .mockResolvedValueOnce({ rows: [{ glo_uid: 2, phrase: 'word' }] });
+      .mockResolvedValueOnce({ rows: [{ id: 2, indonesia: 'word' }] });
 
     const result = await ModelGlosarium.cari({ bahasa: 'en' });
 
     expect(db.query).toHaveBeenNthCalledWith(
       2,
-      expect.stringContaining("g.lang = 'en'"),
+      expect.stringContaining("g.bahasa = 'en'"),
       [20, 0]
     );
     expect(result.total).toBe(1);
@@ -99,18 +99,18 @@ describe('ModelGlosarium', () => {
   it('cari dengan bahasa selain id/en tidak menambah filter bahasa', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '1' }] })
-      .mockResolvedValueOnce({ rows: [{ glo_uid: 3, phrase: 'term' }] });
+      .mockResolvedValueOnce({ rows: [{ id: 3, indonesia: 'term' }] });
 
     await ModelGlosarium.cari({ bahasa: 'semua', limit: 5, offset: 2 });
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
-      expect.not.stringContaining("g.lang = 'id'"),
+      expect.not.stringContaining("g.bahasa = 'id'"),
       []
     );
     expect(db.query).toHaveBeenNthCalledWith(
       2,
-      expect.not.stringContaining("g.lang = 'en'"),
+      expect.not.stringContaining("g.bahasa = 'en'"),
       [5, 2]
     );
   });
@@ -124,7 +124,7 @@ describe('ModelGlosarium', () => {
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
-      expect.stringContaining('SELECT COUNT(*) as total FROM glossary g '),
+      expect.stringContaining('SELECT COUNT(*) as total FROM glosarium g '),
       []
     );
     expect(db.query).toHaveBeenNthCalledWith(
@@ -136,22 +136,22 @@ describe('ModelGlosarium', () => {
   });
 
   it('ambilDaftarBidang mengembalikan rows', async () => {
-    const rows = [{ discipline: 'ling', jumlah: 10 }];
+    const rows = [{ bidang: 'ling', jumlah: 10 }];
     db.query.mockResolvedValue({ rows });
 
     const result = await ModelGlosarium.ambilDaftarBidang();
 
-    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('GROUP BY discipline'));
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('GROUP BY bidang'));
     expect(result).toEqual(rows);
   });
 
   it('ambilDaftarSumber mengembalikan rows', async () => {
-    const rows = [{ ref_source: 'kbbi', jumlah: 5 }];
+    const rows = [{ sumber: 'kbbi', jumlah: 5 }];
     db.query.mockResolvedValue({ rows });
 
     const result = await ModelGlosarium.ambilDaftarSumber();
 
-    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('GROUP BY ref_source'));
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('GROUP BY sumber'));
     expect(result).toEqual(rows);
   });
 
@@ -164,7 +164,7 @@ describe('ModelGlosarium', () => {
 
   it('cariFrasaMengandungKataUtuh menjalankan query dengan limit yang dibatasi', async () => {
     db.query.mockResolvedValue({
-      rows: [{ phrase: 'zat aktif', original: 'active substance' }],
+      rows: [{ indonesia: 'zat aktif', asing: 'active substance' }],
     });
 
     const result = await ModelGlosarium.cariFrasaMengandungKataUtuh(' aktif ', 999);
@@ -173,7 +173,7 @@ describe('ModelGlosarium', () => {
       expect.stringContaining('regexp_replace(LOWER($1)'),
       ['aktif', 200]
     );
-    expect(result).toEqual([{ phrase: 'zat aktif', original: 'active substance' }]);
+    expect(result).toEqual([{ indonesia: 'zat aktif', asing: 'active substance' }]);
   });
 
   it('cariFrasaMengandungKataUtuh mendukung argumen default dan fallback limit', async () => {

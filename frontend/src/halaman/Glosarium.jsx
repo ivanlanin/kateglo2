@@ -99,11 +99,11 @@ function Glosarium() {
               <div className="flex flex-wrap justify-center gap-2">
                 {bidangList.map((b) => (
                   <Link
-                    key={b.discipline}
-                    to={`/glosarium/bidang/${encodeURIComponent(b.discipline)}`}
+                    key={b.bidang}
+                    to={`/glosarium/bidang/${encodeURIComponent(b.bidang)}`}
                     className="beranda-tag-link"
                   >
-                    {b.discipline}
+                    {b.bidang}
                   </Link>
                 ))}
               </div>
@@ -115,11 +115,11 @@ function Glosarium() {
               <div className="flex flex-wrap justify-center gap-2">
                 {sumberList.map((s) => (
                   <Link
-                    key={s.ref_source}
-                    to={`/glosarium/sumber/${encodeURIComponent(s.ref_source)}`}
+                    key={s.sumber}
+                    to={`/glosarium/sumber/${encodeURIComponent(s.sumber)}`}
                     className="beranda-tag-link"
                   >
-                    {s.ref_source}
+                    {s.sumber}
                   </Link>
                 ))}
               </div>
@@ -137,14 +137,14 @@ function Glosarium() {
             <>
               <div className="glosarium-result-grid">
                 {results.map((item) => (
-                  <div key={item.glo_uid} className="glosarium-result-row">
+                  <div key={item.id} className="glosarium-result-row">
                     <Link
-                      to={`/kamus/detail/${encodeURIComponent(item.phrase)}`}
+                      to={`/kamus/detail/${encodeURIComponent(item.indonesia)}`}
                       className="kamus-kategori-grid-link"
                     >
-                      {item.phrase}
+                      {item.indonesia}
                     </Link>
-                    {item.original && <span className="glosarium-result-original"> ({item.original})</span>}
+                    {item.asing && <span className="glosarium-result-original"> ({item.asing})</span>}
                   </div>
                 ))}
               </div>

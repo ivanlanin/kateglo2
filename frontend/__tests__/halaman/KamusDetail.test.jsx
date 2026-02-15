@@ -58,7 +58,7 @@ describe('KamusDetail', () => {
             turunan: [{ id: 7, lema: 'berkata' }],
           },
           tesaurus: { sinonim: ['ucapan'], antonim: [] },
-          glosarium: [{ phrase: 'kata kunci', original: 'keyword' }],
+          glosarium: [{ indonesia: 'kata kunci', asing: 'keyword' }],
         },
       };
     });
@@ -153,8 +153,8 @@ describe('KamusDetail', () => {
           },
           tesaurus: { sinonim: ['sinonim satu', 'sinonim dua'], antonim: ['antonim satu', 'antonim dua'] },
           glosarium: [
-            { phrase: 'kata dasar', original: 'base word' },
-            { phrase: 'kata turunan', original: 'derived word' },
+            { indonesia: 'kata dasar', asing: 'base word' },
+            { indonesia: 'kata turunan', asing: 'derived word' },
           ],
         },
       });
