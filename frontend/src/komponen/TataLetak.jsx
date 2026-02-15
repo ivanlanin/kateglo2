@@ -77,7 +77,14 @@ function TataLetak() {
           >
             Kateglo {appTimestamp}
           </button>
-          {/* Tombol mode gelap disembunyikan untuk sementara */}
+          <button
+            type="button"
+            onClick={() => setModeGelap((v) => !v)}
+            className="kateglo-theme-toggle"
+            title={modeGelap ? 'Mode terang' : 'Mode gelap'}
+          >
+            {modeGelap ? '☀️' : '🌙'}
+          </button>
         </div>
       </footer>
       </div>
