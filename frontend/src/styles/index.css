@@ -748,6 +748,14 @@ code {
     @apply border-dark-border;
   }
 
+  .panel-lipat-root-aksen {
+    @apply border-gray-300;
+  }
+
+  .dark .panel-lipat-root-aksen {
+    @apply border-dark-border;
+  }
+
   .panel-lipat-trigger {
     @apply w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors text-left;
   }
@@ -756,8 +764,24 @@ code {
     @apply bg-dark-bg-elevated hover:bg-dark-bg-hover;
   }
 
+  .panel-lipat-trigger-aksen {
+    @apply bg-gray-100 hover:bg-gray-200;
+  }
+
+  .dark .panel-lipat-trigger-aksen {
+    @apply bg-dark-bg-hover hover:bg-dark-bg-input;
+  }
+
   .panel-lipat-label {
     @apply font-medium text-gray-800;
+  }
+
+  .panel-lipat-label-aksen {
+    @apply text-gray-900;
+  }
+
+  .dark .panel-lipat-label-aksen {
+    @apply text-dark-text;
   }
 
   .panel-lipat-count {
@@ -768,11 +792,27 @@ code {
     @apply bg-blue-900/30 text-blue-300;
   }
 
+  .panel-lipat-count-aksen {
+    @apply bg-gray-200 text-gray-700;
+  }
+
+  .dark .panel-lipat-count-aksen {
+    @apply bg-dark-bg-input text-dark-text-muted;
+  }
+
   .panel-lipat-icon {
     @apply w-5 h-5 text-gray-500 transition-transform;
   }
 
   .dark .panel-lipat-icon {
+    @apply text-dark-text-muted;
+  }
+
+  .panel-lipat-icon-aksen {
+    @apply text-gray-600;
+  }
+
+  .dark .panel-lipat-icon-aksen {
     @apply text-dark-text-muted;
   }
 
