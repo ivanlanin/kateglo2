@@ -50,7 +50,7 @@ function Tesaurus() {
               {results.map((item) => (
                 <div key={item.id} className="py-3 first:pt-0 last:pb-0">
                   <Link
-                    to={`/tesaurus/${encodeURIComponent(item.lema)}`}
+                    to={`/tesaurus/detail/${encodeURIComponent(item.lema)}`}
                     className="kamus-result-link"
                   >
                     {item.lema}

@@ -233,7 +233,7 @@ function KamusDetail() {
           {/* Link ke Tesaurus */}
           <div className="content-card p-4">
             <Link
-              to={`/tesaurus/${encodeURIComponent(data.lema)}`}
+              to={`/tesaurus/detail/${encodeURIComponent(data.lema)}`}
               className="link-action text-sm"
             >
               Lihat di Tesaurus →
