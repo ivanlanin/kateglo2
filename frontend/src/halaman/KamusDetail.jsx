@@ -201,14 +201,16 @@ function KamusDetail() {
               terbukaAwal={true}
             >
               <div className="flex flex-wrap gap-1">
-                {daftar.map((s) => (
-                  <Link
-                    key={s.id}
-                    to={`/kamus/detail/${encodeURIComponent(s.lema)}`}
-                    className="kamus-detail-relation-link"
-                  >
-                    {s.lema}
-                  </Link>
+                {daftar.map((s, i) => (
+                  <span key={s.id}>
+                    <Link
+                      to={`/kamus/detail/${encodeURIComponent(s.lema)}`}
+                      className="kamus-detail-relation-link"
+                    >
+                      {s.lema}
+                    </Link>
+                    {i < daftar.length - 1 && <span className="secondary-text">;</span>}
+                  </span>
                 ))}
               </div>
             </PanelLipat>
