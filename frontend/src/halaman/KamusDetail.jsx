@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ambilDetailKamus } from '../api/apiPublik';
 import PanelLipat from '../komponen/PanelLipat';
 import HalamanDasar from '../komponen/HalamanDasar';
+import TeksLema from '../komponen/TeksLema';
 
 /** Konversi markdown ringan (*italic* dan **bold**) ke HTML inline */
 function renderMarkdown(teks) {
@@ -58,17 +59,17 @@ function KamusDetail() {
         <nav className="kamus-detail-breadcrumb">
           <Link to="/kamus" className="kamus-detail-breadcrumb-link">Kamus</Link>
           <span className="mx-2">›</span>
-          <span className="kamus-detail-breadcrumb-current">{data.lema}</span>
+          <span className="kamus-detail-breadcrumb-current"><TeksLema lema={data.lema} /></span>
         </nav>
         <div>
-          <h1 className="kamus-detail-heading">{data.lema}</h1>
+          <h1 className="kamus-detail-heading"><TeksLema lema={data.lema} /></h1>
           <p className="mt-2">
             → Lihat{' '}
             <Link
               to={`/kamus/detail/${encodeURIComponent(data.lema_rujuk)}`}
               className="link-action font-semibold"
             >
-              {data.lema_rujuk}
+              <TeksLema lema={data.lema_rujuk} />
             </Link>
           </p>
         </div>
@@ -90,6 +91,7 @@ function KamusDetail() {
   const tesaurusSinonim = data.tesaurus?.sinonim || [];
   const tesaurusAntonim = data.tesaurus?.antonim || [];
   const adaTesaurus = tesaurusSinonim.length > 0 || tesaurusAntonim.length > 0;
+  const serupa = data.serupa || [];
   const glosarium = data.glosarium || [];
   const tampilNomorMakna = (data.makna || []).length > 1;
   let nomorMakna = 0;
@@ -122,12 +124,12 @@ function KamusDetail() {
               to={`/kamus/detail/${encodeURIComponent(data.induk.lema)}`}
               className="kamus-detail-breadcrumb-link"
             >
-              {data.induk.lema}
+              <TeksLema lema={data.induk.lema} />
             </Link>
             <span className="mx-2">›</span>
           </>
         )}
-        <span className="kamus-detail-breadcrumb-current">{data.lema}</span>
+        <span className="kamus-detail-breadcrumb-current"><TeksLema lema={data.lema} /></span>
       </nav>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -136,7 +138,7 @@ function KamusDetail() {
           <div>
             <div className="kamus-detail-heading-row">
               <h1 className="kamus-detail-heading">
-                <span className="kamus-detail-heading-main">{data.lema}</span>
+                <span className="kamus-detail-heading-main"><TeksLema lema={data.lema} /></span>
                 {data.lafal && (
                   <span className="kamus-detail-heading-pronunciation">/{data.lafal}/</span>
                 )}
@@ -226,6 +228,25 @@ function KamusDetail() {
 
         {/* Sidebar: sublema, tesaurus, glosarium */}
         <div className="space-y-4">
+          {serupa.length > 0 && (
+            <PanelLipat judul="Serupa" jumlah={serupa.length} terbukaAwal={true} aksen={true}>
+              <div className="kamus-detail-relations-flow">
+                {serupa.map((item, i) => (
+                  <span key={`${item.id || item.lema}-${i}`}>
+                    <Link
+                      to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
+                      className="kamus-detail-relation-link"
+                    >
+                      <TeksLema lema={item.lema} />
+                    </Link>
+                    {item.lafal && <span className="secondary-text"> /{item.lafal}/</span>}
+                    {i < serupa.length - 1 && <span className="secondary-text">; </span>}
+                  </span>
+                ))}
+              </div>
+            </PanelLipat>
+          )}
+
           {/* Sublema per jenis */}
           {sublemaEntries.map(([jenis, daftar]) => (
             <PanelLipat
@@ -242,7 +263,7 @@ function KamusDetail() {
                       to={`/kamus/detail/${encodeURIComponent(s.lema)}`}
                       className="kamus-detail-relation-link"
                     >
-                      {s.lema}
+                      <TeksLema lema={s.lema} />
                     </Link>
                     {i < daftar.length - 1 && <span className="secondary-text">; </span>}
                   </span>

@@ -50,6 +50,10 @@ describe('KamusDetail', () => {
           pemenggalan: 'ka-ta',
           jenis: 'dasar',
           makna: [{ id: 1, kelas_kata: 'n', makna: 'unsur bahasa' }],
+          serupa: [
+            { id: 11, lema: 'kata (1)', lafal: null },
+            { id: 12, lema: 'kata- (2)', lafal: 'ka.ta' },
+          ],
           sublema: {
             turunan: [{ id: 7, lema: 'berkata' }],
           },
@@ -65,6 +69,10 @@ describe('KamusDetail', () => {
     expect(screen.getByText('/ka-ta/')).toBeInTheDocument();
 
     expect(screen.getByText('berkata')).toBeInTheDocument();
+    expect(screen.getByText('Serupa')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /kata\s*1/i })).toHaveAttribute('href', '/kamus/detail/kata%20(1)');
+    expect(screen.getByRole('link', { name: /kata-\s*2/i })).toHaveAttribute('href', '/kamus/detail/kata-%20(2)');
+    expect(screen.getByText('/ka.ta/')).toBeInTheDocument();
     expect(screen.getByText('Tesaurus')).toBeInTheDocument();
     expect(screen.getByText('Glosarium')).toBeInTheDocument();
     expect(ambilDetailKamus).toHaveBeenCalledWith('kata');

@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { cariTesaurus } from '../api/apiPublik';
 import Paginasi from '../komponen/Paginasi';
 import HalamanDasar from '../komponen/HalamanDasar';
+import TeksLema from '../komponen/TeksLema';
 import { EmptyResultText, QueryFeedback } from '../komponen/StatusKonten';
 import { updateSearchParamsWithOffset } from '../utils/searchParams';
 
@@ -118,7 +119,7 @@ function Tesaurus() {
                       to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
                       className="kamus-kategori-grid-link"
                     >
-                      {item.lema}
+                      <TeksLema lema={item.lema} />
                     </Link>
                     <RelasiSingkat sinonim={item.sinonim} antonim={item.antonim} />
                   </div>

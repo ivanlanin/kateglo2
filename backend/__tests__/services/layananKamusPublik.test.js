@@ -6,6 +6,7 @@
 jest.mock('../../models/modelLema', () => ({
   cariLema: jest.fn(),
   ambilLema: jest.fn(),
+  ambilLemaSerupa: jest.fn(),
   ambilMakna: jest.fn(),
   ambilContoh: jest.fn(),
   ambilSublema: jest.fn(),
@@ -67,6 +68,7 @@ describe('layananKamusPublik.cariKamus', () => {
 describe('layananKamusPublik.ambilDetailKamus', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    ModelLema.ambilLemaSerupa.mockResolvedValue([]);
   });
 
   it('mengembalikan null jika entri kosong', async () => {
@@ -119,6 +121,10 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     ModelLema.ambilSublema.mockResolvedValue([
       { id: 2, lema: 'mengaktifkan', jenis: 'berimbuhan' }
     ]);
+    ModelLema.ambilLemaSerupa.mockResolvedValue([
+      { id: 1, lema: 'aktif', lafal: 'ak.tif' },
+      { id: 3, lema: 'aktip', lafal: null },
+    ]);
     ModelLema.ambilInduk.mockResolvedValue(null);
     ModelTesaurus.ambilDetail.mockResolvedValue({
       sinonim: 'aktif;giat',
@@ -139,6 +145,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     expect(result.makna[0].contoh).toHaveLength(1);
     expect(result.sublema.berimbuhan).toHaveLength(1);
     expect(result.tesaurus).toEqual({ sinonim: ['aktif', 'giat'], antonim: ['pasif'] });
+    expect(result.serupa).toEqual([{ id: 3, lema: 'aktip', lafal: null }]);
     expect(result.glosarium).toEqual([{ phrase: 'zat aktif', original: 'active substance' }]);
   });
 
@@ -251,5 +258,40 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     const result = await ambilDetailKamus('nol-tesaurus');
 
     expect(result.tesaurus).toEqual({ sinonim: [], antonim: [] });
+  });
+
+  it('merapikan serupa: dedupe per lema, prefer lafal, dan urut natural', async () => {
+    ModelLema.ambilLema.mockResolvedValue({
+      id: 10,
+      lema: 'per (1)',
+      jenis: 'dasar',
+      induk: null,
+      pemenggalan: null,
+      lafal: null,
+      varian: null,
+      jenis_rujuk: null,
+      lema_rujuk: null,
+    });
+    ModelLema.ambilMakna.mockResolvedValue([]);
+    ModelLema.ambilContoh.mockResolvedValue([]);
+    ModelLema.ambilSublema.mockResolvedValue([]);
+    ModelLema.ambilInduk.mockResolvedValue(null);
+    ModelTesaurus.ambilDetail.mockResolvedValue(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+    ModelLema.ambilLemaSerupa.mockResolvedValue([
+      { id: 10, lema: 'per (1)', lafal: null },
+      { id: 11, lema: 'per (2)', lafal: null },
+      { id: 12, lema: 'per- (2)', lafal: 'per' },
+      { id: 13, lema: 'per (3)', lafal: 'per' },
+      { id: 14, lema: 'per (2)', lafal: 'per' },
+    ]);
+
+    const result = await ambilDetailKamus('per (1)');
+
+    expect(result.serupa).toEqual([
+      { id: 14, lema: 'per (2)', lafal: 'per' },
+      { id: 12, lema: 'per- (2)', lafal: 'per' },
+      { id: 13, lema: 'per (3)', lafal: 'per' },
+    ]);
   });
 });
