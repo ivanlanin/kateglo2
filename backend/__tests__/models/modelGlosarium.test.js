@@ -154,4 +154,35 @@ describe('ModelGlosarium', () => {
     expect(db.query).toHaveBeenCalledWith(expect.stringContaining('GROUP BY ref_source'));
     expect(result).toEqual(rows);
   });
+
+  it('cariFrasaMengandungKataUtuh mengembalikan kosong jika kata kosong', async () => {
+    const result = await ModelGlosarium.cariFrasaMengandungKataUtuh('   ', 20);
+
+    expect(db.query).not.toHaveBeenCalled();
+    expect(result).toEqual([]);
+  });
+
+  it('cariFrasaMengandungKataUtuh menjalankan query dengan limit yang dibatasi', async () => {
+    db.query.mockResolvedValue({
+      rows: [{ phrase: 'zat aktif', original: 'active substance' }],
+    });
+
+    const result = await ModelGlosarium.cariFrasaMengandungKataUtuh(' aktif ', 999);
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('regexp_replace(LOWER($1)'),
+      ['aktif', 200]
+    );
+    expect(result).toEqual([{ phrase: 'zat aktif', original: 'active substance' }]);
+  });
+
+  it('cariFrasaMengandungKataUtuh mendukung argumen default dan fallback limit', async () => {
+    const emptyResult = await ModelGlosarium.cariFrasaMengandungKataUtuh();
+    expect(emptyResult).toEqual([]);
+
+    db.query.mockResolvedValue({ rows: [] });
+    await ModelGlosarium.cariFrasaMengandungKataUtuh('aktif', 0);
+
+    expect(db.query).toHaveBeenCalledWith(expect.any(String), ['aktif', 50]);
+  });
 });

@@ -121,21 +121,33 @@ describe('KamusDetail', () => {
               id: 11,
               kelas_kata: null,
               ragam: 'cak',
+              ragam_varian: 'slang',
               kiasan: 1,
+              bahasa: 'Arab',
               makna: 'contoh <b>makna</b>',
               tipe_penyingkat: 'akr',
               ilmiah: 'species',
               kimia: 'H2O',
               contoh: [
                 { id: 1, contoh: 'contoh kalimat', makna_contoh: 'arti contoh' },
+                { id: 2, contoh: 'contoh kedua', makna_contoh: '' },
               ],
+            },
+            {
+              id: 12,
+              kelas_kata: null,
+              makna: 'makna kedua',
+              contoh: [],
             },
           ],
           sublema: {
             turunan: [{ id: 21, lema: 'berkata' }, { id: 22, lema: 'perkataan' }],
           },
-          tesaurus: { sinonim: ['sinonim satu'], antonim: ['antonim satu'] },
-          glosarium: [{ phrase: 'kata dasar', original: 'base word' }],
+          tesaurus: { sinonim: ['sinonim satu', 'sinonim dua'], antonim: ['antonim satu', 'antonim dua'] },
+          glosarium: [
+            { phrase: 'kata dasar', original: 'base word' },
+            { phrase: 'kata turunan', original: 'derived word' },
+          ],
         },
       });
 
@@ -150,11 +162,15 @@ describe('KamusDetail', () => {
     expect(screen.getByText('turunan')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'kata dasar' })).toHaveAttribute('href', '/kamus/detail/kata%20dasar');
     expect(screen.getByText('cak', { exact: false })).toBeInTheDocument();
+    expect(screen.getByText('slang', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('kiasan', { exact: false })).toBeInTheDocument();
+    expect(screen.getByText('Arab', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('akr')).toBeInTheDocument();
     expect(screen.getByText('species', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('H2O')).toBeInTheDocument();
     expect(screen.getByText(/arti contoh/i)).toBeInTheDocument();
+    expect(screen.getByText(/^1\.$/)).toBeInTheDocument();
+    expect(screen.getByText(/^2\.$/)).toBeInTheDocument();
     expect(screen.getByText('Tesaurus')).toBeInTheDocument();
     expect(screen.getByText('Sinonim:')).toBeInTheDocument();
     expect(screen.getByText('Antonim:')).toBeInTheDocument();
@@ -162,8 +178,11 @@ describe('KamusDetail', () => {
     expect(screen.getByText('Antonim:').closest('li')).not.toBeNull();
     expect(screen.getByRole('link', { name: 'sinonim satu' })).toHaveAttribute('href', '/kamus/detail/sinonim%20satu');
     expect(screen.getByRole('link', { name: 'antonim satu' })).toHaveAttribute('href', '/kamus/detail/antonim%20satu');
+    expect(screen.getByRole('link', { name: 'sinonim dua' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'antonim dua' })).toBeInTheDocument();
     expect(screen.getByText('Glosarium')).toBeInTheDocument();
     expect(screen.getByText('base word')).toBeInTheDocument();
+    expect(screen.getByText('derived word')).toBeInTheDocument();
   });
 
   it('menggunakan judul default saat entri kosong dan menampilkan makna kosong', () => {
@@ -201,6 +220,31 @@ describe('KamusDetail', () => {
 
     expect(screen.getByText('Belum tersedia.')).toBeInTheDocument();
     expect(screen.queryByText('Turunan')).not.toBeInTheDocument();
+  });
+
+  it('menggunakan fallback tesaurus/glosarium dan markdown kosong tanpa error', () => {
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        lema: 'opsional-kosong',
+        makna: [
+          {
+            id: 99,
+            kelas_kata: '-',
+            makna: '',
+            contoh: [{ id: 991, contoh: 'contoh saja', makna_contoh: '' }],
+          },
+        ],
+        sublema: {},
+      },
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.queryByText('Tesaurus')).not.toBeInTheDocument();
+    expect(screen.queryByText('Glosarium')).not.toBeInTheDocument();
+    expect(screen.getByText('contoh saja')).toBeInTheDocument();
   });
 
   it('tidak menampilkan nomor makna jika hanya satu makna', () => {
@@ -241,5 +285,26 @@ describe('KamusDetail', () => {
     expect(labelSinonim.closest('li')).toBeNull();
     expect(screen.queryByText('Antonim:')).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'setara' })).toHaveAttribute('href', '/kamus/detail/setara');
+  });
+
+  it('menampilkan blok tesaurus non-list saat hanya antonim tersedia', () => {
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        lema: 'antonim-saja',
+        makna: [{ id: 1, kelas_kata: '-', makna: 'makna contoh' }],
+        sublema: {},
+        tesaurus: { sinonim: [], antonim: ['lawan kata'] },
+        glosarium: [],
+      },
+    });
+
+    render(<KamusDetail />);
+
+    const labelAntonim = screen.getByText('Antonim:');
+    expect(labelAntonim.closest('li')).toBeNull();
+    expect(screen.queryByText('Sinonim:')).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'lawan kata' })).toHaveAttribute('href', '/kamus/detail/lawan%20kata');
   });
 });

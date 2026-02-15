@@ -201,4 +201,55 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
 
     expect(result.makna[0].contoh).toHaveLength(2);
   });
+
+  it('membersihkan relasi kosong dan menghapus duplikasi tanpa beda kapitalisasi', async () => {
+    ModelLema.ambilLema.mockResolvedValue({
+      id: 12,
+      lema: 'aktif',
+      jenis: 'dasar',
+      induk: null,
+      pemenggalan: null,
+      lafal: null,
+      varian: null,
+      jenis_rujuk: null,
+      lema_rujuk: null,
+    });
+    ModelLema.ambilMakna.mockResolvedValue([{ id: 121, makna: 'giat' }]);
+    ModelLema.ambilContoh.mockResolvedValue([]);
+    ModelLema.ambilSublema.mockResolvedValue([]);
+    ModelLema.ambilInduk.mockResolvedValue(null);
+    ModelTesaurus.ambilDetail.mockResolvedValue({
+      sinonim: 'Aktif; aktif ; ; GIAT;giat',
+      antonim: null,
+    });
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+
+    const result = await ambilDetailKamus('aktif');
+
+    expect(result.tesaurus).toEqual({ sinonim: ['Aktif', 'GIAT'], antonim: [] });
+  });
+
+  it('mengembalikan tesaurus kosong saat detail tesaurus tidak tersedia', async () => {
+    ModelLema.ambilLema.mockResolvedValue({
+      id: 15,
+      lema: 'nol-tesaurus',
+      jenis: 'dasar',
+      induk: null,
+      pemenggalan: null,
+      lafal: null,
+      varian: null,
+      jenis_rujuk: null,
+      lema_rujuk: null,
+    });
+    ModelLema.ambilMakna.mockResolvedValue([{ id: 151, makna: 'arti' }]);
+    ModelLema.ambilContoh.mockResolvedValue([]);
+    ModelLema.ambilSublema.mockResolvedValue([]);
+    ModelLema.ambilInduk.mockResolvedValue(null);
+    ModelTesaurus.ambilDetail.mockResolvedValue(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+
+    const result = await ambilDetailKamus('nol-tesaurus');
+
+    expect(result.tesaurus).toEqual({ sinonim: [], antonim: [] });
+  });
 });
