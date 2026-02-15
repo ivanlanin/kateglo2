@@ -80,10 +80,28 @@ function KamusDetail() {
 
   const sublemaEntries = Object.entries(data.sublema || {});
   const adaTerjemahan = data.terjemahan?.length > 0;
-  const tesaurus = data.tesaurus || [];
+  const tesaurusSinonim = data.tesaurus?.sinonim || [];
+  const tesaurusAntonim = data.tesaurus?.antonim || [];
+  const adaTesaurus = tesaurusSinonim.length > 0 || tesaurusAntonim.length > 0;
   const glosarium = data.glosarium || [];
   const tampilNomorMakna = (data.makna || []).length > 1;
   let nomorMakna = 0;
+
+  const renderDaftarTesaurus = (items) => (
+    <>
+      {items.map((kata, i) => (
+        <span key={`${kata}-${i}`}>
+          <Link
+            to={`/kamus/detail/${encodeURIComponent(kata)}`}
+            className="kamus-detail-relation-link"
+          >
+            {kata}
+          </Link>
+          {i < items.length - 1 && <span className="secondary-text">; </span>}
+        </span>
+      ))}
+    </>
+  );
 
   return (
     <HalamanDasar>
@@ -233,21 +251,35 @@ function KamusDetail() {
             </PanelLipat>
           )}
 
-          {tesaurus.length > 0 && (
-            <PanelLipat judul="Tesaurus" jumlah={tesaurus.length} terbukaAwal={true}>
-              <div className="flex flex-wrap gap-1">
-                {tesaurus.map((kata, i) => (
-                  <span key={`${kata}-${i}`}>
-                    <Link
-                      to={`/tesaurus/detail/${encodeURIComponent(kata)}`}
-                      className="kamus-detail-relation-link"
-                    >
-                      {kata}
-                    </Link>
-                    {i < tesaurus.length - 1 && <span className="secondary-text">;</span>}
-                  </span>
-                ))}
-              </div>
+          {adaTesaurus && (
+            <PanelLipat judul="Tesaurus" jumlah={tesaurusSinonim.length + tesaurusAntonim.length} terbukaAwal={true}>
+              {tesaurusSinonim.length > 0 && tesaurusAntonim.length > 0 ? (
+                <ul className="list-disc list-inside text-sm space-y-1 leading-relaxed">
+                  <li>
+                    <span className="font-medium">Sinonim:</span>{' '}
+                    {renderDaftarTesaurus(tesaurusSinonim)}
+                  </li>
+                  <li>
+                    <span className="font-medium">Antonim:</span>{' '}
+                    {renderDaftarTesaurus(tesaurusAntonim)}
+                  </li>
+                </ul>
+              ) : (
+                <div className="text-sm space-y-1 leading-relaxed">
+                  {tesaurusSinonim.length > 0 && (
+                    <div>
+                      <span className="font-medium">Sinonim:</span>{' '}
+                      {renderDaftarTesaurus(tesaurusSinonim)}
+                    </div>
+                  )}
+                  {tesaurusAntonim.length > 0 && (
+                    <div>
+                      <span className="font-medium">Antonim:</span>{' '}
+                      {renderDaftarTesaurus(tesaurusAntonim)}
+                    </div>
+                  )}
+                </div>
+              )}
             </PanelLipat>
           )}
 

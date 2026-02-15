@@ -11,6 +11,21 @@ function parseDaftarRelasi(teks) {
   return teks.split(';').map((item) => item.trim()).filter(Boolean);
 }
 
+function unikTanpaBedaKapitalisasi(items) {
+  const loweredSet = new Set();
+  const hasil = [];
+
+  for (const item of items) {
+    const lowered = item.toLowerCase();
+    if (!loweredSet.has(lowered)) {
+      loweredSet.add(lowered);
+      hasil.push(item);
+    }
+  }
+
+  return hasil;
+}
+
 async function cariKamus(query, { limit = 100, offset = 0 } = {}) {
   const trimmed = (query || '').trim();
   if (!trimmed) return { data: [], total: 0 };
@@ -72,18 +87,11 @@ async function ambilDetailKamus(entri) {
   }
 
   const tesaurus = tesaurusDetail
-    ? [
-      ...parseDaftarRelasi(tesaurusDetail.sinonim),
-      ...parseDaftarRelasi(tesaurusDetail.antonim),
-      ...parseDaftarRelasi(tesaurusDetail.turunan),
-      ...parseDaftarRelasi(tesaurusDetail.gabungan),
-      ...parseDaftarRelasi(tesaurusDetail.berkaitan),
-    ]
-    : [];
-
-  const tesaurusUnik = [...new Set(tesaurus.map((item) => item.toLowerCase()))]
-    .map((lowered) => tesaurus.find((item) => item.toLowerCase() === lowered))
-    .filter(Boolean);
+    ? {
+      sinonim: unikTanpaBedaKapitalisasi(parseDaftarRelasi(tesaurusDetail.sinonim)),
+      antonim: unikTanpaBedaKapitalisasi(parseDaftarRelasi(tesaurusDetail.antonim)),
+    }
+    : { sinonim: [], antonim: [] };
 
   return {
     lema: lema.lema,
@@ -95,7 +103,7 @@ async function ambilDetailKamus(entri) {
     makna,
     sublema: sublemaPerJenis,
     terjemahan,
-    tesaurus: tesaurusUnik,
+    tesaurus,
     glosarium,
     rujukan: false,
   };

@@ -54,7 +54,7 @@ describe('KamusDetail', () => {
             turunan: [{ id: 7, lema: 'berkata' }],
           },
           terjemahan: [{ translation: 'word', ref_source: 'Oxford' }],
-          tesaurus: ['ucapan'],
+          tesaurus: { sinonim: ['ucapan'], antonim: [] },
           glosarium: [{ phrase: 'kata kunci', original: 'keyword' }],
         },
       };
@@ -91,7 +91,7 @@ describe('KamusDetail', () => {
         ],
         sublema: {},
         terjemahan: [],
-        tesaurus: [],
+        tesaurus: { sinonim: [], antonim: [] },
         glosarium: [],
       },
     });
@@ -140,7 +140,7 @@ describe('KamusDetail', () => {
             turunan: [{ id: 21, lema: 'berkata' }, { id: 22, lema: 'perkataan' }],
           },
           terjemahan: [{ translation: 'word', ref_source: '' }],
-          tesaurus: ['sinonim satu', 'sinonim dua'],
+          tesaurus: { sinonim: ['sinonim satu'], antonim: ['antonim satu'] },
           glosarium: [{ phrase: 'kata dasar', original: 'base word' }],
         },
       });
@@ -162,7 +162,12 @@ describe('KamusDetail', () => {
     expect(screen.getByText('(H2O)', { exact: false })).toBeInTheDocument();
     expect(screen.getByText(/arti contoh/i)).toBeInTheDocument();
     expect(screen.getByText('Tesaurus')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'sinonim satu' })).toHaveAttribute('href', '/tesaurus/detail/sinonim%20satu');
+    expect(screen.getByText('Sinonim:')).toBeInTheDocument();
+    expect(screen.getByText('Antonim:')).toBeInTheDocument();
+    expect(screen.getByText('Sinonim:').closest('li')).not.toBeNull();
+    expect(screen.getByText('Antonim:').closest('li')).not.toBeNull();
+    expect(screen.getByRole('link', { name: 'sinonim satu' })).toHaveAttribute('href', '/kamus/detail/sinonim%20satu');
+    expect(screen.getByRole('link', { name: 'antonim satu' })).toHaveAttribute('href', '/kamus/detail/antonim%20satu');
     expect(screen.getByText('Glosarium')).toBeInTheDocument();
     expect(screen.getByText('base word')).toBeInTheDocument();
   });
@@ -177,7 +182,7 @@ describe('KamusDetail', () => {
         makna: [],
         sublema: {},
         terjemahan: [],
-        tesaurus: [],
+        tesaurus: { sinonim: [], antonim: [] },
         glosarium: [],
       },
     });
@@ -195,7 +200,7 @@ describe('KamusDetail', () => {
       data: {
         lema: 'fallback',
         terjemahan: [],
-        tesaurus: [],
+        tesaurus: { sinonim: [], antonim: [] },
         glosarium: [],
       },
     });
@@ -215,7 +220,7 @@ describe('KamusDetail', () => {
         makna: [{ id: 1, kelas_kata: '-', makna: 'hanya satu makna' }],
         sublema: {},
         terjemahan: [],
-        tesaurus: [],
+        tesaurus: { sinonim: [], antonim: [] },
         glosarium: [],
       },
     });
@@ -224,5 +229,27 @@ describe('KamusDetail', () => {
 
     expect(screen.queryByText(/^1\.$/)).not.toBeInTheDocument();
     expect(screen.getByText('hanya satu makna')).toBeInTheDocument();
+  });
+
+  it('tidak memakai bullet point saat hanya satu kategori tesaurus tersedia', () => {
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        lema: 'satu-kategori',
+        makna: [{ id: 1, kelas_kata: '-', makna: 'makna contoh' }],
+        sublema: {},
+        terjemahan: [],
+        tesaurus: { sinonim: ['setara'], antonim: [] },
+        glosarium: [],
+      },
+    });
+
+    render(<KamusDetail />);
+
+    const labelSinonim = screen.getByText('Sinonim:');
+    expect(labelSinonim.closest('li')).toBeNull();
+    expect(screen.queryByText('Antonim:')).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'setara' })).toHaveAttribute('href', '/kamus/detail/setara');
   });
 });

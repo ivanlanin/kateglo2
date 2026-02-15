@@ -141,7 +141,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     expect(result.makna[0].contoh).toHaveLength(1);
     expect(result.sublema.berimbuhan).toHaveLength(1);
     expect(result.terjemahan).toHaveLength(1);
-    expect(result.tesaurus).toEqual(['aktif', 'giat', 'pasif']);
+    expect(result.tesaurus).toEqual({ sinonim: ['aktif', 'giat'], antonim: ['pasif'] });
     expect(result.glosarium).toEqual([{ phrase: 'zat aktif', original: 'active substance' }]);
   });
 
