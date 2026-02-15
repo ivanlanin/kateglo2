@@ -4,6 +4,7 @@
 
 - Menampilkan superskrip untuk judul entri
 - Menampilkan kotak "Serupa" untuk menampung homonim dan homograf di detail kamus
+- Mengoptimalkan pencarian glosarium dengan indeks teks lengkap
 
 ## 2026-02-15 Minggu
 

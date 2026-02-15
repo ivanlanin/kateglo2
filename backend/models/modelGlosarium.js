@@ -125,6 +125,13 @@ class ModelGlosarium {
     const trimmed = (kata || '').trim();
     if (!trimmed) return [];
 
+    const token = trimmed
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}_-]+/gu, '')
+      .trim();
+
+    if (token.length < 3) return [];
+
     const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
 
     const result = await db.query(

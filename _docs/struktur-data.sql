@@ -102,6 +102,7 @@ create index idx_glosarium_indonesia on glosarium using btree (indonesia);
 create index idx_glosarium_indonesia_trgm on glosarium using gin (indonesia gin_trgm_ops);
 create index idx_glosarium_sumber on glosarium using btree (sumber);
 create index idx_glosarium_indonesia_lower_trgm on glosarium using gin (lower(indonesia) gin_trgm_ops);
+create index idx_glosarium_indonesia_tsv_simple on glosarium using gin (to_tsvector('simple'::regconfig, indonesia));
 
 create table label (
   id serial primary key,
@@ -142,8 +143,10 @@ create table lema (
   constraint lema_jenis_check check (jenis = ANY (ARRAY['dasar'::text, 'berimbuhan'::text, 'gabungan'::text, 'idiom'::text, 'peribahasa'::text, 'varian'::text]))
 );
 create index idx_lema_induk on lema using btree (induk);
+create index idx_lema_induk_aktif_jenis_lema on lema using btree (induk, aktif, jenis, lema);
 create index idx_lema_jenis on lema using btree (jenis);
 create index idx_lema_lower on lema using btree (lower(lema));
+create index idx_lema_serupa_norm_aktif on lema using btree (lower(regexp_replace(replace(lema, '-'::text, ''::text), '\s*\([0-9]+\)\s*$'::text, ''::text))) WHERE (aktif = 1);
 create index idx_lema_trgm on lema using gin (lema gin_trgm_ops);
 create unique index lema_legacy_eid_key on lema using btree (legacy_eid);
 
