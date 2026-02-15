@@ -875,6 +875,33 @@ code {
     @apply text-dark-text-muted;
   }
 
+  /* ===== Glosarium hasil pencarian ===== */
+
+  .glosarium-result-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2;
+  }
+
+  .glosarium-result-row {
+    @apply min-w-0 truncate text-base;
+  }
+
+  .glosarium-result-original {
+    @apply italic text-gray-600;
+  }
+
+  .glosarium-result-badge {
+    @apply inline-block ml-2 px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded;
+  }
+
+  .dark .glosarium-result-original,
+  .dark .glosarium-result-badge {
+    @apply text-dark-text-muted;
+  }
+
+  .dark .glosarium-result-badge {
+    @apply bg-dark-bg-input;
+  }
+
   /* ===== KamusDetail ===== */
 
   .kamus-detail-breadcrumb {
