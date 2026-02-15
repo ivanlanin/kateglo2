@@ -4,26 +4,31 @@
 
 import { useState } from 'react';
 
-function PanelLipat({ judul, jumlah, children, terbukaAwal = false }) {
+function PanelLipat({ judul, jumlah, children, terbukaAwal = false, aksen = false }) {
   const [terbuka, setTerbuka] = useState(terbukaAwal);
+  const rootClass = aksen ? 'panel-lipat-root panel-lipat-root-aksen' : 'panel-lipat-root';
+  const triggerClass = aksen ? 'panel-lipat-trigger panel-lipat-trigger-aksen' : 'panel-lipat-trigger';
+  const labelClass = aksen ? 'panel-lipat-label panel-lipat-label-aksen' : 'panel-lipat-label';
+  const countClass = aksen ? 'panel-lipat-count panel-lipat-count-aksen' : 'panel-lipat-count';
+  const iconClass = aksen ? 'panel-lipat-icon panel-lipat-icon-aksen' : 'panel-lipat-icon';
 
   return (
-    <div className="panel-lipat-root">
+    <div className={rootClass}>
       <button
         type="button"
         onClick={() => setTerbuka(!terbuka)}
-        className="panel-lipat-trigger"
+        className={triggerClass}
       >
-        <span className="panel-lipat-label">
+        <span className={labelClass}>
           {judul}
           {jumlah !== undefined && (
-            <span className="panel-lipat-count">
+            <span className={countClass}>
               {jumlah}
             </span>
           )}
         </span>
         <svg
-          className={`panel-lipat-icon ${terbuka ? 'rotate-180' : ''}`}
+          className={`${iconClass} ${terbuka ? 'rotate-180' : ''}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

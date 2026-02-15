@@ -217,6 +217,7 @@ function KamusDetail() {
               judul={jenis.charAt(0).toUpperCase() + jenis.slice(1)}
               jumlah={daftar.length}
               terbukaAwal={true}
+              aksen={true}
             >
               <div className="flex flex-wrap gap-1">
                 {daftar.map((s, i) => (
@@ -235,7 +236,7 @@ function KamusDetail() {
           ))}
 
           {adaTesaurus && (
-            <PanelLipat judul="Tesaurus" jumlah={tesaurusSinonim.length + tesaurusAntonim.length} terbukaAwal={true}>
+            <PanelLipat judul="Tesaurus" jumlah={tesaurusSinonim.length + tesaurusAntonim.length} terbukaAwal={true} aksen={true}>
               {tesaurusSinonim.length > 0 && tesaurusAntonim.length > 0 ? (
                 <ul className="list-disc list-inside text-sm space-y-1 leading-relaxed">
                   <li>
@@ -267,7 +268,7 @@ function KamusDetail() {
           )}
 
           {glosarium.length > 0 && (
-            <PanelLipat judul="Glosarium" jumlah={glosarium.length} terbukaAwal={true}>
+            <PanelLipat judul="Glosarium" jumlah={glosarium.length} terbukaAwal={true} aksen={true}>
               <div className="text-sm leading-relaxed">
                 {glosarium.map((item, i) => (
                   <span key={`${item.phrase}-${item.original}-${i}`}>
