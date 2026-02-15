@@ -11,7 +11,9 @@
 - Mengubah pencarian glosarium menjadi mencari istilah Indonesia dan asing
 - Memfokuskan otomatis pada kotak cari saat membuka halaman
 - Menyesuaikan laman detail kamus dan tesaurus
-- Membersihkan data dari kurung siku dan HTML
+- Membersihkan lema, makna, dan contoh dari kurung siku dan HTML
+- Mengembangkan singkatan di lema, makna, dan contoh, misalnya "yg" menjadi "yang"
+- Menyederhanakan jenis infiks, konfiks, prefiks, dan sufiks
 
 ## 2026-02-14 Sabtu
 
