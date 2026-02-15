@@ -27,7 +27,7 @@ code {
 
 @layer components {
   .navbar-root {
-    @apply sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm;
+    @apply sticky top-0 z-50 bg-gray-100 border-b border-gray-200 shadow-sm;
   }
 
   .dark .navbar-root {
@@ -55,31 +55,7 @@ code {
   }
 
   .navbar-search-mobile {
-    @apply flex items-center mt-3 mb-2;
-  }
-
-  .navbar-search-input {
-    @apply w-full px-3 py-1.5 text-sm border border-gray-300 rounded-l-md bg-white text-gray-800;
-  }
-
-  .navbar-search-input:focus {
-    @apply outline-none border-blue-500;
-  }
-
-  .dark .navbar-search-input {
-    @apply bg-dark-bg-input border-dark-border text-dark-text;
-  }
-
-  .navbar-search-button {
-    @apply px-4 py-1.5 text-sm bg-blue-600 text-white rounded-r-md hover:bg-blue-700 shrink-0;
-  }
-
-  .dark .navbar-search-button {
-    @apply bg-blue-500 hover:bg-blue-400 text-dark-bg;
-  }
-
-  .navbar-search-button-mobile {
-    @apply py-2;
+    @apply mt-3 mb-2;
   }
 
   .navbar-menu-desktop {
@@ -123,11 +99,11 @@ code {
   }
 
   .beranda-container {
-    @apply container mx-auto px-4;
+    @apply container mx-auto px-4 max-w-4xl;
   }
 
   .beranda-hero {
-    @apply text-center py-16 md:py-24;
+    @apply text-center py-10 md:py-16;
   }
 
   .beranda-title {
@@ -162,36 +138,92 @@ code {
     @apply text-blue-400;
   }
 
-  .beranda-search-form {
-    @apply max-w-xl mx-auto relative;
+  /* ===== KotakCari (shared search box) ===== */
+
+  .kotak-cari {
+    @apply flex items-stretch border border-gray-300 bg-white overflow-hidden;
   }
 
-  .beranda-search-input {
-    @apply w-full px-6 py-4 text-lg border-2 border-gray-300 rounded-xl bg-white text-gray-900 shadow-sm;
+  .dark .kotak-cari {
+    @apply border-dark-border bg-dark-bg-input;
   }
 
-  .beranda-search-input:focus {
-    @apply outline-none border-blue-500;
+  .kotak-cari-beranda {
+    @apply max-w-2xl mx-auto rounded-xl shadow-sm border-2;
   }
 
-  .dark .beranda-search-input {
-    @apply bg-dark-bg-input border-dark-border text-dark-text;
+  .kotak-cari-navbar {
+    @apply rounded-md;
   }
 
-  .beranda-search-button {
-    @apply absolute right-2 top-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors;
+  .kotak-cari-select {
+    @apply px-3 py-2 text-sm bg-gray-100 border-r border-gray-300 text-gray-700 font-medium cursor-pointer appearance-none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 24px;
   }
 
-  .dark .beranda-search-button {
-    @apply bg-blue-500 text-dark-bg hover:bg-blue-400;
+  .dark .kotak-cari-select {
+    @apply bg-dark-bg-elevated border-dark-border text-dark-text;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23858585' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  }
+
+  .kotak-cari-select:focus {
+    @apply outline-none;
+  }
+
+  .kotak-cari-beranda .kotak-cari-select {
+    @apply px-4 py-3 text-base;
+    padding-right: 28px;
+  }
+
+  .kotak-cari-input-wrapper {
+    @apply flex-1 flex items-center relative;
+  }
+
+  .kotak-cari-input {
+    @apply w-full px-3 py-2 text-sm bg-transparent text-gray-900 border-none;
+  }
+
+  .kotak-cari-input:focus {
+    @apply outline-none;
+  }
+
+  .dark .kotak-cari-input {
+    @apply text-dark-text;
+  }
+
+  .kotak-cari-beranda .kotak-cari-input {
+    @apply px-4 py-3 text-lg;
+  }
+
+  .kotak-cari-hapus {
+    @apply px-2 text-gray-400 hover:text-gray-600 text-lg leading-none;
+  }
+
+  .dark .kotak-cari-hapus {
+    @apply text-dark-text-muted hover:text-dark-text;
+  }
+
+  .kotak-cari-tombol {
+    @apply px-3 bg-blue-600 text-white hover:bg-blue-700 transition-colors flex items-center justify-center;
+  }
+
+  .dark .kotak-cari-tombol {
+    @apply bg-blue-500 hover:bg-blue-400;
+  }
+
+  .kotak-cari-beranda .kotak-cari-tombol {
+    @apply px-5;
   }
 
   .beranda-feature-grid {
-    @apply grid grid-cols-1 md:grid-cols-4 gap-4 mb-12;
+    @apply grid grid-cols-1 md:grid-cols-3 gap-4 mb-6;
   }
 
   .beranda-feature-card {
-    @apply p-5 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-200 transition-all;
+    @apply p-5 bg-gray-100 rounded-xl shadow-sm border border-gray-200 hover:shadow-md hover:border-blue-200 transition-all;
   }
 
   .dark .beranda-feature-card {
@@ -227,11 +259,11 @@ code {
   }
 
   .beranda-info-grid {
-    @apply grid grid-cols-1 md:grid-cols-3 gap-6 mb-12;
+    @apply grid grid-cols-1 md:grid-cols-3 gap-4 mb-6;
   }
 
   .beranda-info-card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-5;
+    @apply bg-gray-100 rounded-xl shadow-sm border border-gray-200 p-5;
   }
 
   .dark .beranda-info-card {
@@ -311,11 +343,11 @@ code {
   }
 
   .kateglo-footer {
-    @apply border-t border-gray-200 bg-white mt-12;
+    @apply bg-gray-50 mt-12;
   }
 
   .dark .kateglo-footer {
-    @apply border-dark-border bg-dark-bg-elevated;
+    @apply bg-dark-bg;
   }
 
   .kateglo-footer-content {

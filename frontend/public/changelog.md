@@ -1,5 +1,10 @@
 # Riwayat Perubahan
 
+## 2026-02-15 Minggu
+
+- Menyederhanakan tampilan beranda
+- Memberikan pilihan pencarian kamus, tesaurus, dan glosarium di kotak cari
+
 ## 2026-02-14 Sabtu
 
 - Menyiapkan server di Render.com

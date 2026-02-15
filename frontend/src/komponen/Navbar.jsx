@@ -3,7 +3,8 @@
  */
 
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import KotakCari from './KotakCari';
 
 const menuItems = [
   { path: '/kamus', label: 'Kamus' },
@@ -12,17 +13,7 @@ const menuItems = [
 ];
 
 function Navbar() {
-  const [query, setQuery] = useState('');
   const [menuTerbuka, setMenuTerbuka] = useState(false);
-  const navigate = useNavigate();
-
-  const handleCari = (e) => {
-    e.preventDefault();
-    const trimmed = query.trim();
-    if (!trimmed) return;
-    setMenuTerbuka(false);
-    navigate(`/kamus/cari/${encodeURIComponent(trimmed)}`);
-  };
 
   return (
     <nav className="navbar-root">
@@ -34,21 +25,9 @@ function Navbar() {
           </Link>
 
           {/* Pencarian (desktop) */}
-          <form onSubmit={handleCari} className="navbar-search-desktop">
-            <input
-              type="text"
-              placeholder="Cari kata..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="navbar-search-input"
-            />
-            <button
-              type="submit"
-              className="navbar-search-button"
-            >
-              Cari
-            </button>
-          </form>
+          <div className="navbar-search-desktop">
+            <KotakCari varian="navbar" />
+          </div>
 
           {/* Menu (desktop) */}
           <div className="navbar-menu-desktop">
@@ -83,21 +62,9 @@ function Navbar() {
         {/* Menu mobile */}
         {menuTerbuka && (
           <div className="navbar-mobile-panel">
-            <form onSubmit={handleCari} className="navbar-search-mobile">
-              <input
-                type="text"
-                placeholder="Cari kata..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="navbar-search-input"
-              />
-              <button
-                type="submit"
-                className="navbar-search-button navbar-search-button-mobile"
-              >
-                Cari
-              </button>
-            </form>
+            <div className="navbar-search-mobile">
+              <KotakCari varian="navbar" />
+            </div>
             {menuItems.map((item) => (
               <Link
                 key={item.path}

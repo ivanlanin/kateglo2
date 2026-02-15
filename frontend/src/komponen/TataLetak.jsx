@@ -4,10 +4,12 @@
 
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 
 function TataLetak() {
+  const location = useLocation();
+  const adalahBeranda = location.pathname === '/';
   const [modalTerbuka, setModalTerbuka] = useState(false);
   const [tabAktif, setTabAktif] = useState('changelog');
   const [sedangMemuat, setSedangMemuat] = useState(false);
@@ -62,7 +64,7 @@ function TataLetak() {
   return (
     <>
       <div className="kateglo-layout-root">
-      <Navbar />
+      {!adalahBeranda && <Navbar />}
       <main>
         <Outlet />
       </main>
@@ -75,15 +77,7 @@ function TataLetak() {
           >
             Kateglo {appTimestamp}
           </button>
-          <button
-            type="button"
-            onClick={() => setModeGelap((sebelumnya) => !sebelumnya)}
-            className="kateglo-theme-toggle"
-            aria-label="Ganti mode tema"
-            title={modeGelap ? 'Mode terang' : 'Mode gelap'}
-          >
-            {modeGelap ? '☀️' : '🌙'}
-          </button>
+          {/* Tombol mode gelap disembunyikan untuk sementara */}
         </div>
       </footer>
       </div>
