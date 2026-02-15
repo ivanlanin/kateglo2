@@ -6,13 +6,6 @@
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../models/modelBeranda', () => ({
-  ambilStatistik: jest.fn(),
-  ambilLemaAcak: jest.fn(),
-  ambilRujukan: jest.fn(),
-  ambilPopuler: jest.fn(),
-}));
-
 jest.mock('../../models/modelGlosarium', () => ({
   autocomplete: jest.fn(),
   cari: jest.fn(),
@@ -43,7 +36,6 @@ jest.mock('../../services/layananTesaurusPublik', () => ({
   ambilDetailTesaurus: jest.fn(),
 }));
 
-const ModelBeranda = require('../../models/modelBeranda');
 const ModelGlosarium = require('../../models/modelGlosarium');
 const ModelLabel = require('../../models/modelLabel');
 const ModelLema = require('../../models/modelLema');
@@ -78,30 +70,6 @@ describe('routes backend', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.status).toBe('ok');
-  });
-
-  it('GET /api/public/beranda mengembalikan data gabungan', async () => {
-    ModelBeranda.ambilStatistik.mockResolvedValue({ kamus: 1 });
-    ModelBeranda.ambilLemaAcak.mockResolvedValue([{ id: 1, lema: 'kata' }]);
-    ModelBeranda.ambilRujukan.mockResolvedValue([{ lema: 'abadiat', lema_rujuk: 'abadiah' }]);
-    ModelBeranda.ambilPopuler.mockResolvedValue([{ phrase: 'kata', search_count: 5 }]);
-
-    const response = await request(createApp()).get('/api/public/beranda');
-
-    expect(response.status).toBe(200);
-    expect(response.body.statistik).toEqual({ kamus: 1 });
-    expect(ModelBeranda.ambilLemaAcak).toHaveBeenCalledWith(10);
-    expect(ModelBeranda.ambilRujukan).toHaveBeenCalledWith(5);
-    expect(ModelBeranda.ambilPopuler).toHaveBeenCalledWith(5);
-  });
-
-  it('GET /api/public/beranda meneruskan error ke middleware', async () => {
-    ModelBeranda.ambilStatistik.mockRejectedValue(new Error('gagal beranda'));
-
-    const response = await request(createApp()).get('/api/public/beranda');
-
-    expect(response.status).toBe(500);
-    expect(response.body.error).toBe('gagal beranda');
   });
 
   it('GET /api/public/kamus/kategori mengembalikan data kategori', async () => {

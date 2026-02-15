@@ -100,7 +100,7 @@ CREATE INDEX IF NOT EXISTS idx_external_ref_phrase_lower
   ON external_ref (LOWER(phrase));
 
 -- ============================================
--- STEP 7: Tabel searched_phrase — ada idx_searched_phrase(search_count DESC)
+-- STEP 7: Tabel searched_phrase — historis (tracking populer nonaktif)
 -- ============================================
 
 -- Primary key pencarian frase (untuk upsert saat tracking pencarian)

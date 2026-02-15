@@ -12,7 +12,6 @@ vi.mock('../../src/api/klien', () => ({
 
 import klien from '../../src/api/klien';
 import {
-  ambilDataBeranda,
   ambilKategoriKamus,
   ambilLemaPerKategori,
   cariKamus,
@@ -29,13 +28,6 @@ import {
 describe('apiPublik', () => {
   beforeEach(() => {
     klien.get.mockReset();
-  });
-
-  it('ambilDataBeranda memanggil endpoint yang benar', async () => {
-    klien.get.mockResolvedValue({ data: { statistik: {} } });
-    const result = await ambilDataBeranda();
-    expect(klien.get).toHaveBeenCalledWith('/api/public/beranda');
-    expect(result).toEqual({ statistik: {} });
   });
 
   it('cariKamus mengirim params query + limit', async () => {
