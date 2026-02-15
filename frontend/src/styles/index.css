@@ -983,15 +983,32 @@ code {
     @apply text-gray-900;
   }
 
+  .kamus-detail-heading-row {
+    @apply flex flex-wrap items-start justify-between gap-3;
+  }
+
   .kamus-detail-heading {
-    @apply text-3xl font-bold text-gray-900;
+    @apply text-3xl font-bold text-gray-900 flex flex-wrap items-baseline gap-x-3 gap-y-1 min-w-0;
   }
 
-  .kamus-detail-pronunciation {
-    @apply text-lg font-normal text-gray-500 ml-3;
+  .kamus-detail-heading-main {
+    @apply text-gray-900;
   }
 
-  .dark .kamus-detail-pronunciation {
+  .kamus-detail-heading-pronunciation {
+    @apply text-gray-600;
+  }
+
+  .kamus-detail-heading-split {
+    @apply text-gray-500;
+  }
+
+  .dark .kamus-detail-heading-main {
+    @apply text-dark-text;
+  }
+
+  .dark .kamus-detail-heading-pronunciation,
+  .dark .kamus-detail-heading-split {
     @apply text-dark-text-muted;
   }
 
@@ -1040,11 +1057,15 @@ code {
   }
 
   .kamus-detail-def-class {
-    @apply text-sm font-semibold text-gray-600 mb-2;
+    @apply text-xl font-semibold text-gray-900 mb-2;
   }
 
   .kamus-detail-def-class-code {
     @apply text-gray-400;
+  }
+
+  .dark .kamus-detail-def-class {
+    @apply text-dark-text;
   }
 
   .kamus-detail-def-list {
@@ -1065,6 +1086,53 @@ code {
 
   .kamus-detail-def-discipline {
     @apply text-gray-500;
+  }
+
+  /* Badge label makna — masing-masing kategori punya warna berbeda */
+  .kamus-badge {
+    @apply inline-flex items-center text-xs font-medium px-1.5 py-0.5 rounded mr-1;
+  }
+
+  .kamus-badge-bidang {
+    @apply bg-blue-50 text-blue-700;
+  }
+  .dark .kamus-badge-bidang {
+    @apply bg-blue-900/30 text-blue-300;
+  }
+
+  .kamus-badge-ragam {
+    @apply bg-amber-50 text-amber-700;
+  }
+  .dark .kamus-badge-ragam {
+    @apply bg-amber-900/30 text-amber-300;
+  }
+
+  .kamus-badge-kiasan {
+    @apply bg-orange-50 text-orange-700;
+  }
+  .dark .kamus-badge-kiasan {
+    @apply bg-orange-900/30 text-orange-300;
+  }
+
+  .kamus-badge-bahasa {
+    @apply bg-green-50 text-green-700;
+  }
+  .dark .kamus-badge-bahasa {
+    @apply bg-green-900/30 text-green-300;
+  }
+
+  .kamus-badge-penyingkat {
+    @apply bg-gray-100 text-gray-600;
+  }
+  .dark .kamus-badge-penyingkat {
+    @apply bg-dark-bg-input text-dark-text-muted;
+  }
+
+  .kamus-detail-def-extra {
+    @apply text-gray-600;
+  }
+  .dark .kamus-detail-def-extra {
+    @apply text-gray-400;
   }
 
   .kamus-detail-def-sample {
@@ -1151,7 +1219,6 @@ code {
   .dark .kamus-result-preview,
   .dark .kamus-detail-breadcrumb,
   .dark .kamus-detail-subtext,
-  .dark .kamus-detail-def-class,
   .dark .kamus-detail-def-class-code,
   .dark .kamus-detail-def-discipline,
   .dark .kamus-detail-def-sample,
