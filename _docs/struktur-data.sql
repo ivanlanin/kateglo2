@@ -1,32 +1,10 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-15T19:21:22.677Z
+-- Generated: 2026-02-15T20:03:50.227Z
 
 -- ============================================
 -- TABLES
 -- ============================================
-
-create table _thesaurus (
-  lemma text default ''::text,
-  synonym text not null,
-  antonym text,
-  parent text
-);
-
-create table abbr_entry (
-  abbr_idx serial primary key,
-  abbr_key text,
-  abbr_id text,
-  abbr_en text,
-  abbr_type text,
-  lang text,
-  redirect_to text,
-  source text,
-  url text,
-  notes text
-);
-create index idx_abbr_entry_trgm on abbr_entry using gin (abbr_key gin_trgm_ops);
-create index idx_abbr_key on abbr_entry using btree (abbr_key);
 
 create table contoh (
   id serial primary key,
@@ -44,24 +22,6 @@ create table contoh (
 );
 create unique index contoh_legacy_cid_key on contoh using btree (legacy_cid);
 create index idx_contoh_makna on contoh using btree (makna_id, urutan);
-
-create table discipline (
-  discipline text,
-  discipline_name text not null,
-  glossary_count integer not null default 0,
-  updated timestamp without time zone,
-  updater text
-);
-
-create table external_ref (
-  ext_uid serial primary key,
-  phrase text not null,
-  label text,
-  url text not null,
-  updated timestamp without time zone,
-  updater text
-);
-create index idx_external_ref_phrase_lower on external_ref using btree (lower(phrase));
 
 create table glosarium (
   id serial primary key,
@@ -92,8 +52,7 @@ create table label (
   nama text not null,
   keterangan text,
   sumber text,
-  constraint label_kategori_kode_key unique (kategori, kode),
-  constraint label_kategori_check check (kategori = ANY (ARRAY['ragam'::text, 'kelas_kata'::text, 'bahasa'::text, 'bidang'::text]))
+  constraint label_kategori_kode_key unique (kategori, kode)
 );
 create index idx_label_kategori_nama on label using btree (kategori, nama);
 create unique index label_kategori_kode_key on label using btree (kategori, kode);
@@ -148,66 +107,6 @@ create index idx_makna_bidang on makna using btree (bidang);
 create index idx_makna_kelas_kata on makna using btree (kelas_kata);
 create index idx_makna_lema on makna using btree (lema_id, urutan);
 create unique index makna_legacy_mid_key on makna using btree (legacy_mid);
-
-create table new_lemma (
-  new_lemma text,
-  glossary_count integer not null default 0,
-  is_exists smallint not null default '0'::smallint,
-  is_valid smallint not null default '0'::smallint
-);
-
-create table ref_source (
-  ref_source text,
-  ref_source_name text not null,
-  dictionary smallint not null default '0'::smallint,
-  glossary smallint not null default '0'::smallint,
-  translation smallint not null default '0'::smallint,
-  glossary_count integer not null default 0,
-  updated timestamp without time zone,
-  updater text not null
-);
-
-create table relation (
-  rel_uid serial primary key,
-  root_phrase text not null,
-  related_phrase text not null,
-  rel_type text not null,
-  updated timestamp without time zone,
-  updater text
-);
-create index idx_relation_related on relation using btree (related_phrase);
-create index idx_relation_root on relation using btree (root_phrase);
-create index idx_relation_root_lower on relation using btree (lower(root_phrase));
-create unique index idx_relation_unique on relation using btree (root_phrase, related_phrase, rel_type);
-
-create table relation_type (
-  rel_type text,
-  rel_type_name text not null,
-  sort_order smallint not null default '1'::smallint,
-  updated timestamp without time zone,
-  updater text
-);
-
-create table roget_class (
-  roget_class text,
-  number text,
-  suffix text,
-  roget_name text,
-  english_name text,
-  asterix text,
-  caret text,
-  class_num smallint,
-  division_num smallint,
-  section_num smallint
-);
-
-create table searched_phrase (
-  phrase text,
-  search_count integer not null default 0,
-  last_searched timestamp without time zone not null
-);
-create index idx_searched_phrase on searched_phrase using btree (search_count DESC);
-create unique index idx_searched_phrase_phrase on searched_phrase using btree (phrase);
 
 create table tesaurus (
   id serial primary key,
