@@ -9,7 +9,7 @@ const router = express.Router();
 
 function parsePagination(query) {
   return {
-    limit: Math.min(parseInt(query.limit, 10) || 20, 100),
+    limit: Math.min(parseInt(query.limit, 10) || 100, 100),
     offset: parseInt(query.offset, 10) || 0,
   };
 }

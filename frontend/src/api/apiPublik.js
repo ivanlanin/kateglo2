@@ -64,21 +64,21 @@ export async function autocomplete(kategori, kata) {
 
 // === GLOSARIUM ===
 
-export async function cariGlosarium(kata, { limit = 20, offset = 0 } = {}) {
+export async function cariGlosarium(kata, { limit = 100, offset = 0 } = {}) {
   const response = await klien.get(`/api/public/glosarium/cari/${encodeURIComponent(kata)}`, {
     params: { limit, offset },
   });
   return response.data;
 }
 
-export async function ambilGlosariumPerBidang(bidang, { limit = 20, offset = 0 } = {}) {
+export async function ambilGlosariumPerBidang(bidang, { limit = 100, offset = 0 } = {}) {
   const response = await klien.get(`/api/public/glosarium/bidang/${encodeURIComponent(bidang)}`, {
     params: { limit, offset },
   });
   return response.data;
 }
 
-export async function ambilGlosariumPerSumber(sumber, { limit = 20, offset = 0 } = {}) {
+export async function ambilGlosariumPerSumber(sumber, { limit = 100, offset = 0 } = {}) {
   const response = await klien.get(`/api/public/glosarium/sumber/${encodeURIComponent(sumber)}`, {
     params: { limit, offset },
   });
