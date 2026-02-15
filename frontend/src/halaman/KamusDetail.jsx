@@ -134,26 +134,26 @@ function KamusDetail() {
         {/* Kolom utama: makna */}
         <div className="lg:col-span-2">
           <div>
-            <h1 className="kamus-detail-heading">
-              {data.lema}
-              {data.lafal && (
-                <span className="kamus-detail-pronunciation">/{data.lafal}/</span>
-              )}
-            </h1>
+            <div className="kamus-detail-heading-row">
+              <h1 className="kamus-detail-heading">
+                <span className="kamus-detail-heading-main">{data.lema}</span>
+                {data.lafal && (
+                  <span className="kamus-detail-heading-pronunciation">/{data.lafal}/</span>
+                )}
+                {data.pemenggalan && data.pemenggalan !== data.lema && (
+                  <span className="kamus-detail-heading-split">({data.pemenggalan})</span>
+                )}
+              </h1>
 
-            {data.pemenggalan && data.pemenggalan !== data.lema && (
-              <p className="kamus-detail-subtext">
-                {data.pemenggalan}
-              </p>
-            )}
-
-            {/* Label jenis */}
-            <div className="flex flex-wrap gap-2 mt-3">
               {data.jenis && data.jenis !== 'dasar' && (
                 <span className="kamus-detail-tag-purple">
                   {data.jenis}
                 </span>
               )}
+            </div>
+
+            {/* Label jenis */}
+            <div className="flex flex-wrap gap-2 mt-3">
               {data.varian && (
                 <span className="kamus-detail-tag-gray">
                   varian: {data.varian}
@@ -169,7 +169,7 @@ function KamusDetail() {
               {Object.entries(maknaPerKelas).map(([kelas, daftarMakna]) => (
                 <div key={kelas} className="mb-4 last:mb-0">
                   {kelas !== '-' && (
-                    <h3 className="kamus-detail-def-class">{kelas}</h3>
+                    <h2 className="kamus-detail-def-class">{kelas}</h2>
                   )}
                   <ol className="kamus-detail-def-list">
                     {daftarMakna.map((m) => (
@@ -178,24 +178,32 @@ function KamusDetail() {
                           <span className="kamus-detail-def-number">{++nomorMakna}.</span>
                         )}
                         <span className="kamus-detail-def-content">
+                          {/* Badge label — semua ditampilkan di depan definisi */}
                           {m.bidang && (
-                            <em className="kamus-detail-def-discipline">[{m.bidang}] </em>
+                            <span className="kamus-badge kamus-badge-bidang">{m.bidang}</span>
                           )}
                           {m.ragam && (
-                            <em className="kamus-detail-def-discipline">{m.ragam} </em>
+                            <span className="kamus-badge kamus-badge-ragam">{m.ragam}</span>
+                          )}
+                          {m.ragam_varian && (
+                            <span className="kamus-badge kamus-badge-ragam">{m.ragam_varian}</span>
                           )}
                           {m.kiasan === 1 && (
-                            <em className="kamus-detail-def-discipline">ki </em>
+                            <span className="kamus-badge kamus-badge-kiasan">ki</span>
+                          )}
+                          {m.bahasa && (
+                            <span className="kamus-badge kamus-badge-bahasa">{m.bahasa}</span>
+                          )}
+                          {m.tipe_penyingkat && (
+                            <span className="kamus-badge kamus-badge-penyingkat">{m.tipe_penyingkat}</span>
                           )}
                           <span dangerouslySetInnerHTML={{ __html: renderMarkdown(m.makna) }} />
-                          {m.tipe_penyingkat && (
-                            <span className="tag-subtle ml-1">{m.tipe_penyingkat}</span>
-                          )}
-                          {m.ilmiah && (
-                            <span className="kamus-detail-def-sample"> [{m.ilmiah}]</span>
-                          )}
-                          {m.kimia && (
-                            <span className="kamus-detail-def-sample"> ({m.kimia})</span>
+                          {(m.ilmiah || m.kimia) && (
+                            <span className="kamus-detail-def-extra">
+                              ; {m.ilmiah && <em>{m.ilmiah}</em>}
+                              {m.ilmiah && m.kimia && '; '}
+                              {m.kimia && <span dangerouslySetInnerHTML={{ __html: m.kimia }} />}
+                            </span>
                           )}
                           {m.contoh?.length > 0 && (
                             <span className="kamus-detail-def-sample">: {m.contoh.map((c, i) => (

@@ -94,7 +94,7 @@ describe('KamusDetail', () => {
     render(<KamusDetail />);
 
     expect(screen.getByText(/varian: aktif/i)).toBeInTheDocument();
-    expect(screen.getByText('[Psikologi]', { exact: false })).toBeInTheDocument();
+    expect(screen.getByText('Psikologi')).toBeInTheDocument();
   });
 
   it('menampilkan mode rujukan dan metadata makna opsional', () => {
@@ -146,14 +146,14 @@ describe('KamusDetail', () => {
 
     rerender(<KamusDetail />);
 
-    expect(screen.getByText('ka ta')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /kata.*ka ta/i })).toBeInTheDocument();
     expect(screen.getByText('turunan')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'kata dasar' })).toHaveAttribute('href', '/kamus/detail/kata%20dasar');
     expect(screen.getByText('cak', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('ki', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('akr')).toBeInTheDocument();
-    expect(screen.getByText('[species]', { exact: false })).toBeInTheDocument();
-    expect(screen.getByText('(H2O)', { exact: false })).toBeInTheDocument();
+    expect(screen.getByText('species', { exact: false })).toBeInTheDocument();
+    expect(screen.getByText('H2O')).toBeInTheDocument();
     expect(screen.getByText(/arti contoh/i)).toBeInTheDocument();
     expect(screen.getByText('Tesaurus')).toBeInTheDocument();
     expect(screen.getByText('Sinonim:')).toBeInTheDocument();
