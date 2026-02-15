@@ -1,5 +1,5 @@
 /**
- * @fileoverview Halaman detail kamus — makna, contoh, sublema, terjemahan
+ * @fileoverview Halaman detail kamus — makna, contoh, sublema, tesaurus, glosarium
  */
 
 import { useEffect } from 'react';
@@ -79,7 +79,6 @@ function KamusDetail() {
   });
 
   const sublemaEntries = Object.entries(data.sublema || {});
-  const adaTerjemahan = data.terjemahan?.length > 0;
   const tesaurusSinonim = data.tesaurus?.sinonim || [];
   const tesaurusAntonim = data.tesaurus?.antonim || [];
   const adaTesaurus = tesaurusSinonim.length > 0 || tesaurusAntonim.length > 0;
@@ -209,7 +208,7 @@ function KamusDetail() {
           </div>
         </div>
 
-        {/* Sidebar: sublema, terjemahan */}
+        {/* Sidebar: sublema, tesaurus, glosarium */}
         <div className="space-y-4">
           {/* Sublema per jenis */}
           {sublemaEntries.map(([jenis, daftar]) => (
@@ -234,22 +233,6 @@ function KamusDetail() {
               </div>
             </PanelLipat>
           ))}
-
-          {/* Terjemahan */}
-          {adaTerjemahan && (
-            <PanelLipat judul="Terjemahan" jumlah={data.terjemahan.length}>
-              <ul className="space-y-1 text-sm">
-                {data.terjemahan.map((t, i) => (
-                  <li key={i} className="kamus-detail-translation">
-                    {t.translation}
-                    {t.ref_source && (
-                      <span className="kamus-detail-translation-source">({t.ref_source})</span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </PanelLipat>
-          )}
 
           {adaTesaurus && (
             <PanelLipat judul="Tesaurus" jumlah={tesaurusSinonim.length + tesaurusAntonim.length} terbukaAwal={true}>

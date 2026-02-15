@@ -9,8 +9,7 @@ jest.mock('../../models/modelLema', () => ({
   ambilMakna: jest.fn(),
   ambilContoh: jest.fn(),
   ambilSublema: jest.fn(),
-  ambilInduk: jest.fn(),
-  ambilTerjemahan: jest.fn()
+  ambilInduk: jest.fn()
 }));
 
 jest.mock('../../models/modelTesaurus', () => ({
@@ -121,7 +120,6 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
       { id: 2, lema: 'mengaktifkan', jenis: 'berimbuhan' }
     ]);
     ModelLema.ambilInduk.mockResolvedValue(null);
-    ModelLema.ambilTerjemahan.mockResolvedValue([{ translation: 'active' }]);
     ModelTesaurus.ambilDetail.mockResolvedValue({
       sinonim: 'aktif;giat',
       antonim: 'pasif',
@@ -140,7 +138,6 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     expect(result.makna).toHaveLength(1);
     expect(result.makna[0].contoh).toHaveLength(1);
     expect(result.sublema.berimbuhan).toHaveLength(1);
-    expect(result.terjemahan).toHaveLength(1);
     expect(result.tesaurus).toEqual({ sinonim: ['aktif', 'giat'], antonim: ['pasif'] });
     expect(result.glosarium).toEqual([{ phrase: 'zat aktif', original: 'active substance' }]);
   });
@@ -168,7 +165,6 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
       { id: 9, jenis: 'gabungan', lema: 'gabungan a' },
     ]);
     ModelLema.ambilInduk.mockResolvedValue({ id: 2, lema: 'akar' });
-    ModelLema.ambilTerjemahan.mockResolvedValue([]);
 
     const result = await ambilDetailKamus('kata%20dasar');
 
@@ -196,7 +192,6 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     ModelLema.ambilMakna.mockResolvedValue([{ id: 10, makna: 'giat' }]);
     ModelLema.ambilSublema.mockResolvedValue([]);
     ModelLema.ambilInduk.mockResolvedValue(null);
-    ModelLema.ambilTerjemahan.mockResolvedValue([]);
     ModelLema.ambilContoh.mockResolvedValue([
       { id: 100, makna_id: 10, contoh: 'contoh 1' },
       { id: 101, makna_id: 10, contoh: 'contoh 2' },

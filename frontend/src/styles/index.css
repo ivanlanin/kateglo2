@@ -1033,14 +1033,6 @@ code {
     @apply text-gray-500 mt-0.5;
   }
 
-  .kamus-detail-translation {
-    @apply text-gray-700;
-  }
-
-  .kamus-detail-translation-source {
-    @apply text-gray-400 ml-1;
-  }
-
   /* ===== Peribahasa ===== */
 
   .peribahasa-search-input {
@@ -1083,7 +1075,6 @@ code {
   .dark .kamus-detail-def-list,
   .dark .kamus-detail-info-text,
   .dark .kamus-detail-proverb-text,
-  .dark .kamus-detail-translation,
   .dark .peribahasa-title {
     @apply text-dark-text;
   }
@@ -1104,7 +1095,6 @@ code {
   .dark .kamus-detail-info-label,
   .dark .kamus-detail-relation-type,
   .dark .kamus-detail-proverb-meaning,
-  .dark .kamus-detail-translation-source,
   .dark .peribahasa-meaning,
   .dark .peribahasa-meaning-label,
   .dark .cell-muted {
