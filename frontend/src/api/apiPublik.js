@@ -46,11 +46,6 @@ export async function cariTesaurus(kata, { limit = 100, offset = 0 } = {}) {
   return response.data;
 }
 
-export async function ambilDetailTesaurus(kata) {
-  const response = await klien.get(`/api/public/tesaurus/${encodeURIComponent(kata)}`);
-  return response.data;
-}
-
 // === AUTOCOMPLETE (shared) ===
 
 export async function autocomplete(kategori, kata) {

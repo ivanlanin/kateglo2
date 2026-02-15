@@ -907,12 +907,35 @@ code {
     @apply min-w-0 truncate text-base;
   }
 
-  .tesaurus-result-sinonim {
+  .tesaurus-result-row:has(.tesaurus-result-toggle[aria-expanded="true"]) {
+    @apply whitespace-normal overflow-visible;
+    text-overflow: clip;
+  }
+
+  .tesaurus-result-relasi {
     @apply text-gray-600;
   }
 
-  .dark .tesaurus-result-sinonim {
+  .dark .tesaurus-result-relasi {
     @apply text-dark-text-muted;
+  }
+
+  .tesaurus-result-badge {
+    @apply inline-block text-xs font-semibold px-1 py-0.5 rounded bg-gray-200 text-gray-700;
+    vertical-align: middle;
+    line-height: 1;
+  }
+
+  .dark .tesaurus-result-badge {
+    @apply bg-gray-700 text-gray-300;
+  }
+
+  .tesaurus-result-toggle {
+    @apply text-blue-600 hover:text-blue-800 cursor-pointer;
+  }
+
+  .dark .tesaurus-result-toggle {
+    @apply text-blue-400 hover:text-blue-300;
   }
 
   /* ===== Glosarium hasil pencarian ===== */

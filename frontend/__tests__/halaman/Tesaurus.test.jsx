@@ -82,7 +82,7 @@ describe('Tesaurus', () => {
     expect(screen.getByText(/Kata tidak ditemukan di tesaurus/i)).toBeInTheDocument();
   });
 
-  it('menampilkan hasil, memotong sinonim, dan mengubah offset saat paginasi', () => {
+  it('mengarahkan tautan ke kamus detail dan menampilkan relasi dengan simbol', () => {
     mockParams = { kata: 'anak%20ibu' };
     queryString = 'offset=20';
     mockUseQuery.mockImplementation((options) => {
@@ -93,7 +93,8 @@ describe('Tesaurus', () => {
             {
               id: 1,
               lema: 'anak ibu',
-              sinonim: 's1;s2;s3;s4;s5;s6',
+              sinonim: 's1;s2;s3;s4',
+              antonim: 'a1;a2',
             },
           ],
           total: 120,
@@ -105,11 +106,54 @@ describe('Tesaurus', () => {
 
     render(<Tesaurus />);
 
-    expect(screen.getByRole('heading', { name: /Hasil Pencarian “anak ibu”/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'anak ibu' })).toHaveAttribute('href', '/tesaurus/detail/anak%20ibu');
-    expect(screen.getByText(/s1;\s*s2;\s*s3;\s*s4;\s*s5/)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Hasil Pencarian \u201canak ibu\u201d/i })).toBeInTheDocument();
+
+    // Tautan mengarah ke kamus detail, bukan tesaurus detail
+    expect(screen.getByRole('link', { name: 'anak ibu' })).toHaveAttribute('href', '/kamus/detail/anak%20ibu');
+
+    // Sinonim diringkas maks 2, badge ≈ terpisah dari teks
+    expect(screen.getByText('≈')).toBeInTheDocument();
+    expect(screen.getByText(/s1; s2; …/)).toBeInTheDocument();
+    // Antonim tetap tampil terpisah dengan badge ≠
+    expect(screen.getByText('≠')).toBeInTheDocument();
+    expect(screen.getByText(/a1; a2/)).toBeInTheDocument();
+
+    const tombolEkspansi = screen.getByRole('button', { name: '»' });
+    expect(tombolEkspansi).toHaveAttribute('aria-expanded', 'false');
+
+    // Klik untuk ekspansi — tampilkan semua
+    fireEvent.click(tombolEkspansi);
+    expect(tombolEkspansi).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByText(/s1; s2; s3; s4/)).toBeInTheDocument();
+
+    // Klik lagi untuk ciutkan
+    fireEvent.click(tombolEkspansi);
+    expect(tombolEkspansi).toHaveAttribute('aria-expanded', 'false');
 
     fireEvent.click(screen.getByRole('button', { name: 'Halaman berikut' }));
     expect(mockSetSearchParams).toHaveBeenCalledWith({ offset: '100' });
+  });
+
+  it('menampilkan hanya antonim jika sinonim kosong', () => {
+    mockParams = { kata: 'besar' };
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      return {
+        data: {
+          data: [
+            { id: 2, lema: 'besar', sinonim: null, antonim: 'kecil;mungil' },
+          ],
+          total: 1,
+        },
+        isLoading: false,
+        isError: false,
+      };
+    });
+
+    render(<Tesaurus />);
+
+    expect(screen.getByText('≠')).toBeInTheDocument();
+    expect(screen.getByText(/kecil; mungil/)).toBeInTheDocument();
+    expect(screen.queryByText('≈')).not.toBeInTheDocument();
   });
 });

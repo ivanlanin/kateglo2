@@ -18,7 +18,6 @@ import {
   cariKamus,
   ambilDetailKamus,
   cariTesaurus,
-  ambilDetailTesaurus,
   autocomplete,
   cariGlosarium,
   ambilGlosariumPerBidang,
@@ -72,15 +71,13 @@ describe('apiPublik', () => {
     });
   });
 
-  it('cariTesaurus dan ambilDetailTesaurus memanggil endpoint sesuai kata', async () => {
+  it('cariTesaurus memanggil endpoint sesuai kata', async () => {
     klien.get.mockResolvedValue({ data: { data: [] } });
     await cariTesaurus('anak ibu', { limit: 50, offset: 10 });
-    await ambilDetailTesaurus('anak ibu');
 
-    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/public/tesaurus/cari/anak%20ibu', {
+    expect(klien.get).toHaveBeenCalledWith('/api/public/tesaurus/cari/anak%20ibu', {
       params: { limit: 50, offset: 10 },
     });
-    expect(klien.get).toHaveBeenNthCalledWith(2, '/api/public/tesaurus/anak%20ibu');
   });
 
   it('autocomplete mengembalikan array kosong untuk kata pendek', async () => {

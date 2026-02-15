@@ -2,6 +2,7 @@
  * @fileoverview Halaman pencarian tesaurus — path-based: /tesaurus/cari/:kata
  */
 
+import { useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { cariTesaurus } from '../api/apiPublik';
@@ -11,6 +12,52 @@ import { EmptyResultText, QueryFeedback } from '../komponen/StatusKonten';
 import { updateSearchParamsWithOffset } from '../utils/searchParams';
 
 const limit = 100;
+const BATAS_RINGKAS = 2;
+
+function DaftarRelasi({ simbol, daftar, ekspansi }) {
+  const tampil = ekspansi ? daftar : daftar.slice(0, BATAS_RINGKAS);
+  const terpotong = !ekspansi && daftar.length > BATAS_RINGKAS;
+  return (
+    <>
+      <span className="tesaurus-result-badge">{simbol}</span>
+      {' '}{tampil.join('; ')}{terpotong && '; …'}
+    </>
+  );
+}
+
+function RelasiSingkat({ sinonim, antonim }) {
+  const [ekspansi, setEkspansi] = useState(false);
+
+  const daftarSinonim = sinonim ? sinonim.split(';').map((s) => s.trim()).filter(Boolean) : [];
+  const daftarAntonim = antonim ? antonim.split(';').map((s) => s.trim()).filter(Boolean) : [];
+  if (daftarSinonim.length === 0 && daftarAntonim.length === 0) return null;
+
+  const adaLebih = daftarSinonim.length > BATAS_RINGKAS || daftarAntonim.length > BATAS_RINGKAS;
+
+  return (
+    <span className="tesaurus-result-relasi">
+      {daftarSinonim.length > 0 && (
+        <>{' '}<DaftarRelasi simbol="≈" daftar={daftarSinonim} ekspansi={ekspansi} /></>
+      )}
+      {daftarAntonim.length > 0 && (
+        <>{' '}<DaftarRelasi simbol="≠" daftar={daftarAntonim} ekspansi={ekspansi} /></>
+      )}
+      {adaLebih && (
+        <>
+          {' '}
+          <button
+            type="button"
+            className="tesaurus-result-toggle"
+            onClick={() => setEkspansi(!ekspansi)}
+            aria-expanded={ekspansi}
+          >
+            {ekspansi ? '«' : '»'}
+          </button>
+        </>
+      )}
+    </span>
+  );
+}
 
 function Tesaurus() {
   const { kata } = useParams();
@@ -68,17 +115,12 @@ function Tesaurus() {
                 {results.map((item) => (
                   <div key={item.id} className="tesaurus-result-row">
                     <Link
-                      to={`/tesaurus/detail/${encodeURIComponent(item.lema)}`}
+                      to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
                       className="kamus-kategori-grid-link"
                     >
                       {item.lema}
                     </Link>
-                    {item.sinonim && (
-                      <span className="tesaurus-result-sinonim">
-                        : {item.sinonim.split(';').slice(0, 5).join('; ')}
-                        {item.sinonim.split(';').length > 5 && ' …'}
-                      </span>
-                    )}
+                    <RelasiSingkat sinonim={item.sinonim} antonim={item.antonim} />
                   </div>
                 ))}
               </div>
