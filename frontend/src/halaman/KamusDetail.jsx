@@ -140,10 +140,10 @@ function KamusDetail() {
               <h1 className="kamus-detail-heading">
                 <span className="kamus-detail-heading-main"><TeksLema lema={data.lema} /></span>
                 {data.lafal && (
-                  <span className="kamus-detail-heading-pronunciation">/{data.lafal}/</span>
+                  <span className="kamus-detail-heading-pronunciation">/<TeksLema lema={data.lafal} />/</span>
                 )}
                 {data.pemenggalan && data.pemenggalan !== data.lema && (
-                  <span className="kamus-detail-heading-split">({data.pemenggalan})</span>
+                  <span className="kamus-detail-heading-split">(<TeksLema lema={data.pemenggalan} />)</span>
                 )}
               </h1>
 
@@ -239,7 +239,7 @@ function KamusDetail() {
                     >
                       <TeksLema lema={item.lema} />
                     </Link>
-                    {item.lafal && <span className="secondary-text"> /{item.lafal}/</span>}
+                    {item.lafal && <span className="secondary-text"> /<TeksLema lema={item.lafal} />/</span>}
                     {i < serupa.length - 1 && <span className="secondary-text">; </span>}
                   </span>
                 ))}

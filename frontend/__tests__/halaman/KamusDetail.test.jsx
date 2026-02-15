@@ -315,4 +315,34 @@ describe('KamusDetail', () => {
     expect(screen.queryByText('Sinonim:')).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'lawan kata' })).toHaveAttribute('href', '/kamus/detail/lawan%20kata');
   });
+
+  it('menampilkan superskrip untuk lafal dan pemenggalan di heading detail', () => {
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        lema: 'per (1)',
+        lafal: 'per (2)',
+        pemenggalan: 'per (3)',
+        makna: [{ id: 1, kelas_kata: '-', makna: 'makna contoh' }],
+        sublema: {},
+        serupa: [{ id: 2, lema: 'per- (4)', lafal: 'per (5)' }],
+        tesaurus: { sinonim: [], antonim: [] },
+        glosarium: [],
+      },
+    });
+
+    const { container } = render(<KamusDetail />);
+
+    const supLafal = container.querySelector('.kamus-detail-heading-pronunciation sup');
+    const supPemenggalan = container.querySelector('.kamus-detail-heading-split sup');
+    const supSerupaLafal = container.querySelector('.secondary-text sup');
+
+    expect(supLafal).not.toBeNull();
+    expect(supLafal?.textContent).toBe('2');
+    expect(supPemenggalan).not.toBeNull();
+    expect(supPemenggalan?.textContent).toBe('3');
+    expect(supSerupaLafal).not.toBeNull();
+    expect(supSerupaLafal?.textContent).toBe('5');
+  });
 });
