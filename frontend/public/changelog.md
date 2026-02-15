@@ -10,7 +10,7 @@
 - Menambahkan autokomplet untuk pencarian
 - Mengubah pencarian glosarium menjadi mencari istilah Indonesia dan asing
 - Memfokuskan otomatis pada kotak cari saat membuka halaman
-- Menyesuaikan laman detail kamus
+- Menyesuaikan laman detail kamus dan tesaurus
 
 ## 2026-02-14 Sabtu
 
