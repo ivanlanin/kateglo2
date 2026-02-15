@@ -55,7 +55,9 @@ export async function autocomplete(kategori, kata) {
     ? `/api/public/glosarium/autocomplete?q=${encodeURIComponent(kata)}`
     : `/api/public/${kategori}/autocomplete/${encodeURIComponent(kata)}`;
   const response = await klien.get(url);
-  return response.data.data;
+  return response.data.data.map((item) =>
+    typeof item === 'string' ? { value: item } : item
+  );
 }
 
 // === GLOSARIUM ===

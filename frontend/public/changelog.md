@@ -8,6 +8,7 @@
 - Menampilkan kategori di halaman kamus
 - Mengamankan API dengan CORS dan kunci bersama (opsional)
 - Menambahkan autokomplet untuk pencarian
+- Mengubah pencarian glosarium menjadi mencari istilah Indonesia dan asing
 
 ## 2026-02-14 Sabtu
 
