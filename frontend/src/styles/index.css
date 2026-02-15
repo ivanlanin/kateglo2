@@ -141,7 +141,7 @@ code {
   /* ===== KotakCari (shared search box) ===== */
 
   .kotak-cari {
-    @apply flex items-stretch border border-gray-300 bg-white overflow-hidden;
+    @apply flex items-stretch border border-gray-300 bg-white;
   }
 
   .dark .kotak-cari {
@@ -154,6 +154,22 @@ code {
 
   .kotak-cari-navbar {
     @apply rounded-md;
+  }
+
+  .kotak-cari-navbar .kotak-cari-select {
+    @apply rounded-l-md;
+  }
+
+  .kotak-cari-navbar .kotak-cari-tombol {
+    @apply rounded-r-md;
+  }
+
+  .kotak-cari-beranda .kotak-cari-select {
+    @apply rounded-l-xl;
+  }
+
+  .kotak-cari-beranda .kotak-cari-tombol {
+    @apply rounded-r-xl;
   }
 
   .kotak-cari-select {
@@ -216,6 +232,32 @@ code {
 
   .kotak-cari-beranda .kotak-cari-tombol {
     @apply px-5;
+  }
+
+  .kotak-cari-saran {
+    @apply absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto z-50 mt-1 py-1 list-none m-0 p-0;
+  }
+
+  .dark .kotak-cari-saran {
+    @apply bg-dark-bg-elevated border-dark-border;
+  }
+
+  .kotak-cari-saran-item {
+    @apply px-3 py-2 text-sm text-gray-800 cursor-pointer text-left;
+  }
+
+  .dark .kotak-cari-saran-item {
+    @apply text-dark-text;
+  }
+
+  .kotak-cari-saran-item:hover,
+  .kotak-cari-saran-item-aktif {
+    @apply bg-blue-50 text-blue-700;
+  }
+
+  .dark .kotak-cari-saran-item:hover,
+  .dark .kotak-cari-saran-item-aktif {
+    @apply bg-blue-900/30 text-blue-300;
   }
 
   .beranda-feature-grid {

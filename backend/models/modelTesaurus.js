@@ -3,8 +3,13 @@
  */
 
 const db = require('../db');
+const autocomplete = require('../db/autocomplete');
 
 class ModelTesaurus {
+  static async autocomplete(query, limit = 8) {
+    return autocomplete('tesaurus', 'lema', query, { limit });
+  }
+
   /**
    * Cari tesaurus berdasarkan kata
    * @param {string} query - Kata pencarian

@@ -47,6 +47,17 @@ export async function ambilDetailTesaurus(kata) {
   return response.data;
 }
 
+// === AUTOCOMPLETE (shared) ===
+
+export async function autocomplete(kategori, kata) {
+  if (!kata || kata.length < 2) return [];
+  const url = kategori === 'glosarium'
+    ? `/api/public/glosarium/autocomplete?q=${encodeURIComponent(kata)}`
+    : `/api/public/${kategori}/autocomplete/${encodeURIComponent(kata)}`;
+  const response = await klien.get(url);
+  return response.data.data;
+}
+
 // === GLOSARIUM ===
 
 export async function cariGlosarium({ q = '', bidang = '', sumber = '', bahasa = '', limit = 20, offset = 0 } = {}) {

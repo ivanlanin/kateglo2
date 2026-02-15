@@ -4,8 +4,18 @@
 
 const express = require('express');
 const { cariTesaurus, ambilDetailTesaurus } = require('../../../services/layananTesaurusPublik');
+const ModelTesaurus = require('../../../models/modelTesaurus');
 
 const router = express.Router();
+
+router.get('/autocomplete/:kata', async (req, res, next) => {
+  try {
+    const data = await ModelTesaurus.autocomplete(req.params.kata);
+    return res.json({ data });
+  } catch (error) {
+    return next(error);
+  }
+});
 
 router.get('/cari/:kata', async (req, res, next) => {
   try {
