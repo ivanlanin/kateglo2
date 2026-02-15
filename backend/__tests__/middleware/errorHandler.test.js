@@ -177,4 +177,42 @@ describe('errorHandler', () => {
 
     process.env.NODE_ENV = origEnv;
   });
+
+  it('memakai fallback pesan internal saat message kosong', () => {
+    const { req, res } = createMockReqRes();
+    const err = { name: 'Error', message: '', stack: 'stack' };
+
+    errorHandler(err, req, res, jest.fn());
+
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({ message: 'Internal Server Error' })
+    );
+  });
+
+  it('memakai fallback nama error saat err.name kosong', () => {
+    const { req, res } = createMockReqRes();
+    const err = { message: 'boom', stack: 'trace' };
+
+    errorHandler(err, req, res, jest.fn());
+
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({ error: 'Error' })
+    );
+  });
+
+  it('di mode development tidak menyertakan stack jika stack kosong', () => {
+    const origEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'development';
+
+    const { req, res } = createMockReqRes();
+    const err = { name: 'Error', message: 'x', stack: '' };
+
+    errorHandler(err, req, res, jest.fn());
+
+    const response = res.json.mock.calls[0][0];
+    expect(response.stack).toBeUndefined();
+
+    process.env.NODE_ENV = origEnv;
+  });
 });

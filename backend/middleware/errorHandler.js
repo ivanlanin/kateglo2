@@ -59,11 +59,16 @@ const errorHandler = (err, req, res, _next) => {
     message = err.details.map(d => d.message).join(', ');
   }
 
-  res.status(status).json({
+  const response = {
     error: err.name || 'Error',
     message,
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-  });
+  };
+
+  if (process.env.NODE_ENV === 'development' && err.stack) {
+    response.stack = err.stack;
+  }
+
+  res.status(status).json(response);
 };
 
 module.exports = { notFoundHandler, errorHandler };

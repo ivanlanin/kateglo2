@@ -70,6 +70,12 @@ describe('QueryBuilder', () => {
 
       expect(mockQuery).toHaveBeenCalledWith('SELECT id, phrase FROM phrases', []);
     });
+    
+      it('select() tanpa argumen memakai default *', async () => {
+        await db.from('phrases').select().execute();
+      
+        expect(mockQuery).toHaveBeenCalledWith('SELECT * FROM phrases', []);
+      });
   });
 
   describe('where conditions', () => {
@@ -142,6 +148,15 @@ describe('QueryBuilder', () => {
       );
     });
 
+    it('order() default menggunakan ASC', async () => {
+      await db.from('phrases').select('*').order('phrase').execute();
+
+      expect(mockQuery).toHaveBeenCalledWith(
+        'SELECT * FROM phrases ORDER BY phrase ASC',
+        []
+      );
+    });
+
     it('order() DESC', async () => {
       await db.from('phrases').select('*').order('phrase', false).execute();
 
@@ -165,6 +180,15 @@ describe('QueryBuilder', () => {
 
       expect(mockQuery).toHaveBeenCalledWith(
         'SELECT * FROM phrases OFFSET 20',
+        []
+      );
+    });
+
+    it('offset(0) tidak menambahkan OFFSET clause', async () => {
+      await db.from('phrases').select('*').offset(0).execute();
+
+      expect(mockQuery).toHaveBeenCalledWith(
+        'SELECT * FROM phrases',
         []
       );
     });
@@ -216,6 +240,52 @@ describe('QueryBuilder', () => {
       expect(mockQuery).toHaveBeenCalledTimes(2);
       expect(logger.warn).toHaveBeenCalledWith('Retrying PostgreSQL query after transient connection error');
       expect(result.rows).toEqual([{ ok: true }]);
+    });
+
+    it('retry untuk pesan timeout expired', async () => {
+      mockQuery
+        .mockRejectedValueOnce(new Error('timeout expired'))
+        .mockResolvedValueOnce({ rows: [{ ok: true }], rowCount: 1 });
+
+      const result = await db.query('SELECT 1', []);
+
+      expect(mockQuery).toHaveBeenCalledTimes(2);
+      expect(result.rows).toEqual([{ ok: true }]);
+    });
+
+    it('retry untuk pesan database system starting up', async () => {
+      mockQuery
+        .mockRejectedValueOnce(new Error('the database system is starting up'))
+        .mockResolvedValueOnce({ rows: [{ ok: true }], rowCount: 1 });
+
+      const result = await db.query('SELECT 1', []);
+
+      expect(mockQuery).toHaveBeenCalledTimes(2);
+      expect(result.rows).toEqual([{ ok: true }]);
+    });
+
+    it('tidak retry saat error bernilai undefined', async () => {
+      mockQuery.mockRejectedValueOnce(undefined);
+
+      await expect(db.query('SELECT broken', [])).rejects.toBeUndefined();
+      expect(mockQuery).toHaveBeenCalledTimes(1);
+    });
+
+    it('tidak retry saat error tanpa message', async () => {
+      mockQuery.mockRejectedValueOnce({});
+
+      await expect(db.query('SELECT broken', [])).rejects.toEqual({});
+      expect(mockQuery).toHaveBeenCalledTimes(1);
+    });
+
+    it('berhenti retry setelah jatah habis', async () => {
+      mockQuery
+        .mockRejectedValueOnce(new Error('timeout expired'))
+        .mockRejectedValueOnce(new Error('timeout expired'));
+
+      await expect(db.query('SELECT 1', [])).rejects.toThrow('timeout expired');
+      expect(mockQuery).toHaveBeenCalledTimes(2);
+      expect(logger.warn).toHaveBeenCalledTimes(1);
     });
 
     it('tidak retry untuk error non-transient', async () => {
