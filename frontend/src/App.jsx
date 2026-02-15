@@ -4,7 +4,6 @@ import Beranda from './halaman/Beranda';
 import Kamus from './halaman/Kamus';
 import KamusDetail from './halaman/KamusDetail';
 import Tesaurus from './halaman/Tesaurus';
-import TesaurusDetail from './halaman/TesaurusDetail';
 import Glosarium from './halaman/Glosarium';
 
 function App() {
@@ -18,7 +17,6 @@ function App() {
         <Route path="/kamus/detail/:entri" element={<KamusDetail />} />
         <Route path="/tesaurus" element={<Tesaurus />} />
         <Route path="/tesaurus/cari/:kata" element={<Tesaurus />} />
-        <Route path="/tesaurus/detail/:kata" element={<TesaurusDetail />} />
         <Route path="/glosarium" element={<Glosarium />} />
         <Route path="/glosarium/cari/:kata" element={<Glosarium />} />
         <Route path="/glosarium/bidang/:bidang" element={<Glosarium />} />
