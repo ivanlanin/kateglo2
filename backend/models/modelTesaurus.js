@@ -29,6 +29,7 @@ class ModelTesaurus {
                     ELSE 2 END AS prioritas
         FROM tesaurus
         WHERE lema ILIKE $3
+          AND (sinonim IS NOT NULL OR antonim IS NOT NULL)
       )`;
 
     const countResult = await db.query(
