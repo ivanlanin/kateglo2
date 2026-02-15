@@ -92,7 +92,7 @@ describe('KotakCari', () => {
 
   it('memuat saran, mendukung keyboard, dan memilih item aktif', async () => {
     autocomplete.mockResolvedValue([
-      { value: 'anak', original: 'child' },
+      { value: 'anak', asing: 'child' },
       { value: 'anakan' },
     ]);
 

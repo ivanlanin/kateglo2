@@ -89,14 +89,14 @@ describe('apiPublik', () => {
   it('autocomplete menormalkan item string dan object', async () => {
     klien.get.mockResolvedValue({
       data: {
-        data: ['anak', { value: 'aneka', original: 'varied' }],
+        data: ['anak', { value: 'aneka', asing: 'varied' }],
       },
     });
 
     const hasil = await autocomplete('kamus', 'an');
 
     expect(klien.get).toHaveBeenCalledWith('/api/public/kamus/autocomplete/an');
-    expect(hasil).toEqual([{ value: 'anak' }, { value: 'aneka', original: 'varied' }]);
+    expect(hasil).toEqual([{ value: 'anak' }, { value: 'aneka', asing: 'varied' }]);
   });
 
   it('ambilGlosariumPerBidang dan ambilGlosariumPerSumber memakai default params', async () => {

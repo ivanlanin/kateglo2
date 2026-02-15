@@ -308,12 +308,12 @@ function KamusDetail() {
             <PanelLipat judul="Glosarium" jumlah={glosarium.length} terbukaAwal={true} aksen={true}>
               <div className="text-sm leading-relaxed">
                 {glosarium.map((item, i) => (
-                  <span key={`${item.phrase}-${item.original}-${i}`}>
-                    <span>{item.phrase}</span>
-                    {item.original && (
+                  <span key={`${item.indonesia}-${item.asing}-${i}`}>
+                    <span>{item.indonesia}</span>
+                    {item.asing && (
                       <>
                         <span> (</span>
-                        <em>{item.original}</em>
+                        <em>{item.asing}</em>
                         <span>)</span>
                       </>
                     )}

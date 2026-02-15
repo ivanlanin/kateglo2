@@ -58,8 +58,8 @@ describe('Glosarium', () => {
     mockUseQuery.mockImplementation((options) => {
       if (options?.queryFn) options.queryFn();
       const key = options?.queryKey?.[0];
-      if (key === 'glosarium-bidang') return { data: [{ discipline: 'ling' }], isLoading: false, isError: false };
-      if (key === 'glosarium-sumber') return { data: [{ ref_source: 'kbbi' }], isLoading: false, isError: false };
+      if (key === 'glosarium-bidang') return { data: [{ bidang: 'ling' }], isLoading: false, isError: false };
+      if (key === 'glosarium-sumber') return { data: [{ sumber: 'kbbi' }], isLoading: false, isError: false };
       return { data: undefined, isLoading: false, isError: false };
     });
 
@@ -71,7 +71,7 @@ describe('Glosarium', () => {
     expect(ambilDaftarSumber).toHaveBeenCalled();
   });
 
-  it('menampilkan hasil pencarian kata dengan format phrase (original)', () => {
+  it('menampilkan hasil pencarian kata dengan format indonesia (asing)', () => {
     mockParams = { kata: 'istilah' };
 
     mockUseQuery.mockImplementation((options) => {
@@ -81,7 +81,7 @@ describe('Glosarium', () => {
       if (key === 'glosarium-sumber') return { data: [], isLoading: false, isError: false };
       return {
         data: {
-          data: [{ glo_uid: 1, phrase: 'istilah', original: 'term' }],
+          data: [{ id: 1, indonesia: 'istilah', asing: 'term' }],
           total: 1,
         },
         isLoading: false,
@@ -110,7 +110,7 @@ describe('Glosarium', () => {
       if (key === 'glosarium-sumber') return { data: [], isLoading: false, isError: false };
       return {
         data: {
-          data: [{ glo_uid: 1, phrase: 'fonem', original: 'phoneme' }],
+          data: [{ id: 1, indonesia: 'fonem', asing: 'phoneme' }],
           total: 1,
         },
         isLoading: false,
@@ -134,7 +134,7 @@ describe('Glosarium', () => {
       if (key === 'glosarium-sumber') return { data: [], isLoading: false, isError: false };
       return {
         data: {
-          data: [{ glo_uid: 1, phrase: 'entri', original: 'entry' }],
+          data: [{ id: 1, indonesia: 'entri', asing: 'entry' }],
           total: 1,
         },
         isLoading: false,
