@@ -189,7 +189,7 @@ function KamusDetail() {
                             <span className="kamus-badge kamus-badge-ragam">{m.ragam_varian}</span>
                           )}
                           {m.kiasan === 1 && (
-                            <span className="kamus-badge kamus-badge-kiasan">ki</span>
+                            <span className="kamus-badge kamus-badge-kiasan">kiasan</span>
                           )}
                           {m.bahasa && (
                             <span className="kamus-badge kamus-badge-bahasa">{m.bahasa}</span>

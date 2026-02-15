@@ -14,6 +14,7 @@
 - Membersihkan lema, makna, dan contoh dari kurung siku dan HTML
 - Mengembangkan singkatan di lema, makna, dan contoh, misalnya "yg" menjadi "yang"
 - Menyederhanakan jenis infiks, konfiks, prefiks, dan sufiks
+- Memigrasi label kiasan, kependekan, dan akronim
 
 ## 2026-02-14 Sabtu
 

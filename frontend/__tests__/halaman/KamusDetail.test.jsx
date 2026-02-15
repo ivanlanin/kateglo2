@@ -150,7 +150,7 @@ describe('KamusDetail', () => {
     expect(screen.getByText('turunan')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'kata dasar' })).toHaveAttribute('href', '/kamus/detail/kata%20dasar');
     expect(screen.getByText('cak', { exact: false })).toBeInTheDocument();
-    expect(screen.getByText('ki', { exact: false })).toBeInTheDocument();
+    expect(screen.getByText('kiasan', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('akr')).toBeInTheDocument();
     expect(screen.getByText('species', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('H2O')).toBeInTheDocument();
