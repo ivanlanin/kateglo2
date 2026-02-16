@@ -13,6 +13,7 @@ const logger = require('./config/logger');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const trustProxy = (process.env.TRUST_PROXY || 'true') === 'true';
 
 const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173')
   .split(',')
@@ -42,6 +43,7 @@ const corsOptions = {
 };
 
 // Middleware
+app.set('trust proxy', trustProxy);
 app.use(helmet()); // Security headers
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
@@ -89,7 +91,21 @@ app.use('/api', (req, res, next) => {
 
 // Request logging
 app.use((req, res, next) => {
-  logger.info(`${req.method} ${req.path}`);
+  const startTime = Date.now();
+
+  res.on('finish', () => {
+    const durationMs = Date.now() - startTime;
+    logger.info('HTTP request', {
+      method: req.method,
+      path: req.path,
+      statusCode: res.statusCode,
+      ip: req.ip,
+      origin: req.get('origin') || null,
+      userAgent: req.get('user-agent') || null,
+      durationMs,
+    });
+  });
+
   next();
 });
 
@@ -113,6 +129,7 @@ app.use(errorHandler);
 app.listen(PORT, () => {
   logger.info(`🚀 Kateglo API running on port ${PORT}`);
   logger.info(`📝 Environment: ${process.env.NODE_ENV}`);
+  logger.info(`🌐 Trust proxy: ${trustProxy}`);
   logger.info(`🔐 Allowed origins: ${allowedOrigins.join(', ')}`);
   logger.info(`🧩 Frontend key required: ${requireFrontendKey}`);
   logger.info(`🗄️  Database: ${process.env.DATABASE_URL ? 'Connected' : 'Not configured'}`);

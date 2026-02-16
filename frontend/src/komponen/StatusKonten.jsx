@@ -4,11 +4,32 @@
 
 import { Link } from 'react-router-dom';
 
-function QueryFeedback({ isLoading, isError, loadingText, errorText }) {
+function resolveErrorText(error, defaultText) {
+  const status = error?.response?.status;
+  const serverMessage = error?.response?.data?.message;
+
+  if (status === 429) {
+    return 'Untuk menjaga stabilitas dan keadilan layanan, permintaan per pengguna dibatasi 60 kali/15 menit. Harap coba lagi nanti, ya.';
+  }
+
+  if (status === 400 && typeof serverMessage === 'string' && serverMessage.includes('Offset maksimal')) {
+    return 'Jangkauan halaman sudah melebihi batas. Silakan kembali ke halaman sebelumnya atau ulangi pencarian.';
+  }
+
+  if (typeof serverMessage === 'string' && serverMessage.trim()) {
+    return serverMessage;
+  }
+
+  return defaultText;
+}
+
+function QueryFeedback({ isLoading, isError, error, loadingText, errorText }) {
+  const resolvedErrorText = resolveErrorText(error, errorText);
+
   return (
     <>
       {isLoading && <p className="secondary-text">{loadingText}</p>}
-      {isError && <p className="error-text">{errorText}</p>}
+      {isError && <p className="error-text">{resolvedErrorText}</p>}
     </>
   );
 }
