@@ -75,9 +75,6 @@ function TataLetak() {
           >
             Kateglo {appTimestamp}
           </button>
-          <Link to="/kebijakan-privasi" className="link-action text-sm">
-            Kebijakan Privasi
-          </Link>
           <button
             type="button"
             onClick={() => setModeGelap((v) => !v)}
