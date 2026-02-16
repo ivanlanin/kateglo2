@@ -20,13 +20,13 @@ CREATE TABLE IF NOT EXISTS label (
 CREATE INDEX IF NOT EXISTS idx_label_kategori_nama ON label (kategori, nama);
 
 -- ============================================
--- ENTRI (entri kamus: dasar, berimbuhan, gabungan, idiom, peribahasa, varian)
+-- ENTRI (entri kamus: dasar, turunan, gabungan, idiom, peribahasa, varian)
 -- ============================================
 CREATE TABLE IF NOT EXISTS entri (
   id               SERIAL PRIMARY KEY,
   legacy_eid       INTEGER UNIQUE,
   entri            TEXT NOT NULL,
-  jenis            TEXT NOT NULL CHECK (jenis IN ('dasar', 'berimbuhan', 'gabungan', 'idiom', 'peribahasa', 'varian')),
+  jenis            TEXT NOT NULL CHECK (jenis IN ('dasar', 'turunan', 'gabungan', 'idiom', 'peribahasa', 'varian')),
   induk            INTEGER REFERENCES entri(id) ON DELETE SET NULL,
   pemenggalan      TEXT,
   lafal            TEXT,

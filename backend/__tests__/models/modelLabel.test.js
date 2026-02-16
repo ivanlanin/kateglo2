@@ -69,17 +69,17 @@ describe('ModelLabel', () => {
   it('cariEntriPerLabel kategori jenis valid', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '1' }] })
-      .mockResolvedValueOnce({ rows: [{ id: 2, lema: 'berkata', jenis: 'berimbuhan' }] });
+      .mockResolvedValueOnce({ rows: [{ id: 2, lema: 'berkata', jenis: 'turunan' }] });
 
-    const result = await ModelLabel.cariEntriPerLabel('jenis', 'berimbuhan', 10, 2);
+    const result = await ModelLabel.cariEntriPerLabel('jenis', 'turunan', 10, 2);
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining('WHERE aktif = 1 AND jenis = $1'),
-      ['berimbuhan']
+      ['turunan']
     );
     expect(result.total).toBe(1);
-    expect(result.label).toEqual({ kode: 'berimbuhan', nama: 'berimbuhan' });
+    expect(result.label).toEqual({ kode: 'turunan', nama: 'turunan' });
   });
 
   it('cariEntriPerLabel kategori jenis valid dengan limit/offset default', async () => {

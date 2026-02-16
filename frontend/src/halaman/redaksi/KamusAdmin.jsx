@@ -24,7 +24,7 @@ const nilaiAwalEntri = { entri: '', jenis: 'dasar', lafal: '', pemenggalan: '', 
 
 const opsiJenis = [
   { value: 'dasar', label: 'Dasar' },
-  { value: 'berimbuhan', label: 'Berimbuhan' },
+  { value: 'turunan', label: 'Turunan' },
   { value: 'gabungan', label: 'Gabungan' },
   { value: 'idiom', label: 'Idiom' },
   { value: 'peribahasa', label: 'Peribahasa' },

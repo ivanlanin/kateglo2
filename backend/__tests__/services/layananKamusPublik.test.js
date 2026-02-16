@@ -125,7 +125,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
       { id: 100, makna_id: 10, contoh: 'ia sangat aktif' }
     ]);
     ModelEntri.ambilSubentri.mockResolvedValue([
-      { id: 2, entri: 'mengaktifkan', jenis: 'berimbuhan' }
+      { id: 2, entri: 'mengaktifkan', jenis: 'turunan' }
     ]);
     ModelEntri.ambilEntriSerupa.mockResolvedValue([
       { id: 1, entri: 'aktif', lafal: 'ak.tif' },
@@ -149,7 +149,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     expect(result.entri).toBe('aktif');
     expect(result.makna).toHaveLength(1);
     expect(result.makna[0].contoh).toHaveLength(1);
-    expect(result.subentri.berimbuhan).toHaveLength(1);
+    expect(result.subentri.turunan).toHaveLength(1);
     expect(result.tesaurus).toEqual({ sinonim: ['aktif', 'giat'], antonim: ['pasif'] });
     expect(result.serupa).toEqual([{ id: 3, entri: 'aktip', lafal: null }]);
     expect(result.glosarium).toEqual([{ indonesia: 'zat aktif', asing: 'active substance' }]);
@@ -422,7 +422,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     ]);
   });
 
-  it('menyusun rantai induk multi-level (dasar > berimbuhan > gabungan)', async () => {
+  it('menyusun rantai induk multi-level (dasar > turunan > gabungan)', async () => {
     ModelEntri.ambilEntri.mockResolvedValue({
       id: 60,
       entri: 'berlatih tanding',

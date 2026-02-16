@@ -42,7 +42,7 @@ class ModelLabel {
     }));
 
     // Kategori jenis: nilai tetap dari CHECK constraint tabel lema
-    const JENIS = ['dasar', 'berimbuhan', 'gabungan', 'idiom', 'peribahasa', 'varian'];
+    const JENIS = ['dasar', 'turunan', 'gabungan', 'idiom', 'peribahasa', 'varian'];
     grouped.jenis = JENIS.map((j) => ({ kode: j, nama: j }));
 
     return grouped;
@@ -147,10 +147,10 @@ class ModelLabel {
   }
 
   /**
-  * Cari entri berdasarkan jenis (dasar, berimbuhan, gabungan, idiom, peribahasa, varian).
+  * Cari entri berdasarkan jenis (dasar, turunan, gabungan, idiom, peribahasa, varian).
    */
   static async _cariEntriPerJenis(jenis, limit, offset) {
-    const validJenis = ['dasar', 'berimbuhan', 'gabungan', 'idiom', 'peribahasa', 'varian'];
+    const validJenis = ['dasar', 'turunan', 'gabungan', 'idiom', 'peribahasa', 'varian'];
     if (!validJenis.includes(jenis)) {
       return { data: [], total: 0, label: null };
     }
