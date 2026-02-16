@@ -1,12 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import KamusDetail from '../../src/halaman/KamusDetail';
-import { ambilDetailKamus } from '../../src/api/apiPublik';
+import KamusDetail from '../../../src/halaman/publik/KamusDetail';
+import { ambilDetailKamus } from '../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
 let mockParams = { entri: 'kata' };
 
-vi.mock('../../src/api/apiPublik', () => ({
+vi.mock('../../../src/api/apiPublik', () => ({
   ambilDetailKamus: vi.fn().mockResolvedValue(null),
 }));
 

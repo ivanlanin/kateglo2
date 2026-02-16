@@ -1,8 +1,8 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import TataLetak from '../../src/komponen/TataLetak';
+import TataLetak from '../../../src/komponen/publik/TataLetak';
 
-vi.mock('../../src/komponen/Navbar', () => ({ default: () => <div>Navbar Mock</div> }));
+vi.mock('../../../src/komponen/publik/Navbar', () => ({ default: () => <div>Navbar Mock</div> }));
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   Outlet: () => <div>Outlet Mock</div>,

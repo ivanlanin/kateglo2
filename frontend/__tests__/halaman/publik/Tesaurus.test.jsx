@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Tesaurus from '../../src/halaman/Tesaurus';
-import { cariTesaurus } from '../../src/api/apiPublik';
+import Tesaurus from '../../../src/halaman/publik/Tesaurus';
+import { cariTesaurus } from '../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
 const mockSetSearchParams = vi.fn();
@@ -18,11 +18,11 @@ vi.mock('@tanstack/react-query', () => ({
   useQuery: (...args) => mockUseQuery(...args),
 }));
 
-vi.mock('../../src/api/apiPublik', () => ({
+vi.mock('../../../src/api/apiPublik', () => ({
   cariTesaurus: vi.fn().mockResolvedValue({ data: [], total: 0 }),
 }));
 
-vi.mock('../../src/komponen/Paginasi', () => ({
+vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
   default: ({ onChange }) => (
     <button type="button" onClick={() => onChange(100)}>
       Halaman berikut

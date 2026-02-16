@@ -1,14 +1,14 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Beranda from '../../src/halaman/Beranda';
+import Beranda from '../../../src/halaman/publik/Beranda';
 
 const mockNavigate = vi.fn();
 
-vi.mock('../../src/api/apiPublik', () => ({
+vi.mock('../../../src/api/apiPublik', () => ({
   autocomplete: vi.fn().mockResolvedValue([]),
 }));
 
-vi.mock('../../src/context/authContext', () => ({
+vi.mock('../../../src/context/authContext', () => ({
   useAuth: () => ({
     isLoading: false,
     isAuthenticated: false,
@@ -16,7 +16,7 @@ vi.mock('../../src/context/authContext', () => ({
   }),
 }));
 
-vi.mock('../../src/api/apiAuth', () => ({
+vi.mock('../../../src/api/apiAuth', () => ({
   buatUrlLoginGoogle: vi.fn(() => 'http://localhost:3000/auth/google'),
   simpanReturnTo: vi.fn(),
 }));
