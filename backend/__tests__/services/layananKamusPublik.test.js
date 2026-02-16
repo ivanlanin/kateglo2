@@ -416,4 +416,60 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
       { id: 52, lema: 'alpha', lafal: null },
     ]);
   });
+
+  it('menyusun rantai induk multi-level (dasar > berimbuhan > gabungan)', async () => {
+    ModelLema.ambilLema.mockResolvedValue({
+      id: 60,
+      lema: 'berlatih tanding',
+      jenis: 'gabungan',
+      induk: 61,
+      pemenggalan: null,
+      lafal: null,
+      varian: null,
+      jenis_rujuk: null,
+      lema_rujuk: null,
+    });
+    ModelLema.ambilMakna.mockResolvedValue([{ id: 601, makna: 'berlatih untuk bertanding' }]);
+    ModelLema.ambilContoh.mockResolvedValue([]);
+    ModelLema.ambilSublema.mockResolvedValue([]);
+    ModelLema.ambilRantaiInduk.mockResolvedValue([
+      { id: 62, lema: 'latih' },
+      { id: 61, lema: 'berlatih' },
+    ]);
+    ModelTesaurus.ambilDetail.mockResolvedValue(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+    ModelLema.ambilLemaSerupa.mockResolvedValue([]);
+
+    const result = await ambilDetailKamus('berlatih tanding');
+
+    expect(result.induk).toEqual([
+      { id: 62, lema: 'latih' },
+      { id: 61, lema: 'berlatih' },
+    ]);
+  });
+
+  it('mengembalikan induk null jika rantai induk kosong', async () => {
+    ModelLema.ambilLema.mockResolvedValue({
+      id: 70,
+      lema: 'rumah',
+      jenis: 'dasar',
+      induk: null,
+      pemenggalan: null,
+      lafal: null,
+      varian: null,
+      jenis_rujuk: null,
+      lema_rujuk: null,
+    });
+    ModelLema.ambilMakna.mockResolvedValue([]);
+    ModelLema.ambilContoh.mockResolvedValue([]);
+    ModelLema.ambilSublema.mockResolvedValue([]);
+    ModelLema.ambilRantaiInduk.mockResolvedValue([]);
+    ModelTesaurus.ambilDetail.mockResolvedValue(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+    ModelLema.ambilLemaSerupa.mockResolvedValue([]);
+
+    const result = await ambilDetailKamus('rumah');
+
+    expect(result.induk).toBeNull();
+  });
 });

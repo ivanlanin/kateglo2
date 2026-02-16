@@ -55,6 +55,42 @@ describe('apiPublik', () => {
     expect(klien.get).toHaveBeenCalledWith('/api/public/kamus/detail/anak%20ibu');
   });
 
+  it('ambilDetailKamus melempar error terformat saat 404', async () => {
+    klien.get.mockRejectedValue({
+      response: {
+        status: 404,
+        data: { saran: ['kata', 'kita'] },
+      },
+    });
+
+    await expect(ambilDetailKamus('tidak ada')).rejects.toMatchObject({
+      message: 'Entri tidak ditemukan',
+      saran: ['kata', 'kita'],
+    });
+  });
+
+  it('ambilDetailKamus memberi saran kosong saat 404 tanpa payload saran', async () => {
+    klien.get.mockRejectedValue({
+      response: {
+        status: 404,
+        data: {},
+      },
+    });
+
+    await expect(ambilDetailKamus('tidak ada')).rejects.toMatchObject({
+      message: 'Entri tidak ditemukan',
+      saran: [],
+    });
+  });
+
+  it('ambilDetailKamus meneruskan error non-404 apa adanya', async () => {
+    const err = new Error('Jaringan bermasalah');
+    err.response = { status: 500 };
+    klien.get.mockRejectedValue(err);
+
+    await expect(ambilDetailKamus('kata')).rejects.toBe(err);
+  });
+
   it('cariGlosarium memakai default params', async () => {
     klien.get.mockResolvedValue({ data: { data: [], total: 0 } });
     await cariGlosarium('istilah');
