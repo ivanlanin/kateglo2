@@ -118,6 +118,26 @@ code {
     @apply container mx-auto px-4 max-w-4xl;
   }
 
+  .beranda-top-menu {
+    @apply flex flex-wrap items-center justify-end gap-4 pt-4;
+  }
+
+  .beranda-top-menu-link {
+    @apply text-sm text-gray-700 hover:underline;
+  }
+
+  .dark .beranda-top-menu-link {
+    @apply text-dark-text;
+  }
+
+  .beranda-top-menu-loading {
+    @apply text-sm text-gray-500;
+  }
+
+  .dark .beranda-top-menu-loading {
+    @apply text-dark-text-muted;
+  }
+
   .beranda-hero {
     @apply text-center py-10 md:py-16;
   }
@@ -411,7 +431,7 @@ code {
   }
 
   .kateglo-footer {
-    @apply bg-gray-50 mt-12;
+    @apply bg-gray-50 mt-6;
   }
 
   .dark .kateglo-footer {

@@ -8,6 +8,19 @@ vi.mock('../../src/api/apiPublik', () => ({
   autocomplete: vi.fn().mockResolvedValue([]),
 }));
 
+vi.mock('../../src/context/authContext', () => ({
+  useAuth: () => ({
+    isLoading: false,
+    isAuthenticated: false,
+    logout: vi.fn(),
+  }),
+}));
+
+vi.mock('../../src/api/apiAuth', () => ({
+  buatUrlLoginGoogle: vi.fn(() => 'http://localhost:3000/auth/google'),
+  simpanReturnTo: vi.fn(),
+}));
+
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   useNavigate: () => mockNavigate,
@@ -19,7 +32,7 @@ describe('Beranda', () => {
     mockNavigate.mockReset();
   });
 
-  it('menampilkan hero dan kartu fitur', () => {
+  it('menampilkan hero dan menu kanan atas', () => {
     render(<Beranda />);
 
     expect(screen.getByText('Kateglo')).toBeInTheDocument();
@@ -27,6 +40,7 @@ describe('Beranda', () => {
     expect(screen.getByRole('link', { name: /Kamus/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Tesaurus/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Glosarium/i })).toBeInTheDocument();
+    expect(screen.queryByText('Definisi dan makna kata')).not.toBeInTheDocument();
   });
 
   it('submit query kosong tidak menavigasi', () => {

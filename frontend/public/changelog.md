@@ -11,6 +11,7 @@
 - Menambahkan Google Analytics untuk melacak penggunaan situs
 - Menambahkan batasan pencarian 60 kali/15 menit untuk mencegah penyalahgunaan
 - Menerapkan autentikasi oAuth Google dan halaman kebijakan privasi
+- Menambahkan menu atas di beranda
 
 ## 2026-02-15 Minggu
 
