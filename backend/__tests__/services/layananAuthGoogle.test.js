@@ -74,11 +74,25 @@ describe('services/layananAuthGoogle', () => {
     expect(parsed).toEqual({ frontendOrigin: 'https://kateglo.org' });
   });
 
+  it('buildOAuthState tanpa payload menghasilkan state object kosong', () => {
+    const { service } = loadServiceWithJwt();
+    const state = service.buildOAuthState();
+
+    expect(service.parseOAuthState(state)).toEqual({});
+  });
+
   it('parseOAuthState mengembalikan object kosong untuk state tidak valid', () => {
     const { service } = loadServiceWithJwt();
 
     expect(service.parseOAuthState('invalid@@@')).toEqual({});
     expect(service.parseOAuthState('')).toEqual({});
+  });
+
+  it('parseOAuthState mengembalikan object kosong bila payload valid tapi bukan object', () => {
+    const { service } = loadServiceWithJwt();
+    const nonObjectState = Buffer.from(JSON.stringify('teks-biasa')).toString('base64url');
+
+    expect(service.parseOAuthState(nonObjectState)).toEqual({});
   });
 
   it('exchangeCodeForToken mengembalikan payload saat response OK', async () => {
@@ -264,5 +278,27 @@ describe('services/layananAuthGoogle', () => {
     expect(origins).toContain('https://kateglo.org');
     expect(origins).toContain('https://kateglo.onrender.com');
     expect(origins).toContain('http://localhost:5173');
+  });
+
+  it('getAllowedFrontendOrigins mengabaikan origin env yang tidak valid', () => {
+    process.env.FRONTEND_AUTH_CALLBACK_URL = 'https://kateglo.org/auth/callback';
+    process.env.FRONTEND_ALLOWED_ORIGINS = '%%%invalid%%%,https://kateglo.onrender.com';
+
+    const { service } = loadServiceWithJwt();
+    const origins = service.getAllowedFrontendOrigins();
+
+    expect(origins).toContain('https://kateglo.org');
+    expect(origins).toContain('https://kateglo.onrender.com');
+    expect(origins).not.toContain('%%%invalid%%%');
+  });
+
+  it('getAllowedFrontendOrigins tidak menambah default origin jika callback URL tidak valid', () => {
+    process.env.FRONTEND_AUTH_CALLBACK_URL = 'not-a-valid-url';
+    process.env.FRONTEND_ALLOWED_ORIGINS = 'https://kateglo.onrender.com';
+
+    const { service } = loadServiceWithJwt();
+    const origins = service.getAllowedFrontendOrigins();
+
+    expect(origins).toEqual(['https://kateglo.onrender.com']);
   });
 });
