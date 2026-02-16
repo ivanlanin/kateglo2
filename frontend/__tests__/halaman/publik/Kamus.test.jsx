@@ -9,7 +9,7 @@ let mockParams = {};
 vi.mock('../../../src/api/apiPublik', () => ({
   cariKamus: vi.fn().mockResolvedValue({ data: [], total: 0 }),
   ambilKategoriKamus: vi.fn().mockResolvedValue({}),
-  ambilLemaPerKategori: vi.fn().mockResolvedValue({ data: [], total: 0, label: null }),
+  ambilEntriPerKategori: vi.fn().mockResolvedValue({ data: [], total: 0, label: null }),
 }));
 
 vi.mock('react-router-dom', () => ({
@@ -65,7 +65,7 @@ describe('Kamus', () => {
       const { queryKey } = options;
       if (queryKey[0] === 'cari-kamus') {
         return {
-          data: { data: [{ id: 1, lema: 'kata' }], total: 1 },
+          data: { data: [{ id: 1, entri: 'kata' }], total: 1 },
           isLoading: false,
           isError: false,
         };
@@ -85,10 +85,10 @@ describe('Kamus', () => {
     mockUseQuery.mockImplementation((options) => {
       if (options?.enabled !== false && options?.queryFn) options.queryFn();
       const { queryKey } = options;
-      if (queryKey[0] === 'kamus-kategori-lema') {
+      if (queryKey[0] === 'kamus-kategori-entri') {
         return {
           data: {
-            data: [{ id: 1, lema: 'akar' }],
+            data: [{ id: 1, entri: 'akar' }],
             total: 1,
             label: { nama: 'a' },
           },
@@ -111,7 +111,7 @@ describe('Kamus', () => {
     mockUseQuery.mockImplementation((options) => {
       if (options?.queryFn) options.queryFn();
       const { queryKey } = options;
-      if (queryKey[0] === 'kamus-kategori-lema') {
+      if (queryKey[0] === 'kamus-kategori-entri') {
         return {
           data: {
             data: [],
@@ -168,7 +168,7 @@ describe('Kamus', () => {
       const { queryKey } = options;
       if (queryKey[0] === 'cari-kamus') {
         return {
-          data: { data: [{ id: 1, lema: 'kata' }], total: 300 },
+          data: { data: [{ id: 1, entri: 'kata' }], total: 300 },
           isLoading: false,
           isError: false,
         };

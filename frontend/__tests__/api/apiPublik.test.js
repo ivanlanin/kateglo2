@@ -13,7 +13,7 @@ vi.mock('../../src/api/klien', () => ({
 import klien from '../../src/api/klien';
 import {
   ambilKategoriKamus,
-  ambilLemaPerKategori,
+  ambilEntriPerKategori,
   cariKamus,
   ambilDetailKamus,
   cariTesaurus,
@@ -36,10 +36,10 @@ describe('apiPublik', () => {
     expect(klien.get).toHaveBeenCalledWith('/api/publik/kamus/cari/kata', { params: { limit: 10, offset: 5 } });
   });
 
-  it('ambilKategoriKamus dan ambilLemaPerKategori memanggil endpoint kategori', async () => {
+  it('ambilKategoriKamus dan ambilEntriPerKategori memanggil endpoint kategori', async () => {
     klien.get.mockResolvedValue({ data: { abjad: [] } });
     await ambilKategoriKamus();
-    await ambilLemaPerKategori('kelas kata', 'n-1', { limit: 9, offset: 3 });
+    await ambilEntriPerKategori('kelas kata', 'n-1', { limit: 9, offset: 3 });
 
     expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/kamus/kategori');
     expect(klien.get).toHaveBeenNthCalledWith(

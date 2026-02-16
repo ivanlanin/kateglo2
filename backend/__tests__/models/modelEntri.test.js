@@ -1,15 +1,15 @@
 /**
- * @fileoverview Test ModelLema
- * @tested_in backend/models/modelLema.js
+ * @fileoverview Test ModelEntri
+ * @tested_in backend/models/modelEntri.js
  */
 
 jest.mock('../../db/autocomplete', () => jest.fn());
 
 const db = require('../../db');
 const autocomplete = require('../../db/autocomplete');
-const ModelLema = require('../../models/modelLema');
+const ModelEntri = require('../../models/modelEntri');
 
-describe('ModelLema', () => {
+describe('ModelEntri', () => {
   beforeEach(() => {
     db.query.mockReset();
     autocomplete.mockReset();
@@ -18,7 +18,7 @@ describe('ModelLema', () => {
   it('autocomplete meneruskan parameter ke shared helper', async () => {
     autocomplete.mockResolvedValue(['kata', 'kata kerja']);
 
-    const result = await ModelLema.autocomplete('kat', 12);
+    const result = await ModelEntri.autocomplete('kat', 12);
 
     expect(autocomplete).toHaveBeenCalledWith('entri', 'entri', 'kat', {
       limit: 12,
@@ -30,7 +30,7 @@ describe('ModelLema', () => {
   it('autocomplete memakai limit default', async () => {
     autocomplete.mockResolvedValue([]);
 
-    await ModelLema.autocomplete('kat');
+    await ModelEntri.autocomplete('kat');
 
     expect(autocomplete).toHaveBeenCalledWith('entri', 'entri', 'kat', {
       limit: 8,
@@ -38,20 +38,20 @@ describe('ModelLema', () => {
     });
   });
 
-  it('normalisasiKunciLema mengembalikan string kosong untuk input falsy', () => {
-    expect(ModelLema.normalisasiKunciLema(undefined)).toBe('');
-    expect(ModelLema.normalisasiKunciLema(null)).toBe('');
+  it('normalisasiKunciEntri mengembalikan string kosong untuk input falsy', () => {
+    expect(ModelEntri.normalisasiKunciEntri(undefined)).toBe('');
+    expect(ModelEntri.normalisasiKunciEntri(null)).toBe('');
   });
 
-  it('normalisasiKunciLema menghapus nomor homonim dan tanda hubung', () => {
-    expect(ModelLema.normalisasiKunciLema(' Per- (2) ')).toBe('per');
-    expect(ModelLema.normalisasiKunciLema('dara (10)')).toBe('dara');
+  it('normalisasiKunciEntri menghapus nomor homonim dan tanda hubung', () => {
+    expect(ModelEntri.normalisasiKunciEntri(' Per- (2) ')).toBe('per');
+    expect(ModelEntri.normalisasiKunciEntri('dara (10)')).toBe('dara');
   });
 
-  it('cariLema mengembalikan kosong saat total 0', async () => {
+  it('cariEntri mengembalikan kosong saat total 0', async () => {
     db.query.mockResolvedValueOnce({ rows: [{ total: '0' }] });
 
-    const result = await ModelLema.cariLema(' zzz ', 10, 5);
+    const result = await ModelEntri.cariEntri(' zzz ', 10, 5);
 
     expect(db.query).toHaveBeenCalledTimes(1);
     expect(db.query).toHaveBeenCalledWith(
@@ -61,16 +61,16 @@ describe('ModelLema', () => {
     expect(result).toEqual({ data: [], total: 0 });
   });
 
-  it('cariLema menormalisasi query serta clamp limit dan offset', async () => {
+  it('cariEntri menormalisasi query serta clamp limit dan offset', async () => {
     db.query
       .mockResolvedValueOnce({
         rows: [{ total: '3' }],
       })
       .mockResolvedValueOnce({
-        rows: [{ id: 1, lema: 'kata', jenis: 'dasar' }],
+        rows: [{ id: 1, entri: 'kata', jenis: 'dasar' }],
       });
 
-    const result = await ModelLema.cariLema('  kata  ', '999', '-3');
+    const result = await ModelEntri.cariEntri('  kata  ', '999', '-3');
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
@@ -82,15 +82,15 @@ describe('ModelLema', () => {
       expect.stringContaining('LIMIT $4 OFFSET $5'),
       ['kata', 'kata%', '%kata%', 200, 0]
     );
-    expect(result).toEqual({ data: [{ id: 1, lema: 'kata', jenis: 'dasar' }], total: 3 });
+    expect(result).toEqual({ data: [{ id: 1, entri: 'kata', jenis: 'dasar' }], total: 3 });
   });
 
-  it('cariLema memakai limit dan offset default saat argumen tidak diberikan', async () => {
+  it('cariEntri memakai limit dan offset default saat argumen tidak diberikan', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '1' }] })
-      .mockResolvedValueOnce({ rows: [{ id: 1, lema: 'kata' }] });
+      .mockResolvedValueOnce({ rows: [{ id: 1, entri: 'kata' }] });
 
-    await ModelLema.cariLema('kata');
+    await ModelEntri.cariEntri('kata');
 
     expect(db.query).toHaveBeenNthCalledWith(
       2,
@@ -99,12 +99,12 @@ describe('ModelLema', () => {
     );
   });
 
-  it('cariLema memakai fallback saat limit atau offset bukan angka', async () => {
+  it('cariEntri memakai fallback saat limit atau offset bukan angka', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '1' }] })
-      .mockResolvedValueOnce({ rows: [{ id: 1, lema: 'kata' }] });
+      .mockResolvedValueOnce({ rows: [{ id: 1, entri: 'kata' }] });
 
-    await ModelLema.cariLema('kata', 'abc', 'xyz');
+    await ModelEntri.cariEntri('kata', 'abc', 'xyz');
 
     expect(db.query).toHaveBeenNthCalledWith(
       2,
@@ -113,36 +113,36 @@ describe('ModelLema', () => {
     );
   });
 
-  it('ambilLema mengembalikan null jika tidak ditemukan', async () => {
+  it('ambilEntri mengembalikan null jika tidak ditemukan', async () => {
     db.query.mockResolvedValue({ rows: [] });
 
-    const result = await ModelLema.ambilLema('tidak-ada');
+    const result = await ModelEntri.ambilEntri('tidak-ada');
 
     expect(result).toBeNull();
   });
 
-  it('ambilLema mengembalikan row pertama jika ditemukan', async () => {
-    db.query.mockResolvedValue({ rows: [{ id: 1, lema: 'kata' }] });
+  it('ambilEntri mengembalikan row pertama jika ditemukan', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 1, entri: 'kata' }] });
 
-    const result = await ModelLema.ambilLema('kata');
+    const result = await ModelEntri.ambilEntri('kata');
 
-    expect(result).toEqual({ id: 1, lema: 'kata' });
+    expect(result).toEqual({ id: 1, entri: 'kata' });
   });
 
-  it('ambilLemaSerupa mengembalikan array kosong jika kunci kosong', async () => {
-    const result = await ModelLema.ambilLemaSerupa('   ');
+  it('ambilEntriSerupa mengembalikan array kosong jika kunci kosong', async () => {
+    const result = await ModelEntri.ambilEntriSerupa('   ');
 
     expect(result).toEqual([]);
     expect(db.query).not.toHaveBeenCalled();
   });
 
-  it('ambilLemaSerupa clamp limit maksimum dan fallback non-angka', async () => {
+  it('ambilEntriSerupa clamp limit maksimum dan fallback non-angka', async () => {
     db.query
-      .mockResolvedValueOnce({ rows: [{ id: 1, lema: 'per (1)', lafal: 'per' }] })
-      .mockResolvedValueOnce({ rows: [{ id: 2, lema: 'per (2)', lafal: null }] });
+      .mockResolvedValueOnce({ rows: [{ id: 1, entri: 'per (1)', lafal: 'per' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 2, entri: 'per (2)', lafal: null }] });
 
-    await ModelLema.ambilLemaSerupa('per (1)', 999);
-    await ModelLema.ambilLemaSerupa('per (1)', 'abc');
+    await ModelEntri.ambilEntriSerupa('per (1)', 999);
+    await ModelEntri.ambilEntriSerupa('per (1)', 'abc');
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
@@ -156,37 +156,37 @@ describe('ModelLema', () => {
     );
   });
 
-  it('ambilLemaSerupa mengembalikan array kosong jika kunci kosong', async () => {
-    const result = await ModelLema.ambilLemaSerupa('   ');
+  it('ambilEntriSerupa mengembalikan array kosong jika kunci kosong', async () => {
+    const result = await ModelEntri.ambilEntriSerupa('   ');
 
     expect(result).toEqual([]);
     expect(db.query).not.toHaveBeenCalled();
   });
 
-  it('ambilLemaSerupa menjalankan query normalisasi dengan limit', async () => {
-    db.query.mockResolvedValue({ rows: [{ id: 1, lema: 'per (1)', lafal: 'per' }] });
+  it('ambilEntriSerupa menjalankan query normalisasi dengan limit', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 1, entri: 'per (1)', lafal: 'per' }] });
 
-    const result = await ModelLema.ambilLemaSerupa('per- (2)', 9);
+    const result = await ModelEntri.ambilEntriSerupa('per- (2)', 9);
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining("LOWER(REGEXP_REPLACE(REPLACE(entri, '-', ''),"),
       ['per', 'per- (2)', 9]
     );
-    expect(result).toEqual([{ id: 1, lema: 'per (1)', lafal: 'per' }]);
+    expect(result).toEqual([{ id: 1, entri: 'per (1)', lafal: 'per' }]);
   });
 
   it('ambilMakna mengembalikan rows', async () => {
     const rows = [{ id: 1, makna: 'arti', kelas_kata: 'nomina' }];
     db.query.mockResolvedValue({ rows });
 
-    const result = await ModelLema.ambilMakna(1);
+    const result = await ModelEntri.ambilMakna(1);
 
     expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM makna'), [1]);
     expect(result).toEqual(rows);
   });
 
   it('ambilContoh mengembalikan array kosong jika tidak ada ID', async () => {
-    const result = await ModelLema.ambilContoh([]);
+    const result = await ModelEntri.ambilContoh([]);
 
     expect(result).toEqual([]);
     expect(db.query).not.toHaveBeenCalled();
@@ -196,38 +196,38 @@ describe('ModelLema', () => {
     const rows = [{ id: 1, makna_id: 1, contoh: 'contoh kalimat' }];
     db.query.mockResolvedValue({ rows });
 
-    const result = await ModelLema.ambilContoh([1]);
+    const result = await ModelEntri.ambilContoh([1]);
 
     expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM contoh'), [[1]]);
     expect(result).toEqual(rows);
   });
 
-  it('ambilSublema mengembalikan rows', async () => {
-    const rows = [{ id: 2, lema: 'berkata', jenis: 'berimbuhan' }];
+  it('ambilSubentri mengembalikan rows', async () => {
+    const rows = [{ id: 2, entri: 'berkata', jenis: 'berimbuhan' }];
     db.query.mockResolvedValue({ rows });
 
-    const result = await ModelLema.ambilSublema(1);
+    const result = await ModelEntri.ambilSubentri(1);
 
     expect(db.query).toHaveBeenCalledWith(expect.stringContaining('WHERE induk = $1'), [1]);
     expect(result).toEqual(rows);
   });
 
-  it('saranLema mengembalikan kosong untuk input kosong/falsy', async () => {
-    expect(await ModelLema.saranLema('')).toEqual([]);
-    expect(await ModelLema.saranLema('   ')).toEqual([]);
-    expect(await ModelLema.saranLema(null)).toEqual([]);
+  it('saranEntri mengembalikan kosong untuk input kosong/falsy', async () => {
+    expect(await ModelEntri.saranEntri('')).toEqual([]);
+    expect(await ModelEntri.saranEntri('   ')).toEqual([]);
+    expect(await ModelEntri.saranEntri(null)).toEqual([]);
     expect(db.query).not.toHaveBeenCalled();
   });
 
-  it('saranLema menormalkan teks, clamp limit, dan mapping hasil', async () => {
+  it('saranEntri menormalkan teks, clamp limit, dan mapping hasil', async () => {
     db.query
-      .mockResolvedValueOnce({ rows: [{ lema: 'kata' }, { lema: 'kita' }] })
-      .mockResolvedValueOnce({ rows: [{ lema: 'kata' }] })
-      .mockResolvedValueOnce({ rows: [{ lema: 'kata' }] });
+      .mockResolvedValueOnce({ rows: [{ entri: 'kata' }, { entri: 'kita' }] })
+      .mockResolvedValueOnce({ rows: [{ entri: 'kata' }] })
+      .mockResolvedValueOnce({ rows: [{ entri: 'kata' }] });
 
-    const maxResult = await ModelLema.saranLema('  kata  ', 999);
-    const defaultResult = await ModelLema.saranLema('kata', 'abc');
-    const minResult = await ModelLema.saranLema('kata', -2);
+    const maxResult = await ModelEntri.saranEntri('  kata  ', 999);
+    const defaultResult = await ModelEntri.saranEntri('kata', 'abc');
+    const minResult = await ModelEntri.saranEntri('kata', -2);
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
@@ -250,76 +250,76 @@ describe('ModelLema', () => {
   });
 
   it('ambilInduk mengembalikan null jika indukId null', async () => {
-    const result = await ModelLema.ambilInduk(null);
+    const result = await ModelEntri.ambilInduk(null);
 
     expect(result).toBeNull();
     expect(db.query).not.toHaveBeenCalled();
   });
 
   it('ambilInduk mengembalikan row pertama jika ditemukan', async () => {
-    db.query.mockResolvedValue({ rows: [{ id: 9, lema: 'induk', jenis: 'dasar' }] });
+    db.query.mockResolvedValue({ rows: [{ id: 9, entri: 'induk', jenis: 'dasar' }] });
 
-    const result = await ModelLema.ambilInduk(9);
+    const result = await ModelEntri.ambilInduk(9);
 
     expect(db.query).toHaveBeenCalledWith(expect.stringContaining('WHERE id = $1'), [9]);
-    expect(result).toEqual({ id: 9, lema: 'induk', jenis: 'dasar' });
+    expect(result).toEqual({ id: 9, entri: 'induk', jenis: 'dasar' });
   });
 
   it('ambilInduk mengembalikan null jika ID tidak ditemukan', async () => {
     db.query.mockResolvedValue({ rows: [] });
 
-    const result = await ModelLema.ambilInduk(10);
+    const result = await ModelEntri.ambilInduk(10);
 
     expect(result).toBeNull();
   });
 
   it('ambilRantaiInduk mengembalikan array kosong jika indukId falsy', async () => {
-    expect(await ModelLema.ambilRantaiInduk(null)).toEqual([]);
-    expect(await ModelLema.ambilRantaiInduk(undefined)).toEqual([]);
-    expect(await ModelLema.ambilRantaiInduk(0)).toEqual([]);
+    expect(await ModelEntri.ambilRantaiInduk(null)).toEqual([]);
+    expect(await ModelEntri.ambilRantaiInduk(undefined)).toEqual([]);
+    expect(await ModelEntri.ambilRantaiInduk(0)).toEqual([]);
     expect(db.query).not.toHaveBeenCalled();
   });
 
   it('ambilRantaiInduk mengembalikan rantai dari akar ke induk langsung', async () => {
     db.query.mockResolvedValue({
       rows: [
-        { id: 100, lema: 'latih' },
-        { id: 200, lema: 'berlatih' },
+        { id: 100, entri: 'latih' },
+        { id: 200, entri: 'berlatih' },
       ],
     });
 
-    const result = await ModelLema.ambilRantaiInduk(200);
+    const result = await ModelEntri.ambilRantaiInduk(200);
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('WITH RECURSIVE'),
       [200]
     );
     expect(result).toEqual([
-      { id: 100, lema: 'latih' },
-      { id: 200, lema: 'berlatih' },
+      { id: 100, entri: 'latih' },
+      { id: 200, entri: 'berlatih' },
     ]);
   });
 
   it('ambilRantaiInduk mengembalikan satu elemen jika induk langsung adalah akar', async () => {
     db.query.mockResolvedValue({
-      rows: [{ id: 100, lema: 'latih' }],
+      rows: [{ id: 100, entri: 'latih' }],
     });
 
-    const result = await ModelLema.ambilRantaiInduk(100);
+    const result = await ModelEntri.ambilRantaiInduk(100);
 
-    expect(result).toEqual([{ id: 100, lema: 'latih' }]);
+    expect(result).toEqual([{ id: 100, entri: 'latih' }]);
   });
 
   it('daftarAdmin tanpa q menghitung total dan mengambil data', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '2' }] })
-      .mockResolvedValueOnce({ rows: [{ id: 1, lema: 'kata' }] });
+      .mockResolvedValueOnce({ rows: [{ id: 1, entri: 'kata' }] });
 
-    const result = await ModelLema.daftarAdmin();
+    const result = await ModelEntri.daftarAdmin();
 
     expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('SELECT COUNT(*) AS total FROM entri'), []);
     expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('LIMIT $1 OFFSET $2'), [50, 0]);
-    expect(result).toEqual({ data: [{ id: 1, lema: 'kata' }], total: 2 });
+    expect(result).toEqual({ data: [{ id: 1, entri: 'kata' }], total: 2 });
   });
 
   it('daftarAdmin dengan q memakai where clause', async () => {
@@ -327,7 +327,7 @@ describe('ModelLema', () => {
       .mockResolvedValueOnce({ rows: [{ total: '1' }] })
       .mockResolvedValueOnce({ rows: [] });
 
-    await ModelLema.daftarAdmin({ q: 'kat', limit: 9, offset: 2 });
+    await ModelEntri.daftarAdmin({ q: 'kat', limit: 9, offset: 2 });
 
     expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('WHERE entri ILIKE $1'), ['%kat%']);
     expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('LIMIT $2 OFFSET $3'), ['%kat%', 9, 2]);
@@ -336,7 +336,7 @@ describe('ModelLema', () => {
   it('hitungTotal mengembalikan nilai numerik', async () => {
     db.query.mockResolvedValue({ rows: [{ total: '31' }] });
 
-    const result = await ModelLema.hitungTotal();
+    const result = await ModelEntri.hitungTotal();
 
     expect(result).toBe(31);
   });
@@ -344,35 +344,35 @@ describe('ModelLema', () => {
   it('ambilDenganId mengembalikan null jika tidak ditemukan', async () => {
     db.query.mockResolvedValue({ rows: [] });
 
-    const result = await ModelLema.ambilDenganId(7);
+    const result = await ModelEntri.ambilDenganId(7);
 
     expect(result).toBeNull();
   });
 
   it('ambilDenganId mengembalikan row pertama jika ditemukan', async () => {
-    const row = { id: 7, lema: 'kata' };
+    const row = { id: 7, entri: 'kata' };
     db.query.mockResolvedValue({ rows: [row] });
 
-    const result = await ModelLema.ambilDenganId(7);
+    const result = await ModelEntri.ambilDenganId(7);
 
     expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM entri WHERE id = $1'), [7]);
     expect(result).toEqual(row);
   });
 
   it('simpan melakukan update jika id ada', async () => {
-    const row = { id: 8, lema: 'kata baru' };
+    const row = { id: 8, entri: 'kata baru' };
     db.query.mockResolvedValue({ rows: [row] });
 
-    const result = await ModelLema.simpan({
+    const result = await ModelEntri.simpan({
       id: 8,
-      lema: 'kata baru',
+      entri: 'kata baru',
       jenis: 'dasar',
       induk: null,
       pemenggalan: '',
       lafal: '',
       varian: '',
       jenis_rujuk: '',
-      lema_rujuk: '',
+      entri_rujuk: '',
       aktif: undefined,
     });
 
@@ -384,10 +384,10 @@ describe('ModelLema', () => {
   });
 
   it('simpan melakukan insert jika id tidak ada', async () => {
-    const row = { id: 9, lema: 'kata' };
+    const row = { id: 9, entri: 'kata' };
     db.query.mockResolvedValue({ rows: [row] });
 
-    const result = await ModelLema.simpan({ lema: 'kata', jenis: 'dasar', aktif: 0 });
+    const result = await ModelEntri.simpan({ entri: 'kata', jenis: 'dasar', aktif: 0 });
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO entri'),
@@ -399,7 +399,7 @@ describe('ModelLema', () => {
   it('simpan insert memakai aktif default 1 jika aktif tidak diberikan', async () => {
     db.query.mockResolvedValue({ rows: [{ id: 10 }] });
 
-    await ModelLema.simpan({ lema: 'kata', jenis: 'dasar' });
+    await ModelEntri.simpan({ entri: 'kata', jenis: 'dasar' });
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO entri'),
@@ -410,8 +410,8 @@ describe('ModelLema', () => {
   it('hapus mengembalikan true/false berdasarkan rowCount', async () => {
     db.query.mockResolvedValueOnce({ rowCount: 1 }).mockResolvedValueOnce({ rowCount: 0 });
 
-    const deleted = await ModelLema.hapus(10);
-    const missing = await ModelLema.hapus(11);
+    const deleted = await ModelEntri.hapus(10);
+    const missing = await ModelEntri.hapus(11);
 
     expect(deleted).toBe(true);
     expect(missing).toBe(false);
@@ -420,7 +420,7 @@ describe('ModelLema', () => {
   it('ambilMaknaById mengembalikan null jika tidak ditemukan', async () => {
     db.query.mockResolvedValue({ rows: [] });
 
-    const result = await ModelLema.ambilMaknaById(12);
+    const result = await ModelEntri.ambilMaknaById(12);
 
     expect(result).toBeNull();
   });
@@ -429,7 +429,7 @@ describe('ModelLema', () => {
     const row = { id: 12, makna: 'arti' };
     db.query.mockResolvedValue({ rows: [row] });
 
-    const result = await ModelLema.ambilMaknaById(12);
+    const result = await ModelEntri.ambilMaknaById(12);
 
     expect(result).toEqual(row);
   });
@@ -437,8 +437,8 @@ describe('ModelLema', () => {
   it('simpanMakna melakukan update dan insert', async () => {
     db.query.mockResolvedValueOnce({ rows: [{ id: 1 }] }).mockResolvedValueOnce({ rows: [{ id: 2 }] });
 
-    const updated = await ModelLema.simpanMakna({ id: 1, entri_id: 8, makna: 'arti' });
-    const inserted = await ModelLema.simpanMakna({ entri_id: 8, makna: 'arti' });
+    const updated = await ModelEntri.simpanMakna({ id: 1, entri_id: 8, makna: 'arti' });
+    const inserted = await ModelEntri.simpanMakna({ entri_id: 8, makna: 'arti' });
 
     expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('UPDATE makna SET entri_id = $1'),
       [8, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null, 1]);
@@ -451,8 +451,8 @@ describe('ModelLema', () => {
   it('hapusMakna mengembalikan true/false berdasarkan rowCount', async () => {
     db.query.mockResolvedValueOnce({ rowCount: 1 }).mockResolvedValueOnce({ rowCount: 0 });
 
-    const deleted = await ModelLema.hapusMakna(20);
-    const missing = await ModelLema.hapusMakna(21);
+    const deleted = await ModelEntri.hapusMakna(20);
+    const missing = await ModelEntri.hapusMakna(21);
 
     expect(deleted).toBe(true);
     expect(missing).toBe(false);
@@ -461,7 +461,7 @@ describe('ModelLema', () => {
   it('ambilContohById mengembalikan null jika tidak ditemukan', async () => {
     db.query.mockResolvedValue({ rows: [] });
 
-    const result = await ModelLema.ambilContohById(30);
+    const result = await ModelEntri.ambilContohById(30);
 
     expect(result).toBeNull();
   });
@@ -470,7 +470,7 @@ describe('ModelLema', () => {
     const row = { id: 30, contoh: 'contoh' };
     db.query.mockResolvedValue({ rows: [row] });
 
-    const result = await ModelLema.ambilContohById(30);
+    const result = await ModelEntri.ambilContohById(30);
 
     expect(result).toEqual(row);
   });
@@ -478,8 +478,8 @@ describe('ModelLema', () => {
   it('simpanContoh melakukan update dan insert', async () => {
     db.query.mockResolvedValueOnce({ rows: [{ id: 41 }] }).mockResolvedValueOnce({ rows: [{ id: 42 }] });
 
-    const updated = await ModelLema.simpanContoh({ id: 41, makna_id: 11, contoh: 'contoh' });
-    const inserted = await ModelLema.simpanContoh({ makna_id: 11, contoh: 'contoh' });
+    const updated = await ModelEntri.simpanContoh({ id: 41, makna_id: 11, contoh: 'contoh' });
+    const inserted = await ModelEntri.simpanContoh({ makna_id: 11, contoh: 'contoh' });
 
     expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('UPDATE contoh SET makna_id = $1'),
       [11, 1, 'contoh', null, null, null, 0, null, 41]);
@@ -492,8 +492,8 @@ describe('ModelLema', () => {
   it('hapusContoh mengembalikan true/false berdasarkan rowCount', async () => {
     db.query.mockResolvedValueOnce({ rowCount: 1 }).mockResolvedValueOnce({ rowCount: 0 });
 
-    const deleted = await ModelLema.hapusContoh(50);
-    const missing = await ModelLema.hapusContoh(51);
+    const deleted = await ModelEntri.hapusContoh(50);
+    const missing = await ModelEntri.hapusContoh(51);
 
     expect(deleted).toBe(true);
     expect(missing).toBe(false);

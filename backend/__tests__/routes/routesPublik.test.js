@@ -16,13 +16,16 @@ jest.mock('../../models/modelGlosarium', () => ({
 
 jest.mock('../../models/modelLabel', () => ({
   ambilSemuaKategori: jest.fn(),
-  cariLemaPerLabel: jest.fn(),
+  cariEntriPerLabel: jest.fn(),
 }));
 
-jest.mock('../../models/modelLema', () => ({
-  autocomplete: jest.fn(),
-  saranLema: jest.fn(),
-}));
+jest.mock('../../models/modelEntri', () => {
+  const saranEntri = jest.fn();
+  return {
+    autocomplete: jest.fn(),
+    saranEntri,
+  };
+});
 
 jest.mock('../../models/modelTesaurus', () => ({
   autocomplete: jest.fn(),
@@ -40,7 +43,7 @@ jest.mock('../../services/layananTesaurusPublik', () => ({
 
 const ModelGlosarium = require('../../models/modelGlosarium');
 const ModelLabel = require('../../models/modelLabel');
-const ModelLema = require('../../models/modelLema');
+const ModelEntri = require('../../models/modelEntri');
 const ModelTesaurus = require('../../models/modelTesaurus');
 const layananKamusPublik = require('../../services/layananKamusPublik');
 const layananTesaurusPublik = require('../../services/layananTesaurusPublik');
@@ -58,7 +61,7 @@ function createApp() {
 describe('routes backend', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    ModelLema.saranLema.mockResolvedValue([]);
+    ModelEntri.saranEntri.mockResolvedValue([]);
     delete process.env.JWT_SECRET;
   });
 
@@ -171,17 +174,17 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/kamus/kategori/:kategori/:kode memanggil model label', async () => {
-    ModelLabel.cariLemaPerLabel.mockResolvedValue({ data: [], total: 0, label: null });
+    ModelLabel.cariEntriPerLabel.mockResolvedValue({ data: [], total: 0, label: null });
 
     const response = await request(createApp())
       .get('/api/publik/kamus/kategori/ragam/umum%20sekali?limit=999&offset=-5');
 
     expect(response.status).toBe(200);
-    expect(ModelLabel.cariLemaPerLabel).toHaveBeenCalledWith('ragam', 'umum sekali', 200, 0);
+    expect(ModelLabel.cariEntriPerLabel).toHaveBeenCalledWith('ragam', 'umum sekali', 200, 0);
   });
 
   it('GET /api/publik/kamus/kategori/:kategori/:kode meneruskan error', async () => {
-    ModelLabel.cariLemaPerLabel.mockRejectedValue(new Error('label gagal'));
+    ModelLabel.cariEntriPerLabel.mockRejectedValue(new Error('label gagal'));
 
     const response = await request(createApp())
       .get('/api/publik/kamus/kategori/ragam/cak');
@@ -200,7 +203,7 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/kamus/autocomplete/:kata mengembalikan data', async () => {
-    ModelLema.autocomplete.mockResolvedValue(['kata']);
+    ModelEntri.autocomplete.mockResolvedValue(['kata']);
 
     const response = await request(createApp()).get('/api/publik/kamus/autocomplete/kat');
 
@@ -209,7 +212,7 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/kamus/autocomplete/:kata meneruskan error', async () => {
-    ModelLema.autocomplete.mockRejectedValue(new Error('ac gagal'));
+    ModelEntri.autocomplete.mockRejectedValue(new Error('ac gagal'));
 
     const response = await request(createApp()).get('/api/publik/kamus/autocomplete/kat');
 
@@ -235,12 +238,12 @@ describe('routes backend', () => {
       data: [],
       total: 0,
     });
-    ModelLema.saranLema.mockResolvedValue(['kata', 'kita']);
+    ModelEntri.saranEntri.mockResolvedValue(['kata', 'kita']);
 
     const response = await request(createApp()).get('/api/publik/kamus/cari/tidak%20ada');
 
     expect(response.status).toBe(200);
-    expect(ModelLema.saranLema).toHaveBeenCalledWith('tidak ada');
+    expect(ModelEntri.saranEntri).toHaveBeenCalledWith('tidak ada');
     expect(response.body.saran).toEqual(['kata', 'kita']);
   });
 
@@ -255,7 +258,7 @@ describe('routes backend', () => {
 
   it('GET /api/publik/kamus/detail/:entri mengembalikan 404 saat data null', async () => {
     layananKamusPublik.ambilDetailKamus.mockResolvedValue(null);
-    ModelLema.saranLema.mockResolvedValue(['kata']);
+    ModelEntri.saranEntri.mockResolvedValue(['kata']);
 
     const response = await request(createApp()).get('/api/publik/kamus/detail/tidak-ada');
 
@@ -265,12 +268,12 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/kamus/detail/:entri mengembalikan data saat ditemukan', async () => {
-    layananKamusPublik.ambilDetailKamus.mockResolvedValue({ lema: 'kata' });
+    layananKamusPublik.ambilDetailKamus.mockResolvedValue({ entri: 'kata' });
 
     const response = await request(createApp()).get('/api/publik/kamus/detail/kata');
 
     expect(response.status).toBe(200);
-    expect(response.body.lema).toBe('kata');
+    expect(response.body.entri).toBe('kata');
   });
 
   it('GET /api/publik/kamus/detail/:entri meneruskan error', async () => {

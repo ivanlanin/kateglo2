@@ -7,7 +7,7 @@ import { useStatistikAdmin } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 
 const kartuData = [
-  { key: 'lema', label: 'Lema', warna: 'text-blue-600', link: '/redaksi/kamus' },
+  { key: 'entri', label: 'Entri', warna: 'text-blue-600', link: '/redaksi/kamus' },
   { key: 'tesaurus', label: 'Tesaurus', warna: 'text-emerald-600', link: '/redaksi/tesaurus' },
   { key: 'glosarium', label: 'Glosarium', warna: 'text-amber-600', link: '/redaksi/glosarium' },
   { key: 'pengguna', label: 'Pengguna', warna: 'text-purple-600', link: '/redaksi/pengguna' },

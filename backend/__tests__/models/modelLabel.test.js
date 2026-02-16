@@ -31,19 +31,19 @@ describe('ModelLabel', () => {
     expect(result.jenis).toHaveLength(6);
   });
 
-  it('cariLemaPerLabel mengembalikan kosong untuk kategori tidak valid', async () => {
-    const result = await ModelLabel.cariLemaPerLabel('unknown', 'x', 10, 0);
+  it('cariEntriPerLabel mengembalikan kosong untuk kategori tidak valid', async () => {
+    const result = await ModelLabel.cariEntriPerLabel('unknown', 'x', 10, 0);
 
     expect(db.query).not.toHaveBeenCalled();
     expect(result).toEqual({ data: [], total: 0, label: null });
   });
 
-  it('cariLemaPerLabel kategori abjad valid', async () => {
+  it('cariEntriPerLabel kategori abjad valid', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '2' }] })
       .mockResolvedValueOnce({ rows: [{ id: 1, lema: 'Akar' }] });
 
-    const result = await ModelLabel.cariLemaPerLabel('abjad', 'a', 5, 1);
+    const result = await ModelLabel.cariEntriPerLabel('abjad', 'a', 5, 1);
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
@@ -59,19 +59,19 @@ describe('ModelLabel', () => {
     expect(result.label).toEqual({ kode: 'A', nama: 'A' });
   });
 
-  it('cariLemaPerLabel kategori abjad invalid', async () => {
-    const result = await ModelLabel.cariLemaPerLabel('abjad', '12', 5, 0);
+  it('cariEntriPerLabel kategori abjad invalid', async () => {
+    const result = await ModelLabel.cariEntriPerLabel('abjad', '12', 5, 0);
 
     expect(db.query).not.toHaveBeenCalled();
     expect(result).toEqual({ data: [], total: 0, label: null });
   });
 
-  it('cariLemaPerLabel kategori jenis valid', async () => {
+  it('cariEntriPerLabel kategori jenis valid', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '1' }] })
       .mockResolvedValueOnce({ rows: [{ id: 2, lema: 'berkata', jenis: 'berimbuhan' }] });
 
-    const result = await ModelLabel.cariLemaPerLabel('jenis', 'berimbuhan', 10, 2);
+    const result = await ModelLabel.cariEntriPerLabel('jenis', 'berimbuhan', 10, 2);
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
@@ -82,12 +82,12 @@ describe('ModelLabel', () => {
     expect(result.label).toEqual({ kode: 'berimbuhan', nama: 'berimbuhan' });
   });
 
-  it('cariLemaPerLabel kategori jenis valid dengan limit/offset default', async () => {
+  it('cariEntriPerLabel kategori jenis valid dengan limit/offset default', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '1' }] })
       .mockResolvedValueOnce({ rows: [{ id: 9, lema: 'kata', jenis: 'dasar' }] });
 
-    await ModelLabel.cariLemaPerLabel('jenis', 'dasar');
+    await ModelLabel.cariEntriPerLabel('jenis', 'dasar');
 
     expect(db.query).toHaveBeenNthCalledWith(
       2,
@@ -96,20 +96,20 @@ describe('ModelLabel', () => {
     );
   });
 
-  it('cariLemaPerLabel kategori jenis invalid', async () => {
-    const result = await ModelLabel.cariLemaPerLabel('jenis', 'random', 10, 0);
+  it('cariEntriPerLabel kategori jenis invalid', async () => {
+    const result = await ModelLabel.cariEntriPerLabel('jenis', 'random', 10, 0);
 
     expect(db.query).not.toHaveBeenCalled();
     expect(result).toEqual({ data: [], total: 0, label: null });
   });
 
-  it('cariLemaPerLabel kategori label memakai kode dan nama saat label ditemukan', async () => {
+  it('cariEntriPerLabel kategori label memakai kode dan nama saat label ditemukan', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ kode: 'cak', nama: 'cakapan', keterangan: '' }] })
       .mockResolvedValueOnce({ rows: [{ total: '3' }] })
       .mockResolvedValueOnce({ rows: [{ id: 3, lema: 'kata' }] });
 
-    const result = await ModelLabel.cariLemaPerLabel('ragam', 'cak', 20, 0);
+    const result = await ModelLabel.cariEntriPerLabel('ragam', 'cak', 20, 0);
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
@@ -130,13 +130,13 @@ describe('ModelLabel', () => {
     expect(result.label).toEqual({ kode: 'cak', nama: 'cakapan', keterangan: '' });
   });
 
-  it('cariLemaPerLabel kategori label hanya kode saat label tidak ditemukan', async () => {
+  it('cariEntriPerLabel kategori label hanya kode saat label tidak ditemukan', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [] })
       .mockResolvedValueOnce({ rows: [{ total: '0' }] })
       .mockResolvedValueOnce({ rows: [] });
 
-    const result = await ModelLabel.cariLemaPerLabel('bahasa', 'id', 3, 4);
+    const result = await ModelLabel.cariEntriPerLabel('bahasa', 'id', 3, 4);
 
     expect(db.query).toHaveBeenNthCalledWith(
       2,

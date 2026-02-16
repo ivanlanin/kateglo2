@@ -4,7 +4,7 @@
 
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { cariKamus, ambilKategoriKamus, ambilLemaPerKategori } from '../../api/apiPublik';
+import { cariKamus, ambilKategoriKamus, ambilEntriPerKategori } from '../../api/apiPublik';
 import Paginasi from '../../komponen/bersama/Paginasi';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import TeksLema from '../../komponen/publik/TeksLema';
@@ -56,8 +56,8 @@ function Kamus() {
     isError: isErrorKategori,
     error: errorKategori,
   } = useQuery({
-    queryKey: ['kamus-kategori-lema', kategori, kode, offsetParam],
-    queryFn: () => ambilLemaPerKategori(kategori, kode, { limit, offset: offsetParam }),
+    queryKey: ['kamus-kategori-entri', kategori, kode, offsetParam],
+    queryFn: () => ambilEntriPerKategori(kategori, kode, { limit, offset: offsetParam }),
     enabled: modeKategori,
   });
 
@@ -151,10 +151,10 @@ function Kamus() {
                 {resultsPencarian.map((item) => (
                   <Link
                     key={item.id}
-                    to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
+                    to={`/kamus/detail/${encodeURIComponent(item.entri)}`}
                     className="kamus-kategori-grid-link"
                   >
-                    <TeksLema lema={item.lema} />
+                    <TeksLema lema={item.entri} />
                   </Link>
                 ))}
               </div>
@@ -177,10 +177,10 @@ function Kamus() {
                 {resultsKategori.map((item) => (
                   <Link
                     key={item.id}
-                    to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
+                    to={`/kamus/detail/${encodeURIComponent(item.entri)}`}
                     className="kamus-kategori-grid-link"
                   >
-                    <TeksLema lema={item.lema} />
+                    <TeksLema lema={item.entri} />
                   </Link>
                 ))}
               </div>

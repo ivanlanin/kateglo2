@@ -57,17 +57,17 @@ describe('KamusDetail', () => {
         isLoading: false,
         isError: false,
         data: {
-          lema: 'kata',
+          entri: 'kata',
           lafal: 'ka-ta',
           pemenggalan: 'ka-ta',
           jenis: 'dasar',
           makna: [{ id: 1, kelas_kata: 'n', makna: 'unsur bahasa' }],
           serupa: [
-            { id: 11, lema: 'kata (1)', lafal: null },
-            { lema: 'kata- (2)', lafal: 'ka.ta' },
+            { id: 11, entri: 'kata (1)', lafal: null },
+            { entri: 'kata- (2)', lafal: 'ka.ta' },
           ],
-          sublema: {
-            turunan: [{ id: 7, lema: 'berkata' }],
+          subentri: {
+            turunan: [{ id: 7, entri: 'berkata' }],
           },
           tesaurus: { sinonim: ['ucapan'], antonim: [] },
           glosarium: [{ indonesia: 'kata kunci', asing: 'keyword' }],
@@ -95,7 +95,7 @@ describe('KamusDetail', () => {
       isLoading: false,
       isError: false,
       data: {
-        lema: 'aktip',
+        entri: 'aktip',
         varian: 'aktif',
         makna: [
           {
@@ -105,7 +105,7 @@ describe('KamusDetail', () => {
             makna: 'giat',
           },
         ],
-        sublema: {},
+        subentri: {},
         tesaurus: { sinonim: [], antonim: [] },
         glosarium: [],
       },
@@ -119,16 +119,16 @@ describe('KamusDetail', () => {
 
   it('menampilkan mode rujukan dan metadata makna opsional', () => {
     const dataRujukan = {
-      lema: 'aktip',
+      entri: 'aktip',
       rujukan: true,
-      lema_rujuk: 'aktif',
+      entri_rujuk: 'aktif',
     };
 
     const dataDetail = {
-      lema: 'kata',
+      entri: 'kata',
       pemenggalan: 'ka ta',
       jenis: 'turunan',
-      induk: [{ id: 31, lema: 'kata dasar' }],
+      induk: [{ id: 31, entri: 'kata dasar' }],
       makna: [
         {
           id: 11,
@@ -153,8 +153,8 @@ describe('KamusDetail', () => {
           contoh: [],
         },
       ],
-      sublema: {
-        turunan: [{ id: 21, lema: 'berkata' }, { id: 22, lema: 'perkataan' }],
+      subentri: {
+        turunan: [{ id: 21, entri: 'berkata' }, { id: 22, entri: 'perkataan' }],
       },
       tesaurus: { sinonim: ['sinonim satu', 'sinonim dua'], antonim: ['antonim satu', 'antonim dua'] },
       glosarium: [
@@ -220,9 +220,9 @@ describe('KamusDetail', () => {
       isLoading: false,
       isError: false,
       data: {
-        lema: 'tanpa-makna',
+        entri: 'tanpa-makna',
         makna: [],
-        sublema: {},
+        subentri: {},
         tesaurus: { sinonim: [], antonim: [] },
         glosarium: [],
       },
@@ -254,7 +254,7 @@ describe('KamusDetail', () => {
       isLoading: false,
       isError: false,
       data: {
-        lema: 'fallback',
+        entri: 'fallback',
         tesaurus: { sinonim: [], antonim: [] },
         glosarium: [],
       },
@@ -271,7 +271,7 @@ describe('KamusDetail', () => {
       isLoading: false,
       isError: false,
       data: {
-        lema: 'opsional-kosong',
+        entri: 'opsional-kosong',
         makna: [
           {
             id: 99,
@@ -280,7 +280,7 @@ describe('KamusDetail', () => {
             contoh: [{ id: 991, contoh: 'contoh saja', makna_contoh: '' }],
           },
         ],
-        sublema: {},
+        subentri: {},
       },
     });
 
@@ -296,9 +296,9 @@ describe('KamusDetail', () => {
       isLoading: false,
       isError: false,
       data: {
-        lema: 'tunggal',
+        entri: 'tunggal',
         makna: [{ id: 1, kelas_kata: '-', makna: 'hanya satu makna' }],
-        sublema: {},
+        subentri: {},
         tesaurus: { sinonim: [], antonim: [] },
         glosarium: [],
       },
@@ -315,9 +315,9 @@ describe('KamusDetail', () => {
       isLoading: false,
       isError: false,
       data: {
-        lema: 'satu-kategori',
+        entri: 'satu-kategori',
         makna: [{ id: 1, kelas_kata: '-', makna: 'makna contoh' }],
-        sublema: {},
+        subentri: {},
         tesaurus: { sinonim: ['setara'], antonim: [] },
         glosarium: [],
       },
@@ -336,9 +336,9 @@ describe('KamusDetail', () => {
       isLoading: false,
       isError: false,
       data: {
-        lema: 'antonim-saja',
+        entri: 'antonim-saja',
         makna: [{ id: 1, kelas_kata: '-', makna: 'makna contoh' }],
-        sublema: {},
+        subentri: {},
         tesaurus: { sinonim: [], antonim: ['lawan kata'] },
         glosarium: [],
       },
@@ -357,12 +357,12 @@ describe('KamusDetail', () => {
       isLoading: false,
       isError: false,
       data: {
-        lema: 'per (1)',
+        entri: 'per (1)',
         lafal: 'per (2)',
         pemenggalan: 'per (3)',
         makna: [{ id: 1, kelas_kata: '-', makna: 'makna contoh' }],
-        sublema: {},
-        serupa: [{ id: 2, lema: 'per- (4)', lafal: 'per (5)' }],
+        subentri: {},
+        serupa: [{ id: 2, entri: 'per- (4)', lafal: 'per (5)' }],
         tesaurus: { sinonim: [], antonim: [] },
         glosarium: [],
       },

@@ -6,8 +6,8 @@
 const db = require('../db');
 const autocomplete = require('../db/autocomplete');
 
-class ModelLema {
-  static normalisasiKunciLema(teks) {
+class ModelEntri {
+  static normalisasiKunciEntri(teks) {
     if (!teks) return '';
     return teks
       .trim()
@@ -21,12 +21,12 @@ class ModelLema {
   }
 
   /**
-   * Cari lema di kamus dengan strategi prefix-first + contains-fallback
+  * Cari entri di kamus dengan strategi prefix-first + contains-fallback
    * @param {string} query - Kata pencarian
    * @param {number} limit - Batas hasil
-   * @returns {Promise<Array>} Daftar lema dengan preview makna
+  * @returns {Promise<Array>} Daftar entri dengan preview makna
    */
-  static async cariLema(query, limit = 100, offset = 0) {
+  static async cariEntri(query, limit = 100, offset = 0) {
     const normalizedQuery = query.trim();
     const cappedLimit = Math.min(Math.max(Number(limit) || 100, 1), 200);
     const safeOffset = Math.max(Number(offset) || 0, 0);
@@ -34,7 +34,7 @@ class ModelLema {
     // Gunakan UNION untuk menggabungkan prefix dan contains dengan urutan stabil
     const baseSql = `
       WITH hasil AS (
-           SELECT id, entri AS lema, jenis, lafal, jenis_rujuk, lema_rujuk,
+           SELECT id, entri, jenis, lafal, jenis_rujuk, lema_rujuk AS entri_rujuk,
             CASE WHEN LOWER(entri) = LOWER($1) THEN 0
               WHEN entri ILIKE $2 THEN 1
                     ELSE 2 END AS prioritas
@@ -54,9 +54,9 @@ class ModelLema {
 
     const dataResult = await db.query(
       `${baseSql}
-       SELECT id, lema, jenis, lafal, jenis_rujuk, lema_rujuk
+      SELECT id, entri, jenis, lafal, jenis_rujuk, entri_rujuk
        FROM hasil
-      ORDER BY prioritas, lema ASC
+          ORDER BY prioritas, entri ASC
        LIMIT $4 OFFSET $5`,
       [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`, cappedLimit, safeOffset]
     );
@@ -65,14 +65,14 @@ class ModelLema {
   }
 
   /**
-   * Ambil lema berdasarkan teks (case-insensitive)
-   * @param {string} teks - Teks lema
-   * @returns {Promise<Object|null>} Data lema
+  * Ambil entri berdasarkan teks (case-insensitive)
+  * @param {string} teks - Teks entri
+  * @returns {Promise<Object|null>} Data entri
    */
-  static async ambilLema(teks) {
+  static async ambilEntri(teks) {
     const result = await db.query(
-      `SELECT id, legacy_eid, entri AS lema, jenis, induk, pemenggalan, lafal, varian,
-              jenis_rujuk, lema_rujuk, aktif
+            `SELECT id, legacy_eid, entri, jenis, induk, pemenggalan, lafal, varian,
+              jenis_rujuk, lema_rujuk AS entri_rujuk, aktif
        FROM entri
        WHERE LOWER(entri) = LOWER($1)
        LIMIT 1`,
@@ -82,19 +82,19 @@ class ModelLema {
   }
 
   /**
-   * Ambil daftar lema serupa (homonim/homofon/homograf berbasis normalisasi)
-   * @param {string} teks - Teks lema acuan
+  * Ambil daftar entri serupa (homonim/homofon/homograf berbasis normalisasi)
+  * @param {string} teks - Teks entri acuan
    * @param {number} limit - Batas hasil
-   * @returns {Promise<Array>} Daftar lema ringkas {id, lema, lafal}
+  * @returns {Promise<Array>} Daftar entri ringkas {id, entri, lafal}
    */
-  static async ambilLemaSerupa(teks, limit = 20) {
-    const kunci = ModelLema.normalisasiKunciLema(teks);
+  static async ambilEntriSerupa(teks, limit = 20) {
+    const kunci = ModelEntri.normalisasiKunciEntri(teks);
     if (!kunci) return [];
 
     const cappedLimit = Math.min(Math.max(Number(limit) || 20, 1), 100);
 
     const result = await db.query(
-      `SELECT id, entri AS lema, lafal
+      `SELECT id, entri, lafal
        FROM entri
        WHERE aktif = 1
          AND LOWER(REGEXP_REPLACE(REPLACE(entri, '-', ''), '\\s*\\([0-9]+\\)\\s*$', '')) = $1
@@ -110,11 +110,11 @@ class ModelLema {
   }
 
   /**
-   * Ambil semua makna untuk sebuah lema
-   * @param {number} lemaId - ID lema
+  * Ambil semua makna untuk sebuah entri
+  * @param {number} entriId - ID entri
    * @returns {Promise<Array>} Daftar makna dengan contoh
    */
-  static async ambilMakna(lemaId) {
+  static async ambilMakna(entriId) {
     const result = await db.query(
       `SELECT id, polisem, urutan, makna, ragam, ragam_varian,
               kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat,
@@ -122,7 +122,7 @@ class ModelLema {
        FROM makna
       WHERE entri_id = $1
        ORDER BY urutan ASC, id ASC`,
-      [lemaId]
+      [entriId]
     );
     return result.rows;
   }
@@ -146,13 +146,13 @@ class ModelLema {
   }
 
   /**
-   * Ambil sublema (berimbuhan, gabungan, idiom, peribahasa) dari lema induk
-   * @param {number} indukId - ID lema induk
-   * @returns {Promise<Array>} Daftar sublema
+  * Ambil subentri (berimbuhan, gabungan, idiom, peribahasa) dari entri induk
+  * @param {number} indukId - ID entri induk
+  * @returns {Promise<Array>} Daftar subentri
    */
-  static async ambilSublema(indukId) {
+  static async ambilSubentri(indukId) {
     const result = await db.query(
-      `SELECT id, entri AS lema, jenis, lafal
+      `SELECT id, entri, jenis, lafal
        FROM entri
        WHERE induk = $1 AND aktif = 1
        ORDER BY jenis, entri`,
@@ -162,22 +162,22 @@ class ModelLema {
   }
 
   /**
-   * Ambil lema induk
-   * @param {number} indukId - ID lema induk
-   * @returns {Promise<Object|null>} Data lema induk
+  * Ambil entri induk
+  * @param {number} indukId - ID entri induk
+  * @returns {Promise<Object|null>} Data entri induk
    */
   /**
    * Saran lema mirip menggunakan trigram similarity (pg_trgm)
    * @param {string} teks - Kata yang dicari
    * @param {number} limit - Batas hasil
-   * @returns {Promise<string[]>} Daftar lema mirip
+  * @returns {Promise<string[]>} Daftar entri mirip
    */
-  static async saranLema(teks, limit = 5) {
+  static async saranEntri(teks, limit = 5) {
     if (!teks || !teks.trim()) return [];
     const cappedLimit = Math.min(Math.max(Number(limit) || 5, 1), 20);
     const result = await db.query(
-      `SELECT lema FROM (
-        SELECT DISTINCT entri AS lema, similarity(entri, $1) AS sim
+      `SELECT entri FROM (
+        SELECT DISTINCT entri, similarity(entri, $1) AS sim
         FROM entri
         WHERE aktif = 1 AND similarity(entri, $1) > 0.2
        ) t
@@ -185,13 +185,13 @@ class ModelLema {
        LIMIT $2`,
       [teks.trim(), cappedLimit]
     );
-    return result.rows.map((r) => r.lema);
+    return result.rows.map((r) => r.entri);
   }
 
   static async ambilInduk(indukId) {
     if (!indukId) return null;
     const result = await db.query(
-      `SELECT id, entri AS lema, jenis
+      `SELECT id, entri, jenis
        FROM entri
        WHERE id = $1`,
       [indukId]
@@ -202,21 +202,21 @@ class ModelLema {
   /**
    * Ambil rantai induk (ancestor chain) dari bawah ke atas, maks 5 level
    * @param {number} indukId - ID induk langsung
-   * @returns {Promise<Array>} Rantai dari akar ke induk langsung [{id, lema}, ...]
+  * @returns {Promise<Array>} Rantai dari akar ke induk langsung [{id, entri}, ...]
    */
   static async ambilRantaiInduk(indukId) {
     if (!indukId) return [];
     const result = await db.query(
       `WITH RECURSIVE rantai AS (
-         SELECT id, entri AS lema, induk, 1 AS depth
+         SELECT id, entri, induk, 1 AS depth
          FROM entri WHERE id = $1
          UNION ALL
-         SELECT p.id, p.entri AS lema, p.induk, r.depth + 1
+         SELECT p.id, p.entri, p.induk, r.depth + 1
          FROM entri p
          JOIN rantai r ON r.induk = p.id
          WHERE r.depth < 5
        )
-       SELECT id, lema FROM rantai ORDER BY depth DESC`,
+       SELECT id, entri FROM rantai ORDER BY depth DESC`,
       [indukId]
     );
     return result.rows;
@@ -247,7 +247,7 @@ class ModelLema {
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-      `SELECT id, entri AS lema, jenis, lafal, aktif, jenis_rujuk, lema_rujuk
+      `SELECT id, entri, jenis, lafal, aktif, jenis_rujuk, lema_rujuk AS entri_rujuk
        FROM entri ${where}
        ORDER BY entri ASC
        LIMIT $${idx} OFFSET $${idx + 1}`,
@@ -258,7 +258,7 @@ class ModelLema {
   }
 
   /**
-   * Hitung total lema
+  * Hitung total entri
    * @returns {Promise<number>}
    */
   static async hitungTotal() {
@@ -267,14 +267,14 @@ class ModelLema {
   }
 
   /**
-   * Ambil lema berdasarkan ID (untuk admin)
+  * Ambil entri berdasarkan ID (untuk admin)
    * @param {number} id
    * @returns {Promise<Object|null>}
    */
   static async ambilDenganId(id) {
     const result = await db.query(
-      `SELECT id, entri AS lema, jenis, induk, pemenggalan, lafal, varian,
-              jenis_rujuk, lema_rujuk, aktif
+            `SELECT id, entri, jenis, induk, pemenggalan, lafal, varian,
+              jenis_rujuk, lema_rujuk AS entri_rujuk, aktif
        FROM entri WHERE id = $1`,
       [id]
     );
@@ -282,37 +282,39 @@ class ModelLema {
   }
 
   /**
-   * Simpan (insert atau update) lema
-   * @param {Object} data - Data lema
+  * Simpan (insert atau update) entri
+  * @param {Object} data - Data entri
    * @param {number} [data.id] - ID untuk update, null/undefined untuk insert
-   * @returns {Promise<Object>} Baris lema yang disimpan
+  * @returns {Promise<Object>} Baris entri yang disimpan
    */
-  static async simpan({ id, lema, jenis, induk, pemenggalan, lafal, varian, jenis_rujuk, lema_rujuk, aktif }) {
+  static async simpan({ id, entri, jenis, induk, pemenggalan, lafal, varian, jenis_rujuk, entri_rujuk, aktif }) {
+    const nilaiEntri = entri;
+    const nilaiEntriRujuk = entri_rujuk;
     if (id) {
       const result = await db.query(
         `UPDATE entri SET entri = $1, jenis = $2, induk = $3, pemenggalan = $4,
                 lafal = $5, varian = $6, jenis_rujuk = $7, lema_rujuk = $8, aktif = $9
          WHERE id = $10
-         RETURNING id, legacy_eid, entri AS lema, jenis, induk, pemenggalan, lafal, varian,
-             jenis_rujuk, lema_rujuk, aktif, legacy_tabel, legacy_tid`,
-        [lema, jenis, induk || null, pemenggalan || null, lafal || null,
-         varian || null, jenis_rujuk || null, lema_rujuk || null, aktif ?? 1, id]
+         RETURNING id, legacy_eid, entri, jenis, induk, pemenggalan, lafal, varian,
+             jenis_rujuk, lema_rujuk AS entri_rujuk, aktif, legacy_tabel, legacy_tid`,
+        [nilaiEntri, jenis, induk || null, pemenggalan || null, lafal || null,
+         varian || null, jenis_rujuk || null, nilaiEntriRujuk || null, aktif ?? 1, id]
       );
       return result.rows[0];
     }
     const result = await db.query(
       `INSERT INTO entri (entri, jenis, induk, pemenggalan, lafal, varian, jenis_rujuk, lema_rujuk, aktif)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-       RETURNING id, legacy_eid, entri AS lema, jenis, induk, pemenggalan, lafal, varian,
-             jenis_rujuk, lema_rujuk, aktif, legacy_tabel, legacy_tid`,
-      [lema, jenis, induk || null, pemenggalan || null, lafal || null,
-       varian || null, jenis_rujuk || null, lema_rujuk || null, aktif ?? 1]
+       RETURNING id, legacy_eid, entri, jenis, induk, pemenggalan, lafal, varian,
+         jenis_rujuk, lema_rujuk AS entri_rujuk, aktif, legacy_tabel, legacy_tid`,
+      [nilaiEntri, jenis, induk || null, pemenggalan || null, lafal || null,
+       varian || null, jenis_rujuk || null, nilaiEntriRujuk || null, aktif ?? 1]
     );
     return result.rows[0];
   }
 
   /**
-   * Hapus lema berdasarkan ID
+  * Hapus entri berdasarkan ID
    * @param {number} id
    * @returns {Promise<boolean>}
    */
@@ -330,7 +332,7 @@ class ModelLema {
    */
   static async ambilMaknaById(id) {
     const result = await db.query(
-      `SELECT id, entri_id AS lema_id, polisem, urutan, makna, ragam, ragam_varian,
+      `SELECT id, entri_id, polisem, urutan, makna, ragam, ragam_varian,
               kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia
        FROM makna WHERE id = $1`,
       [id]
@@ -339,20 +341,20 @@ class ModelLema {
   }
 
   /**
-   * Simpan (insert atau update) makna
+  * Simpan (insert atau update) makna
    * @param {Object} data
    * @returns {Promise<Object>}
    */
-  static async simpanMakna({ id, entri_id, lema_id, polisem, urutan, makna, ragam, ragam_varian,
+  static async simpanMakna({ id, entri_id, polisem, urutan, makna, ragam, ragam_varian,
     kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia }) {
-    const targetEntriId = entri_id ?? lema_id;
+    const targetEntriId = entri_id;
     if (id) {
       const result = await db.query(
         `UPDATE makna SET entri_id = $1, polisem = $2, urutan = $3, makna = $4,
                 ragam = $5, ragam_varian = $6, kelas_kata = $7, bahasa = $8,
                 bidang = $9, kiasan = $10, tipe_penyingkat = $11, ilmiah = $12, kimia = $13
          WHERE id = $14
-         RETURNING id, entri_id AS lema_id, polisem, urutan, makna, ragam, ragam_varian,
+         RETURNING id, entri_id, polisem, urutan, makna, ragam, ragam_varian,
                    kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia`,
         [targetEntriId, polisem ?? 1, urutan ?? 1, makna,
          ragam || null, ragam_varian || null, kelas_kata || null, bahasa || null,
@@ -364,7 +366,7 @@ class ModelLema {
       `INSERT INTO makna (entri_id, polisem, urutan, makna, ragam, ragam_varian,
               kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-       RETURNING id, entri_id AS lema_id, polisem, urutan, makna, ragam, ragam_varian,
+      RETURNING id, entri_id, polisem, urutan, makna, ragam, ragam_varian,
                  kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia`,
       [targetEntriId, polisem ?? 1, urutan ?? 1, makna,
        ragam || null, ragam_varian || null, kelas_kata || null, bahasa || null,
@@ -437,4 +439,4 @@ class ModelLema {
 
 }
 
-module.exports = ModelLema;
+module.exports = ModelEntri;

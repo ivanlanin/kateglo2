@@ -11,7 +11,7 @@ export async function ambilKategoriKamus() {
   return response.data;
 }
 
-export async function ambilLemaPerKategori(kategori, kode, { limit = 20, offset = 0 } = {}) {
+export async function ambilEntriPerKategori(kategori, kode, { limit = 20, offset = 0 } = {}) {
   const response = await klien.get(`/api/publik/kamus/kategori/${encodeURIComponent(kategori)}/${encodeURIComponent(kode)}`, {
     params: { limit, offset },
   });

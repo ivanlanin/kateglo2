@@ -2,9 +2,13 @@
  * @fileoverview Layanan kamus publik — business logic untuk pencarian dan detail kamus
  */
 
-const ModelLema = require('../models/modelLema');
+const ModelEntri = require('../models/modelEntri');
 const ModelTesaurus = require('../models/modelTesaurus');
 const ModelGlosarium = require('../models/modelGlosarium');
+
+function bacaTeksEntri(item) {
+  return item?.entri ?? '';
+}
 
 function parseDaftarRelasi(teks) {
   if (!teks) return [];
@@ -26,13 +30,13 @@ function unikTanpaBedaKapitalisasi(items) {
   return hasil;
 }
 
-function ambilNomorHomonim(lema) {
-  const match = lema.match(/\((\d+)\)\s*$/);
+function ambilNomorHomonim(entri) {
+  const match = entri.match(/\((\d+)\)\s*$/);
   return match ? Number(match[1]) : Number.MAX_SAFE_INTEGER;
 }
 
-function normalisasiUrutSerupa(lema) {
-  return lema
+function normalisasiUrutSerupa(entri) {
+  return entri
     .toLowerCase()
     .replace(/\s*\(\d+\)\s*$/, '')
     .replace(/-/g, '')
@@ -41,73 +45,76 @@ function normalisasiUrutSerupa(lema) {
 
 function urutkanSerupaNatural(items) {
   return [...items].sort((a, b) => {
-    const nomorA = ambilNomorHomonim(a.lema);
-    const nomorB = ambilNomorHomonim(b.lema);
+    const nomorA = ambilNomorHomonim(bacaTeksEntri(a));
+    const nomorB = ambilNomorHomonim(bacaTeksEntri(b));
     if (nomorA !== nomorB) return nomorA - nomorB;
 
-    const keyA = normalisasiUrutSerupa(a.lema);
-    const keyB = normalisasiUrutSerupa(b.lema);
+    const keyA = normalisasiUrutSerupa(bacaTeksEntri(a));
+    const keyB = normalisasiUrutSerupa(bacaTeksEntri(b));
     if (keyA !== keyB) return keyA.localeCompare(keyB, 'id');
 
-    return a.lema.localeCompare(b.lema, 'id');
+    return bacaTeksEntri(a).localeCompare(bacaTeksEntri(b), 'id');
   });
 }
 
 function unikSerupa(items) {
-  const byLema = new Map();
+  const byEntri = new Map();
 
   for (const item of items) {
-    const key = (item.lema || '').toLowerCase();
-    const existing = byLema.get(key);
+    const key = bacaTeksEntri(item).toLowerCase();
+    const existing = byEntri.get(key);
     if (!existing) {
-      byLema.set(key, item);
+      byEntri.set(key, item);
       continue;
     }
 
     if (!existing.lafal && item.lafal) {
-      byLema.set(key, item);
+      byEntri.set(key, item);
     }
   }
 
-  return urutkanSerupaNatural(Array.from(byLema.values()));
+  return urutkanSerupaNatural(Array.from(byEntri.values()));
 }
 
 async function cariKamus(query, { limit = 100, offset = 0 } = {}) {
   const trimmed = (query || '').trim();
   if (!trimmed) return { data: [], total: 0 };
-  return ModelLema.cariLema(trimmed, limit, offset);
+  return ModelEntri.cariEntri(trimmed, limit, offset);
 }
 
 async function ambilDetailKamus(entri) {
   const decodedEntri = decodeURIComponent((entri || '').trim());
   if (!decodedEntri) return null;
 
-  const lema = await ModelLema.ambilLema(decodedEntri);
-  if (!lema) return null;
+  const dataEntri = await ModelEntri.ambilEntri(decodedEntri);
+  if (!dataEntri) return null;
 
   // Jika ini rujukan, kembalikan info rujukan
-  if (lema.jenis_rujuk && lema.lema_rujuk) {
+  const entriTeks = bacaTeksEntri(dataEntri);
+  const entriRujuk = dataEntri.entri_rujuk;
+
+  if (dataEntri.jenis_rujuk && entriRujuk) {
     return {
-      lema: lema.lema,
-      jenis: lema.jenis,
-      jenis_rujuk: lema.jenis_rujuk,
-      lema_rujuk: lema.lema_rujuk,
+      entri: entriTeks,
+      jenis: dataEntri.jenis,
+      jenis_rujuk: dataEntri.jenis_rujuk,
+      entri_rujuk: entriRujuk,
       rujukan: true,
     };
   }
 
-  const [maknaList, sublema, rantaiInduk, tesaurusDetail, glosarium, lemaSerupa] = await Promise.all([
-    ModelLema.ambilMakna(lema.id),
-    ModelLema.ambilSublema(lema.id),
-    ModelLema.ambilRantaiInduk(lema.induk),
-    ModelTesaurus.ambilDetail(lema.lema),
-    ModelGlosarium.cariFrasaMengandungKataUtuh(lema.lema),
-    ModelLema.ambilLemaSerupa(lema.lema),
+  const [maknaList, subentri, rantaiInduk, tesaurusDetail, glosarium, entriSerupa] = await Promise.all([
+    ModelEntri.ambilMakna(dataEntri.id),
+    ModelEntri.ambilSubentri(dataEntri.id),
+    ModelEntri.ambilRantaiInduk(dataEntri.induk),
+    ModelTesaurus.ambilDetail(entriTeks),
+    ModelGlosarium.cariFrasaMengandungKataUtuh(entriTeks),
+    ModelEntri.ambilEntriSerupa(entriTeks),
   ]);
 
   // Ambil contoh untuk semua makna
   const maknaIds = maknaList.map((m) => m.id);
-  const contohList = await ModelLema.ambilContoh(maknaIds);
+  const contohList = await ModelEntri.ambilContoh(maknaIds);
 
   // Kelompokkan contoh per makna
   const contohPerMakna = new Map();
@@ -123,13 +130,13 @@ async function ambilDetailKamus(entri) {
     contoh: contohPerMakna.get(m.id) || [],
   }));
 
-  // Kelompokkan sublema per jenis
-  const sublemaPerJenis = {};
-  for (const s of sublema) {
-    if (!sublemaPerJenis[s.jenis]) {
-      sublemaPerJenis[s.jenis] = [];
+  // Kelompokkan subentri per jenis
+  const subentriPerJenis = {};
+  for (const s of subentri) {
+    if (!subentriPerJenis[s.jenis]) {
+      subentriPerJenis[s.jenis] = [];
     }
-    sublemaPerJenis[s.jenis].push(s);
+    subentriPerJenis[s.jenis].push(s);
   }
 
   const tesaurus = tesaurusDetail
@@ -139,23 +146,23 @@ async function ambilDetailKamus(entri) {
     }
     : { sinonim: [], antonim: [] };
 
-  const serupa = unikSerupa((lemaSerupa || [])
-    .filter((item) => item.id !== lema.id)
+  const serupa = unikSerupa((entriSerupa || [])
+    .filter((item) => item.id !== dataEntri.id)
     .map((item) => ({
       id: item.id,
-      lema: item.lema || '',
+      entri: bacaTeksEntri(item),
       lafal: item.lafal || null,
     })));
 
   return {
-    lema: lema.lema,
-    jenis: lema.jenis,
-    pemenggalan: lema.pemenggalan,
-    lafal: lema.lafal,
-    varian: lema.varian,
-    induk: rantaiInduk.length > 0 ? rantaiInduk.map((r) => ({ id: r.id, lema: r.lema })) : null,
+    entri: entriTeks,
+    jenis: dataEntri.jenis,
+    pemenggalan: dataEntri.pemenggalan,
+    lafal: dataEntri.lafal,
+    varian: dataEntri.varian,
+    induk: rantaiInduk.length > 0 ? rantaiInduk.map((r) => ({ id: r.id, entri: bacaTeksEntri(r) })) : null,
     makna,
-    sublema: sublemaPerJenis,
+    subentri: subentriPerJenis,
     tesaurus,
     serupa,
     glosarium,

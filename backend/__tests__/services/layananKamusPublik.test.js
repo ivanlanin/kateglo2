@@ -3,16 +3,21 @@
  * @tested_in backend/services/layananKamusPublik.js
  */
 
-jest.mock('../../models/modelLema', () => ({
-  cariLema: jest.fn(),
-  ambilLema: jest.fn(),
-  ambilLemaSerupa: jest.fn(),
-  ambilMakna: jest.fn(),
-  ambilContoh: jest.fn(),
-  ambilSublema: jest.fn(),
-  ambilInduk: jest.fn(),
-  ambilRantaiInduk: jest.fn()
-}));
+jest.mock('../../models/modelEntri', () => {
+  const cariEntri = jest.fn();
+  const ambilEntri = jest.fn();
+  const ambilEntriSerupa = jest.fn();
+  return {
+    cariEntri,
+    ambilEntri,
+    ambilEntriSerupa,
+    ambilMakna: jest.fn(),
+    ambilContoh: jest.fn(),
+    ambilSubentri: jest.fn(),
+    ambilInduk: jest.fn(),
+    ambilRantaiInduk: jest.fn(),
+  };
+});
 
 jest.mock('../../models/modelTesaurus', () => ({
   ambilDetail: jest.fn()
@@ -22,7 +27,7 @@ jest.mock('../../models/modelGlosarium', () => ({
   cariFrasaMengandungKataUtuh: jest.fn()
 }));
 
-const ModelLema = require('../../models/modelLema');
+const ModelEntri = require('../../models/modelEntri');
 const ModelTesaurus = require('../../models/modelTesaurus');
 const ModelGlosarium = require('../../models/modelGlosarium');
 const { cariKamus, ambilDetailKamus } = require('../../services/layananKamusPublik');
@@ -38,95 +43,95 @@ describe('layananKamusPublik.cariKamus', () => {
     const result = await cariKamus('   ');
 
     expect(result).toEqual({ data: [], total: 0 });
-    expect(ModelLema.cariLema).not.toHaveBeenCalled();
+    expect(ModelEntri.cariEntri).not.toHaveBeenCalled();
   });
 
   it('mengembalikan kosong jika query undefined', async () => {
     const result = await cariKamus(undefined);
 
     expect(result).toEqual({ data: [], total: 0 });
-    expect(ModelLema.cariLema).not.toHaveBeenCalled();
+    expect(ModelEntri.cariEntri).not.toHaveBeenCalled();
   });
 
   it('meneruskan query trim dengan opsi default', async () => {
-    ModelLema.cariLema.mockResolvedValue({ data: [{ lema: 'kata' }], total: 1 });
+    ModelEntri.cariEntri.mockResolvedValue({ data: [{ entri: 'kata' }], total: 1 });
 
     const result = await cariKamus(' kata ');
 
-    expect(ModelLema.cariLema).toHaveBeenCalledWith('kata', 100, 0);
-    expect(result).toEqual({ data: [{ lema: 'kata' }], total: 1 });
+    expect(ModelEntri.cariEntri).toHaveBeenCalledWith('kata', 100, 0);
+    expect(result).toEqual({ data: [{ entri: 'kata' }], total: 1 });
   });
 
   it('meneruskan opsi limit dan offset', async () => {
-    ModelLema.cariLema.mockResolvedValue({ data: [], total: 0 });
+    ModelEntri.cariEntri.mockResolvedValue({ data: [], total: 0 });
 
     await cariKamus('kata', { limit: 33, offset: 7 });
 
-    expect(ModelLema.cariLema).toHaveBeenCalledWith('kata', 33, 7);
+    expect(ModelEntri.cariEntri).toHaveBeenCalledWith('kata', 33, 7);
   });
 });
 
 describe('layananKamusPublik.ambilDetailKamus', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    ModelLema.ambilLemaSerupa.mockResolvedValue([]);
+    ModelEntri.ambilEntriSerupa.mockResolvedValue([]);
   });
 
   it('mengembalikan null jika entri kosong', async () => {
     const result = await ambilDetailKamus('   ');
 
     expect(result).toBeNull();
-    expect(ModelLema.ambilLema).not.toHaveBeenCalled();
+    expect(ModelEntri.ambilEntri).not.toHaveBeenCalled();
   });
 
   it('mengembalikan null jika entri undefined', async () => {
     const result = await ambilDetailKamus(undefined);
 
     expect(result).toBeNull();
-    expect(ModelLema.ambilLema).not.toHaveBeenCalled();
+    expect(ModelEntri.ambilEntri).not.toHaveBeenCalled();
   });
 
   it('mengembalikan null jika lema tidak ditemukan', async () => {
-    ModelLema.ambilLema.mockResolvedValue(null);
+    ModelEntri.ambilEntri.mockResolvedValue(null);
 
     const result = await ambilDetailKamus('kata');
 
-    expect(ModelLema.ambilLema).toHaveBeenCalledWith('kata');
+    expect(ModelEntri.ambilEntri).toHaveBeenCalledWith('kata');
     expect(result).toBeNull();
   });
 
   it('mengembalikan rujukan jika lema adalah rujukan', async () => {
-    ModelLema.ambilLema.mockResolvedValue({
-      id: 1, lema: 'abadiat', jenis: 'dasar',
-      jenis_rujuk: '→', lema_rujuk: 'abadiah'
+    ModelEntri.ambilEntri.mockResolvedValue({
+      id: 1, entri: 'abadiat', jenis: 'dasar',
+      jenis_rujuk: '→', entri_rujuk: 'abadiah'
     });
 
     const result = await ambilDetailKamus('abadiat');
 
     expect(result.rujukan).toBe(true);
-    expect(result.lema_rujuk).toBe('abadiah');
+    expect(result.entri_rujuk).toBe('abadiah');
   });
 
   it('mengembalikan detail lengkap dengan makna dan contoh', async () => {
-    ModelLema.ambilLema.mockResolvedValue({
-      id: 1, lema: 'aktif', jenis: 'dasar', induk: null,
+    ModelEntri.ambilEntri.mockResolvedValue({
+      id: 1, entri: 'aktif', jenis: 'dasar', induk: null,
       pemenggalan: 'ak.tif', lafal: 'aktif', varian: null,
-      jenis_rujuk: null, lema_rujuk: null
+      jenis_rujuk: null, entri_rujuk: null
     });
-    ModelLema.ambilMakna.mockResolvedValue([
+    ModelEntri.ambilMakna.mockResolvedValue([
       { id: 10, makna: 'giat', kelas_kata: 'adjektiva', contoh: [] }
     ]);
-    ModelLema.ambilContoh.mockResolvedValue([
+    ModelEntri.ambilContoh.mockResolvedValue([
       { id: 100, makna_id: 10, contoh: 'ia sangat aktif' }
     ]);
-    ModelLema.ambilSublema.mockResolvedValue([
-      { id: 2, lema: 'mengaktifkan', jenis: 'berimbuhan' }
+    ModelEntri.ambilSubentri.mockResolvedValue([
+      { id: 2, entri: 'mengaktifkan', jenis: 'berimbuhan' }
     ]);
-    ModelLema.ambilLemaSerupa.mockResolvedValue([
-      { id: 1, lema: 'aktif', lafal: 'ak.tif' },
-      { id: 3, lema: 'aktip', lafal: null },
+    ModelEntri.ambilEntriSerupa.mockResolvedValue([
+      { id: 1, entri: 'aktif', lafal: 'ak.tif' },
+      { id: 3, entri: 'aktip', lafal: null },
     ]);
-    ModelLema.ambilRantaiInduk.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
     ModelTesaurus.ambilDetail.mockResolvedValue({
       sinonim: 'aktif;giat',
       antonim: 'pasif',
@@ -141,66 +146,66 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     const result = await ambilDetailKamus('aktif');
 
     expect(result.rujukan).toBe(false);
-    expect(result.lema).toBe('aktif');
+    expect(result.entri).toBe('aktif');
     expect(result.makna).toHaveLength(1);
     expect(result.makna[0].contoh).toHaveLength(1);
-    expect(result.sublema.berimbuhan).toHaveLength(1);
+    expect(result.subentri.berimbuhan).toHaveLength(1);
     expect(result.tesaurus).toEqual({ sinonim: ['aktif', 'giat'], antonim: ['pasif'] });
-    expect(result.serupa).toEqual([{ id: 3, lema: 'aktip', lafal: null }]);
+    expect(result.serupa).toEqual([{ id: 3, entri: 'aktip', lafal: null }]);
     expect(result.glosarium).toEqual([{ indonesia: 'zat aktif', asing: 'active substance' }]);
   });
 
   it('mendekode entri URL dan menyusun induk jika tersedia', async () => {
-    ModelLema.ambilLema.mockResolvedValue({
+    ModelEntri.ambilEntri.mockResolvedValue({
       id: 4,
-      lema: 'kata dasar',
+      entri: 'kata dasar',
       jenis: 'dasar',
       induk: 2,
       pemenggalan: 'ka.ta',
       lafal: null,
       varian: null,
       jenis_rujuk: null,
-      lema_rujuk: null,
+      entri_rujuk: null,
     });
-    ModelLema.ambilMakna.mockResolvedValue([
+    ModelEntri.ambilMakna.mockResolvedValue([
       { id: 11, makna: 'arti pertama' },
       { id: 12, makna: 'arti kedua' },
     ]);
-    ModelLema.ambilContoh.mockResolvedValue([{ id: 1, makna_id: 11, contoh: 'contoh 1' }]);
-    ModelLema.ambilSublema.mockResolvedValue([
-      { id: 7, jenis: 'idiom', lema: 'idiom a' },
-      { id: 8, jenis: 'idiom', lema: 'idiom b' },
-      { id: 9, jenis: 'gabungan', lema: 'gabungan a' },
+    ModelEntri.ambilContoh.mockResolvedValue([{ id: 1, makna_id: 11, contoh: 'contoh 1' }]);
+    ModelEntri.ambilSubentri.mockResolvedValue([
+      { id: 7, jenis: 'idiom', entri: 'idiom a' },
+      { id: 8, jenis: 'idiom', entri: 'idiom b' },
+      { id: 9, jenis: 'gabungan', entri: 'gabungan a' },
     ]);
-    ModelLema.ambilRantaiInduk.mockResolvedValue([{ id: 2, lema: 'akar' }]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([{ id: 2, entri: 'akar' }]);
 
     const result = await ambilDetailKamus('kata%20dasar');
 
-    expect(ModelLema.ambilLema).toHaveBeenCalledWith('kata dasar');
-    expect(ModelLema.ambilContoh).toHaveBeenCalledWith([11, 12]);
-    expect(result.induk).toEqual([{ id: 2, lema: 'akar' }]);
+    expect(ModelEntri.ambilEntri).toHaveBeenCalledWith('kata dasar');
+    expect(ModelEntri.ambilContoh).toHaveBeenCalledWith([11, 12]);
+    expect(result.induk).toEqual([{ id: 2, entri: 'akar' }]);
     expect(result.makna[0].contoh).toEqual([{ id: 1, makna_id: 11, contoh: 'contoh 1' }]);
     expect(result.makna[1].contoh).toEqual([]);
-    expect(result.sublema.idiom).toHaveLength(2);
-    expect(result.sublema.gabungan).toHaveLength(1);
+    expect(result.subentri.idiom).toHaveLength(2);
+    expect(result.subentri.gabungan).toHaveLength(1);
   });
 
   it('mengelompokkan banyak contoh untuk makna yang sama', async () => {
-    ModelLema.ambilLema.mockResolvedValue({
+    ModelEntri.ambilEntri.mockResolvedValue({
       id: 1,
-      lema: 'aktif',
+      entri: 'aktif',
       jenis: 'dasar',
       induk: null,
       pemenggalan: 'ak.tif',
       lafal: null,
       varian: null,
       jenis_rujuk: null,
-      lema_rujuk: null,
+      entri_rujuk: null,
     });
-    ModelLema.ambilMakna.mockResolvedValue([{ id: 10, makna: 'giat' }]);
-    ModelLema.ambilSublema.mockResolvedValue([]);
-    ModelLema.ambilRantaiInduk.mockResolvedValue([]);
-    ModelLema.ambilContoh.mockResolvedValue([
+    ModelEntri.ambilMakna.mockResolvedValue([{ id: 10, makna: 'giat' }]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
+    ModelEntri.ambilContoh.mockResolvedValue([
       { id: 100, makna_id: 10, contoh: 'contoh 1' },
       { id: 101, makna_id: 10, contoh: 'contoh 2' },
     ]);
@@ -211,21 +216,21 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
   });
 
   it('membersihkan relasi kosong dan menghapus duplikasi tanpa beda kapitalisasi', async () => {
-    ModelLema.ambilLema.mockResolvedValue({
+    ModelEntri.ambilEntri.mockResolvedValue({
       id: 12,
-      lema: 'aktif',
+      entri: 'aktif',
       jenis: 'dasar',
       induk: null,
       pemenggalan: null,
       lafal: null,
       varian: null,
       jenis_rujuk: null,
-      lema_rujuk: null,
+      entri_rujuk: null,
     });
-    ModelLema.ambilMakna.mockResolvedValue([{ id: 121, makna: 'giat' }]);
-    ModelLema.ambilContoh.mockResolvedValue([]);
-    ModelLema.ambilSublema.mockResolvedValue([]);
-    ModelLema.ambilRantaiInduk.mockResolvedValue([]);
+    ModelEntri.ambilMakna.mockResolvedValue([{ id: 121, makna: 'giat' }]);
+    ModelEntri.ambilContoh.mockResolvedValue([]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
     ModelTesaurus.ambilDetail.mockResolvedValue({
       sinonim: 'Aktif; aktif ; ; GIAT;giat',
       antonim: null,
@@ -238,21 +243,21 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
   });
 
   it('mengembalikan tesaurus kosong saat detail tesaurus tidak tersedia', async () => {
-    ModelLema.ambilLema.mockResolvedValue({
+    ModelEntri.ambilEntri.mockResolvedValue({
       id: 15,
-      lema: 'nol-tesaurus',
+      entri: 'nol-tesaurus',
       jenis: 'dasar',
       induk: null,
       pemenggalan: null,
       lafal: null,
       varian: null,
       jenis_rujuk: null,
-      lema_rujuk: null,
+      entri_rujuk: null,
     });
-    ModelLema.ambilMakna.mockResolvedValue([{ id: 151, makna: 'arti' }]);
-    ModelLema.ambilContoh.mockResolvedValue([]);
-    ModelLema.ambilSublema.mockResolvedValue([]);
-    ModelLema.ambilRantaiInduk.mockResolvedValue([]);
+    ModelEntri.ambilMakna.mockResolvedValue([{ id: 151, makna: 'arti' }]);
+    ModelEntri.ambilContoh.mockResolvedValue([]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
     ModelTesaurus.ambilDetail.mockResolvedValue(null);
     ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
 
@@ -261,212 +266,212 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     expect(result.tesaurus).toEqual({ sinonim: [], antonim: [] });
   });
 
-  it('merapikan serupa: dedupe per lema, prefer lafal, dan urut natural', async () => {
-    ModelLema.ambilLema.mockResolvedValue({
+  it('merapikan serupa: dedupe per entri, prefer lafal, dan urut natural', async () => {
+    ModelEntri.ambilEntri.mockResolvedValue({
       id: 10,
-      lema: 'per (1)',
+      entri: 'per (1)',
       jenis: 'dasar',
       induk: null,
       pemenggalan: null,
       lafal: null,
       varian: null,
       jenis_rujuk: null,
-      lema_rujuk: null,
+      entri_rujuk: null,
     });
-    ModelLema.ambilMakna.mockResolvedValue([]);
-    ModelLema.ambilContoh.mockResolvedValue([]);
-    ModelLema.ambilSublema.mockResolvedValue([]);
-    ModelLema.ambilRantaiInduk.mockResolvedValue([]);
+    ModelEntri.ambilMakna.mockResolvedValue([]);
+    ModelEntri.ambilContoh.mockResolvedValue([]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
     ModelTesaurus.ambilDetail.mockResolvedValue(null);
     ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
-    ModelLema.ambilLemaSerupa.mockResolvedValue([
-      { id: 10, lema: 'per (1)', lafal: null },
-      { id: 11, lema: 'per (2)', lafal: null },
-      { id: 12, lema: 'per- (2)', lafal: 'per' },
-      { id: 13, lema: 'per (3)', lafal: 'per' },
-      { id: 14, lema: 'per (2)', lafal: 'per' },
+    ModelEntri.ambilEntriSerupa.mockResolvedValue([
+      { id: 10, entri: 'per (1)', lafal: null },
+      { id: 11, entri: 'per (2)', lafal: null },
+      { id: 12, entri: 'per- (2)', lafal: 'per' },
+      { id: 13, entri: 'per (3)', lafal: 'per' },
+      { id: 14, entri: 'per (2)', lafal: 'per' },
     ]);
 
     const result = await ambilDetailKamus('per (1)');
 
     expect(result.serupa).toEqual([
-      { id: 14, lema: 'per (2)', lafal: 'per' },
-      { id: 12, lema: 'per- (2)', lafal: 'per' },
-      { id: 13, lema: 'per (3)', lafal: 'per' },
+      { id: 14, entri: 'per (2)', lafal: 'per' },
+      { id: 12, entri: 'per- (2)', lafal: 'per' },
+      { id: 13, entri: 'per (3)', lafal: 'per' },
     ]);
   });
 
   it('merapikan serupa untuk cabang nomor tak ada, key berbeda, dan tidak override lafal existing', async () => {
-    ModelLema.ambilLema.mockResolvedValue({
+    ModelEntri.ambilEntri.mockResolvedValue({
       id: 20,
-      lema: 'dasar (1)',
+      entri: 'dasar (1)',
       jenis: 'dasar',
       induk: null,
       pemenggalan: null,
       lafal: null,
       varian: null,
       jenis_rujuk: null,
-      lema_rujuk: null,
+      entri_rujuk: null,
     });
-    ModelLema.ambilMakna.mockResolvedValue([]);
-    ModelLema.ambilContoh.mockResolvedValue([]);
-    ModelLema.ambilSublema.mockResolvedValue([]);
-    ModelLema.ambilRantaiInduk.mockResolvedValue([]);
+    ModelEntri.ambilMakna.mockResolvedValue([]);
+    ModelEntri.ambilContoh.mockResolvedValue([]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
     ModelTesaurus.ambilDetail.mockResolvedValue(null);
     ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
-    ModelLema.ambilLemaSerupa.mockResolvedValue([
-      { id: 20, lema: 'dasar (1)', lafal: null },
-      { id: 21, lema: 'alpha', lafal: null },
-      { id: 22, lema: 'beta', lafal: null },
-      { id: 23, lema: 'beta', lafal: 'be.ta' },
-      { id: 24, lema: 'beta', lafal: null },
+    ModelEntri.ambilEntriSerupa.mockResolvedValue([
+      { id: 20, entri: 'dasar (1)', lafal: null },
+      { id: 21, entri: 'alpha', lafal: null },
+      { id: 22, entri: 'beta', lafal: null },
+      { id: 23, entri: 'beta', lafal: 'be.ta' },
+      { id: 24, entri: 'beta', lafal: null },
     ]);
 
     const result = await ambilDetailKamus('dasar (1)');
 
     expect(result.serupa).toEqual([
-      { id: 21, lema: 'alpha', lafal: null },
-      { id: 23, lema: 'beta', lafal: 'be.ta' },
+      { id: 21, entri: 'alpha', lafal: null },
+      { id: 23, entri: 'beta', lafal: 'be.ta' },
     ]);
   });
 
   it('menggunakan fallback serupa kosong saat model mengembalikan null', async () => {
-    ModelLema.ambilLema.mockResolvedValue({
+    ModelEntri.ambilEntri.mockResolvedValue({
       id: 31,
-      lema: 'uji',
+      entri: 'uji',
       jenis: 'dasar',
       induk: null,
       pemenggalan: null,
       lafal: null,
       varian: null,
       jenis_rujuk: null,
-      lema_rujuk: null,
+      entri_rujuk: null,
     });
-    ModelLema.ambilMakna.mockResolvedValue([]);
-    ModelLema.ambilContoh.mockResolvedValue([]);
-    ModelLema.ambilSublema.mockResolvedValue([]);
-    ModelLema.ambilRantaiInduk.mockResolvedValue([]);
+    ModelEntri.ambilMakna.mockResolvedValue([]);
+    ModelEntri.ambilContoh.mockResolvedValue([]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
     ModelTesaurus.ambilDetail.mockResolvedValue(null);
     ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
-    ModelLema.ambilLemaSerupa.mockResolvedValue(null);
+    ModelEntri.ambilEntriSerupa.mockResolvedValue(null);
 
     const result = await ambilDetailKamus('uji');
 
     expect(result.serupa).toEqual([]);
   });
 
-  it('mengurutkan serupa dengan tie-breaker lema mentah saat normalisasi sama', async () => {
-    ModelLema.ambilLema.mockResolvedValue({
+  it('mengurutkan serupa dengan tie-breaker entri mentah saat normalisasi sama', async () => {
+    ModelEntri.ambilEntri.mockResolvedValue({
       id: 40,
-      lema: 'dasar',
+      entri: 'dasar',
       jenis: 'dasar',
       induk: null,
       pemenggalan: null,
       lafal: null,
       varian: null,
       jenis_rujuk: null,
-      lema_rujuk: null,
+      entri_rujuk: null,
     });
-    ModelLema.ambilMakna.mockResolvedValue([]);
-    ModelLema.ambilContoh.mockResolvedValue([]);
-    ModelLema.ambilSublema.mockResolvedValue([]);
-    ModelLema.ambilRantaiInduk.mockResolvedValue([]);
+    ModelEntri.ambilMakna.mockResolvedValue([]);
+    ModelEntri.ambilContoh.mockResolvedValue([]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
     ModelTesaurus.ambilDetail.mockResolvedValue(null);
     ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
-    ModelLema.ambilLemaSerupa.mockResolvedValue([
-      { id: 41, lema: 'per- (2)', lafal: null },
-      { id: 42, lema: 'per (2)', lafal: null },
+    ModelEntri.ambilEntriSerupa.mockResolvedValue([
+      { id: 41, entri: 'per- (2)', lafal: null },
+      { id: 42, entri: 'per (2)', lafal: null },
     ]);
 
     const result = await ambilDetailKamus('dasar');
 
     expect(result.serupa).toEqual([
-      { id: 42, lema: 'per (2)', lafal: null },
-      { id: 41, lema: 'per- (2)', lafal: null },
+      { id: 42, entri: 'per (2)', lafal: null },
+      { id: 41, entri: 'per- (2)', lafal: null },
     ]);
   });
 
-  it('menangani item serupa tanpa lema (fallback key/default param)', async () => {
-    ModelLema.ambilLema.mockResolvedValue({
+  it('menangani item serupa tanpa entri (fallback key/default param)', async () => {
+    ModelEntri.ambilEntri.mockResolvedValue({
       id: 50,
-      lema: 'dasar',
+      entri: 'dasar',
       jenis: 'dasar',
       induk: null,
       pemenggalan: null,
       lafal: null,
       varian: null,
       jenis_rujuk: null,
-      lema_rujuk: null,
+      entri_rujuk: null,
     });
-    ModelLema.ambilMakna.mockResolvedValue([]);
-    ModelLema.ambilContoh.mockResolvedValue([]);
-    ModelLema.ambilSublema.mockResolvedValue([]);
-    ModelLema.ambilRantaiInduk.mockResolvedValue([]);
+    ModelEntri.ambilMakna.mockResolvedValue([]);
+    ModelEntri.ambilContoh.mockResolvedValue([]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
     ModelTesaurus.ambilDetail.mockResolvedValue(null);
     ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
-    ModelLema.ambilLemaSerupa.mockResolvedValue([
-      { id: 51, lema: undefined, lafal: null },
-      { id: 52, lema: 'alpha', lafal: null },
+    ModelEntri.ambilEntriSerupa.mockResolvedValue([
+      { id: 51, entri: undefined, lafal: null },
+      { id: 52, entri: 'alpha', lafal: null },
     ]);
 
     const result = await ambilDetailKamus('dasar');
 
     expect(result.serupa).toEqual([
-      { id: 51, lema: '', lafal: null },
-      { id: 52, lema: 'alpha', lafal: null },
+      { id: 51, entri: '', lafal: null },
+      { id: 52, entri: 'alpha', lafal: null },
     ]);
   });
 
   it('menyusun rantai induk multi-level (dasar > berimbuhan > gabungan)', async () => {
-    ModelLema.ambilLema.mockResolvedValue({
+    ModelEntri.ambilEntri.mockResolvedValue({
       id: 60,
-      lema: 'berlatih tanding',
+      entri: 'berlatih tanding',
       jenis: 'gabungan',
       induk: 61,
       pemenggalan: null,
       lafal: null,
       varian: null,
       jenis_rujuk: null,
-      lema_rujuk: null,
+      entri_rujuk: null,
     });
-    ModelLema.ambilMakna.mockResolvedValue([{ id: 601, makna: 'berlatih untuk bertanding' }]);
-    ModelLema.ambilContoh.mockResolvedValue([]);
-    ModelLema.ambilSublema.mockResolvedValue([]);
-    ModelLema.ambilRantaiInduk.mockResolvedValue([
-      { id: 62, lema: 'latih' },
-      { id: 61, lema: 'berlatih' },
+    ModelEntri.ambilMakna.mockResolvedValue([{ id: 601, makna: 'berlatih untuk bertanding' }]);
+    ModelEntri.ambilContoh.mockResolvedValue([]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([
+      { id: 62, entri: 'latih' },
+      { id: 61, entri: 'berlatih' },
     ]);
     ModelTesaurus.ambilDetail.mockResolvedValue(null);
     ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
-    ModelLema.ambilLemaSerupa.mockResolvedValue([]);
+    ModelEntri.ambilEntriSerupa.mockResolvedValue([]);
 
     const result = await ambilDetailKamus('berlatih tanding');
 
     expect(result.induk).toEqual([
-      { id: 62, lema: 'latih' },
-      { id: 61, lema: 'berlatih' },
+      { id: 62, entri: 'latih' },
+      { id: 61, entri: 'berlatih' },
     ]);
   });
 
   it('mengembalikan induk null jika rantai induk kosong', async () => {
-    ModelLema.ambilLema.mockResolvedValue({
+    ModelEntri.ambilEntri.mockResolvedValue({
       id: 70,
-      lema: 'rumah',
+      entri: 'rumah',
       jenis: 'dasar',
       induk: null,
       pemenggalan: null,
       lafal: null,
       varian: null,
       jenis_rujuk: null,
-      lema_rujuk: null,
+      entri_rujuk: null,
     });
-    ModelLema.ambilMakna.mockResolvedValue([]);
-    ModelLema.ambilContoh.mockResolvedValue([]);
-    ModelLema.ambilSublema.mockResolvedValue([]);
-    ModelLema.ambilRantaiInduk.mockResolvedValue([]);
+    ModelEntri.ambilMakna.mockResolvedValue([]);
+    ModelEntri.ambilContoh.mockResolvedValue([]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
     ModelTesaurus.ambilDetail.mockResolvedValue(null);
     ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
-    ModelLema.ambilLemaSerupa.mockResolvedValue([]);
+    ModelEntri.ambilEntriSerupa.mockResolvedValue([]);
 
     const result = await ambilDetailKamus('rumah');
 
