@@ -193,7 +193,6 @@ describe('services/layananAuthGoogle', () => {
         name: 'Person',
         picture: 'https://img.example/p.png',
         provider: 'google',
-        role: 'user',
       },
       'jwt-secret',
       { expiresIn: '7d' }

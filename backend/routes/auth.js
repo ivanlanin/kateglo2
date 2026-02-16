@@ -14,6 +14,7 @@ const {
   buildFrontendCallbackRedirect,
   buildFrontendErrorRedirect,
 } = require('../services/layananAuthGoogle');
+const ModelPengguna = require('../models/modelPengguna');
 
 const router = express.Router();
 
@@ -48,7 +49,28 @@ router.get('/google/callback', async (req, res) => {
   try {
     const tokenPayload = await exchangeCodeForToken(code);
     const profile = await fetchGoogleProfile(tokenPayload.access_token);
-    const appToken = buildAppToken(profile);
+
+    // Simpan/perbarui pengguna di database
+    const pengguna = await ModelPengguna.upsertDariGoogle({
+      googleId: profile.id,
+      email: profile.email,
+      nama: profile.name,
+      foto: profile.picture,
+    });
+
+    // Bootstrap admin dari ADMIN_EMAILS jika cocok
+    await ModelPengguna.bootstrapAdmin(pengguna);
+
+    // Ambil peran dan izin dari database
+    const peran = await ModelPengguna.ambilKodePeran(pengguna.peran_id);
+    const izin = await ModelPengguna.ambilIzin(pengguna.peran_id);
+
+    const appToken = buildAppToken({
+      ...profile,
+      pid: pengguna.id,
+      peran,
+      izin,
+    });
 
     return res.redirect(buildFrontendCallbackRedirect(appToken, { frontendOrigin }));
   } catch (authError) {

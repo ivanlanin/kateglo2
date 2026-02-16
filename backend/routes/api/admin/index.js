@@ -14,10 +14,11 @@ router.get('/health', (req, res) => {
   });
 });
 
-// TODO: Add admin routes
+router.use('/pengguna', require('./pengguna'));
+
+// TODO: Add more admin routes
 // router.use('/phrases', require('./phrases'));
 // router.use('/definitions', require('./definitions'));
-// router.use('/users', require('./users'));
 // router.use('/analytics', require('./analytics'));
 
 module.exports = router;

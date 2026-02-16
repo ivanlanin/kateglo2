@@ -65,15 +65,22 @@ function AuthProvider({ children }) {
     };
   }, [token]);
 
+  const punyaIzin = useCallback(
+    (kodeIzin) => (user?.izin || []).includes(kodeIzin),
+    [user]
+  );
+
   const value = useMemo(() => ({
     token,
     user,
     isLoading,
     isAuthenticated: Boolean(token && user),
+    adalahAdmin: user?.peran === 'admin',
+    punyaIzin,
     loginDenganGoogle: mulaiLoginGoogle,
     setAuthToken,
     logout,
-  }), [token, user, isLoading, setAuthToken, logout]);
+  }), [token, user, isLoading, punyaIzin, setAuthToken, logout]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

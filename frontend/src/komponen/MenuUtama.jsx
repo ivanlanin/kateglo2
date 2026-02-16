@@ -11,6 +11,7 @@ export const menuItems = [
   { path: '/kamus', label: 'Kamus' },
   { path: '/tesaurus', label: 'Tesaurus' },
   { path: '/glosarium', label: 'Glosarium' },
+  { path: '/admin', label: 'Admin', adminSaja: true },
 ];
 
 function MenuUtama({
@@ -25,6 +26,7 @@ function MenuUtama({
   const {
     isLoading,
     isAuthenticated,
+    adalahAdmin,
     logout,
   } = useAuth();
   const loginUrl = buatUrlLoginGoogle(window.location.origin);
@@ -41,16 +43,18 @@ function MenuUtama({
 
   return (
     <div className={containerClassName}>
-      {tampilkanMenu && menuItems.map((item) => (
-        <Link
-          key={item.path}
-          to={item.path}
-          onClick={onItemClick}
-          className={linkClassName}
-        >
-          {item.label}
-        </Link>
-      ))}
+      {tampilkanMenu && menuItems
+        .filter((item) => !item.adminSaja || adalahAdmin)
+        .map((item) => (
+          <Link
+            key={item.path}
+            to={item.path}
+            onClick={onItemClick}
+            className={linkClassName}
+          >
+            {item.label}
+          </Link>
+        ))}
 
       {tampilkanAutentikasi && (isLoading ? (
         <span className={loadingClassName}>Memuat...</span>

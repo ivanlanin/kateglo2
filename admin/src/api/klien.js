@@ -1,15 +1,14 @@
 /**
- * @fileoverview Klien HTTP untuk API Kateglo
+ * @fileoverview Klien HTTP untuk Admin API Kateglo
  */
 
 import axios from 'axios';
 
+const storageKey = 'kateglo-admin-token';
 const frontendSharedKey = import.meta.env.VITE_FRONTEND_SHARED_KEY;
 
-const storageKey = 'kateglo-auth-token';
-
 const klien = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+  baseURL: import.meta.env.VITE_API_URL || '',
   timeout: 15000,
 });
 
@@ -23,5 +22,16 @@ klien.interceptors.request.use((config) => {
   }
   return config;
 });
+
+klien.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem(storageKey);
+      window.location.replace('/login');
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default klien;
