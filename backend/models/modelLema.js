@@ -199,6 +199,29 @@ class ModelLema {
     return result.rows[0] || null;
   }
 
+  /**
+   * Ambil rantai induk (ancestor chain) dari bawah ke atas, maks 5 level
+   * @param {number} indukId - ID induk langsung
+   * @returns {Promise<Array>} Rantai dari akar ke induk langsung [{id, lema}, ...]
+   */
+  static async ambilRantaiInduk(indukId) {
+    if (!indukId) return [];
+    const result = await db.query(
+      `WITH RECURSIVE rantai AS (
+         SELECT id, lema, induk, 1 AS depth
+         FROM lema WHERE id = $1
+         UNION ALL
+         SELECT p.id, p.lema, p.induk, r.depth + 1
+         FROM lema p
+         JOIN rantai r ON r.induk = p.id
+         WHERE r.depth < 5
+       )
+       SELECT id, lema FROM rantai ORDER BY depth DESC`,
+      [indukId]
+    );
+    return result.rows;
+  }
+
 }
 
 module.exports = ModelLema;

@@ -10,7 +10,8 @@ jest.mock('../../models/modelLema', () => ({
   ambilMakna: jest.fn(),
   ambilContoh: jest.fn(),
   ambilSublema: jest.fn(),
-  ambilInduk: jest.fn()
+  ambilInduk: jest.fn(),
+  ambilRantaiInduk: jest.fn()
 }));
 
 jest.mock('../../models/modelTesaurus', () => ({
@@ -125,7 +126,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
       { id: 1, lema: 'aktif', lafal: 'ak.tif' },
       { id: 3, lema: 'aktip', lafal: null },
     ]);
-    ModelLema.ambilInduk.mockResolvedValue(null);
+    ModelLema.ambilRantaiInduk.mockResolvedValue([]);
     ModelTesaurus.ambilDetail.mockResolvedValue({
       sinonim: 'aktif;giat',
       antonim: 'pasif',
@@ -171,13 +172,13 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
       { id: 8, jenis: 'idiom', lema: 'idiom b' },
       { id: 9, jenis: 'gabungan', lema: 'gabungan a' },
     ]);
-    ModelLema.ambilInduk.mockResolvedValue({ id: 2, lema: 'akar' });
+    ModelLema.ambilRantaiInduk.mockResolvedValue([{ id: 2, lema: 'akar' }]);
 
     const result = await ambilDetailKamus('kata%20dasar');
 
     expect(ModelLema.ambilLema).toHaveBeenCalledWith('kata dasar');
     expect(ModelLema.ambilContoh).toHaveBeenCalledWith([11, 12]);
-    expect(result.induk).toEqual({ id: 2, lema: 'akar' });
+    expect(result.induk).toEqual([{ id: 2, lema: 'akar' }]);
     expect(result.makna[0].contoh).toEqual([{ id: 1, makna_id: 11, contoh: 'contoh 1' }]);
     expect(result.makna[1].contoh).toEqual([]);
     expect(result.sublema.idiom).toHaveLength(2);
@@ -198,7 +199,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     });
     ModelLema.ambilMakna.mockResolvedValue([{ id: 10, makna: 'giat' }]);
     ModelLema.ambilSublema.mockResolvedValue([]);
-    ModelLema.ambilInduk.mockResolvedValue(null);
+    ModelLema.ambilRantaiInduk.mockResolvedValue([]);
     ModelLema.ambilContoh.mockResolvedValue([
       { id: 100, makna_id: 10, contoh: 'contoh 1' },
       { id: 101, makna_id: 10, contoh: 'contoh 2' },
@@ -224,7 +225,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     ModelLema.ambilMakna.mockResolvedValue([{ id: 121, makna: 'giat' }]);
     ModelLema.ambilContoh.mockResolvedValue([]);
     ModelLema.ambilSublema.mockResolvedValue([]);
-    ModelLema.ambilInduk.mockResolvedValue(null);
+    ModelLema.ambilRantaiInduk.mockResolvedValue([]);
     ModelTesaurus.ambilDetail.mockResolvedValue({
       sinonim: 'Aktif; aktif ; ; GIAT;giat',
       antonim: null,
@@ -251,7 +252,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     ModelLema.ambilMakna.mockResolvedValue([{ id: 151, makna: 'arti' }]);
     ModelLema.ambilContoh.mockResolvedValue([]);
     ModelLema.ambilSublema.mockResolvedValue([]);
-    ModelLema.ambilInduk.mockResolvedValue(null);
+    ModelLema.ambilRantaiInduk.mockResolvedValue([]);
     ModelTesaurus.ambilDetail.mockResolvedValue(null);
     ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
 
@@ -275,7 +276,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     ModelLema.ambilMakna.mockResolvedValue([]);
     ModelLema.ambilContoh.mockResolvedValue([]);
     ModelLema.ambilSublema.mockResolvedValue([]);
-    ModelLema.ambilInduk.mockResolvedValue(null);
+    ModelLema.ambilRantaiInduk.mockResolvedValue([]);
     ModelTesaurus.ambilDetail.mockResolvedValue(null);
     ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
     ModelLema.ambilLemaSerupa.mockResolvedValue([
@@ -310,7 +311,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     ModelLema.ambilMakna.mockResolvedValue([]);
     ModelLema.ambilContoh.mockResolvedValue([]);
     ModelLema.ambilSublema.mockResolvedValue([]);
-    ModelLema.ambilInduk.mockResolvedValue(null);
+    ModelLema.ambilRantaiInduk.mockResolvedValue([]);
     ModelTesaurus.ambilDetail.mockResolvedValue(null);
     ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
     ModelLema.ambilLemaSerupa.mockResolvedValue([
@@ -344,7 +345,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     ModelLema.ambilMakna.mockResolvedValue([]);
     ModelLema.ambilContoh.mockResolvedValue([]);
     ModelLema.ambilSublema.mockResolvedValue([]);
-    ModelLema.ambilInduk.mockResolvedValue(null);
+    ModelLema.ambilRantaiInduk.mockResolvedValue([]);
     ModelTesaurus.ambilDetail.mockResolvedValue(null);
     ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
     ModelLema.ambilLemaSerupa.mockResolvedValue(null);
@@ -369,7 +370,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     ModelLema.ambilMakna.mockResolvedValue([]);
     ModelLema.ambilContoh.mockResolvedValue([]);
     ModelLema.ambilSublema.mockResolvedValue([]);
-    ModelLema.ambilInduk.mockResolvedValue(null);
+    ModelLema.ambilRantaiInduk.mockResolvedValue([]);
     ModelTesaurus.ambilDetail.mockResolvedValue(null);
     ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
     ModelLema.ambilLemaSerupa.mockResolvedValue([
@@ -400,7 +401,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     ModelLema.ambilMakna.mockResolvedValue([]);
     ModelLema.ambilContoh.mockResolvedValue([]);
     ModelLema.ambilSublema.mockResolvedValue([]);
-    ModelLema.ambilInduk.mockResolvedValue(null);
+    ModelLema.ambilRantaiInduk.mockResolvedValue([]);
     ModelTesaurus.ambilDetail.mockResolvedValue(null);
     ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
     ModelLema.ambilLemaSerupa.mockResolvedValue([

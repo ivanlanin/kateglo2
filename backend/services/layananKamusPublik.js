@@ -96,10 +96,10 @@ async function ambilDetailKamus(entri) {
     };
   }
 
-  const [maknaList, sublema, induk, tesaurusDetail, glosarium, lemaSerupa] = await Promise.all([
+  const [maknaList, sublema, rantaiInduk, tesaurusDetail, glosarium, lemaSerupa] = await Promise.all([
     ModelLema.ambilMakna(lema.id),
     ModelLema.ambilSublema(lema.id),
-    ModelLema.ambilInduk(lema.induk),
+    ModelLema.ambilRantaiInduk(lema.induk),
     ModelTesaurus.ambilDetail(lema.lema),
     ModelGlosarium.cariFrasaMengandungKataUtuh(lema.lema),
     ModelLema.ambilLemaSerupa(lema.lema),
@@ -153,7 +153,7 @@ async function ambilDetailKamus(entri) {
     pemenggalan: lema.pemenggalan,
     lafal: lema.lafal,
     varian: lema.varian,
-    induk: induk ? { id: induk.id, lema: induk.lema } : null,
+    induk: rantaiInduk.length > 0 ? rantaiInduk.map((r) => ({ id: r.id, lema: r.lema })) : null,
     makna,
     sublema: sublemaPerJenis,
     tesaurus,
