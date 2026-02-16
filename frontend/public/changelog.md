@@ -12,7 +12,7 @@
 - Menambahkan batasan pencarian 60 kali/15 menit untuk mencegah penyalahgunaan
 - Menerapkan autentikasi oAuth Google dan halaman kebijakan privasi
 - Menambahkan menu atas di beranda
-- Menyiapkan akses admin
+- Menyiapkan akses admin mengembangkan halaman dasar untuk admin
 
 ## 2026-02-15 Minggu
 

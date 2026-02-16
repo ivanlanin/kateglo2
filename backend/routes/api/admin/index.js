@@ -15,10 +15,9 @@ router.get('/health', (req, res) => {
 });
 
 router.use('/pengguna', require('./pengguna'));
-
-// TODO: Add more admin routes
-// router.use('/phrases', require('./phrases'));
-// router.use('/definitions', require('./definitions'));
-// router.use('/analytics', require('./analytics'));
+router.use('/statistik', require('./statistik'));
+router.use('/kamus', require('./kamus'));
+router.use('/tesaurus', require('./tesaurus'));
+router.use('/glosarium', require('./glosarium'));
 
 module.exports = router;

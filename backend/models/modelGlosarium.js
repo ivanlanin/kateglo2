@@ -121,6 +121,62 @@ class ModelGlosarium {
    * @param {number} limit - Batas hasil
   * @returns {Promise<Array>} Daftar indonesia + asing
    */
+  /**
+   * Hitung total glosarium
+   * @returns {Promise<number>}
+   */
+  static async hitungTotal() {
+    const result = await db.query('SELECT COUNT(*) AS total FROM glosarium');
+    return parseInt(result.rows[0].total, 10);
+  }
+
+  /**
+   * Ambil glosarium berdasarkan ID (untuk admin)
+   * @param {number} id
+   * @returns {Promise<Object|null>}
+   */
+  static async ambilDenganId(id) {
+    const result = await db.query(
+      'SELECT id, indonesia, asing, bidang, bahasa, sumber FROM glosarium WHERE id = $1',
+      [id]
+    );
+    return result.rows[0] || null;
+  }
+
+  /**
+   * Simpan (insert atau update) glosarium
+   * @param {Object} data
+   * @param {string} updater - Email penyunting
+   * @returns {Promise<Object>}
+   */
+  static async simpan({ id, indonesia, asing, bidang, bahasa, sumber }, updater = 'admin') {
+    if (id) {
+      const result = await db.query(
+        `UPDATE glosarium SET indonesia = $1, asing = $2, bidang = $3,
+                bahasa = $4, sumber = $5, updater = $6, updated = NOW()
+         WHERE id = $7 RETURNING *`,
+        [indonesia, asing, bidang || null, bahasa || 'en', sumber || null, updater, id]
+      );
+      return result.rows[0];
+    }
+    const result = await db.query(
+      `INSERT INTO glosarium (indonesia, asing, bidang, bahasa, sumber, updater, updated)
+       VALUES ($1, $2, $3, $4, $5, $6, NOW()) RETURNING *`,
+      [indonesia, asing, bidang || null, bahasa || 'en', sumber || null, updater]
+    );
+    return result.rows[0];
+  }
+
+  /**
+   * Hapus glosarium berdasarkan ID
+   * @param {number} id
+   * @returns {Promise<boolean>}
+   */
+  static async hapus(id) {
+    const result = await db.query('DELETE FROM glosarium WHERE id = $1 RETURNING id', [id]);
+    return result.rowCount > 0;
+  }
+
   static async cariFrasaMengandungKataUtuh(kata, limit = 50) {
     const trimmed = (kata || '').trim();
     if (!trimmed) return [];

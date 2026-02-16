@@ -130,6 +130,34 @@ class ModelPengguna {
    * @param {Object} pengguna - Baris pengguna dari database
    * @returns {Promise<Object>} Pengguna (mungkin sudah diperbarui peran_id-nya)
    */
+  /**
+   * Hitung total pengguna
+   * @returns {Promise<number>}
+   */
+  static async hitungTotal() {
+    const result = await db.query('SELECT COUNT(*) AS total FROM pengguna');
+    return parseInt(result.rows[0].total, 10);
+  }
+
+  /**
+   * Update pengguna (nama, aktif, peran_id) — untuk panel admin
+   * @param {number} id
+   * @param {Object} data
+   * @returns {Promise<Object|null>}
+   */
+  static async simpanPengguna(id, { nama, aktif, peran_id }) {
+    const result = await db.query(
+      `UPDATE pengguna SET nama = COALESCE($1, nama),
+              aktif = COALESCE($2, aktif),
+              peran_id = COALESCE($3, peran_id),
+              updated_at = NOW()
+       WHERE id = $4
+       RETURNING *`,
+      [nama, aktif, peran_id, id]
+    );
+    return result.rows[0] || null;
+  }
+
   static async bootstrapAdmin(pengguna) {
     const adminEmails = (process.env.ADMIN_EMAILS || '')
       .split(',')

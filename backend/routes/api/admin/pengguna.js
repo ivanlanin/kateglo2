@@ -57,6 +57,25 @@ router.patch('/:id/peran', periksaIzin('kelola_pengguna'), async (req, res, next
 });
 
 /**
+ * PUT /api/admin/pengguna/:id
+ * Sunting pengguna (nama, aktif, peran_id)
+ */
+router.put('/:id', periksaIzin('kelola_pengguna'), async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const pengguna = await ModelPengguna.simpanPengguna(id, req.body);
+
+    if (!pengguna) {
+      return res.status(404).json({ success: false, message: 'Pengguna tidak ditemukan' });
+    }
+
+    return res.json({ success: true, data: pengguna });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+/**
  * GET /api/admin/peran
  * Daftar semua peran yang tersedia
  */

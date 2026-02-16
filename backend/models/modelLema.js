@@ -222,6 +222,210 @@ class ModelLema {
     return result.rows;
   }
 
+  /**
+   * Daftar lema untuk panel admin (dengan pencarian opsional)
+   * @param {{ limit?: number, offset?: number, q?: string }} options
+   * @returns {Promise<{ data: Array, total: number }>}
+   */
+  static async daftarAdmin({ limit = 50, offset = 0, q = '' } = {}) {
+    const conditions = [];
+    const params = [];
+    let idx = 1;
+
+    if (q) {
+      conditions.push(`lema ILIKE $${idx}`);
+      params.push(`%${q}%`);
+      idx++;
+    }
+
+    const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    const countResult = await db.query(
+      `SELECT COUNT(*) AS total FROM lema ${where}`,
+      params
+    );
+    const total = parseInt(countResult.rows[0].total, 10);
+
+    const dataResult = await db.query(
+      `SELECT id, lema, jenis, lafal, aktif, jenis_rujuk, lema_rujuk
+       FROM lema ${where}
+       ORDER BY lema ASC
+       LIMIT $${idx} OFFSET $${idx + 1}`,
+      [...params, limit, offset]
+    );
+
+    return { data: dataResult.rows, total };
+  }
+
+  /**
+   * Hitung total lema
+   * @returns {Promise<number>}
+   */
+  static async hitungTotal() {
+    const result = await db.query('SELECT COUNT(*) AS total FROM lema');
+    return parseInt(result.rows[0].total, 10);
+  }
+
+  /**
+   * Ambil lema berdasarkan ID (untuk admin)
+   * @param {number} id
+   * @returns {Promise<Object|null>}
+   */
+  static async ambilDenganId(id) {
+    const result = await db.query(
+      `SELECT id, lema, jenis, induk, pemenggalan, lafal, varian,
+              jenis_rujuk, lema_rujuk, aktif
+       FROM lema WHERE id = $1`,
+      [id]
+    );
+    return result.rows[0] || null;
+  }
+
+  /**
+   * Simpan (insert atau update) lema
+   * @param {Object} data - Data lema
+   * @param {number} [data.id] - ID untuk update, null/undefined untuk insert
+   * @returns {Promise<Object>} Baris lema yang disimpan
+   */
+  static async simpan({ id, lema, jenis, induk, pemenggalan, lafal, varian, jenis_rujuk, lema_rujuk, aktif }) {
+    if (id) {
+      const result = await db.query(
+        `UPDATE lema SET lema = $1, jenis = $2, induk = $3, pemenggalan = $4,
+                lafal = $5, varian = $6, jenis_rujuk = $7, lema_rujuk = $8, aktif = $9
+         WHERE id = $10 RETURNING *`,
+        [lema, jenis, induk || null, pemenggalan || null, lafal || null,
+         varian || null, jenis_rujuk || null, lema_rujuk || null, aktif ?? 1, id]
+      );
+      return result.rows[0];
+    }
+    const result = await db.query(
+      `INSERT INTO lema (lema, jenis, induk, pemenggalan, lafal, varian, jenis_rujuk, lema_rujuk, aktif)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
+      [lema, jenis, induk || null, pemenggalan || null, lafal || null,
+       varian || null, jenis_rujuk || null, lema_rujuk || null, aktif ?? 1]
+    );
+    return result.rows[0];
+  }
+
+  /**
+   * Hapus lema berdasarkan ID
+   * @param {number} id
+   * @returns {Promise<boolean>}
+   */
+  static async hapus(id) {
+    const result = await db.query('DELETE FROM lema WHERE id = $1 RETURNING id', [id]);
+    return result.rowCount > 0;
+  }
+
+  // ─── Makna CRUD ──────────────────────────────────────────────────────────
+
+  /**
+   * Ambil satu makna berdasarkan ID
+   * @param {number} id
+   * @returns {Promise<Object|null>}
+   */
+  static async ambilMaknaById(id) {
+    const result = await db.query(
+      `SELECT id, lema_id, polisem, urutan, makna, ragam, ragam_varian,
+              kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia
+       FROM makna WHERE id = $1`,
+      [id]
+    );
+    return result.rows[0] || null;
+  }
+
+  /**
+   * Simpan (insert atau update) makna
+   * @param {Object} data
+   * @returns {Promise<Object>}
+   */
+  static async simpanMakna({ id, lema_id, polisem, urutan, makna, ragam, ragam_varian,
+    kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia }) {
+    if (id) {
+      const result = await db.query(
+        `UPDATE makna SET lema_id = $1, polisem = $2, urutan = $3, makna = $4,
+                ragam = $5, ragam_varian = $6, kelas_kata = $7, bahasa = $8,
+                bidang = $9, kiasan = $10, tipe_penyingkat = $11, ilmiah = $12, kimia = $13
+         WHERE id = $14 RETURNING *`,
+        [lema_id, polisem ?? 1, urutan ?? 1, makna,
+         ragam || null, ragam_varian || null, kelas_kata || null, bahasa || null,
+         bidang || null, kiasan ?? 0, tipe_penyingkat || null, ilmiah || null, kimia || null, id]
+      );
+      return result.rows[0];
+    }
+    const result = await db.query(
+      `INSERT INTO makna (lema_id, polisem, urutan, makna, ragam, ragam_varian,
+              kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *`,
+      [lema_id, polisem ?? 1, urutan ?? 1, makna,
+       ragam || null, ragam_varian || null, kelas_kata || null, bahasa || null,
+       bidang || null, kiasan ?? 0, tipe_penyingkat || null, ilmiah || null, kimia || null]
+    );
+    return result.rows[0];
+  }
+
+  /**
+   * Hapus makna (cascade juga hapus contoh)
+   * @param {number} id
+   * @returns {Promise<boolean>}
+   */
+  static async hapusMakna(id) {
+    const result = await db.query('DELETE FROM makna WHERE id = $1 RETURNING id', [id]);
+    return result.rowCount > 0;
+  }
+
+  // ─── Contoh CRUD ─────────────────────────────────────────────────────────
+
+  /**
+   * Ambil satu contoh berdasarkan ID
+   * @param {number} id
+   * @returns {Promise<Object|null>}
+   */
+  static async ambilContohById(id) {
+    const result = await db.query(
+      `SELECT id, makna_id, urutan, contoh, ragam, bahasa, bidang,
+              kiasan, makna_contoh
+       FROM contoh WHERE id = $1`,
+      [id]
+    );
+    return result.rows[0] || null;
+  }
+
+  /**
+   * Simpan (insert atau update) contoh
+   * @param {Object} data
+   * @returns {Promise<Object>}
+   */
+  static async simpanContoh({ id, makna_id, urutan, contoh, ragam, bahasa, bidang, kiasan, makna_contoh }) {
+    if (id) {
+      const result = await db.query(
+        `UPDATE contoh SET makna_id = $1, urutan = $2, contoh = $3, ragam = $4,
+                bahasa = $5, bidang = $6, kiasan = $7, makna_contoh = $8
+         WHERE id = $9 RETURNING *`,
+        [makna_id, urutan ?? 1, contoh, ragam || null, bahasa || null,
+         bidang || null, kiasan ?? 0, makna_contoh || null, id]
+      );
+      return result.rows[0];
+    }
+    const result = await db.query(
+      `INSERT INTO contoh (makna_id, urutan, contoh, ragam, bahasa, bidang, kiasan, makna_contoh)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+      [makna_id, urutan ?? 1, contoh, ragam || null, bahasa || null,
+       bidang || null, kiasan ?? 0, makna_contoh || null]
+    );
+    return result.rows[0];
+  }
+
+  /**
+   * Hapus contoh berdasarkan ID
+   * @param {number} id
+   * @returns {Promise<boolean>}
+   */
+  static async hapusContoh(id) {
+    const result = await db.query('DELETE FROM contoh WHERE id = $1 RETURNING id', [id]);
+    return result.rowCount > 0;
+  }
+
 }
 
 module.exports = ModelLema;
