@@ -7,11 +7,11 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/authContext';
 
 const menuAdmin = [
-  { path: '/admin', label: 'Dasbor', exact: true },
-  { path: '/admin/kamus', label: 'Kamus' },
-  { path: '/admin/tesaurus', label: 'Tesaurus' },
-  { path: '/admin/glosarium', label: 'Glosarium' },
-  { path: '/admin/pengguna', label: 'Pengguna' },
+  { path: '/redaksi', label: 'Dasbor', exact: true },
+  { path: '/redaksi/kamus', label: 'Kamus' },
+  { path: '/redaksi/tesaurus', label: 'Tesaurus' },
+  { path: '/redaksi/glosarium', label: 'Glosarium' },
+  { path: '/redaksi/pengguna', label: 'Pengguna' },
 ];
 
 function TataLetakAdmin({ judul, children }) {
@@ -21,8 +21,8 @@ function TataLetakAdmin({ judul, children }) {
 
   useEffect(() => {
     document.title = judul
-      ? `${judul} — Admin Kateglo`
-      : 'Admin Kateglo';
+      ? `${judul} — Redaksi Kateglo`
+      : 'Redaksi Kateglo';
   }, [judul]);
 
   const handleLogout = () => {
@@ -49,7 +49,7 @@ function TataLetakAdmin({ judul, children }) {
                 &larr; Beranda
               </Link>
               <span className="text-xl font-bold text-gray-900 dark:text-white">
-                Admin Kateglo
+                Redaksi Kateglo
               </span>
             </div>
             <div className="flex items-center gap-3">

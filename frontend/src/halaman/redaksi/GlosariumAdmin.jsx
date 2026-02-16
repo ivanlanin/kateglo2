@@ -5,21 +5,21 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDaftarGlosariumAdmin, useSimpanGlosarium, useHapusGlosarium } from '../../api/apiAdmin';
-import TataLetakAdmin from '../../komponen/admin/TataLetakAdmin';
+import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
   KotakCariAdmin,
   InfoTotal,
   TabelAdmin,
   usePencarianAdmin,
-} from '../../komponen/admin/KomponenAdmin';
-import PanelGeser from '../../komponen/admin/PanelGeser';
+} from '../../komponen/redaksi/KomponenAdmin';
+import PanelGeser from '../../komponen/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
   SelectField,
   FormFooter,
   PesanForm,
-} from '../../komponen/admin/FormAdmin';
+} from '../../komponen/redaksi/FormAdmin';
 
 const nilaiAwal = { indonesia: '', asing: '', bidang: '', bahasa: 'en', sumber: '' };
 

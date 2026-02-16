@@ -14,7 +14,7 @@ function LoginAdmin() {
 
   useEffect(() => {
     if (isAuthenticated && adalahAdmin) {
-      navigate('/admin', { replace: true });
+      navigate('/redaksi', { replace: true });
     }
   }, [isAuthenticated, adalahAdmin, navigate]);
 
@@ -29,9 +29,9 @@ function LoginAdmin() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-dark-bg">
       <div className="max-w-md w-full bg-white dark:bg-dark-bg-elevated rounded-lg shadow-md p-8">
-        <h2 className="text-2xl font-bold text-center mb-2 dark:text-white">Admin Kateglo</h2>
+        <h2 className="text-2xl font-bold text-center mb-2 dark:text-white">Redaksi Kateglo</h2>
         <p className="text-gray-500 dark:text-gray-400 text-center mb-6">
-          Masuk dengan akun Google yang terdaftar sebagai admin
+          Masuk dengan akun Google yang terdaftar sebagai redaksi
         </p>
 
         {authError && (
@@ -42,12 +42,12 @@ function LoginAdmin() {
 
         {isAuthenticated && !adalahAdmin && (
           <div className="mb-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg text-yellow-700 dark:text-yellow-400 text-sm">
-            Akun Anda tidak memiliki akses admin.
+            Akun Anda tidak memiliki akses redaksi.
           </div>
         )}
 
         <button
-          onClick={() => loginDenganGoogle('/admin')}
+          onClick={() => loginDenganGoogle('/redaksi')}
           className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 py-3 px-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">

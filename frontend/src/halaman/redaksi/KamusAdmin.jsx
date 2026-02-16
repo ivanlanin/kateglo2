@@ -9,15 +9,15 @@ import {
   useDaftarMakna, useSimpanMakna, useHapusMakna,
   useSimpanContoh, useHapusContoh,
 } from '../../api/apiAdmin';
-import TataLetakAdmin from '../../komponen/admin/TataLetakAdmin';
+import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
   KotakCariAdmin, InfoTotal, TabelAdmin, BadgeStatus, usePencarianAdmin,
-} from '../../komponen/admin/KomponenAdmin';
-import PanelGeser from '../../komponen/admin/PanelGeser';
+} from '../../komponen/redaksi/KomponenAdmin';
+import PanelGeser from '../../komponen/redaksi/PanelGeser';
 import {
   useFormPanel, InputField, SelectField, TextareaField, ToggleAktif,
   FormFooter, PesanForm,
-} from '../../komponen/admin/FormAdmin';
+} from '../../komponen/redaksi/FormAdmin';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
