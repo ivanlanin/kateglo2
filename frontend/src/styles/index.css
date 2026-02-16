@@ -1021,7 +1021,7 @@ code {
   }
 
   .kamus-detail-tag-blue {
-    @apply text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded;
+    @apply inline-flex items-center text-xs font-medium bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded;
   }
 
   .dark .kamus-detail-tag-blue {
@@ -1029,7 +1029,7 @@ code {
   }
 
   .kamus-detail-tag-purple {
-    @apply text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded;
+    @apply inline-flex items-center text-xs font-medium bg-purple-50 text-purple-700 px-1.5 py-0.5 rounded;
   }
 
   .dark .kamus-detail-tag-purple {
@@ -1037,7 +1037,7 @@ code {
   }
 
   .kamus-detail-tag-green {
-    @apply text-xs bg-green-50 text-green-700 px-2 py-1 rounded;
+    @apply inline-flex items-center text-xs font-medium bg-green-50 text-green-700 px-1.5 py-0.5 rounded;
   }
 
   .dark .kamus-detail-tag-green {
@@ -1045,7 +1045,7 @@ code {
   }
 
   .kamus-detail-tag-gray {
-    @apply text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded;
+    @apply inline-flex items-center text-xs font-medium bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded;
   }
 
   .dark .kamus-detail-tag-gray {
