@@ -8,14 +8,14 @@ import Tesaurus from './halaman/publik/Tesaurus';
 import Glosarium from './halaman/publik/Glosarium';
 import AuthCallback from './halaman/publik/AuthCallback';
 import KebijakanPrivasi from './halaman/publik/KebijakanPrivasi';
-import LoginAdmin from './halaman/admin/LoginAdmin';
-import DasborAdmin from './halaman/admin/DasborAdmin';
-import KamusAdmin from './halaman/admin/KamusAdmin';
-import TesaurusAdmin from './halaman/admin/TesaurusAdmin';
-import GlosariumAdmin from './halaman/admin/GlosariumAdmin';
-import PenggunaAdmin from './halaman/admin/PenggunaAdmin';
+import LoginAdmin from './halaman/redaksi/LoginAdmin';
+import DasborAdmin from './halaman/redaksi/DasborAdmin';
+import KamusAdmin from './halaman/redaksi/KamusAdmin';
+import TesaurusAdmin from './halaman/redaksi/TesaurusAdmin';
+import GlosariumAdmin from './halaman/redaksi/GlosariumAdmin';
+import PenggunaAdmin from './halaman/redaksi/PenggunaAdmin';
 
-function RuteAdmin({ children }) {
+function RuteRedaksi({ children }) {
   const { isAuthenticated, adalahAdmin, isLoading } = useAuth();
 
   if (isLoading) {
@@ -27,7 +27,7 @@ function RuteAdmin({ children }) {
   }
 
   if (!isAuthenticated || !adalahAdmin) {
-    return <Navigate to="/admin/login" replace />;
+    return <Navigate to="/redaksi/login" replace />;
   }
 
   return children;
@@ -37,13 +37,13 @@ function App() {
   return (
     <Routes>
       <Route path="/auth/callback" element={<AuthCallback />} />
-      {/* Admin routes — tanpa TataLetak */}
-      <Route path="/admin/login" element={<LoginAdmin />} />
-      <Route path="/admin" element={<RuteAdmin><DasborAdmin /></RuteAdmin>} />
-      <Route path="/admin/kamus" element={<RuteAdmin><KamusAdmin /></RuteAdmin>} />
-      <Route path="/admin/tesaurus" element={<RuteAdmin><TesaurusAdmin /></RuteAdmin>} />
-      <Route path="/admin/glosarium" element={<RuteAdmin><GlosariumAdmin /></RuteAdmin>} />
-      <Route path="/admin/pengguna" element={<RuteAdmin><PenggunaAdmin /></RuteAdmin>} />
+      {/* Redaksi routes — tanpa TataLetak */}
+      <Route path="/redaksi/login" element={<LoginAdmin />} />
+      <Route path="/redaksi" element={<RuteRedaksi><DasborAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/kamus" element={<RuteRedaksi><KamusAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/tesaurus" element={<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/glosarium" element={<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/pengguna" element={<RuteRedaksi><PenggunaAdmin /></RuteRedaksi>} />
       {/* Public routes */}
       <Route element={<TataLetak />}>
         <Route path="/" element={<Beranda />} />

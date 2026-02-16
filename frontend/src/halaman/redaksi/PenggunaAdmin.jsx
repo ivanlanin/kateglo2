@@ -4,9 +4,9 @@
 
 import { useState } from 'react';
 import { useDaftarPengguna, useDaftarPeran, useUbahPeran, useSimpanPengguna } from '../../api/apiAdmin';
-import TataLetakAdmin from '../../komponen/admin/TataLetakAdmin';
-import { TabelAdmin, InfoTotal, BadgeStatus } from '../../komponen/admin/KomponenAdmin';
-import PanelGeser from '../../komponen/admin/PanelGeser';
+import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
+import { TabelAdmin, InfoTotal, BadgeStatus } from '../../komponen/redaksi/KomponenAdmin';
+import PanelGeser from '../../komponen/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -14,7 +14,7 @@ import {
   ToggleAktif,
   FormFooter,
   PesanForm,
-} from '../../komponen/admin/FormAdmin';
+} from '../../komponen/redaksi/FormAdmin';
 
 function formatTanggal(dateStr) {
   if (!dateStr) return '—';

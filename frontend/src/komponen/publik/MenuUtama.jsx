@@ -11,7 +11,7 @@ export const menuItems = [
   { path: '/kamus', label: 'Kamus' },
   { path: '/tesaurus', label: 'Tesaurus' },
   { path: '/glosarium', label: 'Glosarium' },
-  { path: '/admin', label: 'Admin', adminSaja: true },
+  { path: '/redaksi', label: 'Redaksi', adminSaja: true },
 ];
 
 function MenuUtama({
