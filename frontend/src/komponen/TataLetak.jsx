@@ -4,7 +4,7 @@
 
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 
 function TataLetak() {
@@ -83,6 +83,9 @@ function TataLetak() {
           >
             {modeGelap ? '☀️' : '🌙'}
           </button>
+          <Link to="/kebijakan-privasi" className="link-action text-sm">
+            Kebijakan Privasi
+          </Link>
         </div>
       </footer>
       </div>

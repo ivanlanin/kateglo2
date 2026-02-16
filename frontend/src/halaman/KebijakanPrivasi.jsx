@@ -16,8 +16,8 @@ function KebijakanPrivasi() {
         <section className="space-y-2">
           <h2 className="font-semibold">1. Data yang kami proses</h2>
           <p className="muted-text">
-            Kami dapat memproses informasi akun dari autentikasi Google (nama, email,
-            dan foto profil) untuk kebutuhan login dan personalisasi dasar.
+            Kami dapat memproses informasi akun dari autentikasi Google (nama, surel,
+            dan foto profil) untuk kebutuhan masuk dan personalisasi dasar.
           </p>
         </section>
 
