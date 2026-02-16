@@ -134,17 +134,17 @@ function KamusDetail() {
       <nav className="kamus-detail-breadcrumb">
         <Link to="/kamus" className="kamus-detail-breadcrumb-link">Kamus</Link>
         <span className="mx-2">›</span>
-        {data.induk && (
-          <>
+        {data.induk && data.induk.map((item) => (
+          <span key={item.id}>
             <Link
-              to={`/kamus/detail/${encodeURIComponent(data.induk.lema)}`}
+              to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
               className="kamus-detail-breadcrumb-link"
             >
-              <TeksLema lema={data.induk.lema} />
+              <TeksLema lema={item.lema} />
             </Link>
             <span className="mx-2">›</span>
-          </>
-        )}
+          </span>
+        ))}
         <span className="kamus-detail-breadcrumb-current"><TeksLema lema={data.lema} /></span>
       </nav>
 
