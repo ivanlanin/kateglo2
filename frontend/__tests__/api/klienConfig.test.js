@@ -1,9 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import axios from 'axios';
 
+const mockUse = vi.fn();
 vi.mock('axios', () => ({
   default: {
-    create: vi.fn(() => ({ get: vi.fn() })),
+    create: vi.fn(() => ({ get: vi.fn(), interceptors: { request: { use: mockUse } } })),
   },
 }));
 
@@ -11,6 +12,8 @@ describe('klien config', () => {
   beforeEach(() => {
     vi.resetModules();
     axios.create.mockReset();
+    mockUse.mockReset();
+    axios.create.mockReturnValue({ get: vi.fn(), interceptors: { request: { use: mockUse } } });
   });
 
   afterEach(() => {
@@ -26,8 +29,14 @@ describe('klien config', () => {
     expect(axios.create).toHaveBeenCalledWith({
       baseURL: 'https://api.kateglo.test',
       timeout: 15000,
-      headers: { 'X-Frontend-Key': 'rahasia' },
     });
+    expect(mockUse).toHaveBeenCalled();
+
+    // Simulate interceptor execution to verify it sets the header
+    const interceptorFn = mockUse.mock.calls[0][0];
+    const config = { headers: {} };
+    const result = interceptorFn(config);
+    expect(result.headers['X-Frontend-Key']).toBe('rahasia');
   });
 
   it('memakai default baseURL dan tanpa header saat key tidak ada', async () => {
@@ -39,7 +48,13 @@ describe('klien config', () => {
     expect(axios.create).toHaveBeenCalledWith({
       baseURL: 'http://localhost:3000',
       timeout: 15000,
-      headers: undefined,
     });
+    expect(mockUse).toHaveBeenCalled();
+
+    // Simulate interceptor execution to verify it does NOT set the header
+    const interceptorFn = mockUse.mock.calls[0][0];
+    const config = { headers: {} };
+    const result = interceptorFn(config);
+    expect(result.headers['X-Frontend-Key']).toBeUndefined();
   });
 });

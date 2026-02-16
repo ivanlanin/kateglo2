@@ -149,18 +149,20 @@ function buildAppToken(profile) {
   const jwtSecret = getRequiredEnv('JWT_SECRET');
   const expiresIn = process.env.JWT_EXPIRES_IN || '7d';
 
-  return jwt.sign(
-    {
-      sub: profile.id,
-      email: profile.email,
-      name: profile.name,
-      picture: profile.picture,
-      provider: 'google',
-      role: 'user',
-    },
-    jwtSecret,
-    { expiresIn }
-  );
+  const payload = {
+    sub: profile.id,
+    email: profile.email,
+    name: profile.name,
+    picture: profile.picture,
+    provider: 'google',
+  };
+
+  // Tambah data otorisasi dari database jika tersedia
+  if (profile.pid != null) payload.pid = profile.pid;
+  if (profile.peran) payload.peran = profile.peran;
+  if (profile.izin) payload.izin = profile.izin;
+
+  return jwt.sign(payload, jwtSecret, { expiresIn });
 }
 
 function buildFrontendCallbackRedirect(token, options = {}) {

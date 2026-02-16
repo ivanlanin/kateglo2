@@ -69,11 +69,56 @@ describe('routes backend', () => {
     expect(response.body.status).toBe('ok');
   });
 
-  it('GET /api/admin/health mengembalikan status ok', async () => {
-    const response = await request(createApp()).get('/api/admin/health');
+  it('GET /api/admin/health mengembalikan status ok dengan token admin', async () => {
+    process.env.JWT_SECRET = 'test-secret-routes';
+    const token = jwt.sign(
+      {
+        sub: 'google-admin',
+        email: 'admin@example.com',
+        name: 'Admin',
+        picture: 'https://img.example/admin.png',
+        provider: 'google',
+        peran: 'admin',
+        izin: ['kelola_pengguna'],
+      },
+      process.env.JWT_SECRET
+    );
+
+    const response = await request(createApp())
+      .get('/api/admin/health')
+      .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(200);
     expect(response.body.status).toBe('ok');
+    delete process.env.JWT_SECRET;
+  });
+
+  it('GET /api/admin/health mengembalikan 401 tanpa token', async () => {
+    const response = await request(createApp()).get('/api/admin/health');
+
+    expect(response.status).toBe(401);
+  });
+
+  it('GET /api/admin/health mengembalikan 403 untuk non-admin', async () => {
+    process.env.JWT_SECRET = 'test-secret-routes';
+    const token = jwt.sign(
+      {
+        sub: 'google-user',
+        email: 'user@example.com',
+        name: 'User',
+        provider: 'google',
+        peran: 'pengguna',
+        izin: ['lihat_lema'],
+      },
+      process.env.JWT_SECRET
+    );
+
+    const response = await request(createApp())
+      .get('/api/admin/health')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.status).toBe(403);
+    delete process.env.JWT_SECRET;
   });
 
   it('GET /api/public/kamus/kategori mengembalikan data kategori', async () => {
@@ -405,10 +450,12 @@ describe('routes backend', () => {
     const token = jwt.sign(
       {
         sub: 'google-123',
+        pid: 1,
         email: 'user@example.com',
         name: 'User Test',
         picture: 'https://img.example/user.png',
-        role: 'user',
+        peran: 'pengguna',
+        izin: ['lihat_lema'],
         provider: 'google',
       },
       process.env.JWT_SECRET
@@ -422,10 +469,12 @@ describe('routes backend', () => {
     expect(response.body.success).toBe(true);
     expect(response.body.data).toEqual({
       id: 'google-123',
+      pid: 1,
       email: 'user@example.com',
       name: 'User Test',
       picture: 'https://img.example/user.png',
-      role: 'user',
+      peran: 'pengguna',
+      izin: ['lihat_lema'],
       provider: 'google',
     });
     delete process.env.JWT_SECRET;

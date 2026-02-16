@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-15T20:03:50.227Z
+-- Generated: 2026-02-16T09:58:35.214Z
 
 -- ============================================
 -- TABLES
@@ -44,6 +44,15 @@ create index idx_glosarium_indonesia_lower_trgm on glosarium using gin (lower(in
 create index idx_glosarium_indonesia_trgm on glosarium using gin (indonesia gin_trgm_ops);
 create index idx_glosarium_indonesia_tsv_simple on glosarium using gin (to_tsvector('simple'::regconfig, indonesia));
 create index idx_glosarium_sumber on glosarium using btree (sumber);
+
+create table izin (
+  id serial primary key,
+  kode text not null,
+  nama text not null,
+  kelompok text,
+  constraint izin_kode_key unique (kode)
+);
+create unique index izin_kode_key on izin using btree (kode);
 
 create table label (
   id serial primary key,
@@ -107,6 +116,36 @@ create index idx_makna_bidang on makna using btree (bidang);
 create index idx_makna_kelas_kata on makna using btree (kelas_kata);
 create index idx_makna_lema on makna using btree (lema_id, urutan);
 create unique index makna_legacy_mid_key on makna using btree (legacy_mid);
+
+create table pengguna (
+  id serial primary key,
+  google_id text not null,
+  surel text not null,
+  nama text not null,
+  foto text,
+  peran_id integer references peran(id) not null default 1,
+  aktif integer not null default 1,
+  login_terakhir timestamp without time zone,
+  created_at timestamp without time zone not null default now(),
+  updated_at timestamp without time zone not null default now(),
+  constraint pengguna_google_id_key unique (google_id)
+);
+create index idx_pengguna_surel on pengguna using btree (surel);
+create unique index pengguna_google_id_key on pengguna using btree (google_id);
+
+create table peran (
+  id serial primary key,
+  kode text not null,
+  nama text not null,
+  keterangan text,
+  constraint peran_kode_key unique (kode)
+);
+create unique index peran_kode_key on peran using btree (kode);
+
+create table peran_izin (
+  peran_id integer references peran(id) on delete cascade,
+  izin_id integer references izin(id) on delete cascade
+);
 
 create table tesaurus (
   id serial primary key,

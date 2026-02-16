@@ -21,8 +21,16 @@ jest.mock('../../services/layananAuthGoogle', () => ({
   buildFrontendErrorRedirect: jest.fn(),
 }));
 
+jest.mock('../../models/modelPengguna', () => ({
+  upsertDariGoogle: jest.fn(),
+  bootstrapAdmin: jest.fn(),
+  ambilKodePeran: jest.fn(),
+  ambilIzin: jest.fn(),
+}));
+
 const logger = require('../../config/logger');
 const layananAuthGoogle = require('../../services/layananAuthGoogle');
+const ModelPengguna = require('../../models/modelPengguna');
 const authRouter = require('../../routes/auth');
 
 function createApp() {
@@ -100,7 +108,11 @@ describe('routes/auth', () => {
 
   it('GET /auth/google/callback menukar code dan redirect dengan app token', async () => {
     layananAuthGoogle.exchangeCodeForToken.mockResolvedValue({ access_token: 'google-access' });
-    layananAuthGoogle.fetchGoogleProfile.mockResolvedValue({ id: 'google-id', email: 'u@example.com' });
+    layananAuthGoogle.fetchGoogleProfile.mockResolvedValue({ id: 'google-id', email: 'u@example.com', name: 'User', picture: 'https://img.example/u.png' });
+    ModelPengguna.upsertDariGoogle.mockResolvedValue({ id: 1, peran_id: 1, email: 'u@example.com' });
+    ModelPengguna.bootstrapAdmin.mockResolvedValue({ id: 1, peran_id: 1, email: 'u@example.com' });
+    ModelPengguna.ambilKodePeran.mockResolvedValue('pengguna');
+    ModelPengguna.ambilIzin.mockResolvedValue(['lihat_lema']);
     layananAuthGoogle.buildAppToken.mockReturnValue('app-token-123');
     layananAuthGoogle.buildFrontendCallbackRedirect.mockReturnValue('http://localhost:5173/auth/callback#token=app-token-123');
 
@@ -109,7 +121,18 @@ describe('routes/auth', () => {
     expect(response.status).toBe(302);
     expect(layananAuthGoogle.exchangeCodeForToken).toHaveBeenCalledWith('oauth-code-1');
     expect(layananAuthGoogle.fetchGoogleProfile).toHaveBeenCalledWith('google-access');
-    expect(layananAuthGoogle.buildAppToken).toHaveBeenCalledWith({ id: 'google-id', email: 'u@example.com' });
+    expect(ModelPengguna.upsertDariGoogle).toHaveBeenCalledWith({
+      googleId: 'google-id',
+      email: 'u@example.com',
+      nama: 'User',
+      foto: 'https://img.example/u.png',
+    });
+    expect(layananAuthGoogle.buildAppToken).toHaveBeenCalledWith(expect.objectContaining({
+      id: 'google-id',
+      pid: 1,
+      peran: 'pengguna',
+      izin: ['lihat_lema'],
+    }));
     expect(layananAuthGoogle.buildFrontendCallbackRedirect).toHaveBeenCalledWith('app-token-123', {
       frontendOrigin: 'https://kateglo.org',
     });

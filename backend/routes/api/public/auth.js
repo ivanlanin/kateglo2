@@ -12,10 +12,12 @@ router.get('/me', authenticate, (req, res) => {
     success: true,
     data: {
       id: req.user.sub,
+      pid: req.user.pid,
       email: req.user.email,
       name: req.user.name,
       picture: req.user.picture,
-      role: req.user.role,
+      peran: req.user.peran,
+      izin: req.user.izin || [],
       provider: req.user.provider,
     },
   });

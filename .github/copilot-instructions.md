@@ -30,11 +30,11 @@
 **Kateglo** adalah kamus, tesaurus, dan glosarium bahasa Indonesia. Versi 2.0 adalah full rewrite dengan arsitektur modern.
 
 **Stack:**
-- Frontend Public: React 19 + Vite 6 + TailwindCSS 3 + React Router 7 + React Query 5 (Port 5173)
-- Admin Dashboard: React 19 + Vite 6 + TailwindCSS 3 (Port 5174)
+- Frontend: React 19 + Vite 6 + TailwindCSS 3 + React Router 7 + React Query 5 (Port 5173)
 - Backend: Express.js 4 + PostgreSQL (Native PG) + Winston Logging (Port 3000)
 - Database: PostgreSQL (hosted on Render, remote access via SSL)
 - Authentication: JWT-based dengan role-based access control
+- Admin: Terintegrasi dalam frontend di `/admin/*` (route terproteksi, hanya role admin)
 
 ## Project Infrastructure
 
@@ -53,19 +53,14 @@ kateglo2/
 │   ├── scripts/          # Utility scripts (db-schema.js, etc.)
 │   └── services/         # Business logic layer
 │
-├── frontend/             # Public website (Port 5173)
+├── frontend/             # Website publik + admin (Port 5173)
 │   └── src/
-│       ├── api/          # API client (axios + publicApi)
+│       ├── api/          # API client (axios + publicApi + apiAdmin)
+│       ├── context/      # Auth context (authContext)
 │       ├── komponen/     # Reusable components
-│       ├── halaman/      # Page components
+│       ├── halaman/      # Page components (publik)
+│       │   └── admin/    # Admin pages (terproteksi)
 │       └── styles/       # TailwindCSS styles
-│
-├── admin/                # Admin dashboard (Port 5174)
-│   └── src/
-│       ├── api/          # Admin API client
-│       ├── components/   # Admin components
-│       ├── pages/        # Admin pages
-│       └── styles/       # Admin styles
 │
 ├── _kode/                # Reference code (NOT committed)
 │   ├── kateglo/          # Old PHP codebase (reference)
@@ -82,8 +77,10 @@ kateglo2/
 - **Backend DB**: `backend/db/index.js` — PostgreSQL pool + query builder
 - **Backend Models**: `backend/models/` — Fat model layer (all DB queries here)
 - **API Routes**: `backend/routes/api/public/` — Public endpoints
-- **Frontend API**: `frontend/src/api/apiPublik.js` — API call functions
+- **Frontend API**: `frontend/src/api/apiPublik.js` — API call functions (publik)
+- **Admin API**: `frontend/src/api/apiAdmin.js` — API call functions (admin)
 - **Frontend Pages**: `frontend/src/halaman/` — React page components
+- **Admin Pages**: `frontend/src/halaman/admin/` — Admin page components
 
 ## Shell & CLI Conventions
 
@@ -372,7 +369,6 @@ npm run dev
 # Or run individually
 npm run dev:backend       # Port 3000
 npm run dev:public        # Port 5173
-npm run dev:admin         # Port 5174
 ```
 
 ### Validation Policy (Wajib Setelah Perubahan)
@@ -384,7 +380,6 @@ Contoh per package:
 ```bash
 Set-Location backend; npm run lint; npm run test
 Set-Location frontend; npm run lint; npm run test
-Set-Location admin; npm run lint; npm run test
 ```
 
 ### Database Work
@@ -434,7 +429,7 @@ Set-Location backend; node scripts/db-schema.js
 Select-String -Path "_docs/struktur-data.sql" -Pattern "create table phrase"
 
 # Kill port conflicts
-npx kill-port 3000; npx kill-port 5173; npx kill-port 5174
+npx kill-port 3000; npx kill-port 5173
 
 # Run backend tests
 Set-Location backend; npx jest --no-watch
@@ -478,7 +473,6 @@ Gunakan `_kode/` sebagai referensi:
 - Keep documentation proportional to code complexity
 
 ### Deployment
-Deploy ke Render dengan 3 services:
+Deploy ke Render dengan 2 services:
 - `kateglo-api` — Backend (Web Service)
-- `kateglo-public` — Frontend Public (Static Site)
-- `kateglo-admin` — Frontend Admin (Static Site)
+- `kateglo-public` — Frontend Public + Admin (Static Site)
