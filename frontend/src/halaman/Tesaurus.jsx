@@ -65,7 +65,7 @@ function Tesaurus() {
   const [searchParams, setSearchParams] = useSearchParams();
   const offsetParam = parseInt(searchParams.get('offset') || '0', 10);
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['cari-tesaurus', kata, offsetParam],
     queryFn: () => cariTesaurus(kata, { limit, offset: offsetParam }),
     enabled: Boolean(kata),
@@ -96,6 +96,7 @@ function Tesaurus() {
       <QueryFeedback
         isLoading={isLoading}
         isError={isError}
+        error={error}
         loadingText="Mencari data …"
         errorText="Gagal mengambil data. Coba lagi."
       />

@@ -6,8 +6,26 @@ const express = require('express');
 const { cariKamus, ambilDetailKamus } = require('../../../services/layananKamusPublik');
 const ModelLabel = require('../../../models/modelLabel');
 const ModelLema = require('../../../models/modelLema');
+const { publicSearchLimiter } = require('../../../middleware/rateLimiter');
 
 const router = express.Router();
+const maxOffset = Math.max(Number(process.env.PUBLIC_MAX_OFFSET) || 1000, 0);
+
+function parseSearchPagination(query, defaultLimit = 100, maxLimit = 200) {
+  const limit = Math.min(Math.max(Number(query.limit) || defaultLimit, 1), maxLimit);
+  const offset = Math.max(Number(query.offset) || 0, 0);
+
+  return { limit, offset };
+}
+
+function rejectTooLargeOffset(res, offset) {
+  if (offset <= maxOffset) return false;
+  res.status(400).json({
+    error: 'Invalid Query',
+    message: `Offset maksimal adalah ${maxOffset}`,
+  });
+  return true;
+}
 
 router.get('/kategori', async (_req, res, next) => {
   try {
@@ -20,8 +38,11 @@ router.get('/kategori', async (_req, res, next) => {
 
 router.get('/kategori/:kategori/:kode', async (req, res, next) => {
   try {
-    const limit = Math.min(Math.max(Number(req.query.limit) || 100, 1), 200);
-    const offset = Math.max(Number(req.query.offset) || 0, 0);
+    const { limit, offset } = parseSearchPagination(req.query);
+    if (rejectTooLargeOffset(res, offset)) {
+      return;
+    }
+
     const data = await ModelLabel.cariLemaPerLabel(
       req.params.kategori,
       decodeURIComponent(req.params.kode),
@@ -43,10 +64,13 @@ router.get('/autocomplete/:kata', async (req, res, next) => {
   }
 });
 
-router.get('/cari/:kata', async (req, res, next) => {
+router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
   try {
-    const limit = Math.min(Math.max(Number(req.query.limit) || 100, 1), 200);
-    const offset = Math.max(Number(req.query.offset) || 0, 0);
+    const { limit, offset } = parseSearchPagination(req.query);
+    if (rejectTooLargeOffset(res, offset)) {
+      return;
+    }
+
     const result = await cariKamus(req.params.kata, { limit, offset });
     const response = {
       query: req.params.kata,

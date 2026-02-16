@@ -45,7 +45,7 @@ function Glosarium() {
     return Promise.resolve({ data: [], total: 0 });
   };
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['glosarium', kata || '', bidang || '', sumber || '', offsetParam],
     queryFn,
     enabled: sedangMencari,
@@ -86,6 +86,7 @@ function Glosarium() {
       <QueryFeedback
         isLoading={isLoading}
         isError={isError}
+        error={error}
         loadingText="Mencari data …"
         errorText="Gagal mengambil data."
       />

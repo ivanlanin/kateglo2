@@ -3,7 +3,10 @@
  */
 
 const express = require('express');
+const { publicApiLimiter } = require('../../../middleware/rateLimiter');
 const router = express.Router();
+
+router.use(publicApiLimiter);
 
 router.get('/health', (_req, res) => {
   res.json({

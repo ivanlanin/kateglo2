@@ -36,6 +36,7 @@ function Kamus() {
     data: dataPencarian,
     isLoading: isLoadingPencarian,
     isError: isErrorPencarian,
+    error: errorPencarian,
   } = useQuery({
     queryKey: ['cari-kamus', kata, offsetParam],
     queryFn: () => cariKamus(kata, { limit, offset: offsetParam }),
@@ -53,6 +54,7 @@ function Kamus() {
     data: dataKategori,
     isLoading: isLoadingKategori,
     isError: isErrorKategori,
+    error: errorKategori,
   } = useQuery({
     queryKey: ['kamus-kategori-lema', kategori, kode, offsetParam],
     queryFn: () => ambilLemaPerKategori(kategori, kode, { limit, offset: offsetParam }),
@@ -67,6 +69,7 @@ function Kamus() {
 
   const isLoading = isLoadingPencarian || isLoadingKategori;
   const isError = isErrorPencarian || isErrorKategori;
+  const error = errorPencarian || errorKategori;
 
   const handleOffset = (newOffset) => {
     updateSearchParamsWithOffset(setSearchParams, {}, newOffset);
@@ -106,6 +109,7 @@ function Kamus() {
       <QueryFeedback
         isLoading={isLoading}
         isError={isError}
+        error={error}
         loadingText={modeKategori ? 'Memuat data …' : 'Mencari data …'}
         errorText="Gagal mengambil data. Coba lagi."
       />
