@@ -4,7 +4,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { autocomplete } from '../api/apiPublik';
+import { autocomplete } from '../../api/apiPublik';
 
 const opsiKategori = [
   { value: 'kamus', label: 'Kamus', placeholder: 'Cari kata \u2026' },

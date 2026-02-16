@@ -1,6 +1,6 @@
 /**
  * @fileoverview Test untuk komponen Navbar
- * @tested_in frontend/src/komponen/Navbar.jsx
+ * @tested_in frontend/src/komponen/publik/Navbar.jsx
  */
 
 // Mock react-router-dom SEBELUM import komponen
@@ -16,16 +16,16 @@ const mockAuthState = {
 const mockSimpanReturnTo = vi.fn();
 const mockBuatUrlLoginGoogle = vi.fn(() => 'http://localhost:3000/auth/google');
 
-vi.mock('../../src/api/apiPublik', () => ({
+vi.mock('../../../src/api/apiPublik', () => ({
   autocomplete: vi.fn().mockResolvedValue([]),
 }));
 
-vi.mock('../../src/api/apiAuth', () => ({
+vi.mock('../../../src/api/apiAuth', () => ({
   simpanReturnTo: (...args) => mockSimpanReturnTo(...args),
   buatUrlLoginGoogle: (...args) => mockBuatUrlLoginGoogle(...args),
 }));
 
-vi.mock('../../src/context/authContext', () => ({
+vi.mock('../../../src/context/authContext', () => ({
   useAuth: () => mockAuthState,
 }));
 
@@ -36,7 +36,7 @@ vi.mock('react-router-dom', () => ({
 }));
 
 import { render, screen, fireEvent } from '@testing-library/react';
-import Navbar from '../../src/komponen/Navbar';
+import Navbar from '../../../src/komponen/publik/Navbar';
 
 describe('Navbar', () => {
   beforeEach(() => {

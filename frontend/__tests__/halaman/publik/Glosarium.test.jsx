@@ -1,20 +1,20 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Glosarium from '../../src/halaman/Glosarium';
+import Glosarium from '../../../src/halaman/publik/Glosarium';
 import {
   cariGlosarium,
   ambilGlosariumPerBidang,
   ambilGlosariumPerSumber,
   ambilDaftarBidang,
   ambilDaftarSumber,
-} from '../../src/api/apiPublik';
+} from '../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
 const mockSetSearchParams = vi.fn();
 let mockParams = {};
 let params = '';
 
-vi.mock('../../src/api/apiPublik', () => ({
+vi.mock('../../../src/api/apiPublik', () => ({
   cariGlosarium: vi.fn().mockResolvedValue({ data: [], total: 0 }),
   ambilGlosariumPerBidang: vi.fn().mockResolvedValue({ data: [], total: 0 }),
   ambilGlosariumPerSumber: vi.fn().mockResolvedValue({ data: [], total: 0 }),
@@ -32,7 +32,7 @@ vi.mock('@tanstack/react-query', () => ({
   useQuery: (...args) => mockUseQuery(...args),
 }));
 
-vi.mock('../../src/komponen/Paginasi', () => ({
+vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
   default: ({ onChange }) => (
     <button type="button" onClick={() => onChange(100)}>
       Halaman glosarium berikut

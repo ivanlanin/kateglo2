@@ -1,12 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Kamus from '../../src/halaman/Kamus';
+import Kamus from '../../../src/halaman/publik/Kamus';
 
 const mockUseQuery = vi.fn();
 const mockSetSearchParams = vi.fn();
 let mockParams = {};
 
-vi.mock('../../src/api/apiPublik', () => ({
+vi.mock('../../../src/api/apiPublik', () => ({
   cariKamus: vi.fn().mockResolvedValue({ data: [], total: 0 }),
   ambilKategoriKamus: vi.fn().mockResolvedValue({}),
   ambilLemaPerKategori: vi.fn().mockResolvedValue({ data: [], total: 0, label: null }),
@@ -22,7 +22,7 @@ vi.mock('@tanstack/react-query', () => ({
   useQuery: (...args) => mockUseQuery(...args),
 }));
 
-vi.mock('../../src/komponen/Paginasi', () => ({
+vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
   default: ({ onChange }) => (
     <button type="button" onClick={() => onChange(100)}>
       Ubah halaman

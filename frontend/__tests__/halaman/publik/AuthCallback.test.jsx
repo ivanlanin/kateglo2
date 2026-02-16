@@ -5,20 +5,20 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import AuthCallback from '../../src/halaman/AuthCallback';
+import AuthCallback from '../../../src/halaman/publik/AuthCallback';
 
 const mockNavigate = vi.fn();
 const mockSetAuthToken = vi.fn();
 const mockAmbilReturnTo = vi.fn(() => '/');
 const mockSearchParamsGet = vi.fn(() => '');
 
-vi.mock('../../src/context/authContext', () => ({
+vi.mock('../../../src/context/authContext', () => ({
   useAuth: () => ({
     setAuthToken: (...args) => mockSetAuthToken(...args),
   }),
 }));
 
-vi.mock('../../src/api/apiAuth', () => ({
+vi.mock('../../../src/api/apiAuth', () => ({
   ambilReturnTo: (...args) => mockAmbilReturnTo(...args),
 }));
 

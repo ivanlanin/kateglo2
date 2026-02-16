@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import TeksLema from '../../src/komponen/TeksLema';
+import TeksLema from '../../../src/komponen/publik/TeksLema';
 
 describe('TeksLema', () => {
   it('mengubah pola lema (nomor) menjadi superskrip', () => {

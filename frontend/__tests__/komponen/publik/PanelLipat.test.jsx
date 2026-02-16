@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import PanelLipat from '../../src/komponen/PanelLipat';
+import PanelLipat from '../../../src/komponen/publik/PanelLipat';
 
 describe('PanelLipat', () => {
   it('tertutup secara default dan bisa dibuka', () => {

@@ -3,7 +3,7 @@
  */
 
 import { useState } from 'react';
-import Paginasi from '../Paginasi';
+import Paginasi from '../bersama/Paginasi';
 
 // ─── Utilitas ────────────────────────────────────────────────────────────────
 

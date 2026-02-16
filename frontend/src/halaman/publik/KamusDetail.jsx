@@ -5,11 +5,11 @@
 import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ambilDetailKamus } from '../api/apiPublik';
-import PanelLipat from '../komponen/PanelLipat';
-import HalamanDasar from '../komponen/HalamanDasar';
-import TeksLema from '../komponen/TeksLema';
-import { PesanTidakDitemukan } from '../komponen/StatusKonten';
+import { ambilDetailKamus } from '../../api/apiPublik';
+import PanelLipat from '../../komponen/publik/PanelLipat';
+import HalamanDasar from '../../komponen/publik/HalamanDasar';
+import TeksLema from '../../komponen/publik/TeksLema';
+import { PesanTidakDitemukan } from '../../komponen/publik/StatusKonten';
 
 /** Konversi markdown ringan (*italic* dan **bold**) ke HTML inline */
 function renderMarkdown(teks) {

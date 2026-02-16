@@ -3,8 +3,8 @@
  */
 
 import { useEffect } from 'react';
-import KotakCari from '../komponen/KotakCari';
-import MenuUtama from '../komponen/MenuUtama';
+import KotakCari from '../../komponen/publik/KotakCari';
+import MenuUtama from '../../komponen/publik/MenuUtama';
 
 function Beranda() {
   useEffect(() => {

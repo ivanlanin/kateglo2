@@ -4,8 +4,8 @@
 
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/authContext';
-import { buatUrlLoginGoogle, simpanReturnTo } from '../api/apiAuth';
+import { useAuth } from '../../context/authContext';
+import { buatUrlLoginGoogle, simpanReturnTo } from '../../api/apiAuth';
 
 export const menuItems = [
   { path: '/kamus', label: 'Kamus' },

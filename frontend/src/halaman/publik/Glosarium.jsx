@@ -10,11 +10,11 @@ import {
   ambilGlosariumPerSumber,
   ambilDaftarBidang,
   ambilDaftarSumber,
-} from '../api/apiPublik';
-import Paginasi from '../komponen/Paginasi';
-import HalamanDasar from '../komponen/HalamanDasar';
-import { EmptyResultText, QueryFeedback } from '../komponen/StatusKonten';
-import { updateSearchParamsWithOffset } from '../utils/searchParams';
+} from '../../api/apiPublik';
+import Paginasi from '../../komponen/bersama/Paginasi';
+import HalamanDasar from '../../komponen/publik/HalamanDasar';
+import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
+import { updateSearchParamsWithOffset } from '../../utils/searchParams';
 
 function Glosarium() {
   const { kata, bidang, sumber } = useParams();

@@ -4,12 +4,12 @@
 
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { cariKamus, ambilKategoriKamus, ambilLemaPerKategori } from '../api/apiPublik';
-import Paginasi from '../komponen/Paginasi';
-import HalamanDasar from '../komponen/HalamanDasar';
-import TeksLema from '../komponen/TeksLema';
-import { EmptyResultText, PesanTidakDitemukan, QueryFeedback } from '../komponen/StatusKonten';
-import { updateSearchParamsWithOffset } from '../utils/searchParams';
+import { cariKamus, ambilKategoriKamus, ambilLemaPerKategori } from '../../api/apiPublik';
+import Paginasi from '../../komponen/bersama/Paginasi';
+import HalamanDasar from '../../komponen/publik/HalamanDasar';
+import TeksLema from '../../komponen/publik/TeksLema';
+import { EmptyResultText, PesanTidakDitemukan, QueryFeedback } from '../../komponen/publik/StatusKonten';
+import { updateSearchParamsWithOffset } from '../../utils/searchParams';
 
 const NAMA_KATEGORI = {
   abjad: 'Abjad',

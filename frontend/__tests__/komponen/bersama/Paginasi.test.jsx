@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import Paginasi from '../../src/komponen/Paginasi';
+import Paginasi from '../../../src/komponen/bersama/Paginasi';
 
 describe('Paginasi', () => {
   it('return null jika total halaman <= 1', () => {
