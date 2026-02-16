@@ -5,14 +5,34 @@
 
 // Mock react-router-dom SEBELUM import komponen
 const mockNavigate = vi.fn();
+const mockAuthState = {
+  user: null,
+  isLoading: false,
+  isAuthenticated: false,
+  loginDenganGoogle: vi.fn(),
+  logout: vi.fn(),
+};
+
+const mockSimpanReturnTo = vi.fn();
+const mockBuatUrlLoginGoogle = vi.fn(() => 'http://localhost:3000/auth/google');
+
 vi.mock('../../src/api/apiPublik', () => ({
   autocomplete: vi.fn().mockResolvedValue([]),
+}));
+
+vi.mock('../../src/api/apiAuth', () => ({
+  simpanReturnTo: (...args) => mockSimpanReturnTo(...args),
+  buatUrlLoginGoogle: (...args) => mockBuatUrlLoginGoogle(...args),
+}));
+
+vi.mock('../../src/context/authContext', () => ({
+  useAuth: () => mockAuthState,
 }));
 
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   useNavigate: () => mockNavigate,
-  useLocation: () => ({ pathname: '/kamus' }),
+  useLocation: () => ({ pathname: '/kamus', search: '' }),
 }));
 
 import { render, screen, fireEvent } from '@testing-library/react';
@@ -21,6 +41,13 @@ import Navbar from '../../src/komponen/Navbar';
 describe('Navbar', () => {
   beforeEach(() => {
     mockNavigate.mockClear();
+    mockAuthState.user = null;
+    mockAuthState.isLoading = false;
+    mockAuthState.isAuthenticated = false;
+    mockAuthState.logout = vi.fn();
+    mockSimpanReturnTo.mockClear();
+    mockBuatUrlLoginGoogle.mockClear();
+    mockBuatUrlLoginGoogle.mockReturnValue('http://localhost:3000/auth/google');
   });
 
   it('menampilkan logo Kateglo', () => {
@@ -109,5 +136,65 @@ describe('Navbar', () => {
     fireEvent.submit(mobileInput.closest('form'));
 
     expect(mockNavigate).toHaveBeenCalledWith('/kamus/cari/mobile%20kata');
+  });
+
+  it('menampilkan status loading auth saat isLoading true', () => {
+    mockAuthState.isLoading = true;
+
+    render(<Navbar />);
+
+    expect(screen.getByText('Memuat...')).toBeInTheDocument();
+  });
+
+  it('menampilkan status loading auth pada panel mobile saat menu dibuka', () => {
+    mockAuthState.isLoading = true;
+
+    render(<Navbar />);
+    fireEvent.click(screen.getByLabelText('Toggle menu'));
+
+    expect(screen.getAllByText('Memuat...').length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('menampilkan tombol Keluar dan memanggil logout saat sudah autentikasi', () => {
+    const logoutMock = vi.fn();
+    mockAuthState.isAuthenticated = true;
+    mockAuthState.logout = logoutMock;
+
+    render(<Navbar />);
+    fireEvent.click(screen.getByRole('button', { name: 'Keluar' }));
+
+    expect(logoutMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('klik menu Masuk menyimpan return path', () => {
+    render(<Navbar />);
+
+    fireEvent.click(screen.getByRole('link', { name: 'Masuk' }));
+
+    expect(mockSimpanReturnTo).toHaveBeenCalledWith('/kamus');
+  });
+
+  it('klik menu Masuk di mobile menyimpan return path', () => {
+    const { container } = render(<Navbar />);
+
+    fireEvent.click(screen.getByLabelText('Toggle menu'));
+    const mobileLoginLink = container.querySelector('.navbar-mobile-auth a');
+    fireEvent.click(mobileLoginLink);
+
+    expect(mockSimpanReturnTo).toHaveBeenCalledWith('/kamus');
+  });
+
+  it('logout dari menu mobile menutup panel dan memanggil logout', () => {
+    const logoutMock = vi.fn();
+    mockAuthState.isAuthenticated = true;
+    mockAuthState.logout = logoutMock;
+
+    const { container } = render(<Navbar />);
+    fireEvent.click(screen.getByLabelText('Toggle menu'));
+    const mobileLogoutButton = container.querySelector('.navbar-mobile-auth button');
+    fireEvent.click(mobileLogoutButton);
+
+    expect(logoutMock).toHaveBeenCalledTimes(1);
+    expect(container.querySelector('.navbar-mobile-panel')).not.toBeInTheDocument();
   });
 });

@@ -3,8 +3,10 @@
  */
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import KotakCari from './KotakCari';
+import { useAuth } from '../context/authContext';
+import { buatUrlLoginGoogle, simpanReturnTo } from '../api/apiAuth';
 
 const menuItems = [
   { path: '/kamus', label: 'Kamus' },
@@ -14,6 +16,17 @@ const menuItems = [
 
 function Navbar() {
   const [menuTerbuka, setMenuTerbuka] = useState(false);
+  const location = useLocation();
+  const {
+    isLoading,
+    isAuthenticated,
+    logout,
+  } = useAuth();
+  const loginUrl = buatUrlLoginGoogle(window.location.origin);
+
+  const handleLoginClick = () => {
+    simpanReturnTo(`${location.pathname}${location.search}`);
+  };
 
   return (
     <nav className="navbar-root">
@@ -40,6 +53,26 @@ function Navbar() {
                 {item.label}
               </Link>
             ))}
+
+            {isLoading ? (
+              <span className="navbar-auth-loading">Memuat...</span>
+            ) : isAuthenticated ? (
+              <button
+                type="button"
+                onClick={logout}
+                className="navbar-menu-link"
+              >
+                Keluar
+              </button>
+            ) : (
+              <a
+                href={loginUrl}
+                onClick={handleLoginClick}
+                className="navbar-menu-link"
+              >
+                Masuk
+              </a>
+            )}
           </div>
 
           {/* Hamburger (mobile) */}
@@ -75,6 +108,31 @@ function Navbar() {
                 {item.label}
               </Link>
             ))}
+
+            <div className="navbar-mobile-auth">
+              {isLoading ? (
+                <span className="navbar-auth-loading">Memuat...</span>
+              ) : isAuthenticated ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    logout();
+                    setMenuTerbuka(false);
+                  }}
+                  className="navbar-mobile-link w-full text-left"
+                >
+                  Keluar
+                </button>
+              ) : (
+                <a
+                  href={loginUrl}
+                  onClick={handleLoginClick}
+                  className="navbar-mobile-link"
+                >
+                  Masuk
+                </a>
+              )}
+            </div>
           </div>
         )}
       </div>

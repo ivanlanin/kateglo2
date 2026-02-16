@@ -8,6 +8,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
 const routes = require('./routes');
+const authRoutes = require('./routes/auth');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 const logger = require('./config/logger');
 
@@ -119,6 +120,7 @@ app.get('/health', (req, res) => {
 });
 
 // API Routes
+app.use('/auth', authRoutes);
 app.use('/api', routes);
 
 // Error handlers
