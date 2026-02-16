@@ -212,6 +212,43 @@ describe('ModelLema', () => {
     expect(result).toEqual(rows);
   });
 
+  it('saranLema mengembalikan kosong untuk input kosong/falsy', async () => {
+    expect(await ModelLema.saranLema('')).toEqual([]);
+    expect(await ModelLema.saranLema('   ')).toEqual([]);
+    expect(await ModelLema.saranLema(null)).toEqual([]);
+    expect(db.query).not.toHaveBeenCalled();
+  });
+
+  it('saranLema menormalkan teks, clamp limit, dan mapping hasil', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ lema: 'kata' }, { lema: 'kita' }] })
+      .mockResolvedValueOnce({ rows: [{ lema: 'kata' }] })
+      .mockResolvedValueOnce({ rows: [{ lema: 'kata' }] });
+
+    const maxResult = await ModelLema.saranLema('  kata  ', 999);
+    const defaultResult = await ModelLema.saranLema('kata', 'abc');
+    const minResult = await ModelLema.saranLema('kata', -2);
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('similarity(lema, $1)'),
+      ['kata', 20]
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $2'),
+      ['kata', 5]
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      3,
+      expect.stringContaining('LIMIT $2'),
+      ['kata', 1]
+    );
+    expect(maxResult).toEqual(['kata', 'kita']);
+    expect(defaultResult).toEqual(['kata']);
+    expect(minResult).toEqual(['kata']);
+  });
+
   it('ambilInduk mengembalikan null jika indukId null', async () => {
     const result = await ModelLema.ambilInduk(null);
 
@@ -234,6 +271,43 @@ describe('ModelLema', () => {
     const result = await ModelLema.ambilInduk(10);
 
     expect(result).toBeNull();
+  });
+
+  it('ambilRantaiInduk mengembalikan array kosong jika indukId falsy', async () => {
+    expect(await ModelLema.ambilRantaiInduk(null)).toEqual([]);
+    expect(await ModelLema.ambilRantaiInduk(undefined)).toEqual([]);
+    expect(await ModelLema.ambilRantaiInduk(0)).toEqual([]);
+    expect(db.query).not.toHaveBeenCalled();
+  });
+
+  it('ambilRantaiInduk mengembalikan rantai dari akar ke induk langsung', async () => {
+    db.query.mockResolvedValue({
+      rows: [
+        { id: 100, lema: 'latih' },
+        { id: 200, lema: 'berlatih' },
+      ],
+    });
+
+    const result = await ModelLema.ambilRantaiInduk(200);
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('WITH RECURSIVE'),
+      [200]
+    );
+    expect(result).toEqual([
+      { id: 100, lema: 'latih' },
+      { id: 200, lema: 'berlatih' },
+    ]);
+  });
+
+  it('ambilRantaiInduk mengembalikan satu elemen jika induk langsung adalah akar', async () => {
+    db.query.mockResolvedValue({
+      rows: [{ id: 100, lema: 'latih' }],
+    });
+
+    const result = await ModelLema.ambilRantaiInduk(100);
+
+    expect(result).toEqual([{ id: 100, lema: 'latih' }]);
   });
 
 });

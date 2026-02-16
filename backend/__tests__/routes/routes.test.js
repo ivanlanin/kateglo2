@@ -20,6 +20,7 @@ jest.mock('../../models/modelLabel', () => ({
 
 jest.mock('../../models/modelLema', () => ({
   autocomplete: jest.fn(),
+  saranLema: jest.fn(),
 }));
 
 jest.mock('../../models/modelTesaurus', () => ({
@@ -56,6 +57,7 @@ function createApp() {
 describe('routes backend', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    ModelLema.saranLema.mockResolvedValue([]);
   });
 
   it('GET /api/public/health mengembalikan status ok', async () => {
@@ -141,6 +143,20 @@ describe('routes backend', () => {
     expect(response.body.total).toBe(1);
   });
 
+  it('GET /api/public/kamus/cari/:kata mengembalikan saran saat total 0', async () => {
+    layananKamusPublik.cariKamus.mockResolvedValue({
+      data: [],
+      total: 0,
+    });
+    ModelLema.saranLema.mockResolvedValue(['kata', 'kita']);
+
+    const response = await request(createApp()).get('/api/public/kamus/cari/tidak%20ada');
+
+    expect(response.status).toBe(200);
+    expect(ModelLema.saranLema).toHaveBeenCalledWith('tidak ada');
+    expect(response.body.saran).toEqual(['kata', 'kita']);
+  });
+
   it('GET /api/public/kamus/cari/:kata meneruskan error', async () => {
     layananKamusPublik.cariKamus.mockRejectedValue(new Error('cari kamus gagal'));
 
@@ -152,11 +168,13 @@ describe('routes backend', () => {
 
   it('GET /api/public/kamus/detail/:entri mengembalikan 404 saat data null', async () => {
     layananKamusPublik.ambilDetailKamus.mockResolvedValue(null);
+    ModelLema.saranLema.mockResolvedValue(['kata']);
 
     const response = await request(createApp()).get('/api/public/kamus/detail/tidak-ada');
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('Tidak Ditemukan');
+    expect(response.body.saran).toEqual(['kata']);
   });
 
   it('GET /api/public/kamus/detail/:entri mengembalikan data saat ditemukan', async () => {

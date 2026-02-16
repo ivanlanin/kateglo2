@@ -118,57 +118,66 @@ describe('KamusDetail', () => {
   });
 
   it('menampilkan mode rujukan dan metadata makna opsional', () => {
+    const dataRujukan = {
+      lema: 'aktip',
+      rujukan: true,
+      lema_rujuk: 'aktif',
+    };
+
+    const dataDetail = {
+      lema: 'kata',
+      pemenggalan: 'ka ta',
+      jenis: 'turunan',
+      induk: [{ id: 31, lema: 'kata dasar' }],
+      makna: [
+        {
+          id: 11,
+          kelas_kata: null,
+          ragam: 'cak',
+          ragam_varian: 'slang',
+          kiasan: 1,
+          bahasa: 'Arab',
+          makna: 'contoh <b>makna</b>',
+          tipe_penyingkat: 'akr',
+          ilmiah: 'species',
+          kimia: 'H2O',
+          contoh: [
+            { id: 1, contoh: 'contoh kalimat', makna_contoh: 'arti contoh' },
+            { id: 2, contoh: 'contoh kedua', makna_contoh: '' },
+          ],
+        },
+        {
+          id: 12,
+          kelas_kata: null,
+          makna: 'makna kedua',
+          contoh: [],
+        },
+      ],
+      sublema: {
+        turunan: [{ id: 21, lema: 'berkata' }, { id: 22, lema: 'perkataan' }],
+      },
+      tesaurus: { sinonim: ['sinonim satu', 'sinonim dua'], antonim: ['antonim satu', 'antonim dua'] },
+      glosarium: [
+        { indonesia: 'kata dasar', asing: 'base word' },
+        { indonesia: 'kata turunan', asing: 'derived word' },
+      ],
+    };
+
     mockUseQuery
-      .mockReturnValueOnce({
+      .mockReturnValue({
         isLoading: false,
         isError: false,
-        data: {
-          lema: 'aktip',
-          rujukan: true,
-          lema_rujuk: 'aktif',
-        },
+        data: dataDetail,
       })
       .mockReturnValueOnce({
         isLoading: false,
         isError: false,
-        data: {
-          lema: 'kata',
-          pemenggalan: 'ka ta',
-          jenis: 'turunan',
-          induk: { lema: 'kata dasar' },
-          makna: [
-            {
-              id: 11,
-              kelas_kata: null,
-              ragam: 'cak',
-              ragam_varian: 'slang',
-              kiasan: 1,
-              bahasa: 'Arab',
-              makna: 'contoh <b>makna</b>',
-              tipe_penyingkat: 'akr',
-              ilmiah: 'species',
-              kimia: 'H2O',
-              contoh: [
-                { id: 1, contoh: 'contoh kalimat', makna_contoh: 'arti contoh' },
-                { id: 2, contoh: 'contoh kedua', makna_contoh: '' },
-              ],
-            },
-            {
-              id: 12,
-              kelas_kata: null,
-              makna: 'makna kedua',
-              contoh: [],
-            },
-          ],
-          sublema: {
-            turunan: [{ id: 21, lema: 'berkata' }, { id: 22, lema: 'perkataan' }],
-          },
-          tesaurus: { sinonim: ['sinonim satu', 'sinonim dua'], antonim: ['antonim satu', 'antonim dua'] },
-          glosarium: [
-            { indonesia: 'kata dasar', asing: 'base word' },
-            { indonesia: 'kata turunan', asing: 'derived word' },
-          ],
-        },
+        data: dataRujukan,
+      })
+      .mockReturnValueOnce({
+        isLoading: false,
+        isError: false,
+        data: dataDetail,
       });
 
     const { rerender } = render(<KamusDetail />);
@@ -223,6 +232,21 @@ describe('KamusDetail', () => {
 
     expect(document.title).toBe('Kamus — Kateglo');
     expect(screen.getByText('Belum tersedia.')).toBeInTheDocument();
+  });
+
+  it('menampilkan fallback not found saat entri kosong dan data tidak ada', () => {
+    mockParams = {};
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: null,
+      error: undefined,
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByText(/belum tersedia di Kateglo/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Kembali ke pencarian/i })).toHaveAttribute('href', '/kamus');
   });
 
   it('menggunakan fallback makna/sublema saat field tidak tersedia', () => {
