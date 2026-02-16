@@ -3,7 +3,6 @@
  */
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useDaftarTesaurusAdmin, useSimpanTesaurus, useHapusTesaurus } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
@@ -29,12 +28,9 @@ const kolom = [
     key: 'lema',
     label: 'Lema',
     render: (item) => (
-      <Link
-        to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
-        className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
-      >
+      <span className="font-medium text-gray-800 dark:text-gray-100">
         {item.lema}
-      </Link>
+      </span>
     ),
   },
   {

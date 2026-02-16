@@ -3,7 +3,6 @@
  */
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import {
   useDaftarKamusAdmin, useSimpanKamus, useHapusKamus,
   useDaftarMakna, useSimpanMakna, useHapusMakna,
@@ -45,12 +44,9 @@ const kolom = [
     label: 'Entri',
     render: (item) => (
       <span>
-        <Link
-          to={`/kamus/detail/${encodeURIComponent(item.entri)}`}
-          className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
-        >
+        <span className="font-medium text-gray-800 dark:text-gray-100">
           {item.entri}
-        </Link>
+        </span>
         {item.jenis_rujuk && (
           <span className="text-xs text-gray-400 dark:text-gray-500 ml-2">→ {item.entri_rujuk}</span>
         )}

@@ -5,13 +5,11 @@ import PenggunaAdmin from '../../../src/halaman/redaksi/PenggunaAdmin';
 
 const mockUseDaftarPengguna = vi.fn();
 const mockUseDaftarPeran = vi.fn();
-const mutateUbahPeran = vi.fn();
 const mutateSimpanPengguna = vi.fn();
 
 vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarPengguna: (...args) => mockUseDaftarPengguna(...args),
   useDaftarPeran: (...args) => mockUseDaftarPeran(...args),
-  useUbahPeran: () => ({ mutate: mutateUbahPeran, isPending: false }),
   useSimpanPengguna: () => ({ mutate: mutateSimpanPengguna, isPending: false }),
 }));
 
@@ -44,17 +42,13 @@ describe('PenggunaAdmin', () => {
     });
   });
 
-  it('menampilkan daftar pengguna dan ubah peran', () => {
+  it('menampilkan daftar pengguna tanpa edit peran di tabel', () => {
     render(<PenggunaAdmin />);
 
     expect(screen.getByRole('heading', { name: 'Pengguna' })).toBeInTheDocument();
     expect(screen.getByText('Budi')).toBeInTheDocument();
     expect(screen.getByText('Sari')).toBeInTheDocument();
-
-    const selectPeran = screen.getAllByRole('combobox')[0];
-    fireEvent.click(selectPeran);
-    fireEvent.change(selectPeran, { target: { value: '2' } });
-    expect(mutateUbahPeran).toHaveBeenCalledWith({ penggunaId: 7, peranId: 2 });
+    expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
   });
 
   it('membuka panel sunting dan simpan pengguna', () => {

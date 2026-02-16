@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-02-17 Selasa
+
+- Menambahkan fitur pengelolaan label untuk redaksi
+
 ## 2026-02-16 Senin
 
 - Menampilkan superskrip untuk judul entri

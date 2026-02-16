@@ -26,6 +26,7 @@ import {
   useDaftarKamusAdmin,
   useDaftarTesaurusAdmin,
   useDaftarGlosariumAdmin,
+  useDaftarLabelAdmin,
   useDaftarPengguna,
   useDaftarPeran,
   useUbahPeran,
@@ -40,6 +41,8 @@ import {
   useHapusTesaurus,
   useSimpanGlosarium,
   useHapusGlosarium,
+  useSimpanLabel,
+  useHapusLabel,
   useSimpanPengguna,
 } from '../../src/api/apiAdmin';
 
@@ -68,6 +71,10 @@ describe('apiAdmin', () => {
     const glosarium = useDaftarGlosariumAdmin({ q: '' });
     await glosarium.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium', { params: { limit: 50, offset: 0, q: undefined } });
+
+    const label = useDaftarLabelAdmin({ q: '' });
+    await label.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/label', { params: { limit: 50, offset: 0, q: undefined } });
 
     const pengguna = useDaftarPengguna({ limit: 20, offset: 40 });
     await pengguna.queryFn();
@@ -144,7 +151,7 @@ describe('apiAdmin', () => {
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-makna', 3] });
   });
 
-  it('mengonfigurasi mutation admin tesaurus + glosarium', async () => {
+  it('mengonfigurasi mutation admin tesaurus + glosarium + label', async () => {
     const simpanTesaurus = useSimpanTesaurus();
     await simpanTesaurus.mutationFn({ id: 2, lema: 'a' });
     await simpanTesaurus.mutationFn({ lema: 'b' });
@@ -172,5 +179,19 @@ describe('apiAdmin', () => {
     expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/glosarium/5');
     hapusGlosarium.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-glosarium'] });
+
+    const simpanLabel = useSimpanLabel();
+    await simpanLabel.mutationFn({ id: 7, kategori: 'ragam', kode: 'cak', nama: 'cakapan' });
+    await simpanLabel.mutationFn({ kategori: 'ragam', kode: 'ark', nama: 'arkais' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/label/7', { id: 7, kategori: 'ragam', kode: 'cak', nama: 'cakapan' });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/label', { kategori: 'ragam', kode: 'ark', nama: 'arkais' });
+    simpanLabel.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-label'] });
+
+    const hapusLabel = useHapusLabel();
+    await hapusLabel.mutationFn(7);
+    expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/label/7');
+    hapusLabel.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-label'] });
   });
 });

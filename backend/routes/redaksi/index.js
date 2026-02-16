@@ -19,5 +19,6 @@ router.use('/statistik', require('./statistik'));
 router.use('/kamus', require('./kamus'));
 router.use('/tesaurus', require('./tesaurus'));
 router.use('/glosarium', require('./glosarium'));
+router.use('/label', require('./label'));
 
 module.exports = router;

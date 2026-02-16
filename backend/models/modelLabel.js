@@ -180,6 +180,100 @@ class ModelLabel {
       label: { kode: jenis, nama: jenis },
     };
   }
+
+  /**
+   * Daftar label untuk panel admin (dengan pencarian opsional).
+   * @param {{ limit?: number, offset?: number, q?: string }} options
+   * @returns {Promise<{data: Array, total: number}>}
+   */
+  static async daftarAdmin({ limit = 50, offset = 0, q = '' } = {}) {
+    const conditions = [];
+    const params = [];
+    let idx = 1;
+
+    if (q) {
+      conditions.push(`(
+        kategori ILIKE $${idx}
+        OR kode ILIKE $${idx}
+        OR nama ILIKE $${idx}
+        OR COALESCE(keterangan, '') ILIKE $${idx}
+        OR COALESCE(sumber, '') ILIKE $${idx}
+      )`);
+      params.push(`%${q}%`);
+      idx++;
+    }
+
+    const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    const countResult = await db.query(
+      `SELECT COUNT(*) AS total FROM label ${where}`,
+      params
+    );
+    const total = parseInt(countResult.rows[0].total, 10);
+
+    const dataResult = await db.query(
+      `SELECT id, kategori, kode, nama, keterangan, sumber
+       FROM label ${where}
+       ORDER BY kategori ASC, nama ASC
+       LIMIT $${idx} OFFSET $${idx + 1}`,
+      [...params, limit, offset]
+    );
+
+    return { data: dataResult.rows, total };
+  }
+
+  /**
+   * Ambil label berdasarkan ID (untuk admin).
+   * @param {number} id
+   * @returns {Promise<Object|null>}
+   */
+  static async ambilDenganId(id) {
+    const result = await db.query(
+      'SELECT id, kategori, kode, nama, keterangan, sumber FROM label WHERE id = $1',
+      [id]
+    );
+    return result.rows[0] || null;
+  }
+
+  /**
+   * Simpan (insert/update) label.
+   * @param {{ id?: number, kategori: string, kode: string, nama: string, keterangan?: string, sumber?: string }} data
+   * @returns {Promise<Object|null>}
+   */
+  static async simpan({ id, kategori, kode, nama, keterangan, sumber }) {
+    if (id) {
+      const result = await db.query(
+        `UPDATE label
+         SET kategori = $1,
+             kode = $2,
+             nama = $3,
+             keterangan = $4,
+             sumber = $5
+         WHERE id = $6
+         RETURNING id, kategori, kode, nama, keterangan, sumber`,
+        [kategori, kode, nama, keterangan || null, sumber || null, id]
+      );
+      return result.rows[0] || null;
+    }
+
+    const result = await db.query(
+      `INSERT INTO label (kategori, kode, nama, keterangan, sumber)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING id, kategori, kode, nama, keterangan, sumber`,
+      [kategori, kode, nama, keterangan || null, sumber || null]
+    );
+    return result.rows[0];
+  }
+
+  /**
+   * Hapus label berdasarkan ID.
+   * @param {number} id
+   * @returns {Promise<boolean>}
+   */
+  static async hapus(id) {
+    const result = await db.query('DELETE FROM label WHERE id = $1 RETURNING id', [id]);
+    return result.rowCount > 0;
+  }
 }
 
 module.exports = ModelLabel;
