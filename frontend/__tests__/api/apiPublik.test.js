@@ -33,7 +33,7 @@ describe('apiPublik', () => {
   it('cariKamus mengirim params query + limit', async () => {
     klien.get.mockResolvedValue({ data: { data: [] } });
     await cariKamus('kata', { limit: 10, offset: 5 });
-    expect(klien.get).toHaveBeenCalledWith('/api/public/kamus/cari/kata', { params: { limit: 10, offset: 5 } });
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/kamus/cari/kata', { params: { limit: 10, offset: 5 } });
   });
 
   it('ambilKategoriKamus dan ambilLemaPerKategori memanggil endpoint kategori', async () => {
@@ -41,10 +41,10 @@ describe('apiPublik', () => {
     await ambilKategoriKamus();
     await ambilLemaPerKategori('kelas kata', 'n-1', { limit: 9, offset: 3 });
 
-    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/public/kamus/kategori');
+    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/kamus/kategori');
     expect(klien.get).toHaveBeenNthCalledWith(
       2,
-      '/api/public/kamus/kategori/kelas%20kata/n-1',
+      '/api/publik/kamus/kategori/kelas%20kata/n-1',
       { params: { limit: 9, offset: 3 } }
     );
   });
@@ -52,7 +52,7 @@ describe('apiPublik', () => {
   it('ambilDetailKamus melakukan encode slug', async () => {
     klien.get.mockResolvedValue({ data: { frasa: 'anak' } });
     await ambilDetailKamus('anak ibu');
-    expect(klien.get).toHaveBeenCalledWith('/api/public/kamus/detail/anak%20ibu');
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/kamus/detail/anak%20ibu');
   });
 
   it('ambilDetailKamus melempar error terformat saat 404', async () => {
@@ -94,7 +94,7 @@ describe('apiPublik', () => {
   it('cariGlosarium memakai default params', async () => {
     klien.get.mockResolvedValue({ data: { data: [], total: 0 } });
     await cariGlosarium('istilah');
-    expect(klien.get).toHaveBeenCalledWith('/api/public/glosarium/cari/istilah', {
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/glosarium/cari/istilah', {
       params: { limit: 100, offset: 0 },
     });
   });
@@ -103,7 +103,7 @@ describe('apiPublik', () => {
     klien.get.mockResolvedValue({ data: { data: [] } });
     await cariTesaurus('anak ibu', { limit: 50, offset: 10 });
 
-    expect(klien.get).toHaveBeenCalledWith('/api/public/tesaurus/cari/anak%20ibu', {
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/tesaurus/cari/anak%20ibu', {
       params: { limit: 50, offset: 10 },
     });
   });
@@ -123,7 +123,7 @@ describe('apiPublik', () => {
 
     const hasil = await autocomplete('kamus', 'an');
 
-    expect(klien.get).toHaveBeenCalledWith('/api/public/kamus/autocomplete/an');
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/kamus/autocomplete/an');
     expect(hasil).toEqual([{ value: 'anak' }, { value: 'aneka', asing: 'varied' }]);
   });
 
@@ -132,10 +132,10 @@ describe('apiPublik', () => {
     await ambilGlosariumPerBidang('biologi');
     await ambilGlosariumPerSumber('kbbi');
 
-    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/public/glosarium/bidang/biologi', {
+    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/glosarium/bidang/biologi', {
       params: { limit: 100, offset: 0 },
     });
-    expect(klien.get).toHaveBeenNthCalledWith(2, '/api/public/glosarium/sumber/kbbi', {
+    expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/glosarium/sumber/kbbi', {
       params: { limit: 100, offset: 0 },
     });
   });
@@ -144,8 +144,8 @@ describe('apiPublik', () => {
     klien.get.mockResolvedValue({ data: [] });
     await ambilDaftarBidang();
     await ambilDaftarSumber();
-    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/public/glosarium/bidang');
-    expect(klien.get).toHaveBeenNthCalledWith(2, '/api/public/glosarium/sumber');
+    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/glosarium/bidang');
+    expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/glosarium/sumber');
   });
 
 });

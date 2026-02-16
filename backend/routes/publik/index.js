@@ -3,7 +3,7 @@
  */
 
 const express = require('express');
-const { publicApiLimiter } = require('../../../middleware/rateLimiter');
+const { publicApiLimiter } = require('../../middleware/rateLimiter');
 const router = express.Router();
 
 router.use(publicApiLimiter);

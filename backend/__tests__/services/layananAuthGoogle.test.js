@@ -216,6 +216,37 @@ describe('services/layananAuthGoogle', () => {
     expect(jwt.sign).toHaveBeenCalledWith(expect.any(Object), 'jwt-secret', { expiresIn: '12h' });
   });
 
+  it('buildAppToken menyertakan pid, peran, dan izin jika tersedia', () => {
+    process.env.JWT_SECRET = 'jwt-secret';
+    const { service, jwt } = loadServiceWithJwt();
+    jwt.sign.mockReturnValue('signed-authz');
+
+    service.buildAppToken({
+      id: 'g-300',
+      email: 'admin@example.com',
+      name: 'Admin',
+      picture: 'https://img.example/a.png',
+      pid: 10,
+      peran: 'admin',
+      izin: ['kelola_pengguna'],
+    });
+
+    expect(jwt.sign).toHaveBeenCalledWith(
+      {
+        sub: 'g-300',
+        email: 'admin@example.com',
+        name: 'Admin',
+        picture: 'https://img.example/a.png',
+        provider: 'google',
+        pid: 10,
+        peran: 'admin',
+        izin: ['kelola_pengguna'],
+      },
+      'jwt-secret',
+      { expiresIn: '7d' }
+    );
+  });
+
   it('buildFrontendCallbackRedirect menggunakan default callback URL', () => {
     const { service } = loadServiceWithJwt();
     const url = service.buildFrontendCallbackRedirect('token-abc');

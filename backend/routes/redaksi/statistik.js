@@ -3,15 +3,15 @@
  */
 
 const express = require('express');
-const ModelLema = require('../../../models/modelLema');
-const ModelGlosarium = require('../../../models/modelGlosarium');
-const ModelTesaurus = require('../../../models/modelTesaurus');
-const ModelPengguna = require('../../../models/modelPengguna');
+const ModelLema = require('../../models/modelLema');
+const ModelGlosarium = require('../../models/modelGlosarium');
+const ModelTesaurus = require('../../models/modelTesaurus');
+const ModelPengguna = require('../../models/modelPengguna');
 
 const router = express.Router();
 
 /**
- * GET /api/admin/statistik
+ * GET /api/redaksi/statistik
  * Ringkasan jumlah data untuk dasbor admin
  */
 router.get('/', async (req, res, next) => {
@@ -33,3 +33,4 @@ router.get('/', async (req, res, next) => {
 });
 
 module.exports = router;
+

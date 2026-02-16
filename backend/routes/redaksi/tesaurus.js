@@ -3,12 +3,12 @@
  */
 
 const express = require('express');
-const ModelTesaurus = require('../../../models/modelTesaurus');
+const ModelTesaurus = require('../../models/modelTesaurus');
 
 const router = express.Router();
 
 /**
- * GET /api/admin/tesaurus
+ * GET /api/redaksi/tesaurus
  * Daftar tesaurus dengan pencarian opsional (paginasi)
  */
 router.get('/', async (req, res, next) => {
@@ -25,7 +25,7 @@ router.get('/', async (req, res, next) => {
 });
 
 /**
- * GET /api/admin/tesaurus/:id
+ * GET /api/redaksi/tesaurus/:id
  */
 router.get('/:id', async (req, res, next) => {
   try {
@@ -38,7 +38,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 /**
- * POST /api/admin/tesaurus
+ * POST /api/redaksi/tesaurus
  */
 router.post('/', async (req, res, next) => {
   try {
@@ -53,7 +53,7 @@ router.post('/', async (req, res, next) => {
 });
 
 /**
- * PUT /api/admin/tesaurus/:id
+ * PUT /api/redaksi/tesaurus/:id
  */
 router.put('/:id', async (req, res, next) => {
   try {
@@ -70,7 +70,7 @@ router.put('/:id', async (req, res, next) => {
 });
 
 /**
- * DELETE /api/admin/tesaurus/:id
+ * DELETE /api/redaksi/tesaurus/:id
  */
 router.delete('/:id', async (req, res, next) => {
   try {
@@ -83,3 +83,4 @@ router.delete('/:id', async (req, res, next) => {
 });
 
 module.exports = router;
+

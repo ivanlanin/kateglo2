@@ -3,12 +3,12 @@
  */
 
 const express = require('express');
-const ModelGlosarium = require('../../../models/modelGlosarium');
+const ModelGlosarium = require('../../models/modelGlosarium');
 
 const router = express.Router();
 
 /**
- * GET /api/admin/glosarium
+ * GET /api/redaksi/glosarium
  * Daftar glosarium dengan pencarian opsional (paginasi)
  */
 router.get('/', async (req, res, next) => {
@@ -25,7 +25,7 @@ router.get('/', async (req, res, next) => {
 });
 
 /**
- * GET /api/admin/glosarium/:id
+ * GET /api/redaksi/glosarium/:id
  */
 router.get('/:id', async (req, res, next) => {
   try {
@@ -38,7 +38,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 /**
- * POST /api/admin/glosarium
+ * POST /api/redaksi/glosarium
  */
 router.post('/', async (req, res, next) => {
   try {
@@ -55,7 +55,7 @@ router.post('/', async (req, res, next) => {
 });
 
 /**
- * PUT /api/admin/glosarium/:id
+ * PUT /api/redaksi/glosarium/:id
  */
 router.put('/:id', async (req, res, next) => {
   try {
@@ -74,7 +74,7 @@ router.put('/:id', async (req, res, next) => {
 });
 
 /**
- * DELETE /api/admin/glosarium/:id
+ * DELETE /api/redaksi/glosarium/:id
  */
 router.delete('/:id', async (req, res, next) => {
   try {
@@ -87,3 +87,4 @@ router.delete('/:id', async (req, res, next) => {
 });
 
 module.exports = router;
+

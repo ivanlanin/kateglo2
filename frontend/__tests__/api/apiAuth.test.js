@@ -98,7 +98,7 @@ describe('apiAuth', () => {
 
     const result = await ambilProfilSaya('token-123');
 
-    expect(klien.get).toHaveBeenCalledWith('/api/public/auth/me', {
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/auth/me', {
       headers: {
         Authorization: 'Bearer token-123',
       },

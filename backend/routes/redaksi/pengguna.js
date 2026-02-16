@@ -3,13 +3,13 @@
  */
 
 const express = require('express');
-const { periksaIzin } = require('../../../middleware/otorisasi');
-const ModelPengguna = require('../../../models/modelPengguna');
+const { periksaIzin } = require('../../middleware/otorisasi');
+const ModelPengguna = require('../../models/modelPengguna');
 
 const router = express.Router();
 
 /**
- * GET /api/admin/pengguna
+ * GET /api/redaksi/pengguna
  * Daftar semua pengguna (paginasi)
  */
 router.get('/', periksaIzin('kelola_pengguna'), async (req, res, next) => {
@@ -25,7 +25,7 @@ router.get('/', periksaIzin('kelola_pengguna'), async (req, res, next) => {
 });
 
 /**
- * PATCH /api/admin/pengguna/:id/peran
+ * PATCH /api/redaksi/pengguna/:id/peran
  * Ubah peran pengguna
  * Body: { peran_id: number }
  */
@@ -57,7 +57,7 @@ router.patch('/:id/peran', periksaIzin('kelola_pengguna'), async (req, res, next
 });
 
 /**
- * PUT /api/admin/pengguna/:id
+ * PUT /api/redaksi/pengguna/:id
  * Sunting pengguna (nama, aktif, peran_id)
  */
 router.put('/:id', periksaIzin('kelola_pengguna'), async (req, res, next) => {
@@ -76,7 +76,7 @@ router.put('/:id', periksaIzin('kelola_pengguna'), async (req, res, next) => {
 });
 
 /**
- * GET /api/admin/peran
+ * GET /api/redaksi/peran
  * Daftar semua peran yang tersedia
  */
 router.get('/peran', periksaIzin('kelola_peran'), async (req, res, next) => {
@@ -89,3 +89,4 @@ router.get('/peran', periksaIzin('kelola_peran'), async (req, res, next) => {
 });
 
 module.exports = router;
+

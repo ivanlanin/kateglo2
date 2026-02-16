@@ -38,7 +38,7 @@ export function mulaiLoginGoogle(path = '') {
 }
 
 export async function ambilProfilSaya(token) {
-  const response = await klien.get('/api/public/auth/me', {
+  const response = await klien.get('/api/publik/auth/me', {
     headers: {
       Authorization: `Bearer ${token}`,
     },

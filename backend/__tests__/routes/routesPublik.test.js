@@ -62,14 +62,21 @@ describe('routes backend', () => {
     delete process.env.JWT_SECRET;
   });
 
-  it('GET /api/public/health mengembalikan status ok', async () => {
-    const response = await request(createApp()).get('/api/public/health');
+  it('GET /api/publik/health mengembalikan status ok', async () => {
+    const response = await request(createApp()).get('/api/publik/health');
 
     expect(response.status).toBe(200);
     expect(response.body.status).toBe('ok');
   });
 
-  it('GET /api/admin/health mengembalikan status ok dengan token admin', async () => {
+  it('GET /api/publik/health mengembalikan status ok', async () => {
+    const response = await request(createApp()).get('/api/publik/health');
+
+    expect(response.status).toBe(200);
+    expect(response.body.status).toBe('ok');
+  });
+
+  it('GET /api/redaksi/health mengembalikan status ok dengan token admin', async () => {
     process.env.JWT_SECRET = 'test-secret-routes';
     const token = jwt.sign(
       {
@@ -85,7 +92,7 @@ describe('routes backend', () => {
     );
 
     const response = await request(createApp())
-      .get('/api/admin/health')
+      .get('/api/redaksi/health')
       .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(200);
@@ -93,13 +100,37 @@ describe('routes backend', () => {
     delete process.env.JWT_SECRET;
   });
 
-  it('GET /api/admin/health mengembalikan 401 tanpa token', async () => {
-    const response = await request(createApp()).get('/api/admin/health');
+  it('GET /api/redaksi/health mengembalikan status ok dengan token admin', async () => {
+    process.env.JWT_SECRET = 'test-secret-routes';
+    const token = jwt.sign(
+      {
+        sub: 'google-admin',
+        email: 'admin@example.com',
+        name: 'Admin',
+        picture: 'https://img.example/admin.png',
+        provider: 'google',
+        peran: 'admin',
+        izin: ['kelola_pengguna'],
+      },
+      process.env.JWT_SECRET
+    );
+
+    const response = await request(createApp())
+      .get('/api/redaksi/health')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.status).toBe('ok');
+    delete process.env.JWT_SECRET;
+  });
+
+  it('GET /api/redaksi/health mengembalikan 401 tanpa token', async () => {
+    const response = await request(createApp()).get('/api/redaksi/health');
 
     expect(response.status).toBe(401);
   });
 
-  it('GET /api/admin/health mengembalikan 403 untuk non-admin', async () => {
+  it('GET /api/redaksi/health mengembalikan 403 untuk non-admin', async () => {
     process.env.JWT_SECRET = 'test-secret-routes';
     const token = jwt.sign(
       {
@@ -114,230 +145,230 @@ describe('routes backend', () => {
     );
 
     const response = await request(createApp())
-      .get('/api/admin/health')
+      .get('/api/redaksi/health')
       .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(403);
     delete process.env.JWT_SECRET;
   });
 
-  it('GET /api/public/kamus/kategori mengembalikan data kategori', async () => {
+  it('GET /api/publik/kamus/kategori mengembalikan data kategori', async () => {
     ModelLabel.ambilSemuaKategori.mockResolvedValue({ ragam: [{ kode: 'cak', nama: 'cak' }] });
 
-    const response = await request(createApp()).get('/api/public/kamus/kategori');
+    const response = await request(createApp()).get('/api/publik/kamus/kategori');
 
     expect(response.status).toBe(200);
     expect(response.body.ragam).toHaveLength(1);
   });
 
-  it('GET /api/public/kamus/kategori meneruskan error ke middleware', async () => {
+  it('GET /api/publik/kamus/kategori meneruskan error ke middleware', async () => {
     ModelLabel.ambilSemuaKategori.mockRejectedValue(new Error('kategori gagal'));
 
-    const response = await request(createApp()).get('/api/public/kamus/kategori');
+    const response = await request(createApp()).get('/api/publik/kamus/kategori');
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('kategori gagal');
   });
 
-  it('GET /api/public/kamus/kategori/:kategori/:kode memanggil model label', async () => {
+  it('GET /api/publik/kamus/kategori/:kategori/:kode memanggil model label', async () => {
     ModelLabel.cariLemaPerLabel.mockResolvedValue({ data: [], total: 0, label: null });
 
     const response = await request(createApp())
-      .get('/api/public/kamus/kategori/ragam/umum%20sekali?limit=999&offset=-5');
+      .get('/api/publik/kamus/kategori/ragam/umum%20sekali?limit=999&offset=-5');
 
     expect(response.status).toBe(200);
     expect(ModelLabel.cariLemaPerLabel).toHaveBeenCalledWith('ragam', 'umum sekali', 200, 0);
   });
 
-  it('GET /api/public/kamus/kategori/:kategori/:kode meneruskan error', async () => {
+  it('GET /api/publik/kamus/kategori/:kategori/:kode meneruskan error', async () => {
     ModelLabel.cariLemaPerLabel.mockRejectedValue(new Error('label gagal'));
 
     const response = await request(createApp())
-      .get('/api/public/kamus/kategori/ragam/cak');
+      .get('/api/publik/kamus/kategori/ragam/cak');
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('label gagal');
   });
 
-  it('GET /api/public/kamus/kategori/:kategori/:kode mengembalikan 400 saat offset terlalu besar', async () => {
+  it('GET /api/publik/kamus/kategori/:kategori/:kode mengembalikan 400 saat offset terlalu besar', async () => {
     const response = await request(createApp())
-      .get('/api/public/kamus/kategori/ragam/umum?offset=1001');
+      .get('/api/publik/kamus/kategori/ragam/umum?offset=1001');
 
     expect(response.status).toBe(400);
     expect(response.body.error).toBe('Invalid Query');
     expect(response.body.message).toContain('Offset maksimal adalah 1000');
   });
 
-  it('GET /api/public/kamus/autocomplete/:kata mengembalikan data', async () => {
+  it('GET /api/publik/kamus/autocomplete/:kata mengembalikan data', async () => {
     ModelLema.autocomplete.mockResolvedValue(['kata']);
 
-    const response = await request(createApp()).get('/api/public/kamus/autocomplete/kat');
+    const response = await request(createApp()).get('/api/publik/kamus/autocomplete/kat');
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ data: ['kata'] });
   });
 
-  it('GET /api/public/kamus/autocomplete/:kata meneruskan error', async () => {
+  it('GET /api/publik/kamus/autocomplete/:kata meneruskan error', async () => {
     ModelLema.autocomplete.mockRejectedValue(new Error('ac gagal'));
 
-    const response = await request(createApp()).get('/api/public/kamus/autocomplete/kat');
+    const response = await request(createApp()).get('/api/publik/kamus/autocomplete/kat');
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('ac gagal');
   });
 
-  it('GET /api/public/kamus/cari/:kata mengembalikan hasil dan clamp paginasi', async () => {
+  it('GET /api/publik/kamus/cari/:kata mengembalikan hasil dan clamp paginasi', async () => {
     layananKamusPublik.cariKamus.mockResolvedValue({
       data: [{ lema: 'kata' }],
       total: 1,
     });
 
-    const response = await request(createApp()).get('/api/public/kamus/cari/kata?limit=999&offset=-4');
+    const response = await request(createApp()).get('/api/publik/kamus/cari/kata?limit=999&offset=-4');
 
     expect(response.status).toBe(200);
     expect(layananKamusPublik.cariKamus).toHaveBeenCalledWith('kata', { limit: 200, offset: 0 });
     expect(response.body.total).toBe(1);
   });
 
-  it('GET /api/public/kamus/cari/:kata mengembalikan saran saat total 0', async () => {
+  it('GET /api/publik/kamus/cari/:kata mengembalikan saran saat total 0', async () => {
     layananKamusPublik.cariKamus.mockResolvedValue({
       data: [],
       total: 0,
     });
     ModelLema.saranLema.mockResolvedValue(['kata', 'kita']);
 
-    const response = await request(createApp()).get('/api/public/kamus/cari/tidak%20ada');
+    const response = await request(createApp()).get('/api/publik/kamus/cari/tidak%20ada');
 
     expect(response.status).toBe(200);
     expect(ModelLema.saranLema).toHaveBeenCalledWith('tidak ada');
     expect(response.body.saran).toEqual(['kata', 'kita']);
   });
 
-  it('GET /api/public/kamus/cari/:kata meneruskan error', async () => {
+  it('GET /api/publik/kamus/cari/:kata meneruskan error', async () => {
     layananKamusPublik.cariKamus.mockRejectedValue(new Error('cari kamus gagal'));
 
-    const response = await request(createApp()).get('/api/public/kamus/cari/kata');
+    const response = await request(createApp()).get('/api/publik/kamus/cari/kata');
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('cari kamus gagal');
   });
 
-  it('GET /api/public/kamus/detail/:entri mengembalikan 404 saat data null', async () => {
+  it('GET /api/publik/kamus/detail/:entri mengembalikan 404 saat data null', async () => {
     layananKamusPublik.ambilDetailKamus.mockResolvedValue(null);
     ModelLema.saranLema.mockResolvedValue(['kata']);
 
-    const response = await request(createApp()).get('/api/public/kamus/detail/tidak-ada');
+    const response = await request(createApp()).get('/api/publik/kamus/detail/tidak-ada');
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('Tidak Ditemukan');
     expect(response.body.saran).toEqual(['kata']);
   });
 
-  it('GET /api/public/kamus/detail/:entri mengembalikan data saat ditemukan', async () => {
+  it('GET /api/publik/kamus/detail/:entri mengembalikan data saat ditemukan', async () => {
     layananKamusPublik.ambilDetailKamus.mockResolvedValue({ lema: 'kata' });
 
-    const response = await request(createApp()).get('/api/public/kamus/detail/kata');
+    const response = await request(createApp()).get('/api/publik/kamus/detail/kata');
 
     expect(response.status).toBe(200);
     expect(response.body.lema).toBe('kata');
   });
 
-  it('GET /api/public/kamus/detail/:entri meneruskan error', async () => {
+  it('GET /api/publik/kamus/detail/:entri meneruskan error', async () => {
     layananKamusPublik.ambilDetailKamus.mockRejectedValue(new Error('detail kamus gagal'));
 
-    const response = await request(createApp()).get('/api/public/kamus/detail/kata');
+    const response = await request(createApp()).get('/api/publik/kamus/detail/kata');
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('detail kamus gagal');
   });
 
-  it('GET /api/public/tesaurus/autocomplete/:kata mengembalikan data', async () => {
+  it('GET /api/publik/tesaurus/autocomplete/:kata mengembalikan data', async () => {
     ModelTesaurus.autocomplete.mockResolvedValue(['aktif']);
 
-    const response = await request(createApp()).get('/api/public/tesaurus/autocomplete/akt');
+    const response = await request(createApp()).get('/api/publik/tesaurus/autocomplete/akt');
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ data: ['aktif'] });
   });
 
-  it('GET /api/public/tesaurus/autocomplete/:kata meneruskan error', async () => {
+  it('GET /api/publik/tesaurus/autocomplete/:kata meneruskan error', async () => {
     ModelTesaurus.autocomplete.mockRejectedValue(new Error('tesaurus ac gagal'));
 
-    const response = await request(createApp()).get('/api/public/tesaurus/autocomplete/akt');
+    const response = await request(createApp()).get('/api/publik/tesaurus/autocomplete/akt');
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('tesaurus ac gagal');
   });
 
-  it('GET /api/public/tesaurus/cari/:kata mengembalikan hasil', async () => {
+  it('GET /api/publik/tesaurus/cari/:kata mengembalikan hasil', async () => {
     layananTesaurusPublik.cariTesaurus.mockResolvedValue({ data: [{ lema: 'aktif' }], total: 1 });
 
-    const response = await request(createApp()).get('/api/public/tesaurus/cari/aktif?limit=0&offset=7');
+    const response = await request(createApp()).get('/api/publik/tesaurus/cari/aktif?limit=0&offset=7');
 
     expect(response.status).toBe(200);
     expect(layananTesaurusPublik.cariTesaurus).toHaveBeenCalledWith('aktif', { limit: 100, offset: 7 });
     expect(response.body.total).toBe(1);
   });
 
-  it('GET /api/public/tesaurus/cari/:kata meneruskan error', async () => {
+  it('GET /api/publik/tesaurus/cari/:kata meneruskan error', async () => {
     layananTesaurusPublik.cariTesaurus.mockRejectedValue(new Error('cari tesaurus gagal'));
 
-    const response = await request(createApp()).get('/api/public/tesaurus/cari/aktif');
+    const response = await request(createApp()).get('/api/publik/tesaurus/cari/aktif');
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('cari tesaurus gagal');
   });
 
-  it('GET /api/public/tesaurus/:kata mengembalikan 404 saat data null', async () => {
+  it('GET /api/publik/tesaurus/:kata mengembalikan 404 saat data null', async () => {
     layananTesaurusPublik.ambilDetailTesaurus.mockResolvedValue(null);
 
-    const response = await request(createApp()).get('/api/public/tesaurus/tidak-ada');
+    const response = await request(createApp()).get('/api/publik/tesaurus/tidak-ada');
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('Tidak Ditemukan');
   });
 
-  it('GET /api/public/tesaurus/:kata mengembalikan data saat ditemukan', async () => {
+  it('GET /api/publik/tesaurus/:kata mengembalikan data saat ditemukan', async () => {
     layananTesaurusPublik.ambilDetailTesaurus.mockResolvedValue({ lema: 'aktif', sinonim: ['giat'] });
 
-    const response = await request(createApp()).get('/api/public/tesaurus/aktif');
+    const response = await request(createApp()).get('/api/publik/tesaurus/aktif');
 
     expect(response.status).toBe(200);
     expect(response.body.lema).toBe('aktif');
   });
 
-  it('GET /api/public/tesaurus/:kata meneruskan error', async () => {
+  it('GET /api/publik/tesaurus/:kata meneruskan error', async () => {
     layananTesaurusPublik.ambilDetailTesaurus.mockRejectedValue(new Error('detail tesaurus gagal'));
 
-    const response = await request(createApp()).get('/api/public/tesaurus/aktif');
+    const response = await request(createApp()).get('/api/publik/tesaurus/aktif');
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('detail tesaurus gagal');
   });
 
-  it('GET /api/public/glosarium/autocomplete/:kata mengembalikan data', async () => {
+  it('GET /api/publik/glosarium/autocomplete/:kata mengembalikan data', async () => {
     ModelGlosarium.autocomplete.mockResolvedValue([{ value: 'term' }]);
 
-    const response = await request(createApp()).get('/api/public/glosarium/autocomplete/te');
+    const response = await request(createApp()).get('/api/publik/glosarium/autocomplete/te');
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ data: [{ value: 'term' }] });
   });
 
-  it('GET /api/public/glosarium/autocomplete/:kata meneruskan error', async () => {
+  it('GET /api/publik/glosarium/autocomplete/:kata meneruskan error', async () => {
     ModelGlosarium.autocomplete.mockRejectedValue(new Error('glo ac gagal'));
 
-    const response = await request(createApp()).get('/api/public/glosarium/autocomplete/te');
+    const response = await request(createApp()).get('/api/publik/glosarium/autocomplete/te');
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('glo ac gagal');
   });
 
-  it('GET /api/public/glosarium/cari/:kata memanggil model sesuai query', async () => {
+  it('GET /api/publik/glosarium/cari/:kata memanggil model sesuai query', async () => {
     ModelGlosarium.cari.mockResolvedValue({ data: [], total: 0 });
 
     const response = await request(createApp())
-      .get('/api/public/glosarium/cari/istilah?limit=999&offset=3');
+      .get('/api/publik/glosarium/cari/istilah?limit=999&offset=3');
 
     expect(response.status).toBe(200);
     expect(ModelGlosarium.cari).toHaveBeenCalledWith({
@@ -347,38 +378,38 @@ describe('routes backend', () => {
     });
   });
 
-  it('GET /api/public/glosarium/cari/:kata meneruskan error', async () => {
+  it('GET /api/publik/glosarium/cari/:kata meneruskan error', async () => {
     ModelGlosarium.cari.mockRejectedValue(new Error('glo cari gagal'));
 
-    const response = await request(createApp()).get('/api/public/glosarium/cari/istilah');
+    const response = await request(createApp()).get('/api/publik/glosarium/cari/istilah');
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('glo cari gagal');
   });
 
-  it('GET /api/public/glosarium/bidang mengembalikan daftar bidang', async () => {
+  it('GET /api/publik/glosarium/bidang mengembalikan daftar bidang', async () => {
     ModelGlosarium.ambilDaftarBidang.mockResolvedValue([{ bidang: 'ling', jumlah: 10 }]);
 
-    const response = await request(createApp()).get('/api/public/glosarium/bidang');
+    const response = await request(createApp()).get('/api/publik/glosarium/bidang');
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual([{ bidang: 'ling', jumlah: 10 }]);
   });
 
-  it('GET /api/public/glosarium/bidang meneruskan error', async () => {
+  it('GET /api/publik/glosarium/bidang meneruskan error', async () => {
     ModelGlosarium.ambilDaftarBidang.mockRejectedValue(new Error('bidang gagal'));
 
-    const response = await request(createApp()).get('/api/public/glosarium/bidang');
+    const response = await request(createApp()).get('/api/publik/glosarium/bidang');
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('bidang gagal');
   });
 
-  it('GET /api/public/glosarium/bidang/:bidang memanggil model', async () => {
+  it('GET /api/publik/glosarium/bidang/:bidang memanggil model', async () => {
     ModelGlosarium.cari.mockResolvedValue({ data: [], total: 0 });
 
     const response = await request(createApp())
-      .get('/api/public/glosarium/bidang/ilmu%20komputer?limit=9&offset=2');
+      .get('/api/publik/glosarium/bidang/ilmu%20komputer?limit=9&offset=2');
 
     expect(response.status).toBe(200);
     expect(ModelGlosarium.cari).toHaveBeenCalledWith({
@@ -388,38 +419,38 @@ describe('routes backend', () => {
     });
   });
 
-  it('GET /api/public/glosarium/bidang/:bidang meneruskan error', async () => {
+  it('GET /api/publik/glosarium/bidang/:bidang meneruskan error', async () => {
     ModelGlosarium.cari.mockRejectedValue(new Error('bidang detail gagal'));
 
-    const response = await request(createApp()).get('/api/public/glosarium/bidang/ling');
+    const response = await request(createApp()).get('/api/publik/glosarium/bidang/ling');
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('bidang detail gagal');
   });
 
-  it('GET /api/public/glosarium/sumber mengembalikan daftar sumber', async () => {
+  it('GET /api/publik/glosarium/sumber mengembalikan daftar sumber', async () => {
     ModelGlosarium.ambilDaftarSumber.mockResolvedValue([{ sumber: 'kbbi', jumlah: 5 }]);
 
-    const response = await request(createApp()).get('/api/public/glosarium/sumber');
+    const response = await request(createApp()).get('/api/publik/glosarium/sumber');
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual([{ sumber: 'kbbi', jumlah: 5 }]);
   });
 
-  it('GET /api/public/glosarium/sumber meneruskan error', async () => {
+  it('GET /api/publik/glosarium/sumber meneruskan error', async () => {
     ModelGlosarium.ambilDaftarSumber.mockRejectedValue(new Error('sumber gagal'));
 
-    const response = await request(createApp()).get('/api/public/glosarium/sumber');
+    const response = await request(createApp()).get('/api/publik/glosarium/sumber');
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('sumber gagal');
   });
 
-  it('GET /api/public/glosarium/sumber/:sumber memanggil model', async () => {
+  it('GET /api/publik/glosarium/sumber/:sumber memanggil model', async () => {
     ModelGlosarium.cari.mockResolvedValue({ data: [], total: 0 });
 
     const response = await request(createApp())
-      .get('/api/public/glosarium/sumber/KBBI%20V?limit=6&offset=1');
+      .get('/api/publik/glosarium/sumber/KBBI%20V?limit=6&offset=1');
 
     expect(response.status).toBe(200);
     expect(ModelGlosarium.cari).toHaveBeenCalledWith({
@@ -429,23 +460,23 @@ describe('routes backend', () => {
     });
   });
 
-  it('GET /api/public/glosarium/sumber/:sumber meneruskan error', async () => {
+  it('GET /api/publik/glosarium/sumber/:sumber meneruskan error', async () => {
     ModelGlosarium.cari.mockRejectedValue(new Error('sumber detail gagal'));
 
-    const response = await request(createApp()).get('/api/public/glosarium/sumber/kbbi');
+    const response = await request(createApp()).get('/api/publik/glosarium/sumber/kbbi');
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('sumber detail gagal');
   });
 
-  it('GET /api/public/auth/me mengembalikan 401 saat token tidak ada', async () => {
-    const response = await request(createApp()).get('/api/public/auth/me');
+  it('GET /api/publik/auth/me mengembalikan 401 saat token tidak ada', async () => {
+    const response = await request(createApp()).get('/api/publik/auth/me');
 
     expect(response.status).toBe(401);
     expect(response.body.success).toBe(false);
   });
 
-  it('GET /api/public/auth/me mengembalikan profil saat token valid', async () => {
+  it('GET /api/publik/auth/me mengembalikan profil saat token valid', async () => {
     process.env.JWT_SECRET = 'test-secret-routes';
     const token = jwt.sign(
       {
@@ -462,7 +493,7 @@ describe('routes backend', () => {
     );
 
     const response = await request(createApp())
-      .get('/api/public/auth/me')
+      .get('/api/publik/auth/me')
       .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(200);
@@ -480,48 +511,73 @@ describe('routes backend', () => {
     delete process.env.JWT_SECRET;
   });
 
-  it('GET /api/public/kamus/cari/:kata mengembalikan 400 saat offset terlalu besar', async () => {
+  it('GET /api/publik/auth/me mengisi izin array kosong jika payload tidak memiliki izin', async () => {
+    process.env.JWT_SECRET = 'test-secret-routes';
+    const token = jwt.sign(
+      {
+        sub: 'google-456',
+        pid: 2,
+        email: 'user2@example.com',
+        name: 'User Tanpa Izin',
+        picture: 'https://img.example/user2.png',
+        peran: 'pengguna',
+        provider: 'google',
+      },
+      process.env.JWT_SECRET
+    );
+
     const response = await request(createApp())
-      .get('/api/public/kamus/cari/kata?offset=1001');
+      .get('/api/publik/auth/me')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.data.izin).toEqual([]);
+    delete process.env.JWT_SECRET;
+  });
+
+  it('GET /api/publik/kamus/cari/:kata mengembalikan 400 saat offset terlalu besar', async () => {
+    const response = await request(createApp())
+      .get('/api/publik/kamus/cari/kata?offset=1001');
 
     expect(response.status).toBe(400);
     expect(response.body.error).toBe('Invalid Query');
     expect(response.body.message).toContain('Offset maksimal adalah 1000');
   });
 
-  it('GET /api/public/tesaurus/cari/:kata mengembalikan 400 saat offset terlalu besar', async () => {
+  it('GET /api/publik/tesaurus/cari/:kata mengembalikan 400 saat offset terlalu besar', async () => {
     const response = await request(createApp())
-      .get('/api/public/tesaurus/cari/aktif?offset=1001');
+      .get('/api/publik/tesaurus/cari/aktif?offset=1001');
 
     expect(response.status).toBe(400);
     expect(response.body.error).toBe('Invalid Query');
     expect(response.body.message).toContain('Offset maksimal adalah 1000');
   });
 
-  it('GET /api/public/glosarium/cari/:kata mengembalikan 400 saat offset terlalu besar', async () => {
+  it('GET /api/publik/glosarium/cari/:kata mengembalikan 400 saat offset terlalu besar', async () => {
     const response = await request(createApp())
-      .get('/api/public/glosarium/cari/istilah?offset=1001');
+      .get('/api/publik/glosarium/cari/istilah?offset=1001');
 
     expect(response.status).toBe(400);
     expect(response.body.error).toBe('Invalid Query');
     expect(response.body.message).toContain('Offset maksimal adalah 1000');
   });
 
-  it('GET /api/public/glosarium/bidang/:bidang mengembalikan 400 saat offset terlalu besar', async () => {
+  it('GET /api/publik/glosarium/bidang/:bidang mengembalikan 400 saat offset terlalu besar', async () => {
     const response = await request(createApp())
-      .get('/api/public/glosarium/bidang/linguistik?offset=1001');
+      .get('/api/publik/glosarium/bidang/linguistik?offset=1001');
 
     expect(response.status).toBe(400);
     expect(response.body.error).toBe('Invalid Query');
     expect(response.body.message).toContain('Offset maksimal adalah 1000');
   });
 
-  it('GET /api/public/glosarium/sumber/:sumber mengembalikan 400 saat offset terlalu besar', async () => {
+  it('GET /api/publik/glosarium/sumber/:sumber mengembalikan 400 saat offset terlalu besar', async () => {
     const response = await request(createApp())
-      .get('/api/public/glosarium/sumber/kbbi?offset=1001');
+      .get('/api/publik/glosarium/sumber/kbbi?offset=1001');
 
     expect(response.status).toBe(400);
     expect(response.body.error).toBe('Invalid Query');
     expect(response.body.message).toContain('Offset maksimal adalah 1000');
   });
 });
+
