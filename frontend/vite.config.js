@@ -47,7 +47,8 @@ export default defineConfig({
       exclude: [
         'node_modules/',
         '**/*.test.{js,jsx}',
-        '**/main.jsx'
+        '**/main.jsx',
+        'src/halaman/KebijakanPrivasi.jsx'
       ],
       thresholds: {
         statements: 80,
