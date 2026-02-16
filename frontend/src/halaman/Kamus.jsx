@@ -8,7 +8,7 @@ import { cariKamus, ambilKategoriKamus, ambilLemaPerKategori } from '../api/apiP
 import Paginasi from '../komponen/Paginasi';
 import HalamanDasar from '../komponen/HalamanDasar';
 import TeksLema from '../komponen/TeksLema';
-import { EmptyResultText, QueryFeedback } from '../komponen/StatusKonten';
+import { EmptyResultText, PesanTidakDitemukan, QueryFeedback } from '../komponen/StatusKonten';
 import { updateSearchParamsWithOffset } from '../utils/searchParams';
 
 const NAMA_KATEGORI = {
@@ -139,7 +139,7 @@ function Kamus() {
       {/* Hasil pencarian */}
       {modePencarian && !isLoading && !isError && (
         <>
-          {resultsPencarian.length === 0 && <EmptyResultText text="Lema yang dicari tidak ditemukan. Coba kata lain?" />}
+          {resultsPencarian.length === 0 && <PesanTidakDitemukan saran={dataPencarian?.saran || []} />}
 
           {resultsPencarian.length > 0 && (
             <>

@@ -48,11 +48,15 @@ router.get('/cari/:kata', async (req, res, next) => {
     const limit = Math.min(Math.max(Number(req.query.limit) || 100, 1), 200);
     const offset = Math.max(Number(req.query.offset) || 0, 0);
     const result = await cariKamus(req.params.kata, { limit, offset });
-    return res.json({
+    const response = {
       query: req.params.kata,
       total: result.total,
       data: result.data,
-    });
+    };
+    if (result.total === 0) {
+      response.saran = await ModelLema.saranLema(decodeURIComponent(req.params.kata));
+    }
+    return res.json(response);
   } catch (error) {
     return next(error);
   }
@@ -62,9 +66,11 @@ router.get('/detail/:entri', async (req, res, next) => {
   try {
     const data = await ambilDetailKamus(req.params.entri);
     if (!data) {
+      const saran = await ModelLema.saranLema(decodeURIComponent(req.params.entri));
       return res.status(404).json({
         error: 'Tidak Ditemukan',
         message: 'Entri tidak ditemukan',
+        saran,
       });
     }
     return res.json(data);

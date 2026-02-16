@@ -6,6 +6,7 @@
 - Menampilkan kotak "Serupa" untuk menampung homonim dan homograf di detail kamus
 - Mengoptimalkan pencarian glosarium dengan indeks teks lengkap
 - Membersihkan basis data dari tabel yang tidak terpakai
+- Memberikan saran lain ketika pencarian atau detail tidak menemukan hasil
 
 ## 2026-02-15 Minggu
 

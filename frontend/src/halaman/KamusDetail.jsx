@@ -9,6 +9,7 @@ import { ambilDetailKamus } from '../api/apiPublik';
 import PanelLipat from '../komponen/PanelLipat';
 import HalamanDasar from '../komponen/HalamanDasar';
 import TeksLema from '../komponen/TeksLema';
+import { PesanTidakDitemukan } from '../komponen/StatusKonten';
 
 /** Konversi markdown ringan (*italic* dan **bold**) ke HTML inline */
 function renderMarkdown(teks) {
@@ -27,7 +28,7 @@ function KamusDetail() {
       : 'Kamus — Kateglo';
   }, [entri]);
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['kamus-detail', entri],
     queryFn: () => ambilDetailKamus(entri),
     enabled: Boolean(entri),
@@ -42,10 +43,25 @@ function KamusDetail() {
   }
 
   if (isError || !data) {
+    const kataCari = decodeURIComponent(entri || '');
+    const saran = error?.saran || [];
     return (
       <HalamanDasar>
-        <p className="error-text">Entri tidak ditemukan.</p>
-        <Link to="/kamus" className="link-action text-sm mt-2 inline-block">
+        <nav className="kamus-detail-breadcrumb">
+          <Link to="/kamus" className="kamus-detail-breadcrumb-link">Kamus</Link>
+          <span className="mx-2">›</span>
+          <span className="kamus-detail-breadcrumb-current">{kataCari}</span>
+        </nav>
+
+        <h1 className="kamus-detail-heading">
+          <span className="kamus-detail-heading-main">{kataCari}</span>
+        </h1>
+
+        <div className="mt-6">
+          <PesanTidakDitemukan saran={saran} />
+        </div>
+
+        <Link to="/kamus" className="link-action text-sm mt-4 inline-block">
           ← Kembali ke pencarian
         </Link>
       </HalamanDasar>
