@@ -1238,4 +1238,5 @@ code {
   .dark .cell-muted {
     @apply text-dark-text-muted;
   }
+
 }

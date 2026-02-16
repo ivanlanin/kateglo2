@@ -26,8 +26,18 @@ export async function cariKamus(kata, { limit = 100, offset = 0 } = {}) {
 }
 
 export async function ambilDetailKamus(entri) {
-  const response = await klien.get(`/api/public/kamus/detail/${encodeURIComponent(entri)}`);
-  return response.data;
+  try {
+    const response = await klien.get(`/api/public/kamus/detail/${encodeURIComponent(entri)}`);
+    return response.data;
+  } catch (err) {
+    if (err.response?.status === 404) {
+      const saran = err.response.data?.saran || [];
+      const error = new Error('Entri tidak ditemukan');
+      error.saran = saran;
+      throw error;
+    }
+    throw err;
+  }
 }
 
 // === TESAURUS ===

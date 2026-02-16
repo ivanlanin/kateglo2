@@ -157,7 +157,7 @@ describe('Kamus', () => {
 
     render(<Kamus />);
 
-    expect(screen.getByText(/Lema yang dicari tidak ditemukan/i)).toBeInTheDocument();
+    expect(screen.getByText(/belum tersedia di Kateglo/i)).toBeInTheDocument();
   });
 
   it('mengubah offset saat paginasi dipicu', () => {

@@ -166,6 +166,28 @@ class ModelLema {
    * @param {number} indukId - ID lema induk
    * @returns {Promise<Object|null>} Data lema induk
    */
+  /**
+   * Saran lema mirip menggunakan trigram similarity (pg_trgm)
+   * @param {string} teks - Kata yang dicari
+   * @param {number} limit - Batas hasil
+   * @returns {Promise<string[]>} Daftar lema mirip
+   */
+  static async saranLema(teks, limit = 5) {
+    if (!teks || !teks.trim()) return [];
+    const cappedLimit = Math.min(Math.max(Number(limit) || 5, 1), 20);
+    const result = await db.query(
+      `SELECT lema FROM (
+         SELECT DISTINCT lema, similarity(lema, $1) AS sim
+         FROM lema
+         WHERE aktif = 1 AND similarity(lema, $1) > 0.2
+       ) t
+       ORDER BY sim DESC
+       LIMIT $2`,
+      [teks.trim(), cappedLimit]
+    );
+    return result.rows.map((r) => r.lema);
+  }
+
   static async ambilInduk(indukId) {
     if (!indukId) return null;
     const result = await db.query(

@@ -32,10 +32,22 @@ describe('KamusDetail', () => {
     expect(screen.getByText(/Memuat detail/i)).toBeInTheDocument();
   });
 
-  it('menampilkan not found state', () => {
-    mockUseQuery.mockReturnValue({ isLoading: false, isError: true, data: null });
+  it('menampilkan not found state tanpa saran', () => {
+    mockUseQuery.mockReturnValue({ isLoading: false, isError: true, data: null, error: new Error('Entri tidak ditemukan') });
     render(<KamusDetail />);
-    expect(screen.getByText(/Entri tidak ditemukan/i)).toBeInTheDocument();
+    expect(screen.getByText(/belum tersedia di Kateglo/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Kembali ke pencarian/i })).toBeInTheDocument();
+  });
+
+  it('menampilkan not found state dengan saran entri mirip', () => {
+    const err = new Error('Entri tidak ditemukan');
+    err.saran = ['kata', 'kota', 'kita'];
+    mockUseQuery.mockReturnValue({ isLoading: false, isError: true, data: null, error: err });
+    render(<KamusDetail />);
+    expect(screen.getByText(/belum tersedia di Kateglo/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'kata' })).toHaveAttribute('href', '/kamus/detail/kata');
+    expect(screen.getByRole('link', { name: 'kota' })).toHaveAttribute('href', '/kamus/detail/kota');
+    expect(screen.getByRole('link', { name: 'kita' })).toHaveAttribute('href', '/kamus/detail/kita');
   });
 
   it('menampilkan detail lengkap saat data tersedia', () => {

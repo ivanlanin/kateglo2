@@ -1,11 +1,16 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
   QueryFeedback,
   EmptyInfoCard,
   EmptyResultText,
+  PesanTidakDitemukan,
   TableResultCard,
 } from '../../src/komponen/StatusKonten';
+
+vi.mock('react-router-dom', () => ({
+  Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
+}));
 
 describe('StatusKonten', () => {
   it('QueryFeedback menampilkan loading dan error sesuai flag', () => {
@@ -67,5 +72,17 @@ describe('StatusKonten', () => {
 
     expect(screen.getByText('Konten')).toBeInTheDocument();
     expect(screen.getByText('Footer')).toBeInTheDocument();
+  });
+
+  it('PesanTidakDitemukan menampilkan pesan dasar tanpa saran', () => {
+    render(<PesanTidakDitemukan />);
+    expect(screen.getByText(/belum tersedia di Kateglo/i)).toBeInTheDocument();
+  });
+
+  it('PesanTidakDitemukan menampilkan tautan saran', () => {
+    render(<PesanTidakDitemukan saran={['kata', 'kota']} />);
+    expect(screen.getByText(/belum tersedia di Kateglo/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'kata' })).toHaveAttribute('href', '/kamus/detail/kata');
+    expect(screen.getByRole('link', { name: 'kota' })).toHaveAttribute('href', '/kamus/detail/kota');
   });
 });
