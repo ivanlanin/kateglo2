@@ -51,36 +51,36 @@ describe('apiAdmin', () => {
   it('mengonfigurasi semua query hooks admin', async () => {
     const statistik = useStatistikAdmin();
     await statistik.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/admin/statistik');
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/statistik');
 
     const kamus = useDaftarKamusAdmin({ limit: 10, offset: 5, q: 'anak' });
     await kamus.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/admin/kamus', { params: { limit: 10, offset: 5, q: 'anak' } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus', { params: { limit: 10, offset: 5, q: 'anak' } });
 
     const kamusKosong = useDaftarKamusAdmin({ limit: 10, offset: 5, q: '' });
     await kamusKosong.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/admin/kamus', { params: { limit: 10, offset: 5, q: undefined } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus', { params: { limit: 10, offset: 5, q: undefined } });
 
     const tesaurus = useDaftarTesaurusAdmin({});
     await tesaurus.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/admin/tesaurus', { params: { limit: 50, offset: 0, q: undefined } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/tesaurus', { params: { limit: 50, offset: 0, q: undefined } });
 
     const glosarium = useDaftarGlosariumAdmin({ q: '' });
     await glosarium.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/admin/glosarium', { params: { limit: 50, offset: 0, q: undefined } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium', { params: { limit: 50, offset: 0, q: undefined } });
 
     const pengguna = useDaftarPengguna({ limit: 20, offset: 40 });
     await pengguna.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/admin/pengguna', { params: { limit: 20, offset: 40 } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/pengguna', { params: { limit: 20, offset: 40 } });
 
     const peran = useDaftarPeran();
     await peran.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/admin/pengguna/peran');
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/pengguna/peran');
 
     const makna = useDaftarMakna(44);
     expect(makna.enabled).toBe(true);
     await makna.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/admin/kamus/44/makna');
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus/44/makna');
 
     const maknaKosong = useDaftarMakna(null);
     expect(maknaKosong.enabled).toBe(false);
@@ -89,13 +89,13 @@ describe('apiAdmin', () => {
   it('mengonfigurasi mutation admin pengguna', async () => {
     const ubahPeran = useUbahPeran();
     await ubahPeran.mutationFn({ penggunaId: 5, peranId: 2 });
-    expect(klien.patch).toHaveBeenCalledWith('/api/admin/pengguna/5/peran', { peran_id: 2 });
+    expect(klien.patch).toHaveBeenCalledWith('/api/redaksi/pengguna/5/peran', { peran_id: 2 });
     ubahPeran.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-pengguna'] });
 
     const simpanPengguna = useSimpanPengguna();
     await simpanPengguna.mutationFn({ id: 8, nama: 'Admin' });
-    expect(klien.put).toHaveBeenCalledWith('/api/admin/pengguna/8', { id: 8, nama: 'Admin' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/pengguna/8', { id: 8, nama: 'Admin' });
     simpanPengguna.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-pengguna'] });
   });
@@ -104,42 +104,42 @@ describe('apiAdmin', () => {
     const simpanKamus = useSimpanKamus();
     await simpanKamus.mutationFn({ id: 1, lema: 'uji' });
     await simpanKamus.mutationFn({ lema: 'baru' });
-    expect(klien.put).toHaveBeenCalledWith('/api/admin/kamus/1', { id: 1, lema: 'uji' });
-    expect(klien.post).toHaveBeenCalledWith('/api/admin/kamus', { lema: 'baru' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/kamus/1', { id: 1, lema: 'uji' });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/kamus', { lema: 'baru' });
     simpanKamus.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-kamus'] });
 
     const hapusKamus = useHapusKamus();
     await hapusKamus.mutationFn(9);
-    expect(klien.delete).toHaveBeenCalledWith('/api/admin/kamus/9');
+    expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/kamus/9');
     hapusKamus.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-kamus'] });
 
     const simpanMakna = useSimpanMakna();
     await simpanMakna.mutationFn({ lemaId: 4, id: 2, makna: 'uji' });
     await simpanMakna.mutationFn({ lemaId: 4, makna: 'baru' });
-    expect(klien.put).toHaveBeenCalledWith('/api/admin/kamus/4/makna/2', { id: 2, makna: 'uji' });
-    expect(klien.post).toHaveBeenCalledWith('/api/admin/kamus/4/makna', { makna: 'baru' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/kamus/4/makna/2', { id: 2, makna: 'uji' });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/kamus/4/makna', { makna: 'baru' });
     simpanMakna.onSuccess(null, { lemaId: 4 });
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-makna', 4] });
 
     const hapusMakna = useHapusMakna();
     await hapusMakna.mutationFn({ lemaId: 4, maknaId: 77 });
-    expect(klien.delete).toHaveBeenCalledWith('/api/admin/kamus/4/makna/77');
+    expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/kamus/4/makna/77');
     hapusMakna.onSuccess(null, { lemaId: 4 });
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-makna', 4] });
 
     const simpanContoh = useSimpanContoh();
     await simpanContoh.mutationFn({ lemaId: 3, maknaId: 6, id: 11, contoh: 'c1' });
     await simpanContoh.mutationFn({ lemaId: 3, maknaId: 6, contoh: 'c2' });
-    expect(klien.put).toHaveBeenCalledWith('/api/admin/kamus/3/makna/6/contoh/11', { id: 11, contoh: 'c1' });
-    expect(klien.post).toHaveBeenCalledWith('/api/admin/kamus/3/makna/6/contoh', { contoh: 'c2' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/kamus/3/makna/6/contoh/11', { id: 11, contoh: 'c1' });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/kamus/3/makna/6/contoh', { contoh: 'c2' });
     simpanContoh.onSuccess(null, { lemaId: 3 });
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-makna', 3] });
 
     const hapusContoh = useHapusContoh();
     await hapusContoh.mutationFn({ lemaId: 3, maknaId: 6, contohId: 11 });
-    expect(klien.delete).toHaveBeenCalledWith('/api/admin/kamus/3/makna/6/contoh/11');
+    expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/kamus/3/makna/6/contoh/11');
     hapusContoh.onSuccess(null, { lemaId: 3 });
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-makna', 3] });
   });
@@ -148,28 +148,28 @@ describe('apiAdmin', () => {
     const simpanTesaurus = useSimpanTesaurus();
     await simpanTesaurus.mutationFn({ id: 2, lema: 'a' });
     await simpanTesaurus.mutationFn({ lema: 'b' });
-    expect(klien.put).toHaveBeenCalledWith('/api/admin/tesaurus/2', { id: 2, lema: 'a' });
-    expect(klien.post).toHaveBeenCalledWith('/api/admin/tesaurus', { lema: 'b' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/tesaurus/2', { id: 2, lema: 'a' });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/tesaurus', { lema: 'b' });
     simpanTesaurus.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-tesaurus'] });
 
     const hapusTesaurus = useHapusTesaurus();
     await hapusTesaurus.mutationFn(2);
-    expect(klien.delete).toHaveBeenCalledWith('/api/admin/tesaurus/2');
+    expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/tesaurus/2');
     hapusTesaurus.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-tesaurus'] });
 
     const simpanGlosarium = useSimpanGlosarium();
     await simpanGlosarium.mutationFn({ id: 5, indonesia: 'air' });
     await simpanGlosarium.mutationFn({ indonesia: 'api' });
-    expect(klien.put).toHaveBeenCalledWith('/api/admin/glosarium/5', { id: 5, indonesia: 'air' });
-    expect(klien.post).toHaveBeenCalledWith('/api/admin/glosarium', { indonesia: 'api' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/glosarium/5', { id: 5, indonesia: 'air' });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/glosarium', { indonesia: 'api' });
     simpanGlosarium.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-glosarium'] });
 
     const hapusGlosarium = useHapusGlosarium();
     await hapusGlosarium.mutationFn(5);
-    expect(klien.delete).toHaveBeenCalledWith('/api/admin/glosarium/5');
+    expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/glosarium/5');
     hapusGlosarium.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-glosarium'] });
   });

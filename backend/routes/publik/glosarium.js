@@ -3,8 +3,8 @@
  */
 
 const express = require('express');
-const ModelGlosarium = require('../../../models/modelGlosarium');
-const { publicSearchLimiter } = require('../../../middleware/rateLimiter');
+const ModelGlosarium = require('../../models/modelGlosarium');
+const { publicSearchLimiter } = require('../../middleware/rateLimiter');
 
 const router = express.Router();
 const maxOffset = Math.max(Number(process.env.PUBLIC_MAX_OFFSET) || 1000, 0);

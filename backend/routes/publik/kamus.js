@@ -3,10 +3,10 @@
  */
 
 const express = require('express');
-const { cariKamus, ambilDetailKamus } = require('../../../services/layananKamusPublik');
-const ModelLabel = require('../../../models/modelLabel');
-const ModelLema = require('../../../models/modelLema');
-const { publicSearchLimiter } = require('../../../middleware/rateLimiter');
+const { cariKamus, ambilDetailKamus } = require('../../services/layananKamusPublik');
+const ModelLabel = require('../../models/modelLabel');
+const ModelLema = require('../../models/modelLema');
+const { publicSearchLimiter } = require('../../middleware/rateLimiter');
 
 const router = express.Router();
 const maxOffset = Math.max(Number(process.env.PUBLIC_MAX_OFFSET) || 1000, 0);

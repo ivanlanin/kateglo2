@@ -192,4 +192,73 @@ describe('ModelGlosarium', () => {
 
     expect(db.query).toHaveBeenCalledWith(expect.any(String), ['aktif', 50]);
   });
+
+  it('hitungTotal mengembalikan nilai total numerik', async () => {
+    db.query.mockResolvedValue({ rows: [{ total: '14' }] });
+
+    const result = await ModelGlosarium.hitungTotal();
+
+    expect(db.query).toHaveBeenCalledWith('SELECT COUNT(*) AS total FROM glosarium');
+    expect(result).toBe(14);
+  });
+
+  it('ambilDenganId mengembalikan null jika tidak ditemukan', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    const result = await ModelGlosarium.ambilDenganId(101);
+
+    expect(result).toBeNull();
+  });
+
+  it('ambilDenganId mengembalikan row pertama jika ditemukan', async () => {
+    const row = { id: 101, indonesia: 'istilah' };
+    db.query.mockResolvedValue({ rows: [row] });
+
+    const result = await ModelGlosarium.ambilDenganId(101);
+
+    expect(db.query).toHaveBeenCalledWith(
+      'SELECT id, indonesia, asing, bidang, bahasa, sumber FROM glosarium WHERE id = $1',
+      [101]
+    );
+    expect(result).toEqual(row);
+  });
+
+  it('simpan melakukan update jika id ada', async () => {
+    const row = { id: 3, indonesia: 'baharu' };
+    db.query.mockResolvedValue({ rows: [row] });
+
+    const result = await ModelGlosarium.simpan(
+      { id: 3, indonesia: 'baharu', asing: 'new', bidang: '', bahasa: '', sumber: '' },
+      'editor@example.com'
+    );
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('UPDATE glosarium SET indonesia = $1'),
+      ['baharu', 'new', null, 'en', null, 'editor@example.com', 3]
+    );
+    expect(result).toEqual(row);
+  });
+
+  it('simpan melakukan insert jika id tidak ada', async () => {
+    const row = { id: 4, indonesia: 'baru' };
+    db.query.mockResolvedValue({ rows: [row] });
+
+    const result = await ModelGlosarium.simpan({ indonesia: 'baru', asing: 'new' });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO glosarium'),
+      ['baru', 'new', null, 'en', null, 'admin']
+    );
+    expect(result).toEqual(row);
+  });
+
+  it('hapus mengembalikan true jika ada baris terhapus dan false jika tidak', async () => {
+    db.query.mockResolvedValueOnce({ rowCount: 1 }).mockResolvedValueOnce({ rowCount: 0 });
+
+    const deleted = await ModelGlosarium.hapus(7);
+    const missing = await ModelGlosarium.hapus(8);
+
+    expect(deleted).toBe(true);
+    expect(missing).toBe(false);
+  });
 });

@@ -3,12 +3,12 @@
  */
 
 const express = require('express');
-const ModelLema = require('../../../models/modelLema');
+const ModelLema = require('../../models/modelLema');
 
 const router = express.Router();
 
 /**
- * GET /api/admin/kamus
+ * GET /api/redaksi/kamus
  * Daftar lema dengan pencarian opsional (paginasi)
  */
 router.get('/', async (req, res, next) => {
@@ -25,7 +25,7 @@ router.get('/', async (req, res, next) => {
 });
 
 /**
- * GET /api/admin/kamus/:id
+ * GET /api/redaksi/kamus/:id
  * Ambil detail lema untuk penyuntingan
  */
 router.get('/:id', async (req, res, next) => {
@@ -39,7 +39,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 /**
- * POST /api/admin/kamus
+ * POST /api/redaksi/kamus
  * Tambah lema baru
  */
 router.post('/', async (req, res, next) => {
@@ -56,7 +56,7 @@ router.post('/', async (req, res, next) => {
 });
 
 /**
- * PUT /api/admin/kamus/:id
+ * PUT /api/redaksi/kamus/:id
  * Sunting lema
  */
 router.put('/:id', async (req, res, next) => {
@@ -75,7 +75,7 @@ router.put('/:id', async (req, res, next) => {
 });
 
 /**
- * DELETE /api/admin/kamus/:id
+ * DELETE /api/redaksi/kamus/:id
  * Hapus lema
  */
 router.delete('/:id', async (req, res, next) => {
@@ -93,7 +93,7 @@ router.delete('/:id', async (req, res, next) => {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 /**
- * GET /api/admin/kamus/:lemaId/makna
+ * GET /api/redaksi/kamus/:lemaId/makna
  * Daftar makna + contoh untuk sebuah lema
  */
 router.get('/:lemaId/makna', async (req, res, next) => {
@@ -122,7 +122,7 @@ router.get('/:lemaId/makna', async (req, res, next) => {
 });
 
 /**
- * POST /api/admin/kamus/:lemaId/makna
+ * POST /api/redaksi/kamus/:lemaId/makna
  * Tambah makna baru
  */
 router.post('/:lemaId/makna', async (req, res, next) => {
@@ -139,7 +139,7 @@ router.post('/:lemaId/makna', async (req, res, next) => {
 });
 
 /**
- * PUT /api/admin/kamus/:lemaId/makna/:maknaId
+ * PUT /api/redaksi/kamus/:lemaId/makna/:maknaId
  * Sunting makna
  */
 router.put('/:lemaId/makna/:maknaId', async (req, res, next) => {
@@ -158,7 +158,7 @@ router.put('/:lemaId/makna/:maknaId', async (req, res, next) => {
 });
 
 /**
- * DELETE /api/admin/kamus/:lemaId/makna/:maknaId
+ * DELETE /api/redaksi/kamus/:lemaId/makna/:maknaId
  * Hapus makna (cascade hapus contoh)
  */
 router.delete('/:lemaId/makna/:maknaId', async (req, res, next) => {
@@ -176,7 +176,7 @@ router.delete('/:lemaId/makna/:maknaId', async (req, res, next) => {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 /**
- * POST /api/admin/kamus/:lemaId/makna/:maknaId/contoh
+ * POST /api/redaksi/kamus/:lemaId/makna/:maknaId/contoh
  * Tambah contoh baru
  */
 router.post('/:lemaId/makna/:maknaId/contoh', async (req, res, next) => {
@@ -193,7 +193,7 @@ router.post('/:lemaId/makna/:maknaId/contoh', async (req, res, next) => {
 });
 
 /**
- * PUT /api/admin/kamus/:lemaId/makna/:maknaId/contoh/:contohId
+ * PUT /api/redaksi/kamus/:lemaId/makna/:maknaId/contoh/:contohId
  * Sunting contoh
  */
 router.put('/:lemaId/makna/:maknaId/contoh/:contohId', async (req, res, next) => {
@@ -212,7 +212,7 @@ router.put('/:lemaId/makna/:maknaId/contoh/:contohId', async (req, res, next) =>
 });
 
 /**
- * DELETE /api/admin/kamus/:lemaId/makna/:maknaId/contoh/:contohId
+ * DELETE /api/redaksi/kamus/:lemaId/makna/:maknaId/contoh/:contohId
  * Hapus contoh
  */
 router.delete('/:lemaId/makna/:maknaId/contoh/:contohId', async (req, res, next) => {
@@ -226,3 +226,4 @@ router.delete('/:lemaId/makna/:maknaId/contoh/:contohId', async (req, res, next)
 });
 
 module.exports = router;
+

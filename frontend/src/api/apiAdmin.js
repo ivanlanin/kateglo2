@@ -10,7 +10,7 @@ import klien from './klien';
 export function useStatistikAdmin() {
   return useQuery({
     queryKey: ['admin-statistik'],
-    queryFn: () => klien.get('/api/admin/statistik').then((r) => r.data),
+    queryFn: () => klien.get('/api/redaksi/statistik').then((r) => r.data),
     staleTime: 60 * 1000,
   });
 }
@@ -22,7 +22,7 @@ export function useDaftarKamusAdmin({ limit = 50, offset = 0, q = '' } = {}) {
     queryKey: ['admin-kamus', { limit, offset, q }],
     queryFn: () =>
       klien
-        .get('/api/admin/kamus', { params: { limit, offset, q: q || undefined } })
+        .get('/api/redaksi/kamus', { params: { limit, offset, q: q || undefined } })
         .then((r) => r.data),
   });
 }
@@ -34,7 +34,7 @@ export function useDaftarTesaurusAdmin({ limit = 50, offset = 0, q = '' } = {}) 
     queryKey: ['admin-tesaurus', { limit, offset, q }],
     queryFn: () =>
       klien
-        .get('/api/admin/tesaurus', { params: { limit, offset, q: q || undefined } })
+        .get('/api/redaksi/tesaurus', { params: { limit, offset, q: q || undefined } })
         .then((r) => r.data),
   });
 }
@@ -46,7 +46,7 @@ export function useDaftarGlosariumAdmin({ limit = 50, offset = 0, q = '' } = {})
     queryKey: ['admin-glosarium', { limit, offset, q }],
     queryFn: () =>
       klien
-        .get('/api/admin/glosarium', { params: { limit, offset, q: q || undefined } })
+        .get('/api/redaksi/glosarium', { params: { limit, offset, q: q || undefined } })
         .then((r) => r.data),
   });
 }
@@ -58,7 +58,7 @@ export function useDaftarPengguna({ limit = 50, offset = 0 } = {}) {
     queryKey: ['admin-pengguna', { limit, offset }],
     queryFn: () =>
       klien
-        .get('/api/admin/pengguna', { params: { limit, offset } })
+        .get('/api/redaksi/pengguna', { params: { limit, offset } })
         .then((r) => r.data),
   });
 }
@@ -67,7 +67,7 @@ export function useDaftarPeran() {
   return useQuery({
     queryKey: ['admin-peran'],
     queryFn: () =>
-      klien.get('/api/admin/pengguna/peran').then((r) => r.data),
+      klien.get('/api/redaksi/pengguna/peran').then((r) => r.data),
   });
 }
 
@@ -76,7 +76,7 @@ export function useUbahPeran() {
   return useMutation({
     mutationFn: ({ penggunaId, peranId }) =>
       klien
-        .patch(`/api/admin/pengguna/${penggunaId}/peran`, { peran_id: peranId })
+        .patch(`/api/redaksi/pengguna/${penggunaId}/peran`, { peran_id: peranId })
         .then((r) => r.data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-pengguna'] });
@@ -90,8 +90,8 @@ export function useSimpanKamus() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (data) => {
-      if (data.id) return klien.put(`/api/admin/kamus/${data.id}`, data).then((r) => r.data);
-      return klien.post('/api/admin/kamus', data).then((r) => r.data);
+      if (data.id) return klien.put(`/api/redaksi/kamus/${data.id}`, data).then((r) => r.data);
+      return klien.post('/api/redaksi/kamus', data).then((r) => r.data);
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-kamus'] }),
   });
@@ -100,7 +100,7 @@ export function useSimpanKamus() {
 export function useHapusKamus() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id) => klien.delete(`/api/admin/kamus/${id}`).then((r) => r.data),
+    mutationFn: (id) => klien.delete(`/api/redaksi/kamus/${id}`).then((r) => r.data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-kamus'] }),
   });
 }
@@ -110,7 +110,7 @@ export function useHapusKamus() {
 export function useDaftarMakna(lemaId) {
   return useQuery({
     queryKey: ['admin-makna', lemaId],
-    queryFn: () => klien.get(`/api/admin/kamus/${lemaId}/makna`).then((r) => r.data),
+    queryFn: () => klien.get(`/api/redaksi/kamus/${lemaId}/makna`).then((r) => r.data),
     enabled: Boolean(lemaId),
   });
 }
@@ -119,8 +119,8 @@ export function useSimpanMakna() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: ({ lemaId, ...data }) => {
-      if (data.id) return klien.put(`/api/admin/kamus/${lemaId}/makna/${data.id}`, data).then((r) => r.data);
-      return klien.post(`/api/admin/kamus/${lemaId}/makna`, data).then((r) => r.data);
+      if (data.id) return klien.put(`/api/redaksi/kamus/${lemaId}/makna/${data.id}`, data).then((r) => r.data);
+      return klien.post(`/api/redaksi/kamus/${lemaId}/makna`, data).then((r) => r.data);
     },
     onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['admin-makna', vars.lemaId] }),
   });
@@ -129,7 +129,7 @@ export function useSimpanMakna() {
 export function useHapusMakna() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ lemaId, maknaId }) => klien.delete(`/api/admin/kamus/${lemaId}/makna/${maknaId}`).then((r) => r.data),
+    mutationFn: ({ lemaId, maknaId }) => klien.delete(`/api/redaksi/kamus/${lemaId}/makna/${maknaId}`).then((r) => r.data),
     onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['admin-makna', vars.lemaId] }),
   });
 }
@@ -138,8 +138,8 @@ export function useSimpanContoh() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: ({ lemaId, maknaId, ...data }) => {
-      if (data.id) return klien.put(`/api/admin/kamus/${lemaId}/makna/${maknaId}/contoh/${data.id}`, data).then((r) => r.data);
-      return klien.post(`/api/admin/kamus/${lemaId}/makna/${maknaId}/contoh`, data).then((r) => r.data);
+      if (data.id) return klien.put(`/api/redaksi/kamus/${lemaId}/makna/${maknaId}/contoh/${data.id}`, data).then((r) => r.data);
+      return klien.post(`/api/redaksi/kamus/${lemaId}/makna/${maknaId}/contoh`, data).then((r) => r.data);
     },
     onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['admin-makna', vars.lemaId] }),
   });
@@ -148,7 +148,7 @@ export function useSimpanContoh() {
 export function useHapusContoh() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ lemaId, maknaId, contohId }) => klien.delete(`/api/admin/kamus/${lemaId}/makna/${maknaId}/contoh/${contohId}`).then((r) => r.data),
+    mutationFn: ({ lemaId, maknaId, contohId }) => klien.delete(`/api/redaksi/kamus/${lemaId}/makna/${maknaId}/contoh/${contohId}`).then((r) => r.data),
     onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['admin-makna', vars.lemaId] }),
   });
 }
@@ -159,8 +159,8 @@ export function useSimpanTesaurus() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (data) => {
-      if (data.id) return klien.put(`/api/admin/tesaurus/${data.id}`, data).then((r) => r.data);
-      return klien.post('/api/admin/tesaurus', data).then((r) => r.data);
+      if (data.id) return klien.put(`/api/redaksi/tesaurus/${data.id}`, data).then((r) => r.data);
+      return klien.post('/api/redaksi/tesaurus', data).then((r) => r.data);
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-tesaurus'] }),
   });
@@ -169,7 +169,7 @@ export function useSimpanTesaurus() {
 export function useHapusTesaurus() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id) => klien.delete(`/api/admin/tesaurus/${id}`).then((r) => r.data),
+    mutationFn: (id) => klien.delete(`/api/redaksi/tesaurus/${id}`).then((r) => r.data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-tesaurus'] }),
   });
 }
@@ -180,8 +180,8 @@ export function useSimpanGlosarium() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (data) => {
-      if (data.id) return klien.put(`/api/admin/glosarium/${data.id}`, data).then((r) => r.data);
-      return klien.post('/api/admin/glosarium', data).then((r) => r.data);
+      if (data.id) return klien.put(`/api/redaksi/glosarium/${data.id}`, data).then((r) => r.data);
+      return klien.post('/api/redaksi/glosarium', data).then((r) => r.data);
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-glosarium'] }),
   });
@@ -190,7 +190,7 @@ export function useSimpanGlosarium() {
 export function useHapusGlosarium() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id) => klien.delete(`/api/admin/glosarium/${id}`).then((r) => r.data),
+    mutationFn: (id) => klien.delete(`/api/redaksi/glosarium/${id}`).then((r) => r.data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-glosarium'] }),
   });
 }
@@ -201,7 +201,7 @@ export function useSimpanPengguna() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (data) =>
-      klien.put(`/api/admin/pengguna/${data.id}`, data).then((r) => r.data),
+      klien.put(`/api/redaksi/pengguna/${data.id}`, data).then((r) => r.data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-pengguna'] }),
   });
 }

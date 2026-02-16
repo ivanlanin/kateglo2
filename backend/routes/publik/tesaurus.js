@@ -3,9 +3,9 @@
  */
 
 const express = require('express');
-const { cariTesaurus, ambilDetailTesaurus } = require('../../../services/layananTesaurusPublik');
-const ModelTesaurus = require('../../../models/modelTesaurus');
-const { publicSearchLimiter } = require('../../../middleware/rateLimiter');
+const { cariTesaurus, ambilDetailTesaurus } = require('../../services/layananTesaurusPublik');
+const ModelTesaurus = require('../../models/modelTesaurus');
+const { publicSearchLimiter } = require('../../middleware/rateLimiter');
 
 const router = express.Router();
 const maxOffset = Math.max(Number(process.env.PUBLIC_MAX_OFFSET) || 1000, 0);
