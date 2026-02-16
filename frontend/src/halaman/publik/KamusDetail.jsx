@@ -75,17 +75,17 @@ function KamusDetail() {
         <nav className="kamus-detail-breadcrumb">
           <Link to="/kamus" className="kamus-detail-breadcrumb-link">Kamus</Link>
           <span className="mx-2">›</span>
-          <span className="kamus-detail-breadcrumb-current"><TeksLema lema={data.lema} /></span>
+          <span className="kamus-detail-breadcrumb-current"><TeksLema lema={data.entri} /></span>
         </nav>
         <div>
-          <h1 className="kamus-detail-heading"><TeksLema lema={data.lema} /></h1>
+          <h1 className="kamus-detail-heading"><TeksLema lema={data.entri} /></h1>
           <p className="mt-2">
             → Lihat{' '}
             <Link
-              to={`/kamus/detail/${encodeURIComponent(data.lema_rujuk)}`}
+              to={`/kamus/detail/${encodeURIComponent(data.entri_rujuk)}`}
               className="link-action font-semibold"
             >
-              <TeksLema lema={data.lema_rujuk} />
+              <TeksLema lema={data.entri_rujuk} />
             </Link>
           </p>
         </div>
@@ -103,7 +103,7 @@ function KamusDetail() {
     maknaPerKelas[kelas].push(m);
   });
 
-  const sublemaEntries = Object.entries(data.sublema || {});
+  const subentriEntries = Object.entries(data.subentri || {});
   const tesaurusSinonim = data.tesaurus?.sinonim || [];
   const tesaurusAntonim = data.tesaurus?.antonim || [];
   const adaTesaurus = tesaurusSinonim.length > 0 || tesaurusAntonim.length > 0;
@@ -137,15 +137,15 @@ function KamusDetail() {
         {data.induk && data.induk.map((item) => (
           <span key={item.id}>
             <Link
-              to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
+              to={`/kamus/detail/${encodeURIComponent(item.entri)}`}
               className="kamus-detail-breadcrumb-link"
             >
-              <TeksLema lema={item.lema} />
+              <TeksLema lema={item.entri} />
             </Link>
             <span className="mx-2">›</span>
           </span>
         ))}
-        <span className="kamus-detail-breadcrumb-current"><TeksLema lema={data.lema} /></span>
+        <span className="kamus-detail-breadcrumb-current"><TeksLema lema={data.entri} /></span>
       </nav>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -154,11 +154,11 @@ function KamusDetail() {
           <div>
             <div className="kamus-detail-heading-row">
               <h1 className="kamus-detail-heading">
-                <span className="kamus-detail-heading-main"><TeksLema lema={data.lema} /></span>
+                <span className="kamus-detail-heading-main"><TeksLema lema={data.entri} /></span>
                 {data.lafal && (
                   <span className="kamus-detail-heading-pronunciation">/<TeksLema lema={data.lafal} />/</span>
                 )}
-                {data.pemenggalan && data.pemenggalan !== data.lema && (
+                {data.pemenggalan && data.pemenggalan !== data.entri && (
                   <span className="kamus-detail-heading-split">(<TeksLema lema={data.pemenggalan} />)</span>
                 )}
               </h1>
@@ -242,18 +242,18 @@ function KamusDetail() {
           </div>
         </div>
 
-        {/* Sidebar: sublema, tesaurus, glosarium */}
+        {/* Sidebar: subentri, tesaurus, glosarium */}
         <div className="space-y-4">
           {serupa.length > 0 && (
             <PanelLipat judul="Serupa" jumlah={serupa.length} terbukaAwal={true} aksen={true}>
               <div className="kamus-detail-relations-flow">
                 {serupa.map((item, i) => (
-                  <span key={`${item.id || item.lema}-${i}`}>
+                  <span key={`${item.id || item.entri}-${i}`}>
                     <Link
-                      to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
+                      to={`/kamus/detail/${encodeURIComponent(item.entri)}`}
                       className="kamus-detail-relation-link"
                     >
-                      <TeksLema lema={item.lema} />
+                      <TeksLema lema={item.entri} />
                     </Link>
                     {item.lafal && <span className="secondary-text"> /<TeksLema lema={item.lafal} />/</span>}
                     {i < serupa.length - 1 && <span className="secondary-text">; </span>}
@@ -263,8 +263,8 @@ function KamusDetail() {
             </PanelLipat>
           )}
 
-          {/* Sublema per jenis */}
-          {sublemaEntries.map(([jenis, daftar]) => (
+          {/* Subentri per jenis */}
+          {subentriEntries.map(([jenis, daftar]) => (
             <PanelLipat
               key={jenis}
               judul={jenis.charAt(0).toUpperCase() + jenis.slice(1)}
@@ -276,10 +276,10 @@ function KamusDetail() {
                 {daftar.map((s, i) => (
                   <span key={s.id}>
                     <Link
-                      to={`/kamus/detail/${encodeURIComponent(s.lema)}`}
+                      to={`/kamus/detail/${encodeURIComponent(s.entri)}`}
                       className="kamus-detail-relation-link"
                     >
-                      <TeksLema lema={s.lema} />
+                      <TeksLema lema={s.entri} />
                     </Link>
                     {i < daftar.length - 1 && <span className="secondary-text">; </span>}
                   </span>

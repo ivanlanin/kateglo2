@@ -3,13 +3,13 @@
  */
 
 const express = require('express');
-const ModelLema = require('../../models/modelLema');
+const ModelEntri = require('../../models/modelEntri');
 
 const router = express.Router();
 
 /**
  * GET /api/redaksi/kamus
- * Daftar lema dengan pencarian opsional (paginasi)
+ * Daftar entri dengan pencarian opsional (paginasi)
  */
 router.get('/', async (req, res, next) => {
   try {
@@ -17,7 +17,7 @@ router.get('/', async (req, res, next) => {
     const offset = Math.max(Number(req.query.offset) || 0, 0);
     const q = (req.query.q || '').trim();
 
-    const { data, total } = await ModelLema.daftarAdmin({ limit, offset, q });
+    const { data, total } = await ModelEntri.daftarAdmin({ limit, offset, q });
     return res.json({ success: true, data, total });
   } catch (error) {
     return next(error);
@@ -26,12 +26,12 @@ router.get('/', async (req, res, next) => {
 
 /**
  * GET /api/redaksi/kamus/:id
- * Ambil detail lema untuk penyuntingan
+ * Ambil detail entri untuk penyuntingan
  */
 router.get('/:id', async (req, res, next) => {
   try {
-    const data = await ModelLema.ambilDenganId(Number(req.params.id));
-    if (!data) return res.status(404).json({ success: false, message: 'Lema tidak ditemukan' });
+    const data = await ModelEntri.ambilDenganId(Number(req.params.id));
+    if (!data) return res.status(404).json({ success: false, message: 'Entri tidak ditemukan' });
     return res.json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -40,15 +40,16 @@ router.get('/:id', async (req, res, next) => {
 
 /**
  * POST /api/redaksi/kamus
- * Tambah lema baru
+ * Tambah entri baru
  */
 router.post('/', async (req, res, next) => {
   try {
-    const { lema, jenis } = req.body;
-    if (!lema?.trim()) return res.status(400).json({ success: false, message: 'Lema wajib diisi' });
+    const entri = (req.body.entri ?? req.body.lema ?? '').trim();
+    const { jenis } = req.body;
+    if (!entri) return res.status(400).json({ success: false, message: 'Entri wajib diisi' });
     if (!jenis) return res.status(400).json({ success: false, message: 'Jenis wajib diisi' });
 
-    const data = await ModelLema.simpan(req.body);
+    const data = await ModelEntri.simpan({ ...req.body, entri });
     return res.status(201).json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -57,17 +58,18 @@ router.post('/', async (req, res, next) => {
 
 /**
  * PUT /api/redaksi/kamus/:id
- * Sunting lema
+ * Sunting entri
  */
 router.put('/:id', async (req, res, next) => {
   try {
     const id = Number(req.params.id);
-    const { lema, jenis } = req.body;
-    if (!lema?.trim()) return res.status(400).json({ success: false, message: 'Lema wajib diisi' });
+    const entri = (req.body.entri ?? req.body.lema ?? '').trim();
+    const { jenis } = req.body;
+    if (!entri) return res.status(400).json({ success: false, message: 'Entri wajib diisi' });
     if (!jenis) return res.status(400).json({ success: false, message: 'Jenis wajib diisi' });
 
-    const data = await ModelLema.simpan({ ...req.body, id });
-    if (!data) return res.status(404).json({ success: false, message: 'Lema tidak ditemukan' });
+    const data = await ModelEntri.simpan({ ...req.body, id, entri });
+    if (!data) return res.status(404).json({ success: false, message: 'Entri tidak ditemukan' });
     return res.json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -76,12 +78,12 @@ router.put('/:id', async (req, res, next) => {
 
 /**
  * DELETE /api/redaksi/kamus/:id
- * Hapus lema
+ * Hapus entri
  */
 router.delete('/:id', async (req, res, next) => {
   try {
-    const deleted = await ModelLema.hapus(Number(req.params.id));
-    if (!deleted) return res.status(404).json({ success: false, message: 'Lema tidak ditemukan' });
+    const deleted = await ModelEntri.hapus(Number(req.params.id));
+    if (!deleted) return res.status(404).json({ success: false, message: 'Entri tidak ditemukan' });
     return res.json({ success: true });
   } catch (error) {
     return next(error);
@@ -93,15 +95,15 @@ router.delete('/:id', async (req, res, next) => {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 /**
- * GET /api/redaksi/kamus/:lemaId/makna
- * Daftar makna + contoh untuk sebuah lema
+ * GET /api/redaksi/kamus/:entriId/makna
+ * Daftar makna + contoh untuk sebuah entri
  */
-router.get('/:lemaId/makna', async (req, res, next) => {
+router.get('/:entriId/makna', async (req, res, next) => {
   try {
-    const lemaId = Number(req.params.lemaId);
-    const daftarMakna = await ModelLema.ambilMakna(lemaId);
+    const entriId = Number(req.params.entriId);
+    const daftarMakna = await ModelEntri.ambilMakna(entriId);
     const maknaIds = daftarMakna.map((m) => m.id);
-    const daftarContoh = await ModelLema.ambilContoh(maknaIds);
+    const daftarContoh = await ModelEntri.ambilContoh(maknaIds);
 
     // Group contoh by makna_id
     const contohMap = {};
@@ -122,16 +124,16 @@ router.get('/:lemaId/makna', async (req, res, next) => {
 });
 
 /**
- * POST /api/redaksi/kamus/:lemaId/makna
+ * POST /api/redaksi/kamus/:entriId/makna
  * Tambah makna baru
  */
-router.post('/:lemaId/makna', async (req, res, next) => {
+router.post('/:entriId/makna', async (req, res, next) => {
   try {
-    const entri_id = Number(req.params.lemaId);
+    const entri_id = Number(req.params.entriId);
     const { makna } = req.body;
     if (!makna?.trim()) return res.status(400).json({ success: false, message: 'Makna wajib diisi' });
 
-    const data = await ModelLema.simpanMakna({ ...req.body, entri_id });
+    const data = await ModelEntri.simpanMakna({ ...req.body, entri_id });
     return res.status(201).json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -139,17 +141,17 @@ router.post('/:lemaId/makna', async (req, res, next) => {
 });
 
 /**
- * PUT /api/redaksi/kamus/:lemaId/makna/:maknaId
+ * PUT /api/redaksi/kamus/:entriId/makna/:maknaId
  * Sunting makna
  */
-router.put('/:lemaId/makna/:maknaId', async (req, res, next) => {
+router.put('/:entriId/makna/:maknaId', async (req, res, next) => {
   try {
-    const entri_id = Number(req.params.lemaId);
+    const entri_id = Number(req.params.entriId);
     const id = Number(req.params.maknaId);
     const { makna } = req.body;
     if (!makna?.trim()) return res.status(400).json({ success: false, message: 'Makna wajib diisi' });
 
-    const data = await ModelLema.simpanMakna({ ...req.body, id, entri_id });
+    const data = await ModelEntri.simpanMakna({ ...req.body, id, entri_id });
     if (!data) return res.status(404).json({ success: false, message: 'Makna tidak ditemukan' });
     return res.json({ success: true, data });
   } catch (error) {
@@ -158,12 +160,12 @@ router.put('/:lemaId/makna/:maknaId', async (req, res, next) => {
 });
 
 /**
- * DELETE /api/redaksi/kamus/:lemaId/makna/:maknaId
+ * DELETE /api/redaksi/kamus/:entriId/makna/:maknaId
  * Hapus makna (cascade hapus contoh)
  */
-router.delete('/:lemaId/makna/:maknaId', async (req, res, next) => {
+router.delete('/:entriId/makna/:maknaId', async (req, res, next) => {
   try {
-    const deleted = await ModelLema.hapusMakna(Number(req.params.maknaId));
+    const deleted = await ModelEntri.hapusMakna(Number(req.params.maknaId));
     if (!deleted) return res.status(404).json({ success: false, message: 'Makna tidak ditemukan' });
     return res.json({ success: true });
   } catch (error) {
@@ -176,16 +178,16 @@ router.delete('/:lemaId/makna/:maknaId', async (req, res, next) => {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 /**
- * POST /api/redaksi/kamus/:lemaId/makna/:maknaId/contoh
+ * POST /api/redaksi/kamus/:entriId/makna/:maknaId/contoh
  * Tambah contoh baru
  */
-router.post('/:lemaId/makna/:maknaId/contoh', async (req, res, next) => {
+router.post('/:entriId/makna/:maknaId/contoh', async (req, res, next) => {
   try {
     const makna_id = Number(req.params.maknaId);
     const { contoh } = req.body;
     if (!contoh?.trim()) return res.status(400).json({ success: false, message: 'Contoh wajib diisi' });
 
-    const data = await ModelLema.simpanContoh({ ...req.body, makna_id });
+    const data = await ModelEntri.simpanContoh({ ...req.body, makna_id });
     return res.status(201).json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -193,17 +195,17 @@ router.post('/:lemaId/makna/:maknaId/contoh', async (req, res, next) => {
 });
 
 /**
- * PUT /api/redaksi/kamus/:lemaId/makna/:maknaId/contoh/:contohId
+ * PUT /api/redaksi/kamus/:entriId/makna/:maknaId/contoh/:contohId
  * Sunting contoh
  */
-router.put('/:lemaId/makna/:maknaId/contoh/:contohId', async (req, res, next) => {
+router.put('/:entriId/makna/:maknaId/contoh/:contohId', async (req, res, next) => {
   try {
     const makna_id = Number(req.params.maknaId);
     const id = Number(req.params.contohId);
     const { contoh } = req.body;
     if (!contoh?.trim()) return res.status(400).json({ success: false, message: 'Contoh wajib diisi' });
 
-    const data = await ModelLema.simpanContoh({ ...req.body, id, makna_id });
+    const data = await ModelEntri.simpanContoh({ ...req.body, id, makna_id });
     if (!data) return res.status(404).json({ success: false, message: 'Contoh tidak ditemukan' });
     return res.json({ success: true, data });
   } catch (error) {
@@ -212,12 +214,12 @@ router.put('/:lemaId/makna/:maknaId/contoh/:contohId', async (req, res, next) =>
 });
 
 /**
- * DELETE /api/redaksi/kamus/:lemaId/makna/:maknaId/contoh/:contohId
+ * DELETE /api/redaksi/kamus/:entriId/makna/:maknaId/contoh/:contohId
  * Hapus contoh
  */
-router.delete('/:lemaId/makna/:maknaId/contoh/:contohId', async (req, res, next) => {
+router.delete('/:entriId/makna/:maknaId/contoh/:contohId', async (req, res, next) => {
   try {
-    const deleted = await ModelLema.hapusContoh(Number(req.params.contohId));
+    const deleted = await ModelEntri.hapusContoh(Number(req.params.contohId));
     if (!deleted) return res.status(404).json({ success: false, message: 'Contoh tidak ditemukan' });
     return res.json({ success: true });
   } catch (error) {

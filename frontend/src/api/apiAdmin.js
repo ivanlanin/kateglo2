@@ -107,49 +107,53 @@ export function useHapusKamus() {
 
 // ─── Makna & Contoh ──────────────────────────────────────────────────────────
 
-export function useDaftarMakna(lemaId) {
+export function useDaftarMakna(entriId) {
   return useQuery({
-    queryKey: ['admin-makna', lemaId],
-    queryFn: () => klien.get(`/api/redaksi/kamus/${lemaId}/makna`).then((r) => r.data),
-    enabled: Boolean(lemaId),
+    queryKey: ['admin-makna', entriId],
+    queryFn: () => klien.get(`/api/redaksi/kamus/${entriId}/makna`).then((r) => r.data),
+    enabled: Boolean(entriId),
   });
 }
 
 export function useSimpanMakna() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ lemaId, ...data }) => {
-      if (data.id) return klien.put(`/api/redaksi/kamus/${lemaId}/makna/${data.id}`, data).then((r) => r.data);
-      return klien.post(`/api/redaksi/kamus/${lemaId}/makna`, data).then((r) => r.data);
+    mutationFn: ({ entriId, ...data }) => {
+      if (data.id) return klien.put(`/api/redaksi/kamus/${entriId}/makna/${data.id}`, data).then((r) => r.data);
+      return klien.post(`/api/redaksi/kamus/${entriId}/makna`, data).then((r) => r.data);
     },
-    onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['admin-makna', vars.lemaId] }),
+    onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['admin-makna', vars.entriId] }),
   });
 }
 
 export function useHapusMakna() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ lemaId, maknaId }) => klien.delete(`/api/redaksi/kamus/${lemaId}/makna/${maknaId}`).then((r) => r.data),
-    onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['admin-makna', vars.lemaId] }),
+    mutationFn: ({ entriId, maknaId }) => {
+      return klien.delete(`/api/redaksi/kamus/${entriId}/makna/${maknaId}`).then((r) => r.data);
+    },
+    onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['admin-makna', vars.entriId] }),
   });
 }
 
 export function useSimpanContoh() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ lemaId, maknaId, ...data }) => {
-      if (data.id) return klien.put(`/api/redaksi/kamus/${lemaId}/makna/${maknaId}/contoh/${data.id}`, data).then((r) => r.data);
-      return klien.post(`/api/redaksi/kamus/${lemaId}/makna/${maknaId}/contoh`, data).then((r) => r.data);
+    mutationFn: ({ entriId, maknaId, ...data }) => {
+      if (data.id) return klien.put(`/api/redaksi/kamus/${entriId}/makna/${maknaId}/contoh/${data.id}`, data).then((r) => r.data);
+      return klien.post(`/api/redaksi/kamus/${entriId}/makna/${maknaId}/contoh`, data).then((r) => r.data);
     },
-    onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['admin-makna', vars.lemaId] }),
+    onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['admin-makna', vars.entriId] }),
   });
 }
 
 export function useHapusContoh() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ lemaId, maknaId, contohId }) => klien.delete(`/api/redaksi/kamus/${lemaId}/makna/${maknaId}/contoh/${contohId}`).then((r) => r.data),
-    onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['admin-makna', vars.lemaId] }),
+    mutationFn: ({ entriId, maknaId, contohId }) => {
+      return klien.delete(`/api/redaksi/kamus/${entriId}/makna/${maknaId}/contoh/${contohId}`).then((r) => r.data);
+    },
+    onSuccess: (_d, vars) => qc.invalidateQueries({ queryKey: ['admin-makna', vars.entriId] }),
   });
 }
 

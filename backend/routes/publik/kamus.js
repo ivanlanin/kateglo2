@@ -5,7 +5,7 @@
 const express = require('express');
 const { cariKamus, ambilDetailKamus } = require('../../services/layananKamusPublik');
 const ModelLabel = require('../../models/modelLabel');
-const ModelLema = require('../../models/modelLema');
+const ModelEntri = require('../../models/modelEntri');
 const { publicSearchLimiter } = require('../../middleware/rateLimiter');
 
 const router = express.Router();
@@ -43,7 +43,7 @@ router.get('/kategori/:kategori/:kode', async (req, res, next) => {
       return;
     }
 
-    const data = await ModelLabel.cariLemaPerLabel(
+    const data = await ModelLabel.cariEntriPerLabel(
       req.params.kategori,
       decodeURIComponent(req.params.kode),
       limit,
@@ -57,7 +57,7 @@ router.get('/kategori/:kategori/:kode', async (req, res, next) => {
 
 router.get('/autocomplete/:kata', async (req, res, next) => {
   try {
-    const data = await ModelLema.autocomplete(req.params.kata);
+    const data = await ModelEntri.autocomplete(req.params.kata);
     return res.json({ data });
   } catch (error) {
     return next(error);
@@ -78,7 +78,7 @@ router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
       data: result.data,
     };
     if (result.total === 0) {
-      response.saran = await ModelLema.saranLema(decodeURIComponent(req.params.kata));
+      response.saran = await ModelEntri.saranEntri(decodeURIComponent(req.params.kata));
     }
     return res.json(response);
   } catch (error) {
@@ -90,7 +90,7 @@ router.get('/detail/:entri', async (req, res, next) => {
   try {
     const data = await ambilDetailKamus(req.params.entri);
     if (!data) {
-      const saran = await ModelLema.saranLema(decodeURIComponent(req.params.entri));
+      const saran = await ModelEntri.saranEntri(decodeURIComponent(req.params.entri));
       return res.status(404).json({
         error: 'Tidak Ditemukan',
         message: 'Entri tidak ditemukan',

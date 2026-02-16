@@ -15,7 +15,7 @@ jest.mock('../../models/modelPengguna', () => ({
   hitungTotal: jest.fn(),
 }));
 
-jest.mock('../../models/modelLema', () => ({
+jest.mock('../../models/modelEntri', () => ({
   daftarAdmin: jest.fn(),
   ambilDenganId: jest.fn(),
   simpan: jest.fn(),
@@ -46,7 +46,7 @@ jest.mock('../../models/modelGlosarium', () => ({
 }));
 
 const ModelPengguna = require('../../models/modelPengguna');
-const ModelLema = require('../../models/modelLema');
+const ModelLema = require('../../models/modelEntri');
 const ModelTesaurus = require('../../models/modelTesaurus');
 const ModelGlosarium = require('../../models/modelGlosarium');
 const rootRouter = require('../../routes');
@@ -219,7 +219,7 @@ describe('routes/redaksi', () => {
       const response = await callAsAdmin('get', '/api/redaksi/statistik');
 
       expect(response.status).toBe(200);
-      expect(response.body.data).toEqual({ lema: 10, glosarium: 20, tesaurus: 30, pengguna: 40 });
+      expect(response.body.data).toEqual({ entri: 10, glosarium: 20, tesaurus: 30, pengguna: 40 });
     });
 
     it('GET /api/redaksi/statistik meneruskan error', async () => {

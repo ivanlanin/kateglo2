@@ -52,7 +52,7 @@ describe('KamusAdmin', () => {
       isError: false,
       data: {
         total: 1,
-        data: [{ id: 1, lema: 'anak', jenis: 'dasar', lafal: 'a·nak', aktif: 1, jenis_rujuk: 'lihat', lema_rujuk: 'ananda' }],
+        data: [{ id: 1, entri: 'anak', jenis: 'dasar', lafal: 'a·nak', aktif: 1, jenis_rujuk: 'lihat', entri_rujuk: 'ananda' }],
       },
     });
 
@@ -88,7 +88,7 @@ describe('KamusAdmin', () => {
   });
 
   it('validasi simpan lema dan alur simpan/hapus lema', () => {
-    mutateSimpanKamus.mockImplementation((_data, opts) => opts.onSuccess?.({ data: { id: 2, lema: 'baru' } }));
+    mutateSimpanKamus.mockImplementation((_data, opts) => opts.onSuccess?.({ data: { id: 2, entri: 'baru' } }));
 
     render(
       <MemoryRouter>
@@ -98,9 +98,9 @@ describe('KamusAdmin', () => {
 
     fireEvent.click(screen.getByText('+ Tambah'));
     fireEvent.click(screen.getByText('Simpan'));
-    expect(screen.getByText('Lema wajib diisi')).toBeInTheDocument();
+    expect(screen.getByText('Entri wajib diisi')).toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText('Lema*'), { target: { value: 'baru' } });
+    fireEvent.change(screen.getByLabelText('Entri*'), { target: { value: 'baru' } });
     fireEvent.click(screen.getByText('Simpan'));
     expect(mutateSimpanKamus).toHaveBeenCalled();
 
@@ -259,7 +259,7 @@ describe('KamusAdmin', () => {
     );
 
     fireEvent.click(screen.getByText('+ Tambah'));
-    fireEvent.change(screen.getByLabelText('Lema*'), { target: { value: 'baru pesan' } });
+    fireEvent.change(screen.getByLabelText('Entri*'), { target: { value: 'baru pesan' } });
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Pesan gagal')).toBeInTheDocument();
 

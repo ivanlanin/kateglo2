@@ -49,7 +49,7 @@ class ModelLabel {
   }
 
   /**
-   * Cari lema berdasarkan kategori dan kode label.
+  * Cari entri berdasarkan kategori dan kode label.
    * Mendukung kategori dari tabel label (ragam, kelas_kata, bahasa, bidang)
    * serta kategori virtual (abjad, jenis).
    * @param {string} kategori - Kategori
@@ -58,12 +58,12 @@ class ModelLabel {
    * @param {number} offset - Offset untuk paginasi
    * @returns {Promise<{data: Array, total: number, label: Object|null}>}
    */
-  static async cariLemaPerLabel(kategori, kode, limit = 20, offset = 0) {
+  static async cariEntriPerLabel(kategori, kode, limit = 20, offset = 0) {
     if (kategori === 'abjad') {
-      return this._cariLemaPerAbjad(kode, limit, offset);
+      return this._cariEntriPerAbjad(kode, limit, offset);
     }
     if (kategori === 'jenis') {
-      return this._cariLemaPerJenis(kode, limit, offset);
+      return this._cariEntriPerJenis(kode, limit, offset);
     }
 
     const validKategori = ['ragam', 'kelas_kata', 'bahasa', 'bidang'];
@@ -96,7 +96,7 @@ class ModelLabel {
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-      `SELECT DISTINCT ON (l.entri) l.id, l.entri AS lema, l.jenis, l.jenis_rujuk, l.lema_rujuk,
+      `SELECT DISTINCT ON (l.entri) l.id, l.entri, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk,
               m.kelas_kata AS preview_kelas_kata, m.makna AS preview_makna
        FROM entri l
        JOIN makna m ON m.entri_id = l.id
@@ -110,9 +110,9 @@ class ModelLabel {
   }
 
   /**
-   * Cari lema berdasarkan huruf pertama Latin.
+  * Cari entri berdasarkan huruf pertama Latin.
    */
-  static async _cariLemaPerAbjad(huruf, limit, offset) {
+  static async _cariEntriPerAbjad(huruf, limit, offset) {
     const h = huruf.toUpperCase();
     if (!/^[A-Z]$/.test(h)) {
       return { data: [], total: 0, label: null };
@@ -127,7 +127,7 @@ class ModelLabel {
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-      `SELECT l.id, l.entri AS lema, l.jenis, l.jenis_rujuk, l.lema_rujuk,
+      `SELECT l.id, l.entri, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk,
               m.kelas_kata AS preview_kelas_kata, m.makna AS preview_makna
        FROM entri l
        LEFT JOIN LATERAL (
@@ -147,9 +147,9 @@ class ModelLabel {
   }
 
   /**
-   * Cari lema berdasarkan jenis (dasar, berimbuhan, gabungan, idiom, peribahasa, varian).
+  * Cari entri berdasarkan jenis (dasar, berimbuhan, gabungan, idiom, peribahasa, varian).
    */
-  static async _cariLemaPerJenis(jenis, limit, offset) {
+  static async _cariEntriPerJenis(jenis, limit, offset) {
     const validJenis = ['dasar', 'berimbuhan', 'gabungan', 'idiom', 'peribahasa', 'varian'];
     if (!validJenis.includes(jenis)) {
       return { data: [], total: 0, label: null };
@@ -162,7 +162,7 @@ class ModelLabel {
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-      `SELECT l.id, l.entri AS lema, l.jenis, l.jenis_rujuk, l.lema_rujuk,
+      `SELECT l.id, l.entri, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk,
               m.kelas_kata AS preview_kelas_kata, m.makna AS preview_makna
        FROM entri l
        LEFT JOIN LATERAL (

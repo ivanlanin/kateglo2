@@ -102,10 +102,10 @@ describe('apiAdmin', () => {
 
   it('mengonfigurasi mutation admin kamus + makna + contoh', async () => {
     const simpanKamus = useSimpanKamus();
-    await simpanKamus.mutationFn({ id: 1, lema: 'uji' });
-    await simpanKamus.mutationFn({ lema: 'baru' });
-    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/kamus/1', { id: 1, lema: 'uji' });
-    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/kamus', { lema: 'baru' });
+    await simpanKamus.mutationFn({ id: 1, entri: 'uji' });
+    await simpanKamus.mutationFn({ entri: 'baru' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/kamus/1', { id: 1, entri: 'uji' });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/kamus', { entri: 'baru' });
     simpanKamus.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-kamus'] });
 
@@ -116,31 +116,31 @@ describe('apiAdmin', () => {
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-kamus'] });
 
     const simpanMakna = useSimpanMakna();
-    await simpanMakna.mutationFn({ lemaId: 4, id: 2, makna: 'uji' });
-    await simpanMakna.mutationFn({ lemaId: 4, makna: 'baru' });
+    await simpanMakna.mutationFn({ entriId: 4, id: 2, makna: 'uji' });
+    await simpanMakna.mutationFn({ entriId: 4, makna: 'baru' });
     expect(klien.put).toHaveBeenCalledWith('/api/redaksi/kamus/4/makna/2', { id: 2, makna: 'uji' });
     expect(klien.post).toHaveBeenCalledWith('/api/redaksi/kamus/4/makna', { makna: 'baru' });
-    simpanMakna.onSuccess(null, { lemaId: 4 });
+    simpanMakna.onSuccess(null, { entriId: 4 });
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-makna', 4] });
 
     const hapusMakna = useHapusMakna();
-    await hapusMakna.mutationFn({ lemaId: 4, maknaId: 77 });
+    await hapusMakna.mutationFn({ entriId: 4, maknaId: 77 });
     expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/kamus/4/makna/77');
-    hapusMakna.onSuccess(null, { lemaId: 4 });
+    hapusMakna.onSuccess(null, { entriId: 4 });
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-makna', 4] });
 
     const simpanContoh = useSimpanContoh();
-    await simpanContoh.mutationFn({ lemaId: 3, maknaId: 6, id: 11, contoh: 'c1' });
-    await simpanContoh.mutationFn({ lemaId: 3, maknaId: 6, contoh: 'c2' });
+    await simpanContoh.mutationFn({ entriId: 3, maknaId: 6, id: 11, contoh: 'c1' });
+    await simpanContoh.mutationFn({ entriId: 3, maknaId: 6, contoh: 'c2' });
     expect(klien.put).toHaveBeenCalledWith('/api/redaksi/kamus/3/makna/6/contoh/11', { id: 11, contoh: 'c1' });
     expect(klien.post).toHaveBeenCalledWith('/api/redaksi/kamus/3/makna/6/contoh', { contoh: 'c2' });
-    simpanContoh.onSuccess(null, { lemaId: 3 });
+    simpanContoh.onSuccess(null, { entriId: 3 });
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-makna', 3] });
 
     const hapusContoh = useHapusContoh();
-    await hapusContoh.mutationFn({ lemaId: 3, maknaId: 6, contohId: 11 });
+    await hapusContoh.mutationFn({ entriId: 3, maknaId: 6, contohId: 11 });
     expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/kamus/3/makna/6/contoh/11');
-    hapusContoh.onSuccess(null, { lemaId: 3 });
+    hapusContoh.onSuccess(null, { entriId: 3 });
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-makna', 3] });
   });
 

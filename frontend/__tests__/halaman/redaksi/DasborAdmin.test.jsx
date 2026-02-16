@@ -34,7 +34,7 @@ describe('DasborAdmin', () => {
   it('menampilkan statistik saat data tersedia', () => {
     mockUseStatistikAdmin.mockReturnValue({
       isLoading: false,
-      data: { data: { lema: 1000, tesaurus: 200, glosarium: 50, pengguna: 12 } },
+      data: { data: { entri: 1000, tesaurus: 200, glosarium: 50, pengguna: 12 } },
     });
 
     render(
@@ -52,7 +52,7 @@ describe('DasborAdmin', () => {
   it('menampilkan fallback strip saat nilai statistik kosong', () => {
     mockUseStatistikAdmin.mockReturnValue({
       isLoading: false,
-      data: { data: { lema: null, tesaurus: undefined, glosarium: undefined, pengguna: undefined } },
+      data: { data: { entri: null, tesaurus: undefined, glosarium: undefined, pengguna: undefined } },
     });
 
     render(

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Halaman admin kamus — daftar, cari, tambah, sunting lema + makna + contoh
+ * @fileoverview Halaman admin kamus — daftar, cari, tambah, sunting entri + makna + contoh
  */
 
 import { useState } from 'react';
@@ -21,7 +21,7 @@ import {
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
-const nilaiAwalLema = { lema: '', jenis: 'dasar', lafal: '', pemenggalan: '', varian: '', jenis_rujuk: '', lema_rujuk: '', aktif: 1 };
+const nilaiAwalEntri = { entri: '', jenis: 'dasar', lafal: '', pemenggalan: '', varian: '', jenis_rujuk: '', entri_rujuk: '', aktif: 1 };
 
 const opsiJenis = [
   { value: 'dasar', label: 'Dasar' },
@@ -41,18 +41,18 @@ const opsiTipePenyingkat = [
 
 const kolom = [
   {
-    key: 'lema',
-    label: 'Lema',
+    key: 'entri',
+    label: 'Entri',
     render: (item) => (
       <span>
         <Link
-          to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
+          to={`/kamus/detail/${encodeURIComponent(item.entri)}`}
           className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
         >
-          {item.lema}
+          {item.entri}
         </Link>
         {item.jenis_rujuk && (
-          <span className="text-xs text-gray-400 dark:text-gray-500 ml-2">→ {item.lema_rujuk}</span>
+          <span className="text-xs text-gray-400 dark:text-gray-500 ml-2">→ {item.entri_rujuk}</span>
         )}
       </span>
     ),
@@ -64,21 +64,21 @@ const kolom = [
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
-function ItemContoh({ contoh, lemaId, maknaId, simpanContoh, hapusContoh, isPending }) {
+function ItemContoh({ contoh, entriId, maknaId, simpanContoh, hapusContoh, isPending }) {
   const [edit, setEdit] = useState(false);
   const [data, setData] = useState(contoh);
 
   const ubah = (field, val) => setData((p) => ({ ...p, [field]: val }));
 
   const handleSimpan = () => {
-    simpanContoh.mutate({ lemaId, maknaId, ...data }, {
+    simpanContoh.mutate({ entriId, maknaId, ...data }, {
       onSuccess: () => setEdit(false),
     });
   };
 
   const handleHapus = () => {
     if (!confirm('Hapus contoh ini?')) return;
-    hapusContoh.mutate({ lemaId, maknaId, contohId: contoh.id });
+    hapusContoh.mutate({ entriId, maknaId, contohId: contoh.id });
   };
 
   if (!edit) {
@@ -108,12 +108,12 @@ function ItemContoh({ contoh, lemaId, maknaId, simpanContoh, hapusContoh, isPend
   );
 }
 
-function FormTambahContoh({ lemaId, maknaId, simpanContoh, isPending, onBatal }) {
+function FormTambahContoh({ entriId, maknaId, simpanContoh, isPending, onBatal }) {
   const [contoh, setContoh] = useState('');
 
   const handleSimpan = () => {
     if (!contoh.trim()) return;
-    simpanContoh.mutate({ lemaId, maknaId, contoh, urutan: 1 }, {
+    simpanContoh.mutate({ entriId, maknaId, contoh, urutan: 1 }, {
       onSuccess: () => { setContoh(''); onBatal(); },
     });
   };
@@ -129,7 +129,7 @@ function FormTambahContoh({ lemaId, maknaId, simpanContoh, isPending, onBatal })
   );
 }
 
-function ItemMakna({ makna, lemaId, simpanMakna, hapusMakna, simpanContoh, hapusContoh, isPending }) {
+function ItemMakna({ makna, entriId, simpanMakna, hapusMakna, simpanContoh, hapusContoh, isPending }) {
   const [terbuka, setTerbuka] = useState(false);
   const [edit, setEdit] = useState(false);
   const [data, setData] = useState(makna);
@@ -139,12 +139,12 @@ function ItemMakna({ makna, lemaId, simpanMakna, hapusMakna, simpanContoh, hapus
 
   const handleSimpan = () => {
     if (!data.makna?.trim()) return;
-    simpanMakna.mutate({ lemaId, ...data }, { onSuccess: () => setEdit(false) });
+    simpanMakna.mutate({ entriId, ...data }, { onSuccess: () => setEdit(false) });
   };
 
   const handleHapus = () => {
     if (!confirm('Hapus makna ini beserta semua contohnya?')) return;
-    hapusMakna.mutate({ lemaId, maknaId: makna.id });
+    hapusMakna.mutate({ entriId, maknaId: makna.id });
   };
 
   return (
@@ -230,7 +230,7 @@ function ItemMakna({ makna, lemaId, simpanMakna, hapusMakna, simpanContoh, hapus
                 <ItemContoh
                   key={c.id}
                   contoh={c}
-                  lemaId={lemaId}
+                  entriId={entriId}
                   maknaId={makna.id}
                   simpanContoh={simpanContoh}
                   hapusContoh={hapusContoh}
@@ -243,7 +243,7 @@ function ItemMakna({ makna, lemaId, simpanMakna, hapusMakna, simpanContoh, hapus
 
             {tambahContoh && (
               <FormTambahContoh
-                lemaId={lemaId}
+                entriId={entriId}
                 maknaId={makna.id}
                 simpanContoh={simpanContoh}
                 isPending={isPending}
@@ -257,8 +257,8 @@ function ItemMakna({ makna, lemaId, simpanMakna, hapusMakna, simpanContoh, hapus
   );
 }
 
-function SeksiMakna({ lemaId }) {
-  const { data: resp, isLoading } = useDaftarMakna(lemaId);
+function SeksiMakna({ entriId }) {
+  const { data: resp, isLoading } = useDaftarMakna(entriId);
   const simpanMakna = useSimpanMakna();
   const hapusMakna = useHapusMakna();
   const simpanContoh = useSimpanContoh();
@@ -274,7 +274,7 @@ function SeksiMakna({ lemaId }) {
   const handleTambahMakna = () => {
     if (!maknaBaruTeks.trim()) return;
     simpanMakna.mutate(
-      { lemaId, makna: maknaBaruTeks, kelas_kata: maknaBaruKelas || null, urutan: daftar.length + 1 },
+      { entriId, makna: maknaBaruTeks, kelas_kata: maknaBaruKelas || null, urutan: daftar.length + 1 },
       { onSuccess: () => { setMaknaBaruTeks(''); setMaknaBaruKelas(''); setTambah(false); } }
     );
   };
@@ -296,7 +296,7 @@ function SeksiMakna({ lemaId }) {
         <ItemMakna
           key={m.id}
           makna={m}
-          lemaId={lemaId}
+          entriId={entriId}
           simpanMakna={simpanMakna}
           hapusMakna={hapusMakna}
           simpanContoh={simpanContoh}
@@ -333,7 +333,7 @@ function KamusAdmin() {
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
 
-  const panel = useFormPanel(nilaiAwalLema);
+  const panel = useFormPanel(nilaiAwalEntri);
   const simpan = useSimpanKamus();
   const hapus = useHapusKamus();
 
@@ -341,7 +341,7 @@ function KamusAdmin() {
 
   const handleSimpan = () => {
     setPesan({ error: '', sukses: '' });
-    if (!panel.data.lema?.trim()) { setPesan({ error: 'Lema wajib diisi', sukses: '' }); return; }
+    if (!panel.data.entri?.trim()) { setPesan({ error: 'Entri wajib diisi', sukses: '' }); return; }
     simpan.mutate(panel.data, {
       onSuccess: (r) => {
         setPesan({ error: '', sukses: 'Tersimpan!' });
@@ -357,7 +357,7 @@ function KamusAdmin() {
   };
 
   const handleHapus = () => {
-    if (!confirm('Yakin ingin menghapus lema ini beserta semua maknanya?')) return;
+    if (!confirm('Yakin ingin menghapus entri ini beserta semua maknanya?')) return;
     hapus.mutate(panel.data.id, {
       onSuccess: () => panel.tutup(),
       onError: (err) => setPesan({ error: err?.response?.data?.error || 'Gagal menghapus', sukses: '' }),
@@ -372,13 +372,13 @@ function KamusAdmin() {
           onChange={setCari}
           onCari={kirimCari}
           onHapus={hapusCari}
-          placeholder="Cari lema …"
+          placeholder="Cari entri …"
         />
         <button onClick={panel.bukaUntukTambah} className="form-admin-btn-simpan whitespace-nowrap ml-4">
           + Tambah
         </button>
       </div>
-      <InfoTotal q={q} total={total} label="lema" />
+      <InfoTotal q={q} total={total} label="entri" />
       <TabelAdmin
         kolom={kolom}
         data={daftar}
@@ -391,15 +391,15 @@ function KamusAdmin() {
         onKlikBaris={panel.bukaUntukSunting}
       />
 
-      <PanelGeser buka={panel.buka} onTutup={panel.tutup} judul={panel.modeTambah ? 'Tambah Lema' : 'Sunting Lema'}>
+      <PanelGeser buka={panel.buka} onTutup={panel.tutup} judul={panel.modeTambah ? 'Tambah Entri' : 'Sunting Entri'}>
         <PesanForm error={pesan.error} sukses={pesan.sukses} />
-        <InputField label="Lema" name="lema" value={panel.data.lema} onChange={panel.ubahField} required />
+        <InputField label="Entri" name="entri" value={panel.data.entri} onChange={panel.ubahField} required />
         <SelectField label="Jenis" name="jenis" value={panel.data.jenis} onChange={panel.ubahField} options={opsiJenis} />
         <InputField label="Lafal" name="lafal" value={panel.data.lafal} onChange={panel.ubahField} placeholder="contoh: la·fal" />
         <InputField label="Pemenggalan" name="pemenggalan" value={panel.data.pemenggalan} onChange={panel.ubahField} />
         <InputField label="Varian" name="varian" value={panel.data.varian} onChange={panel.ubahField} />
         <InputField label="Jenis Rujuk" name="jenis_rujuk" value={panel.data.jenis_rujuk} onChange={panel.ubahField} />
-        <InputField label="Lema Rujuk" name="lema_rujuk" value={panel.data.lema_rujuk} onChange={panel.ubahField} />
+        <InputField label="Entri Rujuk" name="entri_rujuk" value={panel.data.entri_rujuk} onChange={panel.ubahField} />
         <ToggleAktif value={panel.data.aktif} onChange={panel.ubahField} />
         <FormFooter
           onSimpan={handleSimpan}
@@ -410,7 +410,7 @@ function KamusAdmin() {
         />
 
         {/* Makna + Contoh section — only in edit mode */}
-        {!panel.modeTambah && panel.data.id && <SeksiMakna lemaId={panel.data.id} />}
+        {!panel.modeTambah && panel.data.id && <SeksiMakna entriId={panel.data.id} />}
       </PanelGeser>
     </TataLetakAdmin>
   );
