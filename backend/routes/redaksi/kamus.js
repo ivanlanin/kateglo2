@@ -127,11 +127,11 @@ router.get('/:lemaId/makna', async (req, res, next) => {
  */
 router.post('/:lemaId/makna', async (req, res, next) => {
   try {
-    const lema_id = Number(req.params.lemaId);
+    const entri_id = Number(req.params.lemaId);
     const { makna } = req.body;
     if (!makna?.trim()) return res.status(400).json({ success: false, message: 'Makna wajib diisi' });
 
-    const data = await ModelLema.simpanMakna({ ...req.body, lema_id });
+    const data = await ModelLema.simpanMakna({ ...req.body, entri_id });
     return res.status(201).json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -144,12 +144,12 @@ router.post('/:lemaId/makna', async (req, res, next) => {
  */
 router.put('/:lemaId/makna/:maknaId', async (req, res, next) => {
   try {
-    const lema_id = Number(req.params.lemaId);
+    const entri_id = Number(req.params.lemaId);
     const id = Number(req.params.maknaId);
     const { makna } = req.body;
     if (!makna?.trim()) return res.status(400).json({ success: false, message: 'Makna wajib diisi' });
 
-    const data = await ModelLema.simpanMakna({ ...req.body, id, lema_id });
+    const data = await ModelLema.simpanMakna({ ...req.body, id, entri_id });
     if (!data) return res.status(404).json({ success: false, message: 'Makna tidak ditemukan' });
     return res.json({ success: true, data });
   } catch (error) {

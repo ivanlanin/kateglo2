@@ -13,6 +13,7 @@
 - Menerapkan autentikasi oAuth Google dan halaman kebijakan privasi
 - Menambahkan menu atas di beranda
 - Menyiapkan akses admin mengembangkan halaman dasar untuk admin
+- Menyesuaikan nama tabel dan kolom dengan lema → entri
 
 ## 2026-02-15 Minggu
 

@@ -20,14 +20,14 @@ CREATE TABLE IF NOT EXISTS label (
 CREATE INDEX IF NOT EXISTS idx_label_kategori_nama ON label (kategori, nama);
 
 -- ============================================
--- LEMA (entri kamus: dasar, berimbuhan, gabungan, idiom, peribahasa, varian)
+-- ENTRI (entri kamus: dasar, berimbuhan, gabungan, idiom, peribahasa, varian)
 -- ============================================
-CREATE TABLE IF NOT EXISTS lema (
+CREATE TABLE IF NOT EXISTS entri (
   id               SERIAL PRIMARY KEY,
   legacy_eid       INTEGER UNIQUE,
-  lema             TEXT NOT NULL,
+  entri            TEXT NOT NULL,
   jenis            TEXT NOT NULL CHECK (jenis IN ('dasar', 'berimbuhan', 'gabungan', 'idiom', 'peribahasa', 'varian')),
-  induk            INTEGER REFERENCES lema(id) ON DELETE SET NULL,
+  induk            INTEGER REFERENCES entri(id) ON DELETE SET NULL,
   pemenggalan      TEXT,
   lafal            TEXT,
   varian           TEXT,
@@ -36,21 +36,21 @@ CREATE TABLE IF NOT EXISTS lema (
   aktif            INTEGER NOT NULL DEFAULT 1,
   legacy_tabel     TEXT,
   legacy_tid       INTEGER,
-  CHECK (TRIM(lema) <> '')
+  CHECK (TRIM(entri) <> '')
 );
 
-CREATE INDEX IF NOT EXISTS idx_lema_lower ON lema (LOWER(lema));
-CREATE INDEX IF NOT EXISTS idx_lema_trgm ON lema USING gin (lema gin_trgm_ops);
-CREATE INDEX IF NOT EXISTS idx_lema_jenis ON lema (jenis);
-CREATE INDEX IF NOT EXISTS idx_lema_induk ON lema (induk);
+CREATE INDEX IF NOT EXISTS idx_entri_lower ON entri (LOWER(entri));
+CREATE INDEX IF NOT EXISTS idx_entri_trgm ON entri USING gin (entri gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_entri_jenis ON entri (jenis);
+CREATE INDEX IF NOT EXISTS idx_entri_induk ON entri (induk);
 
 -- ============================================
--- MAKNA (definisi per lema)
+-- MAKNA (definisi per entri)
 -- ============================================
 CREATE TABLE IF NOT EXISTS makna (
   id               SERIAL PRIMARY KEY,
   legacy_mid       INTEGER UNIQUE,
-  lema_id          INTEGER NOT NULL REFERENCES lema(id) ON DELETE CASCADE,
+  entri_id         INTEGER NOT NULL REFERENCES entri(id) ON DELETE CASCADE,
   polisem          INTEGER NOT NULL DEFAULT 1,
   urutan           INTEGER NOT NULL DEFAULT 1,
   makna            TEXT NOT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS makna (
   CHECK (TRIM(makna) <> '')
 );
 
-CREATE INDEX IF NOT EXISTS idx_makna_lema ON makna (lema_id, urutan);
+CREATE INDEX IF NOT EXISTS idx_makna_entri ON makna (entri_id, urutan);
 CREATE INDEX IF NOT EXISTS idx_makna_kelas_kata ON makna (kelas_kata);
 CREATE INDEX IF NOT EXISTS idx_makna_bidang ON makna (bidang);
 
