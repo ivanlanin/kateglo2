@@ -37,6 +37,11 @@ describe('klien config', () => {
     const config = { headers: {} };
     const result = interceptorFn(config);
     expect(result.headers['X-Frontend-Key']).toBe('rahasia');
+
+    localStorage.getItem.mockReturnValue('token-uji');
+    const configDenganToken = { headers: {} };
+    const resultDenganToken = interceptorFn(configDenganToken);
+    expect(resultDenganToken.headers.Authorization).toBe('Bearer token-uji');
   });
 
   it('memakai default baseURL dan tanpa header saat key tidak ada', async () => {
