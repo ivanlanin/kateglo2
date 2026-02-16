@@ -4,6 +4,7 @@ import TataLetak from '../../src/komponen/TataLetak';
 
 vi.mock('../../src/komponen/Navbar', () => ({ default: () => <div>Navbar Mock</div> }));
 vi.mock('react-router-dom', () => ({
+  Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   Outlet: () => <div>Outlet Mock</div>,
   useLocation: () => ({ pathname: '/kamus' }),
 }));

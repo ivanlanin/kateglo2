@@ -10,7 +10,7 @@
 - Membuat hierarki kata dan menyesuaikan data untuk memfasilitasi itu
 - Menambahkan Google Analytics untuk melacak penggunaan situs
 - Menambahkan batasan pencarian 60 kali/15 menit untuk mencegah penyalahgunaan
-- Menerapkan autentikasi oAuth Google
+- Menerapkan autentikasi oAuth Google dan halaman kebijakan privasi
 
 ## 2026-02-15 Minggu
 

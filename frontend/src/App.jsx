@@ -6,6 +6,7 @@ import KamusDetail from './halaman/KamusDetail';
 import Tesaurus from './halaman/Tesaurus';
 import Glosarium from './halaman/Glosarium';
 import AuthCallback from './halaman/AuthCallback';
+import KebijakanPrivasi from './halaman/KebijakanPrivasi';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/glosarium/cari/:kata" element={<Glosarium />} />
         <Route path="/glosarium/bidang/:bidang" element={<Glosarium />} />
         <Route path="/glosarium/sumber/:sumber" element={<Glosarium />} />
+        <Route path="/kebijakan-privasi" element={<KebijakanPrivasi />} />
       </Route>
     </Routes>
   );
