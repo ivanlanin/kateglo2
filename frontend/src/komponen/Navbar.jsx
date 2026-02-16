@@ -3,30 +3,12 @@
  */
 
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import KotakCari from './KotakCari';
-import { useAuth } from '../context/authContext';
-import { buatUrlLoginGoogle, simpanReturnTo } from '../api/apiAuth';
-
-const menuItems = [
-  { path: '/kamus', label: 'Kamus' },
-  { path: '/tesaurus', label: 'Tesaurus' },
-  { path: '/glosarium', label: 'Glosarium' },
-];
+import MenuUtama from './MenuUtama';
 
 function Navbar() {
   const [menuTerbuka, setMenuTerbuka] = useState(false);
-  const location = useLocation();
-  const {
-    isLoading,
-    isAuthenticated,
-    logout,
-  } = useAuth();
-  const loginUrl = buatUrlLoginGoogle(window.location.origin);
-
-  const handleLoginClick = () => {
-    simpanReturnTo(`${location.pathname}${location.search}`);
-  };
 
   return (
     <nav className="navbar-root">
@@ -43,37 +25,11 @@ function Navbar() {
           </div>
 
           {/* Menu (desktop) */}
-          <div className="navbar-menu-desktop">
-            {menuItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className="navbar-menu-link"
-              >
-                {item.label}
-              </Link>
-            ))}
-
-            {isLoading ? (
-              <span className="navbar-auth-loading">Memuat...</span>
-            ) : isAuthenticated ? (
-              <button
-                type="button"
-                onClick={logout}
-                className="navbar-menu-link"
-              >
-                Keluar
-              </button>
-            ) : (
-              <a
-                href={loginUrl}
-                onClick={handleLoginClick}
-                className="navbar-menu-link"
-              >
-                Masuk
-              </a>
-            )}
-          </div>
+          <MenuUtama
+            containerClassName="navbar-menu-desktop"
+            linkClassName="navbar-menu-link"
+            loadingClassName="navbar-auth-loading"
+          />
 
           {/* Hamburger (mobile) */}
           <button
@@ -98,41 +54,20 @@ function Navbar() {
             <div className="navbar-search-mobile">
               <KotakCari varian="navbar" />
             </div>
-            {menuItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                onClick={() => setMenuTerbuka(false)}
-                className="navbar-mobile-link"
-              >
-                {item.label}
-              </Link>
-            ))}
-
-            <div className="navbar-mobile-auth">
-              {isLoading ? (
-                <span className="navbar-auth-loading">Memuat...</span>
-              ) : isAuthenticated ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    logout();
-                    setMenuTerbuka(false);
-                  }}
-                  className="navbar-mobile-link w-full text-left"
-                >
-                  Keluar
-                </button>
-              ) : (
-                <a
-                  href={loginUrl}
-                  onClick={handleLoginClick}
-                  className="navbar-mobile-link"
-                >
-                  Masuk
-                </a>
-              )}
-            </div>
+            <MenuUtama
+              containerClassName=""
+              linkClassName="navbar-mobile-link"
+              loadingClassName="navbar-auth-loading"
+              onItemClick={() => setMenuTerbuka(false)}
+              tampilkanAutentikasi={false}
+            />
+            <MenuUtama
+              containerClassName="navbar-mobile-auth"
+              linkClassName="navbar-mobile-link"
+              loadingClassName="navbar-auth-loading"
+              onItemClick={() => setMenuTerbuka(false)}
+              tampilkanMenu={false}
+            />
           </div>
         )}
       </div>
