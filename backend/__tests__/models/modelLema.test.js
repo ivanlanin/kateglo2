@@ -20,7 +20,7 @@ describe('ModelLema', () => {
 
     const result = await ModelLema.autocomplete('kat', 12);
 
-    expect(autocomplete).toHaveBeenCalledWith('lema', 'lema', 'kat', {
+    expect(autocomplete).toHaveBeenCalledWith('entri', 'entri', 'kat', {
       limit: 12,
       extraWhere: 'aktif = 1',
     });
@@ -32,7 +32,7 @@ describe('ModelLema', () => {
 
     await ModelLema.autocomplete('kat');
 
-    expect(autocomplete).toHaveBeenCalledWith('lema', 'lema', 'kat', {
+    expect(autocomplete).toHaveBeenCalledWith('entri', 'entri', 'kat', {
       limit: 8,
       extraWhere: 'aktif = 1',
     });
@@ -169,7 +169,7 @@ describe('ModelLema', () => {
     const result = await ModelLema.ambilLemaSerupa('per- (2)', 9);
 
     expect(db.query).toHaveBeenCalledWith(
-      expect.stringContaining("LOWER(REGEXP_REPLACE(REPLACE(lema, '-', ''),"),
+      expect.stringContaining("LOWER(REGEXP_REPLACE(REPLACE(entri, '-', ''),"),
       ['per', 'per- (2)', 9]
     );
     expect(result).toEqual([{ id: 1, lema: 'per (1)', lafal: 'per' }]);
@@ -231,7 +231,7 @@ describe('ModelLema', () => {
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
-      expect.stringContaining('similarity(lema, $1)'),
+      expect.stringContaining('similarity(entri, $1)'),
       ['kata', 20]
     );
     expect(db.query).toHaveBeenNthCalledWith(
@@ -317,7 +317,7 @@ describe('ModelLema', () => {
 
     const result = await ModelLema.daftarAdmin();
 
-    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('SELECT COUNT(*) AS total FROM lema'), []);
+    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('SELECT COUNT(*) AS total FROM entri'), []);
     expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('LIMIT $1 OFFSET $2'), [50, 0]);
     expect(result).toEqual({ data: [{ id: 1, lema: 'kata' }], total: 2 });
   });
@@ -329,7 +329,7 @@ describe('ModelLema', () => {
 
     await ModelLema.daftarAdmin({ q: 'kat', limit: 9, offset: 2 });
 
-    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('WHERE lema ILIKE $1'), ['%kat%']);
+    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('WHERE entri ILIKE $1'), ['%kat%']);
     expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('LIMIT $2 OFFSET $3'), ['%kat%', 9, 2]);
   });
 
@@ -355,7 +355,7 @@ describe('ModelLema', () => {
 
     const result = await ModelLema.ambilDenganId(7);
 
-    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM lema WHERE id = $1'), [7]);
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM entri WHERE id = $1'), [7]);
     expect(result).toEqual(row);
   });
 
@@ -377,7 +377,7 @@ describe('ModelLema', () => {
     });
 
     expect(db.query).toHaveBeenCalledWith(
-      expect.stringContaining('UPDATE lema SET lema = $1'),
+      expect.stringContaining('UPDATE entri SET entri = $1'),
       ['kata baru', 'dasar', null, null, null, null, null, null, 1, 8]
     );
     expect(result).toEqual(row);
@@ -390,7 +390,7 @@ describe('ModelLema', () => {
     const result = await ModelLema.simpan({ lema: 'kata', jenis: 'dasar', aktif: 0 });
 
     expect(db.query).toHaveBeenCalledWith(
-      expect.stringContaining('INSERT INTO lema'),
+      expect.stringContaining('INSERT INTO entri'),
       ['kata', 'dasar', null, null, null, null, null, null, 0]
     );
     expect(result).toEqual(row);
@@ -402,7 +402,7 @@ describe('ModelLema', () => {
     await ModelLema.simpan({ lema: 'kata', jenis: 'dasar' });
 
     expect(db.query).toHaveBeenCalledWith(
-      expect.stringContaining('INSERT INTO lema'),
+      expect.stringContaining('INSERT INTO entri'),
       ['kata', 'dasar', null, null, null, null, null, null, 1]
     );
   });
@@ -437,10 +437,10 @@ describe('ModelLema', () => {
   it('simpanMakna melakukan update dan insert', async () => {
     db.query.mockResolvedValueOnce({ rows: [{ id: 1 }] }).mockResolvedValueOnce({ rows: [{ id: 2 }] });
 
-    const updated = await ModelLema.simpanMakna({ id: 1, lema_id: 8, makna: 'arti' });
-    const inserted = await ModelLema.simpanMakna({ lema_id: 8, makna: 'arti' });
+    const updated = await ModelLema.simpanMakna({ id: 1, entri_id: 8, makna: 'arti' });
+    const inserted = await ModelLema.simpanMakna({ entri_id: 8, makna: 'arti' });
 
-    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('UPDATE makna SET lema_id = $1'),
+    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('UPDATE makna SET entri_id = $1'),
       [8, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null, 1]);
     expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('INSERT INTO makna'),
       [8, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null]);

@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-16T09:58:35.214Z
+-- Generated: 2026-02-16T16:43:24.341Z
 
 -- ============================================
 -- TABLES
@@ -22,6 +22,32 @@ create table contoh (
 );
 create unique index contoh_legacy_cid_key on contoh using btree (legacy_cid);
 create index idx_contoh_makna on contoh using btree (makna_id, urutan);
+
+create table entri (
+  id serial primary key,
+  legacy_eid integer,
+  entri text not null,
+  jenis text not null,
+  induk integer references entri(id) on delete set null,
+  pemenggalan text,
+  lafal text,
+  varian text,
+  jenis_rujuk text,
+  lema_rujuk text,
+  aktif integer not null default 1,
+  legacy_tabel text,
+  legacy_tid integer,
+  constraint entri_legacy_eid_key unique (legacy_eid),
+  constraint entri_entri_check check (TRIM(BOTH FROM entri) <> ''::text),
+  constraint entri_jenis_check check (jenis = ANY (ARRAY['dasar'::text, 'berimbuhan'::text, 'gabungan'::text, 'idiom'::text, 'peribahasa'::text, 'varian'::text]))
+);
+create unique index entri_legacy_eid_key on entri using btree (legacy_eid);
+create index idx_entri_induk on entri using btree (induk);
+create index idx_entri_induk_aktif_jenis_entri on entri using btree (induk, aktif, jenis, entri);
+create index idx_entri_jenis on entri using btree (jenis);
+create index idx_entri_lower on entri using btree (lower(entri));
+create index idx_entri_serupa_norm_aktif on entri using btree (lower(regexp_replace(replace(entri, '-'::text, ''::text), '\s*\([0-9]+\)\s*$'::text, ''::text))) WHERE (aktif = 1);
+create index idx_entri_trgm on entri using gin (entri gin_trgm_ops);
 
 create table glosarium (
   id serial primary key,
@@ -66,36 +92,10 @@ create table label (
 create index idx_label_kategori_nama on label using btree (kategori, nama);
 create unique index label_kategori_kode_key on label using btree (kategori, kode);
 
-create table lema (
-  id serial primary key,
-  legacy_eid integer,
-  lema text not null,
-  jenis text not null,
-  induk integer references lema(id) on delete set null,
-  pemenggalan text,
-  lafal text,
-  varian text,
-  jenis_rujuk text,
-  lema_rujuk text,
-  aktif integer not null default 1,
-  legacy_tabel text,
-  legacy_tid integer,
-  constraint lema_legacy_eid_key unique (legacy_eid),
-  constraint lema_lema_check check (TRIM(BOTH FROM lema) <> ''::text),
-  constraint lema_jenis_check check (jenis = ANY (ARRAY['dasar'::text, 'berimbuhan'::text, 'gabungan'::text, 'idiom'::text, 'peribahasa'::text, 'varian'::text]))
-);
-create index idx_lema_induk on lema using btree (induk);
-create index idx_lema_induk_aktif_jenis_lema on lema using btree (induk, aktif, jenis, lema);
-create index idx_lema_jenis on lema using btree (jenis);
-create index idx_lema_lower on lema using btree (lower(lema));
-create index idx_lema_serupa_norm_aktif on lema using btree (lower(regexp_replace(replace(lema, '-'::text, ''::text), '\s*\([0-9]+\)\s*$'::text, ''::text))) WHERE (aktif = 1);
-create index idx_lema_trgm on lema using gin (lema gin_trgm_ops);
-create unique index lema_legacy_eid_key on lema using btree (legacy_eid);
-
 create table makna (
   id serial primary key,
   legacy_mid integer,
-  lema_id integer references lema(id) on delete cascade not null,
+  entri_id integer references entri(id) on delete cascade not null,
   polisem integer not null default 1,
   urutan integer not null default 1,
   makna text not null,
@@ -113,8 +113,8 @@ create table makna (
   constraint makna_tipe_penyingkat_check check ((tipe_penyingkat IS NULL) OR (tipe_penyingkat = ANY (ARRAY['akronim'::text, 'kependekan'::text, 'singkatan'::text])))
 );
 create index idx_makna_bidang on makna using btree (bidang);
+create index idx_makna_entri on makna using btree (entri_id, urutan);
 create index idx_makna_kelas_kata on makna using btree (kelas_kata);
-create index idx_makna_lema on makna using btree (lema_id, urutan);
 create unique index makna_legacy_mid_key on makna using btree (legacy_mid);
 
 create table pengguna (
