@@ -8,6 +8,7 @@
 - Membersihkan basis data dari tabel yang tidak terpakai
 - Memberikan saran lain ketika pencarian atau detail tidak menemukan hasil
 - Membuat hierarki kata dan menyesuaikan data untuk memfasilitasi itu
+- Menambahkan Google Analytics untuk melacak penggunaan situs
 
 ## 2026-02-15 Minggu
 
