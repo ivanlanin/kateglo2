@@ -10,6 +10,9 @@ import AuthCallback from './halaman/AuthCallback';
 import KebijakanPrivasi from './halaman/KebijakanPrivasi';
 import LoginAdmin from './halaman/admin/LoginAdmin';
 import DasborAdmin from './halaman/admin/DasborAdmin';
+import KamusAdmin from './halaman/admin/KamusAdmin';
+import TesaurusAdmin from './halaman/admin/TesaurusAdmin';
+import GlosariumAdmin from './halaman/admin/GlosariumAdmin';
 import PenggunaAdmin from './halaman/admin/PenggunaAdmin';
 
 function RuteAdmin({ children }) {
@@ -37,6 +40,9 @@ function App() {
       {/* Admin routes — tanpa TataLetak */}
       <Route path="/admin/login" element={<LoginAdmin />} />
       <Route path="/admin" element={<RuteAdmin><DasborAdmin /></RuteAdmin>} />
+      <Route path="/admin/kamus" element={<RuteAdmin><KamusAdmin /></RuteAdmin>} />
+      <Route path="/admin/tesaurus" element={<RuteAdmin><TesaurusAdmin /></RuteAdmin>} />
+      <Route path="/admin/glosarium" element={<RuteAdmin><GlosariumAdmin /></RuteAdmin>} />
       <Route path="/admin/pengguna" element={<RuteAdmin><PenggunaAdmin /></RuteAdmin>} />
       {/* Public routes */}
       <Route element={<TataLetak />}>

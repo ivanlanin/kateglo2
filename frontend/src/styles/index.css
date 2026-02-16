@@ -1275,4 +1275,154 @@ code {
     @apply text-dark-text-muted;
   }
 
+  /* ===== Panel Geser (slide-over) ===== */
+
+  .panel-geser-backdrop {
+    @apply fixed inset-0 bg-black/40 z-40 transition-opacity duration-300 pointer-events-none opacity-0;
+  }
+
+  .panel-geser-backdrop-aktif {
+    @apply opacity-100 pointer-events-auto;
+  }
+
+  .panel-geser {
+    @apply fixed top-0 right-0 h-full w-full sm:w-[480px] md:w-[540px] z-50
+           bg-white shadow-xl flex flex-col outline-none
+           transform translate-x-full transition-transform duration-300 ease-in-out;
+  }
+
+  .panel-geser-aktif {
+    @apply translate-x-0;
+  }
+
+  .dark .panel-geser {
+    @apply bg-dark-bg-elevated shadow-2xl;
+  }
+
+  .panel-geser-header {
+    @apply flex items-center justify-between px-6 py-4 border-b border-gray-200 shrink-0;
+  }
+
+  .dark .panel-geser-header {
+    @apply border-dark-border;
+  }
+
+  .panel-geser-judul {
+    @apply text-lg font-semibold text-gray-900;
+  }
+
+  .dark .panel-geser-judul {
+    @apply text-white;
+  }
+
+  .panel-geser-tutup {
+    @apply w-8 h-8 flex items-center justify-center rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors;
+  }
+
+  .dark .panel-geser-tutup {
+    @apply text-dark-text-muted hover:text-dark-text hover:bg-dark-bg-hover;
+  }
+
+  .panel-geser-body {
+    @apply flex-1 overflow-y-auto px-6 py-5;
+  }
+
+  /* ===== Form admin ===== */
+
+  .form-admin-group {
+    @apply mb-4;
+  }
+
+  .form-admin-label {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+
+  .dark .form-admin-label {
+    @apply text-gray-300;
+  }
+
+  .form-admin-input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg bg-white
+           text-sm text-gray-900
+           focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500
+           transition-colors;
+  }
+
+  .dark .form-admin-input {
+    @apply border-dark-border bg-dark-bg-input text-white;
+  }
+
+  .form-admin-input:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  .form-admin-select {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg bg-white
+           text-sm text-gray-900
+           focus:outline-none focus:border-blue-500
+           transition-colors;
+  }
+
+  .dark .form-admin-select {
+    @apply border-dark-border bg-dark-bg-input text-white;
+  }
+
+  .form-admin-textarea {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg bg-white
+           text-sm text-gray-900 resize-y min-h-[80px]
+           focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500
+           transition-colors;
+  }
+
+  .dark .form-admin-textarea {
+    @apply border-dark-border bg-dark-bg-input text-white;
+  }
+
+  .form-admin-footer {
+    @apply flex items-center gap-3 pt-5 mt-5 border-t border-gray-200;
+  }
+
+  .dark .form-admin-footer {
+    @apply border-dark-border;
+  }
+
+  .form-admin-btn-simpan {
+    @apply px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700
+           text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors;
+  }
+
+  .form-admin-btn-batal {
+    @apply px-5 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50
+           text-sm font-medium transition-colors;
+  }
+
+  .dark .form-admin-btn-batal {
+    @apply text-gray-300 border-dark-border hover:bg-dark-bg;
+  }
+
+  .form-admin-btn-hapus {
+    @apply ml-auto px-4 py-2 text-red-600 border border-red-300 rounded-lg hover:bg-red-50
+           text-sm font-medium transition-colors;
+  }
+
+  .dark .form-admin-btn-hapus {
+    @apply text-red-400 border-red-700 hover:bg-red-900/20;
+  }
+
+  .form-admin-error {
+    @apply p-3 mb-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm;
+  }
+
+  .dark .form-admin-error {
+    @apply bg-red-900/20 border-red-800 text-red-400;
+  }
+
+  .form-admin-sukses {
+    @apply p-3 mb-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm;
+  }
+
+  .dark .form-admin-sukses {
+    @apply bg-green-900/20 border-green-800 text-green-400;
+  }
+
 }

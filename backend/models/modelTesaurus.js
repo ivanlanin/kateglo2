@@ -69,6 +69,98 @@ class ModelTesaurus {
     );
     return result.rows[0] || null;
   }
+
+  /**
+   * Daftar tesaurus untuk panel admin (dengan pencarian opsional)
+   * @param {{ limit?: number, offset?: number, q?: string }} options
+   * @returns {Promise<{ data: Array, total: number }>}
+   */
+  static async daftarAdmin({ limit = 50, offset = 0, q = '' } = {}) {
+    const conditions = [];
+    const params = [];
+    let idx = 1;
+
+    if (q) {
+      conditions.push(`lema ILIKE $${idx}`);
+      params.push(`%${q}%`);
+      idx++;
+    }
+
+    const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    const countResult = await db.query(
+      `SELECT COUNT(*) AS total FROM tesaurus ${where}`,
+      params
+    );
+    const total = parseInt(countResult.rows[0].total, 10);
+
+    const dataResult = await db.query(
+      `SELECT id, lema, sinonim, antonim, turunan, gabungan, berkaitan
+       FROM tesaurus ${where}
+       ORDER BY lema ASC
+       LIMIT $${idx} OFFSET $${idx + 1}`,
+      [...params, limit, offset]
+    );
+
+    return { data: dataResult.rows, total };
+  }
+
+  /**
+   * Hitung total tesaurus
+   * @returns {Promise<number>}
+   */
+  static async hitungTotal() {
+    const result = await db.query('SELECT COUNT(*) AS total FROM tesaurus');
+    return parseInt(result.rows[0].total, 10);
+  }
+
+  /**
+   * Ambil tesaurus berdasarkan ID (untuk admin)
+   * @param {number} id
+   * @returns {Promise<Object|null>}
+   */
+  static async ambilDenganId(id) {
+    const result = await db.query(
+      'SELECT id, lema, sinonim, antonim, turunan, gabungan, berkaitan FROM tesaurus WHERE id = $1',
+      [id]
+    );
+    return result.rows[0] || null;
+  }
+
+  /**
+   * Simpan (insert atau update) tesaurus
+   * @param {Object} data
+   * @returns {Promise<Object>}
+   */
+  static async simpan({ id, lema, sinonim, antonim, turunan, gabungan, berkaitan }) {
+    if (id) {
+      const result = await db.query(
+        `UPDATE tesaurus SET lema = $1, sinonim = $2, antonim = $3,
+                turunan = $4, gabungan = $5, berkaitan = $6
+         WHERE id = $7 RETURNING *`,
+        [lema, sinonim || null, antonim || null, turunan || null,
+         gabungan || null, berkaitan || null, id]
+      );
+      return result.rows[0];
+    }
+    const result = await db.query(
+      `INSERT INTO tesaurus (lema, sinonim, antonim, turunan, gabungan, berkaitan)
+       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+      [lema, sinonim || null, antonim || null, turunan || null,
+       gabungan || null, berkaitan || null]
+    );
+    return result.rows[0];
+  }
+
+  /**
+   * Hapus tesaurus berdasarkan ID
+   * @param {number} id
+   * @returns {Promise<boolean>}
+   */
+  static async hapus(id) {
+    const result = await db.query('DELETE FROM tesaurus WHERE id = $1 RETURNING id', [id]);
+    return result.rowCount > 0;
+  }
 }
 
 module.exports = ModelTesaurus;
