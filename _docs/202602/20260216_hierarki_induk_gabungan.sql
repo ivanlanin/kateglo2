@@ -1,6 +1,6 @@
--- Pindahkan induk gabungan dari entri dasar ke berimbuhan yang sesuai
--- Logika: jika entri gabungan dimulai dengan entri berimbuhan + spasi,
--- maka induknya diubah ke berimbuhan tersebut (pilih yang terpanjang).
+-- Pindahkan induk gabungan dari entri dasar ke turunan yang sesuai
+-- Logika: jika entri gabungan dimulai dengan entri turunan + spasi,
+-- maka induknya diubah ke turunan tersebut (pilih yang terpanjang).
 -- Contoh: "berlatih tanding" induknya berubah dari "latih" ke "berlatih"
 -- Dampak: ~3.367 baris dari total ~23.536 gabungan
 
@@ -10,7 +10,7 @@ FROM (
   SELECT DISTINCT ON (g2.id) g2.id AS gabungan_id, b2.id
   FROM entri g2
   JOIN entri b2 ON b2.induk = g2.induk
-    AND b2.jenis = 'berimbuhan'
+    AND b2.jenis = 'turunan'
     AND b2.aktif = 1
     AND g2.entri ILIKE b2.entri || ' %'
   WHERE g2.jenis = 'gabungan'

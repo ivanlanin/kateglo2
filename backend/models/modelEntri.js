@@ -146,7 +146,7 @@ class ModelEntri {
   }
 
   /**
-  * Ambil subentri (berimbuhan, gabungan, idiom, peribahasa) dari entri induk
+  * Ambil subentri (turunan, gabungan, idiom, peribahasa) dari entri induk
   * @param {number} indukId - ID entri induk
   * @returns {Promise<Array>} Daftar subentri
    */

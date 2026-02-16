@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS label (
 CREATE INDEX IF NOT EXISTS idx_label_kategori_nama ON label (kategori, nama);
 
 -- ============================================
--- ENTRI (gabungan kata/berimbuhan/gabungan/idiom/peribahasa/varian)
+-- ENTRI (gabungan kata/turunan/gabungan/idiom/peribahasa/varian)
 -- ============================================
 CREATE TABLE IF NOT EXISTS entri (
   entri_id              BIGSERIAL PRIMARY KEY,

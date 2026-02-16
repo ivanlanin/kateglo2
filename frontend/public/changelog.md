@@ -3,6 +3,7 @@
 ## 2026-02-17 Selasa
 
 - Menambahkan fitur pengelolaan label untuk redaksi
+- Mengubah entri jenis "berimbuhan" menjadi "turunan"
 
 ## 2026-02-16 Senin
 

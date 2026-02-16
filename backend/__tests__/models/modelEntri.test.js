@@ -203,7 +203,7 @@ describe('ModelEntri', () => {
   });
 
   it('ambilSubentri mengembalikan rows', async () => {
-    const rows = [{ id: 2, entri: 'berkata', jenis: 'berimbuhan' }];
+    const rows = [{ id: 2, entri: 'berkata', jenis: 'turunan' }];
     db.query.mockResolvedValue({ rows });
 
     const result = await ModelEntri.ambilSubentri(1);
