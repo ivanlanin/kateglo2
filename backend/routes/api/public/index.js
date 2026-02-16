@@ -19,5 +19,6 @@ router.get('/health', (_req, res) => {
 router.use('/kamus', require('./kamus'));
 router.use('/tesaurus', require('./tesaurus'));
 router.use('/glosarium', require('./glosarium'));
+router.use('/auth', require('./auth'));
 
 module.exports = router;

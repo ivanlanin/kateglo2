@@ -5,6 +5,7 @@
 
 const express = require('express');
 const request = require('supertest');
+const jwt = require('jsonwebtoken');
 
 jest.mock('../../models/modelGlosarium', () => ({
   autocomplete: jest.fn(),
@@ -58,6 +59,7 @@ describe('routes backend', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     ModelLema.saranLema.mockResolvedValue([]);
+    delete process.env.JWT_SECRET;
   });
 
   it('GET /api/public/health mengembalikan status ok', async () => {
@@ -110,6 +112,15 @@ describe('routes backend', () => {
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('label gagal');
+  });
+
+  it('GET /api/public/kamus/kategori/:kategori/:kode mengembalikan 400 saat offset terlalu besar', async () => {
+    const response = await request(createApp())
+      .get('/api/public/kamus/kategori/ragam/umum?offset=1001');
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Invalid Query');
+    expect(response.body.message).toContain('Offset maksimal adalah 1000');
   });
 
   it('GET /api/public/kamus/autocomplete/:kata mengembalikan data', async () => {
@@ -380,5 +391,88 @@ describe('routes backend', () => {
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('sumber detail gagal');
+  });
+
+  it('GET /api/public/auth/me mengembalikan 401 saat token tidak ada', async () => {
+    const response = await request(createApp()).get('/api/public/auth/me');
+
+    expect(response.status).toBe(401);
+    expect(response.body.success).toBe(false);
+  });
+
+  it('GET /api/public/auth/me mengembalikan profil saat token valid', async () => {
+    process.env.JWT_SECRET = 'test-secret-routes';
+    const token = jwt.sign(
+      {
+        sub: 'google-123',
+        email: 'user@example.com',
+        name: 'User Test',
+        picture: 'https://img.example/user.png',
+        role: 'user',
+        provider: 'google',
+      },
+      process.env.JWT_SECRET
+    );
+
+    const response = await request(createApp())
+      .get('/api/public/auth/me')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.data).toEqual({
+      id: 'google-123',
+      email: 'user@example.com',
+      name: 'User Test',
+      picture: 'https://img.example/user.png',
+      role: 'user',
+      provider: 'google',
+    });
+    delete process.env.JWT_SECRET;
+  });
+
+  it('GET /api/public/kamus/cari/:kata mengembalikan 400 saat offset terlalu besar', async () => {
+    const response = await request(createApp())
+      .get('/api/public/kamus/cari/kata?offset=1001');
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Invalid Query');
+    expect(response.body.message).toContain('Offset maksimal adalah 1000');
+  });
+
+  it('GET /api/public/tesaurus/cari/:kata mengembalikan 400 saat offset terlalu besar', async () => {
+    const response = await request(createApp())
+      .get('/api/public/tesaurus/cari/aktif?offset=1001');
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Invalid Query');
+    expect(response.body.message).toContain('Offset maksimal adalah 1000');
+  });
+
+  it('GET /api/public/glosarium/cari/:kata mengembalikan 400 saat offset terlalu besar', async () => {
+    const response = await request(createApp())
+      .get('/api/public/glosarium/cari/istilah?offset=1001');
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Invalid Query');
+    expect(response.body.message).toContain('Offset maksimal adalah 1000');
+  });
+
+  it('GET /api/public/glosarium/bidang/:bidang mengembalikan 400 saat offset terlalu besar', async () => {
+    const response = await request(createApp())
+      .get('/api/public/glosarium/bidang/linguistik?offset=1001');
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Invalid Query');
+    expect(response.body.message).toContain('Offset maksimal adalah 1000');
+  });
+
+  it('GET /api/public/glosarium/sumber/:sumber mengembalikan 400 saat offset terlalu besar', async () => {
+    const response = await request(createApp())
+      .get('/api/public/glosarium/sumber/kbbi?offset=1001');
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Invalid Query');
+    expect(response.body.message).toContain('Offset maksimal adalah 1000');
   });
 });

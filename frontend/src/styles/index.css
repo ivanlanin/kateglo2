@@ -70,6 +70,14 @@ code {
     @apply text-dark-text hover:bg-dark-bg-hover hover:text-blue-300;
   }
 
+  .navbar-auth-loading {
+    @apply px-3 py-2 text-sm text-gray-500;
+  }
+
+  .dark .navbar-auth-loading {
+    @apply text-dark-text-muted;
+  }
+
   .navbar-toggle {
     @apply md:hidden p-2 text-gray-600 hover:text-gray-900;
   }
@@ -96,6 +104,14 @@ code {
 
   .dark .navbar-mobile-link {
     @apply text-dark-text hover:bg-dark-bg-hover;
+  }
+
+  .navbar-mobile-auth {
+    @apply mt-2 pt-2 border-t border-gray-100 px-3;
+  }
+
+  .dark .navbar-mobile-auth {
+    @apply border-dark-border;
   }
 
   .beranda-container {

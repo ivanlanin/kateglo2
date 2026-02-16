@@ -5,10 +5,12 @@ import Kamus from './halaman/Kamus';
 import KamusDetail from './halaman/KamusDetail';
 import Tesaurus from './halaman/Tesaurus';
 import Glosarium from './halaman/Glosarium';
+import AuthCallback from './halaman/AuthCallback';
 
 function App() {
   return (
     <Routes>
+      <Route path="/auth/callback" element={<AuthCallback />} />
       <Route element={<TataLetak />}>
         <Route path="/" element={<Beranda />} />
         <Route path="/kamus" element={<Kamus />} />

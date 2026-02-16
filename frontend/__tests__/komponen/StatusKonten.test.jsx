@@ -39,6 +39,58 @@ describe('StatusKonten', () => {
     expect(screen.queryByText('Memuat...')).not.toBeInTheDocument();
   });
 
+  it('QueryFeedback menampilkan pesan khusus saat status 429', () => {
+    render(
+      <QueryFeedback
+        isLoading={false}
+        isError
+        error={{ response: { status: 429 } }}
+        loadingText="Memuat..."
+        errorText="Error fallback"
+      />
+    );
+
+    expect(screen.getByText(/permintaan per pengguna dibatasi 60 kali\/15 menit/i)).toBeInTheDocument();
+  });
+
+  it('QueryFeedback menampilkan pesan offset saat status 400 + pesan offset maksimal', () => {
+    render(
+      <QueryFeedback
+        isLoading={false}
+        isError
+        error={{
+          response: {
+            status: 400,
+            data: { message: 'Offset maksimal adalah 1000' },
+          },
+        }}
+        loadingText="Memuat..."
+        errorText="Error fallback"
+      />
+    );
+
+    expect(screen.getByText(/jangkauan halaman sudah melebihi batas/i)).toBeInTheDocument();
+  });
+
+  it('QueryFeedback mengutamakan pesan server yang valid', () => {
+    render(
+      <QueryFeedback
+        isLoading={false}
+        isError
+        error={{
+          response: {
+            status: 500,
+            data: { message: 'Pesan dari server' },
+          },
+        }}
+        loadingText="Memuat..."
+        errorText="Error fallback"
+      />
+    );
+
+    expect(screen.getByText('Pesan dari server')).toBeInTheDocument();
+  });
+
   it('EmptyInfoCard menampilkan teks info', () => {
     render(<EmptyInfoCard text="Belum ada data" />);
     expect(screen.getByText('Belum ada data')).toBeInTheDocument();
