@@ -3,7 +3,7 @@
  */
 
 import { useState } from 'react';
-import { useDaftarPengguna, useDaftarPeran, useUbahPeran, useSimpanPengguna } from '../../api/apiAdmin';
+import { useDaftarPengguna, useDaftarPeran, useSimpanPengguna } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import { TabelAdmin, InfoTotal, BadgeStatus } from '../../komponen/redaksi/KomponenAdmin';
 import PanelGeser from '../../komponen/redaksi/PanelGeser';
@@ -33,7 +33,6 @@ function PenggunaAdmin() {
 
   const { data: penggunaResp, isLoading, isError } = useDaftarPengguna({ limit, offset });
   const { data: peranResp } = useDaftarPeran();
-  const ubahPeran = useUbahPeran();
   const simpanPengguna = useSimpanPengguna();
 
   const daftarPengguna = penggunaResp?.data || [];
@@ -42,10 +41,6 @@ function PenggunaAdmin() {
 
   const panel = useFormPanel({ nama: '', aktif: 1, peran_id: '' });
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
-
-  const handleUbahPeran = (penggunaId, peranId) => {
-    ubahPeran.mutate({ penggunaId, peranId });
-  };
 
   const handleSimpan = () => {
     setPesan({ error: '', sukses: '' });
@@ -91,21 +86,7 @@ function PenggunaAdmin() {
     {
       key: 'peran_kode',
       label: 'Peran',
-      render: (p) => (
-        <select
-          value={daftarPeran.find((r) => r.kode === p.peran_kode)?.id || ''}
-          onChange={(e) => handleUbahPeran(p.id, Number(e.target.value))}
-          onClick={(e) => e.stopPropagation()}
-          disabled={ubahPeran.isPending}
-          className="text-sm border border-gray-300 dark:border-gray-600 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500 bg-white dark:bg-dark-bg dark:text-white"
-        >
-          {daftarPeran.map((r) => (
-            <option key={r.id} value={r.id}>
-              {r.nama}
-            </option>
-          ))}
-        </select>
-      ),
+      render: (p) => p.peran_nama || p.peran_kode || '—',
     },
     {
       key: 'aktif',

@@ -11,6 +11,7 @@ const menuAdmin = [
   { path: '/redaksi/kamus', label: 'Kamus' },
   { path: '/redaksi/tesaurus', label: 'Tesaurus' },
   { path: '/redaksi/glosarium', label: 'Glosarium' },
+  { path: '/redaksi/label', label: 'Label' },
   { path: '/redaksi/pengguna', label: 'Pengguna' },
 ];
 

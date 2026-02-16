@@ -13,6 +13,7 @@ import DasborAdmin from './halaman/redaksi/DasborAdmin';
 import KamusAdmin from './halaman/redaksi/KamusAdmin';
 import TesaurusAdmin from './halaman/redaksi/TesaurusAdmin';
 import GlosariumAdmin from './halaman/redaksi/GlosariumAdmin';
+import LabelAdmin from './halaman/redaksi/LabelAdmin';
 import PenggunaAdmin from './halaman/redaksi/PenggunaAdmin';
 
 function RuteRedaksi({ children }) {
@@ -43,6 +44,7 @@ function App() {
       <Route path="/redaksi/kamus" element={<RuteRedaksi><KamusAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/tesaurus" element={<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/glosarium" element={<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/label" element={<RuteRedaksi><LabelAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/pengguna" element={<RuteRedaksi><PenggunaAdmin /></RuteRedaksi>} />
       {/* Public routes */}
       <Route element={<TataLetak />}>

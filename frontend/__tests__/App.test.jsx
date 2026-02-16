@@ -28,6 +28,7 @@ vi.mock('../src/halaman/redaksi/DasborAdmin', () => ({ default: () => <div>Dasbo
 vi.mock('../src/halaman/redaksi/KamusAdmin', () => ({ default: () => <div>Kamus Redaksi</div> }));
 vi.mock('../src/halaman/redaksi/TesaurusAdmin', () => ({ default: () => <div>Tesaurus Redaksi</div> }));
 vi.mock('../src/halaman/redaksi/GlosariumAdmin', () => ({ default: () => <div>Glosarium Redaksi</div> }));
+vi.mock('../src/halaman/redaksi/LabelAdmin', () => ({ default: () => <div>Label Redaksi</div> }));
 vi.mock('../src/halaman/redaksi/PenggunaAdmin', () => ({ default: () => <div>Pengguna Redaksi</div> }));
 
 describe('App', () => {
@@ -95,6 +96,21 @@ describe('App', () => {
       </MemoryRouter>
     );
     expect(screen.getByText('Kamus Redaksi')).toBeInTheDocument();
+  });
+
+  it('mengizinkan route label redaksi saat user admin', () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      adalahAdmin: true,
+      isLoading: false,
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/redaksi/label']}>
+        <App />
+      </MemoryRouter>
+    );
+    expect(screen.getByText('Label Redaksi')).toBeInTheDocument();
   });
 
   it('merender route kebijakan privasi', () => {

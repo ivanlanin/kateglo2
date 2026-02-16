@@ -5,6 +5,35 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import klien from './klien';
 
+function useDaftarAdmin(path, queryKeyPrefix, { limit = 50, offset = 0, q = '' } = {}) {
+  return useQuery({
+    queryKey: [queryKeyPrefix, { limit, offset, q }],
+    queryFn: () =>
+      klien
+        .get(path, { params: { limit, offset, q: q || undefined } })
+        .then((r) => r.data),
+  });
+}
+
+function useSimpanAdmin({ path, queryKeyPrefix }) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data) => {
+      if (data.id) return klien.put(`${path}/${data.id}`, data).then((r) => r.data);
+      return klien.post(path, data).then((r) => r.data);
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: [queryKeyPrefix] }),
+  });
+}
+
+function useHapusAdmin({ path, queryKeyPrefix }) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id) => klien.delete(`${path}/${id}`).then((r) => r.data),
+    onSuccess: () => qc.invalidateQueries({ queryKey: [queryKeyPrefix] }),
+  });
+}
+
 // ─── Statistik ───────────────────────────────────────────────────────────────
 
 export function useStatistikAdmin() {
@@ -30,25 +59,19 @@ export function useDaftarKamusAdmin({ limit = 50, offset = 0, q = '' } = {}) {
 // ─── Tesaurus ────────────────────────────────────────────────────────────────
 
 export function useDaftarTesaurusAdmin({ limit = 50, offset = 0, q = '' } = {}) {
-  return useQuery({
-    queryKey: ['admin-tesaurus', { limit, offset, q }],
-    queryFn: () =>
-      klien
-        .get('/api/redaksi/tesaurus', { params: { limit, offset, q: q || undefined } })
-        .then((r) => r.data),
-  });
+  return useDaftarAdmin('/api/redaksi/tesaurus', 'admin-tesaurus', { limit, offset, q });
 }
 
 // ─── Glosarium ───────────────────────────────────────────────────────────────
 
 export function useDaftarGlosariumAdmin({ limit = 50, offset = 0, q = '' } = {}) {
-  return useQuery({
-    queryKey: ['admin-glosarium', { limit, offset, q }],
-    queryFn: () =>
-      klien
-        .get('/api/redaksi/glosarium', { params: { limit, offset, q: q || undefined } })
-        .then((r) => r.data),
-  });
+  return useDaftarAdmin('/api/redaksi/glosarium', 'admin-glosarium', { limit, offset, q });
+}
+
+// ─── Label ───────────────────────────────────────────────────────────────────
+
+export function useDaftarLabelAdmin({ limit = 50, offset = 0, q = '' } = {}) {
+  return useDaftarAdmin('/api/redaksi/label', 'admin-label', { limit, offset, q });
 }
 
 // ─── Pengguna ────────────────────────────────────────────────────────────────
@@ -160,43 +183,31 @@ export function useHapusContoh() {
 // ─── Mutations: Tesaurus ─────────────────────────────────────────────────────
 
 export function useSimpanTesaurus() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: (data) => {
-      if (data.id) return klien.put(`/api/redaksi/tesaurus/${data.id}`, data).then((r) => r.data);
-      return klien.post('/api/redaksi/tesaurus', data).then((r) => r.data);
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-tesaurus'] }),
-  });
+  return useSimpanAdmin({ path: '/api/redaksi/tesaurus', queryKeyPrefix: 'admin-tesaurus' });
 }
 
 export function useHapusTesaurus() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: (id) => klien.delete(`/api/redaksi/tesaurus/${id}`).then((r) => r.data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-tesaurus'] }),
-  });
+  return useHapusAdmin({ path: '/api/redaksi/tesaurus', queryKeyPrefix: 'admin-tesaurus' });
 }
 
 // ─── Mutations: Glosarium ────────────────────────────────────────────────────
 
 export function useSimpanGlosarium() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: (data) => {
-      if (data.id) return klien.put(`/api/redaksi/glosarium/${data.id}`, data).then((r) => r.data);
-      return klien.post('/api/redaksi/glosarium', data).then((r) => r.data);
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-glosarium'] }),
-  });
+  return useSimpanAdmin({ path: '/api/redaksi/glosarium', queryKeyPrefix: 'admin-glosarium' });
 }
 
 export function useHapusGlosarium() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: (id) => klien.delete(`/api/redaksi/glosarium/${id}`).then((r) => r.data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-glosarium'] }),
-  });
+  return useHapusAdmin({ path: '/api/redaksi/glosarium', queryKeyPrefix: 'admin-glosarium' });
+}
+
+// ─── Mutations: Label ────────────────────────────────────────────────────────
+
+export function useSimpanLabel() {
+  return useSimpanAdmin({ path: '/api/redaksi/label', queryKeyPrefix: 'admin-label' });
+}
+
+export function useHapusLabel() {
+  return useHapusAdmin({ path: '/api/redaksi/label', queryKeyPrefix: 'admin-label' });
 }
 
 // ─── Mutations: Pengguna ─────────────────────────────────────────────────────

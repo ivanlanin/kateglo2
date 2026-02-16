@@ -45,10 +45,18 @@ jest.mock('../../models/modelGlosarium', () => ({
   hitungTotal: jest.fn(),
 }));
 
+jest.mock('../../models/modelLabel', () => ({
+  daftarAdmin: jest.fn(),
+  ambilDenganId: jest.fn(),
+  simpan: jest.fn(),
+  hapus: jest.fn(),
+}));
+
 const ModelPengguna = require('../../models/modelPengguna');
 const ModelLema = require('../../models/modelEntri');
 const ModelTesaurus = require('../../models/modelTesaurus');
 const ModelGlosarium = require('../../models/modelGlosarium');
+const ModelLabel = require('../../models/modelLabel');
 const rootRouter = require('../../routes');
 
 function createApp() {
@@ -595,6 +603,80 @@ describe('routes/redaksi', () => {
       const post = await callAsAdmin('post', '/api/redaksi/glosarium', { body: { indonesia: 'istilah', asing: 'term' } });
       const put = await callAsAdmin('put', '/api/redaksi/glosarium/1', { body: { indonesia: 'istilah', asing: 'term' } });
       const del = await callAsAdmin('delete', '/api/redaksi/glosarium/1');
+
+      expect(list.status).toBe(500);
+      expect(detail.status).toBe(500);
+      expect(post.status).toBe(500);
+      expect(put.status).toBe(500);
+      expect(del.status).toBe(500);
+    });
+  });
+
+  describe('label', () => {
+    it('CRUD /api/redaksi/label mencakup cabang utama', async () => {
+      ModelLabel.daftarAdmin.mockResolvedValue({ data: [{ id: 1 }], total: 1 });
+      const list = await callAsAdmin('get', '/api/redaksi/label?limit=10&offset=1&q=ragam');
+
+      ModelLabel.ambilDenganId.mockResolvedValueOnce(null).mockResolvedValueOnce({ id: 1, nama: 'ragam resmi' });
+      const detail404 = await callAsAdmin('get', '/api/redaksi/label/1');
+      const detail200 = await callAsAdmin('get', '/api/redaksi/label/1');
+
+      const post400Kategori = await callAsAdmin('post', '/api/redaksi/label', { body: { kategori: ' ', kode: 'R', nama: 'Ragam' } });
+      const post400Kode = await callAsAdmin('post', '/api/redaksi/label', { body: { kategori: 'ragam', kode: ' ', nama: 'Ragam' } });
+      const post400Nama = await callAsAdmin('post', '/api/redaksi/label', { body: { kategori: 'ragam', kode: 'R', nama: ' ' } });
+
+      ModelLabel.simpan.mockResolvedValueOnce({ id: 1 }).mockResolvedValueOnce(null).mockResolvedValueOnce({ id: 1 });
+      const post201 = await callAsAdmin('post', '/api/redaksi/label', {
+        body: { kategori: 'ragam', kode: 'R', nama: 'Ragam resmi' },
+      });
+
+      const put400Kategori = await callAsAdmin('put', '/api/redaksi/label/1', { body: { kategori: ' ', kode: 'R', nama: 'Ragam' } });
+      const put400Kode = await callAsAdmin('put', '/api/redaksi/label/1', { body: { kategori: 'ragam', kode: ' ', nama: 'Ragam' } });
+      const put400Nama = await callAsAdmin('put', '/api/redaksi/label/1', { body: { kategori: 'ragam', kode: 'R', nama: ' ' } });
+      const put404 = await callAsAdmin('put', '/api/redaksi/label/1', {
+        body: { kategori: 'ragam', kode: 'R', nama: 'Ragam resmi' },
+      });
+      const put200 = await callAsAdmin('put', '/api/redaksi/label/1', {
+        body: { kategori: 'ragam', kode: 'R', nama: 'Ragam resmi' },
+      });
+
+      ModelLabel.hapus.mockResolvedValueOnce(false).mockResolvedValueOnce(true);
+      const delete404 = await callAsAdmin('delete', '/api/redaksi/label/1');
+      const delete200 = await callAsAdmin('delete', '/api/redaksi/label/1');
+
+      expect(list.status).toBe(200);
+      expect(detail404.status).toBe(404);
+      expect(detail200.status).toBe(200);
+      expect(post400Kategori.status).toBe(400);
+      expect(post400Kode.status).toBe(400);
+      expect(post400Nama.status).toBe(400);
+      expect(post201.status).toBe(201);
+      expect(put400Kategori.status).toBe(400);
+      expect(put400Kode.status).toBe(400);
+      expect(put400Nama.status).toBe(400);
+      expect(put404.status).toBe(404);
+      expect(put200.status).toBe(200);
+      expect(delete404.status).toBe(404);
+      expect(delete200.status).toBe(200);
+    });
+
+    it('CRUD /api/redaksi/label meneruskan error', async () => {
+      ModelLabel.daftarAdmin.mockRejectedValueOnce(new Error('label list gagal'));
+      ModelLabel.ambilDenganId.mockRejectedValueOnce(new Error('label detail gagal'));
+      ModelLabel.simpan
+        .mockRejectedValueOnce(new Error('label simpan gagal'))
+        .mockRejectedValueOnce(new Error('label update gagal'));
+      ModelLabel.hapus.mockRejectedValueOnce(new Error('label hapus gagal'));
+
+      const list = await callAsAdmin('get', '/api/redaksi/label');
+      const detail = await callAsAdmin('get', '/api/redaksi/label/1');
+      const post = await callAsAdmin('post', '/api/redaksi/label', {
+        body: { kategori: 'ragam', kode: 'R', nama: 'Ragam resmi' },
+      });
+      const put = await callAsAdmin('put', '/api/redaksi/label/1', {
+        body: { kategori: 'ragam', kode: 'R', nama: 'Ragam resmi' },
+      });
+      const del = await callAsAdmin('delete', '/api/redaksi/label/1');
 
       expect(list.status).toBe(500);
       expect(detail.status).toBe(500);
