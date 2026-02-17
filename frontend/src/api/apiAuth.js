@@ -9,6 +9,7 @@ const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 const returnToKey = 'kateglo-auth-return-to';
 
 export function simpanReturnTo(path = '') {
+  if (typeof window === 'undefined') return;
   const currentPath = path || `${window.location.pathname}${window.location.search}`;
   if (currentPath && currentPath !== '/auth/callback') {
     localStorage.setItem(returnToKey, currentPath);
@@ -16,6 +17,7 @@ export function simpanReturnTo(path = '') {
 }
 
 export function ambilReturnTo() {
+  if (typeof window === 'undefined') return '/';
   const returnTo = localStorage.getItem(returnToKey) || '/';
   localStorage.removeItem(returnToKey);
   if (!returnTo.startsWith('/') || returnTo.startsWith('//')) {
@@ -33,6 +35,7 @@ export function buatUrlLoginGoogle(frontendOrigin = '') {
 }
 
 export function mulaiLoginGoogle(path = '') {
+  if (typeof window === 'undefined') return;
   simpanReturnTo(path);
   window.location.assign(buatUrlLoginGoogle(window.location.origin));
 }

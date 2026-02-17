@@ -1,11 +1,18 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 
-const buildTimestamp = (() => {
+function buatTimestampBuild() {
   const now = new Date();
   const date = now.toLocaleDateString('sv-SE', { timeZone: 'Asia/Jakarta' }).replace(/-/g, '');
   const time = now.toLocaleTimeString('sv-SE', { timeZone: 'Asia/Jakarta', hour12: false }).slice(0, 5).replace(/:/g, '');
   return `${date}.${time}`;
+}
+
+const buildTimestamp = (() => {
+  if (process.env.APP_TIMESTAMP) {
+    return process.env.APP_TIMESTAMP;
+  }
+  return buatTimestampBuild();
 })();
 
 export default defineConfig({

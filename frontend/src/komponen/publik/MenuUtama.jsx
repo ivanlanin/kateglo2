@@ -29,7 +29,7 @@ function MenuUtama({
     adalahAdmin,
     logout,
   } = useAuth();
-  const loginUrl = buatUrlLoginGoogle(window.location.origin);
+  const loginUrl = buatUrlLoginGoogle('');
 
   const handleLoginClick = () => {
     simpanReturnTo(`${location.pathname}${location.search}`);

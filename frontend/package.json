@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --port 5173",
     "build": "vite build",
+    "build:ssr": "node scripts/build-ssr.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
