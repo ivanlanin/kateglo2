@@ -15,19 +15,27 @@ describe('ModelLabel', () => {
     db.query.mockResolvedValue({
       rows: [
         { kategori: 'ragam', kode: 'cak', nama: 'cakapan' },
+        { kategori: 'ragam', kode: 'horm', nama: 'hormat' },
         { kategori: 'ragam', kode: 'ark', nama: 'arkais' },
+        { kategori: 'ragam', kode: 'ksr', nama: 'kasar' },
+        { kategori: 'ragam', kode: 'kls', nama: 'klasik' },
         { kategori: 'bahasa', kode: 'id', nama: 'Indonesia' },
         { kategori: 'kelas_kata', kode: 'n', nama: 'nomina' },
-        { kategori: 'kelas_kata', kode: 'v', nama: 'verba' },
+        { kategori: 'kelas_kata', kode: 'adv', nama: 'adverbia' },
         { kategori: 'kelas_kata', kode: 'prefiks', nama: 'prefiks' },
+        { kategori: 'kelas_kata', kode: 'v', nama: 'verba' },
+        { kategori: 'kelas_kata', kode: 'bentuk_terikat', nama: 'bentuk terikat' },
       ],
     });
 
     const result = await ModelLabel.ambilSemuaKategori();
 
     expect(result.ragam).toEqual([
-      { kode: 'cak', nama: 'cakapan' },
       { kode: 'ark', nama: 'arkais' },
+      { kode: 'kls', nama: 'klasik' },
+      { kode: 'horm', nama: 'hormat' },
+      { kode: 'cak', nama: 'cakapan' },
+      { kode: 'ksr', nama: 'kasar' },
     ]);
     expect(result.bahasa).toEqual([{ kode: 'id', nama: 'Indonesia' }]);
     expect(result.abjad).toHaveLength(26);
@@ -45,8 +53,12 @@ describe('ModelLabel', () => {
     expect(result.kelas_kata).toEqual([
       { kode: 'n', nama: 'nomina' },
       { kode: 'v', nama: 'verba' },
+      { kode: 'adv', nama: 'adverbia' },
     ]);
-    expect(result.unsur_terikat).toEqual([{ kode: 'prefiks', nama: 'prefiks' }]);
+    expect(result.unsur_terikat).toEqual([
+      { kode: 'bentuk_terikat', nama: 'bentuk terikat' },
+      { kode: 'prefiks', nama: 'prefiks' },
+    ]);
 
     // Alias kompatibilitas route lama
     expect(result.jenis).toHaveLength(5);

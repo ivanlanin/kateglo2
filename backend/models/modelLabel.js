@@ -16,9 +16,30 @@ const JENIS_EKSPRESI = ['idiom', 'peribahasa'];
 const JENIS_SEMUA = [...JENIS_BENTUK, ...JENIS_EKSPRESI];
 const KELAS_BEBAS = ['adjektiva', 'adverbia', 'nomina', 'numeralia', 'partikel', 'pronomina', 'verba'];
 const UNSUR_TERIKAT = ['sufiks', 'prefiks', 'bentuk terikat', 'infiks', 'klitik', 'konfiks'];
+const URUTAN_KELAS_KATA = ['nomina', 'verba', 'adjektiva', 'adverbia', 'pronomina', 'numeralia', 'partikel'];
+const URUTAN_UNSUR_TERIKAT = ['bentuk terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik'];
+const URUTAN_RAGAM = ['arkais', 'klasik', 'hormat', 'cakapan', 'kasar'];
 
 function normalizeLabelValue(value = '') {
   return String(value || '').trim().toLowerCase();
+}
+
+function urutkanLabelPrioritas(labels = [], urutanPrioritas = []) {
+  const prioritasMap = new Map(urutanPrioritas.map((nama, index) => [normalizeLabelValue(nama), index]));
+  return [...labels].sort((a, b) => {
+    const aNama = normalizeLabelValue(a.nama);
+    const bNama = normalizeLabelValue(b.nama);
+    const aKode = normalizeLabelValue(a.kode);
+    const bKode = normalizeLabelValue(b.kode);
+    const aPrioritas = prioritasMap.get(aNama) ?? prioritasMap.get(aKode);
+    const bPrioritas = prioritasMap.get(bNama) ?? prioritasMap.get(bKode);
+
+    if (aPrioritas !== undefined && bPrioritas !== undefined) return aPrioritas - bPrioritas;
+    if (aPrioritas !== undefined) return -1;
+    if (bPrioritas !== undefined) return 1;
+
+    return String(a.nama || a.kode || '').localeCompare(String(b.nama || b.kode || ''), 'id');
+  });
 }
 
 class ModelLabel {
@@ -59,8 +80,9 @@ class ModelLabel {
         kelasKataUnsurTerikat.push(label);
       }
     }
-    grouped.kelas_kata = kelasKataBebas;
-    grouped.unsur_terikat = kelasKataUnsurTerikat;
+    grouped.kelas_kata = urutkanLabelPrioritas(kelasKataBebas, URUTAN_KELAS_KATA);
+    grouped.unsur_terikat = urutkanLabelPrioritas(kelasKataUnsurTerikat, URUTAN_UNSUR_TERIKAT);
+    grouped.ragam = urutkanLabelPrioritas(grouped.ragam || [], URUTAN_RAGAM);
 
     // Kategori abjad: huruf A–Z
     grouped.abjad = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((h) => ({
