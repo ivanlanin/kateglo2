@@ -87,7 +87,7 @@ describe('Kamus', () => {
     const { container } = render(<Kamus />);
 
     expect(screen.getByText('Abjad')).toBeInTheDocument();
-    expect(screen.getByText('Kelas')).toBeInTheDocument();
+    expect(screen.getByText('Kelas Kata')).toBeInTheDocument();
     const grid = container.querySelector('.grid.grid-cols-1');
     expect(grid?.className).toContain('md:grid-cols-2');
   });

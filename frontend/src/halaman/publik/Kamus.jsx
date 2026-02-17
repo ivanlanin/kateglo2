@@ -16,7 +16,7 @@ const NAMA_KATEGORI = {
   abjad: 'Abjad',
   bentuk: 'Bentuk Bebas',
   unsur_terikat: 'Unsur Terikat',
-  kelas_kata: 'Kelas',
+  kelas_kata: 'Kelas Kata',
   ragam: 'Ragam',
   ekspresi: 'Ekspresi',
   bahasa: 'Asal Bahasa',
