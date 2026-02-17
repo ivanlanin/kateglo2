@@ -101,7 +101,13 @@ function KamusDetail() {
     }];
 
   const daftarEntri = daftarEntriRaw.slice().sort((a, b) => {
+    const prioritasLafalA = String(a.lafal || '').trim() ? 1 : 0;
+    const prioritasLafalB = String(b.lafal || '').trim() ? 1 : 0;
+    if (prioritasLafalA !== prioritasLafalB) return prioritasLafalA - prioritasLafalB;
     if ((a.urutan || 0) !== (b.urutan || 0)) return (a.urutan || 0) - (b.urutan || 0);
+    const homonimA = Number.isFinite(Number(a.homonim)) ? Number(a.homonim) : Number.MAX_SAFE_INTEGER;
+    const homonimB = Number.isFinite(Number(b.homonim)) ? Number(b.homonim) : Number.MAX_SAFE_INTEGER;
+    if (homonimA !== homonimB) return homonimA - homonimB;
     return (a.entri || '').localeCompare((b.entri || ''), 'id');
   });
 
@@ -196,7 +202,7 @@ function KamusDetail() {
                       to={buatPathKategoriKamus('jenis', entriItem.jenis || 'dasar')}
                       className="kamus-detail-tag-purple mt-1"
                     >
-                      {entriItem.jenis || 'dasar'}
+                      {formatTitleCase(entriItem.jenis || 'dasar')}
                     </Link>
                   </div>
                 </div>
