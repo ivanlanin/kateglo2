@@ -32,7 +32,7 @@ describe('LabelAdmin', () => {
       isError: false,
       data: {
         total: 1,
-        data: [{ id: 1, kategori: 'ragam', kode: 'cak', nama: 'cakapan', keterangan: 'ragam lisan', sumber: 'kbbi' }],
+        data: [{ id: 1, kategori: 'ragam', kode: 'cak', nama: 'cakapan', urutan: 1, keterangan: 'ragam lisan', sumber: 'kbbi' }],
       },
     });
   });
@@ -59,6 +59,7 @@ describe('LabelAdmin', () => {
     expect(screen.getByText('Nama wajib diisi')).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText('Nama*'), { target: { value: 'arkais' } });
+    fireEvent.change(screen.getByLabelText('Urutan'), { target: { value: '2' } });
     fireEvent.click(screen.getByText('Simpan'));
 
     expect(mutateSimpan).toHaveBeenCalled();
@@ -79,6 +80,7 @@ describe('LabelAdmin', () => {
     fireEvent.change(screen.getByLabelText('Kategori*'), { target: { value: 'bahasa' } });
     fireEvent.change(screen.getByLabelText('Kode*'), { target: { value: 'ark' } });
     fireEvent.change(screen.getByLabelText('Nama*'), { target: { value: 'arkais' } });
+    fireEvent.change(screen.getByLabelText('Urutan'), { target: { value: '2' } });
 
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Err simpan label')).toBeInTheDocument();

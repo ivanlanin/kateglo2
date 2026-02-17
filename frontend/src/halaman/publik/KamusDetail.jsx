@@ -5,7 +5,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus } from '../../api/apiPublik';
+import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategoriKamus } from '../../api/apiPublik';
 import { useAuth } from '../../context/authContext';
 import PanelLipat from '../../komponen/publik/PanelLipat';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
@@ -34,6 +34,10 @@ function formatTitleCase(teks = '') {
     .filter(Boolean)
     .map((kata) => kata.charAt(0).toUpperCase() + kata.slice(1))
     .join(' ');
+}
+
+function normalizeToken(teks = '') {
+  return String(teks || '').trim().toLowerCase();
 }
 
 function tentukanKategoriJenis(jenis = '') {
@@ -92,6 +96,19 @@ function KamusDetail() {
     queryFn: () => ambilKomentarKamus(indeks),
     enabled: Boolean(indeks) && !isAuthLoading,
   });
+
+  const { data: kategoriKamus } = useQuery({
+    queryKey: ['kamus-kategori'],
+    queryFn: ambilKategoriKamus,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const petaKelasKata = (kategoriKamus?.['kelas-kata'] || kategoriKamus?.kelas_kata || []).reduce((acc, item) => {
+    const key = normalizeToken(item?.kode);
+    if (!key) return acc;
+    acc[key] = item?.nama || item?.kode;
+    return acc;
+  }, {});
 
   const komentarData = komentarResponse?.data || {};
   const jumlahKomentarAktif = Number(komentarData.activeCount || 0);
@@ -292,7 +309,7 @@ function KamusDetail() {
                         {kelas !== '-' && (
                           <div className="kamus-detail-subentry-heading-row">
                             <h3 className="kamus-detail-def-class mb-0">
-                              {formatTitleCase(kelas)}{' '}
+                              {formatTitleCase(petaKelasKata[normalizeToken(kelas)] || kelas)}{' '}
                               <span className="kamus-count-badge" data-count={daftarMakna.length}>
                                 ({daftarMakna.length})
                               </span>

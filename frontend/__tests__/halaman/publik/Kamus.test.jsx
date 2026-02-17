@@ -65,6 +65,8 @@ describe('Kamus', () => {
     expect(screen.getByText('Abjad')).toBeInTheDocument();
     expect(screen.getByText('Bentuk Bebas')).toBeInTheDocument();
     expect(screen.getByText('Unsur Terikat')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Dasar' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Prefiks' })).toBeInTheDocument();
   });
 
   it('browse kategori memakai fallback array kosong untuk key yang tidak ada dan grid dua kolom saat dua kategori terisi', () => {

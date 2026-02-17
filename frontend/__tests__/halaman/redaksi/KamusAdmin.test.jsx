@@ -6,6 +6,7 @@ import KamusAdmin from '../../../src/halaman/redaksi/KamusAdmin';
 
 const mockUseDaftarKamusAdmin = vi.fn();
 const mockUseDaftarMakna = vi.fn();
+const mockUseKategoriLabelRedaksi = vi.fn();
 
 const mutateSimpanKamus = vi.fn();
 const mutateHapusKamus = vi.fn();
@@ -19,6 +20,7 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useSimpanKamus: () => ({ mutate: mutateSimpanKamus, isPending: false }),
   useHapusKamus: () => ({ mutate: mutateHapusKamus, isPending: false }),
   useDaftarMakna: (...args) => mockUseDaftarMakna(...args),
+  useKategoriLabelRedaksi: (...args) => mockUseKategoriLabelRedaksi(...args),
   useSimpanMakna: () => ({ mutate: mutateSimpanMakna, isPending: false }),
   useHapusMakna: () => ({ mutate: mutateHapusMakna, isPending: false }),
   useSimpanContoh: () => ({ mutate: mutateSimpanContoh, isPending: false }),
@@ -83,6 +85,23 @@ describe('KamusAdmin', () => {
             contoh: [],
           },
         ],
+      },
+    });
+
+    mockUseKategoriLabelRedaksi.mockReturnValue({
+      data: {
+        data: {
+          'bentuk-kata': [
+            { kode: 'dasar', nama: 'Dasar' },
+            { kode: 'turunan', nama: 'Turunan' },
+          ],
+          'jenis-rujuk': [{ kode: 'lihat', nama: 'lihat' }],
+          'kelas-kata': [{ kode: 'n', nama: 'nomina' }],
+          ragam: [{ kode: 'cak', nama: 'cakapan' }],
+          bidang: [{ kode: 'umum', nama: 'Umum' }],
+          bahasa: [{ kode: 'id', nama: 'Indonesia' }],
+          penyingkatan: [{ kode: 'singkatan', nama: 'Singkatan' }],
+        },
       },
     });
   });

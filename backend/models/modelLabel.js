@@ -19,6 +19,20 @@ const KELAS_BEBAS = ['adjektiva', 'adverbia', 'nomina', 'numeralia', 'partikel',
 const URUTAN_KELAS_KATA = ['nomina', 'verba', 'adjektiva', 'adverbia', 'pronomina', 'numeralia', 'partikel'];
 const URUTAN_UNSUR_TERIKAT = ['terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik'];
 const URUTAN_RAGAM = ['arkais', 'klasik', 'hormat', 'cakapan', 'kasar'];
+const KATEGORI_LABEL_REDAKSI = ['bentuk-kata', 'jenis-rujuk', 'kelas-kata', 'ragam', 'bidang', 'bahasa', 'penyingkatan'];
+
+function normalisasiKategoriLabel(kategori = '') {
+  const value = String(kategori || '').trim();
+  if (value === 'kelas_kata') return 'kelas-kata';
+  return value;
+}
+
+function kandidatKategoriLabel(kategori = '') {
+  const normalized = normalisasiKategoriLabel(kategori);
+  if (!normalized) return [];
+  if (normalized === 'kelas-kata') return ['kelas-kata', 'kelas_kata'];
+  return [normalized];
+}
 
 function normalizeLabelValue(value) {
   return String(value || '').trim().toLowerCase();
@@ -42,6 +56,19 @@ function urutkanLabelPrioritas(labels, urutanPrioritas) {
   });
 }
 
+function pushLabelUnik(grouped, kategori, label) {
+  if (!grouped[kategori]) {
+    grouped[kategori] = [];
+  }
+
+  const exists = grouped[kategori].some(
+    (item) => normalizeLabelValue(item.kode) === normalizeLabelValue(label.kode)
+  );
+  if (!exists) {
+    grouped[kategori].push(label);
+  }
+}
+
 class ModelLabel {
   /**
   * Ambil semua kategori beserta daftar label per kategori dan jumlah entri.
@@ -52,21 +79,19 @@ class ModelLabel {
   static async ambilSemuaKategori() {
     // Label dari tabel label (ragam, kelas_kata, bahasa, bidang)
     const result = await db.query(
-      `SELECT kategori, kode, nama
+      `SELECT kategori, kode, nama, urutan
        FROM label
-       ORDER BY kategori, nama`
+       ORDER BY kategori, urutan, nama`
     );
 
     const grouped = {};
     for (const row of result.rows) {
-      if (!grouped[row.kategori]) {
-        grouped[row.kategori] = [];
-      }
-      grouped[row.kategori].push({ kode: row.kode, nama: row.nama });
+      const kategori = normalisasiKategoriLabel(row.kategori);
+      pushLabelUnik(grouped, kategori, { kode: row.kode, nama: row.nama });
     }
 
     // Ambil kelas kata bebas saja dari kategori kelas_kata.
-    const kelasKataSemua = grouped.kelas_kata || [];
+    const kelasKataSemua = grouped['kelas-kata'] || [];
     const kelasKataBebas = [];
     for (const label of kelasKataSemua) {
       const kandidatNama = normalizeLabelValue(label.nama);
@@ -75,7 +100,8 @@ class ModelLabel {
         kelasKataBebas.push(label);
       }
     }
-    grouped.kelas_kata = urutkanLabelPrioritas(kelasKataBebas, URUTAN_KELAS_KATA);
+    grouped['kelas-kata'] = urutkanLabelPrioritas(kelasKataBebas, URUTAN_KELAS_KATA);
+    grouped.kelas_kata = grouped['kelas-kata'];
     grouped.unsur_terikat = urutkanLabelPrioritas(
       JENIS_UNSUR_TERIKAT.map((jenis) => ({ kode: jenis, nama: jenis })),
       URUTAN_UNSUR_TERIKAT
@@ -109,6 +135,8 @@ class ModelLabel {
    * @returns {Promise<{data: Array, total: number, label: Object|null}>}
    */
   static async cariEntriPerLabel(kategori, kode, limit = 20, offset = 0) {
+    const kategoriNormal = normalisasiKategoriLabel(kategori);
+
     if (kategori === 'abjad') {
       return this._cariEntriPerAbjad(kode, limit, offset);
     }
@@ -125,19 +153,25 @@ class ModelLabel {
       return this._cariEntriPerJenis(kode, JENIS_UNSUR_TERIKAT, limit, offset);
     }
 
-    const validKategori = ['ragam', 'kelas_kata', 'bahasa', 'bidang'];
-    if (!validKategori.includes(kategori)) {
+    const validKategori = ['ragam', 'kelas-kata', 'bahasa', 'bidang'];
+    if (!validKategori.includes(kategoriNormal)) {
       return { data: [], total: 0, label: null };
     }
 
+    const kategoriKandidat = kandidatKategoriLabel(kategoriNormal);
+
     // Ambil info label (kode + nama) untuk pencocokan ganda
     const labelResult = await db.query(
-      `SELECT kode, nama, keterangan FROM label WHERE kategori = $1 AND kode = $2 LIMIT 1`,
-      [kategori, kode]
+      `SELECT kategori, kode, nama, keterangan
+       FROM label
+       WHERE kategori = ANY($1::text[]) AND kode = $2
+       ORDER BY CASE WHEN kategori = $3 THEN 0 ELSE 1 END
+       LIMIT 1`,
+      [kategoriKandidat, kode, kategoriNormal]
     );
     const label = labelResult.rows[0] || null;
 
-    if (kategori === 'kelas_kata') {
+    if (kategoriNormal === 'kelas-kata') {
       if (!label) {
         return { data: [], total: 0, label: null };
       }
@@ -154,7 +188,7 @@ class ModelLabel {
       nilaiCocok.push(label.nama);
     }
 
-    const kolom = kategori;
+    const kolom = kategoriNormal === 'kelas-kata' ? 'kelas_kata' : kategoriNormal;
 
     const countResult = await db.query(
       `SELECT COUNT(DISTINCT l.id) AS total
@@ -177,6 +211,42 @@ class ModelLabel {
     );
 
     return { data: dataResult.rows, total, label };
+  }
+
+  /**
+   * Ambil daftar label per kategori untuk form redaksi.
+   * @param {string[]} kategoriList
+   * @returns {Promise<Object<string, Array<{kode: string, nama: string}>>>}
+   */
+  static async ambilKategoriUntukRedaksi(kategoriList = []) {
+    const requested = kategoriList.length
+      ? kategoriList.map((item) => normalisasiKategoriLabel(item)).filter(Boolean)
+      : [...KATEGORI_LABEL_REDAKSI];
+
+    const uniqueRequested = [...new Set(requested)].filter((item) => KATEGORI_LABEL_REDAKSI.includes(item));
+    if (!uniqueRequested.length) {
+      return {};
+    }
+
+    const kategoriQuery = [...new Set(uniqueRequested.flatMap((item) => kandidatKategoriLabel(item)))];
+
+    const result = await db.query(
+      `SELECT kategori, kode, nama, urutan
+       FROM label
+       WHERE kategori = ANY($1::text[])
+       ORDER BY kategori ASC, urutan ASC, nama ASC, kode ASC`,
+      [kategoriQuery]
+    );
+
+    const grouped = Object.fromEntries(uniqueRequested.map((kategori) => [kategori, []]));
+
+    for (const row of result.rows) {
+      const normalizedKategori = normalisasiKategoriLabel(row.kategori);
+      if (!grouped[normalizedKategori]) continue;
+      pushLabelUnik(grouped, normalizedKategori, { kode: row.kode, nama: row.nama });
+    }
+
+    return grouped;
   }
 
   /**
@@ -281,9 +351,9 @@ class ModelLabel {
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-      `SELECT id, kategori, kode, nama, keterangan, sumber
+      `SELECT id, kategori, kode, nama, urutan, keterangan, sumber
        FROM label ${where}
-       ORDER BY kategori ASC, nama ASC
+       ORDER BY kategori ASC, urutan ASC, nama ASC
        LIMIT $${idx} OFFSET $${idx + 1}`,
       [...params, limit, offset]
     );
@@ -298,7 +368,7 @@ class ModelLabel {
    */
   static async ambilDenganId(id) {
     const result = await db.query(
-      'SELECT id, kategori, kode, nama, keterangan, sumber FROM label WHERE id = $1',
+      'SELECT id, kategori, kode, nama, urutan, keterangan, sumber FROM label WHERE id = $1',
       [id]
     );
     return result.rows[0] || null;
@@ -306,30 +376,35 @@ class ModelLabel {
 
   /**
    * Simpan (insert/update) label.
-   * @param {{ id?: number, kategori: string, kode: string, nama: string, keterangan?: string, sumber?: string }} data
+   * @param {{ id?: number, kategori: string, kode: string, nama: string, urutan?: number|string, keterangan?: string, sumber?: string }} data
    * @returns {Promise<Object|null>}
    */
-  static async simpan({ id, kategori, kode, nama, keterangan, sumber }) {
+  static async simpan({ id, kategori, kode, nama, urutan, keterangan, sumber }) {
+    const nilaiUrutan = Number.isFinite(Number(urutan)) && Number(urutan) > 0
+      ? Number.parseInt(urutan, 10)
+      : 1;
+
     if (id) {
       const result = await db.query(
         `UPDATE label
          SET kategori = $1,
              kode = $2,
              nama = $3,
-             keterangan = $4,
-             sumber = $5
-         WHERE id = $6
-         RETURNING id, kategori, kode, nama, keterangan, sumber`,
-        [kategori, kode, nama, keterangan || null, sumber || null, id]
+             urutan = $4,
+             keterangan = $5,
+             sumber = $6
+         WHERE id = $7
+         RETURNING id, kategori, kode, nama, urutan, keterangan, sumber`,
+        [kategori, kode, nama, nilaiUrutan, keterangan || null, sumber || null, id]
       );
       return result.rows[0] || null;
     }
 
     const result = await db.query(
-      `INSERT INTO label (kategori, kode, nama, keterangan, sumber)
-       VALUES ($1, $2, $3, $4, $5)
-       RETURNING id, kategori, kode, nama, keterangan, sumber`,
-      [kategori, kode, nama, keterangan || null, sumber || null]
+      `INSERT INTO label (kategori, kode, nama, urutan, keterangan, sumber)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING id, kategori, kode, nama, urutan, keterangan, sumber`,
+      [kategori, kode, nama, nilaiUrutan, keterangan || null, sumber || null]
     );
     return result.rows[0];
   }

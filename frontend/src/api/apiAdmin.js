@@ -78,6 +78,17 @@ export function useDaftarLabelAdmin({ limit = 50, offset = 0, q = '' } = {}) {
   return useDaftarAdmin('/api/redaksi/label', 'admin-label', { limit, offset, q });
 }
 
+export function useKategoriLabelRedaksi(kategori = []) {
+  const nama = kategori.join(',');
+  return useQuery({
+    queryKey: ['admin-label-kategori', nama],
+    queryFn: () =>
+      klien
+        .get('/api/redaksi/label/kategori', { params: { nama: nama || undefined } })
+        .then((r) => r.data),
+  });
+}
+
 // ─── Pengguna ────────────────────────────────────────────────────────────────
 
 export function useDaftarPengguna({ limit = 50, offset = 0 } = {}) {

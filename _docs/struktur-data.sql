@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-17T10:47:11.624Z
+-- Generated: 2026-02-17T11:48:30.076Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -163,6 +163,7 @@ create table label (
   sumber text,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
+  urutan integer not null default 1,
   constraint label_kategori_kode_key unique (kategori, kode)
 );
 create index idx_label_kategori_nama on label using btree (kategori, nama);
