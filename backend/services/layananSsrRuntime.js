@@ -61,9 +61,15 @@ function injectAppHtml(htmlTemplate, appHtml = '') {
   return htmlTemplate.replace('<div id="root"></div>', `<div id="root">${appHtml}</div>`);
 }
 
+/* istanbul ignore next -- native dynamic import tidak dieksekusi penuh pada mode Jest saat ini */
 async function loadSsrRenderer() {
   const moduleUrl = pathToFileURL(frontendServerEntryPath).href;
+  /* istanbul ignore next */
   const ssrModule = await import(moduleUrl);
+  return validateRendererModule(ssrModule);
+}
+
+function validateRendererModule(ssrModule) {
   if (typeof ssrModule.render !== 'function') {
     throw new Error('SSR bundle tidak mengekspor fungsi render(url)');
   }
@@ -163,7 +169,10 @@ async function prefetchSsrData(pathname = '/') {
   return null;
 }
 
-function pasangFrontendRuntime(app) {
+function pasangFrontendRuntime(app, options = {}) {
+  const loadRenderer = options.loadSsrRenderer || loadSsrRenderer;
+  const prefetchData = options.prefetchSsrData || prefetchSsrData;
+
   if (!punyaFrontendBuild()) {
     logger.warn('Frontend build belum tersedia. Lewati pemasangan runtime frontend pada backend.');
     return;
@@ -186,8 +195,8 @@ function pasangFrontendRuntime(app) {
         return res.type('html').send(htmlTemplate);
       }
 
-      const render = await loadSsrRenderer();
-      const prefetchedData = await prefetchSsrData(req.path);
+      const render = await loadRenderer();
+      const prefetchedData = await prefetchData(req.path);
       const rendered = await render(req.originalUrl, prefetchedData);
       const appHtml = rendered?.appHtml || '';
       const headTags = rendered?.headTags || '';
@@ -209,4 +218,16 @@ function pasangFrontendRuntime(app) {
 
 module.exports = {
   pasangFrontendRuntime,
+  __private: {
+    punyaFrontendBuild,
+    punyaSsrBundle,
+    isAssetRequest,
+    isBypassPath,
+    stripReplaceableMeta,
+    injectHeadTags,
+    injectAppHtml,
+    loadSsrRenderer,
+    validateRendererModule,
+    prefetchSsrData,
+  },
 };

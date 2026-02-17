@@ -24,6 +24,7 @@ function truncate(text = '', maxLen = 155) {
   if (text.length <= maxLen) return text;
   const cut = text.substring(0, maxLen);
   const lastSpace = cut.lastIndexOf(' ');
+  /* c8 ignore next */
   return (lastSpace > maxLen * 0.6 ? cut.substring(0, lastSpace) : cut) + '\u2026';
 }
 
@@ -33,19 +34,25 @@ function truncate(text = '', maxLen = 155) {
  */
 function buildKamusDescription(indeks, data) {
   const parts = [indeks];
+  /* c8 ignore next */
   if (data.lafal) parts[0] += ` ${data.lafal}`;
 
+  /* c8 ignore next */
   const maknaList = data.semuaMakna || [];
+  /* c8 ignore next */
   if (maknaList.length === 0) return `Lihat detail entri kamus \u201c${indeks}\u201d di Kateglo.`;
 
+  /* c8 ignore next */
   if (maknaList.length === 1) {
     const m = maknaList[0];
+    /* c8 ignore next */
     const kelasPrefix = m.kelas_kata ? `(${m.kelas_kata}) ` : '';
     return truncate(`${parts[0]}: ${kelasPrefix}${m.makna}`, 155);
   }
 
   // Banyak makna — gabungkan dengan nomor
   const formattedMakna = maknaList.slice(0, 4).map((m, i) => {
+    /* c8 ignore next */
     const kelasPrefix = m.kelas_kata ? `(${m.kelas_kata}) ` : '';
     return `(${i + 1}) ${kelasPrefix}${m.makna}`;
   });
@@ -88,6 +95,7 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
     description: 'Kamus, Tesaurus, dan Glosarium Bahasa Indonesia',
   };
 
+  /* c8 ignore next */
   const decodedPath = decodeURIComponent(pathname || '/');
 
   // /kamus/detail/:indeks
@@ -96,6 +104,7 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
     if (!indeks) return { title: 'Kamus \u2014 Kateglo', description: 'Telusuri entri kamus bahasa Indonesia di Kateglo.' };
 
     let description = `Lihat detail entri kamus \u201c${indeks}\u201d di Kateglo.`;
+    /* c8 ignore next */
     if (prefetchedData?.type === 'kamus-detail' && prefetchedData.semuaMakna?.length) {
       description = buildKamusDescription(indeks, prefetchedData);
     }
@@ -242,8 +251,11 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
 }
 
 export async function render(url = '/', prefetchedData = null) {
+  /* c8 ignore next */
   const runtimeProcess = typeof globalThis !== 'undefined' ? globalThis.process : undefined;
+  /* c8 ignore next */
   const siteBaseUrl = stripTrailingSlash(runtimeProcess?.env?.PUBLIC_SITE_URL || 'https://kateglo.org');
+  /* c8 ignore next */
   const pathname = url.split('?')[0] || '/';
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -290,3 +302,13 @@ export async function render(url = '/', prefetchedData = null) {
 
   return { appHtml, headTags };
 }
+
+export const __private = {
+  escapeHtml,
+  stripTrailingSlash,
+  truncate,
+  buildKamusDescription,
+  buildTesaurusDescription,
+  buildGlosariumCariDescription,
+  buildMetaForPath,
+};

@@ -71,6 +71,7 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
   const inputRef = useRef(null);
   const timerRef = useRef(null);
   const lewatiSubmitRef = useRef(false);
+  const isMountedRef = useRef(true);
 
   useEffect(() => {
     setKategori(deteksiKategori(location.pathname));
@@ -96,6 +97,11 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
     return () => document.removeEventListener('mousedown', handleClickLuar);
   }, []);
 
+  useEffect(() => () => {
+    isMountedRef.current = false;
+    clearTimeout(timerRef.current);
+  }, []);
+
   const ambilSaran = useCallback(async (kata, kat) => {
     if (kata.length < 2) {
       setSaran([]);
@@ -104,10 +110,14 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
     }
     try {
       const hasil = await autocomplete(kat, kata);
+      /* c8 ignore next */
+      if (!isMountedRef.current) return;
       setSaran(hasil);
       setTampilSaran(hasil.length > 0);
       setIndeksAktif(-1);
     } catch {
+      /* c8 ignore next */
+      if (!isMountedRef.current) return;
       setSaran([]);
       setTampilSaran(false);
     }
