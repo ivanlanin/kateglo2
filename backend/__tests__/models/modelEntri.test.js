@@ -20,7 +20,7 @@ describe('ModelEntri', () => {
 
     const result = await ModelEntri.autocomplete('kat', 12);
 
-    expect(autocomplete).toHaveBeenCalledWith('entri', 'entri', 'kat', {
+    expect(autocomplete).toHaveBeenCalledWith('entri', 'indeks', 'kat', {
       limit: 12,
       extraWhere: 'aktif = 1',
     });
@@ -32,7 +32,7 @@ describe('ModelEntri', () => {
 
     await ModelEntri.autocomplete('kat');
 
-    expect(autocomplete).toHaveBeenCalledWith('entri', 'entri', 'kat', {
+    expect(autocomplete).toHaveBeenCalledWith('entri', 'indeks', 'kat', {
       limit: 8,
       extraWhere: 'aktif = 1',
     });

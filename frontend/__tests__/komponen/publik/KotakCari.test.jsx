@@ -6,6 +6,7 @@ import {
   ekstrakQuery,
   SorotTeks,
   navigasiCari,
+  navigasiSaranSpesifik,
 } from '../../../src/komponen/publik/KotakCari';
 import { autocomplete } from '../../../src/api/apiPublik';
 
@@ -63,6 +64,14 @@ describe('KotakCari', () => {
     const navigate = vi.fn();
     navigasiCari(navigate, 'kamus', 'anak ibu');
     expect(navigate).toHaveBeenCalledWith('/kamus/cari/anak%20ibu');
+
+    navigate.mockReset();
+    navigasiSaranSpesifik(navigate, 'kamus', 'anak ibu');
+    expect(navigate).toHaveBeenCalledWith('/kamus/detail/anak%20ibu');
+
+    navigate.mockReset();
+    navigasiSaranSpesifik(navigate, 'tesaurus', 'anak ibu');
+    expect(navigate).toHaveBeenCalledWith('/tesaurus/cari/anak%20ibu');
   });
 
   it('SorotTeks menangani query kosong dan query tidak ditemukan', () => {
@@ -90,7 +99,7 @@ describe('KotakCari', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/kamus/cari/anak%20ibu');
   });
 
-  it('memuat saran, mendukung keyboard, dan memilih item aktif', async () => {
+  it('memuat saran, mendukung keyboard, dan memilih item aktif ke detail kamus', async () => {
     autocomplete.mockResolvedValue([
       { value: 'anak', asing: 'child' },
       { value: 'anakan' },
@@ -110,11 +119,10 @@ describe('KotakCari', () => {
     expect(listbox).toBeInTheDocument();
 
     expect(within(listbox).getAllByRole('option')).toHaveLength(2);
-    fireEvent.keyDown(input, { key: 'ArrowUp' });
     fireEvent.keyDown(input, { key: 'ArrowDown' });
     fireEvent.keyDown(input, { key: 'Enter' });
 
-    expect(mockNavigate).toHaveBeenCalledWith('/kamus/cari/anak');
+    expect(mockNavigate).toHaveBeenCalledWith('/kamus/detail/anak');
   });
 
   it('menutup dropdown dengan escape, klik luar, hapus, dan query pendek', async () => {
@@ -190,7 +198,7 @@ describe('KotakCari', () => {
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 
-  it('keyboard navigation mendukung wrap down/up antar indeks', async () => {
+  it('keyboard navigation memungkinkan kembali ke pencarian umum', async () => {
     autocomplete.mockResolvedValue([
       { value: 'anak' },
       { value: 'anakan' },
@@ -207,15 +215,13 @@ describe('KotakCari', () => {
 
     fireEvent.keyDown(input, { key: 'ArrowDown' }); // -1 -> 0
     fireEvent.keyDown(input, { key: 'ArrowDown' }); // 0 -> 1
-    fireEvent.keyDown(input, { key: 'ArrowDown' }); // 1 -> 0 (wrap)
-    fireEvent.keyDown(input, { key: 'ArrowUp' }); // 0 -> 1 (wrap)
-    fireEvent.keyDown(input, { key: 'ArrowUp' }); // 1 -> 0
+    fireEvent.keyDown(input, { key: 'ArrowDown' }); // 1 -> -1 (kembali ke mode umum)
 
-    fireEvent.keyDown(input, { key: 'Enter' });
-    expect(mockNavigate).toHaveBeenCalledWith('/kamus/cari/anak');
+    fireEvent.submit(screen.getByRole('button', { name: 'Cari' }).closest('form'));
+    expect(mockNavigate).toHaveBeenCalledWith('/kamus/cari/an');
   });
 
-  it('opsi saran merespons hover dan klik mouse', async () => {
+  it('opsi saran merespons hover dan klik mouse ke detail kamus', async () => {
     autocomplete.mockResolvedValue([
       { value: 'anak' },
       { value: 'anakan' },
@@ -235,6 +241,30 @@ describe('KotakCari', () => {
     fireEvent.mouseEnter(options[1]);
     fireEvent.mouseDown(options[1]);
 
-    expect(mockNavigate).toHaveBeenCalledWith('/kamus/cari/anakan');
+    expect(mockNavigate).toHaveBeenCalledWith('/kamus/detail/anakan');
+  });
+
+  it('setelah hover lalu keluar daftar, Enter kembali ke pencarian umum', async () => {
+    autocomplete.mockResolvedValue([
+      { value: 'anak' },
+      { value: 'anakan' },
+    ]);
+
+    render(<KotakCari autoFocus={false} />);
+    const input = screen.getByRole('textbox');
+
+    fireEvent.change(input, { target: { value: 'an' } });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(300);
+    });
+    await act(async () => {});
+
+    const listbox = screen.getByRole('listbox');
+    const options = within(listbox).getAllByRole('option');
+    fireEvent.mouseEnter(options[0]);
+    fireEvent.mouseLeave(listbox);
+    fireEvent.submit(screen.getByRole('button', { name: 'Cari' }).closest('form'));
+
+    expect(mockNavigate).toHaveBeenCalledWith('/kamus/cari/an');
   });
 });

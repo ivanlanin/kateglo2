@@ -7,6 +7,7 @@
 - Mengonsistenkan tata letak publik dan redaksi
 - Mengubah tampilan detail kamus menjadi berdasarkan indeks
 - Menghilangkan sufiks angka dari pemenggalan kata
+- Mengubah autokomplet kamus untuk mencari berdasarkan indeks dan menampilkan detail jika dipilih spesifik
 
 ## 2026-02-16 Senin
 
