@@ -18,6 +18,7 @@
 - Memasang _trigger_ untuk kolom `created_at` dan `updated_at` di semua tabel
 - Menyinkronkan pelabelan entri dan makna
 - Membuat pratayang logo, judul, dan deskripsi untuk media sosial
+- Menerapkan _caching_ dengan Redis di Render
 
 ## 2026-02-16 Senin
 

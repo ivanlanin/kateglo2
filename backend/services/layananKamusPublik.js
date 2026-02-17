@@ -5,6 +5,9 @@
 const ModelEntri = require('../models/modelEntri');
 const ModelTesaurus = require('../models/modelTesaurus');
 const ModelGlosarium = require('../models/modelGlosarium');
+const { getJson, setJson, delKey, getTtlSeconds } = require('./layananCache');
+
+const cachePrefixDetailKamus = 'kamus:detail:';
 
 function bacaTeksEntri(item) {
   return item?.entri ?? '';
@@ -36,6 +39,16 @@ function unikTanpaBedaKapitalisasi(items) {
   return hasil;
 }
 
+function buatCacheKeyDetailKamus(indeks) {
+  return `${cachePrefixDetailKamus}${encodeURIComponent((indeks || '').toLowerCase())}`;
+}
+
+async function hapusCacheDetailKamus(indeks) {
+  const trimmed = (indeks || '').trim();
+  if (!trimmed) return;
+  await delKey(buatCacheKeyDetailKamus(trimmed));
+}
+
 async function cariKamus(query, { limit = 100, offset = 0 } = {}) {
   const trimmed = (query || '').trim();
   if (!trimmed) return { data: [], total: 0 };
@@ -47,6 +60,12 @@ async function ambilDetailKamus(indeksAtauEntri) {
   if (!decoded) return null;
 
   const indeksTarget = normalisasiIndeksKamus(decoded);
+  const cacheKey = buatCacheKeyDetailKamus(indeksTarget);
+  const cached = await getJson(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
   const daftarEntri = await ModelEntri.ambilEntriPerIndeks(indeksTarget);
   if (daftarEntri.length === 0) return null;
 
@@ -146,12 +165,20 @@ async function ambilDetailKamus(indeksAtauEntri) {
     }
     : { sinonim: [], antonim: [] };
 
-  return {
+  const result = {
     indeks: indeksTarget,
     entri: entriUntukRespons,
     tesaurus,
     glosarium,
   };
+
+  await setJson(cacheKey, result, getTtlSeconds());
+  return result;
 }
 
-module.exports = { cariKamus, ambilDetailKamus };
+module.exports = {
+  cariKamus,
+  ambilDetailKamus,
+  hapusCacheDetailKamus,
+  buatCacheKeyDetailKamus,
+};

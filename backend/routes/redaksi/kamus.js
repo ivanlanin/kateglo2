@@ -4,8 +4,28 @@
 
 const express = require('express');
 const ModelEntri = require('../../models/modelEntri');
+const { hapusCacheDetailKamus } = require('../../services/layananKamusPublik');
 
 const router = express.Router();
+
+async function invalidasiCacheByIndeks(indeks) {
+  if (!indeks) return;
+  await hapusCacheDetailKamus(indeks);
+}
+
+async function ambilIndeksAmanByEntriId(entriId) {
+  try {
+    const entri = await ModelEntri.ambilDenganId(Number(entriId));
+    return entri?.indeks || null;
+  } catch (_error) {
+    return null;
+  }
+}
+
+async function invalidasiCacheByEntriId(entriId) {
+  const indeks = await ambilIndeksAmanByEntriId(entriId);
+  await invalidasiCacheByIndeks(indeks);
+}
 
 /**
  * GET /api/redaksi/kamus
@@ -50,6 +70,7 @@ router.post('/', async (req, res, next) => {
     if (!jenis) return res.status(400).json({ success: false, message: 'Jenis wajib diisi' });
 
     const data = await ModelEntri.simpan({ ...req.body, entri });
+    await invalidasiCacheByIndeks(data?.indeks);
     return res.status(201).json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -68,8 +89,11 @@ router.put('/:id', async (req, res, next) => {
     if (!entri) return res.status(400).json({ success: false, message: 'Entri wajib diisi' });
     if (!jenis) return res.status(400).json({ success: false, message: 'Jenis wajib diisi' });
 
+    const indeksSebelum = await ambilIndeksAmanByEntriId(id);
     const data = await ModelEntri.simpan({ ...req.body, id, entri });
     if (!data) return res.status(404).json({ success: false, message: 'Entri tidak ditemukan' });
+    await invalidasiCacheByIndeks(indeksSebelum);
+    await invalidasiCacheByIndeks(data?.indeks);
     return res.json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -82,8 +106,11 @@ router.put('/:id', async (req, res, next) => {
  */
 router.delete('/:id', async (req, res, next) => {
   try {
-    const deleted = await ModelEntri.hapus(Number(req.params.id));
+    const entriId = Number(req.params.id);
+    const indeksSebelum = await ambilIndeksAmanByEntriId(entriId);
+    const deleted = await ModelEntri.hapus(entriId);
     if (!deleted) return res.status(404).json({ success: false, message: 'Entri tidak ditemukan' });
+    await invalidasiCacheByIndeks(indeksSebelum);
     return res.json({ success: true });
   } catch (error) {
     return next(error);
@@ -134,6 +161,7 @@ router.post('/:entriId/makna', async (req, res, next) => {
     if (!makna?.trim()) return res.status(400).json({ success: false, message: 'Makna wajib diisi' });
 
     const data = await ModelEntri.simpanMakna({ ...req.body, entri_id });
+    await invalidasiCacheByEntriId(entri_id);
     return res.status(201).json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -153,6 +181,7 @@ router.put('/:entriId/makna/:maknaId', async (req, res, next) => {
 
     const data = await ModelEntri.simpanMakna({ ...req.body, id, entri_id });
     if (!data) return res.status(404).json({ success: false, message: 'Makna tidak ditemukan' });
+    await invalidasiCacheByEntriId(entri_id);
     return res.json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -165,8 +194,10 @@ router.put('/:entriId/makna/:maknaId', async (req, res, next) => {
  */
 router.delete('/:entriId/makna/:maknaId', async (req, res, next) => {
   try {
+    const entriId = Number(req.params.entriId);
     const deleted = await ModelEntri.hapusMakna(Number(req.params.maknaId));
     if (!deleted) return res.status(404).json({ success: false, message: 'Makna tidak ditemukan' });
+    await invalidasiCacheByEntriId(entriId);
     return res.json({ success: true });
   } catch (error) {
     return next(error);
@@ -183,11 +214,13 @@ router.delete('/:entriId/makna/:maknaId', async (req, res, next) => {
  */
 router.post('/:entriId/makna/:maknaId/contoh', async (req, res, next) => {
   try {
+    const entriId = Number(req.params.entriId);
     const makna_id = Number(req.params.maknaId);
     const { contoh } = req.body;
     if (!contoh?.trim()) return res.status(400).json({ success: false, message: 'Contoh wajib diisi' });
 
     const data = await ModelEntri.simpanContoh({ ...req.body, makna_id });
+    await invalidasiCacheByEntriId(entriId);
     return res.status(201).json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -200,6 +233,7 @@ router.post('/:entriId/makna/:maknaId/contoh', async (req, res, next) => {
  */
 router.put('/:entriId/makna/:maknaId/contoh/:contohId', async (req, res, next) => {
   try {
+    const entriId = Number(req.params.entriId);
     const makna_id = Number(req.params.maknaId);
     const id = Number(req.params.contohId);
     const { contoh } = req.body;
@@ -207,6 +241,7 @@ router.put('/:entriId/makna/:maknaId/contoh/:contohId', async (req, res, next) =
 
     const data = await ModelEntri.simpanContoh({ ...req.body, id, makna_id });
     if (!data) return res.status(404).json({ success: false, message: 'Contoh tidak ditemukan' });
+    await invalidasiCacheByEntriId(entriId);
     return res.json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -219,8 +254,10 @@ router.put('/:entriId/makna/:maknaId/contoh/:contohId', async (req, res, next) =
  */
 router.delete('/:entriId/makna/:maknaId/contoh/:contohId', async (req, res, next) => {
   try {
+    const entriId = Number(req.params.entriId);
     const deleted = await ModelEntri.hapusContoh(Number(req.params.contohId));
     if (!deleted) return res.status(404).json({ success: false, message: 'Contoh tidak ditemukan' });
+    await invalidasiCacheByEntriId(entriId);
     return res.json({ success: true });
   } catch (error) {
     return next(error);
