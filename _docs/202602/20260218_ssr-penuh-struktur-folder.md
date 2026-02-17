@@ -123,7 +123,8 @@ Dengan SSR penuh di URL asli:
 - Crawler tidak perlu jalur `/share/...` khusus.
 - Ranking SEO dan snippet sosial lebih konsisten.
 
-Route `/share/...` tetap boleh dipertahankan sebagai fallback/debug.
+Status implementasi saat ini:
+- Route `/share/...` sudah dihapus untuk menyederhanakan arsitektur SSR murni.
 
 ---
 

@@ -319,7 +319,7 @@ describe('services/layananCache', () => {
   });
 
   it('fallback ke memory saat connect Redis gagal', async () => {
-    const { cache, client, mockLogger } = setupModule({
+    const { cache, mockLogger } = setupModule({
       env: {
         CACHE_ENABLED: 'true',
         CACHE_FALLBACK_MEMORY: 'true',

@@ -13,9 +13,9 @@ Target:
 - Tetap sederhana, biaya rendah, dan risiko migrasi minimal.
 
 Rekomendasi paling efisien:
-1. **Jangka pendek (sudah jalan):** gunakan URL `/share/...` untuk preview dinamis.
-2. **Jangka menengah (disarankan):** **gabungkan delivery layer ke backend Web Service** untuk domain utama (`kateglo.org`), sehingga URL asli bisa dilayani HTML dinamis.
-3. **Jangan langsung full SSR React** jika belum perlu. Mulai dari SSR-lite untuk route SEO penting terlebih dahulu.
+1. **Jangka menengah (disarankan):** **gabungkan delivery layer ke backend Web Service** untuk domain utama (`kateglo.org`), sehingga URL asli bisa dilayani HTML dinamis.
+2. **Jangan langsung full SSR React** jika belum perlu. Mulai dari SSR-lite untuk route SEO penting terlebih dahulu.
+3. **Status saat ini:** route `/share/...` sudah dihentikan pada mode SSR murni.
 
 ---
 
@@ -34,16 +34,16 @@ Dengan begitu, tidak perlu membuat service frontend SSR terpisah sejak awal.
 
 ## Opsi Arsitektur
 
-## Opsi A — Tetap Static Site + /share (status sekarang)
+## Opsi A — Tetap Static Site (legacy)
 Kelebihan:
 - Paling cepat, biaya rendah
-- Sudah bekerja untuk WhatsApp/Telegram saat link `/share/...` dipakai
+- Implementasi awal sederhana
 
 Kekurangan:
 - URL asli tetap metadata statis (SEO dinamis belum tercapai)
 
-Cocok jika:
-- Fokus utama social preview saat share manual
+Catatan:
+- Opsi ini bersifat legacy dan tidak lagi dipakai pada setup SSR murni saat ini.
 
 ## Opsi B — Backend jadi gateway utama domain (rekomendasi)
 Kelebihan:
@@ -74,17 +74,16 @@ Cocok jika:
 ## Rencana Implementasi (Paling Efisien)
 
 ## Fase 0 — Stabilkan yang sudah ada (1 hari)
-- Pertahankan route `/share/...` yang sudah aktif.
 - Pastikan env cache produksi aktif.
-- Pastikan rule rewrite static tidak mengganggu `/share/*`.
+- Pastikan route SSR URL asli berfungsi untuk crawler.
 
 Output:
-- Social preview dinamis tetap aman sebagai fallback.
+- Social preview dinamis langsung tersedia di URL asli.
 
 ## Fase 1 — Backend melayani aset frontend statis (1-2 hari)
 - Tambahkan static serving `frontend/dist` di backend.
 - Route non-API (`/`, `/kamus`, `/tesaurus`, `/glosarium`, dll.) fallback ke `index.html` dari backend.
-- Tetap pertahankan `/api/*` dan `/share/*` di backend.
+- Pertahankan `/api/*` di backend.
 
 Output:
 - Satu service (backend) bisa melayani situs + API.
@@ -124,11 +123,11 @@ Output:
 
 ## Service Mapping
 - Domain produksi `kateglo.org` diarahkan ke service backend (Web Service).
-- Jika belum cutover penuh, tetap gunakan `/share/...` sebagai jalur share resmi.
+- Semua URL publik menggunakan SSR route yang sama (tanpa jalur `/share/...`).
 
 ## Redirect/Rewrite
 - Saat masih memakai Static Site sebagai domain utama:
-  - `/share/*` harus diarahkan ke backend
+   - Route SEO prioritas harus diarahkan ke backend SSR
   - Catch-all `/* -> /index.html` tetap paling bawah
 - Setelah cutover ke backend:
   - rewrite static di Static Site tidak lagi kritikal untuk produksi
@@ -165,7 +164,7 @@ Perkiraan dampak:
 
 Jika setelah cutover terjadi isu:
 1. Kembalikan domain ke Static Site lama.
-2. Pertahankan `/share/...` untuk preview dinamis sementara.
+2. Aktifkan fallback static sementara sambil memperbaiki SSR route.
 3. Perbaiki backend route/serving, lalu cutover ulang.
 
 ---
@@ -173,7 +172,6 @@ Jika setelah cutover terjadi isu:
 ## Checklist Eksekusi Singkat
 
 - [ ] Env cache backend terpasang di production
-- [ ] Route `/share/...` tervalidasi dari WhatsApp/Telegram
 - [ ] Backend dapat serve `frontend/dist`
 - [ ] Route SEO prioritas menghasilkan meta dinamis
 - [ ] Domain `kateglo.org` dialihkan ke backend
