@@ -4,6 +4,7 @@
 
 - Menambahkan fitur pengelolaan label untuk redaksi
 - Mengubah entri jenis "berimbuhan" menjadi "turunan"
+- Mengonsistenkan tata letak publik dan redaksi
 
 ## 2026-02-16 Senin
 

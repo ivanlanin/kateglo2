@@ -3,26 +3,32 @@
  */
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import KotakCari from './KotakCari';
 import MenuUtama from './MenuUtama';
 
 function Navbar() {
   const [menuTerbuka, setMenuTerbuka] = useState(false);
+  const location = useLocation();
+  const adalahBeranda = location.pathname === '/';
 
   return (
-    <nav className="navbar-root">
+    <nav className={`navbar-root ${adalahBeranda ? 'navbar-root-beranda' : ''}`}>
       <div className="navbar-container">
-        <div className="navbar-inner">
+        <div className={`navbar-inner ${adalahBeranda ? 'navbar-inner-beranda' : ''}`}>
           {/* Logo */}
-          <Link to="/" className="navbar-logo">
-            Kateglo
-          </Link>
+          {!adalahBeranda && (
+            <Link to="/" className="navbar-logo">
+              Kateglo
+            </Link>
+          )}
 
           {/* Pencarian (desktop) */}
-          <div className="navbar-search-desktop">
-            <KotakCari varian="navbar" />
-          </div>
+          {!adalahBeranda && (
+            <div className="navbar-search-desktop">
+              <KotakCari varian="navbar" />
+            </div>
+          )}
 
           {/* Menu (desktop) */}
           <MenuUtama
@@ -51,9 +57,11 @@ function Navbar() {
         {/* Menu mobile */}
         {menuTerbuka && (
           <div className="navbar-mobile-panel">
-            <div className="navbar-search-mobile">
-              <KotakCari varian="navbar" />
-            </div>
+            {!adalahBeranda && (
+              <div className="navbar-search-mobile">
+                <KotakCari varian="navbar" />
+              </div>
+            )}
             <MenuUtama
               containerClassName=""
               linkClassName="navbar-mobile-link"

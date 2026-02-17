@@ -5,6 +5,7 @@
 
 // Mock react-router-dom SEBELUM import komponen
 const mockNavigate = vi.fn();
+const mockLocation = { pathname: '/kamus', search: '' };
 const mockAuthState = {
   user: null,
   isLoading: false,
@@ -32,7 +33,7 @@ vi.mock('../../../src/context/authContext', () => ({
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   useNavigate: () => mockNavigate,
-  useLocation: () => ({ pathname: '/kamus', search: '' }),
+  useLocation: () => mockLocation,
 }));
 
 import { render, screen, fireEvent } from '@testing-library/react';
@@ -41,6 +42,8 @@ import Navbar from '../../../src/komponen/publik/Navbar';
 describe('Navbar', () => {
   beforeEach(() => {
     mockNavigate.mockClear();
+    mockLocation.pathname = '/kamus';
+    mockLocation.search = '';
     mockAuthState.user = null;
     mockAuthState.isLoading = false;
     mockAuthState.isAuthenticated = false;
@@ -53,6 +56,15 @@ describe('Navbar', () => {
   it('menampilkan logo Kateglo', () => {
     render(<Navbar />);
     expect(screen.getByText('Kateglo')).toBeInTheDocument();
+  });
+
+  it('di beranda menyembunyikan logo dan kotak cari navbar', () => {
+    mockLocation.pathname = '/';
+
+    render(<Navbar />);
+
+    expect(screen.queryByText('Kateglo')).not.toBeInTheDocument();
+    expect(screen.queryByPlaceholderText('Cari kata …')).not.toBeInTheDocument();
   });
 
   it('menampilkan link menu navigasi', () => {

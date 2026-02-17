@@ -30,16 +30,28 @@ code {
     @apply sticky top-0 z-50 bg-gray-100 border-b border-gray-200 shadow-sm;
   }
 
+  .navbar-root-beranda {
+    @apply bg-gray-50 border-gray-50 shadow-none;
+  }
+
   .dark .navbar-root {
     @apply bg-dark-bg-elevated border-dark-border;
   }
 
+  .dark .navbar-root-beranda {
+    @apply bg-dark-bg border-dark-bg;
+  }
+
   .navbar-container {
-    @apply container mx-auto px-4;
+    @apply w-full px-4 sm:px-6 lg:px-8;
   }
 
   .navbar-inner {
     @apply flex items-center justify-between h-14;
+  }
+
+  .navbar-inner-beranda {
+    @apply justify-end;
   }
 
   .navbar-logo {
@@ -66,8 +78,16 @@ code {
     @apply px-3 py-2 text-sm text-gray-700 rounded-md hover:bg-gray-100 hover:text-blue-700 transition-colors;
   }
 
+  .navbar-menu-link-active {
+    @apply text-blue-700;
+  }
+
   .dark .navbar-menu-link {
     @apply text-dark-text hover:bg-dark-bg-hover hover:text-blue-300;
+  }
+
+  .dark .navbar-menu-link-active {
+    @apply text-blue-300;
   }
 
   .navbar-auth-loading {
@@ -115,7 +135,11 @@ code {
   }
 
   .beranda-container {
-    @apply container mx-auto px-4 max-w-4xl;
+    @apply w-full px-4 sm:px-6 lg:px-8;
+  }
+
+  .halaman-dasar-container {
+    @apply w-full px-4 sm:px-6 lg:px-8 py-8;
   }
 
   .beranda-top-menu {
@@ -423,15 +447,19 @@ code {
   }
 
   .kateglo-layout-root {
-    @apply min-h-screen bg-gray-50;
+    @apply min-h-screen bg-gray-50 flex flex-col;
   }
 
   .dark .kateglo-layout-root {
     @apply bg-dark-bg;
   }
 
+  .kateglo-main-content {
+    @apply flex-1;
+  }
+
   .kateglo-footer {
-    @apply bg-gray-50 mt-6;
+    @apply bg-gray-50 mt-auto;
   }
 
   .dark .kateglo-footer {
@@ -439,7 +467,7 @@ code {
   }
 
   .kateglo-footer-content {
-    @apply container mx-auto px-4 py-6 text-sm flex items-center justify-center gap-3;
+    @apply w-full px-4 sm:px-6 lg:px-8 py-6 text-sm flex items-center justify-center gap-3;
   }
 
   .kateglo-version-button {
