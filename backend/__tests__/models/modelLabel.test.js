@@ -5,6 +5,7 @@
 
 const db = require('../../db');
 const ModelLabel = require('../../models/modelLabel');
+const { __private } = require('../../models/modelLabel');
 
 describe('ModelLabel', () => {
   beforeEach(() => {
@@ -365,6 +366,15 @@ describe('ModelLabel', () => {
     expect(db.query).toHaveBeenCalledTimes(1);
   });
 
+  it('cariEntriPerLabel kategori kelas_kata mengembalikan kosong saat label tidak ditemukan', async () => {
+    db.query.mockResolvedValueOnce({ rows: [] });
+
+    const result = await ModelLabel.cariEntriPerLabel('kelas-kata', 'nomina', 20, 0);
+
+    expect(result).toEqual({ data: [], total: 0, label: null });
+    expect(db.query).toHaveBeenCalledTimes(1);
+  });
+
   it('cariEntriPerLabel kategori kelas sebagai alias kelas_kata', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ kode: 'n', nama: 'nomina', keterangan: null }] })
@@ -534,5 +544,116 @@ describe('ModelLabel', () => {
     expect(db.query).toHaveBeenNthCalledWith(2, 'DELETE FROM label WHERE id = $1 RETURNING id', [6]);
     expect(deleted).toBe(true);
     expect(notDeleted).toBe(false);
+  });
+
+  it('ambilKategoriUntukRedaksi mengembalikan objek kosong untuk kategori tidak valid', async () => {
+    const result = await ModelLabel.ambilKategoriUntukRedaksi(['x', 'y', '']);
+
+    expect(result).toEqual({});
+    expect(db.query).not.toHaveBeenCalled();
+  });
+
+  it('ambilKategoriUntukRedaksi memakai daftar default dan normalisasi kategori', async () => {
+    db.query.mockResolvedValue({
+      rows: [
+        { kategori: 'kelas_kata', kode: 'n', nama: 'nomina' },
+        { kategori: 'kelas-kata', kode: 'v', nama: 'verba' },
+        { kategori: 'kelas-kata', kode: 'v', nama: 'verba' },
+        { kategori: 'ragam', kode: 'cak', nama: 'cakapan' },
+        { kategori: 'asing', kode: 'x', nama: 'abaikan' },
+      ],
+    });
+
+    const result = await ModelLabel.ambilKategoriUntukRedaksi();
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('WHERE kategori = ANY($1::text[])'),
+      [expect.arrayContaining(['kelas-kata', 'kelas_kata', 'ragam', 'bidang', 'bahasa'])]
+    );
+    expect(result['kelas-kata']).toEqual([
+      { kode: 'n', nama: 'nomina' },
+      { kode: 'v', nama: 'verba' },
+    ]);
+    expect(result.ragam).toEqual([{ kode: 'cak', nama: 'cakapan' }]);
+    expect(result).toHaveProperty('bentuk-kata');
+    expect(result).toHaveProperty('jenis-rujuk');
+    expect(result).toHaveProperty('penyingkatan');
+  });
+
+  it('ambilKategoriUntukRedaksi menerima daftar kategori terfilter dan deduplikasi input', async () => {
+    db.query.mockResolvedValue({
+      rows: [{ kategori: 'kelas_kata', kode: 'n', nama: 'nomina' }],
+    });
+
+    const result = await ModelLabel.ambilKategoriUntukRedaksi(['kelas', 'kelas_kata', 'kelas-kata', 'tidak-ada']);
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.any(String),
+      [expect.arrayContaining(['kelas-kata', 'kelas_kata'])]
+    );
+    expect(result).toEqual({
+      'kelas-kata': [{ kode: 'n', nama: 'nomina' }],
+    });
+  });
+
+  it('helper private modelLabel menutup branch normalisasi dan deduplikasi', () => {
+    expect(__private.normalisasiKategoriLabel()).toBe('');
+    expect(__private.normalisasiKategoriLabel('kelas_kata')).toBe('kelas-kata');
+    expect(__private.normalisasiKategoriLabel('kelas')).toBe('kelas-kata');
+    expect(__private.normalisasiKategoriLabel(' ragam ')).toBe('ragam');
+
+    expect(__private.kandidatKategoriLabel()).toEqual([]);
+    expect(__private.kandidatKategoriLabel('kelas-kata')).toEqual(['kelas-kata', 'kelas_kata']);
+    expect(__private.kandidatKategoriLabel('bahasa')).toEqual(['bahasa']);
+    expect(__private.kandidatKategoriLabel('')).toEqual([]);
+
+    expect(__private.normalizeLabelValue(' Nomina ')).toBe('nomina');
+
+    const sorted = __private.urutkanLabelPrioritas(
+      [
+        { kode: 'x', nama: 'zeta' },
+        { kode: 'n', nama: 'nomina' },
+        { kode: 'v', nama: 'verba' },
+      ],
+      ['nomina', 'verba']
+    );
+    expect(sorted.map((item) => item.nama)).toEqual(['nomina', 'verba', 'zeta']);
+
+    const sortedInverse = __private.urutkanLabelPrioritas(
+      [
+        { kode: 'x', nama: 'zeta' },
+        { kode: 'n', nama: 'nomina' },
+      ],
+      ['nomina']
+    );
+    expect(sortedInverse.map((item) => item.nama)).toEqual(['nomina', 'zeta']);
+
+    const sortedFallback = __private.urutkanLabelPrioritas(
+      [
+        {},
+        { nama: 'alpha' },
+      ],
+      []
+    );
+    expect(sortedFallback.map((item) => item.nama || '')).toEqual(['', 'alpha']);
+
+    const sortedFallbackThree = __private.urutkanLabelPrioritas(
+      [
+        { nama: 'beta' },
+        {},
+        { nama: 'alpha' },
+      ],
+      []
+    );
+    expect(sortedFallbackThree.map((item) => item.nama || '')).toEqual(['', 'alpha', 'beta']);
+
+    const grouped = {};
+    __private.pushLabelUnik(grouped, 'ragam', { kode: 'cak', nama: 'cakapan' });
+    __private.pushLabelUnik(grouped, 'ragam', { kode: 'CAK', nama: 'cakapan duplikat' });
+    __private.pushLabelUnik(grouped, 'ragam', { kode: 'horm', nama: 'hormat' });
+    expect(grouped.ragam).toEqual([
+      { kode: 'cak', nama: 'cakapan' },
+      { kode: 'horm', nama: 'hormat' },
+    ]);
   });
 });

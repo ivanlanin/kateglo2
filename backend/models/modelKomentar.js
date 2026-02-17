@@ -9,13 +9,13 @@ const SQL_UPDATED_AT = "to_char(k.updated_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS upd
 const SQL_CREATED_AT_RETURNING = "to_char(created_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS created_at";
 const SQL_UPDATED_AT_RETURNING = "to_char(updated_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS updated_at";
 
-function parsePositiveInteger(value, fallback = 1) {
+function parsePositiveInteger(value, fallback) {
   const parsed = Number.parseInt(value, 10);
   if (Number.isNaN(parsed) || parsed < 1) return fallback;
   return parsed;
 }
 
-function parseNonNegativeInteger(value, fallback = 0) {
+function parseNonNegativeInteger(value, fallback) {
   const parsed = Number.parseInt(value, 10);
   if (Number.isNaN(parsed) || parsed < 0) return fallback;
   return parsed;
@@ -143,3 +143,8 @@ class ModelKomentar {
 }
 
 module.exports = ModelKomentar;
+module.exports.__private = {
+  parsePositiveInteger,
+  parseNonNegativeInteger,
+  normalizeBoolean,
+};

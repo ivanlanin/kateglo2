@@ -210,6 +210,107 @@ describe('Kamus', () => {
     expect(screen.getByRole('heading', { name: 'Asal Bahasa Arab' })).toBeInTheDocument();
   });
 
+  it('kategori bentuk dengan kode unsur terikat memakai judul Bentuk Terikat', () => {
+    mockParams = { kategori: 'bentuk', kode: 'prefiks' };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryFn) options.queryFn();
+      const { queryKey } = options;
+      if (queryKey[0] === 'kamus-kategori-entri') {
+        return {
+          data: {
+            data: [{ id: 11, entri: 'meng-' }],
+            total: 1,
+            label: { nama: 'prefiks' },
+          },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Kamus />);
+
+    expect(screen.getByRole('heading', { name: 'Bentuk Terikat Prefiks' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'meng-' })).toBeInTheDocument();
+  });
+
+  it('kategori bentuk dengan kode non-unsur-terikat memakai judul Bentuk Bebas', () => {
+    mockParams = { kategori: 'bentuk', kode: 'dasar' };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryFn) options.queryFn();
+      const { queryKey } = options;
+      if (queryKey[0] === 'kamus-kategori-entri') {
+        return {
+          data: {
+            data: [{ id: 12, entri: 'kata dasar' }],
+            total: 1,
+            label: { nama: 'dasar' },
+          },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Kamus />);
+
+    expect(screen.getByRole('heading', { name: 'Bentuk Bebas Dasar' })).toBeInTheDocument();
+  });
+
+  it('kategori kelas_kata tetap dipetakan ke judul Kelas Kata', () => {
+    mockParams = { kategori: 'kelas_kata', kode: 'nomina' };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryFn) options.queryFn();
+      const { queryKey } = options;
+      if (queryKey[0] === 'kamus-kategori-entri') {
+        return {
+          data: {
+            data: [{ id: 13, entri: 'kata benda' }],
+            total: 1,
+            label: { nama: 'nomina' },
+          },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Kamus />);
+
+    expect(screen.getByRole('heading', { name: 'Kelas Kata Nomina' })).toBeInTheDocument();
+  });
+
+  it('kategori kelas-kata tetap dipetakan ke judul Kelas Kata', () => {
+    mockParams = { kategori: 'kelas-kata', kode: 'verba' };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryFn) options.queryFn();
+      const { queryKey } = options;
+      if (queryKey[0] === 'kamus-kategori-entri') {
+        return {
+          data: {
+            data: [{ id: 14, entri: 'berlari' }],
+            total: 1,
+            label: { nama: 'verba' },
+          },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Kamus />);
+
+    expect(screen.getByRole('heading', { name: 'Kelas Kata Verba' })).toBeInTheDocument();
+  });
+
   it('menampilkan pesan kosong saat hasil tidak ditemukan', () => {
     mockParams = { kata: 'zzz' };
 

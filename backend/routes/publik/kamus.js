@@ -90,7 +90,7 @@ router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
 
 router.get('/komentar/:indeks', authenticateOptional, async (req, res, next) => {
   try {
-    const indeks = decodeURIComponent(req.params.indeks || '').trim();
+    const indeks = decodeURIComponent(req.params.indeks).trim();
     if (!indeks) {
       return res.status(400).json({
         success: false,
@@ -131,7 +131,7 @@ router.get('/komentar/:indeks', authenticateOptional, async (req, res, next) => 
 
 router.post('/komentar/:indeks', authenticate, async (req, res, next) => {
   try {
-    const indeks = decodeURIComponent(req.params.indeks || '').trim();
+    const indeks = decodeURIComponent(req.params.indeks).trim();
     const komentar = String(req.body?.komentar || '').trim();
     const penggunaId = Number(req.user?.pid || 0);
 

@@ -47,6 +47,7 @@ jest.mock('../../models/modelGlosarium', () => ({
 
 jest.mock('../../models/modelLabel', () => ({
   daftarAdmin: jest.fn(),
+  ambilKategoriUntukRedaksi: jest.fn(),
   ambilDenganId: jest.fn(),
   simpan: jest.fn(),
   hapus: jest.fn(),
@@ -70,6 +71,7 @@ const ModelTesaurus = require('../../models/modelTesaurus');
 const ModelGlosarium = require('../../models/modelGlosarium');
 const ModelLabel = require('../../models/modelLabel');
 const ModelKomentar = require('../../models/modelKomentar');
+const { hapusCacheDetailKamus } = require('../../services/layananKamusPublik');
 const rootRouter = require('../../routes');
 
 function createApp() {
@@ -334,7 +336,7 @@ describe('routes/redaksi', () => {
     });
 
     it('POST /api/redaksi/kamus mengembalikan 201 saat berhasil', async () => {
-      ModelLema.simpan.mockResolvedValue({ id: 12, lema: 'kata' });
+      ModelLema.simpan.mockResolvedValue({ id: 12, lema: 'kata', indeks: 'kata' });
 
       const response = await callAsAdmin('post', '/api/redaksi/kamus', {
         body: { lema: 'kata', jenis: 'dasar' },
@@ -342,6 +344,7 @@ describe('routes/redaksi', () => {
 
       expect(response.status).toBe(201);
       expect(response.body.success).toBe(true);
+      expect(hapusCacheDetailKamus).toHaveBeenCalledWith('kata');
     });
 
     it('POST/PUT /api/redaksi/kamus memakai field entri bila tersedia', async () => {
@@ -410,6 +413,55 @@ describe('routes/redaksi', () => {
       });
 
       expect(response.status).toBe(500);
+    });
+
+    it('PUT /api/redaksi/kamus/:id tetap aman saat ambil indeks lama gagal', async () => {
+      ModelLema.ambilDenganId.mockRejectedValueOnce(new Error('ambil indeks gagal'));
+      ModelLema.simpan.mockResolvedValueOnce({ id: 33, entri: 'kata', indeks: null, jenis: 'dasar' });
+
+      const response = await callAsAdmin('put', '/api/redaksi/kamus/33', {
+        body: { entri: 'kata', jenis: 'dasar' },
+      });
+
+      expect(response.status).toBe(200);
+      expect(response.body.success).toBe(true);
+    });
+
+    it('PUT /api/redaksi/kamus/:id invalidasi cache untuk indeks lama dan indeks baru', async () => {
+      ModelLema.ambilDenganId.mockResolvedValueOnce({ id: 40, indeks: 'lama' });
+      ModelLema.simpan.mockResolvedValueOnce({ id: 40, entri: 'kata', indeks: 'baru', jenis: 'dasar' });
+
+      const response = await callAsAdmin('put', '/api/redaksi/kamus/40', {
+        body: { entri: 'kata', jenis: 'dasar' },
+      });
+
+      expect(response.status).toBe(200);
+      expect(hapusCacheDetailKamus).toHaveBeenCalledWith('lama');
+      expect(hapusCacheDetailKamus).toHaveBeenCalledWith('baru');
+    });
+
+    it('PUT /api/redaksi/kamus/:id tetap aman saat ambil indeks lama tidak punya nilai indeks', async () => {
+      ModelLema.ambilDenganId.mockResolvedValueOnce({ id: 41 });
+      ModelLema.simpan.mockResolvedValueOnce({ id: 41, entri: 'kata', indeks: 'baru', jenis: 'dasar' });
+
+      const response = await callAsAdmin('put', '/api/redaksi/kamus/41', {
+        body: { entri: 'kata', jenis: 'dasar' },
+      });
+
+      expect(response.status).toBe(200);
+      expect(hapusCacheDetailKamus).toHaveBeenCalledWith('baru');
+    });
+
+    it('POST /api/redaksi/kamus/:entriId/makna tetap sukses saat ambil indeks cache gagal', async () => {
+      ModelLema.ambilDenganId.mockRejectedValueOnce(new Error('ambil indeks gagal lagi'));
+      ModelLema.simpanMakna.mockResolvedValueOnce({ id: 501, makna: 'arti baru' });
+
+      const response = await callAsAdmin('post', '/api/redaksi/kamus/77/makna', {
+        body: { makna: 'arti baru' },
+      });
+
+      expect(response.status).toBe(201);
+      expect(response.body.success).toBe(true);
     });
 
     it('DELETE /api/redaksi/kamus/:id mengembalikan 404 dan success', async () => {
@@ -562,10 +614,40 @@ describe('routes/redaksi', () => {
       expect(response.body.message).toBe('Komentar tidak ditemukan');
     });
 
+    it('GET /api/redaksi/komentar dan detail meneruskan error model', async () => {
+      ModelKomentar.daftarAdmin.mockRejectedValueOnce(new Error('komentar list gagal'));
+      ModelKomentar.ambilDenganId.mockRejectedValueOnce(new Error('komentar detail gagal'));
+
+      const list = await callAsAdmin('get', '/api/redaksi/komentar');
+      const detail = await callAsAdmin('get', '/api/redaksi/komentar/9');
+
+      expect(list.status).toBe(500);
+      expect(list.body.error).toBe('komentar list gagal');
+      expect(detail.status).toBe(500);
+      expect(detail.body.error).toBe('komentar detail gagal');
+    });
+
+    it('GET /api/redaksi/komentar/:id mengembalikan data saat ditemukan', async () => {
+      ModelKomentar.ambilDenganId.mockResolvedValue({ id: 9, komentar: 'ok' });
+
+      const response = await callAsAdmin('get', '/api/redaksi/komentar/9');
+
+      expect(response.status).toBe(200);
+      expect(response.body.success).toBe(true);
+      expect(response.body.data.id).toBe(9);
+    });
+
     it('PUT /api/redaksi/komentar/:id validasi komentar wajib', async () => {
       const response = await callAsAdmin('put', '/api/redaksi/komentar/9', {
         body: { komentar: '   ', aktif: true },
       });
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe('Komentar wajib diisi');
+    });
+
+    it('PUT /api/redaksi/komentar/:id validasi komentar wajib saat body kosong', async () => {
+      const response = await callAsAdmin('put', '/api/redaksi/komentar/9');
 
       expect(response.status).toBe(400);
       expect(response.body.message).toBe('Komentar wajib diisi');
@@ -581,6 +663,28 @@ describe('routes/redaksi', () => {
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
       expect(ModelKomentar.simpanAdmin).toHaveBeenCalledWith({ id: 9, komentar: 'baru', aktif: true });
+    });
+
+    it('PUT /api/redaksi/komentar/:id mengembalikan 404 jika simpanAdmin null', async () => {
+      ModelKomentar.simpanAdmin.mockResolvedValue(null);
+
+      const response = await callAsAdmin('put', '/api/redaksi/komentar/9', {
+        body: { komentar: 'baru', aktif: true },
+      });
+
+      expect(response.status).toBe(404);
+      expect(response.body.message).toBe('Komentar tidak ditemukan');
+    });
+
+    it('PUT /api/redaksi/komentar/:id meneruskan error', async () => {
+      ModelKomentar.simpanAdmin.mockRejectedValue(new Error('komentar simpan gagal'));
+
+      const response = await callAsAdmin('put', '/api/redaksi/komentar/9', {
+        body: { komentar: 'baru', aktif: true },
+      });
+
+      expect(response.status).toBe(500);
+      expect(response.body.error).toBe('komentar simpan gagal');
     });
   });
 
@@ -760,6 +864,44 @@ describe('routes/redaksi', () => {
       expect(put200.status).toBe(200);
       expect(delete404.status).toBe(404);
       expect(delete200.status).toBe(200);
+    });
+
+    it('GET /api/redaksi/label/kategori mendukung query nama dan default', async () => {
+      ModelLabel.ambilKategoriUntukRedaksi
+        .mockResolvedValueOnce({ ragam: [{ kode: 'cak', nama: 'cakapan' }] })
+        .mockResolvedValueOnce({});
+
+      const withQuery = await callAsAdmin('get', '/api/redaksi/label/kategori?nama=ragam,kelas-kata');
+      const withoutQuery = await callAsAdmin('get', '/api/redaksi/label/kategori');
+
+      expect(withQuery.status).toBe(200);
+      expect(ModelLabel.ambilKategoriUntukRedaksi).toHaveBeenNthCalledWith(1, ['ragam', 'kelas-kata']);
+      expect(withoutQuery.status).toBe(200);
+      expect(ModelLabel.ambilKategoriUntukRedaksi).toHaveBeenNthCalledWith(2, undefined);
+    });
+
+    it('GET /api/redaksi/label/kategori meneruskan error', async () => {
+      ModelLabel.ambilKategoriUntukRedaksi.mockRejectedValue(new Error('kategori label gagal'));
+
+      const response = await callAsAdmin('get', '/api/redaksi/label/kategori');
+
+      expect(response.status).toBe(500);
+      expect(response.body.error).toBe('kategori label gagal');
+    });
+
+    it('POST/PUT /api/redaksi/label validasi urutan >= 1', async () => {
+      const post = await callAsAdmin('post', '/api/redaksi/label', {
+        body: { kategori: 'ragam', kode: 'R', nama: 'Ragam', urutan: 0 },
+      });
+
+      const put = await callAsAdmin('put', '/api/redaksi/label/1', {
+        body: { kategori: 'ragam', kode: 'R', nama: 'Ragam', urutan: -1 },
+      });
+
+      expect(post.status).toBe(400);
+      expect(post.body.message).toBe('Urutan harus bilangan bulat >= 1');
+      expect(put.status).toBe(400);
+      expect(put.body.message).toBe('Urutan harus bilangan bulat >= 1');
     });
 
     it('CRUD /api/redaksi/label meneruskan error', async () => {

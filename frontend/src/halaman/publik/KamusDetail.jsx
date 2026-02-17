@@ -229,9 +229,9 @@ function KamusDetail() {
 
   return (
     <HalamanDasar>
-      <div className={adaSidebar ? 'grid grid-cols-1 lg:grid-cols-3 gap-6' : 'block'}>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Kolom utama: makna */}
-        <div className={adaSidebar ? 'lg:col-span-2' : ''}>
+        <div className="lg:col-span-2">
           {daftarEntri.map((entriItem) => {
             const maknaPerKelas = {};
             (entriItem.makna || []).forEach((m) => {
@@ -588,6 +588,8 @@ export {
   renderMarkdown,
   buatPathKategoriKamus,
   formatTitleCase,
+  normalizeToken,
+  buildLabelMap,
   tentukanKategoriJenis,
   bandingkanEntriKamus,
   bandingkanJenisSubentri,

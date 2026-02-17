@@ -20,6 +20,8 @@ function parseKomentarDate(value) {
   return Number.isNaN(parsed.getTime()) ? null : parsed;
 }
 
+export { parseKomentarDate };
+
 export function formatTanggalKomentar(value) {
   const date = parseKomentarDate(value);
   if (!date) return '-';

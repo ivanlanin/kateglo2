@@ -335,6 +335,15 @@ describe('routes backend', () => {
     delete process.env.JWT_SECRET;
   });
 
+  it('GET /api/publik/kamus/komentar/:indeks meneruskan error model', async () => {
+    ModelKomentar.hitungKomentarAktif.mockRejectedValue(new Error('komentar publik gagal'));
+
+    const response = await request(createApp()).get('/api/publik/kamus/komentar/kata');
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('komentar publik gagal');
+  });
+
   it('POST /api/publik/kamus/komentar/:indeks menyimpan komentar pengguna login', async () => {
     process.env.JWT_SECRET = 'test-secret-routes';
     const token = jwt.sign(
@@ -657,6 +666,132 @@ describe('routes backend', () => {
     expect(response.status).toBe(400);
     expect(response.body.error).toBe('Invalid Query');
     expect(response.body.message).toContain('Offset maksimal adalah 1000');
+  });
+
+  it('GET /api/publik/kamus/komentar/:indeks mengembalikan 400 jika indeks kosong', async () => {
+    const response = await request(createApp()).get('/api/publik/kamus/komentar/%20%20');
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('Indeks wajib diisi');
+  });
+
+  it('POST /api/publik/kamus/komentar/:indeks mengembalikan 401 jika pid tidak tersedia', async () => {
+    process.env.JWT_SECRET = 'test-secret-routes';
+    const token = jwt.sign(
+      {
+        sub: 'google-user',
+        email: 'user@example.com',
+        name: 'User',
+        provider: 'google',
+        peran: 'pengguna',
+      },
+      process.env.JWT_SECRET
+    );
+
+    const response = await request(createApp())
+      .post('/api/publik/kamus/komentar/kata')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ komentar: 'isi' });
+
+    expect(response.status).toBe(401);
+    expect(response.body.message).toBe('Autentikasi diperlukan');
+    delete process.env.JWT_SECRET;
+  });
+
+  it('POST /api/publik/kamus/komentar/:indeks validasi indeks dan komentar wajib', async () => {
+    process.env.JWT_SECRET = 'test-secret-routes';
+    const token = jwt.sign(
+      {
+        sub: 'google-user',
+        pid: 17,
+        email: 'user@example.com',
+        name: 'User',
+        provider: 'google',
+        peran: 'pengguna',
+      },
+      process.env.JWT_SECRET
+    );
+
+    const noIndeks = await request(createApp())
+      .post('/api/publik/kamus/komentar/%20')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ komentar: 'isi' });
+
+    const noKomentar = await request(createApp())
+      .post('/api/publik/kamus/komentar/kata')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ komentar: '   ' });
+
+    expect(noIndeks.status).toBe(400);
+    expect(noIndeks.body.message).toBe('Indeks wajib diisi');
+    expect(noKomentar.status).toBe(400);
+    expect(noKomentar.body.message).toBe('Komentar wajib diisi');
+    delete process.env.JWT_SECRET;
+  });
+
+  it('POST /api/publik/kamus/komentar/:indeks validasi komentar saat body kosong', async () => {
+    process.env.JWT_SECRET = 'test-secret-routes';
+    const token = jwt.sign(
+      {
+        sub: 'google-user',
+        pid: 17,
+        email: 'user@example.com',
+        name: 'User',
+        provider: 'google',
+        peran: 'pengguna',
+      },
+      process.env.JWT_SECRET
+    );
+
+    const response = await request(createApp())
+      .post('/api/publik/kamus/komentar/kata')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('Komentar wajib diisi');
+    delete process.env.JWT_SECRET;
+  });
+
+  it('GET /api/publik/kamus/kategori/:kategori/:kode meneruskan error decode parameter', async () => {
+    const response = await request(createApp()).get('/api/publik/kamus/kategori/ragam/%E0%A4%A');
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toContain('Failed to decode param');
+  });
+
+  it('POST /api/publik/kamus/komentar/:indeks meneruskan error model', async () => {
+    process.env.JWT_SECRET = 'test-secret-routes';
+    const token = jwt.sign(
+      {
+        sub: 'google-user',
+        pid: 13,
+        email: 'user@example.com',
+        name: 'User',
+        provider: 'google',
+        peran: 'pengguna',
+      },
+      process.env.JWT_SECRET
+    );
+    ModelKomentar.upsertKomentarPengguna.mockRejectedValue(new Error('simpan komentar gagal'));
+
+    const response = await request(createApp())
+      .post('/api/publik/kamus/komentar/kata')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ komentar: 'isi' });
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('simpan komentar gagal');
+    delete process.env.JWT_SECRET;
+  });
+
+  it('GET /api/publik/kamus/detail/:indeks meneruskan error saat ambil saran gagal', async () => {
+    layananKamusPublik.ambilDetailKamus.mockResolvedValue(null);
+    ModelEntri.saranEntri.mockRejectedValue(new Error('saran gagal'));
+
+    const response = await request(createApp()).get('/api/publik/kamus/detail/tidak-ada');
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('saran gagal');
   });
 });
 

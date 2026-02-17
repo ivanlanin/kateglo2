@@ -24,14 +24,30 @@ jest.mock('../../models/modelGlosarium', () => ({
   cariFrasaMengandungKataUtuh: jest.fn()
 }));
 
+jest.mock('../../services/layananCache', () => ({
+  getJson: jest.fn(),
+  setJson: jest.fn(),
+  delKey: jest.fn(),
+  getTtlSeconds: jest.fn(() => 900),
+}));
+
 const ModelEntri = require('../../models/modelEntri');
 const ModelTesaurus = require('../../models/modelTesaurus');
 const ModelGlosarium = require('../../models/modelGlosarium');
-const { cariKamus, ambilDetailKamus } = require('../../services/layananKamusPublik');
+const { getJson, setJson, delKey } = require('../../services/layananCache');
+const {
+  cariKamus,
+  ambilDetailKamus,
+  hapusCacheDetailKamus,
+  buatCacheKeyDetailKamus,
+} = require('../../services/layananKamusPublik');
 
 describe('layananKamusPublik.cariKamus', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    getJson.mockResolvedValue(null);
+    setJson.mockResolvedValue(undefined);
+    delKey.mockResolvedValue(undefined);
     ModelTesaurus.ambilDetail.mockResolvedValue(null);
     ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
   });
@@ -71,6 +87,26 @@ describe('layananKamusPublik.cariKamus', () => {
 describe('layananKamusPublik.ambilDetailKamus', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    getJson.mockResolvedValue(null);
+    setJson.mockResolvedValue(undefined);
+    delKey.mockResolvedValue(undefined);
+  });
+
+  it('membuat cache key detail kamus dalam huruf kecil ter-encode', () => {
+    expect(buatCacheKeyDetailKamus('Kata Dasar')).toBe('kamus:detail:kata%20dasar');
+  });
+
+  it('membuat cache key aman saat indeks undefined', () => {
+    expect(buatCacheKeyDetailKamus()).toBe('kamus:detail:');
+  });
+
+  it('hapusCacheDetailKamus no-op untuk indeks kosong dan memanggil delKey untuk indeks valid', async () => {
+    await hapusCacheDetailKamus('   ');
+    await hapusCacheDetailKamus(undefined);
+    await hapusCacheDetailKamus('Kata Dasar');
+
+    expect(delKey).toHaveBeenCalledTimes(1);
+    expect(delKey).toHaveBeenCalledWith('kamus:detail:kata%20dasar');
   });
 
   it('mengembalikan null jika indeks kosong', async () => {
@@ -94,6 +130,15 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
 
     expect(ModelEntri.ambilEntriPerIndeks).toHaveBeenCalledWith('keras');
     expect(result).toBeNull();
+  });
+
+  it('mengembalikan hasil dari cache tanpa query model saat cache tersedia', async () => {
+    getJson.mockResolvedValue({ indeks: 'kata', entri: [] });
+
+    const result = await ambilDetailKamus('kata');
+
+    expect(result).toEqual({ indeks: 'kata', entri: [] });
+    expect(ModelEntri.ambilEntriPerIndeks).not.toHaveBeenCalled();
   });
 
   it('mengembalikan detail multi-entri berdasarkan indeks dengan makna/contoh/subentri', async () => {
