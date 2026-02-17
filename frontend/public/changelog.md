@@ -9,6 +9,7 @@
 - Menghilangkan sufiks angka dari pemenggalan kata
 - Mengubah autokomplet kamus untuk mencari berdasarkan indeks dan menampilkan detail jika dipilih spesifik
 - Memberi tautan di lencana detail kamus untuk menampilkan daftar kata dalam kategori itu
+- Membuat tampilan makna menjadi satu baris seperti kamus cetak
 
 ## 2026-02-16 Senin
 

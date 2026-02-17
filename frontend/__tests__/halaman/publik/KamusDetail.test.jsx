@@ -190,8 +190,8 @@ describe('KamusDetail', () => {
     expect(screen.getByText('species', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('H2O')).toBeInTheDocument();
     expect(screen.getByText(/arti contoh/i)).toBeInTheDocument();
-    expect(screen.getByText(/^1\.$/)).toBeInTheDocument();
-    expect(screen.getByText(/^2\.$/)).toBeInTheDocument();
+    expect(screen.getByText('(1)')).toBeInTheDocument();
+    expect(screen.getByText('(2)')).toBeInTheDocument();
     expect(screen.getByText('Tesaurus')).toBeInTheDocument();
     expect(screen.getByText('Sinonim:')).toBeInTheDocument();
     expect(screen.getByText('Antonim:')).toBeInTheDocument();
@@ -283,7 +283,7 @@ describe('KamusDetail', () => {
     expect(screen.getByText('contoh saja')).toBeInTheDocument();
   });
 
-  it('tidak menampilkan nomor makna jika hanya satu makna', () => {
+  it('tidak menampilkan prefiks nomor saat hanya satu makna', () => {
     mockUseQuery.mockReturnValue({
       isLoading: false,
       isError: false,
@@ -298,7 +298,7 @@ describe('KamusDetail', () => {
 
     render(<KamusDetail />);
 
-    expect(screen.queryByText(/^1\.$/)).not.toBeInTheDocument();
+    expect(screen.queryByText('(1)')).not.toBeInTheDocument();
     expect(screen.getByText('hanya satu makna')).toBeInTheDocument();
   });
 
