@@ -4,7 +4,6 @@
 
 import { useEffect } from 'react';
 import KotakCari from '../../komponen/publik/KotakCari';
-import MenuUtama from '../../komponen/publik/MenuUtama';
 
 function Beranda() {
   useEffect(() => {
@@ -13,12 +12,6 @@ function Beranda() {
 
   return (
     <div className="beranda-container">
-      <MenuUtama
-        containerClassName="beranda-top-menu"
-        linkClassName="beranda-top-menu-link"
-        loadingClassName="beranda-top-menu-loading"
-      />
-
       {/* Hero / Jumbotron */}
       <div className="beranda-hero">
         <h1 className="beranda-title">Kateglo</h1>

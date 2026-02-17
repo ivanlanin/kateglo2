@@ -12,7 +12,7 @@ function HalamanDasar({ judul, breadcrumb, children }) {
   }, [judul]);
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="halaman-dasar-container">
       {breadcrumb}
       {judul && <h1 className="page-title">{judul}</h1>}
       {children}

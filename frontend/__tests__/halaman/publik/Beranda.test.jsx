@@ -32,14 +32,11 @@ describe('Beranda', () => {
     mockNavigate.mockReset();
   });
 
-  it('menampilkan hero dan menu kanan atas', () => {
+  it('menampilkan hero beranda', () => {
     render(<Beranda />);
 
     expect(screen.getByText('Kateglo')).toBeInTheDocument();
     expect(screen.getByText(/Kamus, tesaurus, dan glosarium bahasa Indonesia/i)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Kamus/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Tesaurus/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Glosarium/i })).toBeInTheDocument();
     expect(screen.queryByText('Definisi dan makna kata')).not.toBeInTheDocument();
   });
 

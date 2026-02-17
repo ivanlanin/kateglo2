@@ -32,14 +32,15 @@ describe('TataLetakAdmin', () => {
     );
 
     expect(document.title).toBe('Kamus — Redaksi Kateglo');
-    expect(screen.getByText('admin@kateglo.id')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Redaksi' })).toHaveAttribute('href', '/redaksi');
     expect(screen.getByRole('link', { name: 'Kateglo' })).toHaveAttribute('href', '/');
     expect(screen.queryByRole('link', { name: 'Dasbor' })).not.toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Kamus' }).className).toContain('border-blue-600');
+    const menuKamus = screen.getAllByRole('link', { name: 'Kamus' });
+    expect(menuKamus.some((link) => link.className.includes('navbar-menu-link-active'))).toBe(true);
+    expect(screen.getByRole('link', { name: 'Kebijakan Privasi' })).toHaveAttribute('href', '/kebijakan-privasi');
     expect(screen.getByText('Isi Admin')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByText('Keluar'));
+    fireEvent.click(screen.getAllByRole('button', { name: 'Keluar' })[0]);
     expect(mockLogout).toHaveBeenCalled();
     expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true });
   });
@@ -54,7 +55,22 @@ describe('TataLetakAdmin', () => {
 
     expect(document.title).toBe('Redaksi Kateglo');
     expect(screen.getByRole('link', { name: 'Redaksi' })).toHaveAttribute('href', '/redaksi');
-    expect(screen.getByText('Redaksi', { selector: 'span' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Kamus' }).className).toContain('border-blue-600');
+    expect(screen.queryByText('admin@kateglo.id')).not.toBeInTheDocument();
+    const menuKamus = screen.getAllByRole('link', { name: 'Kamus' });
+    expect(menuKamus.some((link) => link.className.includes('navbar-menu-link-active'))).toBe(true);
+  });
+
+  it('menampilkan menu burger mobile dan bisa dibuka', () => {
+    render(
+      <MemoryRouter initialEntries={['/redaksi/kamus']}>
+        <TataLetakAdmin>Konten</TataLetakAdmin>
+      </MemoryRouter>
+    );
+
+    const toggleBtn = screen.getByLabelText('Toggle menu');
+    fireEvent.click(toggleBtn);
+
+    const menuKamus = screen.getAllByRole('link', { name: 'Kamus' });
+    expect(menuKamus.length).toBeGreaterThan(1);
   });
 });

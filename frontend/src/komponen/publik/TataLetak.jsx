@@ -4,12 +4,10 @@
 
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 
 function TataLetak() {
-  const location = useLocation();
-  const adalahBeranda = location.pathname === '/';
   const [modalTerbuka, setModalTerbuka] = useState(false);
   const [tabAktif, setTabAktif] = useState('changelog');
   const [sedangMemuat, setSedangMemuat] = useState(false);
@@ -62,32 +60,32 @@ function TataLetak() {
   return (
     <>
       <div className="kateglo-layout-root">
-      {!adalahBeranda && <Navbar />}
-      <main>
-        <Outlet />
-      </main>
-      <footer className="kateglo-footer">
-        <div className="kateglo-footer-content">
-          <button
-            type="button"
-            onClick={bukaModal}
-            className="kateglo-version-button"
-          >
-            Kateglo {appTimestamp}
-          </button>
-          <button
-            type="button"
-            onClick={() => setModeGelap((v) => !v)}
-            className="kateglo-theme-toggle"
-            title={modeGelap ? 'Mode terang' : 'Mode gelap'}
-          >
-            {modeGelap ? '☀️' : '🌙'}
-          </button>
-          <Link to="/kebijakan-privasi" className="link-action text-sm">
-            Kebijakan Privasi
-          </Link>
-        </div>
-      </footer>
+        <Navbar />
+        <main className="kateglo-main-content">
+          <Outlet />
+        </main>
+        <footer className="kateglo-footer">
+          <div className="kateglo-footer-content">
+            <button
+              type="button"
+              onClick={bukaModal}
+              className="kateglo-version-button"
+            >
+              Kateglo {appTimestamp}
+            </button>
+            <button
+              type="button"
+              onClick={() => setModeGelap((v) => !v)}
+              className="kateglo-theme-toggle"
+              title={modeGelap ? 'Mode terang' : 'Mode gelap'}
+            >
+              {modeGelap ? '☀️' : '🌙'}
+            </button>
+            <Link to="/kebijakan-privasi" className="link-action text-sm">
+              Kebijakan Privasi
+            </Link>
+          </div>
+        </footer>
       </div>
 
       {modalTerbuka && (
