@@ -10,6 +10,7 @@
 - Mengubah autokomplet kamus untuk mencari berdasarkan indeks dan menampilkan detail jika dipilih spesifik
 - Memberi tautan di lencana detail kamus untuk menampilkan daftar kata dalam kategori itu
 - Membuat tampilan makna menjadi satu baris seperti kamus cetak
+- Mengubah perilaku entri "varian" menjadi hanya ditampilkan di induknya
 
 ## 2026-02-16 Senin
 

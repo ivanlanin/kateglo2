@@ -211,4 +211,60 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
 
     expect(result.tesaurus).toEqual({ sinonim: [], antonim: [] });
   });
+
+  it('menurunkan entri varian ke subentri induk dan tidak menampilkannya sebagai entri utama', async () => {
+    ModelEntri.ambilEntriPerIndeks.mockResolvedValue([
+      {
+        id: 10,
+        entri: 'be-',
+        indeks: 'be',
+        homonim: null,
+        urutan: 1,
+        jenis: 'dasar',
+        induk: null,
+        pemenggalan: null,
+        lafal: null,
+        varian: null,
+        jenis_rujuk: null,
+        entri_rujuk: null,
+      },
+      {
+        id: 11,
+        entri: 'be-',
+        indeks: 'be',
+        homonim: null,
+        urutan: 2,
+        jenis: 'varian',
+        induk: 10,
+        pemenggalan: null,
+        lafal: null,
+        varian: null,
+        jenis_rujuk: null,
+        entri_rujuk: null,
+      },
+    ]);
+
+    ModelEntri.ambilMakna
+      .mockResolvedValueOnce([{ id: 1001, makna: 'imbuhan' }])
+      .mockResolvedValueOnce([]);
+    ModelEntri.ambilContoh
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([]);
+    ModelEntri.ambilSubentri
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([]);
+    ModelEntri.ambilRantaiInduk
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([{ id: 99, entri: 'ber-', indeks: 'ber' }]);
+    ModelTesaurus.ambilDetail.mockResolvedValue(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+
+    const result = await ambilDetailKamus('be-');
+
+    expect(result.entri).toHaveLength(1);
+    expect(result.entri[0].jenis).toBe('dasar');
+    expect(result.entri[0].subentri.varian).toEqual([
+      expect.objectContaining({ id: 11, entri: 'be-', jenis: 'varian' }),
+    ]);
+  });
 });

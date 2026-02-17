@@ -369,4 +369,33 @@ describe('KamusDetail', () => {
     expect(supPemenggalan).not.toBeNull();
     expect(supPemenggalan?.textContent).toBe('3');
   });
+
+  it('menampilkan subentri varian sebagai teks non-klik', () => {
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        entri: [
+          {
+            id: 1,
+            entri: 'ber-',
+            indeks: 'ber',
+            jenis: 'dasar',
+            makna: [{ id: 11, kelas_kata: null, makna: 'imbuhan' }],
+            subentri: {
+              varian: [{ id: 2, entri: 'be-', indeks: 'be', jenis: 'varian' }],
+            },
+          },
+        ],
+        tesaurus: { sinonim: [], antonim: [] },
+        glosarium: [],
+      },
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByText('Varian')).toBeInTheDocument();
+    expect(screen.getByText('be-')).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'be-' })).not.toBeInTheDocument();
+  });
 });

@@ -84,6 +84,7 @@ async function ambilDetailKamus(indeksAtauEntri) {
 
       return {
         id: dataEntri.id,
+        induk_id: dataEntri.induk || null,
         entri: bacaTeksEntri(dataEntri),
         indeks: dataEntri.indeks,
         homonim: dataEntri.homonim,
@@ -103,6 +104,36 @@ async function ambilDetailKamus(indeksAtauEntri) {
     })
   );
 
+  const entriNonVarian = detailEntri.filter((item) => item.jenis !== 'varian');
+  const entriVarian = detailEntri.filter((item) => item.jenis === 'varian');
+
+  if (entriNonVarian.length > 0 && entriVarian.length > 0) {
+    const petaInduk = new Map(entriNonVarian.map((item) => [item.id, item]));
+
+    for (const itemVarian of entriVarian) {
+      const induk = petaInduk.get(itemVarian.induk_id);
+      if (!induk) continue;
+
+      if (!induk.subentri.varian) {
+        induk.subentri.varian = [];
+      }
+
+      const sudahAda = induk.subentri.varian.some((s) => s.id === itemVarian.id);
+      if (!sudahAda) {
+        induk.subentri.varian.push({
+          id: itemVarian.id,
+          entri: itemVarian.entri,
+          indeks: itemVarian.indeks,
+          urutan: itemVarian.urutan,
+          jenis: itemVarian.jenis,
+          lafal: itemVarian.lafal,
+        });
+      }
+    }
+  }
+
+  const entriUntukRespons = entriNonVarian.length > 0 ? entriNonVarian : detailEntri;
+
   const [tesaurusDetail, glosarium] = await Promise.all([
     ModelTesaurus.ambilDetail(indeksTarget),
     ModelGlosarium.cariFrasaMengandungKataUtuh(indeksTarget),
@@ -117,7 +148,7 @@ async function ambilDetailKamus(indeksAtauEntri) {
 
   return {
     indeks: indeksTarget,
-    entri: detailEntri,
+    entri: entriUntukRespons,
     tesaurus,
     glosarium,
   };
