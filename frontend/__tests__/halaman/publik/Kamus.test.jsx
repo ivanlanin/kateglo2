@@ -43,7 +43,15 @@ describe('Kamus', () => {
       const { queryKey } = options;
       if (queryKey[0] === 'kamus-kategori') {
         return {
-          data: { abjad: [{ kode: 'A', nama: 'A' }], jenis: [{ kode: 'dasar', nama: 'dasar' }] },
+          data: {
+            abjad: [{ kode: 'A', nama: 'A' }],
+            bentuk: [{ kode: 'dasar', nama: 'dasar' }],
+            kelas_kata: [],
+            ragam: [],
+            ekspresi: [],
+            bahasa: [],
+            bidang: [],
+          },
           isLoading: false,
           isError: false,
         };
@@ -54,7 +62,7 @@ describe('Kamus', () => {
     render(<Kamus />);
 
     expect(screen.getByText('Abjad')).toBeInTheDocument();
-    expect(screen.getByText('Jenis')).toBeInTheDocument();
+    expect(screen.getByText('Bentuk')).toBeInTheDocument();
   });
 
   it('menampilkan hasil pencarian kata', () => {
@@ -126,9 +134,10 @@ describe('Kamus', () => {
         return {
           data: {
             abjad: [],
-            jenis: [],
+            bentuk: [],
             kelas_kata: [],
             ragam: [],
+            ekspresi: [],
             bahasa: [],
             bidang: [],
           },
@@ -143,6 +152,31 @@ describe('Kamus', () => {
 
     expect(screen.getByRole('heading', { name: 'khusus Kata dasar' })).toBeInTheDocument();
     expect(screen.getByText(/Tidak ada entri untuk kategori ini/i)).toBeInTheDocument();
+  });
+
+  it('menggunakan label Asal Bahasa pada judul kategori bahasa', () => {
+    mockParams = { kategori: 'bahasa', kode: 'arab' };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryFn) options.queryFn();
+      const { queryKey } = options;
+      if (queryKey[0] === 'kamus-kategori-entri') {
+        return {
+          data: {
+            data: [{ id: 9, entri: 'kabar' }],
+            total: 1,
+            label: { nama: 'arab' },
+          },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Kamus />);
+
+    expect(screen.getByRole('heading', { name: 'Asal Bahasa Arab' })).toBeInTheDocument();
   });
 
   it('menampilkan pesan kosong saat hasil tidak ditemukan', () => {

@@ -11,6 +11,7 @@
 - Memberi tautan di lencana detail kamus untuk menampilkan daftar kata dalam kategori itu
 - Membuat tampilan makna menjadi satu baris seperti kamus cetak
 - Mengubah perilaku entri "varian" menjadi hanya ditampilkan di induknya
+- Memisahkan jenis entri menjadi bentuk (dasar, turunan, gabungan) dan ekspresi (idiom, peribahasa)
 
 ## 2026-02-16 Senin
 

@@ -34,6 +34,13 @@ function formatTitleCase(teks = '') {
     .join(' ');
 }
 
+function tentukanKategoriJenis(jenis = '') {
+  const nilai = String(jenis || '').trim().toLowerCase();
+  if (['dasar', 'turunan', 'gabungan'].includes(nilai)) return 'bentuk';
+  if (['idiom', 'peribahasa'].includes(nilai)) return 'ekspresi';
+  return 'jenis';
+}
+
 function KamusDetail() {
   const { indeks } = useParams();
 
@@ -204,7 +211,7 @@ function KamusDetail() {
                       </span>
                     ) : (
                       <Link
-                        to={buatPathKategoriKamus('jenis', entriItem.jenis || 'dasar')}
+                        to={buatPathKategoriKamus(tentukanKategoriJenis(entriItem.jenis || 'dasar'), entriItem.jenis || 'dasar')}
                         className="kamus-detail-tag-purple mt-1"
                       >
                         {formatTitleCase(entriItem.jenis || 'dasar')}
