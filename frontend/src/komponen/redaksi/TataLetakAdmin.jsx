@@ -21,11 +21,17 @@ function TataLetakAdmin({ judul, children }) {
   const location = useLocation();
   const appTimestamp = __APP_TIMESTAMP__;
   const [menuTerbuka, setMenuTerbuka] = useState(false);
-  const [modeGelap, setModeGelap] = useState(() => {
+  const [modeGelap, setModeGelap] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
     const tersimpan = localStorage.getItem('kateglo-theme');
-    if (tersimpan) return tersimpan === 'dark';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  });
+    if (tersimpan) {
+      setModeGelap(tersimpan === 'dark');
+      return;
+    }
+    setModeGelap(window.matchMedia('(prefers-color-scheme: dark)').matches);
+  }, []);
 
   useEffect(() => {
     document.title = judul
@@ -34,6 +40,7 @@ function TataLetakAdmin({ judul, children }) {
   }, [judul]);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     document.documentElement.classList.toggle('dark', modeGelap);
     localStorage.setItem('kateglo-theme', modeGelap ? 'dark' : 'light');
   }, [modeGelap]);

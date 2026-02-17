@@ -13,15 +13,22 @@ function TataLetak() {
   const [sedangMemuat, setSedangMemuat] = useState(false);
   const [teksChangelog, setTeksChangelog] = useState('');
   const [teksTodo, setTeksTodo] = useState('');
-  const [modeGelap, setModeGelap] = useState(() => {
-    const tersimpan = localStorage.getItem('kateglo-theme');
-    if (tersimpan) return tersimpan === 'dark';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  });
+  const [modeGelap, setModeGelap] = useState(false);
 
   const appTimestamp = __APP_TIMESTAMP__;
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const tersimpan = localStorage.getItem('kateglo-theme');
+    if (tersimpan) {
+      setModeGelap(tersimpan === 'dark');
+      return;
+    }
+    setModeGelap(window.matchMedia('(prefers-color-scheme: dark)').matches);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
     document.documentElement.classList.toggle('dark', modeGelap);
     localStorage.setItem('kateglo-theme', modeGelap ? 'dark' : 'light');
   }, [modeGelap]);

@@ -5,11 +5,29 @@ const storageKey = 'kateglo-auth-token';
 const AuthContext = createContext(null);
 
 function AuthProvider({ children }) {
-  const [token, setToken] = useState(() => localStorage.getItem(storageKey) || '');
+  const [token, setToken] = useState('');
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(Boolean(localStorage.getItem(storageKey)));
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const tersimpan = localStorage.getItem(storageKey) || '';
+    if (!tersimpan) {
+      setIsLoading(false);
+      return;
+    }
+    setToken(tersimpan);
+    setIsLoading(true);
+  }, []);
 
   const setAuthToken = useCallback((nextToken) => {
+    if (typeof window === 'undefined') {
+      setToken(nextToken || '');
+      setUser(null);
+      setIsLoading(Boolean(nextToken));
+      return;
+    }
+
     if (!nextToken) {
       localStorage.removeItem(storageKey);
       setToken('');
@@ -24,6 +42,13 @@ function AuthProvider({ children }) {
   }, []);
 
   const logout = useCallback(() => {
+    if (typeof window === 'undefined') {
+      setToken('');
+      setUser(null);
+      setIsLoading(false);
+      return;
+    }
+
     localStorage.removeItem(storageKey);
     setToken('');
     setUser(null);
@@ -47,7 +72,9 @@ function AuthProvider({ children }) {
         }
       } catch (_error) {
         if (isMounted) {
-          localStorage.removeItem(storageKey);
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem(storageKey);
+          }
           setToken('');
           setUser(null);
         }

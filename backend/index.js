@@ -10,17 +10,24 @@ const compression = require('compression');
 const routes = require('./routes');
 const authRoutes = require('./routes/auth');
 const shareRoutes = require('./routes/share');
+const { pasangFrontendRuntime } = require('./services/layananSsrRuntime');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 const logger = require('./config/logger');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const trustProxy = (process.env.TRUST_PROXY || 'true') === 'true';
+const enableHelmetCsp = (process.env.HELMET_ENABLE_CSP || 'false') === 'true';
+const isProduction = process.env.NODE_ENV === 'production';
 
-const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173')
+const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173,http://localhost:3000')
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean);
+
+if (!isProduction && !allowedOrigins.includes('http://localhost:3000')) {
+  allowedOrigins.push('http://localhost:3000');
+}
 
 const requireOrigin = (process.env.API_REQUIRE_ORIGIN || 'true') === 'true';
 const requireFrontendKey = (process.env.API_REQUIRE_FRONTEND_KEY || 'false') === 'true';
@@ -46,7 +53,9 @@ const corsOptions = {
 
 // Middleware
 app.set('trust proxy', trustProxy);
-app.use(helmet()); // Security headers
+app.use(helmet({
+  contentSecurityPolicy: enableHelmetCsp,
+}));
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 app.use(compression()); // Gzip compression
@@ -56,6 +65,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api', (req, res, next) => {
   const origin = req.get('origin');
   const requestFrontendKey = req.get('x-frontend-key');
+  const bypassFrontendKeyForLocalSsr = !isProduction && origin === 'http://localhost:3000';
 
   if (!origin && requireOrigin) {
     return res.status(403).json({
@@ -71,7 +81,7 @@ app.use('/api', (req, res, next) => {
     });
   }
 
-  if (requireFrontendKey) {
+  if (requireFrontendKey && !bypassFrontendKeyForLocalSsr) {
     if (!frontendSharedKey) {
       logger.error('API_REQUIRE_FRONTEND_KEY aktif tetapi FRONTEND_SHARED_KEY belum diatur');
       return res.status(503).json({
@@ -124,6 +134,7 @@ app.get('/health', (req, res) => {
 app.use('/auth', authRoutes);
 app.use('/share', shareRoutes);
 app.use('/api', routes);
+pasangFrontendRuntime(app);
 
 // Error handlers
 app.use(notFoundHandler);
