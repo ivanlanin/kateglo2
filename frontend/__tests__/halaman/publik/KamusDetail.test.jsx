@@ -62,10 +62,6 @@ describe('KamusDetail', () => {
           pemenggalan: 'ka-ta',
           jenis: 'dasar',
           makna: [{ id: 1, kelas_kata: 'n', makna: 'unsur bahasa' }],
-          serupa: [
-            { id: 11, entri: 'kata (1)', lafal: null },
-            { entri: 'kata- (2)', lafal: 'ka.ta' },
-          ],
           subentri: {
             turunan: [{ id: 7, entri: 'berkata' }],
           },
@@ -81,10 +77,6 @@ describe('KamusDetail', () => {
     expect(screen.getByText('/ka-ta/')).toBeInTheDocument();
 
     expect(screen.getByText('berkata')).toBeInTheDocument();
-    expect(screen.getByText('Serupa')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /kata\s*1/i })).toHaveAttribute('href', '/kamus/detail/kata%20(1)');
-    expect(screen.getByRole('link', { name: /kata-\s*2/i })).toHaveAttribute('href', '/kamus/detail/kata-%20(2)');
-    expect(screen.getByText('/ka.ta/')).toBeInTheDocument();
     expect(screen.getByText('Tesaurus')).toBeInTheDocument();
     expect(screen.getByText('Glosarium')).toBeInTheDocument();
     expect(ambilDetailKamus).toHaveBeenCalledWith('kata');
@@ -362,7 +354,6 @@ describe('KamusDetail', () => {
         pemenggalan: 'per (3)',
         makna: [{ id: 1, kelas_kata: '-', makna: 'makna contoh' }],
         subentri: {},
-        serupa: [{ id: 2, entri: 'per- (4)', lafal: 'per (5)' }],
         tesaurus: { sinonim: [], antonim: [] },
         glosarium: [],
       },
@@ -372,13 +363,10 @@ describe('KamusDetail', () => {
 
     const supLafal = container.querySelector('.kamus-detail-heading-pronunciation sup');
     const supPemenggalan = container.querySelector('.kamus-detail-heading-split sup');
-    const supSerupaLafal = container.querySelector('.secondary-text sup');
 
     expect(supLafal).not.toBeNull();
     expect(supLafal?.textContent).toBe('2');
     expect(supPemenggalan).not.toBeNull();
     expect(supPemenggalan?.textContent).toBe('3');
-    expect(supSerupaLafal).not.toBeNull();
-    expect(supSerupaLafal?.textContent).toBe('5');
   });
 });

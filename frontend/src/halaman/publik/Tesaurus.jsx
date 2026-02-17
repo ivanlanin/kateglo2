@@ -82,16 +82,8 @@ function Tesaurus() {
     ? `Hasil Pencarian \u201c${decodeURIComponent(kata)}\u201d`
     : 'Tesaurus';
 
-  const breadcrumbPencarian = kata ? (
-    <div className="kamus-detail-breadcrumb">
-      <Link to="/tesaurus" className="kamus-detail-breadcrumb-link">Tesaurus</Link>
-      {' › '}
-      <span className="kamus-detail-breadcrumb-current">Pencarian</span>
-    </div>
-  ) : null;
-
   return (
-    <HalamanDasar judul={judulHalaman} breadcrumb={breadcrumbPencarian}>
+    <HalamanDasar judul={judulHalaman}>
 
       <QueryFeedback
         isLoading={isLoading}

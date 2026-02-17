@@ -1063,6 +1063,14 @@ code {
     @apply text-gray-900;
   }
 
+  .kamus-detail-heading-chain-link {
+    @apply text-gray-700 hover:underline;
+  }
+
+  .kamus-detail-heading-chain-separator {
+    @apply text-gray-500;
+  }
+
   .kamus-detail-heading-pronunciation {
     @apply text-gray-600;
   }
@@ -1073,6 +1081,10 @@ code {
 
   .dark .kamus-detail-heading-main {
     @apply text-dark-text;
+  }
+
+  .dark .kamus-detail-heading-chain-link {
+    @apply text-dark-text-muted;
   }
 
   .dark .kamus-detail-heading-pronunciation,
@@ -1146,6 +1158,26 @@ code {
 
   .kamus-detail-def-list {
     @apply space-y-2 text-gray-800;
+  }
+
+  .kamus-detail-subentry-group {
+    @apply mb-4 last:mb-0;
+  }
+
+  .kamus-detail-subentry-heading-row {
+    @apply flex flex-wrap items-center gap-2 mb-2;
+  }
+
+  .kamus-detail-subentry-flow {
+    @apply text-base leading-relaxed;
+  }
+
+  .kamus-detail-subentry-link {
+    @apply text-base text-blue-700 hover:underline;
+  }
+
+  .dark .kamus-detail-subentry-link {
+    @apply text-blue-300;
   }
 
   .kamus-detail-def-item {
