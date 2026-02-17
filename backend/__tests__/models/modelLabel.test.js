@@ -65,13 +65,20 @@ describe('ModelLabel', () => {
     ]);
 
     // Alias kompatibilitas route lama
-    expect(result.jenis).toHaveLength(5);
+    expect(result.jenis).toHaveLength(12);
     expect(result.jenis).toEqual([
       { kode: 'dasar', nama: 'dasar' },
       { kode: 'turunan', nama: 'turunan' },
       { kode: 'gabungan', nama: 'gabungan' },
       { kode: 'idiom', nama: 'idiom' },
       { kode: 'peribahasa', nama: 'peribahasa' },
+      { kode: 'terikat', nama: 'terikat' },
+      { kode: 'prefiks', nama: 'prefiks' },
+      { kode: 'infiks', nama: 'infiks' },
+      { kode: 'sufiks', nama: 'sufiks' },
+      { kode: 'konfiks', nama: 'konfiks' },
+      { kode: 'klitik', nama: 'klitik' },
+      { kode: 'varian', nama: 'varian' },
     ]);
   });
 
@@ -140,7 +147,6 @@ describe('ModelLabel', () => {
     const result = await ModelLabel.ambilSemuaKategori();
 
     expect(result.ragam).toEqual([
-      { kode: null, nama: null },
       { kode: null, nama: null },
       { kode: 'aa', nama: '' },
       { kode: 'zz', nama: null },
@@ -217,6 +223,22 @@ describe('ModelLabel', () => {
     expect(result.label).toEqual({ kode: 'turunan', nama: 'turunan' });
   });
 
+  it('cariEntriPerLabel kategori bentuk menerima kode unsur terikat', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '2' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 5, lema: 'meng-', jenis: 'prefiks' }] });
+
+    const result = await ModelLabel.cariEntriPerLabel('bentuk', 'prefiks', 20, 0);
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('WHERE aktif = 1 AND jenis = $1'),
+      ['prefiks']
+    );
+    expect(result.total).toBe(2);
+    expect(result.label).toEqual({ kode: 'prefiks', nama: 'prefiks' });
+  });
+
   it('cariEntriPerLabel kategori ekspresi valid', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '1' }] })
@@ -264,8 +286,8 @@ describe('ModelLabel', () => {
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
-      expect.stringContaining('FROM label WHERE kategori = $1'),
-      ['ragam', 'cak']
+      expect.stringContaining('WHERE kategori = ANY($1::text[]) AND kode = $2'),
+      [['ragam'], 'cak', 'ragam']
     );
     expect(db.query).toHaveBeenNthCalledWith(
       2,
@@ -318,6 +340,22 @@ describe('ModelLabel', () => {
     expect(result.label).toEqual({ kode: 'prefiks', nama: 'prefiks' });
   });
 
+  it('cariEntriPerLabel kategori unsur (alias path baru) memakai kolom jenis pada entri', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '2' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 31, entri: 'ber-', jenis: 'prefiks' }] });
+
+    const result = await ModelLabel.cariEntriPerLabel('unsur', 'prefiks', 20, 0);
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('WHERE aktif = 1 AND jenis = $1'),
+      ['prefiks']
+    );
+    expect(result.total).toBe(2);
+    expect(result.label).toEqual({ kode: 'prefiks', nama: 'prefiks' });
+  });
+
   it('cariEntriPerLabel kategori kelas_kata menolak label unsur terikat', async () => {
     db.query.mockResolvedValueOnce({ rows: [{ kode: 'prefiks', nama: 'prefiks', keterangan: '' }] });
 
@@ -325,6 +363,22 @@ describe('ModelLabel', () => {
 
     expect(result).toEqual({ data: [], total: 0, label: null });
     expect(db.query).toHaveBeenCalledTimes(1);
+  });
+
+  it('cariEntriPerLabel kategori kelas sebagai alias kelas_kata', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ kode: 'n', nama: 'nomina', keterangan: null }] })
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 88, entri: 'akar' }] });
+
+    const result = await ModelLabel.cariEntriPerLabel('kelas', 'n', 20, 0);
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('m.kelas_kata = ANY($1::text[])'),
+      [['n', 'nomina']]
+    );
+    expect(result.total).toBe(1);
   });
 
   it('cariEntriPerLabel kategori unsur_terikat mengembalikan kosong saat label tidak ditemukan', async () => {
@@ -399,7 +453,7 @@ describe('ModelLabel', () => {
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
-      'SELECT id, kategori, kode, nama, keterangan, sumber FROM label WHERE id = $1',
+      'SELECT id, kategori, kode, nama, urutan, keterangan FROM label WHERE id = $1',
       [11]
     );
     expect(found).toEqual({ id: 11, kategori: 'ragam', kode: 'cak' });
@@ -408,7 +462,7 @@ describe('ModelLabel', () => {
 
   it('simpan melakukan INSERT dengan normalisasi null untuk field opsional', async () => {
     db.query.mockResolvedValueOnce({
-      rows: [{ id: 21, kategori: 'ragam', kode: 'cak', nama: 'cakapan', keterangan: null, sumber: null }],
+      rows: [{ id: 21, kategori: 'ragam', kode: 'cak', nama: 'cakapan', urutan: 1, keterangan: null }],
     });
 
     const result = await ModelLabel.simpan({
@@ -416,20 +470,26 @@ describe('ModelLabel', () => {
       kode: 'cak',
       nama: 'cakapan',
       keterangan: '',
-      sumber: undefined,
+      urutan: undefined,
     });
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO label'),
-      ['ragam', 'cak', 'cakapan', null, null]
+      ['ragam', 'cak', 'cakapan', 1, null]
     );
     expect(result.id).toBe(21);
+  });
+
+  it('hitungTotal mengembalikan angka total label', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ total: '17' }] });
+    const total = await ModelLabel.hitungTotal();
+    expect(total).toBe(17);
   });
 
   it('simpan melakukan UPDATE dan bisa mengembalikan null saat id tidak ditemukan', async () => {
     db.query
       .mockResolvedValueOnce({
-        rows: [{ id: 22, kategori: 'bahasa', kode: 'id', nama: 'Indonesia', keterangan: null, sumber: null }],
+        rows: [{ id: 22, kategori: 'bahasa', kode: 'id', nama: 'Indonesia', urutan: 1, keterangan: null }],
       })
       .mockResolvedValueOnce({ rows: [] });
 
@@ -438,8 +498,8 @@ describe('ModelLabel', () => {
       kategori: 'bahasa',
       kode: 'id',
       nama: 'Indonesia',
+      urutan: 1,
       keterangan: null,
-      sumber: null,
     });
     const missing = await ModelLabel.simpan({
       id: 404,
@@ -451,12 +511,12 @@ describe('ModelLabel', () => {
     expect(db.query).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining('UPDATE label'),
-      ['bahasa', 'id', 'Indonesia', null, null, 22]
+      ['bahasa', 'id', 'Indonesia', 1, null, 22]
     );
     expect(db.query).toHaveBeenNthCalledWith(
       2,
       expect.stringContaining('UPDATE label'),
-      ['bahasa', 'xx', 'Kosong', null, null, 404]
+      ['bahasa', 'xx', 'Kosong', 1, null, 404]
     );
     expect(updated.id).toBe(22);
     expect(missing).toBeNull();

@@ -32,7 +32,7 @@ describe('LabelAdmin', () => {
       isError: false,
       data: {
         total: 1,
-        data: [{ id: 1, kategori: 'ragam', kode: 'cak', nama: 'cakapan', urutan: 1, keterangan: 'ragam lisan', sumber: 'kbbi' }],
+        data: [{ id: 1, kategori: 'ragam', kode: 'cak', nama: 'cakapan', urutan: 1, keterangan: 'ragam lisan' }],
       },
     });
   });

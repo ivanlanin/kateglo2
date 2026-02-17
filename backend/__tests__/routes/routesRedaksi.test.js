@@ -50,6 +50,7 @@ jest.mock('../../models/modelLabel', () => ({
   ambilDenganId: jest.fn(),
   simpan: jest.fn(),
   hapus: jest.fn(),
+  hitungTotal: jest.fn(),
 }));
 
 jest.mock('../../models/modelKomentar', () => ({
@@ -230,8 +231,9 @@ describe('routes/redaksi', () => {
       ModelLema.hitungTotal.mockResolvedValue(10);
       ModelGlosarium.hitungTotal.mockResolvedValue(20);
       ModelTesaurus.hitungTotal.mockResolvedValue(30);
-      ModelPengguna.hitungTotal.mockResolvedValue(40);
-      ModelKomentar.hitungTotal.mockResolvedValue(50);
+      ModelLabel.hitungTotal.mockResolvedValue(40);
+      ModelPengguna.hitungTotal.mockResolvedValue(50);
+      ModelKomentar.hitungTotal.mockResolvedValue(60);
 
       const response = await callAsAdmin('get', '/api/redaksi/statistik');
 
@@ -240,8 +242,9 @@ describe('routes/redaksi', () => {
         entri: 10,
         glosarium: 20,
         tesaurus: 30,
-        pengguna: 40,
-        komentar: 50,
+        label: 40,
+        pengguna: 50,
+        komentar: 60,
       });
     });
 

@@ -40,11 +40,21 @@ function normalizeToken(teks = '') {
   return String(teks || '').trim().toLowerCase();
 }
 
+function buildLabelMap(labels = []) {
+  return (labels || []).reduce((acc, item) => {
+    const key = normalizeToken(item?.kode);
+    if (!key) return acc;
+    acc[key] = item?.nama || item?.kode;
+    return acc;
+  }, {});
+}
+
 function tentukanKategoriJenis(jenis = '') {
   const nilai = String(jenis || '').trim().toLowerCase();
   if (['dasar', 'turunan', 'gabungan'].includes(nilai)) return 'bentuk';
   if (['idiom', 'peribahasa'].includes(nilai)) return 'ekspresi';
-  return 'jenis';
+  if (['terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik'].includes(nilai)) return 'bentuk';
+  return 'bentuk';
 }
 
 function bandingkanEntriKamus(a, b) {
@@ -103,12 +113,10 @@ function KamusDetail() {
     staleTime: 5 * 60 * 1000,
   });
 
-  const petaKelasKata = (kategoriKamus?.['kelas-kata'] || kategoriKamus?.kelas_kata || []).reduce((acc, item) => {
-    const key = normalizeToken(item?.kode);
-    if (!key) return acc;
-    acc[key] = item?.nama || item?.kode;
-    return acc;
-  }, {});
+  const petaKelasKata = buildLabelMap(kategoriKamus?.['kelas-kata'] || kategoriKamus?.kelas_kata || []);
+  const petaRagam = buildLabelMap(kategoriKamus?.ragam || []);
+  const petaBidang = buildLabelMap(kategoriKamus?.bidang || []);
+  const petaBahasa = buildLabelMap(kategoriKamus?.bahasa || []);
 
   const komentarData = komentarResponse?.data || {};
   const jumlahKomentarAktif = Number(komentarData.activeCount || 0);
@@ -326,7 +334,7 @@ function KamusDetail() {
                                     to={buatPathKategoriKamus('bidang', m.bidang)}
                                     className="kamus-badge kamus-badge-bidang"
                                   >
-                                    {m.bidang}
+                                    {petaBidang[normalizeToken(m.bidang)] || m.bidang}
                                   </Link>{' '}
                                 </>
                               )}
@@ -336,7 +344,7 @@ function KamusDetail() {
                                     to={buatPathKategoriKamus('ragam', m.ragam)}
                                     className="kamus-badge kamus-badge-ragam"
                                   >
-                                    {m.ragam}
+                                    {petaRagam[normalizeToken(m.ragam)] || m.ragam}
                                   </Link>{' '}
                                 </>
                               )}
@@ -346,7 +354,7 @@ function KamusDetail() {
                                     to={buatPathKategoriKamus('ragam', m.ragam_varian)}
                                     className="kamus-badge kamus-badge-ragam"
                                   >
-                                    {m.ragam_varian}
+                                    {petaRagam[normalizeToken(m.ragam_varian)] || m.ragam_varian}
                                   </Link>{' '}
                                 </>
                               )}
@@ -366,14 +374,14 @@ function KamusDetail() {
                                     to={buatPathKategoriKamus('bahasa', m.bahasa)}
                                     className="kamus-badge kamus-badge-bahasa"
                                   >
-                                    {m.bahasa}
+                                    {petaBahasa[normalizeToken(m.bahasa)] || m.bahasa}
                                   </Link>{' '}
                                 </>
                               )}
                               {m.tipe_penyingkat && (
                                 <>
                                   <Link
-                                    to={buatPathKategoriKamus('jenis', m.tipe_penyingkat)}
+                                    to={buatPathKategoriKamus('bentuk', m.tipe_penyingkat)}
                                     className="kamus-badge kamus-badge-penyingkat"
                                   >
                                     {m.tipe_penyingkat}
