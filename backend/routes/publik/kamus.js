@@ -3,9 +3,11 @@
  */
 
 const express = require('express');
+const { authenticate, authenticateOptional } = require('../../middleware/auth');
 const { cariKamus, ambilDetailKamus } = require('../../services/layananKamusPublik');
 const ModelLabel = require('../../models/modelLabel');
 const ModelEntri = require('../../models/modelEntri');
+const ModelKomentar = require('../../models/modelKomentar');
 const { publicSearchLimiter } = require('../../middleware/rateLimiter');
 
 const router = express.Router();
@@ -81,6 +83,72 @@ router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
       response.saran = await ModelEntri.saranEntri(decodeURIComponent(req.params.kata));
     }
     return res.json(response);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.get('/komentar/:indeks', authenticateOptional, async (req, res, next) => {
+  try {
+    const indeks = decodeURIComponent(req.params.indeks || '').trim();
+    if (!indeks) {
+      return res.status(400).json({
+        success: false,
+        message: 'Indeks wajib diisi',
+      });
+    }
+
+    const activeCount = await ModelKomentar.hitungKomentarAktif(indeks);
+    const penggunaId = Number(req.user?.pid || 0);
+
+    if (!penggunaId) {
+      return res.json({
+        success: true,
+        data: {
+          indeks,
+          loggedIn: false,
+          activeCount,
+          komentar: [],
+        },
+      });
+    }
+
+    const komentar = await ModelKomentar.ambilKomentarTerbaca(indeks, penggunaId);
+
+    return res.json({
+      success: true,
+      data: {
+        indeks,
+        loggedIn: true,
+        activeCount,
+        komentar,
+      },
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.post('/komentar/:indeks', authenticate, async (req, res, next) => {
+  try {
+    const indeks = decodeURIComponent(req.params.indeks || '').trim();
+    const komentar = String(req.body?.komentar || '').trim();
+    const penggunaId = Number(req.user?.pid || 0);
+
+    if (!penggunaId) {
+      return res.status(401).json({ success: false, message: 'Autentikasi diperlukan' });
+    }
+
+    if (!indeks) {
+      return res.status(400).json({ success: false, message: 'Indeks wajib diisi' });
+    }
+
+    if (!komentar) {
+      return res.status(400).json({ success: false, message: 'Komentar wajib diisi' });
+    }
+
+    const data = await ModelKomentar.upsertKomentarPengguna({ indeks, penggunaId, komentar });
+    return res.status(201).json({ success: true, data });
   } catch (error) {
     return next(error);
   }

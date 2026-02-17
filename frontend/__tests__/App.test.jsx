@@ -26,6 +26,7 @@ vi.mock('../src/halaman/publik/KebijakanPrivasi', () => ({ default: () => <div>K
 vi.mock('../src/halaman/redaksi/LoginAdmin', () => ({ default: () => <div>Login Redaksi</div> }));
 vi.mock('../src/halaman/redaksi/DasborAdmin', () => ({ default: () => <div>Dasbor Redaksi</div> }));
 vi.mock('../src/halaman/redaksi/KamusAdmin', () => ({ default: () => <div>Kamus Redaksi</div> }));
+vi.mock('../src/halaman/redaksi/KomentarAdmin', () => ({ default: () => <div>Komentar Redaksi</div> }));
 vi.mock('../src/halaman/redaksi/TesaurusAdmin', () => ({ default: () => <div>Tesaurus Redaksi</div> }));
 vi.mock('../src/halaman/redaksi/GlosariumAdmin', () => ({ default: () => <div>Glosarium Redaksi</div> }));
 vi.mock('../src/halaman/redaksi/LabelAdmin', () => ({ default: () => <div>Label Redaksi</div> }));
@@ -111,6 +112,21 @@ describe('App', () => {
       </MemoryRouter>
     );
     expect(screen.getByText('Label Redaksi')).toBeInTheDocument();
+  });
+
+  it('mengizinkan route komentar redaksi saat user admin', () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      adalahAdmin: true,
+      isLoading: false,
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/redaksi/komentar']}>
+        <App />
+      </MemoryRouter>
+    );
+    expect(screen.getByText('Komentar Redaksi')).toBeInTheDocument();
   });
 
   it('merender route kebijakan privasi', () => {

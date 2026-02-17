@@ -1150,17 +1150,6 @@ code {
     @apply text-rose-300;
   }
 
-  .panel-lipat-count,
-  .panel-lipat-count-aksen {
-    font-size: 0;
-  }
-
-  .panel-lipat-count::after,
-  .panel-lipat-count-aksen::after {
-    content: attr(data-count);
-    @apply text-xs leading-none font-medium;
-  }
-
   .kamus-detail-section-title {
     @apply text-lg font-semibold text-gray-800 mb-4;
   }

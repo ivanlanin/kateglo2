@@ -56,6 +56,10 @@ export function useDaftarKamusAdmin({ limit = 50, offset = 0, q = '' } = {}) {
   });
 }
 
+export function useDaftarKomentarAdmin({ limit = 50, offset = 0, q = '' } = {}) {
+  return useDaftarAdmin('/api/redaksi/komentar', 'admin-komentar', { limit, offset, q });
+}
+
 // ─── Tesaurus ────────────────────────────────────────────────────────────────
 
 export function useDaftarTesaurusAdmin({ limit = 50, offset = 0, q = '' } = {}) {
@@ -125,6 +129,14 @@ export function useHapusKamus() {
   return useMutation({
     mutationFn: (id) => klien.delete(`/api/redaksi/kamus/${id}`).then((r) => r.data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-kamus'] }),
+  });
+}
+
+export function useSimpanKomentarAdmin() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data) => klien.put(`/api/redaksi/komentar/${data.id}`, data).then((r) => r.data),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-komentar'] }),
   });
 }
 

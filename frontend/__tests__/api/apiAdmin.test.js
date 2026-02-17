@@ -24,6 +24,7 @@ import klien from '../../src/api/klien';
 import {
   useStatistikAdmin,
   useDaftarKamusAdmin,
+  useDaftarKomentarAdmin,
   useDaftarTesaurusAdmin,
   useDaftarGlosariumAdmin,
   useDaftarLabelAdmin,
@@ -31,6 +32,7 @@ import {
   useDaftarPeran,
   useUbahPeran,
   useSimpanKamus,
+  useSimpanKomentarAdmin,
   useHapusKamus,
   useDaftarMakna,
   useSimpanMakna,
@@ -91,6 +93,10 @@ describe('apiAdmin', () => {
 
     const maknaKosong = useDaftarMakna(null);
     expect(maknaKosong.enabled).toBe(false);
+
+    const komentar = useDaftarKomentarAdmin({ limit: 25, offset: 10, q: 'kata' });
+    await komentar.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/komentar', { params: { limit: 25, offset: 10, q: 'kata' } });
   });
 
   it('mengonfigurasi mutation admin pengguna', async () => {
@@ -121,6 +127,12 @@ describe('apiAdmin', () => {
     expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/kamus/9');
     hapusKamus.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-kamus'] });
+
+    const simpanKomentar = useSimpanKomentarAdmin();
+    await simpanKomentar.mutationFn({ id: 4, komentar: 'baru', aktif: true });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/komentar/4', { id: 4, komentar: 'baru', aktif: true });
+    simpanKomentar.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-komentar'] });
 
     const simpanMakna = useSimpanMakna();
     await simpanMakna.mutationFn({ entriId: 4, id: 2, makna: 'uji' });

@@ -52,11 +52,18 @@ jest.mock('../../models/modelLabel', () => ({
   hapus: jest.fn(),
 }));
 
+jest.mock('../../models/modelKomentar', () => ({
+  daftarAdmin: jest.fn(),
+  ambilDenganId: jest.fn(),
+  simpanAdmin: jest.fn(),
+}));
+
 const ModelPengguna = require('../../models/modelPengguna');
 const ModelLema = require('../../models/modelEntri');
 const ModelTesaurus = require('../../models/modelTesaurus');
 const ModelGlosarium = require('../../models/modelGlosarium');
 const ModelLabel = require('../../models/modelLabel');
+const ModelKomentar = require('../../models/modelKomentar');
 const rootRouter = require('../../routes');
 
 function createApp() {
@@ -517,6 +524,48 @@ describe('routes/redaksi', () => {
 
       expect(response.status).toBe(500);
       expect(response.body.error).toBe('update contoh gagal');
+    });
+  });
+
+  describe('komentar', () => {
+    it('GET /api/redaksi/komentar mengembalikan daftar komentar', async () => {
+      ModelKomentar.daftarAdmin.mockResolvedValue({ data: [{ id: 1 }], total: 1 });
+
+      const response = await callAsAdmin('get', '/api/redaksi/komentar?limit=25&offset=5&q=kata');
+
+      expect(response.status).toBe(200);
+      expect(ModelKomentar.daftarAdmin).toHaveBeenCalledWith({ limit: 25, offset: 5, q: 'kata' });
+      expect(response.body.total).toBe(1);
+    });
+
+    it('GET /api/redaksi/komentar/:id mengembalikan 404 jika komentar tidak ditemukan', async () => {
+      ModelKomentar.ambilDenganId.mockResolvedValue(null);
+
+      const response = await callAsAdmin('get', '/api/redaksi/komentar/9');
+
+      expect(response.status).toBe(404);
+      expect(response.body.message).toBe('Komentar tidak ditemukan');
+    });
+
+    it('PUT /api/redaksi/komentar/:id validasi komentar wajib', async () => {
+      const response = await callAsAdmin('put', '/api/redaksi/komentar/9', {
+        body: { komentar: '   ', aktif: true },
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe('Komentar wajib diisi');
+    });
+
+    it('PUT /api/redaksi/komentar/:id menyimpan komentar jika valid', async () => {
+      ModelKomentar.simpanAdmin.mockResolvedValue({ id: 9, komentar: 'baru', aktif: true });
+
+      const response = await callAsAdmin('put', '/api/redaksi/komentar/9', {
+        body: { komentar: 'baru', aktif: true },
+      });
+
+      expect(response.status).toBe(200);
+      expect(response.body.success).toBe(true);
+      expect(ModelKomentar.simpanAdmin).toHaveBeenCalledWith({ id: 9, komentar: 'baru', aktif: true });
     });
   });
 

@@ -22,8 +22,8 @@ function PanelLipat({ judul, jumlah, children, terbukaAwal = false, aksen = fals
         <span className={labelClass}>
           {judul}
           {jumlah !== undefined && (
-            <span className={countClass} data-count={jumlah}>
-              ({jumlah})
+            <span className={countClass}>
+              {jumlah}
             </span>
           )}
         </span>
