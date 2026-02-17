@@ -13,7 +13,7 @@ function parseKomentarDate(value) {
   if (!text) return null;
 
   const normalizedBase = text.includes(' ') ? text.replace(' ', 'T') : text;
-  const hasTimezoneSuffix = /(?:[zZ]|[+\-]\d{2}:?\d{2})$/.test(normalizedBase);
+  const hasTimezoneSuffix = /(?:[zZ]|[+-]\d{2}:?\d{2})$/.test(normalizedBase);
   const normalizedValue = hasTimezoneSuffix ? normalizedBase : `${normalizedBase}Z`;
 
   const parsed = new Date(normalizedValue);

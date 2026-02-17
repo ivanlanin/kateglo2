@@ -31,7 +31,6 @@ function isAssetRequest(requestPath = '') {
 function isBypassPath(requestPath = '') {
   return requestPath.startsWith('/api')
     || requestPath.startsWith('/auth/google')
-    || requestPath.startsWith('/share')
     || requestPath.startsWith('/health');
 }
 
