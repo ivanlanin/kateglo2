@@ -70,18 +70,8 @@ function Glosarium() {
         ? `Sumber ${sumberDekode}`
         : 'Glosarium';
 
-  const breadcrumbPencarian = sedangMencari ? (
-    <div className="kamus-detail-breadcrumb">
-      <Link to="/glosarium" className="kamus-detail-breadcrumb-link">Glosarium</Link>
-      {' › '}
-      <span className="kamus-detail-breadcrumb-current">
-        {modeCariKata ? 'Pencarian' : judulHalaman}
-      </span>
-    </div>
-  ) : null;
-
   return (
-    <HalamanDasar judul={judulHalaman} breadcrumb={breadcrumbPencarian}>
+    <HalamanDasar judul={judulHalaman}>
 
       <QueryFeedback
         isLoading={isLoading}

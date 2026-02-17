@@ -88,22 +88,8 @@ function Kamus() {
       ? judulKategori
       : 'Kamus';
 
-  const breadcrumbPencarian = modePencarian ? (
-    <div className="kamus-detail-breadcrumb">
-      <Link to="/kamus" className="kamus-detail-breadcrumb-link">Kamus</Link>
-      {' › '}
-      <span className="kamus-detail-breadcrumb-current">Pencarian</span>
-    </div>
-  ) : modeKategori ? (
-    <div className="kamus-detail-breadcrumb">
-      <Link to="/kamus" className="kamus-detail-breadcrumb-link">Kamus</Link>
-      {' › '}
-      <span className="kamus-detail-breadcrumb-current">{judulKategori}</span>
-    </div>
-  ) : null;
-
   return (
-    <HalamanDasar judul={judulHalaman} breadcrumb={breadcrumbPencarian}>
+    <HalamanDasar judul={judulHalaman}>
 
       {/* Pesan loading / error */}
       <QueryFeedback

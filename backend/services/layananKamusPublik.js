@@ -30,52 +30,6 @@ function unikTanpaBedaKapitalisasi(items) {
   return hasil;
 }
 
-function ambilNomorHomonim(entri) {
-  const match = entri.match(/\((\d+)\)\s*$/);
-  return match ? Number(match[1]) : Number.MAX_SAFE_INTEGER;
-}
-
-function normalisasiUrutSerupa(entri) {
-  return entri
-    .toLowerCase()
-    .replace(/\s*\(\d+\)\s*$/, '')
-    .replace(/-/g, '')
-    .trim();
-}
-
-function urutkanSerupaNatural(items) {
-  return [...items].sort((a, b) => {
-    const nomorA = ambilNomorHomonim(bacaTeksEntri(a));
-    const nomorB = ambilNomorHomonim(bacaTeksEntri(b));
-    if (nomorA !== nomorB) return nomorA - nomorB;
-
-    const keyA = normalisasiUrutSerupa(bacaTeksEntri(a));
-    const keyB = normalisasiUrutSerupa(bacaTeksEntri(b));
-    if (keyA !== keyB) return keyA.localeCompare(keyB, 'id');
-
-    return bacaTeksEntri(a).localeCompare(bacaTeksEntri(b), 'id');
-  });
-}
-
-function unikSerupa(items) {
-  const byEntri = new Map();
-
-  for (const item of items) {
-    const key = bacaTeksEntri(item).toLowerCase();
-    const existing = byEntri.get(key);
-    if (!existing) {
-      byEntri.set(key, item);
-      continue;
-    }
-
-    if (!existing.lafal && item.lafal) {
-      byEntri.set(key, item);
-    }
-  }
-
-  return urutkanSerupaNatural(Array.from(byEntri.values()));
-}
-
 async function cariKamus(query, { limit = 100, offset = 0 } = {}) {
   const trimmed = (query || '').trim();
   if (!trimmed) return { data: [], total: 0 };
@@ -103,13 +57,12 @@ async function ambilDetailKamus(entri) {
     };
   }
 
-  const [maknaList, subentri, rantaiInduk, tesaurusDetail, glosarium, entriSerupa] = await Promise.all([
+  const [maknaList, subentri, rantaiInduk, tesaurusDetail, glosarium] = await Promise.all([
     ModelEntri.ambilMakna(dataEntri.id),
     ModelEntri.ambilSubentri(dataEntri.id),
     ModelEntri.ambilRantaiInduk(dataEntri.induk),
     ModelTesaurus.ambilDetail(entriTeks),
     ModelGlosarium.cariFrasaMengandungKataUtuh(entriTeks),
-    ModelEntri.ambilEntriSerupa(entriTeks),
   ]);
 
   // Ambil contoh untuk semua makna
@@ -146,14 +99,6 @@ async function ambilDetailKamus(entri) {
     }
     : { sinonim: [], antonim: [] };
 
-  const serupa = unikSerupa((entriSerupa || [])
-    .filter((item) => item.id !== dataEntri.id)
-    .map((item) => ({
-      id: item.id,
-      entri: bacaTeksEntri(item),
-      lafal: item.lafal || null,
-    })));
-
   return {
     entri: entriTeks,
     jenis: dataEntri.jenis,
@@ -164,7 +109,6 @@ async function ambilDetailKamus(entri) {
     makna,
     subentri: subentriPerJenis,
     tesaurus,
-    serupa,
     glosarium,
     rujukan: false,
   };

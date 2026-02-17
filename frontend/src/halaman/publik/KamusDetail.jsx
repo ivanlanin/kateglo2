@@ -2,7 +2,7 @@
  * @fileoverview Halaman detail kamus — makna, contoh, sublema, tesaurus, glosarium
  */
 
-import { useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ambilDetailKamus } from '../../api/apiPublik';
@@ -47,12 +47,6 @@ function KamusDetail() {
     const saran = error?.saran || [];
     return (
       <HalamanDasar>
-        <nav className="kamus-detail-breadcrumb">
-          <Link to="/kamus" className="kamus-detail-breadcrumb-link">Kamus</Link>
-          <span className="mx-2">›</span>
-          <span className="kamus-detail-breadcrumb-current">{kataCari}</span>
-        </nav>
-
         <h1 className="kamus-detail-heading">
           <span className="kamus-detail-heading-main">{kataCari}</span>
         </h1>
@@ -72,11 +66,6 @@ function KamusDetail() {
   if (data.rujukan) {
     return (
       <HalamanDasar>
-        <nav className="kamus-detail-breadcrumb">
-          <Link to="/kamus" className="kamus-detail-breadcrumb-link">Kamus</Link>
-          <span className="mx-2">›</span>
-          <span className="kamus-detail-breadcrumb-current"><TeksLema lema={data.entri} /></span>
-        </nav>
         <div>
           <h1 className="kamus-detail-heading"><TeksLema lema={data.entri} /></h1>
           <p className="mt-2">
@@ -103,12 +92,22 @@ function KamusDetail() {
     maknaPerKelas[kelas].push(m);
   });
 
-  const subentriEntries = Object.entries(data.subentri || {});
+  const urutanJenisSubentri = ['turunan', 'gabungan', 'idiom', 'peribahasa'];
+  const subentriEntries = Object.entries(data.subentri || {}).sort(([jenisA], [jenisB]) => {
+    const idxA = urutanJenisSubentri.indexOf((jenisA || '').toLowerCase());
+    const idxB = urutanJenisSubentri.indexOf((jenisB || '').toLowerCase());
+
+    if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+    if (idxA !== -1) return -1;
+    if (idxB !== -1) return 1;
+
+    return (jenisA || '').localeCompare((jenisB || ''), 'id');
+  });
   const tesaurusSinonim = data.tesaurus?.sinonim || [];
   const tesaurusAntonim = data.tesaurus?.antonim || [];
   const adaTesaurus = tesaurusSinonim.length > 0 || tesaurusAntonim.length > 0;
-  const serupa = data.serupa || [];
   const glosarium = data.glosarium || [];
+  const adaSidebar = adaTesaurus || glosarium.length > 0;
   const tampilNomorMakna = (data.makna || []).length > 1;
   let nomorMakna = 0;
 
@@ -128,33 +127,41 @@ function KamusDetail() {
     </>
   );
 
+  const formatJenisSubentri = (jenis = '') => jenis
+    .split(/[_\-\s]+/)
+    .filter(Boolean)
+    .map((kata) => kata.charAt(0).toUpperCase() + kata.slice(1))
+    .join(' ');
+
+  const rantaiHeading = [...(data.induk || []), { id: 'current', entri: data.entri, current: true }];
+
   return (
     <HalamanDasar>
-      {/* Breadcrumb */}
-      <nav className="kamus-detail-breadcrumb">
-        <Link to="/kamus" className="kamus-detail-breadcrumb-link">Kamus</Link>
-        <span className="mx-2">›</span>
-        {data.induk && data.induk.map((item) => (
-          <span key={item.id}>
-            <Link
-              to={`/kamus/detail/${encodeURIComponent(item.entri)}`}
-              className="kamus-detail-breadcrumb-link"
-            >
-              <TeksLema lema={item.entri} />
-            </Link>
-            <span className="mx-2">›</span>
-          </span>
-        ))}
-        <span className="kamus-detail-breadcrumb-current"><TeksLema lema={data.entri} /></span>
-      </nav>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className={adaSidebar ? 'grid grid-cols-1 lg:grid-cols-3 gap-6' : 'block'}>
         {/* Kolom utama: makna */}
-        <div className="lg:col-span-2">
+        <div className={adaSidebar ? 'lg:col-span-2' : ''}>
           <div>
             <div className="kamus-detail-heading-row">
               <h1 className="kamus-detail-heading">
-                <span className="kamus-detail-heading-main"><TeksLema lema={data.entri} /></span>
+                <span className="kamus-detail-heading-main">
+                  {rantaiHeading.map((item, index) => (
+                    <Fragment key={`${item.id}-${index}`}>
+                      {item.current ? (
+                        <span><TeksLema lema={item.entri} /></span>
+                      ) : (
+                        <Link
+                          to={`/kamus/detail/${encodeURIComponent(item.entri)}`}
+                          className="kamus-detail-heading-chain-link"
+                        >
+                          <TeksLema lema={item.entri} />
+                        </Link>
+                      )}
+                      {index < rantaiHeading.length - 1 && (
+                        <span className="kamus-detail-heading-chain-separator">{' > '}</span>
+                      )}
+                    </Fragment>
+                  ))}
+                </span>
                 {data.lafal && (
                   <span className="kamus-detail-heading-pronunciation">/<TeksLema lema={data.lafal} />/</span>
                 )}
@@ -239,107 +246,92 @@ function KamusDetail() {
                 </div>
               ))}
             </div>
+
+            {subentriEntries.length > 0 && (
+              <div className="mt-8">
+                {subentriEntries.map(([jenis, daftar]) => (
+                  <div key={jenis} className="kamus-detail-subentry-group">
+                    <div className="kamus-detail-subentry-heading-row">
+                      <h2 className="kamus-detail-def-class mb-0">
+                        {formatJenisSubentri(jenis)}
+                      </h2>
+                      <span className="kamus-detail-tag-gray">{daftar.length}</span>
+                    </div>
+                    <div className="kamus-detail-subentry-flow">
+                      {daftar.map((s, i) => (
+                        <span key={s.id}>
+                          <Link
+                            to={`/kamus/detail/${encodeURIComponent(s.entri)}`}
+                            className="kamus-detail-subentry-link"
+                          >
+                            <TeksLema lema={s.entri} />
+                          </Link>
+                          {i < daftar.length - 1 && <span className="secondary-text">; </span>}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Sidebar: subentri, tesaurus, glosarium */}
-        <div className="space-y-4">
-          {serupa.length > 0 && (
-            <PanelLipat judul="Serupa" jumlah={serupa.length} terbukaAwal={true} aksen={true}>
-              <div className="kamus-detail-relations-flow">
-                {serupa.map((item, i) => (
-                  <span key={`${item.id || item.entri}-${i}`}>
-                    <Link
-                      to={`/kamus/detail/${encodeURIComponent(item.entri)}`}
-                      className="kamus-detail-relation-link"
-                    >
-                      <TeksLema lema={item.entri} />
-                    </Link>
-                    {item.lafal && <span className="secondary-text"> /<TeksLema lema={item.lafal} />/</span>}
-                    {i < serupa.length - 1 && <span className="secondary-text">; </span>}
-                  </span>
-                ))}
-              </div>
-            </PanelLipat>
-          )}
-
-          {/* Subentri per jenis */}
-          {subentriEntries.map(([jenis, daftar]) => (
-            <PanelLipat
-              key={jenis}
-              judul={jenis.charAt(0).toUpperCase() + jenis.slice(1)}
-              jumlah={daftar.length}
-              terbukaAwal={true}
-              aksen={true}
-            >
-              <div className="kamus-detail-relations-flow">
-                {daftar.map((s, i) => (
-                  <span key={s.id}>
-                    <Link
-                      to={`/kamus/detail/${encodeURIComponent(s.entri)}`}
-                      className="kamus-detail-relation-link"
-                    >
-                      <TeksLema lema={s.entri} />
-                    </Link>
-                    {i < daftar.length - 1 && <span className="secondary-text">; </span>}
-                  </span>
-                ))}
-              </div>
-            </PanelLipat>
-          ))}
-
-          {adaTesaurus && (
-            <PanelLipat judul="Tesaurus" jumlah={tesaurusSinonim.length + tesaurusAntonim.length} terbukaAwal={true} aksen={true}>
-              {tesaurusSinonim.length > 0 && tesaurusAntonim.length > 0 ? (
-                <ul className="kamus-detail-thesaurus-list">
-                  <li>
-                    <span className="font-medium">Sinonim:</span>{' '}
-                    {renderDaftarTesaurus(tesaurusSinonim)}
-                  </li>
-                  <li>
-                    <span className="font-medium">Antonim:</span>{' '}
-                    {renderDaftarTesaurus(tesaurusAntonim)}
-                  </li>
-                </ul>
-              ) : (
-                <div className="text-sm space-y-1 leading-relaxed">
-                  {tesaurusSinonim.length > 0 && (
-                    <div>
+        {adaSidebar && (
+          <div className="space-y-4">
+            {adaTesaurus && (
+              <PanelLipat judul="Tesaurus" jumlah={tesaurusSinonim.length + tesaurusAntonim.length} terbukaAwal={true} aksen={true}>
+                {tesaurusSinonim.length > 0 && tesaurusAntonim.length > 0 ? (
+                  <ul className="kamus-detail-thesaurus-list">
+                    <li>
                       <span className="font-medium">Sinonim:</span>{' '}
                       {renderDaftarTesaurus(tesaurusSinonim)}
-                    </div>
-                  )}
-                  {tesaurusAntonim.length > 0 && (
-                    <div>
+                    </li>
+                    <li>
                       <span className="font-medium">Antonim:</span>{' '}
                       {renderDaftarTesaurus(tesaurusAntonim)}
-                    </div>
-                  )}
-                </div>
-              )}
-            </PanelLipat>
-          )}
-
-          {glosarium.length > 0 && (
-            <PanelLipat judul="Glosarium" jumlah={glosarium.length} terbukaAwal={true} aksen={true}>
-              <div className="text-sm leading-relaxed">
-                {glosarium.map((item, i) => (
-                  <span key={`${item.indonesia}-${item.asing}-${i}`}>
-                    <span>{item.indonesia}</span>
-                    {item.asing && (
-                      <>
-                        <span> (</span>
-                        <em>{item.asing}</em>
-                        <span>)</span>
-                      </>
+                    </li>
+                  </ul>
+                ) : (
+                  <div className="text-sm space-y-1 leading-relaxed">
+                    {tesaurusSinonim.length > 0 && (
+                      <div>
+                        <span className="font-medium">Sinonim:</span>{' '}
+                        {renderDaftarTesaurus(tesaurusSinonim)}
+                      </div>
                     )}
-                    {i < glosarium.length - 1 && <span>; </span>}
-                  </span>
-                ))}
-              </div>
-            </PanelLipat>
-          )}
-        </div>
+                    {tesaurusAntonim.length > 0 && (
+                      <div>
+                        <span className="font-medium">Antonim:</span>{' '}
+                        {renderDaftarTesaurus(tesaurusAntonim)}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </PanelLipat>
+            )}
+
+            {glosarium.length > 0 && (
+              <PanelLipat judul="Glosarium" jumlah={glosarium.length} terbukaAwal={true} aksen={true}>
+                <div className="text-sm leading-relaxed">
+                  {glosarium.map((item, i) => (
+                    <span key={`${item.indonesia}-${item.asing}-${i}`}>
+                      <span>{item.indonesia}</span>
+                      {item.asing && (
+                        <>
+                          <span> (</span>
+                          <em>{item.asing}</em>
+                          <span>)</span>
+                        </>
+                      )}
+                      {i < glosarium.length - 1 && <span>; </span>}
+                    </span>
+                  ))}
+                </div>
+              </PanelLipat>
+            )}
+          </div>
+        )}
       </div>
     </HalamanDasar>
   );

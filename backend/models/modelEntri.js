@@ -7,15 +7,6 @@ const db = require('../db');
 const autocomplete = require('../db/autocomplete');
 
 class ModelEntri {
-  static normalisasiKunciEntri(teks) {
-    if (!teks) return '';
-    return teks
-      .trim()
-      .toLowerCase()
-      .replace(/\s*\(\d+\)\s*$/, '')
-      .replace(/-/g, '');
-  }
-
   static async autocomplete(query, limit = 8) {
     return autocomplete('entri', 'entri', query, { limit, extraWhere: 'aktif = 1' });
   }
@@ -79,34 +70,6 @@ class ModelEntri {
       [teks]
     );
     return result.rows[0] || null;
-  }
-
-  /**
-  * Ambil daftar entri serupa (homonim/homofon/homograf berbasis normalisasi)
-  * @param {string} teks - Teks entri acuan
-   * @param {number} limit - Batas hasil
-  * @returns {Promise<Array>} Daftar entri ringkas {id, entri, lafal}
-   */
-  static async ambilEntriSerupa(teks, limit = 20) {
-    const kunci = ModelEntri.normalisasiKunciEntri(teks);
-    if (!kunci) return [];
-
-    const cappedLimit = Math.min(Math.max(Number(limit) || 20, 1), 100);
-
-    const result = await db.query(
-      `SELECT id, entri, lafal
-       FROM entri
-       WHERE aktif = 1
-         AND LOWER(REGEXP_REPLACE(REPLACE(entri, '-', ''), '\\s*\\([0-9]+\\)\\s*$', '')) = $1
-       ORDER BY
-         CASE WHEN LOWER(entri) = LOWER($2) THEN 0 ELSE 1 END,
-         COALESCE(((regexp_match(entri, '\\(([0-9]+)\\)\\s*$'))[1])::int, 2147483647),
-         entri ASC
-       LIMIT $3`,
-      [kunci, teks, cappedLimit]
-    );
-
-    return result.rows;
   }
 
   /**

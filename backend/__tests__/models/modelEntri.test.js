@@ -38,16 +38,6 @@ describe('ModelEntri', () => {
     });
   });
 
-  it('normalisasiKunciEntri mengembalikan string kosong untuk input falsy', () => {
-    expect(ModelEntri.normalisasiKunciEntri(undefined)).toBe('');
-    expect(ModelEntri.normalisasiKunciEntri(null)).toBe('');
-  });
-
-  it('normalisasiKunciEntri menghapus nomor homonim dan tanda hubung', () => {
-    expect(ModelEntri.normalisasiKunciEntri(' Per- (2) ')).toBe('per');
-    expect(ModelEntri.normalisasiKunciEntri('dara (10)')).toBe('dara');
-  });
-
   it('cariEntri mengembalikan kosong saat total 0', async () => {
     db.query.mockResolvedValueOnce({ rows: [{ total: '0' }] });
 
@@ -127,52 +117,6 @@ describe('ModelEntri', () => {
     const result = await ModelEntri.ambilEntri('kata');
 
     expect(result).toEqual({ id: 1, entri: 'kata' });
-  });
-
-  it('ambilEntriSerupa mengembalikan array kosong jika kunci kosong', async () => {
-    const result = await ModelEntri.ambilEntriSerupa('   ');
-
-    expect(result).toEqual([]);
-    expect(db.query).not.toHaveBeenCalled();
-  });
-
-  it('ambilEntriSerupa clamp limit maksimum dan fallback non-angka', async () => {
-    db.query
-      .mockResolvedValueOnce({ rows: [{ id: 1, entri: 'per (1)', lafal: 'per' }] })
-      .mockResolvedValueOnce({ rows: [{ id: 2, entri: 'per (2)', lafal: null }] });
-
-    await ModelEntri.ambilEntriSerupa('per (1)', 999);
-    await ModelEntri.ambilEntriSerupa('per (1)', 'abc');
-
-    expect(db.query).toHaveBeenNthCalledWith(
-      1,
-      expect.stringContaining('LIMIT $3'),
-      ['per', 'per (1)', 100]
-    );
-    expect(db.query).toHaveBeenNthCalledWith(
-      2,
-      expect.stringContaining('LIMIT $3'),
-      ['per', 'per (1)', 20]
-    );
-  });
-
-  it('ambilEntriSerupa mengembalikan array kosong jika kunci kosong', async () => {
-    const result = await ModelEntri.ambilEntriSerupa('   ');
-
-    expect(result).toEqual([]);
-    expect(db.query).not.toHaveBeenCalled();
-  });
-
-  it('ambilEntriSerupa menjalankan query normalisasi dengan limit', async () => {
-    db.query.mockResolvedValue({ rows: [{ id: 1, entri: 'per (1)', lafal: 'per' }] });
-
-    const result = await ModelEntri.ambilEntriSerupa('per- (2)', 9);
-
-    expect(db.query).toHaveBeenCalledWith(
-      expect.stringContaining("LOWER(REGEXP_REPLACE(REPLACE(entri, '-', ''),"),
-      ['per', 'per- (2)', 9]
-    );
-    expect(result).toEqual([{ id: 1, entri: 'per (1)', lafal: 'per' }]);
   });
 
   it('ambilMakna mengembalikan rows', async () => {
