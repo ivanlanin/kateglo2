@@ -26,7 +26,7 @@ function parsePositiveInteger(value, fallback = 1) {
 
 class ModelEntri {
   static async autocomplete(query, limit = 8) {
-    return autocomplete('entri', 'entri', query, { limit, extraWhere: 'aktif = 1' });
+    return autocomplete('entri', 'indeks', query, { limit, extraWhere: 'aktif = 1' });
   }
 
   /**

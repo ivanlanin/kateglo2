@@ -5,6 +5,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { autocomplete } from '../../api/apiPublik';
+import { buatPathDetailKamus } from '../../utils/kamusIndex';
 
 const opsiKategori = [
   { value: 'kamus', label: 'Kamus', placeholder: 'Cari kata \u2026' },
@@ -49,6 +50,14 @@ function navigasiCari(navigate, kategori, kata) {
   navigate(`/${kategori}/cari/${encodeURIComponent(kata)}`);
 }
 
+function navigasiSaranSpesifik(navigate, kategori, kata) {
+  if (kategori === 'kamus') {
+    navigate(buatPathDetailKamus(kata));
+    return;
+  }
+  navigasiCari(navigate, kategori, kata);
+}
+
 function KotakCari({ varian = 'navbar', autoFocus = true }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -79,6 +88,7 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
     function handleClickLuar(e) {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
         setTampilSaran(false);
+        setIndeksAktif(-1);
       }
     }
     document.addEventListener('mousedown', handleClickLuar);
@@ -113,13 +123,15 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
     setQuery('');
     setSaran([]);
     setTampilSaran(false);
+    setIndeksAktif(-1);
   };
 
   const handlePilihSaran = (item) => {
     setQuery(item.value);
     setSaran([]);
     setTampilSaran(false);
-    navigasiCari(navigate, kategori, item.value);
+    setIndeksAktif(-1);
+    navigasiSaranSpesifik(navigate, kategori, item.value);
   };
 
   const handleCari = (e) => {
@@ -127,6 +139,7 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
     const trimmed = query.trim();
     if (!trimmed) return;
     setTampilSaran(false);
+    setIndeksAktif(-1);
     navigasiCari(navigate, kategori, trimmed);
   };
 
@@ -135,15 +148,19 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
 
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setIndeksAktif((prev) => (prev < saran.length - 1 ? prev + 1 : 0));
+      setIndeksAktif((prev) => (prev < saran.length - 1 ? prev + 1 : -1));
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
-      setIndeksAktif((prev) => (prev > 0 ? prev - 1 : saran.length - 1));
+      setIndeksAktif((prev) => {
+        if (prev === -1) return saran.length - 1;
+        return prev > 0 ? prev - 1 : -1;
+      });
     } else if (e.key === 'Enter' && indeksAktif >= 0) {
       e.preventDefault();
       handlePilihSaran(saran[indeksAktif]);
     } else if (e.key === 'Escape') {
       setTampilSaran(false);
+      setIndeksAktif(-1);
     }
   };
 
@@ -199,7 +216,7 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
           </button>
         )}
         {tampilSaran && saran.length > 0 && (
-          <ul className="kotak-cari-saran" role="listbox">
+          <ul className="kotak-cari-saran" role="listbox" onMouseLeave={() => setIndeksAktif(-1)}>
             {saran.map((item, idx) => (
               <li
                 key={item.value}
@@ -232,6 +249,7 @@ export {
   ekstrakQuery,
   SorotTeks,
   navigasiCari,
+  navigasiSaranSpesifik,
 };
 
 export default KotakCari;
