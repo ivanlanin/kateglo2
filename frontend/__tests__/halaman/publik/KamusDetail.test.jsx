@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import KamusDetail from '../../../src/halaman/publik/KamusDetail';
-import { ambilDetailKamus } from '../../../src/api/apiPublik';
+import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus } from '../../../src/api/apiPublik';
 import {
   renderMarkdown,
   buatPathKategoriKamus,
@@ -13,9 +13,23 @@ import {
 
 const mockUseQuery = vi.fn();
 let mockParams = { indeks: 'kata' };
+const mockUseAuth = vi.fn(() => ({
+  isAuthenticated: false,
+  isLoading: false,
+  loginDenganGoogle: vi.fn(),
+}));
 
 vi.mock('../../../src/api/apiPublik', () => ({
   ambilDetailKamus: vi.fn().mockResolvedValue(null),
+  ambilKomentarKamus: vi.fn().mockResolvedValue({
+    success: true,
+    data: { loggedIn: false, activeCount: 0, komentar: [] },
+  }),
+  simpanKomentarKamus: vi.fn(),
+}));
+
+vi.mock('../../../src/context/authContext', () => ({
+  useAuth: () => mockUseAuth(),
 }));
 
 vi.mock('@tanstack/react-query', () => ({
@@ -31,6 +45,14 @@ describe('KamusDetail', () => {
   beforeEach(() => {
     mockUseQuery.mockReset();
     ambilDetailKamus.mockClear();
+    ambilKomentarKamus.mockClear();
+    simpanKomentarKamus.mockClear();
+    mockUseAuth.mockReset();
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: false,
+      isLoading: false,
+      loginDenganGoogle: vi.fn(),
+    });
     mockParams = { indeks: 'kata' };
   });
 
@@ -212,6 +234,91 @@ describe('KamusDetail', () => {
     expect(screen.getByText('Glosarium')).toBeInTheDocument();
     expect(screen.getByText('base word')).toBeInTheDocument();
     expect(screen.getByText('derived word')).toBeInTheDocument();
+  });
+
+  it('menampilkan teaser komentar saat belum login dan ada komentar aktif', () => {
+    let panggilan = 0;
+    mockUseQuery.mockImplementation(() => {
+      panggilan += 1;
+      if (panggilan === 1) {
+        return {
+          isLoading: false,
+          isError: false,
+          data: {
+            entri: 'kata',
+            makna: [{ id: 1, kelas_kata: '-', makna: 'definisi' }],
+            subentri: {},
+            tesaurus: { sinonim: [], antonim: [] },
+            glosarium: [],
+          },
+        };
+      }
+      return {
+        isLoading: false,
+        isError: false,
+        data: {
+          data: { loggedIn: false, activeCount: 3, komentar: [] },
+        },
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByText(/Ada 3 komentar pada entri ini/i)).toBeInTheDocument();
+    expect(screen.getByText(/untuk membaca atau meninggalkan komentar/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'masuk dengan akun Google' })).toBeInTheDocument();
+  });
+
+  it('menampilkan komentar terbaca saat login', () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      isLoading: false,
+      loginDenganGoogle: vi.fn(),
+    });
+
+    let panggilan = 0;
+    mockUseQuery.mockImplementation(() => {
+      panggilan += 1;
+      if (panggilan === 1) {
+        return {
+          isLoading: false,
+          isError: false,
+          data: {
+            entri: 'kata',
+            makna: [{ id: 1, kelas_kata: '-', makna: 'definisi' }],
+            subentri: {},
+            tesaurus: { sinonim: [], antonim: [] },
+            glosarium: [],
+          },
+        };
+      }
+      return {
+        isLoading: false,
+        isError: false,
+        data: {
+          data: {
+            loggedIn: true,
+            activeCount: 1,
+            komentar: [
+              {
+                id: 1,
+                aktif: false,
+                komentar: 'baris 1\nbaris 2',
+                pengguna_nama: 'Budi',
+                updated_at: '2026-02-17T00:00:00.000Z',
+              },
+            ],
+          },
+        },
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByText('Berikan komentar, saran, atau pertanyaan terhadap entri ini.')).toBeInTheDocument();
+    expect(screen.getByText('Budi')).toBeInTheDocument();
+    expect(screen.getByText(/baris 1/)).toBeInTheDocument();
+    expect(screen.getByText(/baris 2/)).toBeInTheDocument();
   });
 
   it('menggunakan judul default saat entri kosong dan menampilkan makna kosong', () => {
@@ -409,20 +516,36 @@ describe('KamusDetail', () => {
 
   it('membentuk fallback entri dari indeks route dan memetakan jenis ke kategori ekspresi/jenis', () => {
     mockParams = { indeks: 'kata%20route' };
-    mockUseQuery
-      .mockReturnValueOnce({
-        isLoading: false,
-        isError: false,
-        data: {
-          indeks: 'idiom-data',
-          jenis: 'idiom',
-          makna: [{ id: 1, kelas_kata: '-', makna: 'makna idiom' }],
-          subentri: {},
-          tesaurus: { sinonim: [], antonim: [] },
-          glosarium: [],
-        },
-      })
-      .mockReturnValueOnce({
+    let panggilan = 0;
+    mockUseQuery.mockImplementation(() => {
+      panggilan += 1;
+      const renderKe = Math.ceil(panggilan / 2);
+      const adalahDetail = panggilan % 2 === 1;
+
+      if (!adalahDetail) {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+        };
+      }
+
+      if (renderKe === 1) {
+        return {
+          isLoading: false,
+          isError: false,
+          data: {
+            indeks: 'idiom-data',
+            jenis: 'idiom',
+            makna: [{ id: 1, kelas_kata: '-', makna: 'makna idiom' }],
+            subentri: {},
+            tesaurus: { sinonim: [], antonim: [] },
+            glosarium: [],
+          },
+        };
+      }
+
+      return {
         isLoading: false,
         isError: false,
         data: {
@@ -431,7 +554,8 @@ describe('KamusDetail', () => {
           entri_rujuk: 'kata tujuan',
           entri_rujuk_indeks: '',
         },
-      });
+      };
+    });
 
     const { rerender } = render(<KamusDetail />);
 
@@ -643,21 +767,37 @@ describe('KamusDetail helpers', () => {
   });
 
   it('data non-array mengikuti prioritas entri lalu indeks pada fallback berjenjang', () => {
-    mockUseQuery
-      .mockReturnValueOnce({
-        isLoading: false,
-        isError: false,
-        data: {
-          id: 77,
-          entri: 'utama',
-          indeks: 'cadangan',
-          makna: [],
-          subentri: {},
-          tesaurus: { sinonim: [], antonim: [] },
-          glosarium: [],
-        },
-      })
-      .mockReturnValueOnce({
+    let panggilan = 0;
+    mockUseQuery.mockImplementation(() => {
+      panggilan += 1;
+      const renderKe = Math.ceil(panggilan / 2);
+      const adalahDetail = panggilan % 2 === 1;
+
+      if (!adalahDetail) {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+        };
+      }
+
+      if (renderKe === 1) {
+        return {
+          isLoading: false,
+          isError: false,
+          data: {
+            id: 77,
+            entri: 'utama',
+            indeks: 'cadangan',
+            makna: [],
+            subentri: {},
+            tesaurus: { sinonim: [], antonim: [] },
+            glosarium: [],
+          },
+        };
+      }
+
+      return {
         isLoading: false,
         isError: false,
         data: {
@@ -669,7 +809,8 @@ describe('KamusDetail helpers', () => {
           tesaurus: { sinonim: [], antonim: [] },
           glosarium: [],
         },
-      });
+      };
+    });
 
     const { rerender } = render(<KamusDetail />);
     expect(screen.getByText('utama')).toBeInTheDocument();

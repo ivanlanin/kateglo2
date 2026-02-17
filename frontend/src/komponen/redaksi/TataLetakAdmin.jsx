@@ -8,6 +8,7 @@ import { useAuth } from '../../context/authContext';
 
 const menuAdmin = [
   { path: '/redaksi/kamus', label: 'Kamus' },
+  { path: '/redaksi/komentar', label: 'Komentar' },
   { path: '/redaksi/tesaurus', label: 'Tesaurus' },
   { path: '/redaksi/glosarium', label: 'Glosarium' },
   { path: '/redaksi/label', label: 'Label' },

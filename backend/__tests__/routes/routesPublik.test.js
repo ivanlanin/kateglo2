@@ -27,6 +27,12 @@ jest.mock('../../models/modelEntri', () => {
   };
 });
 
+jest.mock('../../models/modelKomentar', () => ({
+  hitungKomentarAktif: jest.fn(),
+  ambilKomentarTerbaca: jest.fn(),
+  upsertKomentarPengguna: jest.fn(),
+}));
+
 jest.mock('../../models/modelTesaurus', () => ({
   autocomplete: jest.fn(),
 }));
@@ -44,6 +50,7 @@ jest.mock('../../services/layananTesaurusPublik', () => ({
 const ModelGlosarium = require('../../models/modelGlosarium');
 const ModelLabel = require('../../models/modelLabel');
 const ModelEntri = require('../../models/modelEntri');
+const ModelKomentar = require('../../models/modelKomentar');
 const ModelTesaurus = require('../../models/modelTesaurus');
 const layananKamusPublik = require('../../services/layananKamusPublik');
 const layananTesaurusPublik = require('../../services/layananTesaurusPublik');
@@ -51,6 +58,7 @@ const rootRouter = require('../../routes');
 
 function createApp() {
   const app = express();
+  app.use(express.json());
   app.use('/api', rootRouter);
   app.use((err, _req, res, _next) => {
     res.status(500).json({ error: err.message });
@@ -62,6 +70,7 @@ describe('routes backend', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     ModelEntri.saranEntri.mockResolvedValue([]);
+    ModelKomentar.hitungKomentarAktif.mockResolvedValue(0);
     delete process.env.JWT_SECRET;
   });
 
@@ -284,6 +293,72 @@ describe('routes backend', () => {
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('detail kamus gagal');
+  });
+
+  it('GET /api/publik/kamus/komentar/:indeks mengembalikan teaser jika belum login', async () => {
+    ModelKomentar.hitungKomentarAktif.mockResolvedValue(2);
+
+    const response = await request(createApp()).get('/api/publik/kamus/komentar/kata');
+
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.data.loggedIn).toBe(false);
+    expect(response.body.data.activeCount).toBe(2);
+    expect(ModelKomentar.ambilKomentarTerbaca).not.toHaveBeenCalled();
+  });
+
+  it('GET /api/publik/kamus/komentar/:indeks mengembalikan komentar terbaca jika login', async () => {
+    process.env.JWT_SECRET = 'test-secret-routes';
+    const token = jwt.sign(
+      {
+        sub: 'google-user',
+        pid: 9,
+        email: 'user@example.com',
+        name: 'User',
+        provider: 'google',
+        peran: 'pengguna',
+      },
+      process.env.JWT_SECRET
+    );
+
+    ModelKomentar.hitungKomentarAktif.mockResolvedValue(1);
+    ModelKomentar.ambilKomentarTerbaca.mockResolvedValue([{ id: 7, komentar: 'uji', aktif: false }]);
+
+    const response = await request(createApp())
+      .get('/api/publik/kamus/komentar/kata')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.data.loggedIn).toBe(true);
+    expect(response.body.data.komentar).toHaveLength(1);
+    expect(ModelKomentar.ambilKomentarTerbaca).toHaveBeenCalledWith('kata', 9);
+    delete process.env.JWT_SECRET;
+  });
+
+  it('POST /api/publik/kamus/komentar/:indeks menyimpan komentar pengguna login', async () => {
+    process.env.JWT_SECRET = 'test-secret-routes';
+    const token = jwt.sign(
+      {
+        sub: 'google-user',
+        pid: 11,
+        email: 'user@example.com',
+        name: 'User',
+        provider: 'google',
+        peran: 'pengguna',
+      },
+      process.env.JWT_SECRET
+    );
+    ModelKomentar.upsertKomentarPengguna.mockResolvedValue({ id: 1, indeks: 'kata', komentar: 'isi' });
+
+    const response = await request(createApp())
+      .post('/api/publik/kamus/komentar/kata')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ komentar: 'isi' });
+
+    expect(response.status).toBe(201);
+    expect(response.body.success).toBe(true);
+    expect(ModelKomentar.upsertKomentarPengguna).toHaveBeenCalledWith({ indeks: 'kata', penggunaId: 11, komentar: 'isi' });
+    delete process.env.JWT_SECRET;
   });
 
   it('GET /api/publik/tesaurus/autocomplete/:kata mengembalikan data', async () => {

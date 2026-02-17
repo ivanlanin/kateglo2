@@ -35,6 +35,30 @@ function authenticate(req, res, next) {
   }
 }
 
+function authenticateOptional(req, _res, next) {
+  const authHeader = req.get('authorization') || '';
+  const [scheme, token] = authHeader.split(' ');
+
+  if (scheme !== 'Bearer' || !token) {
+    return next();
+  }
+
+  const jwtSecret = process.env.JWT_SECRET;
+  if (!jwtSecret) {
+    return next();
+  }
+
+  try {
+    const payload = jwt.verify(token, jwtSecret);
+    req.user = payload;
+  } catch (_error) {
+    req.user = null;
+  }
+
+  return next();
+}
+
 module.exports = {
   authenticate,
+  authenticateOptional,
 };

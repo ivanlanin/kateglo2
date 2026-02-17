@@ -40,6 +40,18 @@ export async function ambilDetailKamus(indeks) {
   }
 }
 
+export async function ambilKomentarKamus(indeks) {
+  const response = await klien.get(`/api/publik/kamus/komentar/${encodeURIComponent(indeks)}`);
+  return response.data;
+}
+
+export async function simpanKomentarKamus(indeks, komentar) {
+  const response = await klien.post(`/api/publik/kamus/komentar/${encodeURIComponent(indeks)}`, {
+    komentar,
+  });
+  return response.data;
+}
+
 // === TESAURUS ===
 
 export async function cariTesaurus(kata, { limit = 100, offset = 0 } = {}) {

@@ -2,10 +2,11 @@
  * @fileoverview Halaman detail kamus — makna, contoh, sublema, tesaurus, glosarium
  */
 
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ambilDetailKamus } from '../../api/apiPublik';
+import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus } from '../../api/apiPublik';
+import { useAuth } from '../../context/authContext';
 import PanelLipat from '../../komponen/publik/PanelLipat';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import TeksLema from '../../komponen/publik/TeksLema';
@@ -63,8 +64,29 @@ function bandingkanJenisSubentri(jenisA, jenisB, urutanJenisSubentri) {
   return (jenisA || '').localeCompare((jenisB || ''), 'id');
 }
 
+function formatTanggalKomentar(value) {
+  if (!value) return '-';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '-';
+  const tanggal = new Intl.DateTimeFormat('id-ID', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  }).format(date);
+  const waktu = new Intl.DateTimeFormat('id-ID', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(date).replace(':', '.');
+  return `${tanggal} ${waktu}`;
+}
+
 function KamusDetail() {
   const { indeks } = useParams();
+  const { isAuthenticated, isLoading: isAuthLoading, loginDenganGoogle } = useAuth();
+  const [teksKomentar, setTeksKomentar] = useState('');
+  const [isSubmittingKomentar, setIsSubmittingKomentar] = useState(false);
+  const [pesanKomentar, setPesanKomentar] = useState('');
 
   useEffect(() => {
     document.title = indeks
@@ -77,6 +99,43 @@ function KamusDetail() {
     queryFn: () => ambilDetailKamus(indeks),
     enabled: Boolean(indeks),
   });
+
+  const {
+    data: komentarResponse,
+    refetch: refetchKomentar,
+  } = useQuery({
+    queryKey: ['kamus-komentar', indeks, isAuthenticated],
+    queryFn: () => ambilKomentarKamus(indeks),
+    enabled: Boolean(indeks) && !isAuthLoading,
+  });
+
+  const komentarData = komentarResponse?.data || {};
+  const jumlahKomentarAktif = Number(komentarData.activeCount || 0);
+  const daftarKomentar = Array.isArray(komentarData.komentar) ? komentarData.komentar : [];
+
+  const handleKirimKomentar = async (event) => {
+    event.preventDefault();
+    const komentar = teksKomentar.trim();
+    if (!komentar) {
+      setPesanKomentar('Komentar tidak boleh kosong.');
+      return;
+    }
+
+    setIsSubmittingKomentar(true);
+    setPesanKomentar('');
+    try {
+      await simpanKomentarKamus(indeks, komentar);
+      setTeksKomentar('');
+      setPesanKomentar('Komentar tersimpan dan menunggu peninjauan redaksi.');
+      if (typeof refetchKomentar === 'function') {
+        await refetchKomentar();
+      }
+    } catch (_error) {
+      setPesanKomentar('Gagal menyimpan komentar. Silakan coba lagi.');
+    } finally {
+      setIsSubmittingKomentar(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -135,7 +194,7 @@ function KamusDetail() {
   const tesaurusAntonim = data.tesaurus?.antonim || [];
   const adaTesaurus = tesaurusSinonim.length > 0 || tesaurusAntonim.length > 0;
   const glosarium = data.glosarium || [];
-  const adaSidebar = adaTesaurus || glosarium.length > 0;
+  const adaSidebar = true;
 
   const renderDaftarTesaurus = (items) => (
     <>
@@ -383,6 +442,80 @@ function KamusDetail() {
 
         {adaSidebar && (
           <div className="space-y-4">
+            <PanelLipat judul="Komentar" jumlah={isAuthenticated ? daftarKomentar.length : jumlahKomentarAktif} terbukaAwal={true} aksen={true}>
+              {isAuthenticated ? (
+                <div className="space-y-3 text-sm">
+                  {daftarKomentar.length === 0 ? (
+                    <p className="secondary-text">Ingin mengomentari entri ini?</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {daftarKomentar.map((item) => (
+                        <div key={item.id} className="border border-gray-200 dark:border-gray-700 rounded-md px-3 py-2">
+                          <div className="text-xs secondary-text mb-1 flex items-center justify-between gap-2">
+                            <span>{item.pengguna_nama || 'Pengguna'}</span>
+                            <span>{formatTanggalKomentar(item.updated_at || item.created_at)}</span>
+                          </div>
+                          <div className="whitespace-pre-line leading-relaxed">{item.komentar}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <form onSubmit={handleKirimKomentar} className="space-y-2">
+                    <textarea
+                      value={teksKomentar}
+                      onChange={(e) => setTeksKomentar(e.target.value)}
+                      rows={4}
+                      className="w-full text-sm px-3 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-bg-input dark:text-dark-text"
+                      placeholder="Tulis komentar Anda..."
+                    />
+                    <button
+                      type="submit"
+                      disabled={isSubmittingKomentar}
+                      className="px-3 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60"
+                    >
+                      {isSubmittingKomentar ? 'Mengirim…' : 'Kirim'}
+                    </button>
+                    {pesanKomentar && <p className="secondary-text">{pesanKomentar}</p>}
+                  </form>
+                </div>
+              ) : (
+                <div className="space-y-2 text-sm">
+                  {jumlahKomentarAktif > 0 ? (
+                    <p>
+                      Ada {jumlahKomentarAktif} komentar pada entri ini. Silakan{' '}
+                      <a
+                        href="/auth/google"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          loginDenganGoogle(window.location.pathname + window.location.search);
+                        }}
+                        className="link-action"
+                      >
+                        masuk dengan akun Google
+                      </a>{' '}
+                      untuk membaca atau mengirim komentar.
+                    </p>
+                  ) : (
+                    <p>
+                      Silakan{' '}
+                      <a
+                        href="/auth/google"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          loginDenganGoogle(window.location.pathname + window.location.search);
+                        }}
+                        className="link-action"
+                      >
+                        masuk dengan akun Google
+                      </a>{' '}
+                      untuk meninggalkan komentar.
+                    </p>
+                  )}
+                </div>
+              )}
+            </PanelLipat>
+
             {adaTesaurus && (
               <PanelLipat judul="Tesaurus" jumlah={tesaurusSinonim.length + tesaurusAntonim.length} terbukaAwal={true} aksen={true}>
                 {tesaurusSinonim.length > 0 && tesaurusAntonim.length > 0 ? (
@@ -449,4 +582,5 @@ export {
   tentukanKategoriJenis,
   bandingkanEntriKamus,
   bandingkanJenisSubentri,
+  formatTanggalKomentar,
 };

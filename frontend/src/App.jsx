@@ -11,6 +11,7 @@ import KebijakanPrivasi from './halaman/publik/KebijakanPrivasi';
 import LoginAdmin from './halaman/redaksi/LoginAdmin';
 import DasborAdmin from './halaman/redaksi/DasborAdmin';
 import KamusAdmin from './halaman/redaksi/KamusAdmin';
+import KomentarAdmin from './halaman/redaksi/KomentarAdmin';
 import TesaurusAdmin from './halaman/redaksi/TesaurusAdmin';
 import GlosariumAdmin from './halaman/redaksi/GlosariumAdmin';
 import LabelAdmin from './halaman/redaksi/LabelAdmin';
@@ -42,6 +43,7 @@ function App() {
       <Route path="/redaksi/login" element={<LoginAdmin />} />
       <Route path="/redaksi" element={<RuteRedaksi><DasborAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/kamus" element={<RuteRedaksi><KamusAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/komentar" element={<RuteRedaksi><KomentarAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/tesaurus" element={<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/glosarium" element={<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/label" element={<RuteRedaksi><LabelAdmin /></RuteRedaksi>} />
