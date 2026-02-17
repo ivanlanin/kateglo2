@@ -16,6 +16,8 @@
 - Memindahkan data makna.kelas_kata unsur terikat ke entri.jenis
 - Menambahkan fitur komentar pengguna di halaman kamus
 - Memasang _trigger_ untuk kolom `created_at` dan `updated_at` di semua tabel
+- Menyinkronkan pelabelan entri dan makna
+- Membuat pratayang logo, judul, dan deskripsi untuk media sosial
 
 ## 2026-02-16 Senin
 
