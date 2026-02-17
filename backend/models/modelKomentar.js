@@ -32,6 +32,11 @@ function normalizeBoolean(value) {
 }
 
 class ModelKomentar {
+  static async hitungTotal() {
+    const result = await db.query('SELECT COUNT(*) AS total FROM komentar_kamus');
+    return parseInt(result.rows[0]?.total || '0', 10);
+  }
+
   static async hitungKomentarAktif(indeks) {
     const result = await db.query(
       `SELECT COUNT(*) AS total
