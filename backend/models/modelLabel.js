@@ -13,11 +13,11 @@ const db = require('../db');
 const SQL_ABJAD = `UPPER(SUBSTRING(REGEXP_REPLACE(entri, '^[^a-zA-Z]*', ''), 1, 1))`;
 const JENIS_BENTUK = ['dasar', 'turunan', 'gabungan'];
 const JENIS_EKSPRESI = ['idiom', 'peribahasa'];
+const JENIS_UNSUR_TERIKAT = ['terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik'];
 const JENIS_SEMUA = [...JENIS_BENTUK, ...JENIS_EKSPRESI];
 const KELAS_BEBAS = ['adjektiva', 'adverbia', 'nomina', 'numeralia', 'partikel', 'pronomina', 'verba'];
-const UNSUR_TERIKAT = ['sufiks', 'prefiks', 'bentuk terikat', 'infiks', 'klitik', 'konfiks'];
 const URUTAN_KELAS_KATA = ['nomina', 'verba', 'adjektiva', 'adverbia', 'pronomina', 'numeralia', 'partikel'];
-const URUTAN_UNSUR_TERIKAT = ['bentuk terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik'];
+const URUTAN_UNSUR_TERIKAT = ['terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik'];
 const URUTAN_RAGAM = ['arkais', 'klasik', 'hormat', 'cakapan', 'kasar'];
 
 function normalizeLabelValue(value) {
@@ -65,23 +65,21 @@ class ModelLabel {
       grouped[row.kategori].push({ kode: row.kode, nama: row.nama });
     }
 
-    // Pecah kategori kelas_kata menjadi kelas bebas dan unsur terikat.
+    // Ambil kelas kata bebas saja dari kategori kelas_kata.
     const kelasKataSemua = grouped.kelas_kata || [];
     const kelasKataBebas = [];
-    const kelasKataUnsurTerikat = [];
     for (const label of kelasKataSemua) {
       const kandidatNama = normalizeLabelValue(label.nama);
       const kandidatKode = normalizeLabelValue(label.kode);
       if (KELAS_BEBAS.includes(kandidatNama) || KELAS_BEBAS.includes(kandidatKode)) {
         kelasKataBebas.push(label);
-        continue;
-      }
-      if (UNSUR_TERIKAT.includes(kandidatNama) || UNSUR_TERIKAT.includes(kandidatKode)) {
-        kelasKataUnsurTerikat.push(label);
       }
     }
     grouped.kelas_kata = urutkanLabelPrioritas(kelasKataBebas, URUTAN_KELAS_KATA);
-    grouped.unsur_terikat = urutkanLabelPrioritas(kelasKataUnsurTerikat, URUTAN_UNSUR_TERIKAT);
+    grouped.unsur_terikat = urutkanLabelPrioritas(
+      JENIS_UNSUR_TERIKAT.map((jenis) => ({ kode: jenis, nama: jenis })),
+      URUTAN_UNSUR_TERIKAT
+    );
     grouped.ragam = urutkanLabelPrioritas(grouped.ragam || [], URUTAN_RAGAM);
 
     // Kategori abjad: huruf A–Z
@@ -123,29 +121,29 @@ class ModelLabel {
     if (kategori === 'jenis') {
       return this._cariEntriPerJenis(kode, JENIS_SEMUA, limit, offset);
     }
+    if (kategori === 'unsur_terikat') {
+      return this._cariEntriPerJenis(kode, JENIS_UNSUR_TERIKAT, limit, offset);
+    }
 
-    const validKategori = ['ragam', 'kelas_kata', 'bahasa', 'bidang', 'unsur_terikat'];
+    const validKategori = ['ragam', 'kelas_kata', 'bahasa', 'bidang'];
     if (!validKategori.includes(kategori)) {
       return { data: [], total: 0, label: null };
     }
 
-    const kategoriLabel = kategori === 'unsur_terikat' ? 'kelas_kata' : kategori;
-
     // Ambil info label (kode + nama) untuk pencocokan ganda
     const labelResult = await db.query(
       `SELECT kode, nama, keterangan FROM label WHERE kategori = $1 AND kode = $2 LIMIT 1`,
-      [kategoriLabel, kode]
+      [kategori, kode]
     );
     const label = labelResult.rows[0] || null;
 
-    if (kategori === 'kelas_kata' || kategori === 'unsur_terikat') {
+    if (kategori === 'kelas_kata') {
       if (!label) {
         return { data: [], total: 0, label: null };
       }
       const namaLabel = normalizeLabelValue(label.nama);
       const kodeLabel = normalizeLabelValue(label.kode);
-      const whitelist = kategori === 'kelas_kata' ? KELAS_BEBAS : UNSUR_TERIKAT;
-      if (!whitelist.includes(namaLabel) && !whitelist.includes(kodeLabel)) {
+      if (!KELAS_BEBAS.includes(namaLabel) && !KELAS_BEBAS.includes(kodeLabel)) {
         return { data: [], total: 0, label: null };
       }
     }
@@ -156,7 +154,7 @@ class ModelLabel {
       nilaiCocok.push(label.nama);
     }
 
-    const kolom = kategori === 'unsur_terikat' ? 'kelas_kata' : kategori;
+    const kolom = kategori;
 
     const countResult = await db.query(
       `SELECT COUNT(DISTINCT l.id) AS total
