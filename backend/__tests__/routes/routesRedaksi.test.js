@@ -297,6 +297,20 @@ describe('routes/redaksi', () => {
       expect(noJenis.status).toBe(400);
     });
 
+    it('POST/PUT /api/redaksi/kamus validasi saat entri dan lema keduanya tidak dikirim', async () => {
+      const postNoEntri = await callAsAdmin('post', '/api/redaksi/kamus', {
+        body: { jenis: 'dasar' },
+      });
+      const putNoEntri = await callAsAdmin('put', '/api/redaksi/kamus/12', {
+        body: { jenis: 'dasar' },
+      });
+
+      expect(postNoEntri.status).toBe(400);
+      expect(postNoEntri.body.message).toBe('Entri wajib diisi');
+      expect(putNoEntri.status).toBe(400);
+      expect(putNoEntri.body.message).toBe('Entri wajib diisi');
+    });
+
     it('POST /api/redaksi/kamus mengembalikan 201 saat berhasil', async () => {
       ModelLema.simpan.mockResolvedValue({ id: 12, lema: 'kata' });
 
@@ -306,6 +320,30 @@ describe('routes/redaksi', () => {
 
       expect(response.status).toBe(201);
       expect(response.body.success).toBe(true);
+    });
+
+    it('POST/PUT /api/redaksi/kamus memakai field entri bila tersedia', async () => {
+      ModelLema.simpan
+        .mockResolvedValueOnce({ id: 77, entri: 'baku', jenis: 'dasar' })
+        .mockResolvedValueOnce({ id: 77, entri: 'baku', jenis: 'dasar' });
+
+      const post = await callAsAdmin('post', '/api/redaksi/kamus', {
+        body: { entri: '  baku ', jenis: 'dasar' },
+      });
+      const put = await callAsAdmin('put', '/api/redaksi/kamus/77', {
+        body: { entri: '  baku ', jenis: 'dasar' },
+      });
+
+      expect(post.status).toBe(201);
+      expect(put.status).toBe(200);
+      expect(ModelLema.simpan).toHaveBeenNthCalledWith(
+        1,
+        expect.objectContaining({ entri: 'baku', jenis: 'dasar' })
+      );
+      expect(ModelLema.simpan).toHaveBeenNthCalledWith(
+        2,
+        expect.objectContaining({ id: 77, entri: 'baku', jenis: 'dasar' })
+      );
     });
 
     it('POST /api/redaksi/kamus meneruskan error', async () => {
