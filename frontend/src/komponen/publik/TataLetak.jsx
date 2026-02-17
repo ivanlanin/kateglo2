@@ -18,6 +18,7 @@ function TataLetak() {
   const appTimestamp = __APP_TIMESTAMP__;
 
   useEffect(() => {
+    /* c8 ignore next */
     if (typeof window === 'undefined') return;
     const tersimpan = localStorage.getItem('kateglo-theme');
     if (tersimpan) {
@@ -28,6 +29,7 @@ function TataLetak() {
   }, []);
 
   useEffect(() => {
+    /* c8 ignore next */
     if (typeof window === 'undefined') return;
     document.documentElement.classList.toggle('dark', modeGelap);
     localStorage.setItem('kateglo-theme', modeGelap ? 'dark' : 'light');

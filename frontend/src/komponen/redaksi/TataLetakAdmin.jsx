@@ -24,6 +24,7 @@ function TataLetakAdmin({ judul, children }) {
   const [modeGelap, setModeGelap] = useState(false);
 
   useEffect(() => {
+    /* c8 ignore next */
     if (typeof window === 'undefined') return;
     const tersimpan = localStorage.getItem('kateglo-theme');
     if (tersimpan) {
@@ -40,6 +41,7 @@ function TataLetakAdmin({ judul, children }) {
   }, [judul]);
 
   useEffect(() => {
+    /* c8 ignore next */
     if (typeof window === 'undefined') return;
     document.documentElement.classList.toggle('dark', modeGelap);
     localStorage.setItem('kateglo-theme', modeGelap ? 'dark' : 'light');

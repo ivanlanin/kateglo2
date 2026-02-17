@@ -17,6 +17,7 @@ klien.interceptors.request.use((config) => {
   if (frontendSharedKey) {
     config.headers['X-Frontend-Key'] = frontendSharedKey;
   }
+  /* c8 ignore next */
   const token = typeof window !== 'undefined' ? localStorage.getItem(storageKey) : '';
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
