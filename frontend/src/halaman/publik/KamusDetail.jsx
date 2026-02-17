@@ -159,8 +159,6 @@ function KamusDetail() {
               return (jenisA || '').localeCompare((jenisB || ''), 'id');
             });
 
-            const tampilNomorMakna = (entriItem.makna || []).length > 1;
-            let nomorMakna = 0;
             const rantaiHeading = [...(entriItem.induk || []), { id: `current-${entriItem.id}`, entri: entriItem.entri, indeks: entriItem.indeks, current: true }];
 
             return (
@@ -225,96 +223,108 @@ function KamusDetail() {
                     {Object.entries(maknaPerKelas).map(([kelas, daftarMakna]) => (
                       <div key={kelas} className="mb-4 last:mb-0">
                         {kelas !== '-' && (
-                          <h3 className="kamus-detail-def-class">{formatTitleCase(kelas)}</h3>
+                          <div className="kamus-detail-subentry-heading-row">
+                            <h3 className="kamus-detail-def-class mb-0">{formatTitleCase(kelas)}</h3>
+                            <span className="kamus-count-badge">{daftarMakna.length}</span>
+                          </div>
                         )}
-                        <ol className="kamus-detail-def-list">
-                          {daftarMakna.map((m) => (
-                            <li key={m.id} className="kamus-detail-def-item">
-                              {tampilNomorMakna && (
-                                <span className="kamus-detail-def-number">{++nomorMakna}.</span>
-                              )}
-                              <span className="kamus-detail-def-content">
-                                {m.bidang && (
+                        <div className="kamus-detail-def-content leading-relaxed">
+                          {daftarMakna.map((m, indexMakna) => (
+                            <Fragment key={m.id}>
+                              {daftarMakna.length > 1 && <span>({indexMakna + 1}) </span>}
+                              {m.bidang && (
+                                <>
                                   <Link
                                     to={buatPathKategoriKamus('bidang', m.bidang)}
                                     className="kamus-badge kamus-badge-bidang"
                                   >
                                     {m.bidang}
-                                  </Link>
-                                )}
-                                {m.ragam && (
+                                  </Link>{' '}
+                                </>
+                              )}
+                              {m.ragam && (
+                                <>
                                   <Link
                                     to={buatPathKategoriKamus('ragam', m.ragam)}
                                     className="kamus-badge kamus-badge-ragam"
                                   >
                                     {m.ragam}
-                                  </Link>
-                                )}
-                                {m.ragam_varian && (
+                                  </Link>{' '}
+                                </>
+                              )}
+                              {m.ragam_varian && (
+                                <>
                                   <Link
                                     to={buatPathKategoriKamus('ragam', m.ragam_varian)}
                                     className="kamus-badge kamus-badge-ragam"
                                   >
                                     {m.ragam_varian}
-                                  </Link>
-                                )}
-                                {m.kiasan === 1 && (
+                                  </Link>{' '}
+                                </>
+                              )}
+                              {m.kiasan === 1 && (
+                                <>
                                   <Link
                                     to={buatPathKategoriKamus('ragam', 'kiasan')}
                                     className="kamus-badge kamus-badge-kiasan"
                                   >
                                     kiasan
-                                  </Link>
-                                )}
-                                {m.bahasa && (
+                                  </Link>{' '}
+                                </>
+                              )}
+                              {m.bahasa && (
+                                <>
                                   <Link
                                     to={buatPathKategoriKamus('bahasa', m.bahasa)}
                                     className="kamus-badge kamus-badge-bahasa"
                                   >
                                     {m.bahasa}
-                                  </Link>
-                                )}
-                                {m.tipe_penyingkat && (
+                                  </Link>{' '}
+                                </>
+                              )}
+                              {m.tipe_penyingkat && (
+                                <>
                                   <Link
                                     to={buatPathKategoriKamus('jenis', m.tipe_penyingkat)}
                                     className="kamus-badge kamus-badge-penyingkat"
                                   >
                                     {m.tipe_penyingkat}
-                                  </Link>
-                                )}
-                                <span dangerouslySetInnerHTML={{ __html: renderMarkdown(m.makna) }} />
-                                {(m.ilmiah || m.kimia) && (
-                                  <span className="kamus-detail-def-extra">
-                                    ; {m.ilmiah && <em>{m.ilmiah}</em>}
-                                    {m.ilmiah && m.kimia && '; '}
-                                    {m.kimia && <span dangerouslySetInnerHTML={{ __html: m.kimia }} />}
+                                  </Link>{' '}
+                                </>
+                              )}
+                              <span dangerouslySetInnerHTML={{ __html: renderMarkdown(m.makna) }} />
+                              {(m.ilmiah || m.kimia) && (
+                                <span className="kamus-detail-def-extra">
+                                  ; {m.ilmiah && <em>{m.ilmiah}</em>}
+                                  {m.ilmiah && m.kimia && '; '}
+                                  {m.kimia && <span dangerouslySetInnerHTML={{ __html: m.kimia }} />}
+                                </span>
+                              )}
+                              {m.contoh?.length > 0 && (
+                                <span className="kamus-detail-def-sample">: {m.contoh.map((c, i) => (
+                                  <span key={c.id}>
+                                    <span dangerouslySetInnerHTML={{ __html: renderMarkdown(c.contoh) }} />
+                                    {c.makna_contoh && <span> — {c.makna_contoh}</span>}
+                                    {i < m.contoh.length - 1 && <span>; </span>}
                                   </span>
-                                )}
-                                {m.contoh?.length > 0 && (
-                                  <span className="kamus-detail-def-sample">: {m.contoh.map((c, i) => (
-                                    <span key={c.id}>
-                                      <span dangerouslySetInnerHTML={{ __html: renderMarkdown(c.contoh) }} />
-                                      {c.makna_contoh && <span> — {c.makna_contoh}</span>}
-                                      {i < m.contoh.length - 1 && <span>; </span>}
-                                    </span>
-                                  ))}</span>
-                                )}
-                              </span>
-                            </li>
+                                ))}</span>
+                              )}
+                              {indexMakna < daftarMakna.length - 1 && <span>; </span>}
+                            </Fragment>
                           ))}
-                        </ol>
+                        </div>
                       </div>
                     ))}
                   </div>
                 )}
 
                 {subentriEntries.length > 0 && (
-                  <div className="mt-8">
+                  <div className="mt-4">
                     {subentriEntries.map(([jenis, daftar]) => (
                       <div key={jenis} className="kamus-detail-subentry-group">
                         <div className="kamus-detail-subentry-heading-row">
                           <h3 className="kamus-detail-def-class mb-0">{formatJenisSubentri(jenis)}</h3>
-                          <span className="kamus-detail-tag-gray">{daftar.length}</span>
+                          <span className="kamus-count-badge">{daftar.length}</span>
                         </div>
                         <div className="kamus-detail-subentry-flow">
                           {daftar.map((s, i) => (
