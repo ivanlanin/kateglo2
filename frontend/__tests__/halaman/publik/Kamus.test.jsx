@@ -46,6 +46,7 @@ describe('Kamus', () => {
           data: {
             abjad: [{ kode: 'A', nama: 'A' }],
             bentuk: [{ kode: 'dasar', nama: 'dasar' }],
+            unsur_terikat: [{ kode: 'prefiks', nama: 'prefiks' }],
             kelas_kata: [],
             ragam: [],
             ekspresi: [],
@@ -62,7 +63,8 @@ describe('Kamus', () => {
     render(<Kamus />);
 
     expect(screen.getByText('Abjad')).toBeInTheDocument();
-    expect(screen.getByText('Bentuk')).toBeInTheDocument();
+    expect(screen.getByText('Bentuk Bebas')).toBeInTheDocument();
+    expect(screen.getByText('Unsur Terikat')).toBeInTheDocument();
   });
 
   it('menampilkan hasil pencarian kata', () => {
@@ -135,6 +137,7 @@ describe('Kamus', () => {
           data: {
             abjad: [],
             bentuk: [],
+            unsur_terikat: [],
             kelas_kata: [],
             ragam: [],
             ekspresi: [],

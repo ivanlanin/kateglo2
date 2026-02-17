@@ -11,12 +11,15 @@ describe('ModelLabel', () => {
     db.query.mockReset();
   });
 
-  it('ambilSemuaKategori mengelompokkan label serta menambah abjad, bentuk, dan ekspresi', async () => {
+  it('ambilSemuaKategori mengelompokkan label serta menambah abjad, bentuk, ekspresi, kelas, dan unsur terikat', async () => {
     db.query.mockResolvedValue({
       rows: [
         { kategori: 'ragam', kode: 'cak', nama: 'cakapan' },
         { kategori: 'ragam', kode: 'ark', nama: 'arkais' },
         { kategori: 'bahasa', kode: 'id', nama: 'Indonesia' },
+        { kategori: 'kelas_kata', kode: 'n', nama: 'nomina' },
+        { kategori: 'kelas_kata', kode: 'v', nama: 'verba' },
+        { kategori: 'kelas_kata', kode: 'prefiks', nama: 'prefiks' },
       ],
     });
 
@@ -39,6 +42,11 @@ describe('ModelLabel', () => {
       { kode: 'idiom', nama: 'idiom' },
       { kode: 'peribahasa', nama: 'peribahasa' },
     ]);
+    expect(result.kelas_kata).toEqual([
+      { kode: 'n', nama: 'nomina' },
+      { kode: 'v', nama: 'verba' },
+    ]);
+    expect(result.unsur_terikat).toEqual([{ kode: 'prefiks', nama: 'prefiks' }]);
 
     // Alias kompatibilitas route lama
     expect(result.jenis).toHaveLength(5);
@@ -180,6 +188,37 @@ describe('ModelLabel', () => {
       [['id']]
     );
     expect(result).toEqual({ data: [], total: 0, label: null });
+  });
+
+  it('cariEntriPerLabel kategori unsur_terikat memakai kolom kelas_kata', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ kode: 'prefiks', nama: 'prefiks', keterangan: '' }] })
+      .mockResolvedValueOnce({ rows: [{ total: '2' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 5, lema: 'meng-' }] });
+
+    const result = await ModelLabel.cariEntriPerLabel('unsur_terikat', 'prefiks', 20, 0);
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('FROM label WHERE kategori = $1'),
+      ['kelas_kata', 'prefiks']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('m.kelas_kata = ANY($1::text[])'),
+      [['prefiks']]
+    );
+    expect(result.total).toBe(2);
+    expect(result.label).toEqual({ kode: 'prefiks', nama: 'prefiks', keterangan: '' });
+  });
+
+  it('cariEntriPerLabel kategori kelas_kata menolak label unsur terikat', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ kode: 'prefiks', nama: 'prefiks', keterangan: '' }] });
+
+    const result = await ModelLabel.cariEntriPerLabel('kelas_kata', 'prefiks', 20, 0);
+
+    expect(result).toEqual({ data: [], total: 0, label: null });
+    expect(db.query).toHaveBeenCalledTimes(1);
   });
 
   it('daftarAdmin tanpa q memakai paginasi default where kosong', async () => {
