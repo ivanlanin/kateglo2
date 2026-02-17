@@ -175,7 +175,7 @@ code {
   }
 
   .beranda-subtitle {
-    @apply text-lg text-gray-600 mb-2 max-w-2xl mx-auto;
+    @apply text-lg text-gray-600 mb-10 max-w-2xl mx-auto;
   }
 
   .dark .beranda-subtitle {
@@ -219,31 +219,31 @@ code {
   }
 
   .kotak-cari-beranda {
-    @apply max-w-2xl mx-auto rounded-xl shadow-sm border-2;
+    @apply max-w-2xl mx-auto rounded-3xl shadow-sm border-2;
   }
 
   .kotak-cari-navbar {
-    @apply rounded-md;
+    @apply rounded-3xl;
   }
 
   .kotak-cari-navbar .kotak-cari-select {
-    @apply rounded-l-md;
+    @apply rounded-l-3xl;
   }
 
   .kotak-cari-navbar .kotak-cari-tombol {
-    @apply rounded-r-md;
+    @apply rounded-r-3xl;
   }
 
   .kotak-cari-beranda .kotak-cari-select {
-    @apply rounded-l-xl;
+    @apply rounded-l-3xl;
   }
 
   .kotak-cari-beranda .kotak-cari-tombol {
-    @apply rounded-r-xl;
+    @apply rounded-r-3xl;
   }
 
   .kotak-cari-select {
-    @apply px-3 py-2 text-sm bg-gray-100 border-r border-gray-300 text-gray-700 font-medium cursor-pointer appearance-none;
+    @apply px-3 py-3 text-sm bg-gray-100 border-r border-gray-300 text-gray-700 font-medium cursor-pointer appearance-none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 8px center;
@@ -260,7 +260,7 @@ code {
   }
 
   .kotak-cari-beranda .kotak-cari-select {
-    @apply px-4 py-3 text-base;
+    @apply px-4 py-3.5 text-base;
     padding-right: 28px;
   }
 
@@ -269,7 +269,7 @@ code {
   }
 
   .kotak-cari-input {
-    @apply w-full pl-3 pr-8 py-2 text-sm bg-transparent text-gray-900 border-none;
+    @apply w-full pl-3 pr-8 py-3 text-sm bg-transparent text-gray-900 border-none;
   }
 
   .kotak-cari-input:focus {
@@ -281,7 +281,7 @@ code {
   }
 
   .kotak-cari-beranda .kotak-cari-input {
-    @apply pl-4 pr-9 py-3 text-lg;
+    @apply pl-4 pr-9 py-3.5 text-base;
   }
 
   .kotak-cari-hapus {
@@ -293,11 +293,11 @@ code {
   }
 
   .kotak-cari-tombol {
-    @apply px-3 bg-blue-600 text-white hover:bg-blue-700 transition-colors flex items-center justify-center;
+    @apply px-3 bg-transparent text-blue-600 hover:bg-gray-100 transition-colors flex items-center justify-center;
   }
 
   .dark .kotak-cari-tombol {
-    @apply bg-blue-500 hover:bg-blue-400;
+    @apply text-blue-400 hover:bg-dark-bg-hover;
   }
 
   .kotak-cari-beranda .kotak-cari-tombol {

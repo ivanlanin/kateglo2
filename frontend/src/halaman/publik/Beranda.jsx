@@ -16,7 +16,7 @@ function Beranda() {
       <div className="beranda-hero">
         <h1 className="beranda-title">Kateglo</h1>
         <p className="beranda-subtitle">
-          Kamus, tesaurus, dan glosarium bahasa Indonesia
+          Kamus, Tesaurus, dan Glosarium Bahasa Indonesia
         </p>
         {/* Pencarian Utama */}
         <KotakCari varian="beranda" autoFocus />
