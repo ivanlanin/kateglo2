@@ -21,12 +21,13 @@ import {
   PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
 
-const nilaiAwal = { kategori: '', kode: '', nama: '', keterangan: '', sumber: '' };
+const nilaiAwal = { kategori: '', kode: '', nama: '', urutan: 1, keterangan: '', sumber: '' };
 
 const kolom = [
   { key: 'kategori', label: 'Kategori' },
   { key: 'kode', label: 'Kode' },
   { key: 'nama', label: 'Nama' },
+  { key: 'urutan', label: 'Urutan' },
   {
     key: 'keterangan',
     label: 'Keterangan',
@@ -124,6 +125,7 @@ function LabelAdmin() {
         <InputField label="Kategori" name="kategori" value={panel.data.kategori} onChange={panel.ubahField} required />
         <InputField label="Kode" name="kode" value={panel.data.kode} onChange={panel.ubahField} required />
         <InputField label="Nama" name="nama" value={panel.data.nama} onChange={panel.ubahField} required />
+        <InputField label="Urutan" name="urutan" type="number" value={panel.data.urutan} onChange={panel.ubahField} />
         <TextareaField label="Keterangan" name="keterangan" value={panel.data.keterangan} onChange={panel.ubahField} rows={3} />
         <InputField label="Sumber" name="sumber" value={panel.data.sumber} onChange={panel.ubahField} />
         <FormFooter

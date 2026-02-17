@@ -25,6 +25,25 @@ router.get('/', async (req, res, next) => {
 });
 
 /**
+ * GET /api/redaksi/label/kategori
+ * Ambil daftar label per kategori untuk kebutuhan dropdown redaksi.
+ * Query optional: ?nama=bentuk-kata,jenis-rujuk,kelas-kata,ragam,bidang,bahasa,penyingkatan
+ */
+router.get('/kategori', async (req, res, next) => {
+  try {
+    const rawNama = String(req.query.nama || '').trim();
+    const kategori = rawNama
+      ? rawNama.split(',').map((item) => item.trim()).filter(Boolean)
+      : undefined;
+
+    const data = await ModelLabel.ambilKategoriUntukRedaksi(kategori);
+    return res.json({ success: true, data });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+/**
  * GET /api/redaksi/label/:id
  */
 router.get('/:id', async (req, res, next) => {
@@ -42,10 +61,13 @@ router.get('/:id', async (req, res, next) => {
  */
 router.post('/', async (req, res, next) => {
   try {
-    const { kategori, kode, nama } = req.body;
+    const { kategori, kode, nama, urutan } = req.body;
     if (!kategori?.trim()) return res.status(400).json({ success: false, message: 'Kategori wajib diisi' });
     if (!kode?.trim()) return res.status(400).json({ success: false, message: 'Kode wajib diisi' });
     if (!nama?.trim()) return res.status(400).json({ success: false, message: 'Nama wajib diisi' });
+    if (urutan !== undefined && (!Number.isFinite(Number(urutan)) || Number(urutan) < 1)) {
+      return res.status(400).json({ success: false, message: 'Urutan harus bilangan bulat >= 1' });
+    }
 
     const data = await ModelLabel.simpan(req.body);
     return res.status(201).json({ success: true, data });
@@ -60,10 +82,13 @@ router.post('/', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
   try {
     const id = Number(req.params.id);
-    const { kategori, kode, nama } = req.body;
+    const { kategori, kode, nama, urutan } = req.body;
     if (!kategori?.trim()) return res.status(400).json({ success: false, message: 'Kategori wajib diisi' });
     if (!kode?.trim()) return res.status(400).json({ success: false, message: 'Kode wajib diisi' });
     if (!nama?.trim()) return res.status(400).json({ success: false, message: 'Nama wajib diisi' });
+    if (urutan !== undefined && (!Number.isFinite(Number(urutan)) || Number(urutan) < 1)) {
+      return res.status(400).json({ success: false, message: 'Urutan harus bilangan bulat >= 1' });
+    }
 
     const data = await ModelLabel.simpan({ ...req.body, id });
     if (!data) return res.status(404).json({ success: false, message: 'Label tidak ditemukan' });

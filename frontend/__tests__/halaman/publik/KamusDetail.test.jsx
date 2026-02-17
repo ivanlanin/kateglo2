@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import KamusDetail from '../../../src/halaman/publik/KamusDetail';
-import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus } from '../../../src/api/apiPublik';
+import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategoriKamus } from '../../../src/api/apiPublik';
 import {
   renderMarkdown,
   buatPathKategoriKamus,
@@ -26,6 +26,7 @@ vi.mock('../../../src/api/apiPublik', () => ({
     data: { loggedIn: false, activeCount: 0, komentar: [] },
   }),
   simpanKomentarKamus: vi.fn(),
+  ambilKategoriKamus: vi.fn().mockResolvedValue({}),
 }));
 
 vi.mock('../../../src/context/authContext', () => ({
@@ -47,6 +48,7 @@ describe('KamusDetail', () => {
     ambilDetailKamus.mockClear();
     ambilKomentarKamus.mockClear();
     simpanKomentarKamus.mockClear();
+    ambilKategoriKamus.mockClear();
     mockUseAuth.mockReset();
     mockUseAuth.mockReturnValue({
       isAuthenticated: false,
@@ -83,6 +85,15 @@ describe('KamusDetail', () => {
   it('menampilkan detail lengkap saat data tersedia', () => {
     mockUseQuery.mockImplementation((options) => {
       if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: {
+            'kelas-kata': [{ kode: 'n', nama: 'nomina' }],
+          },
+        };
+      }
       return {
         isLoading: false,
         isError: false,
@@ -105,6 +116,7 @@ describe('KamusDetail', () => {
 
     expect(screen.getAllByRole('heading', { name: /kata/i }).length).toBeGreaterThan(0);
     expect(screen.getByText('/ka-ta/')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Nomina/i })).toBeInTheDocument();
 
     expect(screen.getByText('berkata')).toBeInTheDocument();
     expect(screen.getByText('Tesaurus')).toBeInTheDocument();
@@ -515,13 +527,13 @@ describe('KamusDetail', () => {
 
   it('membentuk fallback entri dari indeks route dan memetakan jenis ke kategori ekspresi/jenis', () => {
     mockParams = { indeks: 'kata%20route' };
-    let panggilan = 0;
-    mockUseQuery.mockImplementation(() => {
-      panggilan += 1;
-      const renderKe = Math.ceil(panggilan / 2);
-      const adalahDetail = panggilan % 2 === 1;
+    let jumlahDetail = 0;
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return { isLoading: false, isError: false, data: {} };
+      }
 
-      if (!adalahDetail) {
+      if (options?.queryKey?.[0] !== 'kamus-detail') {
         return {
           isLoading: false,
           isError: false,
@@ -529,7 +541,9 @@ describe('KamusDetail', () => {
         };
       }
 
-      if (renderKe === 1) {
+      jumlahDetail += 1;
+
+      if (jumlahDetail === 1) {
         return {
           isLoading: false,
           isError: false,
@@ -766,13 +780,13 @@ describe('KamusDetail helpers', () => {
   });
 
   it('data non-array mengikuti prioritas entri lalu indeks pada fallback berjenjang', () => {
-    let panggilan = 0;
-    mockUseQuery.mockImplementation(() => {
-      panggilan += 1;
-      const renderKe = Math.ceil(panggilan / 2);
-      const adalahDetail = panggilan % 2 === 1;
+    let jumlahDetail = 0;
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return { isLoading: false, isError: false, data: {} };
+      }
 
-      if (!adalahDetail) {
+      if (options?.queryKey?.[0] !== 'kamus-detail') {
         return {
           isLoading: false,
           isError: false,
@@ -780,7 +794,9 @@ describe('KamusDetail helpers', () => {
         };
       }
 
-      if (renderKe === 1) {
+      jumlahDetail += 1;
+
+      if (jumlahDetail === 1) {
         return {
           isLoading: false,
           isError: false,

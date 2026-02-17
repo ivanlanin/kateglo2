@@ -33,6 +33,15 @@ const BARIS_KATEGORI = [
 
 const limit = 100;
 
+function formatAwalKapital(teks = '') {
+  return String(teks)
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((kata) => kata.charAt(0).toUpperCase() + kata.slice(1))
+    .join(' ');
+}
+
 function Kamus() {
   const { kata, kategori, kode } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -134,7 +143,7 @@ function Kamus() {
                           to={`/kamus/${kat}/${encodeURIComponent(l.kode)}`}
                           className="beranda-tag-link"
                         >
-                          {l.nama}
+                          {['bentuk', 'unsur_terikat', 'ekspresi'].includes(kat) ? formatAwalKapital(l.nama) : l.nama}
                         </Link>
                       ))}
                     </div>
