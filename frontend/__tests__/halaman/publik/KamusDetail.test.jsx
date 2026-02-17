@@ -228,7 +228,7 @@ describe('KamusDetail', () => {
     expect(screen.getByRole('link', { name: 'slang' })).toHaveAttribute('href', '/kamus/ragam/slang');
     expect(screen.getByRole('link', { name: 'kiasan' })).toHaveAttribute('href', '/kamus/ragam/kiasan');
     expect(screen.getByRole('link', { name: 'Arab' })).toHaveAttribute('href', '/kamus/bahasa/Arab');
-    expect(screen.getByRole('link', { name: 'akr' })).toHaveAttribute('href', '/kamus/jenis/akr');
+    expect(screen.getByRole('link', { name: 'akr' })).toHaveAttribute('href', '/kamus/bentuk/akr');
     expect(screen.getByText('species', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('H2O')).toBeInTheDocument();
     expect(screen.getByText(/arti contoh/i)).toBeInTheDocument();
@@ -576,7 +576,7 @@ describe('KamusDetail', () => {
     expect(screen.getByText('idiom-data')).toBeInTheDocument();
 
     rerender(<KamusDetail />);
-    expect(screen.getByRole('link', { name: 'Khusus' })).toHaveAttribute('href', '/kamus/jenis/khusus');
+    expect(screen.getByRole('link', { name: 'Khusus' })).toHaveAttribute('href', '/kamus/bentuk/khusus');
     expect(screen.getByRole('link', { name: 'kata tujuan' })).toHaveAttribute('href', '/kamus/detail/kata%20tujuan');
     expect(screen.getByText('kata route')).toBeInTheDocument();
   });
@@ -678,8 +678,9 @@ describe('KamusDetail helpers', () => {
   it('tentukanKategoriJenis memetakan bentuk, ekspresi, dan fallback jenis', () => {
     expect(tentukanKategoriJenis('dasar')).toBe('bentuk');
     expect(tentukanKategoriJenis('idiom')).toBe('ekspresi');
-    expect(tentukanKategoriJenis('')).toBe('jenis');
-    expect(tentukanKategoriJenis('lain')).toBe('jenis');
+    expect(tentukanKategoriJenis('prefiks')).toBe('bentuk');
+    expect(tentukanKategoriJenis('')).toBe('bentuk');
+    expect(tentukanKategoriJenis('lain')).toBe('bentuk');
   });
 
   it('bandingkanEntriKamus menutup cabang prioritas lafal, urutan, homonim, dan alfabet', () => {

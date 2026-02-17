@@ -10,6 +10,7 @@ const kartuData = [
   { key: 'entri', label: 'Entri Kamus', warna: 'text-blue-600', link: '/redaksi/kamus' },
   { key: 'tesaurus', label: 'Entri Tesaurus', warna: 'text-emerald-600', link: '/redaksi/tesaurus' },
   { key: 'glosarium', label: 'Entri Glosarium', warna: 'text-amber-600', link: '/redaksi/glosarium' },
+  { key: 'label', label: 'Label', warna: 'text-cyan-600', link: '/redaksi/label' },
   { key: 'pengguna', label: 'Pengguna', warna: 'text-purple-600', link: '/redaksi/pengguna' },
   { key: 'komentar', label: 'Komentar', warna: 'text-rose-600', link: '/redaksi/komentar' },
 ];
@@ -36,7 +37,7 @@ function DasborAdmin() {
 
   return (
     <TataLetakAdmin judul="Dasbor">
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
         {kartuData.map((k) => (
           <KartuStatistik
             key={k.key}

@@ -15,7 +15,9 @@ import { updateSearchParamsWithOffset } from '../../utils/searchParams';
 const NAMA_KATEGORI = {
   abjad: 'Abjad',
   bentuk: 'Bentuk Bebas',
-  unsur_terikat: 'Unsur Terikat',
+  unsur: 'Bentuk Terikat',
+  unsur_terikat: 'Bentuk Terikat',
+  kelas: 'Kelas Kata',
   kelas_kata: 'Kelas Kata',
   ragam: 'Ragam',
   ekspresi: 'Ekspresi',
@@ -40,6 +42,22 @@ function formatAwalKapital(teks = '') {
     .filter(Boolean)
     .map((kata) => kata.charAt(0).toUpperCase() + kata.slice(1))
     .join(' ');
+}
+
+function tentukanNamaKategoriDariPath(kategori = '', kode = '') {
+  const kategoriPath = String(kategori || '').trim().toLowerCase();
+  const kodePath = String(kode || '').trim().toLowerCase();
+
+  if (kategoriPath === 'kelas' || kategoriPath === 'kelas_kata' || kategoriPath === 'kelas-kata') {
+    return NAMA_KATEGORI.kelas;
+  }
+
+  if (kategoriPath === 'bentuk') {
+    const kodeBentukTerikat = ['terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik'];
+    return kodeBentukTerikat.includes(kodePath) ? NAMA_KATEGORI.unsur_terikat : NAMA_KATEGORI.bentuk;
+  }
+
+  return NAMA_KATEGORI[kategoriPath] || kategori;
 }
 
 function Kamus() {
@@ -93,7 +111,7 @@ function Kamus() {
     updateSearchParamsWithOffset(setSearchParams, {}, newOffset);
   };
 
-  const namaKategori = NAMA_KATEGORI[kategori] || kategori;
+  const namaKategori = tentukanNamaKategoriDariPath(kategori, kode);
   const namaLabelRaw = labelKategori?.nama || (kode ? decodeURIComponent(kode) : '');
   const namaLabel = namaLabelRaw
     ? namaLabelRaw.charAt(0).toUpperCase() + namaLabelRaw.slice(1)
@@ -137,15 +155,22 @@ function Kamus() {
                   <div key={kat} className="beranda-feature-card text-center">
                     <h3 className="beranda-info-title">{NAMA_KATEGORI[kat]}</h3>
                     <div className="flex flex-wrap justify-center gap-2">
-                      {labels.map((l) => (
+                      {labels.map((l) => {
+                        const pathKategori = kat === 'unsur_terikat'
+                          ? 'bentuk'
+                          : kat === 'kelas_kata'
+                            ? 'kelas'
+                            : kat;
+                        return (
                         <Link
                           key={l.kode}
-                          to={`/kamus/${kat}/${encodeURIComponent(l.kode)}`}
+                          to={`/kamus/${pathKategori}/${encodeURIComponent(l.kode)}`}
                           className="beranda-tag-link"
                         >
                           {['bentuk', 'unsur_terikat', 'ekspresi'].includes(kat) ? formatAwalKapital(l.nama) : l.nama}
                         </Link>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 ))}

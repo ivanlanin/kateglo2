@@ -14,7 +14,7 @@ const SQL_ABJAD = `UPPER(SUBSTRING(REGEXP_REPLACE(entri, '^[^a-zA-Z]*', ''), 1, 
 const JENIS_BENTUK = ['dasar', 'turunan', 'gabungan'];
 const JENIS_EKSPRESI = ['idiom', 'peribahasa'];
 const JENIS_UNSUR_TERIKAT = ['terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik'];
-const JENIS_SEMUA = [...JENIS_BENTUK, ...JENIS_EKSPRESI];
+const JENIS_SEMUA = [...JENIS_BENTUK, ...JENIS_EKSPRESI, ...JENIS_UNSUR_TERIKAT, 'varian'];
 const KELAS_BEBAS = ['adjektiva', 'adverbia', 'nomina', 'numeralia', 'partikel', 'pronomina', 'verba'];
 const URUTAN_KELAS_KATA = ['nomina', 'verba', 'adjektiva', 'adverbia', 'pronomina', 'numeralia', 'partikel'];
 const URUTAN_UNSUR_TERIKAT = ['terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik'];
@@ -24,6 +24,7 @@ const KATEGORI_LABEL_REDAKSI = ['bentuk-kata', 'jenis-rujuk', 'kelas-kata', 'rag
 function normalisasiKategoriLabel(kategori = '') {
   const value = String(kategori || '').trim();
   if (value === 'kelas_kata') return 'kelas-kata';
+  if (value === 'kelas') return 'kelas-kata';
   return value;
 }
 
@@ -141,13 +142,16 @@ class ModelLabel {
       return this._cariEntriPerAbjad(kode, limit, offset);
     }
     if (kategori === 'bentuk') {
-      return this._cariEntriPerJenis(kode, JENIS_BENTUK, limit, offset);
+      return this._cariEntriPerJenis(kode, [...JENIS_BENTUK, ...JENIS_UNSUR_TERIKAT], limit, offset);
     }
     if (kategori === 'ekspresi') {
       return this._cariEntriPerJenis(kode, JENIS_EKSPRESI, limit, offset);
     }
     if (kategori === 'jenis') {
       return this._cariEntriPerJenis(kode, JENIS_SEMUA, limit, offset);
+    }
+    if (kategori === 'unsur') {
+      return this._cariEntriPerJenis(kode, JENIS_UNSUR_TERIKAT, limit, offset);
     }
     if (kategori === 'unsur_terikat') {
       return this._cariEntriPerJenis(kode, JENIS_UNSUR_TERIKAT, limit, offset);
@@ -336,7 +340,6 @@ class ModelLabel {
         OR kode ILIKE $${idx}
         OR nama ILIKE $${idx}
         OR COALESCE(keterangan, '') ILIKE $${idx}
-        OR COALESCE(sumber, '') ILIKE $${idx}
       )`);
       params.push(`%${q}%`);
       idx++;
@@ -351,7 +354,7 @@ class ModelLabel {
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-      `SELECT id, kategori, kode, nama, urutan, keterangan, sumber
+      `SELECT id, kategori, kode, nama, urutan, keterangan
        FROM label ${where}
        ORDER BY kategori ASC, urutan ASC, nama ASC
        LIMIT $${idx} OFFSET $${idx + 1}`,
@@ -368,18 +371,27 @@ class ModelLabel {
    */
   static async ambilDenganId(id) {
     const result = await db.query(
-      'SELECT id, kategori, kode, nama, urutan, keterangan, sumber FROM label WHERE id = $1',
+      'SELECT id, kategori, kode, nama, urutan, keterangan FROM label WHERE id = $1',
       [id]
     );
     return result.rows[0] || null;
   }
 
   /**
+   * Hitung total label.
+   * @returns {Promise<number>}
+   */
+  static async hitungTotal() {
+    const result = await db.query('SELECT COUNT(*) AS total FROM label');
+    return parseInt(result.rows[0].total, 10);
+  }
+
+  /**
    * Simpan (insert/update) label.
-   * @param {{ id?: number, kategori: string, kode: string, nama: string, urutan?: number|string, keterangan?: string, sumber?: string }} data
+  * @param {{ id?: number, kategori: string, kode: string, nama: string, urutan?: number|string, keterangan?: string }} data
    * @returns {Promise<Object|null>}
    */
-  static async simpan({ id, kategori, kode, nama, urutan, keterangan, sumber }) {
+  static async simpan({ id, kategori, kode, nama, urutan, keterangan }) {
     const nilaiUrutan = Number.isFinite(Number(urutan)) && Number(urutan) > 0
       ? Number.parseInt(urutan, 10)
       : 1;
@@ -391,20 +403,19 @@ class ModelLabel {
              kode = $2,
              nama = $3,
              urutan = $4,
-             keterangan = $5,
-             sumber = $6
-         WHERE id = $7
-         RETURNING id, kategori, kode, nama, urutan, keterangan, sumber`,
-        [kategori, kode, nama, nilaiUrutan, keterangan || null, sumber || null, id]
+             keterangan = $5
+         WHERE id = $6
+         RETURNING id, kategori, kode, nama, urutan, keterangan`,
+        [kategori, kode, nama, nilaiUrutan, keterangan || null, id]
       );
       return result.rows[0] || null;
     }
 
     const result = await db.query(
-      `INSERT INTO label (kategori, kode, nama, urutan, keterangan, sumber)
-       VALUES ($1, $2, $3, $4, $5, $6)
-       RETURNING id, kategori, kode, nama, urutan, keterangan, sumber`,
-      [kategori, kode, nama, nilaiUrutan, keterangan || null, sumber || null]
+      `INSERT INTO label (kategori, kode, nama, urutan, keterangan)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING id, kategori, kode, nama, urutan, keterangan`,
+      [kategori, kode, nama, nilaiUrutan, keterangan || null]
     );
     return result.rows[0];
   }

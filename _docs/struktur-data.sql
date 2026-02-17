@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-17T11:48:30.076Z
+-- Generated: 2026-02-17T12:23:16.761Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -160,7 +160,6 @@ create table label (
   kode text not null,
   nama text not null,
   keterangan text,
-  sumber text,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
   urutan integer not null default 1,
