@@ -22,6 +22,18 @@ vi.mock('react-router-dom', async () => {
 describe('TataLetakAdmin', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    localStorage.clear();
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: vi.fn().mockReturnValue({
+        matches: false,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      }),
+    });
   });
 
   it('menampilkan judul, user, menu aktif, dan logout', () => {
@@ -72,5 +84,54 @@ describe('TataLetakAdmin', () => {
 
     const menuKamus = screen.getAllByRole('link', { name: 'Kamus' });
     expect(menuKamus.length).toBeGreaterThan(1);
+  });
+
+  it('menu mobile logout menutup panel lalu logout', () => {
+    render(
+      <MemoryRouter initialEntries={['/redaksi/kamus']}>
+        <TataLetakAdmin>Konten</TataLetakAdmin>
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByLabelText('Toggle menu'));
+    fireEvent.click(screen.getAllByRole('button', { name: 'Keluar' })[1]);
+
+    expect(mockLogout).toHaveBeenCalledTimes(1);
+    expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true });
+  });
+
+  it('klik link pada menu mobile menutup panel tanpa logout', () => {
+    render(
+      <MemoryRouter initialEntries={['/redaksi/kamus']}>
+        <TataLetakAdmin>Konten</TataLetakAdmin>
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByLabelText('Toggle menu'));
+    fireEvent.click(screen.getAllByRole('link', { name: 'Tesaurus' })[1]);
+
+    expect(mockLogout).not.toHaveBeenCalled();
+    expect(screen.queryAllByRole('link', { name: 'Tesaurus' })).toHaveLength(1);
+  });
+
+  it('mode gelap membaca localStorage dan toggle tema memperbarui ikon/title', () => {
+    const storageSpy = vi.spyOn(window.localStorage, 'getItem').mockReturnValue('dark');
+
+    render(
+      <MemoryRouter initialEntries={['/redaksi/kamus']}>
+        <TataLetakAdmin>Konten</TataLetakAdmin>
+      </MemoryRouter>
+    );
+
+    const toggleTheme = document.querySelector('.kateglo-theme-toggle');
+    expect(toggleTheme).not.toBeNull();
+    const titleAwal = toggleTheme?.getAttribute('title');
+    const ikonAwal = toggleTheme?.textContent;
+
+    fireEvent.click(toggleTheme);
+
+    expect(toggleTheme?.getAttribute('title')).not.toBe(titleAwal);
+    expect(toggleTheme?.textContent).not.toBe(ikonAwal);
+    storageSpy.mockRestore();
   });
 });

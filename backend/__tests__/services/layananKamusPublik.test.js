@@ -267,4 +267,147 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
       expect.objectContaining({ id: 11, entri: 'be-', jenis: 'varian' }),
     ]);
   });
+
+  it('tidak menduplikasi varian jika subentri induk sudah memuat varian yang sama', async () => {
+    ModelEntri.ambilEntriPerIndeks.mockResolvedValue([
+      {
+        id: 20,
+        entri: 'kata',
+        indeks: 'kata',
+        homonim: null,
+        urutan: 1,
+        jenis: 'dasar',
+        induk: null,
+        pemenggalan: null,
+        lafal: null,
+        varian: null,
+        jenis_rujuk: null,
+        entri_rujuk: null,
+      },
+      {
+        id: 21,
+        entri: 'kata',
+        indeks: 'kata',
+        homonim: null,
+        urutan: 2,
+        jenis: 'varian',
+        induk: 20,
+        pemenggalan: null,
+        lafal: null,
+        varian: null,
+        jenis_rujuk: null,
+        entri_rujuk: null,
+      },
+    ]);
+    ModelEntri.ambilMakna
+      .mockResolvedValueOnce([{ id: 201, makna: 'arti' }])
+      .mockResolvedValueOnce([]);
+    ModelEntri.ambilContoh
+      .mockResolvedValueOnce([
+        { id: 1, makna_id: 201, contoh: 'contoh 1' },
+        { id: 2, makna_id: 201, contoh: 'contoh 2' },
+      ])
+      .mockResolvedValueOnce([]);
+    ModelEntri.ambilSubentri
+      .mockResolvedValueOnce([
+        { id: 30, entri: 'berkata', indeks: 'kata', jenis: 'turunan' },
+        { id: 31, entri: 'perkata', indeks: 'kata', jenis: 'turunan' },
+        { id: 21, entri: 'kata', indeks: 'kata', jenis: 'varian' },
+      ])
+      .mockResolvedValueOnce([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
+    ModelTesaurus.ambilDetail.mockResolvedValue({ sinonim: '', antonim: '' });
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+
+    const result = await ambilDetailKamus('kata');
+
+    expect(result.entri).toHaveLength(1);
+    expect(result.entri[0].makna[0].contoh).toHaveLength(2);
+    expect(result.entri[0].subentri.turunan).toHaveLength(2);
+    expect(result.entri[0].subentri.varian).toHaveLength(1);
+    expect(result.entri[0].subentri.varian[0].id).toBe(21);
+  });
+
+  it('mengembalikan entri varian jika tidak ada induk non-varian yang cocok', async () => {
+    ModelEntri.ambilEntriPerIndeks.mockResolvedValue([
+      {
+        id: 40,
+        entri: 'xbe',
+        indeks: 'xbe',
+        homonim: null,
+        urutan: 1,
+        jenis: 'varian',
+        induk: 999,
+        pemenggalan: null,
+        lafal: null,
+        varian: null,
+        jenis_rujuk: null,
+        entri_rujuk: null,
+      },
+    ]);
+    ModelEntri.ambilMakna.mockResolvedValue([{ id: 401, makna: 'varian' }]);
+    ModelEntri.ambilContoh.mockResolvedValue([]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([{ id: 999, entri: 'be', indeks: 'be' }]);
+    ModelTesaurus.ambilDetail.mockResolvedValue(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+
+    const result = await ambilDetailKamus('xbe');
+
+    expect(result.entri).toHaveLength(1);
+    expect(result.entri[0]).toEqual(expect.objectContaining({ id: 40, jenis: 'varian' }));
+  });
+
+  it('melewati varian saat induk tidak ditemukan di peta induk non-varian', async () => {
+    ModelEntri.ambilEntriPerIndeks.mockResolvedValue([
+      {
+        id: 50,
+        entri: 'akar',
+        indeks: 'akar',
+        homonim: null,
+        urutan: 1,
+        jenis: 'dasar',
+        induk: null,
+        pemenggalan: null,
+        lafal: null,
+        varian: null,
+        jenis_rujuk: null,
+        entri_rujuk: null,
+      },
+      {
+        id: 51,
+        entri: null,
+        indeks: 'akar',
+        homonim: null,
+        urutan: 2,
+        jenis: 'varian',
+        induk: 999,
+        pemenggalan: null,
+        lafal: null,
+        varian: null,
+        jenis_rujuk: '→',
+        entri_rujuk: '--',
+      },
+    ]);
+    ModelEntri.ambilMakna
+      .mockResolvedValueOnce([{ id: 501, makna: 'arti akar' }])
+      .mockResolvedValueOnce([]);
+    ModelEntri.ambilContoh
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([]);
+    ModelEntri.ambilSubentri
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([]);
+    ModelEntri.ambilRantaiInduk
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([]);
+    ModelTesaurus.ambilDetail.mockResolvedValue({ sinonim: 'akar', antonim: '' });
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+
+    const result = await ambilDetailKamus('akar');
+
+    expect(result.entri).toHaveLength(1);
+    expect(result.entri[0]).toEqual(expect.objectContaining({ id: 50, jenis: 'dasar' }));
+    expect(result.entri[0].subentri.varian).toBeUndefined();
+  });
 });

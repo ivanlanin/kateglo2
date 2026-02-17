@@ -22,7 +22,7 @@ describe('PanelLipat', () => {
       </PanelLipat>
     );
 
-    expect(screen.getByText('3')).toBeInTheDocument();
+    expect(screen.getByText((_, el) => el?.getAttribute('data-count') === '3')).toBeInTheDocument();
     expect(screen.getByText('Konten')).toBeInTheDocument();
   });
 });

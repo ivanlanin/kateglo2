@@ -2,6 +2,14 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import KamusDetail from '../../../src/halaman/publik/KamusDetail';
 import { ambilDetailKamus } from '../../../src/api/apiPublik';
+import {
+  renderMarkdown,
+  buatPathKategoriKamus,
+  formatTitleCase,
+  tentukanKategoriJenis,
+  bandingkanEntriKamus,
+  bandingkanJenisSubentri,
+} from '../../../src/halaman/publik/KamusDetail';
 
 const mockUseQuery = vi.fn();
 let mockParams = { indeks: 'kata' };
@@ -397,5 +405,296 @@ describe('KamusDetail', () => {
     expect(screen.getByText('Varian')).toBeInTheDocument();
     expect(screen.getByText('be-')).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'be-' })).not.toBeInTheDocument();
+  });
+
+  it('membentuk fallback entri dari indeks route dan memetakan jenis ke kategori ekspresi/jenis', () => {
+    mockParams = { indeks: 'kata%20route' };
+    mockUseQuery
+      .mockReturnValueOnce({
+        isLoading: false,
+        isError: false,
+        data: {
+          indeks: 'idiom-data',
+          jenis: 'idiom',
+          makna: [{ id: 1, kelas_kata: '-', makna: 'makna idiom' }],
+          subentri: {},
+          tesaurus: { sinonim: [], antonim: [] },
+          glosarium: [],
+        },
+      })
+      .mockReturnValueOnce({
+        isLoading: false,
+        isError: false,
+        data: {
+          jenis: 'khusus',
+          rujukan: true,
+          entri_rujuk: 'kata tujuan',
+          entri_rujuk_indeks: '',
+        },
+      });
+
+    const { rerender } = render(<KamusDetail />);
+
+    expect(screen.getByRole('link', { name: 'Idiom' })).toHaveAttribute('href', '/kamus/ekspresi/idiom');
+    expect(screen.getByText('idiom-data')).toBeInTheDocument();
+
+    rerender(<KamusDetail />);
+    expect(screen.getByRole('link', { name: 'Khusus' })).toHaveAttribute('href', '/kamus/jenis/khusus');
+    expect(screen.getByRole('link', { name: 'kata tujuan' })).toHaveAttribute('href', '/kamus/detail/kata%20tujuan');
+    expect(screen.getByText('kata route')).toBeInTheDocument();
+  });
+
+  it('mengurutkan entri dan subentri sesuai prioritas internal', () => {
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        entri: [
+          {
+            id: 1,
+            entri: 'c',
+            indeks: 'c',
+            lafal: 'ce',
+            urutan: 1,
+            homonim: 1,
+            jenis: 'dasar',
+            makna: [{ id: 11, kelas_kata: null, makna: 'makna c' }],
+            subentri: {},
+          },
+          {
+            id: 2,
+            entri: 'a',
+            indeks: 'a',
+            lafal: null,
+            urutan: 2,
+            homonim: 2,
+            jenis: 'dasar',
+            makna: [{ id: 12, kelas_kata: null, makna: 'makna a' }],
+            subentri: {},
+          },
+          {
+            id: 3,
+            entri: 'b',
+            indeks: 'b',
+            lafal: null,
+            urutan: 1,
+            homonim: 1,
+            jenis: 'varian',
+            makna: [{ id: 13, kelas_kata: null, makna: 'makna b' }],
+            subentri: {
+              zeta: [{ id: 31, entri: 'zeta', indeks: 'zeta' }],
+              turunan: [{ id: 32, entri: 'turunan-b', indeks: 'turunan-b' }],
+              alfa: [{ id: 33, entri: 'alfa', indeks: 'alfa' }],
+            },
+          },
+          {
+            id: 4,
+            entri: 'aa',
+            indeks: 'aa',
+            lafal: null,
+            urutan: 1,
+            homonim: 2,
+            jenis: 'dasar',
+            makna: [{ id: 14, kelas_kata: null, makna: 'makna aa' }],
+            subentri: {},
+          },
+          {
+            id: 5,
+            entri: 'ab',
+            indeks: 'ab',
+            lafal: null,
+            urutan: 1,
+            homonim: 2,
+            jenis: 'dasar',
+            makna: [{ id: 15, kelas_kata: null, makna: 'makna ab' }],
+            subentri: {},
+          },
+        ],
+        tesaurus: { sinonim: [], antonim: [] },
+        glosarium: [],
+      },
+    });
+
+    const { container } = render(<KamusDetail />);
+
+    const headingTexts = Array.from(container.querySelectorAll('.kamus-detail-heading-main'))
+      .map((el) => (el.textContent || '').trim())
+      .filter(Boolean);
+    expect(headingTexts.slice(0, 5)).toEqual(['b', 'aa', 'ab', 'a', 'c']);
+
+    const subentryHeadings = Array.from(container.querySelectorAll('.kamus-detail-subentry-group h3'))
+      .map((el) => (el.textContent || '').replace(/\(\d+\)/g, '').trim());
+    expect(subentryHeadings.slice(0, 3)).toEqual(['Turunan', 'Alfa', 'Zeta']);
+  });
+});
+
+describe('KamusDetail helpers', () => {
+  it('renderMarkdown, formatTitleCase, dan path kategori menangani fallback', () => {
+    expect(renderMarkdown('')).toBe('');
+    expect(renderMarkdown('**tebal** dan *miring*')).toContain('<strong>tebal</strong>');
+    expect(formatTitleCase('kata_kunci-utama')).toBe('Kata Kunci Utama');
+    expect(buatPathKategoriKamus('', 'nilai')).toBe('/kamus');
+    expect(buatPathKategoriKamus('ragam', '')).toBe('/kamus');
+    expect(buatPathKategoriKamus('ragam', 'cak')).toBe('/kamus/ragam/cak');
+  });
+
+  it('tentukanKategoriJenis memetakan bentuk, ekspresi, dan fallback jenis', () => {
+    expect(tentukanKategoriJenis('dasar')).toBe('bentuk');
+    expect(tentukanKategoriJenis('idiom')).toBe('ekspresi');
+    expect(tentukanKategoriJenis('')).toBe('jenis');
+    expect(tentukanKategoriJenis('lain')).toBe('jenis');
+  });
+
+  it('bandingkanEntriKamus menutup cabang prioritas lafal, urutan, homonim, dan alfabet', () => {
+    expect(bandingkanEntriKamus({ lafal: 'a' }, { lafal: '' })).toBeGreaterThan(0);
+    expect(bandingkanEntriKamus({ lafal: '', urutan: 2 }, { lafal: '', urutan: 1 })).toBeGreaterThan(0);
+    expect(bandingkanEntriKamus({ lafal: '', urutan: 1, homonim: 2 }, { lafal: '', urutan: 1, homonim: 1 })).toBeGreaterThan(0);
+    expect(bandingkanEntriKamus({ lafal: '', urutan: 1, homonim: 1, entri: 'b' }, { lafal: '', urutan: 1, homonim: 1, entri: 'a' })).toBeGreaterThan(0);
+    expect(bandingkanEntriKamus({ lafal: '', urutan: undefined, homonim: 'abc', entri: undefined }, { lafal: '', urutan: undefined, homonim: null, entri: undefined })).toBeGreaterThan(0);
+    expect(bandingkanEntriKamus({ lafal: '', urutan: undefined, homonim: 1, entri: 'a' }, { lafal: '', urutan: 1, homonim: 1, entri: 'a' })).toBeLessThan(0);
+    expect(bandingkanEntriKamus({ lafal: '', urutan: 1, homonim: 1, entri: 'a' }, { lafal: '', urutan: undefined, homonim: 1, entri: 'a' })).toBeGreaterThan(0);
+    expect(bandingkanEntriKamus({ lafal: '', urutan: 1, homonim: 1, entri: undefined }, { lafal: '', urutan: 1, homonim: 'x', entri: 'a' })).toBeLessThan(0);
+    expect(bandingkanEntriKamus({ lafal: '', urutan: 1, homonim: 1, entri: undefined }, { lafal: '', urutan: 1, homonim: 1, entri: 'a' })).toBeLessThan(0);
+    expect(bandingkanEntriKamus({ lafal: '', urutan: 1, homonim: 1, entri: 'a' }, { lafal: '', urutan: 1, homonim: 1, entri: undefined })).toBeGreaterThan(0);
+  });
+
+  it('bandingkanJenisSubentri menutup prioritas daftar dan fallback alfabet', () => {
+    const urutan = ['turunan', 'gabungan', 'idiom', 'peribahasa', 'varian'];
+    expect(bandingkanJenisSubentri('turunan', 'idiom', urutan)).toBeLessThan(0);
+    expect(bandingkanJenisSubentri('turunan', 'xyz', urutan)).toBeLessThan(0);
+    expect(bandingkanJenisSubentri('xyz', 'turunan', urutan)).toBeGreaterThan(0);
+    expect(bandingkanJenisSubentri('beta', 'alfa', urutan)).toBeGreaterThan(0);
+    expect(bandingkanJenisSubentri(undefined, undefined, urutan)).toBe(0);
+  });
+
+  it('normalisasi fallback data detail menutup cabang default untuk jenis, makna, subentri, dan entri rujuk', () => {
+    mockParams = { indeks: 'route%20fallback' };
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        entri: '',
+        indeks: '',
+        jenis: '',
+        rujukan: true,
+        entri_rujuk: 'tujuan fallback',
+        entri_rujuk_indeks: '',
+        makna: undefined,
+        subentri: undefined,
+        tesaurus: { sinonim: [], antonim: [] },
+        glosarium: [],
+      },
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByRole('link', { name: 'Dasar' })).toHaveAttribute('href', '/kamus/bentuk/dasar');
+    expect(screen.getByRole('link', { name: 'tujuan fallback' })).toHaveAttribute('href', '/kamus/detail/tujuan%20fallback');
+    expect(screen.getByText('route fallback')).toBeInTheDocument();
+  });
+
+  it('array entri dengan nilai kosong menutup fallback inline makna/subentri/jenis/rujukan', () => {
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        entri: [
+          {
+            id: 1,
+            entri: 'entri kosong',
+            indeks: 'entri-kosong',
+            jenis: '',
+            makna: undefined,
+            subentri: undefined,
+            rujukan: true,
+            entri_rujuk: 'target rujuk',
+            entri_rujuk_indeks: '',
+          },
+        ],
+        tesaurus: { sinonim: [], antonim: [] },
+        glosarium: [],
+      },
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByRole('link', { name: 'Dasar' })).toHaveAttribute('href', '/kamus/bentuk/dasar');
+    expect(screen.getByRole('link', { name: 'target rujuk' })).toHaveAttribute('href', '/kamus/detail/target%20rujuk');
+  });
+
+  it('data non-array dengan entri langsung memakai fallback indeks dari entri', () => {
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        entri: 'langsung',
+        indeks: '',
+        makna: [],
+        subentri: {},
+        tesaurus: { sinonim: [], antonim: [] },
+        glosarium: [],
+      },
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByText('langsung')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Dasar' })).toHaveAttribute('href', '/kamus/bentuk/dasar');
+  });
+
+  it('data non-array mengikuti prioritas entri lalu indeks pada fallback berjenjang', () => {
+    mockUseQuery
+      .mockReturnValueOnce({
+        isLoading: false,
+        isError: false,
+        data: {
+          id: 77,
+          entri: 'utama',
+          indeks: 'cadangan',
+          makna: [],
+          subentri: {},
+          tesaurus: { sinonim: [], antonim: [] },
+          glosarium: [],
+        },
+      })
+      .mockReturnValueOnce({
+        isLoading: false,
+        isError: false,
+        data: {
+          id: 0,
+          entri: '',
+          indeks: 'cadangan',
+          makna: [],
+          subentri: {},
+          tesaurus: { sinonim: [], antonim: [] },
+          glosarium: [],
+        },
+      });
+
+    const { rerender } = render(<KamusDetail />);
+    expect(screen.getByText('utama')).toBeInTheDocument();
+
+    rerender(<KamusDetail />);
+    expect(screen.getByText('cadangan')).toBeInTheDocument();
+  });
+
+  it('fallback decode memakai indeks kosong saat route indeks tidak tersedia', () => {
+    mockParams = {};
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        entri: '',
+        indeks: '',
+        makna: [],
+        subentri: {},
+        tesaurus: { sinonim: [], antonim: [] },
+        glosarium: [],
+      },
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByRole('link', { name: 'Dasar' })).toHaveAttribute('href', '/kamus/bentuk/dasar');
   });
 });

@@ -67,6 +67,31 @@ describe('Kamus', () => {
     expect(screen.getByText('Unsur Terikat')).toBeInTheDocument();
   });
 
+  it('browse kategori memakai fallback array kosong untuk key yang tidak ada dan grid dua kolom saat dua kategori terisi', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const { queryKey } = options;
+      if (queryKey[0] === 'kamus-kategori') {
+        return {
+          data: {
+            abjad: [{ kode: 'A', nama: 'A' }],
+            kelas_kata: [{ kode: 'n', nama: 'nomina' }],
+          },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    const { container } = render(<Kamus />);
+
+    expect(screen.getByText('Abjad')).toBeInTheDocument();
+    expect(screen.getByText('Kelas')).toBeInTheDocument();
+    const grid = container.querySelector('.grid.grid-cols-1');
+    expect(grid?.className).toContain('md:grid-cols-2');
+  });
+
   it('menampilkan hasil pencarian kata', () => {
     mockParams = { kata: 'kata' };
 

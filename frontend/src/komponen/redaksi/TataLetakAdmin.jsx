@@ -42,10 +42,7 @@ function TataLetakAdmin({ judul, children }) {
     navigate('/', { replace: true });
   };
 
-  const isActive = (item) =>
-    item.exact
-      ? location.pathname === item.path
-      : location.pathname.startsWith(item.path);
+  const isActive = (item) => location.pathname.startsWith(item.path);
 
   return (
     <div className="kateglo-layout-root">

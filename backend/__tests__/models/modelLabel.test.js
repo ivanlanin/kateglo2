@@ -71,6 +71,76 @@ describe('ModelLabel', () => {
     ]);
   });
 
+  it('ambilSemuaKategori mengurutkan prioritas dan fallback alfabet untuk label non-prioritas', async () => {
+    db.query.mockResolvedValue({
+      rows: [
+        { kategori: 'ragam', kode: 'umum', nama: 'umum' },
+        { kategori: 'ragam', kode: 'cak', nama: 'cakapan' },
+        { kategori: 'ragam', kode: 'baku', nama: 'baku' },
+        { kategori: 'kelas_kata', kode: 'verba', nama: 'kata kerja' },
+        { kategori: 'kelas_kata', kode: 'x', nama: 'tak dikenal' },
+      ],
+    });
+
+    const result = await ModelLabel.ambilSemuaKategori();
+
+    expect(result.ragam).toEqual([
+      { kategori: undefined, kode: 'cak', nama: 'cakapan' },
+      { kategori: undefined, kode: 'baku', nama: 'baku' },
+      { kategori: undefined, kode: 'umum', nama: 'umum' },
+    ].map(({ kode, nama }) => ({ kode, nama })));
+    expect(result.kelas_kata).toEqual([{ kode: 'verba', nama: 'kata kerja' }]);
+    expect(result.unsur_terikat).toEqual([]);
+  });
+
+  it('ambilSemuaKategori tetap aman saat kategori ragam/kelas_kata kosong atau nilai label tidak lengkap', async () => {
+    db.query.mockResolvedValue({
+      rows: [
+        { kategori: 'bahasa', kode: 'id', nama: 'Indonesia' },
+        { kategori: 'ragam', kode: null, nama: null },
+      ],
+    });
+
+    const result = await ModelLabel.ambilSemuaKategori();
+
+    expect(result.bahasa).toEqual([{ kode: 'id', nama: 'Indonesia' }]);
+    expect(result.kelas_kata).toEqual([]);
+    expect(result.unsur_terikat).toEqual([]);
+    expect(result.ragam).toEqual([{ kode: null, nama: null }]);
+  });
+
+  it('ambilSemuaKategori mengurutkan ragam saat nama/kode tidak lengkap dengan fallback aman', async () => {
+    db.query.mockResolvedValue({
+      rows: [
+        { kategori: 'ragam', kode: null, nama: null },
+        { kategori: 'ragam', kode: null, nama: null },
+        { kategori: 'ragam', kode: 'zz', nama: null },
+        { kategori: 'ragam', kode: 'aa', nama: '' },
+      ],
+    });
+
+    const result = await ModelLabel.ambilSemuaKategori();
+
+    expect(result.ragam).toEqual([
+      { kode: null, nama: null },
+      { kode: null, nama: null },
+      { kode: 'aa', nama: '' },
+      { kode: 'zz', nama: null },
+    ]);
+  });
+
+  it('ambilSemuaKategori menyediakan fallback array kosong ketika ragam tidak ada', async () => {
+    db.query.mockResolvedValue({
+      rows: [{ kategori: 'bahasa', kode: 'en', nama: 'Inggris' }],
+    });
+
+    const result = await ModelLabel.ambilSemuaKategori();
+
+    expect(result.ragam).toEqual([]);
+    expect(result.kelas_kata).toEqual([]);
+    expect(result.unsur_terikat).toEqual([]);
+  });
+
   it('cariEntriPerLabel mengembalikan kosong untuk kategori tidak valid', async () => {
     const result = await ModelLabel.cariEntriPerLabel('unknown', 'x', 10, 0);
 
@@ -228,6 +298,15 @@ describe('ModelLabel', () => {
     db.query.mockResolvedValueOnce({ rows: [{ kode: 'prefiks', nama: 'prefiks', keterangan: '' }] });
 
     const result = await ModelLabel.cariEntriPerLabel('kelas_kata', 'prefiks', 20, 0);
+
+    expect(result).toEqual({ data: [], total: 0, label: null });
+    expect(db.query).toHaveBeenCalledTimes(1);
+  });
+
+  it('cariEntriPerLabel kategori unsur_terikat mengembalikan kosong saat label tidak ditemukan', async () => {
+    db.query.mockResolvedValueOnce({ rows: [] });
+
+    const result = await ModelLabel.cariEntriPerLabel('unsur_terikat', 'tidak-ada', 20, 0);
 
     expect(result).toEqual({ data: [], total: 0, label: null });
     expect(db.query).toHaveBeenCalledTimes(1);
