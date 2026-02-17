@@ -322,7 +322,7 @@ describe('ModelEntri', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('UPDATE entri SET entri = $1'),
-      ['kata baru', 'dasar', null, null, null, null, null, null, 1, 8]
+      ['kata baru', 'dasar', null, null, null, null, null, null, 1, 'kata baru', null, 1, 8]
     );
     expect(result).toEqual(row);
   });
@@ -335,7 +335,7 @@ describe('ModelEntri', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO entri'),
-      ['kata', 'dasar', null, null, null, null, null, null, 0]
+      ['kata', 'dasar', null, null, null, null, null, null, 0, 'kata', null, 1]
     );
     expect(result).toEqual(row);
   });
@@ -347,7 +347,7 @@ describe('ModelEntri', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO entri'),
-      ['kata', 'dasar', null, null, null, null, null, null, 1]
+      ['kata', 'dasar', null, null, null, null, null, null, 1, 'kata', null, 1]
     );
   });
 

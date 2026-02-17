@@ -10,6 +10,12 @@ function bacaTeksEntri(item) {
   return item?.entri ?? '';
 }
 
+function normalisasiIndeksKamus(teks = '') {
+  const tanpaNomor = teks.replace(/\s*\([0-9]+\)\s*$/, '');
+  const tanpaStripTepi = tanpaNomor.replace(/^-+/, '').replace(/-+$/, '');
+  return tanpaStripTepi.trim() || teks.trim();
+}
+
 function parseDaftarRelasi(teks) {
   if (!teks) return [];
   return teks.split(';').map((item) => item.trim()).filter(Boolean);
@@ -36,61 +42,71 @@ async function cariKamus(query, { limit = 100, offset = 0 } = {}) {
   return ModelEntri.cariEntri(trimmed, limit, offset);
 }
 
-async function ambilDetailKamus(entri) {
-  const decodedEntri = decodeURIComponent((entri || '').trim());
-  if (!decodedEntri) return null;
+async function ambilDetailKamus(indeksAtauEntri) {
+  const decoded = decodeURIComponent((indeksAtauEntri || '').trim());
+  if (!decoded) return null;
 
-  const dataEntri = await ModelEntri.ambilEntri(decodedEntri);
-  if (!dataEntri) return null;
+  const indeksTarget = normalisasiIndeksKamus(decoded);
+  const daftarEntri = await ModelEntri.ambilEntriPerIndeks(indeksTarget);
+  if (daftarEntri.length === 0) return null;
 
-  // Jika ini rujukan, kembalikan info rujukan
-  const entriTeks = bacaTeksEntri(dataEntri);
-  const entriRujuk = dataEntri.entri_rujuk;
+  const detailEntri = await Promise.all(
+    daftarEntri.map(async (dataEntri) => {
+      const [maknaList, subentri, rantaiInduk] = await Promise.all([
+        ModelEntri.ambilMakna(dataEntri.id),
+        ModelEntri.ambilSubentri(dataEntri.id),
+        ModelEntri.ambilRantaiInduk(dataEntri.induk),
+      ]);
 
-  if (dataEntri.jenis_rujuk && entriRujuk) {
-    return {
-      entri: entriTeks,
-      jenis: dataEntri.jenis,
-      jenis_rujuk: dataEntri.jenis_rujuk,
-      entri_rujuk: entriRujuk,
-      rujukan: true,
-    };
-  }
+      const maknaIds = maknaList.map((m) => m.id);
+      const contohList = await ModelEntri.ambilContoh(maknaIds);
 
-  const [maknaList, subentri, rantaiInduk, tesaurusDetail, glosarium] = await Promise.all([
-    ModelEntri.ambilMakna(dataEntri.id),
-    ModelEntri.ambilSubentri(dataEntri.id),
-    ModelEntri.ambilRantaiInduk(dataEntri.induk),
-    ModelTesaurus.ambilDetail(entriTeks),
-    ModelGlosarium.cariFrasaMengandungKataUtuh(entriTeks),
+      const contohPerMakna = new Map();
+      for (const contoh of contohList) {
+        if (!contohPerMakna.has(contoh.makna_id)) {
+          contohPerMakna.set(contoh.makna_id, []);
+        }
+        contohPerMakna.get(contoh.makna_id).push(contoh);
+      }
+
+      const makna = maknaList.map((m) => ({
+        ...m,
+        contoh: contohPerMakna.get(m.id) || [],
+      }));
+
+      const subentriPerJenis = {};
+      for (const s of subentri) {
+        if (!subentriPerJenis[s.jenis]) {
+          subentriPerJenis[s.jenis] = [];
+        }
+        subentriPerJenis[s.jenis].push(s);
+      }
+
+      return {
+        id: dataEntri.id,
+        entri: bacaTeksEntri(dataEntri),
+        indeks: dataEntri.indeks,
+        homonim: dataEntri.homonim,
+        urutan: dataEntri.urutan,
+        jenis: dataEntri.jenis,
+        pemenggalan: dataEntri.pemenggalan,
+        lafal: dataEntri.lafal,
+        varian: dataEntri.varian,
+        jenis_rujuk: dataEntri.jenis_rujuk,
+        entri_rujuk: dataEntri.entri_rujuk,
+        entri_rujuk_indeks: dataEntri.entri_rujuk ? normalisasiIndeksKamus(dataEntri.entri_rujuk) : null,
+        rujukan: Boolean(dataEntri.jenis_rujuk && dataEntri.entri_rujuk),
+        induk: (rantaiInduk || []).map((r) => ({ id: r.id, entri: r.entri, indeks: r.indeks })),
+        makna,
+        subentri: subentriPerJenis,
+      };
+    })
+  );
+
+  const [tesaurusDetail, glosarium] = await Promise.all([
+    ModelTesaurus.ambilDetail(indeksTarget),
+    ModelGlosarium.cariFrasaMengandungKataUtuh(indeksTarget),
   ]);
-
-  // Ambil contoh untuk semua makna
-  const maknaIds = maknaList.map((m) => m.id);
-  const contohList = await ModelEntri.ambilContoh(maknaIds);
-
-  // Kelompokkan contoh per makna
-  const contohPerMakna = new Map();
-  for (const c of contohList) {
-    if (!contohPerMakna.has(c.makna_id)) {
-      contohPerMakna.set(c.makna_id, []);
-    }
-    contohPerMakna.get(c.makna_id).push(c);
-  }
-
-  const makna = maknaList.map((m) => ({
-    ...m,
-    contoh: contohPerMakna.get(m.id) || [],
-  }));
-
-  // Kelompokkan subentri per jenis
-  const subentriPerJenis = {};
-  for (const s of subentri) {
-    if (!subentriPerJenis[s.jenis]) {
-      subentriPerJenis[s.jenis] = [];
-    }
-    subentriPerJenis[s.jenis].push(s);
-  }
 
   const tesaurus = tesaurusDetail
     ? {
@@ -100,17 +116,10 @@ async function ambilDetailKamus(entri) {
     : { sinonim: [], antonim: [] };
 
   return {
-    entri: entriTeks,
-    jenis: dataEntri.jenis,
-    pemenggalan: dataEntri.pemenggalan,
-    lafal: dataEntri.lafal,
-    varian: dataEntri.varian,
-    induk: rantaiInduk.length > 0 ? rantaiInduk.map((r) => ({ id: r.id, entri: bacaTeksEntri(r) })) : null,
-    makna,
-    subentri: subentriPerJenis,
+    indeks: indeksTarget,
+    entri: detailEntri,
     tesaurus,
     glosarium,
-    rujukan: false,
   };
 }
 

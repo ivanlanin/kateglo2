@@ -10,6 +10,7 @@ import Paginasi from '../../komponen/bersama/Paginasi';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import TeksLema from '../../komponen/publik/TeksLema';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
+import { buatPathDetailKamus } from '../../utils/kamusIndex';
 import { updateSearchParamsWithOffset } from '../../utils/searchParams';
 
 const limit = 100;
@@ -109,7 +110,7 @@ function Tesaurus() {
                 {results.map((item) => (
                   <div key={item.id} className="tesaurus-result-row">
                     <Link
-                      to={`/kamus/detail/${encodeURIComponent(item.lema)}`}
+                      to={buatPathDetailKamus(item.lema)}
                       className="kamus-kategori-grid-link"
                     >
                       <TeksLema lema={item.lema} />

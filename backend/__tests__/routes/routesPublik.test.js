@@ -256,7 +256,7 @@ describe('routes backend', () => {
     expect(response.body.error).toBe('cari kamus gagal');
   });
 
-  it('GET /api/publik/kamus/detail/:entri mengembalikan 404 saat data null', async () => {
+  it('GET /api/publik/kamus/detail/:indeks mengembalikan 404 saat data null', async () => {
     layananKamusPublik.ambilDetailKamus.mockResolvedValue(null);
     ModelEntri.saranEntri.mockResolvedValue(['kata']);
 
@@ -268,12 +268,13 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/kamus/detail/:entri mengembalikan data saat ditemukan', async () => {
-    layananKamusPublik.ambilDetailKamus.mockResolvedValue({ entri: 'kata' });
+    layananKamusPublik.ambilDetailKamus.mockResolvedValue({ indeks: 'kata', entri: [{ id: 1, entri: 'kata' }] });
 
     const response = await request(createApp()).get('/api/publik/kamus/detail/kata');
 
     expect(response.status).toBe(200);
-    expect(response.body.entri).toBe('kata');
+    expect(response.body.indeks).toBe('kata');
+    expect(response.body.entri).toHaveLength(1);
   });
 
   it('GET /api/publik/kamus/detail/:entri meneruskan error', async () => {

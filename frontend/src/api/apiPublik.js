@@ -25,9 +25,9 @@ export async function cariKamus(kata, { limit = 100, offset = 0 } = {}) {
   return response.data;
 }
 
-export async function ambilDetailKamus(entri) {
+export async function ambilDetailKamus(indeks) {
   try {
-    const response = await klien.get(`/api/publik/kamus/detail/${encodeURIComponent(entri)}`);
+    const response = await klien.get(`/api/publik/kamus/detail/${encodeURIComponent(indeks)}`);
     return response.data;
   } catch (err) {
     if (err.response?.status === 404) {

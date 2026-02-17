@@ -27,6 +27,9 @@ create table entri (
   id serial primary key,
   legacy_eid integer,
   entri text not null,
+  indeks text not null,
+  homonim integer,
+  urutan integer not null default 1,
   jenis text not null,
   induk integer references entri(id) on delete set null,
   pemenggalan text,
@@ -44,6 +47,8 @@ create table entri (
 create unique index entri_legacy_eid_key on entri using btree (legacy_eid);
 create index idx_entri_induk on entri using btree (induk);
 create index idx_entri_induk_aktif_jenis_entri on entri using btree (induk, aktif, jenis, entri);
+create index idx_entri_indeks on entri using btree (indeks);
+create index idx_entri_indeks_urutan on entri using btree (indeks, urutan, id);
 create index idx_entri_jenis on entri using btree (jenis);
 create index idx_entri_lower on entri using btree (lower(entri));
 create index idx_entri_serupa_norm_aktif on entri using btree (lower(regexp_replace(replace(entri, '-'::text, ''::text), '\s*\([0-9]+\)\s*$'::text, ''::text))) WHERE (aktif = 1);

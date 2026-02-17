@@ -86,14 +86,14 @@ router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
   }
 });
 
-router.get('/detail/:entri', async (req, res, next) => {
+router.get('/detail/:indeks', async (req, res, next) => {
   try {
-    const data = await ambilDetailKamus(req.params.entri);
+    const data = await ambilDetailKamus(req.params.indeks);
     if (!data) {
-      const saran = await ModelEntri.saranEntri(decodeURIComponent(req.params.entri));
+      const saran = await ModelEntri.saranEntri(decodeURIComponent(req.params.indeks));
       return res.status(404).json({
         error: 'Tidak Ditemukan',
-        message: 'Entri tidak ditemukan',
+        message: 'Indeks tidak ditemukan',
         saran,
       });
     }

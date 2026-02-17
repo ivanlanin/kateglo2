@@ -4,7 +4,7 @@ import KamusDetail from '../../../src/halaman/publik/KamusDetail';
 import { ambilDetailKamus } from '../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
-let mockParams = { entri: 'kata' };
+let mockParams = { indeks: 'kata' };
 
 vi.mock('../../../src/api/apiPublik', () => ({
   ambilDetailKamus: vi.fn().mockResolvedValue(null),
@@ -23,7 +23,7 @@ describe('KamusDetail', () => {
   beforeEach(() => {
     mockUseQuery.mockReset();
     ambilDetailKamus.mockClear();
-    mockParams = { entri: 'kata' };
+    mockParams = { indeks: 'kata' };
   });
 
   it('menampilkan loading state', () => {
@@ -73,7 +73,7 @@ describe('KamusDetail', () => {
 
     render(<KamusDetail />);
 
-    expect(screen.getByRole('heading', { name: /kata/i })).toBeInTheDocument();
+    expect(screen.getAllByRole('heading', { name: /kata/i }).length).toBeGreaterThan(0);
     expect(screen.getByText('/ka-ta/')).toBeInTheDocument();
 
     expect(screen.getByText('berkata')).toBeInTheDocument();

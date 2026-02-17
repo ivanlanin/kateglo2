@@ -96,7 +96,7 @@ class ModelLabel {
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-      `SELECT DISTINCT ON (l.entri) l.id, l.entri, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk,
+      `SELECT DISTINCT ON (l.entri) l.id, l.entri, l.indeks, l.urutan, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk,
               m.kelas_kata AS preview_kelas_kata, m.makna AS preview_makna
        FROM entri l
        JOIN makna m ON m.entri_id = l.id
@@ -127,7 +127,7 @@ class ModelLabel {
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-      `SELECT l.id, l.entri, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk,
+      `SELECT l.id, l.entri, l.indeks, l.urutan, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk,
               m.kelas_kata AS preview_kelas_kata, m.makna AS preview_makna
        FROM entri l
        LEFT JOIN LATERAL (
@@ -162,7 +162,7 @@ class ModelLabel {
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-      `SELECT l.id, l.entri, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk,
+      `SELECT l.id, l.entri, l.indeks, l.urutan, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk,
               m.kelas_kata AS preview_kelas_kata, m.makna AS preview_makna
        FROM entri l
        LEFT JOIN LATERAL (
