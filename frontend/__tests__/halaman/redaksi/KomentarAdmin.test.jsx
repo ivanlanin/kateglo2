@@ -34,6 +34,7 @@ describe('KomentarAdmin', () => {
           komentar: 'komentar awal',
           pengguna_nama: 'Budi',
           pengguna_surel: 'budi@contoh.id',
+          updated_at: '2026-02-17T09:39:00.000Z',
           aktif: 0,
         }],
       },
@@ -50,6 +51,7 @@ describe('KomentarAdmin', () => {
     );
 
     expect(screen.getByRole('heading', { name: 'Komentar' })).toBeInTheDocument();
+    expect(screen.getByRole('columnheader', { name: 'Tanggal' })).toBeInTheDocument();
     expect(screen.getByText('kata')).toBeInTheDocument();
     expect(screen.getByText(/komentar awal/i)).toBeInTheDocument();
 

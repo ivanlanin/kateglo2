@@ -265,7 +265,7 @@ describe('KamusDetail', () => {
     render(<KamusDetail />);
 
     expect(screen.getByText(/Ada 3 komentar pada entri ini/i)).toBeInTheDocument();
-    expect(screen.getByText(/untuk membaca atau meninggalkan komentar/i)).toBeInTheDocument();
+    expect(screen.getByText(/untuk membaca atau mengirim komentar/i)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'masuk dengan akun Google' })).toBeInTheDocument();
   });
 
@@ -315,7 +315,6 @@ describe('KamusDetail', () => {
 
     render(<KamusDetail />);
 
-    expect(screen.getByText('Berikan komentar, saran, atau pertanyaan terhadap entri ini.')).toBeInTheDocument();
     expect(screen.getByText('Budi')).toBeInTheDocument();
     expect(screen.getByText(/baris 1/)).toBeInTheDocument();
     expect(screen.getByText(/baris 2/)).toBeInTheDocument();

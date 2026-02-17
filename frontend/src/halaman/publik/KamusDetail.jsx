@@ -12,6 +12,7 @@ import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import TeksLema from '../../komponen/publik/TeksLema';
 import { PesanTidakDitemukan } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus } from '../../utils/kamusIndex';
+import { formatTanggalKomentar } from '../../utils/formatTanggalKomentar';
 
 /** Konversi markdown ringan (*italic* dan **bold**) ke HTML inline */
 function renderMarkdown(teks) {
@@ -62,23 +63,6 @@ function bandingkanJenisSubentri(jenisA, jenisB, urutanJenisSubentri) {
   if (idxB !== -1) return 1;
 
   return (jenisA || '').localeCompare((jenisB || ''), 'id');
-}
-
-function formatTanggalKomentar(value) {
-  if (!value) return '-';
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return '-';
-  const tanggal = new Intl.DateTimeFormat('id-ID', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  }).format(date);
-  const waktu = new Intl.DateTimeFormat('id-ID', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  }).format(date).replace(':', '.');
-  return `${tanggal} ${waktu}`;
 }
 
 function KamusDetail() {

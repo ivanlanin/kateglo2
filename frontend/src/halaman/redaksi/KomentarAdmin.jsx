@@ -22,6 +22,7 @@ import {
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
+import { formatTanggalKomentar } from '../../utils/formatTanggalKomentar';
 
 const nilaiAwal = {
   id: null,
@@ -33,6 +34,11 @@ const nilaiAwal = {
 };
 
 const kolom = [
+  {
+    key: 'tanggal',
+    label: 'Tanggal',
+    render: (item) => formatTanggalKomentar(item.updated_at || item.created_at),
+  },
   { key: 'indeks', label: 'Indeks' },
   {
     key: 'komentar',
@@ -40,7 +46,6 @@ const kolom = [
     render: (item) => <span className="whitespace-pre-line">{potongTeks(item.komentar, 120)}</span>,
   },
   { key: 'pengguna_nama', label: 'Pengguna' },
-  { key: 'pengguna_surel', label: 'Surel' },
   { key: 'aktif', label: 'Status', render: (item) => <BadgeStatus aktif={item.aktif} /> },
 ];
 
