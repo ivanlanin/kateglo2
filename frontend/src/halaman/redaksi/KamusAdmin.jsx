@@ -20,7 +20,19 @@ import {
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
-const nilaiAwalEntri = { entri: '', jenis: 'dasar', lafal: '', pemenggalan: '', varian: '', jenis_rujuk: '', entri_rujuk: '', aktif: 1 };
+const nilaiAwalEntri = {
+  entri: '',
+  indeks: '',
+  homonim: '',
+  urutan: 1,
+  jenis: 'dasar',
+  lafal: '',
+  pemenggalan: '',
+  varian: '',
+  jenis_rujuk: '',
+  entri_rujuk: '',
+  aktif: 1,
+};
 
 const opsiJenis = [
   { value: 'dasar', label: 'Dasar' },
@@ -53,6 +65,9 @@ const kolom = [
       </span>
     ),
   },
+  { key: 'indeks', label: 'Indeks' },
+  { key: 'homonim', label: 'Homonim' },
+  { key: 'urutan', label: 'Urutan' },
   { key: 'jenis', label: 'Jenis' },
   { key: 'lafal', label: 'Lafal' },
   { key: 'aktif', label: 'Status', render: (item) => <BadgeStatus aktif={item.aktif} /> },
@@ -390,6 +405,17 @@ function KamusAdmin() {
       <PanelGeser buka={panel.buka} onTutup={panel.tutup} judul={panel.modeTambah ? 'Tambah Entri' : 'Sunting Entri'}>
         <PesanForm error={pesan.error} sukses={pesan.sukses} />
         <InputField label="Entri" name="entri" value={panel.data.entri} onChange={panel.ubahField} required />
+        <InputField
+          label="Indeks"
+          name="indeks"
+          value={panel.data.indeks}
+          onChange={panel.ubahField}
+          placeholder="Kosongkan untuk normalisasi otomatis dari entri"
+        />
+        <div className="grid grid-cols-2 gap-2">
+          <InputField label="Homonim" name="homonim" type="number" value={panel.data.homonim} onChange={panel.ubahField} />
+          <InputField label="Urutan" name="urutan" type="number" value={panel.data.urutan} onChange={panel.ubahField} />
+        </div>
         <SelectField label="Jenis" name="jenis" value={panel.data.jenis} onChange={panel.ubahField} options={opsiJenis} />
         <InputField label="Lafal" name="lafal" value={panel.data.lafal} onChange={panel.ubahField} placeholder="contoh: la·fal" />
         <InputField label="Pemenggalan" name="pemenggalan" value={panel.data.pemenggalan} onChange={panel.ubahField} />

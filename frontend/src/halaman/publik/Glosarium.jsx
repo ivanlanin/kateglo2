@@ -14,6 +14,7 @@ import {
 import Paginasi from '../../komponen/bersama/Paginasi';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
+import { buatPathDetailKamus } from '../../utils/kamusIndex';
 import { updateSearchParamsWithOffset } from '../../utils/searchParams';
 
 function Glosarium() {
@@ -130,7 +131,7 @@ function Glosarium() {
                 {results.map((item) => (
                   <div key={item.id} className="glosarium-result-row">
                     <Link
-                      to={`/kamus/detail/${encodeURIComponent(item.indonesia)}`}
+                      to={buatPathDetailKamus(item.indonesia)}
                       className="kamus-kategori-grid-link"
                     >
                       {item.indonesia}

@@ -9,6 +9,7 @@ import Paginasi from '../../komponen/bersama/Paginasi';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import TeksLema from '../../komponen/publik/TeksLema';
 import { EmptyResultText, PesanTidakDitemukan, QueryFeedback } from '../../komponen/publik/StatusKonten';
+import { buatPathDetailKamus } from '../../utils/kamusIndex';
 import { updateSearchParamsWithOffset } from '../../utils/searchParams';
 
 const NAMA_KATEGORI = {
@@ -137,7 +138,7 @@ function Kamus() {
                 {resultsPencarian.map((item) => (
                   <Link
                     key={item.id}
-                    to={`/kamus/detail/${encodeURIComponent(item.entri)}`}
+                    to={buatPathDetailKamus(item.indeks || item.entri)}
                     className="kamus-kategori-grid-link"
                   >
                     <TeksLema lema={item.entri} />
@@ -163,7 +164,7 @@ function Kamus() {
                 {resultsKategori.map((item) => (
                   <Link
                     key={item.id}
-                    to={`/kamus/detail/${encodeURIComponent(item.entri)}`}
+                    to={buatPathDetailKamus(item.indeks || item.entri)}
                     className="kamus-kategori-grid-link"
                   >
                     <TeksLema lema={item.entri} />

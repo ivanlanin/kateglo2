@@ -5,6 +5,7 @@
 - Menambahkan fitur pengelolaan label untuk redaksi
 - Mengubah entri jenis "berimbuhan" menjadi "turunan"
 - Mengonsistenkan tata letak publik dan redaksi
+- Mengubah tampilan detail kamus menjadi berdasarkan indeks
 
 ## 2026-02-16 Senin
 

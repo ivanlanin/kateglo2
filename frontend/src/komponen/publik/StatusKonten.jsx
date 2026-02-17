@@ -3,6 +3,7 @@
  */
 
 import { Link } from 'react-router-dom';
+import { buatPathDetailKamus } from '../../utils/kamusIndex';
 
 function resolveErrorText(error, defaultText) {
   const status = error?.response?.status;
@@ -65,7 +66,7 @@ function PesanTidakDitemukan({ saran = [] }) {
           {saran.map((kata, i) => (
             <span key={kata}>
               <Link
-                to={`/kamus/detail/${encodeURIComponent(kata)}`}
+                to={buatPathDetailKamus(kata)}
                 className="link-action font-semibold"
               >
                 {kata}
