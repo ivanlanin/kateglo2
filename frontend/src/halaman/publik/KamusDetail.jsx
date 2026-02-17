@@ -20,6 +20,12 @@ function renderMarkdown(teks) {
     .replace(/\*(.+?)\*/g, '<em>$1</em>');
 }
 
+function buatPathKategoriKamus(kategori, badge) {
+  const nilai = String(badge || '').trim();
+  if (!kategori || !nilai) return '/kamus';
+  return `/kamus/${encodeURIComponent(kategori)}/${encodeURIComponent(nilai)}`;
+}
+
 function KamusDetail() {
   const { indeks } = useParams();
 
@@ -152,37 +158,41 @@ function KamusDetail() {
             return (
               <section key={entriItem.id} className="mb-8 pb-8 border-b border-gray-200 dark:border-gray-700 last:border-b-0 last:mb-0 last:pb-0">
                 <div className="kamus-detail-heading-row">
-                  <h1 className="kamus-detail-heading">
-                    <span className="kamus-detail-heading-main">
-                      {rantaiHeading.map((item, index) => (
-                        <Fragment key={`${item.id}-${index}`}>
-                          {item.current ? (
-                            <span><TeksLema lema={item.entri} /></span>
-                          ) : (
-                            <Link
-                              to={buatPathDetailKamus(item.indeks || item.entri)}
-                              className="kamus-detail-heading-chain-link"
-                            >
-                              <TeksLema lema={item.entri} />
-                            </Link>
-                          )}
-                          {index < rantaiHeading.length - 1 && (
-                            <span className="kamus-detail-heading-chain-separator">{' > '}</span>
-                          )}
-                        </Fragment>
-                      ))}
-                    </span>
-                    {entriItem.lafal && (
-                      <span className="kamus-detail-heading-pronunciation">/<TeksLema lema={entriItem.lafal} />/</span>
-                    )}
-                    {entriItem.pemenggalan && entriItem.pemenggalan !== entriItem.entri && (
-                      <span className="kamus-detail-heading-split">(<TeksLema lema={entriItem.pemenggalan} />)</span>
-                    )}
-                  </h1>
-
-                  {entriItem.jenis && entriItem.jenis !== 'dasar' && (
-                    <span className="kamus-detail-tag-purple">{entriItem.jenis}</span>
-                  )}
+                  <div className="min-w-0">
+                    <h1 className="kamus-detail-heading">
+                      <span className="kamus-detail-heading-main">
+                        {rantaiHeading.map((item, index) => (
+                          <Fragment key={`${item.id}-${index}`}>
+                            {item.current ? (
+                              <span><TeksLema lema={item.entri} /></span>
+                            ) : (
+                              <Link
+                                to={buatPathDetailKamus(item.indeks || item.entri)}
+                                className="kamus-detail-heading-chain-link"
+                              >
+                                <TeksLema lema={item.entri} />
+                              </Link>
+                            )}
+                            {index < rantaiHeading.length - 1 && (
+                              <span className="kamus-detail-heading-chain-separator">{' > '}</span>
+                            )}
+                          </Fragment>
+                        ))}
+                      </span>
+                      {entriItem.lafal && (
+                        <span className="kamus-detail-heading-pronunciation">/<TeksLema lema={entriItem.lafal} />/</span>
+                      )}
+                      {entriItem.pemenggalan && entriItem.pemenggalan !== entriItem.entri && (
+                        <span className="kamus-detail-heading-split">(<TeksLema lema={entriItem.pemenggalan} />)</span>
+                      )}
+                    </h1>
+                    <Link
+                      to={buatPathKategoriKamus('jenis', entriItem.jenis || 'dasar')}
+                      className="kamus-detail-tag-purple mt-1"
+                    >
+                      {entriItem.jenis || 'dasar'}
+                    </Link>
+                  </div>
                 </div>
 
                 <div className="flex flex-wrap gap-2 mt-3">
@@ -217,22 +227,52 @@ function KamusDetail() {
                               )}
                               <span className="kamus-detail-def-content">
                                 {m.bidang && (
-                                  <span className="kamus-badge kamus-badge-bidang">{m.bidang}</span>
+                                  <Link
+                                    to={buatPathKategoriKamus('bidang', m.bidang)}
+                                    className="kamus-badge kamus-badge-bidang"
+                                  >
+                                    {m.bidang}
+                                  </Link>
                                 )}
                                 {m.ragam && (
-                                  <span className="kamus-badge kamus-badge-ragam">{m.ragam}</span>
+                                  <Link
+                                    to={buatPathKategoriKamus('ragam', m.ragam)}
+                                    className="kamus-badge kamus-badge-ragam"
+                                  >
+                                    {m.ragam}
+                                  </Link>
                                 )}
                                 {m.ragam_varian && (
-                                  <span className="kamus-badge kamus-badge-ragam">{m.ragam_varian}</span>
+                                  <Link
+                                    to={buatPathKategoriKamus('ragam', m.ragam_varian)}
+                                    className="kamus-badge kamus-badge-ragam"
+                                  >
+                                    {m.ragam_varian}
+                                  </Link>
                                 )}
                                 {m.kiasan === 1 && (
-                                  <span className="kamus-badge kamus-badge-kiasan">kiasan</span>
+                                  <Link
+                                    to={buatPathKategoriKamus('ragam', 'kiasan')}
+                                    className="kamus-badge kamus-badge-kiasan"
+                                  >
+                                    kiasan
+                                  </Link>
                                 )}
                                 {m.bahasa && (
-                                  <span className="kamus-badge kamus-badge-bahasa">{m.bahasa}</span>
+                                  <Link
+                                    to={buatPathKategoriKamus('bahasa', m.bahasa)}
+                                    className="kamus-badge kamus-badge-bahasa"
+                                  >
+                                    {m.bahasa}
+                                  </Link>
                                 )}
                                 {m.tipe_penyingkat && (
-                                  <span className="kamus-badge kamus-badge-penyingkat">{m.tipe_penyingkat}</span>
+                                  <Link
+                                    to={buatPathKategoriKamus('jenis', m.tipe_penyingkat)}
+                                    className="kamus-badge kamus-badge-penyingkat"
+                                  >
+                                    {m.tipe_penyingkat}
+                                  </Link>
                                 )}
                                 <span dangerouslySetInnerHTML={{ __html: renderMarkdown(m.makna) }} />
                                 {(m.ilmiah || m.kimia) && (
