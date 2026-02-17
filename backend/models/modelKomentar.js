@@ -66,8 +66,7 @@ class ModelKomentar {
       `INSERT INTO komentar_kamus (indeks, pengguna_id, komentar, aktif)
        VALUES ($1, $2, $3, FALSE)
        ON CONFLICT (indeks, pengguna_id) DO UPDATE SET
-         komentar = EXCLUDED.komentar,
-         updated_at = NOW()
+         komentar = EXCLUDED.komentar
        RETURNING id, indeks, pengguna_id, komentar, aktif,
                  ${SQL_CREATED_AT_RETURNING}, ${SQL_UPDATED_AT_RETURNING}`,
       [indeks, penggunaId, komentar]
@@ -133,8 +132,7 @@ class ModelKomentar {
     const result = await db.query(
       `UPDATE komentar_kamus
        SET komentar = $1,
-           aktif = $2,
-           updated_at = NOW()
+           aktif = $2
        WHERE id = $3
        RETURNING id, indeks, pengguna_id, komentar, aktif,
                  ${SQL_CREATED_AT_RETURNING}, ${SQL_UPDATED_AT_RETURNING}`,

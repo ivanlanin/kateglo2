@@ -252,7 +252,7 @@ describe('ModelPengguna', () => {
 
     const result = await ModelPengguna.bootstrapAdmin(pengguna);
 
-    expect(db.query).toHaveBeenNthCalledWith(2, 'UPDATE pengguna SET peran_id = $1, updated_at = NOW() WHERE id = $2', [1, 9]);
+    expect(db.query).toHaveBeenNthCalledWith(2, 'UPDATE pengguna SET peran_id = $1 WHERE id = $2', [1, 9]);
     expect(result.peran_id).toBe(1);
   });
 });

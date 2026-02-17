@@ -15,6 +15,7 @@
 - Memisahkan kelas kata menjadi kelas kata dan unsur terikat
 - Memindahkan data makna.kelas_kata unsur terikat ke entri.jenis
 - Menambahkan fitur komentar pengguna di halaman kamus
+- Memasang _trigger_ untuk kolom `created_at` dan `updated_at` di semua tabel
 
 ## 2026-02-16 Senin
 

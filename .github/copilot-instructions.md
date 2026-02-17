@@ -385,9 +385,10 @@ Set-Location frontend; npm run lint; npm run test
 ### Database Work
 1. **Check schema first**: `Select-String -Path "_docs/struktur-data.sql" -Pattern "table_name"`
 2. **Create migration**: Add SQL file to `_docs/YYYYMM/` with format `YYYYMMDD_nama-migrasi.sql`
-3. **Run migration**: Use temp script in `backend/`
-4. **Regenerate schema**: `Set-Location backend; node scripts/db-schema.js`
-5. **Update models**: Update relevant model files
+3. **Run migration (default wajib)**: Setelah file SQL migration dibuat, **langsung eksekusi SQL tersebut** ke database target (development) pada sesi yang sama, kecuali user secara eksplisit meminta untuk tidak menjalankan.
+4. **Run migration**: Use temp script in `backend/` atau `psql` dengan `DATABASE_URL` dari `backend/.env`
+5. **Regenerate schema**: `Set-Location backend; node scripts/db-schema.js`
+6. **Update models**: Update relevant model files
 
 ### Temporary Scripts & Database Checks
 - **Location**: Skrip temporer HARUS di `backend/`

@@ -19,8 +19,7 @@ class ModelPengguna {
          surel = EXCLUDED.surel,
          nama = EXCLUDED.nama,
          foto = EXCLUDED.foto,
-         login_terakhir = NOW(),
-         updated_at = NOW()
+        login_terakhir = NOW()
        RETURNING *`,
       [googleId, email, nama, foto]
     );
@@ -106,7 +105,7 @@ class ModelPengguna {
    */
   static async ubahPeran(penggunaId, peranId) {
     const result = await db.query(
-      `UPDATE pengguna SET peran_id = $1, updated_at = NOW()
+      `UPDATE pengguna SET peran_id = $1
        WHERE id = $2
        RETURNING *`,
       [peranId, penggunaId]
@@ -149,8 +148,7 @@ class ModelPengguna {
     const result = await db.query(
       `UPDATE pengguna SET nama = COALESCE($1, nama),
               aktif = COALESCE($2, aktif),
-              peran_id = COALESCE($3, peran_id),
-              updated_at = NOW()
+              peran_id = COALESCE($3, peran_id)
        WHERE id = $4
        RETURNING *`,
       [nama, aktif, peran_id, id]
@@ -176,7 +174,7 @@ class ModelPengguna {
 
     if (adminPeranId && pengguna.peran_id !== adminPeranId) {
       await db.query(
-        'UPDATE pengguna SET peran_id = $1, updated_at = NOW() WHERE id = $2',
+        'UPDATE pengguna SET peran_id = $1 WHERE id = $2',
         [adminPeranId, pengguna.id]
       );
       pengguna.peran_id = adminPeranId;
