@@ -224,8 +224,12 @@ function KamusDetail() {
                       <div key={kelas} className="mb-4 last:mb-0">
                         {kelas !== '-' && (
                           <div className="kamus-detail-subentry-heading-row">
-                            <h3 className="kamus-detail-def-class mb-0">{formatTitleCase(kelas)}</h3>
-                            <span className="kamus-count-badge">{daftarMakna.length}</span>
+                            <h3 className="kamus-detail-def-class mb-0">
+                              {formatTitleCase(kelas)}{' '}
+                              <span className="kamus-count-badge" data-count={daftarMakna.length}>
+                                ({daftarMakna.length})
+                              </span>
+                            </h3>
                           </div>
                         )}
                         <div className="kamus-detail-def-content leading-relaxed">
@@ -323,8 +327,12 @@ function KamusDetail() {
                     {subentriEntries.map(([jenis, daftar]) => (
                       <div key={jenis} className="kamus-detail-subentry-group">
                         <div className="kamus-detail-subentry-heading-row">
-                          <h3 className="kamus-detail-def-class mb-0">{formatJenisSubentri(jenis)}</h3>
-                          <span className="kamus-count-badge">{daftar.length}</span>
+                          <h3 className="kamus-detail-def-class mb-0">
+                            {formatJenisSubentri(jenis)}{' '}
+                            <span className="kamus-count-badge" data-count={daftar.length}>
+                              ({daftar.length})
+                            </span>
+                          </h3>
                         </div>
                         <div className="kamus-detail-subentry-flow">
                           {daftar.map((s, i) => (
