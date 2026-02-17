@@ -156,3 +156,15 @@ module.exports = {
   delKey,
   getTtlSeconds,
 };
+
+module.exports.__private = {
+  parseBoolean,
+  isCacheEnabled,
+  isMemoryFallbackEnabled,
+  getRedisUrl,
+  cleanupExpiredMemoryCache,
+  getFromMemory,
+  setToMemory,
+  deleteFromMemory,
+  getRedisClient,
+};

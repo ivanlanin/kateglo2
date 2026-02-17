@@ -7,6 +7,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 vi.mock('../../src/api/klien', () => ({
   default: {
     get: vi.fn(),
+    post: vi.fn(),
   },
 }));
 
@@ -16,6 +17,8 @@ import {
   ambilEntriPerKategori,
   cariKamus,
   ambilDetailKamus,
+  ambilKomentarKamus,
+  simpanKomentarKamus,
   cariTesaurus,
   autocomplete,
   cariGlosarium,
@@ -28,6 +31,7 @@ import {
 describe('apiPublik', () => {
   beforeEach(() => {
     klien.get.mockReset();
+    klien.post.mockReset();
   });
 
   it('cariKamus mengirim params query + limit', async () => {
@@ -105,6 +109,29 @@ describe('apiPublik', () => {
 
     expect(klien.get).toHaveBeenCalledWith('/api/publik/tesaurus/cari/anak%20ibu', {
       params: { limit: 50, offset: 10 },
+    });
+  });
+
+  it('ambilKomentarKamus dan simpanKomentarKamus memanggil endpoint komentar', async () => {
+    klien.get.mockResolvedValue({ data: { success: true } });
+    klien.post.mockResolvedValue({ data: { success: true } });
+
+    await ambilKomentarKamus('kata dasar');
+    await simpanKomentarKamus('kata dasar', 'komentar uji');
+
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/kamus/komentar/kata%20dasar');
+    expect(klien.post).toHaveBeenCalledWith('/api/publik/kamus/komentar/kata%20dasar', {
+      komentar: 'komentar uji',
+    });
+  });
+
+  it('cariTesaurus memakai nilai default params', async () => {
+    klien.get.mockResolvedValue({ data: { data: [] } });
+
+    await cariTesaurus('aktif');
+
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/tesaurus/cari/aktif', {
+      params: { limit: 100, offset: 0 },
     });
   });
 

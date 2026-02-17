@@ -138,7 +138,7 @@ function buildBaseSectionMetadata(pathname = '') {
 
 router.get('/:section(kamus|tesaurus|glosarium)', async (req, res, next) => {
   try {
-    const section = String(req.params.section || '').trim().toLowerCase();
+    const section = String(req.params.section).trim().toLowerCase();
     const siteBaseUrl = getSiteBaseUrl();
     const canonicalUrl = `${siteBaseUrl}/${section}`;
     const imageUrl = `${siteBaseUrl}/Logo%20Kateglo.png`;
@@ -165,7 +165,7 @@ router.get('/:section(kamus|tesaurus|glosarium)', async (req, res, next) => {
 
 router.get('/kamus/detail/:indeks', async (req, res, next) => {
   try {
-    const indeks = safeDecode((req.params.indeks || '').trim());
+    const indeks = safeDecode(String(req.params.indeks).trim());
     const siteBaseUrl = getSiteBaseUrl();
     const encodedIndeks = encodeURIComponent(indeks);
     const canonicalUrl = `${siteBaseUrl}/kamus/detail/${encodedIndeks}`;
@@ -201,8 +201,8 @@ router.get('/kamus/detail/:indeks', async (req, res, next) => {
 
 router.get('/kamus/:kategori/:kode', async (req, res, next) => {
   try {
-    const kategori = safeDecode((req.params.kategori || '').trim());
-    const kode = safeDecode((req.params.kode || '').trim());
+    const kategori = safeDecode(String(req.params.kategori).trim());
+    const kode = safeDecode(String(req.params.kode).trim());
     const siteBaseUrl = getSiteBaseUrl();
     const encodedKategori = encodeURIComponent(kategori);
     const encodedKode = encodeURIComponent(kode);
@@ -240,3 +240,15 @@ router.get('/kamus/:kategori/:kode', async (req, res, next) => {
 });
 
 module.exports = router;
+module.exports.__private = {
+  sanitizeBaseUrl,
+  getSiteBaseUrl,
+  getCacheControlHeader,
+  escapeHtml,
+  safeDecode,
+  ringkasTeks,
+  renderHtmlPreview,
+  buatJudulKategori,
+  ambilAtauSetCacheHtml,
+  buildBaseSectionMetadata,
+};

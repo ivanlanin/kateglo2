@@ -28,6 +28,7 @@ import {
   useDaftarTesaurusAdmin,
   useDaftarGlosariumAdmin,
   useDaftarLabelAdmin,
+  useKategoriLabelRedaksi,
   useDaftarPengguna,
   useDaftarPeran,
   useUbahPeran,
@@ -77,6 +78,14 @@ describe('apiAdmin', () => {
     const label = useDaftarLabelAdmin({ q: '' });
     await label.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/label', { params: { limit: 50, offset: 0, q: undefined } });
+
+    const kategoriLabel = useKategoriLabelRedaksi(['ragam', 'kelas-kata']);
+    await kategoriLabel.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/label/kategori', { params: { nama: 'ragam,kelas-kata' } });
+
+    const kategoriLabelKosong = useKategoriLabelRedaksi([]);
+    await kategoriLabelKosong.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/label/kategori', { params: { nama: undefined } });
 
     const pengguna = useDaftarPengguna({ limit: 20, offset: 40 });
     await pengguna.queryFn();

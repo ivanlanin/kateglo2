@@ -267,6 +267,44 @@ describe('KamusAdmin', () => {
     expect(screen.getByText('Tidak ada data.')).toBeInTheDocument();
   });
 
+  it('menggunakan fallback kategori default saat respons kategori label tidak ada', () => {
+    mockUseKategoriLabelRedaksi.mockReturnValueOnce({ data: undefined });
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    expect(screen.getByRole('option', { name: 'Dasar' })).toBeInTheDocument();
+  });
+
+  it('memakai opsi fallback saat kategori label redaksi kosong/tidak lengkap', () => {
+    mockUseKategoriLabelRedaksi.mockReturnValueOnce({
+      data: {
+        data: {
+          'bentuk-kata': [],
+          'jenis-rujuk': [{}],
+          penyingkatan: [{}],
+        },
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('anak'));
+
+    expect(screen.getByRole('option', { name: 'Dasar' })).toBeInTheDocument();
+    const jenisRujukSelect = screen.getByLabelText('Jenis Rujuk');
+    expect(jenisRujukSelect).toBeInTheDocument();
+    expect(Array.from(jenisRujukSelect.querySelectorAll('option')).some((opt) => opt.value === '')).toBe(true);
+  });
+
   it('menangani loading makna serta cabang validasi internal', () => {
     mockUseDaftarMakna.mockReturnValueOnce({ isLoading: true, data: undefined });
     mutateSimpanKamus.mockImplementation((_data, opts) => opts.onError?.({ response: { data: { message: 'Pesan gagal' } } }));

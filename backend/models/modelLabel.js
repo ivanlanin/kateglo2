@@ -432,3 +432,10 @@ class ModelLabel {
 }
 
 module.exports = ModelLabel;
+module.exports.__private = {
+  normalisasiKategoriLabel,
+  kandidatKategoriLabel,
+  normalizeLabelValue,
+  urutkanLabelPrioritas,
+  pushLabelUnik,
+};
