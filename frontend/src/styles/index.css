@@ -135,11 +135,11 @@ code {
   }
 
   .beranda-container {
-    @apply w-full px-4 sm:px-6 lg:px-8;
+    @apply w-full px-5 sm:px-8 lg:px-10;
   }
 
   .halaman-dasar-container {
-    @apply w-full px-4 sm:px-6 lg:px-8 py-8;
+    @apply w-full px-5 sm:px-8 lg:px-10 py-8;
   }
 
   .beranda-top-menu {
