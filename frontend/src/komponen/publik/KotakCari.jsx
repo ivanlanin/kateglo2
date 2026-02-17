@@ -70,6 +70,7 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
   const wrapperRef = useRef(null);
   const inputRef = useRef(null);
   const timerRef = useRef(null);
+  const lewatiSubmitRef = useRef(false);
 
   useEffect(() => {
     setKategori(deteksiKategori(location.pathname));
@@ -136,6 +137,10 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
 
   const handleCari = (e) => {
     e.preventDefault();
+    if (lewatiSubmitRef.current) {
+      lewatiSubmitRef.current = false;
+      return;
+    }
     const trimmed = query.trim();
     if (!trimmed) return;
     setTampilSaran(false);
@@ -157,6 +162,7 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
       });
     } else if (e.key === 'Enter' && indeksAktif >= 0) {
       e.preventDefault();
+      lewatiSubmitRef.current = true;
       handlePilihSaran(saran[indeksAktif]);
     } else if (e.key === 'Escape') {
       setTampilSaran(false);

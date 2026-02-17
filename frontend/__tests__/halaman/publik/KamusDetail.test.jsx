@@ -180,13 +180,13 @@ describe('KamusDetail', () => {
     rerender(<KamusDetail />);
 
     expect(screen.getByRole('heading', { name: /kata.*ka ta/i })).toBeInTheDocument();
-    expect(screen.getByText('turunan')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'turunan' })).toHaveAttribute('href', '/kamus/jenis/turunan');
     expect(screen.getByRole('link', { name: 'kata dasar' })).toHaveAttribute('href', '/kamus/detail/kata%20dasar');
-    expect(screen.getByText('cak', { exact: false })).toBeInTheDocument();
-    expect(screen.getByText('slang', { exact: false })).toBeInTheDocument();
-    expect(screen.getByText('kiasan', { exact: false })).toBeInTheDocument();
-    expect(screen.getByText('Arab', { exact: false })).toBeInTheDocument();
-    expect(screen.getByText('akr')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'cak' })).toHaveAttribute('href', '/kamus/ragam/cak');
+    expect(screen.getByRole('link', { name: 'slang' })).toHaveAttribute('href', '/kamus/ragam/slang');
+    expect(screen.getByRole('link', { name: 'kiasan' })).toHaveAttribute('href', '/kamus/ragam/kiasan');
+    expect(screen.getByRole('link', { name: 'Arab' })).toHaveAttribute('href', '/kamus/bahasa/Arab');
+    expect(screen.getByRole('link', { name: 'akr' })).toHaveAttribute('href', '/kamus/jenis/akr');
     expect(screen.getByText('species', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('H2O')).toBeInTheDocument();
     expect(screen.getByText(/arti contoh/i)).toBeInTheDocument();
