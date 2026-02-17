@@ -14,14 +14,20 @@ import { updateSearchParamsWithOffset } from '../../utils/searchParams';
 
 const NAMA_KATEGORI = {
   abjad: 'Abjad',
-  jenis: 'Jenis',
+  bentuk: 'Bentuk',
   kelas_kata: 'Kelas Kata',
   ragam: 'Ragam',
-  bahasa: 'Bahasa',
+  ekspresi: 'Ekspresi',
+  bahasa: 'Asal Bahasa',
   bidang: 'Bidang',
+  jenis: 'Jenis',
 };
 
-const URUTAN_KATEGORI = ['abjad', 'jenis', 'kelas_kata', 'ragam', 'bahasa', 'bidang'];
+const BARIS_KATEGORI = [
+  ['abjad', 'kelas_kata'],
+  ['bentuk', 'ragam', 'ekspresi'],
+  ['bahasa', 'bidang'],
+];
 
 const limit = 100;
 
@@ -103,25 +109,36 @@ function Kamus() {
 
       {/* Tanpa pencarian — browse kategori */}
       {modeBrowse && !isLoading && kategoriData && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          {URUTAN_KATEGORI.map((kat) => {
-            const labels = kategoriData[kat];
-            if (!labels || labels.length === 0) return null;
+        <div className="space-y-4 mb-6">
+          {BARIS_KATEGORI.map((baris, indexBaris) => {
+            const kategoriTerisi = baris
+              .map((kat) => ({ kat, labels: kategoriData[kat] || [] }))
+              .filter((item) => item.labels.length > 0);
+
+            if (kategoriTerisi.length === 0) return null;
+
             return (
-              <div key={kat} className="beranda-feature-card text-center">
-                <h3 className="beranda-info-title">{NAMA_KATEGORI[kat]}</h3>
-                <div className="flex flex-wrap justify-center gap-2">
-                  {labels.map((l) => (
-                    <Link
-                      key={l.kode}
-                      to={`/kamus/${kat}/${encodeURIComponent(l.kode)}`}
-                      className="beranda-tag-link"
-                    >
-                      {l.nama}
-                    </Link>
-                  ))}
+              <div
+                key={`baris-${indexBaris}`}
+                className={`grid grid-cols-1 ${kategoriTerisi.length > 1 ? 'md:grid-cols-2' : ''} ${kategoriTerisi.length > 2 ? 'lg:grid-cols-3' : ''} gap-4`}
+              >
+                {kategoriTerisi.map(({ kat, labels }) => (
+                  <div key={kat} className="beranda-feature-card text-center">
+                    <h3 className="beranda-info-title">{NAMA_KATEGORI[kat] || kat}</h3>
+                    <div className="flex flex-wrap justify-center gap-2">
+                      {labels.map((l) => (
+                        <Link
+                          key={l.kode}
+                          to={`/kamus/${kat}/${encodeURIComponent(l.kode)}`}
+                          className="beranda-tag-link"
+                        >
+                          {l.nama}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ))}
                 </div>
-              </div>
             );
           })}
         </div>

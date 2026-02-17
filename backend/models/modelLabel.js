@@ -1,6 +1,6 @@
 /**
  * @fileoverview Model untuk tabel label dan kategori kamus
- * (ragam, kelas_kata, bahasa, bidang, abjad, jenis)
+ * (ragam, kelas_kata, bahasa, bidang, abjad, bentuk, ekspresi)
  */
 
 const db = require('../db');
@@ -11,6 +11,9 @@ const db = require('../db');
  * lalu ambil huruf Latin pertama dan ubah ke huruf besar.
  */
 const SQL_ABJAD = `UPPER(SUBSTRING(REGEXP_REPLACE(entri, '^[^a-zA-Z]*', ''), 1, 1))`;
+const JENIS_BENTUK = ['dasar', 'turunan', 'gabungan'];
+const JENIS_EKSPRESI = ['idiom', 'peribahasa'];
+const JENIS_SEMUA = [...JENIS_BENTUK, ...JENIS_EKSPRESI];
 
 class ModelLabel {
   /**
@@ -41,9 +44,12 @@ class ModelLabel {
       nama: h,
     }));
 
-    // Kategori jenis: nilai tetap dari CHECK constraint tabel lema
-    const JENIS = ['dasar', 'turunan', 'gabungan', 'idiom', 'peribahasa'];
-    grouped.jenis = JENIS.map((j) => ({ kode: j, nama: j }));
+    // Kategori virtual dari kolom entri.jenis
+    grouped.bentuk = JENIS_BENTUK.map((jenis) => ({ kode: jenis, nama: jenis }));
+    grouped.ekspresi = JENIS_EKSPRESI.map((jenis) => ({ kode: jenis, nama: jenis }));
+
+    // Alias kompatibilitas untuk route lama /kamus/jenis/:kode
+    grouped.jenis = JENIS_SEMUA.map((jenis) => ({ kode: jenis, nama: jenis }));
 
     return grouped;
   }
@@ -51,7 +57,7 @@ class ModelLabel {
   /**
   * Cari entri berdasarkan kategori dan kode label.
    * Mendukung kategori dari tabel label (ragam, kelas_kata, bahasa, bidang)
-   * serta kategori virtual (abjad, jenis).
+  * serta kategori virtual (abjad, bentuk, ekspresi, jenis).
    * @param {string} kategori - Kategori
    * @param {string} kode - Kode label / huruf / jenis
    * @param {number} limit - Batas hasil
@@ -62,8 +68,14 @@ class ModelLabel {
     if (kategori === 'abjad') {
       return this._cariEntriPerAbjad(kode, limit, offset);
     }
+    if (kategori === 'bentuk') {
+      return this._cariEntriPerJenis(kode, JENIS_BENTUK, limit, offset);
+    }
+    if (kategori === 'ekspresi') {
+      return this._cariEntriPerJenis(kode, JENIS_EKSPRESI, limit, offset);
+    }
     if (kategori === 'jenis') {
-      return this._cariEntriPerJenis(kode, limit, offset);
+      return this._cariEntriPerJenis(kode, JENIS_SEMUA, limit, offset);
     }
 
     const validKategori = ['ragam', 'kelas_kata', 'bahasa', 'bidang'];
@@ -147,10 +159,9 @@ class ModelLabel {
   }
 
   /**
-  * Cari entri berdasarkan jenis (dasar, turunan, gabungan, idiom, peribahasa).
+  * Cari entri berdasarkan jenis.
    */
-  static async _cariEntriPerJenis(jenis, limit, offset) {
-    const validJenis = ['dasar', 'turunan', 'gabungan', 'idiom', 'peribahasa'];
+  static async _cariEntriPerJenis(jenis, validJenis, limit, offset) {
     if (!validJenis.includes(jenis)) {
       return { data: [], total: 0, label: null };
     }

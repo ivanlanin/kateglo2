@@ -11,7 +11,7 @@ describe('ModelLabel', () => {
     db.query.mockReset();
   });
 
-  it('ambilSemuaKategori mengelompokkan label serta menambah abjad dan jenis', async () => {
+  it('ambilSemuaKategori mengelompokkan label serta menambah abjad, bentuk, dan ekspresi', async () => {
     db.query.mockResolvedValue({
       rows: [
         { kategori: 'ragam', kode: 'cak', nama: 'cakapan' },
@@ -28,6 +28,19 @@ describe('ModelLabel', () => {
     ]);
     expect(result.bahasa).toEqual([{ kode: 'id', nama: 'Indonesia' }]);
     expect(result.abjad).toHaveLength(26);
+    expect(result.bentuk).toHaveLength(3);
+    expect(result.bentuk).toEqual([
+      { kode: 'dasar', nama: 'dasar' },
+      { kode: 'turunan', nama: 'turunan' },
+      { kode: 'gabungan', nama: 'gabungan' },
+    ]);
+    expect(result.ekspresi).toHaveLength(2);
+    expect(result.ekspresi).toEqual([
+      { kode: 'idiom', nama: 'idiom' },
+      { kode: 'peribahasa', nama: 'peribahasa' },
+    ]);
+
+    // Alias kompatibilitas route lama
     expect(result.jenis).toHaveLength(5);
     expect(result.jenis).toEqual([
       { kode: 'dasar', nama: 'dasar' },
@@ -73,12 +86,12 @@ describe('ModelLabel', () => {
     expect(result).toEqual({ data: [], total: 0, label: null });
   });
 
-  it('cariEntriPerLabel kategori jenis valid', async () => {
+  it('cariEntriPerLabel kategori bentuk valid', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '1' }] })
       .mockResolvedValueOnce({ rows: [{ id: 2, lema: 'berkata', jenis: 'turunan' }] });
 
-    const result = await ModelLabel.cariEntriPerLabel('jenis', 'turunan', 10, 2);
+    const result = await ModelLabel.cariEntriPerLabel('bentuk', 'turunan', 10, 2);
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
@@ -89,7 +102,23 @@ describe('ModelLabel', () => {
     expect(result.label).toEqual({ kode: 'turunan', nama: 'turunan' });
   });
 
-  it('cariEntriPerLabel kategori jenis valid dengan limit/offset default', async () => {
+  it('cariEntriPerLabel kategori ekspresi valid', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 12, lema: 'buah bibir', jenis: 'idiom' }] });
+
+    const result = await ModelLabel.cariEntriPerLabel('ekspresi', 'idiom');
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $2 OFFSET $3'),
+      ['idiom', 20, 0]
+    );
+    expect(result.total).toBe(1);
+    expect(result.label).toEqual({ kode: 'idiom', nama: 'idiom' });
+  });
+
+  it('cariEntriPerLabel kategori jenis valid dengan limit/offset default (alias kompatibilitas)', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '1' }] })
       .mockResolvedValueOnce({ rows: [{ id: 9, lema: 'kata', jenis: 'dasar' }] });
