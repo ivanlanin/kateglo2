@@ -14,6 +14,12 @@ const SQL_ABJAD = `UPPER(SUBSTRING(REGEXP_REPLACE(entri, '^[^a-zA-Z]*', ''), 1, 
 const JENIS_BENTUK = ['dasar', 'turunan', 'gabungan'];
 const JENIS_EKSPRESI = ['idiom', 'peribahasa'];
 const JENIS_SEMUA = [...JENIS_BENTUK, ...JENIS_EKSPRESI];
+const KELAS_BEBAS = ['adjektiva', 'adverbia', 'nomina', 'numeralia', 'partikel', 'pronomina', 'verba'];
+const UNSUR_TERIKAT = ['sufiks', 'prefiks', 'bentuk terikat', 'infiks', 'klitik', 'konfiks'];
+
+function normalizeLabelValue(value = '') {
+  return String(value || '').trim().toLowerCase();
+}
 
 class ModelLabel {
   /**
@@ -37,6 +43,24 @@ class ModelLabel {
       }
       grouped[row.kategori].push({ kode: row.kode, nama: row.nama });
     }
+
+    // Pecah kategori kelas_kata menjadi kelas bebas dan unsur terikat.
+    const kelasKataSemua = grouped.kelas_kata || [];
+    const kelasKataBebas = [];
+    const kelasKataUnsurTerikat = [];
+    for (const label of kelasKataSemua) {
+      const kandidatNama = normalizeLabelValue(label.nama);
+      const kandidatKode = normalizeLabelValue(label.kode);
+      if (KELAS_BEBAS.includes(kandidatNama) || KELAS_BEBAS.includes(kandidatKode)) {
+        kelasKataBebas.push(label);
+        continue;
+      }
+      if (UNSUR_TERIKAT.includes(kandidatNama) || UNSUR_TERIKAT.includes(kandidatKode)) {
+        kelasKataUnsurTerikat.push(label);
+      }
+    }
+    grouped.kelas_kata = kelasKataBebas;
+    grouped.unsur_terikat = kelasKataUnsurTerikat;
 
     // Kategori abjad: huruf A–Z
     grouped.abjad = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((h) => ({
@@ -78,17 +102,31 @@ class ModelLabel {
       return this._cariEntriPerJenis(kode, JENIS_SEMUA, limit, offset);
     }
 
-    const validKategori = ['ragam', 'kelas_kata', 'bahasa', 'bidang'];
+    const validKategori = ['ragam', 'kelas_kata', 'bahasa', 'bidang', 'unsur_terikat'];
     if (!validKategori.includes(kategori)) {
       return { data: [], total: 0, label: null };
     }
 
+    const kategoriLabel = kategori === 'unsur_terikat' ? 'kelas_kata' : kategori;
+
     // Ambil info label (kode + nama) untuk pencocokan ganda
     const labelResult = await db.query(
       `SELECT kode, nama, keterangan FROM label WHERE kategori = $1 AND kode = $2 LIMIT 1`,
-      [kategori, kode]
+      [kategoriLabel, kode]
     );
     const label = labelResult.rows[0] || null;
+
+    if (kategori === 'kelas_kata' || kategori === 'unsur_terikat') {
+      if (!label) {
+        return { data: [], total: 0, label: null };
+      }
+      const namaLabel = normalizeLabelValue(label.nama);
+      const kodeLabel = normalizeLabelValue(label.kode);
+      const whitelist = kategori === 'kelas_kata' ? KELAS_BEBAS : UNSUR_TERIKAT;
+      if (!whitelist.includes(namaLabel) && !whitelist.includes(kodeLabel)) {
+        return { data: [], total: 0, label: null };
+      }
+    }
 
     // Kumpulkan nilai yang mungkin tersimpan di kolom makna
     const nilaiCocok = [kode];
@@ -96,7 +134,7 @@ class ModelLabel {
       nilaiCocok.push(label.nama);
     }
 
-    const kolom = kategori;
+    const kolom = kategori === 'unsur_terikat' ? 'kelas_kata' : kategori;
 
     const countResult = await db.query(
       `SELECT COUNT(DISTINCT l.id) AS total

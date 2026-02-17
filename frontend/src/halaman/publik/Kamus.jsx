@@ -14,8 +14,9 @@ import { updateSearchParamsWithOffset } from '../../utils/searchParams';
 
 const NAMA_KATEGORI = {
   abjad: 'Abjad',
-  bentuk: 'Bentuk',
-  kelas_kata: 'Kelas Kata',
+  bentuk: 'Bentuk Bebas',
+  unsur_terikat: 'Unsur Terikat',
+  kelas_kata: 'Kelas',
   ragam: 'Ragam',
   ekspresi: 'Ekspresi',
   bahasa: 'Asal Bahasa',
@@ -25,7 +26,8 @@ const NAMA_KATEGORI = {
 
 const BARIS_KATEGORI = [
   ['abjad', 'kelas_kata'],
-  ['bentuk', 'ragam', 'ekspresi'],
+  ['bentuk', 'unsur_terikat'],
+  ['ekspresi', 'ragam'],
   ['bahasa', 'bidang'],
 ];
 

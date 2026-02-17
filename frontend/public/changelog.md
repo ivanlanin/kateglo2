@@ -12,6 +12,7 @@
 - Membuat tampilan makna menjadi satu baris seperti kamus cetak
 - Mengubah perilaku entri "varian" menjadi hanya ditampilkan di induknya
 - Memisahkan jenis entri menjadi bentuk (dasar, turunan, gabungan) dan ekspresi (idiom, peribahasa)
+- Memisahkan kelas kata menjadi kelas kata dan unsur terikat
 
 ## 2026-02-16 Senin
 
