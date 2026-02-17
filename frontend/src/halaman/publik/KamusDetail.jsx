@@ -26,6 +26,14 @@ function buatPathKategoriKamus(kategori, badge) {
   return `/kamus/${encodeURIComponent(kategori)}/${encodeURIComponent(nilai)}`;
 }
 
+function formatTitleCase(teks = '') {
+  return String(teks)
+    .split(/[_\-\s]+/)
+    .filter(Boolean)
+    .map((kata) => kata.charAt(0).toUpperCase() + kata.slice(1))
+    .join(' ');
+}
+
 function KamusDetail() {
   const { indeks } = useParams();
 
@@ -217,7 +225,7 @@ function KamusDetail() {
                     {Object.entries(maknaPerKelas).map(([kelas, daftarMakna]) => (
                       <div key={kelas} className="mb-4 last:mb-0">
                         {kelas !== '-' && (
-                          <h3 className="kamus-detail-def-class">{kelas}</h3>
+                          <h3 className="kamus-detail-def-class">{formatTitleCase(kelas)}</h3>
                         )}
                         <ol className="kamus-detail-def-list">
                           {daftarMakna.map((m) => (
