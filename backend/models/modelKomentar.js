@@ -4,6 +4,11 @@
 
 const db = require('../db');
 
+const SQL_CREATED_AT = "to_char(k.created_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS created_at";
+const SQL_UPDATED_AT = "to_char(k.updated_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS updated_at";
+const SQL_CREATED_AT_RETURNING = "to_char(created_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS created_at";
+const SQL_UPDATED_AT_RETURNING = "to_char(updated_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS updated_at";
+
 function parsePositiveInteger(value, fallback = 1) {
   const parsed = Number.parseInt(value, 10);
   if (Number.isNaN(parsed) || parsed < 1) return fallback;
@@ -39,7 +44,7 @@ class ModelKomentar {
 
   static async ambilKomentarTerbaca(indeks, penggunaId) {
     const result = await db.query(
-      `SELECT k.id, k.indeks, k.komentar, k.aktif, k.created_at, k.updated_at,
+      `SELECT k.id, k.indeks, k.komentar, k.aktif, ${SQL_CREATED_AT}, ${SQL_UPDATED_AT},
               k.pengguna_id, p.nama AS pengguna_nama
        FROM komentar_kamus k
        JOIN pengguna p ON p.id = k.pengguna_id
@@ -58,7 +63,8 @@ class ModelKomentar {
        ON CONFLICT (indeks, pengguna_id) DO UPDATE SET
          komentar = EXCLUDED.komentar,
          updated_at = NOW()
-       RETURNING id, indeks, pengguna_id, komentar, aktif, created_at, updated_at`,
+       RETURNING id, indeks, pengguna_id, komentar, aktif,
+                 ${SQL_CREATED_AT_RETURNING}, ${SQL_UPDATED_AT_RETURNING}`,
       [indeks, penggunaId, komentar]
     );
     return result.rows[0] || null;
@@ -90,7 +96,7 @@ class ModelKomentar {
     );
 
     const dataResult = await db.query(
-      `SELECT k.id, k.indeks, k.pengguna_id, k.komentar, k.aktif, k.created_at, k.updated_at,
+      `SELECT k.id, k.indeks, k.pengguna_id, k.komentar, k.aktif, ${SQL_CREATED_AT}, ${SQL_UPDATED_AT},
               p.nama AS pengguna_nama, p.surel AS pengguna_surel
        FROM komentar_kamus k
        JOIN pengguna p ON p.id = k.pengguna_id
@@ -108,7 +114,7 @@ class ModelKomentar {
 
   static async ambilDenganId(id) {
     const result = await db.query(
-      `SELECT k.id, k.indeks, k.pengguna_id, k.komentar, k.aktif, k.created_at, k.updated_at,
+      `SELECT k.id, k.indeks, k.pengguna_id, k.komentar, k.aktif, ${SQL_CREATED_AT}, ${SQL_UPDATED_AT},
               p.nama AS pengguna_nama, p.surel AS pengguna_surel
        FROM komentar_kamus k
        JOIN pengguna p ON p.id = k.pengguna_id
@@ -125,7 +131,8 @@ class ModelKomentar {
            aktif = $2,
            updated_at = NOW()
        WHERE id = $3
-       RETURNING id, indeks, pengguna_id, komentar, aktif, created_at, updated_at`,
+       RETURNING id, indeks, pengguna_id, komentar, aktif,
+                 ${SQL_CREATED_AT_RETURNING}, ${SQL_UPDATED_AT_RETURNING}`,
       [komentar, normalizeBoolean(aktif), id]
     );
     return result.rows[0] || null;
