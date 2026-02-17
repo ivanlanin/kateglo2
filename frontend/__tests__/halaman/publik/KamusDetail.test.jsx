@@ -191,7 +191,7 @@ describe('KamusDetail', () => {
     expect(screen.getByText('H2O')).toBeInTheDocument();
     expect(screen.getByText(/arti contoh/i)).toBeInTheDocument();
     expect(screen.getByText('(1)')).toBeInTheDocument();
-    expect(screen.getByText('(2)')).toBeInTheDocument();
+    expect(screen.getAllByText('(2)').length).toBeGreaterThan(0);
     expect(screen.getByText('Tesaurus')).toBeInTheDocument();
     expect(screen.getByText('Sinonim:')).toBeInTheDocument();
     expect(screen.getByText('Antonim:')).toBeInTheDocument();

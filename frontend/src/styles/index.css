@@ -1133,11 +1133,32 @@ code {
   }
 
   .kamus-count-badge {
-    @apply inline-flex items-center text-xs font-medium bg-rose-50 text-rose-700 px-2 py-0.5 rounded-full;
+    @apply inline-flex items-center text-xs leading-none font-medium bg-rose-50 text-rose-700 px-2 py-0.5 rounded-full align-middle relative -top-px;
+    font-size: 0;
   }
 
   .dark .kamus-count-badge {
     @apply bg-rose-900/30 text-rose-300;
+  }
+
+  .kamus-count-badge::after {
+    content: attr(data-count);
+    @apply text-xs leading-none font-medium text-rose-700;
+  }
+
+  .dark .kamus-count-badge::after {
+    @apply text-rose-300;
+  }
+
+  .panel-lipat-count,
+  .panel-lipat-count-aksen {
+    font-size: 0;
+  }
+
+  .panel-lipat-count::after,
+  .panel-lipat-count-aksen::after {
+    content: attr(data-count);
+    @apply text-xs leading-none font-medium;
   }
 
   .kamus-detail-section-title {
