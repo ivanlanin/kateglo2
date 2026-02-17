@@ -7,7 +7,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/authContext';
 
 const menuAdmin = [
-  { path: '/redaksi', label: 'Dasbor', exact: true },
   { path: '/redaksi/kamus', label: 'Kamus' },
   { path: '/redaksi/tesaurus', label: 'Tesaurus' },
   { path: '/redaksi/glosarium', label: 'Glosarium' },
@@ -42,16 +41,19 @@ function TataLetakAdmin({ judul, children }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Top bar */}
           <div className="flex justify-between items-center py-3">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1">
+              <Link
+                to="/redaksi"
+                className="navbar-logo"
+              >
+                Redaksi
+              </Link>
               <Link
                 to="/"
-                className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                className="navbar-logo"
               >
-                &larr; Beranda
+                Kateglo
               </Link>
-              <span className="text-xl font-bold text-gray-900 dark:text-white">
-                Redaksi Kateglo
-              </span>
             </div>
             <div className="flex items-center gap-3">
               <span className="text-sm text-gray-500 dark:text-gray-400 hidden sm:inline">

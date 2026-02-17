@@ -33,6 +33,9 @@ describe('TataLetakAdmin', () => {
 
     expect(document.title).toBe('Kamus — Redaksi Kateglo');
     expect(screen.getByText('admin@kateglo.id')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Redaksi' })).toHaveAttribute('href', '/redaksi');
+    expect(screen.getByRole('link', { name: 'Kateglo' })).toHaveAttribute('href', '/');
+    expect(screen.queryByRole('link', { name: 'Dasbor' })).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Kamus' }).className).toContain('border-blue-600');
     expect(screen.getByText('Isi Admin')).toBeInTheDocument();
 
@@ -44,13 +47,14 @@ describe('TataLetakAdmin', () => {
   it('menangani judul kosong dan fallback nama user', () => {
     mockUseAuth.mockReturnValueOnce({ user: { name: 'Redaksi' }, logout: mockLogout });
     render(
-      <MemoryRouter initialEntries={['/redaksi']}>
+      <MemoryRouter initialEntries={['/redaksi/kamus']}>
         <TataLetakAdmin>Konten</TataLetakAdmin>
       </MemoryRouter>
     );
 
     expect(document.title).toBe('Redaksi Kateglo');
-    expect(screen.getByText('Redaksi')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Dasbor' }).className).toContain('border-blue-600');
+    expect(screen.getByRole('link', { name: 'Redaksi' })).toHaveAttribute('href', '/redaksi');
+    expect(screen.getByText('Redaksi', { selector: 'span' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Kamus' }).className).toContain('border-blue-600');
   });
 });
