@@ -60,6 +60,10 @@ jest.mock('../../models/modelKomentar', () => ({
   hitungTotal: jest.fn(),
 }));
 
+jest.mock('../../services/layananKamusPublik', () => ({
+  hapusCacheDetailKamus: jest.fn(),
+}));
+
 const ModelPengguna = require('../../models/modelPengguna');
 const ModelLema = require('../../models/modelEntri');
 const ModelTesaurus = require('../../models/modelTesaurus');
