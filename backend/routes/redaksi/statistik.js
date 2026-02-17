@@ -7,6 +7,7 @@ const ModelEntri = require('../../models/modelEntri');
 const ModelGlosarium = require('../../models/modelGlosarium');
 const ModelTesaurus = require('../../models/modelTesaurus');
 const ModelPengguna = require('../../models/modelPengguna');
+const ModelKomentar = require('../../models/modelKomentar');
 
 const router = express.Router();
 
@@ -16,16 +17,17 @@ const router = express.Router();
  */
 router.get('/', async (req, res, next) => {
   try {
-    const [entri, glosarium, tesaurus, pengguna] = await Promise.all([
+    const [entri, glosarium, tesaurus, pengguna, komentar] = await Promise.all([
       ModelEntri.hitungTotal(),
       ModelGlosarium.hitungTotal(),
       ModelTesaurus.hitungTotal(),
       ModelPengguna.hitungTotal(),
+      ModelKomentar.hitungTotal(),
     ]);
 
     return res.json({
       success: true,
-      data: { entri, glosarium, tesaurus, pengguna },
+      data: { entri, glosarium, tesaurus, pengguna, komentar },
     });
   } catch (error) {
     return next(error);

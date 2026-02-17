@@ -56,6 +56,7 @@ jest.mock('../../models/modelKomentar', () => ({
   daftarAdmin: jest.fn(),
   ambilDenganId: jest.fn(),
   simpanAdmin: jest.fn(),
+  hitungTotal: jest.fn(),
 }));
 
 const ModelPengguna = require('../../models/modelPengguna');
@@ -230,11 +231,18 @@ describe('routes/redaksi', () => {
       ModelGlosarium.hitungTotal.mockResolvedValue(20);
       ModelTesaurus.hitungTotal.mockResolvedValue(30);
       ModelPengguna.hitungTotal.mockResolvedValue(40);
+      ModelKomentar.hitungTotal.mockResolvedValue(50);
 
       const response = await callAsAdmin('get', '/api/redaksi/statistik');
 
       expect(response.status).toBe(200);
-      expect(response.body.data).toEqual({ entri: 10, glosarium: 20, tesaurus: 30, pengguna: 40 });
+      expect(response.body.data).toEqual({
+        entri: 10,
+        glosarium: 20,
+        tesaurus: 30,
+        pengguna: 40,
+        komentar: 50,
+      });
     });
 
     it('GET /api/redaksi/statistik meneruskan error', async () => {
