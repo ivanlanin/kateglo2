@@ -6,6 +6,7 @@
 - Mengubah entri jenis "berimbuhan" menjadi "turunan"
 - Mengonsistenkan tata letak publik dan redaksi
 - Mengubah tampilan detail kamus menjadi berdasarkan indeks
+- Menghilangkan sufiks angka dari pemenggalan kata
 
 ## 2026-02-16 Senin
 
