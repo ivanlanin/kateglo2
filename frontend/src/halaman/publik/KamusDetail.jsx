@@ -77,7 +77,7 @@ function KamusDetail() {
     );
   }
 
-  const urutanJenisSubentri = ['turunan', 'gabungan', 'idiom', 'peribahasa'];
+  const urutanJenisSubentri = ['turunan', 'gabungan', 'idiom', 'peribahasa', 'varian'];
 
   const daftarEntriRaw = Array.isArray(data.entri)
     ? data.entri
@@ -198,12 +198,18 @@ function KamusDetail() {
                         <span className="kamus-detail-heading-split">(<TeksLema lema={entriItem.pemenggalan} />)</span>
                       )}
                     </h1>
-                    <Link
-                      to={buatPathKategoriKamus('jenis', entriItem.jenis || 'dasar')}
-                      className="kamus-detail-tag-purple mt-1"
-                    >
-                      {formatTitleCase(entriItem.jenis || 'dasar')}
-                    </Link>
+                    {entriItem.jenis === 'varian' ? (
+                      <span className="kamus-detail-tag-purple mt-1">
+                        {formatTitleCase(entriItem.jenis || 'dasar')}
+                      </span>
+                    ) : (
+                      <Link
+                        to={buatPathKategoriKamus('jenis', entriItem.jenis || 'dasar')}
+                        className="kamus-detail-tag-purple mt-1"
+                      >
+                        {formatTitleCase(entriItem.jenis || 'dasar')}
+                      </Link>
+                    )}
                   </div>
                 </div>
 
@@ -343,9 +349,13 @@ function KamusDetail() {
                         <div className="kamus-detail-subentry-flow">
                           {daftar.map((s, i) => (
                             <span key={s.id}>
-                              <Link to={buatPathDetailKamus(s.indeks || s.entri)} className="kamus-detail-subentry-link">
-                                <TeksLema lema={s.entri} />
-                              </Link>
+                              {jenis === 'varian' ? (
+                                <span><TeksLema lema={s.entri} /></span>
+                              ) : (
+                                <Link to={buatPathDetailKamus(s.indeks || s.entri)} className="kamus-detail-subentry-link">
+                                  <TeksLema lema={s.entri} />
+                                </Link>
+                              )}
                               {i < daftar.length - 1 && <span className="secondary-text">; </span>}
                             </span>
                           ))}

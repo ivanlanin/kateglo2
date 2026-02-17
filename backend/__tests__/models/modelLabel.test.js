@@ -28,7 +28,14 @@ describe('ModelLabel', () => {
     ]);
     expect(result.bahasa).toEqual([{ kode: 'id', nama: 'Indonesia' }]);
     expect(result.abjad).toHaveLength(26);
-    expect(result.jenis).toHaveLength(6);
+    expect(result.jenis).toHaveLength(5);
+    expect(result.jenis).toEqual([
+      { kode: 'dasar', nama: 'dasar' },
+      { kode: 'turunan', nama: 'turunan' },
+      { kode: 'gabungan', nama: 'gabungan' },
+      { kode: 'idiom', nama: 'idiom' },
+      { kode: 'peribahasa', nama: 'peribahasa' },
+    ]);
   });
 
   it('cariEntriPerLabel mengembalikan kosong untuk kategori tidak valid', async () => {
