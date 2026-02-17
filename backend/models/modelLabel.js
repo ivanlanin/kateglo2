@@ -20,11 +20,11 @@ const URUTAN_KELAS_KATA = ['nomina', 'verba', 'adjektiva', 'adverbia', 'pronomin
 const URUTAN_UNSUR_TERIKAT = ['bentuk terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik'];
 const URUTAN_RAGAM = ['arkais', 'klasik', 'hormat', 'cakapan', 'kasar'];
 
-function normalizeLabelValue(value = '') {
+function normalizeLabelValue(value) {
   return String(value || '').trim().toLowerCase();
 }
 
-function urutkanLabelPrioritas(labels = [], urutanPrioritas = []) {
+function urutkanLabelPrioritas(labels, urutanPrioritas) {
   const prioritasMap = new Map(urutanPrioritas.map((nama, index) => [normalizeLabelValue(nama), index]));
   return [...labels].sort((a, b) => {
     const aNama = normalizeLabelValue(a.nama);

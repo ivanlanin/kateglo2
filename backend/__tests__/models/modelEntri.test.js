@@ -119,6 +119,19 @@ describe('ModelEntri', () => {
     expect(result).toEqual({ id: 1, entri: 'kata' });
   });
 
+  it('ambilEntriPerIndeks mengembalikan rows sesuai urutan query', async () => {
+    const rows = [{ id: 3, entri: 'aktif', indeks: 'aktif' }];
+    db.query.mockResolvedValue({ rows });
+
+    const result = await ModelEntri.ambilEntriPerIndeks('aktif');
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('WHERE LOWER(indeks) = LOWER($1) AND aktif = 1'),
+      ['aktif']
+    );
+    expect(result).toEqual(rows);
+  });
+
   it('ambilMakna mengembalikan rows', async () => {
     const rows = [{ id: 1, makna: 'arti', kelas_kata: 'nomina' }];
     db.query.mockResolvedValue({ rows });
@@ -348,6 +361,74 @@ describe('ModelEntri', () => {
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO entri'),
       ['kata', 'dasar', null, null, null, null, null, null, 1, 'kata', null, 1]
+    );
+  });
+
+  it('simpan menormalkan indeks serta parsing homonim/urutan saat input tidak valid', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 12, entri: '--kata-- (2)' }] });
+
+    await ModelEntri.simpan({
+      entri: '--kata-- (2)',
+      jenis: 'dasar',
+      indeks: '   ',
+      homonim: 'bukan-angka',
+      urutan: '0',
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO entri'),
+      ['--kata-- (2)', 'dasar', null, null, null, null, null, null, 1, 'kata', null, 1]
+    );
+  });
+
+  it('simpan parsing homonim null-string kosong dan urutan default saat non-numeric', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ id: 13, entri: 'kata-a' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 14, entri: 'kata-b' }] });
+
+    await ModelEntri.simpan({
+      entri: 'kata-a',
+      jenis: 'dasar',
+      homonim: null,
+      urutan: 'abc',
+    });
+
+    await ModelEntri.simpan({
+      entri: 'kata-b',
+      jenis: 'dasar',
+      homonim: '',
+      urutan: 2,
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('INSERT INTO entri'),
+      ['kata-a', 'dasar', null, null, null, null, null, null, 1, 'kata-a', null, 1]
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('INSERT INTO entri'),
+      ['kata-b', 'dasar', null, null, null, null, null, null, 1, 'kata-b', null, 2]
+    );
+  });
+
+  it('simpan tetap menyimpan saat entri undefined serta indeks hasil normalisasi fallback ke teks asli', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ id: 15 }] })
+      .mockResolvedValueOnce({ rows: [{ id: 16 }] });
+
+    await ModelEntri.simpan({ jenis: 'dasar', indeks: '   ' });
+    await ModelEntri.simpan({ entri: '---', jenis: 'dasar', indeks: '' });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('INSERT INTO entri'),
+      [undefined, 'dasar', null, null, null, null, null, null, 1, '', null, 1]
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('INSERT INTO entri'),
+      ['---', 'dasar', null, null, null, null, null, null, 1, '---', null, 1]
     );
   });
 

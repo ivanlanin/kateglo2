@@ -18,9 +18,9 @@ function parseNullableInteger(value) {
   return Number.isNaN(parsed) ? null : parsed;
 }
 
-function parsePositiveInteger(value, fallback = 1) {
+function parsePositiveInteger(value) {
   const parsed = parseNullableInteger(value);
-  if (parsed === null || parsed < 1) return fallback;
+  if (parsed === null || parsed < 1) return 1;
   return parsed;
 }
 
@@ -304,7 +304,7 @@ class ModelEntri {
     const nilaiEntriRujuk = entri_rujuk;
     const nilaiIndeks = (indeks || '').trim() || normalisasiIndeks(nilaiEntri);
     const nilaiHomonim = parseNullableInteger(homonim);
-    const nilaiUrutan = parsePositiveInteger(urutan, 1);
+    const nilaiUrutan = parsePositiveInteger(urutan);
     if (id) {
       const result = await db.query(
         `UPDATE entri SET entri = $1, jenis = $2, induk = $3, pemenggalan = $4,

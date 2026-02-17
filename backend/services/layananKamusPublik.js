@@ -10,7 +10,7 @@ function bacaTeksEntri(item) {
   return item?.entri ?? '';
 }
 
-function normalisasiIndeksKamus(teks = '') {
+function normalisasiIndeksKamus(teks) {
   const tanpaNomor = teks.replace(/\s*\([0-9]+\)\s*$/, '');
   const tanpaStripTepi = tanpaNomor.replace(/^-+/, '').replace(/-+$/, '');
   return tanpaStripTepi.trim() || teks.trim();

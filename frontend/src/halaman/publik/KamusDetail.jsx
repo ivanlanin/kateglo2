@@ -41,6 +41,28 @@ function tentukanKategoriJenis(jenis = '') {
   return 'jenis';
 }
 
+function bandingkanEntriKamus(a, b) {
+  const prioritasLafalA = String(a.lafal || '').trim() ? 1 : 0;
+  const prioritasLafalB = String(b.lafal || '').trim() ? 1 : 0;
+  if (prioritasLafalA !== prioritasLafalB) return prioritasLafalA - prioritasLafalB;
+  if ((a.urutan || 0) !== (b.urutan || 0)) return (a.urutan || 0) - (b.urutan || 0);
+  const homonimA = Number.isFinite(Number(a.homonim)) ? Number(a.homonim) : Number.MAX_SAFE_INTEGER;
+  const homonimB = Number.isFinite(Number(b.homonim)) ? Number(b.homonim) : Number.MAX_SAFE_INTEGER;
+  if (homonimA !== homonimB) return homonimA - homonimB;
+  return (a.entri || '').localeCompare((b.entri || ''), 'id');
+}
+
+function bandingkanJenisSubentri(jenisA, jenisB, urutanJenisSubentri) {
+  const idxA = urutanJenisSubentri.indexOf((jenisA || '').toLowerCase());
+  const idxB = urutanJenisSubentri.indexOf((jenisB || '').toLowerCase());
+
+  if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+  if (idxA !== -1) return -1;
+  if (idxB !== -1) return 1;
+
+  return (jenisA || '').localeCompare((jenisB || ''), 'id');
+}
+
 function KamusDetail() {
   const { indeks } = useParams();
 
@@ -107,16 +129,7 @@ function KamusDetail() {
       subentri: data.subentri || {},
     }];
 
-  const daftarEntri = daftarEntriRaw.slice().sort((a, b) => {
-    const prioritasLafalA = String(a.lafal || '').trim() ? 1 : 0;
-    const prioritasLafalB = String(b.lafal || '').trim() ? 1 : 0;
-    if (prioritasLafalA !== prioritasLafalB) return prioritasLafalA - prioritasLafalB;
-    if ((a.urutan || 0) !== (b.urutan || 0)) return (a.urutan || 0) - (b.urutan || 0);
-    const homonimA = Number.isFinite(Number(a.homonim)) ? Number(a.homonim) : Number.MAX_SAFE_INTEGER;
-    const homonimB = Number.isFinite(Number(b.homonim)) ? Number(b.homonim) : Number.MAX_SAFE_INTEGER;
-    if (homonimA !== homonimB) return homonimA - homonimB;
-    return (a.entri || '').localeCompare((b.entri || ''), 'id');
-  });
+  const daftarEntri = daftarEntriRaw.slice().sort(bandingkanEntriKamus);
 
   const tesaurusSinonim = data.tesaurus?.sinonim || [];
   const tesaurusAntonim = data.tesaurus?.antonim || [];
@@ -161,16 +174,8 @@ function KamusDetail() {
               maknaPerKelas[kelas].push(m);
             });
 
-            const subentriEntries = Object.entries(entriItem.subentri || {}).sort(([jenisA], [jenisB]) => {
-              const idxA = urutanJenisSubentri.indexOf((jenisA || '').toLowerCase());
-              const idxB = urutanJenisSubentri.indexOf((jenisB || '').toLowerCase());
-
-              if (idxA !== -1 && idxB !== -1) return idxA - idxB;
-              if (idxA !== -1) return -1;
-              if (idxB !== -1) return 1;
-
-              return (jenisA || '').localeCompare((jenisB || ''), 'id');
-            });
+            const subentriEntries = Object.entries(entriItem.subentri || {}).sort(([jenisA], [jenisB]) =>
+              bandingkanJenisSubentri(jenisA, jenisB, urutanJenisSubentri));
 
             const rantaiHeading = [...(entriItem.induk || []), { id: `current-${entriItem.id}`, entri: entriItem.entri, indeks: entriItem.indeks, current: true }];
 
@@ -207,7 +212,7 @@ function KamusDetail() {
                     </h1>
                     {entriItem.jenis === 'varian' ? (
                       <span className="kamus-detail-tag-purple mt-1">
-                        {formatTitleCase(entriItem.jenis || 'dasar')}
+                        {formatTitleCase(entriItem.jenis)}
                       </span>
                     ) : (
                       <Link
@@ -437,3 +442,11 @@ function KamusDetail() {
 }
 
 export default KamusDetail;
+export {
+  renderMarkdown,
+  buatPathKategoriKamus,
+  formatTitleCase,
+  tentukanKategoriJenis,
+  bandingkanEntriKamus,
+  bandingkanJenisSubentri,
+};

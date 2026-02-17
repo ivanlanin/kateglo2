@@ -268,4 +268,44 @@ describe('KotakCari', () => {
 
     expect(mockNavigate).toHaveBeenCalledWith('/kamus/cari/an');
   });
+
+  it('Enter pada saran menandai lewati submit sehingga submit berikutnya tidak menavigasi ulang', async () => {
+    autocomplete.mockResolvedValue([{ value: 'anak' }]);
+
+    render(<KotakCari autoFocus={false} />);
+    const input = screen.getByRole('textbox');
+
+    fireEvent.change(input, { target: { value: 'an' } });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(300);
+    });
+    await act(async () => {});
+
+    fireEvent.keyDown(input, { key: 'ArrowDown' });
+    fireEvent.keyDown(input, { key: 'Enter' });
+    expect(mockNavigate).toHaveBeenCalledTimes(1);
+
+    fireEvent.submit(screen.getByRole('button', { name: 'Cari' }).closest('form'));
+    expect(mockNavigate).toHaveBeenCalledTimes(1);
+  });
+
+  it('ArrowUp dari posisi -1 pindah ke item terakhir lalu turun sampai -1 lagi', async () => {
+    autocomplete.mockResolvedValue([{ value: 'anak' }, { value: 'anakan' }]);
+
+    render(<KotakCari autoFocus={false} />);
+    const input = screen.getByRole('textbox');
+
+    fireEvent.change(input, { target: { value: 'an' } });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(300);
+    });
+    await act(async () => {});
+
+    fireEvent.keyDown(input, { key: 'ArrowUp' });
+    fireEvent.keyDown(input, { key: 'ArrowUp' });
+    fireEvent.keyDown(input, { key: 'ArrowUp' });
+
+    fireEvent.submit(screen.getByRole('button', { name: 'Cari' }).closest('form'));
+    expect(mockNavigate).toHaveBeenCalledWith('/kamus/cari/an');
+  });
 });
