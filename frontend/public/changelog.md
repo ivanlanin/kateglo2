@@ -13,6 +13,7 @@
 - Mengubah perilaku entri "varian" menjadi hanya ditampilkan di induknya
 - Memisahkan jenis entri menjadi bentuk (dasar, turunan, gabungan) dan ekspresi (idiom, peribahasa)
 - Memisahkan kelas kata menjadi kelas kata dan unsur terikat
+- Memindahkan data makna.kelas_kata unsur terikat ke entri.jenis
 
 ## 2026-02-16 Senin
 

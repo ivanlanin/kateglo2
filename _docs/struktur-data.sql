@@ -41,8 +41,7 @@ create table entri (
   legacy_tabel text,
   legacy_tid integer,
   constraint entri_legacy_eid_key unique (legacy_eid),
-  constraint entri_entri_check check (TRIM(BOTH FROM entri) <> ''::text),
-  constraint entri_jenis_check check (jenis = ANY (ARRAY['dasar'::text, 'turunan'::text, 'gabungan'::text, 'idiom'::text, 'peribahasa'::text, 'varian'::text]))
+  constraint entri_entri_check check (TRIM(BOTH FROM entri) <> ''::text)
 );
 create unique index entri_legacy_eid_key on entri using btree (legacy_eid);
 create index idx_entri_induk on entri using btree (induk);

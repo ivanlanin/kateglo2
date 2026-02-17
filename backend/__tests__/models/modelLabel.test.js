@@ -56,8 +56,12 @@ describe('ModelLabel', () => {
       { kode: 'adv', nama: 'adverbia' },
     ]);
     expect(result.unsur_terikat).toEqual([
-      { kode: 'bentuk_terikat', nama: 'bentuk terikat' },
+      { kode: 'terikat', nama: 'terikat' },
       { kode: 'prefiks', nama: 'prefiks' },
+      { kode: 'infiks', nama: 'infiks' },
+      { kode: 'sufiks', nama: 'sufiks' },
+      { kode: 'konfiks', nama: 'konfiks' },
+      { kode: 'klitik', nama: 'klitik' },
     ]);
 
     // Alias kompatibilitas route lama
@@ -90,7 +94,14 @@ describe('ModelLabel', () => {
       { kategori: undefined, kode: 'umum', nama: 'umum' },
     ].map(({ kode, nama }) => ({ kode, nama })));
     expect(result.kelas_kata).toEqual([{ kode: 'verba', nama: 'kata kerja' }]);
-    expect(result.unsur_terikat).toEqual([]);
+    expect(result.unsur_terikat).toEqual([
+      { kode: 'terikat', nama: 'terikat' },
+      { kode: 'prefiks', nama: 'prefiks' },
+      { kode: 'infiks', nama: 'infiks' },
+      { kode: 'sufiks', nama: 'sufiks' },
+      { kode: 'konfiks', nama: 'konfiks' },
+      { kode: 'klitik', nama: 'klitik' },
+    ]);
   });
 
   it('ambilSemuaKategori tetap aman saat kategori ragam/kelas_kata kosong atau nilai label tidak lengkap', async () => {
@@ -105,7 +116,14 @@ describe('ModelLabel', () => {
 
     expect(result.bahasa).toEqual([{ kode: 'id', nama: 'Indonesia' }]);
     expect(result.kelas_kata).toEqual([]);
-    expect(result.unsur_terikat).toEqual([]);
+    expect(result.unsur_terikat).toEqual([
+      { kode: 'terikat', nama: 'terikat' },
+      { kode: 'prefiks', nama: 'prefiks' },
+      { kode: 'infiks', nama: 'infiks' },
+      { kode: 'sufiks', nama: 'sufiks' },
+      { kode: 'konfiks', nama: 'konfiks' },
+      { kode: 'klitik', nama: 'klitik' },
+    ]);
     expect(result.ragam).toEqual([{ kode: null, nama: null }]);
   });
 
@@ -138,7 +156,14 @@ describe('ModelLabel', () => {
 
     expect(result.ragam).toEqual([]);
     expect(result.kelas_kata).toEqual([]);
-    expect(result.unsur_terikat).toEqual([]);
+    expect(result.unsur_terikat).toEqual([
+      { kode: 'terikat', nama: 'terikat' },
+      { kode: 'prefiks', nama: 'prefiks' },
+      { kode: 'infiks', nama: 'infiks' },
+      { kode: 'sufiks', nama: 'sufiks' },
+      { kode: 'konfiks', nama: 'konfiks' },
+      { kode: 'klitik', nama: 'klitik' },
+    ]);
   });
 
   it('cariEntriPerLabel mengembalikan kosong untuk kategori tidak valid', async () => {
@@ -272,9 +297,8 @@ describe('ModelLabel', () => {
     expect(result).toEqual({ data: [], total: 0, label: null });
   });
 
-  it('cariEntriPerLabel kategori unsur_terikat memakai kolom kelas_kata', async () => {
+  it('cariEntriPerLabel kategori unsur_terikat memakai kolom jenis pada entri', async () => {
     db.query
-      .mockResolvedValueOnce({ rows: [{ kode: 'prefiks', nama: 'prefiks', keterangan: '' }] })
       .mockResolvedValueOnce({ rows: [{ total: '2' }] })
       .mockResolvedValueOnce({ rows: [{ id: 5, lema: 'meng-' }] });
 
@@ -282,16 +306,16 @@ describe('ModelLabel', () => {
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
-      expect.stringContaining('FROM label WHERE kategori = $1'),
-      ['kelas_kata', 'prefiks']
+      expect.stringContaining('WHERE aktif = 1 AND jenis = $1'),
+      ['prefiks']
     );
     expect(db.query).toHaveBeenNthCalledWith(
       2,
-      expect.stringContaining('m.kelas_kata = ANY($1::text[])'),
-      [['prefiks']]
+      expect.stringContaining('LIMIT $2 OFFSET $3'),
+      ['prefiks', 20, 0]
     );
     expect(result.total).toBe(2);
-    expect(result.label).toEqual({ kode: 'prefiks', nama: 'prefiks', keterangan: '' });
+    expect(result.label).toEqual({ kode: 'prefiks', nama: 'prefiks' });
   });
 
   it('cariEntriPerLabel kategori kelas_kata menolak label unsur terikat', async () => {
@@ -304,12 +328,10 @@ describe('ModelLabel', () => {
   });
 
   it('cariEntriPerLabel kategori unsur_terikat mengembalikan kosong saat label tidak ditemukan', async () => {
-    db.query.mockResolvedValueOnce({ rows: [] });
-
     const result = await ModelLabel.cariEntriPerLabel('unsur_terikat', 'tidak-ada', 20, 0);
 
     expect(result).toEqual({ data: [], total: 0, label: null });
-    expect(db.query).toHaveBeenCalledTimes(1);
+    expect(db.query).not.toHaveBeenCalled();
   });
 
   it('daftarAdmin tanpa q memakai paginasi default where kosong', async () => {
