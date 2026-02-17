@@ -96,7 +96,12 @@ class ModelEntri {
               jenis_rujuk, lema_rujuk AS entri_rujuk, aktif
        FROM entri
        WHERE LOWER(indeks) = LOWER($1) AND aktif = 1
-       ORDER BY urutan ASC, entri ASC, id ASC`,
+       ORDER BY
+         CASE WHEN NULLIF(TRIM(BOTH FROM COALESCE(lafal, '')), '') IS NULL THEN 0 ELSE 1 END,
+         urutan ASC,
+         homonim ASC NULLS LAST,
+         entri ASC,
+         id ASC`,
       [indeks]
     );
     return result.rows;

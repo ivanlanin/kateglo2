@@ -180,7 +180,7 @@ describe('KamusDetail', () => {
     rerender(<KamusDetail />);
 
     expect(screen.getByRole('heading', { name: /kata.*ka ta/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'turunan' })).toHaveAttribute('href', '/kamus/jenis/turunan');
+    expect(screen.getByRole('link', { name: 'Turunan' })).toHaveAttribute('href', '/kamus/jenis/turunan');
     expect(screen.getByRole('link', { name: 'kata dasar' })).toHaveAttribute('href', '/kamus/detail/kata%20dasar');
     expect(screen.getByRole('link', { name: 'cak' })).toHaveAttribute('href', '/kamus/ragam/cak');
     expect(screen.getByRole('link', { name: 'slang' })).toHaveAttribute('href', '/kamus/ragam/slang');
