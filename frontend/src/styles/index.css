@@ -227,7 +227,7 @@ code {
   }
 
   .kotak-cari-navbar .kotak-cari-select {
-    @apply rounded-l-3xl;
+    @apply rounded-l-3xl py-2;
   }
 
   .kotak-cari-navbar .kotak-cari-tombol {
@@ -236,6 +236,10 @@ code {
 
   .kotak-cari-beranda .kotak-cari-select {
     @apply rounded-l-3xl;
+  }
+
+  .kotak-cari-navbar .kotak-cari-input {
+    @apply py-2;
   }
 
   .kotak-cari-beranda .kotak-cari-tombol {
