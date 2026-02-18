@@ -24,6 +24,17 @@ function parsePositiveInteger(value) {
   return parsed;
 }
 
+function normalizeBoolean(value, defaultValue = true) {
+  if (value === undefined || value === null) return defaultValue;
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') return value === 1;
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase();
+    return ['1', 'true', 'ya', 'yes', 'aktif'].includes(normalized);
+  }
+  return defaultValue;
+}
+
 class ModelEntri {
   static async autocomplete(query, limit = 8) {
     return autocomplete('entri', 'indeks', query, { limit, extraWhere: 'aktif = 1' });
@@ -112,13 +123,15 @@ class ModelEntri {
   * @param {number} entriId - ID entri
    * @returns {Promise<Array>} Daftar makna dengan contoh
    */
-  static async ambilMakna(entriId) {
+  static async ambilMakna(entriId, aktifSaja = false) {
+    const kondisiAktif = aktifSaja ? 'AND aktif = TRUE' : '';
     const result = await db.query(
       `SELECT id, polisem, urutan, makna, ragam, ragam_varian,
-              kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat,
+              kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, aktif,
               ilmiah, kimia
        FROM makna
       WHERE entri_id = $1
+        ${kondisiAktif}
        ORDER BY urutan ASC, id ASC`,
       [entriId]
     );
@@ -130,13 +143,15 @@ class ModelEntri {
    * @param {number[]} maknaIds - Daftar ID makna
    * @returns {Promise<Array>} Daftar contoh
    */
-  static async ambilContoh(maknaIds) {
+  static async ambilContoh(maknaIds, aktifSaja = false) {
     if (!maknaIds.length) return [];
+    const kondisiAktif = aktifSaja ? 'AND aktif = TRUE' : '';
     const result = await db.query(
       `SELECT id, makna_id, urutan, contoh, ragam, bahasa, bidang,
-              kiasan, makna_contoh
+              kiasan, makna_contoh, aktif
        FROM contoh
        WHERE makna_id = ANY($1::int[])
+         ${kondisiAktif}
        ORDER BY makna_id, urutan ASC, id ASC`,
       [maknaIds]
     );
@@ -351,7 +366,7 @@ class ModelEntri {
   static async ambilMaknaById(id) {
     const result = await db.query(
       `SELECT id, entri_id, polisem, urutan, makna, ragam, ragam_varian,
-              kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia
+              kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia, aktif
        FROM makna WHERE id = $1`,
       [id]
     );
@@ -364,31 +379,32 @@ class ModelEntri {
    * @returns {Promise<Object>}
    */
   static async simpanMakna({ id, entri_id, polisem, urutan, makna, ragam, ragam_varian,
-    kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia }) {
+    kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia, aktif }) {
     const targetEntriId = entri_id;
+    const nilaiAktif = normalizeBoolean(aktif, true);
     if (id) {
       const result = await db.query(
         `UPDATE makna SET entri_id = $1, polisem = $2, urutan = $3, makna = $4,
                 ragam = $5, ragam_varian = $6, kelas_kata = $7, bahasa = $8,
-                bidang = $9, kiasan = $10, tipe_penyingkat = $11, ilmiah = $12, kimia = $13
-         WHERE id = $14
+                bidang = $9, kiasan = $10, tipe_penyingkat = $11, ilmiah = $12, kimia = $13, aktif = $14
+         WHERE id = $15
          RETURNING id, entri_id, polisem, urutan, makna, ragam, ragam_varian,
-                   kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia`,
+                   kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia, aktif`,
         [targetEntriId, polisem ?? 1, urutan ?? 1, makna,
          ragam || null, ragam_varian || null, kelas_kata || null, bahasa || null,
-         bidang || null, kiasan ?? 0, tipe_penyingkat || null, ilmiah || null, kimia || null, id]
+         bidang || null, kiasan ?? 0, tipe_penyingkat || null, ilmiah || null, kimia || null, nilaiAktif, id]
       );
       return result.rows[0];
     }
     const result = await db.query(
       `INSERT INTO makna (entri_id, polisem, urutan, makna, ragam, ragam_varian,
-              kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+              kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia, aktif)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
       RETURNING id, entri_id, polisem, urutan, makna, ragam, ragam_varian,
-                 kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia`,
+                 kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia, aktif`,
       [targetEntriId, polisem ?? 1, urutan ?? 1, makna,
        ragam || null, ragam_varian || null, kelas_kata || null, bahasa || null,
-       bidang || null, kiasan ?? 0, tipe_penyingkat || null, ilmiah || null, kimia || null]
+       bidang || null, kiasan ?? 0, tipe_penyingkat || null, ilmiah || null, kimia || null, nilaiAktif]
     );
     return result.rows[0];
   }
@@ -413,7 +429,7 @@ class ModelEntri {
   static async ambilContohById(id) {
     const result = await db.query(
       `SELECT id, makna_id, urutan, contoh, ragam, bahasa, bidang,
-              kiasan, makna_contoh
+              kiasan, makna_contoh, aktif
        FROM contoh WHERE id = $1`,
       [id]
     );
@@ -425,22 +441,23 @@ class ModelEntri {
    * @param {Object} data
    * @returns {Promise<Object>}
    */
-  static async simpanContoh({ id, makna_id, urutan, contoh, ragam, bahasa, bidang, kiasan, makna_contoh }) {
+  static async simpanContoh({ id, makna_id, urutan, contoh, ragam, bahasa, bidang, kiasan, makna_contoh, aktif }) {
+    const nilaiAktif = normalizeBoolean(aktif, true);
     if (id) {
       const result = await db.query(
         `UPDATE contoh SET makna_id = $1, urutan = $2, contoh = $3, ragam = $4,
-                bahasa = $5, bidang = $6, kiasan = $7, makna_contoh = $8
-         WHERE id = $9 RETURNING *`,
+                bahasa = $5, bidang = $6, kiasan = $7, makna_contoh = $8, aktif = $9
+         WHERE id = $10 RETURNING *`,
         [makna_id, urutan ?? 1, contoh, ragam || null, bahasa || null,
-         bidang || null, kiasan ?? 0, makna_contoh || null, id]
+         bidang || null, kiasan ?? 0, makna_contoh || null, nilaiAktif, id]
       );
       return result.rows[0];
     }
     const result = await db.query(
-      `INSERT INTO contoh (makna_id, urutan, contoh, ragam, bahasa, bidang, kiasan, makna_contoh)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+      `INSERT INTO contoh (makna_id, urutan, contoh, ragam, bahasa, bidang, kiasan, makna_contoh, aktif)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
       [makna_id, urutan ?? 1, contoh, ragam || null, bahasa || null,
-       bidang || null, kiasan ?? 0, makna_contoh || null]
+       bidang || null, kiasan ?? 0, makna_contoh || null, nilaiAktif]
     );
     return result.rows[0];
   }

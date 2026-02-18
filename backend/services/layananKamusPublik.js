@@ -72,13 +72,13 @@ async function ambilDetailKamus(indeksAtauEntri) {
   const detailEntri = await Promise.all(
     daftarEntri.map(async (dataEntri) => {
       const [maknaList, subentri, rantaiInduk] = await Promise.all([
-        ModelEntri.ambilMakna(dataEntri.id),
+        ModelEntri.ambilMakna(dataEntri.id, true),
         ModelEntri.ambilSubentri(dataEntri.id),
         ModelEntri.ambilRantaiInduk(dataEntri.induk),
       ]);
 
       const maknaIds = maknaList.map((m) => m.id);
-      const contohList = await ModelEntri.ambilContoh(maknaIds);
+      const contohList = await ModelEntri.ambilContoh(maknaIds, true);
 
       const contohPerMakna = new Map();
       for (const contoh of contohList) {
