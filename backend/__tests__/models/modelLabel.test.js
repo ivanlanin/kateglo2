@@ -287,8 +287,8 @@ describe('ModelLabel', () => {
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
-      expect.stringContaining('WHERE kategori = ANY($1::text[]) AND kode = $2'),
-      [['ragam'], 'cak', 'ragam']
+      expect.stringContaining("TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(nama)), '[^a-z0-9]+', '-', 'g')) = $3"),
+      [['ragam'], 'cak', 'cak', 'ragam']
     );
     expect(db.query).toHaveBeenNthCalledWith(
       2,
@@ -302,6 +302,50 @@ describe('ModelLabel', () => {
     );
     expect(result.total).toBe(3);
     expect(result.label).toEqual({ kode: 'cak', nama: 'cakapan', keterangan: '' });
+  });
+
+  it('cariEntriPerLabel menerima nama label pada slug kategori', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ kode: 'v', nama: 'verba', keterangan: '' }] })
+      .mockResolvedValueOnce({ rows: [{ total: '4' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 7, entri: 'makan' }] });
+
+    const result = await ModelLabel.cariEntriPerLabel('kelas', 'Verba', 20, 0);
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining("TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(nama)), '[^a-z0-9]+', '-', 'g')) = $3"),
+      [['kelas-kata', 'kelas_kata'], 'verba', 'verba', 'kelas-kata']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('m.kelas_kata = ANY($1::text[])'),
+      [['Verba', 'v']]
+    );
+    expect(result.total).toBe(4);
+    expect(result.label).toEqual({ kode: 'v', nama: 'verba', keterangan: '' });
+  });
+
+  it('cariEntriPerLabel menerima slug lowercase-hyphen dari nama label', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ kode: 'rag bku', nama: 'Ragam Baku', keterangan: '' }] })
+      .mockResolvedValueOnce({ rows: [{ total: '2' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 17, entri: 'contoh' }] });
+
+    const result = await ModelLabel.cariEntriPerLabel('ragam', 'ragam-baku', 20, 0);
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining("TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(nama)), '[^a-z0-9]+', '-', 'g')) = $3"),
+      [['ragam'], 'ragam-baku', 'ragam-baku', 'ragam']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('m.ragam = ANY($1::text[])'),
+      [['ragam-baku', 'ragam baku', 'rag bku']]
+    );
+    expect(result.total).toBe(2);
+    expect(result.label).toEqual({ kode: 'rag bku', nama: 'Ragam Baku', keterangan: '' });
   });
 
   it('cariEntriPerLabel kategori label hanya kode saat label tidak ditemukan', async () => {

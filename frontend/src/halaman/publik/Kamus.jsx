@@ -34,6 +34,7 @@ const BARIS_KATEGORI = [
 ];
 
 const limit = 100;
+const KATEGORI_SLUG_NAMA = new Set(['kelas_kata', 'kelas-kata', 'kelas', 'ragam', 'bahasa', 'bidang']);
 
 function formatAwalKapital(teks = '') {
   return String(teks)
@@ -42,6 +43,26 @@ function formatAwalKapital(teks = '') {
     .filter(Boolean)
     .map((kata) => kata.charAt(0).toUpperCase() + kata.slice(1))
     .join(' ');
+}
+
+function normalisasiSlugNama(teks = '') {
+  return String(teks || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function tentukanSlugLabel(kategoriLabel, label = {}) {
+  const kategoriNormal = String(kategoriLabel || '').trim().toLowerCase();
+  const kandidatNama = String(label?.nama || '').trim();
+  const kandidatKode = String(label?.kode || '').trim();
+
+  if (KATEGORI_SLUG_NAMA.has(kategoriNormal) && kandidatNama) {
+    return normalisasiSlugNama(kandidatNama);
+  }
+
+  return normalisasiSlugNama(kandidatKode || kandidatNama);
 }
 
 function tentukanNamaKategoriDariPath(kategori = '', kode = '') {
@@ -161,10 +182,11 @@ function Kamus() {
                           : kat === 'kelas_kata'
                             ? 'kelas'
                             : kat;
+                        const slugLabel = tentukanSlugLabel(kat, l);
                         return (
                         <Link
                           key={l.kode}
-                          to={`/kamus/${pathKategori}/${encodeURIComponent(l.kode)}`}
+                          to={`/kamus/${pathKategori}/${encodeURIComponent(slugLabel)}`}
                           className="beranda-tag-link"
                         >
                           {['bentuk', 'unsur_terikat', 'ekspresi'].includes(kat) ? formatAwalKapital(l.nama) : l.nama}

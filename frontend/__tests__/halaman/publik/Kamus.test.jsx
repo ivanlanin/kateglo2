@@ -48,7 +48,7 @@ describe('Kamus', () => {
             bentuk: [{ kode: 'dasar', nama: 'dasar' }],
             unsur_terikat: [{ kode: 'prefiks', nama: 'prefiks' }],
             kelas_kata: [],
-            ragam: [],
+            ragam: [{ kode: 'umum_sekali', nama: 'Umum Sekali' }],
             ekspresi: [],
             bahasa: [],
             bidang: [],
@@ -67,6 +67,7 @@ describe('Kamus', () => {
     expect(screen.getByText('Bentuk Terikat')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Dasar' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Prefiks' })).toHaveAttribute('href', '/kamus/bentuk/prefiks');
+    expect(screen.getByRole('link', { name: 'Umum Sekali' })).toHaveAttribute('href', '/kamus/ragam/umum-sekali');
   });
 
   it('browse kategori memakai fallback array kosong untuk key yang tidak ada dan grid dua kolom saat dua kategori terisi', () => {
@@ -90,7 +91,7 @@ describe('Kamus', () => {
 
     expect(screen.getByText('Abjad')).toBeInTheDocument();
     expect(screen.getByText('Kelas Kata')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'nomina' })).toHaveAttribute('href', '/kamus/kelas/n');
+    expect(screen.getByRole('link', { name: 'nomina' })).toHaveAttribute('href', '/kamus/kelas/nomina');
     const grid = container.querySelector('.grid.grid-cols-1');
     expect(grid?.className).toContain('md:grid-cols-2');
   });
