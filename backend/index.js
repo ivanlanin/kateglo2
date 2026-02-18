@@ -20,13 +20,17 @@ const trustProxy = (process.env.TRUST_PROXY || 'true') === 'true';
 const enableHelmetCsp = (process.env.HELMET_ENABLE_CSP || 'false') === 'true';
 const isProduction = process.env.NODE_ENV === 'production';
 
+function normalisasiOrigin(origin = '') {
+  return String(origin).trim().replace(/\/+$/, '').toLowerCase();
+}
+
 const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173,http://localhost:3000')
   .split(',')
-  .map((origin) => origin.trim())
+  .map((origin) => normalisasiOrigin(origin))
   .filter(Boolean);
 
-if (!isProduction && !allowedOrigins.includes('http://localhost:3000')) {
-  allowedOrigins.push('http://localhost:3000');
+if (!isProduction && !allowedOrigins.includes(normalisasiOrigin('http://localhost:3000'))) {
+  allowedOrigins.push(normalisasiOrigin('http://localhost:3000'));
 }
 
 const requireOrigin = (process.env.API_REQUIRE_ORIGIN || 'true') === 'true';
@@ -39,7 +43,9 @@ const corsOptions = {
       return callback(null, true);
     }
 
-    if (allowedOrigins.includes(origin)) {
+    const normalizedOrigin = normalisasiOrigin(origin);
+
+    if (allowedOrigins.includes(normalizedOrigin)) {
       return callback(null, true);
     }
 
@@ -64,8 +70,9 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', (req, res, next) => {
   const origin = req.get('origin');
+  const normalizedOrigin = normalisasiOrigin(origin || '');
   const requestFrontendKey = req.get('x-frontend-key');
-  const bypassFrontendKeyForLocalSsr = !isProduction && origin === 'http://localhost:3000';
+  const bypassFrontendKeyForLocalSsr = !isProduction && normalizedOrigin === normalisasiOrigin('http://localhost:3000');
 
   if (!origin && requireOrigin) {
     return res.status(403).json({
@@ -74,7 +81,7 @@ app.use('/api', (req, res, next) => {
     });
   }
 
-  if (origin && !allowedOrigins.includes(origin)) {
+  if (origin && !allowedOrigins.includes(normalizedOrigin)) {
     return res.status(403).json({
       success: false,
       message: 'Origin tidak diizinkan',
