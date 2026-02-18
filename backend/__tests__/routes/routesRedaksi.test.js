@@ -904,6 +904,72 @@ describe('routes/redaksi', () => {
       expect(put.body.message).toBe('Urutan harus bilangan bulat >= 1');
     });
 
+    it('POST/PUT /api/redaksi/label validasi status aktif tidak valid', async () => {
+      const post = await callAsAdmin('post', '/api/redaksi/label', {
+        body: { kategori: 'ragam', kode: 'R', nama: 'Ragam', aktif: {} },
+      });
+
+      const put = await callAsAdmin('put', '/api/redaksi/label/1', {
+        body: { kategori: 'ragam', kode: 'R', nama: 'Ragam', aktif: [] },
+      });
+
+      expect(post.status).toBe(400);
+      expect(post.body.message).toBe('Status aktif tidak valid');
+      expect(put.status).toBe(400);
+      expect(put.body.message).toBe('Status aktif tidak valid');
+    });
+
+    it('POST /api/redaksi/label menerima status aktif string valid', async () => {
+      ModelLabel.simpan.mockResolvedValueOnce({ id: 1, aktif: true });
+
+      const response = await callAsAdmin('post', '/api/redaksi/label', {
+        body: { kategori: 'ragam', kode: 'R', nama: 'Ragam', aktif: 'aktif' },
+      });
+
+      expect(response.status).toBe(201);
+      expect(response.body.success).toBe(true);
+    });
+
+    it('PUT /api/redaksi/label menolak status aktif string tidak dikenal', async () => {
+      const response = await callAsAdmin('put', '/api/redaksi/label/1', {
+        body: { kategori: 'ragam', kode: 'R', nama: 'Ragam', aktif: 'mungkin' },
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe('Status aktif tidak valid');
+    });
+
+    it('POST /api/redaksi/label menerima status aktif numerik valid (0/1)', async () => {
+      ModelLabel.simpan.mockResolvedValueOnce({ id: 1, aktif: 1 });
+
+      const response = await callAsAdmin('post', '/api/redaksi/label', {
+        body: { kategori: 'ragam', kode: 'R', nama: 'Ragam', aktif: 1 },
+      });
+
+      expect(response.status).toBe(201);
+      expect(response.body.success).toBe(true);
+    });
+
+    it('POST /api/redaksi/label menerima status aktif boolean', async () => {
+      ModelLabel.simpan.mockResolvedValueOnce({ id: 1, aktif: false });
+
+      const response = await callAsAdmin('post', '/api/redaksi/label', {
+        body: { kategori: 'ragam', kode: 'R', nama: 'Ragam', aktif: false },
+      });
+
+      expect(response.status).toBe(201);
+      expect(response.body.success).toBe(true);
+    });
+
+    it('PUT /api/redaksi/label menolak status aktif numerik di luar 0/1', async () => {
+      const response = await callAsAdmin('put', '/api/redaksi/label/1', {
+        body: { kategori: 'ragam', kode: 'R', nama: 'Ragam', aktif: 2 },
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe('Status aktif tidak valid');
+    });
+
     it('CRUD /api/redaksi/label meneruskan error', async () => {
       ModelLabel.daftarAdmin.mockRejectedValueOnce(new Error('label list gagal'));
       ModelLabel.ambilDenganId.mockRejectedValueOnce(new Error('label detail gagal'));

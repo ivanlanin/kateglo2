@@ -45,6 +45,10 @@ describe('KomponenAdmin', () => {
       { name: 'kode', label: 'Kode' },
     ])).toBe('Nama wajib diisi');
 
+    expect(validateRequiredFields(undefined, [
+      { name: 'nama', label: 'Nama' },
+    ])).toBe('Nama wajib diisi');
+
     expect(validateRequiredFields({ nama: 'Ada', kode: 'n' }, [
       { name: 'nama', label: 'Nama' },
       { name: 'kode', label: 'Kode' },
