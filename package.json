@@ -9,6 +9,7 @@
     "shared"
   ],
   "scripts": {
+    "start": "node scripts/start-production-root.js",
     "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
     "dev:ssr": "npm run dev --prefix backend",
     "sim:production": "npm run build:ssr --prefix frontend && npm run start:production --prefix backend",

@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: kateglo
+    runtime: node
+    rootDir: .
+    buildCommand: npm ci && npm run sim:production:build
+    startCommand: npm run sim:production:start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: NODE_ENV
+        value: production
+      - key: TRUST_PROXY
+        value: "true"
+      - key: API_REQUIRE_ORIGIN
+        value: "true"
+      - key: CORS_ORIGIN
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_REDIRECT_URI
+        sync: false
+      - key: FRONTEND_AUTH_CALLBACK_URL
+        sync: false
+      - key: API_REQUIRE_FRONTEND_KEY
+        value: "false"
+      - key: FRONTEND_SHARED_KEY
+        sync: false
+      - key: REDIS_URL
+        sync: false
