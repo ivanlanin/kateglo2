@@ -3,7 +3,7 @@ services:
     name: kateglo
     runtime: node
     rootDir: .
-    buildCommand: npm ci && npm run sim:production:build
+    buildCommand: npm ci --include=dev && npm run sim:production:build
     startCommand: npm run sim:production:start
     healthCheckPath: /health
     envVars:

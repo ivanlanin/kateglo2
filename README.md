@@ -101,7 +101,7 @@ npm run build:public
 Project ini siap di-deploy sebagai **1 Web Service** (SSR + API) dari root repo.
 
 - Gunakan blueprint [render.yaml](render.yaml)
-- Build: `npm ci && npm run sim:production:build`
+- Build: `npm ci --include=dev && npm run sim:production:build`
 - Start: `npm run sim:production:start`
 - Health check: `/health`
 
