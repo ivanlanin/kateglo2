@@ -14,9 +14,9 @@ import { updateSearchParamsWithOffset } from '../../utils/searchParams';
 
 const NAMA_KATEGORI = {
   abjad: 'Abjad',
-  bentuk: 'Bentuk Bebas',
-  unsur: 'Bentuk Terikat',
-  unsur_terikat: 'Bentuk Terikat',
+  bentuk: 'Bentuk',
+  unsur: 'Bentuk',
+  unsur_terikat: 'Bentuk',
   kelas: 'Kelas Kata',
   kelas_kata: 'Kelas Kata',
   ragam: 'Ragam',
@@ -24,6 +24,12 @@ const NAMA_KATEGORI = {
   bahasa: 'Asal Bahasa',
   bidang: 'Bidang',
   jenis: 'Jenis',
+};
+
+const NAMA_KATEGORI_BROWSE = {
+  bentuk: 'Bentuk Bebas',
+  unsur: 'Bentuk Terikat',
+  unsur_terikat: 'Bentuk Terikat',
 };
 
 const BARIS_KATEGORI = [
@@ -176,7 +182,7 @@ function Kamus() {
               >
                 {kategoriTerisi.map(({ kat, labels }) => (
                   <div key={kat} className="beranda-feature-card text-center">
-                    <h3 className="beranda-info-title">{NAMA_KATEGORI[kat]}</h3>
+                    <h3 className="beranda-info-title">{NAMA_KATEGORI_BROWSE[kat] || NAMA_KATEGORI[kat]}</h3>
                     <div className="flex flex-wrap justify-center gap-2">
                       {labels.map((l) => {
                         const pathKategori = kat === 'unsur_terikat'
