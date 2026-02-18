@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-02-18 Rabu
+
+- Menyiapkan migrasi ke SSR untuk melayani HTML dinamis di URL asli
+
 ## 2026-02-17 Selasa
 
 - Menambahkan fitur pengelolaan label untuk redaksi
