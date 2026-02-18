@@ -229,3 +229,6 @@ class ModelGlosarium {
 }
 
 module.exports = ModelGlosarium;
+module.exports.__private = {
+  normalizeBoolean,
+};

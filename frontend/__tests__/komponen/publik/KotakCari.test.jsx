@@ -309,4 +309,24 @@ describe('KotakCari', () => {
     fireEvent.submit(screen.getByRole('button', { name: 'Cari' }).closest('form'));
     expect(mockNavigate).toHaveBeenCalledWith('/kamus/cari/an');
   });
+
+  it('ambilSaran membersihkan daftar saat input dikosongkan lewat ketik', async () => {
+    autocomplete.mockResolvedValue([{ value: 'kata' }]);
+    render(<KotakCari autoFocus={false} />);
+    const input = screen.getByRole('textbox');
+
+    fireEvent.change(input, { target: { value: 'ka' } });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(300);
+    });
+    await act(async () => {});
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+
+    fireEvent.change(input, { target: { value: '' } });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(300);
+    });
+    await act(async () => {});
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+  });
 });

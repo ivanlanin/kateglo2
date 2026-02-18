@@ -5,6 +5,7 @@
 
 const db = require('../../db');
 const ModelGlosarium = require('../../models/modelGlosarium');
+const { normalizeBoolean } = require('../../models/modelGlosarium').__private;
 
 describe('ModelGlosarium', () => {
   beforeEach(() => {
@@ -260,5 +261,94 @@ describe('ModelGlosarium', () => {
 
     expect(deleted).toBe(true);
     expect(missing).toBe(false);
+  });
+
+  // ─── normalizeBoolean coverage via simpan ─────────────────────────────
+
+  it('simpan normalizeBoolean: boolean true diteruskan apa adanya', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 20 }] });
+    await ModelGlosarium.simpan({ indonesia: 'tes', asing: 'test', aktif: true });
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO glosarium'),
+      ['tes', 'test', null, 'en', null, true, 'admin']
+    );
+  });
+
+  it('simpan normalizeBoolean: boolean false diteruskan apa adanya', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 21 }] });
+    await ModelGlosarium.simpan({ indonesia: 'tes', asing: 'test', aktif: false });
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO glosarium'),
+      ['tes', 'test', null, 'en', null, false, 'admin']
+    );
+  });
+
+  it('simpan normalizeBoolean: number 1 menjadi true', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 22 }] });
+    await ModelGlosarium.simpan({ indonesia: 'tes', asing: 'test', aktif: 1 });
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO glosarium'),
+      ['tes', 'test', null, 'en', null, true, 'admin']
+    );
+  });
+
+  it('simpan normalizeBoolean: string "ya" menjadi true, string "no" menjadi false', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ id: 23 }] });
+    db.query.mockResolvedValueOnce({ rows: [{ id: 24 }] });
+    await ModelGlosarium.simpan({ indonesia: 'a', asing: 'b', aktif: 'ya' });
+    await ModelGlosarium.simpan({ indonesia: 'c', asing: 'd', aktif: 'no' });
+    expect(db.query).toHaveBeenNthCalledWith(
+      1, expect.stringContaining('INSERT INTO glosarium'),
+      ['a', 'b', null, 'en', null, true, 'admin']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2, expect.stringContaining('INSERT INTO glosarium'),
+      ['c', 'd', null, 'en', null, false, 'admin']
+    );
+  });
+
+  it('simpan normalizeBoolean: tipe lain (object) menghasilkan defaultValue', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 25 }] });
+    await ModelGlosarium.simpan({ indonesia: 'tes', asing: 'test', aktif: [] });
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO glosarium'),
+      ['tes', 'test', null, 'en', null, true, 'admin']
+    );
+  });
+
+  // ─── aktifSaja coverage ───────────────────────────────────────────────
+
+  it('cari dengan aktifSaja menambahkan filter aktif', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 30, indonesia: 'aktif' }] });
+    const result = await ModelGlosarium.cari({ q: 'aktif', aktifSaja: true });
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('g.aktif = TRUE'),
+      ['%aktif%']
+    );
+    expect(result.total).toBe(1);
+  });
+
+  it('normalizeBoolean tanpa argumen kedua menggunakan default true', () => {
+    expect(normalizeBoolean(undefined)).toBe(true);
+    expect(normalizeBoolean(null)).toBe(true);
+  });
+
+  it('ambilDaftarBidang dengan aktifSaja=false tidak menambahkan kondisi aktif', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+    await ModelGlosarium.ambilDaftarBidang(false);
+    expect(db.query).toHaveBeenCalledWith(
+      expect.not.stringContaining('AND aktif = TRUE')
+    );
+  });
+
+  it('ambilDaftarSumber dengan aktifSaja=false tidak menambahkan kondisi aktif', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+    await ModelGlosarium.ambilDaftarSumber(false);
+    expect(db.query).toHaveBeenCalledWith(
+      expect.not.stringContaining('AND aktif = TRUE')
+    );
   });
 });
