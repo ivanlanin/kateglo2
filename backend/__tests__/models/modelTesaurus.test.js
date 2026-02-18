@@ -39,7 +39,7 @@ describe('ModelTesaurus', () => {
     const result = await ModelTesaurus.cari(' xyz ', 10, 0);
 
     expect(db.query).toHaveBeenCalledTimes(1);
-    expect(result).toEqual({ data: [], total: 0 });
+    expect(result).toEqual({ data: [], total: 0, hasNext: false });
   });
 
   it('cari menormalisasi query serta clamp limit/offset', async () => {
@@ -61,6 +61,30 @@ describe('ModelTesaurus', () => {
     );
     expect(result.total).toBe(2);
     expect(result.data).toHaveLength(1);
+    expect(result.hasNext).toBe(true);
+  });
+
+  it('cari tanpa hitungTotal memakai limit+1 untuk menentukan hasNext', async () => {
+    db.query.mockResolvedValue({
+      rows: [
+        { id: 1, lema: 'a' },
+        { id: 2, lema: 'b' },
+        { id: 3, lema: 'c' },
+      ],
+    });
+
+    const result = await ModelTesaurus.cari('aktif', 2, 6, false);
+
+    expect(db.query).toHaveBeenCalledTimes(1);
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('LIMIT $4 OFFSET $5'),
+      ['aktif', 'aktif%', '%aktif%', 3, 6]
+    );
+    expect(result).toEqual({
+      data: [{ id: 1, lema: 'a' }, { id: 2, lema: 'b' }],
+      total: 9,
+      hasNext: true,
+    });
   });
 
   it('cari memakai default limit dan offset', async () => {

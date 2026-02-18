@@ -55,32 +55,32 @@ describe('layananKamusPublik.cariKamus', () => {
   it('mengembalikan array kosong jika query kosong', async () => {
     const result = await cariKamus('   ');
 
-    expect(result).toEqual({ data: [], total: 0 });
+    expect(result).toEqual({ data: [], total: 0, hasNext: false });
     expect(ModelEntri.cariEntri).not.toHaveBeenCalled();
   });
 
   it('mengembalikan kosong jika query undefined', async () => {
     const result = await cariKamus(undefined);
 
-    expect(result).toEqual({ data: [], total: 0 });
+    expect(result).toEqual({ data: [], total: 0, hasNext: false });
     expect(ModelEntri.cariEntri).not.toHaveBeenCalled();
   });
 
   it('meneruskan query trim dengan opsi default', async () => {
-    ModelEntri.cariEntri.mockResolvedValue({ data: [{ entri: 'kata' }], total: 1 });
+    ModelEntri.cariEntri.mockResolvedValue({ data: [{ entri: 'kata' }], total: 1, hasNext: false });
 
     const result = await cariKamus(' kata ');
 
-    expect(ModelEntri.cariEntri).toHaveBeenCalledWith('kata', 100, 0);
-    expect(result).toEqual({ data: [{ entri: 'kata' }], total: 1 });
+    expect(ModelEntri.cariEntri).toHaveBeenCalledWith('kata', 100, 0, false);
+    expect(result).toEqual({ data: [{ entri: 'kata' }], total: 1, hasNext: false });
   });
 
   it('meneruskan opsi limit dan offset', async () => {
-    ModelEntri.cariEntri.mockResolvedValue({ data: [], total: 0 });
+    ModelEntri.cariEntri.mockResolvedValue({ data: [], total: 0, hasNext: false });
 
     await cariKamus('kata', { limit: 33, offset: 7 });
 
-    expect(ModelEntri.cariEntri).toHaveBeenCalledWith('kata', 33, 7);
+    expect(ModelEntri.cariEntri).toHaveBeenCalledWith('kata', 33, 7, false);
   });
 });
 

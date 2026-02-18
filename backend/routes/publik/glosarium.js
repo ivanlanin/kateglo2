@@ -30,6 +30,7 @@ router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
       limit,
       offset,
       aktifSaja: true,
+      hitungTotal: false,
     });
     return res.json(result);
   } catch (error) {
@@ -58,6 +59,7 @@ router.get('/bidang/:bidang', async (req, res, next) => {
       limit,
       offset,
       aktifSaja: true,
+      hitungTotal: false,
     });
     return res.json(result);
   } catch (error) {
@@ -86,6 +88,7 @@ router.get('/sumber/:sumber', async (req, res, next) => {
       limit,
       offset,
       aktifSaja: true,
+      hitungTotal: false,
     });
     return res.json(result);
   } catch (error) {

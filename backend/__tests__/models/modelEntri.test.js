@@ -49,7 +49,7 @@ describe('ModelEntri', () => {
       expect.stringContaining('SELECT COUNT(*) AS total FROM hasil'),
       ['zzz', 'zzz%', '%zzz%']
     );
-    expect(result).toEqual({ data: [], total: 0 });
+    expect(result).toEqual({ data: [], total: 0, hasNext: false });
   });
 
   it('cariEntri menormalisasi query serta clamp limit dan offset', async () => {
@@ -73,7 +73,30 @@ describe('ModelEntri', () => {
       expect.stringContaining('LIMIT $4 OFFSET $5'),
       ['kata', 'kata%', '%kata%', 200, 0]
     );
-    expect(result).toEqual({ data: [{ id: 1, entri: 'kata', jenis: 'dasar' }], total: 3 });
+    expect(result).toEqual({ data: [{ id: 1, entri: 'kata', jenis: 'dasar' }], total: 3, hasNext: true });
+  });
+
+  it('cariEntri tanpa hitungTotal memakai limit+1 untuk menentukan hasNext', async () => {
+    db.query.mockResolvedValue({
+      rows: [
+        { id: 1, entri: 'a' },
+        { id: 2, entri: 'b' },
+        { id: 3, entri: 'c' },
+      ],
+    });
+
+    const result = await ModelEntri.cariEntri('kata', 2, 4, false);
+
+    expect(db.query).toHaveBeenCalledTimes(1);
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('LIMIT $4 OFFSET $5'),
+      ['kata', 'kata%', '%kata%', 3, 4]
+    );
+    expect(result).toEqual({
+      data: [{ id: 1, entri: 'a' }, { id: 2, entri: 'b' }],
+      total: 7,
+      hasNext: true,
+    });
   });
 
   it('cariEntri memakai limit dan offset default saat argumen tidak diberikan', async () => {

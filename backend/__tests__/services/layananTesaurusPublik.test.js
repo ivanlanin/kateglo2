@@ -19,23 +19,23 @@ describe('layananTesaurusPublik.cariTesaurus', () => {
   it('mengembalikan kosong bila query kosong', async () => {
     const result = await cariTesaurus('   ');
 
-    expect(result).toEqual({ data: [], total: 0 });
+    expect(result).toEqual({ data: [], total: 0, hasNext: false });
     expect(ModelTesaurus.cari).not.toHaveBeenCalled();
   });
 
   it('mengembalikan kosong bila query undefined', async () => {
     const result = await cariTesaurus(undefined);
 
-    expect(result).toEqual({ data: [], total: 0 });
+    expect(result).toEqual({ data: [], total: 0, hasNext: false });
     expect(ModelTesaurus.cari).not.toHaveBeenCalled();
   });
 
   it('meneruskan query trim beserta opsi', async () => {
-    ModelTesaurus.cari.mockResolvedValue({ data: [{ lema: 'aktif' }], total: 1 });
+    ModelTesaurus.cari.mockResolvedValue({ data: [{ lema: 'aktif' }], total: 1, hasNext: false });
 
     const result = await cariTesaurus(' aktif ', { limit: 25, offset: 3 });
 
-    expect(ModelTesaurus.cari).toHaveBeenCalledWith('aktif', 25, 3);
+    expect(ModelTesaurus.cari).toHaveBeenCalledWith('aktif', 25, 3, false);
     expect(result.total).toBe(1);
   });
 });

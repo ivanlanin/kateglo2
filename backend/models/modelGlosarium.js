@@ -38,7 +38,18 @@ class ModelGlosarium {
    * @param {number} params.offset - Offset untuk pagination
    * @returns {Promise<Object>} { data, total }
    */
-  static async cari({ q = '', bidang = '', sumber = '', bahasa = '', limit = 20, offset = 0, aktifSaja = false } = {}) {
+  static async cari({
+    q = '',
+    bidang = '',
+    sumber = '',
+    bahasa = '',
+    limit = 20,
+    offset = 0,
+    aktifSaja = false,
+    hitungTotal = true,
+  } = {}) {
+    const cappedLimit = Math.min(Math.max(Number(limit) || 20, 1), 200);
+    const safeOffset = Math.max(Number(offset) || 0, 0);
     const conditions = [];
     const params = [];
     let idx = 1;
@@ -73,11 +84,24 @@ class ModelGlosarium {
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
-    const countResult = await db.query(
-      `SELECT COUNT(*) as total FROM glosarium g ${whereClause}`,
-      params
-    );
-    const total = parseCount(countResult.rows[0]?.total);
+    if (hitungTotal) {
+      const countResult = await db.query(
+        `SELECT COUNT(*) as total FROM glosarium g ${whereClause}`,
+        params
+      );
+      const total = parseCount(countResult.rows[0]?.total);
+
+      const dataResult = await db.query(
+        `SELECT g.id, g.indonesia, g.asing, g.bidang, g.bahasa, g.sumber, g.aktif
+         FROM glosarium g
+         ${whereClause}
+         ORDER BY g.indonesia ASC
+         LIMIT $${idx} OFFSET $${idx + 1}`,
+        [...params, cappedLimit, safeOffset]
+      );
+
+      return { data: dataResult.rows, total, hasNext: safeOffset + dataResult.rows.length < total };
+    }
 
     const dataResult = await db.query(
       `SELECT g.id, g.indonesia, g.asing, g.bidang, g.bahasa, g.sumber, g.aktif
@@ -85,10 +109,16 @@ class ModelGlosarium {
        ${whereClause}
        ORDER BY g.indonesia ASC
        LIMIT $${idx} OFFSET $${idx + 1}`,
-      [...params, limit, offset]
+      [...params, cappedLimit + 1, safeOffset]
     );
 
-    return { data: dataResult.rows, total };
+    const hasNext = dataResult.rows.length > cappedLimit;
+    const data = hasNext ? dataResult.rows.slice(0, cappedLimit) : dataResult.rows;
+    const total = hasNext
+      ? safeOffset + cappedLimit + 1
+      : safeOffset + data.length;
+
+    return { data, total, hasNext };
   }
 
   /**
@@ -98,10 +128,9 @@ class ModelGlosarium {
   static async ambilDaftarBidang(aktifSaja = true) {
     const kondisiAktif = aktifSaja ? 'AND aktif = TRUE' : '';
     const result = await db.query(
-      `SELECT bidang, COUNT(*) as jumlah
+      `SELECT DISTINCT bidang
         FROM glosarium
        WHERE bidang IS NOT NULL AND bidang != '' ${kondisiAktif}
-       GROUP BY bidang
        ORDER BY bidang`
     );
     return result.rows;
@@ -114,10 +143,9 @@ class ModelGlosarium {
   static async ambilDaftarSumber(aktifSaja = true) {
     const kondisiAktif = aktifSaja ? 'AND aktif = TRUE' : '';
     const result = await db.query(
-      `SELECT sumber, COUNT(*) as jumlah
+      `SELECT DISTINCT sumber
        FROM glosarium
        WHERE sumber IS NOT NULL AND sumber != '' ${kondisiAktif}
-       GROUP BY sumber
        ORDER BY sumber`
     );
     return result.rows;
