@@ -229,7 +229,7 @@ describe('KamusDetail', () => {
     expect(screen.getByRole('link', { name: 'cak' })).toHaveAttribute('href', '/kamus/ragam/cak');
     expect(screen.getByRole('link', { name: 'slang' })).toHaveAttribute('href', '/kamus/ragam/slang');
     expect(screen.getByRole('link', { name: 'kiasan' })).toHaveAttribute('href', '/kamus/ragam/kiasan');
-    expect(screen.getByRole('link', { name: 'Arab' })).toHaveAttribute('href', '/kamus/bahasa/Arab');
+    expect(screen.getByRole('link', { name: 'Arab' })).toHaveAttribute('href', '/kamus/bahasa/arab');
     expect(screen.getByRole('link', { name: 'akr' })).toHaveAttribute('href', '/kamus/bentuk/akr');
     expect(screen.getByText('species', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('H2O')).toBeInTheDocument();
@@ -977,7 +977,7 @@ describe('KamusDetail helpers', () => {
       { kode: '', nama: 'Kosong' },
       null,
     ]);
-    expect(map).toEqual({ n: 'Nomina', v: 'v' });
+    expect(map).toEqual({ n: 'Nomina', nomina: 'Nomina', v: 'v', kosong: 'Kosong' });
   });
 
   it('tentukanKategoriJenis memetakan bentuk, ekspresi, dan fallback jenis', () => {

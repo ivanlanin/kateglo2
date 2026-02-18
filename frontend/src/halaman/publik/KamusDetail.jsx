@@ -40,13 +40,38 @@ function normalizeToken(teks = '') {
   return String(teks || '').trim().toLowerCase();
 }
 
+function normalisasiSlugNama(teks = '') {
+  return String(teks || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 function buildLabelMap(labels = []) {
   return (labels || []).reduce((acc, item) => {
-    const key = normalizeToken(item?.kode);
-    if (!key) return acc;
-    acc[key] = item?.nama || item?.kode;
+    const keyKode = normalizeToken(item?.kode);
+    const keyNama = normalizeToken(item?.nama);
+    const valueNama = String(item?.nama || item?.kode || '').trim();
+    if (!valueNama) return acc;
+    if (keyKode) {
+      acc[keyKode] = valueNama;
+    }
+    if (keyNama) {
+      acc[keyNama] = valueNama;
+    }
     return acc;
   }, {});
+}
+
+function resolveNamaLabel(nilai, petaLabel = {}) {
+  const key = normalizeToken(nilai);
+  return petaLabel[key] || String(nilai || '').trim();
+}
+
+function buatPathKategoriDariLabel(kategori, nilai, petaLabel = {}) {
+  const namaLabel = resolveNamaLabel(nilai, petaLabel);
+  return buatPathKategoriKamus(kategori, normalisasiSlugNama(namaLabel || nilai));
 }
 
 function tentukanKategoriJenis(jenis = '') {
@@ -334,30 +359,30 @@ function KamusDetail() {
                               {m.bidang && (
                                 <>
                                   <Link
-                                    to={buatPathKategoriKamus('bidang', m.bidang)}
+                                    to={buatPathKategoriDariLabel('bidang', m.bidang, petaBidang)}
                                     className="kamus-badge kamus-badge-bidang"
                                   >
-                                    {petaBidang[normalizeToken(m.bidang)] || m.bidang}
+                                    {resolveNamaLabel(m.bidang, petaBidang)}
                                   </Link>{' '}
                                 </>
                               )}
                               {m.ragam && (
                                 <>
                                   <Link
-                                    to={buatPathKategoriKamus('ragam', m.ragam)}
+                                    to={buatPathKategoriDariLabel('ragam', m.ragam, petaRagam)}
                                     className="kamus-badge kamus-badge-ragam"
                                   >
-                                    {petaRagam[normalizeToken(m.ragam)] || m.ragam}
+                                    {resolveNamaLabel(m.ragam, petaRagam)}
                                   </Link>{' '}
                                 </>
                               )}
                               {m.ragam_varian && (
                                 <>
                                   <Link
-                                    to={buatPathKategoriKamus('ragam', m.ragam_varian)}
+                                    to={buatPathKategoriDariLabel('ragam', m.ragam_varian, petaRagam)}
                                     className="kamus-badge kamus-badge-ragam"
                                   >
-                                    {petaRagam[normalizeToken(m.ragam_varian)] || m.ragam_varian}
+                                    {resolveNamaLabel(m.ragam_varian, petaRagam)}
                                   </Link>{' '}
                                 </>
                               )}
@@ -374,10 +399,10 @@ function KamusDetail() {
                               {m.bahasa && (
                                 <>
                                   <Link
-                                    to={buatPathKategoriKamus('bahasa', m.bahasa)}
+                                    to={buatPathKategoriDariLabel('bahasa', m.bahasa, petaBahasa)}
                                     className="kamus-badge kamus-badge-bahasa"
                                   >
-                                    {petaBahasa[normalizeToken(m.bahasa)] || m.bahasa}
+                                    {resolveNamaLabel(m.bahasa, petaBahasa)}
                                   </Link>{' '}
                                 </>
                               )}
@@ -574,6 +599,8 @@ export {
   formatTitleCase,
   normalizeToken,
   buildLabelMap,
+  resolveNamaLabel,
+  buatPathKategoriDariLabel,
   tentukanKategoriJenis,
   bandingkanEntriKamus,
   bandingkanJenisSubentri,

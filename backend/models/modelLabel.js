@@ -40,6 +40,19 @@ function normalizeLabelValue(value) {
   return String(value || '').trim().toLowerCase();
 }
 
+function normalizeLabelSlug(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function denormalizeLabelSlug(value) {
+  const cleaned = normalizeLabelSlug(value);
+  return cleaned.includes('-') ? cleaned.replace(/-/g, ' ') : cleaned;
+}
+
 function urutkanLabelPrioritas(labels, urutanPrioritas) {
   const prioritasMap = new Map(urutanPrioritas.map((nama, index) => [normalizeLabelValue(nama), index]));
   return [...labels].sort((a, b) => {
@@ -69,6 +82,25 @@ function pushLabelUnik(grouped, kategori, label) {
   if (!exists) {
     grouped[kategori].push(label);
   }
+}
+
+function buildNilaiCocokLabel(inputLabel, label = null) {
+  const inputRaw = String(inputLabel || '').trim();
+  const inputDeslug = denormalizeLabelSlug(inputRaw);
+  const candidates = [inputRaw, inputDeslug, label?.kode, label?.nama]
+    .map((item) => String(item || '').trim())
+    .filter(Boolean);
+
+  const uniqueValues = [];
+  const seen = new Set();
+  for (const value of candidates) {
+    const key = normalizeLabelValue(value);
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    uniqueValues.push(value);
+  }
+
+  return uniqueValues;
 }
 
 class ModelLabel {
@@ -139,6 +171,9 @@ class ModelLabel {
    */
   static async cariEntriPerLabel(kategori, kode, limit = 20, offset = 0) {
     const kategoriNormal = normalisasiKategoriLabel(kategori);
+    const kodeTertrim = String(kode || '').trim();
+    const kodeLower = normalizeLabelValue(kodeTertrim);
+    const kodeSlug = normalizeLabelSlug(kodeTertrim);
 
     if (kategori === 'abjad') {
       return this._cariEntriPerAbjad(kode, limit, offset);
@@ -170,10 +205,21 @@ class ModelLabel {
     const labelResult = await db.query(
       `SELECT kategori, kode, nama, keterangan
        FROM label
-       WHERE kategori = ANY($1::text[]) AND kode = $2 AND aktif = TRUE
-       ORDER BY CASE WHEN kategori = $3 THEN 0 ELSE 1 END
+       WHERE kategori = ANY($1::text[]) AND aktif = TRUE
+         AND (
+           LOWER(TRIM(kode)) = $2
+           OR LOWER(TRIM(nama)) = $2
+           OR TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(kode)), '[^a-z0-9]+', '-', 'g')) = $3
+           OR TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(nama)), '[^a-z0-9]+', '-', 'g')) = $3
+         )
+       ORDER BY
+         CASE WHEN LOWER(TRIM(nama)) = $2 THEN 0 ELSE 1 END,
+         CASE WHEN LOWER(TRIM(kode)) = $2 THEN 0 ELSE 1 END,
+         CASE WHEN TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(nama)), '[^a-z0-9]+', '-', 'g')) = $3 THEN 0 ELSE 1 END,
+         CASE WHEN TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(kode)), '[^a-z0-9]+', '-', 'g')) = $3 THEN 0 ELSE 1 END,
+         CASE WHEN kategori = $4 THEN 0 ELSE 1 END
        LIMIT 1`,
-      [kategoriKandidat, kode, kategoriNormal]
+      [kategoriKandidat, kodeLower, kodeSlug, kategoriNormal]
     );
     const label = labelResult.rows[0] || null;
 
@@ -189,10 +235,7 @@ class ModelLabel {
     }
 
     // Kumpulkan nilai yang mungkin tersimpan di kolom makna
-    const nilaiCocok = [kode];
-    if (label && label.nama !== kode) {
-      nilaiCocok.push(label.nama);
-    }
+    const nilaiCocok = buildNilaiCocokLabel(kodeTertrim, label);
 
     const kolom = kategoriNormal === 'kelas-kata' ? 'kelas_kata' : kategoriNormal;
 
@@ -435,6 +478,7 @@ module.exports.__private = {
   normalisasiKategoriLabel,
   kandidatKategoriLabel,
   normalizeLabelValue,
+  buildNilaiCocokLabel,
   urutkanLabelPrioritas,
   pushLabelUnik,
   normalizeBoolean,
