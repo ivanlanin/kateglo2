@@ -23,6 +23,11 @@ function ambilApiBaseUrl() {
         if (!import.meta.env.DEV && targetLokal && !currentLokal) {
           return window.location.origin;
         }
+      } else {
+        const targetLokal = hostLokal(parsedUrl.hostname);
+        if (!import.meta.env.DEV && targetLokal) {
+          return '';
+        }
       }
     } catch {
       return apiBaseUrlFromEnv;
@@ -60,10 +65,19 @@ export function ambilReturnTo() {
 }
 
 export function buatUrlLoginGoogle(frontendOrigin = '') {
-  const loginUrl = new URL('/auth/google', ambilApiBaseUrl());
+  const apiBaseUrl = ambilApiBaseUrl();
+  const loginUrl = apiBaseUrl
+    ? new URL('/auth/google', apiBaseUrl)
+    : new URL('/auth/google', 'http://localhost');
   if (frontendOrigin) {
     loginUrl.searchParams.set('frontend_origin', frontendOrigin);
   }
+
+  if (!apiBaseUrl) {
+    const search = loginUrl.searchParams.toString();
+    return search ? `/auth/google?${search}` : '/auth/google';
+  }
+
   return loginUrl.toString();
 }
 
