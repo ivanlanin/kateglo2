@@ -5,8 +5,21 @@
 import klien from './klien';
 
 /* c8 ignore next */
-const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const apiBaseUrlFromEnv = (import.meta.env.VITE_API_URL || '').trim();
 const returnToKey = 'kateglo-auth-return-to';
+
+function ambilApiBaseUrl() {
+  if (apiBaseUrlFromEnv) {
+    return apiBaseUrlFromEnv;
+  }
+
+  /* c8 ignore next */
+  if (typeof window !== 'undefined' && window.location?.origin) {
+    return window.location.origin;
+  }
+
+  return 'http://localhost:3000';
+}
 
 export function simpanReturnTo(path = '') {
   /* c8 ignore next */
@@ -29,7 +42,7 @@ export function ambilReturnTo() {
 }
 
 export function buatUrlLoginGoogle(frontendOrigin = '') {
-  const loginUrl = new URL(`${apiBaseUrl}/auth/google`);
+  const loginUrl = new URL('/auth/google', ambilApiBaseUrl());
   if (frontendOrigin) {
     loginUrl.searchParams.set('frontend_origin', frontendOrigin);
   }

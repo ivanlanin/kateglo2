@@ -44,14 +44,14 @@ describe('klien config', () => {
     expect(resultDenganToken.headers.Authorization).toBe('Bearer token-uji');
   });
 
-  it('memakai default baseURL dan tanpa header saat key tidak ada', async () => {
+  it('memakai default same-origin dan tanpa header saat key tidak ada', async () => {
     vi.stubEnv('VITE_API_URL', '');
     vi.stubEnv('VITE_FRONTEND_SHARED_KEY', '');
 
     await import('../../src/api/klien');
 
     expect(axios.create).toHaveBeenCalledWith({
-      baseURL: 'http://localhost:3000',
+      baseURL: undefined,
       timeout: 15000,
     });
     expect(mockUse).toHaveBeenCalled();
