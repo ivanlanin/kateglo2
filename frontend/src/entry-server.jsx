@@ -91,7 +91,7 @@ function buildGlosariumCariDescription(kata, data) {
 
 function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', prefetchedData = null) {
   const defaultMeta = {
-    title: 'Kateglo \u2014 Kamus, Tesaurus, dan Glosarium Bahasa Indonesia',
+    title: 'Kateglo',
     description: 'Kamus, Tesaurus, dan Glosarium Bahasa Indonesia',
   };
 

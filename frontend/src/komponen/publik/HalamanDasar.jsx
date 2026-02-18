@@ -8,7 +8,7 @@ function HalamanDasar({ judul, children }) {
   useEffect(() => {
     document.title = judul
       ? `${judul} — Kateglo`
-      : 'Kateglo — Kamus, Tesaurus, dan Glosarium Bahasa Indonesia';
+      : 'Kateglo';
   }, [judul]);
 
   return (

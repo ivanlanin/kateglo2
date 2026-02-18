@@ -7,7 +7,7 @@ import KotakCari from '../../komponen/publik/KotakCari';
 
 function Beranda() {
   useEffect(() => {
-    document.title = 'Kateglo — Kamus, Tesaurus, dan Glosarium Bahasa Indonesia';
+    document.title = 'Kateglo';
   }, []);
 
   return (
