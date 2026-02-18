@@ -1158,6 +1158,10 @@ code {
     @apply text-xl font-semibold text-gray-900 mb-2;
   }
 
+  .kamus-detail-def-class-link {
+    @apply text-inherit no-underline hover:no-underline;
+  }
+
   .kamus-detail-def-class-code {
     @apply text-gray-400;
   }
