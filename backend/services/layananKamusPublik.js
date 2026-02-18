@@ -51,8 +51,8 @@ async function hapusCacheDetailKamus(indeks) {
 
 async function cariKamus(query, { limit = 100, offset = 0 } = {}) {
   const trimmed = (query || '').trim();
-  if (!trimmed) return { data: [], total: 0 };
-  return ModelEntri.cariEntri(trimmed, limit, offset);
+  if (!trimmed) return { data: [], total: 0, hasNext: false };
+  return ModelEntri.cariEntri(trimmed, limit, offset, false);
 }
 
 async function ambilDetailKamus(indeksAtauEntri) {

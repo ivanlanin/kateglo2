@@ -124,7 +124,7 @@ async function prefetchSsrData(pathname = '/') {
     if (decoded.startsWith('/glosarium/bidang/')) {
       const bidang = decoded.replace('/glosarium/bidang/', '').trim();
       if (!bidang) return null;
-      const result = await ModelGlosarium.cari({ bidang, limit: 3 });
+      const result = await ModelGlosarium.cari({ bidang, limit: 3, hitungTotal: false });
       return { type: 'glosarium-bidang', bidang, total: result.total, contoh: result.data?.slice(0, 3) || [] };
     }
 
@@ -132,7 +132,7 @@ async function prefetchSsrData(pathname = '/') {
     if (decoded.startsWith('/glosarium/sumber/')) {
       const sumber = decoded.replace('/glosarium/sumber/', '').trim();
       if (!sumber) return null;
-      const result = await ModelGlosarium.cari({ sumber, limit: 3 });
+      const result = await ModelGlosarium.cari({ sumber, limit: 3, hitungTotal: false });
       return { type: 'glosarium-sumber', sumber, total: result.total, contoh: result.data?.slice(0, 3) || [] };
     }
 
@@ -140,7 +140,7 @@ async function prefetchSsrData(pathname = '/') {
     if (decoded.startsWith('/glosarium/cari/')) {
       const kata = decoded.replace('/glosarium/cari/', '').trim();
       if (!kata) return null;
-      const result = await ModelGlosarium.cari({ q: kata, limit: 3 });
+      const result = await ModelGlosarium.cari({ q: kata, limit: 3, hitungTotal: false });
       return { type: 'glosarium-cari', kata, total: result.total, contoh: result.data?.slice(0, 3) || [] };
     }
 

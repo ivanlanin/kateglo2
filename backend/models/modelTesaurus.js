@@ -17,7 +17,7 @@ class ModelTesaurus {
    * @param {number} limit - Batas hasil
    * @returns {Promise<Array>} Daftar entri tesaurus
    */
-  static async cari(query, limit = 100, offset = 0) {
+  static async cari(query, limit = 100, offset = 0, hitungTotal = true) {
     const normalizedQuery = query.trim();
     const cappedLimit = Math.min(Math.max(Number(limit) || 100, 1), 200);
     const safeOffset = Math.max(Number(offset) || 0, 0);
@@ -34,14 +34,31 @@ class ModelTesaurus {
           AND (sinonim IS NOT NULL OR antonim IS NOT NULL)
       )`;
 
-    const countResult = await db.query(
-      `${baseSql} SELECT COUNT(*) AS total FROM hasil`,
-      [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`]
-    );
-    const total = parseCount(countResult.rows[0]?.total);
+    if (hitungTotal) {
+      const countResult = await db.query(
+        `${baseSql} SELECT COUNT(*) AS total FROM hasil`,
+        [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`]
+      );
+      const total = parseCount(countResult.rows[0]?.total);
 
-    if (total === 0) {
-      return { data: [], total: 0 };
+      if (total === 0) {
+        return { data: [], total: 0, hasNext: false };
+      }
+
+      const dataResult = await db.query(
+        `${baseSql}
+      SELECT id, lema, sinonim, antonim
+       FROM hasil
+       ORDER BY prioritas, lema ASC
+       LIMIT $4 OFFSET $5`,
+        [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`, cappedLimit, safeOffset]
+      );
+
+      return {
+        data: dataResult.rows,
+        total,
+        hasNext: safeOffset + dataResult.rows.length < total,
+      };
     }
 
     const dataResult = await db.query(
@@ -50,10 +67,16 @@ class ModelTesaurus {
        FROM hasil
        ORDER BY prioritas, lema ASC
        LIMIT $4 OFFSET $5`,
-      [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`, cappedLimit, safeOffset]
+      [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`, cappedLimit + 1, safeOffset]
     );
 
-    return { data: dataResult.rows, total };
+    const hasNext = dataResult.rows.length > cappedLimit;
+    const data = hasNext ? dataResult.rows.slice(0, cappedLimit) : dataResult.rows;
+    const total = hasNext
+      ? safeOffset + cappedLimit + 1
+      : safeOffset + data.length;
+
+    return { data, total, hasNext };
   }
 
   /**

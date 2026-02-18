@@ -79,7 +79,7 @@ describe('ModelGlosarium', () => {
       expect.stringContaining("g.bahasa = 'id'"),
       ['%kat%', 'ling', 'kbbi', 10, 5]
     );
-    expect(result).toEqual({ data: [{ id: 1, indonesia: 'kata' }], total: 2 });
+    expect(result).toEqual({ data: [{ id: 1, indonesia: 'kata' }], total: 2, hasNext: false });
   });
 
   it('cari dengan bahasa en', async () => {
@@ -95,6 +95,7 @@ describe('ModelGlosarium', () => {
       [20, 0]
     );
     expect(result.total).toBe(1);
+    expect(result.hasNext).toBe(false);
   });
 
   it('cari dengan bahasa selain id/en tidak menambah filter bahasa', async () => {
@@ -133,26 +134,48 @@ describe('ModelGlosarium', () => {
       expect.stringContaining('LIMIT $1 OFFSET $2'),
       [20, 0]
     );
-    expect(result).toEqual({ data: [], total: 0 });
+    expect(result).toEqual({ data: [], total: 0, hasNext: false });
+  });
+
+  it('cari tanpa hitungTotal memakai limit+1 untuk menentukan hasNext', async () => {
+    db.query.mockResolvedValue({
+      rows: [
+        { id: 1, indonesia: 'a' },
+        { id: 2, indonesia: 'b' },
+        { id: 3, indonesia: 'c' },
+      ],
+    });
+
+    const result = await ModelGlosarium.cari({ limit: 2, offset: 4, hitungTotal: false });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('LIMIT $1 OFFSET $2'),
+      [3, 4]
+    );
+    expect(result).toEqual({
+      data: [{ id: 1, indonesia: 'a' }, { id: 2, indonesia: 'b' }],
+      total: 7,
+      hasNext: true,
+    });
   });
 
   it('ambilDaftarBidang mengembalikan rows', async () => {
-    const rows = [{ bidang: 'ling', jumlah: 10 }];
+    const rows = [{ bidang: 'ling' }];
     db.query.mockResolvedValue({ rows });
 
     const result = await ModelGlosarium.ambilDaftarBidang();
 
-    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('GROUP BY bidang'));
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('SELECT DISTINCT bidang'));
     expect(result).toEqual(rows);
   });
 
   it('ambilDaftarSumber mengembalikan rows', async () => {
-    const rows = [{ sumber: 'kbbi', jumlah: 5 }];
+    const rows = [{ sumber: 'kbbi' }];
     db.query.mockResolvedValue({ rows });
 
     const result = await ModelGlosarium.ambilDaftarSumber();
 
-    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('GROUP BY sumber'));
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('SELECT DISTINCT sumber'));
     expect(result).toEqual(rows);
   });
 
@@ -329,6 +352,7 @@ describe('ModelGlosarium', () => {
       ['%aktif%']
     );
     expect(result.total).toBe(1);
+    expect(result.hasNext).toBe(false);
   });
 
   it('normalizeBoolean tanpa argumen kedua menggunakan default true', () => {

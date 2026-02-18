@@ -36,7 +36,7 @@ class ModelEntri {
    * @param {number} limit - Batas hasil
   * @returns {Promise<Array>} Daftar entri dengan preview makna
    */
-  static async cariEntri(query, limit = 100, offset = 0) {
+  static async cariEntri(query, limit = 100, offset = 0, hitungTotal = true) {
     const normalizedQuery = query.trim();
     const cappedLimit = Math.min(Math.max(Number(limit) || 100, 1), 200);
     const safeOffset = Math.max(Number(offset) || 0, 0);
@@ -52,14 +52,31 @@ class ModelEntri {
            WHERE entri ILIKE $3 AND aktif = 1
       )`;
 
-    const countResult = await db.query(
-      `${baseSql} SELECT COUNT(*) AS total FROM hasil`,
-      [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`]
-    );
-    const total = parseCount(countResult.rows[0]?.total);
+    if (hitungTotal) {
+      const countResult = await db.query(
+        `${baseSql} SELECT COUNT(*) AS total FROM hasil`,
+        [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`]
+      );
+      const total = parseCount(countResult.rows[0]?.total);
 
-    if (total === 0) {
-      return { data: [], total: 0 };
+      if (total === 0) {
+        return { data: [], total: 0, hasNext: false };
+      }
+
+      const dataResult = await db.query(
+        `${baseSql}
+      SELECT id, entri, indeks, urutan, jenis, lafal, jenis_rujuk, entri_rujuk
+       FROM hasil
+          ORDER BY prioritas, urutan ASC, entri ASC
+       LIMIT $4 OFFSET $5`,
+        [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`, cappedLimit, safeOffset]
+      );
+
+      return {
+        data: dataResult.rows,
+        total,
+        hasNext: safeOffset + dataResult.rows.length < total,
+      };
     }
 
     const dataResult = await db.query(
@@ -68,10 +85,16 @@ class ModelEntri {
        FROM hasil
           ORDER BY prioritas, urutan ASC, entri ASC
        LIMIT $4 OFFSET $5`,
-      [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`, cappedLimit, safeOffset]
+      [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`, cappedLimit + 1, safeOffset]
     );
 
-    return { data: dataResult.rows, total };
+    const hasNext = dataResult.rows.length > cappedLimit;
+    const data = hasNext ? dataResult.rows.slice(0, cappedLimit) : dataResult.rows;
+    const total = hasNext
+      ? safeOffset + cappedLimit + 1
+      : safeOffset + data.length;
+
+    return { data, total, hasNext };
   }
 
   /**
