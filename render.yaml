@@ -31,6 +31,12 @@ services:
         sync: false
       - key: API_REQUIRE_FRONTEND_KEY
         value: "false"
+      - key: CACHE_ENABLED
+        value: "true"
+      - key: CACHE_TTL_SECONDS
+        value: "1800"
+      - key: CACHE_FALLBACK_MEMORY
+        value: "false"
       - key: FRONTEND_SHARED_KEY
         sync: false
       - key: REDIS_URL
