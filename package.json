@@ -11,6 +11,9 @@
   "scripts": {
     "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
     "dev:ssr": "npm run dev --prefix backend",
+    "sim:production": "npm run build:ssr --prefix frontend && npm run start:production --prefix backend",
+    "sim:production:build": "npm run build:ssr --prefix frontend",
+    "sim:production:start": "npm run start:production --prefix backend",
     "dev:backend": "npm run dev --prefix backend",
     "dev:public": "npm run dev --prefix frontend",
     "build": "npm run build --prefix backend && npm run build --prefix frontend",

@@ -5,6 +5,7 @@
 - Menyiapkan migrasi ke SSR untuk melayani HTML dinamis di URL asli
 - Menambahkan penanda aktif di tabel label, makna, contoh, glosarium, dan tesaurus
 - Menerapkan DRY di UI redaksi, router, dan model untuk mengurangi duplikasi kode
+- Menerapkan SSR dengan satu server layanan web untuk lapis payun dan lapis pungkur
 
 ## 2026-02-17 Selasa
 

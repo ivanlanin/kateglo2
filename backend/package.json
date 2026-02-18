@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "start:production": "node scripts/start-production.js",
     "dev": "nodemon index.js",
     "test": "jest --no-cache --detectOpenHandles",
     "test:watch": "jest --watch",
