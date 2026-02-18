@@ -11,6 +11,7 @@ import {
   tentukanKategoriJenis,
   bandingkanEntriKamus,
   bandingkanJenisSubentri,
+  formatInfoWaktuEntri,
 } from '../../../src/halaman/publik/KamusDetail';
 
 const mockUseQuery = vi.fn();
@@ -1008,6 +1009,25 @@ describe('KamusDetail helpers', () => {
     expect(bandingkanJenisSubentri('xyz', 'turunan', urutan)).toBeGreaterThan(0);
     expect(bandingkanJenisSubentri('beta', 'alfa', urutan)).toBeGreaterThan(0);
     expect(bandingkanJenisSubentri(undefined, undefined, urutan)).toBe(0);
+  });
+
+  it('formatInfoWaktuEntri menampilkan format dibuat/diubah secara aman', () => {
+    const keduanya = formatInfoWaktuEntri('2026-02-17 10:20:30.000', '2026-02-18 05:00:00.000');
+    expect(keduanya).toContain('Dibuat ');
+    expect(keduanya).toContain('Diubah ');
+    expect(keduanya).toContain('·');
+
+    const samaPersis = formatInfoWaktuEntri('2026-02-17 10:20:30.000', '2026-02-17 10:20:30.000');
+    expect(samaPersis).toContain('Dibuat ');
+    expect(samaPersis).not.toContain('Diubah ');
+    expect(samaPersis).not.toContain('·');
+
+    const hanyaDibuat = formatInfoWaktuEntri('2026-02-17 10:20:30.000', null);
+    expect(hanyaDibuat).toContain('Dibuat ');
+    expect(hanyaDibuat).not.toContain('Diubah ');
+
+    expect(formatInfoWaktuEntri(null, null)).toBe('');
+    expect(formatInfoWaktuEntri('invalid', 'invalid')).toBe('');
   });
 
   it('normalisasi fallback data detail menutup cabang default untuk jenis, makna, subentri, dan entri rujuk', () => {

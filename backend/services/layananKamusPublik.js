@@ -106,6 +106,8 @@ async function ambilDetailKamus(indeksAtauEntri) {
         induk_id: dataEntri.induk || null,
         entri: bacaTeksEntri(dataEntri),
         indeks: dataEntri.indeks,
+        created_at: dataEntri.created_at || null,
+        updated_at: dataEntri.updated_at || null,
         homonim: dataEntri.homonim,
         urutan: dataEntri.urutan,
         jenis: dataEntri.jenis,

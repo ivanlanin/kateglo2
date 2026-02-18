@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-18T01:47:36.837Z
+-- Generated: 2026-02-18T19:05:34.841Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -21,6 +21,52 @@ begin
   NEW.created_at := COALESCE(NEW.created_at, OLD.created_at, NOW());
   NEW.updated_at := NOW();
   RETURN NEW;
+end;
+$function$
+
+
+-- Function: touch_entri_updated_at_from_makna
+create or replace function touch_entri_updated_at_from_makna()
+ returns trigger
+ language plpgsql
+as $function$
+declare
+  target_entri_id INTEGER;
+begin
+  target_entri_id := COALESCE(NEW.entri_id, OLD.entri_id);
+
+  IF target_entri_id IS NULL THEN
+    RETURN NULL;
+  end IF;
+
+  UPDATE entri
+     SET updated_at = NOW()
+   WHERE id = target_entri_id;
+
+  RETURN NULL;
+end;
+$function$
+
+
+-- Function: touch_makna_updated_at_from_contoh
+create or replace function touch_makna_updated_at_from_contoh()
+ returns trigger
+ language plpgsql
+as $function$
+declare
+  target_makna_id INTEGER;
+begin
+  target_makna_id := COALESCE(NEW.makna_id, OLD.makna_id);
+
+  IF target_makna_id IS NULL THEN
+    RETURN NULL;
+  end IF;
+
+  UPDATE makna
+     SET updated_at = NOW()
+   WHERE id = target_makna_id;
+
+  RETURN NULL;
 end;
 $function$
 
@@ -53,6 +99,10 @@ create trigger trg_set_timestamp_fields__contoh
   before insert or update on contoh
   for each row
   execute function set_timestamp_fields();
+create trigger trg_touch_makna_updated_at_from_contoh
+  after delete or insert or update on contoh
+  for each row
+  execute function touch_makna_updated_at_from_contoh();
 
 create table entri (
   id serial primary key,
@@ -162,10 +212,10 @@ create table label (
   kode text not null,
   nama text not null,
   keterangan text,
-  aktif boolean not null default true,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
   urutan integer not null default 1,
+  aktif boolean not null default true,
   constraint label_kategori_kode_key unique (kategori, kode)
 );
 create index idx_label_kategori_nama on label using btree (kategori, nama);
@@ -206,6 +256,10 @@ create trigger trg_set_timestamp_fields__makna
   before insert or update on makna
   for each row
   execute function set_timestamp_fields();
+create trigger trg_touch_entri_updated_at_from_makna
+  after delete or insert or update on makna
+  for each row
+  execute function touch_entri_updated_at_from_makna();
 
 create table pengguna (
   id serial primary key,

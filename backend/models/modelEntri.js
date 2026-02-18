@@ -117,7 +117,9 @@ class ModelEntri {
   static async ambilEntriPerIndeks(indeks) {
     const result = await db.query(
       `SELECT id, legacy_eid, entri, indeks, homonim, urutan, jenis, induk, pemenggalan, lafal, varian,
-              jenis_rujuk, lema_rujuk AS entri_rujuk, aktif
+              jenis_rujuk, lema_rujuk AS entri_rujuk, aktif,
+              to_char(created_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS created_at,
+              to_char(updated_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS updated_at
        FROM entri
        WHERE LOWER(indeks) = LOWER($1) AND aktif = 1
        ORDER BY

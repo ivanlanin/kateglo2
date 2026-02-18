@@ -1096,6 +1096,14 @@ code {
     @apply text-sm text-gray-500 mt-1;
   }
 
+  .kamus-detail-entry-meta {
+    @apply text-xs text-gray-500 mt-1;
+  }
+
+  .dark .kamus-detail-entry-meta {
+    @apply text-dark-text-muted;
+  }
+
   .kamus-detail-actual-link {
     @apply font-medium;
   }

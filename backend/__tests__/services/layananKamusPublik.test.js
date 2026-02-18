@@ -147,6 +147,8 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
         id: 1,
         entri: 'aktif (1)',
         indeks: 'aktif',
+        created_at: '2026-02-17 10:20:30.000',
+        updated_at: '2026-02-18 10:20:30.000',
         homonim: 1,
         urutan: 1,
         jenis: 'dasar',
@@ -191,6 +193,8 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
 
     expect(result.indeks).toBe('aktif');
     expect(result.entri).toHaveLength(2);
+    expect(result.entri[0].created_at).toBe('2026-02-17 10:20:30.000');
+    expect(result.entri[0].updated_at).toBe('2026-02-18 10:20:30.000');
     expect(result.entri[0].makna).toHaveLength(1);
     expect(result.entri[0].makna[0].contoh).toHaveLength(1);
     expect(result.entri[0].subentri.turunan).toHaveLength(1);

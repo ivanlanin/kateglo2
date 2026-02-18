@@ -12,7 +12,7 @@ import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import TeksLema from '../../komponen/publik/TeksLema';
 import { PesanTidakDitemukan } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus } from '../../utils/kamusIndex';
-import { formatTanggalKomentar } from '../../utils/formatTanggalKomentar';
+import { formatTanggalKomentar, parseKomentarDate } from '../../utils/formatTanggalKomentar';
 
 /** Konversi markdown ringan (*italic* dan **bold**) ke HTML inline */
 function renderMarkdown(teks) {
@@ -102,6 +102,28 @@ function bandingkanJenisSubentri(jenisA, jenisB, urutanJenisSubentri) {
   if (idxB !== -1) return 1;
 
   return (jenisA || '').localeCompare((jenisB || ''), 'id');
+}
+
+function formatInfoWaktuEntri(createdAt, updatedAt) {
+  const createdDate = parseKomentarDate(createdAt);
+  const updatedDate = parseKomentarDate(updatedAt);
+
+  if (!createdDate && !updatedDate) return '';
+
+  const parts = [];
+  if (createdDate) {
+    parts.push(`Dibuat ${formatTanggalKomentar(createdDate)}`);
+  }
+
+  const shouldShowUpdated =
+    Boolean(updatedDate) &&
+    (!createdDate || updatedDate.getTime() !== createdDate.getTime());
+
+  if (shouldShowUpdated) {
+    parts.push(`Diubah ${formatTanggalKomentar(updatedDate)}`);
+  }
+
+  return parts.join(' · ');
 }
 
 function KamusDetail() {
@@ -220,6 +242,8 @@ function KamusDetail() {
       entri_rujuk: data.entri_rujuk || null,
       entri_rujuk_indeks: data.entri_rujuk || null,
       rujukan: Boolean(data.rujukan),
+      created_at: data.created_at || null,
+      updated_at: data.updated_at || null,
       induk: data.induk || [],
       makna: data.makna || [],
       subentri: data.subentri || {},
@@ -274,6 +298,7 @@ function KamusDetail() {
               bandingkanJenisSubentri(jenisA, jenisB, urutanJenisSubentri));
 
             const rantaiHeading = [...(entriItem.induk || []), { id: `current-${entriItem.id}`, entri: entriItem.entri, indeks: entriItem.indeks, current: true }];
+            const infoWaktu = formatInfoWaktuEntri(entriItem.created_at, entriItem.updated_at);
 
             return (
               <section key={entriItem.id} className="mb-8 pb-8 border-b border-gray-200 dark:border-gray-700 last:border-b-0 last:mb-0 last:pb-0">
@@ -317,6 +342,9 @@ function KamusDetail() {
                       >
                         {formatTitleCase(entriItem.jenis || 'dasar')}
                       </Link>
+                    )}
+                    {infoWaktu && (
+                      <p className="kamus-detail-entry-meta">{infoWaktu}</p>
                     )}
                   </div>
                 </div>
@@ -609,5 +637,6 @@ export {
   tentukanKategoriJenis,
   bandingkanEntriKamus,
   bandingkanJenisSubentri,
+  formatInfoWaktuEntri,
   formatTanggalKomentar,
 };
