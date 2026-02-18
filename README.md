@@ -61,6 +61,10 @@ npm run dev:public        # Public di http://localhost:5173
 ### Simulasi Production (SSR + API dalam 1 server)
 
 ```bash
+# Cara paling sederhana (seperti target di Render single-service)
+npm install
+npm start
+
 # Build frontend SSR lalu jalankan backend dalam mode production
 npm run sim:production
 
@@ -68,6 +72,8 @@ npm run sim:production
 npm run sim:production:build
 npm run sim:production:start
 ```
+
+`npm start` akan mengecek artefak SSR frontend (`frontend/dist`). Jika belum ada, build SSR dijalankan otomatis sebelum server backend mode production dinyalakan.
 
 ### Building for Production
 
@@ -92,15 +98,14 @@ npm run build:public
 
 ## Deployment (Render)
 
-Project ini di-deploy sebagai 2 services di Render:
+Project ini siap di-deploy sebagai **1 Web Service** (SSR + API) dari root repo.
 
-1. **kateglo-api** - Backend API (Web Service)
-   - Build: `npm install --prefix backend`
-   - Start: `npm start --prefix backend`
+- Gunakan blueprint [render.yaml](render.yaml)
+- Build: `npm ci && npm run sim:production:build`
+- Start: `npm run sim:production:start`
+- Health check: `/health`
 
-2. **kateglo-public** - Frontend Public + Redaksi (Static Site)
-   - Build: `npm run build --prefix frontend`
-   - Publish: `frontend/dist`
+Jika sebelumnya masih memakai pola 2 service (`kateglo-api` + static frontend), migrasikan domain utama ke service tunggal ini.
 
 ## Quality Checks
 
