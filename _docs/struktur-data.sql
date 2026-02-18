@@ -162,6 +162,7 @@ create table label (
   kode text not null,
   nama text not null,
   keterangan text,
+  aktif boolean not null default true,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
   urutan integer not null default 1,

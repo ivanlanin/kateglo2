@@ -3,7 +3,7 @@
 ## 2026-02-18 Rabu
 
 - Menyiapkan migrasi ke SSR untuk melayani HTML dinamis di URL asli
-- Menambahkan penanda aktif di tabel makna, contoh, glosarium, dan tesaurus
+- Menambahkan penanda aktif di tabel label, makna, contoh, glosarium, dan tesaurus
 
 ## 2026-02-17 Selasa
 

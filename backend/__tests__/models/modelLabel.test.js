@@ -463,7 +463,7 @@ describe('ModelLabel', () => {
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
-      'SELECT id, kategori, kode, nama, urutan, keterangan FROM label WHERE id = $1',
+      'SELECT id, kategori, kode, nama, urutan, keterangan, aktif FROM label WHERE id = $1',
       [11]
     );
     expect(found).toEqual({ id: 11, kategori: 'ragam', kode: 'cak' });
@@ -485,7 +485,7 @@ describe('ModelLabel', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO label'),
-      ['ragam', 'cak', 'cakapan', 1, null]
+      ['ragam', 'cak', 'cakapan', 1, null, true]
     );
     expect(result.id).toBe(21);
   });
@@ -521,12 +521,12 @@ describe('ModelLabel', () => {
     expect(db.query).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining('UPDATE label'),
-      ['bahasa', 'id', 'Indonesia', 1, null, 22]
+      ['bahasa', 'id', 'Indonesia', 1, null, true, 22]
     );
     expect(db.query).toHaveBeenNthCalledWith(
       2,
       expect.stringContaining('UPDATE label'),
-      ['bahasa', 'xx', 'Kosong', 1, null, 404]
+      ['bahasa', 'xx', 'Kosong', 1, null, true, 404]
     );
     expect(updated.id).toBe(22);
     expect(missing).toBeNull();
