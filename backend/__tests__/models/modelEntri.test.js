@@ -466,9 +466,9 @@ describe('ModelEntri', () => {
     const inserted = await ModelEntri.simpanMakna({ entri_id: 8, makna: 'arti' });
 
     expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('UPDATE makna SET entri_id = $1'),
-      [8, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null, 1]);
+      [8, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null, true, 1]);
     expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('INSERT INTO makna'),
-      [8, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null]);
+      [8, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null, true]);
     expect(updated).toEqual({ id: 1 });
     expect(inserted).toEqual({ id: 2 });
   });
@@ -507,9 +507,9 @@ describe('ModelEntri', () => {
     const inserted = await ModelEntri.simpanContoh({ makna_id: 11, contoh: 'contoh' });
 
     expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('UPDATE contoh SET makna_id = $1'),
-      [11, 1, 'contoh', null, null, null, 0, null, 41]);
+      [11, 1, 'contoh', null, null, null, 0, null, true, 41]);
     expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('INSERT INTO contoh'),
-      [11, 1, 'contoh', null, null, null, 0, null]);
+      [11, 1, 'contoh', null, null, null, 0, null, true]);
     expect(updated).toEqual({ id: 41 });
     expect(inserted).toEqual({ id: 42 });
   });

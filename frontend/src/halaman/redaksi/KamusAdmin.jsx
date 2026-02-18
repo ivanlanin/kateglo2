@@ -127,6 +127,7 @@ function ItemContoh({ contoh, entriId, maknaId, simpanContoh, hapusContoh, isPen
       <div className="flex items-start gap-2 py-1.5 group">
         <span className="text-gray-500 dark:text-gray-500 text-sm select-none">•</span>
         <span className="flex-1 text-sm text-gray-700 dark:text-gray-300 italic">{contoh.contoh}</span>
+        <BadgeStatus aktif={contoh.aktif ?? 1} />
         <button onClick={() => setEdit(true)} className="text-xs text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity">sunting</button>
         <button onClick={handleHapus} disabled={isPending} className="text-xs text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">hapus</button>
       </div>
@@ -141,6 +142,7 @@ function ItemContoh({ contoh, entriId, maknaId, simpanContoh, hapusContoh, isPen
         <SelectField label="Ragam" name="ragam" value={data.ragam} onChange={ubah} options={ensureOpsiMemuatNilai(opsiRagam, data.ragam)} />
         <SelectField label="Bidang" name="bidang" value={data.bidang} onChange={ubah} options={ensureOpsiMemuatNilai(opsiBidang, data.bidang)} />
       </div>
+      <ToggleAktif value={data.aktif} onChange={ubah} />
       <div className="flex gap-2 mt-2">
         <button onClick={handleSimpan} disabled={isPending} className="form-admin-btn-simpan text-xs py-1 px-3">Simpan</button>
         <button onClick={() => setEdit(false)} className="form-admin-btn-batal text-xs py-1 px-3">Batal</button>
@@ -253,17 +255,19 @@ function ItemMakna({
                 <SelectField label="Tipe penyingkat" name="tipe_penyingkat" value={data.tipe_penyingkat} onChange={ubah} options={ensureOpsiMemuatNilai(opsiTipePenyingkat, data.tipe_penyingkat)} />
                 <InputField label="Urutan" name="urutan" value={data.urutan} onChange={ubah} type="number" />
               </div>
+              <ToggleAktif value={data.aktif} onChange={ubah} />
               <div className="flex gap-2">
                 <button onClick={handleSimpan} disabled={isPending} className="form-admin-btn-simpan text-xs py-1 px-3">Simpan</button>
                 <button onClick={() => setEdit(false)} className="form-admin-btn-batal text-xs py-1 px-3">Batal</button>
               </div>
             </div>
           ) : (
-            <div className="text-xs text-gray-500 dark:text-gray-400 mb-2 space-x-3">
+            <div className="text-xs text-gray-500 dark:text-gray-400 mb-2 space-x-3 flex items-center gap-2 flex-wrap">
               {makna.bidang && <span>Bidang: {makna.bidang}</span>}
               {makna.ragam && <span>Ragam: {makna.ragam}</span>}
               {makna.bahasa && <span>Bahasa: {makna.bahasa}</span>}
               {makna.kiasan ? <span className="italic">kiasan</span> : null}
+              <BadgeStatus aktif={makna.aktif ?? 1} />
             </div>
           )}
 
