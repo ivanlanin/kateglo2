@@ -4,6 +4,28 @@
 
 import klien from './klien';
 
+function normalisasiItemAutocomplete(item) {
+  if (typeof item === 'string') {
+    const value = item.trim();
+    return value ? { value } : null;
+  }
+
+  if (!item || typeof item !== 'object') return null;
+
+  const kandidatValue = [item.value, item.entri, item.lema, item.indonesia, item.term]
+    .find((nilai) => typeof nilai === 'string' && nilai.trim());
+
+  if (!kandidatValue) return null;
+
+  const kandidatAsing = [item.asing, item.foreign, item.original]
+    .find((nilai) => typeof nilai === 'string' && nilai.trim());
+
+  return {
+    value: kandidatValue.trim(),
+    ...(kandidatAsing ? { asing: kandidatAsing.trim() } : {}),
+  };
+}
+
 // === KAMUS ===
 
 export async function ambilKategoriKamus() {
@@ -64,12 +86,16 @@ export async function cariTesaurus(kata, { limit = 100, offset = 0 } = {}) {
 // === AUTOCOMPLETE (shared) ===
 
 export async function autocomplete(kategori, kata) {
-  if (!kata || kata.length < 2) return [];
-  const url = `/api/publik/${kategori}/autocomplete/${encodeURIComponent(kata)}`;
-  const response = await klien.get(url);
-  return response.data.data.map((item) =>
-    typeof item === 'string' ? { value: item } : item
-  );
+  const trimmedKata = (kata || '').trim();
+  if (trimmedKata.length < 1) return [];
+  const url = `/api/publik/${kategori}/autocomplete/${encodeURIComponent(trimmedKata)}`;
+  const response = await klien.get(url, {
+    params: { _ac: Date.now() },
+  });
+  const daftar = Array.isArray(response?.data?.data) ? response.data.data : [];
+  return daftar
+    .map(normalisasiItemAutocomplete)
+    .filter(Boolean);
 }
 
 // === GLOSARIUM ===

@@ -56,7 +56,7 @@ class ModelTesaurus {
 
     const dataResult = await db.query(
       `${baseSql}
-      SELECT id, lema, sinonim, antonim, aktif
+      SELECT id, lema, sinonim, antonim
        FROM hasil
        ORDER BY prioritas, lema ASC
        LIMIT $4 OFFSET $5`,

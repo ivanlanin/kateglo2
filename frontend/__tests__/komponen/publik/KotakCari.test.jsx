@@ -154,7 +154,8 @@ describe('KotakCari', () => {
     await act(async () => {
       await vi.advanceTimersByTimeAsync(300);
     });
-    expect(autocomplete).toHaveBeenCalledTimes(1);
+    expect(autocomplete).toHaveBeenCalledTimes(2);
+    expect(autocomplete).toHaveBeenLastCalledWith('kamus', 'a');
   });
 
   it('handleKeyDown kembali tanpa aksi saat saran tidak tampil', () => {
