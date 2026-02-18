@@ -463,6 +463,7 @@ describe('routes backend', () => {
       q: 'istilah',
       limit: 100,
       offset: 3,
+      aktifSaja: true,
     });
   });
 
@@ -504,6 +505,7 @@ describe('routes backend', () => {
       bidang: 'ilmu komputer',
       limit: 9,
       offset: 2,
+      aktifSaja: true,
     });
   });
 
@@ -545,6 +547,7 @@ describe('routes backend', () => {
       sumber: 'KBBI V',
       limit: 6,
       offset: 1,
+      aktifSaja: true,
     });
   });
 

@@ -8,6 +8,7 @@ import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
   KotakCariAdmin,
   InfoTotal,
+  BadgeStatus,
   TabelAdmin,
   potongTeks,
   usePencarianAdmin,
@@ -17,11 +18,12 @@ import {
   useFormPanel,
   InputField,
   TextareaField,
+  ToggleAktif,
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
 
-const nilaiAwal = { lema: '', sinonim: '', antonim: '', turunan: '', gabungan: '', berkaitan: '' };
+const nilaiAwal = { lema: '', sinonim: '', antonim: '', turunan: '', gabungan: '', berkaitan: '', aktif: 1 };
 
 const kolom = [
   {
@@ -47,6 +49,7 @@ const kolom = [
       <span className="text-gray-600 dark:text-gray-400">{potongTeks(item.antonim, 60)}</span>
     ),
   },
+  { key: 'aktif', label: 'Status', render: (item) => <BadgeStatus aktif={item.aktif} /> },
 ];
 
 function TesaurusAdmin() {
@@ -115,6 +118,7 @@ function TesaurusAdmin() {
         <TextareaField label="Turunan" name="turunan" value={panel.data.turunan} onChange={panel.ubahField} placeholder="Pisahkan dengan koma" />
         <TextareaField label="Gabungan" name="gabungan" value={panel.data.gabungan} onChange={panel.ubahField} placeholder="Pisahkan dengan koma" />
         <TextareaField label="Berkaitan" name="berkaitan" value={panel.data.berkaitan} onChange={panel.ubahField} placeholder="Pisahkan dengan koma" />
+        <ToggleAktif value={panel.data.aktif} onChange={panel.ubahField} />
         <FormFooter
           onSimpan={handleSimpan}
           onBatal={panel.tutup}

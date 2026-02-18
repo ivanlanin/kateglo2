@@ -29,7 +29,7 @@ describe('ModelGlosarium', () => {
     const result = await ModelGlosarium.autocomplete(' ka ', 99);
 
     expect(db.query).toHaveBeenCalledWith(
-      expect.stringContaining('WHERE indonesia ILIKE $1 OR asing ILIKE $1'),
+      expect.stringContaining('WHERE aktif = TRUE'),
       ['ka%', 20]
     );
     expect(result).toEqual([
@@ -217,7 +217,7 @@ describe('ModelGlosarium', () => {
     const result = await ModelGlosarium.ambilDenganId(101);
 
     expect(db.query).toHaveBeenCalledWith(
-      'SELECT id, indonesia, asing, bidang, bahasa, sumber FROM glosarium WHERE id = $1',
+      'SELECT id, indonesia, asing, bidang, bahasa, sumber, aktif FROM glosarium WHERE id = $1',
       [101]
     );
     expect(result).toEqual(row);
@@ -234,7 +234,7 @@ describe('ModelGlosarium', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('UPDATE glosarium SET indonesia = $1'),
-      ['baharu', 'new', null, 'en', null, 'editor@example.com', 3]
+      ['baharu', 'new', null, 'en', null, true, 'editor@example.com', 3]
     );
     expect(result).toEqual(row);
   });
@@ -247,7 +247,7 @@ describe('ModelGlosarium', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO glosarium'),
-      ['baru', 'new', null, 'en', null, 'admin']
+      ['baru', 'new', null, 'en', null, true, 'admin']
     );
     expect(result).toEqual(row);
   });

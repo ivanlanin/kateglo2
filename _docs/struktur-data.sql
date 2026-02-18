@@ -93,6 +93,7 @@ create table glosarium (
   id serial primary key,
   indonesia text not null,
   asing text not null,
+  aktif boolean not null default true,
   bidang text,
   bahasa text not null default 'en'::text,
   sumber text,
@@ -252,6 +253,7 @@ create trigger trg_set_timestamp_fields__peran_izin
 create table tesaurus (
   id serial primary key,
   lema text not null,
+  aktif boolean not null default true,
   sinonim text,
   antonim text,
   turunan text,
