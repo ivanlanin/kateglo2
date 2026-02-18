@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-17T12:23:16.761Z
+-- Generated: 2026-02-18T01:47:36.837Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -34,7 +34,6 @@ create table contoh (
   id serial primary key,
   legacy_cid integer,
   makna_id integer references makna(id) on delete cascade not null,
-  aktif boolean not null default true,
   urutan integer not null default 1,
   contoh text not null,
   ragam text,
@@ -44,6 +43,7 @@ create table contoh (
   makna_contoh text,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
+  aktif boolean not null default true,
   constraint contoh_legacy_cid_key unique (legacy_cid),
   constraint contoh_contoh_check check (TRIM(BOTH FROM contoh) <> ''::text)
 );
@@ -94,7 +94,6 @@ create table glosarium (
   id serial primary key,
   indonesia text not null,
   asing text not null,
-  aktif boolean not null default true,
   bidang text,
   bahasa text not null default 'en'::text,
   sumber text,
@@ -104,7 +103,8 @@ create table glosarium (
   updater text not null,
   wikipedia_updated timestamp without time zone,
   created_at timestamp without time zone not null default now(),
-  updated_at timestamp without time zone not null default now()
+  updated_at timestamp without time zone not null default now(),
+  aktif boolean not null default true
 );
 create index idx_glosarium_asing on glosarium using btree (asing);
 create index idx_glosarium_asing_trgm on glosarium using gin (asing gin_trgm_ops);
@@ -178,7 +178,6 @@ create table makna (
   id serial primary key,
   legacy_mid integer,
   entri_id integer references entri(id) on delete cascade not null,
-  aktif boolean not null default true,
   polisem integer not null default 1,
   urutan integer not null default 1,
   makna text not null,
@@ -193,6 +192,7 @@ create table makna (
   kimia text,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
+  aktif boolean not null default true,
   constraint makna_legacy_mid_key unique (legacy_mid),
   constraint makna_makna_check check (TRIM(BOTH FROM makna) <> ''::text),
   constraint makna_tipe_penyingkat_check check ((tipe_penyingkat IS NULL) OR (tipe_penyingkat = ANY (ARRAY['akronim'::text, 'kependekan'::text, 'singkatan'::text])))
@@ -255,7 +255,6 @@ create trigger trg_set_timestamp_fields__peran_izin
 create table tesaurus (
   id serial primary key,
   lema text not null,
-  aktif boolean not null default true,
   sinonim text,
   antonim text,
   turunan text,
@@ -263,6 +262,7 @@ create table tesaurus (
   berkaitan text,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
+  aktif boolean not null default true,
   constraint tesaurus_lema_key unique (lema)
 );
 create index idx_tesaurus_lema_lower on tesaurus using btree (lower(lema));
