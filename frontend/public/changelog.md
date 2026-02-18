@@ -1,12 +1,16 @@
 # Riwayat Perubahan
 
+## 2026-02-19 Kamis
+
+- Memisahkan 486 partikel menjadi 26 preposisi, 37 konjungsi, 66 interjeksi, 357 partikel
+- Menambahkan info dibuat dan diubah di detail kamus
+
 ## 2026-02-18 Rabu
 
 - Menyiapkan migrasi ke SSR untuk melayani HTML dinamis di URL asli
 - Menambahkan penanda aktif di tabel label, makna, contoh, glosarium, dan tesaurus
 - Menerapkan DRY di UI redaksi, router, dan model untuk mengurangi duplikasi kode
 - Menerapkan SSR dengan satu server layanan web untuk lapis payun dan lapis pungkur
-- Memisahkan 486 partikel menjadi 26 preposisi, 37 konjungsi, 66 interjeksi, 357 partikel lainnya
 
 ## 2026-02-17 Selasa
 
