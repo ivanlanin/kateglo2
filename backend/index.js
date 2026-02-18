@@ -74,11 +74,19 @@ app.use('/api', (req, res, next) => {
   const requestFrontendKey = req.get('x-frontend-key');
   const bypassFrontendKeyForLocalSsr = !isProduction && normalizedOrigin === normalisasiOrigin('http://localhost:3000');
 
+  // Tanpa origin = same-origin request (browser) atau server-to-server.
+  // Pada setup single-service (SSR + API satu domain), ini normal.
+  // CORS middleware sudah menangani proteksi cross-origin.
   if (!origin && requireOrigin) {
-    return res.status(403).json({
-      success: false,
-      message: 'Origin wajib untuk mengakses API',
-    });
+    const referer = req.get('referer') || '';
+    const isBrowserSameOrigin = referer.length > 0;
+
+    if (!isBrowserSameOrigin) {
+      return res.status(403).json({
+        success: false,
+        message: 'Origin wajib untuk mengakses API',
+      });
+    }
   }
 
   if (origin && !allowedOrigins.includes(normalizedOrigin)) {
