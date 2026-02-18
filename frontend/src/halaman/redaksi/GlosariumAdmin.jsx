@@ -6,10 +6,11 @@ import { useState } from 'react';
 import { useDaftarGlosariumAdmin, useSimpanGlosarium, useHapusGlosarium } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
-  KotakCariAdmin,
+  KotakCariTambahAdmin,
   InfoTotal,
   BadgeStatus,
   TabelAdmin,
+  getApiErrorMessage,
   usePencarianAdmin,
 } from '../../komponen/redaksi/KomponenAdmin';
 import PanelGeser from '../../komponen/redaksi/PanelGeser';
@@ -72,7 +73,7 @@ function GlosariumAdmin() {
     }
     simpan.mutate(panel.data, {
       onSuccess: () => { setPesan({ error: '', sukses: 'Tersimpan!' }); setTimeout(() => panel.tutup(), 600); },
-      onError: (err) => setPesan({ error: err?.response?.data?.error || 'Gagal menyimpan', sukses: '' }),
+      onError: (err) => setPesan({ error: getApiErrorMessage(err, 'Gagal menyimpan'), sukses: '' }),
     });
   };
 
@@ -80,24 +81,20 @@ function GlosariumAdmin() {
     if (!confirm('Yakin ingin menghapus istilah ini?')) return;
     hapus.mutate(panel.data.id, {
       onSuccess: () => panel.tutup(),
-      onError: (err) => setPesan({ error: err?.response?.data?.error || 'Gagal menghapus', sukses: '' }),
+      onError: (err) => setPesan({ error: getApiErrorMessage(err, 'Gagal menghapus'), sukses: '' }),
     });
   };
 
   return (
     <TataLetakAdmin judul="Glosarium">
-      <div className="flex justify-between items-center mb-4">
-        <KotakCariAdmin
-          nilai={cari}
-          onChange={setCari}
-          onCari={kirimCari}
-          onHapus={hapusCari}
-          placeholder="Cari istilah …"
-        />
-        <button onClick={panel.bukaUntukTambah} className="form-admin-btn-simpan whitespace-nowrap ml-4">
-          + Tambah
-        </button>
-      </div>
+      <KotakCariTambahAdmin
+        nilai={cari}
+        onChange={setCari}
+        onCari={kirimCari}
+        onHapus={hapusCari}
+        placeholder="Cari istilah …"
+        onTambah={panel.bukaUntukTambah}
+      />
       <InfoTotal q={q} total={total} label="istilah" />
       <TabelAdmin
         kolom={kolom}

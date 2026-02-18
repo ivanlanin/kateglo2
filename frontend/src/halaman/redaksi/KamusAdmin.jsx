@@ -11,7 +11,13 @@ import {
 } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
-  KotakCariAdmin, InfoTotal, TabelAdmin, BadgeStatus, usePencarianAdmin,
+  KotakCariTambahAdmin,
+  InfoTotal,
+  TabelAdmin,
+  BadgeStatus,
+  getApiErrorMessage,
+  usePencarianAdmin,
+  validateRequiredFields,
 } from '../../komponen/redaksi/KomponenAdmin';
 import PanelGeser from '../../komponen/redaksi/PanelGeser';
 import {
@@ -429,7 +435,11 @@ function KamusAdmin() {
 
   const handleSimpan = () => {
     setPesan({ error: '', sukses: '' });
-    if (!panel.data.entri?.trim()) { setPesan({ error: 'Entri wajib diisi', sukses: '' }); return; }
+    const pesanValidasi = validateRequiredFields(panel.data, [{ name: 'entri', label: 'Entri' }]);
+    if (pesanValidasi) {
+      setPesan({ error: pesanValidasi, sukses: '' });
+      return;
+    }
     simpan.mutate(panel.data, {
       onSuccess: (r) => {
         setPesan({ error: '', sukses: 'Tersimpan!' });
@@ -440,7 +450,7 @@ function KamusAdmin() {
           setTimeout(() => panel.tutup(), 600);
         }
       },
-      onError: (err) => setPesan({ error: err?.response?.data?.error || err?.response?.data?.message || 'Gagal menyimpan', sukses: '' }),
+      onError: (err) => setPesan({ error: getApiErrorMessage(err, 'Gagal menyimpan'), sukses: '' }),
     });
   };
 
@@ -448,24 +458,20 @@ function KamusAdmin() {
     if (!confirm('Yakin ingin menghapus entri ini beserta semua maknanya?')) return;
     hapus.mutate(panel.data.id, {
       onSuccess: () => panel.tutup(),
-      onError: (err) => setPesan({ error: err?.response?.data?.error || 'Gagal menghapus', sukses: '' }),
+      onError: (err) => setPesan({ error: getApiErrorMessage(err, 'Gagal menghapus'), sukses: '' }),
     });
   };
 
   return (
     <TataLetakAdmin judul="Kamus">
-      <div className="flex justify-between items-center mb-4">
-        <KotakCariAdmin
-          nilai={cari}
-          onChange={setCari}
-          onCari={kirimCari}
-          onHapus={hapusCari}
-          placeholder="Cari entri …"
-        />
-        <button onClick={panel.bukaUntukTambah} className="form-admin-btn-simpan whitespace-nowrap ml-4">
-          + Tambah
-        </button>
-      </div>
+      <KotakCariTambahAdmin
+        nilai={cari}
+        onChange={setCari}
+        onCari={kirimCari}
+        onHapus={hapusCari}
+        placeholder="Cari entri …"
+        onTambah={panel.bukaUntukTambah}
+      />
       <InfoTotal q={q} total={total} label="entri" />
       <TabelAdmin
         kolom={kolom}

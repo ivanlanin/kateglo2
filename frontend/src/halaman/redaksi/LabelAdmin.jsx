@@ -6,11 +6,14 @@ import { useState } from 'react';
 import { useDaftarLabelAdmin, useSimpanLabel, useHapusLabel } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
-  KotakCariAdmin,
+  KotakCariTambahAdmin,
+  BadgeStatus,
   InfoTotal,
   TabelAdmin,
+  getApiErrorMessage,
   potongTeks,
   usePencarianAdmin,
+  validateRequiredFields,
 } from '../../komponen/redaksi/KomponenAdmin';
 import PanelGeser from '../../komponen/redaksi/PanelGeser';
 import {
@@ -32,11 +35,7 @@ const kolom = [
   {
     key: 'aktif',
     label: 'Status',
-    render: (item) => (
-      <span className={item.aktif ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-500 dark:text-gray-400'}>
-        {item.aktif ? 'Aktif' : 'Nonaktif'}
-      </span>
-    ),
+    render: (item) => <BadgeStatus aktif={item.aktif} />,
   },
   {
     key: 'keterangan',
@@ -63,18 +62,13 @@ function LabelAdmin() {
   const handleSimpan = () => {
     setPesan({ error: '', sukses: '' });
 
-    if (!panel.data.kategori?.trim()) {
-      setPesan({ error: 'Kategori wajib diisi', sukses: '' });
-      return;
-    }
-
-    if (!panel.data.kode?.trim()) {
-      setPesan({ error: 'Kode wajib diisi', sukses: '' });
-      return;
-    }
-
-    if (!panel.data.nama?.trim()) {
-      setPesan({ error: 'Nama wajib diisi', sukses: '' });
+    const pesanValidasi = validateRequiredFields(panel.data, [
+      { name: 'kategori', label: 'Kategori' },
+      { name: 'kode', label: 'Kode' },
+      { name: 'nama', label: 'Nama' },
+    ]);
+    if (pesanValidasi) {
+      setPesan({ error: pesanValidasi, sukses: '' });
       return;
     }
 
@@ -84,7 +78,7 @@ function LabelAdmin() {
         setTimeout(() => panel.tutup(), 600);
       },
       onError: (err) => {
-        setPesan({ error: err?.response?.data?.message || 'Gagal menyimpan', sukses: '' });
+        setPesan({ error: getApiErrorMessage(err, 'Gagal menyimpan'), sukses: '' });
       },
     });
   };
@@ -95,25 +89,21 @@ function LabelAdmin() {
     hapus.mutate(panel.data.id, {
       onSuccess: () => panel.tutup(),
       onError: (err) => {
-        setPesan({ error: err?.response?.data?.message || 'Gagal menghapus', sukses: '' });
+        setPesan({ error: getApiErrorMessage(err, 'Gagal menghapus'), sukses: '' });
       },
     });
   };
 
   return (
     <TataLetakAdmin judul="Label">
-      <div className="flex justify-between items-center mb-4">
-        <KotakCariAdmin
-          nilai={cari}
-          onChange={setCari}
-          onCari={kirimCari}
-          onHapus={hapusCari}
-          placeholder="Cari label …"
-        />
-        <button onClick={panel.bukaUntukTambah} className="form-admin-btn-simpan whitespace-nowrap ml-4">
-          + Tambah
-        </button>
-      </div>
+      <KotakCariTambahAdmin
+        nilai={cari}
+        onChange={setCari}
+        onCari={kirimCari}
+        onHapus={hapusCari}
+        placeholder="Cari label …"
+        onTambah={panel.bukaUntukTambah}
+      />
 
       <InfoTotal q={q} total={total} label="label" />
 

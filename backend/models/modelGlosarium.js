@@ -3,17 +3,7 @@
  */
 
 const db = require('../db');
-
-function normalizeBoolean(value, defaultValue = true) {
-  if (value === undefined || value === null) return defaultValue;
-  if (typeof value === 'boolean') return value;
-  if (typeof value === 'number') return value === 1;
-  if (typeof value === 'string') {
-    const normalized = value.trim().toLowerCase();
-    return ['1', 'true', 'ya', 'yes', 'aktif'].includes(normalized);
-  }
-  return defaultValue;
-}
+const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
 
 class ModelGlosarium {
   static async autocomplete(query, limit = 8) {
@@ -87,7 +77,7 @@ class ModelGlosarium {
       `SELECT COUNT(*) as total FROM glosarium g ${whereClause}`,
       params
     );
-    const total = parseInt(countResult.rows[0].total, 10);
+    const total = parseCount(countResult.rows[0]?.total);
 
     const dataResult = await db.query(
       `SELECT g.id, g.indonesia, g.asing, g.bidang, g.bahasa, g.sumber, g.aktif
@@ -145,7 +135,7 @@ class ModelGlosarium {
    */
   static async hitungTotal() {
     const result = await db.query('SELECT COUNT(*) AS total FROM glosarium');
-    return parseInt(result.rows[0].total, 10);
+    return parseCount(result.rows[0]?.total);
   }
 
   /**

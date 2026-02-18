@@ -6,12 +6,14 @@ import { useState } from 'react';
 import { useDaftarTesaurusAdmin, useSimpanTesaurus, useHapusTesaurus } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
-  KotakCariAdmin,
+  KotakCariTambahAdmin,
   InfoTotal,
   BadgeStatus,
   TabelAdmin,
+  getApiErrorMessage,
   potongTeks,
   usePencarianAdmin,
+  validateRequiredFields,
 } from '../../komponen/redaksi/KomponenAdmin';
 import PanelGeser from '../../komponen/redaksi/PanelGeser';
 import {
@@ -68,10 +70,14 @@ function TesaurusAdmin() {
 
   const handleSimpan = () => {
     setPesan({ error: '', sukses: '' });
-    if (!panel.data.lema?.trim()) { setPesan({ error: 'Lema wajib diisi', sukses: '' }); return; }
+    const pesanValidasi = validateRequiredFields(panel.data, [{ name: 'lema', label: 'Lema' }]);
+    if (pesanValidasi) {
+      setPesan({ error: pesanValidasi, sukses: '' });
+      return;
+    }
     simpan.mutate(panel.data, {
       onSuccess: () => { setPesan({ error: '', sukses: 'Tersimpan!' }); setTimeout(() => panel.tutup(), 600); },
-      onError: (err) => setPesan({ error: err?.response?.data?.error || 'Gagal menyimpan', sukses: '' }),
+      onError: (err) => setPesan({ error: getApiErrorMessage(err, 'Gagal menyimpan'), sukses: '' }),
     });
   };
 
@@ -79,24 +85,20 @@ function TesaurusAdmin() {
     if (!confirm('Yakin ingin menghapus entri tesaurus ini?')) return;
     hapus.mutate(panel.data.id, {
       onSuccess: () => panel.tutup(),
-      onError: (err) => setPesan({ error: err?.response?.data?.error || 'Gagal menghapus', sukses: '' }),
+      onError: (err) => setPesan({ error: getApiErrorMessage(err, 'Gagal menghapus'), sukses: '' }),
     });
   };
 
   return (
     <TataLetakAdmin judul="Tesaurus">
-      <div className="flex justify-between items-center mb-4">
-        <KotakCariAdmin
-          nilai={cari}
-          onChange={setCari}
-          onCari={kirimCari}
-          onHapus={hapusCari}
-          placeholder="Cari tesaurus …"
-        />
-        <button onClick={panel.bukaUntukTambah} className="form-admin-btn-simpan whitespace-nowrap ml-4">
-          + Tambah
-        </button>
-      </div>
+      <KotakCariTambahAdmin
+        nilai={cari}
+        onChange={setCari}
+        onCari={kirimCari}
+        onHapus={hapusCari}
+        placeholder="Cari tesaurus …"
+        onTambah={panel.bukaUntukTambah}
+      />
       <InfoTotal q={q} total={total} label="entri" />
       <TabelAdmin
         kolom={kolom}

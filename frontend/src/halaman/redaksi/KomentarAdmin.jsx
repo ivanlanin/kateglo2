@@ -10,8 +10,10 @@ import {
   InfoTotal,
   TabelAdmin,
   BadgeStatus,
+  getApiErrorMessage,
   usePencarianAdmin,
   potongTeks,
+  validateRequiredFields,
 } from '../../komponen/redaksi/KomponenAdmin';
 import PanelGeser from '../../komponen/redaksi/PanelGeser';
 import {
@@ -61,8 +63,9 @@ function KomentarAdmin() {
 
   const handleSimpan = () => {
     setPesan({ error: '', sukses: '' });
-    if (!panel.data.komentar?.trim()) {
-      setPesan({ error: 'Komentar wajib diisi', sukses: '' });
+    const pesanValidasi = validateRequiredFields(panel.data, [{ name: 'komentar', label: 'Komentar' }]);
+    if (pesanValidasi) {
+      setPesan({ error: pesanValidasi, sukses: '' });
       return;
     }
 
@@ -73,7 +76,7 @@ function KomentarAdmin() {
       },
       onError: (err) => {
         setPesan({
-          error: err?.response?.data?.error || err?.response?.data?.message || 'Gagal menyimpan komentar',
+          error: getApiErrorMessage(err, 'Gagal menyimpan komentar'),
           sukses: '',
         });
       },

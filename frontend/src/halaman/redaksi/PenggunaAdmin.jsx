@@ -5,7 +5,7 @@
 import { useState } from 'react';
 import { useDaftarPengguna, useDaftarPeran, useSimpanPengguna } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
-import { TabelAdmin, InfoTotal, BadgeStatus } from '../../komponen/redaksi/KomponenAdmin';
+import { TabelAdmin, InfoTotal, BadgeStatus, getApiErrorMessage } from '../../komponen/redaksi/KomponenAdmin';
 import PanelGeser from '../../komponen/redaksi/PanelGeser';
 import {
   useFormPanel,
@@ -46,7 +46,7 @@ function PenggunaAdmin() {
     setPesan({ error: '', sukses: '' });
     simpanPengguna.mutate(panel.data, {
       onSuccess: () => { setPesan({ error: '', sukses: 'Tersimpan!' }); setTimeout(() => panel.tutup(), 600); },
-      onError: (err) => setPesan({ error: err?.response?.data?.error || 'Gagal menyimpan', sukses: '' }),
+      onError: (err) => setPesan({ error: getApiErrorMessage(err, 'Gagal menyimpan'), sukses: '' }),
     });
   };
 
