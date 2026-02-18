@@ -17,9 +17,9 @@
     "sim:production:start": "npm run start:production --prefix backend",
     "dev:backend": "npm run dev --prefix backend",
     "dev:public": "npm run dev --prefix frontend",
-    "build": "npm run build --prefix backend && npm run build --prefix frontend",
+    "build": "npm run build --prefix frontend",
     "build:ssr": "npm run build:ssr --prefix frontend",
-    "build:backend": "npm run build --prefix backend",
+    "build:backend": "node -e \"console.log('Backend tidak memerlukan langkah build')\"",
     "build:public": "npm run build --prefix frontend",
     "test": "npm run test --prefix backend && npm run test --prefix frontend",
     "lint": "npm run lint --prefix backend && npm run lint --prefix frontend"
@@ -28,7 +28,7 @@
     "concurrently": "^9.2.1"
   },
   "engines": {
-    "node": ">=18.0.0",
+    "node": "20.x",
     "npm": ">=9.0.0"
   },
   "author": "Ivan Lanin",
