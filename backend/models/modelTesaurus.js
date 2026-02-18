@@ -178,3 +178,6 @@ class ModelTesaurus {
 }
 
 module.exports = ModelTesaurus;
+module.exports.__private = {
+  normalizeBoolean,
+};

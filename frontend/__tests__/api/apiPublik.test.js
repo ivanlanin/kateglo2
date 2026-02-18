@@ -169,6 +169,40 @@ describe('apiPublik', () => {
     expect(hasil).toEqual([{ value: 'anak' }, { value: 'aneka', asing: 'varied' }]);
   });
 
+  it('autocomplete memfilter item kosong, falsy, object tanpa value, dan object tanpa asing', async () => {
+    klien.get.mockResolvedValue({
+      data: {
+        data: [
+          '  ',             // string yang trim jadi kosong → null
+          null,             // falsy → null
+          42,               // non-object non-string → null
+          { foo: 'bar' },   // object tanpa value field yg valid → null
+          { value: 'kata' },// object dengan value tapi tanpa asing
+        ],
+      },
+    });
+
+    const hasil = await autocomplete('kamus', 'x');
+
+    expect(hasil).toEqual([{ value: 'kata' }]);
+  });
+
+  it('autocomplete dengan kata null/undefined memakai fallback string kosong', async () => {
+    const hasil1 = await autocomplete('kamus', null);
+    const hasil2 = await autocomplete('kamus', undefined);
+    expect(hasil1).toEqual([]);
+    expect(hasil2).toEqual([]);
+    expect(klien.get).not.toHaveBeenCalled();
+  });
+
+  it('autocomplete menangani response tanpa data array (fallback [])', async () => {
+    klien.get.mockResolvedValue({ data: { data: 'bukan-array' } });
+
+    const hasil = await autocomplete('kamus', 'tes');
+
+    expect(hasil).toEqual([]);
+  });
+
   it('ambilGlosariumPerBidang dan ambilGlosariumPerSumber memakai default params', async () => {
     klien.get.mockResolvedValue({ data: { data: [] } });
     await ambilGlosariumPerBidang('biologi');

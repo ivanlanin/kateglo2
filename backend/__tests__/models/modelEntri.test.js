@@ -8,6 +8,7 @@ jest.mock('../../db/autocomplete', () => jest.fn());
 const db = require('../../db');
 const autocomplete = require('../../db/autocomplete');
 const ModelEntri = require('../../models/modelEntri');
+const { normalizeBoolean } = require('../../models/modelEntri').__private;
 
 describe('ModelEntri', () => {
   beforeEach(() => {
@@ -522,6 +523,82 @@ describe('ModelEntri', () => {
 
     expect(deleted).toBe(true);
     expect(missing).toBe(false);
+  });
+
+  // ─── normalizeBoolean coverage via simpanMakna ────────────────────────
+
+  it('simpanMakna normalizeBoolean: boolean true diteruskan apa adanya', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 60 }] });
+    await ModelEntri.simpanMakna({ entri_id: 1, makna: 'arti', aktif: true });
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO makna'),
+      [1, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null, true]
+    );
+  });
+
+  it('simpanMakna normalizeBoolean: boolean false diteruskan apa adanya', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 61 }] });
+    await ModelEntri.simpanMakna({ entri_id: 1, makna: 'arti', aktif: false });
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO makna'),
+      [1, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null, false]
+    );
+  });
+
+  it('simpanMakna normalizeBoolean: number 1 menjadi true', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 62 }] });
+    await ModelEntri.simpanMakna({ entri_id: 1, makna: 'arti', aktif: 1 });
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO makna'),
+      [1, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null, true]
+    );
+  });
+
+  it('simpanMakna normalizeBoolean: string "ya" menjadi true, string "no" menjadi false', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ id: 63 }] });
+    db.query.mockResolvedValueOnce({ rows: [{ id: 64 }] });
+    await ModelEntri.simpanMakna({ entri_id: 1, makna: 'arti', aktif: 'ya' });
+    await ModelEntri.simpanMakna({ entri_id: 1, makna: 'arti', aktif: 'no' });
+    expect(db.query).toHaveBeenNthCalledWith(
+      1, expect.stringContaining('INSERT INTO makna'),
+      [1, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null, true]
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2, expect.stringContaining('INSERT INTO makna'),
+      [1, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null, false]
+    );
+  });
+
+  it('simpanMakna normalizeBoolean: tipe lain (object) menghasilkan defaultValue', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 65 }] });
+    await ModelEntri.simpanMakna({ entri_id: 1, makna: 'arti', aktif: [] });
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO makna'),
+      [1, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null, true]
+    );
+  });
+
+  it('normalizeBoolean tanpa argumen kedua menggunakan default true', () => {
+    expect(normalizeBoolean(undefined)).toBe(true);
+    expect(normalizeBoolean(null)).toBe(true);
+  });
+
+  it('ambilMakna dengan aktifSaja=true menambahkan filter aktif', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+    await ModelEntri.ambilMakna(1, true);
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('AND aktif = TRUE'),
+      [1]
+    );
+  });
+
+  it('ambilContoh dengan aktifSaja=true menambahkan filter aktif', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+    await ModelEntri.ambilContoh([1, 2], true);
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('AND aktif = TRUE'),
+      [[1, 2]]
+    );
   });
 
 });

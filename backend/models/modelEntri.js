@@ -475,3 +475,9 @@ class ModelEntri {
 }
 
 module.exports = ModelEntri;
+module.exports.__private = {
+  normalisasiIndeks,
+  parseNullableInteger,
+  parsePositiveInteger,
+  normalizeBoolean,
+};

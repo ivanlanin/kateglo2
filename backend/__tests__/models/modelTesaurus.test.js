@@ -8,6 +8,7 @@ jest.mock('../../db/autocomplete', () => jest.fn());
 const db = require('../../db');
 const autocomplete = require('../../db/autocomplete');
 const ModelTesaurus = require('../../models/modelTesaurus');
+const { normalizeBoolean } = require('../../models/modelTesaurus').__private;
 
 describe('ModelTesaurus', () => {
   beforeEach(() => {
@@ -241,5 +242,63 @@ describe('ModelTesaurus', () => {
 
     expect(deleted).toBe(true);
     expect(missing).toBe(false);
+  });
+
+  // ─── normalizeBoolean coverage via simpan ─────────────────────────────
+
+  it('simpan normalizeBoolean: boolean true diteruskan apa adanya', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 30 }] });
+    await ModelTesaurus.simpan({ lema: 'tes', aktif: true });
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO tesaurus'),
+      ['tes', null, null, null, null, null, true]
+    );
+  });
+
+  it('simpan normalizeBoolean: boolean false diteruskan apa adanya', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 31 }] });
+    await ModelTesaurus.simpan({ lema: 'tes', aktif: false });
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO tesaurus'),
+      ['tes', null, null, null, null, null, false]
+    );
+  });
+
+  it('simpan normalizeBoolean: number 1 menjadi true', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 32 }] });
+    await ModelTesaurus.simpan({ lema: 'tes', aktif: 1 });
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO tesaurus'),
+      ['tes', null, null, null, null, null, true]
+    );
+  });
+
+  it('simpan normalizeBoolean: string "ya" menjadi true, string "no" menjadi false', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ id: 33 }] });
+    db.query.mockResolvedValueOnce({ rows: [{ id: 34 }] });
+    await ModelTesaurus.simpan({ lema: 'a', aktif: 'ya' });
+    await ModelTesaurus.simpan({ lema: 'b', aktif: 'no' });
+    expect(db.query).toHaveBeenNthCalledWith(
+      1, expect.stringContaining('INSERT INTO tesaurus'),
+      ['a', null, null, null, null, null, true]
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2, expect.stringContaining('INSERT INTO tesaurus'),
+      ['b', null, null, null, null, null, false]
+    );
+  });
+
+  it('simpan normalizeBoolean: tipe lain (object) menghasilkan defaultValue', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 35 }] });
+    await ModelTesaurus.simpan({ lema: 'tes', aktif: [] });
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO tesaurus'),
+      ['tes', null, null, null, null, null, true]
+    );
+  });
+
+  it('normalizeBoolean tanpa argumen kedua menggunakan default true', () => {
+    expect(normalizeBoolean(undefined)).toBe(true);
+    expect(normalizeBoolean(null)).toBe(true);
   });
 });
