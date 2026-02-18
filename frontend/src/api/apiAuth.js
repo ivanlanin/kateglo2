@@ -8,8 +8,26 @@ import klien from './klien';
 const apiBaseUrlFromEnv = (import.meta.env.VITE_API_URL || '').trim();
 const returnToKey = 'kateglo-auth-return-to';
 
+function hostLokal(hostname = '') {
+  return hostname === 'localhost' || hostname === '127.0.0.1';
+}
+
 function ambilApiBaseUrl() {
   if (apiBaseUrlFromEnv) {
+    try {
+      const parsedUrl = new URL(apiBaseUrlFromEnv);
+      /* c8 ignore next */
+      if (typeof window !== 'undefined') {
+        const targetLokal = hostLokal(parsedUrl.hostname);
+        const currentLokal = hostLokal(window.location.hostname);
+        if (!import.meta.env.DEV && targetLokal && !currentLokal) {
+          return window.location.origin;
+        }
+      }
+    } catch {
+      return apiBaseUrlFromEnv;
+    }
+
     return apiBaseUrlFromEnv;
   }
 

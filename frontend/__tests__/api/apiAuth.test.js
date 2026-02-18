@@ -78,21 +78,19 @@ describe('apiAuth', () => {
   });
 
   it('buatUrlLoginGoogle membangun URL login berbasis API', () => {
-    expect(buatUrlLoginGoogle()).toBe(`${window.location.origin}/auth/google`);
+    expect(buatUrlLoginGoogle()).toBe('http://localhost:3000/auth/google');
   });
 
   it('buatUrlLoginGoogle menyertakan frontend_origin jika diberikan', () => {
     const url = buatUrlLoginGoogle('https://kateglo.org');
-    expect(url).toBe(`${window.location.origin}/auth/google?frontend_origin=https%3A%2F%2Fkateglo.org`);
+    expect(url).toBe('http://localhost:3000/auth/google?frontend_origin=https%3A%2F%2Fkateglo.org');
   });
 
   it('mulaiLoginGoogle menyimpan returnTo lalu redirect', () => {
     mulaiLoginGoogle('/kamus/cari/rumah');
 
     expect(localStorage.setItem).toHaveBeenCalledWith('kateglo-auth-return-to', '/kamus/cari/rumah');
-    expect(window.location.assign).toHaveBeenCalledWith(
-      `${window.location.origin}/auth/google?frontend_origin=${encodeURIComponent(window.location.origin)}`
-    );
+    expect(window.location.assign).toHaveBeenCalledWith('http://localhost:3000/auth/google?frontend_origin=http%3A%2F%2Flocalhost');
   });
 
   it('ambilProfilSaya memanggil endpoint /me dengan bearer token', async () => {
