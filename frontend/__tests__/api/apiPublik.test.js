@@ -135,10 +135,22 @@ describe('apiPublik', () => {
     });
   });
 
-  it('autocomplete mengembalikan array kosong untuk kata pendek', async () => {
-    const hasil = await autocomplete('kamus', 'a');
+  it('autocomplete mengembalikan array kosong untuk kata kosong', async () => {
+    const hasil = await autocomplete('kamus', '   ');
     expect(hasil).toEqual([]);
     expect(klien.get).not.toHaveBeenCalled();
+  });
+
+  it('autocomplete memanggil endpoint untuk 1 karakter', async () => {
+    klien.get.mockResolvedValue({ data: { data: ['a'] } });
+
+    const hasil = await autocomplete('kamus', 'a');
+
+    expect(klien.get).toHaveBeenCalledWith(
+      '/api/publik/kamus/autocomplete/a',
+      expect.objectContaining({ params: expect.objectContaining({ _ac: expect.any(Number) }) })
+    );
+    expect(hasil).toEqual([{ value: 'a' }]);
   });
 
   it('autocomplete menormalkan item string dan object', async () => {
@@ -150,7 +162,10 @@ describe('apiPublik', () => {
 
     const hasil = await autocomplete('kamus', 'an');
 
-    expect(klien.get).toHaveBeenCalledWith('/api/publik/kamus/autocomplete/an');
+    expect(klien.get).toHaveBeenCalledWith(
+      '/api/publik/kamus/autocomplete/an',
+      expect.objectContaining({ params: expect.objectContaining({ _ac: expect.any(Number) }) })
+    );
     expect(hasil).toEqual([{ value: 'anak' }, { value: 'aneka', asing: 'varied' }]);
   });
 

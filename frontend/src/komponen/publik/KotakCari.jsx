@@ -72,6 +72,7 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
   const timerRef = useRef(null);
   const lewatiSubmitRef = useRef(false);
   const isMountedRef = useRef(true);
+  const permintaanTerakhirRef = useRef(0);
 
   useEffect(() => {
     setKategori(deteksiKategori(location.pathname));
@@ -97,27 +98,34 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
     return () => document.removeEventListener('mousedown', handleClickLuar);
   }, []);
 
-  useEffect(() => () => {
-    isMountedRef.current = false;
-    clearTimeout(timerRef.current);
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+      clearTimeout(timerRef.current);
+    };
   }, []);
 
   const ambilSaran = useCallback(async (kata, kat) => {
-    if (kata.length < 2) {
+    if (kata.length < 1) {
+      permintaanTerakhirRef.current += 1;
       setSaran([]);
       setTampilSaran(false);
       return;
     }
+
+    const idPermintaan = ++permintaanTerakhirRef.current;
+
     try {
       const hasil = await autocomplete(kat, kata);
       /* c8 ignore next */
-      if (!isMountedRef.current) return;
+      if (!isMountedRef.current || idPermintaan !== permintaanTerakhirRef.current) return;
       setSaran(hasil);
       setTampilSaran(hasil.length > 0);
       setIndeksAktif(-1);
     } catch {
       /* c8 ignore next */
-      if (!isMountedRef.current) return;
+      if (!isMountedRef.current || idPermintaan !== permintaanTerakhirRef.current) return;
       setSaran([]);
       setTampilSaran(false);
     }
@@ -186,7 +194,7 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
     setSaran([]);
     setTampilSaran(false);
     clearTimeout(timerRef.current);
-    if (query.trim().length >= 2) {
+    if (query.trim().length >= 1) {
       timerRef.current = setTimeout(() => ambilSaran(query.trim(), kat), 300);
     }
   };

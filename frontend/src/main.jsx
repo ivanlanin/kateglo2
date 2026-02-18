@@ -6,6 +6,12 @@ import App from './App';
 import { AuthProvider } from './context/authContext';
 import './styles/index.css';
 
+if (import.meta.env.DEV && typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations()
+    .then((registrations) => Promise.all(registrations.map((registration) => registration.unregister())))
+    .catch(() => {});
+}
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
