@@ -58,6 +58,17 @@ npm run dev:backend       # Backend di http://localhost:3000
 npm run dev:public        # Public di http://localhost:5173
 ```
 
+### Simulasi Production (SSR + API dalam 1 server)
+
+```bash
+# Build frontend SSR lalu jalankan backend dalam mode production
+npm run sim:production
+
+# Atau pisahkan langkah build dan start
+npm run sim:production:build
+npm run sim:production:start
+```
+
 ### Building for Production
 
 ```bash
