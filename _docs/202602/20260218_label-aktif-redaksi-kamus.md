@@ -43,11 +43,7 @@ File: `backend/models/modelLabel.js`
   - `ambilSemuaKategori` → `WHERE aktif = TRUE`
   - `cariEntriPerLabel` (lookup label) → `AND aktif = TRUE`
   - `ambilKategoriUntukRedaksi` (dropdown redaksi) → `AND aktif = TRUE`
-- Menambahkan preview kategori pada hasil entri per kategori:
-  - `preview_kelas_kata`
-  - `preview_ragam`
-  - `preview_bidang`
-  - `preview_bahasa`
+- Query kategori Kamus disederhanakan (YAGNI) agar hanya mengambil kolom entri inti tanpa preview tambahan.
 
 ### Route Redaksi Label
 

@@ -216,16 +216,15 @@ class ModelLabel {
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-          `SELECT DISTINCT ON (l.entri) l.id, l.entri, l.indeks, l.urutan, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk,
-            m.kelas_kata AS preview_kelas_kata,
-            m.ragam AS preview_ragam,
-            m.bidang AS preview_bidang,
-            m.bahasa AS preview_bahasa,
-            m.makna AS preview_makna
+      `SELECT l.id, l.entri, l.indeks, l.urutan, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk
        FROM entri l
-       JOIN makna m ON m.entri_id = l.id
-       WHERE m.${kolom} = ANY($1::text[]) AND l.aktif = 1
-       ORDER BY l.entri, m.urutan ASC, m.id ASC
+       WHERE l.aktif = 1
+         AND EXISTS (
+           SELECT 1
+           FROM makna m
+           WHERE m.entri_id = l.id AND m.${kolom} = ANY($1::text[])
+         )
+       ORDER BY l.entri
        LIMIT $2 OFFSET $3`,
       [nilaiCocok, limit, offset]
     );
@@ -287,12 +286,8 @@ class ModelLabel {
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-      `SELECT l.id, l.entri, l.indeks, l.urutan, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk,
-              m.kelas_kata AS preview_kelas_kata, m.makna AS preview_makna
+      `SELECT l.id, l.entri, l.indeks, l.urutan, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk
        FROM entri l
-       LEFT JOIN LATERAL (
-         SELECT kelas_kata, makna FROM makna WHERE entri_id = l.id ORDER BY urutan LIMIT 1
-       ) m ON true
        WHERE l.aktif = 1 AND ${SQL_ABJAD} = $1
        ORDER BY l.entri
        LIMIT $2 OFFSET $3`,
@@ -321,12 +316,8 @@ class ModelLabel {
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-      `SELECT l.id, l.entri, l.indeks, l.urutan, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk,
-              m.kelas_kata AS preview_kelas_kata, m.makna AS preview_makna
+      `SELECT l.id, l.entri, l.indeks, l.urutan, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk
        FROM entri l
-       LEFT JOIN LATERAL (
-         SELECT kelas_kata, makna FROM makna WHERE entri_id = l.id ORDER BY urutan LIMIT 1
-       ) m ON true
        WHERE l.aktif = 1 AND l.jenis = $1
        ORDER BY l.entri
        LIMIT $2 OFFSET $3`,
