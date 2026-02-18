@@ -8,6 +8,7 @@ import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
   KotakCariAdmin,
   InfoTotal,
+  BadgeStatus,
   TabelAdmin,
   usePencarianAdmin,
 } from '../../komponen/redaksi/KomponenAdmin';
@@ -16,11 +17,12 @@ import {
   useFormPanel,
   InputField,
   SelectField,
+  ToggleAktif,
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
 
-const nilaiAwal = { indonesia: '', asing: '', bidang: '', bahasa: 'en', sumber: '' };
+const nilaiAwal = { indonesia: '', asing: '', bidang: '', bahasa: 'en', sumber: '', aktif: 1 };
 
 const opsiBahasa = [
   { value: 'en', label: 'Inggris' },
@@ -45,6 +47,7 @@ const kolom = [
   { key: 'asing', label: 'Asing' },
   { key: 'bidang', label: 'Bidang' },
   { key: 'sumber', label: 'Sumber' },
+  { key: 'aktif', label: 'Status', render: (item) => <BadgeStatus aktif={item.aktif} /> },
 ];
 
 function GlosariumAdmin() {
@@ -115,6 +118,7 @@ function GlosariumAdmin() {
         <InputField label="Bidang" name="bidang" value={panel.data.bidang} onChange={panel.ubahField} />
         <SelectField label="Bahasa" name="bahasa" value={panel.data.bahasa} onChange={panel.ubahField} options={opsiBahasa} />
         <InputField label="Sumber" name="sumber" value={panel.data.sumber} onChange={panel.ubahField} />
+        <ToggleAktif value={panel.data.aktif} onChange={panel.ubahField} />
         <FormFooter
           onSimpan={handleSimpan}
           onBatal={panel.tutup}

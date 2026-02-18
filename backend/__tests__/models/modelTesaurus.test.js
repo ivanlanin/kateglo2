@@ -20,7 +20,7 @@ describe('ModelTesaurus', () => {
 
     const result = await ModelTesaurus.autocomplete('akt', 11);
 
-    expect(autocomplete).toHaveBeenCalledWith('tesaurus', 'lema', 'akt', { limit: 11 });
+    expect(autocomplete).toHaveBeenCalledWith('tesaurus', 'lema', 'akt', { limit: 11, extraWhere: 'aktif = TRUE' });
     expect(result).toEqual(['aktif']);
   });
 
@@ -29,7 +29,7 @@ describe('ModelTesaurus', () => {
 
     await ModelTesaurus.autocomplete('akt');
 
-    expect(autocomplete).toHaveBeenCalledWith('tesaurus', 'lema', 'akt', { limit: 8 });
+    expect(autocomplete).toHaveBeenCalledWith('tesaurus', 'lema', 'akt', { limit: 8, extraWhere: 'aktif = TRUE' });
   });
 
   it('cari mengembalikan kosong saat total 0', async () => {
@@ -153,7 +153,7 @@ describe('ModelTesaurus', () => {
     const result = await ModelTesaurus.ambilDenganId(90);
 
     expect(db.query).toHaveBeenCalledWith(
-      'SELECT id, lema, sinonim, antonim, turunan, gabungan, berkaitan FROM tesaurus WHERE id = $1',
+      'SELECT id, lema, sinonim, antonim, turunan, gabungan, berkaitan, aktif FROM tesaurus WHERE id = $1',
       [90]
     );
     expect(result).toEqual(row);
@@ -167,7 +167,7 @@ describe('ModelTesaurus', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('UPDATE tesaurus SET lema = $1'),
-      ['aktif', null, null, null, null, null, 4]
+      ['aktif', null, null, null, null, null, true, 4]
     );
     expect(result).toEqual(row);
   });
@@ -180,7 +180,7 @@ describe('ModelTesaurus', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
-      ['aktif', 'giat', null, null, null, null]
+      ['aktif', 'giat', null, null, null, null, true]
     );
     expect(result).toEqual(row);
   });
@@ -200,7 +200,7 @@ describe('ModelTesaurus', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('UPDATE tesaurus SET lema = $1'),
-      ['aktif', 'giat', 'pasif', 'aktifkan', 'aktif kerja', 'dinamis', 6]
+      ['aktif', 'giat', 'pasif', 'aktifkan', 'aktif kerja', 'dinamis', true, 6]
     );
   });
 
@@ -218,7 +218,7 @@ describe('ModelTesaurus', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
-      ['aktif', 'giat', 'pasif', 'aktifkan', 'aktif kerja', 'dinamis']
+      ['aktif', 'giat', 'pasif', 'aktifkan', 'aktif kerja', 'dinamis', true]
     );
   });
 
@@ -229,7 +229,7 @@ describe('ModelTesaurus', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
-      ['aktif', null, null, null, null, null]
+      ['aktif', null, null, null, null, null, true]
     );
   });
 

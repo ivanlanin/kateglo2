@@ -5,9 +5,20 @@
 const db = require('../db');
 const autocomplete = require('../db/autocomplete');
 
+function normalizeBoolean(value, defaultValue = true) {
+  if (value === undefined || value === null) return defaultValue;
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') return value === 1;
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase();
+    return ['1', 'true', 'ya', 'yes', 'aktif'].includes(normalized);
+  }
+  return defaultValue;
+}
+
 class ModelTesaurus {
   static async autocomplete(query, limit = 8) {
-    return autocomplete('tesaurus', 'lema', query, { limit });
+    return autocomplete('tesaurus', 'lema', query, { limit, extraWhere: 'aktif = TRUE' });
   }
 
   /**
@@ -29,6 +40,7 @@ class ModelTesaurus {
                     ELSE 2 END AS prioritas
         FROM tesaurus
         WHERE lema ILIKE $3
+          AND aktif = TRUE
           AND (sinonim IS NOT NULL OR antonim IS NOT NULL)
       )`;
 
@@ -44,7 +56,7 @@ class ModelTesaurus {
 
     const dataResult = await db.query(
       `${baseSql}
-       SELECT id, lema, sinonim, antonim
+      SELECT id, lema, sinonim, antonim, aktif
        FROM hasil
        ORDER BY prioritas, lema ASC
        LIMIT $4 OFFSET $5`,
@@ -64,6 +76,7 @@ class ModelTesaurus {
       `SELECT id, lema, sinonim, antonim, turunan, gabungan, berkaitan
        FROM tesaurus
        WHERE LOWER(lema) = LOWER($1)
+         AND aktif = TRUE
        LIMIT 1`,
       [kata]
     );
@@ -95,7 +108,7 @@ class ModelTesaurus {
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-      `SELECT id, lema, sinonim, antonim, turunan, gabungan, berkaitan
+      `SELECT id, lema, sinonim, antonim, turunan, gabungan, berkaitan, aktif
        FROM tesaurus ${where}
        ORDER BY lema ASC
        LIMIT $${idx} OFFSET $${idx + 1}`,
@@ -121,7 +134,7 @@ class ModelTesaurus {
    */
   static async ambilDenganId(id) {
     const result = await db.query(
-      'SELECT id, lema, sinonim, antonim, turunan, gabungan, berkaitan FROM tesaurus WHERE id = $1',
+      'SELECT id, lema, sinonim, antonim, turunan, gabungan, berkaitan, aktif FROM tesaurus WHERE id = $1',
       [id]
     );
     return result.rows[0] || null;
@@ -132,22 +145,23 @@ class ModelTesaurus {
    * @param {Object} data
    * @returns {Promise<Object>}
    */
-  static async simpan({ id, lema, sinonim, antonim, turunan, gabungan, berkaitan }) {
+  static async simpan({ id, lema, sinonim, antonim, turunan, gabungan, berkaitan, aktif }) {
+    const nilaiAktif = normalizeBoolean(aktif, true);
     if (id) {
       const result = await db.query(
         `UPDATE tesaurus SET lema = $1, sinonim = $2, antonim = $3,
-                turunan = $4, gabungan = $5, berkaitan = $6
-         WHERE id = $7 RETURNING *`,
+                turunan = $4, gabungan = $5, berkaitan = $6, aktif = $7
+         WHERE id = $8 RETURNING *`,
         [lema, sinonim || null, antonim || null, turunan || null,
-         gabungan || null, berkaitan || null, id]
+         gabungan || null, berkaitan || null, nilaiAktif, id]
       );
       return result.rows[0];
     }
     const result = await db.query(
-      `INSERT INTO tesaurus (lema, sinonim, antonim, turunan, gabungan, berkaitan)
-       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+      `INSERT INTO tesaurus (lema, sinonim, antonim, turunan, gabungan, berkaitan, aktif)
+       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
       [lema, sinonim || null, antonim || null, turunan || null,
-       gabungan || null, berkaitan || null]
+       gabungan || null, berkaitan || null, nilaiAktif]
     );
     return result.rows[0];
   }

@@ -48,6 +48,7 @@ router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
       q: req.params.kata,
       limit,
       offset,
+      aktifSaja: true,
     });
     return res.json(result);
   } catch (error) {
@@ -75,6 +76,7 @@ router.get('/bidang/:bidang', async (req, res, next) => {
       bidang: decodeURIComponent(req.params.bidang),
       limit,
       offset,
+      aktifSaja: true,
     });
     return res.json(result);
   } catch (error) {
@@ -102,6 +104,7 @@ router.get('/sumber/:sumber', async (req, res, next) => {
       sumber: decodeURIComponent(req.params.sumber),
       limit,
       offset,
+      aktifSaja: true,
     });
     return res.json(result);
   } catch (error) {
