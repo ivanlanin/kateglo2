@@ -4,17 +4,7 @@
 
 const db = require('../db');
 const autocomplete = require('../db/autocomplete');
-
-function normalizeBoolean(value, defaultValue = true) {
-  if (value === undefined || value === null) return defaultValue;
-  if (typeof value === 'boolean') return value;
-  if (typeof value === 'number') return value === 1;
-  if (typeof value === 'string') {
-    const normalized = value.trim().toLowerCase();
-    return ['1', 'true', 'ya', 'yes', 'aktif'].includes(normalized);
-  }
-  return defaultValue;
-}
+const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
 
 class ModelTesaurus {
   static async autocomplete(query, limit = 8) {
@@ -48,7 +38,7 @@ class ModelTesaurus {
       `${baseSql} SELECT COUNT(*) AS total FROM hasil`,
       [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`]
     );
-    const total = parseInt(countResult.rows[0].total, 10);
+    const total = parseCount(countResult.rows[0]?.total);
 
     if (total === 0) {
       return { data: [], total: 0 };
@@ -105,7 +95,7 @@ class ModelTesaurus {
       `SELECT COUNT(*) AS total FROM tesaurus ${where}`,
       params
     );
-    const total = parseInt(countResult.rows[0].total, 10);
+    const total = parseCount(countResult.rows[0]?.total);
 
     const dataResult = await db.query(
       `SELECT id, lema, sinonim, antonim, turunan, gabungan, berkaitan, aktif
@@ -124,7 +114,7 @@ class ModelTesaurus {
    */
   static async hitungTotal() {
     const result = await db.query('SELECT COUNT(*) AS total FROM tesaurus');
-    return parseInt(result.rows[0].total, 10);
+    return parseCount(result.rows[0]?.total);
   }
 
   /**

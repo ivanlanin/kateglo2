@@ -3,6 +3,7 @@
  */
 
 const db = require('../db');
+const { parseCount } = require('../utils/modelUtils');
 
 class ModelPengguna {
   /**
@@ -81,7 +82,7 @@ class ModelPengguna {
     const safeOffset = Math.max(Number(offset) || 0, 0);
 
     const countResult = await db.query('SELECT COUNT(*) AS total FROM pengguna');
-    const total = parseInt(countResult.rows[0].total, 10);
+    const total = parseCount(countResult.rows[0]?.total);
 
     const dataResult = await db.query(
       `SELECT p.id, p.google_id, p.surel, p.nama, p.foto, p.aktif,
@@ -135,7 +136,7 @@ class ModelPengguna {
    */
   static async hitungTotal() {
     const result = await db.query('SELECT COUNT(*) AS total FROM pengguna');
-    return parseInt(result.rows[0].total, 10);
+    return parseCount(result.rows[0]?.total);
   }
 
   /**

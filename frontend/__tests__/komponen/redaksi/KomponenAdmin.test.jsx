@@ -2,11 +2,13 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import {
   BadgeStatus,
+  getApiErrorMessage,
   InfoTotal,
   KotakCariAdmin,
   TabelAdmin,
   potongTeks,
   usePencarianAdmin,
+  validateRequiredFields,
 } from '../../../src/komponen/redaksi/KomponenAdmin';
 
 vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
@@ -35,6 +37,24 @@ describe('KomponenAdmin', () => {
     expect(potongTeks('')).toBe('—');
     expect(potongTeks('pendek', 10)).toBe('pendek');
     expect(potongTeks('teks sangat panjang sekali', 4)).toBe('teks …');
+  });
+
+  it('validateRequiredFields mengembalikan pesan field wajib pertama yang kosong', () => {
+    expect(validateRequiredFields({ nama: '', kode: 'n' }, [
+      { name: 'nama', label: 'Nama' },
+      { name: 'kode', label: 'Kode' },
+    ])).toBe('Nama wajib diisi');
+
+    expect(validateRequiredFields({ nama: 'Ada', kode: 'n' }, [
+      { name: 'nama', label: 'Nama' },
+      { name: 'kode', label: 'Kode' },
+    ])).toBe('');
+  });
+
+  it('getApiErrorMessage memprioritaskan error, lalu message, lalu fallback', () => {
+    expect(getApiErrorMessage({ response: { data: { error: 'Error utama', message: 'Message kedua' } } }, 'Fallback')).toBe('Error utama');
+    expect(getApiErrorMessage({ response: { data: { message: 'Message kedua' } } }, 'Fallback')).toBe('Message kedua');
+    expect(getApiErrorMessage({}, 'Fallback')).toBe('Fallback');
   });
 
   it('usePencarianAdmin mengelola state pencarian', () => {

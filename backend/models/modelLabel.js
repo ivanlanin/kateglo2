@@ -4,6 +4,7 @@
  */
 
 const db = require('../db');
+const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
 
 /**
  * Ekspresi SQL untuk mengekstrak huruf pertama Latin dari entri.
@@ -68,17 +69,6 @@ function pushLabelUnik(grouped, kategori, label) {
   if (!exists) {
     grouped[kategori].push(label);
   }
-}
-
-function normalizeBoolean(value, defaultValue = true) {
-  if (value === undefined || value === null) return defaultValue;
-  if (typeof value === 'boolean') return value;
-  if (typeof value === 'number') return value === 1;
-  if (typeof value === 'string') {
-    const normalized = value.trim().toLowerCase();
-    return ['1', 'true', 'ya', 'yes', 'aktif'].includes(normalized);
-  }
-  return defaultValue;
 }
 
 class ModelLabel {
@@ -213,7 +203,7 @@ class ModelLabel {
        WHERE m.${kolom} = ANY($1::text[]) AND l.aktif = 1`,
       [nilaiCocok]
     );
-    const total = parseInt(countResult.rows[0].total, 10);
+    const total = parseCount(countResult.rows[0]?.total);
 
     const dataResult = await db.query(
       `SELECT l.id, l.entri, l.indeks, l.urutan, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk
@@ -390,7 +380,7 @@ class ModelLabel {
    */
   static async hitungTotal() {
     const result = await db.query('SELECT COUNT(*) AS total FROM label');
-    return parseInt(result.rows[0].total, 10);
+    return parseCount(result.rows[0]?.total);
   }
 
   /**
@@ -447,4 +437,5 @@ module.exports.__private = {
   normalizeLabelValue,
   urutkanLabelPrioritas,
   pushLabelUnik,
+  normalizeBoolean,
 };

@@ -5,6 +5,7 @@
 
 const db = require('../db');
 const autocomplete = require('../db/autocomplete');
+const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
 
 function normalisasiIndeks(entri = '') {
   const tanpaNomor = entri.replace(/\s*\([0-9]+\)\s*$/, '');
@@ -22,17 +23,6 @@ function parsePositiveInteger(value) {
   const parsed = parseNullableInteger(value);
   if (parsed === null || parsed < 1) return 1;
   return parsed;
-}
-
-function normalizeBoolean(value, defaultValue = true) {
-  if (value === undefined || value === null) return defaultValue;
-  if (typeof value === 'boolean') return value;
-  if (typeof value === 'number') return value === 1;
-  if (typeof value === 'string') {
-    const normalized = value.trim().toLowerCase();
-    return ['1', 'true', 'ya', 'yes', 'aktif'].includes(normalized);
-  }
-  return defaultValue;
 }
 
 class ModelEntri {
@@ -66,7 +56,7 @@ class ModelEntri {
       `${baseSql} SELECT COUNT(*) AS total FROM hasil`,
       [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`]
     );
-    const total = parseInt(countResult.rows[0].total, 10);
+    const total = parseCount(countResult.rows[0]?.total);
 
     if (total === 0) {
       return { data: [], total: 0 };
@@ -257,7 +247,7 @@ class ModelEntri {
       `SELECT COUNT(*) AS total FROM entri ${where}`,
       params
     );
-    const total = parseInt(countResult.rows[0].total, 10);
+    const total = parseCount(countResult.rows[0]?.total);
 
     const dataResult = await db.query(
       `SELECT id, entri, indeks, homonim, urutan, jenis, lafal, aktif, jenis_rujuk, lema_rujuk AS entri_rujuk
@@ -276,7 +266,7 @@ class ModelEntri {
    */
   static async hitungTotal() {
     const result = await db.query('SELECT COUNT(*) AS total FROM entri');
-    return parseInt(result.rows[0].total, 10);
+    return parseCount(result.rows[0]?.total);
   }
 
   /**

@@ -3,6 +3,7 @@
  */
 
 const db = require('../db');
+const { normalizeBoolean: normalizeBooleanValue, parseCount } = require('../utils/modelUtils');
 
 const SQL_CREATED_AT = "to_char(k.created_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS created_at";
 const SQL_UPDATED_AT = "to_char(k.updated_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS updated_at";
@@ -22,19 +23,13 @@ function parseNonNegativeInteger(value, fallback) {
 }
 
 function normalizeBoolean(value) {
-  if (typeof value === 'boolean') return value;
-  if (typeof value === 'number') return value === 1;
-  if (typeof value === 'string') {
-    const normalized = value.trim().toLowerCase();
-    return ['1', 'true', 'ya', 'yes', 'aktif'].includes(normalized);
-  }
-  return false;
+  return normalizeBooleanValue(value, false);
 }
 
 class ModelKomentar {
   static async hitungTotal() {
     const result = await db.query('SELECT COUNT(*) AS total FROM komentar_kamus');
-    return parseInt(result.rows[0]?.total || '0', 10);
+    return parseCount(result.rows[0]?.total);
   }
 
   static async hitungKomentarAktif(indeks) {
@@ -44,7 +39,7 @@ class ModelKomentar {
        WHERE LOWER(indeks) = LOWER($1) AND aktif = TRUE`,
       [indeks]
     );
-    return parseInt(result.rows[0]?.total || '0', 10);
+    return parseCount(result.rows[0]?.total);
   }
 
   static async ambilKomentarTerbaca(indeks, penggunaId) {
@@ -112,7 +107,7 @@ class ModelKomentar {
 
     return {
       data: dataResult.rows,
-      total: parseInt(countResult.rows[0]?.total || '0', 10),
+      total: parseCount(countResult.rows[0]?.total),
     };
   }
 

@@ -18,6 +18,32 @@ export function potongTeks(teks, maks = 80) {
   return teks.length > maks ? teks.slice(0, maks) + ' …' : teks;
 }
 
+/**
+ * Validasi field wajib sederhana
+ * @param {Object} data - Data form
+ * @param {{ name: string, label: string }[]} fields - Daftar field wajib
+ * @returns {string} Pesan error, string kosong jika valid
+ */
+export function validateRequiredFields(data, fields = []) {
+  for (const field of fields) {
+    const value = data?.[field.name];
+    if (!String(value ?? '').trim()) {
+      return `${field.label} wajib diisi`;
+    }
+  }
+  return '';
+}
+
+/**
+ * Ambil pesan error dari respons API
+ * @param {unknown} err - Error object
+ * @param {string} fallbackMessage - Pesan fallback
+ * @returns {string}
+ */
+export function getApiErrorMessage(err, fallbackMessage = 'Terjadi kesalahan') {
+  return err?.response?.data?.error || err?.response?.data?.message || fallbackMessage;
+}
+
 // ─── Custom Hook ─────────────────────────────────────────────────────────────
 
 /**
@@ -80,6 +106,34 @@ export function KotakCariAdmin({ nilai, onChange, onCari, onHapus, placeholder =
         </button>
       )}
     </form>
+  );
+}
+
+/**
+ * Toolbar pencarian + tombol tambah untuk halaman admin
+ */
+export function KotakCariTambahAdmin({
+  nilai,
+  onChange,
+  onCari,
+  onHapus,
+  onTambah,
+  placeholder = 'Cari …',
+  labelTambah = '+ Tambah',
+}) {
+  return (
+    <div className="flex justify-between items-center mb-4">
+      <KotakCariAdmin
+        nilai={nilai}
+        onChange={onChange}
+        onCari={onCari}
+        onHapus={onHapus}
+        placeholder={placeholder}
+      />
+      <button onClick={onTambah} className="form-admin-btn-simpan whitespace-nowrap ml-4">
+        {labelTambah}
+      </button>
+    </div>
   );
 }
 
