@@ -4,6 +4,12 @@
 
 const express = require('express');
 const ModelTesaurus = require('../../models/modelTesaurus');
+const {
+  parsePagination,
+  parseSearchQuery,
+  parseIdParam,
+  parseTrimmedString,
+} = require('../../utils/routesRedaksiUtils');
 
 const router = express.Router();
 
@@ -13,9 +19,8 @@ const router = express.Router();
  */
 router.get('/', async (req, res, next) => {
   try {
-    const limit = Math.min(Number(req.query.limit) || 50, 200);
-    const offset = Math.max(Number(req.query.offset) || 0, 0);
-    const q = (req.query.q || '').trim();
+    const { limit, offset } = parsePagination(req.query);
+    const q = parseSearchQuery(req.query.q);
 
     const { data, total } = await ModelTesaurus.daftarAdmin({ limit, offset, q });
     return res.json({ success: true, data, total });
@@ -29,7 +34,7 @@ router.get('/', async (req, res, next) => {
  */
 router.get('/:id', async (req, res, next) => {
   try {
-    const data = await ModelTesaurus.ambilDenganId(Number(req.params.id));
+    const data = await ModelTesaurus.ambilDenganId(parseIdParam(req.params.id));
     if (!data) return res.status(404).json({ success: false, message: 'Tesaurus tidak ditemukan' });
     return res.json({ success: true, data });
   } catch (error) {
@@ -42,10 +47,10 @@ router.get('/:id', async (req, res, next) => {
  */
 router.post('/', async (req, res, next) => {
   try {
-    const { lema } = req.body;
-    if (!lema?.trim()) return res.status(400).json({ success: false, message: 'Lema wajib diisi' });
+    const lema = parseTrimmedString(req.body.lema);
+    if (!lema) return res.status(400).json({ success: false, message: 'Lema wajib diisi' });
 
-    const data = await ModelTesaurus.simpan(req.body);
+    const data = await ModelTesaurus.simpan({ ...req.body, lema });
     return res.status(201).json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -57,11 +62,11 @@ router.post('/', async (req, res, next) => {
  */
 router.put('/:id', async (req, res, next) => {
   try {
-    const id = Number(req.params.id);
-    const { lema } = req.body;
-    if (!lema?.trim()) return res.status(400).json({ success: false, message: 'Lema wajib diisi' });
+    const id = parseIdParam(req.params.id);
+    const lema = parseTrimmedString(req.body.lema);
+    if (!lema) return res.status(400).json({ success: false, message: 'Lema wajib diisi' });
 
-    const data = await ModelTesaurus.simpan({ ...req.body, id });
+    const data = await ModelTesaurus.simpan({ ...req.body, id, lema });
     if (!data) return res.status(404).json({ success: false, message: 'Tesaurus tidak ditemukan' });
     return res.json({ success: true, data });
   } catch (error) {
@@ -74,7 +79,7 @@ router.put('/:id', async (req, res, next) => {
  */
 router.delete('/:id', async (req, res, next) => {
   try {
-    const deleted = await ModelTesaurus.hapus(Number(req.params.id));
+    const deleted = await ModelTesaurus.hapus(parseIdParam(req.params.id));
     if (!deleted) return res.status(404).json({ success: false, message: 'Tesaurus tidak ditemukan' });
     return res.json({ success: true });
   } catch (error) {

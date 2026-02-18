@@ -4,14 +4,19 @@
 
 const express = require('express');
 const ModelKomentar = require('../../models/modelKomentar');
+const {
+  parsePagination,
+  parseSearchQuery,
+  parseIdParam,
+  parseTrimmedString,
+} = require('../../utils/routesRedaksiUtils');
 
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
   try {
-    const limit = Math.min(Number(req.query.limit) || 50, 200);
-    const offset = Math.max(Number(req.query.offset) || 0, 0);
-    const q = String(req.query.q || '').trim();
+    const { limit, offset } = parsePagination(req.query);
+    const q = parseSearchQuery(req.query.q);
 
     const { data, total } = await ModelKomentar.daftarAdmin({ limit, offset, q });
     return res.json({ success: true, data, total });
@@ -22,7 +27,7 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:id', async (req, res, next) => {
   try {
-    const data = await ModelKomentar.ambilDenganId(Number(req.params.id));
+    const data = await ModelKomentar.ambilDenganId(parseIdParam(req.params.id));
     if (!data) {
       return res.status(404).json({ success: false, message: 'Komentar tidak ditemukan' });
     }
@@ -34,8 +39,8 @@ router.get('/:id', async (req, res, next) => {
 
 router.put('/:id', async (req, res, next) => {
   try {
-    const id = Number(req.params.id);
-    const komentar = String(req.body?.komentar || '').trim();
+    const id = parseIdParam(req.params.id);
+    const komentar = parseTrimmedString(req.body?.komentar);
 
     if (!komentar) {
       return res.status(400).json({ success: false, message: 'Komentar wajib diisi' });

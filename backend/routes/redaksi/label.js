@@ -4,6 +4,12 @@
 
 const express = require('express');
 const ModelLabel = require('../../models/modelLabel');
+const {
+  parsePagination,
+  parseSearchQuery,
+  parseIdParam,
+  parseTrimmedString,
+} = require('../../utils/routesRedaksiUtils');
 
 const router = express.Router();
 
@@ -24,9 +30,8 @@ function isValidAktifValue(value) {
  */
 router.get('/', async (req, res, next) => {
   try {
-    const limit = Math.min(Number(req.query.limit) || 50, 200);
-    const offset = Math.max(Number(req.query.offset) || 0, 0);
-    const q = (req.query.q || '').trim();
+    const { limit, offset } = parsePagination(req.query);
+    const q = parseSearchQuery(req.query.q);
 
     const { data, total } = await ModelLabel.daftarAdmin({ limit, offset, q });
     return res.json({ success: true, data, total });
@@ -42,7 +47,7 @@ router.get('/', async (req, res, next) => {
  */
 router.get('/kategori', async (req, res, next) => {
   try {
-    const rawNama = String(req.query.nama || '').trim();
+    const rawNama = parseSearchQuery(req.query.nama);
     const kategori = rawNama
       ? rawNama.split(',').map((item) => item.trim()).filter(Boolean)
       : undefined;
@@ -59,7 +64,7 @@ router.get('/kategori', async (req, res, next) => {
  */
 router.get('/:id', async (req, res, next) => {
   try {
-    const data = await ModelLabel.ambilDenganId(Number(req.params.id));
+    const data = await ModelLabel.ambilDenganId(parseIdParam(req.params.id));
     if (!data) return res.status(404).json({ success: false, message: 'Label tidak ditemukan' });
     return res.json({ success: true, data });
   } catch (error) {
@@ -72,10 +77,13 @@ router.get('/:id', async (req, res, next) => {
  */
 router.post('/', async (req, res, next) => {
   try {
-    const { kategori, kode, nama, urutan, aktif } = req.body;
-    if (!kategori?.trim()) return res.status(400).json({ success: false, message: 'Kategori wajib diisi' });
-    if (!kode?.trim()) return res.status(400).json({ success: false, message: 'Kode wajib diisi' });
-    if (!nama?.trim()) return res.status(400).json({ success: false, message: 'Nama wajib diisi' });
+    const kategori = parseTrimmedString(req.body.kategori);
+    const kode = parseTrimmedString(req.body.kode);
+    const nama = parseTrimmedString(req.body.nama);
+    const { urutan, aktif } = req.body;
+    if (!kategori) return res.status(400).json({ success: false, message: 'Kategori wajib diisi' });
+    if (!kode) return res.status(400).json({ success: false, message: 'Kode wajib diisi' });
+    if (!nama) return res.status(400).json({ success: false, message: 'Nama wajib diisi' });
     if (urutan !== undefined && (!Number.isFinite(Number(urutan)) || Number(urutan) < 1)) {
       return res.status(400).json({ success: false, message: 'Urutan harus bilangan bulat >= 1' });
     }
@@ -83,7 +91,7 @@ router.post('/', async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Status aktif tidak valid' });
     }
 
-    const data = await ModelLabel.simpan(req.body);
+    const data = await ModelLabel.simpan({ ...req.body, kategori, kode, nama });
     return res.status(201).json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -95,11 +103,14 @@ router.post('/', async (req, res, next) => {
  */
 router.put('/:id', async (req, res, next) => {
   try {
-    const id = Number(req.params.id);
-    const { kategori, kode, nama, urutan, aktif } = req.body;
-    if (!kategori?.trim()) return res.status(400).json({ success: false, message: 'Kategori wajib diisi' });
-    if (!kode?.trim()) return res.status(400).json({ success: false, message: 'Kode wajib diisi' });
-    if (!nama?.trim()) return res.status(400).json({ success: false, message: 'Nama wajib diisi' });
+    const id = parseIdParam(req.params.id);
+    const kategori = parseTrimmedString(req.body.kategori);
+    const kode = parseTrimmedString(req.body.kode);
+    const nama = parseTrimmedString(req.body.nama);
+    const { urutan, aktif } = req.body;
+    if (!kategori) return res.status(400).json({ success: false, message: 'Kategori wajib diisi' });
+    if (!kode) return res.status(400).json({ success: false, message: 'Kode wajib diisi' });
+    if (!nama) return res.status(400).json({ success: false, message: 'Nama wajib diisi' });
     if (urutan !== undefined && (!Number.isFinite(Number(urutan)) || Number(urutan) < 1)) {
       return res.status(400).json({ success: false, message: 'Urutan harus bilangan bulat >= 1' });
     }
@@ -107,7 +118,7 @@ router.put('/:id', async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Status aktif tidak valid' });
     }
 
-    const data = await ModelLabel.simpan({ ...req.body, id });
+    const data = await ModelLabel.simpan({ ...req.body, id, kategori, kode, nama });
     if (!data) return res.status(404).json({ success: false, message: 'Label tidak ditemukan' });
     return res.json({ success: true, data });
   } catch (error) {
@@ -120,7 +131,7 @@ router.put('/:id', async (req, res, next) => {
  */
 router.delete('/:id', async (req, res, next) => {
   try {
-    const deleted = await ModelLabel.hapus(Number(req.params.id));
+    const deleted = await ModelLabel.hapus(parseIdParam(req.params.id));
     if (!deleted) return res.status(404).json({ success: false, message: 'Label tidak ditemukan' });
     return res.json({ success: true });
   } catch (error) {

@@ -6,25 +6,9 @@ const express = require('express');
 const { cariTesaurus, ambilDetailTesaurus } = require('../../services/layananTesaurusPublik');
 const ModelTesaurus = require('../../models/modelTesaurus');
 const { publicSearchLimiter } = require('../../middleware/rateLimiter');
+const { parsePagination, rejectTooLargeOffset } = require('../../utils/routesPublikUtils');
 
 const router = express.Router();
-const maxOffset = Math.max(Number(process.env.PUBLIC_MAX_OFFSET) || 1000, 0);
-
-function parseSearchPagination(query, defaultLimit = 100, maxLimit = 200) {
-  const limit = Math.min(Math.max(Number(query.limit) || defaultLimit, 1), maxLimit);
-  const offset = Math.max(Number(query.offset) || 0, 0);
-
-  return { limit, offset };
-}
-
-function rejectTooLargeOffset(res, offset) {
-  if (offset <= maxOffset) return false;
-  res.status(400).json({
-    error: 'Invalid Query',
-    message: `Offset maksimal adalah ${maxOffset}`,
-  });
-  return true;
-}
 
 router.get('/autocomplete/:kata', async (req, res, next) => {
   try {
@@ -37,7 +21,7 @@ router.get('/autocomplete/:kata', async (req, res, next) => {
 
 router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
   try {
-    const { limit, offset } = parseSearchPagination(req.query);
+    const { limit, offset } = parsePagination(req.query, { defaultLimit: 100, maxLimit: 200 });
     if (rejectTooLargeOffset(res, offset)) {
       return;
     }
