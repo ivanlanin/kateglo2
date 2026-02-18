@@ -278,9 +278,8 @@ describe('KamusDetail', () => {
 
     render(<KamusDetail />);
 
-    expect(screen.getByText(/Ada 3 komentar pada entri ini/i)).toBeInTheDocument();
-    expect(screen.getByText(/untuk membaca atau mengirim komentar/i)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'masuk dengan akun Google' })).toBeInTheDocument();
+    expect(screen.queryByText(/Ada 3 komentar pada entri ini/i)).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Masuk dengan Google' })).toBeInTheDocument();
   });
 
   it('menampilkan komentar terbaca saat login', () => {
@@ -422,10 +421,12 @@ describe('KamusDetail', () => {
 
     render(<KamusDetail />);
 
-    expect(screen.getByText('Ingin mengomentari entri ini?')).toBeInTheDocument();
+    expect(screen.queryByText(/Punya pertanyaan, masukan, atau catatan tentang halaman ini\?/i)).not.toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Tulis komentar ...')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Kirim komentar' })).toBeDisabled();
   });
 
-  it('mengirim komentar saat login: validasi kosong, sukses, dan refetch', async () => {
+  it('mengirim komentar saat login: tombol aktif setelah isi, sukses, dan refetch', async () => {
     const mockRefetchKomentar = vi.fn().mockResolvedValue(undefined);
 
     mockUseAuth.mockReturnValue({
@@ -472,13 +473,14 @@ describe('KamusDetail', () => {
 
     render(<KamusDetail />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Kirim' }));
-    expect(screen.getByText('Komentar tidak boleh kosong.')).toBeInTheDocument();
+    const tombolKirim = screen.getByRole('button', { name: 'Kirim komentar' });
+    expect(tombolKirim).toBeDisabled();
 
-    fireEvent.change(screen.getByPlaceholderText('Tulis komentar Anda...'), {
+    fireEvent.change(screen.getByPlaceholderText('Tulis komentar ...'), {
       target: { value: 'Komentar uji' },
     });
-    fireEvent.click(screen.getByRole('button', { name: 'Kirim' }));
+    expect(tombolKirim).toBeEnabled();
+    fireEvent.click(tombolKirim);
 
     await waitFor(() => {
       expect(simpanKomentarKamus).toHaveBeenCalledWith('kata', 'Komentar uji');
@@ -533,10 +535,10 @@ describe('KamusDetail', () => {
 
     render(<KamusDetail />);
 
-    fireEvent.change(screen.getByPlaceholderText('Tulis komentar Anda...'), {
+    fireEvent.change(screen.getByPlaceholderText('Tulis komentar ...'), {
       target: { value: 'Komentar gagal' },
     });
-    fireEvent.click(screen.getByRole('button', { name: 'Kirim' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Kirim komentar' }));
 
     await waitFor(() => {
       expect(screen.getByText('Gagal menyimpan komentar. Silakan coba lagi.')).toBeInTheDocument();
@@ -582,7 +584,7 @@ describe('KamusDetail', () => {
     });
 
     const { rerender } = render(<KamusDetail />);
-    fireEvent.click(screen.getByRole('link', { name: 'masuk dengan akun Google' }));
+    fireEvent.click(screen.getByRole('link', { name: 'Masuk dengan Google' }));
 
     panggilan = 0;
     mockUseQuery.mockImplementation(() => {
@@ -615,7 +617,7 @@ describe('KamusDetail', () => {
     });
 
     rerender(<KamusDetail />);
-    fireEvent.click(screen.getByRole('link', { name: 'masuk dengan akun Google' }));
+  fireEvent.click(screen.getByRole('link', { name: 'Masuk dengan Google' }));
 
     expect(loginDenganGoogle).toHaveBeenCalledTimes(2);
   });
