@@ -5,11 +5,12 @@
 import axios from 'axios';
 
 const frontendSharedKey = import.meta.env.VITE_FRONTEND_SHARED_KEY;
+const apiBaseUrl = (import.meta.env.VITE_API_URL || '').trim();
 
 const storageKey = 'kateglo-auth-token';
 
 const klien = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+  baseURL: apiBaseUrl || undefined,
   timeout: 15000,
 });
 
