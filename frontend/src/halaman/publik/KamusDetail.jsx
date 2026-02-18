@@ -121,14 +121,17 @@ function KamusDetail() {
   const komentarData = komentarResponse?.data || {};
   const jumlahKomentarAktif = Number(komentarData.activeCount || 0);
   const daftarKomentar = Array.isArray(komentarData.komentar) ? komentarData.komentar : [];
+  const daftarKomentarTerurut = daftarKomentar.slice().sort((a, b) => {
+    const waktuA = new Date(a.updated_at || a.created_at || 0).getTime() || 0;
+    const waktuB = new Date(b.updated_at || b.created_at || 0).getTime() || 0;
+    if (waktuA !== waktuB) return waktuB - waktuA;
+    return Number(b.id || 0) - Number(a.id || 0);
+  });
 
   const handleKirimKomentar = async (event) => {
     event.preventDefault();
     const komentar = teksKomentar.trim();
-    if (!komentar) {
-      setPesanKomentar('Komentar tidak boleh kosong.');
-      return;
-    }
+    if (!komentar) return;
 
     setIsSubmittingKomentar(true);
     setPesanKomentar('');
@@ -454,11 +457,31 @@ function KamusDetail() {
             <PanelLipat judul="Komentar" jumlah={isAuthenticated ? daftarKomentar.length : jumlahKomentarAktif} terbukaAwal={true} aksen={true}>
               {isAuthenticated ? (
                 <div className="space-y-3 text-sm">
-                  {daftarKomentar.length === 0 ? (
-                    <p className="secondary-text">Ingin mengomentari entri ini?</p>
-                  ) : (
+                  <form onSubmit={handleKirimKomentar} className="space-y-2">
+                    <div className="relative">
+                      <textarea
+                        value={teksKomentar}
+                        onChange={(e) => setTeksKomentar(e.target.value)}
+                        rows={4}
+                        className="w-full text-sm px-3 py-2 pr-16 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-bg-input dark:text-dark-text"
+                        placeholder="Tulis komentar ..."
+                      />
+                      <button
+                        type="submit"
+                        aria-label="Kirim komentar"
+                        disabled={isSubmittingKomentar || !teksKomentar.trim()}
+                        className="absolute bottom-2 right-2 h-8 px-3 text-xs rounded-full bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-400 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center"
+                      >
+                        {isSubmittingKomentar ? '…' : 'Kirim'}
+                      </button>
+                    </div>
+                  </form>
+
+                  {pesanKomentar && <p className="secondary-text">{pesanKomentar}</p>}
+
+                  {daftarKomentarTerurut.length > 0 && (
                     <div className="space-y-3">
-                      {daftarKomentar.map((item) => (
+                      {daftarKomentarTerurut.map((item) => (
                         <div key={item.id} className="border border-gray-200 dark:border-gray-700 rounded-md px-3 py-2">
                           <div className="text-xs secondary-text mb-1 flex items-center justify-between gap-2">
                             <span>{item.pengguna_nama || 'Pengguna'}</span>
@@ -469,58 +492,19 @@ function KamusDetail() {
                       ))}
                     </div>
                   )}
-
-                  <form onSubmit={handleKirimKomentar} className="space-y-2">
-                    <textarea
-                      value={teksKomentar}
-                      onChange={(e) => setTeksKomentar(e.target.value)}
-                      rows={4}
-                      className="w-full text-sm px-3 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-bg-input dark:text-dark-text"
-                      placeholder="Tulis komentar Anda..."
-                    />
-                    <button
-                      type="submit"
-                      disabled={isSubmittingKomentar}
-                      className="px-3 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60"
-                    >
-                      {isSubmittingKomentar ? 'Mengirim…' : 'Kirim'}
-                    </button>
-                    {pesanKomentar && <p className="secondary-text">{pesanKomentar}</p>}
-                  </form>
                 </div>
               ) : (
                 <div className="space-y-2 text-sm">
-                  {jumlahKomentarAktif > 0 ? (
-                    <p>
-                      Ada {jumlahKomentarAktif} komentar pada entri ini. Silakan{' '}
-                      <a
-                        href="/auth/google"
-                        onClick={(event) => {
-                          event.preventDefault();
-                          loginDenganGoogle(window.location.pathname + window.location.search);
-                        }}
-                        className="link-action"
-                      >
-                        masuk dengan akun Google
-                      </a>{' '}
-                      untuk membaca atau mengirim komentar.
-                    </p>
-                  ) : (
-                    <p>
-                      Silakan{' '}
-                      <a
-                        href="/auth/google"
-                        onClick={(event) => {
-                          event.preventDefault();
-                          loginDenganGoogle(window.location.pathname + window.location.search);
-                        }}
-                        className="link-action"
-                      >
-                        masuk dengan akun Google
-                      </a>{' '}
-                      untuk meninggalkan komentar.
-                    </p>
-                  )}
+                  <a
+                    href="/auth/google"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      loginDenganGoogle(window.location.pathname + window.location.search);
+                    }}
+                    className="inline-flex items-center px-3 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-400"
+                  >
+                    Masuk dengan Google
+                  </a>
                 </div>
               )}
             </PanelLipat>
