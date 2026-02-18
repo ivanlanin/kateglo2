@@ -345,7 +345,12 @@ function KamusDetail() {
                         {kelas !== '-' && (
                           <div className="kamus-detail-subentry-heading-row">
                             <h3 className="kamus-detail-def-class mb-0">
-                              {formatTitleCase(petaKelasKata[normalizeToken(kelas)] || kelas)}{' '}
+                              <Link
+                                to={buatPathKategoriDariLabel('kelas', kelas, petaKelasKata)}
+                                className="kamus-detail-def-class-link"
+                              >
+                                {formatTitleCase(petaKelasKata[normalizeToken(kelas)] || kelas)}
+                              </Link>{' '}
                               <span className="kamus-count-badge" data-count={daftarMakna.length}>
                                 ({daftarMakna.length})
                               </span>

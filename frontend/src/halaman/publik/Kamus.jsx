@@ -82,11 +82,13 @@ function tentukanNamaKategoriDariPath(kategori = '', kode = '') {
 }
 
 function Kamus() {
-  const { kata, kategori, kode } = useParams();
+  const { kata, kategori, kode, kelas } = useParams();
+  const kategoriAktif = kategori || (kelas ? 'kelas' : '');
+  const kodeAktif = kode || kelas || '';
   const [searchParams, setSearchParams] = useSearchParams();
   const offsetParam = parseInt(searchParams.get('offset') || '0', 10);
   const modePencarian = Boolean(kata);
-  const modeKategori = Boolean(!kata && kategori && kode);
+  const modeKategori = Boolean(!kata && kategoriAktif && kodeAktif);
   const modeBrowse = !modePencarian && !modeKategori;
 
   const {
@@ -113,8 +115,8 @@ function Kamus() {
     isError: isErrorKategori,
     error: errorKategori,
   } = useQuery({
-    queryKey: ['kamus-kategori-entri', kategori, kode, offsetParam],
-    queryFn: () => ambilEntriPerKategori(kategori, kode, { limit, offset: offsetParam }),
+    queryKey: ['kamus-kategori-entri', kategoriAktif, kodeAktif, offsetParam],
+    queryFn: () => ambilEntriPerKategori(kategoriAktif, kodeAktif, { limit, offset: offsetParam }),
     enabled: modeKategori,
   });
 
@@ -132,8 +134,8 @@ function Kamus() {
     updateSearchParamsWithOffset(setSearchParams, {}, newOffset);
   };
 
-  const namaKategori = tentukanNamaKategoriDariPath(kategori, kode);
-  const namaLabelRaw = labelKategori?.nama || (kode ? decodeURIComponent(kode) : '');
+  const namaKategori = tentukanNamaKategoriDariPath(kategoriAktif, kodeAktif);
+  const namaLabelRaw = labelKategori?.nama || (kodeAktif ? decodeURIComponent(kodeAktif) : '');
   const namaLabel = namaLabelRaw
     ? namaLabelRaw.charAt(0).toUpperCase() + namaLabelRaw.slice(1)
     : '';
