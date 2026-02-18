@@ -70,6 +70,17 @@ function pushLabelUnik(grouped, kategori, label) {
   }
 }
 
+function normalizeBoolean(value, defaultValue = true) {
+  if (value === undefined || value === null) return defaultValue;
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') return value === 1;
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase();
+    return ['1', 'true', 'ya', 'yes', 'aktif'].includes(normalized);
+  }
+  return defaultValue;
+}
+
 class ModelLabel {
   /**
   * Ambil semua kategori beserta daftar label per kategori dan jumlah entri.
@@ -82,6 +93,7 @@ class ModelLabel {
     const result = await db.query(
       `SELECT kategori, kode, nama, urutan
        FROM label
+       WHERE aktif = TRUE
        ORDER BY kategori, urutan, nama`
     );
 
@@ -168,7 +180,7 @@ class ModelLabel {
     const labelResult = await db.query(
       `SELECT kategori, kode, nama, keterangan
        FROM label
-       WHERE kategori = ANY($1::text[]) AND kode = $2
+       WHERE kategori = ANY($1::text[]) AND kode = $2 AND aktif = TRUE
        ORDER BY CASE WHEN kategori = $3 THEN 0 ELSE 1 END
        LIMIT 1`,
       [kategoriKandidat, kode, kategoriNormal]
@@ -204,8 +216,12 @@ class ModelLabel {
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-      `SELECT DISTINCT ON (l.entri) l.id, l.entri, l.indeks, l.urutan, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk,
-              m.kelas_kata AS preview_kelas_kata, m.makna AS preview_makna
+          `SELECT DISTINCT ON (l.entri) l.id, l.entri, l.indeks, l.urutan, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk,
+            m.kelas_kata AS preview_kelas_kata,
+            m.ragam AS preview_ragam,
+            m.bidang AS preview_bidang,
+            m.bahasa AS preview_bahasa,
+            m.makna AS preview_makna
        FROM entri l
        JOIN makna m ON m.entri_id = l.id
        WHERE m.${kolom} = ANY($1::text[]) AND l.aktif = 1
@@ -237,7 +253,7 @@ class ModelLabel {
     const result = await db.query(
       `SELECT kategori, kode, nama, urutan
        FROM label
-       WHERE kategori = ANY($1::text[])
+       WHERE kategori = ANY($1::text[]) AND aktif = TRUE
        ORDER BY kategori ASC, urutan ASC, nama ASC, kode ASC`,
       [kategoriQuery]
     );
@@ -354,7 +370,7 @@ class ModelLabel {
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-      `SELECT id, kategori, kode, nama, urutan, keterangan
+      `SELECT id, kategori, kode, nama, urutan, keterangan, aktif
        FROM label ${where}
        ORDER BY kategori ASC, urutan ASC, nama ASC
        LIMIT $${idx} OFFSET $${idx + 1}`,
@@ -371,7 +387,7 @@ class ModelLabel {
    */
   static async ambilDenganId(id) {
     const result = await db.query(
-      'SELECT id, kategori, kode, nama, urutan, keterangan FROM label WHERE id = $1',
+      'SELECT id, kategori, kode, nama, urutan, keterangan, aktif FROM label WHERE id = $1',
       [id]
     );
     return result.rows[0] || null;
@@ -391,10 +407,11 @@ class ModelLabel {
   * @param {{ id?: number, kategori: string, kode: string, nama: string, urutan?: number|string, keterangan?: string }} data
    * @returns {Promise<Object|null>}
    */
-  static async simpan({ id, kategori, kode, nama, urutan, keterangan }) {
+  static async simpan({ id, kategori, kode, nama, urutan, keterangan, aktif }) {
     const nilaiUrutan = Number.isFinite(Number(urutan)) && Number(urutan) > 0
       ? Number.parseInt(urutan, 10)
       : 1;
+    const nilaiAktif = normalizeBoolean(aktif, true);
 
     if (id) {
       const result = await db.query(
@@ -403,19 +420,20 @@ class ModelLabel {
              kode = $2,
              nama = $3,
              urutan = $4,
-             keterangan = $5
-         WHERE id = $6
-         RETURNING id, kategori, kode, nama, urutan, keterangan`,
-        [kategori, kode, nama, nilaiUrutan, keterangan || null, id]
+             keterangan = $5,
+             aktif = $6
+         WHERE id = $7
+         RETURNING id, kategori, kode, nama, urutan, keterangan, aktif`,
+        [kategori, kode, nama, nilaiUrutan, keterangan || null, nilaiAktif, id]
       );
       return result.rows[0] || null;
     }
 
     const result = await db.query(
-      `INSERT INTO label (kategori, kode, nama, urutan, keterangan)
-       VALUES ($1, $2, $3, $4, $5)
-       RETURNING id, kategori, kode, nama, urutan, keterangan`,
-      [kategori, kode, nama, nilaiUrutan, keterangan || null]
+      `INSERT INTO label (kategori, kode, nama, urutan, keterangan, aktif)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING id, kategori, kode, nama, urutan, keterangan, aktif`,
+      [kategori, kode, nama, nilaiUrutan, keterangan || null, nilaiAktif]
     );
     return result.rows[0];
   }

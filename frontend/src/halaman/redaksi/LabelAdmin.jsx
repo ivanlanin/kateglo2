@@ -17,17 +17,27 @@ import {
   useFormPanel,
   InputField,
   TextareaField,
+  ToggleAktif,
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
 
-const nilaiAwal = { kategori: '', kode: '', nama: '', urutan: 1, keterangan: '' };
+const nilaiAwal = { kategori: '', kode: '', nama: '', urutan: 1, keterangan: '', aktif: true };
 
 const kolom = [
   { key: 'kategori', label: 'Kategori' },
   { key: 'kode', label: 'Kode' },
   { key: 'nama', label: 'Nama' },
   { key: 'urutan', label: 'Urutan' },
+  {
+    key: 'aktif',
+    label: 'Status',
+    render: (item) => (
+      <span className={item.aktif ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-500 dark:text-gray-400'}>
+        {item.aktif ? 'Aktif' : 'Nonaktif'}
+      </span>
+    ),
+  },
   {
     key: 'keterangan',
     label: 'Keterangan',
@@ -125,6 +135,7 @@ function LabelAdmin() {
         <InputField label="Kode" name="kode" value={panel.data.kode} onChange={panel.ubahField} required />
         <InputField label="Nama" name="nama" value={panel.data.nama} onChange={panel.ubahField} required />
         <InputField label="Urutan" name="urutan" type="number" value={panel.data.urutan} onChange={panel.ubahField} />
+        <ToggleAktif value={Boolean(panel.data.aktif)} onChange={panel.ubahField} />
         <TextareaField label="Keterangan" name="keterangan" value={panel.data.keterangan} onChange={panel.ubahField} rows={3} />
         <FormFooter
           onSimpan={handleSimpan}
