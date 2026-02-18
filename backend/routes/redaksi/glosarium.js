@@ -4,6 +4,12 @@
 
 const express = require('express');
 const ModelGlosarium = require('../../models/modelGlosarium');
+const {
+  parsePagination,
+  parseSearchQuery,
+  parseIdParam,
+  parseTrimmedString,
+} = require('../../utils/routesRedaksiUtils');
 
 const router = express.Router();
 
@@ -13,9 +19,8 @@ const router = express.Router();
  */
 router.get('/', async (req, res, next) => {
   try {
-    const limit = Math.min(Number(req.query.limit) || 50, 200);
-    const offset = Math.max(Number(req.query.offset) || 0, 0);
-    const q = (req.query.q || '').trim();
+    const { limit, offset } = parsePagination(req.query);
+    const q = parseSearchQuery(req.query.q);
 
     const { data, total } = await ModelGlosarium.cari({ q, limit, offset });
     return res.json({ success: true, data, total });
@@ -29,7 +34,7 @@ router.get('/', async (req, res, next) => {
  */
 router.get('/:id', async (req, res, next) => {
   try {
-    const data = await ModelGlosarium.ambilDenganId(Number(req.params.id));
+    const data = await ModelGlosarium.ambilDenganId(parseIdParam(req.params.id));
     if (!data) return res.status(404).json({ success: false, message: 'Glosarium tidak ditemukan' });
     return res.json({ success: true, data });
   } catch (error) {
@@ -42,12 +47,13 @@ router.get('/:id', async (req, res, next) => {
  */
 router.post('/', async (req, res, next) => {
   try {
-    const { indonesia, asing } = req.body;
-    if (!indonesia?.trim()) return res.status(400).json({ success: false, message: 'Istilah Indonesia wajib diisi' });
-    if (!asing?.trim()) return res.status(400).json({ success: false, message: 'Istilah asing wajib diisi' });
+    const indonesia = parseTrimmedString(req.body.indonesia);
+    const asing = parseTrimmedString(req.body.asing);
+    if (!indonesia) return res.status(400).json({ success: false, message: 'Istilah Indonesia wajib diisi' });
+    if (!asing) return res.status(400).json({ success: false, message: 'Istilah asing wajib diisi' });
 
     const updater = req.user?.email || 'admin';
-    const data = await ModelGlosarium.simpan(req.body, updater);
+    const data = await ModelGlosarium.simpan({ ...req.body, indonesia, asing }, updater);
     return res.status(201).json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -59,13 +65,14 @@ router.post('/', async (req, res, next) => {
  */
 router.put('/:id', async (req, res, next) => {
   try {
-    const id = Number(req.params.id);
-    const { indonesia, asing } = req.body;
-    if (!indonesia?.trim()) return res.status(400).json({ success: false, message: 'Istilah Indonesia wajib diisi' });
-    if (!asing?.trim()) return res.status(400).json({ success: false, message: 'Istilah asing wajib diisi' });
+    const id = parseIdParam(req.params.id);
+    const indonesia = parseTrimmedString(req.body.indonesia);
+    const asing = parseTrimmedString(req.body.asing);
+    if (!indonesia) return res.status(400).json({ success: false, message: 'Istilah Indonesia wajib diisi' });
+    if (!asing) return res.status(400).json({ success: false, message: 'Istilah asing wajib diisi' });
 
     const updater = req.user?.email || 'admin';
-    const data = await ModelGlosarium.simpan({ ...req.body, id }, updater);
+    const data = await ModelGlosarium.simpan({ ...req.body, id, indonesia, asing }, updater);
     if (!data) return res.status(404).json({ success: false, message: 'Glosarium tidak ditemukan' });
     return res.json({ success: true, data });
   } catch (error) {
@@ -78,7 +85,7 @@ router.put('/:id', async (req, res, next) => {
  */
 router.delete('/:id', async (req, res, next) => {
   try {
-    const deleted = await ModelGlosarium.hapus(Number(req.params.id));
+    const deleted = await ModelGlosarium.hapus(parseIdParam(req.params.id));
     if (!deleted) return res.status(404).json({ success: false, message: 'Glosarium tidak ditemukan' });
     return res.json({ success: true });
   } catch (error) {

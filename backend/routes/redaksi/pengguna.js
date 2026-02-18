@@ -5,6 +5,7 @@
 const express = require('express');
 const { periksaIzin } = require('../../middleware/otorisasi');
 const ModelPengguna = require('../../models/modelPengguna');
+const { parsePagination, parseIdParam } = require('../../utils/routesRedaksiUtils');
 
 const router = express.Router();
 
@@ -14,8 +15,7 @@ const router = express.Router();
  */
 router.get('/', periksaIzin('kelola_pengguna'), async (req, res, next) => {
   try {
-    const limit = Number(req.query.limit) || 50;
-    const offset = Number(req.query.offset) || 0;
+    const { limit, offset } = parsePagination(req.query);
     const { data, total } = await ModelPengguna.daftarPengguna({ limit, offset });
 
     return res.json({ success: true, data, total });
@@ -31,7 +31,7 @@ router.get('/', periksaIzin('kelola_pengguna'), async (req, res, next) => {
  */
 router.patch('/:id/peran', periksaIzin('kelola_pengguna'), async (req, res, next) => {
   try {
-    const penggunaId = Number(req.params.id);
+    const penggunaId = parseIdParam(req.params.id);
     const { peran_id: peranId } = req.body;
 
     if (!peranId || !Number.isInteger(peranId)) {
@@ -62,7 +62,7 @@ router.patch('/:id/peran', periksaIzin('kelola_pengguna'), async (req, res, next
  */
 router.put('/:id', periksaIzin('kelola_pengguna'), async (req, res, next) => {
   try {
-    const id = Number(req.params.id);
+    const id = parseIdParam(req.params.id);
     const pengguna = await ModelPengguna.simpanPengguna(id, req.body);
 
     if (!pengguna) {

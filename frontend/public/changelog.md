@@ -4,7 +4,7 @@
 
 - Menyiapkan migrasi ke SSR untuk melayani HTML dinamis di URL asli
 - Menambahkan penanda aktif di tabel label, makna, contoh, glosarium, dan tesaurus
-- Menerapkan DRY di halaman redaksi dan di model untuk mengurangi duplikasi kode
+- Menerapkan DRY di UI redaksi, router, dan model untuk mengurangi duplikasi kode
 
 ## 2026-02-17 Selasa
 

@@ -5,28 +5,9 @@
 const express = require('express');
 const ModelGlosarium = require('../../models/modelGlosarium');
 const { publicSearchLimiter } = require('../../middleware/rateLimiter');
+const { parsePagination, rejectTooLargeOffset } = require('../../utils/routesPublikUtils');
 
 const router = express.Router();
-const maxOffset = Math.max(Number(process.env.PUBLIC_MAX_OFFSET) || 1000, 0);
-
-function parsePagination(query) {
-  const limit = Math.min(Math.max(parseInt(query.limit, 10) || 100, 1), 100);
-  const offset = Math.max(parseInt(query.offset, 10) || 0, 0);
-
-  return {
-    limit,
-    offset,
-  };
-}
-
-function rejectTooLargeOffset(res, offset) {
-  if (offset <= maxOffset) return false;
-  res.status(400).json({
-    error: 'Invalid Query',
-    message: `Offset maksimal adalah ${maxOffset}`,
-  });
-  return true;
-}
 
 router.get('/autocomplete/:kata', async (req, res, next) => {
   try {
@@ -39,7 +20,7 @@ router.get('/autocomplete/:kata', async (req, res, next) => {
 
 router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
   try {
-    const { limit, offset } = parsePagination(req.query);
+    const { limit, offset } = parsePagination(req.query, { defaultLimit: 100, maxLimit: 100 });
     if (rejectTooLargeOffset(res, offset)) {
       return;
     }
@@ -67,7 +48,7 @@ router.get('/bidang', async (_req, res, next) => {
 
 router.get('/bidang/:bidang', async (req, res, next) => {
   try {
-    const { limit, offset } = parsePagination(req.query);
+    const { limit, offset } = parsePagination(req.query, { defaultLimit: 100, maxLimit: 100 });
     if (rejectTooLargeOffset(res, offset)) {
       return;
     }
@@ -95,7 +76,7 @@ router.get('/sumber', async (_req, res, next) => {
 
 router.get('/sumber/:sumber', async (req, res, next) => {
   try {
-    const { limit, offset } = parsePagination(req.query);
+    const { limit, offset } = parsePagination(req.query, { defaultLimit: 100, maxLimit: 100 });
     if (rejectTooLargeOffset(res, offset)) {
       return;
     }
