@@ -1,4 +1,4 @@
-import { spawnSync } from 'node:child_process';
+import { build } from 'vite';
 
 function buatTimestampBuild() {
   const now = new Date();
@@ -7,24 +7,15 @@ function buatTimestampBuild() {
   return `${date}.${time}`;
 }
 
-function runVite(args, env) {
-  const result = spawnSync('npx', ['vite', ...args], {
-    stdio: 'inherit',
-    shell: true,
-    env,
-  });
-
-  if (result.status !== 0) {
-    process.exit(result.status || 1);
-  }
-}
-
 const appTimestamp = buatTimestampBuild();
-const env = {
-  ...process.env,
-  APP_TIMESTAMP: appTimestamp,
-};
+process.env.APP_TIMESTAMP = appTimestamp;
 
 console.log(`[build:ssr] APP_TIMESTAMP=${appTimestamp}`);
-runVite(['build'], env);
-runVite(['build', '--ssr', 'src/entry-server.jsx', '--outDir', 'dist/server'], env);
+
+await build();
+await build({
+  build: {
+    ssr: 'src/entry-server.jsx',
+    outDir: 'dist/server',
+  },
+});
