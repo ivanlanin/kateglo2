@@ -211,7 +211,7 @@ describe('Kamus', () => {
     expect(screen.getByRole('heading', { name: 'Asal Bahasa Arab' })).toBeInTheDocument();
   });
 
-  it('kategori bentuk dengan kode unsur terikat memakai judul Bentuk Terikat', () => {
+  it('kategori bentuk dengan kode unsur terikat memakai judul Bentuk', () => {
     mockParams = { kategori: 'bentuk', kode: 'prefiks' };
 
     mockUseQuery.mockImplementation((options) => {
@@ -233,11 +233,11 @@ describe('Kamus', () => {
 
     render(<Kamus />);
 
-    expect(screen.getByRole('heading', { name: 'Bentuk Terikat Prefiks' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Bentuk Prefiks' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'meng-' })).toBeInTheDocument();
   });
 
-  it('kategori bentuk dengan kode non-unsur-terikat memakai judul Bentuk Bebas', () => {
+  it('kategori bentuk dengan kode non-unsur-terikat memakai judul Bentuk', () => {
     mockParams = { kategori: 'bentuk', kode: 'dasar' };
 
     mockUseQuery.mockImplementation((options) => {
@@ -259,7 +259,7 @@ describe('Kamus', () => {
 
     render(<Kamus />);
 
-    expect(screen.getByRole('heading', { name: 'Bentuk Bebas Dasar' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Bentuk Dasar' })).toBeInTheDocument();
   });
 
   it('kategori kelas_kata tetap dipetakan ke judul Kelas Kata', () => {
