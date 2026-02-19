@@ -54,6 +54,7 @@ function LabelAdmin() {
   const idEdit = Number.parseInt(idParam || '', 10);
   const idDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
   const idEditTerbuka = useRef(null);
+  const sedangMenutupDariPath = useRef(false);
 
   const { data: resp, isLoading, isError } = useDaftarLabelAdmin({ limit, offset, q });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailLabelAdmin(idDariPath);
@@ -74,6 +75,7 @@ function LabelAdmin() {
   }, [idParam, idDariPath, navigate]);
 
   useEffect(() => {
+    if (sedangMenutupDariPath.current) return;
     if (!idDariPath || isDetailLoading || isDetailError) return;
     const detail = detailResp?.data;
     if (!detail?.id) return;
@@ -81,6 +83,12 @@ function LabelAdmin() {
     panel.bukaUntukSunting(detail);
     idEditTerbuka.current = detail.id;
   }, [detailResp, idDariPath, isDetailError, isDetailLoading, panel]);
+
+  useEffect(() => {
+    if (idDariPath) return;
+    sedangMenutupDariPath.current = false;
+    idEditTerbuka.current = null;
+  }, [idDariPath]);
 
   useEffect(() => {
     if (!idDariPath || isDetailLoading || !isDetailError) return;
@@ -91,14 +99,14 @@ function LabelAdmin() {
   const tutupPanel = () => {
     panel.tutup();
     if (idDariPath) {
-      idEditTerbuka.current = null;
+      sedangMenutupDariPath.current = true;
       navigate('/redaksi/label', { replace: true });
     }
   };
 
   const bukaTambah = () => {
     if (idDariPath) {
-      idEditTerbuka.current = null;
+      sedangMenutupDariPath.current = true;
       navigate('/redaksi/label', { replace: true });
     }
     panel.bukaUntukTambah();

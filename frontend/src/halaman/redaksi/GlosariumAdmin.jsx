@@ -60,6 +60,7 @@ function GlosariumAdmin() {
   const idEdit = Number.parseInt(idParam || '', 10);
   const idDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
   const idEditTerbuka = useRef(null);
+  const sedangMenutupDariPath = useRef(false);
 
   const { data: resp, isLoading, isError } = useDaftarGlosariumAdmin({ limit, offset, q });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailGlosariumAdmin(idDariPath);
@@ -80,6 +81,7 @@ function GlosariumAdmin() {
   }, [idParam, idDariPath, navigate]);
 
   useEffect(() => {
+    if (sedangMenutupDariPath.current) return;
     if (!idDariPath || isDetailLoading || isDetailError) return;
     const detail = detailResp?.data;
     if (!detail?.id) return;
@@ -87,6 +89,12 @@ function GlosariumAdmin() {
     panel.bukaUntukSunting(detail);
     idEditTerbuka.current = detail.id;
   }, [detailResp, idDariPath, isDetailError, isDetailLoading, panel]);
+
+  useEffect(() => {
+    if (idDariPath) return;
+    sedangMenutupDariPath.current = false;
+    idEditTerbuka.current = null;
+  }, [idDariPath]);
 
   useEffect(() => {
     if (!idDariPath || isDetailLoading || !isDetailError) return;
@@ -97,14 +105,14 @@ function GlosariumAdmin() {
   const tutupPanel = () => {
     panel.tutup();
     if (idDariPath) {
-      idEditTerbuka.current = null;
+      sedangMenutupDariPath.current = true;
       navigate('/redaksi/glosarium', { replace: true });
     }
   };
 
   const bukaTambah = () => {
     if (idDariPath) {
-      idEditTerbuka.current = null;
+      sedangMenutupDariPath.current = true;
       navigate('/redaksi/glosarium', { replace: true });
     }
     panel.bukaUntukTambah();

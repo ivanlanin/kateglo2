@@ -36,6 +36,7 @@ function PenggunaAdmin() {
   const idEdit = Number.parseInt(idParam || '', 10);
   const idDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
   const idEditTerbuka = useRef(null);
+  const sedangMenutupDariPath = useRef(false);
 
   const { data: penggunaResp, isLoading, isError } = useDaftarPengguna({ limit, offset });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailPengguna(idDariPath);
@@ -62,6 +63,7 @@ function PenggunaAdmin() {
   }, [idParam, idDariPath, navigate]);
 
   useEffect(() => {
+    if (sedangMenutupDariPath.current) return;
     if (!idDariPath || isDetailLoading || isDetailError) return;
     const detail = detailResp?.data;
     if (!detail?.id) return;
@@ -69,6 +71,12 @@ function PenggunaAdmin() {
     panel.bukaUntukSunting(mapPenggunaUntukPanel(detail));
     idEditTerbuka.current = detail.id;
   }, [detailResp, idDariPath, isDetailError, isDetailLoading, mapPenggunaUntukPanel, panel]);
+
+  useEffect(() => {
+    if (idDariPath) return;
+    sedangMenutupDariPath.current = false;
+    idEditTerbuka.current = null;
+  }, [idDariPath]);
 
   useEffect(() => {
     if (!idDariPath || isDetailLoading || !isDetailError) return;
@@ -79,7 +87,7 @@ function PenggunaAdmin() {
   const tutupPanel = () => {
     panel.tutup();
     if (idDariPath) {
-      idEditTerbuka.current = null;
+      sedangMenutupDariPath.current = true;
       navigate('/redaksi/pengguna', { replace: true });
     }
   };
