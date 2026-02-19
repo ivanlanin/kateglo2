@@ -32,8 +32,14 @@ router.get('/', async (req, res, next) => {
   try {
     const { limit, offset } = parsePagination(req.query);
     const q = parseSearchQuery(req.query.q);
+    const aktif = parseTrimmedString(req.query.aktif);
 
-    const { data, total } = await ModelLabel.daftarAdmin({ limit, offset, q });
+    const { data, total } = await ModelLabel.daftarAdmin({
+      limit,
+      offset,
+      q,
+      aktif: ['0', '1'].includes(aktif) ? aktif : '',
+    });
     return res.json({ success: true, data, total });
   } catch (error) {
     return next(error);

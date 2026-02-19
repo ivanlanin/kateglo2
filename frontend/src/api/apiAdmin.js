@@ -5,12 +5,19 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import klien from './klien';
 
-function useDaftarAdmin(path, queryKeyPrefix, { limit = 50, offset = 0, q = '' } = {}) {
+function useDaftarAdmin(path, queryKeyPrefix, { limit = 50, offset = 0, q = '', aktif = '' } = {}) {
+  const params = {
+    limit,
+    offset,
+    q: q || undefined,
+    aktif: aktif || undefined,
+  };
+
   return useQuery({
-    queryKey: [queryKeyPrefix, { limit, offset, q }],
+    queryKey: [queryKeyPrefix, { limit, offset, q, aktif }],
     queryFn: () =>
       klien
-        .get(path, { params: { limit, offset, q: q || undefined } })
+        .get(path, { params })
         .then((r) => r.data),
   });
 }
@@ -50,6 +57,7 @@ export function useDaftarKamusAdmin({
   limit = 50,
   offset = 0,
   q = '',
+  aktif = '',
   jenis = '',
   jenisRujuk = '',
   punyaHomograf = '',
@@ -62,6 +70,7 @@ export function useDaftarKamusAdmin({
   };
 
   if (jenis) params.jenis = jenis;
+  if (aktif) params.aktif = aktif;
   if (jenisRujuk) params.jenis_rujuk = jenisRujuk;
   if (punyaHomograf) params.punya_homograf = punyaHomograf;
   if (punyaHomonim) params.punya_homonim = punyaHomonim;
@@ -71,6 +80,7 @@ export function useDaftarKamusAdmin({
       limit,
       offset,
       q,
+      aktif,
       jenis,
       jenisRujuk,
       punyaHomograf,
@@ -91,8 +101,8 @@ export function useDetailKamusAdmin(id) {
   });
 }
 
-export function useDaftarKomentarAdmin({ limit = 50, offset = 0, q = '' } = {}) {
-  return useDaftarAdmin('/api/redaksi/komentar', 'admin-komentar', { limit, offset, q });
+export function useDaftarKomentarAdmin({ limit = 50, offset = 0, q = '', aktif = '' } = {}) {
+  return useDaftarAdmin('/api/redaksi/komentar', 'admin-komentar', { limit, offset, q, aktif });
 }
 
 export function useDetailKomentarAdmin(id) {
@@ -105,8 +115,8 @@ export function useDetailKomentarAdmin(id) {
 
 // ─── Tesaurus ────────────────────────────────────────────────────────────────
 
-export function useDaftarTesaurusAdmin({ limit = 50, offset = 0, q = '' } = {}) {
-  return useDaftarAdmin('/api/redaksi/tesaurus', 'admin-tesaurus', { limit, offset, q });
+export function useDaftarTesaurusAdmin({ limit = 50, offset = 0, q = '', aktif = '' } = {}) {
+  return useDaftarAdmin('/api/redaksi/tesaurus', 'admin-tesaurus', { limit, offset, q, aktif });
 }
 
 export function useDetailTesaurusAdmin(id) {
@@ -119,8 +129,8 @@ export function useDetailTesaurusAdmin(id) {
 
 // ─── Glosarium ───────────────────────────────────────────────────────────────
 
-export function useDaftarGlosariumAdmin({ limit = 50, offset = 0, q = '' } = {}) {
-  return useDaftarAdmin('/api/redaksi/glosarium', 'admin-glosarium', { limit, offset, q });
+export function useDaftarGlosariumAdmin({ limit = 50, offset = 0, q = '', aktif = '' } = {}) {
+  return useDaftarAdmin('/api/redaksi/glosarium', 'admin-glosarium', { limit, offset, q, aktif });
 }
 
 export function useDetailGlosariumAdmin(id) {
@@ -133,8 +143,8 @@ export function useDetailGlosariumAdmin(id) {
 
 // ─── Label ───────────────────────────────────────────────────────────────────
 
-export function useDaftarLabelAdmin({ limit = 50, offset = 0, q = '' } = {}) {
-  return useDaftarAdmin('/api/redaksi/label', 'admin-label', { limit, offset, q });
+export function useDaftarLabelAdmin({ limit = 50, offset = 0, q = '', aktif = '' } = {}) {
+  return useDaftarAdmin('/api/redaksi/label', 'admin-label', { limit, offset, q, aktif });
 }
 
 export function useDetailLabelAdmin(id) {
@@ -158,12 +168,12 @@ export function useKategoriLabelRedaksi(kategori = []) {
 
 // ─── Pengguna ────────────────────────────────────────────────────────────────
 
-export function useDaftarPengguna({ limit = 50, offset = 0 } = {}) {
+export function useDaftarPengguna({ limit = 50, offset = 0, q = '', aktif = '' } = {}) {
   return useQuery({
-    queryKey: ['admin-pengguna', { limit, offset }],
+    queryKey: ['admin-pengguna', { limit, offset, q, aktif }],
     queryFn: () =>
       klien
-        .get('/api/redaksi/pengguna', { params: { limit, offset } })
+        .get('/api/redaksi/pengguna', { params: { limit, offset, q: q || undefined, aktif: aktif || undefined } })
         .then((r) => r.data),
   });
 }

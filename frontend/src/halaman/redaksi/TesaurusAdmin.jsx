@@ -7,9 +7,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarTesaurusAdmin, useDetailTesaurusAdmin, useSimpanTesaurus, useHapusTesaurus } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
-  KotakCariAdmin,
+  BarisFilterCariAdmin,
   TombolAksiAdmin,
   BadgeStatus,
+  opsiFilterStatusAktif,
   TabelAdmin,
   getApiErrorMessage,
   potongTeks,
@@ -64,8 +65,10 @@ function TesaurusAdmin() {
   const idDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
+  const [filterAktifDraft, setFilterAktifDraft] = useState('');
+  const [filterAktif, setFilterAktif] = useState('');
 
-  const { data: resp, isLoading, isError } = useDaftarTesaurusAdmin({ limit, offset, q });
+  const { data: resp, isLoading, isError } = useDaftarTesaurusAdmin({ limit, offset, q, aktif: filterAktif });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailTesaurusAdmin(idDariPath);
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
@@ -152,14 +155,28 @@ function TesaurusAdmin() {
     });
   };
 
+  const handleCari = () => {
+    setFilterAktif(filterAktifDraft);
+    kirimCari(cari);
+  };
+
   return (
     <TataLetakAdmin judul="Tesaurus" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
-      <KotakCariAdmin
+      <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
-        onCari={kirimCari}
+        onCari={handleCari}
         onHapus={hapusCari}
         placeholder="Cari tesaurus …"
+        filters={[
+          {
+            key: 'aktif',
+            value: filterAktifDraft,
+            onChange: setFilterAktifDraft,
+            options: opsiFilterStatusAktif,
+            ariaLabel: 'Filter status tesaurus',
+          },
+        ]}
       />
 
       <TabelAdmin

@@ -77,11 +77,35 @@ class ModelPengguna {
    * @param {{ limit?: number, offset?: number }} options
    * @returns {Promise<{ data: Array, total: number }>}
    */
-  static async daftarPengguna({ limit = 50, offset = 0 } = {}) {
+  static async daftarPengguna({ limit = 50, offset = 0, q = '', aktif = '' } = {}) {
     const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
     const safeOffset = Math.max(Number(offset) || 0, 0);
 
-    const countResult = await db.query('SELECT COUNT(*) AS total FROM pengguna');
+    const params = [];
+    const conditions = [];
+    let idx = 1;
+
+    if (q) {
+      conditions.push(`(p.nama ILIKE $${idx} OR p.surel ILIKE $${idx} OR COALESCE(r.nama, '') ILIKE $${idx} OR COALESCE(r.kode, '') ILIKE $${idx})`);
+      params.push(`%${q}%`);
+      idx++;
+    }
+
+    if (aktif === '1') {
+      conditions.push('p.aktif = TRUE');
+    } else if (aktif === '0') {
+      conditions.push('p.aktif = FALSE');
+    }
+
+    const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    const countResult = await db.query(
+      `SELECT COUNT(*) AS total
+       FROM pengguna p
+       JOIN peran r ON r.id = p.peran_id
+       ${where}`,
+      params
+    );
     const total = parseCount(countResult.rows[0]?.total);
 
     const dataResult = await db.query(
@@ -90,9 +114,10 @@ class ModelPengguna {
               r.kode AS peran_kode, r.nama AS peran_nama
        FROM pengguna p
        JOIN peran r ON r.id = p.peran_id
+       ${where}
        ORDER BY p.created_at DESC
-       LIMIT $1 OFFSET $2`,
-      [cappedLimit, safeOffset]
+       LIMIT $${idx} OFFSET $${idx + 1}`,
+      [...params, cappedLimit, safeOffset]
     );
 
     return { data: dataResult.rows, total };

@@ -7,9 +7,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarKomentarAdmin, useDetailKomentarAdmin, useSimpanKomentarAdmin } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
-  KotakCariAdmin,
+  BarisFilterCariAdmin,
   TabelAdmin,
   BadgeStatus,
+  opsiFilterStatusAktif,
   getApiErrorMessage,
   usePencarianAdmin,
   potongTeks,
@@ -59,7 +60,9 @@ function KomentarAdmin() {
   const idDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
-  const { data: resp, isLoading, isError } = useDaftarKomentarAdmin({ limit, offset, q });
+  const [filterAktifDraft, setFilterAktifDraft] = useState('');
+  const [filterAktif, setFilterAktif] = useState('');
+  const { data: resp, isLoading, isError } = useDaftarKomentarAdmin({ limit, offset, q, aktif: filterAktif });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailKomentarAdmin(idDariPath);
   const simpan = useSimpanKomentarAdmin();
   const panel = useFormPanel(nilaiAwal);
@@ -137,14 +140,28 @@ function KomentarAdmin() {
     });
   };
 
+  const handleCari = () => {
+    setFilterAktif(filterAktifDraft);
+    kirimCari(cari);
+  };
+
   return (
     <TataLetakAdmin judul="Komentar">
-      <KotakCariAdmin
+      <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
-        onCari={kirimCari}
+        onCari={handleCari}
         onHapus={hapusCari}
         placeholder="Cari indeks, komentar, atau pengguna …"
+        filters={[
+          {
+            key: 'aktif',
+            value: filterAktifDraft,
+            onChange: setFilterAktifDraft,
+            options: opsiFilterStatusAktif,
+            ariaLabel: 'Filter status komentar',
+          },
+        ]}
       />
       <TabelAdmin
         kolom={kolom}

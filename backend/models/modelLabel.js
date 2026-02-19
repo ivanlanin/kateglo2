@@ -369,7 +369,7 @@ class ModelLabel {
    * @param {{ limit?: number, offset?: number, q?: string }} options
    * @returns {Promise<{data: Array, total: number}>}
    */
-  static async daftarAdmin({ limit = 50, offset = 0, q = '' } = {}) {
+  static async daftarAdmin({ limit = 50, offset = 0, q = '', aktif = '' } = {}) {
     const conditions = [];
     const params = [];
     let idx = 1;
@@ -383,6 +383,12 @@ class ModelLabel {
       )`);
       params.push(`%${q}%`);
       idx++;
+    }
+
+    if (aktif === '1') {
+      conditions.push('aktif = TRUE');
+    } else if (aktif === '0') {
+      conditions.push('aktif = FALSE');
     }
 
     const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';

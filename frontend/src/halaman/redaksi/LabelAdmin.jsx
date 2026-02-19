@@ -7,9 +7,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarLabelAdmin, useDetailLabelAdmin, useSimpanLabel, useHapusLabel } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
-  KotakCariAdmin,
+  BarisFilterCariAdmin,
   TombolAksiAdmin,
   BadgeStatus,
+  opsiFilterStatusAktif,
   TabelAdmin,
   getApiErrorMessage,
   potongTeks,
@@ -55,8 +56,10 @@ function LabelAdmin() {
   const idDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
+  const [filterAktifDraft, setFilterAktifDraft] = useState('');
+  const [filterAktif, setFilterAktif] = useState('');
 
-  const { data: resp, isLoading, isError } = useDaftarLabelAdmin({ limit, offset, q });
+  const { data: resp, isLoading, isError } = useDaftarLabelAdmin({ limit, offset, q, aktif: filterAktif });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailLabelAdmin(idDariPath);
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
@@ -157,14 +160,28 @@ function LabelAdmin() {
     });
   };
 
+  const handleCari = () => {
+    setFilterAktif(filterAktifDraft);
+    kirimCari(cari);
+  };
+
   return (
     <TataLetakAdmin judul="Label" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
-      <KotakCariAdmin
+      <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
-        onCari={kirimCari}
+        onCari={handleCari}
         onHapus={hapusCari}
         placeholder="Cari label …"
+        filters={[
+          {
+            key: 'aktif',
+            value: filterAktifDraft,
+            onChange: setFilterAktifDraft,
+            options: opsiFilterStatusAktif,
+            ariaLabel: 'Filter status label',
+          },
+        ]}
       />
 
       <TabelAdmin

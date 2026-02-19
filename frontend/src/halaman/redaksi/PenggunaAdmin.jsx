@@ -6,7 +6,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarPengguna, useDetailPengguna, useDaftarPeran, useSimpanPengguna } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
-import { TabelAdmin, BadgeStatus, getApiErrorMessage } from '../../komponen/redaksi/KomponenAdmin';
+import {
+  BarisFilterCariAdmin,
+  TabelAdmin,
+  BadgeStatus,
+  getApiErrorMessage,
+  opsiFilterStatusAktif,
+  usePencarianAdmin,
+} from '../../komponen/redaksi/KomponenAdmin';
 import PanelGeser from '../../komponen/redaksi/PanelGeser';
 import {
   useFormPanel,
@@ -31,14 +38,20 @@ function formatTanggal(dateStr) {
 function PenggunaAdmin() {
   const navigate = useNavigate();
   const { id: idParam } = useParams();
-  const [offset, setOffset] = useState(0);
-  const limit = 20;
+  const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit } = usePencarianAdmin(20);
+  const [filterAktifDraft, setFilterAktifDraft] = useState('');
+  const [filterAktif, setFilterAktif] = useState('');
   const idEdit = Number.parseInt(idParam || '', 10);
   const idDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
 
-  const { data: penggunaResp, isLoading, isError } = useDaftarPengguna({ limit, offset });
+  const { data: penggunaResp, isLoading, isError } = useDaftarPengguna({
+    limit,
+    offset,
+    q,
+    aktif: filterAktif,
+  });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailPengguna(idDariPath);
   const { data: peranResp } = useDaftarPeran();
   const simpanPengguna = useSimpanPengguna();
@@ -110,6 +123,11 @@ function PenggunaAdmin() {
     navigate(`/redaksi/pengguna/${item.id}`);
   };
 
+  const handleCari = () => {
+    setFilterAktif(filterAktifDraft);
+    kirimCari(cari);
+  };
+
   const opsiPeran = [
     { value: '', label: '— Pilih peran —' },
     ...daftarPeran.map((r) => ({ value: r.id, label: r.nama })),
@@ -157,6 +175,23 @@ function PenggunaAdmin() {
 
   return (
     <TataLetakAdmin judul="Pengguna">
+      <BarisFilterCariAdmin
+        nilai={cari}
+        onChange={setCari}
+        onCari={handleCari}
+        onHapus={hapusCari}
+        placeholder="Cari pengguna, surel, atau peran …"
+        filters={[
+          {
+            key: 'aktif',
+            value: filterAktifDraft,
+            onChange: setFilterAktifDraft,
+            options: opsiFilterStatusAktif,
+            ariaLabel: 'Filter status pengguna',
+          },
+        ]}
+      />
+
       <TabelAdmin
         kolom={kolom}
         data={daftarPengguna}

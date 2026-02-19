@@ -43,6 +43,7 @@ class ModelGlosarium {
     bidang = '',
     sumber = '',
     bahasa = '',
+    aktif = '',
     limit = 20,
     offset = 0,
     aktifSaja = false,
@@ -56,6 +57,12 @@ class ModelGlosarium {
 
     if (aktifSaja) {
       conditions.push('g.aktif = TRUE');
+    }
+
+    if (aktif === '1') {
+      conditions.push('g.aktif = TRUE');
+    } else if (aktif === '0') {
+      conditions.push('g.aktif = FALSE');
     }
 
     if (q) {

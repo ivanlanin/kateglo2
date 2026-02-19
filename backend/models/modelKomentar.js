@@ -69,7 +69,7 @@ class ModelKomentar {
     return result.rows[0] || null;
   }
 
-  static async daftarAdmin({ limit = 50, offset = 0, q = '' } = {}) {
+  static async daftarAdmin({ limit = 50, offset = 0, q = '', aktif = '' } = {}) {
     const cappedLimit = Math.min(parsePositiveInteger(limit, 50), 200);
     const safeOffset = parseNonNegativeInteger(offset, 0);
     const trimmedQ = String(q || '').trim();
@@ -82,6 +82,12 @@ class ModelKomentar {
       where.push(`(k.indeks ILIKE $${idx} OR k.komentar ILIKE $${idx} OR p.nama ILIKE $${idx} OR p.surel ILIKE $${idx})`);
       params.push(`%${trimmedQ}%`);
       idx += 1;
+    }
+
+    if (aktif === '1') {
+      where.push('k.aktif = TRUE');
+    } else if (aktif === '0') {
+      where.push('k.aktif = FALSE');
     }
 
     const whereSql = where.length > 0 ? `WHERE ${where.join(' AND ')}` : '';

@@ -53,7 +53,8 @@ describe('PenggunaAdmin', () => {
     expect(screen.getByRole('heading', { name: 'Pengguna' })).toBeInTheDocument();
     expect(screen.getByText('Budi')).toBeInTheDocument();
     expect(screen.getByText('Sari')).toBeInTheDocument();
-    expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
+    expect(screen.getByLabelText('Filter status pengguna')).toBeInTheDocument();
+    expect(screen.queryByLabelText(/Peran/i)).not.toBeInTheDocument();
   });
 
   it('membuka panel sunting dan simpan pengguna', () => {

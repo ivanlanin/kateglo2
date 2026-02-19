@@ -61,11 +61,11 @@ describe('apiAdmin', () => {
 
     const kamus = useDaftarKamusAdmin({ limit: 10, offset: 5, q: 'anak' });
     await kamus.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus', { params: { limit: 10, offset: 5, q: 'anak' } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus', { params: { limit: 10, offset: 5, q: 'anak', aktif: undefined } });
 
     const kamusKosong = useDaftarKamusAdmin({ limit: 10, offset: 5, q: '' });
     await kamusKosong.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus', { params: { limit: 10, offset: 5, q: undefined } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus', { params: { limit: 10, offset: 5, q: undefined, aktif: undefined } });
 
     const kamusDenganFilter = useDaftarKamusAdmin({
       limit: 15,
@@ -80,6 +80,7 @@ describe('apiAdmin', () => {
         limit: 15,
         offset: 0,
         q: 'kata',
+        aktif: undefined,
         jenis: 'dasar',
         jenis_rujuk: 'lihat',
       },
@@ -87,15 +88,15 @@ describe('apiAdmin', () => {
 
     const tesaurus = useDaftarTesaurusAdmin({});
     await tesaurus.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/tesaurus', { params: { limit: 50, offset: 0, q: undefined } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/tesaurus', { params: { limit: 50, offset: 0, q: undefined, aktif: undefined } });
 
     const glosarium = useDaftarGlosariumAdmin({ q: '' });
     await glosarium.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium', { params: { limit: 50, offset: 0, q: undefined } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium', { params: { limit: 50, offset: 0, q: undefined, aktif: undefined } });
 
     const label = useDaftarLabelAdmin({ q: '' });
     await label.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/label', { params: { limit: 50, offset: 0, q: undefined } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/label', { params: { limit: 50, offset: 0, q: undefined, aktif: undefined } });
 
     const kategoriLabel = useKategoriLabelRedaksi(['ragam', 'kelas-kata']);
     await kategoriLabel.queryFn();
@@ -107,7 +108,7 @@ describe('apiAdmin', () => {
 
     const pengguna = useDaftarPengguna({ limit: 20, offset: 40 });
     await pengguna.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/pengguna', { params: { limit: 20, offset: 40 } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/pengguna', { params: { limit: 20, offset: 40, q: undefined, aktif: undefined } });
 
     const peran = useDaftarPeran();
     await peran.queryFn();
@@ -123,7 +124,7 @@ describe('apiAdmin', () => {
 
     const komentar = useDaftarKomentarAdmin({ limit: 25, offset: 10, q: 'kata' });
     await komentar.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/komentar', { params: { limit: 25, offset: 10, q: 'kata' } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/komentar', { params: { limit: 25, offset: 10, q: 'kata', aktif: undefined } });
   });
 
   it('mengonfigurasi mutation admin pengguna', async () => {
