@@ -3,6 +3,13 @@ import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import App from './App';
 import { AuthProvider } from './context/authContext';
+import {
+  buildDeskripsiDetailKamus,
+  buildMetaBrowseKamus,
+  buildMetaDetailKamus,
+  buildMetaKategoriKamus,
+  buildMetaPencarianKamus,
+} from './utils/kamusMeta';
 
 function escapeHtml(value = '') {
   return String(value)
@@ -26,38 +33,6 @@ function truncate(text = '', maxLen = 155) {
   const lastSpace = cut.lastIndexOf(' ');
   /* c8 ignore next */
   return (lastSpace > maxLen * 0.6 ? cut.substring(0, lastSpace) : cut) + '\u2026';
-}
-
-/**
- * Bangun deskripsi kaya dari data kamus detail.
- * Format: "indeks (lafal): (1) makna pertama; (2) makna kedua..."
- */
-function buildKamusDescription(indeks, data) {
-  const parts = [indeks];
-  /* c8 ignore next */
-  if (data.lafal) parts[0] += ` ${data.lafal}`;
-
-  /* c8 ignore next */
-  const maknaList = data.semuaMakna || [];
-  /* c8 ignore next */
-  if (maknaList.length === 0) return `Lihat detail entri kamus \u201c${indeks}\u201d di Kateglo.`;
-
-  /* c8 ignore next */
-  if (maknaList.length === 1) {
-    const m = maknaList[0];
-    /* c8 ignore next */
-    const kelasPrefix = m.kelas_kata ? `(${m.kelas_kata}) ` : '';
-    return truncate(`${parts[0]}: ${kelasPrefix}${m.makna}`, 155);
-  }
-
-  // Banyak makna — gabungkan dengan nomor
-  const formattedMakna = maknaList.slice(0, 4).map((m, i) => {
-    /* c8 ignore next */
-    const kelasPrefix = m.kelas_kata ? `(${m.kelas_kata}) ` : '';
-    return `(${i + 1}) ${kelasPrefix}${m.makna}`;
-  });
-  const joined = formattedMakna.join('; ');
-  return truncate(`${parts[0]}: ${joined}`, 155);
 }
 
 /**
@@ -91,7 +66,7 @@ function buildGlosariumCariDescription(kata, data) {
 
 function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', prefetchedData = null) {
   const defaultMeta = {
-    title: 'Kateglo',
+    title: 'Kateglo \u2014 Kamus, Tesaurus, dan Glosarium Bahasa Indonesia',
     description: 'Kamus, Tesaurus, dan Glosarium Bahasa Indonesia',
   };
 
@@ -101,50 +76,55 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
   // /kamus/detail/:indeks
   if (decodedPath.startsWith('/kamus/detail/')) {
     const indeks = decodedPath.replace('/kamus/detail/', '').trim();
-    if (!indeks) return { title: 'Kamus \u2014 Kateglo', description: 'Telusuri entri kamus bahasa Indonesia di Kateglo.' };
-
-    let description = `Lihat detail entri kamus \u201c${indeks}\u201d di Kateglo.`;
-    /* c8 ignore next */
-    if (prefetchedData?.type === 'kamus-detail' && prefetchedData.semuaMakna?.length) {
-      description = buildKamusDescription(indeks, prefetchedData);
-    }
+    const metaDetail = buildMetaDetailKamus(
+      indeks,
+      prefetchedData?.type === 'kamus-detail' ? prefetchedData : null
+    );
 
     return {
-      title: `${indeks} \u2014 Kamus \u2014 Kateglo`,
-      description,
+      title: `${metaDetail.judul} \u2014 Kateglo`,
+      description: metaDetail.deskripsi,
     };
   }
 
   // /kamus/cari/:kata
   if (decodedPath.startsWith('/kamus/cari/')) {
     const kata = decodedPath.replace('/kamus/cari/', '').trim();
-    if (!kata) return { title: 'Kamus \u2014 Kateglo', description: 'Telusuri entri kamus bahasa Indonesia di Kateglo.' };
+    if (!kata) {
+      const metaBrowse = buildMetaBrowseKamus();
+      return { title: `${metaBrowse.judul} \u2014 Kateglo`, description: metaBrowse.deskripsi };
+    }
 
-    let description = `Hasil pencarian kamus untuk \u201c${kata}\u201d di Kateglo.`;
+    const metaCari = buildMetaPencarianKamus(kata);
+    let description = metaCari.deskripsi;
     if (prefetchedData?.type === 'kamus-cari' && prefetchedData.semuaMakna?.length) {
       const ringkasan = prefetchedData.semuaMakna[0].makna;
       description = `${kata}: ${truncate(ringkasan, 130)}`;
     }
 
     return {
-      title: `Hasil Pencarian \u201c${kata}\u201d \u2014 Kateglo`,
+      title: `${metaCari.judul} \u2014 Kateglo`,
       description,
     };
   }
 
   // /kamus/:kategori/:kode
   if (/^\/kamus\/[^/]+\/[^/]+/.test(decodedPath)) {
+    const [kategoriPath = '', kodePath = ''] = decodedPath.replace('/kamus/', '').split('/');
+    const metaKategori = buildMetaKategoriKamus({ kategori: kategoriPath, kode: kodePath });
+
     return {
-      title: 'Kamus \u2014 Kateglo',
-      description: 'Telusuri entri kamus bahasa Indonesia berdasarkan kategori di Kateglo.',
+      title: `${metaKategori.judul} \u2014 Kateglo`,
+      description: metaKategori.deskripsi,
     };
   }
 
   // /kamus (root)
   if (decodedPath === '/kamus' || decodedPath === '/kamus/') {
+    const metaBrowse = buildMetaBrowseKamus();
     return {
-      title: 'Kamus \u2014 Kateglo',
-      description: 'Telusuri entri kamus bahasa Indonesia di Kateglo.',
+      title: `${metaBrowse.judul} \u2014 Kateglo`,
+      description: metaBrowse.deskripsi,
     };
   }
 
@@ -307,7 +287,7 @@ export const __private = {
   escapeHtml,
   stripTrailingSlash,
   truncate,
-  buildKamusDescription,
+  buildKamusDescription: buildDeskripsiDetailKamus,
   buildTesaurusDescription,
   buildGlosariumCariDescription,
   buildMetaForPath,

@@ -10,27 +10,16 @@ import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import TeksLema from '../../komponen/publik/TeksLema';
 import { EmptyResultText, PesanTidakDitemukan, QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus } from '../../utils/kamusIndex';
+import {
+  buildMetaBrowseKamus,
+  buildMetaKategoriKamus,
+  buildMetaPencarianKamus,
+  formatAwalKapital,
+  NAMA_KATEGORI_BROWSE_KAMUS,
+  NAMA_KATEGORI_KAMUS,
+  tentukanSlugLabel,
+} from '../../utils/kamusMeta';
 import { updateSearchParamsWithOffset } from '../../utils/searchParams';
-
-const NAMA_KATEGORI = {
-  abjad: 'Abjad',
-  bentuk: 'Bentuk',
-  unsur: 'Bentuk',
-  unsur_terikat: 'Bentuk',
-  kelas: 'Kelas Kata',
-  kelas_kata: 'Kelas Kata',
-  ragam: 'Ragam',
-  ekspresi: 'Ekspresi',
-  bahasa: 'Asal Bahasa',
-  bidang: 'Bidang',
-  jenis: 'Jenis',
-};
-
-const NAMA_KATEGORI_BROWSE = {
-  bentuk: 'Bentuk Bebas',
-  unsur: 'Bentuk Terikat',
-  unsur_terikat: 'Bentuk Terikat',
-};
 
 const BARIS_KATEGORI = [
   ['abjad', 'kelas_kata'],
@@ -40,52 +29,6 @@ const BARIS_KATEGORI = [
 ];
 
 const limit = 100;
-const KATEGORI_SLUG_NAMA = new Set(['kelas_kata', 'kelas-kata', 'kelas', 'ragam', 'bahasa', 'bidang']);
-
-function formatAwalKapital(teks = '') {
-  return String(teks)
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((kata) => kata.charAt(0).toUpperCase() + kata.slice(1))
-    .join(' ');
-}
-
-function normalisasiSlugNama(teks = '') {
-  return String(teks || '')
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
-
-function tentukanSlugLabel(kategoriLabel, label = {}) {
-  const kategoriNormal = String(kategoriLabel || '').trim().toLowerCase();
-  const kandidatNama = String(label?.nama || '').trim();
-  const kandidatKode = String(label?.kode || '').trim();
-
-  if (KATEGORI_SLUG_NAMA.has(kategoriNormal) && kandidatNama) {
-    return normalisasiSlugNama(kandidatNama);
-  }
-
-  return normalisasiSlugNama(kandidatKode || kandidatNama);
-}
-
-function tentukanNamaKategoriDariPath(kategori = '', kode = '') {
-  const kategoriPath = String(kategori || '').trim().toLowerCase();
-  const kodePath = String(kode || '').trim().toLowerCase();
-
-  if (kategoriPath === 'kelas' || kategoriPath === 'kelas_kata' || kategoriPath === 'kelas-kata') {
-    return NAMA_KATEGORI.kelas;
-  }
-
-  if (kategoriPath === 'bentuk') {
-    const kodeBentukTerikat = ['terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik'];
-    return kodeBentukTerikat.includes(kodePath) ? NAMA_KATEGORI.unsur_terikat : NAMA_KATEGORI.bentuk;
-  }
-
-  return NAMA_KATEGORI[kategoriPath] || kategori;
-}
 
 function Kamus() {
   const { kata, kategori, kode, kelas } = useParams();
@@ -140,21 +83,21 @@ function Kamus() {
     updateSearchParamsWithOffset(setSearchParams, {}, newOffset);
   };
 
-  const namaKategori = tentukanNamaKategoriDariPath(kategoriAktif, kodeAktif);
-  const namaLabelRaw = labelKategori?.nama || (kodeAktif ? decodeURIComponent(kodeAktif) : '');
-  const namaLabel = namaLabelRaw
-    ? namaLabelRaw.charAt(0).toUpperCase() + namaLabelRaw.slice(1)
-    : '';
-  const judulKategori = modeKategori ? `${namaKategori} ${namaLabel}` : '';
+  const metaHalaman = modeKategori
+    ? buildMetaKategoriKamus({
+      kategori: kategoriAktif,
+      kode: kodeAktif,
+      labelNama: labelKategori?.nama,
+    })
+    : modePencarian
+      ? buildMetaPencarianKamus(kata)
+      : buildMetaBrowseKamus();
 
-  const judulHalaman = modePencarian
-    ? `Hasil Pencarian “${decodeURIComponent(kata)}”`
-    : modeKategori
-      ? judulKategori
-      : 'Kamus';
+  const judulHalaman = metaHalaman.judul;
+  const deskripsiHalaman = metaHalaman.deskripsi;
 
   return (
-    <HalamanDasar judul={judulHalaman}>
+    <HalamanDasar judul={judulHalaman} deskripsi={deskripsiHalaman}>
 
       {/* Pesan loading / error */}
       <QueryFeedback
@@ -182,7 +125,7 @@ function Kamus() {
               >
                 {kategoriTerisi.map(({ kat, labels }) => (
                   <div key={kat} className="beranda-feature-card text-center">
-                    <h3 className="beranda-info-title">{NAMA_KATEGORI_BROWSE[kat] || NAMA_KATEGORI[kat]}</h3>
+                    <h3 className="beranda-info-title">{NAMA_KATEGORI_BROWSE_KAMUS[kat] || NAMA_KATEGORI_KAMUS[kat]}</h3>
                     <div className="flex flex-wrap justify-center gap-2">
                       {labels.map((l) => {
                         const pathKategori = kat === 'unsur_terikat'
