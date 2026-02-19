@@ -6,6 +6,16 @@ const db = require('../db');
 const autocomplete = require('../db/autocomplete');
 const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
 
+function normalizeRelasiList(teks) {
+  if (!teks) return null;
+  const daftar = String(teks)
+    .split(/[;,]/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+  if (daftar.length === 0) return null;
+  return daftar.join('; ');
+}
+
 class ModelTesaurus {
   static async autocomplete(query, limit = 8) {
     return autocomplete('tesaurus', 'lema', query, { limit, extraWhere: 'aktif = TRUE' });
@@ -86,7 +96,7 @@ class ModelTesaurus {
    */
   static async ambilDetail(kata) {
     const result = await db.query(
-      `SELECT id, lema, sinonim, antonim, turunan, gabungan, berkaitan
+      `SELECT id, lema, sinonim, antonim
        FROM tesaurus
        WHERE LOWER(lema) = LOWER($1)
          AND aktif = TRUE
@@ -121,7 +131,7 @@ class ModelTesaurus {
     const total = parseCount(countResult.rows[0]?.total);
 
     const dataResult = await db.query(
-      `SELECT id, lema, sinonim, antonim, turunan, gabungan, berkaitan, aktif
+      `SELECT id, lema, sinonim, antonim, aktif
        FROM tesaurus ${where}
        ORDER BY lema ASC
        LIMIT $${idx} OFFSET $${idx + 1}`,
@@ -147,7 +157,7 @@ class ModelTesaurus {
    */
   static async ambilDenganId(id) {
     const result = await db.query(
-      'SELECT id, lema, sinonim, antonim, turunan, gabungan, berkaitan, aktif FROM tesaurus WHERE id = $1',
+      'SELECT id, lema, sinonim, antonim, aktif FROM tesaurus WHERE id = $1',
       [id]
     );
     return result.rows[0] || null;
@@ -158,23 +168,24 @@ class ModelTesaurus {
    * @param {Object} data
    * @returns {Promise<Object>}
    */
-  static async simpan({ id, lema, sinonim, antonim, turunan, gabungan, berkaitan, aktif }) {
+  static async simpan({ id, lema, sinonim, antonim, aktif }) {
     const nilaiAktif = normalizeBoolean(aktif, true);
+    const sinonimNorm = normalizeRelasiList(sinonim);
+    const antonimNorm = normalizeRelasiList(antonim);
+
     if (id) {
       const result = await db.query(
         `UPDATE tesaurus SET lema = $1, sinonim = $2, antonim = $3,
-                turunan = $4, gabungan = $5, berkaitan = $6, aktif = $7
-         WHERE id = $8 RETURNING *`,
-        [lema, sinonim || null, antonim || null, turunan || null,
-         gabungan || null, berkaitan || null, nilaiAktif, id]
+                aktif = $4
+         WHERE id = $5 RETURNING *`,
+        [lema, sinonimNorm, antonimNorm, nilaiAktif, id]
       );
       return result.rows[0];
     }
     const result = await db.query(
-      `INSERT INTO tesaurus (lema, sinonim, antonim, turunan, gabungan, berkaitan, aktif)
-       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-      [lema, sinonim || null, antonim || null, turunan || null,
-       gabungan || null, berkaitan || null, nilaiAktif]
+      `INSERT INTO tesaurus (lema, sinonim, antonim, aktif)
+       VALUES ($1, $2, $3, $4) RETURNING *`,
+      [lema, sinonimNorm, antonimNorm, nilaiAktif]
     );
     return result.rows[0];
   }
@@ -193,4 +204,5 @@ class ModelTesaurus {
 module.exports = ModelTesaurus;
 module.exports.__private = {
   normalizeBoolean,
+  normalizeRelasiList,
 };

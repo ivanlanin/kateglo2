@@ -26,7 +26,7 @@ import {
   PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
 
-const nilaiAwal = { lema: '', sinonim: '', antonim: '', turunan: '', gabungan: '', berkaitan: '', aktif: 1 };
+const nilaiAwal = { lema: '', sinonim: '', antonim: '', aktif: 1 };
 
 const kolom = [
   {
@@ -178,11 +178,8 @@ function TesaurusAdmin() {
       <PanelGeser buka={panel.buka} onTutup={tutupPanel} judul={panel.modeTambah ? 'Tambah Tesaurus' : 'Sunting Tesaurus'}>
         <PesanForm error={pesan.error} sukses={pesan.sukses} />
         <InputField label="Lema" name="lema" value={panel.data.lema} onChange={panel.ubahField} required />
-        <TextareaField label="Sinonim" name="sinonim" value={panel.data.sinonim} onChange={panel.ubahField} placeholder="Pisahkan dengan koma" />
-        <TextareaField label="Antonim" name="antonim" value={panel.data.antonim} onChange={panel.ubahField} placeholder="Pisahkan dengan koma" />
-        <TextareaField label="Turunan" name="turunan" value={panel.data.turunan} onChange={panel.ubahField} placeholder="Pisahkan dengan koma" />
-        <TextareaField label="Gabungan" name="gabungan" value={panel.data.gabungan} onChange={panel.ubahField} placeholder="Pisahkan dengan koma" />
-        <TextareaField label="Berkaitan" name="berkaitan" value={panel.data.berkaitan} onChange={panel.ubahField} placeholder="Pisahkan dengan koma" />
+        <TextareaField label="Sinonim" name="sinonim" value={panel.data.sinonim} onChange={panel.ubahField} placeholder="Pisahkan dengan titik koma (;)" />
+        <TextareaField label="Antonim" name="antonim" value={panel.data.antonim} onChange={panel.ubahField} placeholder="Pisahkan dengan titik koma (;)" />
         <ToggleAktif value={panel.data.aktif} onChange={panel.ubahField} />
         <FormFooter
           onSimpan={handleSimpan}

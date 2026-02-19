@@ -6,7 +6,7 @@ const ModelTesaurus = require('../models/modelTesaurus');
 
 function parseRelasi(teks) {
   if (!teks) return [];
-  return teks.split(';').map((s) => s.trim()).filter(Boolean);
+  return teks.split(/[;,]/).map((s) => s.trim()).filter(Boolean);
 }
 
 async function cariTesaurus(query, { limit = 100, offset = 0 } = {}) {
@@ -26,9 +26,6 @@ async function ambilDetailTesaurus(kata) {
     lema: entry.lema,
     sinonim: parseRelasi(entry.sinonim),
     antonim: parseRelasi(entry.antonim),
-    turunan: parseRelasi(entry.turunan),
-    gabungan: parseRelasi(entry.gabungan),
-    berkaitan: parseRelasi(entry.berkaitan),
   };
 }
 

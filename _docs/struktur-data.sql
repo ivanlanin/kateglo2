@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-19T10:32:25.993Z
+-- Generated: 2026-02-19T11:52:38.792Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -313,9 +313,6 @@ create table tesaurus (
   lema text not null,
   sinonim text,
   antonim text,
-  turunan text,
-  gabungan text,
-  berkaitan text,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
   aktif boolean not null default true,
