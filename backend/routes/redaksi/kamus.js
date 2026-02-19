@@ -43,6 +43,8 @@ router.get('/', async (req, res, next) => {
     const q = parseSearchQuery(req.query.q);
     const jenis = parseTrimmedString(req.query.jenis);
     const jenisRujuk = parseTrimmedString(req.query.jenis_rujuk);
+    const punyaHomograf = parseTrimmedString(req.query.punya_homograf);
+    const punyaHomonim = parseTrimmedString(req.query.punya_homonim);
 
     const { data, total } = await ModelEntri.daftarAdmin({
       limit,
@@ -50,6 +52,8 @@ router.get('/', async (req, res, next) => {
       q,
       jenis,
       jenis_rujuk: jenisRujuk,
+      punya_homograf: ['0', '1'].includes(punyaHomograf) ? punyaHomograf : '',
+      punya_homonim: ['0', '1'].includes(punyaHomonim) ? punyaHomonim : '',
     });
     return res.json({ success: true, data, total });
   } catch (error) {

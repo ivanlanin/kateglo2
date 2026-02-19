@@ -277,6 +277,8 @@ describe('routes/redaksi', () => {
         q: 'kata',
         jenis: 'dasar',
         jenis_rujuk: 'lihat',
+        punya_homograf: '',
+        punya_homonim: '',
       });
     });
 
@@ -287,6 +289,23 @@ describe('routes/redaksi', () => {
 
       expect(response.status).toBe(500);
       expect(response.body.error).toBe('daftar lema gagal');
+    });
+
+    it('GET /api/redaksi/kamus meneruskan filter punya_homograf dan punya_homonim', async () => {
+      ModelLema.daftarAdmin.mockResolvedValue({ data: [], total: 0 });
+
+      const response = await callAsAdmin('get', '/api/redaksi/kamus?punya_homograf=1&punya_homonim=0');
+
+      expect(response.status).toBe(200);
+      expect(ModelLema.daftarAdmin).toHaveBeenCalledWith({
+        limit: 50,
+        offset: 0,
+        q: '',
+        jenis: '',
+        jenis_rujuk: '',
+        punya_homograf: '1',
+        punya_homonim: '0',
+      });
     });
 
     it('GET /api/redaksi/kamus/:id mengembalikan 404 jika data null', async () => {

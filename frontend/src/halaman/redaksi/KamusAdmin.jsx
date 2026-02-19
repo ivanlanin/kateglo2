@@ -412,6 +412,8 @@ function KamusAdmin() {
     usePencarianAdmin(50);
   const [filterJenis, setFilterJenis] = useState('');
   const [filterJenisRujuk, setFilterJenisRujuk] = useState('');
+  const [filterPunyaHomograf, setFilterPunyaHomograf] = useState('');
+  const [filterPunyaHomonim, setFilterPunyaHomonim] = useState('');
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
   const idEdit = Number.parseInt(idParam || '', 10);
   const entriIdDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
@@ -424,6 +426,8 @@ function KamusAdmin() {
     q,
     jenis: filterJenis,
     jenisRujuk: filterJenisRujuk,
+    punyaHomograf: filterPunyaHomograf,
+    punyaHomonim: filterPunyaHomonim,
   });
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
@@ -466,6 +470,12 @@ function KamusAdmin() {
     return [{ value: '', label: 'Semua jenis rujuk' }, ...pilihanTanpaKosong];
   }, [opsiKategori.jenisRujuk]);
 
+  const opsiYaTidak = useMemo(() => ([
+    { value: '', label: 'Semua' },
+    { value: '1', label: 'Ya' },
+    { value: '0', label: 'Tidak' },
+  ]), []);
+
   const handleUbahFilterJenis = (_name, value) => {
     setFilterJenis(value);
     setOffset(0);
@@ -473,6 +483,16 @@ function KamusAdmin() {
 
   const handleUbahFilterJenisRujuk = (_name, value) => {
     setFilterJenisRujuk(value);
+    setOffset(0);
+  };
+
+  const handleUbahFilterPunyaHomograf = (_name, value) => {
+    setFilterPunyaHomograf(value);
+    setOffset(0);
+  };
+
+  const handleUbahFilterPunyaHomonim = (_name, value) => {
+    setFilterPunyaHomonim(value);
     setOffset(0);
   };
 
@@ -570,20 +590,34 @@ function KamusAdmin() {
         placeholder="Cari entri …"
         onTambah={bukaTambah}
       />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 mb-4">
         <SelectField
-          label="Filter Jenis"
+          label="Jenis"
           name="filter_jenis"
           value={filterJenis}
           onChange={handleUbahFilterJenis}
           options={opsiFilterJenis}
         />
         <SelectField
-          label="Filter Jenis Rujuk"
+          label="Jenis Rujuk"
           name="filter_jenis_rujuk"
           value={filterJenisRujuk}
           onChange={handleUbahFilterJenisRujuk}
           options={opsiFilterJenisRujuk}
+        />
+        <SelectField
+          label="Punya Homograf"
+          name="filter_punya_homograf"
+          value={filterPunyaHomograf}
+          onChange={handleUbahFilterPunyaHomograf}
+          options={opsiYaTidak}
+        />
+        <SelectField
+          label="Punya Homonim"
+          name="filter_punya_homonim"
+          value={filterPunyaHomonim}
+          onChange={handleUbahFilterPunyaHomonim}
+          options={opsiYaTidak}
         />
       </div>
       <InfoTotal q={q} total={total} label="entri" />

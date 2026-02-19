@@ -308,7 +308,7 @@ describe('KamusAdmin', () => {
     fireEvent.click(screen.getByText('dasar'));
 
     expect(screen.getAllByRole('option', { name: 'Dasar' }).length).toBeGreaterThan(0);
-    const jenisRujukSelect = screen.getByLabelText('Jenis Rujuk');
+    const jenisRujukSelect = screen.getAllByLabelText('Jenis Rujuk')[0];
     expect(jenisRujukSelect).toBeInTheDocument();
     expect(Array.from(jenisRujukSelect.querySelectorAll('option')).some((opt) => opt.value === '')).toBe(true);
   });
