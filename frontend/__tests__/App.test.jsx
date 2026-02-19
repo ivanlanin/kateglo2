@@ -13,7 +13,7 @@ vi.mock('../src/context/authContext', () => ({
   useAuth: () => mockUseAuth(),
 }));
 
-vi.mock('../src/komponen/publik/TataLetak', () => ({
+vi.mock('../src/komponen/bersama/TataLetak', () => ({
   default: () => <div data-testid="layout">Layout <Outlet /></div>,
 }));
 vi.mock('../src/halaman/publik/Beranda', () => ({ default: () => <div>Hal Beranda</div> }));

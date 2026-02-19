@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/authContext';
-import TataLetak from './komponen/publik/TataLetak';
+import TataLetak from './komponen/bersama/TataLetak';
 import Beranda from './halaman/publik/Beranda';
 import Kamus from './halaman/publik/Kamus';
 import KamusDetail from './halaman/publik/KamusDetail';

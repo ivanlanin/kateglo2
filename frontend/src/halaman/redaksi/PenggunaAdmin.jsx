@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarPengguna, useDetailPengguna, useDaftarPeran, useSimpanPengguna } from '../../api/apiAdmin';
 import { formatLocalDateTime } from '../../utils/formatTanggalLokal';
 import { parsePositiveIntegerParam } from '../../utils/routeParam';
-import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
+import TataLetak from '../../komponen/bersama/TataLetak';
 import {
   BarisFilterCariAdmin,
   TabelAdmin,
@@ -168,7 +168,7 @@ function PenggunaAdmin() {
   ];
 
   return (
-    <TataLetakAdmin judul="Pengguna">
+    <TataLetak mode="admin" judul="Pengguna">
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -214,7 +214,7 @@ function PenggunaAdmin() {
           modeTambah={false}
         />
       </PanelGeser>
-    </TataLetakAdmin>
+    </TataLetak>
   );
 }
 

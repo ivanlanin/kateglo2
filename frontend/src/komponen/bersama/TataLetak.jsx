@@ -1,11 +1,12 @@
 /**
- * @fileoverview Tata letak utama dengan Navbar dan konten
+ * @fileoverview Tata letak bersama untuk publik dan admin
  */
 
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import Navbar from './Navbar';
+import Navbar from '../publik/Navbar';
+import NavbarAdmin from '../redaksi/NavbarAdmin';
 
 export function hitungModeGelapAwal({ hasWindow, tersimpan, prefersDark }) {
   if (!hasWindow) return false;
@@ -24,8 +25,9 @@ export function bacaPreferensiTema(runtimeWindow) {
   };
 }
 
-function TataLetak() {
+function TataLetak({ mode = 'publik', judul, aksiJudul = null, children }) {
   const location = useLocation();
+  const adalahAdmin = mode === 'admin';
   const adalahBeranda = location.pathname === '/';
   const [modalTerbuka, setModalTerbuka] = useState(false);
   const [tabAktif, setTabAktif] = useState('changelog');
@@ -33,8 +35,15 @@ function TataLetak() {
   const [teksChangelog, setTeksChangelog] = useState('');
   const [teksTodo, setTeksTodo] = useState('');
   const [modeGelap, setModeGelap] = useState(() => hitungModeGelapAwal(bacaPreferensiTema(globalThis.window)));
-
   const appTimestamp = __APP_TIMESTAMP__;
+
+  useEffect(() => {
+    if (adalahAdmin) {
+      document.title = judul
+        ? `${judul} — Redaksi Kateglo`
+        : 'Redaksi Kateglo';
+    }
+  }, [adalahAdmin, judul]);
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', modeGelap);
@@ -75,19 +84,37 @@ function TataLetak() {
   return (
     <>
       <div className="kateglo-layout-root">
-        <Navbar />
-        <main className={`kateglo-main-content ${adalahBeranda ? 'kateglo-main-content-beranda' : ''}`}>
-          <Outlet />
-        </main>
+        {adalahAdmin ? <NavbarAdmin /> : <Navbar />}
+
+        {adalahAdmin ? (
+          <main className="halaman-dasar-container flex-1">
+            {judul && (
+              <div className="mb-6 flex items-center justify-between gap-3">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{judul}</h2>
+                {aksiJudul}
+              </div>
+            )}
+            {children}
+          </main>
+        ) : (
+          <main className={`kateglo-main-content ${adalahBeranda ? 'kateglo-main-content-beranda' : ''}`}>
+            <Outlet />
+          </main>
+        )}
+
         <footer className="kateglo-footer">
           <div className="kateglo-footer-content">
-            <button
-              type="button"
-              onClick={bukaModal}
-              className="kateglo-version-button"
-            >
-              Kateglo {appTimestamp}
-            </button>
+            {adalahAdmin ? (
+              <span className="kateglo-version-button">Kateglo {appTimestamp}</span>
+            ) : (
+              <button
+                type="button"
+                onClick={bukaModal}
+                className="kateglo-version-button"
+              >
+                Kateglo {appTimestamp}
+              </button>
+            )}
             <button
               type="button"
               onClick={() => setModeGelap((v) => !v)}
@@ -103,7 +130,7 @@ function TataLetak() {
         </footer>
       </div>
 
-      {modalTerbuka && (
+      {!adalahAdmin && modalTerbuka && (
         <div className="modal-overlay modal-overlay-kateglo" onClick={() => setModalTerbuka(false)}>
           <div className="modal-container-kateglo" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header-kateglo">

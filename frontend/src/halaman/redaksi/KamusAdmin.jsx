@@ -10,7 +10,7 @@ import {
   useSimpanContoh, useHapusContoh,
   useKategoriLabelRedaksi,
 } from '../../api/apiAdmin';
-import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
+import TataLetak from '../../komponen/bersama/TataLetak';
 import { parsePositiveIntegerParam } from '../../utils/routeParam';
 import {
   BarisFilterCariAdmin,
@@ -578,7 +578,7 @@ function KamusAdmin() {
   };
 
   return (
-    <TataLetakAdmin judul="Kamus" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
+    <TataLetak mode="admin" judul="Kamus" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -677,7 +677,7 @@ function KamusAdmin() {
           />
         )}
       </PanelGeser>
-    </TataLetakAdmin>
+    </TataLetak>
   );
 }
 
