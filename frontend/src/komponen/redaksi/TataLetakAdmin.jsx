@@ -15,6 +15,23 @@ const menuAdmin = [
   { path: '/redaksi/pengguna', label: 'Pengguna', adminSaja: true },
 ];
 
+export function hitungModeGelapAwal({ hasWindow, tersimpan, prefersDark }) {
+  if (!hasWindow) return false;
+  if (tersimpan) return tersimpan === 'dark';
+  return Boolean(prefersDark);
+}
+
+export function bacaPreferensiTema(runtimeWindow) {
+  if (!runtimeWindow) {
+    return { hasWindow: false, tersimpan: null, prefersDark: false };
+  }
+  return {
+    hasWindow: true,
+    tersimpan: runtimeWindow.localStorage.getItem('kateglo-theme'),
+    prefersDark: runtimeWindow.matchMedia('(prefers-color-scheme: dark)').matches,
+  };
+}
+
 function TataLetakAdmin({ judul, aksiJudul = null, children }) {
   const { logout, adalahAdmin } = useAuth();
   const menuTampil = menuAdmin.filter((item) => !item.adminSaja || adalahAdmin);
@@ -22,14 +39,7 @@ function TataLetakAdmin({ judul, aksiJudul = null, children }) {
   const location = useLocation();
   const appTimestamp = __APP_TIMESTAMP__;
   const [menuTerbuka, setMenuTerbuka] = useState(false);
-  /* c8 ignore start */
-  const [modeGelap, setModeGelap] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    const tersimpan = localStorage.getItem('kateglo-theme');
-    if (tersimpan) return tersimpan === 'dark';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  });
-  /* c8 ignore end */
+  const [modeGelap, setModeGelap] = useState(() => hitungModeGelapAwal(bacaPreferensiTema(globalThis.window)));
 
   useEffect(() => {
     document.title = judul
@@ -38,8 +48,6 @@ function TataLetakAdmin({ judul, aksiJudul = null, children }) {
   }, [judul]);
 
   useEffect(() => {
-    /* c8 ignore next */
-    if (typeof window === 'undefined') return;
     document.documentElement.classList.toggle('dark', modeGelap);
     localStorage.setItem('kateglo-theme', modeGelap ? 'dark' : 'light');
   }, [modeGelap]);

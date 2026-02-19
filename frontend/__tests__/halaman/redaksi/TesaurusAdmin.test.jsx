@@ -4,6 +4,18 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import TesaurusAdmin from '../../../src/halaman/redaksi/TesaurusAdmin';
 
+const mockNavigate = vi.fn();
+let mockParams = {};
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+    useParams: () => mockParams,
+  };
+});
+
 const mockUseDaftarTesaurusAdmin = vi.fn();
 const mockUseDetailTesaurusAdmin = vi.fn();
 const mutateSimpan = vi.fn();
@@ -29,6 +41,7 @@ vi.mock('../../../src/komponen/redaksi/TataLetakAdmin', () => ({
 describe('TesaurusAdmin', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockParams = {};
     global.confirm = vi.fn(() => true);
     mockUseDaftarTesaurusAdmin.mockReturnValue({
       isLoading: false,
@@ -133,5 +146,133 @@ describe('TesaurusAdmin', () => {
     fireEvent.click(screen.getByText('anak'));
     fireEvent.click(screen.getByText('Hapus'));
     expect(mutateHapus).toHaveBeenCalled();
+  });
+
+  it('mengarahkan ke daftar saat id route tidak valid', () => {
+    mockParams = { id: 'abc' };
+
+    render(
+      <MemoryRouter>
+        <TesaurusAdmin />
+      </MemoryRouter>
+    );
+
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/tesaurus', { replace: true });
+  });
+
+  it('membuka panel dari detail route valid dan menutup ke daftar', () => {
+    mockParams = { id: '1' };
+    mockUseDetailTesaurusAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          indeks: 'detail indeks',
+          sinonim: 'sinonim',
+          antonim: 'antonim',
+          aktif: 1,
+        },
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <TesaurusAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByDisplayValue('detail indeks')).toBeInTheDocument();
+    fireEvent.click(screen.getByLabelText('Tutup panel'));
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/tesaurus', { replace: true });
+  });
+
+  it('mengarahkan ke daftar saat detail route gagal dimuat', () => {
+    mockParams = { id: '2' };
+    mockUseDetailTesaurusAdmin.mockReturnValue({ isLoading: false, isError: true, data: null });
+
+    render(
+      <MemoryRouter>
+        <TesaurusAdmin />
+      </MemoryRouter>
+    );
+
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/tesaurus', { replace: true });
+  });
+
+  it('mengabaikan detail route saat payload detail tidak memiliki id', () => {
+    mockParams = { id: '3' };
+    mockUseDetailTesaurusAdmin.mockReturnValue({ isLoading: false, isError: false, data: { data: {} } });
+
+    render(
+      <MemoryRouter>
+        <TesaurusAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByLabelText(/Indeks/)).not.toBeInTheDocument();
+  });
+
+  it('membuka panel tanpa navigasi saat item tidak punya id', () => {
+    mockUseDaftarTesaurusAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        total: 1,
+        data: [{ id: null, indeks: 'tanpa-id', sinonim: 'x', antonim: 'y', aktif: 1 }],
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <TesaurusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('tanpa-id'));
+    expect(screen.getByDisplayValue('tanpa-id')).toBeInTheDocument();
+    expect(mockNavigate).not.toHaveBeenCalledWith('/redaksi/tesaurus/null');
+  });
+
+  it('menjalankan handler cari dan menerapkan filter aktif', () => {
+    render(
+      <MemoryRouter>
+        <TesaurusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText('Filter status tesaurus'), { target: { value: '1' } });
+    fireEvent.click(screen.getByText('Cari'));
+
+    const argTerakhir = mockUseDaftarTesaurusAdmin.mock.calls.at(-1)?.[0] || {};
+    expect(argTerakhir.aktif).toBe('1');
+  });
+
+  it('tidak menavigasi saat panel sudah terbuka ketika klik baris lagi', () => {
+    render(
+      <MemoryRouter>
+        <TesaurusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('anak'));
+    expect(screen.getByDisplayValue('anak')).toBeInTheDocument();
+
+    mockNavigate.mockClear();
+    fireEvent.click(screen.getByText('anak'));
+    expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
+  it('klik tambah saat mode detail route menavigasi kembali ke daftar', () => {
+    mockParams = { id: '1' };
+
+    render(
+      <MemoryRouter>
+        <TesaurusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/tesaurus', { replace: true });
   });
 });

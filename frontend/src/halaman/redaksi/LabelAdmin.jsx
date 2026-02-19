@@ -26,6 +26,7 @@ import {
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
+import { parsePositiveIntegerParam } from '../../utils/routeParam';
 
 const nilaiAwal = { kategori: '', kode: '', nama: '', urutan: 1, keterangan: '', aktif: true };
 
@@ -52,9 +53,7 @@ function LabelAdmin() {
   const navigate = useNavigate();
   const { id: idParam } = useParams();
   const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit } = usePencarianAdmin(50);
-  const idEdit = Number.parseInt(idParam || '', 10);
-  /* c8 ignore next */
-  const idDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
+  const idDariPath = parsePositiveIntegerParam(idParam);
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
   const [filterAktifDraft, setFilterAktifDraft] = useState('');
@@ -71,7 +70,6 @@ function LabelAdmin() {
 
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
 
-  /* c8 ignore start */
   useEffect(() => {
     if (!idParam) return;
     if (idDariPath) return;
@@ -166,7 +164,6 @@ function LabelAdmin() {
     setFilterAktif(filterAktifDraft);
     kirimCari(cari);
   };
-  /* c8 ignore end */
 
   return (
     <TataLetakAdmin judul="Label" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>

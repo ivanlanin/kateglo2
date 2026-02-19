@@ -7,6 +7,23 @@ import ReactMarkdown from 'react-markdown';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 
+export function hitungModeGelapAwal({ hasWindow, tersimpan, prefersDark }) {
+  if (!hasWindow) return false;
+  if (tersimpan) return tersimpan === 'dark';
+  return Boolean(prefersDark);
+}
+
+export function bacaPreferensiTema(runtimeWindow) {
+  if (!runtimeWindow) {
+    return { hasWindow: false, tersimpan: null, prefersDark: false };
+  }
+  return {
+    hasWindow: true,
+    tersimpan: runtimeWindow.localStorage.getItem('kateglo-theme'),
+    prefersDark: runtimeWindow.matchMedia('(prefers-color-scheme: dark)').matches,
+  };
+}
+
 function TataLetak() {
   const location = useLocation();
   const adalahBeranda = location.pathname === '/';
@@ -15,20 +32,11 @@ function TataLetak() {
   const [sedangMemuat, setSedangMemuat] = useState(false);
   const [teksChangelog, setTeksChangelog] = useState('');
   const [teksTodo, setTeksTodo] = useState('');
-  /* c8 ignore start */
-  const [modeGelap, setModeGelap] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    const tersimpan = localStorage.getItem('kateglo-theme');
-    if (tersimpan) return tersimpan === 'dark';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  });
-  /* c8 ignore end */
+  const [modeGelap, setModeGelap] = useState(() => hitungModeGelapAwal(bacaPreferensiTema(globalThis.window)));
 
   const appTimestamp = __APP_TIMESTAMP__;
 
   useEffect(() => {
-    /* c8 ignore next */
-    if (typeof window === 'undefined') return;
     document.documentElement.classList.toggle('dark', modeGelap);
     localStorage.setItem('kateglo-theme', modeGelap ? 'dark' : 'light');
   }, [modeGelap]);

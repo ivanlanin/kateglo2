@@ -24,6 +24,7 @@ import {
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
+import { parsePositiveIntegerParam } from '../../utils/routeParam';
 
 const nilaiAwal = { indonesia: '', asing: '', bidang: '', bahasa: 'en', sumber: '', aktif: 1 };
 
@@ -58,9 +59,7 @@ function GlosariumAdmin() {
   const { id: idParam } = useParams();
   const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit } =
     usePencarianAdmin(50);
-  const idEdit = Number.parseInt(idParam || '', 10);
-  /* c8 ignore next */
-  const idDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
+  const idDariPath = parsePositiveIntegerParam(idParam);
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
   const [filterAktifDraft, setFilterAktifDraft] = useState('');
@@ -77,7 +76,6 @@ function GlosariumAdmin() {
 
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
 
-  /* c8 ignore start */
   useEffect(() => {
     if (!idParam) return;
     if (idDariPath) return;
@@ -157,7 +155,6 @@ function GlosariumAdmin() {
     setFilterAktif(filterAktifDraft);
     kirimCari(cari);
   };
-  /* c8 ignore end */
 
   return (
     <TataLetakAdmin judul="Glosarium" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
