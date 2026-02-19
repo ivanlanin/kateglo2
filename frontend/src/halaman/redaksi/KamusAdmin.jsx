@@ -32,8 +32,8 @@ import { buatPathDetailKamus } from '../../utils/kamusIndex';
 const nilaiAwalEntri = {
   entri: '',
   indeks: '',
+  homograf: '',
   homonim: '',
-  urutan: 1,
   jenis: 'dasar',
   lafal: '',
   pemenggalan: '',
@@ -111,8 +111,8 @@ const kolom = [
     ),
   },
   { key: 'indeks', label: 'Indeks' },
+  { key: 'homograf', label: 'Homograf' },
   { key: 'homonim', label: 'Homonim' },
-  { key: 'urutan', label: 'Urutan' },
   { key: 'jenis', label: 'Jenis' },
   { key: 'lafal', label: 'Lafal' },
   { key: 'aktif', label: 'Status', render: (item) => <BadgeStatus aktif={item.aktif} /> },
@@ -610,8 +610,8 @@ function KamusAdmin() {
           placeholder="Kosongkan untuk normalisasi otomatis dari entri"
         />
         <div className="grid grid-cols-2 gap-2">
+          <InputField label="Homograf" name="homograf" type="number" value={panel.data.homograf} onChange={panel.ubahField} />
           <InputField label="Homonim" name="homonim" type="number" value={panel.data.homonim} onChange={panel.ubahField} />
-          <InputField label="Urutan" name="urutan" type="number" value={panel.data.urutan} onChange={panel.ubahField} />
         </div>
         <SelectField label="Jenis" name="jenis" value={panel.data.jenis} onChange={panel.ubahField} options={ensureOpsiMemuatNilai(opsiKategori.jenis, panel.data.jenis)} />
         <InputField label="Lafal" name="lafal" value={panel.data.lafal} onChange={panel.ubahField} placeholder="contoh: la·fal" />

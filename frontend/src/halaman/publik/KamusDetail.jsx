@@ -102,10 +102,9 @@ function tentukanKategoriJenis(jenis = '') {
 }
 
 function bandingkanEntriKamus(a, b) {
-  const prioritasLafalA = String(a.lafal || '').trim() ? 1 : 0;
-  const prioritasLafalB = String(b.lafal || '').trim() ? 1 : 0;
-  if (prioritasLafalA !== prioritasLafalB) return prioritasLafalA - prioritasLafalB;
-  if ((a.urutan || 0) !== (b.urutan || 0)) return (a.urutan || 0) - (b.urutan || 0);
+  const homografA = Number.isFinite(Number(a.homograf)) ? Number(a.homograf) : Number.MAX_SAFE_INTEGER;
+  const homografB = Number.isFinite(Number(b.homograf)) ? Number(b.homograf) : Number.MAX_SAFE_INTEGER;
+  if (homografA !== homografB) return homografA - homografB;
   const homonimA = Number.isFinite(Number(a.homonim)) ? Number(a.homonim) : Number.MAX_SAFE_INTEGER;
   const homonimB = Number.isFinite(Number(b.homonim)) ? Number(b.homonim) : Number.MAX_SAFE_INTEGER;
   if (homonimA !== homonimB) return homonimA - homonimB;
@@ -267,8 +266,8 @@ function KamusDetail() {
       id: data.id || 'legacy',
       entri: data.entri || data.indeks || decodeURIComponent(indeks || ''),
       indeks: data.indeks || data.entri || decodeURIComponent(indeks || ''),
+      homograf: data.homograf ?? null,
       homonim: data.homonim ?? null,
-      urutan: data.urutan ?? 1,
       jenis: data.jenis || 'dasar',
       pemenggalan: data.pemenggalan || null,
       lafal: data.lafal || null,

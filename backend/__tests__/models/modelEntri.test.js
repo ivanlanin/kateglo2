@@ -401,7 +401,7 @@ describe('ModelEntri', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('UPDATE entri SET entri = $1'),
-      ['kata baru', 'dasar', null, null, null, null, null, null, 1, 'kata baru', null, 1, null, 8]
+      ['kata baru', 'dasar', null, null, null, null, null, null, 1, 'kata baru', null, null, null, 8]
     );
     expect(result).toEqual(row);
   });
@@ -414,7 +414,7 @@ describe('ModelEntri', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO entri'),
-      ['kata', 'dasar', null, null, null, null, null, null, 0, 'kata', null, 1, null]
+      ['kata', 'dasar', null, null, null, null, null, null, 0, 'kata', null, null, null]
     );
     expect(result).toEqual(row);
   });
@@ -426,28 +426,28 @@ describe('ModelEntri', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO entri'),
-      ['kata', 'dasar', null, null, null, null, null, null, 1, 'kata', null, 1, null]
+      ['kata', 'dasar', null, null, null, null, null, null, 1, 'kata', null, null, null]
     );
   });
 
-  it('simpan menormalkan indeks serta parsing homonim/urutan saat input tidak valid', async () => {
+  it('simpan menormalkan indeks serta parsing homonim/homograf saat input tidak valid', async () => {
     db.query.mockResolvedValue({ rows: [{ id: 12, entri: '--kata-- (2)' }] });
 
     await ModelEntri.simpan({
       entri: '--kata-- (2)',
       jenis: 'dasar',
       indeks: '   ',
+      homograf: 'bukan-angka',
       homonim: 'bukan-angka',
-      urutan: '0',
     });
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO entri'),
-      ['--kata-- (2)', 'dasar', null, null, null, null, null, null, 1, 'kata', null, 1, null]
+      ['--kata-- (2)', 'dasar', null, null, null, null, null, null, 1, 'kata', null, null, null]
     );
   });
 
-  it('simpan parsing homonim null-string kosong dan urutan default saat non-numeric', async () => {
+  it('simpan parsing homonim/homograf null-string kosong saat non-numeric', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ id: 13, entri: 'kata-a' }] })
       .mockResolvedValueOnce({ rows: [{ id: 14, entri: 'kata-b' }] });
@@ -455,26 +455,26 @@ describe('ModelEntri', () => {
     await ModelEntri.simpan({
       entri: 'kata-a',
       jenis: 'dasar',
+      homograf: null,
       homonim: null,
-      urutan: 'abc',
     });
 
     await ModelEntri.simpan({
       entri: 'kata-b',
       jenis: 'dasar',
+      homograf: '',
       homonim: '',
-      urutan: 2,
     });
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining('INSERT INTO entri'),
-      ['kata-a', 'dasar', null, null, null, null, null, null, 1, 'kata-a', null, 1, null]
+      ['kata-a', 'dasar', null, null, null, null, null, null, 1, 'kata-a', null, null, null]
     );
     expect(db.query).toHaveBeenNthCalledWith(
       2,
       expect.stringContaining('INSERT INTO entri'),
-      ['kata-b', 'dasar', null, null, null, null, null, null, 1, 'kata-b', null, 2, null]
+      ['kata-b', 'dasar', null, null, null, null, null, null, 1, 'kata-b', null, null, null]
     );
   });
 
@@ -489,12 +489,12 @@ describe('ModelEntri', () => {
     expect(db.query).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining('INSERT INTO entri'),
-      [undefined, 'dasar', null, null, null, null, null, null, 1, '', null, 1, null]
+      [undefined, 'dasar', null, null, null, null, null, null, 1, '', null, null, null]
     );
     expect(db.query).toHaveBeenNthCalledWith(
       2,
       expect.stringContaining('INSERT INTO entri'),
-      ['---', 'dasar', null, null, null, null, null, null, 1, '---', null, 1, null]
+      ['---', 'dasar', null, null, null, null, null, null, 1, '---', null, null, null]
     );
   });
 

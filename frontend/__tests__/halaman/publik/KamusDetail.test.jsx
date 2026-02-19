@@ -989,7 +989,7 @@ describe('KamusDetail', () => {
             entri: 'c',
             indeks: 'c',
             lafal: 'ce',
-            urutan: 1,
+            homograf: 3,
             homonim: 1,
             jenis: 'dasar',
             makna: [{ id: 11, kelas_kata: null, makna: 'makna c' }],
@@ -1000,7 +1000,7 @@ describe('KamusDetail', () => {
             entri: 'a',
             indeks: 'a',
             lafal: null,
-            urutan: 2,
+            homograf: 2,
             homonim: 2,
             jenis: 'dasar',
             makna: [{ id: 12, kelas_kata: null, makna: 'makna a' }],
@@ -1011,7 +1011,7 @@ describe('KamusDetail', () => {
             entri: 'b',
             indeks: 'b',
             lafal: null,
-            urutan: 1,
+            homograf: 1,
             homonim: 1,
             jenis: 'varian',
             makna: [{ id: 13, kelas_kata: null, makna: 'makna b' }],
@@ -1026,7 +1026,7 @@ describe('KamusDetail', () => {
             entri: 'aa',
             indeks: 'aa',
             lafal: null,
-            urutan: 1,
+            homograf: 1,
             homonim: 2,
             jenis: 'dasar',
             makna: [{ id: 14, kelas_kata: null, makna: 'makna aa' }],
@@ -1037,7 +1037,7 @@ describe('KamusDetail', () => {
             entri: 'ab',
             indeks: 'ab',
             lafal: null,
-            urutan: 1,
+            homograf: 1,
             homonim: 2,
             jenis: 'dasar',
             makna: [{ id: 15, kelas_kata: null, makna: 'makna ab' }],
@@ -1096,17 +1096,14 @@ describe('KamusDetail helpers', () => {
     expect(tentukanKategoriJenis('lain')).toBe('bentuk');
   });
 
-  it('bandingkanEntriKamus menutup cabang prioritas lafal, urutan, homonim, dan alfabet', () => {
-    expect(bandingkanEntriKamus({ lafal: 'a' }, { lafal: '' })).toBeGreaterThan(0);
-    expect(bandingkanEntriKamus({ lafal: '', urutan: 2 }, { lafal: '', urutan: 1 })).toBeGreaterThan(0);
-    expect(bandingkanEntriKamus({ lafal: '', urutan: 1, homonim: 2 }, { lafal: '', urutan: 1, homonim: 1 })).toBeGreaterThan(0);
-    expect(bandingkanEntriKamus({ lafal: '', urutan: 1, homonim: 1, entri: 'b' }, { lafal: '', urutan: 1, homonim: 1, entri: 'a' })).toBeGreaterThan(0);
-    expect(bandingkanEntriKamus({ lafal: '', urutan: undefined, homonim: 'abc', entri: undefined }, { lafal: '', urutan: undefined, homonim: null, entri: undefined })).toBeGreaterThan(0);
-    expect(bandingkanEntriKamus({ lafal: '', urutan: undefined, homonim: 1, entri: 'a' }, { lafal: '', urutan: 1, homonim: 1, entri: 'a' })).toBeLessThan(0);
-    expect(bandingkanEntriKamus({ lafal: '', urutan: 1, homonim: 1, entri: 'a' }, { lafal: '', urutan: undefined, homonim: 1, entri: 'a' })).toBeGreaterThan(0);
-    expect(bandingkanEntriKamus({ lafal: '', urutan: 1, homonim: 1, entri: undefined }, { lafal: '', urutan: 1, homonim: 'x', entri: 'a' })).toBeLessThan(0);
-    expect(bandingkanEntriKamus({ lafal: '', urutan: 1, homonim: 1, entri: undefined }, { lafal: '', urutan: 1, homonim: 1, entri: 'a' })).toBeLessThan(0);
-    expect(bandingkanEntriKamus({ lafal: '', urutan: 1, homonim: 1, entri: 'a' }, { lafal: '', urutan: 1, homonim: 1, entri: undefined })).toBeGreaterThan(0);
+  it('bandingkanEntriKamus menutup cabang prioritas homograf, homonim, dan alfabet', () => {
+    expect(bandingkanEntriKamus({ homograf: 2 }, { homograf: 1 })).toBeGreaterThan(0);
+    expect(bandingkanEntriKamus({ homograf: 1, homonim: 2 }, { homograf: 1, homonim: 1 })).toBeGreaterThan(0);
+    expect(bandingkanEntriKamus({ homograf: 1, homonim: 1, entri: 'b' }, { homograf: 1, homonim: 1, entri: 'a' })).toBeGreaterThan(0);
+    expect(bandingkanEntriKamus({ homograf: undefined, homonim: 'abc', entri: undefined }, { homograf: null, homonim: null, entri: undefined })).toBeGreaterThan(0);
+    expect(bandingkanEntriKamus({ homograf: 1, homonim: 1, entri: undefined }, { homograf: 1, homonim: 'x', entri: 'a' })).toBeLessThan(0);
+    expect(bandingkanEntriKamus({ homograf: 1, homonim: 1, entri: undefined }, { homograf: 1, homonim: 1, entri: 'a' })).toBeLessThan(0);
+    expect(bandingkanEntriKamus({ homograf: 1, homonim: 1, entri: 'a' }, { homograf: 1, homonim: 1, entri: undefined })).toBeGreaterThan(0);
   });
 
   it('bandingkanJenisSubentri menutup prioritas daftar dan fallback alfabet', () => {
