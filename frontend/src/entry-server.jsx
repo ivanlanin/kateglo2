@@ -39,7 +39,6 @@ function truncate(text = '', maxLen = 155) {
   if (text.length <= maxLen) return text;
   const cut = text.substring(0, maxLen);
   const lastSpace = cut.lastIndexOf(' ');
-  /* c8 ignore next */
   return (lastSpace > maxLen * 0.6 ? cut.substring(0, lastSpace) : cut) + '\u2026';
 }
 
@@ -49,7 +48,6 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
     description: 'Kamus, Tesaurus, dan Glosarium Bahasa Indonesia',
   };
 
-  /* c8 ignore next */
   const decodedPath = decodeURIComponent(pathname || '/');
 
   // /kamus/detail/:indeks
@@ -196,11 +194,8 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
 }
 
 export async function render(url = '/', prefetchedData = null) {
-  /* c8 ignore next */
-  const runtimeProcess = typeof globalThis !== 'undefined' ? globalThis.process : undefined;
-  /* c8 ignore next */
+  const runtimeProcess = globalThis.process;
   const siteBaseUrl = stripTrailingSlash(runtimeProcess?.env?.PUBLIC_SITE_URL || 'https://kateglo.org');
-  /* c8 ignore next */
   const pathname = url.split('?')[0] || '/';
   const queryClient = new QueryClient({
     defaultOptions: {

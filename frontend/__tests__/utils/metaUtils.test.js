@@ -73,6 +73,19 @@ describe('metaUtils', () => {
 
     expect(buildMetaDetailKamus('', null).judul).toBe('Kamus');
     expect(buildMetaDetailKamus('kata', { makna: [{ makna: 'arti' }] }).judul).toBe('kata — Kamus');
+
+    const tanpaMakna = buildDeskripsiDetailKamus('kata', {
+      makna: [{ kelas_kata: 'n', makna: '' }],
+    });
+    expect(tanpaMakna).toContain('kata');
+
+    const multiTanpaMakna = buildDeskripsiDetailKamus('kata', {
+      makna: [
+        { kelas_kata: 'n', makna: '' },
+        { kelas_kata: 'v', makna: 'aksi' },
+      ],
+    });
+    expect(multiTanpaMakna).toContain('(1)');
   });
 
   it('builder metadata tesaurus menutup cabang kosong dan data lengkap', () => {

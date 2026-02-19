@@ -118,13 +118,11 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
 
     try {
       const hasil = await autocomplete(kat, kata);
-      /* c8 ignore next */
       if (!isMountedRef.current || idPermintaan !== permintaanTerakhirRef.current) return;
       setSaran(hasil);
       setTampilSaran(hasil.length > 0);
       setIndeksAktif(-1);
     } catch {
-      /* c8 ignore next */
       if (!isMountedRef.current || idPermintaan !== permintaanTerakhirRef.current) return;
       setSaran([]);
       setTampilSaran(false);

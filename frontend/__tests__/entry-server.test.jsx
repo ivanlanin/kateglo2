@@ -34,6 +34,7 @@ describe('entry-server', () => {
 
     expect(__private.truncate('pendek', 10)).toBe('pendek');
     expect(__private.truncate('ini kalimat sangat panjang sekali untuk dipotong', 20)).toMatch(/…$/);
+    expect(__private.truncate('x'.repeat(220), 20)).toBe(`${'x'.repeat(20)}…`);
   });
 
   it('builder deskripsi kamus menutup semua cabang', () => {
@@ -170,5 +171,16 @@ describe('entry-server', () => {
     expect(headTags).toContain('https://kateglo.org/Logo%20Kateglo.png');
 
     globalThis.process = originalGlobal;
+  });
+
+  it('buildMetaForPath memakai fallback pathname root saat input kosong', () => {
+    const meta = __private.buildMetaForPath('', 'https://kateglo.org');
+    expect(meta.title).toContain('Kateglo — Kamus');
+    expect(meta.canonicalUrl).toBe('https://kateglo.org/');
+  });
+
+  it('render memakai fallback pathname root saat URL kosong', async () => {
+    const { headTags } = await render('');
+    expect(headTags).toContain('https://kateglo.org/');
   });
 });

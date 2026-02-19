@@ -4,52 +4,48 @@
 
 import klien from './klien';
 
-/* c8 ignore next */
-const apiBaseUrlFromEnv = (import.meta.env.VITE_API_URL || '').trim();
+const apiBaseUrlFromEnv = [import.meta.env.VITE_API_URL].join('').trim();
 const returnToKey = 'kateglo-auth-return-to';
 
 function hostLokal(hostname = '') {
   return hostname === 'localhost' || hostname === '127.0.0.1';
 }
 
-function ambilApiBaseUrl() {
-  if (apiBaseUrlFromEnv) {
+function ambilApiBaseUrl(options = {}) {
+  const baseUrl = options.apiBaseUrl ?? apiBaseUrlFromEnv;
+  const runtimeWindow = options.runtimeWindow ?? (typeof window !== 'undefined' ? window : undefined);
+  const rewriteLocalhost = options.rewriteLocalhost ?? !import.meta.env.DEV;
+
+  if (baseUrl) {
     try {
-      const parsedUrl = new URL(apiBaseUrlFromEnv);
-      /* c8 ignore next */
-      if (typeof window !== 'undefined') {
+      const parsedUrl = new URL(baseUrl);
+      if (runtimeWindow) {
         const targetLokal = hostLokal(parsedUrl.hostname);
-        const currentLokal = hostLokal(window.location.hostname);
-        /* c8 ignore start */
-        if (!import.meta.env.DEV && targetLokal && !currentLokal) {
-          return window.location.origin;
+        const currentLokal = hostLokal(runtimeWindow.location.hostname);
+        if (rewriteLocalhost && targetLokal && !currentLokal) {
+          return runtimeWindow.location.origin;
         }
-        /* c8 ignore stop */
       } else {
         const targetLokal = hostLokal(parsedUrl.hostname);
-        /* c8 ignore start */
-        if (!import.meta.env.DEV && targetLokal) {
+        if (rewriteLocalhost && targetLokal) {
           return '';
         }
-        /* c8 ignore stop */
       }
     } catch {
-      return apiBaseUrlFromEnv;
+      return baseUrl;
     }
 
-    return apiBaseUrlFromEnv;
+    return baseUrl;
   }
 
-  /* c8 ignore next */
-  if (typeof window !== 'undefined' && window.location?.origin) {
-    return window.location.origin;
+  if (runtimeWindow?.location?.origin) {
+    return runtimeWindow.location.origin;
   }
 
   return 'http://localhost:3000';
 }
 
 export function simpanReturnTo(path = '') {
-  /* c8 ignore next */
   if (typeof window === 'undefined') return;
   const currentPath = path || `${window.location.pathname}${window.location.search}`;
   if (currentPath && currentPath !== '/auth/callback') {
@@ -58,7 +54,6 @@ export function simpanReturnTo(path = '') {
 }
 
 export function ambilReturnTo() {
-  /* c8 ignore next */
   if (typeof window === 'undefined') return '/';
   const returnTo = localStorage.getItem(returnToKey) || '/';
   localStorage.removeItem(returnToKey);
@@ -68,29 +63,24 @@ export function ambilReturnTo() {
   return returnTo;
 }
 
-export function buatUrlLoginGoogle(frontendOrigin = '') {
-  const apiBaseUrl = ambilApiBaseUrl();
-  /* c8 ignore start */
+export function buatUrlLoginGoogle(frontendOrigin = '', options = {}) {
+  const apiBaseUrl = ambilApiBaseUrl(options);
   const loginUrl = apiBaseUrl
     ? new URL('/auth/google', apiBaseUrl)
     : new URL('/auth/google', 'http://localhost');
-  /* c8 ignore stop */
   if (frontendOrigin) {
     loginUrl.searchParams.set('frontend_origin', frontendOrigin);
   }
 
-  /* c8 ignore start */
   if (!apiBaseUrl) {
     const search = loginUrl.searchParams.toString();
     return search ? `/auth/google?${search}` : '/auth/google';
   }
-  /* c8 ignore stop */
 
   return loginUrl.toString();
 }
 
 export function mulaiLoginGoogle(path = '') {
-  /* c8 ignore next */
   if (typeof window === 'undefined') return;
   simpanReturnTo(path);
   window.location.assign(buatUrlLoginGoogle(window.location.origin));
@@ -105,3 +95,8 @@ export async function ambilProfilSaya(token) {
 
   return response.data?.data || null;
 }
+
+export const __private = {
+  hostLokal,
+  ambilApiBaseUrl,
+};

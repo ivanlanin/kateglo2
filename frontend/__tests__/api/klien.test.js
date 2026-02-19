@@ -87,6 +87,58 @@ describe('klien', () => {
     });
   });
 
+  it('opsi rewriteLocalhost pada __private.resolveApiBaseUrl menutup cabang rewrite', async () => {
+    const module = await import('../../src/api/klien?private-rewrite-resolver');
+    const runtimeWindow = {
+      location: {
+        hostname: 'kateglo.org',
+        origin: 'https://kateglo.org',
+      },
+    };
+
+    expect(module.__private.resolveApiBaseUrl({
+      apiBaseUrl: 'http://localhost:3000',
+      runtimeWindow,
+      rewriteLocalhost: true,
+    })).toBe('https://kateglo.org');
+  });
+
+  it('interceptor tidak menambah Authorization saat token kosong', async () => {
+    vi.stubEnv('VITE_API_URL', 'https://api.kateglo.test');
+    vi.stubEnv('VITE_FRONTEND_SHARED_KEY', '');
+    localStorage.getItem.mockReturnValue('');
+
+    await import('../../src/api/klien?without-token-header');
+    const interceptorFn = mockUse.mock.calls[0][0];
+    const result = interceptorFn({ headers: {} });
+
+    expect(result.headers.Authorization).toBeUndefined();
+  });
+
+  it('interceptor aman saat window tidak tersedia', async () => {
+    vi.stubEnv('VITE_API_URL', 'https://api.kateglo.test');
+    vi.stubEnv('VITE_FRONTEND_SHARED_KEY', '');
+    const originalWindow = globalThis.window;
+    Object.defineProperty(globalThis, 'window', {
+      value: undefined,
+      writable: true,
+      configurable: true,
+    });
+
+    try {
+      await import('../../src/api/klien?no-window-interceptor');
+      const interceptorFn = mockUse.mock.calls[0][0];
+      const result = interceptorFn({ headers: {} });
+      expect(result.headers.Authorization).toBeUndefined();
+    } finally {
+      Object.defineProperty(globalThis, 'window', {
+        value: originalWindow,
+        writable: true,
+        configurable: true,
+      });
+    }
+  });
+
   it('mengembalikan instance axios default dan memasang interceptor request', async () => {
     vi.stubEnv('VITE_API_URL', '');
     vi.stubEnv('VITE_FRONTEND_SHARED_KEY', '');

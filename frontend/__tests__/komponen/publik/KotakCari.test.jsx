@@ -329,4 +329,63 @@ describe('KotakCari', () => {
     await act(async () => {});
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
+
+  it('mengabaikan hasil gagal request lama saat request baru sudah aktif', async () => {
+    let rejectLama;
+    let resolveBaru;
+    autocomplete
+      .mockImplementationOnce(() => new Promise((_, reject) => { rejectLama = reject; }))
+      .mockImplementationOnce(() => new Promise((resolve) => { resolveBaru = resolve; }));
+
+    render(<KotakCari autoFocus={false} />);
+    const input = screen.getByRole('textbox');
+
+    fireEvent.change(input, { target: { value: 'ka' } });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(300);
+    });
+
+    fireEvent.change(input, { target: { value: 'kat' } });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(300);
+    });
+
+    await act(async () => {
+      rejectLama(new Error('request lama gagal'));
+      resolveBaru([{ value: 'kata' }]);
+    });
+
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+    expect(within(screen.getByRole('listbox')).getAllByRole('option')).toHaveLength(1);
+  });
+
+  it('mengabaikan hasil sukses request lama saat request baru sudah aktif', async () => {
+    let resolveLama;
+    let resolveBaru;
+    autocomplete
+      .mockImplementationOnce(() => new Promise((resolve) => { resolveLama = resolve; }))
+      .mockImplementationOnce(() => new Promise((resolve) => { resolveBaru = resolve; }));
+
+    render(<KotakCari autoFocus={false} />);
+    const input = screen.getByRole('textbox');
+
+    fireEvent.change(input, { target: { value: 'ka' } });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(300);
+    });
+
+    fireEvent.change(input, { target: { value: 'kat' } });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(300);
+    });
+
+    await act(async () => {
+      resolveLama([{ value: 'lama' }]);
+      resolveBaru([{ value: 'baru' }]);
+    });
+
+    const opsi = within(screen.getByRole('listbox')).getAllByRole('option');
+    expect(opsi).toHaveLength(1);
+    expect(opsi[0]).toHaveTextContent('baru');
+  });
 });

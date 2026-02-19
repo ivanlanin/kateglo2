@@ -4,21 +4,24 @@ import { ambilProfilSaya, mulaiLoginGoogle } from '../api/apiAuth';
 const storageKey = 'kateglo-auth-token';
 const AuthContext = createContext(null);
 
+function getStorage() {
+  return globalThis.localStorage;
+}
+
 function AuthProvider({ children }) {
   const [token, setToken] = useState('');
   const [user, setUser] = useState(null);
   // Mulai dalam kondisi loading jika ada token tersimpan,
   // agar route guard tidak redirect sebelum profil selesai dimuat.
   const [isLoading, setIsLoading] = useState(() => {
-    /* c8 ignore next */
-    if (typeof window === 'undefined') return false;
-    return Boolean(localStorage.getItem(storageKey));
+    const storage = getStorage();
+    return storage ? Boolean(storage.getItem(storageKey)) : false;
   });
 
-  /* c8 ignore start */
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const tersimpan = localStorage.getItem(storageKey) || '';
+    const storage = getStorage();
+    if (!storage) return;
+    const tersimpan = storage.getItem(storageKey) || '';
     if (!tersimpan) {
       setIsLoading(false);
       return;
@@ -26,49 +29,42 @@ function AuthProvider({ children }) {
     setToken(tersimpan);
     setIsLoading(true);
   }, []);
-  /* c8 ignore stop */
 
   const setAuthToken = useCallback((nextToken) => {
-    /* c8 ignore next 6 */
-    if (typeof window === 'undefined') {
+    const storage = getStorage();
+    if (!storage) {
       setToken(nextToken || '');
       setUser(null);
       setIsLoading(Boolean(nextToken));
       return;
     }
 
-    /* c8 ignore start */
     if (!nextToken) {
-      localStorage.removeItem(storageKey);
-      /* c8 ignore next */
+      storage.removeItem(storageKey);
       setToken('');
       setUser(null);
       setIsLoading(false);
       return;
     }
-    /* c8 ignore stop */
 
-    localStorage.setItem(storageKey, nextToken);
+    storage.setItem(storageKey, nextToken);
     setToken(nextToken);
     setIsLoading(true);
   }, []);
 
   const logout = useCallback(() => {
-    /* c8 ignore next 6 */
-    if (typeof window === 'undefined') {
+    const storage = getStorage();
+    if (!storage) {
       setToken('');
       setUser(null);
       setIsLoading(false);
       return;
     }
 
-    /* c8 ignore start */
-    localStorage.removeItem(storageKey);
-    /* c8 ignore next */
+    storage.removeItem(storageKey);
     setToken('');
     setUser(null);
     setIsLoading(false);
-    /* c8 ignore stop */
   }, []);
 
   useEffect(() => {
@@ -88,10 +84,7 @@ function AuthProvider({ children }) {
         }
       } catch (_error) {
         if (isMounted) {
-          /* c8 ignore next */
-          if (typeof window !== 'undefined') {
-            localStorage.removeItem(storageKey);
-          }
+          getStorage()?.removeItem(storageKey);
           setToken('');
           setUser(null);
         }

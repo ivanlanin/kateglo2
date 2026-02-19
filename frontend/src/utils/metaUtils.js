@@ -35,11 +35,11 @@ export const NAMA_KATEGORI_BROWSE_KAMUS = {
 export const KATEGORI_SLUG_NAMA = new Set(['kelas_kata', 'kelas-kata', 'kelas', 'ragam', 'bahasa', 'bidang']);
 
 function amanDecode(teks = '') {
+  const sumber = String(teks || '');
   try {
-    return decodeURIComponent(String(teks || ''));
+    return decodeURIComponent(sumber);
   } catch {
-    /* c8 ignore next */
-    return String(teks || '');
+    return sumber;
   }
 }
 
@@ -181,7 +181,6 @@ export function buildDeskripsiDetailKamus(indeks, data = {}) {
 
   const formattedMakna = maknaList.slice(0, 4).map((m, i) => {
     const kelasPrefix = m?.kelas_kata ? `(${m.kelas_kata}) ` : '';
-    /* c8 ignore next */
     return `(${i + 1}) ${kelasPrefix}${m?.makna || ''}`;
   });
 

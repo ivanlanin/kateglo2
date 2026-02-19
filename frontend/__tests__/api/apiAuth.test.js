@@ -49,6 +49,15 @@ describe('apiAuth', () => {
     expect(localStorage.setItem).not.toHaveBeenCalled();
   });
 
+  it('simpanReturnTo tidak menyimpan saat path efektif kosong', () => {
+    window.location.pathname = '';
+    window.location.search = '';
+
+    simpanReturnTo();
+
+    expect(localStorage.setItem).not.toHaveBeenCalled();
+  });
+
   it('ambilReturnTo mengembalikan default root jika tidak ada data', () => {
     localStorage.getItem.mockReturnValue(null);
 
@@ -80,6 +89,47 @@ describe('apiAuth', () => {
     const result = ambilReturnTo();
 
     expect(result).toBe('/glosarium/bidang/linguistik');
+  });
+
+  it('guard window-undefined untuk simpanReturnTo dan ambilReturnTo', () => {
+    const originalWindow = globalThis.window;
+    Object.defineProperty(globalThis, 'window', {
+      value: undefined,
+      writable: true,
+      configurable: true,
+    });
+
+    try {
+      expect(() => simpanReturnTo('/kamus')).not.toThrow();
+      expect(ambilReturnTo()).toBe('/');
+    } finally {
+      Object.defineProperty(globalThis, 'window', {
+        value: originalWindow,
+        writable: true,
+        configurable: true,
+      });
+    }
+  });
+
+  it('mulaiLoginGoogle berhenti awal saat window tidak tersedia', async () => {
+    const module = await import('../../src/api/apiAuth.js?login-no-window');
+    const originalWindow = globalThis.window;
+    Object.defineProperty(globalThis, 'window', {
+      value: undefined,
+      writable: true,
+      configurable: true,
+    });
+
+    try {
+      expect(() => module.mulaiLoginGoogle('/kamus')).not.toThrow();
+      expect(localStorage.setItem).not.toHaveBeenCalled();
+    } finally {
+      Object.defineProperty(globalThis, 'window', {
+        value: originalWindow,
+        writable: true,
+        configurable: true,
+      });
+    }
   });
 
   it('buatUrlLoginGoogle membangun URL login berbasis API', () => {
@@ -198,5 +248,45 @@ describe('apiAuth branch coverage', () => {
     const module = await import('../../src/api/apiAuth.js?invalid-env');
 
     expect(() => module.buatUrlLoginGoogle()).toThrow();
+  });
+
+  it('opsi rewriteLocalhost pada __private.ambilApiBaseUrl menutup cabang browser', async () => {
+    const module = await import('../../src/api/apiAuth.js?private-browser-rewrite');
+    const runtimeWindow = {
+      location: {
+        hostname: 'kateglo.org',
+        origin: 'https://kateglo.org',
+      },
+    };
+
+    const result = module.__private.ambilApiBaseUrl({
+      apiBaseUrl: 'http://127.0.0.1:3000',
+      runtimeWindow,
+      rewriteLocalhost: true,
+    });
+
+    expect(result).toBe('https://kateglo.org');
+  });
+
+  it('opsi rewriteLocalhost pada __private.ambilApiBaseUrl menutup cabang SSR', async () => {
+    const module = await import('../../src/api/apiAuth.js?private-ssr-rewrite');
+    const result = module.__private.ambilApiBaseUrl({
+      apiBaseUrl: 'http://localhost:3000',
+      runtimeWindow: 0,
+      rewriteLocalhost: true,
+    });
+
+    expect(result).toBe('');
+    expect(module.buatUrlLoginGoogle('', {
+      apiBaseUrl: 'http://localhost:3000',
+      runtimeWindow: 0,
+      rewriteLocalhost: true,
+    })).toBe('/auth/google');
+
+    expect(module.buatUrlLoginGoogle('https://kateglo.org', {
+      apiBaseUrl: 'http://localhost:3000',
+      runtimeWindow: 0,
+      rewriteLocalhost: true,
+    })).toBe('/auth/google?frontend_origin=https%3A%2F%2Fkateglo.org');
   });
 });
