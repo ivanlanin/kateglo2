@@ -133,6 +133,14 @@ export function BarisFilterCariAdmin({
 
   return (
     <form onSubmit={handleSubmit} className="mb-4 flex flex-wrap gap-2 items-center">
+      <input
+        type="text"
+        value={nilai}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="flex-1 min-w-[220px] px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-dark-bg-input dark:text-white focus:outline-none focus:border-blue-500"
+      />
+
       {filters.map((item) => (
         <select
           key={item.key}
@@ -146,14 +154,6 @@ export function BarisFilterCariAdmin({
           ))}
         </select>
       ))}
-
-      <input
-        type="text"
-        value={nilai}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        className="flex-1 min-w-[220px] px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-dark-bg-input dark:text-white focus:outline-none focus:border-blue-500"
-      />
 
       <button
         type="submit"
@@ -270,7 +270,7 @@ export function TabelAdmin({
   onKlikBaris,
 }) {
   const thClass =
-    'px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider';
+    'px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider';
   const tdClass = 'px-6 py-3 text-sm text-gray-700 dark:text-gray-300';
   const tampilkanPaginasi = total > 0 && limit && onOffset;
 
@@ -309,7 +309,7 @@ export function TabelAdmin({
       <div className="bg-white dark:bg-dark-bg-elevated rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-dark-bg">
+            <thead className="bg-gray-100 dark:bg-neutral-900">
               <tr>
                 {kolom.map((k) => (
                   <th key={k.key} className={thClass}>
@@ -318,7 +318,7 @@ export function TabelAdmin({
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody className="bg-white divide-y divide-gray-200 dark:bg-dark-bg-elevated dark:divide-gray-700">
               {data.map((item) => (
                 <tr
                   key={item[kunciId]}

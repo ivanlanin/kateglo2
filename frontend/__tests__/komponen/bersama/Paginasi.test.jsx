@@ -3,9 +3,11 @@ import { describe, it, expect, vi } from 'vitest';
 import Paginasi from '../../../src/komponen/bersama/Paginasi';
 
 describe('Paginasi', () => {
-  it('return null jika total halaman <= 1', () => {
-    const { container } = render(<Paginasi total={10} limit={20} offset={0} onChange={vi.fn()} />);
-    expect(container).toBeEmptyDOMElement();
+  it('tetap menampilkan info jika total halaman <= 1 tanpa kontrol navigasi', () => {
+    render(<Paginasi total={10} limit={20} offset={0} onChange={vi.fn()} />);
+    expect(screen.getByText(/Menampilkan 1–10 dari 10 entri/i)).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '‹' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '›' })).not.toBeInTheDocument();
   });
 
   it('menampilkan rentang dan tombol halaman', () => {
