@@ -47,10 +47,10 @@ router.get('/:id', async (req, res, next) => {
  */
 router.post('/', async (req, res, next) => {
   try {
-    const lema = parseTrimmedString(req.body.lema);
-    if (!lema) return res.status(400).json({ success: false, message: 'Lema wajib diisi' });
+    const indeks = parseTrimmedString(req.body.indeks);
+    if (!indeks) return res.status(400).json({ success: false, message: 'Indeks wajib diisi' });
 
-    const data = await ModelTesaurus.simpan({ ...req.body, lema });
+    const data = await ModelTesaurus.simpan({ ...req.body, indeks });
     return res.status(201).json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -63,10 +63,10 @@ router.post('/', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
   try {
     const id = parseIdParam(req.params.id);
-    const lema = parseTrimmedString(req.body.lema);
-    if (!lema) return res.status(400).json({ success: false, message: 'Lema wajib diisi' });
+    const indeks = parseTrimmedString(req.body.indeks);
+    if (!indeks) return res.status(400).json({ success: false, message: 'Indeks wajib diisi' });
 
-    const data = await ModelTesaurus.simpan({ ...req.body, id, lema });
+    const data = await ModelTesaurus.simpan({ ...req.body, id, indeks });
     if (!data) return res.status(404).json({ success: false, message: 'Tesaurus tidak ditemukan' });
     return res.json({ success: true, data });
   } catch (error) {

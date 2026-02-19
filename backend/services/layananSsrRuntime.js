@@ -112,7 +112,7 @@ async function prefetchSsrData(pathname = '/') {
       if (!kata) return null;
       const detail = await ambilDetailTesaurus(kata);
       if (!detail) return null;
-      return { type: 'tesaurus-detail', kata: detail.lema, sinonim: detail.sinonim || [], antonim: detail.antonim || [] };
+      return { type: 'tesaurus-detail', kata: detail.indeks, sinonim: detail.sinonim || [], antonim: detail.antonim || [] };
     }
 
     // /tesaurus (tanpa parameter)

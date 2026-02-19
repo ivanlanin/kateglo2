@@ -92,7 +92,7 @@ describe('Tesaurus', () => {
           data: [
             {
               id: 1,
-              lema: 'anak ibu',
+              indeks: 'anak ibu',
               sinonim: 's1;s2;s3;s4',
               antonim: 'a1;a2',
             },
@@ -141,7 +141,7 @@ describe('Tesaurus', () => {
       return {
         data: {
           data: [
-            { id: 2, lema: 'besar', sinonim: null, antonim: 'kecil;mungil' },
+            { id: 2, indeks: 'besar', sinonim: null, antonim: 'kecil;mungil' },
           ],
           total: 1,
         },
@@ -164,7 +164,7 @@ describe('Tesaurus', () => {
       return {
         data: {
           data: [
-            { id: 3, lema: 'hampa', sinonim: ' ; ', antonim: '' },
+            { id: 3, indeks: 'hampa', sinonim: ' ; ', antonim: '' },
           ],
           total: 1,
         },

@@ -23,7 +23,7 @@ async function ambilDetailTesaurus(kata) {
   if (!entry) return null;
 
   return {
-    lema: entry.lema,
+    indeks: entry.indeks,
     sinonim: parseRelasi(entry.sinonim),
     antonim: parseRelasi(entry.antonim),
   };

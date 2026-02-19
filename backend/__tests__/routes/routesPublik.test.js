@@ -389,7 +389,7 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/tesaurus/cari/:kata mengembalikan hasil', async () => {
-    layananTesaurusPublik.cariTesaurus.mockResolvedValue({ data: [{ lema: 'aktif' }], total: 1 });
+    layananTesaurusPublik.cariTesaurus.mockResolvedValue({ data: [{ indeks: 'aktif' }], total: 1 });
 
     const response = await request(createApp()).get('/api/publik/tesaurus/cari/aktif?limit=0&offset=7');
 
@@ -417,12 +417,12 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/tesaurus/:kata mengembalikan data saat ditemukan', async () => {
-    layananTesaurusPublik.ambilDetailTesaurus.mockResolvedValue({ lema: 'aktif', sinonim: ['giat'] });
+    layananTesaurusPublik.ambilDetailTesaurus.mockResolvedValue({ indeks: 'aktif', sinonim: ['giat'] });
 
     const response = await request(createApp()).get('/api/publik/tesaurus/aktif');
 
     expect(response.status).toBe(200);
-    expect(response.body.lema).toBe('aktif');
+    expect(response.body.indeks).toBe('aktif');
   });
 
   it('GET /api/publik/tesaurus/:kata meneruskan error', async () => {

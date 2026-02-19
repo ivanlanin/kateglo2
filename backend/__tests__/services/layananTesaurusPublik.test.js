@@ -31,7 +31,7 @@ describe('layananTesaurusPublik.cariTesaurus', () => {
   });
 
   it('meneruskan query trim beserta opsi', async () => {
-    ModelTesaurus.cari.mockResolvedValue({ data: [{ lema: 'aktif' }], total: 1, hasNext: false });
+    ModelTesaurus.cari.mockResolvedValue({ data: [{ indeks: 'aktif' }], total: 1, hasNext: false });
 
     const result = await cariTesaurus(' aktif ', { limit: 25, offset: 3 });
 
@@ -70,7 +70,7 @@ describe('layananTesaurusPublik.ambilDetailTesaurus', () => {
 
   it('memetakan detail dan mem-parse relasi', async () => {
     ModelTesaurus.ambilDetail.mockResolvedValue({
-      lema: 'aktif',
+      indeks: 'aktif',
       sinonim: ' giat ; rajin ; ',
       antonim: '',
     });
@@ -79,7 +79,7 @@ describe('layananTesaurusPublik.ambilDetailTesaurus', () => {
 
     expect(ModelTesaurus.ambilDetail).toHaveBeenCalledWith('aktif sekali');
     expect(result).toEqual({
-      lema: 'aktif',
+      indeks: 'aktif',
       sinonim: ['giat', 'rajin'],
       antonim: [],
     });
