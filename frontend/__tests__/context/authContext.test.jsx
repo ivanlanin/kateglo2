@@ -88,6 +88,25 @@ describe('context/authContext', () => {
     expect(screen.getByTestId('authenticated')).toHaveTextContent('false');
   });
 
+  it('inisialisasi dengan token tersimpan memicu bootstrap profil', async () => {
+    localStorage.getItem.mockReturnValue('token-tersimpan');
+    mockAmbilProfilSaya.mockResolvedValue({ email: 'awal@contoh.id' });
+
+    render(
+      <AuthProvider>
+        <AuthProbe />
+      </AuthProvider>
+    );
+
+    await waitFor(() => {
+      expect(mockAmbilProfilSaya).toHaveBeenCalledWith('token-tersimpan');
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('user')).toHaveTextContent('awal@contoh.id');
+      expect(screen.getByTestId('authenticated')).toHaveTextContent('true');
+    });
+  });
+
   it('setAuthToken menyimpan token dan memuat profil hingga autentikasi true', async () => {
     mockAmbilProfilSaya.mockResolvedValue({ email: 'user@contoh.id', name: 'User' });
 
@@ -203,4 +222,50 @@ describe('context/authContext', () => {
       expect(mockAmbilProfilSaya).toHaveBeenCalledTimes(1);
     });
   });
+
+  it('tetap aman saat localStorage tidak tersedia', () => {
+    const originalStorage = globalThis.localStorage;
+    const originalWindowStorage = window.localStorage;
+    Object.defineProperty(globalThis, 'localStorage', {
+      value: undefined,
+      writable: true,
+      configurable: true,
+    });
+    Object.defineProperty(window, 'localStorage', {
+      value: undefined,
+      writable: true,
+      configurable: true,
+    });
+
+    try {
+      render(
+        <AuthProvider>
+          <AuthProbe />
+        </AuthProvider>
+      );
+
+      expect(screen.getByTestId('loading')).toHaveTextContent('false');
+
+      fireEvent.click(screen.getByRole('button', { name: 'set-token' }));
+      expect(screen.getByTestId('token')).toHaveTextContent('token-baru');
+
+      fireEvent.click(screen.getByRole('button', { name: 'clear-token' }));
+      expect(screen.getByTestId('token')).toHaveTextContent('-');
+
+      fireEvent.click(screen.getByRole('button', { name: 'logout' }));
+      expect(screen.getByTestId('loading')).toHaveTextContent('false');
+    } finally {
+      Object.defineProperty(globalThis, 'localStorage', {
+        value: originalStorage,
+        writable: true,
+        configurable: true,
+      });
+      Object.defineProperty(window, 'localStorage', {
+        value: originalWindowStorage,
+        writable: true,
+        configurable: true,
+      });
+    }
+  });
+
 });

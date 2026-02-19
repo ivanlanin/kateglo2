@@ -9,6 +9,8 @@ import {
   formatTitleCase,
   normalizeToken,
   buildLabelMap,
+  resolveNamaLabel,
+  buatPathKategoriDariLabel,
   tentukanKategoriJenis,
   bandingkanEntriKamus,
   bandingkanJenisSubentri,
@@ -93,6 +95,34 @@ describe('KamusDetail', () => {
     const tag = document.head.querySelector('meta[property="og:test"]');
     expect(tag).not.toBeNull();
     expect(tag.getAttribute('content')).toBe('nilai-uji');
+  });
+
+  it('upsertMetaTag memperbarui tag yang sudah ada', () => {
+    const tag = document.createElement('meta');
+    tag.setAttribute('property', 'og:uji-update');
+    tag.setAttribute('content', 'lama');
+    document.head.appendChild(tag);
+
+    upsertMetaTag({ property: 'og:uji-update', content: 'baru' });
+
+    const semuaTag = Array.from(document.head.querySelectorAll('meta[property="og:uji-update"]'));
+    expect(semuaTag).toHaveLength(1);
+    expect(semuaTag[0]?.getAttribute('content')).toBe('baru');
+  });
+
+  it('upsertMetaTag menangani kombinasi name+property saat membuat tag', () => {
+    document.head.querySelector('meta[name="uji-meta-kombinasi"]')?.remove();
+
+    upsertMetaTag({
+      name: 'uji-meta-kombinasi',
+      property: 'og:uji-meta-kombinasi',
+      content: 'nilai-kombinasi',
+    });
+
+    const tag = document.head.querySelector('meta[name="uji-meta-kombinasi"]');
+    expect(tag).not.toBeNull();
+    expect(tag?.getAttribute('property')).toBe('og:uji-meta-kombinasi');
+    expect(tag?.getAttribute('content')).toBe('nilai-kombinasi');
   });
 
   it('menampilkan not found state tanpa saran', () => {
@@ -1324,5 +1354,204 @@ describe('KamusDetail helpers', () => {
     render(<KamusDetail />);
 
     expect(screen.getByRole('link', { name: 'Dasar' })).toHaveAttribute('href', '/kamus/bentuk/dasar');
+  });
+
+  it('helper label dan path kategori menutup cabang fallback nilai kosong', () => {
+    expect(resolveNamaLabel('', {})).toBe('');
+    expect(resolveNamaLabel('n', { n: 'Nomina' })).toBe('Nomina');
+    expect(buatPathKategoriDariLabel('kelas', '', {})).toBe('/kamus');
+    expect(buatPathKategoriDariLabel('kelas', 'n', { n: 'Kata Benda' })).toBe('/kamus/kelas/kata-benda');
+  });
+
+  it('bandingkanEntriKamus menutup fallback nilai non-numerik homograf/homonim', () => {
+    const lebihAwal = bandingkanEntriKamus(
+      { entri: 'beta', homograf: undefined, homonim: undefined },
+      { entri: 'alfa', homograf: undefined, homonim: undefined }
+    );
+
+    expect(lebihAwal).toBeGreaterThan(0);
+  });
+
+  it('submit komentar kosong berhenti lebih awal tanpa memanggil API', async () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      isLoading: false,
+      loginDenganGoogle: vi.fn(),
+    });
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return { isLoading: false, isError: false, data: {} };
+      }
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: true, activeCount: 0, komentar: [] } },
+          refetch: vi.fn(),
+        };
+      }
+      return {
+        isLoading: false,
+        isError: false,
+        data: {
+          entri: 'kata',
+          makna: [{ id: 1, makna: 'arti' }],
+          subentri: {},
+          tesaurus: { sinonim: [], antonim: [] },
+          glosarium: [],
+        },
+      };
+    });
+
+    render(<KamusDetail />);
+
+    const form = screen.getByRole('button', { name: /kirim komentar/i }).closest('form');
+    fireEvent.submit(form);
+
+    await waitFor(() => {
+      expect(simpanKomentarKamus).not.toHaveBeenCalled();
+    });
+  });
+
+  it('mengurutkan komentar aman saat timestamp/id tidak tersedia', () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      isLoading: false,
+      loginDenganGoogle: vi.fn(),
+    });
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return { isLoading: false, isError: false, data: {} };
+      }
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: {
+            data: {
+              loggedIn: true,
+              activeCount: 2,
+              komentar: [
+                { id: 1, nama: 'A', komentar: 'satu', created_at: undefined, updated_at: undefined },
+                { id: 2, nama: 'B', komentar: 'dua', created_at: null, updated_at: null },
+              ],
+            },
+          },
+          refetch: vi.fn(),
+        };
+      }
+      return {
+        isLoading: false,
+        isError: false,
+        data: {
+          entri: 'kata',
+          makna: [{ id: 1, makna: 'arti' }],
+          subentri: {},
+          tesaurus: { sinonim: [], antonim: [] },
+          glosarium: [],
+        },
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByText('satu')).toBeInTheDocument();
+    expect(screen.getByText('dua')).toBeInTheDocument();
+  });
+
+  it('mengurutkan komentar dengan fallback id falsy saat waktu sama', () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      isLoading: false,
+      loginDenganGoogle: vi.fn(),
+    });
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return { isLoading: false, isError: false, data: {} };
+      }
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: {
+            data: {
+              loggedIn: true,
+              activeCount: 2,
+              komentar: [
+                { id: 0, pengguna_nama: 'A', komentar: 'id nol', updated_at: '2026-02-01T10:00:00.000Z', created_at: '2026-02-01T10:00:00.000Z' },
+                { id: null, pengguna_nama: 'B', komentar: 'id null', updated_at: '2026-02-01T10:00:00.000Z', created_at: '2026-02-01T10:00:00.000Z' },
+              ],
+            },
+          },
+          refetch: vi.fn(),
+        };
+      }
+      return {
+        isLoading: false,
+        isError: false,
+        data: {
+          entri: 'kata',
+          makna: [{ id: 1, makna: 'arti' }],
+          subentri: {},
+          tesaurus: { sinonim: [], antonim: [] },
+          glosarium: [],
+        },
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByText('id nol')).toBeInTheDocument();
+    expect(screen.getByText('id null')).toBeInTheDocument();
+  });
+
+  it('mengurutkan komentar berdasarkan waktu terbaru saat timestamp berbeda', () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      isLoading: false,
+      loginDenganGoogle: vi.fn(),
+    });
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return { isLoading: false, isError: false, data: {} };
+      }
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: {
+            data: {
+              loggedIn: true,
+              activeCount: 2,
+              komentar: [
+                { id: 1, pengguna_nama: 'A', komentar: 'lebih lama', updated_at: '2026-02-01T10:00:00.000Z', created_at: '2026-02-01T10:00:00.000Z' },
+                { id: 2, pengguna_nama: 'B', komentar: 'lebih baru', updated_at: '2026-02-01T11:00:00.000Z', created_at: '2026-02-01T11:00:00.000Z' },
+              ],
+            },
+          },
+          refetch: vi.fn(),
+        };
+      }
+      return {
+        isLoading: false,
+        isError: false,
+        data: {
+          entri: 'kata',
+          makna: [{ id: 1, makna: 'arti' }],
+          subentri: {},
+          tesaurus: { sinonim: [], antonim: [] },
+          glosarium: [],
+        },
+      };
+    });
+
+    render(<KamusDetail />);
+
+    const komentarNodes = screen.getAllByText(/lebih (baru|lama)/i);
+    expect(komentarNodes[0]).toHaveTextContent('lebih baru');
   });
 });

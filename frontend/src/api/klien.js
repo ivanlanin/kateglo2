@@ -5,8 +5,7 @@
 import axios from 'axios';
 
 const frontendSharedKey = import.meta.env.VITE_FRONTEND_SHARED_KEY;
-/* c8 ignore next */
-const apiBaseUrlFromEnv = (import.meta.env.VITE_API_URL || '').trim();
+const apiBaseUrlFromEnv = [import.meta.env.VITE_API_URL].join('').trim();
 
 const storageKey = 'kateglo-auth-token';
 
@@ -14,28 +13,30 @@ function hostLokal(hostname = '') {
   return hostname === 'localhost' || hostname === '127.0.0.1';
 }
 
-function resolveApiBaseUrl() {
-  if (!apiBaseUrlFromEnv) return undefined;
+function resolveApiBaseUrl(options = {}) {
+  const baseUrl = options.apiBaseUrl ?? apiBaseUrlFromEnv;
+  const runtimeWindow = options.runtimeWindow ?? (typeof window !== 'undefined' ? window : undefined);
+  const rewriteLocalhost = options.rewriteLocalhost ?? !import.meta.env.DEV;
+
+  if (!baseUrl) return undefined;
 
   let parsedUrl;
   try {
-    parsedUrl = new URL(apiBaseUrlFromEnv);
+    parsedUrl = new URL(baseUrl);
   } catch {
-    return apiBaseUrlFromEnv;
+    return baseUrl;
   }
 
-  if (typeof window !== 'undefined') {
+  if (runtimeWindow) {
     const targetLokal = hostLokal(parsedUrl.hostname);
-    const currentLokal = hostLokal(window.location.hostname);
+    const currentLokal = hostLokal(runtimeWindow.location.hostname);
 
-    /* c8 ignore start */
-    if (!import.meta.env.DEV && targetLokal && !currentLokal) {
-      return window.location.origin;
+    if (rewriteLocalhost && targetLokal && !currentLokal) {
+      return runtimeWindow.location.origin;
     }
-    /* c8 ignore stop */
   }
 
-  return apiBaseUrlFromEnv;
+  return baseUrl;
 }
 
 const klien = axios.create({
@@ -47,12 +48,16 @@ klien.interceptors.request.use((config) => {
   if (frontendSharedKey) {
     config.headers['X-Frontend-Key'] = frontendSharedKey;
   }
-  /* c8 ignore next */
-  const token = typeof window !== 'undefined' ? localStorage.getItem(storageKey) : '';
+  const token = globalThis?.localStorage?.getItem(storageKey) || '';
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
+
+export const __private = {
+  hostLokal,
+  resolveApiBaseUrl,
+};
 
 export default klien;
