@@ -3,7 +3,7 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   useDaftarKamusAdmin, useDetailKamusAdmin, useSimpanKamus, useHapusKamus,
   useDaftarMakna, useSimpanMakna, useHapusMakna,
@@ -25,6 +25,7 @@ import {
   useFormPanel, InputField, SelectField, TextareaField, ToggleAktif,
   FormFooter, PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
+import { buatPathDetailKamus } from '../../utils/kamusIndex';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -93,9 +94,12 @@ const kolom = [
     label: 'Entri',
     render: (item) => (
       <span>
-        <span className="font-medium text-gray-800 dark:text-gray-100">
+        <Link
+          to={buatPathDetailKamus(item.indeks || item.entri)}
+          className="font-medium text-blue-700 hover:underline dark:text-blue-300"
+        >
           {item.entri}
-        </span>
+        </Link>
         {item.jenis_rujuk && (
           <span className="text-xs text-gray-400 dark:text-gray-500 ml-2">→ {item.entri_rujuk}</span>
         )}
