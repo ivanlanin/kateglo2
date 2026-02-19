@@ -10,9 +10,10 @@ vi.mock('../../../src/api/apiAdmin', () => ({
 }));
 
 vi.mock('../../../src/komponen/redaksi/TataLetakAdmin', () => ({
-  default: ({ children, judul }) => (
+  default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>
+      {aksiJudul}
       {children}
     </div>
   ),

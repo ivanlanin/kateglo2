@@ -138,6 +138,17 @@ export function KotakCariTambahAdmin({
 }
 
 /**
+ * Tombol aksi utama pada area heading admin
+ */
+export function TombolAksiAdmin({ onClick, label = '+ Tambah' }) {
+  return (
+    <button type="button" onClick={onClick} className="form-admin-btn-simpan whitespace-nowrap">
+      {label}
+    </button>
+  );
+}
+
+/**
  * Info ringkasan total
  */
 export function InfoTotal({ q, total, label = 'entri' }) {
@@ -193,8 +204,9 @@ export function TabelAdmin({
   onKlikBaris,
 }) {
   const thClass =
-    'px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider';
+    'px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider';
   const tdClass = 'px-6 py-3 text-sm text-gray-700 dark:text-gray-300';
+  const tampilkanPaginasi = total > 0 && limit && onOffset;
 
   if (isLoading) {
     return (
@@ -222,6 +234,12 @@ export function TabelAdmin({
 
   return (
     <>
+      {tampilkanPaginasi && (
+        <div className="mb-4">
+          <Paginasi total={total} limit={limit} offset={offset} onChange={onOffset} />
+        </div>
+      )}
+
       <div className="bg-white dark:bg-dark-bg-elevated rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -252,7 +270,7 @@ export function TabelAdmin({
           </table>
         </div>
       </div>
-      {total > 0 && limit && onOffset && (
+      {tampilkanPaginasi && (
         <div className="mt-4">
           <Paginasi total={total} limit={limit} offset={offset} onChange={onOffset} />
         </div>

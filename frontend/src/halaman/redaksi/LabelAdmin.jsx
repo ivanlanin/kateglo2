@@ -7,9 +7,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarLabelAdmin, useDetailLabelAdmin, useSimpanLabel, useHapusLabel } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
-  KotakCariTambahAdmin,
+  KotakCariAdmin,
+  TombolAksiAdmin,
   BadgeStatus,
-  InfoTotal,
   TabelAdmin,
   getApiErrorMessage,
   potongTeks,
@@ -158,17 +158,14 @@ function LabelAdmin() {
   };
 
   return (
-    <TataLetakAdmin judul="Label">
-      <KotakCariTambahAdmin
+    <TataLetakAdmin judul="Label" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
+      <KotakCariAdmin
         nilai={cari}
         onChange={setCari}
         onCari={kirimCari}
         onHapus={hapusCari}
         placeholder="Cari label …"
-        onTambah={bukaTambah}
       />
-
-      <InfoTotal q={q} total={total} label="label" />
 
       <TabelAdmin
         kolom={kolom}

@@ -7,8 +7,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarGlosariumAdmin, useDetailGlosariumAdmin, useSimpanGlosarium, useHapusGlosarium } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
-  KotakCariTambahAdmin,
-  InfoTotal,
+  KotakCariAdmin,
+  TombolAksiAdmin,
   BadgeStatus,
   TabelAdmin,
   getApiErrorMessage,
@@ -149,16 +149,15 @@ function GlosariumAdmin() {
   };
 
   return (
-    <TataLetakAdmin judul="Glosarium">
-      <KotakCariTambahAdmin
+    <TataLetakAdmin judul="Glosarium" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
+      <KotakCariAdmin
         nilai={cari}
         onChange={setCari}
         onCari={kirimCari}
         onHapus={hapusCari}
         placeholder="Cari istilah …"
-        onTambah={bukaTambah}
       />
-      <InfoTotal q={q} total={total} label="istilah" />
+
       <TabelAdmin
         kolom={kolom}
         data={daftar}

@@ -156,7 +156,7 @@ describe('KomponenAdmin', () => {
     fireEvent.click(screen.getByText('A'));
     expect(onKlikBaris).toHaveBeenCalledWith(data[0]);
 
-    fireEvent.click(screen.getByTestId('paginasi-mock'));
+    fireEvent.click(screen.getAllByTestId('paginasi-mock')[0]);
     expect(onOffset).toHaveBeenCalledWith(20);
 
     rerender(
