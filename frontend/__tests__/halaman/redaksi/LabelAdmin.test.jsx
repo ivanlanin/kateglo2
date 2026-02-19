@@ -5,11 +5,13 @@ import { MemoryRouter } from 'react-router-dom';
 import LabelAdmin from '../../../src/halaman/redaksi/LabelAdmin';
 
 const mockUseDaftarLabelAdmin = vi.fn();
+const mockUseDetailLabelAdmin = vi.fn();
 const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
 
 vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarLabelAdmin: (...args) => mockUseDaftarLabelAdmin(...args),
+  useDetailLabelAdmin: (...args) => mockUseDetailLabelAdmin(...args),
   useSimpanLabel: () => ({ mutate: mutateSimpan, isPending: false }),
   useHapusLabel: () => ({ mutate: mutateHapus, isPending: false }),
 }));
@@ -35,6 +37,7 @@ describe('LabelAdmin', () => {
         data: [{ id: 1, kategori: 'ragam', kode: 'cak', nama: 'cakapan', urutan: 1, keterangan: 'ragam lisan' }],
       },
     });
+    mockUseDetailLabelAdmin.mockReturnValue({ isLoading: false, isError: false, data: null });
   });
 
   it('menampilkan daftar dan validasi wajib saat simpan', () => {

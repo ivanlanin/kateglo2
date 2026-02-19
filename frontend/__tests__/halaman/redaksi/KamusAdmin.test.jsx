@@ -5,6 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import KamusAdmin from '../../../src/halaman/redaksi/KamusAdmin';
 
 const mockUseDaftarKamusAdmin = vi.fn();
+const mockUseDetailKamusAdmin = vi.fn();
 const mockUseDaftarMakna = vi.fn();
 const mockUseKategoriLabelRedaksi = vi.fn();
 
@@ -17,6 +18,7 @@ const mutateHapusContoh = vi.fn();
 
 vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarKamusAdmin: (...args) => mockUseDaftarKamusAdmin(...args),
+  useDetailKamusAdmin: (...args) => mockUseDetailKamusAdmin(...args),
   useSimpanKamus: () => ({ mutate: mutateSimpanKamus, isPending: false }),
   useHapusKamus: () => ({ mutate: mutateHapusKamus, isPending: false }),
   useDaftarMakna: (...args) => mockUseDaftarMakna(...args),
@@ -56,6 +58,12 @@ describe('KamusAdmin', () => {
         total: 1,
         data: [{ id: 1, entri: 'anak', jenis: 'dasar', lafal: 'a·nak', aktif: 1, jenis_rujuk: 'lihat', entri_rujuk: 'ananda' }],
       },
+    });
+
+    mockUseDetailKamusAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: null,
     });
 
     mockUseDaftarMakna.mockReturnValue({
@@ -221,7 +229,7 @@ describe('KamusAdmin', () => {
   });
 
   it('menangani state makna kosong dan fallback error simpan/hapus lema', () => {
-    mockUseDaftarMakna.mockReturnValueOnce({ isLoading: false, data: { data: [] } });
+    mockUseDaftarMakna.mockReturnValue({ isLoading: false, data: { data: [] } });
     mutateSimpanKamus.mockImplementation((_data, opts) => opts.onError?.({}));
     mutateHapusKamus.mockImplementation((_id, opts) => opts.onError?.({ response: { data: { error: 'Err hapus lema' } } }));
 

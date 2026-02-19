@@ -147,7 +147,7 @@ function formatInfoWaktuEntri(createdAt, updatedAt) {
 
 function KamusDetail() {
   const { indeks } = useParams();
-  const { isAuthenticated, isLoading: isAuthLoading, loginDenganGoogle } = useAuth();
+  const { isAuthenticated, adalahAdmin, isLoading: isAuthLoading, loginDenganGoogle } = useAuth();
   const [teksKomentar, setTeksKomentar] = useState('');
   const [isSubmittingKomentar, setIsSubmittingKomentar] = useState(false);
   const [pesanKomentar, setPesanKomentar] = useState('');
@@ -373,13 +373,24 @@ function KamusDetail() {
                         {formatTitleCase(entriItem.jenis || 'dasar')}
                       </Link>
                     )}
-                    {infoWaktu && (
-                      <p className="kamus-detail-entry-meta">{infoWaktu}</p>
-                    )}
                   </div>
+                  {adalahAdmin && entriItem.id && (
+                    <Link
+                      to={`/redaksi/kamus/${entriItem.id}`}
+                      className="kamus-detail-edit-link"
+                      aria-label="Sunting entri di Redaksi"
+                      title="Sunting entri di Redaksi"
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-4 w-4">
+                        <path d="M12 20h9" />
+                        <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                      </svg>
+                      <span className="sr-only">Sunting</span>
+                    </Link>
+                  )}
                 </div>
 
-                <div className="flex flex-wrap gap-2 mt-3">
+                <div className="kamus-detail-entry-tags-row">
                   {entriItem.varian && (
                     <span className="kamus-detail-tag-gray">varian: {entriItem.varian}</span>
                   )}
@@ -534,6 +545,10 @@ function KamusDetail() {
                       </div>
                     ))}
                   </div>
+                )}
+
+                {infoWaktu && (
+                  <p className="kamus-detail-entry-meta">{infoWaktu}</p>
                 )}
               </section>
             );

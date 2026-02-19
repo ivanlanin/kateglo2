@@ -2,8 +2,9 @@
  * @fileoverview Halaman kelola pengguna (admin)
  */
 
-import { useState } from 'react';
-import { useDaftarPengguna, useDaftarPeran, useSimpanPengguna } from '../../api/apiAdmin';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDaftarPengguna, useDetailPengguna, useDaftarPeran, useSimpanPengguna } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import { TabelAdmin, InfoTotal, BadgeStatus, getApiErrorMessage } from '../../komponen/redaksi/KomponenAdmin';
 import PanelGeser from '../../komponen/redaksi/PanelGeser';
@@ -28,31 +29,77 @@ function formatTanggal(dateStr) {
 }
 
 function PenggunaAdmin() {
+  const navigate = useNavigate();
+  const { id: idParam } = useParams();
   const [offset, setOffset] = useState(0);
   const limit = 20;
+  const idEdit = Number.parseInt(idParam || '', 10);
+  const idDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
+  const idEditTerbuka = useRef(null);
 
   const { data: penggunaResp, isLoading, isError } = useDaftarPengguna({ limit, offset });
+  const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailPengguna(idDariPath);
   const { data: peranResp } = useDaftarPeran();
   const simpanPengguna = useSimpanPengguna();
 
   const daftarPengguna = penggunaResp?.data || [];
   const total = penggunaResp?.total || 0;
-  const daftarPeran = peranResp?.data || [];
+  const daftarPeran = useMemo(() => peranResp?.data || [], [peranResp]);
 
   const panel = useFormPanel({ nama: '', aktif: 1, peran_id: '' });
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
 
+  const mapPenggunaUntukPanel = useCallback((item) => {
+    const peranId = item?.peran_id || daftarPeran.find((r) => r.kode === item?.peran_kode)?.id || '';
+    return { ...item, peran_id: peranId };
+  }, [daftarPeran]);
+
+  useEffect(() => {
+    if (!idParam) return;
+    if (idDariPath) return;
+    setPesan({ error: 'ID pengguna tidak valid.', sukses: '' });
+    navigate('/redaksi/pengguna', { replace: true });
+  }, [idParam, idDariPath, navigate]);
+
+  useEffect(() => {
+    if (!idDariPath || isDetailLoading || isDetailError) return;
+    const detail = detailResp?.data;
+    if (!detail?.id) return;
+    if (idEditTerbuka.current === detail.id) return;
+    panel.bukaUntukSunting(mapPenggunaUntukPanel(detail));
+    idEditTerbuka.current = detail.id;
+  }, [detailResp, idDariPath, isDetailError, isDetailLoading, mapPenggunaUntukPanel, panel]);
+
+  useEffect(() => {
+    if (!idDariPath || isDetailLoading || !isDetailError) return;
+    setPesan({ error: 'Pengguna tidak ditemukan.', sukses: '' });
+    navigate('/redaksi/pengguna', { replace: true });
+  }, [idDariPath, isDetailError, isDetailLoading, navigate]);
+
+  const tutupPanel = () => {
+    panel.tutup();
+    if (idDariPath) {
+      idEditTerbuka.current = null;
+      navigate('/redaksi/pengguna', { replace: true });
+    }
+  };
+
   const handleSimpan = () => {
     setPesan({ error: '', sukses: '' });
     simpanPengguna.mutate(panel.data, {
-      onSuccess: () => { setPesan({ error: '', sukses: 'Tersimpan!' }); setTimeout(() => panel.tutup(), 600); },
+      onSuccess: () => { setPesan({ error: '', sukses: 'Tersimpan!' }); setTimeout(() => tutupPanel(), 600); },
       onError: (err) => setPesan({ error: getApiErrorMessage(err, 'Gagal menyimpan'), sukses: '' }),
     });
   };
 
   const handleBukaSunting = (item) => {
-    const peranId = daftarPeran.find((r) => r.kode === item.peran_kode)?.id || '';
-    panel.bukaUntukSunting({ ...item, peran_id: peranId });
+    if (!item?.id) {
+      panel.bukaUntukSunting(mapPenggunaUntukPanel(item));
+      return;
+    }
+    panel.bukaUntukSunting(mapPenggunaUntukPanel(item));
+    if (panel.buka) return;
+    navigate(`/redaksi/pengguna/${item.id}`);
   };
 
   const opsiPeran = [
@@ -115,7 +162,7 @@ function PenggunaAdmin() {
         onKlikBaris={handleBukaSunting}
       />
 
-      <PanelGeser buka={panel.buka} onTutup={panel.tutup} judul="Sunting Pengguna">
+      <PanelGeser buka={panel.buka} onTutup={tutupPanel} judul="Sunting Pengguna">
         <PesanForm error={pesan.error} sukses={pesan.sukses} />
         <div className="form-admin-group">
           <label className="form-admin-label">Surel</label>
@@ -126,7 +173,7 @@ function PenggunaAdmin() {
         <ToggleAktif value={panel.data.aktif} onChange={panel.ubahField} />
         <FormFooter
           onSimpan={handleSimpan}
-          onBatal={panel.tutup}
+          onBatal={tutupPanel}
           isPending={simpanPengguna.isPending}
           modeTambah={false}
         />

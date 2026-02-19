@@ -5,11 +5,13 @@ import { MemoryRouter } from 'react-router-dom';
 import TesaurusAdmin from '../../../src/halaman/redaksi/TesaurusAdmin';
 
 const mockUseDaftarTesaurusAdmin = vi.fn();
+const mockUseDetailTesaurusAdmin = vi.fn();
 const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
 
 vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarTesaurusAdmin: (...args) => mockUseDaftarTesaurusAdmin(...args),
+  useDetailTesaurusAdmin: (...args) => mockUseDetailTesaurusAdmin(...args),
   useSimpanTesaurus: () => ({ mutate: mutateSimpan, isPending: false }),
   useHapusTesaurus: () => ({ mutate: mutateHapus, isPending: false }),
 }));
@@ -35,6 +37,7 @@ describe('TesaurusAdmin', () => {
         data: [{ id: 1, lema: 'anak', sinonim: 'buah hati', antonim: 'orang tua' }],
       },
     });
+    mockUseDetailTesaurusAdmin.mockReturnValue({ isLoading: false, isError: false, data: null });
   });
 
   it('menampilkan daftar dan validasi simpan', () => {

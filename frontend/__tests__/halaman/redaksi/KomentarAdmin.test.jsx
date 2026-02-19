@@ -4,10 +4,12 @@ import { MemoryRouter } from 'react-router-dom';
 import KomentarAdmin from '../../../src/halaman/redaksi/KomentarAdmin';
 
 const mockUseDaftarKomentarAdmin = vi.fn();
+const mockUseDetailKomentarAdmin = vi.fn();
 const mutateSimpanKomentar = vi.fn();
 
 vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarKomentarAdmin: (...args) => mockUseDaftarKomentarAdmin(...args),
+  useDetailKomentarAdmin: (...args) => mockUseDetailKomentarAdmin(...args),
   useSimpanKomentarAdmin: () => ({ mutate: mutateSimpanKomentar, isPending: false }),
 }));
 
@@ -39,6 +41,7 @@ describe('KomentarAdmin', () => {
         }],
       },
     });
+    mockUseDetailKomentarAdmin.mockReturnValue({ isLoading: false, isError: false, data: null });
   });
 
   it('menampilkan daftar komentar dan menyimpan moderasi', () => {

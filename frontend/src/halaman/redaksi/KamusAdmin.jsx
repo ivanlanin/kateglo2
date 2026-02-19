@@ -2,9 +2,10 @@
  * @fileoverview Halaman admin kamus — daftar, cari, tambah, sunting entri + makna + contoh
  */
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
-  useDaftarKamusAdmin, useSimpanKamus, useHapusKamus,
+  useDaftarKamusAdmin, useDetailKamusAdmin, useSimpanKamus, useHapusKamus,
   useDaftarMakna, useSimpanMakna, useHapusMakna,
   useSimpanContoh, useHapusContoh,
   useKategoriLabelRedaksi,
@@ -397,12 +398,19 @@ function SeksiMakna({ entriId, opsiKelasKata, opsiRagam, opsiBidang, opsiBahasa,
 // ─── Main Page ───────────────────────────────────────────────────────────────
 
 function KamusAdmin() {
+  const navigate = useNavigate();
+  const { id: idParam } = useParams();
   const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit } =
     usePencarianAdmin(50);
+  const [pesan, setPesan] = useState({ error: '', sukses: '' });
+  const idEdit = Number.parseInt(idParam || '', 10);
+  const entriIdDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
+  const idEditTerbuka = useRef(null);
 
   const { data: resp, isLoading, isError } = useDaftarKamusAdmin({ limit, offset, q });
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
+  const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailKamusAdmin(entriIdDariPath);
 
   const panel = useFormPanel(nilaiAwalEntri);
   const simpan = useSimpanKamus();
@@ -431,7 +439,53 @@ function KamusAdmin() {
     };
   }, [respLabelKategori]);
 
-  const [pesan, setPesan] = useState({ error: '', sukses: '' });
+  useEffect(() => {
+    if (!idParam) return;
+    if (entriIdDariPath) return;
+    setPesan({ error: 'ID entri tidak valid.', sukses: '' });
+    navigate('/redaksi/kamus', { replace: true });
+  }, [idParam, entriIdDariPath, navigate]);
+
+  useEffect(() => {
+    if (!entriIdDariPath || isDetailLoading || isDetailError) return;
+    const detailEntri = detailResp?.data;
+    if (!detailEntri?.id) return;
+    if (idEditTerbuka.current === detailEntri.id) return;
+    panel.bukaUntukSunting(detailEntri);
+    idEditTerbuka.current = detailEntri.id;
+  }, [detailResp, entriIdDariPath, isDetailError, isDetailLoading, panel]);
+
+  useEffect(() => {
+    if (!entriIdDariPath || isDetailLoading || !isDetailError) return;
+    setPesan({ error: 'Entri tidak ditemukan.', sukses: '' });
+    navigate('/redaksi/kamus', { replace: true });
+  }, [entriIdDariPath, isDetailError, isDetailLoading, navigate]);
+
+  const tutupPanel = () => {
+    panel.tutup();
+    if (entriIdDariPath) {
+      idEditTerbuka.current = null;
+      navigate('/redaksi/kamus', { replace: true });
+    }
+  };
+
+  const bukaTambah = () => {
+    if (entriIdDariPath) {
+      idEditTerbuka.current = null;
+      navigate('/redaksi/kamus', { replace: true });
+    }
+    panel.bukaUntukTambah();
+  };
+
+  const bukaSuntingDariDaftar = (item) => {
+    if (!item?.id) {
+      panel.bukaUntukSunting(item);
+      return;
+    }
+    panel.bukaUntukSunting(item);
+    if (panel.buka) return;
+    navigate(`/redaksi/kamus/${item.id}`);
+  };
 
   const handleSimpan = () => {
     setPesan({ error: '', sukses: '' });
@@ -447,7 +501,7 @@ function KamusAdmin() {
         if (panel.modeTambah && r?.data?.id) {
           panel.bukaUntukSunting(r.data);
         } else {
-          setTimeout(() => panel.tutup(), 600);
+          setTimeout(() => tutupPanel(), 600);
         }
       },
       onError: (err) => setPesan({ error: getApiErrorMessage(err, 'Gagal menyimpan'), sukses: '' }),
@@ -457,7 +511,7 @@ function KamusAdmin() {
   const handleHapus = () => {
     if (!confirm('Yakin ingin menghapus entri ini beserta semua maknanya?')) return;
     hapus.mutate(panel.data.id, {
-      onSuccess: () => panel.tutup(),
+      onSuccess: () => tutupPanel(),
       onError: (err) => setPesan({ error: getApiErrorMessage(err, 'Gagal menghapus'), sukses: '' }),
     });
   };
@@ -470,7 +524,7 @@ function KamusAdmin() {
         onCari={kirimCari}
         onHapus={hapusCari}
         placeholder="Cari entri …"
-        onTambah={panel.bukaUntukTambah}
+        onTambah={bukaTambah}
       />
       <InfoTotal q={q} total={total} label="entri" />
       <TabelAdmin
@@ -482,10 +536,10 @@ function KamusAdmin() {
         limit={limit}
         offset={offset}
         onOffset={setOffset}
-        onKlikBaris={panel.bukaUntukSunting}
+        onKlikBaris={bukaSuntingDariDaftar}
       />
 
-      <PanelGeser buka={panel.buka} onTutup={panel.tutup} judul={panel.modeTambah ? 'Tambah Entri' : 'Sunting Entri'}>
+      <PanelGeser buka={panel.buka} onTutup={tutupPanel} judul={panel.modeTambah ? 'Tambah Entri' : 'Sunting Entri'}>
         <PesanForm error={pesan.error} sukses={pesan.sukses} />
         <InputField label="Entri" name="entri" value={panel.data.entri} onChange={panel.ubahField} required />
         <InputField
@@ -508,7 +562,7 @@ function KamusAdmin() {
         <ToggleAktif value={panel.data.aktif} onChange={panel.ubahField} />
         <FormFooter
           onSimpan={handleSimpan}
-          onBatal={panel.tutup}
+          onBatal={tutupPanel}
           onHapus={handleHapus}
           isPending={simpan.isPending || hapus.isPending}
           modeTambah={panel.modeTambah}

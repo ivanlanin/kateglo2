@@ -43,11 +43,17 @@ function App() {
       <Route path="/redaksi/login" element={<LoginAdmin />} />
       <Route path="/redaksi" element={<RuteRedaksi><DasborAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/kamus" element={<RuteRedaksi><KamusAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/kamus/:id" element={<RuteRedaksi><KamusAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/komentar" element={<RuteRedaksi><KomentarAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/komentar/:id" element={<RuteRedaksi><KomentarAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/tesaurus" element={<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/tesaurus/:id" element={<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/glosarium" element={<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/glosarium/:id" element={<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/label" element={<RuteRedaksi><LabelAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/label/:id" element={<RuteRedaksi><LabelAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/pengguna" element={<RuteRedaksi><PenggunaAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/pengguna/:id" element={<RuteRedaksi><PenggunaAdmin /></RuteRedaksi>} />
       {/* Public routes */}
       <Route element={<TataLetak />}>
         <Route path="/" element={<Beranda />} />

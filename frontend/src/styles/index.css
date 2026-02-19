@@ -1096,12 +1096,24 @@ code {
     @apply text-sm text-gray-500 mt-1;
   }
 
+  .kamus-detail-entry-tags-row {
+    @apply flex flex-wrap gap-2 mt-2;
+  }
+
   .kamus-detail-entry-meta {
-    @apply text-xs text-gray-500 mt-1;
+    @apply text-xs text-gray-500 mt-6;
+  }
+
+  .kamus-detail-edit-link {
+    @apply inline-flex items-center justify-center h-8 w-8 rounded-md border border-gray-200 text-gray-500 hover:text-blue-600 hover:border-blue-300;
   }
 
   .dark .kamus-detail-entry-meta {
     @apply text-dark-text-muted;
+  }
+
+  .dark .kamus-detail-edit-link {
+    @apply border-gray-700 text-dark-text-muted hover:text-blue-400 hover:border-blue-500;
   }
 
   .kamus-detail-actual-link {
