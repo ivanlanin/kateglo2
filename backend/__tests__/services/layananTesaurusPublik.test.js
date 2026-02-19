@@ -73,9 +73,6 @@ describe('layananTesaurusPublik.ambilDetailTesaurus', () => {
       lema: 'aktif',
       sinonim: ' giat ; rajin ; ',
       antonim: '',
-      turunan: null,
-      gabungan: 'aktif belajar',
-      berkaitan: 'energi;usaha',
     });
 
     const result = await ambilDetailTesaurus('aktif%20sekali');
@@ -85,9 +82,6 @@ describe('layananTesaurusPublik.ambilDetailTesaurus', () => {
       lema: 'aktif',
       sinonim: ['giat', 'rajin'],
       antonim: [],
-      turunan: [],
-      gabungan: ['aktif belajar'],
-      berkaitan: ['energi', 'usaha'],
     });
   });
 });

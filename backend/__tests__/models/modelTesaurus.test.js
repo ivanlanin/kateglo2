@@ -195,7 +195,7 @@ describe('ModelTesaurus', () => {
     const result = await ModelTesaurus.ambilDenganId(90);
 
     expect(db.query).toHaveBeenCalledWith(
-      'SELECT id, lema, sinonim, antonim, turunan, gabungan, berkaitan, aktif FROM tesaurus WHERE id = $1',
+      'SELECT id, lema, sinonim, antonim, aktif FROM tesaurus WHERE id = $1',
       [90]
     );
     expect(result).toEqual(row);
@@ -209,7 +209,7 @@ describe('ModelTesaurus', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('UPDATE tesaurus SET lema = $1'),
-      ['aktif', null, null, null, null, null, true, 4]
+      ['aktif', null, null, true, 4]
     );
     expect(result).toEqual(row);
   });
@@ -222,12 +222,12 @@ describe('ModelTesaurus', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
-      ['aktif', 'giat', null, null, null, null, true]
+      ['aktif', 'giat', null, true]
     );
     expect(result).toEqual(row);
   });
 
-  it('simpan mempertahankan field opsional saat bernilai truthy', async () => {
+  it('simpan mempertahankan field sinonim/antonim saat bernilai truthy', async () => {
     db.query.mockResolvedValue({ rows: [{ id: 6 }] });
 
     await ModelTesaurus.simpan({
@@ -235,32 +235,41 @@ describe('ModelTesaurus', () => {
       lema: 'aktif',
       sinonim: 'giat',
       antonim: 'pasif',
-      turunan: 'aktifkan',
-      gabungan: 'aktif kerja',
-      berkaitan: 'dinamis',
     });
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('UPDATE tesaurus SET lema = $1'),
-      ['aktif', 'giat', 'pasif', 'aktifkan', 'aktif kerja', 'dinamis', true, 6]
+      ['aktif', 'giat', 'pasif', true, 6]
     );
   });
 
-  it('simpan insert mempertahankan field opsional saat bernilai truthy', async () => {
+  it('simpan insert mempertahankan field sinonim/antonim saat bernilai truthy', async () => {
     db.query.mockResolvedValue({ rows: [{ id: 7 }] });
 
     await ModelTesaurus.simpan({
       lema: 'aktif',
       sinonim: 'giat',
       antonim: 'pasif',
-      turunan: 'aktifkan',
-      gabungan: 'aktif kerja',
-      berkaitan: 'dinamis',
     });
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
-      ['aktif', 'giat', 'pasif', 'aktifkan', 'aktif kerja', 'dinamis', true]
+      ['aktif', 'giat', 'pasif', true]
+    );
+  });
+
+  it('simpan menormalisasi pemisah menjadi titik koma', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 71 }] });
+
+    await ModelTesaurus.simpan({
+      lema: 'aktif',
+      sinonim: 'giat, rajin ; tekun',
+      antonim: 'malas, lamban',
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO tesaurus'),
+      ['aktif', 'giat; rajin; tekun', 'malas; lamban', true]
     );
   });
 
@@ -271,7 +280,7 @@ describe('ModelTesaurus', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
-      ['aktif', null, null, null, null, null, true]
+      ['aktif', null, null, true]
     );
   });
 
@@ -292,7 +301,7 @@ describe('ModelTesaurus', () => {
     await ModelTesaurus.simpan({ lema: 'tes', aktif: true });
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
-      ['tes', null, null, null, null, null, true]
+      ['tes', null, null, true]
     );
   });
 
@@ -301,7 +310,7 @@ describe('ModelTesaurus', () => {
     await ModelTesaurus.simpan({ lema: 'tes', aktif: false });
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
-      ['tes', null, null, null, null, null, false]
+      ['tes', null, null, false]
     );
   });
 
@@ -310,7 +319,7 @@ describe('ModelTesaurus', () => {
     await ModelTesaurus.simpan({ lema: 'tes', aktif: 1 });
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
-      ['tes', null, null, null, null, null, true]
+      ['tes', null, null, true]
     );
   });
 
@@ -321,11 +330,11 @@ describe('ModelTesaurus', () => {
     await ModelTesaurus.simpan({ lema: 'b', aktif: 'no' });
     expect(db.query).toHaveBeenNthCalledWith(
       1, expect.stringContaining('INSERT INTO tesaurus'),
-      ['a', null, null, null, null, null, true]
+      ['a', null, null, true]
     );
     expect(db.query).toHaveBeenNthCalledWith(
       2, expect.stringContaining('INSERT INTO tesaurus'),
-      ['b', null, null, null, null, null, false]
+      ['b', null, null, false]
     );
   });
 
@@ -334,7 +343,7 @@ describe('ModelTesaurus', () => {
     await ModelTesaurus.simpan({ lema: 'tes', aktif: [] });
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
-      ['tes', null, null, null, null, null, true]
+      ['tes', null, null, true]
     );
   });
 

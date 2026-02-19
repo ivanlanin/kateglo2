@@ -31,8 +31,8 @@ function DaftarRelasi({ simbol, daftar, ekspansi }) {
 function RelasiSingkat({ sinonim, antonim }) {
   const [ekspansi, setEkspansi] = useState(false);
 
-  const daftarSinonim = sinonim ? sinonim.split(';').map((s) => s.trim()).filter(Boolean) : [];
-  const daftarAntonim = antonim ? antonim.split(';').map((s) => s.trim()).filter(Boolean) : [];
+  const daftarSinonim = sinonim ? sinonim.split(/[;,]/).map((s) => s.trim()).filter(Boolean) : [];
+  const daftarAntonim = antonim ? antonim.split(/[;,]/).map((s) => s.trim()).filter(Boolean) : [];
   if (daftarSinonim.length === 0 && daftarAntonim.length === 0) return null;
 
   const adaLebih = daftarSinonim.length > BATAS_RINGKAS || daftarAntonim.length > BATAS_RINGKAS;
