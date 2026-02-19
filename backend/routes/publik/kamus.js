@@ -9,7 +9,7 @@ const ModelLabel = require('../../models/modelLabel');
 const ModelEntri = require('../../models/modelEntri');
 const ModelKomentar = require('../../models/modelKomentar');
 const { publicSearchLimiter } = require('../../middleware/rateLimiter');
-const { parsePagination, rejectTooLargeOffset } = require('../../utils/routesPublikUtils');
+const { parseCursorPagination } = require('../../utils/routesPublikUtils');
 
 const router = express.Router();
 
@@ -24,18 +24,31 @@ router.get('/kategori', async (_req, res, next) => {
 
 router.get('/kategori/:kategori/:kode', async (req, res, next) => {
   try {
-    const { limit, offset } = parsePagination(req.query, { defaultLimit: 100, maxLimit: 200 });
-    if (rejectTooLargeOffset(res, offset)) {
-      return;
-    }
+    const { limit, cursor, direction, lastPage } = parseCursorPagination(req.query, {
+      defaultLimit: 100,
+      maxLimit: 200,
+    });
 
-    const data = await ModelLabel.cariEntriPerLabel(
+    const data = await ModelLabel.cariEntriPerLabelCursor(
       req.params.kategori,
       decodeURIComponent(req.params.kode),
-      limit,
-      offset
+      {
+        limit,
+        cursor,
+        direction,
+        lastPage,
+        hitungTotal: true,
+      }
     );
-    return res.json(data);
+    return res.json({
+      ...data,
+      pageInfo: {
+        hasPrev: Boolean(data.hasPrev),
+        hasNext: Boolean(data.hasNext),
+        prevCursor: data.prevCursor || null,
+        nextCursor: data.nextCursor || null,
+      },
+    });
   } catch (error) {
     return next(error);
   }
@@ -52,16 +65,22 @@ router.get('/autocomplete/:kata', async (req, res, next) => {
 
 router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
   try {
-    const { limit, offset } = parsePagination(req.query, { defaultLimit: 100, maxLimit: 200 });
-    if (rejectTooLargeOffset(res, offset)) {
-      return;
-    }
+    const { limit, cursor, direction, lastPage } = parseCursorPagination(req.query, {
+      defaultLimit: 100,
+      maxLimit: 200,
+    });
 
-    const result = await cariKamus(req.params.kata, { limit, offset });
+    const result = await cariKamus(req.params.kata, { limit, cursor, direction, lastPage });
     const response = {
       query: req.params.kata,
       total: result.total,
       data: result.data,
+      pageInfo: {
+        hasPrev: Boolean(result.hasPrev),
+        hasNext: Boolean(result.hasNext),
+        prevCursor: result.prevCursor || null,
+        nextCursor: result.nextCursor || null,
+      },
     };
     if (result.total === 0) {
       response.saran = await ModelEntri.saranEntri(decodeURIComponent(req.params.kata));

@@ -49,10 +49,21 @@ async function hapusCacheDetailKamus(indeks) {
   await delKey(buatCacheKeyDetailKamus(trimmed));
 }
 
-async function cariKamus(query, { limit = 100, offset = 0 } = {}) {
+async function cariKamus(query, {
+  limit = 100,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+} = {}) {
   const trimmed = (query || '').trim();
-  if (!trimmed) return { data: [], total: 0, hasNext: false };
-  return ModelEntri.cariEntri(trimmed, limit, offset, false);
+  if (!trimmed) return { data: [], total: 0, hasNext: false, hasPrev: false };
+  return ModelEntri.cariEntriCursor(trimmed, {
+    limit,
+    cursor,
+    direction,
+    lastPage,
+    hitungTotal: true,
+  });
 }
 
 async function ambilDetailKamus(indeksAtauEntri) {

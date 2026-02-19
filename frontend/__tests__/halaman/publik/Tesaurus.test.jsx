@@ -4,14 +4,11 @@ import Tesaurus from '../../../src/halaman/publik/Tesaurus';
 import { cariTesaurus } from '../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
-const mockSetSearchParams = vi.fn();
 let mockParams = {};
-let queryString = '';
 
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   useParams: () => mockParams,
-  useSearchParams: () => [new URLSearchParams(queryString), mockSetSearchParams],
 }));
 
 vi.mock('@tanstack/react-query', () => ({
@@ -23,8 +20,8 @@ vi.mock('../../../src/api/apiPublik', () => ({
 }));
 
 vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
-  default: ({ onChange }) => (
-    <button type="button" onClick={() => onChange(100)}>
+  default: ({ onNavigateCursor }) => (
+    <button type="button" onClick={() => onNavigateCursor('next')}>
       Halaman berikut
     </button>
   ),
@@ -33,10 +30,8 @@ vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
 describe('Tesaurus', () => {
   beforeEach(() => {
     mockUseQuery.mockReset();
-    mockSetSearchParams.mockReset();
     cariTesaurus.mockClear();
     mockParams = {};
-    queryString = '';
   });
 
   it('menampilkan state default saat tanpa kata', () => {
@@ -50,16 +45,21 @@ describe('Tesaurus', () => {
 
   it('menampilkan loading dan error untuk mode pencarian', () => {
     mockParams = { kata: 'kata' };
-    mockUseQuery.mockImplementationOnce((options) => {
+    mockUseQuery.mockImplementation((options) => {
       if (options?.enabled !== false && options?.queryFn) options.queryFn();
       return { data: undefined, isLoading: true, isError: false };
     });
 
     const { rerender } = render(<Tesaurus />);
     expect(screen.getByText(/Mencari data/i)).toBeInTheDocument();
-    expect(cariTesaurus).toHaveBeenCalledWith('kata', { limit: 100, offset: 0 });
+    expect(cariTesaurus).toHaveBeenCalledWith('kata', {
+      limit: 100,
+      cursor: null,
+      direction: 'next',
+      lastPage: false,
+    });
 
-    mockUseQuery.mockImplementationOnce((options) => {
+    mockUseQuery.mockImplementation((options) => {
       if (options?.enabled !== false && options?.queryFn) options.queryFn();
       return { data: undefined, isLoading: false, isError: true };
     });
@@ -84,7 +84,6 @@ describe('Tesaurus', () => {
 
   it('mengarahkan tautan ke kamus detail dan menampilkan relasi dengan simbol', () => {
     mockParams = { kata: 'anak%20ibu' };
-    queryString = 'offset=20';
     mockUseQuery.mockImplementation((options) => {
       if (options?.enabled !== false && options?.queryFn) options.queryFn();
       return {
@@ -98,6 +97,7 @@ describe('Tesaurus', () => {
             },
           ],
           total: 120,
+          pageInfo: { hasPrev: false, hasNext: true, nextCursor: 'CUR_NEXT' },
         },
         isLoading: false,
         isError: false,
@@ -130,8 +130,13 @@ describe('Tesaurus', () => {
     fireEvent.click(tombolEkspansi);
     expect(tombolEkspansi).toHaveAttribute('aria-expanded', 'false');
 
-    fireEvent.click(screen.getByRole('button', { name: 'Halaman berikut' }));
-    expect(mockSetSearchParams).toHaveBeenCalledWith({ offset: '100' });
+    fireEvent.click(screen.getAllByRole('button', { name: 'Halaman berikut' })[0]);
+    expect(cariTesaurus).toHaveBeenCalledWith('anak%20ibu', {
+      limit: 100,
+      cursor: 'CUR_NEXT',
+      direction: 'next',
+      lastPage: false,
+    });
   });
 
   it('menampilkan hanya antonim jika sinonim kosong', () => {

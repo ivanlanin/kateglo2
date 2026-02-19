@@ -15,6 +15,7 @@
 - Merapikan tabel dan isi tesaurus
 - Menyeragamkan tombol tambah, filter, dan paginasi di halaman redaksi
 - Menerapkan autentikasi dengan banyak peran
+- Menerapkan paginasi dengan kursor untuk meningkatkan kinerja
 
 ## 2026-02-18 Rabu
 

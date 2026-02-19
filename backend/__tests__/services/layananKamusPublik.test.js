@@ -5,9 +5,11 @@
 
 jest.mock('../../models/modelEntri', () => {
   const cariEntri = jest.fn();
+  const cariEntriCursor = jest.fn();
   const ambilEntriPerIndeks = jest.fn();
   return {
     cariEntri,
+    cariEntriCursor,
     ambilEntriPerIndeks,
     ambilMakna: jest.fn(),
     ambilContoh: jest.fn(),
@@ -55,32 +57,44 @@ describe('layananKamusPublik.cariKamus', () => {
   it('mengembalikan array kosong jika query kosong', async () => {
     const result = await cariKamus('   ');
 
-    expect(result).toEqual({ data: [], total: 0, hasNext: false });
-    expect(ModelEntri.cariEntri).not.toHaveBeenCalled();
+    expect(result).toEqual({ data: [], total: 0, hasNext: false, hasPrev: false });
+    expect(ModelEntri.cariEntriCursor).not.toHaveBeenCalled();
   });
 
   it('mengembalikan kosong jika query undefined', async () => {
     const result = await cariKamus(undefined);
 
-    expect(result).toEqual({ data: [], total: 0, hasNext: false });
-    expect(ModelEntri.cariEntri).not.toHaveBeenCalled();
+    expect(result).toEqual({ data: [], total: 0, hasNext: false, hasPrev: false });
+    expect(ModelEntri.cariEntriCursor).not.toHaveBeenCalled();
   });
 
   it('meneruskan query trim dengan opsi default', async () => {
-    ModelEntri.cariEntri.mockResolvedValue({ data: [{ entri: 'kata' }], total: 1, hasNext: false });
+    ModelEntri.cariEntriCursor.mockResolvedValue({ data: [{ entri: 'kata' }], total: 1, hasNext: false, hasPrev: false });
 
     const result = await cariKamus(' kata ');
 
-    expect(ModelEntri.cariEntri).toHaveBeenCalledWith('kata', 100, 0, false);
-    expect(result).toEqual({ data: [{ entri: 'kata' }], total: 1, hasNext: false });
+    expect(ModelEntri.cariEntriCursor).toHaveBeenCalledWith('kata', {
+      limit: 100,
+      cursor: null,
+      direction: 'next',
+      lastPage: false,
+      hitungTotal: true,
+    });
+    expect(result).toEqual({ data: [{ entri: 'kata' }], total: 1, hasNext: false, hasPrev: false });
   });
 
-  it('meneruskan opsi limit dan offset', async () => {
-    ModelEntri.cariEntri.mockResolvedValue({ data: [], total: 0, hasNext: false });
+  it('meneruskan opsi cursor', async () => {
+    ModelEntri.cariEntriCursor.mockResolvedValue({ data: [], total: 0, hasNext: false, hasPrev: false });
 
-    await cariKamus('kata', { limit: 33, offset: 7 });
+    await cariKamus('kata', { limit: 33, cursor: 'abc', direction: 'prev', lastPage: true });
 
-    expect(ModelEntri.cariEntri).toHaveBeenCalledWith('kata', 33, 7, false);
+    expect(ModelEntri.cariEntriCursor).toHaveBeenCalledWith('kata', {
+      limit: 33,
+      cursor: 'abc',
+      direction: 'prev',
+      lastPage: true,
+      hitungTotal: true,
+    });
   });
 });
 

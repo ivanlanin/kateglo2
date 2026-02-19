@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-19T12:24:34.332Z
+-- Generated: 2026-02-19T18:08:40.708Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -157,6 +157,9 @@ create table glosarium (
   updated_at timestamp without time zone not null default now(),
   aktif boolean not null default true
 );
+create index idx_glosarium_aktif_bahasa_indonesia on glosarium using btree (bahasa, indonesia) WHERE (aktif = true);
+create index idx_glosarium_aktif_bidang_indonesia on glosarium using btree (bidang, indonesia) WHERE (aktif = true);
+create index idx_glosarium_aktif_sumber_indonesia on glosarium using btree (sumber, indonesia) WHERE (aktif = true);
 create index idx_glosarium_asing on glosarium using btree (asing);
 create index idx_glosarium_asing_trgm on glosarium using gin (asing gin_trgm_ops);
 create index idx_glosarium_bidang on glosarium using btree (bidang);

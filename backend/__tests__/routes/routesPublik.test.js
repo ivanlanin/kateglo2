@@ -10,6 +10,7 @@ const jwt = require('jsonwebtoken');
 jest.mock('../../models/modelGlosarium', () => ({
   autocomplete: jest.fn(),
   cari: jest.fn(),
+  cariCursor: jest.fn(),
   ambilDaftarBidang: jest.fn(),
   ambilDaftarSumber: jest.fn(),
 }));
@@ -17,6 +18,7 @@ jest.mock('../../models/modelGlosarium', () => ({
 jest.mock('../../models/modelLabel', () => ({
   ambilSemuaKategori: jest.fn(),
   cariEntriPerLabel: jest.fn(),
+  cariEntriPerLabelCursor: jest.fn(),
 }));
 
 jest.mock('../../models/modelEntri', () => {
@@ -183,17 +185,23 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/kamus/kategori/:kategori/:kode memanggil model label', async () => {
-    ModelLabel.cariEntriPerLabel.mockResolvedValue({ data: [], total: 0, label: null });
+    ModelLabel.cariEntriPerLabelCursor.mockResolvedValue({ data: [], total: 0, label: null });
 
     const response = await request(createApp())
-      .get('/api/publik/kamus/kategori/ragam/umum%20sekali?limit=999&offset=-5');
+      .get('/api/publik/kamus/kategori/ragam/umum%20sekali?limit=999&cursor=abc&direction=prev');
 
     expect(response.status).toBe(200);
-    expect(ModelLabel.cariEntriPerLabel).toHaveBeenCalledWith('ragam', 'umum sekali', 200, 0);
+    expect(ModelLabel.cariEntriPerLabelCursor).toHaveBeenCalledWith('ragam', 'umum sekali', {
+      limit: 200,
+      cursor: 'abc',
+      direction: 'prev',
+      lastPage: false,
+      hitungTotal: true,
+    });
   });
 
   it('GET /api/publik/kamus/kategori/:kategori/:kode meneruskan error', async () => {
-    ModelLabel.cariEntriPerLabel.mockRejectedValue(new Error('label gagal'));
+    ModelLabel.cariEntriPerLabelCursor.mockRejectedValue(new Error('label gagal'));
 
     const response = await request(createApp())
       .get('/api/publik/kamus/kategori/ragam/cak');
@@ -202,13 +210,20 @@ describe('routes backend', () => {
     expect(response.body.error).toBe('label gagal');
   });
 
-  it('GET /api/publik/kamus/kategori/:kategori/:kode mengembalikan 400 saat offset terlalu besar', async () => {
-    const response = await request(createApp())
-      .get('/api/publik/kamus/kategori/ragam/umum?offset=1001');
+  it('GET /api/publik/kamus/kategori/:kategori/:kode mendukung lastPage cursor', async () => {
+    ModelLabel.cariEntriPerLabelCursor.mockResolvedValue({ data: [], total: 0, label: null });
 
-    expect(response.status).toBe(400);
-    expect(response.body.error).toBe('Invalid Query');
-    expect(response.body.message).toContain('Offset maksimal adalah 1000');
+    const response = await request(createApp())
+      .get('/api/publik/kamus/kategori/ragam/umum?lastPage=1');
+
+    expect(response.status).toBe(200);
+    expect(ModelLabel.cariEntriPerLabelCursor).toHaveBeenCalledWith('ragam', 'umum', {
+      limit: 100,
+      cursor: null,
+      direction: 'next',
+      lastPage: true,
+      hitungTotal: true,
+    });
   });
 
   it('GET /api/publik/kamus/autocomplete/:kata mengembalikan data', async () => {
@@ -235,10 +250,15 @@ describe('routes backend', () => {
       total: 1,
     });
 
-    const response = await request(createApp()).get('/api/publik/kamus/cari/kata?limit=999&offset=-4');
+    const response = await request(createApp()).get('/api/publik/kamus/cari/kata?limit=999&cursor=abc&direction=prev');
 
     expect(response.status).toBe(200);
-    expect(layananKamusPublik.cariKamus).toHaveBeenCalledWith('kata', { limit: 200, offset: 0 });
+    expect(layananKamusPublik.cariKamus).toHaveBeenCalledWith('kata', {
+      limit: 200,
+      cursor: 'abc',
+      direction: 'prev',
+      lastPage: false,
+    });
     expect(response.body.total).toBe(1);
   });
 
@@ -391,10 +411,15 @@ describe('routes backend', () => {
   it('GET /api/publik/tesaurus/cari/:kata mengembalikan hasil', async () => {
     layananTesaurusPublik.cariTesaurus.mockResolvedValue({ data: [{ indeks: 'aktif' }], total: 1 });
 
-    const response = await request(createApp()).get('/api/publik/tesaurus/cari/aktif?limit=0&offset=7');
+    const response = await request(createApp()).get('/api/publik/tesaurus/cari/aktif?limit=0&cursor=abc&direction=prev');
 
     expect(response.status).toBe(200);
-    expect(layananTesaurusPublik.cariTesaurus).toHaveBeenCalledWith('aktif', { limit: 100, offset: 7 });
+    expect(layananTesaurusPublik.cariTesaurus).toHaveBeenCalledWith('aktif', {
+      limit: 100,
+      cursor: 'abc',
+      direction: 'prev',
+      lastPage: false,
+    });
     expect(response.body.total).toBe(1);
   });
 
@@ -453,23 +478,25 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/glosarium/cari/:kata memanggil model sesuai query', async () => {
-    ModelGlosarium.cari.mockResolvedValue({ data: [], total: 0 });
+    ModelGlosarium.cariCursor.mockResolvedValue({ data: [], total: 0 });
 
     const response = await request(createApp())
-      .get('/api/publik/glosarium/cari/istilah?limit=999&offset=3');
+      .get('/api/publik/glosarium/cari/istilah?limit=999&cursor=abc&direction=prev');
 
     expect(response.status).toBe(200);
-    expect(ModelGlosarium.cari).toHaveBeenCalledWith({
+    expect(ModelGlosarium.cariCursor).toHaveBeenCalledWith({
       q: 'istilah',
       limit: 100,
-      offset: 3,
       aktifSaja: true,
-      hitungTotal: false,
+      hitungTotal: true,
+      cursor: 'abc',
+      direction: 'prev',
+      lastPage: false,
     });
   });
 
   it('GET /api/publik/glosarium/cari/:kata meneruskan error', async () => {
-    ModelGlosarium.cari.mockRejectedValue(new Error('glo cari gagal'));
+    ModelGlosarium.cariCursor.mockRejectedValue(new Error('glo cari gagal'));
 
     const response = await request(createApp()).get('/api/publik/glosarium/cari/istilah');
 
@@ -496,23 +523,25 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/glosarium/bidang/:bidang memanggil model', async () => {
-    ModelGlosarium.cari.mockResolvedValue({ data: [], total: 0 });
+    ModelGlosarium.cariCursor.mockResolvedValue({ data: [], total: 0 });
 
     const response = await request(createApp())
-      .get('/api/publik/glosarium/bidang/ilmu%20komputer?limit=9&offset=2');
+      .get('/api/publik/glosarium/bidang/ilmu%20komputer?limit=9&cursor=abc&direction=prev');
 
     expect(response.status).toBe(200);
-    expect(ModelGlosarium.cari).toHaveBeenCalledWith({
+    expect(ModelGlosarium.cariCursor).toHaveBeenCalledWith({
       bidang: 'ilmu komputer',
       limit: 9,
-      offset: 2,
       aktifSaja: true,
-      hitungTotal: false,
+      hitungTotal: true,
+      cursor: 'abc',
+      direction: 'prev',
+      lastPage: false,
     });
   });
 
   it('GET /api/publik/glosarium/bidang/:bidang meneruskan error', async () => {
-    ModelGlosarium.cari.mockRejectedValue(new Error('bidang detail gagal'));
+    ModelGlosarium.cariCursor.mockRejectedValue(new Error('bidang detail gagal'));
 
     const response = await request(createApp()).get('/api/publik/glosarium/bidang/ling');
 
@@ -539,23 +568,25 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/glosarium/sumber/:sumber memanggil model', async () => {
-    ModelGlosarium.cari.mockResolvedValue({ data: [], total: 0 });
+    ModelGlosarium.cariCursor.mockResolvedValue({ data: [], total: 0 });
 
     const response = await request(createApp())
-      .get('/api/publik/glosarium/sumber/KBBI%20V?limit=6&offset=1');
+      .get('/api/publik/glosarium/sumber/KBBI%20V?limit=6&cursor=abc&direction=prev');
 
     expect(response.status).toBe(200);
-    expect(ModelGlosarium.cari).toHaveBeenCalledWith({
+    expect(ModelGlosarium.cariCursor).toHaveBeenCalledWith({
       sumber: 'KBBI V',
       limit: 6,
-      offset: 1,
       aktifSaja: true,
-      hitungTotal: false,
+      hitungTotal: true,
+      cursor: 'abc',
+      direction: 'prev',
+      lastPage: false,
     });
   });
 
   it('GET /api/publik/glosarium/sumber/:sumber meneruskan error', async () => {
-    ModelGlosarium.cari.mockRejectedValue(new Error('sumber detail gagal'));
+    ModelGlosarium.cariCursor.mockRejectedValue(new Error('sumber detail gagal'));
 
     const response = await request(createApp()).get('/api/publik/glosarium/sumber/kbbi');
 
@@ -629,49 +660,19 @@ describe('routes backend', () => {
     delete process.env.JWT_SECRET;
   });
 
-  it('GET /api/publik/kamus/cari/:kata mengembalikan 400 saat offset terlalu besar', async () => {
+  it('GET /api/publik/kamus/cari/:kata menerima flag lastPage', async () => {
+    layananKamusPublik.cariKamus.mockResolvedValue({ data: [], total: 0 });
+
     const response = await request(createApp())
-      .get('/api/publik/kamus/cari/kata?offset=1001');
+      .get('/api/publik/kamus/cari/kata?lastPage=1');
 
-    expect(response.status).toBe(400);
-    expect(response.body.error).toBe('Invalid Query');
-    expect(response.body.message).toContain('Offset maksimal adalah 1000');
-  });
-
-  it('GET /api/publik/tesaurus/cari/:kata mengembalikan 400 saat offset terlalu besar', async () => {
-    const response = await request(createApp())
-      .get('/api/publik/tesaurus/cari/aktif?offset=1001');
-
-    expect(response.status).toBe(400);
-    expect(response.body.error).toBe('Invalid Query');
-    expect(response.body.message).toContain('Offset maksimal adalah 1000');
-  });
-
-  it('GET /api/publik/glosarium/cari/:kata mengembalikan 400 saat offset terlalu besar', async () => {
-    const response = await request(createApp())
-      .get('/api/publik/glosarium/cari/istilah?offset=1001');
-
-    expect(response.status).toBe(400);
-    expect(response.body.error).toBe('Invalid Query');
-    expect(response.body.message).toContain('Offset maksimal adalah 1000');
-  });
-
-  it('GET /api/publik/glosarium/bidang/:bidang mengembalikan 400 saat offset terlalu besar', async () => {
-    const response = await request(createApp())
-      .get('/api/publik/glosarium/bidang/linguistik?offset=1001');
-
-    expect(response.status).toBe(400);
-    expect(response.body.error).toBe('Invalid Query');
-    expect(response.body.message).toContain('Offset maksimal adalah 1000');
-  });
-
-  it('GET /api/publik/glosarium/sumber/:sumber mengembalikan 400 saat offset terlalu besar', async () => {
-    const response = await request(createApp())
-      .get('/api/publik/glosarium/sumber/kbbi?offset=1001');
-
-    expect(response.status).toBe(400);
-    expect(response.body.error).toBe('Invalid Query');
-    expect(response.body.message).toContain('Offset maksimal adalah 1000');
+    expect(response.status).toBe(200);
+    expect(layananKamusPublik.cariKamus).toHaveBeenCalledWith('kata', {
+      limit: 100,
+      cursor: null,
+      direction: 'next',
+      lastPage: true,
+    });
   });
 
   it('GET /api/publik/kamus/komentar/:indeks mengembalikan 400 jika indeks kosong', async () => {

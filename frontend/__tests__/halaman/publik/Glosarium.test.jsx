@@ -10,9 +10,7 @@ import {
 } from '../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
-const mockSetSearchParams = vi.fn();
 let mockParams = {};
-let params = '';
 
 vi.mock('../../../src/api/apiPublik', () => ({
   cariGlosarium: vi.fn().mockResolvedValue({ data: [], total: 0 }),
@@ -25,7 +23,6 @@ vi.mock('../../../src/api/apiPublik', () => ({
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   useParams: () => mockParams,
-  useSearchParams: () => [new URLSearchParams(params), mockSetSearchParams],
 }));
 
 vi.mock('@tanstack/react-query', () => ({
@@ -33,8 +30,8 @@ vi.mock('@tanstack/react-query', () => ({
 }));
 
 vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
-  default: ({ onChange }) => (
-    <button type="button" onClick={() => onChange(100)}>
+  default: ({ onNavigateCursor }) => (
+    <button type="button" onClick={() => onNavigateCursor('next')}>
       Halaman glosarium berikut
     </button>
   ),
@@ -44,8 +41,6 @@ describe('Glosarium', () => {
   beforeEach(() => {
     mockUseQuery.mockReset();
     mockUseQuery.mockReturnValue({ data: undefined, isLoading: false, isError: false });
-    mockSetSearchParams.mockReset();
-    params = '';
     mockParams = {};
     cariGlosarium.mockClear();
     ambilGlosariumPerBidang.mockClear();
@@ -83,6 +78,7 @@ describe('Glosarium', () => {
         data: {
           data: [{ id: 1, indonesia: 'istilah', asing: 'term' }],
           total: 1,
+          pageInfo: { hasPrev: false, hasNext: true, nextCursor: 'CUR_NEXT' },
         },
         isLoading: false,
         isError: false,
@@ -94,10 +90,19 @@ describe('Glosarium', () => {
     expect(screen.getByText(/Hasil Pencarian/i)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'istilah' })).toBeInTheDocument();
     expect(screen.getByText('(term)')).toBeInTheDocument();
-    expect(cariGlosarium).toHaveBeenCalledWith('istilah', { limit: 100, offset: 0 });
+    expect(cariGlosarium).toHaveBeenCalledWith('istilah', {
+      limit: 100,
+      cursor: null,
+      direction: 'next',
+      lastPage: false,
+    });
 
-    screen.getByRole('button', { name: 'Halaman glosarium berikut' }).click();
-    expect(mockSetSearchParams).toHaveBeenCalledWith({ offset: '100' });
+    expect(cariGlosarium).toHaveBeenCalledWith('istilah', {
+      limit: 100,
+      cursor: null,
+      direction: 'next',
+      lastPage: false,
+    });
   });
 
   it('menampilkan hasil mode bidang', () => {
@@ -121,7 +126,12 @@ describe('Glosarium', () => {
     render(<Glosarium />);
 
     expect(screen.getByRole('heading', { name: 'Bidang linguistik' })).toBeInTheDocument();
-    expect(ambilGlosariumPerBidang).toHaveBeenCalledWith('linguistik', { limit: 100, offset: 0 });
+    expect(ambilGlosariumPerBidang).toHaveBeenCalledWith('linguistik', {
+      limit: 100,
+      cursor: null,
+      direction: 'next',
+      lastPage: false,
+    });
   });
 
   it('menampilkan hasil mode sumber', () => {
@@ -145,7 +155,12 @@ describe('Glosarium', () => {
     render(<Glosarium />);
 
     expect(screen.getByRole('heading', { name: 'Sumber kbbi' })).toBeInTheDocument();
-    expect(ambilGlosariumPerSumber).toHaveBeenCalledWith('kbbi', { limit: 100, offset: 0 });
+    expect(ambilGlosariumPerSumber).toHaveBeenCalledWith('kbbi', {
+      limit: 100,
+      cursor: null,
+      direction: 'next',
+      lastPage: false,
+    });
   });
 
   it('menampilkan state kosong, loading, dan error', () => {

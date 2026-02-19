@@ -5,6 +5,7 @@
 const db = require('../db');
 const autocomplete = require('../db/autocomplete');
 const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
+const { decodeCursor, encodeCursor } = require('../utils/cursorPagination');
 
 function normalizeRelasiList(teks) {
   if (!teks) return null;
@@ -87,6 +88,119 @@ class ModelTesaurus {
       : safeOffset + data.length;
 
     return { data, total, hasNext };
+  }
+
+  static async cariCursor(query, {
+    limit = 100,
+    cursor = null,
+    direction = 'next',
+    lastPage = false,
+    hitungTotal = true,
+  } = {}) {
+    const normalizedQuery = query.trim();
+    const cappedLimit = Math.min(Math.max(Number(limit) || 100, 1), 200);
+    const cursorPayload = decodeCursor(cursor);
+    const isPrev = direction === 'prev';
+    const orderDesc = Boolean(lastPage || isPrev);
+
+    const baseSql = `
+      WITH hasil AS (
+        SELECT id, indeks, sinonim, antonim,
+               CASE WHEN LOWER(indeks) = LOWER($1) THEN 0
+                    WHEN indeks ILIKE $2 THEN 1
+                    ELSE 2 END AS prioritas
+        FROM tesaurus
+        WHERE indeks ILIKE $3
+          AND aktif = TRUE
+          AND (sinonim IS NOT NULL OR antonim IS NOT NULL)
+      )`;
+
+    let total = 0;
+    if (hitungTotal) {
+      const countResult = await db.query(
+        `${baseSql} SELECT COUNT(*) AS total FROM hasil`,
+        [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`]
+      );
+      total = parseCount(countResult.rows[0]?.total);
+      if (total === 0) {
+        return {
+          data: [],
+          total: 0,
+          hasNext: false,
+          hasPrev: false,
+          nextCursor: null,
+          prevCursor: null,
+        };
+      }
+    }
+
+    const params = [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`];
+    const whereCursor = [];
+    if (cursorPayload && !lastPage) {
+      params.push(
+        Number(cursorPayload.prioritas) || 0,
+        String(cursorPayload.indeks || ''),
+        Number(cursorPayload.id) || 0
+      );
+      if (isPrev) {
+        whereCursor.push(`(prioritas, indeks, id) < ($4, $5, $6)`);
+      } else {
+        whereCursor.push(`(prioritas, indeks, id) > ($4, $5, $6)`);
+      }
+    }
+
+    const whereClause = whereCursor.length ? `WHERE ${whereCursor.join(' AND ')}` : '';
+    params.push(cappedLimit + 1);
+
+    const dataResult = await db.query(
+      `${baseSql}
+      SELECT id, indeks, sinonim, antonim, prioritas
+      FROM hasil
+      ${whereClause}
+      ORDER BY prioritas ${orderDesc ? 'DESC' : 'ASC'}, indeks ${orderDesc ? 'DESC' : 'ASC'}, id ${orderDesc ? 'DESC' : 'ASC'}
+      LIMIT $${params.length}`,
+      params
+    );
+
+    const hasMore = dataResult.rows.length > cappedLimit;
+    let rows = hasMore ? dataResult.rows.slice(0, cappedLimit) : dataResult.rows;
+    if (orderDesc) {
+      rows = rows.reverse();
+    }
+
+    const data = rows.map(({ prioritas: _prioritas, ...item }) => item);
+    const first = rows[0];
+    const last = rows[rows.length - 1];
+
+    const prevCursor = first
+      ? encodeCursor({ prioritas: first.prioritas, indeks: first.indeks, id: first.id })
+      : null;
+    const nextCursor = last
+      ? encodeCursor({ prioritas: last.prioritas, indeks: last.indeks, id: last.id })
+      : null;
+
+    let hasPrev = false;
+    let hasNext = false;
+
+    if (lastPage) {
+      hasNext = false;
+      hasPrev = total > data.length;
+    } else if (isPrev) {
+      hasPrev = hasMore;
+      hasNext = Boolean(cursorPayload);
+    } else {
+      hasPrev = Boolean(cursorPayload);
+      hasNext = hasMore;
+    }
+
+    return {
+      data,
+      total,
+      hasPrev,
+      hasNext,
+      prevCursor,
+      nextCursor,
+    };
   }
 
   /**

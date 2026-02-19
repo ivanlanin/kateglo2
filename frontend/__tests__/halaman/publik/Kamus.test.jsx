@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Kamus from '../../../src/halaman/publik/Kamus';
+import { cariKamus } from '../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
-const mockSetSearchParams = vi.fn();
 let mockParams = {};
 
 vi.mock('../../../src/api/apiPublik', () => ({
@@ -15,7 +15,6 @@ vi.mock('../../../src/api/apiPublik', () => ({
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   useParams: () => mockParams,
-  useSearchParams: () => [new URLSearchParams(''), mockSetSearchParams],
 }));
 
 vi.mock('@tanstack/react-query', () => ({
@@ -23,8 +22,8 @@ vi.mock('@tanstack/react-query', () => ({
 }));
 
 vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
-  default: ({ onChange }) => (
-    <button type="button" onClick={() => onChange(100)}>
+  default: ({ onNavigateCursor }) => (
+    <button type="button" onClick={() => onNavigateCursor('next')}>
       Ubah halaman
     </button>
   ),
@@ -33,7 +32,7 @@ vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
 describe('Kamus', () => {
   beforeEach(() => {
     mockUseQuery.mockReset();
-    mockSetSearchParams.mockReset();
+    cariKamus.mockClear();
     mockParams = {};
   });
 
@@ -357,7 +356,7 @@ describe('Kamus', () => {
     expect(screen.getByText(/belum tersedia di Kateglo/i)).toBeInTheDocument();
   });
 
-  it('mengubah offset saat paginasi dipicu', () => {
+  it('menampilkan kontrol paginasi saat hasil tersedia', () => {
     mockParams = { kata: 'kata' };
 
     mockUseQuery.mockImplementation((options) => {
@@ -365,7 +364,11 @@ describe('Kamus', () => {
       const { queryKey } = options;
       if (queryKey[0] === 'cari-kamus') {
         return {
-          data: { data: [{ id: 1, entri: 'kata' }], total: 300 },
+          data: {
+            data: [{ id: 1, entri: 'kata' }],
+            total: 300,
+            pageInfo: { hasPrev: false, hasNext: true, nextCursor: 'CUR_NEXT' },
+          },
           isLoading: false,
           isError: false,
         };
@@ -374,9 +377,7 @@ describe('Kamus', () => {
     });
 
     render(<Kamus />);
-    screen.getByRole('button', { name: 'Ubah halaman' }).click();
-
-    expect(mockSetSearchParams).toHaveBeenCalledWith({ offset: '100' });
+    expect(screen.getAllByRole('button', { name: 'Ubah halaman' }).length).toBeGreaterThan(0);
   });
 
   it('menampilkan pesan error saat query gagal', () => {

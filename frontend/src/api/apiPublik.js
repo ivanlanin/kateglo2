@@ -4,6 +4,15 @@
 
 import klien from './klien';
 
+function buildCursorParams({ limit = 100, cursor = null, direction = 'next', lastPage = false } = {}) {
+  return {
+    limit,
+    ...(cursor ? { cursor } : {}),
+    ...(direction && direction !== 'next' ? { direction } : {}),
+    ...(lastPage ? { lastPage: 1 } : {}),
+  };
+}
+
 function normalisasiItemAutocomplete(item) {
   if (typeof item === 'string') {
     const value = item.trim();
@@ -33,16 +42,26 @@ export async function ambilKategoriKamus() {
   return response.data;
 }
 
-export async function ambilEntriPerKategori(kategori, kode, { limit = 20, offset = 0 } = {}) {
+export async function ambilEntriPerKategori(kategori, kode, {
+  limit = 20,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+} = {}) {
   const response = await klien.get(`/api/publik/kamus/kategori/${encodeURIComponent(kategori)}/${encodeURIComponent(kode)}`, {
-    params: { limit, offset },
+    params: buildCursorParams({ limit, cursor, direction, lastPage }),
   });
   return response.data;
 }
 
-export async function cariKamus(kata, { limit = 100, offset = 0 } = {}) {
+export async function cariKamus(kata, {
+  limit = 100,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+} = {}) {
   const response = await klien.get(`/api/publik/kamus/cari/${encodeURIComponent(kata)}`, {
-    params: { limit, offset },
+    params: buildCursorParams({ limit, cursor, direction, lastPage }),
   });
   return response.data;
 }
@@ -76,9 +95,14 @@ export async function simpanKomentarKamus(indeks, komentar) {
 
 // === TESAURUS ===
 
-export async function cariTesaurus(kata, { limit = 100, offset = 0 } = {}) {
+export async function cariTesaurus(kata, {
+  limit = 100,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+} = {}) {
   const response = await klien.get(`/api/publik/tesaurus/cari/${encodeURIComponent(kata)}`, {
-    params: { limit, offset },
+    params: buildCursorParams({ limit, cursor, direction, lastPage }),
   });
   return response.data;
 }
@@ -100,23 +124,38 @@ export async function autocomplete(kategori, kata) {
 
 // === GLOSARIUM ===
 
-export async function cariGlosarium(kata, { limit = 100, offset = 0 } = {}) {
+export async function cariGlosarium(kata, {
+  limit = 100,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+} = {}) {
   const response = await klien.get(`/api/publik/glosarium/cari/${encodeURIComponent(kata)}`, {
-    params: { limit, offset },
+    params: buildCursorParams({ limit, cursor, direction, lastPage }),
   });
   return response.data;
 }
 
-export async function ambilGlosariumPerBidang(bidang, { limit = 100, offset = 0 } = {}) {
+export async function ambilGlosariumPerBidang(bidang, {
+  limit = 100,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+} = {}) {
   const response = await klien.get(`/api/publik/glosarium/bidang/${encodeURIComponent(bidang)}`, {
-    params: { limit, offset },
+    params: buildCursorParams({ limit, cursor, direction, lastPage }),
   });
   return response.data;
 }
 
-export async function ambilGlosariumPerSumber(sumber, { limit = 100, offset = 0 } = {}) {
+export async function ambilGlosariumPerSumber(sumber, {
+  limit = 100,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+} = {}) {
   const response = await klien.get(`/api/publik/glosarium/sumber/${encodeURIComponent(sumber)}`, {
-    params: { limit, offset },
+    params: buildCursorParams({ limit, cursor, direction, lastPage }),
   });
   return response.data;
 }
