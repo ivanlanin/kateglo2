@@ -123,7 +123,12 @@ describe('routes/redaksi', () => {
       const response = await callAsAdmin('get', '/api/redaksi/pengguna?limit=9&offset=2');
 
       expect(response.status).toBe(200);
-      expect(ModelPengguna.daftarPengguna).toHaveBeenCalledWith({ limit: 9, offset: 2 });
+      expect(ModelPengguna.daftarPengguna).toHaveBeenCalledWith({
+        limit: 9,
+        offset: 2,
+        q: '',
+        aktif: '',
+      });
       expect(response.body.total).toBe(1);
     });
 
@@ -275,6 +280,7 @@ describe('routes/redaksi', () => {
         limit: 200,
         offset: 0,
         q: 'kata',
+        aktif: '',
         jenis: 'dasar',
         jenis_rujuk: 'lihat',
         punya_homograf: '',
@@ -301,6 +307,7 @@ describe('routes/redaksi', () => {
         limit: 50,
         offset: 0,
         q: '',
+        aktif: '',
         jenis: '',
         jenis_rujuk: '',
         punya_homograf: '1',
@@ -626,7 +633,7 @@ describe('routes/redaksi', () => {
       const response = await callAsAdmin('get', '/api/redaksi/komentar?limit=25&offset=5&q=kata');
 
       expect(response.status).toBe(200);
-      expect(ModelKomentar.daftarAdmin).toHaveBeenCalledWith({ limit: 25, offset: 5, q: 'kata' });
+      expect(ModelKomentar.daftarAdmin).toHaveBeenCalledWith({ limit: 25, offset: 5, q: 'kata', aktif: '' });
       expect(response.body.total).toBe(1);
     });
 

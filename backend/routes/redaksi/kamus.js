@@ -41,6 +41,7 @@ router.get('/', async (req, res, next) => {
   try {
     const { limit, offset } = parsePagination(req.query);
     const q = parseSearchQuery(req.query.q);
+    const aktif = parseTrimmedString(req.query.aktif);
     const jenis = parseTrimmedString(req.query.jenis);
     const jenisRujuk = parseTrimmedString(req.query.jenis_rujuk);
     const punyaHomograf = parseTrimmedString(req.query.punya_homograf);
@@ -50,6 +51,7 @@ router.get('/', async (req, res, next) => {
       limit,
       offset,
       q,
+      aktif: ['0', '1'].includes(aktif) ? aktif : '',
       jenis,
       jenis_rujuk: jenisRujuk,
       punya_homograf: ['0', '1'].includes(punyaHomograf) ? punyaHomograf : '',

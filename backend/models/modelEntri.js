@@ -252,6 +252,7 @@ class ModelEntri {
     limit = 50,
     offset = 0,
     q = '',
+    aktif = '',
     jenis = '',
     jenis_rujuk = '',
     punya_homograf = '',
@@ -265,6 +266,12 @@ class ModelEntri {
       conditions.push(`entri ILIKE $${idx}`);
       params.push(`%${q}%`);
       idx++;
+    }
+
+    if (aktif === '1') {
+      conditions.push('aktif = 1');
+    } else if (aktif === '0') {
+      conditions.push('aktif = 0');
     }
 
     if (jenis) {

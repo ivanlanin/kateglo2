@@ -12,11 +12,12 @@ import {
 } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
-  KotakCariAdmin,
+  BarisFilterCariAdmin,
   TombolAksiAdmin,
   TabelAdmin,
   BadgeStatus,
   getApiErrorMessage,
+  opsiFilterStatusAktif,
   usePencarianAdmin,
   validateRequiredFields,
 } from '../../komponen/redaksi/KomponenAdmin';
@@ -410,10 +411,16 @@ function KamusAdmin() {
   const { id: idParam } = useParams();
   const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit } =
     usePencarianAdmin(50);
+  const [filterJenisDraft, setFilterJenisDraft] = useState('');
+  const [filterJenisRujukDraft, setFilterJenisRujukDraft] = useState('');
+  const [filterPunyaHomografDraft, setFilterPunyaHomografDraft] = useState('');
+  const [filterPunyaHomonimDraft, setFilterPunyaHomonimDraft] = useState('');
+  const [filterAktifDraft, setFilterAktifDraft] = useState('');
   const [filterJenis, setFilterJenis] = useState('');
   const [filterJenisRujuk, setFilterJenisRujuk] = useState('');
   const [filterPunyaHomograf, setFilterPunyaHomograf] = useState('');
   const [filterPunyaHomonim, setFilterPunyaHomonim] = useState('');
+  const [filterAktif, setFilterAktif] = useState('');
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
   const idEdit = Number.parseInt(idParam || '', 10);
   const entriIdDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
@@ -424,6 +431,7 @@ function KamusAdmin() {
     limit,
     offset,
     q,
+    aktif: filterAktif,
     jenis: filterJenis,
     jenisRujuk: filterJenisRujuk,
     punyaHomograf: filterPunyaHomograf,
@@ -476,24 +484,13 @@ function KamusAdmin() {
     { value: '0', label: 'Tidak' },
   ]), []);
 
-  const handleUbahFilterJenis = (_name, value) => {
-    setFilterJenis(value);
-    setOffset(0);
-  };
-
-  const handleUbahFilterJenisRujuk = (_name, value) => {
-    setFilterJenisRujuk(value);
-    setOffset(0);
-  };
-
-  const handleUbahFilterPunyaHomograf = (_name, value) => {
-    setFilterPunyaHomograf(value);
-    setOffset(0);
-  };
-
-  const handleUbahFilterPunyaHomonim = (_name, value) => {
-    setFilterPunyaHomonim(value);
-    setOffset(0);
+  const handleCari = () => {
+    setFilterJenis(filterJenisDraft);
+    setFilterJenisRujuk(filterJenisRujukDraft);
+    setFilterPunyaHomograf(filterPunyaHomografDraft);
+    setFilterPunyaHomonim(filterPunyaHomonimDraft);
+    setFilterAktif(filterAktifDraft);
+    kirimCari(cari);
   };
 
   useEffect(() => {
@@ -582,43 +579,50 @@ function KamusAdmin() {
 
   return (
     <TataLetakAdmin judul="Kamus" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
-      <KotakCariAdmin
+      <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
-        onCari={kirimCari}
+        onCari={handleCari}
         onHapus={hapusCari}
         placeholder="Cari entri …"
+        filters={[
+          {
+            key: 'jenis',
+            value: filterJenisDraft,
+            onChange: setFilterJenisDraft,
+            options: opsiFilterJenis,
+            ariaLabel: 'Filter jenis',
+          },
+          {
+            key: 'jenis_rujuk',
+            value: filterJenisRujukDraft,
+            onChange: setFilterJenisRujukDraft,
+            options: opsiFilterJenisRujuk,
+            ariaLabel: 'Filter jenis rujuk',
+          },
+          {
+            key: 'punya_homograf',
+            value: filterPunyaHomografDraft,
+            onChange: setFilterPunyaHomografDraft,
+            options: opsiYaTidak,
+            ariaLabel: 'Filter homograf',
+          },
+          {
+            key: 'punya_homonim',
+            value: filterPunyaHomonimDraft,
+            onChange: setFilterPunyaHomonimDraft,
+            options: opsiYaTidak,
+            ariaLabel: 'Filter homonim',
+          },
+          {
+            key: 'aktif',
+            value: filterAktifDraft,
+            onChange: setFilterAktifDraft,
+            options: opsiFilterStatusAktif,
+            ariaLabel: 'Filter status entri',
+          },
+        ]}
       />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 mb-4">
-        <SelectField
-          label="Jenis"
-          name="filter_jenis"
-          value={filterJenis}
-          onChange={handleUbahFilterJenis}
-          options={opsiFilterJenis}
-        />
-        <SelectField
-          label="Jenis Rujuk"
-          name="filter_jenis_rujuk"
-          value={filterJenisRujuk}
-          onChange={handleUbahFilterJenisRujuk}
-          options={opsiFilterJenisRujuk}
-        />
-        <SelectField
-          label="Punya Homograf"
-          name="filter_punya_homograf"
-          value={filterPunyaHomograf}
-          onChange={handleUbahFilterPunyaHomograf}
-          options={opsiYaTidak}
-        />
-        <SelectField
-          label="Punya Homonim"
-          name="filter_punya_homonim"
-          value={filterPunyaHomonim}
-          onChange={handleUbahFilterPunyaHomonim}
-          options={opsiYaTidak}
-        />
-      </div>
       <TabelAdmin
         kolom={kolom}
         data={daftar}

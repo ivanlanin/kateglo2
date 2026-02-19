@@ -7,9 +7,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarGlosariumAdmin, useDetailGlosariumAdmin, useSimpanGlosarium, useHapusGlosarium } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
-  KotakCariAdmin,
+  BarisFilterCariAdmin,
   TombolAksiAdmin,
   BadgeStatus,
+  opsiFilterStatusAktif,
   TabelAdmin,
   getApiErrorMessage,
   usePencarianAdmin,
@@ -61,8 +62,10 @@ function GlosariumAdmin() {
   const idDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
+  const [filterAktifDraft, setFilterAktifDraft] = useState('');
+  const [filterAktif, setFilterAktif] = useState('');
 
-  const { data: resp, isLoading, isError } = useDaftarGlosariumAdmin({ limit, offset, q });
+  const { data: resp, isLoading, isError } = useDaftarGlosariumAdmin({ limit, offset, q, aktif: filterAktif });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailGlosariumAdmin(idDariPath);
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
@@ -148,14 +151,28 @@ function GlosariumAdmin() {
     });
   };
 
+  const handleCari = () => {
+    setFilterAktif(filterAktifDraft);
+    kirimCari(cari);
+  };
+
   return (
     <TataLetakAdmin judul="Glosarium" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
-      <KotakCariAdmin
+      <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
-        onCari={kirimCari}
+        onCari={handleCari}
         onHapus={hapusCari}
         placeholder="Cari istilah …"
+        filters={[
+          {
+            key: 'aktif',
+            value: filterAktifDraft,
+            onChange: setFilterAktifDraft,
+            options: opsiFilterStatusAktif,
+            ariaLabel: 'Filter status glosarium',
+          },
+        ]}
       />
 
       <TabelAdmin

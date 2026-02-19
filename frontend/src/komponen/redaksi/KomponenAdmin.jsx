@@ -70,6 +70,12 @@ export function usePencarianAdmin(batasPerHalaman = 50) {
   return { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit: batasPerHalaman };
 }
 
+export const opsiFilterStatusAktif = [
+  { value: '', label: 'Semua status' },
+  { value: '1', label: 'Aktif' },
+  { value: '0', label: 'Nonaktif' },
+];
+
 // ─── Komponen ────────────────────────────────────────────────────────────────
 
 /**
@@ -96,6 +102,66 @@ export function KotakCariAdmin({ nilai, onChange, onCari, onHapus, placeholder =
       >
         Cari
       </button>
+      {nilai && (
+        <button
+          type="button"
+          onClick={onHapus}
+          className="px-3 py-2 text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-dark-bg text-sm"
+        >
+          ✕
+        </button>
+      )}
+    </form>
+  );
+}
+
+/**
+ * Toolbar filter + pencarian admin dalam satu baris (tanpa label filter)
+ */
+export function BarisFilterCariAdmin({
+  nilai,
+  onChange,
+  onCari,
+  onHapus,
+  placeholder = 'Cari …',
+  filters = [],
+}) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onCari(nilai);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="mb-4 flex flex-wrap gap-2 items-center">
+      {filters.map((item) => (
+        <select
+          key={item.key}
+          value={item.value ?? ''}
+          onChange={(e) => item.onChange(e.target.value)}
+          className="form-admin-select w-auto min-w-[160px]"
+          aria-label={item.ariaLabel || item.key}
+        >
+          {(item.options || []).map((opt) => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          ))}
+        </select>
+      ))}
+
+      <input
+        type="text"
+        value={nilai}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="flex-1 min-w-[220px] px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-dark-bg-input dark:text-white focus:outline-none focus:border-blue-500"
+      />
+
+      <button
+        type="submit"
+        className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"
+      >
+        Cari
+      </button>
+
       {nilai && (
         <button
           type="button"
