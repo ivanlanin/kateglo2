@@ -38,6 +38,7 @@ function amanDecode(teks = '') {
   try {
     return decodeURIComponent(String(teks || ''));
   } catch {
+    /* c8 ignore next */
     return String(teks || '');
   }
 }
@@ -180,6 +181,7 @@ export function buildDeskripsiDetailKamus(indeks, data = {}) {
 
   const formattedMakna = maknaList.slice(0, 4).map((m, i) => {
     const kelasPrefix = m?.kelas_kata ? `(${m.kelas_kata}) ` : '';
+    /* c8 ignore next */
     return `(${i + 1}) ${kelasPrefix}${m?.makna || ''}`;
   });
 

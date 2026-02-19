@@ -99,6 +99,23 @@ describe('ModelEntri', () => {
     });
   });
 
+  it('cariEntri tanpa hitungTotal mengembalikan hasNext false saat baris tidak melebihi limit', async () => {
+    db.query.mockResolvedValue({
+      rows: [
+        { id: 1, entri: 'a' },
+        { id: 2, entri: 'b' },
+      ],
+    });
+
+    const result = await ModelEntri.cariEntri('kata', 5, 4, false);
+
+    expect(result).toEqual({
+      data: [{ id: 1, entri: 'a' }, { id: 2, entri: 'b' }],
+      total: 6,
+      hasNext: false,
+    });
+  });
+
   it('cariEntri memakai limit dan offset default saat argumen tidak diberikan', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '1' }] })

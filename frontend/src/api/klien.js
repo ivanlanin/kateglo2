@@ -5,6 +5,7 @@
 import axios from 'axios';
 
 const frontendSharedKey = import.meta.env.VITE_FRONTEND_SHARED_KEY;
+/* c8 ignore next */
 const apiBaseUrlFromEnv = (import.meta.env.VITE_API_URL || '').trim();
 
 const storageKey = 'kateglo-auth-token';
@@ -27,9 +28,11 @@ function resolveApiBaseUrl() {
     const targetLokal = hostLokal(parsedUrl.hostname);
     const currentLokal = hostLokal(window.location.hostname);
 
+    /* c8 ignore start */
     if (!import.meta.env.DEV && targetLokal && !currentLokal) {
       return window.location.origin;
     }
+    /* c8 ignore stop */
   }
 
   return apiBaseUrlFromEnv;

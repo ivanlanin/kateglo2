@@ -144,6 +144,32 @@ describe('Kamus', () => {
     expect(screen.getByRole('link', { name: 'akar' })).toBeInTheDocument();
   });
 
+  it('menampilkan hasil kategori dari route /kamus/kelas/:kelas', () => {
+    mockParams = { kelas: 'verba' };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const { queryKey } = options;
+      if (queryKey[0] === 'kamus-kategori-entri') {
+        return {
+          data: {
+            data: [{ id: 2, entri: 'makan' }],
+            total: 1,
+            label: { nama: 'verba' },
+          },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Kamus />);
+
+    expect(screen.getByRole('heading', { name: 'Kelas Kata Verba' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'makan' })).toBeInTheDocument();
+  });
+
   it('mode kategori memakai fallback nama kategori, decode label, dan empty result', () => {
     mockParams = { kategori: 'khusus', kode: 'kata%20dasar' };
 

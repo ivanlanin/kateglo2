@@ -87,6 +87,23 @@ describe('ModelTesaurus', () => {
     });
   });
 
+  it('cari tanpa hitungTotal mengembalikan hasNext false saat hasil <= limit', async () => {
+    db.query.mockResolvedValue({
+      rows: [
+        { id: 1, lema: 'a' },
+        { id: 2, lema: 'b' },
+      ],
+    });
+
+    const result = await ModelTesaurus.cari('aktif', 5, 6, false);
+
+    expect(result).toEqual({
+      data: [{ id: 1, lema: 'a' }, { id: 2, lema: 'b' }],
+      total: 8,
+      hasNext: false,
+    });
+  });
+
   it('cari memakai default limit dan offset', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '1' }] })

@@ -117,6 +117,26 @@ describe('ModelGlosarium', () => {
     );
   });
 
+  it('cari menambahkan filter aktif saat aktifSaja true', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 7, indonesia: 'aktif' }] });
+
+    const result = await ModelGlosarium.cari({ aktifSaja: true, limit: 3, offset: 1 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('g.aktif = TRUE'),
+      []
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('g.aktif = TRUE'),
+      [3, 1]
+    );
+    expect(result).toEqual({ data: [{ id: 7, indonesia: 'aktif' }], total: 1, hasNext: false });
+  });
+
   it('cari tanpa filter menghasilkan whereClause kosong', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '0' }] })
@@ -135,6 +155,21 @@ describe('ModelGlosarium', () => {
       [20, 0]
     );
     expect(result).toEqual({ data: [], total: 0, hasNext: false });
+  });
+
+  it('cari menormalkan limit 0 dan offset negatif ke fallback aman', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 9, indonesia: 'aman' }] });
+
+    const result = await ModelGlosarium.cari({ limit: 0, offset: -10 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $1 OFFSET $2'),
+      [20, 0]
+    );
+    expect(result).toEqual({ data: [{ id: 9, indonesia: 'aman' }], total: 1, hasNext: false });
   });
 
   it('cari tanpa hitungTotal memakai limit+1 untuk menentukan hasNext', async () => {
@@ -156,6 +191,23 @@ describe('ModelGlosarium', () => {
       data: [{ id: 1, indonesia: 'a' }, { id: 2, indonesia: 'b' }],
       total: 7,
       hasNext: true,
+    });
+  });
+
+  it('cari tanpa hitungTotal mengembalikan hasNext false saat hasil <= limit', async () => {
+    db.query.mockResolvedValue({
+      rows: [
+        { id: 1, indonesia: 'a' },
+        { id: 2, indonesia: 'b' },
+      ],
+    });
+
+    const result = await ModelGlosarium.cari({ limit: 5, offset: 4, hitungTotal: false });
+
+    expect(result).toEqual({
+      data: [{ id: 1, indonesia: 'a' }, { id: 2, indonesia: 'b' }],
+      total: 6,
+      hasNext: false,
     });
   });
 
