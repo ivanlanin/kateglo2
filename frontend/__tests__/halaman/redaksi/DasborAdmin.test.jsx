@@ -1,12 +1,17 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import DasborAdmin from '../../../src/halaman/redaksi/DasborAdmin';
 
 const mockUseStatistikAdmin = vi.fn();
+const mockUseAuth = vi.fn();
 
 vi.mock('../../../src/api/apiAdmin', () => ({
   useStatistikAdmin: () => mockUseStatistikAdmin(),
+}));
+
+vi.mock('../../../src/context/authContext', () => ({
+  useAuth: () => mockUseAuth(),
 }));
 
 vi.mock('../../../src/komponen/redaksi/TataLetakAdmin', () => ({
@@ -20,6 +25,10 @@ vi.mock('../../../src/komponen/redaksi/TataLetakAdmin', () => ({
 }));
 
 describe('DasborAdmin', () => {
+  beforeEach(() => {
+    mockUseAuth.mockReturnValue({ adalahAdmin: true });
+  });
+
   it('menampilkan statistik loading', () => {
     mockUseStatistikAdmin.mockReturnValue({ data: null, isLoading: true });
     render(

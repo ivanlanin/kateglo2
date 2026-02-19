@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken');
 
 jest.mock('../../models/modelPengguna', () => ({
   daftarPengguna: jest.fn(),
+  ambilDenganId: jest.fn(),
   ubahPeran: jest.fn(),
   simpanPengguna: jest.fn(),
   daftarPeran: jest.fn(),
@@ -92,7 +93,31 @@ function buildToken(overrides = {}) {
       name: 'Admin',
       provider: 'google',
       peran: 'admin',
-      izin: ['kelola_pengguna', 'kelola_peran'],
+      izin: [
+        'kelola_pengguna',
+        'kelola_peran',
+        'lihat_statistik',
+        'lihat_tesaurus',
+        'tambah_tesaurus',
+        'edit_tesaurus',
+        'hapus_tesaurus',
+        'kelola_komentar',
+        'kelola_label',
+        'lihat_entri',
+        'tambah_entri',
+        'edit_entri',
+        'hapus_entri',
+        'tambah_makna',
+        'edit_makna',
+        'hapus_makna',
+        'tambah_contoh',
+        'edit_contoh',
+        'hapus_contoh',
+        'lihat_glosarium',
+        'tambah_glosarium',
+        'edit_glosarium',
+        'hapus_glosarium',
+      ],
       ...overrides,
     },
     process.env.JWT_SECRET
@@ -235,6 +260,37 @@ describe('routes/redaksi', () => {
       expect(response.status).toBe(500);
       expect(response.body.error).toBe('peran gagal');
     });
+
+    it('GET /api/redaksi/pengguna/:id mengembalikan 404, 200, dan 500 sesuai hasil model', async () => {
+      ModelPengguna.ambilDenganId
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce({ id: 8, nama: 'Admin' })
+        .mockRejectedValueOnce(new Error('detail pengguna gagal'));
+
+      const notFound = await callAsAdmin('get', '/api/redaksi/pengguna/8');
+      const success = await callAsAdmin('get', '/api/redaksi/pengguna/8');
+      const error = await callAsAdmin('get', '/api/redaksi/pengguna/8');
+
+      expect(notFound.status).toBe(404);
+      expect(success.status).toBe(200);
+      expect(success.body.data.id).toBe(8);
+      expect(error.status).toBe(500);
+      expect(error.body.error).toBe('detail pengguna gagal');
+    });
+
+    it('GET /api/redaksi/pengguna meneruskan aktif valid', async () => {
+      ModelPengguna.daftarPengguna.mockResolvedValue({ data: [], total: 0 });
+
+      const response = await callAsAdmin('get', '/api/redaksi/pengguna?aktif=1');
+
+      expect(response.status).toBe(200);
+      expect(ModelPengguna.daftarPengguna).toHaveBeenCalledWith({
+        limit: 50,
+        offset: 0,
+        q: '',
+        aktif: '1',
+      });
+    });
   });
 
   describe('statistik', () => {
@@ -312,6 +368,24 @@ describe('routes/redaksi', () => {
         jenis_rujuk: '',
         punya_homograf: '1',
         punya_homonim: '0',
+      });
+    });
+
+    it('GET /api/redaksi/kamus meneruskan filter aktif valid', async () => {
+      ModelLema.daftarAdmin.mockResolvedValue({ data: [], total: 0 });
+
+      const response = await callAsAdmin('get', '/api/redaksi/kamus?aktif=0');
+
+      expect(response.status).toBe(200);
+      expect(ModelLema.daftarAdmin).toHaveBeenCalledWith({
+        limit: 50,
+        offset: 0,
+        q: '',
+        aktif: '0',
+        jenis: '',
+        jenis_rujuk: '',
+        punya_homograf: '',
+        punya_homonim: '',
       });
     });
 
@@ -637,6 +711,15 @@ describe('routes/redaksi', () => {
       expect(response.body.total).toBe(1);
     });
 
+    it('GET /api/redaksi/komentar meneruskan aktif valid', async () => {
+      ModelKomentar.daftarAdmin.mockResolvedValue({ data: [], total: 0 });
+
+      const response = await callAsAdmin('get', '/api/redaksi/komentar?aktif=1');
+
+      expect(response.status).toBe(200);
+      expect(ModelKomentar.daftarAdmin).toHaveBeenCalledWith({ limit: 50, offset: 0, q: '', aktif: '1' });
+    });
+
     it('GET /api/redaksi/komentar/:id mengembalikan 404 jika komentar tidak ditemukan', async () => {
       ModelKomentar.ambilDenganId.mockResolvedValue(null);
 
@@ -752,6 +835,20 @@ describe('routes/redaksi', () => {
       expect(delete200.status).toBe(200);
     });
 
+    it('GET /api/redaksi/tesaurus meneruskan aktif valid', async () => {
+      ModelTesaurus.daftarAdmin.mockResolvedValue({ data: [], total: 0 });
+
+      const response = await callAsAdmin('get', '/api/redaksi/tesaurus?aktif=1');
+
+      expect(response.status).toBe(200);
+      expect(ModelTesaurus.daftarAdmin).toHaveBeenCalledWith({
+        limit: 50,
+        offset: 0,
+        q: '',
+        aktif: '1',
+      });
+    });
+
     it('CRUD /api/redaksi/tesaurus meneruskan error', async () => {
       ModelTesaurus.daftarAdmin.mockRejectedValueOnce(new Error('tesaurus list gagal'));
       ModelTesaurus.ambilDenganId.mockRejectedValueOnce(new Error('tesaurus detail gagal'));
@@ -808,6 +905,20 @@ describe('routes/redaksi', () => {
       expect(put200.status).toBe(200);
       expect(delete404.status).toBe(404);
       expect(delete200.status).toBe(200);
+    });
+
+    it('GET /api/redaksi/glosarium meneruskan aktif valid', async () => {
+      ModelGlosarium.cari.mockResolvedValue({ data: [], total: 0 });
+
+      const response = await callAsAdmin('get', '/api/redaksi/glosarium?aktif=0');
+
+      expect(response.status).toBe(200);
+      expect(ModelGlosarium.cari).toHaveBeenCalledWith({
+        q: '',
+        limit: 50,
+        offset: 0,
+        aktif: '0',
+      });
     });
 
     it('POST/PUT /api/redaksi/glosarium memakai updater default saat email admin tidak tersedia', async () => {
@@ -896,6 +1007,15 @@ describe('routes/redaksi', () => {
       expect(put200.status).toBe(200);
       expect(delete404.status).toBe(404);
       expect(delete200.status).toBe(200);
+    });
+
+    it('GET /api/redaksi/label meneruskan aktif valid', async () => {
+      ModelLabel.daftarAdmin.mockResolvedValue({ data: [], total: 0 });
+
+      const response = await callAsAdmin('get', '/api/redaksi/label?aktif=1');
+
+      expect(response.status).toBe(200);
+      expect(ModelLabel.daftarAdmin).toHaveBeenCalledWith({ limit: 50, offset: 0, q: '', aktif: '1' });
     });
 
     it('GET /api/redaksi/label/kategori mendukung query nama dan default', async () => {

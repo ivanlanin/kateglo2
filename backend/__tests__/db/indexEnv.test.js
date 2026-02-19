@@ -20,6 +20,11 @@ describe('db/index env SSL config', () => {
 
     jest.doMock('pg', () => ({
       Pool: mockPoolFactory,
+      types: {
+        setTypeParser: jest.fn((_oid, parser) => {
+          parser('2026-01-01 00:00:00');
+        }),
+      },
     }));
     jest.doMock('../../config/logger', () => ({
       info: jest.fn(),
@@ -47,6 +52,11 @@ describe('db/index env SSL config', () => {
 
     jest.doMock('pg', () => ({
       Pool: mockPoolFactory,
+      types: {
+        setTypeParser: jest.fn((_oid, parser) => {
+          parser('2026-01-01 00:00:00');
+        }),
+      },
     }));
     jest.doMock('../../config/logger', () => ({
       info: jest.fn(),
@@ -75,6 +85,11 @@ describe('db/index env SSL config', () => {
 
     jest.doMock('pg', () => ({
       Pool: mockPoolFactory,
+      types: {
+        setTypeParser: jest.fn((_oid, parser) => {
+          parser('2026-01-01 00:00:00');
+        }),
+      },
     }));
     jest.doMock('../../config/logger', () => ({
       info: jest.fn(),

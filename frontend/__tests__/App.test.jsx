@@ -36,6 +36,7 @@ describe('App', () => {
   beforeEach(() => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: false,
+      adalahRedaksi: false,
       adalahAdmin: false,
       isLoading: false,
     });
@@ -72,6 +73,7 @@ describe('App', () => {
   it('menampilkan loading untuk route redaksi saat auth sedang dimuat', () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: false,
+      adalahRedaksi: false,
       adalahAdmin: false,
       isLoading: true,
     });
@@ -87,6 +89,7 @@ describe('App', () => {
   it('mengizinkan route redaksi saat user admin', () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: true,
+      adalahRedaksi: true,
       adalahAdmin: true,
       isLoading: false,
     });
@@ -102,6 +105,7 @@ describe('App', () => {
   it('mengizinkan route label redaksi saat user admin', () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: true,
+      adalahRedaksi: true,
       adalahAdmin: true,
       isLoading: false,
     });
@@ -117,6 +121,7 @@ describe('App', () => {
   it('mengizinkan route komentar redaksi saat user admin', () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: true,
+      adalahRedaksi: true,
       adalahAdmin: true,
       isLoading: false,
     });

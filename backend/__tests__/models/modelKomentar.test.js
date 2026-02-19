@@ -119,6 +119,34 @@ describe('ModelKomentar', () => {
     expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('LIMIT $1 OFFSET $2'), [50, 0]);
   });
 
+  it('daftarAdmin menambahkan filter aktif=true saat aktif=1', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 31 }] });
+
+    await ModelKomentar.daftarAdmin({ aktif: '1' });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('k.aktif = TRUE'),
+      []
+    );
+  });
+
+  it('daftarAdmin menambahkan filter aktif=false saat aktif=0', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 32 }] });
+
+    await ModelKomentar.daftarAdmin({ aktif: '0' });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('k.aktif = FALSE'),
+      []
+    );
+  });
+
   it('daftarAdmin memakai fallback total 0 saat count kosong', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [] })
