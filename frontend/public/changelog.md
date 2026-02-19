@@ -7,6 +7,7 @@
 - Membuat `metaUtils` untuk menyeragamkan metadata halaman
 - Menyambungkan detail kamus dengan halaman redaksi dan sebaliknya
 - Memberikan tautan ke KBBI di detail kamus
+- Menambahkan kolom sumber untuk entri kamus dengan standar KBBI IV
 
 ## 2026-02-18 Rabu
 

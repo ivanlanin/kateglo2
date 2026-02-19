@@ -38,6 +38,7 @@ const nilaiAwalEntri = {
   lafal: '',
   pemenggalan: '',
   varian: '',
+  sumber: '',
   jenis_rujuk: '',
   entri_rujuk: '',
   aktif: 1,
@@ -572,6 +573,7 @@ function KamusAdmin() {
         <InputField label="Lafal" name="lafal" value={panel.data.lafal} onChange={panel.ubahField} placeholder="contoh: la·fal" />
         <InputField label="Pemenggalan" name="pemenggalan" value={panel.data.pemenggalan} onChange={panel.ubahField} />
         <InputField label="Varian" name="varian" value={panel.data.varian} onChange={panel.ubahField} />
+        <InputField label="Sumber" name="sumber" value={panel.data.sumber} onChange={panel.ubahField} />
         <SelectField label="Jenis Rujuk" name="jenis_rujuk" value={panel.data.jenis_rujuk} onChange={panel.ubahField} options={ensureOpsiMemuatNilai(opsiKategori.jenisRujuk, panel.data.jenis_rujuk)} />
         <InputField label="Entri Rujuk" name="entri_rujuk" value={panel.data.entri_rujuk} onChange={panel.ubahField} />
         <ToggleAktif value={panel.data.aktif} onChange={panel.ubahField} />

@@ -1101,6 +1101,9 @@ describe('KamusDetail helpers', () => {
     expect(keduanya).toContain('Diubah ');
     expect(keduanya).toContain('·');
 
+    const denganSumber = formatInfoWaktuEntri('2026-02-17 10:20:30.000', '2026-02-18 05:00:00.000', 'KBBI IV');
+    expect(denganSumber).toContain('Sumber KBBI IV');
+
     const samaPersis = formatInfoWaktuEntri('2026-02-17 10:20:30.000', '2026-02-17 10:20:30.000');
     expect(samaPersis).toContain('Dibuat ');
     expect(samaPersis).not.toContain('Diubah ');
@@ -1109,6 +1112,8 @@ describe('KamusDetail helpers', () => {
     const hanyaDibuat = formatInfoWaktuEntri('2026-02-17 10:20:30.000', null);
     expect(hanyaDibuat).toContain('Dibuat ');
     expect(hanyaDibuat).not.toContain('Diubah ');
+
+    expect(formatInfoWaktuEntri(null, null, 'KBBI IV')).toBe('Sumber KBBI IV');
 
     expect(formatInfoWaktuEntri(null, null)).toBe('');
     expect(formatInfoWaktuEntri('invalid', 'invalid')).toBe('');
