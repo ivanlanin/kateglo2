@@ -21,18 +21,12 @@ function TataLetakAdmin({ judul, aksiJudul = null, children }) {
   const location = useLocation();
   const appTimestamp = __APP_TIMESTAMP__;
   const [menuTerbuka, setMenuTerbuka] = useState(false);
-  const [modeGelap, setModeGelap] = useState(false);
-
-  useEffect(() => {
-    /* c8 ignore next */
-    if (typeof window === 'undefined') return;
+  const [modeGelap, setModeGelap] = useState(() => {
+    if (typeof window === 'undefined') return false;
     const tersimpan = localStorage.getItem('kateglo-theme');
-    if (tersimpan) {
-      setModeGelap(tersimpan === 'dark');
-      return;
-    }
-    setModeGelap(window.matchMedia('(prefers-color-scheme: dark)').matches);
-  }, []);
+    if (tersimpan) return tersimpan === 'dark';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
 
   useEffect(() => {
     document.title = judul
@@ -127,7 +121,7 @@ function TataLetakAdmin({ judul, aksiJudul = null, children }) {
         </div>
       </header>
 
-      <main className="halaman-dasar-container">
+      <main className="halaman-dasar-container flex-1">
         {judul && (
           <div className="mb-6 flex items-center justify-between gap-3">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{judul}</h2>

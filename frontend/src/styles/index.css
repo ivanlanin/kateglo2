@@ -35,7 +35,7 @@ code {
   }
 
   .dark .navbar-root {
-    @apply bg-dark-bg-elevated border-dark-border;
+    @apply bg-dark-bg border-dark-border;
   }
 
   .dark .navbar-root-beranda {
@@ -138,8 +138,16 @@ code {
     @apply w-full px-5 sm:px-8 lg:px-10;
   }
 
+  .dark .beranda-container {
+    @apply bg-dark-bg-elevated;
+  }
+
   .halaman-dasar-container {
     @apply w-full px-5 sm:px-8 lg:px-10 py-8;
+  }
+
+  .dark .halaman-dasar-container {
+    @apply bg-dark-bg-elevated;
   }
 
   .beranda-top-menu {
@@ -343,7 +351,7 @@ code {
   }
 
   .dark .beranda-feature-card {
-    @apply bg-dark-bg-elevated border-dark-border hover:border-blue-700 shadow-none;
+    @apply bg-dark-bg/80 border-dark-border hover:border-blue-700 shadow-none;
   }
 
   .beranda-feature-icon {
@@ -383,7 +391,7 @@ code {
   }
 
   .dark .beranda-info-card {
-    @apply bg-dark-bg-elevated border-dark-border shadow-none;
+    @apply bg-dark-bg/80 border-dark-border shadow-none;
   }
 
   .beranda-info-title {
@@ -462,12 +470,16 @@ code {
     @apply flex-1;
   }
 
+  .dark .kateglo-main-content {
+    @apply bg-dark-bg-elevated;
+  }
+
   .kateglo-footer {
     @apply bg-gray-50 mt-auto;
   }
 
   .dark .kateglo-footer {
-    @apply bg-dark-bg;
+    @apply bg-dark-bg-elevated;
   }
 
   .kateglo-footer-content {
