@@ -7,16 +7,16 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/authContext';
 
 function LoginAdmin() {
-  const { isAuthenticated, adalahAdmin, isLoading, loginDenganGoogle } = useAuth();
+  const { isAuthenticated, adalahRedaksi, isLoading, loginDenganGoogle } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const authError = location.state?.authError;
 
   useEffect(() => {
-    if (isAuthenticated && adalahAdmin) {
+    if (isAuthenticated && adalahRedaksi) {
       navigate('/redaksi', { replace: true });
     }
-  }, [isAuthenticated, adalahAdmin, navigate]);
+  }, [isAuthenticated, adalahRedaksi, navigate]);
 
   if (isLoading) {
     return (
@@ -40,7 +40,7 @@ function LoginAdmin() {
           </div>
         )}
 
-        {isAuthenticated && !adalahAdmin && (
+        {isAuthenticated && !adalahRedaksi && (
           <div className="mb-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg text-yellow-700 dark:text-yellow-400 text-sm">
             Akun Anda tidak memiliki akses redaksi.
           </div>

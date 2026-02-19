@@ -1,8 +1,9 @@
 /**
- * @fileoverview Route admin untuk statistik dasbor
+ * @fileoverview Route redaksi untuk statistik dasbor
  */
 
 const express = require('express');
+const { periksaIzin } = require('../../middleware/otorisasi');
 const ModelEntri = require('../../models/modelEntri');
 const ModelGlosarium = require('../../models/modelGlosarium');
 const ModelTesaurus = require('../../models/modelTesaurus');
@@ -16,7 +17,7 @@ const router = express.Router();
  * GET /api/redaksi/statistik
  * Ringkasan jumlah data untuk dasbor admin
  */
-router.get('/', async (req, res, next) => {
+router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
   try {
     const [entri, glosarium, tesaurus, label, pengguna, komentar] = await Promise.all([
       ModelEntri.hitungTotal(),

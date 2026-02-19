@@ -4,15 +4,16 @@
 
 import { Link } from 'react-router-dom';
 import { useStatistikAdmin } from '../../api/apiAdmin';
+import { useAuth } from '../../context/authContext';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 
 const kartuData = [
   { key: 'entri', label: 'Entri Kamus', warna: 'text-blue-600', link: '/redaksi/kamus' },
   { key: 'tesaurus', label: 'Entri Tesaurus', warna: 'text-emerald-600', link: '/redaksi/tesaurus' },
   { key: 'glosarium', label: 'Entri Glosarium', warna: 'text-amber-600', link: '/redaksi/glosarium' },
-  { key: 'label', label: 'Label', warna: 'text-cyan-600', link: '/redaksi/label' },
-  { key: 'pengguna', label: 'Pengguna', warna: 'text-purple-600', link: '/redaksi/pengguna' },
   { key: 'komentar', label: 'Komentar', warna: 'text-rose-600', link: '/redaksi/komentar' },
+  { key: 'label', label: 'Label', warna: 'text-cyan-600', link: '/redaksi/label', adminSaja: true },
+  { key: 'pengguna', label: 'Pengguna', warna: 'text-purple-600', link: '/redaksi/pengguna', adminSaja: true },
 ];
 
 function KartuStatistik({ label, jumlah, warna, link, isLoading }) {
@@ -33,12 +34,14 @@ function KartuStatistik({ label, jumlah, warna, link, isLoading }) {
 
 function DasborAdmin() {
   const { data: statsResp, isLoading } = useStatistikAdmin();
+  const { adalahAdmin } = useAuth();
   const stats = statsResp?.data;
+  const kartuTampil = kartuData.filter((k) => !k.adminSaja || adalahAdmin);
 
   return (
     <TataLetakAdmin judul="Dasbor">
       <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
-        {kartuData.map((k) => (
+        {kartuTampil.map((k) => (
           <KartuStatistik
             key={k.key}
             label={k.label}

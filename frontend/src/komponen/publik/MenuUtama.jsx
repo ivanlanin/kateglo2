@@ -26,7 +26,7 @@ function MenuUtama({
   const {
     isLoading,
     isAuthenticated,
-    adalahAdmin,
+    adalahRedaksi,
     logout,
   } = useAuth();
   const loginUrl = buatUrlLoginGoogle('');
@@ -44,7 +44,7 @@ function MenuUtama({
   return (
     <div className={containerClassName}>
       {tampilkanMenu && menuItems
-        .filter((item) => !item.adminSaja || adalahAdmin)
+        .filter((item) => !item.adminSaja || adalahRedaksi)
         .map((item) => (
           <Link
             key={item.path}

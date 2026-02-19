@@ -1,8 +1,9 @@
 /**
- * @fileoverview Route admin untuk pengelolaan tesaurus
+ * @fileoverview Route redaksi untuk pengelolaan tesaurus
  */
 
 const express = require('express');
+const { periksaIzin } = require('../../middleware/otorisasi');
 const ModelTesaurus = require('../../models/modelTesaurus');
 const {
   parsePagination,
@@ -17,7 +18,7 @@ const router = express.Router();
  * GET /api/redaksi/tesaurus
  * Daftar tesaurus dengan pencarian opsional (paginasi)
  */
-router.get('/', async (req, res, next) => {
+router.get('/', periksaIzin('lihat_tesaurus'), async (req, res, next) => {
   try {
     const { limit, offset } = parsePagination(req.query);
     const q = parseSearchQuery(req.query.q);
@@ -38,7 +39,7 @@ router.get('/', async (req, res, next) => {
 /**
  * GET /api/redaksi/tesaurus/:id
  */
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', periksaIzin('lihat_tesaurus'), async (req, res, next) => {
   try {
     const data = await ModelTesaurus.ambilDenganId(parseIdParam(req.params.id));
     if (!data) return res.status(404).json({ success: false, message: 'Tesaurus tidak ditemukan' });
@@ -51,7 +52,7 @@ router.get('/:id', async (req, res, next) => {
 /**
  * POST /api/redaksi/tesaurus
  */
-router.post('/', async (req, res, next) => {
+router.post('/', periksaIzin('tambah_tesaurus'), async (req, res, next) => {
   try {
     const indeks = parseTrimmedString(req.body.indeks);
     if (!indeks) return res.status(400).json({ success: false, message: 'Indeks wajib diisi' });
@@ -66,7 +67,7 @@ router.post('/', async (req, res, next) => {
 /**
  * PUT /api/redaksi/tesaurus/:id
  */
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', periksaIzin('edit_tesaurus'), async (req, res, next) => {
   try {
     const id = parseIdParam(req.params.id);
     const indeks = parseTrimmedString(req.body.indeks);
@@ -83,7 +84,7 @@ router.put('/:id', async (req, res, next) => {
 /**
  * DELETE /api/redaksi/tesaurus/:id
  */
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', periksaIzin('hapus_tesaurus'), async (req, res, next) => {
   try {
     const deleted = await ModelTesaurus.hapus(parseIdParam(req.params.id));
     if (!deleted) return res.status(404).json({ success: false, message: 'Tesaurus tidak ditemukan' });

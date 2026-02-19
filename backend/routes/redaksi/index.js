@@ -1,5 +1,5 @@
 /**
- * @fileoverview Admin API routes (protected)
+ * @fileoverview Redaksi API routes — akses: admin & penyunting (otentikasi + redaksiSaja diterapkan di routes/index.js)
  */
 
 const express = require('express');
