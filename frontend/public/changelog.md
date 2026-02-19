@@ -8,6 +8,7 @@
 - Menyambungkan detail kamus dengan halaman redaksi dan sebaliknya
 - Memberikan tautan ke KBBI di detail kamus
 - Menambahkan kolom sumber untuk entri kamus dengan standar KBBI IV
+- Menambahkan jenis entri prakategorial dan menambahkannya ke kategori "Bentuk Terikat"
 
 ## 2026-02-18 Rabu
 

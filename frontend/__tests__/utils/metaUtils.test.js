@@ -36,6 +36,7 @@ describe('metaUtils', () => {
   it('builder kategori kamus menutup cabang kelas/bentuk/fallback', () => {
     expect(tentukanNamaKategoriDariPath('kelas', 'verba')).toBe('Kelas Kata');
     expect(tentukanNamaKategoriDariPath('bentuk', 'prefiks')).toBe('Bentuk');
+    expect(tentukanNamaKategoriDariPath('bentuk', 'prakategorial')).toBe('Bentuk');
     expect(tentukanNamaKategoriDariPath('khusus', 'kata-dasar')).toBe('Khusus');
     expect(tentukanNamaKategoriDariPath()).toBe('');
 

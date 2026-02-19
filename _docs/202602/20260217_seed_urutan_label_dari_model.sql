@@ -43,6 +43,7 @@ WITH prioritas_manual AS (
           WHEN LOWER(TRIM(COALESCE(l.kode, ''))) = 'sufiks' OR LOWER(TRIM(COALESCE(l.nama, ''))) = 'sufiks' THEN 9
           WHEN LOWER(TRIM(COALESCE(l.kode, ''))) = 'konfiks' OR LOWER(TRIM(COALESCE(l.nama, ''))) = 'konfiks' THEN 10
           WHEN LOWER(TRIM(COALESCE(l.kode, ''))) = 'klitik' OR LOWER(TRIM(COALESCE(l.nama, ''))) = 'klitik' THEN 11
+          WHEN LOWER(TRIM(COALESCE(l.kode, ''))) = 'prakategorial' OR LOWER(TRIM(COALESCE(l.nama, ''))) = 'prakategorial' THEN 12
           ELSE NULL
         END
       ELSE NULL

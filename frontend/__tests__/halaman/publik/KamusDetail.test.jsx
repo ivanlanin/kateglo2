@@ -759,6 +759,28 @@ describe('KamusDetail', () => {
     expect(screen.queryByText('Turunan')).not.toBeInTheDocument();
   });
 
+  it('menyembunyikan teks makna kosong saat subentri tersedia', () => {
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        entri: 'fallback-subentri',
+        makna: [],
+        subentri: {
+          turunan: [{ id: 501, entri: 'menjuang', indeks: 'menjuang' }],
+        },
+        tesaurus: { sinonim: [], antonim: [] },
+        glosarium: [],
+      },
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.queryByText('Belum tersedia.')).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Turunan (1)' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'menjuang' })).toHaveAttribute('href', '/kamus/detail/menjuang');
+  });
+
   it('menggunakan fallback tesaurus/glosarium dan markdown kosong tanpa error', () => {
     mockUseQuery.mockReturnValue({
       isLoading: false,
@@ -1069,6 +1091,7 @@ describe('KamusDetail helpers', () => {
     expect(tentukanKategoriJenis('dasar')).toBe('bentuk');
     expect(tentukanKategoriJenis('idiom')).toBe('ekspresi');
     expect(tentukanKategoriJenis('prefiks')).toBe('bentuk');
+    expect(tentukanKategoriJenis('prakategorial')).toBe('bentuk');
     expect(tentukanKategoriJenis('')).toBe('bentuk');
     expect(tentukanKategoriJenis('lain')).toBe('bentuk');
   });
