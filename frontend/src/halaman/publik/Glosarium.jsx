@@ -15,6 +15,12 @@ import Paginasi from '../../komponen/bersama/Paginasi';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus } from '../../utils/kamusIndex';
+import {
+  buildMetaBidangGlosarium,
+  buildMetaBrowseGlosarium,
+  buildMetaPencarianGlosarium,
+  buildMetaSumberGlosarium,
+} from '../../utils/metaUtils';
 import { updateSearchParamsWithOffset } from '../../utils/searchParams';
 
 function Glosarium() {
@@ -59,20 +65,16 @@ function Glosarium() {
   const results = data?.data || [];
   const total = data?.total || 0;
 
-  const kataDekode = kata ? decodeURIComponent(kata) : '';
-  const bidangDekode = bidang ? decodeURIComponent(bidang) : '';
-  const sumberDekode = sumber ? decodeURIComponent(sumber) : '';
-
-  const judulHalaman = modeCariKata
-    ? `Hasil Pencarian “${kataDekode}”`
-    : bidangDekode
-      ? `Bidang ${bidangDekode}`
-      : sumberDekode
-        ? `Sumber ${sumberDekode}`
-        : 'Glosarium';
+  const metaHalaman = modeCariKata
+    ? buildMetaPencarianGlosarium(kata)
+    : bidang
+      ? buildMetaBidangGlosarium(bidang)
+      : sumber
+        ? buildMetaSumberGlosarium(sumber)
+        : buildMetaBrowseGlosarium();
 
   return (
-    <HalamanDasar judul={judulHalaman}>
+    <HalamanDasar judul={metaHalaman.judul} deskripsi={metaHalaman.deskripsi}>
 
       <QueryFeedback
         isLoading={isLoading}

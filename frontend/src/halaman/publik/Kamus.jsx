@@ -18,7 +18,7 @@ import {
   NAMA_KATEGORI_BROWSE_KAMUS,
   NAMA_KATEGORI_KAMUS,
   tentukanSlugLabel,
-} from '../../utils/kamusMeta';
+} from '../../utils/metaUtils';
 import { updateSearchParamsWithOffset } from '../../utils/searchParams';
 
 const BARIS_KATEGORI = [
