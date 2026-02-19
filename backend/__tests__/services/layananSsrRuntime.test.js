@@ -5,6 +5,7 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
+const { pathToFileURL } = require('node:url');
 const express = require('express');
 const request = require('supertest');
 
@@ -164,6 +165,28 @@ describe('services/layananSsrRuntime', () => {
     const fn = jest.fn();
     expect(runtime.__private.validateRendererModule({ render: fn })).toBe(fn);
     expect(() => runtime.__private.validateRendererModule({})).toThrow('SSR bundle tidak mengekspor fungsi render(url)');
+  });
+
+  it('loadSsrRenderer memakai importModule/entryPath injeksi dan mengembalikan renderer valid', async () => {
+    const renderFn = jest.fn();
+    const importModule = jest.fn().mockResolvedValue({ render: renderFn });
+
+    const result = await runtime.__private.loadSsrRenderer({
+      entryPath: serverEntryPath,
+      importModule,
+    });
+
+    expect(result).toBe(renderFn);
+    expect(importModule).toHaveBeenCalledWith(pathToFileURL(serverEntryPath).href);
+  });
+
+  it('loadSsrRenderer melempar error jika modul tidak mengekspor render', async () => {
+    const importModule = jest.fn().mockResolvedValue({});
+
+    await expect(runtime.__private.loadSsrRenderer({
+      entryPath: serverEntryPath,
+      importModule,
+    })).rejects.toThrow('SSR bundle tidak mengekspor fungsi render(url)');
   });
 
   it('prefetchSsrData menutup semua route branch + catch error', async () => {
