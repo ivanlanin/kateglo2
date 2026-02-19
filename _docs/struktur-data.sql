@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-18T19:05:34.841Z
+-- Generated: 2026-02-19T10:26:46.293Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -113,7 +113,6 @@ create table entri (
   pemenggalan text,
   lafal text,
   varian text,
-  sumber text,
   jenis_rujuk text,
   lema_rujuk text,
   aktif integer not null default 1,
@@ -121,15 +120,16 @@ create table entri (
   legacy_tid integer,
   indeks text not null,
   homonim integer,
-  urutan integer not null default 1,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
+  sumber text,
+  homograf integer,
   constraint entri_legacy_eid_key unique (legacy_eid),
   constraint entri_entri_check check (TRIM(BOTH FROM entri) <> ''::text)
 );
 create unique index entri_legacy_eid_key on entri using btree (legacy_eid);
 create index idx_entri_indeks on entri using btree (indeks);
-create index idx_entri_indeks_urutan on entri using btree (indeks, urutan, id);
+create index idx_entri_indeks_homograf_homonim on entri using btree (indeks, homograf, homonim, id);
 create index idx_entri_induk on entri using btree (induk);
 create index idx_entri_induk_aktif_jenis_entri on entri using btree (induk, aktif, jenis, entri);
 create index idx_entri_jenis on entri using btree (jenis);
