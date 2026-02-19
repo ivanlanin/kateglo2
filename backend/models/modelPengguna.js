@@ -115,7 +115,7 @@ class ModelPengguna {
        FROM pengguna p
        JOIN peran r ON r.id = p.peran_id
        ${where}
-       ORDER BY p.created_at DESC
+       ORDER BY p.login_terakhir DESC NULLS LAST, p.created_at DESC
        LIMIT $${idx} OFFSET $${idx + 1}`,
       [...params, cappedLimit, safeOffset]
     );

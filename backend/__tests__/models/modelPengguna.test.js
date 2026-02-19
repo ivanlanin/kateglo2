@@ -83,6 +83,11 @@ describe('ModelPengguna', () => {
 
     const result = await ModelPengguna.daftarPengguna({ limit: 999, offset: -8 });
 
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('ORDER BY p.login_terakhir DESC NULLS LAST, p.created_at DESC'),
+      [200, 0]
+    );
     expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('LIMIT $1 OFFSET $2'), [200, 0]);
     expect(result).toEqual({ data: [{ id: 1 }, { id: 2 }], total: 3 });
   });
