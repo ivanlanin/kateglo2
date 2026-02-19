@@ -35,6 +35,7 @@ describe('formatTanggalLokal', () => {
 
   it('parseUtcDate menangani suffix timezone dan normalisasi spasi', () => {
     expect(parseUtcDate('2026-02-17 09:49:10')).toBeInstanceOf(Date);
+    expect(parseUtcDate('2026-02-17T09:49')).toBeInstanceOf(Date);
     expect(parseUtcDate('2026-02-17T09:49:10Z')).toBeInstanceOf(Date);
     expect(parseUtcDate('2026-02-17T09:49:10+07:00')).toBeInstanceOf(Date);
     expect(parseUtcDate('   ')).toBeNull();

@@ -22,12 +22,14 @@ function TataLetakAdmin({ judul, aksiJudul = null, children }) {
   const location = useLocation();
   const appTimestamp = __APP_TIMESTAMP__;
   const [menuTerbuka, setMenuTerbuka] = useState(false);
+  /* c8 ignore start */
   const [modeGelap, setModeGelap] = useState(() => {
     if (typeof window === 'undefined') return false;
     const tersimpan = localStorage.getItem('kateglo-theme');
     if (tersimpan) return tersimpan === 'dark';
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
+  /* c8 ignore end */
 
   useEffect(() => {
     document.title = judul

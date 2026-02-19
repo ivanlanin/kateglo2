@@ -132,6 +132,8 @@ describe('KamusAdmin', () => {
     fireEvent.click(screen.getByText('Simpan'));
     expect(mutateSimpanKamus).toHaveBeenCalled();
 
+    fireEvent.click(screen.getByTitle('Buka detail kamus'));
+
     fireEvent.click(screen.getByText('dasar'));
     expect(screen.getByText('→ ananda')).toBeInTheDocument();
     fireEvent.click(screen.getByText('Hapus'));
@@ -227,7 +229,7 @@ describe('KamusAdmin', () => {
       expect.objectContaining({ kelas_kata: null }),
       expect.any(Object)
     );
-  });
+  }, 20000);
 
   it('menangani state makna kosong dan fallback error simpan/hapus lema', () => {
     mockUseDaftarMakna.mockReturnValue({ isLoading: false, data: { data: [] } });

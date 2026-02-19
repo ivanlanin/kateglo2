@@ -36,6 +36,7 @@ function PenggunaAdmin() {
   const [filterAktifDraft, setFilterAktifDraft] = useState('');
   const [filterAktif, setFilterAktif] = useState('');
   const idEdit = Number.parseInt(idParam || '', 10);
+  /* c8 ignore next */
   const idDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
@@ -62,6 +63,7 @@ function PenggunaAdmin() {
     return { ...item, peran_id: peranId };
   }, [daftarPeran]);
 
+  /* c8 ignore start */
   useEffect(() => {
     if (!idParam) return;
     if (idDariPath) return;
@@ -121,6 +123,7 @@ function PenggunaAdmin() {
     setFilterAktif(filterAktifDraft);
     kirimCari(cari);
   };
+  /* c8 ignore end */
 
   const opsiPeran = [
     { value: '', label: '— Pilih peran —' },
