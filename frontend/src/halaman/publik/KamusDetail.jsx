@@ -11,7 +11,7 @@ import PanelLipat from '../../komponen/publik/PanelLipat';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import TeksLema from '../../komponen/publik/TeksLema';
 import { PesanTidakDitemukan } from '../../komponen/publik/StatusKonten';
-import { buatPathDetailKamus } from '../../utils/kamusIndex';
+import { buatPathDetailKamus, normalisasiIndeksKamus } from '../../utils/kamusIndex';
 import { formatTanggalKomentar, parseKomentarDate } from '../../utils/formatTanggalKomentar';
 import { buildMetaDetailKamus } from '../../utils/metaUtils';
 
@@ -329,6 +329,10 @@ function KamusDetail() {
 
             const rantaiHeading = [...(entriItem.induk || []), { id: `current-${entriItem.id}`, entri: entriItem.entri, indeks: entriItem.indeks, current: true }];
             const infoWaktu = formatInfoWaktuEntri(entriItem.created_at, entriItem.updated_at);
+            const indeksKamus = normalisasiIndeksKamus(entriItem.indeks || entriItem.entri);
+            const tautanRujukanKbbi = indeksKamus
+              ? `https://kbbi.kemendikdasmen.go.id/entri/${encodeURIComponent(indeksKamus)}`
+              : '';
 
             return (
               <section key={entriItem.id} className="mb-8 pb-8 border-b border-gray-200 dark:border-gray-700 last:border-b-0 last:mb-0 last:pb-0">
@@ -374,19 +378,39 @@ function KamusDetail() {
                       </Link>
                     )}
                   </div>
-                  {adalahAdmin && entriItem.id && (
-                    <Link
-                      to={`/redaksi/kamus/${entriItem.id}`}
-                      className="kamus-detail-edit-link"
-                      aria-label="Sunting entri di Redaksi"
-                      title="Sunting entri di Redaksi"
-                    >
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-4 w-4">
-                        <path d="M12 20h9" />
-                        <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
-                      </svg>
-                      <span className="sr-only">Sunting</span>
-                    </Link>
+                  {adalahAdmin && (
+                    <div className="kamus-detail-admin-actions">
+                      {entriItem.id && (
+                        <Link
+                          to={`/redaksi/kamus/${entriItem.id}`}
+                          className="kamus-detail-edit-link"
+                          aria-label="Sunting entri di Redaksi"
+                          title="Sunting entri di Redaksi"
+                        >
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-4 w-4">
+                            <path d="M12 20h9" />
+                            <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                          </svg>
+                          <span className="sr-only">Sunting</span>
+                        </Link>
+                      )}
+                      {tautanRujukanKbbi && (
+                        <a
+                          href={tautanRujukanKbbi}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="kamus-detail-reference-link"
+                          aria-label="Buka rujukan KBBI di tab baru"
+                          title="Buka rujukan KBBI (tab baru)"
+                        >
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-4 w-4">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                          </svg>
+                          <span className="sr-only">Rujukan KBBI</span>
+                        </a>
+                      )}
+                    </div>
                   )}
                 </div>
 
