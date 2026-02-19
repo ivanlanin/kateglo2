@@ -6,6 +6,7 @@
 const db = require('../db');
 const autocomplete = require('../db/autocomplete');
 const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
+const { decodeCursor, encodeCursor } = require('../utils/cursorPagination');
 
 function normalisasiIndeks(entri = '') {
   const tanpaNomor = entri.replace(/\s*\([0-9]+\)\s*$/, '');
@@ -89,6 +90,138 @@ class ModelEntri {
       : safeOffset + data.length;
 
     return { data, total, hasNext };
+  }
+
+  static async cariEntriCursor(query, {
+    limit = 100,
+    cursor = null,
+    direction = 'next',
+    lastPage = false,
+    hitungTotal = true,
+  } = {}) {
+    const normalizedQuery = query.trim();
+    const cappedLimit = Math.min(Math.max(Number(limit) || 100, 1), 200);
+    const cursorPayload = decodeCursor(cursor);
+    const isPrev = direction === 'prev';
+    const orderDesc = Boolean(lastPage || isPrev);
+
+    const baseSql = `
+      WITH hasil AS (
+        SELECT id, entri, indeks, homograf, homonim, jenis, lafal, jenis_rujuk, lema_rujuk AS entri_rujuk,
+               CASE WHEN LOWER(entri) = LOWER($1) THEN 0
+                    WHEN entri ILIKE $2 THEN 1
+                    ELSE 2 END AS prioritas,
+               COALESCE(homograf, 2147483647) AS homograf_sort,
+               COALESCE(homonim, 2147483647) AS homonim_sort
+        FROM entri
+        WHERE entri ILIKE $3 AND aktif = 1
+      )`;
+
+    let total = 0;
+    if (hitungTotal) {
+      const countResult = await db.query(
+        `${baseSql} SELECT COUNT(*) AS total FROM hasil`,
+        [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`]
+      );
+      total = parseCount(countResult.rows[0]?.total);
+      if (total === 0) {
+        return {
+          data: [],
+          total: 0,
+          hasNext: false,
+          hasPrev: false,
+          nextCursor: null,
+          prevCursor: null,
+        };
+      }
+    }
+
+    const params = [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`];
+    const whereCursor = [];
+    if (cursorPayload && !lastPage) {
+      params.push(
+        Number(cursorPayload.prioritas) || 0,
+        Number(cursorPayload.homografSort) || 2147483647,
+        Number(cursorPayload.homonimSort) || 2147483647,
+        String(cursorPayload.entri || ''),
+        Number(cursorPayload.id) || 0
+      );
+      if (isPrev) {
+        whereCursor.push(`(prioritas, homograf_sort, homonim_sort, entri, id) < ($4, $5, $6, $7, $8)`);
+      } else {
+        whereCursor.push(`(prioritas, homograf_sort, homonim_sort, entri, id) > ($4, $5, $6, $7, $8)`);
+      }
+    }
+
+    const whereClause = whereCursor.length ? `WHERE ${whereCursor.join(' AND ')}` : '';
+    params.push(cappedLimit + 1);
+
+    const dataResult = await db.query(
+      `${baseSql}
+      SELECT id, entri, indeks, homograf, homonim, jenis, lafal, jenis_rujuk, entri_rujuk,
+             prioritas, homograf_sort, homonim_sort
+      FROM hasil
+      ${whereClause}
+      ORDER BY
+        prioritas ${orderDesc ? 'DESC' : 'ASC'},
+        homograf_sort ${orderDesc ? 'DESC' : 'ASC'},
+        homonim_sort ${orderDesc ? 'DESC' : 'ASC'},
+        entri ${orderDesc ? 'DESC' : 'ASC'},
+        id ${orderDesc ? 'DESC' : 'ASC'}
+      LIMIT $${params.length}`,
+      params
+    );
+
+    const hasMore = dataResult.rows.length > cappedLimit;
+    let rows = hasMore ? dataResult.rows.slice(0, cappedLimit) : dataResult.rows;
+    if (orderDesc) {
+      rows = rows.reverse();
+    }
+
+    const data = rows.map(({ prioritas: _p, homograf_sort: _hs, homonim_sort: _hms, ...item }) => item);
+    const first = rows[0];
+    const last = rows[rows.length - 1];
+
+    const prevCursor = first
+      ? encodeCursor({
+        prioritas: first.prioritas,
+        homografSort: first.homograf_sort,
+        homonimSort: first.homonim_sort,
+        entri: first.entri,
+        id: first.id,
+      })
+      : null;
+    const nextCursor = last
+      ? encodeCursor({
+        prioritas: last.prioritas,
+        homografSort: last.homograf_sort,
+        homonimSort: last.homonim_sort,
+        entri: last.entri,
+        id: last.id,
+      })
+      : null;
+
+    let hasPrev = false;
+    let hasNext = false;
+    if (lastPage) {
+      hasNext = false;
+      hasPrev = total > data.length;
+    } else if (isPrev) {
+      hasPrev = hasMore;
+      hasNext = Boolean(cursorPayload);
+    } else {
+      hasPrev = Boolean(cursorPayload);
+      hasNext = hasMore;
+    }
+
+    return {
+      data,
+      total,
+      hasPrev,
+      hasNext,
+      prevCursor,
+      nextCursor,
+    };
   }
 
   /**

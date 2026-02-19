@@ -5,7 +5,7 @@
 const express = require('express');
 const ModelGlosarium = require('../../models/modelGlosarium');
 const { publicSearchLimiter } = require('../../middleware/rateLimiter');
-const { parsePagination, rejectTooLargeOffset } = require('../../utils/routesPublikUtils');
+const { parseCursorPagination } = require('../../utils/routesPublikUtils');
 
 const router = express.Router();
 
@@ -20,19 +20,29 @@ router.get('/autocomplete/:kata', async (req, res, next) => {
 
 router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
   try {
-    const { limit, offset } = parsePagination(req.query, { defaultLimit: 100, maxLimit: 100 });
-    if (rejectTooLargeOffset(res, offset)) {
-      return;
-    }
+    const { limit, cursor, direction, lastPage } = parseCursorPagination(req.query, {
+      defaultLimit: 100,
+      maxLimit: 100,
+    });
 
-    const result = await ModelGlosarium.cari({
+    const result = await ModelGlosarium.cariCursor({
       q: req.params.kata,
       limit,
-      offset,
       aktifSaja: true,
-      hitungTotal: false,
+      hitungTotal: true,
+      cursor,
+      direction,
+      lastPage,
     });
-    return res.json(result);
+    return res.json({
+      ...result,
+      pageInfo: {
+        hasPrev: Boolean(result.hasPrev),
+        hasNext: Boolean(result.hasNext),
+        prevCursor: result.prevCursor || null,
+        nextCursor: result.nextCursor || null,
+      },
+    });
   } catch (error) {
     return next(error);
   }
@@ -49,19 +59,29 @@ router.get('/bidang', async (_req, res, next) => {
 
 router.get('/bidang/:bidang', async (req, res, next) => {
   try {
-    const { limit, offset } = parsePagination(req.query, { defaultLimit: 100, maxLimit: 100 });
-    if (rejectTooLargeOffset(res, offset)) {
-      return;
-    }
+    const { limit, cursor, direction, lastPage } = parseCursorPagination(req.query, {
+      defaultLimit: 100,
+      maxLimit: 100,
+    });
 
-    const result = await ModelGlosarium.cari({
+    const result = await ModelGlosarium.cariCursor({
       bidang: decodeURIComponent(req.params.bidang),
       limit,
-      offset,
       aktifSaja: true,
-      hitungTotal: false,
+      hitungTotal: true,
+      cursor,
+      direction,
+      lastPage,
     });
-    return res.json(result);
+    return res.json({
+      ...result,
+      pageInfo: {
+        hasPrev: Boolean(result.hasPrev),
+        hasNext: Boolean(result.hasNext),
+        prevCursor: result.prevCursor || null,
+        nextCursor: result.nextCursor || null,
+      },
+    });
   } catch (error) {
     return next(error);
   }
@@ -78,19 +98,29 @@ router.get('/sumber', async (_req, res, next) => {
 
 router.get('/sumber/:sumber', async (req, res, next) => {
   try {
-    const { limit, offset } = parsePagination(req.query, { defaultLimit: 100, maxLimit: 100 });
-    if (rejectTooLargeOffset(res, offset)) {
-      return;
-    }
+    const { limit, cursor, direction, lastPage } = parseCursorPagination(req.query, {
+      defaultLimit: 100,
+      maxLimit: 100,
+    });
 
-    const result = await ModelGlosarium.cari({
+    const result = await ModelGlosarium.cariCursor({
       sumber: decodeURIComponent(req.params.sumber),
       limit,
-      offset,
       aktifSaja: true,
-      hitungTotal: false,
+      hitungTotal: true,
+      cursor,
+      direction,
+      lastPage,
     });
-    return res.json(result);
+    return res.json({
+      ...result,
+      pageInfo: {
+        hasPrev: Boolean(result.hasPrev),
+        hasNext: Boolean(result.hasNext),
+        prevCursor: result.prevCursor || null,
+        nextCursor: result.nextCursor || null,
+      },
+    });
   } catch (error) {
     return next(error);
   }

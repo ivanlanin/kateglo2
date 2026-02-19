@@ -4,7 +4,7 @@
  */
 
 jest.mock('../../models/modelTesaurus', () => ({
-  cari: jest.fn(),
+  cariCursor: jest.fn(),
   ambilDetail: jest.fn(),
 }));
 
@@ -19,23 +19,29 @@ describe('layananTesaurusPublik.cariTesaurus', () => {
   it('mengembalikan kosong bila query kosong', async () => {
     const result = await cariTesaurus('   ');
 
-    expect(result).toEqual({ data: [], total: 0, hasNext: false });
-    expect(ModelTesaurus.cari).not.toHaveBeenCalled();
+    expect(result).toEqual({ data: [], total: 0, hasNext: false, hasPrev: false });
+    expect(ModelTesaurus.cariCursor).not.toHaveBeenCalled();
   });
 
   it('mengembalikan kosong bila query undefined', async () => {
     const result = await cariTesaurus(undefined);
 
-    expect(result).toEqual({ data: [], total: 0, hasNext: false });
-    expect(ModelTesaurus.cari).not.toHaveBeenCalled();
+    expect(result).toEqual({ data: [], total: 0, hasNext: false, hasPrev: false });
+    expect(ModelTesaurus.cariCursor).not.toHaveBeenCalled();
   });
 
   it('meneruskan query trim beserta opsi', async () => {
-    ModelTesaurus.cari.mockResolvedValue({ data: [{ indeks: 'aktif' }], total: 1, hasNext: false });
+    ModelTesaurus.cariCursor.mockResolvedValue({ data: [{ indeks: 'aktif' }], total: 1, hasNext: false, hasPrev: false });
 
-    const result = await cariTesaurus(' aktif ', { limit: 25, offset: 3 });
+    const result = await cariTesaurus(' aktif ', { limit: 25, cursor: 'abc', direction: 'prev', lastPage: true });
 
-    expect(ModelTesaurus.cari).toHaveBeenCalledWith('aktif', 25, 3, false);
+    expect(ModelTesaurus.cariCursor).toHaveBeenCalledWith('aktif', {
+      limit: 25,
+      cursor: 'abc',
+      direction: 'prev',
+      lastPage: true,
+      hitungTotal: true,
+    });
     expect(result.total).toBe(1);
   });
 });

@@ -5,6 +5,7 @@
 
 const db = require('../db');
 const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
+const { decodeCursor, encodeCursor } = require('../utils/cursorPagination');
 
 /**
  * Ekspresi SQL untuk mengekstrak huruf pertama Latin dari entri.
@@ -104,6 +105,102 @@ function buildNilaiCocokLabel(inputLabel, label = null) {
 }
 
 class ModelLabel {
+  static async _cariEntriCursorDenganKondisi({
+    whereSql,
+    params = [],
+    label,
+    limit = 20,
+    cursor = null,
+    direction = 'next',
+    lastPage = false,
+    hitungTotal = true,
+  }) {
+    const cappedLimit = Math.min(Math.max(Number(limit) || 20, 1), 200);
+    const cursorPayload = decodeCursor(cursor);
+    const isPrev = direction === 'prev';
+    const orderDesc = Boolean(lastPage || isPrev);
+
+    let total = 0;
+    if (hitungTotal) {
+      const countResult = await db.query(
+        `SELECT COUNT(*) AS total
+         FROM entri l
+         WHERE ${whereSql}`,
+        params
+      );
+      total = parseCount(countResult.rows[0]?.total);
+      if (total === 0) {
+        return {
+          data: [],
+          total: 0,
+          label,
+          hasNext: false,
+          hasPrev: false,
+          nextCursor: null,
+          prevCursor: null,
+        };
+      }
+    }
+
+    const queryParams = [...params];
+    let cursorClause = '';
+    if (cursorPayload && !lastPage) {
+      queryParams.push(String(cursorPayload.entri || ''), Number(cursorPayload.id) || 0);
+      const entriIdx = queryParams.length - 1;
+      const idIdx = queryParams.length;
+      cursorClause = isPrev
+        ? `AND (l.entri, l.id) < ($${entriIdx}, $${idIdx})`
+        : `AND (l.entri, l.id) > ($${entriIdx}, $${idIdx})`;
+    }
+
+    queryParams.push(cappedLimit + 1);
+    const limitIdx = queryParams.length;
+
+    const dataResult = await db.query(
+      `SELECT l.id, l.entri, l.indeks, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk
+       FROM entri l
+       WHERE ${whereSql}
+       ${cursorClause}
+       ORDER BY l.entri ${orderDesc ? 'DESC' : 'ASC'}, l.id ${orderDesc ? 'DESC' : 'ASC'}
+       LIMIT $${limitIdx}`,
+      queryParams
+    );
+
+    const hasMore = dataResult.rows.length > cappedLimit;
+    let rows = hasMore ? dataResult.rows.slice(0, cappedLimit) : dataResult.rows;
+    if (orderDesc) {
+      rows = rows.reverse();
+    }
+
+    const first = rows[0];
+    const last = rows[rows.length - 1];
+    const prevCursor = first ? encodeCursor({ entri: first.entri, id: first.id }) : null;
+    const nextCursor = last ? encodeCursor({ entri: last.entri, id: last.id }) : null;
+
+    let hasPrev = false;
+    let hasNext = false;
+    if (lastPage) {
+      hasNext = false;
+      hasPrev = total > rows.length;
+    } else if (isPrev) {
+      hasPrev = hasMore;
+      hasNext = Boolean(cursorPayload);
+    } else {
+      hasPrev = Boolean(cursorPayload);
+      hasNext = hasMore;
+    }
+
+    return {
+      data: rows,
+      total,
+      label,
+      hasNext,
+      hasPrev,
+      nextCursor,
+      prevCursor,
+    };
+  }
+
   /**
   * Ambil semua kategori beserta daftar label per kategori dan jumlah entri.
    * Kolom makna bisa menyimpan kode atau nama label, jadi pencocokan
@@ -263,6 +360,157 @@ class ModelLabel {
     );
 
     return { data: dataResult.rows, total, label };
+  }
+
+  static async cariEntriPerLabelCursor(kategori, kode, {
+    limit = 20,
+    cursor = null,
+    direction = 'next',
+    lastPage = false,
+    hitungTotal = true,
+  } = {}) {
+    const kategoriNormal = normalisasiKategoriLabel(kategori);
+    const kodeTertrim = String(kode || '').trim();
+    const kodeLower = normalizeLabelValue(kodeTertrim);
+    const kodeSlug = normalizeLabelSlug(kodeTertrim);
+
+    if (kategori === 'abjad') {
+      const h = kodeTertrim.toUpperCase();
+      if (!/^[A-Z]$/.test(h)) {
+        return { data: [], total: 0, label: null, hasNext: false, hasPrev: false, nextCursor: null, prevCursor: null };
+      }
+      return this._cariEntriCursorDenganKondisi({
+        whereSql: `l.aktif = 1 AND ${SQL_ABJAD} = $1`,
+        params: [h],
+        label: { kode: h, nama: h },
+        limit,
+        cursor,
+        direction,
+        lastPage,
+        hitungTotal,
+      });
+    }
+
+    if (kategori === 'bentuk') {
+      if (![...JENIS_BENTUK, ...JENIS_UNSUR_TERIKAT].includes(kodeTertrim)) {
+        return { data: [], total: 0, label: null, hasNext: false, hasPrev: false, nextCursor: null, prevCursor: null };
+      }
+      return this._cariEntriCursorDenganKondisi({
+        whereSql: 'l.aktif = 1 AND l.jenis = $1',
+        params: [kodeTertrim],
+        label: { kode: kodeTertrim, nama: kodeTertrim },
+        limit,
+        cursor,
+        direction,
+        lastPage,
+        hitungTotal,
+      });
+    }
+
+    if (kategori === 'ekspresi') {
+      if (!JENIS_EKSPRESI.includes(kodeTertrim)) {
+        return { data: [], total: 0, label: null, hasNext: false, hasPrev: false, nextCursor: null, prevCursor: null };
+      }
+      return this._cariEntriCursorDenganKondisi({
+        whereSql: 'l.aktif = 1 AND l.jenis = $1',
+        params: [kodeTertrim],
+        label: { kode: kodeTertrim, nama: kodeTertrim },
+        limit,
+        cursor,
+        direction,
+        lastPage,
+        hitungTotal,
+      });
+    }
+
+    if (kategori === 'jenis') {
+      if (!JENIS_SEMUA.includes(kodeTertrim)) {
+        return { data: [], total: 0, label: null, hasNext: false, hasPrev: false, nextCursor: null, prevCursor: null };
+      }
+      return this._cariEntriCursorDenganKondisi({
+        whereSql: 'l.aktif = 1 AND l.jenis = $1',
+        params: [kodeTertrim],
+        label: { kode: kodeTertrim, nama: kodeTertrim },
+        limit,
+        cursor,
+        direction,
+        lastPage,
+        hitungTotal,
+      });
+    }
+
+    if (kategori === 'unsur' || kategori === 'unsur_terikat') {
+      if (!JENIS_UNSUR_TERIKAT.includes(kodeTertrim)) {
+        return { data: [], total: 0, label: null, hasNext: false, hasPrev: false, nextCursor: null, prevCursor: null };
+      }
+      return this._cariEntriCursorDenganKondisi({
+        whereSql: 'l.aktif = 1 AND l.jenis = $1',
+        params: [kodeTertrim],
+        label: { kode: kodeTertrim, nama: kodeTertrim },
+        limit,
+        cursor,
+        direction,
+        lastPage,
+        hitungTotal,
+      });
+    }
+
+    const validKategori = ['ragam', 'kelas-kata', 'bahasa', 'bidang'];
+    if (!validKategori.includes(kategoriNormal)) {
+      return { data: [], total: 0, label: null, hasNext: false, hasPrev: false, nextCursor: null, prevCursor: null };
+    }
+
+    const kategoriKandidat = kandidatKategoriLabel(kategoriNormal);
+    const labelResult = await db.query(
+      `SELECT kategori, kode, nama, keterangan
+       FROM label
+       WHERE kategori = ANY($1::text[]) AND aktif = TRUE
+         AND (
+           LOWER(TRIM(kode)) = $2
+           OR LOWER(TRIM(nama)) = $2
+           OR TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(kode)), '[^a-z0-9]+', '-', 'g')) = $3
+           OR TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(nama)), '[^a-z0-9]+', '-', 'g')) = $3
+         )
+       ORDER BY
+         CASE WHEN LOWER(TRIM(nama)) = $2 THEN 0 ELSE 1 END,
+         CASE WHEN LOWER(TRIM(kode)) = $2 THEN 0 ELSE 1 END,
+         CASE WHEN TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(nama)), '[^a-z0-9]+', '-', 'g')) = $3 THEN 0 ELSE 1 END,
+         CASE WHEN TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(kode)), '[^a-z0-9]+', '-', 'g')) = $3 THEN 0 ELSE 1 END,
+         CASE WHEN kategori = $4 THEN 0 ELSE 1 END
+       LIMIT 1`,
+      [kategoriKandidat, kodeLower, kodeSlug, kategoriNormal]
+    );
+    const label = labelResult.rows[0] || null;
+
+    if (kategoriNormal === 'kelas-kata') {
+      if (!label) {
+        return { data: [], total: 0, label: null, hasNext: false, hasPrev: false, nextCursor: null, prevCursor: null };
+      }
+      const namaLabel = normalizeLabelValue(label.nama);
+      const kodeLabel = normalizeLabelValue(label.kode);
+      if (!KELAS_BEBAS.includes(namaLabel) && !KELAS_BEBAS.includes(kodeLabel)) {
+        return { data: [], total: 0, label: null, hasNext: false, hasPrev: false, nextCursor: null, prevCursor: null };
+      }
+    }
+
+    const nilaiCocok = buildNilaiCocokLabel(kodeTertrim, label);
+    const kolom = kategoriNormal === 'kelas-kata' ? 'kelas_kata' : kategoriNormal;
+
+    return this._cariEntriCursorDenganKondisi({
+      whereSql: `l.aktif = 1
+        AND EXISTS (
+          SELECT 1
+          FROM makna m
+          WHERE m.entri_id = l.id AND m.${kolom} = ANY($1::text[])
+        )`,
+      params: [nilaiCocok],
+      label,
+      limit,
+      cursor,
+      direction,
+      lastPage,
+      hitungTotal,
+    });
   }
 
   /**

@@ -9,10 +9,21 @@ function parseRelasi(teks) {
   return teks.split(/[;,]/).map((s) => s.trim()).filter(Boolean);
 }
 
-async function cariTesaurus(query, { limit = 100, offset = 0 } = {}) {
+async function cariTesaurus(query, {
+  limit = 100,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+} = {}) {
   const trimmed = (query || '').trim();
-  if (!trimmed) return { data: [], total: 0, hasNext: false };
-  return ModelTesaurus.cari(trimmed, limit, offset, false);
+  if (!trimmed) return { data: [], total: 0, hasNext: false, hasPrev: false };
+  return ModelTesaurus.cariCursor(trimmed, {
+    limit,
+    cursor,
+    direction,
+    lastPage,
+    hitungTotal: true,
+  });
 }
 
 async function ambilDetailTesaurus(kata) {

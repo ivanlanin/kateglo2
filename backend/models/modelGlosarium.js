@@ -4,6 +4,7 @@
 
 const db = require('../db');
 const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
+const { decodeCursor, encodeCursor } = require('../utils/cursorPagination');
 
 class ModelGlosarium {
   static async autocomplete(query, limit = 8) {
@@ -126,6 +127,140 @@ class ModelGlosarium {
       : safeOffset + data.length;
 
     return { data, total, hasNext };
+  }
+
+  static async cariCursor({
+    q = '',
+    bidang = '',
+    sumber = '',
+    bahasa = '',
+    aktif = '',
+    limit = 20,
+    aktifSaja = false,
+    hitungTotal = true,
+    cursor = null,
+    direction = 'next',
+    lastPage = false,
+  } = {}) {
+    const cappedLimit = Math.min(Math.max(Number(limit) || 20, 1), 200);
+    const cursorPayload = decodeCursor(cursor);
+    const isPrev = direction === 'prev';
+    const orderDesc = Boolean(lastPage || isPrev);
+    const conditions = [];
+    const params = [];
+    let idx = 1;
+
+    if (aktifSaja) {
+      conditions.push('g.aktif = TRUE');
+    }
+
+    if (aktif === '1') {
+      conditions.push('g.aktif = TRUE');
+    } else if (aktif === '0') {
+      conditions.push('g.aktif = FALSE');
+    }
+
+    if (q) {
+      conditions.push(`(g.indonesia ILIKE $${idx} OR g.asing ILIKE $${idx})`);
+      params.push(`%${q}%`);
+      idx++;
+    }
+
+    if (bidang) {
+      conditions.push(`g.bidang = $${idx}`);
+      params.push(bidang);
+      idx++;
+    }
+
+    if (sumber) {
+      conditions.push(`g.sumber = $${idx}`);
+      params.push(sumber);
+      idx++;
+    }
+
+    if (bahasa === 'id') {
+      conditions.push(`g.bahasa = 'id'`);
+    } else if (bahasa === 'en') {
+      conditions.push(`g.bahasa = 'en'`);
+    }
+
+    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    let total = 0;
+    if (hitungTotal) {
+      const countResult = await db.query(
+        `SELECT COUNT(*) as total FROM glosarium g ${whereClause}`,
+        params
+      );
+      total = parseCount(countResult.rows[0]?.total);
+      if (total === 0) {
+        return {
+          data: [],
+          total: 0,
+          hasNext: false,
+          hasPrev: false,
+          nextCursor: null,
+          prevCursor: null,
+        };
+      }
+    }
+
+    const dataParams = [...params];
+    let cursorClause = '';
+    if (cursorPayload && !lastPage) {
+      dataParams.push(String(cursorPayload.indonesia || ''), Number(cursorPayload.id) || 0);
+      const indonesiaIdx = dataParams.length - 1;
+      const idIdx = dataParams.length;
+      cursorClause = isPrev
+        ? `AND (g.indonesia, g.id) < ($${indonesiaIdx}, $${idIdx})`
+        : `AND (g.indonesia, g.id) > ($${indonesiaIdx}, $${idIdx})`;
+    }
+
+    dataParams.push(cappedLimit + 1);
+    const limitIdx = dataParams.length;
+
+    const dataResult = await db.query(
+      `SELECT g.id, g.indonesia, g.asing, g.bidang, g.bahasa, g.sumber, g.aktif
+       FROM glosarium g
+       ${whereClause}
+       ${cursorClause}
+       ORDER BY g.indonesia ${orderDesc ? 'DESC' : 'ASC'}, g.id ${orderDesc ? 'DESC' : 'ASC'}
+       LIMIT $${limitIdx}`,
+      dataParams
+    );
+
+    const hasMore = dataResult.rows.length > cappedLimit;
+    let rows = hasMore ? dataResult.rows.slice(0, cappedLimit) : dataResult.rows;
+    if (orderDesc) {
+      rows = rows.reverse();
+    }
+
+    const first = rows[0];
+    const last = rows[rows.length - 1];
+    const prevCursor = first ? encodeCursor({ indonesia: first.indonesia, id: first.id }) : null;
+    const nextCursor = last ? encodeCursor({ indonesia: last.indonesia, id: last.id }) : null;
+
+    let hasPrev = false;
+    let hasNext = false;
+    if (lastPage) {
+      hasNext = false;
+      hasPrev = total > rows.length;
+    } else if (isPrev) {
+      hasPrev = hasMore;
+      hasNext = Boolean(cursorPayload);
+    } else {
+      hasPrev = Boolean(cursorPayload);
+      hasNext = hasMore;
+    }
+
+    return {
+      data: rows,
+      total,
+      hasPrev,
+      hasNext,
+      prevCursor,
+      nextCursor,
+    };
   }
 
   /**

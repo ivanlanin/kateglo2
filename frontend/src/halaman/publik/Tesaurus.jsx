@@ -2,8 +2,8 @@
  * @fileoverview Halaman pencarian tesaurus — path-based: /tesaurus/cari/:kata
  */
 
-import { useState } from 'react';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { cariTesaurus } from '../../api/apiPublik';
 import Paginasi from '../../komponen/bersama/Paginasi';
@@ -12,7 +12,6 @@ import TeksLema from '../../komponen/publik/TeksLema';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus } from '../../utils/kamusIndex';
 import { buildMetaBrowseTesaurus, buildMetaPencarianTesaurus } from '../../utils/metaUtils';
-import { updateSearchParamsWithOffset } from '../../utils/searchParams';
 
 const limit = 100;
 const BATAS_RINGKAS = 2;
@@ -64,20 +63,62 @@ function RelasiSingkat({ sinonim, antonim }) {
 
 function Tesaurus() {
   const { kata } = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const offsetParam = parseInt(searchParams.get('offset') || '0', 10);
+  const [cursorState, setCursorState] = useState({
+    cursor: null,
+    direction: 'next',
+    lastPage: false,
+    page: 1,
+  });
+
+  useEffect(() => {
+    setCursorState({ cursor: null, direction: 'next', lastPage: false, page: 1 });
+  }, [kata]);
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['cari-tesaurus', kata, offsetParam],
-    queryFn: () => cariTesaurus(kata, { limit, offset: offsetParam }),
+    queryKey: ['cari-tesaurus', kata, cursorState.cursor, cursorState.direction, cursorState.lastPage],
+    queryFn: () => cariTesaurus(kata, {
+      limit,
+      cursor: cursorState.cursor,
+      direction: cursorState.direction,
+      lastPage: cursorState.lastPage,
+    }),
     enabled: Boolean(kata),
   });
 
   const results = data?.data || [];
   const total = data?.total || 0;
 
-  const handleOffset = (newOffset) => {
-    updateSearchParamsWithOffset(setSearchParams, {}, newOffset);
+  const handleCursor = (action) => {
+    const pageInfo = data?.pageInfo;
+    if (action === 'first') {
+      setCursorState({ cursor: null, direction: 'next', lastPage: false, page: 1 });
+      return;
+    }
+
+    if (action === 'last') {
+      const targetPage = Math.max(1, Math.ceil((total || 0) / limit));
+      setCursorState({ cursor: null, direction: 'next', lastPage: true, page: targetPage });
+      return;
+    }
+
+    if (action === 'next' && pageInfo?.hasNext && pageInfo?.nextCursor) {
+      setCursorState((prev) => ({
+        cursor: pageInfo.nextCursor,
+        direction: 'next',
+        lastPage: false,
+        page: prev.page + 1,
+      }));
+      return;
+    }
+
+    if (action === 'prev' && pageInfo?.hasPrev && pageInfo?.prevCursor) {
+      setCursorState((prev) => ({
+        cursor: pageInfo.prevCursor,
+        direction: 'prev',
+        lastPage: false,
+        page: Math.max(1, prev.page - 1),
+      }));
+    }
   };
 
   const metaHalaman = kata
@@ -107,6 +148,15 @@ function Tesaurus() {
 
           {results.length > 0 && (
             <>
+              <div className="mb-4">
+                <Paginasi
+                  total={total}
+                  limit={limit}
+                  pageInfo={data?.pageInfo}
+                  currentPage={cursorState.page}
+                  onNavigateCursor={handleCursor}
+                />
+              </div>
               <div className="tesaurus-result-grid">
                 {results.map((item) => (
                   <div key={item.id} className="tesaurus-result-row">
@@ -121,7 +171,13 @@ function Tesaurus() {
                 ))}
               </div>
               <div className="mt-4">
-                <Paginasi total={total} limit={limit} offset={offsetParam} onChange={handleOffset} />
+                <Paginasi
+                  total={total}
+                  limit={limit}
+                  pageInfo={data?.pageInfo}
+                  currentPage={cursorState.page}
+                  onNavigateCursor={handleCursor}
+                />
               </div>
             </>
           )}

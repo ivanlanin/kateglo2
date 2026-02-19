@@ -2,7 +2,8 @@
  * @fileoverview Halaman kamus — browse, pencarian, dan daftar kategori
  */
 
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { cariKamus, ambilKategoriKamus, ambilEntriPerKategori } from '../../api/apiPublik';
 import Paginasi from '../../komponen/bersama/Paginasi';
@@ -19,7 +20,6 @@ import {
   NAMA_KATEGORI_KAMUS,
   tentukanSlugLabel,
 } from '../../utils/metaUtils';
-import { updateSearchParamsWithOffset } from '../../utils/searchParams';
 
 const BARIS_KATEGORI = [
   ['abjad', 'kelas_kata'],
@@ -34,11 +34,19 @@ function Kamus() {
   const { kata, kategori, kode, kelas } = useParams();
   const kategoriAktif = kategori || (kelas ? 'kelas' : '');
   const kodeAktif = kode || kelas || '';
-  const [searchParams, setSearchParams] = useSearchParams();
-  const offsetParam = parseInt(searchParams.get('offset') || '0', 10);
+  const [cursorState, setCursorState] = useState({
+    cursor: null,
+    direction: 'next',
+    lastPage: false,
+    page: 1,
+  });
   const modePencarian = Boolean(kata);
   const modeKategori = Boolean(!kata && kategoriAktif && kodeAktif);
   const modeBrowse = !modePencarian && !modeKategori;
+
+  useEffect(() => {
+    setCursorState({ cursor: null, direction: 'next', lastPage: false, page: 1 });
+  }, [kata, kategoriAktif, kodeAktif]);
 
   const {
     data: dataPencarian,
@@ -46,8 +54,13 @@ function Kamus() {
     isError: isErrorPencarian,
     error: errorPencarian,
   } = useQuery({
-    queryKey: ['cari-kamus', kata, offsetParam],
-    queryFn: () => cariKamus(kata, { limit, offset: offsetParam }),
+    queryKey: ['cari-kamus', kata, cursorState.cursor, cursorState.direction, cursorState.lastPage],
+    queryFn: () => cariKamus(kata, {
+      limit,
+      cursor: cursorState.cursor,
+      direction: cursorState.direction,
+      lastPage: cursorState.lastPage,
+    }),
     enabled: modePencarian,
   });
 
@@ -64,8 +77,13 @@ function Kamus() {
     isError: isErrorKategori,
     error: errorKategori,
   } = useQuery({
-    queryKey: ['kamus-kategori-entri', kategoriAktif, kodeAktif, offsetParam],
-    queryFn: () => ambilEntriPerKategori(kategoriAktif, kodeAktif, { limit, offset: offsetParam }),
+    queryKey: ['kamus-kategori-entri', kategoriAktif, kodeAktif, cursorState.cursor, cursorState.direction, cursorState.lastPage],
+    queryFn: () => ambilEntriPerKategori(kategoriAktif, kodeAktif, {
+      limit,
+      cursor: cursorState.cursor,
+      direction: cursorState.direction,
+      lastPage: cursorState.lastPage,
+    }),
     enabled: modeKategori,
   });
 
@@ -79,8 +97,39 @@ function Kamus() {
   const isError = isErrorPencarian || isErrorKategori;
   const error = errorPencarian || errorKategori;
 
-  const handleOffset = (newOffset) => {
-    updateSearchParamsWithOffset(setSearchParams, {}, newOffset);
+  const activePageInfo = modePencarian ? dataPencarian?.pageInfo : dataKategori?.pageInfo;
+  const activeTotal = modePencarian ? totalPencarian : totalKategori;
+
+  const handleCursor = (action) => {
+    if (action === 'first') {
+      setCursorState({ cursor: null, direction: 'next', lastPage: false, page: 1 });
+      return;
+    }
+
+    if (action === 'last') {
+      const targetPage = Math.max(1, Math.ceil((activeTotal || 0) / limit));
+      setCursorState({ cursor: null, direction: 'next', lastPage: true, page: targetPage });
+      return;
+    }
+
+    if (action === 'next' && activePageInfo?.hasNext && activePageInfo?.nextCursor) {
+      setCursorState((prev) => ({
+        cursor: activePageInfo.nextCursor,
+        direction: 'next',
+        lastPage: false,
+        page: prev.page + 1,
+      }));
+      return;
+    }
+
+    if (action === 'prev' && activePageInfo?.hasPrev && activePageInfo?.prevCursor) {
+      setCursorState((prev) => ({
+        cursor: activePageInfo.prevCursor,
+        direction: 'prev',
+        lastPage: false,
+        page: Math.max(1, prev.page - 1),
+      }));
+    }
   };
 
   const metaHalaman = modeKategori
@@ -99,7 +148,6 @@ function Kamus() {
   return (
     <HalamanDasar judul={judulHalaman} deskripsi={deskripsiHalaman}>
 
-      {/* Pesan loading / error */}
       <QueryFeedback
         isLoading={isLoading}
         isError={isError}
@@ -108,7 +156,6 @@ function Kamus() {
         errorText="Gagal mengambil data. Coba lagi."
       />
 
-      {/* Tanpa pencarian — browse kategori */}
       {modeBrowse && !isLoading && kategoriData && (
         <div className="space-y-4 mb-6">
           {BARIS_KATEGORI.map((baris, indexBaris) => {
@@ -135,31 +182,39 @@ function Kamus() {
                             : kat;
                         const slugLabel = tentukanSlugLabel(kat, l);
                         return (
-                        <Link
-                          key={l.kode}
-                          to={`/kamus/${pathKategori}/${encodeURIComponent(slugLabel)}`}
-                          className="beranda-tag-link"
-                        >
-                          {['bentuk', 'unsur_terikat', 'ekspresi'].includes(kat) ? formatAwalKapital(l.nama) : l.nama}
-                        </Link>
+                          <Link
+                            key={l.kode}
+                            to={`/kamus/${pathKategori}/${encodeURIComponent(slugLabel)}`}
+                            className="beranda-tag-link"
+                          >
+                            {['bentuk', 'unsur_terikat', 'ekspresi'].includes(kat) ? formatAwalKapital(l.nama) : l.nama}
+                          </Link>
                         );
                       })}
                     </div>
                   </div>
                 ))}
-                </div>
+              </div>
             );
           })}
         </div>
       )}
 
-      {/* Hasil pencarian */}
       {modePencarian && !isLoading && !isError && (
         <>
           {resultsPencarian.length === 0 && <PesanTidakDitemukan saran={dataPencarian?.saran || []} />}
 
           {resultsPencarian.length > 0 && (
             <>
+              <div className="mb-4">
+                <Paginasi
+                  total={totalPencarian}
+                  limit={limit}
+                  pageInfo={dataPencarian?.pageInfo}
+                  currentPage={cursorState.page}
+                  onNavigateCursor={handleCursor}
+                />
+              </div>
               <div className="kamus-kategori-grid">
                 {resultsPencarian.map((item) => (
                   <Link
@@ -172,20 +227,34 @@ function Kamus() {
                 ))}
               </div>
               <div className="mt-4">
-                <Paginasi total={totalPencarian} limit={limit} offset={offsetParam} onChange={handleOffset} />
+                <Paginasi
+                  total={totalPencarian}
+                  limit={limit}
+                  pageInfo={dataPencarian?.pageInfo}
+                  currentPage={cursorState.page}
+                  onNavigateCursor={handleCursor}
+                />
               </div>
             </>
           )}
         </>
       )}
 
-      {/* Hasil kategori */}
       {modeKategori && !isLoading && !isError && (
         <>
           {resultsKategori.length === 0 && <EmptyResultText text="Tidak ada entri untuk kategori ini." />}
 
           {resultsKategori.length > 0 && (
             <>
+              <div className="mb-4">
+                <Paginasi
+                  total={totalKategori}
+                  limit={limit}
+                  pageInfo={dataKategori?.pageInfo}
+                  currentPage={cursorState.page}
+                  onNavigateCursor={handleCursor}
+                />
+              </div>
               <div className="kamus-kategori-grid">
                 {resultsKategori.map((item) => (
                   <Link
@@ -198,7 +267,13 @@ function Kamus() {
                 ))}
               </div>
               <div className="mt-4">
-                <Paginasi total={totalKategori} limit={limit} offset={offsetParam} onChange={handleOffset} />
+                <Paginasi
+                  total={totalKategori}
+                  limit={limit}
+                  pageInfo={dataKategori?.pageInfo}
+                  currentPage={cursorState.page}
+                  onNavigateCursor={handleCursor}
+                />
               </div>
             </>
           )}

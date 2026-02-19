@@ -2,7 +2,8 @@
  * @fileoverview Halaman Glosarium — browse dan cari istilah teknis bilingual
  */
 
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import {
   cariGlosarium,
@@ -21,13 +22,20 @@ import {
   buildMetaPencarianGlosarium,
   buildMetaSumberGlosarium,
 } from '../../utils/metaUtils';
-import { updateSearchParamsWithOffset } from '../../utils/searchParams';
 
 function Glosarium() {
   const { kata, bidang, sumber } = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const offsetParam = parseInt(searchParams.get('offset') || '0', 10);
+  const [cursorState, setCursorState] = useState({
+    cursor: null,
+    direction: 'next',
+    lastPage: false,
+    page: 1,
+  });
   const limit = 100;
+
+  useEffect(() => {
+    setCursorState({ cursor: null, direction: 'next', lastPage: false, page: 1 });
+  }, [kata, bidang, sumber]);
 
   const sedangMencari = Boolean(kata || bidang || sumber);
   const modeCariKata = Boolean(kata);
@@ -45,25 +53,67 @@ function Glosarium() {
   });
 
   const queryFn = () => {
-    const opts = { limit, offset: offsetParam };
+    const opts = {
+      limit,
+      cursor: cursorState.cursor,
+      direction: cursorState.direction,
+      lastPage: cursorState.lastPage,
+    };
     if (kata) return cariGlosarium(kata, opts);
     if (bidang) return ambilGlosariumPerBidang(bidang, opts);
     if (sumber) return ambilGlosariumPerSumber(sumber, opts);
-    return Promise.resolve({ data: [], total: 0 });
+    return Promise.resolve({ data: [], total: 0, pageInfo: { hasPrev: false, hasNext: false } });
   };
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['glosarium', kata || '', bidang || '', sumber || '', offsetParam],
+    queryKey: [
+      'glosarium',
+      kata || '',
+      bidang || '',
+      sumber || '',
+      cursorState.cursor,
+      cursorState.direction,
+      cursorState.lastPage,
+    ],
     queryFn,
     enabled: sedangMencari,
   });
 
-  const handleOffset = (newOffset) => {
-    updateSearchParamsWithOffset(setSearchParams, {}, newOffset);
-  };
-
   const results = data?.data || [];
   const total = data?.total || 0;
+
+  const handleCursor = (action) => {
+    const pageInfo = data?.pageInfo;
+    if (action === 'first') {
+      setCursorState({ cursor: null, direction: 'next', lastPage: false, page: 1 });
+      return;
+    }
+
+    if (action === 'last') {
+      const targetPage = Math.max(1, Math.ceil((total || 0) / limit));
+      setCursorState({ cursor: null, direction: 'next', lastPage: true, page: targetPage });
+      return;
+    }
+
+    if (action === 'next' && pageInfo?.hasNext && pageInfo?.nextCursor) {
+      setCursorState((prev) => ({
+        cursor: pageInfo.nextCursor,
+        direction: 'next',
+        lastPage: false,
+        page: prev.page + 1,
+      }));
+      return;
+    }
+
+    if (action === 'prev' && pageInfo?.hasPrev && pageInfo?.prevCursor) {
+      setCursorState((prev) => ({
+        cursor: pageInfo.prevCursor,
+        direction: 'prev',
+        lastPage: false,
+        page: Math.max(1, prev.page - 1),
+      }));
+    }
+  };
 
   const metaHalaman = modeCariKata
     ? buildMetaPencarianGlosarium(kata)
@@ -84,7 +134,6 @@ function Glosarium() {
         errorText="Gagal mengambil data."
       />
 
-      {/* Browse index — dua kotak terpisah */}
       {!sedangMencari && !isLoading && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           {bidangList?.length > 0 && (
@@ -122,13 +171,21 @@ function Glosarium() {
         </div>
       )}
 
-      {/* Hasil pencarian kata */}
       {sedangMencari && !isLoading && !isError && (
         <>
           {results.length === 0 && <EmptyResultText text="Tidak ada entri glosarium yang ditemukan." />}
 
           {results.length > 0 && (
             <>
+              <div className="mb-4">
+                <Paginasi
+                  total={total}
+                  limit={limit}
+                  pageInfo={data?.pageInfo}
+                  currentPage={cursorState.page}
+                  onNavigateCursor={handleCursor}
+                />
+              </div>
               <div className="glosarium-result-grid">
                 {results.map((item) => (
                   <div key={item.id} className="glosarium-result-row">
@@ -143,7 +200,13 @@ function Glosarium() {
                 ))}
               </div>
               <div className="mt-4">
-                <Paginasi total={total} limit={limit} offset={offsetParam} onChange={handleOffset} />
+                <Paginasi
+                  total={total}
+                  limit={limit}
+                  pageInfo={data?.pageInfo}
+                  currentPage={cursorState.page}
+                  onNavigateCursor={handleCursor}
+                />
               </div>
             </>
           )}

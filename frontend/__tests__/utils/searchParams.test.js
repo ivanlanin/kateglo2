@@ -1,6 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
 import {
   compactParams,
+  normalizeOffset,
+  readOffsetFromSearchParams,
   updateSearchParams,
   updateSearchParamsWithOffset,
 } from '../../src/utils/searchParams';
@@ -40,6 +42,14 @@ describe('searchParams utils', () => {
     expect(setSearchParams).toHaveBeenCalledWith({ q: 'abc', offset: '40' });
   });
 
+  it('updateSearchParamsWithOffset membatasi offset ke maksimum publik', () => {
+    const setSearchParams = vi.fn();
+
+    updateSearchParamsWithOffset(setSearchParams, { q: 'abc' }, 5000);
+
+    expect(setSearchParams).toHaveBeenCalledWith({ q: 'abc', offset: '1000' });
+  });
+
   it('updateSearchParamsWithOffset menghapus offset jika 0 atau kurang', () => {
     const setSearchParams = vi.fn();
 
@@ -48,5 +58,14 @@ describe('searchParams utils', () => {
 
     expect(setSearchParams).toHaveBeenNthCalledWith(1, { q: 'abc' });
     expect(setSearchParams).toHaveBeenNthCalledWith(2, { q: 'abc' });
+  });
+
+  it('normalizeOffset dan readOffsetFromSearchParams melakukan clamp nilai', () => {
+    expect(normalizeOffset('5000')).toBe(1000);
+    expect(normalizeOffset('-100')).toBe(0);
+    expect(normalizeOffset('abc')).toBe(0);
+
+    const searchParams = new URLSearchParams('offset=9999');
+    expect(readOffsetFromSearchParams(searchParams)).toBe(1000);
   });
 });
