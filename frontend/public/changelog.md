@@ -10,7 +10,8 @@
 - Menambahkan kolom sumber untuk entri kamus dengan standar KBBI IV
 - Menambahkan jenis entri prakategorial dan menambahkannya ke kategori "Bentuk Terikat"
 - Menambahkan filter jenis di redaksi kamus
-- Menambahkan kolom entri.homogram, misalnya untuk "per" dan "seri"
+- Menambahkan kolom entri.homograf, misalnya untuk "per" dan "seri"
+- Menambahkan filter punya homograf dan punya homonim di redaksi kamus
 
 ## 2026-02-18 Rabu
 

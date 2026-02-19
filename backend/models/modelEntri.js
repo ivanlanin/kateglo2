@@ -254,6 +254,8 @@ class ModelEntri {
     q = '',
     jenis = '',
     jenis_rujuk = '',
+    punya_homograf = '',
+    punya_homonim = '',
   } = {}) {
     const conditions = [];
     const params = [];
@@ -275,6 +277,18 @@ class ModelEntri {
       conditions.push(`jenis_rujuk = $${idx}`);
       params.push(jenis_rujuk);
       idx++;
+    }
+
+    if (punya_homograf === '1') {
+      conditions.push('homograf IS NOT NULL');
+    } else if (punya_homograf === '0') {
+      conditions.push('homograf IS NULL');
+    }
+
+    if (punya_homonim === '1') {
+      conditions.push('homonim IS NOT NULL');
+    } else if (punya_homonim === '0') {
+      conditions.push('homonim IS NULL');
     }
 
     const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';

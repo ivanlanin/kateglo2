@@ -356,6 +356,31 @@ describe('ModelEntri', () => {
     );
   });
 
+  it('daftarAdmin dengan filter homograf dan homonim menambah kondisi IS NULL/IS NOT NULL', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [] });
+
+    await ModelEntri.daftarAdmin({
+      q: 'kat',
+      punya_homograf: '1',
+      punya_homonim: '0',
+      limit: 5,
+      offset: 1,
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('WHERE entri ILIKE $1 AND homograf IS NOT NULL AND homonim IS NULL'),
+      ['%kat%']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $2 OFFSET $3'),
+      ['%kat%', 5, 1]
+    );
+  });
+
   it('hitungTotal mengembalikan nilai numerik', async () => {
     db.query.mockResolvedValue({ rows: [{ total: '31' }] });
 
