@@ -1,8 +1,8 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import TataLetak from '../../../src/komponen/publik/TataLetak';
-import { hitungModeGelapAwal } from '../../../src/komponen/publik/TataLetak';
-import { bacaPreferensiTema } from '../../../src/komponen/publik/TataLetak';
+import TataLetak from '../../../src/komponen/bersama/TataLetak';
+import { hitungModeGelapAwal } from '../../../src/komponen/bersama/TataLetak';
+import { bacaPreferensiTema } from '../../../src/komponen/bersama/TataLetak';
 
 let mockPathname = '/kamus';
 

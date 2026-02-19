@@ -5,7 +5,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarGlosariumAdmin, useDetailGlosariumAdmin, useSimpanGlosarium, useHapusGlosarium } from '../../api/apiAdmin';
-import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
+import TataLetak from '../../komponen/bersama/TataLetak';
 import {
   BarisFilterCariAdmin,
   TombolAksiAdmin,
@@ -157,7 +157,7 @@ function GlosariumAdmin() {
   };
 
   return (
-    <TataLetakAdmin judul="Glosarium" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
+    <TataLetak mode="admin" judul="Glosarium" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -203,7 +203,7 @@ function GlosariumAdmin() {
           modeTambah={panel.modeTambah}
         />
       </PanelGeser>
-    </TataLetakAdmin>
+    </TataLetak>
   );
 }
 

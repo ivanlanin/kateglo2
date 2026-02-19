@@ -5,7 +5,7 @@
 import { Link } from 'react-router-dom';
 import { useStatistikAdmin } from '../../api/apiAdmin';
 import { useAuth } from '../../context/authContext';
-import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
+import TataLetak from '../../komponen/bersama/TataLetak';
 
 const kartuData = [
   { key: 'entri', label: 'Entri Kamus', warna: 'text-blue-600', link: '/redaksi/kamus' },
@@ -39,7 +39,7 @@ function DasborAdmin() {
   const kartuTampil = kartuData.filter((k) => !k.adminSaja || adalahAdmin);
 
   return (
-    <TataLetakAdmin judul="Dasbor">
+    <TataLetak mode="admin" judul="Dasbor">
       <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
         {kartuTampil.map((k) => (
           <KartuStatistik
@@ -52,7 +52,7 @@ function DasborAdmin() {
           />
         ))}
       </div>
-    </TataLetakAdmin>
+    </TataLetak>
   );
 }
 

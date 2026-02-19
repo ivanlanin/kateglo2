@@ -41,7 +41,7 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useHapusContoh: () => ({ mutate: mutateHapusContoh, isPending: false }),
 }));
 
-vi.mock('../../../src/komponen/redaksi/TataLetakAdmin', () => ({
+vi.mock('../../../src/komponen/bersama/TataLetak', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>
