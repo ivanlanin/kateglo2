@@ -97,6 +97,9 @@ const kolom = [
         <Link
           to={buatPathDetailKamus(item.indeks || item.entri)}
           className="font-medium text-blue-700 hover:underline dark:text-blue-300"
+          aria-label={`Buka detail kamus ${item.entri}`}
+          title="Buka detail kamus"
+          onClick={(event) => event.stopPropagation()}
         >
           {item.entri}
         </Link>
@@ -410,6 +413,7 @@ function KamusAdmin() {
   const idEdit = Number.parseInt(idParam || '', 10);
   const entriIdDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
   const idEditTerbuka = useRef(null);
+  const sedangMenutupDariPath = useRef(false);
 
   const { data: resp, isLoading, isError } = useDaftarKamusAdmin({ limit, offset, q });
   const daftar = resp?.data || [];
@@ -451,6 +455,7 @@ function KamusAdmin() {
   }, [idParam, entriIdDariPath, navigate]);
 
   useEffect(() => {
+    if (sedangMenutupDariPath.current) return;
     if (!entriIdDariPath || isDetailLoading || isDetailError) return;
     const detailEntri = detailResp?.data;
     if (!detailEntri?.id) return;
@@ -458,6 +463,12 @@ function KamusAdmin() {
     panel.bukaUntukSunting(detailEntri);
     idEditTerbuka.current = detailEntri.id;
   }, [detailResp, entriIdDariPath, isDetailError, isDetailLoading, panel]);
+
+  useEffect(() => {
+    if (entriIdDariPath) return;
+    sedangMenutupDariPath.current = false;
+    idEditTerbuka.current = null;
+  }, [entriIdDariPath]);
 
   useEffect(() => {
     if (!entriIdDariPath || isDetailLoading || !isDetailError) return;
@@ -468,14 +479,14 @@ function KamusAdmin() {
   const tutupPanel = () => {
     panel.tutup();
     if (entriIdDariPath) {
-      idEditTerbuka.current = null;
+      sedangMenutupDariPath.current = true;
       navigate('/redaksi/kamus', { replace: true });
     }
   };
 
   const bukaTambah = () => {
     if (entriIdDariPath) {
-      idEditTerbuka.current = null;
+      sedangMenutupDariPath.current = true;
       navigate('/redaksi/kamus', { replace: true });
     }
     panel.bukaUntukTambah();

@@ -1105,7 +1105,7 @@ code {
   }
 
   .kamus-detail-edit-link {
-    @apply inline-flex items-center justify-center h-8 w-8 rounded-md border border-gray-200 text-gray-500 hover:text-blue-600 hover:border-blue-300;
+    @apply inline-flex items-center justify-center h-8 w-8 rounded-md border border-blue-300 text-blue-600 hover:text-blue-700 hover:border-blue-400;
   }
 
   .dark .kamus-detail-entry-meta {
@@ -1113,7 +1113,15 @@ code {
   }
 
   .dark .kamus-detail-edit-link {
-    @apply border-gray-700 text-dark-text-muted hover:text-blue-400 hover:border-blue-500;
+    @apply border-blue-600 text-blue-300 hover:text-blue-200 hover:border-blue-500;
+  }
+
+  .kamus-admin-link-info {
+    @apply inline-flex items-center justify-center ml-1 h-4 w-4 rounded-full border border-blue-300 text-[10px] leading-none font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100;
+  }
+
+  .dark .kamus-admin-link-info {
+    @apply border-blue-600 text-blue-300 bg-blue-900/30 hover:bg-blue-900/50;
   }
 
   .kamus-detail-actual-link {

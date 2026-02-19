@@ -131,7 +131,7 @@ describe('KamusAdmin', () => {
     fireEvent.click(screen.getByText('Simpan'));
     expect(mutateSimpanKamus).toHaveBeenCalled();
 
-    fireEvent.click(screen.getByText('anak'));
+    fireEvent.click(screen.getByText('dasar'));
     expect(screen.getByText('→ ananda')).toBeInTheDocument();
     fireEvent.click(screen.getByText('Hapus'));
     expect(global.confirm).toHaveBeenCalled();
@@ -150,7 +150,7 @@ describe('KamusAdmin', () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByText('anak'));
+    fireEvent.click(screen.getByText('dasar'));
     expect(screen.getByRole('heading', { name: /Makna/ })).toBeInTheDocument();
 
     fireEvent.click(screen.getByText('keturunan manusia'));
@@ -239,7 +239,7 @@ describe('KamusAdmin', () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByText('anak'));
+    fireEvent.click(screen.getByText('dasar'));
     expect(screen.getByText('Belum ada makna.')).toBeInTheDocument();
 
     fireEvent.click(screen.getByText('Simpan'));
@@ -258,7 +258,7 @@ describe('KamusAdmin', () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByText('anak'));
+    fireEvent.click(screen.getByText('dasar'));
     fireEvent.click(screen.getByText('Hapus'));
     expect(screen.getByText('Gagal menghapus')).toBeInTheDocument();
   });
@@ -305,7 +305,7 @@ describe('KamusAdmin', () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByText('anak'));
+    fireEvent.click(screen.getByText('dasar'));
 
     expect(screen.getByRole('option', { name: 'Dasar' })).toBeInTheDocument();
     const jenisRujukSelect = screen.getByLabelText('Jenis Rujuk');
@@ -328,7 +328,7 @@ describe('KamusAdmin', () => {
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Pesan gagal')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByText('anak'));
+    fireEvent.click(screen.getByText('dasar'));
     expect(screen.getByText('Memuat makna …')).toBeInTheDocument();
 
     fireEvent.click(screen.getByText('+ Tambah makna'));
@@ -350,13 +350,13 @@ describe('KamusAdmin', () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByText('anak'));
+    fireEvent.click(screen.getByText('dasar'));
     fireEvent.click(screen.getByText('Simpan'));
     act(() => {
       vi.advanceTimersByTime(700);
     });
 
-    fireEvent.click(screen.getByText('anak'));
+    fireEvent.click(screen.getByText('dasar'));
     fireEvent.click(screen.getByText('Hapus'));
     expect(mutateHapusKamus).toHaveBeenCalled();
     vi.useRealTimers();
@@ -369,7 +369,7 @@ describe('KamusAdmin', () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByText('anak'));
+    fireEvent.click(screen.getByText('dasar'));
     fireEvent.click(screen.getByText('keturunan manusia'));
     fireEvent.click(screen.getAllByText('sunting')[0]);
 
