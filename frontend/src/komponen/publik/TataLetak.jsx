@@ -4,29 +4,25 @@
 
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 
 function TataLetak() {
+  const location = useLocation();
+  const adalahBeranda = location.pathname === '/';
   const [modalTerbuka, setModalTerbuka] = useState(false);
   const [tabAktif, setTabAktif] = useState('changelog');
   const [sedangMemuat, setSedangMemuat] = useState(false);
   const [teksChangelog, setTeksChangelog] = useState('');
   const [teksTodo, setTeksTodo] = useState('');
-  const [modeGelap, setModeGelap] = useState(false);
+  const [modeGelap, setModeGelap] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const tersimpan = localStorage.getItem('kateglo-theme');
+    if (tersimpan) return tersimpan === 'dark';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
 
   const appTimestamp = __APP_TIMESTAMP__;
-
-  useEffect(() => {
-    /* c8 ignore next */
-    if (typeof window === 'undefined') return;
-    const tersimpan = localStorage.getItem('kateglo-theme');
-    if (tersimpan) {
-      setModeGelap(tersimpan === 'dark');
-      return;
-    }
-    setModeGelap(window.matchMedia('(prefers-color-scheme: dark)').matches);
-  }, []);
 
   useEffect(() => {
     /* c8 ignore next */
@@ -70,7 +66,7 @@ function TataLetak() {
     <>
       <div className="kateglo-layout-root">
         <Navbar />
-        <main className="kateglo-main-content">
+        <main className={`kateglo-main-content ${adalahBeranda ? 'kateglo-main-content-beranda' : ''}`}>
           <Outlet />
         </main>
         <footer className="kateglo-footer">

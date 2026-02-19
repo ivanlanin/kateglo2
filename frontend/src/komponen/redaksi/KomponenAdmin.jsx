@@ -309,7 +309,7 @@ export function TabelAdmin({
       <div className="bg-white dark:bg-dark-bg-elevated rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-100 dark:bg-neutral-900">
+            <thead className="bg-gray-100 dark:bg-dark-bg/80">
               <tr>
                 {kolom.map((k) => (
                   <th key={k.key} className={thClass}>

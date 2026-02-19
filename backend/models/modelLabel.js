@@ -249,7 +249,7 @@ class ModelLabel {
     const total = parseCount(countResult.rows[0]?.total);
 
     const dataResult = await db.query(
-      `SELECT l.id, l.entri, l.indeks, l.urutan, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk
+      `SELECT l.id, l.entri, l.indeks, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk
        FROM entri l
        WHERE l.aktif = 1
          AND EXISTS (
@@ -319,7 +319,7 @@ class ModelLabel {
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-      `SELECT l.id, l.entri, l.indeks, l.urutan, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk
+      `SELECT l.id, l.entri, l.indeks, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk
        FROM entri l
        WHERE l.aktif = 1 AND ${SQL_ABJAD} = $1
        ORDER BY l.entri
@@ -349,7 +349,7 @@ class ModelLabel {
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-      `SELECT l.id, l.entri, l.indeks, l.urutan, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk
+      `SELECT l.id, l.entri, l.indeks, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk
        FROM entri l
        WHERE l.aktif = 1 AND l.jenis = $1
        ORDER BY l.entri
