@@ -5,11 +5,19 @@ import App from './App';
 import { AuthProvider } from './context/authContext';
 import {
   buildDeskripsiDetailKamus,
+  buildDeskripsiPencarianGlosarium,
+  buildDeskripsiPencarianTesaurus,
+  buildMetaBidangGlosarium,
   buildMetaBrowseKamus,
+  buildMetaBrowseGlosarium,
+  buildMetaBrowseTesaurus,
   buildMetaDetailKamus,
+  buildMetaPencarianGlosarium,
   buildMetaKategoriKamus,
   buildMetaPencarianKamus,
-} from './utils/kamusMeta';
+  buildMetaPencarianTesaurus,
+  buildMetaSumberGlosarium,
+} from './utils/metaUtils';
 
 function escapeHtml(value = '') {
   return String(value)
@@ -33,35 +41,6 @@ function truncate(text = '', maxLen = 155) {
   const lastSpace = cut.lastIndexOf(' ');
   /* c8 ignore next */
   return (lastSpace > maxLen * 0.6 ? cut.substring(0, lastSpace) : cut) + '\u2026';
-}
-
-/**
- * Bangun deskripsi kaya dari data tesaurus.
- * Format: "kata — sinonim: x, y, z. Antonim: a, b."
- */
-function buildTesaurusDescription(kata, data) {
-  const parts = [];
-  if (data.sinonim?.length) {
-    parts.push(`Sinonim: ${data.sinonim.slice(0, 5).join(', ')}`);
-  }
-  if (data.antonim?.length) {
-    parts.push(`Antonim: ${data.antonim.slice(0, 5).join(', ')}`);
-  }
-  if (parts.length === 0) return `Hasil pencarian tesaurus untuk \u201c${kata}\u201d di Kateglo.`;
-  return truncate(`${kata} \u2014 ${parts.join('. ')}.`, 155);
-}
-
-/**
- * Bangun deskripsi kaya dari hasil pencarian glosarium.
- */
-function buildGlosariumCariDescription(kata, data) {
-  if (!data.total) return `Hasil pencarian glosarium untuk \u201c${kata}\u201d di Kateglo.`;
-  let desc = `${data.total} hasil glosarium untuk \u201c${kata}\u201d.`;
-  if (data.contoh?.length) {
-    const contohList = data.contoh.map((c) => `${c.indonesia} (${c.asing})`).join(', ');
-    desc += ` Contoh: ${truncate(contohList, 100)}.`;
-  }
-  return truncate(desc, 155);
 }
 
 function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', prefetchedData = null) {
@@ -131,88 +110,74 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
   // /tesaurus/cari/:kata
   if (decodedPath.startsWith('/tesaurus/cari/')) {
     const kata = decodedPath.replace('/tesaurus/cari/', '').trim();
-    if (!kata) return { title: 'Tesaurus \u2014 Kateglo', description: 'Temukan sinonim dan antonim bahasa Indonesia di Kateglo.' };
-
-    let description = `Hasil pencarian tesaurus untuk \u201c${kata}\u201d di Kateglo.`;
-    if (prefetchedData?.type === 'tesaurus-detail') {
-      description = buildTesaurusDescription(kata, prefetchedData);
-    }
+    const metaTesaurus = buildMetaPencarianTesaurus(
+      kata,
+      prefetchedData?.type === 'tesaurus-detail' ? prefetchedData : null
+    );
 
     return {
-      title: `Hasil Pencarian \u201c${kata}\u201d \u2014 Kateglo`,
-      description,
+      title: `${metaTesaurus.judul} \u2014 Kateglo`,
+      description: metaTesaurus.deskripsi,
     };
   }
 
   // /tesaurus
   if (decodedPath.startsWith('/tesaurus')) {
+    const metaBrowse = buildMetaBrowseTesaurus();
     return {
-      title: 'Tesaurus \u2014 Kateglo',
-      description: 'Temukan sinonim dan antonim bahasa Indonesia di Kateglo.',
+      title: `${metaBrowse.judul} \u2014 Kateglo`,
+      description: metaBrowse.deskripsi,
     };
   }
 
   // /glosarium/cari/:kata
   if (decodedPath.startsWith('/glosarium/cari/')) {
     const kata = decodedPath.replace('/glosarium/cari/', '').trim();
-    if (!kata) return { title: 'Glosarium \u2014 Kateglo', description: 'Jelajahi glosarium istilah bidang ilmu di Kateglo.' };
-
-    let description = `Hasil pencarian glosarium untuk \u201c${kata}\u201d di Kateglo.`;
-    if (prefetchedData?.type === 'glosarium-cari' && prefetchedData.total > 0) {
-      description = buildGlosariumCariDescription(kata, prefetchedData);
-    }
+    const metaGlosarium = buildMetaPencarianGlosarium(
+      kata,
+      prefetchedData?.type === 'glosarium-cari' ? prefetchedData : null
+    );
 
     return {
-      title: `Hasil Pencarian \u201c${kata}\u201d \u2014 Kateglo`,
-      description,
+      title: `${metaGlosarium.judul} \u2014 Kateglo`,
+      description: metaGlosarium.deskripsi,
     };
   }
 
   // /glosarium/bidang/:bidang
   if (decodedPath.startsWith('/glosarium/bidang/')) {
     const bidang = decodedPath.replace('/glosarium/bidang/', '').trim();
-    if (!bidang) return { title: 'Glosarium \u2014 Kateglo', description: 'Jelajahi glosarium istilah bidang ilmu di Kateglo.' };
-
-    let description = `Glosarium bidang ${bidang} di Kateglo.`;
-    if (prefetchedData?.type === 'glosarium-bidang' && prefetchedData.total > 0) {
-      description = `${prefetchedData.total} istilah bidang ${bidang}.`;
-      if (prefetchedData.contoh?.length) {
-        const contohList = prefetchedData.contoh.map((c) => `${c.indonesia} (${c.asing})`).join(', ');
-        description += ` Contoh: ${truncate(contohList, 100)}.`;
-      }
-    }
+    const metaBidang = buildMetaBidangGlosarium(
+      bidang,
+      prefetchedData?.type === 'glosarium-bidang' ? prefetchedData : null
+    );
 
     return {
-      title: `Bidang ${bidang} \u2014 Kateglo`,
-      description,
+      title: `${metaBidang.judul} \u2014 Kateglo`,
+      description: metaBidang.deskripsi,
     };
   }
 
   // /glosarium/sumber/:sumber
   if (decodedPath.startsWith('/glosarium/sumber/')) {
     const sumber = decodedPath.replace('/glosarium/sumber/', '').trim();
-    if (!sumber) return { title: 'Glosarium \u2014 Kateglo', description: 'Jelajahi glosarium istilah bidang ilmu di Kateglo.' };
-
-    let description = `Glosarium dari sumber ${sumber} di Kateglo.`;
-    if (prefetchedData?.type === 'glosarium-sumber' && prefetchedData.total > 0) {
-      description = `${prefetchedData.total} istilah dari sumber ${sumber}.`;
-      if (prefetchedData.contoh?.length) {
-        const contohList = prefetchedData.contoh.map((c) => `${c.indonesia} (${c.asing})`).join(', ');
-        description += ` Contoh: ${truncate(contohList, 100)}.`;
-      }
-    }
+    const metaSumber = buildMetaSumberGlosarium(
+      sumber,
+      prefetchedData?.type === 'glosarium-sumber' ? prefetchedData : null
+    );
 
     return {
-      title: `Sumber ${sumber} \u2014 Kateglo`,
-      description,
+      title: `${metaSumber.judul} \u2014 Kateglo`,
+      description: metaSumber.deskripsi,
     };
   }
 
   // /glosarium
   if (decodedPath.startsWith('/glosarium')) {
+    const metaBrowse = buildMetaBrowseGlosarium();
     return {
-      title: 'Glosarium \u2014 Kateglo',
-      description: 'Jelajahi glosarium istilah bidang ilmu di Kateglo.',
+      title: `${metaBrowse.judul} \u2014 Kateglo`,
+      description: metaBrowse.deskripsi,
     };
   }
 
@@ -288,7 +253,7 @@ export const __private = {
   stripTrailingSlash,
   truncate,
   buildKamusDescription: buildDeskripsiDetailKamus,
-  buildTesaurusDescription,
-  buildGlosariumCariDescription,
+  buildTesaurusDescription: buildDeskripsiPencarianTesaurus,
+  buildGlosariumCariDescription: buildDeskripsiPencarianGlosarium,
   buildMetaForPath,
 };

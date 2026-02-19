@@ -11,6 +11,7 @@ import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import TeksLema from '../../komponen/publik/TeksLema';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus } from '../../utils/kamusIndex';
+import { buildMetaBrowseTesaurus, buildMetaPencarianTesaurus } from '../../utils/metaUtils';
 import { updateSearchParamsWithOffset } from '../../utils/searchParams';
 
 const limit = 100;
@@ -79,12 +80,12 @@ function Tesaurus() {
     updateSearchParamsWithOffset(setSearchParams, {}, newOffset);
   };
 
-  const judulHalaman = kata
-    ? `Hasil Pencarian \u201c${decodeURIComponent(kata)}\u201d`
-    : 'Tesaurus';
+  const metaHalaman = kata
+    ? buildMetaPencarianTesaurus(kata)
+    : buildMetaBrowseTesaurus();
 
   return (
-    <HalamanDasar judul={judulHalaman}>
+    <HalamanDasar judul={metaHalaman.judul} deskripsi={metaHalaman.deskripsi}>
 
       <QueryFeedback
         isLoading={isLoading}

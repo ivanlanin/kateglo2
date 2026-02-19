@@ -13,7 +13,7 @@ import TeksLema from '../../komponen/publik/TeksLema';
 import { PesanTidakDitemukan } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus } from '../../utils/kamusIndex';
 import { formatTanggalKomentar, parseKomentarDate } from '../../utils/formatTanggalKomentar';
-import { buildMetaDetailKamus } from '../../utils/kamusMeta';
+import { buildMetaDetailKamus } from '../../utils/metaUtils';
 
 function upsertMetaTag({ name, property, content }) {
   const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
