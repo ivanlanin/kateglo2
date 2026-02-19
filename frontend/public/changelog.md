@@ -5,7 +5,7 @@
 - Memisahkan 486 partikel menjadi 26 preposisi, 37 konjungsi, 66 interjeksi, 357 partikel
 - Menambahkan info dibuat dan diubah di detail kamus
 - Membuat `metaUtils` untuk menyeragamkan metadata halaman
-- Menyambungkan detail kamus dengan halaman redaksi untuk penyuntingan
+- Menyambungkan detail kamus dengan halaman redaksi dan sebaliknya
 
 ## 2026-02-18 Rabu
 
