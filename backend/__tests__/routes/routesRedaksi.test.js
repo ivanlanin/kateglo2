@@ -268,10 +268,16 @@ describe('routes/redaksi', () => {
     it('GET /api/redaksi/kamus mengembalikan data daftar', async () => {
       ModelLema.daftarAdmin.mockResolvedValue({ data: [{ id: 1 }], total: 1 });
 
-      const response = await callAsAdmin('get', '/api/redaksi/kamus?limit=300&offset=-2&q= kata ');
+      const response = await callAsAdmin('get', '/api/redaksi/kamus?limit=300&offset=-2&q= kata &jenis=dasar&jenis_rujuk= lihat ');
 
       expect(response.status).toBe(200);
-      expect(ModelLema.daftarAdmin).toHaveBeenCalledWith({ limit: 200, offset: 0, q: 'kata' });
+      expect(ModelLema.daftarAdmin).toHaveBeenCalledWith({
+        limit: 200,
+        offset: 0,
+        q: 'kata',
+        jenis: 'dasar',
+        jenis_rujuk: 'lihat',
+      });
     });
 
     it('GET /api/redaksi/kamus meneruskan error', async () => {

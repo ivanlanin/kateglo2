@@ -41,8 +41,16 @@ router.get('/', async (req, res, next) => {
   try {
     const { limit, offset } = parsePagination(req.query);
     const q = parseSearchQuery(req.query.q);
+    const jenis = parseTrimmedString(req.query.jenis);
+    const jenisRujuk = parseTrimmedString(req.query.jenis_rujuk);
 
-    const { data, total } = await ModelEntri.daftarAdmin({ limit, offset, q });
+    const { data, total } = await ModelEntri.daftarAdmin({
+      limit,
+      offset,
+      q,
+      jenis,
+      jenis_rujuk: jenisRujuk,
+    });
     return res.json({ success: true, data, total });
   } catch (error) {
     return next(error);

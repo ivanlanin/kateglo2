@@ -252,10 +252,16 @@ class ModelEntri {
 
   /**
    * Daftar lema untuk panel admin (dengan pencarian opsional)
-   * @param {{ limit?: number, offset?: number, q?: string }} options
+   * @param {{ limit?: number, offset?: number, q?: string, jenis?: string, jenis_rujuk?: string }} options
    * @returns {Promise<{ data: Array, total: number }>}
    */
-  static async daftarAdmin({ limit = 50, offset = 0, q = '' } = {}) {
+  static async daftarAdmin({
+    limit = 50,
+    offset = 0,
+    q = '',
+    jenis = '',
+    jenis_rujuk = '',
+  } = {}) {
     const conditions = [];
     const params = [];
     let idx = 1;
@@ -263,6 +269,18 @@ class ModelEntri {
     if (q) {
       conditions.push(`entri ILIKE $${idx}`);
       params.push(`%${q}%`);
+      idx++;
+    }
+
+    if (jenis) {
+      conditions.push(`jenis = $${idx}`);
+      params.push(jenis);
+      idx++;
+    }
+
+    if (jenis_rujuk) {
+      conditions.push(`jenis_rujuk = $${idx}`);
+      params.push(jenis_rujuk);
       idx++;
     }
 
