@@ -376,7 +376,7 @@ describe('ModelEntri', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('UPDATE entri SET entri = $1'),
-      ['kata baru', 'dasar', null, null, null, null, null, null, 1, 'kata baru', null, 1, 8]
+      ['kata baru', 'dasar', null, null, null, null, null, null, 1, 'kata baru', null, 1, null, 8]
     );
     expect(result).toEqual(row);
   });
@@ -389,7 +389,7 @@ describe('ModelEntri', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO entri'),
-      ['kata', 'dasar', null, null, null, null, null, null, 0, 'kata', null, 1]
+      ['kata', 'dasar', null, null, null, null, null, null, 0, 'kata', null, 1, null]
     );
     expect(result).toEqual(row);
   });
@@ -401,7 +401,7 @@ describe('ModelEntri', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO entri'),
-      ['kata', 'dasar', null, null, null, null, null, null, 1, 'kata', null, 1]
+      ['kata', 'dasar', null, null, null, null, null, null, 1, 'kata', null, 1, null]
     );
   });
 
@@ -418,7 +418,7 @@ describe('ModelEntri', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO entri'),
-      ['--kata-- (2)', 'dasar', null, null, null, null, null, null, 1, 'kata', null, 1]
+      ['--kata-- (2)', 'dasar', null, null, null, null, null, null, 1, 'kata', null, 1, null]
     );
   });
 
@@ -444,12 +444,12 @@ describe('ModelEntri', () => {
     expect(db.query).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining('INSERT INTO entri'),
-      ['kata-a', 'dasar', null, null, null, null, null, null, 1, 'kata-a', null, 1]
+      ['kata-a', 'dasar', null, null, null, null, null, null, 1, 'kata-a', null, 1, null]
     );
     expect(db.query).toHaveBeenNthCalledWith(
       2,
       expect.stringContaining('INSERT INTO entri'),
-      ['kata-b', 'dasar', null, null, null, null, null, null, 1, 'kata-b', null, 2]
+      ['kata-b', 'dasar', null, null, null, null, null, null, 1, 'kata-b', null, 2, null]
     );
   });
 
@@ -464,12 +464,12 @@ describe('ModelEntri', () => {
     expect(db.query).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining('INSERT INTO entri'),
-      [undefined, 'dasar', null, null, null, null, null, null, 1, '', null, 1]
+      [undefined, 'dasar', null, null, null, null, null, null, 1, '', null, 1, null]
     );
     expect(db.query).toHaveBeenNthCalledWith(
       2,
       expect.stringContaining('INSERT INTO entri'),
-      ['---', 'dasar', null, null, null, null, null, null, 1, '---', null, 1]
+      ['---', 'dasar', null, null, null, null, null, null, 1, '---', null, 1, null]
     );
   });
 

@@ -113,6 +113,7 @@ create table entri (
   pemenggalan text,
   lafal text,
   varian text,
+  sumber text,
   jenis_rujuk text,
   lema_rujuk text,
   aktif integer not null default 1,

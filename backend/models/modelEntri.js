@@ -105,7 +105,7 @@ class ModelEntri {
   static async ambilEntri(teks) {
     const result = await db.query(
             `SELECT id, legacy_eid, entri, indeks, homonim, urutan, jenis, induk, pemenggalan, lafal, varian,
-              jenis_rujuk, lema_rujuk AS entri_rujuk, aktif
+              jenis_rujuk, lema_rujuk AS entri_rujuk, sumber, aktif
        FROM entri
        WHERE LOWER(entri) = LOWER($1)
        LIMIT 1`,
@@ -117,7 +117,7 @@ class ModelEntri {
   static async ambilEntriPerIndeks(indeks) {
     const result = await db.query(
       `SELECT id, legacy_eid, entri, indeks, homonim, urutan, jenis, induk, pemenggalan, lafal, varian,
-              jenis_rujuk, lema_rujuk AS entri_rujuk, aktif,
+              jenis_rujuk, lema_rujuk AS entri_rujuk, sumber, aktif,
               to_char(created_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS created_at,
               to_char(updated_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS updated_at
        FROM entri
@@ -275,7 +275,7 @@ class ModelEntri {
     const total = parseCount(countResult.rows[0]?.total);
 
     const dataResult = await db.query(
-      `SELECT id, entri, indeks, homonim, urutan, jenis, lafal, aktif, jenis_rujuk, lema_rujuk AS entri_rujuk
+      `SELECT id, entri, indeks, homonim, urutan, jenis, lafal, sumber, aktif, jenis_rujuk, lema_rujuk AS entri_rujuk
        FROM entri ${where}
        ORDER BY indeks ASC, urutan ASC, entri ASC
        LIMIT $${idx} OFFSET $${idx + 1}`,
@@ -302,7 +302,7 @@ class ModelEntri {
   static async ambilDenganId(id) {
     const result = await db.query(
             `SELECT id, entri, indeks, homonim, urutan, jenis, induk, pemenggalan, lafal, varian,
-              jenis_rujuk, lema_rujuk AS entri_rujuk, aktif
+              jenis_rujuk, lema_rujuk AS entri_rujuk, sumber, aktif
        FROM entri WHERE id = $1`,
       [id]
     );
@@ -329,34 +329,36 @@ class ModelEntri {
     indeks,
     homonim,
     urutan,
+    sumber,
   }) {
     const nilaiEntri = entri;
     const nilaiEntriRujuk = entri_rujuk;
     const nilaiIndeks = (indeks || '').trim() || normalisasiIndeks(nilaiEntri);
     const nilaiHomonim = parseNullableInteger(homonim);
     const nilaiUrutan = parsePositiveInteger(urutan);
+    const nilaiSumber = String(sumber || '').trim() || null;
     if (id) {
       const result = await db.query(
         `UPDATE entri SET entri = $1, jenis = $2, induk = $3, pemenggalan = $4,
                 lafal = $5, varian = $6, jenis_rujuk = $7, lema_rujuk = $8, aktif = $9,
-                indeks = $10, homonim = $11, urutan = $12
-         WHERE id = $13
+                indeks = $10, homonim = $11, urutan = $12, sumber = $13
+         WHERE id = $14
          RETURNING id, legacy_eid, entri, indeks, homonim, urutan, jenis, induk, pemenggalan, lafal, varian,
-             jenis_rujuk, lema_rujuk AS entri_rujuk, aktif, legacy_tabel, legacy_tid`,
+             jenis_rujuk, lema_rujuk AS entri_rujuk, sumber, aktif, legacy_tabel, legacy_tid`,
         [nilaiEntri, jenis, induk || null, pemenggalan || null, lafal || null,
          varian || null, jenis_rujuk || null, nilaiEntriRujuk || null, aktif ?? 1,
-         nilaiIndeks, nilaiHomonim, nilaiUrutan, id]
+         nilaiIndeks, nilaiHomonim, nilaiUrutan, nilaiSumber, id]
       );
       return result.rows[0];
     }
     const result = await db.query(
-      `INSERT INTO entri (entri, jenis, induk, pemenggalan, lafal, varian, jenis_rujuk, lema_rujuk, aktif, indeks, homonim, urutan)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+      `INSERT INTO entri (entri, jenis, induk, pemenggalan, lafal, varian, jenis_rujuk, lema_rujuk, aktif, indeks, homonim, urutan, sumber)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
        RETURNING id, legacy_eid, entri, indeks, homonim, urutan, jenis, induk, pemenggalan, lafal, varian,
-         jenis_rujuk, lema_rujuk AS entri_rujuk, aktif, legacy_tabel, legacy_tid`,
+         jenis_rujuk, lema_rujuk AS entri_rujuk, sumber, aktif, legacy_tabel, legacy_tid`,
       [nilaiEntri, jenis, induk || null, pemenggalan || null, lafal || null,
        varian || null, jenis_rujuk || null, nilaiEntriRujuk || null, aktif ?? 1,
-       nilaiIndeks, nilaiHomonim, nilaiUrutan]
+       nilaiIndeks, nilaiHomonim, nilaiUrutan, nilaiSumber]
     );
     return result.rows[0];
   }

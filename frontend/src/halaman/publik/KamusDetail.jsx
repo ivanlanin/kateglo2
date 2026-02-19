@@ -123,11 +123,12 @@ function bandingkanJenisSubentri(jenisA, jenisB, urutanJenisSubentri) {
   return (jenisA || '').localeCompare((jenisB || ''), 'id');
 }
 
-function formatInfoWaktuEntri(createdAt, updatedAt) {
+function formatInfoWaktuEntri(createdAt, updatedAt, sumber = '') {
   const createdDate = parseKomentarDate(createdAt);
   const updatedDate = parseKomentarDate(updatedAt);
+  const sumberAman = String(sumber || '').trim();
 
-  if (!createdDate && !updatedDate) return '';
+  if (!createdDate && !updatedDate && !sumberAman) return '';
 
   const parts = [];
   if (createdDate) {
@@ -140,6 +141,10 @@ function formatInfoWaktuEntri(createdAt, updatedAt) {
 
   if (shouldShowUpdated) {
     parts.push(`Diubah ${formatTanggalKomentar(updatedDate)}`);
+  }
+
+  if (sumberAman) {
+    parts.push(`Sumber ${sumberAman}`);
   }
 
   return parts.join(' · ');
@@ -268,6 +273,7 @@ function KamusDetail() {
       pemenggalan: data.pemenggalan || null,
       lafal: data.lafal || null,
       varian: data.varian || null,
+      sumber: data.sumber || null,
       jenis_rujuk: data.jenis_rujuk || null,
       entri_rujuk: data.entri_rujuk || null,
       entri_rujuk_indeks: data.entri_rujuk || null,
@@ -328,7 +334,7 @@ function KamusDetail() {
               bandingkanJenisSubentri(jenisA, jenisB, urutanJenisSubentri));
 
             const rantaiHeading = [...(entriItem.induk || []), { id: `current-${entriItem.id}`, entri: entriItem.entri, indeks: entriItem.indeks, current: true }];
-            const infoWaktu = formatInfoWaktuEntri(entriItem.created_at, entriItem.updated_at);
+            const infoWaktu = formatInfoWaktuEntri(entriItem.created_at, entriItem.updated_at, entriItem.sumber);
             const indeksKamus = normalisasiIndeksKamus(entriItem.indeks || entriItem.entri);
             const tautanRujukanKbbi = indeksKamus
               ? `https://kbbi.kemendikdasmen.go.id/entri/${encodeURIComponent(indeksKamus)}`
