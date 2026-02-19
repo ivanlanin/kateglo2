@@ -331,6 +331,31 @@ describe('ModelEntri', () => {
     expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('LIMIT $2 OFFSET $3'), ['%kat%', 9, 2]);
   });
 
+  it('daftarAdmin dengan filter jenis dan jenis_rujuk menambah kondisi where', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [] });
+
+    await ModelEntri.daftarAdmin({
+      q: 'kat',
+      jenis: 'dasar',
+      jenis_rujuk: 'lihat',
+      limit: 9,
+      offset: 2,
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('WHERE entri ILIKE $1 AND jenis = $2 AND jenis_rujuk = $3'),
+      ['%kat%', 'dasar', 'lihat']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $4 OFFSET $5'),
+      ['%kat%', 'dasar', 'lihat', 9, 2]
+    );
+  });
+
   it('hitungTotal mengembalikan nilai numerik', async () => {
     db.query.mockResolvedValue({ rows: [{ total: '31' }] });
 

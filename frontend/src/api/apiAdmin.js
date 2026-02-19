@@ -46,12 +46,33 @@ export function useStatistikAdmin() {
 
 // ─── Kamus ───────────────────────────────────────────────────────────────────
 
-export function useDaftarKamusAdmin({ limit = 50, offset = 0, q = '' } = {}) {
+export function useDaftarKamusAdmin({
+  limit = 50,
+  offset = 0,
+  q = '',
+  jenis = '',
+  jenisRujuk = '',
+} = {}) {
+  const params = {
+    limit,
+    offset,
+    q: q || undefined,
+  };
+
+  if (jenis) params.jenis = jenis;
+  if (jenisRujuk) params.jenis_rujuk = jenisRujuk;
+
   return useQuery({
-    queryKey: ['admin-kamus', { limit, offset, q }],
+    queryKey: ['admin-kamus', {
+      limit,
+      offset,
+      q,
+      jenis,
+      jenisRujuk,
+    }],
     queryFn: () =>
       klien
-        .get('/api/redaksi/kamus', { params: { limit, offset, q: q || undefined } })
+        .get('/api/redaksi/kamus', { params })
         .then((r) => r.data),
   });
 }

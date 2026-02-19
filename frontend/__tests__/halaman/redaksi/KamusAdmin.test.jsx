@@ -285,7 +285,7 @@ describe('KamusAdmin', () => {
     );
 
     fireEvent.click(screen.getByText('+ Tambah'));
-    expect(screen.getByRole('option', { name: 'Dasar' })).toBeInTheDocument();
+    expect(screen.getAllByRole('option', { name: 'Dasar' }).length).toBeGreaterThan(0);
   });
 
   it('memakai opsi fallback saat kategori label redaksi kosong/tidak lengkap', () => {
@@ -307,7 +307,7 @@ describe('KamusAdmin', () => {
 
     fireEvent.click(screen.getByText('dasar'));
 
-    expect(screen.getByRole('option', { name: 'Dasar' })).toBeInTheDocument();
+    expect(screen.getAllByRole('option', { name: 'Dasar' }).length).toBeGreaterThan(0);
     const jenisRujukSelect = screen.getByLabelText('Jenis Rujuk');
     expect(jenisRujukSelect).toBeInTheDocument();
     expect(Array.from(jenisRujukSelect.querySelectorAll('option')).some((opt) => opt.value === '')).toBe(true);

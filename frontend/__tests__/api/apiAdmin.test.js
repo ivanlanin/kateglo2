@@ -67,6 +67,24 @@ describe('apiAdmin', () => {
     await kamusKosong.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus', { params: { limit: 10, offset: 5, q: undefined } });
 
+    const kamusDenganFilter = useDaftarKamusAdmin({
+      limit: 15,
+      offset: 0,
+      q: 'kata',
+      jenis: 'dasar',
+      jenisRujuk: 'lihat',
+    });
+    await kamusDenganFilter.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus', {
+      params: {
+        limit: 15,
+        offset: 0,
+        q: 'kata',
+        jenis: 'dasar',
+        jenis_rujuk: 'lihat',
+      },
+    });
+
     const tesaurus = useDaftarTesaurusAdmin({});
     await tesaurus.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/tesaurus', { params: { limit: 50, offset: 0, q: undefined } });

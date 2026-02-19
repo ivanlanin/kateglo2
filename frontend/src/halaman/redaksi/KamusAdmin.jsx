@@ -410,13 +410,21 @@ function KamusAdmin() {
   const { id: idParam } = useParams();
   const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit } =
     usePencarianAdmin(50);
+  const [filterJenis, setFilterJenis] = useState('');
+  const [filterJenisRujuk, setFilterJenisRujuk] = useState('');
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
   const idEdit = Number.parseInt(idParam || '', 10);
   const entriIdDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
 
-  const { data: resp, isLoading, isError } = useDaftarKamusAdmin({ limit, offset, q });
+  const { data: resp, isLoading, isError } = useDaftarKamusAdmin({
+    limit,
+    offset,
+    q,
+    jenis: filterJenis,
+    jenisRujuk: filterJenisRujuk,
+  });
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailKamusAdmin(entriIdDariPath);
@@ -447,6 +455,26 @@ function KamusAdmin() {
       tipePenyingkat: tipePenyingkat.length > 1 ? tipePenyingkat : opsiTipePenyingkatBawaan,
     };
   }, [respLabelKategori]);
+
+  const opsiFilterJenis = useMemo(() => {
+    const pilihanTanpaKosong = (opsiKategori.jenis || []).filter((item) => String(item?.value || '').trim());
+    return [{ value: '', label: 'Semua jenis' }, ...pilihanTanpaKosong];
+  }, [opsiKategori.jenis]);
+
+  const opsiFilterJenisRujuk = useMemo(() => {
+    const pilihanTanpaKosong = (opsiKategori.jenisRujuk || []).filter((item) => String(item?.value || '').trim());
+    return [{ value: '', label: 'Semua jenis rujuk' }, ...pilihanTanpaKosong];
+  }, [opsiKategori.jenisRujuk]);
+
+  const handleUbahFilterJenis = (_name, value) => {
+    setFilterJenis(value);
+    setOffset(0);
+  };
+
+  const handleUbahFilterJenisRujuk = (_name, value) => {
+    setFilterJenisRujuk(value);
+    setOffset(0);
+  };
 
   useEffect(() => {
     if (!idParam) return;
@@ -542,6 +570,22 @@ function KamusAdmin() {
         placeholder="Cari entri …"
         onTambah={bukaTambah}
       />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
+        <SelectField
+          label="Filter Jenis"
+          name="filter_jenis"
+          value={filterJenis}
+          onChange={handleUbahFilterJenis}
+          options={opsiFilterJenis}
+        />
+        <SelectField
+          label="Filter Jenis Rujuk"
+          name="filter_jenis_rujuk"
+          value={filterJenisRujuk}
+          onChange={handleUbahFilterJenisRujuk}
+          options={opsiFilterJenisRujuk}
+        />
+      </div>
       <InfoTotal q={q} total={total} label="entri" />
       <TabelAdmin
         kolom={kolom}
