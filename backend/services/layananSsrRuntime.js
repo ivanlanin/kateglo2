@@ -61,11 +61,11 @@ function injectAppHtml(htmlTemplate, appHtml = '') {
   return htmlTemplate.replace('<div id="root"></div>', `<div id="root">${appHtml}</div>`);
 }
 
-/* istanbul ignore next -- native dynamic import tidak dieksekusi penuh pada mode Jest saat ini */
-async function loadSsrRenderer() {
-  const moduleUrl = pathToFileURL(frontendServerEntryPath).href;
-  /* istanbul ignore next */
-  const ssrModule = await import(moduleUrl);
+async function loadSsrRenderer(options = {}) {
+  const entryPath = options.entryPath || frontendServerEntryPath;
+  const importModule = options.importModule || ((moduleUrl) => import(moduleUrl));
+  const moduleUrl = pathToFileURL(entryPath).href;
+  const ssrModule = await importModule(moduleUrl);
   return validateRendererModule(ssrModule);
 }
 
