@@ -172,6 +172,34 @@ describe('ModelTesaurus', () => {
     expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('LIMIT $2 OFFSET $3'), ['%aktif%', 9, 3]);
   });
 
+  it('daftarAdmin menambahkan filter aktif=true saat aktif=1', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 4 }] });
+
+    await ModelTesaurus.daftarAdmin({ aktif: '1' });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('aktif = TRUE'),
+      []
+    );
+  });
+
+  it('daftarAdmin menambahkan filter aktif=false saat aktif=0', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 5 }] });
+
+    await ModelTesaurus.daftarAdmin({ aktif: '0' });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('aktif = FALSE'),
+      []
+    );
+  });
+
   it('hitungTotal mengembalikan nilai numerik', async () => {
     db.query.mockResolvedValue({ rows: [{ total: '17' }] });
 
@@ -270,6 +298,21 @@ describe('ModelTesaurus', () => {
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
       ['aktif', 'giat; rajin; tekun', 'malas; lamban', true]
+    );
+  });
+
+  it('simpan mengubah daftar relasi yang hanya pemisah menjadi null', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 72 }] });
+
+    await ModelTesaurus.simpan({
+      indeks: 'aktif',
+      sinonim: ' , ;  ',
+      antonim: ' ; ',
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO tesaurus'),
+      ['aktif', null, null, true]
     );
   });
 

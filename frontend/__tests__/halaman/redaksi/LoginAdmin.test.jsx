@@ -25,7 +25,7 @@ describe('LoginAdmin', () => {
   });
 
   it('menampilkan loading state', () => {
-    mockUseAuth.mockReturnValue({ isAuthenticated: false, adalahAdmin: false, isLoading: true, loginDenganGoogle: vi.fn() });
+    mockUseAuth.mockReturnValue({ isAuthenticated: false, adalahRedaksi: false, isLoading: true, loginDenganGoogle: vi.fn() });
 
     render(
       <MemoryRouter>
@@ -38,7 +38,7 @@ describe('LoginAdmin', () => {
 
   it('menampilkan error dan memanggil login google', () => {
     const loginDenganGoogle = vi.fn();
-    mockUseAuth.mockReturnValue({ isAuthenticated: false, adalahAdmin: false, isLoading: false, loginDenganGoogle });
+    mockUseAuth.mockReturnValue({ isAuthenticated: false, adalahRedaksi: false, isLoading: false, loginDenganGoogle });
 
     render(
       <MemoryRouter>
@@ -52,7 +52,7 @@ describe('LoginAdmin', () => {
   });
 
   it('navigasi otomatis saat user admin', () => {
-    mockUseAuth.mockReturnValue({ isAuthenticated: true, adalahAdmin: true, isLoading: false, loginDenganGoogle: vi.fn() });
+    mockUseAuth.mockReturnValue({ isAuthenticated: true, adalahRedaksi: true, isLoading: false, loginDenganGoogle: vi.fn() });
 
     render(
       <MemoryRouter>
@@ -64,7 +64,7 @@ describe('LoginAdmin', () => {
   });
 
   it('menampilkan pesan akun tidak punya akses redaksi', () => {
-    mockUseAuth.mockReturnValue({ isAuthenticated: true, adalahAdmin: false, isLoading: false, loginDenganGoogle: vi.fn() });
+    mockUseAuth.mockReturnValue({ isAuthenticated: true, adalahRedaksi: false, isLoading: false, loginDenganGoogle: vi.fn() });
 
     render(
       <MemoryRouter>

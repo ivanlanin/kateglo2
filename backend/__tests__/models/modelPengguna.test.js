@@ -152,6 +152,35 @@ describe('ModelPengguna', () => {
     expect(db.query).toHaveBeenNthCalledWith(2, expect.any(String), [9, 0]);
   });
 
+  it('daftarPengguna menambahkan filter q dan aktif=true', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 21 }] });
+
+    await ModelPengguna.daftarPengguna({ q: 'admin', aktif: '1', limit: 6, offset: 4 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('WHERE (p.nama ILIKE $1 OR p.surel ILIKE $1 OR COALESCE(r.nama, \'\') ILIKE $1 OR COALESCE(r.kode, \'\') ILIKE $1) AND p.aktif = TRUE'),
+      ['%admin%']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(2, expect.any(String), ['%admin%', 6, 4]);
+  });
+
+  it('daftarPengguna menambahkan filter aktif=false', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 22 }] });
+
+    await ModelPengguna.daftarPengguna({ aktif: '0' });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('p.aktif = FALSE'),
+      []
+    );
+  });
+
   it('ubahPeran mengembalikan null jika tidak ada baris terupdate', async () => {
     db.query.mockResolvedValue({ rows: [] });
 

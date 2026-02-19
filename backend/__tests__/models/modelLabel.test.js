@@ -539,6 +539,44 @@ describe('ModelLabel', () => {
     expect(result.total).toBe(1);
   });
 
+  it('daftarAdmin menambahkan filter aktif=true ketika aktif=1', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 9, kode: 'cak' }] });
+
+    await ModelLabel.daftarAdmin({ q: 'cak', aktif: '1', limit: 10, offset: 1 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('aktif = TRUE'),
+      ['%cak%']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $2 OFFSET $3'),
+      ['%cak%', 10, 1]
+    );
+  });
+
+  it('daftarAdmin menambahkan filter aktif=false ketika aktif=0', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 10, kode: 'ark' }] });
+
+    await ModelLabel.daftarAdmin({ q: 'ark', aktif: '0', limit: 8, offset: 3 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('aktif = FALSE'),
+      ['%ark%']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $2 OFFSET $3'),
+      ['%ark%', 8, 3]
+    );
+  });
+
   it('ambilDenganId mengembalikan baris pertama atau null', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ id: 11, kategori: 'ragam', kode: 'cak' }] })
@@ -578,6 +616,7 @@ describe('ModelLabel', () => {
 
   it('hitungTotal mengembalikan angka total label', async () => {
     db.query.mockResolvedValueOnce({ rows: [{ total: '17' }] });
+
     const total = await ModelLabel.hitungTotal();
     expect(total).toBe(17);
   });

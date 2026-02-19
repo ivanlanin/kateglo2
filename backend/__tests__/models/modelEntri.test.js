@@ -8,7 +8,11 @@ jest.mock('../../db/autocomplete', () => jest.fn());
 const db = require('../../db');
 const autocomplete = require('../../db/autocomplete');
 const ModelEntri = require('../../models/modelEntri');
-const { normalizeBoolean } = require('../../models/modelEntri').__private;
+const {
+  normalizeBoolean,
+  normalisasiIndeks,
+  parseNullableInteger,
+} = require('../../models/modelEntri').__private;
 
 describe('ModelEntri', () => {
   beforeEach(() => {
@@ -381,6 +385,50 @@ describe('ModelEntri', () => {
     );
   });
 
+  it('daftarAdmin mendukung filter aktif, homograf null, dan homonim not-null', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [] });
+
+    await ModelEntri.daftarAdmin({
+      aktif: '1',
+      punya_homograf: '0',
+      punya_homonim: '1',
+      limit: 7,
+      offset: 1,
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('WHERE aktif = 1 AND homograf IS NULL AND homonim IS NOT NULL'),
+      []
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $1 OFFSET $2'),
+      [7, 1]
+    );
+  });
+
+  it('daftarAdmin mendukung filter aktif=0', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [] });
+
+    await ModelEntri.daftarAdmin({ aktif: '0', limit: 5, offset: 2 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('WHERE aktif = 0'),
+      []
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $1 OFFSET $2'),
+      [5, 2]
+    );
+  });
+
   it('hitungTotal mengembalikan nilai numerik', async () => {
     db.query.mockResolvedValue({ rows: [{ total: '31' }] });
 
@@ -689,6 +737,17 @@ describe('ModelEntri', () => {
       expect.stringContaining('AND aktif = TRUE'),
       [[1, 2]]
     );
+  });
+
+  it('helper private normalisasiIndeks dan parseNullableInteger menangani semua cabang', () => {
+    expect(normalisasiIndeks('kata (2)')).toBe('kata');
+    expect(normalisasiIndeks('-kata-')).toBe('kata');
+    expect(normalisasiIndeks('---')).toBe('---');
+
+    expect(parseNullableInteger(null)).toBeNull();
+    expect(parseNullableInteger('')).toBeNull();
+    expect(parseNullableInteger('12')).toBe(12);
+    expect(parseNullableInteger('abc')).toBeNull();
   });
 
 });

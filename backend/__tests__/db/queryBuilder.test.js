@@ -28,7 +28,12 @@ jest.mock('pg', () => ({
     query: mockQuery,
     on: mockOn,
     end: mockEnd
-  }))
+  })),
+  types: {
+    setTypeParser: jest.fn((_oid, parser) => {
+      parser('2026-01-01 00:00:00');
+    }),
+  },
 }));
 
 // Setelah mock pg, require db module (yang akan pakai mock Pool)

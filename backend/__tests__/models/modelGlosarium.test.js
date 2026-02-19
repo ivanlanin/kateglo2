@@ -137,6 +137,39 @@ describe('ModelGlosarium', () => {
     expect(result).toEqual({ data: [{ id: 7, indonesia: 'aktif' }], total: 1, hasNext: false });
   });
 
+  it('cari menambahkan filter aktif=true saat aktif=1', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 10, indonesia: 'aktif true' }] });
+
+    await ModelGlosarium.cari({ aktif: '1', limit: 4, offset: 2 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('g.aktif = TRUE'),
+      []
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $1 OFFSET $2'),
+      [4, 2]
+    );
+  });
+
+  it('cari menambahkan filter aktif=false saat aktif=0', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 11, indonesia: 'aktif false' }] });
+
+    await ModelGlosarium.cari({ aktif: '0' });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('g.aktif = FALSE'),
+      []
+    );
+  });
+
   it('cari tanpa filter menghasilkan whereClause kosong', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '0' }] })
