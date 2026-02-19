@@ -1104,7 +1104,15 @@ code {
     @apply text-xs text-gray-500 mt-6;
   }
 
+  .kamus-detail-admin-actions {
+    @apply flex items-center gap-2;
+  }
+
   .kamus-detail-edit-link {
+    @apply inline-flex items-center justify-center h-8 w-8 rounded-md border border-blue-300 text-blue-600 hover:text-blue-700 hover:border-blue-400;
+  }
+
+  .kamus-detail-reference-link {
     @apply inline-flex items-center justify-center h-8 w-8 rounded-md border border-blue-300 text-blue-600 hover:text-blue-700 hover:border-blue-400;
   }
 
@@ -1113,6 +1121,10 @@ code {
   }
 
   .dark .kamus-detail-edit-link {
+    @apply border-blue-600 text-blue-300 hover:text-blue-200 hover:border-blue-500;
+  }
+
+  .dark .kamus-detail-reference-link {
     @apply border-blue-600 text-blue-300 hover:text-blue-200 hover:border-blue-500;
   }
 
