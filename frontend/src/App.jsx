@@ -18,6 +18,24 @@ import LabelAdmin from './halaman/redaksi/LabelAdmin';
 import PenggunaAdmin from './halaman/redaksi/PenggunaAdmin';
 
 function RuteRedaksi({ children }) {
+  const { isAuthenticated, adalahRedaksi, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-dark-bg">
+        <p className="text-gray-600 dark:text-gray-400">Memuat...</p>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated || !adalahRedaksi) {
+    return <Navigate to="/redaksi/login" replace />;
+  }
+
+  return children;
+}
+
+function RuteAdmin({ children }) {
   const { isAuthenticated, adalahAdmin, isLoading } = useAuth();
 
   if (isLoading) {
@@ -29,7 +47,7 @@ function RuteRedaksi({ children }) {
   }
 
   if (!isAuthenticated || !adalahAdmin) {
-    return <Navigate to="/redaksi/login" replace />;
+    return <Navigate to="/redaksi" replace />;
   }
 
   return children;
@@ -50,10 +68,10 @@ function App() {
       <Route path="/redaksi/tesaurus/:id" element={<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/glosarium" element={<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/glosarium/:id" element={<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/label" element={<RuteRedaksi><LabelAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/label/:id" element={<RuteRedaksi><LabelAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/pengguna" element={<RuteRedaksi><PenggunaAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/pengguna/:id" element={<RuteRedaksi><PenggunaAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/label" element={<RuteAdmin><LabelAdmin /></RuteAdmin>} />
+      <Route path="/redaksi/label/:id" element={<RuteAdmin><LabelAdmin /></RuteAdmin>} />
+      <Route path="/redaksi/pengguna" element={<RuteAdmin><PenggunaAdmin /></RuteAdmin>} />
+      <Route path="/redaksi/pengguna/:id" element={<RuteAdmin><PenggunaAdmin /></RuteAdmin>} />
       {/* Public routes */}
       <Route element={<TataLetak />}>
         <Route path="/" element={<Beranda />} />

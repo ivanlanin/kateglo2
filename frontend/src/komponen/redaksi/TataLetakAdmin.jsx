@@ -10,13 +10,14 @@ const menuAdmin = [
   { path: '/redaksi/kamus', label: 'Kamus' },
   { path: '/redaksi/tesaurus', label: 'Tesaurus' },
   { path: '/redaksi/glosarium', label: 'Glosarium' },
-  { path: '/redaksi/label', label: 'Label' },
-  { path: '/redaksi/pengguna', label: 'Pengguna' },
   { path: '/redaksi/komentar', label: 'Komentar' },
+  { path: '/redaksi/label', label: 'Label', adminSaja: true },
+  { path: '/redaksi/pengguna', label: 'Pengguna', adminSaja: true },
 ];
 
 function TataLetakAdmin({ judul, aksiJudul = null, children }) {
-  const { logout } = useAuth();
+  const { logout, adalahAdmin } = useAuth();
+  const menuTampil = menuAdmin.filter((item) => !item.adminSaja || adalahAdmin);
   const navigate = useNavigate();
   const location = useLocation();
   const appTimestamp = __APP_TIMESTAMP__;
@@ -58,7 +59,7 @@ function TataLetakAdmin({ judul, aksiJudul = null, children }) {
               <Link to="/" className="navbar-logo">Kateglo</Link>
             </div>
             <nav className="hidden md:flex items-center space-x-1">
-              {menuAdmin.map((item) => (
+              {menuTampil.map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}
@@ -95,7 +96,7 @@ function TataLetakAdmin({ judul, aksiJudul = null, children }) {
           {menuTerbuka && (
             <div className="navbar-mobile-panel">
               <div className="px-3">
-                {menuAdmin.map((item) => (
+                {menuTampil.map((item) => (
                   <Link
                     key={item.path}
                     to={item.path}

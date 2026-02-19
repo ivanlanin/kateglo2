@@ -1,9 +1,10 @@
 /**
- * @fileoverview Route admin untuk pengelolaan kamus (lema)
+ * @fileoverview Route redaksi untuk pengelolaan kamus (entri)
  */
 
 const express = require('express');
 const ModelEntri = require('../../models/modelEntri');
+const { periksaIzin } = require('../../middleware/otorisasi');
 const { hapusCacheDetailKamus } = require('../../services/layananKamusPublik');
 const {
   parsePagination,
@@ -37,7 +38,7 @@ async function invalidasiCacheByEntriId(entriId) {
  * GET /api/redaksi/kamus
  * Daftar entri dengan pencarian opsional (paginasi)
  */
-router.get('/', async (req, res, next) => {
+router.get('/', periksaIzin('lihat_entri'), async (req, res, next) => {
   try {
     const { limit, offset } = parsePagination(req.query);
     const q = parseSearchQuery(req.query.q);
@@ -67,7 +68,7 @@ router.get('/', async (req, res, next) => {
  * GET /api/redaksi/kamus/:id
  * Ambil detail entri untuk penyuntingan
  */
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', periksaIzin('lihat_entri'), async (req, res, next) => {
   try {
     const data = await ModelEntri.ambilDenganId(parseIdParam(req.params.id));
     if (!data) return res.status(404).json({ success: false, message: 'Entri tidak ditemukan' });
@@ -81,7 +82,7 @@ router.get('/:id', async (req, res, next) => {
  * POST /api/redaksi/kamus
  * Tambah entri baru
  */
-router.post('/', async (req, res, next) => {
+router.post('/', periksaIzin('tambah_entri'), async (req, res, next) => {
   try {
     const entri = parseTrimmedString(req.body.entri ?? req.body.lema);
     const { jenis } = req.body;
@@ -100,7 +101,7 @@ router.post('/', async (req, res, next) => {
  * PUT /api/redaksi/kamus/:id
  * Sunting entri
  */
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', periksaIzin('edit_entri'), async (req, res, next) => {
   try {
     const id = parseIdParam(req.params.id);
     const entri = parseTrimmedString(req.body.entri ?? req.body.lema);
@@ -123,7 +124,7 @@ router.put('/:id', async (req, res, next) => {
  * DELETE /api/redaksi/kamus/:id
  * Hapus entri
  */
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', periksaIzin('hapus_entri'), async (req, res, next) => {
   try {
     const entriId = parseIdParam(req.params.id);
     const indeksSebelum = await ambilIndeksAmanByEntriId(entriId);
@@ -144,7 +145,7 @@ router.delete('/:id', async (req, res, next) => {
  * GET /api/redaksi/kamus/:entriId/makna
  * Daftar makna + contoh untuk sebuah entri
  */
-router.get('/:entriId/makna', async (req, res, next) => {
+router.get('/:entriId/makna', periksaIzin('lihat_entri'), async (req, res, next) => {
   try {
     const entriId = parseIdParam(req.params.entriId);
     const daftarMakna = await ModelEntri.ambilMakna(entriId);
@@ -173,7 +174,7 @@ router.get('/:entriId/makna', async (req, res, next) => {
  * POST /api/redaksi/kamus/:entriId/makna
  * Tambah makna baru
  */
-router.post('/:entriId/makna', async (req, res, next) => {
+router.post('/:entriId/makna', periksaIzin('tambah_makna'), async (req, res, next) => {
   try {
     const entri_id = parseIdParam(req.params.entriId);
     const { makna } = req.body;
@@ -191,7 +192,7 @@ router.post('/:entriId/makna', async (req, res, next) => {
  * PUT /api/redaksi/kamus/:entriId/makna/:maknaId
  * Sunting makna
  */
-router.put('/:entriId/makna/:maknaId', async (req, res, next) => {
+router.put('/:entriId/makna/:maknaId', periksaIzin('edit_makna'), async (req, res, next) => {
   try {
     const entri_id = parseIdParam(req.params.entriId);
     const id = parseIdParam(req.params.maknaId);
@@ -211,7 +212,7 @@ router.put('/:entriId/makna/:maknaId', async (req, res, next) => {
  * DELETE /api/redaksi/kamus/:entriId/makna/:maknaId
  * Hapus makna (cascade hapus contoh)
  */
-router.delete('/:entriId/makna/:maknaId', async (req, res, next) => {
+router.delete('/:entriId/makna/:maknaId', periksaIzin('hapus_makna'), async (req, res, next) => {
   try {
     const entriId = parseIdParam(req.params.entriId);
     const deleted = await ModelEntri.hapusMakna(parseIdParam(req.params.maknaId));
@@ -231,7 +232,7 @@ router.delete('/:entriId/makna/:maknaId', async (req, res, next) => {
  * POST /api/redaksi/kamus/:entriId/makna/:maknaId/contoh
  * Tambah contoh baru
  */
-router.post('/:entriId/makna/:maknaId/contoh', async (req, res, next) => {
+router.post('/:entriId/makna/:maknaId/contoh', periksaIzin('tambah_contoh'), async (req, res, next) => {
   try {
     const entriId = parseIdParam(req.params.entriId);
     const makna_id = parseIdParam(req.params.maknaId);
@@ -250,7 +251,7 @@ router.post('/:entriId/makna/:maknaId/contoh', async (req, res, next) => {
  * PUT /api/redaksi/kamus/:entriId/makna/:maknaId/contoh/:contohId
  * Sunting contoh
  */
-router.put('/:entriId/makna/:maknaId/contoh/:contohId', async (req, res, next) => {
+router.put('/:entriId/makna/:maknaId/contoh/:contohId', periksaIzin('edit_contoh'), async (req, res, next) => {
   try {
     const entriId = parseIdParam(req.params.entriId);
     const makna_id = parseIdParam(req.params.maknaId);
@@ -271,7 +272,7 @@ router.put('/:entriId/makna/:maknaId/contoh/:contohId', async (req, res, next) =
  * DELETE /api/redaksi/kamus/:entriId/makna/:maknaId/contoh/:contohId
  * Hapus contoh
  */
-router.delete('/:entriId/makna/:maknaId/contoh/:contohId', async (req, res, next) => {
+router.delete('/:entriId/makna/:maknaId/contoh/:contohId', periksaIzin('hapus_contoh'), async (req, res, next) => {
   try {
     const entriId = parseIdParam(req.params.entriId);
     const deleted = await ModelEntri.hapusContoh(parseIdParam(req.params.contohId));

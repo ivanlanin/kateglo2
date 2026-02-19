@@ -1,8 +1,9 @@
 /**
- * @fileoverview Route admin untuk pengelolaan komentar kamus
+ * @fileoverview Route redaksi untuk pengelolaan komentar kamus
  */
 
 const express = require('express');
+const { periksaIzin } = require('../../middleware/otorisasi');
 const ModelKomentar = require('../../models/modelKomentar');
 const {
   parsePagination,
@@ -13,7 +14,7 @@ const {
 
 const router = express.Router();
 
-router.get('/', async (req, res, next) => {
+router.get('/', periksaIzin('kelola_komentar'), async (req, res, next) => {
   try {
     const { limit, offset } = parsePagination(req.query);
     const q = parseSearchQuery(req.query.q);
@@ -31,7 +32,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', periksaIzin('kelola_komentar'), async (req, res, next) => {
   try {
     const data = await ModelKomentar.ambilDenganId(parseIdParam(req.params.id));
     if (!data) {
@@ -43,7 +44,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', periksaIzin('kelola_komentar'), async (req, res, next) => {
   try {
     const id = parseIdParam(req.params.id);
     const komentar = parseTrimmedString(req.body?.komentar);

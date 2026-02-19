@@ -1,8 +1,9 @@
 /**
- * @fileoverview Route admin untuk pengelolaan glosarium
+ * @fileoverview Route redaksi untuk pengelolaan glosarium
  */
 
 const express = require('express');
+const { periksaIzin } = require('../../middleware/otorisasi');
 const ModelGlosarium = require('../../models/modelGlosarium');
 const {
   parsePagination,
@@ -17,7 +18,7 @@ const router = express.Router();
  * GET /api/redaksi/glosarium
  * Daftar glosarium dengan pencarian opsional (paginasi)
  */
-router.get('/', async (req, res, next) => {
+router.get('/', periksaIzin('lihat_glosarium'), async (req, res, next) => {
   try {
     const { limit, offset } = parsePagination(req.query);
     const q = parseSearchQuery(req.query.q);
@@ -38,7 +39,7 @@ router.get('/', async (req, res, next) => {
 /**
  * GET /api/redaksi/glosarium/:id
  */
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', periksaIzin('lihat_glosarium'), async (req, res, next) => {
   try {
     const data = await ModelGlosarium.ambilDenganId(parseIdParam(req.params.id));
     if (!data) return res.status(404).json({ success: false, message: 'Glosarium tidak ditemukan' });
@@ -51,7 +52,7 @@ router.get('/:id', async (req, res, next) => {
 /**
  * POST /api/redaksi/glosarium
  */
-router.post('/', async (req, res, next) => {
+router.post('/', periksaIzin('tambah_glosarium'), async (req, res, next) => {
   try {
     const indonesia = parseTrimmedString(req.body.indonesia);
     const asing = parseTrimmedString(req.body.asing);
@@ -69,7 +70,7 @@ router.post('/', async (req, res, next) => {
 /**
  * PUT /api/redaksi/glosarium/:id
  */
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', periksaIzin('edit_glosarium'), async (req, res, next) => {
   try {
     const id = parseIdParam(req.params.id);
     const indonesia = parseTrimmedString(req.body.indonesia);
@@ -89,7 +90,7 @@ router.put('/:id', async (req, res, next) => {
 /**
  * DELETE /api/redaksi/glosarium/:id
  */
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', periksaIzin('hapus_glosarium'), async (req, res, next) => {
   try {
     const deleted = await ModelGlosarium.hapus(parseIdParam(req.params.id));
     if (!deleted) return res.status(404).json({ success: false, message: 'Glosarium tidak ditemukan' });

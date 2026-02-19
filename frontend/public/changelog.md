@@ -13,7 +13,8 @@
 - Menambahkan kolom entri.homograf, misalnya untuk "per" dan "seri"
 - Menambahkan filter punya homograf dan punya homonim di redaksi kamus
 - Merapikan tabel dan isi tesaurus
-- Menyeragamkan tombol tambah, filter, dan paginasi di halaman redaksi 
+- Menyeragamkan tombol tambah, filter, dan paginasi di halaman redaksi
+- Menerapkan autentikasi dengan banyak peran
 
 ## 2026-02-18 Rabu
 

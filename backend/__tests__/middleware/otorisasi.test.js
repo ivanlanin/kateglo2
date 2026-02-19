@@ -3,7 +3,7 @@
  * @tested_in backend/middleware/otorisasi.js
  */
 
-const { periksaIzin, adminSaja } = require('../../middleware/otorisasi');
+const { periksaIzin, adminSaja, redaksiSaja } = require('../../middleware/otorisasi');
 
 function createRes() {
   return {
@@ -100,6 +100,56 @@ describe('middleware/otorisasi', () => {
       const next = jest.fn();
 
       adminSaja(req, res, next);
+
+      expect(next).toHaveBeenCalledTimes(1);
+      expect(res.status).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('redaksiSaja', () => {
+    it('mengembalikan 403 saat user bukan admin/penyunting', () => {
+      const req = { user: { peran: 'pengguna' } };
+      const res = createRes();
+      const next = jest.fn();
+
+      redaksiSaja(req, res, next);
+
+      expect(res.status).toHaveBeenCalledWith(403);
+      expect(res.json).toHaveBeenCalledWith({
+        success: false,
+        message: 'Akses terbatas untuk tim redaksi',
+      });
+      expect(next).not.toHaveBeenCalled();
+    });
+
+    it('mengembalikan 403 saat req.user tidak ada', () => {
+      const req = {};
+      const res = createRes();
+      const next = jest.fn();
+
+      redaksiSaja(req, res, next);
+
+      expect(res.status).toHaveBeenCalledWith(403);
+      expect(next).not.toHaveBeenCalled();
+    });
+
+    it('lanjut next saat user adalah admin', () => {
+      const req = { user: { peran: 'admin' } };
+      const res = createRes();
+      const next = jest.fn();
+
+      redaksiSaja(req, res, next);
+
+      expect(next).toHaveBeenCalledTimes(1);
+      expect(res.status).not.toHaveBeenCalled();
+    });
+
+    it('lanjut next saat user adalah penyunting', () => {
+      const req = { user: { peran: 'penyunting' } };
+      const res = createRes();
+      const next = jest.fn();
+
+      redaksiSaja(req, res, next);
 
       expect(next).toHaveBeenCalledTimes(1);
       expect(res.status).not.toHaveBeenCalled();

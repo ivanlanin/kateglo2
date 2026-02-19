@@ -7,7 +7,13 @@ const AuthContext = createContext(null);
 function AuthProvider({ children }) {
   const [token, setToken] = useState('');
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  // Mulai dalam kondisi loading jika ada token tersimpan,
+  // agar route guard tidak redirect sebelum profil selesai dimuat.
+  const [isLoading, setIsLoading] = useState(() => {
+    /* c8 ignore next */
+    if (typeof window === 'undefined') return false;
+    return Boolean(localStorage.getItem(storageKey));
+  });
 
   /* c8 ignore start */
   useEffect(() => {
@@ -114,6 +120,7 @@ function AuthProvider({ children }) {
     isLoading,
     isAuthenticated: Boolean(token && user),
     adalahAdmin: user?.peran === 'admin',
+    adalahRedaksi: user?.peran === 'admin' || user?.peran === 'penyunting',
     punyaIzin,
     loginDenganGoogle: mulaiLoginGoogle,
     setAuthToken,

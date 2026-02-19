@@ -1,8 +1,9 @@
 /**
- * @fileoverview Route admin untuk pengelolaan label
+ * @fileoverview Route redaksi untuk pengelolaan label (hanya admin)
  */
 
 const express = require('express');
+const { periksaIzin } = require('../../middleware/otorisasi');
 const ModelLabel = require('../../models/modelLabel');
 const {
   parsePagination,
@@ -28,7 +29,7 @@ function isValidAktifValue(value) {
  * GET /api/redaksi/label
  * Daftar label dengan pencarian opsional (paginasi)
  */
-router.get('/', async (req, res, next) => {
+router.get('/', periksaIzin('kelola_label'), async (req, res, next) => {
   try {
     const { limit, offset } = parsePagination(req.query);
     const q = parseSearchQuery(req.query.q);
@@ -51,7 +52,7 @@ router.get('/', async (req, res, next) => {
  * Ambil daftar label per kategori untuk kebutuhan dropdown redaksi.
  * Query optional: ?nama=bentuk-kata,jenis-rujuk,kelas-kata,ragam,bidang,bahasa,penyingkatan
  */
-router.get('/kategori', async (req, res, next) => {
+router.get('/kategori', periksaIzin('kelola_label'), async (req, res, next) => {
   try {
     const rawNama = parseSearchQuery(req.query.nama);
     const kategori = rawNama
@@ -68,7 +69,7 @@ router.get('/kategori', async (req, res, next) => {
 /**
  * GET /api/redaksi/label/:id
  */
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', periksaIzin('kelola_label'), async (req, res, next) => {
   try {
     const data = await ModelLabel.ambilDenganId(parseIdParam(req.params.id));
     if (!data) return res.status(404).json({ success: false, message: 'Label tidak ditemukan' });
@@ -81,7 +82,7 @@ router.get('/:id', async (req, res, next) => {
 /**
  * POST /api/redaksi/label
  */
-router.post('/', async (req, res, next) => {
+router.post('/', periksaIzin('kelola_label'), async (req, res, next) => {
   try {
     const kategori = parseTrimmedString(req.body.kategori);
     const kode = parseTrimmedString(req.body.kode);
@@ -107,7 +108,7 @@ router.post('/', async (req, res, next) => {
 /**
  * PUT /api/redaksi/label/:id
  */
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', periksaIzin('kelola_label'), async (req, res, next) => {
   try {
     const id = parseIdParam(req.params.id);
     const kategori = parseTrimmedString(req.body.kategori);
@@ -135,7 +136,7 @@ router.put('/:id', async (req, res, next) => {
 /**
  * DELETE /api/redaksi/label/:id
  */
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', periksaIzin('kelola_label'), async (req, res, next) => {
   try {
     const deleted = await ModelLabel.hapus(parseIdParam(req.params.id));
     if (!deleted) return res.status(404).json({ success: false, message: 'Label tidak ditemukan' });
