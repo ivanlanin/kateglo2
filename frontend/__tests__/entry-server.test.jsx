@@ -98,7 +98,12 @@ describe('entry-server', () => {
     expect(kamusCariRich.title).toContain('Hasil Pencarian');
     expect(kamusCariRich.description).toContain('air:');
 
-    expect(__private.buildMetaForPath('/kamus/kelas-kata/nomina', site).title).toBe('Kamus — Kateglo');
+    const kamusKategori = __private.buildMetaForPath('/kamus/kelas-kata/nomina', site);
+    expect(kamusKategori.title).toBe('Kelas Kata Nomina — Kateglo');
+    expect(kamusKategori.description).toContain('kategori kelas kata Nomina');
+
+    const kamusKategoriAlias = __private.buildMetaForPath('/kamus/kelas/verba', site);
+    expect(kamusKategoriAlias.title).toBe('Kelas Kata Verba — Kateglo');
     expect(__private.buildMetaForPath('/kamus', site).title).toBe('Kamus — Kateglo');
 
     expect(__private.buildMetaForPath('/tesaurus/cari/%20', site).title).toBe('Tesaurus — Kateglo');

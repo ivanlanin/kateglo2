@@ -182,7 +182,7 @@ describe('Kamus', () => {
 
     render(<Kamus />);
 
-    expect(screen.getByRole('heading', { name: 'khusus Kata dasar' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Khusus Kata Dasar' })).toBeInTheDocument();
     expect(screen.getByText(/Tidak ada entri untuk kategori ini/i)).toBeInTheDocument();
   });
 

@@ -13,6 +13,21 @@ import TeksLema from '../../komponen/publik/TeksLema';
 import { PesanTidakDitemukan } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus } from '../../utils/kamusIndex';
 import { formatTanggalKomentar, parseKomentarDate } from '../../utils/formatTanggalKomentar';
+import { buildMetaDetailKamus } from '../../utils/kamusMeta';
+
+function upsertMetaTag({ name, property, content }) {
+  const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
+  let tag = document.head.querySelector(selector);
+
+  if (!tag) {
+    tag = document.createElement('meta');
+    if (name) tag.setAttribute('name', name);
+    if (property) tag.setAttribute('property', property);
+    document.head.appendChild(tag);
+  }
+
+  tag.setAttribute('content', content);
+}
 
 /** Konversi markdown ringan (*italic* dan **bold**) ke HTML inline */
 function renderMarkdown(teks) {
@@ -133,12 +148,6 @@ function KamusDetail() {
   const [isSubmittingKomentar, setIsSubmittingKomentar] = useState(false);
   const [pesanKomentar, setPesanKomentar] = useState('');
 
-  useEffect(() => {
-    document.title = indeks
-      ? `${decodeURIComponent(indeks)} — Kamus — Kateglo`
-      : 'Kamus — Kateglo';
-  }, [indeks]);
-
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['kamus-detail', indeks],
     queryFn: () => ambilDetailKamus(indeks),
@@ -159,6 +168,18 @@ function KamusDetail() {
     queryFn: ambilKategoriKamus,
     staleTime: 5 * 60 * 1000,
   });
+
+  useEffect(() => {
+    const metaDetail = buildMetaDetailKamus(indeks, data || null);
+    const judulDokumen = `${metaDetail.judul} — Kateglo`;
+    document.title = judulDokumen;
+
+    upsertMetaTag({ name: 'description', content: metaDetail.deskripsi });
+    upsertMetaTag({ property: 'og:title', content: judulDokumen });
+    upsertMetaTag({ property: 'og:description', content: metaDetail.deskripsi });
+    upsertMetaTag({ name: 'twitter:title', content: judulDokumen });
+    upsertMetaTag({ name: 'twitter:description', content: metaDetail.deskripsi });
+  }, [indeks, data]);
 
   const petaKelasKata = buildLabelMap(kategoriKamus?.['kelas-kata'] || kategoriKamus?.kelas_kata || []);
   const petaRagam = buildLabelMap(kategoriKamus?.ragam || []);
