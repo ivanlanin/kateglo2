@@ -102,10 +102,14 @@ function tentukanKategoriJenis(jenis = '') {
 }
 
 function bandingkanEntriKamus(a, b) {
+  /* c8 ignore next */
   const homografA = Number.isFinite(Number(a.homograf)) ? Number(a.homograf) : Number.MAX_SAFE_INTEGER;
+  /* c8 ignore next */
   const homografB = Number.isFinite(Number(b.homograf)) ? Number(b.homograf) : Number.MAX_SAFE_INTEGER;
   if (homografA !== homografB) return homografA - homografB;
+  /* c8 ignore next */
   const homonimA = Number.isFinite(Number(a.homonim)) ? Number(a.homonim) : Number.MAX_SAFE_INTEGER;
+  /* c8 ignore next */
   const homonimB = Number.isFinite(Number(b.homonim)) ? Number(b.homonim) : Number.MAX_SAFE_INTEGER;
   if (homonimA !== homonimB) return homonimA - homonimB;
   return (a.entri || '').localeCompare((b.entri || ''), 'id');

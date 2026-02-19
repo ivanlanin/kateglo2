@@ -2,10 +2,13 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import {
   BadgeStatus,
+  BarisFilterCariAdmin,
   getApiErrorMessage,
   InfoTotal,
   KotakCariAdmin,
+  KotakCariTambahAdmin,
   TabelAdmin,
+  TombolAksiAdmin,
   potongTeks,
   usePencarianAdmin,
   validateRequiredFields,
@@ -102,6 +105,119 @@ describe('KomponenAdmin', () => {
     expect(onHapus).toHaveBeenCalled();
   });
 
+  it('BarisFilterCariAdmin merender filter, submit, dan hapus', () => {
+    const onCari = vi.fn();
+    const onHapus = vi.fn();
+    const onChange = vi.fn();
+    const onChangeFilter = vi.fn();
+
+    render(
+      <BarisFilterCariAdmin
+        nilai="kata"
+        onChange={onChange}
+        onCari={onCari}
+        onHapus={onHapus}
+        placeholder="Cari baris"
+        filters={[
+          {
+            key: 'aktif',
+            value: '',
+            onChange: onChangeFilter,
+            options: [
+              { value: '', label: 'Semua' },
+              { value: '1', label: 'Aktif' },
+            ],
+            ariaLabel: 'Filter aktif',
+          },
+        ]}
+      />
+    );
+
+    fireEvent.change(screen.getByPlaceholderText('Cari baris'), { target: { value: 'baru' } });
+    expect(onChange).toHaveBeenCalledWith('baru');
+
+    fireEvent.change(screen.getByLabelText('Filter aktif'), { target: { value: '1' } });
+    expect(onChangeFilter).toHaveBeenCalledWith('1');
+
+    fireEvent.click(screen.getByText('Cari'));
+    expect(onCari).toHaveBeenCalledWith('kata');
+
+    fireEvent.click(screen.getByText('✕'));
+    expect(onHapus).toHaveBeenCalled();
+  });
+
+  it('BarisFilterCariAdmin tetap aman saat filter tanpa options', () => {
+    const onCari = vi.fn();
+    const onChange = vi.fn();
+    const onChangeFilter = vi.fn();
+
+    render(
+      <BarisFilterCariAdmin
+        nilai=""
+        onChange={onChange}
+        onCari={onCari}
+        onHapus={vi.fn()}
+        filters={[{ key: 'status', value: '', onChange: onChangeFilter }]}
+      />
+    );
+
+    fireEvent.change(screen.getByLabelText('status'), { target: { value: '' } });
+    expect(onChangeFilter).toHaveBeenCalled();
+    fireEvent.click(screen.getByText('Cari'));
+    expect(onCari).toHaveBeenCalledWith('');
+    expect(screen.queryByText('✕')).not.toBeInTheDocument();
+  });
+
+  it('BarisFilterCariAdmin memakai fallback value kosong saat filter value undefined', () => {
+    const onChangeFilter = vi.fn();
+
+    render(
+      <BarisFilterCariAdmin
+        nilai=""
+        onChange={vi.fn()}
+        onCari={vi.fn()}
+        onHapus={vi.fn()}
+        filters={[
+          {
+            key: 'statusNullish',
+            onChange: onChangeFilter,
+            options: [{ value: '', label: 'Semua' }],
+          },
+        ]}
+      />
+    );
+
+    expect(screen.getByLabelText('statusNullish')).toHaveValue('');
+    fireEvent.change(screen.getByLabelText('statusNullish'), { target: { value: '' } });
+    expect(onChangeFilter).toHaveBeenCalledWith('');
+  });
+
+  it('KotakCariTambahAdmin dan TombolAksiAdmin memanggil callback', () => {
+    const onCari = vi.fn();
+    const onHapus = vi.fn();
+    const onChange = vi.fn();
+    const onTambah = vi.fn();
+    const onAksi = vi.fn();
+
+    const { rerender } = render(
+      <KotakCariTambahAdmin
+        nilai="x"
+        onChange={onChange}
+        onCari={onCari}
+        onHapus={onHapus}
+        onTambah={onTambah}
+        labelTambah="Tambah Data"
+      />
+    );
+
+    fireEvent.click(screen.getByText('Tambah Data'));
+    expect(onTambah).toHaveBeenCalled();
+
+    rerender(<TombolAksiAdmin onClick={onAksi} label="Aksi Utama" />);
+    fireEvent.click(screen.getByText('Aksi Utama'));
+    expect(onAksi).toHaveBeenCalled();
+  });
+
   it('InfoTotal dan BadgeStatus merender teks dengan benar', () => {
     const { rerender } = render(<InfoTotal q="kata" total={10} label="data" />);
     expect(screen.getByText('Pencarian "kata":', { exact: false })).toBeInTheDocument();
@@ -172,5 +288,25 @@ describe('KomponenAdmin', () => {
     );
     expect(screen.getByText('—')).toBeInTheDocument();
     rerender(<div />);
+  });
+
+  it('TabelAdmin dapat merender tanpa onKlikBaris dan tanpa paginasi', () => {
+    const kolom = [{ key: 'nama', label: 'Nama' }];
+    const data = [{ id: 2, nama: 'B' }];
+
+    render(
+      <TabelAdmin
+        kolom={kolom}
+        data={data}
+        isLoading={false}
+        isError={false}
+        total={1}
+        limit={0}
+        offset={0}
+      />
+    );
+
+    expect(screen.getByText('B')).toBeInTheDocument();
+    expect(screen.queryByTestId('paginasi-mock')).not.toBeInTheDocument();
   });
 });

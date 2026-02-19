@@ -24,12 +24,18 @@ import klien from '../../src/api/klien';
 import {
   useStatistikAdmin,
   useDaftarKamusAdmin,
+  useDetailKamusAdmin,
   useDaftarKomentarAdmin,
+  useDetailKomentarAdmin,
   useDaftarTesaurusAdmin,
+  useDetailTesaurusAdmin,
   useDaftarGlosariumAdmin,
+  useDetailGlosariumAdmin,
   useDaftarLabelAdmin,
+  useDetailLabelAdmin,
   useKategoriLabelRedaksi,
   useDaftarPengguna,
+  useDetailPengguna,
   useDaftarPeran,
   useUbahPeran,
   useSimpanKamus,
@@ -71,8 +77,11 @@ describe('apiAdmin', () => {
       limit: 15,
       offset: 0,
       q: 'kata',
+      aktif: '1',
       jenis: 'dasar',
       jenisRujuk: 'lihat',
+      punyaHomograf: '1',
+      punyaHomonim: '0',
     });
     await kamusDenganFilter.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus', {
@@ -80,9 +89,11 @@ describe('apiAdmin', () => {
         limit: 15,
         offset: 0,
         q: 'kata',
-        aktif: undefined,
+        aktif: '1',
         jenis: 'dasar',
         jenis_rujuk: 'lihat',
+        punya_homograf: '1',
+        punya_homonim: '0',
       },
     });
 
@@ -125,6 +136,43 @@ describe('apiAdmin', () => {
     const komentar = useDaftarKomentarAdmin({ limit: 25, offset: 10, q: 'kata' });
     await komentar.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/komentar', { params: { limit: 25, offset: 10, q: 'kata', aktif: undefined } });
+
+    const detailKamus = useDetailKamusAdmin(12);
+    expect(detailKamus.enabled).toBe(true);
+    await detailKamus.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus/12');
+
+    const detailKomentar = useDetailKomentarAdmin(13);
+    expect(detailKomentar.enabled).toBe(true);
+    await detailKomentar.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/komentar/13');
+
+    const detailTesaurus = useDetailTesaurusAdmin(14);
+    expect(detailTesaurus.enabled).toBe(true);
+    await detailTesaurus.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/tesaurus/14');
+
+    const detailGlosarium = useDetailGlosariumAdmin(15);
+    expect(detailGlosarium.enabled).toBe(true);
+    await detailGlosarium.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium/15');
+
+    const detailLabel = useDetailLabelAdmin(16);
+    expect(detailLabel.enabled).toBe(true);
+    await detailLabel.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/label/16');
+
+    const detailPengguna = useDetailPengguna(17);
+    expect(detailPengguna.enabled).toBe(true);
+    await detailPengguna.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/pengguna/17');
+
+    expect(useDetailKamusAdmin(null).enabled).toBe(false);
+    expect(useDetailKomentarAdmin(null).enabled).toBe(false);
+    expect(useDetailTesaurusAdmin(null).enabled).toBe(false);
+    expect(useDetailGlosariumAdmin(null).enabled).toBe(false);
+    expect(useDetailLabelAdmin(null).enabled).toBe(false);
+    expect(useDetailPengguna(null).enabled).toBe(false);
   });
 
   it('mengonfigurasi mutation admin pengguna', async () => {

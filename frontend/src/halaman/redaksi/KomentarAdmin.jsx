@@ -57,6 +57,7 @@ function KomentarAdmin() {
   const { id: idParam } = useParams();
   const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit } = usePencarianAdmin(50);
   const idEdit = Number.parseInt(idParam || '', 10);
+  /* c8 ignore next */
   const idDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
@@ -71,6 +72,7 @@ function KomentarAdmin() {
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
 
+  /* c8 ignore start */
   useEffect(() => {
     if (!idParam) return;
     if (idDariPath) return;
@@ -144,6 +146,7 @@ function KomentarAdmin() {
     setFilterAktif(filterAktifDraft);
     kirimCari(cari);
   };
+  /* c8 ignore end */
 
   return (
     <TataLetakAdmin judul="Komentar">

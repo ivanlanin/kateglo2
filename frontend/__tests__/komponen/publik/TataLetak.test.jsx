@@ -2,15 +2,18 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import TataLetak from '../../../src/komponen/publik/TataLetak';
 
+let mockPathname = '/kamus';
+
 vi.mock('../../../src/komponen/publik/Navbar', () => ({ default: () => <div>Navbar Mock</div> }));
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   Outlet: () => <div>Outlet Mock</div>,
-  useLocation: () => ({ pathname: '/kamus' }),
+  useLocation: () => ({ pathname: mockPathname }),
 }));
 
 describe('TataLetak', () => {
   beforeEach(() => {
+    mockPathname = '/kamus';
     global.fetch.mockReset();
   });
 
@@ -98,6 +101,34 @@ describe('TataLetak', () => {
 
     expect(localStorage.getItem).toHaveBeenCalledWith('kateglo-theme');
     expect(document.documentElement.classList.contains('dark')).toBe(true);
+  });
+
+  it('menggunakan theme terang saat localStorage berisi light', () => {
+    localStorage.getItem.mockReturnValue('light');
+
+    render(<TataLetak />);
+
+    expect(localStorage.getItem).toHaveBeenCalledWith('kateglo-theme');
+    expect(document.documentElement.classList.contains('dark')).toBe(false);
+  });
+
+  it('menggunakan preferensi sistem saat localStorage kosong', () => {
+    localStorage.getItem.mockReturnValue(null);
+    window.matchMedia = vi.fn().mockReturnValue({ matches: true, addListener: vi.fn(), removeListener: vi.fn() });
+
+    render(<TataLetak />);
+
+    expect(window.matchMedia).toHaveBeenCalledWith('(prefers-color-scheme: dark)');
+    expect(document.documentElement.classList.contains('dark')).toBe(true);
+  });
+
+  it('menambahkan kelas beranda saat pathname root', () => {
+    mockPathname = '/';
+
+    const { container } = render(<TataLetak />);
+    const main = container.querySelector('main');
+
+    expect(main.className).toContain('kateglo-main-content-beranda');
   });
 
   it('dapat kembali ke tab Riwayat setelah tab Tugas', async () => {

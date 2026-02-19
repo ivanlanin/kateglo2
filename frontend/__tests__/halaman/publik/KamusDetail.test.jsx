@@ -155,6 +155,43 @@ describe('KamusDetail', () => {
     expect(ambilDetailKamus).toHaveBeenCalledWith('kata');
   });
 
+  it('menampilkan aksi redaksi dan tautan rujukan KBBI saat admin dan indeks tersedia', () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      isLoading: false,
+      adalahAdmin: true,
+      loginDenganGoogle: vi.fn(),
+    });
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return { isLoading: false, isError: false, data: {} };
+      }
+      return {
+        isLoading: false,
+        isError: false,
+        data: {
+          entri: 'kata',
+          indeks: 'kata',
+          id: 99,
+          jenis: 'dasar',
+          makna: [{ id: 1, makna: 'arti' }],
+          subentri: {},
+          tesaurus: { sinonim: [], antonim: [] },
+          glosarium: [],
+        },
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByLabelText('Sunting entri di Redaksi')).toHaveAttribute('href', '/redaksi/kamus/99');
+    expect(screen.getByLabelText('Buka rujukan KBBI di tab baru')).toHaveAttribute(
+      'href',
+      'https://kbbi.kemendikdasmen.go.id/entri/kata'
+    );
+  });
+
   it('menampilkan bentuk baku dan tautan see pada definisi', () => {
     mockUseQuery.mockReturnValue({
       isLoading: false,

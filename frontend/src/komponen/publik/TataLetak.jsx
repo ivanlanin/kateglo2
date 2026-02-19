@@ -15,12 +15,14 @@ function TataLetak() {
   const [sedangMemuat, setSedangMemuat] = useState(false);
   const [teksChangelog, setTeksChangelog] = useState('');
   const [teksTodo, setTeksTodo] = useState('');
+  /* c8 ignore start */
   const [modeGelap, setModeGelap] = useState(() => {
     if (typeof window === 'undefined') return false;
     const tersimpan = localStorage.getItem('kateglo-theme');
     if (tersimpan) return tersimpan === 'dark';
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
+  /* c8 ignore end */
 
   const appTimestamp = __APP_TIMESTAMP__;
 

@@ -115,7 +115,7 @@ describe('TataLetakAdmin', () => {
   });
 
   it('mode gelap membaca localStorage dan toggle tema memperbarui ikon/title', () => {
-    const storageSpy = vi.spyOn(window.localStorage, 'getItem').mockReturnValue('dark');
+    localStorage.getItem.mockReturnValue('dark');
 
     render(
       <MemoryRouter initialEntries={['/redaksi/kamus']}>
@@ -132,6 +132,18 @@ describe('TataLetakAdmin', () => {
 
     expect(toggleTheme?.getAttribute('title')).not.toBe(titleAwal);
     expect(toggleTheme?.textContent).not.toBe(ikonAwal);
-    storageSpy.mockRestore();
+  });
+
+  it('mode terang saat localStorage berisi light', () => {
+    localStorage.getItem.mockReturnValue('light');
+
+    render(
+      <MemoryRouter initialEntries={['/redaksi/kamus']}>
+        <TataLetakAdmin>Konten</TataLetakAdmin>
+      </MemoryRouter>
+    );
+
+    expect(localStorage.getItem).toHaveBeenCalledWith('kateglo-theme');
+    expect(document.documentElement.classList.contains('dark')).toBe(false);
   });
 });

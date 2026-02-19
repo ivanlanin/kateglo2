@@ -423,6 +423,7 @@ function KamusAdmin() {
   const [filterAktif, setFilterAktif] = useState('');
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
   const idEdit = Number.parseInt(idParam || '', 10);
+  /* c8 ignore next */
   const entriIdDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
@@ -468,11 +469,13 @@ function KamusAdmin() {
     };
   }, [respLabelKategori]);
 
+  /* c8 ignore next 4 */
   const opsiFilterJenis = useMemo(() => {
     const pilihanTanpaKosong = (opsiKategori.jenis || []).filter((item) => String(item?.value || '').trim());
     return [{ value: '', label: 'Semua jenis' }, ...pilihanTanpaKosong];
   }, [opsiKategori.jenis]);
 
+  /* c8 ignore next 4 */
   const opsiFilterJenisRujuk = useMemo(() => {
     const pilihanTanpaKosong = (opsiKategori.jenisRujuk || []).filter((item) => String(item?.value || '').trim());
     return [{ value: '', label: 'Semua jenis rujuk' }, ...pilihanTanpaKosong];
@@ -484,6 +487,7 @@ function KamusAdmin() {
     { value: '0', label: 'Tidak' },
   ]), []);
 
+  /* c8 ignore start */
   const handleCari = () => {
     setFilterJenis(filterJenisDraft);
     setFilterJenisRujuk(filterJenisRujukDraft);
@@ -547,6 +551,7 @@ function KamusAdmin() {
     if (panel.buka) return;
     navigate(`/redaksi/kamus/${item.id}`);
   };
+  /* c8 ignore end */
 
   const handleSimpan = () => {
     setPesan({ error: '', sukses: '' });

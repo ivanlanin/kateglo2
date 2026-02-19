@@ -134,6 +134,40 @@ describe('App', () => {
     expect(screen.getByText('Komentar Redaksi')).toBeInTheDocument();
   });
 
+  it('menampilkan loading untuk route admin saat auth sedang dimuat', () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      adalahRedaksi: true,
+      adalahAdmin: true,
+      isLoading: true,
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/redaksi/label']}>
+        <App />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Memuat...')).toBeInTheDocument();
+  });
+
+  it('mengalihkan route admin ke dasbor redaksi saat bukan admin', () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      adalahRedaksi: true,
+      adalahAdmin: false,
+      isLoading: false,
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/redaksi/label']}>
+        <App />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Dasbor Redaksi')).toBeInTheDocument();
+  });
+
   it('merender route kebijakan privasi', () => {
     render(
       <MemoryRouter initialEntries={['/kebijakan-privasi']}>
