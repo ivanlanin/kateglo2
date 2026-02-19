@@ -3,6 +3,18 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import KomentarAdmin from '../../../src/halaman/redaksi/KomentarAdmin';
 
+const mockNavigate = vi.fn();
+let mockParams = {};
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+    useParams: () => mockParams,
+  };
+});
+
 const mockUseDaftarKomentarAdmin = vi.fn();
 const mockUseDetailKomentarAdmin = vi.fn();
 const mutateSimpanKomentar = vi.fn();
@@ -26,6 +38,7 @@ vi.mock('../../../src/komponen/redaksi/TataLetakAdmin', () => ({
 describe('KomentarAdmin', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockParams = {};
     mockUseDaftarKomentarAdmin.mockReturnValue({
       isLoading: false,
       isError: false,
@@ -163,5 +176,121 @@ describe('KomentarAdmin', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Simpan' }));
 
     expect(screen.getByText('Gagal menyimpan komentar')).toBeInTheDocument();
+  });
+
+  it('mengarahkan ke daftar saat id route tidak valid', () => {
+    mockParams = { id: 'abc' };
+
+    render(
+      <MemoryRouter>
+        <KomentarAdmin />
+      </MemoryRouter>
+    );
+
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/komentar', { replace: true });
+  });
+
+  it('membuka panel dari detail route valid dan menutup ke daftar', () => {
+    mockParams = { id: '1' };
+    mockUseDetailKomentarAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          indeks: 'kata',
+          komentar: 'detail komentar',
+          pengguna_nama: 'Budi',
+          pengguna_surel: 'budi@contoh.id',
+          aktif: 1,
+        },
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <KomentarAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByDisplayValue('detail komentar')).toBeInTheDocument();
+    fireEvent.click(screen.getByLabelText('Tutup panel'));
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/komentar', { replace: true });
+  });
+
+  it('mengarahkan ke daftar saat detail route gagal dimuat', () => {
+    mockParams = { id: '2' };
+    mockUseDetailKomentarAdmin.mockReturnValue({ isLoading: false, isError: true, data: null });
+
+    render(
+      <MemoryRouter>
+        <KomentarAdmin />
+      </MemoryRouter>
+    );
+
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/komentar', { replace: true });
+  });
+
+  it('mengabaikan detail route saat payload detail tidak memiliki id', () => {
+    mockParams = { id: '3' };
+    mockUseDetailKomentarAdmin.mockReturnValue({ isLoading: false, isError: false, data: { data: {} } });
+
+    render(
+      <MemoryRouter>
+        <KomentarAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByLabelText('Komentar')).not.toBeInTheDocument();
+  });
+
+  it('membuka panel tanpa navigasi saat item tidak punya id', () => {
+    mockUseDaftarKomentarAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        total: 1,
+        data: [{ id: null, indeks: 'tanpa-id', komentar: 'komentar x', pengguna_nama: 'Anon', pengguna_surel: 'anon@x.id', updated_at: null, aktif: 1 }],
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <KomentarAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('tanpa-id'));
+    expect(screen.getByDisplayValue('komentar x')).toBeInTheDocument();
+    expect(mockNavigate).not.toHaveBeenCalledWith('/redaksi/komentar/null');
+  });
+
+  it('menjalankan handler cari dan menerapkan filter aktif', () => {
+    render(
+      <MemoryRouter>
+        <KomentarAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText('Filter status komentar'), { target: { value: '1' } });
+    fireEvent.click(screen.getByText('Cari'));
+
+    const argTerakhir = mockUseDaftarKomentarAdmin.mock.calls.at(-1)?.[0] || {};
+    expect(argTerakhir.aktif).toBe('1');
+  });
+
+  it('tidak menavigasi saat panel sudah terbuka ketika klik baris lagi', () => {
+    render(
+      <MemoryRouter>
+        <KomentarAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('kata'));
+    expect(screen.getByDisplayValue(/komentar awal/i)).toBeInTheDocument();
+
+    mockNavigate.mockClear();
+    fireEvent.click(screen.getByText('kata'));
+    expect(mockNavigate).not.toHaveBeenCalled();
   });
 });

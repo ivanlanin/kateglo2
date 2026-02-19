@@ -15,7 +15,7 @@ const mockAuthState = {
 };
 
 const mockSimpanReturnTo = vi.fn();
-const mockBuatUrlLoginGoogle = vi.fn(() => 'http://localhost:3000/auth/google');
+const mockBuatUrlLoginGoogle = vi.fn(() => '#login-google');
 
 vi.mock('../../../src/api/apiPublik', () => ({
   autocomplete: vi.fn().mockResolvedValue([]),
@@ -31,7 +31,18 @@ vi.mock('../../../src/context/authContext', () => ({
 }));
 
 vi.mock('react-router-dom', () => ({
-  Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
+  Link: ({ children, to, onClick, ...props }) => (
+    <a
+      href={to}
+      onClick={(event) => {
+        event.preventDefault();
+        if (onClick) onClick(event);
+      }}
+      {...props}
+    >
+      {children}
+    </a>
+  ),
   useNavigate: () => mockNavigate,
   useLocation: () => mockLocation,
 }));
@@ -50,7 +61,7 @@ describe('Navbar', () => {
     mockAuthState.logout = vi.fn();
     mockSimpanReturnTo.mockClear();
     mockBuatUrlLoginGoogle.mockClear();
-    mockBuatUrlLoginGoogle.mockReturnValue('http://localhost:3000/auth/google');
+    mockBuatUrlLoginGoogle.mockReturnValue('#login-google');
   });
 
   it('menampilkan logo Kateglo', () => {

@@ -149,11 +149,9 @@ export function BarisFilterCariAdmin({
           className="form-admin-select w-auto min-w-[160px]"
           aria-label={item.ariaLabel || item.key}
         >
-          {/* c8 ignore start */}
           {(item.options || []).map((opt) => (
             <option key={opt.value} value={opt.value}>{opt.label}</option>
           ))}
-          {/* c8 ignore end */}
         </select>
       ))}
 

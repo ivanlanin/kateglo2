@@ -4,6 +4,18 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import LabelAdmin from '../../../src/halaman/redaksi/LabelAdmin';
 
+const mockNavigate = vi.fn();
+let mockParams = {};
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+    useParams: () => mockParams,
+  };
+});
+
 const mockUseDaftarLabelAdmin = vi.fn();
 const mockUseDetailLabelAdmin = vi.fn();
 const mutateSimpan = vi.fn();
@@ -29,6 +41,7 @@ vi.mock('../../../src/komponen/redaksi/TataLetakAdmin', () => ({
 describe('LabelAdmin', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockParams = {};
     global.confirm = vi.fn(() => true);
     mockUseDaftarLabelAdmin.mockReturnValue({
       isLoading: false,
@@ -169,5 +182,135 @@ describe('LabelAdmin', () => {
       </MemoryRouter>
     );
     expect(screen.getByText('Tidak ada data.')).toBeInTheDocument();
+  });
+
+  it('mengarahkan ke daftar saat id route tidak valid', () => {
+    mockParams = { id: 'abc' };
+
+    render(
+      <MemoryRouter>
+        <LabelAdmin />
+      </MemoryRouter>
+    );
+
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/label', { replace: true });
+  });
+
+  it('membuka panel dari detail route valid dan menutup ke daftar', () => {
+    mockParams = { id: '1' };
+    mockUseDetailLabelAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          kategori: 'ragam',
+          kode: 'cak',
+          nama: 'detail label',
+          urutan: 1,
+          keterangan: 'detail',
+          aktif: 1,
+        },
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <LabelAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByDisplayValue('detail label')).toBeInTheDocument();
+    fireEvent.click(screen.getByLabelText('Tutup panel'));
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/label', { replace: true });
+  });
+
+  it('mengarahkan ke daftar saat detail route gagal dimuat', () => {
+    mockParams = { id: '2' };
+    mockUseDetailLabelAdmin.mockReturnValue({ isLoading: false, isError: true, data: null });
+
+    render(
+      <MemoryRouter>
+        <LabelAdmin />
+      </MemoryRouter>
+    );
+
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/label', { replace: true });
+  });
+
+  it('mengabaikan detail route saat payload detail tidak memiliki id', () => {
+    mockParams = { id: '3' };
+    mockUseDetailLabelAdmin.mockReturnValue({ isLoading: false, isError: false, data: { data: {} } });
+
+    render(
+      <MemoryRouter>
+        <LabelAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByLabelText('Nama*')).not.toBeInTheDocument();
+  });
+
+  it('membuka panel tanpa navigasi saat item tidak punya id', () => {
+    mockUseDaftarLabelAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        total: 1,
+        data: [{ id: null, kategori: 'uji', kode: 'x', nama: 'tanpa-id', urutan: 1, keterangan: '', aktif: 1 }],
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <LabelAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('tanpa-id'));
+    expect(screen.getByDisplayValue('tanpa-id')).toBeInTheDocument();
+    expect(mockNavigate).not.toHaveBeenCalledWith('/redaksi/label/null');
+  });
+
+  it('menjalankan handler cari dan menerapkan filter aktif', () => {
+    render(
+      <MemoryRouter>
+        <LabelAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText('Filter status label'), { target: { value: '1' } });
+    fireEvent.click(screen.getByText('Cari'));
+
+    const argTerakhir = mockUseDaftarLabelAdmin.mock.calls.at(-1)?.[0] || {};
+    expect(argTerakhir.aktif).toBe('1');
+  });
+
+  it('tidak menavigasi saat panel sudah terbuka ketika klik baris lagi', () => {
+    render(
+      <MemoryRouter>
+        <LabelAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('cakapan'));
+    expect(screen.getByDisplayValue('cakapan')).toBeInTheDocument();
+
+    mockNavigate.mockClear();
+    fireEvent.click(screen.getByText('cakapan'));
+    expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
+  it('klik tambah saat mode detail route menavigasi kembali ke daftar', () => {
+    mockParams = { id: '1' };
+
+    render(
+      <MemoryRouter>
+        <LabelAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/label', { replace: true });
   });
 });

@@ -4,6 +4,18 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import KamusAdmin from '../../../src/halaman/redaksi/KamusAdmin';
 
+const mockNavigate = vi.fn();
+let mockParams = {};
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+    useParams: () => mockParams,
+  };
+});
+
 const mockUseDaftarKamusAdmin = vi.fn();
 const mockUseDetailKamusAdmin = vi.fn();
 const mockUseDaftarMakna = vi.fn();
@@ -50,6 +62,7 @@ function invokeReactClick(element) {
 describe('KamusAdmin', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockParams = {};
     global.confirm = vi.fn(() => true);
 
     mockUseDaftarKamusAdmin.mockReturnValue({
@@ -392,5 +405,165 @@ describe('KamusAdmin', () => {
     const simpanContohBaru = within(formContohBaru).getByRole('button', { name: 'Simpan' });
     invokeReactClick(simpanContohBaru);
     expect(mutateSimpanContoh).not.toHaveBeenCalled();
+  });
+
+  it('mengarahkan ke daftar saat id route tidak valid', () => {
+    mockParams = { id: 'abc' };
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/kamus', { replace: true });
+  });
+
+  it('membuka panel dari detail route valid dan menutup ke daftar', () => {
+    mockParams = { id: '1' };
+    mockUseDetailKamusAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          entri: 'detail-anak',
+          jenis: 'dasar',
+          lafal: 'de·tail',
+          aktif: 1,
+        },
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByDisplayValue('detail-anak')).toBeInTheDocument();
+    fireEvent.click(screen.getByLabelText('Tutup panel'));
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/kamus', { replace: true });
+  });
+
+  it('mengarahkan ke daftar saat detail route gagal dimuat', () => {
+    mockParams = { id: '2' };
+    mockUseDetailKamusAdmin.mockReturnValue({ isLoading: false, isError: true, data: null });
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/kamus', { replace: true });
+  });
+
+  it('mengabaikan detail route saat payload detail tidak memiliki id', () => {
+    mockParams = { id: '3' };
+    mockUseDetailKamusAdmin.mockReturnValue({ isLoading: false, isError: false, data: { data: {} } });
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByLabelText('Entri*')).not.toBeInTheDocument();
+  });
+
+  it('membuka panel tanpa navigasi saat item tidak punya id', () => {
+    mockUseDaftarKamusAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        total: 1,
+        data: [{ id: null, entri: 'tanpa-id', jenis: 'dasar', lafal: 'x', aktif: 1 }],
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('dasar'));
+    expect(screen.getByDisplayValue('tanpa-id')).toBeInTheDocument();
+    expect(mockNavigate).not.toHaveBeenCalledWith('/redaksi/kamus/null');
+  });
+
+  it('klik tambah saat mode detail route menavigasi kembali ke daftar', () => {
+    mockParams = { id: '1' };
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/kamus', { replace: true });
+  });
+
+  it('tidak menavigasi saat panel sudah terbuka ketika klik baris lagi', () => {
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('dasar'));
+    expect(screen.getByDisplayValue('anak')).toBeInTheDocument();
+
+    mockNavigate.mockClear();
+    fireEvent.click(screen.getByText('dasar'));
+    expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
+  it('opsi filter jenis dan jenis rujuk menghapus nilai kosong', () => {
+    mockUseKategoriLabelRedaksi.mockReturnValueOnce({
+      data: {
+        data: {
+          'bentuk-kata': [{ kode: '', nama: '' }, { kode: 'dasar', nama: 'Dasar' }],
+          'jenis-rujuk': [{ kode: '', nama: '' }, { kode: 'lihat', nama: 'lihat' }],
+          penyingkatan: [{ kode: 'singkatan', nama: 'Singkatan' }],
+        },
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    const filterJenis = screen.getByLabelText('Filter jenis');
+    const filterJenisRujuk = screen.getByLabelText('Filter jenis rujuk');
+
+    expect(Array.from(filterJenis.querySelectorAll('option')).filter((opt) => opt.value === '').length).toBe(1);
+    expect(Array.from(filterJenisRujuk.querySelectorAll('option')).filter((opt) => opt.value === '').length).toBe(1);
+  });
+
+  it('menjalankan handler cari dan menerapkan semua filter', () => {
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText('Filter jenis'), { target: { value: 'dasar' } });
+    fireEvent.change(screen.getByLabelText('Filter jenis rujuk'), { target: { value: 'lihat' } });
+    fireEvent.change(screen.getByLabelText('Filter homograf'), { target: { value: '1' } });
+    fireEvent.change(screen.getByLabelText('Filter homonim'), { target: { value: '0' } });
+    fireEvent.change(screen.getByLabelText('Filter status entri'), { target: { value: '1' } });
+    fireEvent.click(screen.getByText('Cari'));
+
+    const argsTerakhir = mockUseDaftarKamusAdmin.mock.calls.at(-1)?.[0] || {};
+    expect(argsTerakhir.jenis).toBe('dasar');
+    expect(argsTerakhir.jenisRujuk).toBe('lihat');
+    expect(argsTerakhir.punyaHomograf).toBe('1');
+    expect(argsTerakhir.punyaHomonim).toBe('0');
+    expect(argsTerakhir.aktif).toBe('1');
   });
 });

@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarPengguna, useDetailPengguna, useDaftarPeran, useSimpanPengguna } from '../../api/apiAdmin';
 import { formatLocalDateTime } from '../../utils/formatTanggalLokal';
+import { parsePositiveIntegerParam } from '../../utils/routeParam';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
   BarisFilterCariAdmin,
@@ -35,9 +36,7 @@ function PenggunaAdmin() {
   const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit } = usePencarianAdmin(20);
   const [filterAktifDraft, setFilterAktifDraft] = useState('');
   const [filterAktif, setFilterAktif] = useState('');
-  const idEdit = Number.parseInt(idParam || '', 10);
-  /* c8 ignore next */
-  const idDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
+  const idDariPath = parsePositiveIntegerParam(idParam);
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
 
@@ -63,7 +62,6 @@ function PenggunaAdmin() {
     return { ...item, peran_id: peranId };
   }, [daftarPeran]);
 
-  /* c8 ignore start */
   useEffect(() => {
     if (!idParam) return;
     if (idDariPath) return;
@@ -123,7 +121,6 @@ function PenggunaAdmin() {
     setFilterAktif(filterAktifDraft);
     kirimCari(cari);
   };
-  /* c8 ignore end */
 
   const opsiPeran = [
     { value: '', label: '— Pilih peran —' },
