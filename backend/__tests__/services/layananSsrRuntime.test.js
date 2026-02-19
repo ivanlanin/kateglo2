@@ -121,7 +121,7 @@ describe('services/layananSsrRuntime', () => {
       }],
       tesaurus: { sinonim: ['sinonim'], antonim: ['antonim'] },
     });
-    ambilDetailTesaurus.mockResolvedValue({ lema: 'besar', sinonim: ['agung'], antonim: ['kecil'] });
+    ambilDetailTesaurus.mockResolvedValue({ indeks: 'besar', sinonim: ['agung'], antonim: ['kecil'] });
     ModelGlosarium.cari.mockResolvedValue({ total: 2, data: [{ indonesia: 'istilah', asing: 'term' }] });
   });
 
@@ -211,7 +211,7 @@ describe('services/layananSsrRuntime', () => {
     const detailMaknaKosong = await runtime.__private.prefetchSsrData('/kamus/detail/kosong3');
     expect(detailMaknaKosong.semuaMakna).toEqual([]);
 
-    ambilDetailTesaurus.mockResolvedValueOnce({ lema: 'besar', sinonim: null, antonim: undefined });
+    ambilDetailTesaurus.mockResolvedValueOnce({ indeks: 'besar', sinonim: null, antonim: undefined });
     const tesaurusNullRelasi = await runtime.__private.prefetchSsrData('/tesaurus/cari/besar-null');
     expect(tesaurusNullRelasi.sinonim).toEqual([]);
     expect(tesaurusNullRelasi.antonim).toEqual([]);

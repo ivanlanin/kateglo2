@@ -718,16 +718,16 @@ describe('routes/redaksi', () => {
       ModelTesaurus.daftarAdmin.mockResolvedValue({ data: [{ id: 1 }], total: 1 });
       const list = await callAsAdmin('get', '/api/redaksi/tesaurus?limit=10&offset=1&q=akt');
 
-      ModelTesaurus.ambilDenganId.mockResolvedValueOnce(null).mockResolvedValueOnce({ id: 1, lema: 'aktif' });
+      ModelTesaurus.ambilDenganId.mockResolvedValueOnce(null).mockResolvedValueOnce({ id: 1, indeks: 'aktif' });
       const detail404 = await callAsAdmin('get', '/api/redaksi/tesaurus/1');
       const detail200 = await callAsAdmin('get', '/api/redaksi/tesaurus/1');
 
-      const post400 = await callAsAdmin('post', '/api/redaksi/tesaurus', { body: { lema: ' ' } });
-      ModelTesaurus.simpan.mockResolvedValueOnce({ id: 1, lema: 'aktif' }).mockResolvedValueOnce(null).mockResolvedValueOnce({ id: 1, lema: 'aktif' });
-      const post201 = await callAsAdmin('post', '/api/redaksi/tesaurus', { body: { lema: 'aktif' } });
-      const put400 = await callAsAdmin('put', '/api/redaksi/tesaurus/1', { body: { lema: ' ' } });
-      const put404 = await callAsAdmin('put', '/api/redaksi/tesaurus/1', { body: { lema: 'aktif' } });
-      const put200 = await callAsAdmin('put', '/api/redaksi/tesaurus/1', { body: { lema: 'aktif' } });
+      const post400 = await callAsAdmin('post', '/api/redaksi/tesaurus', { body: { indeks: ' ' } });
+      ModelTesaurus.simpan.mockResolvedValueOnce({ id: 1, indeks: 'aktif' }).mockResolvedValueOnce(null).mockResolvedValueOnce({ id: 1, indeks: 'aktif' });
+      const post201 = await callAsAdmin('post', '/api/redaksi/tesaurus', { body: { indeks: 'aktif' } });
+      const put400 = await callAsAdmin('put', '/api/redaksi/tesaurus/1', { body: { indeks: ' ' } });
+      const put404 = await callAsAdmin('put', '/api/redaksi/tesaurus/1', { body: { indeks: 'aktif' } });
+      const put200 = await callAsAdmin('put', '/api/redaksi/tesaurus/1', { body: { indeks: 'aktif' } });
 
       ModelTesaurus.hapus.mockResolvedValueOnce(false).mockResolvedValueOnce(true);
       const delete404 = await callAsAdmin('delete', '/api/redaksi/tesaurus/1');
@@ -753,8 +753,8 @@ describe('routes/redaksi', () => {
 
       const list = await callAsAdmin('get', '/api/redaksi/tesaurus');
       const detail = await callAsAdmin('get', '/api/redaksi/tesaurus/1');
-      const post = await callAsAdmin('post', '/api/redaksi/tesaurus', { body: { lema: 'aktif' } });
-      const put = await callAsAdmin('put', '/api/redaksi/tesaurus/1', { body: { lema: 'aktif' } });
+      const post = await callAsAdmin('post', '/api/redaksi/tesaurus', { body: { indeks: 'aktif' } });
+      const put = await callAsAdmin('put', '/api/redaksi/tesaurus/1', { body: { indeks: 'aktif' } });
       const del = await callAsAdmin('delete', '/api/redaksi/tesaurus/1');
 
       expect(list.status).toBe(500);

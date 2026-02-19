@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-19T11:52:38.792Z
+-- Generated: 2026-02-19T12:24:34.332Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -310,17 +310,17 @@ create trigger trg_set_timestamp_fields__peran_izin
 
 create table tesaurus (
   id serial primary key,
-  lema text not null,
+  indeks text not null,
   sinonim text,
   antonim text,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
   aktif boolean not null default true,
-  constraint tesaurus_lema_key unique (lema)
+  constraint tesaurus_indeks_key unique (indeks)
 );
-create index idx_tesaurus_lema_lower on tesaurus using btree (lower(lema));
-create index idx_tesaurus_lema_trgm on tesaurus using gin (lema gin_trgm_ops);
-create unique index tesaurus_lema_key on tesaurus using btree (lema);
+create index idx_tesaurus_indeks_lower on tesaurus using btree (lower(indeks));
+create index idx_tesaurus_indeks_trgm on tesaurus using gin (indeks gin_trgm_ops);
+create unique index tesaurus_indeks_key on tesaurus using btree (indeks);
 create trigger trg_set_timestamp_fields__tesaurus
   before insert or update on tesaurus
   for each row

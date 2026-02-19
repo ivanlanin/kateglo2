@@ -94,7 +94,7 @@ CREATE INDEX IF NOT EXISTS idx_contoh_makna ON contoh (makna_id, urutan);
 -- ============================================
 CREATE TABLE IF NOT EXISTS tesaurus (
   id               SERIAL PRIMARY KEY,
-  lema             TEXT NOT NULL UNIQUE,
+  indeks           TEXT NOT NULL UNIQUE,
   sinonim          TEXT,
   antonim          TEXT,
   turunan          TEXT,
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS tesaurus (
   berkaitan        TEXT
 );
 
-CREATE INDEX IF NOT EXISTS idx_tesaurus_lema_lower ON tesaurus (LOWER(lema));
-CREATE INDEX IF NOT EXISTS idx_tesaurus_lema_trgm ON tesaurus USING gin (lema gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_tesaurus_indeks_lower ON tesaurus (LOWER(indeks));
+CREATE INDEX IF NOT EXISTS idx_tesaurus_indeks_trgm ON tesaurus USING gin (indeks gin_trgm_ops);
 
 COMMIT;

@@ -18,7 +18,7 @@ function normalizeRelasiList(teks) {
 
 class ModelTesaurus {
   static async autocomplete(query, limit = 8) {
-    return autocomplete('tesaurus', 'lema', query, { limit, extraWhere: 'aktif = TRUE' });
+    return autocomplete('tesaurus', 'indeks', query, { limit, extraWhere: 'aktif = TRUE' });
   }
 
   /**
@@ -34,12 +34,12 @@ class ModelTesaurus {
 
     const baseSql = `
       WITH hasil AS (
-        SELECT id, lema, sinonim, antonim,
-               CASE WHEN LOWER(lema) = LOWER($1) THEN 0
-                    WHEN lema ILIKE $2 THEN 1
+        SELECT id, indeks, sinonim, antonim,
+               CASE WHEN LOWER(indeks) = LOWER($1) THEN 0
+                    WHEN indeks ILIKE $2 THEN 1
                     ELSE 2 END AS prioritas
         FROM tesaurus
-        WHERE lema ILIKE $3
+        WHERE indeks ILIKE $3
           AND aktif = TRUE
           AND (sinonim IS NOT NULL OR antonim IS NOT NULL)
       )`;
@@ -57,9 +57,9 @@ class ModelTesaurus {
 
       const dataResult = await db.query(
         `${baseSql}
-      SELECT id, lema, sinonim, antonim
+      SELECT id, indeks, sinonim, antonim
        FROM hasil
-       ORDER BY prioritas, lema ASC
+       ORDER BY prioritas, indeks ASC
        LIMIT $4 OFFSET $5`,
         [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`, cappedLimit, safeOffset]
       );
@@ -73,9 +73,9 @@ class ModelTesaurus {
 
     const dataResult = await db.query(
       `${baseSql}
-      SELECT id, lema, sinonim, antonim
+      SELECT id, indeks, sinonim, antonim
        FROM hasil
-       ORDER BY prioritas, lema ASC
+       ORDER BY prioritas, indeks ASC
        LIMIT $4 OFFSET $5`,
       [normalizedQuery, `${normalizedQuery}%`, `%${normalizedQuery}%`, cappedLimit + 1, safeOffset]
     );
@@ -96,9 +96,9 @@ class ModelTesaurus {
    */
   static async ambilDetail(kata) {
     const result = await db.query(
-      `SELECT id, lema, sinonim, antonim
+      `SELECT id, indeks, sinonim, antonim
        FROM tesaurus
-       WHERE LOWER(lema) = LOWER($1)
+       WHERE LOWER(indeks) = LOWER($1)
          AND aktif = TRUE
        LIMIT 1`,
       [kata]
@@ -117,7 +117,7 @@ class ModelTesaurus {
     let idx = 1;
 
     if (q) {
-      conditions.push(`lema ILIKE $${idx}`);
+      conditions.push(`indeks ILIKE $${idx}`);
       params.push(`%${q}%`);
       idx++;
     }
@@ -131,9 +131,9 @@ class ModelTesaurus {
     const total = parseCount(countResult.rows[0]?.total);
 
     const dataResult = await db.query(
-      `SELECT id, lema, sinonim, antonim, aktif
+      `SELECT id, indeks, sinonim, antonim, aktif
        FROM tesaurus ${where}
-       ORDER BY lema ASC
+       ORDER BY indeks ASC
        LIMIT $${idx} OFFSET $${idx + 1}`,
       [...params, limit, offset]
     );
@@ -157,7 +157,7 @@ class ModelTesaurus {
    */
   static async ambilDenganId(id) {
     const result = await db.query(
-      'SELECT id, lema, sinonim, antonim, aktif FROM tesaurus WHERE id = $1',
+      'SELECT id, indeks, sinonim, antonim, aktif FROM tesaurus WHERE id = $1',
       [id]
     );
     return result.rows[0] || null;
@@ -168,24 +168,24 @@ class ModelTesaurus {
    * @param {Object} data
    * @returns {Promise<Object>}
    */
-  static async simpan({ id, lema, sinonim, antonim, aktif }) {
+  static async simpan({ id, indeks, sinonim, antonim, aktif }) {
     const nilaiAktif = normalizeBoolean(aktif, true);
     const sinonimNorm = normalizeRelasiList(sinonim);
     const antonimNorm = normalizeRelasiList(antonim);
 
     if (id) {
       const result = await db.query(
-        `UPDATE tesaurus SET lema = $1, sinonim = $2, antonim = $3,
+        `UPDATE tesaurus SET indeks = $1, sinonim = $2, antonim = $3,
                 aktif = $4
          WHERE id = $5 RETURNING *`,
-        [lema, sinonimNorm, antonimNorm, nilaiAktif, id]
+        [indeks, sinonimNorm, antonimNorm, nilaiAktif, id]
       );
       return result.rows[0];
     }
     const result = await db.query(
-      `INSERT INTO tesaurus (lema, sinonim, antonim, aktif)
+      `INSERT INTO tesaurus (indeks, sinonim, antonim, aktif)
        VALUES ($1, $2, $3, $4) RETURNING *`,
-      [lema, sinonimNorm, antonimNorm, nilaiAktif]
+      [indeks, sinonimNorm, antonimNorm, nilaiAktif]
     );
     return result.rows[0];
   }

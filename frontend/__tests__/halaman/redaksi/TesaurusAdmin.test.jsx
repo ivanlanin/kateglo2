@@ -34,7 +34,7 @@ describe('TesaurusAdmin', () => {
       isError: false,
       data: {
         total: 1,
-        data: [{ id: 1, lema: 'anak', sinonim: 'buah hati', antonim: 'orang tua' }],
+        data: [{ id: 1, indeks: 'anak', sinonim: 'buah hati', antonim: 'orang tua' }],
       },
     });
     mockUseDetailTesaurusAdmin.mockReturnValue({ isLoading: false, isError: false, data: null });
@@ -49,9 +49,9 @@ describe('TesaurusAdmin', () => {
 
     fireEvent.click(screen.getByText('+ Tambah'));
     fireEvent.click(screen.getByText('Simpan'));
-    expect(screen.getByText('Lema wajib diisi')).toBeInTheDocument();
+    expect(screen.getByText('Indeks wajib diisi')).toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText(/Lema/), { target: { value: 'baru' } });
+    fireEvent.change(screen.getByLabelText(/Indeks/), { target: { value: 'baru' } });
     fireEvent.click(screen.getByText('Simpan'));
     expect(mutateSimpan).toHaveBeenCalled();
   });
@@ -114,7 +114,7 @@ describe('TesaurusAdmin', () => {
     );
 
     fireEvent.click(screen.getByText('+ Tambah'));
-    fireEvent.change(screen.getByLabelText(/Lema/), { target: { value: 'uji' } });
+    fireEvent.change(screen.getByLabelText(/Indeks/), { target: { value: 'uji' } });
     fireEvent.click(screen.getByText('Simpan'));
 
     expect(screen.getByText('Gagal menyimpan')).toBeInTheDocument();

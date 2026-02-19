@@ -26,15 +26,15 @@ import {
   PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
 
-const nilaiAwal = { lema: '', sinonim: '', antonim: '', aktif: 1 };
+const nilaiAwal = { indeks: '', sinonim: '', antonim: '', aktif: 1 };
 
 const kolom = [
   {
-    key: 'lema',
-    label: 'Lema',
+    key: 'indeks',
+    label: 'Indeks',
     render: (item) => (
       <span className="font-medium text-gray-800 dark:text-gray-100">
-        {item.lema}
+        {item.indeks}
       </span>
     ),
   },
@@ -133,7 +133,7 @@ function TesaurusAdmin() {
 
   const handleSimpan = () => {
     setPesan({ error: '', sukses: '' });
-    const pesanValidasi = validateRequiredFields(panel.data, [{ name: 'lema', label: 'Lema' }]);
+    const pesanValidasi = validateRequiredFields(panel.data, [{ name: 'indeks', label: 'Indeks' }]);
     if (pesanValidasi) {
       setPesan({ error: pesanValidasi, sukses: '' });
       return;
@@ -177,7 +177,7 @@ function TesaurusAdmin() {
 
       <PanelGeser buka={panel.buka} onTutup={tutupPanel} judul={panel.modeTambah ? 'Tambah Tesaurus' : 'Sunting Tesaurus'}>
         <PesanForm error={pesan.error} sukses={pesan.sukses} />
-        <InputField label="Lema" name="lema" value={panel.data.lema} onChange={panel.ubahField} required />
+        <InputField label="Indeks" name="indeks" value={panel.data.indeks} onChange={panel.ubahField} required />
         <TextareaField label="Sinonim" name="sinonim" value={panel.data.sinonim} onChange={panel.ubahField} placeholder="Pisahkan dengan titik koma (;)" />
         <TextareaField label="Antonim" name="antonim" value={panel.data.antonim} onChange={panel.ubahField} placeholder="Pisahkan dengan titik koma (;)" />
         <ToggleAktif value={panel.data.aktif} onChange={panel.ubahField} />

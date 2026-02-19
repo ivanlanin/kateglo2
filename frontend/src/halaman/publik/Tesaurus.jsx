@@ -111,10 +111,10 @@ function Tesaurus() {
                 {results.map((item) => (
                   <div key={item.id} className="tesaurus-result-row">
                     <Link
-                      to={buatPathDetailKamus(item.lema)}
+                      to={buatPathDetailKamus(item.indeks)}
                       className="kamus-kategori-grid-link"
                     >
-                      <TeksLema lema={item.lema} />
+                      <TeksLema lema={item.indeks} />
                     </Link>
                     <RelasiSingkat sinonim={item.sinonim} antonim={item.antonim} />
                   </div>

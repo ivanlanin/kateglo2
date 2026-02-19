@@ -21,7 +21,7 @@ describe('ModelTesaurus', () => {
 
     const result = await ModelTesaurus.autocomplete('akt', 11);
 
-    expect(autocomplete).toHaveBeenCalledWith('tesaurus', 'lema', 'akt', { limit: 11, extraWhere: 'aktif = TRUE' });
+    expect(autocomplete).toHaveBeenCalledWith('tesaurus', 'indeks', 'akt', { limit: 11, extraWhere: 'aktif = TRUE' });
     expect(result).toEqual(['aktif']);
   });
 
@@ -30,7 +30,7 @@ describe('ModelTesaurus', () => {
 
     await ModelTesaurus.autocomplete('akt');
 
-    expect(autocomplete).toHaveBeenCalledWith('tesaurus', 'lema', 'akt', { limit: 8, extraWhere: 'aktif = TRUE' });
+    expect(autocomplete).toHaveBeenCalledWith('tesaurus', 'indeks', 'akt', { limit: 8, extraWhere: 'aktif = TRUE' });
   });
 
   it('cari mengembalikan kosong saat total 0', async () => {
@@ -45,7 +45,7 @@ describe('ModelTesaurus', () => {
   it('cari menormalisasi query serta clamp limit/offset', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '2' }] })
-      .mockResolvedValueOnce({ rows: [{ id: 1, lema: 'aktif', sinonim: 'giat', antonim: 'pasif' }] });
+      .mockResolvedValueOnce({ rows: [{ id: 1, indeks: 'aktif', sinonim: 'giat', antonim: 'pasif' }] });
 
     const result = await ModelTesaurus.cari(' aktif ', '999', -4);
 
@@ -67,9 +67,9 @@ describe('ModelTesaurus', () => {
   it('cari tanpa hitungTotal memakai limit+1 untuk menentukan hasNext', async () => {
     db.query.mockResolvedValue({
       rows: [
-        { id: 1, lema: 'a' },
-        { id: 2, lema: 'b' },
-        { id: 3, lema: 'c' },
+        { id: 1, indeks: 'a' },
+        { id: 2, indeks: 'b' },
+        { id: 3, indeks: 'c' },
       ],
     });
 
@@ -81,7 +81,7 @@ describe('ModelTesaurus', () => {
       ['aktif', 'aktif%', '%aktif%', 3, 6]
     );
     expect(result).toEqual({
-      data: [{ id: 1, lema: 'a' }, { id: 2, lema: 'b' }],
+      data: [{ id: 1, indeks: 'a' }, { id: 2, indeks: 'b' }],
       total: 9,
       hasNext: true,
     });
@@ -90,15 +90,15 @@ describe('ModelTesaurus', () => {
   it('cari tanpa hitungTotal mengembalikan hasNext false saat hasil <= limit', async () => {
     db.query.mockResolvedValue({
       rows: [
-        { id: 1, lema: 'a' },
-        { id: 2, lema: 'b' },
+        { id: 1, indeks: 'a' },
+        { id: 2, indeks: 'b' },
       ],
     });
 
     const result = await ModelTesaurus.cari('aktif', 5, 6, false);
 
     expect(result).toEqual({
-      data: [{ id: 1, lema: 'a' }, { id: 2, lema: 'b' }],
+      data: [{ id: 1, indeks: 'a' }, { id: 2, indeks: 'b' }],
       total: 8,
       hasNext: false,
     });
@@ -107,7 +107,7 @@ describe('ModelTesaurus', () => {
   it('cari memakai default limit dan offset', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '1' }] })
-      .mockResolvedValueOnce({ rows: [{ id: 1, lema: 'aktif' }] });
+      .mockResolvedValueOnce({ rows: [{ id: 1, indeks: 'aktif' }] });
 
     await ModelTesaurus.cari('aktif');
 
@@ -121,7 +121,7 @@ describe('ModelTesaurus', () => {
   it('cari memakai fallback saat limit dan offset tidak valid', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '1' }] })
-      .mockResolvedValueOnce({ rows: [{ id: 1, lema: 'aktif' }] });
+      .mockResolvedValueOnce({ rows: [{ id: 1, indeks: 'aktif' }] });
 
     await ModelTesaurus.cari('aktif', 'abc', 'xyz');
 
@@ -133,12 +133,12 @@ describe('ModelTesaurus', () => {
   });
 
   it('ambilDetail mengembalikan row pertama jika ditemukan', async () => {
-    db.query.mockResolvedValue({ rows: [{ id: 9, lema: 'aktif' }] });
+    db.query.mockResolvedValue({ rows: [{ id: 9, indeks: 'aktif' }] });
 
     const result = await ModelTesaurus.ambilDetail('aktif');
 
-    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('WHERE LOWER(lema) = LOWER($1)'), ['aktif']);
-    expect(result).toEqual({ id: 9, lema: 'aktif' });
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('WHERE LOWER(indeks) = LOWER($1)'), ['aktif']);
+    expect(result).toEqual({ id: 9, indeks: 'aktif' });
   });
 
   it('ambilDetail mengembalikan null jika tidak ditemukan', async () => {
@@ -152,13 +152,13 @@ describe('ModelTesaurus', () => {
   it('daftarAdmin tanpa query menghitung total dan mengambil data', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '2' }] })
-      .mockResolvedValueOnce({ rows: [{ id: 1, lema: 'aktif' }] });
+      .mockResolvedValueOnce({ rows: [{ id: 1, indeks: 'aktif' }] });
 
     const result = await ModelTesaurus.daftarAdmin();
 
     expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('FROM tesaurus'), []);
     expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('LIMIT $1 OFFSET $2'), [50, 0]);
-    expect(result).toEqual({ data: [{ id: 1, lema: 'aktif' }], total: 2 });
+    expect(result).toEqual({ data: [{ id: 1, indeks: 'aktif' }], total: 2 });
   });
 
   it('daftarAdmin dengan query menggunakan parameter where', async () => {
@@ -168,7 +168,7 @@ describe('ModelTesaurus', () => {
 
     await ModelTesaurus.daftarAdmin({ q: 'aktif', limit: 9, offset: 3 });
 
-    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('WHERE lema ILIKE $1'), ['%aktif%']);
+    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('WHERE indeks ILIKE $1'), ['%aktif%']);
     expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('LIMIT $2 OFFSET $3'), ['%aktif%', 9, 3]);
   });
 
@@ -189,36 +189,36 @@ describe('ModelTesaurus', () => {
   });
 
   it('ambilDenganId mengembalikan baris pertama jika ditemukan', async () => {
-    const row = { id: 90, lema: 'aktif' };
+    const row = { id: 90, indeks: 'aktif' };
     db.query.mockResolvedValue({ rows: [row] });
 
     const result = await ModelTesaurus.ambilDenganId(90);
 
     expect(db.query).toHaveBeenCalledWith(
-      'SELECT id, lema, sinonim, antonim, aktif FROM tesaurus WHERE id = $1',
+      'SELECT id, indeks, sinonim, antonim, aktif FROM tesaurus WHERE id = $1',
       [90]
     );
     expect(result).toEqual(row);
   });
 
   it('simpan melakukan update jika id ada', async () => {
-    const row = { id: 4, lema: 'aktif' };
+    const row = { id: 4, indeks: 'aktif' };
     db.query.mockResolvedValue({ rows: [row] });
 
-    const result = await ModelTesaurus.simpan({ id: 4, lema: 'aktif', sinonim: '', antonim: '' });
+    const result = await ModelTesaurus.simpan({ id: 4, indeks: 'aktif', sinonim: '', antonim: '' });
 
     expect(db.query).toHaveBeenCalledWith(
-      expect.stringContaining('UPDATE tesaurus SET lema = $1'),
+      expect.stringContaining('UPDATE tesaurus SET indeks = $1'),
       ['aktif', null, null, true, 4]
     );
     expect(result).toEqual(row);
   });
 
   it('simpan melakukan insert jika id tidak ada', async () => {
-    const row = { id: 5, lema: 'aktif' };
+    const row = { id: 5, indeks: 'aktif' };
     db.query.mockResolvedValue({ rows: [row] });
 
-    const result = await ModelTesaurus.simpan({ lema: 'aktif', sinonim: 'giat', antonim: '' });
+    const result = await ModelTesaurus.simpan({ indeks: 'aktif', sinonim: 'giat', antonim: '' });
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
@@ -232,13 +232,13 @@ describe('ModelTesaurus', () => {
 
     await ModelTesaurus.simpan({
       id: 6,
-      lema: 'aktif',
+      indeks: 'aktif',
       sinonim: 'giat',
       antonim: 'pasif',
     });
 
     expect(db.query).toHaveBeenCalledWith(
-      expect.stringContaining('UPDATE tesaurus SET lema = $1'),
+      expect.stringContaining('UPDATE tesaurus SET indeks = $1'),
       ['aktif', 'giat', 'pasif', true, 6]
     );
   });
@@ -247,7 +247,7 @@ describe('ModelTesaurus', () => {
     db.query.mockResolvedValue({ rows: [{ id: 7 }] });
 
     await ModelTesaurus.simpan({
-      lema: 'aktif',
+      indeks: 'aktif',
       sinonim: 'giat',
       antonim: 'pasif',
     });
@@ -262,7 +262,7 @@ describe('ModelTesaurus', () => {
     db.query.mockResolvedValue({ rows: [{ id: 71 }] });
 
     await ModelTesaurus.simpan({
-      lema: 'aktif',
+      indeks: 'aktif',
       sinonim: 'giat, rajin ; tekun',
       antonim: 'malas, lamban',
     });
@@ -276,7 +276,7 @@ describe('ModelTesaurus', () => {
   it('simpan insert mengubah sinonim kosong menjadi null', async () => {
     db.query.mockResolvedValue({ rows: [{ id: 8 }] });
 
-    await ModelTesaurus.simpan({ lema: 'aktif', sinonim: '' });
+    await ModelTesaurus.simpan({ indeks: 'aktif', sinonim: '' });
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
@@ -298,7 +298,7 @@ describe('ModelTesaurus', () => {
 
   it('simpan normalizeBoolean: boolean true diteruskan apa adanya', async () => {
     db.query.mockResolvedValue({ rows: [{ id: 30 }] });
-    await ModelTesaurus.simpan({ lema: 'tes', aktif: true });
+    await ModelTesaurus.simpan({ indeks: 'tes', aktif: true });
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
       ['tes', null, null, true]
@@ -307,7 +307,7 @@ describe('ModelTesaurus', () => {
 
   it('simpan normalizeBoolean: boolean false diteruskan apa adanya', async () => {
     db.query.mockResolvedValue({ rows: [{ id: 31 }] });
-    await ModelTesaurus.simpan({ lema: 'tes', aktif: false });
+    await ModelTesaurus.simpan({ indeks: 'tes', aktif: false });
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
       ['tes', null, null, false]
@@ -316,7 +316,7 @@ describe('ModelTesaurus', () => {
 
   it('simpan normalizeBoolean: number 1 menjadi true', async () => {
     db.query.mockResolvedValue({ rows: [{ id: 32 }] });
-    await ModelTesaurus.simpan({ lema: 'tes', aktif: 1 });
+    await ModelTesaurus.simpan({ indeks: 'tes', aktif: 1 });
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
       ['tes', null, null, true]
@@ -326,8 +326,8 @@ describe('ModelTesaurus', () => {
   it('simpan normalizeBoolean: string "ya" menjadi true, string "no" menjadi false', async () => {
     db.query.mockResolvedValueOnce({ rows: [{ id: 33 }] });
     db.query.mockResolvedValueOnce({ rows: [{ id: 34 }] });
-    await ModelTesaurus.simpan({ lema: 'a', aktif: 'ya' });
-    await ModelTesaurus.simpan({ lema: 'b', aktif: 'no' });
+    await ModelTesaurus.simpan({ indeks: 'a', aktif: 'ya' });
+    await ModelTesaurus.simpan({ indeks: 'b', aktif: 'no' });
     expect(db.query).toHaveBeenNthCalledWith(
       1, expect.stringContaining('INSERT INTO tesaurus'),
       ['a', null, null, true]
@@ -340,7 +340,7 @@ describe('ModelTesaurus', () => {
 
   it('simpan normalizeBoolean: tipe lain (object) menghasilkan defaultValue', async () => {
     db.query.mockResolvedValue({ rows: [{ id: 35 }] });
-    await ModelTesaurus.simpan({ lema: 'tes', aktif: [] });
+    await ModelTesaurus.simpan({ indeks: 'tes', aktif: [] });
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
       ['tes', null, null, true]

@@ -12,7 +12,7 @@ function normalisasiItemAutocomplete(item) {
 
   if (!item || typeof item !== 'object') return null;
 
-  const kandidatValue = [item.value, item.entri, item.lema, item.indonesia, item.term]
+  const kandidatValue = [item.value, item.entri, item.lema, item.indeks, item.indonesia, item.term]
     .find((nilai) => typeof nilai === 'string' && nilai.trim());
 
   if (!kandidatValue) return null;
