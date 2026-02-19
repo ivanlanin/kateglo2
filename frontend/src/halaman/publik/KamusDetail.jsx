@@ -97,7 +97,7 @@ function tentukanKategoriJenis(jenis = '') {
   const nilai = String(jenis || '').trim().toLowerCase();
   if (['dasar', 'turunan', 'gabungan'].includes(nilai)) return 'bentuk';
   if (['idiom', 'peribahasa'].includes(nilai)) return 'ekspresi';
-  if (['terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik'].includes(nilai)) return 'bentuk';
+  if (['terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik', 'prakategorial'].includes(nilai)) return 'bentuk';
   return 'bentuk';
 }
 
@@ -332,6 +332,8 @@ function KamusDetail() {
 
             const subentriEntries = Object.entries(entriItem.subentri || {}).sort(([jenisA], [jenisB]) =>
               bandingkanJenisSubentri(jenisA, jenisB, urutanJenisSubentri));
+            const tidakAdaMakna = Object.keys(maknaPerKelas).length === 0;
+            const adaSubentri = subentriEntries.length > 0;
 
             const rantaiHeading = [...(entriItem.induk || []), { id: `current-${entriItem.id}`, entri: entriItem.entri, indeks: entriItem.indeks, current: true }];
             const infoWaktu = formatInfoWaktuEntri(entriItem.created_at, entriItem.updated_at, entriItem.sumber);
@@ -437,7 +439,7 @@ function KamusDetail() {
                   </p>
                 ) : (
                   <div className="mt-6">
-                    {Object.keys(maknaPerKelas).length === 0 && (
+                    {tidakAdaMakna && !adaSubentri && (
                       <p className="muted-text text-sm">Belum tersedia.</p>
                     )}
 

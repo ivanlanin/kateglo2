@@ -63,10 +63,11 @@ describe('ModelLabel', () => {
       { kode: 'sufiks', nama: 'sufiks' },
       { kode: 'konfiks', nama: 'konfiks' },
       { kode: 'klitik', nama: 'klitik' },
+      { kode: 'prakategorial', nama: 'prakategorial' },
     ]);
 
     // Alias kompatibilitas route lama
-    expect(result.jenis).toHaveLength(12);
+    expect(result.jenis).toHaveLength(13);
     expect(result.jenis).toEqual([
       { kode: 'dasar', nama: 'dasar' },
       { kode: 'turunan', nama: 'turunan' },
@@ -79,6 +80,7 @@ describe('ModelLabel', () => {
       { kode: 'sufiks', nama: 'sufiks' },
       { kode: 'konfiks', nama: 'konfiks' },
       { kode: 'klitik', nama: 'klitik' },
+      { kode: 'prakategorial', nama: 'prakategorial' },
       { kode: 'varian', nama: 'varian' },
     ]);
   });
@@ -109,6 +111,7 @@ describe('ModelLabel', () => {
       { kode: 'sufiks', nama: 'sufiks' },
       { kode: 'konfiks', nama: 'konfiks' },
       { kode: 'klitik', nama: 'klitik' },
+      { kode: 'prakategorial', nama: 'prakategorial' },
     ]);
   });
 
@@ -131,6 +134,7 @@ describe('ModelLabel', () => {
       { kode: 'sufiks', nama: 'sufiks' },
       { kode: 'konfiks', nama: 'konfiks' },
       { kode: 'klitik', nama: 'klitik' },
+      { kode: 'prakategorial', nama: 'prakategorial' },
     ]);
     expect(result.ragam).toEqual([{ kode: null, nama: null }]);
   });
@@ -170,6 +174,7 @@ describe('ModelLabel', () => {
       { kode: 'sufiks', nama: 'sufiks' },
       { kode: 'konfiks', nama: 'konfiks' },
       { kode: 'klitik', nama: 'klitik' },
+      { kode: 'prakategorial', nama: 'prakategorial' },
     ]);
   });
 
@@ -238,6 +243,22 @@ describe('ModelLabel', () => {
     );
     expect(result.total).toBe(2);
     expect(result.label).toEqual({ kode: 'prefiks', nama: 'prefiks' });
+  });
+
+  it('cariEntriPerLabel kategori bentuk menerima kode prakategorial', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '3' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 51, lema: 'juang (1)', jenis: 'prakategorial' }] });
+
+    const result = await ModelLabel.cariEntriPerLabel('bentuk', 'prakategorial', 20, 0);
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('WHERE aktif = 1 AND jenis = $1'),
+      ['prakategorial']
+    );
+    expect(result.total).toBe(3);
+    expect(result.label).toEqual({ kode: 'prakategorial', nama: 'prakategorial' });
   });
 
   it('cariEntriPerLabel kategori ekspresi valid', async () => {

@@ -99,7 +99,7 @@ export function tentukanNamaKategoriDariPath(kategori = '', kode = '') {
   }
 
   if (kategoriPath === 'bentuk') {
-    const kodeBentukTerikat = ['terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik'];
+    const kodeBentukTerikat = ['terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik', 'prakategorial'];
     return kodeBentukTerikat.includes(kodePath) ? NAMA_KATEGORI_KAMUS.unsur_terikat : NAMA_KATEGORI_KAMUS.bentuk;
   }
 

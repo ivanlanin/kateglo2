@@ -46,7 +46,10 @@ describe('Kamus', () => {
           data: {
             abjad: [{ kode: 'A', nama: 'A' }],
             bentuk: [{ kode: 'dasar', nama: 'dasar' }],
-            unsur_terikat: [{ kode: 'prefiks', nama: 'prefiks' }],
+            unsur_terikat: [
+              { kode: 'prefiks', nama: 'prefiks' },
+              { kode: 'prakategorial', nama: 'prakategorial' },
+            ],
             kelas_kata: [],
             ragam: [{ kode: 'umum_sekali', nama: 'Umum Sekali' }],
             ekspresi: [],
@@ -67,6 +70,7 @@ describe('Kamus', () => {
     expect(screen.getByText('Bentuk Terikat')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Dasar' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Prefiks' })).toHaveAttribute('href', '/kamus/bentuk/prefiks');
+    expect(screen.getByRole('link', { name: 'Prakategorial' })).toHaveAttribute('href', '/kamus/bentuk/prakategorial');
     expect(screen.getByRole('link', { name: 'Umum Sekali' })).toHaveAttribute('href', '/kamus/ragam/umum-sekali');
   });
 

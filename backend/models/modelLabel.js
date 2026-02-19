@@ -14,11 +14,11 @@ const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
 const SQL_ABJAD = `UPPER(SUBSTRING(REGEXP_REPLACE(entri, '^[^a-zA-Z]*', ''), 1, 1))`;
 const JENIS_BENTUK = ['dasar', 'turunan', 'gabungan'];
 const JENIS_EKSPRESI = ['idiom', 'peribahasa'];
-const JENIS_UNSUR_TERIKAT = ['terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik'];
+const JENIS_UNSUR_TERIKAT = ['terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik', 'prakategorial'];
 const JENIS_SEMUA = [...JENIS_BENTUK, ...JENIS_EKSPRESI, ...JENIS_UNSUR_TERIKAT, 'varian'];
 const KELAS_BEBAS = ['adjektiva', 'adverbia', 'nomina', 'numeralia', 'preposisi', 'konjungsi', 'interjeksi', 'partikel', 'pronomina', 'verba'];
 const URUTAN_KELAS_KATA = ['nomina', 'verba', 'adjektiva', 'adverbia', 'pronomina', 'numeralia', 'preposisi', 'konjungsi', 'interjeksi', 'partikel'];
-const URUTAN_UNSUR_TERIKAT = ['terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik'];
+const URUTAN_UNSUR_TERIKAT = ['terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik', 'prakategorial'];
 const URUTAN_RAGAM = ['arkais', 'klasik', 'hormat', 'cakapan', 'kasar'];
 const KATEGORI_LABEL_REDAKSI = ['bentuk-kata', 'jenis-rujuk', 'kelas-kata', 'ragam', 'bidang', 'bahasa', 'penyingkatan'];
 
