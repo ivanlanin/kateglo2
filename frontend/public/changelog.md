@@ -6,6 +6,7 @@
 - Menambahkan info dibuat dan diubah di detail kamus
 - Membuat `metaUtils` untuk menyeragamkan metadata halaman
 - Menyambungkan detail kamus dengan halaman redaksi dan sebaliknya
+- Memberikan tautan ke KBBI di detail kamus
 
 ## 2026-02-18 Rabu
 

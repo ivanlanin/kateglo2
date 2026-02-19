@@ -353,7 +353,7 @@ function KamusDetail() {
                               </Link>
                             )}
                             {index < rantaiHeading.length - 1 && (
-                              <span className="kamus-detail-heading-chain-separator">{' > '}</span>
+                              <span className="kamus-detail-heading-chain-separator">{' → '}</span>
                             )}
                           </Fragment>
                         ))}
@@ -378,9 +378,10 @@ function KamusDetail() {
                       </Link>
                     )}
                   </div>
-                  {adalahAdmin && (
+                  {(adalahAdmin || tautanRujukanKbbi) && (
                     <div className="kamus-detail-admin-actions">
                       {entriItem.id && (
+                        adalahAdmin && (
                         <Link
                           to={`/redaksi/kamus/${entriItem.id}`}
                           className="kamus-detail-edit-link"
@@ -393,6 +394,7 @@ function KamusDetail() {
                           </svg>
                           <span className="sr-only">Sunting</span>
                         </Link>
+                        )
                       )}
                       {tautanRujukanKbbi && (
                         <a
