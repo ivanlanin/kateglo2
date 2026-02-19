@@ -2,7 +2,7 @@
  * @fileoverview Test API auth frontend
  */
 
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../../src/api/klien', () => ({
   default: {
@@ -18,6 +18,11 @@ import {
   mulaiLoginGoogle,
   ambilProfilSaya,
 } from '../../src/api/apiAuth';
+
+afterEach(() => {
+  vi.unstubAllEnvs();
+  vi.resetModules();
+});
 
 describe('apiAuth', () => {
   beforeEach(() => {
@@ -112,5 +117,86 @@ describe('apiAuth', () => {
     const result = await ambilProfilSaya('token-123');
 
     expect(result).toBeNull();
+  });
+});
+
+describe('apiAuth branch coverage', () => {
+  it('buatUrlLoginGoogle memakai VITE_API_URL saat tersedia', async () => {
+    vi.stubEnv('VITE_API_URL', 'https://api.kateglo.id');
+
+    const module = await import('../../src/api/apiAuth.js?env-override');
+
+    expect(module.buatUrlLoginGoogle()).toBe('https://api.kateglo.id/auth/google');
+  });
+
+  it('tetap memakai base URL env saat target API localhost', async () => {
+    vi.stubEnv('VITE_API_URL', 'http://localhost:3000');
+    window.location.hostname = 'kateglo.org';
+    window.location.origin = 'https://kateglo.org';
+
+    const module = await import('../../src/api/apiAuth.js?prod-origin');
+
+    expect(module.buatUrlLoginGoogle()).toBe('http://localhost:3000/auth/google');
+  });
+
+  it('tetap menghasilkan URL absolut saat tanpa window dan env API tersedia', async () => {
+    vi.stubEnv('VITE_API_URL', 'http://localhost:3000');
+
+    const originalWindow = globalThis.window;
+    Object.defineProperty(globalThis, 'window', {
+      value: undefined,
+      writable: true,
+      configurable: true,
+    });
+
+    try {
+      const module = await import('../../src/api/apiAuth.js?ssr-relative');
+      expect(module.buatUrlLoginGoogle('https://kateglo.org')).toBe('http://localhost:3000/auth/google?frontend_origin=https%3A%2F%2Fkateglo.org');
+    } finally {
+      Object.defineProperty(globalThis, 'window', {
+        value: originalWindow,
+        writable: true,
+        configurable: true,
+      });
+    }
+  });
+
+  it('fallback ke localhost:3000 saat env kosong dan tanpa window', async () => {
+    vi.stubEnv('VITE_API_URL', '');
+
+    const originalWindow = globalThis.window;
+    Object.defineProperty(globalThis, 'window', {
+      value: undefined,
+      writable: true,
+      configurable: true,
+    });
+
+    try {
+      const module = await import('../../src/api/apiAuth.js?ssr-localhost');
+      expect(module.buatUrlLoginGoogle()).toBe('http://localhost:3000/auth/google');
+    } finally {
+      Object.defineProperty(globalThis, 'window', {
+        value: originalWindow,
+        writable: true,
+        configurable: true,
+      });
+    }
+  });
+
+  it('memakai window origin saat env kosong dan window tersedia', async () => {
+    vi.stubEnv('VITE_API_URL', '');
+    window.location.origin = 'https://kateglo.org';
+
+    const module = await import('../../src/api/apiAuth.js?browser-origin');
+
+    expect(module.buatUrlLoginGoogle()).toBe('https://kateglo.org/auth/google');
+  });
+
+  it('tetap meneruskan base URL mentah jika parsing env gagal', async () => {
+    vi.stubEnv('VITE_API_URL', '://invalid-base');
+
+    const module = await import('../../src/api/apiAuth.js?invalid-env');
+
+    expect(() => module.buatUrlLoginGoogle()).toThrow();
   });
 });

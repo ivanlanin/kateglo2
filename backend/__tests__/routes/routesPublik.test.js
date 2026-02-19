@@ -464,6 +464,7 @@ describe('routes backend', () => {
       limit: 100,
       offset: 3,
       aktifSaja: true,
+      hitungTotal: false,
     });
   });
 
@@ -506,6 +507,7 @@ describe('routes backend', () => {
       limit: 9,
       offset: 2,
       aktifSaja: true,
+      hitungTotal: false,
     });
   });
 
@@ -548,6 +550,7 @@ describe('routes backend', () => {
       limit: 6,
       offset: 1,
       aktifSaja: true,
+      hitungTotal: false,
     });
   });
 

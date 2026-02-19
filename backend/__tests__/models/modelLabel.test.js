@@ -304,6 +304,27 @@ describe('ModelLabel', () => {
     expect(result.label).toEqual({ kode: 'cak', nama: 'cakapan', keterangan: '' });
   });
 
+  it('cariEntriPerLabel tetap aman saat kode kosong/falsy pada kategori label', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [{ total: '0' }] })
+      .mockResolvedValueOnce({ rows: [] });
+
+    const result = await ModelLabel.cariEntriPerLabel('ragam', undefined, 10, 0);
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining("REGEXP_REPLACE(LOWER(TRIM(kode)), '[^a-z0-9]+', '-', 'g')"),
+      [['ragam'], '', '', 'ragam']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('m.ragam = ANY($1::text[])'),
+      [[]]
+    );
+    expect(result).toEqual({ data: [], total: 0, label: null });
+  });
+
   it('cariEntriPerLabel menerima nama label pada slug kategori', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ kode: 'v', nama: 'verba', keterangan: '' }] })
@@ -699,5 +720,7 @@ describe('ModelLabel', () => {
       { kode: 'cak', nama: 'cakapan' },
       { kode: 'horm', nama: 'hormat' },
     ]);
+
+    expect(__private.buildNilaiCocokLabel('kelas-kata')).toEqual(['kelas-kata', 'kelas kata']);
   });
 });

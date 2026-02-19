@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import KamusDetail from '../../../src/halaman/publik/KamusDetail';
 import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategoriKamus } from '../../../src/api/apiPublik';
 import {
+  upsertMetaTag,
   renderMarkdown,
   buatPathKategoriKamus,
   formatTitleCase,
@@ -65,6 +66,33 @@ describe('KamusDetail', () => {
     mockUseQuery.mockReturnValue({ isLoading: true, isError: false, data: null });
     render(<KamusDetail />);
     expect(screen.getByText(/Memuat detail/i)).toBeInTheDocument();
+  });
+
+  it('membuat meta tag SEO saat tag belum tersedia di head', () => {
+    document.head.querySelector('meta[name="description"]')?.remove();
+    document.head.querySelector('meta[property="og:title"]')?.remove();
+    document.head.querySelector('meta[property="og:description"]')?.remove();
+    document.head.querySelector('meta[name="twitter:title"]')?.remove();
+    document.head.querySelector('meta[name="twitter:description"]')?.remove();
+
+    mockUseQuery.mockReturnValue({ isLoading: true, isError: false, data: null });
+    render(<KamusDetail />);
+
+    expect(document.head.querySelector('meta[name="description"]')).not.toBeNull();
+    expect(document.head.querySelector('meta[property="og:title"]')).not.toBeNull();
+    expect(document.head.querySelector('meta[property="og:description"]')).not.toBeNull();
+    expect(document.head.querySelector('meta[name="twitter:title"]')).not.toBeNull();
+    expect(document.head.querySelector('meta[name="twitter:description"]')).not.toBeNull();
+  });
+
+  it('upsertMetaTag membuat tag baru saat belum ada', () => {
+    document.head.querySelector('meta[property="og:test"]')?.remove();
+
+    upsertMetaTag({ property: 'og:test', content: 'nilai-uji' });
+
+    const tag = document.head.querySelector('meta[property="og:test"]');
+    expect(tag).not.toBeNull();
+    expect(tag.getAttribute('content')).toBe('nilai-uji');
   });
 
   it('menampilkan not found state tanpa saran', () => {
@@ -249,6 +277,62 @@ describe('KamusDetail', () => {
     expect(screen.getByText('Glosarium')).toBeInTheDocument();
     expect(screen.getByText('base word')).toBeInTheDocument();
     expect(screen.getByText('derived word')).toBeInTheDocument();
+  });
+
+  it('mengurutkan komentar saat waktu sama berdasarkan id dan menampilkan info waktu entri', () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      isLoading: false,
+      loginDenganGoogle: vi.fn(),
+    });
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-detail') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: {
+            entri: 'kata',
+            created_at: '2026-02-01T00:00:00.000Z',
+            updated_at: null,
+            makna: [],
+            subentri: {},
+            tesaurus: { sinonim: [], antonim: [] },
+            glosarium: [],
+          },
+        };
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          data: {
+            data: {
+              loggedIn: true,
+              activeCount: 2,
+              komentar: [
+                { id: 1, pengguna_nama: 'A', komentar: 'Komentar Lama', updated_at: '2026-02-01T10:00:00.000Z', created_at: '2026-02-01T10:00:00.000Z' },
+                { id: 2, pengguna_nama: 'B', komentar: 'Komentar Baru', updated_at: '2026-02-01T10:00:00.000Z', created_at: '2026-02-01T10:00:00.000Z' },
+              ],
+            },
+          },
+          isLoading: false,
+          isError: false,
+          refetch: vi.fn(),
+        };
+      }
+
+      return {
+        data: { 'kelas-kata': [], ragam: [], bidang: [], bahasa: [] },
+        isLoading: false,
+        isError: false,
+      };
+    });
+
+    render(<KamusDetail />);
+
+    const komentarNodes = screen.getAllByText(/Komentar (Baru|Lama)/i);
+    expect(komentarNodes[0]).toHaveTextContent('Komentar Baru');
+    expect(screen.getByText(/Dibuat/i)).toBeInTheDocument();
   });
 
   it('menampilkan teaser komentar saat belum login dan ada komentar aktif', () => {
