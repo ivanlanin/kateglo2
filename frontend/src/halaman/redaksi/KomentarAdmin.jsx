@@ -25,7 +25,7 @@ import {
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
-import { formatTanggalKomentar } from '../../utils/formatTanggalKomentar';
+import { formatLocalDateTime } from '../../utils/formatTanggalLokal';
 
 const nilaiAwal = {
   id: null,
@@ -40,7 +40,7 @@ const kolom = [
   {
     key: 'tanggal',
     label: 'Tanggal',
-    render: (item) => formatTanggalKomentar(item.updated_at || item.created_at),
+    render: (item) => formatLocalDateTime(item.updated_at || item.created_at),
   },
   { key: 'indeks', label: 'Indeks' },
   {

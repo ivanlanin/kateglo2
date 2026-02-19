@@ -12,7 +12,7 @@ import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import TeksLema from '../../komponen/publik/TeksLema';
 import { PesanTidakDitemukan } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus, normalisasiIndeksKamus } from '../../utils/kamusIndex';
-import { formatTanggalKomentar, parseKomentarDate } from '../../utils/formatTanggalKomentar';
+import { formatLocalDateTime, parseUtcDate } from '../../utils/formatTanggalLokal';
 import { buildMetaDetailKamus } from '../../utils/metaUtils';
 
 function upsertMetaTag({ name, property, content }) {
@@ -123,15 +123,15 @@ function bandingkanJenisSubentri(jenisA, jenisB, urutanJenisSubentri) {
 }
 
 function formatInfoWaktuEntri(createdAt, updatedAt, sumber = '') {
-  const createdDate = parseKomentarDate(createdAt);
-  const updatedDate = parseKomentarDate(updatedAt);
+  const createdDate = parseUtcDate(createdAt);
+  const updatedDate = parseUtcDate(updatedAt);
   const sumberAman = String(sumber || '').trim();
 
   if (!createdDate && !updatedDate && !sumberAman) return '';
 
   const parts = [];
   if (createdDate) {
-    parts.push(`Dibuat ${formatTanggalKomentar(createdDate)}`);
+    parts.push(`Dibuat ${formatLocalDateTime(createdDate)}`);
   }
 
   const shouldShowUpdated =
@@ -139,7 +139,7 @@ function formatInfoWaktuEntri(createdAt, updatedAt, sumber = '') {
     (!createdDate || updatedDate.getTime() !== createdDate.getTime());
 
   if (shouldShowUpdated) {
-    parts.push(`Diubah ${formatTanggalKomentar(updatedDate)}`);
+    parts.push(`Diubah ${formatLocalDateTime(updatedDate)}`);
   }
 
   if (sumberAman) {
@@ -621,7 +621,7 @@ function KamusDetail() {
                         <div key={item.id} className="border border-gray-200 dark:border-gray-700 rounded-md px-3 py-2">
                           <div className="text-xs secondary-text mb-1 flex items-center justify-between gap-2">
                             <span>{item.pengguna_nama || 'Pengguna'}</span>
-                            <span>{formatTanggalKomentar(item.updated_at || item.created_at)}</span>
+                            <span>{formatLocalDateTime(item.updated_at || item.created_at)}</span>
                           </div>
                           <div className="whitespace-pre-line leading-relaxed">{item.komentar}</div>
                         </div>
@@ -717,5 +717,5 @@ export {
   bandingkanEntriKamus,
   bandingkanJenisSubentri,
   formatInfoWaktuEntri,
-  formatTanggalKomentar,
+  formatLocalDateTime,
 };
