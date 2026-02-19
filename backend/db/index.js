@@ -3,8 +3,13 @@
  * Native PostgreSQL with query chaining syntax (inspired by Supabase)
  */
 
-const { Pool } = require('pg');
+const { Pool, types } = require('pg');
 const logger = require('../config/logger');
+
+// OID 1114 = timestamp without time zone
+// Kembalikan sebagai string mentah agar tidak ada interpretasi timezone oleh driver.
+// Frontend (parseUtcDate) akan menambahkan suffix Z dan mengonversi ke waktu lokal.
+types.setTypeParser(1114, (str) => str);
 
 const databaseUrl = process.env.DATABASE_URL || '';
 const shouldUseSsl =

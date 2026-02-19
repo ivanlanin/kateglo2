@@ -5,6 +5,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarPengguna, useDetailPengguna, useDaftarPeran, useSimpanPengguna } from '../../api/apiAdmin';
+import { formatLocalDateTime } from '../../utils/formatTanggalLokal';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
   BarisFilterCariAdmin,
@@ -25,14 +26,7 @@ import {
 } from '../../komponen/redaksi/FormAdmin';
 
 function formatTanggal(dateStr) {
-  if (!dateStr) return '—';
-  return new Date(dateStr).toLocaleDateString('id-ID', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  return formatLocalDateTime(dateStr, { fallback: '—', separator: ', ' });
 }
 
 function PenggunaAdmin() {
@@ -168,7 +162,7 @@ function PenggunaAdmin() {
     },
     {
       key: 'login_terakhir',
-      label: 'Login Terakhir',
+      label: 'Masuk Terakhir',
       render: (p) => formatTanggal(p.login_terakhir),
     },
   ];

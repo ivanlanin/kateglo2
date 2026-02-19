@@ -17,6 +17,7 @@
   "dependencies": {
     "@tanstack/react-query": "^5.62.7",
     "axios": "^1.7.9",
+    "dayjs": "^1.11.19",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-markdown": "^10.1.0",
