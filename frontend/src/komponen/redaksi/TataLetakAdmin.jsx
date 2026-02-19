@@ -15,7 +15,7 @@ const menuAdmin = [
   { path: '/redaksi/komentar', label: 'Komentar' },
 ];
 
-function TataLetakAdmin({ judul, children }) {
+function TataLetakAdmin({ judul, aksiJudul = null, children }) {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -129,9 +129,10 @@ function TataLetakAdmin({ judul, children }) {
 
       <main className="halaman-dasar-container">
         {judul && (
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-            {judul}
-          </h2>
+          <div className="mb-6 flex items-center justify-between gap-3">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{judul}</h2>
+            {aksiJudul}
+          </div>
         )}
         {children}
       </main>

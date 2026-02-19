@@ -12,8 +12,8 @@ import {
 } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
-  KotakCariTambahAdmin,
-  InfoTotal,
+  KotakCariAdmin,
+  TombolAksiAdmin,
   TabelAdmin,
   BadgeStatus,
   getApiErrorMessage,
@@ -581,14 +581,13 @@ function KamusAdmin() {
   };
 
   return (
-    <TataLetakAdmin judul="Kamus">
-      <KotakCariTambahAdmin
+    <TataLetakAdmin judul="Kamus" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
+      <KotakCariAdmin
         nilai={cari}
         onChange={setCari}
         onCari={kirimCari}
         onHapus={hapusCari}
         placeholder="Cari entri …"
-        onTambah={bukaTambah}
       />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 mb-4">
         <SelectField
@@ -620,7 +619,6 @@ function KamusAdmin() {
           options={opsiYaTidak}
         />
       </div>
-      <InfoTotal q={q} total={total} label="entri" />
       <TabelAdmin
         kolom={kolom}
         data={daftar}

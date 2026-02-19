@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarPengguna, useDetailPengguna, useDaftarPeran, useSimpanPengguna } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
-import { TabelAdmin, InfoTotal, BadgeStatus, getApiErrorMessage } from '../../komponen/redaksi/KomponenAdmin';
+import { TabelAdmin, BadgeStatus, getApiErrorMessage } from '../../komponen/redaksi/KomponenAdmin';
 import PanelGeser from '../../komponen/redaksi/PanelGeser';
 import {
   useFormPanel,
@@ -157,7 +157,6 @@ function PenggunaAdmin() {
 
   return (
     <TataLetakAdmin judul="Pengguna">
-      <InfoTotal q="" total={total} label="pengguna" />
       <TabelAdmin
         kolom={kolom}
         data={daftarPengguna}

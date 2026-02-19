@@ -8,7 +8,6 @@ import { useDaftarKomentarAdmin, useDetailKomentarAdmin, useSimpanKomentarAdmin 
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
   KotakCariAdmin,
-  InfoTotal,
   TabelAdmin,
   BadgeStatus,
   getApiErrorMessage,
@@ -147,9 +146,6 @@ function KomentarAdmin() {
         onHapus={hapusCari}
         placeholder="Cari indeks, komentar, atau pengguna …"
       />
-
-      <InfoTotal q={q} total={total} label="komentar" />
-
       <TabelAdmin
         kolom={kolom}
         data={daftar}

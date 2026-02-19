@@ -7,8 +7,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarTesaurusAdmin, useDetailTesaurusAdmin, useSimpanTesaurus, useHapusTesaurus } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
-  KotakCariTambahAdmin,
-  InfoTotal,
+  KotakCariAdmin,
+  TombolAksiAdmin,
   BadgeStatus,
   TabelAdmin,
   getApiErrorMessage,
@@ -153,16 +153,15 @@ function TesaurusAdmin() {
   };
 
   return (
-    <TataLetakAdmin judul="Tesaurus">
-      <KotakCariTambahAdmin
+    <TataLetakAdmin judul="Tesaurus" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
+      <KotakCariAdmin
         nilai={cari}
         onChange={setCari}
         onCari={kirimCari}
         onHapus={hapusCari}
         placeholder="Cari tesaurus …"
-        onTambah={bukaTambah}
       />
-      <InfoTotal q={q} total={total} label="entri" />
+
       <TabelAdmin
         kolom={kolom}
         data={daftar}
