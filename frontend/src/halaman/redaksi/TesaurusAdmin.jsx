@@ -2,8 +2,9 @@
  * @fileoverview Halaman admin tesaurus — daftar, cari, tambah, sunting entri tesaurus
  */
 
-import { useState } from 'react';
-import { useDaftarTesaurusAdmin, useSimpanTesaurus, useHapusTesaurus } from '../../api/apiAdmin';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDaftarTesaurusAdmin, useDetailTesaurusAdmin, useSimpanTesaurus, useHapusTesaurus } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
   KotakCariTambahAdmin,
@@ -55,10 +56,16 @@ const kolom = [
 ];
 
 function TesaurusAdmin() {
+  const navigate = useNavigate();
+  const { id: idParam } = useParams();
   const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit } =
     usePencarianAdmin(50);
+  const idEdit = Number.parseInt(idParam || '', 10);
+  const idDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
+  const idEditTerbuka = useRef(null);
 
   const { data: resp, isLoading, isError } = useDaftarTesaurusAdmin({ limit, offset, q });
+  const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailTesaurusAdmin(idDariPath);
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
 
@@ -68,6 +75,54 @@ function TesaurusAdmin() {
 
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
 
+  useEffect(() => {
+    if (!idParam) return;
+    if (idDariPath) return;
+    setPesan({ error: 'ID entri tidak valid.', sukses: '' });
+    navigate('/redaksi/tesaurus', { replace: true });
+  }, [idParam, idDariPath, navigate]);
+
+  useEffect(() => {
+    if (!idDariPath || isDetailLoading || isDetailError) return;
+    const detail = detailResp?.data;
+    if (!detail?.id) return;
+    if (idEditTerbuka.current === detail.id) return;
+    panel.bukaUntukSunting(detail);
+    idEditTerbuka.current = detail.id;
+  }, [detailResp, idDariPath, isDetailError, isDetailLoading, panel]);
+
+  useEffect(() => {
+    if (!idDariPath || isDetailLoading || !isDetailError) return;
+    setPesan({ error: 'Entri tidak ditemukan.', sukses: '' });
+    navigate('/redaksi/tesaurus', { replace: true });
+  }, [idDariPath, isDetailError, isDetailLoading, navigate]);
+
+  const tutupPanel = () => {
+    panel.tutup();
+    if (idDariPath) {
+      idEditTerbuka.current = null;
+      navigate('/redaksi/tesaurus', { replace: true });
+    }
+  };
+
+  const bukaTambah = () => {
+    if (idDariPath) {
+      idEditTerbuka.current = null;
+      navigate('/redaksi/tesaurus', { replace: true });
+    }
+    panel.bukaUntukTambah();
+  };
+
+  const bukaSuntingDariDaftar = (item) => {
+    if (!item?.id) {
+      panel.bukaUntukSunting(item);
+      return;
+    }
+    panel.bukaUntukSunting(item);
+    if (panel.buka) return;
+    navigate(`/redaksi/tesaurus/${item.id}`);
+  };
+
   const handleSimpan = () => {
     setPesan({ error: '', sukses: '' });
     const pesanValidasi = validateRequiredFields(panel.data, [{ name: 'lema', label: 'Lema' }]);
@@ -76,7 +131,7 @@ function TesaurusAdmin() {
       return;
     }
     simpan.mutate(panel.data, {
-      onSuccess: () => { setPesan({ error: '', sukses: 'Tersimpan!' }); setTimeout(() => panel.tutup(), 600); },
+      onSuccess: () => { setPesan({ error: '', sukses: 'Tersimpan!' }); setTimeout(() => tutupPanel(), 600); },
       onError: (err) => setPesan({ error: getApiErrorMessage(err, 'Gagal menyimpan'), sukses: '' }),
     });
   };
@@ -84,7 +139,7 @@ function TesaurusAdmin() {
   const handleHapus = () => {
     if (!confirm('Yakin ingin menghapus entri tesaurus ini?')) return;
     hapus.mutate(panel.data.id, {
-      onSuccess: () => panel.tutup(),
+      onSuccess: () => tutupPanel(),
       onError: (err) => setPesan({ error: getApiErrorMessage(err, 'Gagal menghapus'), sukses: '' }),
     });
   };
@@ -97,7 +152,7 @@ function TesaurusAdmin() {
         onCari={kirimCari}
         onHapus={hapusCari}
         placeholder="Cari tesaurus …"
-        onTambah={panel.bukaUntukTambah}
+        onTambah={bukaTambah}
       />
       <InfoTotal q={q} total={total} label="entri" />
       <TabelAdmin
@@ -109,10 +164,10 @@ function TesaurusAdmin() {
         limit={limit}
         offset={offset}
         onOffset={setOffset}
-        onKlikBaris={panel.bukaUntukSunting}
+        onKlikBaris={bukaSuntingDariDaftar}
       />
 
-      <PanelGeser buka={panel.buka} onTutup={panel.tutup} judul={panel.modeTambah ? 'Tambah Tesaurus' : 'Sunting Tesaurus'}>
+      <PanelGeser buka={panel.buka} onTutup={tutupPanel} judul={panel.modeTambah ? 'Tambah Tesaurus' : 'Sunting Tesaurus'}>
         <PesanForm error={pesan.error} sukses={pesan.sukses} />
         <InputField label="Lema" name="lema" value={panel.data.lema} onChange={panel.ubahField} required />
         <TextareaField label="Sinonim" name="sinonim" value={panel.data.sinonim} onChange={panel.ubahField} placeholder="Pisahkan dengan koma" />
@@ -123,7 +178,7 @@ function TesaurusAdmin() {
         <ToggleAktif value={panel.data.aktif} onChange={panel.ubahField} />
         <FormFooter
           onSimpan={handleSimpan}
-          onBatal={panel.tutup}
+          onBatal={tutupPanel}
           onHapus={handleHapus}
           isPending={simpan.isPending || hapus.isPending}
           modeTambah={panel.modeTambah}

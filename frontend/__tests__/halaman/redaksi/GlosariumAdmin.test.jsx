@@ -5,11 +5,13 @@ import { MemoryRouter } from 'react-router-dom';
 import GlosariumAdmin from '../../../src/halaman/redaksi/GlosariumAdmin';
 
 const mockUseDaftarGlosariumAdmin = vi.fn();
+const mockUseDetailGlosariumAdmin = vi.fn();
 const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
 
 vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarGlosariumAdmin: (...args) => mockUseDaftarGlosariumAdmin(...args),
+  useDetailGlosariumAdmin: (...args) => mockUseDetailGlosariumAdmin(...args),
   useSimpanGlosarium: () => ({ mutate: mutateSimpan, isPending: false }),
   useHapusGlosarium: () => ({ mutate: mutateHapus, isPending: false }),
 }));
@@ -35,6 +37,7 @@ describe('GlosariumAdmin', () => {
         data: [{ id: 1, indonesia: 'air', asing: 'water', bidang: 'kimia', sumber: 'kbbi', bahasa: 'en' }],
       },
     });
+    mockUseDetailGlosariumAdmin.mockReturnValue({ isLoading: false, isError: false, data: null });
   });
 
   it('menampilkan daftar dan validasi simpan', () => {

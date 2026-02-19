@@ -2,8 +2,9 @@
  * @fileoverview Halaman admin label — daftar, cari, tambah, sunting label
  */
 
-import { useState } from 'react';
-import { useDaftarLabelAdmin, useSimpanLabel, useHapusLabel } from '../../api/apiAdmin';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDaftarLabelAdmin, useDetailLabelAdmin, useSimpanLabel, useHapusLabel } from '../../api/apiAdmin';
 import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
   KotakCariTambahAdmin,
@@ -47,9 +48,15 @@ const kolom = [
 ];
 
 function LabelAdmin() {
+  const navigate = useNavigate();
+  const { id: idParam } = useParams();
   const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit } = usePencarianAdmin(50);
+  const idEdit = Number.parseInt(idParam || '', 10);
+  const idDariPath = Number.isInteger(idEdit) && idEdit > 0 ? idEdit : null;
+  const idEditTerbuka = useRef(null);
 
   const { data: resp, isLoading, isError } = useDaftarLabelAdmin({ limit, offset, q });
+  const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailLabelAdmin(idDariPath);
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
 
@@ -58,6 +65,54 @@ function LabelAdmin() {
   const hapus = useHapusLabel();
 
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
+
+  useEffect(() => {
+    if (!idParam) return;
+    if (idDariPath) return;
+    setPesan({ error: 'ID label tidak valid.', sukses: '' });
+    navigate('/redaksi/label', { replace: true });
+  }, [idParam, idDariPath, navigate]);
+
+  useEffect(() => {
+    if (!idDariPath || isDetailLoading || isDetailError) return;
+    const detail = detailResp?.data;
+    if (!detail?.id) return;
+    if (idEditTerbuka.current === detail.id) return;
+    panel.bukaUntukSunting(detail);
+    idEditTerbuka.current = detail.id;
+  }, [detailResp, idDariPath, isDetailError, isDetailLoading, panel]);
+
+  useEffect(() => {
+    if (!idDariPath || isDetailLoading || !isDetailError) return;
+    setPesan({ error: 'Label tidak ditemukan.', sukses: '' });
+    navigate('/redaksi/label', { replace: true });
+  }, [idDariPath, isDetailError, isDetailLoading, navigate]);
+
+  const tutupPanel = () => {
+    panel.tutup();
+    if (idDariPath) {
+      idEditTerbuka.current = null;
+      navigate('/redaksi/label', { replace: true });
+    }
+  };
+
+  const bukaTambah = () => {
+    if (idDariPath) {
+      idEditTerbuka.current = null;
+      navigate('/redaksi/label', { replace: true });
+    }
+    panel.bukaUntukTambah();
+  };
+
+  const bukaSuntingDariDaftar = (item) => {
+    if (!item?.id) {
+      panel.bukaUntukSunting(item);
+      return;
+    }
+    panel.bukaUntukSunting(item);
+    if (panel.buka) return;
+    navigate(`/redaksi/label/${item.id}`);
+  };
 
   const handleSimpan = () => {
     setPesan({ error: '', sukses: '' });
@@ -75,7 +130,7 @@ function LabelAdmin() {
     simpan.mutate(panel.data, {
       onSuccess: () => {
         setPesan({ error: '', sukses: 'Tersimpan!' });
-        setTimeout(() => panel.tutup(), 600);
+        setTimeout(() => tutupPanel(), 600);
       },
       onError: (err) => {
         setPesan({ error: getApiErrorMessage(err, 'Gagal menyimpan'), sukses: '' });
@@ -87,7 +142,7 @@ function LabelAdmin() {
     if (!confirm('Yakin ingin menghapus label ini?')) return;
 
     hapus.mutate(panel.data.id, {
-      onSuccess: () => panel.tutup(),
+      onSuccess: () => tutupPanel(),
       onError: (err) => {
         setPesan({ error: getApiErrorMessage(err, 'Gagal menghapus'), sukses: '' });
       },
@@ -102,7 +157,7 @@ function LabelAdmin() {
         onCari={kirimCari}
         onHapus={hapusCari}
         placeholder="Cari label …"
-        onTambah={panel.bukaUntukTambah}
+        onTambah={bukaTambah}
       />
 
       <InfoTotal q={q} total={total} label="label" />
@@ -116,10 +171,10 @@ function LabelAdmin() {
         limit={limit}
         offset={offset}
         onOffset={setOffset}
-        onKlikBaris={panel.bukaUntukSunting}
+        onKlikBaris={bukaSuntingDariDaftar}
       />
 
-      <PanelGeser buka={panel.buka} onTutup={panel.tutup} judul={panel.modeTambah ? 'Tambah Label' : 'Sunting Label'}>
+      <PanelGeser buka={panel.buka} onTutup={tutupPanel} judul={panel.modeTambah ? 'Tambah Label' : 'Sunting Label'}>
         <PesanForm error={pesan.error} sukses={pesan.sukses} />
         <InputField label="Kategori" name="kategori" value={panel.data.kategori} onChange={panel.ubahField} required />
         <InputField label="Kode" name="kode" value={panel.data.kode} onChange={panel.ubahField} required />
@@ -129,7 +184,7 @@ function LabelAdmin() {
         <TextareaField label="Keterangan" name="keterangan" value={panel.data.keterangan} onChange={panel.ubahField} rows={3} />
         <FormFooter
           onSimpan={handleSimpan}
-          onBatal={panel.tutup}
+          onBatal={tutupPanel}
           onHapus={handleHapus}
           isPending={simpan.isPending || hapus.isPending}
           modeTambah={panel.modeTambah}

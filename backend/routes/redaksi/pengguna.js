@@ -25,6 +25,33 @@ router.get('/', periksaIzin('kelola_pengguna'), async (req, res, next) => {
 });
 
 /**
+ * GET /api/redaksi/pengguna/peran
+ * Daftar semua peran yang tersedia
+ */
+router.get('/peran', periksaIzin('kelola_peran'), async (req, res, next) => {
+  try {
+    const data = await ModelPengguna.daftarPeran();
+    return res.json({ success: true, data });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+/**
+ * GET /api/redaksi/pengguna/:id
+ * Ambil detail pengguna untuk penyuntingan
+ */
+router.get('/:id', periksaIzin('kelola_pengguna'), async (req, res, next) => {
+  try {
+    const data = await ModelPengguna.ambilDenganId(parseIdParam(req.params.id));
+    if (!data) return res.status(404).json({ success: false, message: 'Pengguna tidak ditemukan' });
+    return res.json({ success: true, data });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+/**
  * PATCH /api/redaksi/pengguna/:id/peran
  * Ubah peran pengguna
  * Body: { peran_id: number }
@@ -70,19 +97,6 @@ router.put('/:id', periksaIzin('kelola_pengguna'), async (req, res, next) => {
     }
 
     return res.json({ success: true, data: pengguna });
-  } catch (error) {
-    return next(error);
-  }
-});
-
-/**
- * GET /api/redaksi/peran
- * Daftar semua peran yang tersedia
- */
-router.get('/peran', periksaIzin('kelola_peran'), async (req, res, next) => {
-  try {
-    const data = await ModelPengguna.daftarPeran();
-    return res.json({ success: true, data });
   } catch (error) {
     return next(error);
   }

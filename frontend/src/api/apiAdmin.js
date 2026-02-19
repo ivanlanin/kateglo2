@@ -56,8 +56,24 @@ export function useDaftarKamusAdmin({ limit = 50, offset = 0, q = '' } = {}) {
   });
 }
 
+export function useDetailKamusAdmin(id) {
+  return useQuery({
+    queryKey: ['admin-kamus-detail', id],
+    queryFn: () => klien.get(`/api/redaksi/kamus/${id}`).then((r) => r.data),
+    enabled: Boolean(id),
+  });
+}
+
 export function useDaftarKomentarAdmin({ limit = 50, offset = 0, q = '' } = {}) {
   return useDaftarAdmin('/api/redaksi/komentar', 'admin-komentar', { limit, offset, q });
+}
+
+export function useDetailKomentarAdmin(id) {
+  return useQuery({
+    queryKey: ['admin-komentar-detail', id],
+    queryFn: () => klien.get(`/api/redaksi/komentar/${id}`).then((r) => r.data),
+    enabled: Boolean(id),
+  });
 }
 
 // ─── Tesaurus ────────────────────────────────────────────────────────────────
@@ -66,16 +82,40 @@ export function useDaftarTesaurusAdmin({ limit = 50, offset = 0, q = '' } = {}) 
   return useDaftarAdmin('/api/redaksi/tesaurus', 'admin-tesaurus', { limit, offset, q });
 }
 
+export function useDetailTesaurusAdmin(id) {
+  return useQuery({
+    queryKey: ['admin-tesaurus-detail', id],
+    queryFn: () => klien.get(`/api/redaksi/tesaurus/${id}`).then((r) => r.data),
+    enabled: Boolean(id),
+  });
+}
+
 // ─── Glosarium ───────────────────────────────────────────────────────────────
 
 export function useDaftarGlosariumAdmin({ limit = 50, offset = 0, q = '' } = {}) {
   return useDaftarAdmin('/api/redaksi/glosarium', 'admin-glosarium', { limit, offset, q });
 }
 
+export function useDetailGlosariumAdmin(id) {
+  return useQuery({
+    queryKey: ['admin-glosarium-detail', id],
+    queryFn: () => klien.get(`/api/redaksi/glosarium/${id}`).then((r) => r.data),
+    enabled: Boolean(id),
+  });
+}
+
 // ─── Label ───────────────────────────────────────────────────────────────────
 
 export function useDaftarLabelAdmin({ limit = 50, offset = 0, q = '' } = {}) {
   return useDaftarAdmin('/api/redaksi/label', 'admin-label', { limit, offset, q });
+}
+
+export function useDetailLabelAdmin(id) {
+  return useQuery({
+    queryKey: ['admin-label-detail', id],
+    queryFn: () => klien.get(`/api/redaksi/label/${id}`).then((r) => r.data),
+    enabled: Boolean(id),
+  });
 }
 
 export function useKategoriLabelRedaksi(kategori = []) {
@@ -98,6 +138,14 @@ export function useDaftarPengguna({ limit = 50, offset = 0 } = {}) {
       klien
         .get('/api/redaksi/pengguna', { params: { limit, offset } })
         .then((r) => r.data),
+  });
+}
+
+export function useDetailPengguna(id) {
+  return useQuery({
+    queryKey: ['admin-pengguna-detail', id],
+    queryFn: () => klien.get(`/api/redaksi/pengguna/${id}`).then((r) => r.data),
+    enabled: Boolean(id),
   });
 }
 

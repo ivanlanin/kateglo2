@@ -1,14 +1,17 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
 import PenggunaAdmin from '../../../src/halaman/redaksi/PenggunaAdmin';
 
 const mockUseDaftarPengguna = vi.fn();
+const mockUseDetailPengguna = vi.fn();
 const mockUseDaftarPeran = vi.fn();
 const mutateSimpanPengguna = vi.fn();
 
 vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarPengguna: (...args) => mockUseDaftarPengguna(...args),
+  useDetailPengguna: (...args) => mockUseDetailPengguna(...args),
   useDaftarPeran: (...args) => mockUseDaftarPeran(...args),
   useSimpanPengguna: () => ({ mutate: mutateSimpanPengguna, isPending: false }),
 }));
@@ -40,10 +43,11 @@ describe('PenggunaAdmin', () => {
         ],
       },
     });
+    mockUseDetailPengguna.mockReturnValue({ isLoading: false, isError: false, data: null });
   });
 
   it('menampilkan daftar pengguna tanpa edit peran di tabel', () => {
-    render(<PenggunaAdmin />);
+    render(<MemoryRouter><PenggunaAdmin /></MemoryRouter>);
 
     expect(screen.getByRole('heading', { name: 'Pengguna' })).toBeInTheDocument();
     expect(screen.getByText('Budi')).toBeInTheDocument();
@@ -54,7 +58,7 @@ describe('PenggunaAdmin', () => {
   it('membuka panel sunting dan simpan pengguna', () => {
     vi.useFakeTimers();
     mutateSimpanPengguna.mockImplementation((_data, opts) => opts.onSuccess?.());
-    render(<PenggunaAdmin />);
+    render(<MemoryRouter><PenggunaAdmin /></MemoryRouter>);
 
     fireEvent.click(screen.getByText('Budi'));
     fireEvent.change(screen.getByLabelText(/Nama/), { target: { value: 'Budi Baru' } });
@@ -71,7 +75,7 @@ describe('PenggunaAdmin', () => {
 
   it('menampilkan error saat simpan gagal', () => {
     mutateSimpanPengguna.mockImplementation((_data, opts) => opts.onError?.({ response: { data: { error: 'Gagal simpan pengguna' } } }));
-    render(<PenggunaAdmin />);
+    render(<MemoryRouter><PenggunaAdmin /></MemoryRouter>);
 
     fireEvent.click(screen.getByText('Sari'));
     fireEvent.click(screen.getByText('Simpan'));
@@ -81,7 +85,7 @@ describe('PenggunaAdmin', () => {
 
   it('menggunakan fallback pesan gagal menyimpan default', () => {
     mutateSimpanPengguna.mockImplementation((_data, opts) => opts.onError?.({}));
-    render(<PenggunaAdmin />);
+    render(<MemoryRouter><PenggunaAdmin /></MemoryRouter>);
 
     fireEvent.click(screen.getByText('Tamu'));
     fireEvent.click(screen.getByText('Simpan'));
@@ -97,7 +101,7 @@ describe('PenggunaAdmin', () => {
       data: { total: 1, data: [{ id: 10, nama: '', surel: '', peran_kode: '', aktif: 1, login_terakhir: null, foto: '' }] },
     });
 
-    render(<PenggunaAdmin />);
+    render(<MemoryRouter><PenggunaAdmin /></MemoryRouter>);
     expect(screen.getByText('?')).toBeInTheDocument();
   });
 
@@ -105,7 +109,7 @@ describe('PenggunaAdmin', () => {
     mockUseDaftarPeran.mockReturnValue({ data: undefined });
     mockUseDaftarPengguna.mockReturnValue({ isLoading: false, isError: false, data: undefined });
 
-    render(<PenggunaAdmin />);
+    render(<MemoryRouter><PenggunaAdmin /></MemoryRouter>);
     expect(screen.getByText('Tidak ada data.')).toBeInTheDocument();
   });
 });
