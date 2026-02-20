@@ -88,7 +88,7 @@ describe('entry-server', () => {
       semuaMakna: [{ makna: 'makna detail', kelas_kata: 'n' }],
       lafal: '/sa.ra/',
     });
-    expect(kamusDetailRich.title).toBe('sara — Kamus — Kateglo');
+    expect(kamusDetailRich.title).toBe('sara — Kateglo');
     expect(kamusDetailRich.description).toContain('makna detail');
 
     expect(__private.buildMetaForPath('/kamus/cari/%20', site).title).toBe('Kamus — Kateglo');

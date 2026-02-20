@@ -198,7 +198,7 @@ export function buildMetaDetailKamus(indeks = '', data = null) {
   }
 
   return {
-    judul: `${indeksAman} — Kamus`,
+    judul: indeksAman,
     deskripsi: buildDeskripsiDetailKamus(indeksAman, data || {}),
   };
 }
