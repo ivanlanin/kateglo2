@@ -1,5 +1,10 @@
 # Riwayat Perubahan
 
+## 2026-02-20 Jumat
+
+- Menambahkan fitur pengelolaan peran dan izin pengguna di redaksi
+- Menerapkan izin berbasis peran untuk mengontrol akses ke halaman dan tindakan tertentu
+
 ## 2026-02-19 Kamis
 
 - Memisahkan 486 partikel menjadi 26 preposisi, 37 konjungsi, 66 interjeksi, 357 partikel
@@ -16,7 +21,6 @@
 - Menyeragamkan tombol tambah, filter, dan paginasi di halaman redaksi
 - Menerapkan autentikasi dengan banyak peran
 - Menerapkan paginasi dengan kursor untuk meningkatkan kinerja
-- Menambahkan fitur pengelolaan peran dan izin pengguna di redaksi
 
 ## 2026-02-18 Rabu
 

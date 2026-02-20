@@ -29,7 +29,10 @@ function useSimpanAdmin({ path, queryKeyPrefix }) {
       if (data.id) return klien.put(`${path}/${data.id}`, data).then((r) => r.data);
       return klien.post(path, data).then((r) => r.data);
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: [queryKeyPrefix] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: [queryKeyPrefix] });
+      qc.invalidateQueries({ queryKey: [`${queryKeyPrefix}-detail`] });
+    },
   });
 }
 
@@ -37,7 +40,10 @@ function useHapusAdmin({ path, queryKeyPrefix }) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (id) => klien.delete(`${path}/${id}`).then((r) => r.data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: [queryKeyPrefix] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: [queryKeyPrefix] });
+      qc.invalidateQueries({ queryKey: [`${queryKeyPrefix}-detail`] });
+    },
   });
 }
 
@@ -203,6 +209,7 @@ export function useUbahPeran() {
         .then((r) => r.data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-pengguna'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-pengguna-detail'] });
     },
   });
 }
@@ -247,6 +254,7 @@ export function useSimpanPeranAdmin() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-peran-kelola'] });
       qc.invalidateQueries({ queryKey: ['admin-peran'] });
+      qc.invalidateQueries({ queryKey: ['admin-peran-detail'] });
       qc.invalidateQueries({ queryKey: ['admin-pengguna'] });
     },
   });
@@ -290,6 +298,7 @@ export function useSimpanIzinAdmin() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-izin-kelola'] });
       qc.invalidateQueries({ queryKey: ['admin-izin'] });
+      qc.invalidateQueries({ queryKey: ['admin-izin-detail'] });
       qc.invalidateQueries({ queryKey: ['admin-peran-kelola'] });
       qc.invalidateQueries({ queryKey: ['admin-peran'] });
     },
@@ -305,7 +314,10 @@ export function useSimpanKamus() {
       if (data.id) return klien.put(`/api/redaksi/kamus/${data.id}`, data).then((r) => r.data);
       return klien.post('/api/redaksi/kamus', data).then((r) => r.data);
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-kamus'] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-kamus'] });
+      qc.invalidateQueries({ queryKey: ['admin-kamus-detail'] });
+    },
   });
 }
 
@@ -313,7 +325,10 @@ export function useHapusKamus() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (id) => klien.delete(`/api/redaksi/kamus/${id}`).then((r) => r.data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-kamus'] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-kamus'] });
+      qc.invalidateQueries({ queryKey: ['admin-kamus-detail'] });
+    },
   });
 }
 
@@ -321,7 +336,10 @@ export function useSimpanKomentarAdmin() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (data) => klien.put(`/api/redaksi/komentar/${data.id}`, data).then((r) => r.data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-komentar'] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-komentar'] });
+      qc.invalidateQueries({ queryKey: ['admin-komentar-detail'] });
+    },
   });
 }
 
@@ -414,6 +432,9 @@ export function useSimpanPengguna() {
   return useMutation({
     mutationFn: (data) =>
       klien.put(`/api/redaksi/pengguna/${data.id}`, data).then((r) => r.data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-pengguna'] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-pengguna'] });
+      qc.invalidateQueries({ queryKey: ['admin-pengguna-detail'] });
+    },
   });
 }

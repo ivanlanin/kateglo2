@@ -101,6 +101,7 @@ function KomentarAdmin() {
   }, [idDariPath, isDetailError, isDetailLoading, navigate]);
 
   const tutupPanel = () => {
+    setPesan({ error: '', sukses: '' });
     panel.tutup();
     if (idDariPath) {
       sedangMenutupDariPath.current = true;
@@ -109,12 +110,8 @@ function KomentarAdmin() {
   };
 
   const bukaSuntingDariDaftar = (item) => {
-    if (!item?.id) {
-      panel.bukaUntukSunting(item);
-      return;
-    }
-    panel.bukaUntukSunting(item);
-    if (panel.buka) return;
+    setPesan({ error: '', sukses: '' });
+    if (!item?.id) return;
     navigate(`/redaksi/komentar/${item.id}`);
   };
 

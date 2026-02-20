@@ -129,6 +129,7 @@ function PeranAdmin() {
   }, [idDariPath, isDetailError, isDetailLoading, navigate]);
 
   const tutupPanel = () => {
+    setPesan({ error: '', sukses: '' });
     panel.tutup();
     if (idDariPath) {
       sedangMenutupDariPath.current = true;
@@ -137,6 +138,7 @@ function PeranAdmin() {
   };
 
   const bukaTambah = () => {
+    setPesan({ error: '', sukses: '' });
     if (idDariPath) {
       sedangMenutupDariPath.current = true;
       navigate('/redaksi/peran', { replace: true });
@@ -145,12 +147,8 @@ function PeranAdmin() {
   };
 
   const bukaSuntingDariDaftar = (item) => {
-    if (!item?.id) {
-      panel.bukaUntukSunting(item);
-      return;
-    }
-    panel.bukaUntukSunting(item);
-    if (panel.buka) return;
+    setPesan({ error: '', sukses: '' });
+    if (!item?.id) return;
     navigate(`/redaksi/peran/${item.id}`);
   };
 
