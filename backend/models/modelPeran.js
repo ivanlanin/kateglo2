@@ -50,6 +50,7 @@ class ModelPeran {
          p.kode,
          p.nama,
          p.keterangan,
+         COALESCE(p.akses_redaksi, FALSE) AS akses_redaksi,
          p.created_at,
          p.updated_at,
          (
@@ -63,11 +64,11 @@ class ModelPeran {
            WHERE pi.peran_id = p.id
          ) AS jumlah_izin,
          COALESCE((
-           SELECT array_agg(i.kode ORDER BY i.kode)
+           SELECT array_agg(i.nama ORDER BY i.nama)
            FROM peran_izin pi
            JOIN izin i ON i.id = pi.izin_id
            WHERE pi.peran_id = p.id
-         ), ARRAY[]::text[]) AS izin_kode
+         ), ARRAY[]::text[]) AS izin_nama
        FROM peran p
        ${whereSql}
        ORDER BY p.id ASC
@@ -85,6 +86,7 @@ class ModelPeran {
          p.kode,
          p.nama,
          p.keterangan,
+         COALESCE(p.akses_redaksi, FALSE) AS akses_redaksi,
          p.created_at,
          p.updated_at,
          COALESCE((
@@ -94,11 +96,11 @@ class ModelPeran {
            WHERE pi.peran_id = p.id
          ), ARRAY[]::int[]) AS izin_ids,
          COALESCE((
-           SELECT array_agg(i.kode ORDER BY i.kode)
+           SELECT array_agg(i.nama ORDER BY i.nama)
            FROM peran_izin pi
            JOIN izin i ON i.id = pi.izin_id
            WHERE pi.peran_id = p.id
-         ), ARRAY[]::text[]) AS izin_kode
+         ), ARRAY[]::text[]) AS izin_nama
        FROM peran p
        WHERE p.id = $1`,
       [id]
@@ -132,7 +134,7 @@ class ModelPeran {
     return result.rows;
   }
 
-  static async simpan({ id, kode, nama, keterangan, izin_ids: izinIds = [] }) {
+  static async simpan({ id, kode, nama, keterangan, akses_redaksi: aksesRedaksi = false, izin_ids: izinIds = [] }) {
     const client = await db.pool.connect();
     try {
       await client.query('BEGIN');
@@ -144,16 +146,17 @@ class ModelPeran {
           `UPDATE peran
            SET kode = $1,
                nama = $2,
-               keterangan = NULLIF($3, '')
-           WHERE id = $4
+               keterangan = NULLIF($3, ''),
+               akses_redaksi = $4
+           WHERE id = $5
            RETURNING id`,
-          [kode, nama, keterangan, id]
+          [kode, nama, keterangan, Boolean(aksesRedaksi), id]
         )
         : await client.query(
-          `INSERT INTO peran (kode, nama, keterangan)
-           VALUES ($1, $2, NULLIF($3, ''))
+          `INSERT INTO peran (kode, nama, keterangan, akses_redaksi)
+           VALUES ($1, $2, NULLIF($3, ''), $4)
            RETURNING id`,
-          [kode, nama, keterangan]
+          [kode, nama, keterangan, Boolean(aksesRedaksi)]
         );
 
       const peranId = result.rows[0]?.id;

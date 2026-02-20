@@ -290,6 +290,7 @@ create table peran (
   kode text not null,
   nama text not null,
   keterangan text,
+  akses_redaksi boolean not null default false,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
   constraint peran_kode_key unique (kode)

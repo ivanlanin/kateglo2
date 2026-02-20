@@ -55,7 +55,7 @@ describe('PeranAdmin', () => {
             nama: 'Administrator',
             jumlah_pengguna: 2,
             jumlah_izin: 3,
-            izin_kode: ['kelola_pengguna', 'kelola_peran', 'kelola_label'],
+            izin_nama: ['Kelola Pengguna', 'Kelola Peran', 'Kelola Label'],
           },
         ],
       },

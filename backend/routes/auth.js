@@ -62,13 +62,14 @@ router.get('/google/callback', async (req, res) => {
     await ModelPengguna.bootstrapAdmin(pengguna);
 
     // Ambil peran dan izin dari database
-    const peran = await ModelPengguna.ambilKodePeran(pengguna.peran_id);
+    const peranData = await ModelPengguna.ambilPeranUntukAuth(pengguna.peran_id);
     const izin = await ModelPengguna.ambilIzin(pengguna.peran_id);
 
     const appToken = buildAppToken({
       ...profile,
       pid: pengguna.id,
-      peran,
+      peran: peranData.kode,
+      akses_redaksi: peranData.akses_redaksi,
       izin,
     });
 

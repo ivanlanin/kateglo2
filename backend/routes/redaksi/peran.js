@@ -14,6 +14,17 @@ const {
 
 const router = express.Router();
 
+function parseBooleanFlag(value, defaultValue = false) {
+  if (value === undefined || value === null || value === '') return defaultValue;
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') return value === 1;
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase();
+    return ['1', 'true', 'ya', 'yes', 'aktif'].includes(normalized);
+  }
+  return defaultValue;
+}
+
 function parseIzinIds(value) {
   if (value === undefined) return [];
   if (!Array.isArray(value)) return null;
@@ -59,13 +70,20 @@ router.post('/', periksaIzin('kelola_peran'), async (req, res, next) => {
     const kode = parseTrimmedString(req.body.kode);
     const nama = parseTrimmedString(req.body.nama);
     const keterangan = parseTrimmedString(req.body.keterangan);
+    const aksesRedaksi = parseBooleanFlag(req.body.akses_redaksi, false);
     const izinIds = parseIzinIds(req.body.izin_ids);
 
     if (!kode) return res.status(400).json({ success: false, message: 'Kode peran wajib diisi' });
     if (!nama) return res.status(400).json({ success: false, message: 'Nama peran wajib diisi' });
     if (izinIds === null) return res.status(400).json({ success: false, message: 'izin_ids harus berupa array bilangan bulat' });
 
-    const data = await ModelPeran.simpan({ kode, nama, keterangan, izin_ids: izinIds });
+    const data = await ModelPeran.simpan({
+      kode,
+      nama,
+      keterangan,
+      akses_redaksi: aksesRedaksi,
+      izin_ids: izinIds,
+    });
     return res.status(201).json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -78,13 +96,21 @@ router.put('/:id', periksaIzin('kelola_peran'), async (req, res, next) => {
     const kode = parseTrimmedString(req.body.kode);
     const nama = parseTrimmedString(req.body.nama);
     const keterangan = parseTrimmedString(req.body.keterangan);
+    const aksesRedaksi = parseBooleanFlag(req.body.akses_redaksi, false);
     const izinIds = parseIzinIds(req.body.izin_ids);
 
     if (!kode) return res.status(400).json({ success: false, message: 'Kode peran wajib diisi' });
     if (!nama) return res.status(400).json({ success: false, message: 'Nama peran wajib diisi' });
     if (izinIds === null) return res.status(400).json({ success: false, message: 'izin_ids harus berupa array bilangan bulat' });
 
-    const data = await ModelPeran.simpan({ id, kode, nama, keterangan, izin_ids: izinIds });
+    const data = await ModelPeran.simpan({
+      id,
+      kode,
+      nama,
+      keterangan,
+      akses_redaksi: aksesRedaksi,
+      izin_ids: izinIds,
+    });
     if (!data) return res.status(404).json({ success: false, message: 'Peran tidak ditemukan' });
     return res.json({ success: true, data });
   } catch (error) {

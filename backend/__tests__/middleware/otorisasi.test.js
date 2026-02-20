@@ -107,7 +107,7 @@ describe('middleware/otorisasi', () => {
   });
 
   describe('redaksiSaja', () => {
-    it('mengembalikan 403 saat user bukan admin/penyunting', () => {
+    it('mengembalikan 403 saat user tidak punya akses redaksi', () => {
       const req = { user: { peran: 'pengguna' } };
       const res = createRes();
       const next = jest.fn();
@@ -133,8 +133,8 @@ describe('middleware/otorisasi', () => {
       expect(next).not.toHaveBeenCalled();
     });
 
-    it('lanjut next saat user adalah admin', () => {
-      const req = { user: { peran: 'admin' } };
+    it('lanjut next saat user punya flag akses_redaksi', () => {
+      const req = { user: { peran: 'pengguna', akses_redaksi: true } };
       const res = createRes();
       const next = jest.fn();
 
@@ -144,7 +144,7 @@ describe('middleware/otorisasi', () => {
       expect(res.status).not.toHaveBeenCalled();
     });
 
-    it('lanjut next saat user adalah penyunting', () => {
+    it('lanjut next saat user role legacy penyunting (fallback kompatibilitas)', () => {
       const req = { user: { peran: 'penyunting' } };
       const res = createRes();
       const next = jest.fn();

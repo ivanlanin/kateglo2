@@ -113,7 +113,7 @@ function AuthProvider({ children }) {
     isLoading,
     isAuthenticated: Boolean(token && user),
     adalahAdmin: user?.peran === 'admin',
-    adalahRedaksi: user?.peran === 'admin' || user?.peran === 'penyunting',
+    adalahRedaksi: Boolean(user?.akses_redaksi) || user?.peran === 'admin' || user?.peran === 'penyunting',
     punyaIzin,
     loginDenganGoogle: mulaiLoginGoogle,
     setAuthToken,

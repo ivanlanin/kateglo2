@@ -630,6 +630,7 @@ describe('routes backend', () => {
       name: 'User Test',
       picture: 'https://img.example/user.png',
       peran: 'pengguna',
+      akses_redaksi: false,
       izin: ['lihat_lema'],
       provider: 'google',
     });
@@ -656,6 +657,7 @@ describe('routes backend', () => {
       .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(200);
+    expect(response.body.data.akses_redaksi).toBe(false);
     expect(response.body.data.izin).toEqual([]);
     delete process.env.JWT_SECRET;
   });

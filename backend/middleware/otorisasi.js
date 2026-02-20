@@ -49,7 +49,11 @@ function adminSaja(req, res, next) {
  * Otorisasi lebih rinci per endpoint ditangani oleh periksaIzin.
  */
 function redaksiSaja(req, res, next) {
-  if (!req.user || !['admin', 'penyunting'].includes(req.user.peran)) {
+  const user = req.user;
+  const fallbackRoleRedaksi = ['admin', 'penyunting'].includes(user?.peran);
+  const bolehAksesRedaksi = Boolean(user?.akses_redaksi) || fallbackRoleRedaksi;
+
+  if (!user || !bolehAksesRedaksi) {
     return res.status(403).json({
       success: false,
       message: 'Akses terbatas untuk tim redaksi',

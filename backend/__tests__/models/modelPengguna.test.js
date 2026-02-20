@@ -49,6 +49,26 @@ describe('ModelPengguna', () => {
     expect(result).toBe('pengguna');
   });
 
+  it('ambilPeranUntukAuth mengembalikan kode dan akses_redaksi', async () => {
+    db.query.mockResolvedValue({ rows: [{ kode: 'penyunting', akses_redaksi: true }] });
+
+    const result = await ModelPengguna.ambilPeranUntukAuth(3);
+
+    expect(db.query).toHaveBeenCalledWith(
+      'SELECT kode, COALESCE(akses_redaksi, FALSE) AS akses_redaksi FROM peran WHERE id = $1',
+      [3]
+    );
+    expect(result).toEqual({ kode: 'penyunting', akses_redaksi: true });
+  });
+
+  it('ambilPeranUntukAuth fallback default jika data tidak ada', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    const result = await ModelPengguna.ambilPeranUntukAuth(999);
+
+    expect(result).toEqual({ kode: 'pengguna', akses_redaksi: false });
+  });
+
   it('ambilIzin mengembalikan daftar kode izin', async () => {
     db.query.mockResolvedValue({ rows: [{ kode: 'kelola_pengguna' }, { kode: 'kelola_peran' }] });
 
@@ -205,7 +225,7 @@ describe('ModelPengguna', () => {
 
     const result = await ModelPengguna.daftarPeran();
 
-    expect(db.query).toHaveBeenCalledWith('SELECT id, kode, nama, keterangan FROM peran ORDER BY id');
+    expect(db.query).toHaveBeenCalledWith('SELECT id, kode, nama, keterangan, COALESCE(akses_redaksi, FALSE) AS akses_redaksi FROM peran ORDER BY id');
     expect(result).toEqual(rows);
   });
 
