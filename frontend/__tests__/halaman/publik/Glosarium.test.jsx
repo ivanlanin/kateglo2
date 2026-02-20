@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Glosarium from '../../../src/halaman/publik/Glosarium';
 import {
@@ -31,9 +31,12 @@ vi.mock('@tanstack/react-query', () => ({
 
 vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
   default: ({ onNavigateCursor }) => (
-    <button type="button" onClick={() => onNavigateCursor('next')}>
-      Halaman glosarium berikut
-    </button>
+    <div>
+      <button type="button" aria-label="glosarium-first" onClick={() => onNavigateCursor('first')}>first</button>
+      <button type="button" aria-label="glosarium-prev" onClick={() => onNavigateCursor('prev')}>prev</button>
+      <button type="button" aria-label="glosarium-next" onClick={() => onNavigateCursor('next')}>next</button>
+      <button type="button" aria-label="glosarium-last" onClick={() => onNavigateCursor('last')}>last</button>
+    </div>
   ),
 }));
 
@@ -188,5 +191,87 @@ describe('Glosarium', () => {
 
     rerender(<Glosarium />);
     expect(screen.getByText(/Gagal mengambil data/i)).toBeInTheDocument();
+  });
+
+  it('navigasi cursor first/last/next/prev memperbarui opsi query', () => {
+    mockParams = { kata: 'istilah' };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const key = options?.queryKey?.[0];
+      if (key === 'glosarium-bidang') return { data: [], isLoading: false, isError: false };
+      if (key === 'glosarium-sumber') return { data: [], isLoading: false, isError: false };
+      return {
+        data: {
+          data: [{ id: 1, indonesia: 'istilah', asing: 'term' }],
+          total: 230,
+          pageInfo: { hasPrev: true, hasNext: true, nextCursor: 'NEXT_CUR', prevCursor: 'PREV_CUR' },
+        },
+        isLoading: false,
+        isError: false,
+      };
+    });
+
+    render(<Glosarium />);
+
+    fireEvent.click(screen.getAllByRole('button', { name: 'glosarium-next' })[0]);
+    fireEvent.click(screen.getAllByRole('button', { name: 'glosarium-prev' })[0]);
+    fireEvent.click(screen.getAllByRole('button', { name: 'glosarium-last' })[0]);
+    fireEvent.click(screen.getAllByRole('button', { name: 'glosarium-first' })[0]);
+
+    expect(cariGlosarium).toHaveBeenCalledWith('istilah', {
+      limit: 100,
+      cursor: 'NEXT_CUR',
+      direction: 'next',
+      lastPage: false,
+    });
+    expect(cariGlosarium).toHaveBeenCalledWith('istilah', {
+      limit: 100,
+      cursor: 'PREV_CUR',
+      direction: 'prev',
+      lastPage: false,
+    });
+    expect(cariGlosarium).toHaveBeenCalledWith('istilah', {
+      limit: 100,
+      cursor: null,
+      direction: 'next',
+      lastPage: true,
+    });
+    expect(cariGlosarium).toHaveBeenCalledWith('istilah', {
+      limit: 100,
+      cursor: null,
+      direction: 'next',
+      lastPage: false,
+    });
+  });
+
+  it('aksi last tetap valid saat total 0 (fallback targetPage ke 1)', () => {
+    mockParams = { kata: 'nol' };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const key = options?.queryKey?.[0];
+      if (key === 'glosarium-bidang') return { data: [], isLoading: false, isError: false };
+      if (key === 'glosarium-sumber') return { data: [], isLoading: false, isError: false };
+      return {
+        data: {
+          data: [{ id: 1, indonesia: 'nol', asing: null }],
+          total: 0,
+          pageInfo: { hasPrev: false, hasNext: false },
+        },
+        isLoading: false,
+        isError: false,
+      };
+    });
+
+    render(<Glosarium />);
+    fireEvent.click(screen.getAllByRole('button', { name: 'glosarium-last' })[0]);
+
+    expect(cariGlosarium).toHaveBeenCalledWith('nol', {
+      limit: 100,
+      cursor: null,
+      direction: 'next',
+      lastPage: true,
+    });
   });
 });

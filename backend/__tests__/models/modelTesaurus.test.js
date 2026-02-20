@@ -7,6 +7,7 @@ jest.mock('../../db/autocomplete', () => jest.fn());
 
 const db = require('../../db');
 const autocomplete = require('../../db/autocomplete');
+const { encodeCursor } = require('../../utils/cursorPagination');
 const ModelTesaurus = require('../../models/modelTesaurus');
 const { normalizeBoolean } = require('../../models/modelTesaurus').__private;
 
@@ -335,6 +336,161 @@ describe('ModelTesaurus', () => {
 
     expect(deleted).toBe(true);
     expect(missing).toBe(false);
+  });
+
+  it('cariCursor mengembalikan kosong saat total 0', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ total: '0' }] });
+
+    const result = await ModelTesaurus.cariCursor('aktif');
+
+    expect(db.query).toHaveBeenCalledTimes(1);
+    expect(result).toEqual({
+      data: [],
+      total: 0,
+      hasNext: false,
+      hasPrev: false,
+      nextCursor: null,
+      prevCursor: null,
+    });
+  });
+
+  it('cariCursor arah next dengan cursor menghitung hasPrev/hasNext dan cursor baru', async () => {
+    const cursor = encodeCursor({ prioritas: 1, indeks: 'aktif', id: 2 });
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '5' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 3, indeks: 'aktif', sinonim: 'giat', antonim: null, prioritas: 1 },
+          { id: 4, indeks: 'aktif sekali', sinonim: 'rajin', antonim: null, prioritas: 1 },
+          { id: 5, indeks: 'aktifisme', sinonim: 'enerjik', antonim: null, prioritas: 2 },
+        ],
+      });
+
+    const result = await ModelTesaurus.cariCursor('aktif', {
+      limit: 2,
+      cursor,
+      direction: 'next',
+      hitungTotal: true,
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('(prioritas, indeks, id) > ($4, $5, $6)'),
+      ['aktif', 'aktif%', '%aktif%', 1, 'aktif', 2, 3]
+    );
+    expect(result.data).toEqual([
+      { id: 3, indeks: 'aktif', sinonim: 'giat', antonim: null },
+      { id: 4, indeks: 'aktif sekali', sinonim: 'rajin', antonim: null },
+    ]);
+    expect(result.total).toBe(5);
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(true);
+    expect(result.prevCursor).toEqual(expect.any(String));
+    expect(result.nextCursor).toEqual(expect.any(String));
+  });
+
+  it('cariCursor arah prev tanpa hitungTotal membalik urutan dan set hasNext dari cursor', async () => {
+    const cursor = encodeCursor({ prioritas: 1, indeks: 'aktif', id: 10 });
+    db.query.mockResolvedValueOnce({
+      rows: [
+        { id: 9, indeks: 'aktif x', sinonim: null, antonim: null, prioritas: 2 },
+        { id: 8, indeks: 'aktif y', sinonim: null, antonim: null, prioritas: 1 },
+        { id: 7, indeks: 'aktif z', sinonim: null, antonim: null, prioritas: 1 },
+      ],
+    });
+
+    const result = await ModelTesaurus.cariCursor('aktif', {
+      limit: 2,
+      cursor,
+      direction: 'prev',
+      hitungTotal: false,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('(prioritas, indeks, id) < ($4, $5, $6)'),
+      ['aktif', 'aktif%', '%aktif%', 1, 'aktif', 10, 3]
+    );
+    expect(result.data).toEqual([
+      { id: 8, indeks: 'aktif y', sinonim: null, antonim: null },
+      { id: 9, indeks: 'aktif x', sinonim: null, antonim: null },
+    ]);
+    expect(result.total).toBe(0);
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(true);
+  });
+
+  it('cariCursor lastPage mengatur hasNext false dan hasPrev berdasarkan total', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '3' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 2, indeks: 'aktif b', sinonim: null, antonim: null, prioritas: 1 },
+          { id: 1, indeks: 'aktif a', sinonim: null, antonim: null, prioritas: 1 },
+        ],
+      });
+
+    const result = await ModelTesaurus.cariCursor('aktif', {
+      limit: 2,
+      lastPage: true,
+      hitungTotal: true,
+    });
+
+    expect(result.data).toEqual([
+      { id: 1, indeks: 'aktif a', sinonim: null, antonim: null },
+      { id: 2, indeks: 'aktif b', sinonim: null, antonim: null },
+    ]);
+    expect(result.hasNext).toBe(false);
+    expect(result.hasPrev).toBe(true);
+  });
+
+  it('cariCursor memakai fallback limit default saat limit tidak valid', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 1, indeks: 'aktif', sinonim: null, antonim: null, prioritas: 1 }] });
+
+    await ModelTesaurus.cariCursor('aktif', { limit: 'abc', hitungTotal: true });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $4'),
+      ['aktif', 'aktif%', '%aktif%', 101]
+    );
+  });
+
+  it('cariCursor dengan payload cursor kosong memakai fallback nilai default', async () => {
+    const cursor = encodeCursor({});
+    db.query.mockResolvedValueOnce({ rows: [] });
+
+    const result = await ModelTesaurus.cariCursor('aktif', {
+      cursor,
+      direction: 'prev',
+      hitungTotal: false,
+      limit: 2,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('(prioritas, indeks, id) < ($4, $5, $6)'),
+      ['aktif', 'aktif%', '%aktif%', 0, '', 0, 3]
+    );
+    expect(result.prevCursor).toBeNull();
+    expect(result.nextCursor).toBeNull();
+    expect(result.hasPrev).toBe(false);
+    expect(result.hasNext).toBe(true);
+  });
+
+  it('cariCursor lastPage bisa memiliki hasPrev false saat total tidak melebihi jumlah data', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '2' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 2, indeks: 'aktif b', sinonim: null, antonim: null, prioritas: 1 },
+          { id: 1, indeks: 'aktif a', sinonim: null, antonim: null, prioritas: 1 },
+        ],
+      });
+
+    const result = await ModelTesaurus.cariCursor('aktif', { lastPage: true, limit: 2 });
+    expect(result.hasPrev).toBe(false);
+    expect(result.hasNext).toBe(false);
   });
 
   // ─── normalizeBoolean coverage via simpan ─────────────────────────────

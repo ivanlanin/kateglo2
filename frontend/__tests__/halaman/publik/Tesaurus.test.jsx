@@ -21,9 +21,12 @@ vi.mock('../../../src/api/apiPublik', () => ({
 
 vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
   default: ({ onNavigateCursor }) => (
-    <button type="button" onClick={() => onNavigateCursor('next')}>
-      Halaman berikut
-    </button>
+    <div>
+      <button type="button" aria-label="tesaurus-first" onClick={() => onNavigateCursor('first')}>first</button>
+      <button type="button" aria-label="tesaurus-prev" onClick={() => onNavigateCursor('prev')}>prev</button>
+      <button type="button" aria-label="tesaurus-next" onClick={() => onNavigateCursor('next')}>next</button>
+      <button type="button" aria-label="tesaurus-last" onClick={() => onNavigateCursor('last')}>last</button>
+    </div>
   ),
 }));
 
@@ -130,12 +133,86 @@ describe('Tesaurus', () => {
     fireEvent.click(tombolEkspansi);
     expect(tombolEkspansi).toHaveAttribute('aria-expanded', 'false');
 
-    fireEvent.click(screen.getAllByRole('button', { name: 'Halaman berikut' })[0]);
+    fireEvent.click(screen.getAllByRole('button', { name: 'tesaurus-next' })[0]);
     expect(cariTesaurus).toHaveBeenCalledWith('anak%20ibu', {
       limit: 100,
       cursor: 'CUR_NEXT',
       direction: 'next',
       lastPage: false,
+    });
+  });
+
+  it('navigasi cursor first/last/next/prev memperbarui opsi query tesaurus', () => {
+    mockParams = { kata: 'aktif' };
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      return {
+        data: {
+          data: [{ id: 10, indeks: 'aktif', sinonim: 'giat', antonim: 'pasif' }],
+          total: 230,
+          pageInfo: { hasPrev: true, hasNext: true, nextCursor: 'CUR_NEXT', prevCursor: 'CUR_PREV' },
+        },
+        isLoading: false,
+        isError: false,
+      };
+    });
+
+    render(<Tesaurus />);
+
+    fireEvent.click(screen.getAllByRole('button', { name: 'tesaurus-next' })[0]);
+    fireEvent.click(screen.getAllByRole('button', { name: 'tesaurus-prev' })[0]);
+    fireEvent.click(screen.getAllByRole('button', { name: 'tesaurus-last' })[0]);
+    fireEvent.click(screen.getAllByRole('button', { name: 'tesaurus-first' })[0]);
+
+    expect(cariTesaurus).toHaveBeenCalledWith('aktif', {
+      limit: 100,
+      cursor: 'CUR_NEXT',
+      direction: 'next',
+      lastPage: false,
+    });
+    expect(cariTesaurus).toHaveBeenCalledWith('aktif', {
+      limit: 100,
+      cursor: 'CUR_PREV',
+      direction: 'prev',
+      lastPage: false,
+    });
+    expect(cariTesaurus).toHaveBeenCalledWith('aktif', {
+      limit: 100,
+      cursor: null,
+      direction: 'next',
+      lastPage: true,
+    });
+    expect(cariTesaurus).toHaveBeenCalledWith('aktif', {
+      limit: 100,
+      cursor: null,
+      direction: 'next',
+      lastPage: false,
+    });
+  });
+
+  it('aksi last tetap valid saat total 0', () => {
+    mockParams = { kata: 'nol' };
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      return {
+        data: {
+          data: [{ id: 1, indeks: 'nol', sinonim: null, antonim: null }],
+          total: 0,
+          pageInfo: { hasPrev: false, hasNext: false },
+        },
+        isLoading: false,
+        isError: false,
+      };
+    });
+
+    render(<Tesaurus />);
+    fireEvent.click(screen.getAllByRole('button', { name: 'tesaurus-last' })[0]);
+
+    expect(cariTesaurus).toHaveBeenCalledWith('nol', {
+      limit: 100,
+      cursor: null,
+      direction: 'next',
+      lastPage: true,
     });
   });
 

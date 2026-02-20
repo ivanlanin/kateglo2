@@ -4,6 +4,7 @@
  */
 
 const db = require('../../db');
+const { encodeCursor } = require('../../utils/cursorPagination');
 const ModelLabel = require('../../models/modelLabel');
 const { __private } = require('../../models/modelLabel');
 
@@ -475,6 +476,353 @@ describe('ModelLabel', () => {
       [['n', 'nomina']]
     );
     expect(result.total).toBe(1);
+  });
+
+  it('cariEntriPerLabelCursor mengembalikan kosong untuk kategori tidak valid', async () => {
+    const result = await ModelLabel.cariEntriPerLabelCursor('tidak-ada', 'x', { limit: 10 });
+
+    expect(db.query).not.toHaveBeenCalled();
+    expect(result).toEqual({
+      data: [],
+      total: 0,
+      label: null,
+      hasNext: false,
+      hasPrev: false,
+      nextCursor: null,
+      prevCursor: null,
+    });
+  });
+
+  it('cariEntriPerLabelCursor kategori tidak valid tetap aman saat kode undefined', async () => {
+    const result = await ModelLabel.cariEntriPerLabelCursor('tidak-ada', undefined);
+    expect(result.total).toBe(0);
+    expect(result.data).toEqual([]);
+  });
+
+  it('cariEntriPerLabelCursor abjad invalid mengembalikan kosong', async () => {
+    const result = await ModelLabel.cariEntriPerLabelCursor('abjad', '12');
+    expect(result.total).toBe(0);
+    expect(result.data).toEqual([]);
+  });
+
+  it('cariEntriPerLabelCursor abjad mengembalikan kosong saat total 0', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ total: '0' }] });
+
+    const result = await ModelLabel.cariEntriPerLabelCursor('abjad', 'a', { limit: 2 });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('SELECT COUNT(*) AS total'),
+      ['A']
+    );
+    expect(result).toEqual({
+      data: [],
+      total: 0,
+      label: { kode: 'A', nama: 'A' },
+      hasNext: false,
+      hasPrev: false,
+      nextCursor: null,
+      prevCursor: null,
+    });
+  });
+
+  it('cariEntriPerLabelCursor kategori label next dengan cursor menambah where tuple', async () => {
+    const cursor = encodeCursor({ entri: 'abjad', id: 10 });
+    db.query
+      .mockResolvedValueOnce({ rows: [{ kategori: 'ragam', kode: 'cak', nama: 'cakapan', keterangan: '' }] })
+      .mockResolvedValueOnce({ rows: [{ total: '5' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 11, entri: 'acuh', indeks: 'acuh', jenis: 'dasar', jenis_rujuk: null, entri_rujuk: null },
+          { id: 12, entri: 'adat', indeks: 'adat', jenis: 'dasar', jenis_rujuk: null, entri_rujuk: null },
+          { id: 13, entri: 'adib', indeks: 'adib', jenis: 'dasar', jenis_rujuk: null, entri_rujuk: null },
+        ],
+      });
+
+    const result = await ModelLabel.cariEntriPerLabelCursor('ragam', 'cak', {
+      limit: 2,
+      cursor,
+      direction: 'next',
+      hitungTotal: true,
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      3,
+      expect.stringContaining('AND (l.entri, l.id) > ($2, $3)'),
+      [['cak', 'cakapan'], 'abjad', 10, 3]
+    );
+    expect(result.label).toEqual({ kategori: 'ragam', kode: 'cak', nama: 'cakapan', keterangan: '' });
+    expect(result.data).toHaveLength(2);
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(true);
+  });
+
+  it('cariEntriPerLabelCursor jenis prev tanpa hitungTotal membalik urutan hasil', async () => {
+    const cursor = encodeCursor({ entri: 'kata', id: 20 });
+    db.query.mockResolvedValueOnce({
+      rows: [
+        { id: 19, entri: 'zulu', indeks: 'zulu', jenis: 'dasar', jenis_rujuk: null, entri_rujuk: null },
+        { id: 18, entri: 'yankee', indeks: 'yankee', jenis: 'dasar', jenis_rujuk: null, entri_rujuk: null },
+        { id: 17, entri: 'xray', indeks: 'xray', jenis: 'dasar', jenis_rujuk: null, entri_rujuk: null },
+      ],
+    });
+
+    const result = await ModelLabel.cariEntriPerLabelCursor('jenis', 'dasar', {
+      limit: 2,
+      cursor,
+      direction: 'prev',
+      hitungTotal: false,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('AND (l.entri, l.id) < ($2, $3)'),
+      ['dasar', 'kata', 20, 3]
+    );
+    expect(result.data.map((item) => item.entri)).toEqual(['yankee', 'zulu']);
+    expect(result.total).toBe(0);
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(true);
+  });
+
+  it('cariEntriPerLabelCursor bentuk valid mengembalikan data', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 4, entri: 'berkata', indeks: 'berkata', jenis: 'turunan', jenis_rujuk: null, entri_rujuk: null }] });
+
+    const result = await ModelLabel.cariEntriPerLabelCursor('bentuk', 'turunan', { limit: 2 });
+    expect(result.total).toBe(1);
+    expect(result.label).toEqual({ kode: 'turunan', nama: 'turunan' });
+  });
+
+  it('cariEntriPerLabelCursor ekspresi valid mengembalikan data', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 5, entri: 'buah bibir', indeks: 'buah bibir', jenis: 'idiom', jenis_rujuk: null, entri_rujuk: null }] });
+
+    const result = await ModelLabel.cariEntriPerLabelCursor('ekspresi', 'idiom', { limit: 2 });
+    expect(result.total).toBe(1);
+    expect(result.label).toEqual({ kode: 'idiom', nama: 'idiom' });
+  });
+
+  it('cariEntriPerLabelCursor jenis invalid mengembalikan kosong', async () => {
+    const result = await ModelLabel.cariEntriPerLabelCursor('jenis', 'tidak-valid');
+    expect(result.total).toBe(0);
+    expect(result.data).toEqual([]);
+  });
+
+  it('cariEntriPerLabelCursor unsur valid mengembalikan data', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 6, entri: 'meng-', indeks: 'meng-', jenis: 'prefiks', jenis_rujuk: null, entri_rujuk: null }] });
+
+    const result = await ModelLabel.cariEntriPerLabelCursor('unsur', 'prefiks', { limit: 2 });
+    expect(result.total).toBe(1);
+    expect(result.label).toEqual({ kode: 'prefiks', nama: 'prefiks' });
+  });
+
+  it('cariEntriPerLabelCursor lastPage mengatur hasNext false', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '3' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 2, entri: 'beta', indeks: 'beta', jenis: 'dasar', jenis_rujuk: null, entri_rujuk: null },
+          { id: 1, entri: 'alpha', indeks: 'alpha', jenis: 'dasar', jenis_rujuk: null, entri_rujuk: null },
+        ],
+      });
+
+    const result = await ModelLabel.cariEntriPerLabelCursor('jenis', 'dasar', {
+      limit: 2,
+      lastPage: true,
+      hitungTotal: true,
+    });
+
+    expect(result.data.map((item) => item.entri)).toEqual(['alpha', 'beta']);
+    expect(result.hasNext).toBe(false);
+    expect(result.hasPrev).toBe(true);
+  });
+
+  it('cariEntriPerLabelCursor kelas-kata mengembalikan kosong bila label tidak bebas', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ kategori: 'kelas-kata', kode: 'prefiks', nama: 'prefiks', keterangan: '' }] });
+
+    const result = await ModelLabel.cariEntriPerLabelCursor('kelas-kata', 'prefiks', { limit: 10 });
+
+    expect(result).toEqual({
+      data: [],
+      total: 0,
+      label: null,
+      hasNext: false,
+      hasPrev: false,
+      nextCursor: null,
+      prevCursor: null,
+    });
+    expect(db.query).toHaveBeenCalledTimes(1);
+  });
+
+  it('cariEntriPerLabelCursor kelas-kata mengembalikan kosong bila label tidak ditemukan', async () => {
+    db.query.mockResolvedValueOnce({ rows: [] });
+
+    const result = await ModelLabel.cariEntriPerLabelCursor('kelas-kata', 'nomina');
+
+    expect(result).toEqual({
+      data: [],
+      total: 0,
+      label: null,
+      hasNext: false,
+      hasPrev: false,
+      nextCursor: null,
+      prevCursor: null,
+    });
+    expect(db.query).toHaveBeenCalledTimes(1);
+  });
+
+  it('cariEntriPerLabelCursor kelas-kata valid memakai kolom makna kelas_kata', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ kategori: 'kelas-kata', kode: 'n', nama: 'nomina', keterangan: null }] })
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 1, entri: 'akar', indeks: 'akar', jenis: 'dasar', jenis_rujuk: null, entri_rujuk: null }] });
+
+    const result = await ModelLabel.cariEntriPerLabelCursor('kelas-kata', 'n');
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('m.kelas_kata = ANY($1::text[])'),
+      [['n', 'nomina']]
+    );
+    expect(result.total).toBe(1);
+  });
+
+  it('cariEntriPerLabelCursor bentuk invalid mengembalikan kosong', async () => {
+    const result = await ModelLabel.cariEntriPerLabelCursor('bentuk', 'tidak-valid');
+    expect(result.data).toEqual([]);
+    expect(result.total).toBe(0);
+  });
+
+  it('cariEntriPerLabelCursor ekspresi invalid mengembalikan kosong', async () => {
+    const result = await ModelLabel.cariEntriPerLabelCursor('ekspresi', 'tidak-valid');
+    expect(result.data).toEqual([]);
+    expect(result.total).toBe(0);
+  });
+
+  it('cariEntriPerLabelCursor unsur invalid mengembalikan kosong', async () => {
+    const result = await ModelLabel.cariEntriPerLabelCursor('unsur', 'tidak-valid');
+    expect(result.data).toEqual([]);
+    expect(result.total).toBe(0);
+  });
+
+  it('cariEntriPerLabelCursor unsur_terikat invalid mengembalikan kosong', async () => {
+    const result = await ModelLabel.cariEntriPerLabelCursor('unsur_terikat', 'tidak-valid');
+    expect(result.data).toEqual([]);
+    expect(result.total).toBe(0);
+  });
+
+  it('cariEntriPerLabelCursor jenis memakai default options saat tidak diberikan', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 2, entri: 'beta', indeks: 'beta', jenis: 'dasar', jenis_rujuk: null, entri_rujuk: null }] });
+
+    const result = await ModelLabel.cariEntriPerLabelCursor('jenis', 'dasar');
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $2'),
+      ['dasar', 21]
+    );
+    expect(result.total).toBe(1);
+  });
+
+  it('_cariEntriCursorDenganKondisi memakai default argumen dan cursor null saat rows kosong', async () => {
+    db.query.mockResolvedValueOnce({ rows: [] });
+
+    const result = await ModelLabel._cariEntriCursorDenganKondisi({
+      whereSql: 'l.aktif = 1',
+      label: null,
+      hitungTotal: false,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('LIMIT $1'),
+      [21]
+    );
+    expect(result).toEqual({
+      data: [],
+      total: 0,
+      label: null,
+      hasNext: false,
+      hasPrev: false,
+      nextCursor: null,
+      prevCursor: null,
+    });
+  });
+
+  it('_cariEntriCursorDenganKondisi memakai default hitungTotal=true saat properti tidak diberikan', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ total: '0' }] });
+
+    const result = await ModelLabel._cariEntriCursorDenganKondisi({
+      whereSql: 'l.aktif = 1',
+      label: null,
+    });
+
+    expect(db.query).toHaveBeenCalledTimes(1);
+    expect(result.total).toBe(0);
+    expect(result.data).toEqual([]);
+  });
+
+  it('_cariEntriCursorDenganKondisi dengan payload cursor kosong memakai fallback default', async () => {
+    const cursor = encodeCursor({});
+    db.query.mockResolvedValueOnce({ rows: [{ id: 1, entri: 'alpha', indeks: 'alpha', jenis: 'dasar', jenis_rujuk: null, entri_rujuk: null }] });
+
+    const result = await ModelLabel._cariEntriCursorDenganKondisi({
+      whereSql: 'l.aktif = 1 AND l.jenis = $1',
+      params: ['dasar'],
+      label: { kode: 'dasar', nama: 'dasar' },
+      cursor,
+      hitungTotal: false,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('AND (l.entri, l.id) > ($2, $3)'),
+      ['dasar', '', 0, 21]
+    );
+    expect(result.prevCursor).toEqual(expect.any(String));
+    expect(result.nextCursor).toEqual(expect.any(String));
+  });
+
+  it('_cariEntriCursorDenganKondisi menormalkan limit invalid ke default', async () => {
+    db.query.mockResolvedValueOnce({ rows: [] });
+
+    await ModelLabel._cariEntriCursorDenganKondisi({
+      whereSql: 'l.aktif = 1',
+      label: null,
+      limit: 0,
+      hitungTotal: false,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('LIMIT $1'),
+      [21]
+    );
+  });
+
+  it('_cariEntriCursorDenganKondisi lastPage dapat bernilai hasPrev false', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '2' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 2, entri: 'beta', indeks: 'beta', jenis: 'dasar', jenis_rujuk: null, entri_rujuk: null },
+          { id: 1, entri: 'alpha', indeks: 'alpha', jenis: 'dasar', jenis_rujuk: null, entri_rujuk: null },
+        ],
+      });
+
+    const result = await ModelLabel._cariEntriCursorDenganKondisi({
+      whereSql: 'l.aktif = 1 AND l.jenis = $1',
+      params: ['dasar'],
+      label: { kode: 'dasar', nama: 'dasar' },
+      lastPage: true,
+      limit: 2,
+      hitungTotal: true,
+    });
+
+    expect(result.hasPrev).toBe(false);
+    expect(result.hasNext).toBe(false);
   });
 
   it('cariEntriPerLabel kategori unsur_terikat mengembalikan kosong saat label tidak ditemukan', async () => {
