@@ -61,8 +61,14 @@ function useCursorPagination({ limit, resetOn = '', mode = 'cursor' }) {
     }
 
     if (action === 'last') {
+      const cursorForLast = pageInfo?.nextCursor || pageInfo?.prevCursor || null;
       const targetPage = Math.max(1, Math.ceil((Number(total) || 0) / limit));
-      setCursorState({ cursor: null, direction: 'next', lastPage: true, page: targetPage });
+      setCursorState({
+        cursor: cursorForLast,
+        direction: 'next',
+        lastPage: true,
+        page: targetPage,
+      });
       return;
     }
 

@@ -424,7 +424,7 @@ describe('Kamus', () => {
     });
     expect(cariKamus).toHaveBeenCalledWith('kata', {
       limit: 100,
-      cursor: null,
+      cursor: 'CUR_NEXT',
       direction: 'next',
       lastPage: true,
     });
