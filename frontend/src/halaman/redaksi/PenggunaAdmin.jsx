@@ -195,7 +195,7 @@ function PenggunaAdmin() {
         offset={offset}
         pageInfo={penggunaResp?.pageInfo}
         currentPage={currentPage}
-        onNavigateCursor={(action) => setOffset(action, { pageInfo: penggunaResp?.pageInfo, total })}
+        onNavigateCursor={setOffset}
         onKlikBaris={handleBukaSunting}
       />
 

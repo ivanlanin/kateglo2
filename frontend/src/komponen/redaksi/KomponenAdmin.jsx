@@ -309,7 +309,9 @@ export function TabelAdmin({
     'px-6 py-3 text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider';
   const baseTdClass = 'px-6 py-3 text-sm text-gray-700 dark:text-gray-300';
   const getAlignClass = (align) => (align === 'center' ? 'text-center' : 'text-left');
-  const handlerCursor = onNavigateCursor || (pageInfo ? onOffset : null);
+  const handlerCursor = onNavigateCursor
+    ? (action) => onNavigateCursor(action, { pageInfo, total })
+    : (pageInfo ? onOffset : null);
   const tampilkanPaginasi = total > 0 && limit && (onOffset || handlerCursor);
 
   if (isLoading) {

@@ -9,7 +9,7 @@ const db = require('../../db');
 const autocomplete = require('../../db/autocomplete');
 const { encodeCursor } = require('../../utils/cursorPagination');
 const ModelTesaurus = require('../../models/modelTesaurus');
-const { normalizeBoolean } = require('../../models/modelTesaurus').__private;
+const { normalizeBoolean, buildAdminWhereClause } = require('../../models/modelTesaurus').__private;
 
 describe('ModelTesaurus', () => {
   beforeEach(() => {
@@ -549,5 +549,170 @@ describe('ModelTesaurus', () => {
   it('normalizeBoolean tanpa argumen kedua menggunakan default true', () => {
     expect(normalizeBoolean(undefined)).toBe(true);
     expect(normalizeBoolean(null)).toBe(true);
+  });
+
+  it('buildAdminWhereClause aman saat dipanggil tanpa argumen', () => {
+    expect(buildAdminWhereClause()).toEqual({
+      conditions: [],
+      params: [],
+    });
+  });
+
+  it('daftarAdminCursor mengembalikan kosong saat total 0', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ total: '0' }] });
+
+    const result = await ModelTesaurus.daftarAdminCursor({ q: 'aktif', aktif: '1' });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('SELECT COUNT(*) AS total FROM tesaurus WHERE indeks ILIKE $1 AND aktif = TRUE'),
+      ['%aktif%']
+    );
+    expect(result).toEqual({
+      data: [],
+      total: 0,
+      hasPrev: false,
+      hasNext: false,
+      prevCursor: null,
+      nextCursor: null,
+    });
+  });
+
+  it('daftarAdminCursor arah next dengan cursor membentuk where > serta hasPrev/hasNext', async () => {
+    const cursor = encodeCursor({ indeks: 'aktif', id: 2 });
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '5' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 3, indeks: 'aktif b', sinonim: null, antonim: null, aktif: true },
+          { id: 4, indeks: 'aktif c', sinonim: null, antonim: null, aktif: true },
+          { id: 5, indeks: 'aktif d', sinonim: null, antonim: null, aktif: true },
+        ],
+      });
+
+    const result = await ModelTesaurus.daftarAdminCursor({
+      q: 'aktif',
+      limit: 2,
+      cursor,
+      direction: 'next',
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('(indeks, id) > ($2, $3)'),
+      ['%aktif%', 'aktif', 2, 3]
+    );
+    expect(result.data).toEqual([
+      { id: 3, indeks: 'aktif b', sinonim: null, antonim: null, aktif: true },
+      { id: 4, indeks: 'aktif c', sinonim: null, antonim: null, aktif: true },
+    ]);
+    expect(result.total).toBe(5);
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(true);
+    expect(result.prevCursor).toEqual(expect.any(String));
+    expect(result.nextCursor).toEqual(expect.any(String));
+  });
+
+  it('daftarAdminCursor arah prev membalik urutan dan memakai where <', async () => {
+    const cursor = encodeCursor({ indeks: 'aktif z', id: 10 });
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '9' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 8, indeks: 'aktif y', sinonim: null, antonim: null, aktif: true },
+          { id: 7, indeks: 'aktif x', sinonim: null, antonim: null, aktif: true },
+          { id: 6, indeks: 'aktif w', sinonim: null, antonim: null, aktif: true },
+        ],
+      });
+
+    const result = await ModelTesaurus.daftarAdminCursor({
+      limit: 2,
+      cursor,
+      direction: 'prev',
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('(indeks, id) < ($1, $2)'),
+      ['aktif z', 10, 3]
+    );
+    expect(result.data).toEqual([
+      { id: 7, indeks: 'aktif x', sinonim: null, antonim: null, aktif: true },
+      { id: 8, indeks: 'aktif y', sinonim: null, antonim: null, aktif: true },
+    ]);
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(true);
+  });
+
+  it('daftarAdminCursor lastPage mengatur hasNext false dan hasPrev berdasarkan total', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '2' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 2, indeks: 'b', sinonim: null, antonim: null, aktif: true },
+          { id: 1, indeks: 'a', sinonim: null, antonim: null, aktif: true },
+        ],
+      });
+
+    const result = await ModelTesaurus.daftarAdminCursor({ lastPage: true, limit: 2 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('ORDER BY indeks DESC, id DESC'),
+      [3]
+    );
+    expect(result.hasNext).toBe(false);
+    expect(result.hasPrev).toBe(false);
+    expect(result.data).toEqual([
+      { id: 1, indeks: 'a', sinonim: null, antonim: null, aktif: true },
+      { id: 2, indeks: 'b', sinonim: null, antonim: null, aktif: true },
+    ]);
+  });
+
+  it('daftarAdminCursor memaksa clamp limit serta fallback payload cursor kosong', async () => {
+    const cursor = encodeCursor({});
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [] });
+
+    const result = await ModelTesaurus.daftarAdminCursor({
+      limit: 'abc',
+      cursor,
+      direction: 'next',
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('(indeks, id) > ($1, $2)'),
+      ['', 0, 51]
+    );
+    expect(result.total).toBe(1);
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(false);
+  });
+
+  it('daftarAdminCursor default tanpa opsi memakai arah next dan where kosong', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '2' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 1, indeks: 'a', sinonim: null, antonim: null, aktif: true },
+          { id: 2, indeks: 'b', sinonim: null, antonim: null, aktif: true },
+        ],
+      });
+
+    const result = await ModelTesaurus.daftarAdminCursor();
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      'SELECT COUNT(*) AS total FROM tesaurus ',
+      []
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('ORDER BY indeks ASC, id ASC'),
+      [51]
+    );
+    expect(result.hasPrev).toBe(false);
+    expect(result.hasNext).toBe(false);
   });
 });

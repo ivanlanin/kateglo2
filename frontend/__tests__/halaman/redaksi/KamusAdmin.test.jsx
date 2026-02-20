@@ -370,6 +370,31 @@ describe('KamusAdmin', () => {
     expect(Array.from(jenisRujukSelect.querySelectorAll('option')).some((opt) => opt.value === '')).toBe(true);
   });
 
+  it('mengubah semua filter lanjutan tetap aman', () => {
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    const labels = [
+      'Filter ilmiah',
+      'Filter kimia',
+      'Filter penyingkatan',
+      'Filter contoh',
+      'Filter kelas kata',
+      'Filter ragam',
+      'Filter bidang',
+      'Filter bahasa',
+    ];
+
+    labels.forEach((label) => {
+      fireEvent.change(screen.getByLabelText(label), { target: { value: '' } });
+    });
+
+    expect(screen.getByRole('heading', { name: 'Kamus' })).toBeInTheDocument();
+  });
+
   it('menangani loading makna serta cabang validasi internal', () => {
     mockUseDaftarMakna.mockReturnValueOnce({ isLoading: true, data: undefined });
     mutateSimpanKamus.mockImplementation((_data, opts) => opts.onError?.({ response: { data: { message: 'Pesan gagal' } } }));

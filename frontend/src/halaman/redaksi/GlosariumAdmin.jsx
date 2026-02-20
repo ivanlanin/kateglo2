@@ -201,7 +201,7 @@ function GlosariumAdmin() {
         offset={offset}
         pageInfo={resp?.pageInfo}
         currentPage={currentPage}
-        onNavigateCursor={(action) => setOffset(action, { pageInfo: resp?.pageInfo, total })}
+        onNavigateCursor={setOffset}
         onKlikBaris={bisaEdit ? bukaSuntingDariDaftar : undefined}
       />
 

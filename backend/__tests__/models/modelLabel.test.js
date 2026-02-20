@@ -13,6 +13,13 @@ describe('ModelLabel', () => {
     db.query.mockReset();
   });
 
+  it('buildAdminLabelWhereClause aman saat dipanggil tanpa argumen', () => {
+    expect(__private.buildAdminLabelWhereClause()).toEqual({
+      conditions: [],
+      params: [],
+    });
+  });
+
   it('ambilSemuaKategori mengelompokkan label serta menambah abjad, bentuk, ekspresi, kelas, dan unsur terikat', async () => {
     db.query.mockResolvedValue({
       rows: [
@@ -523,6 +530,150 @@ describe('ModelLabel', () => {
       nextCursor: null,
       prevCursor: null,
     });
+  });
+
+  it('daftarAdminCursor mengembalikan kosong saat total 0', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ total: '0' }] });
+
+    const result = await ModelLabel.daftarAdminCursor({ q: 'ragam', aktif: '1' });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('SELECT COUNT(*) AS total FROM label WHERE ('),
+      ['%ragam%']
+    );
+    expect(result).toEqual({
+      data: [],
+      total: 0,
+      hasPrev: false,
+      hasNext: false,
+      prevCursor: null,
+      nextCursor: null,
+    });
+  });
+
+  it('daftarAdminCursor arah next dengan cursor menambah syarat > dan hasMore', async () => {
+    const cursor = encodeCursor({ kategori: 'ragam', urutan: 1, nama: 'baku', id: 2 });
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '5' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 3, kategori: 'ragam', kode: 'cak', nama: 'cakapan', urutan: 2, keterangan: null, aktif: true },
+          { id: 4, kategori: 'ragam', kode: 'ark', nama: 'arkais', urutan: 3, keterangan: null, aktif: true },
+          { id: 5, kategori: 'ragam', kode: 'kls', nama: 'klasik', urutan: 4, keterangan: null, aktif: true },
+        ],
+      });
+
+    const result = await ModelLabel.daftarAdminCursor({ limit: 2, cursor, direction: 'next' });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('(kategori, urutan, nama, id) > ($1, $2, $3, $4)'),
+      ['ragam', 1, 'baku', 2, 3]
+    );
+    expect(result.data).toEqual([
+      { id: 3, kategori: 'ragam', kode: 'cak', nama: 'cakapan', urutan: 2, keterangan: null, aktif: true },
+      { id: 4, kategori: 'ragam', kode: 'ark', nama: 'arkais', urutan: 3, keterangan: null, aktif: true },
+    ]);
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(true);
+    expect(result.prevCursor).toEqual(expect.any(String));
+    expect(result.nextCursor).toEqual(expect.any(String));
+  });
+
+  it('daftarAdminCursor arah prev membalik hasil dan memakai syarat <', async () => {
+    const cursor = encodeCursor({ kategori: 'ragam', urutan: 9, nama: 'zeta', id: 9 });
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '8' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 7, kategori: 'ragam', kode: 'k1', nama: 'kilo', urutan: 7, keterangan: null, aktif: true },
+          { id: 6, kategori: 'ragam', kode: 'j1', nama: 'juno', urutan: 6, keterangan: null, aktif: true },
+          { id: 5, kategori: 'ragam', kode: 'i1', nama: 'iona', urutan: 5, keterangan: null, aktif: true },
+        ],
+      });
+
+    const result = await ModelLabel.daftarAdminCursor({ limit: 2, cursor, direction: 'prev' });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('(kategori, urutan, nama, id) < ($1, $2, $3, $4)'),
+      ['ragam', 9, 'zeta', 9, 3]
+    );
+    expect(result.data).toEqual([
+      { id: 6, kategori: 'ragam', kode: 'j1', nama: 'juno', urutan: 6, keterangan: null, aktif: true },
+      { id: 7, kategori: 'ragam', kode: 'k1', nama: 'kilo', urutan: 7, keterangan: null, aktif: true },
+    ]);
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(true);
+  });
+
+  it('daftarAdminCursor lastPage mengatur hasNext false dan hasPrev sesuai total', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '2' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 2, kategori: 'bahasa', kode: 'en', nama: 'Inggris', urutan: 2, keterangan: null, aktif: true },
+          { id: 1, kategori: 'bahasa', kode: 'id', nama: 'Indonesia', urutan: 1, keterangan: null, aktif: true },
+        ],
+      });
+
+    const result = await ModelLabel.daftarAdminCursor({ lastPage: true, limit: 2 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('ORDER BY kategori DESC'),
+      [3]
+    );
+    expect(result.hasNext).toBe(false);
+    expect(result.hasPrev).toBe(false);
+    expect(result.data).toEqual([
+      { id: 1, kategori: 'bahasa', kode: 'id', nama: 'Indonesia', urutan: 1, keterangan: null, aktif: true },
+      { id: 2, kategori: 'bahasa', kode: 'en', nama: 'Inggris', urutan: 2, keterangan: null, aktif: true },
+    ]);
+  });
+
+  it('daftarAdminCursor memaksa clamp limit default dan fallback payload cursor kosong', async () => {
+    const cursor = encodeCursor({});
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [] });
+
+    const result = await ModelLabel.daftarAdminCursor({ limit: 'abc', cursor, direction: 'next' });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('(kategori, urutan, nama, id) > ($1, $2, $3, $4)'),
+      ['', 0, '', 0, 51]
+    );
+    expect(result.total).toBe(1);
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(false);
+  });
+
+  it('daftarAdminCursor default tanpa opsi memakai urutan ASC dan where kosong', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '2' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 1, kategori: 'bahasa', kode: 'id', nama: 'Indonesia', urutan: 1, keterangan: null, aktif: true },
+          { id: 2, kategori: 'bahasa', kode: 'en', nama: 'Inggris', urutan: 2, keterangan: null, aktif: true },
+        ],
+      });
+
+    const result = await ModelLabel.daftarAdminCursor();
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      'SELECT COUNT(*) AS total FROM label ',
+      []
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('ORDER BY kategori ASC'),
+      [51]
+    );
+    expect(result.hasPrev).toBe(false);
+    expect(result.hasNext).toBe(false);
   });
 
   it('cariEntriPerLabelCursor kategori label next dengan cursor menambah where tuple', async () => {
