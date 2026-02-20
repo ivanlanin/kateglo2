@@ -1,8 +1,9 @@
 /**
- * @fileoverview Formatter tanggal+waktu lokal berbasis dayjs (input UTC-aware)
+ * @fileoverview Formatter umum: tanggal+waktu lokal dan teks lema
  */
 
 import dayjs from 'dayjs';
+import { Fragment, createElement } from 'react';
 import 'dayjs/locale/id';
 
 dayjs.locale('id');
@@ -34,7 +35,29 @@ function formatLocalDateTime(value, { fallback = '-', separator = ' ' } = {}) {
   return dayjs(date).format(`DD MMM YYYY${separator}HH.mm`);
 }
 
+function pisahNomorHomonim(lema = '') {
+  const teks = String(lema || '').trim();
+  const match = teks.match(/^(.*)\s\((\d+)\)\s*$/);
+
+  if (!match) {
+    return { dasar: teks, nomor: null };
+  }
+
+  return {
+    dasar: match[1],
+    nomor: match[2],
+  };
+}
+
+function formatLemaHomonim(lema = '') {
+  const { dasar, nomor } = pisahNomorHomonim(lema);
+  if (!nomor) return dasar;
+  return createElement(Fragment, null, dasar, createElement('sup', null, nomor));
+}
+
 export {
   parseUtcDate,
   formatLocalDateTime,
+  pisahNomorHomonim,
+  formatLemaHomonim,
 };

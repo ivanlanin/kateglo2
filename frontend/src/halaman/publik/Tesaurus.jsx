@@ -9,8 +9,8 @@ import { cariTesaurus } from '../../api/apiPublik';
 import { useCursorPagination } from '../../hooks/bersama/useCursorPagination';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import HasilPencarian from '../../komponen/publik/HasilPencarian';
-import TeksLema from '../../komponen/publik/TeksLema';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
+import { formatLemaHomonim } from '../../utils/formatUtils';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
 import { buildMetaBrowseTesaurus, buildMetaPencarianTesaurus } from '../../utils/metaUtils';
 
@@ -127,7 +127,7 @@ function Tesaurus() {
                 to={buatPathDetailKamus(item.indeks)}
                 className="kamus-kategori-grid-link"
               >
-                <TeksLema lema={item.indeks} />
+                {formatLemaHomonim(item.indeks)}
               </Link>
               <RelasiSingkat sinonim={item.sinonim} antonim={item.antonim} />
             </div>
