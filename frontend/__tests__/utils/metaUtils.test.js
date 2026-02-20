@@ -51,7 +51,7 @@ describe('metaUtils', () => {
   it('builder metadata kamus menutup cabang browse, pencarian kosong, detail kosong, dan truncate', () => {
     expect(buildMetaBrowseKamus().judul).toBe('Kamus');
     expect(buildMetaPencarianKamus('').judul).toBe('Kamus');
-    expect(buildMetaPencarianKamus('air').judul).toContain('Hasil Pencarian');
+    expect(buildMetaPencarianKamus('air').judul).toBe('Hasil Pencarian "air" di Kamus');
     expect(buildDeskripsiDetailKamus('', {})).toContain('Telusuri entri kamus');
 
     const panjang = Array.from({ length: 80 }).map(() => 'panjang').join(' ');
@@ -101,7 +101,7 @@ describe('metaUtils', () => {
     expect(lengkap).toContain('Antonim');
 
     expect(buildMetaPencarianTesaurus('', null).judul).toBe('Tesaurus');
-    expect(buildMetaPencarianTesaurus('besar', null).judul).toContain('Hasil Pencarian');
+    expect(buildMetaPencarianTesaurus('besar', null).judul).toBe('Hasil Pencarian "besar" di Tesaurus');
   });
 
   it('builder metadata glosarium menutup cabang browse/kata/bidang/sumber', () => {
@@ -117,7 +117,7 @@ describe('metaUtils', () => {
     expect(deskripsiCari).toContain('Contoh');
 
     expect(buildMetaPencarianGlosarium('', null).judul).toBe('Glosarium');
-    expect(buildMetaPencarianGlosarium('air', null).judul).toContain('Hasil Pencarian');
+    expect(buildMetaPencarianGlosarium('air', null).judul).toBe('Hasil Pencarian "air" di Glosarium');
 
     expect(buildMetaBidangGlosarium('', null).judul).toBe('Glosarium');
     expect(buildMetaBidangGlosarium('biologi', { total: 2 }).judul).toBe('Bidang biologi');
