@@ -69,6 +69,14 @@ describe('ModelPengguna', () => {
     expect(result).toEqual({ kode: 'pengguna', akses_redaksi: false });
   });
 
+  it('ambilPeranUntukAuth fallback kode pengguna saat row ada tapi kode kosong', async () => {
+    db.query.mockResolvedValue({ rows: [{ kode: '', akses_redaksi: 0 }] });
+
+    const result = await ModelPengguna.ambilPeranUntukAuth(777);
+
+    expect(result).toEqual({ kode: 'pengguna', akses_redaksi: false });
+  });
+
   it('ambilIzin mengembalikan daftar kode izin', async () => {
     db.query.mockResolvedValue({ rows: [{ kode: 'kelola_pengguna' }, { kode: 'kelola_peran' }] });
 

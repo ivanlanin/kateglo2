@@ -88,6 +88,27 @@ describe('DasborAdmin', () => {
     expect(screen.queryByText('Pengguna')).not.toBeInTheDocument();
   });
 
+  it('menggunakan fallback izin dari user saat punyaIzin bukan fungsi', () => {
+    mockUseAuth.mockReturnValue({
+      user: { izin: ['lihat_entri', 'kelola_label'] },
+      punyaIzin: undefined,
+    });
+    mockUseStatistikAdmin.mockReturnValue({
+      isLoading: false,
+      data: { data: { entri: 10, tesaurus: 20, glosarium: 30, label: 40, pengguna: 50, komentar: 60 } },
+    });
+
+    render(
+      <MemoryRouter>
+        <DasborAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Entri Kamus')).toBeInTheDocument();
+    expect(screen.getByText('Label')).toBeInTheDocument();
+    expect(screen.queryByText('Entri Tesaurus')).not.toBeInTheDocument();
+  });
+
   it('menampilkan fallback strip saat nilai statistik kosong', () => {
     mockUseStatistikAdmin.mockReturnValue({
       isLoading: false,
@@ -103,5 +124,25 @@ describe('DasborAdmin', () => {
     );
 
     expect(screen.getAllByText('—').length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('fallback izin user menjadi array kosong saat format izin tidak valid', () => {
+    mockUseAuth.mockReturnValue({
+      user: { izin: null },
+      punyaIzin: undefined,
+    });
+    mockUseStatistikAdmin.mockReturnValue({
+      isLoading: false,
+      data: { data: { entri: 10, tesaurus: 20, glosarium: 30, label: 40, pengguna: 50, komentar: 60 } },
+    });
+
+    render(
+      <MemoryRouter>
+        <DasborAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByText('Entri Kamus')).not.toBeInTheDocument();
+    expect(screen.queryByText('Label')).not.toBeInTheDocument();
   });
 });

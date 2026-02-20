@@ -124,6 +124,24 @@ describe('TataLetakAdmin', () => {
     expect(screen.queryAllByRole('link', { name: 'Tesaurus' })).toHaveLength(1);
   });
 
+  it('menu admin memakai fallback user.izin saat punyaIzin tidak tersedia', () => {
+    mockUseAuth.mockReturnValueOnce({
+      user: { email: 'fallback@kateglo.id', izin: ['lihat_entri', 'kelola_label'] },
+      logout: mockLogout,
+      punyaIzin: null,
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/redaksi/kamus']}>
+        <TataLetakAdmin>Konten</TataLetakAdmin>
+      </MemoryRouter>
+    );
+
+    expect(screen.getByRole('link', { name: 'Kamus' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Label' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Tesaurus' })).not.toBeInTheDocument();
+  });
+
   it('mode gelap membaca localStorage dan toggle tema memperbarui ikon/title', () => {
     localStorage.getItem.mockReturnValue('dark');
 

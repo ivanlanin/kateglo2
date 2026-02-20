@@ -152,14 +152,12 @@ function ItemContoh({
   const ubah = (field, val) => setData((p) => ({ ...p, [field]: val }));
 
   const handleSimpan = () => {
-    if (!bisaEditContoh) return;
     simpanContoh.mutate({ entriId, maknaId, ...data }, {
       onSuccess: () => setEdit(false),
     });
   };
 
   const handleHapus = () => {
-    if (!bisaHapusContoh) return;
     if (!confirm('Hapus contoh ini?')) return;
     hapusContoh.mutate({ entriId, maknaId, contohId: contoh.id });
   };
@@ -241,13 +239,11 @@ function ItemMakna({
   const ubah = (field, val) => setData((p) => ({ ...p, [field]: val }));
 
   const handleSimpan = () => {
-    if (!bisaEditMakna) return;
     if (!data.makna?.trim()) return;
     simpanMakna.mutate({ entriId, ...data }, { onSuccess: () => setEdit(false) });
   };
 
   const handleHapus = () => {
-    if (!bisaHapusMakna) return;
     if (!confirm('Hapus makna ini beserta semua contohnya?')) return;
     hapusMakna.mutate({ entriId, maknaId: makna.id });
   };
@@ -402,7 +398,6 @@ function SeksiMakna({
   const daftar = resp?.data || [];
 
   const handleTambahMakna = () => {
-    if (!bisaTambahMakna) return;
     if (!maknaBaruTeks.trim()) return;
     simpanMakna.mutate(
       { entriId, makna: maknaBaruTeks, kelas_kata: maknaBaruKelas || null, urutan: daftar.length + 1 },
@@ -710,15 +705,10 @@ function KamusAdmin() {
   const handleUbahInputInduk = (value) => {
     setInputInduk(value);
     setTampilSaranInduk(true);
-    const trimmed = String(value || '').trim();
+    const trimmed = String(value).trim();
+    const indukEntriAktif = panel.data.induk_entri || '';
 
-    if (!trimmed) {
-      panel.ubahField('induk', '');
-      panel.ubahField('induk_entri', '');
-      return;
-    }
-
-    if (panel.data.induk_entri && trimmed !== panel.data.induk_entri) {
+    if (!trimmed || (indukEntriAktif && trimmed !== indukEntriAktif)) {
       panel.ubahField('induk', '');
       panel.ubahField('induk_entri', '');
     }
@@ -734,7 +724,6 @@ function KamusAdmin() {
   };
 
   const bukaTambah = () => {
-    if (!bisaTambah) return;
     setPesan({ error: '', sukses: '' });
     if (entriIdDariPath) {
       sedangMenutupDariPath.current = true;
@@ -744,10 +733,8 @@ function KamusAdmin() {
   };
 
   const bukaSuntingDariDaftar = (item) => {
-    if (!bisaEdit) return;
     setPesan({ error: '', sukses: '' });
-    if (!item?.id) return;
-    navigate(`/redaksi/kamus/${item.id}`);
+    item?.id && navigate(`/redaksi/kamus/${item.id}`);
   };
 
   const handleSimpan = () => {

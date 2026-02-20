@@ -235,6 +235,21 @@ describe('GlosariumAdmin', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/redaksi/glosarium', { replace: true });
   });
 
+  it('mengarahkan ke daftar saat route detail dibuka tapi tidak punya izin edit', () => {
+    mockParams = { id: '5' };
+    mockUseAuth.mockReturnValue({
+      punyaIzin: (izin) => izin === 'tambah_glosarium',
+    });
+
+    render(
+      <MemoryRouter>
+        <GlosariumAdmin />
+      </MemoryRouter>
+    );
+
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/glosarium', { replace: true });
+  });
+
   it('mengabaikan detail route saat payload detail tidak memiliki id', () => {
     mockParams = { id: '3' };
     mockUseDetailGlosariumAdmin.mockReturnValue({ isLoading: false, isError: false, data: { data: {} } });
@@ -309,5 +324,21 @@ describe('GlosariumAdmin', () => {
 
     fireEvent.click(screen.getByText('+ Tambah'));
     expect(mockNavigate).toHaveBeenCalledWith('/redaksi/glosarium', { replace: true });
+  });
+
+  it('menyembunyikan aksi tambah dan hapus saat izin terkait tidak ada', () => {
+    mockParams = { id: '1' };
+    mockUseAuth.mockReturnValue({
+      punyaIzin: (izin) => izin === 'edit_glosarium',
+    });
+
+    render(
+      <MemoryRouter>
+        <GlosariumAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByText('+ Tambah')).not.toBeInTheDocument();
+    expect(screen.queryByText('Hapus')).not.toBeInTheDocument();
   });
 });
