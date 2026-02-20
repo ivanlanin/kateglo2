@@ -26,7 +26,10 @@ vi.mock('../../../src/komponen/bersama/TataLetak', () => ({
 
 describe('DasborAdmin', () => {
   beforeEach(() => {
-    mockUseAuth.mockReturnValue({ adalahAdmin: true });
+    mockUseAuth.mockReturnValue({
+      user: { izin: ['lihat_entri', 'lihat_tesaurus', 'lihat_glosarium', 'kelola_komentar', 'kelola_label', 'kelola_pengguna'] },
+      punyaIzin: () => true,
+    });
   });
 
   it('menampilkan statistik loading', () => {
@@ -59,6 +62,30 @@ describe('DasborAdmin', () => {
     expect(screen.getByText('321')).toBeInTheDocument();
     expect(screen.getByText('12')).toBeInTheDocument();
     expect(screen.getByText('88')).toBeInTheDocument();
+  });
+
+  it('menyembunyikan kartu tanpa izin yang sesuai', () => {
+    mockUseAuth.mockReturnValue({
+      user: { izin: ['lihat_entri', 'lihat_tesaurus'] },
+      punyaIzin: (izin) => ['lihat_entri', 'lihat_tesaurus'].includes(izin),
+    });
+    mockUseStatistikAdmin.mockReturnValue({
+      isLoading: false,
+      data: { data: { entri: 1000, tesaurus: 200, glosarium: 50, label: 321, pengguna: 12, komentar: 88 } },
+    });
+
+    render(
+      <MemoryRouter>
+        <DasborAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Entri Kamus')).toBeInTheDocument();
+    expect(screen.getByText('Entri Tesaurus')).toBeInTheDocument();
+    expect(screen.queryByText('Entri Glosarium')).not.toBeInTheDocument();
+    expect(screen.queryByText('Komentar')).not.toBeInTheDocument();
+    expect(screen.queryByText('Label')).not.toBeInTheDocument();
+    expect(screen.queryByText('Pengguna')).not.toBeInTheDocument();
   });
 
   it('menampilkan fallback strip saat nilai statistik kosong', () => {

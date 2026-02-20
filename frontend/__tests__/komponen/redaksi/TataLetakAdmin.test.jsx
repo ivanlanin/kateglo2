@@ -11,7 +11,11 @@ function TataLetakAdmin(props) {
 
 const mockNavigate = vi.fn();
 const mockLogout = vi.fn();
-const mockUseAuth = vi.fn(() => ({ user: { email: 'admin@kateglo.id' }, logout: mockLogout }));
+const mockUseAuth = vi.fn(() => ({
+  user: { email: 'admin@kateglo.id' },
+  logout: mockLogout,
+  punyaIzin: () => true,
+}));
 
 vi.mock('../../../src/context/authContext', () => ({
   useAuth: () => mockUseAuth(),
@@ -64,7 +68,7 @@ describe('TataLetakAdmin', () => {
   });
 
   it('menangani judul kosong dan fallback nama user', () => {
-    mockUseAuth.mockReturnValueOnce({ user: { name: 'Redaksi' }, logout: mockLogout });
+    mockUseAuth.mockReturnValueOnce({ user: { name: 'Redaksi' }, logout: mockLogout, punyaIzin: () => true });
     render(
       <MemoryRouter initialEntries={['/redaksi/kamus']}>
         <TataLetakAdmin>Konten</TataLetakAdmin>
