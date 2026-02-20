@@ -4,6 +4,7 @@
 
 - Menambahkan fitur pengelolaan peran dan izin pengguna di redaksi
 - Menerapkan izin berbasis peran untuk mengontrol akses ke halaman dan tindakan tertentu
+- Melengkapi filter di redaksi kamus
 
 ## 2026-02-19 Kamis
 
