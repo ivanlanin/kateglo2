@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarGlosariumAdmin, useDetailGlosariumAdmin, useSimpanGlosarium, useHapusGlosarium } from '../../api/apiAdmin';
 import TataLetak from '../../komponen/bersama/TataLetak';
+import { useAuth } from '../../context/authContext';
 import {
   BarisFilterCariAdmin,
   TombolAksiAdmin,
@@ -55,6 +56,7 @@ const kolom = [
 ];
 
 function GlosariumAdmin() {
+  const { punyaIzin } = useAuth();
   const navigate = useNavigate();
   const { id: idParam } = useParams();
   const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit } =
@@ -64,6 +66,9 @@ function GlosariumAdmin() {
   const sedangMenutupDariPath = useRef(false);
   const [filterAktifDraft, setFilterAktifDraft] = useState('');
   const [filterAktif, setFilterAktif] = useState('');
+  const bisaTambah = punyaIzin('tambah_glosarium');
+  const bisaEdit = punyaIzin('edit_glosarium');
+  const bisaHapus = punyaIzin('hapus_glosarium');
 
   const { data: resp, isLoading, isError } = useDaftarGlosariumAdmin({ limit, offset, q, aktif: filterAktif });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailGlosariumAdmin(idDariPath);
@@ -84,6 +89,7 @@ function GlosariumAdmin() {
   }, [idParam, idDariPath, navigate]);
 
   useEffect(() => {
+    if (!bisaEdit) return;
     if (sedangMenutupDariPath.current) return;
     if (!idDariPath || isDetailLoading || isDetailError) return;
     const detail = detailResp?.data;
@@ -91,7 +97,12 @@ function GlosariumAdmin() {
     if (idEditTerbuka.current === detail.id) return;
     panel.bukaUntukSunting(detail);
     idEditTerbuka.current = detail.id;
-  }, [detailResp, idDariPath, isDetailError, isDetailLoading, panel]);
+  }, [bisaEdit, detailResp, idDariPath, isDetailError, isDetailLoading, panel]);
+
+  useEffect(() => {
+    if (!idDariPath || bisaEdit) return;
+    navigate('/redaksi/glosarium', { replace: true });
+  }, [bisaEdit, idDariPath, navigate]);
 
   useEffect(() => {
     if (idDariPath) return;
@@ -114,6 +125,7 @@ function GlosariumAdmin() {
   };
 
   const bukaTambah = () => {
+    if (!bisaTambah) return;
     if (idDariPath) {
       sedangMenutupDariPath.current = true;
       navigate('/redaksi/glosarium', { replace: true });
@@ -122,6 +134,7 @@ function GlosariumAdmin() {
   };
 
   const bukaSuntingDariDaftar = (item) => {
+    if (!bisaEdit) return;
     if (!item?.id) {
       panel.bukaUntukSunting(item);
       return;
@@ -157,7 +170,7 @@ function GlosariumAdmin() {
   };
 
   return (
-    <TataLetak mode="admin" judul="Glosarium" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
+    <TataLetak mode="admin" judul="Glosarium" aksiJudul={bisaTambah ? <TombolAksiAdmin onClick={bukaTambah} /> : null}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -184,25 +197,27 @@ function GlosariumAdmin() {
         limit={limit}
         offset={offset}
         onOffset={setOffset}
-        onKlikBaris={bukaSuntingDariDaftar}
+        onKlikBaris={bisaEdit ? bukaSuntingDariDaftar : undefined}
       />
 
-      <PanelGeser buka={panel.buka} onTutup={tutupPanel} judul={panel.modeTambah ? 'Tambah Glosarium' : 'Sunting Glosarium'}>
-        <PesanForm error={pesan.error} sukses={pesan.sukses} />
-        <InputField label="Indonesia" name="indonesia" value={panel.data.indonesia} onChange={panel.ubahField} required />
-        <InputField label="Asing" name="asing" value={panel.data.asing} onChange={panel.ubahField} required />
-        <InputField label="Bidang" name="bidang" value={panel.data.bidang} onChange={panel.ubahField} />
-        <SelectField label="Bahasa" name="bahasa" value={panel.data.bahasa} onChange={panel.ubahField} options={opsiBahasa} />
-        <InputField label="Sumber" name="sumber" value={panel.data.sumber} onChange={panel.ubahField} />
-        <ToggleAktif value={panel.data.aktif} onChange={panel.ubahField} />
-        <FormFooter
-          onSimpan={handleSimpan}
-          onBatal={tutupPanel}
-          onHapus={handleHapus}
-          isPending={simpan.isPending || hapus.isPending}
-          modeTambah={panel.modeTambah}
-        />
-      </PanelGeser>
+      {bisaEdit && (
+        <PanelGeser buka={panel.buka} onTutup={tutupPanel} judul={panel.modeTambah ? 'Tambah Glosarium' : 'Sunting Glosarium'}>
+          <PesanForm error={pesan.error} sukses={pesan.sukses} />
+          <InputField label="Indonesia" name="indonesia" value={panel.data.indonesia} onChange={panel.ubahField} required />
+          <InputField label="Asing" name="asing" value={panel.data.asing} onChange={panel.ubahField} required />
+          <InputField label="Bidang" name="bidang" value={panel.data.bidang} onChange={panel.ubahField} />
+          <SelectField label="Bahasa" name="bahasa" value={panel.data.bahasa} onChange={panel.ubahField} options={opsiBahasa} />
+          <InputField label="Sumber" name="sumber" value={panel.data.sumber} onChange={panel.ubahField} />
+          <ToggleAktif value={panel.data.aktif} onChange={panel.ubahField} />
+          <FormFooter
+            onSimpan={handleSimpan}
+            onBatal={tutupPanel}
+            onHapus={bisaHapus ? handleHapus : undefined}
+            isPending={simpan.isPending || hapus.isPending}
+            modeTambah={panel.modeTambah}
+          />
+        </PanelGeser>
+      )}
     </TataLetak>
   );
 }

@@ -11,6 +11,7 @@ import {
   useKategoriLabelRedaksi,
 } from '../../api/apiAdmin';
 import TataLetak from '../../komponen/bersama/TataLetak';
+import { useAuth } from '../../context/authContext';
 import { parsePositiveIntegerParam } from '../../utils/routeParam';
 import {
   BarisFilterCariAdmin,
@@ -408,6 +409,7 @@ function SeksiMakna({ entriId, opsiKelasKata, opsiRagam, opsiBidang, opsiBahasa,
 // ─── Main Page ───────────────────────────────────────────────────────────────
 
 function KamusAdmin() {
+  const { punyaIzin } = useAuth();
   const navigate = useNavigate();
   const { id: idParam } = useParams();
   const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit } =
@@ -423,6 +425,9 @@ function KamusAdmin() {
   const [filterPunyaHomonim, setFilterPunyaHomonim] = useState('');
   const [filterAktif, setFilterAktif] = useState('');
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
+  const bisaTambah = punyaIzin('tambah_entri');
+  const bisaEdit = punyaIzin('edit_entri');
+  const bisaHapus = punyaIzin('hapus_entri');
   const entriIdDariPath = parsePositiveIntegerParam(idParam);
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
@@ -501,6 +506,7 @@ function KamusAdmin() {
   }, [idParam, entriIdDariPath, navigate]);
 
   useEffect(() => {
+    if (!bisaEdit) return;
     if (sedangMenutupDariPath.current) return;
     if (!entriIdDariPath || isDetailLoading || isDetailError) return;
     const detailEntri = detailResp?.data;
@@ -508,7 +514,12 @@ function KamusAdmin() {
     if (idEditTerbuka.current === detailEntri.id) return;
     panel.bukaUntukSunting(detailEntri);
     idEditTerbuka.current = detailEntri.id;
-  }, [detailResp, entriIdDariPath, isDetailError, isDetailLoading, panel]);
+  }, [bisaEdit, detailResp, entriIdDariPath, isDetailError, isDetailLoading, panel]);
+
+  useEffect(() => {
+    if (!entriIdDariPath || bisaEdit) return;
+    navigate('/redaksi/kamus', { replace: true });
+  }, [bisaEdit, entriIdDariPath, navigate]);
 
   useEffect(() => {
     if (entriIdDariPath) return;
@@ -531,6 +542,7 @@ function KamusAdmin() {
   };
 
   const bukaTambah = () => {
+    if (!bisaTambah) return;
     if (entriIdDariPath) {
       sedangMenutupDariPath.current = true;
       navigate('/redaksi/kamus', { replace: true });
@@ -539,6 +551,7 @@ function KamusAdmin() {
   };
 
   const bukaSuntingDariDaftar = (item) => {
+    if (!bisaEdit) return;
     if (!item?.id) {
       panel.bukaUntukSunting(item);
       return;
@@ -578,7 +591,7 @@ function KamusAdmin() {
   };
 
   return (
-    <TataLetak mode="admin" judul="Kamus" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
+    <TataLetak mode="admin" judul="Kamus" aksiJudul={bisaTambah ? <TombolAksiAdmin onClick={bukaTambah} /> : null}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -632,51 +645,53 @@ function KamusAdmin() {
         limit={limit}
         offset={offset}
         onOffset={setOffset}
-        onKlikBaris={bukaSuntingDariDaftar}
+        onKlikBaris={bisaEdit ? bukaSuntingDariDaftar : undefined}
       />
 
-      <PanelGeser buka={panel.buka} onTutup={tutupPanel} judul={panel.modeTambah ? 'Tambah Entri' : 'Sunting Entri'}>
-        <PesanForm error={pesan.error} sukses={pesan.sukses} />
-        <InputField label="Entri" name="entri" value={panel.data.entri} onChange={panel.ubahField} required />
-        <InputField
-          label="Indeks"
-          name="indeks"
-          value={panel.data.indeks}
-          onChange={panel.ubahField}
-          placeholder="Kosongkan untuk normalisasi otomatis dari entri"
-        />
-        <div className="grid grid-cols-2 gap-2">
-          <InputField label="Homograf" name="homograf" type="number" value={panel.data.homograf} onChange={panel.ubahField} />
-          <InputField label="Homonim" name="homonim" type="number" value={panel.data.homonim} onChange={panel.ubahField} />
-        </div>
-        <SelectField label="Jenis" name="jenis" value={panel.data.jenis} onChange={panel.ubahField} options={ensureOpsiMemuatNilai(opsiKategori.jenis, panel.data.jenis)} />
-        <InputField label="Lafal" name="lafal" value={panel.data.lafal} onChange={panel.ubahField} placeholder="contoh: la·fal" />
-        <InputField label="Pemenggalan" name="pemenggalan" value={panel.data.pemenggalan} onChange={panel.ubahField} />
-        <InputField label="Varian" name="varian" value={panel.data.varian} onChange={panel.ubahField} />
-        <InputField label="Sumber" name="sumber" value={panel.data.sumber} onChange={panel.ubahField} />
-        <SelectField label="Jenis Rujuk" name="jenis_rujuk" value={panel.data.jenis_rujuk} onChange={panel.ubahField} options={ensureOpsiMemuatNilai(opsiKategori.jenisRujuk, panel.data.jenis_rujuk)} />
-        <InputField label="Entri Rujuk" name="entri_rujuk" value={panel.data.entri_rujuk} onChange={panel.ubahField} />
-        <ToggleAktif value={panel.data.aktif} onChange={panel.ubahField} />
-        <FormFooter
-          onSimpan={handleSimpan}
-          onBatal={tutupPanel}
-          onHapus={handleHapus}
-          isPending={simpan.isPending || hapus.isPending}
-          modeTambah={panel.modeTambah}
-        />
-
-        {/* Makna + Contoh section — only in edit mode */}
-        {!panel.modeTambah && panel.data.id && (
-          <SeksiMakna
-            entriId={panel.data.id}
-            opsiKelasKata={opsiKategori.kelasKata}
-            opsiRagam={opsiKategori.ragam}
-            opsiBidang={opsiKategori.bidang}
-            opsiBahasa={opsiKategori.bahasa}
-            opsiTipePenyingkat={opsiKategori.tipePenyingkat}
+      {bisaEdit && (
+        <PanelGeser buka={panel.buka} onTutup={tutupPanel} judul={panel.modeTambah ? 'Tambah Entri' : 'Sunting Entri'}>
+          <PesanForm error={pesan.error} sukses={pesan.sukses} />
+          <InputField label="Entri" name="entri" value={panel.data.entri} onChange={panel.ubahField} required />
+          <InputField
+            label="Indeks"
+            name="indeks"
+            value={panel.data.indeks}
+            onChange={panel.ubahField}
+            placeholder="Kosongkan untuk normalisasi otomatis dari entri"
           />
-        )}
-      </PanelGeser>
+          <div className="grid grid-cols-2 gap-2">
+            <InputField label="Homograf" name="homograf" type="number" value={panel.data.homograf} onChange={panel.ubahField} />
+            <InputField label="Homonim" name="homonim" type="number" value={panel.data.homonim} onChange={panel.ubahField} />
+          </div>
+          <SelectField label="Jenis" name="jenis" value={panel.data.jenis} onChange={panel.ubahField} options={ensureOpsiMemuatNilai(opsiKategori.jenis, panel.data.jenis)} />
+          <InputField label="Lafal" name="lafal" value={panel.data.lafal} onChange={panel.ubahField} placeholder="contoh: la·fal" />
+          <InputField label="Pemenggalan" name="pemenggalan" value={panel.data.pemenggalan} onChange={panel.ubahField} />
+          <InputField label="Varian" name="varian" value={panel.data.varian} onChange={panel.ubahField} />
+          <InputField label="Sumber" name="sumber" value={panel.data.sumber} onChange={panel.ubahField} />
+          <SelectField label="Jenis Rujuk" name="jenis_rujuk" value={panel.data.jenis_rujuk} onChange={panel.ubahField} options={ensureOpsiMemuatNilai(opsiKategori.jenisRujuk, panel.data.jenis_rujuk)} />
+          <InputField label="Entri Rujuk" name="entri_rujuk" value={panel.data.entri_rujuk} onChange={panel.ubahField} />
+          <ToggleAktif value={panel.data.aktif} onChange={panel.ubahField} />
+          <FormFooter
+            onSimpan={handleSimpan}
+            onBatal={tutupPanel}
+            onHapus={bisaHapus ? handleHapus : undefined}
+            isPending={simpan.isPending || hapus.isPending}
+            modeTambah={panel.modeTambah}
+          />
+
+          {/* Makna + Contoh section — only in edit mode */}
+          {!panel.modeTambah && panel.data.id && (
+            <SeksiMakna
+              entriId={panel.data.id}
+              opsiKelasKata={opsiKategori.kelasKata}
+              opsiRagam={opsiKategori.ragam}
+              opsiBidang={opsiKategori.bidang}
+              opsiBahasa={opsiKategori.bahasa}
+              opsiTipePenyingkat={opsiKategori.tipePenyingkat}
+            />
+          )}
+        </PanelGeser>
+      )}
     </TataLetak>
   );
 }
