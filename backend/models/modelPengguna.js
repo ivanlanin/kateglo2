@@ -41,6 +41,28 @@ class ModelPengguna {
   }
 
   /**
+   * Ambil data peran untuk payload autentikasi
+   * @param {number} peranId
+   * @returns {Promise<{ kode: string, akses_redaksi: boolean }>}
+   */
+  static async ambilPeranUntukAuth(peranId) {
+    const result = await db.query(
+      'SELECT kode, COALESCE(akses_redaksi, FALSE) AS akses_redaksi FROM peran WHERE id = $1',
+      [peranId]
+    );
+
+    const row = result.rows[0];
+    if (!row) {
+      return { kode: 'pengguna', akses_redaksi: false };
+    }
+
+    return {
+      kode: row.kode || 'pengguna',
+      akses_redaksi: Boolean(row.akses_redaksi),
+    };
+  }
+
+  /**
    * Ambil daftar kode izin berdasarkan peran_id
    * @param {number} peranId
    * @returns {Promise<string[]>}
@@ -145,7 +167,7 @@ class ModelPengguna {
    */
   static async daftarPeran() {
     const result = await db.query(
-      'SELECT id, kode, nama, keterangan FROM peran ORDER BY id'
+      'SELECT id, kode, nama, keterangan, COALESCE(akses_redaksi, FALSE) AS akses_redaksi FROM peran ORDER BY id'
     );
     return result.rows;
   }

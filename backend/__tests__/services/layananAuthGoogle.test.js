@@ -228,6 +228,7 @@ describe('services/layananAuthGoogle', () => {
       picture: 'https://img.example/a.png',
       pid: 10,
       peran: 'admin',
+      akses_redaksi: true,
       izin: ['kelola_pengguna'],
     });
 
@@ -240,6 +241,7 @@ describe('services/layananAuthGoogle', () => {
         provider: 'google',
         pid: 10,
         peran: 'admin',
+        akses_redaksi: true,
         izin: ['kelola_pengguna'],
       },
       'jwt-secret',

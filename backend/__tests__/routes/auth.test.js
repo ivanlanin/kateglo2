@@ -24,7 +24,7 @@ jest.mock('../../services/layananAuthGoogle', () => ({
 jest.mock('../../models/modelPengguna', () => ({
   upsertDariGoogle: jest.fn(),
   bootstrapAdmin: jest.fn(),
-  ambilKodePeran: jest.fn(),
+  ambilPeranUntukAuth: jest.fn(),
   ambilIzin: jest.fn(),
 }));
 
@@ -111,7 +111,7 @@ describe('routes/auth', () => {
     layananAuthGoogle.fetchGoogleProfile.mockResolvedValue({ id: 'google-id', email: 'u@example.com', name: 'User', picture: 'https://img.example/u.png' });
     ModelPengguna.upsertDariGoogle.mockResolvedValue({ id: 1, peran_id: 1, email: 'u@example.com' });
     ModelPengguna.bootstrapAdmin.mockResolvedValue({ id: 1, peran_id: 1, email: 'u@example.com' });
-    ModelPengguna.ambilKodePeran.mockResolvedValue('pengguna');
+    ModelPengguna.ambilPeranUntukAuth.mockResolvedValue({ kode: 'pengguna', akses_redaksi: false });
     ModelPengguna.ambilIzin.mockResolvedValue(['lihat_lema']);
     layananAuthGoogle.buildAppToken.mockReturnValue('app-token-123');
     layananAuthGoogle.buildFrontendCallbackRedirect.mockReturnValue('http://localhost:5173/auth/callback#token=app-token-123');
@@ -131,6 +131,7 @@ describe('routes/auth', () => {
       id: 'google-id',
       pid: 1,
       peran: 'pengguna',
+      akses_redaksi: false,
       izin: ['lihat_lema'],
     }));
     expect(layananAuthGoogle.buildFrontendCallbackRedirect).toHaveBeenCalledWith('app-token-123', {

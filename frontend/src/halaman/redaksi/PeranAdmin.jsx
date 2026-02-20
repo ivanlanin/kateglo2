@@ -14,6 +14,7 @@ import TataLetak from '../../komponen/bersama/TataLetak';
 import {
   BarisFilterCariAdmin,
   TombolAksiAdmin,
+  BadgeStatus,
   TabelAdmin,
   getApiErrorMessage,
   potongTeks,
@@ -30,7 +31,7 @@ import {
 } from '../../komponen/redaksi/FormAdmin';
 import { parsePositiveIntegerParam } from '../../utils/routeParam';
 
-const nilaiAwal = { kode: '', nama: '', keterangan: '', izin_ids: [] };
+const nilaiAwal = { kode: '', nama: '', keterangan: '', akses_redaksi: false, izin_ids: [] };
 
 const kolom = [
   { key: 'kode', label: 'Kode' },
@@ -46,11 +47,16 @@ const kolom = [
     render: (item) => item.jumlah_izin ?? 0,
   },
   {
-    key: 'izin_kode',
+    key: 'akses_redaksi',
+    label: 'Redaksi',
+    render: (item) => <BadgeStatus aktif={item.akses_redaksi} />,
+  },
+  {
+    key: 'izin_nama',
     label: 'Daftar Izin',
     render: (item) => (
       <span className="text-gray-600 dark:text-gray-400">
-        {potongTeks((item.izin_kode || []).join(', '), 70)}
+        {potongTeks((item.izin_nama || []).join(', '), 70)}
       </span>
     ),
   },
@@ -160,6 +166,10 @@ function PeranAdmin() {
     panel.ubahField('izin_ids', [...izinIdsSekarang, id]);
   };
 
+  const toggleAksesRedaksi = () => {
+    panel.ubahField('akses_redaksi', !panel.data.akses_redaksi);
+  };
+
   const handleSimpan = () => {
     setPesan({ error: '', sukses: '' });
 
@@ -174,6 +184,7 @@ function PeranAdmin() {
 
     const payload = {
       ...panel.data,
+      akses_redaksi: panel.data.akses_redaksi,
       izin_ids: Array.isArray(panel.data.izin_ids)
         ? panel.data.izin_ids.map((item) => Number(item)).filter((item) => Number.isInteger(item) && item > 0)
         : [],
@@ -219,6 +230,26 @@ function PeranAdmin() {
         <TextareaField label="Keterangan" name="keterangan" value={panel.data.keterangan} onChange={panel.ubahField} rows={3} />
 
         <div className="form-admin-group">
+          <label className="form-admin-label">Redaksi</label>
+          <button
+            type="button"
+            onClick={toggleAksesRedaksi}
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+              panel.data.akses_redaksi ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'
+            }`}
+          >
+            <span
+              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                panel.data.akses_redaksi ? 'translate-x-6' : 'translate-x-1'
+              }`}
+            />
+          </button>
+          <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
+            {panel.data.akses_redaksi ? 'Aktif' : 'Nonaktif'}
+          </span>
+        </div>
+
+        <div className="form-admin-group">
           <label className="form-admin-label">Izin</label>
           {isIzinLoading ? (
             <p className="text-sm text-gray-500 dark:text-gray-400">Memuat daftar izin …</p>
@@ -243,7 +274,6 @@ function PeranAdmin() {
                           />
                           <span>
                             <span className="font-medium">{izin.nama}</span>
-                            <span className="block text-xs text-gray-500 dark:text-gray-400">{izin.kode}</span>
                           </span>
                         </label>
                       );

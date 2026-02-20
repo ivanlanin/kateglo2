@@ -24,7 +24,6 @@ import PanelGeser from '../../komponen/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
-  TextareaField,
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
@@ -46,11 +45,11 @@ const kolom = [
     render: (item) => item.jumlah_peran ?? 0,
   },
   {
-    key: 'peran_kode',
+    key: 'peran_nama',
     label: 'Daftar Peran',
     render: (item) => (
       <span className="text-gray-600 dark:text-gray-400">
-        {potongTeks((item.peran_kode || []).join(', '), 70)}
+        {potongTeks((item.peran_nama || []).join(', '), 70)}
       </span>
     ),
   },
@@ -199,7 +198,7 @@ function IzinAdmin() {
         <PesanForm error={pesan.error} sukses={pesan.sukses} />
         <InputField label="Kode" name="kode" value={panel.data.kode} onChange={panel.ubahField} required />
         <InputField label="Nama" name="nama" value={panel.data.nama} onChange={panel.ubahField} required />
-        <TextareaField label="Kelompok" name="kelompok" value={panel.data.kelompok} onChange={panel.ubahField} rows={2} />
+        <InputField label="Kelompok" name="kelompok" value={panel.data.kelompok} onChange={panel.ubahField} />
 
         <div className="form-admin-group">
           <label className="form-admin-label">Peran</label>
@@ -222,7 +221,6 @@ function IzinAdmin() {
                     />
                     <span>
                       <span className="font-medium">{peran.nama}</span>
-                      <span className="block text-xs text-gray-500 dark:text-gray-400">{peran.kode}</span>
                     </span>
                   </label>
                 );

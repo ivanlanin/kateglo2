@@ -160,6 +160,7 @@ function buildAppToken(profile) {
   // Tambah data otorisasi dari database jika tersedia
   if (profile.pid != null) payload.pid = profile.pid;
   if (profile.peran) payload.peran = profile.peran;
+  if (profile.akses_redaksi != null) payload.akses_redaksi = Boolean(profile.akses_redaksi);
   if (profile.izin) payload.izin = profile.izin;
 
   return jwt.sign(payload, jwtSecret, { expiresIn });

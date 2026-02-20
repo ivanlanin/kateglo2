@@ -17,6 +17,7 @@ router.get('/me', authenticate, (req, res) => {
       name: req.user.name,
       picture: req.user.picture,
       peran: req.user.peran,
+      akses_redaksi: Boolean(req.user.akses_redaksi),
       izin: req.user.izin || [],
       provider: req.user.provider,
     },

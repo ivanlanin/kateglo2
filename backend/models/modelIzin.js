@@ -58,11 +58,11 @@ class ModelIzin {
            WHERE pi.izin_id = i.id
          ) AS jumlah_peran,
          COALESCE((
-           SELECT array_agg(p.kode ORDER BY p.kode)
+           SELECT array_agg(p.nama ORDER BY p.nama)
            FROM peran_izin pi
            JOIN peran p ON p.id = pi.peran_id
            WHERE pi.izin_id = i.id
-         ), ARRAY[]::text[]) AS peran_kode
+         ), ARRAY[]::text[]) AS peran_nama
        FROM izin i
        ${whereSql}
        ORDER BY i.id ASC
@@ -89,11 +89,11 @@ class ModelIzin {
            WHERE pi.izin_id = i.id
          ), ARRAY[]::int[]) AS peran_ids,
          COALESCE((
-           SELECT array_agg(p.kode ORDER BY p.kode)
+           SELECT array_agg(p.nama ORDER BY p.nama)
            FROM peran_izin pi
            JOIN peran p ON p.id = pi.peran_id
            WHERE pi.izin_id = i.id
-         ), ARRAY[]::text[]) AS peran_kode
+         ), ARRAY[]::text[]) AS peran_nama
        FROM izin i
        WHERE i.id = $1`,
       [id]
