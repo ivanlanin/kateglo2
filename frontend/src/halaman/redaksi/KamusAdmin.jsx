@@ -467,7 +467,7 @@ function KamusAdmin() {
   const { punyaIzin } = useAuth();
   const navigate = useNavigate();
   const { id: idParam } = useParams();
-  const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit } =
+  const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit, currentPage, cursor, direction, lastPage } =
     usePencarianAdmin(50);
   const [filterJenisDraft, setFilterJenisDraft] = useState('');
   const [filterPunyaHomografDraft, setFilterPunyaHomografDraft] = useState('');
@@ -509,7 +509,9 @@ function KamusAdmin() {
 
   const { data: resp, isLoading, isError } = useDaftarKamusAdmin({
     limit,
-    offset,
+    cursor,
+    direction,
+    lastPage,
     q,
     aktif: filterAktif,
     jenis: filterJenis,
@@ -875,7 +877,9 @@ function KamusAdmin() {
         total={total}
         limit={limit}
         offset={offset}
-        onOffset={setOffset}
+        pageInfo={resp?.pageInfo}
+        currentPage={currentPage}
+        onNavigateCursor={(action) => setOffset(action, { pageInfo: resp?.pageInfo, total })}
         onKlikBaris={bisaEdit ? bukaSuntingDariDaftar : undefined}
       />
 

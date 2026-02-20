@@ -6,6 +6,7 @@ const express = require('express');
 const { periksaIzin } = require('../../middleware/otorisasi');
 const ModelIzin = require('../../models/modelIzin');
 const {
+  buildPaginatedResult,
   parsePagination,
   parseSearchQuery,
   parseIdParam,
@@ -28,7 +29,7 @@ router.get('/', periksaIzin('kelola_peran'), async (req, res, next) => {
     const { limit, offset } = parsePagination(req.query);
     const q = parseSearchQuery(req.query.q);
     const { data, total } = await ModelIzin.daftarIzin({ limit, offset, q });
-    return res.json({ success: true, data, total });
+    return res.json({ success: true, ...buildPaginatedResult({ data, total, pagination: { limit, offset } }) });
   } catch (error) {
     return next(error);
   }

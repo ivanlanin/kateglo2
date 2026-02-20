@@ -33,7 +33,7 @@ function formatTanggal(dateStr) {
 function PenggunaAdmin() {
   const navigate = useNavigate();
   const { id: idParam } = useParams();
-  const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit } = usePencarianAdmin(20);
+  const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit, currentPage, cursor, direction, lastPage } = usePencarianAdmin(20);
   const [filterAktifDraft, setFilterAktifDraft] = useState('');
   const [filterAktif, setFilterAktif] = useState('');
   const idDariPath = parsePositiveIntegerParam(idParam);
@@ -42,7 +42,9 @@ function PenggunaAdmin() {
 
   const { data: penggunaResp, isLoading, isError } = useDaftarPengguna({
     limit,
-    offset,
+    cursor,
+    direction,
+    lastPage,
     q,
     aktif: filterAktif,
   });
@@ -191,7 +193,9 @@ function PenggunaAdmin() {
         total={total}
         limit={limit}
         offset={offset}
-        onOffset={setOffset}
+        pageInfo={penggunaResp?.pageInfo}
+        currentPage={currentPage}
+        onNavigateCursor={(action) => setOffset(action, { pageInfo: penggunaResp?.pageInfo, total })}
         onKlikBaris={handleBukaSunting}
       />
 

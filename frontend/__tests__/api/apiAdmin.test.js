@@ -74,13 +74,17 @@ describe('apiAdmin', () => {
     await statistik.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/statistik');
 
-    const kamus = useDaftarKamusAdmin({ limit: 10, offset: 5, q: 'anak' });
+    const kamus = useDaftarKamusAdmin({ limit: 10, q: 'anak' });
     await kamus.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus', { params: { limit: 10, offset: 5, q: 'anak', aktif: undefined } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus', {
+      params: { limit: 10, cursor: undefined, direction: 'next', lastPage: undefined, q: 'anak', aktif: undefined },
+    });
 
-    const kamusKosong = useDaftarKamusAdmin({ limit: 10, offset: 5, q: '' });
+    const kamusKosong = useDaftarKamusAdmin({ limit: 10, q: '' });
     await kamusKosong.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus', { params: { limit: 10, offset: 5, q: undefined, aktif: undefined } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus', {
+      params: { limit: 10, cursor: undefined, direction: 'next', lastPage: undefined, q: undefined, aktif: undefined },
+    });
 
     const indukAutocomplete = useAutocompleteIndukKamus({ q: '  akar ', limit: 12, excludeId: 9 });
     expect(indukAutocomplete.enabled).toBe(true);
@@ -131,7 +135,6 @@ describe('apiAdmin', () => {
 
     const kamusDenganFilter = useDaftarKamusAdmin({
       limit: 15,
-      offset: 0,
       q: 'kata',
       aktif: '1',
       jenis: 'dasar',
@@ -143,7 +146,9 @@ describe('apiAdmin', () => {
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus', {
       params: {
         limit: 15,
-        offset: 0,
+        cursor: undefined,
+        direction: 'next',
+        lastPage: undefined,
         q: 'kata',
         aktif: '1',
         jenis: 'dasar',
@@ -155,7 +160,6 @@ describe('apiAdmin', () => {
 
     const kamusDenganSemuaFilter = useDaftarKamusAdmin({
       limit: 11,
-      offset: 2,
       q: 'ujicoba',
       kelasKata: 'n',
       ragam: 'cak',
@@ -170,7 +174,9 @@ describe('apiAdmin', () => {
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus', {
       params: {
         limit: 11,
-        offset: 2,
+        cursor: undefined,
+        direction: 'next',
+        lastPage: undefined,
         q: 'ujicoba',
         kelas_kata: 'n',
         ragam: 'cak',
@@ -185,15 +191,15 @@ describe('apiAdmin', () => {
 
     const tesaurus = useDaftarTesaurusAdmin({});
     await tesaurus.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/tesaurus', { params: { limit: 50, offset: 0, q: undefined, aktif: undefined } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/tesaurus', { params: { limit: 50, cursor: undefined, direction: 'next', lastPage: undefined, q: undefined, aktif: undefined } });
 
     const glosarium = useDaftarGlosariumAdmin({ q: '' });
     await glosarium.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium', { params: { limit: 50, offset: 0, q: undefined, aktif: undefined } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium', { params: { limit: 50, cursor: undefined, direction: 'next', lastPage: undefined, q: undefined, aktif: undefined } });
 
     const label = useDaftarLabelAdmin({ q: '' });
     await label.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/label', { params: { limit: 50, offset: 0, q: undefined, aktif: undefined } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/label', { params: { limit: 50, cursor: undefined, direction: 'next', lastPage: undefined, q: undefined, aktif: undefined } });
 
     const kategoriLabel = useKategoriLabelRedaksi(['ragam', 'kelas-kata']);
     await kategoriLabel.queryFn();
@@ -203,21 +209,27 @@ describe('apiAdmin', () => {
     await kategoriLabelKosong.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/label/kategori', { params: { nama: undefined } });
 
-    const pengguna = useDaftarPengguna({ limit: 20, offset: 40 });
+    const pengguna = useDaftarPengguna({ limit: 20 });
     await pengguna.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/pengguna', { params: { limit: 20, offset: 40, q: undefined, aktif: undefined } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/pengguna', {
+      params: { limit: 20, cursor: undefined, direction: 'next', lastPage: undefined, q: undefined, aktif: undefined },
+    });
 
     const peran = useDaftarPeran();
     await peran.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/pengguna/peran');
 
-    const peranAdmin = useDaftarPeranAdmin({ limit: 30, offset: 10, q: 'adm' });
+    const peranAdmin = useDaftarPeranAdmin({ limit: 30, q: 'adm' });
     await peranAdmin.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/peran', { params: { limit: 30, offset: 10, q: 'adm' } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/peran', {
+      params: { limit: 30, cursor: undefined, direction: 'next', lastPage: undefined, q: 'adm' },
+    });
 
-    const peranAdminTanpaQ = useDaftarPeranAdmin({ limit: 5, offset: 1, q: '' });
+    const peranAdminTanpaQ = useDaftarPeranAdmin({ limit: 5, q: '' });
     await peranAdminTanpaQ.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/peran', { params: { limit: 5, offset: 1, q: undefined } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/peran', {
+      params: { limit: 5, cursor: undefined, direction: 'next', lastPage: undefined, q: undefined },
+    });
 
     const detailPeran = useDetailPeranAdmin(99);
     expect(detailPeran.enabled).toBe(true);
@@ -232,13 +244,17 @@ describe('apiAdmin', () => {
     await daftarIzinTanpaQ.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/peran/izin', { params: { q: undefined } });
 
-    const izinKelola = useDaftarIzinKelolaAdmin({ limit: 40, offset: 20, q: 'lihat' });
+    const izinKelola = useDaftarIzinKelolaAdmin({ limit: 40, q: 'lihat' });
     await izinKelola.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/izin', { params: { limit: 40, offset: 20, q: 'lihat' } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/izin', {
+      params: { limit: 40, cursor: undefined, direction: 'next', lastPage: undefined, q: 'lihat' },
+    });
 
-    const izinKelolaTanpaQ = useDaftarIzinKelolaAdmin({ limit: 7, offset: 3, q: '' });
+    const izinKelolaTanpaQ = useDaftarIzinKelolaAdmin({ limit: 7, q: '' });
     await izinKelolaTanpaQ.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/izin', { params: { limit: 7, offset: 3, q: undefined } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/izin', {
+      params: { limit: 7, cursor: undefined, direction: 'next', lastPage: undefined, q: undefined },
+    });
 
     const detailIzin = useDetailIzinAdmin(101);
     expect(detailIzin.enabled).toBe(true);
@@ -264,9 +280,11 @@ describe('apiAdmin', () => {
     const maknaKosong = useDaftarMakna(null);
     expect(maknaKosong.enabled).toBe(false);
 
-    const komentar = useDaftarKomentarAdmin({ limit: 25, offset: 10, q: 'kata' });
+    const komentar = useDaftarKomentarAdmin({ limit: 25, q: 'kata' });
     await komentar.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/komentar', { params: { limit: 25, offset: 10, q: 'kata', aktif: undefined } });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/komentar', {
+      params: { limit: 25, cursor: undefined, direction: 'next', lastPage: undefined, q: 'kata', aktif: undefined },
+    });
 
     const detailKamus = useDetailKamusAdmin(12);
     expect(detailKamus.enabled).toBe(true);

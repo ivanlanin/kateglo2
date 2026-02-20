@@ -33,6 +33,7 @@ jest.mock('../../models/modelEntri', () => ({
 
 jest.mock('../../models/modelTesaurus', () => ({
   daftarAdmin: jest.fn(),
+  daftarAdminCursor: jest.fn(),
   ambilDenganId: jest.fn(),
   simpan: jest.fn(),
   hapus: jest.fn(),
@@ -49,6 +50,7 @@ jest.mock('../../models/modelGlosarium', () => ({
 
 jest.mock('../../models/modelLabel', () => ({
   daftarAdmin: jest.fn(),
+  daftarAdminCursor: jest.fn(),
   ambilKategoriUntukRedaksi: jest.fn(),
   ambilDenganId: jest.fn(),
   simpan: jest.fn(),
@@ -167,7 +169,7 @@ describe('routes/redaksi', () => {
       expect(response.status).toBe(200);
       expect(ModelPengguna.daftarPengguna).toHaveBeenCalledWith({
         limit: 9,
-        offset: 2,
+        offset: 0,
         q: '',
         aktif: '',
       });
@@ -801,7 +803,7 @@ describe('routes/redaksi', () => {
       const response = await callAsAdmin('get', '/api/redaksi/komentar?limit=25&offset=5&q=kata');
 
       expect(response.status).toBe(200);
-      expect(ModelKomentar.daftarAdmin).toHaveBeenCalledWith({ limit: 25, offset: 5, q: 'kata', aktif: '' });
+      expect(ModelKomentar.daftarAdmin).toHaveBeenCalledWith({ limit: 25, offset: 0, q: 'kata', aktif: '' });
       expect(response.body.total).toBe(1);
     });
 
@@ -904,7 +906,7 @@ describe('routes/redaksi', () => {
       const response = await callAsAdmin('get', '/api/redaksi/peran?limit=9&offset=2&q= adm ');
 
       expect(response.status).toBe(200);
-      expect(ModelPeran.daftarPeran).toHaveBeenCalledWith({ limit: 9, offset: 2, q: 'adm' });
+      expect(ModelPeran.daftarPeran).toHaveBeenCalledWith({ limit: 9, offset: 0, q: 'adm' });
       expect(response.body.total).toBe(1);
     });
 
@@ -1055,7 +1057,7 @@ describe('routes/redaksi', () => {
       const response = await callAsAdmin('get', '/api/redaksi/izin?limit=9&offset=2&q= kelola ');
 
       expect(response.status).toBe(200);
-      expect(ModelIzin.daftarIzin).toHaveBeenCalledWith({ limit: 9, offset: 2, q: 'kelola' });
+      expect(ModelIzin.daftarIzin).toHaveBeenCalledWith({ limit: 9, offset: 0, q: 'kelola' });
       expect(response.body.total).toBe(1);
     });
 
@@ -1153,7 +1155,14 @@ describe('routes/redaksi', () => {
 
   describe('tesaurus', () => {
     it('CRUD /api/redaksi/tesaurus mencakup cabang utama', async () => {
-      ModelTesaurus.daftarAdmin.mockResolvedValue({ data: [{ id: 1 }], total: 1 });
+      ModelTesaurus.daftarAdminCursor.mockResolvedValue({
+        data: [{ id: 1 }],
+        total: 1,
+        hasPrev: false,
+        hasNext: false,
+        prevCursor: null,
+        nextCursor: null,
+      });
       const list = await callAsAdmin('get', '/api/redaksi/tesaurus?limit=10&offset=1&q=akt');
 
       ModelTesaurus.ambilDenganId.mockResolvedValueOnce(null).mockResolvedValueOnce({ id: 1, indeks: 'aktif' });
@@ -1184,21 +1193,30 @@ describe('routes/redaksi', () => {
     });
 
     it('GET /api/redaksi/tesaurus meneruskan aktif valid', async () => {
-      ModelTesaurus.daftarAdmin.mockResolvedValue({ data: [], total: 0 });
+      ModelTesaurus.daftarAdminCursor.mockResolvedValue({
+        data: [],
+        total: 0,
+        hasPrev: false,
+        hasNext: false,
+        prevCursor: null,
+        nextCursor: null,
+      });
 
       const response = await callAsAdmin('get', '/api/redaksi/tesaurus?aktif=1');
 
       expect(response.status).toBe(200);
-      expect(ModelTesaurus.daftarAdmin).toHaveBeenCalledWith({
+      expect(ModelTesaurus.daftarAdminCursor).toHaveBeenCalledWith({
         limit: 50,
-        offset: 0,
         q: '',
         aktif: '1',
+        cursor: null,
+        direction: 'next',
+        lastPage: false,
       });
     });
 
     it('CRUD /api/redaksi/tesaurus meneruskan error', async () => {
-      ModelTesaurus.daftarAdmin.mockRejectedValueOnce(new Error('tesaurus list gagal'));
+      ModelTesaurus.daftarAdminCursor.mockRejectedValueOnce(new Error('tesaurus list gagal'));
       ModelTesaurus.ambilDenganId.mockRejectedValueOnce(new Error('tesaurus detail gagal'));
       ModelTesaurus.simpan.mockRejectedValueOnce(new Error('tesaurus simpan gagal')).mockRejectedValueOnce(new Error('tesaurus update gagal'));
       ModelTesaurus.hapus.mockRejectedValueOnce(new Error('tesaurus hapus gagal'));
@@ -1311,7 +1329,14 @@ describe('routes/redaksi', () => {
 
   describe('label', () => {
     it('CRUD /api/redaksi/label mencakup cabang utama', async () => {
-      ModelLabel.daftarAdmin.mockResolvedValue({ data: [{ id: 1 }], total: 1 });
+      ModelLabel.daftarAdminCursor.mockResolvedValue({
+        data: [{ id: 1 }],
+        total: 1,
+        hasPrev: false,
+        hasNext: false,
+        prevCursor: null,
+        nextCursor: null,
+      });
       const list = await callAsAdmin('get', '/api/redaksi/label?limit=10&offset=1&q=ragam');
 
       ModelLabel.ambilDenganId.mockResolvedValueOnce(null).mockResolvedValueOnce({ id: 1, nama: 'ragam resmi' });
@@ -1358,12 +1383,26 @@ describe('routes/redaksi', () => {
     });
 
     it('GET /api/redaksi/label meneruskan aktif valid', async () => {
-      ModelLabel.daftarAdmin.mockResolvedValue({ data: [], total: 0 });
+      ModelLabel.daftarAdminCursor.mockResolvedValue({
+        data: [],
+        total: 0,
+        hasPrev: false,
+        hasNext: false,
+        prevCursor: null,
+        nextCursor: null,
+      });
 
       const response = await callAsAdmin('get', '/api/redaksi/label?aktif=1');
 
       expect(response.status).toBe(200);
-      expect(ModelLabel.daftarAdmin).toHaveBeenCalledWith({ limit: 50, offset: 0, q: '', aktif: '1' });
+      expect(ModelLabel.daftarAdminCursor).toHaveBeenCalledWith({
+        limit: 50,
+        q: '',
+        aktif: '1',
+        cursor: null,
+        direction: 'next',
+        lastPage: false,
+      });
     });
 
     it('GET /api/redaksi/label/kategori mendukung query nama dan default', async () => {
@@ -1471,7 +1510,7 @@ describe('routes/redaksi', () => {
     });
 
     it('CRUD /api/redaksi/label meneruskan error', async () => {
-      ModelLabel.daftarAdmin.mockRejectedValueOnce(new Error('label list gagal'));
+      ModelLabel.daftarAdminCursor.mockRejectedValueOnce(new Error('label list gagal'));
       ModelLabel.ambilDenganId.mockRejectedValueOnce(new Error('label detail gagal'));
       ModelLabel.simpan
         .mockRejectedValueOnce(new Error('label simpan gagal'))

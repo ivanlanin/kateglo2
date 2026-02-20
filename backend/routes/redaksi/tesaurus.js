@@ -6,6 +6,7 @@ const express = require('express');
 const { periksaIzin } = require('../../middleware/otorisasi');
 const ModelTesaurus = require('../../models/modelTesaurus');
 const {
+  buildPaginatedResult,
   parsePagination,
   parseSearchQuery,
   parseIdParam,
@@ -20,17 +21,33 @@ const router = express.Router();
  */
 router.get('/', periksaIzin('lihat_tesaurus'), async (req, res, next) => {
   try {
-    const { limit, offset } = parsePagination(req.query);
+    const { limit, offset, cursor, direction, lastPage } = parsePagination(req.query);
     const q = parseSearchQuery(req.query.q);
     const aktif = parseTrimmedString(req.query.aktif);
+    const aktifFilter = ['0', '1'].includes(aktif) ? aktif : '';
 
-    const { data, total } = await ModelTesaurus.daftarAdmin({
+    const result = await ModelTesaurus.daftarAdminCursor({
       limit,
-      offset,
       q,
-      aktif: ['0', '1'].includes(aktif) ? aktif : '',
+      aktif: aktifFilter,
+      cursor,
+      direction,
+      lastPage,
     });
-    return res.json({ success: true, data, total });
+    return res.json({
+      success: true,
+      ...buildPaginatedResult({
+        data: result.data,
+        total: result.total,
+        pagination: { limit, offset },
+        pageInfo: {
+          hasPrev: result.hasPrev,
+          hasNext: result.hasNext,
+          prevCursor: result.prevCursor,
+          nextCursor: result.nextCursor,
+        },
+      }),
+    });
   } catch (error) {
     return next(error);
   }

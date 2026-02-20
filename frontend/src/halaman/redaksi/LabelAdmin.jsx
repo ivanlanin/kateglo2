@@ -52,14 +52,21 @@ const kolom = [
 function LabelAdmin() {
   const navigate = useNavigate();
   const { id: idParam } = useParams();
-  const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit } = usePencarianAdmin(50);
+  const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit, currentPage, cursor, direction, lastPage } = usePencarianAdmin(50);
   const idDariPath = parsePositiveIntegerParam(idParam);
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
   const [filterAktifDraft, setFilterAktifDraft] = useState('');
   const [filterAktif, setFilterAktif] = useState('');
 
-  const { data: resp, isLoading, isError } = useDaftarLabelAdmin({ limit, offset, q, aktif: filterAktif });
+  const { data: resp, isLoading, isError } = useDaftarLabelAdmin({
+    limit,
+    cursor,
+    direction,
+    lastPage,
+    q,
+    aktif: filterAktif,
+  });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailLabelAdmin(idDariPath);
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
@@ -190,7 +197,9 @@ function LabelAdmin() {
         total={total}
         limit={limit}
         offset={offset}
-        onOffset={setOffset}
+        pageInfo={resp?.pageInfo}
+        currentPage={currentPage}
+        onNavigateCursor={(action) => setOffset(action, { pageInfo: resp?.pageInfo, total })}
         onKlikBaris={bukaSuntingDariDaftar}
       />
 

@@ -58,12 +58,12 @@ const kolom = [
 function IzinAdmin() {
   const navigate = useNavigate();
   const { id: idParam } = useParams();
-  const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit } = usePencarianAdmin(50);
+  const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit, currentPage, cursor, direction, lastPage } = usePencarianAdmin(50);
   const idDariPath = parsePositiveIntegerParam(idParam);
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
 
-  const { data: resp, isLoading, isError } = useDaftarIzinKelolaAdmin({ limit, offset, q });
+  const { data: resp, isLoading, isError } = useDaftarIzinKelolaAdmin({ limit, cursor, direction, lastPage, q });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailIzinAdmin(idDariPath);
   const { data: peranResp, isLoading: isPeranLoading } = useDaftarPeranUntukIzinAdmin();
 
@@ -185,7 +185,9 @@ function IzinAdmin() {
         total={total}
         limit={limit}
         offset={offset}
-        onOffset={setOffset}
+        pageInfo={resp?.pageInfo}
+        currentPage={currentPage}
+        onNavigateCursor={(action) => setOffset(action, { pageInfo: resp?.pageInfo, total })}
         onKlikBaris={bukaSuntingDariDaftar}
       />
 

@@ -6,6 +6,7 @@
 - Menerapkan izin berbasis peran untuk mengontrol akses ke halaman dan tindakan tertentu
 - Melengkapi filter di redaksi kamus
 - Menambahkan kolom "Makna" di tabel redaksi kamus
+- Mengganti paginasi dari ofset menjadi kursor agar lebih efisien
 
 ## 2026-02-19 Kamis
 

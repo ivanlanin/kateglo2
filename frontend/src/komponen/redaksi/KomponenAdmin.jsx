@@ -4,6 +4,7 @@
 
 import { useState } from 'react';
 import Paginasi from '../bersama/Paginasi';
+import { useCursorPagination } from '../../hooks/bersama/useCursorPagination';
 
 // ─── Utilitas ────────────────────────────────────────────────────────────────
 
@@ -53,7 +54,26 @@ export function getApiErrorMessage(err, fallbackMessage = 'Terjadi kesalahan') {
 export function usePencarianAdmin(batasPerHalaman = 50) {
   const [cari, setCari] = useState('');
   const [q, setQ] = useState('');
-  const [offset, setOffset] = useState(0);
+  const {
+    cursorState,
+    handleCursor,
+  } = useCursorPagination({
+    limit: batasPerHalaman,
+    resetOn: q,
+  });
+
+  const setOffset = (value, { pageInfo, total } = {}) => {
+    if (typeof value === 'number') {
+      if (value <= 0) {
+        handleCursor('first', { pageInfo, total });
+      }
+      return;
+    }
+
+    if (typeof value === 'string') {
+      handleCursor(value, { pageInfo, total });
+    }
+  };
 
   const kirimCari = (nilai) => {
     const val = nilai ?? cari;
@@ -67,7 +87,20 @@ export function usePencarianAdmin(batasPerHalaman = 50) {
     setOffset(0);
   };
 
-  return { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit: batasPerHalaman };
+  return {
+    cari,
+    setCari,
+    q,
+    offset: Math.max((cursorState.page - 1) * batasPerHalaman, 0),
+    setOffset,
+    kirimCari,
+    hapusCari,
+    limit: batasPerHalaman,
+    currentPage: cursorState.page,
+    cursor: cursorState.cursor,
+    direction: cursorState.direction,
+    lastPage: cursorState.lastPage,
+  };
 }
 
 export const opsiFilterStatusAktif = [
@@ -267,13 +300,17 @@ export function TabelAdmin({
   limit,
   offset,
   onOffset,
+  pageInfo,
+  currentPage,
+  onNavigateCursor,
   onKlikBaris,
 }) {
   const baseThClass =
     'px-6 py-3 text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider';
   const baseTdClass = 'px-6 py-3 text-sm text-gray-700 dark:text-gray-300';
   const getAlignClass = (align) => (align === 'center' ? 'text-center' : 'text-left');
-  const tampilkanPaginasi = total > 0 && limit && onOffset;
+  const handlerCursor = onNavigateCursor || (pageInfo ? onOffset : null);
+  const tampilkanPaginasi = total > 0 && limit && (onOffset || handlerCursor);
 
   if (isLoading) {
     return (
@@ -303,7 +340,15 @@ export function TabelAdmin({
     <>
       {tampilkanPaginasi && (
         <div className="mb-4">
-          <Paginasi total={total} limit={limit} offset={offset} onChange={onOffset} />
+          <Paginasi
+            total={total}
+            limit={limit}
+            offset={offset}
+            onChange={handlerCursor ? undefined : onOffset}
+            pageInfo={pageInfo}
+            currentPage={currentPage}
+            onNavigateCursor={handlerCursor || undefined}
+          />
         </div>
       )}
 
@@ -339,7 +384,15 @@ export function TabelAdmin({
       </div>
       {tampilkanPaginasi && (
         <div className="mt-4">
-          <Paginasi total={total} limit={limit} offset={offset} onChange={onOffset} />
+          <Paginasi
+            total={total}
+            limit={limit}
+            offset={offset}
+            onChange={handlerCursor ? undefined : onOffset}
+            pageInfo={pageInfo}
+            currentPage={currentPage}
+            onNavigateCursor={handlerCursor || undefined}
+          />
         </div>
       )}
     </>

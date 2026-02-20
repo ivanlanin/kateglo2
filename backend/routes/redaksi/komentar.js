@@ -6,6 +6,7 @@ const express = require('express');
 const { periksaIzin } = require('../../middleware/otorisasi');
 const ModelKomentar = require('../../models/modelKomentar');
 const {
+  buildPaginatedResult,
   parsePagination,
   parseSearchQuery,
   parseIdParam,
@@ -26,7 +27,7 @@ router.get('/', periksaIzin('kelola_komentar'), async (req, res, next) => {
       q,
       aktif: ['0', '1'].includes(aktif) ? aktif : '',
     });
-    return res.json({ success: true, data, total });
+    return res.json({ success: true, ...buildPaginatedResult({ data, total, pagination: { limit, offset } }) });
   } catch (error) {
     return next(error);
   }

@@ -2,10 +2,10 @@
  * @fileoverview Halaman kamus — browse, pencarian, dan daftar kategori
  */
 
-import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { cariKamus, ambilKategoriKamus, ambilEntriPerKategori } from '../../api/apiPublik';
+import { useCursorPagination } from '../../hooks/bersama/useCursorPagination';
 import Paginasi from '../../komponen/bersama/Paginasi';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import TeksLema from '../../komponen/publik/TeksLema';
@@ -34,19 +34,13 @@ function Kamus() {
   const { kata, kategori, kode, kelas } = useParams();
   const kategoriAktif = kategori || (kelas ? 'kelas' : '');
   const kodeAktif = kode || kelas || '';
-  const [cursorState, setCursorState] = useState({
-    cursor: null,
-    direction: 'next',
-    lastPage: false,
-    page: 1,
+  const { cursorState, handleCursor } = useCursorPagination({
+    limit,
+    resetOn: `${kata || ''}|${kategoriAktif || ''}|${kodeAktif || ''}`,
   });
   const modePencarian = Boolean(kata);
   const modeKategori = Boolean(!kata && kategoriAktif && kodeAktif);
   const modeBrowse = !modePencarian && !modeKategori;
-
-  useEffect(() => {
-    setCursorState({ cursor: null, direction: 'next', lastPage: false, page: 1 });
-  }, [kata, kategoriAktif, kodeAktif]);
 
   const {
     data: dataPencarian,
@@ -100,36 +94,11 @@ function Kamus() {
   const activePageInfo = modePencarian ? dataPencarian?.pageInfo : dataKategori?.pageInfo;
   const activeTotal = modePencarian ? totalPencarian : totalKategori;
 
-  const handleCursor = (action) => {
-    if (action === 'first') {
-      setCursorState({ cursor: null, direction: 'next', lastPage: false, page: 1 });
-      return;
-    }
-
-    if (action === 'last') {
-      const targetPage = Math.max(1, Math.ceil((activeTotal || 0) / limit));
-      setCursorState({ cursor: null, direction: 'next', lastPage: true, page: targetPage });
-      return;
-    }
-
-    if (action === 'next' && activePageInfo?.hasNext && activePageInfo?.nextCursor) {
-      setCursorState((prev) => ({
-        cursor: activePageInfo.nextCursor,
-        direction: 'next',
-        lastPage: false,
-        page: prev.page + 1,
-      }));
-      return;
-    }
-
-    if (action === 'prev' && activePageInfo?.hasPrev && activePageInfo?.prevCursor) {
-      setCursorState((prev) => ({
-        cursor: activePageInfo.prevCursor,
-        direction: 'prev',
-        lastPage: false,
-        page: Math.max(1, prev.page - 1),
-      }));
-    }
+  const handlePaginasi = (action) => {
+    handleCursor(action, {
+      pageInfo: activePageInfo,
+      total: activeTotal,
+    });
   };
 
   const metaHalaman = modeKategori
@@ -212,7 +181,7 @@ function Kamus() {
                   limit={limit}
                   pageInfo={dataPencarian?.pageInfo}
                   currentPage={cursorState.page}
-                  onNavigateCursor={handleCursor}
+                  onNavigateCursor={handlePaginasi}
                 />
               </div>
               <div className="kamus-kategori-grid">
@@ -232,7 +201,7 @@ function Kamus() {
                   limit={limit}
                   pageInfo={dataPencarian?.pageInfo}
                   currentPage={cursorState.page}
-                  onNavigateCursor={handleCursor}
+                  onNavigateCursor={handlePaginasi}
                 />
               </div>
             </>
@@ -252,7 +221,7 @@ function Kamus() {
                   limit={limit}
                   pageInfo={dataKategori?.pageInfo}
                   currentPage={cursorState.page}
-                  onNavigateCursor={handleCursor}
+                  onNavigateCursor={handlePaginasi}
                 />
               </div>
               <div className="kamus-kategori-grid">
@@ -272,7 +241,7 @@ function Kamus() {
                   limit={limit}
                   pageInfo={dataKategori?.pageInfo}
                   currentPage={cursorState.page}
-                  onNavigateCursor={handleCursor}
+                  onNavigateCursor={handlePaginasi}
                 />
               </div>
             </>

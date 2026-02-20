@@ -2,10 +2,11 @@
  * @fileoverview Halaman pencarian tesaurus — path-based: /tesaurus/cari/:kata
  */
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { cariTesaurus } from '../../api/apiPublik';
+import { useCursorPagination } from '../../hooks/bersama/useCursorPagination';
 import Paginasi from '../../komponen/bersama/Paginasi';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import TeksLema from '../../komponen/publik/TeksLema';
@@ -63,16 +64,10 @@ function RelasiSingkat({ sinonim, antonim }) {
 
 function Tesaurus() {
   const { kata } = useParams();
-  const [cursorState, setCursorState] = useState({
-    cursor: null,
-    direction: 'next',
-    lastPage: false,
-    page: 1,
+  const { cursorState, handleCursor } = useCursorPagination({
+    limit,
+    resetOn: kata || '',
   });
-
-  useEffect(() => {
-    setCursorState({ cursor: null, direction: 'next', lastPage: false, page: 1 });
-  }, [kata]);
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['cari-tesaurus', kata, cursorState.cursor, cursorState.direction, cursorState.lastPage],
@@ -88,37 +83,11 @@ function Tesaurus() {
   const results = data?.data || [];
   const total = data?.total || 0;
 
-  const handleCursor = (action) => {
-    const pageInfo = data?.pageInfo;
-    if (action === 'first') {
-      setCursorState({ cursor: null, direction: 'next', lastPage: false, page: 1 });
-      return;
-    }
-
-    if (action === 'last') {
-      const targetPage = Math.max(1, Math.ceil((total || 0) / limit));
-      setCursorState({ cursor: null, direction: 'next', lastPage: true, page: targetPage });
-      return;
-    }
-
-    if (action === 'next' && pageInfo?.hasNext && pageInfo?.nextCursor) {
-      setCursorState((prev) => ({
-        cursor: pageInfo.nextCursor,
-        direction: 'next',
-        lastPage: false,
-        page: prev.page + 1,
-      }));
-      return;
-    }
-
-    if (action === 'prev' && pageInfo?.hasPrev && pageInfo?.prevCursor) {
-      setCursorState((prev) => ({
-        cursor: pageInfo.prevCursor,
-        direction: 'prev',
-        lastPage: false,
-        page: Math.max(1, prev.page - 1),
-      }));
-    }
+  const handlePaginasi = (action) => {
+    handleCursor(action, {
+      pageInfo: data?.pageInfo,
+      total,
+    });
   };
 
   const metaHalaman = kata
@@ -154,7 +123,7 @@ function Tesaurus() {
                   limit={limit}
                   pageInfo={data?.pageInfo}
                   currentPage={cursorState.page}
-                  onNavigateCursor={handleCursor}
+                  onNavigateCursor={handlePaginasi}
                 />
               </div>
               <div className="tesaurus-result-grid">
@@ -176,7 +145,7 @@ function Tesaurus() {
                   limit={limit}
                   pageInfo={data?.pageInfo}
                   currentPage={cursorState.page}
-                  onNavigateCursor={handleCursor}
+                  onNavigateCursor={handlePaginasi}
                 />
               </div>
             </>
