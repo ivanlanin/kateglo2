@@ -92,6 +92,7 @@ function PenggunaAdmin() {
   }, [idDariPath, isDetailError, isDetailLoading, navigate]);
 
   const tutupPanel = () => {
+    setPesan({ error: '', sukses: '' });
     panel.tutup();
     if (idDariPath) {
       sedangMenutupDariPath.current = true;
@@ -108,12 +109,8 @@ function PenggunaAdmin() {
   };
 
   const handleBukaSunting = (item) => {
-    if (!item?.id) {
-      panel.bukaUntukSunting(mapPenggunaUntukPanel(item));
-      return;
-    }
-    panel.bukaUntukSunting(mapPenggunaUntukPanel(item));
-    if (panel.buka) return;
+    setPesan({ error: '', sukses: '' });
+    if (!item?.id) return;
     navigate(`/redaksi/pengguna/${item.id}`);
   };
 

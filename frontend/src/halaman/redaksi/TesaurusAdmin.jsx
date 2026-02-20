@@ -120,6 +120,7 @@ function TesaurusAdmin() {
   }, [idDariPath, isDetailError, isDetailLoading, navigate]);
 
   const tutupPanel = () => {
+    setPesan({ error: '', sukses: '' });
     panel.tutup();
     if (idDariPath) {
       sedangMenutupDariPath.current = true;
@@ -129,6 +130,7 @@ function TesaurusAdmin() {
 
   const bukaTambah = () => {
     if (!bisaTambah) return;
+    setPesan({ error: '', sukses: '' });
     if (idDariPath) {
       sedangMenutupDariPath.current = true;
       navigate('/redaksi/tesaurus', { replace: true });
@@ -138,12 +140,8 @@ function TesaurusAdmin() {
 
   const bukaSuntingDariDaftar = (item) => {
     if (!bisaEdit) return;
-    if (!item?.id) {
-      panel.bukaUntukSunting(item);
-      return;
-    }
-    panel.bukaUntukSunting(item);
-    if (panel.buka) return;
+    setPesan({ error: '', sukses: '' });
+    if (!item?.id) return;
     navigate(`/redaksi/tesaurus/${item.id}`);
   };
 

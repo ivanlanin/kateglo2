@@ -589,6 +589,7 @@ function KamusAdmin() {
   }, [entriIdDariPath, isDetailError, isDetailLoading, navigate]);
 
   const tutupPanel = () => {
+    setPesan({ error: '', sukses: '' });
     panel.tutup();
     if (entriIdDariPath) {
       sedangMenutupDariPath.current = true;
@@ -598,6 +599,7 @@ function KamusAdmin() {
 
   const bukaTambah = () => {
     if (!bisaTambah) return;
+    setPesan({ error: '', sukses: '' });
     if (entriIdDariPath) {
       sedangMenutupDariPath.current = true;
       navigate('/redaksi/kamus', { replace: true });
@@ -607,12 +609,8 @@ function KamusAdmin() {
 
   const bukaSuntingDariDaftar = (item) => {
     if (!bisaEdit) return;
-    if (!item?.id) {
-      panel.bukaUntukSunting(item);
-      return;
-    }
-    panel.bukaUntukSunting(item);
-    if (panel.buka) return;
+    setPesan({ error: '', sukses: '' });
+    if (!item?.id) return;
     navigate(`/redaksi/kamus/${item.id}`);
   };
 
