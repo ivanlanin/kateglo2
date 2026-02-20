@@ -65,6 +65,7 @@ describe('Glosarium', () => {
 
     expect(screen.getByText('Bidang')).toBeInTheDocument();
     expect(screen.getByText('Sumber')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Ling' })).toBeInTheDocument();
     expect(ambilDaftarBidang).toHaveBeenCalled();
     expect(ambilDaftarSumber).toHaveBeenCalled();
   });
@@ -79,7 +80,7 @@ describe('Glosarium', () => {
       if (key === 'glosarium-sumber') return { data: [], isLoading: false, isError: false };
       return {
         data: {
-          data: [{ id: 1, indonesia: 'istilah', asing: 'term' }],
+          data: [{ id: 1, indonesia: '1 istilah; 2 data', asing: 'term' }],
           total: 1,
           pageInfo: { hasPrev: false, hasNext: true, nextCursor: 'CUR_NEXT' },
         },
@@ -91,7 +92,8 @@ describe('Glosarium', () => {
     render(<Glosarium />);
 
     expect(screen.getByText(/Hasil Pencarian/i)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'istilah' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'istilah' })).toHaveAttribute('href', '/kamus/detail/istilah');
+    expect(screen.getByRole('link', { name: 'data' })).toHaveAttribute('href', '/kamus/detail/data');
     expect(screen.getByText('(term)')).toBeInTheDocument();
     expect(cariGlosarium).toHaveBeenCalledWith('istilah', {
       limit: 100,
@@ -128,7 +130,7 @@ describe('Glosarium', () => {
 
     render(<Glosarium />);
 
-    expect(screen.getByRole('heading', { name: 'Bidang linguistik' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Bidang Linguistik' })).toBeInTheDocument();
     expect(ambilGlosariumPerBidang).toHaveBeenCalledWith('linguistik', {
       limit: 100,
       cursor: null,

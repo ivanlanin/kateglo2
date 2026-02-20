@@ -120,7 +120,7 @@ describe('metaUtils', () => {
     expect(buildMetaPencarianGlosarium('air', null).judul).toBe('Hasil Pencarian "air" di Glosarium');
 
     expect(buildMetaBidangGlosarium('', null).judul).toBe('Glosarium');
-    expect(buildMetaBidangGlosarium('biologi', { total: 2 }).judul).toBe('Bidang biologi');
+    expect(buildMetaBidangGlosarium('biologi', { total: 2 }).judul).toBe('Bidang Biologi');
     expect(buildMetaSumberGlosarium('', null).judul).toBe('Glosarium');
     expect(buildMetaSumberGlosarium('KBBI', { total: 2 }).judul).toBe('Sumber KBBI');
   });

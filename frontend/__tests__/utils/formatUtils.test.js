@@ -1,7 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Fragment, createElement } from 'react';
-import { formatLemaHomonim, formatLocalDateTime, parseUtcDate } from '../../src/utils/formatUtils';
+import {
+  formatLemaHomonim,
+  formatLocalDateTime,
+  formatNamaBidang,
+  parseEntriGlosarium,
+  parseUtcDate,
+} from '../../src/utils/formatUtils';
 
 describe('formatUtils.test.js', () => {
   it('mengembalikan fallback untuk nilai kosong/invalid', () => {
@@ -70,5 +76,30 @@ describe('formatUtils.test.js', () => {
     const { container } = render(createElement(Fragment, null, formatLemaHomonim(undefined)));
 
     expect(container.textContent).toBe('');
+  });
+
+  it('formatNamaBidang memformat title case dan mempertahankan kata "dan" kecil', () => {
+    expect(formatNamaBidang('ilmu komputer dan informatika')).toBe('Ilmu Komputer dan Informatika');
+    expect(formatNamaBidang('DAN TEKNOLOGI')).toBe('Dan Teknologi');
+    expect(formatNamaBidang('   ')).toBe('');
+  });
+
+  it('parseEntriGlosarium memecah entri per titik koma', () => {
+    const result = parseEntriGlosarium('akses; data');
+    expect(result).toEqual(['akses', '; ', 'data']);
+  });
+
+  it('parseEntriGlosarium menghapus awalan angka dengan titik opsional', () => {
+    const result = parseEntriGlosarium('1 asal-usul; 2. aser; 3. bayar dam');
+    expect(result).toEqual(['asal-usul', '; ', 'aser', '; ', 'bayar dam']);
+  });
+
+  it('parseEntriGlosarium mendukung renderer tautan per bagian', () => {
+    const nodes = parseEntriGlosarium('1. dam; 2 darah', (part, index) => createElement('a', { href: `/kamus/detail/${part}`, key: index }, part));
+    render(createElement(Fragment, null, ...nodes));
+
+    expect(screen.getByRole('link', { name: 'dam' })).toHaveAttribute('href', '/kamus/detail/dam');
+    expect(screen.getByRole('link', { name: 'darah' })).toHaveAttribute('href', '/kamus/detail/darah');
+    expect(screen.getByText(';')).toBeInTheDocument();
   });
 });
