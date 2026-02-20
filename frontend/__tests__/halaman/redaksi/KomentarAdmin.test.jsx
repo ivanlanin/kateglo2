@@ -59,6 +59,21 @@ describe('KomentarAdmin', () => {
   });
 
   it('menampilkan daftar komentar dan menyimpan moderasi', () => {
+    mockParams = { id: '1' };
+    mockUseDetailKomentarAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          indeks: 'kata',
+          komentar: 'komentar awal',
+          pengguna_nama: 'Budi',
+          pengguna_surel: 'budi@contoh.id',
+          aktif: 0,
+        },
+      },
+    });
     mutateSimpanKomentar.mockImplementation((_data, opts) => opts.onSuccess?.());
 
     render(
@@ -70,9 +85,8 @@ describe('KomentarAdmin', () => {
     expect(screen.getByRole('heading', { name: 'Komentar' })).toBeInTheDocument();
     expect(screen.getByRole('columnheader', { name: 'Tanggal' })).toBeInTheDocument();
     expect(screen.getByText('kata')).toBeInTheDocument();
-    expect(screen.getByText(/komentar awal/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/komentar awal/i).length).toBeGreaterThan(0);
 
-    fireEvent.click(screen.getByText('kata'));
     fireEvent.change(screen.getByLabelText('Komentar'), { target: { value: 'komentar diperbarui' } });
     fireEvent.click(screen.getByRole('button', { name: 'Simpan' }));
 
@@ -83,13 +97,27 @@ describe('KomentarAdmin', () => {
   });
 
   it('menampilkan validasi saat komentar kosong', () => {
+    mockParams = { id: '1' };
+    mockUseDetailKomentarAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          indeks: 'kata',
+          komentar: 'komentar awal',
+          pengguna_nama: 'Budi',
+          pengguna_surel: 'budi@contoh.id',
+          aktif: 0,
+        },
+      },
+    });
     render(
       <MemoryRouter>
         <KomentarAdmin />
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByText('kata'));
     fireEvent.change(screen.getByLabelText('Komentar'), { target: { value: '   ' } });
     fireEvent.click(screen.getByRole('button', { name: 'Simpan' }));
 
@@ -98,6 +126,21 @@ describe('KomentarAdmin', () => {
   });
 
   it('menampilkan pesan error saat simpan gagal', () => {
+    mockParams = { id: '1' };
+    mockUseDetailKomentarAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          indeks: 'kata',
+          komentar: 'komentar awal',
+          pengguna_nama: 'Budi',
+          pengguna_surel: 'budi@contoh.id',
+          aktif: 0,
+        },
+      },
+    });
     mutateSimpanKomentar.mockImplementation((_data, opts) => {
       opts.onError?.({ response: { data: { message: 'Gagal dari server' } } });
     });
@@ -108,7 +151,6 @@ describe('KomentarAdmin', () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByText('kata'));
     fireEvent.change(screen.getByLabelText('Komentar'), { target: { value: 'komentar baru' } });
     fireEvent.click(screen.getByRole('button', { name: 'Simpan' }));
 
@@ -161,6 +203,21 @@ describe('KomentarAdmin', () => {
   });
 
   it('menampilkan fallback error default saat simpan gagal tanpa payload', () => {
+    mockParams = { id: '1' };
+    mockUseDetailKomentarAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          indeks: 'kata',
+          komentar: 'komentar awal',
+          pengguna_nama: 'Budi',
+          pengguna_surel: 'budi@contoh.id',
+          aktif: 0,
+        },
+      },
+    });
     mutateSimpanKomentar.mockImplementation((_data, opts) => {
       opts.onError?.({});
     });
@@ -171,7 +228,6 @@ describe('KomentarAdmin', () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByText('kata'));
     fireEvent.change(screen.getByLabelText('Komentar'), { target: { value: 'komentar baru' } });
     fireEvent.click(screen.getByRole('button', { name: 'Simpan' }));
 
@@ -244,7 +300,7 @@ describe('KomentarAdmin', () => {
     expect(screen.queryByLabelText('Komentar')).not.toBeInTheDocument();
   });
 
-  it('membuka panel tanpa navigasi saat item tidak punya id', () => {
+  it('tidak membuka panel saat item tidak punya id', () => {
     mockUseDaftarKomentarAdmin.mockReturnValue({
       isLoading: false,
       isError: false,
@@ -261,7 +317,7 @@ describe('KomentarAdmin', () => {
     );
 
     fireEvent.click(screen.getByText('tanpa-id'));
-    expect(screen.getByDisplayValue('komentar x')).toBeInTheDocument();
+    expect(screen.queryByDisplayValue('komentar x')).not.toBeInTheDocument();
     expect(mockNavigate).not.toHaveBeenCalledWith('/redaksi/komentar/null');
   });
 
@@ -279,18 +335,32 @@ describe('KomentarAdmin', () => {
     expect(argTerakhir.aktif).toBe('1');
   });
 
-  it('tidak menavigasi saat panel sudah terbuka ketika klik baris lagi', () => {
+  it('tetap menavigasi saat panel sudah terbuka ketika klik baris lagi', () => {
+    mockParams = { id: '1' };
+    mockUseDetailKomentarAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          indeks: 'kata',
+          komentar: 'komentar awal',
+          pengguna_nama: 'Budi',
+          pengguna_surel: 'budi@contoh.id',
+          aktif: 0,
+        },
+      },
+    });
     render(
       <MemoryRouter>
         <KomentarAdmin />
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByText('kata'));
     expect(screen.getByDisplayValue(/komentar awal/i)).toBeInTheDocument();
 
     mockNavigate.mockClear();
     fireEvent.click(screen.getByText('kata'));
-    expect(mockNavigate).not.toHaveBeenCalled();
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/komentar/1');
   });
 });

@@ -20,12 +20,17 @@ const mockUseDaftarGlosariumAdmin = vi.fn();
 const mockUseDetailGlosariumAdmin = vi.fn();
 const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
+const mockUseAuth = vi.fn();
 
 vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarGlosariumAdmin: (...args) => mockUseDaftarGlosariumAdmin(...args),
   useDetailGlosariumAdmin: (...args) => mockUseDetailGlosariumAdmin(...args),
   useSimpanGlosarium: () => ({ mutate: mutateSimpan, isPending: false }),
   useHapusGlosarium: () => ({ mutate: mutateHapus, isPending: false }),
+}));
+
+vi.mock('../../../src/context/authContext', () => ({
+  useAuth: (...args) => mockUseAuth(...args),
 }));
 
 vi.mock('../../../src/komponen/bersama/TataLetak', () => ({
@@ -42,7 +47,16 @@ describe('GlosariumAdmin', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockParams = {};
+    mockNavigate.mockImplementation((path) => {
+      const match = String(path || '').match(/^\/redaksi\/glosarium\/(\d+)$/);
+      if (match) {
+        mockParams = { id: match[1] };
+      }
+    });
     global.confirm = vi.fn(() => true);
+    mockUseAuth.mockReturnValue({
+      punyaIzin: () => true,
+    });
     mockUseDaftarGlosariumAdmin.mockReturnValue({
       isLoading: false,
       isError: false,
@@ -51,7 +65,24 @@ describe('GlosariumAdmin', () => {
         data: [{ id: 1, indonesia: 'air', asing: 'water', bidang: 'kimia', sumber: 'kbbi', bahasa: 'en' }],
       },
     });
-    mockUseDetailGlosariumAdmin.mockReturnValue({ isLoading: false, isError: false, data: null });
+    mockUseDetailGlosariumAdmin.mockImplementation((id) => {
+      if (!id) return { isLoading: false, isError: false, data: null };
+      return {
+        isLoading: false,
+        isError: false,
+        data: {
+          data: {
+            id: 1,
+            indonesia: 'air',
+            asing: 'water',
+            bidang: 'kimia',
+            bahasa: 'en',
+            sumber: 'kbbi',
+            aktif: 1,
+          },
+        },
+      };
+    });
   });
 
   it('menampilkan daftar dan validasi simpan', () => {
@@ -217,7 +248,7 @@ describe('GlosariumAdmin', () => {
     expect(screen.queryByLabelText(/Indonesia/)).not.toBeInTheDocument();
   });
 
-  it('membuka panel tanpa navigasi saat item tidak punya id', () => {
+  it('tidak membuka panel saat item tidak punya id', () => {
     mockUseDaftarGlosariumAdmin.mockReturnValue({
       isLoading: false,
       isError: false,
@@ -234,7 +265,7 @@ describe('GlosariumAdmin', () => {
     );
 
     fireEvent.click(screen.getByText('tanpa-id'));
-    expect(screen.getByDisplayValue('tanpa-id')).toBeInTheDocument();
+    expect(screen.queryByDisplayValue('tanpa-id')).not.toBeInTheDocument();
     expect(mockNavigate).not.toHaveBeenCalledWith('/redaksi/glosarium/null');
   });
 
@@ -252,7 +283,7 @@ describe('GlosariumAdmin', () => {
     expect(argTerakhir.aktif).toBe('1');
   });
 
-  it('tidak menavigasi saat panel sudah terbuka ketika klik baris lagi', () => {
+  it('tetap menavigasi saat panel sudah terbuka ketika klik baris lagi', () => {
     render(
       <MemoryRouter>
         <GlosariumAdmin />
@@ -264,7 +295,7 @@ describe('GlosariumAdmin', () => {
 
     mockNavigate.mockClear();
     fireEvent.click(screen.getByText('air'));
-    expect(mockNavigate).not.toHaveBeenCalled();
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/glosarium/1');
   });
 
   it('klik tambah saat mode detail route menavigasi kembali ke daftar', () => {

@@ -623,7 +623,7 @@ describe('ModelEntri', () => {
 
     await ModelEntri.daftarAdmin({ q: 'kat', limit: 9, offset: 2 });
 
-    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('WHERE entri ILIKE $1'), ['%kat%']);
+    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('WHERE e.entri ILIKE $1'), ['%kat%']);
     expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('LIMIT $2 OFFSET $3'), ['%kat%', 9, 2]);
   });
 
@@ -642,7 +642,7 @@ describe('ModelEntri', () => {
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
-      expect.stringContaining('WHERE entri ILIKE $1 AND jenis = $2 AND jenis_rujuk = $3'),
+      expect.stringContaining('WHERE e.entri ILIKE $1 AND e.jenis = $2 AND e.jenis_rujuk = $3'),
       ['%kat%', 'dasar', 'lihat']
     );
     expect(db.query).toHaveBeenNthCalledWith(
@@ -667,7 +667,7 @@ describe('ModelEntri', () => {
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
-      expect.stringContaining('WHERE entri ILIKE $1 AND homograf IS NOT NULL AND homonim IS NULL'),
+      expect.stringContaining('WHERE e.entri ILIKE $1 AND e.homograf IS NOT NULL AND e.homonim IS NULL'),
       ['%kat%']
     );
     expect(db.query).toHaveBeenNthCalledWith(
@@ -692,7 +692,7 @@ describe('ModelEntri', () => {
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
-      expect.stringContaining('WHERE aktif = 1 AND homograf IS NULL AND homonim IS NOT NULL'),
+      expect.stringContaining('WHERE e.aktif = 1 AND e.homograf IS NULL AND e.homonim IS NOT NULL'),
       []
     );
     expect(db.query).toHaveBeenNthCalledWith(
@@ -711,7 +711,7 @@ describe('ModelEntri', () => {
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
-      expect.stringContaining('WHERE aktif = 0'),
+      expect.stringContaining('WHERE e.aktif = 0'),
       []
     );
     expect(db.query).toHaveBeenNthCalledWith(
@@ -743,7 +743,7 @@ describe('ModelEntri', () => {
 
     const result = await ModelEntri.ambilDenganId(7);
 
-    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM entri WHERE id = $1'), [7]);
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('WHERE e.id = $1'), [7]);
     expect(result).toEqual(row);
   });
 

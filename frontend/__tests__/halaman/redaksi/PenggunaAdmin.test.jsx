@@ -72,10 +72,17 @@ describe('PenggunaAdmin', () => {
 
   it('membuka panel sunting dan simpan pengguna', () => {
     vi.useFakeTimers();
+    mockParams = { id: '7' };
+    mockUseDetailPengguna.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: { id: 7, nama: 'Budi', surel: 'budi@example.com', peran_kode: 'admin', aktif: 1 },
+      },
+    });
     mutateSimpanPengguna.mockImplementation((_data, opts) => opts.onSuccess?.());
     render(<MemoryRouter><PenggunaAdmin /></MemoryRouter>);
 
-    fireEvent.click(screen.getByText('Budi'));
     fireEvent.change(screen.getByLabelText(/Nama/), { target: { value: 'Budi Baru' } });
     fireEvent.change(screen.getByLabelText(/Peran/), { target: { value: '2' } });
     fireEvent.click(screen.getByText('Simpan'));
@@ -89,20 +96,34 @@ describe('PenggunaAdmin', () => {
   });
 
   it('menampilkan error saat simpan gagal', () => {
+    mockParams = { id: '8' };
+    mockUseDetailPengguna.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: { id: 8, nama: 'Sari', surel: 'sari@example.com', peran_kode: 'editor', aktif: 0 },
+      },
+    });
     mutateSimpanPengguna.mockImplementation((_data, opts) => opts.onError?.({ response: { data: { error: 'Gagal simpan pengguna' } } }));
     render(<MemoryRouter><PenggunaAdmin /></MemoryRouter>);
 
-    fireEvent.click(screen.getByText('Sari'));
     fireEvent.click(screen.getByText('Simpan'));
 
     expect(screen.getByText('Gagal simpan pengguna')).toBeInTheDocument();
   });
 
   it('menggunakan fallback pesan gagal menyimpan default', () => {
+    mockParams = { id: '9' };
+    mockUseDetailPengguna.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: { id: 9, nama: 'Tamu', surel: 'tamu@example.com', peran_kode: 'unknown', aktif: 1 },
+      },
+    });
     mutateSimpanPengguna.mockImplementation((_data, opts) => opts.onError?.({}));
     render(<MemoryRouter><PenggunaAdmin /></MemoryRouter>);
 
-    fireEvent.click(screen.getByText('Tamu'));
     fireEvent.click(screen.getByText('Simpan'));
 
     expect(screen.getByText('Gagal menyimpan')).toBeInTheDocument();
@@ -162,7 +183,7 @@ describe('PenggunaAdmin', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/redaksi/pengguna', { replace: true });
   });
 
-  it('membuka panel tanpa navigasi saat item tidak punya id', () => {
+  it('tidak membuka panel saat item tidak punya id', () => {
     mockUseDaftarPengguna.mockReturnValue({
       isLoading: false,
       isError: false,
@@ -175,7 +196,7 @@ describe('PenggunaAdmin', () => {
     render(<MemoryRouter><PenggunaAdmin /></MemoryRouter>);
 
     fireEvent.click(screen.getByText('Tanpa ID'));
-    expect(screen.getByDisplayValue('Tanpa ID')).toBeInTheDocument();
+    expect(screen.queryByDisplayValue('Tanpa ID')).not.toBeInTheDocument();
     expect(mockNavigate).not.toHaveBeenCalledWith('/redaksi/pengguna/null');
   });
 
@@ -198,14 +219,21 @@ describe('PenggunaAdmin', () => {
     expect(screen.queryByLabelText('Nama')).not.toBeInTheDocument();
   });
 
-  it('tidak menavigasi saat panel sudah terbuka ketika klik baris pengguna lagi', () => {
+  it('tetap menavigasi saat panel sudah terbuka ketika klik baris pengguna lagi', () => {
+    mockParams = { id: '7' };
+    mockUseDetailPengguna.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: { id: 7, nama: 'Budi', surel: 'budi@example.com', peran_kode: 'admin', aktif: 1 },
+      },
+    });
     render(<MemoryRouter><PenggunaAdmin /></MemoryRouter>);
 
-    fireEvent.click(screen.getByText('Budi'));
     expect(screen.getByDisplayValue('Budi')).toBeInTheDocument();
 
     mockNavigate.mockClear();
     fireEvent.click(screen.getByText('Sari'));
-    expect(mockNavigate).not.toHaveBeenCalled();
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/pengguna/8');
   });
 });
