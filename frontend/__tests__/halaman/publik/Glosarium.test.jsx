@@ -233,7 +233,7 @@ describe('Glosarium', () => {
     });
     expect(cariGlosarium).toHaveBeenCalledWith('istilah', {
       limit: 100,
-      cursor: null,
+      cursor: 'NEXT_CUR',
       direction: 'next',
       lastPage: true,
     });

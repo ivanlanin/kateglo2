@@ -178,7 +178,7 @@ describe('Tesaurus', () => {
     });
     expect(cariTesaurus).toHaveBeenCalledWith('aktif', {
       limit: 100,
-      cursor: null,
+      cursor: 'CUR_NEXT',
       direction: 'next',
       lastPage: true,
     });
