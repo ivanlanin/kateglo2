@@ -7,19 +7,25 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/authContext';
 
 const menuAdmin = [
-  { path: '/redaksi/kamus', label: 'Kamus' },
-  { path: '/redaksi/tesaurus', label: 'Tesaurus' },
-  { path: '/redaksi/glosarium', label: 'Glosarium' },
-  { path: '/redaksi/komentar', label: 'Komentar' },
-  { path: '/redaksi/label', label: 'Label', adminSaja: true },
-  { path: '/redaksi/peran', label: 'Peran', adminSaja: true },
-  { path: '/redaksi/izin', label: 'Izin', adminSaja: true },
-  { path: '/redaksi/pengguna', label: 'Pengguna', adminSaja: true },
+  { path: '/redaksi/kamus', label: 'Kamus', izin: 'lihat_entri' },
+  { path: '/redaksi/tesaurus', label: 'Tesaurus', izin: 'lihat_tesaurus' },
+  { path: '/redaksi/glosarium', label: 'Glosarium', izin: 'lihat_glosarium' },
+  { path: '/redaksi/komentar', label: 'Komentar', izin: 'kelola_komentar' },
+  { path: '/redaksi/label', label: 'Label', izin: 'kelola_label' },
+  { path: '/redaksi/peran', label: 'Peran', izin: 'kelola_peran' },
+  { path: '/redaksi/izin', label: 'Izin', izin: 'kelola_peran' },
+  { path: '/redaksi/pengguna', label: 'Pengguna', izin: 'kelola_pengguna' },
 ];
 
 function NavbarAdmin() {
-  const { logout, adalahAdmin } = useAuth();
-  const menuTampil = menuAdmin.filter((item) => !item.adminSaja || adalahAdmin);
+  const { logout, punyaIzin, user } = useAuth();
+  const izinPengguna = Array.isArray(user?.izin) ? user.izin : [];
+  const hasIzin = (izin) => {
+    if (!izin) return true;
+    if (typeof punyaIzin === 'function') return punyaIzin(izin);
+    return izinPengguna.includes(izin);
+  };
+  const menuTampil = menuAdmin.filter((item) => hasIzin(item.izin));
   const navigate = useNavigate();
   const location = useLocation();
   const [menuTerbuka, setMenuTerbuka] = useState(false);
