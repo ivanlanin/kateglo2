@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Kamus from '../../../src/halaman/publik/Kamus';
 import { cariKamus } from '../../../src/api/apiPublik';
@@ -23,9 +23,12 @@ vi.mock('@tanstack/react-query', () => ({
 
 vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
   default: ({ onNavigateCursor }) => (
-    <button type="button" onClick={() => onNavigateCursor('next')}>
-      Ubah halaman
-    </button>
+    <div>
+      <button type="button" aria-label="kamus-first" onClick={() => onNavigateCursor('first')}>first</button>
+      <button type="button" aria-label="kamus-prev" onClick={() => onNavigateCursor('prev')}>prev</button>
+      <button type="button" aria-label="kamus-next" onClick={() => onNavigateCursor('next')}>next</button>
+      <button type="button" aria-label="kamus-last" onClick={() => onNavigateCursor('last')}>last</button>
+    </div>
   ),
 }));
 
@@ -377,7 +380,91 @@ describe('Kamus', () => {
     });
 
     render(<Kamus />);
-    expect(screen.getAllByRole('button', { name: 'Ubah halaman' }).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole('button', { name: 'kamus-next' }).length).toBeGreaterThan(0);
+  });
+
+  it('navigasi cursor first/last/next/prev memperbarui opsi query kamus', () => {
+    mockParams = { kata: 'kata' };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const { queryKey } = options;
+      if (queryKey[0] === 'cari-kamus') {
+        return {
+          data: {
+            data: [{ id: 1, entri: 'kata' }],
+            total: 230,
+            pageInfo: { hasPrev: true, hasNext: true, nextCursor: 'CUR_NEXT', prevCursor: 'CUR_PREV' },
+          },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Kamus />);
+
+    fireEvent.click(screen.getAllByRole('button', { name: 'kamus-next' })[0]);
+    fireEvent.click(screen.getAllByRole('button', { name: 'kamus-prev' })[0]);
+    fireEvent.click(screen.getAllByRole('button', { name: 'kamus-last' })[0]);
+    fireEvent.click(screen.getAllByRole('button', { name: 'kamus-first' })[0]);
+
+    expect(cariKamus).toHaveBeenCalledWith('kata', {
+      limit: 100,
+      cursor: 'CUR_NEXT',
+      direction: 'next',
+      lastPage: false,
+    });
+    expect(cariKamus).toHaveBeenCalledWith('kata', {
+      limit: 100,
+      cursor: 'CUR_PREV',
+      direction: 'prev',
+      lastPage: false,
+    });
+    expect(cariKamus).toHaveBeenCalledWith('kata', {
+      limit: 100,
+      cursor: null,
+      direction: 'next',
+      lastPage: true,
+    });
+    expect(cariKamus).toHaveBeenCalledWith('kata', {
+      limit: 100,
+      cursor: null,
+      direction: 'next',
+      lastPage: false,
+    });
+  });
+
+  it('aksi last tetap valid saat total 0 pada mode pencarian', () => {
+    mockParams = { kata: 'nol' };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const { queryKey } = options;
+      if (queryKey[0] === 'cari-kamus') {
+        return {
+          data: {
+            data: [{ id: 1, entri: 'nol' }],
+            total: 0,
+            pageInfo: { hasPrev: false, hasNext: false },
+          },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Kamus />);
+    fireEvent.click(screen.getAllByRole('button', { name: 'kamus-last' })[0]);
+
+    expect(cariKamus).toHaveBeenCalledWith('nol', {
+      limit: 100,
+      cursor: null,
+      direction: 'next',
+      lastPage: true,
+    });
   });
 
   it('menampilkan pesan error saat query gagal', () => {

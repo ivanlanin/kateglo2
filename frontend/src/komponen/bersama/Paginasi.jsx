@@ -28,7 +28,6 @@ function Paginasi({
   };
 
   const handleCursor = (action) => {
-    if (!onNavigateCursor) return;
     onNavigateCursor(action);
   };
 

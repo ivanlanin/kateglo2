@@ -36,21 +36,36 @@ describe('apiPublik', () => {
 
   it('cariKamus mengirim params query + limit', async () => {
     klien.get.mockResolvedValue({ data: { data: [] } });
-    await cariKamus('kata', { limit: 10, offset: 5 });
-    expect(klien.get).toHaveBeenCalledWith('/api/publik/kamus/cari/kata', { params: { limit: 10, offset: 5 } });
+    await cariKamus('kata', { limit: 10 });
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/kamus/cari/kata', { params: { limit: 10 } });
   });
 
   it('ambilKategoriKamus dan ambilEntriPerKategori memanggil endpoint kategori', async () => {
     klien.get.mockResolvedValue({ data: { abjad: [] } });
     await ambilKategoriKamus();
-    await ambilEntriPerKategori('kelas kata', 'n-1', { limit: 9, offset: 3 });
+    await ambilEntriPerKategori('kelas kata', 'n-1', { limit: 9 });
 
     expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/kamus/kategori');
     expect(klien.get).toHaveBeenNthCalledWith(
       2,
       '/api/publik/kamus/kategori/kelas%20kata/n-1',
-      { params: { limit: 9, offset: 3 } }
+      { params: { limit: 9 } }
     );
+  });
+
+  it('ambilEntriPerKategori mendukung cursor, direction, dan lastPage', async () => {
+    klien.get.mockResolvedValue({ data: { data: [] } });
+
+    await ambilEntriPerKategori('ragam', 'cak', {
+      limit: 15,
+      cursor: 'abc123',
+      direction: 'prev',
+      lastPage: true,
+    });
+
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/kamus/kategori/ragam/cak', {
+      params: { limit: 15, cursor: 'abc123', direction: 'prev', lastPage: 1 },
+    });
   });
 
   it('ambilDetailKamus melakukan encode slug', async () => {
@@ -99,16 +114,16 @@ describe('apiPublik', () => {
     klien.get.mockResolvedValue({ data: { data: [], total: 0 } });
     await cariGlosarium('istilah');
     expect(klien.get).toHaveBeenCalledWith('/api/publik/glosarium/cari/istilah', {
-      params: { limit: 100, offset: 0 },
+      params: { limit: 100 },
     });
   });
 
   it('cariTesaurus memanggil endpoint sesuai kata', async () => {
     klien.get.mockResolvedValue({ data: { data: [] } });
-    await cariTesaurus('anak ibu', { limit: 50, offset: 10 });
+    await cariTesaurus('anak ibu', { limit: 50, cursor: 'cur-1', direction: 'prev', lastPage: true });
 
     expect(klien.get).toHaveBeenCalledWith('/api/publik/tesaurus/cari/anak%20ibu', {
-      params: { limit: 50, offset: 10 },
+      params: { limit: 50, cursor: 'cur-1', direction: 'prev', lastPage: 1 },
     });
   });
 
@@ -131,7 +146,7 @@ describe('apiPublik', () => {
     await cariTesaurus('aktif');
 
     expect(klien.get).toHaveBeenCalledWith('/api/publik/tesaurus/cari/aktif', {
-      params: { limit: 100, offset: 0 },
+      params: { limit: 100 },
     });
   });
 
@@ -209,10 +224,24 @@ describe('apiPublik', () => {
     await ambilGlosariumPerSumber('kbbi');
 
     expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/glosarium/bidang/biologi', {
-      params: { limit: 100, offset: 0 },
+      params: { limit: 100 },
     });
     expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/glosarium/sumber/kbbi', {
-      params: { limit: 100, offset: 0 },
+      params: { limit: 100 },
+    });
+  });
+
+  it('cariKamus/cariGlosarium mengirim direction hanya saat bukan next dan cursor tersedia', async () => {
+    klien.get.mockResolvedValue({ data: { data: [] } });
+
+    await cariKamus('uji', { limit: 5, direction: 'next', cursor: null, lastPage: false });
+    await cariGlosarium('uji', { limit: 7, cursor: 'cur-2', direction: 'prev' });
+
+    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/kamus/cari/uji', {
+      params: { limit: 5 },
+    });
+    expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/glosarium/cari/uji', {
+      params: { limit: 7, cursor: 'cur-2', direction: 'prev' },
     });
   });
 

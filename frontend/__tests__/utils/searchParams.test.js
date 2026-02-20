@@ -64,8 +64,15 @@ describe('searchParams utils', () => {
     expect(normalizeOffset('5000')).toBe(1000);
     expect(normalizeOffset('-100')).toBe(0);
     expect(normalizeOffset('abc')).toBe(0);
+    expect(normalizeOffset(undefined)).toBe(0);
 
     const searchParams = new URLSearchParams('offset=9999');
     expect(readOffsetFromSearchParams(searchParams)).toBe(1000);
+  });
+
+  it('normalizeOffset menangani maxOffset invalid/negatif dan readOffset default saat searchParams null', () => {
+    expect(normalizeOffset('10', 'bukan-angka')).toBe(0);
+    expect(normalizeOffset('10', -5)).toBe(0);
+    expect(readOffsetFromSearchParams(null)).toBe(0);
   });
 });

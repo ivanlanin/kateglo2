@@ -4,6 +4,7 @@
  */
 
 const db = require('../../db');
+const { encodeCursor } = require('../../utils/cursorPagination');
 const ModelGlosarium = require('../../models/modelGlosarium');
 const { normalizeBoolean } = require('../../models/modelGlosarium').__private;
 
@@ -242,6 +243,202 @@ describe('ModelGlosarium', () => {
       total: 6,
       hasNext: false,
     });
+  });
+
+  it('cariCursor mengembalikan kosong saat total 0', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ total: '0' }] });
+
+    const result = await ModelGlosarium.cariCursor({ q: 'kata' });
+
+    expect(db.query).toHaveBeenCalledTimes(1);
+    expect(result).toEqual({
+      data: [],
+      total: 0,
+      hasNext: false,
+      hasPrev: false,
+      nextCursor: null,
+      prevCursor: null,
+    });
+  });
+
+  it('cariCursor bisa dipanggil tanpa argumen (default object)', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '0' }] });
+
+    const result = await ModelGlosarium.cariCursor();
+
+    expect(result.total).toBe(0);
+    expect(result.data).toEqual([]);
+  });
+
+  it('cariCursor next dengan cursor menyusun cursorClause dan hasMore', async () => {
+    const cursor = encodeCursor({ indonesia: 'beta', id: 10 });
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '4' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 11, indonesia: 'delta', asing: null, bidang: null, bahasa: 'id', sumber: null, aktif: true },
+          { id: 12, indonesia: 'epsilon', asing: null, bidang: null, bahasa: 'id', sumber: null, aktif: true },
+          { id: 13, indonesia: 'zeta', asing: null, bidang: null, bahasa: 'id', sumber: null, aktif: true },
+        ],
+      });
+
+    const result = await ModelGlosarium.cariCursor({
+      q: 'a',
+      cursor,
+      direction: 'next',
+      limit: 2,
+      hitungTotal: true,
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('AND (g.indonesia, g.id) > ($2, $3)'),
+      ['%a%', 'beta', 10, 3]
+    );
+    expect(result.data).toHaveLength(2);
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(true);
+    expect(result.prevCursor).toEqual(expect.any(String));
+    expect(result.nextCursor).toEqual(expect.any(String));
+  });
+
+  it('cariCursor prev tanpa hitungTotal membalik urutan hasil', async () => {
+    const cursor = encodeCursor({ indonesia: 'kata', id: 22 });
+    db.query.mockResolvedValueOnce({
+      rows: [
+        { id: 21, indonesia: 'gamma', asing: null, bidang: null, bahasa: 'id', sumber: null, aktif: true },
+        { id: 20, indonesia: 'beta', asing: null, bidang: null, bahasa: 'id', sumber: null, aktif: true },
+        { id: 19, indonesia: 'alpha', asing: null, bidang: null, bahasa: 'id', sumber: null, aktif: true },
+      ],
+    });
+
+    const result = await ModelGlosarium.cariCursor({
+      cursor,
+      direction: 'prev',
+      limit: 2,
+      hitungTotal: false,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('AND (g.indonesia, g.id) < ($1, $2)'),
+      ['kata', 22, 3]
+    );
+    expect(result.data).toEqual([
+      { id: 20, indonesia: 'beta', asing: null, bidang: null, bahasa: 'id', sumber: null, aktif: true },
+      { id: 21, indonesia: 'gamma', asing: null, bidang: null, bahasa: 'id', sumber: null, aktif: true },
+    ]);
+    expect(result.total).toBe(0);
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(true);
+  });
+
+  it('cariCursor lastPage menetapkan hasNext false dan hasPrev sesuai total', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '3' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 3, indonesia: 'c', asing: null, bidang: null, bahasa: 'id', sumber: null, aktif: true },
+          { id: 2, indonesia: 'b', asing: null, bidang: null, bahasa: 'id', sumber: null, aktif: true },
+        ],
+      });
+
+    const result = await ModelGlosarium.cariCursor({
+      limit: 2,
+      lastPage: true,
+      hitungTotal: true,
+    });
+
+    expect(result.data).toEqual([
+      { id: 2, indonesia: 'b', asing: null, bidang: null, bahasa: 'id', sumber: null, aktif: true },
+      { id: 3, indonesia: 'c', asing: null, bidang: null, bahasa: 'id', sumber: null, aktif: true },
+    ]);
+    expect(result.hasNext).toBe(false);
+    expect(result.hasPrev).toBe(true);
+  });
+
+  it('cariCursor dapat membangun semua filter dan limit fallback saat tidak valid', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({
+        rows: [{ id: 1, indonesia: 'aktif', asing: null, bidang: 'ling', bahasa: 'id', sumber: 'kbbi', aktif: true }],
+      });
+
+    await ModelGlosarium.cariCursor({
+      q: 'aktif',
+      bidang: 'ling',
+      sumber: 'kbbi',
+      bahasa: 'id',
+      aktif: '1',
+      aktifSaja: true,
+      limit: 'abc',
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining("g.aktif = TRUE"),
+      ['%aktif%', 'ling', 'kbbi']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining("g.bahasa = 'id'"),
+      ['%aktif%', 'ling', 'kbbi', 21]
+    );
+  });
+
+  it('cariCursor mendukung filter aktif=0 dan bahasa=en', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 2, indonesia: 'term', asing: 'term', bidang: null, bahasa: 'en', sumber: null, aktif: false }] });
+
+    await ModelGlosarium.cariCursor({ aktif: '0', bahasa: 'en' });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining("g.aktif = FALSE"),
+      []
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining("g.bahasa = 'en'"),
+      [21]
+    );
+  });
+
+  it('cariCursor dengan payload cursor kosong memakai fallback default dan cursor null ketika rows kosong', async () => {
+    const cursor = encodeCursor({});
+    db.query.mockResolvedValueOnce({ rows: [] });
+
+    const result = await ModelGlosarium.cariCursor({
+      cursor,
+      direction: 'prev',
+      hitungTotal: false,
+      limit: 2,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('AND (g.indonesia, g.id) < ($1, $2)'),
+      ['', 0, 3]
+    );
+    expect(result.prevCursor).toBeNull();
+    expect(result.nextCursor).toBeNull();
+    expect(result.hasPrev).toBe(false);
+    expect(result.hasNext).toBe(true);
+  });
+
+  it('cariCursor lastPage bisa memiliki hasPrev false saat total tidak melebihi data', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '2' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 2, indonesia: 'b', asing: null, bidang: null, bahasa: 'id', sumber: null, aktif: true },
+          { id: 1, indonesia: 'a', asing: null, bidang: null, bahasa: 'id', sumber: null, aktif: true },
+        ],
+      });
+
+    const result = await ModelGlosarium.cariCursor({ lastPage: true, limit: 2 });
+    expect(result.hasPrev).toBe(false);
+    expect(result.hasNext).toBe(false);
   });
 
   it('ambilDaftarBidang mengembalikan rows', async () => {

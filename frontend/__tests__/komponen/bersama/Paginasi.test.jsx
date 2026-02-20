@@ -59,4 +59,100 @@ describe('Paginasi', () => {
     expect(screen.getByRole('button', { name: 'Halaman berikutnya' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Halaman terakhir' })).toBeDisabled();
   });
+
+  it('mode cursor memanggil onNavigateCursor untuk semua aksi', () => {
+    const onNavigateCursor = vi.fn();
+
+    render(
+      <Paginasi
+        total={250}
+        limit={100}
+        pageInfo={{ hasPrev: true, hasNext: true }}
+        currentPage={2}
+        onNavigateCursor={onNavigateCursor}
+      />
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Halaman pertama' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Halaman sebelumnya' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Halaman berikutnya' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Halaman terakhir' }));
+
+    expect(onNavigateCursor).toHaveBeenNthCalledWith(1, 'first');
+    expect(onNavigateCursor).toHaveBeenNthCalledWith(2, 'prev');
+    expect(onNavigateCursor).toHaveBeenNthCalledWith(3, 'next');
+    expect(onNavigateCursor).toHaveBeenNthCalledWith(4, 'last');
+  });
+
+  it('mode cursor men-disable tombol berdasarkan pageInfo', () => {
+    const onNavigateCursor = vi.fn();
+    const { rerender } = render(
+      <Paginasi
+        total={250}
+        limit={100}
+        pageInfo={{ hasPrev: false, hasNext: true }}
+        currentPage={1}
+        onNavigateCursor={onNavigateCursor}
+      />
+    );
+
+    expect(screen.getByRole('button', { name: 'Halaman pertama' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Halaman sebelumnya' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Halaman berikutnya' })).not.toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Halaman terakhir' })).not.toBeDisabled();
+
+    rerender(
+      <Paginasi
+        total={250}
+        limit={100}
+        pageInfo={{ hasPrev: true, hasNext: false }}
+        currentPage={3}
+        onNavigateCursor={onNavigateCursor}
+      />
+    );
+
+    expect(screen.getByRole('button', { name: 'Halaman pertama' })).not.toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Halaman sebelumnya' })).not.toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Halaman berikutnya' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Halaman terakhir' })).toBeDisabled();
+  });
+
+  it('tetap menampilkan navigasi saat total halaman 1 tetapi pageInfo cursor aktif', () => {
+    const onNavigateCursor = vi.fn();
+
+    render(
+      <Paginasi
+        total={10}
+        limit={20}
+        pageInfo={{ hasPrev: false, hasNext: true }}
+        currentPage={1}
+        onNavigateCursor={onNavigateCursor}
+      />
+    );
+
+    expect(screen.getByRole('button', { name: 'Halaman pertama' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Halaman berikutnya' })).toBeInTheDocument();
+  });
+
+  it('tetap menampilkan navigasi saat total halaman 1 tetapi hasPrev aktif', () => {
+    const onNavigateCursor = vi.fn();
+
+    render(
+      <Paginasi
+        total={10}
+        limit={20}
+        pageInfo={{ hasPrev: true, hasNext: false }}
+        currentPage={1}
+        onNavigateCursor={onNavigateCursor}
+      />
+    );
+
+    expect(screen.getByRole('button', { name: 'Halaman pertama' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Halaman sebelumnya' })).toBeInTheDocument();
+  });
+
+  it('menampilkan rentang 0–0 saat total nol', () => {
+    render(<Paginasi total={0} limit={20} offset={0} onChange={vi.fn()} />);
+    expect(screen.getByText(/Menampilkan 0–0 dari 0 entri/i)).toBeInTheDocument();
+  });
 });

@@ -1,5 +1,6 @@
 const {
   parsePagination,
+  parseCursorPagination,
   rejectTooLargeOffset,
 } = require('../../utils/routesPublikUtils');
 
@@ -33,6 +34,45 @@ describe('routesPublikUtils', () => {
     });
   });
 
+  describe('parseCursorPagination', () => {
+    it('menggunakan default saat argumen kosong atau undefined', () => {
+      expect(parseCursorPagination(undefined, undefined)).toEqual({
+        limit: 100,
+        cursor: null,
+        direction: 'next',
+        lastPage: false,
+      });
+      expect(parseCursorPagination({})).toEqual({
+        limit: 100,
+        cursor: null,
+        direction: 'next',
+        lastPage: false,
+      });
+    });
+
+    it('menormalkan limit, cursor, direction, dan lastPage', () => {
+      expect(parseCursorPagination(
+        { limit: '250', cursor: '  abc123  ', direction: 'prev', lastPage: '1' },
+        { defaultLimit: 50, maxLimit: 200 }
+      )).toEqual({
+        limit: 200,
+        cursor: 'abc123',
+        direction: 'prev',
+        lastPage: true,
+      });
+
+      expect(parseCursorPagination(
+        { limit: '0', cursor: '   ', direction: 'unknown', lastPage: 'true' },
+        { defaultLimit: 50, maxLimit: 200 }
+      )).toEqual({
+        limit: 50,
+        cursor: null,
+        direction: 'next',
+        lastPage: true,
+      });
+    });
+  });
+
   describe('rejectTooLargeOffset', () => {
     it('mengembalikan false bila offset masih valid', () => {
       const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
@@ -48,6 +88,12 @@ describe('routesPublikUtils', () => {
         error: 'Invalid Query',
         message: 'Offset maksimal adalah 100',
       });
+    });
+
+    it('menggunakan default maxOffset saat argumen ketiga tidak diberikan', () => {
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+      expect(rejectTooLargeOffset(res, Number.MAX_SAFE_INTEGER)).toBe(true);
+      expect(res.status).toHaveBeenCalledWith(400);
     });
   });
 

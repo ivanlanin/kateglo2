@@ -7,6 +7,7 @@ jest.mock('../../db/autocomplete', () => jest.fn());
 
 const db = require('../../db');
 const autocomplete = require('../../db/autocomplete');
+const { encodeCursor } = require('../../utils/cursorPagination');
 const ModelEntri = require('../../models/modelEntri');
 const {
   normalizeBoolean,
@@ -118,6 +119,297 @@ describe('ModelEntri', () => {
       total: 6,
       hasNext: false,
     });
+  });
+
+  it('cariEntriCursor mengembalikan kosong saat total 0', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ total: '0' }] });
+
+    const result = await ModelEntri.cariEntriCursor('kata');
+
+    expect(db.query).toHaveBeenCalledTimes(1);
+    expect(result).toEqual({
+      data: [],
+      total: 0,
+      hasNext: false,
+      hasPrev: false,
+      nextCursor: null,
+      prevCursor: null,
+    });
+  });
+
+  it('cariEntriCursor next dengan cursor menerapkan where tuple dan hasMore', async () => {
+    const cursor = encodeCursor({ prioritas: 1, homografSort: 2, homonimSort: 3, entri: 'kata', id: 1 });
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '4' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          {
+            id: 2,
+            entri: 'kata a',
+            indeks: 'kata a',
+            homograf: 1,
+            homonim: 1,
+            jenis: 'dasar',
+            lafal: null,
+            jenis_rujuk: null,
+            entri_rujuk: null,
+            prioritas: 1,
+            homograf_sort: 1,
+            homonim_sort: 1,
+          },
+          {
+            id: 3,
+            entri: 'kata b',
+            indeks: 'kata b',
+            homograf: 2,
+            homonim: 2,
+            jenis: 'dasar',
+            lafal: null,
+            jenis_rujuk: null,
+            entri_rujuk: null,
+            prioritas: 2,
+            homograf_sort: 2,
+            homonim_sort: 2,
+          },
+          {
+            id: 4,
+            entri: 'kata c',
+            indeks: 'kata c',
+            homograf: 3,
+            homonim: 3,
+            jenis: 'dasar',
+            lafal: null,
+            jenis_rujuk: null,
+            entri_rujuk: null,
+            prioritas: 2,
+            homograf_sort: 3,
+            homonim_sort: 3,
+          },
+        ],
+      });
+
+    const result = await ModelEntri.cariEntriCursor('kata', {
+      limit: 2,
+      cursor,
+      direction: 'next',
+      hitungTotal: true,
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('(prioritas, homograf_sort, homonim_sort, entri, id) > ($4, $5, $6, $7, $8)'),
+      ['kata', 'kata%', '%kata%', 1, 2, 3, 'kata', 1, 3]
+    );
+    expect(result.data).toHaveLength(2);
+    expect(result.data[0]).not.toHaveProperty('prioritas');
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(true);
+    expect(result.prevCursor).toEqual(expect.any(String));
+    expect(result.nextCursor).toEqual(expect.any(String));
+  });
+
+  it('cariEntriCursor prev tanpa hitungTotal membalik urutan hasil', async () => {
+    const cursor = encodeCursor({ prioritas: 1, homografSort: 1, homonimSort: 1, entri: 'kata', id: 9 });
+    db.query.mockResolvedValueOnce({
+      rows: [
+        {
+          id: 8,
+          entri: 'kata z',
+          indeks: 'kata z',
+          homograf: 8,
+          homonim: 8,
+          jenis: 'dasar',
+          lafal: null,
+          jenis_rujuk: null,
+          entri_rujuk: null,
+          prioritas: 2,
+          homograf_sort: 8,
+          homonim_sort: 8,
+        },
+        {
+          id: 7,
+          entri: 'kata y',
+          indeks: 'kata y',
+          homograf: 7,
+          homonim: 7,
+          jenis: 'dasar',
+          lafal: null,
+          jenis_rujuk: null,
+          entri_rujuk: null,
+          prioritas: 1,
+          homograf_sort: 7,
+          homonim_sort: 7,
+        },
+        {
+          id: 6,
+          entri: 'kata x',
+          indeks: 'kata x',
+          homograf: 6,
+          homonim: 6,
+          jenis: 'dasar',
+          lafal: null,
+          jenis_rujuk: null,
+          entri_rujuk: null,
+          prioritas: 1,
+          homograf_sort: 6,
+          homonim_sort: 6,
+        },
+      ],
+    });
+
+    const result = await ModelEntri.cariEntriCursor('kata', {
+      limit: 2,
+      cursor,
+      direction: 'prev',
+      hitungTotal: false,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('(prioritas, homograf_sort, homonim_sort, entri, id) < ($4, $5, $6, $7, $8)'),
+      ['kata', 'kata%', '%kata%', 1, 1, 1, 'kata', 9, 3]
+    );
+    expect(result.data.map((item) => item.id)).toEqual([7, 8]);
+    expect(result.total).toBe(0);
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(true);
+  });
+
+  it('cariEntriCursor lastPage menetapkan hasNext false dan hasPrev berdasarkan total', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '3' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          {
+            id: 2,
+            entri: 'kata b',
+            indeks: 'kata b',
+            homograf: 2,
+            homonim: 2,
+            jenis: 'dasar',
+            lafal: null,
+            jenis_rujuk: null,
+            entri_rujuk: null,
+            prioritas: 1,
+            homograf_sort: 2,
+            homonim_sort: 2,
+          },
+          {
+            id: 1,
+            entri: 'kata a',
+            indeks: 'kata a',
+            homograf: 1,
+            homonim: 1,
+            jenis: 'dasar',
+            lafal: null,
+            jenis_rujuk: null,
+            entri_rujuk: null,
+            prioritas: 1,
+            homograf_sort: 1,
+            homonim_sort: 1,
+          },
+        ],
+      });
+
+    const result = await ModelEntri.cariEntriCursor('kata', {
+      limit: 2,
+      lastPage: true,
+      hitungTotal: true,
+    });
+
+    expect(result.data.map((item) => item.id)).toEqual([1, 2]);
+    expect(result.hasNext).toBe(false);
+    expect(result.hasPrev).toBe(true);
+  });
+
+  it('cariEntriCursor memakai fallback limit default saat limit tidak valid', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({
+        rows: [{
+          id: 1,
+          entri: 'kata',
+          indeks: 'kata',
+          homograf: null,
+          homonim: null,
+          jenis: 'dasar',
+          lafal: null,
+          jenis_rujuk: null,
+          entri_rujuk: null,
+          prioritas: 1,
+          homograf_sort: 2147483647,
+          homonim_sort: 2147483647,
+        }],
+      });
+
+    await ModelEntri.cariEntriCursor('kata', { limit: 'abc' });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $4'),
+      ['kata', 'kata%', '%kata%', 101]
+    );
+  });
+
+  it('cariEntriCursor dengan payload cursor kosong memakai fallback nilai default', async () => {
+    const cursor = encodeCursor({});
+    db.query.mockResolvedValueOnce({ rows: [] });
+
+    const result = await ModelEntri.cariEntriCursor('kata', {
+      limit: 2,
+      cursor,
+      direction: 'next',
+      hitungTotal: false,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('(prioritas, homograf_sort, homonim_sort, entri, id) > ($4, $5, $6, $7, $8)'),
+      ['kata', 'kata%', '%kata%', 0, 2147483647, 2147483647, '', 0, 3]
+    );
+    expect(result.prevCursor).toBeNull();
+    expect(result.nextCursor).toBeNull();
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(false);
+  });
+
+  it('cariEntriCursor lastPage bisa memiliki hasPrev false saat total tidak melebihi data', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '2' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          {
+            id: 2,
+            entri: 'kata b',
+            indeks: 'kata b',
+            homograf: 2,
+            homonim: 2,
+            jenis: 'dasar',
+            lafal: null,
+            jenis_rujuk: null,
+            entri_rujuk: null,
+            prioritas: 1,
+            homograf_sort: 2,
+            homonim_sort: 2,
+          },
+          {
+            id: 1,
+            entri: 'kata a',
+            indeks: 'kata a',
+            homograf: 1,
+            homonim: 1,
+            jenis: 'dasar',
+            lafal: null,
+            jenis_rujuk: null,
+            entri_rujuk: null,
+            prioritas: 1,
+            homograf_sort: 1,
+            homonim_sort: 1,
+          },
+        ],
+      });
+
+    const result = await ModelEntri.cariEntriCursor('kata', { limit: 2, lastPage: true, hitungTotal: true });
+    expect(result.hasPrev).toBe(false);
+    expect(result.hasNext).toBe(false);
   });
 
   it('cariEntri memakai limit dan offset default saat argumen tidak diberikan', async () => {
