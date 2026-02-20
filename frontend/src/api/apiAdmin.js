@@ -207,6 +207,95 @@ export function useUbahPeran() {
   });
 }
 
+// ─── Peran & Izin ───────────────────────────────────────────────────────────
+
+export function useDaftarPeranAdmin({ limit = 50, offset = 0, q = '' } = {}) {
+  return useQuery({
+    queryKey: ['admin-peran-kelola', { limit, offset, q }],
+    queryFn: () =>
+      klien
+        .get('/api/redaksi/peran', { params: { limit, offset, q: q || undefined } })
+        .then((r) => r.data),
+  });
+}
+
+export function useDetailPeranAdmin(id) {
+  return useQuery({
+    queryKey: ['admin-peran-detail', id],
+    queryFn: () => klien.get(`/api/redaksi/peran/${id}`).then((r) => r.data),
+    enabled: Boolean(id),
+  });
+}
+
+export function useDaftarIzinAdmin({ q = '' } = {}) {
+  return useQuery({
+    queryKey: ['admin-izin', { q }],
+    queryFn: () =>
+      klien
+        .get('/api/redaksi/peran/izin', { params: { q: q || undefined } })
+        .then((r) => r.data),
+  });
+}
+
+export function useSimpanPeranAdmin() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data) => {
+      if (data.id) return klien.put(`/api/redaksi/peran/${data.id}`, data).then((r) => r.data);
+      return klien.post('/api/redaksi/peran', data).then((r) => r.data);
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-peran-kelola'] });
+      qc.invalidateQueries({ queryKey: ['admin-peran'] });
+      qc.invalidateQueries({ queryKey: ['admin-pengguna'] });
+    },
+  });
+}
+
+export function useDaftarIzinKelolaAdmin({ limit = 50, offset = 0, q = '' } = {}) {
+  return useQuery({
+    queryKey: ['admin-izin-kelola', { limit, offset, q }],
+    queryFn: () =>
+      klien
+        .get('/api/redaksi/izin', { params: { limit, offset, q: q || undefined } })
+        .then((r) => r.data),
+  });
+}
+
+export function useDetailIzinAdmin(id) {
+  return useQuery({
+    queryKey: ['admin-izin-detail', id],
+    queryFn: () => klien.get(`/api/redaksi/izin/${id}`).then((r) => r.data),
+    enabled: Boolean(id),
+  });
+}
+
+export function useDaftarPeranUntukIzinAdmin({ q = '' } = {}) {
+  return useQuery({
+    queryKey: ['admin-izin-peran-opsi', { q }],
+    queryFn: () =>
+      klien
+        .get('/api/redaksi/izin/peran', { params: { q: q || undefined } })
+        .then((r) => r.data),
+  });
+}
+
+export function useSimpanIzinAdmin() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data) => {
+      if (data.id) return klien.put(`/api/redaksi/izin/${data.id}`, data).then((r) => r.data);
+      return klien.post('/api/redaksi/izin', data).then((r) => r.data);
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-izin-kelola'] });
+      qc.invalidateQueries({ queryKey: ['admin-izin'] });
+      qc.invalidateQueries({ queryKey: ['admin-peran-kelola'] });
+      qc.invalidateQueries({ queryKey: ['admin-peran'] });
+    },
+  });
+}
+
 // ─── Mutations: Kamus ────────────────────────────────────────────────────────
 
 export function useSimpanKamus() {
