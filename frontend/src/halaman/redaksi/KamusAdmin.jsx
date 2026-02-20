@@ -75,6 +75,21 @@ const kategoriLabelRedaksi = [
   'penyingkatan',
 ];
 
+const nilaiAwalFilterKamus = {
+  jenis: '',
+  punyaHomograf: '',
+  punyaHomonim: '',
+  kelasKata: '',
+  ragam: '',
+  bidang: '',
+  bahasa: '',
+  punyaIlmiah: '',
+  punyaKimia: '',
+  tipePenyingkat: '',
+  punyaContoh: '',
+  aktif: '',
+};
+
 function mapOpsiLabel(labels = [], { emptyLabel = '— Pilih —', includeEmpty = true } = {}) {
   const mapped = labels.map((item) => {
     const kode = item?.kode ?? '';
@@ -469,30 +484,8 @@ function KamusAdmin() {
   const { id: idParam } = useParams();
   const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit, currentPage, cursor, direction, lastPage } =
     usePencarianAdmin(50);
-  const [filterJenisDraft, setFilterJenisDraft] = useState('');
-  const [filterPunyaHomografDraft, setFilterPunyaHomografDraft] = useState('');
-  const [filterPunyaHomonimDraft, setFilterPunyaHomonimDraft] = useState('');
-  const [filterKelasKataDraft, setFilterKelasKataDraft] = useState('');
-  const [filterRagamDraft, setFilterRagamDraft] = useState('');
-  const [filterBidangDraft, setFilterBidangDraft] = useState('');
-  const [filterBahasaDraft, setFilterBahasaDraft] = useState('');
-  const [filterPunyaIlmiahDraft, setFilterPunyaIlmiahDraft] = useState('');
-  const [filterPunyaKimiaDraft, setFilterPunyaKimiaDraft] = useState('');
-  const [filterTipePenyingkatDraft, setFilterTipePenyingkatDraft] = useState('');
-  const [filterPunyaContohDraft, setFilterPunyaContohDraft] = useState('');
-  const [filterAktifDraft, setFilterAktifDraft] = useState('');
-  const [filterJenis, setFilterJenis] = useState('');
-  const [filterPunyaHomograf, setFilterPunyaHomograf] = useState('');
-  const [filterPunyaHomonim, setFilterPunyaHomonim] = useState('');
-  const [filterKelasKata, setFilterKelasKata] = useState('');
-  const [filterRagam, setFilterRagam] = useState('');
-  const [filterBidang, setFilterBidang] = useState('');
-  const [filterBahasa, setFilterBahasa] = useState('');
-  const [filterPunyaIlmiah, setFilterPunyaIlmiah] = useState('');
-  const [filterPunyaKimia, setFilterPunyaKimia] = useState('');
-  const [filterTipePenyingkat, setFilterTipePenyingkat] = useState('');
-  const [filterPunyaContoh, setFilterPunyaContoh] = useState('');
-  const [filterAktif, setFilterAktif] = useState('');
+  const [filterDraft, setFilterDraft] = useState(nilaiAwalFilterKamus);
+  const [filterAktif, setFilterAktif] = useState(nilaiAwalFilterKamus);
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
   const bisaTambah = punyaIzin('tambah_entri');
   const bisaEdit = punyaIzin('edit_entri');
@@ -513,18 +506,18 @@ function KamusAdmin() {
     direction,
     lastPage,
     q,
-    aktif: filterAktif,
-    jenis: filterJenis,
-    punyaHomograf: filterPunyaHomograf,
-    punyaHomonim: filterPunyaHomonim,
-    kelasKata: filterKelasKata,
-    ragam: filterRagam,
-    bidang: filterBidang,
-    bahasa: filterBahasa,
-    punyaIlmiah: filterPunyaIlmiah,
-    punyaKimia: filterPunyaKimia,
-    tipePenyingkat: filterTipePenyingkat,
-    punyaContoh: filterPunyaContoh,
+    jenis: filterAktif.jenis,
+    punyaHomograf: filterAktif.punyaHomograf,
+    punyaHomonim: filterAktif.punyaHomonim,
+    kelasKata: filterAktif.kelasKata,
+    ragam: filterAktif.ragam,
+    bidang: filterAktif.bidang,
+    bahasa: filterAktif.bahasa,
+    punyaIlmiah: filterAktif.punyaIlmiah,
+    punyaKimia: filterAktif.punyaKimia,
+    tipePenyingkat: filterAktif.tipePenyingkat,
+    punyaContoh: filterAktif.punyaContoh,
+    aktif: filterAktif.aktif,
   });
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
@@ -631,19 +624,12 @@ function KamusAdmin() {
     { value: '0', label: 'Tanpa contoh' },
   ]), []);
 
+  const setFilterDraftValue = (key, value) => {
+    setFilterDraft((prev) => ({ ...prev, [key]: value }));
+  };
+
   const handleCari = () => {
-    setFilterJenis(filterJenisDraft);
-    setFilterPunyaHomograf(filterPunyaHomografDraft);
-    setFilterPunyaHomonim(filterPunyaHomonimDraft);
-    setFilterKelasKata(filterKelasKataDraft);
-    setFilterRagam(filterRagamDraft);
-    setFilterBidang(filterBidangDraft);
-    setFilterBahasa(filterBahasaDraft);
-    setFilterPunyaIlmiah(filterPunyaIlmiahDraft);
-    setFilterPunyaKimia(filterPunyaKimiaDraft);
-    setFilterTipePenyingkat(filterTipePenyingkatDraft);
-    setFilterPunyaContoh(filterPunyaContohDraft);
-    setFilterAktif(filterAktifDraft);
+    setFilterAktif(filterDraft);
     kirimCari(cari);
   };
 
@@ -785,85 +771,85 @@ function KamusAdmin() {
         filters={[
           {
             key: 'jenis',
-            value: filterJenisDraft,
-            onChange: setFilterJenisDraft,
+            value: filterDraft.jenis,
+            onChange: (value) => setFilterDraftValue('jenis', value),
             options: opsiFilterJenis,
             ariaLabel: 'Filter jenis',
           },
           {
             key: 'punya_homograf',
-            value: filterPunyaHomografDraft,
-            onChange: setFilterPunyaHomografDraft,
+            value: filterDraft.punyaHomograf,
+            onChange: (value) => setFilterDraftValue('punyaHomograf', value),
             options: opsiFilterHomograf,
             ariaLabel: 'Filter homograf',
           },
           {
             key: 'punya_homonim',
-            value: filterPunyaHomonimDraft,
-            onChange: setFilterPunyaHomonimDraft,
+            value: filterDraft.punyaHomonim,
+            onChange: (value) => setFilterDraftValue('punyaHomonim', value),
             options: opsiFilterHomonim,
             ariaLabel: 'Filter homonim',
           },
           {
             key: 'aktif',
-            value: filterAktifDraft,
-            onChange: setFilterAktifDraft,
+            value: filterDraft.aktif,
+            onChange: (value) => setFilterDraftValue('aktif', value),
             options: opsiFilterStatusKamus,
             ariaLabel: 'Filter status entri',
           },
           {
             key: 'kelas_kata',
-            value: filterKelasKataDraft,
-            onChange: setFilterKelasKataDraft,
+            value: filterDraft.kelasKata,
+            onChange: (value) => setFilterDraftValue('kelasKata', value),
             options: opsiFilterKelasKata,
             ariaLabel: 'Filter kelas kata',
           },
           {
             key: 'ragam',
-            value: filterRagamDraft,
-            onChange: setFilterRagamDraft,
+            value: filterDraft.ragam,
+            onChange: (value) => setFilterDraftValue('ragam', value),
             options: opsiFilterRagam,
             ariaLabel: 'Filter ragam',
           },
           {
             key: 'bidang',
-            value: filterBidangDraft,
-            onChange: setFilterBidangDraft,
+            value: filterDraft.bidang,
+            onChange: (value) => setFilterDraftValue('bidang', value),
             options: opsiFilterBidang,
             ariaLabel: 'Filter bidang',
           },
           {
             key: 'bahasa',
-            value: filterBahasaDraft,
-            onChange: setFilterBahasaDraft,
+            value: filterDraft.bahasa,
+            onChange: (value) => setFilterDraftValue('bahasa', value),
             options: opsiFilterBahasa,
             ariaLabel: 'Filter bahasa',
           },
           {
             key: 'punya_ilmiah',
-            value: filterPunyaIlmiahDraft,
-            onChange: setFilterPunyaIlmiahDraft,
+            value: filterDraft.punyaIlmiah,
+            onChange: (value) => setFilterDraftValue('punyaIlmiah', value),
             options: opsiFilterPunyaIlmiah,
             ariaLabel: 'Filter ilmiah',
           },
           {
             key: 'punya_kimia',
-            value: filterPunyaKimiaDraft,
-            onChange: setFilterPunyaKimiaDraft,
+            value: filterDraft.punyaKimia,
+            onChange: (value) => setFilterDraftValue('punyaKimia', value),
             options: opsiFilterPunyaKimia,
             ariaLabel: 'Filter kimia',
           },
           {
             key: 'tipe_penyingkat',
-            value: filterTipePenyingkatDraft,
-            onChange: setFilterTipePenyingkatDraft,
+            value: filterDraft.tipePenyingkat,
+            onChange: (value) => setFilterDraftValue('tipePenyingkat', value),
             options: opsiFilterTipePenyingkat,
             ariaLabel: 'Filter penyingkatan',
           },
           {
             key: 'punya_contoh',
-            value: filterPunyaContohDraft,
-            onChange: setFilterPunyaContohDraft,
+            value: filterDraft.punyaContoh,
+            onChange: (value) => setFilterDraftValue('punyaContoh', value),
             options: opsiFilterPunyaContoh,
             ariaLabel: 'Filter contoh',
           },
