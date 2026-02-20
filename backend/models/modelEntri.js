@@ -599,11 +599,17 @@ class ModelEntri {
           induk.entri AS induk_entri,
           e.lafal,
           e.sumber,
+           COALESCE(mk_stat.jumlah_makna, 0) AS jumlah_makna,
           e.aktif,
           e.jenis_rujuk,
           e.lema_rujuk AS entri_rujuk
        FROM entri e
        LEFT JOIN entri induk ON induk.id = e.induk
+         LEFT JOIN LATERAL (
+          SELECT COUNT(*)::int AS jumlah_makna
+          FROM makna mk
+          WHERE mk.entri_id = e.id
+         ) mk_stat ON TRUE
        ${where}
        ORDER BY e.indeks ASC, e.homograf ASC NULLS LAST, e.homonim ASC NULLS LAST, e.entri ASC
        LIMIT $${idx} OFFSET $${idx + 1}`,

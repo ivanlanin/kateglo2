@@ -118,8 +118,17 @@ const kolom = [
   { key: 'jenis', label: 'Jenis' },
   { key: 'indeks', label: 'Indeks' },
   { key: 'induk_entri', label: 'Induk', render: (item) => item.induk_entri || '—' },
-  { key: 'homograf', label: 'Homograf' },
-  { key: 'homonim', label: 'Homonim' },
+  { key: 'homograf', label: 'Homograf', align: 'center' },
+  { key: 'homonim', label: 'Homonim', align: 'center' },
+  {
+    key: 'jumlah_makna',
+    label: 'Makna',
+    align: 'center',
+    render: (item) => {
+      const jumlahMakna = Number(item.jumlah_makna || 0);
+      return jumlahMakna > 0 ? jumlahMakna : '—';
+    },
+  },
   { key: 'aktif', label: 'Status', render: (item) => <BadgeStatus aktif={item.aktif} /> },
 ];
 

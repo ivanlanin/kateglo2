@@ -269,9 +269,10 @@ export function TabelAdmin({
   onOffset,
   onKlikBaris,
 }) {
-  const thClass =
-    'px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider';
-  const tdClass = 'px-6 py-3 text-sm text-gray-700 dark:text-gray-300';
+  const baseThClass =
+    'px-6 py-3 text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider';
+  const baseTdClass = 'px-6 py-3 text-sm text-gray-700 dark:text-gray-300';
+  const getAlignClass = (align) => (align === 'center' ? 'text-center' : 'text-left');
   const tampilkanPaginasi = total > 0 && limit && onOffset;
 
   if (isLoading) {
@@ -312,7 +313,7 @@ export function TabelAdmin({
             <thead className="bg-gray-100 dark:bg-dark-bg/80">
               <tr>
                 {kolom.map((k) => (
-                  <th key={k.key} className={thClass}>
+                  <th key={k.key} className={`${baseThClass} ${getAlignClass(k.align)}`}>
                     {k.label}
                   </th>
                 ))}
@@ -326,7 +327,7 @@ export function TabelAdmin({
                   className={`hover:bg-gray-50 dark:hover:bg-dark-bg${onKlikBaris ? ' cursor-pointer' : ''}`}
                 >
                   {kolom.map((k) => (
-                    <td key={k.key} className={tdClass}>
+                    <td key={k.key} className={`${baseTdClass} ${getAlignClass(k.align)}`}>
                       {k.render ? k.render(item) : (item[k.key] ?? '—')}
                     </td>
                   ))}
