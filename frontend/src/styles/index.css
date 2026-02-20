@@ -39,7 +39,7 @@ code {
   }
 
   .dark .navbar-root-beranda {
-    @apply bg-dark-bg border-dark-bg;
+    @apply bg-dark-bg-elevated border-dark-bg-elevated;
   }
 
   .navbar-container {
