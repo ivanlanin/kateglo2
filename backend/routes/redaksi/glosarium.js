@@ -6,6 +6,7 @@ const express = require('express');
 const { periksaIzin } = require('../../middleware/otorisasi');
 const ModelGlosarium = require('../../models/modelGlosarium');
 const {
+  buildPaginatedResult,
   parsePagination,
   parseSearchQuery,
   parseIdParam,
@@ -30,7 +31,7 @@ router.get('/', periksaIzin('lihat_glosarium'), async (req, res, next) => {
       offset,
       aktif: ['0', '1'].includes(aktif) ? aktif : '',
     });
-    return res.json({ success: true, data, total });
+    return res.json({ success: true, ...buildPaginatedResult({ data, total, pagination: { limit, offset } }) });
   } catch (error) {
     return next(error);
   }

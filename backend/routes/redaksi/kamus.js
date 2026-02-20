@@ -7,6 +7,7 @@ const ModelEntri = require('../../models/modelEntri');
 const { periksaIzin } = require('../../middleware/otorisasi');
 const { hapusCacheDetailKamus } = require('../../services/layananKamusPublik');
 const {
+  buildPaginatedResult,
   parsePagination,
   parseSearchQuery,
   parseIdParam,
@@ -74,7 +75,7 @@ router.get('/', periksaIzin('lihat_entri'), async (req, res, next) => {
       tipe_penyingkat: tipePenyingkat,
       punya_contoh: ['0', '1'].includes(punyaContoh) ? punyaContoh : '',
     });
-    return res.json({ success: true, data, total });
+    return res.json({ success: true, ...buildPaginatedResult({ data, total, pagination: { limit, offset } }) });
   } catch (error) {
     return next(error);
   }

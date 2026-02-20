@@ -5,16 +5,25 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import klien from './klien';
 
-function useDaftarAdmin(path, queryKeyPrefix, { limit = 50, offset = 0, q = '', aktif = '' } = {}) {
+function useDaftarAdmin(path, queryKeyPrefix, {
+  limit = 50,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+  q = '',
+  aktif = '',
+} = {}) {
   const params = {
     limit,
-    offset,
+    cursor: cursor || undefined,
+    direction,
+    lastPage: lastPage ? '1' : undefined,
     q: q || undefined,
     aktif: aktif || undefined,
   };
 
   return useQuery({
-    queryKey: [queryKeyPrefix, { limit, offset, q, aktif }],
+    queryKey: [queryKeyPrefix, { limit, cursor, direction, lastPage, q, aktif }],
     queryFn: () =>
       klien
         .get(path, { params })
@@ -61,7 +70,9 @@ export function useStatistikAdmin() {
 
 export function useDaftarKamusAdmin({
   limit = 50,
-  offset = 0,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
   q = '',
   aktif = '',
   jenis = '',
@@ -79,7 +90,9 @@ export function useDaftarKamusAdmin({
 } = {}) {
   const params = {
     limit,
-    offset,
+    cursor: cursor || undefined,
+    direction,
+    lastPage: lastPage ? '1' : undefined,
     q: q || undefined,
   };
 
@@ -100,7 +113,9 @@ export function useDaftarKamusAdmin({
   return useQuery({
     queryKey: ['admin-kamus', {
       limit,
-      offset,
+      cursor,
+      direction,
+      lastPage,
       q,
       aktif,
       jenis,
@@ -149,8 +164,22 @@ export function useAutocompleteIndukKamus({ q = '', limit = 8, excludeId = null 
   });
 }
 
-export function useDaftarKomentarAdmin({ limit = 50, offset = 0, q = '', aktif = '' } = {}) {
-  return useDaftarAdmin('/api/redaksi/komentar', 'admin-komentar', { limit, offset, q, aktif });
+export function useDaftarKomentarAdmin({
+  limit = 50,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+  q = '',
+  aktif = '',
+} = {}) {
+  return useDaftarAdmin('/api/redaksi/komentar', 'admin-komentar', {
+    limit,
+    cursor,
+    direction,
+    lastPage,
+    q,
+    aktif,
+  });
 }
 
 export function useDetailKomentarAdmin(id) {
@@ -163,8 +192,22 @@ export function useDetailKomentarAdmin(id) {
 
 // ─── Tesaurus ────────────────────────────────────────────────────────────────
 
-export function useDaftarTesaurusAdmin({ limit = 50, offset = 0, q = '', aktif = '' } = {}) {
-  return useDaftarAdmin('/api/redaksi/tesaurus', 'admin-tesaurus', { limit, offset, q, aktif });
+export function useDaftarTesaurusAdmin({
+  limit = 50,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+  q = '',
+  aktif = '',
+} = {}) {
+  return useDaftarAdmin('/api/redaksi/tesaurus', 'admin-tesaurus', {
+    limit,
+    cursor,
+    direction,
+    lastPage,
+    q,
+    aktif,
+  });
 }
 
 export function useDetailTesaurusAdmin(id) {
@@ -177,8 +220,22 @@ export function useDetailTesaurusAdmin(id) {
 
 // ─── Glosarium ───────────────────────────────────────────────────────────────
 
-export function useDaftarGlosariumAdmin({ limit = 50, offset = 0, q = '', aktif = '' } = {}) {
-  return useDaftarAdmin('/api/redaksi/glosarium', 'admin-glosarium', { limit, offset, q, aktif });
+export function useDaftarGlosariumAdmin({
+  limit = 50,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+  q = '',
+  aktif = '',
+} = {}) {
+  return useDaftarAdmin('/api/redaksi/glosarium', 'admin-glosarium', {
+    limit,
+    cursor,
+    direction,
+    lastPage,
+    q,
+    aktif,
+  });
 }
 
 export function useDetailGlosariumAdmin(id) {
@@ -191,8 +248,22 @@ export function useDetailGlosariumAdmin(id) {
 
 // ─── Label ───────────────────────────────────────────────────────────────────
 
-export function useDaftarLabelAdmin({ limit = 50, offset = 0, q = '', aktif = '' } = {}) {
-  return useDaftarAdmin('/api/redaksi/label', 'admin-label', { limit, offset, q, aktif });
+export function useDaftarLabelAdmin({
+  limit = 50,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+  q = '',
+  aktif = '',
+} = {}) {
+  return useDaftarAdmin('/api/redaksi/label', 'admin-label', {
+    limit,
+    cursor,
+    direction,
+    lastPage,
+    q,
+    aktif,
+  });
 }
 
 export function useDetailLabelAdmin(id) {
@@ -216,12 +287,28 @@ export function useKategoriLabelRedaksi(kategori = []) {
 
 // ─── Pengguna ────────────────────────────────────────────────────────────────
 
-export function useDaftarPengguna({ limit = 50, offset = 0, q = '', aktif = '' } = {}) {
+export function useDaftarPengguna({
+  limit = 50,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+  q = '',
+  aktif = '',
+} = {}) {
   return useQuery({
-    queryKey: ['admin-pengguna', { limit, offset, q, aktif }],
+    queryKey: ['admin-pengguna', { limit, cursor, direction, lastPage, q, aktif }],
     queryFn: () =>
       klien
-        .get('/api/redaksi/pengguna', { params: { limit, offset, q: q || undefined, aktif: aktif || undefined } })
+        .get('/api/redaksi/pengguna', {
+          params: {
+            limit,
+            cursor: cursor || undefined,
+            direction,
+            lastPage: lastPage ? '1' : undefined,
+            q: q || undefined,
+            aktif: aktif || undefined,
+          },
+        })
         .then((r) => r.data),
   });
 }
@@ -258,12 +345,26 @@ export function useUbahPeran() {
 
 // ─── Peran & Izin ───────────────────────────────────────────────────────────
 
-export function useDaftarPeranAdmin({ limit = 50, offset = 0, q = '' } = {}) {
+export function useDaftarPeranAdmin({
+  limit = 50,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+  q = '',
+} = {}) {
   return useQuery({
-    queryKey: ['admin-peran-kelola', { limit, offset, q }],
+    queryKey: ['admin-peran-kelola', { limit, cursor, direction, lastPage, q }],
     queryFn: () =>
       klien
-        .get('/api/redaksi/peran', { params: { limit, offset, q: q || undefined } })
+        .get('/api/redaksi/peran', {
+          params: {
+            limit,
+            cursor: cursor || undefined,
+            direction,
+            lastPage: lastPage ? '1' : undefined,
+            q: q || undefined,
+          },
+        })
         .then((r) => r.data),
   });
 }
@@ -302,12 +403,26 @@ export function useSimpanPeranAdmin() {
   });
 }
 
-export function useDaftarIzinKelolaAdmin({ limit = 50, offset = 0, q = '' } = {}) {
+export function useDaftarIzinKelolaAdmin({
+  limit = 50,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+  q = '',
+} = {}) {
   return useQuery({
-    queryKey: ['admin-izin-kelola', { limit, offset, q }],
+    queryKey: ['admin-izin-kelola', { limit, cursor, direction, lastPage, q }],
     queryFn: () =>
       klien
-        .get('/api/redaksi/izin', { params: { limit, offset, q: q || undefined } })
+        .get('/api/redaksi/izin', {
+          params: {
+            limit,
+            cursor: cursor || undefined,
+            direction,
+            lastPage: lastPage ? '1' : undefined,
+            q: q || undefined,
+          },
+        })
         .then((r) => r.data),
   });
 }

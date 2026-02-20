@@ -17,6 +17,27 @@ function normalizeRelasiList(teks) {
   return daftar.join('; ');
 }
 
+function buildAdminWhereClause({ q = '', aktif = '' } = {}) {
+  const conditions = [];
+  const params = [];
+
+  if (q) {
+    params.push(`%${q}%`);
+    conditions.push(`indeks ILIKE $${params.length}`);
+  }
+
+  if (aktif === '1') {
+    conditions.push('aktif = TRUE');
+  } else if (aktif === '0') {
+    conditions.push('aktif = FALSE');
+  }
+
+  return {
+    conditions,
+    params,
+  };
+}
+
 class ModelTesaurus {
   static async autocomplete(query, limit = 8) {
     return autocomplete('tesaurus', 'indeks', query, { limit, extraWhere: 'aktif = TRUE' });
@@ -226,23 +247,10 @@ class ModelTesaurus {
    * @returns {Promise<{ data: Array, total: number }>}
    */
   static async daftarAdmin({ limit = 50, offset = 0, q = '', aktif = '' } = {}) {
-    const conditions = [];
-    const params = [];
-    let idx = 1;
-
-    if (q) {
-      conditions.push(`indeks ILIKE $${idx}`);
-      params.push(`%${q}%`);
-      idx++;
-    }
-
-    if (aktif === '1') {
-      conditions.push('aktif = TRUE');
-    } else if (aktif === '0') {
-      conditions.push('aktif = FALSE');
-    }
-
+    const { conditions, params } = buildAdminWhereClause({ q, aktif });
     const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+    const limitIdx = params.length + 1;
+    const offsetIdx = params.length + 2;
 
     const countResult = await db.query(
       `SELECT COUNT(*) AS total FROM tesaurus ${where}`,
@@ -253,12 +261,107 @@ class ModelTesaurus {
     const dataResult = await db.query(
       `SELECT id, indeks, sinonim, antonim, aktif
        FROM tesaurus ${where}
-       ORDER BY indeks ASC
-       LIMIT $${idx} OFFSET $${idx + 1}`,
+       ORDER BY indeks ASC, id ASC
+       LIMIT $${limitIdx} OFFSET $${offsetIdx}`,
       [...params, limit, offset]
     );
 
     return { data: dataResult.rows, total };
+  }
+
+  static async daftarAdminCursor({
+    limit = 50,
+    q = '',
+    aktif = '',
+    cursor = null,
+    direction = 'next',
+    lastPage = false,
+  } = {}) {
+    const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
+    const { conditions, params } = buildAdminWhereClause({ q, aktif });
+    const baseParams = [...params];
+    const cursorPayload = decodeCursor(cursor);
+    const isPrev = direction === 'prev';
+    const orderDesc = Boolean(lastPage || isPrev);
+
+    const whereBase = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    const countResult = await db.query(
+      `SELECT COUNT(*) AS total FROM tesaurus ${whereBase}`,
+      baseParams
+    );
+    const total = parseCount(countResult.rows[0]?.total);
+
+    if (total === 0) {
+      return {
+        data: [],
+        total: 0,
+        hasPrev: false,
+        hasNext: false,
+        prevCursor: null,
+        nextCursor: null,
+      };
+    }
+
+    const queryParams = [...baseParams];
+    const whereParts = [...conditions];
+
+    if (cursorPayload && !lastPage) {
+      queryParams.push(String(cursorPayload.indeks || ''), Number(cursorPayload.id) || 0);
+      const indeksIdx = queryParams.length - 1;
+      const idIdx = queryParams.length;
+      whereParts.push(
+        isPrev
+          ? `(indeks, id) < ($${indeksIdx}, $${idIdx})`
+          : `(indeks, id) > ($${indeksIdx}, $${idIdx})`
+      );
+    }
+
+    queryParams.push(cappedLimit + 1);
+    const limitIdx = queryParams.length;
+    const whereClause = whereParts.length ? `WHERE ${whereParts.join(' AND ')}` : '';
+
+    const dataResult = await db.query(
+      `SELECT id, indeks, sinonim, antonim, aktif
+       FROM tesaurus
+       ${whereClause}
+       ORDER BY indeks ${orderDesc ? 'DESC' : 'ASC'}, id ${orderDesc ? 'DESC' : 'ASC'}
+       LIMIT $${limitIdx}`,
+      queryParams
+    );
+
+    const hasMore = dataResult.rows.length > cappedLimit;
+    let rows = hasMore ? dataResult.rows.slice(0, cappedLimit) : dataResult.rows;
+    if (orderDesc) {
+      rows = rows.reverse();
+    }
+
+    const first = rows[0];
+    const last = rows[rows.length - 1];
+    const prevCursor = first ? encodeCursor({ indeks: first.indeks, id: first.id }) : null;
+    const nextCursor = last ? encodeCursor({ indeks: last.indeks, id: last.id }) : null;
+
+    let hasPrev = false;
+    let hasNext = false;
+    if (lastPage) {
+      hasNext = false;
+      hasPrev = total > rows.length;
+    } else if (isPrev) {
+      hasPrev = hasMore;
+      hasNext = Boolean(cursorPayload);
+    } else {
+      hasPrev = Boolean(cursorPayload);
+      hasNext = hasMore;
+    }
+
+    return {
+      data: rows,
+      total,
+      hasPrev,
+      hasNext,
+      prevCursor,
+      nextCursor,
+    };
   }
 
   /**

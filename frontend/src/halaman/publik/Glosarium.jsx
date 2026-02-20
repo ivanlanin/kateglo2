@@ -2,9 +2,9 @@
  * @fileoverview Halaman Glosarium — browse dan cari istilah teknis bilingual
  */
 
-import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useCursorPagination } from '../../hooks/bersama/useCursorPagination';
 import {
   cariGlosarium,
   ambilGlosariumPerBidang,
@@ -25,17 +25,11 @@ import {
 
 function Glosarium() {
   const { kata, bidang, sumber } = useParams();
-  const [cursorState, setCursorState] = useState({
-    cursor: null,
-    direction: 'next',
-    lastPage: false,
-    page: 1,
-  });
   const limit = 100;
-
-  useEffect(() => {
-    setCursorState({ cursor: null, direction: 'next', lastPage: false, page: 1 });
-  }, [kata, bidang, sumber]);
+  const { cursorState, handleCursor } = useCursorPagination({
+    limit,
+    resetOn: `${kata || ''}|${bidang || ''}|${sumber || ''}`,
+  });
 
   const sedangMencari = Boolean(kata || bidang || sumber);
   const modeCariKata = Boolean(kata);
@@ -82,37 +76,11 @@ function Glosarium() {
   const results = data?.data || [];
   const total = data?.total || 0;
 
-  const handleCursor = (action) => {
-    const pageInfo = data?.pageInfo;
-    if (action === 'first') {
-      setCursorState({ cursor: null, direction: 'next', lastPage: false, page: 1 });
-      return;
-    }
-
-    if (action === 'last') {
-      const targetPage = Math.max(1, Math.ceil((total || 0) / limit));
-      setCursorState({ cursor: null, direction: 'next', lastPage: true, page: targetPage });
-      return;
-    }
-
-    if (action === 'next' && pageInfo?.hasNext && pageInfo?.nextCursor) {
-      setCursorState((prev) => ({
-        cursor: pageInfo.nextCursor,
-        direction: 'next',
-        lastPage: false,
-        page: prev.page + 1,
-      }));
-      return;
-    }
-
-    if (action === 'prev' && pageInfo?.hasPrev && pageInfo?.prevCursor) {
-      setCursorState((prev) => ({
-        cursor: pageInfo.prevCursor,
-        direction: 'prev',
-        lastPage: false,
-        page: Math.max(1, prev.page - 1),
-      }));
-    }
+  const handlePaginasi = (action) => {
+    handleCursor(action, {
+      pageInfo: data?.pageInfo,
+      total,
+    });
   };
 
   const metaHalaman = modeCariKata
@@ -183,7 +151,7 @@ function Glosarium() {
                   limit={limit}
                   pageInfo={data?.pageInfo}
                   currentPage={cursorState.page}
-                  onNavigateCursor={handleCursor}
+                  onNavigateCursor={handlePaginasi}
                 />
               </div>
               <div className="glosarium-result-grid">
@@ -205,7 +173,7 @@ function Glosarium() {
                   limit={limit}
                   pageInfo={data?.pageInfo}
                   currentPage={cursorState.page}
-                  onNavigateCursor={handleCursor}
+                  onNavigateCursor={handlePaginasi}
                 />
               </div>
             </>

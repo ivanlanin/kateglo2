@@ -59,7 +59,7 @@ function GlosariumAdmin() {
   const { punyaIzin } = useAuth();
   const navigate = useNavigate();
   const { id: idParam } = useParams();
-  const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit } =
+  const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit, currentPage, cursor, direction, lastPage } =
     usePencarianAdmin(50);
   const idDariPath = parsePositiveIntegerParam(idParam);
   const idEditTerbuka = useRef(null);
@@ -70,7 +70,14 @@ function GlosariumAdmin() {
   const bisaEdit = punyaIzin('edit_glosarium');
   const bisaHapus = punyaIzin('hapus_glosarium');
 
-  const { data: resp, isLoading, isError } = useDaftarGlosariumAdmin({ limit, offset, q, aktif: filterAktif });
+  const { data: resp, isLoading, isError } = useDaftarGlosariumAdmin({
+    limit,
+    cursor,
+    direction,
+    lastPage,
+    q,
+    aktif: filterAktif,
+  });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailGlosariumAdmin(idDariPath);
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
@@ -192,7 +199,9 @@ function GlosariumAdmin() {
         total={total}
         limit={limit}
         offset={offset}
-        onOffset={setOffset}
+        pageInfo={resp?.pageInfo}
+        currentPage={currentPage}
+        onNavigateCursor={(action) => setOffset(action, { pageInfo: resp?.pageInfo, total })}
         onKlikBaris={bisaEdit ? bukaSuntingDariDaftar : undefined}
       />
 

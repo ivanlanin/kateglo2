@@ -104,6 +104,32 @@ function buildNilaiCocokLabel(inputLabel, label = null) {
   return uniqueValues;
 }
 
+function buildAdminLabelWhereClause({ q = '', aktif = '' } = {}) {
+  const conditions = [];
+  const params = [];
+
+  if (q) {
+    params.push(`%${q}%`);
+    conditions.push(`(
+      kategori ILIKE $${params.length}
+      OR kode ILIKE $${params.length}
+      OR nama ILIKE $${params.length}
+      OR COALESCE(keterangan, '') ILIKE $${params.length}
+    )`);
+  }
+
+  if (aktif === '1') {
+    conditions.push('aktif = TRUE');
+  } else if (aktif === '0') {
+    conditions.push('aktif = FALSE');
+  }
+
+  return {
+    conditions,
+    params,
+  };
+}
+
 class ModelLabel {
   static async _cariEntriCursorDenganKondisi({
     whereSql,
@@ -618,44 +644,136 @@ class ModelLabel {
    * @returns {Promise<{data: Array, total: number}>}
    */
   static async daftarAdmin({ limit = 50, offset = 0, q = '', aktif = '' } = {}) {
-    const conditions = [];
-    const params = [];
-    let idx = 1;
-
-    if (q) {
-      conditions.push(`(
-        kategori ILIKE $${idx}
-        OR kode ILIKE $${idx}
-        OR nama ILIKE $${idx}
-        OR COALESCE(keterangan, '') ILIKE $${idx}
-      )`);
-      params.push(`%${q}%`);
-      idx++;
-    }
-
-    if (aktif === '1') {
-      conditions.push('aktif = TRUE');
-    } else if (aktif === '0') {
-      conditions.push('aktif = FALSE');
-    }
+    const { conditions, params } = buildAdminLabelWhereClause({ q, aktif });
 
     const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+    const limitIdx = params.length + 1;
+    const offsetIdx = params.length + 2;
 
     const countResult = await db.query(
       `SELECT COUNT(*) AS total FROM label ${where}`,
       params
     );
-    const total = parseInt(countResult.rows[0].total, 10);
+    const total = parseCount(countResult.rows[0]?.total);
 
     const dataResult = await db.query(
       `SELECT id, kategori, kode, nama, urutan, keterangan, aktif
        FROM label ${where}
-       ORDER BY kategori ASC, urutan ASC, nama ASC
-       LIMIT $${idx} OFFSET $${idx + 1}`,
+       ORDER BY kategori ASC, urutan ASC, nama ASC, id ASC
+       LIMIT $${limitIdx} OFFSET $${offsetIdx}`,
       [...params, limit, offset]
     );
 
     return { data: dataResult.rows, total };
+  }
+
+  static async daftarAdminCursor({
+    limit = 50,
+    q = '',
+    aktif = '',
+    cursor = null,
+    direction = 'next',
+    lastPage = false,
+  } = {}) {
+    const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
+    const { conditions, params } = buildAdminLabelWhereClause({ q, aktif });
+    const baseParams = [...params];
+    const cursorPayload = decodeCursor(cursor);
+    const isPrev = direction === 'prev';
+    const orderDesc = Boolean(lastPage || isPrev);
+
+    const whereBase = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    const countResult = await db.query(
+      `SELECT COUNT(*) AS total FROM label ${whereBase}`,
+      baseParams
+    );
+    const total = parseCount(countResult.rows[0]?.total);
+
+    if (total === 0) {
+      return {
+        data: [],
+        total: 0,
+        hasPrev: false,
+        hasNext: false,
+        prevCursor: null,
+        nextCursor: null,
+      };
+    }
+
+    const queryParams = [...baseParams];
+    const whereParts = [...conditions];
+
+    if (cursorPayload && !lastPage) {
+      queryParams.push(
+        String(cursorPayload.kategori || ''),
+        Number(cursorPayload.urutan) || 0,
+        String(cursorPayload.nama || ''),
+        Number(cursorPayload.id) || 0
+      );
+      const kategoriIdx = queryParams.length - 3;
+      const urutanIdx = queryParams.length - 2;
+      const namaIdx = queryParams.length - 1;
+      const idIdx = queryParams.length;
+      whereParts.push(
+        isPrev
+          ? `(kategori, urutan, nama, id) < ($${kategoriIdx}, $${urutanIdx}, $${namaIdx}, $${idIdx})`
+          : `(kategori, urutan, nama, id) > ($${kategoriIdx}, $${urutanIdx}, $${namaIdx}, $${idIdx})`
+      );
+    }
+
+    queryParams.push(cappedLimit + 1);
+    const limitIdx = queryParams.length;
+    const whereClause = whereParts.length ? `WHERE ${whereParts.join(' AND ')}` : '';
+
+    const dataResult = await db.query(
+      `SELECT id, kategori, kode, nama, urutan, keterangan, aktif
+       FROM label
+       ${whereClause}
+       ORDER BY kategori ${orderDesc ? 'DESC' : 'ASC'},
+                urutan ${orderDesc ? 'DESC' : 'ASC'},
+                nama ${orderDesc ? 'DESC' : 'ASC'},
+                id ${orderDesc ? 'DESC' : 'ASC'}
+       LIMIT $${limitIdx}`,
+      queryParams
+    );
+
+    const hasMore = dataResult.rows.length > cappedLimit;
+    let rows = hasMore ? dataResult.rows.slice(0, cappedLimit) : dataResult.rows;
+    if (orderDesc) {
+      rows = rows.reverse();
+    }
+
+    const first = rows[0];
+    const last = rows[rows.length - 1];
+    const prevCursor = first
+      ? encodeCursor({ kategori: first.kategori, urutan: first.urutan, nama: first.nama, id: first.id })
+      : null;
+    const nextCursor = last
+      ? encodeCursor({ kategori: last.kategori, urutan: last.urutan, nama: last.nama, id: last.id })
+      : null;
+
+    let hasPrev = false;
+    let hasNext = false;
+    if (lastPage) {
+      hasNext = false;
+      hasPrev = total > rows.length;
+    } else if (isPrev) {
+      hasPrev = hasMore;
+      hasNext = Boolean(cursorPayload);
+    } else {
+      hasPrev = Boolean(cursorPayload);
+      hasNext = hasMore;
+    }
+
+    return {
+      data: rows,
+      total,
+      hasPrev,
+      hasNext,
+      prevCursor,
+      nextCursor,
+    };
   }
 
   /**
