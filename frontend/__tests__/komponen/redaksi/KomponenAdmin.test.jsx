@@ -15,8 +15,8 @@ import {
 } from '../../../src/komponen/redaksi/KomponenAdmin';
 
 vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
-  default: ({ onChange }) => (
-    <button onClick={() => onChange(20)} data-testid="paginasi-mock">
+  default: ({ onChange, onNavigateCursor }) => (
+    <button onClick={() => (onNavigateCursor ? onNavigateCursor('next') : onChange(20))} data-testid="paginasi-mock">
       Paginasi
     </button>
   ),
@@ -30,7 +30,14 @@ function HarnessPencarian() {
       <button onClick={() => state.setCari('tes')}>set-cari</button>
       <button onClick={() => state.kirimCari()}>kirim-cari</button>
       <button onClick={() => state.hapusCari()}>hapus-cari</button>
-      <button onClick={() => state.setOffset(10)}>set-offset</button>
+      <button
+        onClick={() => state.setOffset('next', {
+          pageInfo: { hasNext: true, nextCursor: 'cursor-2' },
+          total: 100,
+        })}
+      >
+        set-offset
+      </button>
     </div>
   );
 }
@@ -73,7 +80,7 @@ describe('KomponenAdmin', () => {
     expect(screen.getByTestId('state').textContent).toContain('"limit":25');
 
     fireEvent.click(screen.getByText('set-offset'));
-    expect(screen.getByTestId('state').textContent).toContain('"offset":10');
+    expect(screen.getByTestId('state').textContent).toContain('"offset":25');
 
     fireEvent.click(screen.getByText('hapus-cari'));
     expect(screen.getByTestId('state').textContent).toContain('"q":""');
@@ -274,7 +281,6 @@ describe('KomponenAdmin', () => {
 
     fireEvent.click(screen.getAllByTestId('paginasi-mock')[0]);
     expect(onOffset).toHaveBeenCalledWith(20);
-
     rerender(
       <TabelAdmin
         kolom={kolom}
@@ -288,6 +294,53 @@ describe('KomponenAdmin', () => {
     );
     expect(screen.getByText('—')).toBeInTheDocument();
     rerender(<div />);
+  });
+
+  it('TabelAdmin mode cursor meneruskan action dengan pageInfo dan total', () => {
+    const onNavigateCursor = vi.fn();
+
+    render(
+      <TabelAdmin
+        kolom={[{ key: 'nama', label: 'Nama' }]}
+        data={[{ id: 1, nama: 'Admin' }]}
+        isLoading={false}
+        isError={false}
+        total={100}
+        limit={10}
+        offset={0}
+        pageInfo={{ hasPrev: false, hasNext: true, nextCursor: 'cursor-2' }}
+        currentPage={1}
+        onNavigateCursor={onNavigateCursor}
+      />
+    );
+
+    fireEvent.click(screen.getAllByTestId('paginasi-mock')[0]);
+    expect(onNavigateCursor).toHaveBeenCalledWith('next', {
+      pageInfo: { hasPrev: false, hasNext: true, nextCursor: 'cursor-2' },
+      total: 100,
+    });
+  });
+
+  it('TabelAdmin memakai onOffset sebagai handler cursor saat pageInfo tersedia', () => {
+    const onOffset = vi.fn();
+
+    render(
+      <TabelAdmin
+        kolom={[{ key: 'nama', label: 'Nama' }]}
+        data={[{ id: 1, nama: 'Admin' }]}
+        isLoading={false}
+        isError={false}
+        total={100}
+        limit={10}
+        offset={0}
+        pageInfo={{ hasPrev: false, hasNext: true }}
+        currentPage={1}
+        onOffset={onOffset}
+      />
+    );
+
+    fireEvent.click(screen.getAllByTestId('paginasi-mock')[0]);
+    expect(onOffset).toHaveBeenCalledWith('next');
   });
 
   it('TabelAdmin dapat merender tanpa onKlikBaris dan tanpa paginasi', () => {

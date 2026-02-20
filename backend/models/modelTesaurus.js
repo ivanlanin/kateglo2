@@ -428,4 +428,5 @@ module.exports = ModelTesaurus;
 module.exports.__private = {
   normalizeBoolean,
   normalizeRelasiList,
+  buildAdminWhereClause,
 };

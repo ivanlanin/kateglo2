@@ -219,6 +219,24 @@ describe('apiAdmin', () => {
     await peran.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/pengguna/peran');
 
+    const izinKelolaCursor = useDaftarIzinKelolaAdmin({
+      limit: 15,
+      cursor: 'cursor-1',
+      direction: 'prev',
+      lastPage: true,
+      q: 'adm',
+    });
+    await izinKelolaCursor.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/izin', {
+      params: {
+        limit: 15,
+        cursor: 'cursor-1',
+        direction: 'prev',
+        lastPage: '1',
+        q: 'adm',
+      },
+    });
+
     const peranAdmin = useDaftarPeranAdmin({ limit: 30, q: 'adm' });
     await peranAdmin.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/peran', {

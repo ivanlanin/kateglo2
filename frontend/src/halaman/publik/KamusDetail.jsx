@@ -351,7 +351,7 @@ function KamusDetail() {
                               </Link>
                             )}
                             {index < rantaiHeading.length - 1 && (
-                              <span className="kamus-detail-heading-chain-separator">{' → '}</span>
+                              <span className="kamus-detail-heading-chain-separator">{' › '}</span>
                             )}
                           </Fragment>
                         ))}

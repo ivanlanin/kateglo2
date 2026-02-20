@@ -847,6 +847,7 @@ class ModelLabel {
 
 module.exports = ModelLabel;
 module.exports.__private = {
+  buildAdminLabelWhereClause,
   normalisasiKategoriLabel,
   kandidatKategoriLabel,
   normalizeLabelValue,
