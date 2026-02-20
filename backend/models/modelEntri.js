@@ -21,6 +21,39 @@ function parseNullableInteger(value) {
 }
 
 class ModelEntri {
+  static async cariIndukAdmin(query, { limit = 8, excludeId = null } = {}) {
+    const trimmed = String(query || '').trim();
+    if (!trimmed) return [];
+
+    const cappedLimit = Math.min(Math.max(Number(limit) || 8, 1), 20);
+    const parsedExcludeId = parseNullableInteger(excludeId);
+    const params = [trimmed, `${trimmed}%`, `%${trimmed}%`];
+    const conditions = ['e.aktif = 1', 'e.entri ILIKE $3'];
+
+    if (parsedExcludeId) {
+      conditions.push(`e.id <> $${params.length + 1}`);
+      params.push(parsedExcludeId);
+    }
+
+    params.push(cappedLimit);
+
+    const result = await db.query(
+      `SELECT e.id, e.entri, e.indeks, e.jenis
+       FROM entri e
+       WHERE ${conditions.join(' AND ')}
+       ORDER BY
+         CASE WHEN LOWER(e.entri) = LOWER($1) THEN 0
+              WHEN e.entri ILIKE $2 THEN 1
+              ELSE 2 END,
+         e.entri ASC,
+         e.id ASC
+       LIMIT $${params.length}`,
+      params
+    );
+
+    return result.rows;
+  }
+
   static async autocomplete(query, limit = 8) {
     return autocomplete('entri', 'indeks', query, { limit, extraWhere: 'aktif = 1' });
   }
@@ -396,53 +429,68 @@ class ModelEntri {
     let idx = 1;
 
     if (q) {
-      conditions.push(`entri ILIKE $${idx}`);
+      conditions.push(`e.entri ILIKE $${idx}`);
       params.push(`%${q}%`);
       idx++;
     }
 
     if (aktif === '1') {
-      conditions.push('aktif = 1');
+      conditions.push('e.aktif = 1');
     } else if (aktif === '0') {
-      conditions.push('aktif = 0');
+      conditions.push('e.aktif = 0');
     }
 
     if (jenis) {
-      conditions.push(`jenis = $${idx}`);
+      conditions.push(`e.jenis = $${idx}`);
       params.push(jenis);
       idx++;
     }
 
     if (jenis_rujuk) {
-      conditions.push(`jenis_rujuk = $${idx}`);
+      conditions.push(`e.jenis_rujuk = $${idx}`);
       params.push(jenis_rujuk);
       idx++;
     }
 
     if (punya_homograf === '1') {
-      conditions.push('homograf IS NOT NULL');
+      conditions.push('e.homograf IS NOT NULL');
     } else if (punya_homograf === '0') {
-      conditions.push('homograf IS NULL');
+      conditions.push('e.homograf IS NULL');
     }
 
     if (punya_homonim === '1') {
-      conditions.push('homonim IS NOT NULL');
+      conditions.push('e.homonim IS NOT NULL');
     } else if (punya_homonim === '0') {
-      conditions.push('homonim IS NULL');
+      conditions.push('e.homonim IS NULL');
     }
 
     const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
 
     const countResult = await db.query(
-      `SELECT COUNT(*) AS total FROM entri ${where}`,
+      `SELECT COUNT(*) AS total FROM entri e ${where}`,
       params
     );
     const total = parseCount(countResult.rows[0]?.total);
 
     const dataResult = await db.query(
-      `SELECT id, entri, indeks, homograf, homonim, jenis, lafal, sumber, aktif, jenis_rujuk, lema_rujuk AS entri_rujuk
-       FROM entri ${where}
-       ORDER BY indeks ASC, homograf ASC NULLS LAST, homonim ASC NULLS LAST, entri ASC
+      `SELECT
+          e.id,
+          e.entri,
+          e.indeks,
+          e.homograf,
+          e.homonim,
+          e.jenis,
+          e.induk,
+          induk.entri AS induk_entri,
+          e.lafal,
+          e.sumber,
+          e.aktif,
+          e.jenis_rujuk,
+          e.lema_rujuk AS entri_rujuk
+       FROM entri e
+       LEFT JOIN entri induk ON induk.id = e.induk
+       ${where}
+       ORDER BY e.indeks ASC, e.homograf ASC NULLS LAST, e.homonim ASC NULLS LAST, e.entri ASC
        LIMIT $${idx} OFFSET $${idx + 1}`,
       [...params, limit, offset]
     );
@@ -466,9 +514,13 @@ class ModelEntri {
    */
   static async ambilDenganId(id) {
     const result = await db.query(
-            `SELECT id, entri, indeks, homograf, homonim, jenis, induk, pemenggalan, lafal, varian,
-              jenis_rujuk, lema_rujuk AS entri_rujuk, sumber, aktif
-       FROM entri WHERE id = $1`,
+            `SELECT e.id, e.entri, e.indeks, e.homograf, e.homonim, e.jenis, e.induk,
+              i.entri AS induk_entri, i.indeks AS induk_indeks,
+              e.pemenggalan, e.lafal, e.varian,
+              e.jenis_rujuk, e.lema_rujuk AS entri_rujuk, e.sumber, e.aktif
+       FROM entri e
+       LEFT JOIN entri i ON i.id = e.induk
+       WHERE e.id = $1`,
       [id]
     );
     return result.rows[0] || null;
@@ -499,9 +551,27 @@ class ModelEntri {
     const nilaiEntri = entri;
     const nilaiEntriRujuk = entri_rujuk;
     const nilaiIndeks = (indeks || '').trim() || normalisasiIndeks(nilaiEntri);
+    const nilaiInduk = parseNullableInteger(induk);
+    const nilaiId = parseNullableInteger(id);
     const nilaiHomograf = parseNullableInteger(homograf);
     const nilaiHomonim = parseNullableInteger(homonim);
     const nilaiSumber = String(sumber || '').trim() || null;
+
+    if (nilaiId && nilaiInduk && nilaiId === nilaiInduk) {
+      const error = new Error('Induk tidak boleh sama dengan entri ini');
+      error.status = 400;
+      throw error;
+    }
+
+    if (nilaiInduk) {
+      const indukAda = await this.ambilInduk(nilaiInduk);
+      if (!indukAda) {
+        const error = new Error('Entri induk tidak ditemukan');
+        error.status = 400;
+        throw error;
+      }
+    }
+
     if (id) {
       const result = await db.query(
         `UPDATE entri SET entri = $1, jenis = $2, induk = $3, pemenggalan = $4,
@@ -510,7 +580,7 @@ class ModelEntri {
          WHERE id = $14
          RETURNING id, legacy_eid, entri, indeks, homograf, homonim, jenis, induk, pemenggalan, lafal, varian,
              jenis_rujuk, lema_rujuk AS entri_rujuk, sumber, aktif, legacy_tabel, legacy_tid`,
-        [nilaiEntri, jenis, induk || null, pemenggalan || null, lafal || null,
+        [nilaiEntri, jenis, nilaiInduk, pemenggalan || null, lafal || null,
          varian || null, jenis_rujuk || null, nilaiEntriRujuk || null, aktif ?? 1,
          nilaiIndeks, nilaiHomograf, nilaiHomonim, nilaiSumber, id]
       );
@@ -521,7 +591,7 @@ class ModelEntri {
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
        RETURNING id, legacy_eid, entri, indeks, homograf, homonim, jenis, induk, pemenggalan, lafal, varian,
          jenis_rujuk, lema_rujuk AS entri_rujuk, sumber, aktif, legacy_tabel, legacy_tid`,
-      [nilaiEntri, jenis, induk || null, pemenggalan || null, lafal || null,
+      [nilaiEntri, jenis, nilaiInduk, pemenggalan || null, lafal || null,
        varian || null, jenis_rujuk || null, nilaiEntriRujuk || null, aktif ?? 1,
        nilaiIndeks, nilaiHomograf, nilaiHomonim, nilaiSumber]
     );
