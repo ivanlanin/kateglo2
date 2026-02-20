@@ -9,8 +9,8 @@ import { useCursorPagination } from '../../hooks/bersama/useCursorPagination';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import HasilPencarian from '../../komponen/publik/HasilPencarian';
 import KartuKategori from '../../komponen/publik/KartuKategori';
-import TeksLema from '../../komponen/publik/TeksLema';
 import { EmptyResultText, PesanTidakDitemukan, QueryFeedback } from '../../komponen/publik/StatusKonten';
+import { formatLemaHomonim } from '../../utils/formatUtils';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
 import {
   buildMetaBrowseKamus,
@@ -188,7 +188,7 @@ function Kamus() {
               to={buatPathDetailKamus(item.indeks || item.entri)}
               className="kamus-kategori-grid-link"
             >
-              <TeksLema lema={item.entri} />
+              {formatLemaHomonim(item.entri)}
             </Link>
           ))}
         />

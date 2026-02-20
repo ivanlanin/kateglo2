@@ -9,10 +9,9 @@ import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategor
 import { useAuth } from '../../context/authContext';
 import PanelLipat from '../../komponen/publik/PanelLipat';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
-import TeksLema from '../../komponen/publik/TeksLema';
 import { PesanTidakDitemukan } from '../../komponen/publik/StatusKonten';
+import { formatLemaHomonim, formatLocalDateTime, parseUtcDate } from '../../utils/formatUtils';
 import { buatPathDetailKamus, normalisasiIndeksKamus } from '../../utils/paramUtils';
-import { formatLocalDateTime, parseUtcDate } from '../../utils/formatTanggalLokal';
 import { buildMetaDetailKamus } from '../../utils/metaUtils';
 
 function upsertMetaTag({ name, property, content }) {
@@ -341,13 +340,13 @@ function KamusDetail() {
                         {rantaiHeading.map((item, index) => (
                           <Fragment key={`${item.id}-${index}`}>
                             {item.current ? (
-                              <span><TeksLema lema={item.entri} /></span>
+                              <span>{formatLemaHomonim(item.entri)}</span>
                             ) : (
                               <Link
                                 to={buatPathDetailKamus(item.indeks || item.entri)}
                                 className="kamus-detail-heading-chain-link"
                               >
-                                <TeksLema lema={item.entri} />
+                                {formatLemaHomonim(item.entri)}
                               </Link>
                             )}
                             {index < rantaiHeading.length - 1 && (
@@ -357,10 +356,10 @@ function KamusDetail() {
                         ))}
                       </span>
                       {entriItem.lafal && (
-                        <span className="kamus-detail-heading-pronunciation">/<TeksLema lema={entriItem.lafal} />/</span>
+                        <span className="kamus-detail-heading-pronunciation">/{formatLemaHomonim(entriItem.lafal)}/</span>
                       )}
                       {entriItem.pemenggalan && entriItem.pemenggalan !== entriItem.entri && (
-                        <span className="kamus-detail-heading-split">(<TeksLema lema={entriItem.pemenggalan} />)</span>
+                        <span className="kamus-detail-heading-split">({formatLemaHomonim(entriItem.pemenggalan)})</span>
                       )}
                     </h1>
                     {entriItem.jenis === 'varian' ? (
@@ -424,7 +423,7 @@ function KamusDetail() {
                   <p className="mt-4">
                     → Lihat{' '}
                     <Link to={buatPathDetailKamus(entriItem.entri_rujuk_indeks || entriItem.entri_rujuk)} className="link-action font-semibold">
-                      <TeksLema lema={entriItem.entri_rujuk} />
+                      {formatLemaHomonim(entriItem.entri_rujuk)}
                     </Link>
                   </p>
                 ) : (
@@ -556,10 +555,10 @@ function KamusDetail() {
                           {daftar.map((s, i) => (
                             <span key={s.id}>
                               {jenis === 'varian' ? (
-                                <span><TeksLema lema={s.entri} /></span>
+                                <span>{formatLemaHomonim(s.entri)}</span>
                               ) : (
                                 <Link to={buatPathDetailKamus(s.indeks || s.entri)} className="kamus-detail-subentry-link">
-                                  <TeksLema lema={s.entri} />
+                                  {formatLemaHomonim(s.entri)}
                                 </Link>
                               )}
                               {i < daftar.length - 1 && <span className="secondary-text">; </span>}

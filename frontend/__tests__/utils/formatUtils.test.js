@@ -1,7 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { formatLocalDateTime, parseUtcDate } from '../../src/utils/formatTanggalLokal';
+import { render, screen } from '@testing-library/react';
+import { Fragment, createElement } from 'react';
+import { formatLemaHomonim, formatLocalDateTime, parseUtcDate } from '../../src/utils/formatUtils';
 
-describe('formatTanggalLokal', () => {
+describe('formatUtils.test.js', () => {
   it('mengembalikan fallback untuk nilai kosong/invalid', () => {
     expect(formatLocalDateTime('')).toBe('-');
     expect(formatLocalDateTime('invalid-date')).toBe('-');
@@ -47,5 +49,26 @@ describe('formatTanggalLokal', () => {
 
     expect(valid).toMatch(/\d{2}\.\d{2}$/);
     expect(invalid).toBe('-');
+  });
+
+  it('formatLemaHomonim mengubah pola lema (nomor) menjadi superskrip', () => {
+    render(createElement(Fragment, null, formatLemaHomonim('dara (3)')));
+
+    const sup = screen.getByText('3');
+    expect(sup.tagName).toBe('SUP');
+    expect(screen.getByText('dara')).toBeInTheDocument();
+  });
+
+  it('formatLemaHomonim menampilkan teks asli jika tidak ada nomor homonim', () => {
+    render(createElement(Fragment, null, formatLemaHomonim('gajah')));
+
+    expect(screen.getByText('gajah')).toBeInTheDocument();
+    expect(screen.queryByText('1')).not.toBeInTheDocument();
+  });
+
+  it('formatLemaHomonim aman untuk lema undefined (fallback default)', () => {
+    const { container } = render(createElement(Fragment, null, formatLemaHomonim(undefined)));
+
+    expect(container.textContent).toBe('');
   });
 });

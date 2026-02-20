@@ -30,7 +30,7 @@ vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
   ),
 }));
 
-describe('Tesaurus', () => {
+describe('Tesaurus.test.jsx', () => {
   beforeEach(() => {
     mockUseQuery.mockReset();
     cariTesaurus.mockClear();
@@ -109,7 +109,7 @@ describe('Tesaurus', () => {
 
     render(<Tesaurus />);
 
-    expect(screen.getByRole('heading', { name: /Hasil Pencarian \u201canak ibu\u201d/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Hasil Pencarian ["“]anak ibu["”] di Tesaurus/i })).toBeInTheDocument();
 
     // Tautan mengarah ke kamus detail, bukan tesaurus detail
     expect(screen.getByRole('link', { name: 'anak ibu' })).toHaveAttribute('href', '/kamus/detail/anak%20ibu');
