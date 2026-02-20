@@ -5,7 +5,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { autocomplete } from '../../api/apiPublik';
-import { buatPathDetailKamus } from '../../utils/kamusIndex';
+import { buatPathDetailKamus } from '../../utils/paramUtils';
 
 const opsiKategori = [
   { value: 'kamus', label: 'Kamus', placeholder: 'Cari kata \u2026' },

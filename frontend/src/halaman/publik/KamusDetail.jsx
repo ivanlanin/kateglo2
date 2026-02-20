@@ -11,7 +11,7 @@ import PanelLipat from '../../komponen/publik/PanelLipat';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import TeksLema from '../../komponen/publik/TeksLema';
 import { PesanTidakDitemukan } from '../../komponen/publik/StatusKonten';
-import { buatPathDetailKamus, normalisasiIndeksKamus } from '../../utils/kamusIndex';
+import { buatPathDetailKamus, normalisasiIndeksKamus } from '../../utils/paramUtils';
 import { formatLocalDateTime, parseUtcDate } from '../../utils/formatTanggalLokal';
 import { buildMetaDetailKamus } from '../../utils/metaUtils';
 

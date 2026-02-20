@@ -15,7 +15,7 @@ import {
 import Paginasi from '../../komponen/bersama/Paginasi';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
-import { buatPathDetailKamus } from '../../utils/kamusIndex';
+import { buatPathDetailKamus } from '../../utils/paramUtils';
 import {
   buildMetaBidangGlosarium,
   buildMetaBrowseGlosarium,

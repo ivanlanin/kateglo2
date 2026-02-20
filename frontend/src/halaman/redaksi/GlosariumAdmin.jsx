@@ -25,7 +25,7 @@ import {
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
-import { parsePositiveIntegerParam } from '../../utils/routeParam';
+import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
 const nilaiAwal = { indonesia: '', asing: '', bidang: '', bahasa: 'en', sumber: '', aktif: 1 };
 

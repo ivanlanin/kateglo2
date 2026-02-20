@@ -13,7 +13,7 @@ import {
 } from '../../api/apiAdmin';
 import TataLetak from '../../komponen/bersama/TataLetak';
 import { useAuth } from '../../context/authContext';
-import { parsePositiveIntegerParam } from '../../utils/routeParam';
+import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 import {
   BarisFilterCariAdmin,
   TombolAksiAdmin,
@@ -28,7 +28,7 @@ import {
   useFormPanel, InputField, SelectField, TextareaField, ToggleAktif,
   FormFooter, PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
-import { buatPathDetailKamus } from '../../utils/kamusIndex';
+import { buatPathDetailKamus } from '../../utils/paramUtils';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
