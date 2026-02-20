@@ -12,6 +12,8 @@ const menuAdmin = [
   { path: '/redaksi/glosarium', label: 'Glosarium' },
   { path: '/redaksi/komentar', label: 'Komentar' },
   { path: '/redaksi/label', label: 'Label', adminSaja: true },
+  { path: '/redaksi/peran', label: 'Peran', adminSaja: true },
+  { path: '/redaksi/izin', label: 'Izin', adminSaja: true },
   { path: '/redaksi/pengguna', label: 'Pengguna', adminSaja: true },
 ];
 

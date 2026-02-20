@@ -16,6 +16,8 @@ import TesaurusAdmin from './halaman/redaksi/TesaurusAdmin';
 import GlosariumAdmin from './halaman/redaksi/GlosariumAdmin';
 import LabelAdmin from './halaman/redaksi/LabelAdmin';
 import PenggunaAdmin from './halaman/redaksi/PenggunaAdmin';
+import PeranAdmin from './halaman/redaksi/PeranAdmin';
+import IzinAdmin from './halaman/redaksi/IzinAdmin';
 
 function RuteRedaksi({ children }) {
   const { isAuthenticated, adalahRedaksi, isLoading } = useAuth();
@@ -70,6 +72,10 @@ function App() {
       <Route path="/redaksi/glosarium/:id" element={<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/label" element={<RuteAdmin><LabelAdmin /></RuteAdmin>} />
       <Route path="/redaksi/label/:id" element={<RuteAdmin><LabelAdmin /></RuteAdmin>} />
+      <Route path="/redaksi/peran" element={<RuteAdmin><PeranAdmin /></RuteAdmin>} />
+      <Route path="/redaksi/peran/:id" element={<RuteAdmin><PeranAdmin /></RuteAdmin>} />
+      <Route path="/redaksi/izin" element={<RuteAdmin><IzinAdmin /></RuteAdmin>} />
+      <Route path="/redaksi/izin/:id" element={<RuteAdmin><IzinAdmin /></RuteAdmin>} />
       <Route path="/redaksi/pengguna" element={<RuteAdmin><PenggunaAdmin /></RuteAdmin>} />
       <Route path="/redaksi/pengguna/:id" element={<RuteAdmin><PenggunaAdmin /></RuteAdmin>} />
       {/* Public routes */}

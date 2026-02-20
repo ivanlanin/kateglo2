@@ -37,7 +37,15 @@ import {
   useDaftarPengguna,
   useDetailPengguna,
   useDaftarPeran,
+  useDaftarPeranAdmin,
+  useDetailPeranAdmin,
+  useDaftarIzinAdmin,
+  useDaftarIzinKelolaAdmin,
+  useDetailIzinAdmin,
+  useDaftarPeranUntukIzinAdmin,
   useUbahPeran,
+  useSimpanPeranAdmin,
+  useSimpanIzinAdmin,
   useSimpanKamus,
   useSimpanKomentarAdmin,
   useHapusKamus,
@@ -125,6 +133,35 @@ describe('apiAdmin', () => {
     await peran.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/pengguna/peran');
 
+    const peranAdmin = useDaftarPeranAdmin({ limit: 30, offset: 10, q: 'adm' });
+    await peranAdmin.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/peran', { params: { limit: 30, offset: 10, q: 'adm' } });
+
+    const detailPeran = useDetailPeranAdmin(99);
+    expect(detailPeran.enabled).toBe(true);
+    await detailPeran.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/peran/99');
+
+    const daftarIzin = useDaftarIzinAdmin({ q: 'kelola' });
+    await daftarIzin.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/peran/izin', { params: { q: 'kelola' } });
+
+    const izinKelola = useDaftarIzinKelolaAdmin({ limit: 40, offset: 20, q: 'lihat' });
+    await izinKelola.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/izin', { params: { limit: 40, offset: 20, q: 'lihat' } });
+
+    const detailIzin = useDetailIzinAdmin(101);
+    expect(detailIzin.enabled).toBe(true);
+    await detailIzin.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/izin/101');
+
+    const opsiPeranUntukIzin = useDaftarPeranUntukIzinAdmin({ q: 'adm' });
+    await opsiPeranUntukIzin.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/izin/peran', { params: { q: 'adm' } });
+
+    expect(useDetailPeranAdmin(null).enabled).toBe(false);
+    expect(useDetailIzinAdmin(null).enabled).toBe(false);
+
     const makna = useDaftarMakna(44);
     expect(makna.enabled).toBe(true);
     await makna.queryFn();
@@ -187,6 +224,29 @@ describe('apiAdmin', () => {
     expect(klien.put).toHaveBeenCalledWith('/api/redaksi/pengguna/8', { id: 8, nama: 'Admin' });
     simpanPengguna.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-pengguna'] });
+
+    const simpanPeran = useSimpanPeranAdmin();
+    await simpanPeran.mutationFn({ id: 2, kode: 'editor', nama: 'Editor', izin_ids: [1, 2] });
+    await simpanPeran.mutationFn({ kode: 'reviewer', nama: 'Reviewer', izin_ids: [] });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/peran/2', { id: 2, kode: 'editor', nama: 'Editor', izin_ids: [1, 2] });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/peran', { kode: 'reviewer', nama: 'Reviewer', izin_ids: [] });
+
+    simpanPeran.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-peran-kelola'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-peran'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-pengguna'] });
+
+    const simpanIzin = useSimpanIzinAdmin();
+    await simpanIzin.mutationFn({ id: 4, kode: 'lihat_dashboard', nama: 'Lihat Dashboard', peran_ids: [1, 2] });
+    await simpanIzin.mutationFn({ kode: 'lihat_statistik', nama: 'Lihat Statistik', peran_ids: [] });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/izin/4', { id: 4, kode: 'lihat_dashboard', nama: 'Lihat Dashboard', peran_ids: [1, 2] });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/izin', { kode: 'lihat_statistik', nama: 'Lihat Statistik', peran_ids: [] });
+
+    simpanIzin.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-izin-kelola'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-izin'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-peran-kelola'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-peran'] });
   });
 
   it('mengonfigurasi mutation admin kamus + makna + contoh', async () => {

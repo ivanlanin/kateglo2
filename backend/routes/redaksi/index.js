@@ -21,5 +21,7 @@ router.use('/komentar', require('./komentar'));
 router.use('/tesaurus', require('./tesaurus'));
 router.use('/glosarium', require('./glosarium'));
 router.use('/label', require('./label'));
+router.use('/peran', require('./peran'));
+router.use('/izin', require('./izin'));
 
 module.exports = router;
