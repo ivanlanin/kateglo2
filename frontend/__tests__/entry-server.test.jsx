@@ -96,7 +96,7 @@ describe('entry-server', () => {
       type: 'kamus-cari',
       semuaMakna: [{ makna: 'cairan jernih', kelas_kata: 'n' }],
     });
-    expect(kamusCariRich.title).toContain('Hasil Pencarian');
+    expect(kamusCariRich.title).toBe('Hasil Pencarian "air" di Kamus — Kateglo');
     expect(kamusCariRich.description).toContain('air:');
 
     const kamusKategori = __private.buildMetaForPath('/kamus/kelas-kata/nomina', site);

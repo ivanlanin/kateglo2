@@ -123,7 +123,7 @@ export function buildMetaPencarianKamus(kata = '') {
   }
 
   return {
-    judul: `Hasil Pencarian “${kataAman}”`,
+    judul: `Hasil Pencarian "${kataAman}" di Kamus`,
     deskripsi: `Hasil pencarian kamus untuk kata ${kataAman} di Kateglo.`,
   };
 }
@@ -238,7 +238,7 @@ export function buildMetaPencarianTesaurus(kata = '', data = null) {
   }
 
   return {
-    judul: `Hasil Pencarian “${kataAman}”`,
+    judul: `Hasil Pencarian "${kataAman}" di Tesaurus`,
     deskripsi: buildDeskripsiPencarianTesaurus(kataAman, data || {}),
   };
 }
@@ -275,7 +275,7 @@ export function buildMetaPencarianGlosarium(kata = '', data = null) {
   }
 
   return {
-    judul: `Hasil Pencarian “${kataAman}”`,
+    judul: `Hasil Pencarian "${kataAman}" di Glosarium`,
     deskripsi: buildDeskripsiPencarianGlosarium(kataAman, data || {}),
   };
 }
