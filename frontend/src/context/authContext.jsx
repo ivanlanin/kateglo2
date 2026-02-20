@@ -108,36 +108,23 @@ function AuthProvider({ children }) {
   useEffect(() => {
     if (!token) return;
 
-    const intervalId = setInterval(() => {
-      if (typeof document !== 'undefined' && document.visibilityState !== 'visible') return;
-      refreshProfil();
-    }, profileRefreshIntervalMs);
-
     const handleFocus = () => {
       refreshProfil();
     };
 
+    const intervalId = setInterval(refreshProfil, profileRefreshIntervalMs);
+
     const handleVisibilityChange = () => {
-      if (typeof document !== 'undefined' && document.visibilityState === 'visible') {
-        refreshProfil();
-      }
+      refreshProfil();
     };
 
-    if (typeof window !== 'undefined') {
-      window.addEventListener('focus', handleFocus);
-    }
-    if (typeof document !== 'undefined') {
-      document.addEventListener('visibilitychange', handleVisibilityChange);
-    }
+    window.addEventListener('focus', handleFocus);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
       clearInterval(intervalId);
-      if (typeof window !== 'undefined') {
-        window.removeEventListener('focus', handleFocus);
-      }
-      if (typeof document !== 'undefined') {
-        document.removeEventListener('visibilitychange', handleVisibilityChange);
-      }
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [refreshProfil, token]);
 

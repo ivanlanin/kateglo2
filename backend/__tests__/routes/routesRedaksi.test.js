@@ -18,6 +18,7 @@ jest.mock('../../models/modelPengguna', () => ({
 
 jest.mock('../../models/modelEntri', () => ({
   daftarAdmin: jest.fn(),
+  cariIndukAdmin: jest.fn(),
   ambilDenganId: jest.fn(),
   simpan: jest.fn(),
   hapus: jest.fn(),
@@ -62,6 +63,20 @@ jest.mock('../../models/modelKomentar', () => ({
   hitungTotal: jest.fn(),
 }));
 
+jest.mock('../../models/modelPeran', () => ({
+  daftarPeran: jest.fn(),
+  ambilDenganId: jest.fn(),
+  daftarIzin: jest.fn(),
+  simpan: jest.fn(),
+}));
+
+jest.mock('../../models/modelIzin', () => ({
+  daftarIzin: jest.fn(),
+  ambilDenganId: jest.fn(),
+  daftarPeran: jest.fn(),
+  simpan: jest.fn(),
+}));
+
 jest.mock('../../services/layananKamusPublik', () => ({
   hapusCacheDetailKamus: jest.fn(),
 }));
@@ -72,6 +87,8 @@ const ModelTesaurus = require('../../models/modelTesaurus');
 const ModelGlosarium = require('../../models/modelGlosarium');
 const ModelLabel = require('../../models/modelLabel');
 const ModelKomentar = require('../../models/modelKomentar');
+const ModelPeran = require('../../models/modelPeran');
+const ModelIzin = require('../../models/modelIzin');
 const { hapusCacheDetailKamus } = require('../../services/layananKamusPublik');
 const rootRouter = require('../../routes');
 
@@ -413,6 +430,32 @@ describe('routes/redaksi', () => {
       }));
     });
 
+    it('GET /api/redaksi/kamus meneruskan filter ilmiah/kimia/contoh saat valid', async () => {
+      ModelLema.daftarAdmin.mockResolvedValue({ data: [], total: 0 });
+
+      const response = await callAsAdmin('get', '/api/redaksi/kamus?punya_ilmiah=1&punya_kimia=0&punya_contoh=1');
+
+      expect(response.status).toBe(200);
+      expect(ModelLema.daftarAdmin).toHaveBeenCalledWith(expect.objectContaining({
+        punya_ilmiah: '1',
+        punya_kimia: '0',
+        punya_contoh: '1',
+      }));
+    });
+
+    it('GET /api/redaksi/kamus mengosongkan filter ilmiah/kimia/contoh saat nilai tidak valid', async () => {
+      ModelLema.daftarAdmin.mockResolvedValue({ data: [], total: 0 });
+
+      const response = await callAsAdmin('get', '/api/redaksi/kamus?punya_ilmiah=x&punya_kimia=2&punya_contoh=ya');
+
+      expect(response.status).toBe(200);
+      expect(ModelLema.daftarAdmin).toHaveBeenCalledWith(expect.objectContaining({
+        punya_ilmiah: '',
+        punya_kimia: '',
+        punya_contoh: '',
+      }));
+    });
+
     it('GET /api/redaksi/kamus/:id mengembalikan 404 jika data null', async () => {
       ModelLema.ambilDenganId.mockResolvedValue(null);
 
@@ -428,6 +471,33 @@ describe('routes/redaksi', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
+    });
+
+    it('GET /api/redaksi/kamus/opsi-induk mengembalikan kosong saat q kosong', async () => {
+      const response = await callAsAdmin('get', '/api/redaksi/kamus/opsi-induk?q=   ');
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toEqual([]);
+      expect(ModelLema.cariIndukAdmin).not.toHaveBeenCalled();
+    });
+
+    it('GET /api/redaksi/kamus/opsi-induk meneruskan q, limit, dan exclude_id', async () => {
+      ModelLema.cariIndukAdmin.mockResolvedValue([{ id: 4, entri: 'latih' }]);
+
+      const response = await callAsAdmin('get', '/api/redaksi/kamus/opsi-induk?q=lat&limit=99&exclude_id=4');
+
+      expect(response.status).toBe(200);
+      expect(ModelLema.cariIndukAdmin).toHaveBeenCalledWith('lat', { limit: 20, excludeId: 4 });
+      expect(response.body.data).toHaveLength(1);
+    });
+
+    it('GET /api/redaksi/kamus/opsi-induk meneruskan error', async () => {
+      ModelLema.cariIndukAdmin.mockRejectedValue(new Error('opsi induk gagal'));
+
+      const response = await callAsAdmin('get', '/api/redaksi/kamus/opsi-induk?q=lat');
+
+      expect(response.status).toBe(500);
+      expect(response.body.error).toBe('opsi induk gagal');
     });
 
     it('GET /api/redaksi/kamus/:id meneruskan error', async () => {
@@ -824,6 +894,260 @@ describe('routes/redaksi', () => {
 
       expect(response.status).toBe(500);
       expect(response.body.error).toBe('komentar simpan gagal');
+    });
+  });
+
+  describe('peran', () => {
+    it('GET /api/redaksi/peran mengembalikan daftar dan meneruskan q', async () => {
+      ModelPeran.daftarPeran.mockResolvedValue({ data: [{ id: 1 }], total: 1 });
+
+      const response = await callAsAdmin('get', '/api/redaksi/peran?limit=9&offset=2&q= adm ');
+
+      expect(response.status).toBe(200);
+      expect(ModelPeran.daftarPeran).toHaveBeenCalledWith({ limit: 9, offset: 2, q: 'adm' });
+      expect(response.body.total).toBe(1);
+    });
+
+    it('GET /api/redaksi/peran/izin mengembalikan opsi izin', async () => {
+      ModelPeran.daftarIzin.mockResolvedValue([{ id: 1, kode: 'kelola_peran' }]);
+
+      const response = await callAsAdmin('get', '/api/redaksi/peran/izin?q=kelola');
+
+      expect(response.status).toBe(200);
+      expect(ModelPeran.daftarIzin).toHaveBeenCalledWith({ q: 'kelola' });
+      expect(response.body.data).toHaveLength(1);
+    });
+
+    it('GET /api/redaksi/peran/:id mengembalikan 404 dan 200 sesuai data', async () => {
+      ModelPeran.ambilDenganId
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce({ id: 8, kode: 'editor' });
+
+      const notFound = await callAsAdmin('get', '/api/redaksi/peran/8');
+      const success = await callAsAdmin('get', '/api/redaksi/peran/8');
+
+      expect(notFound.status).toBe(404);
+      expect(success.status).toBe(200);
+      expect(success.body.data.id).toBe(8);
+    });
+
+    it('POST/PUT /api/redaksi/peran validasi field wajib dan izin_ids', async () => {
+      const noKode = await callAsAdmin('post', '/api/redaksi/peran', { body: { nama: 'Editor' } });
+      const noNama = await callAsAdmin('post', '/api/redaksi/peran', { body: { kode: 'editor' } });
+      const noKodePut = await callAsAdmin('put', '/api/redaksi/peran/8', { body: { nama: 'Editor' } });
+      const noNamaPut = await callAsAdmin('put', '/api/redaksi/peran/8', { body: { kode: 'editor' } });
+      const invalidIdsPost = await callAsAdmin('post', '/api/redaksi/peran', {
+        body: { kode: 'editor', nama: 'Editor', izin_ids: { a: 1 } },
+      });
+      const invalidIdsPut = await callAsAdmin('put', '/api/redaksi/peran/8', {
+        body: { kode: 'editor', nama: 'Editor', izin_ids: [1, 'x'] },
+      });
+
+      expect(noKode.status).toBe(400);
+      expect(noNama.status).toBe(400);
+      expect(noKodePut.status).toBe(400);
+      expect(noNamaPut.status).toBe(400);
+      expect(invalidIdsPost.status).toBe(400);
+      expect(invalidIdsPut.status).toBe(400);
+    });
+
+    it('POST /api/redaksi/peran memetakan akses_redaksi dari berbagai tipe', async () => {
+      ModelPeran.simpan
+        .mockResolvedValueOnce({ id: 1 })
+        .mockResolvedValueOnce({ id: 2 })
+        .mockResolvedValueOnce({ id: 3 })
+        .mockResolvedValueOnce({ id: 4 })
+        .mockResolvedValueOnce({ id: 5 })
+        .mockResolvedValueOnce({ id: 6 })
+        .mockResolvedValueOnce({ id: 7 });
+
+      const boolVal = await callAsAdmin('post', '/api/redaksi/peran', {
+        body: { kode: 'editor', nama: 'Editor', akses_redaksi: true },
+      });
+      const numVal = await callAsAdmin('post', '/api/redaksi/peran', {
+        body: { kode: 'editor2', nama: 'Editor 2', akses_redaksi: 1 },
+      });
+      const strVal = await callAsAdmin('post', '/api/redaksi/peran', {
+        body: { kode: 'editor3', nama: 'Editor 3', akses_redaksi: 'aktif' },
+      });
+      const defVal = await callAsAdmin('post', '/api/redaksi/peran', {
+        body: { kode: 'editor4', nama: 'Editor 4' },
+      });
+      const zeroNum = await callAsAdmin('post', '/api/redaksi/peran', {
+        body: { kode: 'editor5', nama: 'Editor 5', akses_redaksi: 0 },
+      });
+      const unknownType = await callAsAdmin('post', '/api/redaksi/peran', {
+        body: { kode: 'editor6', nama: 'Editor 6', akses_redaksi: {} },
+      });
+      const strFalse = await callAsAdmin('post', '/api/redaksi/peran', {
+        body: { kode: 'editor7', nama: 'Editor 7', akses_redaksi: 'tidak' },
+      });
+
+      expect(boolVal.status).toBe(201);
+      expect(numVal.status).toBe(201);
+      expect(strVal.status).toBe(201);
+      expect(defVal.status).toBe(201);
+      expect(zeroNum.status).toBe(201);
+      expect(unknownType.status).toBe(201);
+      expect(strFalse.status).toBe(201);
+      expect(ModelPeran.simpan).toHaveBeenNthCalledWith(1, expect.objectContaining({ akses_redaksi: true }));
+      expect(ModelPeran.simpan).toHaveBeenNthCalledWith(2, expect.objectContaining({ akses_redaksi: true }));
+      expect(ModelPeran.simpan).toHaveBeenNthCalledWith(3, expect.objectContaining({ akses_redaksi: true }));
+      expect(ModelPeran.simpan).toHaveBeenNthCalledWith(4, expect.objectContaining({ akses_redaksi: false }));
+      expect(ModelPeran.simpan).toHaveBeenNthCalledWith(5, expect.objectContaining({ akses_redaksi: false }));
+      expect(ModelPeran.simpan).toHaveBeenNthCalledWith(6, expect.objectContaining({ akses_redaksi: false }));
+      expect(ModelPeran.simpan).toHaveBeenNthCalledWith(7, expect.objectContaining({ akses_redaksi: false }));
+    });
+
+    it('POST/PUT /api/redaksi/peran mengembalikan 201/200/404 dan normalisasi izin_ids', async () => {
+      ModelPeran.simpan
+        .mockResolvedValueOnce({ id: 9, kode: 'editor' })
+        .mockResolvedValueOnce({ id: 9, kode: 'editor' })
+        .mockResolvedValueOnce(null);
+
+      const post = await callAsAdmin('post', '/api/redaksi/peran', {
+        body: { kode: 'editor', nama: 'Editor', izin_ids: [1, 1, 2] },
+      });
+      const putOk = await callAsAdmin('put', '/api/redaksi/peran/9', {
+        body: { kode: 'editor', nama: 'Editor', izin_ids: [2, 2, 3] },
+      });
+      const put404 = await callAsAdmin('put', '/api/redaksi/peran/9', {
+        body: { kode: 'editor', nama: 'Editor', izin_ids: [] },
+      });
+
+      expect(post.status).toBe(201);
+      expect(putOk.status).toBe(200);
+      expect(put404.status).toBe(404);
+      expect(ModelPeran.simpan).toHaveBeenNthCalledWith(1, expect.objectContaining({ izin_ids: [1, 2] }));
+      expect(ModelPeran.simpan).toHaveBeenNthCalledWith(2, expect.objectContaining({ id: 9, izin_ids: [2, 3] }));
+    });
+
+    it('routes /api/redaksi/peran meneruskan error model', async () => {
+      ModelPeran.daftarPeran.mockRejectedValueOnce(new Error('peran list gagal'));
+      ModelPeran.daftarIzin.mockRejectedValueOnce(new Error('izin opsi gagal'));
+      ModelPeran.ambilDenganId.mockRejectedValueOnce(new Error('peran detail gagal'));
+      ModelPeran.simpan
+        .mockRejectedValueOnce(new Error('peran simpan gagal'))
+        .mockRejectedValueOnce(new Error('peran update gagal'));
+
+      const list = await callAsAdmin('get', '/api/redaksi/peran');
+      const opsiIzin = await callAsAdmin('get', '/api/redaksi/peran/izin');
+      const detail = await callAsAdmin('get', '/api/redaksi/peran/1');
+      const post = await callAsAdmin('post', '/api/redaksi/peran', {
+        body: { kode: 'editor', nama: 'Editor' },
+      });
+      const put = await callAsAdmin('put', '/api/redaksi/peran/1', {
+        body: { kode: 'editor', nama: 'Editor' },
+      });
+
+      expect(list.status).toBe(500);
+      expect(opsiIzin.status).toBe(500);
+      expect(detail.status).toBe(500);
+      expect(post.status).toBe(500);
+      expect(put.status).toBe(500);
+    });
+  });
+
+  describe('izin', () => {
+    it('GET /api/redaksi/izin mengembalikan daftar dan meneruskan q', async () => {
+      ModelIzin.daftarIzin.mockResolvedValue({ data: [{ id: 1 }], total: 1 });
+
+      const response = await callAsAdmin('get', '/api/redaksi/izin?limit=9&offset=2&q= kelola ');
+
+      expect(response.status).toBe(200);
+      expect(ModelIzin.daftarIzin).toHaveBeenCalledWith({ limit: 9, offset: 2, q: 'kelola' });
+      expect(response.body.total).toBe(1);
+    });
+
+    it('GET /api/redaksi/izin/peran mengembalikan opsi peran', async () => {
+      ModelIzin.daftarPeran.mockResolvedValue([{ id: 1, kode: 'admin' }]);
+
+      const response = await callAsAdmin('get', '/api/redaksi/izin/peran?q=admin');
+
+      expect(response.status).toBe(200);
+      expect(ModelIzin.daftarPeran).toHaveBeenCalledWith({ q: 'admin' });
+      expect(response.body.data).toHaveLength(1);
+    });
+
+    it('GET /api/redaksi/izin/:id mengembalikan 404 dan 200 sesuai data', async () => {
+      ModelIzin.ambilDenganId
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce({ id: 8, kode: 'kelola_peran' });
+
+      const notFound = await callAsAdmin('get', '/api/redaksi/izin/8');
+      const success = await callAsAdmin('get', '/api/redaksi/izin/8');
+
+      expect(notFound.status).toBe(404);
+      expect(success.status).toBe(200);
+      expect(success.body.data.id).toBe(8);
+    });
+
+    it('POST/PUT /api/redaksi/izin validasi field wajib dan peran_ids', async () => {
+      const noKode = await callAsAdmin('post', '/api/redaksi/izin', { body: { nama: 'Kelola' } });
+      const noNama = await callAsAdmin('post', '/api/redaksi/izin', { body: { kode: 'kelola' } });
+      const noKodePut = await callAsAdmin('put', '/api/redaksi/izin/8', { body: { nama: 'Kelola' } });
+      const noNamaPut = await callAsAdmin('put', '/api/redaksi/izin/8', { body: { kode: 'kelola' } });
+      const invalidIdsPost = await callAsAdmin('post', '/api/redaksi/izin', {
+        body: { kode: 'kelola', nama: 'Kelola', peran_ids: { a: 1 } },
+      });
+      const invalidIdsPut = await callAsAdmin('put', '/api/redaksi/izin/8', {
+        body: { kode: 'kelola', nama: 'Kelola', peran_ids: [1, 'x'] },
+      });
+
+      expect(noKode.status).toBe(400);
+      expect(noNama.status).toBe(400);
+      expect(noKodePut.status).toBe(400);
+      expect(noNamaPut.status).toBe(400);
+      expect(invalidIdsPost.status).toBe(400);
+      expect(invalidIdsPut.status).toBe(400);
+    });
+
+    it('POST/PUT /api/redaksi/izin mengembalikan 201/200/404 dan normalisasi peran_ids', async () => {
+      ModelIzin.simpan
+        .mockResolvedValueOnce({ id: 9, kode: 'kelola' })
+        .mockResolvedValueOnce({ id: 9, kode: 'kelola' })
+        .mockResolvedValueOnce(null);
+
+      const post = await callAsAdmin('post', '/api/redaksi/izin', {
+        body: { kode: 'kelola', nama: 'Kelola', peran_ids: [1, 1, 2] },
+      });
+      const putOk = await callAsAdmin('put', '/api/redaksi/izin/9', {
+        body: { kode: 'kelola', nama: 'Kelola', peran_ids: [2, 2, 3] },
+      });
+      const put404 = await callAsAdmin('put', '/api/redaksi/izin/9', {
+        body: { kode: 'kelola', nama: 'Kelola', peran_ids: [] },
+      });
+
+      expect(post.status).toBe(201);
+      expect(putOk.status).toBe(200);
+      expect(put404.status).toBe(404);
+      expect(ModelIzin.simpan).toHaveBeenNthCalledWith(1, expect.objectContaining({ peran_ids: [1, 2] }));
+      expect(ModelIzin.simpan).toHaveBeenNthCalledWith(2, expect.objectContaining({ id: 9, peran_ids: [2, 3] }));
+    });
+
+    it('routes /api/redaksi/izin meneruskan error model', async () => {
+      ModelIzin.daftarIzin.mockRejectedValueOnce(new Error('izin list gagal'));
+      ModelIzin.daftarPeran.mockRejectedValueOnce(new Error('peran opsi gagal'));
+      ModelIzin.ambilDenganId.mockRejectedValueOnce(new Error('izin detail gagal'));
+      ModelIzin.simpan
+        .mockRejectedValueOnce(new Error('izin simpan gagal'))
+        .mockRejectedValueOnce(new Error('izin update gagal'));
+
+      const list = await callAsAdmin('get', '/api/redaksi/izin');
+      const opsiPeran = await callAsAdmin('get', '/api/redaksi/izin/peran');
+      const detail = await callAsAdmin('get', '/api/redaksi/izin/1');
+      const post = await callAsAdmin('post', '/api/redaksi/izin', {
+        body: { kode: 'kelola', nama: 'Kelola' },
+      });
+      const put = await callAsAdmin('put', '/api/redaksi/izin/1', {
+        body: { kode: 'kelola', nama: 'Kelola' },
+      });
+
+      expect(list.status).toBe(500);
+      expect(opsiPeran.status).toBe(500);
+      expect(detail.status).toBe(500);
+      expect(post.status).toBe(500);
+      expect(put.status).toBe(500);
     });
   });
 

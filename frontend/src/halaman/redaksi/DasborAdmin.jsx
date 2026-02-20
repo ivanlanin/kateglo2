@@ -38,7 +38,6 @@ function DasborAdmin() {
   const stats = statsResp?.data;
   const izinPengguna = Array.isArray(user?.izin) ? user.izin : [];
   const hasIzin = (izin) => {
-    if (!izin) return true;
     if (typeof punyaIzin === 'function') return punyaIzin(izin);
     return izinPengguna.includes(izin);
   };

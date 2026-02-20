@@ -44,6 +44,35 @@ describe('ModelEntri', () => {
     });
   });
 
+  it('cariIndukAdmin mengembalikan kosong saat query kosong', async () => {
+    expect(await ModelEntri.cariIndukAdmin('')).toEqual([]);
+    expect(await ModelEntri.cariIndukAdmin('   ')).toEqual([]);
+    expect(db.query).not.toHaveBeenCalled();
+  });
+
+  it('cariIndukAdmin menerapkan excludeId valid dan clamp limit maksimum', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 3, entri: 'latih' }] });
+
+    const result = await ModelEntri.cariIndukAdmin('lat', { limit: 99, excludeId: 3 });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('e.id <> $4'),
+      ['lat', 'lat%', '%lat%', 3, 20]
+    );
+    expect(result).toEqual([{ id: 3, entri: 'latih' }]);
+  });
+
+  it('cariIndukAdmin mengabaikan excludeId tidak valid dan memakai fallback limit default', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    await ModelEntri.cariIndukAdmin('lat', { limit: 'abc', excludeId: 'x' });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.not.stringContaining('e.id <> $4'),
+      ['lat', 'lat%', '%lat%', 8]
+    );
+  });
+
   it('cariEntri mengembalikan kosong saat total 0', async () => {
     db.query.mockResolvedValueOnce({ rows: [{ total: '0' }] });
 
@@ -721,6 +750,101 @@ describe('ModelEntri', () => {
     );
   });
 
+  it('daftarAdmin mendukung filter kelas_kata/ragam/bidang/bahasa/tipe_penyingkat dan flag ilmiah/kimia/contoh', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 1 }] });
+
+    await ModelEntri.daftarAdmin({
+      kelas_kata: 'n',
+      ragam: 'cak',
+      bidang: 'kim',
+      bahasa: 'id',
+      tipe_penyingkat: 'sing',
+      punya_ilmiah: '1',
+      punya_kimia: '0',
+      punya_contoh: '1',
+      limit: 3,
+      offset: 2,
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('mk.kelas_kata = $1'),
+      ['n', 'cak', 'kim', 'id', 'sing']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('mk.ragam = $2'),
+      ['n', 'cak', 'kim', 'id', 'sing']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('mk.bidang = $3'),
+      ['n', 'cak', 'kim', 'id', 'sing']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('mk.bahasa = $4'),
+      ['n', 'cak', 'kim', 'id', 'sing']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('mk.tipe_penyingkat = $5'),
+      ['n', 'cak', 'kim', 'id', 'sing']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('AND mk.ilmiah IS NOT NULL'),
+      ['n', 'cak', 'kim', 'id', 'sing']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('NOT EXISTS ('),
+      ['n', 'cak', 'kim', 'id', 'sing']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('JOIN contoh c ON c.makna_id = mk.id'),
+      ['n', 'cak', 'kim', 'id', 'sing', 3, 2]
+    );
+  });
+
+  it('daftarAdmin mendukung kebalikan flag ilmiah/kimia/contoh', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 2 }] });
+
+    await ModelEntri.daftarAdmin({
+      punya_ilmiah: '0',
+      punya_kimia: '1',
+      punya_contoh: '0',
+      limit: 2,
+      offset: 1,
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('AND mk.ilmiah IS NOT NULL'),
+      []
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('AND mk.kimia IS NOT NULL'),
+      []
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('NOT EXISTS ('),
+      []
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $1 OFFSET $2'),
+      [2, 1]
+    );
+  });
+
   it('hitungTotal mengembalikan nilai numerik', async () => {
     db.query.mockResolvedValue({ rows: [{ total: '31' }] });
 
@@ -810,6 +934,56 @@ describe('ModelEntri', () => {
       expect.stringContaining('INSERT INTO entri'),
       ['--kata-- (2)', 'dasar', null, null, null, null, null, null, 1, 'kata', null, null, null]
     );
+  });
+
+  it('simpan melempar 400 saat id sama dengan induk', async () => {
+    await expect(ModelEntri.simpan({
+      id: 21,
+      entri: 'kata',
+      jenis: 'turunan',
+      induk: 21,
+    })).rejects.toMatchObject({
+      message: 'Induk tidak boleh sama dengan entri ini',
+      status: 400,
+    });
+
+    expect(db.query).not.toHaveBeenCalled();
+  });
+
+  it('simpan melempar 400 saat induk tidak ditemukan', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    await expect(ModelEntri.simpan({
+      id: 22,
+      entri: 'kata',
+      jenis: 'turunan',
+      induk: 999,
+    })).rejects.toMatchObject({
+      message: 'Entri induk tidak ditemukan',
+      status: 400,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('WHERE id = $1'), [999]);
+  });
+
+  it('simpan menerima induk yang valid dan meneruskan nilai induk ke query', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ id: 5, entri: 'akar', jenis: 'dasar' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 23, entri: 'berakar' }] });
+
+    const result = await ModelEntri.simpan({
+      entri: 'berakar',
+      jenis: 'turunan',
+      induk: 5,
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('WHERE id = $1'), [5]);
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('INSERT INTO entri'),
+      ['berakar', 'turunan', 5, null, null, null, null, null, 1, 'berakar', null, null, null]
+    );
+    expect(result).toEqual({ id: 23, entri: 'berakar' });
   });
 
   it('simpan parsing homonim/homograf null-string kosong saat non-numeric', async () => {

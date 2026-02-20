@@ -499,6 +499,112 @@ describe('KamusAdmin', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/redaksi/kamus', { replace: true });
   });
 
+  it('mengarahkan ke daftar saat route detail dibuka tapi tidak punya izin edit', () => {
+    mockParams = { id: '2' };
+    mockUseAuth.mockReturnValue({
+      punyaIzin: (izin) => izin === 'tambah_entri',
+    });
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/kamus', { replace: true });
+  });
+
+  it('memuat input induk dari detail route jika induk_entri tersedia', () => {
+    mockParams = { id: '1' };
+    mockUseDetailKamusAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          entri: 'berakar',
+          jenis: 'turunan',
+          induk: 10,
+          induk_entri: 'akar',
+          aktif: 1,
+        },
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByDisplayValue('akar')).toBeInTheDocument();
+  });
+
+  it('menampilkan loading dan empty state pada saran induk', () => {
+    mockUseAutocompleteIndukKamus.mockImplementation(({ q }) => {
+      if (q === 'akar') return { data: { data: [] }, isLoading: true };
+      if (q === 'akar2') return { data: { data: [] }, isLoading: false };
+      return { data: { data: [] }, isLoading: false };
+    });
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    const inputInduk = screen.getByLabelText('Induk');
+
+    fireEvent.focus(inputInduk);
+    fireEvent.change(inputInduk, { target: { value: 'akar' } });
+    expect(screen.getByText('Mencari entri…')).toBeInTheDocument();
+
+    fireEvent.change(inputInduk, { target: { value: 'akar2' } });
+    expect(screen.getByText('Tidak ada hasil.')).toBeInTheDocument();
+  });
+
+  it('memilih saran induk lalu mengubah/ mengosongkan input menghapus referensi induk', () => {
+    mockUseAutocompleteIndukKamus.mockImplementation(({ q }) => {
+      if (q === 'akar') {
+        return {
+          data: {
+            data: [{ id: 10, entri: 'akar', jenis: 'dasar', indeks: 'akar' }],
+          },
+          isLoading: false,
+        };
+      }
+      return { data: { data: [] }, isLoading: false };
+    });
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    const inputInduk = screen.getByLabelText('Induk');
+    fireEvent.focus(inputInduk);
+    fireEvent.change(inputInduk, { target: { value: 'akar' } });
+
+    fireEvent.mouseDown(screen.getByText('akar'));
+    fireEvent.click(screen.getByText('akar'));
+    expect(screen.getByDisplayValue('akar')).toBeInTheDocument();
+
+    fireEvent.change(inputInduk, { target: { value: 'akar' } });
+    fireEvent.blur(inputInduk);
+
+    fireEvent.change(inputInduk, { target: { value: 'akar-baru' } });
+    fireEvent.change(inputInduk, { target: { value: '' } });
+
+    fireEvent.change(screen.getByLabelText('Entri*'), { target: { value: 'turunan baru' } });
+    fireEvent.click(screen.getByText('Simpan'));
+
+    const payload = mutateSimpanKamus.mock.calls.at(-1)[0];
+    expect(payload.induk).toBeNull();
+  });
+
   it('mengabaikan detail route saat payload detail tidak memiliki id', () => {
     mockParams = { id: '3' };
     mockUseDetailKamusAdmin.mockReturnValue({ isLoading: false, isError: false, data: { data: {} } });
@@ -531,6 +637,48 @@ describe('KamusAdmin', () => {
     fireEvent.click(screen.getByText('dasar'));
     expect(screen.queryByDisplayValue('tanpa-id')).not.toBeInTheDocument();
     expect(mockNavigate).not.toHaveBeenCalledWith('/redaksi/kamus/null');
+  });
+
+  it('menampilkan fallback jumlah makna dan menyembunyikan aksi tambah saat tanpa izin', () => {
+    mockUseDaftarKamusAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        total: 1,
+        data: [
+          { id: 7, entri: 'uji', jumlah_makna: 0, aktif: 1 },
+          { id: 8, entri: 'uji2', jumlah_makna: 2, aktif: 1 },
+        ],
+      },
+    });
+    mockUseAuth.mockReturnValue({
+      punyaIzin: (izin) => izin === 'edit_entri',
+    });
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.getAllByText('—').length).toBeGreaterThan(0);
+    expect(screen.getByText('2')).toBeInTheDocument();
+    expect(screen.queryByText('+ Tambah')).not.toBeInTheDocument();
+  });
+
+  it('memakai fallback daftar saran induk kosong saat respons belum ada', () => {
+    mockUseAutocompleteIndukKamus.mockReturnValue({ data: undefined, isLoading: false });
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    fireEvent.focus(screen.getByLabelText('Induk'));
+    fireEvent.change(screen.getByLabelText('Induk'), { target: { value: 'akar' } });
+    expect(screen.getByText('Tidak ada hasil.')).toBeInTheDocument();
   });
 
   it('klik tambah saat mode detail route menavigasi kembali ke daftar', () => {

@@ -70,7 +70,7 @@ router.post('/', periksaIzin('kelola_peran'), async (req, res, next) => {
     const kode = parseTrimmedString(req.body.kode);
     const nama = parseTrimmedString(req.body.nama);
     const keterangan = parseTrimmedString(req.body.keterangan);
-    const aksesRedaksi = parseBooleanFlag(req.body.akses_redaksi, false);
+    const aksesRedaksi = parseBooleanFlag(req.body.akses_redaksi);
     const izinIds = parseIzinIds(req.body.izin_ids);
 
     if (!kode) return res.status(400).json({ success: false, message: 'Kode peran wajib diisi' });
@@ -96,7 +96,7 @@ router.put('/:id', periksaIzin('kelola_peran'), async (req, res, next) => {
     const kode = parseTrimmedString(req.body.kode);
     const nama = parseTrimmedString(req.body.nama);
     const keterangan = parseTrimmedString(req.body.keterangan);
-    const aksesRedaksi = parseBooleanFlag(req.body.akses_redaksi, false);
+    const aksesRedaksi = parseBooleanFlag(req.body.akses_redaksi);
     const izinIds = parseIzinIds(req.body.izin_ids);
 
     if (!kode) return res.status(400).json({ success: false, message: 'Kode peran wajib diisi' });

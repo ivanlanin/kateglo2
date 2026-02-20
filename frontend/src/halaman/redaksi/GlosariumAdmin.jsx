@@ -126,7 +126,6 @@ function GlosariumAdmin() {
   };
 
   const bukaTambah = () => {
-    if (!bisaTambah) return;
     setPesan({ error: '', sukses: '' });
     if (idDariPath) {
       sedangMenutupDariPath.current = true;
@@ -136,7 +135,6 @@ function GlosariumAdmin() {
   };
 
   const bukaSuntingDariDaftar = (item) => {
-    if (!bisaEdit) return;
     setPesan({ error: '', sukses: '' });
     if (!item?.id) return;
     navigate(`/redaksi/glosarium/${item.id}`);

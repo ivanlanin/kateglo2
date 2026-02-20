@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { act } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
@@ -179,6 +179,131 @@ describe('PeranAdmin', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/redaksi/peran', { replace: true });
   });
 
+  it('tidak membuka panel saat payload detail tidak memiliki id', () => {
+    mockParams = { id: '3' };
+    mockUseDetailPeranAdmin.mockReturnValue({ isLoading: false, isError: false, data: { data: {} } });
+
+    render(<MemoryRouter><PeranAdmin /></MemoryRouter>);
+
+    expect(screen.queryByLabelText('Kode*')).not.toBeInTheDocument();
+  });
+
+  it('tidak membuka panel saat item daftar tidak punya id', () => {
+    mockUseDaftarPeranAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        total: 1,
+        data: [{ id: null, kode: 'tanpa-id', nama: 'Tanpa ID', jumlah_pengguna: 0, jumlah_izin: 0, akses_redaksi: false, izin_nama: [] }],
+      },
+    });
+
+    render(<MemoryRouter><PeranAdmin /></MemoryRouter>);
+
+    mockNavigate.mockClear();
+    fireEvent.click(screen.getByText('Tanpa ID'));
+    expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
+  it('klik tambah saat mode detail route menavigasi kembali ke daftar', () => {
+    mockParams = { id: '1' };
+
+    render(<MemoryRouter><PeranAdmin /></MemoryRouter>);
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/peran', { replace: true });
+  });
+
+  it('klik baris valid menavigasi ke detail peran', () => {
+    render(<MemoryRouter><PeranAdmin /></MemoryRouter>);
+
+    fireEvent.click(screen.getByText('Administrator'));
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/peran/1');
+  });
+
+  it('toggle akses redaksi dan toggle izin dapat menambah lalu menghapus pilihan', () => {
+    render(<MemoryRouter><PeranAdmin /></MemoryRouter>);
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+
+    const dialog = screen.getByRole('dialog', { name: 'Tambah Peran' });
+    const labelRedaksi = within(dialog).getByText('Redaksi');
+    const tombolToggle = labelRedaksi.parentElement.querySelector('button');
+    fireEvent.click(tombolToggle);
+    expect(screen.getByText('Aktif')).toBeInTheDocument();
+
+    const checkboxKelola = screen.getByRole('checkbox', { name: /Kelola Pengguna/i });
+    fireEvent.click(checkboxKelola);
+    fireEvent.click(checkboxKelola);
+
+    fireEvent.change(screen.getByLabelText('Kode*'), { target: { value: 'peran_x' } });
+    fireEvent.change(screen.getByLabelText('Nama*'), { target: { value: 'Peran X' } });
+    fireEvent.click(screen.getByText('Simpan'));
+
+    const payload = mutateSimpanPeran.mock.calls.at(-1)[0];
+    expect(payload.akses_redaksi).toBe(true);
+    expect(payload.izin_ids).toEqual([]);
+  });
+
+  it('menampilkan state memuat daftar izin', () => {
+    mockUseDaftarIzinAdmin.mockReturnValue({ isLoading: true, data: undefined });
+
+    render(<MemoryRouter><PeranAdmin /></MemoryRouter>);
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    expect(screen.getByText('Memuat daftar izin …')).toBeInTheDocument();
+  });
+
+  it('simpan memakai fallback izin_ids kosong saat nilai bukan array', () => {
+    mockParams = { id: '1' };
+    mockUseDetailPeranAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          kode: 'admin',
+          nama: 'Admin',
+          keterangan: 'detail',
+          akses_redaksi: false,
+          izin_ids: null,
+        },
+      },
+    });
+
+    render(<MemoryRouter><PeranAdmin /></MemoryRouter>);
+
+    fireEvent.click(screen.getByText('Simpan'));
+    const payload = mutateSimpanPeran.mock.calls.at(-1)[0];
+    expect(payload.izin_ids).toEqual([]);
+  });
+
+  it('toggle izin tetap aman saat izin_ids awal bukan array', () => {
+    mockParams = { id: '1' };
+    mockUseDetailPeranAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          kode: 'admin',
+          nama: 'Admin',
+          keterangan: 'detail',
+          akses_redaksi: false,
+          izin_ids: null,
+        },
+      },
+    });
+
+    render(<MemoryRouter><PeranAdmin /></MemoryRouter>);
+
+    fireEvent.click(screen.getByRole('checkbox', { name: /Kelola Pengguna/i }));
+    fireEvent.click(screen.getByText('Simpan'));
+
+    const payload = mutateSimpanPeran.mock.calls.at(-1)[0];
+    expect(payload.izin_ids).toEqual([11]);
+  });
+
   it('menangani state loading, error, dan data kosong', () => {
     mockUseDaftarPeranAdmin
       .mockReturnValueOnce({ isLoading: true, isError: false, data: undefined })
@@ -193,5 +318,38 @@ describe('PeranAdmin', () => {
 
     rerender(<MemoryRouter><PeranAdmin /></MemoryRouter>);
     expect(screen.getByText('Tidak ada data.')).toBeInTheDocument();
+  });
+
+  it('menampilkan fallback kolom dan kelompok izin "Lainnya"', () => {
+    mockUseDaftarPeranAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        total: 1,
+        data: [
+          {
+            id: 3,
+            kode: 'uji',
+            nama: 'Peran Uji',
+            jumlah_pengguna: null,
+            jumlah_izin: null,
+            akses_redaksi: false,
+            izin_nama: null,
+          },
+        ],
+      },
+    });
+    mockUseDaftarIzinAdmin.mockReturnValue({
+      isLoading: false,
+      data: {
+        data: [{ id: 44, kode: 'izin_uji', nama: 'Izin Uji', kelompok: '' }],
+      },
+    });
+
+    render(<MemoryRouter><PeranAdmin /></MemoryRouter>);
+
+    expect(screen.getAllByText('0').length).toBeGreaterThan(0);
+    fireEvent.click(screen.getByText('+ Tambah'));
+    expect(screen.getByText('Lainnya')).toBeInTheDocument();
   });
 });

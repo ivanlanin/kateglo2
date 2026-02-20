@@ -24,6 +24,7 @@ import klien from '../../src/api/klien';
 import {
   useStatistikAdmin,
   useDaftarKamusAdmin,
+  useAutocompleteIndukKamus,
   useDetailKamusAdmin,
   useDaftarKomentarAdmin,
   useDetailKomentarAdmin,
@@ -81,6 +82,53 @@ describe('apiAdmin', () => {
     await kamusKosong.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus', { params: { limit: 10, offset: 5, q: undefined, aktif: undefined } });
 
+    const indukAutocomplete = useAutocompleteIndukKamus({ q: '  akar ', limit: 12, excludeId: 9 });
+    expect(indukAutocomplete.enabled).toBe(true);
+    await indukAutocomplete.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus/opsi-induk', {
+      params: {
+        q: 'akar',
+        limit: 12,
+        exclude_id: 9,
+      },
+    });
+
+      const autocompleteKosong = useAutocompleteIndukKamus({ q: '   ', limit: 4, excludeId: 0 });
+      expect(autocompleteKosong.enabled).toBe(false);
+      await autocompleteKosong.queryFn();
+      expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus/opsi-induk', {
+        params: {
+          q: undefined,
+          limit: 4,
+          exclude_id: undefined,
+        },
+      });
+
+    const indukAutocompleteKosong = useAutocompleteIndukKamus({ q: '   ', limit: 8, excludeId: null });
+    expect(indukAutocompleteKosong.enabled).toBe(false);
+
+    const indukAutocompleteTanpaExclude = useAutocompleteIndukKamus({ q: 'kata', limit: 7, excludeId: 0 });
+    expect(indukAutocompleteTanpaExclude.enabled).toBe(true);
+    await indukAutocompleteTanpaExclude.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus/opsi-induk', {
+      params: {
+        q: 'kata',
+        limit: 7,
+        exclude_id: undefined,
+      },
+    });
+
+    const autocompleteDefault = useAutocompleteIndukKamus();
+    expect(autocompleteDefault.enabled).toBe(false);
+    await autocompleteDefault.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus/opsi-induk', {
+      params: {
+        q: undefined,
+        limit: 8,
+        exclude_id: undefined,
+      },
+    });
+
     const kamusDenganFilter = useDaftarKamusAdmin({
       limit: 15,
       offset: 0,
@@ -102,6 +150,36 @@ describe('apiAdmin', () => {
         jenis_rujuk: 'lihat',
         punya_homograf: '1',
         punya_homonim: '0',
+      },
+    });
+
+    const kamusDenganSemuaFilter = useDaftarKamusAdmin({
+      limit: 11,
+      offset: 2,
+      q: 'ujicoba',
+      kelasKata: 'n',
+      ragam: 'cak',
+      bidang: 'umum',
+      bahasa: 'id',
+      punyaIlmiah: '1',
+      punyaKimia: '0',
+      tipePenyingkat: 'singkatan',
+      punyaContoh: '1',
+    });
+    await kamusDenganSemuaFilter.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus', {
+      params: {
+        limit: 11,
+        offset: 2,
+        q: 'ujicoba',
+        kelas_kata: 'n',
+        ragam: 'cak',
+        bidang: 'umum',
+        bahasa: 'id',
+        punya_ilmiah: '1',
+        punya_kimia: '0',
+        tipe_penyingkat: 'singkatan',
+        punya_contoh: '1',
       },
     });
 
@@ -137,6 +215,10 @@ describe('apiAdmin', () => {
     await peranAdmin.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/peran', { params: { limit: 30, offset: 10, q: 'adm' } });
 
+    const peranAdminTanpaQ = useDaftarPeranAdmin({ limit: 5, offset: 1, q: '' });
+    await peranAdminTanpaQ.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/peran', { params: { limit: 5, offset: 1, q: undefined } });
+
     const detailPeran = useDetailPeranAdmin(99);
     expect(detailPeran.enabled).toBe(true);
     await detailPeran.queryFn();
@@ -146,9 +228,17 @@ describe('apiAdmin', () => {
     await daftarIzin.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/peran/izin', { params: { q: 'kelola' } });
 
+    const daftarIzinTanpaQ = useDaftarIzinAdmin({ q: '' });
+    await daftarIzinTanpaQ.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/peran/izin', { params: { q: undefined } });
+
     const izinKelola = useDaftarIzinKelolaAdmin({ limit: 40, offset: 20, q: 'lihat' });
     await izinKelola.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/izin', { params: { limit: 40, offset: 20, q: 'lihat' } });
+
+    const izinKelolaTanpaQ = useDaftarIzinKelolaAdmin({ limit: 7, offset: 3, q: '' });
+    await izinKelolaTanpaQ.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/izin', { params: { limit: 7, offset: 3, q: undefined } });
 
     const detailIzin = useDetailIzinAdmin(101);
     expect(detailIzin.enabled).toBe(true);
@@ -158,6 +248,10 @@ describe('apiAdmin', () => {
     const opsiPeranUntukIzin = useDaftarPeranUntukIzinAdmin({ q: 'adm' });
     await opsiPeranUntukIzin.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/izin/peran', { params: { q: 'adm' } });
+
+    const opsiPeranUntukIzinTanpaQ = useDaftarPeranUntukIzinAdmin({ q: '' });
+    await opsiPeranUntukIzinTanpaQ.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/izin/peran', { params: { q: undefined } });
 
     expect(useDetailPeranAdmin(null).enabled).toBe(false);
     expect(useDetailIzinAdmin(null).enabled).toBe(false);

@@ -247,6 +247,21 @@ describe('TesaurusAdmin', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/redaksi/tesaurus', { replace: true });
   });
 
+  it('mengarahkan ke daftar saat route detail dibuka tapi tidak punya izin edit', () => {
+    mockParams = { id: '5' };
+    mockUseAuth.mockReturnValue({
+      punyaIzin: (izin) => izin === 'tambah_tesaurus',
+    });
+
+    render(
+      <MemoryRouter>
+        <TesaurusAdmin />
+      </MemoryRouter>
+    );
+
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/tesaurus', { replace: true });
+  });
+
   it('mengabaikan detail route saat payload detail tidak memiliki id', () => {
     mockParams = { id: '3' };
     mockUseDetailTesaurusAdmin.mockReturnValue({ isLoading: false, isError: false, data: { data: {} } });
@@ -334,5 +349,21 @@ describe('TesaurusAdmin', () => {
 
     fireEvent.click(screen.getByText('+ Tambah'));
     expect(mockNavigate).toHaveBeenCalledWith('/redaksi/tesaurus', { replace: true });
+  });
+
+  it('menyembunyikan aksi tambah dan hapus saat izin terkait tidak ada', () => {
+    mockParams = { id: '1' };
+    mockUseAuth.mockReturnValue({
+      punyaIzin: (izin) => izin === 'edit_tesaurus',
+    });
+
+    render(
+      <MemoryRouter>
+        <TesaurusAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByText('+ Tambah')).not.toBeInTheDocument();
+    expect(screen.queryByText('Hapus')).not.toBeInTheDocument();
   });
 });

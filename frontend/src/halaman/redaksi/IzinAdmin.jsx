@@ -124,13 +124,12 @@ function IzinAdmin() {
 
   const bukaSuntingDariDaftar = (item) => {
     setPesan({ error: '', sukses: '' });
-    if (!item?.id) return;
-    navigate(`/redaksi/izin/${item.id}`);
+    item?.id && navigate(`/redaksi/izin/${item.id}`);
   };
 
   const togglePeran = (peranId) => {
     const id = Number(peranId);
-    const peranIdsSekarang = Array.isArray(panel.data.peran_ids) ? panel.data.peran_ids.map((x) => Number(x)) : [];
+    const peranIdsSekarang = panel.data.peran_ids.map((x) => Number(x));
 
     if (peranIdsSekarang.includes(id)) {
       panel.ubahField('peran_ids', peranIdsSekarang.filter((item) => item !== id));
@@ -154,9 +153,7 @@ function IzinAdmin() {
 
     const payload = {
       ...panel.data,
-      peran_ids: Array.isArray(panel.data.peran_ids)
-        ? panel.data.peran_ids.map((item) => Number(item)).filter((item) => Number.isInteger(item) && item > 0)
-        : [],
+      peran_ids: panel.data.peran_ids.map((item) => Number(item)).filter((item) => Number.isInteger(item) && item > 0),
     };
 
     simpan.mutate(payload, {
@@ -205,7 +202,7 @@ function IzinAdmin() {
           ) : (
             <div className="space-y-2 max-h-[45vh] overflow-y-auto pr-1 rounded-lg border border-gray-200 dark:border-gray-700 p-3">
               {daftarPeran.map((peran) => {
-                const selected = (panel.data.peran_ids || []).map((id) => Number(id)).includes(Number(peran.id));
+                const selected = panel.data.peran_ids.map((id) => Number(id)).includes(Number(peran.id));
                 return (
                   <label
                     key={peran.id}
