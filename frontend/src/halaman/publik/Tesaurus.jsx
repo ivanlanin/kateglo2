@@ -10,7 +10,7 @@ import Paginasi from '../../komponen/bersama/Paginasi';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import TeksLema from '../../komponen/publik/TeksLema';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
-import { buatPathDetailKamus } from '../../utils/kamusIndex';
+import { buatPathDetailKamus } from '../../utils/paramUtils';
 import { buildMetaBrowseTesaurus, buildMetaPencarianTesaurus } from '../../utils/metaUtils';
 
 const limit = 100;

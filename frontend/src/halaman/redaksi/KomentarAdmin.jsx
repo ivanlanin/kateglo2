@@ -26,7 +26,7 @@ import {
   PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
 import { formatLocalDateTime } from '../../utils/formatTanggalLokal';
-import { parsePositiveIntegerParam } from '../../utils/routeParam';
+import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
 const nilaiAwal = {
   id: null,

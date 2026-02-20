@@ -3,7 +3,7 @@
  */
 
 import { Link } from 'react-router-dom';
-import { buatPathDetailKamus } from '../../utils/kamusIndex';
+import { buatPathDetailKamus } from '../../utils/paramUtils';
 
 function resolveErrorText(error, defaultText) {
   const status = error?.response?.status;

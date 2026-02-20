@@ -29,7 +29,7 @@ import {
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
-import { parsePositiveIntegerParam } from '../../utils/routeParam';
+import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
 const nilaiAwal = { kode: '', nama: '', keterangan: '', akses_redaksi: false, izin_ids: [] };
 

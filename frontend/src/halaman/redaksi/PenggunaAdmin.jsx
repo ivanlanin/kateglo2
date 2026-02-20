@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarPengguna, useDetailPengguna, useDaftarPeran, useSimpanPengguna } from '../../api/apiAdmin';
 import { formatLocalDateTime } from '../../utils/formatTanggalLokal';
-import { parsePositiveIntegerParam } from '../../utils/routeParam';
+import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 import TataLetak from '../../komponen/bersama/TataLetak';
 import {
   BarisFilterCariAdmin,
