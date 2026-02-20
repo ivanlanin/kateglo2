@@ -7,8 +7,8 @@ import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { cariTesaurus } from '../../api/apiPublik';
 import { useCursorPagination } from '../../hooks/bersama/useCursorPagination';
-import Paginasi from '../../komponen/bersama/Paginasi';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
+import HasilPencarian from '../../komponen/publik/HasilPencarian';
 import TeksLema from '../../komponen/publik/TeksLema';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
@@ -112,45 +112,27 @@ function Tesaurus() {
 
       {/* Hasil pencarian */}
       {kata && !isLoading && !isError && (
-        <>
-          {results.length === 0 && <EmptyResultText text="Kata tidak ditemukan di tesaurus. Coba kata lain?" />}
-
-          {results.length > 0 && (
-            <>
-              <div className="mb-4">
-                <Paginasi
-                  total={total}
-                  limit={limit}
-                  pageInfo={data?.pageInfo}
-                  currentPage={cursorState.page}
-                  onNavigateCursor={handlePaginasi}
-                />
-              </div>
-              <div className="tesaurus-result-grid">
-                {results.map((item) => (
-                  <div key={item.id} className="tesaurus-result-row">
-                    <Link
-                      to={buatPathDetailKamus(item.indeks)}
-                      className="kamus-kategori-grid-link"
-                    >
-                      <TeksLema lema={item.indeks} />
-                    </Link>
-                    <RelasiSingkat sinonim={item.sinonim} antonim={item.antonim} />
-                  </div>
-                ))}
-              </div>
-              <div className="mt-4">
-                <Paginasi
-                  total={total}
-                  limit={limit}
-                  pageInfo={data?.pageInfo}
-                  currentPage={cursorState.page}
-                  onNavigateCursor={handlePaginasi}
-                />
-              </div>
-            </>
-          )}
-        </>
+        <HasilPencarian
+          results={results}
+          emptyState={<EmptyResultText text="Kata tidak ditemukan di tesaurus. Coba kata lain?" />}
+          total={total}
+          limit={limit}
+          pageInfo={data?.pageInfo}
+          currentPage={cursorState.page}
+          onNavigateCursor={handlePaginasi}
+          containerClassName="tesaurus-result-grid"
+          renderItems={(items) => items.map((item) => (
+            <div key={item.id} className="tesaurus-result-row">
+              <Link
+                to={buatPathDetailKamus(item.indeks)}
+                className="kamus-kategori-grid-link"
+              >
+                <TeksLema lema={item.indeks} />
+              </Link>
+              <RelasiSingkat sinonim={item.sinonim} antonim={item.antonim} />
+            </div>
+          ))}
+        />
       )}
     </HalamanDasar>
   );

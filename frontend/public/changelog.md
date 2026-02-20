@@ -7,6 +7,7 @@
 - Melengkapi filter di redaksi kamus
 - Menambahkan kolom "Makna" di tabel redaksi kamus
 - Mengganti paginasi dari ofset menjadi kursor agar lebih efisien
+- Membuat komponen `HasilPencarian` dan `KartuKategori`
 
 ## 2026-02-19 Kamis
 
