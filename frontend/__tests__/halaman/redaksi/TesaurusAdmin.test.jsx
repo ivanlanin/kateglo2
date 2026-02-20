@@ -20,12 +20,17 @@ const mockUseDaftarTesaurusAdmin = vi.fn();
 const mockUseDetailTesaurusAdmin = vi.fn();
 const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
+const mockUseAuth = vi.fn();
 
 vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarTesaurusAdmin: (...args) => mockUseDaftarTesaurusAdmin(...args),
   useDetailTesaurusAdmin: (...args) => mockUseDetailTesaurusAdmin(...args),
   useSimpanTesaurus: () => ({ mutate: mutateSimpan, isPending: false }),
   useHapusTesaurus: () => ({ mutate: mutateHapus, isPending: false }),
+}));
+
+vi.mock('../../../src/context/authContext', () => ({
+  useAuth: (...args) => mockUseAuth(...args),
 }));
 
 vi.mock('../../../src/komponen/bersama/TataLetak', () => ({
@@ -43,6 +48,9 @@ describe('TesaurusAdmin', () => {
     vi.clearAllMocks();
     mockParams = {};
     global.confirm = vi.fn(() => true);
+    mockUseAuth.mockReturnValue({
+      punyaIzin: () => true,
+    });
     mockUseDaftarTesaurusAdmin.mockReturnValue({
       isLoading: false,
       isError: false,
@@ -71,6 +79,20 @@ describe('TesaurusAdmin', () => {
   });
 
   it('menangani hapus dan error simpan/hapus', () => {
+    mockParams = { id: '1' };
+    mockUseDetailTesaurusAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          indeks: 'anak',
+          sinonim: 'buah hati',
+          antonim: 'orang tua',
+          aktif: 1,
+        },
+      },
+    });
     mutateSimpan.mockImplementation((_data, opts) => opts.onError?.({ response: { data: { error: 'Err simpan' } } }));
     mutateHapus.mockImplementation((_id, opts) => opts.onError?.({ response: { data: { error: 'Err hapus' } } }));
 
@@ -80,7 +102,6 @@ describe('TesaurusAdmin', () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByText('anak'));
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Err simpan')).toBeInTheDocument();
 
@@ -90,6 +111,20 @@ describe('TesaurusAdmin', () => {
   });
 
   it('menjalankan onSuccess dan fallback error default', () => {
+    mockParams = { id: '1' };
+    mockUseDetailTesaurusAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          indeks: 'anak',
+          sinonim: 'buah hati',
+          antonim: 'orang tua',
+          aktif: 1,
+        },
+      },
+    });
     vi.useFakeTimers();
     mutateSimpan.mockImplementation((_data, opts) => opts.onSuccess?.());
     mutateHapus.mockImplementation((_id, opts) => opts.onError?.({}));
@@ -100,7 +135,6 @@ describe('TesaurusAdmin', () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByText('anak'));
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Tersimpan!')).toBeInTheDocument();
 
@@ -135,6 +169,20 @@ describe('TesaurusAdmin', () => {
   });
 
   it('menjalankan onSuccess hapus', () => {
+    mockParams = { id: '1' };
+    mockUseDetailTesaurusAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          indeks: 'anak',
+          sinonim: 'buah hati',
+          antonim: 'orang tua',
+          aktif: 1,
+        },
+      },
+    });
     mutateHapus.mockImplementation((_id, opts) => opts.onSuccess?.());
 
     render(
@@ -143,7 +191,6 @@ describe('TesaurusAdmin', () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByText('anak'));
     fireEvent.click(screen.getByText('Hapus'));
     expect(mutateHapus).toHaveBeenCalled();
   });
@@ -213,7 +260,7 @@ describe('TesaurusAdmin', () => {
     expect(screen.queryByLabelText(/Indeks/)).not.toBeInTheDocument();
   });
 
-  it('membuka panel tanpa navigasi saat item tidak punya id', () => {
+  it('tidak membuka panel saat item tidak punya id', () => {
     mockUseDaftarTesaurusAdmin.mockReturnValue({
       isLoading: false,
       isError: false,
@@ -230,7 +277,7 @@ describe('TesaurusAdmin', () => {
     );
 
     fireEvent.click(screen.getByText('tanpa-id'));
-    expect(screen.getByDisplayValue('tanpa-id')).toBeInTheDocument();
+    expect(screen.queryByDisplayValue('tanpa-id')).not.toBeInTheDocument();
     expect(mockNavigate).not.toHaveBeenCalledWith('/redaksi/tesaurus/null');
   });
 
@@ -248,19 +295,32 @@ describe('TesaurusAdmin', () => {
     expect(argTerakhir.aktif).toBe('1');
   });
 
-  it('tidak menavigasi saat panel sudah terbuka ketika klik baris lagi', () => {
+  it('tetap menavigasi saat panel sudah terbuka ketika klik baris lagi', () => {
+    mockParams = { id: '1' };
+    mockUseDetailTesaurusAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          indeks: 'anak',
+          sinonim: 'buah hati',
+          antonim: 'orang tua',
+          aktif: 1,
+        },
+      },
+    });
     render(
       <MemoryRouter>
         <TesaurusAdmin />
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByText('anak'));
     expect(screen.getByDisplayValue('anak')).toBeInTheDocument();
 
     mockNavigate.mockClear();
     fireEvent.click(screen.getByText('anak'));
-    expect(mockNavigate).not.toHaveBeenCalled();
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/tesaurus/1');
   });
 
   it('klik tambah saat mode detail route menavigasi kembali ke daftar', () => {

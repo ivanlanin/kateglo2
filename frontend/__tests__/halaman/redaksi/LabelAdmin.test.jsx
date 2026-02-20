@@ -107,6 +107,22 @@ describe('LabelAdmin', () => {
   });
 
   it('menjalankan sukses simpan, cabang confirm false, dan sukses hapus', () => {
+    mockParams = { id: '1' };
+    mockUseDetailLabelAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          kategori: 'ragam',
+          kode: 'cak',
+          nama: 'cakapan',
+          urutan: 1,
+          keterangan: 'ragam lisan',
+          aktif: 1,
+        },
+      },
+    });
     vi.useFakeTimers();
     mutateSimpan.mockImplementation((_data, opts) => opts.onSuccess?.());
     mutateHapus.mockImplementation((_id, opts) => opts.onSuccess?.());
@@ -117,16 +133,10 @@ describe('LabelAdmin', () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByText('cakapan'));
     fireEvent.change(screen.getByLabelText('Nama*'), { target: { value: 'cakapan baru' } });
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Tersimpan!')).toBeInTheDocument();
 
-    act(() => {
-      vi.advanceTimersByTime(700);
-    });
-
-    fireEvent.click(screen.getByText('cakapan'));
     global.confirm = vi.fn(() => false);
     fireEvent.click(screen.getByText('Hapus'));
     expect(mutateHapus).not.toHaveBeenCalled();
@@ -134,10 +144,30 @@ describe('LabelAdmin', () => {
     global.confirm = vi.fn(() => true);
     fireEvent.click(screen.getByText('Hapus'));
     expect(mutateHapus).toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(700);
+    });
     vi.useRealTimers();
   });
 
   it('menangani error hapus dengan pesan backend dan fallback default', () => {
+    mockParams = { id: '1' };
+    mockUseDetailLabelAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          kategori: 'ragam',
+          kode: 'cak',
+          nama: 'cakapan',
+          urutan: 1,
+          keterangan: 'ragam lisan',
+          aktif: 1,
+        },
+      },
+    });
     mutateHapus
       .mockImplementationOnce((_id, opts) => opts.onError?.({ response: { data: { message: 'Err hapus label' } } }))
       .mockImplementationOnce((_id, opts) => opts.onError?.({}));
@@ -148,7 +178,6 @@ describe('LabelAdmin', () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByText('cakapan'));
     fireEvent.click(screen.getByText('Hapus'));
     expect(screen.getByText('Err hapus label')).toBeInTheDocument();
 
@@ -251,7 +280,7 @@ describe('LabelAdmin', () => {
     expect(screen.queryByLabelText('Nama*')).not.toBeInTheDocument();
   });
 
-  it('membuka panel tanpa navigasi saat item tidak punya id', () => {
+  it('tidak membuka panel saat item tidak punya id', () => {
     mockUseDaftarLabelAdmin.mockReturnValue({
       isLoading: false,
       isError: false,
@@ -268,7 +297,7 @@ describe('LabelAdmin', () => {
     );
 
     fireEvent.click(screen.getByText('tanpa-id'));
-    expect(screen.getByDisplayValue('tanpa-id')).toBeInTheDocument();
+    expect(screen.queryByDisplayValue('tanpa-id')).not.toBeInTheDocument();
     expect(mockNavigate).not.toHaveBeenCalledWith('/redaksi/label/null');
   });
 
@@ -286,19 +315,34 @@ describe('LabelAdmin', () => {
     expect(argTerakhir.aktif).toBe('1');
   });
 
-  it('tidak menavigasi saat panel sudah terbuka ketika klik baris lagi', () => {
+  it('tetap menavigasi saat panel sudah terbuka ketika klik baris lagi', () => {
+    mockParams = { id: '1' };
+    mockUseDetailLabelAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          kategori: 'ragam',
+          kode: 'cak',
+          nama: 'cakapan',
+          urutan: 1,
+          keterangan: 'ragam lisan',
+          aktif: 1,
+        },
+      },
+    });
     render(
       <MemoryRouter>
         <LabelAdmin />
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByText('cakapan'));
     expect(screen.getByDisplayValue('cakapan')).toBeInTheDocument();
 
     mockNavigate.mockClear();
     fireEvent.click(screen.getByText('cakapan'));
-    expect(mockNavigate).not.toHaveBeenCalled();
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/label/1');
   });
 
   it('klik tambah saat mode detail route menavigasi kembali ke daftar', () => {

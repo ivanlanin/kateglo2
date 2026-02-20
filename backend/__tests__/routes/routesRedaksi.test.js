@@ -332,7 +332,7 @@ describe('routes/redaksi', () => {
       const response = await callAsAdmin('get', '/api/redaksi/kamus?limit=300&offset=-2&q= kata &jenis=dasar&jenis_rujuk= lihat ');
 
       expect(response.status).toBe(200);
-      expect(ModelLema.daftarAdmin).toHaveBeenCalledWith({
+      expect(ModelLema.daftarAdmin).toHaveBeenCalledWith(expect.objectContaining({
         limit: 200,
         offset: 0,
         q: 'kata',
@@ -341,7 +341,15 @@ describe('routes/redaksi', () => {
         jenis_rujuk: 'lihat',
         punya_homograf: '',
         punya_homonim: '',
-      });
+        kelas_kata: '',
+        ragam: '',
+        bidang: '',
+        bahasa: '',
+        punya_ilmiah: '',
+        punya_kimia: '',
+        tipe_penyingkat: '',
+        punya_contoh: '',
+      }));
     });
 
     it('GET /api/redaksi/kamus meneruskan error', async () => {
@@ -359,7 +367,7 @@ describe('routes/redaksi', () => {
       const response = await callAsAdmin('get', '/api/redaksi/kamus?punya_homograf=1&punya_homonim=0');
 
       expect(response.status).toBe(200);
-      expect(ModelLema.daftarAdmin).toHaveBeenCalledWith({
+      expect(ModelLema.daftarAdmin).toHaveBeenCalledWith(expect.objectContaining({
         limit: 50,
         offset: 0,
         q: '',
@@ -368,7 +376,15 @@ describe('routes/redaksi', () => {
         jenis_rujuk: '',
         punya_homograf: '1',
         punya_homonim: '0',
-      });
+        kelas_kata: '',
+        ragam: '',
+        bidang: '',
+        bahasa: '',
+        punya_ilmiah: '',
+        punya_kimia: '',
+        tipe_penyingkat: '',
+        punya_contoh: '',
+      }));
     });
 
     it('GET /api/redaksi/kamus meneruskan filter aktif valid', async () => {
@@ -377,7 +393,7 @@ describe('routes/redaksi', () => {
       const response = await callAsAdmin('get', '/api/redaksi/kamus?aktif=0');
 
       expect(response.status).toBe(200);
-      expect(ModelLema.daftarAdmin).toHaveBeenCalledWith({
+      expect(ModelLema.daftarAdmin).toHaveBeenCalledWith(expect.objectContaining({
         limit: 50,
         offset: 0,
         q: '',
@@ -386,7 +402,15 @@ describe('routes/redaksi', () => {
         jenis_rujuk: '',
         punya_homograf: '',
         punya_homonim: '',
-      });
+        kelas_kata: '',
+        ragam: '',
+        bidang: '',
+        bahasa: '',
+        punya_ilmiah: '',
+        punya_kimia: '',
+        tipe_penyingkat: '',
+        punya_contoh: '',
+      }));
     });
 
     it('GET /api/redaksi/kamus/:id mengembalikan 404 jika data null', async () => {

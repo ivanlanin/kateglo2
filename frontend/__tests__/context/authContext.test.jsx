@@ -170,7 +170,7 @@ describe('context/authContext', () => {
   });
 
   it('menghapus token jika ambilProfilSaya gagal', async () => {
-    mockAmbilProfilSaya.mockRejectedValue(new Error('unauthorized'));
+    mockAmbilProfilSaya.mockRejectedValue({ response: { status: 401 } });
 
     render(
       <AuthProvider>
@@ -223,7 +223,8 @@ describe('context/authContext', () => {
     });
   });
 
-  it('tetap aman saat localStorage tidak tersedia', () => {
+  it('tetap aman saat localStorage tidak tersedia', async () => {
+    mockAmbilProfilSaya.mockResolvedValue({ email: 'tanpa-storage@contoh.id' });
     const originalStorage = globalThis.localStorage;
     const originalWindowStorage = window.localStorage;
     Object.defineProperty(globalThis, 'localStorage', {
@@ -248,6 +249,9 @@ describe('context/authContext', () => {
 
       fireEvent.click(screen.getByRole('button', { name: 'set-token' }));
       expect(screen.getByTestId('token')).toHaveTextContent('token-baru');
+      await waitFor(() => {
+        expect(screen.getByTestId('loading')).toHaveTextContent('false');
+      });
 
       fireEvent.click(screen.getByRole('button', { name: 'clear-token' }));
       expect(screen.getByTestId('token')).toHaveTextContent('-');

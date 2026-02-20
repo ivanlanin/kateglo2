@@ -20,6 +20,7 @@ const mockUseDaftarKamusAdmin = vi.fn();
 const mockUseDetailKamusAdmin = vi.fn();
 const mockUseDaftarMakna = vi.fn();
 const mockUseKategoriLabelRedaksi = vi.fn();
+const mockUseAutocompleteIndukKamus = vi.fn();
 
 const mutateSimpanKamus = vi.fn();
 const mutateHapusKamus = vi.fn();
@@ -27,6 +28,7 @@ const mutateSimpanMakna = vi.fn();
 const mutateHapusMakna = vi.fn();
 const mutateSimpanContoh = vi.fn();
 const mutateHapusContoh = vi.fn();
+const mockUseAuth = vi.fn();
 
 vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarKamusAdmin: (...args) => mockUseDaftarKamusAdmin(...args),
@@ -35,10 +37,15 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useHapusKamus: () => ({ mutate: mutateHapusKamus, isPending: false }),
   useDaftarMakna: (...args) => mockUseDaftarMakna(...args),
   useKategoriLabelRedaksi: (...args) => mockUseKategoriLabelRedaksi(...args),
+  useAutocompleteIndukKamus: (...args) => mockUseAutocompleteIndukKamus(...args),
   useSimpanMakna: () => ({ mutate: mutateSimpanMakna, isPending: false }),
   useHapusMakna: () => ({ mutate: mutateHapusMakna, isPending: false }),
   useSimpanContoh: () => ({ mutate: mutateSimpanContoh, isPending: false }),
   useHapusContoh: () => ({ mutate: mutateHapusContoh, isPending: false }),
+}));
+
+vi.mock('../../../src/context/authContext', () => ({
+  useAuth: (...args) => mockUseAuth(...args),
 }));
 
 vi.mock('../../../src/komponen/bersama/TataLetak', () => ({
@@ -63,7 +70,16 @@ describe('KamusAdmin', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockParams = {};
+    mockNavigate.mockImplementation((path) => {
+      const match = String(path || '').match(/^\/redaksi\/kamus\/(\d+)$/);
+      if (match) {
+        mockParams = { id: match[1] };
+      }
+    });
     global.confirm = vi.fn(() => true);
+    mockUseAuth.mockReturnValue({
+      punyaIzin: () => true,
+    });
 
     mockUseDaftarKamusAdmin.mockReturnValue({
       isLoading: false,
@@ -74,10 +90,30 @@ describe('KamusAdmin', () => {
       },
     });
 
-    mockUseDetailKamusAdmin.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: null,
+    mockUseDetailKamusAdmin.mockImplementation((id) => {
+      if (!id) {
+        return {
+          isLoading: false,
+          isError: false,
+          data: null,
+        };
+      }
+      return {
+        isLoading: false,
+        isError: false,
+        data: {
+          data: {
+            id: 1,
+            entri: 'anak',
+            indeks: 'anak',
+            jenis: 'dasar',
+            lafal: 'a·nak',
+            jenis_rujuk: 'lihat',
+            entri_rujuk: 'ananda',
+            aktif: 1,
+          },
+        },
+      };
     });
 
     mockUseDaftarMakna.mockReturnValue({
@@ -108,6 +144,11 @@ describe('KamusAdmin', () => {
           },
         ],
       },
+    });
+
+    mockUseAutocompleteIndukKamus.mockReturnValue({
+      data: { data: [] },
+      isLoading: false,
     });
 
     mockUseKategoriLabelRedaksi.mockReturnValue({
@@ -368,13 +409,12 @@ describe('KamusAdmin', () => {
 
     fireEvent.click(screen.getByText('dasar'));
     fireEvent.click(screen.getByText('Simpan'));
+    fireEvent.click(screen.getByText('Hapus'));
+    expect(mutateHapusKamus).toHaveBeenCalled();
+
     act(() => {
       vi.advanceTimersByTime(700);
     });
-
-    fireEvent.click(screen.getByText('dasar'));
-    fireEvent.click(screen.getByText('Hapus'));
-    expect(mutateHapusKamus).toHaveBeenCalled();
     vi.useRealTimers();
   });
 
@@ -472,7 +512,7 @@ describe('KamusAdmin', () => {
     expect(screen.queryByLabelText('Entri*')).not.toBeInTheDocument();
   });
 
-  it('membuka panel tanpa navigasi saat item tidak punya id', () => {
+  it('tidak membuka panel saat item tidak punya id', () => {
     mockUseDaftarKamusAdmin.mockReturnValue({
       isLoading: false,
       isError: false,
@@ -489,7 +529,7 @@ describe('KamusAdmin', () => {
     );
 
     fireEvent.click(screen.getByText('dasar'));
-    expect(screen.getByDisplayValue('tanpa-id')).toBeInTheDocument();
+    expect(screen.queryByDisplayValue('tanpa-id')).not.toBeInTheDocument();
     expect(mockNavigate).not.toHaveBeenCalledWith('/redaksi/kamus/null');
   });
 
@@ -506,7 +546,7 @@ describe('KamusAdmin', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/redaksi/kamus', { replace: true });
   });
 
-  it('tidak menavigasi saat panel sudah terbuka ketika klik baris lagi', () => {
+  it('tetap menavigasi saat panel sudah terbuka ketika klik baris lagi', () => {
     render(
       <MemoryRouter>
         <KamusAdmin />
@@ -514,14 +554,14 @@ describe('KamusAdmin', () => {
     );
 
     fireEvent.click(screen.getByText('dasar'));
-    expect(screen.getByDisplayValue('anak')).toBeInTheDocument();
+    expect(screen.getAllByDisplayValue('anak').length).toBeGreaterThan(0);
 
     mockNavigate.mockClear();
     fireEvent.click(screen.getByText('dasar'));
-    expect(mockNavigate).not.toHaveBeenCalled();
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/kamus/1');
   });
 
-  it('opsi filter jenis dan jenis rujuk menghapus nilai kosong', () => {
+  it('opsi filter jenis menghapus nilai kosong', () => {
     mockUseKategoriLabelRedaksi.mockReturnValueOnce({
       data: {
         data: {
@@ -539,10 +579,9 @@ describe('KamusAdmin', () => {
     );
 
     const filterJenis = screen.getByLabelText('Filter jenis');
-    const filterJenisRujuk = screen.getByLabelText('Filter jenis rujuk');
 
     expect(Array.from(filterJenis.querySelectorAll('option')).filter((opt) => opt.value === '').length).toBe(1);
-    expect(Array.from(filterJenisRujuk.querySelectorAll('option')).filter((opt) => opt.value === '').length).toBe(1);
+    expect(screen.queryByLabelText('Filter jenis rujuk')).not.toBeInTheDocument();
   });
 
   it('menjalankan handler cari dan menerapkan semua filter', () => {
@@ -553,7 +592,6 @@ describe('KamusAdmin', () => {
     );
 
     fireEvent.change(screen.getByLabelText('Filter jenis'), { target: { value: 'dasar' } });
-    fireEvent.change(screen.getByLabelText('Filter jenis rujuk'), { target: { value: 'lihat' } });
     fireEvent.change(screen.getByLabelText('Filter homograf'), { target: { value: '1' } });
     fireEvent.change(screen.getByLabelText('Filter homonim'), { target: { value: '0' } });
     fireEvent.change(screen.getByLabelText('Filter status entri'), { target: { value: '1' } });
@@ -561,7 +599,7 @@ describe('KamusAdmin', () => {
 
     const argsTerakhir = mockUseDaftarKamusAdmin.mock.calls.at(-1)?.[0] || {};
     expect(argsTerakhir.jenis).toBe('dasar');
-    expect(argsTerakhir.jenisRujuk).toBe('lihat');
+    expect(argsTerakhir.jenisRujuk || '').toBe('');
     expect(argsTerakhir.punyaHomograf).toBe('1');
     expect(argsTerakhir.punyaHomonim).toBe('0');
     expect(argsTerakhir.aktif).toBe('1');
