@@ -68,6 +68,14 @@ export function useDaftarKamusAdmin({
   jenisRujuk = '',
   punyaHomograf = '',
   punyaHomonim = '',
+  kelasKata = '',
+  ragam = '',
+  bidang = '',
+  bahasa = '',
+  punyaIlmiah = '',
+  punyaKimia = '',
+  tipePenyingkat = '',
+  punyaContoh = '',
 } = {}) {
   const params = {
     limit,
@@ -80,6 +88,14 @@ export function useDaftarKamusAdmin({
   if (jenisRujuk) params.jenis_rujuk = jenisRujuk;
   if (punyaHomograf) params.punya_homograf = punyaHomograf;
   if (punyaHomonim) params.punya_homonim = punyaHomonim;
+  if (kelasKata) params.kelas_kata = kelasKata;
+  if (ragam) params.ragam = ragam;
+  if (bidang) params.bidang = bidang;
+  if (bahasa) params.bahasa = bahasa;
+  if (punyaIlmiah) params.punya_ilmiah = punyaIlmiah;
+  if (punyaKimia) params.punya_kimia = punyaKimia;
+  if (tipePenyingkat) params.tipe_penyingkat = tipePenyingkat;
+  if (punyaContoh) params.punya_contoh = punyaContoh;
 
   return useQuery({
     queryKey: ['admin-kamus', {
@@ -91,6 +107,14 @@ export function useDaftarKamusAdmin({
       jenisRujuk,
       punyaHomograf,
       punyaHomonim,
+      kelasKata,
+      ragam,
+      bidang,
+      bahasa,
+      punyaIlmiah,
+      punyaKimia,
+      tipePenyingkat,
+      punyaContoh,
     }],
     queryFn: () =>
       klien

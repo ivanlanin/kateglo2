@@ -468,10 +468,26 @@ function KamusAdmin() {
   const [filterJenisDraft, setFilterJenisDraft] = useState('');
   const [filterPunyaHomografDraft, setFilterPunyaHomografDraft] = useState('');
   const [filterPunyaHomonimDraft, setFilterPunyaHomonimDraft] = useState('');
+  const [filterKelasKataDraft, setFilterKelasKataDraft] = useState('');
+  const [filterRagamDraft, setFilterRagamDraft] = useState('');
+  const [filterBidangDraft, setFilterBidangDraft] = useState('');
+  const [filterBahasaDraft, setFilterBahasaDraft] = useState('');
+  const [filterPunyaIlmiahDraft, setFilterPunyaIlmiahDraft] = useState('');
+  const [filterPunyaKimiaDraft, setFilterPunyaKimiaDraft] = useState('');
+  const [filterTipePenyingkatDraft, setFilterTipePenyingkatDraft] = useState('');
+  const [filterPunyaContohDraft, setFilterPunyaContohDraft] = useState('');
   const [filterAktifDraft, setFilterAktifDraft] = useState('');
   const [filterJenis, setFilterJenis] = useState('');
   const [filterPunyaHomograf, setFilterPunyaHomograf] = useState('');
   const [filterPunyaHomonim, setFilterPunyaHomonim] = useState('');
+  const [filterKelasKata, setFilterKelasKata] = useState('');
+  const [filterRagam, setFilterRagam] = useState('');
+  const [filterBidang, setFilterBidang] = useState('');
+  const [filterBahasa, setFilterBahasa] = useState('');
+  const [filterPunyaIlmiah, setFilterPunyaIlmiah] = useState('');
+  const [filterPunyaKimia, setFilterPunyaKimia] = useState('');
+  const [filterTipePenyingkat, setFilterTipePenyingkat] = useState('');
+  const [filterPunyaContoh, setFilterPunyaContoh] = useState('');
   const [filterAktif, setFilterAktif] = useState('');
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
   const bisaTambah = punyaIzin('tambah_entri');
@@ -495,6 +511,14 @@ function KamusAdmin() {
     jenis: filterJenis,
     punyaHomograf: filterPunyaHomograf,
     punyaHomonim: filterPunyaHomonim,
+    kelasKata: filterKelasKata,
+    ragam: filterRagam,
+    bidang: filterBidang,
+    bahasa: filterBahasa,
+    punyaIlmiah: filterPunyaIlmiah,
+    punyaKimia: filterPunyaKimia,
+    tipePenyingkat: filterTipePenyingkat,
+    punyaContoh: filterPunyaContoh,
   });
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
@@ -558,10 +582,61 @@ function KamusAdmin() {
     { value: '0', label: 'Nonaktif' },
   ]), []);
 
+  const opsiFilterKelasKata = useMemo(() => {
+    const pilihanTanpaKosong = opsiKategori.kelasKata.filter((item) => String(item?.value || '').trim());
+    return [{ value: '', label: '—Kelas Kata—' }, ...pilihanTanpaKosong];
+  }, [opsiKategori.kelasKata]);
+
+  const opsiFilterRagam = useMemo(() => {
+    const pilihanTanpaKosong = opsiKategori.ragam.filter((item) => String(item?.value || '').trim());
+    return [{ value: '', label: '—Ragam—' }, ...pilihanTanpaKosong];
+  }, [opsiKategori.ragam]);
+
+  const opsiFilterBidang = useMemo(() => {
+    const pilihanTanpaKosong = opsiKategori.bidang.filter((item) => String(item?.value || '').trim());
+    return [{ value: '', label: '—Bidang—' }, ...pilihanTanpaKosong];
+  }, [opsiKategori.bidang]);
+
+  const opsiFilterBahasa = useMemo(() => {
+    const pilihanTanpaKosong = opsiKategori.bahasa.filter((item) => String(item?.value || '').trim());
+    return [{ value: '', label: '—Bahasa—' }, ...pilihanTanpaKosong];
+  }, [opsiKategori.bahasa]);
+
+  const opsiFilterPunyaIlmiah = useMemo(() => ([
+    { value: '', label: '—Ilmiah—' },
+    { value: '1', label: 'Ada ilmiah' },
+    { value: '0', label: 'Tanpa ilmiah' },
+  ]), []);
+
+  const opsiFilterPunyaKimia = useMemo(() => ([
+    { value: '', label: '—Kimia—' },
+    { value: '1', label: 'Ada kimia' },
+    { value: '0', label: 'Tanpa kimia' },
+  ]), []);
+
+  const opsiFilterTipePenyingkat = useMemo(() => {
+    const pilihanTanpaKosong = opsiKategori.tipePenyingkat.filter((item) => String(item?.value || '').trim());
+    return [{ value: '', label: '—Penyingkatan—' }, ...pilihanTanpaKosong];
+  }, [opsiKategori.tipePenyingkat]);
+
+  const opsiFilterPunyaContoh = useMemo(() => ([
+    { value: '', label: '—Contoh—' },
+    { value: '1', label: 'Ada contoh' },
+    { value: '0', label: 'Tanpa contoh' },
+  ]), []);
+
   const handleCari = () => {
     setFilterJenis(filterJenisDraft);
     setFilterPunyaHomograf(filterPunyaHomografDraft);
     setFilterPunyaHomonim(filterPunyaHomonimDraft);
+    setFilterKelasKata(filterKelasKataDraft);
+    setFilterRagam(filterRagamDraft);
+    setFilterBidang(filterBidangDraft);
+    setFilterBahasa(filterBahasaDraft);
+    setFilterPunyaIlmiah(filterPunyaIlmiahDraft);
+    setFilterPunyaKimia(filterPunyaKimiaDraft);
+    setFilterTipePenyingkat(filterTipePenyingkatDraft);
+    setFilterPunyaContoh(filterPunyaContohDraft);
     setFilterAktif(filterAktifDraft);
     kirimCari(cari);
   };
@@ -737,6 +812,62 @@ function KamusAdmin() {
             onChange: setFilterAktifDraft,
             options: opsiFilterStatusKamus,
             ariaLabel: 'Filter status entri',
+          },
+          {
+            key: 'kelas_kata',
+            value: filterKelasKataDraft,
+            onChange: setFilterKelasKataDraft,
+            options: opsiFilterKelasKata,
+            ariaLabel: 'Filter kelas kata',
+          },
+          {
+            key: 'ragam',
+            value: filterRagamDraft,
+            onChange: setFilterRagamDraft,
+            options: opsiFilterRagam,
+            ariaLabel: 'Filter ragam',
+          },
+          {
+            key: 'bidang',
+            value: filterBidangDraft,
+            onChange: setFilterBidangDraft,
+            options: opsiFilterBidang,
+            ariaLabel: 'Filter bidang',
+          },
+          {
+            key: 'bahasa',
+            value: filterBahasaDraft,
+            onChange: setFilterBahasaDraft,
+            options: opsiFilterBahasa,
+            ariaLabel: 'Filter bahasa',
+          },
+          {
+            key: 'punya_ilmiah',
+            value: filterPunyaIlmiahDraft,
+            onChange: setFilterPunyaIlmiahDraft,
+            options: opsiFilterPunyaIlmiah,
+            ariaLabel: 'Filter ilmiah',
+          },
+          {
+            key: 'punya_kimia',
+            value: filterPunyaKimiaDraft,
+            onChange: setFilterPunyaKimiaDraft,
+            options: opsiFilterPunyaKimia,
+            ariaLabel: 'Filter kimia',
+          },
+          {
+            key: 'tipe_penyingkat',
+            value: filterTipePenyingkatDraft,
+            onChange: setFilterTipePenyingkatDraft,
+            options: opsiFilterTipePenyingkat,
+            ariaLabel: 'Filter penyingkatan',
+          },
+          {
+            key: 'punya_contoh',
+            value: filterPunyaContohDraft,
+            onChange: setFilterPunyaContohDraft,
+            options: opsiFilterPunyaContoh,
+            ariaLabel: 'Filter contoh',
           },
         ]}
       />

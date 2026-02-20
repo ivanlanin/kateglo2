@@ -423,6 +423,14 @@ class ModelEntri {
     jenis_rujuk = '',
     punya_homograf = '',
     punya_homonim = '',
+    kelas_kata = '',
+    ragam = '',
+    bidang = '',
+    bahasa = '',
+    punya_ilmiah = '',
+    punya_kimia = '',
+    tipe_penyingkat = '',
+    punya_contoh = '',
   } = {}) {
     const conditions = [];
     const params = [];
@@ -462,6 +470,113 @@ class ModelEntri {
       conditions.push('e.homonim IS NOT NULL');
     } else if (punya_homonim === '0') {
       conditions.push('e.homonim IS NULL');
+    }
+
+    if (kelas_kata) {
+      conditions.push(`EXISTS (
+        SELECT 1
+        FROM makna mk
+        WHERE mk.entri_id = e.id
+          AND mk.kelas_kata = $${idx}
+      )`);
+      params.push(kelas_kata);
+      idx++;
+    }
+
+    if (ragam) {
+      conditions.push(`EXISTS (
+        SELECT 1
+        FROM makna mk
+        WHERE mk.entri_id = e.id
+          AND mk.ragam = $${idx}
+      )`);
+      params.push(ragam);
+      idx++;
+    }
+
+    if (bidang) {
+      conditions.push(`EXISTS (
+        SELECT 1
+        FROM makna mk
+        WHERE mk.entri_id = e.id
+          AND mk.bidang = $${idx}
+      )`);
+      params.push(bidang);
+      idx++;
+    }
+
+    if (bahasa) {
+      conditions.push(`EXISTS (
+        SELECT 1
+        FROM makna mk
+        WHERE mk.entri_id = e.id
+          AND mk.bahasa = $${idx}
+      )`);
+      params.push(bahasa);
+      idx++;
+    }
+
+    if (tipe_penyingkat) {
+      conditions.push(`EXISTS (
+        SELECT 1
+        FROM makna mk
+        WHERE mk.entri_id = e.id
+          AND mk.tipe_penyingkat = $${idx}
+      )`);
+      params.push(tipe_penyingkat);
+      idx++;
+    }
+
+    if (punya_ilmiah === '1') {
+      conditions.push(`EXISTS (
+        SELECT 1
+        FROM makna mk
+        WHERE mk.entri_id = e.id
+          AND mk.ilmiah IS NOT NULL
+          AND BTRIM(mk.ilmiah) <> ''
+      )`);
+    } else if (punya_ilmiah === '0') {
+      conditions.push(`NOT EXISTS (
+        SELECT 1
+        FROM makna mk
+        WHERE mk.entri_id = e.id
+          AND mk.ilmiah IS NOT NULL
+          AND BTRIM(mk.ilmiah) <> ''
+      )`);
+    }
+
+    if (punya_kimia === '1') {
+      conditions.push(`EXISTS (
+        SELECT 1
+        FROM makna mk
+        WHERE mk.entri_id = e.id
+          AND mk.kimia IS NOT NULL
+          AND BTRIM(mk.kimia) <> ''
+      )`);
+    } else if (punya_kimia === '0') {
+      conditions.push(`NOT EXISTS (
+        SELECT 1
+        FROM makna mk
+        WHERE mk.entri_id = e.id
+          AND mk.kimia IS NOT NULL
+          AND BTRIM(mk.kimia) <> ''
+      )`);
+    }
+
+    if (punya_contoh === '1') {
+      conditions.push(`EXISTS (
+        SELECT 1
+        FROM makna mk
+        JOIN contoh c ON c.makna_id = mk.id
+        WHERE mk.entri_id = e.id
+      )`);
+    } else if (punya_contoh === '0') {
+      conditions.push(`NOT EXISTS (
+        SELECT 1
+        FROM makna mk
+        JOIN contoh c ON c.makna_id = mk.id
+        WHERE mk.entri_id = e.id
+      )`);
     }
 
     const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';

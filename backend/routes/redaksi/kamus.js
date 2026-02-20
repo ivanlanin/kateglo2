@@ -47,6 +47,14 @@ router.get('/', periksaIzin('lihat_entri'), async (req, res, next) => {
     const jenisRujuk = parseTrimmedString(req.query.jenis_rujuk);
     const punyaHomograf = parseTrimmedString(req.query.punya_homograf);
     const punyaHomonim = parseTrimmedString(req.query.punya_homonim);
+    const kelasKata = parseTrimmedString(req.query.kelas_kata);
+    const ragam = parseTrimmedString(req.query.ragam);
+    const bidang = parseTrimmedString(req.query.bidang);
+    const bahasa = parseTrimmedString(req.query.bahasa);
+    const punyaIlmiah = parseTrimmedString(req.query.punya_ilmiah);
+    const punyaKimia = parseTrimmedString(req.query.punya_kimia);
+    const tipePenyingkat = parseTrimmedString(req.query.tipe_penyingkat);
+    const punyaContoh = parseTrimmedString(req.query.punya_contoh);
 
     const { data, total } = await ModelEntri.daftarAdmin({
       limit,
@@ -57,6 +65,14 @@ router.get('/', periksaIzin('lihat_entri'), async (req, res, next) => {
       jenis_rujuk: jenisRujuk,
       punya_homograf: ['0', '1'].includes(punyaHomograf) ? punyaHomograf : '',
       punya_homonim: ['0', '1'].includes(punyaHomonim) ? punyaHomonim : '',
+      kelas_kata: kelasKata,
+      ragam,
+      bidang,
+      bahasa,
+      punya_ilmiah: ['0', '1'].includes(punyaIlmiah) ? punyaIlmiah : '',
+      punya_kimia: ['0', '1'].includes(punyaKimia) ? punyaKimia : '',
+      tipe_penyingkat: tipePenyingkat,
+      punya_contoh: ['0', '1'].includes(punyaContoh) ? punyaContoh : '',
     });
     return res.json({ success: true, data, total });
   } catch (error) {
