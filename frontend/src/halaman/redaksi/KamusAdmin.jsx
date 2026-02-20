@@ -123,31 +123,44 @@ const kolom = [
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
-function ItemContoh({ contoh, entriId, maknaId, simpanContoh, hapusContoh, isPending, opsiRagam, opsiBidang }) {
+function ItemContoh({
+  contoh,
+  entriId,
+  maknaId,
+  simpanContoh,
+  hapusContoh,
+  isPending,
+  opsiRagam,
+  opsiBidang,
+  bisaEditContoh,
+  bisaHapusContoh,
+}) {
   const [edit, setEdit] = useState(false);
   const [data, setData] = useState(contoh);
 
   const ubah = (field, val) => setData((p) => ({ ...p, [field]: val }));
 
   const handleSimpan = () => {
+    if (!bisaEditContoh) return;
     simpanContoh.mutate({ entriId, maknaId, ...data }, {
       onSuccess: () => setEdit(false),
     });
   };
 
   const handleHapus = () => {
+    if (!bisaHapusContoh) return;
     if (!confirm('Hapus contoh ini?')) return;
     hapusContoh.mutate({ entriId, maknaId, contohId: contoh.id });
   };
 
-  if (!edit) {
+  if (!edit || !bisaEditContoh) {
     return (
       <div className="flex items-start gap-2 py-1.5 group">
         <span className="text-gray-500 dark:text-gray-500 text-sm select-none">•</span>
         <span className="flex-1 text-sm text-gray-700 dark:text-gray-300 italic">{contoh.contoh}</span>
         <BadgeStatus aktif={contoh.aktif ?? 1} />
-        <button onClick={() => setEdit(true)} className="text-xs text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity">sunting</button>
-        <button onClick={handleHapus} disabled={isPending} className="text-xs text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">hapus</button>
+        {bisaEditContoh && <button onClick={() => setEdit(true)} className="text-xs text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity">sunting</button>}
+        {bisaHapusContoh && <button onClick={handleHapus} disabled={isPending} className="text-xs text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">hapus</button>}
       </div>
     );
   }
@@ -203,6 +216,11 @@ function ItemMakna({
   opsiBidang,
   opsiBahasa,
   opsiTipePenyingkat,
+  bisaTambahContoh,
+  bisaEditContoh,
+  bisaHapusContoh,
+  bisaEditMakna,
+  bisaHapusMakna,
 }) {
   const [terbuka, setTerbuka] = useState(false);
   const [edit, setEdit] = useState(false);
@@ -212,11 +230,13 @@ function ItemMakna({
   const ubah = (field, val) => setData((p) => ({ ...p, [field]: val }));
 
   const handleSimpan = () => {
+    if (!bisaEditMakna) return;
     if (!data.makna?.trim()) return;
     simpanMakna.mutate({ entriId, ...data }, { onSuccess: () => setEdit(false) });
   };
 
   const handleHapus = () => {
+    if (!bisaHapusMakna) return;
     if (!confirm('Hapus makna ini beserta semua contohnya?')) return;
     hapusMakna.mutate({ entriId, maknaId: makna.id });
   };
@@ -236,25 +256,29 @@ function ItemMakna({
         {makna.contoh?.length > 0 && (
           <span className="text-xs text-gray-400 dark:text-gray-500">{makna.contoh.length} contoh</span>
         )}
-        <button
-          onClick={(e) => { e.stopPropagation(); setEdit(true); setTerbuka(true); }}
-          className="text-xs text-blue-500 hover:text-blue-700"
-        >
-          sunting
-        </button>
-        <button
-          onClick={(e) => { e.stopPropagation(); handleHapus(); }}
-          disabled={isPending}
-          className="text-xs text-red-500 hover:text-red-700"
-        >
-          hapus
-        </button>
+        {bisaEditMakna && (
+          <button
+            onClick={(e) => { e.stopPropagation(); setEdit(true); setTerbuka(true); }}
+            className="text-xs text-blue-500 hover:text-blue-700"
+          >
+            sunting
+          </button>
+        )}
+        {bisaHapusMakna && (
+          <button
+            onClick={(e) => { e.stopPropagation(); handleHapus(); }}
+            disabled={isPending}
+            className="text-xs text-red-500 hover:text-red-700"
+          >
+            hapus
+          </button>
+        )}
       </div>
 
       {/* Body — expandable */}
       {terbuka && (
         <div className="px-3 py-2 border-t border-gray-200 dark:border-gray-700">
-          {edit ? (
+          {edit && bisaEditMakna ? (
             <div className="space-y-2 mb-3">
               <TextareaField label="Makna" name="makna" value={data.makna} onChange={ubah} rows={2} />
               <div className="grid grid-cols-2 gap-2">
@@ -293,12 +317,14 @@ function ItemMakna({
           <div className="ml-1">
             <div className="flex items-center justify-between mb-1">
               <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Contoh</span>
-              <button
-                onClick={() => setTambahContoh(true)}
-                className="text-xs text-blue-500 hover:text-blue-700"
-              >
-                + contoh
-              </button>
+              {bisaTambahContoh && (
+                <button
+                  onClick={() => setTambahContoh(true)}
+                  className="text-xs text-blue-500 hover:text-blue-700"
+                >
+                  + contoh
+                </button>
+              )}
             </div>
 
             {makna.contoh?.length > 0 ? (
@@ -313,13 +339,15 @@ function ItemMakna({
                   isPending={isPending}
                   opsiRagam={opsiRagam}
                   opsiBidang={opsiBidang}
+                  bisaEditContoh={bisaEditContoh}
+                  bisaHapusContoh={bisaHapusContoh}
                 />
               ))
             ) : (
               <p className="text-xs text-gray-400 dark:text-gray-500 italic py-1">Belum ada contoh</p>
             )}
 
-            {tambahContoh && (
+            {bisaTambahContoh && tambahContoh && (
               <FormTambahContoh
                 entriId={entriId}
                 maknaId={makna.id}
@@ -335,7 +363,20 @@ function ItemMakna({
   );
 }
 
-function SeksiMakna({ entriId, opsiKelasKata, opsiRagam, opsiBidang, opsiBahasa, opsiTipePenyingkat }) {
+function SeksiMakna({
+  entriId,
+  opsiKelasKata,
+  opsiRagam,
+  opsiBidang,
+  opsiBahasa,
+  opsiTipePenyingkat,
+  bisaTambahMakna,
+  bisaEditMakna,
+  bisaHapusMakna,
+  bisaTambahContoh,
+  bisaEditContoh,
+  bisaHapusContoh,
+}) {
   const { data: resp, isLoading } = useDaftarMakna(entriId);
   const simpanMakna = useSimpanMakna();
   const hapusMakna = useHapusMakna();
@@ -350,6 +391,7 @@ function SeksiMakna({ entriId, opsiKelasKata, opsiRagam, opsiBidang, opsiBahasa,
   const daftar = resp?.data || [];
 
   const handleTambahMakna = () => {
+    if (!bisaTambahMakna) return;
     if (!maknaBaruTeks.trim()) return;
     simpanMakna.mutate(
       { entriId, makna: maknaBaruTeks, kelas_kata: maknaBaruKelas || null, urutan: daftar.length + 1 },
@@ -363,9 +405,11 @@ function SeksiMakna({ entriId, opsiKelasKata, opsiRagam, opsiBidang, opsiBahasa,
         <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
           Makna {daftar.length > 0 && <span className="font-normal text-gray-400">({daftar.length})</span>}
         </h4>
-        <button onClick={() => setTambah(true)} className="text-xs text-blue-500 hover:text-blue-700 font-medium">
-          + Tambah makna
-        </button>
+        {bisaTambahMakna && (
+          <button onClick={() => setTambah(true)} className="text-xs text-blue-500 hover:text-blue-700 font-medium">
+            + Tambah makna
+          </button>
+        )}
       </div>
 
       {isLoading && <p className="text-sm text-gray-400">Memuat makna …</p>}
@@ -385,6 +429,11 @@ function SeksiMakna({ entriId, opsiKelasKata, opsiRagam, opsiBidang, opsiBahasa,
           opsiBidang={opsiBidang}
           opsiBahasa={opsiBahasa}
           opsiTipePenyingkat={opsiTipePenyingkat}
+          bisaTambahContoh={bisaTambahContoh}
+          bisaEditContoh={bisaEditContoh}
+          bisaHapusContoh={bisaHapusContoh}
+          bisaEditMakna={bisaEditMakna}
+          bisaHapusMakna={bisaHapusMakna}
         />
       ))}
 
@@ -392,7 +441,7 @@ function SeksiMakna({ entriId, opsiKelasKata, opsiRagam, opsiBidang, opsiBahasa,
         <p className="text-sm text-gray-400 dark:text-gray-500 italic">Belum ada makna.</p>
       )}
 
-      {tambah && (
+      {bisaTambahMakna && tambah && (
         <div className="border border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-3 space-y-2">
           <TextareaField label="Makna" name="makna_baru" value={maknaBaruTeks} onChange={(_n, v) => setMaknaBaruTeks(v)} rows={2} />
           <SelectField label="Kelas kata" name="kelas_baru" value={maknaBaruKelas} onChange={(_n, v) => setMaknaBaruKelas(v)} options={ensureOpsiMemuatNilai(opsiKelasKata, maknaBaruKelas)} />
@@ -428,6 +477,12 @@ function KamusAdmin() {
   const bisaTambah = punyaIzin('tambah_entri');
   const bisaEdit = punyaIzin('edit_entri');
   const bisaHapus = punyaIzin('hapus_entri');
+  const bisaTambahMakna = punyaIzin('tambah_makna');
+  const bisaEditMakna = punyaIzin('edit_makna');
+  const bisaHapusMakna = punyaIzin('hapus_makna');
+  const bisaTambahContoh = punyaIzin('tambah_contoh');
+  const bisaEditContoh = punyaIzin('edit_contoh');
+  const bisaHapusContoh = punyaIzin('hapus_contoh');
   const entriIdDariPath = parsePositiveIntegerParam(idParam);
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
@@ -688,6 +743,12 @@ function KamusAdmin() {
               opsiBidang={opsiKategori.bidang}
               opsiBahasa={opsiKategori.bahasa}
               opsiTipePenyingkat={opsiKategori.tipePenyingkat}
+              bisaTambahMakna={bisaTambahMakna}
+              bisaEditMakna={bisaEditMakna}
+              bisaHapusMakna={bisaHapusMakna}
+              bisaTambahContoh={bisaTambahContoh}
+              bisaEditContoh={bisaEditContoh}
+              bisaHapusContoh={bisaHapusContoh}
             />
           )}
         </PanelGeser>
