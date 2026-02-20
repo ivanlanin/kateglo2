@@ -1,7 +1,12 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { ambilProfilSaya, mulaiLoginGoogle } from '../api/apiAuth';
 
 const storageKey = 'kateglo-auth-token';
+const defaultRefreshIntervalMs = 120000;
+const refreshIntervalFromEnv = Number(import.meta.env.VITE_AUTH_PROFILE_REFRESH_MS);
+const profileRefreshIntervalMs = Number.isFinite(refreshIntervalFromEnv) && refreshIntervalFromEnv >= 30000
+  ? refreshIntervalFromEnv
+  : defaultRefreshIntervalMs;
 const AuthContext = createContext(null);
 
 function getStorage() {
@@ -11,6 +16,7 @@ function getStorage() {
 function AuthProvider({ children }) {
   const [token, setToken] = useState('');
   const [user, setUser] = useState(null);
+  const isRefreshInFlight = useRef(false);
   // Mulai dalam kondisi loading jika ada token tersimpan,
   // agar route guard tidak redirect sebelum profil selesai dimuat.
   const [isLoading, setIsLoading] = useState(() => {
@@ -67,6 +73,28 @@ function AuthProvider({ children }) {
     setIsLoading(false);
   }, []);
 
+  const refreshProfil = useCallback(async ({ denganLoading = false } = {}) => {
+    if (!token || isRefreshInFlight.current) return;
+
+    isRefreshInFlight.current = true;
+    if (denganLoading) setIsLoading(true);
+
+    try {
+      const profile = await ambilProfilSaya(token);
+      setUser(profile);
+    } catch (error) {
+      const status = error?.response?.status;
+      if (status === 401 || status === 403) {
+        getStorage()?.removeItem(storageKey);
+        setToken('');
+        setUser(null);
+      }
+    } finally {
+      if (denganLoading) setIsLoading(false);
+      isRefreshInFlight.current = false;
+    }
+  }, [token]);
+
   useEffect(() => {
     if (!token) {
       setUser(null);
@@ -74,33 +102,44 @@ function AuthProvider({ children }) {
       return;
     }
 
-    let isMounted = true;
+    refreshProfil({ denganLoading: true });
+  }, [refreshProfil, token]);
 
-    const loadProfile = async () => {
-      try {
-        const profile = await ambilProfilSaya(token);
-        if (isMounted) {
-          setUser(profile);
-        }
-      } catch (_error) {
-        if (isMounted) {
-          getStorage()?.removeItem(storageKey);
-          setToken('');
-          setUser(null);
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
+  useEffect(() => {
+    if (!token) return;
+
+    const intervalId = setInterval(() => {
+      if (typeof document !== 'undefined' && document.visibilityState !== 'visible') return;
+      refreshProfil();
+    }, profileRefreshIntervalMs);
+
+    const handleFocus = () => {
+      refreshProfil();
+    };
+
+    const handleVisibilityChange = () => {
+      if (typeof document !== 'undefined' && document.visibilityState === 'visible') {
+        refreshProfil();
       }
     };
 
-    loadProfile();
+    if (typeof window !== 'undefined') {
+      window.addEventListener('focus', handleFocus);
+    }
+    if (typeof document !== 'undefined') {
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+    }
 
     return () => {
-      isMounted = false;
+      clearInterval(intervalId);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('focus', handleFocus);
+      }
+      if (typeof document !== 'undefined') {
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+      }
     };
-  }, [token]);
+  }, [refreshProfil, token]);
 
   const punyaIzin = useCallback(
     (kodeIzin) => (user?.izin || []).includes(kodeIzin),
@@ -115,10 +154,11 @@ function AuthProvider({ children }) {
     adalahAdmin: user?.peran === 'admin',
     adalahRedaksi: Boolean(user?.akses_redaksi) || user?.peran === 'admin' || user?.peran === 'penyunting',
     punyaIzin,
+    refreshProfil,
     loginDenganGoogle: mulaiLoginGoogle,
     setAuthToken,
     logout,
-  }), [token, user, isLoading, punyaIzin, setAuthToken, logout]);
+  }), [token, user, isLoading, punyaIzin, refreshProfil, setAuthToken, logout]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
