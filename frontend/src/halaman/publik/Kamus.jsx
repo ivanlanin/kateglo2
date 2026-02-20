@@ -6,8 +6,9 @@ import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { cariKamus, ambilKategoriKamus, ambilEntriPerKategori } from '../../api/apiPublik';
 import { useCursorPagination } from '../../hooks/bersama/useCursorPagination';
-import Paginasi from '../../komponen/bersama/Paginasi';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
+import HasilPencarian from '../../komponen/publik/HasilPencarian';
+import KartuKategori from '../../komponen/publik/KartuKategori';
 import TeksLema from '../../komponen/publik/TeksLema';
 import { EmptyResultText, PesanTidakDitemukan, QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
@@ -93,6 +94,10 @@ function Kamus() {
 
   const activePageInfo = modePencarian ? dataPencarian?.pageInfo : dataKategori?.pageInfo;
   const activeTotal = modePencarian ? totalPencarian : totalKategori;
+  const activeResults = modePencarian ? resultsPencarian : resultsKategori;
+  const activeEmptyState = modePencarian
+    ? <PesanTidakDitemukan saran={dataPencarian?.saran || []} />
+    : <EmptyResultText text="Tidak ada entri untuk kategori ini." />;
 
   const handlePaginasi = (action) => {
     handleCursor(action, {
@@ -140,28 +145,26 @@ function Kamus() {
                 className={`grid grid-cols-1 ${kategoriTerisi.length > 1 ? 'md:grid-cols-2' : ''} gap-4`}
               >
                 {kategoriTerisi.map(({ kat, labels }) => (
-                  <div key={kat} className="beranda-feature-card text-center">
-                    <h3 className="beranda-info-title">{NAMA_KATEGORI_BROWSE_KAMUS[kat] || NAMA_KATEGORI_KAMUS[kat]}</h3>
-                    <div className="flex flex-wrap justify-center gap-2">
-                      {labels.map((l) => {
-                        const pathKategori = kat === 'unsur_terikat'
-                          ? 'bentuk'
-                          : kat === 'kelas_kata'
-                            ? 'kelas'
-                            : kat;
-                        const slugLabel = tentukanSlugLabel(kat, l);
-                        return (
-                          <Link
-                            key={l.kode}
-                            to={`/kamus/${pathKategori}/${encodeURIComponent(slugLabel)}`}
-                            className="beranda-tag-link"
-                          >
-                            {['bentuk', 'unsur_terikat', 'ekspresi'].includes(kat) ? formatAwalKapital(l.nama) : l.nama}
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  </div>
+                  <KartuKategori
+                    key={kat}
+                    judul={NAMA_KATEGORI_BROWSE_KAMUS[kat] || NAMA_KATEGORI_KAMUS[kat]}
+                    items={labels}
+                    getKey={(item) => item.kode}
+                    getTo={(item) => {
+                      const pathKategori = kat === 'unsur_terikat'
+                        ? 'bentuk'
+                        : kat === 'kelas_kata'
+                          ? 'kelas'
+                          : kat;
+                      const slugLabel = tentukanSlugLabel(kat, item);
+                      return `/kamus/${pathKategori}/${encodeURIComponent(slugLabel)}`;
+                    }}
+                    getLabel={(item) => (
+                      ['bentuk', 'unsur_terikat', 'ekspresi'].includes(kat)
+                        ? formatAwalKapital(item.nama)
+                        : item.nama
+                    )}
+                  />
                 ))}
               </div>
             );
@@ -169,84 +172,26 @@ function Kamus() {
         </div>
       )}
 
-      {modePencarian && !isLoading && !isError && (
-        <>
-          {resultsPencarian.length === 0 && <PesanTidakDitemukan saran={dataPencarian?.saran || []} />}
-
-          {resultsPencarian.length > 0 && (
-            <>
-              <div className="mb-4">
-                <Paginasi
-                  total={totalPencarian}
-                  limit={limit}
-                  pageInfo={dataPencarian?.pageInfo}
-                  currentPage={cursorState.page}
-                  onNavigateCursor={handlePaginasi}
-                />
-              </div>
-              <div className="kamus-kategori-grid">
-                {resultsPencarian.map((item) => (
-                  <Link
-                    key={item.id}
-                    to={buatPathDetailKamus(item.indeks || item.entri)}
-                    className="kamus-kategori-grid-link"
-                  >
-                    <TeksLema lema={item.entri} />
-                  </Link>
-                ))}
-              </div>
-              <div className="mt-4">
-                <Paginasi
-                  total={totalPencarian}
-                  limit={limit}
-                  pageInfo={dataPencarian?.pageInfo}
-                  currentPage={cursorState.page}
-                  onNavigateCursor={handlePaginasi}
-                />
-              </div>
-            </>
-          )}
-        </>
-      )}
-
-      {modeKategori && !isLoading && !isError && (
-        <>
-          {resultsKategori.length === 0 && <EmptyResultText text="Tidak ada entri untuk kategori ini." />}
-
-          {resultsKategori.length > 0 && (
-            <>
-              <div className="mb-4">
-                <Paginasi
-                  total={totalKategori}
-                  limit={limit}
-                  pageInfo={dataKategori?.pageInfo}
-                  currentPage={cursorState.page}
-                  onNavigateCursor={handlePaginasi}
-                />
-              </div>
-              <div className="kamus-kategori-grid">
-                {resultsKategori.map((item) => (
-                  <Link
-                    key={item.id}
-                    to={buatPathDetailKamus(item.indeks || item.entri)}
-                    className="kamus-kategori-grid-link"
-                  >
-                    <TeksLema lema={item.entri} />
-                  </Link>
-                ))}
-              </div>
-              <div className="mt-4">
-                <Paginasi
-                  total={totalKategori}
-                  limit={limit}
-                  pageInfo={dataKategori?.pageInfo}
-                  currentPage={cursorState.page}
-                  onNavigateCursor={handlePaginasi}
-                />
-              </div>
-            </>
-          )}
-        </>
+      {(modePencarian || modeKategori) && !isLoading && !isError && (
+        <HasilPencarian
+          results={activeResults}
+          emptyState={activeEmptyState}
+          total={activeTotal}
+          limit={limit}
+          pageInfo={activePageInfo}
+          currentPage={cursorState.page}
+          onNavigateCursor={handlePaginasi}
+          containerClassName="kamus-kategori-grid"
+          renderItems={(items) => items.map((item) => (
+            <Link
+              key={item.id}
+              to={buatPathDetailKamus(item.indeks || item.entri)}
+              className="kamus-kategori-grid-link"
+            >
+              <TeksLema lema={item.entri} />
+            </Link>
+          ))}
+        />
       )}
     </HalamanDasar>
   );

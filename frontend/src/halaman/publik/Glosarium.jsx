@@ -12,8 +12,9 @@ import {
   ambilDaftarBidang,
   ambilDaftarSumber,
 } from '../../api/apiPublik';
-import Paginasi from '../../komponen/bersama/Paginasi';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
+import HasilPencarian from '../../komponen/publik/HasilPencarian';
+import KartuKategori from '../../komponen/publik/KartuKategori';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
 import {
@@ -105,80 +106,48 @@ function Glosarium() {
       {!sedangMencari && !isLoading && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           {bidangList?.length > 0 && (
-            <div className="beranda-feature-card text-center">
-              <h3 className="beranda-info-title">Bidang</h3>
-              <div className="flex flex-wrap justify-center gap-2">
-                {bidangList.map((b) => (
-                  <Link
-                    key={b.bidang}
-                    to={`/glosarium/bidang/${encodeURIComponent(b.bidang)}`}
-                    className="beranda-tag-link"
-                  >
-                    {b.bidang}
-                  </Link>
-                ))}
-              </div>
-            </div>
+            <KartuKategori
+              judul="Bidang"
+              items={bidangList}
+              getKey={(item) => item.bidang}
+              getTo={(item) => `/glosarium/bidang/${encodeURIComponent(item.bidang)}`}
+              getLabel={(item) => item.bidang}
+            />
           )}
           {sumberList?.length > 0 && (
-            <div className="beranda-feature-card text-center">
-              <h3 className="beranda-info-title">Sumber</h3>
-              <div className="flex flex-wrap justify-center gap-2">
-                {sumberList.map((s) => (
-                  <Link
-                    key={s.sumber}
-                    to={`/glosarium/sumber/${encodeURIComponent(s.sumber)}`}
-                    className="beranda-tag-link"
-                  >
-                    {s.sumber}
-                  </Link>
-                ))}
-              </div>
-            </div>
+            <KartuKategori
+              judul="Sumber"
+              items={sumberList}
+              getKey={(item) => item.sumber}
+              getTo={(item) => `/glosarium/sumber/${encodeURIComponent(item.sumber)}`}
+              getLabel={(item) => item.sumber}
+            />
           )}
         </div>
       )}
 
       {sedangMencari && !isLoading && !isError && (
-        <>
-          {results.length === 0 && <EmptyResultText text="Tidak ada entri glosarium yang ditemukan." />}
-
-          {results.length > 0 && (
-            <>
-              <div className="mb-4">
-                <Paginasi
-                  total={total}
-                  limit={limit}
-                  pageInfo={data?.pageInfo}
-                  currentPage={cursorState.page}
-                  onNavigateCursor={handlePaginasi}
-                />
-              </div>
-              <div className="glosarium-result-grid">
-                {results.map((item) => (
-                  <div key={item.id} className="glosarium-result-row">
-                    <Link
-                      to={buatPathDetailKamus(item.indonesia)}
-                      className="kamus-kategori-grid-link"
-                    >
-                      {item.indonesia}
-                    </Link>
-                    {item.asing && <span className="glosarium-result-original"> ({item.asing})</span>}
-                  </div>
-                ))}
-              </div>
-              <div className="mt-4">
-                <Paginasi
-                  total={total}
-                  limit={limit}
-                  pageInfo={data?.pageInfo}
-                  currentPage={cursorState.page}
-                  onNavigateCursor={handlePaginasi}
-                />
-              </div>
-            </>
-          )}
-        </>
+        <HasilPencarian
+          results={results}
+          emptyState={<EmptyResultText text="Tidak ada entri glosarium yang ditemukan." />}
+          total={total}
+          limit={limit}
+          pageInfo={data?.pageInfo}
+          currentPage={cursorState.page}
+          onNavigateCursor={handlePaginasi}
+          containerClassName="glosarium-result-grid"
+          renderItems={(items) => items.map((item) => (
+            <div key={item.id} className="glosarium-result-row">
+              <Link
+                to={buatPathDetailKamus(item.indonesia)}
+                className="kamus-kategori-grid-link"
+              >
+                {item.indonesia}
+              </Link>
+              {item.asing && <span className="glosarium-result-original"> ({item.asing})</span>}
+            </div>
+          ))}
+        />
       )}
     </HalamanDasar>
   );
