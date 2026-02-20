@@ -17,6 +17,7 @@ import HasilPencarian from '../../komponen/publik/HasilPencarian';
 import KartuKategori from '../../komponen/publik/KartuKategori';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
+import { formatNamaBidang, parseEntriGlosarium } from '../../utils/formatUtils';
 import {
   buildMetaBidangGlosarium,
   buildMetaBrowseGlosarium,
@@ -111,7 +112,7 @@ function Glosarium() {
               items={bidangList}
               getKey={(item) => item.bidang}
               getTo={(item) => `/glosarium/bidang/${encodeURIComponent(item.bidang)}`}
-              getLabel={(item) => item.bidang}
+              getLabel={(item) => formatNamaBidang(item.bidang)}
             />
           )}
           {sumberList?.length > 0 && (
@@ -138,12 +139,15 @@ function Glosarium() {
           containerClassName="glosarium-result-grid"
           renderItems={(items) => items.map((item) => (
             <div key={item.id} className="glosarium-result-row">
-              <Link
-                to={buatPathDetailKamus(item.indonesia)}
-                className="kamus-kategori-grid-link"
-              >
-                {item.indonesia}
-              </Link>
+              {parseEntriGlosarium(item.indonesia, (part, index) => (
+                <Link
+                  key={`${item.id}-${part}-${index}`}
+                  to={buatPathDetailKamus(part)}
+                  className="kamus-kategori-grid-link"
+                >
+                  {part}
+                </Link>
+              ))}
               {item.asing && <span className="glosarium-result-original"> ({item.asing})</span>}
             </div>
           ))}

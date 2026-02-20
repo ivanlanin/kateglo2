@@ -2,6 +2,8 @@
  * @fileoverview Utilitas metadata lintas domain (kamus/tesaurus/glosarium)
  */
 
+import { formatNamaBidang } from './formatUtils';
+
 const META_DESKRIPSI_UMUM = 'Kamus, Tesaurus, dan Glosarium Bahasa Indonesia';
 const META_DESKRIPSI_KAMUS_BROWSE = 'Jelajahi kamus bahasa Indonesia berdasarkan abjad, kelas kata, bentuk, ragam, bahasa, dan bidang.';
 const META_DESKRIPSI_KAMUS_UMUM = 'Telusuri entri kamus bahasa Indonesia di Kateglo.';
@@ -281,7 +283,7 @@ export function buildMetaPencarianGlosarium(kata = '', data = null) {
 }
 
 export function buildMetaBidangGlosarium(bidang = '', data = null) {
-  const bidangAman = amanDecode(bidang).trim();
+  const bidangAman = formatNamaBidang(amanDecode(bidang).trim());
   if (!bidangAman) {
     return buildMetaBrowseGlosarium();
   }
