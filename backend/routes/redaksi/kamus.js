@@ -65,6 +65,29 @@ router.get('/', periksaIzin('lihat_entri'), async (req, res, next) => {
 });
 
 /**
+ * GET /api/redaksi/kamus/opsi-induk
+ * Lookup entri induk untuk autocomplete panel admin
+ */
+router.get('/opsi-induk', periksaIzin('lihat_entri'), async (req, res, next) => {
+  try {
+    const q = parseSearchQuery(req.query.q);
+    const limit = Math.min(Math.max(Number(req.query.limit) || 8, 1), 20);
+    const excludeId = parseIdParam(req.query.exclude_id);
+
+    if (!q) return res.json({ success: true, data: [] });
+
+    const data = await ModelEntri.cariIndukAdmin(q, {
+      limit,
+      excludeId: Number.isNaN(excludeId) ? null : excludeId,
+    });
+
+    return res.json({ success: true, data });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+/**
  * GET /api/redaksi/kamus/:id
  * Ambil detail entri untuk penyuntingan
  */

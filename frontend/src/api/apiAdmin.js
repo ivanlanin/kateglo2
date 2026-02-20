@@ -107,6 +107,24 @@ export function useDetailKamusAdmin(id) {
   });
 }
 
+export function useAutocompleteIndukKamus({ q = '', limit = 8, excludeId = null } = {}) {
+  const query = String(q || '').trim();
+  return useQuery({
+    queryKey: ['admin-kamus-induk-autocomplete', { q: query, limit, excludeId }],
+    queryFn: () =>
+      klien
+        .get('/api/redaksi/kamus/opsi-induk', {
+          params: {
+            q: query || undefined,
+            limit,
+            exclude_id: excludeId || undefined,
+          },
+        })
+        .then((r) => r.data),
+    enabled: query.length >= 1,
+  });
+}
+
 export function useDaftarKomentarAdmin({ limit = 50, offset = 0, q = '', aktif = '' } = {}) {
   return useDaftarAdmin('/api/redaksi/komentar', 'admin-komentar', { limit, offset, q, aktif });
 }

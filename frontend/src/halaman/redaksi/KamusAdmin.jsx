@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   useDaftarKamusAdmin, useDetailKamusAdmin, useSimpanKamus, useHapusKamus,
+  useAutocompleteIndukKamus,
   useDaftarMakna, useSimpanMakna, useHapusMakna,
   useSimpanContoh, useHapusContoh,
   useKategoriLabelRedaksi,
@@ -19,7 +20,6 @@ import {
   TabelAdmin,
   BadgeStatus,
   getApiErrorMessage,
-  opsiFilterStatusAktif,
   usePencarianAdmin,
   validateRequiredFields,
 } from '../../komponen/redaksi/KomponenAdmin';
@@ -34,6 +34,8 @@ import { buatPathDetailKamus } from '../../utils/kamusIndex';
 
 const nilaiAwalEntri = {
   entri: '',
+  induk: '',
+  induk_entri: '',
   indeks: '',
   homograf: '',
   homonim: '',
@@ -113,11 +115,11 @@ const kolom = [
       </span>
     ),
   },
+  { key: 'jenis', label: 'Jenis' },
   { key: 'indeks', label: 'Indeks' },
+  { key: 'induk_entri', label: 'Induk', render: (item) => item.induk_entri || '—' },
   { key: 'homograf', label: 'Homograf' },
   { key: 'homonim', label: 'Homonim' },
-  { key: 'jenis', label: 'Jenis' },
-  { key: 'lafal', label: 'Lafal' },
   { key: 'aktif', label: 'Status', render: (item) => <BadgeStatus aktif={item.aktif} /> },
 ];
 
@@ -464,12 +466,10 @@ function KamusAdmin() {
   const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit } =
     usePencarianAdmin(50);
   const [filterJenisDraft, setFilterJenisDraft] = useState('');
-  const [filterJenisRujukDraft, setFilterJenisRujukDraft] = useState('');
   const [filterPunyaHomografDraft, setFilterPunyaHomografDraft] = useState('');
   const [filterPunyaHomonimDraft, setFilterPunyaHomonimDraft] = useState('');
   const [filterAktifDraft, setFilterAktifDraft] = useState('');
   const [filterJenis, setFilterJenis] = useState('');
-  const [filterJenisRujuk, setFilterJenisRujuk] = useState('');
   const [filterPunyaHomograf, setFilterPunyaHomograf] = useState('');
   const [filterPunyaHomonim, setFilterPunyaHomonim] = useState('');
   const [filterAktif, setFilterAktif] = useState('');
@@ -493,7 +493,6 @@ function KamusAdmin() {
     q,
     aktif: filterAktif,
     jenis: filterJenis,
-    jenisRujuk: filterJenisRujuk,
     punyaHomograf: filterPunyaHomograf,
     punyaHomonim: filterPunyaHomonim,
   });
@@ -504,6 +503,14 @@ function KamusAdmin() {
   const panel = useFormPanel(nilaiAwalEntri);
   const simpan = useSimpanKamus();
   const hapus = useHapusKamus();
+  const [inputInduk, setInputInduk] = useState('');
+  const [tampilSaranInduk, setTampilSaranInduk] = useState(false);
+  const queryInduk = useMemo(() => String(inputInduk || '').trim(), [inputInduk]);
+  const { data: respSaranInduk, isLoading: isSaranIndukLoading } = useAutocompleteIndukKamus({
+    q: queryInduk,
+    excludeId: panel.data.id || null,
+  });
+  const daftarSaranInduk = respSaranInduk?.data || [];
   const { data: respLabelKategori } = useKategoriLabelRedaksi(kategoriLabelRedaksi);
 
   const opsiKategori = useMemo(() => {
@@ -530,23 +537,29 @@ function KamusAdmin() {
 
   const opsiFilterJenis = useMemo(() => {
     const pilihanTanpaKosong = opsiKategori.jenis.filter((item) => String(item?.value || '').trim());
-    return [{ value: '', label: 'Semua jenis' }, ...pilihanTanpaKosong];
+    return [{ value: '', label: '—Jenis—' }, ...pilihanTanpaKosong];
   }, [opsiKategori.jenis]);
 
-  const opsiFilterJenisRujuk = useMemo(() => {
-    const pilihanTanpaKosong = opsiKategori.jenisRujuk.filter((item) => String(item?.value || '').trim());
-    return [{ value: '', label: 'Semua jenis rujuk' }, ...pilihanTanpaKosong];
-  }, [opsiKategori.jenisRujuk]);
+  const opsiFilterHomograf = useMemo(() => ([
+    { value: '', label: '—Homograf—' },
+    { value: '1', label: 'Berhomograf' },
+    { value: '0', label: 'Nonhomograf' },
+  ]), []);
 
-  const opsiYaTidak = useMemo(() => ([
-    { value: '', label: 'Semua' },
-    { value: '1', label: 'Ya' },
-    { value: '0', label: 'Tidak' },
+  const opsiFilterHomonim = useMemo(() => ([
+    { value: '', label: '—Homonim—' },
+    { value: '1', label: 'Berhomonim' },
+    { value: '0', label: 'Nonhomonim' },
+  ]), []);
+
+  const opsiFilterStatusKamus = useMemo(() => ([
+    { value: '', label: '—Status—' },
+    { value: '1', label: 'Aktif' },
+    { value: '0', label: 'Nonaktif' },
   ]), []);
 
   const handleCari = () => {
     setFilterJenis(filterJenisDraft);
-    setFilterJenisRujuk(filterJenisRujukDraft);
     setFilterPunyaHomograf(filterPunyaHomografDraft);
     setFilterPunyaHomonim(filterPunyaHomonimDraft);
     setFilterAktif(filterAktifDraft);
@@ -588,6 +601,45 @@ function KamusAdmin() {
     navigate('/redaksi/kamus', { replace: true });
   }, [entriIdDariPath, isDetailError, isDetailLoading, navigate]);
 
+  useEffect(() => {
+    if (!panel.buka) {
+      setInputInduk('');
+      setTampilSaranInduk(false);
+      return;
+    }
+    if (panel.data.induk_entri) {
+      setInputInduk(panel.data.induk_entri);
+      return;
+    }
+    if (!panel.data.induk) {
+      setInputInduk('');
+    }
+  }, [panel.buka, panel.data.induk, panel.data.induk_entri]);
+
+  const pilihInduk = (item) => {
+    panel.ubahField('induk', item.id);
+    panel.ubahField('induk_entri', item.entri);
+    setInputInduk(item.entri);
+    setTampilSaranInduk(false);
+  };
+
+  const handleUbahInputInduk = (value) => {
+    setInputInduk(value);
+    setTampilSaranInduk(true);
+    const trimmed = String(value || '').trim();
+
+    if (!trimmed) {
+      panel.ubahField('induk', '');
+      panel.ubahField('induk_entri', '');
+      return;
+    }
+
+    if (panel.data.induk_entri && trimmed !== panel.data.induk_entri) {
+      panel.ubahField('induk', '');
+      panel.ubahField('induk_entri', '');
+    }
+  };
+
   const tutupPanel = () => {
     setPesan({ error: '', sukses: '' });
     panel.tutup();
@@ -621,7 +673,13 @@ function KamusAdmin() {
       setPesan({ error: pesanValidasi, sukses: '' });
       return;
     }
-    simpan.mutate(panel.data, {
+    const payload = {
+      ...panel.data,
+      induk: panel.data.induk || null,
+    };
+    delete payload.induk_entri;
+
+    simpan.mutate(payload, {
       onSuccess: (r) => {
         setPesan({ error: '', sukses: 'Tersimpan!' });
         // If just created, switch to edit mode so makna section shows
@@ -660,31 +718,24 @@ function KamusAdmin() {
             ariaLabel: 'Filter jenis',
           },
           {
-            key: 'jenis_rujuk',
-            value: filterJenisRujukDraft,
-            onChange: setFilterJenisRujukDraft,
-            options: opsiFilterJenisRujuk,
-            ariaLabel: 'Filter jenis rujuk',
-          },
-          {
             key: 'punya_homograf',
             value: filterPunyaHomografDraft,
             onChange: setFilterPunyaHomografDraft,
-            options: opsiYaTidak,
+            options: opsiFilterHomograf,
             ariaLabel: 'Filter homograf',
           },
           {
             key: 'punya_homonim',
             value: filterPunyaHomonimDraft,
             onChange: setFilterPunyaHomonimDraft,
-            options: opsiYaTidak,
+            options: opsiFilterHomonim,
             ariaLabel: 'Filter homonim',
           },
           {
             key: 'aktif',
             value: filterAktifDraft,
             onChange: setFilterAktifDraft,
-            options: opsiFilterStatusAktif,
+            options: opsiFilterStatusKamus,
             ariaLabel: 'Filter status entri',
           },
         ]}
@@ -712,17 +763,56 @@ function KamusAdmin() {
             onChange={panel.ubahField}
             placeholder="Kosongkan untuk normalisasi otomatis dari entri"
           />
+          <SelectField label="Jenis" name="jenis" value={panel.data.jenis} onChange={panel.ubahField} options={ensureOpsiMemuatNilai(opsiKategori.jenis, panel.data.jenis)} />
+          <div className="form-admin-group relative">
+            <label htmlFor="field-induk" className="form-admin-label">Induk</label>
+            <input
+              id="field-induk"
+              type="text"
+              value={inputInduk}
+              onChange={(event) => handleUbahInputInduk(event.target.value)}
+              onFocus={() => setTampilSaranInduk(true)}
+              onBlur={() => setTimeout(() => setTampilSaranInduk(false), 120)}
+              placeholder="Cari entri induk…"
+              className="form-admin-input"
+            />
+            {tampilSaranInduk && queryInduk && (
+              <div className="absolute left-0 right-0 top-full z-20 mt-1 max-h-52 overflow-auto rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-dark-bg-elevated">
+                {isSaranIndukLoading && (
+                  <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">Mencari entri…</div>
+                )}
+                {!isSaranIndukLoading && daftarSaranInduk.length === 0 && (
+                  <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">Tidak ada hasil.</div>
+                )}
+                {!isSaranIndukLoading && daftarSaranInduk.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onMouseDown={(event) => event.preventDefault()}
+                    onClick={() => pilihInduk(item)}
+                    className="block w-full px-3 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-800"
+                  >
+                    <div className="text-sm text-gray-800 dark:text-gray-200">{item.entri}</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">{item.jenis} • {item.indeks}</div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           <div className="grid grid-cols-2 gap-2">
             <InputField label="Homograf" name="homograf" type="number" value={panel.data.homograf} onChange={panel.ubahField} />
             <InputField label="Homonim" name="homonim" type="number" value={panel.data.homonim} onChange={panel.ubahField} />
           </div>
-          <SelectField label="Jenis" name="jenis" value={panel.data.jenis} onChange={panel.ubahField} options={ensureOpsiMemuatNilai(opsiKategori.jenis, panel.data.jenis)} />
-          <InputField label="Lafal" name="lafal" value={panel.data.lafal} onChange={panel.ubahField} placeholder="contoh: la·fal" />
-          <InputField label="Pemenggalan" name="pemenggalan" value={panel.data.pemenggalan} onChange={panel.ubahField} />
           <InputField label="Varian" name="varian" value={panel.data.varian} onChange={panel.ubahField} />
+          <div className="grid grid-cols-2 gap-2">
+            <InputField label="Lafal" name="lafal" value={panel.data.lafal} onChange={panel.ubahField} placeholder="contoh: la·fal" />
+            <InputField label="Pemenggalan" name="pemenggalan" value={panel.data.pemenggalan} onChange={panel.ubahField} />
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <SelectField label="Jenis Rujuk" name="jenis_rujuk" value={panel.data.jenis_rujuk} onChange={panel.ubahField} options={ensureOpsiMemuatNilai(opsiKategori.jenisRujuk, panel.data.jenis_rujuk)} />
+            <InputField label="Entri Rujuk" name="entri_rujuk" value={panel.data.entri_rujuk} onChange={panel.ubahField} />
+          </div>
           <InputField label="Sumber" name="sumber" value={panel.data.sumber} onChange={panel.ubahField} />
-          <SelectField label="Jenis Rujuk" name="jenis_rujuk" value={panel.data.jenis_rujuk} onChange={panel.ubahField} options={ensureOpsiMemuatNilai(opsiKategori.jenisRujuk, panel.data.jenis_rujuk)} />
-          <InputField label="Entri Rujuk" name="entri_rujuk" value={panel.data.entri_rujuk} onChange={panel.ubahField} />
           <ToggleAktif value={panel.data.aktif} onChange={panel.ubahField} />
           <FormFooter
             onSimpan={handleSimpan}
