@@ -29,6 +29,8 @@ import {
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
+import ChecklistPilihanAdmin from '../../komponen/redaksi/ChecklistPilihanAdmin';
+import { useSelectableIds } from '../../hooks/redaksi/useSelectableIds';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
 const nilaiAwal = { kode: '', nama: '', keterangan: '', akses_redaksi: false, izin_ids: [] };
@@ -97,6 +99,10 @@ function PeranAdmin() {
 
   const panel = useFormPanel(nilaiAwal);
   const simpan = useSimpanPeranAdmin();
+  const { selectedIds: izinIdsTerpilih, hasId: hasIzin, toggleId: toggleIzin } = useSelectableIds(
+    panel.data.izin_ids,
+    (nextIds) => panel.ubahField('izin_ids', nextIds)
+  );
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
 
   useEffect(() => {
@@ -149,18 +155,6 @@ function PeranAdmin() {
   const bukaSuntingDariDaftar = (item) => {
     setPesan({ error: '', sukses: '' });
     item?.id && navigate(`/redaksi/peran/${item.id}`);
-  };
-
-  const toggleIzin = (izinId) => {
-    const id = Number(izinId);
-    const izinIdsSekarang = panel.data.izin_ids.map((x) => Number(x));
-
-    if (izinIdsSekarang.includes(id)) {
-      panel.ubahField('izin_ids', izinIdsSekarang.filter((item) => item !== id));
-      return;
-    }
-
-    panel.ubahField('izin_ids', [...izinIdsSekarang, id]);
   };
 
   const toggleAksesRedaksi = () => {
@@ -246,41 +240,19 @@ function PeranAdmin() {
           </span>
         </div>
 
-        <div className="form-admin-group">
-          <label className="form-admin-label">Izin</label>
-          {isIzinLoading ? (
-            <p className="text-sm text-gray-500 dark:text-gray-400">Memuat daftar izin …</p>
-          ) : (
-            <div className="space-y-3 max-h-[45vh] overflow-y-auto pr-1">
-              {kelompokIzin.map(([kelompok, items]) => (
-                <div key={kelompok} className="rounded-lg border border-gray-200 dark:border-gray-700 p-3">
-                  <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">{kelompok}</p>
-                  <div className="mt-2 space-y-2">
-                    {items.map((izin) => {
-                      const selected = panel.data.izin_ids.map((id) => Number(id)).includes(Number(izin.id));
-                      return (
-                        <label
-                          key={izin.id}
-                          className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300 cursor-pointer"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={selected}
-                            onChange={() => toggleIzin(izin.id)}
-                            className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                          />
-                          <span>
-                            <span className="font-medium">{izin.nama}</span>
-                          </span>
-                        </label>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        <ChecklistPilihanAdmin
+          label="Izin"
+          isLoading={isIzinLoading}
+          loadingText="Memuat daftar izin …"
+          groups={kelompokIzin.map(([kelompok, items]) => ({
+            key: kelompok,
+            title: kelompok,
+            items,
+          }))}
+          hasSelected={hasIzin}
+          onToggle={toggleIzin}
+          selectedIds={izinIdsTerpilih}
+        />
 
         <FormFooter
           onSimpan={handleSimpan}

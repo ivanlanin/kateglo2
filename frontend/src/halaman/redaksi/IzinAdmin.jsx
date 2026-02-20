@@ -27,6 +27,8 @@ import {
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
+import ChecklistPilihanAdmin from '../../komponen/redaksi/ChecklistPilihanAdmin';
+import { useSelectableIds } from '../../hooks/redaksi/useSelectableIds';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
 const nilaiAwal = { kode: '', nama: '', kelompok: '', peran_ids: [] };
@@ -73,6 +75,10 @@ function IzinAdmin() {
 
   const panel = useFormPanel(nilaiAwal);
   const simpan = useSimpanIzinAdmin();
+  const { selectedIds: peranIdsTerpilih, hasId: hasPeran, toggleId: togglePeran } = useSelectableIds(
+    panel.data.peran_ids,
+    (nextIds) => panel.ubahField('peran_ids', nextIds)
+  );
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
 
   useEffect(() => {
@@ -125,18 +131,6 @@ function IzinAdmin() {
   const bukaSuntingDariDaftar = (item) => {
     setPesan({ error: '', sukses: '' });
     item?.id && navigate(`/redaksi/izin/${item.id}`);
-  };
-
-  const togglePeran = (peranId) => {
-    const id = Number(peranId);
-    const peranIdsSekarang = panel.data.peran_ids.map((x) => Number(x));
-
-    if (peranIdsSekarang.includes(id)) {
-      panel.ubahField('peran_ids', peranIdsSekarang.filter((item) => item !== id));
-      return;
-    }
-
-    panel.ubahField('peran_ids', [...peranIdsSekarang, id]);
   };
 
   const handleSimpan = () => {
@@ -197,34 +191,15 @@ function IzinAdmin() {
         <InputField label="Nama" name="nama" value={panel.data.nama} onChange={panel.ubahField} required />
         <InputField label="Kelompok" name="kelompok" value={panel.data.kelompok} onChange={panel.ubahField} />
 
-        <div className="form-admin-group">
-          <label className="form-admin-label">Peran</label>
-          {isPeranLoading ? (
-            <p className="text-sm text-gray-500 dark:text-gray-400">Memuat daftar peran …</p>
-          ) : (
-            <div className="space-y-2 max-h-[45vh] overflow-y-auto pr-1 rounded-lg border border-gray-200 dark:border-gray-700 p-3">
-              {daftarPeran.map((peran) => {
-                const selected = panel.data.peran_ids.map((id) => Number(id)).includes(Number(peran.id));
-                return (
-                  <label
-                    key={peran.id}
-                    className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300 cursor-pointer"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selected}
-                      onChange={() => togglePeran(peran.id)}
-                      className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                    />
-                    <span>
-                      <span className="font-medium">{peran.nama}</span>
-                    </span>
-                  </label>
-                );
-              })}
-            </div>
-          )}
-        </div>
+        <ChecklistPilihanAdmin
+          label="Peran"
+          isLoading={isPeranLoading}
+          loadingText="Memuat daftar peran …"
+          items={daftarPeran}
+          hasSelected={hasPeran}
+          onToggle={togglePeran}
+          selectedIds={peranIdsTerpilih}
+        />
 
         <FormFooter
           onSimpan={handleSimpan}
