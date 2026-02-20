@@ -72,7 +72,7 @@ describe('metaUtils', () => {
     expect(deskripsiMultiMakna).toContain('(1)');
 
     expect(buildMetaDetailKamus('', null).judul).toBe('Kamus');
-    expect(buildMetaDetailKamus('kata', { makna: [{ makna: 'arti' }] }).judul).toBe('kata — Kamus');
+    expect(buildMetaDetailKamus('kata', { makna: [{ makna: 'arti' }] }).judul).toBe('kata');
 
     const tanpaMakna = buildDeskripsiDetailKamus('kata', {
       makna: [{ kelas_kata: 'n', makna: '' }],
