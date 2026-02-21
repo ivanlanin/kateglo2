@@ -757,7 +757,7 @@ class ModelEntri {
         `SELECT COUNT(DISTINCT e.id) AS total
          FROM entri e
          JOIN makna m ON m.entri_id = e.id AND m.aktif = TRUE
-         WHERE (m.makna ILIKE $1 OR e.entri ILIKE $1) AND e.aktif = 1`,
+         WHERE m.makna ILIKE $1 AND e.aktif = 1`,
         [pattern]
       );
       total = parseCount(countResult.rows[0]?.total);
@@ -799,7 +799,7 @@ class ModelEntri {
            ) AS makna_cocok
          FROM entri e
          JOIN makna m ON m.entri_id = e.id AND m.aktif = TRUE
-         WHERE (m.makna ILIKE $1 OR e.entri ILIKE $1) AND e.aktif = 1
+         WHERE m.makna ILIKE $1 AND e.aktif = 1
          GROUP BY e.id, e.entri, e.indeks, e.homograf, e.homonim
        )
        SELECT id, entri, indeks, homograf, homonim, makna_cocok, homograf_sort
