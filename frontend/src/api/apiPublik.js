@@ -109,6 +109,11 @@ export async function cariTesaurus(kata, {
 
 // === MAKNA (kamus terbalik) ===
 
+export async function ambilContohMakna() {
+  const response = await klien.get('/api/publik/makna/contoh');
+  return response.data;
+}
+
 export async function cariMakna(kata, {
   limit = 50,
   cursor = null,

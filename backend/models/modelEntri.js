@@ -58,6 +58,18 @@ class ModelEntri {
     return autocomplete('entri', 'indeks', query, { limit, extraWhere: 'aktif = 1' });
   }
 
+  static async contohAcak(limit = 5) {
+    const cappedLimit = Math.min(Math.max(Number(limit) || 5, 1), 10);
+    const result = await db.query(
+      `SELECT indeks FROM entri
+       WHERE aktif = 1 AND induk IS NULL
+       ORDER BY RANDOM()
+       LIMIT $1`,
+      [cappedLimit]
+    );
+    return result.rows.map((r) => r.indeks);
+  }
+
   /**
   * Cari entri di kamus dengan strategi prefix-first + contains-fallback
    * @param {string} query - Kata pencarian
@@ -745,7 +757,7 @@ class ModelEntri {
         `SELECT COUNT(DISTINCT e.id) AS total
          FROM entri e
          JOIN makna m ON m.entri_id = e.id AND m.aktif = TRUE
-         WHERE m.makna ILIKE $1 AND e.aktif = 1`,
+         WHERE (m.makna ILIKE $1 OR e.entri ILIKE $1) AND e.aktif = 1`,
         [pattern]
       );
       total = parseCount(countResult.rows[0]?.total);
@@ -787,7 +799,7 @@ class ModelEntri {
            ) AS makna_cocok
          FROM entri e
          JOIN makna m ON m.entri_id = e.id AND m.aktif = TRUE
-         WHERE m.makna ILIKE $1 AND e.aktif = 1
+         WHERE (m.makna ILIKE $1 OR e.entri ILIKE $1) AND e.aktif = 1
          GROUP BY e.id, e.entri, e.indeks, e.homograf, e.homonim
        )
        SELECT id, entri, indeks, homograf, homonim, makna_cocok, homograf_sort
