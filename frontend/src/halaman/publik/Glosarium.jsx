@@ -25,6 +25,25 @@ import {
   buildMetaSumberGlosarium,
 } from '../../utils/metaUtils';
 
+function normalizeKategoriKey(value = '') {
+  return String(value || '').trim().toLowerCase();
+}
+
+function resolveKategoriNama(param = '', list = [], nameKeys = [], codeKeys = []) {
+  const target = normalizeKategoriKey(param);
+  if (!target || !Array.isArray(list) || list.length === 0) return String(param || '').trim();
+
+  const matched = list.find((item) => {
+    const byCode = codeKeys.some((key) => normalizeKategoriKey(item?.[key]) === target);
+    const byName = nameKeys.some((key) => normalizeKategoriKey(item?.[key]) === target);
+    return byCode || byName;
+  });
+
+  if (!matched) return String(param || '').trim();
+  const nama = nameKeys.map((key) => String(matched?.[key] || '').trim()).find(Boolean);
+  return nama || String(param || '').trim();
+}
+
 function Glosarium() {
   const { kata, bidang, sumber } = useParams();
   const limit = 100;
@@ -77,6 +96,8 @@ function Glosarium() {
 
   const results = data?.data || [];
   const total = data?.total || 0;
+  const namaBidang = resolveKategoriNama(bidang, bidangList, ['nama', 'bidang'], ['kode']);
+  const namaSumber = resolveKategoriNama(sumber, sumberList, ['nama', 'sumber'], ['kode']);
 
   const handlePaginasi = (action) => {
     handleCursor(action, {
@@ -88,9 +109,9 @@ function Glosarium() {
   const metaHalaman = modeCariKata
     ? buildMetaPencarianGlosarium(kata)
     : bidang
-      ? buildMetaBidangGlosarium(bidang)
+      ? buildMetaBidangGlosarium(namaBidang)
       : sumber
-        ? buildMetaSumberGlosarium(sumber)
+        ? buildMetaSumberGlosarium(namaSumber)
         : buildMetaBrowseGlosarium();
 
   return (
@@ -108,7 +129,7 @@ function Glosarium() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           {bidangList?.length > 0 && (
             <KartuKategori
-              judul="Bidang"
+              judul="Glosarium"
               items={bidangList}
               getKey={(item) => item.kode || item.bidang || item.nama}
               getTo={(item) => `/glosarium/bidang/${encodeURIComponent(item.kode || item.bidang || item.nama)}`}
@@ -117,7 +138,7 @@ function Glosarium() {
           )}
           {sumberList?.length > 0 && (
             <KartuKategori
-              judul="Sumber"
+              judul="Glosarium"
               items={sumberList}
               getKey={(item) => item.kode || item.sumber || item.nama}
               getTo={(item) => `/glosarium/sumber/${encodeURIComponent(item.kode || item.sumber || item.nama)}`}

@@ -298,7 +298,7 @@ export function buildMetaBidangGlosarium(bidang = '', data = null) {
   }
 
   return {
-    judul: `Bidang ${bidangAman}`,
+    judul: `Glosarium ${bidangAman}`,
     deskripsi,
   };
 }
@@ -319,7 +319,7 @@ export function buildMetaSumberGlosarium(sumber = '', data = null) {
   }
 
   return {
-    judul: `Sumber ${sumberAman}`,
+    judul: `Glosarium ${sumberAman}`,
     deskripsi,
   };
 }

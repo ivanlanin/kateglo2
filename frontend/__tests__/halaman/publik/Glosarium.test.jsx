@@ -63,8 +63,7 @@ describe('Glosarium', () => {
 
     render(<Glosarium />);
 
-    expect(screen.getByText('Bidang')).toBeInTheDocument();
-    expect(screen.getByText('Sumber')).toBeInTheDocument();
+    expect(screen.getAllByText('Glosarium').length).toBeGreaterThanOrEqual(2);
     expect(screen.getByRole('link', { name: 'Ling' })).toBeInTheDocument();
     expect(ambilDaftarBidang).toHaveBeenCalled();
     expect(ambilDaftarSumber).toHaveBeenCalled();
@@ -111,12 +110,12 @@ describe('Glosarium', () => {
   });
 
   it('menampilkan hasil mode bidang', () => {
-    mockParams = { bidang: 'linguistik' };
+    mockParams = { bidang: 'ling' };
 
     mockUseQuery.mockImplementation((options) => {
       if (options?.enabled !== false && options?.queryFn) options.queryFn();
       const key = options?.queryKey?.[0];
-      if (key === 'glosarium-bidang') return { data: [], isLoading: false, isError: false };
+      if (key === 'glosarium-bidang') return { data: [{ kode: 'ling', nama: 'Linguistik' }], isLoading: false, isError: false };
       if (key === 'glosarium-sumber') return { data: [], isLoading: false, isError: false };
       return {
         data: {
@@ -130,8 +129,8 @@ describe('Glosarium', () => {
 
     render(<Glosarium />);
 
-    expect(screen.getByRole('heading', { name: 'Bidang Linguistik' })).toBeInTheDocument();
-    expect(ambilGlosariumPerBidang).toHaveBeenCalledWith('linguistik', {
+    expect(screen.getByRole('heading', { name: 'Glosarium Linguistik' })).toBeInTheDocument();
+    expect(ambilGlosariumPerBidang).toHaveBeenCalledWith('ling', {
       limit: 100,
       cursor: null,
       direction: 'next',
@@ -140,13 +139,13 @@ describe('Glosarium', () => {
   });
 
   it('menampilkan hasil mode sumber', () => {
-    mockParams = { sumber: 'kbbi' };
+    mockParams = { sumber: 'kbbi-iv' };
 
     mockUseQuery.mockImplementation((options) => {
       if (options?.enabled !== false && options?.queryFn) options.queryFn();
       const key = options?.queryKey?.[0];
       if (key === 'glosarium-bidang') return { data: [], isLoading: false, isError: false };
-      if (key === 'glosarium-sumber') return { data: [], isLoading: false, isError: false };
+      if (key === 'glosarium-sumber') return { data: [{ kode: 'kbbi-iv', nama: 'KBBI IV' }], isLoading: false, isError: false };
       return {
         data: {
           data: [{ id: 1, indonesia: 'entri', asing: 'entry' }],
@@ -159,8 +158,8 @@ describe('Glosarium', () => {
 
     render(<Glosarium />);
 
-    expect(screen.getByRole('heading', { name: 'Sumber kbbi' })).toBeInTheDocument();
-    expect(ambilGlosariumPerSumber).toHaveBeenCalledWith('kbbi', {
+    expect(screen.getByRole('heading', { name: 'Glosarium KBBI IV' })).toBeInTheDocument();
+    expect(ambilGlosariumPerSumber).toHaveBeenCalledWith('kbbi-iv', {
       limit: 100,
       cursor: null,
       direction: 'next',
