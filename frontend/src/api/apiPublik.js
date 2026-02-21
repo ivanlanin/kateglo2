@@ -126,6 +126,27 @@ export async function cariMakna(kata, {
   return response.data;
 }
 
+// === RIMA ===
+
+export async function cariRima(kata, {
+  limit = 50,
+  cursorAkhir = null,
+  directionAkhir = 'next',
+  cursorAwal = null,
+  directionAwal = 'next',
+} = {}) {
+  const response = await klien.get(`/api/publik/rima/cari/${encodeURIComponent(kata)}`, {
+    params: {
+      limit,
+      ...(cursorAkhir ? { cursor_akhir: cursorAkhir } : {}),
+      ...(directionAkhir !== 'next' ? { dir_akhir: directionAkhir } : {}),
+      ...(cursorAwal ? { cursor_awal: cursorAwal } : {}),
+      ...(directionAwal !== 'next' ? { dir_awal: directionAwal } : {}),
+    },
+  });
+  return response.data;
+}
+
 // === AUTOCOMPLETE (shared) ===
 
 export async function autocomplete(kategori, kata) {

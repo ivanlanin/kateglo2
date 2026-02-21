@@ -1018,6 +1018,49 @@ code {
     @apply text-blue-400 hover:text-blue-300;
   }
 
+  /* ===== Rima ===== */
+
+  .rima-kata-chip {
+    @apply inline-flex flex-col items-start px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-800
+           hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700 transition-colors text-sm;
+  }
+
+  .dark .rima-kata-chip {
+    @apply border-gray-700 bg-gray-800 text-gray-200 hover:border-blue-500 hover:bg-blue-900/30 hover:text-blue-300;
+  }
+
+  .rima-kata-pemenggalan {
+    @apply text-xs text-gray-400 mt-0.5;
+  }
+
+  .dark .rima-kata-pemenggalan {
+    @apply text-gray-500;
+  }
+
+  .rima-seksi-judul {
+    @apply flex items-baseline gap-2 text-base font-semibold text-gray-800 border-b border-gray-200 pb-2;
+  }
+
+  .dark .rima-seksi-judul {
+    @apply text-gray-100 border-gray-700;
+  }
+
+  .rima-seksi-pola {
+    @apply text-sm font-normal text-gray-500;
+  }
+
+  .dark .rima-seksi-pola {
+    @apply text-gray-400;
+  }
+
+  .rima-seksi-jumlah {
+    @apply ml-auto text-xs font-normal text-gray-400 tabular-nums;
+  }
+
+  .dark .rima-seksi-jumlah {
+    @apply text-gray-500;
+  }
+
   /* ===== Glosarium hasil pencarian ===== */
 
   .glosarium-result-grid {

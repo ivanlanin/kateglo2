@@ -21,8 +21,8 @@ const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
 
 vi.mock('../../../src/api/apiAdmin', () => ({
-  useDaftarBidangAdmin: (...args) => mockUseDaftar(...args),
-  useDetailBidangAdmin: (...args) => mockUseDetail(...args),
+  useDaftarBidangGlosariumAdmin: (...args) => mockUseDaftar(...args),
+  useDetailBidangGlosariumAdmin: (...args) => mockUseDetail(...args),
   useSimpanBidangGlosarium: () => ({ mutate: mutateSimpan, isPending: false }),
   useHapusBidangGlosarium: () => ({ mutate: mutateHapus, isPending: false }),
 }));
