@@ -39,8 +39,21 @@ function unikTanpaBedaKapitalisasi(items) {
   return hasil;
 }
 
-function buatCacheKeyDetailKamus(indeks) {
-  return `${cachePrefixDetailKamus}${encodeURIComponent((indeks || '').toLowerCase())}`;
+function buatCacheKeyDetailKamus(indeks, options) {
+  const baseKey = `${cachePrefixDetailKamus}${encodeURIComponent((indeks || '').toLowerCase())}`;
+  if (!options || typeof options !== 'object') {
+    return baseKey;
+  }
+
+  const {
+    glosariumLimit = 20,
+    glosariumCursor = null,
+    glosariumDirection = 'next',
+  } = options;
+
+  const cursorPart = glosariumCursor ? encodeURIComponent(glosariumCursor) : '';
+  const directionPart = glosariumDirection === 'prev' ? 'prev' : 'next';
+  return `${baseKey}:g-${Number(glosariumLimit) || 20}:${directionPart}:${cursorPart}`;
 }
 
 async function hapusCacheDetailKamus(indeks) {
@@ -66,12 +79,20 @@ async function cariKamus(query, {
   });
 }
 
-async function ambilDetailKamus(indeksAtauEntri) {
+async function ambilDetailKamus(indeksAtauEntri, {
+  glosariumLimit = 20,
+  glosariumCursor = null,
+  glosariumDirection = 'next',
+} = {}) {
   const decoded = decodeURIComponent((indeksAtauEntri || '').trim());
   if (!decoded) return null;
 
   const indeksTarget = normalisasiIndeksKamus(decoded);
-  const cacheKey = buatCacheKeyDetailKamus(indeksTarget);
+  const cacheKey = buatCacheKeyDetailKamus(indeksTarget, {
+    glosariumLimit,
+    glosariumCursor,
+    glosariumDirection,
+  });
   const cached = await getJson(cacheKey);
   if (cached) {
     return cached;
@@ -168,10 +189,35 @@ async function ambilDetailKamus(indeksAtauEntri) {
 
   const entriUntukRespons = entriNonVarian.length > 0 ? entriNonVarian : detailEntri;
 
-  const [tesaurusDetail, glosarium] = await Promise.all([
+  const [tesaurusDetail, glosariumResult] = await Promise.all([
     ModelTesaurus.ambilDetail(indeksTarget),
-    ModelGlosarium.cariFrasaMengandungKataUtuh(indeksTarget),
+    ModelGlosarium.cariFrasaMengandungKataUtuh(indeksTarget, {
+      limit: glosariumLimit,
+      cursor: glosariumCursor,
+      direction: glosariumDirection,
+      hitungTotal: true,
+    }),
   ]);
+
+  const glosariumData = Array.isArray(glosariumResult)
+    ? glosariumResult
+    : (glosariumResult?.data || []);
+
+  const glosariumPageInfo = Array.isArray(glosariumResult)
+    ? {
+      total: glosariumData.length,
+      hasPrev: false,
+      hasNext: false,
+      prevCursor: null,
+      nextCursor: null,
+    }
+    : {
+      total: Number(glosariumResult?.total || 0),
+      hasPrev: Boolean(glosariumResult?.hasPrev),
+      hasNext: Boolean(glosariumResult?.hasNext),
+      prevCursor: glosariumResult?.prevCursor || null,
+      nextCursor: glosariumResult?.nextCursor || null,
+    };
 
   const tesaurus = tesaurusDetail
     ? {
@@ -184,7 +230,8 @@ async function ambilDetailKamus(indeksAtauEntri) {
     indeks: indeksTarget,
     entri: entriUntukRespons,
     tesaurus,
-    glosarium,
+    glosarium: glosariumData,
+    glosarium_page: glosariumPageInfo,
   };
 
   await setJson(cacheKey, result, getTtlSeconds());

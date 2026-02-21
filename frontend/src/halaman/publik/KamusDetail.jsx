@@ -7,12 +7,15 @@ import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategoriKamus } from '../../api/apiPublik';
 import { useAuth } from '../../context/authContext';
+import CursorNavButton from '../../komponen/publik/CursorNavButton';
 import PanelLipat from '../../komponen/publik/PanelLipat';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import { PesanTidakDitemukan } from '../../komponen/publik/StatusKonten';
 import { formatLemaHomonim, formatLocalDateTime, parseUtcDate } from '../../utils/formatUtils';
 import { buatPathDetailKamus, normalisasiIndeksKamus } from '../../utils/paramUtils';
 import { buildMetaDetailKamus } from '../../utils/metaUtils';
+
+const GLOSARIUM_LIMIT = 20;
 
 function upsertMetaTag({ name, property, content }) {
   const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
@@ -150,12 +153,32 @@ function KamusDetail() {
   const [teksKomentar, setTeksKomentar] = useState('');
   const [isSubmittingKomentar, setIsSubmittingKomentar] = useState(false);
   const [pesanKomentar, setPesanKomentar] = useState('');
+  const [cursorGlosarium, setCursorGlosarium] = useState(null);
+  const [directionGlosarium, setDirectionGlosarium] = useState('next');
+  const [navigasiGlosariumAktif, setNavigasiGlosariumAktif] = useState(null);
 
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['kamus-detail', indeks],
-    queryFn: () => ambilDetailKamus(indeks),
+  useEffect(() => {
+    setCursorGlosarium(null);
+    setDirectionGlosarium('next');
+    setNavigasiGlosariumAktif(null);
+  }, [indeks]);
+
+  const { data, isLoading, isFetching, isError, error } = useQuery({
+    queryKey: ['kamus-detail', indeks, cursorGlosarium, directionGlosarium],
+    queryFn: () => ambilDetailKamus(indeks, {
+      glosariumLimit: GLOSARIUM_LIMIT,
+      glosariumCursor: cursorGlosarium,
+      glosariumDirection: directionGlosarium,
+    }),
     enabled: Boolean(indeks),
+    placeholderData: (previousData) => previousData,
   });
+
+  useEffect(() => {
+    if (!isFetching) {
+      setNavigasiGlosariumAktif(null);
+    }
+  }, [isFetching]);
 
   const {
     data: komentarResponse,
@@ -279,7 +302,31 @@ function KamusDetail() {
   const tesaurusSinonim = data.tesaurus?.sinonim || [];
   const tesaurusAntonim = data.tesaurus?.antonim || [];
   const adaTesaurus = tesaurusSinonim.length > 0 || tesaurusAntonim.length > 0;
-  const glosarium = data.glosarium || [];
+  const glosarium = Array.isArray(data.glosarium)
+    ? data.glosarium
+    : (data.glosarium?.data || []);
+  const glosariumPageInfo = {
+    total: Number(data.glosarium_page?.total || glosarium.length || 0),
+    hasPrev: Boolean(data.glosarium_page?.hasPrev),
+    hasNext: Boolean(data.glosarium_page?.hasNext),
+    prevCursor: data.glosarium_page?.prevCursor || null,
+    nextCursor: data.glosarium_page?.nextCursor || null,
+  };
+
+  const handlePrevGlosarium = () => {
+    if (!glosariumPageInfo.prevCursor) return;
+    setNavigasiGlosariumAktif('prev');
+    setCursorGlosarium(glosariumPageInfo.prevCursor);
+    setDirectionGlosarium('prev');
+  };
+
+  const handleNextGlosarium = () => {
+    if (!glosariumPageInfo.nextCursor) return;
+    setNavigasiGlosariumAktif('next');
+    setCursorGlosarium(glosariumPageInfo.nextCursor);
+    setDirectionGlosarium('next');
+  };
+
   const adaSidebar = true;
 
   const renderDaftarTesaurus = (items) => (
@@ -668,8 +715,19 @@ function KamusDetail() {
             )}
 
             {glosarium.length > 0 && (
-              <PanelLipat judul="Glosarium" jumlah={glosarium.length} terbukaAwal={true} aksen={true}>
+              <PanelLipat judul="Glosarium" jumlah={glosariumPageInfo.total} terbukaAwal={true} aksen={true}>
                 <div className="text-sm leading-relaxed">
+                  {glosariumPageInfo.hasPrev && (
+                    <>
+                      <CursorNavButton
+                        symbol="«"
+                        onClick={handlePrevGlosarium}
+                        disabled={isFetching}
+                        isLoading={isFetching && navigasiGlosariumAktif === 'prev'}
+                      />
+                      <span className="secondary-text"> ... </span>
+                    </>
+                  )}
                   {glosarium.map((item, i) => (
                     <span key={`${item.indonesia}-${item.asing}-${i}`}>
                       <span>{item.indonesia}</span>
@@ -683,6 +741,17 @@ function KamusDetail() {
                       {i < glosarium.length - 1 && <span>; </span>}
                     </span>
                   ))}
+                  {glosariumPageInfo.hasNext && (
+                    <>
+                      <span className="secondary-text"> ... </span>
+                      <CursorNavButton
+                        symbol="»"
+                        onClick={handleNextGlosarium}
+                        disabled={isFetching}
+                        isLoading={isFetching && navigasiGlosariumAktif === 'next'}
+                      />
+                    </>
+                  )}
                 </div>
               </PanelLipat>
             )}
