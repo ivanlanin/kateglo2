@@ -3,6 +3,8 @@
 ## 2026-02-21 Sabtu
 
 - Memisahkan bidang dan sumber glosarium menjadi tabel sendiri
+- Menambahkan entri glosarium dari kamus tata boga, tata busana, dan tata rias Badan Bahasa
+- Menambahkan pencarian makna kata
 
 ## 2026-02-20 Jumat
 
