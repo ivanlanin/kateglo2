@@ -9,18 +9,20 @@ import { buatPathDetailKamus } from '../../utils/paramUtils';
 
 const opsiKategori = [
   { value: 'kamus', label: 'Kamus', placeholder: 'Cari kata \u2026' },
+  { value: 'makna', label: 'Makna', placeholder: 'Cari berdasarkan makna \u2026' },
   { value: 'tesaurus', label: 'Tesaurus', placeholder: 'Cari relasi \u2026' },
   { value: 'glosarium', label: 'Glosarium', placeholder: 'Cari istilah \u2026' },
 ];
 
 function deteksiKategori(pathname) {
+  if (pathname.startsWith('/makna')) return 'makna';
   if (pathname.startsWith('/tesaurus')) return 'tesaurus';
   if (pathname.startsWith('/glosarium')) return 'glosarium';
   return 'kamus';
 }
 
 function ekstrakQuery(pathname) {
-  const match = pathname.match(/^\/(kamus|tesaurus|glosarium)\/cari\/(.+)$/);
+  const match = pathname.match(/^\/(kamus|makna|tesaurus|glosarium)\/cari\/(.+)$/);
   if (match) return decodeURIComponent(match[2]);
   return '';
 }
@@ -133,7 +135,9 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
     const nilai = e.target.value;
     setQuery(nilai);
     clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => ambilSaran(nilai.trim(), kategori), 300);
+    if (kategori !== 'makna') {
+      timerRef.current = setTimeout(() => ambilSaran(nilai.trim(), kategori), 300);
+    }
   };
 
   const handleHapus = () => {
@@ -192,7 +196,7 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
     setSaran([]);
     setTampilSaran(false);
     clearTimeout(timerRef.current);
-    if (query.trim().length >= 1) {
+    if (query.trim().length >= 1 && kat !== 'makna') {
       timerRef.current = setTimeout(() => ambilSaran(query.trim(), kat), 300);
     }
   };

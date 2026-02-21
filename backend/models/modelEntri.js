@@ -720,6 +720,119 @@ class ModelEntri {
   }
 
   /**
+   * Cari entri berdasarkan teks makna (kamus terbalik / reverse dictionary)
+   * @param {string} query - Kata kunci pencarian dalam teks makna
+   * @param {{ limit?, cursor?, direction?, lastPage?, hitungTotal? }} options
+   * @returns {Promise<Object>} Daftar entri dengan makna yang cocok
+   */
+  static async cariMakna(query, {
+    limit = 100,
+    cursor = null,
+    direction = 'next',
+    lastPage = false,
+    hitungTotal = true,
+  } = {}) {
+    const normalizedQuery = query.trim();
+    const cappedLimit = Math.min(Math.max(Number(limit) || 100, 1), 200);
+    const cursorPayload = decodeCursor(cursor);
+    const isPrev = direction === 'prev';
+    const orderDesc = Boolean(lastPage || isPrev);
+    const pattern = `%${normalizedQuery}%`;
+
+    let total = 0;
+    if (hitungTotal) {
+      const countResult = await db.query(
+        `SELECT COUNT(DISTINCT e.id) AS total
+         FROM entri e
+         JOIN makna m ON m.entri_id = e.id AND m.aktif = TRUE
+         WHERE m.makna ILIKE $1 AND e.aktif = 1`,
+        [pattern]
+      );
+      total = parseCount(countResult.rows[0]?.total);
+      if (total === 0) {
+        return { data: [], total: 0, hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null };
+      }
+    }
+
+    const params = [pattern];
+    let cursorWhere = '';
+    if (cursorPayload && !lastPage) {
+      params.push(
+        String(cursorPayload.entri || ''),
+        Number(cursorPayload.homografSort) || 2147483647,
+        Number(cursorPayload.id) || 0
+      );
+      const op = isPrev ? '<' : '>';
+      cursorWhere = `WHERE (entri, homograf_sort, id) ${op} ($2, $3, $4)`;
+    }
+
+    params.push(cappedLimit + 1);
+
+    const dataResult = await db.query(
+      `WITH grouped AS (
+         SELECT
+           e.id,
+           e.entri,
+           e.indeks,
+           e.homograf,
+           e.homonim,
+           COALESCE(e.homograf, 2147483647) AS homograf_sort,
+           json_agg(
+             json_build_object(
+               'makna', m.makna,
+               'kelas_kata', m.kelas_kata,
+               'bidang', m.bidang,
+               'ragam', m.ragam
+             ) ORDER BY m.urutan ASC, m.id ASC
+           ) AS makna_cocok
+         FROM entri e
+         JOIN makna m ON m.entri_id = e.id AND m.aktif = TRUE
+         WHERE m.makna ILIKE $1 AND e.aktif = 1
+         GROUP BY e.id, e.entri, e.indeks, e.homograf, e.homonim
+       )
+       SELECT id, entri, indeks, homograf, homonim, makna_cocok, homograf_sort
+       FROM grouped
+       ${cursorWhere}
+       ORDER BY
+         entri ${orderDesc ? 'DESC' : 'ASC'},
+         homograf_sort ${orderDesc ? 'DESC' : 'ASC'},
+         id ${orderDesc ? 'DESC' : 'ASC'}
+       LIMIT $${params.length}`,
+      params
+    );
+
+    const hasMore = dataResult.rows.length > cappedLimit;
+    let rows = hasMore ? dataResult.rows.slice(0, cappedLimit) : dataResult.rows;
+    if (orderDesc) rows = rows.reverse();
+
+    const data = rows.map(({ homograf_sort: _hs, ...item }) => item);
+    const first = rows[0];
+    const last = rows[rows.length - 1];
+
+    const prevCursor = first
+      ? encodeCursor({ entri: first.entri, homografSort: first.homograf_sort, id: first.id })
+      : null;
+    const nextCursor = last
+      ? encodeCursor({ entri: last.entri, homografSort: last.homograf_sort, id: last.id })
+      : null;
+
+    let hasPrev = false;
+    let hasNext = false;
+    if (lastPage) {
+      hasNext = false;
+      hasPrev = total > data.length;
+    } else if (isPrev) {
+      hasPrev = hasMore;
+      hasNext = Boolean(cursorPayload);
+    } else {
+      hasPrev = Boolean(cursorPayload);
+      hasNext = hasMore;
+    }
+
+    return { data, total, hasPrev, hasNext, prevCursor, nextCursor };
+  }
+
+  /**
   * Hapus entri berdasarkan ID
    * @param {number} id
    * @returns {Promise<boolean>}

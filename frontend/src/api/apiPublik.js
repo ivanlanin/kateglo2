@@ -107,6 +107,20 @@ export async function cariTesaurus(kata, {
   return response.data;
 }
 
+// === MAKNA (kamus terbalik) ===
+
+export async function cariMakna(kata, {
+  limit = 50,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+} = {}) {
+  const response = await klien.get(`/api/publik/makna/cari/${encodeURIComponent(kata)}`, {
+    params: buildCursorParams({ limit, cursor, direction, lastPage }),
+  });
+  return response.data;
+}
+
 // === AUTOCOMPLETE (shared) ===
 
 export async function autocomplete(kategori, kata) {
