@@ -70,6 +70,18 @@ describe('KamusDetail', () => {
     expect(screen.getByText(/Memuat detail/i)).toBeInTheDocument();
   });
 
+  it('query detail kamus memakai placeholderData dari hasil sebelumnya', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-detail') {
+        const previous = { entri: 'sebelumnya', makna: [], subentri: {} };
+        expect(options.placeholderData(previous)).toBe(previous);
+      }
+      return { isLoading: true, isError: false, data: null };
+    });
+
+    render(<KamusDetail />);
+  });
+
   it('membuat meta tag SEO saat tag belum tersedia di head', () => {
     document.head.querySelector('meta[name="description"]')?.remove();
     document.head.querySelector('meta[property="og:title"]')?.remove();
@@ -348,6 +360,187 @@ describe('KamusDetail', () => {
     expect(screen.getByText('Glosarium')).toBeInTheDocument();
     expect(screen.getByText('base word')).toBeInTheDocument();
     expect(screen.getByText('derived word')).toBeInTheDocument();
+  });
+
+  it('navigasi glosarium prev/next meneruskan cursor dan direction ke query detail', async () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-detail') {
+        if (options?.queryFn) options.queryFn();
+        return {
+          isLoading: false,
+          isError: false,
+          isFetching: false,
+          data: {
+            entri: 'kata',
+            makna: [{ id: 1, makna: 'arti' }],
+            subentri: {},
+            tesaurus: { sinonim: [], antonim: [] },
+            glosarium: [{ indonesia: 'kata dasar', asing: 'base word' }],
+            glosarium_page: {
+              total: 10,
+              hasPrev: true,
+              hasNext: true,
+              prevCursor: 'cur-prev',
+              nextCursor: 'cur-next',
+            },
+          },
+        };
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+          refetch: vi.fn(),
+        };
+      }
+
+      return {
+        isLoading: false,
+        isError: false,
+        data: {},
+      };
+    });
+
+    render(<KamusDetail />);
+
+    const tombolPrev = screen.getByRole('button', { name: '«' });
+    const tombolNext = screen.getByRole('button', { name: '»' });
+
+    fireEvent.click(tombolPrev);
+    await waitFor(() => {
+      expect(ambilDetailKamus).toHaveBeenLastCalledWith('kata', {
+        glosariumLimit: 20,
+        glosariumCursor: 'cur-prev',
+        glosariumDirection: 'prev',
+      });
+    });
+
+    fireEvent.click(tombolNext);
+    await waitFor(() => {
+      expect(ambilDetailKamus).toHaveBeenLastCalledWith('kata', {
+        glosariumLimit: 20,
+        glosariumCursor: 'cur-next',
+        glosariumDirection: 'next',
+      });
+    });
+  });
+
+  it('glosarium menerima bentuk object.data serta klik prev/next no-op saat cursor kosong', async () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-detail') {
+        if (options?.queryFn) options.queryFn();
+        return {
+          isLoading: false,
+          isError: false,
+          isFetching: false,
+          data: {
+            entri: 'kata',
+            makna: [{ id: 1, makna: 'arti' }],
+            subentri: {},
+            tesaurus: { sinonim: [], antonim: [] },
+            glosarium: { data: [{ indonesia: 'kata teknis', asing: 'technical term' }] },
+            glosarium_page: {
+              total: 1,
+              hasPrev: true,
+              hasNext: true,
+              prevCursor: null,
+              nextCursor: null,
+            },
+          },
+        };
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+          refetch: vi.fn(),
+        };
+      }
+
+      return {
+        isLoading: false,
+        isError: false,
+        data: {},
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByText('kata teknis')).toBeInTheDocument();
+    expect(ambilDetailKamus).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(screen.getByRole('button', { name: '«' }));
+    fireEvent.click(screen.getByRole('button', { name: '»' }));
+
+    await waitFor(() => {
+      expect(ambilDetailKamus).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('glosarium menampilkan spinner loading saat navigasi aktif dan sedang fetching', async () => {
+    let isFetchingState = false;
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-detail') {
+        if (options?.queryFn) options.queryFn();
+        return {
+          isLoading: false,
+          isError: false,
+          isFetching: isFetchingState,
+          data: {
+            entri: 'kata',
+            makna: [{ id: 1, makna: 'arti' }],
+            subentri: {},
+            tesaurus: { sinonim: [], antonim: [] },
+            glosarium: [{ indonesia: 'kata teknis', asing: 'technical term' }],
+            glosarium_page: {
+              total: 1,
+              hasPrev: true,
+              hasNext: true,
+              prevCursor: 'prev-1',
+              nextCursor: 'next-1',
+            },
+          },
+        };
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+          refetch: vi.fn(),
+        };
+      }
+
+      return {
+        isLoading: false,
+        isError: false,
+        data: {},
+      };
+    });
+
+    const { container, rerender } = render(<KamusDetail />);
+
+    fireEvent.click(screen.getByRole('button', { name: '«' }));
+    isFetchingState = true;
+    rerender(<KamusDetail />);
+    await waitFor(() => {
+      expect(container.querySelector('svg.animate-spin')).not.toBeNull();
+    });
+
+    isFetchingState = false;
+    rerender(<KamusDetail />);
+    fireEvent.click(screen.getByRole('button', { name: '»' }));
+    isFetchingState = true;
+    rerender(<KamusDetail />);
+    await waitFor(() => {
+      expect(container.querySelector('svg.animate-spin')).not.toBeNull();
+    });
   });
 
   it('mengurutkan komentar saat waktu sama berdasarkan id dan menampilkan info waktu entri', () => {

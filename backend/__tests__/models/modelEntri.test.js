@@ -303,6 +303,162 @@ describe('ModelEntri', () => {
     expect(result.nextCursor).toBeNull();
   });
 
+  it('cariRima mengembalikan seksi kosong saat kata terlalu pendek', async () => {
+    db.query.mockResolvedValueOnce({ rows: [] });
+
+    const result = await ModelEntri.cariRima('a');
+
+    expect(db.query).toHaveBeenCalledTimes(1);
+    expect(result).toEqual({
+      indeks: 'a',
+      pemenggalan: null,
+      rima_akhir: {
+        pola: null,
+        data: [],
+        total: 0,
+        hasPrev: false,
+        hasNext: false,
+        prevCursor: null,
+        nextCursor: null,
+      },
+      rima_awal: {
+        pola: null,
+        data: [],
+        total: 0,
+        hasPrev: false,
+        hasNext: false,
+        prevCursor: null,
+        nextCursor: null,
+      },
+    });
+  });
+
+  it('cariRima memakai pemenggalan dan pagination next dengan hasMore', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ indeks: 'aktif', pemenggalan: 'ak.tif' }] })
+      .mockResolvedValueOnce({ rows: [{ total: '5' }] })
+      .mockResolvedValueOnce({ rows: [{ indeks: 'positif' }, { indeks: 'pasif' }, { indeks: 'relatif' }] })
+      .mockResolvedValueOnce({ rows: [{ total: '4' }] })
+      .mockResolvedValueOnce({ rows: [{ indeks: 'akrab' }, { indeks: 'aksen' }] });
+
+    const result = await ModelEntri.cariRima('aktif', { limit: 2 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('WHERE LOWER(indeks) = $1 AND aktif = 1'),
+      ['aktif']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('COUNT(DISTINCT indeks)'),
+      ['%tif', 'aktif']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      3,
+      expect.stringContaining('ORDER BY indeks ASC'),
+      ['%tif', 'aktif', 3]
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      4,
+      expect.stringContaining('COUNT(DISTINCT indeks)'),
+      ['ak%', 'aktif']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      5,
+      expect.stringContaining('ORDER BY indeks ASC'),
+      ['ak%', 'aktif', 3]
+    );
+    expect(result.rima_akhir.pola).toBe('tif');
+    expect(result.rima_akhir.total).toBe(5);
+    expect(result.rima_akhir.data).toEqual([{ indeks: 'positif' }, { indeks: 'pasif' }]);
+    expect(result.rima_akhir.hasPrev).toBe(false);
+    expect(result.rima_akhir.hasNext).toBe(true);
+    expect(result.rima_awal.pola).toBe('ak');
+    expect(result.rima_awal.total).toBe(4);
+    expect(result.rima_awal.hasPrev).toBe(false);
+    expect(result.rima_awal.hasNext).toBe(false);
+  });
+
+  it('cariRima mode prev memakai cursor dan membalik urutan hasil', async () => {
+    const cursorAkhir = encodeCursor({ indeks: 'zulu' });
+    const cursorAwal = encodeCursor({ indeks: 'zebra' });
+    db.query
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [{ total: '3' }] })
+      .mockResolvedValueOnce({ rows: [{ indeks: 'zeta' }, { indeks: 'yoga' }, { indeks: 'xeno' }] })
+      .mockResolvedValueOnce({ rows: [{ total: '2' }] })
+      .mockResolvedValueOnce({ rows: [{ indeks: 'zeta' }, { indeks: 'yeti' }] });
+
+    const result = await ModelEntri.cariRima('KATA', {
+      limit: 2,
+      cursorAkhir,
+      directionAkhir: 'prev',
+      cursorAwal,
+      directionAwal: 'prev',
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      3,
+      expect.stringContaining('ORDER BY indeks DESC'),
+      ['%ta', 'kata', 'zulu', 3]
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      5,
+      expect.stringContaining('ORDER BY indeks DESC'),
+      ['ka%', 'kata', 'zebra', 3]
+    );
+    expect(result.indeks).toBe('kata');
+    expect(result.pemenggalan).toBeNull();
+    expect(result.rima_akhir.pola).toBe('ta');
+    expect(result.rima_akhir.data).toEqual([{ indeks: 'yoga' }, { indeks: 'zeta' }]);
+    expect(result.rima_akhir.hasPrev).toBe(true);
+    expect(result.rima_akhir.hasNext).toBe(true);
+    expect(result.rima_awal.pola).toBe('ka');
+    expect(result.rima_awal.data).toEqual([{ indeks: 'yeti' }, { indeks: 'zeta' }]);
+    expect(result.rima_awal.hasPrev).toBe(false);
+    expect(result.rima_awal.hasNext).toBe(true);
+  });
+
+  it('cariRima mode next dengan cursor mengatur hasPrev true dan hasNext false saat tanpa hasMore', async () => {
+    const cursorAkhir = encodeCursor({ indeks: 'kasa' });
+    db.query
+      .mockResolvedValueOnce({ rows: [{ indeks: 'kata', pemenggalan: null }] })
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ indeks: 'kota' }] })
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ indeks: 'kala' }] });
+
+    const result = await ModelEntri.cariRima('kata', {
+      limit: '0',
+      cursorAkhir,
+      directionAkhir: 'next',
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      3,
+      expect.stringContaining('AND LOWER(indeks) > $3'),
+      ['%ta', 'kata', 'kasa', 51]
+    );
+    expect(result.rima_akhir.hasPrev).toBe(true);
+    expect(result.rima_akhir.hasNext).toBe(false);
+  });
+
+  it('cariRima menghasilkan cursor null saat hasil rima kosong', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ indeks: 'kata', pemenggalan: null }] })
+      .mockResolvedValueOnce({ rows: [{ total: '0' }] })
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [{ total: '0' }] })
+      .mockResolvedValueOnce({ rows: [] });
+
+    const result = await ModelEntri.cariRima('kata', { limit: 2 });
+
+    expect(result.rima_akhir.prevCursor).toBeNull();
+    expect(result.rima_akhir.nextCursor).toBeNull();
+    expect(result.rima_awal.prevCursor).toBeNull();
+    expect(result.rima_awal.nextCursor).toBeNull();
+  });
+
   it('cariEntriCursor mengembalikan kosong saat total 0', async () => {
     db.query.mockResolvedValueOnce({ rows: [{ total: '0' }] });
 

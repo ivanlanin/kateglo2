@@ -22,6 +22,7 @@ import {
   cariTesaurus,
   ambilContohMakna,
   cariMakna,
+  cariRima,
   autocomplete,
   cariGlosarium,
   ambilGlosariumPerBidang,
@@ -94,6 +95,22 @@ describe('apiPublik', () => {
     });
   });
 
+  it('ambilDetailKamus menormalkan paging glosarium saat nilai tidak valid', async () => {
+    klien.get.mockResolvedValue({ data: { indeks: 'anak ibu' } });
+
+    await ambilDetailKamus('anak ibu', {
+      glosariumLimit: '0',
+      glosariumCursor: '',
+      glosariumDirection: 'next',
+    });
+
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/kamus/detail/anak%20ibu', {
+      params: {
+        limit: 20,
+      },
+    });
+  });
+
   it('ambilDetailKamus melempar error terformat saat 404', async () => {
     klien.get.mockRejectedValue({
       response: {
@@ -156,6 +173,38 @@ describe('apiPublik', () => {
     expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/makna/contoh');
     expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/makna/cari/air', {
       params: { limit: 30, cursor: 'm-1', direction: 'prev', lastPage: 1 },
+    });
+  });
+
+  it('cariRima mengirim semua cursor dan direction ketika diperlukan', async () => {
+    klien.get.mockResolvedValue({ data: { rima_akhir: {}, rima_awal: {} } });
+
+    await cariRima('kata', {
+      limit: 77,
+      cursorAkhir: 'akhir-1',
+      directionAkhir: 'prev',
+      cursorAwal: 'awal-1',
+      directionAwal: 'prev',
+    });
+
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/rima/cari/kata', {
+      params: {
+        limit: 77,
+        cursor_akhir: 'akhir-1',
+        dir_akhir: 'prev',
+        cursor_awal: 'awal-1',
+        dir_awal: 'prev',
+      },
+    });
+  });
+
+  it('cariRima default tidak mengirim direction/cursor saat next tanpa cursor', async () => {
+    klien.get.mockResolvedValue({ data: { rima_akhir: {}, rima_awal: {} } });
+
+    await cariRima('kata');
+
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/rima/cari/kata', {
+      params: { limit: 50 },
     });
   });
 
