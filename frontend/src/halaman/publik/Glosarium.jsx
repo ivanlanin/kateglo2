@@ -166,16 +166,32 @@ function Glosarium() {
           containerClassName="glosarium-result-grid"
           renderItems={(items) => items.map((item) => (
             <div key={item.id} className="glosarium-result-row">
-              {parseEntriGlosarium(item.indonesia, (part, index) => (
-                <Link
-                  key={`${item.id}-${part}-${index}`}
-                  to={buatPathDetailKamus(part)}
-                  className="kamus-kategori-grid-link"
-                >
-                  {part}
-                </Link>
-              ))}
-              {item.asing && <span className="glosarium-result-original"> ({item.asing})</span>}
+              {item.asing ? (
+                <>
+                  <span className="glosarium-result-original">{item.asing}</span>
+                  {' ('}
+                  {parseEntriGlosarium(item.indonesia, (part, index) => (
+                    <Link
+                      key={`${item.id}-${part}-${index}`}
+                      to={buatPathDetailKamus(part)}
+                      className="kamus-kategori-grid-link"
+                    >
+                      {part}
+                    </Link>
+                  ))}
+                  {')'}
+                </>
+              ) : (
+                parseEntriGlosarium(item.indonesia, (part, index) => (
+                  <Link
+                    key={`${item.id}-${part}-${index}`}
+                    to={buatPathDetailKamus(part)}
+                    className="kamus-kategori-grid-link"
+                  >
+                    {part}
+                  </Link>
+                ))
+              )}
             </div>
           ))}
         />

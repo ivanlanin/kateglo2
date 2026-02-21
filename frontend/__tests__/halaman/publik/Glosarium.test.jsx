@@ -69,7 +69,7 @@ describe('Glosarium', () => {
     expect(ambilDaftarSumber).toHaveBeenCalled();
   });
 
-  it('menampilkan hasil pencarian kata dengan format indonesia (asing)', () => {
+  it('menampilkan hasil pencarian kata dengan format asing (indonesia)', () => {
     mockParams = { kata: 'istilah' };
 
     mockUseQuery.mockImplementation((options) => {
@@ -93,7 +93,7 @@ describe('Glosarium', () => {
     expect(screen.getByText(/Hasil Pencarian/i)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'istilah' })).toHaveAttribute('href', '/kamus/detail/istilah');
     expect(screen.getByRole('link', { name: 'data' })).toHaveAttribute('href', '/kamus/detail/data');
-    expect(screen.getByText('(term)')).toBeInTheDocument();
+    expect(screen.getByText('term')).toBeInTheDocument();
     expect(cariGlosarium).toHaveBeenCalledWith('istilah', {
       limit: 100,
       cursor: null,

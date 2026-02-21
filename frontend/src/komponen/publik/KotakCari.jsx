@@ -152,11 +152,12 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
   };
 
   const handlePilihSaran = (item) => {
-    setQuery(item.value);
+    const nilaiPilihan = (kategori === 'glosarium' && item.asing) ? item.asing : item.value;
+    setQuery(nilaiPilihan);
     setSaran([]);
     setTampilSaran(false);
     setIndeksAktif(-1);
-    navigasiSaranSpesifik(navigate, kategori, item.value);
+    navigasiSaranSpesifik(navigate, kategori, nilaiPilihan);
   };
 
   const handleCari = (e) => {
@@ -256,9 +257,20 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
                 onMouseDown={() => handlePilihSaran(item)}
                 onMouseEnter={() => setIndeksAktif(idx)}
               >
-                <SorotTeks teks={item.value} query={query} />
-                {item.asing && (
-                  <> (<SorotTeks teks={item.asing} query={query} italic />)</>
+                {kategori === 'glosarium' && item.asing ? (
+                  <>
+                    <SorotTeks teks={item.asing} query={query} italic />
+                    {' ('}
+                    <SorotTeks teks={item.value} query={query} />
+                    {')'}
+                  </>
+                ) : (
+                  <>
+                    <SorotTeks teks={item.value} query={query} />
+                    {item.asing && (
+                      <> (<SorotTeks teks={item.asing} query={query} italic />)</>
+                    )}
+                  </>
                 )}
               </li>
             ))}
