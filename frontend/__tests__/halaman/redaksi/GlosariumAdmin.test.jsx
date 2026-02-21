@@ -18,6 +18,8 @@ vi.mock('react-router-dom', async () => {
 
 const mockUseDaftarGlosariumAdmin = vi.fn();
 const mockUseDetailGlosariumAdmin = vi.fn();
+const mockUseDaftarBidangGlosariumAdmin = vi.fn();
+const mockUseDaftarSumberGlosariumAdmin = vi.fn();
 const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
 const mockUseAuth = vi.fn();
@@ -25,6 +27,8 @@ const mockUseAuth = vi.fn();
 vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarGlosariumAdmin: (...args) => mockUseDaftarGlosariumAdmin(...args),
   useDetailGlosariumAdmin: (...args) => mockUseDetailGlosariumAdmin(...args),
+  useDaftarBidangGlosariumAdmin: (...args) => mockUseDaftarBidangGlosariumAdmin(...args),
+  useDaftarSumberGlosariumAdmin: (...args) => mockUseDaftarSumberGlosariumAdmin(...args),
   useSimpanGlosarium: () => ({ mutate: mutateSimpan, isPending: false }),
   useHapusGlosarium: () => ({ mutate: mutateHapus, isPending: false }),
 }));
@@ -62,8 +66,22 @@ describe('GlosariumAdmin', () => {
       isError: false,
       data: {
         total: 1,
-        data: [{ id: 1, indonesia: 'air', asing: 'water', bidang: 'kimia', sumber: 'kbbi', bahasa: 'en' }],
+        data: [{ id: 1, indonesia: 'air', asing: 'water', bidang_id: 1, bidang: 'Kimia', sumber_id: 1, sumber: 'KBBI', bahasa: 'en' }],
       },
+    });
+    mockUseDaftarBidangGlosariumAdmin.mockReturnValue({
+      data: {
+        data: [{ id: 1, kode: 'kimia', nama: 'Kimia' }],
+      },
+      isLoading: false,
+      isError: false,
+    });
+    mockUseDaftarSumberGlosariumAdmin.mockReturnValue({
+      data: {
+        data: [{ id: 1, kode: 'kbbi', nama: 'KBBI' }],
+      },
+      isLoading: false,
+      isError: false,
     });
     mockUseDetailGlosariumAdmin.mockImplementation((id) => {
       if (!id) return { isLoading: false, isError: false, data: null };
@@ -75,9 +93,11 @@ describe('GlosariumAdmin', () => {
             id: 1,
             indonesia: 'air',
             asing: 'water',
-            bidang: 'kimia',
+            bidang_id: 1,
+            bidang: 'Kimia',
             bahasa: 'en',
-            sumber: 'kbbi',
+            sumber_id: 1,
+            sumber: 'KBBI',
             aktif: 1,
           },
         },
@@ -98,6 +118,8 @@ describe('GlosariumAdmin', () => {
 
     fireEvent.change(screen.getByLabelText(/Indonesia/), { target: { value: 'api' } });
     fireEvent.change(screen.getByLabelText(/Asing/), { target: { value: 'fire' } });
+    fireEvent.change(screen.getByLabelText(/Bidang/), { target: { value: '1' } });
+    fireEvent.change(screen.getByLabelText(/Sumber/), { target: { value: '1' } });
     fireEvent.click(screen.getByText('Simpan'));
     expect(mutateSimpan).toHaveBeenCalled();
   });
@@ -113,6 +135,8 @@ describe('GlosariumAdmin', () => {
     );
 
     fireEvent.click(screen.getByText('air'));
+    fireEvent.change(screen.getByLabelText(/Bidang/), { target: { value: '1' } });
+    fireEvent.change(screen.getByLabelText(/Sumber/), { target: { value: '1' } });
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Err simpan glosarium')).toBeInTheDocument();
 
@@ -133,6 +157,8 @@ describe('GlosariumAdmin', () => {
     );
 
     fireEvent.click(screen.getByText('air'));
+    fireEvent.change(screen.getByLabelText(/Bidang/), { target: { value: '1' } });
+    fireEvent.change(screen.getByLabelText(/Sumber/), { target: { value: '1' } });
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Tersimpan!')).toBeInTheDocument();
 
@@ -162,6 +188,8 @@ describe('GlosariumAdmin', () => {
     fireEvent.click(screen.getByText('+ Tambah'));
     fireEvent.change(screen.getByLabelText(/Indonesia/), { target: { value: 'uji' } });
     fireEvent.change(screen.getByLabelText(/Asing/), { target: { value: 'test' } });
+    fireEvent.change(screen.getByLabelText(/Bidang/), { target: { value: '1' } });
+    fireEvent.change(screen.getByLabelText(/Sumber/), { target: { value: '1' } });
     fireEvent.click(screen.getByText('Simpan'));
 
     expect(screen.getByText('Gagal menyimpan')).toBeInTheDocument();
@@ -203,9 +231,11 @@ describe('GlosariumAdmin', () => {
           id: 1,
           indonesia: 'detail air',
           asing: 'detail water',
-          bidang: 'kimia',
+          bidang_id: 1,
+          bidang: 'Kimia',
           bahasa: 'en',
-          sumber: 'kbbi',
+          sumber_id: 1,
+          sumber: 'KBBI',
           aktif: 1,
         },
       },
@@ -269,7 +299,7 @@ describe('GlosariumAdmin', () => {
       isError: false,
       data: {
         total: 1,
-        data: [{ id: null, indonesia: 'tanpa-id', asing: 'no-id', bidang: 'uji', sumber: 'x', bahasa: 'en', aktif: 1 }],
+        data: [{ id: null, indonesia: 'tanpa-id', asing: 'no-id', bidang_id: 1, bidang: 'Uji', sumber_id: 1, sumber: 'X', bahasa: 'en', aktif: 1 }],
       },
     });
 

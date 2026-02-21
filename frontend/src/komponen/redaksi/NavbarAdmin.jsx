@@ -10,6 +10,8 @@ const menuAdmin = [
   { path: '/redaksi/kamus', label: 'Kamus', izin: 'lihat_entri' },
   { path: '/redaksi/tesaurus', label: 'Tesaurus', izin: 'lihat_tesaurus' },
   { path: '/redaksi/glosarium', label: 'Glosarium', izin: 'lihat_glosarium' },
+  { path: '/redaksi/glosarium/bidang', label: 'Bidang', izin: 'kelola_bidang' },
+  { path: '/redaksi/glosarium/sumber', label: 'Sumber', izin: 'kelola_sumber' },
   { path: '/redaksi/komentar', label: 'Komentar', izin: 'kelola_komentar' },
   { path: '/redaksi/label', label: 'Label', izin: 'kelola_label' },
   { path: '/redaksi/peran', label: 'Peran', izin: 'kelola_peran' },
