@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import SumberGlosariumAdmin from '../../../src/halaman/redaksi/SumberGlosariumAdmin';
+import SumberAdmin from '../../../src/halaman/redaksi/SumberAdmin';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
@@ -21,8 +21,8 @@ const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
 
 vi.mock('../../../src/api/apiAdmin', () => ({
-  useDaftarSumberGlosariumAdmin: (...args) => mockUseDaftar(...args),
-  useDetailSumberGlosariumAdmin: (...args) => mockUseDetail(...args),
+  useDaftarSumberAdmin: (...args) => mockUseDaftar(...args),
+  useDetailSumberAdmin: (...args) => mockUseDetail(...args),
   useSimpanSumberGlosarium: () => ({ mutate: mutateSimpan, isPending: false }),
   useHapusSumberGlosarium: () => ({ mutate: mutateHapus, isPending: false }),
 }));
@@ -37,7 +37,7 @@ vi.mock('../../../src/komponen/bersama/TataLetak', () => ({
   ),
 }));
 
-describe('SumberGlosariumAdmin', () => {
+describe('SumberAdmin', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockParams = {};
@@ -56,7 +56,7 @@ describe('SumberGlosariumAdmin', () => {
   it('menampilkan daftar dan dapat menyimpan data', () => {
     render(
       <MemoryRouter>
-        <SumberGlosariumAdmin />
+        <SumberAdmin />
       </MemoryRouter>
     );
 
@@ -73,7 +73,7 @@ describe('SumberGlosariumAdmin', () => {
 
     render(
       <MemoryRouter>
-        <SumberGlosariumAdmin />
+        <SumberAdmin />
       </MemoryRouter>
     );
 
@@ -90,7 +90,7 @@ describe('SumberGlosariumAdmin', () => {
 
     render(
       <MemoryRouter>
-        <SumberGlosariumAdmin />
+        <SumberAdmin />
       </MemoryRouter>
     );
 
@@ -107,7 +107,7 @@ describe('SumberGlosariumAdmin', () => {
 
     render(
       <MemoryRouter>
-        <SumberGlosariumAdmin />
+        <SumberAdmin />
       </MemoryRouter>
     );
 
@@ -129,7 +129,7 @@ describe('SumberGlosariumAdmin', () => {
 
     render(
       <MemoryRouter>
-        <SumberGlosariumAdmin />
+        <SumberAdmin />
       </MemoryRouter>
     );
 
@@ -155,7 +155,7 @@ describe('SumberGlosariumAdmin', () => {
 
     render(
       <MemoryRouter>
-        <SumberGlosariumAdmin />
+        <SumberAdmin />
       </MemoryRouter>
     );
 
@@ -176,7 +176,7 @@ describe('SumberGlosariumAdmin', () => {
 
     render(
       <MemoryRouter>
-        <SumberGlosariumAdmin />
+        <SumberAdmin />
       </MemoryRouter>
     );
 
@@ -189,7 +189,7 @@ describe('SumberGlosariumAdmin', () => {
   it('menjalankan cari dan klik baris daftar untuk navigasi detail', () => {
     render(
       <MemoryRouter>
-        <SumberGlosariumAdmin />
+        <SumberAdmin />
       </MemoryRouter>
     );
 
@@ -211,7 +211,7 @@ describe('SumberGlosariumAdmin', () => {
 
     render(
       <MemoryRouter>
-        <SumberGlosariumAdmin />
+        <SumberAdmin />
       </MemoryRouter>
     );
 
@@ -226,7 +226,7 @@ describe('SumberGlosariumAdmin', () => {
     mockParams = {};
     render(
       <MemoryRouter>
-        <SumberGlosariumAdmin />
+        <SumberAdmin />
       </MemoryRouter>
     );
 
@@ -247,7 +247,7 @@ describe('SumberGlosariumAdmin', () => {
     });
     render(
       <MemoryRouter>
-        <SumberGlosariumAdmin />
+        <SumberAdmin />
       </MemoryRouter>
     );
 

@@ -15,8 +15,8 @@ import KamusAdmin from './halaman/redaksi/KamusAdmin';
 import KomentarAdmin from './halaman/redaksi/KomentarAdmin';
 import TesaurusAdmin from './halaman/redaksi/TesaurusAdmin';
 import GlosariumAdmin from './halaman/redaksi/GlosariumAdmin';
-import BidangGlosariumAdmin from './halaman/redaksi/BidangGlosariumAdmin';
-import SumberGlosariumAdmin from './halaman/redaksi/SumberGlosariumAdmin';
+import BidangAdmin from './halaman/redaksi/BidangAdmin';
+import SumberAdmin from './halaman/redaksi/SumberAdmin';
 import LabelAdmin from './halaman/redaksi/LabelAdmin';
 import PenggunaAdmin from './halaman/redaksi/PenggunaAdmin';
 import PeranAdmin from './halaman/redaksi/PeranAdmin';
@@ -72,10 +72,10 @@ function App() {
       <Route path="/redaksi/tesaurus" element={<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/tesaurus/:id" element={<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/glosarium" element={<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/glosarium/bidang" element={<RuteRedaksi><BidangGlosariumAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/glosarium/bidang/:id" element={<RuteRedaksi><BidangGlosariumAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/glosarium/sumber" element={<RuteRedaksi><SumberGlosariumAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/glosarium/sumber/:id" element={<RuteRedaksi><SumberGlosariumAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/glosarium/bidang" element={<RuteRedaksi><BidangAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/glosarium/bidang/:id" element={<RuteRedaksi><BidangAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/glosarium/sumber" element={<RuteRedaksi><SumberAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/glosarium/sumber/:id" element={<RuteRedaksi><SumberAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/glosarium/:id" element={<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/label" element={<RuteAdmin><LabelAdmin /></RuteAdmin>} />
       <Route path="/redaksi/label/:id" element={<RuteAdmin><LabelAdmin /></RuteAdmin>} />

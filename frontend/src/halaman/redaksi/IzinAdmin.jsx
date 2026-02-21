@@ -27,7 +27,7 @@ import {
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
-import ChecklistPilihanAdmin from '../../komponen/redaksi/ChecklistPilihanAdmin';
+import KotakCentang from '../../komponen/redaksi/KotakCentang';
 import { useSelectableIds } from '../../hooks/redaksi/useSelectableIds';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
@@ -191,7 +191,7 @@ function IzinAdmin() {
         <InputField label="Nama" name="nama" value={panel.data.nama} onChange={panel.ubahField} required />
         <InputField label="Kelompok" name="kelompok" value={panel.data.kelompok} onChange={panel.ubahField} />
 
-        <ChecklistPilihanAdmin
+        <KotakCentang
           label="Peran"
           isLoading={isPeranLoading}
           loadingText="Memuat daftar peran …"
