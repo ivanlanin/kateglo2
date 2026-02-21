@@ -8,7 +8,7 @@ import { cariMakna, ambilContohMakna } from '../../api/apiPublik';
 import { useCursorPagination } from '../../hooks/bersama/useCursorPagination';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import HasilPencarian from '../../komponen/publik/HasilPencarian';
-import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
+import { QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { formatLemaHomonim } from '../../utils/formatUtils';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
 
@@ -120,7 +120,13 @@ function Makna() {
         <HasilPencarian
           results={results}
           emptyState={
-            <EmptyResultText text={`Tidak ada kata yang maknanya mengandung "${kataAman}".`} />
+            <p className="muted-text">
+              Tidak ada kata yang maknanya mengandung &quot;{kataAman}&quot;. Mau cari{' '}
+              <Link to={`/kamus/cari/${encodeURIComponent(kataAman)}`} className="link-action">
+                kata itu di kamus
+              </Link>
+              ?
+            </p>
           }
           total={total}
           limit={limit}

@@ -5,7 +5,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategoriKamus } from '../../api/apiPublik';
+import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategoriKamus, cariGlosarium } from '../../api/apiPublik';
 import { useAuth } from '../../context/authContext';
 import CursorNavButton from '../../komponen/publik/CursorNavButton';
 import PanelLipat from '../../komponen/publik/PanelLipat';
@@ -156,11 +156,15 @@ function KamusDetail() {
   const [cursorGlosarium, setCursorGlosarium] = useState(null);
   const [directionGlosarium, setDirectionGlosarium] = useState('next');
   const [navigasiGlosariumAktif, setNavigasiGlosariumAktif] = useState(null);
+  const [cursorGlosariumFallback, setCursorGlosariumFallback] = useState(null);
+  const [directionGlosariumFallback, setDirectionGlosariumFallback] = useState('next');
 
   useEffect(() => {
     setCursorGlosarium(null);
     setDirectionGlosarium('next');
     setNavigasiGlosariumAktif(null);
+    setCursorGlosariumFallback(null);
+    setDirectionGlosariumFallback('next');
   }, [indeks]);
 
   const { data, isLoading, isFetching, isError, error } = useQuery({
@@ -193,6 +197,18 @@ function KamusDetail() {
     queryKey: ['kamus-kategori'],
     queryFn: ambilKategoriKamus,
     staleTime: 5 * 60 * 1000,
+  });
+
+  const { data: glosariumFallbackData, isFetching: isFetchingGlosariumFallback } = useQuery({
+    queryKey: ['glosarium-kamus-fallback', indeks, cursorGlosariumFallback, directionGlosariumFallback],
+    queryFn: () => cariGlosarium(decodeURIComponent(indeks || ''), {
+      limit: GLOSARIUM_LIMIT,
+      cursor: cursorGlosariumFallback,
+      direction: directionGlosariumFallback,
+    }),
+    enabled: Boolean(indeks) && !isLoading && (isError || !data),
+    staleTime: 5 * 60 * 1000,
+    placeholderData: (prev) => prev,
   });
 
   useEffect(() => {
@@ -251,83 +267,88 @@ function KamusDetail() {
     );
   }
 
-  if (isError || !data) {
-    const kataCari = decodeURIComponent(indeks || '');
-    const saran = error?.saran || [];
-    return (
-      <HalamanDasar>
-        <h1 className="kamus-detail-heading">
-          <span className="kamus-detail-heading-main">{kataCari}</span>
-        </h1>
-
-        <div className="mt-6">
-          <PesanTidakDitemukan saran={saran} />
-        </div>
-
-        <Link to="/kamus" className="link-action text-sm mt-4 inline-block">
-          ← Kembali ke pencarian
-        </Link>
-      </HalamanDasar>
-    );
-  }
+  const notFound = isError || !data;
+  const kataCari = decodeURIComponent(indeks || '');
+  const saran = error?.saran || [];
 
   const urutanJenisSubentri = ['turunan', 'gabungan', 'idiom', 'peribahasa', 'varian'];
 
-  const daftarEntriRaw = Array.isArray(data.entri)
-    ? data.entri
-    : [{
-      id: data.id || 'legacy',
-      entri: data.entri || data.indeks || decodeURIComponent(indeks || ''),
-      indeks: data.indeks || data.entri || decodeURIComponent(indeks || ''),
-      homograf: data.homograf ?? null,
-      homonim: data.homonim ?? null,
-      jenis: data.jenis || 'dasar',
-      pemenggalan: data.pemenggalan || null,
-      lafal: data.lafal || null,
-      varian: data.varian || null,
-      sumber: data.sumber || null,
-      jenis_rujuk: data.jenis_rujuk || null,
-      entri_rujuk: data.entri_rujuk || null,
-      entri_rujuk_indeks: data.entri_rujuk || null,
-      rujukan: Boolean(data.rujukan),
-      created_at: data.created_at || null,
-      updated_at: data.updated_at || null,
-      induk: data.induk || [],
-      makna: data.makna || [],
-      subentri: data.subentri || {},
-    }];
+  const daftarEntriRaw = notFound ? [] : (
+    Array.isArray(data.entri)
+      ? data.entri
+      : [{
+        id: data.id || 'legacy',
+        entri: data.entri || data.indeks || decodeURIComponent(indeks || ''),
+        indeks: data.indeks || data.entri || decodeURIComponent(indeks || ''),
+        homograf: data.homograf ?? null,
+        homonim: data.homonim ?? null,
+        jenis: data.jenis || 'dasar',
+        pemenggalan: data.pemenggalan || null,
+        lafal: data.lafal || null,
+        varian: data.varian || null,
+        sumber: data.sumber || null,
+        jenis_rujuk: data.jenis_rujuk || null,
+        entri_rujuk: data.entri_rujuk || null,
+        entri_rujuk_indeks: data.entri_rujuk || null,
+        rujukan: Boolean(data.rujukan),
+        created_at: data.created_at || null,
+        updated_at: data.updated_at || null,
+        induk: data.induk || [],
+        makna: data.makna || [],
+        subentri: data.subentri || {},
+      }]
+  );
 
   const daftarEntri = daftarEntriRaw.slice().sort(bandingkanEntriKamus);
 
-  const tesaurusSinonim = data.tesaurus?.sinonim || [];
-  const tesaurusAntonim = data.tesaurus?.antonim || [];
+  const tesaurusSinonim = data?.tesaurus?.sinonim || [];
+  const tesaurusAntonim = data?.tesaurus?.antonim || [];
   const adaTesaurus = tesaurusSinonim.length > 0 || tesaurusAntonim.length > 0;
-  const glosarium = Array.isArray(data.glosarium)
-    ? data.glosarium
-    : (data.glosarium?.data || []);
-  const glosariumPageInfo = {
-    total: Number(data.glosarium_page?.total || glosarium.length || 0),
-    hasPrev: Boolean(data.glosarium_page?.hasPrev),
-    hasNext: Boolean(data.glosarium_page?.hasNext),
-    prevCursor: data.glosarium_page?.prevCursor || null,
-    nextCursor: data.glosarium_page?.nextCursor || null,
-  };
+  const glosarium = notFound
+    ? (glosariumFallbackData?.data || [])
+    : (Array.isArray(data?.glosarium) ? data.glosarium : (data?.glosarium?.data || []));
+  const glosariumPageInfo = notFound
+    ? {
+      total: Number(glosariumFallbackData?.total || 0),
+      hasPrev: Boolean(glosariumFallbackData?.pageInfo?.hasPrev),
+      hasNext: Boolean(glosariumFallbackData?.pageInfo?.hasNext),
+      prevCursor: glosariumFallbackData?.pageInfo?.prevCursor || null,
+      nextCursor: glosariumFallbackData?.pageInfo?.nextCursor || null,
+    }
+    : {
+      total: Number(data?.glosarium_page?.total || glosarium.length || 0),
+      hasPrev: Boolean(data?.glosarium_page?.hasPrev),
+      hasNext: Boolean(data?.glosarium_page?.hasNext),
+      prevCursor: data?.glosarium_page?.prevCursor || null,
+      nextCursor: data?.glosarium_page?.nextCursor || null,
+    };
+
+  const isFetchingGlosarium = notFound ? isFetchingGlosariumFallback : isFetching;
 
   const handlePrevGlosarium = () => {
     if (!glosariumPageInfo.prevCursor) return;
     setNavigasiGlosariumAktif('prev');
-    setCursorGlosarium(glosariumPageInfo.prevCursor);
-    setDirectionGlosarium('prev');
+    if (notFound) {
+      setCursorGlosariumFallback(glosariumPageInfo.prevCursor);
+      setDirectionGlosariumFallback('prev');
+    } else {
+      setCursorGlosarium(glosariumPageInfo.prevCursor);
+      setDirectionGlosarium('prev');
+    }
   };
 
   const handleNextGlosarium = () => {
     if (!glosariumPageInfo.nextCursor) return;
     setNavigasiGlosariumAktif('next');
-    setCursorGlosarium(glosariumPageInfo.nextCursor);
-    setDirectionGlosarium('next');
+    if (notFound) {
+      setCursorGlosariumFallback(glosariumPageInfo.nextCursor);
+      setDirectionGlosariumFallback('next');
+    } else {
+      setCursorGlosarium(glosariumPageInfo.nextCursor);
+      setDirectionGlosarium('next');
+    }
   };
 
-  const adaSidebar = true;
 
   const renderDaftarTesaurus = (items) => (
     <>
@@ -356,7 +377,16 @@ function KamusDetail() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Kolom utama: makna */}
         <div className="lg:col-span-2">
-          {daftarEntri.map((entriItem) => {
+          {notFound ? (
+            <>
+              <h1 className="kamus-detail-heading">
+                <span className="kamus-detail-heading-main">{kataCari}</span>
+              </h1>
+              <div className="mt-6">
+                <PesanTidakDitemukan saran={saran} />
+              </div>
+            </>
+          ) : daftarEntri.map((entriItem) => {
             const maknaPerKelas = {};
             (entriItem.makna || []).forEach((m) => {
               const kelas = m.kelas_kata || '-';
@@ -625,8 +655,7 @@ function KamusDetail() {
           })}
         </div>
 
-        {adaSidebar && (
-          <div className="space-y-4">
+        <div className="space-y-4">
             <PanelLipat judul="Komentar" jumlah={isAuthenticated ? daftarKomentar.length : jumlahKomentarAktif} terbukaAwal={true} aksen={true}>
               {isAuthenticated ? (
                 <div className="space-y-3 text-sm">
@@ -722,8 +751,8 @@ function KamusDetail() {
                       <CursorNavButton
                         symbol="«"
                         onClick={handlePrevGlosarium}
-                        disabled={isFetching}
-                        isLoading={isFetching && navigasiGlosariumAktif === 'prev'}
+                        disabled={isFetchingGlosarium}
+                        isLoading={isFetchingGlosarium && navigasiGlosariumAktif === 'prev'}
                       />
                       <span className="secondary-text"> ... </span>
                     </>
@@ -747,8 +776,8 @@ function KamusDetail() {
                       <CursorNavButton
                         symbol="»"
                         onClick={handleNextGlosarium}
-                        disabled={isFetching}
-                        isLoading={isFetching && navigasiGlosariumAktif === 'next'}
+                        disabled={isFetchingGlosarium}
+                        isLoading={isFetchingGlosarium && navigasiGlosariumAktif === 'next'}
                       />
                     </>
                   )}
@@ -756,7 +785,6 @@ function KamusDetail() {
               </PanelLipat>
             )}
           </div>
-        )}
       </div>
     </HalamanDasar>
   );
