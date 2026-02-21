@@ -8,6 +8,15 @@ const { publicSearchLimiter } = require('../../middleware/rateLimiter');
 
 const router = express.Router();
 
+router.get('/contoh', async (_req, res, next) => {
+  try {
+    const data = await ModelEntri.contohAcakRima(5);
+    return res.json({ data });
+  } catch (error) {
+    return next(error);
+  }
+});
+
 router.get('/autocomplete/:kata', async (req, res, next) => {
   try {
     const kata = decodeURIComponent(req.params.kata).trim();

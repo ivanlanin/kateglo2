@@ -70,6 +70,21 @@ class ModelEntri {
     return result.rows.map((r) => r.indeks);
   }
 
+  static async contohAcakRima(limit = 5) {
+    const cappedLimit = Math.min(Math.max(Number(limit) || 5, 1), 10);
+    const result = await db.query(
+      `SELECT indeks FROM entri
+       WHERE aktif = 1
+         AND induk IS NULL
+         AND indeks NOT LIKE '% %'
+         AND CHAR_LENGTH(indeks) >= 2
+       ORDER BY RANDOM()
+       LIMIT $1`,
+      [cappedLimit]
+    );
+    return result.rows.map((r) => r.indeks);
+  }
+
   /**
   * Cari entri di kamus dengan strategi prefix-first + contains-fallback
    * @param {string} query - Kata pencarian

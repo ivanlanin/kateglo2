@@ -10,6 +10,15 @@ const { parseCursorPagination } = require('../../utils/routesPublikUtils');
 
 const router = express.Router();
 
+router.get('/contoh', async (_req, res, next) => {
+  try {
+    const data = await ModelTesaurus.contohAcak(5);
+    return res.json({ data });
+  } catch (error) {
+    return next(error);
+  }
+});
+
 router.get('/autocomplete/:kata', async (req, res, next) => {
   try {
     const data = await ModelTesaurus.autocomplete(req.params.kata);
