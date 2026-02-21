@@ -45,12 +45,16 @@ router.get('/', periksaIzin('lihat_glosarium'), async (req, res, next) => {
     const { limit, offset } = parsePagination(req.query);
     const q = parseSearchQuery(req.query.q);
     const aktif = parseTrimmedString(req.query.aktif);
+    const bidangId = Number(req.query.bidang_id);
+    const sumberId = Number(req.query.sumber_id);
 
     const { data, total } = await ModelGlosarium.cari({
       q,
       limit,
       offset,
       aktif: ['0', '1'].includes(aktif) ? aktif : '',
+      ...(Number.isInteger(bidangId) && bidangId > 0 ? { bidangId } : {}),
+      ...(Number.isInteger(sumberId) && sumberId > 0 ? { sumberId } : {}),
     });
     return res.json({ success: true, ...buildPaginatedResult({ data, total, pagination: { limit, offset } }) });
   } catch (error) {

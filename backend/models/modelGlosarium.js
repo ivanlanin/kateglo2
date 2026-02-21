@@ -640,30 +640,15 @@ class ModelGlosarium {
    * @returns {Promise<Array>}
    */
   static async ambilDaftarBidang(aktifSaja = true) {
-    const normalizedSchema = await isNormalizedGlosariumSchema();
-    if (!normalizedSchema) {
-      const kondisiAktif = aktifSaja ? 'AND aktif = TRUE' : '';
-      const result = await db.query(
-        `SELECT DISTINCT bidang
-          FROM glosarium
-         WHERE bidang IS NOT NULL AND bidang != '' ${kondisiAktif}
-         ORDER BY bidang`
-      );
-      return result.rows;
-    }
-
-    const kondisiAktif = aktifSaja ? 'AND g.aktif = TRUE' : '';
+    const kondisiAktif = aktifSaja ? 'WHERE b.aktif = TRUE' : '';
     const result = await db.query(
       `SELECT
          b.id,
          b.kode,
          b.nama,
-         b.nama AS bidang,
-         COUNT(g.id)::int AS jumlah
+         b.nama AS bidang
        FROM bidang b
-       JOIN glosarium g ON g.bidang_id = b.id
-       WHERE 1 = 1 ${kondisiAktif}
-       GROUP BY b.id, b.kode, b.nama
+       ${kondisiAktif}
        ORDER BY b.nama`
     );
     return result.rows;
@@ -674,30 +659,15 @@ class ModelGlosarium {
    * @returns {Promise<Array>}
    */
   static async ambilDaftarSumber(aktifSaja = true) {
-    const normalizedSchema = await isNormalizedGlosariumSchema();
-    if (!normalizedSchema) {
-      const kondisiAktif = aktifSaja ? 'AND aktif = TRUE' : '';
-      const result = await db.query(
-        `SELECT DISTINCT sumber
-         FROM glosarium
-         WHERE sumber IS NOT NULL AND sumber != '' ${kondisiAktif}
-         ORDER BY sumber`
-      );
-      return result.rows;
-    }
-
-    const kondisiAktif = aktifSaja ? 'AND g.aktif = TRUE' : '';
+    const kondisiAktif = aktifSaja ? 'WHERE s.aktif = TRUE' : '';
     const result = await db.query(
       `SELECT
          s.id,
          s.kode,
          s.nama,
-         s.nama AS sumber,
-         COUNT(g.id)::int AS jumlah
+         s.nama AS sumber
        FROM sumber s
-       JOIN glosarium g ON g.sumber_id = s.id
-       WHERE 1 = 1 ${kondisiAktif}
-       GROUP BY s.id, s.kode, s.nama
+       ${kondisiAktif}
        ORDER BY s.nama`
     );
     return result.rows;

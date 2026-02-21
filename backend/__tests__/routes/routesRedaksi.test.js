@@ -1287,6 +1287,22 @@ describe('routes/redaksi', () => {
       });
     });
 
+    it('GET /api/redaksi/glosarium meneruskan filter bidang_id dan sumber_id', async () => {
+      ModelGlosarium.cari.mockResolvedValue({ data: [], total: 0 });
+
+      const response = await callAsAdmin('get', '/api/redaksi/glosarium?bidang_id=3&sumber_id=5');
+
+      expect(response.status).toBe(200);
+      expect(ModelGlosarium.cari).toHaveBeenCalledWith({
+        q: '',
+        limit: 50,
+        offset: 0,
+        aktif: '',
+        bidangId: 3,
+        sumberId: 5,
+      });
+    });
+
     it('POST/PUT /api/redaksi/glosarium memakai updater default saat email admin tidak tersedia', async () => {
       ModelGlosarium.simpan.mockResolvedValueOnce({ id: 1 }).mockResolvedValueOnce({ id: 1 });
 

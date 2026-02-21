@@ -257,15 +257,37 @@ export function useDaftarGlosariumAdmin({
   direction = 'next',
   lastPage = false,
   q = '',
+  bidangId = '',
+  sumberId = '',
   aktif = '',
 } = {}) {
-  return useDaftarAdmin('/api/redaksi/glosarium', 'admin-glosarium', {
+  const params = buildDaftarParams({
     limit,
     cursor,
     direction,
     lastPage,
     q,
     aktif,
+  });
+
+  if (bidangId) params.bidang_id = bidangId;
+  if (sumberId) params.sumber_id = sumberId;
+
+  return useQuery({
+    queryKey: ['admin-glosarium', {
+      limit,
+      cursor,
+      direction,
+      lastPage,
+      q,
+      bidangId,
+      sumberId,
+      aktif,
+    }],
+    queryFn: () =>
+      klien
+        .get('/api/redaksi/glosarium', { params })
+        .then((r) => r.data),
   });
 }
 

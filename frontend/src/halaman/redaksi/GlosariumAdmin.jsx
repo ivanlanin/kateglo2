@@ -80,7 +80,11 @@ function GlosariumAdmin() {
   const idDariPath = parsePositiveIntegerParam(idParam);
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
+  const [filterBidangDraft, setFilterBidangDraft] = useState('');
+  const [filterSumberDraft, setFilterSumberDraft] = useState('');
   const [filterAktifDraft, setFilterAktifDraft] = useState('');
+  const [filterBidang, setFilterBidang] = useState('');
+  const [filterSumber, setFilterSumber] = useState('');
   const [filterAktif, setFilterAktif] = useState('');
   const bisaTambah = punyaIzin('tambah_glosarium');
   const bisaEdit = punyaIzin('edit_glosarium');
@@ -92,6 +96,8 @@ function GlosariumAdmin() {
     direction,
     lastPage,
     q,
+    bidangId: filterBidang,
+    sumberId: filterSumber,
     aktif: filterAktif,
   });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailGlosariumAdmin(idDariPath);
@@ -203,6 +209,8 @@ function GlosariumAdmin() {
   };
 
   const handleCari = () => {
+    setFilterBidang(filterBidangDraft);
+    setFilterSumber(filterSumberDraft);
     setFilterAktif(filterAktifDraft);
     kirimCari(cari);
   };
@@ -217,10 +225,27 @@ function GlosariumAdmin() {
         placeholder="Cari istilah …"
         filters={[
           {
+            key: 'bidang',
+            value: filterBidangDraft,
+            onChange: setFilterBidangDraft,
+            options: [{ value: '', label: '—Bidang—' }, ...opsiBidang],
+            ariaLabel: 'Filter bidang glosarium',
+          },
+          {
+            key: 'sumber',
+            value: filterSumberDraft,
+            onChange: setFilterSumberDraft,
+            options: [{ value: '', label: '—Sumber—' }, ...opsiSumber],
+            ariaLabel: 'Filter sumber glosarium',
+          },
+          {
             key: 'aktif',
             value: filterAktifDraft,
             onChange: setFilterAktifDraft,
-            options: opsiFilterStatusAktif,
+            options: [
+              { value: '', label: '—Status—' },
+              ...opsiFilterStatusAktif.filter((item) => item.value !== ''),
+            ],
             ariaLabel: 'Filter status glosarium',
           },
         ]}
