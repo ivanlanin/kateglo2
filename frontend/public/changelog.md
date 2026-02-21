@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-02-22 Minggu
+
+- Menambahkan pencarian rima akhir dan awal
+
 ## 2026-02-21 Sabtu
 
 - Memisahkan bidang dan sumber glosarium menjadi tabel sendiri

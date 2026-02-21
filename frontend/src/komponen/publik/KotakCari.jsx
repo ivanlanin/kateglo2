@@ -12,17 +12,19 @@ const opsiKategori = [
   { value: 'tesaurus', label: 'Tesaurus', placeholder: 'Cari relasi \u2026' },
   { value: 'glosarium', label: 'Glosarium', placeholder: 'Cari istilah \u2026' },
   { value: 'makna', label: 'Makna', placeholder: 'Cari berdasarkan makna \u2026' },
+  { value: 'rima', label: 'Rima', placeholder: 'Cari kata yang berima \u2026' },
 ];
 
 function deteksiKategori(pathname) {
   if (pathname.startsWith('/makna')) return 'makna';
+  if (pathname.startsWith('/rima')) return 'rima';
   if (pathname.startsWith('/tesaurus')) return 'tesaurus';
   if (pathname.startsWith('/glosarium')) return 'glosarium';
   return 'kamus';
 }
 
 function ekstrakQuery(pathname) {
-  const matchCari = pathname.match(/^\/(kamus|makna|tesaurus|glosarium)\/cari\/(.+)$/);
+  const matchCari = pathname.match(/^\/(kamus|makna|rima|tesaurus|glosarium)\/cari\/(.+)$/);
   if (matchCari) return decodeURIComponent(matchCari[2]);
   const matchDetail = pathname.match(/^\/kamus\/detail\/(.+)$/);
   if (matchDetail) return decodeURIComponent(matchDetail[1]);

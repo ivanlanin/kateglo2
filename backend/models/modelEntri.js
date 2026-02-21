@@ -845,6 +845,128 @@ class ModelEntri {
   }
 
   /**
+   * Cari kata yang berima dengan kata tertentu (rima akhir dan rima awal/aliterasi).
+   * Mendukung cursor pagination independen untuk masing-masing seksi.
+   * @param {string} kata - Kata yang akan dicari rimanya
+   * @param {{ limit?, cursorAkhir?, directionAkhir?, cursorAwal?, directionAwal? }} options
+   * @returns {Promise<Object>} Objek dengan rima_akhir dan rima_awal beserta info pagination
+   */
+  static async cariRima(kata, {
+    limit = 50,
+    cursorAkhir = null,
+    directionAkhir = 'next',
+    cursorAwal = null,
+    directionAwal = 'next',
+  } = {}) {
+    const normalizedKata = kata.trim().toLowerCase();
+    const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
+
+    const entryResult = await db.query(
+      `SELECT indeks, entri, pemenggalan FROM entri
+       WHERE LOWER(indeks) = $1 AND aktif = 1
+       LIMIT 1`,
+      [normalizedKata]
+    );
+
+    const entryRow = entryResult.rows[0];
+    const pemenggalan = entryRow?.pemenggalan || null;
+    const indeks = entryRow?.indeks || normalizedKata;
+
+    const emptySection = { pola: null, data: [], total: 0, hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null };
+    if (normalizedKata.length < 2) {
+      return { indeks, pemenggalan, rima_akhir: emptySection, rima_awal: emptySection };
+    }
+
+    // Pola rima: gunakan suku kata dari pemenggalan jika tersedia, fallback ke 2 karakter
+    let lastPattern, firstPattern;
+    if (pemenggalan) {
+      const syllables = pemenggalan.toLowerCase().split('.');
+      lastPattern = syllables[syllables.length - 1];
+      firstPattern = syllables[0];
+    } else {
+      lastPattern = normalizedKata.slice(-2);
+      firstPattern = normalizedKata.slice(0, 2);
+    }
+    const akhirPattern = `%${lastPattern}`;
+    const awalPattern = `${firstPattern}%`;
+
+    // Bangun query data dengan cursor
+    function buildDataQuery(likePattern, exclude, cursorToken, direction) {
+      const isPrev = direction === 'prev';
+      const cursorPayload = decodeCursor(cursorToken);
+      const params = [likePattern, exclude];
+      let cursorWhere = '';
+      if (cursorPayload?.indeks) {
+        params.push(cursorPayload.indeks);
+        cursorWhere = isPrev ? `AND LOWER(indeks) < $3` : `AND LOWER(indeks) > $3`;
+      }
+      params.push(cappedLimit + 1);
+      const limitRef = `$${params.length}`;
+      return {
+        sql: `SELECT DISTINCT indeks FROM entri
+              WHERE LOWER(indeks) LIKE $1 AND indeks NOT LIKE '% %'
+                AND aktif = 1 AND LOWER(indeks) != $2
+                ${cursorWhere}
+              ORDER BY indeks ${isPrev ? 'DESC' : 'ASC'} LIMIT ${limitRef}`,
+        params,
+        isPrev,
+        hasCursor: Boolean(cursorPayload?.indeks),
+      };
+    }
+
+    const akhirQuery = buildDataQuery(akhirPattern, normalizedKata, cursorAkhir, directionAkhir);
+    const awalQuery = buildDataQuery(awalPattern, normalizedKata, cursorAwal, directionAwal);
+
+    const [akhirCount, akhirRaw, awalCount, awalRaw] = await Promise.all([
+      db.query(
+        `SELECT COUNT(DISTINCT indeks) AS total FROM entri
+         WHERE LOWER(indeks) LIKE $1 AND indeks NOT LIKE '% %'
+           AND aktif = 1 AND LOWER(indeks) != $2`,
+        [akhirPattern, normalizedKata]
+      ),
+      db.query(akhirQuery.sql, akhirQuery.params),
+      db.query(
+        `SELECT COUNT(DISTINCT indeks) AS total FROM entri
+         WHERE LOWER(indeks) LIKE $1 AND indeks NOT LIKE '% %'
+           AND aktif = 1 AND LOWER(indeks) != $2`,
+        [awalPattern, normalizedKata]
+      ),
+      db.query(awalQuery.sql, awalQuery.params),
+    ]);
+
+    function processSection(rawRows, query) {
+      const hasMore = rawRows.length > cappedLimit;
+      let rows = hasMore ? rawRows.slice(0, cappedLimit) : rawRows;
+      if (query.isPrev) rows = [...rows].reverse();
+
+      const first = rows[0];
+      const last = rows[rows.length - 1];
+      return {
+        data: rows,
+        hasPrev: query.isPrev ? hasMore : query.hasCursor,
+        hasNext: query.isPrev ? query.hasCursor : hasMore,
+        prevCursor: first ? encodeCursor({ indeks: first.indeks.toLowerCase() }) : null,
+        nextCursor: last ? encodeCursor({ indeks: last.indeks.toLowerCase() }) : null,
+      };
+    }
+
+    return {
+      indeks,
+      pemenggalan,
+      rima_akhir: {
+        pola: lastPattern,
+        total: parseCount(akhirCount.rows[0]?.total),
+        ...processSection(akhirRaw.rows, akhirQuery),
+      },
+      rima_awal: {
+        pola: firstPattern,
+        total: parseCount(awalCount.rows[0]?.total),
+        ...processSection(awalRaw.rows, awalQuery),
+      },
+    };
+  }
+
+  /**
   * Hapus entri berdasarkan ID
    * @param {number} id
    * @returns {Promise<boolean>}
