@@ -447,7 +447,7 @@ describe('ModelGlosarium', () => {
 
     const result = await ModelGlosarium.ambilDaftarBidang();
 
-    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('SELECT DISTINCT bidang'));
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM bidang b'));
     expect(result).toEqual(rows);
   });
 
@@ -457,7 +457,7 @@ describe('ModelGlosarium', () => {
 
     const result = await ModelGlosarium.ambilDaftarSumber();
 
-    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('SELECT DISTINCT sumber'));
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM sumber s'));
     expect(result).toEqual(rows);
   });
 
@@ -646,7 +646,7 @@ describe('ModelGlosarium', () => {
     db.query.mockResolvedValue({ rows: [] });
     await ModelGlosarium.ambilDaftarBidang(false);
     expect(db.query).toHaveBeenCalledWith(
-      expect.not.stringContaining('AND aktif = TRUE')
+      expect.not.stringContaining('WHERE b.aktif = TRUE')
     );
   });
 
@@ -654,7 +654,7 @@ describe('ModelGlosarium', () => {
     db.query.mockResolvedValue({ rows: [] });
     await ModelGlosarium.ambilDaftarSumber(false);
     expect(db.query).toHaveBeenCalledWith(
-      expect.not.stringContaining('AND aktif = TRUE')
+      expect.not.stringContaining('WHERE s.aktif = TRUE')
     );
   });
 });

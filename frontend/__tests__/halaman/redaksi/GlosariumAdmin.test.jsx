@@ -321,6 +321,10 @@ describe('GlosariumAdmin', () => {
       </MemoryRouter>
     );
 
+    expect(screen.getByLabelText('Filter bidang glosarium')).toHaveDisplayValue('—Bidang—');
+    expect(screen.getByLabelText('Filter sumber glosarium')).toHaveDisplayValue('—Sumber—');
+    expect(screen.getByLabelText('Filter status glosarium')).toHaveDisplayValue('—Status—');
+
     fireEvent.change(screen.getByLabelText('Filter status glosarium'), { target: { value: '1' } });
     fireEvent.click(screen.getByText('Cari'));
 
