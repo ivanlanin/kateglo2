@@ -28,6 +28,7 @@ jest.mock('../../models/modelEntri', () => {
     saranEntri,
     contohAcak: jest.fn(),
     cariMakna: jest.fn(),
+    cariRima: jest.fn(),
   };
 });
 
@@ -325,6 +326,72 @@ describe('routes backend', () => {
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('makna gagal');
+  });
+
+  it('GET /api/publik/rima/autocomplete/:kata mengembalikan data autocomplete', async () => {
+    ModelEntri.autocomplete.mockResolvedValue(['kata', 'katarak']);
+
+    const response = await request(createApp()).get('/api/publik/rima/autocomplete/kat');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ data: ['kata', 'katarak'] });
+    expect(ModelEntri.autocomplete).toHaveBeenCalledWith('kat', 8);
+  });
+
+  it('GET /api/publik/rima/autocomplete/:kata mengembalikan data kosong saat query kosong', async () => {
+    const response = await request(createApp()).get('/api/publik/rima/autocomplete/%20%20');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ data: [] });
+    expect(ModelEntri.autocomplete).not.toHaveBeenCalled();
+  });
+
+  it('GET /api/publik/rima/autocomplete/:kata meneruskan error', async () => {
+    ModelEntri.autocomplete.mockRejectedValue(new Error('rima ac gagal'));
+
+    const response = await request(createApp()).get('/api/publik/rima/autocomplete/kat');
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('rima ac gagal');
+  });
+
+  it('GET /api/publik/rima/cari/:kata validasi query kosong', async () => {
+    const response = await request(createApp()).get('/api/publik/rima/cari/%20%20%20');
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Query tidak boleh kosong');
+    expect(ModelEntri.cariRima).not.toHaveBeenCalled();
+  });
+
+  it('GET /api/publik/rima/cari/:kata meneruskan opsi cursor ke model', async () => {
+    ModelEntri.cariRima.mockResolvedValue({
+      indeks: 'kata',
+      pemenggalan: null,
+      rima_akhir: { pola: 'ta', data: [], total: 0, hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+      rima_awal: { pola: 'ka', data: [], total: 0, hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+    });
+
+    const response = await request(createApp())
+      .get('/api/publik/rima/cari/kata?limit=999&cursor_akhir=ca&dir_akhir=prev&cursor_awal=cb&dir_awal=prev');
+
+    expect(response.status).toBe(200);
+    expect(ModelEntri.cariRima).toHaveBeenCalledWith('kata', {
+      limit: 200,
+      cursorAkhir: 'ca',
+      directionAkhir: 'prev',
+      cursorAwal: 'cb',
+      directionAwal: 'prev',
+    });
+    expect(response.body.indeks).toBe('kata');
+  });
+
+  it('GET /api/publik/rima/cari/:kata meneruskan error model', async () => {
+    ModelEntri.cariRima.mockRejectedValue(new Error('rima gagal'));
+
+    const response = await request(createApp()).get('/api/publik/rima/cari/kata');
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('rima gagal');
   });
 
   it('GET /api/publik/kamus/cari/:kata mengembalikan hasil dan clamp paginasi', async () => {

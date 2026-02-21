@@ -55,6 +55,7 @@ describe('KotakCari', () => {
 
   it('helper deteksi/ekstrak/navigasi bekerja sesuai input', () => {
     expect(deteksiKategori('/makna/cari/air')).toBe('makna');
+    expect(deteksiKategori('/rima/cari/air')).toBe('rima');
     expect(deteksiKategori('/tesaurus/cari/kata')).toBe('tesaurus');
     expect(deteksiKategori('/glosarium/cari/kata')).toBe('glosarium');
     expect(deteksiKategori('/kamus')).toBe('kamus');

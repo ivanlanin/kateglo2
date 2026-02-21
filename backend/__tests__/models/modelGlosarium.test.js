@@ -478,6 +478,20 @@ describe('ModelGlosarium', () => {
     expect(result).toEqual([]);
   });
 
+  it('cariFrasaMengandungKataUtuh mode cursor mengembalikan objek kosong jika kata kosong', async () => {
+    const result = await ModelGlosarium.cariFrasaMengandungKataUtuh('   ', { limit: 10 });
+
+    expect(db.query).not.toHaveBeenCalled();
+    expect(result).toEqual({
+      data: [],
+      total: 0,
+      hasPrev: false,
+      hasNext: false,
+      prevCursor: null,
+      nextCursor: null,
+    });
+  });
+
   it('cariFrasaMengandungKataUtuh mengembalikan kosong jika token terlalu pendek', async () => {
     const result = await ModelGlosarium.cariFrasaMengandungKataUtuh('ab', 20);
 
@@ -507,6 +521,153 @@ describe('ModelGlosarium', () => {
     await ModelGlosarium.cariFrasaMengandungKataUtuh('aktif', 0);
 
     expect(db.query).toHaveBeenCalledWith(expect.any(String), ['aktif', 50]);
+  });
+
+  it('cariFrasaMengandungKataUtuh mode cursor mengembalikan total 0 saat hitungTotal aktif', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ total: '0' }] });
+
+    const result = await ModelGlosarium.cariFrasaMengandungKataUtuh('aktif', {
+      limit: 5,
+      hitungTotal: true,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('SELECT COUNT(*) AS total FROM hasil'),
+      ['aktif']
+    );
+    expect(result).toEqual({
+      data: [],
+      total: 0,
+      hasPrev: false,
+      hasNext: false,
+      prevCursor: null,
+      nextCursor: null,
+    });
+  });
+
+  it('cariFrasaMengandungKataUtuh mode cursor next mendukung cursor dan hasMore', async () => {
+    const cursor = encodeCursor({ indonesia: 'kata aktif', id: 9 });
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '5' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 10, indonesia: 'zat aktif', asing: 'active substance' },
+          { id: 11, indonesia: 'prinsip aktif', asing: 'active principle' },
+          { id: 12, indonesia: 'unsur aktif', asing: 'active element' },
+        ],
+      });
+
+    const result = await ModelGlosarium.cariFrasaMengandungKataUtuh('aktif', {
+      limit: 2,
+      cursor,
+      direction: 'next',
+      hitungTotal: true,
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('WHERE (indonesia, id) > ($2, $3)'),
+      ['aktif', 'kata aktif', 9, 3]
+    );
+    expect(result.total).toBe(5);
+    expect(result.data).toEqual([
+      { indonesia: 'zat aktif', asing: 'active substance' },
+      { indonesia: 'prinsip aktif', asing: 'active principle' },
+    ]);
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(true);
+    expect(result.prevCursor).toEqual(expect.any(String));
+    expect(result.nextCursor).toEqual(expect.any(String));
+  });
+
+  it('cariFrasaMengandungKataUtuh mode cursor prev membalik urutan dan tidak menghitung total', async () => {
+    const cursor = encodeCursor({ indonesia: 'zeta', id: 22 });
+    db.query.mockResolvedValueOnce({
+      rows: [
+        { id: 21, indonesia: 'gamma aktif', asing: 'gamma active' },
+        { id: 20, indonesia: 'beta aktif', asing: 'beta active' },
+        { id: 19, indonesia: 'alpha aktif', asing: 'alpha active' },
+      ],
+    });
+
+    const result = await ModelGlosarium.cariFrasaMengandungKataUtuh('aktif', {
+      limit: 2,
+      cursor,
+      direction: 'prev',
+      hitungTotal: false,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('WHERE (indonesia, id) < ($2, $3)'),
+      ['aktif', 'zeta', 22, 3]
+    );
+    expect(result.total).toBe(0);
+    expect(result.data).toEqual([
+      { indonesia: 'beta aktif', asing: 'beta active' },
+      { indonesia: 'gamma aktif', asing: 'gamma active' },
+    ]);
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(true);
+  });
+
+  it('cariFrasaMengandungKataUtuh mode cursor next tanpa cursor memakai hasPrev false dan hasNext false', async () => {
+    db.query.mockResolvedValueOnce({
+      rows: [
+        { id: 31, indonesia: 'aktif biologis', asing: 'biological active' },
+      ],
+    });
+
+    const result = await ModelGlosarium.cariFrasaMengandungKataUtuh('aktif', {
+      limit: 2,
+      direction: 'next',
+      hitungTotal: false,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('ORDER BY indonesia ASC, id ASC'),
+      ['aktif', 3]
+    );
+    expect(result.total).toBe(0);
+    expect(result.hasPrev).toBe(false);
+    expect(result.hasNext).toBe(false);
+  });
+
+  it('cariFrasaMengandungKataUtuh mode cursor dengan payload kosong memakai fallback indonesia/id', async () => {
+    const cursor = encodeCursor({});
+    db.query.mockResolvedValueOnce({ rows: [] });
+
+    const result = await ModelGlosarium.cariFrasaMengandungKataUtuh('aktif', {
+      limit: 2,
+      cursor,
+      direction: 'next',
+      hitungTotal: false,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('WHERE (indonesia, id) > ($2, $3)'),
+      ['aktif', '', 0, 3]
+    );
+    expect(result.prevCursor).toBeNull();
+    expect(result.nextCursor).toBeNull();
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(false);
+  });
+
+  it('cariFrasaMengandungKataUtuh mode cursor mengembalikan fallback kosong saat token tersisa <3', async () => {
+    const result = await ModelGlosarium.cariFrasaMengandungKataUtuh('a!', {
+      limit: 7,
+      hitungTotal: true,
+    });
+
+    expect(db.query).not.toHaveBeenCalled();
+    expect(result).toEqual({
+      data: [],
+      total: 0,
+      hasPrev: false,
+      hasNext: false,
+      prevCursor: null,
+      nextCursor: null,
+    });
   });
 
   it('hitungTotal mengembalikan nilai total numerik', async () => {

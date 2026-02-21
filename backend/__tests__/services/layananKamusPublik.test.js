@@ -114,6 +114,38 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     expect(buatCacheKeyDetailKamus()).toBe('kamus:detail:');
   });
 
+  it('membuat cache key detail dengan opsi glosarium lengkap', () => {
+    const key = buatCacheKeyDetailKamus('Kata Dasar', {
+      glosariumLimit: 30,
+      glosariumCursor: 'abc+/=',
+      glosariumDirection: 'prev',
+    });
+
+    expect(key).toBe('kamus:detail:kata%20dasar:g-30:prev:abc%2B%2F%3D');
+  });
+
+  it('membuat cache key detail dengan fallback limit dan direction next', () => {
+    const key = buatCacheKeyDetailKamus('Kata Dasar', {
+      glosariumLimit: 0,
+      glosariumCursor: '',
+      glosariumDirection: 'invalid',
+    });
+
+    expect(key).toBe('kamus:detail:kata%20dasar:g-20:next:');
+  });
+
+  it('membuat cache key detail default saat opsi bukan object', () => {
+    const key = buatCacheKeyDetailKamus('Kata Dasar', 'invalid-options');
+
+    expect(key).toBe('kamus:detail:kata%20dasar');
+  });
+
+  it('membuat cache key detail memakai default saat opsi object kosong', () => {
+    const key = buatCacheKeyDetailKamus('Kata Dasar', {});
+
+    expect(key).toBe('kamus:detail:kata%20dasar:g-20:next:');
+  });
+
   it('hapusCacheDetailKamus no-op untuk indeks kosong dan memanggil delKey untuk indeks valid', async () => {
     await hapusCacheDetailKamus('   ');
     await hapusCacheDetailKamus(undefined);
@@ -216,6 +248,93 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     expect(result.entri[1].entri_rujuk_indeks).toBe('aktivasi');
     expect(result.tesaurus).toEqual({ sinonim: ['aktif', 'giat'], antonim: ['pasif'] });
     expect(result.glosarium).toEqual([{ indonesia: 'zat aktif', asing: 'active substance' }]);
+  });
+
+  it('mengembalikan page info glosarium dari mode cursor object', async () => {
+    ModelEntri.ambilEntriPerIndeks.mockResolvedValue([
+      {
+        id: 90,
+        entri: 'aktif',
+        indeks: 'aktif',
+        homonim: null,
+        urutan: 1,
+        jenis: 'dasar',
+        pemenggalan: null,
+        lafal: null,
+        varian: null,
+        jenis_rujuk: null,
+        entri_rujuk: null,
+      },
+    ]);
+    ModelEntri.ambilMakna.mockResolvedValue([]);
+    ModelEntri.ambilContoh.mockResolvedValue([]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
+    ModelTesaurus.ambilDetail.mockResolvedValue(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue({
+      data: [{ indonesia: 'zat aktif', asing: 'active substance' }],
+      total: 12,
+      hasPrev: true,
+      hasNext: true,
+      prevCursor: 'prev-1',
+      nextCursor: 'next-1',
+    });
+
+    const result = await ambilDetailKamus('aktif', {
+      glosariumLimit: 10,
+      glosariumCursor: 'cursor-1',
+      glosariumDirection: 'prev',
+    });
+
+    expect(ModelGlosarium.cariFrasaMengandungKataUtuh).toHaveBeenCalledWith('aktif', {
+      limit: 10,
+      cursor: 'cursor-1',
+      direction: 'prev',
+      hitungTotal: true,
+    });
+    expect(result.glosarium).toEqual([{ indonesia: 'zat aktif', asing: 'active substance' }]);
+    expect(result.glosarium_page).toEqual({
+      total: 12,
+      hasPrev: true,
+      hasNext: true,
+      prevCursor: 'prev-1',
+      nextCursor: 'next-1',
+    });
+  });
+
+  it('mengembalikan fallback page info glosarium saat field cursor object kosong', async () => {
+    ModelEntri.ambilEntriPerIndeks.mockResolvedValue([
+      {
+        id: 91,
+        entri: 'aktif',
+        indeks: 'aktif',
+        homonim: null,
+        urutan: 1,
+        jenis: 'dasar',
+        pemenggalan: null,
+        lafal: null,
+        varian: null,
+        jenis_rujuk: null,
+        entri_rujuk: null,
+      },
+    ]);
+    ModelEntri.ambilMakna.mockResolvedValue([]);
+    ModelEntri.ambilContoh.mockResolvedValue([]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
+    ModelTesaurus.ambilDetail.mockResolvedValue(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue({});
+
+    const result = await ambilDetailKamus('aktif');
+
+    expect(result.glosarium).toEqual([]);
+    expect(result.glosarium_page).toEqual({
+      total: 0,
+      hasPrev: false,
+      hasNext: false,
+      prevCursor: null,
+      nextCursor: null,
+    });
   });
 
   it('membersihkan relasi kosong dan menghapus duplikasi tanpa beda kapitalisasi', async () => {
