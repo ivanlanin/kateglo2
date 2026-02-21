@@ -1,11 +1,11 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import ChecklistPilihanAdmin from '../../../src/komponen/redaksi/ChecklistPilihanAdmin';
+import KotakCentang from '../../../src/komponen/redaksi/KotakCentang';
 
-describe('ChecklistPilihanAdmin', () => {
+describe('KotakCentang', () => {
   it('menampilkan loading text saat isLoading=true', () => {
     render(
-      <ChecklistPilihanAdmin
+      <KotakCentang
         label="Izin"
         isLoading={true}
         loadingText="Memuat pilihan ..."
@@ -19,7 +19,7 @@ describe('ChecklistPilihanAdmin', () => {
 
   it('mode groups tetap aman saat group.items undefined', () => {
     render(
-      <ChecklistPilihanAdmin
+      <KotakCentang
         label="Izin"
         groups={[{ key: 'admin', title: 'Admin' }]}
         hasSelected={() => false}
@@ -34,7 +34,7 @@ describe('ChecklistPilihanAdmin', () => {
   it('mode flat list memakai fallback items kosong dan dapat toggle item', () => {
     const onToggle = vi.fn();
     const { rerender } = render(
-      <ChecklistPilihanAdmin
+      <KotakCentang
         label="Izin"
         items={undefined}
         hasSelected={() => false}
@@ -45,7 +45,7 @@ describe('ChecklistPilihanAdmin', () => {
     expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
 
     rerender(
-      <ChecklistPilihanAdmin
+      <KotakCentang
         label="Izin"
         items={[{ id: 10, nama: 'Kelola Pengguna' }]}
         hasSelected={(id) => id === 10}

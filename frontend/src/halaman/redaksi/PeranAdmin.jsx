@@ -29,7 +29,7 @@ import {
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
-import ChecklistPilihanAdmin from '../../komponen/redaksi/ChecklistPilihanAdmin';
+import KotakCentang from '../../komponen/redaksi/KotakCentang';
 import { useSelectableIds } from '../../hooks/redaksi/useSelectableIds';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
@@ -240,7 +240,7 @@ function PeranAdmin() {
           </span>
         </div>
 
-        <ChecklistPilihanAdmin
+        <KotakCentang
           label="Izin"
           isLoading={isIzinLoading}
           loadingText="Memuat daftar izin …"

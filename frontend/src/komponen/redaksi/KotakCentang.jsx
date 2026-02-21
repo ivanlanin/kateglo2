@@ -20,7 +20,7 @@ function ItemChecklist({ item, checked, onToggle }) {
   );
 }
 
-function ChecklistPilihanAdmin({
+function KotakCentang({
   label,
   isLoading = false,
   loadingText,
@@ -68,4 +68,4 @@ function ChecklistPilihanAdmin({
   );
 }
 
-export default ChecklistPilihanAdmin;
+export default KotakCentang;

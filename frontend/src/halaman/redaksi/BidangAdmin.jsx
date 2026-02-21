@@ -41,7 +41,7 @@ const kolom = [
   { key: 'aktif', label: 'Status', render: (item) => <BadgeStatus aktif={item.aktif} /> },
 ];
 
-function BidangGlosariumAdmin() {
+function BidangAdmin() {
   const navigate = useNavigate();
   const { id: idParam } = useParams();
   const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit, currentPage, cursor, direction, lastPage } = usePencarianAdmin(50);
@@ -205,4 +205,4 @@ function BidangGlosariumAdmin() {
   );
 }
 
-export default BidangGlosariumAdmin;
+export default BidangAdmin;

@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import BidangGlosariumAdmin from '../../../src/halaman/redaksi/BidangGlosariumAdmin';
+import BidangAdmin from '../../../src/halaman/redaksi/BidangAdmin';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
@@ -21,8 +21,8 @@ const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
 
 vi.mock('../../../src/api/apiAdmin', () => ({
-  useDaftarBidangGlosariumAdmin: (...args) => mockUseDaftar(...args),
-  useDetailBidangGlosariumAdmin: (...args) => mockUseDetail(...args),
+  useDaftarBidangAdmin: (...args) => mockUseDaftar(...args),
+  useDetailBidangAdmin: (...args) => mockUseDetail(...args),
   useSimpanBidangGlosarium: () => ({ mutate: mutateSimpan, isPending: false }),
   useHapusBidangGlosarium: () => ({ mutate: mutateHapus, isPending: false }),
 }));
@@ -37,7 +37,7 @@ vi.mock('../../../src/komponen/bersama/TataLetak', () => ({
   ),
 }));
 
-describe('BidangGlosariumAdmin', () => {
+describe('BidangAdmin', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockParams = {};
@@ -56,7 +56,7 @@ describe('BidangGlosariumAdmin', () => {
   it('menampilkan daftar dan dapat menyimpan data', () => {
     render(
       <MemoryRouter>
-        <BidangGlosariumAdmin />
+        <BidangAdmin />
       </MemoryRouter>
     );
 
@@ -73,7 +73,7 @@ describe('BidangGlosariumAdmin', () => {
 
     render(
       <MemoryRouter>
-        <BidangGlosariumAdmin />
+        <BidangAdmin />
       </MemoryRouter>
     );
 
@@ -90,7 +90,7 @@ describe('BidangGlosariumAdmin', () => {
 
     render(
       <MemoryRouter>
-        <BidangGlosariumAdmin />
+        <BidangAdmin />
       </MemoryRouter>
     );
 
@@ -107,7 +107,7 @@ describe('BidangGlosariumAdmin', () => {
 
     render(
       <MemoryRouter>
-        <BidangGlosariumAdmin />
+        <BidangAdmin />
       </MemoryRouter>
     );
 
@@ -129,7 +129,7 @@ describe('BidangGlosariumAdmin', () => {
 
     render(
       <MemoryRouter>
-        <BidangGlosariumAdmin />
+        <BidangAdmin />
       </MemoryRouter>
     );
 
@@ -155,7 +155,7 @@ describe('BidangGlosariumAdmin', () => {
 
     render(
       <MemoryRouter>
-        <BidangGlosariumAdmin />
+        <BidangAdmin />
       </MemoryRouter>
     );
 
@@ -176,7 +176,7 @@ describe('BidangGlosariumAdmin', () => {
 
     render(
       <MemoryRouter>
-        <BidangGlosariumAdmin />
+        <BidangAdmin />
       </MemoryRouter>
     );
 
@@ -189,7 +189,7 @@ describe('BidangGlosariumAdmin', () => {
   it('menjalankan cari dan klik baris daftar untuk navigasi detail', () => {
     render(
       <MemoryRouter>
-        <BidangGlosariumAdmin />
+        <BidangAdmin />
       </MemoryRouter>
     );
 
@@ -211,7 +211,7 @@ describe('BidangGlosariumAdmin', () => {
 
     render(
       <MemoryRouter>
-        <BidangGlosariumAdmin />
+        <BidangAdmin />
       </MemoryRouter>
     );
 
@@ -226,7 +226,7 @@ describe('BidangGlosariumAdmin', () => {
     mockParams = {};
     render(
       <MemoryRouter>
-        <BidangGlosariumAdmin />
+        <BidangAdmin />
       </MemoryRouter>
     );
 
@@ -247,7 +247,7 @@ describe('BidangGlosariumAdmin', () => {
     });
     render(
       <MemoryRouter>
-        <BidangGlosariumAdmin />
+        <BidangAdmin />
       </MemoryRouter>
     );
 
