@@ -110,18 +110,18 @@ function Glosarium() {
             <KartuKategori
               judul="Bidang"
               items={bidangList}
-              getKey={(item) => item.bidang}
-              getTo={(item) => `/glosarium/bidang/${encodeURIComponent(item.bidang)}`}
-              getLabel={(item) => formatNamaBidang(item.bidang)}
+              getKey={(item) => item.kode || item.bidang || item.nama}
+              getTo={(item) => `/glosarium/bidang/${encodeURIComponent(item.kode || item.bidang || item.nama)}`}
+              getLabel={(item) => formatNamaBidang(item.nama || item.bidang || '')}
             />
           )}
           {sumberList?.length > 0 && (
             <KartuKategori
               judul="Sumber"
               items={sumberList}
-              getKey={(item) => item.sumber}
-              getTo={(item) => `/glosarium/sumber/${encodeURIComponent(item.sumber)}`}
-              getLabel={(item) => item.sumber}
+              getKey={(item) => item.kode || item.sumber || item.nama}
+              getTo={(item) => `/glosarium/sumber/${encodeURIComponent(item.kode || item.sumber || item.nama)}`}
+              getLabel={(item) => item.nama || item.sumber}
             />
           )}
         </div>

@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-19T18:08:40.708Z
+-- Generated: 2026-02-21T06:15:21.664Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -76,6 +76,24 @@ $function$
 -- TABLES
 -- ============================================
 
+create table bidang (
+  id serial primary key,
+  kode text not null,
+  nama text not null,
+  aktif boolean not null default true,
+  keterangan text,
+  created_at timestamp without time zone not null default now(),
+  updated_at timestamp without time zone not null default now(),
+  constraint bidang_kode_key unique (kode),
+  constraint bidang_nama_key unique (nama)
+);
+create unique index bidang_kode_key on bidang using btree (kode);
+create unique index bidang_nama_key on bidang using btree (nama);
+create trigger trg_set_timestamp_fields__bidang
+  before insert or update on bidang
+  for each row
+  execute function set_timestamp_fields();
+
 create table contoh (
   id serial primary key,
   legacy_cid integer,
@@ -145,9 +163,7 @@ create table glosarium (
   id serial primary key,
   indonesia text not null,
   asing text not null,
-  bidang text,
   bahasa text not null default 'en'::text,
-  sumber text,
   wpid text,
   wpen text,
   updated timestamp without time zone,
@@ -155,19 +171,21 @@ create table glosarium (
   wikipedia_updated timestamp without time zone,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
-  aktif boolean not null default true
+  aktif boolean not null default true,
+  bidang_id integer references bidang(id) on delete restrict on update cascade not null,
+  sumber_id integer references sumber(id) on delete restrict on update cascade not null
 );
 create index idx_glosarium_aktif_bahasa_indonesia on glosarium using btree (bahasa, indonesia) WHERE (aktif = true);
-create index idx_glosarium_aktif_bidang_indonesia on glosarium using btree (bidang, indonesia) WHERE (aktif = true);
-create index idx_glosarium_aktif_sumber_indonesia on glosarium using btree (sumber, indonesia) WHERE (aktif = true);
+create index idx_glosarium_aktif_bidang_id_indonesia on glosarium using btree (bidang_id, indonesia) WHERE (aktif = true);
+create index idx_glosarium_aktif_sumber_id_indonesia on glosarium using btree (sumber_id, indonesia) WHERE (aktif = true);
 create index idx_glosarium_asing on glosarium using btree (asing);
 create index idx_glosarium_asing_trgm on glosarium using gin (asing gin_trgm_ops);
-create index idx_glosarium_bidang on glosarium using btree (bidang);
+create index idx_glosarium_bidang_id on glosarium using btree (bidang_id);
 create index idx_glosarium_indonesia on glosarium using btree (indonesia);
 create index idx_glosarium_indonesia_lower_trgm on glosarium using gin (lower(indonesia) gin_trgm_ops);
 create index idx_glosarium_indonesia_trgm on glosarium using gin (indonesia gin_trgm_ops);
 create index idx_glosarium_indonesia_tsv_simple on glosarium using gin (to_tsvector('simple'::regconfig, indonesia));
-create index idx_glosarium_sumber on glosarium using btree (sumber);
+create index idx_glosarium_sumber_id on glosarium using btree (sumber_id);
 create trigger trg_set_timestamp_fields__glosarium
   before insert or update on glosarium
   for each row
@@ -290,9 +308,9 @@ create table peran (
   kode text not null,
   nama text not null,
   keterangan text,
-  akses_redaksi boolean not null default false,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
+  akses_redaksi boolean not null default false,
   constraint peran_kode_key unique (kode)
 );
 create unique index peran_kode_key on peran using btree (kode);
@@ -309,6 +327,24 @@ create table peran_izin (
 );
 create trigger trg_set_timestamp_fields__peran_izin
   before insert or update on peran_izin
+  for each row
+  execute function set_timestamp_fields();
+
+create table sumber (
+  id serial primary key,
+  kode text not null,
+  nama text not null,
+  aktif boolean not null default true,
+  keterangan text,
+  created_at timestamp without time zone not null default now(),
+  updated_at timestamp without time zone not null default now(),
+  constraint sumber_kode_key unique (kode),
+  constraint sumber_nama_key unique (nama)
+);
+create unique index sumber_kode_key on sumber using btree (kode);
+create unique index sumber_nama_key on sumber using btree (nama);
+create trigger trg_set_timestamp_fields__sumber
+  before insert or update on sumber
   for each row
   execute function set_timestamp_fields();
 

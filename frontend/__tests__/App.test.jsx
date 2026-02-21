@@ -29,6 +29,8 @@ vi.mock('../src/halaman/redaksi/KamusAdmin', () => ({ default: () => <div>Kamus 
 vi.mock('../src/halaman/redaksi/KomentarAdmin', () => ({ default: () => <div>Komentar Redaksi</div> }));
 vi.mock('../src/halaman/redaksi/TesaurusAdmin', () => ({ default: () => <div>Tesaurus Redaksi</div> }));
 vi.mock('../src/halaman/redaksi/GlosariumAdmin', () => ({ default: () => <div>Glosarium Redaksi</div> }));
+vi.mock('../src/halaman/redaksi/BidangGlosariumAdmin', () => ({ default: () => <div>Bidang Glosarium Redaksi</div> }));
+vi.mock('../src/halaman/redaksi/SumberGlosariumAdmin', () => ({ default: () => <div>Sumber Glosarium Redaksi</div> }));
 vi.mock('../src/halaman/redaksi/LabelAdmin', () => ({ default: () => <div>Label Redaksi</div> }));
 vi.mock('../src/halaman/redaksi/PenggunaAdmin', () => ({ default: () => <div>Pengguna Redaksi</div> }));
 

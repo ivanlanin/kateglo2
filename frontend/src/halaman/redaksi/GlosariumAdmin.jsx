@@ -4,7 +4,14 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDaftarGlosariumAdmin, useDetailGlosariumAdmin, useSimpanGlosarium, useHapusGlosarium } from '../../api/apiAdmin';
+import {
+  useDaftarGlosariumAdmin,
+  useDetailGlosariumAdmin,
+  useSimpanGlosarium,
+  useHapusGlosarium,
+  useDaftarBidangGlosariumAdmin,
+  useDaftarSumberGlosariumAdmin,
+} from '../../api/apiAdmin';
 import TataLetak from '../../komponen/bersama/TataLetak';
 import { useAuth } from '../../context/authContext';
 import {
@@ -27,7 +34,16 @@ import {
 } from '../../komponen/redaksi/FormAdmin';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
-const nilaiAwal = { indonesia: '', asing: '', bidang: '', bahasa: 'en', sumber: '', aktif: 1 };
+const nilaiAwal = {
+  indonesia: '',
+  asing: '',
+  bidang_id: '',
+  bidang: '',
+  bahasa: 'en',
+  sumber_id: '',
+  sumber: '',
+  aktif: 1,
+};
 
 const opsiBahasa = [
   { value: 'en', label: 'Inggris' },
@@ -79,8 +95,12 @@ function GlosariumAdmin() {
     aktif: filterAktif,
   });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailGlosariumAdmin(idDariPath);
+  const { data: bidangResp } = useDaftarBidangGlosariumAdmin({ limit: 200, aktif: '1' });
+  const { data: sumberResp } = useDaftarSumberGlosariumAdmin({ limit: 200, aktif: '1' });
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
+  const opsiBidang = (bidangResp?.data || []).map((item) => ({ value: String(item.id), label: item.nama }));
+  const opsiSumber = (sumberResp?.data || []).map((item) => ({ value: String(item.id), label: item.nama }));
 
   const panel = useFormPanel(nilaiAwal);
   const simpan = useSimpanGlosarium();
@@ -153,7 +173,22 @@ function GlosariumAdmin() {
       setPesan({ error: 'Istilah Indonesia dan Asing wajib diisi', sukses: '' });
       return;
     }
-    simpan.mutate(panel.data, {
+    if (!panel.data.bidang_id) {
+      setPesan({ error: 'Bidang wajib dipilih', sukses: '' });
+      return;
+    }
+    if (!panel.data.sumber_id) {
+      setPesan({ error: 'Sumber wajib dipilih', sukses: '' });
+      return;
+    }
+
+    const payload = {
+      ...panel.data,
+      bidang_id: Number(panel.data.bidang_id),
+      sumber_id: Number(panel.data.sumber_id),
+    };
+
+    simpan.mutate(payload, {
       onSuccess: () => { setPesan({ error: '', sukses: 'Tersimpan!' }); setTimeout(() => tutupPanel(), 600); },
       onError: (err) => setPesan({ error: getApiErrorMessage(err, 'Gagal menyimpan'), sukses: '' }),
     });
@@ -210,9 +245,21 @@ function GlosariumAdmin() {
           <PesanForm error={pesan.error} sukses={pesan.sukses} />
           <InputField label="Indonesia" name="indonesia" value={panel.data.indonesia} onChange={panel.ubahField} required />
           <InputField label="Asing" name="asing" value={panel.data.asing} onChange={panel.ubahField} required />
-          <InputField label="Bidang" name="bidang" value={panel.data.bidang} onChange={panel.ubahField} />
+          <SelectField
+            label="Bidang"
+            name="bidang_id"
+            value={String(panel.data.bidang_id || '')}
+            onChange={panel.ubahField}
+            options={[{ value: '', label: '-- Pilih bidang --' }, ...opsiBidang]}
+          />
           <SelectField label="Bahasa" name="bahasa" value={panel.data.bahasa} onChange={panel.ubahField} options={opsiBahasa} />
-          <InputField label="Sumber" name="sumber" value={panel.data.sumber} onChange={panel.ubahField} />
+          <SelectField
+            label="Sumber"
+            name="sumber_id"
+            value={String(panel.data.sumber_id || '')}
+            onChange={panel.ubahField}
+            options={[{ value: '', label: '-- Pilih sumber --' }, ...opsiSumber]}
+          />
           <ToggleAktif value={panel.data.aktif} onChange={panel.ubahField} />
           <FormFooter
             onSimpan={handleSimpan}

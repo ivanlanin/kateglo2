@@ -6,6 +6,79 @@ const db = require('../db');
 const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
 const { decodeCursor, encodeCursor } = require('../utils/cursorPagination');
 
+function parseOptionalPositiveInt(value) {
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed <= 0) return null;
+  return parsed;
+}
+
+async function resolveMasterId(client, {
+  tableName,
+  explicitId,
+  kode,
+  nama,
+}) {
+  const normalizedId = parseOptionalPositiveInt(explicitId);
+  if (normalizedId) return normalizedId;
+
+  const kandidatKode = String(kode || '').trim();
+  const kandidatNama = String(nama || '').trim();
+  if (!kandidatKode && !kandidatNama) return null;
+
+  const result = await client.query(
+    `SELECT id
+     FROM ${tableName}
+     WHERE ($1 <> '' AND LOWER(kode) = LOWER($1))
+        OR ($2 <> '' AND LOWER(nama) = LOWER($2))
+     ORDER BY id
+     LIMIT 1`,
+    [kandidatKode, kandidatNama]
+  );
+
+  return result.rows[0]?.id || null;
+}
+
+function buildMasterFilters({
+  alias,
+  q,
+  aktif,
+  params,
+}) {
+  const conditions = [];
+  if (q) {
+    params.push(`%${q}%`);
+    conditions.push(`(
+      ${alias}.kode ILIKE $${params.length}
+      OR ${alias}.nama ILIKE $${params.length}
+      OR COALESCE(${alias}.keterangan, '') ILIKE $${params.length}
+    )`);
+  }
+
+  if (aktif === '1') {
+    conditions.push(`${alias}.aktif = TRUE`);
+  } else if (aktif === '0') {
+    conditions.push(`${alias}.aktif = FALSE`);
+  }
+
+  return conditions;
+}
+
+let cachedNormalizedSchema = null;
+
+async function isNormalizedGlosariumSchema() {
+  if (process.env.NODE_ENV === 'test') return false;
+  if (cachedNormalizedSchema !== null) return cachedNormalizedSchema;
+  const result = await db.query(
+    `SELECT column_name
+     FROM information_schema.columns
+     WHERE table_schema = 'public'
+       AND table_name = 'glosarium'
+       AND column_name IN ('bidang_id', 'sumber_id')`
+  );
+  cachedNormalizedSchema = result.rows.length >= 2;
+  return cachedNormalizedSchema;
+}
+
 class ModelGlosarium {
   static async autocomplete(query, limit = 8) {
     const trimmed = query.trim();
@@ -42,7 +115,11 @@ class ModelGlosarium {
   static async cari({
     q = '',
     bidang = '',
+    bidangId = null,
+    bidangKode = '',
     sumber = '',
+    sumberId = null,
+    sumberKode = '',
     bahasa = '',
     aktif = '',
     limit = 20,
@@ -50,11 +127,98 @@ class ModelGlosarium {
     aktifSaja = false,
     hitungTotal = true,
   } = {}) {
+    const normalizedSchema = await isNormalizedGlosariumSchema();
+    if (!normalizedSchema) {
+      const cappedLimit = Math.min(Math.max(Number(limit) || 20, 1), 200);
+      const safeOffset = Math.max(Number(offset) || 0, 0);
+      const conditions = [];
+      const params = [];
+      let idx = 1;
+
+      if (aktifSaja) {
+        conditions.push('g.aktif = TRUE');
+      }
+
+      if (aktif === '1') {
+        conditions.push('g.aktif = TRUE');
+      } else if (aktif === '0') {
+        conditions.push('g.aktif = FALSE');
+      }
+
+      if (q) {
+        conditions.push(`(g.indonesia ILIKE $${idx} OR g.asing ILIKE $${idx})`);
+        params.push(`%${q}%`);
+        idx++;
+      }
+
+      if (bidang) {
+        conditions.push(`g.bidang = $${idx}`);
+        params.push(bidang);
+        idx++;
+      }
+
+      if (sumber) {
+        conditions.push(`g.sumber = $${idx}`);
+        params.push(sumber);
+        idx++;
+      }
+
+      if (bahasa === 'id') {
+        conditions.push(`g.bahasa = 'id'`);
+      } else if (bahasa === 'en') {
+        conditions.push(`g.bahasa = 'en'`);
+      }
+
+      const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+
+      if (hitungTotal) {
+        const countResult = await db.query(
+          `SELECT COUNT(*) as total FROM glosarium g ${whereClause}`,
+          params
+        );
+        const total = parseCount(countResult.rows[0]?.total);
+
+        const dataResult = await db.query(
+          `SELECT g.id, g.indonesia, g.asing, g.bidang, g.bahasa, g.sumber, g.aktif
+           FROM glosarium g
+           ${whereClause}
+           ORDER BY g.indonesia ASC
+           LIMIT $${idx} OFFSET $${idx + 1}`,
+          [...params, cappedLimit, safeOffset]
+        );
+
+        return { data: dataResult.rows, total, hasNext: safeOffset + dataResult.rows.length < total };
+      }
+
+      const dataResult = await db.query(
+        `SELECT g.id, g.indonesia, g.asing, g.bidang, g.bahasa, g.sumber, g.aktif
+         FROM glosarium g
+         ${whereClause}
+         ORDER BY g.indonesia ASC
+         LIMIT $${idx} OFFSET $${idx + 1}`,
+        [...params, cappedLimit + 1, safeOffset]
+      );
+
+      const hasNext = dataResult.rows.length > cappedLimit;
+      const data = hasNext ? dataResult.rows.slice(0, cappedLimit) : dataResult.rows;
+      const total = hasNext
+        ? safeOffset + cappedLimit + 1
+        : safeOffset + data.length;
+
+      return { data, total, hasNext };
+    }
+
     const cappedLimit = Math.min(Math.max(Number(limit) || 20, 1), 200);
     const safeOffset = Math.max(Number(offset) || 0, 0);
     const conditions = [];
     const params = [];
     let idx = 1;
+    const normalizedBidangId = parseOptionalPositiveInt(bidangId);
+    const normalizedSumberId = parseOptionalPositiveInt(sumberId);
+    const normalizedBidangKode = String(bidangKode || '').trim();
+    const normalizedSumberKode = String(sumberKode || '').trim();
+    const normalizedBidang = String(bidang || '').trim();
+    const normalizedSumber = String(sumber || '').trim();
 
     if (aktifSaja) {
       conditions.push('g.aktif = TRUE');
@@ -72,16 +236,30 @@ class ModelGlosarium {
       idx++;
     }
 
-    if (bidang) {
-      conditions.push(`g.bidang = $${idx}`);
-      params.push(bidang);
+    if (normalizedBidangId) {
+      conditions.push(`g.bidang_id = $${idx}`);
+      params.push(normalizedBidangId);
       idx++;
+    } else if (normalizedBidangKode || normalizedBidang) {
+      conditions.push(`(
+        ($${idx} <> '' AND LOWER(b.kode) = LOWER($${idx}))
+        OR ($${idx + 1} <> '' AND LOWER(b.nama) = LOWER($${idx + 1}))
+      )`);
+      params.push(normalizedBidangKode || normalizedBidang, normalizedBidang);
+      idx += 2;
     }
 
-    if (sumber) {
-      conditions.push(`g.sumber = $${idx}`);
-      params.push(sumber);
+    if (normalizedSumberId) {
+      conditions.push(`g.sumber_id = $${idx}`);
+      params.push(normalizedSumberId);
       idx++;
+    } else if (normalizedSumberKode || normalizedSumber) {
+      conditions.push(`(
+        ($${idx} <> '' AND LOWER(s.kode) = LOWER($${idx}))
+        OR ($${idx + 1} <> '' AND LOWER(s.nama) = LOWER($${idx + 1}))
+      )`);
+      params.push(normalizedSumberKode || normalizedSumber, normalizedSumber);
+      idx += 2;
     }
 
     if (bahasa === 'id') {
@@ -94,14 +272,31 @@ class ModelGlosarium {
 
     if (hitungTotal) {
       const countResult = await db.query(
-        `SELECT COUNT(*) as total FROM glosarium g ${whereClause}`,
+        `SELECT COUNT(*) as total
+         FROM glosarium g
+         JOIN bidang b ON b.id = g.bidang_id
+         JOIN sumber s ON s.id = g.sumber_id
+         ${whereClause}`,
         params
       );
       const total = parseCount(countResult.rows[0]?.total);
 
       const dataResult = await db.query(
-        `SELECT g.id, g.indonesia, g.asing, g.bidang, g.bahasa, g.sumber, g.aktif
+        `SELECT
+           g.id,
+           g.indonesia,
+           g.asing,
+           g.bidang_id,
+           b.kode AS bidang_kode,
+           b.nama AS bidang,
+           g.bahasa,
+           g.sumber_id,
+           s.kode AS sumber_kode,
+           s.nama AS sumber,
+           g.aktif
          FROM glosarium g
+         JOIN bidang b ON b.id = g.bidang_id
+         JOIN sumber s ON s.id = g.sumber_id
          ${whereClause}
          ORDER BY g.indonesia ASC
          LIMIT $${idx} OFFSET $${idx + 1}`,
@@ -112,8 +307,21 @@ class ModelGlosarium {
     }
 
     const dataResult = await db.query(
-      `SELECT g.id, g.indonesia, g.asing, g.bidang, g.bahasa, g.sumber, g.aktif
+      `SELECT
+         g.id,
+         g.indonesia,
+         g.asing,
+         g.bidang_id,
+         b.kode AS bidang_kode,
+         b.nama AS bidang,
+         g.bahasa,
+         g.sumber_id,
+         s.kode AS sumber_kode,
+         s.nama AS sumber,
+         g.aktif
        FROM glosarium g
+       JOIN bidang b ON b.id = g.bidang_id
+       JOIN sumber s ON s.id = g.sumber_id
        ${whereClause}
        ORDER BY g.indonesia ASC
        LIMIT $${idx} OFFSET $${idx + 1}`,
@@ -132,7 +340,11 @@ class ModelGlosarium {
   static async cariCursor({
     q = '',
     bidang = '',
+    bidangId = null,
+    bidangKode = '',
     sumber = '',
+    sumberId = null,
+    sumberKode = '',
     bahasa = '',
     aktif = '',
     limit = 20,
@@ -142,6 +354,129 @@ class ModelGlosarium {
     direction = 'next',
     lastPage = false,
   } = {}) {
+    const normalizedSchema = await isNormalizedGlosariumSchema();
+    if (!normalizedSchema) {
+      const cappedLimit = Math.min(Math.max(Number(limit) || 20, 1), 200);
+      const cursorPayload = decodeCursor(cursor);
+      const isPrev = direction === 'prev';
+      const orderDesc = Boolean(lastPage || isPrev);
+      const conditions = [];
+      const params = [];
+      let idx = 1;
+
+      if (aktifSaja) {
+        conditions.push('g.aktif = TRUE');
+      }
+
+      if (aktif === '1') {
+        conditions.push('g.aktif = TRUE');
+      } else if (aktif === '0') {
+        conditions.push('g.aktif = FALSE');
+      }
+
+      if (q) {
+        conditions.push(`(g.indonesia ILIKE $${idx} OR g.asing ILIKE $${idx})`);
+        params.push(`%${q}%`);
+        idx++;
+      }
+
+      if (bidang) {
+        conditions.push(`g.bidang = $${idx}`);
+        params.push(bidang);
+        idx++;
+      }
+
+      if (sumber) {
+        conditions.push(`g.sumber = $${idx}`);
+        params.push(sumber);
+        idx++;
+      }
+
+      if (bahasa === 'id') {
+        conditions.push(`g.bahasa = 'id'`);
+      } else if (bahasa === 'en') {
+        conditions.push(`g.bahasa = 'en'`);
+      }
+
+      const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+
+      let total = 0;
+      if (hitungTotal) {
+        const countResult = await db.query(
+          `SELECT COUNT(*) as total FROM glosarium g ${whereClause}`,
+          params
+        );
+        total = parseCount(countResult.rows[0]?.total);
+        if (total === 0) {
+          return {
+            data: [],
+            total: 0,
+            hasNext: false,
+            hasPrev: false,
+            nextCursor: null,
+            prevCursor: null,
+          };
+        }
+      }
+
+      const dataParams = [...params];
+      let cursorClause = '';
+      if (cursorPayload && !lastPage) {
+        dataParams.push(String(cursorPayload.indonesia || ''), Number(cursorPayload.id) || 0);
+        const indonesiaIdx = dataParams.length - 1;
+        const idIdx = dataParams.length;
+        cursorClause = isPrev
+          ? `AND (g.indonesia, g.id) < ($${indonesiaIdx}, $${idIdx})`
+          : `AND (g.indonesia, g.id) > ($${indonesiaIdx}, $${idIdx})`;
+      }
+
+      dataParams.push(cappedLimit + 1);
+      const limitIdx = dataParams.length;
+
+      const dataResult = await db.query(
+        `SELECT g.id, g.indonesia, g.asing, g.bidang, g.bahasa, g.sumber, g.aktif
+         FROM glosarium g
+         ${whereClause}
+         ${cursorClause}
+         ORDER BY g.indonesia ${orderDesc ? 'DESC' : 'ASC'}, g.id ${orderDesc ? 'DESC' : 'ASC'}
+         LIMIT $${limitIdx}`,
+        dataParams
+      );
+
+      const hasMore = dataResult.rows.length > cappedLimit;
+      let rows = hasMore ? dataResult.rows.slice(0, cappedLimit) : dataResult.rows;
+      if (orderDesc) {
+        rows = rows.reverse();
+      }
+
+      const first = rows[0];
+      const last = rows[rows.length - 1];
+      const prevCursor = first ? encodeCursor({ indonesia: first.indonesia, id: first.id }) : null;
+      const nextCursor = last ? encodeCursor({ indonesia: last.indonesia, id: last.id }) : null;
+
+      let hasPrev = false;
+      let hasNext = false;
+      if (lastPage) {
+        hasNext = false;
+        hasPrev = total > rows.length;
+      } else if (isPrev) {
+        hasPrev = hasMore;
+        hasNext = Boolean(cursorPayload);
+      } else {
+        hasPrev = Boolean(cursorPayload);
+        hasNext = hasMore;
+      }
+
+      return {
+        data: rows,
+        total,
+        hasPrev,
+        hasNext,
+        prevCursor,
+        nextCursor,
+      };
+    }
+
     const cappedLimit = Math.min(Math.max(Number(limit) || 20, 1), 200);
     const cursorPayload = decodeCursor(cursor);
     const isPrev = direction === 'prev';
@@ -149,6 +484,12 @@ class ModelGlosarium {
     const conditions = [];
     const params = [];
     let idx = 1;
+    const normalizedBidangId = parseOptionalPositiveInt(bidangId);
+    const normalizedSumberId = parseOptionalPositiveInt(sumberId);
+    const normalizedBidangKode = String(bidangKode || '').trim();
+    const normalizedSumberKode = String(sumberKode || '').trim();
+    const normalizedBidang = String(bidang || '').trim();
+    const normalizedSumber = String(sumber || '').trim();
 
     if (aktifSaja) {
       conditions.push('g.aktif = TRUE');
@@ -166,16 +507,30 @@ class ModelGlosarium {
       idx++;
     }
 
-    if (bidang) {
-      conditions.push(`g.bidang = $${idx}`);
-      params.push(bidang);
+    if (normalizedBidangId) {
+      conditions.push(`g.bidang_id = $${idx}`);
+      params.push(normalizedBidangId);
       idx++;
+    } else if (normalizedBidangKode || normalizedBidang) {
+      conditions.push(`(
+        ($${idx} <> '' AND LOWER(b.kode) = LOWER($${idx}))
+        OR ($${idx + 1} <> '' AND LOWER(b.nama) = LOWER($${idx + 1}))
+      )`);
+      params.push(normalizedBidangKode || normalizedBidang, normalizedBidang);
+      idx += 2;
     }
 
-    if (sumber) {
-      conditions.push(`g.sumber = $${idx}`);
-      params.push(sumber);
+    if (normalizedSumberId) {
+      conditions.push(`g.sumber_id = $${idx}`);
+      params.push(normalizedSumberId);
       idx++;
+    } else if (normalizedSumberKode || normalizedSumber) {
+      conditions.push(`(
+        ($${idx} <> '' AND LOWER(s.kode) = LOWER($${idx}))
+        OR ($${idx + 1} <> '' AND LOWER(s.nama) = LOWER($${idx + 1}))
+      )`);
+      params.push(normalizedSumberKode || normalizedSumber, normalizedSumber);
+      idx += 2;
     }
 
     if (bahasa === 'id') {
@@ -189,7 +544,11 @@ class ModelGlosarium {
     let total = 0;
     if (hitungTotal) {
       const countResult = await db.query(
-        `SELECT COUNT(*) as total FROM glosarium g ${whereClause}`,
+        `SELECT COUNT(*) as total
+         FROM glosarium g
+         JOIN bidang b ON b.id = g.bidang_id
+         JOIN sumber s ON s.id = g.sumber_id
+         ${whereClause}`,
         params
       );
       total = parseCount(countResult.rows[0]?.total);
@@ -220,8 +579,21 @@ class ModelGlosarium {
     const limitIdx = dataParams.length;
 
     const dataResult = await db.query(
-      `SELECT g.id, g.indonesia, g.asing, g.bidang, g.bahasa, g.sumber, g.aktif
+      `SELECT
+         g.id,
+         g.indonesia,
+         g.asing,
+         g.bidang_id,
+         b.kode AS bidang_kode,
+         b.nama AS bidang,
+         g.bahasa,
+         g.sumber_id,
+         s.kode AS sumber_kode,
+         s.nama AS sumber,
+         g.aktif
        FROM glosarium g
+       JOIN bidang b ON b.id = g.bidang_id
+       JOIN sumber s ON s.id = g.sumber_id
        ${whereClause}
        ${cursorClause}
        ORDER BY g.indonesia ${orderDesc ? 'DESC' : 'ASC'}, g.id ${orderDesc ? 'DESC' : 'ASC'}
@@ -268,12 +640,31 @@ class ModelGlosarium {
    * @returns {Promise<Array>}
    */
   static async ambilDaftarBidang(aktifSaja = true) {
-    const kondisiAktif = aktifSaja ? 'AND aktif = TRUE' : '';
+    const normalizedSchema = await isNormalizedGlosariumSchema();
+    if (!normalizedSchema) {
+      const kondisiAktif = aktifSaja ? 'AND aktif = TRUE' : '';
+      const result = await db.query(
+        `SELECT DISTINCT bidang
+          FROM glosarium
+         WHERE bidang IS NOT NULL AND bidang != '' ${kondisiAktif}
+         ORDER BY bidang`
+      );
+      return result.rows;
+    }
+
+    const kondisiAktif = aktifSaja ? 'AND g.aktif = TRUE' : '';
     const result = await db.query(
-      `SELECT DISTINCT bidang
-        FROM glosarium
-       WHERE bidang IS NOT NULL AND bidang != '' ${kondisiAktif}
-       ORDER BY bidang`
+      `SELECT
+         b.id,
+         b.kode,
+         b.nama,
+         b.nama AS bidang,
+         COUNT(g.id)::int AS jumlah
+       FROM bidang b
+       JOIN glosarium g ON g.bidang_id = b.id
+       WHERE 1 = 1 ${kondisiAktif}
+       GROUP BY b.id, b.kode, b.nama
+       ORDER BY b.nama`
     );
     return result.rows;
   }
@@ -283,14 +674,211 @@ class ModelGlosarium {
    * @returns {Promise<Array>}
    */
   static async ambilDaftarSumber(aktifSaja = true) {
-    const kondisiAktif = aktifSaja ? 'AND aktif = TRUE' : '';
+    const normalizedSchema = await isNormalizedGlosariumSchema();
+    if (!normalizedSchema) {
+      const kondisiAktif = aktifSaja ? 'AND aktif = TRUE' : '';
+      const result = await db.query(
+        `SELECT DISTINCT sumber
+         FROM glosarium
+         WHERE sumber IS NOT NULL AND sumber != '' ${kondisiAktif}
+         ORDER BY sumber`
+      );
+      return result.rows;
+    }
+
+    const kondisiAktif = aktifSaja ? 'AND g.aktif = TRUE' : '';
     const result = await db.query(
-      `SELECT DISTINCT sumber
-       FROM glosarium
-       WHERE sumber IS NOT NULL AND sumber != '' ${kondisiAktif}
-       ORDER BY sumber`
+      `SELECT
+         s.id,
+         s.kode,
+         s.nama,
+         s.nama AS sumber,
+         COUNT(g.id)::int AS jumlah
+       FROM sumber s
+       JOIN glosarium g ON g.sumber_id = s.id
+       WHERE 1 = 1 ${kondisiAktif}
+       GROUP BY s.id, s.kode, s.nama
+       ORDER BY s.nama`
     );
     return result.rows;
+  }
+
+  static async daftarMasterBidang({ q = '', aktif = '', limit = 50, offset = 0 } = {}) {
+    const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
+    const safeOffset = Math.max(Number(offset) || 0, 0);
+    const params = [];
+    const conditions = buildMasterFilters({ alias: 'b', q, aktif, params });
+    const whereSql = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    const countResult = await db.query(
+      `SELECT COUNT(*) AS total
+       FROM bidang b
+       ${whereSql}`,
+      params
+    );
+
+    const dataResult = await db.query(
+      `SELECT b.id, b.kode, b.nama, b.aktif, b.keterangan, b.created_at, b.updated_at,
+              (
+                SELECT COUNT(*)::int
+                FROM glosarium g
+                WHERE g.bidang_id = b.id
+              ) AS jumlah_entri
+       FROM bidang b
+       ${whereSql}
+       ORDER BY b.nama ASC
+       LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
+      [...params, cappedLimit, safeOffset]
+    );
+
+    return { data: dataResult.rows, total: parseCount(countResult.rows[0]?.total) };
+  }
+
+  static async daftarMasterSumber({ q = '', aktif = '', limit = 50, offset = 0 } = {}) {
+    const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
+    const safeOffset = Math.max(Number(offset) || 0, 0);
+    const params = [];
+    const conditions = buildMasterFilters({ alias: 's', q, aktif, params });
+    const whereSql = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    const countResult = await db.query(
+      `SELECT COUNT(*) AS total
+       FROM sumber s
+       ${whereSql}`,
+      params
+    );
+
+    const dataResult = await db.query(
+      `SELECT s.id, s.kode, s.nama, s.aktif, s.keterangan, s.created_at, s.updated_at,
+              (
+                SELECT COUNT(*)::int
+                FROM glosarium g
+                WHERE g.sumber_id = s.id
+              ) AS jumlah_entri
+       FROM sumber s
+       ${whereSql}
+       ORDER BY s.nama ASC
+       LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
+      [...params, cappedLimit, safeOffset]
+    );
+
+    return { data: dataResult.rows, total: parseCount(countResult.rows[0]?.total) };
+  }
+
+  static async ambilMasterBidangDenganId(id) {
+    const result = await db.query(
+      `SELECT b.id, b.kode, b.nama, b.aktif, b.keterangan, b.created_at, b.updated_at,
+              (
+                SELECT COUNT(*)::int
+                FROM glosarium g
+                WHERE g.bidang_id = b.id
+              ) AS jumlah_entri
+       FROM bidang b
+       WHERE b.id = $1`,
+      [id]
+    );
+    return result.rows[0] || null;
+  }
+
+  static async ambilMasterSumberDenganId(id) {
+    const result = await db.query(
+      `SELECT s.id, s.kode, s.nama, s.aktif, s.keterangan, s.created_at, s.updated_at,
+              (
+                SELECT COUNT(*)::int
+                FROM glosarium g
+                WHERE g.sumber_id = s.id
+              ) AS jumlah_entri
+       FROM sumber s
+       WHERE s.id = $1`,
+      [id]
+    );
+    return result.rows[0] || null;
+  }
+
+  static async simpanMasterBidang({ id, kode, nama, aktif = true, keterangan = '' }) {
+    const normalizedAktif = normalizeBoolean(aktif, true);
+    if (id) {
+      const result = await db.query(
+        `UPDATE bidang
+         SET kode = $1,
+             nama = $2,
+             aktif = $3,
+             keterangan = NULLIF($4, '')
+         WHERE id = $5
+         RETURNING id`,
+        [kode, nama, normalizedAktif, keterangan, id]
+      );
+      if (!result.rows[0]?.id) return null;
+      return this.ambilMasterBidangDenganId(result.rows[0].id);
+    }
+
+    const result = await db.query(
+      `INSERT INTO bidang (kode, nama, aktif, keterangan)
+       VALUES ($1, $2, $3, NULLIF($4, ''))
+       RETURNING id`,
+      [kode, nama, normalizedAktif, keterangan]
+    );
+
+    return this.ambilMasterBidangDenganId(result.rows[0].id);
+  }
+
+  static async simpanMasterSumber({ id, kode, nama, aktif = true, keterangan = '' }) {
+    const normalizedAktif = normalizeBoolean(aktif, true);
+    if (id) {
+      const result = await db.query(
+        `UPDATE sumber
+         SET kode = $1,
+             nama = $2,
+             aktif = $3,
+             keterangan = NULLIF($4, '')
+         WHERE id = $5
+         RETURNING id`,
+        [kode, nama, normalizedAktif, keterangan, id]
+      );
+      if (!result.rows[0]?.id) return null;
+      return this.ambilMasterSumberDenganId(result.rows[0].id);
+    }
+
+    const result = await db.query(
+      `INSERT INTO sumber (kode, nama, aktif, keterangan)
+       VALUES ($1, $2, $3, NULLIF($4, ''))
+       RETURNING id`,
+      [kode, nama, normalizedAktif, keterangan]
+    );
+
+    return this.ambilMasterSumberDenganId(result.rows[0].id);
+  }
+
+  static async hapusMasterBidang(id) {
+    const usage = await db.query(
+      'SELECT COUNT(*)::int AS total FROM glosarium WHERE bidang_id = $1',
+      [id]
+    );
+    const total = parseCount(usage.rows[0]?.total);
+    if (total > 0) {
+      const error = new Error('Bidang masih dipakai di glosarium dan tidak bisa dihapus');
+      error.code = 'MASTER_IN_USE';
+      throw error;
+    }
+
+    const result = await db.query('DELETE FROM bidang WHERE id = $1 RETURNING id', [id]);
+    return result.rowCount > 0;
+  }
+
+  static async hapusMasterSumber(id) {
+    const usage = await db.query(
+      'SELECT COUNT(*)::int AS total FROM glosarium WHERE sumber_id = $1',
+      [id]
+    );
+    const total = parseCount(usage.rows[0]?.total);
+    if (total > 0) {
+      const error = new Error('Sumber masih dipakai di glosarium dan tidak bisa dihapus');
+      error.code = 'MASTER_IN_USE';
+      throw error;
+    }
+
+    const result = await db.query('DELETE FROM sumber WHERE id = $1 RETURNING id', [id]);
+    return result.rowCount > 0;
   }
 
   /**
@@ -314,8 +902,32 @@ class ModelGlosarium {
    * @returns {Promise<Object|null>}
    */
   static async ambilDenganId(id) {
+    const sudahNormalisasi = await isNormalizedGlosariumSchema();
+    if (!sudahNormalisasi) {
+      const legacyResult = await db.query(
+        'SELECT id, indonesia, asing, bidang, bahasa, sumber, aktif FROM glosarium WHERE id = $1',
+        [id]
+      );
+      return legacyResult.rows[0] || null;
+    }
+
     const result = await db.query(
-      'SELECT id, indonesia, asing, bidang, bahasa, sumber, aktif FROM glosarium WHERE id = $1',
+      `SELECT
+         g.id,
+         g.indonesia,
+         g.asing,
+         g.bidang_id,
+         b.kode AS bidang_kode,
+         b.nama AS bidang,
+         g.bahasa,
+         g.sumber_id,
+         s.kode AS sumber_kode,
+         s.nama AS sumber,
+         g.aktif
+       FROM glosarium g
+       JOIN bidang b ON b.id = g.bidang_id
+       JOIN sumber s ON s.id = g.sumber_id
+       WHERE g.id = $1`,
       [id]
     );
     return result.rows[0] || null;
@@ -327,23 +939,97 @@ class ModelGlosarium {
    * @param {string} updater - Email penyunting
    * @returns {Promise<Object>}
    */
-  static async simpan({ id, indonesia, asing, bidang, bahasa, sumber, aktif }, updater = 'admin') {
-    const nilaiAktif = normalizeBoolean(aktif, true);
-    if (id) {
+  static async simpan({
+    id,
+    indonesia,
+    asing,
+    bidang,
+    bidang_id: bidangId,
+    bidang_kode: bidangKode,
+    bahasa,
+    sumber,
+    sumber_id: sumberId,
+    sumber_kode: sumberKode,
+    aktif,
+  }, updater = 'admin') {
+    const normalizedSchema = await isNormalizedGlosariumSchema();
+    if (!normalizedSchema) {
+      const nilaiAktif = normalizeBoolean(aktif, true);
+      if (id) {
+        const result = await db.query(
+          `UPDATE glosarium SET indonesia = $1, asing = $2, bidang = $3,
+                  bahasa = $4, sumber = $5, aktif = $6, updater = $7, updated = NOW()
+           WHERE id = $8 RETURNING *`,
+          [indonesia, asing, bidang || null, bahasa || 'en', sumber || null, nilaiAktif, updater, id]
+        );
+        return result.rows[0];
+      }
       const result = await db.query(
-        `UPDATE glosarium SET indonesia = $1, asing = $2, bidang = $3,
-                bahasa = $4, sumber = $5, aktif = $6, updater = $7, updated = NOW()
-         WHERE id = $8 RETURNING *`,
-        [indonesia, asing, bidang || null, bahasa || 'en', sumber || null, nilaiAktif, updater, id]
+        `INSERT INTO glosarium (indonesia, asing, bidang, bahasa, sumber, aktif, updater, updated)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, NOW()) RETURNING *`,
+        [indonesia, asing, bidang || null, bahasa || 'en', sumber || null, nilaiAktif, updater]
       );
       return result.rows[0];
     }
-    const result = await db.query(
-      `INSERT INTO glosarium (indonesia, asing, bidang, bahasa, sumber, aktif, updater, updated)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, NOW()) RETURNING *`,
-      [indonesia, asing, bidang || null, bahasa || 'en', sumber || null, nilaiAktif, updater]
-    );
-    return result.rows[0];
+
+    const client = await db.pool.connect();
+    try {
+      const resolvedBidangId = await resolveMasterId(client, {
+        tableName: 'bidang',
+        explicitId: bidangId,
+        kode: bidangKode,
+        nama: bidang,
+      });
+      const resolvedSumberId = await resolveMasterId(client, {
+        tableName: 'sumber',
+        explicitId: sumberId,
+        kode: sumberKode,
+        nama: sumber,
+      });
+
+      if (!resolvedBidangId) {
+        const error = new Error('Bidang tidak valid');
+        error.code = 'INVALID_BIDANG';
+        throw error;
+      }
+      if (!resolvedSumberId) {
+        const error = new Error('Sumber tidak valid');
+        error.code = 'INVALID_SUMBER';
+        throw error;
+      }
+
+      const nilaiAktif = normalizeBoolean(aktif, true);
+      if (id) {
+        const result = await client.query(
+          `UPDATE glosarium
+           SET indonesia = $1,
+               asing = $2,
+               bidang_id = $3,
+               bahasa = $4,
+               sumber_id = $5,
+               aktif = $6,
+               updater = $7,
+               updated = NOW()
+           WHERE id = $8
+           RETURNING id`,
+          [indonesia, asing, resolvedBidangId, bahasa || 'en', resolvedSumberId, nilaiAktif, updater, id]
+        );
+
+        if (!result.rows[0]?.id) return null;
+        return this.ambilDenganId(result.rows[0].id);
+      }
+
+      const result = await client.query(
+        `INSERT INTO glosarium (indonesia, asing, bidang_id, bahasa, sumber_id, aktif, updater, updated)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
+         RETURNING id`,
+        [indonesia, asing, resolvedBidangId, bahasa || 'en', resolvedSumberId, nilaiAktif, updater]
+      );
+
+      return this.ambilDenganId(result.rows[0].id);
+    } finally {
+      client.release();
+    }
   }
 
   /**

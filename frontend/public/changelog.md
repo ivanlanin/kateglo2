@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-02-21 Sabtu
+
+- Memisahkan bidang dan sumber glosarium menjadi tabel sendiri
+
 ## 2026-02-20 Jumat
 
 - Menambahkan fitur pengelolaan peran dan izin pengguna di redaksi
