@@ -141,7 +141,8 @@ describe('KamusDetail', () => {
     mockUseQuery.mockReturnValue({ isLoading: false, isError: true, data: null, error: new Error('Entri tidak ditemukan') });
     render(<KamusDetail />);
     expect(screen.getByText(/belum tersedia di Kateglo/i)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Kembali ke pencarian/i })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /Kembali ke pencarian/i })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Komentar/i })).toBeInTheDocument();
   });
 
   it('menampilkan not found state dengan saran entri mirip', () => {
@@ -1003,7 +1004,8 @@ describe('KamusDetail', () => {
     render(<KamusDetail />);
 
     expect(screen.getByText(/belum tersedia di Kateglo/i)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Kembali ke pencarian/i })).toHaveAttribute('href', '/kamus');
+    expect(screen.queryByRole('link', { name: /Kembali ke pencarian/i })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Komentar/i })).toBeInTheDocument();
   });
 
   it('menggunakan fallback makna/sublema saat field tidak tersedia', () => {

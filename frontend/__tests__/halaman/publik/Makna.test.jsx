@@ -196,6 +196,32 @@ describe('Makna', () => {
     expect(screen.getByText(', atau')).toBeInTheDocument();
   });
 
+  it('saat hasil kosong menampilkan tawaran cari kata itu di kamus', () => {
+    mockParams = { kata: 'laut dalam' };
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const key = options?.queryKey?.[0];
+      if (key === 'cari-makna') {
+        return {
+          data: {
+            total: 0,
+            pageInfo: { hasPrev: false, hasNext: false },
+            data: [],
+          },
+          isLoading: false,
+          isError: false,
+          error: null,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false, error: null };
+    });
+
+    render(<Makna />);
+
+    expect(screen.getByText(/Tidak ada kata yang maknanya mengandung/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'kata itu di kamus' })).toHaveAttribute('href', '/kamus/cari/laut%20dalam');
+  });
+
   it('helper amanDecode fallback saat URI invalid', () => {
     expect(amanDecode('%E0%A4%A')).toBe('%E0%A4%A');
     expect(amanDecode('air')).toBe('air');
