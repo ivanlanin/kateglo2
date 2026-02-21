@@ -6,6 +6,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { cariRima } from '../../api/apiPublik';
+import CursorNavButton from '../../komponen/publik/CursorNavButton';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import { QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
@@ -13,7 +14,15 @@ import { amanDecode } from './Makna';
 
 const LIMIT = 50;
 
-function DaftarRima({ items, pageInfo, onPrev, onNext, isUpdating }) {
+function DaftarRima({
+  items,
+  pageInfo,
+  onPrev,
+  onNext,
+  isUpdating,
+  isPrevLoading,
+  isNextLoading,
+}) {
   if (!items || items.length === 0) {
     return <p className="secondary-text mt-2">Tidak ditemukan.</p>;
   }
@@ -25,14 +34,12 @@ function DaftarRima({ items, pageInfo, onPrev, onNext, isUpdating }) {
     <div className="kamus-detail-subentry-flow mt-2">
       {hasPrev && (
         <>
-          <button
-            type="button"
+          <CursorNavButton
+            symbol="«"
             onClick={onPrev}
-            className="kamus-detail-subentry-link"
             disabled={isUpdating}
-          >
-            «
-          </button>
+            isLoading={isPrevLoading}
+          />
           <span className="secondary-text"> ... </span>
         </>
       )}
@@ -47,14 +54,12 @@ function DaftarRima({ items, pageInfo, onPrev, onNext, isUpdating }) {
       {hasNext && (
         <>
           <span className="secondary-text"> ... </span>
-          <button
-            type="button"
+          <CursorNavButton
+            symbol="»"
             onClick={onNext}
-            className="kamus-detail-subentry-link"
             disabled={isUpdating}
-          >
-            »
-          </button>
+            isLoading={isNextLoading}
+          />
         </>
       )}
     </div>
@@ -69,12 +74,14 @@ function Rima() {
   const [directionAkhir, setDirectionAkhir] = useState('next');
   const [cursorAwal, setCursorAwal] = useState(null);
   const [directionAwal, setDirectionAwal] = useState('next');
+  const [navigasiRimaAktif, setNavigasiRimaAktif] = useState(null);
 
   useEffect(() => {
     setCursorAkhir(null);
     setDirectionAkhir('next');
     setCursorAwal(null);
     setDirectionAwal('next');
+    setNavigasiRimaAktif(null);
   }, [kataAman]);
 
   useEffect(() => {
@@ -99,19 +106,29 @@ function Rima() {
   const rimaAkhir = data?.rima_akhir;
   const rimaAwal = data?.rima_awal;
 
+  useEffect(() => {
+    if (!isFetching) {
+      setNavigasiRimaAktif(null);
+    }
+  }, [isFetching]);
+
   const handleAkhirPrev = () => {
+    setNavigasiRimaAktif('akhir-prev');
     setCursorAkhir(rimaAkhir?.prevCursor);
     setDirectionAkhir('prev');
   };
   const handleAkhirNext = () => {
+    setNavigasiRimaAktif('akhir-next');
     setCursorAkhir(rimaAkhir?.nextCursor);
     setDirectionAkhir('next');
   };
   const handleAwalPrev = () => {
+    setNavigasiRimaAktif('awal-prev');
     setCursorAwal(rimaAwal?.prevCursor);
     setDirectionAwal('prev');
   };
   const handleAwalNext = () => {
+    setNavigasiRimaAktif('awal-next');
     setCursorAwal(rimaAwal?.nextCursor);
     setDirectionAwal('next');
   };
@@ -149,6 +166,8 @@ function Rima() {
               onPrev={handleAkhirPrev}
               onNext={handleAkhirNext}
               isUpdating={isFetching}
+              isPrevLoading={isFetching && navigasiRimaAktif === 'akhir-prev'}
+              isNextLoading={isFetching && navigasiRimaAktif === 'akhir-next'}
             />
           </div>
 
@@ -167,6 +186,8 @@ function Rima() {
               onPrev={handleAwalPrev}
               onNext={handleAwalNext}
               isUpdating={isFetching}
+              isPrevLoading={isFetching && navigasiRimaAktif === 'awal-prev'}
+              isNextLoading={isFetching && navigasiRimaAktif === 'awal-next'}
             />
           </div>
         </>

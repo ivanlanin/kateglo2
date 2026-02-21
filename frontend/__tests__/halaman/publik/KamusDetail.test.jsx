@@ -182,7 +182,11 @@ describe('KamusDetail', () => {
     expect(screen.getByText('berkata')).toBeInTheDocument();
     expect(screen.getByText('Tesaurus')).toBeInTheDocument();
     expect(screen.getByText('Glosarium')).toBeInTheDocument();
-    expect(ambilDetailKamus).toHaveBeenCalledWith('kata');
+    expect(ambilDetailKamus).toHaveBeenCalledWith('kata', {
+      glosariumLimit: 20,
+      glosariumCursor: null,
+      glosariumDirection: 'next',
+    });
   });
 
   it('menampilkan aksi redaksi dan tautan rujukan KBBI saat admin dan indeks tersedia', () => {

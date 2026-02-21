@@ -389,6 +389,19 @@ describe('routes backend', () => {
     expect(response.body.entri).toHaveLength(1);
   });
 
+  it('GET /api/publik/kamus/detail/:entri meneruskan paging glosarium cursor', async () => {
+    layananKamusPublik.ambilDetailKamus.mockResolvedValue({ indeks: 'kata', entri: [{ id: 1, entri: 'kata' }] });
+
+    const response = await request(createApp()).get('/api/publik/kamus/detail/kata?limit=55&cursor=abc&direction=prev');
+
+    expect(response.status).toBe(200);
+    expect(layananKamusPublik.ambilDetailKamus).toHaveBeenCalledWith('kata', {
+      glosariumLimit: 55,
+      glosariumCursor: 'abc',
+      glosariumDirection: 'prev',
+    });
+  });
+
   it('GET /api/publik/kamus/detail/:entri meneruskan error', async () => {
     layananKamusPublik.ambilDetailKamus.mockRejectedValue(new Error('detail kamus gagal'));
 

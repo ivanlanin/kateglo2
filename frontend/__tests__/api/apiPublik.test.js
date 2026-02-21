@@ -76,6 +76,24 @@ describe('apiPublik', () => {
     expect(klien.get).toHaveBeenCalledWith('/api/publik/kamus/detail/anak%20ibu');
   });
 
+  it('ambilDetailKamus mendukung paging glosarium pada endpoint detail', async () => {
+    klien.get.mockResolvedValue({ data: { indeks: 'anak ibu' } });
+
+    await ambilDetailKamus('anak ibu', {
+      glosariumLimit: 20,
+      glosariumCursor: 'abc123',
+      glosariumDirection: 'prev',
+    });
+
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/kamus/detail/anak%20ibu', {
+      params: {
+        limit: 20,
+        cursor: 'abc123',
+        direction: 'prev',
+      },
+    });
+  });
+
   it('ambilDetailKamus melempar error terformat saat 404', async () => {
     klien.get.mockRejectedValue({
       response: {

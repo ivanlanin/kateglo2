@@ -1014,35 +1014,157 @@ class ModelGlosarium {
     return result.rowCount > 0;
   }
 
-  static async cariFrasaMengandungKataUtuh(kata, limit = 50) {
+  static async cariFrasaMengandungKataUtuh(kata, options = 50) {
     const trimmed = (kata || '').trim();
-    if (!trimmed) return [];
+    const legacyMode = typeof options === 'number';
+    if (!trimmed) {
+      return legacyMode
+        ? []
+        : {
+          data: [],
+          total: 0,
+          hasPrev: false,
+          hasNext: false,
+          prevCursor: null,
+          nextCursor: null,
+        };
+    }
 
     const token = trimmed
       .toLowerCase()
       .replace(/[^\p{L}\p{N}_-]+/gu, '')
       .trim();
 
-    if (token.length < 3) return [];
+    if (token.length < 3) {
+      return legacyMode
+        ? []
+        : {
+          data: [],
+          total: 0,
+          hasPrev: false,
+          hasNext: false,
+          prevCursor: null,
+          nextCursor: null,
+        };
+    }
 
+    const limit = legacyMode ? options : options?.limit;
     const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
 
-    const result = await db.query(
-      `SELECT DISTINCT g.indonesia, g.asing
-       FROM glosarium g
-       WHERE g.aktif = TRUE
-         AND LOWER(g.indonesia) LIKE ('%' || LOWER($1) || '%')
-         AND LOWER(g.indonesia) ~ (
-         '(^|[^[:alnum:]_])' ||
-         regexp_replace(LOWER($1), '([.^$|()\\[\\]{}*+?\\\\-])', '\\\\\\1', 'g') ||
-         '([^[:alnum:]_]|$)'
-       )
-       ORDER BY g.indonesia ASC, g.asing ASC
-       LIMIT $2`,
-      [trimmed, cappedLimit]
+    if (legacyMode) {
+      const result = await db.query(
+        `SELECT DISTINCT g.indonesia, g.asing
+         FROM glosarium g
+         WHERE g.aktif = TRUE
+           AND LOWER(g.indonesia) LIKE ('%' || LOWER($1) || '%')
+           AND LOWER(g.indonesia) ~ (
+           '(^|[^[:alnum:]_])' ||
+           regexp_replace(LOWER($1), '([.^$|()\\[\\]{}*+?\\\\-])', '\\\\\\1', 'g') ||
+           '([^[:alnum:]_]|$)'
+         )
+         ORDER BY g.indonesia ASC, g.asing ASC
+         LIMIT $2`,
+        [trimmed, cappedLimit]
+      );
+
+      return result.rows;
+    }
+
+    const cursor = typeof options?.cursor === 'string' && options.cursor.trim()
+      ? options.cursor.trim()
+      : null;
+    const direction = options?.direction === 'prev' ? 'prev' : 'next';
+    const hitungTotal = options?.hitungTotal !== false;
+    const cursorPayload = cursor ? decodeCursor(cursor) : null;
+    const isPrev = direction === 'prev';
+    const orderDesc = isPrev;
+
+    const filteredCte = `
+      WITH hasil AS (
+        SELECT MIN(g.id) AS id, g.indonesia, g.asing
+        FROM glosarium g
+        WHERE g.aktif = TRUE
+          AND LOWER(g.indonesia) LIKE ('%' || LOWER($1) || '%')
+          AND LOWER(g.indonesia) ~ (
+          '(^|[^[:alnum:]_])' ||
+          regexp_replace(LOWER($1), '([.^$|()\\[\\]{}*+?\\\\-])', '\\\\\\1', 'g') ||
+          '([^[:alnum:]_]|$)'
+        )
+        GROUP BY g.indonesia, g.asing
+      )
+    `;
+
+    let total = 0;
+    if (hitungTotal) {
+      const countResult = await db.query(
+        `${filteredCte}
+         SELECT COUNT(*) AS total FROM hasil`,
+        [trimmed]
+      );
+      total = parseCount(countResult.rows[0]?.total);
+      if (total === 0) {
+        return {
+          data: [],
+          total: 0,
+          hasPrev: false,
+          hasNext: false,
+          prevCursor: null,
+          nextCursor: null,
+        };
+      }
+    }
+
+    const params = [trimmed];
+    let cursorClause = '';
+    if (cursorPayload) {
+      params.push(String(cursorPayload.indonesia || ''), Number(cursorPayload.id) || 0);
+      const indonesiaIdx = params.length - 1;
+      const idIdx = params.length;
+      cursorClause = isPrev
+        ? `WHERE (indonesia, id) < ($${indonesiaIdx}, $${idIdx})`
+        : `WHERE (indonesia, id) > ($${indonesiaIdx}, $${idIdx})`;
+    }
+
+    params.push(cappedLimit + 1);
+    const limitIdx = params.length;
+
+    const dataResult = await db.query(
+      `${filteredCte}
+       SELECT id, indonesia, asing
+       FROM hasil
+       ${cursorClause}
+       ORDER BY indonesia ${orderDesc ? 'DESC' : 'ASC'}, id ${orderDesc ? 'DESC' : 'ASC'}
+       LIMIT $${limitIdx}`,
+      params
     );
 
-    return result.rows;
+    const hasMore = dataResult.rows.length > cappedLimit;
+    let rows = hasMore ? dataResult.rows.slice(0, cappedLimit) : dataResult.rows;
+    if (orderDesc) {
+      rows = rows.reverse();
+    }
+
+    const first = rows[0];
+    const last = rows[rows.length - 1];
+
+    let hasPrev = false;
+    let hasNext = false;
+    if (isPrev) {
+      hasPrev = hasMore;
+      hasNext = Boolean(cursorPayload);
+    } else {
+      hasPrev = Boolean(cursorPayload);
+      hasNext = hasMore;
+    }
+
+    return {
+      data: rows.map((row) => ({ indonesia: row.indonesia, asing: row.asing })),
+      total,
+      hasPrev,
+      hasNext,
+      prevCursor: first ? encodeCursor({ indonesia: first.indonesia, id: first.id }) : null,
+      nextCursor: last ? encodeCursor({ indonesia: last.indonesia, id: last.id }) : null,
+    };
   }
 }
 

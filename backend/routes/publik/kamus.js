@@ -159,7 +159,16 @@ router.post('/komentar/:indeks', authenticate, async (req, res, next) => {
 
 router.get('/detail/:indeks', async (req, res, next) => {
   try {
-    const data = await ambilDetailKamus(req.params.indeks);
+    const { limit, cursor, direction } = parseCursorPagination(req.query, {
+      defaultLimit: 20,
+      maxLimit: 100,
+    });
+
+    const data = await ambilDetailKamus(req.params.indeks, {
+      glosariumLimit: limit,
+      glosariumCursor: cursor,
+      glosariumDirection: direction,
+    });
     if (!data) {
       const saran = await ModelEntri.saranEntri(decodeURIComponent(req.params.indeks));
       return res.status(404).json({
