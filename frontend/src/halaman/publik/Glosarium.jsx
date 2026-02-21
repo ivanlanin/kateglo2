@@ -25,23 +25,29 @@ import {
   buildMetaSumberGlosarium,
 } from '../../utils/metaUtils';
 
-function normalizeKategoriKey(value = '') {
+export function normalizeKategoriKey(value = '') {
   return String(value || '').trim().toLowerCase();
 }
 
-function resolveKategoriNama(param = '', list = [], nameKeys = [], codeKeys = []) {
-  const target = normalizeKategoriKey(param);
-  if (!target || !Array.isArray(list) || list.length === 0) return String(param || '').trim();
+export function resolveKategoriNama(param, list, nameKeys, codeKeys) {
+  const safeParam = param ?? '';
+  const safeNameKeys = Array.isArray(nameKeys) ? nameKeys : [];
+  const safeCodeKeys = Array.isArray(codeKeys) ? codeKeys : [];
+  const target = normalizeKategoriKey(safeParam);
+  const fallback = String(param ?? '').trim();
+  if (!target) return fallback;
+  if (!Array.isArray(list)) return fallback;
+  if (list.length === 0) return fallback;
 
   const matched = list.find((item) => {
-    const byCode = codeKeys.some((key) => normalizeKategoriKey(item?.[key]) === target);
-    const byName = nameKeys.some((key) => normalizeKategoriKey(item?.[key]) === target);
+    const byCode = safeCodeKeys.some((key) => normalizeKategoriKey(item?.[key]) === target);
+    const byName = safeNameKeys.some((key) => normalizeKategoriKey(item?.[key]) === target);
     return byCode || byName;
   });
 
-  if (!matched) return String(param || '').trim();
-  const nama = nameKeys.map((key) => String(matched?.[key] || '').trim()).find(Boolean);
-  return nama || String(param || '').trim();
+  if (!matched) return fallback;
+  const nama = safeNameKeys.map((key) => String(matched?.[key] || '').trim()).find(Boolean);
+  return nama || fallback;
 }
 
 function Glosarium() {

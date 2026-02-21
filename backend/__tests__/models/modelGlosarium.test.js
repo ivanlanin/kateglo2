@@ -6,11 +6,21 @@
 const db = require('../../db');
 const { encodeCursor } = require('../../utils/cursorPagination');
 const ModelGlosarium = require('../../models/modelGlosarium');
-const { normalizeBoolean } = require('../../models/modelGlosarium').__private;
+const {
+  normalizeBoolean,
+  parseOptionalPositiveInt,
+  resolveMasterId,
+  buildMasterFilters,
+  isNormalizedGlosariumSchema,
+  forceNormalizedSchemaForTest,
+  resetNormalizedSchemaCache,
+} = require('../../models/modelGlosarium').__private;
 
 describe('ModelGlosarium', () => {
   beforeEach(() => {
     db.query.mockReset();
+    db.pool.connect.mockReset();
+    resetNormalizedSchemaCache();
   });
 
   it('autocomplete mengembalikan kosong jika query kosong', async () => {
@@ -642,6 +652,61 @@ describe('ModelGlosarium', () => {
     expect(normalizeBoolean(null)).toBe(true);
   });
 
+  it('parseOptionalPositiveInt mengembalikan null untuk nilai tidak valid', () => {
+    expect(parseOptionalPositiveInt()).toBeNull();
+    expect(parseOptionalPositiveInt('')).toBeNull();
+    expect(parseOptionalPositiveInt(0)).toBeNull();
+    expect(parseOptionalPositiveInt(-2)).toBeNull();
+    expect(parseOptionalPositiveInt('abc')).toBeNull();
+    expect(parseOptionalPositiveInt(5)).toBe(5);
+  });
+
+  it('buildMasterFilters membangun kondisi q/aktif 1/0', () => {
+    const paramsA = [];
+    const filtersA = buildMasterFilters({ alias: 'b', q: 'kim', aktif: '1', params: paramsA });
+    expect(paramsA).toEqual(['%kim%']);
+    expect(filtersA.join(' ')).toContain('b.aktif = TRUE');
+
+    const paramsB = [];
+    const filtersB = buildMasterFilters({ alias: 's', q: '', aktif: '0', params: paramsB });
+    expect(paramsB).toEqual([]);
+    expect(filtersB.join(' ')).toContain('s.aktif = FALSE');
+  });
+
+  it('resolveMasterId mengembalikan explicit id, null, dan hasil query', async () => {
+    const client = { query: jest.fn().mockResolvedValueOnce({ rows: [] }).mockResolvedValueOnce({ rows: [{ id: 77 }] }) };
+
+    const explicit = await resolveMasterId(client, {
+      tableName: 'bidang',
+      explicitId: '8',
+      kode: '',
+      nama: '',
+    });
+    const none = await resolveMasterId(client, {
+      tableName: 'bidang',
+      explicitId: null,
+      kode: ' ',
+      nama: ' ',
+    });
+    const emptyQueryResult = await resolveMasterId(client, {
+      tableName: 'bidang',
+      explicitId: null,
+      kode: 'x',
+      nama: '',
+    });
+    const found = await resolveMasterId(client, {
+      tableName: 'bidang',
+      explicitId: null,
+      kode: 'y',
+      nama: '',
+    });
+
+    expect(explicit).toBe(8);
+    expect(none).toBeNull();
+    expect(emptyQueryResult).toBeNull();
+    expect(found).toBe(77);
+  });
+
   it('ambilDaftarBidang dengan aktifSaja=false tidak menambahkan kondisi aktif', async () => {
     db.query.mockResolvedValue({ rows: [] });
     await ModelGlosarium.ambilDaftarBidang(false);
@@ -656,5 +721,506 @@ describe('ModelGlosarium', () => {
     expect(db.query).toHaveBeenCalledWith(
       expect.not.stringContaining('WHERE s.aktif = TRUE')
     );
+  });
+
+  it('isNormalizedGlosariumSchema melakukan cache hasil saat non-test', async () => {
+    const originalNodeEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'development';
+    db.query.mockResolvedValue({ rows: [{ column_name: 'bidang_id' }, { column_name: 'sumber_id' }] });
+
+    const first = await isNormalizedGlosariumSchema();
+    const second = await isNormalizedGlosariumSchema();
+
+    expect(first).toBe(true);
+    expect(second).toBe(true);
+    expect(db.query).toHaveBeenCalledTimes(1);
+    process.env.NODE_ENV = originalNodeEnv;
+  });
+
+  it('cari memakai query normalized schema saat dipaksa true', async () => {
+    forceNormalizedSchemaForTest(true);
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '2' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 1, indonesia: 'aktif', bidang: 'Kimia', sumber: 'KBBI' }] });
+
+    const result = await ModelGlosarium.cari({
+      q: 'aktif',
+      bidangId: 3,
+      sumberId: 4,
+      bahasa: 'en',
+      aktif: '1',
+      limit: 7,
+      offset: 2,
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('JOIN bidang b ON b.id = g.bidang_id'),
+      ['%aktif%', 3, 4]
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining("g.bahasa = 'en'"),
+      ['%aktif%', 3, 4, 7, 2]
+    );
+    expect(result).toEqual({ data: [{ id: 1, indonesia: 'aktif', bidang: 'Kimia', sumber: 'KBBI' }], total: 2, hasNext: false });
+  });
+
+  it('cari normalized tanpa hitungTotal menghitung hasNext dari limit+1', async () => {
+    forceNormalizedSchemaForTest(true);
+    db.query.mockResolvedValue({ rows: [{ id: 1 }, { id: 2 }, { id: 3 }] });
+
+    const result = await ModelGlosarium.cari({
+      bidangKode: 'ling',
+      sumberKode: 'kbbi',
+      limit: 2,
+      offset: 9,
+      hitungTotal: false,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('LOWER(b.kode) = LOWER($1)'),
+      ['ling', '', 'kbbi', '', 3, 9]
+    );
+    expect(result).toEqual({
+      data: [{ id: 1 }, { id: 2 }],
+      total: 12,
+      hasNext: true,
+    });
+  });
+
+  it('cari normalized mendukung filter nama bidang/sumber dan bahasa id', async () => {
+    forceNormalizedSchemaForTest(true);
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 99, indonesia: 'abc' }] });
+
+    await ModelGlosarium.cari({
+      bidang: 'Kimia',
+      sumber: 'KBBI',
+      bahasa: 'id',
+      aktif: '0',
+      aktifSaja: true,
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining("LOWER(b.nama) = LOWER($2)"),
+      ['Kimia', 'Kimia', 'KBBI', 'KBBI']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining("g.bahasa = 'id'"),
+      ['Kimia', 'Kimia', 'KBBI', 'KBBI', 20, 0]
+    );
+  });
+
+  it('cariCursor normalized mengembalikan kosong saat total 0', async () => {
+    forceNormalizedSchemaForTest(true);
+    db.query.mockResolvedValueOnce({ rows: [{ total: '0' }] });
+
+    const result = await ModelGlosarium.cariCursor({ q: 'tidak ada' });
+
+    expect(result).toEqual({
+      data: [],
+      total: 0,
+      hasNext: false,
+      hasPrev: false,
+      nextCursor: null,
+      prevCursor: null,
+    });
+  });
+
+  it('cariCursor normalized mendukung cursor prev + reverse ordering', async () => {
+    forceNormalizedSchemaForTest(true);
+    const cursor = encodeCursor({ indonesia: 'delta', id: 8 });
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '10' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 7, indonesia: 'charlie' }, { id: 6, indonesia: 'beta' }, { id: 5, indonesia: 'alpha' }] });
+
+    const result = await ModelGlosarium.cariCursor({
+      cursor,
+      direction: 'prev',
+      limit: 2,
+      hitungTotal: true,
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('AND (g.indonesia, g.id) < ($1, $2)'),
+      ['delta', 8, 3]
+    );
+    expect(result.data).toEqual([{ id: 6, indonesia: 'beta' }, { id: 7, indonesia: 'charlie' }]);
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(true);
+  });
+
+  it('cariCursor normalized mendukung filter id dan lastPage', async () => {
+    forceNormalizedSchemaForTest(true);
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '2' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 2, indonesia: 'b' }, { id: 1, indonesia: 'a' }] });
+
+    const result = await ModelGlosarium.cariCursor({
+      bidangId: 9,
+      sumberId: 10,
+      lastPage: true,
+      limit: 2,
+      hitungTotal: true,
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('g.bidang_id = $1'),
+      [9, 10]
+    );
+    expect(result.hasPrev).toBe(false);
+    expect(result.hasNext).toBe(false);
+  });
+
+  it('cariCursor normalized mencakup aktifSaja, aktif=0, filter kode/nama, dan bahasa en', async () => {
+    forceNormalizedSchemaForTest(true);
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '3' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 1, indonesia: 'a' }] });
+
+    await ModelGlosarium.cariCursor({
+      aktifSaja: true,
+      aktif: '0',
+      q: 'istilah',
+      bidangKode: 'kim',
+      sumberKode: 'kbbi',
+      bahasa: 'en',
+      limit: 2,
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('g.aktif = FALSE'),
+      ['%istilah%', 'kim', '', 'kbbi', '']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining("g.bahasa = 'en'"),
+      ['%istilah%', 'kim', '', 'kbbi', '', 3]
+    );
+  });
+
+  it('cariCursor normalized menambahkan filter aktif=true saat aktif=1', async () => {
+    forceNormalizedSchemaForTest(true);
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 1, indonesia: 'a' }] });
+
+    await ModelGlosarium.cariCursor({ aktif: '1', hitungTotal: true });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('g.aktif = TRUE'),
+      []
+    );
+  });
+
+  it('cariCursor normalized next tanpa cursor mengatur hasPrev false dan hasNext true', async () => {
+    forceNormalizedSchemaForTest(true);
+    db.query.mockResolvedValueOnce({
+      rows: [
+        { id: 1, indonesia: 'a' },
+        { id: 2, indonesia: 'b' },
+        { id: 3, indonesia: 'c' },
+      ],
+    });
+
+    const result = await ModelGlosarium.cariCursor({
+      bahasa: 'id',
+      limit: 2,
+      hitungTotal: false,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining("g.bahasa = 'id'"),
+      [3]
+    );
+    expect(result.hasPrev).toBe(false);
+    expect(result.hasNext).toBe(true);
+  });
+
+  it('ambilDenganId memakai query normalized saat schema normalized aktif', async () => {
+    forceNormalizedSchemaForTest(true);
+    db.query.mockResolvedValue({ rows: [{ id: 9, indonesia: 'istilah', bidang: 'Kimia' }] });
+
+    const result = await ModelGlosarium.ambilDenganId(9);
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('JOIN sumber s ON s.id = g.sumber_id'),
+      [9]
+    );
+    expect(result).toEqual({ id: 9, indonesia: 'istilah', bidang: 'Kimia' });
+  });
+
+  it('simpan normalized melempar INVALID_BIDANG jika bidang tidak valid', async () => {
+    forceNormalizedSchemaForTest(true);
+    const client = {
+      query: jest.fn().mockResolvedValue({ rows: [] }),
+      release: jest.fn(),
+    };
+    db.pool.connect.mockResolvedValue(client);
+
+    await expect(ModelGlosarium.simpan({ indonesia: 'istilah', asing: 'term' })).rejects.toMatchObject({
+      code: 'INVALID_BIDANG',
+    });
+    expect(client.release).toHaveBeenCalled();
+  });
+
+  it('simpan normalized melempar INVALID_SUMBER jika sumber tidak valid', async () => {
+    forceNormalizedSchemaForTest(true);
+    const client = {
+      query: jest.fn()
+        .mockResolvedValueOnce({ rows: [{ id: 2 }] })
+        .mockResolvedValueOnce({ rows: [] }),
+      release: jest.fn(),
+    };
+    db.pool.connect.mockResolvedValue(client);
+
+    await expect(ModelGlosarium.simpan({ indonesia: 'istilah', asing: 'term', bidang_id: 2 })).rejects.toMatchObject({
+      code: 'INVALID_SUMBER',
+    });
+    expect(client.release).toHaveBeenCalled();
+  });
+
+  it('simpan normalized update mengembalikan null saat id tidak ditemukan', async () => {
+    forceNormalizedSchemaForTest(true);
+    const client = {
+      query: jest.fn().mockResolvedValue({ rows: [] }),
+      release: jest.fn(),
+    };
+    db.pool.connect.mockResolvedValue(client);
+
+    const result = await ModelGlosarium.simpan({ id: 99, indonesia: 'a', asing: 'b', bidang_id: 2, sumber_id: 3 }, 'editor@example.com');
+
+    expect(result).toBeNull();
+    expect(client.release).toHaveBeenCalled();
+  });
+
+  it('simpan normalized insert dan update sukses mengembalikan detail via ambilDenganId', async () => {
+    forceNormalizedSchemaForTest(true);
+    const client = {
+      query: jest.fn()
+        .mockResolvedValueOnce({ rows: [{ id: 2 }] })
+        .mockResolvedValueOnce({ rows: [{ id: 3 }] })
+        .mockResolvedValueOnce({ rows: [{ id: 10 }] })
+        .mockResolvedValueOnce({ rows: [{ id: 2 }] })
+        .mockResolvedValueOnce({ rows: [{ id: 3 }] })
+        .mockResolvedValueOnce({ rows: [{ id: 11 }] }),
+      release: jest.fn(),
+    };
+    db.pool.connect.mockResolvedValue(client);
+    db.query
+      .mockResolvedValueOnce({ rows: [{ id: 10, indonesia: 'baru' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 11, indonesia: 'ubah' }] });
+
+    const inserted = await ModelGlosarium.simpan({ indonesia: 'baru', asing: 'new', bidang_id: 2, sumber_id: 3 });
+    const updated = await ModelGlosarium.simpan({ id: 11, indonesia: 'ubah', asing: 'upd', bidang_id: 2, sumber_id: 3 });
+
+    expect(inserted).toEqual({ id: 10, indonesia: 'baru' });
+    expect(updated).toEqual({ id: 11, indonesia: 'ubah' });
+    expect(client.release).toHaveBeenCalledTimes(2);
+  });
+
+  it('master bidang/sumber: daftar dan detail menggunakan parse total', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '4' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 1, kode: 'kim', nama: 'Kimia' }] })
+      .mockResolvedValueOnce({ rows: [{ total: '5' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 2, kode: 'kbbi', nama: 'KBBI' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 1 }] })
+      .mockResolvedValueOnce({ rows: [] });
+
+    const bidang = await ModelGlosarium.daftarMasterBidang({ q: 'kim', aktif: '1', limit: 999, offset: -10 });
+    const sumber = await ModelGlosarium.daftarMasterSumber({ q: 'kb', aktif: '0', limit: 0, offset: 3 });
+    const bidangDetail = await ModelGlosarium.ambilMasterBidangDenganId(1);
+    const sumberDetail = await ModelGlosarium.ambilMasterSumberDenganId(9);
+
+    expect(bidang).toEqual({ data: [{ id: 1, kode: 'kim', nama: 'Kimia' }], total: 4 });
+    expect(sumber).toEqual({ data: [{ id: 2, kode: 'kbbi', nama: 'KBBI' }], total: 5 });
+    expect(bidangDetail).toEqual({ id: 1 });
+    expect(sumberDetail).toBeNull();
+  });
+
+  it('simpanMaster bidang/sumber mencakup update-not-found dan insert success', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [{ id: 5 }] })
+      .mockResolvedValueOnce({ rows: [{ id: 5, nama: 'Kimia' }] })
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [{ id: 6 }] })
+      .mockResolvedValueOnce({ rows: [{ id: 6, nama: 'KBBI' }] });
+
+    const bidangUpdateMissing = await ModelGlosarium.simpanMasterBidang({ id: 7, kode: 'x', nama: 'X' });
+    const bidangInsert = await ModelGlosarium.simpanMasterBidang({ kode: 'kim', nama: 'Kimia', aktif: '1' });
+    const sumberUpdateMissing = await ModelGlosarium.simpanMasterSumber({ id: 8, kode: 'x', nama: 'X' });
+    const sumberInsert = await ModelGlosarium.simpanMasterSumber({ kode: 'kbbi', nama: 'KBBI', aktif: 0 });
+
+    expect(bidangUpdateMissing).toBeNull();
+    expect(bidangInsert).toEqual({ id: 5, nama: 'Kimia' });
+    expect(sumberUpdateMissing).toBeNull();
+    expect(sumberInsert).toEqual({ id: 6, nama: 'KBBI' });
+  });
+
+  it('simpanMaster bidang/sumber update sukses mengembalikan detail', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ id: 7 }] })
+      .mockResolvedValueOnce({ rows: [{ id: 7, nama: 'Kimia Baru' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 8 }] })
+      .mockResolvedValueOnce({ rows: [{ id: 8, nama: 'Sumber Baru' }] });
+
+    const bidang = await ModelGlosarium.simpanMasterBidang({ id: 7, kode: 'kim', nama: 'Kimia Baru', aktif: false });
+    const sumber = await ModelGlosarium.simpanMasterSumber({ id: 8, kode: 'kbbi', nama: 'Sumber Baru', aktif: true });
+
+    expect(bidang).toEqual({ id: 7, nama: 'Kimia Baru' });
+    expect(sumber).toEqual({ id: 8, nama: 'Sumber Baru' });
+  });
+
+  it('hapusMaster bidang/sumber melempar MASTER_IN_USE dan menangani hasil delete', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ total: '0' }] })
+      .mockResolvedValueOnce({ rowCount: 0 })
+      .mockResolvedValueOnce({ rows: [{ total: '0' }] })
+      .mockResolvedValueOnce({ rowCount: 1 });
+
+    await expect(ModelGlosarium.hapusMasterBidang(1)).rejects.toMatchObject({ code: 'MASTER_IN_USE' });
+    await expect(ModelGlosarium.hapusMasterBidang(2)).resolves.toBe(false);
+    await expect(ModelGlosarium.hapusMasterSumber(3)).resolves.toBe(true);
+  });
+
+  it('hapusMasterSumber melempar MASTER_IN_USE saat masih dipakai', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ total: '2' }] });
+
+    await expect(ModelGlosarium.hapusMasterSumber(99)).rejects.toMatchObject({ code: 'MASTER_IN_USE' });
+  });
+
+  it('ambilDaftarBidang dan ambilDaftarSumber default aktifSaja=true menambahkan WHERE aktif', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ id: 1 }] }).mockResolvedValueOnce({ rows: [{ id: 2 }] });
+
+    await ModelGlosarium.ambilDaftarBidang();
+    await ModelGlosarium.ambilDaftarSumber();
+
+    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('WHERE b.aktif = TRUE'));
+    expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('WHERE s.aktif = TRUE'));
+  });
+
+  it('cari normalized tanpa filter dan tanpa hitungTotal menangani hasNext=false', async () => {
+    forceNormalizedSchemaForTest(true);
+    db.query.mockResolvedValue({ rows: [{ id: 1 }, { id: 2 }] });
+
+    const result = await ModelGlosarium.cari({ limit: 5, offset: 4, hitungTotal: false });
+
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('ORDER BY g.indonesia ASC'), [6, 4]);
+    expect(result).toEqual({ data: [{ id: 1 }, { id: 2 }], total: 6, hasNext: false });
+  });
+
+  it('cariCursor normalized next dengan cursor eksplisit memakai operator >', async () => {
+    forceNormalizedSchemaForTest(true);
+    const cursor = encodeCursor({ indonesia: 'kata', id: 22 });
+    db.query.mockResolvedValueOnce({ rows: [{ id: 23, indonesia: 'kiri' }] });
+
+    await ModelGlosarium.cariCursor({
+      cursor,
+      direction: 'next',
+      hitungTotal: false,
+      limit: 2,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('AND (g.indonesia, g.id) > ($1, $2)'),
+      ['kata', 22, 3]
+    );
+  });
+
+  it('cariCursor normalized mengembalikan cursor null saat rows kosong', async () => {
+    forceNormalizedSchemaForTest(true);
+    db.query.mockResolvedValueOnce({ rows: [] });
+
+    const result = await ModelGlosarium.cariCursor({ hitungTotal: false, limit: 2 });
+
+    expect(result.prevCursor).toBeNull();
+    expect(result.nextCursor).toBeNull();
+  });
+
+  it('daftarMasterBidang dan daftarMasterSumber mendukung default argumen tanpa filter', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '0' }] })
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [{ total: '0' }] })
+      .mockResolvedValueOnce({ rows: [] });
+
+    const bidang = await ModelGlosarium.daftarMasterBidang();
+    const sumber = await ModelGlosarium.daftarMasterSumber();
+
+    expect(bidang).toEqual({ data: [], total: 0 });
+    expect(sumber).toEqual({ data: [], total: 0 });
+    expect(db.query).toHaveBeenNthCalledWith(1, expect.not.stringContaining('WHERE'), []);
+    expect(db.query).toHaveBeenNthCalledWith(3, expect.not.stringContaining('WHERE'), []);
+  });
+
+  it('ambilMasterBidangDenganId dan ambilDenganId normalized dapat mengembalikan null', async () => {
+    forceNormalizedSchemaForTest(true);
+    db.query.mockResolvedValueOnce({ rows: [] }).mockResolvedValueOnce({ rows: [] });
+
+    const bidang = await ModelGlosarium.ambilMasterBidangDenganId(404);
+    const glosarium = await ModelGlosarium.ambilDenganId(404);
+
+    expect(bidang).toBeNull();
+    expect(glosarium).toBeNull();
+  });
+
+  it('forceNormalizedSchemaForTest menerima nilai non-boolean sebagai reset ke null', async () => {
+    forceNormalizedSchemaForTest('invalid');
+    const result = await isNormalizedGlosariumSchema();
+    expect(result).toBe(false);
+  });
+
+  it('cari normalized menerima limit invalid dan tetap fallback ke 20', async () => {
+    forceNormalizedSchemaForTest(true);
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 1 }] });
+
+    await ModelGlosarium.cari({ limit: 'abc', hitungTotal: true });
+
+    expect(db.query).toHaveBeenNthCalledWith(2, expect.any(String), [20, 0]);
+  });
+
+  it('cariCursor normalized memakai nama saat kode kosong + fallback cursor payload + fallback limit', async () => {
+    forceNormalizedSchemaForTest(true);
+    const cursor = encodeCursor({});
+    db.query.mockResolvedValueOnce({ rows: [] });
+
+    await ModelGlosarium.cariCursor({
+      bidangKode: '',
+      bidang: 'Kimia',
+      sumberKode: '',
+      sumber: 'KBBI',
+      cursor,
+      direction: 'next',
+      hitungTotal: false,
+      limit: 'abc',
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('AND (g.indonesia, g.id) > ($5, $6)'),
+      ['Kimia', 'Kimia', 'KBBI', 'KBBI', '', 0, 21]
+    );
+  });
+
+  it('daftarMasterBidang memakai fallback limit default saat limit tidak valid', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '0' }] })
+      .mockResolvedValueOnce({ rows: [] });
+
+    await ModelGlosarium.daftarMasterBidang({ limit: 0, offset: -3 });
+
+    expect(db.query).toHaveBeenNthCalledWith(2, expect.any(String), [50, 0]);
   });
 });

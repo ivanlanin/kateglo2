@@ -102,4 +102,14 @@ describe('formatUtils.test.js', () => {
     expect(screen.getByRole('link', { name: 'darah' })).toHaveAttribute('href', '/kamus/detail/darah');
     expect(screen.getByText(';')).toBeInTheDocument();
   });
+
+  it('parseEntriGlosarium mengembalikan kosong saat semua bagian terfilter dan renderer non-fungsi', () => {
+    expect(parseEntriGlosarium('1 ; 2 ; 3 .')).toEqual([]);
+    expect(parseEntriGlosarium('1. data; 2. informasi', {})).toEqual(['data', '; ', 'informasi']);
+  });
+
+  it('parseEntriGlosarium mengembalikan array kosong untuk input kosong/null', () => {
+    expect(parseEntriGlosarium('')).toEqual([]);
+    expect(parseEntriGlosarium(null)).toEqual([]);
+  });
 });

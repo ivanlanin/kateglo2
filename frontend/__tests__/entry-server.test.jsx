@@ -131,7 +131,7 @@ describe('entry-server', () => {
       total: 10,
       contoh: [{ indonesia: 'sel', asing: 'cell' }],
     });
-    expect(glosariumBidang.title).toBe('Bidang biologi — Kateglo');
+    expect(glosariumBidang.title).toBe('Glosarium Biologi — Kateglo');
 
     expect(__private.buildMetaForPath('/glosarium/sumber/%20', site).title).toBe('Glosarium — Kateglo');
     const glosariumSumber = __private.buildMetaForPath('/glosarium/sumber/Pusba', site, {
@@ -139,7 +139,7 @@ describe('entry-server', () => {
       total: 10,
       contoh: [{ indonesia: 'sel', asing: 'cell' }],
     });
-    expect(glosariumSumber.title).toBe('Sumber Pusba — Kateglo');
+    expect(glosariumSumber.title).toBe('Glosarium Pusba — Kateglo');
 
     expect(__private.buildMetaForPath('/glosarium', site).title).toBe('Glosarium — Kateglo');
     expect(__private.buildMetaForPath('/kebijakan-privasi', site).title).toBe('Kebijakan Privasi — Kateglo');

@@ -26,6 +26,8 @@ jest.mock('../../models/modelEntri', () => {
   return {
     autocomplete: jest.fn(),
     saranEntri,
+    contohAcak: jest.fn(),
+    cariMakna: jest.fn(),
   };
 });
 
@@ -242,6 +244,87 @@ describe('routes backend', () => {
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('ac gagal');
+  });
+
+  it('GET /api/publik/makna/contoh mengembalikan data contoh acak', async () => {
+    ModelEntri.contohAcak.mockResolvedValue(['kata', 'frasa']);
+
+    const response = await request(createApp()).get('/api/publik/makna/contoh');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ data: ['kata', 'frasa'] });
+    expect(ModelEntri.contohAcak).toHaveBeenCalledWith(5);
+  });
+
+  it('GET /api/publik/makna/contoh meneruskan error', async () => {
+    ModelEntri.contohAcak.mockRejectedValue(new Error('contoh gagal'));
+
+    const response = await request(createApp()).get('/api/publik/makna/contoh');
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('contoh gagal');
+  });
+
+  it('GET /api/publik/makna/cari/:kata validasi query kosong', async () => {
+    const response = await request(createApp()).get('/api/publik/makna/cari/%20%20%20');
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Query tidak boleh kosong');
+    expect(ModelEntri.cariMakna).not.toHaveBeenCalled();
+  });
+
+  it('GET /api/publik/makna/cari/:kata meneruskan cursor pagination ke model', async () => {
+    ModelEntri.cariMakna.mockResolvedValue({
+      data: [{ id: 1, entri: 'kata' }],
+      total: 2,
+      hasPrev: true,
+      hasNext: false,
+      prevCursor: 'prev123',
+      nextCursor: null,
+    });
+
+    const response = await request(createApp())
+      .get('/api/publik/makna/cari/kata?limit=999&cursor=abc&direction=prev&lastPage=1');
+
+    expect(response.status).toBe(200);
+    expect(ModelEntri.cariMakna).toHaveBeenCalledWith('kata', {
+      limit: 100,
+      cursor: 'abc',
+      direction: 'prev',
+      lastPage: true,
+    });
+    expect(response.body.pageInfo).toEqual({
+      hasPrev: true,
+      hasNext: false,
+      prevCursor: 'prev123',
+      nextCursor: null,
+    });
+  });
+
+  it('GET /api/publik/makna/cari/:kata mengembalikan nextCursor ketika tersedia', async () => {
+    ModelEntri.cariMakna.mockResolvedValue({
+      data: [],
+      total: 0,
+      hasPrev: false,
+      hasNext: true,
+      prevCursor: '',
+      nextCursor: 'next123',
+    });
+
+    const response = await request(createApp()).get('/api/publik/makna/cari/kata');
+
+    expect(response.status).toBe(200);
+    expect(response.body.pageInfo.prevCursor).toBeNull();
+    expect(response.body.pageInfo.nextCursor).toBe('next123');
+  });
+
+  it('GET /api/publik/makna/cari/:kata meneruskan error model', async () => {
+    ModelEntri.cariMakna.mockRejectedValue(new Error('makna gagal'));
+
+    const response = await request(createApp()).get('/api/publik/makna/cari/kata');
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('makna gagal');
   });
 
   it('GET /api/publik/kamus/cari/:kata mengembalikan hasil dan clamp paginasi', async () => {

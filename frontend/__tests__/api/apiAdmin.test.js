@@ -32,6 +32,10 @@ import {
   useDetailTesaurusAdmin,
   useDaftarGlosariumAdmin,
   useDetailGlosariumAdmin,
+  useDaftarBidangGlosariumAdmin,
+  useDetailBidangGlosariumAdmin,
+  useDaftarSumberGlosariumAdmin,
+  useDetailSumberGlosariumAdmin,
   useDaftarLabelAdmin,
   useDetailLabelAdmin,
   useKategoriLabelRedaksi,
@@ -59,6 +63,10 @@ import {
   useHapusTesaurus,
   useSimpanGlosarium,
   useHapusGlosarium,
+  useSimpanBidangGlosarium,
+  useHapusBidangGlosarium,
+  useSimpanSumberGlosarium,
+  useHapusSumberGlosarium,
   useSimpanLabel,
   useHapusLabel,
   useSimpanPengguna,
@@ -197,6 +205,26 @@ describe('apiAdmin', () => {
     await glosarium.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium', { params: { limit: 50, cursor: undefined, direction: 'next', lastPage: undefined, q: undefined, aktif: undefined } });
 
+    const glosariumDenganFilterMaster = useDaftarGlosariumAdmin({
+      q: 'term',
+      bidangId: 12,
+      sumberId: 34,
+      aktif: '1',
+    });
+    await glosariumDenganFilterMaster.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium', {
+      params: {
+        limit: 50,
+        cursor: undefined,
+        direction: 'next',
+        lastPage: undefined,
+        q: 'term',
+        aktif: '1',
+        bidang_id: 12,
+        sumber_id: 34,
+      },
+    });
+
     const label = useDaftarLabelAdmin({ q: '' });
     await label.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/label', { params: { limit: 50, cursor: undefined, direction: 'next', lastPage: undefined, q: undefined, aktif: undefined } });
@@ -324,6 +352,28 @@ describe('apiAdmin', () => {
     await detailGlosarium.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium/15');
 
+    const daftarBidang = useDaftarBidangGlosariumAdmin({ limit: 12, q: 'kim', aktif: '1' });
+    await daftarBidang.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium/bidang-master', {
+      params: { limit: 12, cursor: undefined, direction: 'next', lastPage: undefined, q: 'kim', aktif: '1' },
+    });
+
+    const detailBidang = useDetailBidangGlosariumAdmin(18);
+    expect(detailBidang.enabled).toBe(true);
+    await detailBidang.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium/bidang-master/18');
+
+    const daftarSumber = useDaftarSumberGlosariumAdmin({ limit: 13, q: 'kb', aktif: '0' });
+    await daftarSumber.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium/sumber-master', {
+      params: { limit: 13, cursor: undefined, direction: 'next', lastPage: undefined, q: 'kb', aktif: '0' },
+    });
+
+    const detailSumber = useDetailSumberGlosariumAdmin(19);
+    expect(detailSumber.enabled).toBe(true);
+    await detailSumber.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium/sumber-master/19');
+
     const detailLabel = useDetailLabelAdmin(16);
     expect(detailLabel.enabled).toBe(true);
     await detailLabel.queryFn();
@@ -340,6 +390,8 @@ describe('apiAdmin', () => {
     expect(useDetailGlosariumAdmin(null).enabled).toBe(false);
     expect(useDetailLabelAdmin(null).enabled).toBe(false);
     expect(useDetailPengguna(null).enabled).toBe(false);
+    expect(useDetailBidangGlosariumAdmin(null).enabled).toBe(false);
+    expect(useDetailSumberGlosariumAdmin(null).enabled).toBe(false);
   });
 
   it('mengonfigurasi mutation admin pengguna', async () => {
@@ -457,6 +509,34 @@ describe('apiAdmin', () => {
     expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/glosarium/5');
     hapusGlosarium.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-glosarium'] });
+
+    const simpanBidang = useSimpanBidangGlosarium();
+    await simpanBidang.mutationFn({ id: 2, kode: 'kim', nama: 'Kimia' });
+    await simpanBidang.mutationFn({ kode: 'fis', nama: 'Fisika' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/glosarium/bidang-master/2', { id: 2, kode: 'kim', nama: 'Kimia' });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/glosarium/bidang-master', { kode: 'fis', nama: 'Fisika' });
+    simpanBidang.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-glosarium-bidang'] });
+
+    const hapusBidang = useHapusBidangGlosarium();
+    await hapusBidang.mutationFn(2);
+    expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/glosarium/bidang-master/2');
+    hapusBidang.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-glosarium-bidang'] });
+
+    const simpanSumber = useSimpanSumberGlosarium();
+    await simpanSumber.mutationFn({ id: 3, kode: 'kbbi', nama: 'KBBI' });
+    await simpanSumber.mutationFn({ kode: 'pusba', nama: 'Pusba' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/glosarium/sumber-master/3', { id: 3, kode: 'kbbi', nama: 'KBBI' });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/glosarium/sumber-master', { kode: 'pusba', nama: 'Pusba' });
+    simpanSumber.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-glosarium-sumber'] });
+
+    const hapusSumber = useHapusSumberGlosarium();
+    await hapusSumber.mutationFn(3);
+    expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/glosarium/sumber-master/3');
+    hapusSumber.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-glosarium-sumber'] });
 
     const simpanLabel = useSimpanLabel();
     await simpanLabel.mutationFn({ id: 7, kategori: 'ragam', kode: 'cak', nama: 'cakapan' });
