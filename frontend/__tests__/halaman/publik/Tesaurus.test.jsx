@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Tesaurus from '../../../src/halaman/publik/Tesaurus';
-import { cariTesaurus } from '../../../src/api/apiPublik';
+import { ambilContohTesaurus, cariTesaurus } from '../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
 let mockParams = {};
@@ -17,6 +17,7 @@ vi.mock('@tanstack/react-query', () => ({
 
 vi.mock('../../../src/api/apiPublik', () => ({
   cariTesaurus: vi.fn().mockResolvedValue({ data: [], total: 0 }),
+  ambilContohTesaurus: vi.fn().mockResolvedValue({ data: [] }),
 }));
 
 vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
@@ -34,16 +35,25 @@ describe('Tesaurus.test.jsx', () => {
   beforeEach(() => {
     mockUseQuery.mockReset();
     cariTesaurus.mockClear();
+    ambilContohTesaurus.mockClear();
     mockParams = {};
   });
 
   it('menampilkan state default saat tanpa kata', () => {
-    mockUseQuery.mockReturnValue({ data: undefined, isLoading: false, isError: false });
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'tesaurus-contoh') {
+        return { data: { data: ['aktif', 'besar', 'indah'] }, isLoading: false, isError: false };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    });
 
     render(<Tesaurus />);
 
     expect(screen.getByRole('heading', { name: 'Tesaurus' })).toBeInTheDocument();
-    expect(screen.getByText(/Gunakan kolom pencarian di atas/i)).toBeInTheDocument();
+    expect(screen.getByText(/Gunakan kolom pencarian di atas untuk mencari sinonim, antonim, dan relasi kata/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'aktif' })).toHaveAttribute('href', '/tesaurus/cari/aktif');
+    expect(screen.getByRole('link', { name: 'besar' })).toHaveAttribute('href', '/tesaurus/cari/besar');
+    expect(screen.getByRole('link', { name: 'indah' })).toHaveAttribute('href', '/tesaurus/cari/indah');
   });
 
   it('menampilkan loading dan error untuk mode pencarian', () => {

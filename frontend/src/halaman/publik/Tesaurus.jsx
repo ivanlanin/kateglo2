@@ -5,7 +5,7 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { cariTesaurus } from '../../api/apiPublik';
+import { ambilContohTesaurus, cariTesaurus } from '../../api/apiPublik';
 import { useCursorPagination } from '../../hooks/bersama/useCursorPagination';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import HasilPencarian from '../../komponen/publik/HasilPencarian';
@@ -80,6 +80,15 @@ function Tesaurus() {
     enabled: Boolean(kata),
   });
 
+  const { data: dataContoh } = useQuery({
+    queryKey: ['tesaurus-contoh'],
+    queryFn: ambilContohTesaurus,
+    enabled: !kata,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const contohTesaurus = dataContoh?.data || [];
+
   const results = data?.data || [];
   const total = data?.total || 0;
 
@@ -107,7 +116,23 @@ function Tesaurus() {
 
       {/* Tanpa pencarian */}
       {!kata && !isLoading && (
-        <p className="secondary-text">Gunakan kolom pencarian di atas untuk mencari sinonim, antonim, dan relasi kata.</p>
+        <p className="secondary-text">
+          Gunakan kolom pencarian di atas untuk mencari sinonim, antonim, dan relasi kata
+          {contohTesaurus.length > 0 && (
+            <>, misalnya{' '}
+              {contohTesaurus.map((indeks, i) => (
+                <span key={indeks}>
+                  <Link to={`/tesaurus/cari/${encodeURIComponent(indeks)}`} className="link-action">
+                    {indeks}
+                  </Link>
+                  {i < contohTesaurus.length - 2 && ', '}
+                  {i === contohTesaurus.length - 2 && ', atau '}
+                </span>
+              ))}
+            </>
+          )}
+          .
+        </p>
       )}
 
       {/* Hasil pencarian */}

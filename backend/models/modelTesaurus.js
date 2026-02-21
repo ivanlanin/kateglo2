@@ -43,6 +43,20 @@ class ModelTesaurus {
     return autocomplete('tesaurus', 'indeks', query, { limit, extraWhere: 'aktif = TRUE' });
   }
 
+  static async contohAcak(limit = 5) {
+    const cappedLimit = Math.min(Math.max(Number(limit) || 5, 1), 10);
+    const result = await db.query(
+      `SELECT indeks
+       FROM tesaurus
+       WHERE aktif = TRUE
+         AND (sinonim IS NOT NULL OR antonim IS NOT NULL)
+       ORDER BY RANDOM()
+       LIMIT $1`,
+      [cappedLimit]
+    );
+    return result.rows.map((row) => row.indeks);
+  }
+
   /**
    * Cari tesaurus berdasarkan kata
    * @param {string} query - Kata pencarian

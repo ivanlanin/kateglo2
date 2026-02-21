@@ -5,7 +5,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { cariRima } from '../../api/apiPublik';
+import { ambilContohRima, cariRima } from '../../api/apiPublik';
 import CursorNavButton from '../../komponen/publik/CursorNavButton';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import { QueryFeedback } from '../../komponen/publik/StatusKonten';
@@ -84,12 +84,6 @@ function Rima() {
     setNavigasiRimaAktif(null);
   }, [kataAman]);
 
-  useEffect(() => {
-    document.title = kataAman
-      ? `Rima \u201c${kataAman}\u201d \u2014 Kateglo`
-      : 'Rima \u2014 Kateglo';
-  }, [kataAman]);
-
   const { data, isLoading, isFetching, isError, error } = useQuery({
     queryKey: ['cari-rima', kataAman, cursorAkhir, directionAkhir, cursorAwal, directionAwal],
     queryFn: () => cariRima(kataAman, {
@@ -102,6 +96,22 @@ function Rima() {
     enabled: Boolean(kataAman),
     placeholderData: (previousData) => previousData,
   });
+
+  const { data: dataContoh } = useQuery({
+    queryKey: ['rima-contoh'],
+    queryFn: ambilContohRima,
+    enabled: !kataAman,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const contohRima = dataContoh?.data || [];
+
+  const judulHalaman = kataAman
+    ? `Hasil Pencarian Rima "${kataAman}"`
+    : 'Rima';
+  const deskripsiHalaman = kataAman
+    ? `Kata-kata yang berima dengan "${kataAman}" di kamus Kateglo.`
+    : 'Cari kata berdasarkan rima di kamus Kateglo.';
 
   const rimaAkhir = data?.rima_akhir;
   const rimaAwal = data?.rima_awal;
@@ -134,7 +144,7 @@ function Rima() {
   };
 
   return (
-    <HalamanDasar>
+    <HalamanDasar judul={judulHalaman} deskripsi={deskripsiHalaman}>
       <QueryFeedback
         isLoading={isLoading && !data}
         isError={isError}
@@ -143,14 +153,28 @@ function Rima() {
         errorText="Gagal mengambil data. Coba lagi."
       />
 
+      {!kataAman && !isLoading && (
+        <p className="secondary-text">
+          Gunakan kolom pencarian di atas untuk mencari kata yang berima
+          {contohRima.length > 0 && (
+            <>, misalnya{' '}
+              {contohRima.map((indeks, i) => (
+                <span key={indeks}>
+                  <Link to={`/rima/cari/${encodeURIComponent(indeks)}`} className="link-action">
+                    {indeks}
+                  </Link>
+                  {i < contohRima.length - 2 && ', '}
+                  {i === contohRima.length - 2 && ', atau '}
+                </span>
+              ))}
+            </>
+          )}
+          .
+        </p>
+      )}
+
       {kataAman && !isError && data && (
         <>
-          <h1 className="kamus-detail-heading">
-            <span className="kamus-detail-heading-main">
-              Hasil Pencarian Rima &ldquo;{kataAman}&rdquo;
-            </span>
-          </h1>
-
           <div className="mt-6">
             <div className="kamus-detail-subentry-heading-row">
               <h2 className="kamus-detail-def-class mb-0">Rima Akhir</h2>

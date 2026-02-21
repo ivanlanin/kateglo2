@@ -1,13 +1,14 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Rima from '../../../src/halaman/publik/Rima';
-import { cariRima } from '../../../src/api/apiPublik';
+import { ambilContohRima, cariRima } from '../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
 let mockParams = { kata: 'kata' };
 
 vi.mock('../../../src/api/apiPublik', () => ({
   cariRima: vi.fn(),
+  ambilContohRima: vi.fn().mockResolvedValue({ data: [] }),
 }));
 
 vi.mock('@tanstack/react-query', () => ({
@@ -23,6 +24,7 @@ describe('Rima', () => {
   beforeEach(() => {
     mockUseQuery.mockReset();
     cariRima.mockReset();
+    ambilContohRima.mockClear();
     mockParams = { kata: 'kata' };
     document.title = 'Awal';
   });
@@ -99,7 +101,7 @@ describe('Rima', () => {
     expect(screen.getByRole('heading', { name: /Hasil Pencarian Rima/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'kota' })).toHaveAttribute('href', '/kamus/detail/kota');
     expect(screen.getByText('Tidak ditemukan.')).toBeInTheDocument();
-    expect(document.title).toBe('Rima “kata” — Kateglo');
+    expect(document.title).toBe('Hasil Pencarian Rima "kata" — Kateglo');
   });
 
   it('navigasi cursor rima akhir dan awal meneruskan state ke query berikutnya', async () => {
@@ -190,19 +192,36 @@ describe('Rima', () => {
 
   it('aman saat kata kosong: query disabled dan title default', () => {
     mockParams = { kata: '' };
-    mockUseQuery.mockImplementation((options) => ({
-      data: null,
-      isLoading: false,
-      isFetching: false,
-      isError: false,
-      error: null,
-      enabled: options?.enabled,
-    }));
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'rima-contoh') {
+        return {
+          data: { data: ['kata', 'rasa', 'jalan'] },
+          isLoading: false,
+          isFetching: false,
+          isError: false,
+          error: null,
+          enabled: options?.enabled,
+        };
+      }
+      return {
+        data: null,
+        isLoading: false,
+        isFetching: false,
+        isError: false,
+        error: null,
+        enabled: options?.enabled,
+      };
+    });
 
     render(<Rima />);
 
     expect(cariRima).not.toHaveBeenCalled();
     expect(document.title).toBe('Rima — Kateglo');
+    expect(screen.getByRole('heading', { name: 'Rima' })).toBeInTheDocument();
+    expect(screen.getByText(/Gunakan kolom pencarian di atas untuk mencari kata yang berima/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'kata' })).toHaveAttribute('href', '/rima/cari/kata');
+    expect(screen.getByRole('link', { name: 'rasa' })).toHaveAttribute('href', '/rima/cari/rasa');
+    expect(screen.getByRole('link', { name: 'jalan' })).toHaveAttribute('href', '/rima/cari/jalan');
     expect(screen.queryByText(/Hasil Pencarian Rima/i)).not.toBeInTheDocument();
   });
 
