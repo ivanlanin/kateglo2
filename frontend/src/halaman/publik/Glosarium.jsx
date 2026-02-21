@@ -129,7 +129,7 @@ function Glosarium() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           {bidangList?.length > 0 && (
             <KartuKategori
-              judul="Glosarium"
+              judul="Bidang"
               items={bidangList}
               getKey={(item) => item.kode || item.bidang || item.nama}
               getTo={(item) => `/glosarium/bidang/${encodeURIComponent(item.kode || item.bidang || item.nama)}`}
@@ -138,7 +138,7 @@ function Glosarium() {
           )}
           {sumberList?.length > 0 && (
             <KartuKategori
-              judul="Glosarium"
+              judul="Sumber"
               items={sumberList}
               getKey={(item) => item.kode || item.sumber || item.nama}
               getTo={(item) => `/glosarium/sumber/${encodeURIComponent(item.kode || item.sumber || item.nama)}`}
