@@ -759,13 +759,15 @@ function KamusDetail() {
                   )}
                   {glosarium.map((item, i) => (
                     <span key={`${item.indonesia}-${item.asing}-${i}`}>
-                      <span>{item.indonesia}</span>
-                      {item.asing && (
+                      {item.asing ? (
                         <>
-                          <span> (</span>
                           <em>{item.asing}</em>
+                          <span> (</span>
+                          <span>{item.indonesia}</span>
                           <span>)</span>
                         </>
+                      ) : (
+                        <span>{item.indonesia}</span>
                       )}
                       {i < glosarium.length - 1 && <span>; </span>}
                     </span>
