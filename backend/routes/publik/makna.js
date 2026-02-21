@@ -9,6 +9,15 @@ const { parseCursorPagination } = require('../../utils/routesPublikUtils');
 
 const router = express.Router();
 
+router.get('/contoh', async (_req, res, next) => {
+  try {
+    const data = await ModelEntri.contohAcak(5);
+    return res.json({ data });
+  } catch (error) {
+    return next(error);
+  }
+});
+
 router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
   try {
     const kata = decodeURIComponent(req.params.kata).trim();

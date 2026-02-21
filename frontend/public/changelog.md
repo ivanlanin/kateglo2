@@ -4,7 +4,7 @@
 
 - Memisahkan bidang dan sumber glosarium menjadi tabel sendiri
 - Menambahkan entri glosarium dari kamus tata boga, tata busana, dan tata rias Badan Bahasa
-- Menambahkan pencarian makna kata
+- Menambahkan pencarian makna kata dan menunya dengan halaman bawaan memberikan contoh
 - Mempertahankan kata kunci detail kata muncul di kotak cari
 
 ## 2026-02-20 Jumat

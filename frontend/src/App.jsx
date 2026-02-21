@@ -93,6 +93,7 @@ function App() {
         <Route path="/kamus/kelas/:kelas" element={<Kamus />} />
         <Route path="/kamus/:kategori/:kode" element={<Kamus />} />
         <Route path="/kamus/detail/:indeks" element={<KamusDetail />} />
+        <Route path="/makna" element={<Makna />} />
         <Route path="/makna/cari/:kata" element={<Makna />} />
         <Route path="/tesaurus" element={<Tesaurus />} />
         <Route path="/tesaurus/cari/:kata" element={<Tesaurus />} />

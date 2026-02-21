@@ -9,9 +9,9 @@ import { buatPathDetailKamus } from '../../utils/paramUtils';
 
 const opsiKategori = [
   { value: 'kamus', label: 'Kamus', placeholder: 'Cari kata \u2026' },
-  { value: 'makna', label: 'Makna', placeholder: 'Cari berdasarkan makna \u2026' },
   { value: 'tesaurus', label: 'Tesaurus', placeholder: 'Cari relasi \u2026' },
   { value: 'glosarium', label: 'Glosarium', placeholder: 'Cari istilah \u2026' },
+  { value: 'makna', label: 'Makna', placeholder: 'Cari berdasarkan makna \u2026' },
 ];
 
 function deteksiKategori(pathname) {
