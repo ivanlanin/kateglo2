@@ -22,8 +22,10 @@ function deteksiKategori(pathname) {
 }
 
 function ekstrakQuery(pathname) {
-  const match = pathname.match(/^\/(kamus|makna|tesaurus|glosarium)\/cari\/(.+)$/);
-  if (match) return decodeURIComponent(match[2]);
+  const matchCari = pathname.match(/^\/(kamus|makna|tesaurus|glosarium)\/cari\/(.+)$/);
+  if (matchCari) return decodeURIComponent(matchCari[2]);
+  const matchDetail = pathname.match(/^\/kamus\/detail\/(.+)$/);
+  if (matchDetail) return decodeURIComponent(matchDetail[1]);
   return '';
 }
 
