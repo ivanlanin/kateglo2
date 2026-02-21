@@ -1341,6 +1341,69 @@ describe('routes/redaksi', () => {
       expect(put.status).toBe(500);
       expect(del.status).toBe(500);
     });
+
+    it('POST/PUT /api/redaksi/glosarium mengembalikan 400 untuk INVALID_BIDANG dan INVALID_SUMBER', async () => {
+      const invalidBidangError = new Error('Bidang tidak valid');
+      invalidBidangError.code = 'INVALID_BIDANG';
+      const invalidSumberError = new Error('Sumber tidak valid');
+      invalidSumberError.code = 'INVALID_SUMBER';
+
+      ModelGlosarium.simpan
+        .mockRejectedValueOnce(invalidBidangError)
+        .mockRejectedValueOnce(invalidSumberError)
+        .mockRejectedValueOnce(invalidBidangError)
+        .mockRejectedValueOnce(invalidSumberError);
+
+      const postBidang = await callAsAdmin('post', '/api/redaksi/glosarium', { body: { indonesia: 'istilah', asing: 'term' } });
+      const postSumber = await callAsAdmin('post', '/api/redaksi/glosarium', { body: { indonesia: 'istilah', asing: 'term' } });
+      const putBidang = await callAsAdmin('put', '/api/redaksi/glosarium/1', { body: { indonesia: 'istilah', asing: 'term' } });
+      const putSumber = await callAsAdmin('put', '/api/redaksi/glosarium/1', { body: { indonesia: 'istilah', asing: 'term' } });
+
+      expect(postBidang.status).toBe(400);
+      expect(postBidang.body.message).toBe('Bidang tidak valid');
+      expect(postSumber.status).toBe(400);
+      expect(postSumber.body.message).toBe('Sumber tidak valid');
+      expect(putBidang.status).toBe(400);
+      expect(putBidang.body.message).toBe('Bidang tidak valid');
+      expect(putSumber.status).toBe(400);
+      expect(putSumber.body.message).toBe('Sumber tidak valid');
+    });
+
+    it('POST/PUT /api/redaksi/glosarium tetap meneruskan saat error nullish', async () => {
+      ModelGlosarium.simpan
+        .mockRejectedValueOnce(null)
+        .mockRejectedValueOnce(undefined);
+
+      const post = await callAsAdmin('post', '/api/redaksi/glosarium', { body: { indonesia: 'istilah', asing: 'term' } });
+      const put = await callAsAdmin('put', '/api/redaksi/glosarium/1', { body: { indonesia: 'istilah', asing: 'term' } });
+
+      expect(post.status).toBe(404);
+      expect(put.status).toBe(404);
+    });
+
+    it('POST/PUT /api/redaksi/glosarium meneruskan bidang_id/sumber_id saat integer positif', async () => {
+      ModelGlosarium.simpan.mockResolvedValueOnce({ id: 1 }).mockResolvedValueOnce({ id: 1 });
+
+      const post = await callAsAdmin('post', '/api/redaksi/glosarium', {
+        body: { indonesia: 'istilah', asing: 'term', bidang_id: 3, sumber_id: 5 },
+      });
+      const put = await callAsAdmin('put', '/api/redaksi/glosarium/1', {
+        body: { indonesia: 'istilah', asing: 'term', bidang_id: 7, sumber_id: 9 },
+      });
+
+      expect(post.status).toBe(201);
+      expect(put.status).toBe(200);
+      expect(ModelGlosarium.simpan).toHaveBeenNthCalledWith(
+        1,
+        expect.objectContaining({ bidang_id: 3, sumber_id: 5 }),
+        'admin@example.com'
+      );
+      expect(ModelGlosarium.simpan).toHaveBeenNthCalledWith(
+        2,
+        expect.objectContaining({ bidang_id: 7, sumber_id: 9, id: 1 }),
+        'admin@example.com'
+      );
+    });
   });
 
   describe('label', () => {

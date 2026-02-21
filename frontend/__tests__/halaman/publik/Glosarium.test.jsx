@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Glosarium from '../../../src/halaman/publik/Glosarium';
+import Glosarium, { resolveKategoriNama } from '../../../src/halaman/publik/Glosarium';
 import {
   cariGlosarium,
   ambilGlosariumPerBidang,
@@ -63,7 +63,7 @@ describe('Glosarium', () => {
 
     render(<Glosarium />);
 
-    expect(screen.getAllByText('Glosarium').length).toBeGreaterThanOrEqual(2);
+    expect(screen.getAllByText('Glosarium').length).toBeGreaterThanOrEqual(1);
     expect(screen.getByRole('link', { name: 'Ling' })).toBeInTheDocument();
     expect(ambilDaftarBidang).toHaveBeenCalled();
     expect(ambilDaftarSumber).toHaveBeenCalled();
@@ -138,6 +138,22 @@ describe('Glosarium', () => {
     });
   });
 
+  it('mode bidang tetap memakai fallback nama dari param saat daftar tidak cocok', () => {
+    mockParams = { bidang: 'tak-ada' };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const key = options?.queryKey?.[0];
+      if (key === 'glosarium-bidang') return { data: [{ kode: 'ling', nama: '' }], isLoading: false, isError: false };
+      if (key === 'glosarium-sumber') return { data: [], isLoading: false, isError: false };
+      return { data: { data: [], total: 0 }, isLoading: false, isError: false };
+    });
+
+    render(<Glosarium />);
+
+    expect(screen.getByRole('heading', { name: 'Glosarium Tak-ada' })).toBeInTheDocument();
+  });
+
   it('menampilkan hasil mode sumber', () => {
     mockParams = { sumber: 'kbbi-iv' };
 
@@ -165,6 +181,55 @@ describe('Glosarium', () => {
       direction: 'next',
       lastPage: false,
     });
+  });
+
+  it('browse tanpa daftar bidang/sumber tidak menampilkan kartu kategori', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryFn) options.queryFn();
+      const key = options?.queryKey?.[0];
+      if (key === 'glosarium-bidang') return { data: [], isLoading: false, isError: false };
+      if (key === 'glosarium-sumber') return { data: [], isLoading: false, isError: false };
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Glosarium />);
+
+    expect(screen.queryByText('Bidang')).not.toBeInTheDocument();
+    expect(screen.queryByText('Sumber')).not.toBeInTheDocument();
+  });
+
+  it('browse memakai fallback item.nama saat kode/bidang/sumber kosong dan resolve nama dari key alternatif', () => {
+    mockParams = { bidang: 'kimia', sumber: 'kbbi' };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const key = options?.queryKey?.[0];
+      if (key === 'glosarium-bidang') {
+        return { data: [{ kode: 'kimia', bidang: '', nama: '' }], isLoading: false, isError: false };
+      }
+      if (key === 'glosarium-sumber') {
+        return { data: [{ kode: '', sumber: 'kbbi', nama: '' }], isLoading: false, isError: false };
+      }
+      return { data: { data: [], total: 0, pageInfo: { hasPrev: false, hasNext: false } }, isLoading: false, isError: false };
+    });
+
+    render(<Glosarium />);
+
+    expect(screen.getByRole('heading', { name: 'Glosarium Kimia' })).toBeInTheDocument();
+
+    mockParams = {};
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryFn) options.queryFn();
+      const key = options?.queryKey?.[0];
+      if (key === 'glosarium-bidang') return { data: [{ nama: 'Kesehatan' }], isLoading: false, isError: false };
+      if (key === 'glosarium-sumber') return { data: [{ nama: 'WHO' }], isLoading: false, isError: false };
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Glosarium />);
+
+    expect(screen.getByRole('link', { name: 'Kesehatan' })).toHaveAttribute('href', '/glosarium/bidang/Kesehatan');
+    expect(screen.getByRole('link', { name: 'WHO' })).toHaveAttribute('href', '/glosarium/sumber/WHO');
   });
 
   it('menampilkan state kosong, loading, dan error', () => {
@@ -274,5 +339,28 @@ describe('Glosarium', () => {
       direction: 'next',
       lastPage: true,
     });
+  });
+
+  it('helper resolveKategoriNama menutup cabang match dan fallback', () => {
+    expect(resolveKategoriNama()).toBe('');
+    expect(resolveKategoriNama('', [{ kode: 'x', nama: 'X' }], ['nama'], ['kode'])).toBe('');
+    expect(resolveKategoriNama('x', null, ['nama'], ['kode'])).toBe('x');
+    expect(resolveKategoriNama('x', [], ['nama'], ['kode'])).toBe('x');
+    expect(resolveKategoriNama('abc', [{ kode: 'def', nama: 'Nama' }], ['nama'], ['kode'])).toBe('abc');
+    expect(resolveKategoriNama('kim', [{ kode: 'kim', nama: '' }], ['nama', 'bidang'], ['kode'])).toBe('kim');
+    expect(resolveKategoriNama('kim', [{ kode: 'kim', nama: 'Kimia' }], ['nama'], ['kode'])).toBe('Kimia');
+  });
+
+  it('browse tetap merender link saat label bidang kosong total', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryFn) options.queryFn();
+      const key = options?.queryKey?.[0];
+      if (key === 'glosarium-bidang') return { data: [{ kode: '', bidang: '', nama: '' }], isLoading: false, isError: false };
+      if (key === 'glosarium-sumber') return { data: [], isLoading: false, isError: false };
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    const { container } = render(<Glosarium />);
+    expect(container.querySelector('a[href="/glosarium/bidang/"]')).toBeInTheDocument();
   });
 });

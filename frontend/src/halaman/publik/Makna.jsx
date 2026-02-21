@@ -12,11 +12,12 @@ import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKont
 import { formatLemaHomonim } from '../../utils/formatUtils';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
 
-function amanDecode(teks = '') {
+export function amanDecode(teks = '') {
+  const raw = teks == null ? '' : String(teks);
   try {
-    return decodeURIComponent(String(teks || ''));
+    return decodeURIComponent(raw);
   } catch {
-    return String(teks || '');
+    return raw;
   }
 }
 

@@ -124,6 +124,24 @@ describe('GlosariumAdmin', () => {
     expect(mutateSimpan).toHaveBeenCalled();
   });
 
+  it('memvalidasi bidang dan sumber wajib dipilih', () => {
+    render(
+      <MemoryRouter>
+        <GlosariumAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    fireEvent.change(screen.getByLabelText(/Indonesia/), { target: { value: 'api' } });
+    fireEvent.change(screen.getByLabelText(/Asing/), { target: { value: 'fire' } });
+    fireEvent.click(screen.getByText('Simpan'));
+    expect(screen.getByText('Bidang wajib dipilih')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText(/Bidang/), { target: { value: '1' } });
+    fireEvent.click(screen.getByText('Simpan'));
+    expect(screen.getByText('Sumber wajib dipilih')).toBeInTheDocument();
+  });
+
   it('menangani error simpan dan hapus', () => {
     mutateSimpan.mockImplementation((_data, opts) => opts.onError?.({ response: { data: { error: 'Err simpan glosarium' } } }));
     mutateHapus.mockImplementation((_id, opts) => opts.onError?.({ response: { data: { error: 'Err hapus glosarium' } } }));
@@ -207,6 +225,21 @@ describe('GlosariumAdmin', () => {
     fireEvent.click(screen.getByText('air'));
     fireEvent.click(screen.getByText('Hapus'));
     expect(mutateHapus).toHaveBeenCalled();
+  });
+
+  it('tetap aman saat opsi bidang/sumber dari API kosong', () => {
+    mockUseDaftarBidangGlosariumAdmin.mockReturnValue({ data: undefined, isLoading: false, isError: false });
+    mockUseDaftarSumberGlosariumAdmin.mockReturnValue({ data: undefined, isLoading: false, isError: false });
+
+    render(
+      <MemoryRouter>
+        <GlosariumAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    expect(screen.getByLabelText(/Bidang/)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Sumber/)).toBeInTheDocument();
   });
 
   it('mengarahkan ke daftar saat id route tidak valid', () => {

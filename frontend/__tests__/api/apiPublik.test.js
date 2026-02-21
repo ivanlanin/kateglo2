@@ -20,6 +20,8 @@ import {
   ambilKomentarKamus,
   simpanKomentarKamus,
   cariTesaurus,
+  ambilContohMakna,
+  cariMakna,
   autocomplete,
   cariGlosarium,
   ambilGlosariumPerBidang,
@@ -127,6 +129,18 @@ describe('apiPublik', () => {
     });
   });
 
+  it('ambilContohMakna dan cariMakna memanggil endpoint makna', async () => {
+    klien.get.mockResolvedValue({ data: { data: [] } });
+
+    await ambilContohMakna();
+    await cariMakna('air', { limit: 30, cursor: 'm-1', direction: 'prev', lastPage: true });
+
+    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/makna/contoh');
+    expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/makna/cari/air', {
+      params: { limit: 30, cursor: 'm-1', direction: 'prev', lastPage: 1 },
+    });
+  });
+
   it('ambilKomentarKamus dan simpanKomentarKamus memanggil endpoint komentar', async () => {
     klien.get.mockResolvedValue({ data: { success: true } });
     klien.post.mockResolvedValue({ data: { success: true } });
@@ -200,6 +214,30 @@ describe('apiPublik', () => {
     const hasil = await autocomplete('kamus', 'x');
 
     expect(hasil).toEqual([{ value: 'kata' }]);
+  });
+
+  it('autocomplete mendukung fallback field value entri/lema/indeks/indonesia/term dan foreign/original', async () => {
+    klien.get.mockResolvedValue({
+      data: {
+        data: [
+          { entri: 'entri-1', foreign: 'foreign-1' },
+          { lema: 'lema-2', original: 'original-2' },
+          { indeks: 'indeks-3' },
+          { indonesia: 'indonesia-4' },
+          { term: 'term-5' },
+        ],
+      },
+    });
+
+    const hasil = await autocomplete('kamus', 'x');
+
+    expect(hasil).toEqual([
+      { value: 'entri-1', asing: 'foreign-1' },
+      { value: 'lema-2', asing: 'original-2' },
+      { value: 'indeks-3' },
+      { value: 'indonesia-4' },
+      { value: 'term-5' },
+    ]);
   });
 
   it('autocomplete dengan kata null/undefined memakai fallback string kosong', async () => {

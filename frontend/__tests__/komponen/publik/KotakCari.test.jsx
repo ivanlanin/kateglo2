@@ -54,11 +54,13 @@ describe('KotakCari', () => {
   });
 
   it('helper deteksi/ekstrak/navigasi bekerja sesuai input', () => {
+    expect(deteksiKategori('/makna/cari/air')).toBe('makna');
     expect(deteksiKategori('/tesaurus/cari/kata')).toBe('tesaurus');
     expect(deteksiKategori('/glosarium/cari/kata')).toBe('glosarium');
     expect(deteksiKategori('/kamus')).toBe('kamus');
 
     expect(ekstrakQuery('/kamus/cari/anak%20ibu')).toBe('anak ibu');
+    expect(ekstrakQuery('/kamus/detail/anak%20ibu')).toBe('anak ibu');
     expect(ekstrakQuery('/bukan/cari/kata')).toBe('');
 
     const navigate = vi.fn();

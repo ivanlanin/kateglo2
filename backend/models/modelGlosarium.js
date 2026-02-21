@@ -64,8 +64,10 @@ function buildMasterFilters({
 }
 
 let cachedNormalizedSchema = null;
+let forcedNormalizedSchemaForTest = null;
 
 async function isNormalizedGlosariumSchema() {
+  if (forcedNormalizedSchemaForTest !== null) return forcedNormalizedSchemaForTest;
   if (process.env.NODE_ENV === 'test') return false;
   if (cachedNormalizedSchema !== null) return cachedNormalizedSchema;
   const result = await db.query(
@@ -1047,4 +1049,15 @@ class ModelGlosarium {
 module.exports = ModelGlosarium;
 module.exports.__private = {
   normalizeBoolean,
+  parseOptionalPositiveInt,
+  resolveMasterId,
+  buildMasterFilters,
+  isNormalizedGlosariumSchema,
+  forceNormalizedSchemaForTest(value) {
+    forcedNormalizedSchemaForTest = typeof value === 'boolean' ? value : null;
+  },
+  resetNormalizedSchemaCache() {
+    cachedNormalizedSchema = null;
+    forcedNormalizedSchemaForTest = null;
+  },
 };

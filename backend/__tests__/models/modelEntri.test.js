@@ -44,6 +44,39 @@ describe('ModelEntri', () => {
     });
   });
 
+  it('contohAcak melakukan clamp limit dan mengembalikan indeks', async () => {
+    db.query.mockResolvedValue({ rows: [{ indeks: 'kata' }, { indeks: 'frasa' }] });
+
+    const result = await ModelEntri.contohAcak(99);
+
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('ORDER BY RANDOM()'), [10]);
+    expect(result).toEqual(['kata', 'frasa']);
+  });
+
+  it('contohAcak memakai fallback limit default saat tidak valid', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    await ModelEntri.contohAcak(0);
+
+    expect(db.query).toHaveBeenCalledWith(expect.any(String), [5]);
+  });
+
+  it('contohAcak mempertahankan limit valid tanpa clamp', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    await ModelEntri.contohAcak(3);
+
+    expect(db.query).toHaveBeenCalledWith(expect.any(String), [3]);
+  });
+
+  it('contohAcak memakai argumen default saat limit tidak diberikan', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    await ModelEntri.contohAcak();
+
+    expect(db.query).toHaveBeenCalledWith(expect.any(String), [5]);
+  });
+
   it('cariIndukAdmin mengembalikan kosong saat query kosong', async () => {
     expect(await ModelEntri.cariIndukAdmin('')).toEqual([]);
     expect(await ModelEntri.cariIndukAdmin('   ')).toEqual([]);
@@ -148,6 +181,126 @@ describe('ModelEntri', () => {
       total: 6,
       hasNext: false,
     });
+  });
+
+  it('cariMakna mengembalikan kosong saat total 0', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ total: '0' }] });
+
+    const result = await ModelEntri.cariMakna('tidak-ada');
+
+    expect(db.query).toHaveBeenCalledTimes(1);
+    expect(result).toEqual({
+      data: [],
+      total: 0,
+      hasPrev: false,
+      hasNext: false,
+      prevCursor: null,
+      nextCursor: null,
+    });
+  });
+
+  it('cariMakna next dengan cursor menghasilkan hasPrev true dan hasNext true', async () => {
+    const cursor = encodeCursor({ entri: 'beta', homografSort: 2, id: 12 });
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '7' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 13, entri: 'charlie', indeks: 'charlie', homograf: 1, homonim: 1, homograf_sort: 1, makna_cocok: [] },
+          { id: 14, entri: 'delta', indeks: 'delta', homograf: 2, homonim: 2, homograf_sort: 2, makna_cocok: [] },
+          { id: 15, entri: 'echo', indeks: 'echo', homograf: 3, homonim: 3, homograf_sort: 3, makna_cocok: [] },
+        ],
+      });
+
+    const result = await ModelEntri.cariMakna('kata', { limit: 2, cursor, direction: 'next' });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('WHERE (entri, homograf_sort, id) > ($2, $3, $4)'),
+      ['%kata%', 'beta', 2, 12, 3]
+    );
+    expect(result.data).toHaveLength(2);
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(true);
+    expect(result.prevCursor).toEqual(expect.any(String));
+    expect(result.nextCursor).toEqual(expect.any(String));
+  });
+
+  it('cariMakna prev tanpa hitungTotal membalik urutan dan set hasNext berdasarkan cursor', async () => {
+    const cursor = encodeCursor({ entri: 'kata', homografSort: 10, id: 22 });
+    db.query.mockResolvedValueOnce({
+      rows: [
+        { id: 21, entri: 'gamma', indeks: 'gamma', homograf: 2, homonim: 2, homograf_sort: 2, makna_cocok: [] },
+        { id: 20, entri: 'beta', indeks: 'beta', homograf: 1, homonim: 1, homograf_sort: 1, makna_cocok: [] },
+        { id: 19, entri: 'alpha', indeks: 'alpha', homograf: 1, homonim: 1, homograf_sort: 1, makna_cocok: [] },
+      ],
+    });
+
+    const result = await ModelEntri.cariMakna('kata', {
+      limit: 2,
+      cursor,
+      direction: 'prev',
+      hitungTotal: false,
+    });
+
+    expect(result.data).toEqual([
+      { id: 20, entri: 'beta', indeks: 'beta', homograf: 1, homonim: 1, makna_cocok: [] },
+      { id: 21, entri: 'gamma', indeks: 'gamma', homograf: 2, homonim: 2, makna_cocok: [] },
+    ]);
+    expect(result.total).toBe(0);
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(true);
+  });
+
+  it('cariMakna lastPage mengatur hasNext false dan hasPrev berdasar total', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '3' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 3, entri: 'c', indeks: 'c', homograf: 1, homonim: 1, homograf_sort: 1, makna_cocok: [] },
+          { id: 2, entri: 'b', indeks: 'b', homograf: 1, homonim: 1, homograf_sort: 1, makna_cocok: [] },
+        ],
+      });
+
+    const result = await ModelEntri.cariMakna('kata', { limit: 2, lastPage: true });
+
+    expect(result.hasNext).toBe(false);
+    expect(result.hasPrev).toBe(true);
+  });
+
+  it('cariMakna memakai fallback limit 100 dan cursor payload default', async () => {
+    const cursor = encodeCursor({});
+    db.query.mockResolvedValueOnce({
+      rows: [
+        { id: 1, entri: 'a', indeks: 'a', homograf: null, homonim: null, homograf_sort: 2147483647, makna_cocok: [] },
+      ],
+    });
+
+    const result = await ModelEntri.cariMakna('kata', {
+      limit: 0,
+      hitungTotal: false,
+      cursor,
+      direction: 'next',
+      lastPage: false,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('WHERE (entri, homograf_sort, id) > ($2, $3, $4)'),
+      ['%kata%', '', 2147483647, 0, 101]
+    );
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(false);
+  });
+
+  it('cariMakna menghasilkan cursor null saat baris data kosong', async () => {
+    db.query.mockResolvedValueOnce({ rows: [] });
+
+    const result = await ModelEntri.cariMakna('kata', {
+      limit: 3,
+      hitungTotal: false,
+    });
+
+    expect(result.prevCursor).toBeNull();
+    expect(result.nextCursor).toBeNull();
   });
 
   it('cariEntriCursor mengembalikan kosong saat total 0', async () => {
