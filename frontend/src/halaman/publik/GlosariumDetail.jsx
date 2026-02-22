@@ -139,7 +139,7 @@ function GlosariumDetail() {
   const meta = buildMetaDetailGlosarium(asingDecoded, data);
 
   useEffect(() => {
-    const judul = meta.judul ? `${meta.judul} — Kateglo` : 'Kateglo';
+    const judul = `${meta.judul} — Kateglo`;
     document.title = judul;
     upsertMetaTag({ name: 'description', content: meta.deskripsi });
     upsertMetaTag({ property: 'og:title', content: judul });
@@ -256,5 +256,9 @@ function GlosariumDetail() {
     </HalamanDasar>
   );
 }
+
+export {
+  upsertMetaTag,
+};
 
 export default GlosariumDetail;

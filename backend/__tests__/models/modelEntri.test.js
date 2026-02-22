@@ -77,6 +77,39 @@ describe('ModelEntri', () => {
     expect(db.query).toHaveBeenCalledWith(expect.any(String), [5]);
   });
 
+  it('contohAcakRima melakukan clamp limit dan mengembalikan indeks', async () => {
+    db.query.mockResolvedValue({ rows: [{ indeks: 'kata' }, { indeks: 'nada' }] });
+
+    const result = await ModelEntri.contohAcakRima(99);
+
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('CHAR_LENGTH(indeks) >= 2'), [10]);
+    expect(result).toEqual(['kata', 'nada']);
+  });
+
+  it('contohAcakRima memakai fallback limit default saat tidak valid', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    await ModelEntri.contohAcakRima(0);
+
+    expect(db.query).toHaveBeenCalledWith(expect.any(String), [5]);
+  });
+
+  it('contohAcakRima mempertahankan limit valid tanpa clamp', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    await ModelEntri.contohAcakRima(3);
+
+    expect(db.query).toHaveBeenCalledWith(expect.any(String), [3]);
+  });
+
+  it('contohAcakRima memakai argumen default saat limit tidak diberikan', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    await ModelEntri.contohAcakRima();
+
+    expect(db.query).toHaveBeenCalledWith(expect.any(String), [5]);
+  });
+
   it('cariIndukAdmin mengembalikan kosong saat query kosong', async () => {
     expect(await ModelEntri.cariIndukAdmin('')).toEqual([]);
     expect(await ModelEntri.cariIndukAdmin('   ')).toEqual([]);

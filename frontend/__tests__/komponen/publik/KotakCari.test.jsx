@@ -62,6 +62,7 @@ describe('KotakCari', () => {
 
     expect(ekstrakQuery('/kamus/cari/anak%20ibu')).toBe('anak ibu');
     expect(ekstrakQuery('/kamus/detail/anak%20ibu')).toBe('anak ibu');
+    expect(ekstrakQuery('/glosarium/detail/zero%20sum')).toBe('zero sum');
     expect(ekstrakQuery('/bukan/cari/kata')).toBe('');
 
     const navigate = vi.fn();
@@ -390,5 +391,27 @@ describe('KotakCari', () => {
     const opsi = within(screen.getByRole('listbox')).getAllByRole('option');
     expect(opsi).toHaveLength(1);
     expect(opsi[0]).toHaveTextContent('baru');
+  });
+
+  it('mode glosarium menampilkan saran dengan format asing (indonesia)', async () => {
+    autocomplete.mockResolvedValue([{ value: 'permainan jumlah nol', asing: 'zero sum game' }]);
+
+    render(<KotakCari autoFocus={false} />);
+
+    fireEvent.change(screen.getByDisplayValue('Kamus'), { target: { value: 'glosarium' } });
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'zero' } });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(300);
+    });
+    await act(async () => {});
+
+    const listbox = screen.getByRole('listbox');
+    const option = within(listbox).getByRole('option');
+    expect(option).toHaveTextContent('zero sum game');
+    expect(option).toHaveTextContent('permainan jumlah nol');
+
+    fireEvent.mouseDown(option);
+    expect(mockNavigate).toHaveBeenCalledWith('/glosarium/cari/zero%20sum%20game');
   });
 });

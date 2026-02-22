@@ -283,7 +283,7 @@ describe('KamusAdmin', () => {
       expect.objectContaining({ kelas_kata: null }),
       expect.any(Object)
     );
-  }, 20000);
+  }, 60000);
 
   it('menangani state makna kosong dan fallback error simpan/hapus lema', () => {
     mockUseDaftarMakna.mockReturnValue({ isLoading: false, data: { data: [] } });

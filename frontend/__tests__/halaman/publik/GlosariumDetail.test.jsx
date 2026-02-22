@@ -1,0 +1,288 @@
+import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import GlosariumDetail from '../../../src/halaman/publik/GlosariumDetail';
+import { upsertMetaTag } from '../../../src/halaman/publik/GlosariumDetail';
+import { ambilDetailGlosarium } from '../../../src/api/apiPublik';
+
+const mockUseQuery = vi.fn();
+let mockParams = { asing: 'zero%20sum' };
+let queryState = {
+  data: undefined,
+  isLoading: false,
+  isFetching: false,
+  isError: false,
+  error: null,
+};
+
+vi.mock('../../../src/api/apiPublik', () => ({
+  ambilDetailGlosarium: vi.fn().mockResolvedValue({}),
+}));
+
+vi.mock('@tanstack/react-query', () => ({
+  useQuery: (...args) => mockUseQuery(...args),
+}));
+
+vi.mock('react-router-dom', () => ({
+  Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
+  useParams: () => mockParams,
+}));
+
+describe('GlosariumDetail', () => {
+  beforeEach(() => {
+    mockUseQuery.mockReset();
+    ambilDetailGlosarium.mockClear();
+    mockParams = { asing: 'zero%20sum' };
+    queryState = {
+      data: undefined,
+      isLoading: false,
+      isFetching: false,
+      isError: false,
+      error: null,
+    };
+
+    document.title = 'Kateglo';
+    document.head.querySelector('meta[name="description"]')?.remove();
+    document.head.querySelector('meta[property="og:title"]')?.remove();
+    document.head.querySelector('meta[property="og:description"]')?.remove();
+    document.head.querySelector('meta[name="twitter:title"]')?.remove();
+    document.head.querySelector('meta[name="twitter:description"]')?.remove();
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.placeholderData) {
+        const previousData = { persis: [{ id: 'prev' }] };
+        expect(options.placeholderData(previousData)).toBe(previousData);
+      }
+      if (options?.enabled !== false && options?.queryFn) {
+        options.queryFn();
+      }
+      return queryState;
+    });
+  });
+
+  it('menampilkan loading dan error feedback', () => {
+    queryState = { data: undefined, isLoading: true, isFetching: false, isError: false, error: null };
+    const { rerender } = render(<GlosariumDetail />);
+    expect(screen.getByText('Memuat…')).toBeInTheDocument();
+
+    queryState = { data: undefined, isLoading: false, isFetching: false, isError: true, error: new Error('gagal') };
+    rerender(<GlosariumDetail />);
+    expect(screen.getByText('Gagal mengambil data.')).toBeInTheDocument();
+  });
+
+  it('menampilkan seksi persis/memuat/mirip, tautan, dan navigasi cursor', () => {
+    queryState = {
+      isLoading: false,
+      isFetching: false,
+      isError: false,
+      error: null,
+      data: {
+        persis: [
+          { id: 1, indonesia: '1 istilah; 2 data', bidang: 'Kimia', bidang_kode: 'kim', sumber: 'KBBI', sumber_kode: 'kbbi' },
+          { id: 2, indonesia: 'tanpa badge' },
+        ],
+        mengandung: [
+          { id: 11, asing: 'zero sum game', indonesia: 'permainan jumlah nol', bidang: 'Ekonomi', bidang_kode: '', sumber: 'Istilah', sumber_kode: '' },
+          { id: 12, asing: 'zero day', indonesia: '', bidang: '', sumber: '' },
+        ],
+        mengandungPage: { hasPrev: true, hasNext: true, prevCursor: 'meng-prev', nextCursor: 'meng-next' },
+        mengandungTotal: 8,
+        mirip: [
+          { id: 21, asing: 'sum', indonesia: 'jumlah', bidang: 'Matematika', bidang_kode: 'mat', sumber: 'KBBI', sumber_kode: 'kbbi' },
+          { id: 22, asing: 'summation', indonesia: 'penjumlahan' },
+        ],
+        miripPage: { hasPrev: true, hasNext: true, prevCursor: 'mir-prev', nextCursor: 'mir-next' },
+        miripTotal: 3,
+      },
+    };
+
+    const { rerender } = render(<GlosariumDetail />);
+
+    expect(screen.getByRole('heading', { name: 'Persis (2)' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Memuat (8)' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Mirip (3)' })).toBeInTheDocument();
+
+    expect(screen.getByRole('link', { name: 'Kimia' })).toHaveAttribute('href', '/glosarium/bidang/kim');
+    expect(screen.getAllByRole('link', { name: 'KBBI' }).every((el) => el.getAttribute('href') === '/glosarium/sumber/kbbi')).toBe(true);
+    expect(screen.getByRole('link', { name: 'istilah' })).toHaveAttribute('href', '/kamus/detail/istilah');
+    expect(screen.getByRole('link', { name: 'zero sum game' })).toHaveAttribute('href', '/glosarium/detail/zero%20sum%20game');
+    expect(screen.getAllByText(';').length).toBeGreaterThan(0);
+
+    const tombolNav = screen.getAllByRole('button');
+    tombolNav.forEach((btn) => fireEvent.click(btn));
+
+    rerender(<GlosariumDetail />);
+
+    expect(ambilDetailGlosarium).toHaveBeenCalledWith('zero sum', { mengandungCursor: null, miripCursor: null });
+    expect(ambilDetailGlosarium).toHaveBeenCalledWith('zero sum', { mengandungCursor: 'meng-prev', miripCursor: null });
+    expect(ambilDetailGlosarium).toHaveBeenCalledWith('zero sum', { mengandungCursor: 'meng-next', miripCursor: 'mir-prev' });
+    expect(ambilDetailGlosarium).toHaveBeenCalledWith('zero sum', { mengandungCursor: 'meng-next', miripCursor: 'mir-next' });
+  });
+
+  it('menampilkan pesan kosong dan tidak merender judul saat param asing kosong', () => {
+    mockParams = { asing: '' };
+    queryState = {
+      isLoading: false,
+      isFetching: false,
+      isError: false,
+      error: null,
+      data: {
+        persis: [],
+        mengandung: [],
+        mengandungPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+        mengandungTotal: 0,
+        mirip: [],
+        miripPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+        miripTotal: 0,
+      },
+    };
+
+    render(<GlosariumDetail />);
+
+    expect(screen.queryByRole('heading', { level: 1 })).not.toBeInTheDocument();
+    expect(screen.getByText('Tidak ada entri glosarium yang ditemukan.')).toBeInTheDocument();
+    expect(ambilDetailGlosarium).not.toHaveBeenCalled();
+  });
+
+  it('memperbarui title dan meta SEO pada render ulang', () => {
+    queryState = {
+      isLoading: false,
+      isFetching: false,
+      isError: false,
+      error: null,
+      data: { persis: [{ id: 1, indonesia: 'istilah' }], mengandung: [], mirip: [] },
+    };
+
+    const { rerender } = render(<GlosariumDetail />);
+    expect(document.title).toContain('zero sum — Kateglo');
+    expect(document.head.querySelector('meta[name="description"]')?.getAttribute('content')).toContain('zero sum');
+
+    mockParams = { asing: 'new%20term' };
+    queryState = {
+      ...queryState,
+      data: { persis: [], mengandung: [], mirip: [] },
+    };
+
+    rerender(<GlosariumDetail />);
+
+    expect(document.title).toContain('new term — Kateglo');
+    expect(document.head.querySelector('meta[property="og:title"]')?.getAttribute('content')).toContain('new term — Kateglo');
+    expect(document.head.querySelector('meta[name="twitter:description"]')?.getAttribute('content')).toContain('new term');
+  });
+
+  it('upsertMetaTag membuat tag baru dan memperbarui tag existing', () => {
+    document.head.querySelector('meta[property="og:glosarium-test"]')?.remove();
+    document.head.querySelector('meta[name="glosarium-custom-name"]')?.remove();
+
+    upsertMetaTag({ name: 'glosarium-custom-name', content: 'nama' });
+    expect(document.head.querySelector('meta[name="glosarium-custom-name"]')?.getAttribute('content')).toBe('nama');
+
+    upsertMetaTag({ property: 'og:glosarium-test', content: 'awal' });
+    expect(document.head.querySelector('meta[property="og:glosarium-test"]')?.getAttribute('content')).toBe('awal');
+
+    upsertMetaTag({ property: 'og:glosarium-test', content: 'baru' });
+    const semua = document.head.querySelectorAll('meta[property="og:glosarium-test"]');
+    expect(semua).toHaveLength(1);
+    expect(semua[0]?.getAttribute('content')).toBe('baru');
+  });
+
+  it('seksi memuat/mirip tanpa cursor tidak memicu navigasi saat tombol diklik', () => {
+    queryState = {
+      isLoading: false,
+      isFetching: false,
+      isError: false,
+      error: null,
+      data: {
+        persis: [],
+        mengandung: [{ id: 11, asing: 'alpha', indonesia: 'alfa' }],
+        mengandungPage: { hasPrev: true, hasNext: true, prevCursor: null, nextCursor: null },
+        mengandungTotal: 1,
+        mirip: [{ id: 21, asing: 'beta', indonesia: 'beta' }],
+        miripPage: { hasPrev: true, hasNext: true, prevCursor: null, nextCursor: null },
+        miripTotal: 1,
+      },
+    };
+
+    render(<GlosariumDetail />);
+    expect(ambilDetailGlosarium).toHaveBeenCalledTimes(1);
+
+    screen.getAllByRole('button').forEach((btn) => fireEvent.click(btn));
+
+    expect(ambilDetailGlosarium).toHaveBeenCalledTimes(1);
+  });
+
+  it('saat pageInfo tanpa prev/next, seksi tetap tampil tanpa tombol navigasi', () => {
+    queryState = {
+      isLoading: false,
+      isFetching: false,
+      isError: false,
+      error: null,
+      data: {
+        persis: [],
+        mengandung: [{ id: 1, asing: 'alpha', indonesia: 'alfa' }],
+        mengandungPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+        mengandungTotal: 1,
+        mirip: [{ id: 2, asing: 'beta', indonesia: 'beta' }],
+        miripPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+        miripTotal: 1,
+      },
+    };
+
+    render(<GlosariumDetail />);
+
+    expect(screen.getByRole('heading', { name: 'Memuat (1)' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Mirip (1)' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '«' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '»' })).not.toBeInTheDocument();
+  });
+
+  it('tetap stabil saat fetching aktif (tanpa reset navigasi)', () => {
+    queryState = {
+      isLoading: false,
+      isFetching: true,
+      isError: false,
+      error: null,
+      data: {
+        persis: [{ id: 1, indonesia: 'istilah' }],
+        mengandung: [],
+        mirip: [],
+      },
+    };
+
+    render(<GlosariumDetail />);
+
+    expect(screen.getByRole('heading', { name: 'Persis (1)' })).toBeInTheDocument();
+  });
+
+  it('menampilkan spinner pada semua aksi navigasi saat fetching aktif', () => {
+    queryState = {
+      isLoading: false,
+      isFetching: false,
+      isError: false,
+      error: null,
+      data: {
+        persis: [],
+        mengandung: [{ id: 11, asing: 'alpha', indonesia: 'alfa' }],
+        mengandungPage: { hasPrev: true, hasNext: true, prevCursor: 'm-prev', nextCursor: 'm-next' },
+        mengandungTotal: 1,
+        mirip: [{ id: 21, asing: 'beta', indonesia: 'beta' }],
+        miripPage: { hasPrev: true, hasNext: true, prevCursor: 'r-prev', nextCursor: 'r-next' },
+        miripTotal: 1,
+      },
+    };
+
+    const { container, rerender } = render(<GlosariumDetail />);
+    const klikDanFetch = (index) => {
+      fireEvent.click(screen.getAllByRole('button')[index]);
+      queryState = { ...queryState, isFetching: true };
+      rerender(<GlosariumDetail />);
+      expect(container.querySelectorAll('svg.animate-spin').length).toBeGreaterThan(0);
+      queryState = { ...queryState, isFetching: false };
+      rerender(<GlosariumDetail />);
+    };
+
+    klikDanFetch(0);
+    klikDanFetch(1);
+    klikDanFetch(2);
+    klikDanFetch(3);
+  });
+});

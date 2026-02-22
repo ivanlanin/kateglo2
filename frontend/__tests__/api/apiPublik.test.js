@@ -20,14 +20,17 @@ import {
   ambilKomentarKamus,
   simpanKomentarKamus,
   cariTesaurus,
+  ambilContohTesaurus,
   ambilContohMakna,
   cariMakna,
   cariRima,
+  ambilContohRima,
   autocomplete,
   cariGlosarium,
   ambilGlosariumPerBidang,
   ambilGlosariumPerSumber,
   ambilDaftarBidang,
+  ambilDetailGlosarium,
   ambilDaftarSumber,
 } from '../../src/api/apiPublik';
 
@@ -174,6 +177,16 @@ describe('apiPublik', () => {
     expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/makna/cari/air', {
       params: { limit: 30, cursor: 'm-1', direction: 'prev', lastPage: 1 },
     });
+  });
+
+  it('ambilContohTesaurus dan ambilContohRima memanggil endpoint contoh', async () => {
+    klien.get.mockResolvedValue({ data: { data: [] } });
+
+    await ambilContohTesaurus();
+    await ambilContohRima();
+
+    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/tesaurus/contoh');
+    expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/rima/contoh');
   });
 
   it('cariRima mengirim semua cursor dan direction ketika diperlukan', async () => {
@@ -333,6 +346,38 @@ describe('apiPublik', () => {
     });
     expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/glosarium/sumber/kbbi', {
       params: { limit: 100 },
+    });
+  });
+
+  it('ambilDetailGlosarium mengirim semua parameter detail jika tersedia', async () => {
+    klien.get.mockResolvedValue({ data: { persis: [] } });
+
+    await ambilDetailGlosarium('zero sum', {
+      limit: 10,
+      mengandungCursor: 'meng-1',
+      miripCursor: 'mir-1',
+    });
+
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/glosarium/detail/zero%20sum', {
+      params: {
+        limit: 10,
+        mengandungCursor: 'meng-1',
+        miripCursor: 'mir-1',
+      },
+    });
+  });
+
+  it('ambilDetailGlosarium mengirim params kosong saat opsi tidak valid/kosong', async () => {
+    klien.get.mockResolvedValue({ data: { persis: [] } });
+
+    await ambilDetailGlosarium('zero sum', {
+      limit: 0,
+      mengandungCursor: '',
+      miripCursor: null,
+    });
+
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/glosarium/detail/zero%20sum', {
+      params: {},
     });
   });
 

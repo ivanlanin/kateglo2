@@ -10,6 +10,7 @@ import {
   buildMetaDetailKamus,
   buildMetaKategoriKamus,
   buildMetaPencarianGlosarium,
+  buildMetaDetailGlosarium,
   buildMetaPencarianKamus,
   buildMetaPencarianTesaurus,
   buildMetaSumberGlosarium,
@@ -121,6 +122,9 @@ describe('metaUtils', () => {
 
     expect(buildMetaBidangGlosarium('', null).judul).toBe('Glosarium');
     expect(buildMetaBidangGlosarium('biologi', { total: 2 }).judul).toBe('Glosarium Biologi');
+    expect(buildMetaDetailGlosarium('', null).judul).toBe('Glosarium');
+    expect(buildMetaDetailGlosarium('term', { persis: [{ id: 1 }] }).deskripsi).toContain('padanan Indonesia ditemukan');
+    expect(buildMetaDetailGlosarium('term', { persis: [] }).deskripsi).toContain('dalam glosarium Kateglo');
     expect(buildMetaSumberGlosarium('', null).judul).toBe('Glosarium');
     expect(buildMetaSumberGlosarium('KBBI', { total: 2 }).judul).toBe('Glosarium KBBI');
   });

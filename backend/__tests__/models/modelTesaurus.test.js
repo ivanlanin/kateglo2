@@ -34,6 +34,39 @@ describe('ModelTesaurus', () => {
     expect(autocomplete).toHaveBeenCalledWith('tesaurus', 'indeks', 'akt', { limit: 8, extraWhere: 'aktif = TRUE' });
   });
 
+  it('contohAcak melakukan clamp limit dan mengembalikan indeks', async () => {
+    db.query.mockResolvedValue({ rows: [{ indeks: 'aktif' }, { indeks: 'dinamis' }] });
+
+    const result = await ModelTesaurus.contohAcak(99);
+
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('ORDER BY RANDOM()'), [10]);
+    expect(result).toEqual(['aktif', 'dinamis']);
+  });
+
+  it('contohAcak memakai fallback limit default saat limit tidak valid', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    await ModelTesaurus.contohAcak(0);
+
+    expect(db.query).toHaveBeenCalledWith(expect.any(String), [5]);
+  });
+
+  it('contohAcak mempertahankan limit valid tanpa clamp', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    await ModelTesaurus.contohAcak(4);
+
+    expect(db.query).toHaveBeenCalledWith(expect.any(String), [4]);
+  });
+
+  it('contohAcak memakai argumen default saat limit tidak diberikan', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    await ModelTesaurus.contohAcak();
+
+    expect(db.query).toHaveBeenCalledWith(expect.any(String), [5]);
+  });
+
   it('cari mengembalikan kosong saat total 0', async () => {
     db.query.mockResolvedValueOnce({ rows: [{ total: '0' }] });
 

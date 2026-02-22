@@ -1375,6 +1375,38 @@ describe('ModelGlosarium', () => {
     );
   });
 
+  it('cariCursor legacy mendukung sortBy indonesia saat bukan asing', async () => {
+    forceNormalizedSchemaForTest(false);
+    db.query.mockResolvedValueOnce({ rows: [] });
+
+    await ModelGlosarium.cariCursor({
+      sortBy: 'indonesia',
+      hitungTotal: false,
+      limit: 2,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('ORDER BY g.indonesia ASC, g.id ASC'),
+      [3]
+    );
+  });
+
+  it('cariCursor normalized mendukung sortBy indonesia saat bukan asing', async () => {
+    forceNormalizedSchemaForTest(true);
+    db.query.mockResolvedValueOnce({ rows: [] });
+
+    await ModelGlosarium.cariCursor({
+      sortBy: 'indonesia',
+      hitungTotal: false,
+      limit: 2,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('ORDER BY g.indonesia ASC, g.id ASC'),
+      [3]
+    );
+  });
+
   it('daftarMasterBidang memakai fallback limit default saat limit tidak valid', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '0' }] })
@@ -1383,5 +1415,101 @@ describe('ModelGlosarium', () => {
     await ModelGlosarium.daftarMasterBidang({ limit: 0, offset: -3 });
 
     expect(db.query).toHaveBeenNthCalledWith(2, expect.any(String), [50, 0]);
+  });
+
+  it('ambilDetailAsing mengembalikan struktur kosong jika kata kosong', async () => {
+    const result = await ModelGlosarium.ambilDetailAsing('   ');
+
+    expect(result).toEqual({
+      persis: [],
+      mengandung: [],
+      mengandungPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+      mengandungTotal: 0,
+      mirip: [],
+      miripPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+      miripTotal: 0,
+    });
+    expect(db.query).not.toHaveBeenCalled();
+  });
+
+  it('ambilDetailAsing menerima asing null dan tetap mengembalikan struktur kosong', async () => {
+    const result = await ModelGlosarium.ambilDetailAsing(null);
+
+    expect(result.persis).toEqual([]);
+    expect(result.mengandung).toEqual([]);
+    expect(result.mirip).toEqual([]);
+    expect(db.query).not.toHaveBeenCalled();
+  });
+
+  it('ambilDetailAsing mode legacy menghitung page/cursor dan total', async () => {
+    forceNormalizedSchemaForTest(false);
+    db.query
+      .mockResolvedValueOnce({ rows: [{ id: 1, asing: 'term', indonesia: 'istilah' }] })
+      .mockResolvedValueOnce({ rows: [{ total: '7' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 2, asing: 'term x', indonesia: 'istilah x' },
+          { id: 3, asing: 'term y', indonesia: 'istilah y' },
+          { id: 4, asing: 'term z', indonesia: 'istilah z' },
+        ],
+      })
+      .mockResolvedValueOnce({ rows: [{ total: '5' }] })
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 9, asing: 'alpha', indonesia: 'a' },
+          { id: 10, asing: 'beta', indonesia: 'b' },
+        ],
+      });
+
+    const result = await ModelGlosarium.ambilDetailAsing('term', {
+      limit: 2,
+      mengandungCursor: encodeCursor({ offset: 4 }),
+      miripCursor: encodeCursor({ offset: 2 }),
+    });
+
+    expect(result.persis).toEqual([{ id: 1, asing: 'term', indonesia: 'istilah' }]);
+    expect(result.mengandung).toHaveLength(2);
+    expect(result.mengandungTotal).toBe(7);
+    expect(result.mengandungPage.hasPrev).toBe(true);
+    expect(result.mengandungPage.hasNext).toBe(true);
+    expect(result.mirip).toEqual([
+      { id: 9, asing: 'alpha', indonesia: 'a' },
+      { id: 10, asing: 'beta', indonesia: 'b' },
+    ]);
+    expect(result.miripTotal).toBe(5);
+    expect(result.miripPage.hasPrev).toBe(true);
+    expect(result.miripPage.hasNext).toBe(false);
+  });
+
+  it('ambilDetailAsing mode normalized menjalankan query join master', async () => {
+    forceNormalizedSchemaForTest(true);
+    db.query
+      .mockResolvedValueOnce({ rows: [{ id: 1, asing: 'term', bidang: 'Kimia', sumber: 'KBBI' }] })
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 2, asing: 'term x', bidang: 'Kimia', sumber: 'KBBI' }] })
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 3, asing: 'alpha', bidang: 'Fisika', sumber: 'KBBI' }] });
+
+    const result = await ModelGlosarium.ambilDetailAsing('term', { limit: 5 });
+
+    expect(result.persis).toEqual([{ id: 1, asing: 'term', bidang: 'Kimia', sumber: 'KBBI' }]);
+    expect(result.mengandung).toEqual([{ id: 2, asing: 'term x', bidang: 'Kimia', sumber: 'KBBI' }]);
+    expect(result.mirip).toEqual([{ id: 3, asing: 'alpha', bidang: 'Fisika', sumber: 'KBBI' }]);
+    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('JOIN bidang b ON b.id = g.bidang_id'), ['term']);
+    expect(db.query).toHaveBeenNthCalledWith(3, expect.stringContaining('LIMIT $2 OFFSET $3'), ['term', 6, 0]);
+  });
+
+  it('ambilDetailAsing memakai fallback limit default saat limit tidak valid', async () => {
+    forceNormalizedSchemaForTest(true);
+    db.query
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [{ total: '0' }] })
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [{ total: '0' }] })
+      .mockResolvedValueOnce({ rows: [] });
+
+    await ModelGlosarium.ambilDetailAsing('term', { limit: 0 });
+
+    expect(db.query).toHaveBeenNthCalledWith(3, expect.stringContaining('LIMIT $2 OFFSET $3'), ['term', 21, 0]);
   });
 });

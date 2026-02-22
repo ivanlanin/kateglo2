@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import KamusDetail from '../../../src/halaman/publik/KamusDetail';
-import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategoriKamus } from '../../../src/api/apiPublik';
+import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategoriKamus, cariGlosarium } from '../../../src/api/apiPublik';
 import {
   upsertMetaTag,
   renderMarkdown,
@@ -33,6 +33,7 @@ vi.mock('../../../src/api/apiPublik', () => ({
   }),
   simpanKomentarKamus: vi.fn(),
   ambilKategoriKamus: vi.fn().mockResolvedValue({}),
+  cariGlosarium: vi.fn().mockResolvedValue({ data: [], total: 0, pageInfo: {} }),
 }));
 
 vi.mock('../../../src/context/authContext', () => ({
@@ -55,6 +56,7 @@ describe('KamusDetail', () => {
     ambilKomentarKamus.mockClear();
     simpanKomentarKamus.mockClear();
     ambilKategoriKamus.mockClear();
+    cariGlosarium.mockClear();
     mockUseAuth.mockReset();
     mockUseAuth.mockReturnValue({
       isAuthenticated: false,
@@ -80,6 +82,65 @@ describe('KamusDetail', () => {
     });
 
     render(<KamusDetail />);
+  });
+
+  it('query fallback glosarium juga memakai placeholderData dari hasil sebelumnya', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-detail') {
+        const previous = { entri: 'sebelumnya', makna: [], subentri: {} };
+        expect(options.placeholderData(previous)).toBe(previous);
+        return { isLoading: false, isError: false, isFetching: false, data: null };
+      }
+
+      if (options?.queryKey?.[0] === 'glosarium-kamus-fallback') {
+        const previous = { data: [{ indonesia: 'lama', asing: 'old' }] };
+        expect(options.placeholderData(previous)).toBe(previous);
+        if (options?.queryFn) options.queryFn();
+        return { isLoading: false, isError: false, isFetching: false, data: previous };
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+          refetch: vi.fn(),
+        };
+      }
+
+      return { isLoading: false, isError: false, isFetching: false, data: {} };
+    });
+
+    render(<KamusDetail />);
+  });
+
+  it('fallback query glosarium menormalkan indeks kosong ke string kosong', () => {
+    mockParams = {};
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'glosarium-kamus-fallback') {
+        if (options?.queryFn) options.queryFn();
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+          refetch: vi.fn(),
+        };
+      }
+
+      return { isLoading: true, isError: false, isFetching: false, data: null };
+    });
+
+    render(<KamusDetail />);
+
+    expect(cariGlosarium).toHaveBeenCalledWith('', {
+      limit: 20,
+      cursor: null,
+      direction: 'next',
+    });
   });
 
   it('membuat meta tag SEO saat tag belum tersedia di head', () => {
@@ -541,6 +602,86 @@ describe('KamusDetail', () => {
     rerender(<KamusDetail />);
     await waitFor(() => {
       expect(container.querySelector('svg.animate-spin')).not.toBeNull();
+    });
+  });
+
+  it('mode not found menjalankan query fallback glosarium dan navigasi prev/next', async () => {
+    mockParams = { indeks: 'kata%20hilang' };
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-detail') {
+        if (options?.queryFn) options.queryFn();
+        return {
+          isLoading: false,
+          isError: true,
+          isFetching: false,
+          data: null,
+          error: new Error('not found'),
+        };
+      }
+
+      if (options?.queryKey?.[0] === 'glosarium-kamus-fallback') {
+        if (options?.enabled !== false && options?.queryFn) options.queryFn();
+        return {
+          isLoading: false,
+          isError: false,
+          isFetching: false,
+          data: {
+            data: [
+              { indonesia: 'istilah fallback', asing: 'fallback term' },
+              { indonesia: 'tanpa asing' },
+            ],
+            total: 2,
+            pageInfo: {
+              hasPrev: true,
+              hasNext: true,
+              prevCursor: 'fb-prev',
+              nextCursor: 'fb-next',
+            },
+          },
+        };
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+          refetch: vi.fn(),
+        };
+      }
+
+      return {
+        isLoading: false,
+        isError: false,
+        data: {},
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(cariGlosarium).toHaveBeenCalledWith('kata hilang', {
+      limit: 20,
+      cursor: null,
+      direction: 'next',
+    });
+    expect(screen.getByText('tanpa asing')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: '«' }));
+    await waitFor(() => {
+      expect(cariGlosarium).toHaveBeenLastCalledWith('kata hilang', {
+        limit: 20,
+        cursor: 'fb-prev',
+        direction: 'prev',
+      });
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: '»' }));
+    await waitFor(() => {
+      expect(cariGlosarium).toHaveBeenLastCalledWith('kata hilang', {
+        limit: 20,
+        cursor: 'fb-next',
+        direction: 'next',
+      });
     });
   });
 

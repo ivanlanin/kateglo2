@@ -11,6 +11,7 @@ jest.mock('../../models/modelGlosarium', () => ({
   autocomplete: jest.fn(),
   cari: jest.fn(),
   cariCursor: jest.fn(),
+  ambilDetailAsing: jest.fn(),
   ambilDaftarBidang: jest.fn(),
   ambilDaftarSumber: jest.fn(),
 }));
@@ -27,6 +28,7 @@ jest.mock('../../models/modelEntri', () => {
     autocomplete: jest.fn(),
     saranEntri,
     contohAcak: jest.fn(),
+    contohAcakRima: jest.fn(),
     cariMakna: jest.fn(),
     cariRima: jest.fn(),
   };
@@ -39,6 +41,7 @@ jest.mock('../../models/modelKomentar', () => ({
 }));
 
 jest.mock('../../models/modelTesaurus', () => ({
+  contohAcak: jest.fn(),
   autocomplete: jest.fn(),
 }));
 
@@ -338,6 +341,25 @@ describe('routes backend', () => {
     expect(ModelEntri.autocomplete).toHaveBeenCalledWith('kat', 8);
   });
 
+  it('GET /api/publik/rima/contoh mengembalikan data contoh acak rima', async () => {
+    ModelEntri.contohAcakRima.mockResolvedValue(['sajak', 'ajak']);
+
+    const response = await request(createApp()).get('/api/publik/rima/contoh');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ data: ['sajak', 'ajak'] });
+    expect(ModelEntri.contohAcakRima).toHaveBeenCalledWith(5);
+  });
+
+  it('GET /api/publik/rima/contoh meneruskan error', async () => {
+    ModelEntri.contohAcakRima.mockRejectedValue(new Error('contoh rima gagal'));
+
+    const response = await request(createApp()).get('/api/publik/rima/contoh');
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('contoh rima gagal');
+  });
+
   it('GET /api/publik/rima/autocomplete/:kata mengembalikan data kosong saat query kosong', async () => {
     const response = await request(createApp()).get('/api/publik/rima/autocomplete/%20%20');
 
@@ -562,6 +584,25 @@ describe('routes backend', () => {
     expect(response.body).toEqual({ data: ['aktif'] });
   });
 
+  it('GET /api/publik/tesaurus/contoh mengembalikan data contoh acak', async () => {
+    ModelTesaurus.contohAcak.mockResolvedValue(['aktif', 'dinamis']);
+
+    const response = await request(createApp()).get('/api/publik/tesaurus/contoh');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ data: ['aktif', 'dinamis'] });
+    expect(ModelTesaurus.contohAcak).toHaveBeenCalledWith(5);
+  });
+
+  it('GET /api/publik/tesaurus/contoh meneruskan error', async () => {
+    ModelTesaurus.contohAcak.mockRejectedValue(new Error('contoh tesaurus gagal'));
+
+    const response = await request(createApp()).get('/api/publik/tesaurus/contoh');
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('contoh tesaurus gagal');
+  });
+
   it('GET /api/publik/tesaurus/autocomplete/:kata meneruskan error', async () => {
     ModelTesaurus.autocomplete.mockRejectedValue(new Error('tesaurus ac gagal'));
 
@@ -629,6 +670,107 @@ describe('routes backend', () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ data: [{ value: 'term' }] });
+  });
+
+  it('GET /api/publik/glosarium/detail/:asing validasi parameter kosong', async () => {
+    const response = await request(createApp()).get('/api/publik/glosarium/detail/%20%20');
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Parameter asing diperlukan');
+    expect(ModelGlosarium.ambilDetailAsing).not.toHaveBeenCalled();
+  });
+
+  it('handler detail glosarium memakai fallback param kosong saat req.params.asing undefined', async () => {
+    const glosariumRouter = require('../../routes/publik/glosarium');
+    const layer = glosariumRouter.stack.find((item) => item.route && item.route.path === '/detail/:asing');
+    const handler = layer.route.stack[1].handle;
+
+    const req = { params: {}, query: {} };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    };
+    const next = jest.fn();
+
+    await handler(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ error: 'Parameter asing diperlukan' });
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  it('GET /api/publik/glosarium/detail/:asing memanggil model dengan cursor pagination section', async () => {
+    ModelGlosarium.ambilDetailAsing.mockResolvedValue({
+      persis: [],
+      mengandung: [],
+      mengandungPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+      mengandungTotal: 0,
+      mirip: [],
+      miripPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+      miripTotal: 0,
+    });
+
+    const response = await request(createApp())
+      .get('/api/publik/glosarium/detail/zero%20sum?limit=999&mengandungCursor=abc&miripCursor=xyz');
+
+    expect(response.status).toBe(200);
+    expect(ModelGlosarium.ambilDetailAsing).toHaveBeenCalledWith('zero sum', {
+      limit: 100,
+      mengandungCursor: 'abc',
+      miripCursor: 'xyz',
+    });
+  });
+
+  it('GET /api/publik/glosarium/detail/:asing mengirim cursor null jika query cursor tidak ada', async () => {
+    ModelGlosarium.ambilDetailAsing.mockResolvedValue({
+      persis: [],
+      mengandung: [],
+      mengandungPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+      mengandungTotal: 0,
+      mirip: [],
+      miripPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+      miripTotal: 0,
+    });
+
+    const response = await request(createApp()).get('/api/publik/glosarium/detail/term');
+
+    expect(response.status).toBe(200);
+    expect(ModelGlosarium.ambilDetailAsing).toHaveBeenCalledWith('term', {
+      limit: 20,
+      mengandungCursor: null,
+      miripCursor: null,
+    });
+  });
+
+  it('GET /api/publik/glosarium/detail/:asing mengubah cursor string kosong menjadi null', async () => {
+    ModelGlosarium.ambilDetailAsing.mockResolvedValue({
+      persis: [],
+      mengandung: [],
+      mengandungPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+      mengandungTotal: 0,
+      mirip: [],
+      miripPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+      miripTotal: 0,
+    });
+
+    const response = await request(createApp())
+      .get('/api/publik/glosarium/detail/term?mengandungCursor=%20%20&miripCursor=%20%20');
+
+    expect(response.status).toBe(200);
+    expect(ModelGlosarium.ambilDetailAsing).toHaveBeenCalledWith('term', {
+      limit: 20,
+      mengandungCursor: null,
+      miripCursor: null,
+    });
+  });
+
+  it('GET /api/publik/glosarium/detail/:asing meneruskan error', async () => {
+    ModelGlosarium.ambilDetailAsing.mockRejectedValue(new Error('detail glosarium gagal'));
+
+    const response = await request(createApp()).get('/api/publik/glosarium/detail/aktif');
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('detail glosarium gagal');
   });
 
   it('GET /api/publik/glosarium/autocomplete/:kata meneruskan error', async () => {
