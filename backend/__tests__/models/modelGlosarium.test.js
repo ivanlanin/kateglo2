@@ -282,7 +282,7 @@ describe('ModelGlosarium', () => {
   });
 
   it('cariCursor next dengan cursor menyusun cursorClause dan hasMore', async () => {
-    const cursor = encodeCursor({ indonesia: 'beta', id: 10 });
+    const cursor = encodeCursor({ asing: 'beta', id: 10 });
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '4' }] })
       .mockResolvedValueOnce({
@@ -303,7 +303,7 @@ describe('ModelGlosarium', () => {
 
     expect(db.query).toHaveBeenNthCalledWith(
       2,
-      expect.stringContaining('AND (g.indonesia, g.id) > ($2, $3)'),
+      expect.stringContaining('AND (g.asing, g.id) > ($2, $3)'),
       ['%a%', 'beta', 10, 3]
     );
     expect(result.data).toHaveLength(2);
@@ -314,7 +314,7 @@ describe('ModelGlosarium', () => {
   });
 
   it('cariCursor prev tanpa hitungTotal membalik urutan hasil', async () => {
-    const cursor = encodeCursor({ indonesia: 'kata', id: 22 });
+    const cursor = encodeCursor({ asing: 'kata', id: 22 });
     db.query.mockResolvedValueOnce({
       rows: [
         { id: 21, indonesia: 'gamma', asing: null, bidang: null, bahasa: 'id', sumber: null, aktif: true },
@@ -331,7 +331,7 @@ describe('ModelGlosarium', () => {
     });
 
     expect(db.query).toHaveBeenCalledWith(
-      expect.stringContaining('AND (g.indonesia, g.id) < ($1, $2)'),
+      expect.stringContaining('AND (g.asing, g.id) < ($1, $2)'),
       ['kata', 22, 3]
     );
     expect(result.data).toEqual([
@@ -427,7 +427,7 @@ describe('ModelGlosarium', () => {
     });
 
     expect(db.query).toHaveBeenCalledWith(
-      expect.stringContaining('AND (g.indonesia, g.id) < ($1, $2)'),
+      expect.stringContaining('AND (g.asing, g.id) < ($1, $2)'),
       ['', 0, 3]
     );
     expect(result.prevCursor).toBeNull();
@@ -994,7 +994,7 @@ describe('ModelGlosarium', () => {
 
   it('cariCursor normalized mendukung cursor prev + reverse ordering', async () => {
     forceNormalizedSchemaForTest(true);
-    const cursor = encodeCursor({ indonesia: 'delta', id: 8 });
+    const cursor = encodeCursor({ asing: 'delta', id: 8 });
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '10' }] })
       .mockResolvedValueOnce({ rows: [{ id: 7, indonesia: 'charlie' }, { id: 6, indonesia: 'beta' }, { id: 5, indonesia: 'alpha' }] });
@@ -1008,7 +1008,7 @@ describe('ModelGlosarium', () => {
 
     expect(db.query).toHaveBeenNthCalledWith(
       2,
-      expect.stringContaining('AND (g.indonesia, g.id) < ($1, $2)'),
+      expect.stringContaining('AND (g.asing, g.id) < ($1, $2)'),
       ['delta', 8, 3]
     );
     expect(result.data).toEqual([{ id: 6, indonesia: 'beta' }, { id: 7, indonesia: 'charlie' }]);
@@ -1283,7 +1283,7 @@ describe('ModelGlosarium', () => {
 
   it('cariCursor normalized next dengan cursor eksplisit memakai operator >', async () => {
     forceNormalizedSchemaForTest(true);
-    const cursor = encodeCursor({ indonesia: 'kata', id: 22 });
+    const cursor = encodeCursor({ asing: 'kata', id: 22 });
     db.query.mockResolvedValueOnce({ rows: [{ id: 23, indonesia: 'kiri' }] });
 
     await ModelGlosarium.cariCursor({
@@ -1294,7 +1294,7 @@ describe('ModelGlosarium', () => {
     });
 
     expect(db.query).toHaveBeenCalledWith(
-      expect.stringContaining('AND (g.indonesia, g.id) > ($1, $2)'),
+      expect.stringContaining('AND (g.asing, g.id) > ($1, $2)'),
       ['kata', 22, 3]
     );
   });
@@ -1370,7 +1370,7 @@ describe('ModelGlosarium', () => {
     });
 
     expect(db.query).toHaveBeenCalledWith(
-      expect.stringContaining('AND (g.indonesia, g.id) > ($5, $6)'),
+      expect.stringContaining('AND (g.asing, g.id) > ($5, $6)'),
       ['Kimia', 'Kimia', 'KBBI', 'KBBI', '', 0, 21]
     );
   });

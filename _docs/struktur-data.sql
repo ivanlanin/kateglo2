@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-21T06:15:21.664Z
+-- Generated: 2026-02-22T04:48:07.434Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -176,16 +176,14 @@ create table glosarium (
   sumber_id integer references sumber(id) on delete restrict on update cascade not null
 );
 create index idx_glosarium_aktif_bahasa_indonesia on glosarium using btree (bahasa, indonesia) WHERE (aktif = true);
-create index idx_glosarium_aktif_bidang_id_indonesia on glosarium using btree (bidang_id, indonesia) WHERE (aktif = true);
-create index idx_glosarium_aktif_sumber_id_indonesia on glosarium using btree (sumber_id, indonesia) WHERE (aktif = true);
+create index idx_glosarium_aktif_bidang_id_asing on glosarium using btree (bidang_id, asing) WHERE (aktif = true);
+create index idx_glosarium_aktif_sumber_id_asing on glosarium using btree (sumber_id, asing) WHERE (aktif = true);
 create index idx_glosarium_asing on glosarium using btree (asing);
 create index idx_glosarium_asing_trgm on glosarium using gin (asing gin_trgm_ops);
-create index idx_glosarium_bidang_id on glosarium using btree (bidang_id);
 create index idx_glosarium_indonesia on glosarium using btree (indonesia);
 create index idx_glosarium_indonesia_lower_trgm on glosarium using gin (lower(indonesia) gin_trgm_ops);
 create index idx_glosarium_indonesia_trgm on glosarium using gin (indonesia gin_trgm_ops);
 create index idx_glosarium_indonesia_tsv_simple on glosarium using gin (to_tsvector('simple'::regconfig, indonesia));
-create index idx_glosarium_sumber_id on glosarium using btree (sumber_id);
 create trigger trg_set_timestamp_fields__glosarium
   before insert or update on glosarium
   for each row

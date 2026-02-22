@@ -355,7 +355,7 @@ class ModelGlosarium {
     cursor = null,
     direction = 'next',
     lastPage = false,
-    sortBy = 'indonesia',
+    sortBy = 'asing',
   } = {}) {
     const normalizedSchema = await isNormalizedGlosariumSchema();
     if (!normalizedSchema) {
