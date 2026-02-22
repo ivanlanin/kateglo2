@@ -28,6 +28,8 @@ function ekstrakQuery(pathname) {
   if (matchCari) return decodeURIComponent(matchCari[2]);
   const matchDetail = pathname.match(/^\/kamus\/detail\/(.+)$/);
   if (matchDetail) return decodeURIComponent(matchDetail[1]);
+  const matchGlosariumDetail = pathname.match(/^\/glosarium\/detail\/(.+)$/);
+  if (matchGlosariumDetail) return decodeURIComponent(matchGlosariumDetail[1]);
   return '';
 }
 

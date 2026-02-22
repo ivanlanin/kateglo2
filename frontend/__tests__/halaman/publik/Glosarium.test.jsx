@@ -91,7 +91,9 @@ describe('Glosarium', () => {
     render(<Glosarium />);
 
     expect(screen.getByText(/Hasil Pencarian/i)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'istilah' })).toHaveAttribute('href', '/kamus/detail/istilah');
+    const linksIstilah = screen.getAllByRole('link', { name: 'istilah' });
+    expect(linksIstilah.some((el) => el.getAttribute('href') === '/kamus/detail/istilah')).toBe(true);
+    expect(linksIstilah.some((el) => el.getAttribute('href') === '/glosarium/detail/istilah')).toBe(true);
     expect(screen.getByRole('link', { name: 'data' })).toHaveAttribute('href', '/kamus/detail/data');
     expect(screen.getByText('term')).toBeInTheDocument();
     expect(cariGlosarium).toHaveBeenCalledWith('istilah', {

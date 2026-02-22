@@ -119,8 +119,27 @@ function Kamus() {
   const judulHalaman = metaHalaman.judul;
   const deskripsiHalaman = metaHalaman.deskripsi;
 
+  const judulNodaPencarian = modePencarian && kata
+    ? (
+      <>
+        Hasil Pencarian &ldquo;
+        <Link
+          to={buatPathDetailKamus(kata)}
+          className="kamus-detail-subentry-link"
+        >
+          {kata}
+        </Link>
+        &rdquo; di Kamus
+      </>
+    )
+    : null;
+
   return (
-    <HalamanDasar judul={judulHalaman} deskripsi={deskripsiHalaman}>
+    <HalamanDasar
+      judul={judulHalaman}
+      judulNoda={judulNodaPencarian}
+      deskripsi={deskripsiHalaman}
+    >
 
       <QueryFeedback
         isLoading={isLoading}

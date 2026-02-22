@@ -1072,14 +1072,17 @@ code {
   }
 
   .glosarium-result-original {
-    @apply italic text-gray-600;
+    @apply italic text-blue-700 hover:underline;
   }
 
   .glosarium-result-badge {
     @apply inline-block ml-2 px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded;
   }
 
-  .dark .glosarium-result-original,
+  .dark .glosarium-result-original {
+    @apply text-blue-300;
+  }
+
   .dark .glosarium-result-badge {
     @apply text-dark-text-muted;
   }

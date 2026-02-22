@@ -21,7 +21,7 @@ function upsertMetaTag({ name, property, content }) {
   tag.setAttribute('content', content);
 }
 
-function HalamanDasar({ judul, deskripsi, children }) {
+function HalamanDasar({ judul, judulNoda, deskripsi, children }) {
   useEffect(() => {
     document.title = judul
       ? `${judul} — Kateglo`
@@ -37,7 +37,7 @@ function HalamanDasar({ judul, deskripsi, children }) {
 
   return (
     <div className="halaman-dasar-container">
-      {judul && <h1 className="page-title">{judul}</h1>}
+      {(judulNoda || judul) && <h1 className="page-title">{judulNoda || judul}</h1>}
       {children}
     </div>
   );

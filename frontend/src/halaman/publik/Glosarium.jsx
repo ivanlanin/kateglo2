@@ -120,8 +120,27 @@ function Glosarium() {
         ? buildMetaSumberGlosarium(namaSumber)
         : buildMetaBrowseGlosarium();
 
+  const judulNodaPencarian = modeCariKata && kata
+    ? (
+      <>
+        Hasil Pencarian &ldquo;
+        <Link
+          to={`/glosarium/detail/${encodeURIComponent(kata)}`}
+          className="kamus-detail-subentry-link"
+        >
+          {kata}
+        </Link>
+        &rdquo; di Glosarium
+      </>
+    )
+    : null;
+
   return (
-    <HalamanDasar judul={metaHalaman.judul} deskripsi={metaHalaman.deskripsi}>
+    <HalamanDasar
+      judul={metaHalaman.judul}
+      judulNoda={judulNodaPencarian}
+      deskripsi={metaHalaman.deskripsi}
+    >
 
       <QueryFeedback
         isLoading={isLoading}

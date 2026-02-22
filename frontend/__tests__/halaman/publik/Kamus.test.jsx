@@ -121,7 +121,9 @@ describe('Kamus', () => {
     render(<Kamus />);
 
     expect(screen.getByText(/Hasil Pencarian/i)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'kata' })).toBeInTheDocument();
+    const linksKata = screen.getAllByRole('link', { name: 'kata' });
+    expect(linksKata.length).toBeGreaterThanOrEqual(2);
+    expect(linksKata.every((el) => el.getAttribute('href') === '/kamus/detail/kata')).toBe(true);
   });
 
   it('menampilkan hasil kategori dari route /kamus/:kategori/:kode', () => {
