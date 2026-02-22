@@ -2,7 +2,6 @@
  * @fileoverview Halaman pencarian tesaurus — path-based: /tesaurus/cari/:kata
  */
 
-import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ambilContohTesaurus, cariTesaurus } from '../../api/apiPublik';
@@ -15,48 +14,18 @@ import { buatPathDetailKamus } from '../../utils/paramUtils';
 import { buildMetaBrowseTesaurus, buildMetaPencarianTesaurus } from '../../utils/metaUtils';
 
 const limit = 100;
-const BATAS_RINGKAS = 2;
 
-function DaftarRelasi({ simbol, daftar, ekspansi }) {
-  const tampil = ekspansi ? daftar : daftar.slice(0, BATAS_RINGKAS);
-  const terpotong = !ekspansi && daftar.length > BATAS_RINGKAS;
-  return (
-    <>
-      <span className="tesaurus-result-badge">{simbol}</span>
-      {' '}{tampil.join('; ')}{terpotong && '; …'}
-    </>
-  );
-}
-
-function RelasiSingkat({ sinonim, antonim }) {
-  const [ekspansi, setEkspansi] = useState(false);
-
+function RelasiTampil({ sinonim, antonim }) {
   const daftarSinonim = sinonim ? sinonim.split(/[;,]/).map((s) => s.trim()).filter(Boolean) : [];
   const daftarAntonim = antonim ? antonim.split(/[;,]/).map((s) => s.trim()).filter(Boolean) : [];
   if (daftarSinonim.length === 0 && daftarAntonim.length === 0) return null;
-
-  const adaLebih = daftarSinonim.length > BATAS_RINGKAS || daftarAntonim.length > BATAS_RINGKAS;
-
   return (
     <span className="tesaurus-result-relasi">
       {daftarSinonim.length > 0 && (
-        <>{' '}<DaftarRelasi simbol="≈" daftar={daftarSinonim} ekspansi={ekspansi} /></>
+        <>{' '}<span className="tesaurus-result-badge">≈</span>{' '}{daftarSinonim.join('; ')}</>
       )}
       {daftarAntonim.length > 0 && (
-        <>{' '}<DaftarRelasi simbol="≠" daftar={daftarAntonim} ekspansi={ekspansi} /></>
-      )}
-      {adaLebih && (
-        <>
-          {' '}
-          <button
-            type="button"
-            className="tesaurus-result-toggle"
-            onClick={() => setEkspansi(!ekspansi)}
-            aria-expanded={ekspansi}
-          >
-            {ekspansi ? '«' : '»'}
-          </button>
-        </>
+        <>{' '}<span className="tesaurus-result-badge">≠</span>{' '}{daftarAntonim.join('; ')}</>
       )}
     </span>
   );
@@ -145,18 +114,22 @@ function Tesaurus() {
           pageInfo={data?.pageInfo}
           currentPage={cursorState.page}
           onNavigateCursor={handlePaginasi}
-          containerClassName="tesaurus-result-grid"
-          renderItems={(items) => items.map((item) => (
-            <div key={item.id} className="tesaurus-result-row">
-              <Link
-                to={buatPathDetailKamus(item.indeks)}
-                className="kamus-kategori-grid-link"
-              >
-                {formatLemaHomonim(item.indeks)}
-              </Link>
-              <RelasiSingkat sinonim={item.sinonim} antonim={item.antonim} />
+          containerClassName=""
+          renderItems={(items) => (
+            <div className="space-y-2">
+              {items.map((item) => (
+                <p key={item.id} className="leading-relaxed">
+                  <Link
+                    to={buatPathDetailKamus(item.indeks)}
+                    className="link-action font-bold"
+                  >
+                    {formatLemaHomonim(item.indeks)}
+                  </Link>
+                  <RelasiTampil sinonim={item.sinonim} antonim={item.antonim} />
+                </p>
+              ))}
             </div>
-          ))}
+          )}
         />
       )}
     </HalamanDasar>

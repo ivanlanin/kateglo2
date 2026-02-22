@@ -7,6 +7,7 @@
 - Menambahkan etimologi dari Loan-words in Indonesian and Malay
 - Mengaudit lafal entri dasar
 - Menambahkan halaman detail entri glosarium yang berisi persis, memuat, dan mirip
+- Membuat pencarian tesaurus satu baris, sama seperti pencarian makna
 
 ## 2026-02-21 Sabtu
 
