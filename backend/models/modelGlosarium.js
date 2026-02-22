@@ -355,9 +355,11 @@ class ModelGlosarium {
     cursor = null,
     direction = 'next',
     lastPage = false,
+    sortBy = 'indonesia',
   } = {}) {
     const normalizedSchema = await isNormalizedGlosariumSchema();
     if (!normalizedSchema) {
+      const sortField = sortBy === 'asing' ? 'asing' : 'indonesia';
       const cappedLimit = Math.min(Math.max(Number(limit) || 20, 1), 200);
       const cursorPayload = decodeCursor(cursor);
       const isPrev = direction === 'prev';
@@ -424,12 +426,12 @@ class ModelGlosarium {
       const dataParams = [...params];
       let cursorClause = '';
       if (cursorPayload && !lastPage) {
-        dataParams.push(String(cursorPayload.indonesia || ''), Number(cursorPayload.id) || 0);
-        const indonesiaIdx = dataParams.length - 1;
+        dataParams.push(String(cursorPayload[sortField] || ''), Number(cursorPayload.id) || 0);
+        const sortIdx = dataParams.length - 1;
         const idIdx = dataParams.length;
         cursorClause = isPrev
-          ? `AND (g.indonesia, g.id) < ($${indonesiaIdx}, $${idIdx})`
-          : `AND (g.indonesia, g.id) > ($${indonesiaIdx}, $${idIdx})`;
+          ? `AND (g.${sortField}, g.id) < ($${sortIdx}, $${idIdx})`
+          : `AND (g.${sortField}, g.id) > ($${sortIdx}, $${idIdx})`;
       }
 
       dataParams.push(cappedLimit + 1);
@@ -440,7 +442,7 @@ class ModelGlosarium {
          FROM glosarium g
          ${whereClause}
          ${cursorClause}
-         ORDER BY g.indonesia ${orderDesc ? 'DESC' : 'ASC'}, g.id ${orderDesc ? 'DESC' : 'ASC'}
+         ORDER BY g.${sortField} ${orderDesc ? 'DESC' : 'ASC'}, g.id ${orderDesc ? 'DESC' : 'ASC'}
          LIMIT $${limitIdx}`,
         dataParams
       );
@@ -453,8 +455,8 @@ class ModelGlosarium {
 
       const first = rows[0];
       const last = rows[rows.length - 1];
-      const prevCursor = first ? encodeCursor({ indonesia: first.indonesia, id: first.id }) : null;
-      const nextCursor = last ? encodeCursor({ indonesia: last.indonesia, id: last.id }) : null;
+      const prevCursor = first ? encodeCursor({ [sortField]: first[sortField], id: first.id }) : null;
+      const nextCursor = last ? encodeCursor({ [sortField]: last[sortField], id: last.id }) : null;
 
       let hasPrev = false;
       let hasNext = false;
@@ -479,6 +481,7 @@ class ModelGlosarium {
       };
     }
 
+    const sortField = sortBy === 'asing' ? 'asing' : 'indonesia';
     const cappedLimit = Math.min(Math.max(Number(limit) || 20, 1), 200);
     const cursorPayload = decodeCursor(cursor);
     const isPrev = direction === 'prev';
@@ -569,12 +572,12 @@ class ModelGlosarium {
     const dataParams = [...params];
     let cursorClause = '';
     if (cursorPayload && !lastPage) {
-      dataParams.push(String(cursorPayload.indonesia || ''), Number(cursorPayload.id) || 0);
-      const indonesiaIdx = dataParams.length - 1;
+      dataParams.push(String(cursorPayload[sortField] || ''), Number(cursorPayload.id) || 0);
+      const sortIdx = dataParams.length - 1;
       const idIdx = dataParams.length;
       cursorClause = isPrev
-        ? `AND (g.indonesia, g.id) < ($${indonesiaIdx}, $${idIdx})`
-        : `AND (g.indonesia, g.id) > ($${indonesiaIdx}, $${idIdx})`;
+        ? `AND (g.${sortField}, g.id) < ($${sortIdx}, $${idIdx})`
+        : `AND (g.${sortField}, g.id) > ($${sortIdx}, $${idIdx})`;
     }
 
     dataParams.push(cappedLimit + 1);
@@ -598,7 +601,7 @@ class ModelGlosarium {
        JOIN sumber s ON s.id = g.sumber_id
        ${whereClause}
        ${cursorClause}
-       ORDER BY g.indonesia ${orderDesc ? 'DESC' : 'ASC'}, g.id ${orderDesc ? 'DESC' : 'ASC'}
+       ORDER BY g.${sortField} ${orderDesc ? 'DESC' : 'ASC'}, g.id ${orderDesc ? 'DESC' : 'ASC'}
        LIMIT $${limitIdx}`,
       dataParams
     );
@@ -611,8 +614,8 @@ class ModelGlosarium {
 
     const first = rows[0];
     const last = rows[rows.length - 1];
-    const prevCursor = first ? encodeCursor({ indonesia: first.indonesia, id: first.id }) : null;
-    const nextCursor = last ? encodeCursor({ indonesia: last.indonesia, id: last.id }) : null;
+    const prevCursor = first ? encodeCursor({ [sortField]: first[sortField], id: first.id }) : null;
+    const nextCursor = last ? encodeCursor({ [sortField]: last[sortField], id: last.id }) : null;
 
     let hasPrev = false;
     let hasNext = false;

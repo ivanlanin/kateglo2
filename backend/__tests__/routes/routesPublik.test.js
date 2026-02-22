@@ -700,6 +700,7 @@ describe('routes backend', () => {
       cursor: 'abc',
       direction: 'prev',
       lastPage: false,
+      sortBy: 'asing',
     });
   });
 
@@ -745,6 +746,7 @@ describe('routes backend', () => {
       cursor: 'abc',
       direction: 'prev',
       lastPage: false,
+      sortBy: 'asing',
     });
   });
 

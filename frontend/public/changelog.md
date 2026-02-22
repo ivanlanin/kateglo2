@@ -3,6 +3,7 @@
 ## 2026-02-22 Minggu
 
 - Menambahkan pencarian rima akhir dan awal
+- Menampilkan entri glosarium dengan model _asing_ (indonesia)
 
 ## 2026-02-21 Sabtu
 

@@ -72,6 +72,7 @@ router.get('/bidang/:bidang', async (req, res, next) => {
       cursor,
       direction,
       lastPage,
+      sortBy: 'asing',
     });
     return res.json({
       ...result,
@@ -111,6 +112,7 @@ router.get('/sumber/:sumber', async (req, res, next) => {
       cursor,
       direction,
       lastPage,
+      sortBy: 'asing',
     });
     return res.json({
       ...result,

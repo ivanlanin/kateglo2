@@ -693,7 +693,7 @@ code {
   /* ===== Shared: Typography ===== */
 
   .page-title {
-    @apply text-2xl font-bold text-gray-900 mb-6;
+    @apply text-3xl font-bold text-gray-900 mb-6;
   }
 
   .section-heading {
