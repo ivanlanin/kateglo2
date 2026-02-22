@@ -6,6 +6,7 @@ import Kamus from './halaman/publik/Kamus';
 import KamusDetail from './halaman/publik/KamusDetail';
 import Tesaurus from './halaman/publik/Tesaurus';
 import Glosarium from './halaman/publik/Glosarium';
+import GlosariumDetail from './halaman/publik/GlosariumDetail';
 import Makna from './halaman/publik/Makna';
 import Rima from './halaman/publik/Rima';
 import AuthCallback from './halaman/publik/AuthCallback';
@@ -102,6 +103,7 @@ function App() {
         <Route path="/tesaurus/cari/:kata" element={<Tesaurus />} />
         <Route path="/glosarium" element={<Glosarium />} />
         <Route path="/glosarium/cari/:kata" element={<Glosarium />} />
+        <Route path="/glosarium/detail/:asing" element={<GlosariumDetail />} />
         <Route path="/glosarium/bidang/:bidang" element={<Glosarium />} />
         <Route path="/glosarium/sumber/:sumber" element={<Glosarium />} />
         <Route path="/kebijakan-privasi" element={<KebijakanPrivasi />} />

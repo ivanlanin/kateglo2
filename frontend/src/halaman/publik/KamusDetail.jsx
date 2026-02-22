@@ -761,7 +761,12 @@ function KamusDetail() {
                     <span key={`${item.indonesia}-${item.asing}-${i}`}>
                       {item.asing ? (
                         <>
-                          <em>{item.asing}</em>
+                          <Link
+                            to={`/glosarium/detail/${encodeURIComponent(item.asing)}`}
+                            className="kamus-detail-subentry-link"
+                          >
+                            <em>{item.asing}</em>
+                          </Link>
                           <span> (</span>
                           <span>{item.indonesia}</span>
                           <span>)</span>

@@ -168,7 +168,12 @@ function Glosarium() {
             <div key={item.id} className="glosarium-result-row">
               {item.asing ? (
                 <>
-                  <span className="glosarium-result-original">{item.asing}</span>
+                  <Link
+                    to={`/glosarium/detail/${encodeURIComponent(item.asing)}`}
+                    className="glosarium-result-original"
+                  >
+                    {item.asing}
+                  </Link>
                   {' ('}
                   {parseEntriGlosarium(item.indonesia, (part, index) => (
                     <Link

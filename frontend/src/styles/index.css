@@ -1088,6 +1088,28 @@ code {
     @apply bg-dark-bg-input;
   }
 
+  /* ===== GlosariumDetail ===== */
+
+  .glosarium-detail-seksi {
+    @apply mb-8;
+  }
+
+  .badge-bidang {
+    @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800;
+  }
+
+  .badge-sumber {
+    @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-100 text-emerald-800;
+  }
+
+  .dark .badge-bidang {
+    @apply bg-blue-900 text-blue-200;
+  }
+
+  .dark .badge-sumber {
+    @apply bg-emerald-900 text-emerald-200;
+  }
+
   /* ===== KamusDetail ===== */
 
   .kamus-detail-breadcrumb {
@@ -1290,7 +1312,7 @@ code {
   }
 
   .kamus-detail-subentry-link {
-    @apply text-base text-blue-700 hover:underline;
+    @apply text-blue-700 hover:underline;
   }
 
   .dark .kamus-detail-subentry-link {

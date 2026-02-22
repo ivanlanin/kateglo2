@@ -303,6 +303,16 @@ export function buildMetaBidangGlosarium(bidang = '', data = null) {
   };
 }
 
+export function buildMetaDetailGlosarium(asing = '', data = null) {
+  const asingAman = amanDecode(asing).trim();
+  if (!asingAman) return buildMetaBrowseGlosarium();
+  const totalPersis = data?.persis?.length ?? 0;
+  const deskripsi = totalPersis > 0
+    ? `Istilah "${asingAman}" dalam glosarium bahasa Indonesia — ${totalPersis} padanan Indonesia ditemukan.`
+    : `Lihat istilah asing "${asingAman}" dalam glosarium Kateglo.`;
+  return { judul: asingAman, deskripsi };
+}
+
 export function buildMetaSumberGlosarium(sumber = '', data = null) {
   const sumberAman = amanDecode(sumber).trim();
   if (!sumberAman) {
@@ -354,6 +364,7 @@ export const glosariumMetaUtils = {
   buildMetaPencarianGlosarium,
   buildMetaBidangGlosarium,
   buildMetaSumberGlosarium,
+  buildMetaDetailGlosarium,
 };
 
 export const metaUtils = {

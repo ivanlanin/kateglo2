@@ -1017,6 +1017,189 @@ class ModelGlosarium {
     return result.rowCount > 0;
   }
 
+  static async ambilDetailAsing(asing, { limit = 20, mengandungCursor = null, miripCursor = null } = {}) {
+    const trimmed = (asing || '').trim();
+    const emptyPage = { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null };
+    if (!trimmed) {
+      return {
+        persis: [],
+        mengandung: [], mengandungPage: emptyPage, mengandungTotal: 0,
+        mirip: [], miripPage: emptyPage, miripTotal: 0,
+      };
+    }
+
+    const cappedLimit = Math.min(Math.max(Number(limit) || 20, 1), 100);
+    const fetchLimit = cappedLimit + 1;
+    const mengOffset = Math.max(Number(decodeCursor(mengandungCursor)?.offset) || 0, 0);
+    const mirOffset = Math.max(Number(decodeCursor(miripCursor)?.offset) || 0, 0);
+    const normalizedSchema = await isNormalizedGlosariumSchema();
+
+    const wordBoundarySql = `(
+      '(^|[^[:alnum:]_])' ||
+      regexp_replace(LOWER($1), '([.^$|()\\[\\]{}*+?\\\\-])', '\\\\\\1', 'g') ||
+      '([^[:alnum:]_]|$)'
+    )`;
+
+    function buildPage(offset, rows, cap) {
+      const hasNext = rows.length > cap;
+      const data = hasNext ? rows.slice(0, cap) : rows;
+      const hasPrev = offset > 0;
+      return {
+        data,
+        page: {
+          hasPrev,
+          hasNext,
+          prevCursor: hasPrev ? encodeCursor({ offset: Math.max(0, offset - cap) }) : null,
+          nextCursor: hasNext ? encodeCursor({ offset: offset + cap }) : null,
+        },
+      };
+    }
+
+    if (!normalizedSchema) {
+      const [persisResult, mengCount, mengResult, mirCount, mirResult] = await Promise.all([
+        db.query(
+          `SELECT g.id, g.asing, g.indonesia, g.bahasa,
+                  COALESCE(g.bidang, '') AS bidang, '' AS bidang_kode,
+                  COALESCE(g.sumber, '') AS sumber, '' AS sumber_kode
+           FROM glosarium g
+           WHERE g.aktif = TRUE AND LOWER(g.asing) = LOWER($1)
+           ORDER BY g.bidang, g.sumber`,
+          [trimmed]
+        ),
+        db.query(
+          `SELECT COUNT(*) AS total FROM glosarium g
+           WHERE g.aktif = TRUE
+             AND LOWER(g.asing) != LOWER($1)
+             AND LOWER(g.asing) LIKE ('%' || LOWER($1) || '%')
+             AND g.asing ~* ${wordBoundarySql}`,
+          [trimmed]
+        ),
+        db.query(
+          `SELECT g.id, g.asing, g.indonesia, g.bahasa,
+                  COALESCE(g.bidang, '') AS bidang, '' AS bidang_kode,
+                  COALESCE(g.sumber, '') AS sumber, '' AS sumber_kode
+           FROM glosarium g
+           WHERE g.aktif = TRUE
+             AND LOWER(g.asing) != LOWER($1)
+             AND LOWER(g.asing) LIKE ('%' || LOWER($1) || '%')
+             AND g.asing ~* ${wordBoundarySql}
+           ORDER BY g.asing, g.bidang
+           LIMIT $2 OFFSET $3`,
+          [trimmed, fetchLimit, mengOffset]
+        ),
+        db.query(
+          `SELECT COUNT(*) AS total FROM glosarium g
+           WHERE g.aktif = TRUE
+             AND LOWER(g.asing) != LOWER($1)
+             AND NOT (
+               LOWER(g.asing) LIKE ('%' || LOWER($1) || '%')
+               AND g.asing ~* ${wordBoundarySql}
+             )
+             AND g.asing % $1`,
+          [trimmed]
+        ),
+        db.query(
+          `SELECT g.id, g.asing, g.indonesia, g.bahasa,
+                  COALESCE(g.bidang, '') AS bidang, '' AS bidang_kode,
+                  COALESCE(g.sumber, '') AS sumber, '' AS sumber_kode
+           FROM glosarium g
+           WHERE g.aktif = TRUE
+             AND LOWER(g.asing) != LOWER($1)
+             AND NOT (
+               LOWER(g.asing) LIKE ('%' || LOWER($1) || '%')
+               AND g.asing ~* ${wordBoundarySql}
+             )
+             AND g.asing % $1
+           ORDER BY similarity(g.asing, $1) DESC, g.asing
+           LIMIT $2 OFFSET $3`,
+          [trimmed, fetchLimit, mirOffset]
+        ),
+      ]);
+
+      const { data: mengandung, page: mengandungPage } = buildPage(mengOffset, mengResult.rows, cappedLimit);
+      const { data: mirip, page: miripPage } = buildPage(mirOffset, mirResult.rows, cappedLimit);
+      return {
+        persis: persisResult.rows,
+        mengandung, mengandungPage, mengandungTotal: parseCount(mengCount.rows[0]?.total),
+        mirip, miripPage, miripTotal: parseCount(mirCount.rows[0]?.total),
+      };
+    }
+
+    const [persisResult, mengCount, mengResult, mirCount, mirResult] = await Promise.all([
+      db.query(
+        `SELECT g.id, g.asing, g.indonesia, g.bahasa,
+                b.kode AS bidang_kode, b.nama AS bidang,
+                s.kode AS sumber_kode, s.nama AS sumber
+         FROM glosarium g
+         JOIN bidang b ON b.id = g.bidang_id
+         JOIN sumber s ON s.id = g.sumber_id
+         WHERE g.aktif = TRUE AND LOWER(g.asing) = LOWER($1)
+         ORDER BY b.nama, s.nama`,
+        [trimmed]
+      ),
+      db.query(
+        `SELECT COUNT(*) AS total FROM glosarium g
+         WHERE g.aktif = TRUE
+           AND LOWER(g.asing) != LOWER($1)
+           AND LOWER(g.asing) LIKE ('%' || LOWER($1) || '%')
+           AND g.asing ~* ${wordBoundarySql}`,
+        [trimmed]
+      ),
+      db.query(
+        `SELECT g.id, g.asing, g.indonesia, g.bahasa,
+                b.kode AS bidang_kode, b.nama AS bidang,
+                s.kode AS sumber_kode, s.nama AS sumber
+         FROM glosarium g
+         JOIN bidang b ON b.id = g.bidang_id
+         JOIN sumber s ON s.id = g.sumber_id
+         WHERE g.aktif = TRUE
+           AND LOWER(g.asing) != LOWER($1)
+           AND LOWER(g.asing) LIKE ('%' || LOWER($1) || '%')
+           AND g.asing ~* ${wordBoundarySql}
+         ORDER BY g.asing, b.nama
+         LIMIT $2 OFFSET $3`,
+        [trimmed, fetchLimit, mengOffset]
+      ),
+      db.query(
+        `SELECT COUNT(*) AS total FROM glosarium g
+         WHERE g.aktif = TRUE
+           AND LOWER(g.asing) != LOWER($1)
+           AND NOT (
+             LOWER(g.asing) LIKE ('%' || LOWER($1) || '%')
+             AND g.asing ~* ${wordBoundarySql}
+           )
+           AND g.asing % $1`,
+        [trimmed]
+      ),
+      db.query(
+        `SELECT g.id, g.asing, g.indonesia, g.bahasa,
+                b.kode AS bidang_kode, b.nama AS bidang,
+                s.kode AS sumber_kode, s.nama AS sumber
+         FROM glosarium g
+         JOIN bidang b ON b.id = g.bidang_id
+         JOIN sumber s ON s.id = g.sumber_id
+         WHERE g.aktif = TRUE
+           AND LOWER(g.asing) != LOWER($1)
+           AND NOT (
+             LOWER(g.asing) LIKE ('%' || LOWER($1) || '%')
+             AND g.asing ~* ${wordBoundarySql}
+           )
+           AND g.asing % $1
+         ORDER BY similarity(g.asing, $1) DESC, g.asing
+         LIMIT $2 OFFSET $3`,
+        [trimmed, fetchLimit, mirOffset]
+      ),
+    ]);
+
+    const { data: mengandung, page: mengandungPage } = buildPage(mengOffset, mengResult.rows, cappedLimit);
+    const { data: mirip, page: miripPage } = buildPage(mirOffset, mirResult.rows, cappedLimit);
+    return {
+      persis: persisResult.rows,
+      mengandung, mengandungPage, mengandungTotal: parseCount(mengCount.rows[0]?.total),
+      mirip, miripPage, miripTotal: parseCount(mirCount.rows[0]?.total),
+    };
+  }
+
   static async cariFrasaMengandungKataUtuh(kata, options = 50) {
     const trimmed = (kata || '').trim();
     const legacyMode = typeof options === 'number';

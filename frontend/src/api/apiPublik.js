@@ -226,6 +226,15 @@ export async function ambilDaftarBidang() {
   return response.data;
 }
 
+export async function ambilDetailGlosarium(asing, { mengandungCursor, miripCursor, limit } = {}) {
+  const params = {};
+  if (limit) params.limit = limit;
+  if (mengandungCursor) params.mengandungCursor = mengandungCursor;
+  if (miripCursor) params.miripCursor = miripCursor;
+  const response = await klien.get(`/api/publik/glosarium/detail/${encodeURIComponent(asing)}`, { params });
+  return response.data;
+}
+
 export async function ambilDaftarSumber() {
   const response = await klien.get('/api/publik/glosarium/sumber');
   return response.data;
