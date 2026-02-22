@@ -1,7 +1,13 @@
-# References & Temporaries
+# Project
+scrape*
+
+# References
 _kode/
 _data/
+
+# Temporaries
 .tmp/
+*.log
 
 # System
 .vscode/
@@ -23,7 +29,6 @@ Thumbs.db
 # Build outputs
 dist/
 build/
-*.log
 
 # Testing
 coverage/
