@@ -119,29 +119,20 @@ describe('Tesaurus.test.jsx', () => {
 
     render(<Tesaurus />);
 
-    expect(screen.getByRole('heading', { name: /Hasil Pencarian ["“]anak ibu["”] di Tesaurus/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Hasil Pencarian .anak ibu. di Tesaurus/i })).toBeInTheDocument();
 
     // Tautan mengarah ke kamus detail, bukan tesaurus detail
     expect(screen.getByRole('link', { name: 'anak ibu' })).toHaveAttribute('href', '/kamus/detail/anak%20ibu');
 
-    // Sinonim diringkas maks 2, badge ≈ terpisah dari teks
+    // Semua sinonim ditampilkan sekaligus (tanpa expand/collapse)
     expect(screen.getByText('≈')).toBeInTheDocument();
-    expect(screen.getByText(/s1; s2; …/)).toBeInTheDocument();
-    // Antonim tetap tampil terpisah dengan badge ≠
+    expect(screen.getByText(/s1; s2; s3; s4/)).toBeInTheDocument();
+    // Antonim tampil dengan badge ≠
     expect(screen.getByText('≠')).toBeInTheDocument();
     expect(screen.getByText(/a1; a2/)).toBeInTheDocument();
 
-    const tombolEkspansi = screen.getByRole('button', { name: '»' });
-    expect(tombolEkspansi).toHaveAttribute('aria-expanded', 'false');
-
-    // Klik untuk ekspansi — tampilkan semua
-    fireEvent.click(tombolEkspansi);
-    expect(tombolEkspansi).toHaveAttribute('aria-expanded', 'true');
-    expect(screen.getByText(/s1; s2; s3; s4/)).toBeInTheDocument();
-
-    // Klik lagi untuk ciutkan
-    fireEvent.click(tombolEkspansi);
-    expect(tombolEkspansi).toHaveAttribute('aria-expanded', 'false');
+    // Tidak ada tombol expand/collapse
+    expect(screen.queryByRole('button', { name: '»' })).not.toBeInTheDocument();
 
     fireEvent.click(screen.getAllByRole('button', { name: 'tesaurus-next' })[0]);
     expect(cariTesaurus).toHaveBeenCalledWith('anak%20ibu', {
