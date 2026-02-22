@@ -120,6 +120,7 @@ function GlosariumDetail() {
     queryKey: ['glosarium-detail', asingDecoded, mengandungCursor, miripCursor],
     queryFn: () => ambilDetailGlosarium(asingDecoded, { mengandungCursor, miripCursor }),
     enabled: Boolean(asingDecoded),
+    placeholderData: (previousData) => previousData,
   });
 
   useEffect(() => {
