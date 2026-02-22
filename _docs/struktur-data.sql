@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-22T04:48:07.434Z
+-- Generated: 2026-02-22T07:16:19.266Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -159,6 +159,23 @@ create trigger trg_set_timestamp_fields__entri
   for each row
   execute function set_timestamp_fields();
 
+create table etimologi_lwim (
+  lwim_id text,
+  indeks_query text not null,
+  lwim_orth text not null,
+  lwim_hom integer,
+  etym_lang text,
+  etym_mentioned text,
+  etym_cite text,
+  etym_aksara text,
+  raw_def text,
+  xr_lihat text,
+  xr_varian text,
+  fetched_at timestamp without time zone not null default now()
+);
+create index idx_etimologi_lwim_indeks on etimologi_lwim using btree (indeks_query);
+create index idx_etimologi_lwim_orth on etimologi_lwim using btree (lwim_orth);
+
 create table glosarium (
   id serial primary key,
   indonesia text not null,
@@ -180,10 +197,12 @@ create index idx_glosarium_aktif_bidang_id_asing on glosarium using btree (bidan
 create index idx_glosarium_aktif_sumber_id_asing on glosarium using btree (sumber_id, asing) WHERE (aktif = true);
 create index idx_glosarium_asing on glosarium using btree (asing);
 create index idx_glosarium_asing_trgm on glosarium using gin (asing gin_trgm_ops);
+create index idx_glosarium_bidang_id on glosarium using btree (bidang_id);
 create index idx_glosarium_indonesia on glosarium using btree (indonesia);
 create index idx_glosarium_indonesia_lower_trgm on glosarium using gin (lower(indonesia) gin_trgm_ops);
 create index idx_glosarium_indonesia_trgm on glosarium using gin (indonesia gin_trgm_ops);
 create index idx_glosarium_indonesia_tsv_simple on glosarium using gin (to_tsvector('simple'::regconfig, indonesia));
+create index idx_glosarium_sumber_id on glosarium using btree (sumber_id);
 create trigger trg_set_timestamp_fields__glosarium
   before insert or update on glosarium
   for each row
