@@ -44,153 +44,87 @@ function truncate(text = '', maxLen = 155) {
 
 function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', prefetchedData = null) {
   const defaultMeta = {
-    title: 'Kateglo \u2014 Kamus, Tesaurus, dan Glosarium Bahasa Indonesia',
+    title: 'Kateglo',
     description: 'Kamus, Tesaurus, dan Glosarium Bahasa Indonesia',
   };
 
-  const decodedPath = decodeURIComponent(pathname || '/');
+  const path = decodeURIComponent(pathname || '/');
+
+  /** Bungkus { judul, deskripsi } menjadi output { title, description } */
+  const titled = ({ judul, deskripsi }) => ({ title: `${judul} \u2014 Kateglo`, description: deskripsi });
+
+  /** Kembalikan prefetchedData jika tipenya cocok, null jika tidak */
+  const dataFor = (type) => (prefetchedData?.type === type ? prefetchedData : null);
+
+  /** Ekstrak segmen path setelah prefix */
+  const seg = (prefix) => path.replace(prefix, '').trim();
 
   // /kamus/detail/:indeks
-  if (decodedPath.startsWith('/kamus/detail/')) {
-    const indeks = decodedPath.replace('/kamus/detail/', '').trim();
-    const metaDetail = buildMetaDetailKamus(
-      indeks,
-      prefetchedData?.type === 'kamus-detail' ? prefetchedData : null
-    );
-
-    return {
-      title: `${metaDetail.judul} \u2014 Kateglo`,
-      description: metaDetail.deskripsi,
-    };
+  if (path.startsWith('/kamus/detail/')) {
+    return titled(buildMetaDetailKamus(seg('/kamus/detail/'), dataFor('kamus-detail')));
   }
 
   // /kamus/cari/:kata
-  if (decodedPath.startsWith('/kamus/cari/')) {
-    const kata = decodedPath.replace('/kamus/cari/', '').trim();
-    if (!kata) {
-      const metaBrowse = buildMetaBrowseKamus();
-      return { title: `${metaBrowse.judul} \u2014 Kateglo`, description: metaBrowse.deskripsi };
-    }
+  if (path.startsWith('/kamus/cari/')) {
+    const kata = seg('/kamus/cari/');
+    if (!kata) return titled(buildMetaBrowseKamus());
 
     const metaCari = buildMetaPencarianKamus(kata);
-    let description = metaCari.deskripsi;
-    if (prefetchedData?.type === 'kamus-cari' && prefetchedData.semuaMakna?.length) {
-      const ringkasan = prefetchedData.semuaMakna[0].makna;
-      description = `${kata}: ${truncate(ringkasan, 130)}`;
-    }
+    const data = dataFor('kamus-cari');
+    const description = data?.semuaMakna?.length
+      ? `${kata}: ${truncate(data.semuaMakna[0].makna, 130)}`
+      : metaCari.deskripsi;
 
-    return {
-      title: `${metaCari.judul} \u2014 Kateglo`,
-      description,
-    };
+    return { title: `${metaCari.judul} \u2014 Kateglo`, description };
   }
 
   // /kamus/:kategori/:kode
-  if (/^\/kamus\/[^/]+\/[^/]+/.test(decodedPath)) {
-    const [kategoriPath = '', kodePath = ''] = decodedPath.replace('/kamus/', '').split('/');
-    const metaKategori = buildMetaKategoriKamus({ kategori: kategoriPath, kode: kodePath });
-
-    return {
-      title: `${metaKategori.judul} \u2014 Kateglo`,
-      description: metaKategori.deskripsi,
-    };
+  if (/^\/kamus\/[^/]+\/[^/]+/.test(path)) {
+    const [kategoriPath = '', kodePath = ''] = path.replace('/kamus/', '').split('/');
+    return titled(buildMetaKategoriKamus({ kategori: kategoriPath, kode: kodePath }));
   }
 
   // /kamus (root)
-  if (decodedPath === '/kamus' || decodedPath === '/kamus/') {
-    const metaBrowse = buildMetaBrowseKamus();
-    return {
-      title: `${metaBrowse.judul} \u2014 Kateglo`,
-      description: metaBrowse.deskripsi,
-    };
+  if (path === '/kamus' || path === '/kamus/') {
+    return titled(buildMetaBrowseKamus());
   }
 
   // /tesaurus/cari/:kata
-  if (decodedPath.startsWith('/tesaurus/cari/')) {
-    const kata = decodedPath.replace('/tesaurus/cari/', '').trim();
-    const metaTesaurus = buildMetaPencarianTesaurus(
-      kata,
-      prefetchedData?.type === 'tesaurus-detail' ? prefetchedData : null
-    );
-
-    return {
-      title: `${metaTesaurus.judul} \u2014 Kateglo`,
-      description: metaTesaurus.deskripsi,
-    };
+  if (path.startsWith('/tesaurus/cari/')) {
+    return titled(buildMetaPencarianTesaurus(seg('/tesaurus/cari/'), dataFor('tesaurus-detail')));
   }
 
   // /tesaurus
-  if (decodedPath.startsWith('/tesaurus')) {
-    const metaBrowse = buildMetaBrowseTesaurus();
-    return {
-      title: `${metaBrowse.judul} \u2014 Kateglo`,
-      description: metaBrowse.deskripsi,
-    };
+  if (path.startsWith('/tesaurus')) {
+    return titled(buildMetaBrowseTesaurus());
   }
 
   // /glosarium/cari/:kata
-  if (decodedPath.startsWith('/glosarium/cari/')) {
-    const kata = decodedPath.replace('/glosarium/cari/', '').trim();
-    const metaGlosarium = buildMetaPencarianGlosarium(
-      kata,
-      prefetchedData?.type === 'glosarium-cari' ? prefetchedData : null
-    );
-
-    return {
-      title: `${metaGlosarium.judul} \u2014 Kateglo`,
-      description: metaGlosarium.deskripsi,
-    };
+  if (path.startsWith('/glosarium/cari/')) {
+    return titled(buildMetaPencarianGlosarium(seg('/glosarium/cari/'), dataFor('glosarium-cari')));
   }
 
   // /glosarium/bidang/:bidang
-  if (decodedPath.startsWith('/glosarium/bidang/')) {
-    const bidang = decodedPath.replace('/glosarium/bidang/', '').trim();
-    const metaBidang = buildMetaBidangGlosarium(
-      bidang,
-      prefetchedData?.type === 'glosarium-bidang' ? prefetchedData : null
-    );
-
-    return {
-      title: `${metaBidang.judul} \u2014 Kateglo`,
-      description: metaBidang.deskripsi,
-    };
+  if (path.startsWith('/glosarium/bidang/')) {
+    return titled(buildMetaBidangGlosarium(seg('/glosarium/bidang/'), dataFor('glosarium-bidang')));
   }
 
   // /glosarium/sumber/:sumber
-  if (decodedPath.startsWith('/glosarium/sumber/')) {
-    const sumber = decodedPath.replace('/glosarium/sumber/', '').trim();
-    const metaSumber = buildMetaSumberGlosarium(
-      sumber,
-      prefetchedData?.type === 'glosarium-sumber' ? prefetchedData : null
-    );
-
-    return {
-      title: `${metaSumber.judul} \u2014 Kateglo`,
-      description: metaSumber.deskripsi,
-    };
+  if (path.startsWith('/glosarium/sumber/')) {
+    return titled(buildMetaSumberGlosarium(seg('/glosarium/sumber/'), dataFor('glosarium-sumber')));
   }
 
   // /glosarium
-  if (decodedPath.startsWith('/glosarium')) {
-    const metaBrowse = buildMetaBrowseGlosarium();
-    return {
-      title: `${metaBrowse.judul} \u2014 Kateglo`,
-      description: metaBrowse.deskripsi,
-    };
+  if (path.startsWith('/glosarium')) {
+    return titled(buildMetaBrowseGlosarium());
   }
 
   // /kebijakan-privasi
-  if (decodedPath.startsWith('/kebijakan-privasi')) {
-    return {
-      title: 'Kebijakan Privasi \u2014 Kateglo',
-      description: 'Kebijakan privasi layanan Kateglo.',
-    };
+  if (path.startsWith('/kebijakan-privasi')) {
+    return { title: 'Kebijakan Privasi \u2014 Kateglo', description: 'Kebijakan privasi layanan Kateglo.' };
   }
 
-  return {
-    ...defaultMeta,
-    canonicalUrl: `${siteBaseUrl}${decodedPath}`,
-  };
+  return { ...defaultMeta, canonicalUrl: `${siteBaseUrl}${path}` };
 }
 
 export async function render(url = '/', prefetchedData = null) {

@@ -96,6 +96,38 @@ npm run build:public
    - pengguna belum login melihat teaser jumlah komentar aktif
    - moderasi komentar dilakukan dari halaman redaksi `Komentar`
 
+## Menu dan Cakupan Fitur
+
+### Menu Publik
+
+- **Kamus**: pencarian entri, jelajah kategori (abjad, kelas kata, bentuk/unsur terikat, ekspresi, ragam, bahasa, bidang), hasil berpaginasi, tautan ke detail entri.
+- **Tesaurus**: pencarian sinonim/antonim, tampilan relasi kata, contoh kata saat belum melakukan pencarian.
+- **Glosarium**: pencarian istilah teknis, jelajah berdasarkan bidang dan sumber, detail istilah, tautan silang ke entri kamus.
+- **Makna**: kamus terbalik (mencari kata berdasarkan isi makna).
+- **Rima**: pencarian rima akhir dan rima awal (aliterasi), masing-masing dengan navigasi cursor.
+- **Redaksi**: tampil hanya untuk akun dengan akses redaksi.
+- **Masuk/Keluar**: autentikasi Google OAuth untuk pengguna.
+
+### Halaman Publik Pendukung
+
+- **Beranda** (`/`): hero + kotak pencarian utama.
+- **Kebijakan Privasi** (`/kebijakan-privasi`).
+- **Footer**: tombol versi `Kateglo <versi>` (modal **Riwayat** dan **Tugas**) + toggle tema terang/gelap.
+
+### Menu Redaksi
+
+- **Dasbor**: ringkasan statistik (entri, tesaurus, glosarium, komentar, label, pengguna) dan navigasi cepat.
+- **Kamus**: daftar/cari/filter entri; tambah/sunting/hapus entri; kelola makna dan contoh.
+- **Tesaurus**: daftar/cari/filter status; tambah/sunting/hapus entri tesaurus.
+- **Glosarium**: daftar/cari/filter (bidang, sumber, status); tambah/sunting/hapus istilah.
+- **Bidang**: kelola master bidang glosarium.
+- **Sumber**: kelola master sumber glosarium.
+- **Komentar**: moderasi komentar kamus (isi dan status aktif).
+- **Label**: kelola label (kategori, kode, nama, urutan, status).
+- **Peran**: kelola peran dan pemetaan izin per peran.
+- **Izin**: kelola izin dan pemetaan peran yang memiliki izin.
+- **Pengguna**: kelola pengguna (profil dasar, peran, status aktif).
+
 ## Deployment (Render)
 
 Project ini siap di-deploy sebagai **1 Web Service** (SSR + API) dari root repo.

@@ -145,7 +145,7 @@ describe('entry-server', () => {
     expect(__private.buildMetaForPath('/kebijakan-privasi', site).title).toBe('Kebijakan Privasi — Kateglo');
 
     const defaultMeta = __private.buildMetaForPath('/random', site);
-    expect(defaultMeta.title).toContain('Kateglo — Kamus');
+    expect(defaultMeta.title).toBe('Kateglo');
     expect(defaultMeta.canonicalUrl).toBe('https://kateglo.org/random');
   });
 
@@ -175,7 +175,7 @@ describe('entry-server', () => {
 
   it('buildMetaForPath memakai fallback pathname root saat input kosong', () => {
     const meta = __private.buildMetaForPath('', 'https://kateglo.org');
-    expect(meta.title).toContain('Kateglo — Kamus');
+    expect(meta.title).toBe('Kateglo');
     expect(meta.canonicalUrl).toBe('https://kateglo.org/');
   });
 
