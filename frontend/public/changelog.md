@@ -4,6 +4,8 @@
 
 - Menambahkan pencarian rima akhir dan awal
 - Menampilkan entri glosarium dengan model _asing_ (indonesia) dan menyesuaikan pengurutan
+- Menambahkan etimologi dari Loan-words in Indonesian and Malay
+- Mengaudit lafal entri dasar
 
 ## 2026-02-21 Sabtu
 
