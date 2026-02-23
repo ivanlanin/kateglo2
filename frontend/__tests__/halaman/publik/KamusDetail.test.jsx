@@ -467,8 +467,8 @@ describe('KamusDetail', () => {
 
     render(<KamusDetail />);
 
-    const tombolPrev = screen.getByRole('button', { name: '«' });
-    const tombolNext = screen.getByRole('button', { name: '»' });
+    const tombolPrev = screen.getByRole('button', { name: '‹' });
+    const tombolNext = screen.getByRole('button', { name: '›' });
 
     fireEvent.click(tombolPrev);
     await waitFor(() => {
@@ -535,8 +535,8 @@ describe('KamusDetail', () => {
     expect(screen.getByText('kata teknis')).toBeInTheDocument();
     expect(ambilDetailKamus).toHaveBeenCalledTimes(1);
 
-    fireEvent.click(screen.getByRole('button', { name: '«' }));
-    fireEvent.click(screen.getByRole('button', { name: '»' }));
+    fireEvent.click(screen.getByRole('button', { name: '‹' }));
+    fireEvent.click(screen.getByRole('button', { name: '›' }));
 
     await waitFor(() => {
       expect(ambilDetailKamus).toHaveBeenCalledTimes(1);
@@ -588,7 +588,7 @@ describe('KamusDetail', () => {
 
     const { container, rerender } = render(<KamusDetail />);
 
-    fireEvent.click(screen.getByRole('button', { name: '«' }));
+    fireEvent.click(screen.getByRole('button', { name: '‹' }));
     isFetchingState = true;
     rerender(<KamusDetail />);
     await waitFor(() => {
@@ -597,7 +597,7 @@ describe('KamusDetail', () => {
 
     isFetchingState = false;
     rerender(<KamusDetail />);
-    fireEvent.click(screen.getByRole('button', { name: '»' }));
+    fireEvent.click(screen.getByRole('button', { name: '›' }));
     isFetchingState = true;
     rerender(<KamusDetail />);
     await waitFor(() => {
@@ -666,7 +666,7 @@ describe('KamusDetail', () => {
     });
     expect(screen.getByText('tanpa asing')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: '«' }));
+    fireEvent.click(screen.getByRole('button', { name: '‹' }));
     await waitFor(() => {
       expect(cariGlosarium).toHaveBeenLastCalledWith('kata hilang', {
         limit: 20,
@@ -675,7 +675,7 @@ describe('KamusDetail', () => {
       });
     });
 
-    fireEvent.click(screen.getByRole('button', { name: '»' }));
+    fireEvent.click(screen.getByRole('button', { name: '›' }));
     await waitFor(() => {
       expect(cariGlosarium).toHaveBeenLastCalledWith('kata hilang', {
         limit: 20,

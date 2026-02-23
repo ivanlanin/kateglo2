@@ -744,19 +744,31 @@ function KamusDetail() {
             )}
 
             {glosarium.length > 0 && (
-              <PanelLipat judul="Glosarium" jumlah={glosariumPageInfo.total} terbukaAwal={true} aksen={true}>
+              <PanelLipat
+                judul="Glosarium"
+                jumlah={glosariumPageInfo.total}
+                terbukaAwal={true}
+                aksen={true}
+                aksiKanan={(
+                  <div className="rima-heading-nav">
+                    <CursorNavButton
+                      symbol="‹"
+                      onClick={handlePrevGlosarium}
+                      disabled={isFetchingGlosarium || !glosariumPageInfo.hasPrev}
+                      isLoading={isFetchingGlosarium && navigasiGlosariumAktif === 'prev'}
+                      className="paginasi-btn rima-heading-nav-button"
+                    />
+                    <CursorNavButton
+                      symbol="›"
+                      onClick={handleNextGlosarium}
+                      disabled={isFetchingGlosarium || !glosariumPageInfo.hasNext}
+                      isLoading={isFetchingGlosarium && navigasiGlosariumAktif === 'next'}
+                      className="paginasi-btn rima-heading-nav-button"
+                    />
+                  </div>
+                )}
+              >
                 <div className="text-sm leading-relaxed">
-                  {glosariumPageInfo.hasPrev && (
-                    <>
-                      <CursorNavButton
-                        symbol="«"
-                        onClick={handlePrevGlosarium}
-                        disabled={isFetchingGlosarium}
-                        isLoading={isFetchingGlosarium && navigasiGlosariumAktif === 'prev'}
-                      />
-                      <span className="secondary-text"> ... </span>
-                    </>
-                  )}
                   {glosarium.map((item, i) => (
                     <span key={`${item.indonesia}-${item.asing}-${i}`}>
                       {item.asing ? (
@@ -777,17 +789,6 @@ function KamusDetail() {
                       {i < glosarium.length - 1 && <span>; </span>}
                     </span>
                   ))}
-                  {glosariumPageInfo.hasNext && (
-                    <>
-                      <span className="secondary-text"> ... </span>
-                      <CursorNavButton
-                        symbol="»"
-                        onClick={handleNextGlosarium}
-                        disabled={isFetchingGlosarium}
-                        isLoading={isFetchingGlosarium && navigasiGlosariumAktif === 'next'}
-                      />
-                    </>
-                  )}
                 </div>
               </PanelLipat>
             )}

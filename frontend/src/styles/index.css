@@ -840,6 +840,26 @@ code {
     @apply w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors text-left;
   }
 
+  .panel-lipat-heading {
+    @apply flex items-stretch bg-gray-50 transition-colors;
+  }
+
+  .panel-lipat-heading:hover {
+    @apply bg-gray-100;
+  }
+
+  .panel-lipat-trigger-title {
+    @apply flex-1 rounded-none bg-transparent hover:bg-transparent;
+  }
+
+  .panel-lipat-actions {
+    @apply flex items-center gap-1 px-2 bg-transparent;
+  }
+
+  .panel-lipat-toggle-button {
+    @apply inline-flex items-center justify-center px-3 bg-transparent hover:bg-transparent transition-colors;
+  }
+
   .dark .panel-lipat-trigger {
     @apply bg-dark-bg-elevated hover:bg-dark-bg-hover;
   }
@@ -848,8 +868,48 @@ code {
     @apply bg-gray-100 hover:bg-gray-200;
   }
 
+  .panel-lipat-root-aksen .panel-lipat-heading {
+    @apply bg-gray-100;
+  }
+
+  .panel-lipat-root-aksen .panel-lipat-heading:hover {
+    @apply bg-gray-200;
+  }
+
   .dark .panel-lipat-trigger-aksen {
     @apply bg-dark-bg-hover hover:bg-dark-bg-input;
+  }
+
+  .dark .panel-lipat-heading {
+    @apply bg-dark-bg-elevated;
+  }
+
+  .dark .panel-lipat-heading:hover {
+    @apply bg-dark-bg-hover;
+  }
+
+  .dark .panel-lipat-root-aksen .panel-lipat-heading {
+    @apply bg-dark-bg-hover;
+  }
+
+  .dark .panel-lipat-root-aksen .panel-lipat-heading:hover {
+    @apply bg-dark-bg-input;
+  }
+
+  .panel-lipat-trigger-title.panel-lipat-trigger-aksen {
+    @apply bg-transparent hover:bg-transparent;
+  }
+
+  .dark .panel-lipat-trigger-title.panel-lipat-trigger-aksen {
+    @apply bg-transparent hover:bg-transparent;
+  }
+
+  .panel-lipat-actions .paginasi-btn {
+    @apply px-2.5 py-1;
+  }
+
+  .dark .panel-lipat-actions .paginasi-btn {
+    @apply bg-dark-bg-input border-dark-border hover:bg-dark-bg-hover text-dark-text;
   }
 
   .panel-lipat-label {
