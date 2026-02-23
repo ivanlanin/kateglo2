@@ -8,9 +8,11 @@ import { useQuery } from '@tanstack/react-query';
 import { ambilContohRima, cariRima } from '../../api/apiPublik';
 import CursorNavButton from '../../komponen/publik/CursorNavButton';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
+import NavigasiLoadingOverlay from '../../komponen/publik/NavigasiLoadingOverlay';
 import { QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
 import { amanDecode } from './Makna';
+import useNavigasiMemuat from '../../hooks/bersama/useNavigasiMemuat';
 
 const LIMIT = 50;
 
@@ -44,14 +46,12 @@ function Rima() {
   const [directionAkhir, setDirectionAkhir] = useState('next');
   const [cursorAwal, setCursorAwal] = useState(null);
   const [directionAwal, setDirectionAwal] = useState('next');
-  const [navigasiRimaAktif, setNavigasiRimaAktif] = useState(null);
 
   useEffect(() => {
     setCursorAkhir(null);
     setDirectionAkhir('next');
     setCursorAwal(null);
     setDirectionAwal('next');
-    setNavigasiRimaAktif(null);
   }, [kataAman]);
 
   const { data, isLoading, isFetching, isError, error } = useQuery({
@@ -86,29 +86,27 @@ function Rima() {
   const rimaAkhir = data?.rima_akhir;
   const rimaAwal = data?.rima_awal;
 
-  useEffect(() => {
-    if (!isFetching) {
-      setNavigasiRimaAktif(null);
-    }
-  }, [isFetching]);
+  const { navigasiAktif: navigasiRimaAktif, mulaiNavigasi } = useNavigasiMemuat(isFetching, kataAman);
+  const isMemuatRimaAkhir = isFetching && ['akhir-prev', 'akhir-next'].includes(navigasiRimaAktif);
+  const isMemuatRimaAwal = isFetching && ['awal-prev', 'awal-next'].includes(navigasiRimaAktif);
 
   const handleAkhirPrev = () => {
-    setNavigasiRimaAktif('akhir-prev');
+    mulaiNavigasi('akhir-prev');
     setCursorAkhir(rimaAkhir?.prevCursor);
     setDirectionAkhir('prev');
   };
   const handleAkhirNext = () => {
-    setNavigasiRimaAktif('akhir-next');
+    mulaiNavigasi('akhir-next');
     setCursorAkhir(rimaAkhir?.nextCursor);
     setDirectionAkhir('next');
   };
   const handleAwalPrev = () => {
-    setNavigasiRimaAktif('awal-prev');
+    mulaiNavigasi('awal-prev');
     setCursorAwal(rimaAwal?.prevCursor);
     setDirectionAwal('prev');
   };
   const handleAwalNext = () => {
-    setNavigasiRimaAktif('awal-next');
+    mulaiNavigasi('awal-next');
     setCursorAwal(rimaAwal?.nextCursor);
     setDirectionAwal('next');
   };
@@ -145,7 +143,7 @@ function Rima() {
 
       {kataAman && !isError && data && (
         <>
-          <div className="mt-6">
+          <div className="mt-6 mb-8 pb-8 border-b border-gray-200 dark:border-gray-700">
             <div className="kamus-detail-subentry-heading-row">
               <h2 className="kamus-detail-def-class mb-0">Rima Akhir</h2>
               <div className="rima-heading-actions">
@@ -159,22 +157,25 @@ function Rima() {
                     symbol="‹"
                     onClick={handleAkhirPrev}
                     disabled={isFetching || !rimaAkhir?.hasPrev}
-                    isLoading={isFetching && navigasiRimaAktif === 'akhir-prev'}
                     className="paginasi-btn rima-heading-nav-button"
                   />
                   <CursorNavButton
                     symbol="›"
                     onClick={handleAkhirNext}
                     disabled={isFetching || !rimaAkhir?.hasNext}
-                    isLoading={isFetching && navigasiRimaAktif === 'akhir-next'}
                     className="paginasi-btn rima-heading-nav-button"
                   />
                 </div>
               </div>
             </div>
-            <DaftarRima
-              items={rimaAkhir?.data}
-            />
+            <NavigasiLoadingOverlay
+              isLoading={isMemuatRimaAkhir}
+              loadingText="Memuat rima …"
+            >
+              <DaftarRima
+                items={rimaAkhir?.data}
+              />
+            </NavigasiLoadingOverlay>
           </div>
 
           <div className="mt-6">
@@ -191,22 +192,25 @@ function Rima() {
                     symbol="‹"
                     onClick={handleAwalPrev}
                     disabled={isFetching || !rimaAwal?.hasPrev}
-                    isLoading={isFetching && navigasiRimaAktif === 'awal-prev'}
                     className="paginasi-btn rima-heading-nav-button"
                   />
                   <CursorNavButton
                     symbol="›"
                     onClick={handleAwalNext}
                     disabled={isFetching || !rimaAwal?.hasNext}
-                    isLoading={isFetching && navigasiRimaAktif === 'awal-next'}
                     className="paginasi-btn rima-heading-nav-button"
                   />
                 </div>
               </div>
             </div>
-            <DaftarRima
-              items={rimaAwal?.data}
-            />
+            <NavigasiLoadingOverlay
+              isLoading={isMemuatRimaAwal}
+              loadingText="Memuat rima …"
+            >
+              <DaftarRima
+                items={rimaAwal?.data}
+              />
+            </NavigasiLoadingOverlay>
           </div>
         </>
       )}

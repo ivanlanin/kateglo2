@@ -543,7 +543,7 @@ describe('KamusDetail', () => {
     });
   });
 
-  it('glosarium menampilkan spinner loading saat navigasi aktif dan sedang fetching', async () => {
+  it('glosarium menampilkan overlay hanya saat navigasi aktif dan tombol tetap simbol', async () => {
     let isFetchingState = false;
 
     mockUseQuery.mockImplementation((options) => {
@@ -588,11 +588,20 @@ describe('KamusDetail', () => {
 
     const { container, rerender } = render(<KamusDetail />);
 
+    isFetchingState = true;
+    rerender(<KamusDetail />);
+    expect(screen.queryByText('Memuat glosarium ...')).not.toBeInTheDocument();
+    expect(screen.queryByText('Memuat glosarium …')).not.toBeInTheDocument();
+
+    isFetchingState = false;
+    rerender(<KamusDetail />);
+
     fireEvent.click(screen.getByRole('button', { name: '‹' }));
     isFetchingState = true;
     rerender(<KamusDetail />);
     await waitFor(() => {
-      expect(container.querySelector('svg.animate-spin')).not.toBeNull();
+      expect(screen.getByText('Memuat glosarium …')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: '‹' })).toHaveTextContent('‹');
     });
 
     isFetchingState = false;
@@ -601,8 +610,11 @@ describe('KamusDetail', () => {
     isFetchingState = true;
     rerender(<KamusDetail />);
     await waitFor(() => {
-      expect(container.querySelector('svg.animate-spin')).not.toBeNull();
+      expect(screen.getByText('Memuat glosarium …')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: '›' })).toHaveTextContent('›');
     });
+
+    expect(container.querySelector('.rima-heading-nav-button svg.animate-spin')).toBeNull();
   });
 
   it('mode not found menjalankan query fallback glosarium dan navigasi prev/next', async () => {

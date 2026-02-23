@@ -5,6 +5,7 @@
 - Menyesuaikan tampilan pencarian rima menjadi empat kolom
 - Mengelompokkan tampilan detail glosarium berdasarkan bidang
 - Memindahkan paginasi glosarium di detail kamus ke bilah judul panel lipat
+- Mengubah tampilan navigasi dalam halaman menjadi lebih visual
 
 ## 2026-02-22 Minggu
 

@@ -10,10 +10,12 @@ import { useAuth } from '../../context/authContext';
 import CursorNavButton from '../../komponen/publik/CursorNavButton';
 import PanelLipat from '../../komponen/publik/PanelLipat';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
+import NavigasiLoadingOverlay from '../../komponen/publik/NavigasiLoadingOverlay';
 import { PesanTidakDitemukan } from '../../komponen/publik/StatusKonten';
 import { formatLemaHomonim, formatLocalDateTime, parseUtcDate } from '../../utils/formatUtils';
 import { buatPathDetailKamus, normalisasiIndeksKamus } from '../../utils/paramUtils';
 import { buildMetaDetailKamus } from '../../utils/metaUtils';
+import useNavigasiMemuat from '../../hooks/bersama/useNavigasiMemuat';
 
 const GLOSARIUM_LIMIT = 20;
 
@@ -155,14 +157,12 @@ function KamusDetail() {
   const [pesanKomentar, setPesanKomentar] = useState('');
   const [cursorGlosarium, setCursorGlosarium] = useState(null);
   const [directionGlosarium, setDirectionGlosarium] = useState('next');
-  const [navigasiGlosariumAktif, setNavigasiGlosariumAktif] = useState(null);
   const [cursorGlosariumFallback, setCursorGlosariumFallback] = useState(null);
   const [directionGlosariumFallback, setDirectionGlosariumFallback] = useState('next');
 
   useEffect(() => {
     setCursorGlosarium(null);
     setDirectionGlosarium('next');
-    setNavigasiGlosariumAktif(null);
     setCursorGlosariumFallback(null);
     setDirectionGlosariumFallback('next');
   }, [indeks]);
@@ -177,12 +177,6 @@ function KamusDetail() {
     enabled: Boolean(indeks),
     placeholderData: (previousData) => previousData,
   });
-
-  useEffect(() => {
-    if (!isFetching) {
-      setNavigasiGlosariumAktif(null);
-    }
-  }, [isFetching]);
 
   const {
     data: komentarResponse,
@@ -259,14 +253,6 @@ function KamusDetail() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <HalamanDasar>
-        <p className="secondary-text">Memuat detail …</p>
-      </HalamanDasar>
-    );
-  }
-
   const notFound = isError || !data;
   const kataCari = decodeURIComponent(indeks || '');
   const saran = error?.saran || [];
@@ -324,10 +310,22 @@ function KamusDetail() {
     };
 
   const isFetchingGlosarium = notFound ? isFetchingGlosariumFallback : isFetching;
+  const {
+    mulaiNavigasi: mulaiNavigasiGlosarium,
+    isNavigasiMemuat: isNavigasiGlosariumMemuat,
+  } = useNavigasiMemuat(isFetchingGlosarium, indeks);
+
+  if (isLoading) {
+    return (
+      <HalamanDasar>
+        <p className="secondary-text">Memuat detail …</p>
+      </HalamanDasar>
+    );
+  }
 
   const handlePrevGlosarium = () => {
     if (!glosariumPageInfo.prevCursor) return;
-    setNavigasiGlosariumAktif('prev');
+    mulaiNavigasiGlosarium('prev');
     if (notFound) {
       setCursorGlosariumFallback(glosariumPageInfo.prevCursor);
       setDirectionGlosariumFallback('prev');
@@ -339,7 +337,7 @@ function KamusDetail() {
 
   const handleNextGlosarium = () => {
     if (!glosariumPageInfo.nextCursor) return;
-    setNavigasiGlosariumAktif('next');
+    mulaiNavigasiGlosarium('next');
     if (notFound) {
       setCursorGlosariumFallback(glosariumPageInfo.nextCursor);
       setDirectionGlosariumFallback('next');
@@ -755,41 +753,43 @@ function KamusDetail() {
                       symbol="‹"
                       onClick={handlePrevGlosarium}
                       disabled={isFetchingGlosarium || !glosariumPageInfo.hasPrev}
-                      isLoading={isFetchingGlosarium && navigasiGlosariumAktif === 'prev'}
                       className="paginasi-btn rima-heading-nav-button"
                     />
                     <CursorNavButton
                       symbol="›"
                       onClick={handleNextGlosarium}
                       disabled={isFetchingGlosarium || !glosariumPageInfo.hasNext}
-                      isLoading={isFetchingGlosarium && navigasiGlosariumAktif === 'next'}
                       className="paginasi-btn rima-heading-nav-button"
                     />
                   </div>
                 )}
               >
-                <div className="text-sm leading-relaxed">
-                  {glosarium.map((item, i) => (
-                    <span key={`${item.indonesia}-${item.asing}-${i}`}>
-                      {item.asing ? (
-                        <>
-                          <Link
-                            to={`/glosarium/detail/${encodeURIComponent(item.asing)}`}
-                            className="kamus-detail-subentry-link"
-                          >
-                            <em>{item.asing}</em>
-                          </Link>
-                          <span> (</span>
+                <NavigasiLoadingOverlay
+                  isLoading={isNavigasiGlosariumMemuat}
+                  loadingText="Memuat glosarium …"
+                  contentClassName="text-sm leading-relaxed"
+                >
+                    {glosarium.map((item, i) => (
+                      <span key={`${item.indonesia}-${item.asing}-${i}`}>
+                        {item.asing ? (
+                          <>
+                            <Link
+                              to={`/glosarium/detail/${encodeURIComponent(item.asing)}`}
+                              className="kamus-detail-subentry-link"
+                            >
+                              <em>{item.asing}</em>
+                            </Link>
+                            <span> (</span>
+                            <span>{item.indonesia}</span>
+                            <span>)</span>
+                          </>
+                        ) : (
                           <span>{item.indonesia}</span>
-                          <span>)</span>
-                        </>
-                      ) : (
-                        <span>{item.indonesia}</span>
-                      )}
-                      {i < glosarium.length - 1 && <span>; </span>}
-                    </span>
-                  ))}
-                </div>
+                        )}
+                        {i < glosarium.length - 1 && <span>; </span>}
+                      </span>
+                    ))}
+                </NavigasiLoadingOverlay>
               </PanelLipat>
             )}
           </div>

@@ -8,10 +8,12 @@ import { useQuery } from '@tanstack/react-query';
 import { ambilDetailGlosarium } from '../../api/apiPublik';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import CursorNavButton from '../../komponen/publik/CursorNavButton';
+import NavigasiLoadingOverlay from '../../komponen/publik/NavigasiLoadingOverlay';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
 import { parseEntriGlosarium } from '../../utils/formatUtils';
 import { buildMetaDetailGlosarium } from '../../utils/metaUtils';
+import useNavigasiMemuat from '../../hooks/bersama/useNavigasiMemuat';
 
 function upsertMetaTag({ name, property, content }) {
   const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
@@ -122,12 +124,9 @@ function GlosariumDetail() {
 
   const [mengandungCursor, setMengandungCursor] = useState(null);
   const [miripCursor, setMiripCursor] = useState(null);
-  const [navigasiAktif, setNavigasiAktif] = useState(null);
-
   useEffect(() => {
     setMengandungCursor(null);
     setMiripCursor(null);
-    setNavigasiAktif(null);
   }, [asingDecoded]);
 
   const { data, isLoading, isFetching, isError, error } = useQuery({
@@ -137,9 +136,9 @@ function GlosariumDetail() {
     placeholderData: (previousData) => previousData,
   });
 
-  useEffect(() => {
-    if (!isFetching) setNavigasiAktif(null);
-  }, [isFetching]);
+  const { navigasiAktif, mulaiNavigasi } = useNavigasiMemuat(isFetching, asingDecoded);
+  const isMemuatMengandung = isFetching && ['prevMengandung', 'nextMengandung'].includes(navigasiAktif);
+  const isMemuatMirip = isFetching && ['prevMirip', 'nextMirip'].includes(navigasiAktif);
 
   const persis = data?.persis || [];
   const mengandung = data?.mengandung || [];
@@ -164,25 +163,25 @@ function GlosariumDetail() {
 
   const handlePrevMengandung = () => {
     if (!mengandungPage.prevCursor) return;
-    setNavigasiAktif('prevMengandung');
+    mulaiNavigasi('prevMengandung');
     setMengandungCursor(mengandungPage.prevCursor);
   };
 
   const handleNextMengandung = () => {
     if (!mengandungPage.nextCursor) return;
-    setNavigasiAktif('nextMengandung');
+    mulaiNavigasi('nextMengandung');
     setMengandungCursor(mengandungPage.nextCursor);
   };
 
   const handlePrevMirip = () => {
     if (!miripPage.prevCursor) return;
-    setNavigasiAktif('prevMirip');
+    mulaiNavigasi('prevMirip');
     setMiripCursor(miripPage.prevCursor);
   };
 
   const handleNextMirip = () => {
     if (!miripPage.nextCursor) return;
-    setNavigasiAktif('nextMirip');
+    mulaiNavigasi('nextMirip');
     setMiripCursor(miripPage.nextCursor);
   };
 
@@ -214,23 +213,26 @@ function GlosariumDetail() {
                 symbol="‹"
                 onClick={handlePrevMengandung}
                 disabled={isFetching || !mengandungPage?.hasPrev}
-                isLoading={isFetching && navigasiAktif === 'prevMengandung'}
                 className="paginasi-btn rima-heading-nav-button"
               />
               <CursorNavButton
                 symbol="›"
                 onClick={handleNextMengandung}
                 disabled={isFetching || !mengandungPage?.hasNext}
-                isLoading={isFetching && navigasiAktif === 'nextMengandung'}
                 className="paginasi-btn rima-heading-nav-button"
               />
             </div>
           )}
         >
-          <AlirEntri
-            items={mengandung}
-            tautAsing
-          />
+          <NavigasiLoadingOverlay
+            isLoading={isMemuatMengandung}
+            loadingText="Memuat glosarium …"
+          >
+            <AlirEntri
+              items={mengandung}
+              tautAsing
+            />
+          </NavigasiLoadingOverlay>
         </SeksiDetail>
       )}
 
@@ -244,23 +246,26 @@ function GlosariumDetail() {
                 symbol="‹"
                 onClick={handlePrevMirip}
                 disabled={isFetching || !miripPage?.hasPrev}
-                isLoading={isFetching && navigasiAktif === 'prevMirip'}
                 className="paginasi-btn rima-heading-nav-button"
               />
               <CursorNavButton
                 symbol="›"
                 onClick={handleNextMirip}
                 disabled={isFetching || !miripPage?.hasNext}
-                isLoading={isFetching && navigasiAktif === 'nextMirip'}
                 className="paginasi-btn rima-heading-nav-button"
               />
             </div>
           )}
         >
-          <AlirEntri
-            items={mirip}
-            tautAsing
-          />
+          <NavigasiLoadingOverlay
+            isLoading={isMemuatMirip}
+            loadingText="Memuat glosarium …"
+          >
+            <AlirEntri
+              items={mirip}
+              tautAsing
+            />
+          </NavigasiLoadingOverlay>
         </SeksiDetail>
       )}
 

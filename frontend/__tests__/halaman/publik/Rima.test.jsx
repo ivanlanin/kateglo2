@@ -229,7 +229,7 @@ describe('Rima', () => {
     expect(screen.queryByText(/Hasil Pencarian Rima/i)).not.toBeInTheDocument();
   });
 
-  it('menampilkan spinner loading pada tombol prev/next akhir dan awal sesuai navigasi aktif', async () => {
+  it('menampilkan overlay loading pada hasil rima sesuai navigasi aktif dan tombol tetap simbol', async () => {
     let isFetchingState = false;
     mockUseQuery.mockImplementation((options) => {
       if (options?.enabled && options?.queryFn) options.queryFn();
@@ -261,11 +261,19 @@ describe('Rima', () => {
 
     const { container, rerender } = render(<Rima />);
 
+    isFetchingState = true;
+    rerender(<Rima />);
+    expect(screen.queryByText('Memuat rima …')).not.toBeInTheDocument();
+
+    isFetchingState = false;
+    rerender(<Rima />);
+
     fireEvent.click(screen.getAllByRole('button', { name: '‹' })[0]);
     isFetchingState = true;
     rerender(<Rima />);
     await waitFor(() => {
-      expect(container.querySelector('svg.animate-spin')).not.toBeNull();
+      expect(screen.getByText('Memuat rima …')).toBeInTheDocument();
+      expect(screen.getAllByRole('button', { name: '‹' })[0]).toHaveTextContent('‹');
     });
 
     isFetchingState = false;
@@ -274,7 +282,8 @@ describe('Rima', () => {
     isFetchingState = true;
     rerender(<Rima />);
     await waitFor(() => {
-      expect(container.querySelector('svg.animate-spin')).not.toBeNull();
+      expect(screen.getByText('Memuat rima …')).toBeInTheDocument();
+      expect(screen.getAllByRole('button', { name: '›' })[0]).toHaveTextContent('›');
     });
 
     isFetchingState = false;
@@ -283,7 +292,8 @@ describe('Rima', () => {
     isFetchingState = true;
     rerender(<Rima />);
     await waitFor(() => {
-      expect(container.querySelector('svg.animate-spin')).not.toBeNull();
+      expect(screen.getByText('Memuat rima …')).toBeInTheDocument();
+      expect(screen.getAllByRole('button', { name: '‹' })[1]).toHaveTextContent('‹');
     });
 
     isFetchingState = false;
@@ -292,7 +302,10 @@ describe('Rima', () => {
     isFetchingState = true;
     rerender(<Rima />);
     await waitFor(() => {
-      expect(container.querySelector('svg.animate-spin')).not.toBeNull();
+      expect(screen.getByText('Memuat rima …')).toBeInTheDocument();
+      expect(screen.getAllByRole('button', { name: '›' })[1]).toHaveTextContent('›');
     });
+
+    expect(container.querySelector('.rima-heading-nav-button svg.animate-spin')).toBeNull();
   });
 });

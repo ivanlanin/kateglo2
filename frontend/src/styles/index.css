@@ -1448,6 +1448,26 @@ code {
     @apply text-gray-500 italic;
   }
 
+  .navigasi-loading-body {
+    @apply relative;
+  }
+
+  .navigasi-loading-content {
+    @apply opacity-60;
+  }
+
+  .navigasi-loading-overlay {
+    @apply absolute inset-0 flex items-center justify-center rounded-md bg-white/75;
+  }
+
+  .navigasi-loading-overlay-chip {
+    @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 bg-white text-gray-700;
+  }
+
+  .navigasi-loading-spinner {
+    @apply h-3.5 w-3.5 text-blue-600;
+  }
+
   .kamus-detail-info-label {
     @apply text-sm font-semibold text-gray-600 mb-1;
   }
@@ -1538,6 +1558,18 @@ code {
   .dark .peribahasa-meaning-label,
   .dark .cell-muted {
     @apply text-dark-text-muted;
+  }
+
+  .dark .navigasi-loading-overlay {
+    @apply bg-dark-bg-elevated/75;
+  }
+
+  .dark .navigasi-loading-overlay-chip {
+    @apply border-dark-border bg-dark-bg-input text-dark-text;
+  }
+
+  .dark .navigasi-loading-spinner {
+    @apply text-blue-400;
   }
 
   /* ===== Panel Geser (slide-over) ===== */

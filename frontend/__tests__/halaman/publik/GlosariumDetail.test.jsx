@@ -256,7 +256,7 @@ describe('GlosariumDetail', () => {
     expect(screen.getByRole('heading', { name: 'Persis' })).toBeInTheDocument();
   });
 
-  it('menampilkan spinner pada semua aksi navigasi saat fetching aktif', () => {
+  it('menampilkan overlay hanya saat navigasi aktif dan tombol tetap simbol', () => {
     queryState = {
       isLoading: false,
       isFetching: false,
@@ -274,11 +274,20 @@ describe('GlosariumDetail', () => {
     };
 
     const { container, rerender } = render(<GlosariumDetail />);
+
+    queryState = { ...queryState, isFetching: true };
+    rerender(<GlosariumDetail />);
+    expect(screen.queryByText('Memuat glosarium …')).not.toBeInTheDocument();
+    queryState = { ...queryState, isFetching: false };
+    rerender(<GlosariumDetail />);
+
     const klikDanFetch = (index) => {
       fireEvent.click(screen.getAllByRole('button')[index]);
       queryState = { ...queryState, isFetching: true };
       rerender(<GlosariumDetail />);
-      expect(container.querySelectorAll('svg.animate-spin').length).toBeGreaterThan(0);
+      expect(screen.getByText('Memuat glosarium …')).toBeInTheDocument();
+      expect(screen.getAllByRole('button', { name: '‹' })[0]).toHaveTextContent('‹');
+      expect(screen.getAllByRole('button', { name: '›' })[0]).toHaveTextContent('›');
       queryState = { ...queryState, isFetching: false };
       rerender(<GlosariumDetail />);
     };
@@ -287,5 +296,7 @@ describe('GlosariumDetail', () => {
     klikDanFetch(1);
     klikDanFetch(2);
     klikDanFetch(3);
+
+    expect(container.querySelector('.rima-heading-nav-button svg.animate-spin')).toBeNull();
   });
 });
