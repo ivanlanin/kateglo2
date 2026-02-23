@@ -127,6 +127,7 @@ describe('metaUtils', () => {
     expect(buildMetaDetailGlosarium('term', { persis: [] }).deskripsi).toContain('dalam glosarium Kateglo');
     expect(buildMetaSumberGlosarium('', null).judul).toBe('Glosarium');
     expect(buildMetaSumberGlosarium('KBBI', { total: 2 }).judul).toBe('Glosarium KBBI');
+    expect(buildMetaSumberGlosarium('kamus-tata-boga', { total: 2 }).judul).toBe('Glosarium Kamus Tata Boga');
   });
 
   it('namespace export tersedia untuk tiap domain', () => {

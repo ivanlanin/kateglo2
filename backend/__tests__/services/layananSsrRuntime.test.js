@@ -25,6 +25,7 @@ jest.mock('../../services/layananTesaurusPublik', () => ({
 
 jest.mock('../../models/modelGlosarium', () => ({
   cari: jest.fn(),
+  ambilDetailAsing: jest.fn(),
 }));
 
 const logger = require('../../config/logger');
@@ -124,6 +125,15 @@ describe('services/layananSsrRuntime', () => {
     });
     ambilDetailTesaurus.mockResolvedValue({ indeks: 'besar', sinonim: ['agung'], antonim: ['kecil'] });
     ModelGlosarium.cari.mockResolvedValue({ total: 2, data: [{ indonesia: 'istilah', asing: 'term' }] });
+    ModelGlosarium.ambilDetailAsing.mockResolvedValue({
+      persis: [{ id: 1, asing: 'bankrupt', indonesia: 'bangkrut' }],
+      mengandung: [],
+      mengandungPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+      mengandungTotal: 0,
+      mirip: [],
+      miripPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+      miripTotal: 0,
+    });
   });
 
   it('helper isAssetRequest dan isBypassPath menutup semua cabang', () => {
@@ -198,6 +208,7 @@ describe('services/layananSsrRuntime', () => {
     const glosariumBidang = await runtime.__private.prefetchSsrData('/glosarium/bidang/biologi');
     const glosariumSumber = await runtime.__private.prefetchSsrData('/glosarium/sumber/Pusba');
     const glosariumCari = await runtime.__private.prefetchSsrData('/glosarium/cari/air');
+    const glosariumDetail = await runtime.__private.prefetchSsrData('/glosarium/detail/bankrupt');
     const kamusCari = await runtime.__private.prefetchSsrData('/kamus/cari/air');
     const unknown = await runtime.__private.prefetchSsrData('/apa-saja');
 
@@ -207,6 +218,7 @@ describe('services/layananSsrRuntime', () => {
     expect(glosariumBidang.type).toBe('glosarium-bidang');
     expect(glosariumSumber.type).toBe('glosarium-sumber');
     expect(glosariumCari.type).toBe('glosarium-cari');
+    expect(glosariumDetail.type).toBe('glosarium-detail');
     expect(kamusCari.type).toBe('kamus-cari');
     expect(unknown).toBeNull();
 
@@ -244,6 +256,7 @@ describe('services/layananSsrRuntime', () => {
     expect(await runtime.__private.prefetchSsrData('/glosarium/bidang/%20')).toBeNull();
     expect(await runtime.__private.prefetchSsrData('/glosarium/sumber/%20')).toBeNull();
     expect(await runtime.__private.prefetchSsrData('/glosarium/cari/%20')).toBeNull();
+    expect(await runtime.__private.prefetchSsrData('/glosarium/detail/%20')).toBeNull();
     expect(await runtime.__private.prefetchSsrData('/kamus/cari/%20')).toBeNull();
 
     ambilDetailTesaurus.mockResolvedValueOnce(null);
@@ -260,6 +273,11 @@ describe('services/layananSsrRuntime', () => {
     ModelGlosarium.cari.mockResolvedValueOnce({ total: 0, data: undefined });
     const cariKosong = await runtime.__private.prefetchSsrData('/glosarium/cari/kosong');
     expect(cariKosong.contoh).toEqual([]);
+
+    ModelGlosarium.ambilDetailAsing.mockResolvedValueOnce(null);
+    const detailKosong = await runtime.__private.prefetchSsrData('/glosarium/detail/tidak-ada');
+    expect(detailKosong.type).toBe('glosarium-detail');
+    expect(detailKosong.persis).toEqual([]);
 
     ambilDetailKamus.mockResolvedValueOnce(null);
     expect(await runtime.__private.prefetchSsrData('/kamus/cari/tidak-ada')).toBeNull();

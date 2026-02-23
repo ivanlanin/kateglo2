@@ -107,6 +107,16 @@ describe('entry-server', () => {
     expect(kamusKategoriAlias.title).toBe('Kelas Kata Verba — Kateglo');
     expect(__private.buildMetaForPath('/kamus', site).title).toBe('Kamus — Kateglo');
 
+    expect(__private.buildMetaForPath('/makna', site).title).toBe('Makna — Kateglo');
+    const maknaCari = __private.buildMetaForPath('/makna/cari/air', site);
+    expect(maknaCari.title).toBe('Hasil Pencarian Makna "air" — Kateglo');
+    expect(maknaCari.description).toContain('maknanya mengandung');
+
+    expect(__private.buildMetaForPath('/rima', site).title).toBe('Rima — Kateglo');
+    const rimaCari = __private.buildMetaForPath('/rima/cari/senja', site);
+    expect(rimaCari.title).toBe('Hasil Pencarian Rima "senja" — Kateglo');
+    expect(rimaCari.description).toContain('berima dengan');
+
     expect(__private.buildMetaForPath('/tesaurus/cari/%20', site).title).toBe('Tesaurus — Kateglo');
     const tesaurusRich = __private.buildMetaForPath('/tesaurus/cari/besar', site, {
       type: 'tesaurus-detail',
@@ -140,6 +150,21 @@ describe('entry-server', () => {
       contoh: [{ indonesia: 'sel', asing: 'cell' }],
     });
     expect(glosariumSumber.title).toBe('Glosarium Pusba — Kateglo');
+
+    const glosariumSumberSlug = __private.buildMetaForPath('/glosarium/sumber/kamus-tata-boga', site, {
+      type: 'glosarium-sumber',
+      sumberNama: 'Kamus Tata Boga',
+      total: 4,
+      contoh: [{ indonesia: 'acar', asing: 'achar' }],
+    });
+    expect(glosariumSumberSlug.title).toBe('Glosarium Kamus Tata Boga — Kateglo');
+
+    const glosariumDetail = __private.buildMetaForPath('/glosarium/detail/bankrupt', site, {
+      type: 'glosarium-detail',
+      persis: [{ id: 1, asing: 'bankrupt', indonesia: 'bangkrut' }],
+    });
+    expect(glosariumDetail.title).toBe('bankrupt — Kateglo');
+    expect(glosariumDetail.description).toContain('1 padanan Indonesia');
 
     expect(__private.buildMetaForPath('/glosarium', site).title).toBe('Glosarium — Kateglo');
     expect(__private.buildMetaForPath('/kebijakan-privasi', site).title).toBe('Kebijakan Privasi — Kateglo');

@@ -282,8 +282,17 @@ export function buildMetaPencarianGlosarium(kata = '', data = null) {
   };
 }
 
+function formatNamaSumberGlosarium(sumber = '') {
+  const sumberAman = amanDecode(sumber).trim();
+  if (!sumberAman) return '';
+  if (/[-_]/.test(sumberAman)) {
+    return formatAwalKapital(sumberAman.replace(/[-_]+/g, ' '));
+  }
+  return sumberAman;
+}
+
 export function buildMetaBidangGlosarium(bidang = '', data = null) {
-  const bidangAman = formatNamaBidang(amanDecode(bidang).trim());
+  const bidangAman = formatNamaBidang(String(data?.bidangNama || bidang || '').trim());
   if (!bidangAman) {
     return buildMetaBrowseGlosarium();
   }
@@ -314,7 +323,7 @@ export function buildMetaDetailGlosarium(asing = '', data = null) {
 }
 
 export function buildMetaSumberGlosarium(sumber = '', data = null) {
-  const sumberAman = amanDecode(sumber).trim();
+  const sumberAman = formatNamaSumberGlosarium(String(data?.sumberNama || sumber || '').trim());
   if (!sumberAman) {
     return buildMetaBrowseGlosarium();
   }

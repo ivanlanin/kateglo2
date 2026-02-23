@@ -11,6 +11,7 @@ import {
   buildMetaBrowseKamus,
   buildMetaBrowseGlosarium,
   buildMetaBrowseTesaurus,
+  buildMetaDetailGlosarium,
   buildMetaDetailKamus,
   buildMetaPencarianGlosarium,
   buildMetaKategoriKamus,
@@ -40,6 +41,36 @@ function truncate(text = '', maxLen = 155) {
   const cut = text.substring(0, maxLen);
   const lastSpace = cut.lastIndexOf(' ');
   return (lastSpace > maxLen * 0.6 ? cut.substring(0, lastSpace) : cut) + '\u2026';
+}
+
+function buildMetaMakna(kata = '') {
+  const kataAman = String(kata || '').trim();
+  if (!kataAman) {
+    return {
+      judul: 'Makna',
+      deskripsi: 'Cari kata berdasarkan makna di kamus Kateglo.',
+    };
+  }
+
+  return {
+    judul: `Hasil Pencarian Makna "${kataAman}"`,
+    deskripsi: `Kata-kata yang maknanya mengandung "${kataAman}" di kamus Kateglo.`,
+  };
+}
+
+function buildMetaRima(kata = '') {
+  const kataAman = String(kata || '').trim();
+  if (!kataAman) {
+    return {
+      judul: 'Rima',
+      deskripsi: 'Cari kata berdasarkan rima di kamus Kateglo.',
+    };
+  }
+
+  return {
+    judul: `Hasil Pencarian Rima "${kataAman}"`,
+    deskripsi: `Kata-kata yang berima dengan "${kataAman}" di kamus Kateglo.`,
+  };
 }
 
 function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', prefetchedData = null) {
@@ -89,6 +120,26 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
     return titled(buildMetaBrowseKamus());
   }
 
+  // /makna/cari/:kata
+  if (path.startsWith('/makna/cari/')) {
+    return titled(buildMetaMakna(seg('/makna/cari/')));
+  }
+
+  // /makna
+  if (path === '/makna' || path === '/makna/') {
+    return titled(buildMetaMakna());
+  }
+
+  // /rima/cari/:kata
+  if (path.startsWith('/rima/cari/')) {
+    return titled(buildMetaRima(seg('/rima/cari/')));
+  }
+
+  // /rima
+  if (path === '/rima' || path === '/rima/') {
+    return titled(buildMetaRima());
+  }
+
   // /tesaurus/cari/:kata
   if (path.startsWith('/tesaurus/cari/')) {
     return titled(buildMetaPencarianTesaurus(seg('/tesaurus/cari/'), dataFor('tesaurus-detail')));
@@ -112,6 +163,11 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
   // /glosarium/sumber/:sumber
   if (path.startsWith('/glosarium/sumber/')) {
     return titled(buildMetaSumberGlosarium(seg('/glosarium/sumber/'), dataFor('glosarium-sumber')));
+  }
+
+  // /glosarium/detail/:asing
+  if (path.startsWith('/glosarium/detail/')) {
+    return titled(buildMetaDetailGlosarium(seg('/glosarium/detail/'), dataFor('glosarium-detail')));
   }
 
   // /glosarium

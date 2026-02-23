@@ -125,7 +125,14 @@ async function prefetchSsrData(pathname = '/') {
       const bidang = decoded.replace('/glosarium/bidang/', '').trim();
       if (!bidang) return null;
       const result = await ModelGlosarium.cari({ bidang, limit: 3, hitungTotal: false });
-      return { type: 'glosarium-bidang', bidang, total: result.total, contoh: result.data?.slice(0, 3) || [] };
+      const contoh = result.data?.slice(0, 3) || [];
+      return {
+        type: 'glosarium-bidang',
+        bidang,
+        bidangNama: contoh[0]?.bidang || bidang,
+        total: result.total,
+        contoh,
+      };
     }
 
     // /glosarium/sumber/:sumber
@@ -133,7 +140,14 @@ async function prefetchSsrData(pathname = '/') {
       const sumber = decoded.replace('/glosarium/sumber/', '').trim();
       if (!sumber) return null;
       const result = await ModelGlosarium.cari({ sumber, limit: 3, hitungTotal: false });
-      return { type: 'glosarium-sumber', sumber, total: result.total, contoh: result.data?.slice(0, 3) || [] };
+      const contoh = result.data?.slice(0, 3) || [];
+      return {
+        type: 'glosarium-sumber',
+        sumber,
+        sumberNama: contoh[0]?.sumber || sumber,
+        total: result.total,
+        contoh,
+      };
     }
 
     // /glosarium/cari/:kata
@@ -142,6 +156,18 @@ async function prefetchSsrData(pathname = '/') {
       if (!kata) return null;
       const result = await ModelGlosarium.cari({ q: kata, limit: 3, hitungTotal: false });
       return { type: 'glosarium-cari', kata, total: result.total, contoh: result.data?.slice(0, 3) || [] };
+    }
+
+    // /glosarium/detail/:asing
+    if (decoded.startsWith('/glosarium/detail/')) {
+      const asing = decoded.replace('/glosarium/detail/', '').trim();
+      if (!asing) return null;
+      const detail = await ModelGlosarium.ambilDetailAsing(asing, { limit: 1 });
+      return {
+        type: 'glosarium-detail',
+        asing,
+        persis: detail?.persis || [],
+      };
     }
 
     // /kamus/cari/:kata — pencarian kamus
