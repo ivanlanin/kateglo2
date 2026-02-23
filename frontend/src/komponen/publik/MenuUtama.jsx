@@ -33,6 +33,10 @@ function MenuUtama({
   } = useAuth();
   const loginUrl = buatUrlLoginGoogle('');
 
+  const isActive = (path) => (
+    location.pathname === path || location.pathname.startsWith(`${path}/`)
+  );
+
   const handleLoginClick = () => {
     simpanReturnTo(`${location.pathname}${location.search}`);
     onItemClick();
@@ -52,7 +56,8 @@ function MenuUtama({
             key={item.path}
             to={item.path}
             onClick={onItemClick}
-            className={linkClassName}
+            className={`${linkClassName} ${isActive(item.path) ? 'navbar-menu-link-active' : ''}`.trim()}
+            aria-current={isActive(item.path) ? 'page' : undefined}
           >
             {item.label}
           </Link>
