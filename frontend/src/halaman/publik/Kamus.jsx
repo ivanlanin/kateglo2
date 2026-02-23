@@ -29,6 +29,67 @@ const BARIS_KATEGORI = [
   ['bahasa', 'bidang'],
 ];
 
+const OPSI_BENTUK_TAMBAHAN = [
+  { kode: 'akronim', nama: 'akronim' },
+  { kode: 'kependekan', nama: 'kependekan' },
+];
+
+const OPSI_EKSPRESI_TAMBAHAN = [
+  { kode: 'kiasan', nama: 'kiasan' },
+];
+
+function gabungkanKategoriBentuk(labels = []) {
+  const daftar = Array.isArray(labels) ? [...labels] : [];
+  const hasil = [];
+  const seen = new Set();
+
+  const pushUnik = (item) => {
+    const key = String(item?.kode || '').trim().toLowerCase();
+    if (!key || seen.has(key)) return;
+    seen.add(key);
+    hasil.push(item);
+  };
+
+  daftar.forEach((item) => {
+    pushUnik(item);
+    if (String(item?.kode || '').trim().toLowerCase() === 'gabungan') {
+      OPSI_BENTUK_TAMBAHAN.forEach(pushUnik);
+    }
+  });
+
+  if (!seen.has('gabungan')) {
+    OPSI_BENTUK_TAMBAHAN.forEach(pushUnik);
+  }
+
+  return hasil;
+}
+
+function gabungkanKategoriEkspresi(labels = []) {
+  const daftar = Array.isArray(labels) ? [...labels] : [];
+  const hasil = [];
+  const seen = new Set();
+
+  const pushUnik = (item) => {
+    const key = String(item?.kode || '').trim().toLowerCase();
+    if (!key || seen.has(key)) return;
+    seen.add(key);
+    hasil.push(item);
+  };
+
+  daftar.forEach((item) => {
+    if (String(item?.kode || '').trim().toLowerCase() === 'idiom') {
+      OPSI_EKSPRESI_TAMBAHAN.forEach(pushUnik);
+    }
+    pushUnik(item);
+  });
+
+  if (!seen.has('idiom')) {
+    OPSI_EKSPRESI_TAMBAHAN.forEach(pushUnik);
+  }
+
+  return hasil;
+}
+
 const limit = 100;
 
 function Kamus() {
@@ -153,7 +214,16 @@ function Kamus() {
         <div className="space-y-4 mb-6">
           {BARIS_KATEGORI.map((baris, indexBaris) => {
             const kategoriTerisi = baris
-              .map((kat) => ({ kat, labels: kategoriData[kat] || [] }))
+              .map((kat) => {
+                let labels = kategoriData[kat] || [];
+                if (kat === 'bentuk') {
+                  labels = gabungkanKategoriBentuk(labels);
+                }
+                if (kat === 'ekspresi') {
+                  labels = gabungkanKategoriEkspresi(labels);
+                }
+                return { kat, labels };
+              })
               .filter((item) => item.labels.length > 0);
 
             if (kategoriTerisi.length === 0) return null;

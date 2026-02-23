@@ -55,6 +55,14 @@ function formatTitleCase(teks = '') {
     .join(' ');
 }
 
+function formatLabelPenyingkatanBadge(teks = '') {
+  const value = String(teks || '').trim().toLowerCase();
+  if (value === 'akronim' || value === 'kependekan') {
+    return formatTitleCase(value);
+  }
+  return String(teks || '').trim();
+}
+
 function normalizeToken(teks = '') {
   return String(teks || '').trim().toLowerCase();
 }
@@ -561,10 +569,10 @@ function KamusDetail() {
                               {m.kiasan && (
                                 <>
                                   <Link
-                                    to={buatPathKategoriKamus('ragam', 'kiasan')}
+                                    to={buatPathKategoriKamus('ekspresi', 'kiasan')}
                                     className="kamus-badge kamus-badge-kiasan"
                                   >
-                                    kiasan
+                                    Kiasan
                                   </Link>{' '}
                                 </>
                               )}
@@ -584,7 +592,7 @@ function KamusDetail() {
                                     to={buatPathKategoriKamus('bentuk', m.penyingkatan)}
                                     className="kamus-badge kamus-badge-penyingkat"
                                   >
-                                    {m.penyingkatan}
+                                    {formatLabelPenyingkatanBadge(m.penyingkatan)}
                                   </Link>{' '}
                                 </>
                               )}

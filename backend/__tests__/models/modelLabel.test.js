@@ -48,14 +48,17 @@ describe('ModelLabel', () => {
     ]);
     expect(result.bahasa).toEqual([{ kode: 'id', nama: 'Indonesia' }]);
     expect(result.abjad).toHaveLength(26);
-    expect(result.bentuk).toHaveLength(3);
+    expect(result.bentuk).toHaveLength(5);
     expect(result.bentuk).toEqual([
       { kode: 'dasar', nama: 'dasar' },
       { kode: 'turunan', nama: 'turunan' },
       { kode: 'gabungan', nama: 'gabungan' },
+      { kode: 'akronim', nama: 'akronim' },
+      { kode: 'kependekan', nama: 'kependekan' },
     ]);
-    expect(result.ekspresi).toHaveLength(2);
+    expect(result.ekspresi).toHaveLength(3);
     expect(result.ekspresi).toEqual([
+      { kode: 'kiasan', nama: 'kiasan' },
       { kode: 'idiom', nama: 'idiom' },
       { kode: 'peribahasa', nama: 'peribahasa' },
     ]);

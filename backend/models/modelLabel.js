@@ -14,6 +14,7 @@ const { decodeCursor, encodeCursor } = require('../utils/cursorPagination');
  */
 const SQL_ABJAD = `UPPER(SUBSTRING(REGEXP_REPLACE(entri, '^[^a-zA-Z]*', ''), 1, 1))`;
 const JENIS_BENTUK = ['dasar', 'turunan', 'gabungan'];
+const BENTUK_PENYINGKATAN = ['akronim', 'kependekan'];
 const JENIS_EKSPRESI = ['idiom', 'peribahasa'];
 const JENIS_UNSUR_TERIKAT = ['terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik', 'prakategorial'];
 const JENIS_SEMUA = [...JENIS_BENTUK, ...JENIS_EKSPRESI, ...JENIS_UNSUR_TERIKAT, 'varian'];
@@ -274,7 +275,11 @@ class ModelLabel {
 
     // Kategori virtual dari kolom entri.jenis
     grouped.bentuk = JENIS_BENTUK.map((jenis) => ({ kode: jenis, nama: jenis }));
-    grouped.ekspresi = JENIS_EKSPRESI.map((jenis) => ({ kode: jenis, nama: jenis }));
+    grouped.bentuk = [
+      ...grouped.bentuk,
+      ...BENTUK_PENYINGKATAN.map((jenis) => ({ kode: jenis, nama: jenis })),
+    ];
+    grouped.ekspresi = [{ kode: 'kiasan', nama: 'kiasan' }, ...JENIS_EKSPRESI.map((jenis) => ({ kode: jenis, nama: jenis }))];
 
     // Alias kompatibilitas untuk route lama /kamus/jenis/:kode
     grouped.jenis = JENIS_SEMUA.map((jenis) => ({ kode: jenis, nama: jenis }));
@@ -302,9 +307,78 @@ class ModelLabel {
       return this._cariEntriPerAbjad(kode, limit, offset);
     }
     if (kategori === 'bentuk') {
-      return this._cariEntriPerJenis(kode, [...JENIS_BENTUK, ...JENIS_UNSUR_TERIKAT], limit, offset);
+      const jenisBentuk = [...JENIS_BENTUK, ...JENIS_UNSUR_TERIKAT];
+      if (jenisBentuk.includes(kodeTertrim)) {
+        return this._cariEntriPerJenis(kode, jenisBentuk, limit, offset);
+      }
+
+      if (BENTUK_PENYINGKATAN.includes(kodeTertrim)) {
+        const countResult = await db.query(
+          `SELECT COUNT(DISTINCT l.id) AS total
+           FROM entri l
+           JOIN makna m ON m.entri_id = l.id
+           WHERE l.aktif = 1
+             AND m.penyingkatan = $1`,
+          [kodeTertrim]
+        );
+        const total = parseCount(countResult.rows[0]?.total);
+
+        const dataResult = await db.query(
+          `SELECT l.id, l.entri, l.indeks, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk
+           FROM entri l
+           WHERE l.aktif = 1
+             AND EXISTS (
+               SELECT 1
+               FROM makna m
+               WHERE m.entri_id = l.id
+                 AND m.penyingkatan = $1
+             )
+           ORDER BY l.entri
+           LIMIT $2 OFFSET $3`,
+          [kodeTertrim, limit, offset]
+        );
+
+        return {
+          data: dataResult.rows,
+          total,
+          label: { kode: kodeTertrim, nama: kodeTertrim },
+        };
+      }
+
+      return { data: [], total: 0, label: null };
     }
     if (kategori === 'ekspresi') {
+      if (kodeTertrim === 'kiasan') {
+        const countResult = await db.query(
+          `SELECT COUNT(DISTINCT l.id) AS total
+           FROM entri l
+           JOIN makna m ON m.entri_id = l.id
+           WHERE l.aktif = 1
+             AND m.kiasan = TRUE`
+        );
+        const total = parseCount(countResult.rows[0]?.total);
+
+        const dataResult = await db.query(
+          `SELECT l.id, l.entri, l.indeks, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk
+           FROM entri l
+           WHERE l.aktif = 1
+             AND EXISTS (
+               SELECT 1
+               FROM makna m
+               WHERE m.entri_id = l.id
+                 AND m.kiasan = TRUE
+             )
+           ORDER BY l.entri
+           LIMIT $1 OFFSET $2`,
+          [limit, offset]
+        );
+
+        return {
+          data: dataResult.rows,
+          total,
+          label: { kode: 'kiasan', nama: 'kiasan' },
+        };
+      }
       return this._cariEntriPerJenis(kode, JENIS_EKSPRESI, limit, offset);
     }
     if (kategori === 'jenis') {
@@ -418,22 +492,62 @@ class ModelLabel {
     }
 
     if (kategori === 'bentuk') {
-      if (![...JENIS_BENTUK, ...JENIS_UNSUR_TERIKAT].includes(kodeTertrim)) {
-        return { data: [], total: 0, label: null, hasNext: false, hasPrev: false, nextCursor: null, prevCursor: null };
+      const jenisBentuk = [...JENIS_BENTUK, ...JENIS_UNSUR_TERIKAT];
+      if (jenisBentuk.includes(kodeTertrim)) {
+        return this._cariEntriCursorDenganKondisi({
+          whereSql: 'l.aktif = 1 AND l.jenis = $1',
+          params: [kodeTertrim],
+          label: { kode: kodeTertrim, nama: kodeTertrim },
+          limit,
+          cursor,
+          direction,
+          lastPage,
+          hitungTotal,
+        });
       }
-      return this._cariEntriCursorDenganKondisi({
-        whereSql: 'l.aktif = 1 AND l.jenis = $1',
-        params: [kodeTertrim],
-        label: { kode: kodeTertrim, nama: kodeTertrim },
-        limit,
-        cursor,
-        direction,
-        lastPage,
-        hitungTotal,
-      });
+
+      if (BENTUK_PENYINGKATAN.includes(kodeTertrim)) {
+        return this._cariEntriCursorDenganKondisi({
+          whereSql: `l.aktif = 1
+            AND EXISTS (
+              SELECT 1
+              FROM makna m
+              WHERE m.entri_id = l.id
+                AND m.penyingkatan = $1
+            )`,
+          params: [kodeTertrim],
+          label: { kode: kodeTertrim, nama: kodeTertrim },
+          limit,
+          cursor,
+          direction,
+          lastPage,
+          hitungTotal,
+        });
+      }
+
+      return { data: [], total: 0, label: null, hasNext: false, hasPrev: false, nextCursor: null, prevCursor: null };
     }
 
     if (kategori === 'ekspresi') {
+      if (kodeTertrim === 'kiasan') {
+        return this._cariEntriCursorDenganKondisi({
+          whereSql: `l.aktif = 1
+            AND EXISTS (
+              SELECT 1
+              FROM makna m
+              WHERE m.entri_id = l.id
+                AND m.kiasan = TRUE
+            )`,
+          params: [],
+          label: { kode: 'kiasan', nama: 'kiasan' },
+          limit,
+          cursor,
+          direction,
+          lastPage,
+          hitungTotal,
+        });
+      }
+
       if (!JENIS_EKSPRESI.includes(kodeTertrim)) {
         return { data: [], total: 0, label: null, hasNext: false, hasPrev: false, nextCursor: null, prevCursor: null };
       }

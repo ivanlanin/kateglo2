@@ -402,7 +402,7 @@ describe('KamusDetail', () => {
     expect(screen.getByRole('link', { name: 'kata dasar' })).toHaveAttribute('href', '/kamus/detail/kata%20dasar');
     expect(screen.getByRole('link', { name: 'cak' })).toHaveAttribute('href', '/kamus/ragam/cak');
     expect(screen.getByRole('link', { name: 'slang' })).toHaveAttribute('href', '/kamus/ragam/slang');
-    expect(screen.getByRole('link', { name: 'kiasan' })).toHaveAttribute('href', '/kamus/ragam/kiasan');
+    expect(screen.getByRole('link', { name: 'Kiasan' })).toHaveAttribute('href', '/kamus/ekspresi/kiasan');
     expect(screen.getByRole('link', { name: 'Arab' })).toHaveAttribute('href', '/kamus/bahasa/arab');
     expect(screen.getByRole('link', { name: 'akr' })).toHaveAttribute('href', '/kamus/bentuk/akr');
     expect(screen.getByText('species', { exact: false })).toBeInTheDocument();

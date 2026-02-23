@@ -3,6 +3,7 @@
 ## 2026-02-24 Selasa
 
 - Menampilkan ragam varian dan kiasan di redaksi kamus
+- Menambahkan kategori akronim dan singkatan di bentuk bebas serta kiasan di ekspresi
 
 ## 2026-02-23 Senin
 
