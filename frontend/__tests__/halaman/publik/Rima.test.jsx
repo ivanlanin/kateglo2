@@ -101,6 +101,10 @@ describe('Rima', () => {
     expect(screen.getByRole('heading', { name: /Hasil Pencarian Rima/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'kota' })).toHaveAttribute('href', '/kamus/detail/kota');
     expect(screen.getByText('Tidak ditemukan.')).toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: '‹' })).toHaveLength(2);
+    expect(screen.getAllByRole('button', { name: '›' })).toHaveLength(2);
+    expect(screen.getAllByRole('button', { name: '‹' })[0]).toBeDisabled();
+    expect(screen.getAllByRole('button', { name: '›' })[0]).toBeDisabled();
     expect(document.title).toBe('Hasil Pencarian Rima "kata" — Kateglo');
   });
 
@@ -145,7 +149,7 @@ describe('Rima', () => {
       });
     });
 
-    fireEvent.click(screen.getAllByRole('button', { name: '«' })[0]);
+    fireEvent.click(screen.getAllByRole('button', { name: '‹' })[0]);
     await waitFor(() => {
       expect(cariRima).toHaveBeenLastCalledWith('kata', {
         limit: 50,
@@ -156,7 +160,7 @@ describe('Rima', () => {
       });
     });
 
-    fireEvent.click(screen.getAllByRole('button', { name: '»' })[0]);
+    fireEvent.click(screen.getAllByRole('button', { name: '›' })[0]);
     await waitFor(() => {
       expect(cariRima).toHaveBeenLastCalledWith('kata', {
         limit: 50,
@@ -167,7 +171,7 @@ describe('Rima', () => {
       });
     });
 
-    fireEvent.click(screen.getAllByRole('button', { name: '«' })[1]);
+    fireEvent.click(screen.getAllByRole('button', { name: '‹' })[1]);
     await waitFor(() => {
       expect(cariRima).toHaveBeenLastCalledWith('kata', {
         limit: 50,
@@ -178,7 +182,7 @@ describe('Rima', () => {
       });
     });
 
-    fireEvent.click(screen.getAllByRole('button', { name: '»' })[1]);
+    fireEvent.click(screen.getAllByRole('button', { name: '›' })[1]);
     await waitFor(() => {
       expect(cariRima).toHaveBeenLastCalledWith('kata', {
         limit: 50,
@@ -257,7 +261,7 @@ describe('Rima', () => {
 
     const { container, rerender } = render(<Rima />);
 
-    fireEvent.click(screen.getAllByRole('button', { name: '«' })[0]);
+    fireEvent.click(screen.getAllByRole('button', { name: '‹' })[0]);
     isFetchingState = true;
     rerender(<Rima />);
     await waitFor(() => {
@@ -266,7 +270,7 @@ describe('Rima', () => {
 
     isFetchingState = false;
     rerender(<Rima />);
-    fireEvent.click(screen.getAllByRole('button', { name: '»' })[0]);
+    fireEvent.click(screen.getAllByRole('button', { name: '›' })[0]);
     isFetchingState = true;
     rerender(<Rima />);
     await waitFor(() => {
@@ -275,7 +279,7 @@ describe('Rima', () => {
 
     isFetchingState = false;
     rerender(<Rima />);
-    fireEvent.click(screen.getAllByRole('button', { name: '«' })[1]);
+    fireEvent.click(screen.getAllByRole('button', { name: '‹' })[1]);
     isFetchingState = true;
     rerender(<Rima />);
     await waitFor(() => {
@@ -284,7 +288,7 @@ describe('Rima', () => {
 
     isFetchingState = false;
     rerender(<Rima />);
-    fireEvent.click(screen.getAllByRole('button', { name: '»' })[1]);
+    fireEvent.click(screen.getAllByRole('button', { name: '›' })[1]);
     isFetchingState = true;
     rerender(<Rima />);
     await waitFor(() => {

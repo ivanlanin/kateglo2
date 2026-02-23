@@ -1040,6 +1040,26 @@ code {
     @apply text-gray-500;
   }
 
+  .rima-hasil-grid {
+    @apply grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2;
+  }
+
+  .rima-hasil-link {
+    @apply block min-w-0 truncate;
+  }
+
+  .rima-heading-actions {
+    @apply flex items-center gap-1;
+  }
+
+  .rima-heading-nav {
+    @apply inline-flex items-center gap-1;
+  }
+
+  .rima-heading-nav-button {
+    @apply inline-flex items-center justify-center min-w-8;
+  }
+
   /* ===== Glosarium hasil pencarian ===== */
 
   .glosarium-result-grid {

@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-02-23 Senin
+
+- Menyesuaikan tampilan pencarian rima menjadi empat kolom
+
 ## 2026-02-22 Minggu
 
 - Menambahkan pencarian rima akhir dan awal
