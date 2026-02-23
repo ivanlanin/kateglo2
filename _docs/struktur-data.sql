@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-22T07:16:19.266Z
+-- Generated: 2026-02-23T17:47:42.332Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -75,6 +75,32 @@ $function$
 -- ============================================
 -- TABLES
 -- ============================================
+
+create table audit_makna (
+  id serial primary key,
+  indeks text not null,
+  jumlah integer not null default 0,
+  entri_id integer references entri(id) on delete set null,
+  makna_id integer references makna(id) on delete set null,
+  status text not null default 'tinjau'::text,
+  catatan text,
+  created_at timestamp without time zone not null default now(),
+  updated_at timestamp without time zone not null default now(),
+  constraint audit_makna_indeks_key unique (indeks),
+  constraint audit_makna_jumlah_check check (jumlah >= 0),
+  constraint audit_makna_status_check check (status = ANY (ARRAY['tinjau'::text, 'salah'::text, 'tambah'::text, 'nama'::text])),
+  constraint audit_makna_indeks_check check (TRIM(BOTH FROM indeks) <> ''::text),
+  constraint audit_makna_indeks_lowercase_check check (indeks = lower(indeks))
+);
+create unique index audit_makna_indeks_key on audit_makna using btree (indeks);
+create index idx_audit_makna_entri_id on audit_makna using btree (entri_id);
+create index idx_audit_makna_jumlah on audit_makna using btree (jumlah DESC, indeks);
+create index idx_audit_makna_makna_id on audit_makna using btree (makna_id);
+create index idx_audit_makna_status_jumlah on audit_makna using btree (status, jumlah DESC, indeks);
+create trigger trg_set_timestamp_fields__audit_makna
+  before insert or update on audit_makna
+  for each row
+  execute function set_timestamp_fields();
 
 create table bidang (
   id serial primary key,
@@ -284,7 +310,8 @@ create table makna (
   aktif boolean not null default true,
   constraint makna_legacy_mid_key unique (legacy_mid),
   constraint makna_makna_check check (TRIM(BOTH FROM makna) <> ''::text),
-  constraint makna_penyingkatan_check check ((penyingkatan IS NULL) OR (penyingkatan = ANY (ARRAY['akronim'::text, 'kependekan'::text, 'singkatan'::text])))
+  constraint makna_penyingkatan_check check ((penyingkatan IS NULL) OR (penyingkatan = ANY (ARRAY['akronim'::text, 'kependekan'::text, 'singkatan'::text]))),
+  constraint makna_ragam_varian_check check ((ragam_varian IS NULL) OR (ragam_varian = ANY (ARRAY['cak'::text, 'hor'::text, 'kl'::text, 'kas'::text])))
 );
 create index idx_makna_bidang on makna using btree (bidang);
 create index idx_makna_entri on makna using btree (entri_id, polisem);

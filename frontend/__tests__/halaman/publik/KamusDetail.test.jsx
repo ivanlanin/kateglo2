@@ -345,10 +345,10 @@ describe('KamusDetail', () => {
           kelas_kata: null,
           ragam: 'cak',
           ragam_varian: 'slang',
-          kiasan: 1,
+          kiasan: true,
           bahasa: 'Arab',
           makna: 'contoh <b>makna</b>',
-          tipe_penyingkat: 'akr',
+          penyingkatan: 'akr',
           ilmiah: 'species',
           kimia: 'H2O',
           contoh: [

@@ -1117,7 +1117,7 @@ describe('ModelEntri', () => {
     );
   });
 
-  it('daftarAdmin mendukung filter kelas_kata/ragam/bidang/bahasa/tipe_penyingkat dan flag ilmiah/kimia/contoh', async () => {
+  it('daftarAdmin mendukung filter kelas_kata/ragam/bidang/bahasa/penyingkatan dan flag ilmiah/kimia/contoh', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '1' }] })
       .mockResolvedValueOnce({ rows: [{ id: 1 }] });
@@ -1127,7 +1127,7 @@ describe('ModelEntri', () => {
       ragam: 'cak',
       bidang: 'kim',
       bahasa: 'id',
-      tipe_penyingkat: 'sing',
+      penyingkatan: 'sing',
       punya_ilmiah: '1',
       punya_kimia: '0',
       punya_contoh: '1',
@@ -1157,7 +1157,7 @@ describe('ModelEntri', () => {
     );
     expect(db.query).toHaveBeenNthCalledWith(
       1,
-      expect.stringContaining('mk.tipe_penyingkat = $5'),
+      expect.stringContaining('mk.penyingkatan = $5'),
       ['n', 'cak', 'kim', 'id', 'sing']
     );
     expect(db.query).toHaveBeenNthCalledWith(
@@ -1438,9 +1438,9 @@ describe('ModelEntri', () => {
     const inserted = await ModelEntri.simpanMakna({ entri_id: 8, makna: 'arti' });
 
     expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('UPDATE makna SET entri_id = $1'),
-      [8, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null, true, 1]);
+      [8, 1, 'arti', null, null, null, null, null, false, null, null, null, true, 1]);
     expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('INSERT INTO makna'),
-      [8, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null, true]);
+      [8, 1, 'arti', null, null, null, null, null, false, null, null, null, true]);
     expect(updated).toEqual({ id: 1 });
     expect(inserted).toEqual({ id: 2 });
   });
@@ -1503,7 +1503,7 @@ describe('ModelEntri', () => {
     await ModelEntri.simpanMakna({ entri_id: 1, makna: 'arti', aktif: true });
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO makna'),
-      [1, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null, true]
+      [1, 1, 'arti', null, null, null, null, null, false, null, null, null, true]
     );
   });
 
@@ -1512,7 +1512,7 @@ describe('ModelEntri', () => {
     await ModelEntri.simpanMakna({ entri_id: 1, makna: 'arti', aktif: false });
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO makna'),
-      [1, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null, false]
+      [1, 1, 'arti', null, null, null, null, null, false, null, null, null, false]
     );
   });
 
@@ -1521,7 +1521,7 @@ describe('ModelEntri', () => {
     await ModelEntri.simpanMakna({ entri_id: 1, makna: 'arti', aktif: 1 });
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO makna'),
-      [1, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null, true]
+      [1, 1, 'arti', null, null, null, null, null, false, null, null, null, true]
     );
   });
 
@@ -1532,11 +1532,11 @@ describe('ModelEntri', () => {
     await ModelEntri.simpanMakna({ entri_id: 1, makna: 'arti', aktif: 'no' });
     expect(db.query).toHaveBeenNthCalledWith(
       1, expect.stringContaining('INSERT INTO makna'),
-      [1, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null, true]
+      [1, 1, 'arti', null, null, null, null, null, false, null, null, null, true]
     );
     expect(db.query).toHaveBeenNthCalledWith(
       2, expect.stringContaining('INSERT INTO makna'),
-      [1, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null, false]
+      [1, 1, 'arti', null, null, null, null, null, false, null, null, null, false]
     );
   });
 
@@ -1545,7 +1545,7 @@ describe('ModelEntri', () => {
     await ModelEntri.simpanMakna({ entri_id: 1, makna: 'arti', aktif: [] });
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO makna'),
-      [1, 1, 1, 'arti', null, null, null, null, null, 0, null, null, null, true]
+      [1, 1, 'arti', null, null, null, null, null, false, null, null, null, true]
     );
   });
 

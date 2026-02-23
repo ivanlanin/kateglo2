@@ -93,6 +93,7 @@ const nilaiAwalFilterKamus = {
   jenisRujuk: '',
   kelasKata: '',
   ragam: '',
+  ragamVarian: '',
   bidang: '',
   bahasa: '',
   punyaIlmiah: '',
@@ -562,6 +563,7 @@ function KamusAdmin() {
     punyaPemenggalan: filterAktif.punyaPemenggalan,
     kelasKata: filterAktif.kelasKata,
     ragam: filterAktif.ragam,
+    ragamVarian: filterAktif.ragamVarian,
     bidang: filterAktif.bidang,
     bahasa: filterAktif.bahasa,
     punyaIlmiah: filterAktif.punyaIlmiah,
@@ -658,6 +660,14 @@ function KamusAdmin() {
   const opsiFilterRagam = useMemo(() => {
     const pilihanTanpaKosong = opsiKategori.ragam.filter((item) => String(item?.value || '').trim());
     return [{ value: '', label: '—Ragam—' }, ...pilihanTanpaKosong];
+  }, [opsiKategori.ragam]);
+
+  const opsiFilterRagamVarian = useMemo(() => {
+    const petaLabel = new Map((opsiKategori.ragam || []).map((item) => [String(item.value || '').toLowerCase(), item.label]));
+    return [
+      { value: '', label: '—Ragam Varian—' },
+      ...kodeRagamVarianValid.map((kode) => ({ value: kode, label: petaLabel.get(kode) || kode })),
+    ];
   }, [opsiKategori.ragam]);
 
   const opsiFilterBidang = useMemo(() => {
@@ -914,6 +924,13 @@ function KamusAdmin() {
             onChange: (value) => setFilterDraftValue('ragam', value),
             options: opsiFilterRagam,
             ariaLabel: 'Filter ragam',
+          },
+          {
+            key: 'ragam_varian',
+            value: filterDraft.ragamVarian,
+            onChange: (value) => setFilterDraftValue('ragamVarian', value),
+            options: opsiFilterRagamVarian,
+            ariaLabel: 'Filter ragam varian',
           },
           {
             key: 'bidang',

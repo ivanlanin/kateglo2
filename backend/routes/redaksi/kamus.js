@@ -52,6 +52,7 @@ router.get('/', periksaIzin('lihat_entri'), async (req, res, next) => {
     const punyaPemenggalan = parseTrimmedString(req.query.punya_pemenggalan);
     const kelasKata = parseTrimmedString(req.query.kelas_kata);
     const ragam = parseTrimmedString(req.query.ragam);
+    const ragamVarian = parseTrimmedString(req.query.ragam_varian);
     const bidang = parseTrimmedString(req.query.bidang);
     const bahasa = parseTrimmedString(req.query.bahasa);
     const punyaIlmiah = parseTrimmedString(req.query.punya_ilmiah);
@@ -73,6 +74,7 @@ router.get('/', periksaIzin('lihat_entri'), async (req, res, next) => {
       punya_pemenggalan: ['0', '1'].includes(punyaPemenggalan) ? punyaPemenggalan : '',
       kelas_kata: kelasKata,
       ragam,
+      ragam_varian: ragamVarian,
       bidang,
       bahasa,
       punya_ilmiah: ['0', '1'].includes(punyaIlmiah) ? punyaIlmiah : '',

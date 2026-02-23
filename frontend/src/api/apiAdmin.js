@@ -113,6 +113,7 @@ export function useDaftarKamusAdmin({
   punyaPemenggalan = '',
   kelasKata = '',
   ragam = '',
+  ragamVarian = '',
   bidang = '',
   bahasa = '',
   punyaIlmiah = '',
@@ -139,6 +140,7 @@ export function useDaftarKamusAdmin({
   if (punyaPemenggalan) params.punya_pemenggalan = punyaPemenggalan;
   if (kelasKata) params.kelas_kata = kelasKata;
   if (ragam) params.ragam = ragam;
+  if (ragamVarian) params.ragam_varian = ragamVarian;
   if (bidang) params.bidang = bidang;
   if (bahasa) params.bahasa = bahasa;
   if (punyaIlmiah) params.punya_ilmiah = punyaIlmiah;
@@ -163,6 +165,7 @@ export function useDaftarKamusAdmin({
       punyaPemenggalan,
       kelasKata,
       ragam,
+      ragamVarian,
       bidang,
       bahasa,
       punyaIlmiah,

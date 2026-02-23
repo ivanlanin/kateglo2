@@ -467,6 +467,7 @@ class ModelEntri {
     punya_pemenggalan = '',
     kelas_kata = '',
     ragam = '',
+    ragam_varian = '',
     bidang = '',
     bahasa = '',
     punya_ilmiah = '',
@@ -546,6 +547,17 @@ class ModelEntri {
           AND mk.ragam = $${idx}
       )`);
       params.push(ragam);
+      idx++;
+    }
+
+    if (ragam_varian) {
+      conditions.push(`EXISTS (
+        SELECT 1
+        FROM makna mk
+        WHERE mk.entri_id = e.id
+          AND mk.ragam_varian = $${idx}
+      )`);
+      params.push(ragam_varian);
       idx++;
     }
 
