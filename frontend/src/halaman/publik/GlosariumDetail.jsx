@@ -25,39 +25,53 @@ function upsertMetaTag({ name, property, content }) {
   tag.setAttribute('content', content);
 }
 
-function SeksiDetail({ judul, jumlah, children }) {
+function SeksiDetail({ judul, jumlah, actions = null, children }) {
   return (
     <div className="glosarium-detail-seksi">
       <div className="kamus-detail-subentry-heading-row">
-        <h2 className="kamus-detail-def-class mb-0">
-          {judul}{' '}
+        <h2 className="kamus-detail-def-class mb-0">{judul}</h2>
+        <div className="rima-heading-actions">
           <span className="kamus-count-badge" data-count={jumlah}>
             ({jumlah})
           </span>
-        </h2>
+          {actions}
+        </div>
       </div>
       {children}
     </div>
   );
 }
 
-function AlirEntri({ items, tautAsing = false, before = null, after = null }) {
+function AlirEntri({ items, tautAsing = false }) {
+  const sortedItems = [...items].sort((a, b) => {
+    const bidangA = (a.bidang || '').trim();
+    const bidangB = (b.bidang || '').trim();
+
+    if (bidangA && !bidangB) return -1;
+    if (!bidangA && bidangB) return 1;
+
+    const bidangCompare = bidangA.localeCompare(bidangB, 'id', { sensitivity: 'base' });
+    if (bidangCompare !== 0) return bidangCompare;
+
+    const labelA = (a.asing || a.indonesia || '').trim();
+    const labelB = (b.asing || b.indonesia || '').trim();
+    return labelA.localeCompare(labelB, 'id', { sensitivity: 'base' });
+  });
+
   return (
     <div className="kamus-detail-subentry-flow">
-      {before}
-      {items.map((item, i) => (
+      {sortedItems.map((item, i) => {
+        const bidangSaatIni = (item.bidang || '').trim().toLowerCase();
+        const bidangSebelumnya = i > 0 ? (sortedItems[i - 1]?.bidang || '').trim().toLowerCase() : '';
+        const tampilkanBadgeBidang = Boolean(item.bidang) && bidangSaatIni !== bidangSebelumnya;
+
+        return (
         <span key={item.id}>
-          {item.bidang && (
+          {tampilkanBadgeBidang && (
             <><Link
               to={`/glosarium/bidang/${encodeURIComponent(item.bidang_kode || item.bidang)}`}
               className="badge-bidang"
             >{item.bidang}</Link>{' '}</>
-          )}
-          {item.sumber && (
-            <><Link
-              to={`/glosarium/sumber/${encodeURIComponent(item.sumber_kode || item.sumber)}`}
-              className="badge-sumber"
-            >{item.sumber}</Link>{' '}</>
           )}
           {tautAsing ? (
             <>
@@ -94,10 +108,10 @@ function AlirEntri({ items, tautAsing = false, before = null, after = null }) {
               </Link>
             ))
           )}
-          {i < items.length - 1 && <span className="secondary-text">; </span>}
+          {i < sortedItems.length - 1 && <span className="secondary-text">; </span>}
         </span>
-      ))}
-      {after}
+      );
+      })}
     </div>
   );
 }
@@ -191,63 +205,61 @@ function GlosariumDetail() {
       )}
 
       {mengandung.length > 0 && (
-        <SeksiDetail judul="Memuat" jumlah={mengandungTotal}>
+        <SeksiDetail
+          judul="Memuat"
+          jumlah={mengandungTotal}
+          actions={(
+            <div className="rima-heading-nav">
+              <CursorNavButton
+                symbol="‹"
+                onClick={handlePrevMengandung}
+                disabled={isFetching || !mengandungPage?.hasPrev}
+                isLoading={isFetching && navigasiAktif === 'prevMengandung'}
+                className="paginasi-btn rima-heading-nav-button"
+              />
+              <CursorNavButton
+                symbol="›"
+                onClick={handleNextMengandung}
+                disabled={isFetching || !mengandungPage?.hasNext}
+                isLoading={isFetching && navigasiAktif === 'nextMengandung'}
+                className="paginasi-btn rima-heading-nav-button"
+              />
+            </div>
+          )}
+        >
           <AlirEntri
             items={mengandung}
             tautAsing
-            before={mengandungPage.hasPrev && (
-              <>
-                <CursorNavButton
-                  symbol="«"
-                  onClick={handlePrevMengandung}
-                  disabled={isFetching}
-                  isLoading={isFetching && navigasiAktif === 'prevMengandung'}
-                />
-                <span className="secondary-text"> … </span>
-              </>
-            )}
-            after={mengandungPage.hasNext && (
-              <>
-                <span className="secondary-text"> … </span>
-                <CursorNavButton
-                  symbol="»"
-                  onClick={handleNextMengandung}
-                  disabled={isFetching}
-                  isLoading={isFetching && navigasiAktif === 'nextMengandung'}
-                />
-              </>
-            )}
           />
         </SeksiDetail>
       )}
 
       {mirip.length > 0 && (
-        <SeksiDetail judul="Mirip" jumlah={miripTotal}>
+        <SeksiDetail
+          judul="Mirip"
+          jumlah={miripTotal}
+          actions={(
+            <div className="rima-heading-nav">
+              <CursorNavButton
+                symbol="‹"
+                onClick={handlePrevMirip}
+                disabled={isFetching || !miripPage?.hasPrev}
+                isLoading={isFetching && navigasiAktif === 'prevMirip'}
+                className="paginasi-btn rima-heading-nav-button"
+              />
+              <CursorNavButton
+                symbol="›"
+                onClick={handleNextMirip}
+                disabled={isFetching || !miripPage?.hasNext}
+                isLoading={isFetching && navigasiAktif === 'nextMirip'}
+                className="paginasi-btn rima-heading-nav-button"
+              />
+            </div>
+          )}
+        >
           <AlirEntri
             items={mirip}
             tautAsing
-            before={miripPage.hasPrev && (
-              <>
-                <CursorNavButton
-                  symbol="«"
-                  onClick={handlePrevMirip}
-                  disabled={isFetching}
-                  isLoading={isFetching && navigasiAktif === 'prevMirip'}
-                />
-                <span className="secondary-text"> … </span>
-              </>
-            )}
-            after={miripPage.hasNext && (
-              <>
-                <span className="secondary-text"> … </span>
-                <CursorNavButton
-                  symbol="»"
-                  onClick={handleNextMirip}
-                  disabled={isFetching}
-                  isLoading={isFetching && navigasiAktif === 'nextMirip'}
-                />
-              </>
-            )}
           />
         </SeksiDetail>
       )}

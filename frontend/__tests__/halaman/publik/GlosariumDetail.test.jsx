@@ -82,7 +82,7 @@ describe('GlosariumDetail', () => {
         ],
         mengandung: [
           { id: 11, asing: 'zero sum game', indonesia: 'permainan jumlah nol', bidang: 'Ekonomi', bidang_kode: '', sumber: 'Istilah', sumber_kode: '' },
-          { id: 12, asing: 'zero day', indonesia: '', bidang: '', sumber: '' },
+          { id: 12, asing: 'zero day', indonesia: '', bidang: 'Ekonomi', bidang_kode: '', sumber: '' },
         ],
         mengandungPage: { hasPrev: true, hasNext: true, prevCursor: 'meng-prev', nextCursor: 'meng-next' },
         mengandungTotal: 8,
@@ -97,12 +97,13 @@ describe('GlosariumDetail', () => {
 
     const { rerender } = render(<GlosariumDetail />);
 
-    expect(screen.getByRole('heading', { name: 'Persis (2)' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Memuat (8)' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Mirip (3)' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Persis' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Memuat' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Mirip' })).toBeInTheDocument();
 
     expect(screen.getByRole('link', { name: 'Kimia' })).toHaveAttribute('href', '/glosarium/bidang/kim');
-    expect(screen.getAllByRole('link', { name: 'KBBI' }).every((el) => el.getAttribute('href') === '/glosarium/sumber/kbbi')).toBe(true);
+    expect(screen.getAllByRole('link', { name: 'Ekonomi' })).toHaveLength(1);
+    expect(screen.queryByRole('link', { name: 'KBBI' })).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'istilah' })).toHaveAttribute('href', '/kamus/detail/istilah');
     expect(screen.getByRole('link', { name: 'zero sum game' })).toHaveAttribute('href', '/glosarium/detail/zero%20sum%20game');
     expect(screen.getAllByText(';').length).toBeGreaterThan(0);
@@ -210,7 +211,7 @@ describe('GlosariumDetail', () => {
     expect(ambilDetailGlosarium).toHaveBeenCalledTimes(1);
   });
 
-  it('saat pageInfo tanpa prev/next, seksi tetap tampil tanpa tombol navigasi', () => {
+  it('saat pageInfo tanpa prev/next, seksi tetap tampil dengan tombol navigasi disabled di heading', () => {
     queryState = {
       isLoading: false,
       isFetching: false,
@@ -229,10 +230,12 @@ describe('GlosariumDetail', () => {
 
     render(<GlosariumDetail />);
 
-    expect(screen.getByRole('heading', { name: 'Memuat (1)' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Mirip (1)' })).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: '«' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: '»' })).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Memuat' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Mirip' })).toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: '‹' })).toHaveLength(2);
+    expect(screen.getAllByRole('button', { name: '›' })).toHaveLength(2);
+    expect(screen.getAllByRole('button', { name: '‹' })[0]).toBeDisabled();
+    expect(screen.getAllByRole('button', { name: '›' })[0]).toBeDisabled();
   });
 
   it('tetap stabil saat fetching aktif (tanpa reset navigasi)', () => {
@@ -250,7 +253,7 @@ describe('GlosariumDetail', () => {
 
     render(<GlosariumDetail />);
 
-    expect(screen.getByRole('heading', { name: 'Persis (1)' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Persis' })).toBeInTheDocument();
   });
 
   it('menampilkan spinner pada semua aksi navigasi saat fetching aktif', () => {

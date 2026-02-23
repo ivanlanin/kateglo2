@@ -3,6 +3,7 @@
 ## 2026-02-23 Senin
 
 - Menyesuaikan tampilan pencarian rima menjadi empat kolom
+- Mengelompokkan tampilan detail glosarium berdasarkan bidang
 
 ## 2026-02-22 Minggu
 
