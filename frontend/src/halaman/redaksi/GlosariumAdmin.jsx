@@ -9,8 +9,8 @@ import {
   useDetailGlosariumAdmin,
   useSimpanGlosarium,
   useHapusGlosarium,
-  useDaftarBidangGlosariumAdmin,
-  useDaftarSumberGlosariumAdmin,
+  useDaftarBidangAdmin,
+  useDaftarSumberAdmin,
 } from '../../api/apiAdmin';
 import TataLetak from '../../komponen/bersama/TataLetak';
 import { useAuth } from '../../context/authContext';
@@ -101,8 +101,8 @@ function GlosariumAdmin() {
     aktif: filterAktif,
   });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailGlosariumAdmin(idDariPath);
-  const { data: bidangResp } = useDaftarBidangGlosariumAdmin({ limit: 200, aktif: '1' });
-  const { data: sumberResp } = useDaftarSumberGlosariumAdmin({ limit: 200, aktif: '1' });
+  const { data: bidangResp } = useDaftarBidangAdmin({ limit: 200, aktif: '1' });
+  const { data: sumberResp } = useDaftarSumberAdmin({ limit: 200, aktif: '1' });
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
   const opsiBidang = (bidangResp?.data || []).map((item) => ({ value: String(item.id), label: item.nama }));

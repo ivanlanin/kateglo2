@@ -1,5 +1,5 @@
 /**
- * @fileoverview Test route master bidang/sumber glosarium redaksi
+ * @fileoverview Test route master bidang/sumber redaksi
  */
 
 const express = require('express');
@@ -20,20 +20,22 @@ jest.mock('../../models/modelGlosarium', () => ({
   hapusMasterSumber: jest.fn(),
 }));
 
-const router = require('../../routes/redaksi/glosarium');
+const routerBidang = require('../../routes/redaksi/bidang');
+const routerSumber = require('../../routes/redaksi/sumber');
 const ModelGlosarium = require('../../models/modelGlosarium');
 
 function createApp() {
   const app = express();
   app.use(express.json());
-  app.use('/api/redaksi/glosarium', router);
+  app.use('/api/redaksi/bidang', routerBidang);
+  app.use('/api/redaksi/sumber', routerSumber);
   app.use((err, _req, res, _next) => {
     res.status(500).json({ success: false, message: err.message });
   });
   return app;
 }
 
-describe('routes/redaksi/glosarium master', () => {
+describe('routes/redaksi master bidang/sumber', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -44,7 +46,7 @@ describe('routes/redaksi/glosarium master', () => {
       total: 1,
     });
 
-    const response = await request(createApp()).get('/api/redaksi/glosarium/bidang-master?q=kim&limit=10&offset=0');
+    const response = await request(createApp()).get('/api/redaksi/bidang?q=kim&limit=10&offset=0');
 
     expect(response.status).toBe(200);
     expect(response.body.success).toBe(true);
@@ -54,9 +56,9 @@ describe('routes/redaksi/glosarium master', () => {
   it('GET /bidang-master meneruskan filter aktif 1/0 dan fallback kosong', async () => {
     ModelGlosarium.daftarMasterBidang.mockResolvedValue({ data: [], total: 0 });
 
-    await request(createApp()).get('/api/redaksi/glosarium/bidang-master?aktif=1');
-    await request(createApp()).get('/api/redaksi/glosarium/bidang-master?aktif=0');
-    await request(createApp()).get('/api/redaksi/glosarium/bidang-master?aktif=abc');
+    await request(createApp()).get('/api/redaksi/bidang?aktif=1');
+    await request(createApp()).get('/api/redaksi/bidang?aktif=0');
+    await request(createApp()).get('/api/redaksi/bidang?aktif=abc');
 
     expect(ModelGlosarium.daftarMasterBidang).toHaveBeenNthCalledWith(1, expect.objectContaining({ aktif: '1' }));
     expect(ModelGlosarium.daftarMasterBidang).toHaveBeenNthCalledWith(2, expect.objectContaining({ aktif: '0' }));
@@ -66,7 +68,7 @@ describe('routes/redaksi/glosarium master', () => {
   it('GET /bidang-master meneruskan error', async () => {
     ModelGlosarium.daftarMasterBidang.mockRejectedValue(new Error('list bidang gagal'));
 
-    const response = await request(createApp()).get('/api/redaksi/glosarium/bidang-master');
+    const response = await request(createApp()).get('/api/redaksi/bidang');
 
     expect(response.status).toBe(500);
     expect(response.body.message).toBe('list bidang gagal');
@@ -75,8 +77,8 @@ describe('routes/redaksi/glosarium master', () => {
   it('GET /bidang-master/:id mengembalikan 404 dan 200', async () => {
     ModelGlosarium.ambilMasterBidangDenganId.mockResolvedValueOnce(null).mockResolvedValueOnce({ id: 1, nama: 'Kimia' });
 
-    const notFound = await request(createApp()).get('/api/redaksi/glosarium/bidang-master/1');
-    const success = await request(createApp()).get('/api/redaksi/glosarium/bidang-master/1');
+    const notFound = await request(createApp()).get('/api/redaksi/bidang/1');
+    const success = await request(createApp()).get('/api/redaksi/bidang/1');
 
     expect(notFound.status).toBe(404);
     expect(success.status).toBe(200);
@@ -86,7 +88,7 @@ describe('routes/redaksi/glosarium master', () => {
   it('GET /bidang-master/:id meneruskan error', async () => {
     ModelGlosarium.ambilMasterBidangDenganId.mockRejectedValue(new Error('detail bidang gagal'));
 
-    const response = await request(createApp()).get('/api/redaksi/glosarium/bidang-master/1');
+    const response = await request(createApp()).get('/api/redaksi/bidang/1');
 
     expect(response.status).toBe(500);
     expect(response.body.message).toBe('detail bidang gagal');
@@ -94,7 +96,7 @@ describe('routes/redaksi/glosarium master', () => {
 
   it('POST /bidang-master memvalidasi payload wajib', async () => {
     const response = await request(createApp())
-      .post('/api/redaksi/glosarium/bidang-master')
+      .post('/api/redaksi/bidang')
       .send({ kode: '', nama: '' });
 
     expect(response.status).toBe(400);
@@ -103,7 +105,7 @@ describe('routes/redaksi/glosarium master', () => {
 
   it('POST /bidang-master memvalidasi nama wajib', async () => {
     const response = await request(createApp())
-      .post('/api/redaksi/glosarium/bidang-master')
+      .post('/api/redaksi/bidang')
       .send({ kode: 'kim', nama: '' });
 
     expect(response.status).toBe(400);
@@ -114,7 +116,7 @@ describe('routes/redaksi/glosarium master', () => {
     ModelGlosarium.simpanMasterBidang.mockResolvedValue({ id: 10, kode: 'kim', nama: 'Kimia' });
 
     const response = await request(createApp())
-      .post('/api/redaksi/glosarium/bidang-master')
+      .post('/api/redaksi/bidang')
       .send({ kode: ' kim ', nama: ' Kimia ', keterangan: ' ipa ', aktif: '0' });
 
     expect(response.status).toBe(201);
@@ -130,7 +132,7 @@ describe('routes/redaksi/glosarium master', () => {
     ModelGlosarium.simpanMasterBidang.mockRejectedValue(new Error('simpan bidang gagal'));
 
     const response = await request(createApp())
-      .post('/api/redaksi/glosarium/bidang-master')
+      .post('/api/redaksi/bidang')
       .send({ kode: 'kim', nama: 'Kimia' });
 
     expect(response.status).toBe(500);
@@ -139,18 +141,18 @@ describe('routes/redaksi/glosarium master', () => {
 
   it('PUT /bidang-master/:id memvalidasi payload, 404, dan 200', async () => {
     const badKode = await request(createApp())
-      .put('/api/redaksi/glosarium/bidang-master/1')
+      .put('/api/redaksi/bidang/1')
       .send({ kode: '', nama: 'Kimia' });
     const badNama = await request(createApp())
-      .put('/api/redaksi/glosarium/bidang-master/1')
+      .put('/api/redaksi/bidang/1')
       .send({ kode: 'kim', nama: '' });
 
     ModelGlosarium.simpanMasterBidang.mockResolvedValueOnce(null).mockResolvedValueOnce({ id: 1, nama: 'Kimia Baru' });
     const notFound = await request(createApp())
-      .put('/api/redaksi/glosarium/bidang-master/1')
+      .put('/api/redaksi/bidang/1')
       .send({ kode: 'kim', nama: 'Kimia' });
     const success = await request(createApp())
-      .put('/api/redaksi/glosarium/bidang-master/1')
+      .put('/api/redaksi/bidang/1')
       .send({ kode: 'kim', nama: 'Kimia Baru', aktif: true });
 
     expect(badKode.status).toBe(400);
@@ -170,7 +172,7 @@ describe('routes/redaksi/glosarium master', () => {
     ModelGlosarium.simpanMasterBidang.mockRejectedValue(new Error('ubah bidang gagal'));
 
     const response = await request(createApp())
-      .put('/api/redaksi/glosarium/bidang-master/1')
+      .put('/api/redaksi/bidang/1')
       .send({ kode: 'kim', nama: 'Kimia' });
 
     expect(response.status).toBe(500);
@@ -182,7 +184,7 @@ describe('routes/redaksi/glosarium master', () => {
     error.code = 'MASTER_IN_USE';
     ModelGlosarium.hapusMasterBidang.mockRejectedValue(error);
 
-    const response = await request(createApp()).delete('/api/redaksi/glosarium/bidang-master/1');
+    const response = await request(createApp()).delete('/api/redaksi/bidang/1');
 
     expect(response.status).toBe(409);
     expect(response.body.success).toBe(false);
@@ -194,9 +196,9 @@ describe('routes/redaksi/glosarium master', () => {
       .mockResolvedValueOnce(true)
       .mockRejectedValueOnce(new Error('hapus bidang gagal'));
 
-    const notFound = await request(createApp()).delete('/api/redaksi/glosarium/bidang-master/1');
-    const success = await request(createApp()).delete('/api/redaksi/glosarium/bidang-master/1');
-    const error = await request(createApp()).delete('/api/redaksi/glosarium/bidang-master/1');
+    const notFound = await request(createApp()).delete('/api/redaksi/bidang/1');
+    const success = await request(createApp()).delete('/api/redaksi/bidang/1');
+    const error = await request(createApp()).delete('/api/redaksi/bidang/1');
 
     expect(notFound.status).toBe(404);
     expect(success.status).toBe(200);
@@ -210,7 +212,7 @@ describe('routes/redaksi/glosarium master', () => {
       total: 1,
     });
 
-    const response = await request(createApp()).get('/api/redaksi/glosarium/sumber-master?q=kb&limit=10&offset=0');
+    const response = await request(createApp()).get('/api/redaksi/sumber?q=kb&limit=10&offset=0');
 
     expect(response.status).toBe(200);
     expect(response.body.success).toBe(true);
@@ -220,8 +222,8 @@ describe('routes/redaksi/glosarium master', () => {
   it('GET /sumber-master/:id mengembalikan 404 dan 200', async () => {
     ModelGlosarium.ambilMasterSumberDenganId.mockResolvedValueOnce(null).mockResolvedValueOnce({ id: 2, nama: 'KBBI' });
 
-    const notFound = await request(createApp()).get('/api/redaksi/glosarium/sumber-master/2');
-    const success = await request(createApp()).get('/api/redaksi/glosarium/sumber-master/2');
+    const notFound = await request(createApp()).get('/api/redaksi/sumber/2');
+    const success = await request(createApp()).get('/api/redaksi/sumber/2');
 
     expect(notFound.status).toBe(404);
     expect(success.status).toBe(200);
@@ -231,7 +233,7 @@ describe('routes/redaksi/glosarium master', () => {
   it('GET /sumber-master meneruskan error', async () => {
     ModelGlosarium.daftarMasterSumber.mockRejectedValue(new Error('list sumber gagal'));
 
-    const response = await request(createApp()).get('/api/redaksi/glosarium/sumber-master');
+    const response = await request(createApp()).get('/api/redaksi/sumber');
 
     expect(response.status).toBe(500);
     expect(response.body.message).toBe('list sumber gagal');
@@ -240,7 +242,7 @@ describe('routes/redaksi/glosarium master', () => {
   it('GET /sumber-master/:id meneruskan error', async () => {
     ModelGlosarium.ambilMasterSumberDenganId.mockRejectedValue(new Error('detail sumber gagal'));
 
-    const response = await request(createApp()).get('/api/redaksi/glosarium/sumber-master/2');
+    const response = await request(createApp()).get('/api/redaksi/sumber/2');
 
     expect(response.status).toBe(500);
     expect(response.body.message).toBe('detail sumber gagal');
@@ -248,15 +250,15 @@ describe('routes/redaksi/glosarium master', () => {
 
   it('POST /sumber-master memvalidasi payload dan sukses', async () => {
     const badKode = await request(createApp())
-      .post('/api/redaksi/glosarium/sumber-master')
+      .post('/api/redaksi/sumber')
       .send({ kode: '', nama: 'KBBI' });
     const badNama = await request(createApp())
-      .post('/api/redaksi/glosarium/sumber-master')
+      .post('/api/redaksi/sumber')
       .send({ kode: 'kbbi', nama: '' });
 
     ModelGlosarium.simpanMasterSumber.mockResolvedValue({ id: 2, kode: 'kbbi', nama: 'KBBI' });
     const success = await request(createApp())
-      .post('/api/redaksi/glosarium/sumber-master')
+      .post('/api/redaksi/sumber')
       .send({ kode: ' kbbi ', nama: ' KBBI ', aktif: 1 });
 
     expect(badKode.status).toBe(400);
@@ -274,7 +276,7 @@ describe('routes/redaksi/glosarium master', () => {
     ModelGlosarium.simpanMasterSumber.mockRejectedValue(new Error('simpan sumber gagal'));
 
     const response = await request(createApp())
-      .post('/api/redaksi/glosarium/sumber-master')
+      .post('/api/redaksi/sumber')
       .send({ kode: 'kbbi', nama: 'KBBI' });
 
     expect(response.status).toBe(500);
@@ -283,18 +285,18 @@ describe('routes/redaksi/glosarium master', () => {
 
   it('PUT /sumber-master/:id memvalidasi payload, 404, dan 200', async () => {
     const badKode = await request(createApp())
-      .put('/api/redaksi/glosarium/sumber-master/2')
+      .put('/api/redaksi/sumber/2')
       .send({ kode: '', nama: 'KBBI' });
     const badNama = await request(createApp())
-      .put('/api/redaksi/glosarium/sumber-master/2')
+      .put('/api/redaksi/sumber/2')
       .send({ kode: 'kbbi', nama: '' });
 
     ModelGlosarium.simpanMasterSumber.mockResolvedValueOnce(null).mockResolvedValueOnce({ id: 2, nama: 'KBBI Baru' });
     const notFound = await request(createApp())
-      .put('/api/redaksi/glosarium/sumber-master/2')
+      .put('/api/redaksi/sumber/2')
       .send({ kode: 'kbbi', nama: 'KBBI' });
     const success = await request(createApp())
-      .put('/api/redaksi/glosarium/sumber-master/2')
+      .put('/api/redaksi/sumber/2')
       .send({ kode: 'kbbi', nama: 'KBBI Baru', aktif: false });
 
     expect(badKode.status).toBe(400);
@@ -314,7 +316,7 @@ describe('routes/redaksi/glosarium master', () => {
     ModelGlosarium.simpanMasterSumber.mockRejectedValue(new Error('ubah sumber gagal'));
 
     const response = await request(createApp())
-      .put('/api/redaksi/glosarium/sumber-master/2')
+      .put('/api/redaksi/sumber/2')
       .send({ kode: 'kbbi', nama: 'KBBI' });
 
     expect(response.status).toBe(500);
@@ -326,7 +328,7 @@ describe('routes/redaksi/glosarium master', () => {
     error.code = 'MASTER_IN_USE';
     ModelGlosarium.hapusMasterSumber.mockRejectedValue(error);
 
-    const response = await request(createApp()).delete('/api/redaksi/glosarium/sumber-master/1');
+    const response = await request(createApp()).delete('/api/redaksi/sumber/1');
 
     expect(response.status).toBe(409);
     expect(response.body.success).toBe(false);
@@ -338,9 +340,9 @@ describe('routes/redaksi/glosarium master', () => {
       .mockResolvedValueOnce(true)
       .mockRejectedValueOnce(new Error('hapus sumber gagal'));
 
-    const notFound = await request(createApp()).delete('/api/redaksi/glosarium/sumber-master/1');
-    const success = await request(createApp()).delete('/api/redaksi/glosarium/sumber-master/1');
-    const error = await request(createApp()).delete('/api/redaksi/glosarium/sumber-master/1');
+    const notFound = await request(createApp()).delete('/api/redaksi/sumber/1');
+    const success = await request(createApp()).delete('/api/redaksi/sumber/1');
+    const error = await request(createApp()).delete('/api/redaksi/sumber/1');
 
     expect(notFound.status).toBe(404);
     expect(success.status).toBe(200);

@@ -1,14 +1,14 @@
 /**
- * @fileoverview Halaman admin master bidang glosarium
+ * @fileoverview Halaman admin master bidang
  */
 
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-  useDaftarBidangGlosariumAdmin,
-  useDetailBidangGlosariumAdmin,
-  useSimpanBidangGlosarium,
-  useHapusBidangGlosarium,
+  useDaftarBidangAdmin,
+  useDetailBidangAdmin,
+  useSimpanBidang,
+  useHapusBidang,
 } from '../../api/apiAdmin';
 import TataLetak from '../../komponen/bersama/TataLetak';
 import {
@@ -51,7 +51,7 @@ function BidangAdmin() {
   const [filterAktifDraft, setFilterAktifDraft] = useState('');
   const [filterAktif, setFilterAktif] = useState('');
 
-  const { data: resp, isLoading, isError } = useDaftarBidangGlosariumAdmin({
+  const { data: resp, isLoading, isError } = useDaftarBidangAdmin({
     limit,
     cursor,
     direction,
@@ -59,20 +59,20 @@ function BidangAdmin() {
     q,
     aktif: filterAktif,
   });
-  const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailBidangGlosariumAdmin(idDariPath);
+  const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailBidangAdmin(idDariPath);
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
 
   const panel = useFormPanel(nilaiAwal);
-  const simpan = useSimpanBidangGlosarium();
-  const hapus = useHapusBidangGlosarium();
+  const simpan = useSimpanBidang();
+  const hapus = useHapusBidang();
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
 
   useEffect(() => {
     if (!idParam) return;
     if (idDariPath) return;
     setPesan({ error: 'ID bidang tidak valid.', sukses: '' });
-    navigate('/redaksi/glosarium/bidang', { replace: true });
+    navigate('/redaksi/bidang', { replace: true });
   }, [idParam, idDariPath, navigate]);
 
   useEffect(() => {
@@ -94,7 +94,7 @@ function BidangAdmin() {
   useEffect(() => {
     if (!idDariPath || isDetailLoading || !isDetailError) return;
     setPesan({ error: 'Bidang tidak ditemukan.', sukses: '' });
-    navigate('/redaksi/glosarium/bidang', { replace: true });
+    navigate('/redaksi/bidang', { replace: true });
   }, [idDariPath, isDetailError, isDetailLoading, navigate]);
 
   const tutupPanel = () => {
@@ -102,7 +102,7 @@ function BidangAdmin() {
     panel.tutup();
     if (idDariPath) {
       sedangMenutupDariPath.current = true;
-      navigate('/redaksi/glosarium/bidang', { replace: true });
+      navigate('/redaksi/bidang', { replace: true });
     }
   };
 
@@ -110,7 +110,7 @@ function BidangAdmin() {
     setPesan({ error: '', sukses: '' });
     if (idDariPath) {
       sedangMenutupDariPath.current = true;
-      navigate('/redaksi/glosarium/bidang', { replace: true });
+      navigate('/redaksi/bidang', { replace: true });
     }
     panel.bukaUntukTambah();
   };
@@ -118,7 +118,7 @@ function BidangAdmin() {
   const bukaSuntingDariDaftar = (item) => {
     if (!item?.id) return;
     setPesan({ error: '', sukses: '' });
-    navigate(`/redaksi/glosarium/bidang/${item.id}`);
+    navigate(`/redaksi/bidang/${item.id}`);
   };
 
   const handleSimpan = () => {
@@ -155,7 +155,7 @@ function BidangAdmin() {
   };
 
   return (
-    <TataLetak mode="admin" judul="Bidang Glosarium" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
+    <TataLetak mode="admin" judul="Bidang" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -168,7 +168,7 @@ function BidangAdmin() {
             value: filterAktifDraft,
             onChange: setFilterAktifDraft,
             options: opsiFilterStatusAktif,
-            ariaLabel: 'Filter status bidang glosarium',
+            ariaLabel: 'Filter status bidang',
           },
         ]}
       />

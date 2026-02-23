@@ -21,10 +21,10 @@ const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
 
 vi.mock('../../../src/api/apiAdmin', () => ({
-  useDaftarSumberGlosariumAdmin: (...args) => mockUseDaftar(...args),
-  useDetailSumberGlosariumAdmin: (...args) => mockUseDetail(...args),
-  useSimpanSumberGlosarium: () => ({ mutate: mutateSimpan, isPending: false }),
-  useHapusSumberGlosarium: () => ({ mutate: mutateHapus, isPending: false }),
+  useDaftarSumberAdmin: (...args) => mockUseDaftar(...args),
+  useDetailSumberAdmin: (...args) => mockUseDetail(...args),
+  useSimpanSumber: () => ({ mutate: mutateSimpan, isPending: false }),
+  useHapusSumber: () => ({ mutate: mutateHapus, isPending: false }),
 }));
 
 vi.mock('../../../src/komponen/bersama/TataLetak', () => ({
@@ -77,7 +77,7 @@ describe('SumberAdmin', () => {
       </MemoryRouter>
     );
 
-    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/glosarium/sumber', { replace: true });
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/sumber', { replace: true });
   });
 
   it('membuka mode sunting dari detail route lalu dapat ditutup', async () => {
@@ -96,7 +96,7 @@ describe('SumberAdmin', () => {
 
     await waitFor(() => expect(screen.getByDisplayValue('kbbi')).toBeInTheDocument());
     fireEvent.click(screen.getByLabelText('Tutup panel'));
-    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/glosarium/sumber', { replace: true });
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/sumber', { replace: true });
   });
 
   it('menangani detail error, validasi wajib, error simpan, dan alur hapus', () => {
@@ -111,7 +111,7 @@ describe('SumberAdmin', () => {
       </MemoryRouter>
     );
 
-    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/glosarium/sumber', { replace: true });
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/sumber', { replace: true });
     fireEvent.click(screen.getByText('+ Tambah'));
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Kode wajib diisi')).toBeInTheDocument();
@@ -197,7 +197,7 @@ describe('SumberAdmin', () => {
     fireEvent.click(screen.getByText('Cari'));
     fireEvent.click(screen.getByText('KBBI'));
 
-    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/glosarium/sumber/1');
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/sumber/1');
   });
 
   it('aman saat respons daftar kosong, detail tanpa id, klik item tanpa id, dan batal hapus', async () => {
@@ -231,7 +231,7 @@ describe('SumberAdmin', () => {
     );
 
     fireEvent.click(screen.getByText('Tanpa ID'));
-    expect(mockNavigate).not.toHaveBeenCalledWith('/redaksi/glosarium/sumber/undefined');
+    expect(mockNavigate).not.toHaveBeenCalledWith('/redaksi/sumber/undefined');
     cleanup();
 
     mockParams = { id: '1' };

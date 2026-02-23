@@ -329,7 +329,7 @@ export function useDetailGlosariumAdmin(id) {
   });
 }
 
-export function useDaftarBidangGlosariumAdmin({
+export function useDaftarBidangAdmin({
   limit = 50,
   cursor = null,
   direction = 'next',
@@ -337,7 +337,7 @@ export function useDaftarBidangGlosariumAdmin({
   q = '',
   aktif = '',
 } = {}) {
-  return useDaftarAdmin('/api/redaksi/glosarium/bidang-master', 'admin-glosarium-bidang', {
+  return useDaftarAdmin('/api/redaksi/bidang', 'admin-bidang', {
     limit,
     cursor,
     direction,
@@ -347,15 +347,15 @@ export function useDaftarBidangGlosariumAdmin({
   });
 }
 
-export function useDetailBidangGlosariumAdmin(id) {
+export function useDetailBidangAdmin(id) {
   return useQuery({
-    queryKey: ['admin-glosarium-bidang-detail', id],
-    queryFn: () => klien.get(`/api/redaksi/glosarium/bidang-master/${id}`).then((r) => r.data),
+    queryKey: ['admin-bidang-detail', id],
+    queryFn: () => klien.get(`/api/redaksi/bidang/${id}`).then((r) => r.data),
     enabled: Boolean(id),
   });
 }
 
-export function useDaftarSumberGlosariumAdmin({
+export function useDaftarSumberAdmin({
   limit = 50,
   cursor = null,
   direction = 'next',
@@ -363,7 +363,7 @@ export function useDaftarSumberGlosariumAdmin({
   q = '',
   aktif = '',
 } = {}) {
-  return useDaftarAdmin('/api/redaksi/glosarium/sumber-master', 'admin-glosarium-sumber', {
+  return useDaftarAdmin('/api/redaksi/sumber', 'admin-sumber', {
     limit,
     cursor,
     direction,
@@ -373,10 +373,10 @@ export function useDaftarSumberGlosariumAdmin({
   });
 }
 
-export function useDetailSumberGlosariumAdmin(id) {
+export function useDetailSumberAdmin(id) {
   return useQuery({
-    queryKey: ['admin-glosarium-sumber-detail', id],
-    queryFn: () => klien.get(`/api/redaksi/glosarium/sumber-master/${id}`).then((r) => r.data),
+    queryKey: ['admin-sumber-detail', id],
+    queryFn: () => klien.get(`/api/redaksi/sumber/${id}`).then((r) => r.data),
     enabled: Boolean(id),
   });
 }
@@ -687,8 +687,8 @@ export function useSimpanGlosarium() {
       invalidateQueryKeys(qc, [
         'admin-glosarium',
         'admin-glosarium-detail',
-        'admin-glosarium-bidang',
-        'admin-glosarium-sumber',
+        'admin-bidang',
+        'admin-sumber',
         'glosarium-bidang',
         'glosarium-sumber',
       ]);
@@ -704,8 +704,8 @@ export function useHapusGlosarium() {
       invalidateQueryKeys(qc, [
         'admin-glosarium',
         'admin-glosarium-detail',
-        'admin-glosarium-bidang',
-        'admin-glosarium-sumber',
+        'admin-bidang',
+        'admin-sumber',
         'glosarium-bidang',
         'glosarium-sumber',
       ]);
@@ -713,20 +713,20 @@ export function useHapusGlosarium() {
   });
 }
 
-export function useSimpanBidangGlosarium() {
-  return useSimpanAdmin({ path: '/api/redaksi/glosarium/bidang-master', queryKeyPrefix: 'admin-glosarium-bidang' });
+export function useSimpanBidang() {
+  return useSimpanAdmin({ path: '/api/redaksi/bidang', queryKeyPrefix: 'admin-bidang' });
 }
 
-export function useHapusBidangGlosarium() {
-  return useHapusAdmin({ path: '/api/redaksi/glosarium/bidang-master', queryKeyPrefix: 'admin-glosarium-bidang' });
+export function useHapusBidang() {
+  return useHapusAdmin({ path: '/api/redaksi/bidang', queryKeyPrefix: 'admin-bidang' });
 }
 
-export function useSimpanSumberGlosarium() {
-  return useSimpanAdmin({ path: '/api/redaksi/glosarium/sumber-master', queryKeyPrefix: 'admin-glosarium-sumber' });
+export function useSimpanSumber() {
+  return useSimpanAdmin({ path: '/api/redaksi/sumber', queryKeyPrefix: 'admin-sumber' });
 }
 
-export function useHapusSumberGlosarium() {
-  return useHapusAdmin({ path: '/api/redaksi/glosarium/sumber-master', queryKeyPrefix: 'admin-glosarium-sumber' });
+export function useHapusSumber() {
+  return useHapusAdmin({ path: '/api/redaksi/sumber', queryKeyPrefix: 'admin-sumber' });
 }
 
 // ─── Mutations: Label ────────────────────────────────────────────────────────

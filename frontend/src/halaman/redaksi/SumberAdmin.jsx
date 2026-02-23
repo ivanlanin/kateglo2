@@ -1,14 +1,14 @@
 /**
- * @fileoverview Halaman admin master sumber glosarium
+ * @fileoverview Halaman admin master sumber
  */
 
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-  useDaftarSumberGlosariumAdmin,
-  useDetailSumberGlosariumAdmin,
-  useSimpanSumberGlosarium,
-  useHapusSumberGlosarium,
+  useDaftarSumberAdmin,
+  useDetailSumberAdmin,
+  useSimpanSumber,
+  useHapusSumber,
 } from '../../api/apiAdmin';
 import TataLetak from '../../komponen/bersama/TataLetak';
 import {
@@ -51,7 +51,7 @@ function SumberAdmin() {
   const [filterAktifDraft, setFilterAktifDraft] = useState('');
   const [filterAktif, setFilterAktif] = useState('');
 
-  const { data: resp, isLoading, isError } = useDaftarSumberGlosariumAdmin({
+  const { data: resp, isLoading, isError } = useDaftarSumberAdmin({
     limit,
     cursor,
     direction,
@@ -59,20 +59,20 @@ function SumberAdmin() {
     q,
     aktif: filterAktif,
   });
-  const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailSumberGlosariumAdmin(idDariPath);
+  const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailSumberAdmin(idDariPath);
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
 
   const panel = useFormPanel(nilaiAwal);
-  const simpan = useSimpanSumberGlosarium();
-  const hapus = useHapusSumberGlosarium();
+  const simpan = useSimpanSumber();
+  const hapus = useHapusSumber();
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
 
   useEffect(() => {
     if (!idParam) return;
     if (idDariPath) return;
     setPesan({ error: 'ID sumber tidak valid.', sukses: '' });
-    navigate('/redaksi/glosarium/sumber', { replace: true });
+    navigate('/redaksi/sumber', { replace: true });
   }, [idParam, idDariPath, navigate]);
 
   useEffect(() => {
@@ -94,7 +94,7 @@ function SumberAdmin() {
   useEffect(() => {
     if (!idDariPath || isDetailLoading || !isDetailError) return;
     setPesan({ error: 'Sumber tidak ditemukan.', sukses: '' });
-    navigate('/redaksi/glosarium/sumber', { replace: true });
+    navigate('/redaksi/sumber', { replace: true });
   }, [idDariPath, isDetailError, isDetailLoading, navigate]);
 
   const tutupPanel = () => {
@@ -102,7 +102,7 @@ function SumberAdmin() {
     panel.tutup();
     if (idDariPath) {
       sedangMenutupDariPath.current = true;
-      navigate('/redaksi/glosarium/sumber', { replace: true });
+      navigate('/redaksi/sumber', { replace: true });
     }
   };
 
@@ -110,7 +110,7 @@ function SumberAdmin() {
     setPesan({ error: '', sukses: '' });
     if (idDariPath) {
       sedangMenutupDariPath.current = true;
-      navigate('/redaksi/glosarium/sumber', { replace: true });
+      navigate('/redaksi/sumber', { replace: true });
     }
     panel.bukaUntukTambah();
   };
@@ -118,7 +118,7 @@ function SumberAdmin() {
   const bukaSuntingDariDaftar = (item) => {
     if (!item?.id) return;
     setPesan({ error: '', sukses: '' });
-    navigate(`/redaksi/glosarium/sumber/${item.id}`);
+    navigate(`/redaksi/sumber/${item.id}`);
   };
 
   const handleSimpan = () => {
@@ -155,7 +155,7 @@ function SumberAdmin() {
   };
 
   return (
-    <TataLetak mode="admin" judul="Sumber Glosarium" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
+    <TataLetak mode="admin" judul="Sumber" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -168,7 +168,7 @@ function SumberAdmin() {
             value: filterAktifDraft,
             onChange: setFilterAktifDraft,
             options: opsiFilterStatusAktif,
-            ariaLabel: 'Filter status sumber glosarium',
+            ariaLabel: 'Filter status sumber',
           },
         ]}
       />

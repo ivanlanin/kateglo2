@@ -21,10 +21,10 @@ const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
 
 vi.mock('../../../src/api/apiAdmin', () => ({
-  useDaftarBidangGlosariumAdmin: (...args) => mockUseDaftar(...args),
-  useDetailBidangGlosariumAdmin: (...args) => mockUseDetail(...args),
-  useSimpanBidangGlosarium: () => ({ mutate: mutateSimpan, isPending: false }),
-  useHapusBidangGlosarium: () => ({ mutate: mutateHapus, isPending: false }),
+  useDaftarBidangAdmin: (...args) => mockUseDaftar(...args),
+  useDetailBidangAdmin: (...args) => mockUseDetail(...args),
+  useSimpanBidang: () => ({ mutate: mutateSimpan, isPending: false }),
+  useHapusBidang: () => ({ mutate: mutateHapus, isPending: false }),
 }));
 
 vi.mock('../../../src/komponen/bersama/TataLetak', () => ({
@@ -77,7 +77,7 @@ describe('BidangAdmin', () => {
       </MemoryRouter>
     );
 
-    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/glosarium/bidang', { replace: true });
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/bidang', { replace: true });
   });
 
   it('membuka mode sunting dari detail route lalu dapat ditutup', async () => {
@@ -96,7 +96,7 @@ describe('BidangAdmin', () => {
 
     await waitFor(() => expect(screen.getByDisplayValue('kim')).toBeInTheDocument());
     fireEvent.click(screen.getByLabelText('Tutup panel'));
-    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/glosarium/bidang', { replace: true });
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/bidang', { replace: true });
   });
 
   it('menangani detail error, validasi wajib, error simpan, dan alur hapus', () => {
@@ -111,7 +111,7 @@ describe('BidangAdmin', () => {
       </MemoryRouter>
     );
 
-    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/glosarium/bidang', { replace: true });
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/bidang', { replace: true });
     fireEvent.click(screen.getByText('+ Tambah'));
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Kode wajib diisi')).toBeInTheDocument();
@@ -197,7 +197,7 @@ describe('BidangAdmin', () => {
     fireEvent.click(screen.getByText('Cari'));
     fireEvent.click(screen.getByText('Kimia'));
 
-    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/glosarium/bidang/1');
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/bidang/1');
   });
 
   it('aman saat respons daftar kosong, detail tanpa id, klik item tanpa id, dan batal hapus', async () => {
@@ -231,7 +231,7 @@ describe('BidangAdmin', () => {
     );
 
     fireEvent.click(screen.getByText('Tanpa ID'));
-    expect(mockNavigate).not.toHaveBeenCalledWith('/redaksi/glosarium/bidang/undefined');
+    expect(mockNavigate).not.toHaveBeenCalledWith('/redaksi/bidang/undefined');
     cleanup();
 
     mockParams = { id: '1' };

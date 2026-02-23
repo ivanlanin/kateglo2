@@ -57,6 +57,7 @@ describe('TataLetakAdmin', () => {
     expect(screen.getByRole('link', { name: 'Redaksi' })).toHaveAttribute('href', '/redaksi');
     expect(screen.getByRole('link', { name: 'Kateglo' })).toHaveAttribute('href', '/');
     expect(screen.queryByRole('link', { name: 'Dasbor' })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByLabelText('Buka menu redaksi'));
     const menuKamus = screen.getAllByRole('link', { name: 'Kamus' });
     expect(menuKamus.some((link) => link.className.includes('navbar-menu-link-active'))).toBe(true);
     expect(screen.getByRole('link', { name: 'Kebijakan Privasi' })).toHaveAttribute('href', '/kebijakan-privasi');
@@ -78,6 +79,7 @@ describe('TataLetakAdmin', () => {
     expect(document.title).toBe('Redaksi Kateglo');
     expect(screen.getByRole('link', { name: 'Redaksi' })).toHaveAttribute('href', '/redaksi');
     expect(screen.queryByText('admin@kateglo.id')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByLabelText('Buka menu redaksi'));
     const menuKamus = screen.getAllByRole('link', { name: 'Kamus' });
     expect(menuKamus.some((link) => link.className.includes('navbar-menu-link-active'))).toBe(true);
   });
@@ -89,22 +91,22 @@ describe('TataLetakAdmin', () => {
       </MemoryRouter>
     );
 
-    const toggleBtn = screen.getByLabelText('Toggle menu');
+    const toggleBtn = screen.getByLabelText('Buka menu redaksi');
     fireEvent.click(toggleBtn);
 
-    const menuKamus = screen.getAllByRole('link', { name: 'Kamus' });
-    expect(menuKamus.length).toBeGreaterThan(1);
+    expect(screen.getByRole('heading', { name: 'Leksikon' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Kamus' })).toBeInTheDocument();
   });
 
-  it('menu mobile logout menutup panel lalu logout', () => {
+  it('logout tetap berjalan saat panel menu terbuka', () => {
     render(
       <MemoryRouter initialEntries={['/redaksi/kamus']}>
         <TataLetakAdmin>Konten</TataLetakAdmin>
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByLabelText('Toggle menu'));
-    fireEvent.click(screen.getAllByRole('button', { name: 'Keluar' })[1]);
+    fireEvent.click(screen.getByLabelText('Buka menu redaksi'));
+    fireEvent.click(screen.getByRole('button', { name: 'Keluar' }));
 
     expect(mockLogout).toHaveBeenCalledTimes(1);
     expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true });
@@ -117,15 +119,15 @@ describe('TataLetakAdmin', () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByLabelText('Toggle menu'));
-    fireEvent.click(screen.getAllByRole('link', { name: 'Tesaurus' })[1]);
+    fireEvent.click(screen.getByLabelText('Buka menu redaksi'));
+    fireEvent.click(screen.getByRole('link', { name: 'Tesaurus' }));
 
     expect(mockLogout).not.toHaveBeenCalled();
-    expect(screen.queryAllByRole('link', { name: 'Tesaurus' })).toHaveLength(1);
+    expect(screen.queryByRole('heading', { name: 'Leksikon' })).not.toBeInTheDocument();
   });
 
   it('menu admin memakai fallback user.izin saat punyaIzin tidak tersedia', () => {
-    mockUseAuth.mockReturnValueOnce({
+    mockUseAuth.mockReturnValue({
       user: { email: 'fallback@kateglo.id', izin: ['lihat_entri', 'kelola_label'] },
       logout: mockLogout,
       punyaIzin: null,
@@ -137,6 +139,7 @@ describe('TataLetakAdmin', () => {
       </MemoryRouter>
     );
 
+    fireEvent.click(screen.getByLabelText('Buka menu redaksi'));
     expect(screen.getByRole('link', { name: 'Kamus' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Label' })).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Tesaurus' })).not.toBeInTheDocument();

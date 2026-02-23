@@ -76,10 +76,10 @@ function App() {
       <Route path="/redaksi/tesaurus" element={<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/tesaurus/:id" element={<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/glosarium" element={<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/glosarium/bidang" element={<RuteRedaksi><BidangAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/glosarium/bidang/:id" element={<RuteRedaksi><BidangAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/glosarium/sumber" element={<RuteRedaksi><SumberAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/glosarium/sumber/:id" element={<RuteRedaksi><SumberAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/bidang" element={<RuteRedaksi><BidangAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/bidang/:id" element={<RuteRedaksi><BidangAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/sumber" element={<RuteRedaksi><SumberAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/sumber/:id" element={<RuteRedaksi><SumberAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/glosarium/:id" element={<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/label" element={<RuteAdmin><LabelAdmin /></RuteAdmin>} />
       <Route path="/redaksi/label/:id" element={<RuteAdmin><LabelAdmin /></RuteAdmin>} />

@@ -32,10 +32,10 @@ import {
   useDetailTesaurusAdmin,
   useDaftarGlosariumAdmin,
   useDetailGlosariumAdmin,
-  useDaftarBidangGlosariumAdmin,
-  useDetailBidangGlosariumAdmin,
-  useDaftarSumberGlosariumAdmin,
-  useDetailSumberGlosariumAdmin,
+  useDaftarBidangAdmin,
+  useDetailBidangAdmin,
+  useDaftarSumberAdmin,
+  useDetailSumberAdmin,
   useDaftarLabelAdmin,
   useDetailLabelAdmin,
   useKategoriLabelRedaksi,
@@ -63,10 +63,10 @@ import {
   useHapusTesaurus,
   useSimpanGlosarium,
   useHapusGlosarium,
-  useSimpanBidangGlosarium,
-  useHapusBidangGlosarium,
-  useSimpanSumberGlosarium,
-  useHapusSumberGlosarium,
+  useSimpanBidang,
+  useHapusBidang,
+  useSimpanSumber,
+  useHapusSumber,
   useSimpanLabel,
   useHapusLabel,
   useSimpanPengguna,
@@ -352,27 +352,27 @@ describe('apiAdmin', () => {
     await detailGlosarium.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium/15');
 
-    const daftarBidang = useDaftarBidangGlosariumAdmin({ limit: 12, q: 'kim', aktif: '1' });
+    const daftarBidang = useDaftarBidangAdmin({ limit: 12, q: 'kim', aktif: '1' });
     await daftarBidang.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium/bidang-master', {
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/bidang', {
       params: { limit: 12, cursor: undefined, direction: 'next', lastPage: undefined, q: 'kim', aktif: '1' },
     });
 
-    const detailBidang = useDetailBidangGlosariumAdmin(18);
+    const detailBidang = useDetailBidangAdmin(18);
     expect(detailBidang.enabled).toBe(true);
     await detailBidang.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium/bidang-master/18');
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/bidang/18');
 
-    const daftarSumber = useDaftarSumberGlosariumAdmin({ limit: 13, q: 'kb', aktif: '0' });
+    const daftarSumber = useDaftarSumberAdmin({ limit: 13, q: 'kb', aktif: '0' });
     await daftarSumber.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium/sumber-master', {
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/sumber', {
       params: { limit: 13, cursor: undefined, direction: 'next', lastPage: undefined, q: 'kb', aktif: '0' },
     });
 
-    const detailSumber = useDetailSumberGlosariumAdmin(19);
+    const detailSumber = useDetailSumberAdmin(19);
     expect(detailSumber.enabled).toBe(true);
     await detailSumber.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium/sumber-master/19');
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/sumber/19');
 
     const detailLabel = useDetailLabelAdmin(16);
     expect(detailLabel.enabled).toBe(true);
@@ -390,8 +390,8 @@ describe('apiAdmin', () => {
     expect(useDetailGlosariumAdmin(null).enabled).toBe(false);
     expect(useDetailLabelAdmin(null).enabled).toBe(false);
     expect(useDetailPengguna(null).enabled).toBe(false);
-    expect(useDetailBidangGlosariumAdmin(null).enabled).toBe(false);
-    expect(useDetailSumberGlosariumAdmin(null).enabled).toBe(false);
+    expect(useDetailBidangAdmin(null).enabled).toBe(false);
+    expect(useDetailSumberAdmin(null).enabled).toBe(false);
   });
 
   it('mengonfigurasi mutation admin pengguna', async () => {
@@ -510,33 +510,33 @@ describe('apiAdmin', () => {
     hapusGlosarium.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-glosarium'] });
 
-    const simpanBidang = useSimpanBidangGlosarium();
+    const simpanBidang = useSimpanBidang();
     await simpanBidang.mutationFn({ id: 2, kode: 'kim', nama: 'Kimia' });
     await simpanBidang.mutationFn({ kode: 'fis', nama: 'Fisika' });
-    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/glosarium/bidang-master/2', { id: 2, kode: 'kim', nama: 'Kimia' });
-    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/glosarium/bidang-master', { kode: 'fis', nama: 'Fisika' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/bidang/2', { id: 2, kode: 'kim', nama: 'Kimia' });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/bidang', { kode: 'fis', nama: 'Fisika' });
     simpanBidang.onSuccess();
-    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-glosarium-bidang'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-bidang'] });
 
-    const hapusBidang = useHapusBidangGlosarium();
+    const hapusBidang = useHapusBidang();
     await hapusBidang.mutationFn(2);
-    expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/glosarium/bidang-master/2');
+    expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/bidang/2');
     hapusBidang.onSuccess();
-    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-glosarium-bidang'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-bidang'] });
 
-    const simpanSumber = useSimpanSumberGlosarium();
+    const simpanSumber = useSimpanSumber();
     await simpanSumber.mutationFn({ id: 3, kode: 'kbbi', nama: 'KBBI' });
     await simpanSumber.mutationFn({ kode: 'pusba', nama: 'Pusba' });
-    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/glosarium/sumber-master/3', { id: 3, kode: 'kbbi', nama: 'KBBI' });
-    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/glosarium/sumber-master', { kode: 'pusba', nama: 'Pusba' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/sumber/3', { id: 3, kode: 'kbbi', nama: 'KBBI' });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/sumber', { kode: 'pusba', nama: 'Pusba' });
     simpanSumber.onSuccess();
-    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-glosarium-sumber'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-sumber'] });
 
-    const hapusSumber = useHapusSumberGlosarium();
+    const hapusSumber = useHapusSumber();
     await hapusSumber.mutationFn(3);
-    expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/glosarium/sumber-master/3');
+    expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/sumber/3');
     hapusSumber.onSuccess();
-    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-glosarium-sumber'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-sumber'] });
 
     const simpanLabel = useSimpanLabel();
     await simpanLabel.mutationFn({ id: 7, kategori: 'ragam', kode: 'cak', nama: 'cakapan' });

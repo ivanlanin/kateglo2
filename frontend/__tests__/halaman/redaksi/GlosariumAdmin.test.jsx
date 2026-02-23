@@ -18,8 +18,8 @@ vi.mock('react-router-dom', async () => {
 
 const mockUseDaftarGlosariumAdmin = vi.fn();
 const mockUseDetailGlosariumAdmin = vi.fn();
-const mockUseDaftarBidangGlosariumAdmin = vi.fn();
-const mockUseDaftarSumberGlosariumAdmin = vi.fn();
+const mockUseDaftarBidangAdmin = vi.fn();
+const mockUseDaftarSumberAdmin = vi.fn();
 const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
 const mockUseAuth = vi.fn();
@@ -27,8 +27,8 @@ const mockUseAuth = vi.fn();
 vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarGlosariumAdmin: (...args) => mockUseDaftarGlosariumAdmin(...args),
   useDetailGlosariumAdmin: (...args) => mockUseDetailGlosariumAdmin(...args),
-  useDaftarBidangGlosariumAdmin: (...args) => mockUseDaftarBidangGlosariumAdmin(...args),
-  useDaftarSumberGlosariumAdmin: (...args) => mockUseDaftarSumberGlosariumAdmin(...args),
+  useDaftarBidangAdmin: (...args) => mockUseDaftarBidangAdmin(...args),
+  useDaftarSumberAdmin: (...args) => mockUseDaftarSumberAdmin(...args),
   useSimpanGlosarium: () => ({ mutate: mutateSimpan, isPending: false }),
   useHapusGlosarium: () => ({ mutate: mutateHapus, isPending: false }),
 }));
@@ -69,14 +69,14 @@ describe('GlosariumAdmin', () => {
         data: [{ id: 1, indonesia: 'air', asing: 'water', bidang_id: 1, bidang: 'Kimia', sumber_id: 1, sumber: 'KBBI', bahasa: 'en' }],
       },
     });
-    mockUseDaftarBidangGlosariumAdmin.mockReturnValue({
+    mockUseDaftarBidangAdmin.mockReturnValue({
       data: {
         data: [{ id: 1, kode: 'kimia', nama: 'Kimia' }],
       },
       isLoading: false,
       isError: false,
     });
-    mockUseDaftarSumberGlosariumAdmin.mockReturnValue({
+    mockUseDaftarSumberAdmin.mockReturnValue({
       data: {
         data: [{ id: 1, kode: 'kbbi', nama: 'KBBI' }],
       },
@@ -228,8 +228,8 @@ describe('GlosariumAdmin', () => {
   });
 
   it('tetap aman saat opsi bidang/sumber dari API kosong', () => {
-    mockUseDaftarBidangGlosariumAdmin.mockReturnValue({ data: undefined, isLoading: false, isError: false });
-    mockUseDaftarSumberGlosariumAdmin.mockReturnValue({ data: undefined, isLoading: false, isError: false });
+    mockUseDaftarBidangAdmin.mockReturnValue({ data: undefined, isLoading: false, isError: false });
+    mockUseDaftarSumberAdmin.mockReturnValue({ data: undefined, isLoading: false, isError: false });
 
     render(
       <MemoryRouter>
