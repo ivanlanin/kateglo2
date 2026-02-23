@@ -154,13 +154,19 @@ function SumberAdmin() {
     kirimCari(cari);
   };
 
+  const handleResetFilter = () => {
+    setFilterAktifDraft('');
+    setFilterAktif('');
+    hapusCari();
+  };
+
   return (
     <TataLetak mode="admin" judul="Sumber" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
         onCari={handleCari}
-        onHapus={hapusCari}
+        onHapus={handleResetFilter}
         placeholder="Cari sumber …"
         filters={[
           {

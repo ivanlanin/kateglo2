@@ -110,6 +110,12 @@ function AuditMaknaAdmin() {
     kirimCari(cari);
   };
 
+  const handleResetFilter = () => {
+    setStatusDraft('');
+    setStatus('');
+    hapusCari();
+  };
+
   const bukaSunting = (item) => {
     setPesan({ error: '', sukses: '' });
     panel.bukaUntukSunting(item);
@@ -146,7 +152,7 @@ function AuditMaknaAdmin() {
         nilai={cari}
         onChange={setCari}
         onCari={handleCari}
-        onHapus={hapusCari}
+        onHapus={handleResetFilter}
         placeholder="Cari indeks …"
         filters={[
           {

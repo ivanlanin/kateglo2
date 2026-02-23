@@ -726,6 +726,12 @@ function KamusAdmin() {
     kirimCari(cari);
   };
 
+  const handleResetFilter = () => {
+    setFilterDraft(nilaiAwalFilterKamus);
+    setFilterAktif(nilaiAwalFilterKamus);
+    hapusCari();
+  };
+
   useEffect(() => {
     if (!idParam) return;
     if (entriIdDariPath) return;
@@ -859,7 +865,7 @@ function KamusAdmin() {
         nilai={cari}
         onChange={setCari}
         onCari={handleCari}
-        onHapus={hapusCari}
+        onHapus={handleResetFilter}
         placeholder="Cari entri …"
         filters={[
           {

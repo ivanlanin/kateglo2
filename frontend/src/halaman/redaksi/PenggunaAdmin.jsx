@@ -121,6 +121,12 @@ function PenggunaAdmin() {
     kirimCari(cari);
   };
 
+  const handleResetFilter = () => {
+    setFilterAktifDraft('');
+    setFilterAktif('');
+    hapusCari();
+  };
+
   const opsiPeran = [
     { value: '', label: '— Pilih peran —' },
     ...daftarPeran.map((r) => ({ value: r.id, label: r.nama })),
@@ -172,7 +178,7 @@ function PenggunaAdmin() {
         nilai={cari}
         onChange={setCari}
         onCari={handleCari}
-        onHapus={hapusCari}
+        onHapus={handleResetFilter}
         placeholder="Cari pengguna, surel, atau peran …"
         filters={[
           {

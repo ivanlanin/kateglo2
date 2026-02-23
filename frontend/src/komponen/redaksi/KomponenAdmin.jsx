@@ -159,6 +159,9 @@ export function BarisFilterCariAdmin({
   placeholder = 'Cari …',
   filters = [],
 }) {
+  const hasActiveFilter = filters.some((item) => String(item?.value ?? '').trim() !== '');
+  const tampilkanReset = String(nilai ?? '').trim() !== '' || hasActiveFilter;
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onCari(nilai);
@@ -195,7 +198,7 @@ export function BarisFilterCariAdmin({
         Cari
       </button>
 
-      {nilai && (
+      {tampilkanReset && (
         <button
           type="button"
           onClick={onHapus}

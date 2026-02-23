@@ -215,13 +215,23 @@ function GlosariumAdmin() {
     kirimCari(cari);
   };
 
+  const handleResetFilter = () => {
+    setFilterBidangDraft('');
+    setFilterSumberDraft('');
+    setFilterAktifDraft('');
+    setFilterBidang('');
+    setFilterSumber('');
+    setFilterAktif('');
+    hapusCari();
+  };
+
   return (
     <TataLetak mode="admin" judul="Glosarium" aksiJudul={bisaTambah ? <TombolAksiAdmin onClick={bukaTambah} /> : null}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
         onCari={handleCari}
-        onHapus={hapusCari}
+        onHapus={handleResetFilter}
         placeholder="Cari istilah …"
         filters={[
           {
