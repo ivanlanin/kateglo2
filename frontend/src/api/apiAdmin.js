@@ -109,6 +109,8 @@ export function useDaftarKamusAdmin({
   jenisRujuk = '',
   punyaHomograf = '',
   punyaHomonim = '',
+  punyaLafal = '',
+  punyaPemenggalan = '',
   kelasKata = '',
   ragam = '',
   bidang = '',
@@ -132,6 +134,8 @@ export function useDaftarKamusAdmin({
   if (jenisRujuk) params.jenis_rujuk = jenisRujuk;
   if (punyaHomograf) params.punya_homograf = punyaHomograf;
   if (punyaHomonim) params.punya_homonim = punyaHomonim;
+  if (punyaLafal) params.punya_lafal = punyaLafal;
+  if (punyaPemenggalan) params.punya_pemenggalan = punyaPemenggalan;
   if (kelasKata) params.kelas_kata = kelasKata;
   if (ragam) params.ragam = ragam;
   if (bidang) params.bidang = bidang;
@@ -153,6 +157,8 @@ export function useDaftarKamusAdmin({
       jenisRujuk,
       punyaHomograf,
       punyaHomonim,
+      punyaLafal,
+      punyaPemenggalan,
       kelasKata,
       ragam,
       bidang,

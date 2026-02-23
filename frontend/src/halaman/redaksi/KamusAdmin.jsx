@@ -79,6 +79,9 @@ const nilaiAwalFilterKamus = {
   jenis: '',
   punyaHomograf: '',
   punyaHomonim: '',
+  punyaLafal: '',
+  punyaPemenggalan: '',
+  jenisRujuk: '',
   kelasKata: '',
   ragam: '',
   bidang: '',
@@ -507,8 +510,11 @@ function KamusAdmin() {
     lastPage,
     q,
     jenis: filterAktif.jenis,
+    jenisRujuk: filterAktif.jenisRujuk,
     punyaHomograf: filterAktif.punyaHomograf,
     punyaHomonim: filterAktif.punyaHomonim,
+    punyaLafal: filterAktif.punyaLafal,
+    punyaPemenggalan: filterAktif.punyaPemenggalan,
     kelasKata: filterAktif.kelasKata,
     ragam: filterAktif.ragam,
     bidang: filterAktif.bidang,
@@ -574,6 +580,23 @@ function KamusAdmin() {
     { value: '1', label: 'Berhomonim' },
     { value: '0', label: 'Nonhomonim' },
   ]), []);
+
+  const opsiFilterLafal = useMemo(() => ([
+    { value: '', label: '—Lafal—' },
+    { value: '1', label: 'Berlafal' },
+    { value: '0', label: 'Nonlafal' },
+  ]), []);
+
+  const opsiFilterPemenggalan = useMemo(() => ([
+    { value: '', label: '—Pemenggalan—' },
+    { value: '1', label: 'Berpemenggalan' },
+    { value: '0', label: 'Nonpemenggalan' },
+  ]), []);
+
+  const opsiFilterJenisRujuk = useMemo(() => {
+    const pilihanTanpaKosong = opsiKategori.jenisRujuk.filter((item) => String(item?.value || '').trim());
+    return [{ value: '', label: '—Jenis Rujuk—' }, ...pilihanTanpaKosong];
+  }, [opsiKategori.jenisRujuk]);
 
   const opsiFilterStatusKamus = useMemo(() => ([
     { value: '', label: '—Status—' },
@@ -789,6 +812,27 @@ function KamusAdmin() {
             onChange: (value) => setFilterDraftValue('punyaHomonim', value),
             options: opsiFilterHomonim,
             ariaLabel: 'Filter homonim',
+          },
+          {
+            key: 'punya_lafal',
+            value: filterDraft.punyaLafal,
+            onChange: (value) => setFilterDraftValue('punyaLafal', value),
+            options: opsiFilterLafal,
+            ariaLabel: 'Filter lafal',
+          },
+          {
+            key: 'punya_pemenggalan',
+            value: filterDraft.punyaPemenggalan,
+            onChange: (value) => setFilterDraftValue('punyaPemenggalan', value),
+            options: opsiFilterPemenggalan,
+            ariaLabel: 'Filter pemenggalan',
+          },
+          {
+            key: 'jenis_rujuk',
+            value: filterDraft.jenisRujuk,
+            onChange: (value) => setFilterDraftValue('jenisRujuk', value),
+            options: opsiFilterJenisRujuk,
+            ariaLabel: 'Filter jenis rujuk',
           },
           {
             key: 'aktif',

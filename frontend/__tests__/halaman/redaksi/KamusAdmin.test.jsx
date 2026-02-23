@@ -378,6 +378,7 @@ describe('KamusAdmin', () => {
     );
 
     const labels = [
+      'Filter jenis rujuk',
       'Filter ilmiah',
       'Filter kimia',
       'Filter penyingkatan',
@@ -752,9 +753,10 @@ describe('KamusAdmin', () => {
     );
 
     const filterJenis = screen.getByLabelText('Filter jenis');
+    const filterJenisRujuk = screen.getByLabelText('Filter jenis rujuk');
 
     expect(Array.from(filterJenis.querySelectorAll('option')).filter((opt) => opt.value === '').length).toBe(1);
-    expect(screen.queryByLabelText('Filter jenis rujuk')).not.toBeInTheDocument();
+    expect(Array.from(filterJenisRujuk.querySelectorAll('option')).filter((opt) => opt.value === '').length).toBe(1);
   });
 
   it('menjalankan handler cari dan menerapkan semua filter', () => {
@@ -767,14 +769,19 @@ describe('KamusAdmin', () => {
     fireEvent.change(screen.getByLabelText('Filter jenis'), { target: { value: 'dasar' } });
     fireEvent.change(screen.getByLabelText('Filter homograf'), { target: { value: '1' } });
     fireEvent.change(screen.getByLabelText('Filter homonim'), { target: { value: '0' } });
+    fireEvent.change(screen.getByLabelText('Filter lafal'), { target: { value: '1' } });
+    fireEvent.change(screen.getByLabelText('Filter pemenggalan'), { target: { value: '0' } });
+    fireEvent.change(screen.getByLabelText('Filter jenis rujuk'), { target: { value: 'lihat' } });
     fireEvent.change(screen.getByLabelText('Filter status entri'), { target: { value: '1' } });
     fireEvent.click(screen.getByText('Cari'));
 
     const argsTerakhir = mockUseDaftarKamusAdmin.mock.calls.at(-1)?.[0] || {};
     expect(argsTerakhir.jenis).toBe('dasar');
-    expect(argsTerakhir.jenisRujuk || '').toBe('');
+    expect(argsTerakhir.jenisRujuk || '').toBe('lihat');
     expect(argsTerakhir.punyaHomograf).toBe('1');
     expect(argsTerakhir.punyaHomonim).toBe('0');
+    expect(argsTerakhir.punyaLafal).toBe('1');
+    expect(argsTerakhir.punyaPemenggalan).toBe('0');
     expect(argsTerakhir.aktif).toBe('1');
   });
 });

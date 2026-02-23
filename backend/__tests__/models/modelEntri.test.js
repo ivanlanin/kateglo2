@@ -1073,6 +1073,31 @@ describe('ModelEntri', () => {
     );
   });
 
+  it('daftarAdmin mendukung filter lafal dan pemenggalan', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [] });
+
+    await ModelEntri.daftarAdmin({
+      q: 'kat',
+      punya_lafal: '1',
+      punya_pemenggalan: '0',
+      limit: 5,
+      offset: 2,
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining("WHERE e.entri ILIKE $1 AND e.lafal IS NOT NULL AND BTRIM(e.lafal) <> '' AND (e.pemenggalan IS NULL OR BTRIM(e.pemenggalan) = '')"),
+      ['%kat%']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $2 OFFSET $3'),
+      ['%kat%', 5, 2]
+    );
+  });
+
   it('daftarAdmin mendukung filter aktif=0', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '1' }] })

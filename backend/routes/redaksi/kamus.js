@@ -48,6 +48,8 @@ router.get('/', periksaIzin('lihat_entri'), async (req, res, next) => {
     const jenisRujuk = parseTrimmedString(req.query.jenis_rujuk);
     const punyaHomograf = parseTrimmedString(req.query.punya_homograf);
     const punyaHomonim = parseTrimmedString(req.query.punya_homonim);
+    const punyaLafal = parseTrimmedString(req.query.punya_lafal);
+    const punyaPemenggalan = parseTrimmedString(req.query.punya_pemenggalan);
     const kelasKata = parseTrimmedString(req.query.kelas_kata);
     const ragam = parseTrimmedString(req.query.ragam);
     const bidang = parseTrimmedString(req.query.bidang);
@@ -66,6 +68,8 @@ router.get('/', periksaIzin('lihat_entri'), async (req, res, next) => {
       jenis_rujuk: jenisRujuk,
       punya_homograf: ['0', '1'].includes(punyaHomograf) ? punyaHomograf : '',
       punya_homonim: ['0', '1'].includes(punyaHomonim) ? punyaHomonim : '',
+      punya_lafal: ['0', '1'].includes(punyaLafal) ? punyaLafal : '',
+      punya_pemenggalan: ['0', '1'].includes(punyaPemenggalan) ? punyaPemenggalan : '',
       kelas_kata: kelasKata,
       ragam,
       bidang,

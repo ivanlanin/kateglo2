@@ -8,6 +8,7 @@
 - Mengubah tampilan navigasi dalam halaman menjadi lebih visual
 - Menambahkan audit kata yang ada di makna, tapi belum ada di indeks
 - Mengubah menu redaksi menjadi bilah sisi dengan menu hamburger di kiri
+- Menambahkan filter lafal, pemenggalan, dan jenis rujuk di redaksi kamus
 
 ## 2026-02-22 Minggu
 

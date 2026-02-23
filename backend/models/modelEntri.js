@@ -450,6 +450,8 @@ class ModelEntri {
     jenis_rujuk = '',
     punya_homograf = '',
     punya_homonim = '',
+    punya_lafal = '',
+    punya_pemenggalan = '',
     kelas_kata = '',
     ragam = '',
     bidang = '',
@@ -497,6 +499,18 @@ class ModelEntri {
       conditions.push('e.homonim IS NOT NULL');
     } else if (punya_homonim === '0') {
       conditions.push('e.homonim IS NULL');
+    }
+
+    if (punya_lafal === '1') {
+      conditions.push("e.lafal IS NOT NULL AND BTRIM(e.lafal) <> ''");
+    } else if (punya_lafal === '0') {
+      conditions.push("(e.lafal IS NULL OR BTRIM(e.lafal) = '')");
+    }
+
+    if (punya_pemenggalan === '1') {
+      conditions.push("e.pemenggalan IS NOT NULL AND BTRIM(e.pemenggalan) <> ''");
+    } else if (punya_pemenggalan === '0') {
+      conditions.push("(e.pemenggalan IS NULL OR BTRIM(e.pemenggalan) = '')");
     }
 
     if (kelas_kata) {
