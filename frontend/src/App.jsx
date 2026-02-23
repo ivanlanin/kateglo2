@@ -23,6 +23,7 @@ import LabelAdmin from './halaman/redaksi/LabelAdmin';
 import PenggunaAdmin from './halaman/redaksi/PenggunaAdmin';
 import PeranAdmin from './halaman/redaksi/PeranAdmin';
 import IzinAdmin from './halaman/redaksi/IzinAdmin';
+import AuditMaknaAdmin from './halaman/redaksi/AuditMaknaAdmin';
 
 function RuteRedaksi({ children }) {
   const { isAuthenticated, adalahRedaksi, isLoading } = useAuth();
@@ -71,6 +72,7 @@ function App() {
       <Route path="/redaksi/kamus/:id" element={<RuteRedaksi><KamusAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/komentar" element={<RuteRedaksi><KomentarAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/komentar/:id" element={<RuteRedaksi><KomentarAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/audit-makna" element={<RuteRedaksi><AuditMaknaAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/tesaurus" element={<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/tesaurus/:id" element={<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/glosarium" element={<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>} />

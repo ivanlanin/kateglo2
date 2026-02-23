@@ -23,5 +23,6 @@ router.use('/glosarium', require('./glosarium'));
 router.use('/label', require('./label'));
 router.use('/peran', require('./peran'));
 router.use('/izin', require('./izin'));
+router.use('/audit-makna', require('./auditMakna'));
 
 module.exports = router;

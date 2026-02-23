@@ -221,6 +221,36 @@ export function useDetailKomentarAdmin(id) {
   });
 }
 
+// ─── Audit Makna ─────────────────────────────────────────────────────────────
+
+export function useDaftarAuditMaknaAdmin({
+  limit = 50,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+  q = '',
+  status = '',
+} = {}) {
+  const params = buildDaftarParams({
+    limit,
+    cursor,
+    direction,
+    lastPage,
+    q,
+    includeAktif: false,
+  });
+
+  if (status) params.status = status;
+
+  return useQuery({
+    queryKey: ['admin-audit-makna', { limit, cursor, direction, lastPage, q, status }],
+    queryFn: () =>
+      klien
+        .get('/api/redaksi/audit-makna', { params })
+        .then((r) => r.data),
+  });
+}
+
 // ─── Tesaurus ────────────────────────────────────────────────────────────────
 
 export function useDaftarTesaurusAdmin({
@@ -568,6 +598,16 @@ export function useSimpanKomentarAdmin() {
     mutationFn: (data) => klien.put(`/api/redaksi/komentar/${data.id}`, data).then((r) => r.data),
     onSuccess: () => {
       invalidateQueryKeys(qc, ['admin-komentar', 'admin-komentar-detail']);
+    },
+  });
+}
+
+export function useSimpanAuditMaknaAdmin() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data) => klien.put(`/api/redaksi/audit-makna/${data.id}`, data).then((r) => r.data),
+    onSuccess: () => {
+      invalidateQueryKeys(qc, ['admin-audit-makna']);
     },
   });
 }

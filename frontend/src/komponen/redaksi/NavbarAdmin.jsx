@@ -13,6 +13,7 @@ const menuAdmin = [
   { path: '/redaksi/glosarium/bidang', label: 'Bidang', izin: 'kelola_bidang' },
   { path: '/redaksi/glosarium/sumber', label: 'Sumber', izin: 'kelola_sumber' },
   { path: '/redaksi/komentar', label: 'Komentar', izin: 'kelola_komentar' },
+  { path: '/redaksi/audit-makna', label: 'Audit Makna', izin: 'lihat_entri' },
   { path: '/redaksi/label', label: 'Label', izin: 'kelola_label' },
   { path: '/redaksi/peran', label: 'Peran', izin: 'kelola_peran' },
   { path: '/redaksi/izin', label: 'Izin', izin: 'kelola_peran' },
