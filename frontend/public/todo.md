@@ -1,4 +1,5 @@
 # Daftar Tugas
 
-- Menyediakan fasilitas kolaborasi untuk publik
-- Menyediakan fitur komentar
+- Menyediakan etimologi
+- Melengkapi entri kamus
+- Membuat meronim/holonim dan hiponim/hipernim
