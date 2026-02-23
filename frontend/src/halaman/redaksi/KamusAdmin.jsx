@@ -65,6 +65,15 @@ const opsiTipePenyingkatBawaan = [
   { value: 'singkatan', label: 'Singkatan' },
 ];
 
+const kodeRagamVarianValid = ['cak', 'hor', 'kl', 'kas'];
+
+const petaNormalisasiRagamVarian = {
+  cakapan: 'cak',
+  hormat: 'hor',
+  klasik: 'kl',
+  kasar: 'kas',
+};
+
 const kategoriLabelRedaksi = [
   'bentuk-kata',
   'jenis-rujuk',
@@ -88,7 +97,8 @@ const nilaiAwalFilterKamus = {
   bahasa: '',
   punyaIlmiah: '',
   punyaKimia: '',
-  tipePenyingkat: '',
+  penyingkatan: '',
+  punyaKiasan: '',
   punyaContoh: '',
   aktif: '',
 };
@@ -110,6 +120,13 @@ function ensureOpsiMemuatNilai(options = [], value = '') {
   if (!trimmedValue) return options;
   if (options.some((item) => String(item.value) === trimmedValue)) return options;
   return [{ value: trimmedValue, label: trimmedValue }, ...options];
+}
+
+function normalisasiRagamVarian(value = '') {
+  const trimmed = String(value || '').trim().toLowerCase();
+  if (!trimmed) return '';
+  if (kodeRagamVarianValid.includes(trimmed)) return trimmed;
+  return petaNormalisasiRagamVarian[trimmed] || '';
 }
 
 const kolom = [
@@ -240,9 +257,10 @@ function ItemMakna({
   isPending,
   opsiKelasKata,
   opsiRagam,
+  opsiRagamVarian,
   opsiBidang,
   opsiBahasa,
-  opsiTipePenyingkat,
+  opsiPenyingkatan,
   bisaTambahContoh,
   bisaEditContoh,
   bisaHapusContoh,
@@ -251,14 +269,24 @@ function ItemMakna({
 }) {
   const [terbuka, setTerbuka] = useState(false);
   const [edit, setEdit] = useState(false);
-  const [data, setData] = useState(makna);
+  const [data, setData] = useState({
+    ...makna,
+    ragam_varian: normalisasiRagamVarian(makna?.ragam_varian),
+  });
   const [tambahContoh, setTambahContoh] = useState(false);
 
   const ubah = (field, val) => setData((p) => ({ ...p, [field]: val }));
 
   const handleSimpan = () => {
     if (!data.makna?.trim()) return;
-    simpanMakna.mutate({ entriId, ...data }, { onSuccess: () => setEdit(false) });
+    simpanMakna.mutate(
+      {
+        entriId,
+        ...data,
+        ragam_varian: normalisasiRagamVarian(data.ragam_varian),
+      },
+      { onSuccess: () => setEdit(false) }
+    );
   };
 
   const handleHapus = () => {
@@ -277,6 +305,7 @@ function ItemMakna({
         {makna.kelas_kata && (
           <span className="text-xs bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 px-1.5 py-0.5 rounded font-mono">{makna.kelas_kata}</span>
         )}
+        <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">{makna.polisem || 1}.</span>
         <span className="flex-1 text-sm text-gray-800 dark:text-gray-200 line-clamp-1">{makna.makna}</span>
         {makna.contoh?.length > 0 && (
           <span className="text-xs text-gray-400 dark:text-gray-500">{makna.contoh.length} contoh</span>
@@ -311,6 +340,19 @@ function ItemMakna({
                 <SelectField label="Ragam" name="ragam" value={data.ragam} onChange={ubah} options={ensureOpsiMemuatNilai(opsiRagam, data.ragam)} />
               </div>
               <div className="grid grid-cols-2 gap-2">
+                <SelectField label="Ragam varian" name="ragam_varian" value={data.ragam_varian || ''} onChange={ubah} options={opsiRagamVarian} />
+                <SelectField
+                  label="Kiasan"
+                  name="kiasan"
+                  value={data.kiasan ? '1' : '0'}
+                  onChange={(_field, val) => ubah('kiasan', val === '1')}
+                  options={[
+                    { value: '0', label: 'Nonkiasan' },
+                    { value: '1', label: 'Kiasan' },
+                  ]}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-2">
                 <SelectField label="Bidang" name="bidang" value={data.bidang} onChange={ubah} options={ensureOpsiMemuatNilai(opsiBidang, data.bidang)} />
                 <SelectField label="Bahasa" name="bahasa" value={data.bahasa} onChange={ubah} options={ensureOpsiMemuatNilai(opsiBahasa, data.bahasa)} />
               </div>
@@ -319,8 +361,8 @@ function ItemMakna({
                 <InputField label="Kimia" name="kimia" value={data.kimia} onChange={ubah} />
               </div>
               <div className="grid grid-cols-2 gap-2">
-                <SelectField label="Tipe penyingkat" name="tipe_penyingkat" value={data.tipe_penyingkat} onChange={ubah} options={ensureOpsiMemuatNilai(opsiTipePenyingkat, data.tipe_penyingkat)} />
-                <InputField label="Urutan" name="urutan" value={data.urutan} onChange={ubah} type="number" />
+                <SelectField label="Penyingkatan" name="penyingkatan" value={data.penyingkatan} onChange={ubah} options={ensureOpsiMemuatNilai(opsiPenyingkatan, data.penyingkatan)} />
+                <InputField label="Polisem" name="polisem" value={data.polisem} onChange={ubah} type="number" />
               </div>
               <ToggleAktif value={data.aktif} onChange={ubah} />
               <div className="flex gap-2">
@@ -332,6 +374,7 @@ function ItemMakna({
             <div className="text-xs text-gray-500 dark:text-gray-400 mb-2 space-x-3 flex items-center gap-2 flex-wrap">
               {makna.bidang && <span>Bidang: {makna.bidang}</span>}
               {makna.ragam && <span>Ragam: {makna.ragam}</span>}
+              {makna.ragam_varian && <span>Ragam varian: {normalisasiRagamVarian(makna.ragam_varian)}</span>}
               {makna.bahasa && <span>Bahasa: {makna.bahasa}</span>}
               {makna.kiasan ? <span className="italic">kiasan</span> : null}
               <BadgeStatus aktif={makna.aktif ?? 1} />
@@ -392,9 +435,10 @@ function SeksiMakna({
   entriId,
   opsiKelasKata,
   opsiRagam,
+  opsiRagamVarian,
   opsiBidang,
   opsiBahasa,
-  opsiTipePenyingkat,
+  opsiPenyingkatan,
   bisaTambahMakna,
   bisaEditMakna,
   bisaHapusMakna,
@@ -418,7 +462,7 @@ function SeksiMakna({
   const handleTambahMakna = () => {
     if (!maknaBaruTeks.trim()) return;
     simpanMakna.mutate(
-      { entriId, makna: maknaBaruTeks, kelas_kata: maknaBaruKelas || null, urutan: daftar.length + 1 },
+      { entriId, makna: maknaBaruTeks, kelas_kata: maknaBaruKelas || null, polisem: daftar.length + 1 },
       { onSuccess: () => { setMaknaBaruTeks(''); setMaknaBaruKelas(''); setTambah(false); } }
     );
   };
@@ -450,9 +494,10 @@ function SeksiMakna({
           isPending={isPending}
           opsiKelasKata={opsiKelasKata}
           opsiRagam={opsiRagam}
+          opsiRagamVarian={opsiRagamVarian}
           opsiBidang={opsiBidang}
           opsiBahasa={opsiBahasa}
-          opsiTipePenyingkat={opsiTipePenyingkat}
+          opsiPenyingkatan={opsiPenyingkatan}
           bisaTambahContoh={bisaTambahContoh}
           bisaEditContoh={bisaEditContoh}
           bisaHapusContoh={bisaHapusContoh}
@@ -521,7 +566,8 @@ function KamusAdmin() {
     bahasa: filterAktif.bahasa,
     punyaIlmiah: filterAktif.punyaIlmiah,
     punyaKimia: filterAktif.punyaKimia,
-    tipePenyingkat: filterAktif.tipePenyingkat,
+    penyingkatan: filterAktif.penyingkatan,
+    punyaKiasan: filterAktif.punyaKiasan,
     punyaContoh: filterAktif.punyaContoh,
     aktif: filterAktif.aktif,
   });
@@ -640,6 +686,20 @@ function KamusAdmin() {
     const pilihanTanpaKosong = opsiKategori.tipePenyingkat.filter((item) => String(item?.value || '').trim());
     return [{ value: '', label: '—Penyingkatan—' }, ...pilihanTanpaKosong];
   }, [opsiKategori.tipePenyingkat]);
+
+  const opsiFilterKiasan = useMemo(() => ([
+    { value: '', label: '—Kiasan—' },
+    { value: '1', label: 'Kiasan' },
+    { value: '0', label: 'Nonkiasan' },
+  ]), []);
+
+  const opsiRagamVarian = useMemo(() => {
+    const petaLabel = new Map((opsiKategori.ragam || []).map((item) => [String(item.value).toLowerCase(), item.label]));
+    return [
+      { value: '', label: '— Tidak ada —' },
+      ...kodeRagamVarianValid.map((kode) => ({ value: kode, label: petaLabel.get(kode) || kode })),
+    ];
+  }, [opsiKategori.ragam]);
 
   const opsiFilterPunyaContoh = useMemo(() => ([
     { value: '', label: '—Contoh—' },
@@ -884,11 +944,18 @@ function KamusAdmin() {
             ariaLabel: 'Filter kimia',
           },
           {
-            key: 'tipe_penyingkat',
-            value: filterDraft.tipePenyingkat,
-            onChange: (value) => setFilterDraftValue('tipePenyingkat', value),
+            key: 'penyingkatan',
+            value: filterDraft.penyingkatan,
+            onChange: (value) => setFilterDraftValue('penyingkatan', value),
             options: opsiFilterTipePenyingkat,
             ariaLabel: 'Filter penyingkatan',
+          },
+          {
+            key: 'punya_kiasan',
+            value: filterDraft.punyaKiasan,
+            onChange: (value) => setFilterDraftValue('punyaKiasan', value),
+            options: opsiFilterKiasan,
+            ariaLabel: 'Filter kiasan',
           },
           {
             key: 'punya_contoh',
@@ -989,9 +1056,10 @@ function KamusAdmin() {
               entriId={panel.data.id}
               opsiKelasKata={opsiKategori.kelasKata}
               opsiRagam={opsiKategori.ragam}
+              opsiRagamVarian={opsiRagamVarian}
               opsiBidang={opsiKategori.bidang}
               opsiBahasa={opsiKategori.bahasa}
-              opsiTipePenyingkat={opsiKategori.tipePenyingkat}
+              opsiPenyingkatan={opsiKategori.tipePenyingkat}
               bisaTambahMakna={bisaTambahMakna}
               bisaEditMakna={bisaEditMakna}
               bisaHapusMakna={bisaHapusMakna}

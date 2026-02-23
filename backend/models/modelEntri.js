@@ -20,6 +20,19 @@ function parseNullableInteger(value) {
   return Number.isNaN(parsed) ? null : parsed;
 }
 
+function normalisasiRagamVarian(value) {
+  const trimmed = String(value || '').trim().toLowerCase();
+  if (!trimmed) return null;
+  const alias = {
+    cakapan: 'cak',
+    hormat: 'hor',
+    klasik: 'kl',
+    kasar: 'kas',
+  };
+  const normalized = alias[trimmed] || trimmed;
+  return ['cak', 'hor', 'kl', 'kas'].includes(normalized) ? normalized : null;
+}
+
 class ModelEntri {
   static async cariIndukAdmin(query, { limit = 8, excludeId = null } = {}) {
     const trimmed = String(query || '').trim();
@@ -327,13 +340,13 @@ class ModelEntri {
   static async ambilMakna(entriId, aktifSaja = false) {
     const kondisiAktif = aktifSaja ? 'AND aktif = TRUE' : '';
     const result = await db.query(
-      `SELECT id, polisem, urutan, makna, ragam, ragam_varian,
-              kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, aktif,
+      `SELECT id, polisem, makna, ragam, ragam_varian,
+              kelas_kata, bahasa, bidang, kiasan, penyingkatan, aktif,
               ilmiah, kimia
        FROM makna
       WHERE entri_id = $1
         ${kondisiAktif}
-       ORDER BY urutan ASC, id ASC`,
+       ORDER BY polisem ASC, id ASC`,
       [entriId]
     );
     return result.rows;
@@ -458,7 +471,8 @@ class ModelEntri {
     bahasa = '',
     punya_ilmiah = '',
     punya_kimia = '',
-    tipe_penyingkat = '',
+    penyingkatan = '',
+    punya_kiasan = '',
     punya_contoh = '',
   } = {}) {
     const conditions = [];
@@ -557,15 +571,31 @@ class ModelEntri {
       idx++;
     }
 
-    if (tipe_penyingkat) {
+    if (penyingkatan) {
       conditions.push(`EXISTS (
         SELECT 1
         FROM makna mk
         WHERE mk.entri_id = e.id
-          AND mk.tipe_penyingkat = $${idx}
+          AND mk.penyingkatan = $${idx}
       )`);
-      params.push(tipe_penyingkat);
+      params.push(penyingkatan);
       idx++;
+    }
+
+    if (punya_kiasan === '1') {
+      conditions.push(`EXISTS (
+        SELECT 1
+        FROM makna mk
+        WHERE mk.entri_id = e.id
+          AND mk.kiasan = TRUE
+      )`);
+    } else if (punya_kiasan === '0') {
+      conditions.push(`NOT EXISTS (
+        SELECT 1
+        FROM makna mk
+        WHERE mk.entri_id = e.id
+          AND mk.kiasan = TRUE
+      )`);
     }
 
     if (punya_ilmiah === '1') {
@@ -824,7 +854,7 @@ class ModelEntri {
                'kelas_kata', m.kelas_kata,
                'bidang', m.bidang,
                'ragam', m.ragam
-             ) ORDER BY m.urutan ASC, m.id ASC
+               ) ORDER BY m.polisem ASC, m.id ASC
            ) AS makna_cocok
          FROM entri e
          JOIN makna m ON m.entri_id = e.id AND m.aktif = TRUE
@@ -1014,8 +1044,8 @@ class ModelEntri {
    */
   static async ambilMaknaById(id) {
     const result = await db.query(
-      `SELECT id, entri_id, polisem, urutan, makna, ragam, ragam_varian,
-              kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia, aktif
+      `SELECT id, entri_id, polisem, makna, ragam, ragam_varian,
+              kelas_kata, bahasa, bidang, kiasan, penyingkatan, ilmiah, kimia, aktif
        FROM makna WHERE id = $1`,
       [id]
     );
@@ -1027,33 +1057,35 @@ class ModelEntri {
    * @param {Object} data
    * @returns {Promise<Object>}
    */
-  static async simpanMakna({ id, entri_id, polisem, urutan, makna, ragam, ragam_varian,
-    kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia, aktif }) {
+  static async simpanMakna({ id, entri_id, polisem, makna, ragam, ragam_varian,
+    kelas_kata, bahasa, bidang, kiasan, penyingkatan, ilmiah, kimia, aktif }) {
     const targetEntriId = entri_id;
     const nilaiAktif = normalizeBoolean(aktif, true);
+    const nilaiKiasan = normalizeBoolean(kiasan, false);
+    const nilaiRagamVarian = normalisasiRagamVarian(ragam_varian);
     if (id) {
       const result = await db.query(
-        `UPDATE makna SET entri_id = $1, polisem = $2, urutan = $3, makna = $4,
-                ragam = $5, ragam_varian = $6, kelas_kata = $7, bahasa = $8,
-                bidang = $9, kiasan = $10, tipe_penyingkat = $11, ilmiah = $12, kimia = $13, aktif = $14
-         WHERE id = $15
-         RETURNING id, entri_id, polisem, urutan, makna, ragam, ragam_varian,
-                   kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia, aktif`,
-        [targetEntriId, polisem ?? 1, urutan ?? 1, makna,
-         ragam || null, ragam_varian || null, kelas_kata || null, bahasa || null,
-         bidang || null, kiasan ?? 0, tipe_penyingkat || null, ilmiah || null, kimia || null, nilaiAktif, id]
+        `UPDATE makna SET entri_id = $1, polisem = $2, makna = $3,
+                ragam = $4, ragam_varian = $5, kelas_kata = $6, bahasa = $7,
+                bidang = $8, kiasan = $9, penyingkatan = $10, ilmiah = $11, kimia = $12, aktif = $13
+         WHERE id = $14
+         RETURNING id, entri_id, polisem, makna, ragam, ragam_varian,
+                   kelas_kata, bahasa, bidang, kiasan, penyingkatan, ilmiah, kimia, aktif`,
+        [targetEntriId, polisem ?? 1, makna,
+         ragam || null, nilaiRagamVarian, kelas_kata || null, bahasa || null,
+         bidang || null, nilaiKiasan, penyingkatan || null, ilmiah || null, kimia || null, nilaiAktif, id]
       );
       return result.rows[0];
     }
     const result = await db.query(
-      `INSERT INTO makna (entri_id, polisem, urutan, makna, ragam, ragam_varian,
-              kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia, aktif)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-      RETURNING id, entri_id, polisem, urutan, makna, ragam, ragam_varian,
-                 kelas_kata, bahasa, bidang, kiasan, tipe_penyingkat, ilmiah, kimia, aktif`,
-      [targetEntriId, polisem ?? 1, urutan ?? 1, makna,
-       ragam || null, ragam_varian || null, kelas_kata || null, bahasa || null,
-       bidang || null, kiasan ?? 0, tipe_penyingkat || null, ilmiah || null, kimia || null, nilaiAktif]
+      `INSERT INTO makna (entri_id, polisem, makna, ragam, ragam_varian,
+              kelas_kata, bahasa, bidang, kiasan, penyingkatan, ilmiah, kimia, aktif)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+      RETURNING id, entri_id, polisem, makna, ragam, ragam_varian,
+                 kelas_kata, bahasa, bidang, kiasan, penyingkatan, ilmiah, kimia, aktif`,
+      [targetEntriId, polisem ?? 1, makna,
+       ragam || null, nilaiRagamVarian, kelas_kata || null, bahasa || null,
+       bidang || null, nilaiKiasan, penyingkatan || null, ilmiah || null, kimia || null, nilaiAktif]
     );
     return result.rows[0];
   }
@@ -1127,5 +1159,6 @@ module.exports = ModelEntri;
 module.exports.__private = {
   normalisasiIndeks,
   parseNullableInteger,
+  normalisasiRagamVarian,
   normalizeBoolean,
 };

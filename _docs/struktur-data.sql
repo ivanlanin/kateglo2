@@ -269,15 +269,14 @@ create table makna (
   legacy_mid integer,
   entri_id integer references entri(id) on delete cascade not null,
   polisem integer not null default 1,
-  urutan integer not null default 1,
   makna text not null,
   ragam text,
   ragam_varian text,
   kelas_kata text,
   bahasa text,
   bidang text,
-  kiasan integer not null default 0,
-  tipe_penyingkat text,
+  kiasan boolean not null default false,
+  penyingkatan text,
   ilmiah text,
   kimia text,
   created_at timestamp without time zone not null default now(),
@@ -285,10 +284,10 @@ create table makna (
   aktif boolean not null default true,
   constraint makna_legacy_mid_key unique (legacy_mid),
   constraint makna_makna_check check (TRIM(BOTH FROM makna) <> ''::text),
-  constraint makna_tipe_penyingkat_check check ((tipe_penyingkat IS NULL) OR (tipe_penyingkat = ANY (ARRAY['akronim'::text, 'kependekan'::text, 'singkatan'::text])))
+  constraint makna_penyingkatan_check check ((penyingkatan IS NULL) OR (penyingkatan = ANY (ARRAY['akronim'::text, 'kependekan'::text, 'singkatan'::text])))
 );
 create index idx_makna_bidang on makna using btree (bidang);
-create index idx_makna_entri on makna using btree (entri_id, urutan);
+create index idx_makna_entri on makna using btree (entri_id, polisem);
 create index idx_makna_kelas_kata on makna using btree (kelas_kata);
 create unique index makna_legacy_mid_key on makna using btree (legacy_mid);
 create trigger trg_set_timestamp_fields__makna

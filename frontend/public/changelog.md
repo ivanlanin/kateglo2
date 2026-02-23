@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-02-24 Selasa
+
+- Menampilkan ragam varian dan kiasan di redaksi kamus
+
 ## 2026-02-23 Senin
 
 - Menyesuaikan tampilan pencarian rima menjadi empat kolom

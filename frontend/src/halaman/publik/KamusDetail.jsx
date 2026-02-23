@@ -558,7 +558,7 @@ function KamusDetail() {
                                   </Link>{' '}
                                 </>
                               )}
-                              {m.kiasan === 1 && (
+                              {m.kiasan && (
                                 <>
                                   <Link
                                     to={buatPathKategoriKamus('ragam', 'kiasan')}
@@ -578,13 +578,13 @@ function KamusDetail() {
                                   </Link>{' '}
                                 </>
                               )}
-                              {m.tipe_penyingkat && (
+                              {m.penyingkatan && (
                                 <>
                                   <Link
-                                    to={buatPathKategoriKamus('bentuk', m.tipe_penyingkat)}
+                                    to={buatPathKategoriKamus('bentuk', m.penyingkatan)}
                                     className="kamus-badge kamus-badge-penyingkat"
                                   >
-                                    {m.tipe_penyingkat}
+                                    {m.penyingkatan}
                                   </Link>{' '}
                                 </>
                               )}

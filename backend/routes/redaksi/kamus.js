@@ -56,7 +56,8 @@ router.get('/', periksaIzin('lihat_entri'), async (req, res, next) => {
     const bahasa = parseTrimmedString(req.query.bahasa);
     const punyaIlmiah = parseTrimmedString(req.query.punya_ilmiah);
     const punyaKimia = parseTrimmedString(req.query.punya_kimia);
-    const tipePenyingkat = parseTrimmedString(req.query.tipe_penyingkat);
+    const penyingkatan = parseTrimmedString(req.query.penyingkatan);
+    const punyaKiasan = parseTrimmedString(req.query.punya_kiasan);
     const punyaContoh = parseTrimmedString(req.query.punya_contoh);
 
     const { data, total } = await ModelEntri.daftarAdmin({
@@ -76,7 +77,8 @@ router.get('/', periksaIzin('lihat_entri'), async (req, res, next) => {
       bahasa,
       punya_ilmiah: ['0', '1'].includes(punyaIlmiah) ? punyaIlmiah : '',
       punya_kimia: ['0', '1'].includes(punyaKimia) ? punyaKimia : '',
-      tipe_penyingkat: tipePenyingkat,
+      penyingkatan,
+      punya_kiasan: ['0', '1'].includes(punyaKiasan) ? punyaKiasan : '',
       punya_contoh: ['0', '1'].includes(punyaContoh) ? punyaContoh : '',
     });
     return res.json({ success: true, ...buildPaginatedResult({ data, total, pagination: { limit, offset } }) });

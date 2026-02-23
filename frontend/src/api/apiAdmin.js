@@ -117,7 +117,8 @@ export function useDaftarKamusAdmin({
   bahasa = '',
   punyaIlmiah = '',
   punyaKimia = '',
-  tipePenyingkat = '',
+  penyingkatan = '',
+  punyaKiasan = '',
   punyaContoh = '',
 } = {}) {
   const params = buildDaftarParams({
@@ -142,7 +143,8 @@ export function useDaftarKamusAdmin({
   if (bahasa) params.bahasa = bahasa;
   if (punyaIlmiah) params.punya_ilmiah = punyaIlmiah;
   if (punyaKimia) params.punya_kimia = punyaKimia;
-  if (tipePenyingkat) params.tipe_penyingkat = tipePenyingkat;
+  if (penyingkatan) params.penyingkatan = penyingkatan;
+  if (punyaKiasan) params.punya_kiasan = punyaKiasan;
   if (punyaContoh) params.punya_contoh = punyaContoh;
 
   return useQuery({
@@ -165,7 +167,8 @@ export function useDaftarKamusAdmin({
       bahasa,
       punyaIlmiah,
       punyaKimia,
-      tipePenyingkat,
+      penyingkatan,
+      punyaKiasan,
       punyaContoh,
     }],
     queryFn: () =>
