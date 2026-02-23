@@ -4,6 +4,7 @@
 
 const express = require('express');
 const ModelGlosarium = require('../../models/modelGlosarium');
+const { ambilDetailGlosarium } = require('../../services/layananGlosariumPublik');
 const { publicSearchLimiter } = require('../../middleware/rateLimiter');
 const { parseCursorPagination } = require('../../utils/routesPublikUtils');
 
@@ -18,7 +19,7 @@ router.get('/detail/:asing', publicSearchLimiter, async (req, res, next) => {
     const { limit } = parseCursorPagination(req.query, { defaultLimit: 20, maxLimit: 100 });
     const mengandungCursor = typeof req.query.mengandungCursor === 'string' ? req.query.mengandungCursor.trim() || null : null;
     const miripCursor = typeof req.query.miripCursor === 'string' ? req.query.miripCursor.trim() || null : null;
-    const result = await ModelGlosarium.ambilDetailAsing(asing, { limit, mengandungCursor, miripCursor });
+    const result = await ambilDetailGlosarium(asing, { limit, mengandungCursor, miripCursor });
     return res.json(result);
   } catch (error) {
     return next(error);

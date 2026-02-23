@@ -5,6 +5,7 @@
 const express = require('express');
 const { periksaIzin } = require('../../middleware/otorisasi');
 const ModelGlosarium = require('../../models/modelGlosarium');
+const { invalidasiCacheDetailGlosarium } = require('../../services/layananGlosariumPublik');
 const {
   buildPaginatedResult,
   parsePagination,
@@ -14,6 +15,15 @@ const {
 } = require('../../utils/routesRedaksiUtils');
 
 const router = express.Router();
+
+async function ambilAsingAmanById(id) {
+  try {
+    const data = await ModelGlosarium.ambilDenganId(parseIdParam(id));
+    return data?.asing || null;
+  } catch (_error) {
+    return null;
+  }
+}
 
 /**
  * GET /api/redaksi/glosarium
@@ -78,6 +88,7 @@ router.post('/', periksaIzin('tambah_glosarium'), async (req, res, next) => {
       indonesia,
       asing,
     }, updater);
+    await invalidasiCacheDetailGlosarium(data?.asing);
     return res.status(201).json({ success: true, data });
   } catch (error) {
     if (error?.code === 'INVALID_BIDANG') {
@@ -96,6 +107,7 @@ router.post('/', periksaIzin('tambah_glosarium'), async (req, res, next) => {
 router.put('/:id', periksaIzin('edit_glosarium'), async (req, res, next) => {
   try {
     const id = parseIdParam(req.params.id);
+    const asingSebelum = await ambilAsingAmanById(id);
     const indonesia = parseTrimmedString(req.body.indonesia);
     const asing = parseTrimmedString(req.body.asing);
     const bidangId = Number(req.body.bidang_id);
@@ -117,6 +129,8 @@ router.put('/:id', periksaIzin('edit_glosarium'), async (req, res, next) => {
       asing,
     }, updater);
     if (!data) return res.status(404).json({ success: false, message: 'Glosarium tidak ditemukan' });
+    await invalidasiCacheDetailGlosarium(asingSebelum);
+    await invalidasiCacheDetailGlosarium(data?.asing);
     return res.json({ success: true, data });
   } catch (error) {
     if (error?.code === 'INVALID_BIDANG') {
@@ -134,8 +148,11 @@ router.put('/:id', periksaIzin('edit_glosarium'), async (req, res, next) => {
  */
 router.delete('/:id', periksaIzin('hapus_glosarium'), async (req, res, next) => {
   try {
-    const deleted = await ModelGlosarium.hapus(parseIdParam(req.params.id));
+    const id = parseIdParam(req.params.id);
+    const asingSebelum = await ambilAsingAmanById(id);
+    const deleted = await ModelGlosarium.hapus(id);
     if (!deleted) return res.status(404).json({ success: false, message: 'Glosarium tidak ditemukan' });
+    await invalidasiCacheDetailGlosarium(asingSebelum);
     return res.json({ success: true });
   } catch (error) {
     return next(error);

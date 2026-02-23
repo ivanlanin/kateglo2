@@ -9,6 +9,7 @@ const express = require('express');
 const logger = require('../config/logger');
 const { ambilDetailKamus } = require('./layananKamusPublik');
 const { ambilDetailTesaurus } = require('./layananTesaurusPublik');
+const { ambilDetailGlosarium } = require('./layananGlosariumPublik');
 const ModelGlosarium = require('../models/modelGlosarium');
 
 const rootDir = path.resolve(__dirname, '..', '..');
@@ -162,7 +163,7 @@ async function prefetchSsrData(pathname = '/') {
     if (decoded.startsWith('/glosarium/detail/')) {
       const asing = decoded.replace('/glosarium/detail/', '').trim();
       if (!asing) return null;
-      const detail = await ModelGlosarium.ambilDetailAsing(asing, { limit: 1 });
+      const detail = await ambilDetailGlosarium(asing, { limit: 1 });
       return {
         type: 'glosarium-detail',
         asing,

@@ -83,6 +83,10 @@ jest.mock('../../services/layananKamusPublik', () => ({
   hapusCacheDetailKamus: jest.fn(),
 }));
 
+jest.mock('../../services/layananGlosariumPublik', () => ({
+  invalidasiCacheDetailGlosarium: jest.fn(),
+}));
+
 const ModelPengguna = require('../../models/modelPengguna');
 const ModelLema = require('../../models/modelEntri');
 const ModelTesaurus = require('../../models/modelTesaurus');
@@ -92,6 +96,7 @@ const ModelKomentar = require('../../models/modelKomentar');
 const ModelPeran = require('../../models/modelPeran');
 const ModelIzin = require('../../models/modelIzin');
 const { hapusCacheDetailKamus } = require('../../services/layananKamusPublik');
+const { invalidasiCacheDetailGlosarium } = require('../../services/layananGlosariumPublik');
 const rootRouter = require('../../routes');
 
 function createApp() {
@@ -1252,14 +1257,20 @@ describe('routes/redaksi', () => {
       ModelGlosarium.cari.mockResolvedValue({ data: [{ id: 1 }], total: 1 });
       const list = await callAsAdmin('get', '/api/redaksi/glosarium?limit=10&offset=1&q=istilah');
 
-      ModelGlosarium.ambilDenganId.mockResolvedValueOnce(null).mockResolvedValueOnce({ id: 1, indonesia: 'istilah' });
+      ModelGlosarium.ambilDenganId
+        .mockResolvedValue({ id: 1, indonesia: 'istilah', asing: 'term-lama' })
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce({ id: 1, indonesia: 'istilah', asing: 'term' });
       const detail404 = await callAsAdmin('get', '/api/redaksi/glosarium/1');
       const detail200 = await callAsAdmin('get', '/api/redaksi/glosarium/1');
 
       const post400Indonesia = await callAsAdmin('post', '/api/redaksi/glosarium', { body: { indonesia: ' ', asing: 'term' } });
       const post400Asing = await callAsAdmin('post', '/api/redaksi/glosarium', { body: { indonesia: 'istilah', asing: ' ' } });
 
-      ModelGlosarium.simpan.mockResolvedValueOnce({ id: 1 }).mockResolvedValueOnce(null).mockResolvedValueOnce({ id: 1 });
+      ModelGlosarium.simpan
+        .mockResolvedValueOnce({ id: 1, asing: 'term' })
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce({ id: 1, asing: 'term-baru' });
       const post201 = await callAsAdmin('post', '/api/redaksi/glosarium', { body: { indonesia: 'istilah', asing: 'term' } });
 
       const put400Indonesia = await callAsAdmin('put', '/api/redaksi/glosarium/1', { body: { indonesia: ' ', asing: 'term' } });
@@ -1283,6 +1294,9 @@ describe('routes/redaksi', () => {
       expect(put200.status).toBe(200);
       expect(delete404.status).toBe(404);
       expect(delete200.status).toBe(200);
+      expect(invalidasiCacheDetailGlosarium).toHaveBeenCalledWith('term');
+      expect(invalidasiCacheDetailGlosarium).toHaveBeenCalledWith('term-lama');
+      expect(invalidasiCacheDetailGlosarium).toHaveBeenCalledWith('term-baru');
     });
 
     it('GET /api/redaksi/glosarium meneruskan aktif valid', async () => {

@@ -50,6 +50,10 @@ jest.mock('../../services/layananKamusPublik', () => ({
   ambilDetailKamus: jest.fn(),
 }));
 
+jest.mock('../../services/layananGlosariumPublik', () => ({
+  ambilDetailGlosarium: jest.fn(),
+}));
+
 jest.mock('../../services/layananTesaurusPublik', () => ({
   cariTesaurus: jest.fn(),
   ambilDetailTesaurus: jest.fn(),
@@ -61,6 +65,7 @@ const ModelEntri = require('../../models/modelEntri');
 const ModelKomentar = require('../../models/modelKomentar');
 const ModelTesaurus = require('../../models/modelTesaurus');
 const layananKamusPublik = require('../../services/layananKamusPublik');
+const layananGlosariumPublik = require('../../services/layananGlosariumPublik');
 const layananTesaurusPublik = require('../../services/layananTesaurusPublik');
 const rootRouter = require('../../routes');
 
@@ -677,7 +682,7 @@ describe('routes backend', () => {
 
     expect(response.status).toBe(400);
     expect(response.body.error).toBe('Parameter asing diperlukan');
-    expect(ModelGlosarium.ambilDetailAsing).not.toHaveBeenCalled();
+    expect(layananGlosariumPublik.ambilDetailGlosarium).not.toHaveBeenCalled();
   });
 
   it('handler detail glosarium memakai fallback param kosong saat req.params.asing undefined', async () => {
@@ -700,7 +705,7 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/glosarium/detail/:asing memanggil model dengan cursor pagination section', async () => {
-    ModelGlosarium.ambilDetailAsing.mockResolvedValue({
+    layananGlosariumPublik.ambilDetailGlosarium.mockResolvedValue({
       persis: [],
       mengandung: [],
       mengandungPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
@@ -714,7 +719,7 @@ describe('routes backend', () => {
       .get('/api/publik/glosarium/detail/zero%20sum?limit=999&mengandungCursor=abc&miripCursor=xyz');
 
     expect(response.status).toBe(200);
-    expect(ModelGlosarium.ambilDetailAsing).toHaveBeenCalledWith('zero sum', {
+    expect(layananGlosariumPublik.ambilDetailGlosarium).toHaveBeenCalledWith('zero sum', {
       limit: 100,
       mengandungCursor: 'abc',
       miripCursor: 'xyz',
@@ -722,7 +727,7 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/glosarium/detail/:asing mengirim cursor null jika query cursor tidak ada', async () => {
-    ModelGlosarium.ambilDetailAsing.mockResolvedValue({
+    layananGlosariumPublik.ambilDetailGlosarium.mockResolvedValue({
       persis: [],
       mengandung: [],
       mengandungPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
@@ -735,7 +740,7 @@ describe('routes backend', () => {
     const response = await request(createApp()).get('/api/publik/glosarium/detail/term');
 
     expect(response.status).toBe(200);
-    expect(ModelGlosarium.ambilDetailAsing).toHaveBeenCalledWith('term', {
+    expect(layananGlosariumPublik.ambilDetailGlosarium).toHaveBeenCalledWith('term', {
       limit: 20,
       mengandungCursor: null,
       miripCursor: null,
@@ -743,7 +748,7 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/glosarium/detail/:asing mengubah cursor string kosong menjadi null', async () => {
-    ModelGlosarium.ambilDetailAsing.mockResolvedValue({
+    layananGlosariumPublik.ambilDetailGlosarium.mockResolvedValue({
       persis: [],
       mengandung: [],
       mengandungPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
@@ -757,7 +762,7 @@ describe('routes backend', () => {
       .get('/api/publik/glosarium/detail/term?mengandungCursor=%20%20&miripCursor=%20%20');
 
     expect(response.status).toBe(200);
-    expect(ModelGlosarium.ambilDetailAsing).toHaveBeenCalledWith('term', {
+    expect(layananGlosariumPublik.ambilDetailGlosarium).toHaveBeenCalledWith('term', {
       limit: 20,
       mengandungCursor: null,
       miripCursor: null,
@@ -765,7 +770,7 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/glosarium/detail/:asing meneruskan error', async () => {
-    ModelGlosarium.ambilDetailAsing.mockRejectedValue(new Error('detail glosarium gagal'));
+    layananGlosariumPublik.ambilDetailGlosarium.mockRejectedValue(new Error('detail glosarium gagal'));
 
     const response = await request(createApp()).get('/api/publik/glosarium/detail/aktif');
 

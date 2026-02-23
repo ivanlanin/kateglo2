@@ -23,14 +23,18 @@ jest.mock('../../services/layananTesaurusPublik', () => ({
   ambilDetailTesaurus: jest.fn(),
 }));
 
+jest.mock('../../services/layananGlosariumPublik', () => ({
+  ambilDetailGlosarium: jest.fn(),
+}));
+
 jest.mock('../../models/modelGlosarium', () => ({
   cari: jest.fn(),
-  ambilDetailAsing: jest.fn(),
 }));
 
 const logger = require('../../config/logger');
 const { ambilDetailKamus } = require('../../services/layananKamusPublik');
 const { ambilDetailTesaurus } = require('../../services/layananTesaurusPublik');
+const { ambilDetailGlosarium } = require('../../services/layananGlosariumPublik');
 const ModelGlosarium = require('../../models/modelGlosarium');
 const runtime = require('../../services/layananSsrRuntime');
 
@@ -125,7 +129,7 @@ describe('services/layananSsrRuntime', () => {
     });
     ambilDetailTesaurus.mockResolvedValue({ indeks: 'besar', sinonim: ['agung'], antonim: ['kecil'] });
     ModelGlosarium.cari.mockResolvedValue({ total: 2, data: [{ indonesia: 'istilah', asing: 'term' }] });
-    ModelGlosarium.ambilDetailAsing.mockResolvedValue({
+    ambilDetailGlosarium.mockResolvedValue({
       persis: [{ id: 1, asing: 'bankrupt', indonesia: 'bangkrut' }],
       mengandung: [],
       mengandungPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
@@ -274,7 +278,7 @@ describe('services/layananSsrRuntime', () => {
     const cariKosong = await runtime.__private.prefetchSsrData('/glosarium/cari/kosong');
     expect(cariKosong.contoh).toEqual([]);
 
-    ModelGlosarium.ambilDetailAsing.mockResolvedValueOnce(null);
+    ambilDetailGlosarium.mockResolvedValueOnce(null);
     const detailKosong = await runtime.__private.prefetchSsrData('/glosarium/detail/tidak-ada');
     expect(detailKosong.type).toBe('glosarium-detail');
     expect(detailKosong.persis).toEqual([]);
