@@ -3,3 +3,5 @@
 - Menyediakan etimologi
 - Melengkapi entri kamus
 - Membuat meronim/holonim dan hiponim/hipernim
+- Membuat kategori akronim, kependekan, dan kiasan
+- Menerapkan pelacakan kata terpopuler yang efisien
