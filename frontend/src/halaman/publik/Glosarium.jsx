@@ -17,7 +17,7 @@ import HasilPencarian from '../../komponen/publik/HasilPencarian';
 import KartuKategori from '../../komponen/publik/KartuKategori';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
-import { formatNamaBidang, parseEntriGlosarium } from '../../utils/formatUtils';
+import { formatNamaBidang, renderEntriGlosariumTertaut } from '../../utils/formatUtils';
 import {
   buildMetaBidangGlosarium,
   buildMetaBrowseGlosarium,
@@ -135,6 +135,26 @@ function Glosarium() {
     )
     : null;
 
+  const renderAsing = (item) => renderEntriGlosariumTertaut(item.asing, (part, info) => (
+    <Link
+      key={`${item.id}-${part}-${info.partIndex}-${info.tokenIndex}`}
+      to={`/glosarium/detail/${encodeURIComponent(part)}`}
+      className="glosarium-result-original"
+    >
+      {part}
+    </Link>
+  ));
+
+  const renderIndonesia = (item) => renderEntriGlosariumTertaut(item.indonesia, (part, info) => (
+    <Link
+      key={`${item.id}-${part}-${info.partIndex}-${info.tokenIndex}`}
+      to={buatPathDetailKamus(part)}
+      className="kamus-kategori-grid-link"
+    >
+      {part}
+    </Link>
+  ));
+
   return (
     <HalamanDasar
       judul={metaHalaman.judul}
@@ -187,34 +207,12 @@ function Glosarium() {
             <div key={item.id} className="glosarium-result-row">
               {item.asing ? (
                 <>
-                  <Link
-                    to={`/glosarium/detail/${encodeURIComponent(item.asing)}`}
-                    className="glosarium-result-original"
-                  >
-                    {item.asing}
-                  </Link>
-                  {' ('}
-                  {parseEntriGlosarium(item.indonesia, (part, index) => (
-                    <Link
-                      key={`${item.id}-${part}-${index}`}
-                      to={buatPathDetailKamus(part)}
-                      className="kamus-kategori-grid-link"
-                    >
-                      {part}
-                    </Link>
-                  ))}
-                  {')'}
+                  <em>{renderAsing(item)}</em>
+                  {item.indonesia ? ': ' : ''}
+                  {renderIndonesia(item)}
                 </>
               ) : (
-                parseEntriGlosarium(item.indonesia, (part, index) => (
-                  <Link
-                    key={`${item.id}-${part}-${index}`}
-                    to={buatPathDetailKamus(part)}
-                    className="kamus-kategori-grid-link"
-                  >
-                    {part}
-                  </Link>
-                ))
+                renderIndonesia(item)
               )}
             </div>
           ))}

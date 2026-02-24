@@ -69,14 +69,43 @@ function formatNamaBidang(value = '') {
     .join(' ');
 }
 
-function parseEntriGlosarium(value = '', renderTautan = null) {
+function splitEntriGlosarium(value = '') {
   const text = String(value || '').trim();
   if (!text) return [];
 
-  const parts = text
+  return text
     .split(';')
     .map((part) => part.replace(/^\s*\d+\s*\.?\s*/, '').trim())
     .filter(Boolean);
+}
+
+function tokenizeKurung(value = '') {
+  const text = String(value || '');
+  if (!text) return [];
+
+  const regex = /\([^()]*\)/g;
+  const chunks = [];
+  let lastIndex = 0;
+  let match = regex.exec(text);
+
+  while (match) {
+    if (match.index > lastIndex) {
+      chunks.push({ text: text.slice(lastIndex, match.index), isKurung: false });
+    }
+    chunks.push({ text: match[0], isKurung: true });
+    lastIndex = match.index + match[0].length;
+    match = regex.exec(text);
+  }
+
+  if (lastIndex < text.length) {
+    chunks.push({ text: text.slice(lastIndex), isKurung: false });
+  }
+
+  return chunks;
+}
+
+function parseEntriGlosarium(value = '', renderTautan = null) {
+  const parts = splitEntriGlosarium(value);
 
   if (parts.length === 0) return [];
 
@@ -90,6 +119,36 @@ function parseEntriGlosarium(value = '', renderTautan = null) {
   return parts.flatMap((part, index) => (index === 0 ? [renderPart(part, index)] : ['; ', renderPart(part, index)]));
 }
 
+function renderEntriGlosariumTertaut(value = '', renderTautan = null) {
+  const parts = splitEntriGlosarium(value);
+  if (parts.length === 0) return [];
+
+  const renderTextChunk = (chunk, info) => {
+    if (typeof renderTautan !== 'function') return chunk;
+
+    const leading = chunk.match(/^\s*/)?.[0] || '';
+    const trailing = chunk.match(/\s*$/)?.[0] || '';
+    const textUtama = chunk.trim();
+    if (!textUtama) return chunk;
+
+    const rendered = [];
+    if (leading) rendered.push(leading);
+    rendered.push(renderTautan(textUtama, info));
+    if (trailing) rendered.push(trailing);
+    return rendered;
+  };
+
+  return parts.flatMap((part, partIndex) => {
+    const tokens = tokenizeKurung(part);
+    const renderedPart = tokens.flatMap((token, tokenIndex) => {
+      if (token.isKurung) return [token.text];
+      return renderTextChunk(token.text, { part, partIndex, tokenIndex });
+    });
+
+    return partIndex === 0 ? renderedPart : ['; ', ...renderedPart];
+  });
+}
+
 export {
   parseUtcDate,
   formatLocalDateTime,
@@ -97,4 +156,5 @@ export {
   formatLemaHomonim,
   formatNamaBidang,
   parseEntriGlosarium,
+  renderEntriGlosariumTertaut,
 };

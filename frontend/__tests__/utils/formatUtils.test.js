@@ -7,6 +7,7 @@ import {
   formatNamaBidang,
   parseEntriGlosarium,
   parseUtcDate,
+  renderEntriGlosariumTertaut,
 } from '../../src/utils/formatUtils';
 
 describe('formatUtils.test.js', () => {
@@ -111,5 +112,25 @@ describe('formatUtils.test.js', () => {
   it('parseEntriGlosarium mengembalikan array kosong untuk input kosong/null', () => {
     expect(parseEntriGlosarium('')).toEqual([]);
     expect(parseEntriGlosarium(null)).toEqual([]);
+  });
+
+  it('renderEntriGlosariumTertaut memisah titik koma dan merender tautan per bagian', () => {
+    const nodes = renderEntriGlosariumTertaut('accomplice; accessory', (part, info) => createElement('a', { href: `/glosarium/detail/${part}`, key: `${part}-${info.partIndex}` }, part));
+    render(createElement(Fragment, null, ...nodes));
+
+    expect(screen.getByRole('link', { name: 'accomplice' })).toHaveAttribute('href', '/glosarium/detail/accomplice');
+    expect(screen.getByRole('link', { name: 'accessory' })).toHaveAttribute('href', '/glosarium/detail/accessory');
+    expect(screen.getByText(';')).toBeInTheDocument();
+  });
+
+  it('renderEntriGlosariumTertaut tidak menautkan teks dalam tanda kurung', () => {
+    const nodes = renderEntriGlosariumTertaut('change (a law) (verb)', (part, info) => createElement('a', { href: `/glosarium/detail/${part}`, key: `${part}-${info.partIndex}` }, part));
+    const { container } = render(createElement(Fragment, null, ...nodes));
+
+    expect(screen.getByRole('link', { name: 'change' })).toHaveAttribute('href', '/glosarium/detail/change');
+    expect(container).toHaveTextContent('(a law)');
+    expect(container).toHaveTextContent('(verb)');
+    expect(screen.queryByRole('link', { name: '(a law)' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: '(verb)' })).not.toBeInTheDocument();
   });
 });

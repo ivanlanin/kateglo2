@@ -408,7 +408,7 @@ describe('KamusDetail', () => {
 
     expect(screen.getByRole('heading', { name: /kata.*ka ta/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Turunan' })).toHaveAttribute('href', '/kamus/bentuk/turunan');
-    expect(screen.getByRole('link', { name: 'kata dasar' })).toHaveAttribute('href', '/kamus/detail/kata%20dasar');
+    expect(screen.getAllByRole('link', { name: 'kata dasar' }).some((link) => link.getAttribute('href') === '/kamus/detail/kata%20dasar')).toBe(true);
     expect(screen.getByRole('link', { name: 'cak' })).toHaveAttribute('href', '/kamus/ragam/cak');
     expect(screen.getByRole('link', { name: 'slang' })).toHaveAttribute('href', '/kamus/ragam/slang');
     expect(screen.getByRole('link', { name: 'Kiasan' })).toHaveAttribute('href', '/kamus/ekspresi/kiasan');

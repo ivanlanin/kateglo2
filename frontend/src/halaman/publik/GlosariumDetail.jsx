@@ -11,7 +11,7 @@ import CursorNavButton from '../../komponen/publik/CursorNavButton';
 import NavigasiLoadingOverlay from '../../komponen/publik/NavigasiLoadingOverlay';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
-import { parseEntriGlosarium } from '../../utils/formatUtils';
+import { renderEntriGlosariumTertaut } from '../../utils/formatUtils';
 import { buildMetaDetailGlosarium } from '../../utils/metaUtils';
 import useNavigasiMemuat from '../../hooks/bersama/useNavigasiMemuat';
 
@@ -52,6 +52,26 @@ function getBidangSebelumnya(sortedItems = [], index = 0) {
 function AlirEntri({ items, tautAsing = false }) {
   const sortedItems = sortAlirEntriItems(items);
 
+  const renderAsing = (item) => renderEntriGlosariumTertaut(item.asing, (part, info) => (
+    <Link
+      key={`${item.id}-${part}-${info.partIndex}-${info.tokenIndex}`}
+      to={`/glosarium/detail/${encodeURIComponent(part)}`}
+      className="kamus-detail-subentry-link"
+    >
+      {part}
+    </Link>
+  ));
+
+  const renderIndonesia = (item) => renderEntriGlosariumTertaut(item.indonesia, (part, info) => (
+    <Link
+      key={`${item.id}-${part}-${info.partIndex}-${info.tokenIndex}`}
+      to={buatPathDetailKamus(part)}
+      className="kamus-detail-subentry-link"
+    >
+      {part}
+    </Link>
+  ));
+
   return (
     <div className="kamus-detail-subentry-flow">
       {sortedItems.map((item, i) => {
@@ -69,38 +89,12 @@ function AlirEntri({ items, tautAsing = false }) {
           )}
           {tautAsing ? (
             <>
-              <Link
-                to={`/glosarium/detail/${encodeURIComponent(item.asing)}`}
-                className="kamus-detail-subentry-link"
-              >
-                <em>{item.asing}</em>
-              </Link>
-              {item.indonesia && (
-                <>
-                  {' ('}
-                  {parseEntriGlosarium(item.indonesia, (part, idx) => (
-                    <Link
-                      key={`${item.id}-${part}-${idx}`}
-                      to={buatPathDetailKamus(part)}
-                      className="kamus-detail-subentry-link"
-                    >
-                      {part}
-                    </Link>
-                  ))}
-                  {')'}
-                </>
-              )}
+              <em>{renderAsing(item)}</em>
+              {item.indonesia ? ': ' : ''}
+              {renderIndonesia(item)}
             </>
           ) : (
-            item.indonesia && parseEntriGlosarium(item.indonesia, (part, idx) => (
-              <Link
-                key={`${item.id}-${part}-${idx}`}
-                to={buatPathDetailKamus(part)}
-                className="kamus-detail-subentry-link"
-              >
-                {part}
-              </Link>
-            ))
+            item.indonesia && renderIndonesia(item)
           )}
           {i < sortedItems.length - 1 && <span className="secondary-text">; </span>}
         </span>

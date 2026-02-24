@@ -12,7 +12,12 @@ import PanelLipat from '../../komponen/publik/PanelLipat';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import NavigasiLoadingOverlay from '../../komponen/publik/NavigasiLoadingOverlay';
 import { PesanTidakDitemukan } from '../../komponen/publik/StatusKonten';
-import { formatLemaHomonim, formatLocalDateTime, parseUtcDate } from '../../utils/formatUtils';
+import {
+  formatLemaHomonim,
+  formatLocalDateTime,
+  parseUtcDate,
+  renderEntriGlosariumTertaut,
+} from '../../utils/formatUtils';
 import { buatPathDetailKamus, normalisasiIndeksKamus } from '../../utils/paramUtils';
 import { buildMetaDetailKamus } from '../../utils/metaUtils';
 import useNavigasiMemuat from '../../hooks/bersama/useNavigasiMemuat';
@@ -785,18 +790,36 @@ function KamusDetail() {
                       <span key={`${item.indonesia}-${item.asing}-${i}`}>
                         {item.asing ? (
                           <>
-                            <Link
-                              to={`/glosarium/detail/${encodeURIComponent(item.asing)}`}
-                              className="kamus-detail-subentry-link"
-                            >
-                              <em>{item.asing}</em>
-                            </Link>
-                            <span> (</span>
-                            <span>{item.indonesia}</span>
-                            <span>)</span>
+                            <em>{renderEntriGlosariumTertaut(item.asing, (part, info) => (
+                              <Link
+                                key={`${item.asing}-${part}-${info.partIndex}-${info.tokenIndex}`}
+                                to={`/glosarium/detail/${encodeURIComponent(part)}`}
+                                className="kamus-detail-subentry-link"
+                              >
+                                {part}
+                              </Link>
+                            ))}</em>
+                            {item.indonesia ? ': ' : ''}
+                            {renderEntriGlosariumTertaut(item.indonesia, (part, info) => (
+                              <Link
+                                key={`${item.indonesia}-${part}-${info.partIndex}-${info.tokenIndex}`}
+                                to={buatPathDetailKamus(part)}
+                                className="kamus-detail-subentry-link"
+                              >
+                                {part}
+                              </Link>
+                            ))}
                           </>
                         ) : (
-                          <span>{item.indonesia}</span>
+                          <>{renderEntriGlosariumTertaut(item.indonesia, (part, info) => (
+                            <Link
+                              key={`${item.indonesia}-${part}-${info.partIndex}-${info.tokenIndex}`}
+                              to={buatPathDetailKamus(part)}
+                              className="kamus-detail-subentry-link"
+                            >
+                              {part}
+                            </Link>
+                          ))}</>
                         )}
                         {i < glosarium.length - 1 && <span>; </span>}
                       </span>
