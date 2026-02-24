@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Kamus from '../../../src/halaman/publik/Kamus';
+import { __private } from '../../../src/halaman/publik/Kamus';
 import { cariKamus } from '../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
@@ -74,6 +75,37 @@ describe('Kamus', () => {
     expect(screen.getByRole('link', { name: 'Prefiks' })).toHaveAttribute('href', '/kamus/bentuk/prefiks');
     expect(screen.getByRole('link', { name: 'Prakategorial' })).toHaveAttribute('href', '/kamus/bentuk/prakategorial');
     expect(screen.getByRole('link', { name: 'Umum Sekali' })).toHaveAttribute('href', '/kamus/ragam/umum-sekali');
+  });
+
+  it('helper gabungkan kategori bentuk/ekspresi menutup semua cabang deduplikasi', () => {
+    expect(__private.gabungkanKategoriBentuk([{ kode: 'gabungan', nama: 'gabungan' }]).map((i) => i.kode)).toEqual(
+      expect.arrayContaining(['gabungan', 'akronim', 'kependekan'])
+    );
+    expect(__private.gabungkanKategoriBentuk([{ kode: 'dasar', nama: 'dasar' }]).map((i) => i.kode)).toEqual(
+      expect.arrayContaining(['dasar', 'akronim', 'kependekan'])
+    );
+    expect(__private.gabungkanKategoriEkspresi([{ kode: 'idiom', nama: 'idiom' }]).map((i) => i.kode)).toEqual(
+      expect.arrayContaining(['kiasan', 'idiom'])
+    );
+    expect(__private.gabungkanKategoriEkspresi([{ kode: 'peribahasa', nama: 'peribahasa' }]).map((i) => i.kode)).toEqual(
+      expect.arrayContaining(['kiasan', 'peribahasa'])
+    );
+
+    expect(
+      __private
+        .gabungkanKategoriBentuk([{ kode: 'gabungan' }, { kode: '' }, { kode: 'GABUNGAN' }, { nama: 'tanpa-kode' }])
+        .map((i) => i.kode)
+    ).toEqual(['gabungan', 'akronim', 'kependekan']);
+
+    expect(
+      __private
+        .gabungkanKategoriEkspresi([{ kode: 'idiom' }, { kode: '' }, { kode: 'IDIOM' }, { kode: 'peribahasa' }])
+        .map((i) => i.kode)
+    ).toEqual(['kiasan', 'idiom', 'peribahasa']);
+
+    expect(__private.gabungkanKategoriBentuk(null).map((i) => i.kode)).toEqual(['akronim', 'kependekan']);
+    expect(__private.gabungkanKategoriEkspresi(undefined).map((i) => i.kode)).toEqual(['kiasan']);
+    expect(__private.gabungkanKategoriEkspresi(null).map((i) => i.kode)).toEqual(['kiasan']);
   });
 
   it('browse kategori memakai fallback array kosong untuk key yang tidak ada dan grid dua kolom saat dua kategori terisi', () => {

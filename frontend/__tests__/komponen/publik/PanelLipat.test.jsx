@@ -25,4 +25,23 @@ describe('PanelLipat', () => {
     expect(screen.getByText('3')).toBeInTheDocument();
     expect(screen.getByText('Konten')).toBeInTheDocument();
   });
+
+  it('mode aksiKanan menampilkan heading custom dan tombol toggle terpisah', () => {
+    render(
+      <PanelLipat judul="Relasi" jumlah={2} terbukaAwal={false} aksiKanan={<button type="button">Aksi</button>}>
+        <div>Isi Aksi</div>
+      </PanelLipat>
+    );
+
+    expect(screen.getByText('Aksi')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /Relasi/i }));
+    expect(screen.getByText('Isi Aksi')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /Relasi/i }));
+    expect(screen.queryByText('Isi Aksi')).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Buka panel' }));
+    expect(screen.getByText('Isi Aksi')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Tutup panel' }));
+    expect(screen.queryByText('Isi Aksi')).not.toBeInTheDocument();
+  });
 });

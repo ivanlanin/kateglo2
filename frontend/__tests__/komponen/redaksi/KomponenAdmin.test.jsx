@@ -5,6 +5,7 @@ import {
   BarisFilterCariAdmin,
   getApiErrorMessage,
   InfoTotal,
+  isActiveFilterValue,
   KotakCariAdmin,
   KotakCariTambahAdmin,
   TabelAdmin,
@@ -69,6 +70,13 @@ describe('KomponenAdmin', () => {
     expect(getApiErrorMessage({ response: { data: { error: 'Error utama', message: 'Message kedua' } } }, 'Fallback')).toBe('Error utama');
     expect(getApiErrorMessage({ response: { data: { message: 'Message kedua' } } }, 'Fallback')).toBe('Message kedua');
     expect(getApiErrorMessage({}, 'Fallback')).toBe('Fallback');
+  });
+
+  it('isActiveFilterValue menilai nilai filter aktif dengan aman', () => {
+    expect(isActiveFilterValue(undefined)).toBe(false);
+    expect(isActiveFilterValue({ value: null })).toBe(false);
+    expect(isActiveFilterValue({ value: '   ' })).toBe(false);
+    expect(isActiveFilterValue({ value: '1' })).toBe(true);
   });
 
   it('usePencarianAdmin mengelola state pencarian', () => {
@@ -175,6 +183,33 @@ describe('KomponenAdmin', () => {
     expect(screen.queryByText('✕')).not.toBeInTheDocument();
   });
 
+  it('BarisFilterCariAdmin menampilkan tombol reset saat nilai kosong tapi filter aktif', () => {
+    const onHapus = vi.fn();
+
+    render(
+      <BarisFilterCariAdmin
+        nilai=""
+        onChange={vi.fn()}
+        onCari={vi.fn()}
+        onHapus={onHapus}
+        filters={[
+          {
+            key: 'aktif',
+            value: '1',
+            onChange: vi.fn(),
+            options: [
+              { value: '', label: 'Semua' },
+              { value: '1', label: 'Aktif' },
+            ],
+          },
+        ]}
+      />
+    );
+
+    fireEvent.click(screen.getByText('✕'));
+    expect(onHapus).toHaveBeenCalled();
+  });
+
   it('BarisFilterCariAdmin memakai fallback value kosong saat filter value undefined', () => {
     const onChangeFilter = vi.fn();
 
@@ -197,6 +232,54 @@ describe('KomponenAdmin', () => {
     expect(screen.getByLabelText('statusNullish')).toHaveValue('');
     fireEvent.change(screen.getByLabelText('statusNullish'), { target: { value: '' } });
     expect(onChangeFilter).toHaveBeenCalledWith('');
+  });
+
+  it('BarisFilterCariAdmin aman saat nilai filter nullish', () => {
+    render(
+      <BarisFilterCariAdmin
+        nilai=""
+        onChange={vi.fn()}
+        onCari={vi.fn()}
+        onHapus={vi.fn()}
+        filters={[{ key: 'aktif', value: null, onChange: vi.fn(), options: [] }]}
+      />
+    );
+
+    expect(screen.getByLabelText('aktif')).toBeInTheDocument();
+    expect(screen.queryByText('✕')).not.toBeInTheDocument();
+  });
+
+  it('BarisFilterCariAdmin menangani filters non-array yang tetap menyediakan some/map', () => {
+    const filtersAneh = {
+      some: (cb) => cb(undefined),
+      map: () => [],
+    };
+
+    render(
+      <BarisFilterCariAdmin
+        nilai=""
+        onChange={vi.fn()}
+        onCari={vi.fn()}
+        onHapus={vi.fn()}
+        filters={filtersAneh}
+      />
+    );
+
+    expect(screen.queryByText('✕')).not.toBeInTheDocument();
+  });
+
+  it('BarisFilterCariAdmin menangani nilai undefined untuk kalkulasi reset', () => {
+    render(
+      <BarisFilterCariAdmin
+        nilai={undefined}
+        onChange={vi.fn()}
+        onCari={vi.fn()}
+        onHapus={vi.fn()}
+        filters={[]}
+      />
+    );
+
+    expect(screen.queryByText('✕')).not.toBeInTheDocument();
   });
 
   it('KotakCariTambahAdmin dan TombolAksiAdmin memanggil callback', () => {

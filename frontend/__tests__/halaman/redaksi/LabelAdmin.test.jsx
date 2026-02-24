@@ -213,6 +213,22 @@ describe('LabelAdmin', () => {
     expect(screen.getByText('Tidak ada data.')).toBeInTheDocument();
   });
 
+  it('menjalankan reset filter label', () => {
+    render(
+      <MemoryRouter>
+        <LabelAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByPlaceholderText('Cari label …'), { target: { value: 'cak' } });
+    fireEvent.change(screen.getByLabelText('Filter status label'), { target: { value: '1' } });
+    fireEvent.click(screen.getAllByRole('button', { name: '✕' })[0]);
+
+    const panggilanTerakhir = mockUseDaftarLabelAdmin.mock.calls.at(-1)?.[0] || {};
+    expect(panggilanTerakhir.q).toBe('');
+    expect(panggilanTerakhir.aktif).toBe('');
+  });
+
   it('mengarahkan ke daftar saat id route tidak valid', () => {
     mockParams = { id: 'abc' };
 

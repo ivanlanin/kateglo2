@@ -96,6 +96,18 @@ describe('KomentarAdmin', () => {
     );
   });
 
+  it('menjalankan reset filter komentar', () => {
+    render(<MemoryRouter><KomentarAdmin /></MemoryRouter>);
+
+    fireEvent.change(screen.getByPlaceholderText('Cari indeks, komentar, atau pengguna …'), { target: { value: 'kata' } });
+    fireEvent.change(screen.getByLabelText('Filter status komentar'), { target: { value: '1' } });
+    fireEvent.click(screen.getAllByRole('button', { name: '✕' })[0]);
+
+    const panggilanTerakhir = mockUseDaftarKomentarAdmin.mock.calls.at(-1)?.[0] || {};
+    expect(panggilanTerakhir.q).toBe('');
+    expect(panggilanTerakhir.aktif).toBe('');
+  });
+
   it('menampilkan validasi saat komentar kosong', () => {
     mockParams = { id: '1' };
     mockUseDetailKomentarAdmin.mockReturnValue({

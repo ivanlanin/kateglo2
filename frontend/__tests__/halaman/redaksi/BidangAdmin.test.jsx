@@ -1,4 +1,5 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import BidangAdmin from '../../../src/halaman/redaksi/BidangAdmin';
@@ -139,7 +140,9 @@ describe('BidangAdmin', () => {
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Tersimpan!')).toBeInTheDocument();
 
-    vi.advanceTimersByTime(700);
+    act(() => {
+      vi.advanceTimersByTime(700);
+    });
 
     vi.useRealTimers();
   });
@@ -200,6 +203,22 @@ describe('BidangAdmin', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/redaksi/bidang/1');
   });
 
+  it('menjalankan reset filter pencarian', () => {
+    render(
+      <MemoryRouter>
+        <BidangAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByPlaceholderText('Cari bidang …'), { target: { value: 'kim' } });
+    fireEvent.change(screen.getByLabelText('Filter status bidang'), { target: { value: '1' } });
+    fireEvent.click(screen.getAllByRole('button', { name: '✕' })[0]);
+
+    const panggilanTerakhir = mockUseDaftar.mock.calls.at(-1)?.[0] || {};
+    expect(panggilanTerakhir.q).toBe('');
+    expect(panggilanTerakhir.aktif).toBe('');
+  });
+
   it('aman saat respons daftar kosong, detail tanpa id, klik item tanpa id, dan batal hapus', async () => {
     mockUseDaftar.mockReturnValue({ isLoading: false, isError: false, data: undefined });
     mockParams = { id: '1' };
@@ -221,7 +240,7 @@ describe('BidangAdmin', () => {
     mockUseDaftar.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { total: 1, data: [{ kode: 'tanpa-id', nama: 'Tanpa ID', aktif: true }] },
+      data: { total: 1, data: [{ id: 0, kode: 'tanpa-id', nama: 'Tanpa ID', aktif: true }] },
     });
     mockParams = {};
     render(

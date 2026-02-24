@@ -130,6 +130,22 @@ function normalisasiRagamVarian(value = '') {
   return petaNormalisasiRagamVarian[trimmed] || '';
 }
 
+function buatPetaLabelRagam(ragamOptions = [], fallbackKosong = true) {
+  const daftar = Array.isArray(ragamOptions) ? ragamOptions : [];
+  return new Map(
+    daftar.map((item) => {
+      const rawValue = fallbackKosong ? (item?.value || '') : item?.value;
+      return [String(rawValue).toLowerCase(), item?.label];
+    })
+  );
+}
+
+export const __private = {
+  ensureOpsiMemuatNilai,
+  normalisasiRagamVarian,
+  buatPetaLabelRagam,
+};
+
 const kolom = [
   {
     key: 'entri',
@@ -663,7 +679,7 @@ function KamusAdmin() {
   }, [opsiKategori.ragam]);
 
   const opsiFilterRagamVarian = useMemo(() => {
-    const petaLabel = new Map((opsiKategori.ragam || []).map((item) => [String(item.value || '').toLowerCase(), item.label]));
+    const petaLabel = buatPetaLabelRagam(opsiKategori.ragam, true);
     return [
       { value: '', label: '—Ragam Varian—' },
       ...kodeRagamVarianValid.map((kode) => ({ value: kode, label: petaLabel.get(kode) || kode })),
@@ -704,7 +720,7 @@ function KamusAdmin() {
   ]), []);
 
   const opsiRagamVarian = useMemo(() => {
-    const petaLabel = new Map((opsiKategori.ragam || []).map((item) => [String(item.value).toLowerCase(), item.label]));
+    const petaLabel = buatPetaLabelRagam(opsiKategori.ragam, false);
     return [
       { value: '', label: '— Tidak ada —' },
       ...kodeRagamVarianValid.map((kode) => ({ value: kode, label: petaLabel.get(kode) || kode })),

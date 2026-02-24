@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import GlosariumDetail from '../../../src/halaman/publik/GlosariumDetail';
+import { __private } from '../../../src/halaman/publik/GlosariumDetail';
 import { upsertMetaTag } from '../../../src/halaman/publik/GlosariumDetail';
 import { ambilDetailGlosarium } from '../../../src/api/apiPublik';
 
@@ -67,6 +68,62 @@ describe('GlosariumDetail', () => {
     queryState = { data: undefined, isLoading: false, isFetching: false, isError: true, error: new Error('gagal') };
     rerender(<GlosariumDetail />);
     expect(screen.getByText('Gagal mengambil data.')).toBeInTheDocument();
+  });
+
+  it('helper sortAlirEntriItems mengurutkan bidang lalu label dengan fallback kosong', () => {
+    const sorted = __private.sortAlirEntriItems([
+      { id: 3, bidang: '', asing: 'zeta', indonesia: 'zeta' },
+      { id: 1, bidang: 'Kimia', asing: 'asam', indonesia: 'asam' },
+      { id: 2, bidang: 'Biologi', asing: '', indonesia: 'akar' },
+      { id: 4, bidang: '', asing: '', indonesia: 'alfa' },
+    ]);
+
+    expect(sorted.map((item) => item.id)).toEqual([2, 1, 4, 3]);
+
+    const sortedBidangSama = __private.sortAlirEntriItems([
+      { id: 11, bidang: 'Biologi', asing: 'zeta', indonesia: '' },
+      { id: 10, bidang: 'Biologi', asing: 'alfa', indonesia: '' },
+    ]);
+    expect(sortedBidangSama.map((item) => item.id)).toEqual([10, 11]);
+
+    const sortedBidangKosong = __private.sortAlirEntriItems([
+      { id: 21, bidang: '', asing: '', indonesia: 'beta' },
+      { id: 20, bidang: '', asing: '', indonesia: 'alfa' },
+    ]);
+    expect(sortedBidangKosong.map((item) => item.id)).toEqual([20, 21]);
+
+    const sortedSemuaKosong = __private.sortAlirEntriItems([
+      { id: 30, bidang: '', asing: '', indonesia: '' },
+      { id: 31, bidang: '', asing: '', indonesia: '' },
+    ]);
+    expect(sortedSemuaKosong.map((item) => item.id)).toEqual([30, 31]);
+
+    const sortedLabelCampuran = __private.sortAlirEntriItems([
+      { id: 41, bidang: '', asing: 'beta', indonesia: '' },
+      { id: 40, bidang: '', asing: '', indonesia: 'alfa' },
+    ]);
+    expect(sortedLabelCampuran.map((item) => item.id)).toEqual([40, 41]);
+  });
+
+  it('helper AlirEntri menampilkan badge bidang hanya saat bidang berubah', () => {
+    const AlirEntri = __private.AlirEntri;
+    render(
+      <AlirEntri
+        items={[
+          { id: 1, bidang: 'Kimia', bidang_kode: 'kim', indonesia: 'asam' },
+          { id: 2, bidang: 'Kimia', bidang_kode: 'kim', indonesia: 'basa' },
+          { id: 3, bidang: '', indonesia: 'garam' },
+        ]}
+      />
+    );
+
+    expect(screen.getAllByRole('link', { name: 'Kimia' })).toHaveLength(1);
+  });
+
+  it('helper getBidangSebelumnya menormalisasi bidang sebelumnya', () => {
+    expect(__private.getBidangSebelumnya([], 0)).toBe('');
+    expect(__private.getBidangSebelumnya([{ bidang: ' Kimia ' }, { bidang: 'Biologi' }], 1)).toBe('kimia');
+    expect(__private.getBidangSebelumnya([undefined, { bidang: 'Biologi' }], 1)).toBe('');
   });
 
   it('menampilkan seksi persis/memuat/mirip, tautan, dan navigasi cursor', () => {

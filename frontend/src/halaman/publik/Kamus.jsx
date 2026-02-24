@@ -90,6 +90,11 @@ function gabungkanKategoriEkspresi(labels = []) {
   return hasil;
 }
 
+export const __private = {
+  gabungkanKategoriBentuk,
+  gabungkanKategoriEkspresi,
+};
+
 const limit = 100;
 
 function Kamus() {

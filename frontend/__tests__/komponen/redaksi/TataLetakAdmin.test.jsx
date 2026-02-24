@@ -126,6 +126,34 @@ describe('TataLetakAdmin', () => {
     expect(screen.queryByRole('heading', { name: 'Leksikon' })).not.toBeInTheDocument();
   });
 
+  it('tombol tutup panel menu mobile menutup panel', () => {
+    render(
+      <MemoryRouter initialEntries={['/redaksi/kamus']}>
+        <TataLetakAdmin>Konten</TataLetakAdmin>
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByLabelText('Buka menu redaksi'));
+    expect(screen.getByRole('heading', { name: 'Leksikon' })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByLabelText('Tutup panel menu'));
+    expect(screen.queryByRole('heading', { name: 'Leksikon' })).not.toBeInTheDocument();
+  });
+
+  it('overlay menu mobile menutup panel saat diklik', () => {
+    render(
+      <MemoryRouter initialEntries={['/redaksi/kamus']}>
+        <TataLetakAdmin>Konten</TataLetakAdmin>
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByLabelText('Buka menu redaksi'));
+    expect(screen.getByRole('heading', { name: 'Leksikon' })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByLabelText('Tutup menu redaksi'));
+    expect(screen.queryByRole('heading', { name: 'Leksikon' })).not.toBeInTheDocument();
+  });
+
   it('menu admin memakai fallback user.izin saat punyaIzin tidak tersedia', () => {
     mockUseAuth.mockReturnValue({
       user: { email: 'fallback@kateglo.id', izin: ['lihat_entri', 'kelola_label'] },

@@ -272,6 +272,37 @@ describe('ModelLabel', () => {
     expect(result.label).toEqual({ kode: 'prakategorial', nama: 'prakategorial' });
   });
 
+  it('cariEntriPerLabel kategori bentuk penyingkatan mengambil data dari makna', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '2' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 8, entri: 'PBB', jenis: 'akronim' }] });
+
+    const result = await ModelLabel.cariEntriPerLabel('bentuk', 'akronim', 15, 3);
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('m.penyingkatan = $1'),
+      ['akronim']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $2 OFFSET $3'),
+      ['akronim', 15, 3]
+    );
+    expect(result).toEqual({
+      data: [{ id: 8, entri: 'PBB', jenis: 'akronim' }],
+      total: 2,
+      label: { kode: 'akronim', nama: 'akronim' },
+    });
+  });
+
+  it('cariEntriPerLabel kategori bentuk invalid mengembalikan kosong', async () => {
+    const result = await ModelLabel.cariEntriPerLabel('bentuk', 'tidak-ada', 10, 0);
+
+    expect(db.query).not.toHaveBeenCalled();
+    expect(result).toEqual({ data: [], total: 0, label: null });
+  });
+
   it('cariEntriPerLabel kategori ekspresi valid', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '1' }] })
@@ -286,6 +317,26 @@ describe('ModelLabel', () => {
     );
     expect(result.total).toBe(1);
     expect(result.label).toEqual({ kode: 'idiom', nama: 'idiom' });
+  });
+
+  it('cariEntriPerLabel kategori ekspresi kiasan mengambil data dari flag makna', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 22, entri: 'panjang tangan', jenis: 'frasa' }] });
+
+    const result = await ModelLabel.cariEntriPerLabel('ekspresi', 'kiasan', 6, 1);
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('AND m.kiasan = TRUE')
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $1 OFFSET $2'),
+      [6, 1]
+    );
+    expect(result.total).toBe(1);
+    expect(result.label).toEqual({ kode: 'kiasan', nama: 'kiasan' });
   });
 
   it('cariEntriPerLabel kategori jenis valid dengan limit/offset default (alias kompatibilitas)', async () => {
@@ -747,6 +798,22 @@ describe('ModelLabel', () => {
     expect(result.label).toEqual({ kode: 'turunan', nama: 'turunan' });
   });
 
+  it('cariEntriPerLabelCursor bentuk penyingkatan memakai query makna', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 40, entri: 'PBB', indeks: 'pbb', jenis: 'akronim', jenis_rujuk: null, entri_rujuk: null }] });
+
+    const result = await ModelLabel.cariEntriPerLabelCursor('bentuk', 'akronim', { limit: 2 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('SELECT COUNT(*) AS total'),
+      ['akronim']
+    );
+    expect(result.total).toBe(1);
+    expect(result.label).toEqual({ kode: 'akronim', nama: 'akronim' });
+  });
+
   it('cariEntriPerLabelCursor ekspresi valid mengembalikan data', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '1' }] })
@@ -755,6 +822,22 @@ describe('ModelLabel', () => {
     const result = await ModelLabel.cariEntriPerLabelCursor('ekspresi', 'idiom', { limit: 2 });
     expect(result.total).toBe(1);
     expect(result.label).toEqual({ kode: 'idiom', nama: 'idiom' });
+  });
+
+  it('cariEntriPerLabelCursor ekspresi kiasan memakai filter makna.kiasan', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 41, entri: 'besar kepala', indeks: 'besar kepala', jenis: 'frasa', jenis_rujuk: null, entri_rujuk: null }] });
+
+    const result = await ModelLabel.cariEntriPerLabelCursor('ekspresi', 'kiasan', { limit: 2 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('m.kiasan = TRUE'),
+      [3]
+    );
+    expect(result.total).toBe(1);
+    expect(result.label).toEqual({ kode: 'kiasan', nama: 'kiasan' });
   });
 
   it('cariEntriPerLabelCursor jenis invalid mengembalikan kosong', async () => {

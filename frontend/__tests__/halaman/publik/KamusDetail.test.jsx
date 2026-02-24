@@ -15,6 +15,7 @@ import {
   bandingkanEntriKamus,
   bandingkanJenisSubentri,
   formatInfoWaktuEntri,
+  __private,
 } from '../../../src/halaman/publik/KamusDetail';
 
 const mockUseQuery = vi.fn();
@@ -70,6 +71,14 @@ describe('KamusDetail', () => {
     mockUseQuery.mockReturnValue({ isLoading: true, isError: false, data: null });
     render(<KamusDetail />);
     expect(screen.getByText(/Memuat detail/i)).toBeInTheDocument();
+  });
+
+  it('helper formatLabelPenyingkatanBadge memformat akronim/kependekan dan mempertahankan label lain', () => {
+    expect(__private.formatLabelPenyingkatanBadge('akronim')).toBe('Akronim');
+    expect(__private.formatLabelPenyingkatanBadge('kependekan')).toBe('Kependekan');
+    expect(__private.formatLabelPenyingkatanBadge(' AKRONIM ')).toBe('Akronim');
+    expect(__private.formatLabelPenyingkatanBadge(' singkatan ')).toBe('singkatan');
+    expect(__private.formatLabelPenyingkatanBadge()).toBe('');
   });
 
   it('query detail kamus memakai placeholderData dari hasil sebelumnya', () => {

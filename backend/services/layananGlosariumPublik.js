@@ -76,3 +76,9 @@ module.exports = {
   invalidasiCacheDetailGlosarium,
   buatCacheKeyDetailGlosarium,
 };
+
+module.exports.__private = {
+  normalisasiAsing,
+  buatCacheKeyVersion,
+  ambilVersiCache,
+};

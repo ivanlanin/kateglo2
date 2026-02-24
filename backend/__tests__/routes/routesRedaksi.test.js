@@ -419,6 +419,22 @@ describe('routes/redaksi', () => {
       }));
     });
 
+    it('GET /api/redaksi/kamus meneruskan filter lafal/pemenggalan/kiasan saat valid', async () => {
+      ModelLema.daftarAdmin.mockResolvedValue({ data: [], total: 0 });
+
+      const response = await callAsAdmin(
+        'get',
+        '/api/redaksi/kamus?punya_lafal=0&punya_pemenggalan=1&punya_kiasan=1'
+      );
+
+      expect(response.status).toBe(200);
+      expect(ModelLema.daftarAdmin).toHaveBeenCalledWith(expect.objectContaining({
+        punya_lafal: '0',
+        punya_pemenggalan: '1',
+        punya_kiasan: '1',
+      }));
+    });
+
     it('GET /api/redaksi/kamus meneruskan filter aktif valid', async () => {
       ModelLema.daftarAdmin.mockResolvedValue({ data: [], total: 0 });
 
@@ -1429,6 +1445,32 @@ describe('routes/redaksi', () => {
         expect.objectContaining({ bidang_id: 7, sumber_id: 9, id: 1 }),
         'admin@example.com'
       );
+    });
+
+    it('PUT /api/redaksi/glosarium tetap melakukan invalidasi cache saat lookup sebelum update gagal', async () => {
+      ModelGlosarium.ambilDenganId.mockRejectedValueOnce(new Error('lookup lama gagal'));
+      ModelGlosarium.simpan.mockResolvedValue({ id: 1, asing: 'term-baru' });
+
+      const response = await callAsAdmin('put', '/api/redaksi/glosarium/1', {
+        body: { indonesia: 'istilah', asing: 'term-baru' },
+      });
+
+      expect(response.status).toBe(200);
+      expect(invalidasiCacheDetailGlosarium).toHaveBeenNthCalledWith(1, null);
+      expect(invalidasiCacheDetailGlosarium).toHaveBeenNthCalledWith(2, 'term-baru');
+    });
+
+    it('PUT /api/redaksi/glosarium memaksa null saat data sebelum-update tidak punya asing', async () => {
+      ModelGlosarium.ambilDenganId.mockResolvedValueOnce({ id: 1, asing: '' });
+      ModelGlosarium.simpan.mockResolvedValue({ id: 1, asing: 'term-baru' });
+
+      const response = await callAsAdmin('put', '/api/redaksi/glosarium/1', {
+        body: { indonesia: 'istilah', asing: 'term-baru' },
+      });
+
+      expect(response.status).toBe(200);
+      expect(invalidasiCacheDetailGlosarium).toHaveBeenNthCalledWith(1, null);
+      expect(invalidasiCacheDetailGlosarium).toHaveBeenNthCalledWith(2, 'term-baru');
     });
   });
 

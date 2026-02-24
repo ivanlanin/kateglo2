@@ -44,27 +44,19 @@ function SeksiDetail({ judul, jumlah, actions = null, children }) {
   );
 }
 
+function getBidangSebelumnya(sortedItems = [], index = 0) {
+  if (index <= 0) return '';
+  return (sortedItems[index - 1]?.bidang || '').trim().toLowerCase();
+}
+
 function AlirEntri({ items, tautAsing = false }) {
-  const sortedItems = [...items].sort((a, b) => {
-    const bidangA = (a.bidang || '').trim();
-    const bidangB = (b.bidang || '').trim();
-
-    if (bidangA && !bidangB) return -1;
-    if (!bidangA && bidangB) return 1;
-
-    const bidangCompare = bidangA.localeCompare(bidangB, 'id', { sensitivity: 'base' });
-    if (bidangCompare !== 0) return bidangCompare;
-
-    const labelA = (a.asing || a.indonesia || '').trim();
-    const labelB = (b.asing || b.indonesia || '').trim();
-    return labelA.localeCompare(labelB, 'id', { sensitivity: 'base' });
-  });
+  const sortedItems = sortAlirEntriItems(items);
 
   return (
     <div className="kamus-detail-subentry-flow">
       {sortedItems.map((item, i) => {
         const bidangSaatIni = (item.bidang || '').trim().toLowerCase();
-        const bidangSebelumnya = i > 0 ? (sortedItems[i - 1]?.bidang || '').trim().toLowerCase() : '';
+        const bidangSebelumnya = getBidangSebelumnya(sortedItems, i);
         const tampilkanBadgeBidang = Boolean(item.bidang) && bidangSaatIni !== bidangSebelumnya;
 
         return (
@@ -116,6 +108,23 @@ function AlirEntri({ items, tautAsing = false }) {
       })}
     </div>
   );
+}
+
+function sortAlirEntriItems(items = []) {
+  return [...items].sort((a, b) => {
+    const bidangA = (a.bidang || '').trim();
+    const bidangB = (b.bidang || '').trim();
+
+    if (bidangA && !bidangB) return -1;
+    if (!bidangA && bidangB) return 1;
+
+    const bidangCompare = bidangA.localeCompare(bidangB, 'id', { sensitivity: 'base' });
+    if (bidangCompare !== 0) return bidangCompare;
+
+    const labelA = (a.asing || a.indonesia || '').trim();
+    const labelB = (b.asing || b.indonesia || '').trim();
+    return labelA.localeCompare(labelB, 'id', { sensitivity: 'base' });
+  });
 }
 
 function GlosariumDetail() {
@@ -273,6 +282,12 @@ function GlosariumDetail() {
     </HalamanDasar>
   );
 }
+
+export const __private = {
+  AlirEntri,
+  getBidangSebelumnya,
+  sortAlirEntriItems,
+};
 
 export {
   upsertMetaTag,

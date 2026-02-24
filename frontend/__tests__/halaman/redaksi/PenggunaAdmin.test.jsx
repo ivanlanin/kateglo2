@@ -210,6 +210,18 @@ describe('PenggunaAdmin', () => {
     expect(panggilanTerakhir.aktif).toBe('1');
   });
 
+  it('menjalankan reset filter pengguna', () => {
+    render(<MemoryRouter><PenggunaAdmin /></MemoryRouter>);
+
+    fireEvent.change(screen.getByPlaceholderText('Cari pengguna, surel, atau peran …'), { target: { value: 'budi' } });
+    fireEvent.change(screen.getByLabelText('Filter status pengguna'), { target: { value: '1' } });
+    fireEvent.click(screen.getAllByRole('button', { name: '✕' })[0]);
+
+    const panggilanTerakhir = mockUseDaftarPengguna.mock.calls.at(-1)?.[0] || {};
+    expect(panggilanTerakhir.q).toBe('');
+    expect(panggilanTerakhir.aktif).toBe('');
+  });
+
   it('mengabaikan detail route saat payload detail tidak memiliki id', () => {
     mockParams = { id: '11' };
     mockUseDetailPengguna.mockReturnValue({ isLoading: false, isError: false, data: { data: {} } });

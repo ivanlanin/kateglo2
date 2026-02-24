@@ -75,6 +75,10 @@ function normalisasiSlugNama(teks = '') {
     .replace(/^-+|-+$/g, '');
 }
 
+export const __private = {
+  formatLabelPenyingkatanBadge,
+};
+
 function buildLabelMap(labels = []) {
   return (labels || []).reduce((acc, item) => {
     const keyKode = normalizeToken(item?.kode);

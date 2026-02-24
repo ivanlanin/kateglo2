@@ -99,6 +99,12 @@ describe('entry-server', () => {
     expect(kamusCariRich.title).toBe('Hasil Pencarian "air" di Kamus — Kateglo');
     expect(kamusCariRich.description).toContain('air:');
 
+    const kamusCariKosong = __private.buildMetaForPath('/kamus/cari/air', site, {
+      type: 'kamus-cari',
+      semuaMakna: [],
+    });
+    expect(kamusCariKosong.description).toContain('Hasil pencarian kamus untuk kata');
+
     const kamusKategori = __private.buildMetaForPath('/kamus/kelas-kata/nomina', site);
     expect(kamusKategori.title).toBe('Kelas Kata Nomina — Kateglo');
     expect(kamusKategori.description).toContain('kategori kelas kata Nomina');

@@ -227,6 +227,26 @@ describe('GlosariumAdmin', () => {
     expect(mutateHapus).toHaveBeenCalled();
   });
 
+  it('menjalankan reset semua filter glosarium', () => {
+    render(
+      <MemoryRouter>
+        <GlosariumAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByPlaceholderText('Cari istilah …'), { target: { value: 'air' } });
+    fireEvent.change(screen.getByLabelText('Filter bidang glosarium'), { target: { value: '1' } });
+    fireEvent.change(screen.getByLabelText('Filter sumber glosarium'), { target: { value: '1' } });
+    fireEvent.change(screen.getByLabelText('Filter status glosarium'), { target: { value: '1' } });
+    fireEvent.click(screen.getAllByRole('button', { name: '✕' })[0]);
+
+    const panggilanTerakhir = mockUseDaftarGlosariumAdmin.mock.calls.at(-1)?.[0] || {};
+    expect(panggilanTerakhir.q).toBe('');
+    expect(panggilanTerakhir.bidangId).toBe('');
+    expect(panggilanTerakhir.sumberId).toBe('');
+    expect(panggilanTerakhir.aktif).toBe('');
+  });
+
   it('tetap aman saat opsi bidang/sumber dari API kosong', () => {
     mockUseDaftarBidangAdmin.mockReturnValue({ data: undefined, isLoading: false, isError: false });
     mockUseDaftarSumberAdmin.mockReturnValue({ data: undefined, isLoading: false, isError: false });

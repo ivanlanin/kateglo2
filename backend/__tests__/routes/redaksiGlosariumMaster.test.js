@@ -219,6 +219,18 @@ describe('routes/redaksi master bidang/sumber', () => {
     expect(ModelGlosarium.daftarMasterSumber).toHaveBeenCalled();
   });
 
+  it('GET /sumber-master meneruskan filter aktif 1/0 dan fallback kosong', async () => {
+    ModelGlosarium.daftarMasterSumber.mockResolvedValue({ data: [], total: 0 });
+
+    await request(createApp()).get('/api/redaksi/sumber?aktif=1');
+    await request(createApp()).get('/api/redaksi/sumber?aktif=0');
+    await request(createApp()).get('/api/redaksi/sumber?aktif=random');
+
+    expect(ModelGlosarium.daftarMasterSumber).toHaveBeenNthCalledWith(1, expect.objectContaining({ aktif: '1' }));
+    expect(ModelGlosarium.daftarMasterSumber).toHaveBeenNthCalledWith(2, expect.objectContaining({ aktif: '0' }));
+    expect(ModelGlosarium.daftarMasterSumber).toHaveBeenNthCalledWith(3, expect.objectContaining({ aktif: '' }));
+  });
+
   it('GET /sumber-master/:id mengembalikan 404 dan 200', async () => {
     ModelGlosarium.ambilMasterSumberDenganId.mockResolvedValueOnce(null).mockResolvedValueOnce({ id: 2, nama: 'KBBI' });
 

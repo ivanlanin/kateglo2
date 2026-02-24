@@ -148,6 +148,10 @@ export function KotakCariAdmin({ nilai, onChange, onCari, onHapus, placeholder =
   );
 }
 
+export function isActiveFilterValue(item) {
+  return String(item?.value ?? '').trim() !== '';
+}
+
 /**
  * Toolbar filter + pencarian admin dalam satu baris (tanpa label filter)
  */
@@ -159,7 +163,7 @@ export function BarisFilterCariAdmin({
   placeholder = 'Cari …',
   filters = [],
 }) {
-  const hasActiveFilter = filters.some((item) => String(item?.value ?? '').trim() !== '');
+  const hasActiveFilter = filters.some((item) => isActiveFilterValue(item));
   const tampilkanReset = String(nilai ?? '').trim() !== '' || hasActiveFilter;
 
   const handleSubmit = (e) => {

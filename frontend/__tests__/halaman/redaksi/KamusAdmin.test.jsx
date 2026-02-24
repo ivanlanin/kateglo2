@@ -3,6 +3,7 @@ import { act } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import KamusAdmin from '../../../src/halaman/redaksi/KamusAdmin';
+import { __private } from '../../../src/halaman/redaksi/KamusAdmin';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
@@ -67,6 +68,28 @@ function invokeReactClick(element) {
 }
 
 describe('KamusAdmin', () => {
+  it('helper normalisasiRagamVarian dan ensureOpsiMemuatNilai menutup cabang fallback', () => {
+    expect(__private.normalisasiRagamVarian('')).toBe('');
+    expect(__private.normalisasiRagamVarian('kas')).toBe('kas');
+    expect(__private.normalisasiRagamVarian('kasar')).toBe('kas');
+    expect(__private.normalisasiRagamVarian('tidak-valid')).toBe('');
+
+    const opsi = [{ value: 'n', label: 'n' }];
+    expect(__private.ensureOpsiMemuatNilai(opsi, '')).toEqual(opsi);
+    expect(__private.ensureOpsiMemuatNilai(opsi, 'n')).toEqual(opsi);
+    expect(__private.ensureOpsiMemuatNilai(opsi, 'x')).toEqual([{ value: 'x', label: 'x' }, ...opsi]);
+
+    const petaFallback = __private.buatPetaLabelRagam([{ value: 'cak', label: 'cakapan' }, {}], true);
+    expect(petaFallback.get('cak')).toBe('cakapan');
+    expect(petaFallback.get('')).toBeUndefined();
+
+    const petaTanpaFallback = __private.buatPetaLabelRagam([{ value: 'cak', label: 'cakapan' }, {}], false);
+    expect(petaTanpaFallback.get('cak')).toBe('cakapan');
+    expect(petaTanpaFallback.get('undefined')).toBeUndefined();
+
+    expect(__private.buatPetaLabelRagam(null, true).size).toBe(0);
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
     mockParams = {};
@@ -385,8 +408,10 @@ describe('KamusAdmin', () => {
       'Filter contoh',
       'Filter kelas kata',
       'Filter ragam',
+      'Filter ragam varian',
       'Filter bidang',
       'Filter bahasa',
+      'Filter kiasan',
     ];
 
     labels.forEach((label) => {
@@ -394,6 +419,50 @@ describe('KamusAdmin', () => {
     });
 
     expect(screen.getByRole('heading', { name: 'Kamus' })).toBeInTheDocument();
+  });
+
+  it('tetap aman saat kategori ragam memuat item tanpa kode', () => {
+    mockUseKategoriLabelRedaksi.mockReturnValue({
+      data: {
+        data: {
+          'bentuk-kata': [{ kode: 'dasar', nama: 'Dasar' }],
+          'jenis-rujuk': [{ kode: 'lihat', nama: 'lihat' }],
+          'kelas-kata': [{ kode: 'n', nama: 'nomina' }],
+          ragam: [{}, { kode: 'cak', nama: 'cakapan' }],
+          bidang: [{ kode: 'umum', nama: 'Umum' }],
+          bahasa: [{ kode: 'id', nama: 'Indonesia' }],
+          penyingkatan: [{ kode: 'singkatan', nama: 'Singkatan' }],
+        },
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByLabelText('Filter ragam varian')).toBeInTheDocument();
+    fireEvent.click(screen.getByText('dasar'));
+    expect(screen.getByRole('heading', { name: 'Sunting Entri' })).toBeInTheDocument();
+  });
+
+  it('mereset semua filter lanjutan kembali ke nilai awal', () => {
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByPlaceholderText('Cari entri …'), { target: { value: 'anak' } });
+    fireEvent.change(screen.getByLabelText('Filter status entri'), { target: { value: '1' } });
+    fireEvent.change(screen.getByLabelText('Filter homograf'), { target: { value: '1' } });
+    fireEvent.click(screen.getAllByRole('button', { name: '✕' })[0]);
+
+    const panggilanTerakhir = mockUseDaftarKamusAdmin.mock.calls.at(-1)?.[0] || {};
+    expect(panggilanTerakhir.q).toBe('');
+    expect(panggilanTerakhir.aktif).toBe('');
+    expect(panggilanTerakhir.punyaHomograf).toBe('');
   });
 
   it('menangani loading makna serta cabang validasi internal', () => {
@@ -420,6 +489,45 @@ describe('KamusAdmin', () => {
 
     global.confirm = vi.fn(() => false);
     fireEvent.click(screen.getByText('Hapus'));
+  });
+
+  it('menampilkan ragam varian pada ringkasan dan menangani toggle kiasan saat edit makna', () => {
+    mockUseDaftarMakna.mockReturnValueOnce({
+      isLoading: false,
+      data: {
+        data: [
+          {
+            id: 12,
+            makna: 'contoh ragam varian',
+            kelas_kata: 'n',
+            bidang: 'umum',
+            ragam: 'cak',
+            ragam_varian: 'kasar',
+            bahasa: 'id',
+            kiasan: false,
+            urutan: 1,
+            contoh: [],
+          },
+        ],
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('dasar'));
+    fireEvent.click(screen.getByText('contoh ragam varian'));
+    expect(screen.getByText('Ragam varian: kas')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'sunting' }));
+    fireEvent.change(screen.getByLabelText('Kiasan'), { target: { value: '1' } });
+    const tombolSimpanMakna = screen.getAllByRole('button', { name: 'Simpan' }).find((btn) => btn.className.includes('text-xs'));
+    fireEvent.click(tombolSimpanMakna);
+
+    expect(mutateSimpanMakna).toHaveBeenCalled();
   });
 
   it('menjalankan onSuccess simpan mode sunting dan onSuccess hapus lema', () => {

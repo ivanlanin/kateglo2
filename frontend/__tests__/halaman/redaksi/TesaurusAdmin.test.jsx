@@ -168,6 +168,22 @@ describe('TesaurusAdmin', () => {
     expect(screen.getByText('Gagal menyimpan')).toBeInTheDocument();
   });
 
+  it('menjalankan reset filter tesaurus', () => {
+    render(
+      <MemoryRouter>
+        <TesaurusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByPlaceholderText('Cari tesaurus …'), { target: { value: 'anak' } });
+    fireEvent.change(screen.getByLabelText('Filter status tesaurus'), { target: { value: '1' } });
+    fireEvent.click(screen.getAllByRole('button', { name: '✕' })[0]);
+
+    const panggilanTerakhir = mockUseDaftarTesaurusAdmin.mock.calls.at(-1)?.[0] || {};
+    expect(panggilanTerakhir.q).toBe('');
+    expect(panggilanTerakhir.aktif).toBe('');
+  });
+
   it('menjalankan onSuccess hapus', () => {
     mockParams = { id: '1' };
     mockUseDetailTesaurusAdmin.mockReturnValue({

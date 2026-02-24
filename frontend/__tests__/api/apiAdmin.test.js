@@ -28,6 +28,7 @@ import {
   useDetailKamusAdmin,
   useDaftarKomentarAdmin,
   useDetailKomentarAdmin,
+  useDaftarAuditMaknaAdmin,
   useDaftarTesaurusAdmin,
   useDetailTesaurusAdmin,
   useDaftarGlosariumAdmin,
@@ -53,6 +54,7 @@ import {
   useSimpanIzinAdmin,
   useSimpanKamus,
   useSimpanKomentarAdmin,
+  useSimpanAuditMaknaAdmin,
   useHapusKamus,
   useDaftarMakna,
   useSimpanMakna,
@@ -174,6 +176,8 @@ describe('apiAdmin', () => {
       ragamVarian: 'kas',
       bidang: 'umum',
       bahasa: 'id',
+      punyaLafal: '1',
+      punyaPemenggalan: '0',
       punyaIlmiah: '1',
       punyaKimia: '0',
       penyingkatan: 'singkatan',
@@ -193,6 +197,8 @@ describe('apiAdmin', () => {
         ragam_varian: 'kas',
         bidang: 'umum',
         bahasa: 'id',
+        punya_lafal: '1',
+        punya_pemenggalan: '0',
         punya_ilmiah: '1',
         punya_kimia: '0',
         penyingkatan: 'singkatan',
@@ -204,6 +210,38 @@ describe('apiAdmin', () => {
     const tesaurus = useDaftarTesaurusAdmin({});
     await tesaurus.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/tesaurus', { params: { limit: 50, cursor: undefined, direction: 'next', lastPage: undefined, q: undefined, aktif: undefined } });
+
+    const auditMakna = useDaftarAuditMaknaAdmin({
+      limit: 25,
+      cursor: 'c-1',
+      direction: 'prev',
+      lastPage: true,
+      q: 'audit',
+      status: 'tinjau',
+    });
+    await auditMakna.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/audit-makna', {
+      params: {
+        limit: 25,
+        cursor: 'c-1',
+        direction: 'prev',
+        lastPage: '1',
+        q: 'audit',
+        status: 'tinjau',
+      },
+    });
+
+    const auditMaknaTanpaStatus = useDaftarAuditMaknaAdmin({ q: '' });
+    await auditMaknaTanpaStatus.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/audit-makna', {
+      params: {
+        limit: 50,
+        cursor: undefined,
+        direction: 'next',
+        lastPage: undefined,
+        q: undefined,
+      },
+    });
 
     const glosarium = useDaftarGlosariumAdmin({ q: '' });
     await glosarium.queryFn();
@@ -455,6 +493,12 @@ describe('apiAdmin', () => {
     expect(klien.put).toHaveBeenCalledWith('/api/redaksi/komentar/4', { id: 4, komentar: 'baru', aktif: true });
     simpanKomentar.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-komentar'] });
+
+    const simpanAuditMakna = useSimpanAuditMaknaAdmin();
+    await simpanAuditMakna.mutationFn({ id: 12, status: 'salah', catatan: 'uji' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/audit-makna/12', { id: 12, status: 'salah', catatan: 'uji' });
+    simpanAuditMakna.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-audit-makna'] });
 
     const simpanMakna = useSimpanMakna();
     await simpanMakna.mutationFn({ entriId: 4, id: 2, makna: 'uji' });

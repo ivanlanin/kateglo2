@@ -13,6 +13,7 @@ const {
   normalizeBoolean,
   normalisasiIndeks,
   parseNullableInteger,
+  normalisasiRagamVarian,
 } = require('../../models/modelEntri').__private;
 
 describe('ModelEntri', () => {
@@ -1098,6 +1099,43 @@ describe('ModelEntri', () => {
     );
   });
 
+  it('daftarAdmin mendukung kebalikan filter lafal/pemenggalan, ragam_varian, dan kiasan', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [] });
+
+    await ModelEntri.daftarAdmin({
+      q: 'kat',
+      punya_lafal: '0',
+      punya_pemenggalan: '1',
+      ragam_varian: 'cak',
+      punya_kiasan: '1',
+      limit: 4,
+      offset: 1,
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining("(e.lafal IS NULL OR BTRIM(e.lafal) = '')"),
+      ['%kat%', 'cak']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining("e.pemenggalan IS NOT NULL AND BTRIM(e.pemenggalan) <> ''"),
+      ['%kat%', 'cak']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('mk.ragam_varian = $2'),
+      ['%kat%', 'cak']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('AND mk.kiasan = TRUE'),
+      ['%kat%', 'cak']
+    );
+  });
+
   it('daftarAdmin mendukung filter aktif=0', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '1' }] })
@@ -1209,6 +1247,25 @@ describe('ModelEntri', () => {
       2,
       expect.stringContaining('LIMIT $1 OFFSET $2'),
       [2, 1]
+    );
+  });
+
+  it('daftarAdmin mendukung punya_kiasan=0', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [] });
+
+    await ModelEntri.daftarAdmin({ punya_kiasan: '0', limit: 5, offset: 0 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('NOT EXISTS ('),
+      []
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('AND mk.kiasan = TRUE'),
+      []
     );
   });
 
@@ -1581,6 +1638,12 @@ describe('ModelEntri', () => {
     expect(parseNullableInteger('')).toBeNull();
     expect(parseNullableInteger('12')).toBe(12);
     expect(parseNullableInteger('abc')).toBeNull();
+
+    expect(normalisasiRagamVarian('cakapan')).toBe('cak');
+    expect(normalisasiRagamVarian(' Hormat ')).toBe('hor');
+    expect(normalisasiRagamVarian('kas')).toBe('kas');
+    expect(normalisasiRagamVarian('tidak-ada')).toBeNull();
+    expect(normalisasiRagamVarian('')).toBeNull();
   });
 
 });
