@@ -279,7 +279,7 @@ function KamusDetail() {
     : '';
   const saran = error?.saran || [];
 
-  const urutanJenisSubentri = ['turunan', 'gabungan', 'idiom', 'peribahasa', 'varian'];
+  const urutanJenisSubentri = ['turunan', 'gabungan', 'idiom', 'peribahasa', 'varian', 'bentuk_tidak_baku'];
 
   const daftarEntriRaw = notFound ? [] : (
     Array.isArray(data.entri)
@@ -531,9 +531,9 @@ function KamusDetail() {
                   )}
                 </div>
 
-                {entriItem.rujukan ? (
+                {entriItem.entri_rujuk ? (
                   <p className="mt-4">
-                    → Lihat{' '}
+                    {entriItem.jenis_rujuk === '→' ? 'Bentuk tidak baku dari ' : 'Lihat '}
                     <Link to={buatPathDetailKamus(entriItem.entri_rujuk_indeks || entriItem.entri_rujuk)} className="link-action font-semibold">
                       {formatLemaHomonim(entriItem.entri_rujuk)}
                     </Link>
@@ -654,6 +654,12 @@ function KamusDetail() {
                 {subentriEntries.length > 0 && (
                   <div className="mt-4">
                     {subentriEntries.map(([jenis, daftar]) => (
+                      (() => {
+                        const daftarSubentri = jenis === 'bentuk_tidak_baku'
+                          ? [...daftar].sort((a, b) => (a?.entri || '').localeCompare((b?.entri || ''), 'id', { sensitivity: 'base' }))
+                          : daftar;
+
+                        return (
                       <div key={jenis} className="kamus-detail-subentry-group">
                         <div className="kamus-detail-subentry-heading-row">
                           <h3 className="kamus-detail-def-class mb-0">
@@ -664,7 +670,7 @@ function KamusDetail() {
                           </h3>
                         </div>
                         <div className="kamus-detail-subentry-flow">
-                          {daftar.map((s, i) => (
+                          {daftarSubentri.map((s, i) => (
                             <span key={s.id}>
                               {jenis === 'varian' ? (
                                 <span>{formatLemaHomonim(s.entri)}</span>
@@ -673,11 +679,13 @@ function KamusDetail() {
                                   {formatLemaHomonim(s.entri)}
                                 </Link>
                               )}
-                              {i < daftar.length - 1 && <span className="secondary-text">; </span>}
+                              {i < daftarSubentri.length - 1 && <span className="secondary-text">; </span>}
                             </span>
                           ))}
                         </div>
                       </div>
+                        );
+                      })()
                     ))}
                   </div>
                 )}

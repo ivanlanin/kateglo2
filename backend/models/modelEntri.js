@@ -112,13 +112,13 @@ class ModelEntri {
     // Gunakan UNION untuk menggabungkan prefix dan contains dengan urutan stabil
     const baseSql = `
       WITH hasil AS (
-              SELECT id, entri, indeks, homograf, homonim, jenis, lafal, jenis_rujuk,
-                (SELECT er.entri FROM entri er WHERE er.id = entri_rujuk) AS entri_rujuk,
+                  SELECT e.id, e.entri, e.indeks, e.homograf, e.homonim, e.jenis, e.lafal, e.jenis_rujuk,
+                    (SELECT er.entri FROM entri er WHERE er.id = e.entri_rujuk) AS entri_rujuk,
             CASE WHEN LOWER(entri) = LOWER($1) THEN 0
               WHEN entri ILIKE $2 THEN 1
                     ELSE 2 END AS prioritas
-           FROM entri
-           WHERE entri ILIKE $3 AND aktif = 1
+                  FROM entri e
+                  WHERE e.entri ILIKE $3 AND e.aktif = 1
       )`;
 
     if (hitungTotal) {
@@ -181,15 +181,15 @@ class ModelEntri {
 
     const baseSql = `
       WITH hasil AS (
-         SELECT id, entri, indeks, homograf, homonim, jenis, lafal, jenis_rujuk,
-           (SELECT er.entri FROM entri er WHERE er.id = entri_rujuk) AS entri_rujuk,
+         SELECT e.id, e.entri, e.indeks, e.homograf, e.homonim, e.jenis, e.lafal, e.jenis_rujuk,
+           (SELECT er.entri FROM entri er WHERE er.id = e.entri_rujuk) AS entri_rujuk,
                CASE WHEN LOWER(entri) = LOWER($1) THEN 0
                     WHEN entri ILIKE $2 THEN 1
                     ELSE 2 END AS prioritas,
                COALESCE(homograf, 2147483647) AS homograf_sort,
                COALESCE(homonim, 2147483647) AS homonim_sort
-        FROM entri
-        WHERE entri ILIKE $3 AND aktif = 1
+         FROM entri e
+         WHERE e.entri ILIKE $3 AND e.aktif = 1
       )`;
 
     let total = 0;
@@ -306,13 +306,13 @@ class ModelEntri {
    */
   static async ambilEntri(teks) {
     const result = await db.query(
-            `SELECT id, legacy_eid, entri, indeks, homograf, homonim, jenis, induk, pemenggalan, lafal, varian,
-              jenis_rujuk, lema_rujuk,
-              (SELECT er.entri FROM entri er WHERE er.id = entri_rujuk) AS entri_rujuk,
-              (SELECT er.indeks FROM entri er WHERE er.id = entri_rujuk) AS entri_rujuk_indeks,
-              sumber, aktif
-       FROM entri
-       WHERE LOWER(entri) = LOWER($1)
+            `SELECT e.id, e.legacy_eid, e.entri, e.indeks, e.homograf, e.homonim, e.jenis, e.induk, e.pemenggalan, e.lafal, e.varian,
+              e.jenis_rujuk, e.lema_rujuk,
+              (SELECT er.entri FROM entri er WHERE er.id = e.entri_rujuk) AS entri_rujuk,
+              (SELECT er.indeks FROM entri er WHERE er.id = e.entri_rujuk) AS entri_rujuk_indeks,
+              e.sumber, e.aktif
+       FROM entri e
+       WHERE LOWER(e.entri) = LOWER($1)
        LIMIT 1`,
       [teks]
     );
@@ -321,20 +321,20 @@ class ModelEntri {
 
   static async ambilEntriPerIndeks(indeks) {
     const result = await db.query(
-            `SELECT id, legacy_eid, entri, indeks, homograf, homonim, jenis, induk, pemenggalan, lafal, varian,
-              jenis_rujuk, lema_rujuk,
-              (SELECT er.entri FROM entri er WHERE er.id = entri_rujuk) AS entri_rujuk,
-              (SELECT er.indeks FROM entri er WHERE er.id = entri_rujuk) AS entri_rujuk_indeks,
-              sumber, aktif,
-              to_char(created_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS created_at,
-              to_char(updated_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS updated_at
-       FROM entri
-       WHERE LOWER(indeks) = LOWER($1) AND aktif = 1
+            `SELECT e.id, e.legacy_eid, e.entri, e.indeks, e.homograf, e.homonim, e.jenis, e.induk, e.pemenggalan, e.lafal, e.varian,
+              e.jenis_rujuk, e.lema_rujuk,
+              (SELECT er.entri FROM entri er WHERE er.id = e.entri_rujuk) AS entri_rujuk,
+              (SELECT er.indeks FROM entri er WHERE er.id = e.entri_rujuk) AS entri_rujuk_indeks,
+              e.sumber, e.aktif,
+              to_char(e.created_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS created_at,
+              to_char(e.updated_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS updated_at
+       FROM entri e
+       WHERE LOWER(e.indeks) = LOWER($1) AND e.aktif = 1
        ORDER BY
-         homograf ASC NULLS LAST,
-         homonim ASC NULLS LAST,
-         entri ASC,
-         id ASC`,
+         e.homograf ASC NULLS LAST,
+         e.homonim ASC NULLS LAST,
+         e.entri ASC,
+         e.id ASC`,
       [indeks]
     );
     return result.rows;
@@ -392,6 +392,19 @@ class ModelEntri {
        WHERE induk = $1 AND aktif = 1
        ORDER BY jenis, homograf ASC NULLS LAST, homonim ASC NULLS LAST, entri ASC`,
       [indukId]
+    );
+    return result.rows;
+  }
+
+  static async ambilBentukTidakBakuByRujukId(entriRujukId) {
+    const result = await db.query(
+      `SELECT id, entri, indeks, homograf, homonim, jenis, lafal
+       FROM entri
+       WHERE entri_rujuk = $1
+         AND jenis_rujuk = '→'
+         AND aktif = 1
+       ORDER BY homograf ASC NULLS LAST, homonim ASC NULLS LAST, entri ASC, id ASC`,
+      [entriRujukId]
     );
     return result.rows;
   }

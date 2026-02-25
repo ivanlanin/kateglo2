@@ -14,6 +14,7 @@ jest.mock('../../models/modelEntri', () => {
     ambilMakna: jest.fn(),
     ambilContoh: jest.fn(),
     ambilSubentri: jest.fn(),
+    ambilBentukTidakBakuByRujukId: jest.fn(),
     ambilRantaiInduk: jest.fn(),
   };
 });

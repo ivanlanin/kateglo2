@@ -835,7 +835,7 @@ describe('ModelEntri', () => {
     const result = await ModelEntri.ambilEntriPerIndeks('aktif');
 
     expect(db.query).toHaveBeenCalledWith(
-      expect.stringContaining('WHERE LOWER(indeks) = LOWER($1) AND aktif = 1'),
+      expect.stringContaining('WHERE LOWER(e.indeks) = LOWER($1) AND e.aktif = 1'),
       ['aktif']
     );
     expect(result).toEqual(rows);

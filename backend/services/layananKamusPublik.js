@@ -103,9 +103,10 @@ async function ambilDetailKamus(indeksAtauEntri, {
 
   const detailEntri = await Promise.all(
     daftarEntri.map(async (dataEntri) => {
-      const [maknaList, subentri, rantaiInduk] = await Promise.all([
+      const [maknaList, subentri, bentukTidakBaku, rantaiInduk] = await Promise.all([
         ModelEntri.ambilMakna(dataEntri.id, true),
         ModelEntri.ambilSubentri(dataEntri.id),
+        ModelEntri.ambilBentukTidakBakuByRujukId(dataEntri.id),
         ModelEntri.ambilRantaiInduk(dataEntri.induk),
       ]);
 
@@ -133,6 +134,10 @@ async function ambilDetailKamus(indeksAtauEntri, {
         subentriPerJenis[s.jenis].push(s);
       }
 
+      if (bentukTidakBaku?.length) {
+        subentriPerJenis.bentuk_tidak_baku = bentukTidakBaku;
+      }
+
       return {
         id: dataEntri.id,
         induk_id: dataEntri.induk || null,
@@ -151,7 +156,7 @@ async function ambilDetailKamus(indeksAtauEntri, {
         lema_rujuk: dataEntri.lema_rujuk || null,
         entri_rujuk: dataEntri.entri_rujuk,
         entri_rujuk_indeks: dataEntri.entri_rujuk_indeks || (dataEntri.entri_rujuk ? normalisasiIndeksKamus(dataEntri.entri_rujuk) : null),
-        rujukan: Boolean(dataEntri.jenis_rujuk && dataEntri.entri_rujuk),
+        rujukan: Boolean(dataEntri.entri_rujuk),
         induk: (rantaiInduk || []).map((r) => ({ id: r.id, entri: r.entri, indeks: r.indeks })),
         makna,
         subentri: subentriPerJenis,

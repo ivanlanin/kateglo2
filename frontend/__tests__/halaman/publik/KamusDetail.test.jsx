@@ -1397,6 +1397,44 @@ describe('KamusDetail', () => {
     expect(screen.queryByRole('link', { name: 'be-' })).not.toBeInTheDocument();
   });
 
+  it('mengurutkan subentri bentuk tidak baku secara alfabetis dan menampilkannya sebagai tautan', () => {
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        entri: [
+          {
+            id: 1,
+            entri: 'kelambai',
+            indeks: 'kelambai',
+            jenis: 'dasar',
+            makna: [{ id: 11, kelas_kata: null, makna: 'contoh makna' }],
+            subentri: {
+              bentuk_tidak_baku: [
+                { id: 2, entri: 'Kulambai', indeks: 'kulambai' },
+                { id: 3, entri: 'gelembai', indeks: 'gelembai' },
+                { id: 4, entri: 'gedembai' },
+              ],
+            },
+          },
+        ],
+        tesaurus: { sinonim: [], antonim: [] },
+        glosarium: [],
+      },
+    });
+
+    const { container } = render(<KamusDetail />);
+
+    const subentryLinks = Array.from(container.querySelectorAll('.kamus-detail-subentry-flow a.kamus-detail-subentry-link'))
+      .map((el) => ({ text: (el.textContent || '').trim(), href: el.getAttribute('href') }));
+
+    expect(subentryLinks).toEqual([
+      { text: 'gedembai', href: '/kamus/detail/gedembai' },
+      { text: 'gelembai', href: '/kamus/detail/gelembai' },
+      { text: 'Kulambai', href: '/kamus/detail/kulambai' },
+    ]);
+  });
+
   it('membentuk fallback entri dari indeks route dan memetakan jenis ke kategori ekspresi/jenis', () => {
     mockParams = { indeks: 'kata%20route' };
     let jumlahDetail = 0;

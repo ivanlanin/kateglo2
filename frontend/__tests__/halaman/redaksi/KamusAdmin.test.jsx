@@ -253,7 +253,7 @@ describe('KamusAdmin', () => {
     const tombolSimpanKosong = screen.getAllByRole('button', { name: 'Simpan' }).find((btn) => btn.className.includes('text-xs'));
     tombolSimpanKosong.removeAttribute('disabled');
     fireEvent.click(tombolSimpanKosong);
-    fireEvent.change(screen.getByLabelText('Contoh baru'), { target: { value: 'contoh tambahan' } });
+    fireEvent.change(screen.getAllByLabelText('Contoh').at(-1), { target: { value: 'contoh tambahan' } });
     screen.getAllByRole('button', { name: 'Simpan' }).forEach((btn) => fireEvent.click(btn));
     expect(mutateSimpanContoh).toHaveBeenCalled();
 
@@ -569,13 +569,12 @@ describe('KamusAdmin', () => {
     expect(mutateSimpanMakna).not.toHaveBeenCalled();
 
     fireEvent.click(screen.getByText('+ Tambah makna'));
-    const formTambahMakna = screen.getAllByLabelText('Kelas kata')[1].closest('div').parentElement;
-    const simpanTambahMakna = within(formTambahMakna).getByRole('button', { name: 'Simpan' });
+    const simpanTambahMakna = screen.getAllByRole('button', { name: 'Simpan' }).find((btn) => btn.className.includes('text-xs'));
     invokeReactClick(simpanTambahMakna);
     expect(mutateSimpanMakna).not.toHaveBeenCalled();
 
     fireEvent.click(screen.getAllByText('+ contoh')[0]);
-    const formContohBaru = screen.getByLabelText('Contoh baru').closest('div').parentElement;
+    const formContohBaru = screen.getAllByLabelText('Contoh').at(-1).closest('div').parentElement;
     const simpanContohBaru = within(formContohBaru).getByRole('button', { name: 'Simpan' });
     invokeReactClick(simpanContohBaru);
     expect(mutateSimpanContoh).not.toHaveBeenCalled();

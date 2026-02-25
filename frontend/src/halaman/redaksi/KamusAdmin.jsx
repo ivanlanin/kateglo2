@@ -132,6 +132,22 @@ function normalisasiRagamVarian(value = '') {
   return petaNormalisasiRagamVarian[trimmed] || '';
 }
 
+function filterJenisRujukOptions(options = []) {
+  const allowed = new Set(['→', 'lihat']);
+  const seen = new Set();
+
+  return options.filter((item) => {
+    const rawValue = String(item?.value || '').trim();
+    if (!rawValue) return true;
+
+    const value = rawValue.toLowerCase();
+    if (!allowed.has(value)) return false;
+    if (seen.has(value)) return false;
+    seen.add(value);
+    return true;
+  });
+}
+
 function buatPetaLabelRagam(ragamOptions = [], fallbackKosong = true) {
   const daftar = Array.isArray(ragamOptions) ? ragamOptions : [];
   return new Map(
@@ -216,6 +232,18 @@ function ItemContoh({
     hapusContoh.mutate({ entriId, maknaId, contohId: contoh.id });
   };
 
+  const renderContohFields = (nilaiData, onChange) => (
+    <>
+      <TextareaField label="Contoh" name="contoh" value={nilaiData.contoh} onChange={onChange} rows={2} />
+      <TextareaField label="Makna contoh" name="makna_contoh" value={nilaiData.makna_contoh} onChange={onChange} rows={2} />
+      <div className="grid grid-cols-2 gap-2">
+        <SelectField label="Ragam" name="ragam" value={nilaiData.ragam} onChange={onChange} options={ensureOpsiMemuatNilai(opsiRagam, nilaiData.ragam)} />
+        <SelectField label="Bidang" name="bidang" value={nilaiData.bidang} onChange={onChange} options={ensureOpsiMemuatNilai(opsiBidang, nilaiData.bidang)} />
+      </div>
+      <ToggleAktif value={nilaiData.aktif} onChange={onChange} />
+    </>
+  );
+
   if (!edit || !bisaEditContoh) {
     return (
       <div className="flex items-start gap-2 py-1.5 group">
@@ -230,13 +258,7 @@ function ItemContoh({
 
   return (
     <div className="border border-gray-200 dark:border-gray-600 rounded-md p-3 mt-1 mb-2 bg-gray-50 dark:bg-dark-bg space-y-2">
-      <TextareaField label="Contoh" name="contoh" value={data.contoh} onChange={ubah} rows={2} />
-      <TextareaField label="Makna contoh" name="makna_contoh" value={data.makna_contoh} onChange={ubah} rows={2} />
-      <div className="grid grid-cols-2 gap-2">
-        <SelectField label="Ragam" name="ragam" value={data.ragam} onChange={ubah} options={ensureOpsiMemuatNilai(opsiRagam, data.ragam)} />
-        <SelectField label="Bidang" name="bidang" value={data.bidang} onChange={ubah} options={ensureOpsiMemuatNilai(opsiBidang, data.bidang)} />
-      </div>
-      <ToggleAktif value={data.aktif} onChange={ubah} />
+      {renderContohFields(data, ubah)}
       <div className="flex gap-2 mt-2">
         <button onClick={handleSimpan} disabled={isPending} className="form-admin-btn-simpan text-xs py-1 px-3">Simpan</button>
         <button onClick={() => setEdit(false)} className="form-admin-btn-batal text-xs py-1 px-3">Batal</button>
@@ -245,21 +267,38 @@ function ItemContoh({
   );
 }
 
-function FormTambahContoh({ entriId, maknaId, simpanContoh, isPending, onBatal }) {
-  const [contoh, setContoh] = useState('');
+function FormTambahContoh({ entriId, maknaId, simpanContoh, isPending, onBatal, opsiRagam, opsiBidang }) {
+  const [data, setData] = useState({
+    contoh: '',
+    makna_contoh: '',
+    ragam: '',
+    bidang: '',
+    aktif: 1,
+  });
+
+  const ubah = (field, val) => setData((prev) => ({ ...prev, [field]: val }));
 
   const handleSimpan = () => {
-    if (!contoh.trim()) return;
-    simpanContoh.mutate({ entriId, maknaId, contoh, urutan: 1 }, {
-      onSuccess: () => { setContoh(''); onBatal(); },
+    if (!data.contoh.trim()) return;
+    simpanContoh.mutate({ entriId, maknaId, ...data, urutan: 1 }, {
+      onSuccess: () => {
+        setData({ contoh: '', makna_contoh: '', ragam: '', bidang: '', aktif: 1 });
+        onBatal();
+      },
     });
   };
 
   return (
     <div className="border border-dashed border-gray-300 dark:border-gray-600 rounded-md p-3 mt-1 mb-2 space-y-2">
-      <TextareaField label="Contoh baru" name="contoh_baru" value={contoh} onChange={(_n, v) => setContoh(v)} rows={2} />
+      <TextareaField label="Contoh" name="contoh" value={data.contoh} onChange={ubah} rows={2} />
+      <TextareaField label="Makna contoh" name="makna_contoh" value={data.makna_contoh} onChange={ubah} rows={2} />
+      <div className="grid grid-cols-2 gap-2">
+        <SelectField label="Ragam" name="ragam" value={data.ragam} onChange={ubah} options={ensureOpsiMemuatNilai(opsiRagam, data.ragam)} />
+        <SelectField label="Bidang" name="bidang" value={data.bidang} onChange={ubah} options={ensureOpsiMemuatNilai(opsiBidang, data.bidang)} />
+      </div>
+      <ToggleAktif value={data.aktif} onChange={ubah} />
       <div className="flex gap-2">
-        <button onClick={handleSimpan} disabled={isPending || !contoh.trim()} className="form-admin-btn-simpan text-xs py-1 px-3">Simpan</button>
+        <button onClick={handleSimpan} disabled={isPending || !data.contoh.trim()} className="form-admin-btn-simpan text-xs py-1 px-3">Simpan</button>
         <button onClick={onBatal} className="form-admin-btn-batal text-xs py-1 px-3">Batal</button>
       </div>
     </div>
@@ -313,6 +352,42 @@ function ItemMakna({
     hapusMakna.mutate({ entriId, maknaId: makna.id });
   };
 
+  const renderMaknaFields = (nilaiData, onChange) => (
+    <>
+      <TextareaField label="Makna" name="makna" value={nilaiData.makna} onChange={onChange} rows={2} />
+      <div className="grid grid-cols-2 gap-2">
+        <SelectField label="Kelas kata" name="kelas_kata" value={nilaiData.kelas_kata} onChange={onChange} options={ensureOpsiMemuatNilai(opsiKelasKata, nilaiData.kelas_kata)} />
+        <SelectField label="Ragam" name="ragam" value={nilaiData.ragam} onChange={onChange} options={ensureOpsiMemuatNilai(opsiRagam, nilaiData.ragam)} />
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <SelectField label="Ragam varian" name="ragam_varian" value={nilaiData.ragam_varian || ''} onChange={onChange} options={opsiRagamVarian} />
+        <SelectField
+          label="Kiasan"
+          name="kiasan"
+          value={nilaiData.kiasan ? '1' : '0'}
+          onChange={(_field, val) => onChange('kiasan', val === '1')}
+          options={[
+            { value: '0', label: 'Nonkiasan' },
+            { value: '1', label: 'Kiasan' },
+          ]}
+        />
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <SelectField label="Bidang" name="bidang" value={nilaiData.bidang} onChange={onChange} options={ensureOpsiMemuatNilai(opsiBidang, nilaiData.bidang)} />
+        <SelectField label="Bahasa" name="bahasa" value={nilaiData.bahasa} onChange={onChange} options={ensureOpsiMemuatNilai(opsiBahasa, nilaiData.bahasa)} />
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <InputField label="Ilmiah" name="ilmiah" value={nilaiData.ilmiah} onChange={onChange} />
+        <InputField label="Kimia" name="kimia" value={nilaiData.kimia} onChange={onChange} />
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <SelectField label="Penyingkatan" name="penyingkatan" value={nilaiData.penyingkatan} onChange={onChange} options={ensureOpsiMemuatNilai(opsiPenyingkatan, nilaiData.penyingkatan)} />
+        <InputField label="Polisem" name="polisem" value={nilaiData.polisem} onChange={onChange} type="number" />
+      </div>
+      <ToggleAktif value={nilaiData.aktif} onChange={onChange} />
+    </>
+  );
+
   return (
     <div className="border border-gray-200 dark:border-gray-700 rounded-lg mb-2 overflow-hidden">
       {/* Header — always visible */}
@@ -353,37 +428,7 @@ function ItemMakna({
         <div className="px-3 py-2 border-t border-gray-200 dark:border-gray-700">
           {edit && bisaEditMakna ? (
             <div className="space-y-2 mb-3">
-              <TextareaField label="Makna" name="makna" value={data.makna} onChange={ubah} rows={2} />
-              <div className="grid grid-cols-2 gap-2">
-                <SelectField label="Kelas kata" name="kelas_kata" value={data.kelas_kata} onChange={ubah} options={ensureOpsiMemuatNilai(opsiKelasKata, data.kelas_kata)} />
-                <SelectField label="Ragam" name="ragam" value={data.ragam} onChange={ubah} options={ensureOpsiMemuatNilai(opsiRagam, data.ragam)} />
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <SelectField label="Ragam varian" name="ragam_varian" value={data.ragam_varian || ''} onChange={ubah} options={opsiRagamVarian} />
-                <SelectField
-                  label="Kiasan"
-                  name="kiasan"
-                  value={data.kiasan ? '1' : '0'}
-                  onChange={(_field, val) => ubah('kiasan', val === '1')}
-                  options={[
-                    { value: '0', label: 'Nonkiasan' },
-                    { value: '1', label: 'Kiasan' },
-                  ]}
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <SelectField label="Bidang" name="bidang" value={data.bidang} onChange={ubah} options={ensureOpsiMemuatNilai(opsiBidang, data.bidang)} />
-                <SelectField label="Bahasa" name="bahasa" value={data.bahasa} onChange={ubah} options={ensureOpsiMemuatNilai(opsiBahasa, data.bahasa)} />
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <InputField label="Ilmiah" name="ilmiah" value={data.ilmiah} onChange={ubah} />
-                <InputField label="Kimia" name="kimia" value={data.kimia} onChange={ubah} />
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <SelectField label="Penyingkatan" name="penyingkatan" value={data.penyingkatan} onChange={ubah} options={ensureOpsiMemuatNilai(opsiPenyingkatan, data.penyingkatan)} />
-                <InputField label="Polisem" name="polisem" value={data.polisem} onChange={ubah} type="number" />
-              </div>
-              <ToggleAktif value={data.aktif} onChange={ubah} />
+              {renderMaknaFields(data, ubah)}
               <div className="flex gap-2">
                 <button onClick={handleSimpan} disabled={isPending} className="form-admin-btn-simpan text-xs py-1 px-3">Simpan</button>
                 <button onClick={() => setEdit(false)} className="form-admin-btn-batal text-xs py-1 px-3">Batal</button>
@@ -414,6 +459,18 @@ function ItemMakna({
               )}
             </div>
 
+            {bisaTambahContoh && tambahContoh && (
+              <FormTambahContoh
+                entriId={entriId}
+                maknaId={makna.id}
+                simpanContoh={simpanContoh}
+                isPending={isPending}
+                opsiRagam={opsiRagam}
+                opsiBidang={opsiBidang}
+                onBatal={() => setTambahContoh(false)}
+              />
+            )}
+
             {makna.contoh?.length > 0 ? (
               makna.contoh.map((c) => (
                 <ItemContoh
@@ -432,16 +489,6 @@ function ItemMakna({
               ))
             ) : (
               <p className="text-xs text-gray-400 dark:text-gray-500 italic py-1">Belum ada contoh</p>
-            )}
-
-            {bisaTambahContoh && tambahContoh && (
-              <FormTambahContoh
-                entriId={entriId}
-                maknaId={makna.id}
-                simpanContoh={simpanContoh}
-                isPending={isPending}
-                onBatal={() => setTambahContoh(false)}
-              />
             )}
           </div>
         </div>
@@ -472,19 +519,100 @@ function SeksiMakna({
   const hapusContoh = useHapusContoh();
 
   const [tambah, setTambah] = useState(false);
-  const [maknaBaruTeks, setMaknaBaruTeks] = useState('');
-  const [maknaBaruKelas, setMaknaBaruKelas] = useState('');
+  const [maknaBaru, setMaknaBaru] = useState({
+    makna: '',
+    kelas_kata: '',
+    ragam: '',
+    ragam_varian: '',
+    kiasan: false,
+    bidang: '',
+    bahasa: '',
+    ilmiah: '',
+    kimia: '',
+    penyingkatan: '',
+    polisem: '',
+    aktif: 1,
+  });
 
   const isPending = simpanMakna.isPending || hapusMakna.isPending || simpanContoh.isPending || hapusContoh.isPending;
   const daftar = resp?.data || [];
 
+  const ubahMaknaBaru = (field, value) => {
+    setMaknaBaru((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const resetMaknaBaru = () => {
+    setMaknaBaru({
+      makna: '',
+      kelas_kata: '',
+      ragam: '',
+      ragam_varian: '',
+      kiasan: false,
+      bidang: '',
+      bahasa: '',
+      ilmiah: '',
+      kimia: '',
+      penyingkatan: '',
+      polisem: '',
+      aktif: 1,
+    });
+  };
+
   const handleTambahMakna = () => {
-    if (!maknaBaruTeks.trim()) return;
+    if (!maknaBaru.makna.trim()) return;
     simpanMakna.mutate(
-      { entriId, makna: maknaBaruTeks, kelas_kata: maknaBaruKelas || null, polisem: daftar.length + 1 },
-      { onSuccess: () => { setMaknaBaruTeks(''); setMaknaBaruKelas(''); setTambah(false); } }
+      {
+        entriId,
+        ...maknaBaru,
+        kelas_kata: maknaBaru.kelas_kata || null,
+        ragam: maknaBaru.ragam || null,
+        ragam_varian: normalisasiRagamVarian(maknaBaru.ragam_varian),
+        bidang: maknaBaru.bidang || null,
+        bahasa: maknaBaru.bahasa || null,
+        ilmiah: maknaBaru.ilmiah || null,
+        kimia: maknaBaru.kimia || null,
+        penyingkatan: maknaBaru.penyingkatan || null,
+        polisem: Number(maknaBaru.polisem) || (daftar.length + 1),
+      },
+      { onSuccess: () => { resetMaknaBaru(); setTambah(false); } }
     );
   };
+
+  const renderMaknaBaruFields = () => (
+    <>
+      <TextareaField label="Makna" name="makna" value={maknaBaru.makna} onChange={ubahMaknaBaru} rows={2} />
+      <div className="grid grid-cols-2 gap-2">
+        <SelectField label="Kelas kata" name="kelas_kata" value={maknaBaru.kelas_kata} onChange={ubahMaknaBaru} options={ensureOpsiMemuatNilai(opsiKelasKata, maknaBaru.kelas_kata)} />
+        <SelectField label="Ragam" name="ragam" value={maknaBaru.ragam} onChange={ubahMaknaBaru} options={ensureOpsiMemuatNilai(opsiRagam, maknaBaru.ragam)} />
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <SelectField label="Ragam varian" name="ragam_varian" value={maknaBaru.ragam_varian || ''} onChange={ubahMaknaBaru} options={opsiRagamVarian} />
+        <SelectField
+          label="Kiasan"
+          name="kiasan"
+          value={maknaBaru.kiasan ? '1' : '0'}
+          onChange={(_field, val) => ubahMaknaBaru('kiasan', val === '1')}
+          options={[
+            { value: '0', label: 'Nonkiasan' },
+            { value: '1', label: 'Kiasan' },
+          ]}
+        />
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <SelectField label="Bidang" name="bidang" value={maknaBaru.bidang} onChange={ubahMaknaBaru} options={ensureOpsiMemuatNilai(opsiBidang, maknaBaru.bidang)} />
+        <SelectField label="Bahasa" name="bahasa" value={maknaBaru.bahasa} onChange={ubahMaknaBaru} options={ensureOpsiMemuatNilai(opsiBahasa, maknaBaru.bahasa)} />
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <InputField label="Ilmiah" name="ilmiah" value={maknaBaru.ilmiah} onChange={ubahMaknaBaru} />
+        <InputField label="Kimia" name="kimia" value={maknaBaru.kimia} onChange={ubahMaknaBaru} />
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <SelectField label="Penyingkatan" name="penyingkatan" value={maknaBaru.penyingkatan} onChange={ubahMaknaBaru} options={ensureOpsiMemuatNilai(opsiPenyingkatan, maknaBaru.penyingkatan)} />
+        <InputField label="Polisem" name="polisem" value={maknaBaru.polisem} onChange={ubahMaknaBaru} type="number" />
+      </div>
+      <ToggleAktif value={maknaBaru.aktif} onChange={ubahMaknaBaru} />
+    </>
+  );
 
   return (
     <div className="mt-6 border-t border-gray-200 dark:border-gray-700 pt-4">
@@ -500,6 +628,16 @@ function SeksiMakna({
       </div>
 
       {isLoading && <p className="text-sm text-gray-400">Memuat makna …</p>}
+
+      {bisaTambahMakna && tambah && (
+        <div className="border border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-3 space-y-2 mb-3">
+          {renderMaknaBaruFields()}
+          <div className="flex gap-2">
+            <button onClick={handleTambahMakna} disabled={isPending || !maknaBaru.makna.trim()} className="form-admin-btn-simpan text-xs py-1 px-3">Simpan</button>
+            <button onClick={() => { resetMaknaBaru(); setTambah(false); }} className="form-admin-btn-batal text-xs py-1 px-3">Batal</button>
+          </div>
+        </div>
+      )}
 
       {daftar.map((m) => (
         <ItemMakna
@@ -527,17 +665,6 @@ function SeksiMakna({
 
       {!isLoading && daftar.length === 0 && !tambah && (
         <p className="text-sm text-gray-400 dark:text-gray-500 italic">Belum ada makna.</p>
-      )}
-
-      {bisaTambahMakna && tambah && (
-        <div className="border border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-3 space-y-2">
-          <TextareaField label="Makna" name="makna_baru" value={maknaBaruTeks} onChange={(_n, v) => setMaknaBaruTeks(v)} rows={2} />
-          <SelectField label="Kelas kata" name="kelas_baru" value={maknaBaruKelas} onChange={(_n, v) => setMaknaBaruKelas(v)} options={ensureOpsiMemuatNilai(opsiKelasKata, maknaBaruKelas)} />
-          <div className="flex gap-2">
-            <button onClick={handleTambahMakna} disabled={isPending || !maknaBaruTeks.trim()} className="form-admin-btn-simpan text-xs py-1 px-3">Simpan</button>
-            <button onClick={() => setTambah(false)} className="form-admin-btn-batal text-xs py-1 px-3">Batal</button>
-          </div>
-        </div>
       )}
     </div>
   );
@@ -620,7 +747,9 @@ function KamusAdmin() {
     const kategori = respLabelKategori?.data || {};
 
     const jenis = mapOpsiLabel(kategori['bentuk-kata'] || [], { includeEmpty: false });
-    const jenisRujuk = mapOpsiLabel(kategori['jenis-rujuk'] || [], { emptyLabel: '— Tidak ada —' });
+    const jenisRujuk = filterJenisRujukOptions(
+      mapOpsiLabel(kategori['jenis-rujuk'] || [], { emptyLabel: '— Tidak ada —' })
+    );
     const kelasKata = mapOpsiLabel(kategori['kelas-kata'] || [], { emptyLabel: '— Tidak ada —' });
     const ragam = mapOpsiLabel(kategori.ragam || [], { emptyLabel: '— Tidak ada —' });
     const bidang = mapOpsiLabel(kategori.bidang || [], { emptyLabel: '— Tidak ada —' });
@@ -1123,7 +1252,7 @@ function KamusAdmin() {
             <InputField label="Pemenggalan" name="pemenggalan" value={panel.data.pemenggalan} onChange={panel.ubahField} />
           </div>
           <div className="grid grid-cols-2 gap-2">
-            <SelectField label="Jenis Rujuk" name="jenis_rujuk" value={panel.data.jenis_rujuk} onChange={panel.ubahField} options={ensureOpsiMemuatNilai(opsiKategori.jenisRujuk, panel.data.jenis_rujuk)} />
+            <SelectField label="Jenis Rujuk" name="jenis_rujuk" value={panel.data.jenis_rujuk} onChange={panel.ubahField} options={opsiKategori.jenisRujuk} />
             <div className="form-admin-group relative">
               <label htmlFor="field-entri-rujuk" className="form-admin-label">Entri Rujuk</label>
               <input
