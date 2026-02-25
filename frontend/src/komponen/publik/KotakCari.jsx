@@ -13,9 +13,92 @@ const opsiKategori = [
   { value: 'glosarium', label: 'Glosarium', placeholder: 'Cari istilah \u2026' },
   { value: 'makna', label: 'Makna', placeholder: 'Cari berdasarkan makna \u2026' },
   { value: 'rima', label: 'Rima', placeholder: 'Cari kata yang berima \u2026' },
+  { value: 'ejaan', label: 'Ejaan', placeholder: 'Cari kaidah ejaan \u2026' },
 ];
 
+const daftarAutocompleteEjaan = [
+  { value: 'Huruf Abjad', slug: 'huruf-abjad' },
+  { value: 'Huruf Vokal', slug: 'huruf-vokal' },
+  { value: 'Huruf Konsonan', slug: 'huruf-konsonan' },
+  { value: 'Gabungan Huruf Vokal', slug: 'gabungan-huruf-vokal' },
+  { value: 'Gabungan Huruf Konsonan', slug: 'gabungan-huruf-konsonan' },
+  { value: 'Huruf Kapital', slug: 'huruf-kapital' },
+  { value: 'Huruf Miring', slug: 'huruf-miring' },
+  { value: 'Huruf Tebal', slug: 'huruf-tebal' },
+  { value: 'Kata Dasar', slug: 'kata-dasar' },
+  { value: 'Kata Turunan', slug: 'kata-turunan' },
+  { value: 'Pemenggalan Kata', slug: 'pemenggalan-kata' },
+  { value: 'Kata Depan', slug: 'kata-depan' },
+  { value: 'Partikel', slug: 'partikel' },
+  { value: 'Singkatan', slug: 'singkatan' },
+  { value: 'Angka dan Bilangan', slug: 'angka-dan-bilangan' },
+  { value: 'Kata Ganti', slug: 'kata-ganti' },
+  { value: 'Kata Sandang', slug: 'kata-sandang' },
+  { value: 'Tanda Titik (.)', slug: 'tanda-titik' },
+  { value: 'Tanda Koma (,)', slug: 'tanda-koma' },
+  { value: 'Tanda Titik Koma (;)', slug: 'tanda-titik-koma' },
+  { value: 'Tanda Titik Dua (:)', slug: 'tanda-titik-dua' },
+  { value: 'Tanda Hubung (-)', slug: 'tanda-hubung' },
+  { value: 'Tanda Pisah (—)', slug: 'tanda-pisah' },
+  { value: 'Tanda Tanya (?)', slug: 'tanda-tanya' },
+  { value: 'Tanda Seru (!)', slug: 'tanda-seru' },
+  { value: 'Tanda Elipsis (...)', slug: 'tanda-elipsis' },
+  { value: 'Tanda Petik ("...")', slug: 'tanda-petik' },
+  { value: "Tanda Petik Tunggal ('...')", slug: 'tanda-petik-tunggal' },
+  { value: 'Tanda Kurung ((...))', slug: 'tanda-kurung' },
+  { value: 'Tanda Kurung Siku ([...])', slug: 'tanda-kurung-siku' },
+  { value: 'Tanda Garis Miring (/)', slug: 'tanda-garis-miring' },
+  { value: "Tanda Apostrof (')", slug: 'tanda-apostrof' },
+  { value: 'Serapan Umum', slug: 'serapan-umum' },
+  { value: 'Serapan Khusus', slug: 'serapan-khusus' },
+];
+
+const petaAutocompleteEjaan = daftarAutocompleteEjaan.reduce((acc, item) => {
+  acc[item.slug] = item.value;
+  return acc;
+}, {});
+
+function normalisasiPencarianEjaan(teks = '') {
+  return String(teks || '')
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+function cariAutocompleteEjaan(kata = '') {
+  const query = normalisasiPencarianEjaan(kata);
+  if (!query) return [];
+
+  return daftarAutocompleteEjaan
+    .filter((item) => {
+      const nilai = normalisasiPencarianEjaan(item.value);
+      return nilai.includes(query) || item.slug.includes(query);
+    })
+    .slice(0, 8);
+}
+
+function cariSlugEjaanDariKata(kata = '') {
+  const query = normalisasiPencarianEjaan(kata);
+  if (!query) return '';
+
+  const cocokPersis = daftarAutocompleteEjaan.find(
+    (item) => normalisasiPencarianEjaan(item.value) === query || item.slug === query
+  );
+
+  return cocokPersis?.slug || '';
+}
+
+function formatSlugEjaan(slug = '') {
+  return String(slug || '')
+    .split('-')
+    .filter(Boolean)
+    .map((kata) => kata.charAt(0).toUpperCase() + kata.slice(1))
+    .join(' ');
+}
+
 function deteksiKategori(pathname) {
+  if (pathname.startsWith('/ejaan')) return 'ejaan';
   if (pathname.startsWith('/makna')) return 'makna';
   if (pathname.startsWith('/rima')) return 'rima';
   if (pathname.startsWith('/tesaurus')) return 'tesaurus';
@@ -26,6 +109,11 @@ function deteksiKategori(pathname) {
 function ekstrakQuery(pathname) {
   const matchCari = pathname.match(/^\/(kamus|makna|rima|tesaurus|glosarium)\/cari\/(.+)$/);
   if (matchCari) return decodeURIComponent(matchCari[2]);
+  const matchEjaan = pathname.match(/^\/ejaan\/([^/]+)$/);
+  if (matchEjaan) {
+    const slug = decodeURIComponent(matchEjaan[1]);
+    return petaAutocompleteEjaan[slug] || formatSlugEjaan(slug);
+  }
   const matchDetail = pathname.match(/^\/kamus\/detail\/(.+)$/);
   if (matchDetail) return decodeURIComponent(matchDetail[1]);
   const matchGlosariumDetail = pathname.match(/^\/glosarium\/detail\/(.+)$/);
@@ -55,12 +143,22 @@ function SorotTeks({ teks, query, italic = false }) {
 }
 
 function navigasiCari(navigate, kategori, kata) {
+  if (kategori === 'ejaan') {
+    const slug = cariSlugEjaanDariKata(kata);
+    navigate(slug ? `/ejaan/${encodeURIComponent(slug)}` : '/ejaan');
+    return;
+  }
   navigate(`/${kategori}/cari/${encodeURIComponent(kata)}`);
 }
 
-function navigasiSaranSpesifik(navigate, kategori, kata) {
+function navigasiSaranSpesifik(navigate, kategori, kata, slug = '') {
   if (kategori === 'kamus') {
     navigate(buatPathDetailKamus(kata));
+    return;
+  }
+  if (kategori === 'ejaan') {
+    const slugTarget = String(slug || '').trim() || cariSlugEjaanDariKata(kata);
+    navigate(slugTarget ? `/ejaan/${encodeURIComponent(slugTarget)}` : '/ejaan');
     return;
   }
   navigasiCari(navigate, kategori, kata);
@@ -125,7 +223,9 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
     const idPermintaan = ++permintaanTerakhirRef.current;
 
     try {
-      const hasil = await autocomplete(kat, kata);
+      const hasil = kat === 'ejaan'
+        ? cariAutocompleteEjaan(kata)
+        : await autocomplete(kat, kata);
       if (!isMountedRef.current || idPermintaan !== permintaanTerakhirRef.current) return;
       setSaran(hasil);
       setTampilSaran(hasil.length > 0);
@@ -159,7 +259,7 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
     setSaran([]);
     setTampilSaran(false);
     setIndeksAktif(-1);
-    navigasiSaranSpesifik(navigate, kategori, nilaiPilihan);
+    navigasiSaranSpesifik(navigate, kategori, nilaiPilihan, item.slug);
   };
 
   const handleCari = (e) => {
@@ -252,7 +352,7 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
           <ul className="kotak-cari-saran" role="listbox" onMouseLeave={() => setIndeksAktif(-1)}>
             {saran.map((item, idx) => (
               <li
-                key={item.value}
+                key={item.slug || item.value}
                 role="option"
                 aria-selected={idx === indeksAktif}
                 className={`kotak-cari-saran-item${idx === indeksAktif ? ' kotak-cari-saran-item-aktif' : ''}`}

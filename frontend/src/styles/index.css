@@ -299,17 +299,17 @@ code {
   /* Ejaan: konten markdown */
 
   .changelog-content.ejaan-markdown-content table {
-    @apply my-4 w-full text-sm border-separate border-spacing-0 border border-gray-200 rounded-lg overflow-hidden;
+    @apply my-4 w-full text-sm border-separate border-spacing-0 border border-gray-300 rounded-lg overflow-hidden;
     display: table;
     table-layout: fixed;
   }
 
   .changelog-content.ejaan-markdown-content thead th {
-    @apply bg-gray-100 text-gray-800 font-semibold px-3 py-2 text-center border-b border-gray-200;
+    @apply bg-gray-100 text-gray-800 font-semibold px-3 py-2 text-center border-b border-gray-300;
   }
 
   .changelog-content.ejaan-markdown-content tbody td {
-    @apply px-3 py-2 align-top text-center text-gray-700 border-b border-gray-200;
+    @apply px-3 py-2 align-top text-center text-gray-700 border-b border-gray-300;
   }
 
   .changelog-content.ejaan-markdown-content th,
@@ -320,7 +320,7 @@ code {
 
   .changelog-content.ejaan-markdown-content th + th,
   .changelog-content.ejaan-markdown-content td + td {
-    @apply border-l border-gray-200;
+    @apply border-l border-gray-300;
   }
 
   .changelog-content.ejaan-markdown-content tbody tr:nth-child(even) {
@@ -360,6 +360,14 @@ code {
   .changelog-content.ejaan-markdown-content blockquote p,
   .changelog-content.ejaan-markdown-content blockquote li {
     @apply font-semibold leading-relaxed text-[17px];
+  }
+
+  .changelog-content.ejaan-markdown-content blockquote:not(:first-of-type) {
+    @apply border-t border-gray-300 pt-3 mt-3;
+  }
+
+  .dark .changelog-content.ejaan-markdown-content blockquote:not(:first-of-type) {
+    @apply border-dark-border;
   }
 
   .changelog-content.ejaan-markdown-content ul {

@@ -54,12 +54,15 @@ describe('KotakCari', () => {
   });
 
   it('helper deteksi/ekstrak/navigasi bekerja sesuai input', () => {
+    expect(deteksiKategori('/ejaan/huruf-kapital')).toBe('ejaan');
     expect(deteksiKategori('/makna/cari/air')).toBe('makna');
     expect(deteksiKategori('/rima/cari/air')).toBe('rima');
     expect(deteksiKategori('/tesaurus/cari/kata')).toBe('tesaurus');
     expect(deteksiKategori('/glosarium/cari/kata')).toBe('glosarium');
     expect(deteksiKategori('/kamus')).toBe('kamus');
 
+    expect(ekstrakQuery('/ejaan/huruf-kapital')).toBe('Huruf Kapital');
+    expect(ekstrakQuery('/ejaan/aturan-baru')).toBe('Aturan Baru');
     expect(ekstrakQuery('/kamus/cari/anak%20ibu')).toBe('anak ibu');
     expect(ekstrakQuery('/kamus/detail/anak%20ibu')).toBe('anak ibu');
     expect(ekstrakQuery('/glosarium/detail/zero%20sum')).toBe('zero sum');
@@ -76,6 +79,25 @@ describe('KotakCari', () => {
     navigate.mockReset();
     navigasiSaranSpesifik(navigate, 'tesaurus', 'anak ibu');
     expect(navigate).toHaveBeenCalledWith('/tesaurus/cari/anak%20ibu');
+
+    navigate.mockReset();
+    navigasiCari(navigate, 'ejaan', 'Huruf Kapital');
+    expect(navigate).toHaveBeenCalledWith('/ejaan/huruf-kapital');
+
+    navigate.mockReset();
+    navigasiCari(navigate, 'ejaan', 'entri tidak ada');
+    expect(navigate).toHaveBeenCalledWith('/ejaan');
+
+    navigate.mockReset();
+    navigasiSaranSpesifik(navigate, 'ejaan', 'Huruf Kapital', 'huruf-kapital');
+    expect(navigate).toHaveBeenCalledWith('/ejaan/huruf-kapital');
+  });
+
+  it('menampilkan pilihan kategori Ejaan setelah Rima', () => {
+    render(<KotakCari autoFocus={false} />);
+
+    const options = Array.from(screen.getByRole('combobox').querySelectorAll('option')).map((opt) => opt.textContent);
+    expect(options).toEqual(['Kamus', 'Tesaurus', 'Glosarium', 'Makna', 'Rima', 'Ejaan']);
   });
 
   it('SorotTeks menangani query kosong dan query tidak ditemukan', () => {
@@ -413,5 +435,35 @@ describe('KotakCari', () => {
 
     fireEvent.mouseDown(option);
     expect(mockNavigate).toHaveBeenCalledWith('/glosarium/cari/zero%20sum%20game');
+  });
+
+  it('mode ejaan memakai autocomplete lokal daftar isi dan navigasi ke halaman ejaan', async () => {
+    render(<KotakCari autoFocus={false} />);
+
+    fireEvent.change(screen.getByDisplayValue('Kamus'), { target: { value: 'ejaan' } });
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'huruf kap' } });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(300);
+    });
+    await act(async () => {});
+
+    expect(autocomplete).not.toHaveBeenCalled();
+
+    const option = within(screen.getByRole('listbox')).getByRole('option');
+    expect(option).toHaveTextContent('Huruf Kapital');
+
+    fireEvent.mouseDown(option);
+    expect(mockNavigate).toHaveBeenCalledWith('/ejaan/huruf-kapital');
+  });
+
+  it('submit ejaan dengan kata bebas mengarah ke halaman ejaan paling relevan', () => {
+    render(<KotakCari autoFocus={false} />);
+
+    fireEvent.change(screen.getByDisplayValue('Kamus'), { target: { value: 'ejaan' } });
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'apostrof tunggal' } });
+    fireEvent.submit(screen.getByRole('button', { name: 'Cari' }).closest('form'));
+
+    expect(mockNavigate).toHaveBeenCalledWith('/ejaan');
   });
 });
