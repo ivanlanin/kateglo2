@@ -5,7 +5,7 @@
 import { act, useEffect } from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { AuthProvider, useAuth } from '../../src/context/authContext';
+import { AuthProvider, useAuth, useAuthOptional } from '../../src/context/authContext';
 
 const mockAmbilProfilSaya = vi.fn();
 const mockMulaiLoginGoogle = vi.fn();
@@ -53,6 +53,11 @@ function ErrorProbe() {
   return <div>should not render</div>;
 }
 
+function OptionalProbe() {
+  const auth = useAuthOptional();
+  return <div data-testid="optional-auth">{auth ? 'ada' : 'kosong'}</div>;
+}
+
 function DeferredProfileHarness({ resolveNow }) {
   const { setAuthToken } = useAuth();
 
@@ -81,6 +86,21 @@ describe('context/authContext', () => {
 
   it('melempar error jika useAuth dipakai di luar provider', () => {
     expect(() => render(<ErrorProbe />)).toThrow('useAuth harus digunakan di dalam AuthProvider');
+  });
+
+  it('useAuthOptional aman dipakai di luar provider', () => {
+    render(<OptionalProbe />);
+    expect(screen.getByTestId('optional-auth')).toHaveTextContent('kosong');
+  });
+
+  it('useAuthOptional mengembalikan context saat di dalam provider', () => {
+    render(
+      <AuthProvider>
+        <OptionalProbe />
+      </AuthProvider>
+    );
+
+    expect(screen.getByTestId('optional-auth')).toHaveTextContent('ada');
   });
 
   it('inisialisasi tanpa token menyetel state tidak autentikasi', () => {

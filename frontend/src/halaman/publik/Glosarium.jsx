@@ -53,7 +53,7 @@ export function resolveKategoriNama(param, list, nameKeys, codeKeys) {
   return nama || fallback;
 }
 
-function resolveKategoriItem(param, list, nameKeys, codeKeys) {
+export function resolveKategoriItem(param, list, nameKeys, codeKeys) {
   const safeParam = param ?? '';
   const safeNameKeys = Array.isArray(nameKeys) ? nameKeys : [];
   const safeCodeKeys = Array.isArray(codeKeys) ? codeKeys : [];

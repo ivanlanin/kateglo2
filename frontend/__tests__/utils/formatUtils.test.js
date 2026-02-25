@@ -7,6 +7,7 @@ import {
   formatNamaBidang,
   parseEntriGlosarium,
   parseUtcDate,
+  tokenizeKurung,
   renderEntriGlosariumTertaut,
 } from '../../src/utils/formatUtils';
 
@@ -80,6 +81,7 @@ describe('formatUtils.test.js', () => {
   });
 
   it('formatNamaBidang memformat title case dan mempertahankan kata "dan" kecil', () => {
+    expect(formatNamaBidang()).toBe('');
     expect(formatNamaBidang('ilmu komputer dan informatika')).toBe('Ilmu Komputer dan Informatika');
     expect(formatNamaBidang('DAN TEKNOLOGI')).toBe('Dan Teknologi');
     expect(formatNamaBidang('   ')).toBe('');
@@ -132,5 +134,28 @@ describe('formatUtils.test.js', () => {
     expect(container).toHaveTextContent('(verb)');
     expect(screen.queryByRole('link', { name: '(a law)' })).not.toBeInTheDocument();
     expect(screen.queryByRole('link', { name: '(verb)' })).not.toBeInTheDocument();
+  });
+
+  it('tokenizeKurung mengembalikan array kosong untuk input kosong/default', () => {
+    expect(tokenizeKurung()).toEqual([]);
+    expect(tokenizeKurung('')).toEqual([]);
+  });
+
+  it('renderEntriGlosariumTertaut mengembalikan string saat renderer bukan fungsi', () => {
+    const nodes = renderEntriGlosariumTertaut('alpha; beta', null);
+    expect(nodes).toEqual(['alpha', '; ', 'beta']);
+  });
+
+  it('renderEntriGlosariumTertaut mengembalikan array kosong saat input kosong', () => {
+    expect(renderEntriGlosariumTertaut('')).toEqual([]);
+  });
+
+  it('renderEntriGlosariumTertaut mempertahankan spasi leading/trailing saat menautkan', () => {
+    const nodes = renderEntriGlosariumTertaut('alpha(beta) gamma', (part, info) => createElement('a', { href: `/glosarium/detail/${part}`, key: `${part}-${info.partIndex}-${info.tokenIndex}` }, part));
+    const { container } = render(createElement(Fragment, null, ...nodes));
+
+    expect(screen.getByRole('link', { name: 'alpha' })).toHaveAttribute('href', '/glosarium/detail/alpha');
+    expect(screen.getByRole('link', { name: 'gamma' })).toHaveAttribute('href', '/glosarium/detail/gamma');
+    expect(container).toHaveTextContent('alpha(beta) gamma');
   });
 });

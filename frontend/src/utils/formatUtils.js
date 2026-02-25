@@ -155,6 +155,7 @@ export {
   pisahNomorHomonim,
   formatLemaHomonim,
   formatNamaBidang,
+  tokenizeKurung,
   parseEntriGlosarium,
   renderEntriGlosariumTertaut,
 };

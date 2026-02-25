@@ -190,6 +190,7 @@ module.exports = {
     normalisasiSlug,
     normalisasiKategoriPath,
     tentukanSlugLabel,
+    encodePathSegment,
     ambilPathStatis,
     buildPathKamusKategori,
     ambilPathKamusKategori,

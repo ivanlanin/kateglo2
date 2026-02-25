@@ -552,6 +552,53 @@ describe('KamusDetail', () => {
     });
   });
 
+  it('glosarium tanpa indonesia tidak menampilkan pemisah titik dua setelah asing', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-detail') {
+        if (options?.queryFn) options.queryFn();
+        return {
+          isLoading: false,
+          isError: false,
+          isFetching: false,
+          data: {
+            entri: 'kata',
+            makna: [{ id: 1, makna: 'arti' }],
+            subentri: {},
+            tesaurus: { sinonim: [], antonim: [] },
+            glosarium: [{ indonesia: '', asing: 'alpha term' }],
+            glosarium_page: {
+              total: 1,
+              hasPrev: false,
+              hasNext: false,
+              prevCursor: null,
+              nextCursor: null,
+            },
+          },
+        };
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+          refetch: vi.fn(),
+        };
+      }
+
+      return {
+        isLoading: false,
+        isError: false,
+        data: {},
+      };
+    });
+
+    const { container } = render(<KamusDetail />);
+
+    expect(screen.getByRole('link', { name: 'alpha term' })).toHaveAttribute('href', '/glosarium/detail/alpha%20term');
+    expect(container.textContent).not.toContain('alpha term:');
+  });
+
   it('glosarium menampilkan overlay hanya saat navigasi aktif dan tombol tetap simbol', async () => {
     let isFetchingState = false;
 

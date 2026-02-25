@@ -118,6 +118,21 @@ function AlirEntri({ items, tautAsing = false, tampilkanEdit = false }) {
   );
 }
 
+function pilihLabelAlir(item, prioritizeIndonesia = false) {
+  const indonesia = String(item?.indonesia || '').trim();
+  const asing = String(item?.asing || '').trim();
+
+  if (prioritizeIndonesia) {
+    if (indonesia) return indonesia;
+    if (asing) return asing;
+    return '';
+  }
+
+  if (asing) return asing;
+  if (indonesia) return indonesia;
+  return '';
+}
+
 function sortAlirEntriItems(items = [], { prioritizeIndonesia = false, sortByBidang = true } = {}) {
   return [...items].sort((a, b) => {
     const bidangA = (a.bidang || '').trim();
@@ -131,12 +146,8 @@ function sortAlirEntriItems(items = [], { prioritizeIndonesia = false, sortByBid
       if (bidangCompare !== 0) return bidangCompare;
     }
 
-    const labelA = prioritizeIndonesia
-      ? (a.indonesia || a.asing || '').trim()
-      : (a.asing || a.indonesia || '').trim();
-    const labelB = prioritizeIndonesia
-      ? (b.indonesia || b.asing || '').trim()
-      : (b.asing || b.indonesia || '').trim();
+    const labelA = pilihLabelAlir(a, prioritizeIndonesia);
+    const labelB = pilihLabelAlir(b, prioritizeIndonesia);
     return labelA.localeCompare(labelB, 'id', { sensitivity: 'base' });
   });
 }
@@ -304,6 +315,7 @@ function GlosariumDetail() {
 export const __private = {
   AlirEntri,
   getBidangSebelumnya,
+  pilihLabelAlir,
   sortAlirEntriItems,
 };
 

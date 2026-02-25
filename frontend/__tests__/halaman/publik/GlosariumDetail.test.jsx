@@ -7,6 +7,7 @@ import { ambilDetailGlosarium } from '../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
 let mockParams = { asing: 'zero%20sum' };
+let mockAuth = { adalahAdmin: false };
 let queryState = {
   data: undefined,
   isLoading: false,
@@ -28,11 +29,16 @@ vi.mock('react-router-dom', () => ({
   useParams: () => mockParams,
 }));
 
+vi.mock('../../../src/context/authContext', () => ({
+  useAuthOptional: () => mockAuth,
+}));
+
 describe('GlosariumDetail', () => {
   beforeEach(() => {
     mockUseQuery.mockReset();
     ambilDetailGlosarium.mockClear();
     mockParams = { asing: 'zero%20sum' };
+    mockAuth = { adalahAdmin: false };
     queryState = {
       data: undefined,
       isLoading: false,
@@ -103,6 +109,37 @@ describe('GlosariumDetail', () => {
       { id: 40, bidang: '', asing: '', indonesia: 'alfa' },
     ]);
     expect(sortedLabelCampuran.map((item) => item.id)).toEqual([40, 41]);
+
+    const sortedPrioritasIndonesia = __private.sortAlirEntriItems([
+      { id: 51, bidang: 'Kimia', asing: 'zeta', indonesia: 'beta' },
+      { id: 50, bidang: 'Kimia', asing: 'alfa', indonesia: 'alfa' },
+    ], { prioritizeIndonesia: true, sortByBidang: true });
+    expect(sortedPrioritasIndonesia.map((item) => item.id)).toEqual([50, 51]);
+
+    const sortedFallbackIndonesia = __private.sortAlirEntriItems([
+      { id: 60, bidang: 'Kimia', asing: 'zeta', indonesia: '' },
+      { id: 61, bidang: 'Kimia', asing: 'alfa', indonesia: '' },
+      { id: 62, bidang: 'Kimia', asing: '', indonesia: '' },
+    ], { prioritizeIndonesia: true, sortByBidang: true });
+    expect(sortedFallbackIndonesia.map((item) => item.id)).toEqual([62, 61, 60]);
+
+    const sortedFallbackLabelB = __private.sortAlirEntriItems([
+      { id: 71, bidang: 'Kimia', asing: 'beta', indonesia: 'beta' },
+      { id: 70, bidang: 'Kimia', asing: '', indonesia: '' },
+    ], { prioritizeIndonesia: true, sortByBidang: true });
+    expect(sortedFallbackLabelB.map((item) => item.id)).toEqual([70, 71]);
+
+    const sortedDenganBAsing = __private.sortAlirEntriItems([
+      { id: 80, bidang: 'Kimia', asing: 'delta', indonesia: 'delta' },
+      { id: 81, bidang: 'Kimia', asing: 'alpha', indonesia: '' },
+    ], { prioritizeIndonesia: true, sortByBidang: true });
+    expect(sortedDenganBAsing.map((item) => item.id)).toEqual([81, 80]);
+
+    const sortedDenganBAsingReversed = __private.sortAlirEntriItems([
+      { id: 82, bidang: 'Kimia', asing: 'alpha', indonesia: '' },
+      { id: 83, bidang: 'Kimia', asing: 'delta', indonesia: 'delta' },
+    ], { prioritizeIndonesia: true, sortByBidang: true });
+    expect(sortedDenganBAsingReversed.map((item) => item.id)).toEqual([82, 83]);
   });
 
   it('helper AlirEntri menampilkan badge bidang hanya saat bidang berubah', () => {
@@ -118,6 +155,37 @@ describe('GlosariumDetail', () => {
     );
 
     expect(screen.getAllByRole('link', { name: 'Kimia' })).toHaveLength(1);
+  });
+
+  it('helper AlirEntri menampilkan tombol edit saat mode asing dan indonesia lengkap', () => {
+    const AlirEntri = __private.AlirEntri;
+    render(
+      <AlirEntri
+        tautAsing
+        tampilkanEdit
+        items={[
+          { id: 51, bidang: 'Kimia', bidang_kode: 'kim', asing: 'acid', indonesia: 'asam' },
+        ]}
+      />
+    );
+
+    const editLinks = screen.getAllByRole('link').filter((el) => el.getAttribute('href') === '/redaksi/glosarium/51');
+    expect(editLinks).toHaveLength(1);
+  });
+
+  it('helper AlirEntri menampilkan tombol edit saat mode indonesia dan id tersedia', () => {
+    const AlirEntri = __private.AlirEntri;
+    render(
+      <AlirEntri
+        tampilkanEdit
+        items={[
+          { id: 61, bidang: 'Kimia', bidang_kode: 'kim', indonesia: 'garam' },
+        ]}
+      />
+    );
+
+    const editLinks = screen.getAllByRole('link').filter((el) => el.getAttribute('href') === '/redaksi/glosarium/61');
+    expect(editLinks).toHaveLength(1);
   });
 
   it('helper getBidangSebelumnya menormalisasi bidang sebelumnya', () => {
@@ -153,7 +221,18 @@ describe('GlosariumDetail', () => {
     expect(sorted.map((item) => item.id)).toEqual([2, 3, 1]);
   });
 
+  it('helper pilihLabelAlir memilih label sesuai prioritas indonesia/asing', () => {
+    expect(__private.pilihLabelAlir({ indonesia: 'ind', asing: 'asg' }, true)).toBe('ind');
+    expect(__private.pilihLabelAlir({ indonesia: '', asing: 'asg' }, true)).toBe('asg');
+    expect(__private.pilihLabelAlir({ indonesia: '', asing: '' }, true)).toBe('');
+
+    expect(__private.pilihLabelAlir({ indonesia: 'ind', asing: 'asg' }, false)).toBe('asg');
+    expect(__private.pilihLabelAlir({ indonesia: 'ind', asing: '' }, false)).toBe('ind');
+    expect(__private.pilihLabelAlir({ indonesia: '', asing: '' }, false)).toBe('');
+  });
+
   it('menampilkan seksi persis/memuat/mirip, tautan, dan navigasi cursor', () => {
+    mockAuth = { adalahAdmin: true };
     queryState = {
       isLoading: false,
       isFetching: false,

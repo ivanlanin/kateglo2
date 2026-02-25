@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Glosarium, { resolveKategoriNama } from '../../../src/halaman/publik/Glosarium';
+import Glosarium, { resolveKategoriNama, resolveKategoriItem } from '../../../src/halaman/publik/Glosarium';
 import {
   cariGlosarium,
   ambilGlosariumPerBidang,
@@ -11,6 +11,7 @@ import {
 
 const mockUseQuery = vi.fn();
 let mockParams = {};
+let mockAuth = { adalahAdmin: false };
 
 vi.mock('../../../src/api/apiPublik', () => ({
   cariGlosarium: vi.fn().mockResolvedValue({ data: [], total: 0 }),
@@ -29,6 +30,10 @@ vi.mock('@tanstack/react-query', () => ({
   useQuery: (...args) => mockUseQuery(...args),
 }));
 
+vi.mock('../../../src/context/authContext', () => ({
+  useAuthOptional: () => mockAuth,
+}));
+
 vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
   default: ({ onNavigateCursor }) => (
     <div>
@@ -45,6 +50,7 @@ describe('Glosarium', () => {
     mockUseQuery.mockReset();
     mockUseQuery.mockReturnValue({ data: undefined, isLoading: false, isError: false });
     mockParams = {};
+    mockAuth = { adalahAdmin: false };
     cariGlosarium.mockClear();
     ambilGlosariumPerBidang.mockClear();
     ambilGlosariumPerSumber.mockClear();
@@ -266,6 +272,57 @@ describe('Glosarium', () => {
     expect(screen.getByRole('link', { name: 'WHO' })).toHaveAttribute('href', '/glosarium/sumber/WHO');
   });
 
+  it('menampilkan tautan edit redaksi saat admin dan data entri lengkap', () => {
+    mockParams = { kata: 'istilah' };
+    mockAuth = { adalahAdmin: true };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const key = options?.queryKey?.[0];
+      if (key === 'glosarium-bidang') return { data: [], isLoading: false, isError: false };
+      if (key === 'glosarium-sumber') return { data: [], isLoading: false, isError: false };
+      return {
+        data: {
+          data: [{ id: 99, indonesia: 'istilah', asing: 'term' }],
+          total: 1,
+          pageInfo: { hasPrev: false, hasNext: false },
+        },
+        isLoading: false,
+        isError: false,
+      };
+    });
+
+    render(<Glosarium />);
+
+    const editLinks = screen.getAllByRole('link').filter((el) => el.getAttribute('href') === '/redaksi/glosarium/99');
+    expect(editLinks).toHaveLength(1);
+  });
+
+  it('hasil kata tanpa indonesia tidak menampilkan pemisah titik dua', () => {
+    mockParams = { kata: 'istilah' };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const key = options?.queryKey?.[0];
+      if (key === 'glosarium-bidang') return { data: [], isLoading: false, isError: false };
+      if (key === 'glosarium-sumber') return { data: [], isLoading: false, isError: false };
+      return {
+        data: {
+          data: [{ id: 100, indonesia: '', asing: 'alpha term' }],
+          total: 1,
+          pageInfo: { hasPrev: false, hasNext: false },
+        },
+        isLoading: false,
+        isError: false,
+      };
+    });
+
+    const { container } = render(<Glosarium />);
+
+    expect(screen.getByRole('link', { name: 'alpha term' })).toHaveAttribute('href', '/glosarium/detail/alpha%20term');
+    expect(container.textContent).not.toContain('alpha term:');
+  });
+
   it('menampilkan state kosong, loading, dan error', () => {
     mockParams = { kata: 'kosong' };
     mockUseQuery
@@ -383,6 +440,16 @@ describe('Glosarium', () => {
     expect(resolveKategoriNama('abc', [{ kode: 'def', nama: 'Nama' }], ['nama'], ['kode'])).toBe('abc');
     expect(resolveKategoriNama('kim', [{ kode: 'kim', nama: '' }], ['nama', 'bidang'], ['kode'])).toBe('kim');
     expect(resolveKategoriNama('kim', [{ kode: 'kim', nama: 'Kimia' }], ['nama'], ['kode'])).toBe('Kimia');
+  });
+
+  it('helper resolveKategoriItem menutup cabang validasi list/keys dan fallback null', () => {
+    expect(resolveKategoriItem('', [], ['nama'], ['kode'])).toBeNull();
+    expect(resolveKategoriItem('kimia', null, ['nama'], ['kode'])).toBeNull();
+    expect(resolveKategoriItem('kimia', [], ['nama'], ['kode'])).toBeNull();
+
+    const list = [{ kode: 'kim', nama: 'Kimia' }, { kode: 'bio', nama: 'Biologi' }];
+    expect(resolveKategoriItem('kimia', list, ['nama'], ['kode'])).toEqual({ kode: 'kim', nama: 'Kimia' });
+    expect(resolveKategoriItem('kimia', list, null, null)).toBeNull();
   });
 
   it('browse tetap merender link saat label bidang kosong total', () => {
