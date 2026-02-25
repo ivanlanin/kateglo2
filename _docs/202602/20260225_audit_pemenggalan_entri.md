@@ -30,6 +30,25 @@ HAVING COUNT(*) FILTER (WHERE pemenggalan IS NULL OR BTRIM(pemenggalan) = '') > 
 ORDER BY tanpa_pemenggalan DESC, jenis ASC;
 ```
 
+## Cakupan Jenis Entri (`distinct(entri.jenis)`)
+Hasil pengecekan terbaru menunjukkan terdapat **13** jenis entri:
+
+| jenis | total_entri |
+|---|---:|
+| dasar | 39659 |
+| gabungan | 23536 |
+| idiom | 272 |
+| infiks | 6 |
+| klitik | 5 |
+| konfiks | 6 |
+| peribahasa | 2033 |
+| prakategorial | 1669 |
+| prefiks | 11 |
+| sufiks | 14 |
+| terikat | 103 |
+| turunan | 24607 |
+| varian | 91 |
+
 ## Hasil Rekap Awal (Sebelum Perubahan)
 | jenis | tanpa_pemenggalan | total_entri | persen_tanpa_pemenggalan |
 |---|---:|---:|---:|
@@ -78,7 +97,7 @@ WHERE (pemenggalan IS NULL OR BTRIM(pemenggalan) = '')
   - `si- (2)` -> `si-`
 
 ## Rekap Setelah Perubahan
-Sisa entri tanpa `pemenggalan` untuk jenis yang dibahas:
+Sisa entri tanpa `pemenggalan` (berdasarkan seluruh `distinct(entri.jenis)`):
 
 | jenis | tanpa_pemenggalan |
 |---|---:|
@@ -86,7 +105,15 @@ Sisa entri tanpa `pemenggalan` untuk jenis yang dibahas:
 | idiom | 272 |
 | peribahasa | 2033 |
 
-`dasar`, `terikat`, dan `varian` sudah tidak memiliki data kosong `pemenggalan`.
+Jenis berikut sudah tidak memiliki data kosong `pemenggalan` (0 baris):
+`dasar`, `infiks`, `klitik`, `konfiks`, `prakategorial`, `prefiks`, `sufiks`, `terikat`, `turunan`, `varian`.
+
+## Validasi Tambahan
+- Distribusi `aktif` untuk entri yang masih kosong `pemenggalan`:
+  - `gabungan`: `aktif = 1` (23536)
+  - `idiom`: `aktif = 1` (272)
+  - `peribahasa`: `aktif = 1` (2033)
+- Tidak ditemukan entri `aktif = 0` pada kelompok yang masih kosong.
 
 ## Tindak Lanjut
 1. Dokumentasi kebijakan di level backend/frontend validation agar konsisten:
