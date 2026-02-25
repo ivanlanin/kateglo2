@@ -151,6 +151,28 @@ function Ejaan() {
 
   const modeDaftarIsi = !slug;
 
+  const metaSeo = useMemo(() => {
+    if (modeDaftarIsi) {
+      return {
+        judul: 'Ejaan Bahasa Indonesia',
+        judulNoda: 'Ejaan',
+        deskripsi: 'Panduan kaidah ejaan bahasa Indonesia mencakup penggunaan huruf, penulisan kata, tanda baca, dan unsur serapan.',
+      };
+    }
+
+    if (!metadataAktif) {
+      return {
+        judul: 'Ejaan Bahasa Indonesia',
+        deskripsi: 'Panduan kaidah ejaan bahasa Indonesia untuk penulisan yang tepat dan konsisten.',
+      };
+    }
+
+    return {
+      judul: `${metadataAktif.judul} — Ejaan Bahasa Indonesia`,
+      deskripsi: `Kaidah ${metadataAktif.judul} pada bab ${metadataAktif.judulBab} dalam pedoman ejaan bahasa Indonesia di Kateglo.`,
+    };
+  }, [modeDaftarIsi, metadataAktif]);
+
   useEffect(() => {
     if (slug && !metadataAktif) {
       navigate('/ejaan', { replace: true });
@@ -204,8 +226,9 @@ function Ejaan() {
   if (modeDaftarIsi) {
     return (
       <HalamanDasar
-        judul="Ejaan"
-        deskripsi="Daftar isi kaidah ejaan bahasa Indonesia."
+        judul={metaSeo.judul}
+        judulNoda={metaSeo.judulNoda}
+        deskripsi={metaSeo.deskripsi}
       >
         <DaftarIsiEjaanGrid />
         <p className="secondary-text mt-4">
@@ -234,8 +257,8 @@ function Ejaan() {
 
   return (
     <HalamanDasar
-      judul={metadataAktif?.judul || 'Ejaan'}
-      deskripsi="Kaidah ejaan bahasa Indonesia berbasis dokumen markdown."
+      judul={metaSeo.judul}
+      deskripsi={metaSeo.deskripsi}
       tampilkanJudul={false}
     >
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

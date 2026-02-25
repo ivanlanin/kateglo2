@@ -2,8 +2,14 @@
  * @fileoverview Layanan SEO publik untuk robots.txt dan sitemap.xml
  */
 
+const fs = require('node:fs');
+const path = require('node:path');
+
 const ModelLabel = require('../models/modelLabel');
 const ModelGlosarium = require('../models/modelGlosarium');
+
+const rootDir = path.resolve(__dirname, '..', '..');
+const ejaanDocsDir = path.join(rootDir, 'frontend', 'public', 'ejaan');
 
 const KATEGORI_SLUG_NAMA = new Set(['kelas_kata', 'kelas-kata', 'kelas', 'ragam', 'bahasa', 'bidang']);
 
@@ -119,8 +125,25 @@ function ambilPathStatis() {
     '/glosarium',
     '/makna',
     '/rima',
+    '/ejaan',
     '/kebijakan-privasi',
   ];
+}
+
+function ambilPathEjaan() {
+  if (!fs.existsSync(ejaanDocsDir)) return [];
+
+  const entries = fs.readdirSync(ejaanDocsDir, { recursive: true, withFileTypes: true });
+  const detailPaths = entries
+    .filter((entry) => entry.isFile() && entry.name.toLowerCase().endsWith('.md'))
+    .map((entry) => {
+      const basename = path.basename(entry.name, '.md').trim();
+      if (!basename) return '';
+      return `/ejaan/${encodePathSegment(basename)}`;
+    })
+    .filter(Boolean);
+
+  return [...new Set(detailPaths)];
 }
 
 function buildPathKamusKategori(kategori, label = {}) {
@@ -173,10 +196,13 @@ async function generateSitemapPaths() {
     ambilPathGlosariumKategori(),
   ]);
 
+  const ejaanPaths = ambilPathEjaan();
+
   return [
     ...ambilPathStatis(),
     ...kamusKategori,
     ...glosariumKategori,
+    ...ejaanPaths,
   ];
 }
 
@@ -195,6 +221,7 @@ module.exports = {
     buildPathKamusKategori,
     ambilPathKamusKategori,
     ambilPathGlosariumKategori,
+    ambilPathEjaan,
     escapeXml,
   },
 };

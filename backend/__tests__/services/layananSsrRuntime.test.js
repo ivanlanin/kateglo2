@@ -150,6 +150,23 @@ describe('services/layananSsrRuntime', () => {
     expect(runtime.__private.isBypassPath('/health')).toBe(true);
     expect(runtime.__private.isBypassPath()).toBe(false);
     expect(runtime.__private.isBypassPath('/kamus')).toBe(false);
+
+    expect(runtime.__private.isEjaanPagePath('/ejaan')).toBe(true);
+    expect(runtime.__private.isEjaanPagePath('/ejaan/')).toBe(true);
+    expect(runtime.__private.isEjaanPagePath('/ejaan/huruf-kapital')).toBe(true);
+    expect(runtime.__private.isEjaanPagePath('/ejaan/penggunaan-huruf/huruf-kapital')).toBe(false);
+
+    const previousTtl = process.env.CACHE_TTL_SECONDS;
+    delete process.env.CACHE_TTL_SECONDS;
+    expect(runtime.__private.resolvePageCacheControl('/kamus')).toBe('');
+    expect(runtime.__private.resolvePageCacheControl('/ejaan')).toBe('public, max-age=1800');
+    process.env.CACHE_TTL_SECONDS = '3600';
+    expect(runtime.__private.resolvePageCacheControl('/ejaan/huruf-kapital')).toBe('public, max-age=3600');
+    if (previousTtl === undefined) {
+      delete process.env.CACHE_TTL_SECONDS;
+    } else {
+      process.env.CACHE_TTL_SECONDS = previousTtl;
+    }
   });
 
   it('helper strip/inject meta dan inject root app', () => {
@@ -373,6 +390,24 @@ describe('services/layananSsrRuntime', () => {
     expect(response.text).toContain('<main>kamus-detail</main>');
     expect(response.text).toContain('<title>SSR kamus-detail</title>');
     expect(response.text).not.toContain('TemplateOG');
+  });
+
+  it('pasangFrontendRuntime menambahkan header cache untuk halaman ejaan', async () => {
+    const renderFn = jest.fn(async () => ({
+      appHtml: '<main>ejaan</main>',
+      headTags: '<title>SSR ejaan</title><meta name="description" content="ejaan" />',
+    }));
+    const app = createApp(jest.fn(async () => renderFn), jest.fn(async () => null));
+
+    const indeks = await request(app).get('/ejaan');
+    const detail = await request(app).get('/ejaan/huruf-kapital');
+    const nonEjaan = await request(app).get('/kamus');
+
+    expect(indeks.status).toBe(200);
+    expect(detail.status).toBe(200);
+    expect(indeks.headers['cache-control']).toBeDefined();
+    expect(detail.headers['cache-control']).toBeDefined();
+    expect(nonEjaan.headers['cache-control']).toBeUndefined();
   });
 
   it('pasangFrontendRuntime fallback ke template saat render error', async () => {

@@ -35,6 +35,18 @@ function isBypassPath(requestPath = '') {
     || requestPath.startsWith('/health');
 }
 
+function isEjaanPagePath(requestPath = '') {
+  return /^\/ejaan(?:\/[^/]+)?\/?$/.test(String(requestPath || '').trim());
+}
+
+function resolvePageCacheControl(requestPath = '') {
+  if (!isEjaanPagePath(requestPath)) return '';
+
+  const parsed = Number.parseInt(process.env.CACHE_TTL_SECONDS, 10);
+  const ttl = Number.isFinite(parsed) && parsed > 0 ? parsed : 1800;
+  return `public, max-age=${ttl}`;
+}
+
 function stripReplaceableMeta(html) {
   const patterns = [
     /<title>[^<]*<\/title>/gi,
@@ -216,9 +228,12 @@ function pasangFrontendRuntime(app, options = {}) {
         return next();
       }
 
+      const cacheControl = resolvePageCacheControl(req.path);
+
       const htmlTemplate = fs.readFileSync(frontendTemplatePath, 'utf8');
 
       if (!punyaSsrBundle()) {
+        if (cacheControl) res.set('Cache-Control', cacheControl);
         return res.type('html').send(htmlTemplate);
       }
 
@@ -230,11 +245,14 @@ function pasangFrontendRuntime(app, options = {}) {
 
       const withHead = injectHeadTags(htmlTemplate, headTags);
       const finalHtml = injectAppHtml(withHead, appHtml);
+      if (cacheControl) res.set('Cache-Control', cacheControl);
       return res.type('html').send(finalHtml);
     } catch (error) {
       logger.warn(`SSR runtime fallback ke template statis: ${error.message}`);
       try {
         const htmlTemplate = fs.readFileSync(frontendTemplatePath, 'utf8');
+        const cacheControl = resolvePageCacheControl(req.path);
+        if (cacheControl) res.set('Cache-Control', cacheControl);
         return res.type('html').send(htmlTemplate);
       } catch (templateError) {
         return next(templateError);
@@ -250,6 +268,8 @@ module.exports = {
     punyaSsrBundle,
     isAssetRequest,
     isBypassPath,
+    isEjaanPagePath,
+    resolvePageCacheControl,
     stripReplaceableMeta,
     injectHeadTags,
     injectAppHtml,

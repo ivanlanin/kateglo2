@@ -131,6 +131,8 @@ describe('layananSeoPublik.generateSitemapPaths', () => {
     expect(paths).toContain('/tesaurus');
     expect(paths).toContain('/makna');
     expect(paths).toContain('/rima');
+    expect(paths).toContain('/ejaan');
+    expect(paths).toContain('/ejaan/huruf-kapital');
     expect(paths).toContain('/kamus/kelas/nomina');
     expect(paths).toContain('/kamus/bidang/teknologi-informasi');
     expect(paths).toContain('/kamus/abjad/a');
