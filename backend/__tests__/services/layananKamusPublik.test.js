@@ -251,6 +251,39 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     expect(result.glosarium).toEqual([{ indonesia: 'zat aktif', asing: 'active substance' }]);
   });
 
+  it('memasukkan bentuk tidak baku ke subentri saat tersedia', async () => {
+    ModelEntri.ambilEntriPerIndeks.mockResolvedValue([
+      {
+        id: 61,
+        entri: 'aktif',
+        indeks: 'aktif',
+        homonim: null,
+        urutan: 1,
+        jenis: 'dasar',
+        pemenggalan: null,
+        lafal: null,
+        varian: null,
+        jenis_rujuk: null,
+        entri_rujuk: null,
+      },
+    ]);
+    ModelEntri.ambilMakna.mockResolvedValue([]);
+    ModelEntri.ambilContoh.mockResolvedValue([]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilBentukTidakBakuByRujukId.mockResolvedValue([
+      { id: 62, entri: 'aktip', indeks: 'aktif', jenis: 'bentuk_tidak_baku' },
+    ]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
+    ModelTesaurus.ambilDetail.mockResolvedValue(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+
+    const result = await ambilDetailKamus('aktif');
+
+    expect(result.entri[0].subentri.bentuk_tidak_baku).toEqual([
+      { id: 62, entri: 'aktip', indeks: 'aktif', jenis: 'bentuk_tidak_baku' },
+    ]);
+  });
+
   it('mengembalikan page info glosarium dari mode cursor object', async () => {
     ModelEntri.ambilEntriPerIndeks.mockResolvedValue([
       {

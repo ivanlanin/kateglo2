@@ -151,17 +151,24 @@ describe('services/layananSsrRuntime', () => {
     expect(runtime.__private.isBypassPath()).toBe(false);
     expect(runtime.__private.isBypassPath('/kamus')).toBe(false);
 
+    expect(runtime.__private.isEjaanPagePath()).toBe(false);
     expect(runtime.__private.isEjaanPagePath('/ejaan')).toBe(true);
     expect(runtime.__private.isEjaanPagePath('/ejaan/')).toBe(true);
     expect(runtime.__private.isEjaanPagePath('/ejaan/huruf-kapital')).toBe(true);
+    expect(runtime.__private.isEjaanPagePath('  /ejaan/huruf-kecil  ')).toBe(true);
     expect(runtime.__private.isEjaanPagePath('/ejaan/penggunaan-huruf/huruf-kapital')).toBe(false);
 
     const previousTtl = process.env.CACHE_TTL_SECONDS;
     delete process.env.CACHE_TTL_SECONDS;
+    expect(runtime.__private.resolvePageCacheControl()).toBe('');
     expect(runtime.__private.resolvePageCacheControl('/kamus')).toBe('');
     expect(runtime.__private.resolvePageCacheControl('/ejaan')).toBe('public, max-age=1800');
     process.env.CACHE_TTL_SECONDS = '3600';
     expect(runtime.__private.resolvePageCacheControl('/ejaan/huruf-kapital')).toBe('public, max-age=3600');
+    process.env.CACHE_TTL_SECONDS = '0';
+    expect(runtime.__private.resolvePageCacheControl('/ejaan/huruf-kapital')).toBe('public, max-age=1800');
+    process.env.CACHE_TTL_SECONDS = 'tidak-valid';
+    expect(runtime.__private.resolvePageCacheControl('/ejaan/huruf-kapital')).toBe('public, max-age=1800');
     if (previousTtl === undefined) {
       delete process.env.CACHE_TTL_SECONDS;
     } else {
@@ -358,6 +365,20 @@ describe('services/layananSsrRuntime', () => {
     existsSpy.mockRestore();
   });
 
+  it('pasangFrontendRuntime fallback template statis tanpa SSR menambahkan cache untuk halaman ejaan', async () => {
+    const existsSpy = jest.spyOn(fs, 'existsSync').mockImplementation((target) => {
+      if (target === serverEntryPath) return false;
+      return true;
+    });
+
+    const app = createApp(jest.fn(), jest.fn());
+    const response = await request(app).get('/ejaan/huruf-kapital');
+
+    expect(response.status).toBe(200);
+    expect(response.headers['cache-control']).toBeDefined();
+    existsSpy.mockRestore();
+  });
+
   it('pasangFrontendRuntime dengan default loader/prefetch saat bundle ada', async () => {
     const realExistsSync = fs.existsSync.bind(fs);
     const existsSpy = jest.spyOn(fs, 'existsSync').mockImplementation((target) => {
@@ -421,6 +442,19 @@ describe('services/layananSsrRuntime', () => {
     expect(response.status).toBe(200);
     expect(response.text).toContain('TemplateTitle');
     expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining('SSR runtime fallback ke template statis: render gagal'));
+  });
+
+  it('pasangFrontendRuntime fallback karena render error tetap menambahkan cache untuk halaman ejaan', async () => {
+    const loader = jest.fn(async () => {
+      throw new Error('render gagal ejaan');
+    });
+    const app = createApp(loader, jest.fn(async () => null));
+
+    const response = await request(app).get('/ejaan/huruf-kapital');
+
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('TemplateTitle');
+    expect(response.headers['cache-control']).toBeDefined();
   });
 
   it('pasangFrontendRuntime meneruskan error jika fallback template juga gagal', async () => {

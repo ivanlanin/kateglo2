@@ -878,6 +878,16 @@ describe('ModelEntri', () => {
     expect(result).toEqual(rows);
   });
 
+  it('ambilBentukTidakBakuByRujukId mengembalikan rows', async () => {
+    const rows = [{ id: 7, entri: 'gak', jenis_rujuk: '→' }];
+    db.query.mockResolvedValue({ rows });
+
+    const result = await ModelEntri.ambilBentukTidakBakuByRujukId(11);
+
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('WHERE entri_rujuk = $1'), [11]);
+    expect(result).toEqual(rows);
+  });
+
   it('saranEntri mengembalikan kosong untuk input kosong/falsy', async () => {
     expect(await ModelEntri.saranEntri('')).toEqual([]);
     expect(await ModelEntri.saranEntri('   ')).toEqual([]);
@@ -1408,6 +1418,59 @@ describe('ModelEntri', () => {
       ['berakar', 'turunan', 5, null, null, null, null, null, 1, 'berakar', null, null, null]
     );
     expect(result).toEqual({ id: 23, entri: 'berakar' });
+  });
+
+  it('simpan melempar 400 saat id sama dengan entri_rujuk', async () => {
+    await expect(ModelEntri.simpan({
+      id: 31,
+      entri: 'kata',
+      jenis: 'dasar',
+      entri_rujuk: 31,
+      jenis_rujuk: '→',
+    })).rejects.toMatchObject({
+      message: 'Entri rujuk tidak boleh sama dengan entri ini',
+      status: 400,
+    });
+
+    expect(db.query).not.toHaveBeenCalled();
+  });
+
+  it('simpan melempar 400 saat entri_rujuk tidak ditemukan', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    await expect(ModelEntri.simpan({
+      id: 32,
+      entri: 'kata',
+      jenis: 'dasar',
+      entri_rujuk: 999,
+      jenis_rujuk: '→',
+    })).rejects.toMatchObject({
+      message: 'Entri rujuk tidak ditemukan',
+      status: 400,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('WHERE id = $1'), [999]);
+  });
+
+  it('simpan menerima entri_rujuk valid dan meneruskan ke query', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ id: 8, entri: 'kata rujuk', jenis: 'dasar' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 33, entri: 'kata baru', entri_rujuk_id: 8 }] });
+
+    const result = await ModelEntri.simpan({
+      entri: 'kata baru',
+      jenis: 'dasar',
+      jenis_rujuk: '→',
+      entri_rujuk: 8,
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('WHERE id = $1'), [8]);
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('INSERT INTO entri'),
+      ['kata baru', 'dasar', null, null, null, null, '→', 8, 1, 'kata baru', null, null, null]
+    );
+    expect(result).toEqual({ id: 33, entri: 'kata baru', entri_rujuk_id: 8 });
   });
 
   it('simpan parsing homonim/homograf null-string kosong saat non-numeric', async () => {

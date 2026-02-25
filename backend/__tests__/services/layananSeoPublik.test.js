@@ -3,6 +3,8 @@
  * @tested_in backend/services/layananSeoPublik.js
  */
 
+const fs = require('node:fs');
+
 jest.mock('../../models/modelLabel', () => ({
   ambilSemuaKategori: jest.fn(),
 }));
@@ -226,5 +228,30 @@ describe('layananSeoPublik private helpers', () => {
     const paths = await __private.ambilPathGlosariumKategori();
 
     expect(paths).toEqual([]);
+  });
+
+  it('ambilPathEjaan mengembalikan array kosong saat folder ejaan tidak ada', () => {
+    const existsSpy = jest.spyOn(fs, 'existsSync').mockReturnValue(false);
+
+    const paths = __private.ambilPathEjaan();
+
+    expect(paths).toEqual([]);
+    existsSpy.mockRestore();
+  });
+
+  it('ambilPathEjaan mengabaikan file markdown dengan basename kosong', () => {
+    const existsSpy = jest.spyOn(fs, 'existsSync').mockReturnValue(true);
+    const readdirSpy = jest.spyOn(fs, 'readdirSync').mockReturnValue([
+      {
+        isFile: () => true,
+        name: '.md',
+      },
+    ]);
+
+    const paths = __private.ambilPathEjaan();
+
+    expect(paths).toEqual([]);
+    readdirSpy.mockRestore();
+    existsSpy.mockRestore();
   });
 });

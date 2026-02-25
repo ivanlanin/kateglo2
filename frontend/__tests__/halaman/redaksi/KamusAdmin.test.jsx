@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { act } from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import KamusAdmin from '../../../src/halaman/redaksi/KamusAdmin';
 import { __private } from '../../../src/halaman/redaksi/KamusAdmin';
@@ -91,6 +91,7 @@ describe('KamusAdmin', () => {
   });
 
   beforeEach(() => {
+    vi.useFakeTimers();
     vi.clearAllMocks();
     mockParams = {};
     mockNavigate.mockImplementation((path) => {
@@ -190,6 +191,11 @@ describe('KamusAdmin', () => {
         },
       },
     });
+  });
+
+  afterEach(() => {
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
   });
 
   it('validasi simpan lema dan alur simpan/hapus lema', () => {
@@ -393,6 +399,37 @@ describe('KamusAdmin', () => {
     expect(Array.from(jenisRujukSelect.querySelectorAll('option')).some((opt) => opt.value === '')).toBe(true);
   });
 
+  it('opsi jenis rujuk menghapus nilai invalid dan duplikat case-insensitive', () => {
+    mockUseKategoriLabelRedaksi.mockReturnValueOnce({
+      data: {
+        data: {
+          'bentuk-kata': [{ kode: 'dasar', nama: 'Dasar' }],
+          'jenis-rujuk': [
+            { kode: '', nama: '' },
+            { kode: 'lihat', nama: 'lihat' },
+            { kode: 'LIHAT', nama: 'LIHAT' },
+            { kode: 'abc', nama: 'abc' },
+            { kode: '→', nama: '→' },
+          ],
+          penyingkatan: [{ kode: 'singkatan', nama: 'Singkatan' }],
+        },
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    const filterJenisRujuk = screen.getByLabelText('Filter jenis rujuk');
+    const opsi = Array.from(filterJenisRujuk.querySelectorAll('option')).map((opt) => opt.value);
+
+    expect(opsi.filter((value) => value.toLowerCase() === 'lihat')).toHaveLength(1);
+    expect(opsi.includes('abc')).toBe(false);
+    expect(opsi.includes('→')).toBe(true);
+  });
+
   it('mengubah semua filter lanjutan tetap aman', () => {
     render(
       <MemoryRouter>
@@ -531,7 +568,6 @@ describe('KamusAdmin', () => {
   });
 
   it('menjalankan onSuccess simpan mode sunting dan onSuccess hapus lema', () => {
-    vi.useFakeTimers();
     mutateSimpanKamus.mockImplementation((_data, opts) => opts.onSuccess?.({}));
     mutateHapusKamus.mockImplementation((_id, opts) => opts.onSuccess?.());
 
@@ -549,7 +585,6 @@ describe('KamusAdmin', () => {
     act(() => {
       vi.advanceTimersByTime(700);
     });
-    vi.useRealTimers();
   });
 
   it('mengeksekusi early-return handler lokal makna/contoh secara eksplisit', () => {
@@ -799,6 +834,49 @@ describe('KamusAdmin', () => {
     expect(screen.queryByText('+ Tambah')).not.toBeInTheDocument();
   });
 
+  it('menampilkan fallback rujukan dash saat jenis rujuk ada tanpa target', () => {
+    mockUseDaftarKamusAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        total: 1,
+        data: [
+          { id: 17, entri: 'uji-rujuk', jenis: 'dasar', aktif: 1, jenis_rujuk: 'lihat', entri_rujuk: '', lema_rujuk: '' },
+        ],
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('→ —')).toBeInTheDocument();
+  });
+
+  it('tambah makna mendukung nilai kiasan true dari dropdown', () => {
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('dasar'));
+    fireEvent.click(screen.getByText('+ Tambah makna'));
+
+    fireEvent.change(screen.getAllByLabelText('Makna')[0], { target: { value: 'makna kiasan baru' } });
+    fireEvent.change(screen.getAllByLabelText('Kiasan').at(-1), { target: { value: '1' } });
+
+    const tombolSimpan = screen.getAllByRole('button', { name: 'Simpan' }).find((btn) => btn.className.includes('text-xs'));
+    fireEvent.click(tombolSimpan);
+
+    expect(mutateSimpanMakna).toHaveBeenLastCalledWith(
+      expect.objectContaining({ kiasan: true }),
+      expect.any(Object)
+    );
+  });
+
   it('memakai fallback daftar saran induk kosong saat respons belum ada', () => {
     mockUseAutocompleteIndukKamus.mockReturnValue({ data: undefined, isLoading: false });
 
@@ -812,6 +890,57 @@ describe('KamusAdmin', () => {
     fireEvent.focus(screen.getByLabelText('Induk'));
     fireEvent.change(screen.getByLabelText('Induk'), { target: { value: 'akar' } });
     expect(screen.getByText('Tidak ada hasil.')).toBeInTheDocument();
+  });
+
+  it('menampilkan loading/empty pada saran rujuk, memilih rujuk, lalu reset saat input diubah', () => {
+    mockUseAutocompleteIndukKamus.mockImplementation(({ q }) => {
+      if (q === 'rujuk-load') return { data: { data: [] }, isLoading: true };
+      if (q === 'rujuk-empty') return { data: { data: [] }, isLoading: false };
+      if (q === 'rujuk') {
+        return {
+          data: { data: [{ id: 88, entri: 'ananda', jenis: 'dasar', indeks: 'ananda' }] },
+          isLoading: false,
+        };
+      }
+      return { data: { data: [] }, isLoading: false };
+    });
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    const inputRujuk = screen.getByLabelText('Entri Rujuk');
+
+    fireEvent.focus(inputRujuk);
+    fireEvent.change(inputRujuk, { target: { value: 'rujuk-load' } });
+    expect(screen.getByText('Mencari entri…')).toBeInTheDocument();
+
+    fireEvent.change(inputRujuk, { target: { value: 'rujuk-empty' } });
+    expect(screen.getByText('Tidak ada hasil.')).toBeInTheDocument();
+
+    fireEvent.blur(inputRujuk);
+    act(() => {
+      vi.advanceTimersByTime(130);
+    });
+    expect(screen.queryByText('Tidak ada hasil.')).not.toBeInTheDocument();
+
+    fireEvent.focus(inputRujuk);
+
+    fireEvent.change(inputRujuk, { target: { value: 'rujuk' } });
+    fireEvent.mouseDown(screen.getByText('ananda'));
+    fireEvent.click(screen.getByText('ananda'));
+    expect(screen.getByDisplayValue('ananda')).toBeInTheDocument();
+
+    fireEvent.change(inputRujuk, { target: { value: 'ananda-baru' } });
+    fireEvent.change(inputRujuk, { target: { value: '' } });
+    fireEvent.change(screen.getByLabelText('Entri*'), { target: { value: 'entri baru' } });
+    fireEvent.click(screen.getByText('Simpan'));
+
+    const payload = mutateSimpanKamus.mock.calls.at(-1)[0];
+    expect(payload.entri_rujuk).toBeNull();
   });
 
   it('klik tambah saat mode detail route menavigasi kembali ke daftar', () => {

@@ -498,6 +498,112 @@ describe('KamusDetail', () => {
     });
   });
 
+  it('menampilkan teks rujukan bentuk tidak baku dan menyortir subentri bentuk_tidak_baku', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-detail') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: {
+            entri: [
+              {
+                id: 99,
+                entri: 'aktip',
+                jenis_rujuk: '→',
+                entri_rujuk: 'aktif',
+                entri_rujuk_indeks: 'aktif',
+                makna: [],
+                subentri: {
+                  bentuk_tidak_baku: [
+                    { id: 2, entri: 'zeta', indeks: 'zeta' },
+                    { id: 1, entri: 'alpha', indeks: 'alpha' },
+                  ],
+                },
+              },
+            ],
+            tesaurus: { sinonim: [], antonim: [] },
+            glosarium: [],
+          },
+        };
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+          refetch: vi.fn(),
+        };
+      }
+
+      return {
+        isLoading: false,
+        isError: false,
+        data: {},
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByText('Bentuk tidak baku dari')).toBeInTheDocument();
+    const links = screen.getAllByRole('link');
+    const alphaIndex = links.findIndex((link) => link.textContent === 'alpha');
+    const zetaIndex = links.findIndex((link) => link.textContent === 'zeta');
+    expect(alphaIndex).toBeGreaterThanOrEqual(0);
+    expect(zetaIndex).toBeGreaterThanOrEqual(0);
+    expect(alphaIndex).toBeLessThan(zetaIndex);
+  });
+
+  it('sorting bentuk_tidak_baku tetap aman saat sebagian entri kosong', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-detail') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: {
+            entri: [
+              {
+                id: 199,
+                entri: 'aktip',
+                makna: [],
+                subentri: {
+                  bentuk_tidak_baku: [
+                    { id: 21, entri: 'zeta', indeks: 'zeta' },
+                    { id: 20, entri: '', indeks: '' },
+                    { id: 22, entri: 'alpha', indeks: 'alpha' },
+                  ],
+                },
+              },
+            ],
+            tesaurus: { sinonim: [], antonim: [] },
+            glosarium: [],
+          },
+        };
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+          refetch: vi.fn(),
+        };
+      }
+
+      return {
+        isLoading: false,
+        isError: false,
+        data: {},
+      };
+    });
+
+    render(<KamusDetail />);
+
+    const links = screen.getAllByRole('link');
+    expect(links.some((link) => link.textContent === 'alpha')).toBe(true);
+    expect(links.some((link) => link.textContent === 'zeta')).toBe(true);
+  });
+
   it('glosarium menerima bentuk object.data serta klik prev/next no-op saat cursor kosong', async () => {
     mockUseQuery.mockImplementation((options) => {
       if (options?.queryKey?.[0] === 'kamus-detail') {

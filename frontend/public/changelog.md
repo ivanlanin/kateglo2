@@ -10,6 +10,7 @@
 - Memberi tanda warna berbeda untuk filter aktif di redaksi
 - Membuat `entri.entri_rujuk` untuk mengganti `lema_rujuk` agar rujukan lebih konsisten
 - Menghapus `entri.jenis_rujuk` "kp" dan membedakan tampilan "→" dan "lihat"
+- Menambahkan subentri bentuk tidak baku di detail kamus
 - Menambahkan menu ejaan dari EYD V melalui [gipsterya/eyd](https://github.com/gipsterya/eyd)
 
 ## 2026-02-24 Selasa

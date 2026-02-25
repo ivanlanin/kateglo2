@@ -80,5 +80,9 @@ beforeEach(() => {
   window.location.search = '';
   window.location.hash = '';
 
-  global.fetch.mockReset();
+  if (!global.fetch || typeof global.fetch.mockReset !== 'function') {
+    global.fetch = vi.fn();
+  } else {
+    global.fetch.mockReset();
+  }
 });

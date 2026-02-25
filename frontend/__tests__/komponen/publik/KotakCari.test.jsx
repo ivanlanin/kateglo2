@@ -91,6 +91,18 @@ describe('KotakCari', () => {
     navigate.mockReset();
     navigasiSaranSpesifik(navigate, 'ejaan', 'Huruf Kapital', 'huruf-kapital');
     expect(navigate).toHaveBeenCalledWith('/ejaan/huruf-kapital');
+
+    navigate.mockReset();
+    navigasiSaranSpesifik(navigate, 'ejaan', null, '   ');
+    expect(navigate).toHaveBeenCalledWith('/ejaan');
+
+    navigate.mockReset();
+    navigasiSaranSpesifik(navigate, 'ejaan', '  ', '  huruf-kapital  ');
+    expect(navigate).toHaveBeenCalledWith('/ejaan/huruf-kapital');
+
+    navigate.mockReset();
+    navigasiSaranSpesifik(navigate, 'ejaan', 'Huruf Kapital', '');
+    expect(navigate).toHaveBeenCalledWith('/ejaan/huruf-kapital');
   });
 
   it('menampilkan pilihan kategori Ejaan setelah Rima', () => {
@@ -455,6 +467,21 @@ describe('KotakCari', () => {
 
     fireEvent.mouseDown(option);
     expect(mockNavigate).toHaveBeenCalledWith('/ejaan/huruf-kapital');
+  });
+
+  it('mode ejaan dengan query yang ternormalisasi kosong tidak menampilkan saran', async () => {
+    render(<KotakCari autoFocus={false} />);
+
+    fireEvent.change(screen.getByDisplayValue('Kamus'), { target: { value: 'ejaan' } });
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: '\u0301' } });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(300);
+    });
+    await act(async () => {});
+
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    expect(autocomplete).not.toHaveBeenCalled();
   });
 
   it('submit ejaan dengan kata bebas mengarah ke halaman ejaan paling relevan', () => {
