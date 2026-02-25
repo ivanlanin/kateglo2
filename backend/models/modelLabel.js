@@ -184,8 +184,9 @@ class ModelLabel {
     const limitIdx = queryParams.length;
 
     const dataResult = await db.query(
-      `SELECT l.id, l.entri, l.indeks, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk
+      `SELECT l.id, l.entri, l.indeks, l.jenis, l.jenis_rujuk, r.entri AS entri_rujuk
        FROM entri l
+       LEFT JOIN entri r ON r.id = l.entri_rujuk
        WHERE ${whereSql}
        ${cursorClause}
        ORDER BY l.entri ${orderDesc ? 'DESC' : 'ASC'}, l.id ${orderDesc ? 'DESC' : 'ASC'}
@@ -324,8 +325,9 @@ class ModelLabel {
         const total = parseCount(countResult.rows[0]?.total);
 
         const dataResult = await db.query(
-          `SELECT l.id, l.entri, l.indeks, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk
+          `SELECT l.id, l.entri, l.indeks, l.jenis, l.jenis_rujuk, r.entri AS entri_rujuk
            FROM entri l
+           LEFT JOIN entri r ON r.id = l.entri_rujuk
            WHERE l.aktif = 1
              AND EXISTS (
                SELECT 1
@@ -359,8 +361,9 @@ class ModelLabel {
         const total = parseCount(countResult.rows[0]?.total);
 
         const dataResult = await db.query(
-          `SELECT l.id, l.entri, l.indeks, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk
+          `SELECT l.id, l.entri, l.indeks, l.jenis, l.jenis_rujuk, r.entri AS entri_rujuk
            FROM entri l
+           LEFT JOIN entri r ON r.id = l.entri_rujuk
            WHERE l.aktif = 1
              AND EXISTS (
                SELECT 1
@@ -446,8 +449,9 @@ class ModelLabel {
     const total = parseCount(countResult.rows[0]?.total);
 
     const dataResult = await db.query(
-      `SELECT l.id, l.entri, l.indeks, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk
+      `SELECT l.id, l.entri, l.indeks, l.jenis, l.jenis_rujuk, r.entri AS entri_rujuk
        FROM entri l
+       LEFT JOIN entri r ON r.id = l.entri_rujuk
        WHERE l.aktif = 1
          AND EXISTS (
            SELECT 1
@@ -707,8 +711,9 @@ class ModelLabel {
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-      `SELECT l.id, l.entri, l.indeks, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk
+      `SELECT l.id, l.entri, l.indeks, l.jenis, l.jenis_rujuk, r.entri AS entri_rujuk
        FROM entri l
+       LEFT JOIN entri r ON r.id = l.entri_rujuk
        WHERE l.aktif = 1 AND ${SQL_ABJAD} = $1
        ORDER BY l.entri
        LIMIT $2 OFFSET $3`,
@@ -737,8 +742,9 @@ class ModelLabel {
     const total = parseInt(countResult.rows[0].total, 10);
 
     const dataResult = await db.query(
-      `SELECT l.id, l.entri, l.indeks, l.jenis, l.jenis_rujuk, l.lema_rujuk AS entri_rujuk
+      `SELECT l.id, l.entri, l.indeks, l.jenis, l.jenis_rujuk, r.entri AS entri_rujuk
        FROM entri l
+       LEFT JOIN entri r ON r.id = l.entri_rujuk
        WHERE l.aktif = 1 AND l.jenis = $1
        ORDER BY l.entri
        LIMIT $2 OFFSET $3`,

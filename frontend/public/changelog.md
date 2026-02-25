@@ -8,6 +8,7 @@
 - Menambahkan `sitemap.xml` dan `robots.txt` untuk SEO
 - Menambahkan keterangan sumber glosarium
 - Memberi tanda warna berbeda untuk filter aktif di redaksi
+- Membuat `entri.entri_rujuk` untuk mengganti `lema_rujuk` agar rujukan lebih konsisten
 
 ## 2026-02-24 Selasa
 

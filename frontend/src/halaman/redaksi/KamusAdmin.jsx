@@ -45,6 +45,8 @@ const nilaiAwalEntri = {
   varian: '',
   sumber: '',
   jenis_rujuk: '',
+  lema_rujuk: '',
+  entri_rujuk_id: '',
   entri_rujuk: '',
   aktif: 1,
 };
@@ -162,7 +164,7 @@ const kolom = [
           {item.entri}
         </Link>
         {item.jenis_rujuk && (
-          <span className="text-xs text-gray-400 dark:text-gray-500 ml-2">→ {item.entri_rujuk}</span>
+          <span className="text-xs text-gray-400 dark:text-gray-500 ml-2">→ {item.entri_rujuk || item.lema_rujuk || '—'}</span>
         )}
       </span>
     ),
@@ -604,6 +606,14 @@ function KamusAdmin() {
     excludeId: panel.data.id || null,
   });
   const daftarSaranInduk = respSaranInduk?.data || [];
+  const [inputRujuk, setInputRujuk] = useState('');
+  const [tampilSaranRujuk, setTampilSaranRujuk] = useState(false);
+  const queryRujuk = useMemo(() => String(inputRujuk || '').trim(), [inputRujuk]);
+  const { data: respSaranRujuk, isLoading: isSaranRujukLoading } = useAutocompleteIndukKamus({
+    q: queryRujuk,
+    excludeId: panel.data.id || null,
+  });
+  const daftarSaranRujuk = respSaranRujuk?.data || [];
   const { data: respLabelKategori } = useKategoriLabelRedaksi(kategoriLabelRedaksi);
 
   const opsiKategori = useMemo(() => {
@@ -787,6 +797,8 @@ function KamusAdmin() {
     if (!panel.buka) {
       setInputInduk('');
       setTampilSaranInduk(false);
+      setInputRujuk('');
+      setTampilSaranRujuk(false);
       return;
     }
     if (panel.data.induk_entri) {
@@ -797,6 +809,20 @@ function KamusAdmin() {
       setInputInduk('');
     }
   }, [panel.buka, panel.data.induk, panel.data.induk_entri]);
+
+  useEffect(() => {
+    if (!panel.buka) {
+      setInputRujuk('');
+      return;
+    }
+    if (panel.data.entri_rujuk) {
+      setInputRujuk(panel.data.entri_rujuk);
+      return;
+    }
+    if (!panel.data.entri_rujuk_id) {
+      setInputRujuk('');
+    }
+  }, [panel.buka, panel.data.entri_rujuk, panel.data.entri_rujuk_id]);
 
   const pilihInduk = (item) => {
     panel.ubahField('induk', item.id);
@@ -814,6 +840,25 @@ function KamusAdmin() {
     if (!trimmed || (indukEntriAktif && trimmed !== indukEntriAktif)) {
       panel.ubahField('induk', '');
       panel.ubahField('induk_entri', '');
+    }
+  };
+
+  const pilihRujuk = (item) => {
+    panel.ubahField('entri_rujuk_id', item.id);
+    panel.ubahField('entri_rujuk', item.entri);
+    setInputRujuk(item.entri);
+    setTampilSaranRujuk(false);
+  };
+
+  const handleUbahInputRujuk = (value) => {
+    setInputRujuk(value);
+    setTampilSaranRujuk(true);
+    const trimmed = String(value).trim();
+    const entriRujukAktif = panel.data.entri_rujuk || '';
+
+    if (!trimmed || (entriRujukAktif && trimmed !== entriRujukAktif)) {
+      panel.ubahField('entri_rujuk_id', '');
+      panel.ubahField('entri_rujuk', '');
     }
   };
 
@@ -850,8 +895,10 @@ function KamusAdmin() {
     const payload = {
       ...panel.data,
       induk: panel.data.induk || null,
+      entri_rujuk: panel.data.entri_rujuk_id || null,
     };
     delete payload.induk_entri;
+    delete payload.entri_rujuk_id;
 
     simpan.mutate(payload, {
       onSuccess: (r) => {
@@ -1077,8 +1124,43 @@ function KamusAdmin() {
           </div>
           <div className="grid grid-cols-2 gap-2">
             <SelectField label="Jenis Rujuk" name="jenis_rujuk" value={panel.data.jenis_rujuk} onChange={panel.ubahField} options={ensureOpsiMemuatNilai(opsiKategori.jenisRujuk, panel.data.jenis_rujuk)} />
-            <InputField label="Entri Rujuk" name="entri_rujuk" value={panel.data.entri_rujuk} onChange={panel.ubahField} />
+            <div className="form-admin-group relative">
+              <label htmlFor="field-entri-rujuk" className="form-admin-label">Entri Rujuk</label>
+              <input
+                id="field-entri-rujuk"
+                type="text"
+                value={inputRujuk}
+                onChange={(event) => handleUbahInputRujuk(event.target.value)}
+                onFocus={() => setTampilSaranRujuk(true)}
+                onBlur={() => setTimeout(() => setTampilSaranRujuk(false), 120)}
+                placeholder="Cari entri rujukan…"
+                className="form-admin-input"
+              />
+              {tampilSaranRujuk && queryRujuk && (
+                <div className="absolute left-0 right-0 top-full z-20 mt-1 max-h-52 overflow-auto rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-dark-bg-elevated">
+                  {isSaranRujukLoading && (
+                    <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">Mencari entri…</div>
+                  )}
+                  {!isSaranRujukLoading && daftarSaranRujuk.length === 0 && (
+                    <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">Tidak ada hasil.</div>
+                  )}
+                  {!isSaranRujukLoading && daftarSaranRujuk.map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onMouseDown={(event) => event.preventDefault()}
+                      onClick={() => pilihRujuk(item)}
+                      className="block w-full px-3 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-800"
+                    >
+                      <div className="text-sm text-gray-800 dark:text-gray-200">{item.entri}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">{item.jenis} • {item.indeks}</div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
+          <InputField label="Lema Rujuk (legacy)" name="lema_rujuk" value={panel.data.lema_rujuk} onChange={panel.ubahField} disabled />
           <InputField label="Sumber" name="sumber" value={panel.data.sumber} onChange={panel.ubahField} />
           <ToggleAktif value={panel.data.aktif} onChange={panel.ubahField} />
           <FormFooter

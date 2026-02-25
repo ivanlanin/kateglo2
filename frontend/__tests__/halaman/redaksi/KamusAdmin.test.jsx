@@ -466,7 +466,7 @@ describe('KamusAdmin', () => {
   });
 
   it('menangani loading makna serta cabang validasi internal', () => {
-    mockUseDaftarMakna.mockReturnValueOnce({ isLoading: true, data: undefined });
+    mockUseDaftarMakna.mockReturnValue({ isLoading: true, data: undefined });
     mutateSimpanKamus.mockImplementation((_data, opts) => opts.onError?.({ response: { data: { message: 'Pesan gagal' } } }));
 
     render(
@@ -492,7 +492,7 @@ describe('KamusAdmin', () => {
   });
 
   it('menampilkan ragam varian pada ringkasan dan menangani toggle kiasan saat edit makna', () => {
-    mockUseDaftarMakna.mockReturnValueOnce({
+    mockUseDaftarMakna.mockReturnValue({
       isLoading: false,
       data: {
         data: [

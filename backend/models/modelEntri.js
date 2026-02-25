@@ -112,7 +112,8 @@ class ModelEntri {
     // Gunakan UNION untuk menggabungkan prefix dan contains dengan urutan stabil
     const baseSql = `
       WITH hasil AS (
-           SELECT id, entri, indeks, homograf, homonim, jenis, lafal, jenis_rujuk, lema_rujuk AS entri_rujuk,
+              SELECT id, entri, indeks, homograf, homonim, jenis, lafal, jenis_rujuk,
+                (SELECT er.entri FROM entri er WHERE er.id = entri_rujuk) AS entri_rujuk,
             CASE WHEN LOWER(entri) = LOWER($1) THEN 0
               WHEN entri ILIKE $2 THEN 1
                     ELSE 2 END AS prioritas
@@ -180,7 +181,8 @@ class ModelEntri {
 
     const baseSql = `
       WITH hasil AS (
-        SELECT id, entri, indeks, homograf, homonim, jenis, lafal, jenis_rujuk, lema_rujuk AS entri_rujuk,
+         SELECT id, entri, indeks, homograf, homonim, jenis, lafal, jenis_rujuk,
+           (SELECT er.entri FROM entri er WHERE er.id = entri_rujuk) AS entri_rujuk,
                CASE WHEN LOWER(entri) = LOWER($1) THEN 0
                     WHEN entri ILIKE $2 THEN 1
                     ELSE 2 END AS prioritas,
@@ -305,7 +307,10 @@ class ModelEntri {
   static async ambilEntri(teks) {
     const result = await db.query(
             `SELECT id, legacy_eid, entri, indeks, homograf, homonim, jenis, induk, pemenggalan, lafal, varian,
-              jenis_rujuk, lema_rujuk AS entri_rujuk, sumber, aktif
+              jenis_rujuk, lema_rujuk,
+              (SELECT er.entri FROM entri er WHERE er.id = entri_rujuk) AS entri_rujuk,
+              (SELECT er.indeks FROM entri er WHERE er.id = entri_rujuk) AS entri_rujuk_indeks,
+              sumber, aktif
        FROM entri
        WHERE LOWER(entri) = LOWER($1)
        LIMIT 1`,
@@ -316,8 +321,11 @@ class ModelEntri {
 
   static async ambilEntriPerIndeks(indeks) {
     const result = await db.query(
-      `SELECT id, legacy_eid, entri, indeks, homograf, homonim, jenis, induk, pemenggalan, lafal, varian,
-              jenis_rujuk, lema_rujuk AS entri_rujuk, sumber, aktif,
+            `SELECT id, legacy_eid, entri, indeks, homograf, homonim, jenis, induk, pemenggalan, lafal, varian,
+              jenis_rujuk, lema_rujuk,
+              (SELECT er.entri FROM entri er WHERE er.id = entri_rujuk) AS entri_rujuk,
+              (SELECT er.indeks FROM entri er WHERE er.id = entri_rujuk) AS entri_rujuk_indeks,
+              sumber, aktif,
               to_char(created_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS created_at,
               to_char(updated_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS updated_at
        FROM entri
@@ -683,11 +691,14 @@ class ModelEntri {
           e.lafal,
           e.sumber,
            COALESCE(mk_stat.jumlah_makna, 0) AS jumlah_makna,
-          e.aktif,
-          e.jenis_rujuk,
-          e.lema_rujuk AS entri_rujuk
+           e.aktif,
+           e.jenis_rujuk,
+           e.lema_rujuk,
+           e.entri_rujuk AS entri_rujuk_id,
+           rujuk.entri AS entri_rujuk
        FROM entri e
        LEFT JOIN entri induk ON induk.id = e.induk
+         LEFT JOIN entri rujuk ON rujuk.id = e.entri_rujuk
          LEFT JOIN LATERAL (
           SELECT COUNT(*)::int AS jumlah_makna
           FROM makna mk
@@ -721,9 +732,15 @@ class ModelEntri {
             `SELECT e.id, e.entri, e.indeks, e.homograf, e.homonim, e.jenis, e.induk,
               i.entri AS induk_entri, i.indeks AS induk_indeks,
               e.pemenggalan, e.lafal, e.varian,
-              e.jenis_rujuk, e.lema_rujuk AS entri_rujuk, e.sumber, e.aktif
+              e.jenis_rujuk,
+              e.lema_rujuk,
+              e.entri_rujuk AS entri_rujuk_id,
+              r.entri AS entri_rujuk,
+              r.indeks AS entri_rujuk_indeks,
+              e.sumber, e.aktif
        FROM entri e
        LEFT JOIN entri i ON i.id = e.induk
+       LEFT JOIN entri r ON r.id = e.entri_rujuk
        WHERE e.id = $1`,
       [id]
     );
@@ -753,7 +770,7 @@ class ModelEntri {
     sumber,
   }) {
     const nilaiEntri = entri;
-    const nilaiEntriRujuk = entri_rujuk;
+    const nilaiEntriRujuk = parseNullableInteger(entri_rujuk);
     const nilaiIndeks = (indeks || '').trim() || normalisasiIndeks(nilaiEntri);
     const nilaiInduk = parseNullableInteger(induk);
     const nilaiId = parseNullableInteger(id);
@@ -776,14 +793,32 @@ class ModelEntri {
       }
     }
 
+    if (nilaiId && nilaiEntriRujuk && nilaiId === nilaiEntriRujuk) {
+      const error = new Error('Entri rujuk tidak boleh sama dengan entri ini');
+      error.status = 400;
+      throw error;
+    }
+
+    if (nilaiEntriRujuk) {
+      const entriRujukAda = await this.ambilInduk(nilaiEntriRujuk);
+      if (!entriRujukAda) {
+        const error = new Error('Entri rujuk tidak ditemukan');
+        error.status = 400;
+        throw error;
+      }
+    }
+
     if (id) {
       const result = await db.query(
         `UPDATE entri SET entri = $1, jenis = $2, induk = $3, pemenggalan = $4,
-                lafal = $5, varian = $6, jenis_rujuk = $7, lema_rujuk = $8, aktif = $9,
+          lafal = $5, varian = $6, jenis_rujuk = $7, entri_rujuk = $8, aktif = $9,
                 indeks = $10, homograf = $11, homonim = $12, sumber = $13
          WHERE id = $14
          RETURNING id, legacy_eid, entri, indeks, homograf, homonim, jenis, induk, pemenggalan, lafal, varian,
-             jenis_rujuk, lema_rujuk AS entri_rujuk, sumber, aktif, legacy_tabel, legacy_tid`,
+             jenis_rujuk, entri_rujuk AS entri_rujuk_id,
+             (SELECT er.entri FROM entri er WHERE er.id = entri_rujuk) AS entri_rujuk,
+             (SELECT er.indeks FROM entri er WHERE er.id = entri_rujuk) AS entri_rujuk_indeks,
+             sumber, aktif, legacy_tabel, legacy_tid`,
         [nilaiEntri, jenis, nilaiInduk, pemenggalan || null, lafal || null,
          varian || null, jenis_rujuk || null, nilaiEntriRujuk || null, aktif ?? 1,
          nilaiIndeks, nilaiHomograf, nilaiHomonim, nilaiSumber, id]
@@ -791,10 +826,13 @@ class ModelEntri {
       return result.rows[0];
     }
     const result = await db.query(
-      `INSERT INTO entri (entri, jenis, induk, pemenggalan, lafal, varian, jenis_rujuk, lema_rujuk, aktif, indeks, homograf, homonim, sumber)
+      `INSERT INTO entri (entri, jenis, induk, pemenggalan, lafal, varian, jenis_rujuk, entri_rujuk, aktif, indeks, homograf, homonim, sumber)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
        RETURNING id, legacy_eid, entri, indeks, homograf, homonim, jenis, induk, pemenggalan, lafal, varian,
-         jenis_rujuk, lema_rujuk AS entri_rujuk, sumber, aktif, legacy_tabel, legacy_tid`,
+        jenis_rujuk, entri_rujuk AS entri_rujuk_id,
+        (SELECT er.entri FROM entri er WHERE er.id = entri_rujuk) AS entri_rujuk,
+        (SELECT er.indeks FROM entri er WHERE er.id = entri_rujuk) AS entri_rujuk_indeks,
+        sumber, aktif, legacy_tabel, legacy_tid`,
       [nilaiEntri, jenis, nilaiInduk, pemenggalan || null, lafal || null,
        varian || null, jenis_rujuk || null, nilaiEntriRujuk || null, aktif ?? 1,
        nilaiIndeks, nilaiHomograf, nilaiHomonim, nilaiSumber]

@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-23T17:47:42.332Z
+-- Generated: 2026-02-25T10:41:18.734Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -168,15 +168,18 @@ create table entri (
   updated_at timestamp without time zone not null default now(),
   sumber text,
   homograf integer,
+  entri_rujuk integer,
   constraint entri_legacy_eid_key unique (legacy_eid),
   constraint entri_entri_check check (TRIM(BOTH FROM entri) <> ''::text)
 );
 create unique index entri_legacy_eid_key on entri using btree (legacy_eid);
+create index idx_entri_entri_rujuk on entri using btree (entri_rujuk);
 create index idx_entri_indeks on entri using btree (indeks);
 create index idx_entri_indeks_homograf_homonim on entri using btree (indeks, homograf, homonim, id);
 create index idx_entri_induk on entri using btree (induk);
 create index idx_entri_induk_aktif_jenis_entri on entri using btree (induk, aktif, jenis, entri);
 create index idx_entri_jenis on entri using btree (jenis);
+create index idx_entri_lema_rujuk on entri using btree (lema_rujuk);
 create index idx_entri_lower on entri using btree (lower(entri));
 create index idx_entri_serupa_norm_aktif on entri using btree (lower(regexp_replace(replace(entri, '-'::text, ''::text), '\s*\([0-9]+\)\s*$'::text, ''::text))) WHERE (aktif = 1);
 create index idx_entri_trgm on entri using gin (entri gin_trgm_ops);

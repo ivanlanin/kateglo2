@@ -297,7 +297,7 @@ function KamusDetail() {
         sumber: data.sumber || null,
         jenis_rujuk: data.jenis_rujuk || null,
         entri_rujuk: data.entri_rujuk || null,
-        entri_rujuk_indeks: data.entri_rujuk || null,
+        entri_rujuk_indeks: data.entri_rujuk_indeks || data.entri_rujuk || null,
         rujukan: Boolean(data.rujukan),
         created_at: data.created_at || null,
         updated_at: data.updated_at || null,
