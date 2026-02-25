@@ -73,6 +73,100 @@ function buildMetaRima(kata = '') {
   };
 }
 
+const daftarBabEjaan = [
+  {
+    judulBab: 'Penggunaan Huruf',
+    items: [
+      { judul: 'Huruf Abjad', slug: 'huruf-abjad' },
+      { judul: 'Huruf Vokal', slug: 'huruf-vokal' },
+      { judul: 'Huruf Konsonan', slug: 'huruf-konsonan' },
+      { judul: 'Gabungan Huruf Vokal', slug: 'gabungan-huruf-vokal' },
+      { judul: 'Gabungan Huruf Konsonan', slug: 'gabungan-huruf-konsonan' },
+      { judul: 'Huruf Kapital', slug: 'huruf-kapital' },
+      { judul: 'Huruf Miring', slug: 'huruf-miring' },
+      { judul: 'Huruf Tebal', slug: 'huruf-tebal' },
+    ],
+  },
+  {
+    judulBab: 'Penulisan Kata',
+    items: [
+      { judul: 'Kata Dasar', slug: 'kata-dasar' },
+      { judul: 'Kata Turunan', slug: 'kata-turunan' },
+      { judul: 'Pemenggalan Kata', slug: 'pemenggalan-kata' },
+      { judul: 'Kata Depan', slug: 'kata-depan' },
+      { judul: 'Partikel', slug: 'partikel' },
+      { judul: 'Singkatan', slug: 'singkatan' },
+      { judul: 'Angka dan Bilangan', slug: 'angka-dan-bilangan' },
+      { judul: 'Kata Ganti', slug: 'kata-ganti' },
+      { judul: 'Kata Sandang', slug: 'kata-sandang' },
+    ],
+  },
+  {
+    judulBab: 'Penggunaan Tanda Baca',
+    items: [
+      { judul: 'Tanda Titik (.)', slug: 'tanda-titik' },
+      { judul: 'Tanda Koma (,)', slug: 'tanda-koma' },
+      { judul: 'Tanda Titik Koma (;)', slug: 'tanda-titik-koma' },
+      { judul: 'Tanda Titik Dua (:)', slug: 'tanda-titik-dua' },
+      { judul: 'Tanda Hubung (-)', slug: 'tanda-hubung' },
+      { judul: 'Tanda Pisah (—)', slug: 'tanda-pisah' },
+      { judul: 'Tanda Tanya (?)', slug: 'tanda-tanya' },
+      { judul: 'Tanda Seru (!)', slug: 'tanda-seru' },
+      { judul: 'Tanda Elipsis (...)', slug: 'tanda-elipsis' },
+      { judul: 'Tanda Petik ("...")', slug: 'tanda-petik' },
+      { judul: "Tanda Petik Tunggal ('...')", slug: 'tanda-petik-tunggal' },
+      { judul: 'Tanda Kurung ((...))', slug: 'tanda-kurung' },
+      { judul: 'Tanda Kurung Siku ([...])', slug: 'tanda-kurung-siku' },
+      { judul: 'Tanda Garis Miring (/)', slug: 'tanda-garis-miring' },
+      { judul: "Tanda Apostrof (')", slug: 'tanda-apostrof' },
+    ],
+  },
+  {
+    judulBab: 'Penulisan Unsur Serapan',
+    items: [
+      { judul: 'Serapan Umum', slug: 'serapan-umum' },
+      { judul: 'Serapan Khusus', slug: 'serapan-khusus' },
+    ],
+  },
+];
+
+const petaMetaEjaan = daftarBabEjaan
+  .flatMap((bab) => bab.items.map((item) => ({ ...item, judulBab: bab.judulBab })))
+  .reduce((acc, item) => {
+    acc[item.slug] = { judul: item.judul, judulBab: item.judulBab };
+    return acc;
+  }, {});
+
+function formatJudulDariSlug(slug = '') {
+  return String(slug || '')
+    .trim()
+    .split('-')
+    .filter(Boolean)
+    .map((kata) => kata.charAt(0).toUpperCase() + kata.slice(1))
+    .join(' ');
+}
+
+function buildMetaEjaan(slug = '') {
+  const slugAman = String(slug || '').trim().replace(/\/+$/, '');
+  if (!slugAman) {
+    return {
+      judul: 'Ejaan Bahasa Indonesia',
+      deskripsi:
+        'Panduan kaidah ejaan bahasa Indonesia mencakup penggunaan huruf, penulisan kata, tanda baca, dan unsur serapan.',
+    };
+  }
+
+  const metadata = petaMetaEjaan[slugAman] || {
+    judul: formatJudulDariSlug(slugAman) || 'Ejaan Bahasa Indonesia',
+    judulBab: 'Ejaan Bahasa Indonesia',
+  };
+
+  return {
+    judul: `${metadata.judul} — Ejaan Bahasa Indonesia`,
+    deskripsi: `Kaidah ${metadata.judul} pada bab ${metadata.judulBab} dalam pedoman ejaan bahasa Indonesia di Kateglo.`,
+  };
+}
+
 function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', prefetchedData = null) {
   const defaultMeta = {
     title: 'Kateglo',
@@ -173,6 +267,15 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
   // /glosarium
   if (path.startsWith('/glosarium')) {
     return titled(buildMetaBrowseGlosarium());
+  }
+
+  // /ejaan dan /ejaan/:slug
+  if (path === '/ejaan' || path === '/ejaan/') {
+    return titled(buildMetaEjaan());
+  }
+
+  if (path.startsWith('/ejaan/')) {
+    return titled(buildMetaEjaan(seg('/ejaan/')));
   }
 
   // /kebijakan-privasi
