@@ -196,6 +196,22 @@ code {
     @apply space-y-3;
   }
 
+  .ejaan-sekuens-nav {
+    @apply mt-6 flex items-center justify-between gap-2 flex-nowrap;
+  }
+
+  .ejaan-sekuens-link {
+    @apply beranda-tag-link inline-flex w-auto px-3;
+  }
+
+  .ejaan-sekuens-link-prev {
+    @apply justify-start text-left;
+  }
+
+  .ejaan-sekuens-link-next {
+    @apply justify-end text-right;
+  }
+
   .ejaan-sidebar-pill-grid {
     @apply grid grid-cols-2 gap-2 list-none p-0 m-0;
   }

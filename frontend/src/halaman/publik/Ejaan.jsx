@@ -83,6 +83,13 @@ function Ejaan() {
 
   const metadataAktif = semuaDokumen.find((item) => item.slug === slug) || null;
   const dokumenValid = metadataAktif?.dokumen || '';
+  const indeksAktif = metadataAktif
+    ? semuaDokumen.findIndex((item) => item.slug === metadataAktif.slug)
+    : -1;
+  const dokumenSebelumnya = indeksAktif > 0 ? semuaDokumen[indeksAktif - 1] : null;
+  const dokumenSesudah = indeksAktif >= 0 && indeksAktif < semuaDokumen.length - 1
+    ? semuaDokumen[indeksAktif + 1]
+    : null;
 
   const modeDaftarIsi = !slug;
 
@@ -214,6 +221,28 @@ function Ejaan() {
                   {isiMarkdown}
                 </ReactMarkdown>
               </div>
+            )}
+
+            {!sedangMemuat && !galat && (dokumenSebelumnya || dokumenSesudah) && (
+              <nav className="ejaan-sekuens-nav" aria-label="Navigasi bab ejaan">
+                {dokumenSebelumnya && (
+                  <Link
+                    to={`/ejaan/${dokumenSebelumnya.slug}`}
+                    className="ejaan-sekuens-link ejaan-sekuens-link-prev"
+                  >
+                    ‹ {dokumenSebelumnya.judul}
+                  </Link>
+                )}
+
+                {dokumenSesudah && (
+                  <Link
+                    to={`/ejaan/${dokumenSesudah.slug}`}
+                    className="ejaan-sekuens-link ejaan-sekuens-link-next"
+                  >
+                    {dokumenSesudah.judul} ›
+                  </Link>
+                )}
+              </nav>
             )}
           </div>
         </article>
