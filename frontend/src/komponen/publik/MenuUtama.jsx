@@ -13,6 +13,7 @@ export const menuItems = [
   { path: '/glosarium', label: 'Glosarium' },
   { path: '/makna', label: 'Makna' },
   { path: '/rima', label: 'Rima' },
+  { path: '/ejaan', label: 'Ejaan' },
   { path: '/redaksi', label: 'Redaksi', adminSaja: true },
 ];
 
