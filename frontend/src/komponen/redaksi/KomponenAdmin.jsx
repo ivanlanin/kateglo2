@@ -186,7 +186,7 @@ export function BarisFilterCariAdmin({
           key={item.key}
           value={item.value ?? ''}
           onChange={(e) => item.onChange(e.target.value)}
-          className="form-admin-select w-auto min-w-[160px]"
+          className={`form-admin-select w-auto min-w-[160px] ${isActiveFilterValue(item) ? 'form-admin-filter-active' : ''}`}
           aria-label={item.ariaLabel || item.key}
         >
           {(item.options || []).map((opt) => (

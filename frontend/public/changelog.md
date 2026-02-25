@@ -7,6 +7,7 @@
 - Membuat komponen `PensilSunting` untuk menyeragamkan tampilan penyuntingan
 - Menambahkan `sitemap.xml` dan `robots.txt` untuk SEO
 - Menambahkan keterangan sumber glosarium
+- Memberi tanda warna berbeda untuk filter aktif di redaksi
 
 ## 2026-02-24 Selasa
 

@@ -1696,6 +1696,14 @@ code {
     @apply border-dark-border bg-dark-bg-input text-white;
   }
 
+  .form-admin-filter-active {
+    @apply bg-blue-50 border-blue-300;
+  }
+
+  .dark .form-admin-filter-active {
+    @apply bg-blue-900/25 border-blue-600;
+  }
+
   .form-admin-textarea {
     @apply w-full px-3 py-2 border border-gray-300 rounded-lg bg-white
            text-sm text-gray-900 resize-y min-h-[80px]
