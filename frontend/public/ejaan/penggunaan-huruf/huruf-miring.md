@@ -37,7 +37,6 @@ Misalnya:
 - Ungkapan _tut wuri handayani_ merupakan semboyan pendidikan.
 - Istilah _men sana in corpore sano_ sering digunakan dalam bidang olahraga.
 
-<Note>
+**Catatan:**  
 a. Nama diri, seperti nama orang, lembaga, organisasi, atau merek dagang dalam bahasa asing atau bahasa daerah tidak ditulis dengan huruf miring.  
 b. Dalam naskah tulisan tangan atau mesin tik (bukan komputer), bagian yang akan dicetak miring ditandai dengan garis bawah satu.
-</Note>

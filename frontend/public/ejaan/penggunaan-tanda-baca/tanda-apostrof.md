@@ -12,6 +12,4 @@ Misalnya:
 - Diriku s'lalu dimanja. (s'lalu = selalu)
 - 5-2-'21 ('21 = 2021)
 
-<Note>
-Penggunaan tanda apostrof ini lazim dalam ragam nonstandar.
-</Note>
+**Catatan:** Penggunaan tanda apostrof ini lazim dalam ragam nonstandar.

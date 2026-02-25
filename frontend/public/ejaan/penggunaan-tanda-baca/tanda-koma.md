@@ -112,10 +112,9 @@ Misalnya:
 - Dr. dr. Rahayu Ningtyas, Sp.A., Subsp.End.(K).
 - Prof. Dr. Muh. Muhlis, S.E., M.A., Ph.D.
 
-<Note>
+**Catatan:**  
 a. Bandingkan _Siti Khadijah, M.A._ (_Siti Khadijah, Master of Arts_) dengan _Siti Khadijah M.A._ (_Siti Khadijah Mas Agung_).  
 b. Spasi digunakan untuk memisahkan unsur nama dan singkatannya serta antargelar dan singkatannya.
-</Note>
 
 > 12. Tanda koma digunakan sebelum angka desimal atau di antara rupiah dan sen yang dinyatakan dengan angka.
 

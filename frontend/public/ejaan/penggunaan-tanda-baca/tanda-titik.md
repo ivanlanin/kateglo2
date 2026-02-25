@@ -51,7 +51,7 @@ II. Patokan Khusus
 
 c. Contoh Penggunaan Tanda Titik dalam Tabel
 
-<p style={{ textAlign: 'center' }}>Tabel 1 Kelas Kata</p>
+**Tabel 1 Kelas Kata**
 
 | Nomor | Kata Kerja | Kata Benda |
 | ----- | ---------- | ---------- |

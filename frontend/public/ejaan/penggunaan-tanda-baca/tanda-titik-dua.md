@@ -59,9 +59,7 @@ Misalnya:
 - 00:20:30 jam (20 menit, 30 detik)
 - 00:00:30 jam (30 detik)
 
-<Note>
-Lihat penggunaan tanda titik (kaidah A butir 7)!
-</Note>
+**Catatan:** Lihat penggunaan tanda titik (kaidah A butir 7)!
 
 > 7. Tanda titik dua digunakan untuk menuliskan rasio dan hal lain yang menyatakan perbandingan dalam bentuk angka.
 

@@ -211,9 +211,7 @@ Misalnya:
 - nangka *b*elanda (_Anona muricata_)
 - petai *c*ina (_Leucaena glauca_)
 
-<Note>
-Nama yang disertai nama geografi dan merupakan nama jenis dapat dikontraskan atau disejajarkan dengan nama jenis lain dalam kelompoknya.
-</Note>
+**Catatan:** Nama yang disertai nama geografi dan merupakan nama jenis dapat dikontraskan atau disejajarkan dengan nama jenis lain dalam kelompoknya.
 
 Misalnya:
 
@@ -276,26 +274,21 @@ Misalnya:
 - "Selamat belajar, *A*nak-*A*nak."
 - "Sampai berjumpa kembali, *T*eman-*T*eman."
 
-<Note>
+**Catatan:**  
 a. Kata _Anda_ ditulis dengan huruf awal kapital.
-<br />
-Misalnya:
 
+Misalnya:
 - Sudahkah *A*nda tahu?
 - Hanya teman *A*nda yang mengerti masalah itu.
 
 b. Kata atau ungkapan yang digunakan dalam pengacuan ditulis dengan huruf awal kapital.
-<br />
-Misalnya:
 
+Misalnya:
 - "Bu, saya sudah melaporkan hal ini kepada *B*apak."
 - Besok *P*aman akan datang bersama kakakmu.
 
 c. Istilah kekerabatan yang diikuti oleh kata yang menunjukkan kepemilikan ditulis dengan huruf nonkapital.
-<br />
-Misalnya:
 
+Misalnya:
 - Kita harus menghormati *b*apak dan *i*bu kita.
 - Semua *k*akak dan *a*dik saya sudah berkeluarga.
-
-</Note>

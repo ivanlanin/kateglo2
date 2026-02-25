@@ -10,9 +10,7 @@ Misalnya:
 - Huruf _dh_, seperti pada kata _Rama**dh**an_, tidak terdapat dalam Ejaan Bahasa Indonesia.
 - Kata _et_ dalam ungkapan _ora **et** labora_ berarti 'dan'.
 
-<Note>
-Dalam naskah tulisan tangan atau mesin tik (bukan komputer), bagian yang akan dicetak tebal ditandai dengan garis bawah dua.
-</Note>
+**Catatan:** Dalam naskah tulisan tangan atau mesin tik (bukan komputer), bagian yang akan dicetak tebal ditandai dengan garis bawah dua.
 
 > 2. Huruf tebal digunakan untuk menegaskan bagian karangan, seperti bab atau subbab.
 
