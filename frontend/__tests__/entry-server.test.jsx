@@ -178,11 +178,11 @@ describe('entry-server', () => {
     expect(ejaanIndex.description).toContain('penggunaan huruf');
 
     const ejaanDetail = __private.buildMetaForPath('/ejaan/huruf-kapital', site);
-    expect(ejaanDetail.title).toBe('Huruf Kapital — Ejaan Bahasa Indonesia — Kateglo');
+    expect(ejaanDetail.title).toBe('Huruf Kapital — Kateglo');
     expect(ejaanDetail.description).toContain('Penggunaan Huruf');
 
     const ejaanDetailUnknown = __private.buildMetaForPath('/ejaan/aturan-baru', site);
-    expect(ejaanDetailUnknown.title).toBe('Aturan Baru — Ejaan Bahasa Indonesia — Kateglo');
+    expect(ejaanDetailUnknown.title).toBe('Aturan Baru — Kateglo');
     expect(__private.buildMetaForPath('/kebijakan-privasi', site).title).toBe('Kebijakan Privasi — Kateglo');
 
     const defaultMeta = __private.buildMetaForPath('/random', site);

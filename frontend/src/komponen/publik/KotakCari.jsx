@@ -6,6 +6,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { autocomplete } from '../../api/apiPublik';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
+import {
+  daftarAutocompleteEjaan,
+  petaAutocompleteEjaan,
+  formatJudulEjaanDariSlug,
+} from '../../constants/ejaanData';
 
 const opsiKategori = [
   { value: 'kamus', label: 'Kamus', placeholder: 'Cari kata \u2026' },
@@ -15,48 +20,6 @@ const opsiKategori = [
   { value: 'rima', label: 'Rima', placeholder: 'Cari kata yang berima \u2026' },
   { value: 'ejaan', label: 'Ejaan', placeholder: 'Cari kaidah ejaan \u2026' },
 ];
-
-const daftarAutocompleteEjaan = [
-  { value: 'Huruf Abjad', slug: 'huruf-abjad' },
-  { value: 'Huruf Vokal', slug: 'huruf-vokal' },
-  { value: 'Huruf Konsonan', slug: 'huruf-konsonan' },
-  { value: 'Gabungan Huruf Vokal', slug: 'gabungan-huruf-vokal' },
-  { value: 'Gabungan Huruf Konsonan', slug: 'gabungan-huruf-konsonan' },
-  { value: 'Huruf Kapital', slug: 'huruf-kapital' },
-  { value: 'Huruf Miring', slug: 'huruf-miring' },
-  { value: 'Huruf Tebal', slug: 'huruf-tebal' },
-  { value: 'Kata Dasar', slug: 'kata-dasar' },
-  { value: 'Kata Turunan', slug: 'kata-turunan' },
-  { value: 'Pemenggalan Kata', slug: 'pemenggalan-kata' },
-  { value: 'Kata Depan', slug: 'kata-depan' },
-  { value: 'Partikel', slug: 'partikel' },
-  { value: 'Singkatan', slug: 'singkatan' },
-  { value: 'Angka dan Bilangan', slug: 'angka-dan-bilangan' },
-  { value: 'Kata Ganti', slug: 'kata-ganti' },
-  { value: 'Kata Sandang', slug: 'kata-sandang' },
-  { value: 'Tanda Titik (.)', slug: 'tanda-titik' },
-  { value: 'Tanda Koma (,)', slug: 'tanda-koma' },
-  { value: 'Tanda Titik Koma (;)', slug: 'tanda-titik-koma' },
-  { value: 'Tanda Titik Dua (:)', slug: 'tanda-titik-dua' },
-  { value: 'Tanda Hubung (-)', slug: 'tanda-hubung' },
-  { value: 'Tanda Pisah (—)', slug: 'tanda-pisah' },
-  { value: 'Tanda Tanya (?)', slug: 'tanda-tanya' },
-  { value: 'Tanda Seru (!)', slug: 'tanda-seru' },
-  { value: 'Tanda Elipsis (...)', slug: 'tanda-elipsis' },
-  { value: 'Tanda Petik ("...")', slug: 'tanda-petik' },
-  { value: "Tanda Petik Tunggal ('...')", slug: 'tanda-petik-tunggal' },
-  { value: 'Tanda Kurung ((...))', slug: 'tanda-kurung' },
-  { value: 'Tanda Kurung Siku ([...])', slug: 'tanda-kurung-siku' },
-  { value: 'Tanda Garis Miring (/)', slug: 'tanda-garis-miring' },
-  { value: "Tanda Apostrof (')", slug: 'tanda-apostrof' },
-  { value: 'Serapan Umum', slug: 'serapan-umum' },
-  { value: 'Serapan Khusus', slug: 'serapan-khusus' },
-];
-
-const petaAutocompleteEjaan = daftarAutocompleteEjaan.reduce((acc, item) => {
-  acc[item.slug] = item.value;
-  return acc;
-}, {});
 
 function normalisasiPencarianEjaan(teks = '') {
   return String(teks || '')
@@ -89,14 +52,6 @@ function cariSlugEjaanDariKata(kata = '') {
   return cocokPersis?.slug || '';
 }
 
-function formatSlugEjaan(slug = '') {
-  return String(slug || '')
-    .split('-')
-    .filter(Boolean)
-    .map((kata) => kata.charAt(0).toUpperCase() + kata.slice(1))
-    .join(' ');
-}
-
 function deteksiKategori(pathname) {
   if (pathname.startsWith('/ejaan')) return 'ejaan';
   if (pathname.startsWith('/makna')) return 'makna';
@@ -112,7 +67,7 @@ function ekstrakQuery(pathname) {
   const matchEjaan = pathname.match(/^\/ejaan\/([^/]+)$/);
   if (matchEjaan) {
     const slug = decodeURIComponent(matchEjaan[1]);
-    return petaAutocompleteEjaan[slug] || formatSlugEjaan(slug);
+    return petaAutocompleteEjaan[slug] || formatJudulEjaanDariSlug(slug);
   }
   const matchDetail = pathname.match(/^\/kamus\/detail\/(.+)$/);
   if (matchDetail) return decodeURIComponent(matchDetail[1]);

@@ -9,67 +9,7 @@ import remarkGfm from 'remark-gfm';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import PanelLipat from '../../komponen/publik/PanelLipat';
 import KartuKategori from '../../komponen/publik/KartuKategori';
-
-const daftarBab = [
-  {
-    judul: 'Penggunaan Huruf',
-    slug: 'penggunaan-huruf',
-    items: [
-      { judul: 'Huruf Abjad', slug: 'huruf-abjad' },
-      { judul: 'Huruf Vokal', slug: 'huruf-vokal' },
-      { judul: 'Huruf Konsonan', slug: 'huruf-konsonan' },
-      { judul: 'Gabungan Huruf Vokal', slug: 'gabungan-huruf-vokal' },
-      { judul: 'Gabungan Huruf Konsonan', slug: 'gabungan-huruf-konsonan' },
-      { judul: 'Huruf Kapital', slug: 'huruf-kapital' },
-      { judul: 'Huruf Miring', slug: 'huruf-miring' },
-      { judul: 'Huruf Tebal', slug: 'huruf-tebal' },
-    ],
-  },
-  {
-    judul: 'Penulisan Kata',
-    slug: 'penulisan-kata',
-    items: [
-      { judul: 'Kata Dasar', slug: 'kata-dasar' },
-      { judul: 'Kata Turunan', slug: 'kata-turunan' },
-      { judul: 'Pemenggalan Kata', slug: 'pemenggalan-kata' },
-      { judul: 'Kata Depan', slug: 'kata-depan' },
-      { judul: 'Partikel', slug: 'partikel' },
-      { judul: 'Singkatan', slug: 'singkatan' },
-      { judul: 'Angka dan Bilangan', slug: 'angka-dan-bilangan' },
-      { judul: 'Kata Ganti', slug: 'kata-ganti' },
-      { judul: 'Kata Sandang', slug: 'kata-sandang' },
-    ],
-  },
-  {
-    judul: 'Penggunaan Tanda Baca',
-    slug: 'penggunaan-tanda-baca',
-    items: [
-      { judul: 'Tanda Titik (.)', slug: 'tanda-titik' },
-      { judul: 'Tanda Koma (,)', slug: 'tanda-koma' },
-      { judul: 'Tanda Titik Koma (;)', slug: 'tanda-titik-koma' },
-      { judul: 'Tanda Titik Dua (:)', slug: 'tanda-titik-dua' },
-      { judul: 'Tanda Hubung (-)', slug: 'tanda-hubung' },
-      { judul: 'Tanda Pisah (—)', slug: 'tanda-pisah' },
-      { judul: 'Tanda Tanya (?)', slug: 'tanda-tanya' },
-      { judul: 'Tanda Seru (!)', slug: 'tanda-seru' },
-      { judul: 'Tanda Elipsis (...)', slug: 'tanda-elipsis' },
-      { judul: 'Tanda Petik ("...")', slug: 'tanda-petik' },
-      { judul: "Tanda Petik Tunggal ('...')", slug: 'tanda-petik-tunggal' },
-      { judul: 'Tanda Kurung ((...))', slug: 'tanda-kurung' },
-      { judul: 'Tanda Kurung Siku ([...])', slug: 'tanda-kurung-siku' },
-      { judul: 'Tanda Garis Miring (/)', slug: 'tanda-garis-miring' },
-      { judul: "Tanda Apostrof (')", slug: 'tanda-apostrof' },
-    ],
-  },
-  {
-    judul: 'Penulisan Unsur Serapan',
-    slug: 'penulisan-unsur-serapan',
-    items: [
-      { judul: 'Serapan Umum', slug: 'serapan-umum' },
-      { judul: 'Serapan Khusus', slug: 'serapan-khusus' },
-    ],
-  },
-];
+import { daftarIsiEjaan, daftarItemEjaan } from '../../constants/ejaanData';
 
 function bacaIsiMarkdown(mardownMentah = '') {
   return mardownMentah.replace(/^---[\s\S]*?---\s*/m, '');
@@ -78,7 +18,7 @@ function bacaIsiMarkdown(mardownMentah = '') {
 function DaftarIsiEjaanGrid() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-      {daftarBab.map((bab) => (
+      {daftarIsiEjaan.map((bab) => (
         <KartuKategori
           key={bab.slug}
           judul={bab.judul}
@@ -95,7 +35,7 @@ function DaftarIsiEjaanGrid() {
 function DaftarIsiPanel({ aktifSlug = '' }) {
   return (
     <div className="space-y-4">
-      {daftarBab.map((bab) => {
+      {daftarIsiEjaan.map((bab) => {
         const kategoriAktif = bab.items.some((item) => item.slug === aktifSlug);
         return (
           <PanelLipat
@@ -137,12 +77,7 @@ function Ejaan() {
   const [galat, setGalat] = useState('');
 
   const semuaDokumen = useMemo(
-    () => daftarBab.flatMap((bab) => bab.items.map((item) => ({
-      judulBab: bab.judul,
-      judul: item.judul,
-      slug: item.slug,
-      dokumen: `${bab.slug}/${item.slug}.md`,
-    }))),
+    () => daftarItemEjaan,
     [],
   );
 
@@ -168,7 +103,7 @@ function Ejaan() {
     }
 
     return {
-      judul: `${metadataAktif.judul} — Ejaan Bahasa Indonesia`,
+      judul: metadataAktif.judul,
       deskripsi: `Kaidah ${metadataAktif.judul} pada bab ${metadataAktif.judulBab} dalam pedoman ejaan bahasa Indonesia di Kateglo.`,
     };
   }, [modeDaftarIsi, metadataAktif]);
