@@ -11,6 +11,7 @@ import CursorNavButton from '../../komponen/publik/CursorNavButton';
 import PanelLipat from '../../komponen/publik/PanelLipat';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import NavigasiLoadingOverlay from '../../komponen/publik/NavigasiLoadingOverlay';
+import PensilSunting from '../../komponen/publik/PensilSunting';
 import { PesanTidakDitemukan } from '../../komponen/publik/StatusKonten';
 import {
   formatLemaHomonim,
@@ -272,6 +273,10 @@ function KamusDetail() {
 
   const notFound = isError || !data;
   const kataCari = decodeURIComponent(indeks || '');
+  const indeksKamusFallback = normalisasiIndeksKamus(kataCari);
+  const tautanRujukanKbbiFallback = indeksKamusFallback
+    ? `https://kbbi.kemendikdasmen.go.id/entri/${encodeURIComponent(indeksKamusFallback)}`
+    : '';
   const saran = error?.saran || [];
 
   const urutanJenisSubentri = ['turunan', 'gabungan', 'idiom', 'peribahasa', 'varian'];
@@ -394,9 +399,29 @@ function KamusDetail() {
         <div className="lg:col-span-2">
           {notFound ? (
             <>
-              <h1 className="kamus-detail-heading">
-                <span className="kamus-detail-heading-main">{kataCari}</span>
-              </h1>
+              <div className="kamus-detail-heading-row">
+                <h1 className="kamus-detail-heading">
+                  <span className="kamus-detail-heading-main">{kataCari}</span>
+                </h1>
+                {tautanRujukanKbbiFallback && (
+                  <div className="kamus-detail-admin-actions">
+                    <a
+                      href={tautanRujukanKbbiFallback}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="kamus-detail-reference-link"
+                      aria-label="Buka rujukan KBBI di tab baru"
+                      title="Buka rujukan KBBI (tab baru)"
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-4 w-4">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                      </svg>
+                      <span className="sr-only">Rujukan KBBI</span>
+                    </a>
+                  </div>
+                )}
+              </div>
               <div className="mt-6">
                 <PesanTidakDitemukan saran={saran} />
               </div>
@@ -471,18 +496,13 @@ function KamusDetail() {
                     <div className="kamus-detail-admin-actions">
                       {entriItem.id && (
                         adalahAdmin && (
-                        <Link
+                        <PensilSunting
                           to={`/redaksi/kamus/${entriItem.id}`}
                           className="kamus-detail-edit-link"
-                          aria-label="Sunting entri di Redaksi"
+                          ariaLabel="Sunting entri di Redaksi"
                           title="Sunting entri di Redaksi"
-                        >
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-4 w-4">
-                            <path d="M12 20h9" />
-                            <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
-                          </svg>
-                          <span className="sr-only">Sunting</span>
-                        </Link>
+                          iconClassName="h-4 w-4"
+                        />
                         )
                       )}
                       {tautanRujukanKbbi && (

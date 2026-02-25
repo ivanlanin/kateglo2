@@ -15,6 +15,7 @@ import {
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import HasilPencarian from '../../komponen/publik/HasilPencarian';
 import KartuKategori from '../../komponen/publik/KartuKategori';
+import PensilSunting from '../../komponen/publik/PensilSunting';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
 import { formatNamaBidang, renderEntriGlosariumTertaut } from '../../utils/formatUtils';
@@ -160,23 +161,7 @@ function Glosarium() {
 
   const renderAdminEditLink = (item) => {
     if (!adalahAdmin || !item?.id || !item?.asing || !item?.indonesia) return null;
-    return (
-      <>
-        {' '}
-        <Link
-          to={`/redaksi/glosarium/${item.id}`}
-          className="glosarium-edit-link-inline"
-          aria-label="Sunting entri glosarium di Redaksi"
-          title="Sunting entri glosarium di Redaksi"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-3.5 w-3.5">
-            <path d="M12 20h9" />
-            <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
-          </svg>
-          <span className="sr-only">Sunting</span>
-        </Link>
-      </>
-    );
+    return <PensilSunting to={`/redaksi/glosarium/${item.id}`} />;
   };
 
   return (

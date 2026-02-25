@@ -4,6 +4,7 @@
 
 - Mengurutkan entri detail glosarium berdasarkan abjad
 - Menambahkan ikon pensil di entri glosarium publik untuk memudahkan pengeditan
+- Membuat komponen `PensilSunting` untuk menyeragamkan tampilan penyuntingan
 
 ## 2026-02-24 Selasa
 
