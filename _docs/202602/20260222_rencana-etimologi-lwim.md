@@ -1,58 +1,97 @@
-# Rencana Fitur Etimologi dari LWIM (Sealang.net)
+# Rencana dan Temuan Etimologi LWIM (Sealang.net)
 
-**Tanggal**: 2026-02-22
-**Sumber data**: http://sealang.net/lwim/ (Loan Words in Indonesian and Malay)
-**Status**: Perencanaan
+**Tanggal awal**: 2026-02-22  
+**Pembaruan**: 2026-02-26  
+**Sumber rujukan**: http://sealang.net/lwim/ (Loan Words in Indonesian and Malay)  
+**Status**: Rencana implementasi + temuan pembacaan korpus
 
 ---
 
-## Temuan Awal
+## Ringkasan Temuan
 
-### Akses URL
+Berdasarkan pembacaan korpus LWIM yang telah dihimpun pada tabel `etimologi_lwim`, ditemukan pola berikut:
 
-```
-GET http://sealang.net/lwim/search.pl?dict=lwim&ignoreDiacritic=1&orth=<indeks>
-```
+- Total entri: **16.512**
+- Entri dengan `etym_lang` terisi: **6.066**
+- Entri dengan `etym_lang` kosong: **10.446**
+- Dari `etym_lang` kosong:
+  - Memiliki `raw_def`: **9.100**
+  - Memiliki `xr_lihat`: **1.351**
+  - Memiliki `raw_def` + `xr_lihat`: **5**
+  - Tidak memiliki keduanya: **0**
 
-- Harus via **HTTP** (bukan HTTPS — sertifikat expired)
-- Parameter `ignoreDiacritic=1` penting: query tanpa aksen tetap menemukan entri beraksen
-- Response: XHTML dengan XML embedded (`<entry>`, `<etym>`, `<def>`, dll.)
+Kesimpulan utama: ketika `etym_lang` kosong, informasi asal-usul tetap tersedia melalui narasi `raw_def` atau rujukan `xr_lihat`.
 
-### Dua Format Etimologi
+---
 
-**Format A — Terstruktur** (ada tag `<etym>`):
+## Struktur Data Etimologi yang Ditemukan
+
+### 1) Bentuk terstruktur (tag `<etym>`)
+
 ```xml
 <entry orthTarget="komputer" id="LWIM:10960" hom="1">
   <def>computer</def>
   <etym><lang>English</lang> <mentioned>computer</mentioned></etym>
 ```
 
-**Format B — Inline di `<def>`** (tanpa tag `<etym>`):
+### 2) Bentuk naratif di `<def>`
+
 ```xml
 <entry orthTarget="véntilasi" id="LWIM:22824" hom="1">
   <def>ventilation  [&lt; Dutch <i>ventilatie</i> (&lt; French)]</def>
 ```
 
-Contoh inline yang lebih kompleks (rantai):
-```
-bank [< Dutch bank (< Italian)]
-algoritme [< Dutch algoritme (f Greek)]
-per [< Dutch or < English per (< Latin)]
-```
+Contoh pola naratif yang sering muncul:
 
-### Fitur Lain yang Ditemukan
+- `bank [< Dutch bank (< Italian)]`
+- `algoritme [< Dutch algoritme (f Greek)]`
+- `per [< Dutch or < English per (< Latin)]`
 
-- **Cross-reference**: `<xr type="see"><ref>fair</ref></xr>` dan `<xr type="var"><ref>pir</ref></xr>`
-- **Banyak homonim**: kata "per" menghasilkan 7 entri berbeda dari sealang
-- **Aksen menandakan pelafalan**: `pér` (é = taling/open-e) vs `per` (tanpa aksen = pepet/schwa)
-- **Kutipan referensi**: `<cite>Monier-Williams:1098.2</cite>` — bibliografi sumber etimologi
-- **Aksara non-Latin**: `<ming>四</ming>` — untuk entri dari bahasa Tionghoa (Amoy/Hokkien)
+### 3) Bentuk rujukan silang
+
+- `<xr type="see"><ref>fair</ref></xr>`
+- `<xr type="var"><ref>pir</ref></xr>`
+
+Pada bentuk ini, jejak etimologi bisa hadir sebagai rujukan, bukan uraian langsung.
 
 ---
 
-## Masalah Utama: Pencocokan (Matching)
+## Bahasa yang Teridentifikasi
 
-### Penanda Lafal di Sealang vs DB
+### Bahasa unik pada kolom `etym_lang`
+
+Jumlah bahasa unik terstruktur: **35**.
+
+Arabic, Dutch, English, Sanskrit, Amoy, Persian, Portuguese, Latin, Tamil, Hindi, Japanese, Chiangchiu, Italian, Greek, French, Cantonese, Foochow, Hakka, German, Javanese, Mandarin, Russian, Spanish, Thai, American-English, Ningpo, Tsoanchiu, Amoy?, Amoy/Ts, Arabic<i>ṣalaf</i>, Chinese.A, Hebrew, Teochew, Tong'an, Tong'an/A.
+
+### Bahasa yang muncul pada narasi `raw_def`
+
+Ekstraksi heuristik menghasilkan **74 token bahasa/kandidat bahasa**.
+
+Dominan:
+
+- Dutch (6.344)
+- French (2.985)
+- Greek (2.449)
+- Latin (2.301)
+- English (2.025)
+- Sanskrit (533)
+- Arabic (401)
+- Italian (213)
+- German (134)
+- Spanish (83)
+- Portuguese (52)
+
+Catatan kualitas data:
+
+- Ada token non-bahasa/ambigu dari narasi (`Loan`, `Old`, `American`, `Am`, `Ar`, `Fr`).
+- Ada variasi ejaan/markup di kolom terstruktur (`Arabic<i>ṣalaf</i>`, `Chinese.A`, `Amoy/Ts`, dll.).
+
+---
+
+## Masalah Utama untuk Penautan ke Entri Kamus
+
+### Perbedaan lafal dan diakritik
 
 Sealang menggunakan diakritik di `orthTarget` untuk membedakan lafal:
 
@@ -61,167 +100,123 @@ Sealang menggunakan diakritik di `orthTarget` untuk membedakan lafal:
 | `per` (tanpa aksen) | pepet / schwa | `pər` |
 | `pér` (aksen akut) | taling / open-e | `per` |
 
-Ini **terbalik secara visual**: sealang tanpa aksen = pepet, sealang `é` = taling.
+Secara visual tampak terbalik: tanpa aksen = pepet, `é` = taling.
 
-### Masalah Penomoran Homonim
+### Nomor homonim tidak selalu sejajar
 
-Nomor `hom` di sealang **tidak selalu sama** dengan `homonim` di tabel `entri`.
+Nomor `hom` di sealang tidak selalu sama dengan `homonim` di tabel `entri`.
 
-Contoh "per" di DB (jenis=dasar):
+Untuk kasus seperti “per”, jumlah dan urutan kelompok makna tidak bisa dipadankan otomatis hanya dari nomor.
 
-| id    | homonim | homograf | lafal |
-|-------|---------|----------|-------|
-| 28615 | 1       | 1        | per   |
-| 28616 | 2       | 1        | per   |
-| 28617 | 3       | 1        | per   |
-| 28608 | 1       | 2        | pər   |
-| 28609 | 2       | 2        | pər   |
-| 28610 | 3       | 2        | pər   |
-| 28611 | 4       | 3        | null  |
-| 28612 | 5       | 3        | null  |
+### Duplikasi `hom` di sumber
 
-Sealang "per" (pepet, no diacritic) → hom 1,2,3
-Sealang "pér" (taling, aksen) → hom 1,2,3,4
+Ada kasus `orthTarget` yang memiliki `hom` duplikat namun `lwim_id` berbeda (contoh: `para`, `kala`, `si`).
 
-Relasi homonim antar sistem tidak bisa dicocokkan otomatis berdasarkan urutan saja.
-
-### Masalah Kualitas Data di Sealang Sendiri
-
-Dari pengujian kata-kata dengan banyak variasi, ditemukan bahwa sealang kadang punya
-**nomor `hom` duplikat** untuk `orthTarget` yang sama:
-
-| Kata | LWIM IDs | `hom` | Keterangan |
-|---|---|---|---|
-| `para` | LWIM:15668, LWIM:15669 | keduanya `hom="1"` | sentry vs. karet para |
-| `kala` | LWIM:9403, LWIM:9404 | keduanya `hom="1"` | waktu vs. xr ke "kada" |
-| `si` | LWIM:19461, LWIM:19462 | keduanya `hom="1"` | empat (Amoy) vs. nada musik (Dutch) |
-
-Artinya `lwim_id` adalah pengidentifikasi unik yang sesungguhnya, **bukan** kombinasi `orthTarget + hom`.
-
-### Banyak Entri DB Tanpa Penanda Lafal
-
-Dari pengujian, banyak entri dengan `homograf=null` dan `lafal=null` (contoh: `kala`, `si`, `para`).
-Matching berbasis lafal hanya bisa dilakukan untuk sebagian kecil entri.
-
-### Kesimpulan Matching
-
-Pencocokan otomatis **satu entri sealang ↔ satu entri DB** berisiko salah.
-Pendekatan yang aman:
-1. Simpan data mentah sealang, kunci unik adalah `lwim_id` (bukan kombinasi orthTarget+hom)
-2. Sediakan kolom `entri_id` sebagai **optional foreign key** untuk link manual ke entri spesifik
-3. Matching otomatis hanya untuk kasus sederhana: indeks unik + sealang hanya 1 hasil + lafal cocok
-4. Kasus ambigu → biarkan `entri_id` null, tampilkan di antarmuka redaksi untuk review manual
+Konsekuensi: identitas paling stabil tetap `lwim_id`, bukan gabungan `orthTarget + hom`.
 
 ---
 
-## Desain Tabel
+## Implikasi Pemodelan Data
+
+1. `etym_lang` tidak bisa menjadi satu-satunya sumber bahasa asal.
+2. `raw_def` dan `xr_lihat` harus diperlakukan sebagai sumber pendamping wajib.
+3. Relasi `indeks_query = entri.indeks` adalah basis domain, tetapi tidak satu-ke-satu.
+4. Tautan spesifik dilakukan lewat `entri_id` per baris etimologi.
+
+### Pola kardinalitas
+
+1. Satu `indeks_query` dapat memiliki **0..N** baris di `etimologi_lwim`.
+2. Satu `entri.indeks` dapat memiliki **1..N** `entri.id`.
+3. Karena itu, satu baris etimologi belum tentu langsung dapat dipadankan ke satu `entri.id` tanpa tahap analisis.
+
+---
+
+## Desain Tabel Final (berbasis `etimologi_lwim`)
 
 ```sql
-create table etimologi (
-  id serial primary key,
+alter table etimologi_lwim
+  add column entri_id integer references entri(id) on delete set null;
 
-  -- Tautan ke entri (opsional, bisa null untuk data mentah)
-  entri_id integer references entri(id) on delete set null,
+create index idx_etimologi_lwim_entri_id on etimologi_lwim using btree (entri_id);
+create index idx_etimologi_lwim_indeks_entri on etimologi_lwim using btree (indeks_query, entri_id);
 
-  -- Data dari sealang LWIM
-  lwim_id text not null,           -- e.g., "LWIM:22824" — UNIQUE, bukan orthTarget+hom
-  lwim_orth text not null,         -- orthTarget dengan diakritik, e.g., "véntilasi"
-  lwim_hom integer,                -- nomor hom dari sealang (BISA duplikat per orthTarget)
-  lwim_cite text,                  -- kutipan referensi, e.g., "Monier-Williams:1098.2"
-  aksara_asal text,                -- aksara non-Latin jika ada, e.g., "四" (untuk Tionghoa)
+-- Rekomendasi integritas:
+-- 1) indeks_query diisi sesuai domain entri.indeks
+-- 2) entri_id boleh null untuk kasus ambigu
+-- 3) lwim_id dipakai sebagai idempotency key (disarankan UNIQUE jika belum)
+```
 
-  -- Data etimologi yang sudah diparsing
-  bahasa_asal text,                -- e.g., "Dutch", "English", "Portuguese"
-  kata_asal text,                  -- e.g., "ventilatie", "kantoor"
-  bahasa_antara text,              -- bahasa perantara jika ada, e.g., "French"
-  kata_antara text,                -- kata dalam bahasa perantara
-  rantai_lengkap text,             -- teks rantai asli, e.g., "< Dutch ventilatie (< French)"
+### Aturan relasi
 
-  -- Data tambahan
-  definisi_en text,                -- definisi bahasa Inggris dari sealang
-  xr_lihat text,                   -- cross-ref "see", e.g., "fair"
-  xr_varian text,                  -- cross-ref "var", e.g., "pir"
-  catatan text,                    -- catatan tambahan dari redaksi
+- `etimologi_lwim.indeks_query` harus berada pada domain nilai `entri.indeks`.
+- Satu `indeks_query` bisa merujuk banyak `entri.id`.
+- `entri_id` adalah tautan spesifik per baris LWIM, dan boleh `null`.
+- Foreign key langsung dari `indeks_query` ke `entri.indeks` tidak dapat dipasang karena `entri.indeks` bukan kolom unik.
 
-  -- Metadata
-  sumber text not null default 'lwim',
-  aktif integer not null default 1,
-  created_at timestamp without time zone not null default now(),
-  updated_at timestamp without time zone not null default now()
-);
+---
 
-create index idx_etimologi_entri_id on etimologi using btree (entri_id);
-create index idx_etimologi_lwim_id on etimologi using btree (lwim_id);
-create unique index idx_etimologi_lwim_id on etimologi using btree (lwim_id);
--- Catatan: lwim_id sudah unik sendiri (LWIM:xxxxx), tidak perlu lwim_id+hom karena hom bisa duplikat
+## Query Analisis Pola
+
+```sql
+-- 1) indeks yang punya banyak kandidat entri.id
+select e.indeks, count(*) as jumlah_entri
+from entri e
+where e.jenis = 'dasar'
+group by e.indeks
+having count(*) > 1
+order by jumlah_entri desc, e.indeks;
+
+-- 2) kepadatan baris LWIM per indeks_query
+select l.indeks_query, count(*) as jumlah_lwim
+from etimologi_lwim l
+group by l.indeks_query
+order by jumlah_lwim desc, l.indeks_query;
+
+-- 3) kandidat baris LWIM yang belum tertaut ke entri
+select l.lwim_id, l.indeks_query, l.lwim_orth, l.lwim_hom
+from etimologi_lwim l
+where l.entri_id is null
+order by l.indeks_query, l.lwim_orth, l.lwim_hom nulls last;
+
+-- 4) validasi konsistensi entri_id vs indeks_query
+select l.lwim_id, l.indeks_query, e.id as entri_id, e.indeks as indeks_entri
+from etimologi_lwim l
+join entri e on e.id = l.entri_id
+where e.indeks <> l.indeks_query;
 ```
 
 ---
 
 ## Rencana Implementasi
 
-### Fase 1: Skrip Scraper (Backend)
+### Fase 1 — Konsolidasi Data Etimologi
 
-File: `backend/scripts/scrapeEtimologi.js`
+1. Ambil seluruh indeks unik dari `entri` (`jenis = 'dasar'`).
+2. Lengkapi baris `etimologi_lwim` dengan `lwim_id`, `indeks_query`, dan informasi etimologi yang tersedia.
+3. Pastikan update bersifat idempoten berdasarkan `lwim_id`.
 
-```
-Algoritme:
-1. Ambil semua indeks unik dari entri WHERE jenis = 'dasar'
-   (±10.000 indeks unik)
-2. Untuk setiap indeks:
-   a. GET http://sealang.net/lwim/...?orth=<indeks>
-   b. Jika "Nothing found" → skip
-   c. Parse semua <entry> dalam response
-   d. Parse etimologi dari <etym> atau dari <def> (regex)
-   e. Simpan ke tabel etimologi (upsert by lwim_id)
-3. Rate limiting: delay 500ms antar request
-4. Retry sekali untuk error jaringan
-5. Log progress ke file
-```
+### Fase 2 — Matching Heuristik ke `entri_id`
 
-### Fase 2: Matching Heuristik
+Kasus auto-link:
 
-Setelah scraping, jalankan matching otomatis hanya untuk kasus yang jelas:
+- `indeks_query` hanya punya 1 kandidat `entri.id` dan 1 entri etimologi relevan.
+- Atau pola lafal/diakritik mendukung keputusan tunggal.
 
-```
-Kasus auto-match (set entri_id otomatis):
-  - indeks hanya punya 1 entri di DB (jenis=dasar) DAN sealang hanya 1 result → langsung link
-  - Jika DB punya lafal: konversi diakritik sealang → lafal IPA, cocokkan dengan entri.lafal
-    Contoh: lwim_orth="séri" → taling → cocok dengan entri.lafal="seri" (bukan "səri")
+Kasus review manual (`entri_id = null`):
 
-Kasus butuh review manual (entri_id = null):
-  - Sealang punya duplikat hom untuk orthTarget yang sama
-  - DB punya banyak homonim tapi lafal=null semua
-  - Jumlah hasil sealang != jumlah entri di DB untuk indeks tersebut
+- Duplikasi `hom` dalam satu `orthTarget`.
+- Banyak homonim pada `entri` tetapi `lafal` tidak cukup membedakan.
+- Jumlah entri etimologi dan jumlah kandidat `entri.id` tidak seimbang.
 
-Konversi diakritik sealang → lafal DB:
-  - orthTarget tanpa aksen → pepet (schwa) → cocok dengan lafal "...ə..."
-  - orthTarget dengan é (akut) → taling → cocok dengan lafal "...e..." (tanpa ə)
-```
+### Fase 3 — Penyajian Frontend
 
-### Fase 3: Frontend
-
-- Tampilkan blok etimologi di halaman kamus detail
-- Format: "Dari bahasa Belanda *kantoor*" atau "Dari bahasa Portugis *escola* (berasal dari Latin)"
-- Khusus kata tanpa `entri_id` → tidak ditampilkan ke publik (aktif=0)
-
----
-
-## Estimasi Data
-
-| Kategori | Estimasi |
-|---|---|
-| Total entri unik (indeks) | ~30.000 |
-| Entri jenis `dasar` | ~25.000 |
-| Perkiraan hit di sealang | ~5.000–8.000 |
-| Request ke sealang | ~25.000 (dengan gap untuk "not found") |
-| Waktu scraping (500ms delay) | ~3–4 jam |
+- Tampilkan etimologi hanya untuk baris yang sudah memiliki `entri_id` valid.
+- Untuk kasus ambigu, tahan di area redaksi sampai ditautkan.
 
 ---
 
 ## Catatan Penting
 
-- Sealang hanya memiliki **kata serapan** — bukan semua entri kamus akan ditemukan
-- Kata-kata asli Melayu/Jawa/daerah → "Nothing found" → skip
-- Data LWIM memiliki lisensi akademik — gunakan untuk referensi, bukan redistribusi mentah
-- Perlu konfirmasi: apakah sealang punya endpoint bulk/API atau hanya per-kata?
+- LWIM berfokus pada kata serapan; tidak semua entri kamus akan memiliki etimologi LWIM.
+- Bentuk naratif pada `raw_def` sangat dominan untuk kasus `etym_lang` kosong.
+- Diperlukan kamus normalisasi bahasa (alias/ejaan) agar agregasi statistik lebih bersih.

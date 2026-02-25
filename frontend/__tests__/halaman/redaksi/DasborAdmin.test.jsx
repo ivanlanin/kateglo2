@@ -41,7 +41,7 @@ describe('DasborAdmin', () => {
     );
 
     expect(screen.getByText('Dasbor')).toBeInTheDocument();
-    expect(screen.getAllByText('…')).toHaveLength(6);
+    expect(screen.getAllByText('…')).toHaveLength(7);
   });
 
   it('menampilkan statistik saat data tersedia', () => {

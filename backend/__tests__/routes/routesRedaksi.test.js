@@ -40,6 +40,14 @@ jest.mock('../../models/modelTesaurus', () => ({
   hitungTotal: jest.fn(),
 }));
 
+jest.mock('../../models/modelEtimologi', () => ({
+  daftarAdmin: jest.fn(),
+  ambilDenganId: jest.fn(),
+  simpan: jest.fn(),
+  hapus: jest.fn(),
+  hitungTotal: jest.fn(),
+}));
+
 jest.mock('../../models/modelGlosarium', () => ({
   cari: jest.fn(),
   ambilDenganId: jest.fn(),
@@ -90,6 +98,7 @@ jest.mock('../../services/layananGlosariumPublik', () => ({
 const ModelPengguna = require('../../models/modelPengguna');
 const ModelLema = require('../../models/modelEntri');
 const ModelTesaurus = require('../../models/modelTesaurus');
+const ModelEtimologi = require('../../models/modelEtimologi');
 const ModelGlosarium = require('../../models/modelGlosarium');
 const ModelLabel = require('../../models/modelLabel');
 const ModelKomentar = require('../../models/modelKomentar');
@@ -322,6 +331,7 @@ describe('routes/redaksi', () => {
       ModelLema.hitungTotal.mockResolvedValue(10);
       ModelGlosarium.hitungTotal.mockResolvedValue(20);
       ModelTesaurus.hitungTotal.mockResolvedValue(30);
+      ModelEtimologi.hitungTotal.mockResolvedValue(35);
       ModelLabel.hitungTotal.mockResolvedValue(40);
       ModelPengguna.hitungTotal.mockResolvedValue(50);
       ModelKomentar.hitungTotal.mockResolvedValue(60);
@@ -333,6 +343,7 @@ describe('routes/redaksi', () => {
         entri: 10,
         glosarium: 20,
         tesaurus: 30,
+        etimologi: 35,
         label: 40,
         pengguna: 50,
         komentar: 60,

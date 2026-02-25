@@ -7,6 +7,7 @@ const { periksaIzin } = require('../../middleware/otorisasi');
 const ModelEntri = require('../../models/modelEntri');
 const ModelGlosarium = require('../../models/modelGlosarium');
 const ModelTesaurus = require('../../models/modelTesaurus');
+const ModelEtimologi = require('../../models/modelEtimologi');
 const ModelLabel = require('../../models/modelLabel');
 const ModelPengguna = require('../../models/modelPengguna');
 const ModelKomentar = require('../../models/modelKomentar');
@@ -19,10 +20,11 @@ const router = express.Router();
  */
 router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
   try {
-    const [entri, glosarium, tesaurus, label, pengguna, komentar] = await Promise.all([
+    const [entri, glosarium, tesaurus, etimologi, label, pengguna, komentar] = await Promise.all([
       ModelEntri.hitungTotal(),
       ModelGlosarium.hitungTotal(),
       ModelTesaurus.hitungTotal(),
+      ModelEtimologi.hitungTotal(),
       ModelLabel.hitungTotal(),
       ModelPengguna.hitungTotal(),
       ModelKomentar.hitungTotal(),
@@ -30,7 +32,7 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
 
     return res.json({
       success: true,
-      data: { entri, glosarium, tesaurus, label, pengguna, komentar },
+      data: { entri, glosarium, tesaurus, etimologi, label, pengguna, komentar },
     });
   } catch (error) {
     return next(error);

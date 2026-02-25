@@ -291,6 +291,50 @@ export function useDetailTesaurusAdmin(id) {
   });
 }
 
+// ─── Etimologi ───────────────────────────────────────────────────────────────
+
+export function useDaftarEtimologiAdmin({
+  limit = 50,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+  q = '',
+} = {}) {
+  return useDaftarAdmin('/api/redaksi/etimologi', 'admin-etimologi', {
+    limit,
+    cursor,
+    direction,
+    lastPage,
+    q,
+    includeAktif: false,
+  });
+}
+
+export function useDetailEtimologiAdmin(id) {
+  return useQuery({
+    queryKey: ['admin-etimologi-detail', id],
+    queryFn: () => klien.get(`/api/redaksi/etimologi/${id}`).then((r) => r.data),
+    enabled: Boolean(id),
+  });
+}
+
+export function useAutocompleteEntriEtimologi({ q = '', limit = 8 } = {}) {
+  const query = String(q || '').trim();
+  return useQuery({
+    queryKey: ['admin-etimologi-entri-autocomplete', { q: query, limit }],
+    queryFn: () =>
+      klien
+        .get('/api/redaksi/etimologi/opsi-entri', {
+          params: {
+            q: query || undefined,
+            limit,
+          },
+        })
+        .then((r) => r.data),
+    enabled: query.length >= 1,
+  });
+}
+
 // ─── Glosarium ───────────────────────────────────────────────────────────────
 
 export function useDaftarGlosariumAdmin({
@@ -684,6 +728,16 @@ export function useSimpanTesaurus() {
 
 export function useHapusTesaurus() {
   return useHapusAdmin({ path: '/api/redaksi/tesaurus', queryKeyPrefix: 'admin-tesaurus' });
+}
+
+// ─── Mutations: Etimologi ────────────────────────────────────────────────────
+
+export function useSimpanEtimologi() {
+  return useSimpanAdmin({ path: '/api/redaksi/etimologi', queryKeyPrefix: 'admin-etimologi' });
+}
+
+export function useHapusEtimologi() {
+  return useHapusAdmin({ path: '/api/redaksi/etimologi', queryKeyPrefix: 'admin-etimologi' });
 }
 
 // ─── Mutations: Glosarium ────────────────────────────────────────────────────

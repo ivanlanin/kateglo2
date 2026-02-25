@@ -10,6 +10,7 @@ import TataLetak from '../../komponen/bersama/TataLetak';
 const kartuData = [
   { key: 'entri', label: 'Entri Kamus', warna: 'text-blue-600', link: '/redaksi/kamus', izin: 'lihat_entri' },
   { key: 'tesaurus', label: 'Entri Tesaurus', warna: 'text-emerald-600', link: '/redaksi/tesaurus', izin: 'lihat_tesaurus' },
+  { key: 'etimologi', label: 'Entri Etimologi', warna: 'text-indigo-600', link: '/redaksi/etimologi', izin: 'kelola_etimologi' },
   { key: 'glosarium', label: 'Entri Glosarium', warna: 'text-amber-600', link: '/redaksi/glosarium', izin: 'lihat_glosarium' },
   { key: 'komentar', label: 'Komentar', warna: 'text-rose-600', link: '/redaksi/komentar', izin: 'kelola_komentar' },
   { key: 'label', label: 'Label', warna: 'text-cyan-600', link: '/redaksi/label', izin: 'kelola_label' },

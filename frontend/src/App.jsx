@@ -17,6 +17,7 @@ import DasborAdmin from './halaman/redaksi/DasborAdmin';
 import KamusAdmin from './halaman/redaksi/KamusAdmin';
 import KomentarAdmin from './halaman/redaksi/KomentarAdmin';
 import TesaurusAdmin from './halaman/redaksi/TesaurusAdmin';
+import EtimologiAdmin from './halaman/redaksi/EtimologiAdmin';
 import GlosariumAdmin from './halaman/redaksi/GlosariumAdmin';
 import BidangAdmin from './halaman/redaksi/BidangAdmin';
 import SumberAdmin from './halaman/redaksi/SumberAdmin';
@@ -76,6 +77,8 @@ function App() {
       <Route path="/redaksi/audit-makna" element={<RuteRedaksi><AuditMaknaAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/tesaurus" element={<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/tesaurus/:id" element={<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/etimologi" element={<RuteRedaksi><EtimologiAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/etimologi/:id" element={<RuteRedaksi><EtimologiAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/glosarium" element={<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/bidang" element={<RuteRedaksi><BidangAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/bidang/:id" element={<RuteRedaksi><BidangAdmin /></RuteRedaksi>} />

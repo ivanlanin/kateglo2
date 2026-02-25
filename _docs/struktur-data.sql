@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-25T12:32:58.946Z
+-- Generated: 2026-02-25T20:10:12.950Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -187,6 +187,35 @@ create trigger trg_set_timestamp_fields__entri
   before insert or update on entri
   for each row
   execute function set_timestamp_fields();
+
+create table etimologi (
+  id serial primary key,
+  indeks text not null,
+  entri_id integer references entri(id) on delete set null,
+  homonim integer,
+  lafal text,
+  bahasa text,
+  sumber text not null default 'LWIM'::text,
+  sumber_sitasi text,
+  sumber_isi text,
+  sumber_aksara text,
+  sumber_lihat text,
+  sumber_varian text,
+  sumber_definisi text,
+  sumber_id text,
+  aktif boolean not null default false,
+  created_at timestamp with time zone not null,
+  updated_at timestamp with time zone not null,
+  constraint etimologi_indeks_check check (TRIM(BOTH FROM indeks) <> ''::text)
+);
+create index idx_etimologi_aktif on etimologi using btree (aktif);
+create index idx_etimologi_bahasa on etimologi using btree (bahasa);
+create index idx_etimologi_created_at on etimologi using btree (created_at DESC);
+create index idx_etimologi_entri_id on etimologi using btree (entri_id);
+create index idx_etimologi_indeks on etimologi using btree (indeks);
+create index idx_etimologi_indeks_homonim on etimologi using btree (indeks, homonim);
+create index idx_etimologi_lafal on etimologi using btree (lafal);
+create index idx_etimologi_sumber_id on etimologi using btree (sumber_id);
 
 create table etimologi_lwim (
   lwim_id text,
