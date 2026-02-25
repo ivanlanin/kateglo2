@@ -50,7 +50,11 @@ function getBidangSebelumnya(sortedItems = [], index = 0) {
 }
 
 function AlirEntri({ items, tautAsing = false }) {
-  const sortedItems = sortAlirEntriItems(items);
+  const sortedItems = sortAlirEntriItems(items, {
+    prioritizeIndonesia: !tautAsing,
+    sortByBidang: true,
+  });
+  const flowItems = sortedItems;
 
   const renderAsing = (item) => renderEntriGlosariumTertaut(item.asing, (part, info) => (
     <Link
@@ -74,9 +78,9 @@ function AlirEntri({ items, tautAsing = false }) {
 
   return (
     <div className="kamus-detail-subentry-flow">
-      {sortedItems.map((item, i) => {
+      {flowItems.map((item, i) => {
         const bidangSaatIni = (item.bidang || '').trim().toLowerCase();
-        const bidangSebelumnya = getBidangSebelumnya(sortedItems, i);
+        const bidangSebelumnya = getBidangSebelumnya(flowItems, i);
         const tampilkanBadgeBidang = Boolean(item.bidang) && bidangSaatIni !== bidangSebelumnya;
 
         return (
@@ -96,7 +100,7 @@ function AlirEntri({ items, tautAsing = false }) {
           ) : (
             item.indonesia && renderIndonesia(item)
           )}
-          {i < sortedItems.length - 1 && <span className="secondary-text">; </span>}
+          {i < flowItems.length - 1 && <span className="secondary-text">; </span>}
         </span>
       );
       })}
@@ -104,19 +108,25 @@ function AlirEntri({ items, tautAsing = false }) {
   );
 }
 
-function sortAlirEntriItems(items = []) {
+function sortAlirEntriItems(items = [], { prioritizeIndonesia = false, sortByBidang = true } = {}) {
   return [...items].sort((a, b) => {
     const bidangA = (a.bidang || '').trim();
     const bidangB = (b.bidang || '').trim();
 
-    if (bidangA && !bidangB) return -1;
-    if (!bidangA && bidangB) return 1;
+    if (sortByBidang) {
+      if (bidangA && !bidangB) return -1;
+      if (!bidangA && bidangB) return 1;
 
-    const bidangCompare = bidangA.localeCompare(bidangB, 'id', { sensitivity: 'base' });
-    if (bidangCompare !== 0) return bidangCompare;
+      const bidangCompare = bidangA.localeCompare(bidangB, 'id', { sensitivity: 'base' });
+      if (bidangCompare !== 0) return bidangCompare;
+    }
 
-    const labelA = (a.asing || a.indonesia || '').trim();
-    const labelB = (b.asing || b.indonesia || '').trim();
+    const labelA = prioritizeIndonesia
+      ? (a.indonesia || a.asing || '').trim()
+      : (a.asing || a.indonesia || '').trim();
+    const labelB = prioritizeIndonesia
+      ? (b.indonesia || b.asing || '').trim()
+      : (b.asing || b.indonesia || '').trim();
     return labelA.localeCompare(labelB, 'id', { sensitivity: 'base' });
   });
 }

@@ -126,6 +126,33 @@ describe('GlosariumDetail', () => {
     expect(__private.getBidangSebelumnya([undefined, { bidang: 'Biologi' }], 1)).toBe('');
   });
 
+  it('helper AlirEntri mengurutkan daftar indonesia per bidang secara abjad', () => {
+    const AlirEntri = __private.AlirEntri;
+    render(
+      <AlirEntri
+        items={[
+          { id: 1, bidang: 'Hukum', bidang_kode: 'huk', indonesia: 'penerimaan' },
+          { id: 2, bidang: 'Hukum', bidang_kode: 'huk', indonesia: 'akseptasi' },
+          { id: 3, bidang: 'Hukum', bidang_kode: 'huk', indonesia: 'dikabulkan' },
+        ]}
+      />
+    );
+
+    const flowText = document.querySelector('.kamus-detail-subentry-flow')?.textContent || '';
+    expect(flowText.indexOf('akseptasi')).toBeLessThan(flowText.indexOf('dikabulkan'));
+    expect(flowText.indexOf('dikabulkan')).toBeLessThan(flowText.indexOf('penerimaan'));
+  });
+
+  it('helper sortAlirEntriItems mengurutkan asing sambil tetap mengelompokkan bidang', () => {
+    const sorted = __private.sortAlirEntriItems([
+      { id: 1, bidang: 'Kimia', asing: 'zeta', indonesia: 'x' },
+      { id: 2, bidang: 'Biologi', asing: 'omega', indonesia: 'y' },
+      { id: 3, bidang: 'Kimia', asing: 'alfa', indonesia: 'z' },
+    ], { prioritizeIndonesia: false, sortByBidang: true });
+
+    expect(sorted.map((item) => item.id)).toEqual([2, 3, 1]);
+  });
+
   it('menampilkan seksi persis/memuat/mirip, tautan, dan navigasi cursor', () => {
     queryState = {
       isLoading: false,

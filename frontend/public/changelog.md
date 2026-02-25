@@ -1,10 +1,15 @@
 # Riwayat Perubahan
 
+## 2026-02-25 Rabu
+
+- Mengurutkan entri detail glosarium berdasarkan abjad
+
 ## 2026-02-24 Selasa
 
 - Menampilkan ragam varian dan kiasan di redaksi kamus
 - Menambahkan kategori akronim dan singkatan di bentuk bebas serta kiasan di ekspresi
 - Memproses tampilan entri glosarium agar mengenali titik koma dan tanda kurung
+- Menambahkan entri glosarium dari Glosarium Kemenkeu
 
 ## 2026-02-23 Senin
 
