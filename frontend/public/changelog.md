@@ -3,6 +3,7 @@
 ## 2026-02-25 Rabu
 
 - Mengurutkan entri detail glosarium berdasarkan abjad
+- Menambahkan ikon pensil di entri glosarium publik untuk memudahkan pengeditan
 
 ## 2026-02-24 Selasa
 

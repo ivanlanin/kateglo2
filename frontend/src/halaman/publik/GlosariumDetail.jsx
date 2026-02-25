@@ -14,6 +14,7 @@ import { buatPathDetailKamus } from '../../utils/paramUtils';
 import { renderEntriGlosariumTertaut } from '../../utils/formatUtils';
 import { buildMetaDetailGlosarium } from '../../utils/metaUtils';
 import useNavigasiMemuat from '../../hooks/bersama/useNavigasiMemuat';
+import { useAuthOptional } from '../../context/authContext';
 
 function upsertMetaTag({ name, property, content }) {
   const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
@@ -49,7 +50,7 @@ function getBidangSebelumnya(sortedItems = [], index = 0) {
   return (sortedItems[index - 1]?.bidang || '').trim().toLowerCase();
 }
 
-function AlirEntri({ items, tautAsing = false }) {
+function AlirEntri({ items, tautAsing = false, tampilkanEdit = false }) {
   const sortedItems = sortAlirEntriItems(items, {
     prioritizeIndonesia: !tautAsing,
     sortByBidang: true,
@@ -96,6 +97,23 @@ function AlirEntri({ items, tautAsing = false }) {
               <em>{renderAsing(item)}</em>
               {item.indonesia ? ': ' : ''}
               {renderIndonesia(item)}
+              {tampilkanEdit && item?.id && item?.asing && item?.indonesia && (
+                <>
+                  {' '}
+                  <Link
+                    to={`/redaksi/glosarium/${item.id}`}
+                    className="glosarium-edit-link-inline"
+                    aria-label="Sunting entri glosarium di Redaksi"
+                    title="Sunting entri glosarium di Redaksi"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-3.5 w-3.5">
+                      <path d="M12 20h9" />
+                      <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                    </svg>
+                    <span className="sr-only">Sunting</span>
+                  </Link>
+                </>
+              )}
             </>
           ) : (
             item.indonesia && renderIndonesia(item)
@@ -133,6 +151,8 @@ function sortAlirEntriItems(items = [], { prioritizeIndonesia = false, sortByBid
 
 function GlosariumDetail() {
   const { asing } = useParams();
+  const auth = useAuthOptional();
+  const adalahAdmin = Boolean(auth?.adalahAdmin);
   const asingDecoded = decodeURIComponent(asing || '');
 
   const [mengandungCursor, setMengandungCursor] = useState(null);
@@ -244,6 +264,7 @@ function GlosariumDetail() {
             <AlirEntri
               items={mengandung}
               tautAsing
+              tampilkanEdit={adalahAdmin}
             />
           </NavigasiLoadingOverlay>
         </SeksiDetail>
@@ -277,6 +298,7 @@ function GlosariumDetail() {
             <AlirEntri
               items={mirip}
               tautAsing
+              tampilkanEdit={adalahAdmin}
             />
           </NavigasiLoadingOverlay>
         </SeksiDetail>

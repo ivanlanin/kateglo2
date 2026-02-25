@@ -1138,12 +1138,20 @@ code {
     @apply inline-block ml-2 px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded;
   }
 
+  .glosarium-edit-link-inline {
+    @apply inline-flex align-middle items-center justify-center ml-1 h-4 w-4 rounded border border-blue-300 text-blue-600 hover:text-blue-700 hover:border-blue-400;
+  }
+
   .dark .glosarium-result-original {
     @apply text-blue-300;
   }
 
   .dark .glosarium-result-badge {
     @apply text-dark-text-muted;
+  }
+
+  .dark .glosarium-edit-link-inline {
+    @apply border-blue-600 text-blue-300 hover:text-blue-200 hover:border-blue-500;
   }
 
   .dark .glosarium-result-badge {

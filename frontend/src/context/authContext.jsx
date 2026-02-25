@@ -158,4 +158,8 @@ function useAuth() {
   return context;
 }
 
-export { AuthProvider, useAuth };
+function useAuthOptional() {
+  return useContext(AuthContext);
+}
+
+export { AuthProvider, useAuth, useAuthOptional };
