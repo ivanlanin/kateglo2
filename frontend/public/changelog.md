@@ -5,6 +5,7 @@
 - Mengurutkan entri detail glosarium berdasarkan abjad
 - Menambahkan ikon pensil di entri glosarium publik untuk memudahkan pengeditan
 - Membuat komponen `PensilSunting` untuk menyeragamkan tampilan penyuntingan
+- Menambahkan `sitemap.xml` dan `robots.txt` untuk SEO
 
 ## 2026-02-24 Selasa
 
