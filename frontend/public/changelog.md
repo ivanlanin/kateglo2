@@ -6,6 +6,7 @@
 - Menambahkan ikon pensil di entri glosarium publik untuk memudahkan pengeditan
 - Membuat komponen `PensilSunting` untuk menyeragamkan tampilan penyuntingan
 - Menambahkan `sitemap.xml` dan `robots.txt` untuk SEO
+- Menambahkan keterangan sumber glosarium
 
 ## 2026-02-24 Selasa
 

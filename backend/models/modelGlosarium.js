@@ -670,6 +670,7 @@ class ModelGlosarium {
          s.id,
          s.kode,
          s.nama,
+         s.keterangan,
          s.nama AS sumber
        FROM sumber s
        ${kondisiAktif}

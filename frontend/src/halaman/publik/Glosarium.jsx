@@ -4,6 +4,7 @@
 
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import ReactMarkdown from 'react-markdown';
 import { useCursorPagination } from '../../hooks/bersama/useCursorPagination';
 import {
   cariGlosarium,
@@ -50,6 +51,22 @@ export function resolveKategoriNama(param, list, nameKeys, codeKeys) {
   if (!matched) return fallback;
   const nama = safeNameKeys.map((key) => String(matched?.[key] || '').trim()).find(Boolean);
   return nama || fallback;
+}
+
+function resolveKategoriItem(param, list, nameKeys, codeKeys) {
+  const safeParam = param ?? '';
+  const safeNameKeys = Array.isArray(nameKeys) ? nameKeys : [];
+  const safeCodeKeys = Array.isArray(codeKeys) ? codeKeys : [];
+  const target = normalizeKategoriKey(safeParam);
+  if (!target) return null;
+  if (!Array.isArray(list)) return null;
+  if (list.length === 0) return null;
+
+  return list.find((item) => {
+    const byCode = safeCodeKeys.some((key) => normalizeKategoriKey(item?.[key]) === target);
+    const byName = safeNameKeys.some((key) => normalizeKategoriKey(item?.[key]) === target);
+    return byCode || byName;
+  }) || null;
 }
 
 function Glosarium() {
@@ -108,6 +125,8 @@ function Glosarium() {
   const total = data?.total || 0;
   const namaBidang = resolveKategoriNama(bidang, bidangList, ['nama', 'bidang'], ['kode']);
   const namaSumber = resolveKategoriNama(sumber, sumberList, ['nama', 'sumber'], ['kode']);
+  const detailSumber = resolveKategoriItem(sumber, sumberList, ['nama', 'sumber'], ['kode']);
+  const keteranganSumber = String(detailSumber?.keterangan || '').trim();
 
   const handlePaginasi = (action) => {
     handleCursor(action, {
@@ -170,6 +189,11 @@ function Glosarium() {
       judulNoda={judulNodaPencarian}
       deskripsi={metaHalaman.deskripsi}
     >
+      {sumber && keteranganSumber && (
+        <div className="glosarium-keterangan-sumber">
+          <ReactMarkdown>{keteranganSumber}</ReactMarkdown>
+        </div>
+      )}
 
       <QueryFeedback
         isLoading={isLoading}

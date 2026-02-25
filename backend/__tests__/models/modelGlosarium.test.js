@@ -462,11 +462,12 @@ describe('ModelGlosarium', () => {
   });
 
   it('ambilDaftarSumber mengembalikan rows', async () => {
-    const rows = [{ sumber: 'kbbi' }];
+    const rows = [{ sumber: 'kbbi', keterangan: '**Sumber utama**' }];
     db.query.mockResolvedValue({ rows });
 
     const result = await ModelGlosarium.ambilDaftarSumber();
 
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('s.keterangan'));
     expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM sumber s'));
     expect(result).toEqual(rows);
   });

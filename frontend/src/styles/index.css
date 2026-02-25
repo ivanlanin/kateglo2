@@ -1126,6 +1126,22 @@ code {
     @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2;
   }
 
+  .glosarium-keterangan-sumber {
+    @apply mb-4 text-gray-700;
+  }
+
+  .glosarium-keterangan-sumber p {
+    @apply mb-3;
+  }
+
+  .glosarium-keterangan-sumber p:last-child {
+    @apply mb-0;
+  }
+
+  .glosarium-keterangan-sumber a {
+    @apply text-blue-700 hover:text-blue-800 hover:underline;
+  }
+
   .glosarium-result-row {
     @apply min-w-0 truncate text-base;
   }
@@ -1144,6 +1160,14 @@ code {
 
   .dark .glosarium-result-original {
     @apply text-blue-300;
+  }
+
+  .dark .glosarium-keterangan-sumber {
+    @apply text-dark-text-muted;
+  }
+
+  .dark .glosarium-keterangan-sumber a {
+    @apply text-blue-300 hover:text-blue-200;
   }
 
   .dark .glosarium-result-badge {

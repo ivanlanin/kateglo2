@@ -185,6 +185,38 @@ describe('Glosarium', () => {
     });
   });
 
+  it('menampilkan keterangan sumber berformat markdown di bawah heading', () => {
+    mockParams = { sumber: 'kbbi-iv' };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const key = options?.queryKey?.[0];
+      if (key === 'glosarium-bidang') return { data: [], isLoading: false, isError: false };
+      if (key === 'glosarium-sumber') {
+        return {
+          data: [{ kode: 'kbbi-iv', nama: 'KBBI IV', keterangan: '**Sumber resmi** untuk glosarium.' }],
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return {
+        data: {
+          data: [{ id: 1, indonesia: 'entri', asing: 'entry' }],
+          total: 1,
+        },
+        isLoading: false,
+        isError: false,
+      };
+    });
+
+    render(<Glosarium />);
+
+    expect(screen.getByRole('heading', { name: 'Glosarium KBBI IV' })).toBeInTheDocument();
+    const strong = screen.getByText('Sumber resmi', { selector: 'strong' });
+    expect(strong).toBeInTheDocument();
+    expect(strong.closest('.glosarium-keterangan-sumber')).toBeInTheDocument();
+  });
+
   it('browse tanpa daftar bidang/sumber tidak menampilkan kartu kategori', () => {
     mockUseQuery.mockImplementation((options) => {
       if (options?.queryFn) options.queryFn();
