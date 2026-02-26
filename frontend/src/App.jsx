@@ -45,8 +45,8 @@ function RuteRedaksi({ children }) {
   return children;
 }
 
-function RuteAdmin({ children }) {
-  const { isAuthenticated, adalahAdmin, isLoading } = useAuth();
+function RuteIzin({ children, izinDibutuhkan = [] }) {
+  const { isAuthenticated, adalahRedaksi, adalahAdmin, punyaIzin, isLoading } = useAuth();
 
   if (isLoading) {
     return (
@@ -56,7 +56,18 @@ function RuteAdmin({ children }) {
     );
   }
 
-  if (!isAuthenticated || !adalahAdmin) {
+  if (!isAuthenticated || !adalahRedaksi) {
+    return <Navigate to="/redaksi/login" replace />;
+  }
+
+  const daftarIzin = Array.isArray(izinDibutuhkan)
+    ? izinDibutuhkan.filter(Boolean)
+    : [];
+  const lolosIzin = daftarIzin.length === 0
+    || Boolean(adalahAdmin)
+    || (typeof punyaIzin === 'function' && daftarIzin.every((kodeIzin) => punyaIzin(kodeIzin)));
+
+  if (!lolosIzin) {
     return <Navigate to="/redaksi" replace />;
   }
 
@@ -85,14 +96,14 @@ function App() {
       <Route path="/redaksi/sumber" element={<RuteRedaksi><SumberAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/sumber/:id" element={<RuteRedaksi><SumberAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/glosarium/:id" element={<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/label" element={<RuteAdmin><LabelAdmin /></RuteAdmin>} />
-      <Route path="/redaksi/label/:id" element={<RuteAdmin><LabelAdmin /></RuteAdmin>} />
-      <Route path="/redaksi/peran" element={<RuteAdmin><PeranAdmin /></RuteAdmin>} />
-      <Route path="/redaksi/peran/:id" element={<RuteAdmin><PeranAdmin /></RuteAdmin>} />
-      <Route path="/redaksi/izin" element={<RuteAdmin><IzinAdmin /></RuteAdmin>} />
-      <Route path="/redaksi/izin/:id" element={<RuteAdmin><IzinAdmin /></RuteAdmin>} />
-      <Route path="/redaksi/pengguna" element={<RuteAdmin><PenggunaAdmin /></RuteAdmin>} />
-      <Route path="/redaksi/pengguna/:id" element={<RuteAdmin><PenggunaAdmin /></RuteAdmin>} />
+      <Route path="/redaksi/label" element={<RuteIzin izinDibutuhkan={['kelola_label']}><LabelAdmin /></RuteIzin>} />
+      <Route path="/redaksi/label/:id" element={<RuteIzin izinDibutuhkan={['kelola_label']}><LabelAdmin /></RuteIzin>} />
+      <Route path="/redaksi/peran" element={<RuteIzin izinDibutuhkan={['kelola_peran']}><PeranAdmin /></RuteIzin>} />
+      <Route path="/redaksi/peran/:id" element={<RuteIzin izinDibutuhkan={['kelola_peran']}><PeranAdmin /></RuteIzin>} />
+      <Route path="/redaksi/izin" element={<RuteIzin izinDibutuhkan={['kelola_peran']}><IzinAdmin /></RuteIzin>} />
+      <Route path="/redaksi/izin/:id" element={<RuteIzin izinDibutuhkan={['kelola_peran']}><IzinAdmin /></RuteIzin>} />
+      <Route path="/redaksi/pengguna" element={<RuteIzin izinDibutuhkan={['kelola_pengguna']}><PenggunaAdmin /></RuteIzin>} />
+      <Route path="/redaksi/pengguna/:id" element={<RuteIzin izinDibutuhkan={['kelola_pengguna']}><PenggunaAdmin /></RuteIzin>} />
       {/* Public routes */}
       <Route element={<TataLetak />}>
         <Route path="/" element={<Beranda />} />

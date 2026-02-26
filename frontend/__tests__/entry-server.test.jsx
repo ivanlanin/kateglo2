@@ -216,6 +216,13 @@ describe('entry-server', () => {
     globalThis.process = originalGlobal;
   });
 
+  it('render melewati SSR untuk route redaksi agar hydrasi client yang mengelola auth', async () => {
+    const { appHtml, headTags } = await render('/redaksi/kamus');
+    expect(appHtml).toBe('');
+    expect(headTags).toContain('canonical');
+    expect(headTags).toContain('https://kateglo.org/redaksi/kamus');
+  });
+
   it('buildMetaForPath memakai fallback pathname root saat input kosong', () => {
     const meta = __private.buildMetaForPath('', 'https://kateglo.org');
     expect(meta.title).toBe('Kateglo');

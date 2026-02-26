@@ -45,6 +45,12 @@ jest.mock('../../models/modelTesaurus', () => ({
   autocomplete: jest.fn(),
 }));
 
+jest.mock('../../models/modelPengguna', () => ({
+  ambilDenganId: jest.fn(),
+  ambilPeranUntukAuth: jest.fn(),
+  ambilIzin: jest.fn(),
+}));
+
 jest.mock('../../services/layananKamusPublik', () => ({
   cariKamus: jest.fn(),
   ambilDetailKamus: jest.fn(),
@@ -64,6 +70,7 @@ const ModelLabel = require('../../models/modelLabel');
 const ModelEntri = require('../../models/modelEntri');
 const ModelKomentar = require('../../models/modelKomentar');
 const ModelTesaurus = require('../../models/modelTesaurus');
+const ModelPengguna = require('../../models/modelPengguna');
 const layananKamusPublik = require('../../services/layananKamusPublik');
 const layananGlosariumPublik = require('../../services/layananGlosariumPublik');
 const layananTesaurusPublik = require('../../services/layananTesaurusPublik');
@@ -84,6 +91,9 @@ describe('routes backend', () => {
     jest.clearAllMocks();
     ModelEntri.saranEntri.mockResolvedValue([]);
     ModelKomentar.hitungKomentarAktif.mockResolvedValue(0);
+    ModelPengguna.ambilDenganId.mockResolvedValue(null);
+    ModelPengguna.ambilPeranUntukAuth.mockResolvedValue({ kode: 'pengguna', akses_redaksi: false });
+    ModelPengguna.ambilIzin.mockResolvedValue([]);
     delete process.env.JWT_SECRET;
   });
 
@@ -971,6 +981,40 @@ describe('routes backend', () => {
     expect(response.status).toBe(200);
     expect(response.body.data.akses_redaksi).toBe(false);
     expect(response.body.data.izin).toEqual([]);
+    delete process.env.JWT_SECRET;
+  });
+
+  it('GET /api/publik/auth/me memakai izin/peran terbaru dari DB saat pid tersedia', async () => {
+    process.env.JWT_SECRET = 'test-secret-routes';
+    ModelPengguna.ambilDenganId.mockResolvedValue({ id: 2, peran_id: 7 });
+    ModelPengguna.ambilPeranUntukAuth.mockResolvedValue({ kode: 'editor', akses_redaksi: true });
+    ModelPengguna.ambilIzin.mockResolvedValue(['kelola_label', 'kelola_pengguna']);
+
+    const token = jwt.sign(
+      {
+        sub: 'google-789',
+        pid: 2,
+        email: 'editor@example.com',
+        name: 'Editor',
+        picture: 'https://img.example/editor.png',
+        peran: 'pengguna',
+        izin: ['izin_lama'],
+        provider: 'google',
+      },
+      process.env.JWT_SECRET
+    );
+
+    const response = await request(createApp())
+      .get('/api/publik/auth/me')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(ModelPengguna.ambilDenganId).toHaveBeenCalledWith(2);
+    expect(ModelPengguna.ambilPeranUntukAuth).toHaveBeenCalledWith(7);
+    expect(ModelPengguna.ambilIzin).toHaveBeenCalledWith(7);
+    expect(response.body.data.peran).toBe('editor');
+    expect(response.body.data.akses_redaksi).toBe(true);
+    expect(response.body.data.izin).toEqual(['kelola_label', 'kelola_pengguna']);
     delete process.env.JWT_SECRET;
   });
 

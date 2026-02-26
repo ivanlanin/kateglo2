@@ -214,6 +214,11 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
   return { ...defaultMeta, canonicalUrl: `${siteBaseUrl}${path}` };
 }
 
+function shouldSkipSsr(pathname = '/') {
+  const path = decodeURIComponent(pathname || '/');
+  return path === '/redaksi' || path.startsWith('/redaksi/');
+}
+
 export async function render(url = '/', prefetchedData = null) {
   const runtimeProcess = globalThis.process;
   const siteBaseUrl = stripTrailingSlash(runtimeProcess?.env?.PUBLIC_SITE_URL || 'https://kateglo.org');
@@ -225,6 +230,35 @@ export async function render(url = '/', prefetchedData = null) {
       },
     },
   });
+
+  if (shouldSkipSsr(pathname)) {
+    const meta = buildMetaForPath(pathname, siteBaseUrl, prefetchedData);
+    const canonicalUrl = meta.canonicalUrl || `${siteBaseUrl}${pathname}`;
+    const imageUrl = `${siteBaseUrl}/Logo%20Kateglo.png`;
+    const title = escapeHtml(meta.title);
+    const description = escapeHtml(meta.description);
+    const escapedCanonicalUrl = escapeHtml(canonicalUrl);
+    const escapedImageUrl = escapeHtml(imageUrl);
+
+    const headTags = `
+    <title>${title}</title>
+    <meta name="description" content="${description}" />
+    <link rel="canonical" href="${escapedCanonicalUrl}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Kateglo" />
+    <meta property="og:locale" content="id_ID" />
+    <meta property="og:url" content="${escapedCanonicalUrl}" />
+    <meta property="og:title" content="${title}" />
+    <meta property="og:description" content="${description}" />
+    <meta property="og:image" content="${escapedImageUrl}" />
+    <meta property="og:image:alt" content="Logo Kateglo" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${title}" />
+    <meta name="twitter:description" content="${description}" />
+    <meta name="twitter:image" content="${escapedImageUrl}" />`;
+
+    return { appHtml: '', headTags };
+  }
 
   const appHtml = renderToString(
     <QueryClientProvider client={queryClient}>
@@ -272,4 +306,5 @@ export const __private = {
   buildTesaurusDescription: buildDeskripsiPencarianTesaurus,
   buildGlosariumCariDescription: buildDeskripsiPencarianGlosarium,
   buildMetaForPath,
+  shouldSkipSsr,
 };

@@ -14,7 +14,13 @@ function getStorage() {
 }
 
 function AuthProvider({ children }) {
-  const [token, setToken] = useState('');
+  // Inisialisasi token langsung dari localStorage agar render pertama
+  // sudah memiliki token — menghindari race condition di mana useEffect
+  // belum sempat meng-set token saat route guard sudah mengevaluasi.
+  const [token, setToken] = useState(() => {
+    const storage = getStorage();
+    return storage ? (storage.getItem(storageKey) || '') : '';
+  });
   const [user, setUser] = useState(null);
   const isRefreshInFlight = useRef(false);
   // Mulai dalam kondisi loading jika ada token tersimpan,
@@ -23,18 +29,6 @@ function AuthProvider({ children }) {
     const storage = getStorage();
     return storage ? Boolean(storage.getItem(storageKey)) : false;
   });
-
-  useEffect(() => {
-    const storage = getStorage();
-    if (!storage) return;
-    const tersimpan = storage.getItem(storageKey) || '';
-    if (!tersimpan) {
-      setIsLoading(false);
-      return;
-    }
-    setToken(tersimpan);
-    setIsLoading(true);
-  }, []);
 
   const setAuthToken = useCallback((nextToken) => {
     const storage = getStorage();
@@ -128,10 +122,19 @@ function AuthProvider({ children }) {
     };
   }, [refreshProfil, token]);
 
-  const punyaIzin = useCallback(
-    (kodeIzin) => (user?.izin || []).includes(kodeIzin),
-    [user]
-  );
+  const punyaIzin = useCallback((kodeIzin) => {
+    if (!kodeIzin) return false;
+    const daftarIzin = Array.isArray(user?.izin) ? user.izin : [];
+    return daftarIzin.some((izin) => {
+      if (typeof izin === 'string') {
+        return izin === kodeIzin;
+      }
+      if (izin && typeof izin === 'object' && typeof izin.kode === 'string') {
+        return izin.kode === kodeIzin;
+      }
+      return false;
+    });
+  }, [user]);
 
   const value = useMemo(() => ({
     token,
