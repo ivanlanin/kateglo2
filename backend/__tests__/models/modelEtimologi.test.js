@@ -258,4 +258,34 @@ describe('ModelEtimologi', () => {
     await expect(ModelEtimologi.hitungTotal()).resolves.toBe(17);
     await expect(ModelEtimologi.hitungTotal()).resolves.toBe(0);
   });
+
+  it('ambilAktifPublikByEntriId mengembalikan kosong saat entriId tidak valid', async () => {
+    await expect(ModelEtimologi.ambilAktifPublikByEntriId(0)).resolves.toEqual([]);
+    await expect(ModelEtimologi.ambilAktifPublikByEntriId(-1)).resolves.toEqual([]);
+    await expect(ModelEtimologi.ambilAktifPublikByEntriId('abc')).resolves.toEqual([]);
+    await expect(ModelEtimologi.ambilAktifPublikByEntriId(null)).resolves.toEqual([]);
+    await expect(ModelEtimologi.ambilAktifPublikByEntriId(1.5)).resolves.toEqual([]);
+    expect(db.query).not.toHaveBeenCalled();
+  });
+
+  it('ambilAktifPublikByEntriId memanggil db.query dengan id valid dan mengembalikan baris', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 5, bahasa: 'Inggris', kata_asal: 'active', sumber: 'KBBI' }] });
+
+    const result = await ModelEtimologi.ambilAktifPublikByEntriId(3);
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('FROM etimologi'),
+      [3]
+    );
+    expect(result).toEqual([{ id: 5, bahasa: 'Inggris', kata_asal: 'active', sumber: 'KBBI' }]);
+  });
+
+  it('ambilAktifPublikByEntriId menerima entriId berupa string angka valid', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    const result = await ModelEtimologi.ambilAktifPublikByEntriId('7');
+
+    expect(db.query).toHaveBeenCalledWith(expect.any(String), [7]);
+    expect(result).toEqual([]);
+  });
 });

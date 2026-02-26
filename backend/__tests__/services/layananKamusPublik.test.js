@@ -581,6 +581,36 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     expect(result.entri[0]).toEqual(expect.objectContaining({ id: 40, jenis: 'varian' }));
   });
 
+  it('memakai fallback array kosong saat ambilAktifPublikByEntriId mengembalikan null', async () => {
+    ModelEntri.ambilEntriPerIndeks.mockResolvedValue([
+      {
+        id: 70,
+        entri: 'tes-etimologi',
+        indeks: 'tes-etimologi',
+        homonim: null,
+        urutan: 1,
+        jenis: 'dasar',
+        pemenggalan: null,
+        lafal: null,
+        varian: null,
+        jenis_rujuk: null,
+        entri_rujuk: null,
+      },
+    ]);
+    ModelEntri.ambilMakna.mockResolvedValue([]);
+    ModelEntri.ambilContoh.mockResolvedValue([]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilBentukTidakBakuByRujukId.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
+    ModelTesaurus.ambilDetail.mockResolvedValue(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+    ModelEtimologi.ambilAktifPublikByEntriId.mockResolvedValue(null);
+
+    const result = await ambilDetailKamus('tes-etimologi');
+
+    expect(result.entri[0].etimologi).toEqual([]);
+  });
+
   it('melewati varian saat induk tidak ditemukan di peta induk non-varian', async () => {
     ModelEntri.ambilEntriPerIndeks.mockResolvedValue([
       {

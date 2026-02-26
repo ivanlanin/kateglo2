@@ -233,4 +233,9 @@ describe('entry-server', () => {
     const { headTags } = await render('');
     expect(headTags).toContain('https://kateglo.org/');
   });
+
+  it('shouldSkipSsr mengembalikan false saat pathname kosong', () => {
+    expect(__private.shouldSkipSsr('')).toBe(false);
+    expect(__private.shouldSkipSsr()).toBe(false);
+  });
 });

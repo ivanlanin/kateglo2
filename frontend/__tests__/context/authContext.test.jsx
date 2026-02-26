@@ -482,6 +482,61 @@ describe('context/authContext', () => {
     vi.unstubAllEnvs();
   });
 
+  it('punyaIzin mengembalikan false saat kodeIzin kosong', () => {
+    function EmptyIzinProbe() {
+      const { punyaIzin } = useAuth();
+      return <div data-testid="empty-izin">{String(punyaIzin(''))}</div>;
+    }
+
+    render(
+      <AuthProvider>
+        <EmptyIzinProbe />
+      </AuthProvider>
+    );
+
+    expect(screen.getByTestId('empty-izin')).toHaveTextContent('false');
+  });
+
+  it('punyaIzin mengembalikan false saat izin dalam format tidak valid (angka)', async () => {
+    mockAmbilProfilSaya.mockResolvedValue({
+      email: 'invalid@contoh.id',
+      peran: 'penyunting',
+      izin: [42],
+    });
+
+    render(
+      <AuthProvider>
+        <AuthProbe />
+      </AuthProvider>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'set-token' }));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('has-izin-kelola')).toHaveTextContent('false');
+    });
+  });
+
+  it('punyaIzin mengembalikan true saat izin dalam format objek', async () => {
+    mockAmbilProfilSaya.mockResolvedValue({
+      email: 'objek@contoh.id',
+      peran: 'penyunting',
+      izin: [{ kode: 'kelola_pengguna' }],
+    });
+
+    render(
+      <AuthProvider>
+        <AuthProbe />
+      </AuthProvider>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'set-token' }));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('has-izin-kelola')).toHaveTextContent('true');
+    });
+  });
+
   it('mengekspos loginDenganGoogle dari apiAuth', () => {
     render(
       <AuthProvider>

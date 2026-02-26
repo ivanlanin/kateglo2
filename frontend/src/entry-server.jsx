@@ -233,7 +233,7 @@ export async function render(url = '/', prefetchedData = null) {
 
   if (shouldSkipSsr(pathname)) {
     const meta = buildMetaForPath(pathname, siteBaseUrl, prefetchedData);
-    const canonicalUrl = meta.canonicalUrl || `${siteBaseUrl}${pathname}`;
+    const canonicalUrl = meta.canonicalUrl;
     const imageUrl = `${siteBaseUrl}/Logo%20Kateglo.png`;
     const title = escapeHtml(meta.title);
     const description = escapeHtml(meta.description);

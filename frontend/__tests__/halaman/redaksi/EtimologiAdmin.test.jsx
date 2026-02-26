@@ -457,4 +457,34 @@ describe('EtimologiAdmin', () => {
     fireEvent.click(screen.getByText('Cari'));
     expect(mockUseDaftar).toHaveBeenLastCalledWith(expect.objectContaining({ aktif: '1' }));
   });
+
+  it('klik tautan entri tidak memicu bukaSuntingDariDaftar', () => {
+    render(
+      <MemoryRouter>
+        <EtimologiAdmin />
+      </MemoryRouter>
+    );
+    fireEvent.click(screen.getByRole('link', { name: 'asal' }));
+    expect(mockNavigate).not.toHaveBeenCalledWith('/redaksi/etimologi/1');
+  });
+
+  it('mereset semua filter etimologi saat tombol ✕ ditekan', () => {
+    render(
+      <MemoryRouter>
+        <EtimologiAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByPlaceholderText('Cari etimologi …'), { target: { value: 'asal' } });
+    fireEvent.change(screen.getByLabelText('Filter bahasa'), { target: { value: 'Inggris' } });
+    fireEvent.change(screen.getByLabelText('Filter status etimologi'), { target: { value: '1' } });
+
+    mockUseDaftar.mockClear();
+    fireEvent.click(screen.getAllByRole('button', { name: '✕' })[0]);
+
+    const argTerakhir = mockUseDaftar.mock.calls.at(-1)?.[0] || {};
+    expect(argTerakhir.q).toBe('');
+    expect(argTerakhir.bahasa).toBe('');
+    expect(argTerakhir.aktif).toBe('');
+  });
 });

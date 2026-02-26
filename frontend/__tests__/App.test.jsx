@@ -5,7 +5,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, vi, beforeEach, expect } from 'vitest';
 import { MemoryRouter, Outlet } from 'react-router-dom';
-import App from '../src/App';
+import App, { RuteIzin } from '../src/App';
 
 const mockUseAuth = vi.fn();
 
@@ -177,5 +177,73 @@ describe('App', () => {
       </MemoryRouter>
     );
     expect(screen.getByText('Kebijakan Privasi')).toBeInTheDocument();
+  });
+
+  it('mengalihkan route izin ke login saat belum autentikasi', () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: false,
+      adalahRedaksi: false,
+      adalahAdmin: false,
+      isLoading: false,
+      punyaIzin: () => false,
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/redaksi/pengguna']}>
+        <App />
+      </MemoryRouter>
+    );
+    expect(screen.getByText('Login Redaksi')).toBeInTheDocument();
+  });
+
+  it('mengalihkan route izin ke login saat tidak punya akses redaksi', () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      adalahRedaksi: false,
+      adalahAdmin: false,
+      isLoading: false,
+      punyaIzin: () => false,
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/redaksi/pengguna']}>
+        <App />
+      </MemoryRouter>
+    );
+    expect(screen.getByText('Login Redaksi')).toBeInTheDocument();
+  });
+
+  it('RuteIzin redireksi ke dasbor saat punyaIzin mengembalikan false untuk izin wajib', () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      adalahRedaksi: true,
+      adalahAdmin: false,
+      isLoading: false,
+      punyaIzin: () => false,
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/redaksi/pengguna']}>
+        <App />
+      </MemoryRouter>
+    );
+    expect(screen.getByText('Dasbor Redaksi')).toBeInTheDocument();
+  });
+
+  it('RuteIzin menerima izinDibutuhkan bukan array dan memperlakukan sebagai daftar kosong', () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      adalahRedaksi: true,
+      adalahAdmin: false,
+      isLoading: false,
+      punyaIzin: () => true,
+    });
+
+    render(
+      <MemoryRouter>
+        <RuteIzin izinDibutuhkan="kelola_label"><div>isi-izin</div></RuteIzin>
+      </MemoryRouter>
+    );
+    expect(screen.getByText('isi-izin')).toBeInTheDocument();
   });
 });

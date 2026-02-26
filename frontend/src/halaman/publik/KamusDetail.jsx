@@ -678,11 +678,9 @@ function KamusDetail() {
                           );
 
                           if (daftarMakna.length <= 1) {
-                            const item = daftarMakna[0];
-                            if (!item) return null;
                             return (
                               <div className="kamus-detail-def-content leading-relaxed">
-                                {renderIsiMakna(item)}
+                                {renderIsiMakna(daftarMakna[0])}
                               </div>
                             );
                           }
@@ -750,13 +748,13 @@ function KamusDetail() {
                       <div className="kamus-detail-subentry-heading-row">
                         <h3 className="kamus-detail-def-class mb-0">
                           Etimologi{' '}
-                          <span className="kamus-count-badge" data-count={(entriItem.etimologi || []).length}>
-                            ({(entriItem.etimologi || []).length})
+                          <span className="kamus-count-badge" data-count={entriItem.etimologi.length}>
+                            ({entriItem.etimologi.length})
                           </span>
                         </h3>
                       </div>
                       <div className="kamus-detail-subentry-flow">
-                        {(entriItem.etimologi || []).map((item, i) => (
+                        {entriItem.etimologi.map((item, i) => (
                           <span key={item.id || `${item.bahasa}-${item.kata_asal}-${i}`}>
                             {item.bahasa && (
                               <>
@@ -767,7 +765,7 @@ function KamusDetail() {
                             )}
                             <em>{String(item.kata_asal || '').trim() || '—'}</em>{' '}
                             <span className="secondary-text">({String(item.sumber || '').trim() || '—'})</span>
-                            {i < (entriItem.etimologi || []).length - 1 && <span className="secondary-text">; </span>}
+                            {i < entriItem.etimologi.length - 1 && <span className="secondary-text">; </span>}
                           </span>
                         ))}
                       </div>

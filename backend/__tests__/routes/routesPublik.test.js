@@ -1158,5 +1158,114 @@ describe('routes backend', () => {
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('saran gagal');
   });
+
+  it('GET /api/publik/auth/me memakai peran default saat token tidak memiliki field peran', async () => {
+    process.env.JWT_SECRET = 'test-secret-routes';
+    const token = jwt.sign(
+      {
+        sub: 'google-noperan',
+        email: 'noperan@example.com',
+        name: 'Tanpa Peran',
+        provider: 'google',
+      },
+      process.env.JWT_SECRET
+    );
+
+    const response = await request(createApp())
+      .get('/api/publik/auth/me')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.data.peran).toBe('pengguna');
+    expect(response.body.data.akses_redaksi).toBe(false);
+    expect(response.body.data.izin).toEqual([]);
+    delete process.env.JWT_SECRET;
+  });
+
+  it('GET /api/publik/auth/me melewati sinkronisasi DB saat pid tidak valid', async () => {
+    process.env.JWT_SECRET = 'test-secret-routes';
+    const token = jwt.sign(
+      {
+        sub: 'google-nopid',
+        pid: 0,
+        email: 'nopid@example.com',
+        name: 'Tanpa PID',
+        provider: 'google',
+        peran: 'pengguna',
+        izin: ['lihat_lema'],
+      },
+      process.env.JWT_SECRET
+    );
+
+    const response = await request(createApp())
+      .get('/api/publik/auth/me')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(ModelPengguna.ambilDenganId).not.toHaveBeenCalled();
+    expect(response.body.data.peran).toBe('pengguna');
+    expect(response.body.data.izin).toEqual(['lihat_lema']);
+    delete process.env.JWT_SECRET;
+  });
+
+  it('GET /api/publik/auth/me memakai peran token saat peranData null', async () => {
+    process.env.JWT_SECRET = 'test-secret-routes';
+    ModelPengguna.ambilDenganId.mockResolvedValue({ id: 5, peran_id: 3 });
+    ModelPengguna.ambilPeranUntukAuth.mockResolvedValue(null);
+    ModelPengguna.ambilIzin.mockResolvedValue(['perm_satu']);
+
+    const token = jwt.sign(
+      {
+        sub: 'google-nullperan',
+        pid: 5,
+        email: 'nullperan@example.com',
+        name: 'Null Peran',
+        provider: 'google',
+        peran: 'kontributor',
+        izin: [],
+      },
+      process.env.JWT_SECRET
+    );
+
+    const response = await request(createApp())
+      .get('/api/publik/auth/me')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.data.peran).toBe('kontributor');
+    expect(response.body.data.akses_redaksi).toBe(false);
+    expect(response.body.data.izin).toEqual(['perm_satu']);
+    delete process.env.JWT_SECRET;
+  });
+
+  it('GET /api/publik/auth/me memakai izin fallback array kosong saat izinDb bukan array', async () => {
+    process.env.JWT_SECRET = 'test-secret-routes';
+    ModelPengguna.ambilDenganId.mockResolvedValue({ id: 6, peran_id: 4 });
+    ModelPengguna.ambilPeranUntukAuth.mockResolvedValue({ kode: '', akses_redaksi: true });
+    ModelPengguna.ambilIzin.mockResolvedValue(null);
+
+    const token = jwt.sign(
+      {
+        sub: 'google-nullizin',
+        pid: 6,
+        email: 'nullizin@example.com',
+        name: 'Null Izin',
+        provider: 'google',
+        peran: 'pengguna',
+        izin: [],
+      },
+      process.env.JWT_SECRET
+    );
+
+    const response = await request(createApp())
+      .get('/api/publik/auth/me')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.data.peran).toBe('pengguna');
+    expect(response.body.data.akses_redaksi).toBe(true);
+    expect(response.body.data.izin).toEqual([]);
+    delete process.env.JWT_SECRET;
+  });
 });
 

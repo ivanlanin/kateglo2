@@ -1668,6 +1668,48 @@ describe('KamusDetail', () => {
     expect(screen.getByText('kata route')).toBeInTheDocument();
   });
 
+  it('menampilkan etimologi dengan bahasa kosong dan kata_asal/sumber kosong memunculkan tanda pisah', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return { isLoading: false, isError: false, data: { bahasa: [] } };
+      }
+
+      return {
+        isLoading: false,
+        isError: false,
+        isFetching: false,
+        data: {
+          indeks: 'kata',
+          entri: [
+            {
+              id: 10,
+              entri: 'kata',
+              indeks: 'kata',
+              jenis: 'dasar',
+              makna: [],
+              subentri: {},
+              etimologi: [
+                { id: null, bahasa: '', kata_asal: '', sumber: '' },
+                { id: 2, bahasa: 'Inggris', kata_asal: 'word', sumber: 'KBBI' },
+              ],
+            },
+          ],
+          tesaurus: { sinonim: [], antonim: [] },
+          glosarium: [],
+          glosarium_page: { total: 0, hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+        },
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByText('Etimologi')).toBeInTheDocument();
+    const semuaEm = document.querySelectorAll('em');
+    const teksEm = Array.from(semuaEm).map((el) => el.textContent);
+    expect(teksEm.some((t) => t === '—')).toBe(true);
+    expect(teksEm.some((t) => t === 'word')).toBe(true);
+  });
+
   it('mengurutkan entri dan subentri sesuai prioritas internal', () => {
     mockUseQuery.mockReturnValue({
       isLoading: false,

@@ -428,4 +428,34 @@ describe('GlosariumAdmin', () => {
     expect(screen.queryByText('+ Tambah')).not.toBeInTheDocument();
     expect(screen.queryByText('Hapus')).not.toBeInTheDocument();
   });
+
+  it('klik tautan asing tidak memicu bukaSuntingDariDaftar', () => {
+    render(
+      <MemoryRouter>
+        <GlosariumAdmin />
+      </MemoryRouter>
+    );
+    fireEvent.click(screen.getByRole('link', { name: 'water' }));
+    expect(mockNavigate).not.toHaveBeenCalledWith('/redaksi/glosarium/1');
+  });
+
+  it('menampilkan tanda pisah saat kolom asing kosong', () => {
+    mockUseDaftarGlosariumAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        total: 1,
+        data: [{ id: 2, indonesia: 'api', asing: '', bidang_id: 1, bidang: 'Kimia', sumber_id: 1, sumber: 'KBBI', bahasa: 'en', aktif: 1 }],
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <GlosariumAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('—')).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'api' })).not.toBeInTheDocument();
+  });
 });
