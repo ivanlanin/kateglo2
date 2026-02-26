@@ -12,8 +12,8 @@ const kelompokMenuAdmin = [
     items: [
       { path: '/redaksi/kamus', label: 'Kamus', izin: 'lihat_entri' },
       { path: '/redaksi/tesaurus', label: 'Tesaurus', izin: 'lihat_tesaurus' },
-      { path: '/redaksi/etimologi', label: 'Etimologi', izin: 'kelola_etimologi' },
       { path: '/redaksi/glosarium', label: 'Glosarium', izin: 'lihat_glosarium' },
+      { path: '/redaksi/etimologi', label: 'Etimologi', izin: 'kelola_etimologi' },
     ],
   },
   {
