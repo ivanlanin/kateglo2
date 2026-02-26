@@ -77,6 +77,46 @@ describe('ModelEtimologi', () => {
     expect(result).toEqual({ data: [{ id: 5 }, { id: 6 }], total: 2 });
   });
 
+  it('daftarAdmin dengan filter bahasa menambahkan kondisi bahasa', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 8, bahasa: 'Inggris' }] });
+
+    const result = await ModelEtimologi.daftarAdmin({ bahasa: 'Inggris', limit: 10, offset: 1 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining("LOWER(COALESCE(e.bahasa, '')) = LOWER($1)"),
+      ['Inggris']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $2 OFFSET $3'),
+      ['Inggris', 10, 1]
+    );
+    expect(result).toEqual({ data: [{ id: 8, bahasa: 'Inggris' }], total: 1 });
+  });
+
+  it('daftarAdmin dengan filter bahasa kosong menambahkan kondisi null/blank', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 10, bahasa: null }] });
+
+    const result = await ModelEtimologi.daftarAdmin({ bahasa: '__KOSONG__', limit: 10, offset: 1 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining("NULLIF(BTRIM(COALESCE(e.bahasa, '')), '') IS NULL"),
+      []
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $1 OFFSET $2'),
+      [10, 1]
+    );
+    expect(result).toEqual({ data: [{ id: 10, bahasa: null }], total: 1 });
+  });
+
   it('daftarAdmin memakai fallback default limit dan offset', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '0' }] })
@@ -124,6 +164,8 @@ describe('ModelEtimologi', () => {
       homonim: '2',
       lafal: 'laf',
       bahasa: 'id',
+      kata_asal: 'asal-kata',
+      arti_asal: 'makna asal',
       sumber: 'LWIM',
       sumber_definisi: 'def',
       sumber_sitasi: 'sit',
@@ -137,7 +179,7 @@ describe('ModelEtimologi', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('UPDATE etimologi'),
-      ['kata', 2, 'laf', 'id', 'LWIM', 'def', 'sit', 'isi', 'aks', 'lihat', 'var', 4, true, 9]
+      ['kata', 2, 'laf', 'id', 'asal-kata', 'makna asal', 'LWIM', 'def', 'sit', 'isi', 'aks', 'lihat', 'var', 4, true, 9]
     );
     expect(ambilSpy).toHaveBeenCalledWith(9);
     expect(result).toEqual({ id: 9, indeks: 'kata' });
@@ -152,6 +194,8 @@ describe('ModelEtimologi', () => {
       homonim: 'abc',
       lafal: '',
       bahasa: '',
+      kata_asal: '',
+      arti_asal: '',
       sumber: '',
       sumber_definisi: '',
       sumber_sitasi: '',
@@ -165,7 +209,7 @@ describe('ModelEtimologi', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO etimologi'),
-      ['serapan', null, '', '', '', '', '', '', '', '', '', null, true]
+      ['serapan', null, '', '', '', '', '', '', '', '', '', '', '', null, true]
     );
     expect(ambilSpy).toHaveBeenCalledWith(12);
     expect(result).toEqual({ id: 12 });

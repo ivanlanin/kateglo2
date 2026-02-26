@@ -373,6 +373,7 @@ npm run dev:public        # Port 5173
 
 ### Validation Policy (Wajib Setelah Perubahan)
 - Setelah selesai mengubah kode, **WAJIB jalankan lint dan test** untuk area yang diubah.
+- **Pengecualian**: jika perubahan **hanya data** (misalnya SQL migration, backfill data, dokumentasi `_docs/`, tanpa perubahan kode aplikasi di `backend/` atau `frontend/src`), **tidak wajib** menjalankan lint/test.
 - **Tidak perlu menjalankan build** sebagai langkah default validasi perubahan.
 - Prioritaskan validasi terarah dulu (misalnya per package yang terdampak), baru meluas jika diperlukan.
 

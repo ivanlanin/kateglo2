@@ -43,7 +43,7 @@ class ModelEtimologi {
     return result.rows;
   }
 
-  static async daftarAdmin({ limit = 50, offset = 0, q = '' } = {}) {
+  static async daftarAdmin({ limit = 50, offset = 0, q = '', bahasa = '' } = {}) {
     const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
     const safeOffset = Math.max(Number(offset) || 0, 0);
 
@@ -56,9 +56,18 @@ class ModelEtimologi {
         e.indeks ILIKE $${params.length}
         OR COALESCE(e.lafal, '') ILIKE $${params.length}
         OR COALESCE(e.bahasa, '') ILIKE $${params.length}
+        OR COALESCE(e.kata_asal, '') ILIKE $${params.length}
+        OR COALESCE(e.arti_asal, '') ILIKE $${params.length}
         OR COALESCE(e.sumber_isi, '') ILIKE $${params.length}
         OR COALESCE(en.entri, '') ILIKE $${params.length}
       )`);
+    }
+
+    if (bahasa === '__KOSONG__') {
+      conditions.push("NULLIF(BTRIM(COALESCE(e.bahasa, '')), '') IS NULL");
+    } else if (bahasa) {
+      params.push(String(bahasa).trim());
+      conditions.push(`LOWER(COALESCE(e.bahasa, '')) = LOWER($${params.length})`);
     }
 
     const whereSql = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
@@ -83,6 +92,8 @@ class ModelEtimologi {
          e.homonim,
          e.lafal,
          e.bahasa,
+         e.kata_asal,
+         e.arti_asal,
          e.sumber,
          e.sumber_definisi,
          e.sumber_sitasi,
@@ -116,6 +127,8 @@ class ModelEtimologi {
          e.homonim,
          e.lafal,
          e.bahasa,
+         e.kata_asal,
+         e.arti_asal,
          e.sumber,
          e.sumber_definisi,
          e.sumber_sitasi,
@@ -144,6 +157,8 @@ class ModelEtimologi {
     homonim,
     lafal,
     bahasa,
+    kata_asal,
+    arti_asal,
     sumber,
     sumber_definisi,
     sumber_sitasi,
@@ -165,23 +180,27 @@ class ModelEtimologi {
              homonim = $2,
              lafal = NULLIF($3, ''),
              bahasa = NULLIF($4, ''),
-             sumber = NULLIF($5, ''),
-             sumber_definisi = NULLIF($6, ''),
-             sumber_sitasi = NULLIF($7, ''),
-             sumber_isi = NULLIF($8, ''),
-             sumber_aksara = NULLIF($9, ''),
-             sumber_lihat = NULLIF($10, ''),
-             sumber_varian = NULLIF($11, ''),
-             entri_id = $12,
-             aktif = COALESCE($13, aktif),
+             kata_asal = NULLIF($5, ''),
+             arti_asal = NULLIF($6, ''),
+             sumber = NULLIF($7, ''),
+             sumber_definisi = NULLIF($8, ''),
+             sumber_sitasi = NULLIF($9, ''),
+             sumber_isi = NULLIF($10, ''),
+             sumber_aksara = NULLIF($11, ''),
+             sumber_lihat = NULLIF($12, ''),
+             sumber_varian = NULLIF($13, ''),
+             entri_id = $14,
+             aktif = COALESCE($15, aktif),
              updated_at = NOW()
-           WHERE id = $14
+           WHERE id = $16
          RETURNING id`,
         [
           indeks,
           normalizedHomonim,
           lafal,
           bahasa,
+          kata_asal,
+          arti_asal,
           sumber,
           sumber_definisi,
           sumber_sitasi,
@@ -200,6 +219,8 @@ class ModelEtimologi {
            homonim,
            lafal,
            bahasa,
+           kata_asal,
+           arti_asal,
            sumber,
            sumber_definisi,
            sumber_sitasi,
@@ -224,8 +245,10 @@ class ModelEtimologi {
            NULLIF($9, ''),
            NULLIF($10, ''),
            NULLIF($11, ''),
-           $12,
-           COALESCE($13, FALSE),
+           NULLIF($12, ''),
+           NULLIF($13, ''),
+           $14,
+           COALESCE($15, FALSE),
            NOW(),
            NOW()
          )
@@ -235,6 +258,8 @@ class ModelEtimologi {
           normalizedHomonim,
           lafal,
           bahasa,
+          kata_asal,
+          arti_asal,
           sumber,
           sumber_definisi,
           sumber_sitasi,

@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-25T20:10:12.950Z
+-- Generated: 2026-02-26T06:53:14.987Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -206,6 +206,8 @@ create table etimologi (
   aktif boolean not null default false,
   created_at timestamp with time zone not null,
   updated_at timestamp with time zone not null,
+  kata_asal text,
+  arti_asal text,
   constraint etimologi_indeks_check check (TRIM(BOTH FROM indeks) <> ''::text)
 );
 create index idx_etimologi_aktif on etimologi using btree (aktif);

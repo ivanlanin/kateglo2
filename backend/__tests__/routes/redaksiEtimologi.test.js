@@ -66,12 +66,17 @@ describe('routes/redaksi/etimologi', () => {
   it('GET / mengembalikan paginasi list', async () => {
     ModelEtimologi.daftarAdmin.mockResolvedValue({ data: [{ id: 2 }], total: 3 });
 
-    const response = await request(createApp()).get('/api/redaksi/etimologi?q=%20serap%20&limit=10&offset=0');
+    const response = await request(createApp()).get('/api/redaksi/etimologi?q=%20serap%20&bahasa=%20Inggris%20&limit=10&offset=0');
 
     expect(response.status).toBe(200);
     expect(response.body.success).toBe(true);
     expect(response.body.total).toBe(3);
-    expect(ModelEtimologi.daftarAdmin).toHaveBeenCalledWith({ limit: 10, offset: 0, q: 'serap' });
+    expect(ModelEtimologi.daftarAdmin).toHaveBeenCalledWith({
+      limit: 10,
+      offset: 0,
+      q: 'serap',
+      bahasa: 'Inggris',
+    });
   });
 
   it('GET / meneruskan error', async () => {

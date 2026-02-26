@@ -216,7 +216,14 @@ describe('apiAdmin', () => {
     await tesaurus.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/tesaurus', { params: { limit: 50, cursor: undefined, direction: 'next', lastPage: undefined, q: undefined, aktif: undefined } });
 
-    const etimologi = useDaftarEtimologiAdmin({ limit: 22, q: 'asal', cursor: 'et-1', direction: 'prev', lastPage: true });
+    const etimologi = useDaftarEtimologiAdmin({
+      limit: 22,
+      q: 'asal',
+      cursor: 'et-1',
+      direction: 'prev',
+      lastPage: true,
+      bahasa: 'Inggris',
+    });
     await etimologi.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/etimologi', {
       params: {
@@ -225,6 +232,7 @@ describe('apiAdmin', () => {
         direction: 'prev',
         lastPage: '1',
         q: 'asal',
+        bahasa: 'Inggris',
       },
     });
 
@@ -237,6 +245,20 @@ describe('apiAdmin', () => {
         direction: 'next',
         lastPage: undefined,
         q: undefined,
+        bahasa: undefined,
+      },
+    });
+
+    const etimologiKosong = useDaftarEtimologiAdmin({ bahasa: '__KOSONG__' });
+    await etimologiKosong.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/etimologi', {
+      params: {
+        limit: 50,
+        cursor: undefined,
+        direction: 'next',
+        lastPage: undefined,
+        q: undefined,
+        bahasa: '__KOSONG__',
       },
     });
 

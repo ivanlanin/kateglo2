@@ -299,14 +299,25 @@ export function useDaftarEtimologiAdmin({
   direction = 'next',
   lastPage = false,
   q = '',
+  bahasa = '',
 } = {}) {
-  return useDaftarAdmin('/api/redaksi/etimologi', 'admin-etimologi', {
+  const params = buildDaftarParams({
     limit,
     cursor,
     direction,
     lastPage,
     q,
     includeAktif: false,
+  });
+
+  if (bahasa) params.bahasa = bahasa;
+
+  return useQuery({
+    queryKey: ['admin-etimologi', { limit, cursor, direction, lastPage, q, bahasa }],
+    queryFn: () =>
+      klien
+        .get('/api/redaksi/etimologi', { params })
+        .then((r) => r.data),
   });
 }
 

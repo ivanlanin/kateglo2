@@ -86,6 +86,16 @@ vi.mock('../../../src/komponen/redaksi/FormAdmin', () => ({
       <input id={`field-${name}`} type={type} value={value ?? ''} onChange={(e) => onChange(name, e.target.value)} />
     </div>
   ),
+  SelectField: ({ label, name, value, onChange, options = [] }) => (
+    <div>
+      <label htmlFor={`field-${name}`}>{label}</label>
+      <select id={`field-${name}`} value={value ?? ''} onChange={(e) => onChange(name, e.target.value)}>
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>{opt.label}</option>
+        ))}
+      </select>
+    </div>
+  ),
   TextareaField: ({ label, name, value, onChange }) => (
     <div>
       <label htmlFor={`field-${name}`}>{label}</label>
@@ -142,13 +152,13 @@ describe('EtimologiAdmin', () => {
     );
 
     expect(screen.getByText('Etimologi')).toBeInTheDocument();
-    expect(screen.getByText('asal (asal)')).toBeInTheDocument();
-    expect(screen.getByText('akar (—)')).toBeInTheDocument();
+    expect(screen.getAllByText('asal').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('akar').length).toBeGreaterThan(0);
     expect(screen.getAllByText('—').length).toBeGreaterThan(0);
 
     fireEvent.change(screen.getByPlaceholderText('Cari etimologi …'), { target: { value: 'asal' } });
     fireEvent.click(screen.getByText('Cari'));
-    fireEvent.click(screen.getByText('asal'));
+    fireEvent.click(screen.getAllByText('asal')[0]);
     expect(mockNavigate).toHaveBeenCalledWith('/redaksi/etimologi/1');
 
     fireEvent.click(screen.getByText('+ Tambah'));
@@ -241,7 +251,7 @@ describe('EtimologiAdmin', () => {
     );
 
     fireEvent.click(screen.getByText('+ Tambah'));
-    fireEvent.focus(screen.getByLabelText('Tautkan ke Entri'));
+    fireEvent.focus(screen.getByLabelText('Entri'));
     expect(screen.getByText('Mencari entri …')).toBeInTheDocument();
 
     mockUseAutocomplete.mockReturnValue({ isLoading: false, data: { data: [] } });
@@ -251,7 +261,7 @@ describe('EtimologiAdmin', () => {
       </MemoryRouter>
     );
 
-    fireEvent.focus(screen.getByLabelText('Tautkan ke Entri'));
+    fireEvent.focus(screen.getByLabelText('Entri'));
     expect(screen.getByText('Tidak ada entri cocok')).toBeInTheDocument();
 
     mockUseAutocomplete.mockReturnValue({
@@ -264,7 +274,7 @@ describe('EtimologiAdmin', () => {
       </MemoryRouter>
     );
 
-    fireEvent.focus(screen.getByLabelText('Tautkan ke Entri'));
+    fireEvent.focus(screen.getByLabelText('Entri'));
     expect(screen.getByText('homonim: —')).toBeInTheDocument();
   });
 
@@ -400,5 +410,36 @@ describe('EtimologiAdmin', () => {
     fireEvent.click(screen.getByText('Simpan'));
 
     expect(screen.getByText('Gagal menyimpan etimologi')).toBeInTheDocument();
+  });
+
+  it('menerapkan filter bahasa saat tombol Cari ditekan', () => {
+    render(
+      <MemoryRouter>
+        <EtimologiAdmin />
+      </MemoryRouter>
+    );
+
+    mockUseDaftar.mockClear();
+
+    fireEvent.change(screen.getByLabelText('Filter bahasa'), { target: { value: 'Inggris' } });
+    expect(mockUseDaftar).toHaveBeenLastCalledWith(expect.objectContaining({ bahasa: '' }));
+
+    fireEvent.click(screen.getByText('Cari'));
+
+    expect(mockUseDaftar).toHaveBeenLastCalledWith(expect.objectContaining({ bahasa: 'Inggris' }));
+  });
+
+  it('menerapkan filter bahasa kosong saat pilih opsi —Kosong— dan Cari', () => {
+    render(
+      <MemoryRouter>
+        <EtimologiAdmin />
+      </MemoryRouter>
+    );
+
+    mockUseDaftar.mockClear();
+    fireEvent.change(screen.getByLabelText('Filter bahasa'), { target: { value: '__KOSONG__' } });
+    fireEvent.click(screen.getByText('Cari'));
+
+    expect(mockUseDaftar).toHaveBeenLastCalledWith(expect.objectContaining({ bahasa: '__KOSONG__' }));
   });
 });
