@@ -114,7 +114,7 @@ describe('GlosariumAdmin', () => {
 
     fireEvent.click(screen.getByText('+ Tambah'));
     fireEvent.click(screen.getByText('Simpan'));
-    expect(screen.getByText('Istilah Indonesia dan Asing wajib diisi')).toBeInTheDocument();
+    expect(screen.getByText('Istilah Asing dan Indonesia wajib diisi')).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText(/Indonesia/), { target: { value: 'api' } });
     fireEvent.change(screen.getByLabelText(/Asing/), { target: { value: 'fire' } });

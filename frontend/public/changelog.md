@@ -5,6 +5,7 @@
 - Menyiapkan data etimologi dari LWIM
 - Membuatkan halaman redaksi etimologi
 - Memisahkan pemenggalan dan lafal serta membuat makna dalam daftar berbutir di detail kamus
+- Mengubah urutan kolom di redaksi glosarium: asing dulu, baru Indonesia
 
 ## 2026-02-25 Rabu
 

@@ -3,7 +3,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   useDaftarGlosariumAdmin,
   useDetailGlosariumAdmin,
@@ -57,6 +57,24 @@ const opsiBahasa = [
 
 const kolom = [
   {
+    key: 'asing',
+    label: 'Asing',
+    render: (item) => {
+      const asing = String(item.asing || '').trim();
+      if (!asing) return '—';
+
+      return (
+        <Link
+          to={`/glosarium/detail/${encodeURIComponent(asing)}`}
+          onClick={(event) => event.stopPropagation()}
+          className="font-medium text-blue-700 hover:text-blue-800 hover:underline dark:text-blue-400 dark:hover:text-blue-300"
+        >
+          {asing}
+        </Link>
+      );
+    },
+  },
+  {
     key: 'indonesia',
     label: 'Indonesia',
     render: (item) => (
@@ -65,7 +83,6 @@ const kolom = [
       </span>
     ),
   },
-  { key: 'asing', label: 'Asing' },
   { key: 'bidang', label: 'Bidang' },
   { key: 'sumber', label: 'Sumber' },
   { key: 'aktif', label: 'Status', render: (item) => <BadgeStatus aktif={item.aktif} /> },
@@ -175,8 +192,8 @@ function GlosariumAdmin() {
 
   const handleSimpan = () => {
     setPesan({ error: '', sukses: '' });
-    if (!panel.data.indonesia?.trim() || !panel.data.asing?.trim()) {
-      setPesan({ error: 'Istilah Indonesia dan Asing wajib diisi', sukses: '' });
+    if (!panel.data.asing?.trim() || !panel.data.indonesia?.trim()) {
+      setPesan({ error: 'Istilah Asing dan Indonesia wajib diisi', sukses: '' });
       return;
     }
     if (!panel.data.bidang_id) {
@@ -278,8 +295,8 @@ function GlosariumAdmin() {
       {bisaEdit && (
         <PanelGeser buka={panel.buka} onTutup={tutupPanel} judul={panel.modeTambah ? 'Tambah Glosarium' : 'Sunting Glosarium'}>
           <PesanForm error={pesan.error} sukses={pesan.sukses} />
-          <InputField label="Indonesia" name="indonesia" value={panel.data.indonesia} onChange={panel.ubahField} required />
           <InputField label="Asing" name="asing" value={panel.data.asing} onChange={panel.ubahField} required />
+          <InputField label="Indonesia" name="indonesia" value={panel.data.indonesia} onChange={panel.ubahField} required />
           <SelectField
             label="Bidang"
             name="bidang_id"
