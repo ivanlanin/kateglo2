@@ -27,6 +27,10 @@ jest.mock('../../models/modelGlosarium', () => ({
   cariFrasaMengandungKataUtuh: jest.fn()
 }));
 
+jest.mock('../../models/modelEtimologi', () => ({
+  ambilAktifPublikByEntriId: jest.fn(),
+}));
+
 jest.mock('../../services/layananCache', () => ({
   getJson: jest.fn(),
   setJson: jest.fn(),
@@ -37,6 +41,7 @@ jest.mock('../../services/layananCache', () => ({
 const ModelEntri = require('../../models/modelEntri');
 const ModelTesaurus = require('../../models/modelTesaurus');
 const ModelGlosarium = require('../../models/modelGlosarium');
+const ModelEtimologi = require('../../models/modelEtimologi');
 const { getJson, setJson, delKey } = require('../../services/layananCache');
 const {
   cariKamus,
@@ -53,6 +58,7 @@ describe('layananKamusPublik.cariKamus', () => {
     delKey.mockResolvedValue(undefined);
     ModelTesaurus.ambilDetail.mockResolvedValue(null);
     ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+    ModelEtimologi.ambilAktifPublikByEntriId.mockResolvedValue([]);
   });
 
   it('mengembalikan array kosong jika query kosong', async () => {
@@ -105,6 +111,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     getJson.mockResolvedValue(null);
     setJson.mockResolvedValue(undefined);
     delKey.mockResolvedValue(undefined);
+    ModelEtimologi.ambilAktifPublikByEntriId.mockResolvedValue([]);
   });
 
   it('membuat cache key detail kamus dalam huruf kecil ter-encode', () => {

@@ -442,4 +442,19 @@ describe('EtimologiAdmin', () => {
 
     expect(mockUseDaftar).toHaveBeenLastCalledWith(expect.objectContaining({ bahasa: '__KOSONG__' }));
   });
+
+  it('menerapkan filter status saat tombol Cari ditekan', () => {
+    render(
+      <MemoryRouter>
+        <EtimologiAdmin />
+      </MemoryRouter>
+    );
+
+    mockUseDaftar.mockClear();
+    fireEvent.change(screen.getByLabelText('Filter status etimologi'), { target: { value: '1' } });
+    expect(mockUseDaftar).toHaveBeenLastCalledWith(expect.objectContaining({ aktif: '' }));
+
+    fireEvent.click(screen.getByText('Cari'));
+    expect(mockUseDaftar).toHaveBeenLastCalledWith(expect.objectContaining({ aktif: '1' }));
+  });
 });

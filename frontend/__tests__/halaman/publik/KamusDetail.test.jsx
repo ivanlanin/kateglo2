@@ -272,6 +272,52 @@ describe('KamusDetail', () => {
     });
   });
 
+  it('menampilkan subentri Etimologi dengan badge bahasa dan kata_asal miring', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: {
+            bahasa: [{ kode: 'belanda', nama: 'Belanda' }],
+          },
+        };
+      }
+
+      return {
+        isLoading: false,
+        isError: false,
+        isFetching: false,
+        data: {
+          indeks: 'adjektif',
+          entri: [
+            {
+              id: 158,
+              entri: 'adjektif',
+              indeks: 'adjektif',
+              jenis: 'dasar',
+              makna: [],
+              subentri: {},
+              etimologi: [{ id: 1, bahasa: 'Belanda', kata_asal: 'adjectief', sumber: 'LWIM' }],
+            },
+          ],
+          tesaurus: { sinonim: [], antonim: [] },
+          glosarium: [],
+          glosarium_page: { total: 0, hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+        },
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByText('Etimologi')).toBeInTheDocument();
+    const badgeBahasa = screen.getByText('Belanda');
+    expect(badgeBahasa).toHaveClass('kamus-badge-bahasa');
+    expect(screen.getByText('adjectief').closest('em')).not.toBeNull();
+    expect(screen.getByText('(LWIM)')).toBeInTheDocument();
+  });
+
   it('menampilkan aksi redaksi dan tautan rujukan KBBI saat admin dan indeks tersedia', () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: true,

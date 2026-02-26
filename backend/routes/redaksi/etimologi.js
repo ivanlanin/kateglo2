@@ -33,7 +33,8 @@ router.get('/', periksaIzin('kelola_etimologi'), async (req, res, next) => {
     const { limit, offset } = parsePagination(req.query);
     const q = parseSearchQuery(req.query.q);
     const bahasa = parseTrimmedString(req.query.bahasa);
-    const { data, total } = await ModelEtimologi.daftarAdmin({ limit, offset, q, bahasa });
+    const aktif = parseTrimmedString(req.query.aktif);
+    const { data, total } = await ModelEtimologi.daftarAdmin({ limit, offset, q, bahasa, aktif });
     return res.json({ success: true, ...buildPaginatedResult({ data, total, pagination: { limit, offset } }) });
   } catch (error) {
     return next(error);

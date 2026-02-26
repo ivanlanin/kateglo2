@@ -690,6 +690,37 @@ function KamusDetail() {
                   </div>
                 )}
 
+                {(entriItem.etimologi || []).length > 0 && (
+                  <div className="mt-4">
+                    <div className="kamus-detail-subentry-group">
+                      <div className="kamus-detail-subentry-heading-row">
+                        <h3 className="kamus-detail-def-class mb-0">
+                          Etimologi{' '}
+                          <span className="kamus-count-badge" data-count={(entriItem.etimologi || []).length}>
+                            ({(entriItem.etimologi || []).length})
+                          </span>
+                        </h3>
+                      </div>
+                      <div className="kamus-detail-subentry-flow">
+                        {(entriItem.etimologi || []).map((item, i) => (
+                          <span key={item.id || `${item.bahasa}-${item.kata_asal}-${i}`}>
+                            {item.bahasa && (
+                              <>
+                                <span className="kamus-badge kamus-badge-bahasa">
+                                  {resolveNamaLabel(item.bahasa, petaBahasa)}
+                                </span>{' '}
+                              </>
+                            )}
+                            <em>{String(item.kata_asal || '').trim() || '—'}</em>{' '}
+                            <span className="secondary-text">({String(item.sumber || '').trim() || '—'})</span>
+                            {i < (entriItem.etimologi || []).length - 1 && <span className="secondary-text">; </span>}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {infoWaktu && (
                   <p className="kamus-detail-entry-meta">{infoWaktu}</p>
                 )}

@@ -5,6 +5,7 @@
 const ModelEntri = require('../models/modelEntri');
 const ModelTesaurus = require('../models/modelTesaurus');
 const ModelGlosarium = require('../models/modelGlosarium');
+const ModelEtimologi = require('../models/modelEtimologi');
 const { getJson, setJson, delKey, getTtlSeconds } = require('./layananCache');
 
 const cachePrefixDetailKamus = 'kamus:detail:';
@@ -103,11 +104,12 @@ async function ambilDetailKamus(indeksAtauEntri, {
 
   const detailEntri = await Promise.all(
     daftarEntri.map(async (dataEntri) => {
-      const [maknaList, subentri, bentukTidakBaku, rantaiInduk] = await Promise.all([
+      const [maknaList, subentri, bentukTidakBaku, rantaiInduk, etimologi] = await Promise.all([
         ModelEntri.ambilMakna(dataEntri.id, true),
         ModelEntri.ambilSubentri(dataEntri.id),
         ModelEntri.ambilBentukTidakBakuByRujukId(dataEntri.id),
         ModelEntri.ambilRantaiInduk(dataEntri.induk),
+        ModelEtimologi.ambilAktifPublikByEntriId(dataEntri.id),
       ]);
 
       const maknaIds = maknaList.map((m) => m.id);
@@ -160,6 +162,7 @@ async function ambilDetailKamus(indeksAtauEntri, {
         induk: (rantaiInduk || []).map((r) => ({ id: r.id, entri: r.entri, indeks: r.indeks })),
         makna,
         subentri: subentriPerJenis,
+        etimologi: etimologi || [],
       };
     })
   );

@@ -3,7 +3,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   useDaftarEtimologiAdmin,
   useDetailEtimologiAdmin,
@@ -18,6 +18,7 @@ import {
   TombolAksiAdmin,
   TabelAdmin,
   BadgeStatus,
+  opsiFilterStatusAktif,
   getApiErrorMessage,
   potongTeks,
   usePencarianAdmin,
@@ -32,7 +33,7 @@ import {
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
-import { parsePositiveIntegerParam } from '../../utils/paramUtils';
+import { buatPathDetailKamus, parsePositiveIntegerParam } from '../../utils/paramUtils';
 
 const daftarBahasaEtimologi = [
   'Amoy',
@@ -97,7 +98,22 @@ const kolom = [
   {
     key: 'entri_teks',
     label: 'Entri',
-    render: (item) => <span className="text-gray-600 dark:text-gray-400">{item.entri_teks || '—'}</span>,
+    render: (item) => {
+      const target = item.entri_indeks || item.entri_teks;
+      if (!item.entri_teks || !target) {
+        return <span className="text-gray-600 dark:text-gray-400">—</span>;
+      }
+
+      return (
+        <Link
+          to={buatPathDetailKamus(target)}
+          className="text-blue-600 hover:underline dark:text-blue-400"
+          onClick={(event) => event.stopPropagation()}
+        >
+          {item.entri_teks}
+        </Link>
+      );
+    },
   },
   {
     key: 'bahasa',
@@ -143,7 +159,9 @@ function EtimologiAdmin() {
   const bisaKelola = punyaIzin('kelola_etimologi');
 
   const [draftFilterBahasa, setDraftFilterBahasa] = useState('');
+  const [draftFilterAktif, setDraftFilterAktif] = useState('');
   const [filterBahasa, setFilterBahasa] = useState('');
+  const [filterAktif, setFilterAktif] = useState('');
 
   const { data: resp, isLoading, isError } = useDaftarEtimologiAdmin({
     limit,
@@ -152,6 +170,7 @@ function EtimologiAdmin() {
     lastPage,
     q,
     bahasa: filterBahasa,
+    aktif: filterAktif,
   });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailEtimologiAdmin(idDariPath);
 
@@ -299,11 +318,14 @@ function EtimologiAdmin() {
   const handleResetFilter = () => {
     hapusCari();
     setDraftFilterBahasa('');
+    setDraftFilterAktif('');
     setFilterBahasa('');
+    setFilterAktif('');
   };
 
   const handleCari = () => {
     setFilterBahasa(draftFilterBahasa);
+    setFilterAktif(draftFilterAktif);
     kirimCari(cari);
   };
 
@@ -316,6 +338,13 @@ function EtimologiAdmin() {
         onHapus={handleResetFilter}
         placeholder="Cari etimologi …"
         filters={[
+          {
+            key: 'aktif',
+            value: draftFilterAktif,
+            onChange: setDraftFilterAktif,
+            options: opsiFilterStatusAktif,
+            ariaLabel: 'Filter status etimologi',
+          },
           {
             key: 'bahasa',
             value: draftFilterBahasa,

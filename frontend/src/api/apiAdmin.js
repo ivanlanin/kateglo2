@@ -300,6 +300,7 @@ export function useDaftarEtimologiAdmin({
   lastPage = false,
   q = '',
   bahasa = '',
+  aktif = '',
 } = {}) {
   const params = buildDaftarParams({
     limit,
@@ -307,13 +308,14 @@ export function useDaftarEtimologiAdmin({
     direction,
     lastPage,
     q,
-    includeAktif: false,
+    aktif,
+    includeAktif: true,
   });
 
   if (bahasa) params.bahasa = bahasa;
 
   return useQuery({
-    queryKey: ['admin-etimologi', { limit, cursor, direction, lastPage, q, bahasa }],
+    queryKey: ['admin-etimologi', { limit, cursor, direction, lastPage, q, bahasa, aktif }],
     queryFn: () =>
       klien
         .get('/api/redaksi/etimologi', { params })

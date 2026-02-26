@@ -38,7 +38,7 @@ const nilaiAwal = {
 };
 
 const opsiStatus = [
-  { value: '', label: 'Semua status' },
+  { value: '', label: '—Status—' },
   { value: 'tinjau', label: 'Tinjau' },
   { value: 'salah', label: 'Salah' },
   { value: 'tambah', label: 'Tambah' },

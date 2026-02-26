@@ -1,5 +1,10 @@
 # Riwayat Perubahan
 
+## 2026-02-26 Kamis
+
+- Menyiapkan data etimologi dari LWIM
+- Membuatkan halaman redaksi etimologi
+
 ## 2026-02-25 Rabu
 
 - Mengurutkan entri detail glosarium berdasarkan abjad

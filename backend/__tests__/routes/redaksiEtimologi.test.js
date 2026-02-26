@@ -76,6 +76,22 @@ describe('routes/redaksi/etimologi', () => {
       offset: 0,
       q: 'serap',
       bahasa: 'Inggris',
+      aktif: '',
+    });
+  });
+
+  it('GET / meneruskan filter aktif saat tersedia', async () => {
+    ModelEtimologi.daftarAdmin.mockResolvedValue({ data: [{ id: 9 }], total: 1 });
+
+    const response = await request(createApp()).get('/api/redaksi/etimologi?aktif=1&limit=5&offset=0');
+
+    expect(response.status).toBe(200);
+    expect(ModelEtimologi.daftarAdmin).toHaveBeenCalledWith({
+      limit: 5,
+      offset: 0,
+      q: '',
+      bahasa: '',
+      aktif: '1',
     });
   });
 

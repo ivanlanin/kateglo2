@@ -223,6 +223,7 @@ describe('apiAdmin', () => {
       direction: 'prev',
       lastPage: true,
       bahasa: 'Inggris',
+      aktif: '1',
     });
     await etimologi.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/etimologi', {
@@ -232,6 +233,7 @@ describe('apiAdmin', () => {
         direction: 'prev',
         lastPage: '1',
         q: 'asal',
+        aktif: '1',
         bahasa: 'Inggris',
       },
     });
@@ -245,6 +247,7 @@ describe('apiAdmin', () => {
         direction: 'next',
         lastPage: undefined,
         q: undefined,
+        aktif: undefined,
         bahasa: undefined,
       },
     });
@@ -258,6 +261,7 @@ describe('apiAdmin', () => {
         direction: 'next',
         lastPage: undefined,
         q: undefined,
+        aktif: undefined,
         bahasa: '__KOSONG__',
       },
     });

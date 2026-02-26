@@ -117,6 +117,26 @@ describe('ModelEtimologi', () => {
     expect(result).toEqual({ data: [{ id: 10, bahasa: null }], total: 1 });
   });
 
+  it('daftarAdmin dengan filter aktif menambahkan kondisi status', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 12, aktif: true }] });
+
+    const result = await ModelEtimologi.daftarAdmin({ aktif: '1', limit: 10, offset: 1 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('e.aktif = $1'),
+      [true]
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $2 OFFSET $3'),
+      [true, 10, 1]
+    );
+    expect(result).toEqual({ data: [{ id: 12, aktif: true }], total: 1 });
+  });
+
   it('daftarAdmin memakai fallback default limit dan offset', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '0' }] })
@@ -209,7 +229,7 @@ describe('ModelEtimologi', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO etimologi'),
-      ['serapan', null, '', '', '', '', '', '', '', '', '', '', '', null, true]
+      ['serapan', null, '', '', '', '', '', '', '', '', '', '', '', null, false]
     );
     expect(ambilSpy).toHaveBeenCalledWith(12);
     expect(result).toEqual({ id: 12 });

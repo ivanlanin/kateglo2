@@ -104,7 +104,7 @@ export function usePencarianAdmin(batasPerHalaman = 50) {
 }
 
 export const opsiFilterStatusAktif = [
-  { value: '', label: 'Semua status' },
+  { value: '', label: '—Status—' },
   { value: '1', label: 'Aktif' },
   { value: '0', label: 'Nonaktif' },
 ];

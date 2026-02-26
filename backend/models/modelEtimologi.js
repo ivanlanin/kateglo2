@@ -3,7 +3,7 @@
  */
 
 const db = require('../db');
-const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
+const { parseCount } = require('../utils/modelUtils');
 
 function normalizeIntegerNullable(value) {
   if (value === null || value === undefined || value === '') return null;
@@ -12,6 +12,23 @@ function normalizeIntegerNullable(value) {
 }
 
 class ModelEtimologi {
+  static async ambilAktifPublikByEntriId(entriId) {
+    const parsedId = Number(entriId);
+    if (!Number.isInteger(parsedId) || parsedId <= 0) return [];
+
+    const result = await db.query(
+      `SELECT id, bahasa, kata_asal, sumber
+       FROM etimologi
+       WHERE entri_id = $1
+         AND aktif = TRUE
+         AND NULLIF(BTRIM(COALESCE(bahasa, '')), '') IS NOT NULL
+       ORDER BY id ASC`,
+      [parsedId]
+    );
+
+    return result.rows;
+  }
+
   static async cariEntriUntukTautan(query, { limit = 8 } = {}) {
     const trimmed = String(query || '').trim();
     if (!trimmed) return [];
@@ -43,7 +60,7 @@ class ModelEtimologi {
     return result.rows;
   }
 
-  static async daftarAdmin({ limit = 50, offset = 0, q = '', bahasa = '' } = {}) {
+  static async daftarAdmin({ limit = 50, offset = 0, q = '', bahasa = '', aktif = '' } = {}) {
     const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
     const safeOffset = Math.max(Number(offset) || 0, 0);
 
@@ -68,6 +85,11 @@ class ModelEtimologi {
     } else if (bahasa) {
       params.push(String(bahasa).trim());
       conditions.push(`LOWER(COALESCE(e.bahasa, '')) = LOWER($${params.length})`);
+    }
+
+    if (aktif === '1' || aktif === '0') {
+      params.push(aktif === '1');
+      conditions.push(`e.aktif = $${params.length}`);
     }
 
     const whereSql = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
@@ -167,11 +189,11 @@ class ModelEtimologi {
     sumber_lihat,
     sumber_varian,
     entri_id,
-    aktif,
   }) {
     const normalizedHomonim = normalizeIntegerNullable(homonim);
     const normalizedEntriId = normalizeIntegerNullable(entri_id);
-    const normalizedAktif = normalizeBoolean(aktif);
+    const normalizedBahasa = String(bahasa || '').trim();
+    const normalizedAktifDariBahasa = normalizedBahasa ? true : false;
 
     const result = id
       ? await db.query(
@@ -190,7 +212,7 @@ class ModelEtimologi {
              sumber_lihat = NULLIF($12, ''),
              sumber_varian = NULLIF($13, ''),
              entri_id = $14,
-             aktif = COALESCE($15, aktif),
+             aktif = $15,
              updated_at = NOW()
            WHERE id = $16
          RETURNING id`,
@@ -198,7 +220,7 @@ class ModelEtimologi {
           indeks,
           normalizedHomonim,
           lafal,
-          bahasa,
+          normalizedBahasa,
           kata_asal,
           arti_asal,
           sumber,
@@ -209,7 +231,7 @@ class ModelEtimologi {
           sumber_lihat,
           sumber_varian,
           normalizedEntriId,
-          normalizedAktif,
+          normalizedAktifDariBahasa,
           id,
         ]
       )
@@ -248,7 +270,7 @@ class ModelEtimologi {
            NULLIF($12, ''),
            NULLIF($13, ''),
            $14,
-           COALESCE($15, FALSE),
+           $15,
            NOW(),
            NOW()
          )
@@ -257,7 +279,7 @@ class ModelEtimologi {
           indeks,
           normalizedHomonim,
           lafal,
-          bahasa,
+          normalizedBahasa,
           kata_asal,
           arti_asal,
           sumber,
@@ -268,7 +290,7 @@ class ModelEtimologi {
           sumber_lihat,
           sumber_varian,
           normalizedEntriId,
-          normalizedAktif,
+          normalizedAktifDariBahasa,
         ]
       );
 
