@@ -384,7 +384,7 @@ Set-Location frontend; npm run lint; npm run test
 
 ### Database Work
 1. **Check schema first**: `Select-String -Path "_docs/struktur-data.sql" -Pattern "table_name"`
-2. **Create migration**: Add SQL file to `_docs/YYYYMM/` with format `YYYYMMDD_nama-migrasi.sql`
+2. **Create migration**: Add SQL file to `_docs/YYYYMM/` with format `YYYYMMDDHHMM_nama-migrasi.sql` (HHMM dari waktu pembuatan file)
 3. **Run migration (default wajib)**: Setelah file SQL migration dibuat, **langsung eksekusi SQL tersebut** ke database target (development) pada sesi yang sama, kecuali user secara eksplisit meminta untuk tidak menjalankan.
 4. **Run migration**: Use temp script in `backend/` atau `psql` dengan `DATABASE_URL` dari `backend/.env`
 5. **Regenerate schema**: `Set-Location backend; node scripts/db-schema.js`
@@ -460,8 +460,8 @@ Gunakan `_kode/` sebagai referensi:
 - **Components**: PascalCase (e.g., `SearchBar.jsx`, `DictionaryDetail.jsx`)
 - **Constants**: camelCase (NOT SCREAMING_SNAKE_CASE)
 - **Database**: snake_case (matching PostgreSQL convention)
-- **Changelog docs**: `YYYYMMDD_nama-topik.md` (di `_docs/YYYYMM/`)
-- **SQL migration files**: `YYYYMMDD_nama-migrasi.sql` (di `_docs/YYYYMM/`)
+- **Changelog docs**: `YYYYMMDDHHMM_nama-topik.md` (di `_docs/YYYYMM/`, HHMM wajib untuk menghindari bentrok nama dalam satu hari)
+- **SQL migration files**: `YYYYMMDDHHMM_nama-migrasi.sql` (di `_docs/YYYYMM/`, HHMM wajib)
 
 ### Language
 - **Code**: English (variable names, functions, comments in code)
