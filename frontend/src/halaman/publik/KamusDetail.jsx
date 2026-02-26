@@ -663,13 +663,16 @@ function KamusDetail() {
                                 </span>
                               )}
                               {m.contoh?.length > 0 && (
-                                <span className="kamus-detail-def-sample">: {m.contoh.map((c, i) => (
-                                  <span key={c.id}>
-                                    <span dangerouslySetInnerHTML={{ __html: renderMarkdown(c.contoh) }} />
-                                    {c.makna_contoh && <span> — {c.makna_contoh}</span>}
-                                    {i < m.contoh.length - 1 && <span>; </span>}
-                                  </span>
-                                ))}</span>
+                                <>
+                                  <span>: </span>
+                                  <span className="kamus-detail-def-sample">{m.contoh.map((c, i) => (
+                                    <span key={c.id}>
+                                      <span dangerouslySetInnerHTML={{ __html: renderMarkdown(c.contoh) }} />
+                                      {c.makna_contoh && <span> — {c.makna_contoh}</span>}
+                                      {i < m.contoh.length - 1 && <span>; </span>}
+                                    </span>
+                                  ))}</span>
+                                </>
                               )}
                             </>
                           );
