@@ -1189,22 +1189,6 @@ code {
     @apply text-dark-text;
   }
 
-  .panel-lipat-count {
-    @apply ml-2 text-xs bg-rose-50 text-rose-700 px-2 py-0.5 rounded-full;
-  }
-
-  .dark .panel-lipat-count {
-    @apply bg-rose-900/30 text-rose-300;
-  }
-
-  .panel-lipat-count-aksen {
-    @apply bg-rose-50 text-rose-700;
-  }
-
-  .dark .panel-lipat-count-aksen {
-    @apply bg-rose-900/30 text-rose-300;
-  }
-
   .panel-lipat-icon {
     @apply w-5 h-5 text-gray-500 transition-transform;
   }
@@ -1617,21 +1601,21 @@ code {
   }
 
   .kamus-count-badge {
-    @apply inline-flex items-center text-xs leading-none font-medium bg-rose-50 text-rose-700 px-2 py-0.5 rounded-full align-middle relative -top-px;
+    @apply inline-flex items-center text-xs leading-none font-medium bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full align-middle relative -top-px;
     font-size: 0;
   }
 
   .dark .kamus-count-badge {
-    @apply bg-rose-900/30 text-rose-300;
+    @apply bg-gray-700 text-gray-300;
   }
 
   .kamus-count-badge::after {
     content: attr(data-count);
-    @apply text-xs leading-none font-medium text-rose-700;
+    @apply text-xs leading-none font-medium text-gray-700;
   }
 
   .dark .kamus-count-badge::after {
-    @apply text-rose-300;
+    @apply text-gray-300;
   }
 
   .kamus-detail-section-title {

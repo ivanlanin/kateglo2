@@ -10,7 +10,7 @@ function PanelLipat({ judul, jumlah, children, terbukaAwal = false, aksen = fals
   const rootClass = aksen ? 'panel-lipat-root panel-lipat-root-aksen' : 'panel-lipat-root';
   const triggerClass = aksen ? 'panel-lipat-trigger panel-lipat-trigger-aksen' : 'panel-lipat-trigger';
   const labelClass = aksen ? 'panel-lipat-label panel-lipat-label-aksen' : 'panel-lipat-label';
-  const countClass = aksen ? 'panel-lipat-count panel-lipat-count-aksen' : 'panel-lipat-count';
+  const countClass = 'kamus-count-badge ml-2';
   const iconClass = aksen ? 'panel-lipat-icon panel-lipat-icon-aksen' : 'panel-lipat-icon';
 
   return (
@@ -25,7 +25,7 @@ function PanelLipat({ judul, jumlah, children, terbukaAwal = false, aksen = fals
             <span className={labelClass}>
               {judul}
               {jumlah !== undefined && (
-                <span className={countClass}>
+                <span className={countClass} data-count={jumlah}>
                   {jumlah}
                 </span>
               )}
@@ -59,7 +59,7 @@ function PanelLipat({ judul, jumlah, children, terbukaAwal = false, aksen = fals
           <span className={labelClass}>
             {judul}
             {jumlah !== undefined && (
-              <span className={countClass}>
+              <span className={countClass} data-count={jumlah}>
                 {jumlah}
               </span>
             )}
