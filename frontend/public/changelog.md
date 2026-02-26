@@ -4,6 +4,7 @@
 
 - Menyiapkan data etimologi dari LWIM
 - Membuatkan halaman redaksi etimologi
+- Memisahkan pemenggalan dan lafal serta membuat makna dalam daftar berbutir di detail kamus
 
 ## 2026-02-25 Rabu
 

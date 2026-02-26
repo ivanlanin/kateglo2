@@ -167,6 +167,15 @@ function formatInfoWaktuEntri(createdAt, updatedAt, sumber = '') {
   return parts.join(' · ');
 }
 
+function normalisasiNilaiMeta(teks = '', { hapusSlash = false } = {}) {
+  let nilai = String(teks || '').trim();
+  nilai = nilai.replace(/\s*(\(\d+\)\s*)+$/g, '').trim();
+  if (hapusSlash) {
+    nilai = nilai.replace(/^\/+|\/+$/g, '').trim();
+  }
+  return nilai.toLowerCase();
+}
+
 function KamusDetail() {
   const { indeks } = useParams();
   const { isAuthenticated, adalahAdmin, isLoading: isAuthLoading, loginDenganGoogle } = useAuth();
@@ -447,6 +456,18 @@ function KamusDetail() {
             const tautanRujukanKbbi = indeksKamus
               ? `https://kbbi.kemendikdasmen.go.id/entri/${encodeURIComponent(indeksKamus)}`
               : '';
+            const pembandingEntri = [
+              normalisasiNilaiMeta(entriItem.entri),
+              normalisasiNilaiMeta(entriItem.indeks),
+            ].filter(Boolean);
+            const pemenggalanTernormalisasi = normalisasiNilaiMeta(entriItem.pemenggalan);
+            const lafalTernormalisasi = normalisasiNilaiMeta(entriItem.lafal, { hapusSlash: true });
+            const adaPemenggalan = Boolean(
+              pemenggalanTernormalisasi && !pembandingEntri.includes(pemenggalanTernormalisasi)
+            );
+            const adaLafal = Boolean(
+              lafalTernormalisasi && !pembandingEntri.includes(lafalTernormalisasi)
+            );
 
             return (
               <section key={entriItem.id} className="mb-8 pb-8 border-b border-gray-200 dark:border-gray-700 last:border-b-0 last:mb-0 last:pb-0">
@@ -472,24 +493,33 @@ function KamusDetail() {
                           </Fragment>
                         ))}
                       </span>
-                      {entriItem.lafal && (
-                        <span className="kamus-detail-heading-pronunciation">/{formatLemaHomonim(entriItem.lafal)}/</span>
-                      )}
-                      {entriItem.pemenggalan && entriItem.pemenggalan !== entriItem.entri && (
-                        <span className="kamus-detail-heading-split">({formatLemaHomonim(entriItem.pemenggalan)})</span>
+                      {entriItem.jenis === 'varian' ? (
+                        <span className="kamus-detail-tag-jenis">
+                          {formatTitleCase(entriItem.jenis)}
+                        </span>
+                      ) : (
+                        <Link
+                          to={buatPathKategoriKamus(tentukanKategoriJenis(entriItem.jenis || 'dasar'), entriItem.jenis || 'dasar')}
+                          className="kamus-detail-tag-jenis"
+                        >
+                          {formatTitleCase(entriItem.jenis || 'dasar')}
+                        </Link>
                       )}
                     </h1>
-                    {entriItem.jenis === 'varian' ? (
-                      <span className="kamus-detail-tag-purple mt-1">
-                        {formatTitleCase(entriItem.jenis)}
-                      </span>
-                    ) : (
-                      <Link
-                        to={buatPathKategoriKamus(tentukanKategoriJenis(entriItem.jenis || 'dasar'), entriItem.jenis || 'dasar')}
-                        className="kamus-detail-tag-purple mt-1"
-                      >
-                        {formatTitleCase(entriItem.jenis || 'dasar')}
-                      </Link>
+                    {(adaPemenggalan || adaLafal) && (
+                      <p className="kamus-detail-heading-meta">
+                        {adaPemenggalan && (
+                          <>
+                            <span title="Pemenggalan">{formatLemaHomonim(entriItem.pemenggalan)}</span>
+                          </>
+                        )}
+                        {adaPemenggalan && adaLafal && <span>{' · '}</span>}
+                        {adaLafal && (
+                          <>
+                            <span title="Pelafalan">/{formatLemaHomonim(entriItem.lafal)}/</span>
+                          </>
+                        )}
+                      </p>
                     )}
                   </div>
                   {(adalahAdmin || tautanRujukanKbbi) && (
@@ -561,10 +591,9 @@ function KamusDetail() {
                             </h3>
                           </div>
                         )}
-                        <div className="kamus-detail-def-content leading-relaxed">
-                          {daftarMakna.map((m, indexMakna) => (
-                            <Fragment key={m.id}>
-                              {daftarMakna.length > 1 && <span>({indexMakna + 1}) </span>}
+                        {(() => {
+                          const renderIsiMakna = (m) => (
+                            <>
                               {m.bidang && (
                                 <>
                                   <Link
@@ -642,10 +671,32 @@ function KamusDetail() {
                                   </span>
                                 ))}</span>
                               )}
-                              {indexMakna < daftarMakna.length - 1 && <span>; </span>}
-                            </Fragment>
-                          ))}
-                        </div>
+                            </>
+                          );
+
+                          if (daftarMakna.length <= 1) {
+                            const item = daftarMakna[0];
+                            if (!item) return null;
+                            return (
+                              <div className="kamus-detail-def-content leading-relaxed">
+                                {renderIsiMakna(item)}
+                              </div>
+                            );
+                          }
+
+                          return (
+                            <ol className="kamus-detail-def-list">
+                              {daftarMakna.map((m, indexMakna) => (
+                                <li key={m.id} className="kamus-detail-def-item">
+                                  <span className="kamus-detail-def-number">{indexMakna + 1}.</span>
+                                  <div className="kamus-detail-def-content leading-relaxed">
+                                    {renderIsiMakna(m)}
+                                  </div>
+                                </li>
+                              ))}
+                            </ol>
+                          );
+                        })()}
                       </div>
                     ))}
                   </div>

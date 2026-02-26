@@ -1532,6 +1532,14 @@ code {
     @apply text-sm text-gray-500 mt-1;
   }
 
+  .kamus-detail-heading-meta {
+    @apply text-base leading-relaxed text-gray-700 mt-1;
+  }
+
+  .dark .kamus-detail-heading-meta {
+    @apply text-dark-text-muted;
+  }
+
   .kamus-detail-entry-tags-row {
     @apply flex flex-wrap gap-2 mt-2;
   }
@@ -1584,11 +1592,11 @@ code {
     @apply bg-blue-900/30 text-blue-300;
   }
 
-  .kamus-detail-tag-purple {
+  .kamus-detail-tag-jenis {
     @apply inline-flex items-center text-xs font-medium bg-purple-50 text-purple-700 px-1.5 py-0.5 rounded;
   }
 
-  .dark .kamus-detail-tag-purple {
+  .dark .kamus-detail-tag-jenis {
     @apply bg-purple-900/30 text-purple-300;
   }
 
@@ -1655,7 +1663,7 @@ code {
   }
 
   .kamus-detail-def-list {
-    @apply space-y-2 text-gray-800;
+    @apply space-y-0 text-gray-800 list-none pl-0;
   }
 
   .kamus-detail-subentry-group {
@@ -1683,7 +1691,7 @@ code {
   }
 
   .kamus-detail-def-number {
-    @apply w-7 shrink-0 text-gray-700;
+    @apply w-8 shrink-0 text-gray-700 text-left pr-0 tabular-nums;
   }
 
   .kamus-detail-def-content {

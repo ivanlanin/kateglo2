@@ -259,6 +259,7 @@ describe('KamusDetail', () => {
     render(<KamusDetail />);
 
     expect(screen.getAllByRole('heading', { name: /kata/i }).length).toBeGreaterThan(0);
+    expect(screen.getByText('ka-ta')).toBeInTheDocument();
     expect(screen.getByText('/ka-ta/')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /Nomina/i })).toBeInTheDocument();
 
@@ -445,14 +446,15 @@ describe('KamusDetail', () => {
         data: dataDetail,
       });
 
-    const { rerender } = render(<KamusDetail />);
+    const { rerender, container } = render(<KamusDetail />);
 
     expect(screen.getByText(/Lihat/i)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'aktif' })).toHaveAttribute('href', '/kamus/detail/aktif');
 
     rerender(<KamusDetail />);
 
-    expect(screen.getByRole('heading', { name: /kata.*ka ta/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /kata/i })).toBeInTheDocument();
+    expect(screen.getByText('ka ta')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Turunan' })).toHaveAttribute('href', '/kamus/bentuk/turunan');
     expect(screen.getAllByRole('link', { name: 'kata dasar' }).some((link) => link.getAttribute('href') === '/kamus/detail/kata%20dasar')).toBe(true);
     expect(screen.getByRole('link', { name: 'cak' })).toHaveAttribute('href', '/kamus/ragam/cak');
@@ -463,8 +465,9 @@ describe('KamusDetail', () => {
     expect(screen.getByText('species', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('H2O')).toBeInTheDocument();
     expect(screen.getByText(/arti contoh/i)).toBeInTheDocument();
-    expect(screen.getByText('(1)')).toBeInTheDocument();
-    expect(screen.getAllByText('(2)').length).toBeGreaterThan(0);
+    const daftarMaknaBernomor = container.querySelector('.kamus-detail-def-list');
+    expect(daftarMaknaBernomor).not.toBeNull();
+    expect(daftarMaknaBernomor?.querySelectorAll('li').length).toBeGreaterThanOrEqual(2);
     expect(screen.getByText('Tesaurus')).toBeInTheDocument();
     expect(screen.getByText('Sinonim:')).toBeInTheDocument();
     expect(screen.getByText('Antonim:')).toBeInTheDocument();
@@ -1433,7 +1436,7 @@ describe('KamusDetail', () => {
     expect(screen.getByText('contoh saja')).toBeInTheDocument();
   });
 
-  it('tidak menampilkan prefiks nomor saat hanya satu makna', () => {
+  it('tidak menampilkan nomor saat hanya satu makna', () => {
     mockUseQuery.mockReturnValue({
       isLoading: false,
       isError: false,
@@ -1446,9 +1449,11 @@ describe('KamusDetail', () => {
       },
     });
 
-    render(<KamusDetail />);
+    const { container } = render(<KamusDetail />);
 
-    expect(screen.queryByText('(1)')).not.toBeInTheDocument();
+    const daftarMaknaBernomor = container.querySelector('.kamus-detail-def-list');
+    expect(daftarMaknaBernomor).toBeNull();
+    expect(container.querySelector('.kamus-detail-def-number')).toBeNull();
     expect(screen.getByText('hanya satu makna')).toBeInTheDocument();
   });
 
@@ -1494,14 +1499,14 @@ describe('KamusDetail', () => {
     expect(screen.getByRole('link', { name: 'lawan kata' })).toHaveAttribute('href', '/kamus/detail/lawan%20kata');
   });
 
-  it('menampilkan superskrip untuk lafal dan pemenggalan di heading detail', () => {
+  it('menampilkan superskrip untuk lafal dan pemenggalan di metadata heading detail', () => {
     mockUseQuery.mockReturnValue({
       isLoading: false,
       isError: false,
       data: {
         entri: 'per (1)',
-        lafal: 'per (2)',
-        pemenggalan: 'per (3)',
+        lafal: 'pêr (2)',
+        pemenggalan: 'pe.r (3)',
         makna: [{ id: 1, kelas_kata: '-', makna: 'makna contoh' }],
         subentri: {},
         tesaurus: { sinonim: [], antonim: [] },
@@ -1511,13 +1516,33 @@ describe('KamusDetail', () => {
 
     const { container } = render(<KamusDetail />);
 
-    const supLafal = container.querySelector('.kamus-detail-heading-pronunciation sup');
-    const supPemenggalan = container.querySelector('.kamus-detail-heading-split sup');
+    const superskrip = Array.from(container.querySelectorAll('.kamus-detail-heading-meta sup'))
+      .map((node) => node.textContent)
+      .filter(Boolean)
+      .sort();
 
-    expect(supLafal).not.toBeNull();
-    expect(supLafal?.textContent).toBe('2');
-    expect(supPemenggalan).not.toBeNull();
-    expect(supPemenggalan?.textContent).toBe('3');
+    expect(superskrip).toEqual(['2', '3']);
+  });
+
+  it('menyembunyikan baris metadata jika pemenggalan dan lafal sama dengan entri/indeks setelah abaikan suffix angka', () => {
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        entri: 'per (1)',
+        indeks: 'per (2)',
+        lafal: 'per (3)',
+        pemenggalan: 'per (4)',
+        makna: [{ id: 1, kelas_kata: '-', makna: 'makna contoh' }],
+        subentri: {},
+        tesaurus: { sinonim: [], antonim: [] },
+        glosarium: [],
+      },
+    });
+
+    const { container } = render(<KamusDetail />);
+
+    expect(container.querySelector('.kamus-detail-heading-meta')).toBeNull();
   });
 
   it('menampilkan subentri varian sebagai teks non-klik', () => {
