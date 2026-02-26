@@ -31,6 +31,9 @@ import {
   useDaftarAuditMaknaAdmin,
   useDaftarTesaurusAdmin,
   useDetailTesaurusAdmin,
+  useDaftarEtimologiAdmin,
+  useDetailEtimologiAdmin,
+  useAutocompleteEntriEtimologi,
   useDaftarGlosariumAdmin,
   useDetailGlosariumAdmin,
   useDaftarBidangAdmin,
@@ -63,6 +66,8 @@ import {
   useHapusContoh,
   useSimpanTesaurus,
   useHapusTesaurus,
+  useSimpanEtimologi,
+  useHapusEtimologi,
   useSimpanGlosarium,
   useHapusGlosarium,
   useSimpanBidang,
@@ -210,6 +215,60 @@ describe('apiAdmin', () => {
     const tesaurus = useDaftarTesaurusAdmin({});
     await tesaurus.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/tesaurus', { params: { limit: 50, cursor: undefined, direction: 'next', lastPage: undefined, q: undefined, aktif: undefined } });
+
+    const etimologi = useDaftarEtimologiAdmin({ limit: 22, q: 'asal', cursor: 'et-1', direction: 'prev', lastPage: true });
+    await etimologi.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/etimologi', {
+      params: {
+        limit: 22,
+        cursor: 'et-1',
+        direction: 'prev',
+        lastPage: '1',
+        q: 'asal',
+      },
+    });
+
+    const etimologiDefault = useDaftarEtimologiAdmin();
+    await etimologiDefault.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/etimologi', {
+      params: {
+        limit: 50,
+        cursor: undefined,
+        direction: 'next',
+        lastPage: undefined,
+        q: undefined,
+      },
+    });
+
+    const autocompleteEntriEtimologi = useAutocompleteEntriEtimologi({ q: '  kata ', limit: 9 });
+    expect(autocompleteEntriEtimologi.enabled).toBe(true);
+    await autocompleteEntriEtimologi.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/etimologi/opsi-entri', {
+      params: {
+        q: 'kata',
+        limit: 9,
+      },
+    });
+
+    const autocompleteEntriEtimologiKosong = useAutocompleteEntriEtimologi({ q: '   ' });
+    expect(autocompleteEntriEtimologiKosong.enabled).toBe(false);
+    await autocompleteEntriEtimologiKosong.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/etimologi/opsi-entri', {
+      params: {
+        q: undefined,
+        limit: 8,
+      },
+    });
+
+    const autocompleteEntriEtimologiNull = useAutocompleteEntriEtimologi({ q: null, limit: 6 });
+    expect(autocompleteEntriEtimologiNull.enabled).toBe(false);
+    await autocompleteEntriEtimologiNull.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/etimologi/opsi-entri', {
+      params: {
+        q: undefined,
+        limit: 6,
+      },
+    });
 
     const auditMakna = useDaftarAuditMaknaAdmin({
       limit: 25,
@@ -389,6 +448,11 @@ describe('apiAdmin', () => {
     await detailTesaurus.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/tesaurus/14');
 
+    const detailEtimologi = useDetailEtimologiAdmin(77);
+    expect(detailEtimologi.enabled).toBe(true);
+    await detailEtimologi.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/etimologi/77');
+
     const detailGlosarium = useDetailGlosariumAdmin(15);
     expect(detailGlosarium.enabled).toBe(true);
     await detailGlosarium.queryFn();
@@ -429,6 +493,7 @@ describe('apiAdmin', () => {
     expect(useDetailKamusAdmin(null).enabled).toBe(false);
     expect(useDetailKomentarAdmin(null).enabled).toBe(false);
     expect(useDetailTesaurusAdmin(null).enabled).toBe(false);
+    expect(useDetailEtimologiAdmin(null).enabled).toBe(false);
     expect(useDetailGlosariumAdmin(null).enabled).toBe(false);
     expect(useDetailLabelAdmin(null).enabled).toBe(false);
     expect(useDetailPengguna(null).enabled).toBe(false);
@@ -543,6 +608,20 @@ describe('apiAdmin', () => {
     expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/tesaurus/2');
     hapusTesaurus.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-tesaurus'] });
+
+    const simpanEtimologi = useSimpanEtimologi();
+    await simpanEtimologi.mutationFn({ id: 8, indeks: 'asal' });
+    await simpanEtimologi.mutationFn({ indeks: 'serapan' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/etimologi/8', { id: 8, indeks: 'asal' });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/etimologi', { indeks: 'serapan' });
+    simpanEtimologi.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-etimologi'] });
+
+    const hapusEtimologi = useHapusEtimologi();
+    await hapusEtimologi.mutationFn(8);
+    expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/etimologi/8');
+    hapusEtimologi.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-etimologi'] });
 
     const simpanGlosarium = useSimpanGlosarium();
     await simpanGlosarium.mutationFn({ id: 5, indonesia: 'air' });
