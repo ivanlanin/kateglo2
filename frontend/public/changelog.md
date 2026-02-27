@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-02-27 Jumat
+
+- Memperbaiki tampilan redaksi glosarium
+
 ## 2026-02-26 Kamis
 
 - Menyiapkan data etimologi dari LWIM

@@ -67,22 +67,14 @@ const kolom = [
         <Link
           to={`/glosarium/detail/${encodeURIComponent(asing)}`}
           onClick={(event) => event.stopPropagation()}
-          className="font-medium text-blue-700 hover:text-blue-800 hover:underline dark:text-blue-400 dark:hover:text-blue-300"
+          className="font-medium italic text-blue-700 hover:text-blue-800 hover:underline dark:text-blue-400 dark:hover:text-blue-300"
         >
           {asing}
         </Link>
       );
     },
   },
-  {
-    key: 'indonesia',
-    label: 'Indonesia',
-    render: (item) => (
-      <span className="font-medium text-gray-800 dark:text-gray-100">
-        {item.indonesia}
-      </span>
-    ),
-  },
+  { key: 'indonesia', label: 'Indonesia' },
   { key: 'bidang', label: 'Bidang' },
   { key: 'sumber', label: 'Sumber' },
   { key: 'aktif', label: 'Status', render: (item) => <BadgeStatus aktif={item.aktif} /> },

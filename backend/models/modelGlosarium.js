@@ -184,7 +184,7 @@ class ModelGlosarium {
           `SELECT g.id, g.indonesia, g.asing, g.bidang, g.bahasa, g.sumber, g.aktif
            FROM glosarium g
            ${whereClause}
-           ORDER BY g.indonesia ASC
+           ORDER BY g.asing ASC
            LIMIT $${idx} OFFSET $${idx + 1}`,
           [...params, cappedLimit, safeOffset]
         );
@@ -196,7 +196,7 @@ class ModelGlosarium {
         `SELECT g.id, g.indonesia, g.asing, g.bidang, g.bahasa, g.sumber, g.aktif
          FROM glosarium g
          ${whereClause}
-         ORDER BY g.indonesia ASC
+         ORDER BY g.asing ASC
          LIMIT $${idx} OFFSET $${idx + 1}`,
         [...params, cappedLimit + 1, safeOffset]
       );
@@ -300,7 +300,7 @@ class ModelGlosarium {
          JOIN bidang b ON b.id = g.bidang_id
          JOIN sumber s ON s.id = g.sumber_id
          ${whereClause}
-         ORDER BY g.indonesia ASC
+         ORDER BY g.asing ASC
          LIMIT $${idx} OFFSET $${idx + 1}`,
         [...params, cappedLimit, safeOffset]
       );
@@ -325,7 +325,7 @@ class ModelGlosarium {
        JOIN bidang b ON b.id = g.bidang_id
        JOIN sumber s ON s.id = g.sumber_id
        ${whereClause}
-       ORDER BY g.indonesia ASC
+       ORDER BY g.asing ASC
        LIMIT $${idx} OFFSET $${idx + 1}`,
       [...params, cappedLimit + 1, safeOffset]
     );

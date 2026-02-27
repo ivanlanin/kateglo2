@@ -1278,7 +1278,7 @@ describe('ModelGlosarium', () => {
 
     const result = await ModelGlosarium.cari({ limit: 5, offset: 4, hitungTotal: false });
 
-    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('ORDER BY g.indonesia ASC'), [6, 4]);
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('ORDER BY g.asing ASC'), [6, 4]);
     expect(result).toEqual({ data: [{ id: 1 }, { id: 2 }], total: 6, hasNext: false });
   });
 
