@@ -84,6 +84,15 @@ function buildSumberFilters({ q, glosarium, kamus, tesaurus, etimologi, params }
   return conditions;
 }
 
+function buildJumlahEntriSumberSql(alias = 's') {
+  return `(
+            (SELECT COUNT(*)::int FROM entri e WHERE e.sumber_id = ${alias}.id)
+          + (SELECT COUNT(*)::int FROM tesaurus t WHERE t.sumber_id = ${alias}.id)
+          + (SELECT COUNT(*)::int FROM glosarium g WHERE g.sumber_id = ${alias}.id)
+          + (SELECT COUNT(*)::int FROM etimologi et WHERE et.sumber_id = ${alias}.id)
+         )`;
+}
+
 let cachedNormalizedSchema = null;
 let forcedNormalizedSchemaForTest = null;
 
@@ -684,8 +693,18 @@ class ModelGlosarium {
    * Ambil daftar sumber yang memiliki entri glosarium
    * @returns {Promise<Array>}
    */
-  static async ambilDaftarSumber(glosariumSaja = true) {
-    const kondisi = glosariumSaja ? 'WHERE s.glosarium = TRUE' : '';
+  static async ambilDaftarSumber(filterMode = 'glosarium') {
+    const mode = typeof filterMode === 'string'
+      ? filterMode
+      : (filterMode ? 'glosarium' : 'all');
+
+    let kondisi = '';
+    if (mode === 'glosarium') {
+      kondisi = 'WHERE s.glosarium = TRUE';
+    } else if (mode === 'konteks') {
+      kondisi = 'WHERE (s.glosarium = TRUE OR s.kamus = TRUE OR s.tesaurus = TRUE OR s.etimologi = TRUE)';
+    }
+
     const result = await db.query(
       `SELECT
          s.id,
@@ -765,7 +784,7 @@ class ModelGlosarium {
     const dataResult = await db.query(
       `SELECT s.id, s.kode, s.nama, s.glosarium, s.kamus, s.tesaurus, s.etimologi,
               s.keterangan, s.created_at, s.updated_at,
-              (SELECT COUNT(*)::int FROM glosarium g WHERE g.sumber_id = s.id) AS jumlah_entri
+              ${buildJumlahEntriSumberSql('s')} AS jumlah_entri
        FROM sumber s
        ${whereSql}
        ORDER BY s.nama ASC
@@ -795,7 +814,7 @@ class ModelGlosarium {
     const result = await db.query(
       `SELECT s.id, s.kode, s.nama, s.glosarium, s.kamus, s.tesaurus, s.etimologi,
               s.keterangan, s.created_at, s.updated_at,
-              (SELECT COUNT(*)::int FROM glosarium g WHERE g.sumber_id = s.id) AS jumlah_entri
+              ${buildJumlahEntriSumberSql('s')} AS jumlah_entri
        FROM sumber s
        WHERE s.id = $1`,
       [id]
@@ -877,12 +896,17 @@ class ModelGlosarium {
 
   static async hapusMasterSumber(id) {
     const usage = await db.query(
-      'SELECT COUNT(*)::int AS total FROM glosarium WHERE sumber_id = $1',
+      `SELECT (
+          (SELECT COUNT(*)::int FROM entri WHERE sumber_id = $1)
+        + (SELECT COUNT(*)::int FROM tesaurus WHERE sumber_id = $1)
+        + (SELECT COUNT(*)::int FROM glosarium WHERE sumber_id = $1)
+        + (SELECT COUNT(*)::int FROM etimologi WHERE sumber_id = $1)
+      ) AS total`,
       [id]
     );
     const total = parseCount(usage.rows[0]?.total);
     if (total > 0) {
-      const error = new Error('Sumber masih dipakai di glosarium dan tidak bisa dihapus');
+      const error = new Error('Sumber masih dipakai dan tidak bisa dihapus');
       error.code = 'MASTER_IN_USE';
       throw error;
     }

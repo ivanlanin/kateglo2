@@ -12,17 +12,18 @@ function normalizeIntegerNullable(value) {
 }
 
 class ModelEtimologi {
-  static async ambilAktifPublikByEntriId(entriId) {
+  static async ambilAktifPublikByEntriId(entriId, { aktifSaja = true } = {}) {
     const parsedId = Number(entriId);
     if (!Number.isInteger(parsedId) || parsedId <= 0) return [];
 
     const result = await db.query(
-      `SELECT id, bahasa, kata_asal, sumber_id
-       FROM etimologi
-       WHERE entri_id = $1
-         AND aktif = TRUE
+      `SELECT e.id, e.bahasa, e.kata_asal, e.sumber_id, s.kode AS sumber_kode, e.aktif
+       FROM etimologi e
+       LEFT JOIN sumber s ON s.id = e.sumber_id
+       WHERE e.entri_id = $1
+         ${aktifSaja ? 'AND e.aktif = TRUE' : ''}
          AND NULLIF(BTRIM(COALESCE(bahasa, '')), '') IS NOT NULL
-       ORDER BY id ASC`,
+       ORDER BY e.id ASC`,
       [parsedId]
     );
 

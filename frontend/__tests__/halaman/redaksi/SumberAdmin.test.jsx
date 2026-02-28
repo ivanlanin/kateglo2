@@ -211,12 +211,10 @@ describe('SumberAdmin', () => {
     );
 
     fireEvent.change(screen.getByPlaceholderText('Cari sumber …'), { target: { value: 'kbbi' } });
-    fireEvent.change(screen.getByLabelText('Filter status sumber'), { target: { value: '1' } });
     fireEvent.click(screen.getAllByRole('button', { name: '✕' })[0]);
 
     const panggilanTerakhir = mockUseDaftar.mock.calls.at(-1)?.[0] || {};
     expect(panggilanTerakhir.q).toBe('');
-    expect(panggilanTerakhir.aktif).toBe('');
   });
 
   it('aman saat respons daftar kosong, detail tanpa id, klik item tanpa id, dan batal hapus', async () => {

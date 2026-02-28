@@ -50,11 +50,13 @@ function buatCacheKeyDetailKamus(indeks, options) {
     glosariumLimit = 20,
     glosariumCursor = null,
     glosariumDirection = 'next',
+    includeEtimologiNonaktif = false,
   } = options;
 
   const cursorPart = glosariumCursor ? encodeURIComponent(glosariumCursor) : '';
   const directionPart = glosariumDirection === 'prev' ? 'prev' : 'next';
-  return `${baseKey}:g-${Number(glosariumLimit) || 20}:${directionPart}:${cursorPart}`;
+  const etimologiPart = includeEtimologiNonaktif ? ':et-all' : '';
+  return `${baseKey}:g-${Number(glosariumLimit) || 20}:${directionPart}:${cursorPart}${etimologiPart}`;
 }
 
 async function hapusCacheDetailKamus(indeks) {
@@ -84,6 +86,7 @@ async function ambilDetailKamus(indeksAtauEntri, {
   glosariumLimit = 20,
   glosariumCursor = null,
   glosariumDirection = 'next',
+  includeEtimologiNonaktif = false,
 } = {}) {
   const decoded = decodeURIComponent((indeksAtauEntri || '').trim());
   if (!decoded) return null;
@@ -93,6 +96,7 @@ async function ambilDetailKamus(indeksAtauEntri, {
     glosariumLimit,
     glosariumCursor,
     glosariumDirection,
+    includeEtimologiNonaktif,
   });
   const cached = await getJson(cacheKey);
   if (cached) {
@@ -109,7 +113,9 @@ async function ambilDetailKamus(indeksAtauEntri, {
         ModelEntri.ambilSubentri(dataEntri.id),
         ModelEntri.ambilBentukTidakBakuByRujukId(dataEntri.id),
         ModelEntri.ambilRantaiInduk(dataEntri.induk),
-        ModelEtimologi.ambilAktifPublikByEntriId(dataEntri.id),
+        ModelEtimologi.ambilAktifPublikByEntriId(dataEntri.id, {
+          aktifSaja: !includeEtimologiNonaktif,
+        }),
       ]);
 
       const maknaIds = maknaList.map((m) => m.id);
@@ -145,6 +151,8 @@ async function ambilDetailKamus(indeksAtauEntri, {
         induk_id: dataEntri.induk || null,
         entri: bacaTeksEntri(dataEntri),
         indeks: dataEntri.indeks,
+        sumber_id: dataEntri.sumber_id || null,
+        sumber_kode: dataEntri.sumber_kode || null,
         sumber: dataEntri.sumber || null,
         created_at: dataEntri.created_at || null,
         updated_at: dataEntri.updated_at || null,

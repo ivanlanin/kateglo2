@@ -25,6 +25,7 @@ const mockUseAuth = vi.fn();
 vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarTesaurusAdmin: (...args) => mockUseDaftarTesaurusAdmin(...args),
   useDetailTesaurusAdmin: (...args) => mockUseDetailTesaurusAdmin(...args),
+  useDaftarSumberAdmin: () => ({ data: { data: [] } }),
   useSimpanTesaurus: () => ({ mutate: mutateSimpan, isPending: false }),
   useHapusTesaurus: () => ({ mutate: mutateHapus, isPending: false }),
 }));

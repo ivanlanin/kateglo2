@@ -492,6 +492,12 @@ describe('routes backend', () => {
     expect(response.status).toBe(200);
     expect(response.body.indeks).toBe('kata');
     expect(response.body.entri).toHaveLength(1);
+    expect(layananKamusPublik.ambilDetailKamus).toHaveBeenCalledWith('kata', {
+      glosariumLimit: 20,
+      glosariumCursor: null,
+      glosariumDirection: 'next',
+      includeEtimologiNonaktif: false,
+    });
   });
 
   it('GET /api/publik/kamus/detail/:entri meneruskan paging glosarium cursor', async () => {
@@ -504,7 +510,37 @@ describe('routes backend', () => {
       glosariumLimit: 55,
       glosariumCursor: 'abc',
       glosariumDirection: 'prev',
+      includeEtimologiNonaktif: false,
     });
+  });
+
+  it('GET /api/publik/kamus/detail/:entri mengirim flag admin untuk etimologi nonaktif', async () => {
+    process.env.JWT_SECRET = 'test-secret-routes';
+    const token = jwt.sign(
+      {
+        sub: 'google-admin',
+        pid: 1,
+        email: 'admin@example.com',
+        name: 'Admin',
+        provider: 'google',
+        peran: 'admin',
+      },
+      process.env.JWT_SECRET
+    );
+    layananKamusPublik.ambilDetailKamus.mockResolvedValue({ indeks: 'kata', entri: [{ id: 1, entri: 'kata' }] });
+
+    const response = await request(createApp())
+      .get('/api/publik/kamus/detail/kata')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(layananKamusPublik.ambilDetailKamus).toHaveBeenCalledWith('kata', {
+      glosariumLimit: 20,
+      glosariumCursor: null,
+      glosariumDirection: 'next',
+      includeEtimologiNonaktif: true,
+    });
+    delete process.env.JWT_SECRET;
   });
 
   it('GET /api/publik/kamus/detail/:entri meneruskan error', async () => {

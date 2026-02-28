@@ -157,7 +157,7 @@ router.post('/komentar/:indeks', authenticate, async (req, res, next) => {
   }
 });
 
-router.get('/detail/:indeks', async (req, res, next) => {
+router.get('/detail/:indeks', authenticateOptional, async (req, res, next) => {
   try {
     const { limit, cursor, direction } = parseCursorPagination(req.query, {
       defaultLimit: 20,
@@ -168,6 +168,7 @@ router.get('/detail/:indeks', async (req, res, next) => {
       glosariumLimit: limit,
       glosariumCursor: cursor,
       glosariumDirection: direction,
+      includeEtimologiNonaktif: req.user?.peran === 'admin',
     });
     if (!data) {
       const saran = await ModelEntri.saranEntri(decodeURIComponent(req.params.indeks));

@@ -140,12 +140,11 @@ function bandingkanJenisSubentri(jenisA, jenisB, urutanJenisSubentri) {
   return (jenisA || '').localeCompare((jenisB || ''), 'id');
 }
 
-function formatInfoWaktuEntri(createdAt, updatedAt, sumber = '') {
+function formatInfoWaktuEntri(createdAt, updatedAt) {
   const createdDate = parseUtcDate(createdAt);
   const updatedDate = parseUtcDate(updatedAt);
-  const sumberAman = String(sumber || '').trim();
 
-  if (!createdDate && !updatedDate && !sumberAman) return '';
+  if (!createdDate && !updatedDate) return '';
 
   const parts = [];
   if (createdDate) {
@@ -158,10 +157,6 @@ function formatInfoWaktuEntri(createdAt, updatedAt, sumber = '') {
 
   if (shouldShowUpdated) {
     parts.push(`Diubah ${formatLocalDateTime(updatedDate)}`);
-  }
-
-  if (sumberAman) {
-    parts.push(`Sumber ${sumberAman}`);
   }
 
   return parts.join(' · ');
@@ -449,9 +444,11 @@ function KamusDetail() {
               bandingkanJenisSubentri(jenisA, jenisB, urutanJenisSubentri));
             const tidakAdaMakna = Object.keys(maknaPerKelas).length === 0;
             const adaSubentri = subentriEntries.length > 0;
+            const etimologiTampil = (entriItem.etimologi || []).filter((item) => adalahAdmin || item?.aktif !== false);
+            const sumberKodeEntri = String(entriItem.sumber_kode || '').trim();
 
             const rantaiHeading = [...(entriItem.induk || []), { id: `current-${entriItem.id}`, entri: entriItem.entri, indeks: entriItem.indeks, current: true }];
-            const infoWaktu = formatInfoWaktuEntri(entriItem.created_at, entriItem.updated_at, entriItem.sumber);
+            const infoWaktu = formatInfoWaktuEntri(entriItem.created_at, entriItem.updated_at);
             const indeksKamus = normalisasiIndeksKamus(entriItem.indeks || entriItem.entri);
             const tautanRujukanKbbi = indeksKamus
               ? `https://kbbi.kemendikdasmen.go.id/entri/${encodeURIComponent(indeksKamus)}`
@@ -742,19 +739,19 @@ function KamusDetail() {
                   </div>
                 )}
 
-                {(entriItem.etimologi || []).length > 0 && (
+                {etimologiTampil.length > 0 && (
                   <div className="mt-4">
                     <div className="kamus-detail-subentry-group">
                       <div className="kamus-detail-subentry-heading-row">
                         <h3 className="kamus-detail-def-class mb-0">
                           Etimologi{' '}
-                          <span className="kamus-count-badge" data-count={entriItem.etimologi.length}>
-                            ({entriItem.etimologi.length})
+                          <span className="kamus-count-badge" data-count={etimologiTampil.length}>
+                            ({etimologiTampil.length})
                           </span>
                         </h3>
                       </div>
                       <div className="kamus-detail-subentry-flow">
-                        {entriItem.etimologi.map((item, i) => (
+                        {etimologiTampil.map((item, i) => (
                           <span key={item.id || `${item.bahasa}-${item.kata_asal}-${i}`}>
                             {item.bahasa && (
                               <>
@@ -763,9 +760,26 @@ function KamusDetail() {
                                 </span>{' '}
                               </>
                             )}
-                            <em>{String(item.kata_asal || '').trim() || '—'}</em>{' '}
-                            <span className="secondary-text">({String(item.sumber || '').trim() || '—'})</span>
-                            {i < entriItem.etimologi.length - 1 && <span className="secondary-text">; </span>}
+                            <em>{String(item.kata_asal || '').trim() || '—'}</em>
+                            {String(item.sumber_kode || '').trim() && (
+                              <>
+                                {' '}
+                                <span className="kamus-badge kamus-badge-sumber">{String(item.sumber_kode || '').trim()}</span>
+                              </>
+                            )}
+                            {adalahAdmin && item.id && (
+                              <>
+                                {' '}
+                                <PensilSunting
+                                  to={`/redaksi/etimologi/${item.id}`}
+                                  className="kamus-detail-edit-link"
+                                  ariaLabel="Sunting etimologi di Redaksi"
+                                  title="Sunting etimologi di Redaksi"
+                                  iconClassName="h-4 w-4"
+                                />
+                              </>
+                            )}
+                            {i < etimologiTampil.length - 1 && <span className="secondary-text">; </span>}
                           </span>
                         ))}
                       </div>
@@ -775,6 +789,11 @@ function KamusDetail() {
 
                 {infoWaktu && (
                   <p className="kamus-detail-entry-meta">{infoWaktu}</p>
+                )}
+                {sumberKodeEntri && (
+                  <p className="kamus-detail-entry-meta">
+                    <span className="kamus-badge kamus-badge-sumber">{sumberKodeEntri}</span>
+                  </p>
                 )}
               </section>
             );

@@ -273,7 +273,7 @@ describe('KamusDetail', () => {
     });
   });
 
-  it('menampilkan subentri Etimologi dengan badge bahasa dan kata_asal miring', () => {
+  it('menampilkan subentri Etimologi dengan badge bahasa, kata_asal miring, dan badge sumber', () => {
     mockUseQuery.mockImplementation((options) => {
       if (options?.enabled !== false && options?.queryFn) options.queryFn();
       if (options?.queryKey?.[0] === 'kamus-kategori') {
@@ -300,7 +300,7 @@ describe('KamusDetail', () => {
               jenis: 'dasar',
               makna: [],
               subentri: {},
-              etimologi: [{ id: 1, bahasa: 'Belanda', kata_asal: 'adjectief', sumber: 'LWIM' }],
+              etimologi: [{ id: 1, bahasa: 'Belanda', kata_asal: 'adjectief', sumber_kode: 'LWIM', aktif: true }],
             },
           ],
           tesaurus: { sinonim: [], antonim: [] },
@@ -316,7 +316,8 @@ describe('KamusDetail', () => {
     const badgeBahasa = screen.getByText('Belanda');
     expect(badgeBahasa).toHaveClass('kamus-badge-bahasa');
     expect(screen.getByText('adjectief').closest('em')).not.toBeNull();
-    expect(screen.getByText('(LWIM)')).toBeInTheDocument();
+    const badgeSumber = screen.getByText('LWIM');
+    expect(badgeSumber).toHaveClass('kamus-badge-sumber');
   });
 
   it('menampilkan aksi redaksi dan tautan rujukan KBBI saat admin dan indeks tersedia', () => {
@@ -1668,7 +1669,7 @@ describe('KamusDetail', () => {
     expect(screen.getByText('kata route')).toBeInTheDocument();
   });
 
-  it('menampilkan etimologi dengan bahasa kosong dan kata_asal/sumber kosong memunculkan tanda pisah', () => {
+  it('menampilkan etimologi dengan bahasa kosong dan kata_asal kosong memunculkan tanda pisah', () => {
     mockUseQuery.mockImplementation((options) => {
       if (options?.queryKey?.[0] === 'kamus-kategori') {
         return { isLoading: false, isError: false, data: { bahasa: [] } };
@@ -1689,8 +1690,8 @@ describe('KamusDetail', () => {
               makna: [],
               subentri: {},
               etimologi: [
-                { id: null, bahasa: '', kata_asal: '', sumber: '' },
-                { id: 2, bahasa: 'Inggris', kata_asal: 'word', sumber: 'KBBI' },
+                { id: null, bahasa: '', kata_asal: '', sumber_kode: '', aktif: true },
+                { id: 2, bahasa: 'Inggris', kata_asal: 'word', sumber_kode: 'KBBI', aktif: true },
               ],
             },
           ],
@@ -1853,9 +1854,6 @@ describe('KamusDetail helpers', () => {
     expect(keduanya).toContain('Diubah ');
     expect(keduanya).toContain('·');
 
-    const denganSumber = formatInfoWaktuEntri('2026-02-17 10:20:30.000', '2026-02-18 05:00:00.000', 'KBBI IV');
-    expect(denganSumber).toContain('Sumber KBBI IV');
-
     const samaPersis = formatInfoWaktuEntri('2026-02-17 10:20:30.000', '2026-02-17 10:20:30.000');
     expect(samaPersis).toContain('Dibuat ');
     expect(samaPersis).not.toContain('Diubah ');
@@ -1864,8 +1862,6 @@ describe('KamusDetail helpers', () => {
     const hanyaDibuat = formatInfoWaktuEntri('2026-02-17 10:20:30.000', null);
     expect(hanyaDibuat).toContain('Dibuat ');
     expect(hanyaDibuat).not.toContain('Diubah ');
-
-    expect(formatInfoWaktuEntri(null, null, 'KBBI IV')).toBe('Sumber KBBI IV');
 
     expect(formatInfoWaktuEntri(null, null)).toBe('');
     expect(formatInfoWaktuEntri('invalid', 'invalid')).toBe('');

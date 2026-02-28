@@ -3,6 +3,7 @@
 ## 2026-03-01 Minggu
 
 - Merujuk sumber kamus, tesaurus, dan etimologi ke tabel sumber
+- Mengubah tampilan sumber entri dan etimologi di detail entri kamus
 
 ## 2026-02-28 Sabtu
 

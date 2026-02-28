@@ -498,7 +498,7 @@ describe('apiAdmin', () => {
     const daftarSumber = useDaftarSumberAdmin({ limit: 13, q: 'kb', glosarium: '1', kamus: '0' });
     await daftarSumber.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/sumber', {
-      params: { limit: 13, cursor: undefined, direction: 'next', lastPage: undefined, q: 'kb', glosarium: '1', kamus: '0', tesaurus: '', etimologi: '' },
+      params: { limit: 13, cursor: undefined, direction: 'next', lastPage: undefined, q: 'kb', aktif: undefined },
     });
 
     const detailSumber = useDetailSumberAdmin(19);
