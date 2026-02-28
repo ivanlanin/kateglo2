@@ -10,6 +10,7 @@ import {
   useAutocompleteEntriEtimologi,
   useSimpanEtimologi,
   useHapusEtimologi,
+  useDaftarSumberAdmin,
 } from '../../api/apiAdmin';
 import TataLetak from '../../komponen/bersama/TataLetak';
 import { useAuth } from '../../context/authContext';
@@ -77,7 +78,7 @@ const nilaiAwal = {
   bahasa: '',
   kata_asal: '',
   arti_asal: '',
-  sumber: 'LWIM',
+  sumber_id: '',
   sumber_definisi: '',
   sumber_sitasi: '',
   sumber_isi: '',
@@ -177,6 +178,9 @@ function EtimologiAdmin() {
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
 
+  const { data: sumberResp } = useDaftarSumberAdmin({ limit: 200, etimologi: '1' });
+  const opsiSumber = (sumberResp?.data || []).map((item) => ({ value: String(item.id), label: item.nama }));
+
   const panel = useFormPanel(nilaiAwal);
   const simpan = useSimpanEtimologi();
   const hapus = useHapusEtimologi();
@@ -258,7 +262,6 @@ function EtimologiAdmin() {
       navigate('/redaksi/etimologi', { replace: true });
     }
     panel.bukaUntukTambah();
-    panel.ubahField('sumber', 'LWIM');
     panel.ubahField('aktif', false);
   };
 
@@ -272,7 +275,7 @@ function EtimologiAdmin() {
     setPesan({ error: '', sukses: '' });
     const pesanValidasi = validateRequiredFields(panel.data, [
       { name: 'indeks', label: 'Indeks' },
-      { name: 'sumber', label: 'Sumber' },
+      { name: 'sumber_id', label: 'Sumber' },
     ]);
     if (pesanValidasi) {
       setPesan({ error: pesanValidasi, sukses: '' });
@@ -457,7 +460,7 @@ function EtimologiAdmin() {
 
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             <InputField label="Sitasi" name="sumber_sitasi" value={panel.data.sumber_sitasi} onChange={panel.ubahField} />
-            <InputField label="Sumber" name="sumber" value={panel.data.sumber} onChange={panel.ubahField} required />
+            <SelectField label="Sumber" name="sumber_id" value={String(panel.data.sumber_id || '')} onChange={panel.ubahField} options={opsiSumber} />
           </div>
 
           <ToggleAktif value={Boolean(panel.data.aktif)} onChange={panel.ubahField} />

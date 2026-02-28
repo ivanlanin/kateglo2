@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-28T15:05:09.806Z
+-- Generated: 2026-02-28T17:46:11.536Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -166,9 +166,9 @@ create table entri (
   homonim integer,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
-  sumber text,
   homograf integer,
   entri_rujuk integer,
+  sumber_id integer references sumber(id) on delete restrict on update cascade,
   constraint entri_legacy_eid_key unique (legacy_eid),
   constraint entri_entri_check check (TRIM(BOTH FROM entri) <> ''::text)
 );
@@ -182,6 +182,7 @@ create index idx_entri_jenis on entri using btree (jenis);
 create index idx_entri_lema_rujuk on entri using btree (lema_rujuk);
 create index idx_entri_lower on entri using btree (lower(entri));
 create index idx_entri_serupa_norm_aktif on entri using btree (lower(regexp_replace(replace(entri, '-'::text, ''::text), '\s*\([0-9]+\)\s*$'::text, ''::text))) WHERE (aktif = 1);
+create index idx_entri_sumber_id on entri using btree (sumber_id);
 create index idx_entri_trgm on entri using gin (entri gin_trgm_ops);
 create trigger trg_set_timestamp_fields__entri
   before insert or update on entri
@@ -195,19 +196,19 @@ create table etimologi (
   homonim integer,
   lafal text,
   bahasa text,
-  sumber text not null default 'LWIM'::text,
   sumber_sitasi text,
   sumber_isi text,
   sumber_aksara text,
   sumber_lihat text,
   sumber_varian text,
   sumber_definisi text,
-  sumber_id text,
+  lwim_ref text,
   aktif boolean not null default false,
   created_at timestamp with time zone not null,
   updated_at timestamp with time zone not null,
   kata_asal text,
   arti_asal text,
+  sumber_id integer references sumber(id) on delete restrict on update cascade,
   constraint etimologi_indeks_check check (TRIM(BOTH FROM indeks) <> ''::text)
 );
 create index idx_etimologi_aktif on etimologi using btree (aktif);
@@ -217,6 +218,7 @@ create index idx_etimologi_entri_id on etimologi using btree (entri_id);
 create index idx_etimologi_indeks on etimologi using btree (indeks);
 create index idx_etimologi_indeks_homonim on etimologi using btree (indeks, homonim);
 create index idx_etimologi_lafal on etimologi using btree (lafal);
+create index idx_etimologi_lwim_ref on etimologi using btree (lwim_ref);
 create index idx_etimologi_sumber_id on etimologi using btree (sumber_id);
 
 create table etimologi_lwim (
@@ -411,12 +413,15 @@ create table sumber (
   id serial primary key,
   kode text not null,
   nama text not null,
-  aktif boolean not null default true,
+  glosarium boolean not null default true,
   keterangan text,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
-  constraint sumber_kode_key unique (kode),
-  constraint sumber_nama_key unique (nama)
+  kamus boolean not null default false,
+  tesaurus boolean not null default false,
+  etimologi boolean not null default false,
+  constraint sumber_nama_key unique (nama),
+  constraint sumber_kode_key unique (kode)
 );
 create unique index sumber_kode_key on sumber using btree (kode);
 create unique index sumber_nama_key on sumber using btree (nama);
@@ -433,10 +438,12 @@ create table tesaurus (
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
   aktif boolean not null default true,
+  sumber_id integer references sumber(id) on delete restrict on update cascade,
   constraint tesaurus_indeks_key unique (indeks)
 );
 create index idx_tesaurus_indeks_lower on tesaurus using btree (lower(indeks));
 create index idx_tesaurus_indeks_trgm on tesaurus using gin (indeks gin_trgm_ops);
+create index idx_tesaurus_sumber_id on tesaurus using btree (sumber_id);
 create unique index tesaurus_indeks_key on tesaurus using btree (indeks);
 create trigger trg_set_timestamp_fields__tesaurus
   before insert or update on tesaurus

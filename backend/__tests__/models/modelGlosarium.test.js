@@ -877,11 +877,11 @@ describe('ModelGlosarium', () => {
     );
   });
 
-  it('ambilDaftarSumber dengan aktifSaja=false tidak menambahkan kondisi aktif', async () => {
+  it('ambilDaftarSumber dengan glosariumSaja=false tidak menambahkan kondisi glosarium', async () => {
     db.query.mockResolvedValue({ rows: [] });
     await ModelGlosarium.ambilDaftarSumber(false);
     expect(db.query).toHaveBeenCalledWith(
-      expect.not.stringContaining('WHERE s.aktif = TRUE')
+      expect.not.stringContaining('WHERE s.glosarium = TRUE')
     );
   });
 
@@ -1262,14 +1262,14 @@ describe('ModelGlosarium', () => {
     await expect(ModelGlosarium.hapusMasterSumber(99)).rejects.toMatchObject({ code: 'MASTER_IN_USE' });
   });
 
-  it('ambilDaftarBidang dan ambilDaftarSumber default aktifSaja=true menambahkan WHERE aktif', async () => {
+  it('ambilDaftarBidang dan ambilDaftarSumber default menambahkan WHERE aktif/glosarium', async () => {
     db.query.mockResolvedValueOnce({ rows: [{ id: 1 }] }).mockResolvedValueOnce({ rows: [{ id: 2 }] });
 
     await ModelGlosarium.ambilDaftarBidang();
     await ModelGlosarium.ambilDaftarSumber();
 
     expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('WHERE b.aktif = TRUE'));
-    expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('WHERE s.aktif = TRUE'));
+    expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('WHERE s.glosarium = TRUE'));
   });
 
   it('cari normalized tanpa filter dan tanpa hitungTotal menangani hasNext=false', async () => {

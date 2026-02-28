@@ -62,8 +62,7 @@ router.post('/', periksaIzin('kelola_etimologi'), async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'entri_id tidak valid' });
     }
 
-    const sumber = parseTrimmedString(req.body.sumber) || 'LWIM';
-    const data = await ModelEtimologi.simpan({ ...req.body, indeks, sumber, entri_id: entriId });
+    const data = await ModelEtimologi.simpan({ ...req.body, indeks, entri_id: entriId });
     return res.status(201).json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -82,8 +81,7 @@ router.put('/:id', periksaIzin('kelola_etimologi'), async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'entri_id tidak valid' });
     }
 
-    const sumber = parseTrimmedString(req.body.sumber) || 'LWIM';
-    const data = await ModelEtimologi.simpan({ ...req.body, id, indeks, sumber, entri_id: entriId });
+    const data = await ModelEtimologi.simpan({ ...req.body, id, indeks, entri_id: entriId });
     if (!data) return res.status(404).json({ success: false, message: 'Etimologi tidak ditemukan' });
     return res.json({ success: true, data });
   } catch (error) {

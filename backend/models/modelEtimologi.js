@@ -17,7 +17,7 @@ class ModelEtimologi {
     if (!Number.isInteger(parsedId) || parsedId <= 0) return [];
 
     const result = await db.query(
-      `SELECT id, bahasa, kata_asal, sumber
+      `SELECT id, bahasa, kata_asal, sumber_id
        FROM etimologi
        WHERE entri_id = $1
          AND aktif = TRUE
@@ -116,7 +116,7 @@ class ModelEtimologi {
          e.bahasa,
          e.kata_asal,
          e.arti_asal,
-         e.sumber,
+         e.sumber_id,
          e.sumber_definisi,
          e.sumber_sitasi,
          e.sumber_isi,
@@ -151,7 +151,7 @@ class ModelEtimologi {
          e.bahasa,
          e.kata_asal,
          e.arti_asal,
-         e.sumber,
+         e.sumber_id,
          e.sumber_definisi,
          e.sumber_sitasi,
          e.sumber_isi,
@@ -181,7 +181,7 @@ class ModelEtimologi {
     bahasa,
     kata_asal,
     arti_asal,
-    sumber,
+    sumber_id,
     sumber_definisi,
     sumber_sitasi,
     sumber_isi,
@@ -192,8 +192,9 @@ class ModelEtimologi {
   }) {
     const normalizedHomonim = normalizeIntegerNullable(homonim);
     const normalizedEntriId = normalizeIntegerNullable(entri_id);
+    const normalizedSumberId = normalizeIntegerNullable(sumber_id);
     const normalizedBahasa = String(bahasa || '').trim();
-    const normalizedAktifDariBahasa = normalizedBahasa ? true : false;
+    const normalizedAktifDariBahasa = Boolean(normalizedBahasa);
 
     const result = id
       ? await db.query(
@@ -204,7 +205,7 @@ class ModelEtimologi {
              bahasa = NULLIF($4, ''),
              kata_asal = NULLIF($5, ''),
              arti_asal = NULLIF($6, ''),
-             sumber = NULLIF($7, ''),
+             sumber_id = $7,
              sumber_definisi = NULLIF($8, ''),
              sumber_sitasi = NULLIF($9, ''),
              sumber_isi = NULLIF($10, ''),
@@ -223,7 +224,7 @@ class ModelEtimologi {
           normalizedBahasa,
           kata_asal,
           arti_asal,
-          sumber,
+          normalizedSumberId,
           sumber_definisi,
           sumber_sitasi,
           sumber_isi,
@@ -243,7 +244,7 @@ class ModelEtimologi {
            bahasa,
            kata_asal,
            arti_asal,
-           sumber,
+           sumber_id,
            sumber_definisi,
            sumber_sitasi,
            sumber_isi,
@@ -262,7 +263,7 @@ class ModelEtimologi {
            NULLIF($4, ''),
            NULLIF($5, ''),
            NULLIF($6, ''),
-           NULLIF($7, ''),
+           $7,
            NULLIF($8, ''),
            NULLIF($9, ''),
            NULLIF($10, ''),
@@ -282,7 +283,7 @@ class ModelEtimologi {
           normalizedBahasa,
           kata_asal,
           arti_asal,
-          sumber,
+          normalizedSumberId,
           sumber_definisi,
           sumber_sitasi,
           sumber_isi,

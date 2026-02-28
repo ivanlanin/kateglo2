@@ -310,7 +310,7 @@ class ModelEntri {
               e.jenis_rujuk, e.lema_rujuk,
               (SELECT er.entri FROM entri er WHERE er.id = e.entri_rujuk) AS entri_rujuk,
               (SELECT er.indeks FROM entri er WHERE er.id = e.entri_rujuk) AS entri_rujuk_indeks,
-              e.sumber, e.aktif
+              e.sumber_id, e.aktif
        FROM entri e
        WHERE LOWER(e.entri) = LOWER($1)
        LIMIT 1`,
@@ -325,7 +325,7 @@ class ModelEntri {
               e.jenis_rujuk, e.lema_rujuk,
               (SELECT er.entri FROM entri er WHERE er.id = e.entri_rujuk) AS entri_rujuk,
               (SELECT er.indeks FROM entri er WHERE er.id = e.entri_rujuk) AS entri_rujuk_indeks,
-              e.sumber, e.aktif,
+              e.sumber_id, e.aktif,
               to_char(e.created_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS created_at,
               to_char(e.updated_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS updated_at
        FROM entri e
@@ -702,7 +702,7 @@ class ModelEntri {
           e.induk,
           induk.entri AS induk_entri,
           e.lafal,
-          e.sumber,
+          e.sumber_id,
            COALESCE(mk_stat.jumlah_makna, 0) AS jumlah_makna,
            e.aktif,
            e.jenis_rujuk,
@@ -750,7 +750,7 @@ class ModelEntri {
               e.entri_rujuk AS entri_rujuk_id,
               r.entri AS entri_rujuk,
               r.indeks AS entri_rujuk_indeks,
-              e.sumber, e.aktif
+              e.sumber_id, e.aktif
        FROM entri e
        LEFT JOIN entri i ON i.id = e.induk
        LEFT JOIN entri r ON r.id = e.entri_rujuk
@@ -780,7 +780,7 @@ class ModelEntri {
     indeks,
     homograf,
     homonim,
-    sumber,
+    sumber_id,
   }) {
     const nilaiEntri = entri;
     const nilaiEntriRujuk = parseNullableInteger(entri_rujuk);
@@ -789,7 +789,7 @@ class ModelEntri {
     const nilaiId = parseNullableInteger(id);
     const nilaiHomograf = parseNullableInteger(homograf);
     const nilaiHomonim = parseNullableInteger(homonim);
-    const nilaiSumber = String(sumber || '').trim() || null;
+    const nilaiSumberId = parseNullableInteger(sumber_id);
 
     if (nilaiId && nilaiInduk && nilaiId === nilaiInduk) {
       const error = new Error('Induk tidak boleh sama dengan entri ini');
@@ -825,30 +825,30 @@ class ModelEntri {
       const result = await db.query(
         `UPDATE entri SET entri = $1, jenis = $2, induk = $3, pemenggalan = $4,
           lafal = $5, varian = $6, jenis_rujuk = $7, entri_rujuk = $8, aktif = $9,
-                indeks = $10, homograf = $11, homonim = $12, sumber = $13
+                indeks = $10, homograf = $11, homonim = $12, sumber_id = $13
          WHERE id = $14
          RETURNING id, legacy_eid, entri, indeks, homograf, homonim, jenis, induk, pemenggalan, lafal, varian,
              jenis_rujuk, entri_rujuk AS entri_rujuk_id,
              (SELECT er.entri FROM entri er WHERE er.id = entri_rujuk) AS entri_rujuk,
              (SELECT er.indeks FROM entri er WHERE er.id = entri_rujuk) AS entri_rujuk_indeks,
-             sumber, aktif, legacy_tabel, legacy_tid`,
+             sumber_id, aktif, legacy_tabel, legacy_tid`,
         [nilaiEntri, jenis, nilaiInduk, pemenggalan || null, lafal || null,
          varian || null, jenis_rujuk || null, nilaiEntriRujuk || null, aktif ?? 1,
-         nilaiIndeks, nilaiHomograf, nilaiHomonim, nilaiSumber, id]
+         nilaiIndeks, nilaiHomograf, nilaiHomonim, nilaiSumberId, id]
       );
       return result.rows[0];
     }
     const result = await db.query(
-      `INSERT INTO entri (entri, jenis, induk, pemenggalan, lafal, varian, jenis_rujuk, entri_rujuk, aktif, indeks, homograf, homonim, sumber)
+      `INSERT INTO entri (entri, jenis, induk, pemenggalan, lafal, varian, jenis_rujuk, entri_rujuk, aktif, indeks, homograf, homonim, sumber_id)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
        RETURNING id, legacy_eid, entri, indeks, homograf, homonim, jenis, induk, pemenggalan, lafal, varian,
         jenis_rujuk, entri_rujuk AS entri_rujuk_id,
         (SELECT er.entri FROM entri er WHERE er.id = entri_rujuk) AS entri_rujuk,
         (SELECT er.indeks FROM entri er WHERE er.id = entri_rujuk) AS entri_rujuk_indeks,
-        sumber, aktif, legacy_tabel, legacy_tid`,
+        sumber_id, aktif, legacy_tabel, legacy_tid`,
       [nilaiEntri, jenis, nilaiInduk, pemenggalan || null, lafal || null,
        varian || null, jenis_rujuk || null, nilaiEntriRujuk || null, aktif ?? 1,
-       nilaiIndeks, nilaiHomograf, nilaiHomonim, nilaiSumber]
+       nilaiIndeks, nilaiHomograf, nilaiHomonim, nilaiSumberId]
     );
     return result.rows[0];
   }

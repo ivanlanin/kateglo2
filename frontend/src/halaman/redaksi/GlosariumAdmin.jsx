@@ -111,7 +111,7 @@ function GlosariumAdmin() {
   });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailGlosariumAdmin(idDariPath);
   const { data: bidangResp } = useDaftarBidangAdmin({ limit: 200, aktif: '1' });
-  const { data: sumberResp } = useDaftarSumberAdmin({ limit: 200, aktif: '1' });
+  const { data: sumberResp } = useDaftarSumberAdmin({ limit: 200, glosarium: '1' });
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
   const opsiBidang = (bidangResp?.data || []).map((item) => ({ value: String(item.id), label: item.nama }));

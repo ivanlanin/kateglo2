@@ -10,6 +10,7 @@ import {
   useDaftarMakna, useSimpanMakna, useHapusMakna,
   useSimpanContoh, useHapusContoh,
   useKategoriLabelRedaksi,
+  useDaftarSumberAdmin,
 } from '../../api/apiAdmin';
 import TataLetak from '../../komponen/bersama/TataLetak';
 import { useAuth } from '../../context/authContext';
@@ -43,7 +44,7 @@ const nilaiAwalEntri = {
   lafal: '',
   pemenggalan: '',
   varian: '',
-  sumber: '',
+  sumber_id: '',
   jenis_rujuk: '',
   lema_rujuk: '',
   entri_rujuk_id: '',
@@ -722,6 +723,9 @@ function KamusAdmin() {
   const total = resp?.total || 0;
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailKamusAdmin(entriIdDariPath);
 
+  const { data: sumberResp } = useDaftarSumberAdmin({ limit: 200, kamus: '1' });
+  const opsiSumber = (sumberResp?.data || []).map((item) => ({ value: String(item.id), label: item.nama }));
+
   const panel = useFormPanel(nilaiAwalEntri);
   const simpan = useSimpanKamus();
   const hapus = useHapusKamus();
@@ -1290,7 +1294,7 @@ function KamusAdmin() {
             </div>
           </div>
           <InputField label="Lema Rujuk (legacy)" name="lema_rujuk" value={panel.data.lema_rujuk} onChange={panel.ubahField} disabled />
-          <InputField label="Sumber" name="sumber" value={panel.data.sumber} onChange={panel.ubahField} />
+          <SelectField label="Sumber" name="sumber_id" value={String(panel.data.sumber_id || '')} onChange={panel.ubahField} options={opsiSumber} />
           <ToggleAktif value={panel.data.aktif} onChange={panel.ubahField} />
           <FormFooter
             onSimpan={handleSimpan}

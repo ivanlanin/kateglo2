@@ -273,7 +273,7 @@ class ModelTesaurus {
     const total = parseCount(countResult.rows[0]?.total);
 
     const dataResult = await db.query(
-      `SELECT id, indeks, sinonim, antonim, aktif
+      `SELECT id, indeks, sinonim, antonim, aktif, sumber_id
        FROM tesaurus ${where}
        ORDER BY indeks ASC, id ASC
        LIMIT $${limitIdx} OFFSET $${offsetIdx}`,
@@ -336,7 +336,7 @@ class ModelTesaurus {
     const whereClause = whereParts.length ? `WHERE ${whereParts.join(' AND ')}` : '';
 
     const dataResult = await db.query(
-      `SELECT id, indeks, sinonim, antonim, aktif
+      `SELECT id, indeks, sinonim, antonim, aktif, sumber_id
        FROM tesaurus
        ${whereClause}
        ORDER BY indeks ${orderDesc ? 'DESC' : 'ASC'}, id ${orderDesc ? 'DESC' : 'ASC'}
@@ -394,7 +394,7 @@ class ModelTesaurus {
    */
   static async ambilDenganId(id) {
     const result = await db.query(
-      'SELECT id, indeks, sinonim, antonim, aktif FROM tesaurus WHERE id = $1',
+      'SELECT id, indeks, sinonim, antonim, aktif, sumber_id FROM tesaurus WHERE id = $1',
       [id]
     );
     return result.rows[0] || null;
@@ -405,24 +405,27 @@ class ModelTesaurus {
    * @param {Object} data
    * @returns {Promise<Object>}
    */
-  static async simpan({ id, indeks, sinonim, antonim, aktif }) {
+  static async simpan({ id, indeks, sinonim, antonim, aktif, sumber_id }) {
     const nilaiAktif = normalizeBoolean(aktif, true);
     const sinonimNorm = normalizeRelasiList(sinonim);
     const antonimNorm = normalizeRelasiList(antonim);
+    const nilaiSumberId = sumber_id ? Number(sumber_id) || null : null;
 
     if (id) {
       const result = await db.query(
         `UPDATE tesaurus SET indeks = $1, sinonim = $2, antonim = $3,
-                aktif = $4
-         WHERE id = $5 RETURNING *`,
-        [indeks, sinonimNorm, antonimNorm, nilaiAktif, id]
+                aktif = $4, sumber_id = $5
+         WHERE id = $6
+         RETURNING id, indeks, sinonim, antonim, aktif, sumber_id`,
+        [indeks, sinonimNorm, antonimNorm, nilaiAktif, nilaiSumberId, id]
       );
       return result.rows[0];
     }
     const result = await db.query(
-      `INSERT INTO tesaurus (indeks, sinonim, antonim, aktif)
-       VALUES ($1, $2, $3, $4) RETURNING *`,
-      [indeks, sinonimNorm, antonimNorm, nilaiAktif]
+      `INSERT INTO tesaurus (indeks, sinonim, antonim, aktif, sumber_id)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING id, indeks, sinonim, antonim, aktif, sumber_id`,
+      [indeks, sinonimNorm, antonimNorm, nilaiAktif, nilaiSumberId]
     );
     return result.rows[0];
   }

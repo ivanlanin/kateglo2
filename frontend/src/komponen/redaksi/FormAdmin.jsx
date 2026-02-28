@@ -134,6 +134,27 @@ export function ToggleAktif({ value, onChange, disabled }) {
 }
 
 /**
+ * Grup checkbox tunggal
+ */
+export function CheckboxField({ label, name, value, onChange, disabled }) {
+  return (
+    <div className="form-admin-group flex-row items-center gap-2">
+      <input
+        type="checkbox"
+        id={`field-${name}`}
+        checked={Boolean(value)}
+        onChange={(e) => onChange(name, e.target.checked)}
+        disabled={disabled}
+        className="h-4 w-4 cursor-pointer rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+      />
+      <label htmlFor={`field-${name}`} className="form-admin-label mb-0 cursor-pointer">
+        {label}
+      </label>
+    </div>
+  );
+}
+
+/**
  * Footer formulir dengan tombol Simpan, Batal, dan Hapus (opsional)
  */
 export function FormFooter({ onSimpan, onBatal, onHapus, isPending, modeTambah }) {

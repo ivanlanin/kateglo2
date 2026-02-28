@@ -430,7 +430,10 @@ export function useDaftarSumberAdmin({
   direction = 'next',
   lastPage = false,
   q = '',
-  aktif = '',
+  glosarium = '',
+  kamus = '',
+  tesaurus = '',
+  etimologi = '',
 } = {}) {
   return useDaftarAdmin('/api/redaksi/sumber', 'admin-sumber', {
     limit,
@@ -438,7 +441,10 @@ export function useDaftarSumberAdmin({
     direction,
     lastPage,
     q,
-    aktif,
+    glosarium,
+    kamus,
+    tesaurus,
+    etimologi,
   });
 }
 

@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-03-01 Minggu
+
+- Merujuk sumber kamus, tesaurus, dan etimologi ke tabel sumber
+
 ## 2026-02-28 Sabtu
 
 - Menambahkan lencana sumber di detail glosarium

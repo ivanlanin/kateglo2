@@ -257,7 +257,7 @@ describe('ModelTesaurus', () => {
     const result = await ModelTesaurus.ambilDenganId(90);
 
     expect(db.query).toHaveBeenCalledWith(
-      'SELECT id, indeks, sinonim, antonim, aktif FROM tesaurus WHERE id = $1',
+      'SELECT id, indeks, sinonim, antonim, aktif, sumber_id FROM tesaurus WHERE id = $1',
       [90]
     );
     expect(result).toEqual(row);
@@ -271,7 +271,7 @@ describe('ModelTesaurus', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('UPDATE tesaurus SET indeks = $1'),
-      ['aktif', null, null, true, 4]
+      ['aktif', null, null, true, null, 4]
     );
     expect(result).toEqual(row);
   });
@@ -284,7 +284,7 @@ describe('ModelTesaurus', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
-      ['aktif', 'giat', null, true]
+      ['aktif', 'giat', null, true, null]
     );
     expect(result).toEqual(row);
   });

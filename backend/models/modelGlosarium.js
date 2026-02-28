@@ -63,6 +63,27 @@ function buildMasterFilters({
   return conditions;
 }
 
+function buildSumberFilters({ q, glosarium, kamus, tesaurus, etimologi, params }) {
+  const conditions = [];
+  if (q) {
+    params.push(`%${q}%`);
+    conditions.push(`(
+      s.kode ILIKE $${params.length}
+      OR s.nama ILIKE $${params.length}
+      OR COALESCE(s.keterangan, '') ILIKE $${params.length}
+    )`);
+  }
+  if (glosarium === '1') conditions.push('s.glosarium = TRUE');
+  else if (glosarium === '0') conditions.push('s.glosarium = FALSE');
+  if (kamus === '1') conditions.push('s.kamus = TRUE');
+  else if (kamus === '0') conditions.push('s.kamus = FALSE');
+  if (tesaurus === '1') conditions.push('s.tesaurus = TRUE');
+  else if (tesaurus === '0') conditions.push('s.tesaurus = FALSE');
+  if (etimologi === '1') conditions.push('s.etimologi = TRUE');
+  else if (etimologi === '0') conditions.push('s.etimologi = FALSE');
+  return conditions;
+}
+
 let cachedNormalizedSchema = null;
 let forcedNormalizedSchemaForTest = null;
 
@@ -663,8 +684,8 @@ class ModelGlosarium {
    * Ambil daftar sumber yang memiliki entri glosarium
    * @returns {Promise<Array>}
    */
-  static async ambilDaftarSumber(aktifSaja = true) {
-    const kondisiAktif = aktifSaja ? 'WHERE s.aktif = TRUE' : '';
+  static async ambilDaftarSumber(glosariumSaja = true) {
+    const kondisi = glosariumSaja ? 'WHERE s.glosarium = TRUE' : '';
     const result = await db.query(
       `SELECT
          s.id,
@@ -674,7 +695,7 @@ class ModelGlosarium {
          s.nama AS sumber,
          LOWER(TRIM(BOTH '-' FROM REGEXP_REPLACE(TRIM(s.nama), '[^a-zA-Z0-9]+', '-', 'g'))) AS slug
        FROM sumber s
-       ${kondisiAktif}
+       ${kondisi}
        ORDER BY s.keterangan ASC NULLS LAST, s.nama ASC`
     );
     return result.rows;
@@ -727,27 +748,24 @@ class ModelGlosarium {
     return { data: dataResult.rows, total: parseCount(countResult.rows[0]?.total) };
   }
 
-  static async daftarMasterSumber({ q = '', aktif = '', limit = 50, offset = 0 } = {}) {
+  static async daftarMasterSumber({
+    q = '', glosarium = '', kamus = '', tesaurus = '', etimologi = '', limit = 50, offset = 0,
+  } = {}) {
     const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
     const safeOffset = Math.max(Number(offset) || 0, 0);
     const params = [];
-    const conditions = buildMasterFilters({ alias: 's', q, aktif, params });
+    const conditions = buildSumberFilters({ q, glosarium, kamus, tesaurus, etimologi, params });
     const whereSql = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
 
     const countResult = await db.query(
-      `SELECT COUNT(*) AS total
-       FROM sumber s
-       ${whereSql}`,
+      `SELECT COUNT(*) AS total FROM sumber s ${whereSql}`,
       params
     );
 
     const dataResult = await db.query(
-      `SELECT s.id, s.kode, s.nama, s.aktif, s.keterangan, s.created_at, s.updated_at,
-              (
-                SELECT COUNT(*)::int
-                FROM glosarium g
-                WHERE g.sumber_id = s.id
-              ) AS jumlah_entri
+      `SELECT s.id, s.kode, s.nama, s.glosarium, s.kamus, s.tesaurus, s.etimologi,
+              s.keterangan, s.created_at, s.updated_at,
+              (SELECT COUNT(*)::int FROM glosarium g WHERE g.sumber_id = s.id) AS jumlah_entri
        FROM sumber s
        ${whereSql}
        ORDER BY s.nama ASC
@@ -775,12 +793,9 @@ class ModelGlosarium {
 
   static async ambilMasterSumberDenganId(id) {
     const result = await db.query(
-      `SELECT s.id, s.kode, s.nama, s.aktif, s.keterangan, s.created_at, s.updated_at,
-              (
-                SELECT COUNT(*)::int
-                FROM glosarium g
-                WHERE g.sumber_id = s.id
-              ) AS jumlah_entri
+      `SELECT s.id, s.kode, s.nama, s.glosarium, s.kamus, s.tesaurus, s.etimologi,
+              s.keterangan, s.created_at, s.updated_at,
+              (SELECT COUNT(*)::int FROM glosarium g WHERE g.sumber_id = s.id) AS jumlah_entri
        FROM sumber s
        WHERE s.id = $1`,
       [id]
@@ -815,30 +830,32 @@ class ModelGlosarium {
     return this.ambilMasterBidangDenganId(result.rows[0].id);
   }
 
-  static async simpanMasterSumber({ id, kode, nama, aktif = true, keterangan = '' }) {
-    const normalizedAktif = normalizeBoolean(aktif, true);
+  static async simpanMasterSumber({
+    id, kode, nama, glosarium = false, kamus = false, tesaurus = false, etimologi = false, keterangan = '',
+  }) {
+    const normGlosarium = normalizeBoolean(glosarium, false);
+    const normKamus = normalizeBoolean(kamus, false);
+    const normTesaurus = normalizeBoolean(tesaurus, false);
+    const normEtimologi = normalizeBoolean(etimologi, false);
     if (id) {
       const result = await db.query(
         `UPDATE sumber
-         SET kode = $1,
-             nama = $2,
-             aktif = $3,
-             keterangan = NULLIF($4, '')
-         WHERE id = $5
+         SET kode = $1, nama = $2, glosarium = $3, kamus = $4,
+             tesaurus = $5, etimologi = $6, keterangan = NULLIF($7, '')
+         WHERE id = $8
          RETURNING id`,
-        [kode, nama, normalizedAktif, keterangan, id]
+        [kode, nama, normGlosarium, normKamus, normTesaurus, normEtimologi, keterangan, id]
       );
       if (!result.rows[0]?.id) return null;
       return this.ambilMasterSumberDenganId(result.rows[0].id);
     }
 
     const result = await db.query(
-      `INSERT INTO sumber (kode, nama, aktif, keterangan)
-       VALUES ($1, $2, $3, NULLIF($4, ''))
+      `INSERT INTO sumber (kode, nama, glosarium, kamus, tesaurus, etimologi, keterangan)
+       VALUES ($1, $2, $3, $4, $5, $6, NULLIF($7, ''))
        RETURNING id`,
-      [kode, nama, normalizedAktif, keterangan]
+      [kode, nama, normGlosarium, normKamus, normTesaurus, normEtimologi, keterangan]
     );
-
     return this.ambilMasterSumberDenganId(result.rows[0].id);
   }
 

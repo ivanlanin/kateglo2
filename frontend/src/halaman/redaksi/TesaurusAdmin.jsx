@@ -4,7 +4,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDaftarTesaurusAdmin, useDetailTesaurusAdmin, useSimpanTesaurus, useHapusTesaurus } from '../../api/apiAdmin';
+import { useDaftarTesaurusAdmin, useDetailTesaurusAdmin, useSimpanTesaurus, useHapusTesaurus, useDaftarSumberAdmin } from '../../api/apiAdmin';
 import TataLetak from '../../komponen/bersama/TataLetak';
 import { useAuth } from '../../context/authContext';
 import {
@@ -22,6 +22,7 @@ import PanelGeser from '../../komponen/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
+  SelectField,
   TextareaField,
   ToggleAktif,
   FormFooter,
@@ -29,7 +30,7 @@ import {
 } from '../../komponen/redaksi/FormAdmin';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
-const nilaiAwal = { indeks: '', sinonim: '', antonim: '', aktif: 1 };
+const nilaiAwal = { indeks: '', sinonim: '', antonim: '', aktif: 1, sumber_id: '' };
 
 const kolom = [
   {
@@ -84,6 +85,9 @@ function TesaurusAdmin() {
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailTesaurusAdmin(idDariPath);
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
+
+  const { data: sumberResp } = useDaftarSumberAdmin({ limit: 200, tesaurus: '1' });
+  const opsiSumber = (sumberResp?.data || []).map((item) => ({ value: String(item.id), label: item.nama }));
 
   const panel = useFormPanel(nilaiAwal);
   const simpan = useSimpanTesaurus();
@@ -152,7 +156,10 @@ function TesaurusAdmin() {
 
   const handleSimpan = () => {
     setPesan({ error: '', sukses: '' });
-    const pesanValidasi = validateRequiredFields(panel.data, [{ name: 'indeks', label: 'Indeks' }]);
+    const pesanValidasi = validateRequiredFields(panel.data, [
+      { name: 'indeks', label: 'Indeks' },
+      { name: 'sumber_id', label: 'Sumber' },
+    ]);
     if (pesanValidasi) {
       setPesan({ error: pesanValidasi, sukses: '' });
       return;
@@ -221,6 +228,7 @@ function TesaurusAdmin() {
           <InputField label="Indeks" name="indeks" value={panel.data.indeks} onChange={panel.ubahField} required />
           <TextareaField label="Sinonim" name="sinonim" value={panel.data.sinonim} onChange={panel.ubahField} placeholder="Pisahkan dengan titik koma (;)" />
           <TextareaField label="Antonim" name="antonim" value={panel.data.antonim} onChange={panel.ubahField} placeholder="Pisahkan dengan titik koma (;)" />
+          <SelectField label="Sumber" name="sumber_id" value={String(panel.data.sumber_id || '')} onChange={panel.ubahField} options={opsiSumber} />
           <ToggleAktif value={panel.data.aktif} onChange={panel.ubahField} />
           <FormFooter
             onSimpan={handleSimpan}

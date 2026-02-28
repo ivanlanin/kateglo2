@@ -14,8 +14,6 @@ import TataLetak from '../../komponen/bersama/TataLetak';
 import {
   BarisFilterCariAdmin,
   TombolAksiAdmin,
-  BadgeStatus,
-  opsiFilterStatusAktif,
   TabelAdmin,
   getApiErrorMessage,
   usePencarianAdmin,
@@ -26,19 +24,29 @@ import {
   useFormPanel,
   InputField,
   TextareaField,
-  ToggleAktif,
+  CheckboxField,
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormAdmin';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
-const nilaiAwal = { kode: '', nama: '', keterangan: '', aktif: true };
+const nilaiAwal = { kode: '', nama: '', keterangan: '', glosarium: false, kamus: false, tesaurus: false, etimologi: false };
+
+function renderKonteks(item) {
+  const flags = [
+    item.glosarium && 'Glosarium',
+    item.kamus && 'Kamus',
+    item.tesaurus && 'Tesaurus',
+    item.etimologi && 'Etimologi',
+  ].filter(Boolean);
+  return flags.length ? flags.join(', ') : '—';
+}
 
 const kolom = [
   { key: 'kode', label: 'Kode' },
   { key: 'nama', label: 'Nama' },
   { key: 'jumlah_entri', label: 'Jumlah Entri' },
-  { key: 'aktif', label: 'Status', render: (item) => <BadgeStatus aktif={item.aktif} /> },
+  { key: 'konteks', label: 'Konteks', render: renderKonteks },
 ];
 
 function SumberAdmin() {
@@ -48,8 +56,6 @@ function SumberAdmin() {
   const idDariPath = parsePositiveIntegerParam(idParam);
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
-  const [filterAktifDraft, setFilterAktifDraft] = useState('');
-  const [filterAktif, setFilterAktif] = useState('');
 
   const { data: resp, isLoading, isError } = useDaftarSumberAdmin({
     limit,
@@ -57,7 +63,6 @@ function SumberAdmin() {
     direction,
     lastPage,
     q,
-    aktif: filterAktif,
   });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailSumberAdmin(idDariPath);
   const daftar = resp?.data || [];
@@ -150,13 +155,10 @@ function SumberAdmin() {
   };
 
   const handleCari = () => {
-    setFilterAktif(filterAktifDraft);
     kirimCari(cari);
   };
 
   const handleResetFilter = () => {
-    setFilterAktifDraft('');
-    setFilterAktif('');
     hapusCari();
   };
 
@@ -168,15 +170,6 @@ function SumberAdmin() {
         onCari={handleCari}
         onHapus={handleResetFilter}
         placeholder="Cari sumber …"
-        filters={[
-          {
-            key: 'aktif',
-            value: filterAktifDraft,
-            onChange: setFilterAktifDraft,
-            options: opsiFilterStatusAktif,
-            ariaLabel: 'Filter status sumber',
-          },
-        ]}
       />
 
       <TabelAdmin
@@ -197,7 +190,15 @@ function SumberAdmin() {
         <PesanForm error={pesan.error} sukses={pesan.sukses} />
         <InputField label="Kode" name="kode" value={panel.data.kode} onChange={panel.ubahField} required />
         <InputField label="Nama" name="nama" value={panel.data.nama} onChange={panel.ubahField} required />
-        <ToggleAktif value={Boolean(panel.data.aktif)} onChange={panel.ubahField} />
+        <div className="form-admin-group">
+          <label className="form-admin-label">Konteks</label>
+          <div className="flex flex-col gap-2">
+            <CheckboxField label="Glosarium" name="glosarium" value={panel.data.glosarium} onChange={panel.ubahField} />
+            <CheckboxField label="Kamus" name="kamus" value={panel.data.kamus} onChange={panel.ubahField} />
+            <CheckboxField label="Tesaurus" name="tesaurus" value={panel.data.tesaurus} onChange={panel.ubahField} />
+            <CheckboxField label="Etimologi" name="etimologi" value={panel.data.etimologi} onChange={panel.ubahField} />
+          </div>
+        </div>
         <TextareaField label="Keterangan" name="keterangan" value={panel.data.keterangan} onChange={panel.ubahField} rows={3} />
         <FormFooter
           onSimpan={handleSimpan}
