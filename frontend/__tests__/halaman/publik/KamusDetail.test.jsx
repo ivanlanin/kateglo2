@@ -317,7 +317,7 @@ describe('KamusDetail', () => {
     expect(badgeBahasa).toHaveClass('kamus-badge-bahasa');
     expect(screen.getByText('adjectief').closest('em')).not.toBeNull();
     const badgeSumber = screen.getByText('LWIM');
-    expect(badgeSumber).toHaveClass('kamus-badge-sumber');
+    expect(badgeSumber).toHaveClass('badge-sumber');
   });
 
   it('menampilkan aksi redaksi dan tautan rujukan KBBI saat admin dan indeks tersedia', () => {

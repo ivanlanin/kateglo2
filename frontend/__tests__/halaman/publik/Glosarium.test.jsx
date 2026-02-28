@@ -63,7 +63,7 @@ describe('Glosarium', () => {
       if (options?.queryFn) options.queryFn();
       const key = options?.queryKey?.[0];
       if (key === 'glosarium-bidang') return { data: [{ bidang: 'ling' }], isLoading: false, isError: false };
-      if (key === 'glosarium-sumber') return { data: [{ sumber: 'kbbi' }], isLoading: false, isError: false };
+      if (key === 'glosarium-sumber') return { data: [{ sumber: 'kbbi', glosarium: true }], isLoading: false, isError: false };
       return { data: undefined, isLoading: false, isError: false };
     });
 
@@ -169,7 +169,7 @@ describe('Glosarium', () => {
       if (options?.enabled !== false && options?.queryFn) options.queryFn();
       const key = options?.queryKey?.[0];
       if (key === 'glosarium-bidang') return { data: [], isLoading: false, isError: false };
-      if (key === 'glosarium-sumber') return { data: [{ kode: 'kbbi-iv', nama: 'KBBI IV' }], isLoading: false, isError: false };
+      if (key === 'glosarium-sumber') return { data: [{ kode: 'kbbi-iv', nama: 'KBBI IV', glosarium: true }], isLoading: false, isError: false };
       return {
         data: {
           data: [{ id: 1, indonesia: 'entri', asing: 'entry' }],
@@ -201,7 +201,7 @@ describe('Glosarium', () => {
       if (key === 'glosarium-bidang') return { data: [], isLoading: false, isError: false };
       if (key === 'glosarium-sumber') {
         return {
-          data: [{ kode: 'kbbi-iv', nama: 'KBBI IV', keterangan: '**Sumber resmi** untuk glosarium.' }],
+          data: [{ kode: 'kbbi-iv', nama: 'KBBI IV', glosarium: true, keterangan: '**Sumber resmi** untuk glosarium.' }],
           isLoading: false,
           isError: false,
         };
@@ -262,7 +262,7 @@ describe('Glosarium', () => {
       if (options?.queryFn) options.queryFn();
       const key = options?.queryKey?.[0];
       if (key === 'glosarium-bidang') return { data: [{ nama: 'Kesehatan' }], isLoading: false, isError: false };
-      if (key === 'glosarium-sumber') return { data: [{ nama: 'WHO' }], isLoading: false, isError: false };
+      if (key === 'glosarium-sumber') return { data: [{ nama: 'WHO', glosarium: true }], isLoading: false, isError: false };
       return { data: undefined, isLoading: false, isError: false };
     });
 

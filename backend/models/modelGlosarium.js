@@ -710,6 +710,7 @@ class ModelGlosarium {
          s.id,
          s.kode,
          s.nama,
+        s.glosarium,
          s.keterangan,
          s.nama AS sumber,
          LOWER(TRIM(BOTH '-' FROM REGEXP_REPLACE(TRIM(s.nama), '[^a-zA-Z0-9]+', '-', 'g'))) AS slug

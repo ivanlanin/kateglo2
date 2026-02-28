@@ -122,6 +122,14 @@ function Glosarium() {
 
   const results = data?.data || [];
   const total = data?.total || 0;
+  const sumberKategoriList = (sumberList || [])
+    .filter((item) => Boolean(item?.glosarium))
+    .slice()
+    .sort((a, b) => {
+      const namaA = String(a?.nama || a?.sumber || a?.kode || '').trim();
+      const namaB = String(b?.nama || b?.sumber || b?.kode || '').trim();
+      return namaA.localeCompare(namaB, 'id', { sensitivity: 'base' });
+    });
   const namaBidang = resolveKategoriNama(bidang, bidangList, ['nama', 'bidang'], ['kode']);
   const namaSumber = resolveKategoriNama(sumber, sumberList, ['nama', 'sumber'], ['kode', 'slug']);
   const detailSumber = resolveKategoriItem(sumber, sumberList, ['nama', 'sumber'], ['kode', 'slug']);
@@ -220,10 +228,10 @@ function Glosarium() {
               getLabel={(item) => formatNamaBidang(item.nama || item.bidang || '')}
             />
           )}
-          {sumberList?.length > 0 && (
+          {sumberKategoriList.length > 0 && (
             <KartuKategori
               judul="Sumber"
-              items={sumberList}
+              items={sumberKategoriList}
               getKey={(item) => item.kode || item.sumber || item.nama}
               getTo={(item) => `/glosarium/sumber/${encodeURIComponent(item.slug || buatSlug(item.nama))}`}
               getLabel={(item) => item.nama || item.sumber}

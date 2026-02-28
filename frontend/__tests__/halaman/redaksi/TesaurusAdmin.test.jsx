@@ -25,7 +25,7 @@ const mockUseAuth = vi.fn();
 vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarTesaurusAdmin: (...args) => mockUseDaftarTesaurusAdmin(...args),
   useDetailTesaurusAdmin: (...args) => mockUseDetailTesaurusAdmin(...args),
-  useDaftarSumberAdmin: () => ({ data: { data: [] } }),
+  useDaftarSumberAdmin: () => ({ data: { data: [{ id: 1, kode: 'KBBI', nama: 'KBBI' }] } }),
   useSimpanTesaurus: () => ({ mutate: mutateSimpan, isPending: false }),
   useHapusTesaurus: () => ({ mutate: mutateHapus, isPending: false }),
 }));
@@ -75,6 +75,7 @@ describe('TesaurusAdmin', () => {
     expect(screen.getByText('Indeks wajib diisi')).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText(/Indeks/), { target: { value: 'baru' } });
+    fireEvent.change(screen.getByLabelText(/Sumber/), { target: { value: '1' } });
     fireEvent.click(screen.getByText('Simpan'));
     expect(mutateSimpan).toHaveBeenCalled();
   });
@@ -90,6 +91,7 @@ describe('TesaurusAdmin', () => {
           indeks: 'anak',
           sinonim: 'buah hati',
           antonim: 'orang tua',
+          sumber_id: 1,
           aktif: 1,
         },
       },
@@ -122,6 +124,7 @@ describe('TesaurusAdmin', () => {
           indeks: 'anak',
           sinonim: 'buah hati',
           antonim: 'orang tua',
+          sumber_id: 1,
           aktif: 1,
         },
       },
@@ -164,6 +167,7 @@ describe('TesaurusAdmin', () => {
 
     fireEvent.click(screen.getByText('+ Tambah'));
     fireEvent.change(screen.getByLabelText(/Indeks/), { target: { value: 'uji' } });
+    fireEvent.change(screen.getByLabelText(/Sumber/), { target: { value: '1' } });
     fireEvent.click(screen.getByText('Simpan'));
 
     expect(screen.getByText('Gagal menyimpan')).toBeInTheDocument();
@@ -196,6 +200,7 @@ describe('TesaurusAdmin', () => {
           indeks: 'anak',
           sinonim: 'buah hati',
           antonim: 'orang tua',
+          sumber_id: 1,
           aktif: 1,
         },
       },
@@ -235,6 +240,7 @@ describe('TesaurusAdmin', () => {
           indeks: 'detail indeks',
           sinonim: 'sinonim',
           antonim: 'antonim',
+          sumber_id: 1,
           aktif: 1,
         },
       },

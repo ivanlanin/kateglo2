@@ -17,7 +17,7 @@ class ModelEtimologi {
     if (!Number.isInteger(parsedId) || parsedId <= 0) return [];
 
     const result = await db.query(
-      `SELECT e.id, e.bahasa, e.kata_asal, e.sumber_id, s.kode AS sumber_kode, e.aktif
+      `SELECT e.id, e.bahasa, e.kata_asal, e.sumber_id, s.kode AS sumber_kode, s.nama AS sumber, e.aktif
        FROM etimologi e
        LEFT JOIN sumber s ON s.id = e.sumber_id
        WHERE e.entri_id = $1

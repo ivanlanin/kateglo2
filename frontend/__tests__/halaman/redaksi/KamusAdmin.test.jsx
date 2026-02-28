@@ -20,6 +20,7 @@ vi.mock('react-router-dom', async () => {
 const mockUseDaftarKamusAdmin = vi.fn();
 const mockUseDetailKamusAdmin = vi.fn();
 const mockUseDaftarMakna = vi.fn();
+const mockUseDaftarSumberAdmin = vi.fn();
 const mockUseKategoriLabelRedaksi = vi.fn();
 const mockUseAutocompleteIndukKamus = vi.fn();
 
@@ -34,6 +35,7 @@ const mockUseAuth = vi.fn();
 vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarKamusAdmin: (...args) => mockUseDaftarKamusAdmin(...args),
   useDetailKamusAdmin: (...args) => mockUseDetailKamusAdmin(...args),
+  useDaftarSumberAdmin: (...args) => mockUseDaftarSumberAdmin(...args),
   useSimpanKamus: () => ({ mutate: mutateSimpanKamus, isPending: false }),
   useHapusKamus: () => ({ mutate: mutateHapusKamus, isPending: false }),
   useDaftarMakna: (...args) => mockUseDaftarMakna(...args),
@@ -170,6 +172,16 @@ describe('KamusAdmin', () => {
       },
     });
 
+    mockUseDaftarSumberAdmin.mockReturnValue({
+      data: {
+        data: [
+          { id: 1, kode: 'KBBI', nama: 'KBBI' },
+        ],
+      },
+      isLoading: false,
+      isError: false,
+    });
+
     mockUseAutocompleteIndukKamus.mockReturnValue({
       data: { data: [] },
       isLoading: false,
@@ -194,7 +206,9 @@ describe('KamusAdmin', () => {
   });
 
   afterEach(() => {
-    vi.runOnlyPendingTimers();
+    act(() => {
+      vi.runOnlyPendingTimers();
+    });
     vi.useRealTimers();
   });
 

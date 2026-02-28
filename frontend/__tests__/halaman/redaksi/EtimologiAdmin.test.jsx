@@ -167,6 +167,7 @@ describe('EtimologiAdmin', () => {
     expect(screen.getByText('Indeks wajib diisi')).toBeInTheDocument();
 
     fireEvent.change(document.getElementById('field-indeks'), { target: { value: 'asal-usul' } });
+    fireEvent.change(document.getElementById('field-sumber_id'), { target: { value: '1' } });
     fireEvent.click(screen.getByText('Simpan'));
     expect(mutateSimpan).toHaveBeenCalled();
   });
@@ -192,6 +193,7 @@ describe('EtimologiAdmin', () => {
         data: {
           id: 1,
           indeks: 'asal',
+          sumber_id: 1,
           homonim: null,
           sumber: 'LWIM',
           entri_id: 22,
@@ -227,6 +229,7 @@ describe('EtimologiAdmin', () => {
 
     fireEvent.change(inputEntri, { target: { value: 'berbeda' } });
     fireEvent.blur(inputEntri);
+    fireEvent.change(document.getElementById('field-sumber_id'), { target: { value: '1' } });
 
     fireEvent.click(screen.getByText('Simpan'));
     expect(mutateSimpan).toHaveBeenCalledWith(
@@ -389,6 +392,7 @@ describe('EtimologiAdmin', () => {
     const inputEntri = document.getElementById('field-entri-autocomplete');
     fireEvent.change(inputEntri, { target: { value: '   ' } });
     fireEvent.change(document.getElementById('field-indeks'), { target: { value: 'uji' } });
+    fireEvent.change(document.getElementById('field-sumber_id'), { target: { value: '1' } });
     fireEvent.click(screen.getByText('Simpan'));
 
     expect(mutateSimpan).toHaveBeenCalledWith(
@@ -408,6 +412,7 @@ describe('EtimologiAdmin', () => {
 
     fireEvent.click(screen.getByText('+ Tambah'));
     fireEvent.change(document.getElementById('field-indeks'), { target: { value: 'uji' } });
+    fireEvent.change(document.getElementById('field-sumber_id'), { target: { value: '1' } });
     fireEvent.click(screen.getByText('Simpan'));
 
     expect(screen.getByText('Gagal menyimpan etimologi')).toBeInTheDocument();

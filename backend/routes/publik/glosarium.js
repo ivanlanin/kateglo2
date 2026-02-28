@@ -107,7 +107,7 @@ router.get('/bidang/:bidang', async (req, res, next) => {
 
 router.get('/sumber', async (_req, res, next) => {
   try {
-    const data = await ModelGlosarium.ambilDaftarSumber();
+    const data = await ModelGlosarium.ambilDaftarSumber('konteks');
     return res.json(data);
   } catch (error) {
     return next(error);

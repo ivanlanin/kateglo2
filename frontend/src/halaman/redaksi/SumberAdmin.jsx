@@ -36,32 +36,34 @@ const kolom = [
   { key: 'kode', label: 'Kode' },
   { key: 'nama', label: 'Nama' },
   { key: 'jumlah_entri', label: 'Jumlah Entri' },
-  { key: 'glosarium', label: 'Glosarium', render: (item) => <BadgeStatus aktif={Boolean(item.glosarium)} /> },
   { key: 'kamus', label: 'Kamus', render: (item) => <BadgeStatus aktif={Boolean(item.kamus)} /> },
   { key: 'tesaurus', label: 'Tesaurus', render: (item) => <BadgeStatus aktif={Boolean(item.tesaurus)} /> },
+  { key: 'glosarium', label: 'Glosarium', render: (item) => <BadgeStatus aktif={Boolean(item.glosarium)} /> },
   { key: 'etimologi', label: 'Etimologi', render: (item) => <BadgeStatus aktif={Boolean(item.etimologi)} /> },
 ];
 
 function ToggleSumberKonteks({ label, name, value, onChange }) {
   return (
-    <div className="form-admin-group">
+    <div className="form-admin-group mb-0">
       <label className="form-admin-label">{label}</label>
-      <button
-        type="button"
-        onClick={() => onChange(name, !Boolean(value))}
-        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-          value ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'
-        }`}
-      >
-        <span
-          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-            value ? 'translate-x-6' : 'translate-x-1'
+      <div className="flex items-center gap-2 min-w-0">
+        <button
+          type="button"
+          onClick={() => onChange(name, !value)}
+          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+            value ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'
           }`}
-        />
-      </button>
-      <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
-        {value ? 'Aktif' : 'Nonaktif'}
-      </span>
+        >
+          <span
+            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+              value ? 'translate-x-6' : 'translate-x-1'
+            }`}
+          />
+        </button>
+        <span className="text-sm text-gray-600 dark:text-gray-400">
+          {value ? 'Aktif' : 'Nonaktif'}
+        </span>
+      </div>
     </div>
   );
 }
@@ -207,10 +209,10 @@ function SumberAdmin() {
         <PesanForm error={pesan.error} sukses={pesan.sukses} />
         <InputField label="Kode" name="kode" value={panel.data.kode} onChange={panel.ubahField} required />
         <InputField label="Nama" name="nama" value={panel.data.nama} onChange={panel.ubahField} required />
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          <ToggleSumberKonteks label="Glosarium" name="glosarium" value={panel.data.glosarium} onChange={panel.ubahField} />
+        <div className="grid grid-cols-2 gap-3">
           <ToggleSumberKonteks label="Kamus" name="kamus" value={panel.data.kamus} onChange={panel.ubahField} />
           <ToggleSumberKonteks label="Tesaurus" name="tesaurus" value={panel.data.tesaurus} onChange={panel.ubahField} />
+          <ToggleSumberKonteks label="Glosarium" name="glosarium" value={panel.data.glosarium} onChange={panel.ubahField} />
           <ToggleSumberKonteks label="Etimologi" name="etimologi" value={panel.data.etimologi} onChange={panel.ubahField} />
         </div>
         <TextareaField label="Keterangan" name="keterangan" value={panel.data.keterangan} onChange={panel.ubahField} rows={3} />

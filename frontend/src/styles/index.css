@@ -1532,6 +1532,27 @@ code {
     @apply text-xs text-gray-500 mt-6;
   }
 
+  .kamus-detail-etimologi-source-badge {
+    @apply text-xs;
+  }
+
+  .kamus-detail-entry-source-badge {
+    font-size: inherit;
+  }
+
+  .kamus-detail-inline-source {
+    @apply inline-flex items-center gap-1 align-middle;
+    vertical-align: middle;
+  }
+
+  .kamus-detail-inline-source .badge-sumber {
+    @apply align-middle leading-none;
+  }
+
+  .kamus-detail-inline-source .glosarium-edit-link-inline {
+    @apply align-middle;
+  }
+
   .kamus-detail-admin-actions {
     @apply flex items-center gap-2;
   }

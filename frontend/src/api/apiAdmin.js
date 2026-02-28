@@ -13,6 +13,7 @@ function buildDaftarParams({
   q,
   aktif,
   includeAktif = true,
+  ...extraParams
 } = {}) {
   const params = {
     limit,
@@ -25,6 +26,11 @@ function buildDaftarParams({
   if (includeAktif) {
     params.aktif = aktif || undefined;
   }
+
+  Object.entries(extraParams).forEach(([key, value]) => {
+    if (value === '' || value === null || value === undefined) return;
+    params[key] = value;
+  });
 
   return params;
 }

@@ -171,6 +171,39 @@ function normalisasiNilaiMeta(teks = '', { hapusSlash = false } = {}) {
   return nilai.toLowerCase();
 }
 
+function BadgeSumberDanTombolEdit({
+  sumberKode = '',
+  editTo = '',
+  editAriaLabel = 'Sunting entri di Redaksi',
+  editTitle = 'Sunting entri di Redaksi',
+  badgeClassName = '',
+}) {
+  const kode = String(sumberKode || '').trim();
+  if (!kode && !editTo) return null;
+
+  const kelasBadge = ['badge-sumber', badgeClassName].filter(Boolean).join(' ');
+  const pathSumber = kode ? `/sumber#${encodeURIComponent(kode)}` : '';
+
+  return (
+    <span className="kamus-detail-inline-source">
+      {kode && (
+        pathSumber ? (
+          <Link to={pathSumber} className={kelasBadge}>{kode}</Link>
+        ) : (
+          <span className={kelasBadge}>{kode}</span>
+        )
+      )}
+      {editTo && (
+        <PensilSunting
+          to={editTo}
+          ariaLabel={editAriaLabel}
+          title={editTitle}
+        />
+      )}
+    </span>
+  );
+}
+
 function KamusDetail() {
   const { indeks } = useParams();
   const { isAuthenticated, adalahAdmin, isLoading: isAuthLoading, loginDenganGoogle } = useAuth();
@@ -519,19 +552,8 @@ function KamusDetail() {
                       </p>
                     )}
                   </div>
-                  {(adalahAdmin || tautanRujukanKbbi) && (
+                  {tautanRujukanKbbi && (
                     <div className="kamus-detail-admin-actions">
-                      {entriItem.id && (
-                        adalahAdmin && (
-                        <PensilSunting
-                          to={`/redaksi/kamus/${entriItem.id}`}
-                          className="kamus-detail-edit-link"
-                          ariaLabel="Sunting entri di Redaksi"
-                          title="Sunting entri di Redaksi"
-                          iconClassName="h-4 w-4"
-                        />
-                        )
-                      )}
                       {tautanRujukanKbbi && (
                         <a
                           href={tautanRujukanKbbi}
@@ -761,24 +783,14 @@ function KamusDetail() {
                               </>
                             )}
                             <em>{String(item.kata_asal || '').trim() || '—'}</em>
-                            {String(item.sumber_kode || '').trim() && (
-                              <>
-                                {' '}
-                                <span className="kamus-badge kamus-badge-sumber">{String(item.sumber_kode || '').trim()}</span>
-                              </>
-                            )}
-                            {adalahAdmin && item.id && (
-                              <>
-                                {' '}
-                                <PensilSunting
-                                  to={`/redaksi/etimologi/${item.id}`}
-                                  className="kamus-detail-edit-link"
-                                  ariaLabel="Sunting etimologi di Redaksi"
-                                  title="Sunting etimologi di Redaksi"
-                                  iconClassName="h-4 w-4"
-                                />
-                              </>
-                            )}
+                            {' '}
+                            <BadgeSumberDanTombolEdit
+                              sumberKode={item.sumber_kode}
+                              editTo={adalahAdmin && item.id ? `/redaksi/etimologi/${item.id}` : ''}
+                              editAriaLabel="Sunting etimologi di Redaksi"
+                              editTitle="Sunting etimologi di Redaksi"
+                              badgeClassName="kamus-detail-etimologi-source-badge"
+                            />
                             {i < etimologiTampil.length - 1 && <span className="secondary-text">; </span>}
                           </span>
                         ))}
@@ -787,12 +799,17 @@ function KamusDetail() {
                   </div>
                 )}
 
-                {infoWaktu && (
-                  <p className="kamus-detail-entry-meta">{infoWaktu}</p>
-                )}
-                {sumberKodeEntri && (
+                {(infoWaktu || sumberKodeEntri || (adalahAdmin && entriItem.id)) && (
                   <p className="kamus-detail-entry-meta">
-                    <span className="kamus-badge kamus-badge-sumber">{sumberKodeEntri}</span>
+                    {infoWaktu}
+                    {infoWaktu && (sumberKodeEntri || (adalahAdmin && entriItem.id)) && <span>{' · '}</span>}
+                    <BadgeSumberDanTombolEdit
+                      sumberKode={sumberKodeEntri}
+                      editTo={adalahAdmin && entriItem.id ? `/redaksi/kamus/${entriItem.id}` : ''}
+                      editAriaLabel="Sunting entri di Redaksi"
+                      editTitle="Sunting entri di Redaksi"
+                      badgeClassName="kamus-detail-entry-source-badge"
+                    />
                   </p>
                 )}
               </section>

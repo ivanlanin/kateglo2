@@ -327,6 +327,7 @@ class ModelEntri {
               (SELECT er.indeks FROM entri er WHERE er.id = e.entri_rujuk) AS entri_rujuk_indeks,
               e.sumber_id, e.aktif,
               s.kode AS sumber_kode,
+              s.nama AS sumber,
               to_char(e.created_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS created_at,
               to_char(e.updated_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS updated_at
        FROM entri e
