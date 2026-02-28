@@ -495,10 +495,10 @@ describe('apiAdmin', () => {
     await detailBidang.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/bidang/18');
 
-    const daftarSumber = useDaftarSumberAdmin({ limit: 13, q: 'kb', aktif: '0' });
+    const daftarSumber = useDaftarSumberAdmin({ limit: 13, q: 'kb', glosarium: '1', kamus: '0' });
     await daftarSumber.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/sumber', {
-      params: { limit: 13, cursor: undefined, direction: 'next', lastPage: undefined, q: 'kb', aktif: '0' },
+      params: { limit: 13, cursor: undefined, direction: 'next', lastPage: undefined, q: 'kb', glosarium: '1', kamus: '0', tesaurus: '', etimologi: '' },
     });
 
     const detailSumber = useDetailSumberAdmin(19);

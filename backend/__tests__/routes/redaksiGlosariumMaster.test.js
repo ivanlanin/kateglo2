@@ -219,16 +219,14 @@ describe('routes/redaksi master bidang/sumber', () => {
     expect(ModelGlosarium.daftarMasterSumber).toHaveBeenCalled();
   });
 
-  it('GET /sumber-master meneruskan filter aktif 1/0 dan fallback kosong', async () => {
+  it('GET /sumber-master meneruskan filter konteks 1/0 dan fallback kosong', async () => {
     ModelGlosarium.daftarMasterSumber.mockResolvedValue({ data: [], total: 0 });
 
-    await request(createApp()).get('/api/redaksi/sumber?aktif=1');
-    await request(createApp()).get('/api/redaksi/sumber?aktif=0');
-    await request(createApp()).get('/api/redaksi/sumber?aktif=random');
+    await request(createApp()).get('/api/redaksi/sumber?glosarium=1&kamus=0&tesaurus=random');
+    await request(createApp()).get('/api/redaksi/sumber?etimologi=1');
 
-    expect(ModelGlosarium.daftarMasterSumber).toHaveBeenNthCalledWith(1, expect.objectContaining({ aktif: '1' }));
-    expect(ModelGlosarium.daftarMasterSumber).toHaveBeenNthCalledWith(2, expect.objectContaining({ aktif: '0' }));
-    expect(ModelGlosarium.daftarMasterSumber).toHaveBeenNthCalledWith(3, expect.objectContaining({ aktif: '' }));
+    expect(ModelGlosarium.daftarMasterSumber).toHaveBeenNthCalledWith(1, expect.objectContaining({ glosarium: '1', kamus: '0', tesaurus: '' }));
+    expect(ModelGlosarium.daftarMasterSumber).toHaveBeenNthCalledWith(2, expect.objectContaining({ etimologi: '1' }));
   });
 
   it('GET /sumber-master/:id mengembalikan 404 dan 200', async () => {
@@ -271,7 +269,7 @@ describe('routes/redaksi master bidang/sumber', () => {
     ModelGlosarium.simpanMasterSumber.mockResolvedValue({ id: 2, kode: 'kbbi', nama: 'KBBI' });
     const success = await request(createApp())
       .post('/api/redaksi/sumber')
-      .send({ kode: ' kbbi ', nama: ' KBBI ', aktif: 1 });
+      .send({ kode: ' kbbi ', nama: ' KBBI ', glosarium: 1, kamus: true });
 
     expect(badKode.status).toBe(400);
     expect(badNama.status).toBe(400);
@@ -280,7 +278,10 @@ describe('routes/redaksi master bidang/sumber', () => {
       kode: 'kbbi',
       nama: 'KBBI',
       keterangan: '',
-      aktif: true,
+      glosarium: true,
+      kamus: true,
+      tesaurus: false,
+      etimologi: false,
     });
   });
 
@@ -309,7 +310,7 @@ describe('routes/redaksi master bidang/sumber', () => {
       .send({ kode: 'kbbi', nama: 'KBBI' });
     const success = await request(createApp())
       .put('/api/redaksi/sumber/2')
-      .send({ kode: 'kbbi', nama: 'KBBI Baru', aktif: false });
+      .send({ kode: 'kbbi', nama: 'KBBI Baru', etimologi: true });
 
     expect(badKode.status).toBe(400);
     expect(badNama.status).toBe(400);
@@ -320,7 +321,10 @@ describe('routes/redaksi master bidang/sumber', () => {
       kode: 'kbbi',
       nama: 'KBBI Baru',
       keterangan: '',
-      aktif: false,
+      glosarium: false,
+      kamus: false,
+      tesaurus: false,
+      etimologi: true,
     });
   });
 

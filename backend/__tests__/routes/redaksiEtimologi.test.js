@@ -143,7 +143,7 @@ describe('routes/redaksi/etimologi', () => {
     expect(response.body.message).toBe('entri_id tidak valid');
   });
 
-  it('POST / memakai sumber default dan entri_id null', async () => {
+  it('POST / meneruskan indeks ter-trim dan entri_id null', async () => {
     ModelEtimologi.simpan.mockResolvedValue({ id: 11, indeks: 'kata' });
 
     const response = await request(createApp())
@@ -153,21 +153,20 @@ describe('routes/redaksi/etimologi', () => {
     expect(response.status).toBe(201);
     expect(ModelEtimologi.simpan).toHaveBeenCalledWith(expect.objectContaining({
       indeks: 'kata',
-      sumber: 'LWIM',
       entri_id: null,
     }));
   });
 
-  it('POST / meneruskan sumber ter-trim saat tersedia', async () => {
+  it('POST / meneruskan sumber_id saat tersedia', async () => {
     ModelEtimologi.simpan.mockResolvedValue({ id: 12, indeks: 'serapan' });
 
     const response = await request(createApp())
       .post('/api/redaksi/etimologi')
-      .send({ indeks: 'serapan', sumber: '  KBBI  ', entri_id: 3 });
+      .send({ indeks: 'serapan', sumber_id: 5, entri_id: 3 });
 
     expect(response.status).toBe(201);
     expect(ModelEtimologi.simpan).toHaveBeenCalledWith(expect.objectContaining({
-      sumber: 'KBBI',
+      sumber_id: 5,
       entri_id: 3,
     }));
   });
@@ -217,14 +216,13 @@ describe('routes/redaksi/etimologi', () => {
 
     const response = await request(createApp())
       .put('/api/redaksi/etimologi/5')
-      .send({ indeks: ' kata-baru ', sumber: '', entri_id: null });
+      .send({ indeks: ' kata-baru ', entri_id: null });
 
     expect(response.status).toBe(200);
     expect(response.body.success).toBe(true);
     expect(ModelEtimologi.simpan).toHaveBeenCalledWith(expect.objectContaining({
       id: 5,
       indeks: 'kata-baru',
-      sumber: 'LWIM',
       entri_id: null,
     }));
   });

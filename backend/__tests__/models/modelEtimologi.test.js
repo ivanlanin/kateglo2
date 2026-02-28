@@ -186,7 +186,7 @@ describe('ModelEtimologi', () => {
       bahasa: 'id',
       kata_asal: 'asal-kata',
       arti_asal: 'makna asal',
-      sumber: 'LWIM',
+      sumber_id: 7,
       sumber_definisi: 'def',
       sumber_sitasi: 'sit',
       sumber_isi: 'isi',
@@ -199,7 +199,7 @@ describe('ModelEtimologi', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('UPDATE etimologi'),
-      ['kata', 2, 'laf', 'id', 'asal-kata', 'makna asal', 'LWIM', 'def', 'sit', 'isi', 'aks', 'lihat', 'var', 4, true, 9]
+      ['kata', 2, 'laf', 'id', 'asal-kata', 'makna asal', 7, 'def', 'sit', 'isi', 'aks', 'lihat', 'var', 4, true, 9]
     );
     expect(ambilSpy).toHaveBeenCalledWith(9);
     expect(result).toEqual({ id: 9, indeks: 'kata' });
@@ -216,7 +216,7 @@ describe('ModelEtimologi', () => {
       bahasa: '',
       kata_asal: '',
       arti_asal: '',
-      sumber: '',
+      sumber_id: '',
       sumber_definisi: '',
       sumber_sitasi: '',
       sumber_isi: '',
@@ -229,7 +229,7 @@ describe('ModelEtimologi', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO etimologi'),
-      ['serapan', null, '', '', '', '', '', '', '', '', '', '', '', null, false]
+      ['serapan', null, '', '', '', '', null, '', '', '', '', '', '', null, false]
     );
     expect(ambilSpy).toHaveBeenCalledWith(12);
     expect(result).toEqual({ id: 12 });

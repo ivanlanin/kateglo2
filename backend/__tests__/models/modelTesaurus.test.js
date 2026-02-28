@@ -301,7 +301,7 @@ describe('ModelTesaurus', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('UPDATE tesaurus SET indeks = $1'),
-      ['aktif', 'giat', 'pasif', true, 6]
+      ['aktif', 'giat', 'pasif', true, null, 6]
     );
   });
 
@@ -316,7 +316,7 @@ describe('ModelTesaurus', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
-      ['aktif', 'giat', 'pasif', true]
+      ['aktif', 'giat', 'pasif', true, null]
     );
   });
 
@@ -331,7 +331,7 @@ describe('ModelTesaurus', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
-      ['aktif', 'giat; rajin; tekun', 'malas; lamban', true]
+      ['aktif', 'giat; rajin; tekun', 'malas; lamban', true, null]
     );
   });
 
@@ -346,7 +346,7 @@ describe('ModelTesaurus', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
-      ['aktif', null, null, true]
+      ['aktif', null, null, true, null]
     );
   });
 
@@ -357,7 +357,7 @@ describe('ModelTesaurus', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
-      ['aktif', null, null, true]
+      ['aktif', null, null, true, null]
     );
   });
 
@@ -533,7 +533,7 @@ describe('ModelTesaurus', () => {
     await ModelTesaurus.simpan({ indeks: 'tes', aktif: true });
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
-      ['tes', null, null, true]
+      ['tes', null, null, true, null]
     );
   });
 
@@ -542,7 +542,7 @@ describe('ModelTesaurus', () => {
     await ModelTesaurus.simpan({ indeks: 'tes', aktif: false });
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
-      ['tes', null, null, false]
+      ['tes', null, null, false, null]
     );
   });
 
@@ -551,7 +551,7 @@ describe('ModelTesaurus', () => {
     await ModelTesaurus.simpan({ indeks: 'tes', aktif: 1 });
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
-      ['tes', null, null, true]
+      ['tes', null, null, true, null]
     );
   });
 
@@ -562,11 +562,11 @@ describe('ModelTesaurus', () => {
     await ModelTesaurus.simpan({ indeks: 'b', aktif: 'no' });
     expect(db.query).toHaveBeenNthCalledWith(
       1, expect.stringContaining('INSERT INTO tesaurus'),
-      ['a', null, null, true]
+      ['a', null, null, true, null]
     );
     expect(db.query).toHaveBeenNthCalledWith(
       2, expect.stringContaining('INSERT INTO tesaurus'),
-      ['b', null, null, false]
+      ['b', null, null, false, null]
     );
   });
 
@@ -575,7 +575,7 @@ describe('ModelTesaurus', () => {
     await ModelTesaurus.simpan({ indeks: 'tes', aktif: [] });
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO tesaurus'),
-      ['tes', null, null, true]
+      ['tes', null, null, true, null]
     );
   });
 

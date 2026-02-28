@@ -29,6 +29,7 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useAutocompleteEntriEtimologi: (...args) => mockUseAutocomplete(...args),
   useSimpanEtimologi: () => ({ mutate: mutateSimpan, isPending: false }),
   useHapusEtimologi: () => ({ mutate: mutateHapus, isPending: false }),
+  useDaftarSumberAdmin: () => ({ data: { data: [{ id: 1, nama: 'LWIM' }] } }),
 }));
 
 vi.mock('../../../src/context/authContext', () => ({
