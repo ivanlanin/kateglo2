@@ -182,7 +182,8 @@ describe('Glosarium', () => {
 
     render(<Glosarium />);
 
-    expect(screen.getByRole('heading', { name: 'Glosarium KBBI IV' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /KBBI IV/ })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'kbbi-iv' })).toHaveAttribute('href', '/sumber#kbbi-iv');
     expect(ambilGlosariumPerSumber).toHaveBeenCalledWith('kbbi-iv', {
       limit: 100,
       cursor: null,
@@ -191,7 +192,7 @@ describe('Glosarium', () => {
     });
   });
 
-  it('menampilkan keterangan sumber berformat markdown di bawah heading', () => {
+  it('tidak menampilkan blok keterangan sumber di halaman glosarium', () => {
     mockParams = { sumber: 'kbbi-iv' };
 
     mockUseQuery.mockImplementation((options) => {
@@ -217,10 +218,9 @@ describe('Glosarium', () => {
 
     render(<Glosarium />);
 
-    expect(screen.getByRole('heading', { name: 'Glosarium KBBI IV' })).toBeInTheDocument();
-    const strong = screen.getByText('Sumber resmi', { selector: 'strong' });
-    expect(strong).toBeInTheDocument();
-    expect(strong.closest('.glosarium-keterangan-sumber')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /KBBI IV/ })).toBeInTheDocument();
+    expect(screen.queryByText('Sumber resmi', { selector: 'strong' })).not.toBeInTheDocument();
+    expect(document.querySelector('.glosarium-keterangan-sumber')).not.toBeInTheDocument();
   });
 
   it('browse tanpa daftar bidang/sumber tidak menampilkan kartu kategori', () => {

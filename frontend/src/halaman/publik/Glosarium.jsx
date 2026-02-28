@@ -4,7 +4,6 @@
 
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import ReactMarkdown from 'react-markdown';
 import { useCursorPagination } from '../../hooks/bersama/useCursorPagination';
 import {
   cariGlosarium,
@@ -126,7 +125,6 @@ function Glosarium() {
   const namaBidang = resolveKategoriNama(bidang, bidangList, ['nama', 'bidang'], ['kode']);
   const namaSumber = resolveKategoriNama(sumber, sumberList, ['nama', 'sumber'], ['kode', 'slug']);
   const detailSumber = resolveKategoriItem(sumber, sumberList, ['nama', 'sumber'], ['kode', 'slug']);
-  const keteranganSumber = String(detailSumber?.keterangan || '').trim();
 
   const handlePaginasi = (action) => {
     handleCursor(action, {
@@ -158,6 +156,20 @@ function Glosarium() {
     )
     : null;
 
+  const judulNodaSumber = sumber && detailSumber?.kode
+    ? (
+      <span className="inline-flex items-center gap-2">
+        {namaSumber}
+        <Link
+          to={`/sumber#${encodeURIComponent(detailSumber.kode)}`}
+          className="badge-sumber"
+        >
+          {detailSumber.kode}
+        </Link>
+      </span>
+    )
+    : null;
+
   const renderAsing = (item) => renderEntriGlosariumTertaut(item.asing, (part, info) => (
     <Link
       key={`${item.id}-${part}-${info.partIndex}-${info.tokenIndex}`}
@@ -186,15 +198,9 @@ function Glosarium() {
   return (
     <HalamanDasar
       judul={metaHalaman.judul}
-      judulNoda={judulNodaPencarian}
+      judulNoda={judulNodaPencarian || judulNodaSumber}
       deskripsi={metaHalaman.deskripsi}
     >
-      {sumber && keteranganSumber && (
-        <div className="glosarium-keterangan-sumber">
-          <ReactMarkdown>{keteranganSumber}</ReactMarkdown>
-        </div>
-      )}
-
       <QueryFeedback
         isLoading={isLoading}
         isError={isError}

@@ -7,6 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import Navbar from '../publik/Navbar';
 import NavbarAdmin from '../redaksi/NavbarAdmin';
+import { useAuthOptional } from '../../context/authContext';
 
 export function hitungModeGelapAwal({ hasWindow, tersimpan, prefersDark }) {
   if (!hasWindow) return false;
@@ -28,6 +29,8 @@ export function bacaPreferensiTema(runtimeWindow) {
 function TataLetak({ mode = 'publik', judul, aksiJudul = null, children }) {
   const location = useLocation();
   const adalahAdmin = mode === 'admin';
+  const auth = useAuthOptional();
+  const adalahRedaksi = !adalahAdmin && Boolean(auth?.adalahRedaksi);
   const adalahBeranda = location.pathname === '/';
   const [modalTerbuka, setModalTerbuka] = useState(false);
   const [tabAktif, setTabAktif] = useState('changelog');
@@ -123,13 +126,14 @@ function TataLetak({ mode = 'publik', judul, aksiJudul = null, children }) {
             >
               {modeGelap ? '☀️' : '🌙'}
             </button>
-            <Link to="/kebijakan-privasi" className="link-action text-sm">
-              Privasi
-            </Link>
-            <span className="text-gray-400 dark:text-gray-600">·</span>
-            <Link to="/sumber" className="link-action text-sm">
-              Sumber
-            </Link>
+            <span className="text-sm">
+              <Link to="/kebijakan-privasi" className="link-action">Privasi</Link>
+              {' · '}
+              <Link to="/sumber" className="link-action">Sumber</Link>
+              {adalahRedaksi && (
+                <>{' · '}<Link to="/redaksi" className="link-action">Redaksi</Link></>
+              )}
+            </span>
           </div>
         </footer>
       </div>

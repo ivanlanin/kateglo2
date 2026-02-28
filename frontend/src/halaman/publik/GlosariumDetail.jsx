@@ -11,7 +11,7 @@ import CursorNavButton from '../../komponen/publik/CursorNavButton';
 import NavigasiLoadingOverlay from '../../komponen/publik/NavigasiLoadingOverlay';
 import PensilSunting from '../../komponen/publik/PensilSunting';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
-import { buatPathDetailKamus } from '../../utils/paramUtils';
+import { buatPathDetailKamus, buatSlug } from '../../utils/paramUtils';
 import { renderEntriGlosariumTertaut } from '../../utils/formatUtils';
 import { buildMetaDetailGlosarium } from '../../utils/metaUtils';
 import useNavigasiMemuat from '../../hooks/bersama/useNavigasiMemuat';
@@ -51,6 +51,11 @@ function getBidangSebelumnya(sortedItems = [], index = 0) {
   return (sortedItems[index - 1]?.bidang || '').trim().toLowerCase();
 }
 
+function getSumberSebelumnya(sortedItems = [], index = 0) {
+  if (index <= 0) return '';
+  return (sortedItems[index - 1]?.sumber_kode || '').trim();
+}
+
 function AlirEntri({ items, tautAsing = false, tampilkanEdit = false }) {
   const sortedItems = sortAlirEntriItems(items, {
     prioritizeIndonesia: !tautAsing,
@@ -85,6 +90,10 @@ function AlirEntri({ items, tautAsing = false, tampilkanEdit = false }) {
         const bidangSebelumnya = getBidangSebelumnya(flowItems, i);
         const tampilkanBadgeBidang = Boolean(item.bidang) && bidangSaatIni !== bidangSebelumnya;
 
+        const sumberKodeSaatIni = (item.sumber_kode || '').trim();
+        const sumberKodeSebelumnya = getSumberSebelumnya(flowItems, i);
+        const tampilkanBadgeSumber = Boolean(sumberKodeSaatIni) && sumberKodeSaatIni !== sumberKodeSebelumnya;
+
         return (
         <span key={item.id}>
           {tampilkanBadgeBidang && (
@@ -92,6 +101,12 @@ function AlirEntri({ items, tautAsing = false, tampilkanEdit = false }) {
               to={`/glosarium/bidang/${encodeURIComponent(item.bidang_kode || item.bidang)}`}
               className="badge-bidang"
             >{item.bidang}</Link>{' '}</>
+          )}
+          {tampilkanBadgeSumber && (
+            <><Link
+              to={`/glosarium/sumber/${encodeURIComponent(buatSlug(item.sumber || ''))}`}
+              className="badge-sumber"
+            >{sumberKodeSaatIni}</Link>{' '}</>
           )}
           {tautAsing ? (
             <>
@@ -145,6 +160,11 @@ function sortAlirEntriItems(items = [], { prioritizeIndonesia = false, sortByBid
       const bidangCompare = bidangA.localeCompare(bidangB, 'id', { sensitivity: 'base' });
       if (bidangCompare !== 0) return bidangCompare;
     }
+
+    const sumberA = (a.sumber || '').trim();
+    const sumberB = (b.sumber || '').trim();
+    const sumberCompare = sumberA.localeCompare(sumberB, 'id', { sensitivity: 'base' });
+    if (sumberCompare !== 0) return sumberCompare;
 
     const labelA = pilihLabelAlir(a, prioritizeIndonesia);
     const labelB = pilihLabelAlir(b, prioritizeIndonesia);
@@ -315,6 +335,7 @@ function GlosariumDetail() {
 export const __private = {
   AlirEntri,
   getBidangSebelumnya,
+  getSumberSebelumnya,
   pilihLabelAlir,
   sortAlirEntriItems,
 };

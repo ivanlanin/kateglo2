@@ -14,7 +14,6 @@ export const menuItems = [
   { path: '/makna', label: 'Makna' },
   { path: '/rima', label: 'Rima' },
   { path: '/ejaan', label: 'Ejaan' },
-  { path: '/redaksi', label: 'Redaksi', adminSaja: true },
 ];
 
 function MenuUtama({

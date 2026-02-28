@@ -675,7 +675,7 @@ class ModelGlosarium {
          LOWER(TRIM(BOTH '-' FROM REGEXP_REPLACE(TRIM(s.nama), '[^a-zA-Z0-9]+', '-', 'g'))) AS slug
        FROM sumber s
        ${kondisiAktif}
-       ORDER BY s.nama`
+       ORDER BY s.keterangan ASC NULLS LAST, s.nama ASC`
     );
     return result.rows;
   }

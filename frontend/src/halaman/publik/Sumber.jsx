@@ -1,14 +1,12 @@
 /**
- * @fileoverview Halaman Sumber — daftar sumber glosarium Kateglo
+ * @fileoverview Halaman Sumber — daftar sumber referensi glosarium Kateglo
  */
 
-import { Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
 import ReactMarkdown from 'react-markdown';
+import { useQuery } from '@tanstack/react-query';
 import { ambilDaftarSumber } from '../../api/apiPublik';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import { QueryFeedback } from '../../komponen/publik/StatusKonten';
-import { buatSlug } from '../../utils/paramUtils';
 
 function Sumber() {
   const { data: sumberList, isLoading, isError, error } = useQuery({
@@ -31,25 +29,19 @@ function Sumber() {
       />
 
       {!isLoading && !isError && sumberList?.length > 0 && (
-        <div className="space-y-6">
-          {sumberList.map((item) => (
-            <div key={item.id} className="space-y-1">
-              <h2 className="font-semibold">
-                <Link
-                  to={`/glosarium/sumber/${encodeURIComponent(item.slug || buatSlug(item.nama))}`}
-                  className="link-action"
-                >
-                  {item.nama}
-                </Link>
-              </h2>
-              {item.keterangan && (
-                <div className="muted-text">
-                  <ReactMarkdown>{item.keterangan}</ReactMarkdown>
-                </div>
-              )}
-            </div>
+        <ol className="kamus-detail-def-list">
+          {sumberList.map((item, index) => (
+            <li key={item.id} id={item.kode} className="kamus-detail-def-item">
+              <span className="kamus-detail-def-number">{index + 1}.</span>
+              <div className="kamus-detail-def-content leading-relaxed">
+                <ReactMarkdown components={{ p: ({ children }) => <>{children}</>, a: ({ children, href }) => <a href={href} className="link-action">{children}</a> }}>
+                  {item.keterangan || item.nama}
+                </ReactMarkdown>
+                {item.kode && <> <span className="badge-sumber">{item.kode}</span></>}
+              </div>
+            </li>
           ))}
-        </div>
+        </ol>
       )}
 
       {!isLoading && !isError && sumberList?.length === 0 && (

@@ -1,5 +1,10 @@
 # Riwayat Perubahan
 
+## 2026-02-28 Sabtu
+
+- Menambahkan lencana sumber di detail glosarium
+- Menambahkan halaman [Sumber](/sumber) untuk menampilkan daftar sumber yang digunakan
+
 ## 2026-02-27 Jumat
 
 - Memperbaiki tampilan redaksi glosarium
