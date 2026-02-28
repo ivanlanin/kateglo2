@@ -671,12 +671,29 @@ class ModelGlosarium {
          s.kode,
          s.nama,
          s.keterangan,
-         s.nama AS sumber
+         s.nama AS sumber,
+         LOWER(TRIM(BOTH '-' FROM REGEXP_REPLACE(TRIM(s.nama), '[^a-zA-Z0-9]+', '-', 'g'))) AS slug
        FROM sumber s
        ${kondisiAktif}
        ORDER BY s.nama`
     );
     return result.rows;
+  }
+
+  /**
+   * Cari sumber berdasarkan slug yang dibentuk dari nama
+   * @param {string} slug
+   * @returns {Promise<Object|null>}
+   */
+  static async resolveSlugSumber(slug) {
+    const result = await db.query(
+      `SELECT id, kode, nama
+       FROM sumber
+       WHERE LOWER(TRIM(BOTH '-' FROM REGEXP_REPLACE(TRIM(nama), '[^a-zA-Z0-9]+', '-', 'g'))) = $1
+       LIMIT 1`,
+      [String(slug || '').toLowerCase()]
+    );
+    return result.rows[0] || null;
   }
 
   static async daftarMasterBidang({ q = '', aktif = '', limit = 50, offset = 0 } = {}) {

@@ -12,6 +12,7 @@ import Rima from './halaman/publik/Rima';
 import Ejaan from './halaman/publik/Ejaan';
 import AuthCallback from './halaman/publik/AuthCallback';
 import KebijakanPrivasi from './halaman/publik/KebijakanPrivasi';
+import Sumber from './halaman/publik/Sumber';
 import LoginAdmin from './halaman/redaksi/LoginAdmin';
 import DasborAdmin from './halaman/redaksi/DasborAdmin';
 import KamusAdmin from './halaman/redaksi/KamusAdmin';
@@ -126,6 +127,7 @@ function App() {
         <Route path="/glosarium/bidang/:bidang" element={<Glosarium />} />
         <Route path="/glosarium/sumber/:sumber" element={<Glosarium />} />
         <Route path="/kebijakan-privasi" element={<KebijakanPrivasi />} />
+        <Route path="/sumber" element={<Sumber />} />
       </Route>
     </Routes>
   );

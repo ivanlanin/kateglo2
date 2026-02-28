@@ -14,6 +14,7 @@ jest.mock('../../models/modelGlosarium', () => ({
   ambilDetailAsing: jest.fn(),
   ambilDaftarBidang: jest.fn(),
   ambilDaftarSumber: jest.fn(),
+  resolveSlugSumber: jest.fn(),
 }));
 
 jest.mock('../../models/modelLabel', () => ({
@@ -889,14 +890,16 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/glosarium/sumber/:sumber memanggil model', async () => {
+    ModelGlosarium.resolveSlugSumber.mockResolvedValue({ id: 42, kode: 'kbbi-v', nama: 'KBBI V' });
     ModelGlosarium.cariCursor.mockResolvedValue({ data: [], total: 0 });
 
     const response = await request(createApp())
-      .get('/api/publik/glosarium/sumber/KBBI%20V?limit=6&cursor=abc&direction=prev');
+      .get('/api/publik/glosarium/sumber/kbbi-v?limit=6&cursor=abc&direction=prev');
 
     expect(response.status).toBe(200);
+    expect(ModelGlosarium.resolveSlugSumber).toHaveBeenCalledWith('kbbi-v');
     expect(ModelGlosarium.cariCursor).toHaveBeenCalledWith({
-      sumber: 'KBBI V',
+      sumberId: 42,
       limit: 6,
       aktifSaja: true,
       hitungTotal: true,
@@ -907,7 +910,17 @@ describe('routes backend', () => {
     });
   });
 
+  it('GET /api/publik/glosarium/sumber/:sumber mengembalikan 404 jika sumber tidak ditemukan', async () => {
+    ModelGlosarium.resolveSlugSumber.mockResolvedValue(null);
+
+    const response = await request(createApp()).get('/api/publik/glosarium/sumber/tidak-ada');
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('Sumber tidak ditemukan');
+  });
+
   it('GET /api/publik/glosarium/sumber/:sumber meneruskan error', async () => {
+    ModelGlosarium.resolveSlugSumber.mockResolvedValue({ id: 1, kode: 'kbbi', nama: 'KBBI' });
     ModelGlosarium.cariCursor.mockRejectedValue(new Error('sumber detail gagal'));
 
     const response = await request(createApp()).get('/api/publik/glosarium/sumber/kbbi');

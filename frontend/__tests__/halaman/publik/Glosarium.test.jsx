@@ -269,7 +269,7 @@ describe('Glosarium', () => {
     render(<Glosarium />);
 
     expect(screen.getByRole('link', { name: 'Kesehatan' })).toHaveAttribute('href', '/glosarium/bidang/Kesehatan');
-    expect(screen.getByRole('link', { name: 'WHO' })).toHaveAttribute('href', '/glosarium/sumber/WHO');
+    expect(screen.getByRole('link', { name: 'WHO' })).toHaveAttribute('href', '/glosarium/sumber/who');
   });
 
   it('menampilkan tautan edit redaksi saat admin dan data entri lengkap', () => {

@@ -18,7 +18,7 @@ import HasilPencarian from '../../komponen/publik/HasilPencarian';
 import KartuKategori from '../../komponen/publik/KartuKategori';
 import PensilSunting from '../../komponen/publik/PensilSunting';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
-import { buatPathDetailKamus } from '../../utils/paramUtils';
+import { buatPathDetailKamus, buatSlug } from '../../utils/paramUtils';
 import { formatNamaBidang, renderEntriGlosariumTertaut } from '../../utils/formatUtils';
 import { useAuthOptional } from '../../context/authContext';
 import {
@@ -124,8 +124,8 @@ function Glosarium() {
   const results = data?.data || [];
   const total = data?.total || 0;
   const namaBidang = resolveKategoriNama(bidang, bidangList, ['nama', 'bidang'], ['kode']);
-  const namaSumber = resolveKategoriNama(sumber, sumberList, ['nama', 'sumber'], ['kode']);
-  const detailSumber = resolveKategoriItem(sumber, sumberList, ['nama', 'sumber'], ['kode']);
+  const namaSumber = resolveKategoriNama(sumber, sumberList, ['nama', 'sumber'], ['kode', 'slug']);
+  const detailSumber = resolveKategoriItem(sumber, sumberList, ['nama', 'sumber'], ['kode', 'slug']);
   const keteranganSumber = String(detailSumber?.keterangan || '').trim();
 
   const handlePaginasi = (action) => {
@@ -219,7 +219,7 @@ function Glosarium() {
               judul="Sumber"
               items={sumberList}
               getKey={(item) => item.kode || item.sumber || item.nama}
-              getTo={(item) => `/glosarium/sumber/${encodeURIComponent(item.kode || item.sumber || item.nama)}`}
+              getTo={(item) => `/glosarium/sumber/${encodeURIComponent(item.slug || buatSlug(item.nama))}`}
               getLabel={(item) => item.nama || item.sumber}
             />
           )}

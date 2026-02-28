@@ -124,7 +124,11 @@ function TataLetak({ mode = 'publik', judul, aksiJudul = null, children }) {
               {modeGelap ? '☀️' : '🌙'}
             </button>
             <Link to="/kebijakan-privasi" className="link-action text-sm">
-              Kebijakan Privasi
+              Privasi
+            </Link>
+            <span className="text-gray-400 dark:text-gray-600">·</span>
+            <Link to="/sumber" className="link-action text-sm">
+              Sumber
             </Link>
           </div>
         </footer>

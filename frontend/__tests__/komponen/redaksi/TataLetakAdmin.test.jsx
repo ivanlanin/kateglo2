@@ -60,7 +60,9 @@ describe('TataLetakAdmin', () => {
     fireEvent.click(screen.getByLabelText('Buka menu redaksi'));
     const menuKamus = screen.getAllByRole('link', { name: 'Kamus' });
     expect(menuKamus.some((link) => link.className.includes('navbar-menu-link-active'))).toBe(true);
-    expect(screen.getByRole('link', { name: 'Kebijakan Privasi' })).toHaveAttribute('href', '/kebijakan-privasi');
+    expect(screen.getByRole('link', { name: 'Privasi' })).toHaveAttribute('href', '/kebijakan-privasi');
+    const sumberLinks = screen.getAllByRole('link', { name: 'Sumber' });
+    expect(sumberLinks.some((link) => link.getAttribute('href') === '/sumber')).toBe(true);
     expect(screen.getByText('Isi Admin')).toBeInTheDocument();
 
     fireEvent.click(screen.getAllByRole('button', { name: 'Keluar' })[0]);

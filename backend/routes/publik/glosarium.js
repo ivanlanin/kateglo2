@@ -116,13 +116,19 @@ router.get('/sumber', async (_req, res, next) => {
 
 router.get('/sumber/:sumber', async (req, res, next) => {
   try {
+    const slug = decodeURIComponent(req.params.sumber);
+    const sumberObj = await ModelGlosarium.resolveSlugSumber(slug);
+    if (!sumberObj) {
+      return res.status(404).json({ error: 'Sumber tidak ditemukan' });
+    }
+
     const { limit, cursor, direction, lastPage } = parseCursorPagination(req.query, {
       defaultLimit: 100,
       maxLimit: 100,
     });
 
     const result = await ModelGlosarium.cariCursor({
-      sumber: decodeURIComponent(req.params.sumber),
+      sumberId: sumberObj.id,
       limit,
       aktifSaja: true,
       hitungTotal: true,

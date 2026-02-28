@@ -59,8 +59,17 @@ function buatPathDetailKamus(teks = '') {
   return `/kamus/detail/${encodeURIComponent(indeks)}`;
 }
 
+function buatSlug(nama) {
+  return String(nama || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
 export {
   buatPathDetailKamus,
+  buatSlug,
   compactParams,
   normalisasiIndeksKamus,
   normalizeOffset,
