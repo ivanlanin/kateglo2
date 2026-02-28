@@ -238,6 +238,19 @@ describe('KamusAdmin', () => {
     expect(mutateHapusKamus).toHaveBeenCalled();
   });
 
+  it('tetap aman saat daftar sumber admin kosong', () => {
+    mockUseDaftarSumberAdmin.mockReturnValue({ data: undefined, isLoading: false, isError: false });
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    expect(screen.getByLabelText('Sumber')).toBeInTheDocument();
+  });
+
   it('mengelola makna dan contoh', () => {
     mutateSimpanMakna.mockImplementation((_data, opts) => opts.onSuccess?.());
     mutateHapusMakna.mockImplementation((_data, opts) => opts?.onSuccess?.());

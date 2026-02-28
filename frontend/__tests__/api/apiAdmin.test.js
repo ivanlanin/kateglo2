@@ -498,7 +498,16 @@ describe('apiAdmin', () => {
     const daftarSumber = useDaftarSumberAdmin({ limit: 13, q: 'kb', glosarium: '1', kamus: '0' });
     await daftarSumber.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/sumber', {
-      params: { limit: 13, cursor: undefined, direction: 'next', lastPage: undefined, q: 'kb', aktif: undefined },
+      params: {
+        limit: 13,
+        cursor: undefined,
+        direction: 'next',
+        lastPage: undefined,
+        q: 'kb',
+        aktif: undefined,
+        glosarium: '1',
+        kamus: '0',
+      },
     });
 
     const detailSumber = useDetailSumberAdmin(19);
@@ -704,5 +713,31 @@ describe('apiAdmin', () => {
     expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/label/7');
     hapusLabel.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-label'] });
+  });
+
+  it('meneruskan extra params non-kosong pada daftar sumber admin', async () => {
+    const daftarSumber = useDaftarSumberAdmin({
+      limit: 20,
+      q: 'src',
+      glosarium: '1',
+      kamus: '0',
+      tesaurus: '1',
+      etimologi: '',
+    });
+
+    await daftarSumber.queryFn();
+
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/sumber', {
+      params: {
+        limit: 20,
+        cursor: undefined,
+        direction: 'next',
+        lastPage: undefined,
+        q: 'src',
+        glosarium: '1',
+        kamus: '0',
+        tesaurus: '1',
+      },
+    });
   });
 });

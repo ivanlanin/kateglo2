@@ -171,6 +171,13 @@ function normalisasiNilaiMeta(teks = '', { hapusSlash = false } = {}) {
   return nilai.toLowerCase();
 }
 
+export function shouldShowMetaSeparator(infoWaktu, sumberKodeEntri, adalahAdmin, entriId) {
+  if (!infoWaktu) return false;
+  if (sumberKodeEntri) return true;
+  if (adalahAdmin && entriId) return true;
+  return false;
+}
+
 function BadgeSumberDanTombolEdit({
   sumberKode = '',
   editTo = '',
@@ -187,11 +194,7 @@ function BadgeSumberDanTombolEdit({
   return (
     <span className="kamus-detail-inline-source">
       {kode && (
-        pathSumber ? (
-          <Link to={pathSumber} className={kelasBadge}>{kode}</Link>
-        ) : (
-          <span className={kelasBadge}>{kode}</span>
-        )
+        <Link to={pathSumber} className={kelasBadge}>{kode}</Link>
       )}
       {editTo && (
         <PensilSunting
@@ -802,7 +805,7 @@ function KamusDetail() {
                 {(infoWaktu || sumberKodeEntri || (adalahAdmin && entriItem.id)) && (
                   <p className="kamus-detail-entry-meta">
                     {infoWaktu}
-                    {infoWaktu && (sumberKodeEntri || (adalahAdmin && entriItem.id)) && <span>{' · '}</span>}
+                    {shouldShowMetaSeparator(infoWaktu, sumberKodeEntri, adalahAdmin, entriItem.id) && <span>{' · '}</span>}
                     <BadgeSumberDanTombolEdit
                       sumberKode={sumberKodeEntri}
                       editTo={adalahAdmin && entriItem.id ? `/redaksi/kamus/${entriItem.id}` : ''}

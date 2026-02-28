@@ -5,17 +5,24 @@ import { hitungModeGelapAwal } from '../../../src/komponen/bersama/TataLetak';
 import { bacaPreferensiTema } from '../../../src/komponen/bersama/TataLetak';
 
 let mockPathname = '/kamus';
+let mockAuthOptional = { adalahRedaksi: false };
 
 vi.mock('../../../src/komponen/publik/Navbar', () => ({ default: () => <div>Navbar Mock</div> }));
+vi.mock('../../../src/komponen/redaksi/NavbarAdmin', () => ({ default: () => <div>NavbarAdmin Mock</div> }));
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   Outlet: () => <div>Outlet Mock</div>,
   useLocation: () => ({ pathname: mockPathname }),
 }));
 
+vi.mock('../../../src/context/authContext', () => ({
+  useAuthOptional: () => mockAuthOptional,
+}));
+
 describe('TataLetak', () => {
   beforeEach(() => {
     mockPathname = '/kamus';
+    mockAuthOptional = { adalahRedaksi: false };
     global.fetch.mockReset();
   });
 
@@ -131,6 +138,39 @@ describe('TataLetak', () => {
     const main = container.querySelector('main');
 
     expect(main.className).toContain('kateglo-main-content-beranda');
+  });
+
+  it('mode admin merender tata letak redaksi dan judul halaman admin', () => {
+    render(
+      <TataLetak mode="admin" judul="Manajemen" aksiJudul={<button type="button">Aksi</button>}>
+        <div>Konten Admin</div>
+      </TataLetak>
+    );
+
+    expect(screen.getByText('NavbarAdmin Mock')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Manajemen' })).toBeInTheDocument();
+    expect(screen.getByText('Aksi')).toBeInTheDocument();
+    expect(screen.getByText('Konten Admin')).toBeInTheDocument();
+    expect(document.title).toBe('Manajemen — Redaksi Kateglo');
+    expect(screen.queryByRole('button', { name: /Kateglo/i })).not.toBeInTheDocument();
+  });
+
+  it('mode admin tanpa judul memakai title default redaksi', () => {
+    render(
+      <TataLetak mode="admin">
+        <div>Konten Admin</div>
+      </TataLetak>
+    );
+
+    expect(document.title).toBe('Redaksi Kateglo');
+  });
+
+  it('menampilkan tautan Redaksi di footer saat user adalah redaksi', () => {
+    mockAuthOptional = { adalahRedaksi: true };
+
+    render(<TataLetak />);
+
+    expect(screen.getByRole('link', { name: 'Redaksi' })).toHaveAttribute('href', '/redaksi');
   });
 
   it('dapat kembali ke tab Riwayat setelah tab Tugas', async () => {

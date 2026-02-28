@@ -188,6 +188,19 @@ describe('GlosariumDetail', () => {
     expect(editLinks).toHaveLength(1);
   });
 
+  it('helper AlirEntri membentuk tautan sumber meski nama sumber kosong', () => {
+    const AlirEntri = __private.AlirEntri;
+    render(
+      <AlirEntri
+        items={[
+          { id: 71, bidang: 'Kimia', bidang_kode: 'kim', sumber_kode: 'KBBI', sumber: '', indonesia: 'asam' },
+        ]}
+      />
+    );
+
+    expect(screen.getByRole('link', { name: 'KBBI' })).toHaveAttribute('href', '/glosarium/sumber/');
+  });
+
   it('helper getBidangSebelumnya menormalisasi bidang sebelumnya', () => {
     expect(__private.getBidangSebelumnya([], 0)).toBe('');
     expect(__private.getBidangSebelumnya([{ bidang: ' Kimia ' }, { bidang: 'Biologi' }], 1)).toBe('kimia');

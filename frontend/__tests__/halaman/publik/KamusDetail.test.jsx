@@ -15,6 +15,7 @@ import {
   bandingkanEntriKamus,
   bandingkanJenisSubentri,
   formatInfoWaktuEntri,
+  shouldShowMetaSeparator,
   __private,
 } from '../../../src/halaman/publik/KamusDetail';
 
@@ -355,6 +356,74 @@ describe('KamusDetail', () => {
       'href',
       'https://kbbi.kemendikdasmen.go.id/entri/kata'
     );
+  });
+
+  it('admin menampilkan edit etimologi dan tidak menampilkan edit entri saat id entri tidak ada', () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      isLoading: false,
+      adalahAdmin: true,
+      loginDenganGoogle: vi.fn(),
+    });
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return { isLoading: false, isError: false, data: {} };
+      }
+      return {
+        isLoading: false,
+        isError: false,
+        data: {
+          indeks: 'kata',
+          entri: [{
+            entri: 'kata',
+            indeks: 'kata',
+            jenis: 'dasar',
+            makna: [{ id: 1, makna: 'arti' }],
+            subentri: {},
+            etimologi: [{ id: 5, bahasa: 'Belanda', kata_asal: 'adjectief', sumber_kode: 'LWIM', aktif: true }],
+          }],
+          tesaurus: { sinonim: [], antonim: [] },
+          glosarium: [],
+        },
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByLabelText('Sunting etimologi di Redaksi')).toHaveAttribute('href', '/redaksi/etimologi/5');
+    expect(screen.queryByLabelText('Sunting entri di Redaksi')).not.toBeInTheDocument();
+  });
+
+  it('menampilkan pemisah metadata saat info waktu dan sumber entri tersedia', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return { isLoading: false, isError: false, data: {} };
+      }
+      return {
+        isLoading: false,
+        isError: false,
+        data: {
+          indeks: 'kata',
+          entri: [{
+            entri: 'kata',
+            indeks: 'kata',
+            jenis: 'dasar',
+            makna: [{ id: 1, makna: 'arti' }],
+            subentri: {},
+            created_at: '2026-02-01 10:00:00',
+            sumber_kode: 'KBBI',
+          }],
+          tesaurus: { sinonim: [], antonim: [] },
+          glosarium: [],
+        },
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByText('KBBI')).toBeInTheDocument();
+    expect(screen.getByText('·')).toBeInTheDocument();
   });
 
   it('menampilkan bentuk baku dan tautan see pada definisi', () => {
@@ -1865,6 +1934,14 @@ describe('KamusDetail helpers', () => {
 
     expect(formatInfoWaktuEntri(null, null)).toBe('');
     expect(formatInfoWaktuEntri('invalid', 'invalid')).toBe('');
+  });
+
+  it('shouldShowMetaSeparator menutup semua cabang logika', () => {
+    expect(shouldShowMetaSeparator('', 'KBBI', false, null)).toBe(false);
+    expect(shouldShowMetaSeparator('Dibuat 01 Jan', 'KBBI', false, null)).toBe(true);
+    expect(shouldShowMetaSeparator('Dibuat 01 Jan', '', true, 10)).toBe(true);
+    expect(shouldShowMetaSeparator('Dibuat 01 Jan', '', true, 0)).toBe(false);
+    expect(shouldShowMetaSeparator('Dibuat 01 Jan', '', false, 10)).toBe(false);
   });
 
   it('normalisasi fallback data detail menutup cabang default untuk jenis, makna, subentri, dan entri rujuk', () => {

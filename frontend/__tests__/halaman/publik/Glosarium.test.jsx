@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Glosarium, { resolveKategoriNama, resolveKategoriItem } from '../../../src/halaman/publik/Glosarium';
+import { resolveNamaSumberSort } from '../../../src/halaman/publik/Glosarium';
 import {
   cariGlosarium,
   ambilGlosariumPerBidang,
@@ -21,6 +22,12 @@ vi.mock('../../../src/api/apiPublik', () => ({
   ambilDaftarSumber: vi.fn().mockResolvedValue([]),
 }));
 
+  it('helper resolveNamaSumberSort memprioritaskan nama lalu sumber lalu kode', () => {
+    expect(resolveNamaSumberSort({ nama: ' KBBI ', sumber: 'Sumber', kode: 'k' })).toBe('KBBI');
+    expect(resolveNamaSumberSort({ nama: '', sumber: ' Sumber Utama ', kode: 'k' })).toBe('Sumber Utama');
+    expect(resolveNamaSumberSort({ nama: '', sumber: '', kode: ' KODE ' })).toBe('KODE');
+    expect(resolveNamaSumberSort({ nama: '', sumber: '', kode: '' })).toBe('');
+  });
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   useParams: () => mockParams,
@@ -235,6 +242,71 @@ describe('Glosarium', () => {
     render(<Glosarium />);
 
     expect(screen.queryByText('Bidang')).not.toBeInTheDocument();
+    expect(screen.queryByText('Sumber')).not.toBeInTheDocument();
+  });
+
+  it('browse memfilter sumber glosarium=true dan mengurutkan nama sumber secara alfabetis', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryFn) options.queryFn();
+      const key = options?.queryKey?.[0];
+      if (key === 'glosarium-bidang') return { data: [], isLoading: false, isError: false };
+      if (key === 'glosarium-sumber') {
+        return {
+          data: [
+            { id: 1, nama: 'Zulu', glosarium: true, slug: 'zulu' },
+            { id: 2, nama: 'Alpha', glosarium: true, slug: 'alpha' },
+            { id: 3, nama: 'Bukan Glosarium', glosarium: false, slug: 'bukan' },
+          ],
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Glosarium />);
+
+    const tautanSumber = Array.from(document.querySelectorAll('a[href^="/glosarium/sumber/"]')).map((el) => el.textContent);
+    expect(tautanSumber).toEqual(['Alpha', 'Zulu']);
+    expect(screen.queryByRole('link', { name: 'Bukan Glosarium' })).not.toBeInTheDocument();
+  });
+
+  it('browse aman saat daftar sumber undefined dan fallback label dari sumber/kode tetap terurut', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryFn) options.queryFn();
+      const key = options?.queryKey?.[0];
+      if (key === 'glosarium-bidang') return { data: [], isLoading: false, isError: false };
+      if (key === 'glosarium-sumber') {
+        return {
+          data: [
+            { id: 1, nama: '', sumber: 'Zulu Source', kode: 'z', slug: 'zulu-source', glosarium: true },
+            { id: 2, nama: '', sumber: '', kode: 'AlphaCode', slug: 'alpha-code', glosarium: true },
+            { id: 3, nama: '', sumber: '', kode: '', glosarium: true },
+          ],
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Glosarium />);
+
+    const hrefSumber = Array.from(document.querySelectorAll('a[href^="/glosarium/sumber/"]')).map((el) => el.getAttribute('href'));
+    expect(hrefSumber).toEqual(expect.arrayContaining(['/glosarium/sumber/alpha-code', '/glosarium/sumber/zulu-source']));
+  });
+
+  it('browse tetap aman saat query daftar sumber mengembalikan undefined', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryFn) options.queryFn();
+      const key = options?.queryKey?.[0];
+      if (key === 'glosarium-bidang') return { data: [], isLoading: false, isError: false };
+      if (key === 'glosarium-sumber') return { data: undefined, isLoading: false, isError: false };
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Glosarium />);
+
     expect(screen.queryByText('Sumber')).not.toBeInTheDocument();
   });
 

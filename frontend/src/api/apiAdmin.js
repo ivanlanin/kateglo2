@@ -49,6 +49,7 @@ function useDaftarAdmin(path, queryKeyPrefix, {
   q = '',
   aktif = '',
   includeAktif = true,
+  ...extraParams
 } = {}) {
   const params = buildDaftarParams({
     limit,
@@ -58,10 +59,11 @@ function useDaftarAdmin(path, queryKeyPrefix, {
     q,
     aktif,
     includeAktif,
+    ...extraParams,
   });
 
   return useQuery({
-    queryKey: [queryKeyPrefix, { limit, cursor, direction, lastPage, q, aktif }],
+    queryKey: [queryKeyPrefix, { limit, cursor, direction, lastPage, q, aktif, ...extraParams }],
     queryFn: () =>
       klien
         .get(path, { params })

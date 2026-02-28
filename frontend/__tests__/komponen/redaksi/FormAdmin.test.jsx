@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import {
+  CheckboxField,
   FormFooter,
   InputField,
   PesanForm,
@@ -42,7 +43,7 @@ describe('FormAdmin', () => {
     expect(screen.getByTestId('state').textContent).toContain('"buka":false');
   });
 
-  it('InputField, TextareaField, SelectField, ToggleAktif, FormFooter, PesanForm berfungsi', () => {
+  it('InputField, TextareaField, SelectField, ToggleAktif, CheckboxField, FormFooter, PesanForm berfungsi', () => {
     const onChange = vi.fn();
     const onSimpan = vi.fn();
     const onBatal = vi.fn();
@@ -59,6 +60,7 @@ describe('FormAdmin', () => {
           onChange={onChange}
           options={[{ value: 'user', label: 'User' }, { value: 'admin', label: 'Admin' }]}
         />
+        <CheckboxField label="Tampilkan" name="tampilkan" value onChange={onChange} />
         <ToggleAktif value={1} onChange={onChange} />
         <FormFooter onSimpan={onSimpan} onBatal={onBatal} onHapus={onHapus} isPending={false} modeTambah={false} />
         <PesanForm error="Err" sukses="Ok" />
@@ -68,6 +70,7 @@ describe('FormAdmin', () => {
     fireEvent.change(screen.getByLabelText(/Nama/), { target: { value: 'B' } });
     fireEvent.change(screen.getByLabelText(/Catatan/), { target: { value: 'Y' } });
     fireEvent.change(screen.getByLabelText(/Peran/), { target: { value: 'admin' } });
+    fireEvent.click(screen.getByLabelText(/Tampilkan/));
     fireEvent.click(screen.getAllByRole('button')[0]);
     fireEvent.click(screen.getByText('Simpan'));
     fireEvent.click(screen.getByText('Batal'));
@@ -98,6 +101,7 @@ describe('FormAdmin', () => {
           options={[{ value: '', label: 'Pilih' }]}
           disabled
         />
+        <CheckboxField label="Tampilkan" name="tampilkan" value={false} onChange={onChange} disabled />
         <ToggleAktif value={0} onChange={onChange} disabled />
         <FormFooter onSimpan={onSimpan} onBatal={onBatal} isPending={false} modeTambah />
       </div>

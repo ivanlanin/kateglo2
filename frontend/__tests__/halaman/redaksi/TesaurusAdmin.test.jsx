@@ -18,6 +18,7 @@ vi.mock('react-router-dom', async () => {
 
 const mockUseDaftarTesaurusAdmin = vi.fn();
 const mockUseDetailTesaurusAdmin = vi.fn();
+const mockUseDaftarSumberAdmin = vi.fn();
 const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
 const mockUseAuth = vi.fn();
@@ -25,7 +26,7 @@ const mockUseAuth = vi.fn();
 vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarTesaurusAdmin: (...args) => mockUseDaftarTesaurusAdmin(...args),
   useDetailTesaurusAdmin: (...args) => mockUseDetailTesaurusAdmin(...args),
-  useDaftarSumberAdmin: () => ({ data: { data: [{ id: 1, kode: 'KBBI', nama: 'KBBI' }] } }),
+  useDaftarSumberAdmin: (...args) => mockUseDaftarSumberAdmin(...args),
   useSimpanTesaurus: () => ({ mutate: mutateSimpan, isPending: false }),
   useHapusTesaurus: () => ({ mutate: mutateHapus, isPending: false }),
 }));
@@ -60,6 +61,7 @@ describe('TesaurusAdmin', () => {
         data: [{ id: 1, indeks: 'anak', sinonim: 'buah hati', antonim: 'orang tua' }],
       },
     });
+    mockUseDaftarSumberAdmin.mockReturnValue({ data: { data: [{ id: 1, kode: 'KBBI', nama: 'KBBI' }] } });
     mockUseDetailTesaurusAdmin.mockReturnValue({ isLoading: false, isError: false, data: null });
   });
 
@@ -171,6 +173,19 @@ describe('TesaurusAdmin', () => {
     fireEvent.click(screen.getByText('Simpan'));
 
     expect(screen.getByText('Gagal menyimpan')).toBeInTheDocument();
+  });
+
+  it('tetap aman saat daftar sumber admin kosong', () => {
+    mockUseDaftarSumberAdmin.mockReturnValue({ data: undefined });
+
+    render(
+      <MemoryRouter>
+        <TesaurusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    expect(screen.getByLabelText(/Sumber/)).toBeInTheDocument();
   });
 
   it('menjalankan reset filter tesaurus', () => {

@@ -69,6 +69,26 @@ describe('SumberAdmin', () => {
     expect(mutateSimpan).toHaveBeenCalled();
   });
 
+  it('mengubah toggle konteks sumber dari nonaktif ke aktif lalu menyimpan', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <SumberAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    const toggleButtons = Array.from(container.querySelectorAll('button.relative.inline-flex'));
+    expect(screen.getAllByText('Nonaktif').length).toBeGreaterThan(0);
+    fireEvent.click(toggleButtons[0]);
+    expect(screen.getByText('Aktif')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText(/Kode/), { target: { value: 'pusba' } });
+    fireEvent.change(screen.getByLabelText(/Nama/), { target: { value: 'Pusba' } });
+    fireEvent.click(screen.getByText('Simpan'));
+
+    expect(mutateSimpan).toHaveBeenCalledWith(expect.objectContaining({ kamus: true }), expect.any(Object));
+  });
+
   it('memvalidasi id route tidak valid dan redirect ke daftar', () => {
     mockParams = { id: 'abc' };
 

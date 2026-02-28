@@ -19,6 +19,7 @@ vi.mock('react-router-dom', async () => {
 const mockUseDaftar = vi.fn();
 const mockUseDetail = vi.fn();
 const mockUseAutocomplete = vi.fn();
+const mockUseDaftarSumberAdmin = vi.fn();
 const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
 const mockUseAuth = vi.fn();
@@ -29,7 +30,7 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useAutocompleteEntriEtimologi: (...args) => mockUseAutocomplete(...args),
   useSimpanEtimologi: () => ({ mutate: mutateSimpan, isPending: false }),
   useHapusEtimologi: () => ({ mutate: mutateHapus, isPending: false }),
-  useDaftarSumberAdmin: () => ({ data: { data: [{ id: 1, nama: 'LWIM' }] } }),
+  useDaftarSumberAdmin: (...args) => mockUseDaftarSumberAdmin(...args),
 }));
 
 vi.mock('../../../src/context/authContext', () => ({
@@ -143,6 +144,7 @@ describe('EtimologiAdmin', () => {
     });
     mockUseDetail.mockReturnValue({ isLoading: false, isError: false, data: null });
     mockUseAutocomplete.mockReturnValue({ isLoading: false, data: { data: [] } });
+    mockUseDaftarSumberAdmin.mockReturnValue({ data: { data: [{ id: 1, nama: 'LWIM' }] } });
   });
 
   it('menampilkan daftar, dapat cari, klik baris, dan validasi simpan', async () => {
@@ -280,6 +282,19 @@ describe('EtimologiAdmin', () => {
 
     fireEvent.focus(screen.getByLabelText('Entri'));
     expect(screen.getByText('homonim: —')).toBeInTheDocument();
+  });
+
+  it('tetap aman saat daftar sumber admin kosong', () => {
+    mockUseDaftarSumberAdmin.mockReturnValue({ data: undefined });
+
+    render(
+      <MemoryRouter>
+        <EtimologiAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    expect(screen.getByLabelText('Sumber')).toBeInTheDocument();
   });
 
   it('menangani detail error dengan redirect ke daftar', () => {

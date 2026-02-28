@@ -68,6 +68,14 @@ export function resolveKategoriItem(param, list, nameKeys, codeKeys) {
   }) || null;
 }
 
+export function resolveNamaSumberSort(item) {
+  const nama = String(item?.nama || '').trim();
+  if (nama) return nama;
+  const sumberNama = String(item?.sumber || '').trim();
+  if (sumberNama) return sumberNama;
+  return String(item?.kode || '').trim();
+}
+
 function Glosarium() {
   const { kata, bidang, sumber } = useParams();
   const auth = useAuthOptional();
@@ -126,8 +134,8 @@ function Glosarium() {
     .filter((item) => Boolean(item?.glosarium))
     .slice()
     .sort((a, b) => {
-      const namaA = String(a?.nama || a?.sumber || a?.kode || '').trim();
-      const namaB = String(b?.nama || b?.sumber || b?.kode || '').trim();
+      const namaA = resolveNamaSumberSort(a);
+      const namaB = resolveNamaSumberSort(b);
       return namaA.localeCompare(namaB, 'id', { sensitivity: 'base' });
     });
   const namaBidang = resolveKategoriNama(bidang, bidangList, ['nama', 'bidang'], ['kode']);
