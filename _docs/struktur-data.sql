@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-26T06:53:14.987Z
+-- Generated: 2026-02-28T15:05:09.806Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -283,7 +283,7 @@ create trigger trg_set_timestamp_fields__izin
   for each row
   execute function set_timestamp_fields();
 
-create table komentar_kamus (
+create table komentar (
   id serial primary key,
   indeks text not null,
   pengguna_id integer references pengguna(id) on delete cascade not null,
@@ -291,17 +291,17 @@ create table komentar_kamus (
   aktif boolean not null default false,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
-  constraint komentar_kamus_indeks_pengguna_key unique (indeks, pengguna_id),
-  constraint komentar_kamus_indeks_check check (TRIM(BOTH FROM indeks) <> ''::text),
-  constraint komentar_kamus_komentar_check check (TRIM(BOTH FROM komentar) <> ''::text)
+  constraint komentar_indeks_pengguna_key unique (indeks, pengguna_id),
+  constraint komentar_indeks_check check (TRIM(BOTH FROM indeks) <> ''::text),
+  constraint komentar_komentar_check check (TRIM(BOTH FROM komentar) <> ''::text)
 );
-create index idx_komentar_kamus_indeks on komentar_kamus using btree (indeks);
-create index idx_komentar_kamus_indeks_aktif on komentar_kamus using btree (indeks, aktif);
-create index idx_komentar_kamus_pengguna_id on komentar_kamus using btree (pengguna_id);
-create index idx_komentar_kamus_updated_at on komentar_kamus using btree (updated_at DESC);
-create unique index komentar_kamus_indeks_pengguna_key on komentar_kamus using btree (indeks, pengguna_id);
-create trigger trg_set_timestamp_fields__komentar_kamus
-  before insert or update on komentar_kamus
+create index idx_komentar_indeks on komentar using btree (indeks);
+create index idx_komentar_indeks_aktif on komentar using btree (indeks, aktif);
+create index idx_komentar_pengguna_id on komentar using btree (pengguna_id);
+create index idx_komentar_updated_at on komentar using btree (updated_at DESC);
+create unique index komentar_indeks_pengguna_key on komentar using btree (indeks, pengguna_id);
+create trigger trg_set_timestamp_fields__komentar
+  before insert or update on komentar
   for each row
   execute function set_timestamp_fields();
 

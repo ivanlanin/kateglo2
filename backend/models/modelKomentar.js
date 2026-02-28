@@ -28,14 +28,14 @@ function normalizeBoolean(value) {
 
 class ModelKomentar {
   static async hitungTotal() {
-    const result = await db.query('SELECT COUNT(*) AS total FROM komentar_kamus');
+    const result = await db.query('SELECT COUNT(*) AS total FROM komentar');
     return parseCount(result.rows[0]?.total);
   }
 
   static async hitungKomentarAktif(indeks) {
     const result = await db.query(
       `SELECT COUNT(*) AS total
-       FROM komentar_kamus
+       FROM komentar
        WHERE LOWER(indeks) = LOWER($1) AND aktif = TRUE`,
       [indeks]
     );
@@ -46,7 +46,7 @@ class ModelKomentar {
     const result = await db.query(
       `SELECT k.id, k.indeks, k.komentar, k.aktif, ${SQL_CREATED_AT}, ${SQL_UPDATED_AT},
               k.pengguna_id, p.nama AS pengguna_nama
-       FROM komentar_kamus k
+       FROM komentar k
        JOIN pengguna p ON p.id = k.pengguna_id
        WHERE LOWER(k.indeks) = LOWER($1)
          AND (k.aktif = TRUE OR k.pengguna_id = $2)
@@ -58,7 +58,7 @@ class ModelKomentar {
 
   static async upsertKomentarPengguna({ indeks, penggunaId, komentar }) {
     const result = await db.query(
-      `INSERT INTO komentar_kamus (indeks, pengguna_id, komentar, aktif)
+      `INSERT INTO komentar (indeks, pengguna_id, komentar, aktif)
        VALUES ($1, $2, $3, FALSE)
        ON CONFLICT (indeks, pengguna_id) DO UPDATE SET
          komentar = EXCLUDED.komentar
@@ -94,7 +94,7 @@ class ModelKomentar {
 
     const countResult = await db.query(
       `SELECT COUNT(*) AS total
-       FROM komentar_kamus k
+       FROM komentar k
        JOIN pengguna p ON p.id = k.pengguna_id
        ${whereSql}`,
       params
@@ -103,7 +103,7 @@ class ModelKomentar {
     const dataResult = await db.query(
       `SELECT k.id, k.indeks, k.pengguna_id, k.komentar, k.aktif, ${SQL_CREATED_AT}, ${SQL_UPDATED_AT},
               p.nama AS pengguna_nama, p.surel AS pengguna_surel
-       FROM komentar_kamus k
+       FROM komentar k
        JOIN pengguna p ON p.id = k.pengguna_id
        ${whereSql}
        ORDER BY k.updated_at DESC, k.id DESC
@@ -121,7 +121,7 @@ class ModelKomentar {
     const result = await db.query(
       `SELECT k.id, k.indeks, k.pengguna_id, k.komentar, k.aktif, ${SQL_CREATED_AT}, ${SQL_UPDATED_AT},
               p.nama AS pengguna_nama, p.surel AS pengguna_surel
-       FROM komentar_kamus k
+       FROM komentar k
        JOIN pengguna p ON p.id = k.pengguna_id
        WHERE k.id = $1`,
       [id]
@@ -131,7 +131,7 @@ class ModelKomentar {
 
   static async simpanAdmin({ id, komentar, aktif }) {
     const result = await db.query(
-      `UPDATE komentar_kamus
+      `UPDATE komentar
        SET komentar = $1,
            aktif = $2
        WHERE id = $3

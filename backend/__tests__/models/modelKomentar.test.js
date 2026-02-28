@@ -35,7 +35,7 @@ describe('ModelKomentar', () => {
     const result = await ModelKomentar.hitungTotal();
 
     expect(result).toBe(0);
-    expect(db.query).toHaveBeenCalledWith('SELECT COUNT(*) AS total FROM komentar_kamus');
+    expect(db.query).toHaveBeenCalledWith('SELECT COUNT(*) AS total FROM komentar');
   });
 
   it('ambilKomentarTerbaca mengembalikan daftar komentar aktif + milik user', async () => {
@@ -179,7 +179,7 @@ describe('ModelKomentar', () => {
     const result = await ModelKomentar.simpanAdmin({ id: 8, komentar: 'baru', aktif: 'true' });
 
     expect(result).toEqual({ id: 8, komentar: 'baru', aktif: true });
-    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('UPDATE komentar_kamus'), ['baru', true, 8]);
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('UPDATE komentar'), ['baru', true, 8]);
   });
 
   it('simpanAdmin mengubah nilai aktif non-boolean sesuai normalisasi', async () => {
