@@ -361,6 +361,25 @@ describe('ModelTesaurus', () => {
     );
   });
 
+  it('simpan menormalisasi sumber_id truthy menjadi angka atau null saat invalid', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ id: 81 }] });
+    db.query.mockResolvedValueOnce({ rows: [{ id: 82 }] });
+
+    await ModelTesaurus.simpan({ indeks: 'aktif', sinonim: '', antonim: '', sumber_id: '9' });
+    await ModelTesaurus.simpan({ indeks: 'aktif', sinonim: '', antonim: '', sumber_id: 'abc' });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('INSERT INTO tesaurus'),
+      ['aktif', null, null, true, 9]
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('INSERT INTO tesaurus'),
+      ['aktif', null, null, true, null]
+    );
+  });
+
   it('hapus mengembalikan true jika ada baris terhapus dan false jika tidak', async () => {
     db.query.mockResolvedValueOnce({ rowCount: 1 }).mockResolvedValueOnce({ rowCount: 0 });
 

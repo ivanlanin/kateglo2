@@ -288,4 +288,16 @@ describe('ModelEtimologi', () => {
     expect(db.query).toHaveBeenCalledWith(expect.any(String), [7]);
     expect(result).toEqual([]);
   });
+
+  it('ambilAktifPublikByEntriId dapat mematikan filter aktif saat aktifSaja=false', async () => {
+    db.query.mockResolvedValue({ rows: [{ id: 9 }] });
+
+    const result = await ModelEtimologi.ambilAktifPublikByEntriId(9, { aktifSaja: false });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.not.stringContaining('AND e.aktif = TRUE'),
+      [9]
+    );
+    expect(result).toEqual([{ id: 9 }]);
+  });
 });

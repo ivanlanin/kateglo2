@@ -11,6 +11,8 @@ const {
   parseOptionalPositiveInt,
   resolveMasterId,
   buildMasterFilters,
+  buildSumberFilters,
+  buildJumlahEntriSumberSql,
   isNormalizedGlosariumSchema,
   forceNormalizedSchemaForTest,
   resetNormalizedSchemaCache,
@@ -835,6 +837,32 @@ describe('ModelGlosarium', () => {
     expect(filtersB.join(' ')).toContain('s.aktif = FALSE');
   });
 
+  it('buildSumberFilters membangun kondisi untuk semua flag dan q', () => {
+    const params = [];
+    const filters = buildSumberFilters({
+      q: 'src',
+      glosarium: '1',
+      kamus: '0',
+      tesaurus: '1',
+      etimologi: '0',
+      params,
+    });
+
+    expect(params).toEqual(['%src%']);
+    expect(filters).toEqual(expect.arrayContaining([
+      expect.stringContaining('s.kode ILIKE $1'),
+      's.glosarium = TRUE',
+      's.kamus = FALSE',
+      's.tesaurus = TRUE',
+      's.etimologi = FALSE',
+    ]));
+  });
+
+  it('buildJumlahEntriSumberSql memakai alias default dan alias kustom', () => {
+    expect(buildJumlahEntriSumberSql()).toContain('e.sumber_id = s.id');
+    expect(buildJumlahEntriSumberSql('x')).toContain('e.sumber_id = x.id');
+  });
+
   it('resolveMasterId mengembalikan explicit id, null, dan hasil query', async () => {
     const client = { query: jest.fn().mockResolvedValueOnce({ rows: [] }).mockResolvedValueOnce({ rows: [{ id: 77 }] }) };
 
@@ -883,6 +911,87 @@ describe('ModelGlosarium', () => {
     expect(db.query).toHaveBeenCalledWith(
       expect.not.stringContaining('WHERE s.glosarium = TRUE')
     );
+  });
+
+  it('ambilDaftarSumber mode konteks menambahkan kondisi OR konteks', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    await ModelGlosarium.ambilDaftarSumber('konteks');
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('WHERE (s.glosarium = TRUE OR s.kamus = TRUE OR s.tesaurus = TRUE OR s.etimologi = TRUE)')
+    );
+  });
+
+  it('ambilDaftarSumber dengan filterMode truthy non-string diperlakukan sebagai glosarium', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    await ModelGlosarium.ambilDaftarSumber(true);
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('WHERE s.glosarium = TRUE')
+    );
+  });
+
+  it('resolveSlugSumber mengembalikan row pertama atau null', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ id: 4, kode: 'kbbi', nama: 'KBBI' }] })
+      .mockResolvedValueOnce({ rows: [] });
+
+    await expect(ModelGlosarium.resolveSlugSumber('k-b-b-i')).resolves.toEqual({ id: 4, kode: 'kbbi', nama: 'KBBI' });
+    await expect(ModelGlosarium.resolveSlugSumber('tidak-ada')).resolves.toBeNull();
+    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('FROM sumber'), ['k-b-b-i']);
+    expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('FROM sumber'), ['tidak-ada']);
+  });
+
+  it('resolveSlugSumber memakai fallback string kosong saat slug tidak diberikan', async () => {
+    db.query.mockResolvedValueOnce({ rows: [] });
+
+    const result = await ModelGlosarium.resolveSlugSumber(undefined);
+
+    expect(result).toBeNull();
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM sumber'), ['']);
+  });
+
+  it('daftarMasterSumber membangun filter glosarium/kamus/tesaurus/etimologi', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 10, nama: 'Sumber A' }] });
+
+    const result = await ModelGlosarium.daftarMasterSumber({
+      glosarium: '0',
+      kamus: '1',
+      tesaurus: '0',
+      etimologi: '1',
+      limit: 5,
+      offset: 2,
+    });
+
+    const countSql = db.query.mock.calls[0][0];
+    expect(countSql).toContain('s.glosarium = FALSE');
+    expect(countSql).toContain('s.kamus = TRUE');
+    expect(countSql).toContain('s.tesaurus = FALSE');
+    expect(countSql).toContain('s.etimologi = TRUE');
+    expect(result).toEqual({ data: [{ id: 10, nama: 'Sumber A' }], total: 1 });
+  });
+
+  it('daftarMasterSumber mencakup cabang TRUE/FALSE kebalikan untuk semua flag filter', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 11, nama: 'Sumber B' }] });
+
+    await ModelGlosarium.daftarMasterSumber({
+      glosarium: '1',
+      kamus: '0',
+      tesaurus: '1',
+      etimologi: '0',
+    });
+
+    const countSql = db.query.mock.calls[0][0];
+    expect(countSql).toContain('s.glosarium = TRUE');
+    expect(countSql).toContain('s.kamus = FALSE');
+    expect(countSql).toContain('s.tesaurus = TRUE');
+    expect(countSql).toContain('s.etimologi = FALSE');
   });
 
   it('isNormalizedGlosariumSchema melakukan cache hasil saat non-test', async () => {

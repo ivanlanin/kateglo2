@@ -1420,6 +1420,8 @@ module.exports.__private = {
   parseOptionalPositiveInt,
   resolveMasterId,
   buildMasterFilters,
+  buildSumberFilters,
+  buildJumlahEntriSumberSql,
   isNormalizedGlosariumSchema,
   forceNormalizedSchemaForTest(value) {
     forcedNormalizedSchemaForTest = typeof value === 'boolean' ? value : null;

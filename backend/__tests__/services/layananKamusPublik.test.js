@@ -148,6 +148,14 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     expect(key).toBe('kamus:detail:kata%20dasar');
   });
 
+  it('membuat cache key detail dengan suffix etimologi nonaktif saat diaktifkan', () => {
+    const key = buatCacheKeyDetailKamus('Kata Dasar', {
+      includeEtimologiNonaktif: true,
+    });
+
+    expect(key).toBe('kamus:detail:kata%20dasar:g-20:next::et-all');
+  });
+
   it('membuat cache key detail memakai default saat opsi object kosong', () => {
     const key = buatCacheKeyDetailKamus('Kata Dasar', {});
 
