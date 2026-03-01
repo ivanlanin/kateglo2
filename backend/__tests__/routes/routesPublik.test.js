@@ -38,6 +38,24 @@ jest.mock('../../models/modelEntri', () => {
   };
 });
 
+jest.mock('../../models/modelSusunKata', () => ({
+  parsePanjang: jest.fn((value) => {
+    const parsed = Number.parseInt(value, 10);
+    if (Number.isNaN(parsed)) return 5;
+    return Math.min(Math.max(parsed, 4), 8);
+  }),
+  parsePenggunaId: jest.fn((value) => {
+    const parsed = Number.parseInt(value, 10);
+    return Number.isNaN(parsed) || parsed <= 0 ? null : parsed;
+  }),
+  hitungSkor: jest.fn(({ percobaan, menang }) => (menang ? Math.max(7 - percobaan, 1) : 0)),
+  ambilTanggalHariIniJakarta: jest.fn(),
+  ambilAtauBuatHarian: jest.fn(),
+  ambilSkorPenggunaHarian: jest.fn(),
+  simpanSkorHarian: jest.fn(),
+  ambilKlasemenHarian: jest.fn(),
+}));
+
 jest.mock('../../models/modelKomentar', () => ({
   hitungKomentarAktif: jest.fn(),
   ambilKomentarTerbaca: jest.fn(),
@@ -77,6 +95,7 @@ jest.mock('../../services/layananTesaurusPublik', () => ({
 const ModelGlosarium = require('../../models/modelGlosarium');
 const ModelLabel = require('../../models/modelLabel');
 const ModelEntri = require('../../models/modelEntri');
+const ModelSusunKata = require('../../models/modelSusunKata');
 const ModelKomentar = require('../../models/modelKomentar');
 const ModelPencarian = require('../../models/modelPencarian');
 const ModelTesaurus = require('../../models/modelTesaurus');
@@ -103,6 +122,18 @@ describe('routes backend', () => {
     ModelKomentar.hitungKomentarAktif.mockResolvedValue(0);
     ModelPencarian.catatPencarian.mockResolvedValue(true);
     ModelPencarian.ambilKataTerpopuler.mockResolvedValue([]);
+    ModelSusunKata.ambilTanggalHariIniJakarta.mockResolvedValue('2026-03-01');
+    ModelSusunKata.ambilAtauBuatHarian.mockResolvedValue({ id: 10, kata: 'kata' });
+    ModelSusunKata.ambilSkorPenggunaHarian.mockResolvedValue(null);
+    ModelSusunKata.simpanSkorHarian.mockResolvedValue({
+      id: 1,
+      susun_kata_id: 10,
+      pengguna_id: 7,
+      percobaan: 3,
+      waktu_detik: 42,
+      menang: true,
+    });
+    ModelSusunKata.ambilKlasemenHarian.mockResolvedValue([]);
     ModelPengguna.ambilDenganId.mockResolvedValue(null);
     ModelPengguna.ambilPeranUntukAuth.mockResolvedValue({ kode: 'pengguna', akses_redaksi: false });
     ModelPengguna.ambilIzin.mockResolvedValue([]);
@@ -297,25 +328,25 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/gim/susun-kata/puzzle mengembalikan puzzle Susun Kata', async () => {
-    ModelEntri.ambilKamusSusunKata.mockResolvedValue(['kata']);
+    ModelSusunKata.ambilAtauBuatHarian.mockResolvedValue({ id: 11, kata: 'kata' });
     ModelEntri.ambilArtiSusunKataByIndeks.mockResolvedValue('bagian bahasa');
 
     const response = await request(createApp()).get('/api/publik/gim/susun-kata/puzzle?panjang=5');
 
     expect(response.status).toBe(200);
-    expect(ModelEntri.ambilKamusSusunKata).toHaveBeenCalledWith({ panjang: 5, limit: 5000 });
+    expect(ModelSusunKata.ambilAtauBuatHarian).toHaveBeenCalledWith({ tanggal: '2026-03-01', panjang: 5 });
     expect(ModelEntri.ambilArtiSusunKataByIndeks).toHaveBeenCalledWith('kata');
     expect(response.body).toMatchObject({
       panjang: 5,
       total: 1,
-      kamus: ['kata'],
       target: 'kata',
       arti: 'bagian bahasa',
+      kamus: ['kata'],
     });
   });
 
   it('GET /api/publik/gim/susun-kata/puzzle mengembalikan 404 saat kamus kosong', async () => {
-    ModelEntri.ambilKamusSusunKata.mockResolvedValue([]);
+    ModelSusunKata.ambilAtauBuatHarian.mockResolvedValue(null);
 
     const response = await request(createApp()).get('/api/publik/gim/susun-kata/puzzle?panjang=6');
 

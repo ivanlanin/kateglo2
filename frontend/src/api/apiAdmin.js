@@ -455,6 +455,21 @@ export function useDetailBidangAdmin(id) {
   });
 }
 
+export function useSusunKataHarianAdmin({ tanggal = '', panjang = 5 } = {}) {
+  return useQuery({
+    queryKey: ['admin-susun-kata-harian', { tanggal, panjang }],
+    queryFn: () =>
+      klien
+        .get('/api/redaksi/susun-kata/harian', {
+          params: {
+            tanggal: tanggal || undefined,
+            panjang: Math.min(Math.max(Number(panjang) || 5, 4), 8),
+          },
+        })
+        .then((r) => r.data),
+  });
+}
+
 export function useDaftarSumberAdmin({
   limit = 50,
   cursor = null,
@@ -835,6 +850,16 @@ export function useSimpanBidang() {
 
 export function useHapusBidang() {
   return useHapusAdmin({ path: '/api/redaksi/bidang', queryKeyPrefix: 'admin-bidang' });
+}
+
+export function useSimpanSusunKataHarianAdmin() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data) => klien.put('/api/redaksi/susun-kata/harian', data).then((r) => r.data),
+    onSuccess: () => {
+      invalidateQueryKeys(qc, ['admin-susun-kata-harian']);
+    },
+  });
 }
 
 export function useSimpanSumber() {

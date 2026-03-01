@@ -223,12 +223,12 @@ describe('apiPublik', () => {
     });
   });
 
-  it('ambilPuzzleSusunKata memanggil endpoint puzzle dengan panjang aman', async () => {
+  it('ambilPuzzleSusunKata memanggil endpoint harian dengan panjang aman', async () => {
     klien.get.mockResolvedValue({ data: { panjang: 5, target: 'kata', kamus: [] } });
 
     await ambilPuzzleSusunKata({ panjang: 20 });
 
-    expect(klien.get).toHaveBeenCalledWith('/api/publik/gim/susun-kata/puzzle', {
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/gim/susun-kata/harian', {
       params: { panjang: 8 },
     });
   });

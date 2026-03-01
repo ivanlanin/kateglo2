@@ -2,18 +2,27 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import SusunKata from '../../../src/halaman/gim/SusunKata';
-import { ambilPuzzleSusunKata, validasiKataSusunKata } from '../../../src/api/apiPublik';
+import {
+  ambilKlasemenSusunKata,
+  ambilPuzzleSusunKata,
+  submitSkorSusunKata,
+  validasiKataSusunKata,
+} from '../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
+const mockUseMutation = vi.fn();
 const mockUseAuth = vi.fn();
 
 vi.mock('@tanstack/react-query', () => ({
   useQuery: (...args) => mockUseQuery(...args),
+  useMutation: (...args) => mockUseMutation(...args),
 }));
 
 vi.mock('../../../src/api/apiPublik', () => ({
   ambilPuzzleSusunKata: vi.fn(),
   validasiKataSusunKata: vi.fn(),
+  submitSkorSusunKata: vi.fn(),
+  ambilKlasemenSusunKata: vi.fn(),
 }));
 
 vi.mock('../../../src/context/authContext', () => ({
@@ -58,6 +67,13 @@ describe('SusunKata', () => {
       total: 3,
     });
     validasiKataSusunKata.mockResolvedValue({ valid: false });
+    submitSkorSusunKata.mockResolvedValue({ success: true });
+    ambilKlasemenSusunKata.mockResolvedValue({ success: true, data: [] });
+
+    mockUseMutation.mockReturnValue({
+      mutate: vi.fn(),
+      isPending: false,
+    });
 
     mockUseQuery.mockImplementation((options) => {
       if (options?.enabled !== false && options?.queryFn) options.queryFn();

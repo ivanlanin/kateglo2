@@ -3,9 +3,14 @@
  */
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { ambilPuzzleSusunKata, validasiKataSusunKata } from '../../api/apiPublik';
+import {
+  ambilKlasemenSusunKata,
+  ambilPuzzleSusunKata,
+  submitSkorSusunKata,
+  validasiKataSusunKata,
+} from '../../api/apiPublik';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import { QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { useAuth } from '../../context/authContext';
@@ -79,11 +84,23 @@ function buatPetaKeyboard(riwayat, target) {
   return peta;
 }
 
+function parseRiwayatDariSkor(tebakanRaw, panjang) {
+  const panjangAman = Number(panjang) || PANJANG_DEFAULT;
+  return String(tebakanRaw || '')
+    .split(';')
+    .map((item) => item.trim().toLowerCase())
+    .filter((item) => item.length === panjangAman && /^[a-z]+$/.test(item))
+    .slice(0, MAKS_PERCOBAAN);
+}
+
 function SusunKata() {
   const { isAuthenticated, isLoading: authLoading, loginDenganGoogle } = useAuth();
   const [riwayat, setRiwayat] = useState([]);
   const [tebakan, setTebakan] = useState('');
   const [pesanMunculan, setPesanMunculan] = useState(null);
+  const [mulaiMainAt, setMulaiMainAt] = useState(Date.now());
+  const [skorTerkirim, setSkorTerkirim] = useState(false);
+  const [panelKlasemenTerbuka, setPanelKlasemenTerbuka] = useState(false);
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['gim-susun-kata-puzzle', PANJANG_DEFAULT],
@@ -94,14 +111,28 @@ function SusunKata() {
 
   const panjang = Number(data?.panjang) || PANJANG_DEFAULT;
   const target = String(data?.target || '').toLowerCase();
+  const sudahMainHariIni = Boolean(data?.sudahMainHariIni);
   const kamusSet = useMemo(
     () => new Set((data?.kamus || []).map((item) => String(item || '').trim().toLowerCase()).filter(Boolean)),
     [data?.kamus]
   );
   const menang = Boolean(target) && riwayat.some((item) => item === target);
   const kalah = !menang && riwayat.length >= MAKS_PERCOBAAN;
-  const selesai = menang || kalah;
+  const selesai = menang || kalah || sudahMainHariIni;
   const petaKeyboard = useMemo(() => buatPetaKeyboard(riwayat, target), [riwayat, target]);
+
+  const kirimSkor = useMutation({
+    mutationFn: submitSkorSusunKata,
+  });
+
+  const { data: dataKlasemen } = useQuery({
+    queryKey: ['gim-susun-kata-klasemen', panjang],
+    queryFn: () => ambilKlasemenSusunKata({ panjang, limit: 10 }),
+    staleTime: 30 * 1000,
+    enabled: Boolean(panelKlasemenTerbuka),
+  });
+
+  const daftarKlasemen = dataKlasemen?.data || [];
 
   const tampilkanPesan = useCallback((jenis, judul, deskripsi = '') => {
     setPesanMunculan({
@@ -139,11 +170,28 @@ function SusunKata() {
     const riwayatBaru = [...riwayat, tebakan];
     const menangBaru = tebakan === target;
     const kalahBaru = !menangBaru && riwayatBaru.length >= MAKS_PERCOBAAN;
+    const serializedTebakan = riwayatBaru.join(';');
 
     setRiwayat(riwayatBaru);
     setTebakan('');
 
     if (menangBaru) {
+      if (!skorTerkirim) {
+        const detik = Math.max(Math.floor((Date.now() - mulaiMainAt) / 1000), 0);
+        kirimSkor.mutate(
+          {
+            panjang,
+            percobaan: riwayatBaru.length,
+            detik,
+            menang: true,
+            tebakan: serializedTebakan,
+          },
+          {
+            onSettled: () => setSkorTerkirim(true),
+          }
+        );
+      }
+
       const artiAman = data?.arti || 'arti belum tersedia';
       tampilkanPesan(
         'success',
@@ -161,15 +209,46 @@ function SusunKata() {
     }
 
     if (kalahBaru) {
+      if (!skorTerkirim) {
+        const detik = Math.max(Math.floor((Date.now() - mulaiMainAt) / 1000), 0);
+        kirimSkor.mutate(
+          {
+            panjang,
+            percobaan: MAKS_PERCOBAAN,
+            detik,
+            menang: false,
+            tebakan: serializedTebakan,
+          },
+          {
+            onSettled: () => setSkorTerkirim(true),
+          }
+        );
+      }
+
       tampilkanPesan('error', `Kesempatan habis. Jawabannya ${target.toUpperCase()}.`);
     }
-  }, [data?.arti, kamusSet, panjang, riwayat, selesai, tampilkanPesan, target, tebakan]);
+  }, [
+    data?.arti,
+    kamusSet,
+    kirimSkor,
+    mulaiMainAt,
+    panjang,
+    riwayat,
+    selesai,
+    skorTerkirim,
+    tampilkanPesan,
+    target,
+    tebakan,
+  ]);
 
   useEffect(() => {
-    setRiwayat([]);
+    const riwayatTersimpan = parseRiwayatDariSkor(data?.hasilHariIni?.tebakan, panjang);
+    setRiwayat(riwayatTersimpan);
     setTebakan('');
     setPesanMunculan(null);
-  }, [target]);
+    setMulaiMainAt(Date.now());
+    setSkorTerkirim(Boolean(data?.sudahMainHariIni));
+  }, [data?.hasilHariIni?.tebakan, data?.sudahMainHariIni, panjang, target]);
 
   useEffect(() => {
     if (!isAuthenticated || !target || selesai) return undefined;
@@ -218,12 +297,19 @@ function SusunKata() {
   return (
     <HalamanDasar judul="Susun Kata" deskripsi="Gim susun kata dari data Kateglo" tampilkanJudul={false}>
       <div className="susun-kata-wrap">
-        <h1 className="susun-kata-heading">Susun Kata</h1>
-        {isAuthenticated ? (
-          <p className="susun-kata-info" aria-live="polite">
-            Kata benar (debug): {target ? target.toUpperCase() : '—'}
-          </p>
-        ) : null}
+        <div className="susun-kata-heading-row">
+          <h1 className="susun-kata-heading">Susun Kata</h1>
+          {isAuthenticated ? (
+            <button
+              type="button"
+              className="susun-kata-klasemen-btn"
+              aria-label={panelKlasemenTerbuka ? 'Kembali ke papan permainan' : 'Lihat klasemen harian'}
+              onClick={() => setPanelKlasemenTerbuka((prev) => !prev)}
+            >
+              🏆
+            </button>
+          ) : null}
+        </div>
 
         <QueryFeedback
           isLoading={isAuthenticated && isLoading && !data}
@@ -248,65 +334,85 @@ function SusunKata() {
 
         {!isError && isAuthenticated && data && (
           <>
-            <div className="susun-kata-grid">
-              {barisGrid.map((baris) => (
-                <div key={baris.key} className="susun-kata-grid-row">
-                  {baris.huruf.map((huruf, idx) => {
-                    const status = baris.status[idx] || '';
-                    const kelasStatus = kelasStatusSel(status);
-                    return (
-                      <div
-                        key={`${baris.key}-${idx}`}
-                        className={`susun-kata-cell ${kelasStatus} ${baris.aktif ? 'susun-kata-cell-aktif' : ''}`.trim()}
-                      >
-                        {huruf.toUpperCase()}
-                      </div>
-                    );
-                  })}
-                </div>
-              ))}
-            </div>
-
-            <div className="susun-kata-keyboard" aria-label="Keyboard indikator huruf">
-              {KEYBOARD_ROWS.map((row) => (
-                <div key={row} className="susun-kata-keyboard-row">
-                  {row.split('').map((huruf) => (
-                    <span
-                      key={huruf}
-                      className={`susun-kata-key ${kelasStatusKey(petaKeyboard[huruf])}`.trim()}
-                    >
-                      {huruf.toUpperCase()}
-                    </span>
+            {panelKlasemenTerbuka ? (
+              <div className="susun-kata-klasemen-panel">
+                {daftarKlasemen.length ? (
+                  <ol className="susun-kata-klasemen-list">
+                    {daftarKlasemen.map((item, index) => (
+                      <li key={`${item.pengguna_id}-${index}`} className="susun-kata-klasemen-item">
+                        <span className="susun-kata-klasemen-rank">#{index + 1}</span>
+                        <span className="susun-kata-klasemen-name">{item.nama}</span>
+                        <span className="susun-kata-klasemen-score">{item.skor} poin, {item.detik} detik</span>
+                      </li>
+                    ))}
+                  </ol>
+                ) : (
+                  <p className="susun-kata-klasemen-kosong">Belum ada skor hari ini.</p>
+                )}
+              </div>
+            ) : (
+              <>
+                <div className="susun-kata-grid">
+                  {barisGrid.map((baris) => (
+                    <div key={baris.key} className="susun-kata-grid-row">
+                      {baris.huruf.map((huruf, idx) => {
+                        const status = baris.status[idx] || '';
+                        const kelasStatus = kelasStatusSel(status);
+                        return (
+                          <div
+                            key={`${baris.key}-${idx}`}
+                            className={`susun-kata-cell ${kelasStatus} ${baris.aktif ? 'susun-kata-cell-aktif' : ''}`.trim()}
+                          >
+                            {huruf.toUpperCase()}
+                          </div>
+                        );
+                      })}
+                    </div>
                   ))}
                 </div>
-              ))}
-              <div className="susun-kata-keyboard-row">
-                <button
-                  type="button"
-                  className="susun-kata-key susun-kata-key-wide"
-                  onClick={() => void submitTebakan()}
-                  disabled={selesai}
-                >
-                  Enter
-                </button>
-                {'zxcvbnm'.split('').map((huruf) => (
-                  <span
-                    key={`baris-bawah-${huruf}`}
-                    className={`susun-kata-key ${kelasStatusKey(petaKeyboard[huruf])}`.trim()}
-                  >
-                    {huruf.toUpperCase()}
-                  </span>
-                ))}
-                <button
-                  type="button"
-                  className="susun-kata-key susun-kata-key-wide"
-                  onClick={() => setTebakan((prev) => prev.slice(0, -1))}
-                  disabled={selesai}
-                >
-                  Hapus
-                </button>
-              </div>
-            </div>
+
+                <div className="susun-kata-keyboard" aria-label="Keyboard indikator huruf">
+                  {KEYBOARD_ROWS.map((row) => (
+                    <div key={row} className="susun-kata-keyboard-row">
+                      {row.split('').map((huruf) => (
+                        <span
+                          key={huruf}
+                          className={`susun-kata-key ${kelasStatusKey(petaKeyboard[huruf])}`.trim()}
+                        >
+                          {huruf.toUpperCase()}
+                        </span>
+                      ))}
+                    </div>
+                  ))}
+                  <div className="susun-kata-keyboard-row">
+                    <button
+                      type="button"
+                      className="susun-kata-key susun-kata-key-wide"
+                      onClick={() => void submitTebakan()}
+                      disabled={selesai}
+                    >
+                      Enter
+                    </button>
+                    {'zxcvbnm'.split('').map((huruf) => (
+                      <span
+                        key={`baris-bawah-${huruf}`}
+                        className={`susun-kata-key ${kelasStatusKey(petaKeyboard[huruf])}`.trim()}
+                      >
+                        {huruf.toUpperCase()}
+                      </span>
+                    ))}
+                    <button
+                      type="button"
+                      className="susun-kata-key susun-kata-key-wide"
+                      onClick={() => setTebakan((prev) => prev.slice(0, -1))}
+                      disabled={selesai}
+                    >
+                      Hapus
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
 
             <PesanMunculan
               tampil={Boolean(pesanMunculan)}

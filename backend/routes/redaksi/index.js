@@ -27,5 +27,6 @@ router.use('/label', require('./label'));
 router.use('/peran', require('./peran'));
 router.use('/izin', require('./izin'));
 router.use('/audit-makna', require('./auditMakna'));
+router.use('/susun-kata', require('./susunKata'));
 
 module.exports = router;

@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-01T09:15:16.526Z
+-- Generated: 2026-03-01T17:01:21.930Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -537,6 +537,44 @@ create trigger trg_set_timestamp_fields__sumber
   before insert or update on sumber
   for each row
   execute function set_timestamp_fields();
+
+create table susun_kata (
+  id serial primary key,
+  tanggal date not null,
+  panjang integer not null,
+  kata text not null,
+  keterangan text,
+  created_at timestamp without time zone not null default now(),
+  updated_at timestamp without time zone not null default now(),
+  constraint susun_kata_tanggal_panjang_key unique (tanggal, panjang),
+  constraint susun_kata_kata_check check (kata ~ '^[a-z]+$'::text),
+  constraint susun_kata_kata_panjang_check check (char_length(kata) = panjang),
+  constraint susun_kata_panjang_check check ((panjang >= 4) AND (panjang <= 8))
+);
+create index idx_susun_kata_panjang_tanggal on susun_kata using btree (panjang, tanggal DESC);
+create index idx_susun_kata_tanggal on susun_kata using btree (tanggal DESC);
+create unique index susun_kata_tanggal_panjang_key on susun_kata using btree (tanggal, panjang);
+create trigger trg_set_timestamp_fields__susun_kata
+  before insert or update on susun_kata
+  for each row
+  execute function set_timestamp_fields();
+
+create table susun_kata_skor (
+  id serial primary key,
+  susun_kata_id integer references susun_kata(id) on delete cascade not null,
+  pengguna_id integer references pengguna(id) on delete cascade not null,
+  percobaan integer not null,
+  detik integer not null,
+  menang boolean not null,
+  created_at timestamp without time zone not null default now(),
+  tebakan text not null default ''::text,
+  constraint susun_kata_skor_unik_harian_user unique (susun_kata_id, pengguna_id),
+  constraint susun_kata_skor_percobaan_check check ((percobaan >= 1) AND (percobaan <= 6)),
+  constraint susun_kata_skor_waktu_check check (detik >= 0)
+);
+create index idx_susun_kata_skor_harian on susun_kata_skor using btree (susun_kata_id, menang DESC, percobaan, detik);
+create index idx_susun_kata_skor_pengguna on susun_kata_skor using btree (pengguna_id, created_at DESC);
+create unique index susun_kata_skor_unik_harian_user on susun_kata_skor using btree (susun_kata_id, pengguna_id);
 
 create table tesaurus (
   id serial primary key,

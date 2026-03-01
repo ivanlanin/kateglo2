@@ -171,9 +171,45 @@ export async function ambilContohRima() {
 // === GIM: SUSUN KATA ===
 
 export async function ambilPuzzleSusunKata({ panjang = 5 } = {}) {
-  const response = await klien.get('/api/publik/gim/susun-kata/puzzle', {
+  const response = await klien.get('/api/publik/gim/susun-kata/harian', {
     params: {
       panjang: Math.min(Math.max(Number(panjang) || 5, 4), 8),
+    },
+  });
+  return response.data;
+}
+
+export async function ambilHarianSusunKata({ panjang = 5 } = {}) {
+  const response = await klien.get('/api/publik/gim/susun-kata/harian', {
+    params: {
+      panjang: Math.min(Math.max(Number(panjang) || 5, 4), 8),
+    },
+  });
+  return response.data;
+}
+
+export async function submitSkorSusunKata({
+  panjang = 5,
+  percobaan = 6,
+  detik = 0,
+  menang = false,
+  tebakan = '',
+} = {}) {
+  const response = await klien.post('/api/publik/gim/susun-kata/harian/submit', {
+    panjang: Math.min(Math.max(Number(panjang) || 5, 4), 8),
+    percobaan: Math.min(Math.max(Number(percobaan) || 6, 1), 6),
+    detik: Math.min(Math.max(Number(detik) || 0, 0), 86400),
+    menang: Boolean(menang),
+    tebakan: String(tebakan || '').trim().toLowerCase(),
+  });
+  return response.data;
+}
+
+export async function ambilKlasemenSusunKata({ panjang = 5, limit = 10 } = {}) {
+  const response = await klien.get('/api/publik/gim/susun-kata/harian/klasemen', {
+    params: {
+      panjang: Math.min(Math.max(Number(panjang) || 5, 4), 8),
+      limit: Math.min(Math.max(Number(limit) || 10, 1), 50),
     },
   });
   return response.data;

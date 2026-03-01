@@ -41,11 +41,15 @@ function PanelGeser({ buka, onTutup, judul, children }) {
     }
   }, [buka]);
 
+  if (!buka) {
+    return null;
+  }
+
   return (
     <>
       {/* Backdrop */}
       <div
-        className={`panel-geser-backdrop ${buka ? 'panel-geser-backdrop-aktif' : ''}`}
+        className="panel-geser-backdrop panel-geser-backdrop-aktif"
         onClick={onTutup}
         aria-hidden="true"
       />
@@ -57,7 +61,7 @@ function PanelGeser({ buka, onTutup, judul, children }) {
         role="dialog"
         aria-modal="true"
         aria-label={judul}
-        className={`panel-geser ${buka ? 'panel-geser-aktif' : ''}`}
+        className="panel-geser panel-geser-aktif"
       >
         {/* Header */}
         <div className="panel-geser-header">
@@ -74,7 +78,7 @@ function PanelGeser({ buka, onTutup, judul, children }) {
 
         {/* Body — scrollable */}
         <div className="panel-geser-body">
-          {buka && children}
+          {children}
         </div>
       </div>
     </>
