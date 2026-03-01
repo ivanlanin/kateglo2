@@ -19,7 +19,12 @@ import {
   TextareaField,
   useFormPanel,
 } from '../../komponen/redaksi/FormulirAdmin';
-import { useSimpanSusunKataHarianAdmin, useSusunKataHarianAdmin } from '../../api/apiAdmin';
+import {
+  useDetailSusunKataHarianAdmin,
+  useSimpanSusunKataHarianAdmin,
+  useSusunKataHarianAdmin,
+} from '../../api/apiAdmin';
+import { formatLocalDateTime } from '../../utils/formatUtils';
 
 function tanggalHariIni() {
   const sekarang = new Date();
@@ -46,8 +51,9 @@ const kolom = [
 function SusunKataAdmin() {
   const [cariTanggal, setCariTanggal] = useState(tanggalHariIni());
   const [tanggalQuery, setTanggalQuery] = useState(tanggalHariIni());
-  const [panjangDraft, setPanjangDraft] = useState('5');
-  const [panjang, setPanjang] = useState(5);
+  const [panjangDraft, setPanjangDraft] = useState('');
+  const [panjang, setPanjang] = useState('');
+  const [selected, setSelected] = useState({ tanggal: '', panjang: '' });
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
 
   const panel = useFormPanel(nilaiAwal);
@@ -58,10 +64,14 @@ function SusunKataAdmin() {
     tanggal: tanggalQuery,
     panjang,
   });
+  const { data: detailResp } = useDetailSusunKataHarianAdmin(selected);
   const simpan = useSimpanSusunKataHarianAdmin();
 
-  const detail = data?.data || null;
-  const dataTabel = useMemo(() => (detail ? [detail] : []), [detail]);
+  const dataTabel = useMemo(
+    () => (Array.isArray(data?.data) ? data.data : []),
+    [data?.data]
+  );
+  const detail = detailResp?.data || null;
   const daftarPeserta = useMemo(
     () => (Array.isArray(detail?.peserta) ? detail.peserta : []),
     [detail?.peserta]
@@ -70,32 +80,37 @@ function SusunKataAdmin() {
   useEffect(() => {
     if (!detail) return;
 
-    if (!panelTerbuka) {
+    if (panelTerbuka) {
       setPanelData({
-        tanggal: String(detail.tanggal || tanggalQuery),
-        panjang: String(detail.panjang || panjang),
+        tanggal: String(detail.tanggal || selected.tanggal || tanggalQuery),
+        panjang: String(detail.panjang || selected.panjang || 5),
         kata: String(detail.kata || ''),
         keterangan: String(detail.keterangan || ''),
       });
     }
-  }, [detail, panelTerbuka, setPanelData, panjang, tanggalQuery]);
+  }, [detail, panelTerbuka, selected.tanggal, selected.panjang, setPanelData, tanggalQuery]);
 
-  const bukaPanel = () => {
+  const bukaPanel = (item = null) => {
     setPesan({ error: '', sukses: '' });
-    if (detail) {
+    if (item?.tanggal && item?.panjang) {
+      setSelected({
+        tanggal: String(item.tanggal || ''),
+        panjang: String(item.panjang || ''),
+      });
       panel.bukaUntukSunting({
-        tanggal: String(detail.tanggal || tanggalQuery),
-        panjang: String(detail.panjang || panjang),
-        kata: String(detail.kata || ''),
-        keterangan: String(detail.keterangan || ''),
+        tanggal: String(item.tanggal || ''),
+        panjang: String(item.panjang || ''),
+        kata: String(item.kata || ''),
+        keterangan: String(item.keterangan || ''),
       });
       return;
     }
 
+    setSelected({ tanggal: '', panjang: '' });
     panel.bukaUntukTambah();
     panel.setData({
-      tanggal: tanggalQuery,
-      panjang: String(panjang),
+      tanggal: tanggalQuery || tanggalHariIni(),
+      panjang: String(panjang || 5),
       kata: '',
       keterangan: '',
     });
@@ -151,17 +166,16 @@ function SusunKataAdmin() {
 
   const handleCari = () => {
     const tanggalAman = String(cariTanggal || '').trim();
-    if (!tanggalAman) return;
     setTanggalQuery(tanggalAman);
-    setPanjang(Number.parseInt(panjangDraft, 10) || 5);
+    setPanjang(String(panjangDraft || '').trim());
   };
 
   const handleReset = () => {
     const hariIni = tanggalHariIni();
     setCariTanggal(hariIni);
     setTanggalQuery(hariIni);
-    setPanjangDraft('5');
-    setPanjang(5);
+    setPanjangDraft('');
+    setPanjang('');
   };
 
   return (
@@ -177,7 +191,10 @@ function SusunKataAdmin() {
             key: 'panjang',
             value: panjangDraft,
             onChange: setPanjangDraft,
-            options: [4, 5, 6, 7, 8].map((item) => ({ value: String(item), label: `${item} huruf` })),
+            options: [
+              { value: '', label: '—Panjang—' },
+              ...[4, 5, 6, 7, 8].map((item) => ({ value: String(item), label: `${item} huruf` })),
+            ],
             ariaLabel: 'Filter panjang kata harian',
           },
         ]}
@@ -192,7 +209,7 @@ function SusunKataAdmin() {
         limit={50}
         offset={0}
         onOffset={() => {}}
-        onKlikBaris={() => bukaPanel()}
+        onKlikBaris={bukaPanel}
       />
 
       <PanelGeser buka={panel.buka} onTutup={tutupPanel} judul="Atur Kata Harian Susun Kata">
@@ -223,6 +240,7 @@ function SusunKataAdmin() {
                 <li key={`${item.pengguna_id}-${index}`} className="rounded-md border border-gray-200 px-3 py-2 text-sm dark:border-dark-border">
                   <div className="font-medium text-gray-900 dark:text-dark-text">{item.nama}</div>
                   <div className="text-gray-600 dark:text-dark-text-muted">{item.skor} poin, {item.detik} detik, {item.percobaan} percobaan</div>
+                  <div className="text-gray-600 dark:text-dark-text-muted">{formatLocalDateTime(item.created_at)}</div>
                 </li>
               ))}
             </ul>

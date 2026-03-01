@@ -456,6 +456,11 @@ export function useDetailBidangAdmin(id) {
 }
 
 export function useSusunKataHarianAdmin({ tanggal = '', panjang = 5 } = {}) {
+  const panjangRaw = String(panjang ?? '').trim();
+  const panjangAman = panjangRaw
+    ? Math.min(Math.max(Number(panjangRaw) || 5, 4), 8)
+    : undefined;
+
   return useQuery({
     queryKey: ['admin-susun-kata-harian', { tanggal, panjang }],
     queryFn: () =>
@@ -463,10 +468,32 @@ export function useSusunKataHarianAdmin({ tanggal = '', panjang = 5 } = {}) {
         .get('/api/redaksi/susun-kata/harian', {
           params: {
             tanggal: tanggal || undefined,
-            panjang: Math.min(Math.max(Number(panjang) || 5, 4), 8),
+            panjang: panjangAman,
           },
         })
         .then((r) => r.data),
+  });
+}
+
+export function useDetailSusunKataHarianAdmin({ tanggal = '', panjang = '' } = {}) {
+  const panjangRaw = String(panjang ?? '').trim();
+  const tanggalRaw = String(tanggal ?? '').trim();
+  const panjangAman = panjangRaw
+    ? Math.min(Math.max(Number(panjangRaw) || 5, 4), 8)
+    : undefined;
+
+  return useQuery({
+    queryKey: ['admin-susun-kata-harian-detail', { tanggal: tanggalRaw, panjang: panjangRaw }],
+    queryFn: () =>
+      klien
+        .get('/api/redaksi/susun-kata/harian/detail', {
+          params: {
+            tanggal: tanggalRaw,
+            panjang: panjangAman,
+          },
+        })
+        .then((r) => r.data),
+    enabled: Boolean(tanggalRaw && panjangRaw),
   });
 }
 

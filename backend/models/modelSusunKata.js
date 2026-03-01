@@ -40,7 +40,7 @@ function hitungOffsetHari(tanggal) {
 function hitungSkor({ percobaan, menang }) {
   if (!menang) return 0;
   const percobaanAman = Math.min(Math.max(Number.parseInt(percobaan, 10) || 6, 1), 6);
-  return Math.max(7 - percobaanAman, 1);
+  return Math.max(11 - percobaanAman, 1);
 }
 
 class ModelSusunKata {
@@ -77,6 +77,62 @@ class ModelSusunKata {
     );
 
     return result.rows[0] || null;
+  }
+
+  static async daftarHarianAdmin({ tanggal = null, panjang = null, limit = 200 }) {
+    const tanggalAman = parseTanggal(tanggal);
+    const panjangAman = panjang === null || panjang === undefined || String(panjang).trim() === ''
+      ? null
+      : parsePanjang(panjang, 5);
+    const limitAman = Math.min(Math.max(Number.parseInt(limit, 10) || 200, 1), 1000);
+
+    const kondisi = [];
+    const values = [];
+
+    if (tanggalAman) {
+      values.push(tanggalAman);
+      kondisi.push(`sk.tanggal = $${values.length}::date`);
+    }
+
+    if (panjangAman !== null) {
+      values.push(panjangAman);
+      kondisi.push(`sk.panjang = $${values.length}`);
+    }
+
+    values.push(limitAman);
+    const limitParam = values.length;
+
+    const whereClause = kondisi.length ? `WHERE ${kondisi.join(' AND ')}` : '';
+
+    const result = await db.query(
+      `SELECT
+         sk.id,
+         to_char(sk.tanggal, 'YYYY-MM-DD') AS tanggal,
+         sk.panjang,
+         sk.kata,
+         sk.keterangan,
+         sk.created_at,
+         sk.updated_at,
+         COUNT(ss.id) AS jumlah_peserta
+       FROM susun_kata sk
+       LEFT JOIN susun_kata_skor ss ON ss.susun_kata_id = sk.id
+       ${whereClause}
+       GROUP BY sk.id, sk.tanggal, sk.panjang, sk.kata, sk.keterangan, sk.created_at, sk.updated_at
+       ORDER BY sk.tanggal DESC, sk.panjang ASC
+       LIMIT $${limitParam}`,
+      values
+    );
+
+    return result.rows.map((row) => ({
+      id: Number(row.id) || 0,
+      tanggal: row.tanggal,
+      panjang: Number(row.panjang) || 0,
+      kata: row.kata,
+      keterangan: row.keterangan,
+      created_at: row.created_at,
+      updated_at: row.updated_at,
+      jumlahPeserta: Number(row.jumlah_peserta) || 0,
+    }));
   }
 
   static async buatHarianOtomatis({ tanggal, panjang }) {
@@ -188,7 +244,7 @@ class ModelSusunKata {
          sk.detik,
          sk.menang,
          CASE
-           WHEN sk.menang THEN GREATEST(7 - sk.percobaan, 1)
+           WHEN sk.menang THEN GREATEST(11 - sk.percobaan, 1)
            ELSE 0
          END AS skor,
          sk.created_at
@@ -224,7 +280,7 @@ class ModelSusunKata {
          sk.detik,
          sk.menang,
          CASE
-           WHEN sk.menang THEN GREATEST(7 - sk.percobaan, 1)
+           WHEN sk.menang THEN GREATEST(11 - sk.percobaan, 1)
            ELSE 0
          END AS skor,
          sk.created_at

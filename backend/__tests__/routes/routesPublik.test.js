@@ -48,7 +48,7 @@ jest.mock('../../models/modelSusunKata', () => ({
     const parsed = Number.parseInt(value, 10);
     return Number.isNaN(parsed) || parsed <= 0 ? null : parsed;
   }),
-  hitungSkor: jest.fn(({ percobaan, menang }) => (menang ? Math.max(7 - percobaan, 1) : 0)),
+  hitungSkor: jest.fn(({ percobaan, menang }) => (menang ? Math.max(11 - percobaan, 1) : 0)),
   ambilTanggalHariIniJakarta: jest.fn(),
   ambilAtauBuatHarian: jest.fn(),
   ambilSkorPenggunaHarian: jest.fn(),

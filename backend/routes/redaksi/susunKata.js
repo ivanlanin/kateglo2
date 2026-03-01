@@ -20,10 +20,49 @@ function parsePanjang(value) {
   return ModelSusunKata.parsePanjang(value, 5);
 }
 
+function parsePanjangFilter(value) {
+  const raw = String(value ?? '').trim();
+  if (!raw) return null;
+  return ModelSusunKata.parsePanjang(raw, 5);
+}
+
 router.get('/harian', periksaIzin('lihat_entri'), async (req, res, next) => {
   try {
-    const panjang = parsePanjang(req.query.panjang);
-    const tanggal = parseTanggal(req.query.tanggal) || await ModelSusunKata.ambilTanggalHariIniJakarta();
+    const tanggal = parseTanggal(req.query.tanggal);
+    const panjang = parsePanjangFilter(req.query.panjang);
+
+    if (tanggal && panjang !== null) {
+      await ModelSusunKata.ambilAtauBuatHarian({ tanggal, panjang });
+    }
+
+    if (tanggal && panjang === null) {
+      await Promise.all([4, 5, 6, 7, 8].map((item) => ModelSusunKata.ambilAtauBuatHarian({ tanggal, panjang: item })));
+    }
+
+    const data = await ModelSusunKata.daftarHarianAdmin({ tanggal, panjang, limit: 500 });
+
+    return res.json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.get('/harian/detail', periksaIzin('lihat_entri'), async (req, res, next) => {
+  try {
+    const tanggal = parseTanggal(req.query.tanggal);
+    const panjang = parsePanjangFilter(req.query.panjang);
+
+    if (!tanggal) {
+      return res.status(400).json({ success: false, message: 'Tanggal wajib format YYYY-MM-DD' });
+    }
+
+    if (panjang === null) {
+      return res.status(400).json({ success: false, message: 'Panjang wajib diisi' });
+    }
+
     const harian = await ModelSusunKata.ambilAtauBuatHarian({ tanggal, panjang });
 
     if (!harian) {

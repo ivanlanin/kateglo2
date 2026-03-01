@@ -2132,7 +2132,7 @@ code {
   }
 
   .susun-kata-grid {
-    @apply space-y-2 mb-4;
+    @apply space-y-2 mb-4 mt-10;
   }
 
   .susun-kata-grid-row {
