@@ -78,15 +78,15 @@ function buildMetaEjaan(slug = '') {
   const slugAman = String(slug || '').trim().replace(/\/+$/, '');
   if (!slugAman) {
     return {
-      judul: 'Ejaan Bahasa Indonesia',
+      judul: 'Ejaan',
       deskripsi:
         'Panduan kaidah ejaan bahasa Indonesia mencakup penggunaan huruf, penulisan kata, tanda baca, dan unsur serapan.',
     };
   }
 
   const metadata = petaItemEjaanBySlug[slugAman] || {
-    judul: formatJudulEjaanDariSlug(slugAman) || 'Ejaan Bahasa Indonesia',
-    judulBab: 'Ejaan Bahasa Indonesia',
+    judul: formatJudulEjaanDariSlug(slugAman) || 'Ejaan',
+    judulBab: 'Ejaan',
   };
 
   return {

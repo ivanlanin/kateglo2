@@ -174,7 +174,7 @@ describe('entry-server', () => {
 
     expect(__private.buildMetaForPath('/glosarium', site).title).toBe('Glosarium — Kateglo');
     const ejaanIndex = __private.buildMetaForPath('/ejaan', site);
-    expect(ejaanIndex.title).toBe('Ejaan Bahasa Indonesia — Kateglo');
+    expect(ejaanIndex.title).toBe('Ejaan — Kateglo');
     expect(ejaanIndex.description).toContain('penggunaan huruf');
 
     const ejaanDetail = __private.buildMetaForPath('/ejaan/huruf-kapital', site);
@@ -184,7 +184,7 @@ describe('entry-server', () => {
     const ejaanDetailUnknown = __private.buildMetaForPath('/ejaan/aturan-baru', site);
     expect(ejaanDetailUnknown.title).toBe('Aturan Baru — Kateglo');
     const ejaanDetailKosong = __private.buildMetaForPath('/ejaan/---', site);
-    expect(ejaanDetailKosong.title).toBe('Ejaan Bahasa Indonesia — Kateglo');
+    expect(ejaanDetailKosong.title).toBe('Ejaan — Kateglo');
     expect(__private.buildMetaForPath('/kebijakan-privasi', site).title).toBe('Kebijakan Privasi — Kateglo');
 
     const defaultMeta = __private.buildMetaForPath('/random', site);

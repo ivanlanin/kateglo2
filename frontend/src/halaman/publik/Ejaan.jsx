@@ -96,7 +96,7 @@ function Ejaan() {
   const metaSeo = useMemo(() => {
     if (modeDaftarIsi) {
       return {
-        judul: 'Ejaan Bahasa Indonesia',
+        judul: 'Ejaan',
         judulNoda: 'Ejaan',
         deskripsi: 'Panduan kaidah ejaan bahasa Indonesia mencakup penggunaan huruf, penulisan kata, tanda baca, dan unsur serapan.',
       };
@@ -104,7 +104,7 @@ function Ejaan() {
 
     if (!metadataAktif) {
       return {
-        judul: 'Ejaan Bahasa Indonesia',
+        judul: 'Ejaan',
         deskripsi: 'Panduan kaidah ejaan bahasa Indonesia untuk penulisan yang tepat dan konsisten.',
       };
     }
