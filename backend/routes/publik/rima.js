@@ -4,9 +4,11 @@
 
 const express = require('express');
 const ModelEntri = require('../../models/modelEntri');
+const ModelPencarian = require('../../models/modelPencarian');
 const { publicSearchLimiter } = require('../../middleware/rateLimiter');
 
 const router = express.Router();
+const domainRima = 5;
 
 router.get('/contoh', async (_req, res, next) => {
   try {
@@ -44,6 +46,8 @@ router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
     const directionAwal = req.query.dir_awal === 'prev' ? 'prev' : 'next';
 
     const result = await ModelEntri.cariRima(kata, { limit, cursorAkhir, directionAkhir, cursorAwal, directionAwal });
+
+    await ModelPencarian.catatPencarian(kata, { domain: domainRima });
 
     return res.json(result);
   } catch (error) {

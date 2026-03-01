@@ -8,10 +8,23 @@ const { cariKamus, ambilDetailKamus } = require('../../services/layananKamusPubl
 const ModelLabel = require('../../models/modelLabel');
 const ModelEntri = require('../../models/modelEntri');
 const ModelKomentar = require('../../models/modelKomentar');
+const ModelPencarian = require('../../models/modelPencarian');
 const { publicSearchLimiter } = require('../../middleware/rateLimiter');
 const { parseCursorPagination } = require('../../utils/routesPublikUtils');
 
 const router = express.Router();
+const domainKamus = 1;
+
+function parseLimitTerpopuler(value, defaultValue = 10) {
+  const parsed = Number.parseInt(value, 10);
+  if (Number.isNaN(parsed)) return defaultValue;
+  return Math.min(Math.max(parsed, 1), 100);
+}
+
+function parsePeriodeTerpopuler(value) {
+  const normalized = String(value || 'all').trim().toLowerCase();
+  return normalized === '7hari' ? '7hari' : 'all';
+}
 
 router.get('/kategori', async (_req, res, next) => {
   try {
@@ -63,6 +76,22 @@ router.get('/autocomplete/:kata', async (req, res, next) => {
   }
 });
 
+router.get('/terpopuler', async (req, res, next) => {
+  try {
+    const periode = parsePeriodeTerpopuler(req.query.periode);
+    const limit = parseLimitTerpopuler(req.query.limit, 10);
+    const data = await ModelPencarian.ambilKataTerpopuler({ periode, limit });
+
+    return res.json({
+      periode,
+      limit,
+      data,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
 router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
   try {
     const { limit, cursor, direction, lastPage } = parseCursorPagination(req.query, {
@@ -85,6 +114,9 @@ router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
     if (result.total === 0) {
       response.saran = await ModelEntri.saranEntri(decodeURIComponent(req.params.kata));
     }
+
+    await ModelPencarian.catatPencarian(req.params.kata, { domain: domainKamus });
+
     return res.json(response);
   } catch (error) {
     return next(error);
@@ -170,6 +202,9 @@ router.get('/detail/:indeks', authenticateOptional, async (req, res, next) => {
       glosariumDirection: direction,
       includeEtimologiNonaktif: req.user?.peran === 'admin',
     });
+
+    await ModelPencarian.catatPencarian(req.params.indeks, { domain: domainKamus });
+
     if (!data) {
       const saran = await ModelEntri.saranEntri(decodeURIComponent(req.params.indeks));
       return res.status(404).json({

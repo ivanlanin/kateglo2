@@ -4,11 +4,13 @@
 
 const express = require('express');
 const ModelGlosarium = require('../../models/modelGlosarium');
+const ModelPencarian = require('../../models/modelPencarian');
 const { ambilDetailGlosarium } = require('../../services/layananGlosariumPublik');
 const { publicSearchLimiter } = require('../../middleware/rateLimiter');
 const { parseCursorPagination } = require('../../utils/routesPublikUtils');
 
 const router = express.Router();
+const domainGlosarium = 3;
 
 router.get('/detail/:asing', publicSearchLimiter, async (req, res, next) => {
   try {
@@ -20,6 +22,9 @@ router.get('/detail/:asing', publicSearchLimiter, async (req, res, next) => {
     const mengandungCursor = typeof req.query.mengandungCursor === 'string' ? req.query.mengandungCursor.trim() || null : null;
     const miripCursor = typeof req.query.miripCursor === 'string' ? req.query.miripCursor.trim() || null : null;
     const result = await ambilDetailGlosarium(asing, { limit, mengandungCursor, miripCursor });
+
+    await ModelPencarian.catatPencarian(asing, { domain: domainGlosarium });
+
     return res.json(result);
   } catch (error) {
     return next(error);
@@ -51,6 +56,9 @@ router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
       direction,
       lastPage,
     });
+
+    await ModelPencarian.catatPencarian(req.params.kata, { domain: domainGlosarium });
+
     return res.json({
       ...result,
       pageInfo: {

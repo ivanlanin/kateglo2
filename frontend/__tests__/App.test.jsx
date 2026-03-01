@@ -33,6 +33,7 @@ vi.mock('../src/halaman/redaksi/BidangGlosariumAdmin', () => ({ default: () => <
 vi.mock('../src/halaman/redaksi/SumberGlosariumAdmin', () => ({ default: () => <div>Sumber Glosarium Redaksi</div> }));
 vi.mock('../src/halaman/redaksi/LabelAdmin', () => ({ default: () => <div>Label Redaksi</div> }));
 vi.mock('../src/halaman/redaksi/PenggunaAdmin', () => ({ default: () => <div>Pengguna Redaksi</div> }));
+vi.mock('../src/halaman/redaksi/PencarianAdmin', () => ({ default: () => <div>Statistik Pencarian Redaksi</div> }));
 
 describe('App', () => {
   beforeEach(() => {
@@ -134,6 +135,24 @@ describe('App', () => {
       </MemoryRouter>
     );
     expect(screen.getByText('Komentar Redaksi')).toBeInTheDocument();
+  });
+
+  it('mengizinkan route statistik pencarian saat user punya izin', () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      adalahRedaksi: true,
+      adalahAdmin: false,
+      isLoading: false,
+      punyaIzin: (izin) => izin === 'lihat_statistik',
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/redaksi/pencarian']}>
+        <App />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Statistik Pencarian Redaksi')).toBeInTheDocument();
   });
 
   it('menampilkan loading untuk route admin saat auth sedang dimuat', () => {

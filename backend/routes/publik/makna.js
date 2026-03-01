@@ -4,10 +4,12 @@
 
 const express = require('express');
 const ModelEntri = require('../../models/modelEntri');
+const ModelPencarian = require('../../models/modelPencarian');
 const { publicSearchLimiter } = require('../../middleware/rateLimiter');
 const { parseCursorPagination } = require('../../utils/routesPublikUtils');
 
 const router = express.Router();
+const domainMakna = 4;
 
 router.get('/contoh', async (_req, res, next) => {
   try {
@@ -31,6 +33,8 @@ router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
     });
 
     const result = await ModelEntri.cariMakna(kata, { limit, cursor, direction, lastPage });
+
+    await ModelPencarian.catatPencarian(kata, { domain: domainMakna });
 
     return res.json({
       query: kata,

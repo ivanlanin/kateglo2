@@ -27,6 +27,7 @@ import PenggunaAdmin from './halaman/redaksi/PenggunaAdmin';
 import PeranAdmin from './halaman/redaksi/PeranAdmin';
 import IzinAdmin from './halaman/redaksi/IzinAdmin';
 import AuditMaknaAdmin from './halaman/redaksi/AuditMaknaAdmin';
+import PencarianAdmin from './halaman/redaksi/PencarianAdmin';
 
 function RuteRedaksi({ children }) {
   const { isAuthenticated, adalahRedaksi, isLoading } = useAuth();
@@ -87,6 +88,7 @@ function App() {
       <Route path="/redaksi/komentar" element={<RuteRedaksi><KomentarAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/komentar/:id" element={<RuteRedaksi><KomentarAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/audit-makna" element={<RuteRedaksi><AuditMaknaAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/pencarian" element={<RuteIzin izinDibutuhkan={['lihat_statistik']}><PencarianAdmin /></RuteIzin>} />
       <Route path="/redaksi/tesaurus" element={<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/tesaurus/:id" element={<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/etimologi" element={<RuteRedaksi><EtimologiAdmin /></RuteRedaksi>} />

@@ -12,6 +12,8 @@ const kartuData = [
   { key: 'tesaurus', label: 'Entri Tesaurus', warna: 'text-emerald-600', link: '/redaksi/tesaurus', izin: 'lihat_tesaurus' },
   { key: 'glosarium', label: 'Entri Glosarium', warna: 'text-amber-600', link: '/redaksi/glosarium', izin: 'lihat_glosarium' },
   { key: 'etimologi', label: 'Entri Etimologi', warna: 'text-indigo-600', link: '/redaksi/etimologi', izin: 'kelola_etimologi' },
+  { key: 'bidang', label: 'Bidang', warna: 'text-sky-600', link: '/redaksi/bidang', izin: 'kelola_bidang' },
+  { key: 'sumber', label: 'Sumber', warna: 'text-teal-600', link: '/redaksi/sumber', izin: 'kelola_sumber' },
   { key: 'komentar', label: 'Komentar', warna: 'text-rose-600', link: '/redaksi/komentar', izin: 'kelola_komentar' },
   { key: 'label', label: 'Label', warna: 'text-cyan-600', link: '/redaksi/label', izin: 'kelola_label' },
   { key: 'pengguna', label: 'Pengguna', warna: 'text-purple-600', link: '/redaksi/pengguna', izin: 'kelola_pengguna' },

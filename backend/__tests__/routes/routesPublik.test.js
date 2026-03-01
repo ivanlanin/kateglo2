@@ -41,6 +41,11 @@ jest.mock('../../models/modelKomentar', () => ({
   upsertKomentarPengguna: jest.fn(),
 }));
 
+jest.mock('../../models/modelPencarian', () => ({
+  catatPencarian: jest.fn(),
+  ambilKataTerpopuler: jest.fn(),
+}));
+
 jest.mock('../../models/modelTesaurus', () => ({
   contohAcak: jest.fn(),
   autocomplete: jest.fn(),
@@ -70,6 +75,7 @@ const ModelGlosarium = require('../../models/modelGlosarium');
 const ModelLabel = require('../../models/modelLabel');
 const ModelEntri = require('../../models/modelEntri');
 const ModelKomentar = require('../../models/modelKomentar');
+const ModelPencarian = require('../../models/modelPencarian');
 const ModelTesaurus = require('../../models/modelTesaurus');
 const ModelPengguna = require('../../models/modelPengguna');
 const layananKamusPublik = require('../../services/layananKamusPublik');
@@ -92,6 +98,8 @@ describe('routes backend', () => {
     jest.clearAllMocks();
     ModelEntri.saranEntri.mockResolvedValue([]);
     ModelKomentar.hitungKomentarAktif.mockResolvedValue(0);
+    ModelPencarian.catatPencarian.mockResolvedValue(true);
+    ModelPencarian.ambilKataTerpopuler.mockResolvedValue([]);
     ModelPengguna.ambilDenganId.mockResolvedValue(null);
     ModelPengguna.ambilPeranUntukAuth.mockResolvedValue({ kode: 'pengguna', akses_redaksi: false });
     ModelPengguna.ambilIzin.mockResolvedValue([]);
@@ -313,6 +321,7 @@ describe('routes backend', () => {
       direction: 'prev',
       lastPage: true,
     });
+    expect(ModelPencarian.catatPencarian).toHaveBeenCalledWith('kata', { domain: 4 });
     expect(response.body.pageInfo).toEqual({
       hasPrev: true,
       hasNext: false,
@@ -420,6 +429,7 @@ describe('routes backend', () => {
       cursorAwal: 'cb',
       directionAwal: 'prev',
     });
+    expect(ModelPencarian.catatPencarian).toHaveBeenCalledWith('kata', { domain: 5 });
     expect(response.body.indeks).toBe('kata');
   });
 
@@ -447,7 +457,48 @@ describe('routes backend', () => {
       direction: 'prev',
       lastPage: false,
     });
+    expect(ModelPencarian.catatPencarian).toHaveBeenCalledWith('kata', { domain: 1 });
     expect(response.body.total).toBe(1);
+  });
+
+  it('GET /api/publik/kamus/terpopuler mengembalikan data default all-time', async () => {
+    ModelPencarian.ambilKataTerpopuler.mockResolvedValue([
+      { kata: 'kata', jumlah: 12 },
+    ]);
+
+    const response = await request(createApp()).get('/api/publik/kamus/terpopuler');
+
+    expect(response.status).toBe(200);
+    expect(ModelPencarian.ambilKataTerpopuler).toHaveBeenCalledWith({
+      periode: 'all',
+      limit: 10,
+    });
+    expect(response.body).toEqual({
+      periode: 'all',
+      limit: 10,
+      data: [{ kata: 'kata', jumlah: 12 }],
+    });
+  });
+
+  it('GET /api/publik/kamus/terpopuler mendukung periode 7hari dan clamp limit', async () => {
+    ModelPencarian.ambilKataTerpopuler.mockResolvedValue([]);
+
+    const response = await request(createApp()).get('/api/publik/kamus/terpopuler?periode=7hari&limit=999');
+
+    expect(response.status).toBe(200);
+    expect(ModelPencarian.ambilKataTerpopuler).toHaveBeenCalledWith({
+      periode: '7hari',
+      limit: 100,
+    });
+  });
+
+  it('GET /api/publik/kamus/terpopuler meneruskan error model', async () => {
+    ModelPencarian.ambilKataTerpopuler.mockRejectedValue(new Error('terpopuler gagal'));
+
+    const response = await request(createApp()).get('/api/publik/kamus/terpopuler');
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('terpopuler gagal');
   });
 
   it('GET /api/publik/kamus/cari/:kata mengembalikan saran saat total 0', async () => {
@@ -482,6 +533,7 @@ describe('routes backend', () => {
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('Tidak Ditemukan');
     expect(response.body.saran).toEqual(['kata']);
+    expect(ModelPencarian.catatPencarian).toHaveBeenCalledWith('tidak-ada', { domain: 1 });
   });
 
   it('GET /api/publik/kamus/detail/:entri mengembalikan data saat ditemukan', async () => {
@@ -498,6 +550,7 @@ describe('routes backend', () => {
       glosariumDirection: 'next',
       includeEtimologiNonaktif: false,
     });
+    expect(ModelPencarian.catatPencarian).toHaveBeenCalledWith('kata', { domain: 1 });
   });
 
   it('GET /api/publik/kamus/detail/:entri meneruskan paging glosarium cursor', async () => {
@@ -676,6 +729,7 @@ describe('routes backend', () => {
       direction: 'prev',
       lastPage: false,
     });
+    expect(ModelPencarian.catatPencarian).toHaveBeenCalledWith('aktif', { domain: 2 });
     expect(response.body.total).toBe(1);
   });
 
@@ -695,6 +749,7 @@ describe('routes backend', () => {
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('Tidak Ditemukan');
+    expect(ModelPencarian.catatPencarian).not.toHaveBeenCalled();
   });
 
   it('GET /api/publik/tesaurus/:kata mengembalikan data saat ditemukan', async () => {
@@ -704,6 +759,7 @@ describe('routes backend', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.indeks).toBe('aktif');
+    expect(ModelPencarian.catatPencarian).not.toHaveBeenCalled();
   });
 
   it('GET /api/publik/tesaurus/:kata meneruskan error', async () => {
@@ -766,6 +822,7 @@ describe('routes backend', () => {
       .get('/api/publik/glosarium/detail/zero%20sum?limit=999&mengandungCursor=abc&miripCursor=xyz');
 
     expect(response.status).toBe(200);
+    expect(ModelPencarian.catatPencarian).toHaveBeenCalledWith('zero sum', { domain: 3 });
     expect(layananGlosariumPublik.ambilDetailGlosarium).toHaveBeenCalledWith('zero sum', {
       limit: 100,
       mengandungCursor: 'abc',
@@ -850,6 +907,7 @@ describe('routes backend', () => {
       direction: 'prev',
       lastPage: false,
     });
+    expect(ModelPencarian.catatPencarian).toHaveBeenCalledWith('istilah', { domain: 3 });
   });
 
   it('GET /api/publik/glosarium/cari/:kata meneruskan error', async () => {

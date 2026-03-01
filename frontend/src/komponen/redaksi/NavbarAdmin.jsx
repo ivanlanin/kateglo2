@@ -18,7 +18,10 @@ const kelompokMenuAdmin = [
   },
   {
     judul: 'Interaksi',
-    items: [{ path: '/redaksi/komentar', label: 'Komentar', izin: 'kelola_komentar' }],
+    items: [
+      { path: '/redaksi/komentar', label: 'Komentar', izin: 'kelola_komentar' },
+      { path: '/redaksi/pencarian', label: 'Pencarian', izin: 'lihat_statistik' },
+    ],
   },
   {
     judul: 'Audit',

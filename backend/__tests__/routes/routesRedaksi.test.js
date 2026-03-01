@@ -53,6 +53,8 @@ jest.mock('../../models/modelGlosarium', () => ({
   ambilDenganId: jest.fn(),
   simpan: jest.fn(),
   hapus: jest.fn(),
+  hitungTotalBidang: jest.fn(),
+  hitungTotalSumber: jest.fn(),
   hitungTotal: jest.fn(),
 }));
 
@@ -71,6 +73,10 @@ jest.mock('../../models/modelKomentar', () => ({
   ambilDenganId: jest.fn(),
   simpanAdmin: jest.fn(),
   hitungTotal: jest.fn(),
+}));
+
+jest.mock('../../models/modelPencarian', () => ({
+  ambilStatistikRedaksi: jest.fn(),
 }));
 
 jest.mock('../../models/modelPeran', () => ({
@@ -102,6 +108,7 @@ const ModelEtimologi = require('../../models/modelEtimologi');
 const ModelGlosarium = require('../../models/modelGlosarium');
 const ModelLabel = require('../../models/modelLabel');
 const ModelKomentar = require('../../models/modelKomentar');
+const ModelPencarian = require('../../models/modelPencarian');
 const ModelPeran = require('../../models/modelPeran');
 const ModelIzin = require('../../models/modelIzin');
 const { hapusCacheDetailKamus } = require('../../services/layananKamusPublik');
@@ -333,6 +340,8 @@ describe('routes/redaksi', () => {
       ModelTesaurus.hitungTotal.mockResolvedValue(30);
       ModelEtimologi.hitungTotal.mockResolvedValue(35);
       ModelLabel.hitungTotal.mockResolvedValue(40);
+      ModelGlosarium.hitungTotalBidang.mockResolvedValue(70);
+      ModelGlosarium.hitungTotalSumber.mockResolvedValue(80);
       ModelPengguna.hitungTotal.mockResolvedValue(50);
       ModelKomentar.hitungTotal.mockResolvedValue(60);
 
@@ -345,6 +354,8 @@ describe('routes/redaksi', () => {
         tesaurus: 30,
         etimologi: 35,
         label: 40,
+        bidang: 70,
+        sumber: 80,
         pengguna: 50,
         komentar: 60,
       });
@@ -357,6 +368,36 @@ describe('routes/redaksi', () => {
 
       expect(response.status).toBe(500);
       expect(response.body.error).toBe('statistik gagal');
+    });
+
+    it('GET /api/redaksi/statistik/pencarian mengembalikan statistik tracking', async () => {
+      ModelPencarian.ambilStatistikRedaksi.mockResolvedValue({
+        filter: { domain: 1, periode: '7hari', limit: 50 },
+        ringkasanDomain: [{ domain: 1, domain_nama: 'kamus', jumlah: 99 }],
+        data: [{ domain: 1, domain_nama: 'kamus', kata: 'air', jumlah: 10 }],
+      });
+
+      const response = await callAsAdmin('get', '/api/redaksi/statistik/pencarian?domain=1&periode=7hari&limit=50');
+
+      expect(response.status).toBe(200);
+      expect(ModelPencarian.ambilStatistikRedaksi).toHaveBeenCalledWith({
+        domain: '1',
+        periode: '7hari',
+        limit: '50',
+        tanggalMulai: undefined,
+        tanggalSelesai: undefined,
+      });
+      expect(response.body.success).toBe(true);
+      expect(response.body.data).toHaveLength(1);
+    });
+
+    it('GET /api/redaksi/statistik/pencarian meneruskan error', async () => {
+      ModelPencarian.ambilStatistikRedaksi.mockRejectedValue(new Error('statistik pencarian gagal'));
+
+      const response = await callAsAdmin('get', '/api/redaksi/statistik/pencarian');
+
+      expect(response.status).toBe(500);
+      expect(response.body.error).toBe('statistik pencarian gagal');
     });
   });
 

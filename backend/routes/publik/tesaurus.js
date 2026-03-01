@@ -5,10 +5,12 @@
 const express = require('express');
 const { cariTesaurus, ambilDetailTesaurus } = require('../../services/layananTesaurusPublik');
 const ModelTesaurus = require('../../models/modelTesaurus');
+const ModelPencarian = require('../../models/modelPencarian');
 const { publicSearchLimiter } = require('../../middleware/rateLimiter');
 const { parseCursorPagination } = require('../../utils/routesPublikUtils');
 
 const router = express.Router();
+const domainTesaurus = 2;
 
 router.get('/contoh', async (_req, res, next) => {
   try {
@@ -36,6 +38,8 @@ router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
     });
 
     const result = await cariTesaurus(req.params.kata, { limit, cursor, direction, lastPage });
+    await ModelPencarian.catatPencarian(req.params.kata, { domain: domainTesaurus });
+
     return res.json({
       query: req.params.kata,
       total: result.total,
@@ -55,6 +59,7 @@ router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
 router.get('/:kata', async (req, res, next) => {
   try {
     const data = await ambilDetailTesaurus(req.params.kata);
+
     if (!data) {
       return res.status(404).json({
         error: 'Tidak Ditemukan',

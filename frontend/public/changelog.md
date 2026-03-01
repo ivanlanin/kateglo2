@@ -4,6 +4,7 @@
 
 - Merujuk sumber kamus, tesaurus, dan etimologi ke tabel sumber
 - Mengubah tampilan sumber entri dan etimologi di detail entri kamus
+- Melacak frasa pencarian di kamus, tesaurus, glosarium, makna, dan rima
 
 ## 2026-02-28 Sabtu
 

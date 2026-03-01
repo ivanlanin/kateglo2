@@ -41,13 +41,25 @@ describe('DasborAdmin', () => {
     );
 
     expect(screen.getByText('Dasbor')).toBeInTheDocument();
-    expect(screen.getAllByText('…')).toHaveLength(7);
+    expect(screen.getAllByText('…')).toHaveLength(9);
   });
 
   it('menampilkan statistik saat data tersedia', () => {
     mockUseStatistikAdmin.mockReturnValue({
       isLoading: false,
-      data: { data: { entri: 1000, tesaurus: 200, glosarium: 50, label: 321, pengguna: 12, komentar: 88 } },
+      data: {
+        data: {
+          entri: 1000,
+          tesaurus: 200,
+          glosarium: 50,
+          etimologi: 70,
+          bidang: 14,
+          sumber: 18,
+          label: 321,
+          pengguna: 12,
+          komentar: 88,
+        },
+      },
     });
 
     render(
@@ -59,6 +71,8 @@ describe('DasborAdmin', () => {
     expect(screen.getByText('1.000')).toBeInTheDocument();
     expect(screen.getByText('200')).toBeInTheDocument();
     expect(screen.getByText('50')).toBeInTheDocument();
+    expect(screen.getByText('14')).toBeInTheDocument();
+    expect(screen.getByText('18')).toBeInTheDocument();
     expect(screen.getByText('321')).toBeInTheDocument();
     expect(screen.getByText('12')).toBeInTheDocument();
     expect(screen.getByText('88')).toBeInTheDocument();
@@ -71,7 +85,19 @@ describe('DasborAdmin', () => {
     });
     mockUseStatistikAdmin.mockReturnValue({
       isLoading: false,
-      data: { data: { entri: 1000, tesaurus: 200, glosarium: 50, label: 321, pengguna: 12, komentar: 88 } },
+      data: {
+        data: {
+          entri: 1000,
+          tesaurus: 200,
+          glosarium: 50,
+          etimologi: 70,
+          bidang: 14,
+          sumber: 18,
+          label: 321,
+          pengguna: 12,
+          komentar: 88,
+        },
+      },
     });
 
     render(
@@ -83,6 +109,8 @@ describe('DasborAdmin', () => {
     expect(screen.getByText('Entri Kamus')).toBeInTheDocument();
     expect(screen.getByText('Entri Tesaurus')).toBeInTheDocument();
     expect(screen.queryByText('Entri Glosarium')).not.toBeInTheDocument();
+    expect(screen.queryByText('Bidang')).not.toBeInTheDocument();
+    expect(screen.queryByText('Sumber')).not.toBeInTheDocument();
     expect(screen.queryByText('Komentar')).not.toBeInTheDocument();
     expect(screen.queryByText('Label')).not.toBeInTheDocument();
     expect(screen.queryByText('Pengguna')).not.toBeInTheDocument();
@@ -95,7 +123,19 @@ describe('DasborAdmin', () => {
     });
     mockUseStatistikAdmin.mockReturnValue({
       isLoading: false,
-      data: { data: { entri: 10, tesaurus: 20, glosarium: 30, label: 40, pengguna: 50, komentar: 60 } },
+      data: {
+        data: {
+          entri: 10,
+          tesaurus: 20,
+          glosarium: 30,
+          etimologi: 0,
+          bidang: 7,
+          sumber: 8,
+          label: 40,
+          pengguna: 50,
+          komentar: 60,
+        },
+      },
     });
 
     render(
@@ -106,6 +146,8 @@ describe('DasborAdmin', () => {
 
     expect(screen.getByText('Entri Kamus')).toBeInTheDocument();
     expect(screen.getByText('Label')).toBeInTheDocument();
+    expect(screen.queryByText('Bidang')).not.toBeInTheDocument();
+    expect(screen.queryByText('Sumber')).not.toBeInTheDocument();
     expect(screen.queryByText('Entri Tesaurus')).not.toBeInTheDocument();
   });
 
@@ -133,7 +175,19 @@ describe('DasborAdmin', () => {
     });
     mockUseStatistikAdmin.mockReturnValue({
       isLoading: false,
-      data: { data: { entri: 10, tesaurus: 20, glosarium: 30, label: 40, pengguna: 50, komentar: 60 } },
+      data: {
+        data: {
+          entri: 10,
+          tesaurus: 20,
+          glosarium: 30,
+          etimologi: 0,
+          bidang: 7,
+          sumber: 8,
+          label: 40,
+          pengguna: 50,
+          komentar: 60,
+        },
+      },
     });
 
     render(

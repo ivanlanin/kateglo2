@@ -104,6 +104,29 @@ export function useStatistikAdmin() {
   });
 }
 
+export function useStatistikPencarianAdmin({
+  domain = '',
+  periode = '7hari',
+  limit = 200,
+  tanggalMulai = '',
+  tanggalSelesai = '',
+} = {}) {
+  return useQuery({
+    queryKey: ['admin-statistik-pencarian', { domain, periode, limit, tanggalMulai, tanggalSelesai }],
+    queryFn: () =>
+      klien.get('/api/redaksi/statistik/pencarian', {
+        params: {
+          domain: domain || undefined,
+          periode: periode || undefined,
+          limit,
+          tanggal_mulai: tanggalMulai || undefined,
+          tanggal_selesai: tanggalSelesai || undefined,
+        },
+      }).then((r) => r.data),
+    staleTime: 30 * 1000,
+  });
+}
+
 // ─── Kamus ───────────────────────────────────────────────────────────────────
 
 export function useDaftarKamusAdmin({

@@ -931,6 +931,16 @@ class ModelGlosarium {
     return parseCount(result.rows[0]?.total);
   }
 
+  static async hitungTotalBidang() {
+    const result = await db.query('SELECT COUNT(*) AS total FROM bidang');
+    return parseCount(result.rows[0]?.total);
+  }
+
+  static async hitungTotalSumber() {
+    const result = await db.query('SELECT COUNT(*) AS total FROM sumber');
+    return parseCount(result.rows[0]?.total);
+  }
+
   /**
    * Ambil glosarium berdasarkan ID (untuk admin)
    * @param {number} id

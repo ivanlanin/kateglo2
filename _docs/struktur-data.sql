@@ -1,10 +1,68 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-02-28T17:46:11.536Z
+-- Generated: 2026-03-01T06:20:35.146Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
 -- ============================================
+
+-- Function: pencarian_route
+create or replace function pencarian_route()
+ returns trigger
+ language plpgsql
+as $function$
+declare
+  nama_tabel text;
+  awal_bulan date;
+  akhir_bulan date;
+begin
+  IF NEW.tanggal IS NULL THEN
+    NEW.tanggal := CURRENT_DATE;
+  end IF;
+
+  IF NEW.kata IS NULL OR btrim(NEW.kata) = '' THEN
+    RETURN NULL;
+  end IF;
+
+  IF NEW.jumlah IS NULL OR NEW.jumlah < 1 THEN
+    NEW.jumlah := 1;
+  end IF;
+
+  IF NEW.domain IS NULL OR NEW.domain NOT IN (1, 2, 3, 4, 5) THEN
+    NEW.domain := 1;
+  end IF;
+
+  nama_tabel := format('pencarian_%s', to_char(NEW.tanggal, 'YYYYMM'));
+  awal_bulan := date_trunc('month', NEW.tanggal)::date;
+  akhir_bulan := (date_trunc('month', NEW.tanggal) + interval '1 month')::date;
+
+  EXECUTE format(
+    'CREATE TABLE IF NOT EXISTS %I (
+      CHECK (tanggal >= date %L AND tanggal < date %L),
+      CHECK (domain IN (1, 2, 3, 4, 5))
+    ) INHERITS (pencarian)',
+    nama_tabel, awal_bulan, akhir_bulan
+  );
+
+  EXECUTE format(
+    'CREATE UNIQUE INDEX IF NOT EXISTS %I ON %I (tanggal, domain, kata)',
+    nama_tabel || '_tanggal_domain_kata_key',
+    nama_tabel
+  );
+
+  EXECUTE format(
+    'INSERT INTO %I (tanggal, domain, kata, jumlah)
+     VALUES ($1, $2, $3, $4)
+     ON CONFLICT (tanggal, domain, kata)
+     DO UPDATE SET jumlah = %I.jumlah + EXCLUDED.jumlah',
+    nama_tabel,
+    nama_tabel
+  ) USING NEW.tanggal, NEW.domain, lower(btrim(NEW.kata)), NEW.jumlah;
+
+  RETURN NULL;
+end;
+$function$
+
 
 -- Function: set_timestamp_fields
 create or replace function set_timestamp_fields()
@@ -361,6 +419,19 @@ create trigger trg_touch_entri_updated_at_from_makna
   after delete or insert or update on makna
   for each row
   execute function touch_entri_updated_at_from_makna();
+
+create table pencarian (
+  tanggal date not null,
+  kata text not null,
+  jumlah integer not null default 0,
+  domain smallint not null default 1,
+  constraint pencarian_domain_check check (domain = ANY (ARRAY[1, 2, 3, 4, 5])),
+  constraint pencarian_jumlah_check check (jumlah >= 0)
+);
+create trigger trg_pencarian_route
+  before insert on pencarian
+  for each row
+  execute function pencarian_route();
 
 create table pengguna (
   id serial primary key,
