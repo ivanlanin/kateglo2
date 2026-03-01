@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-01T09:09:08.161Z
+-- Generated: 2026-03-01T09:15:16.526Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -48,30 +48,35 @@ begin
   akhir_bulan := (date_trunc('month', NEW.tanggal) + interval '1 month')::date;
 
   EXECUTE format(
-    'CREATE TABLE IF NOT EXISTS %I (
-      CHECK (tanggal >= date %L AND tanggal < date %L),
+    $fmt$
+    CREATE TABLE IF NOT EXISTS %1$I (
+      CHECK (tanggal >= date %2$L AND tanggal < date %3$L),
       CHECK (domain IN (1, 2, 3, 4, 5))
-    ) INHERITS (pencarian)',
-    nama_tabel, awal_bulan, akhir_bulan
+    ) INHERITS (pencarian)
+    $fmt$,
+    nama_tabel,
+    awal_bulan,
+    akhir_bulan
   );
 
   EXECUTE format(
-    'CREATE UNIQUE INDEX IF NOT EXISTS %I ON %I (tanggal, domain, kata)',
+    $fmt$
+    CREATE UNIQUE INDEX IF NOT EXISTS %1$I ON %2$I (tanggal, domain, kata)
+    $fmt$,
     nama_tabel || '_tanggal_domain_kata_key',
     nama_tabel
   );
 
   EXECUTE format(
-    'INSERT INTO %I (tanggal, domain, kata, jumlah, created_at, updated_at)
-     VALUES ($1, $2, $3, $4, $5, $6)
-     ON CONFLICT (tanggal, domain, kata)
-     DO UPDATE SET
-       jumlah = %I.jumlah + EXCLUDED.jumlah,
-       created_at = LEAST(%I.created_at, EXCLUDED.created_at),
-       updated_at = GREATEST(%I.updated_at, EXCLUDED.updated_at)',
-    nama_tabel,
-    nama_tabel,
-    nama_tabel,
+    $fmt$
+    INSERT INTO %1$I (tanggal, domain, kata, jumlah, created_at, updated_at)
+    VALUES ($1, $2, $3, $4, $5, $6)
+    ON CONFLICT (tanggal, domain, kata)
+    DO UPDATE SET
+      jumlah = %1$I.jumlah + EXCLUDED.jumlah,
+      created_at = LEAST(%1$I.created_at, EXCLUDED.created_at),
+      updated_at = GREATEST(%1$I.updated_at, EXCLUDED.updated_at)
+    $fmt$,
     nama_tabel
   ) USING NEW.tanggal, NEW.domain, lower(btrim(NEW.kata)), NEW.jumlah, NEW.created_at, NEW.updated_at;
 
