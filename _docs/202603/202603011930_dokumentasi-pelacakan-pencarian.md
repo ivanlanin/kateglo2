@@ -58,6 +58,8 @@ Tabel pelacakan menggunakan entitas `pencarian` dengan kolom inti:
 - `domain` (smallint)
 - `kata` (text)
 - `jumlah` (integer)
+- `created_at` (timestamp UTC, waktu pertama hit pada bucket harian)
+- `updated_at` (timestamp UTC, waktu terakhir hit pada bucket harian)
 
 ### Kunci Unik
 
@@ -136,7 +138,7 @@ Fitur filter:
 
 Sort data detail:
 - `jumlah DESC`
-- `tanggal_akhir DESC`
+- `tanggal_akhir DESC` (berbasis `MAX(updated_at)`)
 - `domain ASC`
 - `kata ASC`
 
@@ -165,6 +167,8 @@ Sort data detail:
      - `filter`
      - `ringkasanDomain[]`
      - `data[]` (domain, kata, jumlah, tanggal_awal, tanggal_akhir)
+          - `tanggal_awal` berasal dari `MIN(created_at)`
+          - `tanggal_akhir` berasal dari `MAX(updated_at)`
 
 ## Integrasi Frontend Redaksi
 
@@ -177,7 +181,7 @@ Fitur UI:
 1. Filter domain, periode, limit, tanggal mulai, tanggal selesai.
 2. Ringkasan jumlah per domain.
 3. Tabel kata terpopuler lintas domain.
-4. Format tanggal: `DD MMM YYYY`.
+4. Format waktu UTC: `DD MMM YYYY HH:mm UTC`.
 5. State loading, error, dan kosong.
 
 ## Catatan Implementasi
@@ -218,3 +222,4 @@ Dokumen terkait:
 - `_docs/struktur-data.sql`
 - `_docs/202603/202603011210_tambah-sistem-pelacakan-kata-terpopuler.sql`
 - `_docs/202603/202603011245_refactor-pencarian-tambah-domain-kode.sql`
+- `_docs/202603/202603011950_tambah_timestamp_utc_pencarian.sql`

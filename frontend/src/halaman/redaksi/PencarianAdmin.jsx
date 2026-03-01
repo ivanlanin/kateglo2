@@ -4,8 +4,11 @@
 
 import { useState } from 'react';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import TataLetak from '../../komponen/bersama/TataLetak';
 import { useStatistikPencarianAdmin } from '../../api/apiAdmin';
+
+dayjs.extend(utc);
 
 const opsiPeriode = [
   { value: '7hari', label: '7 hari terakhir' },
@@ -26,10 +29,12 @@ function formatTanggalSingkat(value) {
   const text = String(value || '').trim();
   if (!text) return '—';
 
-  const normalized = text.length <= 10 ? `${text}T00:00:00Z` : text;
-  const parsed = dayjs(normalized);
+  const normalized = text.length <= 10 ? `${text}T00:00:00` : text.replace(' ', 'T');
+  const hasTimezone = /(?:Z|[+-]\d{2}:?\d{2})$/i.test(normalized);
+  const source = hasTimezone ? normalized : `${normalized}Z`;
+  const parsed = dayjs.utc(source);
   if (!parsed.isValid()) return '—';
-  return parsed.format('DD MMM YYYY');
+  return parsed.format('DD MMM YYYY HH:mm [UTC]');
 }
 
 function PencarianAdmin() {
@@ -173,8 +178,8 @@ function PencarianAdmin() {
                   <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Domain</th>
                   <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Kata</th>
                   <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Jumlah</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Awal</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Akhir</th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Awal (UTC)</th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Akhir (UTC)</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-dark-border/60">

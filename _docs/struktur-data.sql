@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-01T06:20:35.146Z
+-- Generated: 2026-03-01T09:09:08.161Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -15,6 +15,7 @@ declare
   nama_tabel text;
   awal_bulan date;
   akhir_bulan date;
+  waktu_utc timestamp without time zone;
 begin
   IF NEW.tanggal IS NULL THEN
     NEW.tanggal := CURRENT_DATE;
@@ -30,6 +31,16 @@ begin
 
   IF NEW.domain IS NULL OR NEW.domain NOT IN (1, 2, 3, 4, 5) THEN
     NEW.domain := 1;
+  end IF;
+
+  waktu_utc := now() AT TIME ZONE 'UTC';
+
+  IF NEW.created_at IS NULL THEN
+    NEW.created_at := waktu_utc;
+  end IF;
+
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at := waktu_utc;
   end IF;
 
   nama_tabel := format('pencarian_%s', to_char(NEW.tanggal, 'YYYYMM'));
@@ -51,13 +62,18 @@ begin
   );
 
   EXECUTE format(
-    'INSERT INTO %I (tanggal, domain, kata, jumlah)
-     VALUES ($1, $2, $3, $4)
+    'INSERT INTO %I (tanggal, domain, kata, jumlah, created_at, updated_at)
+     VALUES ($1, $2, $3, $4, $5, $6)
      ON CONFLICT (tanggal, domain, kata)
-     DO UPDATE SET jumlah = %I.jumlah + EXCLUDED.jumlah',
+     DO UPDATE SET
+       jumlah = %I.jumlah + EXCLUDED.jumlah,
+       created_at = LEAST(%I.created_at, EXCLUDED.created_at),
+       updated_at = GREATEST(%I.updated_at, EXCLUDED.updated_at)',
+    nama_tabel,
+    nama_tabel,
     nama_tabel,
     nama_tabel
-  ) USING NEW.tanggal, NEW.domain, lower(btrim(NEW.kata)), NEW.jumlah;
+  ) USING NEW.tanggal, NEW.domain, lower(btrim(NEW.kata)), NEW.jumlah, NEW.created_at, NEW.updated_at;
 
   RETURN NULL;
 end;
@@ -425,6 +441,8 @@ create table pencarian (
   kata text not null,
   jumlah integer not null default 0,
   domain smallint not null default 1,
+  created_at timestamp without time zone not null default (now() AT TIME ZONE 'UTC'::text),
+  updated_at timestamp without time zone not null default (now() AT TIME ZONE 'UTC'::text),
   constraint pencarian_domain_check check (domain = ANY (ARRAY[1, 2, 3, 4, 5])),
   constraint pencarian_jumlah_check check (jumlah >= 0)
 );
@@ -432,6 +450,20 @@ create trigger trg_pencarian_route
   before insert on pencarian
   for each row
   execute function pencarian_route();
+
+create table pencarian_202603 (
+  tanggal date not null,
+  kata text not null,
+  jumlah integer not null default 0,
+  domain smallint not null default 1,
+  created_at timestamp without time zone not null default (now() AT TIME ZONE 'UTC'::text),
+  updated_at timestamp without time zone not null default (now() AT TIME ZONE 'UTC'::text),
+  constraint pencarian_202603_domain_check check (domain = ANY (ARRAY[1, 2, 3, 4, 5])),
+  constraint pencarian_202603_tanggal_check check ((tanggal >= '2026-03-01'::date) AND (tanggal < '2026-04-01'::date)),
+  constraint pencarian_domain_check check (domain = ANY (ARRAY[1, 2, 3, 4, 5])),
+  constraint pencarian_jumlah_check check (jumlah >= 0)
+);
+create unique index pencarian_202603_tanggal_domain_kata_key on pencarian_202603 using btree (tanggal, domain, kata);
 
 create table pengguna (
   id serial primary key,

@@ -24,8 +24,9 @@ describe('PencarianAdmin', () => {
   });
 
   it('helper formatTanggalSingkat memakai format dd mmm yyyy', () => {
-    expect(formatTanggalSingkat('2026-03-01')).toBe('01 Mar 2026');
-    expect(formatTanggalSingkat('2026-03-01T10:20:00Z')).toBe('01 Mar 2026');
+    expect(formatTanggalSingkat('2026-03-01')).toBe('01 Mar 2026 00:00 UTC');
+    expect(formatTanggalSingkat('2026-03-01T10:20:00Z')).toBe('01 Mar 2026 10:20 UTC');
+    expect(formatTanggalSingkat('2026-03-01 10:20:00')).toBe('01 Mar 2026 10:20 UTC');
     expect(formatTanggalSingkat('bukan-tanggal')).toBe('—');
     expect(formatTanggalSingkat('')).toBe('—');
   });
@@ -59,8 +60,8 @@ describe('PencarianAdmin', () => {
             domain_nama: 'kamus',
             kata: 'air',
             jumlah: 50,
-            tanggal_awal: '2026-02-20',
-            tanggal_akhir: '2026-02-28',
+            tanggal_awal: '2026-02-20 08:15:00',
+            tanggal_akhir: '2026-02-28 23:30:00',
           },
         ],
       },
@@ -74,9 +75,9 @@ describe('PencarianAdmin', () => {
 
     expect(screen.getByText('123')).toBeInTheDocument();
     expect(screen.getByText('air')).toBeInTheDocument();
-    expect(screen.queryByText('01 Mar 2026')).not.toBeInTheDocument();
-    expect(screen.getByText('20 Feb 2026')).toBeInTheDocument();
-    expect(screen.getByText('28 Feb 2026')).toBeInTheDocument();
+    expect(screen.queryByText('01 Mar 2026 00:00 UTC')).not.toBeInTheDocument();
+    expect(screen.getByText('20 Feb 2026 08:15 UTC')).toBeInTheDocument();
+    expect(screen.getByText('28 Feb 2026 23:30 UTC')).toBeInTheDocument();
   });
 
   it('menampilkan state error saat query gagal', () => {

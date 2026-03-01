@@ -198,10 +198,10 @@ class ModelPencarian {
     params.push(limitAman);
     const limitParam = `$${params.length}`;
 
-    const rowsQuery = `
-      SELECT domain, kata, SUM(jumlah)::bigint AS jumlah,
-             MIN(tanggal) AS tanggal_awal,
-             MAX(tanggal) AS tanggal_akhir
+        const rowsQuery = `
+          SELECT domain, kata, SUM(jumlah)::bigint AS jumlah,
+            MIN(created_at) AS tanggal_awal,
+            MAX(updated_at) AS tanggal_akhir
       FROM pencarian
       ${whereClause}
       GROUP BY domain, kata

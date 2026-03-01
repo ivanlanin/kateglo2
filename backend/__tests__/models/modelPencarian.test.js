@@ -222,6 +222,16 @@ describe('ModelPencarian', () => {
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
+      expect.stringContaining('MIN(created_at) AS tanggal_awal'),
+      [3, '2026-02-01', '2026-02-28', 1000]
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('MAX(updated_at) AS tanggal_akhir'),
+      [3, '2026-02-01', '2026-02-28', 1000]
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
       expect.stringContaining('WHERE domain = $1 AND tanggal >= $2::date AND tanggal <= $3::date'),
       [3, '2026-02-01', '2026-02-28', 1000]
     );
