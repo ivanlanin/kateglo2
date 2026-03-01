@@ -123,6 +123,8 @@ function ambilPathStatis() {
     '/kamus',
     '/tesaurus',
     '/glosarium',
+    '/sumber',
+    '/gim/susun-kata',
     '/makna',
     '/rima',
     '/ejaan',

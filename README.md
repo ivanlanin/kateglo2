@@ -85,6 +85,15 @@ npm run build:public
 # (langsung dijalankan dengan Node.js)
 ```
 
+### SEO (Robots & Sitemap)
+
+SEO publik digenerate otomatis oleh backend (bukan file statis di `frontend/public`):
+
+- `GET /robots.txt`
+- `GET /sitemap.xml`
+
+Generator sitemap mengambil path statis + path dinamis kategori kamus/glosarium. Path statis mencakup halaman utama termasuk `gim/susun-kata` dan `sumber`.
+
 ## Fitur Utama
 
 - Pencarian kamus (prefix-first + fallback contains)
