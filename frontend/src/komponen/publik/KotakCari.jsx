@@ -134,6 +134,7 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
   const lewatiSubmitRef = useRef(false);
   const isMountedRef = useRef(true);
   const permintaanTerakhirRef = useRef(0);
+  const autoFocusAktif = autoFocus && !location.pathname.startsWith('/gim/susun-kata');
 
   useEffect(() => {
     setKategori(deteksiKategori(location.pathname));
@@ -141,11 +142,11 @@ function KotakCari({ varian = 'navbar', autoFocus = true }) {
   }, [location.pathname]);
 
   useEffect(() => {
-    if (autoFocus && inputRef.current) {
+    if (autoFocusAktif && inputRef.current) {
       const id = setTimeout(() => inputRef.current.focus(), 100);
       return () => clearTimeout(id);
     }
-  }, [autoFocus]);
+  }, [autoFocusAktif]);
 
   // Tutup dropdown saat klik di luar
   useEffect(() => {

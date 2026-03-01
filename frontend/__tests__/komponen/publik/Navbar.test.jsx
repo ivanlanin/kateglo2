@@ -90,6 +90,14 @@ describe('Navbar', () => {
     expect(screen.getByPlaceholderText('Cari kata …')).toBeInTheDocument();
   });
 
+  it('di halaman Susun Kata menyembunyikan kotak cari navbar', () => {
+    mockLocation.pathname = '/gim/susun-kata';
+
+    render(<Navbar />);
+
+    expect(screen.queryByPlaceholderText('Cari kata …')).not.toBeInTheDocument();
+  });
+
   it('navigasi ke halaman kamus saat pencarian di-submit', () => {
     render(<Navbar />);
     const input = screen.getAllByPlaceholderText('Cari kata …')[0];

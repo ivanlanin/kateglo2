@@ -53,6 +53,18 @@ describe('KotakCari', () => {
     expect(screen.getByPlaceholderText('Cari istilah …')).toBeInTheDocument();
   });
 
+  it('menonaktifkan autofocus di halaman gim susun kata', async () => {
+    mockPathname = '/gim/susun-kata';
+
+    render(<KotakCari autoFocus />);
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(120);
+    });
+
+    expect(document.activeElement).not.toBe(screen.getByRole('textbox'));
+  });
+
   it('helper deteksi/ekstrak/navigasi bekerja sesuai input', () => {
     expect(deteksiKategori('/ejaan/huruf-kapital')).toBe('ejaan');
     expect(deteksiKategori('/makna/cari/air')).toBe('makna');

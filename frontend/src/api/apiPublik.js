@@ -168,6 +168,27 @@ export async function ambilContohRima() {
   return response.data;
 }
 
+// === GIM: SUSUN KATA ===
+
+export async function ambilPuzzleSusunKata({ panjang = 5 } = {}) {
+  const response = await klien.get('/api/publik/gim/susun-kata/puzzle', {
+    params: {
+      panjang: Math.min(Math.max(Number(panjang) || 5, 4), 8),
+    },
+  });
+  return response.data;
+}
+
+export async function validasiKataSusunKata(kata, { panjang = 5 } = {}) {
+  const kataAman = String(kata || '').trim().toLowerCase();
+  const response = await klien.get(`/api/publik/gim/susun-kata/validasi/${encodeURIComponent(kataAman)}`, {
+    params: {
+      panjang: Math.min(Math.max(Number(panjang) || 5, 4), 8),
+    },
+  });
+  return response.data;
+}
+
 // === AUTOCOMPLETE (shared) ===
 
 export async function autocomplete(kategori, kata) {

@@ -34,6 +34,77 @@ function normalisasiRagamVarian(value) {
 }
 
 class ModelEntri {
+  static async ambilKamusSusunKata({ panjang = 5, limit = 5000 } = {}) {
+    const parsedPanjang = Number(panjang);
+    const parsedLimit = Number(limit);
+    const panjangAman = Math.min(Math.max(Number.isFinite(parsedPanjang) ? parsedPanjang : 5, 4), 8);
+    const limitAman = Math.min(Math.max(Number.isFinite(parsedLimit) ? parsedLimit : 5000, 100), 10000);
+
+    const result = await db.query(
+      `SELECT DISTINCT LOWER(TRIM(e.indeks)) AS kata
+       FROM entri e
+       WHERE e.aktif = 1
+         AND e.jenis = 'dasar'
+         AND e.jenis_rujuk IS NULL
+         AND CHAR_LENGTH(TRIM(e.indeks)) = $1
+         AND TRIM(e.indeks) NOT LIKE '% %'
+         AND TRIM(e.indeks) ~ '^[A-Za-z]+$'
+       ORDER BY LOWER(TRIM(e.indeks)) ASC
+       LIMIT $2`,
+      [panjangAman, limitAman]
+    );
+
+    return result.rows
+      .map((row) => String(row.kata || '').trim())
+      .filter(Boolean);
+  }
+
+  static async cekKataSusunKataValid(kata, { panjang = 5 } = {}) {
+    const kataAman = String(kata || '').trim().toLowerCase();
+    const parsedPanjang = Number(panjang);
+    const panjangAman = Math.min(Math.max(Number.isFinite(parsedPanjang) ? parsedPanjang : 5, 4), 8);
+
+    if (!kataAman || kataAman.length !== panjangAman || !/^[a-z]+$/.test(kataAman)) {
+      return false;
+    }
+
+    const result = await db.query(
+      `SELECT 1
+       FROM entri e
+       WHERE e.aktif = 1
+         AND e.jenis = 'dasar'
+         AND e.jenis_rujuk IS NULL
+         AND CHAR_LENGTH(TRIM(e.indeks)) = $1
+         AND TRIM(e.indeks) NOT LIKE '% %'
+         AND TRIM(e.indeks) ~ '^[A-Za-z]+$'
+         AND LOWER(TRIM(e.indeks)) = $2
+       LIMIT 1`,
+      [panjangAman, kataAman]
+    );
+
+    return result.rows.length > 0;
+  }
+
+  static async ambilArtiSusunKataByIndeks(indeks) {
+    const indeksAman = String(indeks || '').trim().toLowerCase();
+    if (!indeksAman) return null;
+
+    const result = await db.query(
+      `SELECT m.makna
+       FROM entri e
+       JOIN makna m ON m.entri_id = e.id
+       WHERE e.aktif = 1
+         AND m.aktif = true
+         AND LOWER(e.indeks) = $1
+       ORDER BY m.polisem ASC, m.id ASC
+       LIMIT 1`,
+      [indeksAman]
+    );
+
+    const arti = String(result.rows[0]?.makna || '').trim();
+    return arti || null;
+  }
+
   static async cariIndukAdmin(query, { limit = 8, excludeId = null } = {}) {
     const trimmed = String(query || '').trim();
     if (!trimmed) return [];

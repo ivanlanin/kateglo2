@@ -25,6 +25,8 @@ import {
   cariMakna,
   cariRima,
   ambilContohRima,
+  ambilPuzzleSusunKata,
+  validasiKataSusunKata,
   autocomplete,
   cariGlosarium,
   ambilGlosariumPerBidang,
@@ -218,6 +220,26 @@ describe('apiPublik', () => {
 
     expect(klien.get).toHaveBeenCalledWith('/api/publik/rima/cari/kata', {
       params: { limit: 50 },
+    });
+  });
+
+  it('ambilPuzzleSusunKata memanggil endpoint puzzle dengan panjang aman', async () => {
+    klien.get.mockResolvedValue({ data: { panjang: 5, target: 'kata', kamus: [] } });
+
+    await ambilPuzzleSusunKata({ panjang: 20 });
+
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/gim/susun-kata/puzzle', {
+      params: { panjang: 8 },
+    });
+  });
+
+  it('validasiKataSusunKata memanggil endpoint validasi dengan kata ter-normalisasi', async () => {
+    klien.get.mockResolvedValue({ data: { kata: 'kartu', panjang: 5, valid: true } });
+
+    await validasiKataSusunKata(' KARTU ', { panjang: 9 });
+
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/gim/susun-kata/validasi/kartu', {
+      params: { panjang: 8 },
     });
   });
 

@@ -20,6 +20,7 @@ vi.mock('../src/halaman/publik/Beranda', () => ({ default: () => <div>Hal Berand
 vi.mock('../src/halaman/publik/Kamus', () => ({ default: () => <div>Hal Kamus</div> }));
 vi.mock('../src/halaman/publik/KamusDetail', () => ({ default: () => <div>Hal Kamus Detail</div> }));
 vi.mock('../src/halaman/publik/Tesaurus', () => ({ default: () => <div>Hal Tesaurus</div> }));
+vi.mock('../src/halaman/gim/SusunKata', () => ({ default: () => <div>Hal Susun Kata</div> }));
 vi.mock('../src/halaman/publik/Glosarium', () => ({ default: () => <div>Hal Glosarium</div> }));
 vi.mock('../src/halaman/publik/AuthCallback', () => ({ default: () => <div>Auth Callback</div> }));
 vi.mock('../src/halaman/publik/KebijakanPrivasi', () => ({ default: () => <div>Kebijakan Privasi</div> }));
@@ -196,6 +197,15 @@ describe('App', () => {
       </MemoryRouter>
     );
     expect(screen.getByText('Kebijakan Privasi')).toBeInTheDocument();
+  });
+
+  it('merender route gim susun kata', () => {
+    render(
+      <MemoryRouter initialEntries={['/gim/susun-kata']}>
+        <App />
+      </MemoryRouter>
+    );
+    expect(screen.getByText('Hal Susun Kata')).toBeInTheDocument();
   });
 
   it('mengalihkan route izin ke login saat belum autentikasi', () => {

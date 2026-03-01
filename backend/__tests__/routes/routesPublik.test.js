@@ -30,6 +30,9 @@ jest.mock('../../models/modelEntri', () => {
     saranEntri,
     contohAcak: jest.fn(),
     contohAcakRima: jest.fn(),
+    ambilKamusSusunKata: jest.fn(),
+    cekKataSusunKataValid: jest.fn(),
+    ambilArtiSusunKataByIndeks: jest.fn(),
     cariMakna: jest.fn(),
     cariRima: jest.fn(),
   };
@@ -291,6 +294,43 @@ describe('routes backend', () => {
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('contoh gagal');
+  });
+
+  it('GET /api/publik/gim/susun-kata/puzzle mengembalikan puzzle Susun Kata', async () => {
+    ModelEntri.ambilKamusSusunKata.mockResolvedValue(['kata']);
+    ModelEntri.ambilArtiSusunKataByIndeks.mockResolvedValue('bagian bahasa');
+
+    const response = await request(createApp()).get('/api/publik/gim/susun-kata/puzzle?panjang=5');
+
+    expect(response.status).toBe(200);
+    expect(ModelEntri.ambilKamusSusunKata).toHaveBeenCalledWith({ panjang: 5, limit: 5000 });
+    expect(ModelEntri.ambilArtiSusunKataByIndeks).toHaveBeenCalledWith('kata');
+    expect(response.body).toMatchObject({
+      panjang: 5,
+      total: 1,
+      kamus: ['kata'],
+      target: 'kata',
+      arti: 'bagian bahasa',
+    });
+  });
+
+  it('GET /api/publik/gim/susun-kata/puzzle mengembalikan 404 saat kamus kosong', async () => {
+    ModelEntri.ambilKamusSusunKata.mockResolvedValue([]);
+
+    const response = await request(createApp()).get('/api/publik/gim/susun-kata/puzzle?panjang=6');
+
+    expect(response.status).toBe(404);
+    expect(response.body.message).toContain('6 huruf');
+  });
+
+  it('GET /api/publik/gim/susun-kata/validasi/:kata mengembalikan status valid kata', async () => {
+    ModelEntri.cekKataSusunKataValid.mockResolvedValue(true);
+
+    const response = await request(createApp()).get('/api/publik/gim/susun-kata/validasi/KARTU?panjang=5');
+
+    expect(response.status).toBe(200);
+    expect(ModelEntri.cekKataSusunKataValid).toHaveBeenCalledWith('kartu', { panjang: 5 });
+    expect(response.body).toEqual({ kata: 'kartu', panjang: 5, valid: true });
   });
 
   it('GET /api/publik/makna/cari/:kata validasi query kosong', async () => {

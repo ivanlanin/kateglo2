@@ -111,6 +111,57 @@ describe('ModelEntri', () => {
     expect(db.query).toHaveBeenCalledWith(expect.any(String), [5]);
   });
 
+  it('ambilKamusSusunKata melakukan clamp panjang/limit dan menormalkan hasil', async () => {
+    db.query.mockResolvedValue({ rows: [{ kata: 'Kata' }, { kata: ' data ' }] });
+
+    const result = await ModelEntri.ambilKamusSusunKata({ panjang: 20, limit: 999999 });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('LOWER(TRIM(e.indeks)) AS kata'),
+      [8, 10000]
+    );
+    expect(result).toEqual(['Kata', 'data']);
+  });
+
+  it('ambilKamusSusunKata memakai fallback nilai default saat parameter tidak valid', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    await ModelEntri.ambilKamusSusunKata({ panjang: 'x', limit: 0 });
+
+    expect(db.query).toHaveBeenCalledWith(expect.any(String), [5, 100]);
+  });
+
+  it('ambilArtiSusunKataByIndeks mengembalikan makna pertama yang aktif', async () => {
+    db.query.mockResolvedValue({ rows: [{ makna: 'alat untuk mencatat' }] });
+
+    const result = await ModelEntri.ambilArtiSusunKataByIndeks('KARTU');
+
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('JOIN makna m ON m.entri_id = e.id'), ['kartu']);
+    expect(result).toBe('alat untuk mencatat');
+  });
+
+  it('cekKataSusunKataValid mengembalikan true saat kata ditemukan', async () => {
+    db.query.mockResolvedValue({ rows: [{ '?column?': 1 }] });
+
+    const result = await ModelEntri.cekKataSusunKataValid('KARTU', { panjang: 5 });
+
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('LOWER(TRIM(e.indeks)) = $2'), [5, 'kartu']);
+    expect(result).toBe(true);
+  });
+
+  it('cekKataSusunKataValid mengembalikan false untuk format kata tidak valid', async () => {
+    await expect(ModelEntri.cekKataSusunKataValid('kata-1', { panjang: 6 })).resolves.toBe(false);
+    expect(db.query).not.toHaveBeenCalled();
+  });
+
+  it('ambilArtiSusunKataByIndeks mengembalikan null bila indeks kosong atau tanpa hasil', async () => {
+    expect(await ModelEntri.ambilArtiSusunKataByIndeks('')).toBeNull();
+    expect(db.query).not.toHaveBeenCalled();
+
+    db.query.mockResolvedValue({ rows: [] });
+    expect(await ModelEntri.ambilArtiSusunKataByIndeks('kata')).toBeNull();
+  });
+
   it('cariIndukAdmin mengembalikan kosong saat query kosong', async () => {
     expect(await ModelEntri.cariIndukAdmin('')).toEqual([]);
     expect(await ModelEntri.cariIndukAdmin('   ')).toEqual([]);

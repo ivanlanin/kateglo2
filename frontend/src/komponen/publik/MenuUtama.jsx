@@ -14,6 +14,7 @@ export const menuItems = [
   { path: '/makna', label: 'Makna' },
   { path: '/rima', label: 'Rima' },
   { path: '/ejaan', label: 'Ejaan' },
+  { path: '/gim/susun-kata', label: 'Gim' },
 ];
 
 function MenuUtama({

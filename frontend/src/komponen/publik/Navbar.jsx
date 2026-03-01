@@ -11,6 +11,7 @@ function Navbar() {
   const [menuTerbuka, setMenuTerbuka] = useState(false);
   const location = useLocation();
   const adalahBeranda = location.pathname === '/';
+  const sedangMainSusunKata = location.pathname.startsWith('/gim/susun-kata');
 
   return (
     <nav className={`navbar-root ${adalahBeranda ? 'navbar-root-beranda' : ''}`}>
@@ -24,7 +25,7 @@ function Navbar() {
           )}
 
           {/* Pencarian (desktop) */}
-          {!adalahBeranda && (
+          {!adalahBeranda && !sedangMainSusunKata && (
             <div className="navbar-search-desktop">
               <KotakCari varian="navbar" />
             </div>
@@ -57,7 +58,7 @@ function Navbar() {
         {/* Menu mobile */}
         {menuTerbuka && (
           <div className="navbar-mobile-panel">
-            {!adalahBeranda && (
+            {!adalahBeranda && !sedangMainSusunKata && (
               <div className="navbar-search-mobile">
                 <KotakCari varian="navbar" />
               </div>

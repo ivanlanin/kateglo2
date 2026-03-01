@@ -21,6 +21,7 @@ router.use('/makna', require('./makna'));
 router.use('/rima', require('./rima'));
 router.use('/tesaurus', require('./tesaurus'));
 router.use('/glosarium', require('./glosarium'));
+router.use('/gim', require('../gim'));
 router.use('/auth', require('./auth'));
 
 module.exports = router;
