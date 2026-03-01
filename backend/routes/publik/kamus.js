@@ -15,7 +15,7 @@ const { parseCursorPagination } = require('../../utils/routesPublikUtils');
 const router = express.Router();
 const domainKamus = 1;
 
-function parseLimitTerpopuler(value, defaultValue = 10) {
+function parseLimitTerpopuler(value, defaultValue) {
   const parsed = Number.parseInt(value, 10);
   if (Number.isNaN(parsed)) return defaultValue;
   return Math.min(Math.max(parsed, 1), 100);

@@ -682,6 +682,24 @@ describe('ModelGlosarium', () => {
     expect(result).toBe(14);
   });
 
+  it('hitungTotalBidang mengembalikan nilai total numerik', async () => {
+    db.query.mockResolvedValue({ rows: [{ total: '7' }] });
+
+    const result = await ModelGlosarium.hitungTotalBidang();
+
+    expect(db.query).toHaveBeenCalledWith('SELECT COUNT(*) AS total FROM bidang');
+    expect(result).toBe(7);
+  });
+
+  it('hitungTotalSumber mengembalikan nilai total numerik', async () => {
+    db.query.mockResolvedValue({ rows: [{ total: '5' }] });
+
+    const result = await ModelGlosarium.hitungTotalSumber();
+
+    expect(db.query).toHaveBeenCalledWith('SELECT COUNT(*) AS total FROM sumber');
+    expect(result).toBe(5);
+  });
+
   it('ambilDenganId mengembalikan null jika tidak ditemukan', async () => {
     db.query.mockResolvedValue({ rows: [] });
 

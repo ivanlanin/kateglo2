@@ -23,6 +23,7 @@ vi.mock('../../src/api/klien', () => ({
 import klien from '../../src/api/klien';
 import {
   useStatistikAdmin,
+  useStatistikPencarianAdmin,
   useDaftarKamusAdmin,
   useAutocompleteIndukKamus,
   useDetailKamusAdmin,
@@ -88,6 +89,48 @@ describe('apiAdmin', () => {
     const statistik = useStatistikAdmin();
     await statistik.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/statistik');
+
+    const statistikPencarianDefault = useStatistikPencarianAdmin();
+    await statistikPencarianDefault.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/statistik/pencarian', {
+      params: {
+        domain: undefined,
+        periode: '7hari',
+        limit: 200,
+        tanggal_mulai: undefined,
+        tanggal_selesai: undefined,
+      },
+    });
+
+    const statistikPencarianCustom = useStatistikPencarianAdmin({
+      domain: '3',
+      periode: '30hari',
+      limit: 500,
+      tanggalMulai: '2026-02-01',
+      tanggalSelesai: '2026-02-29',
+    });
+    await statistikPencarianCustom.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/statistik/pencarian', {
+      params: {
+        domain: '3',
+        periode: '30hari',
+        limit: 500,
+        tanggal_mulai: '2026-02-01',
+        tanggal_selesai: '2026-02-29',
+      },
+    });
+
+    const statistikPencarianPeriodeKosong = useStatistikPencarianAdmin({ periode: '' });
+    await statistikPencarianPeriodeKosong.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/statistik/pencarian', {
+      params: {
+        domain: undefined,
+        periode: undefined,
+        limit: 200,
+        tanggal_mulai: undefined,
+        tanggal_selesai: undefined,
+      },
+    });
 
     const kamus = useDaftarKamusAdmin({ limit: 10, q: 'anak' });
     await kamus.queryFn();
