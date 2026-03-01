@@ -3,12 +3,9 @@
  */
 
 import { useState } from 'react';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 import TataLetak from '../../komponen/bersama/TataLetak';
 import { useStatistikPencarianAdmin } from '../../api/apiAdmin';
-
-dayjs.extend(utc);
+import { formatLocalDateTime } from '../../utils/formatUtils';
 
 const opsiPeriode = [
   { value: '7hari', label: '7 hari terakhir' },
@@ -26,15 +23,7 @@ const opsiDomain = [
 ];
 
 function formatTanggalSingkat(value) {
-  const text = String(value || '').trim();
-  if (!text) return '—';
-
-  const normalized = text.length <= 10 ? `${text}T00:00:00` : text.replace(' ', 'T');
-  const hasTimezone = /(?:Z|[+-]\d{2}:?\d{2})$/i.test(normalized);
-  const source = hasTimezone ? normalized : `${normalized}Z`;
-  const parsed = dayjs.utc(source);
-  if (!parsed.isValid()) return '—';
-  return parsed.format('DD MMM YYYY HH:mm [UTC]');
+  return formatLocalDateTime(value, { fallback: '—', separator: ', ' });
 }
 
 function PencarianAdmin() {
@@ -178,8 +167,8 @@ function PencarianAdmin() {
                   <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Domain</th>
                   <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Kata</th>
                   <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Jumlah</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Awal (UTC)</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Akhir (UTC)</th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Awal</th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Akhir</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-dark-border/60">

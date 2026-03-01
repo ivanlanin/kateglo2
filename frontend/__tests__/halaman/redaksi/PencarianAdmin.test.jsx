@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import PencarianAdmin, { formatTanggalSingkat } from '../../../src/halaman/redaksi/PencarianAdmin';
+import { formatLocalDateTime } from '../../../src/utils/formatUtils';
 
 const mockUseStatistikPencarianAdmin = vi.fn();
 
@@ -24,9 +25,9 @@ describe('PencarianAdmin', () => {
   });
 
   it('helper formatTanggalSingkat memakai format dd mmm yyyy', () => {
-    expect(formatTanggalSingkat('2026-03-01')).toBe('01 Mar 2026 00:00 UTC');
-    expect(formatTanggalSingkat('2026-03-01T10:20:00Z')).toBe('01 Mar 2026 10:20 UTC');
-    expect(formatTanggalSingkat('2026-03-01 10:20:00')).toBe('01 Mar 2026 10:20 UTC');
+    expect(formatTanggalSingkat('2026-03-01')).toBe(formatLocalDateTime('2026-03-01', { fallback: '—', separator: ', ' }));
+    expect(formatTanggalSingkat('2026-03-01T10:20:00Z')).toBe(formatLocalDateTime('2026-03-01T10:20:00Z', { fallback: '—', separator: ', ' }));
+    expect(formatTanggalSingkat('2026-03-01 10:20:00')).toBe(formatLocalDateTime('2026-03-01 10:20:00', { fallback: '—', separator: ', ' }));
     expect(formatTanggalSingkat('bukan-tanggal')).toBe('—');
     expect(formatTanggalSingkat('')).toBe('—');
   });
@@ -75,9 +76,9 @@ describe('PencarianAdmin', () => {
 
     expect(screen.getByText('123')).toBeInTheDocument();
     expect(screen.getByText('air')).toBeInTheDocument();
-    expect(screen.queryByText('01 Mar 2026 00:00 UTC')).not.toBeInTheDocument();
-    expect(screen.getByText('20 Feb 2026 08:15 UTC')).toBeInTheDocument();
-    expect(screen.getByText('28 Feb 2026 23:30 UTC')).toBeInTheDocument();
+    expect(screen.queryByText(formatLocalDateTime('2026-03-01', { fallback: '—', separator: ', ' }))).not.toBeInTheDocument();
+    expect(screen.getByText(formatLocalDateTime('2026-02-20 08:15:00', { fallback: '—', separator: ', ' }))).toBeInTheDocument();
+    expect(screen.getByText(formatLocalDateTime('2026-02-28 23:30:00', { fallback: '—', separator: ', ' }))).toBeInTheDocument();
   });
 
   it('menampilkan state error saat query gagal', () => {
