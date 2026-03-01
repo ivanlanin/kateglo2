@@ -295,7 +295,11 @@ function SusunKata() {
   });
 
   return (
-    <HalamanDasar judul="Susun Kata" deskripsi="Gim susun kata dari data Kateglo" tampilkanJudul={false}>
+    <HalamanDasar
+      judul="Susun Kata"
+      deskripsi="Mainkan gim susun kata harian seperti Wordle untuk menyusun kata bahasa Indonesia dalam enam percobaan."
+      tampilkanJudul={false}
+    >
       <div className="susun-kata-wrap">
         <div className="susun-kata-heading-row">
           <h1 className="susun-kata-heading">Susun Kata</h1>

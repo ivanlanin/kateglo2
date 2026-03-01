@@ -185,6 +185,11 @@ describe('entry-server', () => {
     expect(ejaanDetailUnknown.title).toBe('Aturan Baru — Kateglo');
     const ejaanDetailKosong = __private.buildMetaForPath('/ejaan/---', site);
     expect(ejaanDetailKosong.title).toBe('Ejaan — Kateglo');
+
+    const gimSusunKata = __private.buildMetaForPath('/gim/susun-kata', site);
+    expect(gimSusunKata.title).toBe('Susun Kata — Kateglo');
+    expect(gimSusunKata.description).toContain('susun kata harian');
+
     expect(__private.buildMetaForPath('/kebijakan-privasi', site).title).toBe('Kebijakan Privasi — Kateglo');
 
     const defaultMeta = __private.buildMetaForPath('/random', site);

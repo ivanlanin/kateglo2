@@ -95,6 +95,13 @@ function buildMetaEjaan(slug = '') {
   };
 }
 
+function buildMetaSusunKata() {
+  return {
+    judul: 'Susun Kata',
+    deskripsi: 'Mainkan gim susun kata harian seperti Wordle untuk menyusun kata bahasa Indonesia dalam enam percobaan.',
+  };
+}
+
 function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', prefetchedData = null) {
   const defaultMeta = {
     title: 'Kateglo',
@@ -209,6 +216,11 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
   // /kebijakan-privasi
   if (path.startsWith('/kebijakan-privasi')) {
     return { title: 'Kebijakan Privasi \u2014 Kateglo', description: 'Kebijakan privasi layanan Kateglo.' };
+  }
+
+  // /gim/susun-kata
+  if (path === '/gim/susun-kata' || path === '/gim/susun-kata/') {
+    return titled(buildMetaSusunKata());
   }
 
   return { ...defaultMeta, canonicalUrl: `${siteBaseUrl}${path}` };
