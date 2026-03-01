@@ -144,7 +144,7 @@ describe('App', () => {
       adalahRedaksi: true,
       adalahAdmin: false,
       isLoading: false,
-      punyaIzin: (izin) => izin === 'lihat_statistik',
+      punyaIzin: (izin) => izin === 'lihat_pencarian',
     });
 
     render(

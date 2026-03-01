@@ -56,7 +56,7 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
  * GET /api/redaksi/statistik/pencarian
  * Statistik kata pencarian terpopuler lintas domain
  */
-router.get('/pencarian', periksaIzin('lihat_statistik'), async (req, res, next) => {
+router.get('/pencarian', periksaIzin('lihat_pencarian'), async (req, res, next) => {
   try {
     const domain = req.query.domain;
     const periode = req.query.periode;

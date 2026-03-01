@@ -26,7 +26,7 @@ function parsePanjangFilter(value) {
   return ModelSusunKata.parsePanjang(raw, 5);
 }
 
-router.get('/harian', periksaIzin('lihat_entri'), async (req, res, next) => {
+router.get('/harian', periksaIzin('kelola_susun_kata'), async (req, res, next) => {
   try {
     const tanggal = parseTanggal(req.query.tanggal);
     const panjang = parsePanjangFilter(req.query.panjang);
@@ -50,7 +50,7 @@ router.get('/harian', periksaIzin('lihat_entri'), async (req, res, next) => {
   }
 });
 
-router.get('/harian/detail', periksaIzin('lihat_entri'), async (req, res, next) => {
+router.get('/harian/detail', periksaIzin('kelola_susun_kata'), async (req, res, next) => {
   try {
     const tanggal = parseTanggal(req.query.tanggal);
     const panjang = parsePanjangFilter(req.query.panjang);
@@ -87,7 +87,7 @@ router.get('/harian/detail', periksaIzin('lihat_entri'), async (req, res, next) 
   }
 });
 
-router.put('/harian', periksaIzin('edit_entri'), async (req, res, next) => {
+router.put('/harian', periksaIzin('kelola_susun_kata'), async (req, res, next) => {
   try {
     const tanggal = parseTanggal(req.body?.tanggal);
     const panjang = parsePanjang(req.body?.panjang);

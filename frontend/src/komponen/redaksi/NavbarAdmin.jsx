@@ -18,18 +18,18 @@ const kelompokMenuAdmin = [
   },
   {
     judul: 'Gim',
-    items: [{ path: '/redaksi/susun-kata', label: 'Susun Kata', izin: 'lihat_entri' }],
+    items: [{ path: '/redaksi/susun-kata', label: 'Susun Kata', izin: 'kelola_susun_kata' }],
   },
   {
     judul: 'Interaksi',
     items: [
       { path: '/redaksi/komentar', label: 'Komentar', izin: 'kelola_komentar' },
-      { path: '/redaksi/pencarian', label: 'Pencarian', izin: 'lihat_statistik' },
+      { path: '/redaksi/pencarian', label: 'Pencarian', izin: 'lihat_pencarian' },
     ],
   },
   {
     judul: 'Audit',
-    items: [{ path: '/redaksi/audit-makna', label: 'Makna', izin: 'lihat_entri' }],
+    items: [{ path: '/redaksi/audit-makna', label: 'Makna', izin: 'audit_makna' }],
   },
   {
     judul: 'Master',

@@ -16,7 +16,7 @@ const {
 const router = express.Router();
 const statusValid = ['tinjau', 'salah', 'tambah', 'nama'];
 
-router.get('/', periksaIzin('lihat_entri'), async (req, res, next) => {
+router.get('/', periksaIzin('audit_makna'), async (req, res, next) => {
   try {
     const { limit, offset } = parsePagination(req.query);
     const q = parseSearchQuery(req.query.q);
@@ -35,7 +35,7 @@ router.get('/', periksaIzin('lihat_entri'), async (req, res, next) => {
   }
 });
 
-router.put('/:id', periksaIzin('edit_makna'), async (req, res, next) => {
+router.put('/:id', periksaIzin('audit_makna'), async (req, res, next) => {
   try {
     const id = parseIdParam(req.params.id);
     const status = parseTrimmedString(req.body?.status).toLowerCase();
