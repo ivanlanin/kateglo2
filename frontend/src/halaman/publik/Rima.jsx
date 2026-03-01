@@ -6,9 +6,9 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ambilContohRima, cariRima } from '../../api/apiPublik';
-import CursorNavButton from '../../komponen/publik/CursorNavButton';
+import TombolNavKursor from '../../komponen/publik/TombolNavKursor';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
-import NavigasiLoadingOverlay from '../../komponen/publik/NavigasiLoadingOverlay';
+import HamparanMuatNav from '../../komponen/publik/HamparanMuatNav';
 import { QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
 import { amanDecode } from './Makna';
@@ -153,13 +153,13 @@ function Rima() {
                   </span>
                 )}
                 <div className="rima-heading-nav">
-                  <CursorNavButton
+                  <TombolNavKursor
                     symbol="‹"
                     onClick={handleAkhirPrev}
                     disabled={isFetching || !rimaAkhir?.hasPrev}
                     className="paginasi-btn rima-heading-nav-button"
                   />
-                  <CursorNavButton
+                  <TombolNavKursor
                     symbol="›"
                     onClick={handleAkhirNext}
                     disabled={isFetching || !rimaAkhir?.hasNext}
@@ -168,14 +168,14 @@ function Rima() {
                 </div>
               </div>
             </div>
-            <NavigasiLoadingOverlay
+            <HamparanMuatNav
               isLoading={isMemuatRimaAkhir}
               loadingText="Memuat rima …"
             >
               <DaftarRima
                 items={rimaAkhir?.data}
               />
-            </NavigasiLoadingOverlay>
+            </HamparanMuatNav>
           </div>
 
           <div className="mt-6">
@@ -188,13 +188,13 @@ function Rima() {
                   </span>
                 )}
                 <div className="rima-heading-nav">
-                  <CursorNavButton
+                  <TombolNavKursor
                     symbol="‹"
                     onClick={handleAwalPrev}
                     disabled={isFetching || !rimaAwal?.hasPrev}
                     className="paginasi-btn rima-heading-nav-button"
                   />
-                  <CursorNavButton
+                  <TombolNavKursor
                     symbol="›"
                     onClick={handleAwalNext}
                     disabled={isFetching || !rimaAwal?.hasNext}
@@ -203,14 +203,14 @@ function Rima() {
                 </div>
               </div>
             </div>
-            <NavigasiLoadingOverlay
+            <HamparanMuatNav
               isLoading={isMemuatRimaAwal}
               loadingText="Memuat rima …"
             >
               <DaftarRima
                 items={rimaAwal?.data}
               />
-            </NavigasiLoadingOverlay>
+            </HamparanMuatNav>
           </div>
         </>
       )}

@@ -2,7 +2,7 @@
  * @fileoverview Tombol navigasi cursor dengan state loading spinner
  */
 
-function CursorNavButton({
+function TombolNavKursor({
   symbol,
   onClick,
   isLoading = false,
@@ -33,4 +33,4 @@ function CursorNavButton({
   );
 }
 
-export default CursorNavButton;
+export default TombolNavKursor;

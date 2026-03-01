@@ -1,4 +1,4 @@
-function NavigasiLoadingOverlay({ isLoading = false, loadingText = 'Memuat data …', contentClassName = '', children }) {
+function HamparanMuatNav({ isLoading = false, loadingText = 'Memuat data …', contentClassName = '', children }) {
   const kelasKonten = [contentClassName, isLoading ? 'navigasi-loading-content' : '']
     .filter(Boolean)
     .join(' ');
@@ -23,4 +23,4 @@ function NavigasiLoadingOverlay({ isLoading = false, loadingText = 'Memuat data 
   );
 }
 
-export default NavigasiLoadingOverlay;
+export default HamparanMuatNav;

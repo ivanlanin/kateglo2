@@ -24,7 +24,7 @@ import {
   ToggleAktif,
   FormFooter,
   PesanForm,
-} from '../../komponen/redaksi/FormAdmin';
+} from '../../komponen/redaksi/FormulirAdmin';
 
 function formatTanggal(dateStr) {
   return formatLocalDateTime(dateStr, { fallback: '—', separator: ', ' });

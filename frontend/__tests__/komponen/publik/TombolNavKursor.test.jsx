@@ -1,12 +1,12 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import CursorNavButton from '../../../src/komponen/publik/CursorNavButton';
+import TombolNavKursor from '../../../src/komponen/publik/TombolNavKursor';
 
-describe('CursorNavButton', () => {
+describe('TombolNavKursor', () => {
   it('merender simbol dan menjalankan onClick saat tidak loading', () => {
     const onClick = vi.fn();
 
-    render(<CursorNavButton symbol="»" onClick={onClick} />);
+    render(<TombolNavKursor symbol="»" onClick={onClick} />);
 
     const tombol = screen.getByRole('button', { name: '»' });
     fireEvent.click(tombol);
@@ -18,7 +18,7 @@ describe('CursorNavButton', () => {
 
   it('menampilkan spinner saat loading dan menghormati disabled + className custom', () => {
     render(
-      <CursorNavButton
+      <TombolNavKursor
         symbol="«"
         onClick={() => {}}
         isLoading={true}

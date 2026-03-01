@@ -33,7 +33,7 @@ import {
   ToggleAktif,
   FormFooter,
   PesanForm,
-} from '../../komponen/redaksi/FormAdmin';
+} from '../../komponen/redaksi/FormulirAdmin';
 import { buatPathDetailKamus, parsePositiveIntegerParam } from '../../utils/paramUtils';
 
 const daftarBahasaEtimologi = [

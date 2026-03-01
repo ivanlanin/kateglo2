@@ -15,7 +15,7 @@ import {
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import HasilPencarian from '../../komponen/publik/HasilPencarian';
 import KartuKategori from '../../komponen/publik/KartuKategori';
-import PensilSunting from '../../komponen/publik/PensilSunting';
+import TombolSunting from '../../komponen/publik/TombolSunting';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus, buatSlug } from '../../utils/paramUtils';
 import { formatNamaBidang, renderEntriGlosariumTertaut } from '../../utils/formatUtils';
@@ -208,7 +208,7 @@ function Glosarium() {
 
   const renderAdminEditLink = (item) => {
     if (!adalahAdmin || !item?.id || !item?.asing || !item?.indonesia) return null;
-    return <PensilSunting to={`/redaksi/glosarium/${item.id}`} />;
+    return <TombolSunting to={`/redaksi/glosarium/${item.id}`} />;
   };
 
   return (

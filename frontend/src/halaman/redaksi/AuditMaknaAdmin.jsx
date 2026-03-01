@@ -23,7 +23,7 @@ import {
   TextareaField,
   FormFooter,
   PesanForm,
-} from '../../komponen/redaksi/FormAdmin';
+} from '../../komponen/redaksi/FormulirAdmin';
 
 const nilaiAwal = {
   id: null,

@@ -1,13 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import PensilSunting from '../../../src/komponen/publik/PensilSunting';
+import TombolSunting from '../../../src/komponen/publik/TombolSunting';
 
-describe('PensilSunting', () => {
+describe('TombolSunting', () => {
   it('mengembalikan null saat properti to kosong', () => {
     const { container } = render(
       <MemoryRouter>
-        <PensilSunting to="" />
+        <TombolSunting to="" />
       </MemoryRouter>
     );
     expect(container.firstChild).toBeNull();
@@ -16,7 +16,7 @@ describe('PensilSunting', () => {
   it('merender link edit dengan properti default', () => {
     render(
       <MemoryRouter>
-        <PensilSunting to="/redaksi/glosarium/10" />
+        <TombolSunting to="/redaksi/glosarium/10" />
       </MemoryRouter>
     );
 

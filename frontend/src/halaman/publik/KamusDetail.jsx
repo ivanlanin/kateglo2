@@ -7,11 +7,11 @@ import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategoriKamus, cariGlosarium } from '../../api/apiPublik';
 import { useAuth } from '../../context/authContext';
-import CursorNavButton from '../../komponen/publik/CursorNavButton';
+import TombolNavKursor from '../../komponen/publik/TombolNavKursor';
 import PanelLipat from '../../komponen/publik/PanelLipat';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
-import NavigasiLoadingOverlay from '../../komponen/publik/NavigasiLoadingOverlay';
-import PensilSunting from '../../komponen/publik/PensilSunting';
+import HamparanMuatNav from '../../komponen/publik/HamparanMuatNav';
+import TombolSunting from '../../komponen/publik/TombolSunting';
 import { PesanTidakDitemukan } from '../../komponen/publik/StatusKonten';
 import {
   formatLemaHomonim,
@@ -197,7 +197,7 @@ function BadgeSumberDanTombolEdit({
         <Link to={pathSumber} className={kelasBadge}>{kode}</Link>
       )}
       {editTo && (
-        <PensilSunting
+        <TombolSunting
           to={editTo}
           ariaLabel={editAriaLabel}
           title={editTitle}
@@ -916,13 +916,13 @@ function KamusDetail() {
                 aksen={true}
                 aksiKanan={(
                   <div className="rima-heading-nav">
-                    <CursorNavButton
+                    <TombolNavKursor
                       symbol="‹"
                       onClick={handlePrevGlosarium}
                       disabled={isFetchingGlosarium || !glosariumPageInfo.hasPrev}
                       className="paginasi-btn rima-heading-nav-button"
                     />
-                    <CursorNavButton
+                    <TombolNavKursor
                       symbol="›"
                       onClick={handleNextGlosarium}
                       disabled={isFetchingGlosarium || !glosariumPageInfo.hasNext}
@@ -931,7 +931,7 @@ function KamusDetail() {
                   </div>
                 )}
               >
-                <NavigasiLoadingOverlay
+                <HamparanMuatNav
                   isLoading={isNavigasiGlosariumMemuat}
                   loadingText="Memuat glosarium …"
                   contentClassName="text-sm leading-relaxed"
@@ -974,7 +974,7 @@ function KamusDetail() {
                         {i < glosarium.length - 1 && <span>; </span>}
                       </span>
                     ))}
-                </NavigasiLoadingOverlay>
+                </HamparanMuatNav>
               </PanelLipat>
             )}
           </div>

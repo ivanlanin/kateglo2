@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-function PensilSunting({
+function TombolSunting({
   to,
   className = 'glosarium-edit-link-inline',
   ariaLabel = 'Sunting entri glosarium di Redaksi',
@@ -26,4 +26,4 @@ function PensilSunting({
   );
 }
 
-export default PensilSunting;
+export default TombolSunting;

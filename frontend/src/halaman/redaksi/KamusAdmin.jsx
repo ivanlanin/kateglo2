@@ -28,7 +28,7 @@ import PanelGeser from '../../komponen/redaksi/PanelGeser';
 import {
   useFormPanel, InputField, SelectField, TextareaField, ToggleAktif,
   FormFooter, PesanForm,
-} from '../../komponen/redaksi/FormAdmin';
+} from '../../komponen/redaksi/FormulirAdmin';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
 
 // ─── Constants ───────────────────────────────────────────────────────────────

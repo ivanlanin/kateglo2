@@ -57,7 +57,7 @@ vi.mock('../../../src/komponen/redaksi/PanelGeser', () => ({
   ),
 }));
 
-vi.mock('../../../src/komponen/redaksi/FormAdmin', () => ({
+vi.mock('../../../src/komponen/redaksi/FormulirAdmin', () => ({
   useFormPanel: (nilaiAwal = {}) => {
     const [buka, setBuka] = useState(false);
     const [data, setData] = useState(nilaiAwal);

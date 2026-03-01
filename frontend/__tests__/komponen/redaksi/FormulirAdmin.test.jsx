@@ -9,7 +9,7 @@ import {
   TextareaField,
   ToggleAktif,
   useFormPanel,
-} from '../../../src/komponen/redaksi/FormAdmin';
+} from '../../../src/komponen/redaksi/FormulirAdmin';
 
 function HarnessFormPanel() {
   const form = useFormPanel({ nama: 'awal', aktif: 1 });
@@ -24,7 +24,7 @@ function HarnessFormPanel() {
   );
 }
 
-describe('FormAdmin', () => {
+describe('FormulirAdmin', () => {
   it('useFormPanel mengelola mode tambah/sunting dan ubah data', () => {
     render(<HarnessFormPanel />);
 

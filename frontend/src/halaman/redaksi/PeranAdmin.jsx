@@ -28,7 +28,7 @@ import {
   TextareaField,
   FormFooter,
   PesanForm,
-} from '../../komponen/redaksi/FormAdmin';
+} from '../../komponen/redaksi/FormulirAdmin';
 import KotakCentang from '../../komponen/redaksi/KotakCentang';
 import { useSelectableIds } from '../../hooks/redaksi/useSelectableIds';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';

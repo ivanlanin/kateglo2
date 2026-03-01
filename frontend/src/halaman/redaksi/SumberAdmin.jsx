@@ -27,7 +27,7 @@ import {
   TextareaField,
   FormFooter,
   PesanForm,
-} from '../../komponen/redaksi/FormAdmin';
+} from '../../komponen/redaksi/FormulirAdmin';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
 const nilaiAwal = { kode: '', nama: '', keterangan: '', glosarium: false, kamus: false, tesaurus: false, etimologi: false };
