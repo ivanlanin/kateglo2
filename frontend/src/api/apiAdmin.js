@@ -889,6 +889,31 @@ export function useSimpanSusunKataHarianAdmin() {
   });
 }
 
+export function useBuatSusunKataHarianAdmin() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ tanggal = '', panjang = '' } = {}) => {
+      const tanggalRaw = String(tanggal || '').trim();
+      const panjangRaw = String(panjang || '').trim();
+      const panjangAman = panjangRaw
+        ? Math.min(Math.max(Number(panjangRaw) || 5, 4), 8)
+        : undefined;
+
+      return klien
+        .get('/api/redaksi/susun-kata/harian', {
+          params: {
+            tanggal: tanggalRaw || undefined,
+            panjang: panjangAman,
+          },
+        })
+        .then((r) => r.data);
+    },
+    onSuccess: () => {
+      invalidateQueryKeys(qc, ['admin-susun-kata-harian', 'admin-susun-kata-harian-detail']);
+    },
+  });
+}
+
 export function useSimpanSumber() {
   return useSimpanAdmin({ path: '/api/redaksi/sumber', queryKeyPrefix: 'admin-sumber' });
 }

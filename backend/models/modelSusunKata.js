@@ -37,6 +37,42 @@ function hitungOffsetHari(tanggal) {
   return Math.floor((milidetikSekarang - milidetikBase) / 86400000);
 }
 
+function gcd(a, b) {
+  let x = Math.abs(a);
+  let y = Math.abs(b);
+  while (y !== 0) {
+    const sisa = x % y;
+    x = y;
+    y = sisa;
+  }
+  return x;
+}
+
+function hash32(input) {
+  const teks = String(input || '');
+  let hash = 2166136261;
+  for (let i = 0; i < teks.length; i += 1) {
+    hash ^= teks.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+function pilihIndexKata({ panjang, offsetHari, totalKamus }) {
+  if (totalKamus <= 1) return 0;
+
+  const seed = `susun-kata:${BASE_TANGGAL}:${panjang}`;
+  const start = hash32(`${seed}:start`) % totalKamus;
+
+  let step = (hash32(`${seed}:step`) % (totalKamus - 1)) + 1;
+  while (gcd(step, totalKamus) !== 1) {
+    step = (step % (totalKamus - 1)) + 1;
+  }
+
+  const putaran = ((offsetHari % totalKamus) + totalKamus) % totalKamus;
+  return (start + (putaran * step)) % totalKamus;
+}
+
 function hitungSkor({ percobaan, menang }) {
   if (!menang) return 0;
   const percobaanAman = Math.min(Math.max(Number.parseInt(percobaan, 10) || 6, 1), 6);
@@ -144,7 +180,11 @@ class ModelSusunKata {
     if (!kamus.length) return null;
 
     const offsetHari = hitungOffsetHari(tanggalAman);
-    const indexKata = ((offsetHari % kamus.length) + kamus.length) % kamus.length;
+    const indexKata = pilihIndexKata({
+      panjang: panjangAman,
+      offsetHari,
+      totalKamus: kamus.length,
+    });
     const kata = String(kamus[indexKata] || '').trim().toLowerCase();
 
     const insertResult = await db.query(

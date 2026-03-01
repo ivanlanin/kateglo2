@@ -20,6 +20,7 @@ import {
   useFormPanel,
 } from '../../komponen/redaksi/FormulirAdmin';
 import {
+  useBuatSusunKataHarianAdmin,
   useDetailSusunKataHarianAdmin,
   useSimpanSusunKataHarianAdmin,
   useSusunKataHarianAdmin,
@@ -66,6 +67,7 @@ function SusunKataAdmin() {
   });
   const { data: detailResp } = useDetailSusunKataHarianAdmin(selected);
   const simpan = useSimpanSusunKataHarianAdmin();
+  const buatHarian = useBuatSusunKataHarianAdmin();
 
   const dataTabel = useMemo(
     () => (Array.isArray(data?.data) ? data.data : []),
@@ -171,15 +173,37 @@ function SusunKataAdmin() {
   };
 
   const handleReset = () => {
-    const hariIni = tanggalHariIni();
-    setCariTanggal(hariIni);
-    setTanggalQuery(hariIni);
+    setCariTanggal('');
+    setTanggalQuery('');
     setPanjangDraft('');
     setPanjang('');
   };
 
+  const handleBuatKataHarian = () => {
+    setPesan({ error: '', sukses: '' });
+    const tanggalAman = String(cariTanggal || tanggalQuery || tanggalHariIni()).trim();
+    const panjangAman = String(panjangDraft || '').trim();
+
+    buatHarian.mutate(
+      {
+        tanggal: tanggalAman,
+        panjang: panjangAman,
+      },
+      {
+        onSuccess: () => {
+          setTanggalQuery(tanggalAman);
+          setPanjang(panjangAman);
+          setPesan({ error: '', sukses: 'Kata harian berhasil dibuat.' });
+        },
+        onError: (error) => {
+          setPesan({ error: getApiErrorMessage(error, 'Gagal membuat kata harian.'), sukses: '' });
+        },
+      }
+    );
+  };
+
   return (
-    <TataLetak mode="admin" judul="Susun Kata" aksiJudul={<TombolAksiAdmin onClick={bukaPanel} label="Atur Kata Harian" />}>
+    <TataLetak mode="admin" judul="Susun Kata" aksiJudul={<TombolAksiAdmin onClick={handleBuatKataHarian} label={buatHarian.isPending ? 'Membuat …' : 'Buat Kata Harian'} />}>
       <BarisFilterCariAdmin
         nilai={cariTanggal}
         onChange={setCariTanggal}
@@ -212,7 +236,9 @@ function SusunKataAdmin() {
         onKlikBaris={bukaPanel}
       />
 
-      <PanelGeser buka={panel.buka} onTutup={tutupPanel} judul="Atur Kata Harian Susun Kata">
+      {!panel.buka && (pesan.error || pesan.sukses) ? <PesanForm error={pesan.error} sukses={pesan.sukses} /> : null}
+
+      <PanelGeser buka={panel.buka} onTutup={tutupPanel} judul="Sunting Susun Kata">
         <PesanForm error={pesan.error} sukses={pesan.sukses} />
         <InputField label="Tanggal" name="tanggal" value={panel.data.tanggal} onChange={panel.ubahField} required />
         <InputField label="Panjang" name="panjang" value={panel.data.panjang} onChange={panel.ubahField} required />

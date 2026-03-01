@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-03-02 Senin
+
+- Membuat versi awal gim [Susun Kata](/gim/susun-kata)
+
 ## 2026-03-01 Minggu
 
 - Merujuk sumber kamus, tesaurus, dan etimologi ke tabel sumber
