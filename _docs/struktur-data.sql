@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-02T18:39:08.854Z
+-- Generated: 2026-03-02T19:15:51.999Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -18,7 +18,7 @@ declare
   waktu_utc timestamp without time zone;
 begin
   IF NEW.tanggal IS NULL THEN
-    NEW.tanggal := CURRENT_DATE;
+    NEW.tanggal := (now() AT TIME ZONE 'Asia/Jakarta')::date;
   end IF;
 
   IF NEW.kata IS NULL OR btrim(NEW.kata) = '' THEN
