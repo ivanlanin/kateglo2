@@ -3,6 +3,7 @@
 ## 2026-03-02 Senin
 
 - Membuat versi awal gim [Susun Kata](/gim/susun-kata)
+- Mengganti gambar pratayang media sosial
 
 ## 2026-03-01 Minggu
 

@@ -216,7 +216,7 @@ describe('entry-server', () => {
     delete globalThis.process;
 
     const { headTags } = await render('/');
-    expect(headTags).toContain('https://kateglo.org/Logo%20Kateglo.png');
+    expect(headTags).toContain('https://kateglo.org/logo-kateglo-sosial.png');
 
     globalThis.process = originalGlobal;
   });

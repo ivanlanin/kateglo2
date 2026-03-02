@@ -5,7 +5,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/authContext';
-import TombolMasukGoogle from '../../komponen/bersama/TombolMasukGoogle';
+import TombolMasuk from '../../komponen/bersama/TombolMasuk';
 
 function LoginAdmin() {
   const { isAuthenticated, adalahRedaksi, isLoading, loginDenganGoogle } = useAuth();
@@ -47,7 +47,7 @@ function LoginAdmin() {
           </div>
         )}
 
-        <TombolMasukGoogle onClick={() => loginDenganGoogle('/redaksi')} />
+        <TombolMasuk onClick={() => loginDenganGoogle('/redaksi')} />
       </div>
     </div>
   );

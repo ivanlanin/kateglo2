@@ -1063,7 +1063,7 @@ describe('KamusDetail', () => {
     render(<KamusDetail />);
 
     expect(screen.queryByText(/Ada 3 komentar pada entri ini/i)).not.toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Masuk dengan Google' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Masuk dengan Google' })).toBeInTheDocument();
   });
 
   it('menampilkan komentar terbaca saat login', () => {
@@ -1329,7 +1329,7 @@ describe('KamusDetail', () => {
     });
   });
 
-  it('klik tautan login Google memanggil loginDenganGoogle pada kedua mode teaser', () => {
+  it('klik tombol login Google memanggil loginDenganGoogle pada kedua mode teaser', () => {
     const loginDenganGoogle = vi.fn();
     mockUseAuth.mockReturnValue({
       isAuthenticated: false,
@@ -1368,7 +1368,7 @@ describe('KamusDetail', () => {
     });
 
     const { rerender } = render(<KamusDetail />);
-    fireEvent.click(screen.getByRole('link', { name: 'Masuk dengan Google' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Masuk dengan Google' }));
 
     panggilan = 0;
     mockUseQuery.mockImplementation(() => {
@@ -1401,7 +1401,7 @@ describe('KamusDetail', () => {
     });
 
     rerender(<KamusDetail />);
-  fireEvent.click(screen.getByRole('link', { name: 'Masuk dengan Google' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Masuk dengan Google' }));
 
     expect(loginDenganGoogle).toHaveBeenCalledTimes(2);
   });

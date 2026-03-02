@@ -37,6 +37,12 @@
       }
     },
     {
+      "files": ["scripts/**/*.{js,mjs}"],
+      "env": {
+        "node": true
+      }
+    },
+    {
       "files": ["__tests__/**/*.{js,jsx}"],
       "globals": {
         "vi": "readonly",

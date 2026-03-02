@@ -12,6 +12,7 @@ import PanelLipat from '../../komponen/publik/PanelLipat';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import HamparanMuatNav from '../../komponen/publik/HamparanMuatNav';
 import TombolSunting from '../../komponen/publik/TombolSunting';
+import TombolMasuk from '../../komponen/bersama/TombolMasuk';
 import { PesanTidakDitemukan } from '../../komponen/publik/StatusKonten';
 import {
   formatLemaHomonim,
@@ -862,16 +863,16 @@ function KamusDetail() {
                 </div>
               ) : (
                 <div className="space-y-2 text-sm">
-                  <a
-                    href="/auth/google"
+                  <TombolMasuk
+                    label="Masuk dengan Google"
                     onClick={(event) => {
-                      event.preventDefault();
+                      if (event?.preventDefault) {
+                        event.preventDefault();
+                      }
                       loginDenganGoogle(window.location.pathname + window.location.search);
                     }}
-                    className="inline-flex items-center px-3 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-400"
-                  >
-                    Masuk dengan Google
-                  </a>
+                    className="w-auto px-3 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-400 border-0"
+                  />
                 </div>
               )}
             </PanelLipat>

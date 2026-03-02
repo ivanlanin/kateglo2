@@ -2,7 +2,7 @@
  * @fileoverview Tombol masuk Google reusable
  */
 
-function TombolMasukGoogle({ onClick, label = 'Masuk dengan Google', className = '' }) {
+function TombolMasuk({ onClick, label = 'Masuk dengan Google', className = '' }) {
   return (
     <button
       type="button"
@@ -20,4 +20,4 @@ function TombolMasukGoogle({ onClick, label = 'Masuk dengan Google', className =
   );
 }
 
-export default TombolMasukGoogle;
+export default TombolMasuk;

@@ -14,7 +14,7 @@ import {
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import { QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { useAuth } from '../../context/authContext';
-import TombolMasukGoogle from '../../komponen/bersama/TombolMasukGoogle';
+import TombolMasuk from '../../komponen/bersama/TombolMasuk';
 import PesanMunculan from '../../komponen/bersama/PesanMunculan';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
 
@@ -328,7 +328,7 @@ function SusunKata() {
             <p className="susun-kata-locked-text">
               Susun Kata adalah gim menyusun lima huruf untuk membentuk kata yang sah dalam kamus dalam enam kesempatan. Gim ini terinspirasi oleh Wordle dari Josh Wardle dan mengikuti semua aturan gim tersebut.
             </p>
-            <TombolMasukGoogle
+            <TombolMasuk
               label="Masuk untuk Bermain"
               className="susun-kata-login-btn"
               onClick={() => loginDenganGoogle('/gim/susun-kata')}

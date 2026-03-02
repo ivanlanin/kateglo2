@@ -246,7 +246,7 @@ export async function render(url = '/', prefetchedData = null) {
   if (shouldSkipSsr(pathname)) {
     const meta = buildMetaForPath(pathname, siteBaseUrl, prefetchedData);
     const canonicalUrl = meta.canonicalUrl;
-    const imageUrl = `${siteBaseUrl}/Logo%20Kateglo.png`;
+    const imageUrl = `${siteBaseUrl}/logo-kateglo-sosial.png`;
     const title = escapeHtml(meta.title);
     const description = escapeHtml(meta.description);
     const escapedCanonicalUrl = escapeHtml(canonicalUrl);
@@ -284,7 +284,7 @@ export async function render(url = '/', prefetchedData = null) {
 
   const meta = buildMetaForPath(pathname, siteBaseUrl, prefetchedData);
   const canonicalUrl = meta.canonicalUrl || `${siteBaseUrl}${pathname}`;
-  const imageUrl = `${siteBaseUrl}/Logo%20Kateglo.png`;
+  const imageUrl = `${siteBaseUrl}/logo-kateglo-sosial.png`;
   const title = escapeHtml(meta.title);
   const description = escapeHtml(meta.description);
   const escapedCanonicalUrl = escapeHtml(canonicalUrl);
