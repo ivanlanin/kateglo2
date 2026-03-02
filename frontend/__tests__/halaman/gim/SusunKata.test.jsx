@@ -116,8 +116,8 @@ describe('SusunKata', () => {
     fireEvent.keyDown(window, { key: 'Enter' });
 
     expect(screen.getByText('Selamat! 🥳')).toBeInTheDocument();
-    expect(screen.getByText(/Kata KARTU berarti 'lembar kecil sebagai penanda identitas'\./i)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'entri kata itu di kamus' })).toHaveAttribute('href', '/kamus/detail/kartu');
+    expect(screen.getByText(/Mau lihat arti kartu di kamus\?/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Lihat entri kartu di kamus/i })).toHaveAttribute('href', '/kamus/detail/kartu');
     expect(screen.getAllByText('K').some((el) => el.className.includes('susun-kata-key-benar'))).toBe(true);
     expect(screen.getAllByText('A').some((el) => el.className.includes('susun-kata-key-benar'))).toBe(true);
   });

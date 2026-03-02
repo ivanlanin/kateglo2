@@ -205,16 +205,12 @@ function SusunKata() {
         );
       }
 
-      const artiAman = data?.arti || 'arti belum tersedia';
       tampilkanPesan(
         'success',
         'Selamat! 🥳',
         (
           <>
-            Kata {target.toUpperCase()} berarti {"'"}{artiAman}{"'"}.
-            <br />
-            <br />
-            Lihat <Link className="pesan-munculan-link" to={buatPathDetailKamus(target)}>entri kata itu di kamus</Link>.
+            <Link className="pesan-munculan-link" to={buatPathDetailKamus(target)}>Mau lihat arti {target} di kamus</Link>?
           </>
         )
       );
@@ -241,7 +237,6 @@ function SusunKata() {
       tampilkanPesan('error', `Kesempatan habis. Jawabannya ${target.toUpperCase()}.`);
     }
   }, [
-    data?.arti,
     kamusSet,
     kirimSkor,
     mulaiMainAt,
