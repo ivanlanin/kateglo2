@@ -3,6 +3,7 @@
 ## 2026-03-03 Selasa
 
 - Menampilkan kategori tagar di [Kamus](/kamus), misalnya *[peng-](/kamus/tagar/peng)*
+- Menampilkan lencana tagar di tajuk detail [Kamus](/kamus)
 
 ## 2026-03-02 Senin
 

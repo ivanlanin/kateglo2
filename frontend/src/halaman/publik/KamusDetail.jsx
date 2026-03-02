@@ -345,6 +345,7 @@ function KamusDetail() {
         induk: data.induk || [],
         makna: data.makna || [],
         subentri: data.subentri || {},
+        tagar: data.tagar || [],
       }]
   );
 
@@ -502,6 +503,9 @@ function KamusDetail() {
             const adaLafal = Boolean(
               lafalTernormalisasi && !pembandingEntri.includes(lafalTernormalisasi)
             );
+            const daftarTagarEntri = Array.isArray(entriItem.tagar)
+              ? entriItem.tagar.filter((item) => item && typeof item === 'object' && String(item.nama || '').trim() && String(item.kode || '').trim())
+              : [];
 
             return (
               <section key={`${entriItem.id ?? entriItem.indeks ?? entriItem.entri ?? 'entri'}-${entriIndex}`} className="mb-8 pb-8 border-b border-gray-200 dark:border-gray-700 last:border-b-0 last:mb-0 last:pb-0">
@@ -527,18 +531,29 @@ function KamusDetail() {
                           </Fragment>
                         ))}
                       </span>
-                      {entriItem.jenis === 'varian' ? (
-                        <span className="kamus-detail-tag-jenis">
-                          {formatTitleCase(entriItem.jenis)}
-                        </span>
-                      ) : (
-                        <Link
-                          to={buatPathKategoriKamus(tentukanKategoriJenis(entriItem.jenis || 'dasar'), entriItem.jenis || 'dasar')}
-                          className="kamus-detail-tag-jenis"
-                        >
-                          {formatTitleCase(entriItem.jenis || 'dasar')}
-                        </Link>
-                      )}
+                      <span className="kamus-detail-heading-badge-group">
+                        {entriItem.jenis === 'varian' ? (
+                          <span className="kamus-detail-tag-jenis">
+                            {formatTitleCase(entriItem.jenis)}
+                          </span>
+                        ) : (
+                          <Link
+                            to={buatPathKategoriKamus(tentukanKategoriJenis(entriItem.jenis || 'dasar'), entriItem.jenis || 'dasar')}
+                            className="kamus-detail-tag-jenis"
+                          >
+                            {formatTitleCase(entriItem.jenis || 'dasar')}
+                          </Link>
+                        )}
+                        {daftarTagarEntri.map((tagar) => (
+                          <Link
+                            key={`${tagar.id ?? tagar.kode}`}
+                            to={`/kamus/tagar/${encodeURIComponent(tagar.kode)}`}
+                            className="kamus-detail-tag-blue"
+                          >
+                            {tagar.nama}
+                          </Link>
+                        ))}
+                      </span>
                     </h1>
                     {(adaPemenggalan || adaLafal) && (
                       <p className="kamus-detail-heading-meta">

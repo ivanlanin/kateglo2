@@ -6,6 +6,7 @@ const ModelEntri = require('../models/modelEntri');
 const ModelTesaurus = require('../models/modelTesaurus');
 const ModelGlosarium = require('../models/modelGlosarium');
 const ModelEtimologi = require('../models/modelEtimologi');
+const ModelTagar = require('../models/modelTagar');
 const { getJson, setJson, delKey, getTtlSeconds } = require('./layananCache');
 
 const cachePrefixDetailKamus = 'kamus:detail:';
@@ -108,7 +109,7 @@ async function ambilDetailKamus(indeksAtauEntri, {
 
   const detailEntri = await Promise.all(
     daftarEntri.map(async (dataEntri) => {
-      const [maknaList, subentri, bentukTidakBaku, rantaiInduk, etimologi] = await Promise.all([
+      const [maknaList, subentri, bentukTidakBaku, rantaiInduk, etimologi, tagar] = await Promise.all([
         ModelEntri.ambilMakna(dataEntri.id, true),
         ModelEntri.ambilSubentri(dataEntri.id),
         ModelEntri.ambilBentukTidakBakuByRujukId(dataEntri.id),
@@ -116,6 +117,7 @@ async function ambilDetailKamus(indeksAtauEntri, {
         ModelEtimologi.ambilAktifPublikByEntriId(dataEntri.id, {
           aktifSaja: !includeEtimologiNonaktif,
         }),
+        ModelTagar.ambilTagarEntri(dataEntri.id),
       ]);
 
       const maknaIds = maknaList.map((m) => m.id);
@@ -171,6 +173,7 @@ async function ambilDetailKamus(indeksAtauEntri, {
         makna,
         subentri: subentriPerJenis,
         etimologi: etimologi || [],
+        tagar: tagar || [],
       };
     })
   );
