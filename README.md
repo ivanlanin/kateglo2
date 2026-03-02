@@ -92,7 +92,7 @@ SEO publik digenerate otomatis oleh backend (bukan file statis di `frontend/publ
 - `GET /robots.txt`
 - `GET /sitemap.xml`
 
-Generator sitemap mengambil path statis + path dinamis kategori kamus/glosarium. Path statis mencakup halaman utama termasuk `gim/susun-kata` dan `sumber`.
+Generator sitemap mengambil path statis + path dinamis kategori kamus/glosarium. Path statis mencakup halaman utama termasuk `gim/susun-kata/harian`, `gim/susun-kata/bebas`, dan `sumber`.
 
 ## Fitur Utama
 
@@ -101,12 +101,25 @@ Generator sitemap mengambil path statis + path dinamis kategori kamus/glosarium.
 - Detail entri: makna, contoh, subentri, tesaurus, glosarium
 - Login Google + RBAC untuk redaksi
 - Panel redaksi terintegrasi di frontend (`/redaksi/*`)
+- Gim Susun Kata dengan 2 mode:
+   - `harian` (kata harian 5 huruf, klasemen harian pemenang)
+   - `bebas` (kata acak 4-6 huruf, klasemen harian berbasis rata-rata pemenang)
 - Sidebar komentar pada halaman detail kamus per `indeks`:
    - pengguna login dapat melihat komentar terbaca dan mengirim komentar
    - pengguna belum login melihat teaser jumlah komentar aktif
    - moderasi komentar dilakukan dari halaman redaksi `Komentar`
 
 ## Menu dan Cakupan Fitur
+
+### Status Susun Kata (per 2026-03-02)
+
+- URL publik mode terpisah: `/gim/susun-kata/harian` dan `/gim/susun-kata/bebas`.
+- URL lama `/gim/susun-kata` diarahkan ke mode harian.
+- Mode harian menggunakan kata yang sama untuk semua pemain pada tanggal yang sama (zona Asia/Jakarta).
+- Mode bebas memilih kata dasar acak 4-6 huruf per sesi.
+- Klasemen harian menampilkan pemenang (`menang=true`) untuk hari berjalan.
+- Klasemen bebas juga per hari, menampilkan pemenang dengan format: `rata_poin; rata_detik; total_main`.
+- Tabel yang dipakai: `susun_kata`, `susun_kata_skor`, `susun_kata_bebas`.
 
 ### Menu Publik
 
@@ -115,6 +128,7 @@ Generator sitemap mengambil path statis + path dinamis kategori kamus/glosarium.
 - **Glosarium**: pencarian istilah teknis, jelajah berdasarkan bidang dan sumber, detail istilah, tautan silang ke entri kamus.
 - **Makna**: kamus terbalik (mencari kata berdasarkan isi makna).
 - **Rima**: pencarian rima akhir dan rima awal (aliterasi), masing-masing dengan navigasi cursor.
+- **Gim**: Susun Kata mode harian dan bebas.
 - **Redaksi**: tampil hanya untuk akun dengan akses redaksi.
 - **Masuk/Keluar**: autentikasi Google OAuth untuk pengguna.
 

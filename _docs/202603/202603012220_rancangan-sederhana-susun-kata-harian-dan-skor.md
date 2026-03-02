@@ -1,8 +1,33 @@
 # Rancangan Sederhana Susun Kata Harian + Skor
 
 Tanggal: 2026-03-01 22:20  
-Update: 2026-03-01 22:40  
-Status: Proposed (MVP Revisi)
+Update: 2026-03-02 18:30  
+Status: Implemented (Harian + Bebas)
+
+## Status Implementasi per 2026-03-02
+
+Dokumen ini awalnya rancangan. Berikut status implementasi terkini:
+
+1. ✅ Tabel `susun_kata` dipakai untuk kata harian.
+2. ✅ Tabel `susun_kata_skor` dipakai untuk skor harian.
+3. ✅ Tabel `susun_kata_bebas` ditambahkan untuk sesi mode bebas.
+4. ✅ URL publik mode terpisah:
+   - `/gim/susun-kata/harian`
+   - `/gim/susun-kata/bebas`
+5. ✅ Klasemen harian menampilkan pemenang (`menang=true`) per hari.
+6. ✅ Klasemen bebas juga per hari (zona Asia/Jakarta), dengan metrik rata-rata pemenang:
+   - rata poin
+   - rata detik
+   - total main menang
+7. ✅ Toast sukses mode bebas tidak auto-close, dan memberi opsi:
+   - lihat arti kata di kamus
+   - mulai sesi baru
+
+## Catatan Delta terhadap Rancangan Awal
+
+- Prefix route redaksi yang berjalan: `/api/redaksi/susun-kata` (bukan `/api/redaksi/gim/susun-kata`).
+- Rumus skor tetap: `11 - percobaan` untuk sesi menang.
+- Mode bebas menggunakan kata dasar acak panjang 4-6 huruf per sesi.
 
 ## Ringkasan
 
