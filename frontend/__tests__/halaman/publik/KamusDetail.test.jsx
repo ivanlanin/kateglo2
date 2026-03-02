@@ -213,7 +213,7 @@ describe('KamusDetail', () => {
     render(<KamusDetail />);
     expect(screen.getByText(/belum tersedia di Kateglo/i)).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: /Kembali ke pencarian/i })).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Komentar/i })).toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: /Komentar/i }).length).toBeGreaterThan(0);
   });
 
   it('menampilkan not found state dengan saran entri mirip', () => {
@@ -1136,7 +1136,7 @@ describe('KamusDetail', () => {
     render(<KamusDetail />);
 
     expect(screen.queryByText(/Ada 3 komentar pada entri ini/i)).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Masuk dengan Google' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Masuk untuk Berkomentar' })).toBeInTheDocument();
   });
 
   it('menampilkan komentar terbaca saat login', () => {
@@ -1441,7 +1441,7 @@ describe('KamusDetail', () => {
     });
 
     const { rerender } = render(<KamusDetail />);
-    fireEvent.click(screen.getByRole('button', { name: 'Masuk dengan Google' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Masuk untuk Berkomentar' }));
 
     panggilan = 0;
     mockUseQuery.mockImplementation(() => {
@@ -1474,7 +1474,7 @@ describe('KamusDetail', () => {
     });
 
     rerender(<KamusDetail />);
-    fireEvent.click(screen.getByRole('button', { name: 'Masuk dengan Google' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Masuk untuk Berkomentar' }));
 
     expect(loginDenganGoogle).toHaveBeenCalledTimes(2);
   });
@@ -1512,7 +1512,7 @@ describe('KamusDetail', () => {
 
     expect(screen.getByText(/belum tersedia di Kateglo/i)).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: /Kembali ke pencarian/i })).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Komentar/i })).toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: /Komentar/i }).length).toBeGreaterThan(0);
   });
 
   it('menggunakan fallback makna/sublema saat field tidak tersedia', () => {

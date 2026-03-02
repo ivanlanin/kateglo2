@@ -95,7 +95,7 @@ describe('Tesaurus.test.jsx', () => {
     expect(screen.getByText(/Kata tidak ditemukan di tesaurus/i)).toBeInTheDocument();
   });
 
-  it('mengarahkan tautan ke kamus detail dan menampilkan relasi dengan simbol', () => {
+  it('mengarahkan tautan ke kamus detail dan menampilkan relasi dengan badge label', () => {
     mockParams = { kata: 'anak%20ibu' };
     mockUseQuery.mockImplementation((options) => {
       if (options?.enabled !== false && options?.queryFn) options.queryFn();
@@ -125,10 +125,10 @@ describe('Tesaurus.test.jsx', () => {
     expect(screen.getByRole('link', { name: 'anak ibu' })).toHaveAttribute('href', '/kamus/detail/anak%20ibu');
 
     // Semua sinonim ditampilkan sekaligus (tanpa expand/collapse)
-    expect(screen.getByText('≈')).toBeInTheDocument();
+    expect(screen.getByText('Sinonim')).toBeInTheDocument();
     expect(screen.getByText(/s1; s2; s3; s4/)).toBeInTheDocument();
-    // Antonim tampil dengan badge ≠
-    expect(screen.getByText('≠')).toBeInTheDocument();
+    // Antonim tampil dengan badge label
+    expect(screen.getByText('Antonim')).toBeInTheDocument();
     expect(screen.getByText(/a1; a2/)).toBeInTheDocument();
 
     // Tidak ada tombol expand/collapse
@@ -235,9 +235,9 @@ describe('Tesaurus.test.jsx', () => {
 
     render(<Tesaurus />);
 
-    expect(screen.getByText('≠')).toBeInTheDocument();
+    expect(screen.getByText('Antonim')).toBeInTheDocument();
     expect(screen.getByText(/kecil; mungil/)).toBeInTheDocument();
-    expect(screen.queryByText('≈')).not.toBeInTheDocument();
+    expect(screen.queryByText('Sinonim')).not.toBeInTheDocument();
   });
 
   it('tidak menampilkan relasi saat sinonim dan antonim kosong', () => {
@@ -259,8 +259,8 @@ describe('Tesaurus.test.jsx', () => {
     render(<Tesaurus />);
 
     expect(screen.getByRole('link', { name: 'hampa' })).toHaveAttribute('href', '/kamus/detail/hampa');
-    expect(screen.queryByText('≈')).not.toBeInTheDocument();
-    expect(screen.queryByText('≠')).not.toBeInTheDocument();
+    expect(screen.queryByText('Sinonim')).not.toBeInTheDocument();
+    expect(screen.queryByText('Antonim')).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: '»' })).not.toBeInTheDocument();
   });
 });

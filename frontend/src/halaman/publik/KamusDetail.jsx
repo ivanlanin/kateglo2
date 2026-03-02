@@ -864,14 +864,14 @@ function KamusDetail() {
               ) : (
                 <div className="space-y-2 text-sm">
                   <TombolMasuk
-                    label="Masuk dengan Google"
+                    label="Masuk untuk Berkomentar"
                     onClick={(event) => {
                       if (event?.preventDefault) {
                         event.preventDefault();
                       }
                       loginDenganGoogle(window.location.pathname + window.location.search);
                     }}
-                    className="w-auto px-3 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-400 border-0"
+                    className="w-auto px-3 py-2 text-sm rounded-md"
                   />
                 </div>
               )}

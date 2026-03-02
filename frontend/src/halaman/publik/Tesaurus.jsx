@@ -8,7 +8,9 @@ import { ambilContohTesaurus, cariTesaurus } from '../../api/apiPublik';
 import { useCursorPagination } from '../../hooks/bersama/useCursorPagination';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import HasilPencarian from '../../komponen/publik/HasilPencarian';
+import TombolSunting from '../../komponen/publik/TombolSunting';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
+import { useAuthOptional } from '../../context/authContext';
 import { formatLemaHomonim } from '../../utils/formatUtils';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
 import { buildMetaBrowseTesaurus, buildMetaPencarianTesaurus } from '../../utils/metaUtils';
@@ -19,13 +21,22 @@ function RelasiTampil({ sinonim, antonim }) {
   const daftarSinonim = sinonim ? sinonim.split(/[;,]/).map((s) => s.trim()).filter(Boolean) : [];
   const daftarAntonim = antonim ? antonim.split(/[;,]/).map((s) => s.trim()).filter(Boolean) : [];
   if (daftarSinonim.length === 0 && daftarAntonim.length === 0) return null;
+
   return (
     <span className="tesaurus-result-relasi">
+      {': '}
       {daftarSinonim.length > 0 && (
-        <>{' '}<span className="tesaurus-result-badge">≈</span>{' '}{daftarSinonim.join('; ')}</>
+        <>
+          <span className="tesaurus-result-badge-violet">Sinonim</span>{' '}
+          {daftarSinonim.join('; ')}
+        </>
       )}
+      {daftarSinonim.length > 0 && daftarAntonim.length > 0 && '; '}
       {daftarAntonim.length > 0 && (
-        <>{' '}<span className="tesaurus-result-badge">≠</span>{' '}{daftarAntonim.join('; ')}</>
+        <>
+          <span className="tesaurus-result-badge-violet">Antonim</span>{' '}
+          {daftarAntonim.join('; ')}
+        </>
       )}
     </span>
   );
@@ -33,6 +44,8 @@ function RelasiTampil({ sinonim, antonim }) {
 
 function Tesaurus() {
   const { kata } = useParams();
+  const auth = useAuthOptional();
+  const adalahAdmin = Boolean(auth?.adalahAdmin);
   const { cursorState, handleCursor } = useCursorPagination({
     limit,
     resetOn: kata || '',
@@ -125,6 +138,12 @@ function Tesaurus() {
                   >
                     {formatLemaHomonim(item.indeks)}
                   </Link>
+                  {adalahAdmin && item?.id && (
+                    <TombolSunting
+                      to={`/redaksi/tesaurus/${item.id}`}
+                      entitas="tesaurus"
+                    />
+                  )}
                   <RelasiTampil sinonim={item.sinonim} antonim={item.antonim} />
                 </p>
               ))}

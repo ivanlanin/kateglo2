@@ -1326,6 +1326,16 @@ code {
     @apply bg-gray-700 text-gray-300;
   }
 
+  .tesaurus-result-badge-violet {
+    @apply inline-block text-xs font-semibold px-1 py-0.5 rounded-full bg-violet-100 text-violet-700;
+    vertical-align: middle;
+    line-height: 1;
+  }
+
+  .dark .tesaurus-result-badge-violet {
+    @apply bg-violet-900/40 text-violet-200;
+  }
+
   /* ===== Rima ===== */
 
   .rima-kata-chip {
