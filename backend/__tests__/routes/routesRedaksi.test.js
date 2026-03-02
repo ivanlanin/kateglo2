@@ -386,7 +386,8 @@ describe('routes/redaksi', () => {
       expect(ModelPencarian.ambilStatistikRedaksi).toHaveBeenCalledWith({
         domain: '1',
         periode: '7hari',
-        limit: '50',
+        limit: 50,
+        offset: 0,
         tanggalMulai: undefined,
         tanggalSelesai: undefined,
       });

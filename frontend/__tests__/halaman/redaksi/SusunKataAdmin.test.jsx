@@ -403,6 +403,9 @@ describe('SusunKataAdmin', () => {
   });
 
   it('simpan memakai fallback tanggalQuery saat tanggal form kosong dan validasi dipaksa lolos', async () => {
+    const sekarang = new Date();
+    const tanggalHariIni = `${sekarang.getFullYear()}-${String(sekarang.getMonth() + 1).padStart(2, '0')}-${String(sekarang.getDate()).padStart(2, '0')}`;
+
     paksaPesanValidasi = '';
     renderPage();
 
@@ -424,7 +427,7 @@ describe('SusunKataAdmin', () => {
 
     await screen.findByText('Kata harian berhasil disimpan.');
     expect(mockUseHarian).toHaveBeenLastCalledWith({
-      tanggal: '2026-03-02',
+      tanggal: tanggalHariIni,
       panjang: 5,
     });
   });

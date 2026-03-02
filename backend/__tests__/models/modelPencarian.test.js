@@ -279,7 +279,8 @@ describe('ModelPencarian', () => {
           tanggal_akhir: '2026-02-22',
         }],
       })
-      .mockResolvedValueOnce({ rows: [{ domain: 3, jumlah: '9' }] });
+      .mockResolvedValueOnce({ rows: [{ domain: 3, jumlah: '9' }] })
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] });
 
     const result = await ModelPencarian.ambilStatistikRedaksi({
       domain: '3',
@@ -292,21 +293,26 @@ describe('ModelPencarian', () => {
     expect(db.query).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining('MIN(created_at) AS tanggal_awal'),
-      [3, '2026-02-01', '2026-02-28', 1000]
+      [3, '2026-02-01', '2026-02-28', 1000, 0]
     );
     expect(db.query).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining('MAX(updated_at) AS tanggal_akhir'),
-      [3, '2026-02-01', '2026-02-28', 1000]
+      [3, '2026-02-01', '2026-02-28', 1000, 0]
     );
     expect(db.query).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining('WHERE domain = $1 AND tanggal >= $2::date AND tanggal <= $3::date'),
-      [3, '2026-02-01', '2026-02-28', 1000]
+      [3, '2026-02-01', '2026-02-28', 1000, 0]
     );
     expect(db.query).toHaveBeenNthCalledWith(
       2,
       expect.stringContaining('GROUP BY domain'),
+      [3, '2026-02-01', '2026-02-28']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      3,
+      expect.stringContaining('GROUP BY domain, kata'),
       [3, '2026-02-01', '2026-02-28']
     );
     expect(result.filter).toEqual({
@@ -315,7 +321,9 @@ describe('ModelPencarian', () => {
       tanggalMulai: '2026-02-01',
       tanggalSelesai: '2026-02-28',
       limit: 1000,
+      offset: 0,
     });
+    expect(result.total).toBe(1);
     expect(result.data).toEqual([
       {
         domain: 3,
@@ -334,14 +342,15 @@ describe('ModelPencarian', () => {
   it('ambilStatistikRedaksi tanpa argumen memakai default dan filter 7hari', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [] })
-      .mockResolvedValueOnce({ rows: [] });
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [{ total: '0' }] });
 
     const result = await ModelPencarian.ambilStatistikRedaksi();
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining("tanggal >= CURRENT_DATE - INTERVAL '6 days'"),
-      [200]
+      [200, 0]
     );
     expect(result.filter).toEqual({
       domain: null,
@@ -349,23 +358,31 @@ describe('ModelPencarian', () => {
       tanggalMulai: null,
       tanggalSelesai: null,
       limit: 200,
+      offset: 0,
     });
+    expect(result.total).toBe(0);
   });
 
   it('ambilStatistikRedaksi memakai periode 30hari saat tanggal tidak diberikan', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [] })
-      .mockResolvedValueOnce({ rows: [] });
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [{ total: '0' }] });
 
     const result = await ModelPencarian.ambilStatistikRedaksi({ periode: '30hari' });
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining("tanggal >= CURRENT_DATE - INTERVAL '29 days'"),
-      [200]
+      [200, 0]
     );
     expect(db.query).toHaveBeenNthCalledWith(
       2,
+      expect.stringContaining("tanggal >= CURRENT_DATE - INTERVAL '29 days'"),
+      []
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      3,
       expect.stringContaining("tanggal >= CURRENT_DATE - INTERVAL '29 days'"),
       []
     );
@@ -384,7 +401,8 @@ describe('ModelPencarian', () => {
           tanggal_akhir: '2026-03-01',
         }],
       })
-      .mockResolvedValueOnce({ rows: [{ domain: 9, jumlah: '2' }] });
+      .mockResolvedValueOnce({ rows: [{ domain: 9, jumlah: '2' }] })
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] });
 
     const result = await ModelPencarian.ambilStatistikRedaksi({
       domain: 'abc',
@@ -397,7 +415,7 @@ describe('ModelPencarian', () => {
     expect(db.query).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining("tanggal >= CURRENT_DATE - INTERVAL '6 days'"),
-      [1]
+      [1, 0]
     );
     expect(result.filter).toEqual({
       domain: null,
@@ -405,7 +423,9 @@ describe('ModelPencarian', () => {
       tanggalMulai: null,
       tanggalSelesai: null,
       limit: 1,
+      offset: 0,
     });
+    expect(result.total).toBe(1);
     expect(result.data[0].domain_nama).toBe('lainnya');
     expect(result.ringkasanDomain[0].domain_nama).toBe('lainnya');
   });
@@ -421,15 +441,17 @@ describe('ModelPencarian', () => {
           tanggal_akhir: '2026-03-01',
         }],
       })
-      .mockResolvedValueOnce({ rows: [{ domain: null, jumlah: null }] });
+      .mockResolvedValueOnce({ rows: [{ domain: null, jumlah: null }] })
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] });
 
     const result = await ModelPencarian.ambilStatistikRedaksi({ periode: 'all' });
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
       expect.not.stringContaining('WHERE'),
-      [200]
+      [200, 0]
     );
+    expect(result.total).toBe(1);
     expect(result.data).toEqual([
       {
         domain: 0,

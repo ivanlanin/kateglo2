@@ -2,9 +2,10 @@
  * @fileoverview Halaman redaksi untuk statistik pelacakan pencarian
  */
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import TataLetak from '../../komponen/bersama/TataLetak';
 import { useStatistikPencarianAdmin } from '../../api/apiAdmin';
+import { TabelAdmin, usePencarianAdmin } from '../../komponen/redaksi/KomponenAdmin';
 import { formatLocalDateTime } from '../../utils/formatUtils';
 
 const opsiPeriode = [
@@ -27,37 +28,63 @@ function formatTanggalSingkat(value) {
 }
 
 function PencarianAdmin() {
+  const { limit, currentPage, cursor, direction, lastPage, setOffset } = usePencarianAdmin(200);
   const [filterDraft, setFilterDraft] = useState({
     domain: '',
     periode: '7hari',
-    limit: 200,
     tanggalMulai: '',
     tanggalSelesai: '',
   });
-  const [filterAktif, setFilterAktif] = useState(filterDraft);
+  const [filterAktif, setFilterAktif] = useState({
+    domain: '',
+    periode: '7hari',
+    tanggalMulai: '',
+    tanggalSelesai: '',
+  });
 
-  const { data, isLoading, isError } = useStatistikPencarianAdmin(filterAktif);
-  const daftar = data?.data || [];
+  const { data, isLoading, isError } = useStatistikPencarianAdmin({
+    ...filterAktif,
+    limit,
+    cursor,
+    direction,
+    lastPage,
+  });
+  const daftarTabel = useMemo(
+    () => (data?.data || []).map((item, index) => ({ ...item, _rowKey: `${item.domain}-${item.kata}-${index}` })),
+    [data?.data]
+  );
   const ringkasanDomain = data?.ringkasanDomain || [];
+
+  const kolom = [
+    { key: 'domain_nama', label: 'Domain', render: (item) => item.domain_nama || '—' },
+    { key: 'kata', label: 'Kata', render: (item) => item.kata || '—' },
+    {
+      key: 'jumlah',
+      label: 'Jumlah',
+      render: (item) => Number(item.jumlah || 0).toLocaleString('id-ID'),
+    },
+    { key: 'tanggal_awal', label: 'Awal', render: (item) => formatTanggalSingkat(item.tanggal_awal) },
+    { key: 'tanggal_akhir', label: 'Akhir', render: (item) => formatTanggalSingkat(item.tanggal_akhir) },
+  ];
 
   const handleCari = (e) => {
     e.preventDefault();
     setFilterAktif({
       ...filterDraft,
-      limit: Math.min(Math.max(Number.parseInt(filterDraft.limit, 10) || 200, 1), 1000),
     });
+    setOffset(0);
   };
 
   const handleReset = () => {
     const awal = {
       domain: '',
       periode: '7hari',
-      limit: 200,
       tanggalMulai: '',
       tanggalSelesai: '',
     };
     setFilterDraft(awal);
     setFilterAktif(awal);
+    setOffset(0);
   };
 
   return (
@@ -89,19 +116,6 @@ function PencarianAdmin() {
               <option key={opsi.value} value={opsi.value}>{opsi.label}</option>
             ))}
           </select>
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <label htmlFor="filter-limit" className="text-sm text-gray-600 dark:text-gray-300">Limit</label>
-          <input
-            id="filter-limit"
-            type="number"
-            min="1"
-            max="1000"
-            value={filterDraft.limit}
-            onChange={(e) => setFilterDraft((v) => ({ ...v, limit: e.target.value }))}
-            className="form-admin-input w-[110px]"
-          />
         </div>
 
         <div className="flex flex-col gap-1">
@@ -152,40 +166,25 @@ function PencarianAdmin() {
         )}
       </div>
 
-      <div className="bg-white dark:bg-dark-bg-elevated rounded-lg shadow overflow-hidden">
-        {isLoading ? (
-          <div className="p-8 text-center text-gray-500 dark:text-gray-400">Memuat data …</div>
-        ) : isError ? (
-          <div className="p-8 text-center text-red-600 dark:text-red-400">Gagal memuat statistik pencarian.</div>
-        ) : daftar.length === 0 ? (
-          <div className="p-8 text-center text-gray-500 dark:text-gray-400">Tidak ada data.</div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-dark-border">
-              <thead className="bg-gray-50 dark:bg-dark-bg">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Domain</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Kata</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Jumlah</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Awal</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Akhir</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 dark:divide-dark-border/60">
-                {daftar.map((item, index) => (
-                  <tr key={`${item.domain}-${item.kata}-${index}`}>
-                    <td className="px-6 py-3 text-sm text-gray-700 dark:text-gray-300">{item.domain_nama}</td>
-                    <td className="px-6 py-3 text-sm text-gray-700 dark:text-gray-300">{item.kata}</td>
-                    <td className="px-6 py-3 text-sm text-gray-700 dark:text-gray-300">{Number(item.jumlah || 0).toLocaleString('id-ID')}</td>
-                    <td className="px-6 py-3 text-sm text-gray-700 dark:text-gray-300">{formatTanggalSingkat(item.tanggal_awal)}</td>
-                    <td className="px-6 py-3 text-sm text-gray-700 dark:text-gray-300">{formatTanggalSingkat(item.tanggal_akhir)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+      {isError ? (
+        <div className="bg-white dark:bg-dark-bg-elevated rounded-lg shadow p-8 text-center text-red-600 dark:text-red-400">
+          Gagal memuat statistik pencarian.
+        </div>
+      ) : (
+        <TabelAdmin
+          kolom={kolom}
+          data={daftarTabel}
+          isLoading={isLoading}
+          isError={false}
+          total={Number(data?.total || 0)}
+          limit={limit}
+          offset={Math.max((currentPage - 1) * limit, 0)}
+          pageInfo={data?.pageInfo}
+          currentPage={currentPage}
+          onNavigateCursor={setOffset}
+          kunciId="_rowKey"
+        />
+      )}
     </TataLetak>
   );
 }

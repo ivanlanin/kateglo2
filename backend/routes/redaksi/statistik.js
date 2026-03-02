@@ -12,6 +12,10 @@ const ModelLabel = require('../../models/modelLabel');
 const ModelPengguna = require('../../models/modelPengguna');
 const ModelKomentar = require('../../models/modelKomentar');
 const ModelPencarian = require('../../models/modelPencarian');
+const {
+  buildPaginatedResult,
+  parsePagination,
+} = require('../../utils/routesRedaksiUtils');
 
 const router = express.Router();
 
@@ -58,9 +62,9 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
  */
 router.get('/pencarian', periksaIzin('lihat_pencarian'), async (req, res, next) => {
   try {
+    const { limit, offset } = parsePagination(req.query, { defaultLimit: 200, maxLimit: 1000 });
     const domain = req.query.domain;
     const periode = req.query.periode;
-    const limit = req.query.limit;
     const tanggalMulai = req.query.tanggal_mulai;
     const tanggalSelesai = req.query.tanggal_selesai;
 
@@ -68,13 +72,20 @@ router.get('/pencarian', periksaIzin('lihat_pencarian'), async (req, res, next) 
       domain,
       periode,
       limit,
+      offset,
       tanggalMulai,
       tanggalSelesai,
     });
 
     return res.json({
       success: true,
-      ...data,
+      ...buildPaginatedResult({
+        data: data.data,
+        total: data.total,
+        pagination: { limit, offset },
+      }),
+      filter: data.filter,
+      ringkasanDomain: data.ringkasanDomain,
     });
   } catch (error) {
     return next(error);

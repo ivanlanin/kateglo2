@@ -155,40 +155,33 @@ describe('PencarianAdmin', () => {
 
     fireEvent.change(screen.getByLabelText('Domain'), { target: { value: '3' } });
     fireEvent.change(screen.getByLabelText('Periode'), { target: { value: '30hari' } });
-    fireEvent.change(screen.getByLabelText('Limit'), { target: { value: '9999' } });
     fireEvent.change(screen.getByLabelText('Tanggal Mulai'), { target: { value: '2026-02-01' } });
     fireEvent.change(screen.getByLabelText('Tanggal Selesai'), { target: { value: '2026-02-28' } });
     fireEvent.submit(screen.getByRole('button', { name: 'Terapkan' }).closest('form'));
 
     const lastCallAfterSubmit = mockUseStatistikPencarianAdmin.mock.calls.at(-1)?.[0];
-    expect(lastCallAfterSubmit).toEqual({
+    expect(lastCallAfterSubmit).toEqual(expect.objectContaining({
       domain: '3',
       periode: '30hari',
-      limit: 1000,
+      limit: 200,
       tanggalMulai: '2026-02-01',
       tanggalSelesai: '2026-02-28',
-    });
+      cursor: null,
+      direction: 'next',
+      lastPage: false,
+    }));
 
     fireEvent.click(screen.getByRole('button', { name: 'Reset' }));
     const lastCallAfterReset = mockUseStatistikPencarianAdmin.mock.calls.at(-1)?.[0];
-    expect(lastCallAfterReset).toEqual({
+    expect(lastCallAfterReset).toEqual(expect.objectContaining({
       domain: '',
       periode: '7hari',
       limit: 200,
       tanggalMulai: '',
       tanggalSelesai: '',
-    });
-
-    fireEvent.change(screen.getByLabelText('Limit'), { target: { value: 'abc' } });
-    fireEvent.submit(screen.getByRole('button', { name: 'Terapkan' }).closest('form'));
-
-    const lastCallAfterInvalidLimit = mockUseStatistikPencarianAdmin.mock.calls.at(-1)?.[0];
-    expect(lastCallAfterInvalidLimit).toEqual({
-      domain: '',
-      periode: '7hari',
-      limit: 200,
-      tanggalMulai: '',
-      tanggalSelesai: '',
-    });
+      cursor: null,
+      direction: 'next',
+      lastPage: false,
+    }));
   });
 });

@@ -235,10 +235,12 @@ class ModelPencarian {
     domain = null,
     periode = '7hari',
     limit = 200,
+    offset = 0,
     tanggalMulai = null,
     tanggalSelesai = null,
   } = {}) {
     const limitAman = parseLimitRedaksi(limit, 200);
+    const offsetAman = Math.max(Number.parseInt(offset, 10) || 0, 0);
     const domainAman = parseDomainNullable(domain);
     const periodeAman = parsePeriodeRedaksi(periode);
     const tanggalMulaiAman = parseTanggal(tanggalMulai);
@@ -274,6 +276,8 @@ class ModelPencarian {
 
     params.push(limitAman);
     const limitParam = `$${params.length}`;
+    params.push(offsetAman);
+    const offsetParam = `$${params.length}`;
 
         const rowsQuery = `
           SELECT domain, kata, SUM(jumlah)::bigint AS jumlah,
@@ -283,7 +287,16 @@ class ModelPencarian {
       ${whereClause}
       GROUP BY domain, kata
       ORDER BY jumlah DESC, tanggal_akhir DESC, domain ASC, kata ASC
-      LIMIT ${limitParam}`;
+      LIMIT ${limitParam} OFFSET ${offsetParam}`;
+
+    const countQuery = `
+      SELECT COUNT(*)::bigint AS total
+      FROM (
+        SELECT 1
+        FROM pencarian
+        ${whereClause}
+        GROUP BY domain, kata
+      ) grouped`;
 
     const summaryQuery = `
       SELECT domain, SUM(jumlah)::bigint AS jumlah
@@ -293,7 +306,8 @@ class ModelPencarian {
       ORDER BY domain ASC`;
 
     const rowsResult = await db.query(rowsQuery, params);
-    const summaryResult = await db.query(summaryQuery, params.slice(0, -1));
+    const summaryResult = await db.query(summaryQuery, params.slice(0, -2));
+    const countResult = await db.query(countQuery, params.slice(0, -2));
 
     const data = rowsResult.rows.map((row) => ({
       domain: Number(row.domain) || 0,
@@ -317,7 +331,9 @@ class ModelPencarian {
         tanggalMulai: tanggalMulaiAman,
         tanggalSelesai: tanggalSelesaiAman,
         limit: limitAman,
+        offset: offsetAman,
       },
+      total: Number(countResult.rows[0]?.total) || 0,
       ringkasanDomain,
       data,
     };

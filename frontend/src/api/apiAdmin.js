@@ -108,17 +108,32 @@ export function useStatistikPencarianAdmin({
   domain = '',
   periode = '7hari',
   limit = 200,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
   tanggalMulai = '',
   tanggalSelesai = '',
 } = {}) {
   return useQuery({
-    queryKey: ['admin-statistik-pencarian', { domain, periode, limit, tanggalMulai, tanggalSelesai }],
+    queryKey: ['admin-statistik-pencarian', {
+      domain,
+      periode,
+      limit,
+      cursor,
+      direction,
+      lastPage,
+      tanggalMulai,
+      tanggalSelesai,
+    }],
     queryFn: () =>
       klien.get('/api/redaksi/statistik/pencarian', {
         params: {
           domain: domain || undefined,
           periode: periode || undefined,
           limit,
+          cursor: cursor || undefined,
+          direction,
+          lastPage: lastPage ? '1' : undefined,
           tanggal_mulai: tanggalMulai || undefined,
           tanggal_selesai: tanggalSelesai || undefined,
         },
