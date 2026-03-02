@@ -20,6 +20,7 @@ router.use('/kamus', require('./kamus'));
 router.use('/komentar', require('./komentar'));
 router.use('/tesaurus', require('./tesaurus'));
 router.use('/etimologi', require('./etimologi'));
+router.use('/audit-tagar', require('./auditTagar'));
 router.use('/glosarium', require('./glosarium'));
 router.use('/bidang', require('./bidang'));
 router.use('/sumber', require('./sumber'));

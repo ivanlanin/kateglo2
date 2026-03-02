@@ -99,6 +99,8 @@ describe('TataLetakAdmin', () => {
 
     expect(screen.getByRole('heading', { name: 'Leksikon' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Kamus' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Tagar' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Audit Tagar' })).toBeInTheDocument();
   });
 
   it('logout tetap berjalan saat panel menu terbuka', () => {

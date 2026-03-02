@@ -967,6 +967,33 @@ export function useDaftarTagarAdmin({
   });
 }
 
+export function useDaftarAuditTagarAdmin({
+  limit = 50,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+  q = '',
+  tagarId = '',
+  jenis = 'turunan',
+  punyaTagar = '',
+} = {}) {
+  return useDaftarAdmin('/api/redaksi/audit-tagar', 'admin-audit-tagar', {
+    limit,
+    cursor,
+    direction,
+    lastPage,
+    q,
+    includeAktif: false,
+    tagar_id: tagarId,
+    jenis,
+    punya_tagar: punyaTagar,
+  });
+}
+
+export function useDaftarEntriTagarAdmin(options = {}) {
+  return useDaftarAuditTagarAdmin(options);
+}
+
 export function useDetailTagarAdmin(id) {
   return useQuery({
     queryKey: ['admin-tagar-detail', id],

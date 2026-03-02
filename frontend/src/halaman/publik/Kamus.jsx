@@ -105,15 +105,15 @@ export const __private = {
 const limit = 100;
 
 function Kamus() {
-  const { kata, kategori, kode, kelas } = useParams();
-  const kategoriAktif = kategori || (kelas ? 'kelas' : '');
-  const kodeAktif = kode || kelas || '';
+  const { kata, kategori, kode, kelas, tagar: kodeTagar } = useParams();
+  const modeTagar = Boolean(!kata && kodeTagar);
+  const kategoriAktif = modeTagar ? 'tagar' : (kategori || (kelas ? 'kelas' : ''));
+  const kodeAktif = kodeTagar || kode || kelas || '';
   const { cursorState, handleCursor } = useCursorPagination({
     limit,
     resetOn: `${kata || ''}|${kategoriAktif || ''}|${kodeAktif || ''}`,
   });
   const modePencarian = Boolean(kata);
-  const modeTagar = Boolean(!kata && kategoriAktif === 'tagar' && kodeAktif);
   const modeKategori = Boolean(!kata && kategoriAktif && kodeAktif);
   const modeKategoriBiasa = modeKategori && !modeTagar;
   const modeBrowse = !modePencarian && !modeKategori;

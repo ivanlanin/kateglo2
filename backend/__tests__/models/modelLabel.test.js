@@ -205,7 +205,7 @@ describe('ModelLabel', () => {
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
-      expect.stringContaining('WHERE aktif = 1 AND UPPER'),
+      expect.stringContaining('WHERE l.aktif = 1 AND UPPER'),
       ['A']
     );
     expect(db.query).toHaveBeenNthCalledWith(

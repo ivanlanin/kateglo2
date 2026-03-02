@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-03-03 Selasa
+
+- Menampilkan kategori tagar di [Kamus](/kamus), misalnya *[peng-](/kamus/tagar/peng)*
+
 ## 2026-03-02 Senin
 
 - Membuat versi awal gim [Susun Kata](/gim/susun-kata)

@@ -283,6 +283,156 @@ class ModelTagar {
   }
 
   /**
+   * Daftar entri untuk audit tagar di redaksi (cursor pagination).
+   * @param {{ limit?: number, cursor?: string|null, direction?: 'next'|'prev', lastPage?: boolean,
+   *   q?: string, tagarId?: number|null, jenis?: string, punyaTagar?: '0'|'1'|'' }} options
+   * @returns {Promise<{data: Array, total: number, hasPrev: boolean, hasNext: boolean, prevCursor: string|null, nextCursor: string|null}>}
+   */
+  static async daftarEntriTagarAdminCursor({
+    limit = 50,
+    cursor = null,
+    direction = 'next',
+    lastPage = false,
+    q = '',
+    tagarId = null,
+    jenis = '',
+    punyaTagar = '',
+  } = {}) {
+    const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
+    const cursorPayload = decodeCursor(cursor);
+    const isPrev = direction === 'prev';
+    const orderDesc = Boolean(lastPage || isPrev);
+
+    const params = [];
+    const conditions = ['e.aktif = 1'];
+
+    if (q) {
+      params.push(`%${q}%`);
+      conditions.push(`(e.entri ILIKE $${params.length} OR COALESCE(i.entri, '') ILIKE $${params.length} OR e.indeks ILIKE $${params.length})`);
+    }
+
+    if (jenis) {
+      params.push(jenis);
+      conditions.push(`e.jenis = $${params.length}`);
+    }
+
+    if (Number.isFinite(Number(tagarId)) && Number(tagarId) > 0) {
+      params.push(Number(tagarId));
+      conditions.push(`EXISTS (SELECT 1 FROM entri_tagar et_filter WHERE et_filter.entri_id = e.id AND et_filter.tagar_id = $${params.length})`);
+    }
+
+    if (punyaTagar === '1') {
+      conditions.push('EXISTS (SELECT 1 FROM entri_tagar et_exists WHERE et_exists.entri_id = e.id)');
+    } else if (punyaTagar === '0') {
+      conditions.push('NOT EXISTS (SELECT 1 FROM entri_tagar et_exists WHERE et_exists.entri_id = e.id)');
+    }
+
+    const whereBase = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    const countResult = await db.query(
+      `SELECT COUNT(*) AS total
+       FROM entri e
+       LEFT JOIN entri i ON i.id = e.induk
+       ${whereBase}`,
+      params
+    );
+    const total = parseCount(countResult.rows[0]?.total);
+
+    if (total === 0) {
+      return {
+        data: [],
+        total: 0,
+        hasPrev: false,
+        hasNext: false,
+        prevCursor: null,
+        nextCursor: null,
+      };
+    }
+
+    const dataParams = [...params];
+    const dataConditions = [...conditions];
+
+    if (cursorPayload && !lastPage) {
+      dataParams.push(String(cursorPayload.entri || ''), Number(cursorPayload.id) || 0);
+      const entriIdx = dataParams.length - 1;
+      const idIdx = dataParams.length;
+      dataConditions.push(
+        isPrev
+          ? `(e.entri, e.id) < ($${entriIdx}, $${idIdx})`
+          : `(e.entri, e.id) > ($${entriIdx}, $${idIdx})`
+      );
+    }
+
+    dataParams.push(cappedLimit + 1);
+    const limitIdx = dataParams.length;
+    const whereData = dataConditions.length ? `WHERE ${dataConditions.join(' AND ')}` : '';
+
+    const dataResult = await db.query(
+      `SELECT
+         e.id,
+         e.entri,
+         e.indeks,
+         e.jenis,
+         i.entri AS induk_entri,
+         COALESCE(tg.items, '[]'::json) AS tagar,
+         COALESCE(tg.total, 0) AS jumlah_tagar
+       FROM entri e
+       LEFT JOIN entri i ON i.id = e.induk
+       LEFT JOIN LATERAL (
+         SELECT
+           json_agg(
+             json_build_object(
+               'id', t.id,
+               'kode', t.kode,
+               'nama', t.nama,
+               'kategori', t.kategori
+             )
+             ORDER BY t.kategori, t.urutan, t.nama
+           ) AS items,
+           COUNT(*)::int AS total
+         FROM entri_tagar et
+         JOIN tagar t ON t.id = et.tagar_id
+         WHERE et.entri_id = e.id
+       ) tg ON TRUE
+       ${whereData}
+       ORDER BY e.entri ${orderDesc ? 'DESC' : 'ASC'}, e.id ${orderDesc ? 'DESC' : 'ASC'}
+       LIMIT $${limitIdx}`,
+      dataParams
+    );
+
+    const hasMore = dataResult.rows.length > cappedLimit;
+    let rows = hasMore ? dataResult.rows.slice(0, cappedLimit) : dataResult.rows;
+    if (orderDesc) rows = rows.reverse();
+
+    const first = rows[0];
+    const last = rows[rows.length - 1];
+    const prevCursor = first ? encodeCursor({ entri: first.entri, id: first.id }) : null;
+    const nextCursor = last ? encodeCursor({ entri: last.entri, id: last.id }) : null;
+
+    let hasPrev = false;
+    let hasNext = false;
+    if (lastPage) {
+      hasNext = false;
+      hasPrev = total > rows.length;
+    } else if (isPrev) {
+      hasPrev = hasMore;
+      hasNext = Boolean(cursorPayload);
+    } else {
+      hasPrev = Boolean(cursorPayload);
+      hasNext = hasMore;
+    }
+
+    return {
+      data: rows,
+      total,
+      hasPrev,
+      hasNext,
+      prevCursor,
+      nextCursor,
+    };
+  }
+
+  /**
    * Simpan (insert/update) tagar.
    * @param {{ id?: number, kode: string, nama: string, kategori: string, deskripsi?: string, urutan?: number, aktif?: boolean }} data
    * @returns {Promise<Object|null>}

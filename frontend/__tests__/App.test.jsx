@@ -33,6 +33,7 @@ vi.mock('../src/halaman/redaksi/GlosariumAdmin', () => ({ default: () => <div>Gl
 vi.mock('../src/halaman/redaksi/BidangGlosariumAdmin', () => ({ default: () => <div>Bidang Glosarium Redaksi</div> }));
 vi.mock('../src/halaman/redaksi/SumberGlosariumAdmin', () => ({ default: () => <div>Sumber Glosarium Redaksi</div> }));
 vi.mock('../src/halaman/redaksi/LabelAdmin', () => ({ default: () => <div>Label Redaksi</div> }));
+vi.mock('../src/halaman/redaksi/AuditTagarAdmin', () => ({ default: () => <div>Audit Tagar Redaksi</div> }));
 vi.mock('../src/halaman/redaksi/PenggunaAdmin', () => ({ default: () => <div>Pengguna Redaksi</div> }));
 vi.mock('../src/halaman/redaksi/PencarianAdmin', () => ({ default: () => <div>Statistik Pencarian Redaksi</div> }));
 
@@ -154,6 +155,24 @@ describe('App', () => {
     );
 
     expect(screen.getByText('Statistik Pencarian Redaksi')).toBeInTheDocument();
+  });
+
+  it('mengizinkan route audit tagar saat user punya izin audit_tagar', () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      adalahRedaksi: true,
+      adalahAdmin: false,
+      isLoading: false,
+      punyaIzin: (izin) => izin === 'audit_tagar',
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/redaksi/audit-tagar']}>
+        <App />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Audit Tagar Redaksi')).toBeInTheDocument();
   });
 
   it('menampilkan loading untuk route admin saat auth sedang dimuat', () => {

@@ -20,6 +20,24 @@ const DRY_RUN = process.argv.includes('--dry-run');
 const VERBOSE = process.argv.includes('--verbose');
 const BATCH_SIZE = 500;
 
+async function ensureAuditTagarPermission() {
+  await db.query(
+    `INSERT INTO izin (kode, nama, kelompok)
+     VALUES ('audit_tagar', 'Audit cakupan tagar entri', 'audit')
+     ON CONFLICT (kode)
+     DO UPDATE SET nama = EXCLUDED.nama, kelompok = EXCLUDED.kelompok`
+  );
+
+  await db.query(
+    `INSERT INTO peran_izin (peran_id, izin_id)
+     SELECT p.id, i.id
+     FROM peran p, izin i
+     WHERE i.kode = 'audit_tagar'
+       AND p.akses_redaksi = TRUE
+     ON CONFLICT DO NOTHING`
+  );
+}
+
 // ============================================================
 // Konfigurasi pola imbuhan
 // Diurutkan dari terpanjang ke terpendek agar startsWith tidak
@@ -286,6 +304,9 @@ function detectReduplikasi(entri, _induk) {
 async function main() {
   console.log(`Seeder entri_tagar${DRY_RUN ? ' [DRY RUN]' : ''}`);
   console.log('--------------------------------------------------');
+
+  await ensureAuditTagarPermission();
+  console.log('Izin audit_tagar dipastikan tersedia untuk peran redaksi.');
 
   // Muat semua tagar aktif (kode → id)
   const tagarResult = await db.query(

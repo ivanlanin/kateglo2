@@ -14,6 +14,7 @@ const kelompokMenuAdmin = [
       { path: '/redaksi/tesaurus', label: 'Tesaurus', izin: 'lihat_tesaurus' },
       { path: '/redaksi/glosarium', label: 'Glosarium', izin: 'lihat_glosarium' },
       { path: '/redaksi/etimologi', label: 'Etimologi', izin: 'kelola_etimologi' },
+      { path: '/redaksi/tagar', label: 'Tagar', izin: 'kelola_tagar' },
     ],
   },
   {
@@ -29,7 +30,10 @@ const kelompokMenuAdmin = [
   },
   {
     judul: 'Audit',
-    items: [{ path: '/redaksi/audit-makna', label: 'Makna', izin: 'audit_makna' }],
+    items: [
+      { path: '/redaksi/audit-makna', label: 'Makna', izin: 'audit_makna' },
+      { path: '/redaksi/audit-tagar', label: 'Tagar', izin: 'audit_tagar' },
+    ],
   },
   {
     judul: 'Master',

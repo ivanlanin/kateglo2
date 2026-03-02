@@ -25,6 +25,7 @@ import BidangAdmin from './halaman/redaksi/BidangAdmin';
 import SumberAdmin from './halaman/redaksi/SumberAdmin';
 import LabelAdmin from './halaman/redaksi/LabelAdmin';
 import TagarAdmin from './halaman/redaksi/TagarAdmin';
+import AuditTagarAdmin from './halaman/redaksi/AuditTagarAdmin';
 import PenggunaAdmin from './halaman/redaksi/PenggunaAdmin';
 import PeranAdmin from './halaman/redaksi/PeranAdmin';
 import IzinAdmin from './halaman/redaksi/IzinAdmin';
@@ -107,6 +108,7 @@ function App() {
       <Route path="/redaksi/label/:id" element={<RuteIzin izinDibutuhkan={['kelola_label']}><LabelAdmin /></RuteIzin>} />
       <Route path="/redaksi/tagar" element={<RuteIzin izinDibutuhkan={['kelola_tagar']}><TagarAdmin /></RuteIzin>} />
       <Route path="/redaksi/tagar/:id" element={<RuteIzin izinDibutuhkan={['kelola_tagar']}><TagarAdmin /></RuteIzin>} />
+      <Route path="/redaksi/audit-tagar" element={<RuteIzin izinDibutuhkan={['audit_tagar']}><AuditTagarAdmin /></RuteIzin>} />
       <Route path="/redaksi/peran" element={<RuteIzin izinDibutuhkan={['kelola_peran']}><PeranAdmin /></RuteIzin>} />
       <Route path="/redaksi/peran/:id" element={<RuteIzin izinDibutuhkan={['kelola_peran']}><PeranAdmin /></RuteIzin>} />
       <Route path="/redaksi/izin" element={<RuteIzin izinDibutuhkan={['kelola_peran']}><IzinAdmin /></RuteIzin>} />
@@ -119,7 +121,7 @@ function App() {
         <Route path="/kamus" element={<Kamus />} />
         <Route path="/kamus/cari/:kata" element={<Kamus />} />
         <Route path="/kamus/kelas/:kelas" element={<Kamus />} />
-        <Route path="/kamus/tagar/:kode" element={<Kamus />} />
+        <Route path="/kamus/tagar/:tagar" element={<Kamus />} />
         <Route path="/kamus/:kategori/:kode" element={<Kamus />} />
         <Route path="/kamus/detail/:indeks" element={<KamusDetail />} />
         <Route path="/makna" element={<Makna />} />

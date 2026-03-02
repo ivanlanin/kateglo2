@@ -12,7 +12,10 @@ const { decodeCursor, encodeCursor } = require('../utils/cursorPagination');
  * Lewati karakter non-Latin di awal (tanda hubung, spasi, dll.),
  * lalu ambil huruf Latin pertama dan ubah ke huruf besar.
  */
-const SQL_ABJAD = `UPPER(SUBSTRING(REGEXP_REPLACE(entri, '^[^a-zA-Z]*', ''), 1, 1))`;
+function sqlAbjad(alias = '') {
+  const prefix = alias ? `${alias}.` : '';
+  return `UPPER(SUBSTRING(REGEXP_REPLACE(${prefix}entri, '^[^a-zA-Z]*', ''), 1, 1))`;
+}
 const JENIS_BENTUK = ['dasar', 'turunan', 'gabungan'];
 const BENTUK_PENYINGKATAN = ['akronim', 'kependekan'];
 const JENIS_EKSPRESI = ['idiom', 'peribahasa'];
@@ -484,7 +487,7 @@ class ModelLabel {
         return { data: [], total: 0, label: null, hasNext: false, hasPrev: false, nextCursor: null, prevCursor: null };
       }
       return this._cariEntriCursorDenganKondisi({
-        whereSql: `l.aktif = 1 AND ${SQL_ABJAD} = $1`,
+        whereSql: `l.aktif = 1 AND ${sqlAbjad('l')} = $1`,
         params: [h],
         label: { kode: h, nama: h },
         limit,
@@ -704,8 +707,8 @@ class ModelLabel {
 
     const countResult = await db.query(
       `SELECT COUNT(*) AS total
-        FROM entri
-       WHERE aktif = 1 AND ${SQL_ABJAD} = $1`,
+        FROM entri l
+       WHERE l.aktif = 1 AND ${sqlAbjad('l')} = $1`,
       [h]
     );
     const total = parseInt(countResult.rows[0].total, 10);
@@ -714,7 +717,7 @@ class ModelLabel {
       `SELECT l.id, l.entri, l.indeks, l.jenis, l.jenis_rujuk, r.entri AS entri_rujuk
        FROM entri l
        LEFT JOIN entri r ON r.id = l.entri_rujuk
-       WHERE l.aktif = 1 AND ${SQL_ABJAD} = $1
+      WHERE l.aktif = 1 AND ${sqlAbjad('l')} = $1
        ORDER BY l.entri
        LIMIT $2 OFFSET $3`,
       [h, limit, offset]

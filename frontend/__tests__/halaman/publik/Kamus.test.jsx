@@ -187,7 +187,7 @@ describe('Kamus', () => {
   });
 
   it('menampilkan hasil tagar dari route /kamus/tagar/:kode', () => {
-    mockParams = { kategori: 'tagar', kode: 'afiks' };
+    mockParams = { tagar: 'afiks' };
 
     mockUseQuery.mockImplementation((options) => {
       if (options?.enabled !== false && options?.queryFn) options.queryFn();

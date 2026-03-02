@@ -21,7 +21,7 @@
 
 ---
 
-## 1. Halaman Admin: TagarAdmin vs EntriTagarAdmin
+## 1. Halaman Admin: TagarAdmin vs AuditTagarAdmin
 
 ### 1.1 Apakah perlu dua halaman?
 
@@ -30,7 +30,7 @@
 | Halaman | Path | Tujuan Utama |
 |---|---|---|
 | **TagarAdmin** | `/redaksi/tagar` | Master data — CRUD tagar (kode, nama, kategori, urutan, aktif) |
-| **EntriTagarAdmin** | `/redaksi/entri-tagar` | Audit & kelola asosiasi — entri mana punya tagar, mana yang belum |
+| **AuditTagarAdmin** | `/redaksi/audit-tagar` | Audit & kelola asosiasi — entri mana punya tagar, mana yang belum |
 
 Ini analog dengan pola yang sudah ada:
 - `BidangAdmin` = master data bidang
@@ -38,7 +38,7 @@ Ini analog dengan pola yang sudah ada:
 
 Demikian pula:
 - `TagarAdmin` = master data tagar
-- `EntriTagarAdmin` = pengelolaan tagar per entri (dari sudut pandang "entri")
+- `AuditTagarAdmin` = pengelolaan tagar per entri (dari sudut pandang "entri")
 - Chip editor di `KamusAdmin` = pengelolaan tagar per entri (dari sudut pandang "edit entri satu-satu")
 
 ---
@@ -82,7 +82,7 @@ Demikian pula:
 
 ---
 
-### 1.3 EntriTagarAdmin — Rancangan Detail
+### 1.3 AuditTagarAdmin — Rancangan Detail
 
 **Tujuan**: Audit cakupan tagar dan kelola asosiasi secara massal.
 
@@ -118,7 +118,7 @@ Demikian pula:
 └─────────────────────────────────────────────────────────────┘
 ```
 
-**Fitur khusus EntriTagarAdmin:**
+**Fitur khusus AuditTagarAdmin:**
 
 1. **Progress bar cakupan** — visual berapa persen entri turunan sudah bertagar
 2. **Filter "belum ada tagar"** — tampilkan entri yang perlu dikerjakan
@@ -128,7 +128,7 @@ Demikian pula:
 
 **Route backend yang diperlukan:**
 ```
-GET /api/redaksi/entri-tagar
+GET /api/redaksi/audit-tagar
   Query: ?q=, tagar_id=, jenis=, punya_tagar=, limit=, cursor=
   Response: daftar entri + tagar mereka, total, pageInfo
 
@@ -137,7 +137,7 @@ PUT /api/redaksi/kamus/:id/tagar
   → Replace semua tagar untuk entri ini
 ```
 
-**Izin**: `edit_entri` (sama dengan edit makna/contoh)
+**Izin**: `audit_tagar`
 
 ---
 
@@ -270,7 +270,7 @@ Backend: tambahkan query `SELECT kode, nama FROM tagar WHERE aktif = TRUE ORDER 
 
 Di `Kamus.jsx`, deteksi parameter `tagar` dari path dan panggil `ambilEntriPerKategori('tagar', kode, ...)` yang diteruskan ke backend sebagai `GET /api/publik/tagar/:kode`.
 
-Atau lebih eksplisit: tambahkan `modeTagarPublik` yang memanggil endpoint tagar khusus.
+Implementasi final memakai `modeTagar` eksplisit di `Kamus.jsx` yang memanggil endpoint tagar khusus (`cariEntriPerTagar`).
 
 **Path**: `/kamus/tagar/meng` → daftar entri bertagar `meng-`
 **Judul halaman**: `Kata bertagar meng- — Kamus Kateglo`
@@ -283,6 +283,7 @@ Atau lebih eksplisit: tambahkan `modeTagarPublik` yang memanggil endpoint tagar 
 - ✅ Tabel `tagar` dan `entri_tagar` dibuat
 - ✅ 26 tagar seed (8 prefiks, 3 sufiks, 4 infiks, 7 klitik, 4 reduplikasi)
 - ✅ Izin `kelola_tagar` ditambahkan, di-assign ke peran `admin` dan `penyunting`
+- ✅ Izin `audit_tagar` ditambahkan, di-assign ke peran `admin` dan `penyunting`
 - ✅ `_docs/struktur-data.sql` diperbarui
 
 ### Backend — ✅ Selesai
@@ -291,105 +292,36 @@ Atau lebih eksplisit: tambahkan `modeTagarPublik` yang memanggil endpoint tagar 
 | `models/modelTagar.js` | ✅ Selesai |
 | `routes/publik/tagar.js` | ✅ Selesai — `GET /api/publik/tagar`, `GET /api/publik/tagar/:kode` |
 | `routes/redaksi/tagar.js` | ✅ Selesai — CRUD `GET/POST/PUT/DELETE /api/redaksi/tagar` |
+| `routes/redaksi/auditTagar.js` | ✅ Selesai — `GET /api/redaksi/audit-tagar` (audit + filter + cakupan) |
 | `routes/publik/kamus.js` | ✅ Selesai — endpoint `/kategori` menyertakan `tagar` flat array |
 | `routes/redaksi/kamus.js` | ✅ Selesai — `GET/PUT /api/redaksi/kamus/:id/tagar` |
 | `routes/publik/index.js` | ✅ Selesai — route `/tagar` terdaftar |
-| `routes/redaksi/index.js` | ✅ Selesai — route `/tagar` terdaftar |
+| `routes/redaksi/index.js` | ✅ Selesai — route `/tagar` dan `/audit-tagar` terdaftar |
 
-### Frontend — ✅ Selesai (kecuali EntriTagarAdmin)
+### Frontend — ✅ Selesai
 | File | Perubahan | Status |
 |---|---|---|
 | `api/apiPublik.js` | Tambah: `ambilSemuaTagar()`, `cariEntriPerTagar()` | ✅ |
-| `api/apiAdmin.js` | Tambah: `useDaftarTagarAdmin()`, `useDetailTagarAdmin()`, `useSimpanTagar()`, `useHapusTagar()`, `useTagarEntri()`, `useSimpanTagarEntri()`, `useDaftarTagarUntukPilih()` | ✅ |
+| `api/apiAdmin.js` | Tambah: hook tagar + `useDaftarAuditTagarAdmin()` | ✅ |
 | `halaman/redaksi/TagarAdmin.jsx` | **Baru** — CRUD master data tagar (ikuti pola LabelAdmin) | ✅ |
+| `halaman/redaksi/AuditTagarAdmin.jsx` | **Baru** — audit cakupan + kelola asosiasi tagar per entri | ✅ |
 | `halaman/redaksi/KamusAdmin.jsx` | Modifikasi — tambah `<SeksiTagar>` chip editor di panel edit entri (semua jenis kecuali dasar/idiom/peribahasa) | ✅ |
 | `halaman/publik/Kamus.jsx` | Modifikasi — tambah `'tagar'` ke `BARIS_KATEGORI`, handler `getTo` ke `/kamus/tagar/:kode` | ✅ |
-| `halaman/publik/KamusTagar.jsx` | **Baru** — halaman daftar entri per tagar (komponen terpisah) | ✅ |
-| `App.jsx` | Tambah route `/kamus/tagar/:kode` → `KamusTagar`, route `/redaksi/tagar` + `/redaksi/tagar/:id` → `TagarAdmin` | ✅ |
+| `halaman/publik/KamusTagar.jsx` | Dihapus — mode tagar digabung ke `Kamus.jsx` | ✅ |
+| `App.jsx` | Route `/kamus/tagar/:kode` → `Kamus`, route `/redaksi/tagar`, `/redaksi/tagar/:id`, `/redaksi/audit-tagar` | ✅ |
 | `utils/metaUtils.js` | Tambah `'tagar': 'Tagar'` ke `NAMA_KATEGORI_KAMUS` | ✅ |
-| `halaman/redaksi/EntriTagarAdmin.jsx` | **Baru** — audit cakupan + kelola asosiasi massal | ⏳ Rendah |
 
 ---
 
-## 5. Catatan Implementasi Frontend (Sesi Berikutnya)
+## 5. Catatan Implementasi Frontend (Status Saat Ini)
 
-### apiPublik.js — fungsi yang perlu ditambahkan
-
-```javascript
-// Ambil semua tagar aktif (flat array)
-export async function ambilSemuaTagar() {
-  const { data } = await klien.get('/publik/tagar');
-  return data;
-}
-
-// Ambil entri per tagar (cursor pagination)
-export async function cariEntriPerTagar(kode, params = {}) {
-  const { data } = await klien.get(`/publik/tagar/${encodeURIComponent(kode)}`, { params });
-  return data;
-}
-```
-
-### apiAdmin.js — hooks yang perlu ditambahkan
-
-Pattern: identik dengan `useDaftarLabelAdmin` / `useSimpanLabel` / `useHapusLabel`.
-
-```javascript
-// Query keys: ['admin-tagar', params]
-export function useDaftarTagarAdmin(params) { ... }
-export function useDetailTagarAdmin(id) { ... }
-export function useSimpanTagarAdmin() { ... }   // invalidate 'admin-tagar'
-export function useHapusTagarAdmin() { ... }    // invalidate 'admin-tagar'
-
-// Untuk chip editor di KamusAdmin:
-export function useTagarEntri(entriId) { ... }        // GET /redaksi/kamus/:id/tagar
-export function useSimpanTagarEntri() { ... }          // PUT /redaksi/kamus/:id/tagar
-export function useDaftarTagarUntukPilih() { ... }    // GET /publik/tagar (untuk dropdown)
-```
-
-### TagarAdmin.jsx — struktur minimal
-
-- **Kolom tabel**: nama, kode, kategori (badge), urutan, aktif
-- **Filter**: cari teks + filter kategori (dropdown 6 pilihan) + filter aktif
-- **Panel geser**: form dengan InputField (kode, nama), SelectField (kategori), InputField (urutan), ToggleAktif, TextareaField (deskripsi)
-- **Ikuti persis** struktur `LabelAdmin.jsx`
-
-### SeksiTagar di KamusAdmin.jsx — chip autocomplete
-
-- Tampilkan hanya jika `!panel.modeTambah && panel.data.id`
-- Letakkan **setelah** `<FormFooter>` dan **sebelum** `<SeksiMakna>`
-- State: `tagarTerpilih` (array), `queryInput` (string), `tampilDropdown` (bool)
-- Dropdown: semua tagar dari `useDaftarTagarUntukPilih()`, filter by `queryInput`
-- Autosave: panggil `simpanTagarEntri.mutate({ entriId, tagar_ids })` saat chip ditambah/dihapus
-
-### Kamus.jsx — perubahan minimal
-
-```javascript
-// Tambahkan 'tagar' ke baris terakhir
-const BARIS_KATEGORI = [
-  ['abjad', 'kelas_kata'],
-  ['bentuk', 'unsur_terikat'],
-  ['ekspresi', 'ragam'],
-  ['bahasa', 'bidang'],
-  ['tagar'],  // ← baru
-];
-
-// Di dalam map, tambahkan handler khusus untuk tagar:
-getTo={(item) => {
-  if (kat === 'tagar') return `/kamus/tagar/${encodeURIComponent(item.kode)}`;
-  // ... existing logic
-}}
-```
-
-### App.jsx — route baru
-
-```jsx
-// Tambahkan di blok routes kamus, sebelum route kamus/:kata
-<Route path="/kamus/tagar/:kode" element={<Kamus />} />
-```
-
-Di `Kamus.jsx`, deteksi param `kode` dari path `/kamus/tagar/:kode` dengan menambahkan prop/param baru atau menggunakan `useParams()` yang sudah ada — bedakan dari `kategori/:kategori/:kode` yang sekarang.
-
-**Alternatif lebih bersih**: buat komponen `KamusTagar.jsx` terpisah khusus untuk mode tagar, agar tidak menambah kompleksitas ke `Kamus.jsx` yang sudah besar.
+- `apiPublik.js` sudah menyediakan `ambilSemuaTagar()` dan `cariEntriPerTagar()`.
+- `apiAdmin.js` sudah menyediakan hook tagar master + hook audit `useDaftarAuditTagarAdmin()`.
+- `TagarAdmin.jsx` aktif untuk CRUD master tagar.
+- `AuditTagarAdmin.jsx` aktif untuk audit cakupan, filter, dan sunting asosiasi tagar per entri.
+- `KamusAdmin.jsx` sudah memuat chip editor tagar di panel sunting entri.
+- `Kamus.jsx` menangani mode tagar publik; `KamusTagar.jsx` tidak dipakai lagi.
+- `App.jsx` sudah memuat route `/redaksi/audit-tagar` dan `/kamus/tagar/:kode`.
 
 ---
 
