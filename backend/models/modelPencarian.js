@@ -117,7 +117,7 @@ class ModelPencarian {
     try {
       await db.query(
         `INSERT INTO pencarian (tanggal, domain, kata, jumlah)
-         VALUES (CURRENT_DATE, $1, $2, $3)`,
+         VALUES ((NOW() AT TIME ZONE 'Asia/Jakarta')::date, $1, $2, $3)`,
         [domainAman, kataNormal, jumlahAman]
       );
       return true;
