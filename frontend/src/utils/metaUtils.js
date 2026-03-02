@@ -26,6 +26,7 @@ export const NAMA_KATEGORI_KAMUS = {
   bahasa: 'Asal Bahasa',
   bidang: 'Bidang',
   jenis: 'Jenis',
+  tagar: 'Tagar',
 };
 
 export const NAMA_KATEGORI_BROWSE_KAMUS = {

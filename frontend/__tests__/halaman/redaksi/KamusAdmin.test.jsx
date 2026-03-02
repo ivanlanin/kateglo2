@@ -45,6 +45,9 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useHapusMakna: () => ({ mutate: mutateHapusMakna, isPending: false }),
   useSimpanContoh: () => ({ mutate: mutateSimpanContoh, isPending: false }),
   useHapusContoh: () => ({ mutate: mutateHapusContoh, isPending: false }),
+  useTagarEntri: () => ({ data: { data: [] }, isLoading: false }),
+  useSimpanTagarEntri: () => ({ mutate: vi.fn(), isPending: false, isError: false }),
+  useDaftarTagarUntukPilih: () => ({ data: { data: [] }, isLoading: false }),
 }));
 
 vi.mock('../../../src/context/authContext', () => ({

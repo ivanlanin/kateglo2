@@ -4,6 +4,7 @@ import TataLetak from './komponen/bersama/TataLetak';
 import Beranda from './halaman/publik/Beranda';
 import Kamus from './halaman/publik/Kamus';
 import KamusDetail from './halaman/publik/KamusDetail';
+import KamusTagar from './halaman/publik/KamusTagar';
 import Tesaurus from './halaman/publik/Tesaurus';
 import Glosarium from './halaman/publik/Glosarium';
 import GlosariumDetail from './halaman/publik/GlosariumDetail';
@@ -24,6 +25,7 @@ import GlosariumAdmin from './halaman/redaksi/GlosariumAdmin';
 import BidangAdmin from './halaman/redaksi/BidangAdmin';
 import SumberAdmin from './halaman/redaksi/SumberAdmin';
 import LabelAdmin from './halaman/redaksi/LabelAdmin';
+import TagarAdmin from './halaman/redaksi/TagarAdmin';
 import PenggunaAdmin from './halaman/redaksi/PenggunaAdmin';
 import PeranAdmin from './halaman/redaksi/PeranAdmin';
 import IzinAdmin from './halaman/redaksi/IzinAdmin';
@@ -104,6 +106,8 @@ function App() {
       <Route path="/redaksi/glosarium/:id" element={<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/label" element={<RuteIzin izinDibutuhkan={['kelola_label']}><LabelAdmin /></RuteIzin>} />
       <Route path="/redaksi/label/:id" element={<RuteIzin izinDibutuhkan={['kelola_label']}><LabelAdmin /></RuteIzin>} />
+      <Route path="/redaksi/tagar" element={<RuteIzin izinDibutuhkan={['kelola_tagar']}><TagarAdmin /></RuteIzin>} />
+      <Route path="/redaksi/tagar/:id" element={<RuteIzin izinDibutuhkan={['kelola_tagar']}><TagarAdmin /></RuteIzin>} />
       <Route path="/redaksi/peran" element={<RuteIzin izinDibutuhkan={['kelola_peran']}><PeranAdmin /></RuteIzin>} />
       <Route path="/redaksi/peran/:id" element={<RuteIzin izinDibutuhkan={['kelola_peran']}><PeranAdmin /></RuteIzin>} />
       <Route path="/redaksi/izin" element={<RuteIzin izinDibutuhkan={['kelola_peran']}><IzinAdmin /></RuteIzin>} />
@@ -116,6 +120,7 @@ function App() {
         <Route path="/kamus" element={<Kamus />} />
         <Route path="/kamus/cari/:kata" element={<Kamus />} />
         <Route path="/kamus/kelas/:kelas" element={<Kamus />} />
+        <Route path="/kamus/tagar/:kode" element={<KamusTagar />} />
         <Route path="/kamus/:kategori/:kode" element={<Kamus />} />
         <Route path="/kamus/detail/:indeks" element={<KamusDetail />} />
         <Route path="/makna" element={<Makna />} />

@@ -296,17 +296,18 @@ Atau lebih eksplisit: tambahkan `modeTagarPublik` yang memanggil endpoint tagar 
 | `routes/publik/index.js` | ✅ Selesai — route `/tagar` terdaftar |
 | `routes/redaksi/index.js` | ✅ Selesai — route `/tagar` terdaftar |
 
-### Frontend — ⏳ Belum dikerjakan (sesi berikutnya)
-| File | Perubahan | Prioritas |
+### Frontend — ✅ Selesai (kecuali EntriTagarAdmin)
+| File | Perubahan | Status |
 |---|---|---|
-| `api/apiPublik.js` | Tambah: `ambilSemuaTagar()`, `cariEntriPerTagar()` | Tinggi |
-| `api/apiAdmin.js` | Tambah: `useDaftarTagarAdmin()`, `useDetailTagarAdmin()`, `useSimpanTagarAdmin()`, `useHapusTagarAdmin()`, `useTagarEntri()`, `useSimpanTagarEntri()` | Tinggi |
-| `halaman/redaksi/TagarAdmin.jsx` | **Baru** — CRUD master data tagar. Ikuti pola `LabelAdmin.jsx` | Tinggi |
-| `halaman/redaksi/KamusAdmin.jsx` | Modifikasi — tambah `<SeksiTagar>` chip editor di panel edit entri (hanya jenis `turunan/prefiks/sufiks/klitik`) | Tinggi |
-| `halaman/publik/Kamus.jsx` | Modifikasi — tambah `'tagar'` ke `BARIS_KATEGORI`, handler `getTo` ke `/kamus/tagar/:kode` | Sedang |
-| `App.jsx` | Tambah route `<Route path="/kamus/tagar/:kode" element={<Kamus />} />` | Sedang |
-| `utils/metaUtils.js` | Tambah fungsi/konstanta meta untuk halaman tagar (`buildMetaTagarKamus`) | Sedang |
-| `halaman/redaksi/EntriTagarAdmin.jsx` | **Baru** — audit cakupan + kelola asosiasi massal | Rendah |
+| `api/apiPublik.js` | Tambah: `ambilSemuaTagar()`, `cariEntriPerTagar()` | ✅ |
+| `api/apiAdmin.js` | Tambah: `useDaftarTagarAdmin()`, `useDetailTagarAdmin()`, `useSimpanTagar()`, `useHapusTagar()`, `useTagarEntri()`, `useSimpanTagarEntri()`, `useDaftarTagarUntukPilih()` | ✅ |
+| `halaman/redaksi/TagarAdmin.jsx` | **Baru** — CRUD master data tagar (ikuti pola LabelAdmin) | ✅ |
+| `halaman/redaksi/KamusAdmin.jsx` | Modifikasi — tambah `<SeksiTagar>` chip editor di panel edit entri (semua jenis kecuali dasar/idiom/peribahasa) | ✅ |
+| `halaman/publik/Kamus.jsx` | Modifikasi — tambah `'tagar'` ke `BARIS_KATEGORI`, handler `getTo` ke `/kamus/tagar/:kode` | ✅ |
+| `halaman/publik/KamusTagar.jsx` | **Baru** — halaman daftar entri per tagar (komponen terpisah) | ✅ |
+| `App.jsx` | Tambah route `/kamus/tagar/:kode` → `KamusTagar`, route `/redaksi/tagar` + `/redaksi/tagar/:id` → `TagarAdmin` | ✅ |
+| `utils/metaUtils.js` | Tambah `'tagar': 'Tagar'` ke `NAMA_KATEGORI_KAMUS` | ✅ |
+| `halaman/redaksi/EntriTagarAdmin.jsx` | **Baru** — audit cakupan + kelola asosiasi massal | ⏳ Rendah |
 
 ---
 

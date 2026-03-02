@@ -39,7 +39,7 @@ class ModelTagar {
    */
   static async ambilSemuaTagar() {
     const result = await db.query(
-      `SELECT kode, nama, kategori
+      `SELECT id, kode, nama, kategori
        FROM tagar
        WHERE aktif = TRUE
        ORDER BY kategori, urutan, nama`

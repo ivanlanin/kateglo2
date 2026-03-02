@@ -27,6 +27,7 @@ const BARIS_KATEGORI = [
   ['bentuk', 'unsur_terikat'],
   ['ekspresi', 'ragam'],
   ['bahasa', 'bidang'],
+  ['tagar'],
 ];
 
 const OPSI_BENTUK_TAMBAHAN = [
@@ -245,6 +246,9 @@ function Kamus() {
                     items={labels}
                     getKey={(item) => item.kode}
                     getTo={(item) => {
+                      if (kat === 'tagar') {
+                        return `/kamus/tagar/${encodeURIComponent(item.kode)}`;
+                      }
                       const pathKategori = kat === 'unsur_terikat'
                         ? 'bentuk'
                         : kat === 'kelas_kata'

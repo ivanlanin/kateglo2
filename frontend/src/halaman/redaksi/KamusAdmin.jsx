@@ -11,6 +11,7 @@ import {
   useSimpanContoh, useHapusContoh,
   useKategoriLabelRedaksi,
   useDaftarSumberAdmin,
+  useTagarEntri, useSimpanTagarEntri, useDaftarTagarUntukPilih,
 } from '../../api/apiAdmin';
 import TataLetak from '../../komponen/bersama/TataLetak';
 import { useAuth } from '../../context/authContext';
@@ -493,6 +494,115 @@ function ItemMakna({
             )}
           </div>
         </div>
+      )}
+    </div>
+  );
+}
+
+// ─── SeksiTagar ──────────────────────────────────────────────────────────────
+
+const WARNA_TAGAR = {
+  prefiks: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+  sufiks: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+  infiks: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+  klitik: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
+  reduplikasi: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
+  prakategorial: 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300',
+};
+
+function SeksiTagar({ entriId }) {
+  const { data: tagarEntriResp } = useTagarEntri(entriId);
+  const { data: semuaTagarResp } = useDaftarTagarUntukPilih();
+  const simpanTagarEntri = useSimpanTagarEntri();
+
+  const tagarTerpilih = tagarEntriResp?.data || [];
+  const semuaTagar = semuaTagarResp?.data || [];
+
+  const [queryInput, setQueryInput] = useState('');
+  const [tampilDropdown, setTampilDropdown] = useState(false);
+
+  const idsYangDipilih = new Set(tagarTerpilih.map((t) => t.id));
+  const tagarTersedia = semuaTagar.filter((t) => !idsYangDipilih.has(t.id));
+  const tagarFiltered = queryInput
+    ? tagarTersedia.filter(
+        (t) =>
+          t.nama.toLowerCase().includes(queryInput.toLowerCase()) ||
+          t.kode.toLowerCase().includes(queryInput.toLowerCase())
+      )
+    : tagarTersedia;
+
+  const grupDropdown = tagarFiltered.reduce((acc, t) => {
+    if (!acc[t.kategori]) acc[t.kategori] = [];
+    acc[t.kategori].push(t);
+    return acc;
+  }, {});
+
+  const tambahTagar = (tagar) => {
+    const tagarBaru = [...tagarTerpilih, tagar];
+    simpanTagarEntri.mutate({ entriId, tagar_ids: tagarBaru.map((t) => t.id) });
+    setQueryInput('');
+  };
+
+  const hapusTagar = (tagarId) => {
+    const tagarBaru = tagarTerpilih.filter((t) => t.id !== tagarId);
+    simpanTagarEntri.mutate({ entriId, tagar_ids: tagarBaru.map((t) => t.id) });
+  };
+
+  return (
+    <div className="border-t border-gray-200 pt-4 dark:border-gray-700">
+      <div className="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">Tagar</div>
+      <div className="relative">
+        <div className="flex flex-wrap gap-1.5 rounded border border-gray-300 bg-white p-2 dark:border-gray-600 dark:bg-gray-800 min-h-[2.5rem]">
+          {tagarTerpilih.map((t) => (
+            <span
+              key={t.id}
+              className={`inline-flex items-center gap-1 rounded px-2 py-0.5 text-sm ${WARNA_TAGAR[t.kategori] || WARNA_TAGAR.prakategorial}`}
+            >
+              {t.nama}
+              <button
+                type="button"
+                onClick={() => hapusTagar(t.id)}
+                className="opacity-60 hover:opacity-100"
+                aria-label={`Hapus tagar ${t.nama}`}
+              >
+                ×
+              </button>
+            </span>
+          ))}
+          <input
+            type="text"
+            value={queryInput}
+            onChange={(e) => setQueryInput(e.target.value)}
+            onFocus={() => setTampilDropdown(true)}
+            onBlur={() => setTimeout(() => setTampilDropdown(false), 120)}
+            placeholder={tagarTerpilih.length === 0 ? 'Tambah tagar…' : ''}
+            className="min-w-24 flex-1 bg-transparent text-sm outline-none"
+          />
+        </div>
+        {tampilDropdown && Object.keys(grupDropdown).length > 0 && (
+          <div className="absolute left-0 right-0 top-full z-20 mt-1 max-h-60 overflow-y-auto rounded border border-gray-200 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-800">
+            {Object.entries(grupDropdown).map(([kat, items]) => (
+              <div key={kat}>
+                <div className="px-3 py-1 text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">
+                  {kat}
+                </div>
+                {items.map((t) => (
+                  <button
+                    key={t.id}
+                    type="button"
+                    onMouseDown={() => tambahTagar(t)}
+                    className="w-full px-3 py-1.5 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+                  >
+                    {t.nama}
+                  </button>
+                ))}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      {simpanTagarEntri.isError && (
+        <p className="mt-1 text-xs text-red-600">Gagal menyimpan tagar.</p>
       )}
     </div>
   );
@@ -1303,6 +1413,12 @@ function KamusAdmin() {
             isPending={simpan.isPending || hapus.isPending}
             modeTambah={panel.modeTambah}
           />
+
+          {/* Tagar section — only in edit mode, for derivational/affix entry types */}
+          {!panel.modeTambah && panel.data.id &&
+            !['dasar', 'idiom', 'peribahasa'].includes(panel.data.jenis) && (
+            <SeksiTagar entriId={panel.data.id} />
+          )}
 
           {/* Makna + Contoh section — only in edit mode */}
           {!panel.modeTambah && panel.data.id && (
