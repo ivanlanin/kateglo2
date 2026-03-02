@@ -359,3 +359,22 @@ export async function ambilDaftarSumber() {
   const response = await klien.get('/api/publik/glosarium/sumber');
   return response.data;
 }
+
+// === TAGAR ===
+
+export async function ambilSemuaTagar() {
+  const response = await klien.get('/api/publik/tagar');
+  return response.data;
+}
+
+export async function cariEntriPerTagar(kode, {
+  limit = 100,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+} = {}) {
+  const response = await klien.get(`/api/publik/tagar/${encodeURIComponent(kode)}`, {
+    params: buildCursorParams({ limit, cursor, direction, lastPage }),
+  });
+  return response.data;
+}

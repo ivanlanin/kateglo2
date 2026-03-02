@@ -24,6 +24,7 @@ router.use('/glosarium', require('./glosarium'));
 router.use('/bidang', require('./bidang'));
 router.use('/sumber', require('./sumber'));
 router.use('/label', require('./label'));
+router.use('/tagar', require('./tagar'));
 router.use('/peran', require('./peran'));
 router.use('/izin', require('./izin'));
 router.use('/audit-makna', require('./auditMakna'));

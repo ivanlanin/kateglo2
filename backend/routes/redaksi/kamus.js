@@ -4,6 +4,7 @@
 
 const express = require('express');
 const ModelEntri = require('../../models/modelEntri');
+const ModelTagar = require('../../models/modelTagar');
 const { periksaIzin } = require('../../middleware/otorisasi');
 const { hapusCacheDetailKamus } = require('../../services/layananKamusPublik');
 const {
@@ -327,6 +328,41 @@ router.delete('/:entriId/makna/:maknaId/contoh/:contohId', periksaIzin('hapus_co
     if (!deleted) return res.status(404).json({ success: false, message: 'Contoh tidak ditemukan' });
     await invalidasiCacheByEntriId(entriId);
     return res.json({ success: true });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+/**
+ * GET /api/redaksi/kamus/:entriId/tagar
+ * Ambil tagar untuk satu entri.
+ */
+router.get('/:entriId/tagar', periksaIzin('edit_entri'), async (req, res, next) => {
+  try {
+    const entriId = parseIdParam(req.params.entriId);
+    if (!entriId) return res.status(400).json({ success: false, message: 'ID entri tidak valid' });
+    const data = await ModelTagar.ambilTagarEntri(entriId);
+    return res.json({ success: true, data });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+/**
+ * PUT /api/redaksi/kamus/:entriId/tagar
+ * Replace semua tagar untuk satu entri.
+ * Body: { tagar_ids: number[] }
+ */
+router.put('/:entriId/tagar', periksaIzin('edit_entri'), async (req, res, next) => {
+  try {
+    const entriId = parseIdParam(req.params.entriId);
+    if (!entriId) return res.status(400).json({ success: false, message: 'ID entri tidak valid' });
+
+    const tagarIds = Array.isArray(req.body.tagar_ids) ? req.body.tagar_ids : [];
+    await ModelTagar.simpanTagarEntri(entriId, tagarIds);
+
+    const data = await ModelTagar.ambilTagarEntri(entriId);
+    return res.json({ success: true, data });
   } catch (error) {
     return next(error);
   }

@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-02T10:21:29.129Z
+-- Generated: 2026-03-02T14:54:44.653Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -267,6 +267,14 @@ create trigger trg_set_timestamp_fields__entri
   before insert or update on entri
   for each row
   execute function set_timestamp_fields();
+
+create table entri_tagar (
+  entri_id integer references entri(id) on delete cascade,
+  tagar_id integer references tagar(id) on delete cascade,
+  created_at timestamp without time zone not null default now()
+);
+create index idx_entri_tagar_entri_id on entri_tagar using btree (entri_id);
+create index idx_entri_tagar_tagar_id on entri_tagar using btree (tagar_id);
 
 create table etimologi (
   id serial primary key,
@@ -596,6 +604,29 @@ create table susun_kata_skor (
 create index idx_susun_kata_skor_harian on susun_kata_skor using btree (susun_kata_id, menang DESC, percobaan, detik);
 create index idx_susun_kata_skor_pengguna on susun_kata_skor using btree (pengguna_id, created_at DESC);
 create unique index susun_kata_skor_unik_harian_user on susun_kata_skor using btree (susun_kata_id, pengguna_id);
+
+create table tagar (
+  id serial primary key,
+  kode text not null,
+  nama text not null,
+  kategori text not null,
+  deskripsi text,
+  urutan integer not null default 1,
+  aktif boolean not null default true,
+  created_at timestamp without time zone not null default now(),
+  updated_at timestamp without time zone not null default now(),
+  constraint tagar_kode_key unique (kode),
+  constraint tagar_kategori_check check (kategori = ANY (ARRAY['prefiks'::text, 'sufiks'::text, 'infiks'::text, 'klitik'::text, 'reduplikasi'::text, 'prakategorial'::text])),
+  constraint tagar_kode_check check (TRIM(BOTH FROM kode) <> ''::text),
+  constraint tagar_nama_check check (TRIM(BOTH FROM nama) <> ''::text)
+);
+create index idx_tagar_aktif on tagar using btree (aktif);
+create index idx_tagar_kategori_urutan on tagar using btree (kategori, urutan);
+create unique index tagar_kode_key on tagar using btree (kode);
+create trigger trg_set_timestamp_fields__tagar
+  before insert or update on tagar
+  for each row
+  execute function set_timestamp_fields();
 
 create table tesaurus (
   id serial primary key,

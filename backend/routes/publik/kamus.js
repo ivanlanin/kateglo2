@@ -6,6 +6,7 @@ const express = require('express');
 const { authenticate, authenticateOptional } = require('../../middleware/auth');
 const { cariKamus, ambilDetailKamus } = require('../../services/layananKamusPublik');
 const ModelLabel = require('../../models/modelLabel');
+const ModelTagar = require('../../models/modelTagar');
 const ModelEntri = require('../../models/modelEntri');
 const ModelKomentar = require('../../models/modelKomentar');
 const ModelPencarian = require('../../models/modelPencarian');
@@ -28,8 +29,11 @@ function parsePeriodeTerpopuler(value) {
 
 router.get('/kategori', async (_req, res, next) => {
   try {
-    const data = await ModelLabel.ambilSemuaKategori();
-    return res.json(data);
+    const [label, tagar] = await Promise.all([
+      ModelLabel.ambilSemuaKategori(),
+      ModelTagar.ambilSemuaTagar(),
+    ]);
+    return res.json({ ...label, tagar });
   } catch (error) {
     return next(error);
   }

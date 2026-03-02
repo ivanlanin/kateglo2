@@ -17,6 +17,7 @@ router.get('/health', (_req, res) => {
 });
 
 router.use('/kamus', require('./kamus'));
+router.use('/tagar', require('./tagar'));
 router.use('/makna', require('./makna'));
 router.use('/rima', require('./rima'));
 router.use('/tesaurus', require('./tesaurus'));

@@ -944,3 +944,77 @@ export function useSimpanPengguna() {
     },
   });
 }
+
+// ─── Queries: Tagar ──────────────────────────────────────────────────────────
+
+export function useDaftarTagarAdmin({
+  limit = 50,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+  q = '',
+  kategori = '',
+  aktif = '',
+} = {}) {
+  return useDaftarAdmin('/api/redaksi/tagar', 'admin-tagar', {
+    limit,
+    cursor,
+    direction,
+    lastPage,
+    q,
+    kategori,
+    aktif,
+  });
+}
+
+export function useDetailTagarAdmin(id) {
+  return useQuery({
+    queryKey: ['admin-tagar-detail', id],
+    queryFn: () => klien.get(`/api/redaksi/tagar/${id}`).then((r) => r.data),
+    enabled: Boolean(id),
+  });
+}
+
+/** Ambil tagar untuk satu entri (chip editor di KamusAdmin) */
+export function useTagarEntri(entriId) {
+  return useQuery({
+    queryKey: ['tagar-entri', entriId],
+    queryFn: () =>
+      klien.get(`/api/redaksi/kamus/${entriId}/tagar`).then((r) => r.data),
+    enabled: Boolean(entriId),
+  });
+}
+
+/** Ambil semua tagar aktif untuk dropdown/autocomplete */
+export function useDaftarTagarUntukPilih() {
+  return useQuery({
+    queryKey: ['semua-tagar-aktif'],
+    queryFn: () => klien.get('/api/publik/tagar').then((r) => r.data),
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+// ─── Mutations: Tagar ────────────────────────────────────────────────────────
+
+export function useSimpanTagar() {
+  return useSimpanAdmin({ path: '/api/redaksi/tagar', queryKeyPrefix: 'admin-tagar' });
+}
+
+export function useHapusTagar() {
+  return useHapusAdmin({ path: '/api/redaksi/tagar', queryKeyPrefix: 'admin-tagar' });
+}
+
+/** Simpan (replace) tagar untuk satu entri */
+export function useSimpanTagarEntri() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ entriId, tagar_ids }) =>
+      klien
+        .put(`/api/redaksi/kamus/${entriId}/tagar`, { tagar_ids })
+        .then((r) => r.data),
+    onSuccess: (_data, { entriId }) => {
+      invalidateQueryKeys(qc, [`tagar-entri`]);
+      qc.invalidateQueries({ queryKey: ['tagar-entri', entriId] });
+    },
+  });
+}
