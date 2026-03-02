@@ -124,7 +124,8 @@ function App() {
         <Route path="/rima/cari/:kata" element={<Rima />} />
         <Route path="/ejaan" element={<Ejaan />} />
         <Route path="/ejaan/:slug" element={<Ejaan />} />
-        <Route path="/gim/susun-kata" element={<SusunKata />} />
+        <Route path="/gim/susun-kata" element={<Navigate to="/gim/susun-kata/harian" replace />} />
+        <Route path="/gim/susun-kata/:mode" element={<SusunKata />} />
         <Route path="/tesaurus" element={<Tesaurus />} />
         <Route path="/tesaurus/cari/:kata" element={<Tesaurus />} />
         <Route path="/glosarium" element={<Glosarium />} />

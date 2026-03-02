@@ -197,13 +197,28 @@ export async function ambilPuzzleSusunKata({ panjang = 5 } = {}) {
   return response.data;
 }
 
-export async function ambilHarianSusunKata({ panjang = 5 } = {}) {
-  const response = await klien.get('/api/publik/gim/susun-kata/harian', {
-    params: {
-      panjang: Math.min(Math.max(Number(panjang) || 5, 4), 8),
-    },
+function normalisasiPanjangSusunKata(value, { min = 4, max = 8, fallback = 5 } = {}) {
+  return Math.min(Math.max(Number(value) || fallback, min), max);
+}
+
+async function ambilModeSusunKata(mode, { panjang, min = 4, max = 8 } = {}) {
+  const params = {};
+  if (panjang !== null && panjang !== undefined && String(panjang).trim() !== '') {
+    params.panjang = normalisasiPanjangSusunKata(panjang, { min, max, fallback: 5 });
+  }
+
+  const response = await klien.get(`/api/publik/gim/susun-kata/${mode}`, {
+    params,
   });
   return response.data;
+}
+
+export async function ambilHarianSusunKata({ panjang = 5 } = {}) {
+  return ambilModeSusunKata('harian', { panjang, min: 4, max: 8 });
+}
+
+export async function ambilBebasSusunKata({ panjang = null } = {}) {
+  return ambilModeSusunKata('bebas', { panjang, min: 4, max: 6 });
 }
 
 export async function submitSkorSusunKata({
@@ -223,10 +238,40 @@ export async function submitSkorSusunKata({
   return response.data;
 }
 
+export async function submitSkorSusunKataBebas({
+  tanggal = null,
+  panjang = 5,
+  kata = '',
+  percobaan = 6,
+  detik = 0,
+  menang = false,
+  tebakan = '',
+} = {}) {
+  const response = await klien.post('/api/publik/gim/susun-kata/bebas/submit', {
+    tanggal,
+    panjang: normalisasiPanjangSusunKata(panjang, { min: 4, max: 6, fallback: 5 }),
+    kata: String(kata || '').trim().toLowerCase(),
+    percobaan: Math.min(Math.max(Number(percobaan) || 6, 1), 6),
+    detik: Math.min(Math.max(Number(detik) || 0, 0), 86400),
+    menang: Boolean(menang),
+    tebakan: String(tebakan || '').trim().toLowerCase(),
+  });
+  return response.data;
+}
+
 export async function ambilKlasemenSusunKata({ panjang = 5, limit = 10 } = {}) {
   const response = await klien.get('/api/publik/gim/susun-kata/harian/klasemen', {
     params: {
       panjang: Math.min(Math.max(Number(panjang) || 5, 4), 8),
+      limit: Math.min(Math.max(Number(limit) || 10, 1), 50),
+    },
+  });
+  return response.data;
+}
+
+export async function ambilKlasemenSusunKataBebas({ limit = 10 } = {}) {
+  const response = await klien.get('/api/publik/gim/susun-kata/bebas/klasemen', {
+    params: {
       limit: Math.min(Math.max(Number(limit) || 10, 1), 50),
     },
   });

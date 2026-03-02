@@ -8,6 +8,7 @@
 - Menawarkan entri glosarium yang mirip ketika frasa yang dicari tidak ditemukan
 - Menambahkan info cara main [Susun Kata](/gim/susun-kata)
 - Menambahkan lencana sinonim dan antonim di [Tesaurus](/tesaurus)
+- Menambahkan [mode bebas untuk Susun Kata](/gim/susun-kata/bebas)
 
 ## 2026-03-01 Minggu
 

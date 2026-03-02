@@ -2,14 +2,17 @@
  * @fileoverview Halaman gim Susun Kata
  */
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Info, Trophy } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   ambilKlasemenSusunKata,
+  ambilKlasemenSusunKataBebas,
+  ambilBebasSusunKata,
   ambilPuzzleSusunKata,
   submitSkorSusunKata,
+  submitSkorSusunKataBebas,
   validasiKataSusunKata,
 } from '../../api/apiPublik';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
@@ -21,12 +24,24 @@ import { buatPathDetailKamus } from '../../utils/paramUtils';
 
 const MAKS_PERCOBAAN = 6;
 const PANJANG_DEFAULT = 5;
+const MODE_HARIAN = 'harian';
+const MODE_BEBAS = 'bebas';
 const KEYBOARD_ROWS = ['qwertyuiop', 'asdfghjkl'];
 const PRIORITAS_STATUS = {
   salah: 0,
   ada: 1,
   benar: 2,
 };
+
+const formatAngkaId = new Intl.NumberFormat('id-ID', {
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 2,
+});
+
+const formatSatuDesimalId = new Intl.NumberFormat('id-ID', {
+  minimumFractionDigits: 1,
+  maximumFractionDigits: 1,
+});
 
 function evaluasiTebakan(tebakan, target) {
   const hasil = Array.from({ length: target.length }, () => 'salah');
@@ -94,25 +109,87 @@ export function parseRiwayatDariSkor(tebakanRaw, panjang) {
     .slice(0, MAKS_PERCOBAAN);
 }
 
+function PanelInfoSusunKata() {
+  return (
+    <div className="susun-kata-info-panel">
+      <p className="susun-kata-info-text">
+        Susun Kata adalah gim menyusun huruf untuk membentuk kata bahasa Indonesia yang ada di kamus Kateglo. Gim ini terinspirasi oleh Wordle dari Josh Wardle untuk kata bahasa Inggris.
+      </p>
+      <p className="susun-kata-info-text">
+        Peserta harus masuk log agar sesi permainan dapat direkam. Ada dua mode permainan (harian dan bebas) yang dapat diikuti dengan tiap sesi permainan mendapat enam kesempatan untuk menebak.
+      </p>
+      <p className="susun-kata-info-text">
+        Pada mode harian, kata dasar lima huruf yang sama ditentukan untuk ditebak semua peserta. Pada mode bebas, kata dasar 4–6 huruf akan dipilih secara acak oleh sistem dan berbeda baik antarpeserta maupun antarsesi.
+      </p>
+      <p className="susun-kata-info-text">
+        Masukkan huruf untuk membentuk kata. Tekan enter untuk mengirim tebakan. Warna kotak dan tombol kibor di layar akan menunjukkan huruf yang sudah dipilih dan statusnya.
+      </p>
+      <ul className="susun-kata-info-list">
+        <li><span className="susun-kata-info-badge susun-kata-info-badge-benar">Hijau</span>: Huruf dan tempatnya benar.</li>
+        <li><span className="susun-kata-info-badge susun-kata-info-badge-ada">Kuning</span>: Huruf benar, tetapi tempatnya salah.</li>
+        <li><span className="susun-kata-info-badge susun-kata-info-badge-salah">Abu-abu</span>: Huruf salah.</li>
+      </ul>
+    </div>
+  );
+}
+
 function SusunKata() {
   const { isAuthenticated, isLoading: authLoading, loginDenganGoogle } = useAuth();
+  const navigate = useNavigate();
+  const { mode: modeParam } = useParams();
+  const [modeAktif, setModeAktif] = useState(MODE_HARIAN);
   const [riwayat, setRiwayat] = useState([]);
   const [tebakan, setTebakan] = useState('');
   const [pesanMunculan, setPesanMunculan] = useState(null);
   const [mulaiMainAt, setMulaiMainAt] = useState(Date.now());
   const [skorTerkirim, setSkorTerkirim] = useState(false);
   const [panelAktif, setPanelAktif] = useState('permainan');
+  const [putaranBebas, setPutaranBebas] = useState(0);
+  const nextRoundTimeoutRef = useRef(null);
+  const modeDariPath = modeParam === MODE_BEBAS ? MODE_BEBAS : MODE_HARIAN;
 
-  const { data, isLoading, isError, error } = useQuery({
+  useEffect(() => {
+    setModeAktif(modeDariPath);
+    setPanelAktif('permainan');
+    setPesanMunculan(null);
+
+    if (modeDariPath === MODE_BEBAS) {
+      setPutaranBebas((prev) => prev + 1);
+    }
+  }, [modeDariPath]);
+
+  const {
+    data: dataHarian,
+    isLoading: isLoadingHarian,
+    isError: isErrorHarian,
+    error: errorHarian,
+  } = useQuery({
     queryKey: ['gim-susun-kata-puzzle', PANJANG_DEFAULT],
     queryFn: () => ambilPuzzleSusunKata({ panjang: PANJANG_DEFAULT }),
     staleTime: 0,
-    enabled: Boolean(isAuthenticated),
+    enabled: Boolean(isAuthenticated && modeAktif === MODE_HARIAN),
   });
+
+  const {
+    data: dataBebas,
+    isLoading: isLoadingBebas,
+    isError: isErrorBebas,
+    error: errorBebas,
+  } = useQuery({
+    queryKey: ['gim-susun-kata-bebas', putaranBebas],
+    queryFn: () => ambilBebasSusunKata(),
+    staleTime: 0,
+    enabled: Boolean(isAuthenticated && modeAktif === MODE_BEBAS),
+  });
+
+  const data = modeAktif === MODE_HARIAN ? dataHarian : dataBebas;
+  const isLoading = modeAktif === MODE_HARIAN ? isLoadingHarian : isLoadingBebas;
+  const isError = modeAktif === MODE_HARIAN ? isErrorHarian : isErrorBebas;
+  const error = modeAktif === MODE_HARIAN ? errorHarian : errorBebas;
 
   const panjang = Number(data?.panjang) || PANJANG_DEFAULT;
   const target = String(data?.target || '').toLowerCase();
-  const sudahMainHariIni = Boolean(data?.sudahMainHariIni);
+  const sudahMainHariIni = modeAktif === MODE_HARIAN ? Boolean(data?.sudahMainHariIni) : false;
   const kamusSet = useMemo(
     () => new Set((data?.kamus || []).map((item) => String(item || '').trim().toLowerCase()).filter(Boolean)),
     [data?.kamus]
@@ -123,12 +200,21 @@ function SusunKata() {
   const petaKeyboard = useMemo(() => buatPetaKeyboard(riwayat, target), [riwayat, target]);
 
   const kirimSkor = useMutation({
-    mutationFn: submitSkorSusunKata,
+    mutationFn: (payload) => {
+      if (modeAktif === MODE_BEBAS) {
+        return submitSkorSusunKataBebas(payload);
+      }
+      return submitSkorSusunKata(payload);
+    },
   });
 
   const { data: dataKlasemen } = useQuery({
-    queryKey: ['gim-susun-kata-klasemen', panjang],
-    queryFn: () => ambilKlasemenSusunKata({ panjang, limit: 10 }),
+    queryKey: ['gim-susun-kata-klasemen', modeAktif, panjang],
+    queryFn: () => (
+      modeAktif === MODE_BEBAS
+        ? ambilKlasemenSusunKataBebas({ limit: 10 })
+        : ambilKlasemenSusunKata({ panjang, limit: 10 })
+    ),
     staleTime: 30 * 1000,
     enabled: panelAktif === 'klasemen',
   });
@@ -189,14 +275,20 @@ function SusunKata() {
     if (menangBaru) {
       if (!skorTerkirim) {
         const detik = Math.max(Math.floor((Date.now() - mulaiMainAt) / 1000), 0);
+        const payloadSkor = {
+          panjang,
+          percobaan: riwayatBaru.length,
+          detik,
+          menang: true,
+          tebakan: serializedTebakan,
+        };
+
+        if (modeAktif === MODE_BEBAS) {
+          payloadSkor.kata = target;
+        }
+
         kirimSkor.mutate(
-          {
-            panjang,
-            percobaan: riwayatBaru.length,
-            detik,
-            menang: true,
-            tebakan: serializedTebakan,
-          },
+          payloadSkor,
           {
             onSettled: () => setSkorTerkirim(true),
           }
@@ -212,20 +304,36 @@ function SusunKata() {
           </>
         )
       );
+
+      if (modeAktif === MODE_BEBAS) {
+        if (nextRoundTimeoutRef.current) {
+          window.clearTimeout(nextRoundTimeoutRef.current);
+        }
+
+        nextRoundTimeoutRef.current = window.setTimeout(() => {
+          setPutaranBebas((prev) => prev + 1);
+        }, 1200);
+      }
       return;
     }
 
     if (kalahBaru) {
       if (!skorTerkirim) {
         const detik = Math.max(Math.floor((Date.now() - mulaiMainAt) / 1000), 0);
+        const payloadSkor = {
+          panjang,
+          percobaan: MAKS_PERCOBAAN,
+          detik,
+          menang: false,
+          tebakan: serializedTebakan,
+        };
+
+        if (modeAktif === MODE_BEBAS) {
+          payloadSkor.kata = target;
+        }
+
         kirimSkor.mutate(
-          {
-            panjang,
-            percobaan: MAKS_PERCOBAAN,
-            detik,
-            menang: false,
-            tebakan: serializedTebakan,
-          },
+          payloadSkor,
           {
             onSettled: () => setSkorTerkirim(true),
           }
@@ -242,6 +350,7 @@ function SusunKata() {
     riwayat,
     selesai,
     skorTerkirim,
+    modeAktif,
     tampilkanPesan,
     target,
     tebakan,
@@ -253,8 +362,14 @@ function SusunKata() {
     setTebakan('');
     setPesanMunculan(null);
     setMulaiMainAt(Date.now());
-    setSkorTerkirim(Boolean(data?.sudahMainHariIni));
-  }, [data?.hasilHariIni?.tebakan, data?.sudahMainHariIni, panjang, target]);
+    setSkorTerkirim(modeAktif === MODE_HARIAN ? Boolean(data?.sudahMainHariIni) : false);
+  }, [data?.hasilHariIni?.tebakan, data?.sudahMainHariIni, modeAktif, panjang, target]);
+
+  useEffect(() => () => {
+    if (nextRoundTimeoutRef.current) {
+      window.clearTimeout(nextRoundTimeoutRef.current);
+    }
+  }, []);
 
   useEffect(() => {
     if (!isAuthenticated || !target || selesai) return undefined;
@@ -333,6 +448,37 @@ function SusunKata() {
           ) : null}
         </div>
 
+        <div className="susun-kata-mode-row" role="tablist" aria-label="Mode permainan Susun Kata">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={modeAktif === MODE_HARIAN}
+            className={`susun-kata-mode-pill ${modeAktif === MODE_HARIAN ? 'susun-kata-mode-pill-aktif' : ''}`.trim()}
+            onClick={() => {
+              if (modeAktif !== MODE_HARIAN) {
+                navigate('/gim/susun-kata/harian');
+              }
+            }}
+          >
+            Harian
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={modeAktif === MODE_BEBAS}
+            className={`susun-kata-mode-pill ${modeAktif === MODE_BEBAS ? 'susun-kata-mode-pill-aktif' : ''}`.trim()}
+            onClick={() => {
+              if (modeAktif !== MODE_BEBAS) {
+                navigate('/gim/susun-kata/bebas');
+              } else {
+                setPutaranBebas((prev) => prev + 1);
+              }
+            }}
+          >
+            Bebas
+          </button>
+        </div>
+
         <QueryFeedback
           isLoading={isAuthenticated && isLoading && !data}
           isError={isError}
@@ -343,26 +489,11 @@ function SusunKata() {
 
         {!authLoading && !isAuthenticated && (
           <div className="susun-kata-locked-wrap">
-            <div className="susun-kata-info-panel">
-              <p className="susun-kata-info-text">
-                Susun Kata adalah gim menyusun huruf untuk membentuk kata bahasa Indonesia yang ada di kamus Kateglo. Gim ini terinspirasi oleh Wordle dari Josh Wardle untuk kata bahasa Inggris.
-              </p>
-              <p className="susun-kata-info-text">
-                Setiap hari akan ada satu kata yang sama yang ditebakkan. Peserta harus masuk log untuk bermain dan mendapat enam kesempatan untuk menebak.
-              </p>
-              <p className="susun-kata-info-text">
-                Masukkan huruf untuk membentuk kata. Tekan enter untuk mengirim tebakan. Warna kotak dan tombol kibor di layar akan menunjukkan huruf yang sudah dipilih dan statusnya.
-              </p>
-              <ul className="susun-kata-info-list">
-                <li><span className="susun-kata-info-badge susun-kata-info-badge-benar">Hijau</span>: Huruf dan tempatnya benar.</li>
-                <li><span className="susun-kata-info-badge susun-kata-info-badge-ada">Kuning</span>: Huruf benar, tetapi tempatnya salah.</li>
-                <li><span className="susun-kata-info-badge susun-kata-info-badge-salah">Abu-abu</span>: Huruf salah.</li>
-              </ul>
-            </div>
+            <PanelInfoSusunKata />
             <TombolMasuk
               label="Masuk untuk Bermain"
               className="susun-kata-login-btn"
-              onClick={() => loginDenganGoogle('/gim/susun-kata')}
+              onClick={() => loginDenganGoogle(`/gim/susun-kata/${modeAktif}`)}
             />
           </div>
         )}
@@ -370,22 +501,7 @@ function SusunKata() {
         {!isError && isAuthenticated && data && (
           <>
             {panelInfoTerbuka ? (
-              <div className="susun-kata-info-panel">
-                <p className="susun-kata-info-text">
-                  Susun Kata adalah gim menyusun huruf untuk membentuk kata bahasa Indonesia yang ada di kamus Kateglo. Gim ini terinspirasi oleh Wordle dari Josh Wardle untuk kata bahasa Inggris.
-                </p>
-                <p className="susun-kata-info-text">
-                  Setiap hari akan ada satu kata yang sama yang ditebakkan. Peserta harus masuk log untuk bermain dan mendapat enam kesempatan untuk menebak.
-                </p>
-                <p className="susun-kata-info-text">
-                  Masukkan huruf untuk membentuk kata. Tekan enter untuk mengirim tebakan. Warna kotak dan tombol kibor di layar akan menunjukkan huruf yang sudah dipilih dan statusnya.
-                </p>
-                <ul className="susun-kata-info-list">
-                  <li><span className="susun-kata-info-badge susun-kata-info-badge-benar">Hijau</span>: Huruf dan tempatnya benar</li>
-                  <li><span className="susun-kata-info-badge susun-kata-info-badge-ada">Kuning</span>: Huruf benar, tetapi tempatnya salah</li>
-                  <li><span className="susun-kata-info-badge susun-kata-info-badge-salah">Abu-abu</span>: Huruf salah</li>
-                </ul>
-              </div>
+              <PanelInfoSusunKata />
             ) : panelKlasemenTerbuka ? (
               <div className="susun-kata-klasemen-panel">
                 {daftarKlasemen.length ? (
@@ -394,12 +510,20 @@ function SusunKata() {
                       <li key={`${item.pengguna_id}-${index}`} className="susun-kata-klasemen-item">
                         <span className="susun-kata-klasemen-rank">#{index + 1}</span>
                         <span className="susun-kata-klasemen-name">{item.nama}</span>
-                        <span className="susun-kata-klasemen-score">{item.skor} poin, {item.detik} detik</span>
+                        {modeAktif === MODE_BEBAS ? (
+                          <span className="susun-kata-klasemen-score">
+                            {formatSatuDesimalId.format(Number(item.rata_poin) || 0)} poin; {formatSatuDesimalId.format(Number(item.rata_detik) || 0)} detik; {formatAngkaId.format(Number(item.total_main) || 0)}x main
+                          </span>
+                        ) : (
+                          <span className="susun-kata-klasemen-score">{item.skor} poin, {item.detik} detik</span>
+                        )}
                       </li>
                     ))}
                   </ol>
                 ) : (
-                  <p className="susun-kata-klasemen-kosong">Belum ada skor hari ini.</p>
+                  <p className="susun-kata-klasemen-kosong">
+                    {modeAktif === MODE_BEBAS ? 'Belum ada pemenang mode bebas.' : 'Belum ada skor hari ini.'}
+                  </p>
                 )}
               </div>
             ) : (

@@ -218,8 +218,8 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
     return { title: 'Kebijakan Privasi \u2014 Kateglo', description: 'Kebijakan privasi layanan Kateglo.' };
   }
 
-  // /gim/susun-kata
-  if (path === '/gim/susun-kata' || path === '/gim/susun-kata/') {
+  // /gim/susun-kata, /gim/susun-kata/harian, /gim/susun-kata/bebas
+  if (path === '/gim/susun-kata' || path === '/gim/susun-kata/' || path.startsWith('/gim/susun-kata/')) {
     return titled(buildMetaSusunKata());
   }
 

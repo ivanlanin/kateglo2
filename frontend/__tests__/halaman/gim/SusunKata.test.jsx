@@ -4,8 +4,11 @@ import { MemoryRouter } from 'react-router-dom';
 import SusunKata, { buatPetaKeyboard, parseRiwayatDariSkor } from '../../../src/halaman/gim/SusunKata';
 import {
   ambilKlasemenSusunKata,
+  ambilKlasemenSusunKataBebas,
+  ambilBebasSusunKata,
   ambilPuzzleSusunKata,
   submitSkorSusunKata,
+  submitSkorSusunKataBebas,
   validasiKataSusunKata,
 } from '../../../src/api/apiPublik';
 
@@ -20,9 +23,12 @@ vi.mock('@tanstack/react-query', () => ({
 
 vi.mock('../../../src/api/apiPublik', () => ({
   ambilPuzzleSusunKata: vi.fn(),
+  ambilBebasSusunKata: vi.fn(),
   validasiKataSusunKata: vi.fn(),
   submitSkorSusunKata: vi.fn(),
+  submitSkorSusunKataBebas: vi.fn(),
   ambilKlasemenSusunKata: vi.fn(),
+  ambilKlasemenSusunKataBebas: vi.fn(),
 }));
 
 vi.mock('../../../src/context/authContext', () => ({
@@ -80,7 +86,10 @@ describe('SusunKata', () => {
     });
     validasiKataSusunKata.mockResolvedValue({ valid: false });
     submitSkorSusunKata.mockResolvedValue({ success: true });
+    ambilBebasSusunKata.mockResolvedValue({ success: true, panjang: 5, target: 'kartu', kamus: ['kartu'] });
+    submitSkorSusunKataBebas.mockResolvedValue({ success: true });
     ambilKlasemenSusunKata.mockResolvedValue({ success: true, data: [] });
+    ambilKlasemenSusunKataBebas.mockResolvedValue({ success: true, data: [] });
 
     mockUseMutation.mockReturnValue({
       mutate: vi.fn((_payload, options) => options?.onSettled?.()),
@@ -172,7 +181,7 @@ describe('SusunKata', () => {
     expect(screen.getByText('Hijau')).toBeInTheDocument();
     expect(screen.getByText(/Huruf dan tempatnya benar/i)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Masuk untuk Bermain' }));
-    expect(loginDenganGoogle).toHaveBeenCalledWith('/gim/susun-kata');
+    expect(loginDenganGoogle).toHaveBeenCalledWith('/gim/susun-kata/harian');
     expect(ambilPuzzleSusunKata).not.toHaveBeenCalled();
   });
 

@@ -2098,7 +2098,35 @@ code {
   }
 
   .susun-kata-heading-row {
-    @apply relative mb-6;
+    @apply relative mb-4 w-full;
+  }
+
+  .susun-kata-mode-row {
+    @apply mb-3 mx-auto flex h-9 w-fit max-w-[260px] items-center justify-center rounded-md border border-gray-200 bg-gray-100 p-0.5;
+  }
+
+  .susun-kata-mode-pill {
+    @apply inline-flex h-8 min-w-20 items-center justify-center rounded-md px-4 text-sm font-semibold text-gray-700 transition-colors duration-200 ease-in-out;
+  }
+
+  .susun-kata-mode-pill-aktif {
+    @apply bg-green-600 text-white;
+  }
+
+  .susun-kata-mode-pill:not(.susun-kata-mode-pill-aktif) {
+    @apply text-gray-700;
+  }
+
+  .dark .susun-kata-mode-pill {
+    @apply text-gray-300;
+  }
+
+  .dark .susun-kata-mode-pill-aktif {
+    @apply bg-green-600 text-white;
+  }
+
+  .dark .susun-kata-mode-row {
+    @apply border-gray-600 bg-gray-800;
   }
 
   .susun-kata-panel-btn {
@@ -2178,7 +2206,7 @@ code {
   }
 
   .susun-kata-grid {
-    @apply space-y-2 mb-4 mt-6;
+    @apply space-y-2 mb-4 mt-3;
   }
 
   .susun-kata-grid-row {

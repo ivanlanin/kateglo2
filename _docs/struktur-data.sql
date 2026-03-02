@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-01T17:01:21.930Z
+-- Generated: 2026-03-02T10:21:29.129Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -558,6 +558,27 @@ create trigger trg_set_timestamp_fields__susun_kata
   before insert or update on susun_kata
   for each row
   execute function set_timestamp_fields();
+
+create table susun_kata_bebas (
+  id serial primary key,
+  tanggal date not null default ((now() AT TIME ZONE 'Asia/Jakarta'::text))::date,
+  panjang integer not null,
+  kata text not null,
+  pengguna_id integer references pengguna(id) on delete cascade not null,
+  percobaan integer not null,
+  tebakan text not null default ''::text,
+  detik integer not null,
+  menang boolean not null,
+  created_at timestamp without time zone not null default now(),
+  constraint susun_kata_bebas_kata_check check (kata ~ '^[a-z]+$'::text),
+  constraint susun_kata_bebas_kata_panjang_check check (char_length(kata) = panjang),
+  constraint susun_kata_bebas_panjang_check check ((panjang >= 4) AND (panjang <= 6)),
+  constraint susun_kata_bebas_percobaan_check check ((percobaan >= 1) AND (percobaan <= 6)),
+  constraint susun_kata_bebas_detik_check check (detik >= 0)
+);
+create index idx_susun_kata_bebas_created_at on susun_kata_bebas using btree (created_at DESC);
+create index idx_susun_kata_bebas_klasemen on susun_kata_bebas using btree (menang, percobaan, detik, created_at);
+create index idx_susun_kata_bebas_pengguna_created on susun_kata_bebas using btree (pengguna_id, created_at DESC);
 
 create table susun_kata_skor (
   id serial primary key,

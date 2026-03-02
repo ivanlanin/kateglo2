@@ -19,6 +19,12 @@ function parsePanjang(value, fallback = 5) {
   return Math.min(Math.max(parsed, 4), 8);
 }
 
+function parsePanjangBebas(value, fallback = 5) {
+  const parsed = Number.parseInt(value, 10);
+  if (Number.isNaN(parsed)) return fallback;
+  return Math.min(Math.max(parsed, 4), 6);
+}
+
 function parsePenggunaId(value) {
   const parsed = Number.parseInt(value, 10);
   if (Number.isNaN(parsed)) return null;
@@ -79,6 +85,21 @@ function hitungSkor({ percobaan, menang }) {
   return Math.max(11 - percobaanAman, 1);
 }
 
+function sanitasiPayloadSkor({ percobaan, detik, tebakan, menang }) {
+  return {
+    percobaanAman: Math.min(Math.max(Number.parseInt(percobaan, 10) || 6, 1), 6),
+    detikAman: Math.min(Math.max(Number.parseInt(detik, 10) || 0, 0), 86400),
+    tebakanAman: String(tebakan || '').trim().toLowerCase(),
+    menangAman: Boolean(menang),
+  };
+}
+
+function acakDariArray(daftar) {
+  if (!Array.isArray(daftar) || !daftar.length) return null;
+  const index = Math.floor(Math.random() * daftar.length);
+  return daftar[index] || null;
+}
+
 class ModelSusunKata {
   static parsePanjang(value, fallback = 5) {
     return parsePanjang(value, fallback);
@@ -86,6 +107,10 @@ class ModelSusunKata {
 
   static parsePenggunaId(value) {
     return parsePenggunaId(value);
+  }
+
+  static parsePanjangBebas(value, fallback = 5) {
+    return parsePanjangBebas(value, fallback);
   }
 
   static hitungSkor(payload) {
@@ -256,10 +281,12 @@ class ModelSusunKata {
   static async simpanSkorHarian({ susunKataId, penggunaId, percobaan, detik, tebakan, menang }) {
     const susunKataIdAman = Number.parseInt(susunKataId, 10);
     const penggunaIdAman = parsePenggunaId(penggunaId);
-    const percobaanAman = Math.min(Math.max(Number.parseInt(percobaan, 10) || 6, 1), 6);
-    const detikAman = Math.min(Math.max(Number.parseInt(detik, 10) || 0, 0), 86400);
-    const tebakanAman = String(tebakan || '').trim().toLowerCase();
-    const menangAman = Boolean(menang);
+    const {
+      percobaanAman,
+      detikAman,
+      tebakanAman,
+      menangAman,
+    } = sanitasiPayloadSkor({ percobaan, detik, tebakan, menang });
 
     const result = await db.query(
       `INSERT INTO susun_kata_skor (susun_kata_id, pengguna_id, percobaan, detik, tebakan, menang)
@@ -290,7 +317,8 @@ class ModelSusunKata {
          sk.created_at
        FROM susun_kata_skor sk
        JOIN pengguna p ON p.id = sk.pengguna_id
-       WHERE sk.susun_kata_id = $1
+      WHERE sk.susun_kata_id = $1
+        AND sk.menang = true
        ORDER BY skor DESC, sk.detik ASC, sk.created_at ASC
        LIMIT $2`,
       [susunKataIdAman, limitAman]
@@ -342,17 +370,103 @@ class ModelSusunKata {
       created_at: row.created_at,
     }));
   }
+
+  static async ambilPuzzleBebas({ panjang = null }) {
+    const kandidatPanjang = panjang
+      ? [parsePanjangBebas(panjang, 5)]
+      : [4, 5, 6].sort(() => Math.random() - 0.5);
+
+    for (const panjangItem of kandidatPanjang) {
+      const kamus = await ModelEntri.ambilKamusSusunKata({ panjang: panjangItem, limit: 10000 });
+      if (!kamus.length) continue;
+
+      const target = String(acakDariArray(kamus) || '').trim().toLowerCase();
+      if (!target) continue;
+
+      const arti = await ModelEntri.ambilArtiSusunKataByIndeks(target);
+      return {
+        tanggal: null,
+        panjang: panjangItem,
+        total: 1,
+        target,
+        arti,
+        kamus: [target],
+      };
+    }
+
+    return null;
+  }
+
+  static async simpanSkorBebas({ tanggal = null, panjang, kata, penggunaId, percobaan, tebakan, detik, menang }) {
+    const penggunaIdAman = parsePenggunaId(penggunaId);
+    const panjangAman = parsePanjangBebas(panjang, 5);
+    const kataAman = String(kata || '').trim().toLowerCase();
+    const {
+      percobaanAman,
+      detikAman,
+      tebakanAman,
+      menangAman,
+    } = sanitasiPayloadSkor({ percobaan, detik, tebakan, menang });
+
+    const tanggalAman = parseTanggal(tanggal);
+
+    const result = await db.query(
+      `INSERT INTO susun_kata_bebas (tanggal, panjang, kata, pengguna_id, percobaan, tebakan, detik, menang)
+       VALUES (COALESCE($1::date, (now() AT TIME ZONE 'Asia/Jakarta')::date), $2, $3, $4, $5, $6, $7, $8)
+       RETURNING id, tanggal, panjang, kata, pengguna_id, percobaan, tebakan, detik, menang, created_at`,
+      [tanggalAman, panjangAman, kataAman, penggunaIdAman, percobaanAman, tebakanAman, detikAman, menangAman]
+    );
+
+    return result.rows[0] || null;
+  }
+
+  static async ambilKlasemenBebas({ limit = 10, tanggal = null }) {
+    const limitAman = Math.min(Math.max(Number.parseInt(limit, 10) || 10, 1), 50);
+    const tanggalAman = parseTanggal(tanggal);
+
+    const result = await db.query(
+      `SELECT
+         sb.pengguna_id,
+         p.nama,
+         to_char(sb.tanggal, 'YYYY-MM-DD') AS tanggal,
+         COUNT(*) AS total_main,
+         ROUND(AVG(GREATEST(11 - sb.percobaan, 1))::numeric, 2) AS rata_poin,
+         ROUND(AVG(sb.detik)::numeric, 2) AS rata_detik,
+         MAX(sb.created_at) AS terakhir_main
+       FROM susun_kata_bebas sb
+       JOIN pengguna p ON p.id = sb.pengguna_id
+       WHERE sb.menang = true
+         AND sb.tanggal = COALESCE($2::date, (now() AT TIME ZONE 'Asia/Jakarta')::date)
+       GROUP BY sb.pengguna_id, p.nama, sb.tanggal
+       ORDER BY rata_poin DESC, total_main DESC, rata_detik ASC, terakhir_main ASC
+       LIMIT $1`,
+      [limitAman, tanggalAman]
+    );
+
+    return result.rows.map((row) => ({
+      pengguna_id: Number(row.pengguna_id) || 0,
+      nama: row.nama,
+      tanggal: row.tanggal,
+      total_main: Number(row.total_main) || 0,
+      rata_poin: Number(row.rata_poin) || 0,
+      rata_detik: Number(row.rata_detik) || 0,
+      terakhir_main: row.terakhir_main,
+    }));
+  }
 }
 
 ModelSusunKata.__private = {
   parseTanggal,
   parsePanjang,
+  parsePanjangBebas,
   parsePenggunaId,
   hitungOffsetHari,
   gcd,
   hash32,
   pilihIndexKata,
   hitungSkor,
+  sanitasiPayloadSkor,
+  acakDariArray,
 };
 
 module.exports = ModelSusunKata;

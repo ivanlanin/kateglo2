@@ -30,6 +30,11 @@ jest.mock('../../models/modelSusunKata', () => ({
     if (Number.isNaN(parsed)) return fallback;
     return Math.min(Math.max(parsed, 4), 8);
   }),
+  parsePanjangBebas: jest.fn((value, fallback = 5) => {
+    const parsed = Number.parseInt(value, 10);
+    if (Number.isNaN(parsed)) return fallback;
+    return Math.min(Math.max(parsed, 4), 6);
+  }),
   parsePenggunaId: jest.fn((value) => {
     const parsed = Number.parseInt(value, 10);
     return Number.isNaN(parsed) || parsed <= 0 ? null : parsed;
@@ -40,6 +45,9 @@ jest.mock('../../models/modelSusunKata', () => ({
   ambilSkorPenggunaHarian: jest.fn(),
   simpanSkorHarian: jest.fn(),
   ambilKlasemenHarian: jest.fn(),
+  ambilPuzzleBebas: jest.fn(),
+  simpanSkorBebas: jest.fn(),
+  ambilKlasemenBebas: jest.fn(),
 }));
 
 const router = require('../../routes/gim/susunKata');
@@ -67,6 +75,9 @@ describe('routes/gim/susunKata', () => {
     ModelSusunKata.ambilSkorPenggunaHarian.mockResolvedValue(null);
     ModelSusunKata.simpanSkorHarian.mockResolvedValue({ id: 1, susun_kata_id: 10, pengguna_id: 9 });
     ModelSusunKata.ambilKlasemenHarian.mockResolvedValue([{ pengguna_id: 9, nama: 'A', skor: 8 }]);
+    ModelSusunKata.ambilPuzzleBebas.mockResolvedValue({ panjang: 5, target: 'kartu', arti: 'alat tulis', kamus: ['kartu'] });
+    ModelSusunKata.simpanSkorBebas.mockResolvedValue({ id: 2, pengguna_id: 9, kata: 'kartu' });
+    ModelSusunKata.ambilKlasemenBebas.mockResolvedValue([{ pengguna_id: 9, nama: 'A', rata_poin: 7.5, total_main: 4 }]);
     ModelEntri.cekKataSusunKataValid.mockResolvedValue(true);
   });
 
@@ -297,5 +308,46 @@ describe('routes/gim/susunKata', () => {
 
     expect(response.status).toBe(200);
     expect(ModelSusunKata.parsePanjang).toHaveBeenCalledWith(undefined, 5);
+  });
+
+  it('GET /bebas mengembalikan payload bebas dan 404 saat kosong', async () => {
+    const success = await request(createApp()).get('/api/publik/gim/susun-kata/bebas');
+
+    expect(success.status).toBe(200);
+    expect(success.body.mode).toBe('bebas');
+
+    ModelSusunKata.ambilPuzzleBebas.mockResolvedValueOnce(null);
+    const notFound = await request(createApp()).get('/api/publik/gim/susun-kata/bebas');
+    expect(notFound.status).toBe(404);
+  });
+
+  it('POST /bebas/submit validasi auth, kata, dan sukses simpan skor', async () => {
+    const unauthorized = await request(createApp())
+      .post('/api/publik/gim/susun-kata/bebas/submit')
+      .send({ panjang: 5, kata: 'kartu' });
+    expect(unauthorized.status).toBe(401);
+
+    ModelEntri.cekKataSusunKataValid.mockResolvedValueOnce(false);
+    const invalid = await request(createApp())
+      .post('/api/publik/gim/susun-kata/bebas/submit')
+      .set('x-user-pid', '9')
+      .send({ panjang: 5, kata: 'zzzzz', menang: true, tebakan: 'zzzzz' });
+    expect(invalid.status).toBe(400);
+
+    const success = await request(createApp())
+      .post('/api/publik/gim/susun-kata/bebas/submit')
+      .set('x-user-pid', '9')
+      .send({ panjang: 5, kata: 'kartu', menang: true, tebakan: 'kartu', percobaan: 2, detik: 10 });
+
+    expect(success.status).toBe(201);
+    expect(ModelSusunKata.simpanSkorBebas).toHaveBeenCalledWith(expect.objectContaining({ penggunaId: 9, kata: 'kartu', menang: true }));
+  });
+
+  it('GET /bebas/klasemen mengembalikan data', async () => {
+    const response = await request(createApp()).get('/api/publik/gim/susun-kata/bebas/klasemen?limit=99');
+
+    expect(response.status).toBe(200);
+    expect(ModelSusunKata.ambilKlasemenBebas).toHaveBeenCalledWith({ limit: 50 });
+    expect(response.body.mode).toBe('bebas');
   });
 });

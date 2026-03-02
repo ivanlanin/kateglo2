@@ -69,6 +69,18 @@ async function buildHarianPayload({ panjang, userPid = null }) {
   };
 }
 
+async function buildBebasPayload({ panjang = null }) {
+  const payload = await ModelSusunKata.ambilPuzzleBebas({ panjang });
+  if (!payload) return null;
+
+  return {
+    ...payload,
+    mode: 'bebas',
+    sudahMainHariIni: false,
+    hasilHariIni: null,
+  };
+}
+
 router.get('/puzzle', authenticateOptional, async (req, res, next) => {
   try {
     const panjang = parsePanjang(req.query.panjang);
@@ -96,6 +108,25 @@ router.get('/harian', authenticateOptional, async (req, res, next) => {
       return res.status(404).json({
         error: 'Tidak Ditemukan',
         message: `Kata untuk Susun Kata ${panjang} huruf belum tersedia`,
+      });
+    }
+
+    return res.json(payload);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.get('/bebas', authenticateOptional, async (req, res, next) => {
+  try {
+    const panjangRaw = req.query.panjang;
+    const panjang = panjangRaw ? ModelSusunKata.parsePanjangBebas(panjangRaw, 5) : null;
+    const payload = await buildBebasPayload({ panjang });
+
+    if (!payload) {
+      return res.status(404).json({
+        error: 'Tidak Ditemukan',
+        message: 'Kata untuk Susun Kata Bebas belum tersedia',
       });
     }
 
@@ -201,6 +232,77 @@ router.get('/harian/klasemen', async (req, res, next) => {
   }
 });
 
+router.post('/bebas/submit', authenticate, async (req, res, next) => {
+  try {
+    const penggunaId = ModelSusunKata.parsePenggunaId(req.user?.pid);
+
+    if (!penggunaId) {
+      return res.status(401).json({ success: false, message: 'Autentikasi diperlukan' });
+    }
+
+    const panjang = ModelSusunKata.parsePanjangBebas(req.body?.panjang ?? req.query?.panjang, 5);
+    const kata = String(req.body?.kata || '').trim().toLowerCase();
+    const tanggal = String(req.body?.tanggal || '').trim() || null;
+    const percobaan = Math.min(Math.max(Number.parseInt(req.body?.percobaan, 10) || 6, 1), 6);
+    const detik = Math.min(Math.max(Number.parseInt(req.body?.detik ?? req.body?.waktuDetik, 10) || 0, 0), 86400);
+    const tebakan = String(req.body?.tebakan || '').trim().toLowerCase();
+    const menang = parseBodyBoolean(req.body?.menang, false);
+    const tebakanTerakhir = ambilTebakanTerakhir(tebakan) || String(req.body?.tebakanTerakhir || '').trim().toLowerCase();
+
+    if (!kata || !/^[a-z]+$/.test(kata) || kata.length !== panjang) {
+      return res.status(400).json({ success: false, message: `Kata harus ${panjang} huruf a-z` });
+    }
+
+    const valid = await ModelEntri.cekKataSusunKataValid(kata, { panjang });
+    if (!valid) {
+      return res.status(400).json({ success: false, message: 'Kata tidak ditemukan pada kamus Susun Kata' });
+    }
+
+    if (menang && tebakanTerakhir && tebakanTerakhir !== kata) {
+      return res.status(400).json({
+        success: false,
+        message: 'Tebakan terakhir tidak cocok dengan kata bebas',
+      });
+    }
+
+    const data = await ModelSusunKata.simpanSkorBebas({
+      tanggal,
+      panjang,
+      kata,
+      penggunaId,
+      percobaan,
+      tebakan,
+      detik,
+      menang,
+    });
+
+    return res.status(201).json({
+      success: true,
+      data: {
+        ...data,
+        skor: ModelSusunKata.hitungSkor({ percobaan, menang }),
+      },
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.get('/bebas/klasemen', async (req, res, next) => {
+  try {
+    const limit = parseLimit(req.query.limit, 10);
+    const data = await ModelSusunKata.ambilKlasemenBebas({ limit });
+
+    return res.json({
+      success: true,
+      mode: 'bebas',
+      data,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
 router.get('/validasi/:kata', async (req, res, next) => {
   try {
     const panjang = parsePanjang(req.query.panjang);
@@ -226,4 +328,5 @@ module.exports.__private = {
   ambilTebakanTerakhir,
   normalisasiKataParam,
   buildHarianPayload,
+  buildBebasPayload,
 };
