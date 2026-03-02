@@ -403,7 +403,8 @@ describe('Glosarium', () => {
       .mockReturnValueOnce({ data: { data: [], total: 0 }, isLoading: false, isError: false });
 
     const { rerender } = render(<Glosarium />);
-    expect(screen.getByText(/Tidak ada entri glosarium yang ditemukan/i)).toBeInTheDocument();
+  expect(screen.getByText(/Tidak ada entri glosarium sama persis yang ditemukan/i)).toBeInTheDocument();
+  expect(screen.getByRole('link', { name: 'entri yang mirip' })).toHaveAttribute('href', '/glosarium/detail/kosong');
 
     mockUseQuery
       .mockReturnValueOnce({ data: [], isLoading: false, isError: false })

@@ -608,23 +608,23 @@ code {
   }
 
   .beranda-populer-wrapper {
-    @apply max-w-2xl mx-auto mt-3 flex items-center gap-2 justify-center flex-wrap;
+    @apply max-w-2xl mx-auto mt-6 flex items-center justify-center flex-wrap gap-x-2 gap-y-2;
   }
 
   .beranda-populer-label {
-    @apply text-sm text-gray-600;
-  }
-
-  .dark .beranda-populer-label {
-    @apply text-dark-text-muted;
-  }
-
-  .beranda-populer-list {
-    @apply flex items-center gap-2 flex-wrap;
+    @apply text-sm text-gray-600 leading-none;
   }
 
   .beranda-populer-placeholder {
     @apply beranda-tag-link;
+  }
+
+  .beranda-populer-wrapper .beranda-tag-link {
+    @apply m-0;
+  }
+
+  .dark .beranda-populer-label {
+    @apply text-dark-text-muted;
   }
 
   .beranda-feature-grid {

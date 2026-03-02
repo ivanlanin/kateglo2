@@ -65,26 +65,24 @@ function Beranda() {
         <KotakCari varian="beranda" autoFocus />
         <div className="beranda-populer-wrapper" aria-label="Pencarian populer">
           <span className="beranda-populer-label">Populer:</span>
-          <div className="beranda-populer-list">
-            {daftarDomain.map((item) => {
-              const kata = dataPopuler?.[item.key];
-              if (!kata) {
-                return (
-                  <span key={item.key} className="beranda-populer-placeholder">{item.key}</span>
-                );
-              }
-
+          {daftarDomain.map((item) => {
+            const kata = dataPopuler?.[item.key];
+            if (!kata) {
               return (
-                <Link
-                  key={item.key}
-                  to={`${item.path}${encodeURIComponent(kata)}`}
-                  className="beranda-tag-link"
-                >
-                  {kata}
-                </Link>
+                <span key={item.key} className="beranda-populer-placeholder">{item.key}</span>
               );
-            })}
-          </div>
+            }
+
+            return (
+              <Link
+                key={item.key}
+                to={`${item.path}${encodeURIComponent(kata)}`}
+                className="beranda-tag-link"
+              >
+                {kata}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </div>

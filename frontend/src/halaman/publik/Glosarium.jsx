@@ -211,6 +211,25 @@ function Glosarium() {
     return <TombolSunting to={`/redaksi/glosarium/${item.id}`} />;
   };
 
+  const emptyState = modeCariKata && kata
+    ? (
+      <EmptyResultText
+        text={(
+          <>
+            Tidak ada entri glosarium sama persis yang ditemukan. Mau lihat{' '}
+            <Link
+              to={`/glosarium/detail/${encodeURIComponent(kata)}`}
+              className="kamus-detail-subentry-link"
+            >
+              entri yang mirip
+            </Link>
+            ?
+          </>
+        )}
+      />
+    )
+    : <EmptyResultText text="Tidak ada entri glosarium yang ditemukan." />;
+
   return (
     <HalamanDasar
       judul={metaHalaman.judul}
@@ -251,7 +270,7 @@ function Glosarium() {
       {sedangMencari && !isLoading && !isError && (
         <HasilPencarian
           results={results}
-          emptyState={<EmptyResultText text="Tidak ada entri glosarium yang ditemukan." />}
+          emptyState={emptyState}
           total={total}
           limit={limit}
           pageInfo={data?.pageInfo}
