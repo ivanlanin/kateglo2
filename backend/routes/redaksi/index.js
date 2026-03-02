@@ -16,6 +16,7 @@ router.get('/health', (req, res) => {
 
 router.use('/pengguna', require('./pengguna'));
 router.use('/statistik', require('./statistik'));
+router.use('/pencarianHitam', require('./pencarianHitam'));
 router.use('/kamus', require('./kamus'));
 router.use('/komentar', require('./komentar'));
 router.use('/tesaurus', require('./tesaurus'));

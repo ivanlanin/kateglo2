@@ -79,6 +79,13 @@ jest.mock('../../models/modelPencarian', () => ({
   ambilStatistikRedaksi: jest.fn(),
 }));
 
+jest.mock('../../models/modelPencarianHitam', () => ({
+  daftarAdmin: jest.fn(),
+  ambilDenganId: jest.fn(),
+  simpan: jest.fn(),
+  hapus: jest.fn(),
+}));
+
 jest.mock('../../models/modelPeran', () => ({
   daftarPeran: jest.fn(),
   ambilDenganId: jest.fn(),
@@ -109,6 +116,7 @@ const ModelGlosarium = require('../../models/modelGlosarium');
 const ModelLabel = require('../../models/modelLabel');
 const ModelKomentar = require('../../models/modelKomentar');
 const ModelPencarian = require('../../models/modelPencarian');
+const ModelPencarianHitam = require('../../models/modelPencarianHitam');
 const ModelPeran = require('../../models/modelPeran');
 const ModelIzin = require('../../models/modelIzin');
 const { hapusCacheDetailKamus } = require('../../services/layananKamusPublik');
@@ -402,6 +410,37 @@ describe('routes/redaksi', () => {
 
       expect(response.status).toBe(500);
       expect(response.body.error).toBe('statistik pencarian gagal');
+    });
+  });
+
+  describe('pencarian blacklist', () => {
+    it('GET /api/redaksi/pencarianHitam mengembalikan daftar kata hitam', async () => {
+      ModelPencarianHitam.daftarAdmin.mockResolvedValue({
+        data: [{ id: 1, kata: 'bajingan', aktif: true, catatan: 'uji' }],
+        total: 1,
+      });
+
+      const response = await callAsAdmin('get', '/api/redaksi/pencarianHitam?q=baj&aktif=1&limit=20');
+
+      expect(response.status).toBe(200);
+      expect(ModelPencarianHitam.daftarAdmin).toHaveBeenCalledWith({
+        q: 'baj',
+        aktif: '1',
+        limit: 20,
+        offset: 0,
+      });
+      expect(response.body.success).toBe(true);
+      expect(response.body.total).toBe(1);
+    });
+
+    it('POST /api/redaksi/pencarianHitam validasi kata wajib', async () => {
+      const response = await callAsAdmin('post', '/api/redaksi/pencarianHitam', {
+        body: { kata: '   ' },
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.body.success).toBe(false);
+      expect(response.body.message).toBe('Kata wajib diisi');
     });
   });
 

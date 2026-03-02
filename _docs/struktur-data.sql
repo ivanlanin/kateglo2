@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-02T14:54:44.653Z
+-- Generated: 2026-03-02T18:39:08.854Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -477,6 +477,23 @@ create table pencarian_202603 (
   constraint pencarian_jumlah_check check (jumlah >= 0)
 );
 create unique index pencarian_202603_tanggal_domain_kata_key on pencarian_202603 using btree (tanggal, domain, kata);
+
+create table pencarian_hitam (
+  id serial primary key,
+  kata text not null,
+  aktif boolean not null default true,
+  catatan text,
+  created_at timestamp without time zone not null default now(),
+  updated_at timestamp without time zone not null default now(),
+  constraint pencarian_hitam_kata_check check (btrim(kata) <> ''::text),
+  constraint pencarian_hitam_kata_lowercase_check check (kata = lower(kata))
+);
+create index idx_pencarian_hitam_aktif on pencarian_hitam using btree (aktif, kata);
+create unique index pencarian_hitam_kata_key on pencarian_hitam using btree (kata);
+create trigger trg_set_timestamp_fields__pencarian_hitam
+  before insert or update on pencarian_hitam
+  for each row
+  execute function set_timestamp_fields();
 
 create table pengguna (
   id serial primary key,

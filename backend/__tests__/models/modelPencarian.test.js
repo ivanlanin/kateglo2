@@ -332,6 +332,7 @@ describe('ModelPencarian', () => {
         jumlah: 9,
         tanggal_awal: '2026-02-01',
         tanggal_akhir: '2026-02-22',
+        diblokir: false,
       },
     ]);
     expect(result.ringkasanDomain).toEqual([
@@ -448,7 +449,12 @@ describe('ModelPencarian', () => {
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
-      expect.not.stringContaining('WHERE'),
+      expect.stringContaining('FROM pencarian'),
+      [200, 0]
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.not.stringContaining('WHERE domain ='),
       [200, 0]
     );
     expect(result.total).toBe(1);
@@ -460,6 +466,7 @@ describe('ModelPencarian', () => {
         jumlah: 0,
         tanggal_awal: '2026-03-01',
         tanggal_akhir: '2026-03-01',
+        diblokir: false,
       },
     ]);
     expect(result.ringkasanDomain).toEqual([

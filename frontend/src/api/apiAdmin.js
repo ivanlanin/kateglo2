@@ -142,6 +142,46 @@ export function useStatistikPencarianAdmin({
   });
 }
 
+export function useDaftarPencarianHitamAdmin({
+  limit = 200,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+  q = '',
+  aktif = '',
+} = {}) {
+  return useDaftarAdmin('/api/redaksi/pencarianHitam', 'admin-pencarian-hitam', {
+    limit,
+    cursor,
+    direction,
+    lastPage,
+    q,
+    aktif,
+  });
+}
+
+export function useDetailPencarianHitamAdmin(id) {
+  return useQuery({
+    queryKey: ['admin-pencarian-hitam-detail', id],
+    queryFn: () => klien.get(`/api/redaksi/pencarianHitam/${id}`).then((r) => r.data),
+    enabled: Boolean(id),
+  });
+}
+
+export function useSimpanPencarianHitamAdmin() {
+  return useSimpanAdmin({
+    path: '/api/redaksi/pencarianHitam',
+    queryKeyPrefix: 'admin-pencarian-hitam',
+  });
+}
+
+export function useHapusPencarianHitamAdmin() {
+  return useHapusAdmin({
+    path: '/api/redaksi/pencarianHitam',
+    queryKeyPrefix: 'admin-pencarian-hitam',
+  });
+}
+
 // ─── Kamus ───────────────────────────────────────────────────────────────────
 
 export function useDaftarKamusAdmin({

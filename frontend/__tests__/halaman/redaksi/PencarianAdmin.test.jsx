@@ -5,9 +5,15 @@ import PencarianAdmin, { formatTanggalSingkat } from '../../../src/halaman/redak
 import { formatLocalDateTime } from '../../../src/utils/formatUtils';
 
 const mockUseStatistikPencarianAdmin = vi.fn();
+const mockUseDaftarPencarianHitamAdmin = vi.fn();
+const mockUseSimpanPencarianHitamAdmin = vi.fn();
+const mockUseHapusPencarianHitamAdmin = vi.fn();
 
 vi.mock('../../../src/api/apiAdmin', () => ({
   useStatistikPencarianAdmin: (...args) => mockUseStatistikPencarianAdmin(...args),
+  useDaftarPencarianHitamAdmin: (...args) => mockUseDaftarPencarianHitamAdmin(...args),
+  useSimpanPencarianHitamAdmin: (...args) => mockUseSimpanPencarianHitamAdmin(...args),
+  useHapusPencarianHitamAdmin: (...args) => mockUseHapusPencarianHitamAdmin(...args),
 }));
 
 vi.mock('../../../src/komponen/bersama/TataLetak', () => ({
@@ -22,6 +28,19 @@ vi.mock('../../../src/komponen/bersama/TataLetak', () => ({
 describe('PencarianAdmin', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockUseDaftarPencarianHitamAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { data: [], total: 0, pageInfo: {} },
+    });
+    mockUseSimpanPencarianHitamAdmin.mockReturnValue({
+      mutate: vi.fn(),
+      isPending: false,
+    });
+    mockUseHapusPencarianHitamAdmin.mockReturnValue({
+      mutate: vi.fn(),
+      isPending: false,
+    });
   });
 
   it('helper formatTanggalSingkat memakai format dd mmm yyyy', () => {
@@ -183,5 +202,22 @@ describe('PencarianAdmin', () => {
       direction: 'next',
       lastPage: false,
     }));
+  });
+
+  it('membuka panel daftar hitam dari tombol aksi', () => {
+    mockUseStatistikPencarianAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { ringkasanDomain: [], data: [] },
+    });
+
+    render(
+      <MemoryRouter>
+        <PencarianAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Daftar Hitam' }));
+    expect(screen.getByText('Daftar Hitam Pencarian')).toBeInTheDocument();
   });
 });

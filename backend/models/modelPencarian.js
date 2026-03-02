@@ -138,6 +138,12 @@ class ModelPencarian {
          FROM pencarian
          WHERE domain = $1
            AND tanggal >= CURRENT_DATE - INTERVAL '6 days'
+           AND NOT EXISTS (
+             SELECT 1
+             FROM pencarian_hitam ph
+             WHERE ph.aktif = true
+               AND ph.kata = pencarian.kata
+           )
          GROUP BY kata
          ORDER BY jumlah DESC, kata ASC
          LIMIT $2`,
@@ -154,6 +160,12 @@ class ModelPencarian {
       `SELECT kata, SUM(jumlah)::bigint AS jumlah
        FROM pencarian
        WHERE domain = $1
+         AND NOT EXISTS (
+           SELECT 1
+           FROM pencarian_hitam ph
+           WHERE ph.aktif = true
+             AND ph.kata = pencarian.kata
+         )
        GROUP BY kata
        ORDER BY jumlah DESC, kata ASC
        LIMIT $2`,
@@ -196,6 +208,12 @@ class ModelPencarian {
          JOIN tanggal_aktif t
            ON t.domain = p.domain
           AND t.tanggal = p.tanggal
+         WHERE NOT EXISTS (
+           SELECT 1
+           FROM pencarian_hitam ph
+           WHERE ph.aktif = true
+             AND ph.kata = p.kata
+         )
          GROUP BY p.domain, p.tanggal, p.kata
        )
        SELECT t.domain,
@@ -279,10 +297,16 @@ class ModelPencarian {
     params.push(offsetAman);
     const offsetParam = `$${params.length}`;
 
-        const rowsQuery = `
+    const rowsQuery = `
           SELECT domain, kata, SUM(jumlah)::bigint AS jumlah,
             MIN(created_at) AS tanggal_awal,
-            MAX(updated_at) AS tanggal_akhir
+            MAX(updated_at) AS tanggal_akhir,
+            EXISTS (
+              SELECT 1
+              FROM pencarian_hitam ph
+              WHERE ph.aktif = true
+                AND ph.kata = pencarian.kata
+            ) AS diblokir
       FROM pencarian
       ${whereClause}
       GROUP BY domain, kata
@@ -316,6 +340,7 @@ class ModelPencarian {
       jumlah: Number(row.jumlah) || 0,
       tanggal_awal: row.tanggal_awal,
       tanggal_akhir: row.tanggal_akhir,
+      diblokir: Boolean(row.diblokir),
     }));
 
     const ringkasanDomain = summaryResult.rows.map((row) => ({
@@ -338,6 +363,7 @@ class ModelPencarian {
       data,
     };
   }
+
 }
 
 ModelPencarian.__private = {
