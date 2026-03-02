@@ -2,7 +2,7 @@
  * @fileoverview Halaman gim Susun Kata
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Info, Trophy } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -145,7 +145,6 @@ function SusunKata() {
   const [skorTerkirim, setSkorTerkirim] = useState(false);
   const [panelAktif, setPanelAktif] = useState('permainan');
   const [putaranBebas, setPutaranBebas] = useState(0);
-  const nextRoundTimeoutRef = useRef(null);
   const modeDariPath = modeParam === MODE_BEBAS ? MODE_BEBAS : MODE_HARIAN;
 
   useEffect(() => {
@@ -232,6 +231,11 @@ function SusunKata() {
     });
   }, []);
 
+  const mulaiSesiBaruBebas = useCallback(() => {
+    setPesanMunculan(null);
+    setPutaranBebas((prev) => prev + 1);
+  }, []);
+
   const tambahHuruf = useCallback((huruf) => {
     setTebakan((prev) => `${prev}${huruf}`.slice(0, panjang));
   }, [panjang]);
@@ -298,22 +302,30 @@ function SusunKata() {
       tampilkanPesan(
         'success',
         'Selamat! 🥳',
-        (
-          <>
-            <Link className="pesan-munculan-link" to={buatPathDetailKamus(target)}>Mau lihat arti {target} di kamus</Link>?
-          </>
-        )
+        modeAktif === MODE_BEBAS
+          ? (
+              <>
+                <Link className="pesan-munculan-link" to={buatPathDetailKamus(target)}>Mau lihat arti {target} di kamus</Link> atau
+                {' '}
+                <a
+                  href="#"
+                  className="pesan-munculan-link"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    mulaiSesiBaruBebas();
+                  }}
+                >
+                  mulai sesi baru
+                </a>
+                ?
+              </>
+            )
+          : (
+              <>
+                <Link className="pesan-munculan-link" to={buatPathDetailKamus(target)}>Mau lihat arti {target} di kamus</Link>?
+              </>
+            )
       );
-
-      if (modeAktif === MODE_BEBAS) {
-        if (nextRoundTimeoutRef.current) {
-          window.clearTimeout(nextRoundTimeoutRef.current);
-        }
-
-        nextRoundTimeoutRef.current = window.setTimeout(() => {
-          setPutaranBebas((prev) => prev + 1);
-        }, 1200);
-      }
       return;
     }
 
@@ -351,6 +363,7 @@ function SusunKata() {
     selesai,
     skorTerkirim,
     modeAktif,
+    mulaiSesiBaruBebas,
     tampilkanPesan,
     target,
     tebakan,
@@ -364,12 +377,6 @@ function SusunKata() {
     setMulaiMainAt(Date.now());
     setSkorTerkirim(modeAktif === MODE_HARIAN ? Boolean(data?.sudahMainHariIni) : false);
   }, [data?.hasilHariIni?.tebakan, data?.sudahMainHariIni, modeAktif, panjang, target]);
-
-  useEffect(() => () => {
-    if (nextRoundTimeoutRef.current) {
-      window.clearTimeout(nextRoundTimeoutRef.current);
-    }
-  }, []);
 
   useEffect(() => {
     if (!isAuthenticated || !target || selesai) return undefined;
