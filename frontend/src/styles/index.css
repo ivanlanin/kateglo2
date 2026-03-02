@@ -2091,12 +2091,28 @@ code {
     @apply relative mb-6;
   }
 
-  .susun-kata-klasemen-btn {
+  .susun-kata-panel-btn {
     @apply absolute right-0 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-md bg-transparent text-lg transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-300;
   }
 
-  .dark .susun-kata-klasemen-btn {
+  .susun-kata-panel-btn-left {
+    @apply left-0 right-auto text-blue-700 hover:bg-blue-50;
+  }
+
+  .susun-kata-panel-btn-right {
+    @apply right-0 text-amber-700 hover:bg-amber-50 focus:ring-amber-300;
+  }
+
+  .dark .susun-kata-panel-btn {
     @apply hover:bg-dark-bg-hover focus:ring-blue-700;
+  }
+
+  .dark .susun-kata-panel-btn-left {
+    @apply text-blue-300 hover:bg-blue-900/30;
+  }
+
+  .dark .susun-kata-panel-btn-right {
+    @apply text-amber-300 hover:bg-amber-900/30 focus:ring-amber-700;
   }
 
   .susun-kata-klasemen-panel {
@@ -2152,7 +2168,7 @@ code {
   }
 
   .susun-kata-grid {
-    @apply space-y-2 mb-4 mt-10;
+    @apply space-y-2 mb-4 mt-6;
   }
 
   .susun-kata-grid-row {
@@ -2208,7 +2224,11 @@ code {
   }
 
   .susun-kata-key {
-    @apply w-8 h-8 rounded-md bg-gray-200 text-gray-800 text-xs font-semibold flex items-center justify-center;
+    @apply w-8 h-8 rounded-md bg-gray-200 text-gray-800 text-xs font-semibold flex items-center justify-center cursor-pointer transition-colors;
+  }
+
+  .susun-kata-key:disabled {
+    @apply cursor-not-allowed opacity-60;
   }
 
   .susun-kata-key-wide {
@@ -2244,11 +2264,56 @@ code {
   }
 
   .susun-kata-locked-wrap {
-    @apply space-y-4;
+    @apply space-y-6;
+  }
+
+  .susun-kata-info-panel {
+    @apply space-y-4 text-left;
+  }
+
+  .susun-kata-info-text {
+    @apply text-base text-gray-700;
+  }
+
+  .susun-kata-info-list {
+    @apply list-disc pl-5 space-y-1 text-base text-gray-700;
+  }
+
+  .susun-kata-info-badge {
+    @apply inline-flex items-center rounded px-1.5 py-0.5 text-sm font-semibold text-white;
+  }
+
+  .susun-kata-info-badge-benar {
+    @apply bg-green-600;
+  }
+
+  .susun-kata-info-badge-ada {
+    @apply bg-amber-500;
+  }
+
+  .susun-kata-info-badge-salah {
+    @apply bg-gray-500;
   }
 
   .susun-kata-locked-text {
     @apply text-center text-base text-gray-700;
+  }
+
+  .dark .susun-kata-info-text,
+  .dark .susun-kata-info-list {
+    @apply text-dark-text-muted;
+  }
+
+  .dark .susun-kata-info-badge-benar {
+    @apply bg-green-500 text-gray-950;
+  }
+
+  .dark .susun-kata-info-badge-ada {
+    @apply bg-amber-400 text-gray-950;
+  }
+
+  .dark .susun-kata-info-badge-salah {
+    @apply bg-gray-600 text-gray-100;
   }
 
   .dark .susun-kata-locked-text {

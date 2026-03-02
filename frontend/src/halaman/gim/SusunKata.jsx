@@ -4,6 +4,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { Info, Trophy } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
   ambilKlasemenSusunKata,
@@ -100,7 +101,7 @@ function SusunKata() {
   const [pesanMunculan, setPesanMunculan] = useState(null);
   const [mulaiMainAt, setMulaiMainAt] = useState(Date.now());
   const [skorTerkirim, setSkorTerkirim] = useState(false);
-  const [panelKlasemenTerbuka, setPanelKlasemenTerbuka] = useState(false);
+  const [panelAktif, setPanelAktif] = useState('permainan');
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['gim-susun-kata-puzzle', PANJANG_DEFAULT],
@@ -129,10 +130,12 @@ function SusunKata() {
     queryKey: ['gim-susun-kata-klasemen', panjang],
     queryFn: () => ambilKlasemenSusunKata({ panjang, limit: 10 }),
     staleTime: 30 * 1000,
-    enabled: Boolean(panelKlasemenTerbuka),
+    enabled: panelAktif === 'klasemen',
   });
 
   const daftarKlasemen = dataKlasemen?.data || [];
+  const panelKlasemenTerbuka = panelAktif === 'klasemen';
+  const panelInfoTerbuka = panelAktif === 'info';
 
   const tampilkanPesan = useCallback((jenis, judul, deskripsi = '') => {
     setPesanMunculan({
@@ -142,6 +145,16 @@ function SusunKata() {
       deskripsi,
     });
   }, []);
+
+  const tambahHuruf = useCallback((huruf) => {
+    if (selesai) return;
+    setTebakan((prev) => `${prev}${huruf}`.slice(0, panjang));
+  }, [panjang, selesai]);
+
+  const hapusHuruf = useCallback(() => {
+    if (selesai) return;
+    setTebakan((prev) => prev.slice(0, -1));
+  }, [selesai]);
 
   const submitTebakan = useCallback(async () => {
     if (!target || selesai) return;
@@ -266,19 +279,19 @@ function SusunKata() {
 
       if (event.key === 'Backspace') {
         event.preventDefault();
-        setTebakan((prev) => prev.slice(0, -1));
+        hapusHuruf();
         return;
       }
 
       if (/^[a-zA-Z]$/.test(event.key)) {
         event.preventDefault();
-        setTebakan((prev) => `${prev}${event.key.toLowerCase()}`.slice(0, panjang));
+        tambahHuruf(event.key.toLowerCase());
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isAuthenticated, selesai, submitTebakan, panjang, target]);
+  }, [hapusHuruf, isAuthenticated, selesai, submitTebakan, tambahHuruf, target]);
 
   const barisGrid = Array.from({ length: MAKS_PERCOBAAN }, (_, idx) => {
     const nilai = riwayat[idx] || '';
@@ -302,15 +315,27 @@ function SusunKata() {
     >
       <div className="susun-kata-wrap">
         <div className="susun-kata-heading-row">
-          <h1 className="susun-kata-heading">Susun Kata</h1>
           {isAuthenticated ? (
             <button
               type="button"
-              className="susun-kata-klasemen-btn"
-              aria-label={panelKlasemenTerbuka ? 'Kembali ke papan permainan' : 'Lihat klasemen harian'}
-              onClick={() => setPanelKlasemenTerbuka((prev) => !prev)}
+              className="susun-kata-panel-btn susun-kata-panel-btn-left"
+              aria-label={panelInfoTerbuka ? 'Kembali ke papan permainan' : 'Lihat petunjuk gim'}
+              onClick={() => setPanelAktif((prev) => (prev === 'info' ? 'permainan' : 'info'))}
             >
-              🏆
+              <Info size={20} strokeWidth={2.2} aria-hidden="true" />
+            </button>
+          ) : null}
+
+          <h1 className="susun-kata-heading">Susun Kata</h1>
+
+          {isAuthenticated ? (
+            <button
+              type="button"
+              className="susun-kata-panel-btn susun-kata-panel-btn-right"
+              aria-label={panelKlasemenTerbuka ? 'Kembali ke papan permainan' : 'Lihat klasemen harian'}
+              onClick={() => setPanelAktif((prev) => (prev === 'klasemen' ? 'permainan' : 'klasemen'))}
+            >
+              <Trophy size={20} strokeWidth={2.2} aria-hidden="true" />
             </button>
           ) : null}
         </div>
@@ -325,9 +350,22 @@ function SusunKata() {
 
         {!authLoading && !isAuthenticated && (
           <div className="susun-kata-locked-wrap">
-            <p className="susun-kata-locked-text">
-              Susun Kata adalah gim menyusun lima huruf untuk membentuk kata yang sah dalam kamus dalam enam kesempatan. Gim ini terinspirasi oleh Wordle dari Josh Wardle dan mengikuti semua aturan gim tersebut.
-            </p>
+            <div className="susun-kata-info-panel">
+              <p className="susun-kata-info-text">
+                Susun Kata adalah gim menyusun huruf untuk membentuk kata bahasa Indonesia yang ada di kamus Kateglo. Gim ini terinspirasi oleh Wordle dari Josh Wardle untuk kata bahasa Inggris.
+              </p>
+              <p className="susun-kata-info-text">
+                Setiap hari akan ada satu kata yang sama yang ditebakkan. Peserta harus masuk log untuk bermain dan mendapat enam kesempatan untuk menebak.
+              </p>
+              <p className="susun-kata-info-text">
+                Masukkan huruf untuk membentuk kata. Tekan enter untuk mengirim tebakan. Warna kotak dan tombol kibor di layar akan menunjukkan huruf yang sudah dipilih dan statusnya.
+              </p>
+              <ul className="susun-kata-info-list">
+                <li><span className="susun-kata-info-badge susun-kata-info-badge-benar">Hijau</span>: Huruf dan tempatnya benar.</li>
+                <li><span className="susun-kata-info-badge susun-kata-info-badge-ada">Kuning</span>: Huruf benar, tetapi tempatnya salah.</li>
+                <li><span className="susun-kata-info-badge susun-kata-info-badge-salah">Abu-abu</span>: Huruf salah.</li>
+              </ul>
+            </div>
             <TombolMasuk
               label="Masuk untuk Bermain"
               className="susun-kata-login-btn"
@@ -338,7 +376,24 @@ function SusunKata() {
 
         {!isError && isAuthenticated && data && (
           <>
-            {panelKlasemenTerbuka ? (
+            {panelInfoTerbuka ? (
+              <div className="susun-kata-info-panel">
+                <p className="susun-kata-info-text">
+                  Susun Kata adalah gim menyusun huruf untuk membentuk kata bahasa Indonesia yang ada di kamus Kateglo. Gim ini terinspirasi oleh Wordle dari Josh Wardle untuk kata bahasa Inggris.
+                </p>
+                <p className="susun-kata-info-text">
+                  Setiap hari akan ada satu kata yang sama yang ditebakkan. Peserta harus masuk log untuk bermain dan mendapat enam kesempatan untuk menebak.
+                </p>
+                <p className="susun-kata-info-text">
+                  Masukkan huruf untuk membentuk kata. Tekan enter untuk mengirim tebakan. Warna kotak dan tombol kibor di layar akan menunjukkan huruf yang sudah dipilih dan statusnya.
+                </p>
+                <ul className="susun-kata-info-list">
+                  <li><span className="susun-kata-info-badge susun-kata-info-badge-benar">Hijau</span>: Huruf dan tempatnya benar</li>
+                  <li><span className="susun-kata-info-badge susun-kata-info-badge-ada">Kuning</span>: Huruf benar, tetapi tempatnya salah</li>
+                  <li><span className="susun-kata-info-badge susun-kata-info-badge-salah">Abu-abu</span>: Huruf salah</li>
+                </ul>
+              </div>
+            ) : panelKlasemenTerbuka ? (
               <div className="susun-kata-klasemen-panel">
                 {daftarKlasemen.length ? (
                   <ol className="susun-kata-klasemen-list">
@@ -379,12 +434,15 @@ function SusunKata() {
                   {KEYBOARD_ROWS.map((row) => (
                     <div key={row} className="susun-kata-keyboard-row">
                       {row.split('').map((huruf) => (
-                        <span
+                        <button
+                          type="button"
                           key={huruf}
                           className={`susun-kata-key ${kelasStatusKey(petaKeyboard[huruf])}`.trim()}
+                          onClick={() => tambahHuruf(huruf)}
+                          disabled={selesai}
                         >
                           {huruf.toUpperCase()}
-                        </span>
+                        </button>
                       ))}
                     </div>
                   ))}
@@ -398,17 +456,20 @@ function SusunKata() {
                       Enter
                     </button>
                     {'zxcvbnm'.split('').map((huruf) => (
-                      <span
+                      <button
+                        type="button"
                         key={`baris-bawah-${huruf}`}
                         className={`susun-kata-key ${kelasStatusKey(petaKeyboard[huruf])}`.trim()}
+                        onClick={() => tambahHuruf(huruf)}
+                        disabled={selesai}
                       >
                         {huruf.toUpperCase()}
-                      </span>
+                      </button>
                     ))}
                     <button
                       type="button"
                       className="susun-kata-key susun-kata-key-wide"
-                      onClick={() => setTebakan((prev) => prev.slice(0, -1))}
+                      onClick={hapusHuruf}
                       disabled={selesai}
                     >
                       Hapus

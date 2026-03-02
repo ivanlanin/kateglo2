@@ -6,6 +6,7 @@
 - Mengganti gambar pratayang media sosial
 - Menambahkan daftar frasa pencarian populer di beranda
 - Menawarkan entri glosarium yang mirip ketika frasa yang dicari tidak ditemukan
+- Menambahkan info cara main [Susun Kata](/gim/susun-kata)
 
 ## 2026-03-01 Minggu
 

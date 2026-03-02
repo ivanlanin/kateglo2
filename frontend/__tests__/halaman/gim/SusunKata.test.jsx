@@ -150,10 +150,25 @@ describe('SusunKata', () => {
     renderSusunKata();
 
     expect(screen.getByRole('heading', { name: 'Susun Kata' })).toBeInTheDocument();
-    expect(screen.getByText(/Susun Kata adalah gim menyusun lima huruf/i)).toBeInTheDocument();
+    expect(screen.getByText(/Susun Kata adalah gim menyusun huruf untuk membentuk kata bahasa Indonesia/i)).toBeInTheDocument();
+    expect(screen.getByText('Hijau')).toBeInTheDocument();
+    expect(screen.getByText(/Huruf dan tempatnya benar/i)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Masuk untuk Bermain' }));
     expect(loginDenganGoogle).toHaveBeenCalledWith('/gim/susun-kata');
     expect(ambilPuzzleSusunKata).not.toHaveBeenCalled();
+  });
+
+  it('kibor layar bisa diklik untuk mengisi kata', () => {
+    renderSusunKata();
+
+    fireEvent.click(screen.getByRole('button', { name: 'K' }));
+    fireEvent.click(screen.getByRole('button', { name: 'A' }));
+    fireEvent.click(screen.getByRole('button', { name: 'R' }));
+    fireEvent.click(screen.getByRole('button', { name: 'T' }));
+    fireEvent.click(screen.getByRole('button', { name: 'U' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Enter' }));
+
+    expect(screen.getByText('Selamat! 🥳')).toBeInTheDocument();
   });
 
   it('memakai fallback validasi backend saat kata tidak ada di kamus payload', async () => {
