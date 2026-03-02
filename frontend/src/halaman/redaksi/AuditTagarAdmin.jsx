@@ -6,6 +6,7 @@ import { useMemo, useState } from 'react';
 import TataLetak from '../../komponen/bersama/TataLetak';
 import {
   BarisFilterCariAdmin,
+  TabelAdmin,
   usePencarianAdmin,
 } from '../../komponen/redaksi/KomponenAdmin';
 import PanelGeser from '../../komponen/redaksi/PanelGeser';
@@ -205,6 +206,42 @@ function AuditTagarAdmin() {
   const total = Number(resp?.total || 0);
   const cakupan = resp?.cakupan || { totalTurunan: 0, sudahBertagar: 0, persentase: 0 };
 
+  const kolom = [
+    {
+      key: 'entri',
+      label: 'Entri',
+      render: (item) => <span className="font-medium">{item.entri || '—'}</span>,
+    },
+    { key: 'jenis', label: 'Jenis', render: (item) => item.jenis || '—' },
+    { key: 'induk_entri', label: 'Induk', render: (item) => item.induk_entri || '—' },
+    {
+      key: 'tagar',
+      label: 'Tagar',
+      render: (item) => (
+        Array.isArray(item.tagar) && item.tagar.length > 0 ? (
+          <div className="flex flex-wrap gap-1">
+            {item.tagar.map((tagar) => <BadgeTagar key={tagar.id} item={tagar} />)}
+          </div>
+        ) : (
+          <span className="text-gray-400 dark:text-gray-500">Belum ada</span>
+        )
+      ),
+    },
+    {
+      key: 'aksi',
+      label: 'Aksi',
+      render: (item) => (
+        <button
+          type="button"
+          onClick={() => setEntriDipilih(item)}
+          className="rounded border border-blue-300 px-2 py-1 text-xs text-blue-700 hover:bg-blue-50 dark:border-blue-700 dark:text-blue-300 dark:hover:bg-blue-900/20"
+        >
+          Sunting Tagar
+        </button>
+      ),
+    },
+  ];
+
   const handleCari = () => {
     setFilterJenis(filterJenisDraft);
     setFilterPunyaTagar(filterPunyaTagarDraft);
@@ -269,81 +306,18 @@ function AuditTagarAdmin() {
         ]}
       />
 
-      <div className="bg-white dark:bg-dark-bg-elevated rounded-lg shadow overflow-hidden">
-        {isLoading ? (
-          <div className="p-8 text-center text-gray-500 dark:text-gray-400">Memuat data …</div>
-        ) : isError ? (
-          <div className="p-8 text-center text-red-600 dark:text-red-400">Gagal memuat data entri tagar.</div>
-        ) : daftar.length === 0 ? (
-          <div className="p-8 text-center text-gray-500 dark:text-gray-400">Tidak ada data.</div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-dark-border">
-              <thead className="bg-gray-50 dark:bg-dark-bg">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Entri</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Jenis</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Induk</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Tagar</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-800 dark:text-gray-100 uppercase tracking-wider">Aksi</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 dark:divide-dark-border/60">
-                {daftar.map((item) => (
-                  <tr key={item.id}>
-                    <td className="px-6 py-3 text-sm text-gray-700 dark:text-gray-300 font-medium">{item.entri}</td>
-                    <td className="px-6 py-3 text-sm text-gray-700 dark:text-gray-300">{item.jenis || '—'}</td>
-                    <td className="px-6 py-3 text-sm text-gray-700 dark:text-gray-300">{item.induk_entri || '—'}</td>
-                    <td className="px-6 py-3 text-sm text-gray-700 dark:text-gray-300">
-                      {Array.isArray(item.tagar) && item.tagar.length > 0 ? (
-                        <div className="flex flex-wrap gap-1">
-                          {item.tagar.map((tagar) => <BadgeTagar key={tagar.id} item={tagar} />)}
-                        </div>
-                      ) : (
-                        <span className="text-gray-400 dark:text-gray-500">Belum ada</span>
-                      )}
-                    </td>
-                    <td className="px-6 py-3 text-sm">
-                      <button
-                        type="button"
-                        onClick={() => setEntriDipilih(item)}
-                        className="rounded border border-blue-300 px-2 py-1 text-xs text-blue-700 hover:bg-blue-50 dark:border-blue-700 dark:text-blue-300 dark:hover:bg-blue-900/20"
-                      >
-                        Sunting Tagar
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-
-      {total > 0 && (
-        <div className="mt-4 flex items-center justify-between text-sm text-gray-600 dark:text-gray-300">
-          <div>Total: {total.toLocaleString('id-ID')}</div>
-          <div>Halaman: {currentPage}</div>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              className="px-3 py-1 border rounded disabled:opacity-50"
-              disabled={!resp?.pageInfo?.hasPrev}
-              onClick={() => setOffset('prev', { pageInfo: resp?.pageInfo, total })}
-            >
-              Sebelumnya
-            </button>
-            <button
-              type="button"
-              className="px-3 py-1 border rounded disabled:opacity-50"
-              disabled={!resp?.pageInfo?.hasNext}
-              onClick={() => setOffset('next', { pageInfo: resp?.pageInfo, total })}
-            >
-              Berikutnya
-            </button>
-          </div>
-        </div>
-      )}
+      <TabelAdmin
+        kolom={kolom}
+        data={daftar}
+        isLoading={isLoading}
+        isError={isError}
+        total={total}
+        limit={limit}
+        offset={Math.max((currentPage - 1) * limit, 0)}
+        pageInfo={resp?.pageInfo}
+        currentPage={currentPage}
+        onNavigateCursor={setOffset}
+      />
 
       <EditorTagarPanel
         entri={entriDipilih}
