@@ -549,7 +549,7 @@ function SeksiTagar({ entriId }) {
   };
 
   return (
-    <div className="border-t border-gray-200 pt-4 dark:border-gray-700">
+    <div className="mt-3 border-t border-gray-200 pt-4 dark:border-gray-700">
       <div className="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">Tagar</div>
       <div className="relative">
         <div className="flex flex-wrap gap-1.5 rounded border border-gray-300 bg-white p-2 dark:border-gray-600 dark:bg-gray-800 min-h-[2.5rem]">
