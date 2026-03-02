@@ -64,6 +64,18 @@ function parseTanggal(value) {
   return raw;
 }
 
+function formatTanggalOutput(value) {
+  if (!value) return null;
+
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toISOString().slice(0, 10);
+  }
+
+  const raw = String(value).trim();
+  if (!raw) return null;
+  return /^\d{4}-\d{2}-\d{2}$/.test(raw) ? raw : null;
+}
+
 function namaDomain(domain) {
   const parsed = parseDomainNullable(domain);
   switch (parsed) {
@@ -152,6 +164,71 @@ class ModelPencarian {
       kata: row.kata,
       jumlah: Number(row.jumlah) || 0,
     }));
+  }
+
+  static async ambilFrasaPopulerPerDomain({ tanggalReferensi = null } = {}) {
+    const tanggalAman = parseTanggal(tanggalReferensi) || new Date().toISOString().slice(0, 10);
+    const daftarDomainAman = [...daftarDomain];
+
+    const result = await db.query(
+      `WITH daftar_domain AS (
+         SELECT UNNEST($1::int[]) AS domain
+       ),
+       tanggal_aktif AS (
+         SELECT d.domain,
+                MAX(p.tanggal) AS tanggal
+         FROM daftar_domain d
+         LEFT JOIN pencarian p
+           ON p.domain = d.domain
+          AND p.tanggal <= $2::date
+         GROUP BY d.domain
+       ),
+       peringkat_kata AS (
+         SELECT p.domain,
+                p.tanggal,
+                p.kata,
+                SUM(p.jumlah)::bigint AS jumlah,
+                ROW_NUMBER() OVER (
+                  PARTITION BY p.domain, p.tanggal
+                  ORDER BY SUM(p.jumlah) DESC, p.kata ASC
+                ) AS urutan
+         FROM pencarian p
+         JOIN tanggal_aktif t
+           ON t.domain = p.domain
+          AND t.tanggal = p.tanggal
+         GROUP BY p.domain, p.tanggal, p.kata
+       )
+       SELECT t.domain,
+              t.tanggal,
+              r.kata,
+              r.jumlah
+       FROM tanggal_aktif t
+       LEFT JOIN peringkat_kata r
+         ON r.domain = t.domain
+        AND r.tanggal = t.tanggal
+        AND r.urutan = 1
+       ORDER BY t.domain ASC`,
+      [daftarDomainAman, tanggalAman]
+    );
+
+    const petaHasil = new Map(
+      result.rows.map((row) => [Number(row.domain), {
+        tanggal: formatTanggalOutput(row.tanggal),
+        kata: row.kata,
+        jumlah: Number(row.jumlah) || 0,
+      }])
+    );
+
+    return daftarDomainAman.map((domain) => {
+      const item = petaHasil.get(domain);
+      return {
+        domain,
+        domain_nama: namaDomain(domain),
+        tanggal: item?.tanggal || null,
+        kata: item?.kata || null,
+        jumlah: item?.jumlah || 0,
+      };
+    });
   }
 
   static async ambilStatistikRedaksi({
@@ -258,6 +335,7 @@ ModelPencarian.__private = {
   parseDomain,
   parseDomainNullable,
   parseTanggal,
+  formatTanggalOutput,
   namaDomain,
   isPelacakanAktif,
 };

@@ -168,6 +168,24 @@ export async function ambilContohRima() {
   return response.data;
 }
 
+function formatTanggalLokalBrowser(value = new Date()) {
+  const tahun = value.getFullYear();
+  const bulan = String(value.getMonth() + 1).padStart(2, '0');
+  const tanggal = String(value.getDate()).padStart(2, '0');
+  return `${tahun}-${bulan}-${tanggal}`;
+}
+
+export async function ambilPencarianPopuler({ tanggal = null } = {}) {
+  const tanggalAman = /^\d{4}-\d{2}-\d{2}$/.test(String(tanggal || '').trim())
+    ? String(tanggal).trim()
+    : formatTanggalLokalBrowser();
+
+  const response = await klien.get('/api/publik/pencarian/populer', {
+    params: { tanggal: tanggalAman },
+  });
+  return response.data;
+}
+
 // === GIM: SUSUN KATA ===
 
 export async function ambilPuzzleSusunKata({ panjang = 5 } = {}) {

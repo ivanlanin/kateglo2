@@ -65,6 +65,7 @@ jest.mock('../../models/modelKomentar', () => ({
 jest.mock('../../models/modelPencarian', () => ({
   catatPencarian: jest.fn(),
   ambilKataTerpopuler: jest.fn(),
+  ambilFrasaPopulerPerDomain: jest.fn(),
 }));
 
 jest.mock('../../models/modelTesaurus', () => ({
@@ -122,6 +123,13 @@ describe('routes backend', () => {
     ModelKomentar.hitungKomentarAktif.mockResolvedValue(0);
     ModelPencarian.catatPencarian.mockResolvedValue(true);
     ModelPencarian.ambilKataTerpopuler.mockResolvedValue([]);
+    ModelPencarian.ambilFrasaPopulerPerDomain.mockResolvedValue([
+      { domain: 1, domain_nama: 'kamus', tanggal: '2026-03-02', kata: 'air', jumlah: 10 },
+      { domain: 2, domain_nama: 'tesaurus', tanggal: '2026-03-01', kata: 'kata', jumlah: 9 },
+      { domain: 3, domain_nama: 'glosarium', tanggal: '2026-03-02', kata: 'istilah', jumlah: 8 },
+      { domain: 4, domain_nama: 'makna', tanggal: '2026-03-02', kata: 'arti', jumlah: 7 },
+      { domain: 5, domain_nama: 'rima', tanggal: '2026-02-28', kata: 'sajak', jumlah: 6 },
+    ]);
     ModelSusunKata.ambilTanggalHariIniJakarta.mockResolvedValue('2026-03-01');
     ModelSusunKata.ambilAtauBuatHarian.mockResolvedValue({ id: 10, kata: 'kata' });
     ModelSusunKata.ambilSkorPenggunaHarian.mockResolvedValue(null);
@@ -306,6 +314,46 @@ describe('routes backend', () => {
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('ac gagal');
+  });
+
+  it('GET /api/publik/pencarian/populer mengembalikan satu frasa teratas per domain berdasarkan tanggal', async () => {
+    const response = await request(createApp()).get('/api/publik/pencarian/populer?tanggal=2026-01-15');
+
+    expect(response.status).toBe(200);
+    expect(ModelPencarian.ambilFrasaPopulerPerDomain).toHaveBeenCalledWith({ tanggalReferensi: '2026-01-15' });
+    expect(response.body).toEqual({
+      tanggal: '2026-01-15',
+      tanggalData: '2026-03-02',
+      data: {
+        kamus: 'air',
+        tesaurus: 'kata',
+        glosarium: 'istilah',
+        makna: 'arti',
+        rima: 'sajak',
+      },
+    });
+  });
+
+  it('GET /api/publik/pencarian/populer memakai fallback tanggal hari ini jika query tanggal tidak valid', async () => {
+    const response = await request(createApp()).get('/api/publik/pencarian/populer?tanggal=tidak-valid');
+
+    expect(response.status).toBe(200);
+    expect(ModelPencarian.ambilFrasaPopulerPerDomain).toHaveBeenCalledWith({ tanggalReferensi: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/) });
+    expect(response.headers['cache-control']).toContain('public');
+  });
+
+  it('GET /api/publik/pencarian/populer tetap mengembalikan tanggalData saat model mengirim Date object', async () => {
+    ModelPencarian.ambilFrasaPopulerPerDomain.mockResolvedValueOnce([
+      { domain: 1, domain_nama: 'kamus', tanggal: new Date('2026-03-02T00:00:00Z'), kata: 'air', jumlah: 10 },
+      { domain: 2, domain_nama: 'tesaurus', tanggal: new Date('2026-03-01T00:00:00Z'), kata: 'kata', jumlah: 9 },
+    ]);
+
+    const response = await request(createApp()).get('/api/publik/pencarian/populer?tanggal=2026-01-16');
+
+    expect(response.status).toBe(200);
+    expect(response.body.tanggalData).toBe('2026-03-02');
+    expect(response.body.data.kamus).toBe('air');
+    expect(response.body.data.tesaurus).toBe('kata');
   });
 
   it('GET /api/publik/makna/contoh mengembalikan data contoh acak', async () => {

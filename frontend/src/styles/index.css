@@ -607,6 +607,26 @@ code {
     @apply bg-blue-900/30 text-blue-300;
   }
 
+  .beranda-populer-wrapper {
+    @apply max-w-2xl mx-auto mt-3 flex items-center gap-2 justify-center flex-wrap;
+  }
+
+  .beranda-populer-label {
+    @apply text-sm text-gray-600;
+  }
+
+  .dark .beranda-populer-label {
+    @apply text-dark-text-muted;
+  }
+
+  .beranda-populer-list {
+    @apply flex items-center gap-2 flex-wrap;
+  }
+
+  .beranda-populer-placeholder {
+    @apply beranda-tag-link;
+  }
+
   .beranda-feature-grid {
     @apply grid grid-cols-1 md:grid-cols-3 gap-4 mb-6;
   }

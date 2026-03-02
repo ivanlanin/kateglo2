@@ -97,6 +97,7 @@ Generator sitemap mengambil path statis + path dinamis kategori kamus/glosarium.
 ## Fitur Utama
 
 - Pencarian kamus (prefix-first + fallback contains)
+- Frasa pencarian populer di beranda (kamus, tesaurus, glosarium, makna, rima)
 - Detail entri: makna, contoh, subentri, tesaurus, glosarium
 - Login Google + RBAC untuk redaksi
 - Panel redaksi terintegrasi di frontend (`/redaksi/*`)
@@ -120,6 +121,7 @@ Generator sitemap mengambil path statis + path dinamis kategori kamus/glosarium.
 ### Halaman Publik Pendukung
 
 - **Beranda** (`/`): hero + kotak pencarian utama.
+- **Pencarian Populer** (`/api/publik/pencarian/populer?tanggal=YYYY-MM-DD`): 1 frasa teratas per domain berdasarkan tanggal browser pengguna; jika tanggal belum ada, otomatis mundur ke tanggal sebelumnya yang tersedia.
 - **Kebijakan Privasi** (`/kebijakan-privasi`).
 - **Footer**: tombol versi `Kateglo <versi>` (modal **Riwayat** dan **Tugas**) + toggle tema terang/gelap.
 
@@ -190,6 +192,7 @@ PORT=3000
 DATABASE_URL=postgresql://user:password@localhost:5432/kateglo
 JWT_SECRET=your-secret-key
 CORS_ORIGIN=http://localhost:5173
+POPULAR_SEARCH_CACHE_TTL_SECONDS=300
 ```
 
 ### Frontend (.env)

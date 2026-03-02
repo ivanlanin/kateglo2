@@ -25,6 +25,7 @@ import {
   cariMakna,
   cariRima,
   ambilContohRima,
+  ambilPencarianPopuler,
   ambilPuzzleSusunKata,
   validasiKataSusunKata,
   autocomplete,
@@ -189,6 +190,20 @@ describe('apiPublik', () => {
 
     expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/tesaurus/contoh');
     expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/rima/contoh');
+  });
+
+  it('ambilPencarianPopuler memanggil endpoint populer dengan tanggal aman', async () => {
+    klien.get.mockResolvedValue({ data: { data: {} } });
+
+    await ambilPencarianPopuler({ tanggal: '2026-03-02' });
+    await ambilPencarianPopuler({ tanggal: 'invalid' });
+
+    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/pencarian/populer', {
+      params: { tanggal: '2026-03-02' },
+    });
+    expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/pencarian/populer', {
+      params: { tanggal: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/) },
+    });
   });
 
   it('cariRima mengirim semua cursor dan direction ketika diperlukan', async () => {

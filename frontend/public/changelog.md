@@ -4,6 +4,7 @@
 
 - Membuat versi awal gim [Susun Kata](/gim/susun-kata)
 - Mengganti gambar pratayang media sosial
+- Menambahkan daftar frasa pencarian populer di beranda
 
 ## 2026-03-01 Minggu
 

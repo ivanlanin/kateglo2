@@ -2,10 +2,13 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Beranda from '../../../src/halaman/publik/Beranda';
 
+const mockAmbilPencarianPopuler = vi.fn();
+
 const mockNavigate = vi.fn();
 
 vi.mock('../../../src/api/apiPublik', () => ({
   autocomplete: vi.fn().mockResolvedValue([]),
+  ambilPencarianPopuler: (...args) => mockAmbilPencarianPopuler(...args),
 }));
 
 vi.mock('../../../src/context/authContext', () => ({
@@ -30,6 +33,16 @@ vi.mock('react-router-dom', () => ({
 describe('Beranda', () => {
   beforeEach(() => {
     mockNavigate.mockReset();
+    mockAmbilPencarianPopuler.mockReset();
+    mockAmbilPencarianPopuler.mockResolvedValue({
+      data: {
+        kamus: 'air',
+        tesaurus: 'kata',
+        glosarium: 'istilah',
+        makna: 'arti',
+        rima: 'sajak',
+      },
+    });
   });
 
   it('menampilkan hero beranda', () => {
@@ -54,5 +67,32 @@ describe('Beranda', () => {
     fireEvent.submit(screen.getByRole('button', { name: 'Cari' }).closest('form'));
 
     expect(mockNavigate).toHaveBeenCalledWith('/kamus/cari/anak%20ibu');
+  });
+
+  it('menampilkan daftar frasa populer di bawah kotak cari', async () => {
+    render(<Beranda />);
+
+    expect(await screen.findByText('Populer:')).toBeInTheDocument();
+    expect(mockAmbilPencarianPopuler).toHaveBeenCalledWith({
+      tanggal: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/),
+    });
+    expect(screen.getByRole('link', { name: 'air' })).toHaveAttribute('href', '/kamus/cari/air');
+    expect(screen.getByRole('link', { name: 'kata' })).toHaveAttribute('href', '/tesaurus/cari/kata');
+    expect(screen.getByRole('link', { name: 'istilah' })).toHaveAttribute('href', '/glosarium/cari/istilah');
+    expect(screen.getByRole('link', { name: 'arti' })).toHaveAttribute('href', '/makna/cari/arti');
+    expect(screen.getByRole('link', { name: 'sajak' })).toHaveAttribute('href', '/rima/cari/sajak');
+  });
+
+  it('menampilkan placeholder domain saat API populer gagal', async () => {
+    mockAmbilPencarianPopuler.mockRejectedValueOnce(new Error('gagal'));
+
+    render(<Beranda />);
+
+    expect(await screen.findByText('Populer:')).toBeInTheDocument();
+    expect(screen.getByText('kamus')).toBeInTheDocument();
+    expect(screen.getByText('tesaurus')).toBeInTheDocument();
+    expect(screen.getByText('glosarium')).toBeInTheDocument();
+    expect(screen.getByText('makna')).toBeInTheDocument();
+    expect(screen.getByText('rima')).toBeInTheDocument();
   });
 });
