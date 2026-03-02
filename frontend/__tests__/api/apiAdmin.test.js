@@ -39,6 +39,8 @@ import {
   useDetailGlosariumAdmin,
   useDaftarBidangAdmin,
   useDetailBidangAdmin,
+  useSusunKataHarianAdmin,
+  useDetailSusunKataHarianAdmin,
   useDaftarSumberAdmin,
   useDetailSumberAdmin,
   useDaftarLabelAdmin,
@@ -73,6 +75,8 @@ import {
   useHapusGlosarium,
   useSimpanBidang,
   useHapusBidang,
+  useSimpanSusunKataHarianAdmin,
+  useBuatSusunKataHarianAdmin,
   useSimpanSumber,
   useHapusSumber,
   useSimpanLabel,
@@ -538,6 +542,71 @@ describe('apiAdmin', () => {
     await detailBidang.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/bidang/18');
 
+    const susunKataHarian = useSusunKataHarianAdmin({ tanggal: '2026-03-02', panjang: '7' });
+    await susunKataHarian.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/susun-kata/harian', {
+      params: {
+        tanggal: '2026-03-02',
+        panjang: 7,
+      },
+    });
+
+    const susunKataHarianNonNumerik = useSusunKataHarianAdmin({ tanggal: '2026-03-08', panjang: 'abc' });
+    await susunKataHarianNonNumerik.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/susun-kata/harian', {
+      params: {
+        tanggal: '2026-03-08',
+        panjang: 5,
+      },
+    });
+
+    const susunKataHarianKosong = useSusunKataHarianAdmin({ tanggal: '', panjang: '' });
+    await susunKataHarianKosong.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/susun-kata/harian', {
+      params: {
+        tanggal: undefined,
+        panjang: undefined,
+      },
+    });
+
+    const susunKataHarianNull = useSusunKataHarianAdmin({ tanggal: '2026-03-09', panjang: null });
+    await susunKataHarianNull.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/susun-kata/harian', {
+      params: {
+        tanggal: '2026-03-09',
+        panjang: undefined,
+      },
+    });
+
+    const detailSusunKata = useDetailSusunKataHarianAdmin({ tanggal: '2026-03-02', panjang: '9' });
+    expect(detailSusunKata.enabled).toBe(true);
+    await detailSusunKata.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/susun-kata/harian/detail', {
+      params: {
+        tanggal: '2026-03-02',
+        panjang: 8,
+      },
+    });
+
+    const detailSusunKataNonNumerik = useDetailSusunKataHarianAdmin({ tanggal: '2026-03-08', panjang: 'abc' });
+    expect(detailSusunKataNonNumerik.enabled).toBe(true);
+    await detailSusunKataNonNumerik.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/susun-kata/harian/detail', {
+      params: {
+        tanggal: '2026-03-08',
+        panjang: 5,
+      },
+    });
+
+    const detailSusunKataKosong = useDetailSusunKataHarianAdmin({ tanggal: '', panjang: '' });
+    expect(detailSusunKataKosong.enabled).toBe(false);
+
+    const detailSusunKataNull = useDetailSusunKataHarianAdmin({ tanggal: '2026-03-02', panjang: null });
+    expect(detailSusunKataNull.enabled).toBe(false);
+
+    const detailSusunKataTanggalNull = useDetailSusunKataHarianAdmin({ tanggal: null, panjang: '5' });
+    expect(detailSusunKataTanggalNull.enabled).toBe(false);
+
     const daftarSumber = useDaftarSumberAdmin({ limit: 13, q: 'kb', glosarium: '1', kamus: '0' });
     await daftarSumber.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/sumber', {
@@ -728,6 +797,45 @@ describe('apiAdmin', () => {
     expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/bidang/2');
     hapusBidang.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-bidang'] });
+
+    const simpanSusunKata = useSimpanSusunKataHarianAdmin();
+    await simpanSusunKata.mutationFn({ tanggal: '2026-03-02', panjang: 5, kata: 'kartu' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/susun-kata/harian', { tanggal: '2026-03-02', panjang: 5, kata: 'kartu' });
+    simpanSusunKata.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-susun-kata-harian'] });
+
+    const buatSusunKata = useBuatSusunKataHarianAdmin();
+    await buatSusunKata.mutationFn({ tanggal: ' 2026-03-03 ', panjang: '20' });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/susun-kata/harian', {
+      params: {
+        tanggal: '2026-03-03',
+        panjang: 8,
+      },
+    });
+    await buatSusunKata.mutationFn({ tanggal: '2026-03-04', panjang: 'abc' });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/susun-kata/harian', {
+      params: {
+        tanggal: '2026-03-04',
+        panjang: 5,
+      },
+    });
+    await buatSusunKata.mutationFn({ tanggal: '   ', panjang: '' });
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/susun-kata/harian', {
+      params: {
+        tanggal: undefined,
+        panjang: undefined,
+      },
+    });
+    await buatSusunKata.mutationFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/susun-kata/harian', {
+      params: {
+        tanggal: undefined,
+        panjang: undefined,
+      },
+    });
+    buatSusunKata.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-susun-kata-harian'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-susun-kata-harian-detail'] });
 
     const simpanSumber = useSimpanSumber();
     await simpanSumber.mutationFn({ id: 3, kode: 'kbbi', nama: 'KBBI' });

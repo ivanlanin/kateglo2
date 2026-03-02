@@ -45,24 +45,27 @@ describe('Beranda', () => {
     });
   });
 
-  it('menampilkan hero beranda', () => {
+  it('menampilkan hero beranda', async () => {
     render(<Beranda />);
 
+    await screen.findByText('Populer:');
     expect(screen.getByText('Kateglo')).toBeInTheDocument();
     expect(screen.getByText(/Kamus, tesaurus, dan glosarium bahasa Indonesia/i)).toBeInTheDocument();
     expect(screen.queryByText('Definisi dan makna kata')).not.toBeInTheDocument();
   });
 
-  it('submit query kosong tidak menavigasi', () => {
+  it('submit query kosong tidak menavigasi', async () => {
     render(<Beranda />);
 
+    await screen.findByText('Populer:');
     fireEvent.submit(screen.getByRole('button', { name: 'Cari' }).closest('form'));
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 
-  it('submit query menavigasi ke halaman kamus', () => {
+  it('submit query menavigasi ke halaman kamus', async () => {
     render(<Beranda />);
 
+    await screen.findByText('Populer:');
     fireEvent.change(screen.getByPlaceholderText('Cari kata …'), { target: { value: 'anak ibu' } });
     fireEvent.submit(screen.getByRole('button', { name: 'Cari' }).closest('form'));
 
@@ -76,7 +79,7 @@ describe('Beranda', () => {
     expect(mockAmbilPencarianPopuler).toHaveBeenCalledWith({
       tanggal: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/),
     });
-    expect(screen.getByRole('link', { name: 'air' })).toHaveAttribute('href', '/kamus/cari/air');
+    expect(await screen.findByRole('link', { name: 'air' })).toHaveAttribute('href', '/kamus/cari/air');
     expect(screen.getByRole('link', { name: 'kata' })).toHaveAttribute('href', '/tesaurus/cari/kata');
     expect(screen.getByRole('link', { name: 'istilah' })).toHaveAttribute('href', '/glosarium/cari/istilah');
     expect(screen.getByRole('link', { name: 'arti' })).toHaveAttribute('href', '/makna/cari/arti');
@@ -85,6 +88,19 @@ describe('Beranda', () => {
 
   it('menampilkan placeholder domain saat API populer gagal', async () => {
     mockAmbilPencarianPopuler.mockRejectedValueOnce(new Error('gagal'));
+
+    render(<Beranda />);
+
+    expect(await screen.findByText('Populer:')).toBeInTheDocument();
+    expect(screen.getByText('kamus')).toBeInTheDocument();
+    expect(screen.getByText('tesaurus')).toBeInTheDocument();
+    expect(screen.getByText('glosarium')).toBeInTheDocument();
+    expect(screen.getByText('makna')).toBeInTheDocument();
+    expect(screen.getByText('rima')).toBeInTheDocument();
+  });
+
+  it('menampilkan placeholder domain saat respons sukses tanpa data populer', async () => {
+    mockAmbilPencarianPopuler.mockResolvedValueOnce({});
 
     render(<Beranda />);
 

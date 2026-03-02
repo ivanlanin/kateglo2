@@ -84,6 +84,7 @@ describe('MenuUtama', () => {
     render(<MenuUtama onItemClick={onItemClick} />);
 
     const loginLink = screen.getByRole('link', { name: 'Masuk' });
+    loginLink.addEventListener('click', (event) => event.preventDefault());
     expect(loginLink).toHaveAttribute('href', '/auth/google');
     fireEvent.click(loginLink);
 
@@ -96,7 +97,9 @@ describe('MenuUtama', () => {
 
     render(<MenuUtama />);
 
-    fireEvent.click(screen.getByRole('link', { name: 'Masuk' }));
+    const loginLink = screen.getByRole('link', { name: 'Masuk' });
+    loginLink.addEventListener('click', (event) => event.preventDefault());
+    fireEvent.click(loginLink);
     expect(mockSimpanReturnTo).toHaveBeenCalledWith('/kamus');
   });
 

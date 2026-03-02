@@ -467,7 +467,7 @@ function KamusDetail() {
                 <PesanTidakDitemukan saran={saran} />
               </div>
             </>
-          ) : daftarEntri.map((entriItem) => {
+          ) : daftarEntri.map((entriItem, entriIndex) => {
             const maknaPerKelas = {};
             (entriItem.makna || []).forEach((m) => {
               const kelas = m.kelas_kata || '-';
@@ -504,7 +504,7 @@ function KamusDetail() {
             );
 
             return (
-              <section key={entriItem.id} className="mb-8 pb-8 border-b border-gray-200 dark:border-gray-700 last:border-b-0 last:mb-0 last:pb-0">
+              <section key={`${entriItem.id ?? entriItem.indeks ?? entriItem.entri ?? 'entri'}-${entriIndex}`} className="mb-8 pb-8 border-b border-gray-200 dark:border-gray-700 last:border-b-0 last:mb-0 last:pb-0">
                 <div className="kamus-detail-heading-row">
                   <div className="min-w-0">
                     <h1 className="kamus-detail-heading">
@@ -689,7 +689,7 @@ function KamusDetail() {
                                 <>
                                   <span>: </span>
                                   <span className="kamus-detail-def-sample">{m.contoh.map((c, i) => (
-                                    <span key={c.id}>
+                                    <span key={`${c.id ?? c.contoh ?? 'contoh'}-${i}`}>
                                       <span dangerouslySetInnerHTML={{ __html: renderMarkdown(c.contoh) }} />
                                       {c.makna_contoh && <span> — {c.makna_contoh}</span>}
                                       {i < m.contoh.length - 1 && <span>; </span>}
@@ -711,7 +711,7 @@ function KamusDetail() {
                           return (
                             <ol className="kamus-detail-def-list">
                               {daftarMakna.map((m, indexMakna) => (
-                                <li key={m.id} className="kamus-detail-def-item">
+                                <li key={`${m.id ?? m.makna ?? 'makna'}-${indexMakna}`} className="kamus-detail-def-item">
                                   <span className="kamus-detail-def-number">{indexMakna + 1}.</span>
                                   <div className="kamus-detail-def-content leading-relaxed">
                                     {renderIsiMakna(m)}
@@ -746,7 +746,7 @@ function KamusDetail() {
                         </div>
                         <div className="kamus-detail-subentry-flow">
                           {daftarSubentri.map((s, i) => (
-                            <span key={s.id}>
+                            <span key={`${s.id ?? s.indeks ?? s.entri ?? 'subentri'}-${i}`}>
                               {jenis === 'varian' ? (
                                 <span>{formatLemaHomonim(s.entri)}</span>
                               ) : (
@@ -849,8 +849,8 @@ function KamusDetail() {
 
                   {daftarKomentarTerurut.length > 0 && (
                     <div className="space-y-3">
-                      {daftarKomentarTerurut.map((item) => (
-                        <div key={item.id} className="border border-gray-200 dark:border-gray-700 rounded-md px-3 py-2">
+                      {daftarKomentarTerurut.map((item, indexKomentar) => (
+                        <div key={`${item.id ?? item.created_at ?? 'komentar'}-${indexKomentar}`} className="border border-gray-200 dark:border-gray-700 rounded-md px-3 py-2">
                           <div className="text-xs secondary-text mb-1 flex items-center justify-between gap-2">
                             <span>{item.pengguna_nama || 'Pengguna'}</span>
                             <span>{formatLocalDateTime(item.updated_at || item.created_at)}</span>

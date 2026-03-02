@@ -344,4 +344,15 @@ class ModelSusunKata {
   }
 }
 
+ModelSusunKata.__private = {
+  parseTanggal,
+  parsePanjang,
+  parsePenggunaId,
+  hitungOffsetHari,
+  gcd,
+  hash32,
+  pilihIndexKata,
+  hitungSkor,
+};
+
 module.exports = ModelSusunKata;

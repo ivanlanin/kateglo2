@@ -81,4 +81,20 @@ describe('PesanMunculan', () => {
 
     expect(onClose).not.toHaveBeenCalled();
   });
+
+  it('merender jenis info tanpa deskripsi dan tetap aman saat onClose default', () => {
+    render(
+      <PesanMunculan
+        tampil
+        jenis="info"
+        judul="Informasi"
+      />
+    );
+
+    const toast = screen.getByRole('status');
+    expect(toast).toHaveClass('pesan-munculan-info');
+    expect(screen.queryByText('Silakan coba lagi')).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Tutup pesan' }));
+  });
 });

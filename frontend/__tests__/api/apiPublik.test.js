@@ -27,6 +27,9 @@ import {
   ambilContohRima,
   ambilPencarianPopuler,
   ambilPuzzleSusunKata,
+  ambilHarianSusunKata,
+  submitSkorSusunKata,
+  ambilKlasemenSusunKata,
   validasiKataSusunKata,
   autocomplete,
   cariGlosarium,
@@ -206,6 +209,26 @@ describe('apiPublik', () => {
     });
   });
 
+  it('ambilPencarianPopuler mempertahankan tanggal valid apa adanya', async () => {
+    klien.get.mockResolvedValue({ data: { data: {} } });
+
+    await ambilPencarianPopuler({ tanggal: '2026-03-21' });
+
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/pencarian/populer', {
+      params: { tanggal: '2026-03-21' },
+    });
+  });
+
+  it('ambilPencarianPopuler tanpa parameter memakai fallback tanggal lokal', async () => {
+    klien.get.mockResolvedValue({ data: { data: {} } });
+
+    await ambilPencarianPopuler();
+
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/pencarian/populer', {
+      params: { tanggal: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/) },
+    });
+  });
+
   it('cariRima mengirim semua cursor dan direction ketika diperlukan', async () => {
     klien.get.mockResolvedValue({ data: { rima_akhir: {}, rima_awal: {} } });
 
@@ -248,6 +271,50 @@ describe('apiPublik', () => {
     });
   });
 
+  it('ambilHarianSusunKata, submitSkorSusunKata, dan ambilKlasemenSusunKata menormalkan payload', async () => {
+    klien.get.mockResolvedValue({ data: { success: true } });
+    klien.post.mockResolvedValue({ data: { success: true } });
+
+    await ambilHarianSusunKata({ panjang: 'abc' });
+    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/gim/susun-kata/harian', {
+      params: { panjang: 5 },
+    });
+
+    await submitSkorSusunKata({
+      panjang: 20,
+      percobaan: 0,
+      detik: 999999,
+      menang: 1,
+      tebakan: '  KARTU  ',
+    });
+    expect(klien.post).toHaveBeenCalledWith('/api/publik/gim/susun-kata/harian/submit', {
+      panjang: 8,
+      percobaan: 6,
+      detik: 86400,
+      menang: true,
+      tebakan: 'kartu',
+    });
+
+    await ambilKlasemenSusunKata({ panjang: 3, limit: 999 });
+    expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/gim/susun-kata/harian/klasemen', {
+      params: { panjang: 4, limit: 50 },
+    });
+
+    await submitSkorSusunKata({ panjang: -2, percobaan: -3, detik: -9, menang: 0, tebakan: '  ' });
+    expect(klien.post).toHaveBeenNthCalledWith(2, '/api/publik/gim/susun-kata/harian/submit', {
+      panjang: 4,
+      percobaan: 1,
+      detik: 0,
+      menang: false,
+      tebakan: '',
+    });
+
+    await ambilKlasemenSusunKata({ panjang: -99, limit: -1 });
+    expect(klien.get).toHaveBeenNthCalledWith(3, '/api/publik/gim/susun-kata/harian/klasemen', {
+      params: { panjang: 4, limit: 1 },
+    });
+  });
+
   it('validasiKataSusunKata memanggil endpoint validasi dengan kata ter-normalisasi', async () => {
     klien.get.mockResolvedValue({ data: { kata: 'kartu', panjang: 5, valid: true } });
 
@@ -255,6 +322,35 @@ describe('apiPublik', () => {
 
     expect(klien.get).toHaveBeenCalledWith('/api/publik/gim/susun-kata/validasi/kartu', {
       params: { panjang: 8 },
+    });
+  });
+
+  it('normalisasi susun kata memakai fallback default untuk input non-numerik/kosong', async () => {
+    klien.get.mockResolvedValue({ data: { success: true } });
+    klien.post.mockResolvedValue({ data: { success: true } });
+
+    await ambilPuzzleSusunKata({ panjang: 'abc' });
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/gim/susun-kata/harian', {
+      params: { panjang: 5 },
+    });
+
+    await submitSkorSusunKata({ panjang: 'abc', percobaan: 'xyz', detik: 'def', menang: '', tebakan: null });
+    expect(klien.post).toHaveBeenLastCalledWith('/api/publik/gim/susun-kata/harian/submit', {
+      panjang: 5,
+      percobaan: 6,
+      detik: 0,
+      menang: false,
+      tebakan: '',
+    });
+
+    await ambilKlasemenSusunKata({ panjang: 'abc', limit: 'zzz' });
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/gim/susun-kata/harian/klasemen', {
+      params: { panjang: 5, limit: 10 },
+    });
+
+    await validasiKataSusunKata('', { panjang: 'abc' });
+    expect(klien.get).toHaveBeenLastCalledWith('/api/publik/gim/susun-kata/validasi/', {
+      params: { panjang: 5 },
     });
   });
 

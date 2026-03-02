@@ -67,7 +67,7 @@ function kelasStatusKey(status) {
   return '';
 }
 
-function buatPetaKeyboard(riwayat, target) {
+export function buatPetaKeyboard(riwayat, target) {
   const peta = {};
 
   riwayat.forEach((tebakan) => {
@@ -85,7 +85,7 @@ function buatPetaKeyboard(riwayat, target) {
   return peta;
 }
 
-function parseRiwayatDariSkor(tebakanRaw, panjang) {
+export function parseRiwayatDariSkor(tebakanRaw, panjang) {
   const panjangAman = Number(panjang) || PANJANG_DEFAULT;
   return String(tebakanRaw || '')
     .split(';')
@@ -147,14 +147,12 @@ function SusunKata() {
   }, []);
 
   const tambahHuruf = useCallback((huruf) => {
-    if (selesai) return;
     setTebakan((prev) => `${prev}${huruf}`.slice(0, panjang));
-  }, [panjang, selesai]);
+  }, [panjang]);
 
   const hapusHuruf = useCallback(() => {
-    if (selesai) return;
     setTebakan((prev) => prev.slice(0, -1));
-  }, [selesai]);
+  }, []);
 
   const submitTebakan = useCallback(async () => {
     if (!target || selesai) return;

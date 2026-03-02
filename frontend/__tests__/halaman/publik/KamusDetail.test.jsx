@@ -723,6 +723,79 @@ describe('KamusDetail', () => {
     expect(links.some((link) => link.textContent === 'zeta')).toBe(true);
   });
 
+  it('mengeksekusi fallback key default untuk entri, makna, contoh, subentri, dan komentar', () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      isLoading: false,
+      loginDenganGoogle: vi.fn(),
+    });
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-detail') {
+        return {
+          isLoading: false,
+          isError: false,
+          isFetching: false,
+          data: {
+            entri: [
+              {
+                jenis: 'dasar',
+                makna: [
+                  {
+                    kelas_kata: 'n',
+                    makna: 'makna fallback id kosong',
+                    contoh: [],
+                  },
+                  {
+                    kelas_kata: 'n',
+                    contoh: [{ makna_contoh: 'makna contoh fallback' }],
+                  },
+                ],
+                subentri: {
+                  turunan: [{}],
+                },
+              },
+            ],
+            tesaurus: { sinonim: [], antonim: [] },
+            glosarium: [],
+          },
+        };
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: {
+            data: {
+              loggedIn: true,
+              activeCount: 1,
+              komentar: [
+                {
+                  komentar: 'komentar fallback key',
+                  pengguna_nama: '',
+                },
+              ],
+            },
+          },
+          refetch: vi.fn(),
+        };
+      }
+
+      return {
+        isLoading: false,
+        isError: false,
+        data: {},
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByText('makna fallback id kosong')).toBeInTheDocument();
+    expect(screen.getByText(/makna contoh fallback/i)).toBeInTheDocument();
+    expect(screen.getByText('komentar fallback key')).toBeInTheDocument();
+  });
+
   it('glosarium menerima bentuk object.data serta klik prev/next no-op saat cursor kosong', async () => {
     mockUseQuery.mockImplementation((options) => {
       if (options?.queryKey?.[0] === 'kamus-detail') {

@@ -147,10 +147,18 @@ describe('ModelEntri', () => {
 
     expect(db.query).toHaveBeenCalledWith(expect.stringContaining('LOWER(TRIM(e.indeks)) = $2'), [5, 'kartu']);
     expect(result).toBe(true);
+
+    db.query.mockResolvedValueOnce({ rows: [{ '?column?': 1 }] });
+    const resultDefaultOpsi = await ModelEntri.cekKataSusunKataValid('KARTU');
+    expect(resultDefaultOpsi).toBe(true);
+    expect(db.query).toHaveBeenNthCalledWith(2, expect.any(String), [5, 'kartu']);
   });
 
   it('cekKataSusunKataValid mengembalikan false untuk format kata tidak valid', async () => {
     await expect(ModelEntri.cekKataSusunKataValid('kata-1', { panjang: 6 })).resolves.toBe(false);
+    await expect(ModelEntri.cekKataSusunKataValid(undefined, { panjang: 5 })).resolves.toBe(false);
+    await expect(ModelEntri.cekKataSusunKataValid('', { panjang: 5 })).resolves.toBe(false);
+    await expect(ModelEntri.cekKataSusunKataValid('kata', { panjang: 5 })).resolves.toBe(false);
     expect(db.query).not.toHaveBeenCalled();
   });
 
@@ -1756,8 +1764,31 @@ describe('ModelEntri', () => {
     expect(normalisasiRagamVarian('cakapan')).toBe('cak');
     expect(normalisasiRagamVarian(' Hormat ')).toBe('hor');
     expect(normalisasiRagamVarian('kas')).toBe('kas');
+    expect(normalisasiRagamVarian('KLASIK')).toBe('kl');
     expect(normalisasiRagamVarian('tidak-ada')).toBeNull();
     expect(normalisasiRagamVarian('')).toBeNull();
+  });
+
+  it('ambilKamusSusunKata dan cekKataSusunKataValid memakai fallback panjang default saat non-finite', async () => {
+    db.query.mockResolvedValueOnce({ rows: [] });
+    await ModelEntri.ambilKamusSusunKata({ panjang: Number.POSITIVE_INFINITY, limit: Number.NaN });
+    expect(db.query).toHaveBeenCalledWith(expect.any(String), [5, 5000]);
+
+    db.query.mockResolvedValueOnce({ rows: [{ '?column?': 1 }] });
+    const valid = await ModelEntri.cekKataSusunKataValid('kartu', { panjang: Number.NaN });
+    expect(valid).toBe(true);
+    expect(db.query).toHaveBeenNthCalledWith(2, expect.any(String), [5, 'kartu']);
+  });
+
+  it('ambilKamusSusunKata tanpa argumen memakai default dan menyaring kata kosong', async () => {
+    db.query.mockResolvedValueOnce({
+      rows: [{ kata: '  kata  ' }, { kata: null }, { kata: '   ' }],
+    });
+
+    const result = await ModelEntri.ambilKamusSusunKata();
+
+    expect(db.query).toHaveBeenCalledWith(expect.any(String), [5, 5000]);
+    expect(result).toEqual(['kata']);
   });
 
 });

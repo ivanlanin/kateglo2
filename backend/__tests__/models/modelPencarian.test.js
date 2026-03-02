@@ -65,7 +65,10 @@ describe('ModelPencarian', () => {
     expect(__private.parseTanggal('2026/03/01')).toBeNull();
     expect(__private.parseTanggal('')).toBeNull();
     expect(__private.formatTanggalOutput('2026-03-02')).toBe('2026-03-02');
+    expect(__private.formatTanggalOutput(undefined)).toBeNull();
     expect(__private.formatTanggalOutput(new Date('2026-03-02T10:00:00Z'))).toBe('2026-03-02');
+    expect(__private.formatTanggalOutput(new Date('invalid'))).toBeNull();
+    expect(__private.formatTanggalOutput('   ')).toBeNull();
     expect(__private.formatTanggalOutput('x')).toBeNull();
 
     expect(__private.namaDomain(1)).toBe('kamus');
@@ -240,6 +243,29 @@ describe('ModelPencarian', () => {
     );
     expect(result).toHaveLength(5);
     expect(result[0]).toEqual({ domain: 1, domain_nama: 'kamus', tanggal: null, kata: null, jumlah: 0 });
+  });
+
+  it('ambilFrasaPopulerPerDomain memetakan jumlah fallback 0 saat nilai non numerik', async () => {
+    db.query.mockResolvedValue({
+      rows: [
+        { domain: 1, tanggal: '2026-03-02', kata: null, jumlah: 'abc' },
+      ],
+    });
+
+    const result = await ModelPencarian.ambilFrasaPopulerPerDomain({ tanggalReferensi: '2026-03-02' });
+
+    expect(result[0]).toEqual({ domain: 1, domain_nama: 'kamus', tanggal: '2026-03-02', kata: null, jumlah: 0 });
+  });
+
+  it('ambilFrasaPopulerPerDomain tanpa argumen memakai tanggal hari ini default', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    await ModelPencarian.ambilFrasaPopulerPerDomain();
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('p.tanggal <= $2::date'),
+      [[1, 2, 3, 4, 5], expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/)]
+    );
   });
 
   it('ambilStatistikRedaksi menyusun filter domain+tanggal eksplisit', async () => {

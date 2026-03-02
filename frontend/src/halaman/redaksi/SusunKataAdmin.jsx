@@ -49,6 +49,58 @@ const kolom = [
   { key: 'jumlahPeserta', label: 'Peserta', render: (item) => Number(item.jumlahPeserta) || 0 },
 ];
 
+export function buildPanelDataFromDetail(detail, selectedTanggal, selectedPanjang, tanggalQuery) {
+  return {
+    tanggal: String(detail?.tanggal || selectedTanggal || tanggalQuery),
+    panjang: String(detail?.panjang || selectedPanjang || 5),
+    kata: String(detail?.kata || ''),
+    keterangan: String(detail?.keterangan || ''),
+  };
+}
+
+export function buildSelectedFromItem(item) {
+  return {
+    tanggal: String(item?.tanggal || ''),
+    panjang: String(item?.panjang || ''),
+  };
+}
+
+export function buildSuntingDataFromItem(item) {
+  return {
+    tanggal: String(item?.tanggal),
+    panjang: String(item?.panjang),
+    kata: String(item?.kata || ''),
+    keterangan: String(item?.keterangan || ''),
+  };
+}
+
+export function sanitizeKataSusunInput(value) {
+  return String(value || '').replace(/[^a-zA-Z]/g, '').toLowerCase();
+}
+
+export function buildSimpanPayload(panelData) {
+  const panjangAman = Number.parseInt(panelData?.panjang, 10) || 5;
+  const kataAman = String(panelData?.kata || '').trim().toLowerCase();
+  return {
+    payload: {
+      tanggal: String(panelData?.tanggal || '').trim(),
+      panjang: panjangAman,
+      kata: kataAman,
+      keterangan: String(panelData?.keterangan || '').trim(),
+    },
+    panjangAman,
+    kataAman,
+  };
+}
+
+export function resolveTanggalBuatKataHarian(cariTanggal, tanggalQuery) {
+  return String(cariTanggal || tanggalQuery || tanggalHariIni()).trim();
+}
+
+export function resolveTanggalSimpan(tanggalForm, tanggalQuery) {
+  return String(tanggalForm || '').trim() || tanggalQuery;
+}
+
 function SusunKataAdmin() {
   const [cariTanggal, setCariTanggal] = useState(tanggalHariIni());
   const [tanggalQuery, setTanggalQuery] = useState(tanggalHariIni());
@@ -83,28 +135,15 @@ function SusunKataAdmin() {
     if (!detail) return;
 
     if (panelTerbuka) {
-      setPanelData({
-        tanggal: String(detail.tanggal || selected.tanggal || tanggalQuery),
-        panjang: String(detail.panjang || selected.panjang || 5),
-        kata: String(detail.kata || ''),
-        keterangan: String(detail.keterangan || ''),
-      });
+      setPanelData(buildPanelDataFromDetail(detail, selected.tanggal, selected.panjang, tanggalQuery));
     }
   }, [detail, panelTerbuka, selected.tanggal, selected.panjang, setPanelData, tanggalQuery]);
 
   const bukaPanel = (item = null) => {
     setPesan({ error: '', sukses: '' });
     if (item?.tanggal && item?.panjang) {
-      setSelected({
-        tanggal: String(item.tanggal || ''),
-        panjang: String(item.panjang || ''),
-      });
-      panel.bukaUntukSunting({
-        tanggal: String(item.tanggal || ''),
-        panjang: String(item.panjang || ''),
-        kata: String(item.kata || ''),
-        keterangan: String(item.keterangan || ''),
-      });
+      setSelected(buildSelectedFromItem(item));
+      panel.bukaUntukSunting(buildSuntingDataFromItem(item));
       return;
     }
 
@@ -136,8 +175,7 @@ function SusunKataAdmin() {
       return;
     }
 
-    const panjangAman = Number.parseInt(panel.data.panjang, 10) || 5;
-    const kataAman = String(panel.data.kata || '').trim().toLowerCase();
+    const { payload, panjangAman, kataAman } = buildSimpanPayload(panel.data);
 
     if (kataAman.length !== panjangAman) {
       setPesan({ error: `Kata harus ${panjangAman} huruf`, sukses: '' });
@@ -145,18 +183,14 @@ function SusunKataAdmin() {
     }
 
     simpan.mutate(
-      {
-        tanggal: String(panel.data.tanggal || '').trim(),
-        panjang: panjangAman,
-        kata: kataAman,
-        keterangan: String(panel.data.keterangan || '').trim(),
-      },
+      payload,
       {
         onSuccess: () => {
           setPesan({ error: '', sukses: 'Kata harian berhasil disimpan.' });
-          setTanggalQuery(String(panel.data.tanggal || '').trim() || tanggalQuery);
+          const tanggalSimpan = resolveTanggalSimpan(panel.data.tanggal, tanggalQuery);
+          setTanggalQuery(tanggalSimpan);
           setPanjang(panjangAman);
-          setCariTanggal(String(panel.data.tanggal || '').trim() || tanggalQuery);
+          setCariTanggal(tanggalSimpan);
           setPanjangDraft(String(panjangAman));
         },
         onError: (error) => {
@@ -181,7 +215,7 @@ function SusunKataAdmin() {
 
   const handleBuatKataHarian = () => {
     setPesan({ error: '', sukses: '' });
-    const tanggalAman = String(cariTanggal || tanggalQuery || tanggalHariIni()).trim();
+    const tanggalAman = resolveTanggalBuatKataHarian(cariTanggal, tanggalQuery);
     const panjangAman = String(panjangDraft || '').trim();
 
     buatHarian.mutate(
@@ -246,7 +280,7 @@ function SusunKataAdmin() {
           label="Kata"
           name="kata"
           value={panel.data.kata}
-          onChange={(field, value) => panel.ubahField(field, String(value || '').replace(/[^a-zA-Z]/g, '').toLowerCase())}
+          onChange={(field, value) => panel.ubahField(field, sanitizeKataSusunInput(value))}
           required
         />
         <TextareaField label="Keterangan" name="keterangan" value={panel.data.keterangan} onChange={panel.ubahField} rows={3} />

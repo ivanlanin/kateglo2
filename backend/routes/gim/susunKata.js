@@ -33,6 +33,10 @@ function ambilTebakanTerakhir(tebakan) {
   return daftar[daftar.length - 1] || '';
 }
 
+function normalisasiKataParam(value) {
+  return String(value || '').trim().toLowerCase();
+}
+
 async function buildHarianPayload({ panjang, userPid = null }) {
   const tanggal = await ModelSusunKata.ambilTanggalHariIniJakarta();
   const harian = await ModelSusunKata.ambilAtauBuatHarian({ tanggal, panjang });
@@ -200,7 +204,7 @@ router.get('/harian/klasemen', async (req, res, next) => {
 router.get('/validasi/:kata', async (req, res, next) => {
   try {
     const panjang = parsePanjang(req.query.panjang);
-    const kata = String(req.params.kata || '').trim().toLowerCase();
+    const kata = normalisasiKataParam(req.params.kata);
     const valid = await ModelEntri.cekKataSusunKataValid(kata, { panjang });
 
     return res.json({
@@ -214,3 +218,12 @@ router.get('/validasi/:kata', async (req, res, next) => {
 });
 
 module.exports = router;
+
+module.exports.__private = {
+  parsePanjang,
+  parseLimit,
+  parseBodyBoolean,
+  ambilTebakanTerakhir,
+  normalisasiKataParam,
+  buildHarianPayload,
+};
