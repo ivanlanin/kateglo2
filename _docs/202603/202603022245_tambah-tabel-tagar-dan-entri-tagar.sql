@@ -3,8 +3,8 @@
 -- Deskripsi: Sistem tagar morfologis untuk entri kamus (many-to-many)
 -- Keputusan desain:
 --   - Kategori: prefiks, sufiks, infiks, klitik, reduplikasi, prakategorial (tidak ada konfiks)
---   - Alomorf digabung: me- mencakup meng-/mem-/men-/meny-, ber- mencakup be-, ter- mencakup te-
---   - Reduplikasi berimbuhan dipisah: tagar R + tagar ber/me/dll secara terpisah
+--   - Alomorf digabung: meng- mencakup me-/mem-/men-/meny-, ber- mencakup be-, ter- mencakup te-
+--   - Reduplikasi berimbuhan dipisah: tagar R + tagar ber/meng/dll secara terpisah
 
 -- ============================================================
 -- 1. TABEL tagar (master data)
@@ -70,14 +70,14 @@ ON CONFLICT DO NOTHING;
 
 -- Prefiks (urutan: paling umum dulu)
 INSERT INTO tagar (kode, nama, kategori, deskripsi, urutan) VALUES
-  ('me',  'me-',  'prefiks', 'Prefiks aktif (termasuk alomorf meng-, mem-, men-, meny-)', 1),
+  ('meng', 'meng-', 'prefiks', 'Prefiks aktif (mencakup alomorf me-, mem-, men-, meny-)', 1),
   ('ber', 'ber-', 'prefiks', 'Prefiks statis/intransitif (termasuk alomorf be-)', 2),
   ('di',  'di-',  'prefiks', 'Prefiks pasif', 3),
   ('ter', 'ter-', 'prefiks', 'Prefiks pasif/aspek (termasuk alomorf te-)', 4),
   ('per', 'per-', 'prefiks', 'Prefiks kausatif', 5),
   ('ke',  'ke-',  'prefiks', 'Prefiks ordinal/nominal', 6),
   ('se',  'se-',  'prefiks', 'Prefiks satu/semua', 7),
-  ('pe',  'pe-',  'prefiks', 'Prefiks agentif (termasuk alomorf peng-, pem-, pen-, peny-)', 8);
+  ('peng', 'peng-', 'prefiks', 'Prefiks agentif (mencakup alomorf pe-, pem-, pen-, peny-)', 8);
 
 -- Sufiks
 INSERT INTO tagar (kode, nama, kategori, deskripsi, urutan) VALUES

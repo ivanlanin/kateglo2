@@ -4,7 +4,6 @@ import TataLetak from './komponen/bersama/TataLetak';
 import Beranda from './halaman/publik/Beranda';
 import Kamus from './halaman/publik/Kamus';
 import KamusDetail from './halaman/publik/KamusDetail';
-import KamusTagar from './halaman/publik/KamusTagar';
 import Tesaurus from './halaman/publik/Tesaurus';
 import Glosarium from './halaman/publik/Glosarium';
 import GlosariumDetail from './halaman/publik/GlosariumDetail';
@@ -120,7 +119,7 @@ function App() {
         <Route path="/kamus" element={<Kamus />} />
         <Route path="/kamus/cari/:kata" element={<Kamus />} />
         <Route path="/kamus/kelas/:kelas" element={<Kamus />} />
-        <Route path="/kamus/tagar/:kode" element={<KamusTagar />} />
+        <Route path="/kamus/tagar/:kode" element={<Kamus />} />
         <Route path="/kamus/:kategori/:kode" element={<Kamus />} />
         <Route path="/kamus/detail/:indeks" element={<KamusDetail />} />
         <Route path="/makna" element={<Makna />} />

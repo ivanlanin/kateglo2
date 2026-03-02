@@ -84,13 +84,13 @@ Beberapa tagar yang kemungkinan langsung dibutuhkan:
 -- Prefiks
 INSERT INTO tagar (kode, nama, kategori, urutan) VALUES
   ('meng', 'meng-', 'prefiks', 1),
-  ('me', 'me-', 'prefiks', 2),
-  ('di', 'di-', 'prefiks', 3),
-  ('ter', 'ter-', 'prefiks', 4),
-  ('ber', 'ber-', 'prefiks', 5),
-  ('per', 'per-', 'prefiks', 6),
-  ('ke', 'ke-', 'prefiks', 7),
-  ('se', 'se-', 'prefiks', 8);
+  ('peng', 'peng-', 'prefiks', 2),
+  ('di',   'di-',   'prefiks', 3),
+  ('ter',  'ter-',  'prefiks', 4),
+  ('ber',  'ber-',  'prefiks', 5),
+  ('per',  'per-',  'prefiks', 6),
+  ('ke',   'ke-',   'prefiks', 7),
+  ('se',   'se-',   'prefiks', 8);
 
 -- Sufiks
 INSERT INTO tagar (kode, nama, kategori, urutan) VALUES
@@ -106,11 +106,11 @@ INSERT INTO tagar (kode, nama, kategori, urutan) VALUES
 
 -- Konfiks
 INSERT INTO tagar (kode, nama, kategori, urutan) VALUES
-  ('ke-an', 'ke--an', 'konfiks', 1),
-  ('pe-an', 'pe--an', 'konfiks', 2),
-  ('ber-an', 'ber--an', 'konfiks', 3),
-  ('me-kan', 'me--kan', 'konfiks', 4),
-  ('me-i', 'me--i', 'konfiks', 5);
+  ('ke-an',   'ke--an',   'konfiks', 1),
+  ('peng-an', 'peng--an', 'konfiks', 2),
+  ('ber-an',  'ber--an',  'konfiks', 3),
+  ('meng-kan','meng--kan','konfiks', 4),
+  ('meng-i',  'meng--i',  'konfiks', 5);
 
 -- Klitik
 INSERT INTO tagar (kode, nama, kategori, urutan) VALUES
@@ -148,10 +148,10 @@ Enam kategori sesuai linguistik morfologi Indonesia:
 
 | Kategori | Contoh |
 |---|---|
-| `prefiks` | `meng-`, `di-`, `ber-`, `ter-`, `per-`, `ke-`, `se-` |
+| `prefiks` | `meng-`, `peng-`, `di-`, `ber-`, `ter-`, `per-`, `ke-`, `se-` |
 | `sufiks` | `-kan`, `-i`, `-an` |
 | `infiks` | `-el-`, `-em-`, `-er-` |
-| `konfiks` | `ke--an`, `pe--an`, `ber--an`, `me--kan` |
+| `konfiks` | `ke--an`, `peng--an`, `ber--an`, `meng--kan` |
 | `klitik` | `-nya`, `-ku`, `-mu`, `-kah`, `-lah`, `-pun` |
 | `prakategorial` | bentuk terikat yang tidak masuk kategori di atas |
 

@@ -11,7 +11,7 @@
 
 | Pertanyaan | Keputusan |
 |---|---|
-| Alomorf (me/meng/mem/men/meny, ber, ter) | **Digabung** — satu tagar per prefiks dasar |
+| Alomorf (meng/mem/men/meny/me, ber, ter) | **Digabung** — satu tagar per prefiks dasar (`meng-` untuk famili me-, `peng-` untuk famili pe-) |
 | Reduplikasi berimbuhan (`ber-R`) | **Dipisah** — tagar `ber-` + tagar `R-` secara terpisah |
 | Konfiks (`ke--an`) | **Dipisah** — tagar `ke-` + tagar `-an` secara terpisah |
 
@@ -166,7 +166,7 @@ Di `KamusAdmin.jsx`, setelah `<FormFooter>` dan sebelum/sesudah `<SeksiMakna>`, 
 │  ↳ saat input fokus, dropdown muncul:                        │
 │  ┌──────────────────────────────────────────────────────┐   │
 │  │  Prefiks                                             │   │
-│  │    me-  meng-  ber-  di-  ter-  per-  ke-  se-  pe- │   │
+│  │    meng-  ber-  di-  ter-  per-  ke-  se-  peng-   │   │
 │  │  Sufiks                                             │   │
 │  │    -an  -kan  -i                                     │   │
 │  │  Klitik                                              │   │
@@ -230,8 +230,8 @@ Karena hanya satu item di baris terakhir, grid `grid-cols-2` otomatis akan meren
 ┌─ Tagar ─────────────────────────────────────────────────────────────────────┐
 │                                                                              │
 │  [R-]  [R--an]  [R--kan]  [R--nya]  [-el-]  [-em-]  [-er-]  [-nya]        │
-│  [-kah]  [-lah]  [-ku]  [-mu]  [-pun]  [me-]  [ber-]  [di-]  [ter-]       │
-│  [per-]  [ke-]  [se-]  [pe-]  [-an]  [-kan]  [-i]  …                       │
+│  [-kah]  [-lah]  [-ku]  [-mu]  [-pun]  [meng-]  [ber-]  [di-]  [ter-]     │
+│  [per-]  [ke-]  [se-]  [peng-]  [-an]  [-kan]  [-i]  …                     │
 │                                                                              │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -251,7 +251,7 @@ Saat ini `ambilKategoriKamus()` memanggil `GET /api/publik/kamus/kategori` yang 
   tagar: [
     { kode: 'R',   nama: 'R-'   },
     { kode: 'R-an', nama: 'R--an' },
-    { kode: 'me',  nama: 'me-'  },
+    { kode: 'meng',  nama: 'meng-'  },
     { kode: 'ber', nama: 'ber-' },
     { kode: 'an',  nama: '-an'  },
     // ... dst, ORDER BY kategori, urutan

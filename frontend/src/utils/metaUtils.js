@@ -131,6 +131,17 @@ export function buildMetaPencarianKamus(kata = '') {
   };
 }
 
+export function buildMetaTagarKamus(tagar = null, total = 0) {
+  if (!tagar) {
+    return { judul: 'Tagar', deskripsi: META_DESKRIPSI_KAMUS_UMUM };
+  }
+  const judul = `Tagar ${tagar.nama}`;
+  const deskripsi = total > 0
+    ? `${total} kata dalam kamus Kateglo bertagar ${tagar.nama}.`
+    : `Daftar kata bertagar ${tagar.nama} di Kateglo.`;
+  return { judul, deskripsi };
+}
+
 export function buildMetaKategoriKamus({ kategori = '', kode = '', labelNama = '' } = {}) {
   const namaKategori = tentukanNamaKategoriDariPath(kategori, kode);
   const sumberLabel = String(labelNama || '').trim() || formatLabelDariSlug(kode);
@@ -355,6 +366,7 @@ export const kamusMetaUtils = {
   tentukanNamaKategoriDariPath,
   buildMetaBrowseKamus,
   buildMetaPencarianKamus,
+  buildMetaTagarKamus,
   buildMetaKategoriKamus,
   buildDeskripsiDetailKamus,
   buildMetaDetailKamus,

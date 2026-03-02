@@ -15,6 +15,7 @@ import {
   buildMetaDetailKamus,
   buildMetaPencarianGlosarium,
   buildMetaKategoriKamus,
+  buildMetaTagarKamus,
   buildMetaPencarianKamus,
   buildMetaPencarianTesaurus,
   buildMetaSumberGlosarium,
@@ -136,6 +137,12 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
       : metaCari.deskripsi;
 
     return { title: `${metaCari.judul} \u2014 Kateglo`, description };
+  }
+
+  // /kamus/tagar/:kode
+  if (path.startsWith('/kamus/tagar/')) {
+    const kodeTagar = seg('/kamus/tagar/');
+    return titled(buildMetaTagarKamus(kodeTagar ? { nama: kodeTagar } : null, 0));
   }
 
   // /kamus/:kategori/:kode

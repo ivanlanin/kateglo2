@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Kamus from '../../../src/halaman/publik/Kamus';
 import { __private } from '../../../src/halaman/publik/Kamus';
-import { cariKamus } from '../../../src/api/apiPublik';
+import { cariEntriPerTagar, cariKamus } from '../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
 let mockParams = {};
@@ -11,6 +11,7 @@ vi.mock('../../../src/api/apiPublik', () => ({
   cariKamus: vi.fn().mockResolvedValue({ data: [], total: 0 }),
   ambilKategoriKamus: vi.fn().mockResolvedValue({}),
   ambilEntriPerKategori: vi.fn().mockResolvedValue({ data: [], total: 0, label: null }),
+  cariEntriPerTagar: vi.fn().mockResolvedValue({ data: [], total: 0, tagar: null }),
 }));
 
 vi.mock('react-router-dom', () => ({
@@ -37,6 +38,7 @@ describe('Kamus', () => {
   beforeEach(() => {
     mockUseQuery.mockReset();
     cariKamus.mockClear();
+    cariEntriPerTagar.mockClear();
     mockParams = {};
   });
 
@@ -182,6 +184,38 @@ describe('Kamus', () => {
 
     expect(screen.getByRole('heading', { name: 'Abjad A' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'akar' })).toBeInTheDocument();
+  });
+
+  it('menampilkan hasil tagar dari route /kamus/tagar/:kode', () => {
+    mockParams = { kategori: 'tagar', kode: 'afiks' };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const { queryKey } = options;
+      if (queryKey[0] === 'kamus-tagar-entri') {
+        return {
+          data: {
+            data: [{ id: 1, entri: 'berlari' }],
+            total: 1,
+            tagar: { nama: 'afiks' },
+          },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Kamus />);
+
+    expect(screen.getByRole('heading', { name: 'Tagar afiks' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'berlari' })).toBeInTheDocument();
+    expect(cariEntriPerTagar).toHaveBeenCalledWith('afiks', {
+      limit: 100,
+      cursor: null,
+      direction: 'next',
+      lastPage: false,
+    });
   });
 
   it('menampilkan hasil kategori dari route /kamus/kelas/:kelas', () => {

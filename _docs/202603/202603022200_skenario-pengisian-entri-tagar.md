@@ -15,7 +15,7 @@ Tabel `entri` berisi beberapa `jenis` yang relevan untuk tagar:
 | `jenis` | Deskripsi | Relevansi |
 |---|---|---|
 | `turunan` | Kata turunan dari kata dasar/prakategorial | **Utama** — punya `induk`, bisa dianotasi otomatis |
-| `prefiks` | Entri yang merupakan unsur prefiks itu sendiri | Relevan (misal: `me-`, `ber-`) |
+| `prefiks` | Entri yang merupakan unsur prefiks itu sendiri | Relevan (misal: `meng-`, `ber-`) |
 | `sufiks` | Entri yang merupakan unsur sufiks | Relevan |
 | `konfiks` | Entri yang merupakan unsur konfiks | Relevan |
 | `klitik` | Entri yang merupakan klitik | Relevan |
@@ -37,7 +37,7 @@ Total entri `turunan` aktif: **24.607 entri**
 | Reduplikasi murni | ~145 | 2,9% | `abar-abar`, `acap-acap`, `aki-aki` |
 | Reduplikasi + `-an` | ~86 | 1,7% | `abuh-abuhan`, `acak-acakan`, `aci-acian` |
 | Reduplikasi + `-nya` | ~6 | 0,1% | `aci-acinya`, `ada-adanya`, `akhir-akhirnya` |
-| Konfiks `me--kan` | tersebar | ~?% | `mengadukan`, `mempersoalkan` |
+| Konfiks `meng--kan` | tersebar | ~?% | `mengadukan`, `mempersoalkan` |
 | Klitik `-nya` | ~6 | 0,1% | `adanya`, `agaknya`, `akibatnya`, `akhirnya` |
 | Klitik `-kah` | ~10 | 0,2% | `berakikah`, `apakah`, `bagaimanakah` |
 | Klitik `-lah` | ~2 | 0,04% | `hendaklah`, `itulah` |
@@ -55,24 +55,16 @@ Berdasarkan analisis data nyata, berikut inventaris tagar yang komprehensif:
 
 | `kode` | `nama` | Keterangan |
 |---|---|---|
-| `me` | `me-` | Prefiks aktif umum (melatih, merasa) |
-| `meng` | `meng-` | Varian me- sebelum vokal/k (mengambil, mengerjakan) |
-| `mem` | `mem-` | Varian me- sebelum b/p (membuat, memperbaiki) |
-| `men` | `men-` | Varian me- sebelum d/t/c/j (mendapat, mentari) |
-| `meny` | `meny-` | Varian me- sebelum s (menyapu, menyela) |
+| `meng` | `meng-` | Prefiks aktif; mencakup semua alomorf me-/mem-/men-/meng-/meny- (melatih, mengambil, membuat, mendapat, menyapu) |
 | `di` | `di-` | Prefiks pasif (diambil, dibuang) |
 | `ber` | `ber-` | Prefiks statis/intransitif (berada, berjalan) |
 | `ter` | `ter-` | Prefiks pasif/hasil/aspek (terjatuh, tersenyum) |
 | `per` | `per-` | Prefiks kausatif (perbesar, perlambat) |
 | `ke` | `ke-` | Prefiks (ketua, kelima) |
 | `se` | `se-` | Prefiks 'satu/semua' (seorang, semuanya) |
-| `pe` | `pe-` | Prefiks agentif (pelari, penulis) |
-| `pem` | `pem-` | Varian pe- (pembuat, pembeli) |
-| `pen` | `pen-` | Varian pe- (penulis, pendata) |
-| `peng` | `peng-` | Varian pe- (pengambil, pengguna) |
-| `peny` | `peny-` | Varian pe- (penyapu, penyelia) |
+| `peng` | `peng-` | Prefiks agentif; mencakup semua alomorf pe-/pem-/pen-/peng-/peny- (pelari, pembuat, penulis, pengambil, penyapu) |
 
-> **Catatan implementasi**: Untuk pengisian tagar, varian alomorfik (me/meng/mem/men/meny dan pe/pem/pen/peng/peny) bisa disatukan menjadi dua tagar generik `me` dan `pe`, karena varian ditentukan secara fonemis otomatis dari akar kata. Tapi menyimpan varian spesifik lebih akurat.
+> **Catatan implementasi**: Varian alomorfik (me-/mem-/men-/meng-/meny- dan pe-/pem-/pen-/peng-/peny-) disatukan ke dalam satu tagar `meng` dan `peng` per famili, sesuai konvensi KBBI, karena varian ditentukan secara fonemis otomatis dari akar kata.
 
 ### 2.2 Kategori `sufiks`
 
@@ -98,11 +90,11 @@ Konfiks adalah kombinasi prefiks+sufiks yang muncul bersamaan sebagai satu unit.
 | `kode` | `nama` | Keterangan |
 |---|---|---|
 | `ke-an` | `ke--an` | Abstraksi/keadaan (kebijakan, keadaan, kemiskinan) |
-| `pe-an` | `pe--an` | Proses/hasil (pelajaran, pembuatan, penerbangan) |
+| `peng-an` | `peng--an` | Proses/hasil (pelajaran, pembuatan, penerbangan) |
 | `per-an` | `per--an` | Abstraksi verbal (perjalanan, persoalan, perdebatan) |
 | `ber-an` | `ber--an` | Resiprokal/intransitif (berlomba-an, berdesakan) |
-| `me-kan` | `me--kan` | Kausatif aktif (menjalankan, mengangkatkan) |
-| `me-i` | `me--i` | Aplikatif aktif (menghampiri, mengikuti) |
+| `meng-kan` | `meng--kan` | Kausatif aktif (menjalankan, mengangkatkan) |
+| `meng-i` | `meng--i` | Aplikatif aktif (menghampiri, mengikuti) |
 | `di-kan` | `di--kan` | Kausatif pasif (dijalankan, diangkatkan) |
 | `di-i` | `di--i` | Aplikatif pasif (dihampiri, diikuti) |
 | `ter-kan` | `ter--kan` | Pasif tidak sengaja + kan (terbuatkan) |
@@ -137,7 +129,7 @@ Ini adalah temuan penting dari analisis data. Reduplikasi dalam bahasa Indonesia
 | `R-kan` | `R--kan` | Reduplikasi + sufiks -kan | aduk-adukan |
 | `R-nya` | `R--nya` | Reduplikasi + klitik -nya | ada-adanya, akhir-akhirnya, asyik-asyiknya |
 | `ber-R` | `ber-R-` | Reduplikasi + prefiks ber- | adik-beradik, anak-beranak, bahu-membahu |
-| `me-R` | `me-R-` | Reduplikasi + prefiks me- | ambil-mengambil, antar-mengantar, balas-membalas |
+| `meng-R` | `meng-R-` | Reduplikasi + prefiks meng- | ambil-mengambil, antar-mengantar, balas-membalas |
 | `ber-R-an` | `ber-R--an` | Reduplikasi + ber- + -an | beramah-ramahan, berdesak-desakan |
 | `ter-R` | `ter-R-` | Reduplikasi + ter- | terkucar-kacir, terkena-kena |
 
@@ -173,7 +165,7 @@ GIVEN: entri = "memperebutkan", induk = "rebut"
    - "ebut" + "kan"     → suffix: -kan, akar: "ebut" (→ rebut dengan fonem awal)
 
 4. Hasil: tagar = [meng, per, kan]
-   → jika ada tagar ke--an, tapi ada prefix DAN suffix → ini konfiks me--kan + per
+  → jika ada tagar ke--an, tapi ada prefix DAN suffix → ini konfiks meng--kan + per
    → tagar final: meng, per, kan  (3 tagar terpisah)
 ```
 
@@ -190,7 +182,7 @@ GIVEN: entri = "memperebutkan", induk = "rebut"
 | `abuh-abuhan` | `abuh` | `abuh` `-` `abuh` + `an` | `R-an` |
 | `adik-beradik` | `adik` | `adik` `-` `ber` + `adik` | `ber-R` |
 | `akhirnya` | `akhir` | `akhir` + `nya` | `nya` |
-| `ambil-mengambil` | `ambil` | `ambil` `-` `meng` + `ambil` | `me-R` |
+| `ambil-mengambil` | `ambil` | `ambil` `-` `meng` + `ambil` | `meng-R` |
 
 **Estimasi cakupan otomatis:**
 
@@ -243,7 +235,7 @@ INSERT INTO tagar (kode, nama, kategori, deskripsi, urutan) VALUES
   ('R-kan',   'R--kan',  'reduplikasi', 'Reduplikasi dengan sufiks -kan', 3),
   ('R-nya',   'R--nya',  'reduplikasi', 'Reduplikasi dengan klitik -nya', 4),
   ('ber-R',   'ber-R-',  'reduplikasi', 'Reduplikasi dengan prefiks ber-', 5),
-  ('me-R',    'me-R-',   'reduplikasi', 'Reduplikasi dengan prefiks me-', 6),
+  ('meng-R',  'meng-R-', 'reduplikasi', 'Reduplikasi dengan prefiks meng-', 6),
   ('ber-R-an','ber-R--an','reduplikasi','Reduplikasi dengan ber- dan -an', 7),
   ('ter-R',   'ter-R-',  'reduplikasi', 'Reduplikasi dengan prefiks ter-', 8);
 ```
@@ -276,7 +268,7 @@ async function deteksiTagar(entri, induk) {
     if (after === before + 'kan') return [{ kode: 'R-kan' }];
     if (after === before + 'nya') return [{ kode: 'R-nya' }];
     if (before === induk && after.startsWith('ber')) return [{ kode: 'ber-R' }];
-    if (before === induk && (after.startsWith('me') || after.startsWith('meng'))) return [{ kode: 'me-R' }];
+    if (before === induk && (after.startsWith('me') || after.startsWith('meng'))) return [{ kode: 'meng-R' }];
     if (entri.startsWith('ber') && after.endsWith('an')) return [{ kode: 'ber-R-an' }];
     // ... dst
     return []; // reduplikasi tidak terdeteksi → tandai manual
@@ -320,13 +312,12 @@ async function deteksiTagar(entri, induk) {
 // Entri "mengambil" → induk "ambil"
 // String entri dimulai dengan "meng", tapi kode tagarnya "meng"
 // Varian: me-, mem-, men-, meny-, meng- → semua dikode sebagai "meng"
-// (atau bisa dibuat tagar terpisah per varian jika dibutuhkan)
 const ALOMORF_ME = ['meng', 'mem', 'men', 'meny', 'me'];
 const ALOMORF_PE = ['peng', 'pem', 'pen', 'peny', 'pe'];
 
 function normalisasiPrefiks(awalan) {
-  if (ALOMORF_ME.includes(awalan)) return 'meng'; // atau 'me' jika satu tagar
-  if (ALOMORF_PE.includes(awalan)) return 'peng'; // atau 'pe'
+  if (ALOMORF_ME.includes(awalan)) return 'meng';
+  if (ALOMORF_PE.includes(awalan)) return 'peng';
   return awalan;
 }
 ```
@@ -337,10 +328,10 @@ function normalisasiPrefiks(awalan) {
 
 Sebelum implementasi script seeder dan skema final:
 
-1. **Alomorf sebagai tagar terpisah atau digabung?**
-   - Opsi A: Satu tagar `meng-` untuk semua varian (me-, mem-, men-, meng-, meny-)
-   - Opsi B: Tagar terpisah per varian (lebih akurat secara linguistik)
-   - **Rekomendasi**: Opsi A (lebih sederhana, cukup untuk keperluan kamus)
+1. **Alomorf sebagai tagar terpisah atau digabung?** ✅ **Diputuskan: Digabung**
+   - Satu tagar `meng-` untuk semua varian (me-, mem-, men-, meng-, meny-)
+   - Satu tagar `peng-` untuk semua varian (pe-, pem-, pen-, peng-, peny-)
+   - Sesuai konvensi KBBI yang menggunakan `meng-` dan `peng-` sebagai bentuk kanonik.
 
 2. **Tagar `ber-R` vs `ber-` + `R`?**
    - Apakah reduplikasi berimbuhan disimpan sebagai *satu* tagar gabungan (`ber-R`)

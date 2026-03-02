@@ -4,7 +4,12 @@
 
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { cariKamus, ambilKategoriKamus, ambilEntriPerKategori } from '../../api/apiPublik';
+import {
+  cariKamus,
+  ambilKategoriKamus,
+  ambilEntriPerKategori,
+  cariEntriPerTagar,
+} from '../../api/apiPublik';
 import { useCursorPagination } from '../../hooks/bersama/useCursorPagination';
 import HalamanDasar from '../../komponen/publik/HalamanDasar';
 import HasilPencarian from '../../komponen/publik/HasilPencarian';
@@ -15,6 +20,7 @@ import { buatPathDetailKamus } from '../../utils/paramUtils';
 import {
   buildMetaBrowseKamus,
   buildMetaKategoriKamus,
+  buildMetaTagarKamus,
   buildMetaPencarianKamus,
   formatAwalKapital,
   NAMA_KATEGORI_BROWSE_KAMUS,
@@ -25,9 +31,9 @@ import {
 const BARIS_KATEGORI = [
   ['abjad', 'kelas_kata'],
   ['bentuk', 'unsur_terikat'],
+  ['tagar'],
   ['ekspresi', 'ragam'],
   ['bahasa', 'bidang'],
-  ['tagar'],
 ];
 
 const OPSI_BENTUK_TAMBAHAN = [
@@ -107,7 +113,9 @@ function Kamus() {
     resetOn: `${kata || ''}|${kategoriAktif || ''}|${kodeAktif || ''}`,
   });
   const modePencarian = Boolean(kata);
+  const modeTagar = Boolean(!kata && kategoriAktif === 'tagar' && kodeAktif);
   const modeKategori = Boolean(!kata && kategoriAktif && kodeAktif);
+  const modeKategoriBiasa = modeKategori && !modeTagar;
   const modeBrowse = !modePencarian && !modeKategori;
 
   const {
@@ -134,6 +142,22 @@ function Kamus() {
   });
 
   const {
+    data: dataTagar,
+    isLoading: isLoadingTagar,
+    isError: isErrorTagar,
+    error: errorTagar,
+  } = useQuery({
+    queryKey: ['kamus-tagar-entri', kodeAktif, cursorState.cursor, cursorState.direction, cursorState.lastPage],
+    queryFn: () => cariEntriPerTagar(kodeAktif, {
+      limit,
+      cursor: cursorState.cursor,
+      direction: cursorState.direction,
+      lastPage: cursorState.lastPage,
+    }),
+    enabled: modeTagar,
+  });
+
+  const {
     data: dataKategori,
     isLoading: isLoadingKategori,
     isError: isErrorKategori,
@@ -146,25 +170,42 @@ function Kamus() {
       direction: cursorState.direction,
       lastPage: cursorState.lastPage,
     }),
-    enabled: modeKategori,
+    enabled: modeKategoriBiasa,
   });
 
   const resultsPencarian = dataPencarian?.data || [];
   const totalPencarian = dataPencarian?.total || 0;
+  const resultsTagar = dataTagar?.data || [];
+  const totalTagar = dataTagar?.total || 0;
   const resultsKategori = dataKategori?.data || [];
   const totalKategori = dataKategori?.total || 0;
   const labelKategori = dataKategori?.label;
+  const tagar = dataTagar?.tagar;
 
-  const isLoading = isLoadingPencarian || isLoadingKategori;
-  const isError = isErrorPencarian || isErrorKategori;
-  const error = errorPencarian || errorKategori;
+  const isLoading = isLoadingPencarian || isLoadingKategori || isLoadingTagar;
+  const isError = isErrorPencarian || isErrorKategori || isErrorTagar;
+  const error = errorPencarian || errorKategori || errorTagar;
 
-  const activePageInfo = modePencarian ? dataPencarian?.pageInfo : dataKategori?.pageInfo;
-  const activeTotal = modePencarian ? totalPencarian : totalKategori;
-  const activeResults = modePencarian ? resultsPencarian : resultsKategori;
+  const activePageInfo = modePencarian
+    ? dataPencarian?.pageInfo
+    : modeTagar
+      ? dataTagar?.pageInfo
+      : dataKategori?.pageInfo;
+  const activeTotal = modePencarian
+    ? totalPencarian
+    : modeTagar
+      ? totalTagar
+      : totalKategori;
+  const activeResults = modePencarian
+    ? resultsPencarian
+    : modeTagar
+      ? resultsTagar
+      : resultsKategori;
   const activeEmptyState = modePencarian
     ? <PesanTidakDitemukan saran={dataPencarian?.saran || []} />
-    : <EmptyResultText text="Tidak ada entri untuk kategori ini." />;
+    : modeTagar
+      ? <EmptyResultText text="Tidak ada entri untuk tagar ini." />
+      : <EmptyResultText text="Tidak ada entri untuk kategori ini." />;
 
   const handlePaginasi = (action) => {
     handleCursor(action, {
@@ -174,11 +215,18 @@ function Kamus() {
   };
 
   const metaHalaman = modeKategori
-    ? buildMetaKategoriKamus({
-      kategori: kategoriAktif,
-      kode: kodeAktif,
-      labelNama: labelKategori?.nama,
-    })
+    ? modeTagar
+      ? buildMetaTagarKamus(
+        (tagar?.nama || kodeAktif)
+          ? { nama: tagar?.nama || kodeAktif }
+          : null,
+        totalTagar
+      )
+      : buildMetaKategoriKamus({
+        kategori: kategoriAktif,
+        kode: kodeAktif,
+        labelNama: labelKategori?.nama,
+      })
     : modePencarian
       ? buildMetaPencarianKamus(kata)
       : buildMetaBrowseKamus();
