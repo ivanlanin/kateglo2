@@ -1,0 +1,456 @@
+id,entri,induk_entri,jenis,kategori_saran,saran
+41641,ada-adanyakah,ada,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+41642,ada-ada saja,ada,turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+42191,ajisesirep,aji (1),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+42237,akalakalan,akal,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+42524,alah-mengalahi,alah (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+71633,almuhit,muhit,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+44554,atas-mengatasi,atas,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+44714,awang-gemawang,awang (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+44839,ayun-temayun,ayun,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+46203,baru-baru ini,baru (1),turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+46477,bebatuan,batu,turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+46534,bebauan,bau (1),turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+47497,bebercak,bercak,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+48544,bebuahan,buah,turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+49269,bebunyian,bunyi (1),turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+49486,bebuyutan,buyut (2),turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+50626,becermin,cermin,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+52563,bederma,derma,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+46801,bedil-bedal,bedil,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+63767,bekerdom-kerdom,kerdom,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+63936,bekerja,kerja,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+63946,bekerjap-kerjap,kerjap,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+63952,bekerlapan,kerlap (1),turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+63961,bekerlip,kerlip (1),turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+63973,bekernyut,kernyut (1),turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+63974,bekernyutan,kernyut (1),turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+64007,bekersik,kersik (2),turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+64009,bekertak,kertak-kertuk,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+64010,bekertak-kertak,kertak-kertuk,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+66353,belacak,lacak (1),turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+66422,belaga,laga (2),turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+66457,belagu,lagu (2),turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+68179,belengkok,lengkok,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+68180,belengkokan,lengkok,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+68204,belengset,lengset,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+68378,belesir,lesir (1),turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+68426,beleter,leter (1),turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+91059,belunjur,unjur,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+75171,bepercikan,percik,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+75207,bepergian,pergi,turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+57399,beperhatian,hati,turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+75316,beperkara,perkara,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+41719,beradik-berkakak,adik,turunan,reduplikasi-ber,Tambahkan tagar ber + R (atau ber + R-* sesuai bentuk).
+42190,berajimumpung,aji (1),turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+46986,berbelaskasihan,belas (1),turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+49522,bercabiran,cobar-cabir,turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+50142,bercebar-cebur,cebur,turunan,reduplikasi-ber,Tambahkan tagar ber + R (atau ber + R-* sesuai bentuk).
+50227,bercekakak-cekikik,cekakak,turunan,reduplikasi-ber,Tambahkan tagar ber + R (atau ber + R-* sesuai bentuk).
+51020,bercoreng-moreng,coreng,turunan,reduplikasi-ber,Tambahkan tagar ber + R (atau ber + R-* sesuai bentuk).
+51202,bercura-bura,cura (2),turunan,reduplikasi-ber,Tambahkan tagar ber + R (atau ber + R-* sesuai bentuk).
+51492,berdahanam,dahan (2),turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+52542,berderetderet,deret (1),turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+70818,berduri,menduri,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+84197,berkesesuaian,suai (1),turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+64143,berketak-ketik,ketak (1),turunan,reduplikasi-ber,Tambahkan tagar ber + R (atau ber + R-* sesuai bentuk).
+64228,berketap-ketip,ketip (3),turunan,reduplikasi-ber,Tambahkan tagar ber + R (atau ber + R-* sesuai bentuk).
+64144,berketuk-ketak,ketak (1),turunan,reduplikasi-ber,Tambahkan tagar ber + R (atau ber + R-* sesuai bentuk).
+68502,berliang-liuk,liang (2),turunan,reduplikasi-ber,Tambahkan tagar ber + R (atau ber + R-* sesuai bentuk).
+70668,bermaulid Rasul,maulid,turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+42188,berpelajaran,ajar,turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+75286,berpemerintahan,perintah,turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+85895,berpenampilan,tampil,turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+86733,berpenaruhan,taruh,turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+88159,berpenerangan,terang,turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+79876,berpenyakitan,sakit,turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+88508,berseketiduran,tidur,turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+81429,berselang-tenggang,selang (2),turunan,reduplikasi-ber,Tambahkan tagar ber + R (atau ber + R-* sesuai bentuk).
+49257,bersibunuh,bunuh,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+49736,bersicakar,cakar (1),turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+50445,bersicengang,cengang,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+50490,bersicepat,cepat,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+51511,bersidahulu,dahulu,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+60367,bersijengket,jengket,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+62793,bersikejar,kejar,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+63730,bersikeras,keras (1),turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+65770,bersikukuh,kukuh,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+66547,bersilaju,laju (1),turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+69418,bersilutu,lutu (2),turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+69537,bersimaharajalela,maharajalela,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+78903,bersirobok,robok (2),turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+85105,bersitabik,tabik (1),turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+87167,bersitegang,tegang,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+87200,bersiteguh,teguh,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+89875,bersitumpu,tumpu,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+90005,bersitungkin,tungkin,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+82838,bersuling,seruling,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+87524,bertelengkup,telungkup,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+87924,bertenggang rasa,tengang rasa,turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+82640,beserban,serban,turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+82642,beserbankan,serban,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+82662,beserdam,serdam,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+82663,beserdawa,serdawa,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+82664,beserdih,serdih,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+82800,beserta,serta (2),turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+88220,beterbangan,terbang (1),turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+88269,beterjunan,terjun,turunan,prefiks-ber,Tambahkan tagar ber + an (atau ber-R-an bila reduplikasi); cek alomorf ber-/be-.
+88282,beterkup,terkup,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+88310,beternak,ternak,turunan,prefiks-ber,Tambahkan tagar ber; cek alomorf ber-/be-.
+45667,bolang-baling,baling (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+49251,bunuhbunuhan,bunuh,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+49762,calar-balar,calar,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+49803,campang-camping,camping,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+50049,carut-marut,carut (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+50054,carut-marut,carut (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+50138,cebar-cebur,cebur,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+49703,cecairan,cair,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+50346,celas-celus,celus,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+70834,cengking-mengking,mengking,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+50646,ceruk-meruk,ceruk,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+50774,cingak-cinguk,cingak,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+50815,cirit-birit,cirit,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+50951,condong-mondong,condong,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+50957,congak-cangik,congak (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+51012,coreng-moreng,coreng,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+51176,cungap-cangip,cungap,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+51491,dahanam,dahan (2),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+51505,dahulu-mendahului,dahulu,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+51552,dalaman,dalam-dalam,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+51711,dansa-dansi,dansa,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+51854,datang-mendatangi,datang,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+52053,dayung-mayung,dayung,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+52061,debak-debuk,debak,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+51950,dedaunan,daun,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+52502,derak-derik,derak,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+46607,di bawah,bawah,turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+68577,dua,lidah (1),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+53999,erang-erot,erang (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+54471,galang-gulung,galang (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+56154,gegoakan,goak (1),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+56615,geguritan,gurit,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+55366,gemeletuk,geletuk,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+55694,genjrang-genjreng,genjrang,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+55740,gerabak-gerubuk,gerabak (3),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+55870,geriak-geriuk,geriak (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+55888,gerit-gerit putih,gerit (2),turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+55931,geruh-gerah,geruh (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+56018,getak-getuk,getuk (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+56020,gial-giul,gial (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+56087,gilang-gemilang,gilang,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+56088,gilap-gemilap,gilap,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+56248,gonjang-ganjing,gonjang,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+56249,gonjlang-ganjling,gonjlang,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+56353,gual-gail,gual (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+56354,gual-gail,gual (3),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+56589,gunung-ganang,gunung,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+56590,gunung-gemunung,gunung,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+56964,hancur-menghancurkan,hancur,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+57701,hina-menghinakan,hina,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+57863,hormat-menghormati,hormat,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+58267,ibunda,ibu,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+58835,inca-binca,inca,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+59082,instruksional,instruksi,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+59540,jejaka,jaka,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+59763,jejampi,jampi,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+59775,jejamu,jamu (1),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+59991,jejaring,jaring,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+60126,jejawi,jawi (3),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+60314,jejenang,jenang (2),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+59974,jemari,jari,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+59992,jemaring,jaring,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+60324,jendal-jendul,jendal,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+60338,jenggar-jenggur,jenggar,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+60353,jengkang-jengkot,jengkang,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+60420,jerah-jerih,jerah (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+60666,jongkang-jangking,jongkang (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+59862,jongkar-jangkir,jangkir (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+59872,jongkat-jangkit,jangkit (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+60872,jungkat-jungkit,jungkat,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+62072,karut-marut,karut,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+62455,kawin-mawin,kawin (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+62582,kebat-kebit,kebat (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+46924,ke belakang,belakang,turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+77439,keberagaman,ragam (1),turunan,konfiks-ke-an,Tambahkan tagar ke-an (konfiks).
+57391,keberhati-hatian,hati,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+67358,keberlarut-larutan,larut (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+50467,kecentang-perenangan,centang perenang,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+62654,kecil-mengecilkan,kecil,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+62666,kecomak-kecimik,kecimik,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+51557,kedalaman,dalam-dalam,turunan,konfiks-ke-an,Tambahkan tagar ke-an (konfiks).
+62726,kedekak-kedekik,kedekik (3),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+52458,ke depan,depan,turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+56587,kegunungapian,gunung,turunan,konfiks-ke-an,Tambahkan tagar ke-an (konfiks).
+68603,kelihatannya,lihat,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+63294,kemak-kemik,kemik (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+74710,kemelesetan,peleset,turunan,konfiks-ke-an,Tambahkan tagar ke-an (konfiks).
+86707,kemenarikan,tarik,turunan,konfiks-ke-an,Tambahkan tagar ke-an (konfiks).
+63306,kempas-kempis,kempis (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+71691,ke muka,muka,turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+63390,kencang-kencung,kencang (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+63397,kencing-mengencingi,kencing,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+63455,kentungan,kentung-kentung,turunan,konfiks-ke-an,Tambahkan tagar ke-an (konfiks).
+63470,kenyat-kenyit,kenyat,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+74788,kepemelukan,peluk (1),turunan,konfiks-ke-an,Tambahkan tagar ke-an (konfiks).
+75841,kepemimpinan,pimpin,turunan,konfiks-ke-an,Tambahkan tagar ke-an (konfiks).
+85438,kepenajaan,taja,turunan,konfiks-ke-an,Tambahkan tagar ke-an (konfiks).
+61966,kepengarangan,karang (2),turunan,konfiks-ke-an,Tambahkan tagar ke-an (konfiks).
+62694,kepengecutan,kecut (1),turunan,konfiks-ke-an,Tambahkan tagar ke-an (konfiks).
+89230,kepenontonan,tonton,turunan,konfiks-ke-an,Tambahkan tagar ke-an (konfiks).
+89752,kepenulisan,tulis,turunan,konfiks-ke-an,Tambahkan tagar ke-an (konfiks).
+63996,kerang-kerot,kerot,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+63682,kerang-keruk,kerang,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+66953,keras,langit,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+63721,keras-mengerasi,keras (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+63975,kerobat-kerabit,kerobat,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+81759,kesemaran,semara,turunan,konfiks-ke-an,Tambahkan tagar ke-an (konfiks).
+81874,kesemena-menaan,semena,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+91803,kesewenang-wenangan,wenang,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+83555,ke sini,sini,turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+83683,ke sisi,sisi,turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+84657,ke sungai,sungai,turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+86024,ke tanah,tanah (1),turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+64227,ketap-ketip,ketip (3),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+87897,ke tengah,tengah (1),turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+88074,ke tepi,tepi,turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+78604,keterepasan,repas,turunan,konfiks-ke-an,Tambahkan tagar ke-an (konfiks).
+55959,ketergesa-gesaan,gesa,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+42187,keterpelajaran,ajar,turunan,konfiks-ke-an,Tambahkan tagar ke-an (konfiks).
+82311,ketidaksenonohan,senonoh,turunan,konfiks-ke-an,Tambahkan tagar ke-an (konfiks).
+91325,keusahawanan,usaha,turunan,konfiks-ke-an,Tambahkan tagar ke-an (konfiks).
+65534,kuas-kais,kuas (3),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+66668,lama-kelamaan,lama,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+67110,lantung-lantang,lantung (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+67374,laserasi,laser,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+67430,lauk-pauk,lauk,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+66566,lelaki,laki,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+66577,lelakon,lakon,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+66954,lelangit,langit,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+68578,lembut,lidah (1),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+68151,lenggak-lenggok,lenggok,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+68248,lentang-lentok,lentok,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+68236,lentang-lentung,lentang (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+68409,letah-letai,letai,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+68500,liang-liuk,liang (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+68501,liang-liut,liang (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+68936,liat-liut,liut (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+67108,lontang-lantung,lantung (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+69080,lopak-lapik,lopak (3),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+69431,maaf-memaafkan,maaf,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+70661,mau(pun) ... mau(pun),mau,turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+42183,membelajarkan,ajar,turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+76389,memontang-mantingkan,pontang-panting,turunan,reduplikasi-meng,Tambahkan tagar meng + kan; validasi pola reduplikasi/alomorf meN- secara manual.
+76403,memorak-perandakan,porak-peranda,turunan,reduplikasi-meng,Tambahkan tagar meng + kan; validasi pola reduplikasi/alomorf meN- secara manual.
+42179,mempelajari,ajar,turunan,prefiks-meng,Tambahkan tagar meng + i; cek peluluhan KPST dan kecocokan induk.
+51554,memperdalam,dalam-dalam,turunan,prefiks-meng,Tambahkan tagar meng; cek peluluhan KPST dan kecocokan induk.
+90969,memperundungkan,undung-undung (1),turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+51548,mendalam,dalam-dalam,turunan,prefiks-meng,Tambahkan tagar meng; cek peluluhan KPST dan kecocokan induk.
+51549,mendalami,dalam-dalam,turunan,prefiks-meng,Tambahkan tagar meng + i; cek peluluhan KPST dan kecocokan induk.
+51550,mendalamkan,dalam-dalam,turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+43039,mengambungambungkan,ambung (1),turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+61571,mengamitkan,kamit-kamit,turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+62129,mengasihani,kasih (1),turunan,prefiks-meng,Tambahkan tagar meng + i; cek peluluhan KPST dan kecocokan induk.
+46925,mengebelakangkan,belakang,turunan,alomorf-menge,Tambahkan tagar meng + kan; pastikan induk monosuku kata.
+49071,mengebumikan,bumi,turunan,alomorf-menge,Tambahkan tagar meng + kan; pastikan induk monosuku kata.
+52459,mengedepan,depan,turunan,alomorf-menge,Tambahkan tagar meng + an; pastikan induk monosuku kata.
+52460,mengedepankan,depan,turunan,alomorf-menge,Tambahkan tagar meng + kan; pastikan induk monosuku kata.
+53810,mengempat puluh hari,empat,turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+76563,mengemprit,prit,turunan,alomorf-menge,Tambahkan tagar meng; pastikan induk monosuku kata.
+71692,mengemuka,muka,turunan,alomorf-menge,Tambahkan tagar meng; pastikan induk monosuku kata.
+71693,mengemukakan,muka,turunan,alomorf-menge,Tambahkan tagar meng + kan; pastikan induk monosuku kata.
+80336,mengesampingkan,samping (1),turunan,alomorf-menge,Tambahkan tagar meng + kan; pastikan induk monosuku kata.
+83556,mengesinikan,sini,turunan,alomorf-menge,Tambahkan tagar meng + kan; pastikan induk monosuku kata.
+83684,mengesisikan,sisi,turunan,alomorf-menge,Tambahkan tagar meng + kan; pastikan induk monosuku kata.
+85378,mengetahui,tahu (1),turunan,alomorf-menge,Tambahkan tagar meng + i; pastikan induk monosuku kata.
+86025,mengetanahkan,tanah (1),turunan,alomorf-menge,Tambahkan tagar meng + kan; pastikan induk monosuku kata.
+87898,mengetengahi,tengah (1),turunan,alomorf-menge,Tambahkan tagar meng + i; pastikan induk monosuku kata.
+87899,mengetengahkan,tengah (1),turunan,alomorf-menge,Tambahkan tagar meng + kan; pastikan induk monosuku kata.
+88075,mengetepikan,tepi,turunan,alomorf-menge,Tambahkan tagar meng + kan; pastikan induk monosuku kata.
+55379,menggeliang-geliutkan,geliang,turunan,reduplikasi-meng,Tambahkan tagar meng + kan; validasi pola reduplikasi/alomorf meN- secara manual.
+57807,menghitam-memutihkan,hitam putih,turunan,reduplikasi-meng,Tambahkan tagar meng + kan; validasi pola reduplikasi/alomorf meN- secara manual.
+64781,mengocar-ngacirkan,kocar-kacir,turunan,reduplikasi-meng,Tambahkan tagar meng + kan; validasi pola reduplikasi/alomorf meN- secara manual.
+65378,mengotak-ngatikkan,kotak-katik,turunan,reduplikasi-meng,Tambahkan tagar meng + kan; validasi pola reduplikasi/alomorf meN- secara manual.
+65624,mengucar-ngacirkan,kucar-kacir,turunan,reduplikasi-meng,Tambahkan tagar meng + kan; validasi pola reduplikasi/alomorf meN- secara manual.
+66211,mengutak-ngatikkan,kutak,turunan,reduplikasi-meng,Tambahkan tagar meng + kan; validasi pola reduplikasi/alomorf meN- secara manual.
+88573,menikung,tikungan,turunan,prefiks-meng,Tambahkan tagar meng; cek peluluhan KPST dan kecocokan induk.
+44079,menyearahkan,arah (1),turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+45014,menyebadani,badan,turunan,prefiks-meng,Tambahkan tagar meng + i; cek peluluhan KPST dan kecocokan induk.
+46901,menyebelah,belah (1),turunan,prefiks-meng,Tambahkan tagar meng; cek peluluhan KPST dan kecocokan induk.
+46903,menyebelahi,belah (1),turunan,prefiks-meng,Tambahkan tagar meng + i; cek peluluhan KPST dan kecocokan induk.
+46904,menyebelahkan,belah (1),turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+52497,menyederajatkan,derajat (1),turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+53235,menyedua,dua (1),turunan,prefiks-meng,Tambahkan tagar meng; cek peluluhan KPST dan kecocokan induk.
+53236,menyeduai,dua (1),turunan,prefiks-meng,Tambahkan tagar meng + i; cek peluluhan KPST dan kecocokan induk.
+53237,menyeduakan,dua (1),turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+58743,menyeimbangkan,imbang (1),turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+59532,menyejajarkan,jajar (1),turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+81437,menyelang-nyelingkan,selang-seling,turunan,reduplikasi-meng,Tambahkan tagar meng + kan; validasi pola reduplikasi/alomorf meN- secara manual.
+67272,menyelaraskan,laras (1),turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+71689,menyemukakan,muka,turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+73213,menyepadan,padan (1),turunan,prefiks-meng,Tambahkan tagar meng + an; cek peluluhan KPST dan kecocokan induk.
+77443,menyeragamkan,ragam (1),turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+77781,menyerangkaikan,rangkai,turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+77994,menyeratakan,rata (1),turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+78017,menyeratus,ratus (1),turunan,prefiks-meng,Tambahkan tagar meng; cek peluluhan KPST dan kecocokan induk.
+78440,menyerempak,rempak (1),turunan,prefiks-meng,Tambahkan tagar meng; cek peluluhan KPST dan kecocokan induk.
+78544,menyerentakkan,rentak (1),turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+78747,menyeribu,ribu,turunan,prefiks-meng,Tambahkan tagar meng; cek peluluhan KPST dan kecocokan induk.
+79328,menyerumahkan,rumah,turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+79479,menyerupa,rupa,turunan,prefiks-meng,Tambahkan tagar meng; cek peluluhan KPST dan kecocokan induk.
+79480,menyerupai,rupa,turunan,prefiks-meng,Tambahkan tagar meng + i; cek peluluhan KPST dan kecocokan induk.
+79481,menyerupakan,rupa,turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+84190,menyesuaikan,suai (1),turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+86588,menyetarafkan,taraf,turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+86579,menyetarakan,tara (1),turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+88687,menyetimbangkan,timbang (1),turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+89473,menyetubuhi,tubuh,turunan,prefiks-meng,Tambahkan tagar meng + i; cek peluluhan KPST dan kecocokan induk.
+89547,menyetujui,tuju (1),turunan,prefiks-meng,Tambahkan tagar meng + i; cek peluluhan KPST dan kecocokan induk.
+89548,menyetujukan,tuju (1),turunan,prefiks-meng,Tambahkan tagar meng + kan; cek peluluhan KPST dan kecocokan induk.
+78422,meremeh-temehkan,remeh,turunan,reduplikasi-meng,Tambahkan tagar meng + kan; validasi pola reduplikasi/alomorf meN- secara manual.
+78518,merenggang gawai,renggang (2),turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+73242,napinadar,padar,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+49292,ngabuburit,burit (2),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+72828,olang-alingan,olang-aling (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+68579,panjang,lidah (1),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+51555,pedalaman,dalam-dalam,turunan,prefiks-peng,Tambahkan tagar peng + an; cek peluluhan KPST dan kecocokan induk.
+74647,pekik-pekuk,pekik,turunan,reduplikasi-peng,Tambahkan tagar peng; validasi pola reduplikasi/alomorf peN- secara manual.
+42178,pelajar,ajar,turunan,prefiks-peng,Tambahkan tagar peng; cek peluluhan KPST dan kecocokan induk.
+42182,pelajaran,ajar,turunan,prefiks-peng,Tambahkan tagar peng + an; cek peluluhan KPST dan kecocokan induk.
+42184,pembelajar,ajar,turunan,prefiks-peng,Tambahkan tagar peng; cek peluluhan KPST dan kecocokan induk.
+42185,pembelajaran,ajar,turunan,prefiks-peng,Tambahkan tagar peng + an; cek peluluhan KPST dan kecocokan induk.
+42180,pemelajar,ajar,turunan,prefiks-peng,Tambahkan tagar peng; cek peluluhan KPST dan kecocokan induk.
+42181,pemelajaran,ajar,turunan,prefiks-peng,Tambahkan tagar peng + an; cek peluluhan KPST dan kecocokan induk.
+49916,pemercantik,cantik (1),turunan,prefiks-peng,Tambahkan tagar peng; cek peluluhan KPST dan kecocokan induk.
+50484,pemercepat,cepat,turunan,prefiks-peng,Tambahkan tagar peng; cek peluluhan KPST dan kecocokan induk.
+50991,pemercontoh,contoh,turunan,prefiks-peng,Tambahkan tagar peng; cek peluluhan KPST dan kecocokan induk.
+50992,pemercontohan,contoh,turunan,prefiks-peng,Tambahkan tagar peng + an; cek peluluhan KPST dan kecocokan induk.
+57395,pemerhati,hati,turunan,prefiks-peng,Tambahkan tagar peng + i; cek peluluhan KPST dan kecocokan induk.
+57396,pemerhatian,hati,turunan,prefiks-peng,Tambahkan tagar peng + an; cek peluluhan KPST dan kecocokan induk.
+72832,pemerolehan,oleh,turunan,prefiks-peng,Tambahkan tagar peng + an; cek peluluhan KPST dan kecocokan induk.
+73984,pemerpanjangan,panjang,turunan,prefiks-peng,Tambahkan tagar peng + an; cek peluluhan KPST dan kecocokan induk.
+80832,pemersatu,satu,turunan,prefiks-peng,Tambahkan tagar peng; cek peluluhan KPST dan kecocokan induk.
+80833,pemersatuan,satu,turunan,prefiks-peng,Tambahkan tagar peng + an; cek peluluhan KPST dan kecocokan induk.
+85305,pemertahanan,tahan (1),turunan,prefiks-peng,Tambahkan tagar peng + an; cek peluluhan KPST dan kecocokan induk.
+51551,pendalaman,dalam-dalam,turunan,prefiks-peng,Tambahkan tagar peng + an; cek peluluhan KPST dan kecocokan induk.
+86924,penertawaan,tawa,turunan,prefiks-peng,Tambahkan tagar peng + an; cek peluluhan KPST dan kecocokan induk.
+52461,pengedepanan,depan,turunan,alomorf-penge,Tambahkan tagar peng + an; pastikan induk monosuku kata.
+71694,pengemuka,muka,turunan,alomorf-penge,Tambahkan tagar peng; pastikan induk monosuku kata.
+71695,pengemukaan,muka,turunan,alomorf-penge,Tambahkan tagar peng + an; pastikan induk monosuku kata.
+85379,pengetahuan,tahu (1),turunan,alomorf-penge,Tambahkan tagar peng + an; pastikan induk monosuku kata.
+86026,pengetanahan,tanah (1),turunan,alomorf-penge,Tambahkan tagar peng + an; pastikan induk monosuku kata.
+89975,penunggangang,tunggang (3),turunan,prefiks-peng,Tambahkan tagar peng; cek peluluhan KPST dan kecocokan induk.
+44080,penyearah,arah (1),turunan,prefiks-peng,Tambahkan tagar peng; cek peluluhan KPST dan kecocokan induk.
+58745,penyeimbangan,imbang (1),turunan,prefiks-peng,Tambahkan tagar peng + an; cek peluluhan KPST dan kecocokan induk.
+59533,penyejajaran,jajar (1),turunan,prefiks-peng,Tambahkan tagar peng + an; cek peluluhan KPST dan kecocokan induk.
+67273,penyelarasan,laras (1),turunan,prefiks-peng,Tambahkan tagar peng + an; cek peluluhan KPST dan kecocokan induk.
+77444,penyeragaman,ragam (1),turunan,prefiks-peng,Tambahkan tagar peng + an; cek peluluhan KPST dan kecocokan induk.
+84191,penyesuaian,suai (1),turunan,prefiks-peng,Tambahkan tagar peng + an; cek peluluhan KPST dan kecocokan induk.
+86580,penyetara,tara (1),turunan,prefiks-peng,Tambahkan tagar peng; cek peluluhan KPST dan kecocokan induk.
+86581,penyetaraan,tara (1),turunan,prefiks-peng,Tambahkan tagar peng + an; cek peluluhan KPST dan kecocokan induk.
+84996,penyusur bayar,susur (3),turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+75347,pernak-pernik,pernik,turunan,reduplikasi-peng,Tambahkan tagar peng; validasi pola reduplikasi/alomorf peN- secara manual.
+75657,piat-piut,piat (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+76276,polang-paling,polang,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+76517,premanisme,preman (1),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+76518,premanisme,preman (2),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+77984,purata,rata (1),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+78196,redep-redup,redup,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+78397,rembah-rembih,rembah (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+78420,remeh-cemeh,remeh,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+78419,remeh-temeh,remeh,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+77696,reramuan,ramu,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+77763,rerangka,rangka (1),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+77882,reranting,ranting,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+78774,rerimbun,rimbun,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+79208,reruku,ruku (1),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+79381,rerumputan,rumput,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+79448,reruntuhan,runtuh,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+78995,rompang-romping,rompang (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+80774,sasarannya,sasar (4),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+80983,sayur-mayur,sayur,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+42242,seakal budi,akal,turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+46748,seberapa,beberapa,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+81142,segan-menyegani,segan,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+46980,selar-belar,belar,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+81680,seluk-semeluk,seluk (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+69850,semaksimal mungkin,maksimal,turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+83352,semilir,silir (1),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+82155,senggang-tenggang,senggang,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+73361,sepemagutan,pagut (2),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+73491,sepemakai,pakai,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+73694,sepemanah,panah,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+73810,sepemandangan,pandang,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+73863,sepemanggil,panggil,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+74786,sepemeluk,peluk (1),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+74787,sepemelukan,peluk (1),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+86037,sepenanak,tanak,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+86356,sepenanggungan,tanggung (1),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+86414,sepenangkap,tangkap,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+88800,sepeninggal,tinggal,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+78020,seperseratus,ratus (1),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+77449,seragam sebahu,ragam (2),turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+82709,serak-serik,serik (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+82636,serba-serbi,serba (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+82794,serta-menyertai,serta (2),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+82874,sesal-menyesali,sesal,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+82186,sesengggukan,sengguk (2),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+83271,silakanlah,sila (1),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+83350,silir-semilir,silir (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+83461,sinar-seminar,sinar (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+83462,sinar-suminar,sinar (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+75453,sipesan,pesan (2),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+85111,tabir-mabir,tabir,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+85122,tabrak-tubruk,tabrak,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+85697,tali-temali,tali (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+85722,talun-temalun,talun,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+86986,tayum-temayum,tayum,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+50635,tecerna,cerna,turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+55808,tegerbang-gerbang,gerbang (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+63935,tekerjakan,kerja,turunan,prefiks-ter,Tambahkan tagar ter + kan; cek alomorf ter-/te-.
+63954,tekerlap,kerlap (2),turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+64006,tekersik,kersik (2),turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+67023,telanjuk,lanjuk,turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+68254,telentung,lentung (2),turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+85696,temali,tali (1),turunan,prefiks-ter,Tambahkan tagar ter + i; cek alomorf ter-/te-.
+48649,teperbuat,buat (1),turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+75159,tepercaya,percaya,turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+75169,tepercik,percik,turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+75173,tepercit,percit,turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+75174,tepercul,percul,turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+52027,teperdaya,daya (1),turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+75210,tepergok,pergok,turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+57398,teperhatikan,hati,turunan,prefiks-ter,Tambahkan tagar ter + kan; cek alomorf ter-/te-.
+75328,teperling,perling (2),turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+75337,teperlus,perlus,turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+75341,tepermanai,permana,turunan,prefiks-ter,Tambahkan tagar ter + i; cek alomorf ter-/te-.
+75375,tepersil,persil (1),turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+66912,terbelangah,langah,turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+51017,tercoreng-moreng,coreng,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+42186,terpelajar,ajar,turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+80642,tersara bara,sara,turunan,frasa-spasi,"Tinjau manual: frasa/spasi. Verifikasi apakah tetap jenis turunan; jika ya, tetapkan tagar afiks dominan secara manual."
+86940,tertawak,tawak-tawak,turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+82648,teserbu,serbu,turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+82689,tesergam,sergam,turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+82694,tesergap,sergap,turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+82746,teserlah,serlah,turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+82747,teserling,serling,turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+85138,tetabuhan,tabuh,turunan,prefiks-ter,Tambahkan tagar ter + an; cek alomorf ter-/te-.
+85939,tetamu,tamu,turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+88921,tetirah,tirah,turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+89372,tetua,tua,turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+89443,tetuang,tuang-tuang,turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+89791,tetumbuhan,tumbuh,turunan,prefiks-ter,Tambahkan tagar ter + an; cek alomorf ter-/te-.
+89997,tetunggul,tunggul (2),turunan,prefiks-ter,Tambahkan tagar ter; cek alomorf ter-/te-.
+85762,tinambah,tambah,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+88931,tirai-mirai,tirai,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+89970,tunggang-tunggik,tunggang (3),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+89959,tunggang-tungging,tunggang (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+89971,tunggang-tunggit,tunggang (3),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+90148,turun-temurun,turun (1),turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+68580,ular,lidah (1),turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+90988,unggul-mengungguli,unggul,turunan,reduplikasi-lain,"Tinjau manual: reduplikasi variasi bunyi/idiomatik. Pilih antara R, R-an, R-nya, atau gabungan dengan prefiks."
+91219,urbanisasi,urban,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+91324,usahawan,usaha,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+91643,wewangian,wangi,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+91655,wewara,wara,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).
+91799,wewenang,wenang,turunan,manual-lain,Tinjau manual kasus tidak beraturan (serapan/arkais/idiom/zero-derivation).

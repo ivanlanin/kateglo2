@@ -32,7 +32,7 @@ const kelompokMenuAdmin = [
     judul: 'Audit',
     items: [
       { path: '/redaksi/audit-makna', label: 'Makna', izin: 'audit_makna' },
-      { path: '/redaksi/audit-tagar', label: 'Audit Tagar', izin: 'audit_tagar' },
+      { path: '/redaksi/audit-tagar', label: 'Tagar', izin: 'audit_tagar' },
     ],
   },
   {

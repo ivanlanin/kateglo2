@@ -1,0 +1,57 @@
+{
+  "total": 455,
+  "grouped": [
+    {
+      "kategori": "reduplikasi-lain",
+      "jumlah": 127
+    },
+    {
+      "kategori": "prefiks-ber",
+      "jumlah": 72
+    },
+    {
+      "kategori": "manual-lain",
+      "jumlah": 67
+    },
+    {
+      "kategori": "prefiks-meng",
+      "jumlah": 43
+    },
+    {
+      "kategori": "prefiks-ter",
+      "jumlah": 34
+    },
+    {
+      "kategori": "prefiks-peng",
+      "jumlah": 29
+    },
+    {
+      "kategori": "frasa-spasi",
+      "jumlah": 23
+    },
+    {
+      "kategori": "konfiks-ke-an",
+      "jumlah": 18
+    },
+    {
+      "kategori": "alomorf-menge",
+      "jumlah": 15
+    },
+    {
+      "kategori": "reduplikasi-ber",
+      "jumlah": 10
+    },
+    {
+      "kategori": "reduplikasi-meng",
+      "jumlah": 10
+    },
+    {
+      "kategori": "alomorf-penge",
+      "jumlah": 5
+    },
+    {
+      "kategori": "reduplikasi-peng",
+      "jumlah": 2
+    }
+  ]
+}

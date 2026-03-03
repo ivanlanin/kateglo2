@@ -322,6 +322,21 @@ function normalisasiPrefiks(awalan) {
 }
 ```
 
+### Penanganan peluluhan KPST (`k/p/s/t`) pada `meng-`/`peng-`
+
+Saat prefiks meN-/peN- menempel pada akar berawalan `k/p/s/t`, fonem awal akar dapat luluh:
+
+- `kenal` → `mengenal`, `pengenal`
+- `pakai` → `memakai`, `pemakai`
+- `siram` → `menyiram`, `penyiram`
+- `tukar` → `menukar`, `penukar`
+
+Aturan implementasi:
+
+- Peluluhan hanya dianggap valid untuk keluarga prefiks `meN-`/`peN-`.
+- Kecocokan akar diterima jika `sisa_setelah_prefiks === induk.slice(1)` **dan** huruf awal induk ada di himpunan `k/p/s/t`.
+- Hasil tagar tetap dinormalisasi ke bentuk kanonik: `meng` atau `peng`.
+
 ---
 
 ## 6. Pertanyaan Baru yang Perlu Dikonfirmasi

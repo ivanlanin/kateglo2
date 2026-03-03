@@ -48,6 +48,8 @@ const PREFIXES = [
   { str: 'memper', tags: ['meng', 'per']  },
   { str: 'diper',  tags: ['di', 'per']    },
   { str: 'mempe',  tags: ['meng', 'peng'] },
+  { str: 'menge',  tags: ['meng']         },
+  { str: 'penge',  tags: ['peng']         },
   { str: 'terpe',  tags: ['ter', 'peng']  },
   { str: 'berpe',  tags: ['ber', 'peng']  },
   { str: 'sepe',   tags: ['se', 'peng']   },
@@ -82,6 +84,10 @@ const SUFFIXES = [
   { str: 'ku',  tag: 'ku'  },
   { str: 'i',   tag: 'i'   },
 ];
+
+const PREFIXES_NASAL = new Set(['me', 'mem', 'men', 'meng', 'meny', 'pe', 'pem', 'pen', 'peng', 'peny']);
+const HURUF_PELULUHAN_KPST = new Set(['k', 'p', 's', 't']);
+const TAGAR_REDUP_GABUNGAN_TERSEDIA = new Set(['R-an', 'R-nya']);
 
 // ============================================================
 // Utilitas: normalisasi teks induk
@@ -140,6 +146,53 @@ function mapSuffix(suf) {
   return found ? found.tag : null;
 }
 
+/**
+ * Cek apakah prefiks termasuk keluarga nasal meN-/peN-.
+ * @param {string} pre
+ * @returns {boolean}
+ */
+function isPrefiksNasal(pre) {
+  return PREFIXES_NASAL.has(pre);
+}
+
+/**
+ * Cek kecocokan peluluhan KPST.
+ * Contoh: kenal→enal, pakai→akai, siram→iram, tukar→ukar.
+ * @param {string} induk
+ * @param {string} kandidat
+ * @returns {boolean}
+ */
+function isPeluluhanKPST(induk, kandidat) {
+  if (!induk || induk.length < 2) return false;
+  if (!kandidat) return false;
+  return HURUF_PELULUHAN_KPST.has(induk[0]) && induk.slice(1) === kandidat;
+}
+
+/**
+ * Perkiraan sederhana jumlah suku kata berbasis kelompok vokal.
+ * Digunakan untuk aturan alomorf menge- (dasar monosuku kata).
+ * @param {string} kata
+ * @returns {boolean}
+ */
+function isMonosukuKata(kata) {
+  if (!kata) return false;
+  const normalized = kata
+    .toLowerCase()
+    .replace(/[^a-z]/g, '');
+  if (!normalized) return false;
+  const vokalGroups = normalized.match(/[aiueo]+/g) || [];
+  return vokalGroups.length === 1;
+}
+
+/**
+ * Prefiks alomorf khusus yang hanya valid untuk dasar monosuku kata.
+ * @param {string} pre
+ * @returns {boolean}
+ */
+function isPrefiksKhususMonosuku(pre) {
+  return pre === 'menge' || pre === 'penge';
+}
+
 // ============================================================
 // Deteksi entri non-reduplikasi
 // ============================================================
@@ -157,9 +210,15 @@ function mapSuffix(suf) {
  * @returns {string[]|null} array kode tagar, atau null jika tidak terdeteksi
  */
 function detectNonReduplikasi(entri, induk) {
-  // Jika induk multi-kata (mis. "alih aksara"), coba juga versi tanpa spasi ("alihaksara")
-  const indukVariants = [induk];
-  if (induk.includes(' ')) indukVariants.push(induk.replace(/\s+/g, ''));
+  // Variasi induk untuk pencocokan string:
+  // - bentuk asli
+  // - tanpa spasi (alih aksara -> alihaksara)
+  // - tanpa spasi dan tanda hubung (desas-desus -> desasdesus)
+  const indukVariants = Array.from(new Set([
+    induk,
+    induk.replace(/\s+/g, ''),
+    induk.replace(/[\s-]+/g, ''),
+  ].filter(Boolean)));
 
   // --- Strategi 1: induk sebagai substring langsung ---
   for (const indukVar of indukVariants) {
@@ -168,6 +227,8 @@ function detectNonReduplikasi(entri, induk) {
 
     const pre = entri.slice(0, idx);
     const suf = entri.slice(idx + indukVar.length);
+
+    if (isPrefiksKhususMonosuku(pre) && !isMonosukuKata(indukVar)) continue;
 
     // Tidak ada imbuhan sama sekali → entri == induk (lewati)
     if (!pre && !suf) return [];
@@ -188,16 +249,22 @@ function detectNonReduplikasi(entri, induk) {
   for (const { str: preStr, tags: preTags } of PREFIXES) {
     if (!entri.startsWith(preStr)) continue;
     const afterPre = entri.slice(preStr.length);
+    const allowPeluluhan = isPrefiksNasal(preStr);
 
     // Coba dengan sufiks
     for (const { str: sufStr, tag: sufTag } of SUFFIXES) {
       if (!afterPre.endsWith(sufStr)) continue;
       const middle = afterPre.slice(0, -sufStr.length);
 
-      if (
-        middle === induk ||
-        (induk.length > 1 && induk.slice(1) === middle)
-      ) {
+      const cocokAkar = indukVariants.some((indukVar) => (
+        (!isPrefiksKhususMonosuku(preStr) || isMonosukuKata(indukVar))
+        && (
+        middle === indukVar ||
+        (allowPeluluhan && isPeluluhanKPST(indukVar, middle))
+        )
+      ));
+
+      if (cocokAkar) {
         const tagSet = new Set(preTags);
         tagSet.add(sufTag);
         return [...tagSet];
@@ -205,17 +272,22 @@ function detectNonReduplikasi(entri, induk) {
     }
 
     // Coba tanpa sufiks
-    if (
-      afterPre === induk ||
-      (induk.length > 1 && induk.slice(1) === afterPre)
-    ) {
+    const cocokTanpaSufiks = indukVariants.some((indukVar) => (
+      (!isPrefiksKhususMonosuku(preStr) || isMonosukuKata(indukVar))
+      && (
+      afterPre === indukVar ||
+      (allowPeluluhan && isPeluluhanKPST(indukVar, afterPre))
+      )
+    ));
+
+    if (cocokTanpaSufiks) {
       return [...preTags];
     }
   }
 
   // --- Strategi 3: sufiks/klitik saja (tanpa prefiks) ---
   for (const { str: sufStr, tag: sufTag } of SUFFIXES) {
-    if (entri === induk + sufStr) return [sufTag];
+    if (indukVariants.some((indukVar) => entri === indukVar + sufStr)) return [sufTag];
   }
 
   return null; // tidak terdeteksi
@@ -242,6 +314,35 @@ function detectNonReduplikasi(entri, induk) {
  * @returns {string[]|null}
  */
 function detectReduplikasi(entri, _induk) {
+  const induk = (_induk || '').trim().toLowerCase();
+
+  if (induk) {
+    const indukVariants = Array.from(new Set([
+      induk,
+      induk.replace(/\s+/g, ''),
+      induk.replace(/[\s-]+/g, ''),
+    ].filter(Boolean)));
+
+    // Pola: prefiks + induk(berhubung/majemuk) + (opsional) sufiks
+    // Contoh: mendesas-desuskan (men + desas-desus + kan), mengagak-agihkan (meng + agak-agih + kan)
+    for (const { str: preStr, tags: preTags } of PREFIXES) {
+      if (!entri.startsWith(preStr)) continue;
+      const afterPre = entri.slice(preStr.length);
+
+      for (const indukVar of indukVariants) {
+        if (afterPre === indukVar) return [...preTags];
+
+        for (const { str: sufStr, tag: sufTag } of SUFFIXES) {
+          if (afterPre === indukVar + sufStr) {
+            const tagSet = new Set(preTags);
+            tagSet.add(sufTag);
+            return [...tagSet];
+          }
+        }
+      }
+    }
+  }
+
   const firstHyphen = entri.indexOf('-');
   if (firstHyphen < 0) return null;
 
@@ -256,8 +357,7 @@ function detectReduplikasi(entri, _induk) {
     if (right === left + sufStr) {
       // R + sufiks → untuk R-an, R-kan, R-nya gunakan kode gabungan jika ada
       const combined = `R-${sufStr}`;
-      // Kode gabungan yang tersedia dalam tagar: R-an, R-kan, R-nya
-      if (['R-an', 'R-kan', 'R-nya'].includes(combined)) return [combined];
+      if (TAGAR_REDUP_GABUNGAN_TERSEDIA.has(combined)) return [combined];
       // Lainnya → R + sufiks terpisah
       return ['R', sufTag];
     }
@@ -290,6 +390,52 @@ function detectReduplikasi(entri, _induk) {
         (right.length > 1 && right.slice(1) === leftAfterPre)
       ) {
         return ['R', ...preTags];
+      }
+    }
+  }
+
+  // Pola prefiks + reduplikasi dasar: preX-X atau preX-X+suf
+  // Contoh:
+  // - berhadap-hadapan   => ber + R-an
+  // - bergagah-gagahan   => ber + R-an
+  // - bergembar-gembor   => ber + R (reduplikasi variasi bunyi)
+  for (const { str: preStr, tags: preTags } of PREFIXES) {
+    if (!left.startsWith(preStr)) continue;
+    const leftRoot = left.slice(preStr.length);
+    if (!leftRoot) continue;
+
+    const kandidatAkar = [leftRoot];
+    if (preStr === 'ber' && /^[aiueo]/.test(leftRoot)) {
+      kandidatAkar.push(`r${leftRoot}`);
+    }
+
+    // preX-X
+    if (kandidatAkar.some((akar) => right === akar)) return [...preTags, 'R'];
+
+    // preX-X+suf
+    for (const { str: sufStr, tag: sufTag } of SUFFIXES) {
+      if (kandidatAkar.some((akar) => right === akar + sufStr)) {
+        const combined = `R-${sufStr}`;
+        if (TAGAR_REDUP_GABUNGAN_TERSEDIA.has(combined)) {
+          return [...preTags, combined];
+        }
+        return [...preTags, 'R', sufTag];
+      }
+    }
+
+    // preX-Y (reduplikasi variasi bunyi / dwilingga salin suara) dengan kemiripan kuat
+    // Contoh: bergembar-gembor
+    if (
+      right.length === leftRoot.length &&
+      right.length >= 4 &&
+      right.slice(0, 4) === leftRoot.slice(0, 4)
+    ) {
+      let beda = 0;
+      for (let i = 0; i < right.length; i += 1) {
+        if (right[i] !== leftRoot[i]) beda += 1;
+      }
+      if (beda > 0 && beda <= 2) {
+        return [...preTags, 'R'];
       }
     }
   }
