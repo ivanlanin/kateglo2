@@ -99,8 +99,9 @@ describe('TataLetakAdmin', () => {
 
     expect(screen.getByRole('heading', { name: 'Leksikon' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Kamus' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Tagar' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Audit Tagar' })).toBeInTheDocument();
+    const menuTagar = screen.getAllByRole('link', { name: 'Tagar' });
+    expect(menuTagar.some((link) => link.getAttribute('href') === '/redaksi/tagar')).toBe(true);
+    expect(menuTagar.some((link) => link.getAttribute('href') === '/redaksi/audit-tagar')).toBe(true);
   });
 
   it('logout tetap berjalan saat panel menu terbuka', () => {

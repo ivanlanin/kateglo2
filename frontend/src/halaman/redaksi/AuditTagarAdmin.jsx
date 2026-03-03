@@ -15,31 +15,38 @@ import { buatPathDetailKamus } from '../../utils/paramUtils';
 import {
   useDaftarAuditTagarAdmin,
   useDaftarTagarUntukPilih,
+  useKategoriLabelRedaksi,
   useTagarEntri,
   useSimpanTagarEntri,
 } from '../../api/apiAdmin';
 
-const opsiJenis = [
-  { value: '', label: 'Semua jenis' },
-  { value: 'turunan', label: 'Turunan' },
-  { value: 'prefiks', label: 'Prefiks' },
-  { value: 'sufiks', label: 'Sufiks' },
-  { value: 'konfiks', label: 'Konfiks' },
-  { value: 'klitik', label: 'Klitik' },
-  { value: 'prakategorial', label: 'Prakategorial' },
+const opsiJenisBawaan = [
   { value: 'dasar', label: 'Dasar' },
+  { value: 'turunan', label: 'Turunan' },
+  { value: 'gabungan', label: 'Gabungan' },
   { value: 'idiom', label: 'Idiom' },
   { value: 'peribahasa', label: 'Peribahasa' },
+  { value: 'varian', label: 'Varian' },
 ];
+
+const kategoriLabelRedaksi = ['bentuk-kata'];
+
+function mapOpsiLabel(labels = [], { includeEmpty = true, emptyLabel = '— Pilih —' } = {}) {
+  const mapped = labels.map((item) => {
+    const kode = item?.kode ?? '';
+    const nama = item?.nama ?? '';
+    return { value: kode, label: String(nama || kode) };
+  });
+
+  if (!includeEmpty) return mapped;
+  return [{ value: '', label: emptyLabel }, ...mapped];
+}
 
 const opsiPunyaTagar = [
   { value: '', label: '—Status Tagar—' },
   { value: '1', label: 'Bertagar' },
   { value: '0', label: 'Nirtagar' },
 ];
-
-const DEFAULT_FILTER_JENIS = 'turunan';
-const DEFAULT_FILTER_PUNYA_TAGAR = '0';
 
 const warnaTagar = {
   prefiks: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
@@ -181,15 +188,25 @@ function AuditTagarAdmin() {
     lastPage,
   } = usePencarianAdmin(50);
 
-  const [filterJenisDraft, setFilterJenisDraft] = useState(DEFAULT_FILTER_JENIS);
-  const [filterJenis, setFilterJenis] = useState(DEFAULT_FILTER_JENIS);
-  const [filterPunyaTagarDraft, setFilterPunyaTagarDraft] = useState(DEFAULT_FILTER_PUNYA_TAGAR);
-  const [filterPunyaTagar, setFilterPunyaTagar] = useState(DEFAULT_FILTER_PUNYA_TAGAR);
+  const [filterJenisDraft, setFilterJenisDraft] = useState('');
+  const [filterJenis, setFilterJenis] = useState('');
+  const [filterPunyaTagarDraft, setFilterPunyaTagarDraft] = useState('');
+  const [filterPunyaTagar, setFilterPunyaTagar] = useState('');
   const [filterTagarDraft, setFilterTagarDraft] = useState('');
   const [filterTagar, setFilterTagar] = useState('');
   const [entriDipilih, setEntriDipilih] = useState(null);
 
+  const { data: respLabelKategori } = useKategoriLabelRedaksi(kategoriLabelRedaksi);
   const { data: daftarTagarResp } = useDaftarTagarUntukPilih();
+
+  const opsiJenis = useMemo(() => {
+    const kategori = respLabelKategori?.data || {};
+    const jenisDb = mapOpsiLabel(kategori['bentuk-kata'] || [], { includeEmpty: false });
+    const pilihanTanpaKosong = (jenisDb.length ? jenisDb : opsiJenisBawaan)
+      .filter((item) => String(item?.value || '').trim());
+    return [{ value: '', label: '—Jenis—' }, ...pilihanTanpaKosong];
+  }, [respLabelKategori]);
+
   const opsiTagar = useMemo(() => ([
     { value: '', label: '—Jenis Tagar—' },
     ...(daftarTagarResp?.data || []).map((item) => ({ value: String(item.id), label: item.nama })),
@@ -208,7 +225,6 @@ function AuditTagarAdmin() {
 
   const daftar = resp?.data || [];
   const total = Number(resp?.total || 0);
-  const cakupan = resp?.cakupan || { totalTurunan: 0, sudahBertagar: 0, persentase: 0 };
 
   const kolom = [
     {
@@ -266,10 +282,10 @@ function AuditTagarAdmin() {
 
   const handleReset = () => {
     setCari('');
-    setFilterJenisDraft(DEFAULT_FILTER_JENIS);
-    setFilterJenis(DEFAULT_FILTER_JENIS);
-    setFilterPunyaTagarDraft(DEFAULT_FILTER_PUNYA_TAGAR);
-    setFilterPunyaTagar(DEFAULT_FILTER_PUNYA_TAGAR);
+    setFilterJenisDraft('');
+    setFilterJenis('');
+    setFilterPunyaTagarDraft('');
+    setFilterPunyaTagar('');
     setFilterTagarDraft('');
     setFilterTagar('');
     kirimCari('');
@@ -277,20 +293,6 @@ function AuditTagarAdmin() {
 
   return (
     <TataLetak mode="admin" judul="Audit Tagar">
-      <div className="mb-4 rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-bg-elevated">
-        <div className="mb-2 text-sm font-semibold text-gray-700 dark:text-gray-200">Cakupan Tagar Turunan</div>
-        <div className="mb-2 text-sm text-gray-600 dark:text-gray-300">
-          {Number(cakupan.sudahBertagar || 0).toLocaleString('id-ID')} dari {Number(cakupan.totalTurunan || 0).toLocaleString('id-ID')} entri
-        </div>
-        <div className="h-2 overflow-hidden rounded bg-gray-200 dark:bg-gray-700">
-          <div
-            className="h-full bg-blue-600"
-            style={{ width: `${Math.max(0, Math.min(Number(cakupan.persentase || 0), 100))}%` }}
-          />
-        </div>
-        <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">{Number(cakupan.persentase || 0)}%</div>
-      </div>
-
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
