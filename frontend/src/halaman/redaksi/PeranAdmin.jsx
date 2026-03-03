@@ -31,6 +31,7 @@ import {
 } from '../../komponen/redaksi/FormulirAdmin';
 import KotakCentang from '../../komponen/redaksi/KotakCentang';
 import { useSelectableIds } from '../../hooks/redaksi/useSelectableIds';
+import { formatBilanganRibuan } from '../../utils/formatUtils';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
 const nilaiAwal = { kode: '', nama: '', keterangan: '', akses_redaksi: false, izin_ids: [] };
@@ -41,12 +42,14 @@ const kolom = [
   {
     key: 'jumlah_pengguna',
     label: 'Pengguna',
-    render: (item) => item.jumlah_pengguna ?? 0,
+    align: 'right',
+    render: (item) => formatBilanganRibuan(item.jumlah_pengguna),
   },
   {
     key: 'jumlah_izin',
     label: 'Izin',
-    render: (item) => item.jumlah_izin ?? 0,
+    align: 'right',
+    render: (item) => formatBilanganRibuan(item.jumlah_izin),
   },
   {
     key: 'akses_redaksi',

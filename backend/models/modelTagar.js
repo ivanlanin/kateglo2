@@ -212,13 +212,20 @@ class ModelTagar {
     const whereClause = whereParts.length ? `WHERE ${whereParts.join(' AND ')}` : '';
 
     const dataResult = await db.query(
-      `SELECT id, kode, nama, kategori, deskripsi, urutan, aktif
+      `SELECT t.id, t.kode, t.nama, t.kategori, t.deskripsi, t.urutan, t.aktif,
+              COALESCE(et_count.jumlah_entri, 0) AS jumlah_entri
        FROM tagar
+       t
+       LEFT JOIN LATERAL (
+         SELECT COUNT(*)::int AS jumlah_entri
+         FROM entri_tagar et
+         WHERE et.tagar_id = t.id
+       ) et_count ON TRUE
        ${whereClause}
-       ORDER BY kategori ${orderDesc ? 'DESC' : 'ASC'},
-                urutan   ${orderDesc ? 'DESC' : 'ASC'},
-                nama     ${orderDesc ? 'DESC' : 'ASC'},
-                id       ${orderDesc ? 'DESC' : 'ASC'}
+       ORDER BY t.kategori ${orderDesc ? 'DESC' : 'ASC'},
+                t.urutan   ${orderDesc ? 'DESC' : 'ASC'},
+                t.nama     ${orderDesc ? 'DESC' : 'ASC'},
+                t.id       ${orderDesc ? 'DESC' : 'ASC'}
        LIMIT $${limitIdx}`,
       queryParams
     );

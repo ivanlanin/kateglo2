@@ -28,6 +28,7 @@ import {
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormulirAdmin';
+import { formatBilanganRibuan } from '../../utils/formatUtils';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
 const nilaiAwal = { kode: '', nama: '', keterangan: '', glosarium: false, kamus: false, tesaurus: false, etimologi: false };
@@ -35,7 +36,7 @@ const nilaiAwal = { kode: '', nama: '', keterangan: '', glosarium: false, kamus:
 const kolom = [
   { key: 'kode', label: 'Kode' },
   { key: 'nama', label: 'Nama' },
-  { key: 'jumlah_entri', label: 'Jumlah Entri' },
+  { key: 'jumlah_entri', label: 'Entri', align: 'right', render: (item) => formatBilanganRibuan(item.jumlah_entri) },
   { key: 'kamus', label: 'Kamus', render: (item) => <BadgeStatus aktif={Boolean(item.kamus)} /> },
   { key: 'tesaurus', label: 'Tesaurus', render: (item) => <BadgeStatus aktif={Boolean(item.tesaurus)} /> },
   { key: 'glosarium', label: 'Glosarium', render: (item) => <BadgeStatus aktif={Boolean(item.glosarium)} /> },

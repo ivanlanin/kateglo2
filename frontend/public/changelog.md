@@ -4,6 +4,7 @@
 
 - Menampilkan kategori tagar di [Kamus](/kamus), misalnya *[peng-](/kamus/tagar/peng)*
 - Menampilkan lencana tagar di tajuk detail [Kamus](/kamus)
+- Memperbaiki tagar imbuhan dan klitik
 
 ## 2026-03-02 Senin
 

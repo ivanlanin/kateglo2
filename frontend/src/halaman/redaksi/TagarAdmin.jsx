@@ -32,6 +32,7 @@ import {
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormulirAdmin';
+import { formatBilanganRibuan } from '../../utils/formatUtils';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
 const KATEGORI_VALID = [
@@ -70,6 +71,12 @@ const kolom = [
         {item.kategori}
       </span>
     ),
+  },
+  {
+    key: 'jumlah_entri',
+    label: 'Entri',
+    align: 'right',
+    render: (item) => formatBilanganRibuan(item.jumlah_entri),
   },
   { key: 'urutan', label: 'Urutan' },
   {

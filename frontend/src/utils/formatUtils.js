@@ -35,6 +35,13 @@ function formatLocalDateTime(value, { fallback = '-', separator = ' ' } = {}) {
   return dayjs(date).format(`DD MMM YYYY${separator}HH.mm`);
 }
 
+function formatBilanganRibuan(value, { fallback = '0' } = {}) {
+  if (value === null || value === undefined || value === '') return fallback;
+  const angka = Number(value);
+  if (!Number.isFinite(angka)) return fallback;
+  return new Intl.NumberFormat('id-ID').format(Math.trunc(angka));
+}
+
 function pisahNomorHomonim(lema = '') {
   const teks = String(lema || '').trim();
   const match = teks.match(/^(.*)\s\((\d+)\)\s*$/);
@@ -152,6 +159,7 @@ function renderEntriGlosariumTertaut(value = '', renderTautan = null) {
 export {
   parseUtcDate,
   formatLocalDateTime,
+  formatBilanganRibuan,
   pisahNomorHomonim,
   formatLemaHomonim,
   formatNamaBidang,

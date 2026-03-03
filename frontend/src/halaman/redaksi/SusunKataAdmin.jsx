@@ -25,7 +25,7 @@ import {
   useSimpanSusunKataHarianAdmin,
   useSusunKataHarianAdmin,
 } from '../../api/apiAdmin';
-import { formatLocalDateTime } from '../../utils/formatUtils';
+import { formatBilanganRibuan, formatLocalDateTime } from '../../utils/formatUtils';
 
 function tanggalHariIni() {
   const sekarang = new Date();
@@ -46,7 +46,7 @@ const kolom = [
   { key: 'tanggal', label: 'Tanggal' },
   { key: 'panjang', label: 'Panjang' },
   { key: 'kata', label: 'Kata', render: (item) => String(item.kata || '').toUpperCase() },
-  { key: 'jumlahPeserta', label: 'Peserta', render: (item) => Number(item.jumlahPeserta) || 0 },
+  { key: 'jumlahPeserta', label: 'Peserta', align: 'right', render: (item) => formatBilanganRibuan(item.jumlahPeserta) },
 ];
 
 export function buildPanelDataFromDetail(detail, selectedTanggal, selectedPanjang, tanggalQuery) {

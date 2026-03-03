@@ -25,7 +25,7 @@ import {
   ToggleAktif,
   useFormPanel,
 } from '../../komponen/redaksi/FormulirAdmin';
-import { formatLocalDateTime } from '../../utils/formatUtils';
+import { formatBilanganRibuan, formatLocalDateTime } from '../../utils/formatUtils';
 
 const opsiPeriode = [
   { value: '7hari', label: '7 hari terakhir' },
@@ -165,7 +165,8 @@ function PencarianAdmin() {
     {
       key: 'jumlah',
       label: 'Jumlah',
-      render: (item) => Number(item.jumlah || 0).toLocaleString('id-ID'),
+      align: 'right',
+      render: (item) => formatBilanganRibuan(item.jumlah),
     },
     { key: 'tanggal_awal', label: 'Awal', render: (item) => formatTanggalSingkat(item.tanggal_awal) },
     { key: 'tanggal_akhir', label: 'Akhir', render: (item) => formatTanggalSingkat(item.tanggal_akhir) },

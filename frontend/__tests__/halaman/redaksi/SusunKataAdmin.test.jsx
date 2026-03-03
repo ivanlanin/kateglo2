@@ -27,6 +27,7 @@ vi.mock('../../../src/api/apiAdmin', () => ({
 
 vi.mock('../../../src/utils/formatUtils', () => ({
   formatLocalDateTime: vi.fn(() => '2026-03-02 10:00'),
+  formatBilanganRibuan: vi.fn((value) => String(value ?? 0)),
 }));
 
 vi.mock('../../../src/komponen/bersama/TataLetak', () => ({

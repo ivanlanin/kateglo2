@@ -24,6 +24,7 @@ import {
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormulirAdmin';
+import { formatBilanganRibuan } from '../../utils/formatUtils';
 
 const nilaiAwal = {
   id: null,
@@ -67,7 +68,7 @@ function BadgeStatusAudit({ status }) {
 
 const kolom = [
   { key: 'indeks', label: 'Indeks' },
-  { key: 'jumlah', label: 'Jumlah', align: 'center' },
+  { key: 'jumlah', label: 'Jumlah', align: 'right', render: (item) => formatBilanganRibuan(item.jumlah) },
   {
     key: 'status',
     label: 'Status',
@@ -182,7 +183,7 @@ function AuditMaknaAdmin() {
       <PanelGeser buka={panel.buka} onTutup={tutupPanel} judul="Tinjau Audit Makna">
         <PesanForm error={pesan.error} sukses={pesan.sukses} />
         <InputField label="Indeks" name="indeks" value={panel.data.indeks} onChange={panel.ubahField} disabled={true} />
-        <InputField label="Jumlah" name="jumlah" value={panel.data.jumlah} onChange={panel.ubahField} disabled={true} />
+        <InputField label="Jumlah" name="jumlah" value={formatBilanganRibuan(panel.data.jumlah)} onChange={panel.ubahField} disabled={true} />
         <InputField label="Entri ID" name="entri_id" value={panel.data.entri_id || ''} onChange={panel.ubahField} disabled={true} />
         <InputField label="Makna ID" name="makna_id" value={panel.data.makna_id || ''} onChange={panel.ubahField} disabled={true} />
         <TextareaField label="Entri contoh" name="entri_sumber" value={panel.data.entri_sumber || ''} onChange={panel.ubahField} disabled={true} rows={2} />

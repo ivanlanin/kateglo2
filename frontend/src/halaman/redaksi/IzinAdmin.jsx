@@ -29,6 +29,7 @@ import {
 } from '../../komponen/redaksi/FormulirAdmin';
 import KotakCentang from '../../komponen/redaksi/KotakCentang';
 import { useSelectableIds } from '../../hooks/redaksi/useSelectableIds';
+import { formatBilanganRibuan } from '../../utils/formatUtils';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
 const nilaiAwal = { kode: '', nama: '', kelompok: '', peran_ids: [] };
@@ -44,7 +45,8 @@ const kolom = [
   {
     key: 'jumlah_peran',
     label: 'Peran',
-    render: (item) => item.jumlah_peran ?? 0,
+    align: 'right',
+    render: (item) => formatBilanganRibuan(item.jumlah_peran),
   },
   {
     key: 'peran_nama',
