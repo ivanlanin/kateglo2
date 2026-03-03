@@ -124,16 +124,16 @@ Ini adalah temuan penting dari analisis data. Reduplikasi dalam bahasa Indonesia
 
 | `kode` | `nama` | Keterangan | Contoh |
 |---|---|---|---|
-| `R` | `R-` | Reduplikasi murni (X → X-X) | abar-abar, acap-acap, aki-aki |
-| `R-an` | `R--an` | Reduplikasi + sufiks -an | abuh-abuhan, acak-acakan, aci-acian |
-| `R-kan` | `R--kan` | Reduplikasi + sufiks -kan | aduk-adukan |
-| `R-nya` | `R--nya` | Reduplikasi + klitik -nya | ada-adanya, akhir-akhirnya, asyik-asyiknya |
-| `ber-R` | `ber-R-` | Reduplikasi + prefiks ber- | adik-beradik, anak-beranak, bahu-membahu |
-| `meng-R` | `meng-R-` | Reduplikasi + prefiks meng- | ambil-mengambil, antar-mengantar, balas-membalas |
-| `ber-R-an` | `ber-R--an` | Reduplikasi + ber- + -an | beramah-ramahan, berdesak-desakan |
-| `ter-R` | `ter-R-` | Reduplikasi + ter- | terkucar-kacir, terkena-kena |
+| `R.penuh` | `R.penuh` | Reduplikasi murni (X → X-X) | abar-abar, acap-acap, aki-aki |
+| `R.penuh` + `-an` | `R.penuh` + `-an` | Reduplikasi + sufiks -an | abuh-abuhan, acak-acakan, aci-acian |
+| `R.penuh` + `-kan` | `R.penuh` + `-kan` | Reduplikasi + sufiks -kan | aduk-adukan |
+| `R.penuh` + `-nya` | `R.penuh` + `-nya` | Reduplikasi + klitik -nya | ada-adanya, akhir-akhirnya, asyik-asyiknya |
+| `ber-` + `R.penuh` | `ber-` + `R.penuh` | Reduplikasi + prefiks ber- | adik-beradik, anak-beranak, bahu-membahu |
+| `meng-` + `R.penuh` | `meng-` + `R.penuh` | Reduplikasi + prefiks meng- | ambil-mengambil, antar-mengantar, balas-membalas |
+| `ber-` + `R.penuh` + `-an` | `ber-` + `R.penuh` + `-an` | Reduplikasi + ber- + -an | beramah-ramahan, berdesak-desakan |
+| `ter-` + `R.penuh` | `ter-` + `R.penuh` | Reduplikasi + ter- | terkucar-kacir, terkena-kena |
 
-> **Notasi**: `R` menandakan reduplikasi (pengulangan), `--` menandakan posisi akar. Jadi `R--an` berarti akar diulang lalu ditambah `-an`.
+> **Notasi**: `R.penuh` menandakan reduplikasi penuh (pengulangan). Sufiks/klitik tetap ditulis sebagai tag terpisah (`-an`, `-nya`, dst.).
 
 ---
 
@@ -178,11 +178,11 @@ GIVEN: entri = "memperebutkan", induk = "rebut"
 | `abaian` | `abai` | `abai` + `an` | `an` |
 | `adukan` | `aduk` | `aduk` + `kan` | `kan` |
 | `beradab` | `adab` | `ber` + `adab` | `ber` |
-| `abar-abar` | `abar` | `abar` `-` `abar` | `R` |
-| `abuh-abuhan` | `abuh` | `abuh` `-` `abuh` + `an` | `R-an` |
-| `adik-beradik` | `adik` | `adik` `-` `ber` + `adik` | `ber-R` |
+| `abar-abar` | `abar` | `abar` `-` `abar` | `R.penuh` |
+| `abuh-abuhan` | `abuh` | `abuh` `-` `abuh` + `an` | `R.penuh`, `-an` |
+| `adik-beradik` | `adik` | `adik` `-` `ber` + `adik` | `ber-`, `R.penuh` |
 | `akhirnya` | `akhir` | `akhir` + `nya` | `nya` |
-| `ambil-mengambil` | `ambil` | `ambil` `-` `meng` + `ambil` | `meng-R` |
+| `ambil-mengambil` | `ambil` | `ambil` `-` `meng` + `ambil` | `meng-`, `R.penuh` |
 
 **Estimasi cakupan otomatis:**
 
@@ -230,14 +230,11 @@ CONSTRAINT tagar_kategori_check CHECK (
 
 ```sql
 INSERT INTO tagar (kode, nama, kategori, deskripsi, urutan) VALUES
-  ('R',       'R-',      'reduplikasi', 'Reduplikasi murni (X → X-X)', 1),
-  ('R-an',    'R--an',   'reduplikasi', 'Reduplikasi dengan sufiks -an', 2),
-  ('R-kan',   'R--kan',  'reduplikasi', 'Reduplikasi dengan sufiks -kan', 3),
-  ('R-nya',   'R--nya',  'reduplikasi', 'Reduplikasi dengan klitik -nya', 4),
-  ('ber-R',   'ber-R-',  'reduplikasi', 'Reduplikasi dengan prefiks ber-', 5),
-  ('meng-R',  'meng-R-', 'reduplikasi', 'Reduplikasi dengan prefiks meng-', 6),
-  ('ber-R-an','ber-R--an','reduplikasi','Reduplikasi dengan ber- dan -an', 7),
-  ('ter-R',   'ter-R-',  'reduplikasi', 'Reduplikasi dengan prefiks ter-', 8);
+  ('R.penuh', 'R.penuh', 'reduplikasi', 'Reduplikasi penuh (X → X-X)', 1),
+  ('R.salin', 'R.salin', 'reduplikasi', 'Reduplikasi dwilingga salin suara', 2),
+  ('R.purwa', 'R.purwa', 'reduplikasi', 'Reduplikasi dwipurwa', 3),
+  ('R.wasana','R.wasana','reduplikasi', 'Reduplikasi dwiwasana', 4),
+  ('R.tri',   'R.tri',   'reduplikasi', 'Reduplikasi tri-leksikal', 5);
 ```
 
 ---
@@ -262,14 +259,14 @@ async function deteksiTagar(entri, induk) {
     const after = parts.slice(1).join('-');
 
     if (before === after) {
-      return [{ kode: 'R' }];
+      return [{ kode: 'R.penuh' }];
     }
-    if (after === before + 'an') return [{ kode: 'R-an' }];
-    if (after === before + 'kan') return [{ kode: 'R-kan' }];
-    if (after === before + 'nya') return [{ kode: 'R-nya' }];
-    if (before === induk && after.startsWith('ber')) return [{ kode: 'ber-R' }];
-    if (before === induk && (after.startsWith('me') || after.startsWith('meng'))) return [{ kode: 'meng-R' }];
-    if (entri.startsWith('ber') && after.endsWith('an')) return [{ kode: 'ber-R-an' }];
+    if (after === before + 'an') return [{ kode: 'R.penuh' }, { kode: '-an' }];
+    if (after === before + 'kan') return [{ kode: 'R.penuh' }, { kode: '-kan' }];
+    if (after === before + 'nya') return [{ kode: 'R.penuh' }, { kode: '-nya' }];
+    if (before === induk && after.startsWith('ber')) return [{ kode: 'R.penuh' }, { kode: 'ber-' }];
+    if (before === induk && (after.startsWith('me') || after.startsWith('meng'))) return [{ kode: 'R.penuh' }, { kode: 'meng-' }];
+    if (entri.startsWith('ber') && after.endsWith('an')) return [{ kode: 'R.penuh' }, { kode: 'ber-' }, { kode: '-an' }];
     // ... dst
     return []; // reduplikasi tidak terdeteksi → tandai manual
   }

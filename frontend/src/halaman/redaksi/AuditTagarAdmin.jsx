@@ -3,6 +3,7 @@
  */
 
 import { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import TataLetak from '../../komponen/bersama/TataLetak';
 import {
   BarisFilterCariAdmin,
@@ -10,6 +11,7 @@ import {
   usePencarianAdmin,
 } from '../../komponen/redaksi/KomponenAdmin';
 import PanelGeser from '../../komponen/redaksi/PanelGeser';
+import { buatPathDetailKamus } from '../../utils/paramUtils';
 import {
   useDaftarAuditTagarAdmin,
   useDaftarTagarUntukPilih,
@@ -32,9 +34,12 @@ const opsiJenis = [
 
 const opsiPunyaTagar = [
   { value: '', label: '—Status Tagar—' },
-  { value: '1', label: 'Ada tagar' },
-  { value: '0', label: 'Belum ada tagar' },
+  { value: '1', label: 'Bertagar' },
+  { value: '0', label: 'Nirtagar' },
 ];
+
+const DEFAULT_FILTER_JENIS = 'turunan';
+const DEFAULT_FILTER_PUNYA_TAGAR = '0';
 
 const warnaTagar = {
   prefiks: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
@@ -169,7 +174,6 @@ function AuditTagarAdmin() {
     q,
     setOffset,
     kirimCari,
-    hapusCari,
     limit,
     currentPage,
     cursor,
@@ -177,17 +181,17 @@ function AuditTagarAdmin() {
     lastPage,
   } = usePencarianAdmin(50);
 
-  const [filterJenisDraft, setFilterJenisDraft] = useState('turunan');
-  const [filterJenis, setFilterJenis] = useState('turunan');
-  const [filterPunyaTagarDraft, setFilterPunyaTagarDraft] = useState('');
-  const [filterPunyaTagar, setFilterPunyaTagar] = useState('');
+  const [filterJenisDraft, setFilterJenisDraft] = useState(DEFAULT_FILTER_JENIS);
+  const [filterJenis, setFilterJenis] = useState(DEFAULT_FILTER_JENIS);
+  const [filterPunyaTagarDraft, setFilterPunyaTagarDraft] = useState(DEFAULT_FILTER_PUNYA_TAGAR);
+  const [filterPunyaTagar, setFilterPunyaTagar] = useState(DEFAULT_FILTER_PUNYA_TAGAR);
   const [filterTagarDraft, setFilterTagarDraft] = useState('');
   const [filterTagar, setFilterTagar] = useState('');
   const [entriDipilih, setEntriDipilih] = useState(null);
 
   const { data: daftarTagarResp } = useDaftarTagarUntukPilih();
   const opsiTagar = useMemo(() => ([
-    { value: '', label: '—Semua Tagar—' },
+    { value: '', label: '—Jenis Tagar—' },
     ...(daftarTagarResp?.data || []).map((item) => ({ value: String(item.id), label: item.nama })),
   ]), [daftarTagarResp]);
 
@@ -210,10 +214,34 @@ function AuditTagarAdmin() {
     {
       key: 'entri',
       label: 'Entri',
-      render: (item) => <span className="font-medium">{item.entri || '—'}</span>,
+      render: (item) => (item.entri ? (
+        <Link
+          to={buatPathDetailKamus(item.indeks || item.entri)}
+          className="font-medium text-blue-700 hover:underline dark:text-blue-300"
+          aria-label={`Buka detail kamus ${item.entri}`}
+          title="Buka detail kamus"
+          onClick={(event) => event.stopPropagation()}
+        >
+          {item.entri}
+        </Link>
+      ) : '—'),
     },
     { key: 'jenis', label: 'Jenis', render: (item) => item.jenis || '—' },
-    { key: 'induk_entri', label: 'Induk', render: (item) => item.induk_entri || '—' },
+    {
+      key: 'induk_entri',
+      label: 'Induk',
+      render: (item) => (item.induk_entri ? (
+        <Link
+          to={buatPathDetailKamus(item.induk_entri)}
+          className="text-blue-700 hover:underline dark:text-blue-300"
+          aria-label={`Buka detail kamus ${item.induk_entri}`}
+          title="Buka detail kamus"
+          onClick={(event) => event.stopPropagation()}
+        >
+          {item.induk_entri}
+        </Link>
+      ) : '—'),
+    },
     {
       key: 'tagar',
       label: 'Tagar',
@@ -227,19 +255,6 @@ function AuditTagarAdmin() {
         )
       ),
     },
-    {
-      key: 'aksi',
-      label: 'Aksi',
-      render: (item) => (
-        <button
-          type="button"
-          onClick={() => setEntriDipilih(item)}
-          className="rounded border border-blue-300 px-2 py-1 text-xs text-blue-700 hover:bg-blue-50 dark:border-blue-700 dark:text-blue-300 dark:hover:bg-blue-900/20"
-        >
-          Sunting Tagar
-        </button>
-      ),
-    },
   ];
 
   const handleCari = () => {
@@ -250,13 +265,14 @@ function AuditTagarAdmin() {
   };
 
   const handleReset = () => {
-    setFilterJenisDraft('turunan');
-    setFilterJenis('turunan');
-    setFilterPunyaTagarDraft('');
-    setFilterPunyaTagar('');
+    setCari('');
+    setFilterJenisDraft(DEFAULT_FILTER_JENIS);
+    setFilterJenis(DEFAULT_FILTER_JENIS);
+    setFilterPunyaTagarDraft(DEFAULT_FILTER_PUNYA_TAGAR);
+    setFilterPunyaTagar(DEFAULT_FILTER_PUNYA_TAGAR);
     setFilterTagarDraft('');
     setFilterTagar('');
-    hapusCari();
+    kirimCari('');
   };
 
   return (
@@ -317,6 +333,7 @@ function AuditTagarAdmin() {
         pageInfo={resp?.pageInfo}
         currentPage={currentPage}
         onNavigateCursor={setOffset}
+        onKlikBaris={(item) => setEntriDipilih(item)}
       />
 
       <EditorTagarPanel

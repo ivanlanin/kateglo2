@@ -1,0 +1,681 @@
+entri_id,entri,subtype,kode_tagar
+9,"aba-aba",R,R
+16,"abah-abah",R,R
+25,"abal-abal",R,R
+94,"abong-abong",R,R
+116,"abrit-abritan",R.purwa,R.purwa
+155,"abu-abu (1)",R,R
+156,"abu-abu (2)",R,R
+163,"abuk-abuk",R,R
+168,"abun-abun",R,R
+177,"acak-acak",R,R
+181,"acan-acan",R,R
+183,"acang-acang (1)",R,R
+184,"acang-acang (2)",R,R
+201,"aci-aci (1)",R,R
+202,"aci-aci (2)",R,R
+203,"aci-aci kalimat (3)",R.purwa,R.purwa
+236,"adang-adang",R,R
+237,"adap-adapan",R.purwa,R.purwa
+277,"adi-adi",R,R
+479,"agak-agih",R.salin,R.salin
+510,"agar-agar",R,R
+614,"agut-agut",R,R
+674,"ajar-ajar",R,R
+681,"aji-aji (1)",R,R
+682,"aji-aji (2)",R,R
+949,"alai-belai",R.wasana,R.wasana
+968,"alan-alan",R,R
+973,"alang-alang",R,R
+983,"alap-alap",R,R
+1079,"ali-ali",R,R
+1090,"alih-alih",R,R
+1261,"alu-alu",R,R
+1262,"alu-aluan",R.purwa,R.purwa
+1273,"alun-alun",R,R
+1279,"alur-alur",R,R
+1333,"ambah-ambah",R,R
+1336,"ambai-ambai (1)",R,R
+1337,"ambai-ambai (2)",R,R
+1393,"ambreng-ambrengan",R.purwa,R.purwa
+1399,"ambu-ambu (1)",R,R
+1400,"ambu-ambu (2)",R,R
+1408,"ambung-ambung",R,R
+1500,"amin-amin",R,R
+1513,"amit-amit",R,R
+1543,"ampai-ampai",R,R
+1601,"amung-amung",R,R
+1628,"anai-anai",R,R
+1681,"ancak-ancak",R,R
+1685,"ancar-ancar",R,R
+1708,"andang-andang",R,R
+1715,"andeng-andeng",R,R
+1794,"anggel-anggel",R,R
+1814,"anggup-anggip",R.salin,R.salin
+1830,"angkal-angkal",R,R
+1854,"angkul-angkul (1)",R,R
+1855,"angkul-angkul (2)",R,R
+1862,"angkut-angkut",R,R
+1888,"ani-ani",R,R
+1902,"aning-aning",R,R
+1919,"anjang-anjang (1)",R,R
+1920,"anjang-anjang (2)",R,R
+1921,"anjang-anjang (3)",R,R
+1922,"anjang-anjang (4)",R,R
+1923,"anjang-anjang (5)",R,R
+1932,"anjing-anjing (1)",R,R
+1933,"anjing-anjing (2)",R,R
+1984,"antah-berantah",R.wasana,R.wasana
+1997,"antar-antar",R,R
+2051,"anter-anter",R,R
+2179,"antung-antung",R,R
+2199,"anyak-anyik",R.salin,R.salin
+2203,"anyang-anyang",R,R
+2204,"anyang-anyangan",R.purwa,R.purwa
+2257,"api-api (1)",R,R
+2258,"api-api (2)",R,R
+2269,"apit-apit (1)",R,R
+2270,"apit-apit (2)",R,R
+2330,"aprit-apritan",R.purwa,R.purwa
+2335,"apu-apu",R,R
+2393,"arem-arem",R,R
+2424,"ari-ari",R,R
+2525,"aru-aru",R,R
+2554,"asah-asah",R,R
+2718,"asuh-asuh",R,R
+2761,"ati-ati",R,R
+2804,"au-au",R,R
+2946,"awar-awar (1)",R,R
+2947,"awar-awar (2)",R,R
+2953,"awat-awat",R,R
+2957,"awik-awik",R,R
+2964,"awuk-awuk",R,R
+2974,"ayak-ayak",R,R
+2977,"ayam-ayam",R,R
+2982,"ayang-ayang",R,R
+2994,"ayong-ayong",R,R
+3249,"bajang-bajang",R,R
+3256,"baji-baji",R,R
+3354,"balai-balai",R,R
+3391,"bale-bale",R,R
+3603,"bangun-bangun",R,R
+3698,"barat-barat",R,R
+3699,"barau-barau (1)",R,R
+3700,"barau-barau (2)",R,R
+3714,"bare-bare",R,R
+3726,"bari-bari",R,R
+3764,"baru-baru laut",R.purwa,R.purwa
+3774,"barung-barung",R,R
+3787,"basa-basi",R.purwa,R.purwa
+3875,"batir-batir",R,R
+3935,"bayan-bayan",R,R
+4045,"begana-begini",R.purwa,R.purwa
+4179,"belat-belit",R.salin,R.salin
+4302,"belu-belai",R.purwa,R.purwa
+4407,"bengang-bengut",R.purwa,R.purwa
+4413,"benggal-benggil",R.salin,R.salin
+4427,"bengkal-bengkil",R.salin,R.salin
+4429,"bengkang-bengkok",R.purwa,R.purwa
+4430,"bengkang-bengkong",R.salin,R.salin
+4431,"bengkang-bengkung",R.salin,R.salin
+4577,"berang-berang",R,R
+4593,"beras-beras (1)",R,R
+4594,"beras-beras (2)",R,R
+4602,"berek-berek",R,R
+4609,"bereng-bereng",R,R
+4631,"beri-beri",R,R
+4639,"bering-bering",R,R
+4763,"betak-betak (1)",R,R
+4764,"betak-betak (2)",R,R
+4779,"beti-beti",R,R
+4784,"betik-betik",R,R
+4812,"bia-bia",R,R
+4832,"biar-biar",R,R
+4955,"bilang-bilang",R,R
+5007,"bincang-bincut",R.purwa,R.purwa
+5045,"binti-binti",R,R
+5131,"biri-biri",R,R
+5312,"bolak-balik",R.salin,R.salin
+5313,"bolang-baling",R.salin,R.salin
+5375,"bongkar-bangkir",R.salin,R.salin
+5435,"boro-boro",R,R
+5475,"boyo-boyo",R,R
+5576,"buaya-buaya",R,R
+5627,"bugi-bugi",R,R
+5670,"bula-bula",R,R
+5678,"bulang-baling",R.salin,R.salin
+5693,"buli-buli",R,R
+5699,"bulu-bulu",R,R
+5708,"bulus-bulus",R,R
+6295,"cawe-cawe",R,R
+6303,"cebar-cebur",R.salin,R.salin
+6421,"celam-celum",R.salin,R.salin
+6426,"celangak-celinguk",R.salin,R.salin
+6433,"celas-celus",R.salin,R.salin
+6450,"celengkak-celengkok",R.salin,R.salin
+6465,"celingak-celinguk",R.salin,R.salin
+6482,"celum-celam",R.salin,R.salin
+6561,"cenal-cenil",R.salin,R.salin
+6597,"cengar-cengir",R.salin,R.salin
+6609,"cengir-cengir",R,R
+6611,"cengis-cengis",R,R
+6682,"ceplas-ceplos",R.salin,R.salin
+6707,"cerai-berai",R.wasana,R.wasana
+6800,"cetar-ceter",R.salin,R.salin
+6959,"cobak-cabik",R.salin,R.salin
+5910,"cobar-cabir",R.salin,R.salin
+6961,"cobar-cabir",R.salin,R.salin
+6997,"cola-cala",R.salin,R.salin
+7000,"colang-caling",R.salin,R.salin
+7017,"comat-comot",R.salin,R.salin
+7028,"compang-camping",R.salin,R.salin
+7042,"conggah-canggih",R.salin,R.salin
+7045,"congkah-cangkih",R.salin,R.salin
+7046,"congkah-mangkih",R.salin,R.salin
+7072,"copak-capik",R.salin,R.salin
+7080,"corak-carik",R.salin,R.salin
+7098,"crat-crit",R.salin,R.salin
+7109,"cuang-caing",R.salin,R.salin
+7117,"cubung-cubung",R,R
+7123,"cuci-maki",R.salin,R.salin
+7184,"cumi-cumi",R,R
+7313,"dag-dag",R,R
+7314,"dag-dig-dug",R.tri,R.tri
+7353,"dakak-dakak",R,R
+7384,"dalam-dalam",R,R
+7392,"dali-dali",R,R
+7514,"dari-dari",R,R
+7528,"daru-daru",R,R
+7581,"dawai-dawai",R,R
+7720,"deg-degan",R.purwa,R.purwa
+7761,"dekak-dekak",R,R
+8157,"desas-desus",R.salin,R.salin
+8275,"dewi-dewi",R,R
+8474,"dinul-Islam",R.salin,R.salin
+8678,"dog-dog",R,R
+8701,"doko-doko",R,R
+8703,"dokok-dokok",R,R
+8718,"dolak-dalik",R.salin,R.salin
+8937,"dulang-dulang",R,R
+9128,"eigen-nilai",R.salin,R.salin
+9674,"empon-empon",R,R
+9778,"engap-engap",R,R
+9797,"engket-engket",R,R
+9995,"erek-erek",R,R
+10548,"flip-plop",R.salin,R.salin
+10816,"gaba-gaba (1)",R,R
+10817,"gaba-gaba (2)",R,R
+10822,"gabai-gabai",R,R
+10846,"gada-gada",R,R
+10857,"gadi-gadi",R,R
+10861,"gading-gading (1)",R,R
+10862,"gading-gading (2)",R,R
+10866,"gado-gado",R,R
+10935,"gala-gala",R,R
+10980,"gali-gali",R,R
+10982,"galing-galing",R,R
+10989,"galu-galu",R,R
+11035,"gami-gami",R,R
+11052,"gana-gini",R.salin,R.salin
+11168,"gapah-gopoh",R.salin,R.salin
+11181,"gara-gara",R,R
+11300,"gayang-gayang",R,R
+11359,"gedana-gedini",R.purwa,R.purwa
+11362,"gedebak-gedebuk",R.salin,R.salin
+11363,"gedebar-gedebur",R.salin,R.salin
+11563,"geli-geli (1)",R,R
+11564,"geli-geli (2)",R,R
+11692,"gembrang-gembreng",R.salin,R.salin
+11753,"gempul-gempul",R,R
+11973,"gerbas-gerbus",R.salin,R.salin
+12003,"gereng-gereng",R,R
+12122,"gerot-gerot",R,R
+12177,"getak-getuk",R.salin,R.salin
+12185,"geteh-geteh",R,R
+12188,"getem-getem",R,R
+12243,"gili-gili",R,R
+12286,"girap-girap",R,R
+12297,"giring-giring",R,R
+12433,"golak-galik",R.salin,R.salin
+12465,"gondas-gandes",R.salin,R.salin
+12492,"gono-gini",R.salin,R.salin
+12497,"gonta-ganti",R.salin,R.salin
+12516,"goro-goro",R,R
+12519,"gorong-gorong",R,R
+12582,"grasah-grusuh",R.salin,R.salin
+12601,"gresek-gresek",R,R
+12652,"gudu-gudu",R,R
+12678,"gulang-gulang",R,R
+12717,"guna-ganah",R.salin,R.salin
+12716,"guna-guna",R,R
+12886,"halai-balai",R.wasana,R.wasana
+13096,"hawar-hawar",R,R
+13440,"hila-hila",R,R
+13580,"hiru-biru",R.wasana,R.wasana
+13582,"hiru-hara",R.salin,R.salin
+13628,"hogo-hogo",R,R
+13742,"hubar-habir",R.salin,R.salin
+13743,"hubaya-hubaya",R,R
+13767,"hula-hula (1)",R,R
+13768,"hula-hula (2)",R,R
+13807,"hura-hura",R,R
+13812,"huru-hara",R.salin,R.salin
+13840,"ibar-ibar",R,R
+13858,"icak-icak",R,R
+13951,"ikan-ikan",R,R
+14007,"ilam-ilam",R,R
+14013,"ilat-ilatan",R.purwa,R.purwa
+14018,"iles-iles",R,R
+14072,"iming-iming",R,R
+14141,"imut-imut",R,R
+14157,"incang-incut",R.purwa,R.purwa
+14282,"inggang-inggung",R.salin,R.salin
+14302,"ining-ining",R,R
+14601,"irah-irahan",R.purwa,R.purwa
+14602,"ira-ira",R,R
+14610,"ireng-ireng",R,R
+14635,"isak-isak",R,R
+14659,"islamo-demokrasi",R.salin,R.salin
+14906,"jali-jali",R,R
+15065,"jari-jari",R,R
+15079,"jarum-jarum merah",R.purwa,R.purwa
+15136,"jebar-jebur",R.salin,R.salin
+15248,"jelur-jelir",R.salin,R.salin
+15369,"jentik-jentik",R,R
+15377,"jeprat-jepret",R.salin,R.salin
+15631,"jolong-jolong",R,R
+15648,"jongkar-jangkir",R.salin,R.salin
+15649,"jongkat-jangkit",R.salin,R.salin
+15739,"julo-julo",R,R
+15745,"julung-julung",R,R
+15781,"jungkang-jungkit",R.purwa,R.purwa
+15807,"jurai-jurai",R,R
+15851,"kabali-balil",R.salin,R.salin
+15853,"kabang-kabang",R,R
+15872,"kabir-kabiran",R.purwa,R.purwa
+15882,"kabu-kabu",R,R
+15911,"kacang-kacangan",R.purwa,R.purwa
+16045,"kait-kait",R,R
+16082,"kakek-kakek",R,R
+16118,"kala-kala",R,R
+16153,"kalau-kalau",R,R
+16237,"kalo-kalo",R,R
+16274,"kamanu-manu",R.wasana,R.wasana
+16333,"kamit-kamit",R,R
+16387,"kanak-kanak",R,R
+16406,"kanda-kanda oa",R.purwa,R.purwa
+16696,"kareseh-peseh",R.wasana,R.wasana
+16807,"kasak-kisik",R.salin,R.salin
+16808,"kasak-kusuk",R.salin,R.salin
+16914,"katang-katang (1)",R,R
+16915,"katang-katang (2)",R,R
+16971,"kato-kato",R,R
+16989,"kau-kaudara",R.purwa,R.purwa
+17017,"kawa-kawa",R,R
+17060,"kayu-kayu",R,R
+17162,"kecuh-kecah",R.salin,R.salin
+17325,"kelak-kelik",R.salin,R.salin
+17326,"kelak-keluk",R.salin,R.salin
+17353,"kelap-kelip",R.salin,R.salin
+17365,"kelasah-kelusuh",R.salin,R.salin
+17394,"kelek-kelekan",R.purwa,R.purwa
+17402,"kelemak-kelemek",R.salin,R.salin
+17507,"kelik-kelik",R,R
+17535,"kelip-kelip (1)",R,R
+17536,"kelip-kelip (2)",R,R
+17579,"kelontang-kelantung",R.salin,R.salin
+17634,"kelusuh-kelasah",R.salin,R.salin
+17636,"kelut-melut",R.wasana,R.wasana
+17644,"kemak-kemik",R.salin,R.salin
+17809,"kencrang-kencring",R.salin,R.salin
+17868,"kentung-kentung",R,R
+17880,"kenyat-kenyut",R.salin,R.salin
+17908,"kepang-kepot",R.purwa,R.purwa
+17962,"kepuh-kepuh",R,R
+18030,"kerang-keroh",R.purwa,R.purwa
+18022,"kerang-kerung",R.salin,R.salin
+18071,"kercap-kercip",R.salin,R.salin
+18072,"kercap-kercup",R.salin,R.salin
+18151,"keriang-keriut",R.purwa,R.purwa
+18154,"keriat-keriut",R.salin,R.salin
+18229,"kernyat-kernyut",R.salin,R.salin
+18241,"kerobak-kerabit",R.purwa,R.purwa
+18239,"kerobak-kerobek",R.salin,R.salin
+18240,"kerobak-kerobik",R.salin,R.salin
+18267,"kerong-kerong",R,R
+18275,"keropas-kerapis",R.salin,R.salin
+18316,"kertak-kertuk",R.salin,R.salin
+18352,"keruntang-pungkang",R.wasana,R.wasana
+18373,"kesampar-kesandung",R.purwa,R.purwa
+18378,"kesap-kesip",R.salin,R.salin
+18398,"kesik-kesik",R,R
+18407,"keso-keso",R,R
+18416,"kesuh-kesih",R.salin,R.salin
+18415,"kesu-kesi",R.purwa,R.purwa
+18417,"kesuk-kesik",R.salin,R.salin
+18451,"ketap-ketap",R,R
+18493,"keti-keti",R,R
+18511,"ketir-ketir",R,R
+18658,"kia-kia",R,R
+18659,"kiak-kiak",R,R
+18661,"kial-kial",R,R
+18668,"kiang-kiut",R.salin,R.salin
+18682,"kibang-kibut",R.purwa,R.purwa
+18695,"kicang-kecoh",R.salin,R.salin
+18696,"kicang-kicu",R.purwa,R.purwa
+18706,"kida-kida",R,R
+18723,"kijang-kijang",R,R
+18763,"kili-kili (1)",R,R
+18764,"kili-kili (2)",R,R
+18868,"kinyis-kinyis",R,R
+18967,"kiu-kiu",R,R
+18977,"klak-klik",R.salin,R.salin
+19106,"kluntang-klantung",R.salin,R.salin
+19121,"koak-koak",R,R
+19141,"kobol-kobol",R,R
+19143,"kocah-kacih",R.salin,R.salin
+19148,"kocar-kacir",R.salin,R.salin
+19169,"kodok-kodok (1)",R,R
+19170,"kodok-kodok (2)",R,R
+19264,"kolang-kalik",R.salin,R.salin
+19265,"kolang-kaling (1)",R.salin,R.salin
+19266,"kolang-kaling (2)",R.salin,R.salin
+19276,"koleh-koleh",R,R
+19278,"kole-kole",R,R
+19381,"komat-kamit",R.salin,R.salin
+19708,"kontal-kantil",R.salin,R.salin
+19712,"kontang-kanting",R.salin,R.salin
+19805,"kopat-kapit",R.salin,R.salin
+19943,"kosak-kasik",R.salin,R.salin
+19979,"kotak-katik",R.salin,R.salin
+20064,"kreseh-peseh",R.wasana,R.wasana
+20314,"kucar-kacir",R.salin,R.salin
+20331,"kuda-kuda",R,R
+20410,"kulak-kulak tangan",R.purwa,R.purwa
+20428,"kulik-kulik",R,R
+20461,"kuma-kuma",R,R
+20509,"kunang-kunang",R,R
+20578,"kupat-kapit",R.salin,R.salin
+20596,"kupu-kupu",R,R
+20601,"kura-kura",R,R
+20665,"kusat-mesat",R.wasana,R.wasana
+20682,"kusu-kusu",R,R
+20692,"kutat-kutet",R.salin,R.salin
+20727,"kuwung-kuwung",R,R
+20749,"labah-labah",R,R
+20748,"laba-laba",R,R
+20761,"labi-labi",R,R
+20829,"laguh-lagah",R.salin,R.salin
+20941,"lalu-lalang",R.purwa,R.purwa
+20949,"lamat-lamat",R,R
+21036,"lancar-lancar",R,R
+21074,"langak-languk",R.salin,R.salin
+21075,"langak-longok",R.salin,R.salin
+21247,"lapat-lapat",R,R
+21291,"lari-lari",R,R
+21370,"laun-laun hari",R.purwa,R.purwa
+21385,"lawah-lawah",R,R
+21429,"layar-layar",R,R
+21515,"legak-legok",R.salin,R.salin
+21571,"legup-legup",R,R
+21572,"leha-leha",R,R
+21586,"lekak-lekuk",R.salin,R.salin
+21590,"lekap-lekup",R.salin,R.salin
+21600,"lek-lekan",R.purwa,R.purwa
+21620,"lekuh-lekih",R.salin,R.salin
+21623,"lekum-lekum",R,R
+21626,"lekup-lekap",R.salin,R.salin
+21798,"lenggak-lenggok",R.salin,R.salin
+21827,"lengket-lengket",R,R
+21831,"lengko-lengko",R,R
+21869,"lentam-lentum",R.salin,R.salin
+21872,"lentang-lentok",R.purwa,R.purwa
+21907,"lepa-lepa",R,R
+21908,"lepa-lepa",R,R
+22024,"lete-lete",R,R
+22119,"lidah-lidah (1)",R,R
+22120,"lidah-lidah (2)",R,R
+22415,"liuk-liuk",R,R
+22436,"lobi-lobi",R,R
+22556,"longak-longok",R.salin,R.salin
+22575,"lontang-lanting",R.salin,R.salin
+22576,"lontang-lantung",R.salin,R.salin
+22590,"lopak-lopak",R,R
+22733,"lumba-lumba",R,R
+22739,"lumi-lumi",R,R
+22794,"luntang-lantung",R.salin,R.salin
+22803,"lupa-lupa",R,R
+22921,"magep-magep",R,R
+23019,"mahi-mahi",R,R
+23056,"maja-muju",R.salin,R.salin
+23253,"mali-mali",R,R
+23686,"masing-masing",R,R
+23756,"mata-mata",R,R
+23836,"maya-maya",R,R
+23932,"megal-megol",R.salin,R.salin
+23947,"megap-megap",R,R
+23963,"meger-meger",R,R
+23964,"megrek-megrek",R,R
+23980,"mekala-kalado",R.salin,R.salin
+24001,"melak-melak",R,R
+24119,"mencak-mencak",R,R
+24121,"mencang-mencong",R.salin,R.salin
+24125,"mencla-mencle",R.purwa,R.purwa
+24282,"mentinggi-tinggi",R.wasana,R.wasana
+24292,"mentul-mentul",R,R
+24347,"mercak-mercik",R.salin,R.salin
+24439,"mesamba-samba ulu",R.salin,R.salin
+24497,"metai-tai",R.wasana,R.wasana
+24965,"mondar-mandir",R.salin,R.salin
+25071,"morak-marik",R.salin,R.salin
+25078,"morat-marit",R.salin,R.salin
+25425,"murat-marit",R.salin,R.salin
+25622,"naga-naganya",R.purwa,R.purwa
+25745,"nasi-nasi",R,R
+25858,"neka-neka",R,R
+25862,"neko-neko",R,R
+25986,"ngak-ngik-ngok",R.tri,R.tri
+26171,"nong-nong",R,R
+26298,"nuri-nuri",R,R
+26319,"nyai-nyai",R,R
+26426,"obrak-abrik",R.salin,R.salin
+26487,"ogah-agih",R.salin,R.salin
+26488,"ogah-ogah",R,R
+26489,"ogak-agik",R.salin,R.salin
+26490,"ogak-ogak",R,R
+26494,"ogoh-ogoh",R,R
+26574,"olak-alik",R.salin,R.salin
+26575,"olak-olak",R,R
+26577,"olang-aling (1)",R.salin,R.salin
+26583,"oleh-oleh",R,R
+26615,"olong-olong",R,R
+26661,"ondel-ondel",R,R
+26662,"onde-onde",R,R
+26673,"oneng-oneng",R,R
+26675,"ongah-angih",R.salin,R.salin
+26687,"ongol-ongol",R,R
+26706,"ontran-ontran",R,R
+26708,"onyak-anyik (1)",R.salin,R.salin
+26709,"onyak-anyik (2)",R.salin,R.salin
+26798,"orak-arik",R.salin,R.salin
+26803,"orang-aring",R.salin,R.salin
+26808,"orat-oret",R.salin,R.salin
+26890,"orok-orok (1)",R,R
+26891,"orok-orok (2)",R,R
+26892,"orong-orong (1)",R,R
+26893,"orong-orong (2)",R,R
+26960,"otak-atik",R.salin,R.salin
+26961,"otak-otak",R,R
+27245,"palas-palas",R,R
+27251,"palato-alveolar",R.salin,R.salin
+27583,"pao-pao",R,R
+27943,"pasu-pasu",R,R
+28002,"pato-pato",R,R
+28051,"paya-paya",R,R
+28066,"pe--an (1)",R.salin,R.salin
+28067,"pe--an (2)",R.salin,R.salin
+28243,"pel--an",R.salin,R.salin
+28373,"pem--an",R.salin,R.salin
+28471,"penge--an",R.salin,R.salin
+28558,"peny--an",R.salin,R.salin
+28633,"perak-perak",R,R
+28664,"peras-perus",R.salin,R.salin
+29043,"petantang-petenteng",R.salin,R.salin
+29049,"petatang-peteteng",R.salin,R.salin
+29056,"pete-pete",R,R
+29241,"pina-pina (1)",R,R
+29242,"pina-pina (2)",R,R
+29503,"plintat-plintut",R.salin,R.salin
+29515,"plonga-plongo",R.purwa,R.purwa
+29715,"poma-poma",R,R
+29754,"pontang-panting",R.salin,R.salin
+29780,"porak-parik",R.salin,R.salin
+29781,"porak-peranda",R.salin,R.salin
+29782,"porak-poranda",R.purwa,R.purwa
+29815,"pos-el",R.salin,R.salin
+29857,"potong-potong",R,R
+29932,"prangas-pringis",R.salin,R.salin
+30063,"pringas-pringis",R.salin,R.salin
+30385,"pukang-pukang",R,R
+30430,"pulut-pulut",R,R
+30454,"pungak-pinguk",R.salin,R.salin
+30513,"pura-pura",R,R
+30552,"puruk-parak",R.salin,R.salin
+30627,"puvi-puvi",R,R
+30631,"puyo-puyo",R,R
+30667,"raba-rubu",R.salin,R.salin
+30896,"ramah-tamah",R.wasana,R.wasana
+30903,"rama-rama",R,R
+30992,"randa-rondo",R.salin,R.salin
+31058,"rango-rango",R,R
+31782,"rep-repan",R.purwa,R.purwa
+32001,"riang-riang (1)",R,R
+32002,"riang-riang (2)",R,R
+32003,"riang-riang (3)",R,R
+32021,"ribu-ribu",R,R
+32038,"rigi-rigi",R,R
+32165,"robak-rabik",R.salin,R.salin
+32166,"robat-rabit",R.salin,R.salin
+32232,"rombang-rambing",R.salin,R.salin
+32247,"romol-romol",R,R
+32270,"rondah-rondih",R.salin,R.salin
+32303,"ropak-rapik",R.salin,R.salin
+32355,"ruba-ruba",R,R
+32439,"rumbai-rumbai",R,R
+32469,"rundu-rundu",R,R
+32476,"runggu-rangga",R.salin,R.salin
+32494,"runtang-runtung",R.salin,R.salin
+32594,"sabu-sabu",R,R
+32935,"samo-samo",R,R
+33182,"sapu-sapu ringin",R.purwa,R.purwa
+33246,"sarit-sarit",R,R
+33423,"seban-seban",R,R
+33505,"sedok-sedok",R,R
+33529,"segan-segan",R,R
+33656,"sekonyong-konyong",R.wasana,R.wasana
+33742,"selak-seluk",R.salin,R.salin
+33771,"selang-seli",R.purwa,R.purwa
+33772,"selang-seling",R.salin,R.salin
+33845,"selentang-selenting",R.salin,R.salin
+33960,"seluk-beluk",R.wasana,R.wasana
+34026,"semang-semang",R,R
+34041,"sema-sema",R,R
+34288,"sengar-sengir",R.salin,R.salin
+34296,"senggak-sengguk",R.salin,R.salin
+34489,"seolah-olah",R.wasana,R.wasana
+34506,"sepala-pala",R.wasana,R.wasana
+34668,"serbah-serbih",R.salin,R.salin
+34705,"serembah-serembih",R.salin,R.salin
+34836,"serta-merta",R.wasana,R.wasana
+35106,"sia-sia",R,R
+35783,"slintat-slintut",R.salin,R.salin
+35966,"sorak-sorai",R.purwa,R.purwa
+36377,"suat-suit",R.salin,R.salin
+36467,"sudu-sudu",R,R
+36480,"sugi-sugi",R,R
+36549,"sulat-sulit",R.salin,R.salin
+36621,"sumpah-sumpah",R,R
+37032,"tabar-tabar",R,R
+37189,"takang-takik",R.purwa,R.purwa
+37311,"tali-tali",R,R
+37563,"tapa-tapa",R,R
+37728,"tatah-tatah",R,R
+37793,"tawak-tawak",R,R
+37798,"tawang-tawang",R,R
+37805,"tawar-tawar",R,R
+37810,"tawa-tawa",R,R
+37873,"tedong-tedong",R,R
+37914,"teka-teki",R.purwa,R.purwa
+38159,"temas-temas",R,R
+38318,"temut-temut",R,R
+38790,"tiba-tiba",R,R
+38842,"timah-timah (1)",R,R
+38843,"timah-timah (2)",R,R
+38889,"timu-timu",R,R
+39018,"tiup-tiup",R,R
+39062,"tokak-takik",R.salin,R.salin
+39513,"tuang-tuang",R,R
+39610,"tuli-tuli",R,R
+39653,"tumpang-tindih",R.salin,R.salin
+39717,"tunggang-langgang",R.wasana,R.wasana
+39770,"tupai-tupai",R,R
+39854,"ubal-ubal",R,R
+39874,"ubun-ubun (1)",R,R
+39875,"ubun-ubun (2)",R,R
+39876,"ubur-ubur (1)",R,R
+39877,"ubur-ubur (2)",R,R
+39882,"uci-uci",R,R
+39920,"ugal-ugalan",R.purwa,R.purwa
+39923,"uget-uget",R,R
+39929,"uir-uir (1)",R,R
+39930,"uir-uir (2)",R,R
+39966,"ulang-alik",R.salin,R.salin
+39967,"ulang-aling",R.salin,R.salin
+39970,"ulap-ulap (1)",R,R
+39971,"ulap-ulap (2)",R,R
+39973,"ular-ular (1)",R,R
+39974,"ular-ular (2)",R,R
+39975,"ular-ular (3)",R,R
+39976,"ular-ularan",R.purwa,R.purwa
+39985,"ula-ula",R,R
+40032,"uluh-uluh",R,R
+40039,"ulung-ulung",R,R
+40043,"ulur-ulur",R,R
+40046,"ulu-ulu",R,R
+40053,"umang-umang",R,R
+40078,"umbul-umbul",R,R
+40079,"umbun-umbun",R,R
+40081,"umbur-umbur",R,R
+40112,"uncang-uncit",R.purwa,R.purwa
+40129,"unduk-unduk",R,R
+40131,"undung-undung (1)",R,R
+40134,"undur-undur",R,R
+40135,"unek-unek",R,R
+40136,"ungah-angih",R.salin,R.salin
+40138,"ungap-ungap",R,R
+40141,"unggah-ungguh",R.salin,R.salin
+40143,"unggang-anggit",R.salin,R.salin
+40145,"unggat-unggit",R.salin,R.salin
+40159,"ungkang-ungkang",R,R
+40160,"ungkang-ungkit",R.purwa,R.purwa
+40219,"untang-anting",R.salin,R.salin
+40271,"urang-aring",R.salin,R.salin
+40276,"uran-uran",R,R
+40285,"ura-ura",R,R
+40340,"user-user",R,R
+40365,"utak-atik",R.salin,R.salin
+40372,"utar-utar",R,R
+40376,"uter-uter",R,R
+40394,"uwa-uwa",R,R
+40398,"uyah-uyahan",R.purwa,R.purwa
+40834,"wande-wande",R,R
+40848,"wanti-wanti",R,R
+40863,"wara-wiri (1)",R.salin,R.salin
+40864,"wara-wiri (2)",R.salin,R.salin
+40882,"warna-warni",R.purwa,R.purwa
+40939,"wau-wau",R,R
+41064,"wira-wiri",R.purwa,R.purwa
+41100,"wora-wari",R.salin,R.salin
+41205,"yang-yang",R,R
+41345,"Zend-Avesta",R.salin,R.salin
+41369,"zig-zag",R.salin,R.salin

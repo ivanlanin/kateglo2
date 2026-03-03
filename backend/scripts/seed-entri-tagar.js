@@ -45,49 +45,51 @@ async function ensureAuditTagarPermission() {
 // ============================================================
 
 const PREFIXES = [
-  { str: 'memper', tags: ['meng', 'per']  },
-  { str: 'diper',  tags: ['di', 'per']    },
-  { str: 'mempe',  tags: ['meng', 'peng'] },
-  { str: 'menge',  tags: ['meng']         },
-  { str: 'penge',  tags: ['peng']         },
-  { str: 'terpe',  tags: ['ter', 'peng']  },
-  { str: 'berpe',  tags: ['ber', 'peng']  },
-  { str: 'sepe',   tags: ['se', 'peng']   },
-  { str: 'meng',   tags: ['meng'] },
-  { str: 'meny',   tags: ['meng'] },
-  { str: 'peng',   tags: ['peng'] },
-  { str: 'peny',   tags: ['peng'] },
-  { str: 'mem',    tags: ['meng'] },
-  { str: 'men',    tags: ['meng'] },
-  { str: 'pem',    tags: ['peng'] },
-  { str: 'pen',    tags: ['peng'] },
-  { str: 'ber',    tags: ['ber']  },
-  { str: 'ter',    tags: ['ter']  },
-  { str: 'per',    tags: ['per']  },
-  { str: 'me',     tags: ['meng'] },
-  { str: 'pe',     tags: ['peng'] },
-  { str: 'di',     tags: ['di']   },
-  { str: 'ke',     tags: ['ke']   },
-  { str: 'se',     tags: ['se']   },
+  { str: 'memper', tags: ['meng-', 'per-']  },
+  { str: 'diper',  tags: ['di-', 'per-']    },
+  { str: 'mempe',  tags: ['meng-', 'peng-'] },
+  { str: 'menge',  tags: ['meng-']          },
+  { str: 'menye',  tags: ['meng-']          },
+  { str: 'penge',  tags: ['peng-']          },
+  { str: 'terpe',  tags: ['ter-', 'peng-']  },
+  { str: 'berpe',  tags: ['ber-', 'peng-']  },
+  { str: 'bersi',  tags: ['bersi-']         },
+  { str: 'sepe',   tags: ['se-', 'peng-']   },
+  { str: 'meng',   tags: ['meng-'] },
+  { str: 'meny',   tags: ['meng-'] },
+  { str: 'peng',   tags: ['peng-'] },
+  { str: 'peny',   tags: ['peng-'] },
+  { str: 'mem',    tags: ['meng-'] },
+  { str: 'men',    tags: ['meng-'] },
+  { str: 'pem',    tags: ['peng-'] },
+  { str: 'pen',    tags: ['peng-'] },
+  { str: 'ber',    tags: ['ber-']  },
+  { str: 'ter',    tags: ['ter-']  },
+  { str: 'te',     tags: ['ter-']  },
+  { str: 'per',    tags: ['per-']  },
+  { str: 'me',     tags: ['meng-'] },
+  { str: 'pe',     tags: ['peng-'] },
+  { str: 'di',     tags: ['di-']   },
+  { str: 'ke',     tags: ['ke-']   },
+  { str: 'se',     tags: ['se-']   },
 ];
 
 // Diurutkan dari terpanjang ke terpendek
 const SUFFIXES = [
-  { str: 'kan', tag: 'kan' },
-  { str: 'nya', tag: 'nya' },
-  { str: 'kah', tag: 'kah' },
-  { str: 'lah', tag: 'lah' },
-  { str: 'pun', tag: 'pun' },
-  { str: 'tah', tag: 'tah' },
-  { str: 'an',  tag: 'an'  },
-  { str: 'mu',  tag: 'mu'  },
-  { str: 'ku',  tag: 'ku'  },
-  { str: 'i',   tag: 'i'   },
+  { str: 'kan', tag: '-kan' },
+  { str: 'nya', tag: '-nya' },
+  { str: 'kah', tag: '-kah' },
+  { str: 'lah', tag: '-lah' },
+  { str: 'pun', tag: '-pun' },
+  { str: 'tah', tag: '-tah' },
+  { str: 'an',  tag: '-an'  },
+  { str: 'mu',  tag: '-mu'  },
+  { str: 'ku',  tag: '-ku'  },
+  { str: 'i',   tag: '-i'   },
 ];
 
-const PREFIXES_NASAL = new Set(['me', 'mem', 'men', 'meng', 'meny', 'pe', 'pem', 'pen', 'peng', 'peny']);
+const PREFIXES_NASAL = new Set(['me', 'mem', 'men', 'meng', 'meny', 'menye', 'pe', 'pem', 'pen', 'peng', 'peny']);
 const HURUF_PELULUHAN_KPST = new Set(['k', 'p', 's', 't']);
-const TAGAR_REDUP_GABUNGAN_TERSEDIA = new Set(['R-an', 'R-nya']);
 
 // ============================================================
 // Utilitas: normalisasi teks induk
@@ -102,6 +104,13 @@ const TAGAR_REDUP_GABUNGAN_TERSEDIA = new Set(['R-an', 'R-nya']);
  */
 function normalizeInduk(induk) {
   return induk
+    .replace(/\s*\(\d+\)\s*$/, '')
+    .trim()
+    .toLowerCase();
+}
+
+function normalizeHomonimSuffix(teks) {
+  return String(teks || '')
     .replace(/\s*\(\d+\)\s*$/, '')
     .trim()
     .toLowerCase();
@@ -184,6 +193,38 @@ function isMonosukuKata(kata) {
   return vokalGroups.length === 1;
 }
 
+function commonPrefix(a, b) {
+  let idx = 0;
+  while (idx < a.length && idx < b.length && a[idx] === b[idx]) idx += 1;
+  return a.slice(0, idx);
+}
+
+function commonSuffix(a, b) {
+  let idx = 0;
+  while (
+    idx < a.length
+    && idx < b.length
+    && a[a.length - 1 - idx] === b[b.length - 1 - idx]
+  ) idx += 1;
+  return a.slice(a.length - idx);
+}
+
+function detectReduplikasiSubtype(left, right) {
+  const leftNorm = normalizeHomonimSuffix(left);
+  const rightNorm = normalizeHomonimSuffix(right);
+  if (!leftNorm || !rightNorm) return null;
+  if (leftNorm === rightNorm) return null;
+
+  const sameLen = leftNorm.length === rightNorm.length;
+  const prefix = commonPrefix(leftNorm, rightNorm);
+  const suffix = commonSuffix(leftNorm, rightNorm);
+
+  if (sameLen && prefix.length >= 2 && suffix.length >= 1) return 'R.salin';
+  if (suffix.length >= 3 && prefix.length <= 1) return 'R.wasana';
+  if (prefix.length >= 3 && suffix.length <= 1) return 'R.purwa';
+  return 'R.salin';
+}
+
 /**
  * Prefiks alomorf khusus yang hanya valid untuk dasar monosuku kata.
  * @param {string} pre
@@ -191,6 +232,47 @@ function isMonosukuKata(kata) {
  */
 function isPrefiksKhususMonosuku(pre) {
   return pre === 'menge' || pre === 'penge';
+}
+
+function cocokPolaMenyeDenganSe(preStr, indukVar, kandidat) {
+  if (preStr !== 'menye') return false;
+  if (!indukVar || !indukVar.startsWith('se') || indukVar.length <= 2) return false;
+  return indukVar.slice(2) === kandidat;
+}
+
+function bolehGunakanTagLayered(preStr, extraTags = []) {
+  if (!Array.isArray(extraTags) || extraTags.length === 0) return true;
+  if (['menye', 'penye', 'meny', 'peny'].includes(preStr)) {
+    return !extraTags.some((tag) => tag === 'ke' || tag === 'di');
+  }
+  return true;
+}
+
+function buildIndukCandidates(indukVariants) {
+  const map = new Map();
+
+  for (const indukVar of indukVariants) {
+    const baseKey = `${indukVar}::`;
+    if (!map.has(baseKey)) {
+      map.set(baseKey, { value: indukVar, extraTags: [] });
+    }
+
+    const layeredOptions = [
+      { str: 'ke', tag: 'ke' },
+      { str: 'di', tag: 'di' },
+      { str: 'se', tag: 'se-' },
+    ];
+
+    for (const { str: layered, tag } of layeredOptions) {
+      const layeredValue = `${layered}${indukVar}`;
+      const layeredKey = `${layeredValue}::${tag}`;
+      if (!map.has(layeredKey)) {
+        map.set(layeredKey, { value: layeredValue, extraTags: [tag] });
+      }
+    }
+  }
+
+  return [...map.values()];
 }
 
 // ============================================================
@@ -219,9 +301,10 @@ function detectNonReduplikasi(entri, induk) {
     induk.replace(/\s+/g, ''),
     induk.replace(/[\s-]+/g, ''),
   ].filter(Boolean)));
+  const indukCandidates = buildIndukCandidates(indukVariants);
 
   // --- Strategi 1: induk sebagai substring langsung ---
-  for (const indukVar of indukVariants) {
+  for (const { value: indukVar, extraTags } of indukCandidates) {
     const idx = entri.indexOf(indukVar);
     if (idx < 0) continue;
 
@@ -240,6 +323,10 @@ function detectNonReduplikasi(entri, induk) {
     if (suf && suffixTag === null) continue; // sufiks tidak dikenali, coba varian lain
 
     const tagSet = new Set(prefixTags);
+    extraTags.forEach((tag) => tagSet.add(tag));
+    if (pre === 'menye' && extraTags.length === 0) {
+      tagSet.add('se-');
+    }
     if (suffixTag) tagSet.add(suffixTag);
     if (tagSet.size > 0) return [...tagSet];
   }
@@ -256,32 +343,41 @@ function detectNonReduplikasi(entri, induk) {
       if (!afterPre.endsWith(sufStr)) continue;
       const middle = afterPre.slice(0, -sufStr.length);
 
-      const cocokAkar = indukVariants.some((indukVar) => (
+      const cocokAkar = indukCandidates.find(({ value: indukVar, extraTags }) => (
+        bolehGunakanTagLayered(preStr, extraTags)
+        &&
         (!isPrefiksKhususMonosuku(preStr) || isMonosukuKata(indukVar))
         && (
-        middle === indukVar ||
-        (allowPeluluhan && isPeluluhanKPST(indukVar, middle))
+          middle === indukVar ||
+          (allowPeluluhan && isPeluluhanKPST(indukVar, middle)) ||
+          cocokPolaMenyeDenganSe(preStr, indukVar, middle)
         )
       ));
 
       if (cocokAkar) {
         const tagSet = new Set(preTags);
+        cocokAkar.extraTags.forEach((tag) => tagSet.add(tag));
         tagSet.add(sufTag);
         return [...tagSet];
       }
     }
 
     // Coba tanpa sufiks
-    const cocokTanpaSufiks = indukVariants.some((indukVar) => (
+    const cocokTanpaSufiks = indukCandidates.find(({ value: indukVar, extraTags }) => (
+      bolehGunakanTagLayered(preStr, extraTags)
+      &&
       (!isPrefiksKhususMonosuku(preStr) || isMonosukuKata(indukVar))
       && (
-      afterPre === indukVar ||
-      (allowPeluluhan && isPeluluhanKPST(indukVar, afterPre))
+        afterPre === indukVar ||
+        (allowPeluluhan && isPeluluhanKPST(indukVar, afterPre)) ||
+        cocokPolaMenyeDenganSe(preStr, indukVar, afterPre)
       )
     ));
 
     if (cocokTanpaSufiks) {
-      return [...preTags];
+      const tagSet = new Set(preTags);
+      cocokTanpaSufiks.extraTags.forEach((tag) => tagSet.add(tag));
+      return [...tagSet];
     }
   }
 
@@ -301,20 +397,26 @@ function detectNonReduplikasi(entri, induk) {
  * Deteksi tagar untuk entri yang mengandung tanda hubung (reduplikasi).
  *
  * Pola yang ditangani:
- *   X-X           → R
- *   X-Xan         → R-an
- *   X-Xkan        → R-kan
- *   X-Xnya        → R-nya
- *   X-preX        → R + prefix  (right = pre + left, contoh: adik-beradik)
- *   preX-X        → R + prefix  (left = pre + right, contoh: berbelit-belit)
- *   preX-Xalomorf → R + prefix  (right alomorf dari left, contoh: bahu-membahu)
+ *   X-X           → R.penuh
+ *   X-Xan         → R.penuh + -an
+ *   X-Xkan        → R.penuh + -kan
+ *   X-Xnya        → R.penuh + -nya
+ *   X-preX        → R.penuh + prefix  (right = pre + left, contoh: adik-beradik)
+ *   preX-X        → R.penuh + prefix  (left = pre + right, contoh: berbelit-belit)
+ *   preX-Xalomorf → R.penuh + prefix  (right alomorf dari left, contoh: bahu-membahu)
  *
  * @param {string} entri
  * @param {string} _induk - tidak digunakan untuk reduplikasi saat ini
  * @returns {string[]|null}
  */
 function detectReduplikasi(entri, _induk) {
-  const induk = (_induk || '').trim().toLowerCase();
+  const induk = normalizeHomonimSuffix(_induk);
+  const entriNorm = normalizeHomonimSuffix(entri);
+
+  const partsForTri = entriNorm.split('-').filter(Boolean);
+  if (partsForTri.length >= 3) {
+    return ['R.tri'];
+  }
 
   if (induk) {
     const indukVariants = Array.from(new Set([
@@ -343,33 +445,29 @@ function detectReduplikasi(entri, _induk) {
     }
   }
 
-  const firstHyphen = entri.indexOf('-');
+  const firstHyphen = entriNorm.indexOf('-');
   if (firstHyphen < 0) return null;
 
-  const left = entri.slice(0, firstHyphen);
-  const right = entri.slice(firstHyphen + 1);
+  const left = entriNorm.slice(0, firstHyphen);
+  const right = entriNorm.slice(firstHyphen + 1);
 
   // Pola murni: X-X
-  if (left === right) return ['R'];
+  if (left === right) return ['R.penuh'];
 
-  // Pola R + sufiks: X-Xsuf
+  // Pola R.penuh + sufiks: X-Xsuf
   for (const { str: sufStr, tag: sufTag } of SUFFIXES) {
     if (right === left + sufStr) {
-      // R + sufiks → untuk R-an, R-kan, R-nya gunakan kode gabungan jika ada
-      const combined = `R-${sufStr}`;
-      if (TAGAR_REDUP_GABUNGAN_TERSEDIA.has(combined)) return [combined];
-      // Lainnya → R + sufiks terpisah
-      return ['R', sufTag];
+      return ['R.penuh', sufTag];
     }
   }
 
-  // Pola R + prefiks (right = preStr + left, alomorf diterima)
+  // Pola R.penuh + prefiks (right = preStr + left, alomorf diterima)
   for (const { str: preStr, tags: preTags } of PREFIXES) {
     // right = prefix + left  (adik-beradik: right='beradik'='ber'+'adik'=prefix+left)
-    if (right === preStr + left) return ['R', ...preTags];
+    if (right === preStr + left) return ['R.penuh', ...preTags];
 
     // left = prefix + right  (berbelit-belit: left='berbelit'='ber'+'belit'=prefix+right)
-    if (left === preStr + right) return ['R', ...preTags];
+    if (left === preStr + right) return ['R.penuh', ...preTags];
 
     // right = prefix + alomorf(left)  (bahu-membahu: right='membahu'='mem'+'bahu', left='bahu')
     if (right.startsWith(preStr)) {
@@ -378,7 +476,7 @@ function detectReduplikasi(entri, _induk) {
         rightAfterPre === left ||
         (left.length > 1 && left.slice(1) === rightAfterPre)
       ) {
-        return ['R', ...preTags];
+        return ['R.penuh', ...preTags];
       }
     }
 
@@ -389,16 +487,16 @@ function detectReduplikasi(entri, _induk) {
         leftAfterPre === right ||
         (right.length > 1 && right.slice(1) === leftAfterPre)
       ) {
-        return ['R', ...preTags];
+        return ['R.penuh', ...preTags];
       }
     }
   }
 
   // Pola prefiks + reduplikasi dasar: preX-X atau preX-X+suf
   // Contoh:
-  // - berhadap-hadapan   => ber + R-an
-  // - bergagah-gagahan   => ber + R-an
-  // - bergembar-gembor   => ber + R (reduplikasi variasi bunyi)
+  // - berhadap-hadapan   => ber + R.penuh + -an
+  // - bergagah-gagahan   => ber + R.penuh + -an
+  // - bergembar-gembor   => ber + R.penuh (reduplikasi variasi bunyi)
   for (const { str: preStr, tags: preTags } of PREFIXES) {
     if (!left.startsWith(preStr)) continue;
     const leftRoot = left.slice(preStr.length);
@@ -410,16 +508,12 @@ function detectReduplikasi(entri, _induk) {
     }
 
     // preX-X
-    if (kandidatAkar.some((akar) => right === akar)) return [...preTags, 'R'];
+    if (kandidatAkar.some((akar) => right === akar)) return [...preTags, 'R.penuh'];
 
     // preX-X+suf
     for (const { str: sufStr, tag: sufTag } of SUFFIXES) {
       if (kandidatAkar.some((akar) => right === akar + sufStr)) {
-        const combined = `R-${sufStr}`;
-        if (TAGAR_REDUP_GABUNGAN_TERSEDIA.has(combined)) {
-          return [...preTags, combined];
-        }
-        return [...preTags, 'R', sufTag];
+        return [...preTags, 'R.penuh', sufTag];
       }
     }
 
@@ -435,9 +529,15 @@ function detectReduplikasi(entri, _induk) {
         if (right[i] !== leftRoot[i]) beda += 1;
       }
       if (beda > 0 && beda <= 2) {
-        return [...preTags, 'R'];
+        const subtype = detectReduplikasiSubtype(leftRoot, right);
+        return [...preTags, subtype || 'R.penuh'];
       }
     }
+  }
+
+  const subtypeGlobal = detectReduplikasiSubtype(left, right);
+  if (subtypeGlobal) {
+    return [subtypeGlobal];
   }
 
   return null; // pola reduplikasi kompleks — tidak terdeteksi
@@ -484,10 +584,11 @@ async function main() {
   const undetectedExamples = [];
 
   for (const { id, entri, induk_entri: induk } of entries) {
+    const entriNorm = normalizeHomonimSuffix(entri);
     const indukNorm = normalizeInduk(induk);
-    const tagCodes = entri.includes('-')
-      ? detectReduplikasi(entri, indukNorm)
-      : detectNonReduplikasi(entri, indukNorm);
+    const tagCodes = entriNorm.includes('-')
+      ? detectReduplikasi(entriNorm, indukNorm)
+      : detectNonReduplikasi(entriNorm, indukNorm);
 
     if (tagCodes === null) {
       cntUndetected++;

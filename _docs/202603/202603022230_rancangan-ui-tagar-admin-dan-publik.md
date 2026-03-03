@@ -249,11 +249,11 @@ Saat ini `ambilKategoriKamus()` memanggil `GET /api/publik/kamus/kategori` yang 
   kelas_kata: [...],
   // ...existing...
   tagar: [
-    { kode: 'R',   nama: 'R-'   },
-    { kode: 'R-an', nama: 'R--an' },
-    { kode: 'meng',  nama: 'meng-'  },
-    { kode: 'ber', nama: 'ber-' },
-    { kode: 'an',  nama: '-an'  },
+    { kode: 'R.penuh', nama: 'R.penuh' },
+    { kode: 'R.salin', nama: 'R.salin' },
+    { kode: 'meng-',   nama: 'meng-'   },
+    { kode: 'ber-',    nama: 'ber-'    },
+    { kode: '-an',     nama: '-an'     },
     // ... dst, ORDER BY kategori, urutan
   ]
 }
@@ -272,7 +272,7 @@ Di `Kamus.jsx`, deteksi parameter `tagar` dari path dan panggil `ambilEntriPerKa
 
 Implementasi final memakai `modeTagar` eksplisit di `Kamus.jsx` yang memanggil endpoint tagar khusus (`cariEntriPerTagar`).
 
-**Path**: `/kamus/tagar/meng` → daftar entri bertagar `meng-`
+**Path**: `/kamus/tagar/meng-` → daftar entri bertagar `meng-`
 **Judul halaman**: `Kata bertagar meng- — Kamus Kateglo`
 
 ---

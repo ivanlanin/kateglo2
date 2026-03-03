@@ -50,14 +50,16 @@ class ModelTagar {
   /**
    * Ambil semua tagar untuk satu entri.
    * @param {number} entriId
-   * @returns {Promise<Array<{id: number, kode: string, nama: string, kategori: string}>>}
+   * @param {{ aktifSaja?: boolean }} options
+   * @returns {Promise<Array<{id: number, kode: string, nama: string, kategori: string, aktif: boolean}>>}
    */
-  static async ambilTagarEntri(entriId) {
+  static async ambilTagarEntri(entriId, { aktifSaja = false } = {}) {
     const result = await db.query(
-      `SELECT t.id, t.kode, t.nama, t.kategori
+      `SELECT t.id, t.kode, t.nama, t.kategori, t.aktif
        FROM tagar t
        JOIN entri_tagar et ON et.tagar_id = t.id
        WHERE et.entri_id = $1
+       ${aktifSaja ? 'AND t.aktif = TRUE' : ''}
        ORDER BY t.kategori, t.urutan, t.nama`,
       [entriId]
     );

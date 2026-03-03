@@ -9,6 +9,9 @@
 ## 1) Ringkasan
 
 - Total entri turunan aktif yang belum punya tagar saat audit ini: **455 entri**.
+- Status terbaru setelah beberapa iterasi rule + auto-assign ada pada:
+  - `_docs/202603/202603032245_pembaruan-otomasi-nirtagar-dan-notasi-reduplikasi.md`
+  - `_docs/202603/202603032210_ringkasan-identifikasi-nirtagar.md`
 - Daftar lengkap tersedia pada file:
   - `_docs/202603/202603031950_entri-turunan-belum-bertagar.csv`
 - Daftar lengkap + **saran per entri** tersedia pada file:

@@ -369,7 +369,7 @@ Beberapa hal yang perlu dikonfirmasi sebelum implementasi:
 
 2. **Apakah tagar perlu urutan dalam konteks satu entri?** (mis. prefiks selalu sebelum sufiks) → Asumsi: **tidak perlu** — urutan bisa diinferensikan dari kategori. Jika perlu, tambahkan kolom `urutan` ke `entri_tagar`.
 
-3. **Apakah halaman indeks per tagar** (`/kamus/tagar/meng`) **termasuk scope MVP?** → Asumsi: opsional, bisa ditunda.
+3. **Apakah halaman indeks per tagar** (`/kamus/tagar/meng-`) **termasuk scope MVP?** → Asumsi: opsional, bisa ditunda.
 
 4. **Siapa yang bisa mengedit tagar entri?** → Asumsi: siapapun yang memiliki izin `edit_entri` (sama dengan mengedit makna/contoh).
 

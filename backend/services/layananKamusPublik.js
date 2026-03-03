@@ -117,7 +117,7 @@ async function ambilDetailKamus(indeksAtauEntri, {
         ModelEtimologi.ambilAktifPublikByEntriId(dataEntri.id, {
           aktifSaja: !includeEtimologiNonaktif,
         }),
-        ModelTagar.ambilTagarEntri(dataEntri.id),
+        ModelTagar.ambilTagarEntri(dataEntri.id, { aktifSaja: true }),
       ]);
 
       const maknaIds = maknaList.map((m) => m.id);

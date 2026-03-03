@@ -1095,7 +1095,7 @@ export function useSimpanTagarEntri() {
         .put(`/api/redaksi/kamus/${entriId}/tagar`, { tagar_ids })
         .then((r) => r.data),
     onSuccess: (_data, { entriId }) => {
-      invalidateQueryKeys(qc, [`tagar-entri`]);
+      invalidateQueryKeys(qc, ['tagar-entri', 'admin-audit-tagar']);
       qc.invalidateQueries({ queryKey: ['tagar-entri', entriId] });
     },
   });
