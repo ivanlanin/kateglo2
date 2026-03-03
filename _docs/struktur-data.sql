@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-03T05:39:56.000Z
+-- Generated: 2026-03-03T09:30:15.062Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -633,7 +633,6 @@ create table tagar (
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
   constraint tagar_kode_key unique (kode),
-  constraint tagar_kategori_check check (kategori = ANY (ARRAY['prefiks'::text, 'sufiks'::text, 'infiks'::text, 'klitik'::text, 'reduplikasi'::text, 'prakategorial'::text])),
   constraint tagar_kode_check check (TRIM(BOTH FROM kode) <> ''::text),
   constraint tagar_nama_check check (TRIM(BOTH FROM nama) <> ''::text)
 );

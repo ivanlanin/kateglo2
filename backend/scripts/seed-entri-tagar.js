@@ -58,6 +58,92 @@ const CONFIX_RULES = [
   { confixKode: 'peng--an', requiredCodes: ['peng-', '-an'] },
 ];
 
+const COMBINATION_TAGAR_DEFINITIONS = [
+  {
+    kode: 'meng--kan',
+    nama: 'meng--kan',
+    kategori: 'kombinasi',
+    deskripsi: 'Kombinasi meng- + -kan',
+    urutan: 60,
+  },
+  {
+    kode: 'meng--i',
+    nama: 'meng--i',
+    kategori: 'kombinasi',
+    deskripsi: 'Kombinasi meng- + -i',
+    urutan: 61,
+  },
+  {
+    kode: 'ber--kan',
+    nama: 'ber--kan',
+    kategori: 'kombinasi',
+    deskripsi: 'Kombinasi ber- + -kan',
+    urutan: 62,
+  },
+  {
+    kode: 'ber--i',
+    nama: 'ber--i',
+    kategori: 'kombinasi',
+    deskripsi: 'Kombinasi ber- + -i',
+    urutan: 63,
+  },
+  {
+    kode: 'di--kan',
+    nama: 'di--kan',
+    kategori: 'kombinasi',
+    deskripsi: 'Kombinasi di- + -kan',
+    urutan: 64,
+  },
+  {
+    kode: 'di--i',
+    nama: 'di--i',
+    kategori: 'kombinasi',
+    deskripsi: 'Kombinasi di- + -i',
+    urutan: 65,
+  },
+  {
+    kode: 'ter--kan',
+    nama: 'ter--kan',
+    kategori: 'kombinasi',
+    deskripsi: 'Kombinasi ter- + -kan',
+    urutan: 66,
+  },
+  {
+    kode: 'memper-',
+    nama: 'memper-',
+    kategori: 'kombinasi',
+    deskripsi: 'Kombinasi memper- (meng- + per-)',
+    urutan: 67,
+  },
+  {
+    kode: 'memper--kan',
+    nama: 'memper--kan',
+    kategori: 'kombinasi',
+    deskripsi: 'Kombinasi memper--kan (meng- + per- + -kan)',
+    urutan: 68,
+  },
+  {
+    kode: 'memper--i',
+    nama: 'memper--i',
+    kategori: 'kombinasi',
+    deskripsi: 'Kombinasi memper--i (meng- + per- + -i)',
+    urutan: 69,
+  },
+];
+
+const COMBINATION_RULES = [
+  { combinationKode: 'meng--kan', requiredCodes: ['meng-', '-kan'] },
+  { combinationKode: 'meng--i', requiredCodes: ['meng-', '-i'] },
+  { combinationKode: 'ber--kan', requiredCodes: ['ber-', '-kan'] },
+  { combinationKode: 'ber--i', requiredCodes: ['ber-', '-i'] },
+  { combinationKode: 'di--kan', requiredCodes: ['di-', '-kan'] },
+  { combinationKode: 'di--i', requiredCodes: ['di-', '-i'] },
+  { combinationKode: 'ter--kan', requiredCodes: ['ter-', '-kan'] },
+  { combinationKode: 'memper-', requiredCodes: ['meng-', 'per-'] },
+  { combinationKode: 'memper--kan', requiredCodes: ['meng-', 'per-', '-kan'] },
+  { combinationKode: 'memper--i', requiredCodes: ['meng-', 'per-', '-i'] },
+];
+
 async function ensureAuditTagarPermission() {
   await db.query(
     `INSERT INTO izin (kode, nama, kelompok)
@@ -91,6 +177,39 @@ async function ensureConfixTagarDefinitions() {
       [def.kode, def.nama, def.kategori, def.deskripsi, def.urutan]
     );
   }
+}
+
+async function ensureCombinationTagarDefinitions() {
+  for (const def of COMBINATION_TAGAR_DEFINITIONS) {
+    await db.query(
+      `INSERT INTO tagar (kode, nama, kategori, deskripsi, urutan, aktif)
+       VALUES ($1, $2, $3, $4, $5, TRUE)
+       ON CONFLICT (kode)
+       DO UPDATE SET
+         nama = EXCLUDED.nama,
+         kategori = EXCLUDED.kategori,
+         deskripsi = EXCLUDED.deskripsi,
+         urutan = EXCLUDED.urutan,
+         aktif = TRUE`,
+      [def.kode, def.nama, def.kategori, def.deskripsi, def.urutan]
+    );
+  }
+}
+
+function buildRequiredTagClauses(requiredCodes, startParam = 2) {
+  return requiredCodes
+    .map((_, idx) => (
+      `EXISTS (
+           SELECT 1
+           FROM entri_tagar et_req_${idx}
+           JOIN tagar t_req_${idx}
+             ON t_req_${idx}.id = et_req_${idx}.tagar_id
+          WHERE et_req_${idx}.entri_id = e.id
+            AND t_req_${idx}.aktif = TRUE
+            AND t_req_${idx}.kode = $${startParam + idx}
+         )`
+    ))
+    .join('\n         AND ');
 }
 
 async function applyConfixTags({ dryRun = false } = {}) {
@@ -148,6 +267,56 @@ async function applyConfixTags({ dryRun = false } = {}) {
   return summary;
 }
 
+async function applyCombinationTags({ dryRun = false } = {}) {
+  const summary = [];
+
+  for (const { combinationKode, requiredCodes } of COMBINATION_RULES) {
+    const requiredClauses = buildRequiredTagClauses(requiredCodes, 2);
+    const params = [combinationKode, ...requiredCodes];
+
+    if (dryRun) {
+      const preview = await db.query(
+        `SELECT COUNT(*)::int AS total
+           FROM entri e
+           JOIN tagar t_comb ON t_comb.kode = $1 AND t_comb.aktif = TRUE
+           LEFT JOIN entri_tagar et_comb ON et_comb.entri_id = e.id AND et_comb.tagar_id = t_comb.id
+          WHERE e.jenis = 'turunan'
+            AND e.aktif = 1
+            AND et_comb.entri_id IS NULL
+            AND ${requiredClauses}`,
+        params
+      );
+
+      summary.push({
+        combinationKode,
+        inserted: 0,
+        potential: preview.rows[0].total,
+      });
+      continue;
+    }
+
+    const inserted = await db.query(
+      `INSERT INTO entri_tagar (entri_id, tagar_id)
+       SELECT DISTINCT e.id, t_comb.id
+         FROM entri e
+         JOIN tagar t_comb ON t_comb.kode = $1 AND t_comb.aktif = TRUE
+        WHERE e.jenis = 'turunan'
+          AND e.aktif = 1
+          AND ${requiredClauses}
+       ON CONFLICT DO NOTHING`,
+      params
+    );
+
+    summary.push({
+      combinationKode,
+      inserted: inserted.rowCount || 0,
+      potential: inserted.rowCount || 0,
+    });
+  }
+
+  return summary;
+}
+
 // ============================================================
 // Konfigurasi pola imbuhan
 // Diurutkan dari terpanjang ke terpendek agar startsWith tidak
@@ -156,6 +325,10 @@ async function applyConfixTags({ dryRun = false } = {}) {
 
 const PREFIXES = [
   { str: 'memper', tags: ['meng-', 'per-']  },
+  { str: 'pemer',  tags: ['peng-', 'per-']  },
+  { str: 'pemel',  tags: ['peng-', 'per-']  },
+  { str: 'kepen',  tags: ['ke-', 'peng-']   },
+  { str: 'sepem',  tags: ['se-', 'peng-']   },
   { str: 'diper',  tags: ['di-', 'per-']    },
   { str: 'mempe',  tags: ['meng-', 'peng-'] },
   { str: 'menge',  tags: ['meng-']          },
@@ -201,7 +374,7 @@ const SUFFIXES = [
   { str: 'i',   tag: '-i'   },
 ];
 
-const PREFIXES_NASAL = new Set(['me', 'mem', 'men', 'meng', 'meny', 'menye', 'pe', 'pem', 'pen', 'peng', 'peny']);
+const PREFIXES_NASAL = new Set(['me', 'mem', 'men', 'meng', 'meny', 'menye', 'pe', 'pem', 'pen', 'peng', 'peny', 'kepen', 'sepem']);
 const HURUF_PELULUHAN_KPST = new Set(['k', 'p', 's', 't']);
 
 // ============================================================
@@ -691,6 +864,8 @@ async function main() {
   console.log('Izin audit_tagar dipastikan tersedia untuk peran redaksi.');
   await ensureConfixTagarDefinitions();
   console.log('Tagar konfiks dipastikan tersedia.');
+  await ensureCombinationTagarDefinitions();
+  console.log('Tagar kombinasi dipastikan tersedia.');
 
   // Muat semua tagar aktif (kode → id)
   const tagarResult = await db.query(
@@ -781,6 +956,13 @@ async function main() {
     confixPreview.forEach(({ confixKode, potential }) => {
       console.log(`  ${confixKode}: +${potential}`);
     });
+
+    const combinationPreview = await applyCombinationTags({ dryRun: true });
+    console.log('\nPreview kombinasi (berdasarkan data saat ini):');
+    combinationPreview.forEach(({ combinationKode, potential }) => {
+      console.log(`  ${combinationKode}: +${potential}`);
+    });
+
     console.log('\n[DRY RUN] Tidak ada data yang ditulis ke database.');
     return;
   }
@@ -809,6 +991,12 @@ async function main() {
   console.log('\nPenambahan tagar konfiks:');
   confixInserted.forEach(({ confixKode, inserted }) => {
     console.log(`  ${confixKode}: +${inserted}`);
+  });
+
+  const combinationInserted = await applyCombinationTags({ dryRun: false });
+  console.log('\nPenambahan tagar kombinasi:');
+  combinationInserted.forEach(({ combinationKode, inserted }) => {
+    console.log(`  ${combinationKode}: +${inserted}`);
   });
 
   console.log('\nSelesai!');
