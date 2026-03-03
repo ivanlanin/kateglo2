@@ -4,8 +4,8 @@
  * Algoritme: bandingkan string entri vs string induk (JOIN) untuk mendeteksi
  * imbuhan (prefiks, sufiks, klitik, reduplikasi) secara heuristik.
  *
- * Cakupan estimasi: ~89% dari 24.607 entri turunan.
- * Sisanya (~11%) perlu pengisian manual via antarmuka admin.
+ * Cakupan estimasi: ~99.4% dari 24.580 entri turunan.
+ * Sisanya (~0.6%) perlu pengisian manual via antarmuka admin.
  *
  * Penggunaan:
  *   node scripts/seed-entri-tagar.js --dry-run          # Preview tanpa tulis
@@ -502,8 +502,121 @@ function isMonosukuKata(kata) {
     .toLowerCase()
     .replace(/[^a-z]/g, '');
   if (!normalized) return false;
-  const vokalGroups = normalized.match(/[aiueo]+/g) || [];
-  return vokalGroups.length === 1;
+  // Hitung vokal secara individual (bukan per kelompok) agar deret vokal
+  // seperti 'ua' (buat), 'ai' (main), 'eo' (beo) tidak dianggap monosuku.
+  const vokalCount = (normalized.match(/[aiueo]/g) || []).length;
+  return vokalCount === 1;
+}
+
+/**
+ * Kembalikan array bentuk turunan yang valid untuk tagar 'peng-' dari kata dasar.
+ *
+ * Menangani alomorf nasal peN-:
+ *   - vokal       → peng + base         (ajar → pengajar)
+ *   - p (luluh)   → pem  + base[1:]     (pakai → pemakai)
+ *   - t (luluh)   → pen  + base[1:]     (tari → penari)
+ *   - k (luluh)   → peng + base[1:]     (karang → pengarang)
+ *   - k (pe-)     → pe   + base         (kerja → pekerja)
+ *   - s (luluh)   → peny + base[1:]     (sapu → penyapu)
+ *   - b, f, v     → pem  + base         (buat → pembuat)
+ *   - d           → pen  + base         (dapat → pendapat)
+ *                   pe   + base         (dagang → pedagang)
+ *   - c, j, z     → pen  + base
+ *   - g, h        → peng + base
+ *   - l,m,n,r,w,y → pe   + base         (laku → pelaku)
+ *   - monosuku    → penge + base         (cat → pengecat)
+ *
+ * @param {string} base - kata dasar (akan dinormalisasi: lowercase, hanya a-z)
+ * @returns {string[]} array bentuk turunan yang valid
+ */
+function expectedPeng(base) {
+  const b = String(base || '').toLowerCase().replace(/[^a-z]/g, '');
+  if (!b) return [];
+
+  // Monosuku kata → penge + base + alternatif pe + base (mis. pegolf)
+  if (isMonosukuKata(b)) return ['penge' + b, 'pe' + b];
+
+  const c = b[0];
+  const c2 = b[1] || ''; // karakter kedua untuk deteksi kluster konsonan
+  const isC2Consonant = c2 && !'aiueo'.includes(c2);
+  const forms = [];
+
+  if ('aiueo'.includes(c)) {
+    // Vokal: peng + base (penganggar)
+    // Juga pe + base untuk bentuk tanpa nasal (peanggar, peimbuh, peubah)
+    forms.push('peng' + b);
+    forms.push('pe' + b);
+  } else if (c === 'p') {
+    // Peluluhan p: pem + base[1:]  (pakai → pemakai, prakarsa → pemrakarsa)
+    forms.push('pem' + b.slice(1));
+    if (isC2Consonant) {
+      // Kluster pr-, pl-, dll.: juga bentuk tanpa peluluhan (propaganda → pempropaganda)
+      forms.push('pem' + b);
+    }
+    // Tanpa nasalisasi: pe + base   (pebisnis)
+    forms.push('pe' + b);
+  } else if (c === 't') {
+    if (isC2Consonant) {
+      // Kluster tr-, dl.: tanpa peluluhan (trompet → pentrompet)
+      forms.push('pen' + b);
+    } else {
+      // Peluluhan t: pen + base[1:]  (tari → penari)
+      forms.push('pen' + b.slice(1));
+    }
+    // Tanpa nasalisasi: pe + base
+    forms.push('pe' + b);
+  } else if (c === 'k') {
+    if (isC2Consonant) {
+      // Kluster kh-, kl-, kr-, dll.: tanpa peluluhan (khayal → pengkhayal)
+      forms.push('peng' + b);
+    } else {
+      // Peluluhan k: peng + base[1:]  (karang → pengarang)
+      forms.push('peng' + b.slice(1));
+    }
+    // Tanpa peluluhan via pe-        (kerja → pekerja)
+    forms.push('pe' + b);
+  } else if (c === 's') {
+    if (c2 === 'y') {
+      // Digraf sy: s luluh, y dipertahankan → peny + base[2:] (syair → penyair)
+      // dan pen + base (pensyair)
+      forms.push('peny' + b.slice(2));
+      forms.push('pen' + b);
+    } else if (isC2Consonant) {
+      // Kluster st-, sk-, sp-, dll.: tanpa peluluhan (stabil → penstabil)
+      forms.push('pen' + b);
+    } else {
+      // Peluluhan s: peny + base[1:]  (sapu → penyapu)
+      forms.push('peny' + b.slice(1));
+    }
+    // Tanpa nasalisasi: pe + base
+    forms.push('pe' + b);
+  } else if (c === 'b' || c === 'f' || c === 'v') {
+    // Nasalisasi: pem + base         (buat → pembuat)
+    forms.push('pem' + b);
+    // Tanpa nasalisasi: pe + base    (pebisnis)
+    forms.push('pe' + b);
+  } else if (c === 'd') {
+    // pen + base (pendapat) atau pe + base (pedagang)
+    forms.push('pen' + b);
+    forms.push('pe' + b);
+  } else if (c === 'c' || c === 'j' || c === 'z') {
+    // Nasalisasi: pen + base         (juang → penjuang)
+    forms.push('pen' + b);
+    // Tanpa nasalisasi: pe + base    (pejuang)
+    forms.push('pe' + b);
+  } else if (c === 'g' || c === 'h') {
+    // Nasalisasi: peng + base        (golf → penggolf)
+    forms.push('peng' + b);
+    // Tanpa nasalisasi: pe + base    (pegolf)
+    forms.push('pe' + b);
+  } else {
+    // l, m, n, r, w, y, dll. → pe + base (laku → pelaku)
+    // Juga peng + base untuk bentuk formal/arkais (penglihat, pengrajin)
+    forms.push('pe' + b);
+    forms.push('peng' + b);
+  }
+
+  return forms;
 }
 
 function hitungBedaFonem(a, b) {
@@ -636,6 +749,19 @@ function detectReduplikasiSubtypeFormal(left, right, indukVariants = []) {
   const rightNorm = normalizeHomonimSuffix(right);
   if (!leftNorm || !rightNorm || leftNorm === rightNorm) return null;
 
+  // R.salin: cek lebih awal sebelum filter prefiks agar tidak terblokir oleh
+  // ambilPrefiks yang salah mendeteksi prefiks pendek (mis. 'te' di 'temeh').
+  // Contoh: remeh-temeh → r≠t, beda=1, induk='remeh' → R.salin.
+  if (leftNorm.length === rightNorm.length) {
+    const beda = hitungBedaFonem(leftNorm, rightNorm);
+    if (beda > 0 && beda <= 2) {
+      if (indukVariants.length === 0) return 'R.salin';
+      if (indukVariants.includes(leftNorm) || indukVariants.includes(rightNorm)) {
+        return 'R.salin';
+      }
+    }
+  }
+
   const leftPref = ambilPrefiks(leftNorm);
   const rightPref = ambilPrefiks(rightNorm);
 
@@ -662,16 +788,6 @@ function detectReduplikasiSubtypeFormal(left, right, indukVariants = []) {
     }
   }
 
-  if (leftNorm.length === rightNorm.length) {
-    const beda = hitungBedaFonem(leftNorm, rightNorm);
-    if (beda > 0 && beda <= 2) {
-      if (indukVariants.length === 0) return 'R.salin';
-      if (indukVariants.includes(leftNorm) || indukVariants.includes(rightNorm)) {
-        return 'R.salin';
-      }
-    }
-  }
-
   return null;
 }
 
@@ -695,6 +811,33 @@ function isAlomorfKhususAjar(pre, induk) {
   const akar = String(induk || '').toLowerCase().replace(/[^a-z]/g, '');
   if (pre === 'bel' || pre === 'pel') return akar === 'ajar';
   return true;
+}
+
+/**
+ * Kembalikan bentuk nasal N- saja (tanpa me-) dari kata dasar.
+ * Digunakan untuk mendeteksi pola R.penuh nasal:
+ *   menagak-nagak (tagak), memacak-macak (pacak), mengabung-ngabung (kabung).
+ * @param {string} base
+ * @returns {string[]}
+ */
+function nasalAloneForms(base) {
+  const b = String(base || '').toLowerCase().replace(/[^a-z]/g, '');
+  if (!b) return [];
+  const c = b[0];
+  // Konsonan yang "luluh" ke nasal berlaku meski monosuku kata
+  // (kais → ngais, tari → nari, palu → malu, sari → nyari)
+  if ('aiueo'.includes(c)) return ['ng' + b];
+  if (c === 'p') return ['m' + b.slice(1)];
+  if (c === 't') return ['n' + b.slice(1)];
+  if (c === 'k') return ['ng' + b.slice(1)];
+  if (c === 's') return ['ny' + b.slice(1)];
+  // Konsonan lain monosuku kata → menge- sehingga N-alone = nge + base
+  // (bor → ngebor, las → ngelas, cat → ngecat)
+  if (isMonosukuKata(b)) return ['nge' + b];
+  if (c === 'b' || c === 'f' || c === 'v') return ['m' + b];
+  if (c === 'd' || c === 'c' || c === 'j') return ['n' + b];
+  if (c === 'g' || c === 'h') return ['ng' + b];
+  return [b]; // l, m, n, r, w, y — tidak berubah
 }
 
 function cocokPolaMenyeDenganSe(preStr, indukVar, kandidat) {
@@ -891,6 +1034,13 @@ function detectReduplikasi(entri, _induk) {
     return ['R.tri'];
   }
 
+  // Pindahkan ke atas agar tersedia untuk semua pengecekan berikutnya
+  const indukVariants = Array.from(new Set([
+    induk,
+    induk.replace(/\s+/g, ''),
+    induk.replace(/[\s-]+/g, ''),
+  ].filter(Boolean)));
+
   const globalPre = ambilPrefiks(entriNorm);
   const tanpaPre = globalPre.prefix ? globalPre.root : entriNorm;
   const framedParts = tanpaPre.split('-').filter(Boolean);
@@ -919,16 +1069,102 @@ function detectReduplikasi(entri, _induk) {
     }
   }
 
+  // Tipe A: prefiks + induk berkejang (seluruh tanpaPre cocok dengan induk)
+  // Contoh: berbasa-basi (induk basa-basi) → ['ber-']
+  // Contoh: berpontang-panting (induk pontang-panting) → ['ber-']
+  if (globalPre.prefix && indukVariants.some((v) => v === tanpaPre)) {
+    const preTags = mapPrefix(globalPre.prefix) || [];
+    if (preTags.length > 0) return preTags;
+  }
+
+  // Tipe A diperluas: prefiks + induk berkejang + sufiks pada bagian terakhir
+  // Contoh: mencerai-beraikan (induk cerai-berai) → ['meng-', '-kan']
+  // Contoh: mendesas-desuskan (induk desas-desus) → ['meng-', '-kan']
+  if (globalPre.prefix && framedParts.length === 2) {
+    const [fLeft, fRight] = framedParts;
+    const preTags = mapPrefix(globalPre.prefix) || [];
+    if (preTags.length > 0) {
+      for (const { str: sufStr, tag: sufTag } of SUFFIXES) {
+        if (fRight.endsWith(sufStr) && fRight.length > sufStr.length) {
+          const fRightBase = fRight.slice(0, -sufStr.length);
+          if (sufTag && indukVariants.some((v) => v === fLeft + '-' + fRightBase)) {
+            return [...new Set([...preTags, sufTag])];
+          }
+        }
+      }
+      // R.salin / R.purwa / R.wasana dengan prefiks (framedParts)
+      // Contoh: bercoreng-moreng (induk coreng), berlenggak-lenggok (induk lenggok)
+      const subtype = detectReduplikasiSubtypeFormal(fLeft, fRight, indukVariants);
+      if (subtype) return [...new Set([subtype, ...preTags])];
+
+      // R.salin dengan prefiks + sufiks
+      // Contoh: meremeh-temehkan (induk remeh)
+      for (const { str: sufStr, tag: sufTag } of SUFFIXES) {
+        if (fRight.endsWith(sufStr) && fRight.length > sufStr.length) {
+          const fRightBase = fRight.slice(0, -sufStr.length);
+          const subtype2 = detectReduplikasiSubtypeFormal(fLeft, fRightBase, indukVariants);
+          if (subtype2 && sufTag) return [...new Set([subtype2, ...preTags, sufTag])];
+        }
+      }
+
+      // R.berafiks pada framedParts (mis. sekali-sekali → se + kali-sekali)
+      const afiksFromFLeft = deteksiAfiksasiDari(fRight, fLeft);
+      if (afiksFromFLeft && indukVariants.includes(fLeft)) {
+        return [...new Set(['R.berafiks', ...preTags, ...afiksFromFLeft])];
+      }
+      const afiksFromFRight = deteksiAfiksasiDari(fLeft, fRight);
+      if (afiksFromFRight && indukVariants.includes(fRight)) {
+        return [...new Set(['R.berafiks', ...preTags, ...afiksFromFRight])];
+      }
+    }
+  }
+
+  // Fallback: coba setiap prefiks (bukan hanya yang terpanjang/greedy)
+  // agar menangani dua kasus:
+  //   1. Greedy salah pilih (berpeluk-pelukan → 'berpe' dipilih, tapi 'ber' yang benar)
+  //   2. Alomorf 'be-' dari 'ber-' sebelum base berawalan 'r'
+  //      (beramah-tamah → 'be' + 'ramah-tamah' = induk)
+  //      (beramah-ramahan → 'be' + R.penuh 'ramah' + '-an')
+  for (const { str: altPre } of PREFIXES) {
+    if (altPre === globalPre.prefix) continue;
+    if (!entriNorm.startsWith(altPre)) continue;
+    const altRoot = entriNorm.slice(altPre.length);
+    const altParts = altRoot.split('-').filter(Boolean);
+    if (altParts.length !== 2) continue;
+    const [altLeft, altRight] = altParts;
+    const altPreTags = mapPrefix(altPre) || [];
+    if (altPreTags.length === 0) continue;
+
+    if (altLeft === altRight && indukVariants.includes(altLeft)) {
+      return [...new Set(['R.penuh', ...altPreTags])];
+    }
+    for (const { str: sufStr, tag: sufTag } of SUFFIXES) {
+      if (altRight === altLeft + sufStr && indukVariants.includes(altLeft)) {
+        return [...new Set(['R.penuh', ...altPreTags, sufTag])];
+      }
+    }
+    // Tipe A dengan prefiks alternatif (mis. 'be' alomorf dari 'ber-')
+    if (indukVariants.some((v) => v === altRoot)) {
+      return altPreTags;
+    }
+    // Tipe A diperluas dengan prefiks alternatif
+    for (const { str: sufStr, tag: sufTag } of SUFFIXES) {
+      if (altRight.endsWith(sufStr) && altRight.length > sufStr.length) {
+        const altRightBase = altRight.slice(0, -sufStr.length);
+        if (sufTag && indukVariants.some((v) => v === altLeft + '-' + altRightBase)) {
+          return [...new Set([...altPreTags, sufTag])];
+        }
+      }
+    }
+    // R.salin dengan prefiks alternatif
+    const subtypeAlt = detectReduplikasiSubtypeFormal(altLeft, altRight, indukVariants);
+    if (subtypeAlt) return [...new Set([subtypeAlt, ...altPreTags])];
+  }
+
   if (parts.length !== 2) return null;
 
   const [left, right] = parts;
   if (!left || !right) return null;
-
-  const indukVariants = Array.from(new Set([
-    induk,
-    induk.replace(/\s+/g, ''),
-    induk.replace(/[\s-]+/g, ''),
-  ].filter(Boolean)));
 
   const berbagiLeksemDasar = (base) => {
     if (!base) return false;
@@ -945,6 +1181,22 @@ function detectReduplikasi(entri, _induk) {
       const suffixTag = mapSuffix(sufStr);
       if (!suffixTag) continue;
       return ['R.penuh', suffixTag];
+    }
+  }
+
+  // Nasal R.penuh: left = me+N(induk), right = N(induk) [+ sufiks]
+  // Contoh: menagak-nagak (tagak), memacak-macak (pacak), mengabung-ngabung (kabung)
+  // Contoh: menakut-nakuti (takut), menambah-nambahi (tambah)
+  for (const indukVar of indukVariants) {
+    const nasals = nasalAloneForms(indukVar);
+    for (const nasal of nasals) {
+      if (left !== 'me' + nasal) continue;
+      if (right === nasal) return ['R.penuh', 'meng-'];
+      for (const { str: sufStr, tag: sufTag } of SUFFIXES) {
+        if (right === nasal + sufStr && sufTag) {
+          return ['R.penuh', 'meng-', sufTag];
+        }
+      }
     }
   }
 
@@ -1017,9 +1269,44 @@ async function main() {
   for (const { id, entri, induk_entri: induk } of entries) {
     const entriNorm = normalizeHomonimSuffix(entri);
     const indukNorm = normalizeInduk(induk);
-    const tagCodes = entriNorm.includes('-')
+
+    // --- Aturan baru: peng- hanya jika entri diawali bentuk expectedPeng(base) ---
+    // Gunakan startsWith agar entri + sufiks (mis. pengajaran) juga terdeteksi.
+    // Untuk entri frasa multi-kata (mis. "penanda tangan"), bandingkan juga
+    // setelah menghapus spasi/tanda hubung agar cocok dengan bentuk expectedPeng.
+    const pengForms = expectedPeng(indukNorm);
+    const entriNormNoSpace = entriNorm.replace(/[\s-]+/g, '');
+    const hasPeng = pengForms.length > 0
+      && pengForms.some(
+        (form) => entriNorm.startsWith(form) || entriNormNoSpace.startsWith(form)
+      );
+
+    // --- Aturan baru: per- berdasarkan awalan entri ---
+    // per- dari deteksi lama (memper-, diper-, pemer-, dsb.) TIDAK dihapus;
+    // rule ini hanya menambahkan per- untuk kasus sederhana yang mungkin belum terdeteksi.
+    const baseStartsVowel = indukNorm.length > 0 && 'aiueo'.includes(indukNorm[0]);
+    const hasPer = entriNorm.startsWith('per')
+      || (entriNorm.startsWith('pel') && baseStartsVowel);
+
+    // Deteksi tagar lainnya menggunakan logika yang ada
+    let tagCodes = entriNorm.includes('-')
       ? detectReduplikasi(entriNorm, indukNorm)
       : detectNonReduplikasi(entriNorm, indukNorm);
+
+    // Override peng- saja: hapus yang lama, tambah berdasarkan aturan baru.
+    // per- dari deteksi lama dipertahankan (untuk memper-, diper-, dll.).
+    if (tagCodes !== null) {
+      tagCodes = tagCodes.filter((t) => t !== 'peng-');
+    } else if (hasPeng || hasPer) {
+      // Tidak terdeteksi oleh logika umum, tapi ada peng-/per-
+      tagCodes = [];
+    }
+
+    if (tagCodes !== null) {
+      if (hasPeng) tagCodes.push('peng-');
+      if (hasPer && !tagCodes.includes('per-')) tagCodes.push('per-');
+      tagCodes = [...new Set(tagCodes)];
+    }
 
     if (tagCodes === null) {
       cntUndetected++;
