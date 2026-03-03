@@ -20,6 +20,44 @@ const DRY_RUN = process.argv.includes('--dry-run');
 const VERBOSE = process.argv.includes('--verbose');
 const BATCH_SIZE = 500;
 
+const CONFIX_TAGAR_DEFINITIONS = [
+  {
+    kode: 'ber--an',
+    nama: 'ber--an',
+    kategori: 'prakategorial',
+    deskripsi: 'Konfiks ber--an (kombinasi ber- + -an)',
+    urutan: 50,
+  },
+  {
+    kode: 'ke--an',
+    nama: 'ke--an',
+    kategori: 'prakategorial',
+    deskripsi: 'Konfiks ke--an (kombinasi ke- + -an)',
+    urutan: 51,
+  },
+  {
+    kode: 'per--an',
+    nama: 'per--an',
+    kategori: 'prakategorial',
+    deskripsi: 'Konfiks per--an (kombinasi per- + -an)',
+    urutan: 52,
+  },
+  {
+    kode: 'peng--an',
+    nama: 'peng--an',
+    kategori: 'prakategorial',
+    deskripsi: 'Konfiks peng--an (kombinasi peng- + -an)',
+    urutan: 53,
+  },
+];
+
+const CONFIX_RULES = [
+  { confixKode: 'ber--an', requiredCodes: ['ber-', '-an'] },
+  { confixKode: 'ke--an', requiredCodes: ['ke-', '-an'] },
+  { confixKode: 'per--an', requiredCodes: ['per-', '-an'] },
+  { confixKode: 'peng--an', requiredCodes: ['peng-', '-an'] },
+];
+
 async function ensureAuditTagarPermission() {
   await db.query(
     `INSERT INTO izin (kode, nama, kelompok)
@@ -36,6 +74,78 @@ async function ensureAuditTagarPermission() {
        AND p.akses_redaksi = TRUE
      ON CONFLICT DO NOTHING`
   );
+}
+
+async function ensureConfixTagarDefinitions() {
+  for (const def of CONFIX_TAGAR_DEFINITIONS) {
+    await db.query(
+      `INSERT INTO tagar (kode, nama, kategori, deskripsi, urutan, aktif)
+       VALUES ($1, $2, $3, $4, $5, TRUE)
+       ON CONFLICT (kode)
+       DO UPDATE SET
+         nama = EXCLUDED.nama,
+         kategori = EXCLUDED.kategori,
+         deskripsi = EXCLUDED.deskripsi,
+         urutan = EXCLUDED.urutan,
+         aktif = TRUE`,
+      [def.kode, def.nama, def.kategori, def.deskripsi, def.urutan]
+    );
+  }
+}
+
+async function applyConfixTags({ dryRun = false } = {}) {
+  const summary = [];
+
+  for (const { confixKode, requiredCodes } of CONFIX_RULES) {
+    const [kodeA, kodeB] = requiredCodes;
+
+    if (dryRun) {
+      const preview = await db.query(
+        `SELECT COUNT(*)::int AS total
+         FROM entri e
+         JOIN tagar t_conf ON t_conf.kode = $1 AND t_conf.aktif = TRUE
+         JOIN tagar t_a ON t_a.kode = $2 AND t_a.aktif = TRUE
+         JOIN tagar t_b ON t_b.kode = $3 AND t_b.aktif = TRUE
+         JOIN entri_tagar et_a ON et_a.entri_id = e.id AND et_a.tagar_id = t_a.id
+         JOIN entri_tagar et_b ON et_b.entri_id = e.id AND et_b.tagar_id = t_b.id
+         LEFT JOIN entri_tagar et_conf ON et_conf.entri_id = e.id AND et_conf.tagar_id = t_conf.id
+         WHERE e.jenis = 'turunan'
+           AND e.aktif = 1
+           AND et_conf.entri_id IS NULL`,
+        [confixKode, kodeA, kodeB]
+      );
+
+      summary.push({
+        confixKode,
+        inserted: 0,
+        potential: preview.rows[0].total,
+      });
+      continue;
+    }
+
+    const inserted = await db.query(
+      `INSERT INTO entri_tagar (entri_id, tagar_id)
+       SELECT DISTINCT e.id, t_conf.id
+       FROM entri e
+       JOIN tagar t_conf ON t_conf.kode = $1 AND t_conf.aktif = TRUE
+       JOIN tagar t_a ON t_a.kode = $2 AND t_a.aktif = TRUE
+       JOIN tagar t_b ON t_b.kode = $3 AND t_b.aktif = TRUE
+       JOIN entri_tagar et_a ON et_a.entri_id = e.id AND et_a.tagar_id = t_a.id
+       JOIN entri_tagar et_b ON et_b.entri_id = e.id AND et_b.tagar_id = t_b.id
+       WHERE e.jenis = 'turunan'
+         AND e.aktif = 1
+       ON CONFLICT DO NOTHING`,
+      [confixKode, kodeA, kodeB]
+    );
+
+    summary.push({
+      confixKode,
+      inserted: inserted.rowCount || 0,
+      potential: inserted.rowCount || 0,
+    });
+  }
+
+  return summary;
 }
 
 // ============================================================
@@ -579,6 +689,8 @@ async function main() {
 
   await ensureAuditTagarPermission();
   console.log('Izin audit_tagar dipastikan tersedia untuk peran redaksi.');
+  await ensureConfixTagarDefinitions();
+  console.log('Tagar konfiks dipastikan tersedia.');
 
   // Muat semua tagar aktif (kode → id)
   const tagarResult = await db.query(
@@ -664,6 +776,11 @@ async function main() {
   }
 
   if (DRY_RUN) {
+    const confixPreview = await applyConfixTags({ dryRun: true });
+    console.log('\nPreview konfiks (berdasarkan data saat ini):');
+    confixPreview.forEach(({ confixKode, potential }) => {
+      console.log(`  ${confixKode}: +${potential}`);
+    });
     console.log('\n[DRY RUN] Tidak ada data yang ditulis ke database.');
     return;
   }
@@ -687,6 +804,12 @@ async function main() {
       console.log(`  Tersimpan: ${saved}/${toInsert.length}`);
     }
   }
+
+  const confixInserted = await applyConfixTags({ dryRun: false });
+  console.log('\nPenambahan tagar konfiks:');
+  confixInserted.forEach(({ confixKode, inserted }) => {
+    console.log(`  ${confixKode}: +${inserted}`);
+  });
 
   console.log('\nSelesai!');
 }
