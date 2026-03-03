@@ -1414,9 +1414,8 @@ function KamusAdmin() {
             modeTambah={panel.modeTambah}
           />
 
-          {/* Tagar section — only in edit mode, for derivational/affix entry types */}
-          {!panel.modeTambah && panel.data.id &&
-            !['dasar', 'idiom', 'peribahasa'].includes(panel.data.jenis) && (
+          {/* Tagar section — only in edit mode */}
+          {!panel.modeTambah && panel.data.id && (
             <SeksiTagar entriId={panel.data.id} />
           )}
 

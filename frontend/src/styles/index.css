@@ -2027,6 +2027,15 @@ code {
     @apply border-dark-border bg-dark-bg-input text-white;
   }
 
+  .dark .form-admin-select option {
+    @apply bg-dark-bg-elevated text-dark-text;
+  }
+
+  .dark .form-admin-select option:checked,
+  .dark .form-admin-select option:hover {
+    @apply bg-blue-900/50 text-blue-100;
+  }
+
   .form-admin-filter-active {
     @apply bg-blue-50 border-blue-300;
   }
