@@ -63,6 +63,9 @@ const PREFIXES = [
   { str: 'men',    tags: ['meng-'] },
   { str: 'pem',    tags: ['peng-'] },
   { str: 'pen',    tags: ['peng-'] },
+  { str: 'bel',    tags: ['ber-']  },
+  { str: 'pel',    tags: ['per-']  },
+  { str: 'be',     tags: ['ber-']  },
   { str: 'ber',    tags: ['ber-']  },
   { str: 'ter',    tags: ['ter-']  },
   { str: 'te',     tags: ['ter-']  },
@@ -234,6 +237,19 @@ function isPrefiksKhususMonosuku(pre) {
   return pre === 'menge' || pre === 'penge';
 }
 
+function isAlomorfBeUntukBer(induk) {
+  const akar = String(induk || '').toLowerCase().replace(/[^a-z]/g, '');
+  if (!akar) return false;
+  if (akar.startsWith('r')) return true;
+  return /^[^aiueo]*er([^aiueo]|$)/.test(akar);
+}
+
+function isAlomorfKhususAjar(pre, induk) {
+  const akar = String(induk || '').toLowerCase().replace(/[^a-z]/g, '');
+  if (pre === 'bel' || pre === 'pel') return akar === 'ajar';
+  return true;
+}
+
 function cocokPolaMenyeDenganSe(preStr, indukVar, kandidat) {
   if (preStr !== 'menye') return false;
   if (!indukVar || !indukVar.startsWith('se') || indukVar.length <= 2) return false;
@@ -318,6 +334,8 @@ function detectNonReduplikasi(entri, induk) {
 
     const prefixTags = mapPrefix(pre);
     if (prefixTags === null) continue; // prefiks tidak dikenali, coba varian lain
+    if (pre === 'be' && !isAlomorfBeUntukBer(indukVar)) continue;
+    if (!isAlomorfKhususAjar(pre, indukVar)) continue;
 
     const suffixTag = suf ? mapSuffix(suf) : null;
     if (suf && suffixTag === null) continue; // sufiks tidak dikenali, coba varian lain
@@ -346,6 +364,10 @@ function detectNonReduplikasi(entri, induk) {
       const cocokAkar = indukCandidates.find(({ value: indukVar, extraTags }) => (
         bolehGunakanTagLayered(preStr, extraTags)
         &&
+        isAlomorfKhususAjar(preStr, indukVar)
+        &&
+        (preStr !== 'be' || isAlomorfBeUntukBer(indukVar))
+        &&
         (!isPrefiksKhususMonosuku(preStr) || isMonosukuKata(indukVar))
         && (
           middle === indukVar ||
@@ -365,6 +387,10 @@ function detectNonReduplikasi(entri, induk) {
     // Coba tanpa sufiks
     const cocokTanpaSufiks = indukCandidates.find(({ value: indukVar, extraTags }) => (
       bolehGunakanTagLayered(preStr, extraTags)
+      &&
+      isAlomorfKhususAjar(preStr, indukVar)
+      &&
+      (preStr !== 'be' || isAlomorfBeUntukBer(indukVar))
       &&
       (!isPrefiksKhususMonosuku(preStr) || isMonosukuKata(indukVar))
       && (
