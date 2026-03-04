@@ -3,6 +3,7 @@
 ## 2026-03-04 Rabu
 
 - Membuat halaman redaksi untuk melihat statistik [Susun Kata Bebas](/gim/susun-kata/bebas)
+- Menghapus navigasi di bawah halaman dan menyisakan navigasi di atas untuk menyederhanakan tampilan
 
 ## 2026-03-03 Selasa
 

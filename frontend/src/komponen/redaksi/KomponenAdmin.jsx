@@ -391,19 +391,6 @@ export function TabelAdmin({
           </table>
         </div>
       </div>
-      {tampilkanPaginasi && (
-        <div className="mt-4">
-          <Paginasi
-            total={total}
-            limit={limit}
-            offset={offset}
-            onChange={handlerCursor ? undefined : onOffset}
-            pageInfo={pageInfo}
-            currentPage={currentPage}
-            onNavigateCursor={handlerCursor || undefined}
-          />
-        </div>
-      )}
     </>
   );
 }

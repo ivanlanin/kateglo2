@@ -1,5 +1,5 @@
 /**
- * @fileoverview Komponen pembungkus hasil pencarian dengan paginasi atas-bawah
+ * @fileoverview Komponen pembungkus hasil pencarian dengan paginasi di atas tabel
  */
 
 import Paginasi from '../bersama/Paginasi';
@@ -32,15 +32,6 @@ function HasilPencarian({
       </div>
       <div className={containerClassName}>
         {renderItems(results)}
-      </div>
-      <div className="mt-4">
-        <Paginasi
-          total={total}
-          limit={limit}
-          pageInfo={pageInfo}
-          currentPage={currentPage}
-          onNavigateCursor={onNavigateCursor}
-        />
       </div>
     </>
   );
