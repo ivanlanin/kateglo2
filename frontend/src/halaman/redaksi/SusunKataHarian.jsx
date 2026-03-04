@@ -101,7 +101,7 @@ export function resolveTanggalSimpan(tanggalForm, tanggalQuery) {
   return String(tanggalForm || '').trim() || tanggalQuery;
 }
 
-function SusunKataAdmin() {
+function SusunKataHarian() {
   const [cariTanggal, setCariTanggal] = useState(tanggalHariIni());
   const [tanggalQuery, setTanggalQuery] = useState(tanggalHariIni());
   const [panjangDraft, setPanjangDraft] = useState('');
@@ -237,7 +237,7 @@ function SusunKataAdmin() {
   };
 
   return (
-    <TataLetak mode="admin" judul="Susun Kata" aksiJudul={<TombolAksiAdmin onClick={handleBuatKataHarian} label={buatHarian.isPending ? 'Membuat …' : 'Buat Kata Harian'} />}>
+    <TataLetak mode="admin" judul="Susun Kata Harian" aksiJudul={<TombolAksiAdmin onClick={handleBuatKataHarian} label={buatHarian.isPending ? 'Membuat …' : 'Buat Kata Harian'} />}>
       <BarisFilterCariAdmin
         nilai={cariTanggal}
         onChange={setCariTanggal}
@@ -313,4 +313,4 @@ function SusunKataAdmin() {
   );
 }
 
-export default SusunKataAdmin;
+export default SusunKataHarian;

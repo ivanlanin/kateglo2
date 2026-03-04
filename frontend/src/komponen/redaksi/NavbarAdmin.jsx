@@ -18,7 +18,10 @@ const kelompokMenuAdmin = [
   },
   {
     judul: 'Gim',
-    items: [{ path: '/redaksi/susun-kata', label: 'Susun Kata', izin: 'kelola_susun_kata' }],
+    items: [
+      { path: '/redaksi/susun-kata-harian', label: 'Susun Kata Harian', izin: 'kelola_susun_kata' },
+      { path: '/redaksi/susun-kata-bebas', label: 'Susun Kata Bebas', izin: 'kelola_susun_kata' },
+    ],
   },
   {
     judul: 'Interaksi',

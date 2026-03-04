@@ -420,6 +420,61 @@ class ModelSusunKata {
     return result.rows[0] || null;
   }
 
+  static async daftarRekapBebasAdmin({ tanggal = null, limit = 200 }) {
+    const tanggalAman = parseTanggal(tanggal);
+    const limitAman = Math.min(Math.max(Number.parseInt(limit, 10) || 200, 1), 1000);
+
+    const result = await db.query(
+      `WITH rekap AS (
+         SELECT
+           sb.tanggal,
+           COUNT(*) AS total_main,
+           COUNT(DISTINCT sb.pengguna_id) AS jumlah_peserta,
+           COUNT(*) FILTER (WHERE sb.menang = true) AS total_menang
+         FROM susun_kata_bebas sb
+         WHERE sb.tanggal = COALESCE($1::date, sb.tanggal)
+         GROUP BY sb.tanggal
+       ),
+       pemenang AS (
+         SELECT DISTINCT ON (sb.tanggal)
+           sb.tanggal,
+           p.nama AS pemenang
+         FROM susun_kata_bebas sb
+         JOIN pengguna p ON p.id = sb.pengguna_id
+         WHERE sb.menang = true
+           AND sb.tanggal = COALESCE($1::date, sb.tanggal)
+         ORDER BY sb.tanggal DESC, GREATEST(11 - sb.percobaan, 1) DESC, sb.detik ASC, sb.created_at ASC
+       )
+       SELECT
+         to_char(r.tanggal, 'YYYY-MM-DD') AS tanggal,
+         COALESCE(p.pemenang, '—') AS pemenang,
+         r.jumlah_peserta,
+         r.total_main,
+         r.total_menang,
+         ROUND(
+           CASE
+             WHEN r.total_main = 0 THEN 0
+             ELSE (r.total_menang::numeric * 100.0) / r.total_main::numeric
+           END,
+           2
+         ) AS persen_menang
+       FROM rekap r
+       LEFT JOIN pemenang p ON p.tanggal = r.tanggal
+       ORDER BY r.tanggal DESC
+       LIMIT $2`,
+      [tanggalAman, limitAman]
+    );
+
+    return result.rows.map((row) => ({
+      tanggal: row.tanggal,
+      pemenang: row.pemenang,
+      jumlah_peserta: Number(row.jumlah_peserta) || 0,
+      total_main: Number(row.total_main) || 0,
+      total_menang: Number(row.total_menang) || 0,
+      persen_menang: Number(row.persen_menang) || 0,
+    }));
+  }
+
   static async ambilKlasemenBebas({ limit = 10, tanggal = null }) {
     const limitAman = Math.min(Math.max(Number.parseInt(limit, 10) || 10, 1), 50);
     const tanggalAman = parseTanggal(tanggal);

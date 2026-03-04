@@ -331,4 +331,58 @@ describe('ModelSusunKata', () => {
     await ModelSusunKata.ambilKlasemenHarian({ susunKataId: '8' });
     expect(db.query).toHaveBeenNthCalledWith(6, expect.stringContaining('ORDER BY skor DESC'), [8, 10]);
   });
+
+  it('daftarRekapBebasAdmin memetakan hasil rekap dengan aman', async () => {
+    db.query.mockResolvedValueOnce({
+      rows: [{
+        tanggal: '2026-03-03',
+        pemenang: 'Andi',
+        jumlah_peserta: '8',
+        total_main: '20',
+        total_menang: '11',
+        persen_menang: '55.00',
+      }],
+    });
+
+    const result = await ModelSusunKata.daftarRekapBebasAdmin({ tanggal: '2026-03-03', limit: 5000 });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('FROM susun_kata_bebas sb'),
+      ['2026-03-03', 1000]
+    );
+    expect(result[0]).toEqual({
+      tanggal: '2026-03-03',
+      pemenang: 'Andi',
+      jumlah_peserta: 8,
+      total_main: 20,
+      total_menang: 11,
+      persen_menang: 55,
+    });
+  });
+
+  it('daftarRekapBebasAdmin memakai fallback saat data kosong atau input invalid', async () => {
+    db.query.mockResolvedValueOnce({ rows: [] });
+    await expect(ModelSusunKata.daftarRekapBebasAdmin({ tanggal: '2026/03/03', limit: 'abc' })).resolves.toEqual([]);
+    expect(db.query).toHaveBeenCalledWith(expect.any(String), [null, 200]);
+
+    db.query.mockResolvedValueOnce({
+      rows: [{
+        tanggal: null,
+        pemenang: null,
+        jumlah_peserta: null,
+        total_main: null,
+        total_menang: null,
+        persen_menang: null,
+      }],
+    });
+    const fallback = await ModelSusunKata.daftarRekapBebasAdmin({});
+    expect(fallback[0]).toEqual({
+      tanggal: null,
+      pemenang: null,
+      jumlah_peserta: 0,
+      total_main: 0,
+      total_menang: 0,
+      persen_menang: 0,
+    });
+  });
 });

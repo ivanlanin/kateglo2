@@ -36,6 +36,8 @@ vi.mock('../src/halaman/redaksi/LabelAdmin', () => ({ default: () => <div>Label 
 vi.mock('../src/halaman/redaksi/AuditTagarAdmin', () => ({ default: () => <div>Audit Tagar Redaksi</div> }));
 vi.mock('../src/halaman/redaksi/PenggunaAdmin', () => ({ default: () => <div>Pengguna Redaksi</div> }));
 vi.mock('../src/halaman/redaksi/PencarianAdmin', () => ({ default: () => <div>Statistik Pencarian Redaksi</div> }));
+vi.mock('../src/halaman/redaksi/SusunKataHarian', () => ({ default: () => <div>Susun Kata Harian Redaksi</div> }));
+vi.mock('../src/halaman/redaksi/SusunKataBebas', () => ({ default: () => <div>Susun Kata Bebas Redaksi</div> }));
 
 describe('App', () => {
   beforeEach(() => {
@@ -155,6 +157,30 @@ describe('App', () => {
     );
 
     expect(screen.getByText('Statistik Pencarian Redaksi')).toBeInTheDocument();
+  });
+
+  it('mengizinkan route susun kata harian dan bebas saat user punya izin', () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      adalahRedaksi: true,
+      adalahAdmin: false,
+      isLoading: false,
+      punyaIzin: (izin) => izin === 'kelola_susun_kata',
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/redaksi/susun-kata-harian']}>
+        <App />
+      </MemoryRouter>
+    );
+    expect(screen.getByText('Susun Kata Harian Redaksi')).toBeInTheDocument();
+
+    render(
+      <MemoryRouter initialEntries={['/redaksi/susun-kata-bebas']}>
+        <App />
+      </MemoryRouter>
+    );
+    expect(screen.getByText('Susun Kata Bebas Redaksi')).toBeInTheDocument();
   });
 
   it('mengizinkan route audit tagar saat user punya izin audit_tagar', () => {

@@ -552,6 +552,24 @@ export function useDetailSusunKataHarianAdmin({ tanggal = '', panjang = '' } = {
   });
 }
 
+export function useSusunKataBebasAdmin({ tanggal = '', limit = 200 } = {}) {
+  const tanggalAman = String(tanggal ?? '').trim();
+  const limitAman = Math.min(Math.max(Number.parseInt(limit, 10) || 200, 1), 1000);
+
+  return useQuery({
+    queryKey: ['admin-susun-kata-bebas', { tanggal: tanggalAman, limit: limitAman }],
+    queryFn: () =>
+      klien
+        .get('/api/redaksi/susun-kata/bebas', {
+          params: {
+            tanggal: tanggalAman || undefined,
+            limit: limitAman,
+          },
+        })
+        .then((r) => r.data),
+  });
+}
+
 export function useDaftarSumberAdmin({
   limit = 50,
   cursor = null,

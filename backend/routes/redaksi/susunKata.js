@@ -26,6 +26,12 @@ function parsePanjangFilter(value) {
   return ModelSusunKata.parsePanjang(raw, 5);
 }
 
+function parseLimit(value, fallback = 200) {
+  const parsed = Number.parseInt(value, 10);
+  if (Number.isNaN(parsed)) return fallback;
+  return Math.min(Math.max(parsed, 1), 1000);
+}
+
 router.get('/harian', periksaIzin('kelola_susun_kata'), async (req, res, next) => {
   try {
     const tanggal = parseTanggal(req.query.tanggal);
@@ -121,6 +127,22 @@ router.put('/harian', periksaIzin('kelola_susun_kata'), async (req, res, next) =
     if (error?.message?.includes('tidak ditemukan')) {
       return res.status(404).json({ success: false, message: error.message });
     }
+    return next(error);
+  }
+});
+
+router.get('/bebas', periksaIzin('kelola_susun_kata'), async (req, res, next) => {
+  try {
+    const tanggal = parseTanggal(req.query.tanggal);
+    const limit = parseLimit(req.query.limit, 200);
+
+    const data = await ModelSusunKata.daftarRekapBebasAdmin({ tanggal, limit });
+
+    return res.json({
+      success: true,
+      data,
+    });
+  } catch (error) {
     return next(error);
   }
 });

@@ -31,7 +31,8 @@ import PeranAdmin from './halaman/redaksi/PeranAdmin';
 import IzinAdmin from './halaman/redaksi/IzinAdmin';
 import AuditMaknaAdmin from './halaman/redaksi/AuditMaknaAdmin';
 import PencarianAdmin from './halaman/redaksi/PencarianAdmin';
-import SusunKataAdmin from './halaman/redaksi/SusunKataAdmin';
+import SusunKataHarian from './halaman/redaksi/SusunKataHarian';
+import SusunKataBebas from './halaman/redaksi/SusunKataBebas';
 
 function RuteRedaksi({ children }) {
   const { isAuthenticated, adalahRedaksi, isLoading } = useAuth();
@@ -93,7 +94,8 @@ function App() {
       <Route path="/redaksi/komentar/:id" element={<RuteRedaksi><KomentarAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/audit-makna" element={<RuteIzin izinDibutuhkan={['audit_makna']}><AuditMaknaAdmin /></RuteIzin>} />
       <Route path="/redaksi/pencarian" element={<RuteIzin izinDibutuhkan={['lihat_pencarian']}><PencarianAdmin /></RuteIzin>} />
-      <Route path="/redaksi/susun-kata" element={<RuteIzin izinDibutuhkan={['kelola_susun_kata']}><SusunKataAdmin /></RuteIzin>} />
+      <Route path="/redaksi/susun-kata-harian" element={<RuteIzin izinDibutuhkan={['kelola_susun_kata']}><SusunKataHarian /></RuteIzin>} />
+      <Route path="/redaksi/susun-kata-bebas" element={<RuteIzin izinDibutuhkan={['kelola_susun_kata']}><SusunKataBebas /></RuteIzin>} />
       <Route path="/redaksi/tesaurus" element={<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/tesaurus/:id" element={<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/etimologi" element={<RuteRedaksi><EtimologiAdmin /></RuteRedaksi>} />

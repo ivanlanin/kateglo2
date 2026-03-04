@@ -20,6 +20,7 @@ jest.mock('../../models/modelSusunKata', () => ({
   daftarHarianAdmin: jest.fn(),
   ambilPesertaHarian: jest.fn(),
   simpanHarianAdmin: jest.fn(),
+  daftarRekapBebasAdmin: jest.fn(),
 }));
 
 jest.mock('../../models/modelEntri', () => ({
@@ -52,6 +53,7 @@ describe('routes/redaksi/susunKata', () => {
     ModelEntri.ambilArtiSusunKataByIndeks.mockResolvedValue('alat tulis');
     ModelSusunKata.ambilPesertaHarian.mockResolvedValue([{ pengguna_id: 9 }]);
     ModelSusunKata.simpanHarianAdmin.mockResolvedValue({ id: 10, kata: 'kartu' });
+    ModelSusunKata.daftarRekapBebasAdmin.mockResolvedValue([{ tanggal: '2026-03-02' }]);
   });
 
   it('GET /harian membuat data sesuai kombinasi filter tanggal dan panjang', async () => {
@@ -160,5 +162,28 @@ describe('routes/redaksi/susunKata', () => {
 
     expect(response.status).toBe(500);
     expect(response.body.message).toBe('simpan gagal');
+  });
+
+  it('GET /bebas mengembalikan rekap per tanggal', async () => {
+    const response = await request(createApp()).get('/api/redaksi/susun-kata/bebas?tanggal=2026-03-02&limit=25');
+
+    expect(response.status).toBe(200);
+    expect(ModelSusunKata.daftarRekapBebasAdmin).toHaveBeenCalledWith({ tanggal: '2026-03-02', limit: 25 });
+    expect(response.body.data).toEqual([{ tanggal: '2026-03-02' }]);
+  });
+
+  it('GET /bebas memakai nilai fallback saat query tidak valid', async () => {
+    await request(createApp()).get('/api/redaksi/susun-kata/bebas?tanggal=2026/03/02&limit=abc');
+
+    expect(ModelSusunKata.daftarRekapBebasAdmin).toHaveBeenCalledWith({ tanggal: null, limit: 200 });
+  });
+
+  it('GET /bebas meneruskan error', async () => {
+    ModelSusunKata.daftarRekapBebasAdmin.mockRejectedValueOnce(new Error('rekap gagal'));
+
+    const response = await request(createApp()).get('/api/redaksi/susun-kata/bebas');
+
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe('rekap gagal');
   });
 });

@@ -40,6 +40,7 @@ import {
   useDaftarBidangAdmin,
   useDetailBidangAdmin,
   useSusunKataHarianAdmin,
+  useSusunKataBebasAdmin,
   useDetailSusunKataHarianAdmin,
   useDaftarSumberAdmin,
   useDetailSumberAdmin,
@@ -584,6 +585,24 @@ describe('apiAdmin', () => {
       params: {
         tanggal: '2026-03-09',
         panjang: undefined,
+      },
+    });
+
+    const susunKataBebas = useSusunKataBebasAdmin({ tanggal: '2026-03-03', limit: '77' });
+    await susunKataBebas.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/susun-kata/bebas', {
+      params: {
+        tanggal: '2026-03-03',
+        limit: 77,
+      },
+    });
+
+    const susunKataBebasFallback = useSusunKataBebasAdmin({ tanggal: ' ', limit: 'abc' });
+    await susunKataBebasFallback.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/susun-kata/bebas', {
+      params: {
+        tanggal: undefined,
+        limit: 200,
       },
     });
 

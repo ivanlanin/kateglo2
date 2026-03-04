@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import SusunKataAdmin, {
+import SusunKataHarian, {
   buildPanelDataFromDetail,
   buildSelectedFromItem,
   buildSuntingDataFromItem,
@@ -9,7 +9,7 @@ import SusunKataAdmin, {
   buildSimpanPayload,
   resolveTanggalBuatKataHarian,
   resolveTanggalSimpan,
-} from '../../../src/halaman/redaksi/SusunKataAdmin';
+} from '../../../src/halaman/redaksi/SusunKataHarian';
 
 const mutateSimpan = vi.fn();
 const mutateBuat = vi.fn();
@@ -155,7 +155,7 @@ vi.mock('../../../src/komponen/redaksi/FormulirAdmin', async () => {
   };
 });
 
-describe('SusunKataAdmin', () => {
+describe('SusunKataHarian', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     buatPending = false;
@@ -201,7 +201,7 @@ describe('SusunKataAdmin', () => {
   function renderPage() {
     return render(
       <MemoryRouter>
-        <SusunKataAdmin />
+        <SusunKataHarian />
       </MemoryRouter>
     );
   }
