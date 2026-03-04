@@ -15,8 +15,6 @@ const {
 
 const router = express.Router();
 
-const KATEGORI_VALID = ['prefiks', 'sufiks', 'infiks', 'klitik', 'reduplikasi', 'prakategorial'];
-
 /**
  * GET /api/redaksi/tagar
  * Daftar tagar dengan filter opsional (cursor pagination).
@@ -28,7 +26,8 @@ router.get('/', periksaIzin('kelola_tagar'), async (req, res, next) => {
     const kategori = parseTrimmedString(req.query.kategori);
     const aktif = parseTrimmedString(req.query.aktif);
     const aktifFilter = ['0', '1'].includes(aktif) ? aktif : '';
-    const kategoriFilter = KATEGORI_VALID.includes(kategori) ? kategori : '';
+    const kategoriValid = await ModelTagar.ambilDaftarKategori();
+    const kategoriFilter = kategoriValid.includes(kategori) ? kategori : '';
 
     const result = await ModelTagar.daftarAdminCursor({
       limit,
@@ -60,6 +59,18 @@ router.get('/', periksaIzin('kelola_tagar'), async (req, res, next) => {
 });
 
 /**
+ * GET /api/redaksi/tagar/kategori
+ */
+router.get('/kategori', periksaIzin('kelola_tagar'), async (_req, res, next) => {
+  try {
+    const data = await ModelTagar.ambilDaftarKategori();
+    return res.json({ success: true, data });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+/**
  * GET /api/redaksi/tagar/:id
  */
 router.get('/:id', periksaIzin('kelola_tagar'), async (req, res, next) => {
@@ -85,8 +96,9 @@ router.post('/', periksaIzin('kelola_tagar'), async (req, res, next) => {
     if (!kode) return res.status(400).json({ success: false, message: 'Kode wajib diisi' });
     if (!nama) return res.status(400).json({ success: false, message: 'Nama wajib diisi' });
     if (!kategori) return res.status(400).json({ success: false, message: 'Kategori wajib diisi' });
-    if (!KATEGORI_VALID.includes(kategori)) {
-      return res.status(400).json({ success: false, message: `Kategori tidak valid. Pilihan: ${KATEGORI_VALID.join(', ')}` });
+    const kategoriValid = await ModelTagar.ambilDaftarKategori();
+    if (!kategoriValid.includes(kategori)) {
+      return res.status(400).json({ success: false, message: `Kategori tidak valid. Pilihan: ${kategoriValid.join(', ')}` });
     }
 
     const data = await ModelTagar.simpan({ kode, nama, kategori, deskripsi, urutan, aktif });
@@ -110,8 +122,9 @@ router.put('/:id', periksaIzin('kelola_tagar'), async (req, res, next) => {
     if (!kode) return res.status(400).json({ success: false, message: 'Kode wajib diisi' });
     if (!nama) return res.status(400).json({ success: false, message: 'Nama wajib diisi' });
     if (!kategori) return res.status(400).json({ success: false, message: 'Kategori wajib diisi' });
-    if (!KATEGORI_VALID.includes(kategori)) {
-      return res.status(400).json({ success: false, message: `Kategori tidak valid. Pilihan: ${KATEGORI_VALID.join(', ')}` });
+    const kategoriValid = await ModelTagar.ambilDaftarKategori();
+    if (!kategoriValid.includes(kategori)) {
+      return res.status(400).json({ success: false, message: `Kategori tidak valid. Pilihan: ${kategoriValid.join(', ')}` });
     }
 
     const data = await ModelTagar.simpan({ id, kode, nama, kategori, deskripsi, urutan, aktif });

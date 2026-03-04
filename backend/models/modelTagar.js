@@ -6,8 +6,6 @@ const db = require('../db');
 const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
 const { decodeCursor, encodeCursor } = require('../utils/cursorPagination');
 
-const KATEGORI_VALID = ['prefiks', 'sufiks', 'infiks', 'klitik', 'reduplikasi', 'prakategorial'];
-
 function buildAdminWhereClause({ q = '', kategori = '', aktif = '' } = {}) {
   const conditions = [];
   const params = [];
@@ -17,7 +15,7 @@ function buildAdminWhereClause({ q = '', kategori = '', aktif = '' } = {}) {
     conditions.push(`(kode ILIKE $${params.length} OR nama ILIKE $${params.length} OR COALESCE(deskripsi, '') ILIKE $${params.length})`);
   }
 
-  if (kategori && KATEGORI_VALID.includes(kategori)) {
+  if (kategori) {
     params.push(kategori);
     conditions.push(`kategori = $${params.length}`);
   }
@@ -32,6 +30,20 @@ function buildAdminWhereClause({ q = '', kategori = '', aktif = '' } = {}) {
 }
 
 class ModelTagar {
+  /**
+   * Ambil daftar kategori tagar unik dari tabel.
+   * @returns {Promise<string[]>}
+   */
+  static async ambilDaftarKategori() {
+    const result = await db.query(
+      `SELECT DISTINCT kategori
+       FROM tagar
+       WHERE TRIM(COALESCE(kategori, '')) <> ''
+       ORDER BY kategori ASC`
+    );
+    return result.rows.map((row) => String(row.kategori || '').trim()).filter(Boolean);
+  }
+
   /**
    * Ambil semua tagar aktif sebagai flat array (untuk publik & dropdown).
    * Diurutkan berdasarkan kategori, urutan.

@@ -374,7 +374,7 @@ npm run dev:public        # Port 5173
 ### Validation Policy (Wajib Setelah Perubahan)
 - Setelah selesai mengubah kode, **WAJIB jalankan lint dan test** untuk area yang diubah.
 - Gunakan strategi bertahap: **validasi terarah dulu**, lalu meluas hanya bila perlu.
-- Frontend (terarah): jalankan `npm run lint` lalu `npx vitest related <daftar-file-berubah>`.
+- Frontend (terarah): jalankan `npm run lint` lalu `npx vitest related --run <daftar-file-berubah>`.
 - Backend (terarah): jalankan `npm run lint` lalu `npx jest --findRelatedTests <daftar-file-berubah>`.
 - Jalankan full test package (`npm run test`) hanya jika:
   - perubahan lintas banyak modul/fitur,
@@ -448,7 +448,7 @@ Select-String -Path "_docs/struktur-data.sql" -Pattern "create table phrase"
 npx kill-port 3000; npx kill-port 5173
 
 # Run targeted tests first (recommended)
-Set-Location frontend; npm run lint; npx vitest related src/komponen/bersama/TataLetak.jsx
+Set-Location frontend; npm run lint; npx vitest related --run src/komponen/bersama/TataLetak.jsx
 Set-Location backend; npm run lint; npx jest --findRelatedTests models/modelFrasa.js
 
 # Run full suite only when needed

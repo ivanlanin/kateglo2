@@ -13,7 +13,7 @@ Gunakan urutan berikut:
 cd backend && npm run lint && npx jest --findRelatedTests <file-yang-diubah>
 
 # Jika mengubah file frontend (terarah)
-cd frontend && npm run lint && npx vitest related <file-yang-diubah>
+cd frontend && npm run lint && npx vitest related --run <file-yang-diubah>
 
 # Jika perlu regresi menyeluruh
 cd backend && npm run test

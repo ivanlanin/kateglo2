@@ -9,6 +9,7 @@ import {
   useDetailTagarAdmin,
   useSimpanTagar,
   useHapusTagar,
+  useKategoriTagarAdmin,
 } from '../../api/apiAdmin';
 import TataLetak from '../../komponen/bersama/TataLetak';
 import {
@@ -34,22 +35,6 @@ import {
 } from '../../komponen/redaksi/FormulirAdmin';
 import { formatBilanganRibuan } from '../../utils/formatUtils';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
-
-const KATEGORI_VALID = [
-  'prefiks',
-  'sufiks',
-  'infiks',
-  'klitik',
-  'reduplikasi',
-  'prakategorial',
-];
-
-const opsiKategori = [
-  { value: '', label: 'Semua kategori' },
-  ...KATEGORI_VALID.map((k) => ({ value: k, label: k })),
-];
-
-const opsiKategoriForm = KATEGORI_VALID.map((k) => ({ value: k, label: k }));
 
 const nilaiAwal = {
   kode: '',
@@ -125,8 +110,15 @@ function TagarAdmin() {
     isLoading: isDetailLoading,
     isError: isDetailError,
   } = useDetailTagarAdmin(idDariPath);
+  const { data: kategoriResp } = useKategoriTagarAdmin();
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
+  const daftarKategori = kategoriResp?.data || [];
+  const opsiKategori = [
+    { value: '', label: 'Semua kategori' },
+    ...daftarKategori.map((k) => ({ value: k, label: k })),
+  ];
+  const opsiKategoriForm = daftarKategori.map((k) => ({ value: k, label: k }));
 
   const panel = useFormPanel(nilaiAwal);
   const simpan = useSimpanTagar();

@@ -1085,6 +1085,14 @@ export function useDaftarTagarUntukPilih() {
   });
 }
 
+export function useKategoriTagarAdmin() {
+  return useQuery({
+    queryKey: ['admin-tagar-kategori'],
+    queryFn: () => klien.get('/api/redaksi/tagar/kategori').then((r) => r.data),
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
 // ─── Mutations: Tagar ────────────────────────────────────────────────────────
 
 export function useSimpanTagar() {

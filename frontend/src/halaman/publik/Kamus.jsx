@@ -31,7 +31,9 @@ import {
 const BARIS_KATEGORI = [
   ['abjad', 'kelas_kata'],
   ['bentuk', 'unsur_terikat'],
-  ['tagar'],
+  ['tagar:prefiks', 'tagar:infiks', 'tagar:sufiks'],
+  ['tagar:konfiks', 'tagar:kombinasi'],
+  ['tagar:klitik', 'tagar:reduplikasi'],
   ['ekspresi', 'ragam'],
   ['bahasa', 'bidang'],
 ];
@@ -101,6 +103,14 @@ export const __private = {
   gabungkanKategoriBentuk,
   gabungkanKategoriEkspresi,
 };
+
+function ambilTagarPerKategori(daftarTagar = [], kategoriTagar = '') {
+  const kategoriLower = String(kategoriTagar || '').trim().toLowerCase();
+  if (!kategoriLower) return [];
+  return (Array.isArray(daftarTagar) ? daftarTagar : []).filter(
+    (item) => String(item?.kategori || '').trim().toLowerCase() === kategoriLower
+  );
+}
 
 const limit = 100;
 
@@ -269,6 +279,12 @@ function Kamus() {
           {BARIS_KATEGORI.map((baris, indexBaris) => {
             const kategoriTerisi = baris
               .map((kat) => {
+                if (kat.startsWith('tagar:')) {
+                  const kategoriTagar = kat.split(':')[1] || '';
+                  const labels = ambilTagarPerKategori(kategoriData.tagar || [], kategoriTagar);
+                  return { kat, labels, tipe: 'tagar', kategoriTagar };
+                }
+
                 let labels = kategoriData[kat] || [];
                 if (kat === 'bentuk') {
                   labels = gabungkanKategoriBentuk(labels);
@@ -276,7 +292,7 @@ function Kamus() {
                 if (kat === 'ekspresi') {
                   labels = gabungkanKategoriEkspresi(labels);
                 }
-                return { kat, labels };
+                return { kat, labels, tipe: 'kategori' };
               })
               .filter((item) => item.labels.length > 0);
 
@@ -285,16 +301,18 @@ function Kamus() {
             return (
               <div
                 key={`baris-${indexBaris}`}
-                className={`grid grid-cols-1 ${kategoriTerisi.length > 1 ? 'md:grid-cols-2' : ''} gap-4`}
+                className={`grid grid-cols-1 ${kategoriTerisi.length >= 3 ? 'md:grid-cols-3' : kategoriTerisi.length === 2 ? 'md:grid-cols-2' : ''} gap-4`}
               >
-                {kategoriTerisi.map(({ kat, labels }) => (
+                {kategoriTerisi.map(({ kat, labels, tipe, kategoriTagar }) => (
                   <KartuKategori
                     key={kat}
-                    judul={NAMA_KATEGORI_BROWSE_KAMUS[kat] || NAMA_KATEGORI_KAMUS[kat]}
+                    judul={tipe === 'tagar'
+                      ? formatAwalKapital(kategoriTagar)
+                      : (NAMA_KATEGORI_BROWSE_KAMUS[kat] || NAMA_KATEGORI_KAMUS[kat])}
                     items={labels}
                     getKey={(item) => item.kode}
                     getTo={(item) => {
-                      if (kat === 'tagar') {
+                      if (tipe === 'tagar') {
                         return `/kamus/tagar/${encodeURIComponent(item.kode)}`;
                       }
                       const pathKategori = kat === 'unsur_terikat'
