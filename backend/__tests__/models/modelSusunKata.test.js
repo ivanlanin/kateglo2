@@ -194,6 +194,30 @@ describe('ModelSusunKata', () => {
     expect(db.query).toHaveBeenLastCalledWith(expect.any(String), [10, null]);
   });
 
+  it('hitungPesertaHarian dan hitungPesertaBebasHarian mengembalikan total dengan fallback 0', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ total: '9' }] });
+    await expect(ModelSusunKata.hitungPesertaHarian({ tanggal: '2026-03-05' })).resolves.toBe(9);
+    expect(db.query).toHaveBeenLastCalledWith(expect.stringContaining('FROM susun_kata sk'), ['2026-03-05']);
+
+    db.query.mockResolvedValueOnce({ rows: [{ total: null }] });
+    await expect(ModelSusunKata.hitungPesertaHarian({ tanggal: 'invalid' })).resolves.toBe(0);
+    expect(db.query).toHaveBeenLastCalledWith(expect.any(String), [null]);
+
+    db.query.mockResolvedValueOnce({ rows: [{ total: '4' }] });
+    await expect(ModelSusunKata.hitungPesertaBebasHarian({ tanggal: '2026-03-05' })).resolves.toBe(4);
+    expect(db.query).toHaveBeenLastCalledWith(expect.stringContaining('FROM susun_kata_bebas sb'), ['2026-03-05']);
+
+    db.query.mockResolvedValueOnce({ rows: [{ total: null }] });
+    await expect(ModelSusunKata.hitungPesertaBebasHarian({ tanggal: 'invalid' })).resolves.toBe(0);
+    expect(db.query).toHaveBeenLastCalledWith(expect.any(String), [null]);
+
+    db.query.mockResolvedValueOnce({ rows: [] });
+    await expect(ModelSusunKata.hitungPesertaHarian()).resolves.toBe(0);
+
+    db.query.mockResolvedValueOnce({ rows: [] });
+    await expect(ModelSusunKata.hitungPesertaBebasHarian()).resolves.toBe(0);
+  });
+
   it('ambilTanggalHariIniJakarta mengembalikan tanggal atau null', async () => {
     db.query.mockResolvedValueOnce({ rows: [{ tanggal: '2026-03-02' }] });
     await expect(ModelSusunKata.ambilTanggalHariIniJakarta()).resolves.toBe('2026-03-02');

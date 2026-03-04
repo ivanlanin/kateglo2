@@ -28,6 +28,11 @@ function normalizeStatus(value) {
 }
 
 class ModelAuditMakna {
+  static async hitungTotal() {
+    const result = await db.query('SELECT COUNT(*) AS total FROM audit_makna');
+    return parseCount(result.rows[0]?.total);
+  }
+
   static async daftarAdmin({ limit = 50, offset = 0, q = '', status = '' } = {}) {
     const cappedLimit = Math.min(parsePositiveInteger(limit, 50), 200);
     const safeOffset = parseNonNegativeInteger(offset, 0);

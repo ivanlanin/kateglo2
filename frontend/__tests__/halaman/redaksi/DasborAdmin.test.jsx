@@ -41,7 +41,7 @@ describe('DasborAdmin', () => {
     );
 
     expect(screen.getByText('Dasbor')).toBeInTheDocument();
-    expect(screen.getAllByText('…')).toHaveLength(9);
+    expect(screen.getAllByText('…')).toHaveLength(15);
   });
 
   it('menampilkan statistik saat data tersedia', () => {
@@ -53,11 +53,17 @@ describe('DasborAdmin', () => {
           tesaurus: 200,
           glosarium: 50,
           etimologi: 70,
+          susunKataHarian: 77,
+          susunKataBebas: 66,
+          auditMakna: 44,
+          auditTagar: 33,
+          tagar: 22,
           bidang: 14,
           sumber: 18,
           label: 321,
           pengguna: 12,
           komentar: 88,
+          pencarian: 999,
         },
       },
     });
@@ -71,11 +77,17 @@ describe('DasborAdmin', () => {
     expect(screen.getByText('1.000')).toBeInTheDocument();
     expect(screen.getByText('200')).toBeInTheDocument();
     expect(screen.getByText('50')).toBeInTheDocument();
+    expect(screen.getByText('77')).toBeInTheDocument();
+    expect(screen.getByText('66')).toBeInTheDocument();
+    expect(screen.getByText('44')).toBeInTheDocument();
+    expect(screen.getByText('33')).toBeInTheDocument();
+    expect(screen.getByText('22')).toBeInTheDocument();
     expect(screen.getByText('14')).toBeInTheDocument();
     expect(screen.getByText('18')).toBeInTheDocument();
     expect(screen.getByText('321')).toBeInTheDocument();
     expect(screen.getByText('12')).toBeInTheDocument();
     expect(screen.getByText('88')).toBeInTheDocument();
+    expect(screen.getByText('999')).toBeInTheDocument();
   });
 
   it('menyembunyikan kartu tanpa izin yang sesuai', () => {

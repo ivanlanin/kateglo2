@@ -473,4 +473,20 @@ describe('ModelPencarian', () => {
       { domain: 0, domain_nama: 'lainnya', jumlah: 0 },
     ]);
   });
+
+  it('hitungTotalKataHarian menghitung total kata per tanggal dengan fallback 0', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ total: '13' }] });
+    await expect(ModelPencarian.hitungTotalKataHarian({ tanggal: '2026-03-05' })).resolves.toBe(13);
+    expect(db.query).toHaveBeenLastCalledWith(
+      expect.stringContaining('SELECT COALESCE(SUM(jumlah), 0)::bigint AS total'),
+      ['2026-03-05']
+    );
+
+    db.query.mockResolvedValueOnce({ rows: [{ total: null }] });
+    await expect(ModelPencarian.hitungTotalKataHarian({ tanggal: 'invalid' })).resolves.toBe(0);
+    expect(db.query).toHaveBeenLastCalledWith(expect.any(String), [null]);
+
+    db.query.mockResolvedValueOnce({ rows: [] });
+    await expect(ModelPencarian.hitungTotalKataHarian()).resolves.toBe(0);
+  });
 });

@@ -33,6 +33,16 @@ function buildAdminWhereClause(filters) {
 }
 
 class ModelTagar {
+  static async hitungTotal() {
+    const result = await db.query('SELECT COUNT(*) AS total FROM tagar');
+    return parseCount(result.rows[0]?.total);
+  }
+
+  static async hitungTotalBelumBertagar() {
+    const cakupan = await this.hitungCakupan();
+    return Math.max((cakupan.total_turunan || 0) - (cakupan.sudah_bertagar || 0), 0);
+  }
+
   /**
    * Ambil daftar kategori tagar unik dari tabel.
    * @returns {Promise<string[]>}
@@ -192,7 +202,7 @@ class ModelTagar {
     const isPrev = direction === 'prev';
     const orderDesc = Boolean(lastPage || isPrev);
 
-    const whereBase = `WHERE ${conditions.join(' AND ')}`;
+    const whereBase = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
 
     const countResult = await db.query(`SELECT COUNT(*) AS total FROM tagar ${whereBase}`, baseParams);
     const total = parseCount(countResult.rows[0]?.total);

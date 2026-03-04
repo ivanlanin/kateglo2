@@ -77,6 +77,21 @@ jest.mock('../../models/modelKomentar', () => ({
 
 jest.mock('../../models/modelPencarian', () => ({
   ambilStatistikRedaksi: jest.fn(),
+  hitungTotalKataHarian: jest.fn(),
+}));
+
+jest.mock('../../models/modelSusunKata', () => ({
+  hitungPesertaHarian: jest.fn(),
+  hitungPesertaBebasHarian: jest.fn(),
+}));
+
+jest.mock('../../models/modelAuditMakna', () => ({
+  hitungTotal: jest.fn(),
+}));
+
+jest.mock('../../models/modelTagar', () => ({
+  hitungTotalBelumBertagar: jest.fn(),
+  hitungTotal: jest.fn(),
 }));
 
 jest.mock('../../models/modelPencarianHitam', () => ({
@@ -116,6 +131,9 @@ const ModelGlosarium = require('../../models/modelGlosarium');
 const ModelLabel = require('../../models/modelLabel');
 const ModelKomentar = require('../../models/modelKomentar');
 const ModelPencarian = require('../../models/modelPencarian');
+const ModelSusunKata = require('../../models/modelSusunKata');
+const ModelAuditMakna = require('../../models/modelAuditMakna');
+const ModelTagar = require('../../models/modelTagar');
 const ModelPencarianHitam = require('../../models/modelPencarianHitam');
 const ModelPeran = require('../../models/modelPeran');
 const ModelIzin = require('../../models/modelIzin');
@@ -350,11 +368,17 @@ describe('routes/redaksi', () => {
       ModelGlosarium.hitungTotal.mockResolvedValue(20);
       ModelTesaurus.hitungTotal.mockResolvedValue(30);
       ModelEtimologi.hitungTotal.mockResolvedValue(35);
+      ModelSusunKata.hitungPesertaHarian.mockResolvedValue(15);
+      ModelSusunKata.hitungPesertaBebasHarian.mockResolvedValue(25);
+      ModelAuditMakna.hitungTotal.mockResolvedValue(95);
+      ModelTagar.hitungTotalBelumBertagar.mockResolvedValue(45);
+      ModelTagar.hitungTotal.mockResolvedValue(145);
       ModelLabel.hitungTotal.mockResolvedValue(40);
       ModelGlosarium.hitungTotalBidang.mockResolvedValue(70);
       ModelGlosarium.hitungTotalSumber.mockResolvedValue(80);
       ModelPengguna.hitungTotal.mockResolvedValue(50);
       ModelKomentar.hitungTotal.mockResolvedValue(60);
+      ModelPencarian.hitungTotalKataHarian.mockResolvedValue(90);
 
       const response = await callAsAdmin('get', '/api/redaksi/statistik');
 
@@ -364,11 +388,17 @@ describe('routes/redaksi', () => {
         glosarium: 20,
         tesaurus: 30,
         etimologi: 35,
+        susunKataHarian: 15,
+        susunKataBebas: 25,
+        auditMakna: 95,
+        auditTagar: 45,
+        tagar: 145,
         label: 40,
         bidang: 70,
         sumber: 80,
         pengguna: 50,
         komentar: 60,
+        pencarian: 90,
       });
     });
 

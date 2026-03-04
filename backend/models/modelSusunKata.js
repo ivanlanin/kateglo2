@@ -658,6 +658,35 @@ class ModelSusunKata {
     }));
   }
 
+  static async hitungPesertaHarian({ tanggal = null } = {}) {
+    const tanggalAman = parseTanggal(tanggal);
+
+    const result = await db.query(
+      `SELECT COUNT(DISTINCT ss.pengguna_id)::bigint AS total
+       FROM susun_kata sk
+       JOIN susun_kata_skor ss ON ss.susun_kata_id = sk.id
+       WHERE sk.tanggal = COALESCE($1::date, (now() AT TIME ZONE 'Asia/Jakarta')::date)
+         AND sk.panjang = 5
+         AND ss.selesai = true`,
+      [tanggalAman]
+    );
+
+    return Number(result.rows[0]?.total) || 0;
+  }
+
+  static async hitungPesertaBebasHarian({ tanggal = null } = {}) {
+    const tanggalAman = parseTanggal(tanggal);
+
+    const result = await db.query(
+      `SELECT COUNT(DISTINCT sb.pengguna_id)::bigint AS total
+       FROM susun_kata_bebas sb
+       WHERE sb.tanggal = COALESCE($1::date, (now() AT TIME ZONE 'Asia/Jakarta')::date)`,
+      [tanggalAman]
+    );
+
+    return Number(result.rows[0]?.total) || 0;
+  }
+
   static async ambilKlasemenBebas({ limit, tanggal }) {
     const limitInput = limit ?? 10;
     const limitAman = Math.min(Math.max(Number.parseInt(limitInput, 10) || 10, 1), 50);

@@ -11,7 +11,10 @@ const ModelEtimologi = require('../../models/modelEtimologi');
 const ModelLabel = require('../../models/modelLabel');
 const ModelPengguna = require('../../models/modelPengguna');
 const ModelKomentar = require('../../models/modelKomentar');
+const ModelSusunKata = require('../../models/modelSusunKata');
 const ModelPencarian = require('../../models/modelPencarian');
+const ModelAuditMakna = require('../../models/modelAuditMakna');
+const ModelTagar = require('../../models/modelTagar');
 const {
   buildPaginatedResult,
   parsePagination,
@@ -25,16 +28,38 @@ const router = express.Router();
  */
 router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
   try {
-    const [entri, glosarium, tesaurus, etimologi, label, bidang, sumber, pengguna, komentar] = await Promise.all([
+    const [
+      entri,
+      glosarium,
+      tesaurus,
+      etimologi,
+      susunKataHarian,
+      susunKataBebas,
+      auditMakna,
+      auditTagar,
+      tagar,
+      label,
+      bidang,
+      sumber,
+      pengguna,
+      komentar,
+      pencarian,
+    ] = await Promise.all([
       ModelEntri.hitungTotal(),
       ModelGlosarium.hitungTotal(),
       ModelTesaurus.hitungTotal(),
       ModelEtimologi.hitungTotal(),
+      ModelSusunKata.hitungPesertaHarian(),
+      ModelSusunKata.hitungPesertaBebasHarian(),
+      ModelAuditMakna.hitungTotal(),
+      ModelTagar.hitungTotalBelumBertagar(),
+      ModelTagar.hitungTotal(),
       ModelLabel.hitungTotal(),
       ModelGlosarium.hitungTotalBidang(),
       ModelGlosarium.hitungTotalSumber(),
       ModelPengguna.hitungTotal(),
       ModelKomentar.hitungTotal(),
+      ModelPencarian.hitungTotalKataHarian(),
     ]);
 
     return res.json({
@@ -44,11 +69,17 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
         glosarium,
         tesaurus,
         etimologi,
+        susunKataHarian,
+        susunKataBebas,
+        auditMakna,
+        auditTagar,
+        tagar,
         label,
         bidang,
         sumber,
         pengguna,
         komentar,
+        pencarian,
       },
     });
   } catch (error) {

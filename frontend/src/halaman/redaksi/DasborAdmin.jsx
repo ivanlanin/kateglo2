@@ -12,10 +12,16 @@ const kartuData = [
   { key: 'tesaurus', label: 'Entri Tesaurus', warna: 'text-emerald-600', link: '/redaksi/tesaurus', izin: 'lihat_tesaurus' },
   { key: 'glosarium', label: 'Entri Glosarium', warna: 'text-amber-600', link: '/redaksi/glosarium', izin: 'lihat_glosarium' },
   { key: 'etimologi', label: 'Entri Etimologi', warna: 'text-indigo-600', link: '/redaksi/etimologi', izin: 'kelola_etimologi' },
+  { key: 'susunKataHarian', label: 'Susun Kata Harian', warna: 'text-lime-600', link: '/redaksi/susun-kata-harian', izin: 'kelola_susun_kata' },
+  { key: 'susunKataBebas', label: 'Susun Kata Bebas', warna: 'text-green-600', link: '/redaksi/susun-kata-bebas', izin: 'kelola_susun_kata' },
+  { key: 'komentar', label: 'Komentar', warna: 'text-rose-600', link: '/redaksi/komentar', izin: 'kelola_komentar' },
+  { key: 'pencarian', label: 'Pencarian', warna: 'text-orange-600', link: '/redaksi/pencarian', izin: 'lihat_pencarian' },
+  { key: 'auditMakna', label: 'Audit Makna', warna: 'text-fuchsia-600', link: '/redaksi/audit-makna', izin: 'audit_makna' },
+  { key: 'auditTagar', label: 'Audit Tagar', warna: 'text-violet-600', link: '/redaksi/audit-tagar', izin: 'audit_tagar' },
+  { key: 'tagar', label: 'Tagar', warna: 'text-pink-600', link: '/redaksi/tagar', izin: 'kelola_tagar' },
+  { key: 'label', label: 'Label', warna: 'text-cyan-600', link: '/redaksi/label', izin: 'kelola_label' },
   { key: 'bidang', label: 'Bidang', warna: 'text-sky-600', link: '/redaksi/bidang', izin: 'kelola_bidang' },
   { key: 'sumber', label: 'Sumber', warna: 'text-teal-600', link: '/redaksi/sumber', izin: 'kelola_sumber' },
-  { key: 'komentar', label: 'Komentar', warna: 'text-rose-600', link: '/redaksi/komentar', izin: 'kelola_komentar' },
-  { key: 'label', label: 'Label', warna: 'text-cyan-600', link: '/redaksi/label', izin: 'kelola_label' },
   { key: 'pengguna', label: 'Pengguna', warna: 'text-purple-600', link: '/redaksi/pengguna', izin: 'kelola_pengguna' },
 ];
 

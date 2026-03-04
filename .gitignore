@@ -5,6 +5,7 @@ _data/
 # Temporaries
 .tmp/
 *.log
+scrape*
 
 # System
 .vscode/

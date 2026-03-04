@@ -28,6 +28,14 @@ describe('ModelAuditMakna', () => {
     expect(__private.normalizeStatus(null)).toBe('');
   });
 
+  it('hitungTotal mengembalikan total ter-parse', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ total: '7' }] });
+    await expect(ModelAuditMakna.hitungTotal()).resolves.toBe(7);
+
+    db.query.mockResolvedValueOnce({ rows: [{ total: null }] });
+    await expect(ModelAuditMakna.hitungTotal()).resolves.toBe(0);
+  });
+
   it('daftarAdmin tanpa filter memakai pagination aman', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '2' }] })

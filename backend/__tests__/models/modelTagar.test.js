@@ -149,6 +149,20 @@ describe('ModelTagar', () => {
     await expect(ModelTagar.hitungCakupan()).resolves.toEqual({ total_turunan: 12, sudah_bertagar: 4 });
   });
 
+  it('hitungTotal dan hitungTotalBelumBertagar mengembalikan nilai aman', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ total: '15' }] });
+    await expect(ModelTagar.hitungTotal()).resolves.toBe(15);
+
+    db.query.mockResolvedValueOnce({ rows: [{ total_turunan: '12', sudah_bertagar: '4' }] });
+    await expect(ModelTagar.hitungTotalBelumBertagar()).resolves.toBe(8);
+
+    db.query.mockResolvedValueOnce({ rows: [{ total_turunan: null, sudah_bertagar: null }] });
+    await expect(ModelTagar.hitungTotalBelumBertagar()).resolves.toBe(0);
+
+    db.query.mockResolvedValueOnce({ rows: [{ total_turunan: '2', sudah_bertagar: '9' }] });
+    await expect(ModelTagar.hitungTotalBelumBertagar()).resolves.toBe(0);
+  });
+
   it('daftarEntriTagarAdminCursor mencakup filter, cursor, prev, dan lastPage', async () => {
     db.query.mockResolvedValueOnce({ rows: [{ total: '0' }] });
     await expect(ModelTagar.daftarEntriTagarAdminCursor()).resolves.toEqual({

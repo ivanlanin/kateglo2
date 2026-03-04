@@ -364,6 +364,19 @@ class ModelPencarian {
     };
   }
 
+  static async hitungTotalKataHarian({ tanggal = null } = {}) {
+    const tanggalAman = parseTanggal(tanggal);
+
+    const result = await db.query(
+      `SELECT COALESCE(SUM(jumlah), 0)::bigint AS total
+       FROM pencarian
+       WHERE tanggal = COALESCE($1::date, (now() AT TIME ZONE 'Asia/Jakarta')::date)`,
+      [tanggalAman]
+    );
+
+    return Number(result.rows[0]?.total) || 0;
+  }
+
 }
 
 ModelPencarian.__private = {
