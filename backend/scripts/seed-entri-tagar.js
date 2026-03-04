@@ -4,7 +4,7 @@
  * Algoritme: bandingkan string entri vs string induk (JOIN) untuk mendeteksi
  * imbuhan (prefiks, sufiks, klitik, reduplikasi) secara heuristik.
  *
- * Cakupan estimasi: ~99.4% dari 24.580 entri turunan.
+ * Cakupan estimasi: ~99.6% dari 24.580 entri turunan.
  * Sisanya (~0.6%) perlu pengisian manual via antarmuka admin.
  *
  * Penggunaan:
@@ -152,6 +152,44 @@ const REDUPLIKASI_TAGAR_DEFINITIONS = [
     deskripsi: 'Reduplikasi berafiks: salah satu unsur merupakan bentuk berafiks dari unsur lain',
     urutan: 43,
   },
+  {
+    kode: 'R.purwa',
+    nama: 'R.purwa',
+    kategori: 'reduplikasi',
+    deskripsi: 'Dwipurwa: pengulangan suku awal konsonan dengan sisipan e (batu→bebatu, laki→lelaki)',
+    urutan: 44,
+  },
+];
+
+const INFIKS_TAGAR_DEFINITIONS = [
+  {
+    kode: '-el-',
+    nama: '-el-',
+    kategori: 'infiks',
+    deskripsi: 'Infiks -el- (tali→temali, tunjuk→telunjuk)',
+    urutan: 70,
+  },
+  {
+    kode: '-em-',
+    nama: '-em-',
+    kategori: 'infiks',
+    deskripsi: 'Infiks -em- (gilang→gemilang, guruh→gemuruh)',
+    urutan: 71,
+  },
+  {
+    kode: '-er-',
+    nama: '-er-',
+    kategori: 'infiks',
+    deskripsi: 'Infiks -er- (suling→seruling, gigi→gerigi)',
+    urutan: 72,
+  },
+  {
+    kode: '-in-',
+    nama: '-in-',
+    kategori: 'infiks',
+    deskripsi: 'Infiks -in- (kerja→kinerja, sambung→sinambung)',
+    urutan: 73,
+  },
 ];
 
 async function ensureAuditTagarPermission() {
@@ -207,7 +245,26 @@ async function ensureCombinationTagarDefinitions() {
 }
 
 async function ensureReduplikasiTagarDefinitions() {
+  // Bersihkan kode lama 'R.dwipurwa' yang sudah diganti nama menjadi 'R.purwa'
+  await db.query(`DELETE FROM tagar WHERE kode = 'R.dwipurwa'`);
   for (const def of REDUPLIKASI_TAGAR_DEFINITIONS) {
+    await db.query(
+      `INSERT INTO tagar (kode, nama, kategori, deskripsi, urutan, aktif)
+       VALUES ($1, $2, $3, $4, $5, TRUE)
+       ON CONFLICT (kode)
+       DO UPDATE SET
+         nama = EXCLUDED.nama,
+         kategori = EXCLUDED.kategori,
+         deskripsi = EXCLUDED.deskripsi,
+         urutan = EXCLUDED.urutan,
+         aktif = TRUE`,
+      [def.kode, def.nama, def.kategori, def.deskripsi, def.urutan]
+    );
+  }
+}
+
+async function ensureInfixTagarDefinitions() {
+  for (const def of INFIKS_TAGAR_DEFINITIONS) {
     await db.query(
       `INSERT INTO tagar (kode, nama, kategori, deskripsi, urutan, aktif)
        VALUES ($1, $2, $3, $4, $5, TRUE)
@@ -352,6 +409,10 @@ async function applyCombinationTags({ dryRun = false } = {}) {
 
 const PREFIXES = [
   { str: 'memper', tags: ['meng-', 'per-']  },
+  { str: 'berpeny', tags: ['ber-', 'peng-'] }, // ber- + peny- (sakit→berpenyakitan)
+  { str: 'berpeng', tags: ['ber-', 'peng-'] }, // ber- + peng- (kluster k: karang→berpengarangan)
+  { str: 'kepeng', tags: ['ke-', 'peng-']  }, // ke- + peng- (karang→kepengarangan, kecut→kepengecutan)
+  { str: 'berpen', tags: ['ber-', 'peng-'] }, // ber- + pen- (tampil→berpenampilan, terang→berpenerangan)
   { str: 'pemer',  tags: ['peng-', 'per-']  },
   { str: 'pemel',  tags: ['peng-', 'per-']  },
   { str: 'kepen',  tags: ['ke-', 'peng-']   },
@@ -401,7 +462,7 @@ const SUFFIXES = [
   { str: 'i',   tag: '-i'   },
 ];
 
-const PREFIXES_NASAL = new Set(['me', 'mem', 'men', 'meng', 'meny', 'menye', 'pe', 'pem', 'pen', 'peng', 'peny', 'kepen', 'sepem']);
+const PREFIXES_NASAL = new Set(['me', 'mem', 'men', 'meng', 'meny', 'menye', 'pe', 'pem', 'pen', 'peng', 'peny', 'kepen', 'sepem', 'berpen', 'berpeny', 'berpeng', 'kepeng']);
 const HURUF_PELULUHAN_KPST = new Set(['k', 'p', 's', 't']);
 
 // ============================================================
@@ -804,12 +865,14 @@ function isAlomorfBeUntukBer(induk) {
   const akar = String(induk || '').toLowerCase().replace(/[^a-z]/g, '');
   if (!akar) return false;
   if (akar.startsWith('r')) return true;
+  if (akar.startsWith('l')) return true; // be- + l-initial (belacak, belaga, belagu, belesir...)
   return /^[^aiueo]*er([^aiueo]|$)/.test(akar);
 }
 
 function isAlomorfKhususAjar(pre, induk) {
   const akar = String(induk || '').toLowerCase().replace(/[^a-z]/g, '');
-  if (pre === 'bel' || pre === 'pel') return akar === 'ajar';
+  if (pre === 'pel') return akar === 'ajar'; // pel- hanya untuk 'ajar' → pelajar
+  if (pre === 'bel') return 'aiueo'.includes(akar[0] || ''); // bel- untuk vokal-awal (belajar, belunjur)
   return true;
 }
 
@@ -879,6 +942,67 @@ function buildIndukCandidates(indukVariants) {
   }
 
   return [...map.values()];
+}
+
+// ============================================================
+// Deteksi dwipurwa dan infiks
+// ============================================================
+
+const INFIXES_LIST = ['el', 'em', 'er', 'in'];
+
+/**
+ * Deteksi R.dwipurwa: pengulangan suku awal konsonan dengan sisipan 'e'.
+ * Contoh: batu→bebatu(an), jamu→jejamu, laki→lelaki, rumput→rerumput(an).
+ *
+ * Pola: entri = base[0] + 'e' + base (+ opsional sufiks)
+ *
+ * @param {string} entri
+ * @param {string[]} indukVariants
+ * @returns {string[]|null}
+ */
+function detectDwipurwa(entri, indukVariants) {
+  for (const indukVar of indukVariants) {
+    if (!indukVar || indukVar.length < 2) continue;
+    if ('aiueo'.includes(indukVar[0])) continue; // harus diawali konsonan
+    const expected = indukVar[0] + 'e' + indukVar; // bebatu, jejamu, lelaki
+    if (entri === expected) return ['R.purwa'];
+    for (const { str: sufStr, tag: sufTag } of SUFFIXES) {
+      if (entri === expected + sufStr && sufTag) {
+        return ['R.purwa', sufTag];
+      }
+    }
+  }
+  return null;
+}
+
+/**
+ * Deteksi infiks -el-, -em-, -er-, -in-.
+ * Contoh: tali→temali (-el-), gilang→gemilang (-em-), suling→seruling (-er-), kerja→kinerja (-in-).
+ *
+ * Pola: entri = base[0] + infix + base[1:] (+ opsional sufiks)
+ *
+ * @param {string} entri
+ * @param {string[]} indukVariants
+ * @returns {string[]|null}
+ */
+function detectInfiks(entri, indukVariants) {
+  for (const indukVar of indukVariants) {
+    if (!indukVar || indukVar.length < 2) continue;
+    if ('aiueo'.includes(indukVar[0])) continue; // harus diawali konsonan
+    const c1 = indukVar[0];
+    const baseRest = indukVar.slice(1);
+    for (const infix of INFIXES_LIST) {
+      const expected = c1 + infix + baseRest; // temali, gemilang, seruling, kinerja
+      const tagCode = '-' + infix + '-';
+      if (entri === expected) return [tagCode];
+      for (const { str: sufStr, tag: sufTag } of SUFFIXES) {
+        if (entri === expected + sufStr && sufTag) {
+          return [tagCode, sufTag];
+        }
+      }
+    }
+  }
+  return null;
 }
 
 // ============================================================
@@ -1000,6 +1124,15 @@ function detectNonReduplikasi(entri, induk) {
   // --- Strategi 3: sufiks/klitik saja (tanpa prefiks) ---
   for (const { str: sufStr, tag: sufTag } of SUFFIXES) {
     if (indukVariants.some((indukVar) => entri === indukVar + sufStr)) return [sufTag];
+  }
+
+  // --- Strategi 4: dwipurwa dan infiks ---
+  // Dijalankan terakhir agar tidak mengesampingkan deteksi afiksasi standar.
+  // Satu entri bisa memiliki kedua tag sekaligus (mis. lelaki: R.dwipurwa + -el-).
+  const dwipurwaTags = detectDwipurwa(entri, indukVariants);
+  const infixTags = detectInfiks(entri, indukVariants);
+  if (dwipurwaTags || infixTags) {
+    return [...new Set([...(dwipurwaTags || []), ...(infixTags || [])])];
   }
 
   return null; // tidak terdeteksi
@@ -1200,6 +1333,30 @@ function detectReduplikasi(entri, _induk) {
     }
   }
 
+  // Nasal meng- diterapkan pada induk berkejang (mengandung -):
+  // Pattern: left = me + N(part1), right = N(part2) [+ sufiks]
+  // Contoh: menyia-nyiakan (sia-sia), mengocar-ngacirkan (kocar-kacir),
+  //         menyelang-nyeling (selang-seling), mengotak-ngatikkan (kotak-katik)
+  for (const indukVar of indukVariants) {
+    if (!indukVar.includes('-')) continue;
+    const iParts = indukVar.split('-').filter(Boolean);
+    if (iParts.length !== 2) continue;
+    const [iPart1, iPart2] = iParts;
+    const nasals1 = nasalAloneForms(iPart1);
+    const nasals2 = nasalAloneForms(iPart2);
+    for (const nasal1 of nasals1) {
+      if (left !== 'me' + nasal1) continue;
+      for (const nasal2 of nasals2) {
+        if (right === nasal2) return ['meng-'];
+        for (const { str: sufStr, tag: sufTag } of SUFFIXES) {
+          if (right === nasal2 + sufStr && sufTag) {
+            return ['meng-', sufTag];
+          }
+        }
+      }
+    }
+  }
+
   const afiksFromLeft = deteksiAfiksasiDari(right, left);
   if (afiksFromLeft && berbagiLeksemDasar(left)) {
     return [...new Set(['R.berafiks', ...afiksFromLeft])];
@@ -1236,6 +1393,8 @@ async function main() {
   console.log('Tagar kombinasi dipastikan tersedia.');
   await ensureReduplikasiTagarDefinitions();
   console.log('Tagar reduplikasi tambahan dipastikan tersedia.');
+  await ensureInfixTagarDefinitions();
+  console.log('Tagar infiks dipastikan tersedia.');
 
   // Muat semua tagar aktif (kode → id)
   const tagarResult = await db.query(
