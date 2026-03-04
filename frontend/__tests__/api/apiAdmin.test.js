@@ -557,7 +557,7 @@ describe('apiAdmin', () => {
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/susun-kata/harian', {
       params: {
         tanggal: '2026-03-02',
-        panjang: 7,
+        panjang: 5,
       },
     });
 
@@ -575,7 +575,7 @@ describe('apiAdmin', () => {
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/susun-kata/harian', {
       params: {
         tanggal: undefined,
-        panjang: undefined,
+        panjang: 5,
       },
     });
 
@@ -584,7 +584,7 @@ describe('apiAdmin', () => {
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/susun-kata/harian', {
       params: {
         tanggal: '2026-03-09',
-        panjang: undefined,
+        panjang: 5,
       },
     });
 
@@ -612,7 +612,7 @@ describe('apiAdmin', () => {
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/susun-kata/harian/detail', {
       params: {
         tanggal: '2026-03-02',
-        panjang: 8,
+        panjang: 5,
       },
     });
 
@@ -837,7 +837,7 @@ describe('apiAdmin', () => {
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/susun-kata/harian', {
       params: {
         tanggal: '2026-03-03',
-        panjang: 8,
+        panjang: 5,
       },
     });
     await buatSusunKata.mutationFn({ tanggal: '2026-03-04', panjang: 'abc' });
@@ -851,14 +851,14 @@ describe('apiAdmin', () => {
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/susun-kata/harian', {
       params: {
         tanggal: undefined,
-        panjang: undefined,
+        panjang: 5,
       },
     });
     await buatSusunKata.mutationFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/susun-kata/harian', {
       params: {
         tanggal: undefined,
-        panjang: undefined,
+        panjang: 5,
       },
     });
     buatSusunKata.onSuccess();
