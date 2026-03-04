@@ -4,6 +4,8 @@
 
 - Membuat halaman redaksi untuk melihat statistik [Susun Kata Bebas](/gim/susun-kata/bebas)
 - Menghapus navigasi di bawah halaman dan menyisakan navigasi di atas untuk menyederhanakan tampilan
+- Memperbaiki pemenggalan bentuk dasar, turunan, dan gabungan
+- Memperbaiki tampilan kategori tagar afiks, klitik, dan reduplikasi
 
 ## 2026-03-03 Selasa
 
