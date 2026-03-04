@@ -23,9 +23,11 @@ function parsePanjangHarian() {
   return 5;
 }
 
-function parsePanjangBebas(value, fallback = 5) {
+function parsePanjangBebas(value, fallback) {
+  const parsedFallback = Number.parseInt(fallback, 10);
+  const fallbackAman = Number.isNaN(parsedFallback) ? 5 : parsedFallback;
   const parsed = Number.parseInt(value, 10);
-  if (Number.isNaN(parsed)) return fallback;
+  if (Number.isNaN(parsed)) return fallbackAman;
   return Math.min(Math.max(parsed, 4), 6);
 }
 
@@ -98,13 +100,15 @@ function sanitasiPayloadSkor({ percobaan, detik, tebakan, menang }) {
   };
 }
 
-function parseDaftarTebakan(tebakanRaw, { panjang = 5, maksimum = 6 } = {}) {
-  const panjangAman = parsePanjangHarian(panjang, 5);
+function parseDaftarTebakan(tebakanRaw, options) {
+  const panjangAman = parsePanjangHarian(options?.panjang, 5);
+  const parsedMaksimum = Number.parseInt(options?.maksimum, 10);
+  const maksimumAman = Number.isNaN(parsedMaksimum) ? 6 : parsedMaksimum;
   return String(tebakanRaw || '')
     .split(';')
     .map((item) => item.trim().toLowerCase())
     .filter((item) => /^[a-z]+$/.test(item) && item.length === panjangAman)
-    .slice(0, maksimum);
+    .slice(0, maksimumAman);
 }
 
 function acakDariArray(daftar) {
@@ -186,7 +190,7 @@ class ModelSusunKata {
     values.push(limitAman);
     const limitParam = values.length;
 
-    const whereClause = kondisi.length ? `WHERE ${kondisi.join(' AND ')}` : '';
+    const whereClause = `WHERE ${kondisi.join(' AND ')}`;
 
     const result = await db.query(
       `WITH rekap AS (
@@ -295,16 +299,16 @@ class ModelSusunKata {
     return this.buatHarianOtomatis({ tanggal, panjang });
   }
 
-  static async buatHarianRentang({ tanggalMulai, totalHari = 30 }) {
+  static async buatHarianRentang({ tanggalMulai, totalHari }) {
     const tanggalAman = parseTanggal(tanggalMulai);
     if (!tanggalAman) return [];
 
-    const totalHariAman = Math.min(Math.max(Number.parseInt(totalHari, 10) || 30, 1), 365);
+    const totalHariInput = totalHari ?? 30;
+    const totalHariAman = Math.min(Math.max(Number.parseInt(totalHariInput, 10) || 30, 1), 365);
     const hasil = [];
 
     for (let offset = 0; offset < totalHariAman; offset += 1) {
       const tanggalItem = tambahHari(tanggalAman, offset);
-      if (!tanggalItem) continue;
       const item = await this.ambilAtauBuatHarian({ tanggal: tanggalItem, panjang: 5 });
       if (item) {
         hasil.push(item);
@@ -576,7 +580,7 @@ class ModelSusunKata {
     return null;
   }
 
-  static async simpanSkorBebas({ tanggal = null, panjang, kata, penggunaId, percobaan, tebakan, detik, menang }) {
+  static async simpanSkorBebas({ tanggal, panjang, kata, penggunaId, percobaan, tebakan, detik, menang }) {
     const penggunaIdAman = parsePenggunaId(penggunaId);
     const panjangAman = parsePanjangBebas(panjang, 5);
     const kataAman = String(kata || '').trim().toLowerCase();
@@ -587,7 +591,7 @@ class ModelSusunKata {
       menangAman,
     } = sanitasiPayloadSkor({ percobaan, detik, tebakan, menang });
 
-    const tanggalAman = parseTanggal(tanggal);
+    const tanggalAman = parseTanggal(tanggal ?? null);
 
     const result = await db.query(
       `INSERT INTO susun_kata_bebas (tanggal, panjang, kata, pengguna_id, percobaan, tebakan, detik, menang)
@@ -654,9 +658,10 @@ class ModelSusunKata {
     }));
   }
 
-  static async ambilKlasemenBebas({ limit = 10, tanggal = null }) {
-    const limitAman = Math.min(Math.max(Number.parseInt(limit, 10) || 10, 1), 50);
-    const tanggalAman = parseTanggal(tanggal);
+  static async ambilKlasemenBebas({ limit, tanggal }) {
+    const limitInput = limit ?? 10;
+    const limitAman = Math.min(Math.max(Number.parseInt(limitInput, 10) || 10, 1), 50);
+    const tanggalAman = parseTanggal(tanggal ?? null);
 
     const result = await db.query(
       `SELECT

@@ -13,7 +13,7 @@ const { decodeCursor, encodeCursor } = require('../utils/cursorPagination');
  * lalu ambil huruf Latin pertama dan ubah ke huruf besar.
  */
 function sqlAbjad(alias = '') {
-  const prefix = alias ? `${alias}.` : '';
+  const prefix = `${alias}.`.replace(/^(undefined\.|null\.|\.$)/, '');
   return `UPPER(SUBSTRING(REGEXP_REPLACE(${prefix}entri, '^[^a-zA-Z]*', ''), 1, 1))`;
 }
 const JENIS_BENTUK = ['dasar', 'turunan', 'gabungan'];
@@ -970,6 +970,7 @@ class ModelLabel {
 
 module.exports = ModelLabel;
 module.exports.__private = {
+  sqlAbjad,
   buildAdminLabelWhereClause,
   normalisasiKategoriLabel,
   kandidatKategoriLabel,

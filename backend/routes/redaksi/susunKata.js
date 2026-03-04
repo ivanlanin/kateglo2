@@ -64,10 +64,6 @@ router.get('/harian/detail', periksaIzin('kelola_susun_kata'), async (req, res, 
       return res.status(400).json({ success: false, message: 'Tanggal wajib format YYYY-MM-DD' });
     }
 
-    if (panjang === null) {
-      return res.status(400).json({ success: false, message: 'Panjang wajib diisi' });
-    }
-
     const harian = await ModelSusunKata.ambilAtauBuatHarian({ tanggal, panjang });
 
     if (!harian) {
@@ -147,3 +143,9 @@ router.get('/bebas', periksaIzin('kelola_susun_kata'), async (req, res, next) =>
 });
 
 module.exports = router;
+module.exports.__private = {
+  parseTanggal,
+  parsePanjang,
+  parsePanjangFilter,
+  parseLimit,
+};

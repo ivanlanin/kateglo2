@@ -1307,6 +1307,9 @@ describe('ModelLabel', () => {
   });
 
   it('helper private modelLabel menutup branch normalisasi dan deduplikasi', () => {
+    expect(__private.sqlAbjad()).toContain("REGEXP_REPLACE(entri");
+    expect(__private.sqlAbjad('l')).toContain("REGEXP_REPLACE(l.entri");
+
     expect(__private.normalisasiKategoriLabel()).toBe('');
     expect(__private.normalisasiKategoriLabel('kelas_kata')).toBe('kelas-kata');
     expect(__private.normalisasiKategoriLabel('kelas')).toBe('kelas-kata');

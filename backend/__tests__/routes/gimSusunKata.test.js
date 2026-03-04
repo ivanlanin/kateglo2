@@ -118,6 +118,16 @@ describe('routes/gim/susunKata', () => {
     expect(__private.ambilTebakanTerakhir('')).toBe('');
     expect(__private.normalisasiKataParam(undefined)).toBe('');
     expect(__private.normalisasiKataParam(' KATA ')).toBe('kata');
+    expect(__private.parseRiwayatTebakanHarian('abcde;ab12e;fghij', 5)).toEqual(['abcde', 'fghij']);
+    expect(__private.parseRiwayatTebakanHarian('abcd;efgh', 'abc')).toEqual([]);
+    expect(__private.parseRiwayatTebakanHarian('abcde;fghij')).toEqual(['abcde', 'fghij']);
+    expect(__private.parseRiwayatTebakanHarian('abcd;ab12;ABCDE', 4)).toEqual(['abcd']);
+    expect(__private.parseRiwayatTebakanHarian(undefined, 5)).toEqual([]);
+  });
+
+  it('helper private buildBebasPayload menutup cabang default parameter', async () => {
+    const payload = await __private.buildBebasPayload({});
+    expect(payload).toEqual(expect.objectContaining({ mode: 'bebas', sudahMainHariIni: false }));
   });
 
   it('GET /harian meneruskan error ke middleware', async () => {
@@ -157,6 +167,75 @@ describe('routes/gim/susunKata', () => {
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('Tidak Ditemukan');
+  });
+
+  it('POST /harian/progres mengembalikan 401 ketika user tidak valid', async () => {
+    const response = await request(createApp())
+      .post('/api/publik/gim/susun-kata/harian/progres')
+      .send({ panjang: 5, tebakan: 'kartu' });
+
+    expect(response.status).toBe(401);
+    expect(response.body.message).toBe('Autentikasi diperlukan');
+  });
+
+  it('POST /harian/progres mengembalikan 404 saat kata harian belum tersedia', async () => {
+    ModelSusunKata.ambilAtauBuatHarian.mockResolvedValueOnce(null);
+
+    const response = await request(createApp())
+      .post('/api/publik/gim/susun-kata/harian/progres')
+      .set('x-user-pid', '9')
+      .send({ panjang: 5, tebakan: 'kartu' });
+
+    expect(response.status).toBe(404);
+  });
+
+  it('POST /harian/progres mengembalikan 409 jika skor sudah tercatat', async () => {
+    ModelSusunKata.ambilSkorPenggunaHarian.mockResolvedValue({ id: 77, menang: true });
+
+    const response = await request(createApp())
+      .post('/api/publik/gim/susun-kata/harian/progres')
+      .set('x-user-pid', '9')
+      .send({ panjang: 5, tebakan: 'kartu' });
+
+    expect(response.status).toBe(409);
+    expect(response.body.data).toEqual({ id: 77, menang: true });
+  });
+
+  it('POST /harian/progres sukses dan memfilter tebakan sesuai regex+panjang', async () => {
+    const response = await request(createApp())
+      .post('/api/publik/gim/susun-kata/harian/progres?panjang=5')
+      .set('x-user-pid', '9')
+      .send({ tebakan: 'abcde;ABCD3;kartu;katun;selalu;tepat;lebih;akhir' });
+
+    expect(response.status).toBe(200);
+    expect(ModelSusunKata.simpanProgresPenggunaHarian).toHaveBeenCalledWith({
+      susunKataId: 10,
+      penggunaId: 9,
+      tebakan: 'abcde;kartu;katun;tepat;lebih;akhir',
+    });
+  });
+
+  it('POST /harian/progres mengembalikan 409 saat simpan progres tidak berhasil', async () => {
+    ModelSusunKata.simpanProgresPenggunaHarian.mockResolvedValueOnce(null);
+
+    const response = await request(createApp())
+      .post('/api/publik/gim/susun-kata/harian/progres')
+      .set('x-user-pid', '9')
+      .send({ panjang: 5, tebakan: 'kartu' });
+
+    expect(response.status).toBe(409);
+  });
+
+  it('POST /harian/progres meneruskan error umum ke middleware', async () => {
+    ModelSusunKata.simpanProgresPenggunaHarian.mockRejectedValueOnce(new Error('progres gagal'));
+
+    const response = await request(createApp())
+      .post('/api/publik/gim/susun-kata/harian/progres')
+      .set('x-user-pid', '9')
+      .send({ panjang: 5, tebakan: 'kartu' });
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('progres gagal');
   });
 
   it('POST /harian/submit mengembalikan 401 ketika user tidak valid', async () => {
@@ -328,6 +407,18 @@ describe('routes/gim/susunKata', () => {
     ModelSusunKata.ambilPuzzleBebas.mockResolvedValueOnce(null);
     const notFound = await request(createApp()).get('/api/publik/gim/susun-kata/bebas');
     expect(notFound.status).toBe(404);
+
+    await request(createApp()).get('/api/publik/gim/susun-kata/bebas?panjang=6');
+    expect(ModelSusunKata.parsePanjangBebas).toHaveBeenCalledWith('6', 5);
+  });
+
+  it('GET /bebas meneruskan error ke middleware', async () => {
+    ModelSusunKata.ambilPuzzleBebas.mockRejectedValueOnce(new Error('bebas gagal'));
+
+    const response = await request(createApp()).get('/api/publik/gim/susun-kata/bebas');
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('bebas gagal');
   });
 
   it('POST /bebas/submit validasi auth, kata, dan sukses simpan skor', async () => {
@@ -350,6 +441,65 @@ describe('routes/gim/susunKata', () => {
 
     expect(success.status).toBe(201);
     expect(ModelSusunKata.simpanSkorBebas).toHaveBeenCalledWith(expect.objectContaining({ penggunaId: 9, kata: 'kartu', menang: true }));
+  });
+
+  it('POST /bebas/submit memvalidasi format kata dan kecocokan tebakan terakhir', async () => {
+    const badFormat = await request(createApp())
+      .post('/api/publik/gim/susun-kata/bebas/submit')
+      .set('x-user-pid', '9')
+      .send({ panjang: 5, kata: 'ka1tu', menang: false });
+    expect(badFormat.status).toBe(400);
+
+    const badLastGuess = await request(createApp())
+      .post('/api/publik/gim/susun-kata/bebas/submit')
+      .set('x-user-pid', '9')
+      .send({ panjang: 5, kata: 'kartu', menang: true, tebakan: 'kartu;salah' });
+    expect(badLastGuess.status).toBe(400);
+
+    await request(createApp())
+      .post('/api/publik/gim/susun-kata/bebas/submit')
+      .set('x-user-pid', '9')
+      .send({ panjang: 5, kata: 'kartu', menang: false, percobaan: 2, waktuDetik: 11, tebakan: 'kartu' });
+    expect(ModelSusunKata.simpanSkorBebas).toHaveBeenLastCalledWith(expect.objectContaining({ detik: 11 }));
+
+    await request(createApp())
+      .post('/api/publik/gim/susun-kata/bebas/submit')
+      .set('x-user-pid', '9')
+      .send({ panjang: 5, kata: 'kartu', menang: false, percobaan: 2, detik: 9, tebakan: '', tanggal: '2026-03-02' });
+    expect(ModelSusunKata.simpanSkorBebas).toHaveBeenLastCalledWith(expect.objectContaining({ detik: 9, tanggal: '2026-03-02', tebakan: '' }));
+
+    await request(createApp())
+      .post('/api/publik/gim/susun-kata/bebas/submit?panjang=6')
+      .set('x-user-pid', '9')
+      .send({ kata: 'kartut', menang: false, percobaan: 2, tebakan: 'kartut' });
+    expect(ModelSusunKata.parsePanjangBebas).toHaveBeenLastCalledWith('6', 5);
+
+    const tanpaKata = await request(createApp())
+      .post('/api/publik/gim/susun-kata/bebas/submit')
+      .set('x-user-pid', '9')
+      .send({ panjang: 5, menang: false, percobaan: 1 });
+    expect(tanpaKata.status).toBe(400);
+  });
+
+  it('GET /bebas/klasemen meneruskan error', async () => {
+    ModelSusunKata.ambilKlasemenBebas.mockRejectedValueOnce(new Error('klasemen bebas gagal'));
+
+    const response = await request(createApp()).get('/api/publik/gim/susun-kata/bebas/klasemen');
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('klasemen bebas gagal');
+  });
+
+  it('POST /bebas/submit meneruskan error umum', async () => {
+    ModelSusunKata.simpanSkorBebas.mockRejectedValueOnce(new Error('simpan bebas gagal'));
+
+    const response = await request(createApp())
+      .post('/api/publik/gim/susun-kata/bebas/submit')
+      .set('x-user-pid', '9')
+      .send({ panjang: 5, kata: 'kartu', menang: false });
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('simpan bebas gagal');
   });
 
   it('GET /bebas/klasemen mengembalikan data', async () => {

@@ -6,7 +6,10 @@ const db = require('../db');
 const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
 const { decodeCursor, encodeCursor } = require('../utils/cursorPagination');
 
-function buildAdminWhereClause({ q = '', kategori = '', aktif = '' } = {}) {
+function buildAdminWhereClause(filters) {
+  const q = filters?.q || '';
+  const kategori = filters?.kategori || '';
+  const aktif = filters?.aktif || '';
   const conditions = [];
   const params = [];
 
@@ -189,7 +192,7 @@ class ModelTagar {
     const isPrev = direction === 'prev';
     const orderDesc = Boolean(lastPage || isPrev);
 
-    const whereBase = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+    const whereBase = `WHERE ${conditions.join(' AND ')}`;
 
     const countResult = await db.query(`SELECT COUNT(*) AS total FROM tagar ${whereBase}`, baseParams);
     const total = parseCount(countResult.rows[0]?.total);
@@ -348,7 +351,7 @@ class ModelTagar {
       conditions.push('NOT EXISTS (SELECT 1 FROM entri_tagar et_exists WHERE et_exists.entri_id = e.id)');
     }
 
-    const whereBase = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+    const whereBase = `WHERE ${conditions.join(' AND ')}`;
 
     const countResult = await db.query(
       `SELECT COUNT(*) AS total
@@ -386,7 +389,7 @@ class ModelTagar {
 
     dataParams.push(cappedLimit + 1);
     const limitIdx = dataParams.length;
-    const whereData = dataConditions.length ? `WHERE ${dataConditions.join(' AND ')}` : '';
+    const whereData = `WHERE ${dataConditions.join(' AND ')}`;
 
     const dataResult = await db.query(
       `SELECT
@@ -501,8 +504,11 @@ class ModelTagar {
    * @param {number[]} tagarIds - Array ID tagar. Kosong = hapus semua tagar entri.
    * @returns {Promise<void>}
    */
-  static async simpanTagarEntri(entriId, tagarIds = []) {
-    const ids = (tagarIds || []).filter((id) => Number.isFinite(Number(id))).map(Number);
+  static async simpanTagarEntri(entriId, tagarIds) {
+    const sumberIds = Array.isArray(tagarIds) ? tagarIds : [];
+    const ids = sumberIds
+      .map(Number)
+      .filter((id) => Number.isInteger(id) && id > 0);
 
     await db.query('BEGIN');
     try {

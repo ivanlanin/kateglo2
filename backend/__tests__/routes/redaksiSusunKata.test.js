@@ -30,6 +30,7 @@ jest.mock('../../models/modelEntri', () => ({
 }));
 
 const router = require('../../routes/redaksi/susunKata');
+const { __private } = router;
 const ModelSusunKata = require('../../models/modelSusunKata');
 const ModelEntri = require('../../models/modelEntri');
 
@@ -60,6 +61,18 @@ describe('routes/redaksi/susunKata', () => {
     ModelSusunKata.daftarRekapBebasAdmin.mockResolvedValue([{ tanggal: '2026-03-02' }]);
   });
 
+  it('helper private parser menutup cabang tanggal/limit', () => {
+    expect(__private.parseTanggal('')).toBeNull();
+    expect(__private.parseTanggal('2026/03/02')).toBeNull();
+    expect(__private.parseTanggal('2026-03-02')).toBe('2026-03-02');
+    expect(__private.parsePanjang()).toBe(5);
+    expect(__private.parsePanjangFilter()).toBe(5);
+    expect(__private.parseLimit('abc')).toBe(200);
+    expect(__private.parseLimit('abc', 200)).toBe(200);
+    expect(__private.parseLimit('0', 200)).toBe(1);
+    expect(__private.parseLimit('9999', 200)).toBe(1000);
+  });
+
   it('GET /harian membuat data rentang 30 hari dengan panjang 5', async () => {
     const withTanggalPanjang = await request(createApp()).get('/api/redaksi/susun-kata/harian?tanggal=2026-03-02&panjang=5');
     expect(withTanggalPanjang.status).toBe(200);
@@ -72,6 +85,10 @@ describe('routes/redaksi/susunKata', () => {
     expect(ModelSusunKata.ambilTanggalHariIniJakarta).toHaveBeenCalled();
     expect(ModelSusunKata.buatHarianRentang).toHaveBeenCalledWith({ tanggalMulai: '2026-03-02', totalHari: 30 });
     expect(ModelSusunKata.daftarHarianAdmin).toHaveBeenCalled();
+
+    ModelSusunKata.ambilTanggalHariIniJakarta.mockResolvedValueOnce(null);
+    await request(createApp()).get('/api/redaksi/susun-kata/harian');
+    expect(ModelSusunKata.buatHarianRentang).not.toHaveBeenLastCalledWith({ tanggalMulai: null, totalHari: 30 });
   });
 
   it('GET /harian meneruskan error', async () => {

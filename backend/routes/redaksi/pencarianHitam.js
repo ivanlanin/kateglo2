@@ -133,3 +133,6 @@ router.delete('/:id', periksaIzin('lihat_pencarian'), async (req, res, next) => 
 });
 
 module.exports = router;
+module.exports.__private = {
+  isValidAktifValue,
+};

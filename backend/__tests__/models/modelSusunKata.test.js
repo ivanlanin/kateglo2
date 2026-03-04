@@ -6,6 +6,7 @@
 jest.mock('../../models/modelEntri', () => ({
   ambilKamusSusunKata: jest.fn(),
   cekKataSusunKataValid: jest.fn(),
+  ambilArtiSusunKataByIndeks: jest.fn(),
 }));
 
 const db = require('../../db');
@@ -18,6 +19,7 @@ describe('ModelSusunKata', () => {
     db.query.mockReset();
     ModelEntri.ambilKamusSusunKata.mockReset();
     ModelEntri.cekKataSusunKataValid.mockReset();
+    ModelEntri.ambilArtiSusunKataByIndeks.mockReset();
   });
 
   it('helper parsePanjang, parsePenggunaId, dan hitungSkor mencakup semua cabang', () => {
@@ -44,6 +46,11 @@ describe('ModelSusunKata', () => {
     expect(__private.parsePanjang(undefined)).toBe(5);
     expect(__private.parsePanjang('9', 6)).toBe(8);
     expect(__private.parsePanjang('3', 6)).toBe(4);
+    expect(ModelSusunKata.parsePanjangBebas('9')).toBe(6);
+    expect(ModelSusunKata.parsePanjangBebas('3')).toBe(4);
+    expect(ModelSusunKata.parsePanjangBebas('abc')).toBe(5);
+    expect(ModelSusunKata.parsePanjangBebas('abc', 'x')).toBe(5);
+    expect(ModelSusunKata.parsePanjangBebas('abc', 6)).toBe(6);
 
     expect(__private.parsePenggunaId(undefined)).toBeNull();
     expect(__private.parsePenggunaId('-1')).toBeNull();
@@ -57,10 +64,134 @@ describe('ModelSusunKata', () => {
     expect(typeof __private.hash32(undefined)).toBe('number');
     expect(typeof __private.hash32('abc')).toBe('number');
 
+    expect(__private.parseDaftarTebakan('a;abcde;ABCDE;ab1de', { panjang: 5, maksimum: 6 })).toEqual(['abcde', 'abcde']);
+    expect(__private.parseDaftarTebakan('abcde;fghij;klmno;pqrst;uvwxy;zzzzz;aaaaa', { panjang: 5, maksimum: 6 })).toHaveLength(6);
+    expect(__private.parseDaftarTebakan('abcde;fghij', { panjang: 5, maksimum: 0 })).toEqual([]);
+    expect(__private.parseDaftarTebakan('abcde;fghij')).toEqual(['abcde', 'fghij']);
+    expect(__private.parsePanjangHarian()).toBe(5);
+    expect(__private.acakDariArray([])).toBeNull();
+    expect(__private.acakDariArray(null)).toBeNull();
+    expect(__private.tambahHari('invalid', 2)).toBeNull();
+    expect(__private.tambahHari('2026-03-02', 2)).toBe('2026-03-04');
+
     expect(__private.pilihIndexKata({ panjang: 5, offsetHari: 0, totalKamus: 1 })).toBe(0);
     const index = __private.pilihIndexKata({ panjang: 4, offsetHari: -3, totalKamus: 4 });
     expect(index).toBeGreaterThanOrEqual(0);
     expect(index).toBeLessThan(4);
+  });
+
+  it('ambilProgresPenggunaHarian validasi id dan mengembalikan baris', async () => {
+    await expect(ModelSusunKata.ambilProgresPenggunaHarian({ susunKataId: 'x', penggunaId: 1 })).resolves.toBeNull();
+    await expect(ModelSusunKata.ambilProgresPenggunaHarian({ susunKataId: 1, penggunaId: 0 })).resolves.toBeNull();
+
+    db.query.mockResolvedValueOnce({ rows: [{ id: 7, selesai: false }] });
+    await expect(ModelSusunKata.ambilProgresPenggunaHarian({ susunKataId: 11, penggunaId: 9 })).resolves.toEqual({ id: 7, selesai: false });
+
+    db.query.mockResolvedValueOnce({ rows: [] });
+    await expect(ModelSusunKata.ambilProgresPenggunaHarian({ susunKataId: 11, penggunaId: 9 })).resolves.toBeNull();
+  });
+
+  it('simpanProgresPenggunaHarian validasi id, sanitasi tebakan, dan null jika update gagal', async () => {
+    await expect(ModelSusunKata.simpanProgresPenggunaHarian({ susunKataId: 'x', penggunaId: 9, tebakan: 'abcde' })).resolves.toBeNull();
+
+    db.query.mockResolvedValueOnce({ rows: [{ id: 10, tebakan: 'abcde;fghij', percobaan: 2, selesai: false }] });
+    await expect(ModelSusunKata.simpanProgresPenggunaHarian({
+      susunKataId: 10,
+      penggunaId: 9,
+      tebakan: 'ab1de;abcde;fghij;ABCDE;zz',
+    })).resolves.toEqual({ id: 10, tebakan: 'abcde;fghij', percobaan: 2, selesai: false });
+
+    db.query.mockResolvedValueOnce({ rows: [] });
+    await expect(ModelSusunKata.simpanProgresPenggunaHarian({ susunKataId: 10, penggunaId: 9, tebakan: '' })).resolves.toBeNull();
+  });
+
+  it('ambilPuzzleBebas mengembalikan null saat kamus kosong dan data saat kamus tersedia', async () => {
+    ModelEntri.ambilKamusSusunKata
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([]);
+    await expect(ModelSusunKata.ambilPuzzleBebas({})).resolves.toBeNull();
+
+    ModelEntri.ambilKamusSusunKata.mockResolvedValueOnce(['kartu']);
+    ModelEntri.ambilArtiSusunKataByIndeks.mockResolvedValueOnce('alat tulis');
+    const result = await ModelSusunKata.ambilPuzzleBebas({ panjang: 5 });
+    expect(result).toEqual({
+      tanggal: null,
+      panjang: 5,
+      total: 1,
+      target: 'kartu',
+      arti: 'alat tulis',
+      kamus: ['kartu'],
+    });
+
+    ModelEntri.ambilKamusSusunKata
+      .mockResolvedValueOnce([''])
+      .mockResolvedValueOnce(['baru']);
+    ModelEntri.ambilArtiSusunKataByIndeks.mockResolvedValueOnce('arti baru');
+    await expect(ModelSusunKata.ambilPuzzleBebas({})).resolves.toEqual(expect.objectContaining({ target: 'baru', arti: 'arti baru' }));
+  });
+
+  it('simpanSkorBebas menormalisasi payload dan mengembalikan null saat tanpa baris', async () => {
+    db.query.mockResolvedValueOnce({
+      rows: [{ id: 1, tanggal: '2026-03-02', panjang: 5, kata: 'kartu', pengguna_id: 9, percobaan: 6, tebakan: 'a', detik: 86400, menang: true, created_at: 'x' }],
+    });
+    await expect(ModelSusunKata.simpanSkorBebas({
+      tanggal: 'invalid',
+      panjang: 9,
+      kata: ' KARTU ',
+      penggunaId: '9',
+      percobaan: 99,
+      tebakan: ' A ',
+      detik: 999999,
+      menang: '1',
+    })).resolves.toEqual(expect.objectContaining({ id: 1, kata: 'kartu' }));
+
+    db.query.mockResolvedValueOnce({ rows: [] });
+    await expect(ModelSusunKata.simpanSkorBebas({ panjang: 5, kata: 'kartu', penggunaId: 9 })).resolves.toBeNull();
+
+    db.query.mockResolvedValueOnce({ rows: [{ id: 2, tanggal: '2026-03-03' }] });
+    await expect(ModelSusunKata.simpanSkorBebas({ tanggal: '2026-03-03', panjang: 5, kata: 'kartu', penggunaId: 9 })).resolves.toEqual({ id: 2, tanggal: '2026-03-03' });
+
+    db.query.mockResolvedValueOnce({ rows: [{ id: 3, kata: '' }] });
+    await expect(ModelSusunKata.simpanSkorBebas({ tanggal: null, panjang: 5, kata: null, penggunaId: 9 })).resolves.toEqual({ id: 3, kata: '' });
+    expect(db.query).toHaveBeenLastCalledWith(expect.any(String), [null, 5, '', 9, 6, '', 0, false]);
+  });
+
+  it('ambilKlasemenBebas memetakan data dan default saat null', async () => {
+    db.query.mockResolvedValueOnce({
+      rows: [{ pengguna_id: '9', nama: 'A', tanggal: '2026-03-02', total_main: '4', rata_poin: '7.5', rata_detik: '11.2', terakhir_main: 'x' }],
+    });
+    const result = await ModelSusunKata.ambilKlasemenBebas({ limit: 999, tanggal: 'invalid' });
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM susun_kata_bebas sb'), [50, null]);
+    expect(result[0]).toEqual({
+      pengguna_id: 9,
+      nama: 'A',
+      tanggal: '2026-03-02',
+      total_main: 4,
+      rata_poin: 7.5,
+      rata_detik: 11.2,
+      terakhir_main: 'x',
+    });
+
+    db.query.mockResolvedValueOnce({ rows: [{ pengguna_id: null, nama: null, tanggal: null, total_main: null, rata_poin: null, rata_detik: null, terakhir_main: null }] });
+    const fallback = await ModelSusunKata.ambilKlasemenBebas({ limit: 'abc' });
+    expect(fallback[0]).toEqual({
+      pengguna_id: 0,
+      nama: null,
+      tanggal: null,
+      total_main: 0,
+      rata_poin: 0,
+      rata_detik: 0,
+      terakhir_main: null,
+    });
+
+    db.query.mockResolvedValueOnce({ rows: [] });
+    await expect(ModelSusunKata.ambilKlasemenBebas({ tanggal: '2026-03-03', limit: 5 })).resolves.toEqual([]);
+    expect(db.query).toHaveBeenLastCalledWith(expect.any(String), [5, '2026-03-03']);
+
+    db.query.mockResolvedValueOnce({ rows: [] });
+    await expect(ModelSusunKata.ambilKlasemenBebas({})).resolves.toEqual([]);
+    expect(db.query).toHaveBeenLastCalledWith(expect.any(String), [10, null]);
   });
 
   it('ambilTanggalHariIniJakarta mengembalikan tanggal atau null', async () => {
@@ -212,6 +343,35 @@ describe('ModelSusunKata', () => {
     expect(spy).toHaveBeenNthCalledWith(1, { tanggal: '2026-03-02', panjang: 5 });
     expect(spy).toHaveBeenNthCalledWith(30, { tanggal: '2026-03-31', panjang: 5 });
 
+    spy.mockRestore();
+  });
+
+  it('buatHarianRentang tidak menambahkan item null', async () => {
+    const spy = jest.spyOn(ModelSusunKata, 'ambilAtauBuatHarian')
+      .mockResolvedValueOnce({ id: 1, kata: 'kartu' })
+      .mockResolvedValueOnce(null)
+      .mockResolvedValue({ id: 2, kata: 'katun' });
+
+    const hasil = await ModelSusunKata.buatHarianRentang({ tanggalMulai: '2026-03-02', totalHari: 3 });
+
+    expect(hasil).toHaveLength(2);
+    expect(spy).toHaveBeenCalledTimes(3);
+    spy.mockRestore();
+  });
+
+  it('buatHarianRentang memakai totalHari default saat tidak dikirim', async () => {
+    const spy = jest.spyOn(ModelSusunKata, 'ambilAtauBuatHarian').mockResolvedValue({ id: 3, kata: 'kartu' });
+    const hasil = await ModelSusunKata.buatHarianRentang({ tanggalMulai: '2026-03-02' });
+    expect(hasil).toHaveLength(30);
+    spy.mockRestore();
+  });
+
+  it('buatHarianRentang mengembalikan kosong saat tanggal invalid dan clamp total hari minimum', async () => {
+    await expect(ModelSusunKata.buatHarianRentang({ tanggalMulai: 'invalid', totalHari: 30 })).resolves.toEqual([]);
+
+    const spy = jest.spyOn(ModelSusunKata, 'ambilAtauBuatHarian').mockResolvedValue({ id: 1, kata: 'kartu' });
+    const result = await ModelSusunKata.buatHarianRentang({ tanggalMulai: '2026-03-02', totalHari: 0 });
+    expect(result).toHaveLength(30);
     spy.mockRestore();
   });
 
