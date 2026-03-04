@@ -17,6 +17,8 @@ jest.mock('../../models/modelSusunKata', () => ({
     return Math.min(Math.max(parsed, 4), 8);
   }),
   ambilAtauBuatHarian: jest.fn(),
+  buatHarianRentang: jest.fn(),
+  ambilTanggalHariIniJakarta: jest.fn(),
   daftarHarianAdmin: jest.fn(),
   ambilPesertaHarian: jest.fn(),
   simpanHarianAdmin: jest.fn(),
@@ -50,22 +52,25 @@ describe('routes/redaksi/susunKata', () => {
     jest.clearAllMocks();
     ModelSusunKata.daftarHarianAdmin.mockResolvedValue([{ id: 1 }]);
     ModelSusunKata.ambilAtauBuatHarian.mockResolvedValue({ id: 10, kata: 'kartu', tanggal: '2026-03-02', panjang: 5 });
+    ModelSusunKata.buatHarianRentang.mockResolvedValue([{ id: 10, kata: 'kartu', tanggal: '2026-03-02', panjang: 5 }]);
+    ModelSusunKata.ambilTanggalHariIniJakarta.mockResolvedValue('2026-03-02');
     ModelEntri.ambilArtiSusunKataByIndeks.mockResolvedValue('alat tulis');
     ModelSusunKata.ambilPesertaHarian.mockResolvedValue([{ pengguna_id: 9 }]);
     ModelSusunKata.simpanHarianAdmin.mockResolvedValue({ id: 10, kata: 'kartu' });
     ModelSusunKata.daftarRekapBebasAdmin.mockResolvedValue([{ tanggal: '2026-03-02' }]);
   });
 
-  it('GET /harian membuat data sesuai kombinasi filter tanggal dan panjang', async () => {
+  it('GET /harian membuat data rentang 30 hari dengan panjang 5', async () => {
     const withTanggalPanjang = await request(createApp()).get('/api/redaksi/susun-kata/harian?tanggal=2026-03-02&panjang=5');
     expect(withTanggalPanjang.status).toBe(200);
-    expect(ModelSusunKata.ambilAtauBuatHarian).toHaveBeenCalledWith({ tanggal: '2026-03-02', panjang: 5 });
+    expect(ModelSusunKata.buatHarianRentang).toHaveBeenCalledWith({ tanggalMulai: '2026-03-02', totalHari: 30 });
 
     await request(createApp()).get('/api/redaksi/susun-kata/harian?tanggal=2026-03-03');
-    const panggilUntukTanggalSaja = ModelSusunKata.ambilAtauBuatHarian.mock.calls.filter((call) => call[0].tanggal === '2026-03-03');
-    expect(panggilUntukTanggalSaja).toHaveLength(5);
+    expect(ModelSusunKata.buatHarianRentang).toHaveBeenCalledWith({ tanggalMulai: '2026-03-03', totalHari: 30 });
 
     await request(createApp()).get('/api/redaksi/susun-kata/harian');
+    expect(ModelSusunKata.ambilTanggalHariIniJakarta).toHaveBeenCalled();
+    expect(ModelSusunKata.buatHarianRentang).toHaveBeenCalledWith({ tanggalMulai: '2026-03-02', totalHari: 30 });
     expect(ModelSusunKata.daftarHarianAdmin).toHaveBeenCalled();
   });
 
@@ -83,7 +88,7 @@ describe('routes/redaksi/susunKata', () => {
     expect(noTanggal.status).toBe(400);
 
     const noPanjang = await request(createApp()).get('/api/redaksi/susun-kata/harian/detail?tanggal=2026-03-02');
-    expect(noPanjang.status).toBe(400);
+    expect(noPanjang.status).toBe(200);
 
     const tanggalInvalid = await request(createApp()).get('/api/redaksi/susun-kata/harian/detail?tanggal=2026/03/02&panjang=5');
     expect(tanggalInvalid.status).toBe(400);
@@ -132,7 +137,7 @@ describe('routes/redaksi/susunKata', () => {
     expect(response.status).toBe(200);
     expect(ModelSusunKata.simpanHarianAdmin).toHaveBeenCalledWith({
       tanggal: '2026-03-02',
-      panjang: 6,
+      panjang: 5,
       kata: 'kartun',
       penggunaId: 9,
       keterangan: 'catatan',

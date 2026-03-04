@@ -2,9 +2,9 @@
  * @fileoverview Halaman redaksi untuk rekap Susun Kata Bebas
  */
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import TataLetak from '../../komponen/bersama/TataLetak';
-import { BarisFilterCariAdmin, TabelAdmin } from '../../komponen/redaksi/KomponenAdmin';
+import { TabelAdmin } from '../../komponen/redaksi/KomponenAdmin';
 import { useSusunKataBebasAdmin } from '../../api/apiAdmin';
 import { formatBilanganRibuan } from '../../utils/formatUtils';
 
@@ -23,10 +23,7 @@ const kolom = [
 ];
 
 function SusunKataBebas() {
-  const [cariTanggal, setCariTanggal] = useState('');
-  const [tanggalQuery, setTanggalQuery] = useState('');
-
-  const { data, isLoading, isError } = useSusunKataBebasAdmin({ tanggal: tanggalQuery });
+  const { data, isLoading, isError } = useSusunKataBebasAdmin();
 
   const dataTabel = useMemo(
     () => (Array.isArray(data?.data) ? data.data : []).map((item) => ({
@@ -39,25 +36,8 @@ function SusunKataBebas() {
     [data?.data]
   );
 
-  const handleCari = () => {
-    setTanggalQuery(String(cariTanggal || '').trim());
-  };
-
-  const handleReset = () => {
-    setCariTanggal('');
-    setTanggalQuery('');
-  };
-
   return (
     <TataLetak mode="admin" judul="Susun Kata Bebas">
-      <BarisFilterCariAdmin
-        nilai={cariTanggal}
-        onChange={setCariTanggal}
-        onCari={handleCari}
-        onHapus={handleReset}
-        placeholder="Tanggal (YYYY-MM-DD)"
-      />
-
       <TabelAdmin
         kolom={kolom}
         data={dataTabel}

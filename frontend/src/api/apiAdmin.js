@@ -511,10 +511,7 @@ export function useDetailBidangAdmin(id) {
 }
 
 export function useSusunKataHarianAdmin({ tanggal = '', panjang = 5 } = {}) {
-  const panjangRaw = String(panjang ?? '').trim();
-  const panjangAman = panjangRaw
-    ? Math.min(Math.max(Number(panjangRaw) || 5, 4), 8)
-    : undefined;
+  const panjangAman = 5;
 
   return useQuery({
     queryKey: ['admin-susun-kata-harian', { tanggal, panjang }],
@@ -533,9 +530,7 @@ export function useSusunKataHarianAdmin({ tanggal = '', panjang = 5 } = {}) {
 export function useDetailSusunKataHarianAdmin({ tanggal = '', panjang = '' } = {}) {
   const panjangRaw = String(panjang ?? '').trim();
   const tanggalRaw = String(tanggal ?? '').trim();
-  const panjangAman = panjangRaw
-    ? Math.min(Math.max(Number(panjangRaw) || 5, 4), 8)
-    : undefined;
+  const panjangAman = panjangRaw ? 5 : undefined;
 
   return useQuery({
     queryKey: ['admin-susun-kata-harian-detail', { tanggal: tanggalRaw, panjang: panjangRaw }],
@@ -965,18 +960,14 @@ export function useSimpanSusunKataHarianAdmin() {
 export function useBuatSusunKataHarianAdmin() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ tanggal = '', panjang = '' } = {}) => {
+    mutationFn: ({ tanggal = '' } = {}) => {
       const tanggalRaw = String(tanggal || '').trim();
-      const panjangRaw = String(panjang || '').trim();
-      const panjangAman = panjangRaw
-        ? Math.min(Math.max(Number(panjangRaw) || 5, 4), 8)
-        : undefined;
 
       return klien
         .get('/api/redaksi/susun-kata/harian', {
           params: {
             tanggal: tanggalRaw || undefined,
-            panjang: panjangAman,
+            panjang: 5,
           },
         })
         .then((r) => r.data);

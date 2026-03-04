@@ -16,14 +16,12 @@ function parseTanggal(value) {
   return raw;
 }
 
-function parsePanjang(value) {
-  return ModelSusunKata.parsePanjang(value, 5);
+function parsePanjang() {
+  return 5;
 }
 
-function parsePanjangFilter(value) {
-  const raw = String(value ?? '').trim();
-  if (!raw) return null;
-  return ModelSusunKata.parsePanjang(raw, 5);
+function parsePanjangFilter() {
+  return 5;
 }
 
 function parseLimit(value, fallback = 200) {
@@ -34,18 +32,19 @@ function parseLimit(value, fallback = 200) {
 
 router.get('/harian', periksaIzin('kelola_susun_kata'), async (req, res, next) => {
   try {
-    const tanggal = parseTanggal(req.query.tanggal);
+    const tanggalFilter = parseTanggal(req.query.tanggal);
     const panjang = parsePanjangFilter(req.query.panjang);
+    let tanggalAcuan = tanggalFilter;
 
-    if (tanggal && panjang !== null) {
-      await ModelSusunKata.ambilAtauBuatHarian({ tanggal, panjang });
+    if (!tanggalAcuan) {
+      tanggalAcuan = await ModelSusunKata.ambilTanggalHariIniJakarta();
     }
 
-    if (tanggal && panjang === null) {
-      await Promise.all([4, 5, 6, 7, 8].map((item) => ModelSusunKata.ambilAtauBuatHarian({ tanggal, panjang: item })));
+    if (tanggalAcuan) {
+      await ModelSusunKata.buatHarianRentang({ tanggalMulai: tanggalAcuan, totalHari: 30 });
     }
 
-    const data = await ModelSusunKata.daftarHarianAdmin({ tanggal, panjang, limit: 500 });
+    const data = await ModelSusunKata.daftarHarianAdmin({ tanggal: tanggalFilter, panjang, limit: 500 });
 
     return res.json({
       success: true,

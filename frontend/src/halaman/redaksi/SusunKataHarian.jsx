@@ -5,7 +5,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import TataLetak from '../../komponen/bersama/TataLetak';
 import {
-  BarisFilterCariAdmin,
   getApiErrorMessage,
   TabelAdmin,
   TombolAksiAdmin,
@@ -44,15 +43,16 @@ const nilaiAwal = {
 
 const kolom = [
   { key: 'tanggal', label: 'Tanggal' },
-  { key: 'panjang', label: 'Panjang' },
   { key: 'kata', label: 'Kata', render: (item) => String(item.kata || '').toUpperCase() },
+  { key: 'pemenang', label: 'Pemenang' },
   { key: 'jumlahPeserta', label: 'Peserta', align: 'right', render: (item) => formatBilanganRibuan(item.jumlahPeserta) },
+  { key: 'persenMenang', label: 'Menang', align: 'right', render: (item) => `${Number(item.persenMenang || 0).toFixed(2)}%` },
 ];
 
 export function buildPanelDataFromDetail(detail, selectedTanggal, selectedPanjang, tanggalQuery) {
   return {
     tanggal: String(detail?.tanggal || selectedTanggal || tanggalQuery),
-    panjang: String(detail?.panjang || selectedPanjang || 5),
+    panjang: '5',
     kata: String(detail?.kata || ''),
     keterangan: String(detail?.keterangan || ''),
   };
@@ -68,7 +68,7 @@ export function buildSelectedFromItem(item) {
 export function buildSuntingDataFromItem(item) {
   return {
     tanggal: String(item?.tanggal),
-    panjang: String(item?.panjang),
+    panjang: '5',
     kata: String(item?.kata || ''),
     keterangan: String(item?.keterangan || ''),
   };
@@ -79,7 +79,7 @@ export function sanitizeKataSusunInput(value) {
 }
 
 export function buildSimpanPayload(panelData) {
-  const panjangAman = Number.parseInt(panelData?.panjang, 10) || 5;
+  const panjangAman = 5;
   const kataAman = String(panelData?.kata || '').trim().toLowerCase();
   return {
     payload: {
@@ -102,10 +102,7 @@ export function resolveTanggalSimpan(tanggalForm, tanggalQuery) {
 }
 
 function SusunKataHarian() {
-  const [cariTanggal, setCariTanggal] = useState(tanggalHariIni());
-  const [tanggalQuery, setTanggalQuery] = useState(tanggalHariIni());
-  const [panjangDraft, setPanjangDraft] = useState('');
-  const [panjang, setPanjang] = useState('');
+  const [tanggalAcuan, setTanggalAcuan] = useState(tanggalHariIni());
   const [selected, setSelected] = useState({ tanggal: '', panjang: '' });
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
 
@@ -113,10 +110,7 @@ function SusunKataHarian() {
   const panelTerbuka = panel.buka;
   const setPanelData = panel.setData;
 
-  const { data, isLoading, isError } = useSusunKataHarianAdmin({
-    tanggal: tanggalQuery,
-    panjang,
-  });
+  const { data, isLoading, isError } = useSusunKataHarianAdmin();
   const { data: detailResp } = useDetailSusunKataHarianAdmin(selected);
   const simpan = useSimpanSusunKataHarianAdmin();
   const buatHarian = useBuatSusunKataHarianAdmin();
@@ -135,9 +129,9 @@ function SusunKataHarian() {
     if (!detail) return;
 
     if (panelTerbuka) {
-      setPanelData(buildPanelDataFromDetail(detail, selected.tanggal, selected.panjang, tanggalQuery));
+      setPanelData(buildPanelDataFromDetail(detail, selected.tanggal, selected.panjang, tanggalAcuan));
     }
-  }, [detail, panelTerbuka, selected.tanggal, selected.panjang, setPanelData, tanggalQuery]);
+  }, [detail, panelTerbuka, selected.tanggal, selected.panjang, setPanelData, tanggalAcuan]);
 
   const bukaPanel = (item = null) => {
     setPesan({ error: '', sukses: '' });
@@ -150,8 +144,8 @@ function SusunKataHarian() {
     setSelected({ tanggal: '', panjang: '' });
     panel.bukaUntukTambah();
     panel.setData({
-      tanggal: tanggalQuery || tanggalHariIni(),
-      panjang: String(panjang || 5),
+      tanggal: tanggalAcuan || tanggalHariIni(),
+      panjang: '5',
       kata: '',
       keterangan: '',
     });
@@ -187,11 +181,8 @@ function SusunKataHarian() {
       {
         onSuccess: () => {
           setPesan({ error: '', sukses: 'Kata harian berhasil disimpan.' });
-          const tanggalSimpan = resolveTanggalSimpan(panel.data.tanggal, tanggalQuery);
-          setTanggalQuery(tanggalSimpan);
-          setPanjang(panjangAman);
-          setCariTanggal(tanggalSimpan);
-          setPanjangDraft(String(panjangAman));
+          const tanggalSimpan = resolveTanggalSimpan(panel.data.tanggal, tanggalAcuan);
+          setTanggalAcuan(tanggalSimpan || tanggalHariIni());
         },
         onError: (error) => {
           setPesan({ error: getApiErrorMessage(error, 'Gagal menyimpan kata harian.'), sukses: '' });
@@ -200,33 +191,17 @@ function SusunKataHarian() {
     );
   };
 
-  const handleCari = () => {
-    const tanggalAman = String(cariTanggal || '').trim();
-    setTanggalQuery(tanggalAman);
-    setPanjang(String(panjangDraft || '').trim());
-  };
-
-  const handleReset = () => {
-    setCariTanggal('');
-    setTanggalQuery('');
-    setPanjangDraft('');
-    setPanjang('');
-  };
-
   const handleBuatKataHarian = () => {
     setPesan({ error: '', sukses: '' });
-    const tanggalAman = resolveTanggalBuatKataHarian(cariTanggal, tanggalQuery);
-    const panjangAman = String(panjangDraft || '').trim();
+    const tanggalAman = resolveTanggalBuatKataHarian(tanggalAcuan, '');
 
     buatHarian.mutate(
       {
         tanggal: tanggalAman,
-        panjang: panjangAman,
       },
       {
         onSuccess: () => {
-          setTanggalQuery(tanggalAman);
-          setPanjang(panjangAman);
+          setTanggalAcuan(tanggalAman || tanggalHariIni());
           setPesan({ error: '', sukses: 'Kata harian berhasil dibuat.' });
         },
         onError: (error) => {
@@ -238,26 +213,6 @@ function SusunKataHarian() {
 
   return (
     <TataLetak mode="admin" judul="Susun Kata Harian" aksiJudul={<TombolAksiAdmin onClick={handleBuatKataHarian} label={buatHarian.isPending ? 'Membuat …' : 'Buat Kata Harian'} />}>
-      <BarisFilterCariAdmin
-        nilai={cariTanggal}
-        onChange={setCariTanggal}
-        onCari={handleCari}
-        onHapus={handleReset}
-        placeholder="Tanggal (YYYY-MM-DD)"
-        filters={[
-          {
-            key: 'panjang',
-            value: panjangDraft,
-            onChange: setPanjangDraft,
-            options: [
-              { value: '', label: '—Panjang—' },
-              ...[4, 5, 6, 7, 8].map((item) => ({ value: String(item), label: `${item} huruf` })),
-            ],
-            ariaLabel: 'Filter panjang kata harian',
-          },
-        ]}
-      />
-
       <TabelAdmin
         kolom={kolom}
         data={dataTabel}
@@ -275,7 +230,7 @@ function SusunKataHarian() {
       <PanelGeser buka={panel.buka} onTutup={tutupPanel} judul="Sunting Susun Kata">
         <PesanForm error={pesan.error} sukses={pesan.sukses} />
         <InputField label="Tanggal" name="tanggal" value={panel.data.tanggal} onChange={panel.ubahField} required />
-        <InputField label="Panjang" name="panjang" value={panel.data.panjang} onChange={panel.ubahField} required />
+        <InputField label="Panjang" name="panjang" value={panel.data.panjang} onChange={() => {}} required />
         <InputField
           label="Kata"
           name="kata"

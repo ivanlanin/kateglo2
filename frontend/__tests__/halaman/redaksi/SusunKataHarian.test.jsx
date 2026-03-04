@@ -239,8 +239,7 @@ describe('SusunKataHarian', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Buka kosong' }));
     fireEvent.change(screen.getByLabelText('Tanggal'), { target: { value: '2026-03-03' } });
-    fireEvent.change(screen.getByLabelText('Panjang'), { target: { value: '4' } });
-    fireEvent.change(screen.getByLabelText('Kata'), { target: { value: 'K@R-TU1' } });
+    fireEvent.change(screen.getByLabelText('Kata'), { target: { value: 'K@A-RTU1' } });
     fireEvent.change(screen.getByLabelText('Keterangan'), { target: { value: '  catatan baru  ' } });
 
     fireEvent.click(screen.getByRole('button', { name: 'Simpan' }));
@@ -248,8 +247,8 @@ describe('SusunKataHarian', () => {
     expect(mutateSimpan).toHaveBeenCalledWith(
       {
         tanggal: '2026-03-03',
-        panjang: 4,
-        kata: 'krtu',
+        panjang: 5,
+        kata: 'kartu',
         keterangan: 'catatan baru',
       },
       expect.objectContaining({ onSuccess: expect.any(Function), onError: expect.any(Function) })
@@ -269,16 +268,9 @@ describe('SusunKataHarian', () => {
     expect(await screen.findByText('Simpan gagal')).toBeInTheDocument();
   });
 
-  it('cari dan reset filter memperbarui parameter query', () => {
+  it('tanpa filter tetap memanggil hook daftar harian', () => {
     renderPage();
-
-    fireEvent.change(screen.getByLabelText('Filter tanggal'), { target: { value: '2026-03-10' } });
-    fireEvent.change(screen.getByLabelText('Filter panjang kata harian'), { target: { value: '7' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Cari' }));
-    expect(mockUseHarian).toHaveBeenLastCalledWith({ tanggal: '2026-03-10', panjang: '7' });
-
-    fireEvent.click(screen.getByRole('button', { name: '✕' }));
-    expect(mockUseHarian).toHaveBeenLastCalledWith({ tanggal: '', panjang: '' });
+    expect(mockUseHarian).toHaveBeenCalled();
   });
 
   it('buat kata harian menampilkan sukses lalu error', async () => {
@@ -362,7 +354,7 @@ describe('SusunKataHarian', () => {
 
     expect(await screen.findByRole('heading', { name: 'Sunting Susun Kata' })).toBeInTheDocument();
     expect(screen.getByLabelText('Tanggal')).toHaveValue('2026-03-11');
-    expect(screen.getByLabelText('Panjang')).toHaveValue('6');
+    expect(screen.getByLabelText('Panjang')).toHaveValue('5');
     expect(screen.getByLabelText('Kata')).toHaveValue('');
   });
 
@@ -379,19 +371,11 @@ describe('SusunKataHarian', () => {
     expect(screen.queryByRole('button', { name: 'row-0' })).not.toBeInTheDocument();
   });
 
-  it('reset lalu cari mengirim filter kosong, dan tombol aksi menampilkan status pending', () => {
+  it('tombol aksi menampilkan status pending', () => {
     buatPending = true;
     renderPage();
 
     expect(screen.getByRole('button', { name: 'Membuat …' })).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole('button', { name: '✕' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Cari' }));
-
-    expect(mockUseHarian).toHaveBeenLastCalledWith({
-      tanggal: '',
-      panjang: '',
-    });
   });
 
   it('menampilkan pesan sukses di luar panel saat buat kata harian berhasil', async () => {
@@ -404,9 +388,6 @@ describe('SusunKataHarian', () => {
   });
 
   it('simpan memakai fallback tanggalQuery saat tanggal form kosong dan validasi dipaksa lolos', async () => {
-    const sekarang = new Date();
-    const tanggalHariIni = `${sekarang.getFullYear()}-${String(sekarang.getMonth() + 1).padStart(2, '0')}-${String(sekarang.getDate()).padStart(2, '0')}`;
-
     paksaPesanValidasi = '';
     renderPage();
 
@@ -427,10 +408,7 @@ describe('SusunKataHarian', () => {
     );
 
     await screen.findByText('Kata harian berhasil disimpan.');
-    expect(mockUseHarian).toHaveBeenLastCalledWith({
-      tanggal: tanggalHariIni,
-      panjang: 5,
-    });
+    expect(mockUseHarian).toHaveBeenCalled();
   });
 
   it('jalur tambah memakai fallback tanggalHariIni setelah reset, lalu buat harian memakai tanggal fallback yang sama', async () => {
@@ -439,7 +417,6 @@ describe('SusunKataHarian', () => {
 
     renderPage();
 
-    fireEvent.click(screen.getByRole('button', { name: '✕' }));
     fireEvent.click(screen.getByRole('button', { name: 'Buka kosong' }));
 
     expect(screen.getByLabelText('Tanggal')).toHaveValue(hariIni);
@@ -450,7 +427,6 @@ describe('SusunKataHarian', () => {
     expect(mutateBuat).toHaveBeenCalledWith(
       {
         tanggal: hariIni,
-        panjang: '',
       },
       expect.objectContaining({ onSuccess: expect.any(Function), onError: expect.any(Function) })
     );
@@ -477,7 +453,7 @@ describe('SusunKataHarian', () => {
       )
     ).toEqual({
       tanggal: '2026-03-10',
-      panjang: '7',
+      panjang: '5',
       kata: '',
       keterangan: '',
     });
@@ -497,7 +473,7 @@ describe('SusunKataHarian', () => {
       )
     ).toEqual({
       tanggal: '2026-03-01',
-      panjang: '8',
+      panjang: '5',
       kata: 'uji',
       keterangan: 'cat',
     });
@@ -518,7 +494,7 @@ describe('SusunKataHarian', () => {
 
     expect(buildSuntingDataFromItem({ tanggal: '2026-03-09', panjang: 6, kata: null, keterangan: null })).toEqual({
       tanggal: '2026-03-09',
-      panjang: '6',
+      panjang: '5',
       kata: '',
       keterangan: '',
     });

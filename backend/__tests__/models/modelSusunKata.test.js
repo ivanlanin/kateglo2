@@ -88,12 +88,16 @@ describe('ModelSusunKata', () => {
       rows: [{
         id: '10',
         tanggal: '2026-03-02',
-        panjang: '6',
+        panjang: '5',
         kata: 'kartun',
         keterangan: 'tes',
         created_at: '2026-03-02T00:00:00.000Z',
         updated_at: '2026-03-02T00:00:00.000Z',
+        pemenang: 'Andi',
         jumlah_peserta: '7',
+        total_main: '10',
+        total_menang: '6',
+        persen_menang: '60.00',
       }],
     });
 
@@ -101,9 +105,17 @@ describe('ModelSusunKata', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('WHERE sk.tanggal = $1::date AND sk.panjang = $2'),
-      ['2026-03-02', 6, 1000]
+      ['2026-03-02', 5, 1000]
     );
-    expect(result[0]).toEqual(expect.objectContaining({ id: 10, panjang: 6, jumlahPeserta: 7 }));
+    expect(result[0]).toEqual(expect.objectContaining({
+      id: 10,
+      panjang: 5,
+      pemenang: 'Andi',
+      jumlahPeserta: 7,
+      totalMain: 10,
+      totalMenang: 6,
+      persenMenang: 60,
+    }));
   });
 
   it('daftarHarianAdmin tanpa filter memakai limit default aman', async () => {
@@ -111,7 +123,7 @@ describe('ModelSusunKata', () => {
 
     await ModelSusunKata.daftarHarianAdmin({ tanggal: '', panjang: '', limit: 'abc' });
 
-    expect(db.query).toHaveBeenCalledWith(expect.not.stringContaining('WHERE'), [200]);
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('WHERE sk.panjang = $1'), [5, 200]);
 
     db.query.mockResolvedValueOnce({
       rows: [{
@@ -122,7 +134,11 @@ describe('ModelSusunKata', () => {
         keterangan: null,
         created_at: null,
         updated_at: null,
+        pemenang: null,
         jumlah_peserta: null,
+        total_main: null,
+        total_menang: null,
+        persen_menang: null,
       }],
     });
     const resultDefault = await ModelSusunKata.daftarHarianAdmin({});
@@ -134,7 +150,11 @@ describe('ModelSusunKata', () => {
       keterangan: null,
       created_at: null,
       updated_at: null,
+      pemenang: null,
       jumlahPeserta: 0,
+      totalMain: 0,
+      totalMenang: 0,
+      persenMenang: 0,
     });
   });
 
@@ -177,8 +197,22 @@ describe('ModelSusunKata', () => {
     expect(result).toEqual({ id: 15, kata: 'bbbb' });
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO susun_kata'),
-      ['2026-03-02', 4, expect.any(String)]
+      ['2026-03-02', 5, expect.any(String)]
     );
+  });
+
+  it('buatHarianRentang membuat hingga 30 hari dari tanggal acuan', async () => {
+    const spy = jest.spyOn(ModelSusunKata, 'ambilAtauBuatHarian')
+      .mockResolvedValue({ id: 1, kata: 'kartu' });
+
+    const hasil = await ModelSusunKata.buatHarianRentang({ tanggalMulai: '2026-03-02', totalHari: 30 });
+
+    expect(hasil).toHaveLength(30);
+    expect(spy).toHaveBeenCalledTimes(30);
+    expect(spy).toHaveBeenNthCalledWith(1, { tanggal: '2026-03-02', panjang: 5 });
+    expect(spy).toHaveBeenNthCalledWith(30, { tanggal: '2026-03-31', panjang: 5 });
+
+    spy.mockRestore();
   });
 
   it('ambilAtauBuatHarian mengembalikan existing atau membuat baru', async () => {
@@ -198,7 +232,7 @@ describe('ModelSusunKata', () => {
     await expect(ModelSusunKata.simpanHarianAdmin({ tanggal: 'x', panjang: 5, kata: 'kartu', penggunaId: 1 })).rejects.toThrow('Tanggal tidak valid');
     await expect(ModelSusunKata.simpanHarianAdmin({ tanggal: '2026-03-02', panjang: 5, kata: undefined, penggunaId: 1 })).rejects.toThrow('Kata hanya boleh huruf a-z');
     await expect(ModelSusunKata.simpanHarianAdmin({ tanggal: '2026-03-02', panjang: 5, kata: 'kar1u', penggunaId: 1 })).rejects.toThrow('Kata hanya boleh huruf a-z');
-    await expect(ModelSusunKata.simpanHarianAdmin({ tanggal: '2026-03-02', panjang: 6, kata: 'kartu', penggunaId: 1 })).rejects.toThrow('Kata harus 6 huruf');
+    await expect(ModelSusunKata.simpanHarianAdmin({ tanggal: '2026-03-02', panjang: 6, kata: 'kartuu', penggunaId: 1 })).rejects.toThrow('Kata harus 5 huruf');
 
     ModelEntri.cekKataSusunKataValid.mockResolvedValueOnce(false);
     await expect(ModelSusunKata.simpanHarianAdmin({ tanggal: '2026-03-02', panjang: 5, kata: 'kartu', penggunaId: 1 })).rejects.toThrow('Kata tidak ditemukan pada kamus Susun Kata');

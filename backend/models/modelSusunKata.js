@@ -19,6 +19,10 @@ function parsePanjang(value, fallback = 5) {
   return Math.min(Math.max(parsed, 4), 8);
 }
 
+function parsePanjangHarian() {
+  return 5;
+}
+
 function parsePanjangBebas(value, fallback = 5) {
   const parsed = Number.parseInt(value, 10);
   if (Number.isNaN(parsed)) return fallback;
@@ -100,6 +104,20 @@ function acakDariArray(daftar) {
   return daftar[index] || null;
 }
 
+function tambahHari(tanggal, jumlahHari) {
+  const aman = parseTanggal(tanggal);
+  if (!aman) return null;
+
+  const [tahun, bulan, hari] = aman.split('-').map((item) => Number.parseInt(item, 10));
+  const tanggalObj = new Date(Date.UTC(tahun, bulan - 1, hari));
+  tanggalObj.setUTCDate(tanggalObj.getUTCDate() + jumlahHari);
+
+  const tahunBaru = tanggalObj.getUTCFullYear();
+  const bulanBaru = String(tanggalObj.getUTCMonth() + 1).padStart(2, '0');
+  const hariBaru = String(tanggalObj.getUTCDate()).padStart(2, '0');
+  return `${tahunBaru}-${bulanBaru}-${hariBaru}`;
+}
+
 class ModelSusunKata {
   static parsePanjang(value, fallback = 5) {
     return parsePanjang(value, fallback);
@@ -126,7 +144,7 @@ class ModelSusunKata {
 
   static async ambilHarian({ tanggal, panjang }) {
     const tanggalAman = parseTanggal(tanggal);
-    const panjangAman = parsePanjang(panjang, 5);
+    const panjangAman = parsePanjangHarian(panjang, 5);
     if (!tanggalAman) return null;
 
     const result = await db.query(
@@ -142,9 +160,7 @@ class ModelSusunKata {
 
   static async daftarHarianAdmin({ tanggal = null, panjang = null, limit = 200 }) {
     const tanggalAman = parseTanggal(tanggal);
-    const panjangAman = panjang === null || panjang === undefined || String(panjang).trim() === ''
-      ? null
-      : parsePanjang(panjang, 5);
+    const panjangAman = parsePanjangHarian(panjang, 5);
     const limitAman = Math.min(Math.max(Number.parseInt(limit, 10) || 200, 1), 1000);
 
     const kondisi = [];
@@ -155,10 +171,8 @@ class ModelSusunKata {
       kondisi.push(`sk.tanggal = $${values.length}::date`);
     }
 
-    if (panjangAman !== null) {
-      values.push(panjangAman);
-      kondisi.push(`sk.panjang = $${values.length}`);
-    }
+    values.push(panjangAman);
+    kondisi.push(`sk.panjang = $${values.length}`);
 
     values.push(limitAman);
     const limitParam = values.length;
@@ -166,20 +180,54 @@ class ModelSusunKata {
     const whereClause = kondisi.length ? `WHERE ${kondisi.join(' AND ')}` : '';
 
     const result = await db.query(
-      `SELECT
-         sk.id,
-         to_char(sk.tanggal, 'YYYY-MM-DD') AS tanggal,
-         sk.panjang,
-         sk.kata,
-         sk.keterangan,
-         sk.created_at,
-         sk.updated_at,
-         COUNT(ss.id) AS jumlah_peserta
-       FROM susun_kata sk
-       LEFT JOIN susun_kata_skor ss ON ss.susun_kata_id = sk.id
-       ${whereClause}
-       GROUP BY sk.id, sk.tanggal, sk.panjang, sk.kata, sk.keterangan, sk.created_at, sk.updated_at
-       ORDER BY sk.tanggal DESC, sk.panjang ASC
+      `WITH rekap AS (
+         SELECT
+           sk.id,
+           sk.tanggal,
+           sk.panjang,
+           sk.kata,
+           sk.keterangan,
+           sk.created_at,
+           sk.updated_at,
+           COUNT(ss.id) AS total_main,
+           COUNT(DISTINCT ss.pengguna_id) AS jumlah_peserta,
+           COUNT(*) FILTER (WHERE ss.menang = true) AS total_menang
+         FROM susun_kata sk
+         LEFT JOIN susun_kata_skor ss ON ss.susun_kata_id = sk.id
+         ${whereClause}
+         GROUP BY sk.id, sk.tanggal, sk.panjang, sk.kata, sk.keterangan, sk.created_at, sk.updated_at
+       ),
+       pemenang AS (
+         SELECT DISTINCT ON (ss.susun_kata_id)
+           ss.susun_kata_id,
+           p.nama AS pemenang
+         FROM susun_kata_skor ss
+         JOIN pengguna p ON p.id = ss.pengguna_id
+         WHERE ss.menang = true
+         ORDER BY ss.susun_kata_id, GREATEST(11 - ss.percobaan, 1) DESC, ss.detik ASC, ss.created_at ASC
+       )
+       SELECT
+         r.id,
+         to_char(r.tanggal, 'YYYY-MM-DD') AS tanggal,
+         r.panjang,
+         r.kata,
+         r.keterangan,
+         r.created_at,
+         r.updated_at,
+         COALESCE(p.pemenang, '—') AS pemenang,
+         r.jumlah_peserta,
+         r.total_main,
+         r.total_menang,
+         ROUND(
+           CASE
+             WHEN r.total_main = 0 THEN 0
+             ELSE (r.total_menang::numeric * 100.0) / r.total_main::numeric
+           END,
+           2
+         ) AS persen_menang
+       FROM rekap r
+       LEFT JOIN pemenang p ON p.susun_kata_id = r.id
+       ORDER BY r.tanggal DESC, r.panjang ASC
        LIMIT $${limitParam}`,
       values
     );
@@ -192,13 +240,17 @@ class ModelSusunKata {
       keterangan: row.keterangan,
       created_at: row.created_at,
       updated_at: row.updated_at,
+      pemenang: row.pemenang,
       jumlahPeserta: Number(row.jumlah_peserta) || 0,
+      totalMain: Number(row.total_main) || 0,
+      totalMenang: Number(row.total_menang) || 0,
+      persenMenang: Number(row.persen_menang) || 0,
     }));
   }
 
   static async buatHarianOtomatis({ tanggal, panjang }) {
     const tanggalAman = parseTanggal(tanggal);
-    const panjangAman = parsePanjang(panjang, 5);
+    const panjangAman = parsePanjangHarian(panjang, 5);
     if (!tanggalAman) return null;
 
     const kamus = await ModelEntri.ambilKamusSusunKata({ panjang: panjangAman, limit: 10000 });
@@ -233,9 +285,28 @@ class ModelSusunKata {
     return this.buatHarianOtomatis({ tanggal, panjang });
   }
 
+  static async buatHarianRentang({ tanggalMulai, totalHari = 30 }) {
+    const tanggalAman = parseTanggal(tanggalMulai);
+    if (!tanggalAman) return [];
+
+    const totalHariAman = Math.min(Math.max(Number.parseInt(totalHari, 10) || 30, 1), 365);
+    const hasil = [];
+
+    for (let offset = 0; offset < totalHariAman; offset += 1) {
+      const tanggalItem = tambahHari(tanggalAman, offset);
+      if (!tanggalItem) continue;
+      const item = await this.ambilAtauBuatHarian({ tanggal: tanggalItem, panjang: 5 });
+      if (item) {
+        hasil.push(item);
+      }
+    }
+
+    return hasil;
+  }
+
   static async simpanHarianAdmin({ tanggal, panjang, kata, penggunaId, keterangan = null }) {
     const tanggalAman = parseTanggal(tanggal);
-    const panjangAman = parsePanjang(panjang, 5);
+    const panjangAman = parsePanjangHarian(panjang, 5);
     const kataAman = String(kata || '').trim().toLowerCase();
     parsePenggunaId(penggunaId);
     const keteranganAman = String(keterangan || '').trim() || null;
@@ -515,6 +586,7 @@ ModelSusunKata.__private = {
   parsePanjang,
   parsePanjangBebas,
   parsePenggunaId,
+  parsePanjangHarian,
   hitungOffsetHari,
   gcd,
   hash32,
@@ -522,6 +594,7 @@ ModelSusunKata.__private = {
   hitungSkor,
   sanitasiPayloadSkor,
   acakDariArray,
+  tambahHari,
 };
 
 module.exports = ModelSusunKata;
