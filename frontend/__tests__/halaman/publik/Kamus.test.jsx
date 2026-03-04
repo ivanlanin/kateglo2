@@ -136,6 +136,43 @@ describe('Kamus', () => {
     expect(grid?.className).toContain('md:grid-cols-2');
   });
 
+  it('browse menampilkan satu kartu Tagar dengan urutan kategori yang ditentukan', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const { queryKey } = options;
+      if (queryKey[0] === 'kamus-kategori') {
+        return {
+          data: {
+            abjad: [{ kode: 'A', nama: 'A' }],
+            kelas_kata: [{ kode: 'n', nama: 'nomina' }],
+            tagar: [
+              { kode: 'ulang', nama: 'ulang', kategori: 'reduplikasi', urutan: 1 },
+              { kode: 'meng', nama: 'meng-', kategori: 'prefiks', urutan: 3 },
+              { kode: 'ber', nama: 'ber-', kategori: 'prefiks', urutan: 1 },
+              { kode: 'sisip', nama: '-el-', kategori: 'infiks', urutan: 2 },
+              { kode: 'akhiran', nama: '-an', kategori: 'sufiks', urutan: 1 },
+              { kode: 'beran', nama: 'ber--an', kategori: 'konfiks', urutan: 1 },
+              { kode: 'kombi', nama: 'meN+kan', kategori: 'kombinasi', urutan: 2 },
+              { kode: 'lah', nama: '-lah', kategori: 'klitik', urutan: 1 },
+            ],
+          },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Kamus />);
+
+    expect(screen.getByText('Tagar')).toBeInTheDocument();
+    const links = screen.getAllByRole('link');
+    const tagarLinks = links.filter((item) => item.getAttribute('href')?.startsWith('/kamus/tagar/'));
+    expect(tagarLinks.map((item) => item.textContent)).toEqual([
+      'ber-', 'meng-', '-el-', '-an', 'ber--an', 'meN+kan', '-lah', 'ulang',
+    ]);
+  });
+
   it('menampilkan hasil pencarian kata', () => {
     mockParams = { kata: 'kata' };
 
@@ -197,7 +234,7 @@ describe('Kamus', () => {
           data: {
             data: [{ id: 1, entri: 'berlari' }],
             total: 1,
-            tagar: { nama: 'afiks' },
+            tagar: { nama: 'meng-', kategori: 'prefiks' },
           },
           isLoading: false,
           isError: false,
@@ -208,7 +245,7 @@ describe('Kamus', () => {
 
     render(<Kamus />);
 
-    expect(screen.getByRole('heading', { name: 'Tagar afiks' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Prefiks meng-' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'berlari' })).toBeInTheDocument();
     expect(cariEntriPerTagar).toHaveBeenCalledWith('afiks', {
       limit: 100,

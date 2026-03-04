@@ -135,10 +135,14 @@ export function buildMetaTagarKamus(tagar = null, total = 0) {
   if (!tagar) {
     return { judul: 'Tagar', deskripsi: META_DESKRIPSI_KAMUS_UMUM };
   }
-  const judul = `Tagar ${tagar.nama}`;
+  const namaTagar = String(tagar.nama || '').trim();
+  const kategoriTagar = String(tagar.kategori || '').trim();
+  const judul = kategoriTagar
+    ? `${formatAwalKapital(kategoriTagar)} ${namaTagar}`
+    : `Tagar ${namaTagar}`;
   const deskripsi = total > 0
-    ? `${total} kata dalam kamus Kateglo bertagar ${tagar.nama}.`
-    : `Daftar kata bertagar ${tagar.nama} di Kateglo.`;
+    ? `${total} kata dalam kamus Kateglo bertagar ${namaTagar}.`
+    : `Daftar kata bertagar ${namaTagar} di Kateglo.`;
   return { judul, deskripsi };
 }
 

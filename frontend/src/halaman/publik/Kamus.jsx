@@ -31,12 +31,12 @@ import {
 const BARIS_KATEGORI = [
   ['abjad', 'kelas_kata'],
   ['bentuk', 'unsur_terikat'],
-  ['tagar:prefiks', 'tagar:infiks', 'tagar:sufiks'],
-  ['tagar:konfiks', 'tagar:kombinasi'],
-  ['tagar:klitik', 'tagar:reduplikasi'],
+  ['tagar'],
   ['ekspresi', 'ragam'],
   ['bahasa', 'bidang'],
 ];
+
+const URUTAN_KATEGORI_TAGAR = ['prefiks', 'infiks', 'sufiks', 'konfiks', 'kombinasi', 'klitik', 'reduplikasi'];
 
 const OPSI_BENTUK_TAMBAHAN = [
   { kode: 'akronim', nama: 'akronim' },
@@ -99,18 +99,26 @@ function gabungkanKategoriEkspresi(labels = []) {
   return hasil;
 }
 
+function urutkanTagar(daftarTagar = []) {
+  const rank = new Map(URUTAN_KATEGORI_TAGAR.map((kategori, index) => [kategori, index]));
+  return [...(Array.isArray(daftarTagar) ? daftarTagar : [])].sort((a, b) => {
+    const kategoriA = String(a?.kategori || '').trim().toLowerCase();
+    const kategoriB = String(b?.kategori || '').trim().toLowerCase();
+    const rankA = rank.get(kategoriA) ?? Number.MAX_SAFE_INTEGER;
+    const rankB = rank.get(kategoriB) ?? Number.MAX_SAFE_INTEGER;
+    if (rankA !== rankB) return rankA - rankB;
+    const urutanA = Number.isFinite(Number(a?.urutan)) ? Number(a.urutan) : Number.MAX_SAFE_INTEGER;
+    const urutanB = Number.isFinite(Number(b?.urutan)) ? Number(b.urutan) : Number.MAX_SAFE_INTEGER;
+    if (urutanA !== urutanB) return urutanA - urutanB;
+    return String(a?.nama || '').localeCompare(String(b?.nama || ''), 'id');
+  });
+}
+
 export const __private = {
   gabungkanKategoriBentuk,
   gabungkanKategoriEkspresi,
+  urutkanTagar,
 };
-
-function ambilTagarPerKategori(daftarTagar = [], kategoriTagar = '') {
-  const kategoriLower = String(kategoriTagar || '').trim().toLowerCase();
-  if (!kategoriLower) return [];
-  return (Array.isArray(daftarTagar) ? daftarTagar : []).filter(
-    (item) => String(item?.kategori || '').trim().toLowerCase() === kategoriLower
-  );
-}
 
 const limit = 100;
 
@@ -228,7 +236,7 @@ function Kamus() {
     ? modeTagar
       ? buildMetaTagarKamus(
         (tagar?.nama || kodeAktif)
-          ? { nama: tagar?.nama || kodeAktif }
+          ? { nama: tagar?.nama || kodeAktif, kategori: tagar?.kategori || '' }
           : null,
         totalTagar
       )
@@ -279,12 +287,6 @@ function Kamus() {
           {BARIS_KATEGORI.map((baris, indexBaris) => {
             const kategoriTerisi = baris
               .map((kat) => {
-                if (kat.startsWith('tagar:')) {
-                  const kategoriTagar = kat.split(':')[1] || '';
-                  const labels = ambilTagarPerKategori(kategoriData.tagar || [], kategoriTagar);
-                  return { kat, labels, tipe: 'tagar', kategoriTagar };
-                }
-
                 let labels = kategoriData[kat] || [];
                 if (kat === 'bentuk') {
                   labels = gabungkanKategoriBentuk(labels);
@@ -292,7 +294,10 @@ function Kamus() {
                 if (kat === 'ekspresi') {
                   labels = gabungkanKategoriEkspresi(labels);
                 }
-                return { kat, labels, tipe: 'kategori' };
+                if (kat === 'tagar') {
+                  labels = urutkanTagar(labels);
+                }
+                return { kat, labels };
               })
               .filter((item) => item.labels.length > 0);
 
@@ -301,18 +306,16 @@ function Kamus() {
             return (
               <div
                 key={`baris-${indexBaris}`}
-                className={`grid grid-cols-1 ${kategoriTerisi.length >= 3 ? 'md:grid-cols-3' : kategoriTerisi.length === 2 ? 'md:grid-cols-2' : ''} gap-4`}
+                className={`grid grid-cols-1 ${kategoriTerisi.length > 1 ? 'md:grid-cols-2' : ''} gap-4`}
               >
-                {kategoriTerisi.map(({ kat, labels, tipe, kategoriTagar }) => (
+                {kategoriTerisi.map(({ kat, labels }) => (
                   <KartuKategori
                     key={kat}
-                    judul={tipe === 'tagar'
-                      ? formatAwalKapital(kategoriTagar)
-                      : (NAMA_KATEGORI_BROWSE_KAMUS[kat] || NAMA_KATEGORI_KAMUS[kat])}
+                    judul={NAMA_KATEGORI_BROWSE_KAMUS[kat] || NAMA_KATEGORI_KAMUS[kat]}
                     items={labels}
                     getKey={(item) => item.kode}
                     getTo={(item) => {
-                      if (tipe === 'tagar') {
+                      if (kat === 'tagar') {
                         return `/kamus/tagar/${encodeURIComponent(item.kode)}`;
                       }
                       const pathKategori = kat === 'unsur_terikat'
