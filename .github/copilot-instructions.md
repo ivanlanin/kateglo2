@@ -373,9 +373,17 @@ npm run dev:public        # Port 5173
 
 ### Validation Policy (Wajib Setelah Perubahan)
 - Setelah selesai mengubah kode, **WAJIB jalankan lint dan test** untuk area yang diubah.
+- Gunakan strategi bertahap: **validasi terarah dulu**, lalu meluas hanya bila perlu.
+- Frontend (terarah): jalankan `npm run lint` lalu `npx vitest related <daftar-file-berubah>`.
+- Backend (terarah): jalankan `npm run lint` lalu `npx jest --findRelatedTests <daftar-file-berubah>`.
+- Jalankan full test package (`npm run test`) hanya jika:
+  - perubahan lintas banyak modul/fitur,
+  - menyentuh shared utilities, auth, routing utama, atau lapisan DB/model,
+  - diminta eksplisit oleh user, atau
+  - hasil test terarah mengindikasikan potensi regresi lebih luas.
 - **Pengecualian**: jika perubahan **hanya data** (misalnya SQL migration, backfill data, dokumentasi `_docs/`, tanpa perubahan kode aplikasi di `backend/` atau `frontend/src`), **tidak wajib** menjalankan lint/test.
 - **Tidak perlu menjalankan build** sebagai langkah default validasi perubahan.
-- Prioritaskan validasi terarah dulu (misalnya per package yang terdampak), baru meluas jika diperlukan.
+- Jika command `related/findRelatedTests` tidak tersedia atau gagal memetakan dependensi, gunakan test paling sempit yang relevan (folder/file test terkait), baru fallback ke full package.
 
 ### Rename File/Folder (Wajib)
 - Untuk pengubahan nama file atau folder, **utamakan `git mv`** agar riwayat rename tetap terlacak.
@@ -439,12 +447,13 @@ Select-String -Path "_docs/struktur-data.sql" -Pattern "create table phrase"
 # Kill port conflicts
 npx kill-port 3000; npx kill-port 5173
 
-# Run backend tests
-Set-Location backend; npx jest --no-watch
+# Run targeted tests first (recommended)
+Set-Location frontend; npm run lint; npx vitest related src/komponen/bersama/TataLetak.jsx
+Set-Location backend; npm run lint; npx jest --findRelatedTests models/modelFrasa.js
 
-# Run lint + tests (recommended after changes)
-Set-Location frontend; npm run lint; npm run test
-Set-Location backend; npm run lint; npm run test
+# Run full suite only when needed
+Set-Location frontend; npm run test
+Set-Location backend; npm run test
 
 # Python diagnostics (SQLite source)
 Set-Location "C:/Kode/Kateglo/kateglo2"
