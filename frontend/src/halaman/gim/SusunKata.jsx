@@ -11,6 +11,7 @@ import {
   ambilKlasemenSusunKataBebas,
   ambilBebasSusunKata,
   ambilPuzzleSusunKata,
+  simpanProgresSusunKata,
   submitSkorSusunKata,
   submitSkorSusunKataBebas,
   validasiKataSusunKata,
@@ -207,6 +208,10 @@ function SusunKata() {
     },
   });
 
+  const simpanProgres = useMutation({
+    mutationFn: (payload) => simpanProgresSusunKata(payload),
+  });
+
   const { data: dataKlasemen } = useQuery({
     queryKey: ['gim-susun-kata-klasemen', modeAktif, panjang],
     queryFn: () => (
@@ -275,6 +280,13 @@ function SusunKata() {
 
     setRiwayat(riwayatBaru);
     setTebakan('');
+
+    if (modeAktif === MODE_HARIAN && !menangBaru && !kalahBaru) {
+      simpanProgres.mutate({
+        panjang,
+        tebakan: serializedTebakan,
+      });
+    }
 
     if (menangBaru) {
       if (!skorTerkirim) {
@@ -377,6 +389,7 @@ function SusunKata() {
     selesai,
     skorTerkirim,
     modeAktif,
+    simpanProgres,
     mulaiSesiBaruBebas,
     tampilkanPesan,
     target,
@@ -384,13 +397,27 @@ function SusunKata() {
   ]);
 
   useEffect(() => {
-    const riwayatTersimpan = parseRiwayatDariSkor(data?.hasilHariIni?.tebakan, panjang);
+    const riwayatDariSkor = parseRiwayatDariSkor(data?.hasilHariIni?.tebakan, panjang);
+    const riwayatDariProgres = parseRiwayatDariSkor(data?.progresHariIni?.tebakan, panjang);
+    const riwayatTersimpan = riwayatDariSkor.length ? riwayatDariSkor : riwayatDariProgres;
+    const mulaiAtProgres = data?.progresHariIni?.mulai_at
+      ? new Date(data.progresHariIni.mulai_at).getTime()
+      : null;
+
     setRiwayat(riwayatTersimpan);
     setTebakan('');
     setPesanMunculan(null);
-    setMulaiMainAt(Date.now());
+    setMulaiMainAt(Number.isFinite(mulaiAtProgres) ? mulaiAtProgres : Date.now());
     setSkorTerkirim(modeAktif === MODE_HARIAN ? Boolean(data?.sudahMainHariIni) : false);
-  }, [data?.hasilHariIni?.tebakan, data?.sudahMainHariIni, modeAktif, panjang, target]);
+  }, [
+    data?.hasilHariIni?.tebakan,
+    data?.progresHariIni?.tebakan,
+    data?.progresHariIni?.mulai_at,
+    data?.sudahMainHariIni,
+    modeAktif,
+    panjang,
+    target,
+  ]);
 
   useEffect(() => {
     if (!isAuthenticated || !target || selesai) return undefined;

@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-03T09:30:15.062Z
+-- Generated: 2026-03-04T14:46:07.473Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -614,12 +614,16 @@ create table susun_kata_skor (
   menang boolean not null,
   created_at timestamp without time zone not null default now(),
   tebakan text not null default ''::text,
+  selesai boolean not null default true,
+  mulai_at timestamp without time zone not null default now(),
+  updated_at timestamp without time zone not null default now(),
   constraint susun_kata_skor_unik_harian_user unique (susun_kata_id, pengguna_id),
   constraint susun_kata_skor_percobaan_check check ((percobaan >= 1) AND (percobaan <= 6)),
   constraint susun_kata_skor_waktu_check check (detik >= 0)
 );
 create index idx_susun_kata_skor_harian on susun_kata_skor using btree (susun_kata_id, menang DESC, percobaan, detik);
 create index idx_susun_kata_skor_pengguna on susun_kata_skor using btree (pengguna_id, created_at DESC);
+create index idx_susun_kata_skor_selesai on susun_kata_skor using btree (susun_kata_id, pengguna_id, selesai);
 create unique index susun_kata_skor_unik_harian_user on susun_kata_skor using btree (susun_kata_id, pengguna_id);
 
 create table tagar (

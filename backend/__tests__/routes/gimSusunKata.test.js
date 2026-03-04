@@ -43,6 +43,8 @@ jest.mock('../../models/modelSusunKata', () => ({
   ambilTanggalHariIniJakarta: jest.fn(),
   ambilAtauBuatHarian: jest.fn(),
   ambilSkorPenggunaHarian: jest.fn(),
+  ambilProgresPenggunaHarian: jest.fn(),
+  simpanProgresPenggunaHarian: jest.fn(),
   simpanSkorHarian: jest.fn(),
   ambilKlasemenHarian: jest.fn(),
   ambilPuzzleBebas: jest.fn(),
@@ -73,6 +75,13 @@ describe('routes/gim/susunKata', () => {
     ModelSusunKata.ambilAtauBuatHarian.mockResolvedValue({ id: 10, kata: 'kartu' });
     ModelEntri.ambilArtiSusunKataByIndeks.mockResolvedValue('alat tulis');
     ModelSusunKata.ambilSkorPenggunaHarian.mockResolvedValue(null);
+    ModelSusunKata.ambilProgresPenggunaHarian.mockResolvedValue(null);
+    ModelSusunKata.simpanProgresPenggunaHarian.mockResolvedValue({
+      id: 99,
+      susun_kata_id: 10,
+      pengguna_id: 9,
+      tebakan: 'kartu',
+    });
     ModelSusunKata.simpanSkorHarian.mockResolvedValue({ id: 1, susun_kata_id: 10, pengguna_id: 9 });
     ModelSusunKata.ambilKlasemenHarian.mockResolvedValue([{ pengguna_id: 9, nama: 'A', skor: 8 }]);
     ModelSusunKata.ambilPuzzleBebas.mockResolvedValue({ panjang: 5, target: 'kartu', arti: 'alat tulis', kamus: ['kartu'] });

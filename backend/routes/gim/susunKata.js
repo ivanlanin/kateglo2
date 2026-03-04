@@ -37,6 +37,15 @@ function normalisasiKataParam(value) {
   return String(value || '').trim().toLowerCase();
 }
 
+function parseRiwayatTebakanHarian(tebakanRaw, panjang = 5) {
+  const panjangAman = parsePanjang(panjang);
+  return String(tebakanRaw || '')
+    .split(';')
+    .map((item) => item.trim().toLowerCase())
+    .filter((item) => /^[a-z]+$/.test(item) && item.length === panjangAman)
+    .slice(0, 6);
+}
+
 async function buildHarianPayload({ panjang, userPid = null }) {
   const tanggal = await ModelSusunKata.ambilTanggalHariIniJakarta();
   const harian = await ModelSusunKata.ambilAtauBuatHarian({ tanggal, panjang });
@@ -48,12 +57,20 @@ async function buildHarianPayload({ panjang, userPid = null }) {
   const arti = await ModelEntri.ambilArtiSusunKataByIndeks(harian.kata);
   const penggunaId = ModelSusunKata.parsePenggunaId(userPid);
   let hasilHariIni = null;
+  let progresHariIni = null;
 
   if (penggunaId) {
     hasilHariIni = await ModelSusunKata.ambilSkorPenggunaHarian({
       susunKataId: harian.id,
       penggunaId,
     });
+
+    if (!hasilHariIni) {
+      progresHariIni = await ModelSusunKata.ambilProgresPenggunaHarian({
+        susunKataId: harian.id,
+        penggunaId,
+      });
+    }
   }
 
   return {
@@ -66,6 +83,7 @@ async function buildHarianPayload({ panjang, userPid = null }) {
     susunKataId: harian.id,
     sudahMainHariIni: Boolean(hasilHariIni),
     hasilHariIni,
+    progresHariIni,
   };
 }
 
@@ -203,6 +221,58 @@ router.post('/harian/submit', authenticate, async (req, res, next) => {
   }
 });
 
+router.post('/harian/progres', authenticate, async (req, res, next) => {
+  try {
+    const panjang = parsePanjang(req.body?.panjang ?? req.query?.panjang);
+    const penggunaId = ModelSusunKata.parsePenggunaId(req.user?.pid);
+
+    if (!penggunaId) {
+      return res.status(401).json({ success: false, message: 'Autentikasi diperlukan' });
+    }
+
+    const payloadHarian = await buildHarianPayload({ panjang, userPid: req.user?.pid });
+    if (!payloadHarian?.susunKataId) {
+      return res.status(404).json({ success: false, message: 'Kata harian belum tersedia' });
+    }
+
+    const existing = await ModelSusunKata.ambilSkorPenggunaHarian({
+      susunKataId: payloadHarian.susunKataId,
+      penggunaId,
+    });
+
+    if (existing) {
+      return res.status(409).json({
+        success: false,
+        message: 'Skor hari ini sudah tercatat',
+        data: existing,
+      });
+    }
+
+    const daftarTebakan = parseRiwayatTebakanHarian(req.body?.tebakan, panjang);
+    const tebakan = daftarTebakan.join(';');
+
+    const data = await ModelSusunKata.simpanProgresPenggunaHarian({
+      susunKataId: payloadHarian.susunKataId,
+      penggunaId,
+      tebakan,
+    });
+
+    if (!data) {
+      return res.status(409).json({
+        success: false,
+        message: 'Progres tidak dapat diperbarui',
+      });
+    }
+
+    return res.json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
 router.get('/harian/klasemen', async (req, res, next) => {
   try {
     const panjang = parsePanjang(req.query.panjang);
@@ -326,6 +396,7 @@ module.exports.__private = {
   parseLimit,
   parseBodyBoolean,
   ambilTebakanTerakhir,
+  parseRiwayatTebakanHarian,
   normalisasiKataParam,
   buildHarianPayload,
   buildBebasPayload,

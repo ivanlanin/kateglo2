@@ -284,11 +284,12 @@ describe('ModelSusunKata', () => {
     });
 
     expect(db.query).toHaveBeenCalledWith(
-      expect.stringContaining('INSERT INTO susun_kata_skor'),
+      expect.stringContaining('UPDATE susun_kata_skor'),
       [3, 7, 6, 0, 'ka; ta', true]
     );
     expect(result).toEqual({ id: 5, menang: true });
 
+    db.query.mockResolvedValueOnce({ rows: [] });
     db.query.mockResolvedValueOnce({ rows: [] });
     await expect(ModelSusunKata.simpanSkorHarian({
       susunKataId: '3',
@@ -300,13 +301,20 @@ describe('ModelSusunKata', () => {
     })).resolves.toBeNull();
     expect(db.query).toHaveBeenNthCalledWith(
       2,
+      expect.stringContaining('UPDATE susun_kata_skor'),
+      [3, 7, 6, 0, '', false]
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      3,
       expect.stringContaining('INSERT INTO susun_kata_skor'),
       [3, 7, 6, 0, '', false]
     );
 
     db.query.mockResolvedValueOnce({ rows: [] });
+    db.query.mockResolvedValueOnce({ rows: [{ id: 8, menang: false }] });
     await ModelSusunKata.simpanSkorHarian({ susunKataId: '3', penggunaId: '7', percobaan: 2, detik: 999999, tebakan: '', menang: false });
-    expect(db.query).toHaveBeenNthCalledWith(3, expect.any(String), [3, 7, 2, 86400, '', false]);
+    expect(db.query).toHaveBeenNthCalledWith(4, expect.stringContaining('UPDATE susun_kata_skor'), [3, 7, 2, 86400, '', false]);
+    expect(db.query).toHaveBeenNthCalledWith(5, expect.stringContaining('INSERT INTO susun_kata_skor'), [3, 7, 2, 86400, '', false]);
   });
 
   it('ambilKlasemenHarian dan ambilPesertaHarian menangani id invalid dan mapping hasil', async () => {

@@ -98,6 +98,15 @@ function sanitasiPayloadSkor({ percobaan, detik, tebakan, menang }) {
   };
 }
 
+function parseDaftarTebakan(tebakanRaw, { panjang = 5, maksimum = 6 } = {}) {
+  const panjangAman = parsePanjangHarian(panjang, 5);
+  return String(tebakanRaw || '')
+    .split(';')
+    .map((item) => item.trim().toLowerCase())
+    .filter((item) => /^[a-z]+$/.test(item) && item.length === panjangAman)
+    .slice(0, maksimum);
+}
+
 function acakDariArray(daftar) {
   if (!Array.isArray(daftar) || !daftar.length) return null;
   const index = Math.floor(Math.random() * daftar.length);
@@ -193,7 +202,7 @@ class ModelSusunKata {
            COUNT(DISTINCT ss.pengguna_id) AS jumlah_peserta,
            COUNT(*) FILTER (WHERE ss.menang = true) AS total_menang
          FROM susun_kata sk
-         LEFT JOIN susun_kata_skor ss ON ss.susun_kata_id = sk.id
+         LEFT JOIN susun_kata_skor ss ON ss.susun_kata_id = sk.id AND ss.selesai = true
          ${whereClause}
          GROUP BY sk.id, sk.tanggal, sk.panjang, sk.kata, sk.keterangan, sk.created_at, sk.updated_at
        ),
@@ -204,6 +213,7 @@ class ModelSusunKata {
          FROM susun_kata_skor ss
          JOIN pengguna p ON p.id = ss.pengguna_id
          WHERE ss.menang = true
+           AND ss.selesai = true
          ORDER BY ss.susun_kata_id, GREATEST(11 - ss.percobaan, 1) DESC, ss.detik ASC, ss.created_at ASC
        )
        SELECT
@@ -339,11 +349,70 @@ class ModelSusunKata {
     if (Number.isNaN(susunKataIdAman) || !penggunaIdAman) return null;
 
     const result = await db.query(
-      `SELECT id, susun_kata_id, pengguna_id, percobaan, detik, tebakan, menang, created_at
+      `SELECT id, susun_kata_id, pengguna_id, percobaan, detik, tebakan, menang, selesai, mulai_at, updated_at, created_at
        FROM susun_kata_skor
        WHERE susun_kata_id = $1 AND pengguna_id = $2
+         AND selesai = true
        LIMIT 1`,
       [susunKataIdAman, penggunaIdAman]
+    );
+
+    return result.rows[0] || null;
+  }
+
+  static async ambilProgresPenggunaHarian({ susunKataId, penggunaId }) {
+    const susunKataIdAman = Number.parseInt(susunKataId, 10);
+    const penggunaIdAman = parsePenggunaId(penggunaId);
+    if (Number.isNaN(susunKataIdAman) || !penggunaIdAman) return null;
+
+    const result = await db.query(
+      `SELECT id, susun_kata_id, pengguna_id, percobaan, detik, tebakan, menang, selesai, mulai_at, updated_at, created_at
+       FROM susun_kata_skor
+       WHERE susun_kata_id = $1 AND pengguna_id = $2
+         AND selesai = false
+       LIMIT 1`,
+      [susunKataIdAman, penggunaIdAman]
+    );
+
+    return result.rows[0] || null;
+  }
+
+  static async simpanProgresPenggunaHarian({ susunKataId, penggunaId, tebakan }) {
+    const susunKataIdAman = Number.parseInt(susunKataId, 10);
+    const penggunaIdAman = parsePenggunaId(penggunaId);
+    if (Number.isNaN(susunKataIdAman) || !penggunaIdAman) return null;
+
+    const daftarTebakan = parseDaftarTebakan(tebakan, { panjang: 5, maksimum: 6 });
+    const tebakanAman = daftarTebakan.join(';');
+    const percobaanAman = Math.max(daftarTebakan.length, 1);
+
+    const result = await db.query(
+      `INSERT INTO susun_kata_skor (
+         susun_kata_id,
+         pengguna_id,
+         percobaan,
+         detik,
+         tebakan,
+         menang,
+         selesai,
+         mulai_at,
+         updated_at
+       )
+       VALUES ($1, $2, $3, 0, $4, false, false, now(), now())
+       ON CONFLICT (susun_kata_id, pengguna_id)
+       DO UPDATE SET
+         percobaan = EXCLUDED.percobaan,
+         detik = GREATEST(
+           susun_kata_skor.detik,
+           EXTRACT(EPOCH FROM (now() - susun_kata_skor.mulai_at))::integer
+         ),
+         tebakan = EXCLUDED.tebakan,
+         menang = false,
+         selesai = false,
+         updated_at = now()
+       WHERE susun_kata_skor.selesai = false
+       RETURNING id, susun_kata_id, pengguna_id, percobaan, detik, tebakan, menang, selesai, mulai_at, updated_at, created_at`,
+      [susunKataIdAman, penggunaIdAman, percobaanAman, tebakanAman]
     );
 
     return result.rows[0] || null;
@@ -359,11 +428,48 @@ class ModelSusunKata {
       menangAman,
     } = sanitasiPayloadSkor({ percobaan, detik, tebakan, menang });
 
+    const daftarTebakan = parseDaftarTebakan(tebakanAman, { panjang: 5, maksimum: 6 });
+    const percobaanDariRiwayat = daftarTebakan.length;
+    const percobaanFinal = Math.min(
+      Math.max(Math.max(percobaanAman, percobaanDariRiwayat), 1),
+      6
+    );
+
+    const updateProgressResult = await db.query(
+      `UPDATE susun_kata_skor
+       SET
+         percobaan = $3,
+         detik = GREATEST($4, EXTRACT(EPOCH FROM (now() - mulai_at))::integer),
+         tebakan = $5,
+         menang = $6,
+         selesai = true,
+         updated_at = now()
+       WHERE susun_kata_id = $1
+         AND pengguna_id = $2
+         AND selesai = false
+       RETURNING id, susun_kata_id, pengguna_id, percobaan, detik, tebakan, menang, selesai, mulai_at, updated_at, created_at`,
+      [susunKataIdAman, penggunaIdAman, percobaanFinal, detikAman, tebakanAman, menangAman]
+    );
+
+    if (updateProgressResult.rows[0]) {
+      return updateProgressResult.rows[0];
+    }
+
     const result = await db.query(
-      `INSERT INTO susun_kata_skor (susun_kata_id, pengguna_id, percobaan, detik, tebakan, menang)
-       VALUES ($1, $2, $3, $4, $5, $6)
-       RETURNING id, susun_kata_id, pengguna_id, percobaan, detik, tebakan, menang, created_at`,
-      [susunKataIdAman, penggunaIdAman, percobaanAman, detikAman, tebakanAman, menangAman]
+      `INSERT INTO susun_kata_skor (
+         susun_kata_id,
+         pengguna_id,
+         percobaan,
+         detik,
+         tebakan,
+         menang,
+         selesai,
+         mulai_at,
+         updated_at
+       )
+       VALUES ($1, $2, $3, $4, $5, $6, true, now(), now())
+       RETURNING id, susun_kata_id, pengguna_id, percobaan, detik, tebakan, menang, selesai, mulai_at, updated_at, created_at`,
+      [susunKataIdAman, penggunaIdAman, percobaanFinal, detikAman, tebakanAman, menangAman]
     );
 
     return result.rows[0] || null;
@@ -389,6 +495,7 @@ class ModelSusunKata {
        FROM susun_kata_skor sk
        JOIN pengguna p ON p.id = sk.pengguna_id
       WHERE sk.susun_kata_id = $1
+        AND sk.selesai = true
         AND sk.menang = true
        ORDER BY skor DESC, sk.detik ASC, sk.created_at ASC
        LIMIT $2`,
@@ -426,6 +533,7 @@ class ModelSusunKata {
        FROM susun_kata_skor sk
        JOIN pengguna p ON p.id = sk.pengguna_id
        WHERE sk.susun_kata_id = $1
+         AND sk.selesai = true
        ORDER BY skor DESC, sk.detik ASC, sk.created_at ASC
        LIMIT $2`,
       [susunKataIdAman, limitAman]
@@ -593,6 +701,7 @@ ModelSusunKata.__private = {
   pilihIndexKata,
   hitungSkor,
   sanitasiPayloadSkor,
+  parseDaftarTebakan,
   acakDariArray,
   tambahHari,
 };

@@ -239,6 +239,17 @@ export async function submitSkorSusunKata({
   return response.data;
 }
 
+export async function simpanProgresSusunKata({
+  panjang = 5,
+  tebakan = '',
+} = {}) {
+  const response = await klien.post('/api/publik/gim/susun-kata/harian/progres', {
+    panjang: Math.min(Math.max(Number(panjang) || 5, 4), 8),
+    tebakan: String(tebakan || '').trim().toLowerCase(),
+  });
+  return response.data;
+}
+
 export async function submitSkorSusunKataBebas({
   tanggal = null,
   panjang = 5,
