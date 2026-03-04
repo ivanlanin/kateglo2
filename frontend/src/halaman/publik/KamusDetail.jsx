@@ -3,7 +3,7 @@
  */
 
 import { Fragment, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategoriKamus, cariGlosarium } from '../../api/apiPublik';
 import { useAuth } from '../../context/authContext';
@@ -210,6 +210,7 @@ function BadgeSumberDanTombolEdit({
 
 function KamusDetail() {
   const { indeks } = useParams();
+  const location = useLocation();
   const { isAuthenticated, adalahAdmin, isLoading: isAuthLoading, loginDenganGoogle } = useAuth();
   const [teksKomentar, setTeksKomentar] = useState('');
   const [isSubmittingKomentar, setIsSubmittingKomentar] = useState(false);
@@ -226,12 +227,16 @@ function KamusDetail() {
     setDirectionGlosariumFallback('next');
   }, [indeks]);
 
+  const sumberPelacakan = String(location.state?.sumberPelacakan || '').trim().toLowerCase();
+  const skipPelacakan = sumberPelacakan === 'susun-kata';
+
   const { data, isLoading, isFetching, isError, error } = useQuery({
     queryKey: ['kamus-detail', indeks, cursorGlosarium, directionGlosarium],
     queryFn: () => ambilDetailKamus(indeks, {
       glosariumLimit: GLOSARIUM_LIMIT,
       glosariumCursor: cursorGlosarium,
       glosariumDirection: directionGlosarium,
+      sumberPelacakan: skipPelacakan ? 'susun-kata' : null,
     }),
     enabled: Boolean(indeks),
     placeholderData: (previousData) => previousData,

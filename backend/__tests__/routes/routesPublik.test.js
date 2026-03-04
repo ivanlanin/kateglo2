@@ -672,6 +672,15 @@ describe('routes backend', () => {
     expect(ModelPencarian.catatPencarian).toHaveBeenCalledWith('kata', { domain: 1 });
   });
 
+  it('GET /api/publik/kamus/detail/:entri tidak mencatat pelacakan saat sumber susun-kata', async () => {
+    layananKamusPublik.ambilDetailKamus.mockResolvedValue({ indeks: 'kata', entri: [{ id: 1, entri: 'kata' }] });
+
+    const response = await request(createApp()).get('/api/publik/kamus/detail/kata?sumber=susun-kata');
+
+    expect(response.status).toBe(200);
+    expect(ModelPencarian.catatPencarian).not.toHaveBeenCalled();
+  });
+
   it('GET /api/publik/kamus/detail/:entri meneruskan paging glosarium cursor', async () => {
     layananKamusPublik.ambilDetailKamus.mockResolvedValue({ indeks: 'kata', entri: [{ id: 1, entri: 'kata' }] });
 

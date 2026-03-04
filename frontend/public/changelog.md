@@ -6,6 +6,7 @@
 - Menghapus navigasi di bawah halaman dan menyisakan navigasi di atas untuk menyederhanakan tampilan
 - Memperbaiki pemenggalan bentuk dasar, turunan, dan gabungan
 - Memperbaiki tampilan kategori tagar afiks, klitik, dan reduplikasi
+- Mengabaikan tautan dari susun kata dalam pelacakan kata populer 
 
 ## 2026-03-03 Selasa
 

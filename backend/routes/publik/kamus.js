@@ -27,6 +27,11 @@ function parsePeriodeTerpopuler(value) {
   return normalized === '7hari' ? '7hari' : 'all';
 }
 
+function parseSumberPelacakan(value) {
+  const normalized = String(value || '').trim().toLowerCase();
+  return normalized === 'susun-kata' ? 'susun-kata' : null;
+}
+
 router.get('/kategori', async (_req, res, next) => {
   try {
     const [label, tagar] = await Promise.all([
@@ -207,7 +212,10 @@ router.get('/detail/:indeks', authenticateOptional, async (req, res, next) => {
       includeEtimologiNonaktif: req.user?.peran === 'admin',
     });
 
-    await ModelPencarian.catatPencarian(req.params.indeks, { domain: domainKamus });
+    const sumberPelacakan = parseSumberPelacakan(req.query.sumber);
+    if (sumberPelacakan !== 'susun-kata') {
+      await ModelPencarian.catatPencarian(req.params.indeks, { domain: domainKamus });
+    }
 
     if (!data) {
       const saran = await ModelEntri.saranEntri(decodeURIComponent(req.params.indeks));

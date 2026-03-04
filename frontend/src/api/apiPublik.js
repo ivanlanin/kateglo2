@@ -69,17 +69,18 @@ export async function cariKamus(kata, {
 export async function ambilDetailKamus(indeks, glosariumPaging = null) {
   try {
     const url = `/api/publik/kamus/detail/${encodeURIComponent(indeks)}`;
-    const params = glosariumPaging && typeof glosariumPaging === 'object'
-      ? {
-        limit: Math.min(Math.max(Number(glosariumPaging.glosariumLimit) || 20, 1), 100),
-        ...(glosariumPaging.glosariumCursor ? { cursor: glosariumPaging.glosariumCursor } : {}),
-        ...(glosariumPaging.glosariumDirection === 'prev' ? { direction: 'prev' } : {}),
-      }
-      : null;
+    const paging = glosariumPaging && typeof glosariumPaging === 'object' ? glosariumPaging : null;
+    const sumberPelacakan = String(paging?.sumberPelacakan || '').trim().toLowerCase();
+    const params = {
+      ...(paging ? {
+        limit: Math.min(Math.max(Number(paging.glosariumLimit) || 20, 1), 100),
+        ...(paging.glosariumCursor ? { cursor: paging.glosariumCursor } : {}),
+        ...(paging.glosariumDirection === 'prev' ? { direction: 'prev' } : {}),
+      } : {}),
+      ...(sumberPelacakan === 'susun-kata' ? { sumber: 'susun-kata' } : {}),
+    };
 
-    const response = params
-      ? await klien.get(url, { params })
-      : await klien.get(url);
+    const response = await klien.get(url, { params });
     return response.data;
   } catch (err) {
     if (err.response?.status === 404) {

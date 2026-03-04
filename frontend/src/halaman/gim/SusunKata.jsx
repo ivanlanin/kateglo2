@@ -305,7 +305,14 @@ function SusunKata() {
         modeAktif === MODE_BEBAS
           ? (
               <>
-                <Link className="pesan-munculan-link" to={buatPathDetailKamus(target)}>Mau lihat arti {target} di kamus</Link> atau
+                <Link
+                  className="pesan-munculan-link"
+                  to={buatPathDetailKamus(target)}
+                  state={{ sumberPelacakan: 'susun-kata' }}
+                >
+                  Mau lihat arti {target} di kamus
+                </Link>
+                {' '}atau
                 {' '}
                 <a
                   href="#"
@@ -322,7 +329,14 @@ function SusunKata() {
             )
           : (
               <>
-                <Link className="pesan-munculan-link" to={buatPathDetailKamus(target)}>Mau lihat arti {target} di kamus</Link>?
+                <Link
+                  className="pesan-munculan-link"
+                  to={buatPathDetailKamus(target)}
+                  state={{ sumberPelacakan: 'susun-kata' }}
+                >
+                  Mau lihat arti {target} di kamus
+                </Link>
+                ?
               </>
             )
       );

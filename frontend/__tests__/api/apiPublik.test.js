@@ -83,7 +83,9 @@ describe('apiPublik', () => {
   it('ambilDetailKamus melakukan encode slug', async () => {
     klien.get.mockResolvedValue({ data: { frasa: 'anak' } });
     await ambilDetailKamus('anak ibu');
-    expect(klien.get).toHaveBeenCalledWith('/api/publik/kamus/detail/anak%20ibu');
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/kamus/detail/anak%20ibu', {
+      params: {},
+    });
   });
 
   it('ambilDetailKamus mendukung paging glosarium pada endpoint detail', async () => {

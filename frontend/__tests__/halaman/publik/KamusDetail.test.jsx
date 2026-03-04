@@ -21,6 +21,7 @@ import {
 
 const mockUseQuery = vi.fn();
 let mockParams = { indeks: 'kata' };
+let mockLocation = { state: null };
 const mockUseAuth = vi.fn(() => ({
   isAuthenticated: false,
   isLoading: false,
@@ -49,6 +50,7 @@ vi.mock('@tanstack/react-query', () => ({
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   useParams: () => mockParams,
+  useLocation: () => mockLocation,
 }));
 
 describe('KamusDetail', () => {
@@ -66,6 +68,7 @@ describe('KamusDetail', () => {
       loginDenganGoogle: vi.fn(),
     });
     mockParams = { indeks: 'kata' };
+    mockLocation = { state: null };
   });
 
   it('menampilkan loading state', () => {
@@ -271,6 +274,7 @@ describe('KamusDetail', () => {
       glosariumLimit: 20,
       glosariumCursor: null,
       glosariumDirection: 'next',
+      sumberPelacakan: null,
     });
   });
 
@@ -604,6 +608,7 @@ describe('KamusDetail', () => {
         glosariumLimit: 20,
         glosariumCursor: 'cur-prev',
         glosariumDirection: 'prev',
+        sumberPelacakan: null,
       });
     });
 
@@ -613,6 +618,7 @@ describe('KamusDetail', () => {
         glosariumLimit: 20,
         glosariumCursor: 'cur-next',
         glosariumDirection: 'next',
+        sumberPelacakan: null,
       });
     });
   });
