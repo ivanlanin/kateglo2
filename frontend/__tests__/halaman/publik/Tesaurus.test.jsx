@@ -5,6 +5,7 @@ import { ambilContohTesaurus, cariTesaurus } from '../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
 let mockParams = {};
+let mockAuth = { adalahAdmin: false };
 
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
@@ -18,6 +19,10 @@ vi.mock('@tanstack/react-query', () => ({
 vi.mock('../../../src/api/apiPublik', () => ({
   cariTesaurus: vi.fn().mockResolvedValue({ data: [], total: 0 }),
   ambilContohTesaurus: vi.fn().mockResolvedValue({ data: [] }),
+}));
+
+vi.mock('../../../src/context/authContext', () => ({
+  useAuthOptional: () => mockAuth,
 }));
 
 vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
@@ -37,6 +42,7 @@ describe('Tesaurus.test.jsx', () => {
     cariTesaurus.mockClear();
     ambilContohTesaurus.mockClear();
     mockParams = {};
+    mockAuth = { adalahAdmin: false };
   });
 
   it('menampilkan state default saat tanpa kata', () => {
@@ -238,6 +244,32 @@ describe('Tesaurus.test.jsx', () => {
     expect(screen.getByText('Antonim')).toBeInTheDocument();
     expect(screen.getByText(/kecil; mungil/)).toBeInTheDocument();
     expect(screen.queryByText('Sinonim')).not.toBeInTheDocument();
+  });
+
+  it('menampilkan tombol sunting hanya untuk admin dan item dengan id', () => {
+    mockParams = { kata: 'besar' };
+    mockAuth = { adalahAdmin: true };
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      return {
+        data: {
+          data: [
+            { id: 8, indeks: 'besar', sinonim: 'agung', antonim: '' },
+            { id: null, indeks: 'luas', sinonim: 'lebar', antonim: '' },
+          ],
+          total: 2,
+        },
+        isLoading: false,
+        isError: false,
+      };
+    });
+
+    const { rerender } = render(<Tesaurus />);
+    expect(screen.getByRole('link', { name: /Sunting entri tesaurus di Redaksi/i })).toHaveAttribute('href', '/redaksi/tesaurus/8');
+
+    mockAuth = undefined;
+    rerender(<Tesaurus />);
+    expect(screen.queryByRole('link', { name: /Sunting entri tesaurus di Redaksi/i })).not.toBeInTheDocument();
   });
 
   it('tidak menampilkan relasi saat sinonim dan antonim kosong', () => {

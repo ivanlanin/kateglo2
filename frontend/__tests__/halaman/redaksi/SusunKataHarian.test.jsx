@@ -528,6 +528,7 @@ describe('SusunKataHarian', () => {
 
     expect(resolveTanggalBuatKataHarian('2026-03-13', '2026-03-14')).toBe('2026-03-13');
     expect(resolveTanggalBuatKataHarian('', '2026-03-14')).toBe('2026-03-14');
+    expect(resolveTanggalBuatKataHarian('', '')).toMatch(/^\d{4}-\d{2}-\d{2}$/);
 
     expect(resolveTanggalSimpan(' 2026-03-15 ', '2026-03-02')).toBe('2026-03-15');
     expect(resolveTanggalSimpan('  ', '2026-03-02')).toBe('2026-03-02');

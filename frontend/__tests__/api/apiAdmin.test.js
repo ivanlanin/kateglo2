@@ -24,6 +24,10 @@ import klien from '../../src/api/klien';
 import {
   useStatistikAdmin,
   useStatistikPencarianAdmin,
+  useDaftarPencarianHitamAdmin,
+  useDetailPencarianHitamAdmin,
+  useSimpanPencarianHitamAdmin,
+  useHapusPencarianHitamAdmin,
   useDaftarKamusAdmin,
   useAutocompleteIndukKamus,
   useDetailKamusAdmin,
@@ -83,6 +87,16 @@ import {
   useSimpanLabel,
   useHapusLabel,
   useSimpanPengguna,
+  useDaftarTagarAdmin,
+  useDaftarAuditTagarAdmin,
+  useDaftarEntriTagarAdmin,
+  useDetailTagarAdmin,
+  useTagarEntri,
+  useDaftarTagarUntukPilih,
+  useKategoriTagarAdmin,
+  useSimpanTagar,
+  useHapusTagar,
+  useSimpanTagarEntri,
 } from '../../src/api/apiAdmin';
 
 describe('apiAdmin', () => {
@@ -114,6 +128,8 @@ describe('apiAdmin', () => {
       domain: '3',
       periode: '30hari',
       limit: 500,
+      cursor: 'sp-1',
+      lastPage: true,
       tanggalMulai: '2026-02-01',
       tanggalSelesai: '2026-02-29',
     });
@@ -123,9 +139,9 @@ describe('apiAdmin', () => {
         domain: '3',
         periode: '30hari',
         limit: 500,
-        cursor: undefined,
+        cursor: 'sp-1',
         direction: 'next',
-        lastPage: undefined,
+        lastPage: '1',
         tanggal_mulai: '2026-02-01',
         tanggal_selesai: '2026-02-29',
       },
@@ -606,6 +622,15 @@ describe('apiAdmin', () => {
       },
     });
 
+    const susunKataBebasNull = useSusunKataBebasAdmin({ tanggal: null, limit: 10 });
+    await susunKataBebasNull.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/susun-kata/bebas', {
+      params: {
+        tanggal: undefined,
+        limit: 10,
+      },
+    });
+
     const detailSusunKata = useDetailSusunKataHarianAdmin({ tanggal: '2026-03-02', panjang: '9' });
     expect(detailSusunKata.enabled).toBe(true);
     await detailSusunKata.queryFn();
@@ -918,5 +943,192 @@ describe('apiAdmin', () => {
         tesaurus: '1',
       },
     });
+  });
+
+  it('mengonfigurasi query pencarian hitam dan detailnya', async () => {
+    const daftarDefault = useDaftarPencarianHitamAdmin();
+    await daftarDefault.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/pencarianHitam', {
+      params: {
+        limit: 200,
+        cursor: undefined,
+        direction: 'next',
+        lastPage: undefined,
+        q: undefined,
+        aktif: undefined,
+      },
+    });
+
+    const daftarCustom = useDaftarPencarianHitamAdmin({
+      limit: 80,
+      cursor: 'ph-1',
+      direction: 'prev',
+      lastPage: true,
+      q: 'spam',
+      aktif: '0',
+    });
+    await daftarCustom.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/pencarianHitam', {
+      params: {
+        limit: 80,
+        cursor: 'ph-1',
+        direction: 'prev',
+        lastPage: '1',
+        q: 'spam',
+        aktif: '0',
+      },
+    });
+
+    const detailAktif = useDetailPencarianHitamAdmin(11);
+    expect(detailAktif.enabled).toBe(true);
+    await detailAktif.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/pencarianHitam/11');
+
+    const detailNonaktif = useDetailPencarianHitamAdmin(0);
+    expect(detailNonaktif.enabled).toBe(false);
+  });
+
+  it('mengonfigurasi query tagar dan audit tagar', async () => {
+    const daftarTagar = useDaftarTagarAdmin({
+      limit: 30,
+      cursor: 't-1',
+      direction: 'prev',
+      lastPage: true,
+      q: 'pref',
+      kategori: 'prefiks',
+      aktif: '1',
+    });
+    await daftarTagar.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/tagar', {
+      params: {
+        limit: 30,
+        cursor: 't-1',
+        direction: 'prev',
+        lastPage: '1',
+        q: 'pref',
+        aktif: '1',
+        kategori: 'prefiks',
+      },
+    });
+
+    const auditDefault = useDaftarAuditTagarAdmin();
+    await auditDefault.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/audit-tagar', {
+      params: {
+        limit: 50,
+        cursor: undefined,
+        direction: 'next',
+        lastPage: undefined,
+        q: undefined,
+        tagar_id: undefined,
+        jenis: 'turunan',
+        punya_tagar: undefined,
+      },
+    });
+
+    const auditCustom = useDaftarAuditTagarAdmin({
+      limit: 15,
+      cursor: 'at-2',
+      direction: 'prev',
+      lastPage: true,
+      q: 'me',
+      tagarId: '7',
+      jenis: 'dasar',
+      punyaTagar: '0',
+    });
+    await auditCustom.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/audit-tagar', {
+      params: {
+        limit: 15,
+        cursor: 'at-2',
+        direction: 'prev',
+        lastPage: '1',
+        q: 'me',
+        tagar_id: '7',
+        jenis: 'dasar',
+        punya_tagar: '0',
+      },
+    });
+
+    const daftarEntriTagar = useDaftarEntriTagarAdmin({ q: 'lihat' });
+    await daftarEntriTagar.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/audit-tagar', {
+      params: {
+        limit: 50,
+        cursor: undefined,
+        direction: 'next',
+        lastPage: undefined,
+        q: 'lihat',
+        tagar_id: undefined,
+        jenis: 'turunan',
+        punya_tagar: undefined,
+      },
+    });
+
+    const detailTagar = useDetailTagarAdmin(3);
+    expect(detailTagar.enabled).toBe(true);
+    await detailTagar.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/tagar/3');
+    expect(useDetailTagarAdmin(null).enabled).toBe(false);
+
+    const tagarEntri = useTagarEntri(9);
+    expect(tagarEntri.enabled).toBe(true);
+    await tagarEntri.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus/9/tagar');
+    expect(useTagarEntri('').enabled).toBe(false);
+
+    const semuaTagar = useDaftarTagarUntukPilih();
+    expect(semuaTagar.staleTime).toBe(5 * 60 * 1000);
+    await semuaTagar.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/tagar');
+
+    const kategoriTagar = useKategoriTagarAdmin();
+    expect(kategoriTagar.staleTime).toBe(5 * 60 * 1000);
+    await kategoriTagar.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/tagar/kategori');
+  });
+
+  it('mengonfigurasi mutation tagar dan asosiasi tagar-entri', async () => {
+    const simpanTagar = useSimpanTagar();
+    await simpanTagar.mutationFn({ id: 4, kode: 'me', nama: 'me-' });
+    await simpanTagar.mutationFn({ kode: 'an', nama: '-an' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/tagar/4', { id: 4, kode: 'me', nama: 'me-' });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/tagar', { kode: 'an', nama: '-an' });
+    simpanTagar.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-tagar'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-tagar-detail'] });
+
+    const hapusTagar = useHapusTagar();
+    await hapusTagar.mutationFn(4);
+    expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/tagar/4');
+    hapusTagar.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-tagar'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-tagar-detail'] });
+
+    const simpanTagarEntri = useSimpanTagarEntri();
+    await simpanTagarEntri.mutationFn({ entriId: 17, tagar_ids: [1, 2] });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/kamus/17/tagar', { tagar_ids: [1, 2] });
+    simpanTagarEntri.onSuccess(null, { entriId: 17 });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['tagar-entri'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-audit-tagar'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['tagar-entri', 17] });
+  });
+
+  it('mengonfigurasi mutation pencarian hitam', async () => {
+    const simpanHitam = useSimpanPencarianHitamAdmin();
+    await simpanHitam.mutationFn({ id: 21, kata: 'spam', aktif: true });
+    await simpanHitam.mutationFn({ kata: 'iklan', aktif: false });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/pencarianHitam/21', { id: 21, kata: 'spam', aktif: true });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/pencarianHitam', { kata: 'iklan', aktif: false });
+    simpanHitam.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-pencarian-hitam'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-pencarian-hitam-detail'] });
+
+    const hapusHitam = useHapusPencarianHitamAdmin();
+    await hapusHitam.mutationFn(21);
+    expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/pencarianHitam/21');
+    hapusHitam.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-pencarian-hitam'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-pencarian-hitam-detail'] });
   });
 });

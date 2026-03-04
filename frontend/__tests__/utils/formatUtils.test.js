@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Fragment, createElement } from 'react';
 import {
+  formatBilanganRibuan,
   formatLemaHomonim,
   formatLocalDateTime,
   formatNamaBidang,
@@ -85,6 +86,11 @@ describe('formatUtils.test.js', () => {
     expect(formatNamaBidang('ilmu komputer dan informatika')).toBe('Ilmu Komputer dan Informatika');
     expect(formatNamaBidang('DAN TEKNOLOGI')).toBe('Dan Teknologi');
     expect(formatNamaBidang('   ')).toBe('');
+  });
+
+  it('formatBilanganRibuan mengembalikan fallback saat nilai bukan angka valid', () => {
+    expect(formatBilanganRibuan('abc')).toBe('0');
+    expect(formatBilanganRibuan('abc', { fallback: '-' })).toBe('-');
   });
 
   it('parseEntriGlosarium memecah entri per titik koma', () => {

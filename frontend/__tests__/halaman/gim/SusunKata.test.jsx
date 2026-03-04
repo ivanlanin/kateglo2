@@ -1,12 +1,13 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import SusunKata, { buatPetaKeyboard, parseRiwayatDariSkor } from '../../../src/halaman/gim/SusunKata';
 import {
   ambilKlasemenSusunKata,
   ambilKlasemenSusunKataBebas,
   ambilBebasSusunKata,
   ambilPuzzleSusunKata,
+  simpanProgresSusunKata,
   submitSkorSusunKata,
   submitSkorSusunKataBebas,
   validasiKataSusunKata,
@@ -25,6 +26,7 @@ vi.mock('../../../src/api/apiPublik', () => ({
   ambilPuzzleSusunKata: vi.fn(),
   ambilBebasSusunKata: vi.fn(),
   validasiKataSusunKata: vi.fn(),
+  simpanProgresSusunKata: vi.fn(),
   submitSkorSusunKata: vi.fn(),
   submitSkorSusunKataBebas: vi.fn(),
   ambilKlasemenSusunKata: vi.fn(),
@@ -50,10 +52,13 @@ describe('SusunKata', () => {
   let puzzleData;
   let klasemenData;
 
-  function renderSusunKata() {
+  function renderSusunKata(initialPath = '/gim/susun-kata/harian') {
     return render(
-      <MemoryRouter>
-        <SusunKata />
+      <MemoryRouter initialEntries={[initialPath]}>
+        <Routes>
+          <Route path="/gim/susun-kata/:mode" element={<SusunKata />} />
+          <Route path="/gim/susun-kata" element={<SusunKata />} />
+        </Routes>
       </MemoryRouter>
     );
   }
@@ -85,16 +90,20 @@ describe('SusunKata', () => {
       total: 3,
     });
     validasiKataSusunKata.mockResolvedValue({ valid: false });
+    simpanProgresSusunKata.mockResolvedValue({ success: true });
     submitSkorSusunKata.mockResolvedValue({ success: true });
     ambilBebasSusunKata.mockResolvedValue({ success: true, panjang: 5, target: 'kartu', kamus: ['kartu'] });
     submitSkorSusunKataBebas.mockResolvedValue({ success: true });
     ambilKlasemenSusunKata.mockResolvedValue({ success: true, data: [] });
     ambilKlasemenSusunKataBebas.mockResolvedValue({ success: true, data: [] });
 
-    mockUseMutation.mockReturnValue({
-      mutate: vi.fn((_payload, options) => options?.onSettled?.()),
+    mockUseMutation.mockImplementation((config) => ({
+      mutate: vi.fn((payload, options) => {
+        config?.mutationFn?.(payload);
+        options?.onSettled?.();
+      }),
       isPending: false,
-    });
+    }));
 
     mockUseQuery.mockImplementation((options) => {
       if (options?.enabled !== false && options?.queryFn) options.queryFn();
@@ -296,6 +305,21 @@ describe('SusunKata', () => {
     expect(screen.getByText('Menyiapkan gim ...')).toBeInTheDocument();
   });
 
+  it('mode harian menyimpan progres saat tebakan valid tetapi permainan belum selesai', async () => {
+    validasiKataSusunKata.mockResolvedValueOnce({ valid: true });
+
+    renderSusunKata('/gim/susun-kata/harian');
+
+    for (const huruf of ['k', 'a', 'r', 'y', 'a']) {
+      fireEvent.keyDown(window, { key: huruf });
+    }
+    fireEvent.keyDown(window, { key: 'Enter' });
+
+    await waitFor(() => {
+      expect(simpanProgresSusunKata).toHaveBeenCalledWith({ panjang: 5, tebakan: 'karya' });
+    });
+  });
+
   it('submit diabaikan saat target kosong dan saat game sudah selesai', () => {
     const mutate = vi.fn();
     mockUseMutation.mockReturnValue({ mutate, isPending: false });
@@ -350,10 +374,100 @@ describe('SusunKata', () => {
     expect(validasiKataSusunKata).not.toHaveBeenCalled();
   });
 
+  it('mode bebas menang mengirim payload skor dengan kata, menampilkan tautan kamus, dan bisa mulai sesi baru', async () => {
+    const mutate = vi.fn((_payload, options) => options?.onSettled?.());
+    mockUseMutation.mockReturnValue({ mutate, isPending: false });
+
+    renderSusunKata('/gim/susun-kata/bebas');
+
+    for (const huruf of ['k', 'a', 'r', 't', 'u']) {
+      fireEvent.keyDown(window, { key: huruf });
+    }
+    fireEvent.keyDown(window, { key: 'Enter' });
+
+    await screen.findByText('Selamat! 🥳');
+    expect(mutate).toHaveBeenCalledWith(
+      expect.objectContaining({ kata: 'kartu', menang: true }),
+      expect.objectContaining({ onSettled: expect.any(Function) })
+    );
+    expect(screen.getByRole('link', { name: /Mau lihat arti\s*kartu\s*di kamus/i })).toHaveAttribute('href', '/kamus/detail/kartu');
+
+    fireEvent.click(screen.getByRole('link', { name: 'mulai sesi baru' }));
+  });
+
+  it('mode bebas mengeksekusi mutationFn submit skor bebas', async () => {
+    renderSusunKata('/gim/susun-kata/bebas');
+
+    for (const huruf of ['k', 'a', 'r', 't', 'u']) {
+      fireEvent.keyDown(window, { key: huruf });
+    }
+    fireEvent.keyDown(window, { key: 'Enter' });
+
+    await screen.findByText('Selamat! 🥳');
+    expect(submitSkorSusunKataBebas).toHaveBeenCalledWith(expect.objectContaining({ kata: 'kartu' }));
+  });
+
+  it('mode bebas menampilkan format klasemen bebas, jalur kalah menyertakan kata, dan tab mode menutup cabang klik', async () => {
+    const mutate = vi.fn((_payload, options) => options?.onSettled?.());
+    mockUseMutation.mockReturnValue({ mutate, isPending: false });
+
+    puzzleData = {
+      ...puzzleData,
+      target: 'kartu',
+      kamus: ['karya', 'katun', 'karet', 'kasur', 'kabar', 'kabin'],
+      hasilHariIni: { tebakan: 'karya;katun;karet;kasur;kabar' },
+      progresHariIni: { tebakan: 'karya;katun', mulai_at: '2026-01-01T00:00:00Z' },
+    };
+    klasemenData = {
+      data: [{ pengguna_id: 3, nama: 'Ani', rata_poin: 12.3, rata_detik: 45.6, total_main: 7 }],
+    };
+
+    renderSusunKata('/gim/susun-kata/bebas');
+
+    fireEvent.click(screen.getByRole('tab', { name: 'Harian' }));
+    fireEvent.click(screen.getByRole('tab', { name: 'Bebas' }));
+    fireEvent.click(screen.getByRole('tab', { name: 'Bebas' }));
+
+    fireEvent.click(screen.getByRole('button', { name: 'Lihat klasemen harian' }));
+    expect(screen.getByText('#1')).toBeInTheDocument();
+    expect(screen.getByText('Ani')).toBeInTheDocument();
+    expect(screen.getByText('12,3 poin; 45,6 detik; 7x main')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Kembali ke papan permainan' }));
+
+    for (const huruf of ['k', 'a', 'b', 'i', 'n']) {
+      fireEvent.keyDown(window, { key: huruf });
+    }
+    fireEvent.keyDown(window, { key: 'Enter' });
+
+    await screen.findByText('Kesempatan habis. Jawabannya KARTU.');
+    expect(mutate).toHaveBeenCalledWith(
+      expect.objectContaining({ kata: 'kartu', menang: false, percobaan: 6 }),
+      expect.objectContaining({ onSettled: expect.any(Function) })
+    );
+  });
+
+  it('mode bebas klasemen memakai fallback angka nol dan pesan kosong khusus mode bebas', () => {
+    klasemenData = {
+      data: [{ pengguna_id: 9, nama: 'Kosong', rata_poin: 'x', rata_detik: null, total_main: undefined }],
+    };
+
+    renderSusunKata('/gim/susun-kata/bebas');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Lihat klasemen harian' }));
+    expect(screen.getByText('0,0 poin; 0,0 detik; 0x main')).toBeInTheDocument();
+
+    klasemenData = { data: [] };
+    renderSusunKata('/gim/susun-kata/bebas');
+    fireEvent.click(screen.getAllByRole('button', { name: 'Lihat klasemen harian' }).at(-1));
+    expect(screen.getByText('Belum ada pemenang mode bebas.')).toBeInTheDocument();
+  });
+
   it('helper buatPetaKeyboard dan parseRiwayatDariSkor menutup edge case', () => {
     const peta = buatPetaKeyboard(['ab'], 'abc');
     expect(peta.a).toBe('benar');
     expect(peta.b).toBe('benar');
+    expect(buatPetaKeyboard(['a'], 'ab').a).toBe('benar');
 
     expect(parseRiwayatDariSkor('abcde;ABCDE;ab12c;abc', 0)).toEqual(['abcde', 'abcde']);
   });

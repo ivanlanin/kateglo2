@@ -278,6 +278,51 @@ describe('KamusDetail', () => {
     });
   });
 
+  it('menyaring tagar entri agar hanya item valid yang ditampilkan', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return { isLoading: false, isError: false, data: {} };
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+          refetch: vi.fn(),
+        };
+      }
+
+      return {
+        isLoading: false,
+        isError: false,
+        isFetching: false,
+        data: {
+          indeks: 'menguji',
+          entri: [
+            {
+              id: 101,
+              entri: 'menguji',
+              indeks: 'menguji',
+              jenis: 'turunan',
+              tagar: [null, 'teks', { nama: 'tanpa-kode', kode: '' }, { nama: '', kode: 'me' }, { nama: 'prefiks me', kode: 'me' }],
+              makna: [{ id: 1, makna: 'melakukan uji' }],
+              subentri: {},
+            },
+          ],
+          tesaurus: { sinonim: [], antonim: [] },
+          glosarium: [],
+          glosarium_page: { total: 0, hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+        },
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByText('prefiks me')).toBeInTheDocument();
+    expect(screen.queryByText('tanpa-kode')).not.toBeInTheDocument();
+  });
+
   it('menampilkan subentri Etimologi dengan badge bahasa, kata_asal miring, dan badge sumber', () => {
     mockUseQuery.mockImplementation((options) => {
       if (options?.enabled !== false && options?.queryFn) options.queryFn();
@@ -621,6 +666,89 @@ describe('KamusDetail', () => {
         sumberPelacakan: null,
       });
     });
+  });
+
+  it('meneruskan sumber pelacakan susun-kata ke query detail', async () => {
+    mockLocation = { state: { sumberPelacakan: 'susun-kata' } };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-detail') {
+        if (options?.queryFn) options.queryFn();
+        return {
+          isLoading: false,
+          isError: false,
+          isFetching: false,
+          data: {
+            entri: 'kata',
+            makna: [{ id: 1, makna: 'arti' }],
+            subentri: {},
+            tesaurus: { sinonim: [], antonim: [] },
+            glosarium: [],
+          },
+        };
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+          refetch: vi.fn(),
+        };
+      }
+
+      return { isLoading: false, isError: false, data: {} };
+    });
+
+    render(<KamusDetail />);
+
+    await waitFor(() => {
+      expect(ambilDetailKamus).toHaveBeenCalledWith('kata', {
+        glosariumLimit: 20,
+        glosariumCursor: null,
+        glosariumDirection: 'next',
+        sumberPelacakan: 'susun-kata',
+      });
+    });
+  });
+
+  it('render tagar subentri tetap aman saat id tagar kosong', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-detail') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: {
+            entri: [
+              {
+                id: 77,
+                entri: 'kata',
+                makna: [{ id: 1, makna: 'arti' }],
+                tagar: [{ id: null, kode: 'me-', nama: 'me-' }],
+                subentri: {},
+              },
+            ],
+            tesaurus: { sinonim: [], antonim: [] },
+            glosarium: [],
+          },
+        };
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+          refetch: vi.fn(),
+        };
+      }
+
+      return { isLoading: false, isError: false, data: {} };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByRole('link', { name: 'me-' })).toHaveAttribute('href', '/kamus/tagar/me-');
   });
 
   it('menampilkan teks rujukan bentuk tidak baku dan menyortir subentri bentuk_tidak_baku', () => {

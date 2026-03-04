@@ -8,6 +8,8 @@ const mockUseStatistikPencarianAdmin = vi.fn();
 const mockUseDaftarPencarianHitamAdmin = vi.fn();
 const mockUseSimpanPencarianHitamAdmin = vi.fn();
 const mockUseHapusPencarianHitamAdmin = vi.fn();
+const mutateSimpanHitam = vi.fn();
+const mutateHapusHitam = vi.fn();
 
 vi.mock('../../../src/api/apiAdmin', () => ({
   useStatistikPencarianAdmin: (...args) => mockUseStatistikPencarianAdmin(...args),
@@ -34,13 +36,14 @@ describe('PencarianAdmin', () => {
       data: { data: [], total: 0, pageInfo: {} },
     });
     mockUseSimpanPencarianHitamAdmin.mockReturnValue({
-      mutate: vi.fn(),
+      mutate: mutateSimpanHitam,
       isPending: false,
     });
     mockUseHapusPencarianHitamAdmin.mockReturnValue({
-      mutate: vi.fn(),
+      mutate: mutateHapusHitam,
       isPending: false,
     });
+    global.confirm = vi.fn(() => true);
   });
 
   it('helper formatTanggalSingkat memakai format dd mmm yyyy', () => {
@@ -219,5 +222,203 @@ describe('PencarianAdmin', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Daftar Hitam' }));
     expect(screen.getByText('Daftar Hitam Pencarian')).toBeInTheDocument();
+  });
+
+  it('menutup cabang badge diblokir/normal dan fallback domain-kata', () => {
+    mockUseStatistikPencarianAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        ringkasanDomain: [],
+        data: [
+          { domain: 1, domain_nama: '', kata: '', diblokir: true, jumlah: 0, tanggal_awal: null, tanggal_akhir: null },
+          { domain: 2, domain_nama: 'tesaurus', kata: 'air', diblokir: false, jumlah: 1, tanggal_awal: null, tanggal_akhir: null },
+        ],
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <PencarianAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Diblokir')).toBeInTheDocument();
+    expect(screen.getByText('Normal')).toBeInTheDocument();
+    expect(screen.getAllByText('—').length).toBeGreaterThan(0);
+  });
+
+  it('mengelola panel daftar hitam: cari, reset, simpan, sunting, dan hapus', () => {
+    mockUseStatistikPencarianAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { ringkasanDomain: [], data: [] },
+    });
+    mockUseDaftarPencarianHitamAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        total: 1,
+        pageInfo: {},
+        data: [{ id: 7, kata: 'spam', aktif: 1, catatan: 'uji', updated_at: '2026-03-01 10:00:00' }],
+      },
+    });
+    mutateSimpanHitam
+      .mockImplementationOnce((_data, opts) => opts.onError?.({ response: { data: { message: 'Err simpan hitam' } } }))
+      .mockImplementationOnce((_data, opts) => opts.onSuccess?.());
+    mutateHapusHitam
+      .mockImplementationOnce((_id, opts) => opts.onError?.({ response: { data: { message: 'Err hapus hitam' } } }))
+      .mockImplementationOnce((_id, opts) => opts.onSuccess?.());
+
+    render(
+      <MemoryRouter>
+        <PencarianAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Daftar Hitam' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Tutup panel' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Daftar Hitam' }));
+    fireEvent.change(screen.getByPlaceholderText('Cari kata daftar hitam …'), { target: { value: 'spam' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Cari' }));
+
+    fireEvent.click(screen.getAllByRole('button', { name: 'Reset' }).at(-1));
+
+    fireEvent.click(screen.getByRole('button', { name: 'Simpan' }));
+    expect(screen.getByText('Kata wajib diisi')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText('Kata*'), { target: { value: 'promo' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Simpan' }));
+    expect(screen.getByText('Err simpan hitam')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Simpan' }));
+    expect(screen.getByText('Tersimpan!')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('spam'));
+    fireEvent.click(screen.getByRole('button', { name: 'Hapus' }));
+    expect(screen.getByText('Err hapus hitam')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Hapus' }));
+    expect(screen.getByText('Berhasil dihapus.')).toBeInTheDocument();
+  });
+
+  it('menutup guard konfirmasi hapus saat dibatalkan', () => {
+    mockUseStatistikPencarianAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { ringkasanDomain: [], data: [] },
+    });
+    mockUseDaftarPencarianHitamAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        total: 1,
+        pageInfo: {},
+        data: [{ id: 99, kata: 'promo', aktif: 1, catatan: '', updated_at: '2026-03-01 10:00:00' }],
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <PencarianAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Daftar Hitam' }));
+    fireEvent.click(screen.getByText('promo'));
+
+    global.confirm = vi.fn(() => false);
+    fireEvent.click(screen.getByRole('button', { name: 'Hapus' }));
+    expect(global.confirm).toHaveBeenCalled();
+    expect(mutateHapusHitam).not.toHaveBeenCalled();
+  });
+
+  it('menutup fallback kolom daftar hitam dan guard hapus', () => {
+    mockUseStatistikPencarianAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { ringkasanDomain: [], data: [] },
+    });
+    mockUseDaftarPencarianHitamAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        total: 1,
+        pageInfo: {},
+        data: [{ id: null, kata: '', aktif: 0, catatan: '', updated_at: '' }],
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <PencarianAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Daftar Hitam' }));
+    expect(screen.getByRole('cell', { name: 'Nonaktif' })).toBeInTheDocument();
+    expect(screen.getAllByText('—').length).toBeGreaterThan(0);
+
+    fireEvent.click(screen.getByRole('cell', { name: 'Nonaktif' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Hapus' }));
+    expect(mutateHapusHitam).not.toHaveBeenCalled();
+
+    fireEvent.change(screen.getByLabelText('Kata*'), { target: { value: 'spam' } });
+    global.confirm = vi.fn(() => false);
+    fireEvent.click(screen.getByRole('button', { name: 'Hapus' }));
+    expect(mutateHapusHitam).not.toHaveBeenCalled();
+  });
+
+  it('menutup fallback daftar hitam saat respons belum memuat data', () => {
+    mockUseStatistikPencarianAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { ringkasanDomain: [], data: [] },
+    });
+    mockUseDaftarPencarianHitamAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: undefined,
+    });
+
+    render(
+      <MemoryRouter>
+        <PencarianAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Daftar Hitam' }));
+    expect(screen.getAllByText('Tidak ada data.').length).toBeGreaterThan(0);
+  });
+
+  it('menjalankan aksi +Tambah Kata, perubahan filter status panel, dan tombol Batal form', () => {
+    mockUseStatistikPencarianAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { ringkasanDomain: [], data: [] },
+    });
+    mockUseDaftarPencarianHitamAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        total: 1,
+        pageInfo: {},
+        data: [{ id: 4, kata: 'uji', aktif: 1, catatan: '', updated_at: '2026-03-01 10:00:00' }],
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <PencarianAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Daftar Hitam' }));
+    fireEvent.change(screen.getByPlaceholderText('Cari kata daftar hitam …'), { target: { value: 'uji' } });
+    fireEvent.change(screen.getAllByRole('combobox').at(-1), { target: { value: '1' } });
+    fireEvent.click(screen.getByRole('button', { name: '+ Tambah Kata' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Batal' }));
+
+    expect(screen.getByLabelText('Kata*')).toHaveValue('');
   });
 });

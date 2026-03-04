@@ -23,6 +23,9 @@ const mockUseDaftarMakna = vi.fn();
 const mockUseDaftarSumberAdmin = vi.fn();
 const mockUseKategoriLabelRedaksi = vi.fn();
 const mockUseAutocompleteIndukKamus = vi.fn();
+const mockUseTagarEntri = vi.fn();
+const mockUseSimpanTagarEntri = vi.fn();
+const mockUseDaftarTagarUntukPilih = vi.fn();
 
 const mutateSimpanKamus = vi.fn();
 const mutateHapusKamus = vi.fn();
@@ -30,6 +33,7 @@ const mutateSimpanMakna = vi.fn();
 const mutateHapusMakna = vi.fn();
 const mutateSimpanContoh = vi.fn();
 const mutateHapusContoh = vi.fn();
+const mutateSimpanTagar = vi.fn();
 const mockUseAuth = vi.fn();
 
 vi.mock('../../../src/api/apiAdmin', () => ({
@@ -45,9 +49,9 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useHapusMakna: () => ({ mutate: mutateHapusMakna, isPending: false }),
   useSimpanContoh: () => ({ mutate: mutateSimpanContoh, isPending: false }),
   useHapusContoh: () => ({ mutate: mutateHapusContoh, isPending: false }),
-  useTagarEntri: () => ({ data: { data: [] }, isLoading: false }),
-  useSimpanTagarEntri: () => ({ mutate: vi.fn(), isPending: false, isError: false }),
-  useDaftarTagarUntukPilih: () => ({ data: { data: [] }, isLoading: false }),
+  useTagarEntri: (...args) => mockUseTagarEntri(...args),
+  useSimpanTagarEntri: (...args) => mockUseSimpanTagarEntri(...args),
+  useDaftarTagarUntukPilih: (...args) => mockUseDaftarTagarUntukPilih(...args),
 }));
 
 vi.mock('../../../src/context/authContext', () => ({
@@ -109,6 +113,9 @@ describe('KamusAdmin', () => {
     mockUseAuth.mockReturnValue({
       punyaIzin: () => true,
     });
+    mockUseTagarEntri.mockReturnValue({ data: { data: [] }, isLoading: false });
+    mockUseDaftarTagarUntukPilih.mockReturnValue({ data: { data: [] }, isLoading: false });
+    mockUseSimpanTagarEntri.mockReturnValue({ mutate: mutateSimpanTagar, isPending: false, isError: false });
 
     mockUseDaftarKamusAdmin.mockReturnValue({
       isLoading: false,
@@ -252,6 +259,71 @@ describe('KamusAdmin', () => {
 
     fireEvent.click(screen.getByText('+ Tambah'));
     expect(screen.getByLabelText('Sumber')).toBeInTheDocument();
+  });
+
+  it('mengelola seksi tagar: filter dropdown, tambah, hapus, fallback warna, dan pesan error', () => {
+    mockUseTagarEntri.mockReturnValue({
+      data: {
+        data: [
+          { id: 1, nama: 'prefiks me', kode: 'me', kategori: 'prefiks' },
+          { id: 9, nama: 'misteri', kode: 'ms', kategori: 'aneh' },
+        ],
+      },
+      isLoading: false,
+    });
+    mockUseDaftarTagarUntukPilih.mockReturnValue({
+      data: {
+        data: [
+          { id: 1, nama: 'prefiks me', kode: 'me', kategori: 'prefiks' },
+          { id: 9, nama: 'misteri', kode: 'ms', kategori: 'aneh' },
+          { id: 2, nama: 'sufiks', kode: 'an', kategori: 'sufiks' },
+        ],
+      },
+      isLoading: false,
+    });
+    mockUseSimpanTagarEntri.mockReturnValue({ mutate: mutateSimpanTagar, isPending: false, isError: true });
+
+    const { container } = render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('dasar'));
+    expect(screen.getByLabelText('Hapus tagar prefiks me')).toBeInTheDocument();
+    expect(screen.getByText('Gagal menyimpan tagar.')).toBeInTheDocument();
+
+    const inputTagar = container.querySelector('input.min-w-24');
+    expect(inputTagar).not.toBeNull();
+    fireEvent.focus(inputTagar);
+    fireEvent.change(inputTagar, { target: { value: 'an' } });
+
+    fireEvent.mouseDown(screen.getByRole('button', { name: 'sufiks' }));
+    expect(mutateSimpanTagar).toHaveBeenCalledWith({ entriId: 1, tagar_ids: [1, 9, 2] });
+
+    fireEvent.blur(inputTagar);
+    act(() => {
+      vi.advanceTimersByTime(130);
+    });
+
+    fireEvent.click(screen.getByLabelText('Hapus tagar prefiks me'));
+    expect(mutateSimpanTagar).toHaveBeenCalledWith({ entriId: 1, tagar_ids: [9] });
+  });
+
+  it('seksi tagar tetap aman saat respons entri/tagar belum ada', () => {
+    mockUseTagarEntri.mockReturnValue({ data: undefined, isLoading: false });
+    mockUseDaftarTagarUntukPilih.mockReturnValue({ data: undefined, isLoading: false });
+
+    const { container } = render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('dasar'));
+    const inputTagar = container.querySelector('input.min-w-24');
+    expect(inputTagar).not.toBeNull();
+    expect(inputTagar).toHaveAttribute('placeholder', 'Tambah tagar…');
   });
 
   it('mengelola makna dan contoh', () => {
@@ -917,9 +989,15 @@ describe('KamusAdmin', () => {
     );
 
     fireEvent.click(screen.getByText('+ Tambah'));
-    fireEvent.focus(screen.getByLabelText('Induk'));
-    fireEvent.change(screen.getByLabelText('Induk'), { target: { value: 'akar' } });
+    const inputInduk = screen.getByLabelText('Induk');
+    fireEvent.focus(inputInduk);
+    fireEvent.change(inputInduk, { target: { value: 'akar' } });
     expect(screen.getByText('Tidak ada hasil.')).toBeInTheDocument();
+    fireEvent.blur(inputInduk);
+    act(() => {
+      vi.advanceTimersByTime(130);
+    });
+    expect(screen.queryByText('Tidak ada hasil.')).not.toBeInTheDocument();
   });
 
   it('menampilkan loading/empty pada saran rujuk, memilih rujuk, lalu reset saat input diubah', () => {

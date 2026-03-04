@@ -12,6 +12,7 @@ import {
   buildMetaPencarianGlosarium,
   buildMetaDetailGlosarium,
   buildMetaPencarianKamus,
+  buildMetaTagarKamus,
   buildMetaPencarianTesaurus,
   buildMetaSumberGlosarium,
   formatAwalKapital,
@@ -87,6 +88,20 @@ describe('metaUtils', () => {
       ],
     });
     expect(multiTanpaMakna).toContain('(1)');
+
+    const tagarKosong = buildMetaTagarKamus(null, 0);
+    expect(tagarKosong.judul).toBe('Tagar');
+
+    const tagarDenganKategori = buildMetaTagarKamus({ nama: 'me-', kategori: 'prefiks' }, 3);
+    expect(tagarDenganKategori.judul).toBe('Prefiks me-');
+    expect(tagarDenganKategori.deskripsi).toContain('3 kata');
+
+    const tagarTanpaKategori = buildMetaTagarKamus({ nama: 'arkaik', kategori: '' }, 0);
+    expect(tagarTanpaKategori.judul).toBe('Tagar arkaik');
+    expect(tagarTanpaKategori.deskripsi).toContain('Daftar kata bertagar');
+
+    const tagarKosongObjek = buildMetaTagarKamus({}, 0);
+    expect(tagarKosongObjek.judul).toBe('Tagar ');
   });
 
   it('builder metadata tesaurus menutup cabang kosong dan data lengkap', () => {

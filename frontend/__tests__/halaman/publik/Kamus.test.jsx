@@ -108,6 +108,44 @@ describe('Kamus', () => {
     expect(__private.gabungkanKategoriBentuk(null).map((i) => i.kode)).toEqual(['akronim', 'kependekan']);
     expect(__private.gabungkanKategoriEkspresi(undefined).map((i) => i.kode)).toEqual(['kiasan']);
     expect(__private.gabungkanKategoriEkspresi(null).map((i) => i.kode)).toEqual(['kiasan']);
+
+    expect(__private.urutkanTagar({})).toEqual([]);
+    expect(
+      __private.urutkanTagar([
+        { nama: 'zzz', kategori: 'lain', urutan: 'x' },
+        { nama: 'aaa', kategori: 'lain', urutan: 'x' },
+        { nama: 'dua', kategori: 'prefiks', urutan: 2 },
+        { nama: 'satu', kategori: 'prefiks', urutan: 1 },
+      ]).map((item) => item.nama)
+    ).toEqual(['satu', 'dua', 'aaa', 'zzz']);
+
+    expect(
+      __private.urutkanTagar([
+        { nama: 'beta', kategori: 'lain', urutan: 'x' },
+        { nama: 'alpha', kategori: 'lain', urutan: 'x' },
+      ]).map((item) => item.nama)
+    ).toEqual(['alpha', 'beta']);
+
+    expect(
+      __private.urutkanTagar([
+        undefined,
+        { nama: 'prefiks me', kategori: 'prefiks', urutan: 1 },
+      ]).map((item) => item?.nama || '')
+    ).toEqual(['prefiks me', '']);
+
+    expect(
+      __private.urutkanTagar([
+        {},
+        { nama: 'alpha' },
+      ]).map((item) => item?.nama || '')
+    ).toEqual(['', 'alpha']);
+
+    expect(
+      __private.urutkanTagar([
+        { nama: 'alpha' },
+        {},
+      ]).map((item) => item?.nama || '')
+    ).toEqual(['', 'alpha']);
   });
 
   it('browse kategori memakai fallback array kosong untuk key yang tidak ada dan grid dua kolom saat dua kategori terisi', () => {
@@ -253,6 +291,56 @@ describe('Kamus', () => {
       direction: 'next',
       lastPage: false,
     });
+  });
+
+  it('mode tagar memakai fallback kategori kosong pada metadata judul', () => {
+    mockParams = { tagar: 'arkaik' };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const { queryKey } = options;
+      if (queryKey[0] === 'kamus-tagar-entri') {
+        return {
+          data: {
+            data: [{ id: 1, entri: 'kata' }],
+            total: 1,
+            tagar: { nama: 'arkaik', kategori: '' },
+          },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Kamus />);
+
+    expect(screen.getByRole('heading', { name: 'Tagar arkaik' })).toBeInTheDocument();
+  });
+
+  it('mode tagar memakai fallback kode aktif saat nama tagar kosong', () => {
+    mockParams = { tagar: 'afiks' };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const { queryKey } = options;
+      if (queryKey[0] === 'kamus-tagar-entri') {
+        return {
+          data: {
+            data: [{ id: 1, entri: 'berkata' }],
+            total: 1,
+            tagar: { nama: '', kategori: '' },
+          },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Kamus />);
+
+    expect(screen.getByRole('heading', { name: 'Tagar afiks' })).toBeInTheDocument();
   });
 
   it('menampilkan hasil kategori dari route /kamus/kelas/:kelas', () => {

@@ -31,15 +31,12 @@ const opsiJenisBawaan = [
 
 const kategoriLabelRedaksi = ['bentuk-kata'];
 
-function mapOpsiLabel(labels = [], { includeEmpty = true, emptyLabel = '— Pilih —' } = {}) {
-  const mapped = labels.map((item) => {
+function mapOpsiLabel(labels = []) {
+  return labels.map((item) => {
     const kode = item?.kode ?? '';
     const nama = item?.nama ?? '';
     return { value: kode, label: String(nama || kode) };
   });
-
-  if (!includeEmpty) return mapped;
-  return [{ value: '', label: emptyLabel }, ...mapped];
 }
 
 const opsiPunyaTagar = [
@@ -201,7 +198,7 @@ function AuditTagarAdmin() {
 
   const opsiJenis = useMemo(() => {
     const kategori = respLabelKategori?.data || {};
-    const jenisDb = mapOpsiLabel(kategori['bentuk-kata'] || [], { includeEmpty: false });
+    const jenisDb = mapOpsiLabel(kategori['bentuk-kata'] || []);
     const pilihanTanpaKosong = (jenisDb.length ? jenisDb : opsiJenisBawaan)
       .filter((item) => String(item?.value || '').trim());
     return [{ value: '', label: '—Jenis—' }, ...pilihanTanpaKosong];

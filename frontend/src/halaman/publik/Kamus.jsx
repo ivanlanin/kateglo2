@@ -235,9 +235,7 @@ function Kamus() {
   const metaHalaman = modeKategori
     ? modeTagar
       ? buildMetaTagarKamus(
-        (tagar?.nama || kodeAktif)
-          ? { nama: tagar?.nama || kodeAktif, kategori: tagar?.kategori || '' }
-          : null,
+        { nama: tagar?.nama || kodeAktif, kategori: tagar?.kategori || '' },
         totalTagar
       )
       : buildMetaKategoriKamus({

@@ -111,6 +111,10 @@ describe('entry-server', () => {
 
     const kamusKategoriAlias = __private.buildMetaForPath('/kamus/kelas/verba', site);
     expect(kamusKategoriAlias.title).toBe('Kelas Kata Verba — Kateglo');
+    const kamusTagar = __private.buildMetaForPath('/kamus/tagar/prefiks', site);
+    expect(kamusTagar.title).toBe('Tagar prefiks — Kateglo');
+    const kamusTagarKosong = __private.buildMetaForPath('/kamus/tagar/', site);
+    expect(kamusTagarKosong.title).toBe('Tagar — Kateglo');
     expect(__private.buildMetaForPath('/kamus', site).title).toBe('Kamus — Kateglo');
 
     expect(__private.buildMetaForPath('/makna', site).title).toBe('Makna — Kateglo');

@@ -31,7 +31,7 @@ function SusunKataBebas() {
       pemenang: item.pemenang || '—',
       peserta: Number(item.jumlah_peserta) || 0,
       main: Number(item.total_main) || 0,
-      menang: Number(item.persen_menang) || 0,
+      menang: Number(item.persen_menang),
     })),
     [data?.data]
   );
@@ -46,7 +46,6 @@ function SusunKataBebas() {
         total={dataTabel.length}
         limit={100}
         offset={0}
-        onOffset={() => {}}
         kunciId="tanggal"
       />
     </TataLetak>

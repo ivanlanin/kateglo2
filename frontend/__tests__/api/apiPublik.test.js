@@ -28,8 +28,12 @@ import {
   ambilPencarianPopuler,
   ambilPuzzleSusunKata,
   ambilHarianSusunKata,
+  ambilBebasSusunKata,
   submitSkorSusunKata,
+  simpanProgresSusunKata,
+  submitSkorSusunKataBebas,
   ambilKlasemenSusunKata,
+  ambilKlasemenSusunKataBebas,
   validasiKataSusunKata,
   autocomplete,
   cariGlosarium,
@@ -38,6 +42,8 @@ import {
   ambilDaftarBidang,
   ambilDetailGlosarium,
   ambilDaftarSumber,
+  ambilSemuaTagar,
+  cariEntriPerTagar,
 } from '../../src/api/apiPublik';
 
 describe('apiPublik', () => {
@@ -95,6 +101,7 @@ describe('apiPublik', () => {
       glosariumLimit: 20,
       glosariumCursor: 'abc123',
       glosariumDirection: 'prev',
+      sumberPelacakan: 'susun-kata',
     });
 
     expect(klien.get).toHaveBeenCalledWith('/api/publik/kamus/detail/anak%20ibu', {
@@ -102,6 +109,7 @@ describe('apiPublik', () => {
         limit: 20,
         cursor: 'abc123',
         direction: 'prev',
+        sumber: 'susun-kata',
       },
     });
   });
@@ -461,6 +469,103 @@ describe('apiPublik', () => {
     expect(hasil1).toEqual([]);
     expect(hasil2).toEqual([]);
     expect(klien.get).not.toHaveBeenCalled();
+  });
+
+  it('mode susun kata bebas dan progres menormalkan payload', async () => {
+    klien.get.mockResolvedValue({ data: { success: true } });
+    klien.post.mockResolvedValue({ data: { success: true } });
+
+    await ambilBebasSusunKata({ panjang: 9 });
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/gim/susun-kata/bebas', {
+      params: { panjang: 6 },
+    });
+
+    await ambilBebasSusunKata({ panjang: null });
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/gim/susun-kata/bebas', {
+      params: {},
+    });
+
+    await simpanProgresSusunKata({ panjang: 12, tebakan: '  KATA  ' });
+    expect(klien.post).toHaveBeenCalledWith('/api/publik/gim/susun-kata/harian/progres', {
+      panjang: 8,
+      tebakan: 'kata',
+    });
+
+    await simpanProgresSusunKata({ panjang: '', tebakan: null });
+    expect(klien.post).toHaveBeenCalledWith('/api/publik/gim/susun-kata/harian/progres', {
+      panjang: 5,
+      tebakan: '',
+    });
+
+    await submitSkorSusunKataBebas({
+      tanggal: '2026-03-04',
+      panjang: 2,
+      kata: '  LEMA  ',
+      percobaan: 0,
+      detik: 999999,
+      menang: 1,
+      tebakan: '  UJI  ',
+    });
+    expect(klien.post).toHaveBeenCalledWith('/api/publik/gim/susun-kata/bebas/submit', {
+      tanggal: '2026-03-04',
+      panjang: 4,
+      kata: 'lema',
+      percobaan: 6,
+      detik: 86400,
+      menang: true,
+      tebakan: 'uji',
+    });
+
+    await submitSkorSusunKataBebas({
+      tanggal: null,
+      panjang: '',
+      kata: null,
+      percobaan: '',
+      detik: '',
+      menang: 0,
+      tebakan: null,
+    });
+    expect(klien.post).toHaveBeenCalledWith('/api/publik/gim/susun-kata/bebas/submit', {
+      tanggal: null,
+      panjang: 5,
+      kata: '',
+      percobaan: 6,
+      detik: 0,
+      menang: false,
+      tebakan: '',
+    });
+
+    await ambilKlasemenSusunKataBebas({ limit: 1000 });
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/gim/susun-kata/bebas/klasemen', {
+      params: { limit: 50 },
+    });
+
+    await ambilKlasemenSusunKataBebas({ limit: '' });
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/gim/susun-kata/bebas/klasemen', {
+      params: { limit: 10 },
+    });
+  });
+
+  it('endpoint tagar publik memanggil URL dan cursor params dengan benar', async () => {
+    klien.get.mockResolvedValue({ data: { data: [] } });
+
+    await ambilSemuaTagar();
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/tagar');
+
+    await cariEntriPerTagar('prefiks me', {
+      limit: 17,
+      cursor: 'tg-1',
+      direction: 'prev',
+      lastPage: true,
+    });
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/tagar/prefiks%20me', {
+      params: {
+        limit: 17,
+        cursor: 'tg-1',
+        direction: 'prev',
+        lastPage: 1,
+      },
+    });
   });
 
   it('autocomplete menangani response tanpa data array (fallback [])', async () => {

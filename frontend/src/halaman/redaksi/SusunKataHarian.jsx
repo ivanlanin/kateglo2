@@ -143,8 +143,9 @@ function SusunKataHarian() {
 
     setSelected({ tanggal: '', panjang: '' });
     panel.bukaUntukTambah();
+    const tanggalDefault = resolveTanggalBuatKataHarian(tanggalAcuan, '');
     panel.setData({
-      tanggal: tanggalAcuan || tanggalHariIni(),
+      tanggal: tanggalDefault,
       panjang: '5',
       kata: '',
       keterangan: '',
@@ -182,7 +183,7 @@ function SusunKataHarian() {
         onSuccess: () => {
           setPesan({ error: '', sukses: 'Kata harian berhasil disimpan.' });
           const tanggalSimpan = resolveTanggalSimpan(panel.data.tanggal, tanggalAcuan);
-          setTanggalAcuan(tanggalSimpan || tanggalHariIni());
+          setTanggalAcuan(tanggalSimpan);
         },
         onError: (error) => {
           setPesan({ error: getApiErrorMessage(error, 'Gagal menyimpan kata harian.'), sukses: '' });
@@ -201,7 +202,7 @@ function SusunKataHarian() {
       },
       {
         onSuccess: () => {
-          setTanggalAcuan(tanggalAman || tanggalHariIni());
+          setTanggalAcuan(tanggalAman);
           setPesan({ error: '', sukses: 'Kata harian berhasil dibuat.' });
         },
         onError: (error) => {
