@@ -377,6 +377,12 @@ npm run dev:public        # Port 5173
 - **Tidak perlu menjalankan build** sebagai langkah default validasi perubahan.
 - Prioritaskan validasi terarah dulu (misalnya per package yang terdampak), baru meluas jika diperlukan.
 
+### Rename File/Folder (Wajib)
+- Untuk pengubahan nama file atau folder, **utamakan `git mv`** agar riwayat rename tetap terlacak.
+- Setelah rename, **WAJIB** perbarui semua import/path yang terdampak.
+- Setelah rename, **WAJIB** cek dan sesuaikan file test terkait (nama file test, import target, dan assertion yang relevan).
+- Lanjutkan dengan lint + test pada package terdampak sesuai kebijakan validasi di atas.
+
 Contoh per package:
 ```bash
 Set-Location backend; npm run lint; npm run test
