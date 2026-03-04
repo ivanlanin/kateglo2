@@ -411,12 +411,15 @@ const PREFIXES = [
   { str: 'memper', tags: ['meng-', 'per-']  },
   { str: 'berpeny', tags: ['ber-', 'peng-'] }, // ber- + peny- (sakit→berpenyakitan)
   { str: 'berpeng', tags: ['ber-', 'peng-'] }, // ber- + peng- (kluster k: karang→berpengarangan)
+  { str: 'sepeny', tags: ['se-', 'peng-']  }, // se- + peny- (s-awal: sapu→sepenyapu)
   { str: 'kepeng', tags: ['ke-', 'peng-']  }, // ke- + peng- (karang→kepengarangan, kecut→kepengecutan)
   { str: 'berpen', tags: ['ber-', 'peng-'] }, // ber- + pen- (tampil→berpenampilan, terang→berpenerangan)
   { str: 'pemer',  tags: ['peng-', 'per-']  },
   { str: 'pemel',  tags: ['peng-', 'per-']  },
   { str: 'kepen',  tags: ['ke-', 'peng-']   },
   { str: 'sepem',  tags: ['se-', 'peng-']   },
+  { str: 'sepeng', tags: ['se-', 'peng-']   }, // se- + peng- (k-awal: karang→sepengarangan)
+  { str: 'sepen',  tags: ['se-', 'peng-']   }, // se- + pen-  (t-awal: tanak→sepenanak)
   { str: 'diper',  tags: ['di-', 'per-']    },
   { str: 'mempe',  tags: ['meng-', 'peng-'] },
   { str: 'menge',  tags: ['meng-']          },
@@ -462,7 +465,7 @@ const SUFFIXES = [
   { str: 'i',   tag: '-i'   },
 ];
 
-const PREFIXES_NASAL = new Set(['me', 'mem', 'men', 'meng', 'meny', 'menye', 'pe', 'pem', 'pen', 'peng', 'peny', 'kepen', 'sepem', 'berpen', 'berpeny', 'berpeng', 'kepeng']);
+const PREFIXES_NASAL = new Set(['me', 'mem', 'men', 'meng', 'meny', 'menye', 'pe', 'pem', 'pen', 'peng', 'peny', 'kepen', 'sepem', 'berpen', 'berpeny', 'berpeng', 'kepeng', 'sepen', 'sepeny', 'sepeng']);
 const HURUF_PELULUHAN_KPST = new Set(['k', 'p', 's', 't']);
 
 // ============================================================
@@ -1365,6 +1368,31 @@ function detectReduplikasi(entri, _induk) {
   const afiksFromRight = deteksiAfiksasiDari(left, right);
   if (afiksFromRight && berbagiLeksemDasar(right)) {
     return [...new Set(['R.berafiks', ...afiksFromRight])];
+  }
+
+  // R.berafiks dengan infiks: X-Y di mana Y = infiks(X) atau X = infiks(Y)
+  // Contoh: gunung-gemunung (-em-), sinar-seminar (-em-), turun-temurun (-em-)
+  for (const infix of INFIXES_LIST) {
+    const tagCode = '-' + infix + '-';
+    // Kanan = kiri yang diberi infiks (+ sufiks opsional)
+    if (left.length >= 2 && !'aiueo'.includes(left[0])) {
+      const infixedLeft = left[0] + infix + left.slice(1);
+      if (right === infixedLeft && berbagiLeksemDasar(left)) {
+        return ['R.berafiks', tagCode];
+      }
+      for (const { str: sufStr, tag: sufTag } of SUFFIXES) {
+        if (right === infixedLeft + sufStr && berbagiLeksemDasar(left) && sufTag) {
+          return ['R.berafiks', tagCode, sufTag];
+        }
+      }
+    }
+    // Kiri = kanan yang diberi infiks
+    if (right.length >= 2 && !'aiueo'.includes(right[0])) {
+      const infixedRight = right[0] + infix + right.slice(1);
+      if (left === infixedRight && berbagiLeksemDasar(right)) {
+        return ['R.berafiks', tagCode];
+      }
+    }
   }
 
   if (isTurunanBerafiksDari(left, right)) return null;
