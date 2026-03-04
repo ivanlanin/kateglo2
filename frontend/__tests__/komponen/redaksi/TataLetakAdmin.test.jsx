@@ -55,7 +55,7 @@ describe('TataLetakAdmin', () => {
     );
 
     expect(document.title).toBe('Kamus — Redaksi Kateglo');
-    expect(screen.getByRole('link', { name: 'Redaksi' })).toHaveAttribute('href', '/redaksi');
+    expect(screen.getByRole('link', { name: 'Redaksi Kateglo' })).toHaveAttribute('href', '/redaksi');
     expect(screen.getByRole('link', { name: 'Kateglo' })).toHaveAttribute('href', '/');
     expect(screen.queryByRole('link', { name: 'Dasbor' })).not.toBeInTheDocument();
     fireEvent.click(screen.getByLabelText('Buka menu redaksi'));
@@ -80,7 +80,7 @@ describe('TataLetakAdmin', () => {
     );
 
     expect(document.title).toBe('Redaksi Kateglo');
-    expect(screen.getByRole('link', { name: 'Redaksi' })).toHaveAttribute('href', '/redaksi');
+    expect(screen.getByRole('link', { name: 'Redaksi Kateglo' })).toHaveAttribute('href', '/redaksi');
     expect(screen.queryByText('admin@kateglo.id')).not.toBeInTheDocument();
     fireEvent.click(screen.getByLabelText('Buka menu redaksi'));
     const menuKamus = screen.getAllByRole('link', { name: 'Kamus' });

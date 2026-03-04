@@ -107,17 +107,13 @@ function TataLetak({ mode = 'publik', judul, aksiJudul = null, children }) {
 
         <footer className="kateglo-footer">
           <div className="kateglo-footer-content">
-            {adalahAdmin ? (
-              <span className="kateglo-version-button">Kateglo {appTimestamp}</span>
-            ) : (
-              <button
-                type="button"
-                onClick={bukaModal}
-                className="kateglo-version-button"
-              >
-                Kateglo {appTimestamp}
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={bukaModal}
+              className="kateglo-version-button"
+            >
+              Kateglo {appTimestamp}
+            </button>
             <button
               type="button"
               onClick={() => setModeGelap((v) => !v)}
@@ -133,12 +129,15 @@ function TataLetak({ mode = 'publik', judul, aksiJudul = null, children }) {
               {adalahRedaksi && (
                 <>{' · '}<Link to="/redaksi" className="link-action">Redaksi</Link></>
               )}
+              {adalahAdmin && (
+                <>{' · '}<Link to="/" className="link-action">Kateglo</Link></>
+              )}
             </span>
           </div>
         </footer>
       </div>
 
-      {!adalahAdmin && modalTerbuka && (
+      {modalTerbuka && (
         <div className="modal-overlay modal-overlay-kateglo" onClick={() => setModalTerbuka(false)}>
           <div className="modal-container-kateglo" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header-kateglo">

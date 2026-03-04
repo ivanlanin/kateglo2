@@ -100,8 +100,7 @@ function NavbarAdmin() {
                 )}
               </svg>
             </button>
-            <Link to="/redaksi" className="navbar-logo">Redaksi</Link>
-            <Link to="/" className="navbar-logo">Kateglo</Link>
+            <Link to="/redaksi" className="navbar-logo">Redaksi Kateglo</Link>
           </div>
 
           <button

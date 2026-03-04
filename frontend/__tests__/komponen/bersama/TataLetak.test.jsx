@@ -152,7 +152,7 @@ describe('TataLetak', () => {
     expect(screen.getByText('Aksi')).toBeInTheDocument();
     expect(screen.getByText('Konten Admin')).toBeInTheDocument();
     expect(document.title).toBe('Manajemen — Redaksi Kateglo');
-    expect(screen.queryByRole('button', { name: /Kateglo/i })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Kateglo/i })).toBeInTheDocument();
   });
 
   it('mode admin tanpa judul memakai title default redaksi', () => {
