@@ -220,6 +220,28 @@ Opsi C — **Lookup hibrida**: coba lookup dulu, jika tidak ketemu gunakan algor
 
 Daftar lengkap entri yang menggunakan fallback tersimpan di: `202603041200_gabungan-fallback-review.md`
 
+## Pembersihan Fallback (Review Lanjutan)
+
+**Tanggal:** 2026-03-04
+
+Setelah review 1.508 entri fallback, ditemukan 3 masalah sistematis yang diperbaiki:
+
+| Masalah | Jumlah | Contoh |
+|---|---|---|
+| Huruf kapital dari lookup nama diri | 297 | `Pi.sang → pi.sang`, `Be.lan.da → be.lan.da` |
+| Titik di dalam / sebelum tanda kurung | 62 | `sa.bung.(an) → sa.bung(an)`, `(gi.ling) → (giling)` |
+| `sei.` bukan diftong (prefix `se-` + `i`) | 2 | `sei.bu → se.i.bu` |
+| **Total diperbarui** | **359** | |
+
+**Penjelasan masalah:**
+- **Kapital**: Lookup map mengambil pemenggalan dari entri nama diri (e.g., `Jawa → Ja.wa`), lalu diterapkan ke kata dalam gabungan yang ditulis lowercase. Konvensi pemenggalan kamus: semua huruf kecil.
+- **Tanda kurung**: Konten dalam `(...)` seharusnya tidak disyllabify — merupakan alternatif/keterangan tambahan.
+- **`seibu`**: Prefix `se-` + `ibu` menghasilkan morfem boundary, bukan diftong `ei`. Algoritma tidak mengenali batas morfem.
+
+**Kasus minor yang diterima:**
+- `sofa (huruf) L → so.fa (huruf) l` — huruf bentuk benda jadi lowercase
+- `dsb.` dalam kurung → `dsb` — titik singkatan ikut dihapus
+
 ## Referensi
 
 - Dokumen terkait: `202603041040_fix-pemenggalan-vokal-awal-akhir.md`
