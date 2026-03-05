@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import {
+  BadgeMeragukan,
   BadgeStatus,
   BarisFilterCariAdmin,
   getApiErrorMessage,
@@ -318,6 +319,12 @@ describe('KomponenAdmin', () => {
 
     rerender(<BadgeStatus aktif={1} />);
     expect(screen.getByText('Aktif')).toBeInTheDocument();
+
+    rerender(<BadgeMeragukan meragukan={1} />);
+    expect(screen.getByText('Ragu')).toBeInTheDocument();
+
+    rerender(<BadgeMeragukan meragukan={0} />);
+    expect(screen.getByText('Pasti')).toBeInTheDocument();
     rerender(<BadgeStatus aktif={0} />);
     expect(screen.getByText('Nonaktif')).toBeInTheDocument();
   });
@@ -444,5 +451,22 @@ describe('KomponenAdmin', () => {
 
     expect(screen.getByText('B')).toBeInTheDocument();
     expect(screen.queryByTestId('paginasi-mock')).not.toBeInTheDocument();
+  });
+
+  it('TabelAdmin mendukung alignment center pada kolom', () => {
+    render(
+      <TabelAdmin
+        kolom={[{ key: 'skor', label: 'Skor', align: 'center' }]}
+        data={[{ id: 3, skor: 99 }]}
+        isLoading={false}
+        isError={false}
+        total={1}
+        limit={0}
+        offset={0}
+      />
+    );
+
+    expect(screen.getByRole('columnheader', { name: 'Skor' }).className).toContain('text-center');
+    expect(screen.getByText('99').className).toContain('text-center');
   });
 });

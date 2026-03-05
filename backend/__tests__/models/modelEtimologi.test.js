@@ -137,6 +137,46 @@ describe('ModelEtimologi', () => {
     expect(result).toEqual({ data: [{ id: 12, aktif: true }], total: 1 });
   });
 
+  it('daftarAdmin dengan filter aktif=0 menambahkan kondisi status false', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 13, aktif: false }] });
+
+    const result = await ModelEtimologi.daftarAdmin({ aktif: '0', limit: 10, offset: 1 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('e.aktif = $1'),
+      [false]
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $2 OFFSET $3'),
+      [false, 10, 1]
+    );
+    expect(result).toEqual({ data: [{ id: 13, aktif: false }], total: 1 });
+  });
+
+  it('daftarAdmin dengan filter meragukan menambahkan kondisi meragukan', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 14, meragukan: false }] });
+
+    const result = await ModelEtimologi.daftarAdmin({ meragukan: '0', limit: 10, offset: 1 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('e.meragukan = $1'),
+      [false]
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $2 OFFSET $3'),
+      [false, 10, 1]
+    );
+    expect(result).toEqual({ data: [{ id: 14, meragukan: false }], total: 1 });
+  });
+
   it('daftarAdmin memakai fallback default limit dan offset', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '0' }] })

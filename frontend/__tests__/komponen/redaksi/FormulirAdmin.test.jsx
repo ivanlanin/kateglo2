@@ -8,6 +8,7 @@ import {
   SelectField,
   TextareaField,
   ToggleAktif,
+  ToggleMeragukan,
   useFormPanel,
 } from '../../../src/komponen/redaksi/FormulirAdmin';
 
@@ -62,6 +63,7 @@ describe('FormulirAdmin', () => {
         />
         <CheckboxField label="Tampilkan" name="tampilkan" value onChange={onChange} />
         <ToggleAktif value={1} onChange={onChange} />
+        <ToggleMeragukan value={1} onChange={onChange} />
         <FormFooter onSimpan={onSimpan} onBatal={onBatal} onHapus={onHapus} isPending={false} modeTambah={false} />
         <PesanForm error="Err" sukses="Ok" />
       </div>
@@ -72,6 +74,7 @@ describe('FormulirAdmin', () => {
     fireEvent.change(screen.getByLabelText(/Peran/), { target: { value: 'admin' } });
     fireEvent.click(screen.getByLabelText(/Tampilkan/));
     fireEvent.click(screen.getAllByRole('button')[0]);
+    fireEvent.click(screen.getAllByRole('button')[1]);
     fireEvent.click(screen.getByText('Simpan'));
     fireEvent.click(screen.getByText('Batal'));
     fireEvent.click(screen.getByText('Hapus'));
@@ -103,14 +106,19 @@ describe('FormulirAdmin', () => {
         />
         <CheckboxField label="Tampilkan" name="tampilkan" value={false} onChange={onChange} disabled />
         <ToggleAktif value={0} onChange={onChange} disabled />
+        <ToggleMeragukan value={0} onChange={onChange} disabled />
         <FormFooter onSimpan={onSimpan} onBatal={onBatal} isPending={false} modeTambah />
       </div>
     );
 
     expect(screen.getByText('Nonaktif')).toBeInTheDocument();
+    expect(screen.getByText('Pasti')).toBeInTheDocument();
     expect(screen.queryByText('Hapus')).not.toBeInTheDocument();
 
     rerender(<ToggleAktif value={0} onChange={onChange} />);
+    fireEvent.click(screen.getByRole('button'));
+
+    rerender(<ToggleMeragukan value={0} onChange={onChange} />);
     fireEvent.click(screen.getByRole('button'));
   });
 });

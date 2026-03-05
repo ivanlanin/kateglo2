@@ -339,6 +339,20 @@ describe('apiAdmin', () => {
       },
     });
 
+    const etimologiMeragukan = useDaftarEtimologiAdmin({ meragukan: '0' });
+    await etimologiMeragukan.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/etimologi', {
+      params: {
+        limit: 50,
+        cursor: undefined,
+        direction: 'next',
+        lastPage: undefined,
+        q: undefined,
+        aktif: undefined,
+        meragukan: '0',
+      },
+    });
+
     const autocompleteEntriEtimologi = useAutocompleteEntriEtimologi({ q: '  kata ', limit: 9 });
     expect(autocompleteEntriEtimologi.enabled).toBe(true);
     await autocompleteEntriEtimologi.queryFn();
