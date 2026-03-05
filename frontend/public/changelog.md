@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-03-05 Kamis
+
+- Menyeragamkan jumlah data per halaman (*paging*) redaksi menjadi 50
+
 ## 2026-03-04 Rabu
 
 - Membuat halaman redaksi untuk melihat statistik [Susun Kata Bebas](/gim/susun-kata/bebas)
