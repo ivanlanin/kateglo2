@@ -115,7 +115,7 @@ describe('apiAdmin', () => {
       params: {
         domain: undefined,
         periode: '7hari',
-        limit: 200,
+        limit: 50,
         cursor: undefined,
         direction: 'next',
         lastPage: undefined,
@@ -153,7 +153,7 @@ describe('apiAdmin', () => {
       params: {
         domain: undefined,
         periode: undefined,
-        limit: 200,
+        limit: 50,
         cursor: undefined,
         direction: 'next',
         lastPage: undefined,
@@ -950,7 +950,7 @@ describe('apiAdmin', () => {
     await daftarDefault.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/pencarianHitam', {
       params: {
-        limit: 200,
+        limit: 50,
         cursor: undefined,
         direction: 'next',
         lastPage: undefined,

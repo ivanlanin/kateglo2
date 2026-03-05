@@ -32,7 +32,7 @@ function isValidAktifValue(value) {
  */
 router.get('/', periksaIzin('lihat_pencarian'), async (req, res, next) => {
   try {
-    const { limit, offset } = parsePagination(req.query, { defaultLimit: 200, maxLimit: 1000 });
+    const { limit, offset } = parsePagination(req.query, { defaultLimit: 50, maxLimit: 1000 });
     const q = parseSearchQuery(req.query.q);
     const aktif = parseTrimmedString(req.query.aktif);
     const aktifFilter = ['0', '1'].includes(aktif) ? aktif : '';

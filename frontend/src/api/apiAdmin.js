@@ -107,7 +107,7 @@ export function useStatistikAdmin() {
 export function useStatistikPencarianAdmin({
   domain = '',
   periode = '7hari',
-  limit = 200,
+  limit = 50,
   cursor = null,
   direction = 'next',
   lastPage = false,
@@ -143,7 +143,7 @@ export function useStatistikPencarianAdmin({
 }
 
 export function useDaftarPencarianHitamAdmin({
-  limit = 200,
+  limit = 50,
   cursor = null,
   direction = 'next',
   lastPage = false,

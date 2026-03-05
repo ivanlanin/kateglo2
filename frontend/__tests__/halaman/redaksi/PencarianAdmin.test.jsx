@@ -185,7 +185,7 @@ describe('PencarianAdmin', () => {
     expect(lastCallAfterSubmit).toEqual(expect.objectContaining({
       domain: '3',
       periode: '30hari',
-      limit: 200,
+      limit: 50,
       tanggalMulai: '2026-02-01',
       tanggalSelesai: '2026-02-28',
       cursor: null,
@@ -198,7 +198,7 @@ describe('PencarianAdmin', () => {
     expect(lastCallAfterReset).toEqual(expect.objectContaining({
       domain: '',
       periode: '7hari',
-      limit: 200,
+      limit: 50,
       tanggalMulai: '',
       tanggalSelesai: '',
       cursor: null,

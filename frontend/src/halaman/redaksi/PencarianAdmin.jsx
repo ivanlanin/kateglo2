@@ -59,7 +59,7 @@ function formatTanggalSingkat(value) {
 }
 
 function PencarianAdmin() {
-  const { limit, currentPage, cursor, direction, lastPage, setOffset } = usePencarianAdmin(200);
+  const { limit, currentPage, cursor, direction, lastPage, setOffset } = usePencarianAdmin(50);
   const {
     cari: cariHitam,
     setCari: setCariHitam,
@@ -73,7 +73,7 @@ function PencarianAdmin() {
     cursor: cursorHitam,
     direction: directionHitam,
     lastPage: lastPageHitam,
-  } = usePencarianAdmin(100);
+  } = usePencarianAdmin(50);
 
   const [filterDraft, setFilterDraft] = useState({
     domain: '',
