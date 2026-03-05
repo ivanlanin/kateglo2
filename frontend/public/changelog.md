@@ -3,6 +3,7 @@
 ## 2026-03-05 Kamis
 
 - Menyeragamkan jumlah data per halaman (*paging*) redaksi menjadi 50
+- Membenahi data etimologi dari Loan-words in Indonesian and Malay
 
 ## 2026-03-04 Rabu
 

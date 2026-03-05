@@ -20,6 +20,7 @@ import {
   TabelAdmin,
   BadgeStatus,
   opsiFilterStatusAktif,
+  opsiFilterMeragukan,
   getApiErrorMessage,
   potongTeks,
   usePencarianAdmin,
@@ -161,8 +162,10 @@ function EtimologiAdmin() {
 
   const [draftFilterBahasa, setDraftFilterBahasa] = useState('');
   const [draftFilterAktif, setDraftFilterAktif] = useState('');
+  const [draftFilterMeragukan, setDraftFilterMeragukan] = useState('');
   const [filterBahasa, setFilterBahasa] = useState('');
   const [filterAktif, setFilterAktif] = useState('');
+  const [filterMeragukan, setFilterMeragukan] = useState('');
 
   const { data: resp, isLoading, isError } = useDaftarEtimologiAdmin({
     limit,
@@ -172,6 +175,7 @@ function EtimologiAdmin() {
     q,
     bahasa: filterBahasa,
     aktif: filterAktif,
+    meragukan: filterMeragukan,
   });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailEtimologiAdmin(idDariPath);
 
@@ -322,13 +326,16 @@ function EtimologiAdmin() {
     hapusCari();
     setDraftFilterBahasa('');
     setDraftFilterAktif('');
+    setDraftFilterMeragukan('');
     setFilterBahasa('');
     setFilterAktif('');
+    setFilterMeragukan('');
   };
 
   const handleCari = () => {
     setFilterBahasa(draftFilterBahasa);
     setFilterAktif(draftFilterAktif);
+    setFilterMeragukan(draftFilterMeragukan);
     kirimCari(cari);
   };
 
@@ -347,6 +354,13 @@ function EtimologiAdmin() {
             onChange: setDraftFilterAktif,
             options: opsiFilterStatusAktif,
             ariaLabel: 'Filter status etimologi',
+          },
+          {
+            key: 'meragukan',
+            value: draftFilterMeragukan,
+            onChange: setDraftFilterMeragukan,
+            options: opsiFilterMeragukan,
+            ariaLabel: 'Filter meragukan',
           },
           {
             key: 'bahasa',

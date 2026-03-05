@@ -1,7 +1,7 @@
 # Audit dan Rencana Perbaikan Tabel Etimologi
 
 **Tanggal**: 2026-03-05
-**Status**: Analisis selesai — belum ada perubahan ke database
+**Status**: Selesai — lihat `202603051600_perbaikan-data-etimologi.md` untuk laporan pelaksanaan
 **Konteks**: Temuan dari proyek deteksi sisipan/dwipurwa
 **Dokumen terkait**: `_docs/202603/202603050001_deteksi-sisipan-dwipurwa-entri-dasar.md` §9.9
 

@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-04T14:46:07.473Z
+-- Generated: 2026-03-05T09:47:38.668Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -296,6 +296,7 @@ create table etimologi (
   kata_asal text,
   arti_asal text,
   sumber_id integer references sumber(id) on delete restrict on update cascade,
+  meragukan boolean not null default false,
   constraint etimologi_indeks_check check (TRIM(BOTH FROM indeks) <> ''::text)
 );
 create index idx_etimologi_aktif on etimologi using btree (aktif);
@@ -306,6 +307,7 @@ create index idx_etimologi_indeks on etimologi using btree (indeks);
 create index idx_etimologi_indeks_homonim on etimologi using btree (indeks, homonim);
 create index idx_etimologi_lafal on etimologi using btree (lafal);
 create index idx_etimologi_lwim_ref on etimologi using btree (lwim_ref);
+create index idx_etimologi_meragukan on etimologi using btree (meragukan);
 create index idx_etimologi_sumber_id on etimologi using btree (sumber_id);
 
 create table etimologi_lwim (

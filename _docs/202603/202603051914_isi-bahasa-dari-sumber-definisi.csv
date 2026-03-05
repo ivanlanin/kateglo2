@@ -1,0 +1,753 @@
+id,indeks,entri_id,tipe,bahasa_baru,kata_asal_baru,aktif_baru,sumber_def
+30,abiosfer,66,tunggal,Belanda,a- + biosfér,True,the part of the world not occupied by the biosphere  [from a- (< Belanda) + from
+95,adakala,221,tunggal,Sanskerta,,True,sometimes  [from ada + from kala (< Sanskerta)]
+125,adibangkit,282,tunggal,Sanskerta,,True,morning bugle call  [from adi- (< Sanskerta) + < loan bangkit]
+126,adibintang,284,tunggal,Sanskerta,,True,superstar  [from adi- (< Sanskerta) + < loan bintang]
+127,adibusana,286,tunggal,Sanskerta,adi- + busana,True,haute couture  [from adi- (< Sanskerta) + from busana (< Sanskerta)]
+128,adicita,287,tunggal,Sanskerta,adi- + cita,True,ideology  [from adi- (< Sanskerta) + from cita (< Sanskerta)]
+129,adidaya,288,tunggal,Sanskerta,adi- + daya,True,superpower  [from adi- (< Sanskerta) + from daya (< Sanskerta)]
+132,adikarya,298,tunggal,Sanskerta,adi- + karya,True,masterpiece  [from adi- (< Sanskerta) + from karya (< Sanskerta)]
+133,adikodrati,300,compound,,adi- (Sanskerta) + kodrati (Arab),False,supernatural  [from adi- (< Sanskerta) + from kodrati (< Arab)]
+138,adikuasa,304,tunggal,Sanskerta,adi- + kuasa,True,superpower  [from adi- (< Sanskerta) + from kuasa (< Sanskerta)]
+141,adimarga,308,tunggal,Sanskerta,adi- + marga,True,boulevard  [from adi- (< Sanskerta) + from marga (< Sanskerta)]
+144,adipenghantar,314,tunggal,Sanskerta,,True,superconductor  [from adi- (< Sanskerta) + < loan penghantar]
+147,adipura,319,tunggal,Sanskerta,adi- + pura,True,the cleanest (etc.) city (chosen annually)  [from adi- (< Sanskerta) + from pura
+149,adiratna,322,tunggal,Sanskerta,adi- + ratna,True,"jewel, beautiful woman  [from adi- (< Sanskerta) + from ratna (< Sanskerta)]"
+152,adisiswa,326,tunggal,Sanskerta,adi- + siswa,True,the best student  [from adi- (< Sanskerta) + from siswa (< Sanskerta)]
+154,aditokoh,329,tunggal,Sanskerta,,True,very prominent figure  [from adi- (< Sanskerta) + < loan tokoh]
+156,adiwarna,331,tunggal,Sanskerta,adi- + warna,True,glowing with colour  [from adi- (< Sanskerta) + from warna (< Sanskerta)]
+157,adiwidia,332,tunggal,Sanskerta,adi- + widya,True,distinguished scholarship  [from adi- (< Sanskerta) + from widya (< Sanskerta)]
+243,agamawi,490,compound,,agama (Sanskerta) + -wi (Arab),False,religious person  [from agama (< Sanskerta) + from -wi (< Arab)]
+246,agamis,495,tunggal_multi_fallback,Sanskerta,,True,religious (person)  [based on agama (< Sanskerta) + -is 2 (< Belanda)]
+283,agrisilvikultur,576,compound,,agri- (Belanda) + silvikultur (Inggris),False,agroforestry  [from agri- (< Belanda) or < Inggris agri- + from silvikultur (< I
+286,agroekonomi,583,tunggal,Belanda,agro- + ékonomi,True,economics of agriculture  [from  agro- (< Belanda) + from  ékonomi (< Belanda)]
+287,agroekosistem,584,tunggal,Belanda,agro- + ékosistem,True,agricultural ecosystem  [from  agro- (< Belanda) + from  ékosistem (< Belanda)]
+290,agroindustri,591,tunggal,Belanda,agro- + industri,True,agricultural industry  [from agro- (< Belanda) + from industri (< Belanda)]
+291,agrokimia,592,compound,,agro- (Belanda) + kimia (Arab),False,chemicals used in agriculture  [from agro- (< Belanda) (< Latin) + from kimia (<
+302,ahadiat,618,tidak,,,False,
+314,ahwal,636,tidak,,,False,
+423,aktinokimia,867,tunggal,Arab,,True,radiation chemistry  [based upon Du actino + kimia (< Arab)]
+456,akupunkturis,926,tunggal,Belanda,,True,acupuncturist  [from akupunktur (< Belanda) + from -is 2 (< Belanda)]
+479,alamas,962,tidak,,,False,
+529,aliah,1078,tidak,,,False,
+563,alkana,1142,tidak,,,False,alkanes
+595,aloleks,1197,tunggal_multi_fallback,Belanda,,True,combinatory variant of a lexeme  [based on alo- (< Belanda) (< Yunani) + léksém 
+606,alpokat,1239,tidak,,,False,
+623,alumni,1270,tidak,,,False,alumni
+653,amarah,1320,tidak,,,False,
+755,anadrom,1618,tidak,,,False,anadromous animal
+787,anasional,1666,tunggal,Belanda,a- + nasional,True,‘anational’  [from  a- (< Belanda) + from  nasional (< Belanda)]
+839,angkasawan,1835,tunggal,Sanskerta,angkasa + -wan,True,astronaut; broadcaster  [from angkasa (< Sanskerta) + from -wan (< Sanskerta)]
+840,angkasawati,1836,tunggal,Sanskerta,angkasa + -wati,True,astronaut or broadcaster  [from angkasa (< Sanskerta) + from -wati (< Sanskerta)
+867,anjangkarya,1924,tunggal,Sanskerta,,True,working visit  [133.2 < Sanskerta ājñākārya 133.3]
+896,antarbangsa,1998,tunggal,Sanskerta,antar- + bangsa,True,international  [from antar- (< Sanskerta) + from bangsa (< Sanskerta)]
+897,antarbenua,1999,tunggal,Sanskerta,,True,intercontinental  [from antar- (< Sanskerta) + < loan benua]
+898,antardaerah,2000,compound,,antar- (Sanskerta) + daerah (Arab),False,interdistrict  [from antar- (< Sanskerta) + from daerah (< Arab)]
+904,antarkelompok,2010,tunggal,Sanskerta,,True,intergroup  [from antar- (< Sanskerta) + < loan kelompok]
+905,antarlingkungan,2012,tunggal,Sanskerta,,True,"intercircle, intergroup  [from antar- (< Sanskerta) + < loan lingkungan]"
+906,antarmaster,2013,compound,,antar- (Sanskerta) + master (Inggris),False,tournament between champions  [from antar- (< Sanskerta) + from master (< Inggri
+907,antarmolekul,2014,compound,,antar- (Sanskerta) + molekul (Belanda),False,between molecules  [from antar- (< Sanskerta) + from molekul (< Belanda)]
+908,antarmuka,2015,tunggal,Sanskerta,antar- + muka,True,interface (of computer)  [from antar- (< Sanskerta) + from muka (< Sanskerta)]
+909,antarnegara,2016,tunggal,Sanskerta,antar- + negara,True,international  [from antar- (< Sanskerta) + from negara (< Sanskerta)]
+910,antarplanet,2017,compound,,antar- (Sanskerta) + planét (Belanda),False,interplanetary  [from antar- (< Sanskerta) + from planét (< Belanda)]
+911,antarpribadi,2018,tunggal,Sanskerta,,True,interpersonal  [from antar- (< Sanskerta) + from pribadi (< Belanda or < Portugi
+912,antarpulau,2019,tunggal,Sanskerta,,True,interinsular  [from antar- (< Sanskerta) + < loan pulau]
+913,antarras,2020,compound,,antar- (Sanskerta) + ras (Belanda),False,interracial  [from antar- (< Sanskerta) + from ras (< Belanda)]
+914,antarruang,2021,tunggal,Sanskerta,,True,"between two adjacent spaces, or rooms etc.  [from antar- (< Sanskerta) + < loan "
+915,antarsel,2022,compound,,antar- (Sanskerta) + sél (Belanda),False,between cells  [from antar- (< Sanskerta) + from sél (< Belanda)]
+916,antarsuku,2023,tunggal,Sanskerta,,True,interethnic  [from antar- (< Sanskerta) + < loan suku]
+919,antawacana,2030,tunggal,Sanskerta,,True,dialogue  [prob. from anta(r - (< Sanskerta) + from wacana (< Sanskerta)]
+920,antediluvium,2034,tunggal,Belanda,anté- + diluvium,True,antediluvian age  [from  anté- (< Belanda) (< Latin) + from  diluvium (< Belanda
+934,antianemia,2059,tunggal,Belanda,,True,a medicine to cure anaemia  [from anti- (< Belanda) + from anémia (< Inggris or 
+937,antibeku,2064,tunggal,Belanda,,True,"antifreeze, anticoagulation  [from anti- (< Belanda) + < loan beku]"
+944,antienzim,2075,tunggal,Belanda,anti- + énzim,True,antienzyme  [from anti- (< Belanda) + from énzim (< Belanda)]
+947,antigravitasi,2080,tunggal,Belanda,anti- + gravitasi,True,antigravitation  [from  anti- (< Belanda) + from  gravitasi (< Belanda)]
+948,antijasad,2085,compound,,anti- (Belanda) + jasad (Arab),False,antibody  [from anti- (< Belanda) + from jasad (< Arab)]
+956,antimateri,2101,tunggal,Belanda,anti- + matéri,True,antimatter  [from  anti- (< Belanda) + from  matéri (< Belanda)]
+959,antimuntah,2104,tunggal,Belanda,,True,medicine to prevent vomiting  [from  anti- (< Belanda) + < loan muntah]
+965,antipenawar,2113,tunggal,Belanda,,True,substance that neutralizes an antidote  [from anti- (< Belanda) + < loan penawar
+982,antiwirawan,2139,compound,,anti- (Belanda) + wira (Sanskerta) + -wan (Sanskerta),False,antihero  [from anti- (< Belanda) from wira (< Sanskerta) + from -wan (< Sansker
+983,antizarah,2140,compound,,anti- (Belanda) + zarah (Arab),False,antiparticle  [from anti- (< Belanda) + from zarah (< Arab)]
+1019,apabila,2215,tunggal,Sanskerta,,True,when  [from apa + from bila (< Sanskerta)]
+1021,apakala,2219,tunggal,Sanskerta,,True,when  [apa + from kala (< Sanskerta)]
+1046,apiun,2271,tidak,,,False,opium
+1100,aras,2368,tunggal,Arab,,True,check ! (in chess)  [prob. < Arab ʿarṣa 602(?)]
+1180,asetimeter,2588,tunggal,Belanda,,True,acid meter  [based on asetiléna (< Belanda) + méter (< Belanda)]
+1190,artesis,2502,tidak,,,False,artesian well
+1231,asasi,2571,tidak,,,False,
+1257,vokalis,40659,tunggal,Belanda,,True,an outspoken critic  [from vokal (< Belanda) + from -is 2 (< Belanda)]
+1271,violces,40581,tidak,,,False,viola (flower)
+1346,asparaga,2656,tunggal_multi_fallback,Belanda,,True,asparagus fern  [based on Belanda-or-Inggris asparagus (< Latin < Yunani)]
+1390,asusila,2727,tunggal,Sanskerta,a- + susila,True,immoral  [from a- (< Sanskerta) + from susila (< Sanskerta)]
+1443,virilisme,40594,tunggal,Belanda,viriel + -isme,True,virility  [from viriel (< Belanda) + from -isme (< Belanda)]
+1504,avertebrata,2901,tunggal,Latin,,True,animals not having a spinal column  [from a- (< Belanda or < Inggris) + from vér
+1512,avokad,2914,tidak,,,False,
+1515,awaair,2921,tunggal,Sanskerta,,True,draining (a field)  [from awa- (< Sanskerta) + < loan air]
+1516,awaarang,2922,tunggal,Sanskerta,,True,decarbonizing  [from awa- (< Sanskerta) + < loan arang]
+1517,awabau,2924,tunggal,Sanskerta,,True,making inodorous  [from awa- (< Sanskerta) + < loan bau]
+1518,awabulu,2926,tunggal,Sanskerta,,True,depilation  [from awa- (< Sanskerta) + < loan bulu]
+1519,awabusa,2927,tunggal,Sanskerta,,True,"not foaming, foamless  [from awa- (< Sanskerta) + < loan busa]"
+1520,awadara,2928,tunggal,Sanskerta,,True,"deflowering, loss of virginity  [from awa- (< Sanskerta) + < loan dara]"
+1521,awahama,2930,tunggal,Sanskerta,,True,disinfection  [from awa- (< Sanskerta) + < loan hama]
+1523,awamineral,2937,compound,,awa- (Sanskerta) + mineral (Belanda),False,not containing minerals  [from awa- (< Sanskerta) + from mineral (< Belanda)]
+1525,awanama,2940,tunggal,Sanskerta,awa- + nama,True,anonymous  [from awa- (< Sanskerta) + from nama (< Sanskerta)]
+1526,awaracun,2945,tunggal,Sanskerta,,True,detoxication  [from awa- (< Sanskerta) + < loan racun]
+1528,awawarna,2954,tunggal,Sanskerta,awa- + warna,True,"decolorized, blanched  [from awa- (< Sanskerta) + from warna (< Sanskerta)]"
+1611,Baitulharam,3234,tunggal,Arab,,True,The Kaabah at Mecca] {from:Arab  [al-  [baituʾl-ḥarām 84-171]
+1615,Baitulmukadas,3239,tunggal,Arab,,True,the Holy Mosque at Jerusalem] {from:Arab  [al-  [baituʾl-muqaddas 84-747]
+1616,Baitulmukadis,3240,tidak,,,False,
+1692,banat,3470,tidak,,,False,
+1716,bangsat,3595,tidak,,,False,
+1717,bangsawan,3597,tunggal,Sanskerta,bangsa + -wan,True,noble  [from bangsa (< Sanskerta) + from -wan (< Sanskerta)]
+1727,bansai,3625,tidak,,,False,
+1753,bari,3723,tunggal,Arab,,True,The Creator] {from:Arab  [al-  [bāriʾ 49]
+1789,basat,3795,tidak,,,False,
+1799,basir,3813,tidak,,,False,
+1834,baureksa,3910,tidak,,,False,
+1850,beasiswa,3965,tunggal,Sanskerta,bea + siswa,True,scholarship  [from bea (< Sanskerta) + from siswa (< Sanskerta)]
+1893,beledi,4201,tidak,,,False,
+1917,bendaharawan,4368,tunggal,Sanskerta,bendahara + -wan,True,treasurer  [from bendahara (< Sanskerta) + from -wan (< Sanskerta)]
+1919,bendara,4374,tidak,,,False,
+1926,benduan,4396,tidak,,,False,
+1933,bengkerap,4446,tidak,,,False,
+1959,beritawan,4646,tunggal,Sanskerta,berita + -wan,True,journalist  [from berita (< Sanskerta) + from -wan (< Sanskerta)]
+1994,betonisasi,4796,tunggal,Belanda,beton + -isasi,True,covering with concrete  [from beton (< Belanda) + from -isasi (< Belanda)]
+2000,biarawan,4830,tunggal,Sanskerta,biara + -wan,True,monk  [from biara (< Sanskerta) + from -wan (< Sanskerta)]
+2001,biarawati,4831,tunggal,Sanskerta,,True,nun  [from biara (< Sanskerta) + from -wati (< Sanskerta]
+2043,bilamana,4951,tunggal,Sanskerta,,True,when  [from bila (< Sanskerta) + < loan mana]
+2065,binaraga,4994,tunggal,Arab,,True,"physical exercise, bodybuilding  [from bina (< Arab) + from raga]"
+2066,binaragawan,4995,compound,,bina (Arab) + -wan (Sanskerta),False,bodybuilder  [from bina (< Arab) + from raga + from -wan (< Sanskerta)]
+2087,biokimia,5073,tunggal,Arab,,True,biochemistry  [from bio- (< Belanda or < Inggris) (< Yunani) + from kimia (< Ara
+2105,biosekuen,5101,tunggal_multi_fallback,Belanda,,True,sequence of different geological layers  [based on bio- (< Belanda) (< Yunani) +
+2119,bipolisentrisme,5118,tunggal,Belanda,bi- + poliséntrisme,True,the changing of political blocks  [from bi- (< Belanda) or (< Inggris) bi- (< La
+2127,birofaks,5138,compound,,biro (Belanda) + faks (Inggris),False,fax  [from biro (< Belanda) + from faks (< Inggris)]
+2156,bit,5180,tidak,,,False,unit of measurement of information; the amount of information in a system having
+2162,biverbal,5195,tunggal,Belanda,bi- + vérbal,True,compatible of words  [from bi- (< Belanda) or (< Inggris) bi- (< Latin) + from v
+2221,bonafid,5347,tidak,,,False,
+2418,cakmar,6002,tidak,,,False,
+2433,candrasengkala,6110,tunggal,Sanskerta,candra + sengkala,True,chronogram in words or pictures  [from candra (< Sanskerta) + from sengkala (< S
+2436,cang,6114,tidak,,,False,
+2457,caturlarik,6278,tunggal,Sanskerta,,True,a fourline verse  [from catur (< Sanskerta) + < loan larik]
+2458,caturtunggal,6279,tunggal,Sanskerta,,True,"quadripartite, four in one  [from catur (< Sanskerta) + < loan tunggal]"
+2459,caturwarga,6281,tunggal,Sanskerta,catur + warga,True,family consisting of two parents and two children  [from catur (< Sanskerta) + f
+2463,cawi,6296,tidak,,,False,
+2492,zoosemiotika,41446,tunggal,Belanda,zoo- + sémiotika,True,research on animal communication  [from zoo- (< Belanda) (< Yunani) + from sémio
+2566,zariat,41332,tidak,,,False,
+2567,zariah,41330,tunggal,Arab,zarah + -iah,True,"seed, offspring  [from zarah (< Arab) + from -iah (< Arab)]"
+2570,zapin,41325,tidak,,,False,
+2589,vulgar,40688,tidak,,,False,
+2619,yu,41254,tidak,,,False,
+2702,wisudawati,41080,tunggal,Sanskerta,wisuda + -wati,True,graduand (woman)  [from wisuda (< Sanskerta) + from -wati (< Sanskerta)]
+2703,wisudawan,41079,tunggal,Sanskerta,wisuda + -wan,True,graduand (man)  [from wisuda (< Sanskerta) + from -wan (< Sanskerta)]
+2707,wisatawan,41071,tunggal,Sanskerta,wisata + -wan,True,tourist  [from wisata (< Sanskerta) + from -wan (< Sanskerta)]
+2710,wirausaha,41062,tunggal,Sanskerta,wira- + usaha,True,"entrepreneur, businessman  [from wira- (< Sanskerta) + from usaha (< Sanskerta)]"
+2711,wiraswasta,41061,tunggal,Sanskerta,wira + swasta,True,private entrepreneur  [from wira (< Sanskerta) + from swasta (< Sanskerta)]
+2712,wirasuara,41060,tunggal,Sanskerta,wira- + suara,True,singer (gamelan)  [from wira- (< Sanskerta) + from suara (< Sanskerta)]
+2716,wirakarya,41055,tunggal,Sanskerta,wira- + karya,True,jamboree  [from wira- (< Sanskerta) + from karya (< Sanskerta)]
+2718,wirabank,41052,compound,,wira (Sanskerta) + bank (Belanda),False,guard at a bank  [from wira (< Sanskerta) + from bank (< Belanda)]
+2730,wijayakusuma,41023,tunggal,Sanskerta,wijaya + kusuma,True,victory flower  [from wijaya (< Sanskerta) + from kusuma (< Sanskerta)]
+2734,widyawisata,41017,tunggal,Sanskerta,widya + wisata,True,study tour  [from widya (< Sanskerta) + from wisata (< Sanskerta)]
+2753,we,40953,tidak,,,False,
+2754,we,40954,tidak,,,False,
+2781,wasangka,40901,compound,,wa- (Arab) + sangka (Sanskerta),False,suspicion  [from wa- (< Arab) + from sangka (< Sanskerta)]
+2784,wartawati,40889,tunggal,Sanskerta,warta + -wati,True,female journalist  [from warta (< Sanskerta) + from -wati (< Sanskerta)]
+2785,wartawan,40888,tunggal,Sanskerta,warta + -wan,True,journalist  [from warta (< Sanskerta) + from -wan (< Sanskerta)]
+2820,walafiat,40787,tidak,,,False,
+2832,wahid,40754,tidak,,,False,
+2881,virilis,40593,tunggal,Belanda,,True,showing virility  [from viril (< Belanda) + from -is 1 (< Belanda)]
+2927,vaskular,40463,tidak,,,False,
+2958,valas,40422,tidak,,,False,foreign currency
+3026,upaduta,40239,tunggal,Sanskerta,upa- + duta,True,deputy to ambassador  [from upa- (< Sanskerta) + from duta (< Sanskerta)]
+3056,ungti,40171,tidak,,,False,
+3074,ultraungu,40029,tunggal,Belanda,,True,ultraviolet  [from ultra- (< Belanda) (< Latin) + from ungu]
+3080,ultralembayung,40018,tunggal,Belanda,,True,ultraviolet  [from ultra- (< Belanda) (< Latin) + from lembayung]
+3131,tunawisma,39698,tunggal,Sanskerta,tuna- + wisma,True,homeless  [from tuna- (< Sanskerta) + from wisma (< Sanskerta)]
+3133,tunasusila,39695,tunggal,Sanskerta,tuna- + susila,True,immoral  [from tuna- (< Sanskerta) + from susila (< Sanskerta)]
+3134,tunarungu,39692,tunggal,Sanskerta,,True,deaf  [from tuna- (< Sanskerta) + < loan rungu]
+3136,tunakarya,39684,tunggal,Sanskerta,tuna- + karya,True,unemployed  [from tuna- (< Sanskerta) + from karya (< Sanskerta)]
+3138,tunagrahita,39680,tunggal,Sanskerta,tuna- + grahita,True,mentally handicapped  [from tuna- (< Sanskerta) + from grahita (< Sanskerta)]
+3139,tunaganda,39678,tunggal,Sanskerta,,True,multiple disablement  [from tuna- (< Sanskerta) + < loan ganda]
+3141,tunabusana,39676,tunggal,Sanskerta,tuna- + busana,True,undressed  [from tuna- (< Sanskerta) + from busana (< Sanskerta)]
+3142,tunaaksara,39675,tunggal,Sanskerta,tuna- + aksara,True,illiterate  [from tuna- (< Sanskerta) + from aksara (< Sanskerta)]
+3203,triwulan,39462,tunggal,Sanskerta,,True,three months  [from tri- (< Sanskerta) + < loan wulan]
+3204,triwindu,39461,tunggal,Sanskerta,tri- + windu,True,twenty four (Jawa) years  [from tri- (< Sanskerta) + from windu (< Sanskerta)]
+3210,triunsur,39453,compound,,tri- (Sanskerta) + unsur (Arab),False,consisting of three elements  [from tri- (< Sanskerta) + from unsur (< Arab)]
+3213,tritunggal,39450,tunggal,Sanskerta,,True,trinity  [from tri- (< Sanskerta) + < loan tunggal]
+3219,triprasetia,39436,tunggal,Sanskerta,tri- + prasetia,True,threefold oath of loyalty  [from tri- (< Sanskerta) + from prasetia (< Sanskerta
+3232,trilomba,39418,tunggal,Sanskerta,,True,triathlon  [from tri- (< Sanskerta) + < loan lomba]
+3236,trilipat,39415,tunggal,Sanskerta,,True,threefold  [from tri- (< Sanskerta) + < loan lipat]
+3237,trilingga,39414,compound,,tri- (Sanskerta) + lingua (Latin),False,triple reduplication  [from tri- (< Sanskerta) + from lingua (< Latin)]
+3251,tridarma,39391,tunggal,Sanskerta,tri- + darma,True,"the three responsibilities (of universities, etc.)  [from tri- (< Sanskerta) + f"
+3252,tributa,39389,tunggal,Sanskerta,tri- + buta,True,"three shortcomings (lack of literacy, Indonesian language, arithmetic)  [from tr"
+3256,tribulan,39386,tidak,,,False,
+3264,tren,39368,tidak,,,False,
+3441,titinada,39003,tunggal,Sanskerta,,True,note (music)  [from titi + from nada (< Sanskerta)]
+3548,termolistrik,38650,tunggal,Belanda,térmo- + listrik,True,thermo-electricity  [from térmo- (< Belanda) + from listrik (< Belanda)]
+3552,termokimia,38645,compound,,térmo- (Belanda) + kimia (Arab),False,thermochemistry  [from térmo- (< Belanda) + from kimia (< Arab)]
+3553,termohigrograf,38644,tunggal,Belanda,térmo- + higrograf,True,combination of a hygrograph and a thermograph  [from térmo- (< Belanda) + from h
+3580,terhal,,tunggal,Arab,,False,"hindered, caught up  [from ter- + hal (< Arab)]"
+3672,telenovela,38074,compound,,télé- (Belanda) + novéla (Inggris),False,(short) story for television  [from télé- (< Belanda) (< Yunani) + from novéla (
+3720,teknologiwan,37955,compound,,téknologi (Belanda) + -wan (Sanskerta),False,technologist  [from téknologi (< Belanda) + from -wan (< Sanskerta)]
+3722,teknokratisme,37953,tunggal,Belanda,téknokrat + -isme,True,technocracy  [from téknokrat (< Belanda) + from -isme (< Belanda)]
+3746,teatris,37830,tunggal,Belanda,,True,theatrical  [from téater (< Belanda) + from -is 1 (< Belanda)]
+3762,tawa,37785,tidak,,,False,
+3781,tata usaha,37722,tunggal,Sanskerta,tata + usaha,True,administration  [from tata (< Sanskerta) + from usaha (< Sanskerta)]
+3782,tata praja,37721,tunggal,Sanskerta,tata + praja,True,public administration  [from tata (< Sanskerta) + from praja (< Sanskerta)]
+3783,tata negara,37719,tunggal,Sanskerta,tata + negara,True,form of government  [from tata (< Sanskerta) + from negara (< Sanskerta)]
+3785,tata guna,37717,tunggal,Sanskerta,tata + guna,True,instructions for use  [from tata (< Sanskerta) + from guna (< Sanskerta)]
+3786,tata bahasa,37716,tunggal,Sanskerta,tata + bahasa,True,grammar  [from tata (< Sanskerta) + from bahasa (< Sanskerta)]
+3865,tanwujud,37545,tunggal,Arab,,True,non-existent  [from tan- + from wujud (< Arab)]
+3996,taju,37169,tidak,,,False,
+4004,taifun,37149,tidak,,,False,typhoon
+4016,tahiat,37130,tidak,,,False,
+4111,syarab,36968,tunggal,Arab,,True,"strong drink, alcohol] {from:Arab sharāb} 462  [CF. serbat"
+4123,Syam,36955,tidak,,,False,"Syria, Damascus] from:Arab  [ash-  [shām Wehr1961:449]"
+4132,syajar khuldi,36945,tunggal,Arab,,True,"tree of immortality (Q.20 ,120)] {from:Arab shajarat  [iʾl-  [ khuldi 455-254]"
+4165,swempak,36913,tidak,,,False,
+4166,swausaha,36911,tunggal,Sanskerta,swa- + usaha,True,on one’s own initiative  [from swa- (< Sanskerta) + from usaha (< Sanskerta)]
+4168,swastanisasi,36907,compound,,swasta (Sanskerta) + -isasi (Belanda),False,to privatize  [from swasta (< Sanskerta) + from -isasi (< Belanda)]
+4171,swasembada,36903,tunggal,Sanskerta,swa- + sembada,True,selfsufficient  [from swa- (< Sanskerta) + from sembada (< Sanskerta)]
+4174,swapraja,36898,tunggal,Sanskerta,swa- + praja,True,autonomous  [from swa- (< Sanskerta) + from praja (< Sanskerta)]
+4175,swanama,36894,tunggal,Sanskerta,swa- + nama,True,one’s own name  [from swa- (< Sanskerta) + from nama (< Sanskerta)]
+4176,swalayan,36893,tunggal,Sanskerta,,True,self-service  [from swa- (< Sanskerta) + < loan layan]
+4177,swakontradiksi,36892,compound,,swa- (Sanskerta) + kontradiksi (Belanda),False,self-contradiction  [from swa- (< Sanskerta) + from kontradiksi (< Belanda)]
+4178,swakendali,36891,tunggal,Sanskerta,,True,self-control  [from swa- (< Sanskerta) + < loan kendali]
+4179,swakelola,36890,tunggal,Sanskerta,,True,self-management  [from swa- (< Sanskerta) + < loan kelola]
+4180,swakarya,36889,tunggal,Sanskerta,swa- + karya,True,self-developing  [from swa- (< Sanskerta) + from karya (< Sanskerta)]
+4182,swakaji,36887,tunggal,Sanskerta,,True,self-study  [from swa- (< Sanskerta) + < loan kaji]
+4184,swaimbas,36884,tunggal,Sanskerta,,True,self-induction  [from swa- (< Sanskerta) + < loan imbas]
+4185,swaharga,36883,tunggal,Sanskerta,swa- + harga,True,self-respect  [from swa- (< Sanskerta) + from harga (< Sanskerta)]
+4187,swadisiplin,36879,compound,,swa- (Sanskerta) + disiplin (Belanda),False,self-discipline  [from swa- (< Sanskerta) + from disiplin (< Belanda)]
+4189,swadaya,36876,tunggal,Sanskerta,swa- + daya,True,self-reliance  [from swa- (< Sanskerta) + from daya (< Sanskerta)]
+4190,swadarma,36875,tunggal,Sanskerta,swa- + darma,True,one’s own right or duty  [from swa- (< Sanskerta) + from darma (< Sanskerta)]
+4191,swadana,36874,tunggal,Sanskerta,swa- + dana,True,self-provided finance  [from swa- (< Sanskerta) + from dana (< Sanskerta)]
+4221,surahi,36772,tunggal,Arab,surah + -i,True,referring to a surah  [from surah (< Arab) + from -i (< Arab)]
+4228,supramolekuler,36760,tunggal,Belanda,supra- + molekulér,True,supramolecular  [from supra- (< Belanda) (< Latin) + from molekulér (< Belanda)]
+4230,supraalami,36758,tunggal,Belanda,,True,supernatural  [from supra (< Belanda) + alami (< Arab)]
+4256,superinfeksi,36722,tunggal,Belanda,super- + inféksi,True,superinfection  [from super- (< Belanda) (< Latin) + from inféksi (< Belanda)]
+4260,supercepat,36716,tunggal,Belanda,,True,very fast  [from super- (< Belanda) (< Latin) + from cepat]
+4261,superblok,36715,tunggal,Belanda,super- + blok,True,a huge block of houses  [from super- (< Belanda) (< Latin) + from blok (< Beland
+4294,sulfonamida,36557,tidak,,,False,sulphonamide
+4304,sukuisme,36533,tunggal,Belanda,,True,ethnic chauvinism  [from suku + from -isme (< Belanda)]
+4311,sukarelawan,36515,compound,,suka (Sanskerta) + réla (Arab) + -wan (Sanskerta),False,volunteer  [from suka (< Sanskerta) + from réla (< Arab) + from -wan (< Sanskert
+4312,sukarela,36514,compound,,suka (Sanskerta) + réla (Arab),False,voluntary  [from suka (< Sanskerta) + from réla (< Arab)]
+4329,sugra,36483,tidak,,,False,
+4365,suborganisasi,36420,tunggal,Belanda,sub- + organisasi,True,subdivision of an organisation  [from sub- (< Belanda) (< Latin) + from organisa
+4373,subletal,36410,tunggal,Belanda,sub- + létal,True,sublethal  [from sub- (< Belanda) (< Latin) + from létal (< Belanda)]
+4374,sublema,36409,tunggal,Belanda,sub- + léma,True,subentry  [from sub- (< Belanda) (< Latin) + from léma (< Belanda)]
+4376,subkontraktor,36407,compound,,sub- (Belanda) + kontraktor (Inggris),False,subcontractor  [from sub- (< Belanda) (< Latin) + from kontraktor (< Inggris)]
+4382,subirigasi,36401,tunggal,Belanda,sub- + irigasi,True,subirrigation  [from sub- (< Belanda) (< Latin) + from irigasi (< Belanda)]
+4385,subgeneralisasi,36397,tunggal,Belanda,sub- + géneralisasi,True,generalization of limited significance  [from sub- (< Belanda) (< Latin) + from 
+4386,subetnik,36394,compound,,sub- (Belanda) + étnik (Inggris),False,ethnic subdivision  [from sub- (< Belanda) (< Latin) + from étnik (< Inggris)]
+4388,subentri,36392,compound,,sub- (Belanda) + éntri (Inggris),False,sub-entry  [from sub- (< Belanda) (< Latin) + from éntri (< Inggris)]
+4390,subdirektorat,36390,tunggal,Belanda,sub- + diréktorat,True,submanagement  [from sub- (< Belanda) (< Latin) + from diréktorat (< Belanda)]
+4391,subbagian,36389,tunggal,Belanda,,True,subparagraph  [from sub- (< Belanda) (< Latin) + < loan bagian]
+4392,subbab,36388,tunggal,Arab,,True,subchapter  [from sub- (< Belanda or < Inggris) (< Latin) + from bab (< Arab)]
+4461,stimulan,36272,tidak,,,False,
+4483,stereokimia,36241,tunggal,Arab,,True,stereochemistry  [from stéréo- < Belanda or < Inggris) + from kimia (< Arab)]
+4516,statuta,36198,tidak,,,False,statutes
+4557,sripanggung,36147,tunggal,Sanskerta,,True,prima donna  [from sri (< Sanskerta) + < loan panggung]
+4586,spiralisasi,36104,tunggal,Belanda,spiral + -isasi,True,the introduction of the i.u.d. contraceptive  [from spiral (< Belanda) + from -i
+4654,pribumi,30047,compound,,pri- (Jawa) + bumi (Sanskerta),False,indigenous  [from pri- (< Jawa) + from bumi (< Sanskerta)]
+4693,sosionasional,36006,tunggal,Belanda,sosio- + nasional,True,related to social and national problems  [from sosio- (< Belanda) (< Latin) + fr
+4702,sosiodemokrasi,35996,tunggal,Belanda,sosio- + démokrasi,True,social democracy  [from sosio- (< Belanda) (< Latin) + from démokrasi (< Belanda
+4721,sopi,35960,tidak,,,False,an alcoholic drink
+4768,soklat,35842,tidak,,,False,
+4826,skolastisi,35752,tidak,,,False,scholastics
+4886,sistemisasi,35652,tunggal,Belanda,sistém + -isasi,True,systematization  [from sistém (< Belanda) + from -isasi (< Belanda)]
+4887,sistemis,35651,tunggal,Belanda,,True,systemic  [based on sistém (< Belanda) + -is 1 (< Belanda)]
+4898,sis,35627,tidak,,,False,
+4937,sio,35547,tidak,,,False,
+5139,setormking,35008,tidak,,,False,
+5196,setala,,tunggal,Sanskerta,se- + tala,False,in tune  [from se- or from se- (< Sanskerta) + from tala (< Sanskerta)]
+5243,seridanta,34752,tunggal,Sanskerta,seri + danta,True,"the ivory-flower, night-tree, Nyctanthes arbor tristis  [from seri (< Sanskerta)"
+5261,serbaneka,34675,tunggal,Sanskerta,serba + aneka,True,various  [from serba (< Sanskerta) + from aneka (< Sanskerta)]
+5268,serasa,,tunggal,Sanskerta,se- + rasa,False,as if  [from se- or from se- (< Sanskerta) + from rasa (< Sanskerta)]
+5317,sepakat,34502,tunggal,Arab,,True,be in agreement  [from se + from pakat (< Arab)]
+5332,sentra,34459,tidak,,,False,centre
+5343,senti,34438,tunggal,Belanda,,True,centimetre  [from séntiméter (< Belanda)]
+5367,seniwati,34382,tunggal,Sanskerta,,True,female artist  [from seni + from -wati (< Sanskerta)]
+5411,semivokal,34168,tunggal,Belanda,sémi- + vokal,True,semivowel  [from sémi- (< Belanda) (< Latin) + from vokal (< Belanda)]
+5422,semiidiom,34145,tunggal,Belanda,sémi- + idiom,True,opaque compound  [from sémi- (< Belanda) (< Latin) + from idiom (< Belanda)]
+5507,sekularis,33700,tunggal,Belanda,,True,"secular, worldly  [from sékular (< Belanda) + from -is 1 (< Belanda)]"
+5569,sekadar,,tunggal,Arab,,False,as much as  [from se- + from kadar (< Arab)]
+5572,sejarawan,33568,compound,,sejarah (Arab) + -wan (Sanskerta),False,historian  [from sejarah (< Arab) + from -wan (< Sanskerta)]
+5600,sediakala,33496,tunggal,Sanskerta,sedia + kala,True,formerly  [from sedia (< Sanskerta) + from kala (< Sanskerta)]
+5602,sederiah,33491,tidak,,,False,
+5606,sedativa,33480,tidak,,,False,sedative
+5639,satyalencana,33338,tidak,,,False,
+5692,sardencis,33216,tidak,,,False,sardine
+5695,sarahan,33195,tidak,,,False,
+5700,saptapesona,33178,compound,,sapta- (Sanskerta) + pesona (Persia),False,seven measures to attract tourists  [from sapta- (< Sanskerta) + from pesona (< 
+5701,saptamarga,33177,tunggal,Sanskerta,sapta- + marga,True,Armed Forces’ seven-fold oath  [from sapta- (< Sanskerta) + from marga (< Sanske
+5713,santung,33142,tidak,,,False,
+5715,santriwati,33138,tunggal,Sanskerta,santri + -wati,True,female santri (pupil at traditional Muslim school  [from santri (< Sanskerta) + 
+5743,sanawiah,33002,tidak,,,False,
+5765,sami,32927,tidak,,,False,
+5780,samad,32873,tidak,,,False,
+5814,salasal,32809,tunggal,Arab,,True,polyuria; diabetes medicine] {from:Arab salas al-  [baul  [ 421-83]
+5938,sadariah,32609,tunggal,Arab,sadar + -iah,True,"jacket, waistcoat  [from sadar (< Arab) + from -iah (< Arab)]"
+5943,sabu-sabu,32594,tidak,,,False,
+6016,produser,30100,tidak,,,False,
+6056,ronsen,32294,tidak,,,False,
+6062,romusa,32263,tidak,,,False,
+6079,rolpres,32216,compound,,rol (Belanda) + prés (Inggris),False,franking machine  [from rol (< Belanda) + from prés (< Inggris)]
+6091,Rohulkudus,32198,tidak,,,False,Holy Ghost Christianity] from:Arab  [al-  [rūḥuʾl-qudus Wehr1961:365 Wehr1961:74
+6093,rohaniwan,32196,tunggal,Arab,,True,clergyman  [from rohani (< Arab) + wan (< Sanskerta)]
+6172,revisibilitas,31966,tunggal,Belanda,,True,revisability  [based on révisi (< Belanda)]
+6184,retromamal,31949,compound,,rétro- (Belanda) + mamal (Inggris),False,situated behind the breasts  [from rétro- (< Belanda) (< Latin) + from mamal (< 
+6194,retradisionalisasi,31935,tunggal,Belanda,ré- + tradisional + -isasi,True,the act of making traditional once again  [from ré- (< Belanda) + from tradision
+6212,restrukturisasi,31898,tunggal,Belanda,ré- + struktur + -isasi,True,restructuring  [from ré- (< Belanda) + from struktur (< Belanda) + from -isasi (
+6325,remiling,31575,tunggal,Belanda,,True,processing of rubber  [based on ré- (< Belanda) + Eng milling]
+6345,relban,31511,tunggal,Belanda,rél + ban,True,railway track  [from rél (< Belanda) + from ban (< Belanda)]
+6395,reinvestasi,31417,tunggal,Belanda,ré- + invéstasi,True,reinvesting  [from ré- (< Belanda) + from invéstasi (< Belanda)]
+6399,reindoktrinasi,31413,tunggal,Belanda,ré- + indoktrinasi,True,the act of indoctrinating once more  [from ré- (< Belanda) + from indoktrinasi (
+6401,reideologisasi,31411,tunggal,Belanda,ré- + idéolog + -isasi,True,the act of ideologizing once more  [from ré- (< Belanda) + from idéolog (< Belan
+6563,rakanita,30861,tunggal,Sanskerta,,True,female senior student  [based on raka + wanita (< Sanskerta)]
+6577,rahman,30825,tidak,,,False,
+6593,rafi,30777,tidak,,,False,
+6612,radiokimia,30749,compound,,radio (Inggris) + kimia (Arab),False,radiochemistry  [from radio (< Inggris) + from kimia (< Arab)]
+6667,pustakawan,30590,tunggal,Sanskerta,pustaka + -wan,True,librarian  [from pustaka (< Sanskerta) + from -wan (< Sanskerta)]
+6679,purnawirawan,30546,tunggal,Sanskerta,purna + wira + -wan,True,veteran  [from purna (< Sanskerta) + from wira (< Sanskerta) + from -wan (< Sans
+6680,purnawaktu,30545,compound,,purna (Sanskerta) + waktu (Arab),False,fulltime (job)  [from purna (< Sanskerta) + from waktu (< Arab)]
+6681,purnasarjana,30543,tunggal,Sanskerta,purna + sarjana,True,"postgraduate, Ph.D.  [from purna (< Sanskerta) + from sarjana (< Sanskerta)]"
+6683,purnakaryawan,30540,tunggal,Sanskerta,purna + karya + -wan,True,retired civil servant  [from purna (< Sanskerta) + from karya (< Sanskerta) + fr
+6684,purnajual,30538,tunggal,Sanskerta,,True,after sales (service)  [from purna (< Sanskerta) + from jual]
+6685,purnabakti,30535,tunggal,Sanskerta,purna + bakti,True,retirement  [from purna (< Sanskerta) + from bakti (< Sanskerta)]
+6697,purbasangka,30518,tunggal,Sanskerta,purba + sangka,True,prejudice  [from purba (< Sanskerta) + from sangka (< Sanskerta)]
+6725,pukat,30387,tidak,,,False,
+6793,pseudokata,30269,compound,,pséudo- (Belanda) + kata (Sanskerta),False,function word (i.e. without independent meaning)  [from pséudo- (< Belanda) + fr
+6868,pronomina,30158,tidak,,,False,pronoun
+6882,proleksem,30141,tunggal,Belanda,pro- + léksém,True,prolexeme  [from pro- (< Belanda) (< Latin) + from léksém (< Belanda)]
+6934,preasetabulum,29977,tunggal,Inggris,pré- + asétabulum,True,situated in front of the acetabulum  [from pré- (< Inggris) + from asétabulum (<
+6935,preantena,29976,tunggal,Belanda,pré- + anténa,True,juvenal antenna  [from pré- (< Belanda) (< Latin) + from anténa (< Belanda)]
+6938,prayuwana,29972,tunggal,Sanskerta,pra- + yuwana,True,young child  [from pra- (< Sanskerta) + from yuwana (< Sanskerta)]
+6940,pratinjau,29966,tunggal,Sanskerta,,True,"advance showing, advance inspection  [from pra- (< Sanskerta) + from tinjau]"
+6942,prasyarat,29964,compound,,pra- (Sanskerta) + syarat (Arab),False,precondition  [from pra- (< Sanskerta) + from syarat (< Arab)]
+6943,prasyarat,29964,compound,,pra- (Sanskerta) + syarat (Arab),False,precondition  [from pra- (< Sanskerta) + from syarat (< Arab)]
+6944,prastudi,29963,compound,,pra- (Sanskerta) + studi (Belanda),False,preliminary study  [from pra- (< Sanskerta) + from studi (< Belanda)]
+6945,prasmanan,29962,tunggal,Belanda,,True,meal served buffet style  [from prasman (< Belanda) + < loan -an]
+6946,prasetia,29960,tunggal,Sanskerta,pra- + setia,True,pledge of loyalty  [from pra- (< Sanskerta) + from setia (< Sanskerta)]
+6947,praseminar,29958,compound,,pra- (Sanskerta) + séminar (Inggris),False,preliminary seminar  [from pra- (< Sanskerta) + from séminar (< Inggris)]
+6948,prasekolah,29957,compound,,pra- (Sanskerta) + sekolah (Portugis),False,kindergarten  [from pra- (< Sanskerta) + from sekolah (< Portugis)]
+6949,prasejarah,29956,compound,,pra- (Sanskerta) + sejarah (Arab),False,prehistory  [from pra- (< Sanskerta) + from sejarah (< Arab)]
+6950,prasejarah,29956,compound,,pra- (Sanskerta) + sejarah (Arab),False,prehistory  [from pra- (< Sanskerta) + from sejarah (< Arab)]
+6951,prasejahtera,29955,tunggal,Sanskerta,pra- + sejahtera,True,"poor, underprivileged  [from pra- (< Sanskerta) + from sejahtera (< Sanskerta)]"
+6953,prasarana,29952,tunggal,Sanskerta,,True,infrastructure  [from pra- (< Sanskerta) + from sarana]
+6954,prasaran,29951,tunggal,Sanskerta,,True,introductory discussion paper  [from pra- (< Sanskerta) + < loan saran]
+6955,prasangka,29950,tunggal,Sanskerta,pra- + sangka,True,prejudice  [from pra- (< Sanskerta) + from sangka (< Sanskerta)]
+6956,prarekam,29946,compound,,pra- (Sanskerta) + rekam (Arab),False,prerecording  [from pra- (< Sanskerta) + from rekam (< Arab)]
+6957,prarasa,29944,tunggal,Sanskerta,pra- + rasa,True,preference  [from pra- (< Sanskerta) + from rasa (< Sanskerta)]
+6958,prapustaka,29943,tunggal,Sanskerta,pra- + pustaka,True,pre-literary  [from pra- (< Sanskerta) + from pustaka (< Sanskerta)]
+6960,prapubertas,29941,compound,,pra- (Sanskerta) + pubertas (Belanda),False,adolescence  [from pra- (< Sanskerta) + from pubertas (< Belanda)]
+6961,prapuber,29940,compound,,pra- (Sanskerta) + puber (Belanda),False,adolescence  [from pra- (< Sanskerta) + from puber (< Belanda)]
+6962,prapromosi,29939,compound,,pra- (Sanskerta) + promosi (Belanda),False,the examination preceding admission to taking the doctoral degree  [from pra- (<
+6963,praperadilan,29938,tunggal,Sanskerta,,True,preliminary findings  [from pra- (< Sanskerta) + from per- + adil (< Arab) + < l
+6964,prapendapat,29937,tunggal,Sanskerta,,True,"prior opinion, prejudice  [from pra- (< Sanskerta) + < loan pendapat]"
+6966,pranatal,29930,compound,,pra- (Sanskerta) + natal (Portugis),False,Advent; prenatal  [from pra- (< Sanskerta) + from natal (< Portugis)]
+6967,pramuwisma,29926,tunggal,Sanskerta,,True,maid servant  [from pramu- + from wisma (< Sanskerta)]
+6968,pramuwisata,29925,tunggal,Sanskerta,,True,tourist guide  [from pramu- + from wisata (< Sanskerta)]
+6970,pramubakti,29906,tunggal,Sanskerta,,True,social worker  [from pramu- + from bakti (< Sanskerta)]
+6971,pramodern,29904,compound,,pra- (Sanskerta) + modérn (Belanda),False,premodern  [from pra- (< Sanskerta) + from modérn (< Belanda)]
+6972,pralahir,29901,compound,,pra- (Sanskerta) + lahir (Arab),False,prenatal  [from pra- (< Sanskerta) + from lahir (< Arab)]
+6973,pralahir,29901,compound,,pra- (Sanskerta) + lahir (Arab),False,prenatal  [from pra- (< Sanskerta) + from lahir (< Arab)]
+7037,prakonsepsi,29893,compound,,pra- (Sanskerta) + konsépsi (Belanda),False,preconception  [from pra- (< Sanskerta) + from konsépsi (< Belanda)]
+7038,prakondisi,29892,compound,,pra- (Sanskerta) + kondisi (Belanda),False,precondition  [from pra- (< Sanskerta) + from kondisi (< Belanda)]
+7039,prakilang,29890,tunggal,Sanskerta,,True,prefabricated  [from pra- (< Sanskerta) + < loan kilang]
+7040,prakata,29889,tunggal,Sanskerta,pra- + kata,True,foreword  [from pra- (< Sanskerta) + from kata (< Sanskerta)]
+7041,prakarsa,29887,tunggal,Sanskerta,pra- + karsa,True,initiative  [from pra- (< Sanskerta) + from karsa (< Sanskerta)]
+7042,prakala,29886,tunggal,Sanskerta,pra- + kala,True,"preceding, to go before  [from pra- (< Sanskerta) + from kala (< Sanskerta)]"
+7043,prajaksa,29884,tunggal,Sanskerta,pra- + jaksa,True,assistant public prosecutor  [from pra- (< Sanskerta) + from jaksa (< Sanskerta)
+7044,prajabatan,29883,tunggal,Sanskerta,,True,apprenticeship  [from pra- (< Sanskerta) + < loan jabatan]
+7052,pragmatika,29874,tunggal,Belanda,,True,pragmatics  [based on pragmatik (< Belanda)]
+7054,praduga,29872,tunggal,Sanskerta,,True,prejudice  [from pra- (< Sanskerta) + < loan duga]
+7056,pradesain,29870,compound,,pra- (Sanskerta) + desain (Inggris),False,preparatory design  [from pra- (< Sanskerta) + from desain (< Inggris)]
+7058,pradana,29868,tunggal,Sanskerta,pra- + dana,True,initial funding (preliminary funding of a project)  [from pra- (< Sanskerta) + f
+7060,praanggapan,29862,tunggal,Sanskerta,,True,prejudice  [from pra- (< Sanskerta) + < loan anggapan]
+7116,popi,29765,tidak,,,False,doll
+7187,polikultur,29645,tunggal,Belanda,poli- + kultur,True,crop rotation  [from poli- (< Belanda) (< Yunani) + from kultur (< Belanda)]
+7299,planing,29442,tidak,,,False,
+7306,plamir,29431,tidak,,,False,
+7332,pirsawan,29357,tunggal,Sanskerta,,True,viewer (TV)  [605.3 based on Sanskerta prekṣā 605.3 + from -wan (< Sanskerta)]
+7383,pianika,29128,tunggal,Belanda,,True,a group of wind instruments  [based on piano (< Belanda) + harmonika (< Belanda)
+7394,petuah,29097,tidak,,,False,
+7409,peti es,29061,tunggal,Belanda,,True,refrigerator  [from peti (< Tamil or < Hindi) + from és (< Belanda)]
+7430,pesanggrahan,,tunggal,Sanskerta,,False,resthouse  [from pe- + < Sanskerta saṃgraha 1129.2 + < loan -an]
+7531,periorbita,28798,compound,,péri- (Belanda) + orbita (Latin),False,periosteum around the eye socket  [from péri- (< Belanda) (< Yunani) + from orbi
+7582,perawi,,tunggal,Arab,,False,"narrator, esp. of Traditions  [from pe- + rawi (< Arab)]"
+7591,per,,tidak,,,False,
+7641,pelotaris,28349,tunggal_multi_fallback,Inggris,,True,pelota player  [based on pélota (< Inggris) + -is 2 (< Belanda)]
+7662,pelan,,tunggal,Belanda,,False,field  [from pél (< Belanda) + < loan -an]
+7668,pel,,tidak,,,False,"floorcloth, mop"
+7675,pekojan,28205,tunggal,Persia,,True,residential area of khojahs  [pe- + < Persia khwāja 479 +-an]
+7684,pei,28166,tidak,,,False,
+7686,pego,28159,tidak,,,False,
+7737,patokimia,27996,compound,,pato- (Belanda) + kimia (Arab),False,chemical pathology  [from pato- (< Belanda) (< Yunani) + from kimia (< Arab)]
+7781,paseban,27894,tidak,,,False,audience hall  [based on pa- + Skt sevā 1247.1 + < loan -an]
+7782,pascayuwana,27893,tunggal,Sanskerta,pasca- + yuwana,True,"juvenile, adolescent  [from pasca- (< Sanskerta) + from yuwana (< Sanskerta)]"
+7783,pascausaha,27892,tunggal,Sanskerta,pasca- + usaha,True,various methods for increasing agricultural production  [from pasca- (< Sanskert
+7784,pascasarjana,27891,tunggal,Sanskerta,pasca- + sarjana,True,"postgraduate, postdoctoral  [from pasca- (< Sanskerta) + from sarjana (< Sansker"
+7785,pascaperang,27887,tunggal,Sanskerta,,True,postwar  [from pasca- (< Sanskerta) + < loan perang]
+7786,pascapanen,27886,tunggal,Sanskerta,,True,after the harvest  [from pasca- (< Sanskerta) + < loan panén]
+7787,pascalarva,27881,compound,,pasca- (Sanskerta) + larva (Belanda),False,"post-larval, immature fish in the post-larval stage  [from pasca- (< Sanskerta) "
+7788,pascalahir,27880,compound,,pasca- (Sanskerta) + lahir (Arab),False,postnatal  [from pasca- (< Sanskerta) + from lahir (< Arab)]
+7789,pascakawin,27877,compound,,pasca- (Sanskerta) + kawin (Persia),False,after marriage  [from pasca- (< Sanskerta) + from kawin (< Persia)]
+7790,pascajual,27876,tunggal,Sanskerta,,True,post-sale period  [from pasca- (< Sanskerta) + < loan jual]
+7791,pascadoktoral,27875,compound,,pasca- (Sanskerta) + doktoral (Belanda),False,post-doctoral  [from pasca- (< Sanskerta) + from doktoral (< Belanda)]
+7792,pascabedah,27873,tunggal,Sanskerta,,True,postoperative  [from pasca- (< Sanskerta) + < loan bedah]
+7881,paralinguistis,27682,tunggal,Belanda,para- + linguistis,True,paralinguistic  [from para- (< Belanda) (< Yunani) + from linguistis (< Belanda)
+7882,paralinguistik,27681,tunggal,Belanda,para- + linguistik,True,paralinguistics  [from para- (< Belanda) (< Yunani) + from linguistik (< Belanda
+7940,pankronis,27535,tunggal,Belanda,pan- + kronis,True,combining synchronic and diachronic  [from pan- (< Belanda) (< Yunani) + from kr
+7953,pangkin,27476,tidak,,,False,
+7960,pandialektal,27427,compound,,pan- (Belanda) + dialéktal (Inggris),False,applying to all dialects (of a language)  [from pan- (< Belanda) (< Yunani) + fr
+7968,pancausaha,27401,tunggal,Sanskerta,panca- + usaha,True,fivefold effort (for agricultural development)  [from panca- (< Sanskerta) + fro
+7969,pancasuara,27399,tunggal,Sanskerta,panca- + suara,True,a cacophony of sounds  [from panca- (< Sanskerta) + from suara (< Sanskerta)]
+7971,Pancasilais,27397,tunggal,Sanskerta,,True,a follower of the Pancasila  [from pancasila (< Sanskerta) + from -is (< Belanda
+7974,pancaroba,27393,tunggal,Sanskerta,,True,changeable  [from panca- (< Sanskerta) + < loan roba]
+7976,pancaragam,27391,compound,,panca- (Sanskerta) + ragam (Tamil),False,diverse  [from panca- (< Sanskerta) + from ragam (< Tamil)]
+7978,pancamarga,27385,tunggal,Sanskerta,panca- + marga,True,the five paths (of leadership)  [from panca- (< Sanskerta) + from marga (< Sansk
+7979,pancalomba,27383,tunggal,Sanskerta,,True,pentathlon  [from panca- (< Sanskerta) + < loan lomba]
+7981,pancalima,27381,tunggal,Sanskerta,,True,"palmistry, chiromancy  [from panca- (< Sanskerta) + < Old Jawa lima]"
+7982,pancakembar,27378,tunggal,Sanskerta,,True,quintuplets  [from panca- (< Sanskerta) + < loan kembar]
+7984,pancadarma,27374,tunggal,Sanskerta,panca- + darma,True,five duties  [from panca- (< Sanskerta) + from darma (< Sanskerta)]
+7985,pancacita,27373,tunggal,Sanskerta,panca- + cita,True,"the five ideals: health, justice, heroism, welfare, prosperity  [from panca- (< "
+7987,pancabicara,27371,tunggal,Sanskerta,,True,"mixture of five flowers, or perfumes; five-pronged gold ornament worn by royalty"
+8020,palawija,27257,tunggal,Sanskerta,,True,second crop  [based on pahala (< Sanskerta) + Skt bīja 732.2]
+8073,padahal,27085,compound,,pada (Sanskerta) + hal (Arab),False,whereas  [from pada (< Sanskerta) + from hal (< Arab)]
+8074,padahal,27085,tunggal,Arab,,True,whereas  [pada + hal (< Arab)]
+8206,oreol,26832,tidak,,,False,
+8226,oratoris,26810,tunggal,Belanda,,True,oratorical  [from orator (< Belanda) + from -is 1 (< Belanda)]
+8236,optoelektronika,26790,tunggal,Belanda,,True,optoelectronics  [based on optis (< Belanda) + éléktronika (< Belanda)]
+8260,opor,26763,tidak,,,False,
+8344,olahragawan,26567,tunggal,Sanskerta,,True,sportsman  [from olah + raga + from -wan (< Sanskerta)]
+8396,obyektivitas,26446,tunggal,Prancis,,True,objectivity  [based upon Du objectiviteit (< Prancis)]
+8435,nyentrik,26362,tunggal,Belanda,,True,to behave eccentrically  [based on ékséntrik (< Belanda)]
+8443,nusantara,26303,tunggal,Sanskerta,,True,The Indonesian Archipelago  [from  nusa + from antara (< Sanskerta)]
+8468,Nuh,26263,tidak,,,False,
+8503,nontradisional,26208,tunggal,Belanda,non- + tradisional,True,not traditional  [from non- (< Belanda) (< Latin) + from tradisional (< Belanda)
+8504,nonteknis,26207,tunggal,Belanda,non- + téknis,True,nontechnica  [from non- (< Belanda) (< Latin) + from téknis (< Belanda)]
+8506,nonstandar,26205,tunggal,Belanda,non- + standar,True,non-standard  [from non- (< Belanda) (< Latin) + from standar (< Belanda)]
+8507,nonsilabis,26204,tunggal,Belanda,non- + silabis,True,non-syllabic  [from non- (< Belanda) (< Latin) + from silabis (< Belanda)]
+8513,nonpredikatif,26197,tunggal,Belanda,non- + prédikatif,True,not predicative  [from non- (< Belanda) (< Latin) + from prédikatif (< Belanda)]
+8514,nonpolitik,26196,tunggal,Belanda,non- + politik,True,non-political  [from non- (< Belanda) (< Latin) + from politik (< Belanda)]
+8515,nonpemerintah,26195,tunggal,Belanda,,True,non-governmental  [from non- (< Belanda) + < loan pemerintah]
+8516,nonpatogenik,26194,compound,,non- (Belanda) + patogénik (Inggris),False,not pathogenic  [from non- (< Belanda) (< Latin) + from patogénik (< Inggris)]
+8517,nonmiliter,26187,tunggal,Belanda,non- + militér,True,non-military  [from non- (< Belanda) (< Latin) + from militér (< Belanda)]
+8518,nonmigas,26186,tidak,,,False,(products) other than oil and gas  [(abbr. of non minyak gas)]
+8519,nonmedis,26185,tunggal,Belanda,non- + médis,True,non-medical  [from non- (< Belanda) (< Latin) + from médis (< Belanda)]
+8521,nonkooperasi,26183,tunggal,Belanda,non- + kooperasi,True,non-cooperative  [from non- (< Belanda) (< Latin) + from kooperasi (< Belanda)]
+8522,nonkonvensional,26182,compound,,non- (Belanda) + konvénsional (Inggris),False,not conventional  [from non- (< Belanda) (< Latin) + from konvénsional (< Inggri
+8524,nonkimia,26180,compound,,non- (Belanda) + kimia (Arab),False,nonchemical  [from non- (< Belanda) (< Latin) + from kimia (< Arab)]
+8527,nonindustri,26177,tunggal,Belanda,non- + industri,True,non-industrial  [from non- (< Belanda) (< Latin) + from industri (< Belanda)]
+8529,noni,26175,tunggal,Portugis,,True,little girl  [based on nona  (< Portugis)]
+8530,nonhistoris,26174,tunggal,Belanda,non- + historis,True,non-historical  [from non- (< Belanda) (< Latin) + from historis (< Belanda)]
+8531,nonformal,26169,compound,,non- (Belanda) + formal (Inggris),False,not official  [from non- (< Belanda) (< Latin) + from formal (< Inggris)]
+8533,noneksakta,26166,tunggal,Belanda,non- + éksakta,True,not belonging to the exact sciences  [from non- (< Belanda) (< Latin) + from éks
+8534,nonekonomi,26165,tunggal,Belanda,non- + ékonomi,True,non-economic sphere  [from non- (< Belanda) (< Latin) + from ékonomi (< Belanda)
+8535,nondepartemental,26163,tunggal,Belanda,non- + départeméntal,True,of an agency which is not under a ministry  [from non- (< Belanda) (< Latin) + f
+8536,nondepartemen,26162,tunggal,Belanda,non- + départemén,True,agency which is not under a ministry  [from non- (< Belanda) (< Latin) + from dé
+8537,nonblok,26161,tunggal,Belanda,non- + blok,True,neutral  [from non- (< Belanda) (< Latin) + from blok (< Belanda)]
+8541,nona,26157,tidak,,,False,"girl, Miss"
+8542,non,26153,tidak,,,False,"girl, Miss"
+8544,non,26155,tunggal_multi_fallback,Belanda,,True,non-cooperator  [based on non- (< Belanda) (< Latin)]
+8583,nirwarta,26087,tunggal,Sanskerta,nir- + warta,True,embargoed news  [from nir- (< Sanskerta) + from warta (< Sanskerta)]
+8586,nirlaba,26081,tunggal,Sanskerta,nir- + laba,True,non-profit  [from nir- (< Sanskerta) + from laba (< Sanskerta)]
+8588,nirgesekan,26078,tunggal,Sanskerta,,True,(almost) without friction  [from nir- (< Sanskerta) + < loan gésékan]
+8589,nirgelar,26077,tunggal,Sanskerta,,True,non-degree (education)  [from nir- (< Sanskerta) + < loan gelar]
+8590,niraksarawan,26075,tunggal,Sanskerta,nir- + aksara + -wan,True,illiterate  [from nir- (< Sanskerta) + from aksara (< Sanskerta) + from -wan (< 
+8591,niraksara,26074,tunggal,Sanskerta,nir- + aksara,True,illiterate  [from nir- (< Sanskerta) + from aksara (< Sanskerta)]
+8655,neositosis,25932,tunggal_multi_fallback,Belanda,,True,a kind of leukocytosis  [based on néo- (< Belanda) + (léuko)sitosis (< Inggris)]
+8659,neonisasi,25926,tunggal,Belanda,néon + -isasi,True,introduction of neon lights  [from néon (< Belanda) + from -isasi (< Belanda)]
+8663,neolokal,25922,tunggal,Belanda,néo- + lokal,True,neo-locality  [from néo- (< Belanda) (< Yunani) + from lokal (< Belanda)]
+8671,neofeodalistis,25906,tunggal,Belanda,néo- + féodalistis,True,neofeudalistic  [from néo- (< Belanda) (< Yunani) + from féodalistis (< Belanda)
+8672,neofeodalisme,25905,tunggal,Belanda,néo- + féodalisme,True,neofeudalism  [from néo- (< Belanda) (< Yunani) + from féodalisme (< Belanda)]
+8701,negarawan,25836,tunggal,Sanskerta,negara + -wan,True,statesman  [from negara (< Sanskerta) + from -wan (< Sanskerta)]
+8712,naziisme,25806,tunggal,Belanda,,True,nazism  [from nazi (< Jerman) + from -isme (< Belanda)]
+8743,nasionisme,25752,compound,,nasion (Inggris) + -isme (Belanda),False,nation-based politics  [from nasion (< Inggris) + from -isme (< Belanda)]
+8761,narsisisme,25730,tidak,,,False,
+8771,narasumber,25715,tunggal,Sanskerta,,True,"informant, authority  [from nara- (< Sanskerta) + < loan sumber]"
+8773,narapraja,25713,tunggal,Sanskerta,nara- + praja,True,government offical  [from nara- (< Sanskerta) + from praja (< Sanskerta)]
+8774,narapidana,25712,tunggal,Sanskerta,nara- + pidana,True,delinquent  [from nara- (< Sanskerta) + from pidana (< Sanskerta)]
+8829,nadir,25600,tidak,,,False,"inspector, supervisor (of wakaf)"
+8838,nabatah,25586,tidak,,,False,
+8842,na,25581,tidak,,,False,"our, us (suffixed to Arab words)"
+8861,mutmainah,25552,tidak,,,False,
+8865,mute,25545,tidak,,,False,
+8888,Mustari,25507,tidak,,,False,
+8977,multivalensi,25335,tunggal,Belanda,multi- + valénsi,True,multivalence  [from  multi- (< Belanda) (< Latin) + from  valénsi (< Belanda)]
+8979,multirasialisme,25330,tunggal,Belanda,multirasial + -isme,True,multiracialism  [from  multirasial (< Belanda) + from  -isme (< Belanda)]
+8989,multiorgan,25318,tunggal,Belanda,multi- + organ,True,several organs  [from  multi- (< Belanda) (< Latin) + from  organ (< Belanda)]
+8997,multikultur,25307,tunggal,Belanda,multi- + kultur,True,cultivation of various products  [from multi- (< Belanda) (< Latin) + from kultu
+8998,multikrisis,25306,tunggal,Belanda,multi- + krisis,True,various kinds of crisis  [from multi- (< Belanda) (< Latin) + from krisis (< Bel
+8999,multikompleks,25305,tunggal,Belanda,multi- + kompléks,True,very complex  [from multi- (< Belanda) (< Latin) + from kompléks (< Belanda)]
+9000,multijutawan,25304,tunggal,Sanskerta,juta + -wan,True,multimillionaire  [from multi- (< Belanda or < Inggris) + from juta (< Sanskerta
+9001,multiguna,25303,tunggal,Sanskerta,,True,of manifold use  [from multi- (< Belanda or < Inggris) + from guna (< Sanskerta)
+9002,multifungsi,25301,tunggal,Belanda,multi- + fungsi,True,multifunctional  [from multi- (< Belanda) (< Latin) + from fungsi (< Belanda)]
+9003,multifaset,25300,tunggal,Belanda,multi- + fasét,True,many-sided  [from multi- (< Belanda) (< Latin) + from fasét (< Belanda)]
+9005,multidimensi,25297,tunggal,Belanda,multi- + diménsi,True,multidimensional  [from  multi- (< Belanda) (< Latin) + from  diménsi (< Belanda
+9006,multibahasawan,25296,tunggal,Sanskerta,bahasa + -wan,True,"polyglot, multilingual  [from multi- (< Belanda or < Inggris) (< Latin) + from b"
+9007,multibahasa,25295,tunggal,Sanskerta,,True,polyglottal  [multi- (< Belanda or < Inggris) (< Latin) + from bahasa (< Sansker
+9170,monsinyur,25048,tidak,,,False,
+9176,monosilabisme,25040,tunggal_multi_fallback,Inggris,,True,monosyllabicity  [based on monosilabel (< Inggris) + -isme (< Belanda)]
+9178,monosemantik,25038,tunggal,Belanda,mono- + sémantik,True,unambiguity  [from  mono- (< Belanda) (< Yunani) + from  sémantik (< Belanda)]
+9185,monoloyalitas,25024,tunggal,Belanda,,True,exclusive loyality  [from mono- (< Belanda or < Inggris) (< Yunani) + from loyal
+9203,monogini,25001,tunggal,Belanda,,True,monogamousness  [based on mono- (< Belanda) + from (poli gini (< Belanda)]
+9210,monoatom,24993,tunggal,Belanda,mono- + atom,True,monatomic atom  [from  mono- (< Belanda) or < Inggris mono- (< Yunani) + from  a
+9254,modernomaniak,24896,tunggal,Belanda,modérn + maniak,True,mania for modernization  [from modérn (< Belanda) + from maniak (< Belanda)]
+9278,mizan,24862,tunggal,Arab,,True,Libra zodiac] {from:Arab  [al-  [mīzān 1065]
+9337,minikata,24762,compound,,mini- (Belanda) + kata (Sanskerta),False,drama with very short text  [from mini- (< Belanda) + from kata (< Sanskerta)]
+9362,milu,24713,tidak,,,False,
+9398,mikrolet,24652,tunggal,Belanda,,True,minibus  [based on mikro- (< Belanda) + (ope)lét (< Belanda)]
+9401,mikrohistori,24644,tunggal,Belanda,mikro- + histori,True,reconstructing of historical documents  [from mikro- (< Belanda) or < Inggris mi
+9403,mikrogelombang,24638,tunggal,Belanda,,True,microwave  [from mikro- (< Belanda) (< Yunani) + < loan gelombang]
+9416,mikroba,24614,tidak,,,False,
+9421,mikologiwan,24603,compound,,mikologi (Belanda) + -wan (Sanskerta),False,mycologist  [from mikologi (< Belanda) + from -wan (< Sanskerta)]
+9425,mik,24596,tunggal,Belanda,,True,microphone  [microfon (< Belanda)]
+9443,metropolisasi,24559,tunggal,Belanda,métropolis + -isasi,True,upgrading a city into a metropolis  [from  métropolis (< Belanda) + from  -isasi
+9447,metromini,24554,compound,,métro (Prancis) + mini (Belanda),False,small city bus  [from métro (< Prancis) + from mini (< Belanda)]
+9497,metabahasa,24485,compound,,méta- (Yunani) + bahasa (Sanskerta),False,metalanguage  [from méta- (< Yunani) + from bahasa (< Sanskerta)]
+9548,mentifakta,24277,tunggal_multi_fallback,Belanda,,True,author’s viewpoints  [based on méntal (< Belanda) + fakta (< Inggris)]
+9571,megaohm,23945,tunggal,Belanda,,True,megohm (a million ohms)  [based on Belanda-or-Inggris megohm]
+9576,Megalitikum,23931,tunggal,Belanda,,True,Stone Age  [based on mégalit (< Belanda)]
+9612,mayokratio,23849,tunggal,Belanda,,True,majoritarianism  [based on mayoritas (< Belanda) + Gk kratia]
+9737,martaban,23637,tunggal,Belanda,,True,martaban (large jar)] {from:Belanda martavaan ({from proper} name Martaban (Burm
+9841,mangkubumi,23434,tunggal,Sanskerta,,True,world ruler (name of princes in Central Java)  [mangku + from bumi (< Sanskerta)
+9863,Malikuljabar,23250,tunggal,Arab,,True,The Most Supreme King (God)] {from:Arab  [al-  [malikuʾl-jabbār 923-111]
+9869,malatindak,23236,tunggal,Sanskerta,,True,crime (committed by officials)  [from mala- (< Sanskerta) + < loan tindak]
+9870,malasuai,23235,tunggal,Sanskerta,,True,incompatible  [from mala- (< Sanskerta) + < loan suai]
+9873,malapetaka,23228,tunggal,Sanskerta,mala- + petaka,True,calamity  [from mala- (< Sanskerta) + from petaka (< Sanskerta)]
+9881,makrososiologi,23162,tunggal,Belanda,makro- + sosiologi,True,macrosociology  [from  makro- (< Belanda) + from  sosiologi (< Belanda)]
+9886,makrometeorologi,23156,tunggal,Belanda,makro- + météorologi,True,macrometeorology  [from makro- (< Belanda) + from météorologi (< Belanda)]
+9888,makrokriminologi,23152,tunggal,Belanda,makro- + kriminologi,True,macrocrimonology  [from makro- (< Belanda) + from kriminologi (< Belanda)]
+9915,makena,23114,tidak,,,False,
+9967,mahatahu,23005,tunggal,Sanskerta,,True,Omniscient  [from maha- (< Sanskerta) + < loan tahu]
+9968,mahasuci,23004,tunggal,Sanskerta,maha- + suci,True,the Most Holy  [from maha- (< Sanskerta) + from suci (< Sanskerta)]
+9969,mahasiswi,23003,tunggal,Sanskerta,,True,female student  [based on maha- (< Sanskerta) + siswa (< Sanskerta)]
+9970,mahasiswa,23002,tunggal,Sanskerta,maha- + siswa,True,(male) student  [from maha- (< Sanskerta) + from siswa (< Sanskerta)]
+9971,maharupa,23001,tunggal,Sanskerta,maha- + rupa,True,extremely beautiful  [from maha- (< Sanskerta) + from rupa (< Sanskerta)]
+9975,maharajalela,22994,tunggal,Sanskerta,,True,go on the rampage; to rage (of epidemic)  [from maharaja (< Sanskerta) + < Sansk
+9982,mahakuasa,22982,tunggal,Sanskerta,maha- + kuasa,True,all-mighty  [from maha- (< Sanskerta) + from kuasa (< Sanskerta)]
+9983,mahakarya,22981,tunggal,Sanskerta,maha- + karya,True,masterpiece  [from maha- (< Sanskerta) + from karya (< Sanskerta)]
+9996,magnetor,22954,tunggal,Belanda,,True,magneto (of engine)  [from magnét (< Belanda) + from -(t  or (< Inggris)]
+10047,lokakarya,22480,tunggal,Sanskerta,loka + karya,True,working group  [from loka (< Sanskerta) + from karya (< Sanskerta)]
+10061,logawiah,22456,tunggal,Arab,,True,linguistic  [based upon logat (< Arab) + -iah (< Arab)]
+10306,kusta,20673,tidak,,,False,
+10335,kupang,20572,tidak,,,False,
+10336,kupa,20569,tidak,,,False,
+10361,jemeki,15272,tidak,,,False,
+10386,mancawarna,23339,tunggal,Sanskerta,manca + warna,True,varicoloured  [from manca (< Sanskerta) + from warna (< Sanskerta)]
+10388,manasuka,23336,tunggal,Sanskerta,,True,voluntary  [from mana + from suka (< Sanskerta)]
+10391,manakala,23326,tunggal,Sanskerta,,True,whenever  [from mana + from kala (< Sanskerta)]
+10417,malagizi,23202,compound,,mala- (Sanskerta) + gizi (Arab),False,malnutrition  [from mala- (< Sanskerta) + from gizi (< Arab)]
+10418,malafungsi,23200,compound,,mala- (Sanskerta) + fungsi (Belanda),False,malfunction  [from mala- (< Sanskerta) + from fungsi (< Belanda)]
+10420,malabau,23196,tunggal,Sanskerta,,True,malodorous  [from mala- (< Sanskerta) + < loan bau]
+10425,makulat,23181,tidak,,,False,knowledge of the esoteric based on reason  [Arab maʿqūlāt 631]
+10439,mahabintang,22972,tunggal,Sanskerta,,True,superstar  [from maha- (< Sanskerta) + < loan bintang]
+10452,lung,22773,tidak,,,False,
+10492,long,22555,tunggal,Amoy,,True,fireworks; firecracker]  {from:Amoy 烺  [hé  [lōng  &nbsp; ]
+10503,loksun,22513,tidak,,,False,[Douglas1899:to get] tuberculosis
+10511,lokawisata,22497,tunggal,Sanskerta,loka + wisata,True,tourist attraction  [from loka (< Sanskerta) + from wisata (< Sanskerta)]
+10633,laknatullah,20888,tunggal,Arab,,True,accursed of God] {from:Arab laʿnatuʾllāh  [ʿalaihi  [ 870-24]
+10669,laci,20790,tidak,,,False,
+10711,kutubusitah,20712,tunggal,Arab,,True,The Six famous collections of Traditions Islam] {from:Arab  [al-  [kutubuʾs-sitt
+10734,kulzum,20459,tunggal,Arab,,True,"Laut Kulzum, The Red Sea] {from:Arab  [Baḥr al-  [qulzum 42-786]"
+10738,kulturisasi,20449,tunggal,Belanda,kultur + -isasi,True,cultivation (of living material)  [from kultur (< Belanda) + from -isasi (< Bela
+10805,kuadrupleks,20223,tunggal,Belanda,,True,laminate in four layers  [based on kuadrupel (< Belanda) + from tripléks (< Bela
+10829,kronosekuen,20192,tunggal,Belanda,,True,similar soils dating from different periods  [< (< Yunani) + from sékuén (< Bela
+10857,kritisi,20143,tidak,,,False,critics
+10863,kriterium,20138,tidak,,,False,
+10864,kriteria,20137,tidak,,,False,criterion
+10899,kriminalisasi,20078,tunggal,Belanda,kriminal + -isasi,True,"making (the use of drugs, etc.) a criminal act  [from kriminal (< Belanda) + fro"
+10900,kriminalis,20077,tunggal_multi_fallback,Belanda,,True,criminal  [from kriminal (< Belanda or < Inggris) or < Inggris criminal + from -
+10959,kosen,19950,tidak,,,False,
+10963,kosakata,19942,tunggal,Sanskerta,kosa + kata,True,vocabulary  [from kosa (< Sanskerta) + from kata (< Sanskerta)]
+11027,koran,19854,tidak,,,False,
+11066,kooperativisme,19785,tunggal,Belanda,,True,the concept of cooperation  [based on kooperatif (< Belanda) + -isme (< Belanda)
+11134,Jepun,15379,tidak,,,False,Japan
+11151,konstatatif,19681,tunggal,Belanda,,True,constative  [based on konstatasi (< Belanda) or Du constatering]
+11153,konstantagravitasi,19679,tunggal,Belanda,konstanta + gravitasi,True,gravitational constant  [from  konstanta (< Belanda) + from  gravitasi (< Beland
+11245,Konghucu,19567,tidak,,,False,
+11250,konformitas,19558,compound,,konform (Belanda) + -itas (Latin),False,conformity  [from  konform (< Belanda) + from  -itas (< Latin)]
+11262,koneksitas,19544,compound,,konéksi (Belanda) + -itas (Latin),False,being linked in a law suit although coming under different jurisdictions  [from 
+11274,kondomisasi,19529,tunggal,Belanda,kondom + -isasi,True,condomization (introduction of the use of condoms)  [from kondom (< Belanda) + f
+11284,koncoisme,19514,compound,,konco (Jawa) + -isme (Belanda),False,favouritism  [from  konco (< Jawa) + from  -isme (< Belanda)]
+11479,kokang,19227,tidak,,,False,
+11525,koboisme,19138,tunggal,Belanda,koboi + -isme,True,reckless way of behaviour  [from koboi (< Belanda) + from -isme (< Belanda)]
+11534,koaksi,19122,tunggal,Belanda,ko- + aksi,True,"joint action, mutual influence  [from ko- (< Belanda) + from aksi (< Belanda)]"
+11537,koagregasi,19117,tunggal,Belanda,ko- + agrégasi,True,coaggregation  [from  ko- (< Belanda) + from  agrégasi (< Belanda)]
+11539,koa,19114,tidak,,,False,
+11555,klorinasi,19087,tunggal_multi_fallback,Inggris,,True,chlorination  [based on klorin (< Inggris) + -asi (< Belanda)]
+11565,klona,19074,tunggal,Yunani,,True,clone  [from  Du klonen (< Yunani)]
+11579,klinisi,19053,tidak,,,False,clinician
+11669,kingka,18845,tidak,,,False,
+11670,kinetokardiografi,18844,tunggal,Belanda,,True,kinetocardiography  [based on kinétika (< Belanda) + kardiografi (< Belanda)]
+11674,kinestesiometer,18839,compound,,kinéstésia (Inggris) + méter (Belanda),False,kinaesthesiometer  [from  kinéstésia (< Inggris) + from  méter (< Belanda)]
+11696,kilowattjam,18782,compound,,kilowatt (Belanda) + jam (Arab),False,kilowatt-hour  [from kilowatt (< Belanda) + from jam (< Arab)]
+11708,kik,18729,tidak,,,False,
+11716,kicak,18694,tidak,,,False,
+11757,khilafiah,18624,tunggal,Arab,khilaf + -iah,True,"controversial issue, difference of opinion (Isl. law)  [from khilaf (< Arab) + f"
+11761,khiar,18619,tidak,,,False,
+11833,kersen,18304,tidak,,,False,
+11835,kers,18303,tidak,,,False,cherry
+11847,kermanici,18222,tidak,,,False,
+11854,keratoelastin,18051,tunggal,Inggris,,True,protein occuring in the skin of fishes and reptiles  [based on kératin (< Beland
+11912,keluyuk,17640,tidak,,,False,
+11920,kelompen,17568,tidak,,,False,wooden shoe or slipper
+11924,kelobotisme,17550,tunggal,Belanda,,True,repetitious clichés  [from kelobot + from -isme (< Belanda)]
+11955,kek,17265,tidak,,,False,
+11996,kauli,16994,tidak,,,False,Trad. based on a saying of a prophet  [Arab qaulī 797]
+12038,katawi,16925,compound,,kata (Sanskerta) + -wi (Arab),False,"literal, word-by-word  [from kata (< Sanskerta) + from -wi (< Arab)]"
+12078,kastanyet,16859,tidak,,,False,castanets
+12109,karyawati,16789,tunggal,Sanskerta,karya + -wati,True,female employee  [from karya (< Sanskerta) + from -wati (< Sanskerta)]
+12110,karyawan,16788,tunggal,Sanskerta,karya + -wan,True,employee  [from karya (< Sanskerta) + from -wan (< Sanskerta)]
+12112,karyasiswa,16786,tunggal,Sanskerta,karya + siswa,True,trainee  [from karya (< Sanskerta) + from siswa (< Sanskerta)]
+12184,karcis,16674,tidak,,,False,ticket
+12191,karbonan,16664,tunggal,Belanda,,True,means for treatment with carbonic acid  [based on karbon (< Belanda) + < loan -a
+12201,karbit,16653,tidak,,,False,
+12273,kaolin,16509,tidak,,,False,porcelain clay
+12297,kanji,16463,tunggal,Jepang,,True,"Jepang script, based-on:Tionghoa  [Jepang kanji]"
+12303,kanibalisasi,16450,tunggal,Belanda,,True,cannibalization (dismantling a machine to re-use its parts)  [based on kanibal (
+12365,kamat,16280,tidak,,,False,
+12445,kalakian,16123,tunggal,Sanskerta,kala + kian,True,at that time  [from kala (< Sanskerta) + from kian (< Sanskerta)]
+12450,kakus,16103,tidak,,,False,"lavatory, w.c."
+12473,kahar,16017,tidak,,,False,
+12524,kacapuri,15913,tunggal,Sanskerta,kaca + puri,True,main building of palace  [from kaca (< Sanskerta) + from puri (< Sanskerta)]
+12525,kacamata,15908,tunggal,Sanskerta,,True,spectacles  [from kaca (< Sanskerta) + < loan mata]
+12547,jutawan,15838,tunggal,Sanskerta,juta + -wan,True,very rich  [from juta (< Sanskerta) + from -wan (< Sanskerta)]
+12583,juhi,15710,tidak,,,False,
+12589,judes,15700,tidak,,,False,
+12595,jongos,15655,tidak,,,False,houseboy
+12647,Jibrail,15496,tidak,,,False,
+12689,jaswadi,15090,compound,,jas (Belanda) + wadi (Arab),False,condom  [from  jas (< Belanda) + from  wadi (< Arab)]
+12716,jamrah,14963,tidak,,,False,
+12749,jail,14869,tidak,,,False,
+12760,jagabaya,14839,tunggal,Sanskerta,jaga + bahaya,True,village guard  [from jaga (< Sanskerta) + from bahaya (< Sanskerta)]
+12775,iudisasi,14799,compound,,iud (Inggris) + -isasi (Belanda),False,promotion of the use of IUDs in family planning  [from iud (< Inggris) + from -i
+12852,isokemi,14694,tunggal,Belanda,,True,local shortage of blood (for transfusion)  [based on iso - (< Belanda) + Du -hem
+12853,isokalori,14693,tunggal,Belanda,,True,rations of equal calorific value  [from iso - (< Belanda) + from kalori (< Belan
+12854,isokal,14692,tunggal,Belanda,,True,line connecting places where the market quotation for charcoal is equal  [based 
+12864,isoflor,14678,tunggal,Belanda,,True,line connecting places having the same flora  [based on iso - (< Belanda) + from
+12866,isofase,14675,tunggal,Belanda,,True,lighthouse with equal periods of light and dark  [from iso - (< Belanda) + from 
+12877,islamis,14656,compound,,Islam (Arab) + -is (Belanda),False,Islamic  [from Islam (< Arab) + from -is (< Belanda)]
+12883,isit,14649,tidak,,,False,
+12904,iqamat,14594,tidak,,,False,
+12941,intravena,14538,tunggal,Belanda,intra- + véna,True,intravenous (of injection)  [from intra- (< Belanda) (< Latin) + from véna (< Be
+12947,intramolekul,14529,tunggal,Belanda,intra- + molekul,True,intramolecular  [from  intra- (< Belanda) (< Latin) + from  molekul (< Belanda)]
+12950,intrakalimat,14525,compound,,intra- (Belanda) + kalimat (Arab),False,"occurring within the sentence (word, etc.)  [from  intra- (< Belanda) (< Latin) "
+12964,interzona,14504,tunggal,Belanda,inter- + zona,True,interzonal area  [from  inter- (< Belanda) + from  zona (< Belanda)]
+12995,intermeso,14471,tidak,,,False,
+13066,instansional,14388,tunggal,Belanda,,True,institutional  [based on instansi (< Belanda) + (nasi)onal (< Belanda)]
+13114,inkonvensional,14330,compound,,in- (Belanda) + konvénsional (Inggris),False,"contrary to agreement, unconventional  [from in- (< Belanda)+ from konvénsional "
+13147,inframerah,14272,tunggal,Belanda,,True,infrared  [from  infra- (< Belanda) + from merah]
+13156,infleksif,14260,tunggal,Belanda,,True,inflective (words)  [based on infléksi (< Belanda)]
+13183,industriawan,14230,compound,,industri (Belanda) + -wan (Sanskerta),False,industrialist  [from industri (< Belanda) + a + from -wan (< Sanskerta)]
+13193,indonesianisasi,14210,tunggal_multi_fallback,Inggris,,True,Indonesianization  [from Indonésia (< Inggris or < Belanda) + from -(n  isasi (<
+13209,indisipliner,14192,tunggal,Belanda,in- + disiplinér,True,undisciplined  [from in- (< Belanda) + from disiplinér (< Belanda)]
+13232,imunologis,14137,tidak,,,False,
+13234,imunokimia,14134,compound,,imun(o (Belanda) + kimia (Arab),False,immunochemistry  [from imun(o (< Belanda) + from kimia (< Arab)]
+13263,impersonalia,14095,tidak,,,False,impersonal verb
+13310,ilmuwan,14029,compound,,ilmu (Arab) + -wan (Sanskerta),False,scientist  [from ilmu (< Arab) + from -wan (< Sanskerta)]
+13368,ihwal,13930,tidak,,,False,
+13415,ibtidaiah,13851,tidak,,,False,
+13432,Hut,13816,tidak,,,False,
+13470,hujah,13753,tunggal,Arab,,True,slander  [prob. < Arab hijāʾ Wehr1961:1020]
+13511,homoseksualisme,13694,tunggal,Belanda,homoséksual + -isme,True,the homosexual ideology  [from  homoséksual (< Belanda) or < Inggris homosexual 
+13513,homoseks,13692,compound,,homo (Belanda) + séks (Inggris),False,homosexual intercourse  [from  homo (< Belanda) + from  séks (< Inggris)]
+13546,holobentos,13639,tidak,,,False,organism inhabiting the deep sea
+13569,histokimia,13601,compound,,histo(logi (Belanda) + kimia (Arab),False,histochemistry  [from histo(logi (< Belanda) + from kimia (< Arab)]
+13587,hipotermia,13564,tidak,,,False,
+13618,hipersonika,13515,tunggal,Inggris,,True,hypersonics; the use of hypersonic sound frequencies  [based on hipersonik (< In
+13630,hipergami,13491,tunggal_multi_fallback,Belanda,,True,hypergamy  [based on hiper- (< Belanda) (< Yunani) + Gk gamos]
+13636,hiperamnesi,13481,tunggal,Belanda,hiper- + amnési,True,hyperamnesia  [from hiper- (< Belanda) (< Yunani) + from amnési (< Belanda)]
+13827,helicak,13145,tidak,,,False,motorised pedicab  [based on Eng helicopter + Chin. bécak]
+13844,hegemonisme,13116,tunggal,Belanda,hégémoni + -isme,True,hegemonism  [from hégémoni (< Belanda) + from -isme (< Belanda)]
+13851,hebras,13107,tidak,,,False,Gerbera
+13880,hasib,13068,tidak,,,False,
+13889,hart,13049,tidak,,,False,hearts (in cards)
+13949,halogenasi,12921,tunggal,Belanda,halogén + -asi,True,halogenation  [from halogén (< Belanda) + from -asi (< Belanda)]
+14005,hadi,12832,tidak,,,False,
+14009,hadam,12826,tidak,,,False,
+14013,habluk,12818,tidak,,,False,
+14049,gue,12653,tidak,,,False,
+14118,goni,12481,tidak,,,False,
+14123,golpi,12444,tidak,,,False,
+14125,golbi,12434,tidak,,,False,fly (of trousers)
+14187,giral,12284,tidak,,,False,"(bank) deposit, girocheque"
+14205,gim,12247,tidak,,,False,gold thread
+14242,geoteknologi,11906,tunggal,Belanda,géo- + téknologi,True,geotechnology  [from géo- (< Belanda) + from téknologi (< Belanda)]
+14246,geosinkronis,11901,tunggal,Belanda,géo- + sinkronis,True,"geosynchronical, geostatic  [from géo- (< Belanda) + from sinkronis (< Belanda)]"
+14258,geokimia,11884,compound,,géo- (Belanda) + kimia (Arab),False,geochemistry  [from  géo- (< Belanda) + from  kimia (< Arab)]
+14342,garizah,11222,tidak,,,False,
+14367,gandaria,11069,tunggal,Sanskerta,,True,fruit tree (Bouea macrophylla)  [from ganda (< Sanskerta) + < loan ria]
+14368,gandapura,11066,tunggal,Sanskerta,ganda + pura,True,musk-mallow tree (Abelmoschus moschatus)  [from ganda (< Sanskerta) + from pura 
+14385,gamalisasi,11005,tunggal,Belanda,,True,planting of gamal trees to suppress alang-alang  [from gamal + from -(i sasi (< 
+14426,gagu,10902,tidak,,,False,"mute, dumb"
+14427,gafur,10886,tidak,,,False,
+14429,gafar,10880,tidak,,,False,
+14437,fuyonghai,10812,tidak,,,False,
+14568,fora,10621,tidak,,,False,forums
+14601,fluktuatif,10570,tunggal,Belanda,,True,liable to fluctuations  [based on fluktuasi (< Belanda)]
+14712,fidiah,10417,tidak,,,False,
+14782,fasilitator,10306,tunggal,Inggris,,True,"person providing facilities, facilitator  [(< Inggris fasilitator)]"
+14829,falsafi,10251,tidak,,,False,
+14898,etnopolitik,10134,tunggal,Belanda,,True,the comparative science of the political organization of (pre-industrial) societ
+14992,erata,9990,tidak,,,False,errata
+15036,epifiton,9923,tunggal,Belanda,,True,epiphyte  [based on épifit (< Belanda)]
+15144,encim,9711,tidak,,,False,"aunt, wife of father’s younger brother, term of address for any Ch married woman"
+15215,elpiji,9529,tidak,,,False,liquified petroleum gas
+15243,elektropatologi,9487,tunggal,Belanda,éléktro- + patologi,True,electropathology  [from éléktro- (< Belanda) + from patologi (< Belanda)]
+15258,elektrolisi,9470,tunggal,Inggris,,True,product of electrolysis  [based on éléktrolisis (< Inggris)]
+15475,ekabahasawan,9145,tunggal,Sanskerta,éka- + bahasa + -wan,True,monolingual person  [from éka- (< Sanskerta) + from bahasa (< Sanskerta) + from 
+15476,ekabahasa,9144,tunggal,Sanskerta,éka- + bahasa,True,unilingual  [from éka- (< Sanskerta) + from bahasa (< Sanskerta)]
+15523,dwitunggal,9045,tunggal,Sanskerta,,True,"two in one, duumvirate  [from dwi- (< Sanskerta) + < loan tunggal]"
+15524,dwitarung,9044,tunggal,Sanskerta,,True,twosome  [from dwi- (< Sanskerta) + < loan tarung]
+15525,dwisegi,9043,tunggal,Sanskerta,,True,ambiguous  [from dwi- (< Sanskerta) + < loan segi]
+15527,dwiperan,9041,tunggal,Sanskerta,,True,double role  [from dwi- (< Sanskerta) + < loan peran]
+15528,dwimuka,9040,tunggal,Sanskerta,dwi- + muka,True,ambiguous  [from dwi- (< Sanskerta) + from muka (< Sanskerta)]
+15532,dwiganda,9034,tunggal,Sanskerta,,True,duplicate  [from dwi- (< Sanskerta) + < loan ganda]
+15533,dwifungsi,9033,compound,,dwi- (Sanskerta) + fungsi (Belanda),False,dual function  [from dwi- (< Sanskerta) + from fungsi (< Belanda)]
+15534,dwidasawarsa,9032,tunggal,Sanskerta,dwi- + dasawarsa,True,two decades  [from dwi- (< Sanskerta) + from dasawarsa (< Sanskerta)]
+15535,dwidarma,9031,tunggal,Sanskerta,dwi- + darma,True,dual duty  [from dwi- (< Sanskerta) + from darma (< Sanskerta)]
+15536,dwibahasawan,9027,tunggal,Sanskerta,dwi- + bahasa + -wan,True,bilingual person  [from dwi- (< Sanskerta) + from bahasa (< Sanskerta) + from -w
+15537,dwibahasa,9026,tunggal,Sanskerta,dwi- + bahasa,True,bilingual  [from dwi- (< Sanskerta) + from bahasa (< Sanskerta)]
+15538,dwiarti,9024,tunggal,Sanskerta,dwi- + arti,True,ambiguous  [from dwi- (< Sanskerta) + from arti (< Sanskerta)]
+15557,duplisitas,8978,compound,,duplik (Belanda) + -itas (Latin),False,replying to a rejoinder  [from duplik (< Belanda) + from -itas (< Latin)]
+15565,duodrama,8967,tunggal,Belanda,duo + drama,True,drama performed by two players only  [from duo (< Belanda) (< Italia) + from dra
+15579,dukaten,8921,tidak,,,False,ducat
+15582,dukacita,8917,tunggal,Sanskerta,duka + cita,True,sorrow  [from duka (< Sanskerta) + from cita (< Sanskerta)]
+15721,ditransitif,8639,tunggal,Belanda,di- + transitif,True,(verbs) with two objects  [from di- (< Belanda) (< Latin) + from transitif (< Be
+15750,dismutasi,8590,tunggal,Belanda,dis- + mutasi,True,split  [from  dis- (< Belanda) + from  mutasi (< Belanda)]
+15835,dinamisator,8451,compound,,dinamis (Belanda) + -ator (Inggris),False,"mobilizer, activator  [from  dinamis (< Belanda) + from  -ator (< Inggris)]"
+15884,digdaya,8377,tidak,,,False,
+15916,dias,8330,tidak,,,False,transparency
+16035,dermawan,8131,tunggal,Sanskerta,derma + -wan,True,philanthropic; philanthropist  [from derma (< Sanskerta) + from -wan (< Sanskert
+16052,deras,8087,tidak,,,False,
+16069,depersonifikasi,8042,tunggal,Belanda,dé- + personifikasi,True,depersonalization  [from  dé- (< Belanda) (< Latin) + from  personifikasi (< Bel
+16075,deparpolisasi,8034,tunggal,Belanda,dé- + -isasi,True,reduction of number of political parties  [from dé- (< Belanda) (< Latin) + parp
+16078,deoknumisasi,8020,compound,,oknum (Arab) + -isasi (Belanda),False,abandoning of personality cult  [from dé- (< Belanda or < Inggris) (< Latin) + f
+16102,dena,7937,tidak,,,False,
+16105,demonstrativa,7916,tidak,,,False,demonstrative
+16157,dekontekstualisasi,7802,tunggal_multi_fallback,Belanda,,True,decontextualization  [based on dé- (< Belanda) (< Latin) + Eng contextual + -isa
+16158,dekonstruksi,7800,tunggal,Belanda,dé- + konstruksi,True,deconstruction  [from  dé- (< Belanda)- (< Latin) + from  konstruksi (< Belanda)
+16170,deklasifikasi,7785,tunggal,Belanda,dé- + klasifikasi,True,declassification  [from dé- (< Belanda) (< Latin) + from klasifikasi (< Belanda)
+16192,deideologisasi,7746,tunggal,Belanda,,True,the abandonment of an ideology  [based on dé (< Belanda) + Du ideologisering]
+16205,defonologisasi,7707,tunggal_multi_fallback,Belanda,,True,dephonologization  [based on dé- (< Belanda) (< Latin) + Eng phonologization]
+16239,debirokratisasi,7620,tunggal,Belanda,dé- + birokratisasi,True,‘debureaucratization’  [from dé- (< Belanda) (< Latin) + from birokratisasi (< B
+16260,dasi,7553,tidak,,,False,(neck) tie
+16263,dasatitah,7549,tunggal,Sanskerta,,True,the Ten Commandments  [from dasa- (< Sanskerta) + < loan titah]
+16264,dasasila,7548,tunggal,Sanskerta,dasa- + sila,True,the Ten Basic Principles  [from dasa- (< Sanskerta) + from sila (< Sanskerta)]
+16265,dasarian,7547,tunggal,Sanskerta,,True,a ten day period  [based on dasa- (< Sanskerta) + hari (< Sanskerta) + < loan -a
+16266,dasalomba,7544,tunggal,Sanskerta,,True,decathlon  [from dasa- (< Sanskerta) + < loan lomba]
+16270,darus,7539,tidak,,,False,
+16277,darmawisata,7524,tunggal,Sanskerta,darma + wisata,True,"excursion, outing  [from darma (< Sanskerta) + from wisata (< Sanskerta)]"
+16278,darmasiswa,7522,tunggal,Sanskerta,darma + siswa,True,scholarship  [from darma (< Sanskerta) + from siswa (< Sanskerta)]
+16279,darmakelana,7521,tunggal,Sanskerta,,True,tourist  [from darma (< Sanskerta) + < loan kelana]
+16280,darmabakti,7520,tunggal,Sanskerta,darma + bakti,True,sacred duty  [from darma (< Sanskerta) + from bakti (< Sanskerta)]
+16350,daerahisme,7304,compound,,daérah (Arab) + -isme (Belanda),False,regionalism  [from daérah (< Arab) + from -isme (< Belanda)]
+16384,cuki,7154,tidak,,,False,
+16394,congsam,7061,tidak,,,False,
+16399,cokmar,6990,tunggal,Persia,,True,"club, mace  [prob. < Persia chob-mār 401-1139]"
+16400,cokelat,6985,tidak,,,False,
+16402,cok,6980,tidak,,,False,coarse (of the quality of tobacco)
+16442,cerpenis,6784,tunggal,Sanskerta,,True,a writer of short stories  [from cer (< Sanskerta) + pén + from -is (< Belanda o
+16443,cerpen,6783,tunggal,Sanskerta,,True,short story  [from cerita (< Sanskerta) + from péndék]

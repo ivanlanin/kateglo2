@@ -199,7 +199,7 @@ describe('ModelEtimologi', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('UPDATE etimologi'),
-      ['kata', 2, 'laf', 'id', 'asal-kata', 'makna asal', 7, 'def', 'sit', 'isi', 'aks', 'lihat', 'var', 4, true, 9]
+      ['kata', 2, 'laf', 'id', 'asal-kata', 'makna asal', 7, 'def', 'sit', 'isi', 'aks', 'lihat', 'var', 4, true, false, 9]
     );
     expect(ambilSpy).toHaveBeenCalledWith(9);
     expect(result).toEqual({ id: 9, indeks: 'kata' });
@@ -229,7 +229,7 @@ describe('ModelEtimologi', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO etimologi'),
-      ['serapan', null, '', '', '', '', null, '', '', '', '', '', '', null, false]
+      ['serapan', null, '', '', '', '', null, '', '', '', '', '', '', null, false, false]
     );
     expect(ambilSpy).toHaveBeenCalledWith(12);
     expect(result).toEqual({ id: 12 });

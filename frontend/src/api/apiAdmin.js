@@ -387,6 +387,7 @@ export function useDaftarEtimologiAdmin({
   q = '',
   bahasa = '',
   aktif = '',
+  meragukan = '',
 } = {}) {
   const params = buildDaftarParams({
     limit,
@@ -399,9 +400,10 @@ export function useDaftarEtimologiAdmin({
   });
 
   if (bahasa) params.bahasa = bahasa;
+  if (meragukan === '1' || meragukan === '0') params.meragukan = meragukan;
 
   return useQuery({
-    queryKey: ['admin-etimologi', { limit, cursor, direction, lastPage, q, bahasa, aktif }],
+    queryKey: ['admin-etimologi', { limit, cursor, direction, lastPage, q, bahasa, aktif, meragukan }],
     queryFn: () =>
       klien
         .get('/api/redaksi/etimologi', { params })

@@ -17,12 +17,15 @@ class ModelEtimologi {
     if (!Number.isInteger(parsedId) || parsedId <= 0) return [];
 
     const result = await db.query(
-      `SELECT e.id, e.bahasa, e.kata_asal, e.sumber_id, s.kode AS sumber_kode, s.nama AS sumber, e.aktif
+      `SELECT e.id, e.bahasa, e.kata_asal, e.sumber_id, s.kode AS sumber_kode, s.nama AS sumber, e.aktif, e.meragukan
        FROM etimologi e
        LEFT JOIN sumber s ON s.id = e.sumber_id
        WHERE e.entri_id = $1
          ${aktifSaja ? 'AND e.aktif = TRUE' : ''}
-         AND NULLIF(BTRIM(COALESCE(bahasa, '')), '') IS NOT NULL
+         AND (
+           NULLIF(BTRIM(COALESCE(e.bahasa, '')), '') IS NOT NULL
+           OR NULLIF(BTRIM(COALESCE(e.kata_asal, '')), '') IS NOT NULL
+         )
        ORDER BY e.id ASC`,
       [parsedId]
     );
@@ -61,7 +64,7 @@ class ModelEtimologi {
     return result.rows;
   }
 
-  static async daftarAdmin({ limit = 50, offset = 0, q = '', bahasa = '', aktif = '' } = {}) {
+  static async daftarAdmin({ limit = 50, offset = 0, q = '', bahasa = '', aktif = '', meragukan = '' } = {}) {
     const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
     const safeOffset = Math.max(Number(offset) || 0, 0);
 
@@ -91,6 +94,11 @@ class ModelEtimologi {
     if (aktif === '1' || aktif === '0') {
       params.push(aktif === '1');
       conditions.push(`e.aktif = $${params.length}`);
+    }
+
+    if (meragukan === '1' || meragukan === '0') {
+      params.push(meragukan === '1');
+      conditions.push(`e.meragukan = $${params.length}`);
     }
 
     const whereSql = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
@@ -129,6 +137,7 @@ class ModelEtimologi {
          en.indeks AS entri_indeks,
          en.homonim AS entri_homonim,
          e.aktif,
+         e.meragukan,
          e.created_at,
          e.updated_at
        FROM etimologi e
@@ -164,6 +173,7 @@ class ModelEtimologi {
          en.indeks AS entri_indeks,
          en.homonim AS entri_homonim,
          e.aktif,
+         e.meragukan,
          e.created_at,
          e.updated_at
        FROM etimologi e
@@ -190,12 +200,14 @@ class ModelEtimologi {
     sumber_lihat,
     sumber_varian,
     entri_id,
+    meragukan,
   }) {
     const normalizedHomonim = normalizeIntegerNullable(homonim);
     const normalizedEntriId = normalizeIntegerNullable(entri_id);
     const normalizedSumberId = normalizeIntegerNullable(sumber_id);
     const normalizedBahasa = String(bahasa || '').trim();
     const normalizedAktifDariBahasa = Boolean(normalizedBahasa);
+    const normalizedMeragukan = Boolean(meragukan);
 
     const result = id
       ? await db.query(
@@ -215,8 +227,9 @@ class ModelEtimologi {
              sumber_varian = NULLIF($13, ''),
              entri_id = $14,
              aktif = $15,
+             meragukan = $16,
              updated_at = NOW()
-           WHERE id = $16
+           WHERE id = $17
          RETURNING id`,
         [
           indeks,
@@ -234,6 +247,7 @@ class ModelEtimologi {
           sumber_varian,
           normalizedEntriId,
           normalizedAktifDariBahasa,
+          normalizedMeragukan,
           id,
         ]
       )
@@ -254,6 +268,7 @@ class ModelEtimologi {
            sumber_varian,
            entri_id,
            aktif,
+           meragukan,
            created_at,
            updated_at
          )
@@ -273,6 +288,7 @@ class ModelEtimologi {
            NULLIF($13, ''),
            $14,
            $15,
+           $16,
            NOW(),
            NOW()
          )
@@ -293,6 +309,7 @@ class ModelEtimologi {
           sumber_varian,
           normalizedEntriId,
           normalizedAktifDariBahasa,
+          normalizedMeragukan,
         ]
       );
 

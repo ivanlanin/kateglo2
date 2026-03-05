@@ -109,6 +109,12 @@ export const opsiFilterStatusAktif = [
   { value: '0', label: 'Nonaktif' },
 ];
 
+export const opsiFilterMeragukan = [
+  { value: '', label: '—Meragukan—' },
+  { value: '1', label: 'Meragukan' },
+  { value: '0', label: 'Meyakinkan' },
+];
+
 // ─── Komponen ────────────────────────────────────────────────────────────────
 
 /**
