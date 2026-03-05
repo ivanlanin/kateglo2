@@ -19,6 +19,7 @@ import {
   TombolAksiAdmin,
   TabelAdmin,
   BadgeStatus,
+  BadgeMeragukan,
   opsiFilterStatusAktif,
   opsiFilterMeragukan,
   getApiErrorMessage,
@@ -32,6 +33,7 @@ import {
   InputField,
   SelectField,
   ToggleAktif,
+  ToggleMeragukan,
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormulirAdmin';
@@ -89,6 +91,7 @@ const nilaiAwal = {
   entri_id: '',
   entri_teks: '',
   aktif: false,
+  meragukan: false,
 };
 
 const kolom = [
@@ -128,11 +131,6 @@ const kolom = [
     render: (item) => <span className="text-gray-600 dark:text-gray-400">{potongTeks(item.kata_asal, 70)}</span>,
   },
   {
-    key: 'arti_asal',
-    label: 'Arti',
-    render: (item) => <span className="text-gray-600 dark:text-gray-400">{potongTeks(item.arti_asal, 80)}</span>,
-  },
-  {
     key: 'sumber_definisi',
     label: 'Definisi',
     render: (item) => <span className="text-gray-600 dark:text-gray-400">{potongTeks(item.sumber_definisi, 100)}</span>,
@@ -146,6 +144,11 @@ const kolom = [
     key: 'aktif',
     label: 'Status',
     render: (item) => <BadgeStatus aktif={Boolean(item.aktif)} />,
+  },
+  {
+    key: 'meragukan',
+    label: 'Meragukan',
+    render: (item) => <BadgeMeragukan meragukan={Boolean(item.meragukan)} />,
   },
 ];
 
@@ -477,7 +480,10 @@ function EtimologiAdmin() {
             <SelectField label="Sumber" name="sumber_id" value={String(panel.data.sumber_id || '')} onChange={panel.ubahField} options={opsiSumber} />
           </div>
 
-          <ToggleAktif value={Boolean(panel.data.aktif)} onChange={panel.ubahField} />
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+            <ToggleAktif value={Boolean(panel.data.aktif)} onChange={panel.ubahField} />
+            <ToggleMeragukan value={Boolean(panel.data.meragukan)} onChange={panel.ubahField} />
+          </div>
 
           <FormFooter
             onSimpan={handleSimpan}

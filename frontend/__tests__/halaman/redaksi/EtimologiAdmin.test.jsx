@@ -107,6 +107,9 @@ vi.mock('../../../src/komponen/redaksi/FormulirAdmin', () => ({
   ToggleAktif: ({ value, onChange }) => (
     <button type="button" onClick={() => onChange('aktif', value ? 0 : 1)}>toggle</button>
   ),
+  ToggleMeragukan: ({ value, onChange }) => (
+    <button type="button" onClick={() => onChange('meragukan', value ? 0 : 1)}>toggle meragukan</button>
+  ),
   FormFooter: ({ onSimpan, onBatal, onHapus }) => (
     <div>
       <button type="button" onClick={onSimpan}>Simpan</button>

@@ -77,6 +77,7 @@ describe('routes/redaksi/etimologi', () => {
       q: 'serap',
       bahasa: 'Inggris',
       aktif: '',
+      meragukan: '',
     });
   });
 
@@ -92,6 +93,7 @@ describe('routes/redaksi/etimologi', () => {
       q: '',
       bahasa: '',
       aktif: '1',
+      meragukan: '',
     });
   });
 

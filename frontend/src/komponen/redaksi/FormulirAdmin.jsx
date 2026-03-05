@@ -134,6 +134,34 @@ export function ToggleAktif({ value, onChange, disabled }) {
 }
 
 /**
+ * Toggle meragukan/pasti
+ */
+export function ToggleMeragukan({ value, onChange, disabled }) {
+  return (
+    <div className="form-admin-group">
+      <label className="form-admin-label">Meragukan</label>
+      <button
+        type="button"
+        onClick={() => onChange('meragukan', value ? 0 : 1)}
+        disabled={disabled}
+        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+          value ? 'bg-amber-500' : 'bg-gray-300 dark:bg-gray-600'
+        }`}
+      >
+        <span
+          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+            value ? 'translate-x-6' : 'translate-x-1'
+          }`}
+        />
+      </button>
+      <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
+        {value ? 'Ragu' : 'Pasti'}
+      </span>
+    </div>
+  );
+}
+
+/**
  * Grup checkbox tunggal
  */
 export function CheckboxField({ label, name, value, onChange, disabled }) {

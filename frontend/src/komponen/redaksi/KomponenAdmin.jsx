@@ -111,8 +111,8 @@ export const opsiFilterStatusAktif = [
 
 export const opsiFilterMeragukan = [
   { value: '', label: '—Meragukan—' },
-  { value: '1', label: 'Meragukan' },
-  { value: '0', label: 'Meyakinkan' },
+  { value: '1', label: 'Ragu' },
+  { value: '0', label: 'Pasti' },
 ];
 
 // ─── Komponen ────────────────────────────────────────────────────────────────
@@ -285,6 +285,23 @@ export function BadgeStatus({ aktif }) {
       }`}
     >
       {aktif ? 'Aktif' : 'Nonaktif'}
+    </span>
+  );
+}
+
+/**
+ * Badge status meragukan/pasti
+ */
+export function BadgeMeragukan({ meragukan }) {
+  return (
+    <span
+      className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
+        meragukan
+          ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400'
+          : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400'
+      }`}
+    >
+      {meragukan ? 'Ragu' : 'Pasti'}
     </span>
   );
 }
