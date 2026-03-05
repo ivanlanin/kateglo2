@@ -541,9 +541,7 @@ function KamusDetail() {
             ].filter(Boolean);
             const pemenggalanTernormalisasi = normalisasiNilaiMeta(entriItem.pemenggalan);
             const lafalTernormalisasi = normalisasiNilaiMeta(entriItem.lafal, { hapusSlash: true });
-            const adaPemenggalan = Boolean(
-              pemenggalanTernormalisasi && !pembandingEntri.includes(pemenggalanTernormalisasi)
-            );
+            const adaPemenggalan = Boolean(pemenggalanTernormalisasi);
             const adaLafal = Boolean(
               lafalTernormalisasi && !pembandingEntri.includes(lafalTernormalisasi)
             );

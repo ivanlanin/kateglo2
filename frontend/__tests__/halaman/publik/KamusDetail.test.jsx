@@ -1801,7 +1801,7 @@ describe('KamusDetail', () => {
     expect(superskrip).toEqual(['2', '3']);
   });
 
-  it('menyembunyikan baris metadata jika pemenggalan dan lafal sama dengan entri/indeks setelah abaikan suffix angka', () => {
+  it('menampilkan pemenggalan meski sama dengan entri/indeks, tapi menyembunyikan lafal jika sama', () => {
     mockUseQuery.mockReturnValue({
       isLoading: false,
       isError: false,
@@ -1819,7 +1819,10 @@ describe('KamusDetail', () => {
 
     const { container } = render(<KamusDetail />);
 
-    expect(container.querySelector('.kamus-detail-heading-meta')).toBeNull();
+    const metaRow = container.querySelector('.kamus-detail-heading-meta');
+    expect(metaRow).not.toBeNull();
+    expect(metaRow.querySelector('[title="Pemenggalan"]')).not.toBeNull();
+    expect(metaRow.querySelector('[title="Pelafalan"]')).toBeNull();
   });
 
   it('menampilkan subentri varian sebagai teks non-klik', () => {
