@@ -6,14 +6,22 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ambilPencarianPopuler } from '../../api/apiPublik';
 import KotakCari from '../../komponen/publik/KotakCari';
+import { buatPathDetailKamus } from '../../utils/paramUtils';
 
 const daftarDomain = [
-  { key: 'kamus', path: '/kamus/cari/' },
+  { key: 'kamus', buildPath: (kata) => buatPathDetailKamus(kata) },
   { key: 'tesaurus', path: '/tesaurus/cari/' },
-  { key: 'glosarium', path: '/glosarium/cari/' },
+  { key: 'glosarium', buildPath: (kata) => `/glosarium/detail/${encodeURIComponent(kata)}` },
   { key: 'makna', path: '/makna/cari/' },
   { key: 'rima', path: '/rima/cari/' },
 ];
+
+function buatPathPopuler(item, kata) {
+  if (typeof item.buildPath === 'function') {
+    return item.buildPath(kata);
+  }
+  return `${item.path}${encodeURIComponent(kata)}`;
+}
 
 function tanggalLokalBrowser() {
   const now = new Date();
@@ -76,7 +84,7 @@ function Beranda() {
             return (
               <Link
                 key={item.key}
-                to={`${item.path}${encodeURIComponent(kata)}`}
+                to={buatPathPopuler(item, kata)}
                 className="beranda-tag-link"
               >
                 {kata}

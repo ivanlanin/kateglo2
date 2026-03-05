@@ -79,9 +79,9 @@ describe('Beranda', () => {
     expect(mockAmbilPencarianPopuler).toHaveBeenCalledWith({
       tanggal: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/),
     });
-    expect(await screen.findByRole('link', { name: 'air' })).toHaveAttribute('href', '/kamus/cari/air');
+    expect(await screen.findByRole('link', { name: 'air' })).toHaveAttribute('href', '/kamus/detail/air');
     expect(screen.getByRole('link', { name: 'kata' })).toHaveAttribute('href', '/tesaurus/cari/kata');
-    expect(screen.getByRole('link', { name: 'istilah' })).toHaveAttribute('href', '/glosarium/cari/istilah');
+    expect(screen.getByRole('link', { name: 'istilah' })).toHaveAttribute('href', '/glosarium/detail/istilah');
     expect(screen.getByRole('link', { name: 'arti' })).toHaveAttribute('href', '/makna/cari/arti');
     expect(screen.getByRole('link', { name: 'sajak' })).toHaveAttribute('href', '/rima/cari/sajak');
   });
