@@ -48,6 +48,45 @@ function renderMarkdown(teks) {
     .replace(/\*(.+?)\*/g, '<em>$1</em>');
 }
 
+/**
+ * Render teks makna dengan tautan otomatis ke entri kamus.
+ * Setiap segmen yang dipisah ";" dan terdiri dari 1–2 kata akan menjadi tautan.
+ * Teks dalam kurung seperti "(tentang ...)" tetap tampil tapi bukan bagian tautan.
+ */
+function RenderMakna({ teks }) {
+  if (!teks) return null;
+  const segmen = teks.split(';');
+  return (
+    <>
+      {segmen.map((seg, i) => {
+        const trimmed = seg.trim();
+        const hasMarkdown = /\*/.test(trimmed);
+        if (!hasMarkdown) {
+          const parenIdx = trimmed.indexOf('(');
+          const baseText = parenIdx !== -1 ? trimmed.slice(0, parenIdx).trim() : trimmed;
+          const parenthetical = parenIdx !== -1 ? ' ' + trimmed.slice(parenIdx) : '';
+          const wordCount = baseText.split(/\s+/).filter(Boolean).length;
+          if (baseText && wordCount <= 2) {
+            return (
+              <Fragment key={i}>
+                {i > 0 && '; '}
+                <Link to={buatPathDetailKamus(baseText)} className="kamus-detail-subentry-link">{baseText}</Link>
+                {parenthetical}
+              </Fragment>
+            );
+          }
+        }
+        return (
+          <Fragment key={i}>
+            {i > 0 && '; '}
+            <span dangerouslySetInnerHTML={{ __html: renderMarkdown(trimmed) }} />
+          </Fragment>
+        );
+      })}
+    </>
+  );
+}
+
 function buatPathKategoriKamus(kategori, badge) {
   const nilai = String(badge || '').trim();
   if (!kategori || !nilai) return '/kamus';
@@ -697,7 +736,7 @@ function KamusDetail() {
                                   </Link>{' '}
                                 </>
                               )}
-                              <span dangerouslySetInnerHTML={{ __html: renderMarkdown(m.makna) }} />
+                              <RenderMakna teks={m.makna} />
                               {(m.ilmiah || m.kimia) && (
                                 <span className="kamus-detail-def-extra">
                                   ; {m.ilmiah && <em>{m.ilmiah}</em>}

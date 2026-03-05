@@ -4,6 +4,7 @@
 
 - Menyeragamkan jumlah data per halaman (*paging*) redaksi menjadi 50
 - Membenahi data etimologi dari Loan-words in Indonesian and Malay
+- Memberikan tautan ke entri lain untuk makna yang 1–2 huruf
 
 ## 2026-03-04 Rabu
 
