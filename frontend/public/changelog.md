@@ -4,7 +4,8 @@
 
 - Mengubah tautan kamus dan glosarium di beranda untuk mengarah detail
 - Menganalisis dan memperbaiki pemenggalan kata di kamus
-- Menyorot [Sumber](/sumber) yang diberi jangkar (_anchor_)
+- Menyorot [sumber](/sumber) yang diberi jangkar (_anchor_)
+- Menambahkan navigasi ke entri sebelum dan sesudah di detail kamus
 
 ## 2026-03-05 Kamis
 

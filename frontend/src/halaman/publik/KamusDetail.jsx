@@ -418,6 +418,12 @@ function KamusDetail() {
     };
 
   const isFetchingGlosarium = notFound ? isFetchingGlosariumFallback : isFetching;
+  const navigasiIndeks = notFound
+    ? { prev: null, next: null }
+    : {
+      prev: data?.navigasi?.prev || null,
+      next: data?.navigasi?.next || null,
+    };
   const {
     mulaiNavigasi: mulaiNavigasiGlosarium,
     isNavigasiMemuat: isNavigasiGlosariumMemuat,
@@ -549,8 +555,16 @@ function KamusDetail() {
               ? entriItem.tagar.filter((item) => item && typeof item === 'object' && String(item.nama || '').trim() && String(item.kode || '').trim())
               : [];
 
+            const adalahEntriTerakhir = entriIndex === daftarEntri.length - 1;
+
             return (
-              <section key={`${entriItem.id ?? entriItem.indeks ?? entriItem.entri ?? 'entri'}-${entriIndex}`} className="mb-8 pb-8 border-b border-gray-200 dark:border-gray-700 last:border-b-0 last:mb-0 last:pb-0">
+              <section
+                key={`${entriItem.id ?? entriItem.indeks ?? entriItem.entri ?? 'entri'}-${entriIndex}`}
+                className={[
+                  'mb-8 pb-8 border-b border-gray-200 dark:border-gray-700',
+                  adalahEntriTerakhir ? 'border-b-0 mb-0 pb-0' : '',
+                ].join(' ').trim()}
+              >
                 <div className="kamus-detail-heading-row">
                   <div className="min-w-0">
                     <h1 className="kamus-detail-heading">
@@ -876,6 +890,30 @@ function KamusDetail() {
               </section>
             );
           })}
+
+          {!notFound && (navigasiIndeks.prev || navigasiIndeks.next) && (
+            <nav className="kamus-detail-sekuens-nav" aria-label="Navigasi indeks kamus">
+              {navigasiIndeks.prev ? (
+                <Link
+                  to={buatPathDetailKamus(navigasiIndeks.prev.indeks || navigasiIndeks.prev.label || '')}
+                  className="kamus-detail-sekuens-link kamus-detail-sekuens-link-prev"
+                >
+                  {'‹ '}
+                  {navigasiIndeks.prev.label || navigasiIndeks.prev.indeks}
+                </Link>
+              ) : <span />}
+
+              {navigasiIndeks.next && (
+                <Link
+                  to={buatPathDetailKamus(navigasiIndeks.next.indeks || navigasiIndeks.next.label || '')}
+                  className="kamus-detail-sekuens-link kamus-detail-sekuens-link-next"
+                >
+                  {navigasiIndeks.next.label || navigasiIndeks.next.indeks}
+                  {' ›'}
+                </Link>
+              )}
+            </nav>
+          )}
         </div>
 
         <div className="space-y-4">

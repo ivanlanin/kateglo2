@@ -1550,6 +1550,22 @@ code {
     @apply text-base leading-relaxed text-gray-700 mt-1;
   }
 
+  .kamus-detail-sekuens-nav {
+    @apply mt-2 flex items-center justify-between gap-2 flex-nowrap;
+  }
+
+  .kamus-detail-sekuens-link {
+    @apply beranda-tag-link inline-flex w-auto px-3;
+  }
+
+  .kamus-detail-sekuens-link-prev {
+    @apply justify-start text-left;
+  }
+
+  .kamus-detail-sekuens-link-next {
+    @apply justify-end text-right;
+  }
+
   .dark .kamus-detail-heading-meta {
     @apply text-dark-text-muted;
   }

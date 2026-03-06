@@ -7,10 +7,12 @@ jest.mock('../../models/modelEntri', () => {
   const cariEntri = jest.fn();
   const cariEntriCursor = jest.fn();
   const ambilEntriPerIndeks = jest.fn();
+  const ambilNavigasiIndeks = jest.fn();
   return {
     cariEntri,
     cariEntriCursor,
     ambilEntriPerIndeks,
+    ambilNavigasiIndeks,
     ambilMakna: jest.fn(),
     ambilContoh: jest.fn(),
     ambilSubentri: jest.fn(),
@@ -63,6 +65,7 @@ describe('layananKamusPublik.cariKamus', () => {
     delKey.mockResolvedValue(undefined);
     ModelTesaurus.ambilDetail.mockResolvedValue(null);
     ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+    ModelEntri.ambilNavigasiIndeks.mockResolvedValue({ prev: null, next: null });
     ModelEtimologi.ambilAktifPublikByEntriId.mockResolvedValue([]);
     ModelTagar.ambilTagarEntri.mockResolvedValue([]);
   });
@@ -117,6 +120,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     getJson.mockResolvedValue(null);
     setJson.mockResolvedValue(undefined);
     delKey.mockResolvedValue(undefined);
+    ModelEntri.ambilNavigasiIndeks.mockResolvedValue({ prev: null, next: null });
     ModelEtimologi.ambilAktifPublikByEntriId.mockResolvedValue([]);
     ModelTagar.ambilTagarEntri.mockResolvedValue([]);
   });
@@ -258,6 +262,10 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([
       { indonesia: 'zat aktif', asing: 'active substance' }
     ]);
+    ModelEntri.ambilNavigasiIndeks.mockResolvedValue({
+      prev: { indeks: 'akti', label: 'akti' },
+      next: { indeks: 'aktifisme', label: 'aktifisme' },
+    });
 
     const result = await ambilDetailKamus('aktif');
 
@@ -272,6 +280,39 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     expect(result.entri[1].entri_rujuk_indeks).toBe('aktivasi-indeks');
     expect(result.tesaurus).toEqual({ sinonim: ['aktif', 'giat'], antonim: ['pasif'] });
     expect(result.glosarium).toEqual([{ indonesia: 'zat aktif', asing: 'active substance' }]);
+    expect(result.navigasi).toEqual({
+      prev: { indeks: 'akti', label: 'akti' },
+      next: { indeks: 'aktifisme', label: 'aktifisme' },
+    });
+  });
+
+  it('meminta navigasi indeks tetangga dengan indeks yang sudah ternormalisasi', async () => {
+    ModelEntri.ambilEntriPerIndeks.mockResolvedValue([
+      {
+        id: 200,
+        entri: 'keras',
+        indeks: 'keras',
+        homonim: null,
+        urutan: 1,
+        jenis: 'dasar',
+        pemenggalan: null,
+        lafal: null,
+        varian: null,
+        jenis_rujuk: null,
+        entri_rujuk: null,
+      },
+    ]);
+    ModelEntri.ambilMakna.mockResolvedValue([]);
+    ModelEntri.ambilContoh.mockResolvedValue([]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilBentukTidakBakuByRujukId.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
+    ModelTesaurus.ambilDetail.mockResolvedValue(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+
+    await ambilDetailKamus('keras (2)');
+
+    expect(ModelEntri.ambilNavigasiIndeks).toHaveBeenCalledWith('keras');
   });
 
   it('membangun entri_rujuk_indeks dari entri_rujuk saat indeks rujuk tidak tersedia', async () => {

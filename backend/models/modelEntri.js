@@ -414,6 +414,52 @@ class ModelEntri {
     return result.rows;
   }
 
+  static async ambilNavigasiIndeks(indeks) {
+    const indeksAman = String(indeks || '').trim().toLowerCase();
+    if (!indeksAman) {
+      return { prev: null, next: null };
+    }
+
+    const baseCte = `
+      WITH indeks_unik AS (
+        SELECT LOWER(TRIM(e.indeks)) AS indeks_norm,
+               MIN(e.indeks) AS label
+        FROM entri e
+        WHERE e.aktif = 1
+          AND COALESCE(TRIM(e.indeks), '') <> ''
+        GROUP BY LOWER(TRIM(e.indeks))
+      )`;
+
+    const [prevResult, nextResult] = await Promise.all([
+      db.query(
+        `${baseCte}
+         SELECT indeks_norm AS indeks, label
+         FROM indeks_unik
+         WHERE indeks_norm < $1
+         ORDER BY indeks_norm DESC
+         LIMIT 1`,
+        [indeksAman]
+      ),
+      db.query(
+        `${baseCte}
+         SELECT indeks_norm AS indeks, label
+         FROM indeks_unik
+         WHERE indeks_norm > $1
+         ORDER BY indeks_norm ASC
+         LIMIT 1`,
+        [indeksAman]
+      ),
+    ]);
+
+    const prev = prevResult.rows[0] || null;
+    const next = nextResult.rows[0] || null;
+
+    return {
+      prev,
+      next,
+    };
+  }
+
   /**
   * Ambil semua makna untuk sebuah entri
   * @param {number} entriId - ID entri

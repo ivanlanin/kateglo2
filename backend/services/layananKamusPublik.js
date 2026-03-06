@@ -209,7 +209,7 @@ async function ambilDetailKamus(indeksAtauEntri, {
 
   const entriUntukRespons = entriNonVarian.length > 0 ? entriNonVarian : detailEntri;
 
-  const [tesaurusDetail, glosariumResult] = await Promise.all([
+  const [tesaurusDetail, glosariumResult, navigasiIndeks] = await Promise.all([
     ModelTesaurus.ambilDetail(indeksTarget),
     ModelGlosarium.cariFrasaMengandungKataUtuh(indeksTarget, {
       limit: glosariumLimit,
@@ -217,6 +217,7 @@ async function ambilDetailKamus(indeksAtauEntri, {
       direction: glosariumDirection,
       hitungTotal: true,
     }),
+    ModelEntri.ambilNavigasiIndeks(indeksTarget),
   ]);
 
   const glosariumData = Array.isArray(glosariumResult)
@@ -252,6 +253,10 @@ async function ambilDetailKamus(indeksAtauEntri, {
     tesaurus,
     glosarium: glosariumData,
     glosarium_page: glosariumPageInfo,
+    navigasi: {
+      prev: navigasiIndeks?.prev || null,
+      next: navigasiIndeks?.next || null,
+    },
   };
 
   await setJson(cacheKey, result, getTtlSeconds());
