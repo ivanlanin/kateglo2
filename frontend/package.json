@@ -7,6 +7,11 @@
     "dev": "vite --port 5173",
     "build": "vite build",
     "build:ssr": "node scripts/build-ssr.mjs",
+    "mobile:build": "npm run build && npx cap sync",
+    "mobile:sync": "npx cap sync",
+    "mobile:android": "npx cap open android",
+    "mobile:ios": "npx cap open ios",
+    "mobile:doctor": "npx cap doctor",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -15,6 +20,9 @@
     "lint:fix": "eslint . --ext js,jsx --fix"
   },
   "dependencies": {
+    "@capacitor/android": "^8.2.0",
+    "@capacitor/core": "^8.2.0",
+    "@capacitor/ios": "^8.2.0",
     "@tanstack/react-query": "^5.62.7",
     "axios": "^1.7.9",
     "dayjs": "^1.11.19",
@@ -26,6 +34,7 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.2.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@vitejs/plugin-react": "^4.3.4",

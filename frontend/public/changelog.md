@@ -10,6 +10,7 @@
 - Membuat kartu bidang dan asal bahasa di [kamus](/kamus) menjadi masing-masing satu baris
 - Menyesuaikan pemenggalan akhiran -i
 - Menampilkan kategori dan subentri kamus dengan cip, bukan teks biasa
+- Menyiapkan aplikasi Android dan iOS
 
 ## 2026-03-05 Kamis
 

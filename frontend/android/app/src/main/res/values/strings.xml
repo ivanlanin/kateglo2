@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Kateglo</string>
+    <string name="title_activity_main">Kateglo</string>
+    <string name="package_name">com.kateglo.app</string>
+    <string name="custom_url_scheme">com.kateglo.app</string>
+</resources>
