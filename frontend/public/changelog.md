@@ -6,6 +6,7 @@
 - Menganalisis dan memperbaiki pemenggalan kata di kamus
 - Menyorot [sumber](/sumber) yang diberi jangkar (_anchor_)
 - Menambahkan navigasi ke entri sebelum dan sesudah di detail kamus
+- Memisahkan kartu kategori tagar [kamus](/kamus) menjadi afiks, kombinasi, klitik, dan reduplikasi
 
 ## 2026-03-05 Kamis
 

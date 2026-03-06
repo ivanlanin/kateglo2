@@ -71,8 +71,7 @@ describe('Kamus', () => {
     render(<Kamus />);
 
     expect(screen.getByText('Abjad')).toBeInTheDocument();
-    expect(screen.getByText('Bentuk Bebas')).toBeInTheDocument();
-    expect(screen.getByText('Bentuk Terikat')).toBeInTheDocument();
+    expect(screen.getByText('Bentuk')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Dasar' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Prefiks' })).toHaveAttribute('href', '/kamus/bentuk/prefiks');
     expect(screen.getByRole('link', { name: 'Prakategorial' })).toHaveAttribute('href', '/kamus/bentuk/prakategorial');
@@ -148,7 +147,7 @@ describe('Kamus', () => {
     ).toEqual(['', 'alpha']);
   });
 
-  it('browse kategori memakai fallback array kosong untuk key yang tidak ada dan grid dua kolom saat dua kategori terisi', () => {
+  it('browse kategori memakai fallback array kosong untuk key yang tidak ada dan grid dua kolom saat kelas dan bentuk terisi', () => {
     mockUseQuery.mockImplementation((options) => {
       if (options?.enabled !== false && options?.queryFn) options.queryFn();
       const { queryKey } = options;
@@ -157,6 +156,7 @@ describe('Kamus', () => {
           data: {
             abjad: [{ kode: 'A', nama: 'A' }],
             kelas_kata: [{ kode: 'n', nama: 'nomina' }],
+            bentuk: [{ kode: 'dasar', nama: 'dasar' }],
           },
           isLoading: false,
           isError: false,
@@ -168,13 +168,13 @@ describe('Kamus', () => {
     const { container } = render(<Kamus />);
 
     expect(screen.getByText('Abjad')).toBeInTheDocument();
-    expect(screen.getByText('Kelas Kata')).toBeInTheDocument();
+    expect(screen.getByText('Kelas')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'nomina' })).toHaveAttribute('href', '/kamus/kelas/nomina');
-    const grid = container.querySelector('.grid.grid-cols-1');
-    expect(grid?.className).toContain('md:grid-cols-2');
+    const grids = Array.from(container.querySelectorAll('.grid.grid-cols-1'));
+    expect(grids.some((grid) => grid.className.includes('md:grid-cols-2'))).toBe(true);
   });
 
-  it('browse menampilkan satu kartu Tagar dengan urutan kategori yang ditentukan', () => {
+  it('browse memecah kategori tagar menjadi kartu afiks, kombinasi, klitik, dan reduplikasi', () => {
     mockUseQuery.mockImplementation((options) => {
       if (options?.enabled !== false && options?.queryFn) options.queryFn();
       const { queryKey } = options;
@@ -203,7 +203,10 @@ describe('Kamus', () => {
 
     render(<Kamus />);
 
-    expect(screen.getByText('Tagar')).toBeInTheDocument();
+    expect(screen.getByText('Afiks')).toBeInTheDocument();
+    expect(screen.getByText('Kombinasi')).toBeInTheDocument();
+    expect(screen.getByText('Klitik')).toBeInTheDocument();
+    expect(screen.getByText('Reduplikasi')).toBeInTheDocument();
     const links = screen.getAllByRole('link');
     const tagarLinks = links.filter((item) => item.getAttribute('href')?.startsWith('/kamus/tagar/'));
     expect(tagarLinks.map((item) => item.textContent)).toEqual([

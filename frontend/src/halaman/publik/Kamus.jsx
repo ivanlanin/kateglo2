@@ -29,14 +29,16 @@ import {
 } from '../../utils/metaUtils';
 
 const BARIS_KATEGORI = [
-  ['abjad', 'kelas_kata'],
-  ['bentuk', 'unsur_terikat'],
-  ['tagar'],
+  ['abjad'],
+  ['kelas', 'bentuk_gabungan'],
+  ['afiks', 'kombinasi'],
+  ['klitik', 'reduplikasi'],
   ['ekspresi', 'ragam'],
   ['bahasa', 'bidang'],
 ];
 
 const URUTAN_KATEGORI_TAGAR = ['prefiks', 'infiks', 'sufiks', 'konfiks', 'kombinasi', 'klitik', 'reduplikasi'];
+const KATEGORI_TAGAR_AFIX = ['prefiks', 'infiks', 'sufiks', 'konfiks'];
 
 const OPSI_BENTUK_TAMBAHAN = [
   { kode: 'akronim', nama: 'akronim' },
@@ -114,9 +116,42 @@ function urutkanTagar(daftarTagar = []) {
   });
 }
 
+function gabungkanKategoriBentukGabungan(bentukLabels = [], unsurTerikatLabels = []) {
+  const hasil = [];
+  const seen = new Set();
+  const gabunganBentuk = gabungkanKategoriBentuk(bentukLabels);
+
+  const pushUnik = (item) => {
+    const key = String(item?.kode || '').trim().toLowerCase();
+    if (!key || seen.has(key)) return;
+    seen.add(key);
+    hasil.push(item);
+  };
+
+  gabunganBentuk.forEach(pushUnik);
+  (Array.isArray(unsurTerikatLabels) ? unsurTerikatLabels : []).forEach(pushUnik);
+
+  return hasil;
+}
+
+function ambilTagarPerKategori(daftarTagar = [], daftarKategori = []) {
+  const kategoriSet = new Set(
+    (Array.isArray(daftarKategori) ? daftarKategori : [])
+      .map((kategori) => String(kategori || '').trim().toLowerCase())
+      .filter(Boolean)
+  );
+
+  return (Array.isArray(daftarTagar) ? daftarTagar : []).filter((item) => {
+    const kategori = String(item?.kategori || '').trim().toLowerCase();
+    return kategoriSet.has(kategori);
+  });
+}
+
 export const __private = {
   gabungkanKategoriBentuk,
+  gabungkanKategoriBentukGabungan,
   gabungkanKategoriEkspresi,
+  ambilTagarPerKategori,
   urutkanTagar,
 };
 
@@ -283,19 +318,51 @@ function Kamus() {
       {modeBrowse && !isLoading && kategoriData && (
         <div className="space-y-4 mb-6">
           {BARIS_KATEGORI.map((baris, indexBaris) => {
+            const daftarTagar = urutkanTagar(kategoriData.tagar || []);
             const kategoriTerisi = baris
               .map((kat) => {
-                let labels = kategoriData[kat] || [];
-                if (kat === 'bentuk') {
-                  labels = gabungkanKategoriBentuk(labels);
+                let labels = [];
+                let kategoriSumber = kat;
+                let judul = NAMA_KATEGORI_BROWSE_KAMUS[kat] || NAMA_KATEGORI_KAMUS[kat];
+
+                if (kat === 'kelas') {
+                  labels = kategoriData.kelas_kata || [];
+                  kategoriSumber = 'kelas_kata';
+                  judul = 'Kelas';
+                } else if (kat === 'bentuk_gabungan') {
+                  labels = gabungkanKategoriBentukGabungan(
+                    kategoriData.bentuk || [],
+                    kategoriData.unsur_terikat || []
+                  );
+                  kategoriSumber = 'bentuk';
+                  judul = 'Bentuk';
+                } else if (kat === 'afiks') {
+                  labels = ambilTagarPerKategori(daftarTagar, KATEGORI_TAGAR_AFIX);
+                  kategoriSumber = 'tagar';
+                  judul = 'Afiks';
+                } else if (kat === 'kombinasi') {
+                  labels = ambilTagarPerKategori(daftarTagar, ['kombinasi']);
+                  kategoriSumber = 'tagar';
+                  judul = 'Kombinasi';
+                } else if (kat === 'klitik') {
+                  labels = ambilTagarPerKategori(daftarTagar, ['klitik']);
+                  kategoriSumber = 'tagar';
+                  judul = 'Klitik';
+                } else if (kat === 'reduplikasi') {
+                  labels = ambilTagarPerKategori(daftarTagar, ['reduplikasi']);
+                  kategoriSumber = 'tagar';
+                  judul = 'Reduplikasi';
+                } else {
+                  labels = kategoriData[kat] || [];
+                  if (kat === 'bentuk') {
+                    labels = gabungkanKategoriBentuk(labels);
+                  }
+                  if (kat === 'ekspresi') {
+                    labels = gabungkanKategoriEkspresi(labels);
+                  }
                 }
-                if (kat === 'ekspresi') {
-                  labels = gabungkanKategoriEkspresi(labels);
-                }
-                if (kat === 'tagar') {
-                  labels = urutkanTagar(labels);
-                }
-                return { kat, labels };
+
+                return { kat, kategoriSumber, judul, labels };
               })
               .filter((item) => item.labels.length > 0);
 
@@ -306,26 +373,26 @@ function Kamus() {
                 key={`baris-${indexBaris}`}
                 className={`grid grid-cols-1 ${kategoriTerisi.length > 1 ? 'md:grid-cols-2' : ''} gap-4`}
               >
-                {kategoriTerisi.map(({ kat, labels }) => (
+                {kategoriTerisi.map(({ kat, kategoriSumber, judul, labels }) => (
                   <KartuKategori
                     key={kat}
-                    judul={NAMA_KATEGORI_BROWSE_KAMUS[kat] || NAMA_KATEGORI_KAMUS[kat]}
+                    judul={judul}
                     items={labels}
                     getKey={(item) => item.kode}
                     getTo={(item) => {
-                      if (kat === 'tagar') {
+                      if (kategoriSumber === 'tagar') {
                         return `/kamus/tagar/${encodeURIComponent(item.kode)}`;
                       }
-                      const pathKategori = kat === 'unsur_terikat'
+                      const pathKategori = kategoriSumber === 'unsur_terikat'
                         ? 'bentuk'
-                        : kat === 'kelas_kata'
+                        : kategoriSumber === 'kelas_kata'
                           ? 'kelas'
-                          : kat;
-                      const slugLabel = tentukanSlugLabel(kat, item);
+                          : kategoriSumber;
+                      const slugLabel = tentukanSlugLabel(kategoriSumber, item);
                       return `/kamus/${pathKategori}/${encodeURIComponent(slugLabel)}`;
                     }}
                     getLabel={(item) => (
-                      ['bentuk', 'unsur_terikat', 'ekspresi'].includes(kat)
+                      ['bentuk', 'unsur_terikat', 'bentuk_gabungan', 'ekspresi'].includes(kat)
                         ? formatAwalKapital(item.nama)
                         : item.nama
                     )}
