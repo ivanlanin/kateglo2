@@ -1094,7 +1094,7 @@ describe('apiAdmin', () => {
     const semuaTagar = useDaftarTagarUntukPilih();
     expect(semuaTagar.staleTime).toBe(5 * 60 * 1000);
     await semuaTagar.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/publik/tagar');
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/tagar/opsi-pilih');
 
     const kategoriTagar = useKategoriTagarAdmin();
     expect(kategoriTagar.staleTime).toBe(5 * 60 * 1000);

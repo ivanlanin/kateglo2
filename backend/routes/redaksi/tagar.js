@@ -71,6 +71,19 @@ router.get('/kategori', periksaIzin('kelola_tagar'), async (_req, res, next) => 
 });
 
 /**
+ * GET /api/redaksi/tagar/opsi-pilih
+ * Semua tagar (aktif + nonaktif) untuk autocomplete/dropdown redaksi.
+ */
+router.get('/opsi-pilih', periksaIzin('kelola_tagar', 'edit_entri', 'audit_tagar'), async (_req, res, next) => {
+  try {
+    const data = await ModelTagar.ambilSemuaTagarRedaksi();
+    return res.json({ success: true, data });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+/**
  * GET /api/redaksi/tagar/:id
  */
 router.get('/:id', periksaIzin('kelola_tagar'), async (req, res, next) => {

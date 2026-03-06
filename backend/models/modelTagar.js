@@ -73,6 +73,20 @@ class ModelTagar {
   }
 
   /**
+   * Ambil semua tagar (aktif + nonaktif) untuk kebutuhan redaksi.
+   * Diurutkan berdasarkan kategori, urutan.
+   * @returns {Promise<Array<{id: number, kode: string, nama: string, kategori: string, urutan: number, aktif: boolean}>>}
+   */
+  static async ambilSemuaTagarRedaksi() {
+    const result = await db.query(
+      `SELECT id, kode, nama, kategori, urutan, aktif
+       FROM tagar
+       ORDER BY kategori, urutan, nama`
+    );
+    return result.rows;
+  }
+
+  /**
    * Ambil semua tagar untuk satu entri.
    * @param {number} entriId
    * @param {{ aktifSaja?: boolean }} options

@@ -12,20 +12,23 @@ describe('ModelTagar', () => {
     db.query.mockReset();
   });
 
-  it('ambilDaftarKategori, ambilSemuaTagar, ambilTagarEntri berjalan normal', async () => {
+  it('ambilDaftarKategori, ambilSemuaTagar, ambilSemuaTagarRedaksi, ambilTagarEntri berjalan normal', async () => {
     db.query.mockResolvedValueOnce({ rows: [{ kategori: 'bentuk' }, { kategori: null }, { kategori: '  ' }, { kategori: 'kelas' }] });
     await expect(ModelTagar.ambilDaftarKategori()).resolves.toEqual(['bentuk', 'kelas']);
 
     db.query.mockResolvedValueOnce({ rows: [{ id: 1, kode: 'pref', nama: 'Prefiks', kategori: 'bentuk', urutan: 1 }] });
     await expect(ModelTagar.ambilSemuaTagar()).resolves.toEqual([{ id: 1, kode: 'pref', nama: 'Prefiks', kategori: 'bentuk', urutan: 1 }]);
 
+    db.query.mockResolvedValueOnce({ rows: [{ id: 1, kode: 'pref', nama: 'Prefiks', kategori: 'bentuk', urutan: 1, aktif: true }] });
+    await expect(ModelTagar.ambilSemuaTagarRedaksi()).resolves.toEqual([{ id: 1, kode: 'pref', nama: 'Prefiks', kategori: 'bentuk', urutan: 1, aktif: true }]);
+
     db.query.mockResolvedValueOnce({ rows: [{ id: 2, kode: 'inf', aktif: true }] });
     await ModelTagar.ambilTagarEntri(9, { aktifSaja: true });
-    expect(db.query).toHaveBeenNthCalledWith(3, expect.stringContaining('AND t.aktif = TRUE'), [9]);
+    expect(db.query).toHaveBeenNthCalledWith(4, expect.stringContaining('AND t.aktif = TRUE'), [9]);
 
     db.query.mockResolvedValueOnce({ rows: [] });
     await ModelTagar.ambilTagarEntri(9);
-    expect(db.query).toHaveBeenNthCalledWith(4, expect.not.stringContaining('AND t.aktif = TRUE'), [9]);
+    expect(db.query).toHaveBeenNthCalledWith(5, expect.not.stringContaining('AND t.aktif = TRUE'), [9]);
   });
 
   it('cariEntriPerTagar return awal saat tagar tidak ditemukan atau total 0', async () => {

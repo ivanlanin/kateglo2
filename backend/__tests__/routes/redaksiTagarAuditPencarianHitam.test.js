@@ -14,6 +14,7 @@ jest.mock('../../middleware/otorisasi', () => ({
 
 jest.mock('../../models/modelTagar', () => ({
   ambilDaftarKategori: jest.fn(),
+  ambilSemuaTagarRedaksi: jest.fn(),
   daftarAdminCursor: jest.fn(),
   ambilDenganId: jest.fn(),
   simpan: jest.fn(),
@@ -52,6 +53,7 @@ describe('routes/redaksi/tagar + auditTagar + pencarianHitam', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     ModelTagar.ambilDaftarKategori.mockResolvedValue(['bentuk', 'kelas']);
+    ModelTagar.ambilSemuaTagarRedaksi.mockResolvedValue([{ id: 1, kode: 'pref', nama: 'Prefiks', kategori: 'bentuk', aktif: true }]);
     ModelTagar.daftarAdminCursor.mockResolvedValue({
       data: [{ id: 1, kode: 'pref' }],
       total: 1,
@@ -101,6 +103,10 @@ describe('routes/redaksi/tagar + auditTagar + pencarianHitam', () => {
 
     const kategori = await request(createApp()).get('/api/redaksi/tagar/kategori');
     expect(kategori.status).toBe(200);
+
+    const opsiPilih = await request(createApp()).get('/api/redaksi/tagar/opsi-pilih');
+    expect(opsiPilih.status).toBe(200);
+    expect(ModelTagar.ambilSemuaTagarRedaksi).toHaveBeenCalled();
 
     ModelTagar.ambilDenganId.mockResolvedValueOnce(null);
     const detail404 = await request(createApp()).get('/api/redaksi/tagar/1');
@@ -157,6 +163,10 @@ describe('routes/redaksi/tagar + auditTagar + pencarianHitam', () => {
     ModelTagar.ambilDaftarKategori.mockRejectedValueOnce(new Error('kategori gagal'));
     const kategoriErr = await request(createApp()).get('/api/redaksi/tagar/kategori');
     expect(kategoriErr.status).toBe(500);
+
+    ModelTagar.ambilSemuaTagarRedaksi.mockRejectedValueOnce(new Error('opsi gagal'));
+    const opsiErr = await request(createApp()).get('/api/redaksi/tagar/opsi-pilih');
+    expect(opsiErr.status).toBe(500);
 
     ModelTagar.ambilDenganId.mockRejectedValueOnce(new Error('detail gagal'));
     const detailErr = await request(createApp()).get('/api/redaksi/tagar/2');

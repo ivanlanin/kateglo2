@@ -1078,11 +1078,11 @@ export function useTagarEntri(entriId) {
   });
 }
 
-/** Ambil semua tagar aktif untuk dropdown/autocomplete */
+/** Ambil semua tagar redaksi (aktif + nonaktif) untuk dropdown/autocomplete */
 export function useDaftarTagarUntukPilih() {
   return useQuery({
-    queryKey: ['semua-tagar-aktif'],
-    queryFn: () => klien.get('/api/publik/tagar').then((r) => r.data),
+    queryKey: ['redaksi-tagar-opsi'],
+    queryFn: () => klien.get('/api/redaksi/tagar/opsi-pilih').then((r) => r.data),
     staleTime: 5 * 60 * 1000,
   });
 }
