@@ -1572,6 +1572,17 @@ code {
 
   .kamus-detail-sekuens-link {
     @apply inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm leading-5 text-blue-800 no-underline transition-colors hover:border-blue-300 hover:bg-blue-100 hover:text-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2;
+    @apply gap-1.5;
+    max-width: 48%;
+    min-width: 0;
+  }
+
+  .kamus-detail-sekuens-label {
+    @apply block truncate;
+  }
+
+  .kamus-detail-sekuens-arrow {
+    @apply shrink-0;
   }
 
   .kamus-detail-sekuens-link-prev {

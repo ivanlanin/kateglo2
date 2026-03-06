@@ -983,9 +983,10 @@ function KamusDetail() {
                 <Link
                   to={buatPathDetailKamus(navigasiIndeks.prev.indeks || navigasiIndeks.prev.label || '')}
                   className="kamus-detail-sekuens-link kamus-detail-sekuens-link-prev"
+                  title={navigasiIndeks.prev.label || navigasiIndeks.prev.indeks || ''}
                 >
-                  {'‹ '}
-                  {navigasiIndeks.prev.label || navigasiIndeks.prev.indeks}
+                  <span className="kamus-detail-sekuens-arrow" aria-hidden="true">{'‹'}</span>
+                  <span className="kamus-detail-sekuens-label">{navigasiIndeks.prev.label || navigasiIndeks.prev.indeks}</span>
                 </Link>
               ) : <span />}
 
@@ -993,9 +994,10 @@ function KamusDetail() {
                 <Link
                   to={buatPathDetailKamus(navigasiIndeks.next.indeks || navigasiIndeks.next.label || '')}
                   className="kamus-detail-sekuens-link kamus-detail-sekuens-link-next"
+                  title={navigasiIndeks.next.label || navigasiIndeks.next.indeks || ''}
                 >
-                  {navigasiIndeks.next.label || navigasiIndeks.next.indeks}
-                  {' ›'}
+                  <span className="kamus-detail-sekuens-label">{navigasiIndeks.next.label || navigasiIndeks.next.indeks}</span>
+                  <span className="kamus-detail-sekuens-arrow" aria-hidden="true">{'›'}</span>
                 </Link>
               )}
             </nav>

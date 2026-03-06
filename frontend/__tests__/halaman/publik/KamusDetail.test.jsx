@@ -450,8 +450,13 @@ describe('KamusDetail', () => {
 
     render(<KamusDetail />);
 
-    expect(screen.getByRole('link', { name: /medan/i })).toHaveAttribute('href', '/kamus/detail/medan');
-    expect(screen.getByRole('link', { name: /mekar/i })).toHaveAttribute('href', '/kamus/detail/mekar');
+    const linkPrev = screen.getByRole('link', { name: /medan/i });
+    const linkNext = screen.getByRole('link', { name: /mekar/i });
+
+    expect(linkPrev).toHaveAttribute('href', '/kamus/detail/medan');
+    expect(linkNext).toHaveAttribute('href', '/kamus/detail/mekar');
+    expect(linkPrev).toHaveAttribute('title', 'medan');
+    expect(linkNext).toHaveAttribute('title', 'mekar');
   });
 
   it('menyaring tagar entri agar hanya item valid yang ditampilkan', () => {
