@@ -201,7 +201,7 @@ code {
   }
 
   .ejaan-sekuens-link {
-    @apply beranda-tag-link inline-flex w-auto px-3;
+    @apply inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm leading-5 text-blue-800 no-underline transition-colors hover:border-blue-300 hover:bg-blue-100 hover:text-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2;
   }
 
   .ejaan-sekuens-link-prev {
@@ -221,23 +221,27 @@ code {
   }
 
   .ejaan-sidebar-pill {
-    @apply beranda-tag-link w-full text-center inline-flex items-center justify-center;
+    @apply w-full text-center inline-flex items-center justify-center rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm leading-5 text-blue-800 no-underline transition-colors hover:border-blue-300 hover:bg-blue-100 hover:text-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2;
   }
 
   .ejaan-sidebar-pill-active {
-    @apply bg-blue-100 text-gray-900 font-semibold cursor-default no-underline inline-flex items-center justify-center;
+    @apply w-full text-center inline-flex items-center justify-center rounded-full border border-blue-300 bg-blue-100 px-3 py-1 text-sm leading-5 text-blue-900 font-medium cursor-default no-underline;
   }
 
   .dark .ejaan-sidebar-pill {
-    @apply hover:bg-dark-bg-hover;
+    @apply border-gray-600 bg-gray-800 text-blue-200 hover:border-blue-500/60 hover:bg-gray-700 hover:text-blue-100;
+  }
+
+  .dark .ejaan-sekuens-link {
+    @apply border-gray-600 bg-gray-800 text-blue-200 hover:border-blue-500/60 hover:bg-gray-700 hover:text-blue-100;
   }
 
   .dark .ejaan-sidebar-pill-active {
-    @apply bg-blue-700 text-white border border-blue-500;
+    @apply border-blue-500/70 bg-gray-700 text-blue-100;
   }
 
   .dark .ejaan-sidebar-pill-active:hover {
-    @apply bg-blue-700 text-white;
+    @apply border-blue-500/70 bg-gray-700 text-blue-100;
   }
 
   .ejaan-panel-list {
@@ -689,6 +693,18 @@ code {
 
   .beranda-tag-list {
     @apply flex flex-wrap gap-2;
+  }
+
+  .kategori-card-chip-list {
+    @apply flex flex-wrap justify-center gap-x-1 gap-y-1.5;
+  }
+
+  .kategori-card-chip-link {
+    @apply inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm leading-5 text-blue-800 no-underline transition-colors hover:border-blue-300 hover:bg-blue-100 hover:text-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2;
+  }
+
+  .dark .kategori-card-chip-link {
+    @apply border-gray-600 bg-gray-800 text-blue-200 hover:border-blue-500/60 hover:bg-gray-700 hover:text-blue-100;
   }
 
   .beranda-tag-link {
@@ -1555,7 +1571,7 @@ code {
   }
 
   .kamus-detail-sekuens-link {
-    @apply beranda-tag-link inline-flex w-auto px-3;
+    @apply inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm leading-5 text-blue-800 no-underline transition-colors hover:border-blue-300 hover:bg-blue-100 hover:text-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2;
   }
 
   .kamus-detail-sekuens-link-prev {
@@ -1568,6 +1584,10 @@ code {
 
   .dark .kamus-detail-heading-meta {
     @apply text-dark-text-muted;
+  }
+
+  .dark .kamus-detail-sekuens-link {
+    @apply border-gray-600 bg-gray-800 text-blue-200 hover:border-blue-500/60 hover:bg-gray-700 hover:text-blue-100;
   }
 
   .kamus-detail-entry-tags-row {

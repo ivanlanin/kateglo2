@@ -17,12 +17,12 @@ function KartuKategori({
   return (
     <div className={className}>
       <h3 className="beranda-info-title">{judul}</h3>
-      <div className="flex flex-wrap justify-center gap-2">
+      <div className="kategori-card-chip-list">
         {items.map((item, index) => (
           <Link
             key={getKey(item, index)}
             to={getTo(item, index)}
-            className="beranda-tag-link"
+            className="kategori-card-chip-link"
           >
             {getLabel(item, index)}
           </Link>
