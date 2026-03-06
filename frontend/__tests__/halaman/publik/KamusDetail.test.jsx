@@ -278,6 +278,134 @@ describe('KamusDetail', () => {
     });
   });
 
+  it('menampilkan toggle +x lainnya dan memungkinkan ringkas via klik badge jumlah', () => {
+    const daftarTurunan = Array.from({ length: 10 }, (_, index) => ({
+      id: index + 1,
+      entri: `kata-${index + 1}`,
+    }));
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: {
+            'kelas-kata': [{ kode: 'n', nama: 'nomina' }],
+          },
+        };
+      }
+      return {
+        isLoading: false,
+        isError: false,
+        data: {
+          entri: 'kata',
+          jenis: 'dasar',
+          makna: [{ id: 1, kelas_kata: 'n', makna: 'unsur bahasa' }],
+          subentri: {
+            turunan: daftarTurunan,
+          },
+          tesaurus: { sinonim: [], antonim: [] },
+          glosarium: [],
+        },
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByRole('button', { name: '+2 lainnya' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'kata-10' })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: '+2 lainnya' }));
+
+    expect(screen.getByRole('link', { name: 'kata-10' })).toHaveAttribute('href', '/kamus/detail/kata-10');
+    expect(screen.queryByRole('button', { name: '+2 lainnya' })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /\(10\)/ }));
+
+    expect(screen.queryByRole('link', { name: 'kata-10' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '+2 lainnya' })).toBeInTheDocument();
+  });
+
+  it('tidak menautkan kata awal jika keseluruhan makna lebih dari dua kata', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return { isLoading: false, isError: false, data: {} };
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+          refetch: vi.fn(),
+        };
+      }
+
+      return {
+        isLoading: false,
+        isError: false,
+        data: {
+          entri: 'meja',
+          makna: [
+            {
+              id: 1,
+              kelas_kata: 'n',
+              makna: 'perkakas (perabot) rumah yang mempunyai bidang datar sebagai daun mejanya',
+            },
+          ],
+          subentri: {},
+          tesaurus: { sinonim: [], antonim: [] },
+          glosarium: [],
+        },
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByText(/perkakas \(perabot\) rumah yang mempunyai bidang datar/i)).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'perkakas' })).not.toBeInTheDocument();
+  });
+
+  it('tetap menautkan makna segmen pendek satu sampai dua kata', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return { isLoading: false, isError: false, data: {} };
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+          refetch: vi.fn(),
+        };
+      }
+
+      return {
+        isLoading: false,
+        isError: false,
+        data: {
+          entri: 'alat',
+          makna: [
+            {
+              id: 1,
+              kelas_kata: 'n',
+              makna: 'perkakas',
+            },
+          ],
+          subentri: {},
+          tesaurus: { sinonim: [], antonim: [] },
+          glosarium: [],
+        },
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByRole('link', { name: 'perkakas' })).toHaveAttribute('href', '/kamus/detail/perkakas');
+  });
+
   it('menampilkan navigasi indeks sebelumnya dan sesudahnya saat tersedia', () => {
     mockUseQuery.mockImplementation((options) => {
       if (options?.queryKey?.[0] === 'kamus-kategori') {
@@ -1930,7 +2058,7 @@ describe('KamusDetail', () => {
 
     const { container } = render(<KamusDetail />);
 
-    const subentryLinks = Array.from(container.querySelectorAll('.kamus-detail-subentry-flow a.kamus-detail-subentry-link'))
+    const subentryLinks = Array.from(container.querySelectorAll('.kamus-detail-subentry-chip-list a.kamus-detail-subentry-chip-link'))
       .map((el) => ({ text: (el.textContent || '').trim(), href: el.getAttribute('href') }));
 
     expect(subentryLinks).toEqual([

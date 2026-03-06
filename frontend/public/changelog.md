@@ -9,6 +9,7 @@
 - Memisahkan kartu kategori tagar [kamus](/kamus) menjadi afiks, kombinasi, klitik, dan reduplikasi
 - Membuat kartu bidang dan asal bahasa di [kamus](/kamus) menjadi masing-masing satu baris
 - Menyesuaikan pemenggalan akhiran -i
+- Menampilkan subentri kamus dengan cip, bukan teks biasa
 
 ## 2026-03-05 Kamis
 

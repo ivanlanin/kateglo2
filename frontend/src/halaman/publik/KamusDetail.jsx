@@ -25,6 +25,7 @@ import { buildMetaDetailKamus } from '../../utils/metaUtils';
 import useNavigasiMemuat from '../../hooks/bersama/useNavigasiMemuat';
 
 const GLOSARIUM_LIMIT = 20;
+const SUBENTRI_PREVIEW_LIMIT = 8;
 
 function upsertMetaTag({ name, property, content }) {
   const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
@@ -48,10 +49,31 @@ function renderMarkdown(teks) {
     .replace(/\*(.+?)\*/g, '<em>$1</em>');
 }
 
+function ekstrakKandidatTautanMakna(segmen = '') {
+  const trimmed = String(segmen || '').trim();
+  if (!trimmed || /\*/.test(trimmed)) return null;
+
+  // Hanya tautkan segmen pendek utuh: "kata", "dua kata", atau dengan kurung penjelas di akhir.
+  const match = trimmed.match(/^([^()]+?)(\s*(?:\([^)]*\)\s*)*)$/);
+  if (!match) return null;
+
+  const baseText = String(match[1] || '').trim();
+  if (!baseText) return null;
+
+  const wordCount = baseText.split(/\s+/).filter(Boolean).length;
+  if (wordCount < 1 || wordCount > 2) return null;
+
+  const parentheticalRaw = String(match[2] || '').trim();
+  return {
+    baseText,
+    parenthetical: parentheticalRaw ? ` ${parentheticalRaw}` : '',
+  };
+}
+
 /**
  * Render teks makna dengan tautan otomatis ke entri kamus.
- * Setiap segmen yang dipisah ";" dan terdiri dari 1–2 kata akan menjadi tautan.
- * Teks dalam kurung seperti "(tentang ...)" tetap tampil tapi bukan bagian tautan.
+ * Tautan hanya dibuat bila seluruh segmen adalah kandidat pendek (1-2 kata)
+ * dengan kurung penjelas opsional di bagian akhir.
  */
 function RenderMakna({ teks }) {
   if (!teks) return null;
@@ -60,22 +82,17 @@ function RenderMakna({ teks }) {
     <>
       {segmen.map((seg, i) => {
         const trimmed = seg.trim();
-        const hasMarkdown = /\*/.test(trimmed);
-        if (!hasMarkdown) {
-          const parenIdx = trimmed.indexOf('(');
-          const baseText = parenIdx !== -1 ? trimmed.slice(0, parenIdx).trim() : trimmed;
-          const parenthetical = parenIdx !== -1 ? ' ' + trimmed.slice(parenIdx) : '';
-          const wordCount = baseText.split(/\s+/).filter(Boolean).length;
-          if (baseText && wordCount <= 2) {
-            return (
-              <Fragment key={i}>
-                {i > 0 && '; '}
-                <Link to={buatPathDetailKamus(baseText)} className="kamus-detail-subentry-link">{baseText}</Link>
-                {parenthetical}
-              </Fragment>
-            );
-          }
+        const kandidatTautan = ekstrakKandidatTautanMakna(trimmed);
+        if (kandidatTautan) {
+          return (
+            <Fragment key={i}>
+              {i > 0 && '; '}
+              <Link to={buatPathDetailKamus(kandidatTautan.baseText)} className="kamus-detail-subentry-link">{kandidatTautan.baseText}</Link>
+              {kandidatTautan.parenthetical}
+            </Fragment>
+          );
         }
+
         return (
           <Fragment key={i}>
             {i > 0 && '; '}
@@ -253,6 +270,7 @@ function KamusDetail() {
   const { isAuthenticated, adalahAdmin, isLoading: isAuthLoading, loginDenganGoogle } = useAuth();
   const [teksKomentar, setTeksKomentar] = useState('');
   const [isSubmittingKomentar, setIsSubmittingKomentar] = useState(false);
+  const [subentriExpanded, setSubentriExpanded] = useState({});
   const [pesanKomentar, setPesanKomentar] = useState('');
   const [cursorGlosarium, setCursorGlosarium] = useState(null);
   const [directionGlosarium, setDirectionGlosarium] = useState('next');
@@ -459,6 +477,13 @@ function KamusDetail() {
       setCursorGlosarium(glosariumPageInfo.nextCursor);
       setDirectionGlosarium('next');
     }
+  };
+
+  const toggleSubentri = (groupKey) => {
+    setSubentriExpanded((prev) => ({
+      ...prev,
+      [groupKey]: !prev[groupKey],
+    }));
   };
 
 
@@ -804,31 +829,65 @@ function KamusDetail() {
                         const daftarSubentri = jenis === 'bentuk_tidak_baku'
                           ? [...daftar].sort((a, b) => (a?.entri || '').localeCompare((b?.entri || ''), 'id', { sensitivity: 'base' }))
                           : daftar;
+                        const groupKey = `${entriItem.id ?? entriIndex}-${jenis}`;
+                        const groupId = `subentri-${normalisasiSlugNama(String(entriItem.id ?? entriIndex))}-${normalisasiSlugNama(jenis) || 'jenis'}`;
+                        const isExpanded = Boolean(subentriExpanded[groupKey]);
+                        const perluLipat = daftarSubentri.length > SUBENTRI_PREVIEW_LIMIT;
+                        const jumlahLainnya = Math.max(daftarSubentri.length - SUBENTRI_PREVIEW_LIMIT, 0);
+                        const daftarSubentriTampil = perluLipat && !isExpanded
+                          ? daftarSubentri.slice(0, SUBENTRI_PREVIEW_LIMIT)
+                          : daftarSubentri;
 
                         return (
                       <div key={jenis} className="kamus-detail-subentry-group">
                         <div className="kamus-detail-subentry-heading-row">
                           <h3 className="kamus-detail-def-class mb-0">
                             {formatJenisSubentri(jenis)}{' '}
-                            <span className="kamus-count-badge" data-count={daftar.length}>
-                              ({daftar.length})
-                            </span>
+                            {perluLipat ? (
+                              <button
+                                type="button"
+                                className="kamus-count-badge-button"
+                                onClick={() => toggleSubentri(groupKey)}
+                                aria-expanded={isExpanded}
+                                aria-controls={groupId}
+                              >
+                                <span className="kamus-count-badge" data-count={daftar.length}>
+                                  ({daftar.length})
+                                </span>
+                              </button>
+                            ) : (
+                              <span className="kamus-count-badge" data-count={daftar.length}>
+                                ({daftar.length})
+                              </span>
+                            )}
                           </h3>
                         </div>
-                        <div className="kamus-detail-subentry-flow">
-                          {daftarSubentri.map((s, i) => (
-                            <span key={`${s.id ?? s.indeks ?? s.entri ?? 'subentri'}-${i}`}>
+                        <ul id={groupId} className="kamus-detail-subentry-chip-list">
+                          {daftarSubentriTampil.map((s, i) => (
+                            <li key={`${s.id ?? s.indeks ?? s.entri ?? 'subentri'}-${i}`} className="kamus-detail-subentry-chip-item">
                               {jenis === 'varian' ? (
-                                <span>{formatLemaHomonim(s.entri)}</span>
+                                <span className="kamus-detail-subentry-chip-static">{formatLemaHomonim(s.entri)}</span>
                               ) : (
-                                <Link to={buatPathDetailKamus(s.indeks || s.entri)} className="kamus-detail-subentry-link">
+                                <Link to={buatPathDetailKamus(s.indeks || s.entri)} className="kamus-detail-subentry-chip-link">
                                   {formatLemaHomonim(s.entri)}
                                 </Link>
                               )}
-                              {i < daftarSubentri.length - 1 && <span className="secondary-text">; </span>}
-                            </span>
+                            </li>
                           ))}
-                        </div>
+                          {perluLipat && !isExpanded && (
+                            <li className="kamus-detail-subentry-chip-item">
+                              <button
+                                type="button"
+                                className="kamus-detail-subentry-toggle"
+                                onClick={() => toggleSubentri(groupKey)}
+                                aria-expanded={isExpanded}
+                                aria-controls={groupId}
+                              >
+                                {`+${jumlahLainnya} lainnya`}
+                              </button>
+                            </li>
+                          )}
+                        </ul>
                       </div>
                         );
                       })()

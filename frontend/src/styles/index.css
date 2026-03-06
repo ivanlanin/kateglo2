@@ -1676,6 +1676,15 @@ code {
     font-size: 0;
   }
 
+  .kamus-count-badge-button {
+    @apply inline-flex items-center border-0 bg-transparent p-0 m-0 align-middle cursor-pointer rounded;
+    font: inherit;
+  }
+
+  .kamus-count-badge-button:focus-visible {
+    @apply outline-none ring-2 ring-blue-400 ring-offset-2;
+  }
+
   .dark .kamus-count-badge {
     @apply bg-gray-700 text-gray-300;
   }
@@ -1733,12 +1742,68 @@ code {
     @apply text-base leading-relaxed;
   }
 
+  .kamus-detail-subentry-chip-list {
+    @apply flex flex-wrap gap-1 list-none pl-0 m-0;
+  }
+
+  .kamus-detail-subentry-chip-item {
+    @apply m-0;
+  }
+
+  .kamus-detail-subentry-chip-link,
+  .kamus-detail-subentry-chip-static {
+    @apply inline-flex items-center rounded-full border px-3 py-1 text-sm leading-5;
+  }
+
+  .kamus-detail-subentry-chip-link {
+    @apply border-blue-200 bg-blue-50 text-blue-800 no-underline transition-colors;
+  }
+
+  .kamus-detail-subentry-chip-link:hover {
+    @apply border-blue-300 bg-blue-100 text-blue-900;
+  }
+
+  .kamus-detail-subentry-chip-link:focus-visible {
+    @apply outline-none ring-2 ring-blue-400 ring-offset-2;
+  }
+
+  .kamus-detail-subentry-chip-static {
+    @apply border-gray-200 bg-gray-100 text-gray-700;
+  }
+
+  .kamus-detail-subentry-toggle {
+    @apply inline-flex items-center rounded-full border border-blue-300 bg-blue-50 px-3 py-1 text-sm leading-5 text-blue-800 transition-colors hover:border-blue-400 hover:bg-blue-100 hover:text-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 cursor-pointer;
+    font-family: inherit;
+    font-weight: 500;
+  }
+
   .kamus-detail-subentry-link {
     @apply text-blue-700 hover:underline;
   }
 
   .dark .kamus-detail-subentry-link {
     @apply text-blue-300;
+  }
+
+  .dark .kamus-detail-subentry-chip-link,
+  .dark .kamus-detail-subentry-chip-static {
+    @apply bg-gray-800;
+  }
+
+  .dark .kamus-detail-subentry-chip-link {
+    @apply border-gray-600 text-blue-200;
+  }
+
+  .dark .kamus-detail-subentry-chip-link:hover {
+    @apply border-blue-500/60 bg-gray-700 text-blue-100;
+  }
+
+  .dark .kamus-detail-subentry-chip-static {
+    @apply border-gray-600 text-gray-200;
+  }
+
+  .dark .kamus-detail-subentry-toggle {
+    @apply border-blue-500/50 bg-gray-800 text-blue-200 hover:border-blue-400/80 hover:bg-gray-700 hover:text-blue-100;
   }
 
   .kamus-detail-def-item {
