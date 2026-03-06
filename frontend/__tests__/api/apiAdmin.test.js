@@ -114,7 +114,7 @@ describe('apiAdmin', () => {
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/statistik/pencarian', {
       params: {
         domain: undefined,
-        periode: '7hari',
+        periode: 'hariini',
         limit: 50,
         cursor: undefined,
         direction: 'next',

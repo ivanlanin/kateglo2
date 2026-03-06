@@ -48,6 +48,7 @@ describe('ModelPencarian', () => {
     expect(__private.parseLimitRedaksi('abc', 200)).toBe(200);
 
     expect(__private.parsePeriodeRedaksi()).toBe('7hari');
+    expect(__private.parsePeriodeRedaksi('hariini')).toBe('hariini');
     expect(__private.parsePeriodeRedaksi('all')).toBe('all');
     expect(__private.parsePeriodeRedaksi('30hari')).toBe('30hari');
     expect(__private.parsePeriodeRedaksi('x')).toBe('7hari');
@@ -364,6 +365,33 @@ describe('ModelPencarian', () => {
     expect(result.total).toBe(0);
   });
 
+  it('ambilStatistikRedaksi memakai periode hariini saat tanggal tidak diberikan', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [{ total: '0' }] });
+
+    const result = await ModelPencarian.ambilStatistikRedaksi({ periode: 'hariini' });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('tanggal = CURRENT_DATE'),
+      [200, 0]
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('tanggal = CURRENT_DATE'),
+      []
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      3,
+      expect.stringContaining('tanggal = CURRENT_DATE'),
+      []
+    );
+    expect(result.filter.periode).toBe('hariini');
+    expect(result.filter.domain).toBeNull();
+  });
+
   it('ambilStatistikRedaksi memakai periode 30hari saat tanggal tidak diberikan', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [] })
@@ -478,7 +506,7 @@ describe('ModelPencarian', () => {
     db.query.mockResolvedValueOnce({ rows: [{ total: '13' }] });
     await expect(ModelPencarian.hitungTotalKataHarian({ tanggal: '2026-03-05' })).resolves.toBe(13);
     expect(db.query).toHaveBeenLastCalledWith(
-      expect.stringContaining('SELECT COALESCE(SUM(jumlah), 0)::bigint AS total'),
+      expect.stringContaining('SELECT COUNT(kata)::bigint AS total'),
       ['2026-03-05']
     );
 

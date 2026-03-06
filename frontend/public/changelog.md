@@ -1,5 +1,10 @@
 # Riwayat Perubahan
 
+## 2026-03-06 Jumat
+
+- Mengubah tautan kamus dan glosarium di beranda untuk mengarah detail
+- Menganalisis dan memperbaiki pemenggalan kata di kamus
+
 ## 2026-03-05 Kamis
 
 - Menyeragamkan jumlah data per halaman (*paging*) redaksi menjadi 50

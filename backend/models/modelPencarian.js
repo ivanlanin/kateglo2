@@ -38,6 +38,7 @@ function parsePeriode(periode) {
 
 function parsePeriodeRedaksi(periode) {
   const normalized = String(periode || '7hari').trim().toLowerCase();
+  if (normalized === 'hariini') return 'hariini';
   if (normalized === 'all') return 'all';
   if (normalized === '30hari') return '30hari';
   return '7hari';
@@ -283,7 +284,9 @@ class ModelPencarian {
     }
 
     if (!tanggalMulaiAman && !tanggalSelesaiAman) {
-      if (periodeAman === '7hari') {
+      if (periodeAman === 'hariini') {
+        where.push('tanggal = CURRENT_DATE');
+      } else if (periodeAman === '7hari') {
         where.push("tanggal >= CURRENT_DATE - INTERVAL '6 days'");
       } else if (periodeAman === '30hari') {
         where.push("tanggal >= CURRENT_DATE - INTERVAL '29 days'");
@@ -321,6 +324,7 @@ class ModelPencarian {
         ${whereClause}
         GROUP BY domain, kata
       ) grouped`;
+
 
     const summaryQuery = `
       SELECT domain, SUM(jumlah)::bigint AS jumlah
@@ -368,7 +372,7 @@ class ModelPencarian {
     const tanggalAman = parseTanggal(tanggal);
 
     const result = await db.query(
-      `SELECT COALESCE(SUM(jumlah), 0)::bigint AS total
+      `SELECT COUNT(kata)::bigint AS total
        FROM pencarian
        WHERE tanggal = COALESCE($1::date, (now() AT TIME ZONE 'Asia/Jakarta')::date)`,
       [tanggalAman]

@@ -197,7 +197,7 @@ describe('PencarianAdmin', () => {
     const lastCallAfterReset = mockUseStatistikPencarianAdmin.mock.calls.at(-1)?.[0];
     expect(lastCallAfterReset).toEqual(expect.objectContaining({
       domain: '',
-      periode: '7hari',
+      periode: 'hariini',
       limit: 50,
       tanggalMulai: '',
       tanggalSelesai: '',

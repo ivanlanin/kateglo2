@@ -106,7 +106,7 @@ export function useStatistikAdmin() {
 
 export function useStatistikPencarianAdmin({
   domain = '',
-  periode = '7hari',
+  periode = 'hariini',
   limit = 50,
   cursor = null,
   direction = 'next',

@@ -28,6 +28,7 @@ import {
 import { formatBilanganRibuan, formatLocalDateTime } from '../../utils/formatUtils';
 
 const opsiPeriode = [
+  { value: 'hariini', label: 'Hari ini' },
   { value: '7hari', label: '7 hari terakhir' },
   { value: '30hari', label: '30 hari terakhir' },
   { value: 'all', label: 'Semua waktu' },
@@ -77,13 +78,13 @@ function PencarianAdmin() {
 
   const [filterDraft, setFilterDraft] = useState({
     domain: '',
-    periode: '7hari',
+    periode: 'hariini',
     tanggalMulai: '',
     tanggalSelesai: '',
   });
   const [filterAktif, setFilterAktif] = useState({
     domain: '',
-    periode: '7hari',
+    periode: 'hariini',
     tanggalMulai: '',
     tanggalSelesai: '',
   });
@@ -183,7 +184,7 @@ function PencarianAdmin() {
   const handleReset = () => {
     const awal = {
       domain: '',
-      periode: '7hari',
+      periode: 'hariini',
       tanggalMulai: '',
       tanggalSelesai: '',
     };
