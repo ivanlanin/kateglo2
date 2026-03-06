@@ -1729,8 +1729,45 @@ code {
     @apply flex items-start text-base leading-relaxed;
   }
 
+  .sumber-anchor-item {
+    @apply rounded-lg px-2 -mx-2 transition-colors;
+    scroll-margin-top: 5rem;
+  }
+
+  .sumber-anchor-item:target,
+  .sumber-anchor-item-active {
+    @apply bg-amber-100;
+  }
+
+  .dark .sumber-anchor-item:target,
+  .dark .sumber-anchor-item-active {
+    @apply bg-amber-900/30;
+  }
+
+  .sumber-anchor-item .link-action {
+    @apply text-blue-700;
+  }
+
+  .sumber-anchor-item:target .link-action,
+  .sumber-anchor-item-active .link-action {
+    @apply text-blue-800;
+  }
+
+  .dark .sumber-anchor-item .link-action {
+    @apply text-blue-300;
+  }
+
+  .dark .sumber-anchor-item:target .link-action,
+  .dark .sumber-anchor-item-active .link-action {
+    @apply text-blue-200;
+  }
+
   .kamus-detail-def-number {
     @apply w-8 shrink-0 text-gray-700 text-left pr-0 tabular-nums;
+  }
+
+  .dark .kamus-detail-def-number {
+    @apply text-dark-text-muted;
   }
 
   .kamus-detail-def-content {
