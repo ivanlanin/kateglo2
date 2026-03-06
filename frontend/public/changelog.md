@@ -7,6 +7,8 @@
 - Menyorot [sumber](/sumber) yang diberi jangkar (_anchor_)
 - Menambahkan navigasi ke entri sebelum dan sesudah di detail kamus
 - Memisahkan kartu kategori tagar [kamus](/kamus) menjadi afiks, kombinasi, klitik, dan reduplikasi
+- Membuat kartu bidang dan asal bahasa di [kamus](/kamus) menjadi masing-masing satu baris
+- Menyesuaikan pemenggalan akhiran -i
 
 ## 2026-03-05 Kamis
 

@@ -34,7 +34,8 @@ const BARIS_KATEGORI = [
   ['afiks', 'kombinasi'],
   ['klitik', 'reduplikasi'],
   ['ekspresi', 'ragam'],
-  ['bahasa', 'bidang'],
+  ['bidang'],
+  ['bahasa'],
 ];
 
 const URUTAN_KATEGORI_TAGAR = ['prefiks', 'infiks', 'sufiks', 'konfiks', 'kombinasi', 'klitik', 'reduplikasi'];
