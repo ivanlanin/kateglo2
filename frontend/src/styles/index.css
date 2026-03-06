@@ -440,7 +440,7 @@ code {
   }
 
   .beranda-hero {
-    @apply text-center py-10 md:py-16;
+    @apply text-center pt-5 pb-7 md:pt-8 md:pb-10;
   }
 
   .beranda-title {
@@ -452,7 +452,7 @@ code {
   }
 
   .beranda-subtitle {
-    @apply text-lg text-gray-600 mb-10 max-w-2xl mx-auto;
+    @apply text-lg text-gray-600 mb-7 max-w-2xl mx-auto;
   }
 
   .dark .beranda-subtitle {
@@ -612,7 +612,7 @@ code {
   }
 
   .beranda-populer-wrapper {
-    @apply max-w-2xl mx-auto mt-6 flex items-center justify-center flex-wrap gap-x-2 gap-y-2;
+    @apply max-w-2xl mx-auto mt-4 flex items-center justify-center flex-wrap gap-x-2 gap-y-2;
   }
 
   .beranda-populer-label {
@@ -758,6 +758,311 @@ code {
   .dark .beranda-popular-link {
     @apply text-blue-300;
   }
+
+  /* ===== Gim Pilih Ganda ===== */
+
+  .gim-pilih-ganda {
+    @apply max-w-xl mx-auto mt-4 mb-2 px-1;
+  }
+
+  .gim-header {
+    @apply grid grid-cols-[1fr_auto_1fr] items-center gap-3 mb-4 text-xs text-gray-500 uppercase tracking-wide font-semibold;
+  }
+
+  .dark .gim-header {
+    @apply text-dark-text-muted;
+  }
+
+  .gim-header-mode {
+    @apply justify-self-start whitespace-nowrap;
+  }
+
+  .gim-header-skor {
+    @apply justify-self-end whitespace-nowrap text-xs font-semibold uppercase tracking-wide text-green-600;
+  }
+
+  .dark .gim-header-skor {
+    @apply text-green-400;
+  }
+
+  .gim-header-skor-merah {
+    @apply text-red-600;
+  }
+
+  .dark .gim-header-skor-merah {
+    @apply text-red-400;
+  }
+
+  .gim-header-skor-hijau-muda {
+    @apply text-green-500;
+  }
+
+  .dark .gim-header-skor-hijau-muda {
+    @apply text-green-300;
+  }
+
+  .gim-header-skor-hijau {
+    @apply text-green-700;
+  }
+
+  .dark .gim-header-skor-hijau {
+    @apply text-green-400;
+  }
+
+  .gim-progress {
+    @apply flex items-center justify-center gap-1.5;
+  }
+
+  .gim-progress-bullet {
+    @apply inline-block w-1.5 h-1.5 rounded-full bg-gray-300 transition-all;
+  }
+
+  .dark .gim-progress-bullet {
+    @apply bg-gray-600;
+  }
+
+  .gim-progress-bullet-aktif {
+    @apply w-2.5 h-2.5 bg-gray-500;
+  }
+
+  .dark .gim-progress-bullet-aktif {
+    @apply bg-gray-300;
+  }
+
+  .gim-progress-bullet-benar {
+    @apply bg-green-500;
+  }
+
+  .dark .gim-progress-bullet-benar {
+    @apply bg-green-400;
+  }
+
+  .gim-progress-bullet-salah {
+    @apply bg-red-500;
+  }
+
+  .dark .gim-progress-bullet-salah {
+    @apply bg-red-400;
+  }
+
+  .gim-soal {
+    @apply text-sm font-normal text-gray-900 text-center mb-5 leading-relaxed;
+  }
+
+  .dark .gim-soal {
+    @apply text-dark-text;
+  }
+
+  .gim-pilihan-list {
+    @apply flex flex-col gap-3 mb-3;
+  }
+
+  .gim-tombol {
+    @apply w-full py-3 px-5 rounded-xl border text-sm font-normal transition-all text-center;
+    @apply border-gray-300 bg-white text-gray-800 hover:border-blue-400 hover:bg-blue-50;
+  }
+
+  .dark .gim-tombol {
+    @apply border-dark-border bg-dark-bg-input text-dark-text hover:border-blue-500 hover:bg-blue-900/20;
+  }
+
+  .gim-tombol-benar {
+    @apply border-green-500 bg-green-50 text-green-800 hover:bg-green-50 hover:border-green-500;
+  }
+
+  .dark .gim-tombol-benar {
+    @apply border-green-500 bg-green-900/20 text-green-300 hover:bg-green-900/20 hover:border-green-500;
+  }
+
+  .gim-tombol-salah {
+    @apply border-red-400 bg-red-50 text-red-700 hover:bg-red-50 hover:border-red-400;
+  }
+
+  .dark .gim-tombol-salah {
+    @apply border-red-500 bg-red-900/20 text-red-400 hover:bg-red-900/20 hover:border-red-500;
+  }
+
+  .gim-tombol-redup {
+    @apply opacity-40 pointer-events-none;
+  }
+
+  .gim-aksi-bawah {
+    @apply flex justify-end mt-2;
+  }
+
+  .gim-tombol-lewati {
+    @apply text-xs uppercase tracking-wide text-gray-500 hover:text-gray-700 transition-colors;
+  }
+
+  .dark .gim-tombol-lewati {
+    @apply text-dark-text-muted hover:text-dark-text;
+  }
+
+  .gim-ringkasan-atas {
+    @apply flex items-start justify-between gap-4 mb-5;
+  }
+
+  .gim-ringkasan {
+    @apply text-left mb-0;
+  }
+
+  .gim-ringkasan-skor-angka {
+    @apply text-4xl font-bold text-gray-900;
+  }
+
+  .dark .gim-ringkasan-skor-angka {
+    @apply text-dark-text;
+  }
+
+  .gim-ringkasan-skor-merah {
+    @apply text-red-600;
+  }
+
+  .dark .gim-ringkasan-skor-merah {
+    @apply text-red-400;
+  }
+
+  .gim-ringkasan-skor-jingga {
+    @apply text-orange-500;
+  }
+
+  .dark .gim-ringkasan-skor-jingga {
+    @apply text-orange-300;
+  }
+
+  .gim-ringkasan-skor-kuning {
+    @apply text-amber-500;
+  }
+
+  .dark .gim-ringkasan-skor-kuning {
+    @apply text-amber-300;
+  }
+
+  .gim-ringkasan-skor-limau {
+    @apply text-lime-600;
+  }
+
+  .dark .gim-ringkasan-skor-limau {
+    @apply text-lime-400;
+  }
+
+  .gim-ringkasan-skor-hijau-muda {
+    @apply text-green-500;
+  }
+
+  .dark .gim-ringkasan-skor-hijau-muda {
+    @apply text-green-300;
+  }
+
+  .gim-ringkasan-skor-hijau {
+    @apply text-green-700;
+  }
+
+  .dark .gim-ringkasan-skor-hijau {
+    @apply text-green-400;
+  }
+
+  .gim-ringkasan-label {
+    @apply text-lg text-gray-600 mt-1;
+  }
+
+  .dark .gim-ringkasan-label {
+    @apply text-dark-text-muted;
+  }
+
+  .gim-ringkasan-list {
+    @apply divide-y divide-gray-200 border border-gray-200 rounded-xl overflow-hidden mb-5 text-left;
+  }
+
+  .dark .gim-ringkasan-list {
+    @apply divide-dark-border border-dark-border;
+  }
+
+  .gim-ringkasan-item {
+    @apply px-4 py-3 bg-white cursor-pointer hover:bg-gray-50 transition-colors;
+  }
+
+  .dark .gim-ringkasan-item {
+    @apply bg-dark-bg-input hover:bg-dark-bg;
+  }
+
+  .gim-ringkasan-item-header {
+    @apply flex items-start gap-2 text-sm font-normal text-gray-800;
+  }
+
+  .gim-ringkasan-item-header-terbuka {
+    @apply border-b border-gray-200 pb-3;
+  }
+
+  .dark .gim-ringkasan-item-header {
+    @apply text-dark-text;
+  }
+
+  .dark .gim-ringkasan-item-header-terbuka {
+    @apply border-dark-border;
+  }
+
+  .gim-ringkasan-item-detail {
+    @apply mt-2 space-y-1 text-sm;
+  }
+
+  .gim-tautan-ringkasan {
+    @apply inline text-blue-700 underline underline-offset-2 hover:text-blue-800 transition-colors;
+  }
+
+  .dark .gim-tautan-ringkasan {
+    @apply text-blue-300 hover:text-blue-200;
+  }
+
+  .gim-ikon-benar {
+    @apply text-green-600;
+  }
+
+  .dark .gim-ikon-benar {
+    @apply text-green-400;
+  }
+
+  .gim-ikon-salah {
+    @apply text-red-600;
+  }
+
+  .dark .gim-ikon-salah {
+    @apply text-red-400;
+  }
+
+  .gim-ringkasan-item-benar {
+    @apply flex items-center gap-2 text-green-700;
+  }
+
+  .dark .gim-ringkasan-item-benar {
+    @apply text-green-400;
+  }
+
+  .gim-ringkasan-item-salah {
+    @apply flex items-center gap-2 text-red-600;
+  }
+
+  .dark .gim-ringkasan-item-salah {
+    @apply text-red-400;
+  }
+
+  .gim-tombol-ronde {
+    @apply shrink-0 py-2 px-4 rounded-xl border border-gray-200 bg-gray-100 text-gray-700 font-medium text-sm hover:bg-gray-200 hover:border-gray-300 transition-colors text-right;
+  }
+
+  .dark .gim-tombol-ronde {
+    @apply border-dark-border bg-dark-bg-input text-dark-text-muted hover:bg-dark-bg-hover hover:text-dark-text;
+  }
+
+  .gim-muat {
+    @apply flex flex-col items-center gap-3 py-10 text-sm text-gray-400;
+  }
+
+  .dark .gim-muat {
+    @apply text-dark-text-muted;
+  }
+
+  /* ===== End Gim Pilih Ganda ===== */
 
   .kateglo-layout-root {
     @apply min-h-screen bg-gray-50 flex flex-col;

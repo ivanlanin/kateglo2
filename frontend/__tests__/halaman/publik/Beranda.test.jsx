@@ -24,6 +24,10 @@ vi.mock('../../../src/api/apiAuth', () => ({
   simpanReturnTo: vi.fn(),
 }));
 
+vi.mock('../../../src/komponen/publik/GimPilihGanda', () => ({
+  default: () => null,
+}));
+
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   useNavigate: () => mockNavigate,

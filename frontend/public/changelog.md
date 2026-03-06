@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-03-07 Sabut
+
+- Mengujicobakan gim pilih ganda di beranda
+
 ## 2026-03-06 Jumat
 
 - Mengubah tautan kamus dan glosarium di beranda untuk mengarah detail

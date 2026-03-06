@@ -187,6 +187,15 @@ export async function ambilPencarianPopuler({ tanggal = null } = {}) {
   return response.data;
 }
 
+// === GIM: PILIH GANDA ===
+
+export async function ambilRondePilihGanda({ riwayat = [] } = {}) {
+  const response = await klien.get('/api/publik/gim/pilih-ganda/ronde', {
+    params: riwayat.length > 0 ? { riwayat: JSON.stringify(riwayat) } : {},
+  });
+  return response.data;
+}
+
 // === GIM: SUSUN KATA ===
 
 export async function ambilPuzzleSusunKata({ panjang = 5 } = {}) {
