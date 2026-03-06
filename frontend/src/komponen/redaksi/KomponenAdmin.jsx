@@ -397,9 +397,9 @@ export function TabelAdmin({
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 dark:bg-dark-bg-elevated dark:divide-gray-700">
-              {data.map((item) => (
+              {data.map((item, index) => (
                 <tr
-                  key={item[kunciId]}
+                  key={item[kunciId] ?? `row-${index}`}
                   onClick={onKlikBaris ? () => onKlikBaris(item) : undefined}
                   className={`hover:bg-gray-50 dark:hover:bg-dark-bg${onKlikBaris ? ' cursor-pointer' : ''}`}
                 >

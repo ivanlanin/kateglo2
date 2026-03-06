@@ -118,7 +118,10 @@ function TagarAdmin() {
     { value: '', label: 'Semua kategori' },
     ...daftarKategori.map((k) => ({ value: k, label: k })),
   ];
-  const opsiKategoriForm = daftarKategori.map((k) => ({ value: k, label: k }));
+  const opsiKategoriForm = [
+    { value: '', label: '-- Pilih kategori --' },
+    ...daftarKategori.map((k) => ({ value: k, label: k })),
+  ];
 
   const panel = useFormPanel(nilaiAwal);
   const simpan = useSimpanTagar();

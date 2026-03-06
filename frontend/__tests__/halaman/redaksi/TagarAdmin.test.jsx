@@ -80,6 +80,10 @@ describe('TagarAdmin', () => {
 
     fireEvent.change(screen.getByLabelText('Nama*'), { target: { value: 'ber-' } });
     fireEvent.change(screen.getByLabelText('Kode*'), { target: { value: 'ber' } });
+
+    fireEvent.click(screen.getByText('Simpan'));
+    expect(screen.getByText('Kategori wajib diisi')).toBeInTheDocument();
+
     fireEvent.change(screen.getByLabelText('Kategori'), { target: { value: 'prefiks' } });
 
     fireEvent.click(screen.getByText('Simpan'));
