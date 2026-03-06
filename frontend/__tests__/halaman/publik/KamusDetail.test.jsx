@@ -2068,6 +2068,42 @@ describe('KamusDetail', () => {
     ]);
   });
 
+  it('memendekkan label subentri peribahasa panjang dengan spasi sebelum elipsis', () => {
+    const peribahasaPanjang = 'hujan emas di negeri orang, hujan batu di negeri sendiri, baik jua di negeri sendiri';
+
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        entri: [
+          {
+            id: 1,
+            entri: 'hujan',
+            indeks: 'hujan',
+            jenis: 'dasar',
+            makna: [{ id: 11, kelas_kata: null, makna: 'contoh makna' }],
+            subentri: {
+              peribahasa: [
+                { id: 2, entri: peribahasaPanjang, indeks: peribahasaPanjang },
+              ],
+            },
+          },
+        ],
+        tesaurus: { sinonim: [], antonim: [] },
+        glosarium: [],
+      },
+    });
+
+    const { container } = render(<KamusDetail />);
+    const linkPeribahasa = container.querySelector('.kamus-detail-subentry-chip-list a.kamus-detail-subentry-chip-link');
+
+    expect(linkPeribahasa).not.toBeNull();
+    const teks = (linkPeribahasa?.textContent || '').trim();
+    expect(teks.endsWith(' ...')).toBe(true);
+    expect(linkPeribahasa?.getAttribute('title')).toBe(peribahasaPanjang);
+    expect(linkPeribahasa?.getAttribute('href')).toBe('/kamus/detail/hujan%20emas%20di%20negeri%20orang%2C%20hujan%20batu%20di%20negeri%20sendiri%2C%20baik%20jua%20di%20negeri%20sendiri');
+  });
+
   it('membentuk fallback entri dari indeks route dan memetakan jenis ke kategori ekspresi/jenis', () => {
     mockParams = { indeks: 'kata%20route' };
     let jumlahDetail = 0;

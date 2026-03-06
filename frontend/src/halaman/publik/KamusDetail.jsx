@@ -26,6 +26,7 @@ import useNavigasiMemuat from '../../hooks/bersama/useNavigasiMemuat';
 
 const GLOSARIUM_LIMIT = 20;
 const SUBENTRI_PREVIEW_LIMIT = 8;
+const SUBENTRI_PERIBAHASA_LABEL_LIMIT = 56;
 
 function upsertMetaTag({ name, property, content }) {
   const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
@@ -136,6 +137,20 @@ function normalisasiSlugNama(teks = '') {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
+}
+
+function ringkasLabelChip(text = '', maxLength = SUBENTRI_PERIBAHASA_LABEL_LIMIT) {
+  const nilai = String(text || '').trim();
+  if (!nilai || nilai.length <= maxLength) return nilai;
+
+  const batas = Math.max(maxLength - 4, 1);
+  const potongAwal = nilai.slice(0, batas).trimEnd();
+  const indeksSpasiTerakhir = potongAwal.lastIndexOf(' ');
+  const potongRapi = indeksSpasiTerakhir >= 24
+    ? potongAwal.slice(0, indeksSpasiTerakhir).trimEnd()
+    : potongAwal;
+
+  return `${potongRapi} ...`;
 }
 
 export const __private = {
@@ -834,6 +849,7 @@ function KamusDetail() {
                         const isExpanded = Boolean(subentriExpanded[groupKey]);
                         const perluLipat = daftarSubentri.length > SUBENTRI_PREVIEW_LIMIT;
                         const jumlahLainnya = Math.max(daftarSubentri.length - SUBENTRI_PREVIEW_LIMIT, 0);
+                        const gunakanLabelRingkas = jenis === 'peribahasa';
                         const daftarSubentriTampil = perluLipat && !isExpanded
                           ? daftarSubentri.slice(0, SUBENTRI_PREVIEW_LIMIT)
                           : daftarSubentri;
@@ -865,13 +881,24 @@ function KamusDetail() {
                         <ul id={groupId} className="kamus-detail-subentry-chip-list">
                           {daftarSubentriTampil.map((s, i) => (
                             <li key={`${s.id ?? s.indeks ?? s.entri ?? 'subentri'}-${i}`} className="kamus-detail-subentry-chip-item">
-                              {jenis === 'varian' ? (
-                                <span className="kamus-detail-subentry-chip-static">{formatLemaHomonim(s.entri)}</span>
-                              ) : (
-                                <Link to={buatPathDetailKamus(s.indeks || s.entri)} className="kamus-detail-subentry-chip-link">
-                                  {formatLemaHomonim(s.entri)}
-                                </Link>
-                              )}
+                              {(() => {
+                                const labelAsli = formatLemaHomonim(s.entri);
+                                const labelTampil = gunakanLabelRingkas
+                                  ? ringkasLabelChip(labelAsli)
+                                  : labelAsli;
+
+                                return jenis === 'varian' ? (
+                                  <span className="kamus-detail-subentry-chip-static" title={labelAsli}>{labelTampil}</span>
+                                ) : (
+                                  <Link
+                                    to={buatPathDetailKamus(s.indeks || s.entri)}
+                                    className="kamus-detail-subentry-chip-link"
+                                    title={labelAsli}
+                                  >
+                                    {labelTampil}
+                                  </Link>
+                                );
+                              })()}
                             </li>
                           ))}
                           {perluLipat && !isExpanded && (
