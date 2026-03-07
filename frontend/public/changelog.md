@@ -1,6 +1,6 @@
 # Riwayat Perubahan
 
-## 2026-03-07 Sabut
+## 2026-03-07 Sabtu
 
 - Mengujicobakan gim pilih ganda di beranda
 
