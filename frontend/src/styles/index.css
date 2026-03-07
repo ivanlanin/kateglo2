@@ -975,15 +975,23 @@ code {
   }
 
   .dark .gim-ringkasan-list {
-    @apply divide-dark-border border-dark-border;
+    @apply divide-gray-600 border-gray-600;
   }
 
   .gim-ringkasan-item {
-    @apply px-4 py-3 bg-white cursor-pointer hover:bg-gray-50 transition-colors;
+    @apply px-4 py-3 bg-white cursor-pointer hover:bg-gray-100 transition-colors;
+  }
+
+  .gim-ringkasan-item-terbuka {
+    @apply bg-gray-100 hover:bg-gray-100;
   }
 
   .dark .gim-ringkasan-item {
     @apply bg-dark-bg-input hover:bg-dark-bg;
+  }
+
+  .dark .gim-ringkasan-item-terbuka {
+    @apply bg-dark-bg;
   }
 
   .gim-ringkasan-item-header {
@@ -999,7 +1007,7 @@ code {
   }
 
   .dark .gim-ringkasan-item-header-terbuka {
-    @apply border-dark-border;
+    @apply border-gray-600;
   }
 
   .gim-ringkasan-item-detail {

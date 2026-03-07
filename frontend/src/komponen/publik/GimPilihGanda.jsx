@@ -209,7 +209,10 @@ function ItemRingkasan({ soal, pilihanUser }) {
   const benar = pilihanUser === soal.jawaban;
 
   return (
-    <div className="gim-ringkasan-item" onClick={() => setBuka((v) => !v)}>
+    <div
+      className={`gim-ringkasan-item${buka ? ' gim-ringkasan-item-terbuka' : ''}`}
+      onClick={() => setBuka((v) => !v)}
+    >
       <div className={`gim-ringkasan-item-header${buka ? ' gim-ringkasan-item-header-terbuka' : ''}`}>
         <span className={benar ? 'gim-ikon-benar' : 'gim-ikon-salah'}>{benar ? '✓' : '✗'}</span>
         <span className="flex-1 text-sm"><PertanyaanRingkasan soal={soal} /></span>
