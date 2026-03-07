@@ -243,10 +243,12 @@ function ItemRingkasan({ soal, pilihanUser }) {
 function GimPilihGanda() {
   const queryClient = useQueryClient();
   const rondeRef = useRef([]);
+  const skorAwalRef = useRef(true);
 
   const [rondeKey, setRondeKey] = useState(0);
   const [riwayatSoal, setRiwayatSoal] = useState([]);
   const [totalSkor, setTotalSkor] = useState(0);
+  const [animasiSkor, setAnimasiSkor] = useState(false);
   const [indeks, setIndeks] = useState(0);
   const [jawabanUser, setJawabanUser] = useState([]);
   const [fase, setFase] = useState('soal'); // 'soal' | 'ringkasan'
@@ -263,6 +265,22 @@ function GimPilihGanda() {
   useEffect(() => {
     rondeRef.current = data?.ronde ?? [];
   }, [data]);
+
+  useEffect(() => {
+    if (skorAwalRef.current) {
+      skorAwalRef.current = false;
+      return undefined;
+    }
+
+    setAnimasiSkor(true);
+    const timerId = window.setTimeout(() => {
+      setAnimasiSkor(false);
+    }, 420);
+
+    return () => {
+      window.clearTimeout(timerId);
+    };
+  }, [totalSkor]);
 
   const jumlahBenar = jawabanUser.reduce((total, pilihan, i) => {
     if (pilihan !== null && pilihan !== undefined && ronde[i] && pilihan === ronde[i].jawaban) {
@@ -345,8 +363,8 @@ function GimPilihGanda() {
             <div className={`gim-ringkasan-skor-angka ${kelasSkor}`}>{jumlahBenar}/{ronde.length}</div>
             <div className="gim-ringkasan-label">{labelSkor(jumlahBenar * 10)}</div>
           </div>
-          <button type="button" className="gim-tombol-ronde" onClick={handleRondeBaru}>
-            Lagi!
+          <button type="button" className="btn-primary shrink-0" onClick={handleRondeBaru}>
+            Main lagi!
           </button>
         </div>
         <div className="gim-ringkasan-list">
@@ -382,7 +400,7 @@ function GimPilihGanda() {
             return <span key={`${soal.mode}-${i}`} className={kelasBullet} aria-hidden="true" />;
           })}
         </div>
-        <span className={`gim-header-skor ${kelasSkorHeader(totalSkor)}`}>{totalSkor}</span>
+        <span className={`gim-header-skor ${kelasSkorHeader(totalSkor)}${animasiSkor ? ' gim-header-skor-animasi' : ''}`}>{totalSkor}</span>
       </div>
 
       <p className="gim-soal">
@@ -392,13 +410,14 @@ function GimPilihGanda() {
       <div className="gim-pilihan-list">
         {soalSaatIni.pilihan.map((pilihan, i) => {
           let kelas = 'gim-tombol';
+          let statusPilihan = null;
           if (sudahJawab) {
             if (jawabanUser[indeks] === soalSaatIni.jawaban && i === soalSaatIni.jawaban) {
               kelas += ' gim-tombol-benar';
+              statusPilihan = 'benar';
             } else if (i === jawabanUser[indeks]) {
               kelas += ' gim-tombol-salah';
-            } else {
-              kelas += ' gim-tombol-redup';
+              statusPilihan = 'salah';
             }
           }
           return (
@@ -409,7 +428,14 @@ function GimPilihGanda() {
               onClick={() => handlePilih(i)}
               disabled={sudahJawab}
             >
-              {teksPilihan(soalSaatIni, pilihan)}
+              <span className={`gim-tombol-konten${statusPilihan ? ' gim-tombol-konten-berikon' : ''}`}>
+                {statusPilihan ? (
+                  <span className="gim-tombol-ikon" aria-hidden="true">
+                    {statusPilihan === 'benar' ? '✓' : '✕'}
+                  </span>
+                ) : null}
+                <span className="gim-tombol-label">{teksPilihan(soalSaatIni, pilihan)}</span>
+              </span>
             </button>
           );
         })}

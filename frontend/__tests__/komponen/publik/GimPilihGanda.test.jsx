@@ -117,7 +117,7 @@ describe('GimPilihGanda', () => {
     expect(container.querySelectorAll('.gim-ringkasan-item-benar')).toHaveLength(1);
     expect(container.querySelectorAll('.gim-ringkasan-item-salah')).toHaveLength(1);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Lagi!' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Main lagi!' }));
 
     expect(screen.getByText('10')).toBeInTheDocument();
     expect(container.querySelector('.gim-soal')).toHaveTextContent('Apa arti alpha?');

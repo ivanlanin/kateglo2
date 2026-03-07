@@ -778,7 +778,7 @@ code {
   }
 
   .gim-header-skor {
-    @apply justify-self-end whitespace-nowrap text-xs font-semibold uppercase tracking-wide text-green-600;
+    @apply justify-self-end whitespace-nowrap text-xs font-semibold uppercase tracking-wide text-green-600 inline-block origin-center;
   }
 
   .dark .gim-header-skor {
@@ -807,6 +807,28 @@ code {
 
   .dark .gim-header-skor-hijau {
     @apply text-green-400;
+  }
+
+  .gim-header-skor-animasi {
+    animation: gimSkorPop 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @keyframes gimSkorPop {
+    0% {
+      transform: scale(1);
+    }
+
+    38% {
+      transform: scale(1.24);
+    }
+
+    68% {
+      transform: scale(1.08);
+    }
+
+    100% {
+      transform: scale(1);
+    }
   }
 
   .gim-progress {
@@ -858,7 +880,8 @@ code {
   }
 
   .gim-tombol {
-    @apply w-full py-3 px-5 rounded-xl border text-sm font-normal transition-all text-center;
+    @apply w-full py-3 px-5 rounded-xl border text-sm font-normal text-center;
+    @apply transition-colors duration-200;
     @apply border-gray-300 bg-white text-gray-800 hover:border-blue-400 hover:bg-blue-50;
   }
 
@@ -866,24 +889,41 @@ code {
     @apply border-dark-border bg-dark-bg-input text-dark-text hover:border-blue-500 hover:bg-blue-900/20;
   }
 
+  .gim-tombol-konten {
+    @apply relative block w-full;
+  }
+
+  .gim-tombol-konten-berikon {
+    @apply px-8;
+  }
+
+  .gim-tombol-ikon {
+    @apply absolute left-0 top-0 inline-flex w-6 items-start justify-center text-lg font-semibold leading-5;
+  }
+
+  .gim-tombol-label {
+    @apply block min-w-0 text-center leading-5;
+  }
+
   .gim-tombol-benar {
-    @apply border-green-500 bg-green-50 text-green-800 hover:bg-green-50 hover:border-green-500;
+    @apply border-green-600 bg-green-600 text-white hover:bg-green-600 hover:border-green-600;
   }
 
   .dark .gim-tombol-benar {
-    @apply border-green-500 bg-green-900/20 text-green-300 hover:bg-green-900/20 hover:border-green-500;
+    @apply border-green-500 bg-green-500 text-white hover:bg-green-500 hover:border-green-500;
   }
 
   .gim-tombol-salah {
-    @apply border-red-400 bg-red-50 text-red-700 hover:bg-red-50 hover:border-red-400;
+    @apply border-red-500 bg-red-500 text-white hover:bg-red-500 hover:border-red-500;
   }
 
   .dark .gim-tombol-salah {
-    @apply border-red-500 bg-red-900/20 text-red-400 hover:bg-red-900/20 hover:border-red-500;
+    @apply border-red-500 bg-red-500 text-white hover:bg-red-500 hover:border-red-500;
   }
 
-  .gim-tombol-redup {
-    @apply opacity-40 pointer-events-none;
+  .gim-tombol-benar .gim-tombol-ikon,
+  .gim-tombol-salah .gim-tombol-ikon {
+    @apply text-white;
   }
 
   .gim-aksi-bawah {
@@ -1052,14 +1092,6 @@ code {
 
   .dark .gim-ringkasan-item-salah {
     @apply text-red-400;
-  }
-
-  .gim-tombol-ronde {
-    @apply shrink-0 py-2 px-4 rounded-xl border border-gray-200 bg-gray-100 text-gray-700 font-medium text-sm hover:bg-gray-200 hover:border-gray-300 transition-colors text-right;
-  }
-
-  .dark .gim-tombol-ronde {
-    @apply border-dark-border bg-dark-bg-input text-dark-text-muted hover:bg-dark-bg-hover hover:text-dark-text;
   }
 
   .gim-muat {
