@@ -325,7 +325,7 @@ function GimPilihGanda() {
     return (
       <div className="gim-pilih-ganda">
         <div className="gim-muat">
-          <span>Menyiapkan soal…</span>
+          <span>Menyiapkan soal …</span>
         </div>
       </div>
     );

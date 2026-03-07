@@ -33,8 +33,8 @@ describe('entry-server', () => {
     expect(__private.stripTrailingSlash()).toBe('');
 
     expect(__private.truncate('pendek', 10)).toBe('pendek');
-    expect(__private.truncate('ini kalimat sangat panjang sekali untuk dipotong', 20)).toMatch(/…$/);
-    expect(__private.truncate('x'.repeat(220), 20)).toBe(`${'x'.repeat(20)}…`);
+    expect(__private.truncate('ini kalimat sangat panjang sekali untuk dipotong', 20)).toMatch(/\s…$/);
+    expect(__private.truncate('x'.repeat(220), 20)).toBe(`${'x'.repeat(20)} …`);
   });
 
   it('builder deskripsi kamus menutup semua cabang', () => {

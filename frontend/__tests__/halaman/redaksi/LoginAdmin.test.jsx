@@ -33,7 +33,7 @@ describe('LoginAdmin', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('Memeriksa sesi...')).toBeInTheDocument();
+    expect(screen.getByText('Memeriksa sesi …')).toBeInTheDocument();
   });
 
   it('menampilkan error dan memanggil login google', () => {

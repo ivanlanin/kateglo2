@@ -1259,7 +1259,7 @@ describe('KamusDetail', () => {
 
     isFetchingState = true;
     rerender(<KamusDetail />);
-    expect(screen.queryByText('Memuat glosarium ...')).not.toBeInTheDocument();
+    expect(screen.queryByText('Memuat glosarium …')).not.toBeInTheDocument();
     expect(screen.queryByText('Memuat glosarium …')).not.toBeInTheDocument();
 
     isFetchingState = false;
@@ -1594,7 +1594,7 @@ describe('KamusDetail', () => {
     render(<KamusDetail />);
 
     expect(screen.queryByText(/Punya pertanyaan, masukan, atau catatan tentang halaman ini\?/i)).not.toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Tulis komentar ...')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Tulis komentar …')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Kirim komentar' })).toBeDisabled();
   });
 
@@ -1648,7 +1648,7 @@ describe('KamusDetail', () => {
     const tombolKirim = screen.getByRole('button', { name: 'Kirim komentar' });
     expect(tombolKirim).toBeDisabled();
 
-    fireEvent.change(screen.getByPlaceholderText('Tulis komentar ...'), {
+    fireEvent.change(screen.getByPlaceholderText('Tulis komentar …'), {
       target: { value: 'Komentar uji' },
     });
     expect(tombolKirim).toBeEnabled();
@@ -1707,7 +1707,7 @@ describe('KamusDetail', () => {
 
     render(<KamusDetail />);
 
-    fireEvent.change(screen.getByPlaceholderText('Tulis komentar ...'), {
+    fireEvent.change(screen.getByPlaceholderText('Tulis komentar …'), {
       target: { value: 'Komentar gagal' },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Kirim komentar' }));
@@ -2104,7 +2104,7 @@ describe('KamusDetail', () => {
 
     expect(linkPeribahasa).not.toBeNull();
     const teks = (linkPeribahasa?.textContent || '').trim();
-    expect(teks.endsWith(' ...')).toBe(true);
+    expect(teks.endsWith(' …')).toBe(true);
     expect(linkPeribahasa?.getAttribute('title')).toBe(peribahasaPanjang);
     expect(linkPeribahasa?.getAttribute('href')).toBe('/kamus/detail/hujan%20emas%20di%20negeri%20orang%2C%20hujan%20batu%20di%20negeri%20sendiri%2C%20baik%20jua%20di%20negeri%20sendiri');
   });

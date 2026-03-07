@@ -575,7 +575,7 @@ function SeksiTagar({ entriId }) {
             onChange={(e) => setQueryInput(e.target.value)}
             onFocus={() => setTampilDropdown(true)}
             onBlur={() => setTimeout(() => setTampilDropdown(false), 120)}
-            placeholder={tagarTerpilih.length === 0 ? 'Tambah tagar…' : ''}
+            placeholder={tagarTerpilih.length === 0 ? 'Tambah tagar …' : ''}
             className="min-w-24 flex-1 bg-transparent text-sm outline-none"
           />
         </div>
@@ -1330,13 +1330,13 @@ function KamusAdmin() {
               onChange={(event) => handleUbahInputInduk(event.target.value)}
               onFocus={() => setTampilSaranInduk(true)}
               onBlur={() => setTimeout(() => setTampilSaranInduk(false), 120)}
-              placeholder="Cari entri induk…"
+              placeholder="Cari entri induk …"
               className="form-admin-input"
             />
             {tampilSaranInduk && queryInduk && (
               <div className="absolute left-0 right-0 top-full z-20 mt-1 max-h-52 overflow-auto rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-dark-bg-elevated">
                 {isSaranIndukLoading && (
-                  <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">Mencari entri…</div>
+                  <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">Mencari entri …</div>
                 )}
                 {!isSaranIndukLoading && daftarSaranInduk.length === 0 && (
                   <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">Tidak ada hasil.</div>
@@ -1376,13 +1376,13 @@ function KamusAdmin() {
                 onChange={(event) => handleUbahInputRujuk(event.target.value)}
                 onFocus={() => setTampilSaranRujuk(true)}
                 onBlur={() => setTimeout(() => setTampilSaranRujuk(false), 120)}
-                placeholder="Cari entri rujukan…"
+                placeholder="Cari entri rujukan …"
                 className="form-admin-input"
               />
               {tampilSaranRujuk && queryRujuk && (
                 <div className="absolute left-0 right-0 top-full z-20 mt-1 max-h-52 overflow-auto rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-dark-bg-elevated">
                   {isSaranRujukLoading && (
-                    <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">Mencari entri…</div>
+                    <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">Mencari entri …</div>
                   )}
                   {!isSaranRujukLoading && daftarSaranRujuk.length === 0 && (
                     <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">Tidak ada hasil.</div>

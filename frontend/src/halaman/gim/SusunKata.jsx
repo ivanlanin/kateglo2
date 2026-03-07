@@ -531,7 +531,7 @@ function SusunKata() {
           isLoading={isAuthenticated && isLoading && !data}
           isError={isError}
           error={error}
-          loadingText="Menyiapkan gim ..."
+          loadingText="Menyiapkan gim …"
           errorText="Gagal memuat gim."
         />
 

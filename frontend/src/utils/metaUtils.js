@@ -50,7 +50,7 @@ function truncate(text = '', maxLen = 155) {
   if (text.length <= maxLen) return text;
   const cut = text.substring(0, maxLen);
   const lastSpace = cut.lastIndexOf(' ');
-  return (lastSpace > maxLen * 0.6 ? cut.substring(0, lastSpace) : cut) + '…';
+  return (lastSpace > maxLen * 0.6 ? cut.substring(0, lastSpace) : cut) + ' …';
 }
 
 // =========================

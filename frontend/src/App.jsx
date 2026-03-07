@@ -40,7 +40,7 @@ function RuteRedaksi({ children }) {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-dark-bg">
-        <p className="text-gray-600 dark:text-gray-400">Memuat...</p>
+        <p className="text-gray-600 dark:text-gray-400">Memuat …</p>
       </div>
     );
   }
@@ -58,7 +58,7 @@ function RuteIzin({ children, izinDibutuhkan = [] }) {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-dark-bg">
-        <p className="text-gray-600 dark:text-gray-400">Memuat...</p>
+        <p className="text-gray-600 dark:text-gray-400">Memuat …</p>
       </div>
     );
   }

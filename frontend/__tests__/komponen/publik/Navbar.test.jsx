@@ -174,7 +174,7 @@ describe('Navbar', () => {
 
     render(<Navbar />);
 
-    expect(screen.getByText('Memuat...')).toBeInTheDocument();
+    expect(screen.getByText('Memuat …')).toBeInTheDocument();
   });
 
   it('menampilkan status loading auth pada panel mobile saat menu dibuka', () => {
@@ -183,7 +183,7 @@ describe('Navbar', () => {
     render(<Navbar />);
     fireEvent.click(screen.getByLabelText('Toggle menu'));
 
-    expect(screen.getAllByText('Memuat...').length).toBeGreaterThanOrEqual(2);
+    expect(screen.getAllByText('Memuat …').length).toBeGreaterThanOrEqual(2);
   });
 
   it('menampilkan tombol Keluar dan memanggil logout saat sudah autentikasi', () => {

@@ -249,7 +249,7 @@ function GlosariumDetail() {
         isLoading={isLoading}
         isError={isError}
         error={error}
-        loadingText="Memuat…"
+        loadingText="Memuat …"
         errorText="Gagal mengambil data."
       />
 

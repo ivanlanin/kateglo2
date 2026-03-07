@@ -65,7 +65,7 @@ function MenuUtama({
         ))}
 
       {tampilkanAutentikasi && (isLoading ? (
-        <span className={loadingClassName}>Memuat...</span>
+        <span className={loadingClassName}>Memuat …</span>
       ) : isAuthenticated ? (
         <button
           type="button"

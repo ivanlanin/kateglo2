@@ -150,7 +150,7 @@ function ringkasLabelChip(text = '', maxLength = SUBENTRI_PERIBAHASA_LABEL_LIMIT
     ? potongAwal.slice(0, indeksSpasiTerakhir).trimEnd()
     : potongAwal;
 
-  return `${potongRapi} ...`;
+  return `${potongRapi} …`;
 }
 
 export const __private = {
@@ -1015,7 +1015,7 @@ function KamusDetail() {
                         onChange={(e) => setTeksKomentar(e.target.value)}
                         rows={4}
                         className="w-full text-sm px-3 py-2 pr-16 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark-bg-input dark:text-dark-text"
-                        placeholder="Tulis komentar ..."
+                        placeholder="Tulis komentar …"
                       />
                       <button
                         type="submit"

@@ -69,7 +69,7 @@ describe('GlosariumDetail', () => {
   it('menampilkan loading dan error feedback', () => {
     queryState = { data: undefined, isLoading: true, isFetching: false, isError: false, error: null };
     const { rerender } = render(<GlosariumDetail />);
-    expect(screen.getByText('Memuat…')).toBeInTheDocument();
+    expect(screen.getByText('Memuat …')).toBeInTheDocument();
 
     queryState = { data: undefined, isLoading: false, isFetching: false, isError: true, error: new Error('gagal') };
     rerender(<GlosariumDetail />);

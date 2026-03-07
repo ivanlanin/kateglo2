@@ -58,7 +58,7 @@ describe('MenuUtama', () => {
 
     render(<MenuUtama loadingClassName="loading" />);
 
-    expect(screen.getByText('Memuat...')).toBeInTheDocument();
+    expect(screen.getByText('Memuat …')).toBeInTheDocument();
   });
 
   it('menangani klik logout saat user sudah login', () => {

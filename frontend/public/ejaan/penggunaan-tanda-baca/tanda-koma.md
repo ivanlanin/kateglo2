@@ -13,7 +13,7 @@ Misalnya:
   (1) akta kelahiran,
   (2) ijazah terakhir, dan
   (3) surat keterangan kesehatan.
-- Satu, dua, ... tiga!
+- Satu, dua, … tiga!
 
 > 2. Tanda koma digunakan sebelum kata penghubung, seperti _tetapi_, _melainkan_, dan _sedangkan_, dalam kalimat majemuk pertentangan.
 

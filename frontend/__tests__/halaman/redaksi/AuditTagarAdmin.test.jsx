@@ -249,6 +249,6 @@ describe('AuditTagarAdmin', () => {
     );
 
     fireEvent.click(screen.getByText('dasar'));
-    expect(screen.getByPlaceholderText('Tambah tagar…')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Tambah tagar …')).toBeInTheDocument();
   });
 });

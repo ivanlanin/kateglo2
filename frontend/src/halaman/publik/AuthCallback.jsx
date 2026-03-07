@@ -43,7 +43,7 @@ function AuthCallback() {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <p>Memproses login Google...</p>
+      <p>Memproses login Google …</p>
     </div>
   );
 }

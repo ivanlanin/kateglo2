@@ -90,7 +90,7 @@ describe('App', () => {
         <App />
       </MemoryRouter>
     );
-    expect(screen.getByText('Memuat...')).toBeInTheDocument();
+    expect(screen.getByText('Memuat …')).toBeInTheDocument();
   });
 
   it('mengizinkan route redaksi saat user admin', () => {
@@ -215,7 +215,7 @@ describe('App', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('Memuat...')).toBeInTheDocument();
+    expect(screen.getByText('Memuat …')).toBeInTheDocument();
   });
 
   it('mengalihkan route admin ke dasbor redaksi saat bukan admin', () => {

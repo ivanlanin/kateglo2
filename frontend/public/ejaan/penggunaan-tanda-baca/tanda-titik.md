@@ -102,7 +102,7 @@ Bahasa Indonesia berkedudukan sebagai
    b) identitas nasional,  
    c) alat pemersatu bangsa, dan  
    d) sarana perhubungan antarwarga, antardaerah, dan antarbudaya;
-2. bahasa negara ....
+2. bahasa negara ….
 
 > 6. Tanda titik _tidak_ digunakan di belakang angka terakhir, baik satu digit maupun lebih, dalam judul tabel, bagan, grafik, atau gambar.
 

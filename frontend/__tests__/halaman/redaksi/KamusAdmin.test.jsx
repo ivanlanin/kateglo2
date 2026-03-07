@@ -323,7 +323,7 @@ describe('KamusAdmin', () => {
     fireEvent.click(screen.getByText('dasar'));
     const inputTagar = container.querySelector('input.min-w-24');
     expect(inputTagar).not.toBeNull();
-    expect(inputTagar).toHaveAttribute('placeholder', 'Tambah tagar…');
+    expect(inputTagar).toHaveAttribute('placeholder', 'Tambah tagar …');
   });
 
   it('mengelola makna dan contoh', () => {
@@ -828,7 +828,7 @@ describe('KamusAdmin', () => {
 
     fireEvent.focus(inputInduk);
     fireEvent.change(inputInduk, { target: { value: 'akar' } });
-    expect(screen.getByText('Mencari entri…')).toBeInTheDocument();
+    expect(screen.getByText('Mencari entri …')).toBeInTheDocument();
 
     fireEvent.change(inputInduk, { target: { value: 'akar2' } });
     expect(screen.getByText('Tidak ada hasil.')).toBeInTheDocument();
@@ -1024,7 +1024,7 @@ describe('KamusAdmin', () => {
 
     fireEvent.focus(inputRujuk);
     fireEvent.change(inputRujuk, { target: { value: 'rujuk-load' } });
-    expect(screen.getByText('Mencari entri…')).toBeInTheDocument();
+    expect(screen.getByText('Mencari entri …')).toBeInTheDocument();
 
     fireEvent.change(inputRujuk, { target: { value: 'rujuk-empty' } });
     expect(screen.getByText('Tidak ada hasil.')).toBeInTheDocument();

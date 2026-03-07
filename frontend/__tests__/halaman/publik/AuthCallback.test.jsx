@@ -41,7 +41,7 @@ describe('halaman/AuthCallback', () => {
   it('menampilkan teks proses login', () => {
     render(<AuthCallback />);
 
-    expect(screen.getByText('Memproses login Google...')).toBeInTheDocument();
+    expect(screen.getByText('Memproses login Google …')).toBeInTheDocument();
   });
 
   it('redirect ke root dengan pesan error saat query error tersedia', async () => {

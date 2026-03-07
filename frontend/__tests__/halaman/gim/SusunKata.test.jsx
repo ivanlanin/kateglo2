@@ -302,7 +302,7 @@ describe('SusunKata', () => {
 
     renderSusunKata();
 
-    expect(screen.getByText('Menyiapkan gim ...')).toBeInTheDocument();
+    expect(screen.getByText('Menyiapkan gim …')).toBeInTheDocument();
   });
 
   it('mode harian menyimpan progres saat tebakan valid tetapi permainan belum selesai', async () => {

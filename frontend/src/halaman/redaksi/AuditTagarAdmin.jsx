@@ -135,7 +135,7 @@ function EditorTagarPanel({ entri, onTutup }) {
               onChange={(e) => setQueryInput(e.target.value)}
               onFocus={() => setTampilDropdown(true)}
               onBlur={() => setTimeout(() => setTampilDropdown(false), 120)}
-              placeholder={tagarTerpilih.length === 0 ? 'Tambah tagar…' : ''}
+              placeholder={tagarTerpilih.length === 0 ? 'Tambah tagar …' : ''}
               className="min-w-24 flex-1 bg-transparent text-sm outline-none"
             />
           </div>

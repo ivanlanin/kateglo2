@@ -18,25 +18,25 @@ describe('StatusKonten', () => {
       <QueryFeedback
         isLoading
         isError={false}
-        loadingText="Memuat..."
-        errorText="Error..."
+        loadingText="Memuat…"
+        errorText="Error…"
       />
     );
 
-    expect(screen.getByText('Memuat...')).toBeInTheDocument();
-    expect(screen.queryByText('Error...')).not.toBeInTheDocument();
+    expect(screen.getByText('Memuat…')).toBeInTheDocument();
+    expect(screen.queryByText('Error…')).not.toBeInTheDocument();
 
     rerender(
       <QueryFeedback
         isLoading={false}
         isError
-        loadingText="Memuat..."
-        errorText="Error..."
+        loadingText="Memuat…"
+        errorText="Error…"
       />
     );
 
-    expect(screen.getByText('Error...')).toBeInTheDocument();
-    expect(screen.queryByText('Memuat...')).not.toBeInTheDocument();
+    expect(screen.getByText('Error…')).toBeInTheDocument();
+    expect(screen.queryByText('Memuat…')).not.toBeInTheDocument();
   });
 
   it('QueryFeedback menampilkan pesan khusus saat status 429', () => {
@@ -45,7 +45,7 @@ describe('StatusKonten', () => {
         isLoading={false}
         isError
         error={{ response: { status: 429 } }}
-        loadingText="Memuat..."
+        loadingText="Memuat…"
         errorText="Error fallback"
       />
     );
@@ -64,7 +64,7 @@ describe('StatusKonten', () => {
             data: { message: 'Offset maksimal adalah 1000' },
           },
         }}
-        loadingText="Memuat..."
+        loadingText="Memuat…"
         errorText="Error fallback"
       />
     );
@@ -83,7 +83,7 @@ describe('StatusKonten', () => {
             data: { message: 'Pesan dari server' },
           },
         }}
-        loadingText="Memuat..."
+        loadingText="Memuat…"
         errorText="Error fallback"
       />
     );

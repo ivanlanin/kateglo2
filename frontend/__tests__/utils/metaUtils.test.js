@@ -61,7 +61,7 @@ describe('metaUtils', () => {
       lafal: '/ka.ta/',
       makna: [{ kelas_kata: 'n', makna: panjang }],
     });
-    expect(deskripsi.endsWith('…')).toBe(true);
+    expect(deskripsi.endsWith(' …')).toBe(true);
 
     const kataPanjangTanpaSpasi = 'x'.repeat(200);
     const deskripsiMultiMakna = buildDeskripsiDetailKamus('kata', {
@@ -70,7 +70,7 @@ describe('metaUtils', () => {
         { kelas_kata: 'v', makna: 'aksi' },
       ],
     });
-    expect(deskripsiMultiMakna.endsWith('…')).toBe(true);
+    expect(deskripsiMultiMakna.endsWith(' …')).toBe(true);
     expect(deskripsiMultiMakna).toContain('(1)');
 
     expect(buildMetaDetailKamus('', null).judul).toBe('Kamus');

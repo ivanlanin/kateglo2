@@ -22,7 +22,7 @@ function LoginAdmin() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-dark-bg">
-        <p className="text-gray-600 dark:text-gray-400">Memeriksa sesi...</p>
+        <p className="text-gray-600 dark:text-gray-400">Memeriksa sesi …</p>
       </div>
     );
   }

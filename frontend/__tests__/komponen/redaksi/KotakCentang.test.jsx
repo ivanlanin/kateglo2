@@ -8,13 +8,13 @@ describe('KotakCentang', () => {
       <KotakCentang
         label="Izin"
         isLoading={true}
-        loadingText="Memuat pilihan ..."
+        loadingText="Memuat pilihan …"
         hasSelected={() => false}
         onToggle={vi.fn()}
       />
     );
 
-    expect(screen.getByText('Memuat pilihan ...')).toBeInTheDocument();
+    expect(screen.getByText('Memuat pilihan …')).toBeInTheDocument();
   });
 
   it('mode groups tetap aman saat group.items undefined', () => {
