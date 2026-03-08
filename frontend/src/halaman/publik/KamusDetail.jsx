@@ -58,8 +58,7 @@ function ekstrakKandidatTautanMakna(segmen = '') {
   const match = trimmed.match(/^([^()]+?)(\s*(?:\([^)]*\)\s*)*)$/);
   if (!match) return null;
 
-  const baseText = String(match[1] || '').trim();
-  if (!baseText) return null;
+  const baseText = String(match[1]).trim();
 
   const wordCount = baseText.split(/\s+/).filter(Boolean).length;
   if (wordCount < 1 || wordCount > 2) return null;
@@ -155,6 +154,9 @@ function ringkasLabelChip(text = '', maxLength = SUBENTRI_PERIBAHASA_LABEL_LIMIT
 
 export const __private = {
   formatLabelPenyingkatanBadge,
+  ekstrakKandidatTautanMakna,
+  RenderMakna,
+  ringkasLabelChip,
 };
 
 function buildLabelMap(labels = []) {
@@ -981,9 +983,9 @@ function KamusDetail() {
             <nav className="kamus-detail-sekuens-nav" aria-label="Navigasi indeks kamus">
               {navigasiIndeks.prev ? (
                 <Link
-                  to={buatPathDetailKamus(navigasiIndeks.prev.indeks || navigasiIndeks.prev.label || '')}
+                  to={buatPathDetailKamus(navigasiIndeks.prev.indeks || navigasiIndeks.prev.label)}
                   className="kamus-detail-sekuens-link kamus-detail-sekuens-link-prev"
-                  title={navigasiIndeks.prev.label || navigasiIndeks.prev.indeks || ''}
+                  title={navigasiIndeks.prev.label || navigasiIndeks.prev.indeks}
                 >
                   <span className="kamus-detail-sekuens-arrow" aria-hidden="true">{'‹'}</span>
                   <span className="kamus-detail-sekuens-label">{navigasiIndeks.prev.label || navigasiIndeks.prev.indeks}</span>
@@ -992,9 +994,9 @@ function KamusDetail() {
 
               {navigasiIndeks.next && (
                 <Link
-                  to={buatPathDetailKamus(navigasiIndeks.next.indeks || navigasiIndeks.next.label || '')}
+                  to={buatPathDetailKamus(navigasiIndeks.next.indeks || navigasiIndeks.next.label)}
                   className="kamus-detail-sekuens-link kamus-detail-sekuens-link-next"
-                  title={navigasiIndeks.next.label || navigasiIndeks.next.indeks || ''}
+                  title={navigasiIndeks.next.label || navigasiIndeks.next.indeks}
                 >
                   <span className="kamus-detail-sekuens-label">{navigasiIndeks.next.label || navigasiIndeks.next.indeks}</span>
                   <span className="kamus-detail-sekuens-arrow" aria-hidden="true">{'›'}</span>

@@ -130,7 +130,7 @@ function gabungkanKategoriBentukGabungan(bentukLabels = [], unsurTerikatLabels =
   };
 
   gabunganBentuk.forEach(pushUnik);
-  (Array.isArray(unsurTerikatLabels) ? unsurTerikatLabels : []).forEach(pushUnik);
+  unsurTerikatLabels.forEach(pushUnik);
 
   return hasil;
 }
@@ -355,9 +355,6 @@ function Kamus() {
                   judul = 'Reduplikasi';
                 } else {
                   labels = kategoriData[kat] || [];
-                  if (kat === 'bentuk') {
-                    labels = gabungkanKategoriBentuk(labels);
-                  }
                   if (kat === 'ekspresi') {
                     labels = gabungkanKategoriEkspresi(labels);
                   }
@@ -384,16 +381,14 @@ function Kamus() {
                       if (kategoriSumber === 'tagar') {
                         return `/kamus/tagar/${encodeURIComponent(item.kode)}`;
                       }
-                      const pathKategori = kategoriSumber === 'unsur_terikat'
-                        ? 'bentuk'
-                        : kategoriSumber === 'kelas_kata'
+                      const pathKategori = kategoriSumber === 'kelas_kata'
                           ? 'kelas'
                           : kategoriSumber;
                       const slugLabel = tentukanSlugLabel(kategoriSumber, item);
                       return `/kamus/${pathKategori}/${encodeURIComponent(slugLabel)}`;
                     }}
                     getLabel={(item) => (
-                      ['bentuk', 'unsur_terikat', 'bentuk_gabungan', 'ekspresi'].includes(kat)
+                      ['bentuk_gabungan', 'ekspresi'].includes(kat)
                         ? formatAwalKapital(item.nama)
                         : item.nama
                     )}

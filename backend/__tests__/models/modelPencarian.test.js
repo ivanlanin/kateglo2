@@ -3,7 +3,15 @@
  * @tested_in backend/models/modelPencarian.js
  */
 
+jest.mock('../../config/logger', () => ({
+  warn: jest.fn(),
+  info: jest.fn(),
+  error: jest.fn(),
+  debug: jest.fn(),
+}));
+
 const db = require('../../db');
+const logger = require('../../config/logger');
 const ModelPencarian = require('../../models/modelPencarian');
 
 const { __private } = ModelPencarian;
@@ -14,6 +22,7 @@ describe('ModelPencarian', () => {
 
   beforeEach(() => {
     db.query.mockReset();
+    jest.clearAllMocks();
     delete process.env.TRACK_SEARCH;
     process.env.NODE_ENV = originalNodeEnv;
   });
@@ -148,6 +157,7 @@ describe('ModelPencarian', () => {
     const result = await ModelPencarian.catatPencarian('kata');
 
     expect(result).toBe(false);
+    expect(logger.warn).toHaveBeenCalledWith('Gagal mencatat pelacakan pencarian: db gagal');
   });
 
   it('ambilKataTerpopuler all-time memakai agregasi tanpa filter tanggal', async () => {

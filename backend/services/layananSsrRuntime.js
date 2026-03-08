@@ -219,6 +219,7 @@ function pasangFrontendRuntime(app, options = {}) {
 
   app.use(express.static(frontendDistDir, {
     index: false,
+    redirect: false,
     maxAge: '1h',
   }));
 

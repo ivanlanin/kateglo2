@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import GimPilihGanda, { gabungRiwayat } from '../../../src/komponen/publik/GimPilihGanda';
+import GimPilihGanda, { gabungRiwayat, __private } from '../../../src/komponen/publik/GimPilihGanda';
 
 const mockRemoveQueries = vi.fn();
 const mockUseQuery = vi.fn();
@@ -41,15 +41,102 @@ describe('GimPilihGanda', () => {
     vi.useFakeTimers();
     mockRemoveQueries.mockReset();
     mockUseQuery.mockReset();
-    mockUseQuery.mockReturnValue({
-      data: { ronde: rondeMock },
-      isLoading: false,
-      isError: false,
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryFn) {
+        options.queryFn();
+      }
+      return {
+        data: { ronde: rondeMock },
+        isLoading: false,
+        isError: false,
+      };
     });
   });
 
   afterEach(() => {
     vi.useRealTimers();
+  });
+
+  it('helper private memetakan label, ikon, kelas skor, pemendek tesaurus, dan path ringkasan', () => {
+    expect(__private.labelSkor(50)).toBe('Sempurna!');
+    expect(__private.labelSkor(40)).toBe('Hampir sempurna!');
+    expect(__private.labelSkor(30)).toBe('Lumayan!');
+    expect(__private.labelSkor(20)).toBe('Terus berlatih!');
+    expect(__private.labelSkor(10)).toBe('Coba lagi!');
+    expect(__private.ikonMode('asing')).toBe('❓');
+    expect(__private.batasiPilihanTesaurus()).toBe('');
+    expect(__private.batasiPilihanTesaurus('a; b; c; d')).toBe('a; b; c');
+    expect(__private.batasiPilihanTesaurus('a; b')).toBe('a; b');
+    expect(__private.teksPilihan({ mode: 'tesaurus' }, 'a; b; c; d')).toBe('a; b; c');
+    expect(__private.teksPilihan({ mode: 'kamus' }, 'arti')).toBe('arti');
+    expect(__private.kelasSkorAkhir(0, 5)).toBe('gim-ringkasan-skor-merah');
+    expect(__private.kelasSkorAkhir(5, 5)).toBe('gim-ringkasan-skor-hijau');
+    expect(__private.kelasSkorAkhir(4, 5)).toBe('gim-ringkasan-skor-hijau-muda');
+    expect(__private.kelasSkorAkhir(3, 5)).toBe('gim-ringkasan-skor-kuning');
+    expect(__private.kelasSkorAkhir(2, 4)).toBe('gim-ringkasan-skor-kuning');
+    expect(__private.kelasSkorAkhir(1, 4)).toBe('gim-ringkasan-skor-jingga');
+    expect(__private.kelasSkorAkhir(4, 6)).toBe('gim-ringkasan-skor-limau');
+    expect(__private.kelasSkorHeader(0)).toBe('gim-header-skor-merah');
+    expect(__private.kelasSkorHeader(50)).toBe('gim-header-skor-hijau');
+    expect(__private.kelasSkorHeader(10)).toBe('gim-header-skor-hijau-muda');
+    expect(__private.buatPathRingkasan({ mode: 'glosarium', soal: 'loan word' })).toBe('/glosarium/detail/loan%20word');
+    expect(__private.buatPathRingkasan({ mode: 'tesaurus', soal: 'kata' })).toBe('/tesaurus/cari/kata');
+    expect(__private.buatPathRingkasan({ mode: 'makna', soal: 'arti' })).toBe('/makna/cari/arti');
+    expect(__private.buatPathRingkasan({ mode: 'rima', soal: 'nada' })).toBe('/rima/cari/nada');
+    expect(__private.buatPathRingkasan({ mode: 'kamus', soal: 'kata' })).toBe('/kamus/detail/kata');
+  });
+
+  it('helper private merender pertanyaan untuk mode ringkasan dan mode soal', () => {
+    const parentClick = vi.fn();
+    const { rerender } = render(<div onClick={parentClick}><__private.PertanyaanRingkasan soal={{ mode: 'makna', soal: 'arti' }} /></div>);
+    expect(screen.getByText(/Apa yang bermakna/i)).toBeInTheDocument();
+
+    rerender(<__private.PertanyaanRingkasan soal={{ mode: 'rima', soal: 'nada' }} />);
+    expect(screen.getByText(/Apa yang berima dengan/i)).toBeInTheDocument();
+
+    rerender(<__private.PertanyaanRingkasan soal={{ mode: 'glosarium', soal: 'loan word' }} />);
+    expect(screen.getByText('loan word').tagName).toBe('EM');
+    fireEvent.click(screen.getByRole('link', { name: 'loan word' }));
+    expect(parentClick).not.toHaveBeenCalled();
+
+    rerender(<__private.PertanyaanRingkasan soal={{ mode: 'tesaurus', soal: 'kata', relasi: '' }} />);
+    expect(screen.getByText(/Apa sinonim/i)).toBeInTheDocument();
+
+    rerender(<__private.PertanyaanSoal soal={{ mode: 'kamus', soal: 'kata' }} />);
+    expect(screen.getByText('kata').tagName).toBe('STRONG');
+
+    rerender(<__private.PertanyaanSoal soal={{ mode: 'tesaurus', soal: 'kata', relasi: '' }} />);
+    expect(screen.getByText(/Apa sinonim/i)).toBeInTheDocument();
+
+    rerender(<__private.PertanyaanSoal soal={{ mode: 'makna', soal: 'arti' }} />);
+    expect(screen.getByText(/Apa yang bermakna/i)).toBeInTheDocument();
+
+    rerender(<__private.PertanyaanSoal soal={{ mode: 'rima', soal: 'nada' }} />);
+    expect(screen.getByText(/Apa yang berima dengan/i)).toBeInTheDocument();
+
+    rerender(<__private.PertanyaanSoal soal={{ mode: 'glosarium', soal: 'loan word' }} />);
+    expect(screen.getByText('loan word').tagName).toBe('EM');
+  });
+
+  it('menampilkan loading state dan null pada error, ronde kosong, atau soal aktif tak tersedia', () => {
+    mockUseQuery.mockReturnValueOnce({ data: null, isLoading: true, isError: false });
+    const loadingView = render(<GimPilihGanda />);
+    expect(screen.getByText('Menyiapkan soal …')).toBeInTheDocument();
+    loadingView.unmount();
+
+    mockUseQuery.mockReturnValueOnce({ data: null, isLoading: false, isError: true });
+    const errorView = render(<GimPilihGanda />);
+    expect(errorView.container.firstChild).toBeNull();
+    errorView.unmount();
+
+    mockUseQuery.mockReturnValueOnce({ data: { ronde: [] }, isLoading: false, isError: false });
+    const emptyView = render(<GimPilihGanda />);
+    expect(emptyView.container.firstChild).toBeNull();
+    emptyView.unmount();
+
+    mockUseQuery.mockReturnValueOnce({ data: { ronde: [undefined] }, isLoading: false, isError: false });
+    const noQuestionView = render(<GimPilihGanda />);
+    expect(noQuestionView.container.firstChild).toBeNull();
   });
 
   it('langsung pindah ke soal berikutnya setelah jeda singkat', async () => {
@@ -147,5 +234,26 @@ describe('GimPilihGanda', () => {
       { mode: 'tesaurus', kunciSoal: 'padan' },
       { mode: 'tesaurus', kunciSoal: 'kontras' },
     ]);
+
+    expect(gabungRiwayat([], null)).toEqual([]);
+    expect(gabungRiwayat([], [{ mode: '   ', kunciSoal: 'x' }])).toEqual([]);
+    expect(gabungRiwayat(null, [{ mode: '', kunciSoal: '' }, { mode: 'kamus', soal: 'baru-2' }])).toEqual([
+      { mode: 'kamus', kunciSoal: 'baru-2' },
+    ]);
+  });
+
+  it('mengabaikan klik jawaban dan lewati setelah soal sudah dijawab', async () => {
+    const { container } = render(<GimPilihGanda />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'arti alpha' }));
+    fireEvent.click(screen.getByRole('button', { name: 'arti beta' }));
+    expect(screen.getByText('10')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Lewati' })).not.toBeInTheDocument();
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1900);
+    });
+
+    expect(container.querySelector('.gim-soal')).toHaveTextContent('Apa antonim beta?');
   });
 });

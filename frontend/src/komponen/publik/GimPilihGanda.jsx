@@ -33,13 +33,14 @@ function ikonMode(mode) {
 }
 
 function batasiPilihanTesaurus(teks) {
-  const bagian = String(teks || '')
+  const teksAman = String(teks || '');
+  const bagian = teksAman
     .split(';')
     .map((item) => item.trim())
     .filter(Boolean);
 
   if (bagian.length <= 3) {
-    return teks;
+    return teksAman;
   }
 
   return bagian.slice(0, 3).join('; ');
@@ -292,16 +293,14 @@ function GimPilihGanda() {
   const sudahJawab = jawabanUser[indeks] !== undefined && jawabanUser[indeks] !== null;
 
   const handleLewati = useCallback(() => {
-    if (sudahJawab) return;
     setJawabanUser((prev) => {
       const baru = [...prev];
       baru[indeks] = -1;
       return baru;
     });
-  }, [sudahJawab, indeks]);
+  }, [indeks]);
 
   const handlePilih = useCallback((pilihanIndeks) => {
-    if (sudahJawab) return;
     if (soalSaatIni && pilihanIndeks === soalSaatIni.jawaban) {
       setTotalSkor((prev) => prev + 10);
     }
@@ -310,7 +309,7 @@ function GimPilihGanda() {
       baru[indeks] = pilihanIndeks;
       return baru;
     });
-  }, [sudahJawab, indeks, soalSaatIni]);
+  }, [indeks, soalSaatIni]);
 
   const handleRondeBaru = useCallback(() => {
     queryClient.removeQueries({ queryKey: ['gim-pilih-ganda', rondeKey] });
@@ -354,7 +353,7 @@ function GimPilihGanda() {
   }
 
   if (fase === 'ringkasan') {
-    const kelasSkor = kelasSkorAkhir(jumlahBenar, ronde.length || 5);
+    const kelasSkor = kelasSkorAkhir(jumlahBenar, ronde.length);
 
     return (
       <div className="gim-pilih-ganda">
@@ -369,7 +368,7 @@ function GimPilihGanda() {
         </div>
         <div className="gim-ringkasan-list">
           {ronde.map((soal, i) => (
-            <ItemRingkasan key={`${soal.mode}-${i}`} soal={soal} pilihanUser={jawabanUser[i] ?? null} />
+            <ItemRingkasan key={`${soal.mode}-${i}`} soal={soal} pilihanUser={jawabanUser[i]} />
           ))}
         </div>
       </div>
@@ -454,3 +453,15 @@ function GimPilihGanda() {
 
 export default GimPilihGanda;
 export { gabungRiwayat };
+export const __private = {
+  labelSkor,
+  ikonMode,
+  batasiPilihanTesaurus,
+  teksPilihan,
+  kelasSkorAkhir,
+  kelasSkorHeader,
+  buatPathRingkasan,
+  TautanRingkasan,
+  PertanyaanRingkasan,
+  PertanyaanSoal,
+};

@@ -26,6 +26,7 @@ import {
   cariRima,
   ambilContohRima,
   ambilPencarianPopuler,
+  ambilRondePilihGanda,
   ambilPuzzleSusunKata,
   ambilHarianSusunKata,
   ambilBebasSusunKata,
@@ -236,6 +237,20 @@ describe('apiPublik', () => {
 
     expect(klien.get).toHaveBeenCalledWith('/api/publik/pencarian/populer', {
       params: { tanggal: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/) },
+    });
+  });
+
+  it('ambilRondePilihGanda mengirim riwayat hanya saat tersedia', async () => {
+    klien.get.mockResolvedValue({ data: { ronde: [] } });
+
+    await ambilRondePilihGanda();
+    await ambilRondePilihGanda({ riwayat: [{ mode: 'kamus', kunciSoal: 'kata' }] });
+
+    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/gim/pilih-ganda/ronde', {
+      params: {},
+    });
+    expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/gim/pilih-ganda/ronde', {
+      params: { riwayat: JSON.stringify([{ mode: 'kamus', kunciSoal: 'kata' }]) },
     });
   });
 

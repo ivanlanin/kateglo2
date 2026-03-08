@@ -27,9 +27,13 @@ async function queryAcak(sql, params = []) {
   const sqlFull = sql.replace(/\s+TABLESAMPLE\s+SYSTEM\(\d+\)/gi, '');
   const butuhOrderAcak = !/ORDER\s+BY\s+RANDOM\(\)/i.test(sqlFull);
   const limitMatch = sqlFull.match(/LIMIT\s+(\d+)/i);
-  const sqlFallback = butuhOrderAcak
-    ? sqlFull.replace(/\s+LIMIT\s+\d+/i, ` ORDER BY RANDOM() LIMIT ${limitMatch?.[1] || jumlahKandidat}`)
-    : sqlFull;
+  let sqlFallback = sqlFull;
+
+  if (butuhOrderAcak && limitMatch) {
+    sqlFallback = sqlFull.replace(/\s+LIMIT\s+\d+/i, ` ORDER BY RANDOM() LIMIT ${limitMatch[1]}`);
+  } else if (butuhOrderAcak) {
+    sqlFallback = `${sqlFull} ORDER BY RANDOM() LIMIT ${jumlahKandidat}`;
+  }
 
   return db.query(sqlFallback, params);
 }
@@ -448,12 +452,13 @@ async function soalRima({ riwayat = [] } = {}) {
  * @returns {Promise<object[]>} Array 5 soal
  */
 async function ambilRonde({ riwayat = {} } = {}) {
+  const privateApi = module.exports.__private;
   const generator = [
-    () => soalKamus({ riwayat: riwayat.kamus }),
-    () => soalTesaurus({ riwayat: riwayat.tesaurus }),
-    () => soalGlosarium({ riwayat: riwayat.glosarium }),
-    () => soalMakna({ riwayat: riwayat.makna }),
-    () => soalRima({ riwayat: riwayat.rima }),
+    () => privateApi.soalKamus({ riwayat: riwayat.kamus }),
+    () => privateApi.soalTesaurus({ riwayat: riwayat.tesaurus }),
+    () => privateApi.soalGlosarium({ riwayat: riwayat.glosarium }),
+    () => privateApi.soalMakna({ riwayat: riwayat.makna }),
+    () => privateApi.soalRima({ riwayat: riwayat.rima }),
   ];
 
   const hasil = await Promise.all(generator.map((fn) => fn().catch(() => null)));
@@ -465,7 +470,7 @@ async function ambilRonde({ riwayat = {} } = {}) {
       soalFinal.push(hasil[i]);
     } else {
       // eslint-disable-next-line no-await-in-loop
-      const cadangan = await soalKamus({ riwayat: riwayat.kamus }).catch(() => null);
+      const cadangan = await privateApi.soalKamus({ riwayat: riwayat.kamus }).catch(() => null);
       if (cadangan) soalFinal.push(cadangan);
     }
   }
@@ -483,10 +488,17 @@ module.exports = { ambilRonde };
 module.exports.__private = {
   acakDariArray,
   acakArray,
+  acakPilihan,
   buatFilterRiwayat,
   normalisasiDaftar,
   normalisasiRiwayatMode,
+  potong,
   pilihBerbeda,
   queryAcak,
+  soalGlosarium,
+  soalKamus,
+  soalMakna,
+  soalRima,
   soalTesaurus,
+  ambilRonde,
 };

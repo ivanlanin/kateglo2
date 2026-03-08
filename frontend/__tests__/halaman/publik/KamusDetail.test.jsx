@@ -85,6 +85,28 @@ describe('KamusDetail', () => {
     expect(__private.formatLabelPenyingkatanBadge()).toBe('');
   });
 
+  it('helper ringkasLabelChip mempertahankan potongan tanpa mundur ke spasi sebelumnya', () => {
+    expect(__private.ringkasLabelChip()).toBe('');
+    expect(__private.ringkasLabelChip('frasa pendek', 40)).toBe('frasa pendek');
+    expect(__private.ringkasLabelChip('aaaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbb', 30)).toBe('aaaaaaaaaaaaaaaaaaaaaaaaaa …');
+  });
+
+  it('helper kandidat tautan makna dan renderer makna menutup semua cabang utama', () => {
+    expect(__private.ekstrakKandidatTautanMakna('')).toBeNull();
+    expect(__private.ekstrakKandidatTautanMakna('*teks*')).toBeNull();
+    expect(__private.ekstrakKandidatTautanMakna('(cak)')).toBeNull();
+    expect(__private.ekstrakKandidatTautanMakna('tiga kata penuh')).toBeNull();
+    expect(__private.ekstrakKandidatTautanMakna('kata (cak)')).toEqual({
+      baseText: 'kata',
+      parenthetical: ' (cak)',
+    });
+
+    const { container } = render(<__private.RenderMakna teks="kata (cak); dua kata; *miring*" />);
+    expect(screen.getByRole('link', { name: 'kata' })).toHaveAttribute('href', '/kamus/detail/kata');
+    expect(screen.getByRole('link', { name: 'dua kata' })).toHaveAttribute('href', '/kamus/detail/dua%20kata');
+    expect(container.querySelector('em')).not.toBeNull();
+  });
+
   it('query detail kamus memakai placeholderData dari hasil sebelumnya', () => {
     mockUseQuery.mockImplementation((options) => {
       if (options?.queryKey?.[0] === 'kamus-detail') {
@@ -457,6 +479,162 @@ describe('KamusDetail', () => {
     expect(linkNext).toHaveAttribute('href', '/kamus/detail/mekar');
     expect(linkPrev).toHaveAttribute('title', 'medan');
     expect(linkNext).toHaveAttribute('title', 'mekar');
+  });
+
+  it('menampilkan placeholder kosong saat navigasi hanya punya next', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return { isLoading: false, isError: false, data: {} };
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+          refetch: vi.fn(),
+        };
+      }
+
+      return {
+        isLoading: false,
+        isError: false,
+        isFetching: false,
+        data: {
+          indeks: 'meja',
+          entri: [
+            {
+              id: 100,
+              entri: 'meja',
+              indeks: 'meja',
+              jenis: 'dasar',
+              makna: [{ id: 1, makna: 'perabot untuk menaruh barang' }],
+              subentri: {},
+            },
+          ],
+          tesaurus: { sinonim: [], antonim: [] },
+          glosarium: [],
+          glosarium_page: { total: 0, hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+          navigasi: {
+            prev: null,
+            next: { indeks: 'mekar', label: 'mekar' },
+          },
+        },
+      };
+    });
+
+    const { container } = render(<KamusDetail />);
+    const nav = screen.getByRole('navigation', { name: 'Navigasi indeks kamus' });
+
+    expect(screen.getByRole('link', { name: /mekar/i })).toHaveAttribute('href', '/kamus/detail/mekar');
+    expect(container.querySelector('.kamus-detail-sekuens-link-prev')).toBeNull();
+    expect(nav.firstElementChild?.tagName).toBe('SPAN');
+  });
+
+  it('navigasi indeks memakai fallback indeks saat label tidak tersedia', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return { isLoading: false, isError: false, data: {} };
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+          refetch: vi.fn(),
+        };
+      }
+
+      return {
+        isLoading: false,
+        isError: false,
+        isFetching: false,
+        data: {
+          indeks: 'meja',
+          entri: [
+            {
+              entri: 'meja',
+              indeks: 'meja',
+              jenis: 'dasar',
+              makna: [{ id: 1, makna: 'perabot untuk menaruh barang' }],
+              subentri: {
+                '': [
+                  { entri: 'pepatah satu' },
+                  { entri: 'pepatah dua' },
+                  { entri: 'pepatah tiga' },
+                  { entri: 'pepatah empat' },
+                  { entri: 'pepatah lima' },
+                ],
+              },
+            },
+          ],
+          tesaurus: { sinonim: [], antonim: [] },
+          glosarium: [],
+          glosarium_page: { total: 0, hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+          navigasi: {
+            prev: { indeks: 'medan' },
+            next: { indeks: 'mekar' },
+          },
+        },
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByRole('link', { name: /medan/i })).toHaveAttribute('title', 'medan');
+    expect(screen.getByRole('link', { name: /mekar/i })).toHaveAttribute('title', 'mekar');
+    expect(screen.getByRole('link', { name: /medan/i })).toHaveTextContent('medan');
+    expect(screen.getByRole('link', { name: /mekar/i })).toHaveTextContent('mekar');
+    expect(document.getElementById('subentri-0-jenis')).not.toBeNull();
+  });
+
+  it('navigasi indeks memakai fallback label saat indeks tidak tersedia', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return { isLoading: false, isError: false, data: {} };
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+          refetch: vi.fn(),
+        };
+      }
+
+      return {
+        isLoading: false,
+        isError: false,
+        isFetching: false,
+        data: {
+          indeks: 'meja',
+          entri: [
+            {
+              id: 100,
+              entri: 'meja',
+              indeks: 'meja',
+              jenis: 'dasar',
+              makna: [{ id: 1, makna: 'perabot untuk menaruh barang' }],
+              subentri: {},
+            },
+          ],
+          tesaurus: { sinonim: [], antonim: [] },
+          glosarium: [],
+          glosarium_page: { total: 0, hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+          navigasi: {
+            prev: { label: 'medan' },
+            next: { label: 'mekar' },
+          },
+        },
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByRole('link', { name: /medan/i })).toHaveAttribute('href', '/kamus/detail/medan');
+    expect(screen.getByRole('link', { name: /mekar/i })).toHaveAttribute('href', '/kamus/detail/mekar');
   });
 
   it('menyaring tagar entri agar hanya item valid yang ditampilkan', () => {

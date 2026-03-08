@@ -105,8 +105,18 @@ describe('Kamus', () => {
     ).toEqual(['kiasan', 'idiom', 'peribahasa']);
 
     expect(__private.gabungkanKategoriBentuk(null).map((i) => i.kode)).toEqual(['akronim', 'kependekan']);
+    expect(__private.gabungkanKategoriBentukGabungan(null, [{ kode: 'prefiks', nama: 'prefiks' }, { kode: 'prefiks', nama: 'Prefiks' }]).map((i) => i.kode)).toEqual([
+      'akronim', 'kependekan', 'prefiks',
+    ]);
+    expect(__private.gabungkanKategoriBentukGabungan([{ kode: '' }, { kode: 'gabungan', nama: 'gabungan' }], [undefined, { kode: 'prefiks', nama: 'prefiks' }]).map((i) => i.kode)).toEqual([
+      'gabungan', 'akronim', 'kependekan', 'prefiks',
+    ]);
     expect(__private.gabungkanKategoriEkspresi(undefined).map((i) => i.kode)).toEqual(['kiasan']);
     expect(__private.gabungkanKategoriEkspresi(null).map((i) => i.kode)).toEqual(['kiasan']);
+    expect(__private.ambilTagarPerKategori(null, ['prefiks'])).toEqual([]);
+    expect(__private.ambilTagarPerKategori([{ kategori: 'prefiks' }, { kategori: 'sufiks' }], null)).toEqual([]);
+    expect(__private.ambilTagarPerKategori([{ kategori: 'prefiks' }, { kategori: 'sufiks' }], [' prefiks '])).toEqual([{ kategori: 'prefiks' }]);
+    expect(__private.ambilTagarPerKategori([undefined, { kategori: 'prefiks' }], [null, 'prefiks'])).toEqual([{ kategori: 'prefiks' }]);
 
     expect(__private.urutkanTagar({})).toEqual([]);
     expect(
@@ -212,6 +222,54 @@ describe('Kamus', () => {
     expect(tagarLinks.map((item) => item.textContent)).toEqual([
       'ber-', 'meng-', '-el-', '-an', 'ber--an', 'meN+kan', '-lah', 'ulang',
     ]);
+  });
+
+  it('browse ekspresi memformat label kapital dan kelas kata memakai slug kelas', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const { queryKey } = options;
+      if (queryKey[0] === 'kamus-kategori') {
+        return {
+          data: {
+            abjad: [{ kode: 'A', nama: 'A' }],
+            kelas_kata: [{ kode: 'n', nama: 'nomina' }],
+            ekspresi: [{ kode: 'idiom', nama: 'idiom' }],
+            ragam: [{ kode: 'cak', nama: 'cakapan' }],
+          },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Kamus />);
+
+    expect(screen.getByRole('link', { name: 'Idiom' })).toHaveAttribute('href', '/kamus/ekspresi/idiom');
+    expect(screen.getByRole('link', { name: 'nomina' })).toHaveAttribute('href', '/kamus/kelas/nomina');
+  });
+
+  it('browse tetap aman saat data kelas kata tidak tersedia', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.enabled !== false && options?.queryFn) options.queryFn();
+      const { queryKey } = options;
+      if (queryKey[0] === 'kamus-kategori') {
+        return {
+          data: {
+            abjad: [{ kode: 'A', nama: 'A' }],
+            ragam: [{ kode: 'cak', nama: 'cakapan' }],
+          },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    });
+
+    render(<Kamus />);
+
+    expect(screen.getByText('Abjad')).toBeInTheDocument();
+    expect(screen.queryByText('Kelas')).not.toBeInTheDocument();
   });
 
   it('menampilkan hasil pencarian kata', () => {

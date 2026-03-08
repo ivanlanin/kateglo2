@@ -900,6 +900,42 @@ describe('ModelEntri', () => {
     expect(result).toEqual(rows);
   });
 
+  it('ambilNavigasiIndeks mengembalikan prev/next null saat indeks kosong', async () => {
+    await expect(ModelEntri.ambilNavigasiIndeks('')).resolves.toEqual({ prev: null, next: null });
+    expect(db.query).not.toHaveBeenCalled();
+  });
+
+  it('ambilNavigasiIndeks mengambil indeks sebelum dan sesudah secara paralel', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ indeks: 'beta', label: 'Beta' }] })
+      .mockResolvedValueOnce({ rows: [{ indeks: 'delta', label: 'Delta' }] });
+
+    const result = await ModelEntri.ambilNavigasiIndeks('  Gamma ');
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('WHERE indeks_norm < $1'),
+      ['gamma']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('WHERE indeks_norm > $1'),
+      ['gamma']
+    );
+    expect(result).toEqual({
+      prev: { indeks: 'beta', label: 'Beta' },
+      next: { indeks: 'delta', label: 'Delta' },
+    });
+  });
+
+  it('ambilNavigasiIndeks mengembalikan null untuk sisi yang tidak ada hasil', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [] });
+
+    await expect(ModelEntri.ambilNavigasiIndeks('gamma')).resolves.toEqual({ prev: null, next: null });
+  });
+
   it('ambilMakna mengembalikan rows', async () => {
     const rows = [{ id: 1, makna: 'arti', kelas_kata: 'nomina' }];
     db.query.mockResolvedValue({ rows });

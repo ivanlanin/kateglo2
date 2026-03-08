@@ -1,84 +1,118 @@
 /**
- * @fileoverview Test logger configuration
+ * @fileoverview Test lightweight logger backend
  * @tested_in backend/config/logger.js
  */
 
 describe('config/logger', () => {
+  const originalLevel = process.env.LOG_LEVEL;
+
   beforeEach(() => {
     jest.resetModules();
   });
 
-  it('membuat logger dengan level dari env dan format stack/non-stack', () => {
-    const originalLevel = process.env.LOG_LEVEL;
-    process.env.LOG_LEVEL = 'debug';
+  afterAll(() => {
+    if (originalLevel === undefined) {
+      delete process.env.LOG_LEVEL;
+    } else {
+      process.env.LOG_LEVEL = originalLevel;
+    }
+  });
 
-    const mockCreateLogger = jest.fn(() => ({ info: jest.fn(), error: jest.fn() }));
-    const mockPrintf = jest.fn((formatter) => formatter);
+  it('memakai level info default dan menulis meta object/error/string', () => {
+    delete process.env.LOG_LEVEL;
 
-    jest.doMock('winston', () => ({
-      createLogger: mockCreateLogger,
-      format: {
-        combine: jest.fn((...args) => ({ combined: args })),
-        timestamp: jest.fn(() => 'timestamp-format'),
-        errors: jest.fn(() => 'errors-format'),
-        printf: mockPrintf,
-        colorize: jest.fn(() => 'colorize-format'),
-        simple: jest.fn(() => 'simple-format')
-      },
-      transports: {
-        Console: jest.fn((options) => ({ options }))
-      }
-    }));
+    const infoSpy = jest.spyOn(console, 'info').mockImplementation(() => {});
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const debugSpy = jest.spyOn(console, 'debug').mockImplementation(() => {});
 
     const logger = require('../../config/logger');
 
-    expect(logger).toBeDefined();
-    expect(mockCreateLogger).toHaveBeenCalledWith(expect.objectContaining({ level: 'debug' }));
+    logger.info('info jalan', { fitur: 'kamus' });
+    logger.warn('warn jalan', 'teks tambahan');
+    logger.error('error jalan', new Error('gagal'));
+    logger.debug('debug tersembunyi');
 
-    const formatter = mockPrintf.mock.calls[0][0];
-    const formattedWithStack = formatter({
-      level: 'error',
-      message: 'gagal',
-      timestamp: '2026-02-14T00:00:00.000Z',
-      stack: 'stacktrace'
-    });
-    const formattedWithoutStack = formatter({
-      level: 'info',
-      message: 'ok',
-      timestamp: '2026-02-14T00:00:00.000Z'
-    });
+    expect(infoSpy).toHaveBeenCalledWith(expect.stringContaining('[info]: info jalan {"fitur":"kamus"}'));
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('[warn]: warn jalan teks tambahan'));
+    expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining('[error]: error jalan Error: gagal'));
+    expect(debugSpy).not.toHaveBeenCalled();
 
-    expect(formattedWithStack).toContain('stacktrace');
-    expect(formattedWithoutStack).toBe('2026-02-14T00:00:00.000Z [info]: ok');
-
-    process.env.LOG_LEVEL = originalLevel;
+    infoSpy.mockRestore();
+    warnSpy.mockRestore();
+    errorSpy.mockRestore();
+    debugSpy.mockRestore();
   });
 
-  it('menggunakan level default info saat LOG_LEVEL tidak ada', () => {
-    const originalLevel = process.env.LOG_LEVEL;
+  it('mengekspos helper privat untuk normalisasi, serialisasi, dan format pesan', () => {
     delete process.env.LOG_LEVEL;
 
-    const mockCreateLogger = jest.fn(() => ({ info: jest.fn() }));
+    const { __private } = require('../../config/logger');
+    const errorDenganPesan = new Error('hanya pesan');
+    const errorFallback = new Error('');
+    const tanpaMeta = __private.formatPesan('info', undefined);
+    const circular = {};
 
-    jest.doMock('winston', () => ({
-      createLogger: mockCreateLogger,
-      format: {
-        combine: jest.fn((...args) => ({ combined: args })),
-        timestamp: jest.fn(() => 'timestamp-format'),
-        errors: jest.fn(() => 'errors-format'),
-        printf: jest.fn((formatter) => formatter),
-        colorize: jest.fn(() => 'colorize-format'),
-        simple: jest.fn(() => 'simple-format')
-      },
-      transports: {
-        Console: jest.fn((options) => ({ options }))
-      }
-    }));
+    errorDenganPesan.stack = '';
+    errorFallback.stack = '';
+    circular.self = circular;
 
-    require('../../config/logger');
+    expect(__private.normalisasiLevel()).toBe('info');
+    expect(__private.normalisasiLevel(' DEBUG ')).toBe('debug');
+    expect(__private.normalisasiLevel(null)).toBe('info');
+    expect(__private.normalisasiLevel('verbose')).toBe('info');
 
-    expect(mockCreateLogger).toHaveBeenCalledWith(expect.objectContaining({ level: 'info' }));
+    expect(__private.serialisasiMeta()).toBe('');
+    expect(__private.serialisasiMeta('teks')).toBe('teks');
+    expect(__private.serialisasiMeta({ fitur: 'kamus' })).toBe('{"fitur":"kamus"}');
+    expect(__private.serialisasiMeta(errorDenganPesan)).toBe('hanya pesan');
+    expect(__private.serialisasiMeta(errorFallback)).toBe('Error');
+    expect(__private.serialisasiMeta(circular)).toBe('[object Object]');
 
-    process.env.LOG_LEVEL = originalLevel;
+    expect(tanpaMeta).toContain('[info]: ');
+    expect(tanpaMeta).not.toContain('undefined');
+  });
+
+  it('memakai fallback level info untuk env tidak valid dan menangani meta sirkular', () => {
+    process.env.LOG_LEVEL = 'verbose';
+
+    const infoSpy = jest.spyOn(console, 'info').mockImplementation(() => {});
+    const debugSpy = jest.spyOn(console, 'debug').mockImplementation(() => {});
+    const circular = {};
+    circular.self = circular;
+
+    const logger = require('../../config/logger');
+
+    logger.info('meta sirkular', circular);
+    logger.debug('debug tetap tersembunyi');
+
+    expect(infoSpy).toHaveBeenCalledWith(expect.stringContaining('[info]: meta sirkular [object Object]'));
+    expect(debugSpy).not.toHaveBeenCalled();
+
+    infoSpy.mockRestore();
+    debugSpy.mockRestore();
+  });
+
+  it('mengizinkan debug saat level debug aktif', () => {
+    process.env.LOG_LEVEL = 'debug';
+
+    const debugSpy = jest.spyOn(console, 'debug').mockImplementation(() => {});
+    const logger = require('../../config/logger');
+
+    logger.debug('debug aktif');
+
+    expect(debugSpy).toHaveBeenCalledWith(expect.stringContaining('[debug]: debug aktif'));
+
+    debugSpy.mockRestore();
+  });
+
+  it('menghitung izin level sesuai level aktif', () => {
+    process.env.LOG_LEVEL = 'warn';
+
+    const { __private } = require('../../config/logger');
+
+    expect(__private.bolehLog('error')).toBe(true);
+    expect(__private.bolehLog('warn')).toBe(true);
+    expect(__private.bolehLog('info')).toBe(false);
   });
 });
