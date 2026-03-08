@@ -29,7 +29,8 @@ import {
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
 const nilaiAwal = { kategori: '', kode: '', nama: '', urutan: 1, keterangan: '', aktif: true };
-const kategoriMasterLabel = new Set(['bahasa', 'bidang']);
+const kategoriMasterLabel = new Set(['bahasa', 'bidang', 'sumber']);
+const pesanKategoriMaster = 'Kategori bahasa, bidang, dan sumber dikelola lewat menu master masing-masing';
 
 const kolom = [
   { key: 'kategori', label: 'Kategori' },
@@ -145,7 +146,7 @@ function LabelAdmin() {
     }
 
     if (kategoriMasterLabel.has(String(panel.data.kategori || '').trim().toLowerCase())) {
-      setPesan({ error: 'Kategori bahasa dan bidang dikelola lewat menu master masing-masing', sukses: '' });
+      setPesan({ error: pesanKategoriMaster, sukses: '' });
       return;
     }
 

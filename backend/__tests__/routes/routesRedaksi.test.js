@@ -1718,19 +1718,19 @@ describe('routes/redaksi', () => {
       expect(put.body.message).toBe('Urutan harus bilangan bulat >= 1');
     });
 
-    it('POST/PUT /api/redaksi/label menolak kategori master bahasa dan bidang', async () => {
+    it('POST/PUT /api/redaksi/label menolak kategori master bahasa, bidang, dan sumber', async () => {
       const post = await callAsAdmin('post', '/api/redaksi/label', {
         body: { kategori: 'bahasa', kode: 'Ing', nama: 'Inggris' },
       });
 
       const put = await callAsAdmin('put', '/api/redaksi/label/1', {
-        body: { kategori: 'bidang', kode: 'Kim', nama: 'Kimia' },
+        body: { kategori: 'sumber', kode: 'KBBI4', nama: 'KBBI IV' },
       });
 
       expect(post.status).toBe(400);
-      expect(post.body.message).toBe('Kategori bahasa dan bidang dikelola lewat menu master masing-masing');
+      expect(post.body.message).toBe('Kategori bahasa, bidang, dan sumber dikelola lewat menu master masing-masing');
       expect(put.status).toBe(400);
-      expect(put.body.message).toBe('Kategori bahasa dan bidang dikelola lewat menu master masing-masing');
+      expect(put.body.message).toBe('Kategori bahasa, bidang, dan sumber dikelola lewat menu master masing-masing');
     });
 
     it('POST/PUT /api/redaksi/label validasi status aktif tidak valid', async () => {

@@ -106,7 +106,7 @@ describe('LabelAdmin', () => {
     expect(screen.getByText('Gagal menyimpan')).toBeInTheDocument();
   });
 
-  it('menolak kategori master bahasa dan bidang dari panel label', () => {
+  it('menolak kategori master bahasa, bidang, dan sumber dari panel label', () => {
     render(
       <MemoryRouter>
         <LabelAdmin />
@@ -119,7 +119,7 @@ describe('LabelAdmin', () => {
     fireEvent.change(screen.getByLabelText('Nama*'), { target: { value: 'Inggris' } });
     fireEvent.click(screen.getByText('Simpan'));
 
-    expect(screen.getByText('Kategori bahasa dan bidang dikelola lewat menu master masing-masing')).toBeInTheDocument();
+    expect(screen.getByText('Kategori bahasa, bidang, dan sumber dikelola lewat menu master masing-masing')).toBeInTheDocument();
     expect(mutateSimpan).not.toHaveBeenCalled();
   });
 

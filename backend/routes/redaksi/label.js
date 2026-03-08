@@ -14,7 +14,8 @@ const {
 } = require('../../utils/routesRedaksiUtils');
 
 const router = express.Router();
-const kategoriMasterLabel = new Set(['bahasa', 'bidang']);
+const kategoriMasterLabel = new Set(['bahasa', 'bidang', 'sumber']);
+const pesanKategoriMaster = 'Kategori bahasa, bidang, dan sumber dikelola lewat menu master masing-masing';
 
 function isValidAktifValue(value) {
   if (value === undefined || value === null) return true;
@@ -108,7 +109,7 @@ router.post('/', periksaIzin('kelola_label'), async (req, res, next) => {
     const { urutan, aktif } = req.body;
     if (!kategori) return res.status(400).json({ success: false, message: 'Kategori wajib diisi' });
     if (kategoriMasterLabel.has(kategori.toLowerCase())) {
-      return res.status(400).json({ success: false, message: 'Kategori bahasa dan bidang dikelola lewat menu master masing-masing' });
+      return res.status(400).json({ success: false, message: pesanKategoriMaster });
     }
     if (!kode) return res.status(400).json({ success: false, message: 'Kode wajib diisi' });
     if (!nama) return res.status(400).json({ success: false, message: 'Nama wajib diisi' });
@@ -138,7 +139,7 @@ router.put('/:id', periksaIzin('kelola_label'), async (req, res, next) => {
     const { urutan, aktif } = req.body;
     if (!kategori) return res.status(400).json({ success: false, message: 'Kategori wajib diisi' });
     if (kategoriMasterLabel.has(kategori.toLowerCase())) {
-      return res.status(400).json({ success: false, message: 'Kategori bahasa dan bidang dikelola lewat menu master masing-masing' });
+      return res.status(400).json({ success: false, message: pesanKategoriMaster });
     }
     if (!kode) return res.status(400).json({ success: false, message: 'Kode wajib diisi' });
     if (!nama) return res.status(400).json({ success: false, message: 'Nama wajib diisi' });
