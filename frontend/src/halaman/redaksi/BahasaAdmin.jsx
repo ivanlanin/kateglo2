@@ -1,10 +1,15 @@
 /**
- * @fileoverview Halaman admin label — daftar, cari, tambah, sunting label
+ * @fileoverview Halaman admin master bahasa
  */
 
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDaftarLabelAdmin, useDetailLabelAdmin, useSimpanLabel, useHapusLabel } from '../../api/apiAdmin';
+import {
+  useDaftarBahasaAdmin,
+  useDetailBahasaAdmin,
+  useSimpanBahasa,
+  useHapusBahasa,
+} from '../../api/apiAdmin';
 import TataLetak from '../../komponen/bersama/TataLetak';
 import {
   BarisFilterCariAdmin,
@@ -13,7 +18,6 @@ import {
   opsiFilterStatusAktif,
   TabelAdmin,
   getApiErrorMessage,
-  potongTeks,
   usePencarianAdmin,
   validateRequiredFields,
 } from '../../komponen/redaksi/KomponenAdmin';
@@ -26,31 +30,20 @@ import {
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormulirAdmin';
+import { formatBilanganRibuan } from '../../utils/formatUtils';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
-const nilaiAwal = { kategori: '', kode: '', nama: '', urutan: 1, keterangan: '', aktif: true };
-const kategoriMasterLabel = new Set(['bahasa', 'bidang']);
+const nilaiAwal = { kode: '', nama: '', iso2: '', iso3: '', keterangan: '', aktif: true };
 
 const kolom = [
-  { key: 'kategori', label: 'Kategori' },
   { key: 'kode', label: 'Kode' },
   { key: 'nama', label: 'Nama' },
-  { key: 'urutan', label: 'Urutan' },
-  {
-    key: 'aktif',
-    label: 'Status',
-    render: (item) => <BadgeStatus aktif={item.aktif} />,
-  },
-  {
-    key: 'keterangan',
-    label: 'Keterangan',
-    render: (item) => (
-      <span className="text-gray-600 dark:text-gray-400">{potongTeks(item.keterangan, 80)}</span>
-    ),
-  },
+  { key: 'iso2', label: 'ISO 2', render: (item) => item.iso2 || '—' },
+  { key: 'jumlah_entri', label: 'Entri', align: 'right', render: (item) => formatBilanganRibuan(item.jumlah_entri) },
+  { key: 'aktif', label: 'Status', render: (item) => <BadgeStatus aktif={item.aktif} /> },
 ];
 
-function LabelAdmin() {
+function BahasaAdmin() {
   const navigate = useNavigate();
   const { id: idParam } = useParams();
   const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit, currentPage, cursor, direction, lastPage } = usePencarianAdmin(50);
@@ -60,7 +53,7 @@ function LabelAdmin() {
   const [filterAktifDraft, setFilterAktifDraft] = useState('');
   const [filterAktif, setFilterAktif] = useState('');
 
-  const { data: resp, isLoading, isError } = useDaftarLabelAdmin({
+  const { data: resp, isLoading, isError } = useDaftarBahasaAdmin({
     limit,
     cursor,
     direction,
@@ -68,21 +61,20 @@ function LabelAdmin() {
     q,
     aktif: filterAktif,
   });
-  const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailLabelAdmin(idDariPath);
+  const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailBahasaAdmin(idDariPath);
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
 
   const panel = useFormPanel(nilaiAwal);
-  const simpan = useSimpanLabel();
-  const hapus = useHapusLabel();
-
+  const simpan = useSimpanBahasa();
+  const hapus = useHapusBahasa();
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
 
   useEffect(() => {
     if (!idParam) return;
     if (idDariPath) return;
-    setPesan({ error: 'ID label tidak valid.', sukses: '' });
-    navigate('/redaksi/label', { replace: true });
+    setPesan({ error: 'ID bahasa tidak valid.', sukses: '' });
+    navigate('/redaksi/bahasa', { replace: true });
   }, [idParam, idDariPath, navigate]);
 
   useEffect(() => {
@@ -103,8 +95,8 @@ function LabelAdmin() {
 
   useEffect(() => {
     if (!idDariPath || isDetailLoading || !isDetailError) return;
-    setPesan({ error: 'Label tidak ditemukan.', sukses: '' });
-    navigate('/redaksi/label', { replace: true });
+    setPesan({ error: 'Bahasa tidak ditemukan.', sukses: '' });
+    navigate('/redaksi/bahasa', { replace: true });
   }, [idDariPath, isDetailError, isDetailLoading, navigate]);
 
   const tutupPanel = () => {
@@ -112,7 +104,7 @@ function LabelAdmin() {
     panel.tutup();
     if (idDariPath) {
       sedangMenutupDariPath.current = true;
-      navigate('/redaksi/label', { replace: true });
+      navigate('/redaksi/bahasa', { replace: true });
     }
   };
 
@@ -120,22 +112,20 @@ function LabelAdmin() {
     setPesan({ error: '', sukses: '' });
     if (idDariPath) {
       sedangMenutupDariPath.current = true;
-      navigate('/redaksi/label', { replace: true });
+      navigate('/redaksi/bahasa', { replace: true });
     }
     panel.bukaUntukTambah();
   };
 
   const bukaSuntingDariDaftar = (item) => {
-    setPesan({ error: '', sukses: '' });
     if (!item?.id) return;
-    navigate(`/redaksi/label/${item.id}`);
+    setPesan({ error: '', sukses: '' });
+    navigate(`/redaksi/bahasa/${item.id}`);
   };
 
   const handleSimpan = () => {
     setPesan({ error: '', sukses: '' });
-
     const pesanValidasi = validateRequiredFields(panel.data, [
-      { name: 'kategori', label: 'Kategori' },
       { name: 'kode', label: 'Kode' },
       { name: 'nama', label: 'Nama' },
     ]);
@@ -144,30 +134,20 @@ function LabelAdmin() {
       return;
     }
 
-    if (kategoriMasterLabel.has(String(panel.data.kategori || '').trim().toLowerCase())) {
-      setPesan({ error: 'Kategori bahasa dan bidang dikelola lewat menu master masing-masing', sukses: '' });
-      return;
-    }
-
     simpan.mutate(panel.data, {
       onSuccess: () => {
         setPesan({ error: '', sukses: 'Tersimpan!' });
         setTimeout(() => tutupPanel(), 600);
       },
-      onError: (err) => {
-        setPesan({ error: getApiErrorMessage(err, 'Gagal menyimpan'), sukses: '' });
-      },
+      onError: (err) => setPesan({ error: getApiErrorMessage(err, 'Gagal menyimpan'), sukses: '' }),
     });
   };
 
   const handleHapus = () => {
-    if (!confirm('Yakin ingin menghapus label ini?')) return;
-
+    if (!confirm('Yakin ingin menghapus bahasa ini?')) return;
     hapus.mutate(panel.data.id, {
       onSuccess: () => tutupPanel(),
-      onError: (err) => {
-        setPesan({ error: getApiErrorMessage(err, 'Gagal menghapus'), sukses: '' });
-      },
+      onError: (err) => setPesan({ error: getApiErrorMessage(err, 'Gagal menghapus'), sukses: '' }),
     });
   };
 
@@ -183,20 +163,20 @@ function LabelAdmin() {
   };
 
   return (
-    <TataLetak mode="admin" judul="Label" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
+    <TataLetak mode="admin" judul="Bahasa" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
         onCari={handleCari}
         onHapus={handleResetFilter}
-        placeholder="Cari label …"
+        placeholder="Cari bahasa …"
         filters={[
           {
             key: 'aktif',
             value: filterAktifDraft,
             onChange: setFilterAktifDraft,
             options: opsiFilterStatusAktif,
-            ariaLabel: 'Filter status label',
+            ariaLabel: 'Filter status bahasa',
           },
         ]}
       />
@@ -215,14 +195,14 @@ function LabelAdmin() {
         onKlikBaris={bukaSuntingDariDaftar}
       />
 
-      <PanelGeser buka={panel.buka} onTutup={tutupPanel} judul={panel.modeTambah ? 'Tambah Label' : 'Sunting Label'}>
+      <PanelGeser buka={panel.buka} onTutup={tutupPanel} judul={panel.modeTambah ? 'Tambah Bahasa' : 'Sunting Bahasa'}>
         <PesanForm error={pesan.error} sukses={pesan.sukses} />
-        <InputField label="Kategori" name="kategori" value={panel.data.kategori} onChange={panel.ubahField} required />
         <InputField label="Kode" name="kode" value={panel.data.kode} onChange={panel.ubahField} required />
         <InputField label="Nama" name="nama" value={panel.data.nama} onChange={panel.ubahField} required />
-        <InputField label="Urutan" name="urutan" type="number" value={panel.data.urutan} onChange={panel.ubahField} />
+        <InputField label="ISO 2" name="iso2" value={panel.data.iso2 ?? ''} onChange={panel.ubahField} placeholder="mis. en, id" />
+        <InputField label="ISO 3" name="iso3" value={panel.data.iso3 ?? ''} onChange={panel.ubahField} placeholder="mis. eng, ind" />
         <ToggleAktif value={Boolean(panel.data.aktif)} onChange={panel.ubahField} />
-        <TextareaField label="Keterangan" name="keterangan" value={panel.data.keterangan} onChange={panel.ubahField} rows={3} />
+        <TextareaField label="Keterangan" name="keterangan" value={panel.data.keterangan ?? ''} onChange={panel.ubahField} rows={3} />
         <FormFooter
           onSimpan={handleSimpan}
           onBatal={tutupPanel}
@@ -235,4 +215,4 @@ function LabelAdmin() {
   );
 }
 
-export default LabelAdmin;
+export default BahasaAdmin;

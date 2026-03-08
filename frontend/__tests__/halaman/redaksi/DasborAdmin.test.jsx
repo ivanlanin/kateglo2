@@ -27,7 +27,7 @@ vi.mock('../../../src/komponen/bersama/TataLetak', () => ({
 describe('DasborAdmin', () => {
   beforeEach(() => {
     mockUseAuth.mockReturnValue({
-      user: { izin: ['lihat_entri', 'lihat_tesaurus', 'lihat_glosarium', 'kelola_komentar', 'kelola_label', 'kelola_pengguna'] },
+      user: { izin: ['lihat_entri', 'lihat_tesaurus', 'lihat_glosarium', 'kelola_komentar', 'kelola_label', 'kelola_bahasa', 'kelola_pengguna'] },
       punyaIzin: () => true,
     });
   });
@@ -41,7 +41,7 @@ describe('DasborAdmin', () => {
     );
 
     expect(screen.getByText('Dasbor')).toBeInTheDocument();
-    expect(screen.getAllByText('…')).toHaveLength(15);
+    expect(screen.getAllByText('…')).toHaveLength(16);
   });
 
   it('menampilkan statistik saat data tersedia', () => {
@@ -59,6 +59,7 @@ describe('DasborAdmin', () => {
           auditTagar: 33,
           tagar: 22,
           bidang: 14,
+          bahasa: 19,
           sumber: 18,
           label: 321,
           pengguna: 12,
@@ -83,6 +84,7 @@ describe('DasborAdmin', () => {
     expect(screen.getByText('33')).toBeInTheDocument();
     expect(screen.getByText('22')).toBeInTheDocument();
     expect(screen.getByText('14')).toBeInTheDocument();
+    expect(screen.getByText('19')).toBeInTheDocument();
     expect(screen.getByText('18')).toBeInTheDocument();
     expect(screen.getByText('321')).toBeInTheDocument();
     expect(screen.getByText('12')).toBeInTheDocument();
@@ -104,6 +106,7 @@ describe('DasborAdmin', () => {
           glosarium: 50,
           etimologi: 70,
           bidang: 14,
+          bahasa: 19,
           sumber: 18,
           label: 321,
           pengguna: 12,
@@ -122,6 +125,7 @@ describe('DasborAdmin', () => {
     expect(screen.getByText('Entri Tesaurus')).toBeInTheDocument();
     expect(screen.queryByText('Entri Glosarium')).not.toBeInTheDocument();
     expect(screen.queryByText('Bidang')).not.toBeInTheDocument();
+    expect(screen.queryByText('Bahasa')).not.toBeInTheDocument();
     expect(screen.queryByText('Sumber')).not.toBeInTheDocument();
     expect(screen.queryByText('Komentar')).not.toBeInTheDocument();
     expect(screen.queryByText('Label')).not.toBeInTheDocument();
@@ -130,7 +134,7 @@ describe('DasborAdmin', () => {
 
   it('menggunakan fallback izin dari user saat punyaIzin bukan fungsi', () => {
     mockUseAuth.mockReturnValue({
-      user: { izin: ['lihat_entri', 'kelola_label'] },
+      user: { izin: ['lihat_entri', 'kelola_label', 'kelola_bahasa'] },
       punyaIzin: undefined,
     });
     mockUseStatistikAdmin.mockReturnValue({
@@ -142,6 +146,7 @@ describe('DasborAdmin', () => {
           glosarium: 30,
           etimologi: 0,
           bidang: 7,
+          bahasa: 9,
           sumber: 8,
           label: 40,
           pengguna: 50,
@@ -158,6 +163,7 @@ describe('DasborAdmin', () => {
 
     expect(screen.getByText('Entri Kamus')).toBeInTheDocument();
     expect(screen.getByText('Label')).toBeInTheDocument();
+    expect(screen.getByText('Bahasa')).toBeInTheDocument();
     expect(screen.queryByText('Bidang')).not.toBeInTheDocument();
     expect(screen.queryByText('Sumber')).not.toBeInTheDocument();
     expect(screen.queryByText('Entri Tesaurus')).not.toBeInTheDocument();

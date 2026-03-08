@@ -97,6 +97,9 @@ router.post('/', periksaIzin('tambah_glosarium'), async (req, res, next) => {
     if (error?.code === 'INVALID_SUMBER') {
       return res.status(400).json({ success: false, message: 'Sumber tidak valid' });
     }
+    if (error?.code === 'INVALID_BAHASA') {
+      return res.status(400).json({ success: false, message: 'Bahasa tidak valid' });
+    }
     return next(error);
   }
 });
@@ -138,6 +141,9 @@ router.put('/:id', periksaIzin('edit_glosarium'), async (req, res, next) => {
     }
     if (error?.code === 'INVALID_SUMBER') {
       return res.status(400).json({ success: false, message: 'Sumber tidak valid' });
+    }
+    if (error?.code === 'INVALID_BAHASA') {
+      return res.status(400).json({ success: false, message: 'Bahasa tidak valid' });
     }
     return next(error);
   }

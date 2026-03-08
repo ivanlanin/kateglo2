@@ -18,6 +18,7 @@ vi.mock('react-router-dom', async () => {
 
 const mockUseDaftar = vi.fn();
 const mockUseDetail = vi.fn();
+const mockUseDaftarBahasaAdmin = vi.fn();
 const mockUseAutocomplete = vi.fn();
 const mockUseDaftarSumberAdmin = vi.fn();
 const mutateSimpan = vi.fn();
@@ -27,6 +28,7 @@ const mockUseAuth = vi.fn();
 vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarEtimologiAdmin: (...args) => mockUseDaftar(...args),
   useDetailEtimologiAdmin: (...args) => mockUseDetail(...args),
+  useDaftarBahasaAdmin: (...args) => mockUseDaftarBahasaAdmin(...args),
   useAutocompleteEntriEtimologi: (...args) => mockUseAutocomplete(...args),
   useSimpanEtimologi: () => ({ mutate: mutateSimpan, isPending: false }),
   useHapusEtimologi: () => ({ mutate: mutateHapus, isPending: false }),
@@ -147,6 +149,11 @@ describe('EtimologiAdmin', () => {
     });
     mockUseDetail.mockReturnValue({ isLoading: false, isError: false, data: null });
     mockUseAutocomplete.mockReturnValue({ isLoading: false, data: { data: [] } });
+    mockUseDaftarBahasaAdmin.mockReturnValue({
+      data: { data: [{ id: 10, kode: 'Ing', nama: 'Inggris' }, { id: 11, kode: 'Ar', nama: 'Arab' }] },
+      isLoading: false,
+      isError: false,
+    });
     mockUseDaftarSumberAdmin.mockReturnValue({ data: { data: [{ id: 1, nama: 'LWIM' }] } });
   });
 
@@ -445,12 +452,12 @@ describe('EtimologiAdmin', () => {
 
     mockUseDaftar.mockClear();
 
-    fireEvent.change(screen.getByLabelText('Filter bahasa'), { target: { value: 'Inggris' } });
+    fireEvent.change(screen.getByLabelText('Filter bahasa'), { target: { value: 'Ing' } });
     expect(mockUseDaftar).toHaveBeenLastCalledWith(expect.objectContaining({ bahasa: '' }));
 
     fireEvent.click(screen.getByText('Cari'));
 
-    expect(mockUseDaftar).toHaveBeenLastCalledWith(expect.objectContaining({ bahasa: 'Inggris' }));
+    expect(mockUseDaftar).toHaveBeenLastCalledWith(expect.objectContaining({ bahasa: 'Ing' }));
   });
 
   it('menerapkan filter bahasa kosong saat pilih opsi —Kosong— dan Cari', () => {

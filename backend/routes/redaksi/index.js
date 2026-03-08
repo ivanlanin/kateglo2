@@ -24,6 +24,7 @@ router.use('/etimologi', require('./etimologi'));
 router.use('/audit-tagar', require('./auditTagar'));
 router.use('/glosarium', require('./glosarium'));
 router.use('/bidang', require('./bidang'));
+router.use('/bahasa', require('./bahasa'));
 router.use('/sumber', require('./sumber'));
 router.use('/label', require('./label'));
 router.use('/tagar', require('./tagar'));

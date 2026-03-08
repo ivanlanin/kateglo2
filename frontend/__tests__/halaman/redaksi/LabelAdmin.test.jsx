@@ -67,7 +67,7 @@ describe('LabelAdmin', () => {
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Kategori wajib diisi')).toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText('Kategori*'), { target: { value: 'bahasa' } });
+    fireEvent.change(screen.getByLabelText('Kategori*'), { target: { value: 'ragam' } });
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Kode wajib diisi')).toBeInTheDocument();
 
@@ -94,7 +94,7 @@ describe('LabelAdmin', () => {
     );
 
     fireEvent.click(screen.getByText('+ Tambah'));
-    fireEvent.change(screen.getByLabelText('Kategori*'), { target: { value: 'bahasa' } });
+    fireEvent.change(screen.getByLabelText('Kategori*'), { target: { value: 'ragam' } });
     fireEvent.change(screen.getByLabelText('Kode*'), { target: { value: 'ark' } });
     fireEvent.change(screen.getByLabelText('Nama*'), { target: { value: 'arkais' } });
     fireEvent.change(screen.getByLabelText('Urutan'), { target: { value: '2' } });
@@ -104,6 +104,23 @@ describe('LabelAdmin', () => {
 
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Gagal menyimpan')).toBeInTheDocument();
+  });
+
+  it('menolak kategori master bahasa dan bidang dari panel label', () => {
+    render(
+      <MemoryRouter>
+        <LabelAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    fireEvent.change(screen.getByLabelText('Kategori*'), { target: { value: 'bahasa' } });
+    fireEvent.change(screen.getByLabelText('Kode*'), { target: { value: 'Ing' } });
+    fireEvent.change(screen.getByLabelText('Nama*'), { target: { value: 'Inggris' } });
+    fireEvent.click(screen.getByText('Simpan'));
+
+    expect(screen.getByText('Kategori bahasa dan bidang dikelola lewat menu master masing-masing')).toBeInTheDocument();
+    expect(mutateSimpan).not.toHaveBeenCalled();
   });
 
   it('menjalankan sukses simpan, cabang confirm false, dan sukses hapus', () => {

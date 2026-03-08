@@ -43,6 +43,7 @@ const kelompokMenuAdmin = [
       { path: '/redaksi/tagar', label: 'Tagar', izin: 'kelola_tagar' },
       { path: '/redaksi/label', label: 'Label', izin: 'kelola_label' },
       { path: '/redaksi/bidang', label: 'Bidang', izin: 'kelola_bidang' },
+      { path: '/redaksi/bahasa', label: 'Bahasa', izin: 'kelola_bahasa' },
       { path: '/redaksi/sumber', label: 'Sumber', izin: 'kelola_sumber' },
     ],
   },

@@ -258,8 +258,9 @@ async function soalGlosarium({ riwayat = [] } = {}) {
   const soalRes = await queryAcak(
     `SELECT g.asing, g.indonesia AS indonesia_benar
      FROM glosarium g TABLESAMPLE SYSTEM(10)
+     JOIN bahasa ba ON ba.id = g.bahasa_id
      WHERE g.aktif = true
-       AND g.bahasa = 'en'
+       AND (ba.iso2 = 'en' OR LOWER(ba.kode) = 'ing')
        AND CHAR_LENGTH(g.asing) BETWEEN 3 AND 25
        AND CHAR_LENGTH(g.indonesia) BETWEEN 3 AND 40
        ${filterRiwayat.clause}

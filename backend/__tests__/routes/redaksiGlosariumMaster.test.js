@@ -10,6 +10,10 @@ jest.mock('../../middleware/otorisasi', () => ({
 }));
 
 jest.mock('../../models/modelGlosarium', () => ({
+  daftarMasterBahasa: jest.fn(),
+  ambilMasterBahasaDenganId: jest.fn(),
+  simpanMasterBahasa: jest.fn(),
+  hapusMasterBahasa: jest.fn(),
   daftarMasterBidang: jest.fn(),
   ambilMasterBidangDenganId: jest.fn(),
   simpanMasterBidang: jest.fn(),
@@ -20,6 +24,7 @@ jest.mock('../../models/modelGlosarium', () => ({
   hapusMasterSumber: jest.fn(),
 }));
 
+const routerBahasa = require('../../routes/redaksi/bahasa');
 const routerBidang = require('../../routes/redaksi/bidang');
 const routerSumber = require('../../routes/redaksi/sumber');
 const ModelGlosarium = require('../../models/modelGlosarium');
@@ -27,6 +32,7 @@ const ModelGlosarium = require('../../models/modelGlosarium');
 function createApp() {
   const app = express();
   app.use(express.json());
+  app.use('/api/redaksi/bahasa', routerBahasa);
   app.use('/api/redaksi/bidang', routerBidang);
   app.use('/api/redaksi/sumber', routerSumber);
   app.use((err, _req, res, _next) => {
@@ -38,6 +44,61 @@ function createApp() {
 describe('routes/redaksi master bidang/sumber', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  it('CRUD /bahasa menangani alur utama', async () => {
+    ModelGlosarium.daftarMasterBahasa.mockResolvedValue({
+      data: [{ id: 1, kode: 'Ing', nama: 'Inggris' }],
+      total: 1,
+    });
+    ModelGlosarium.ambilMasterBahasaDenganId.mockResolvedValueOnce(null).mockResolvedValueOnce({ id: 1, kode: 'Ing', nama: 'Inggris' });
+    ModelGlosarium.simpanMasterBahasa.mockResolvedValueOnce({ id: 1 }).mockResolvedValueOnce(null).mockResolvedValueOnce({ id: 1 });
+    const inUseError = new Error('Bahasa masih dipakai');
+    inUseError.code = 'MASTER_IN_USE';
+    ModelGlosarium.hapusMasterBahasa
+      .mockRejectedValueOnce(inUseError)
+      .mockResolvedValueOnce(false)
+      .mockResolvedValueOnce(true);
+
+    const list = await request(createApp()).get('/api/redaksi/bahasa?q=ing&aktif=1');
+    const detail404 = await request(createApp()).get('/api/redaksi/bahasa/1');
+    const detail200 = await request(createApp()).get('/api/redaksi/bahasa/1');
+    const post400 = await request(createApp()).post('/api/redaksi/bahasa').send({ kode: '', nama: '' });
+    const post201 = await request(createApp()).post('/api/redaksi/bahasa').send({ kode: ' Ing ', nama: ' Inggris ', aktif: '0' });
+    const put404 = await request(createApp()).put('/api/redaksi/bahasa/1').send({ kode: 'Ing', nama: 'Inggris' });
+    const put200 = await request(createApp()).put('/api/redaksi/bahasa/1').send({ kode: 'Ing', nama: 'Inggris', aktif: true });
+    const delete409 = await request(createApp()).delete('/api/redaksi/bahasa/1');
+    const delete404 = await request(createApp()).delete('/api/redaksi/bahasa/1');
+    const delete200 = await request(createApp()).delete('/api/redaksi/bahasa/1');
+
+    expect(list.status).toBe(200);
+    expect(ModelGlosarium.daftarMasterBahasa).toHaveBeenCalledWith(expect.objectContaining({ q: 'ing', aktif: '1' }));
+    expect(detail404.status).toBe(404);
+    expect(detail200.status).toBe(200);
+    expect(post400.status).toBe(400);
+    expect(post201.status).toBe(201);
+    expect(ModelGlosarium.simpanMasterBahasa).toHaveBeenNthCalledWith(1, {
+      kode: 'Ing',
+      nama: 'Inggris',
+      iso2: '',
+      iso3: '',
+      keterangan: '',
+      aktif: false,
+    });
+    expect(put404.status).toBe(404);
+    expect(put200.status).toBe(200);
+    expect(ModelGlosarium.simpanMasterBahasa).toHaveBeenNthCalledWith(3, {
+      id: 1,
+      kode: 'Ing',
+      nama: 'Inggris',
+      iso2: '',
+      iso3: '',
+      keterangan: '',
+      aktif: true,
+    });
+    expect(delete409.status).toBe(409);
+    expect(delete404.status).toBe(404);
+    expect(delete200.status).toBe(200);
   });
 
   it('GET /bidang-master mengembalikan data paginasi', async () => {

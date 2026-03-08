@@ -24,6 +24,9 @@ router.get('/opsi-entri', periksaIzin('kelola_etimologi'), async (req, res, next
     const data = await ModelEtimologi.cariEntriUntukTautan(q, { limit });
     return res.json({ success: true, data });
   } catch (error) {
+    if (error?.code === 'INVALID_BAHASA') {
+      return res.status(400).json({ success: false, message: 'Bahasa tidak valid' });
+    }
     return next(error);
   }
 });
@@ -38,6 +41,9 @@ router.get('/', periksaIzin('kelola_etimologi'), async (req, res, next) => {
     const { data, total } = await ModelEtimologi.daftarAdmin({ limit, offset, q, bahasa, aktif, meragukan });
     return res.json({ success: true, ...buildPaginatedResult({ data, total, pagination: { limit, offset } }) });
   } catch (error) {
+    if (error?.code === 'INVALID_BAHASA') {
+      return res.status(400).json({ success: false, message: 'Bahasa tidak valid' });
+    }
     return next(error);
   }
 });

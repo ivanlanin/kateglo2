@@ -19,6 +19,7 @@ vi.mock('react-router-dom', async () => {
 const mockUseDaftarGlosariumAdmin = vi.fn();
 const mockUseDetailGlosariumAdmin = vi.fn();
 const mockUseDaftarBidangAdmin = vi.fn();
+const mockUseDaftarBahasaAdmin = vi.fn();
 const mockUseDaftarSumberAdmin = vi.fn();
 const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
@@ -28,6 +29,7 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarGlosariumAdmin: (...args) => mockUseDaftarGlosariumAdmin(...args),
   useDetailGlosariumAdmin: (...args) => mockUseDetailGlosariumAdmin(...args),
   useDaftarBidangAdmin: (...args) => mockUseDaftarBidangAdmin(...args),
+  useDaftarBahasaAdmin: (...args) => mockUseDaftarBahasaAdmin(...args),
   useDaftarSumberAdmin: (...args) => mockUseDaftarSumberAdmin(...args),
   useSimpanGlosarium: () => ({ mutate: mutateSimpan, isPending: false }),
   useHapusGlosarium: () => ({ mutate: mutateHapus, isPending: false }),
@@ -66,12 +68,19 @@ describe('GlosariumAdmin', () => {
       isError: false,
       data: {
         total: 1,
-        data: [{ id: 1, indonesia: 'air', asing: 'water', bidang_id: 1, bidang: 'Kimia', sumber_id: 1, sumber: 'KBBI', bahasa: 'en' }],
+        data: [{ id: 1, indonesia: 'air', asing: 'water', bidang_id: 1, bidang: 'Kimia', bahasa_id: 10, bahasa: 'Inggris', sumber_id: 1, sumber: 'KBBI' }],
       },
     });
     mockUseDaftarBidangAdmin.mockReturnValue({
       data: {
         data: [{ id: 1, kode: 'kimia', nama: 'Kimia' }],
+      },
+      isLoading: false,
+      isError: false,
+    });
+    mockUseDaftarBahasaAdmin.mockReturnValue({
+      data: {
+        data: [{ id: 10, kode: 'Ing', nama: 'Inggris', iso2: 'en' }],
       },
       isLoading: false,
       isError: false,
@@ -95,7 +104,8 @@ describe('GlosariumAdmin', () => {
             asing: 'water',
             bidang_id: 1,
             bidang: 'Kimia',
-            bahasa: 'en',
+            bahasa_id: 10,
+            bahasa: 'Inggris',
             sumber_id: 1,
             sumber: 'KBBI',
             aktif: 1,
@@ -286,7 +296,8 @@ describe('GlosariumAdmin', () => {
           asing: 'detail water',
           bidang_id: 1,
           bidang: 'Kimia',
-          bahasa: 'en',
+          bahasa_id: 10,
+          bahasa: 'Inggris',
           sumber_id: 1,
           sumber: 'KBBI',
           aktif: 1,
@@ -352,7 +363,7 @@ describe('GlosariumAdmin', () => {
       isError: false,
       data: {
         total: 1,
-        data: [{ id: null, indonesia: 'tanpa-id', asing: 'no-id', bidang_id: 1, bidang: 'Uji', sumber_id: 1, sumber: 'X', bahasa: 'en', aktif: 1 }],
+        data: [{ id: null, indonesia: 'tanpa-id', asing: 'no-id', bidang_id: 1, bidang: 'Uji', bahasa_id: 10, bahasa: 'Inggris', sumber_id: 1, sumber: 'X', aktif: 1 }],
       },
     });
 
@@ -445,7 +456,7 @@ describe('GlosariumAdmin', () => {
       isError: false,
       data: {
         total: 1,
-        data: [{ id: 2, indonesia: 'api', asing: '', bidang_id: 1, bidang: 'Kimia', sumber_id: 1, sumber: 'KBBI', bahasa: 'en', aktif: 1 }],
+        data: [{ id: 2, indonesia: 'api', asing: '', bidang_id: 1, bidang: 'Kimia', bahasa_id: 10, bahasa: 'Inggris', sumber_id: 1, sumber: 'KBBI', aktif: 1 }],
       },
     });
 

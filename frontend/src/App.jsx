@@ -22,6 +22,7 @@ import TesaurusAdmin from './halaman/redaksi/TesaurusAdmin';
 import EtimologiAdmin from './halaman/redaksi/EtimologiAdmin';
 import GlosariumAdmin from './halaman/redaksi/GlosariumAdmin';
 import BidangAdmin from './halaman/redaksi/BidangAdmin';
+import BahasaAdmin from './halaman/redaksi/BahasaAdmin';
 import SumberAdmin from './halaman/redaksi/SumberAdmin';
 import LabelAdmin from './halaman/redaksi/LabelAdmin';
 import TagarAdmin from './halaman/redaksi/TagarAdmin';
@@ -103,6 +104,8 @@ function App() {
       <Route path="/redaksi/glosarium" element={<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/bidang" element={<RuteRedaksi><BidangAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/bidang/:id" element={<RuteRedaksi><BidangAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/bahasa" element={<RuteRedaksi><BahasaAdmin /></RuteRedaksi>} />
+      <Route path="/redaksi/bahasa/:id" element={<RuteRedaksi><BahasaAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/sumber" element={<RuteRedaksi><SumberAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/sumber/:id" element={<RuteRedaksi><SumberAdmin /></RuteRedaksi>} />
       <Route path="/redaksi/glosarium/:id" element={<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>} />

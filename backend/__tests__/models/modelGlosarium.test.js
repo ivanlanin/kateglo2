@@ -1015,7 +1015,7 @@ describe('ModelGlosarium', () => {
   it('isNormalizedGlosariumSchema melakukan cache hasil saat non-test', async () => {
     const originalNodeEnv = process.env.NODE_ENV;
     process.env.NODE_ENV = 'development';
-    db.query.mockResolvedValue({ rows: [{ column_name: 'bidang_id' }, { column_name: 'sumber_id' }] });
+    db.query.mockResolvedValue({ rows: [{ column_name: 'bidang_id' }, { column_name: 'sumber_id' }, { column_name: 'bahasa_id' }] });
 
     const first = await isNormalizedGlosariumSchema();
     const second = await isNormalizedGlosariumSchema();
@@ -1045,12 +1045,12 @@ describe('ModelGlosarium', () => {
     expect(db.query).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining('JOIN bidang b ON b.id = g.bidang_id'),
-      ['%aktif%', 3, 4]
+      ['%aktif%', 3, 4, 'en']
     );
     expect(db.query).toHaveBeenNthCalledWith(
       2,
-      expect.stringContaining("g.bahasa = 'en'"),
-      ['%aktif%', 3, 4, 7, 2]
+      expect.stringContaining("ba.kode = $4"),
+      ['%aktif%', 3, 4, 'en', 7, 2]
     );
     expect(result).toEqual({ data: [{ id: 1, indonesia: 'aktif', bidang: 'Kimia', sumber: 'KBBI' }], total: 2, hasNext: false });
   });
@@ -1095,12 +1095,12 @@ describe('ModelGlosarium', () => {
     expect(db.query).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining("LOWER(b.nama) = LOWER($2)"),
-      ['Kimia', 'Kimia', 'KBBI', 'KBBI']
+      ['Kimia', 'Kimia', 'KBBI', 'KBBI', 'id']
     );
     expect(db.query).toHaveBeenNthCalledWith(
       2,
-      expect.stringContaining("g.bahasa = 'id'"),
-      ['Kimia', 'Kimia', 'KBBI', 'KBBI', 20, 0]
+      expect.stringContaining("ba.kode = $5"),
+      ['Kimia', 'Kimia', 'KBBI', 'KBBI', 'id', 20, 0]
     );
   });
 
@@ -1186,12 +1186,12 @@ describe('ModelGlosarium', () => {
     expect(db.query).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining('g.aktif = FALSE'),
-      ['%istilah%', 'kim', '', 'kbbi', '']
+      ['%istilah%', 'kim', '', 'kbbi', '', 'en']
     );
     expect(db.query).toHaveBeenNthCalledWith(
       2,
-      expect.stringContaining("g.bahasa = 'en'"),
-      ['%istilah%', 'kim', '', 'kbbi', '', 3]
+      expect.stringContaining("ba.kode = $6"),
+      ['%istilah%', 'kim', '', 'kbbi', '', 'en', 3]
     );
   });
 
@@ -1227,8 +1227,8 @@ describe('ModelGlosarium', () => {
     });
 
     expect(db.query).toHaveBeenCalledWith(
-      expect.stringContaining("g.bahasa = 'id'"),
-      [3]
+      expect.stringContaining("ba.kode = $1"),
+      ['id', 3]
     );
     expect(result.hasPrev).toBe(false);
     expect(result.hasNext).toBe(true);
@@ -1285,7 +1285,7 @@ describe('ModelGlosarium', () => {
     };
     db.pool.connect.mockResolvedValue(client);
 
-    const result = await ModelGlosarium.simpan({ id: 99, indonesia: 'a', asing: 'b', bidang_id: 2, sumber_id: 3 }, 'editor@example.com');
+    const result = await ModelGlosarium.simpan({ id: 99, indonesia: 'a', asing: 'b', bidang_id: 2, bahasa_id: 10, sumber_id: 3 }, 'editor@example.com');
 
     expect(result).toBeNull();
     expect(client.release).toHaveBeenCalled();
@@ -1308,8 +1308,8 @@ describe('ModelGlosarium', () => {
       .mockResolvedValueOnce({ rows: [{ id: 10, indonesia: 'baru' }] })
       .mockResolvedValueOnce({ rows: [{ id: 11, indonesia: 'ubah' }] });
 
-    const inserted = await ModelGlosarium.simpan({ indonesia: 'baru', asing: 'new', bidang_id: 2, sumber_id: 3 });
-    const updated = await ModelGlosarium.simpan({ id: 11, indonesia: 'ubah', asing: 'upd', bidang_id: 2, sumber_id: 3 });
+    const inserted = await ModelGlosarium.simpan({ indonesia: 'baru', asing: 'new', bidang_id: 2, bahasa_id: 10, sumber_id: 3 });
+    const updated = await ModelGlosarium.simpan({ id: 11, indonesia: 'ubah', asing: 'upd', bidang_id: 2, bahasa_id: 10, sumber_id: 3 });
 
     expect(inserted).toEqual({ id: 10, indonesia: 'baru' });
     expect(updated).toEqual({ id: 11, indonesia: 'ubah' });

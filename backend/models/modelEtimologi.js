@@ -17,13 +17,15 @@ class ModelEtimologi {
     if (!Number.isInteger(parsedId) || parsedId <= 0) return [];
 
     const result = await db.query(
-      `SELECT e.id, e.bahasa, e.kata_asal, e.sumber_id, s.kode AS sumber_kode, s.nama AS sumber, e.aktif, e.meragukan
+      `SELECT e.id, e.bahasa_id, ba.kode AS bahasa_kode, ba.nama AS bahasa,
+              e.kata_asal, e.sumber_id, s.kode AS sumber_kode, s.nama AS sumber, e.aktif, e.meragukan
        FROM etimologi e
        LEFT JOIN sumber s ON s.id = e.sumber_id
+       LEFT JOIN bahasa ba ON ba.id = e.bahasa_id
        WHERE e.entri_id = $1
          ${aktifSaja ? 'AND e.aktif = TRUE' : ''}
          AND (
-           NULLIF(BTRIM(COALESCE(e.bahasa, '')), '') IS NOT NULL
+           e.bahasa_id IS NOT NULL
            OR NULLIF(BTRIM(COALESCE(e.kata_asal, '')), '') IS NOT NULL
          )
        ORDER BY e.id ASC`,
@@ -76,7 +78,8 @@ class ModelEtimologi {
       conditions.push(`(
         e.indeks ILIKE $${params.length}
         OR COALESCE(e.lafal, '') ILIKE $${params.length}
-        OR COALESCE(e.bahasa, '') ILIKE $${params.length}
+        OR COALESCE(ba.kode, '') ILIKE $${params.length}
+        OR COALESCE(ba.nama, '') ILIKE $${params.length}
         OR COALESCE(e.kata_asal, '') ILIKE $${params.length}
         OR COALESCE(e.arti_asal, '') ILIKE $${params.length}
         OR COALESCE(e.sumber_isi, '') ILIKE $${params.length}
@@ -85,10 +88,10 @@ class ModelEtimologi {
     }
 
     if (bahasa === '__KOSONG__') {
-      conditions.push("NULLIF(BTRIM(COALESCE(e.bahasa, '')), '') IS NULL");
+      conditions.push('e.bahasa_id IS NULL');
     } else if (bahasa) {
       params.push(String(bahasa).trim());
-      conditions.push(`LOWER(COALESCE(e.bahasa, '')) = LOWER($${params.length})`);
+      conditions.push(`LOWER(COALESCE(ba.kode, '')) = LOWER($${params.length})`);
     }
 
     if (aktif === '1' || aktif === '0') {
@@ -107,6 +110,7 @@ class ModelEtimologi {
       `SELECT COUNT(*) AS total
        FROM etimologi e
        LEFT JOIN entri en ON en.id = e.entri_id
+       LEFT JOIN bahasa ba ON ba.id = e.bahasa_id
        ${whereSql}`,
       params
     );
@@ -122,7 +126,9 @@ class ModelEtimologi {
          e.indeks,
          e.homonim,
          e.lafal,
-         e.bahasa,
+         e.bahasa_id,
+         ba.kode AS bahasa_kode,
+         ba.nama AS bahasa,
          e.kata_asal,
          e.arti_asal,
          e.sumber_id,
@@ -142,6 +148,7 @@ class ModelEtimologi {
          e.updated_at
        FROM etimologi e
        LEFT JOIN entri en ON en.id = e.entri_id
+       LEFT JOIN bahasa ba ON ba.id = e.bahasa_id
        ${whereSql}
        ORDER BY e.indeks ASC, e.id ASC
        LIMIT $${limitParamIdx} OFFSET $${offsetParamIdx}`,
@@ -158,7 +165,9 @@ class ModelEtimologi {
          e.indeks,
          e.homonim,
          e.lafal,
-         e.bahasa,
+         e.bahasa_id,
+         ba.kode AS bahasa_kode,
+         ba.nama AS bahasa,
          e.kata_asal,
          e.arti_asal,
          e.sumber_id,
@@ -178,6 +187,7 @@ class ModelEtimologi {
          e.updated_at
        FROM etimologi e
        LEFT JOIN entri en ON en.id = e.entri_id
+       LEFT JOIN bahasa ba ON ba.id = e.bahasa_id
        WHERE e.id = $1`,
       [id]
     );
@@ -190,6 +200,7 @@ class ModelEtimologi {
     homonim,
     lafal,
     bahasa,
+    bahasa_id,
     kata_asal,
     arti_asal,
     sumber_id,
@@ -205,9 +216,23 @@ class ModelEtimologi {
     const normalizedHomonim = normalizeIntegerNullable(homonim);
     const normalizedEntriId = normalizeIntegerNullable(entri_id);
     const normalizedSumberId = normalizeIntegerNullable(sumber_id);
-    const normalizedBahasa = String(bahasa || '').trim();
-    const normalizedAktifDariBahasa = Boolean(normalizedBahasa);
     const normalizedMeragukan = Boolean(meragukan);
+
+    // Resolve bahasa_id: terima bahasa_id (integer) atau bahasa (kode string)
+    let resolvedBahasaId = normalizeIntegerNullable(bahasa_id);
+    if (!resolvedBahasaId && bahasa) {
+      const kode = String(bahasa).trim();
+      if (kode) {
+        const r = await db.query('SELECT id FROM bahasa WHERE LOWER(kode) = LOWER($1) LIMIT 1', [kode]);
+        resolvedBahasaId = r.rows[0]?.id || null;
+        if (!resolvedBahasaId) {
+          const error = new Error('Bahasa tidak valid');
+          error.code = 'INVALID_BAHASA';
+          throw error;
+        }
+      }
+    }
+    const normalizedAktif = Boolean(resolvedBahasaId);
 
     const result = id
       ? await db.query(
@@ -215,7 +240,7 @@ class ModelEtimologi {
          SET indeks = $1,
              homonim = $2,
              lafal = NULLIF($3, ''),
-             bahasa = NULLIF($4, ''),
+             bahasa_id = $4,
              kata_asal = NULLIF($5, ''),
              arti_asal = NULLIF($6, ''),
              sumber_id = $7,
@@ -235,7 +260,7 @@ class ModelEtimologi {
           indeks,
           normalizedHomonim,
           lafal,
-          normalizedBahasa,
+          resolvedBahasaId,
           kata_asal,
           arti_asal,
           normalizedSumberId,
@@ -246,7 +271,7 @@ class ModelEtimologi {
           sumber_lihat,
           sumber_varian,
           normalizedEntriId,
-          normalizedAktifDariBahasa,
+          normalizedAktif,
           normalizedMeragukan,
           id,
         ]
@@ -256,7 +281,7 @@ class ModelEtimologi {
            indeks,
            homonim,
            lafal,
-           bahasa,
+           bahasa_id,
            kata_asal,
            arti_asal,
            sumber_id,
@@ -276,7 +301,7 @@ class ModelEtimologi {
            $1,
            $2,
            NULLIF($3, ''),
-           NULLIF($4, ''),
+           $4,
            NULLIF($5, ''),
            NULLIF($6, ''),
            $7,
@@ -297,7 +322,7 @@ class ModelEtimologi {
           indeks,
           normalizedHomonim,
           lafal,
-          normalizedBahasa,
+          resolvedBahasaId,
           kata_asal,
           arti_asal,
           normalizedSumberId,
@@ -308,7 +333,7 @@ class ModelEtimologi {
           sumber_lihat,
           sumber_varian,
           normalizedEntriId,
-          normalizedAktifDariBahasa,
+          normalizedAktif,
           normalizedMeragukan,
         ]
       );

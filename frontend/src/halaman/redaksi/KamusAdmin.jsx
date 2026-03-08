@@ -10,6 +10,8 @@ import {
   useDaftarMakna, useSimpanMakna, useHapusMakna,
   useSimpanContoh, useHapusContoh,
   useKategoriLabelRedaksi,
+  useDaftarBidangAdmin,
+  useDaftarBahasaAdmin,
   useDaftarSumberAdmin,
   useTagarEntri, useSimpanTagarEntri, useDaftarTagarUntukPilih,
 } from '../../api/apiAdmin';
@@ -83,8 +85,6 @@ const kategoriLabelRedaksi = [
   'jenis-rujuk',
   'kelas-kata',
   'ragam',
-  'bidang',
-  'bahasa',
   'penyingkatan',
 ];
 
@@ -856,6 +856,8 @@ function KamusAdmin() {
   });
   const daftarSaranRujuk = respSaranRujuk?.data || [];
   const { data: respLabelKategori } = useKategoriLabelRedaksi(kategoriLabelRedaksi);
+  const { data: respBidang } = useDaftarBidangAdmin({ limit: 200, aktif: '1' });
+  const { data: respBahasa } = useDaftarBahasaAdmin({ limit: 200, aktif: '1' });
 
   const opsiKategori = useMemo(() => {
     const kategori = respLabelKategori?.data || {};
@@ -866,8 +868,8 @@ function KamusAdmin() {
     );
     const kelasKata = mapOpsiLabel(kategori['kelas-kata'] || [], { emptyLabel: '— Tidak ada —' });
     const ragam = mapOpsiLabel(kategori.ragam || [], { emptyLabel: '— Tidak ada —' });
-    const bidang = mapOpsiLabel(kategori.bidang || [], { emptyLabel: '— Tidak ada —' });
-    const bahasa = mapOpsiLabel(kategori.bahasa || [], { emptyLabel: '— Tidak ada —' });
+    const bidang = mapOpsiLabel(respBidang?.data || [], { emptyLabel: '— Tidak ada —' });
+    const bahasa = mapOpsiLabel(respBahasa?.data || [], { emptyLabel: '— Tidak ada —' });
     const tipePenyingkat = mapOpsiLabel(kategori.penyingkatan || [], { emptyLabel: '— Tidak ada —' });
 
     return {
@@ -879,7 +881,7 @@ function KamusAdmin() {
       bahasa,
       tipePenyingkat: tipePenyingkat.length > 1 ? tipePenyingkat : opsiTipePenyingkatBawaan,
     };
-  }, [respLabelKategori]);
+  }, [respLabelKategori, respBidang, respBahasa]);
 
   const opsiFilterJenis = useMemo(() => {
     const pilihanTanpaKosong = opsiKategori.jenis.filter((item) => String(item?.value || '').trim());

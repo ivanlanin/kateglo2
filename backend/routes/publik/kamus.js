@@ -6,6 +6,7 @@ const express = require('express');
 const { authenticate, authenticateOptional } = require('../../middleware/auth');
 const { cariKamus, ambilDetailKamus } = require('../../services/layananKamusPublik');
 const ModelLabel = require('../../models/modelLabel');
+const ModelGlosarium = require('../../models/modelGlosarium');
 const ModelTagar = require('../../models/modelTagar');
 const ModelEntri = require('../../models/modelEntri');
 const ModelKomentar = require('../../models/modelKomentar');
@@ -34,11 +35,18 @@ function parseSumberPelacakan(value) {
 
 router.get('/kategori', async (_req, res, next) => {
   try {
-    const [label, tagar] = await Promise.all([
+    const [label, tagar, daftarBidang, daftarBahasa] = await Promise.all([
       ModelLabel.ambilSemuaKategori(),
       ModelTagar.ambilSemuaTagar(),
+      ModelGlosarium.ambilDaftarBidang(true),
+      ModelGlosarium.ambilDaftarBahasa(true),
     ]);
-    return res.json({ ...label, tagar });
+    return res.json({
+      ...label,
+      bidang: daftarBidang.map((b) => ({ kode: b.kode, nama: b.nama })),
+      bahasa: daftarBahasa.map((b) => ({ kode: b.kode, nama: b.nama })),
+      tagar,
+    });
   } catch (error) {
     return next(error);
   }

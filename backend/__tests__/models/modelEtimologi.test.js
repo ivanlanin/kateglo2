@@ -86,7 +86,7 @@ describe('ModelEtimologi', () => {
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
-      expect.stringContaining("LOWER(COALESCE(e.bahasa, '')) = LOWER($1)"),
+      expect.stringContaining("LOWER(COALESCE(ba.kode, '')) = LOWER($1)"),
       ['Inggris']
     );
     expect(db.query).toHaveBeenNthCalledWith(
@@ -106,7 +106,7 @@ describe('ModelEtimologi', () => {
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
-      expect.stringContaining("NULLIF(BTRIM(COALESCE(e.bahasa, '')), '') IS NULL"),
+      expect.stringContaining("e.bahasa_id IS NULL"),
       []
     );
     expect(db.query).toHaveBeenNthCalledWith(
@@ -223,7 +223,7 @@ describe('ModelEtimologi', () => {
       indeks: 'kata',
       homonim: '2',
       lafal: 'laf',
-      bahasa: 'id',
+      bahasa_id: 5,
       kata_asal: 'asal-kata',
       arti_asal: 'makna asal',
       sumber_id: 7,
@@ -239,7 +239,7 @@ describe('ModelEtimologi', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('UPDATE etimologi'),
-      ['kata', 2, 'laf', 'id', 'asal-kata', 'makna asal', 7, 'def', 'sit', 'isi', 'aks', 'lihat', 'var', 4, true, false, 9]
+      ['kata', 2, 'laf', 5, 'asal-kata', 'makna asal', 7, 'def', 'sit', 'isi', 'aks', 'lihat', 'var', 4, true, false, 9]
     );
     expect(ambilSpy).toHaveBeenCalledWith(9);
     expect(result).toEqual({ id: 9, indeks: 'kata' });
@@ -269,7 +269,7 @@ describe('ModelEtimologi', () => {
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO etimologi'),
-      ['serapan', null, '', '', '', '', null, '', '', '', '', '', '', null, false, false]
+      ['serapan', null, '', null, '', '', null, '', '', '', '', '', '', null, false, false]
     );
     expect(ambilSpy).toHaveBeenCalledWith(12);
     expect(result).toEqual({ id: 12 });

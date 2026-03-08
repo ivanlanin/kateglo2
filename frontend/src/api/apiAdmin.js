@@ -949,6 +949,35 @@ export function useHapusBidang() {
   return useHapusAdmin({ path: '/api/redaksi/bidang', queryKeyPrefix: 'admin-bidang' });
 }
 
+export function useDaftarBahasaAdmin({
+  limit = 50,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+  q = '',
+  aktif = '',
+} = {}) {
+  return useDaftarAdmin('/api/redaksi/bahasa', 'admin-bahasa', {
+    limit, cursor, direction, lastPage, q, aktif,
+  });
+}
+
+export function useDetailBahasaAdmin(id) {
+  return useQuery({
+    queryKey: ['admin-bahasa-detail', id],
+    queryFn: () => klien.get(`/api/redaksi/bahasa/${id}`).then((r) => r.data),
+    enabled: Boolean(id),
+  });
+}
+
+export function useSimpanBahasa() {
+  return useSimpanAdmin({ path: '/api/redaksi/bahasa', queryKeyPrefix: 'admin-bahasa' });
+}
+
+export function useHapusBahasa() {
+  return useHapusAdmin({ path: '/api/redaksi/bahasa', queryKeyPrefix: 'admin-bahasa' });
+}
+
 export function useSimpanSusunKataHarianAdmin() {
   const qc = useQueryClient();
   return useMutation({

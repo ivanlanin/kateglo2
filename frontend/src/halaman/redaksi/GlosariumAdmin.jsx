@@ -10,6 +10,7 @@ import {
   useSimpanGlosarium,
   useHapusGlosarium,
   useDaftarBidangAdmin,
+  useDaftarBahasaAdmin,
   useDaftarSumberAdmin,
 } from '../../api/apiAdmin';
 import TataLetak from '../../komponen/bersama/TataLetak';
@@ -39,21 +40,11 @@ const nilaiAwal = {
   asing: '',
   bidang_id: '',
   bidang: '',
-  bahasa: 'en',
+  bahasa_id: '',
   sumber_id: '',
   sumber: '',
   aktif: 1,
 };
-
-const opsiBahasa = [
-  { value: 'en', label: 'Inggris' },
-  { value: 'id', label: 'Indonesia' },
-  { value: 'nl', label: 'Belanda' },
-  { value: 'ar', label: 'Arab' },
-  { value: 'ja', label: 'Jepang' },
-  { value: 'de', label: 'Jerman' },
-  { value: 'fr', label: 'Prancis' },
-];
 
 const kolom = [
   {
@@ -111,10 +102,15 @@ function GlosariumAdmin() {
   });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailGlosariumAdmin(idDariPath);
   const { data: bidangResp } = useDaftarBidangAdmin({ limit: 200, aktif: '1' });
+  const { data: bahasaResp } = useDaftarBahasaAdmin({ limit: 200 });
   const { data: sumberResp } = useDaftarSumberAdmin({ limit: 200, glosarium: '1' });
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
   const opsiBidang = (bidangResp?.data || []).map((item) => ({ value: String(item.id), label: item.nama }));
+  const opsiBahasa = (bahasaResp?.data || []).map((item) => ({
+    value: String(item.id),
+    label: item.kode ? `${item.nama} (${item.kode})` : item.nama,
+  }));
   const opsiSumber = (sumberResp?.data || []).map((item) => ({ value: String(item.id), label: item.nama }));
 
   const panel = useFormPanel(nilaiAwal);
@@ -158,6 +154,14 @@ function GlosariumAdmin() {
     navigate('/redaksi/glosarium', { replace: true });
   }, [idDariPath, isDetailError, isDetailLoading, navigate]);
 
+  useEffect(() => {
+    if (!panel.buka || !panel.modeTambah || panel.data.bahasa_id) return;
+    const defaultBahasa = (bahasaResp?.data || []).find((item) => item.iso2 === 'en' || item.kode === 'Ing');
+    if (defaultBahasa?.id) {
+      panel.ubahField('bahasa_id', String(defaultBahasa.id));
+    }
+  }, [bahasaResp, panel]);
+
   const tutupPanel = () => {
     setPesan({ error: '', sukses: '' });
     panel.tutup();
@@ -196,10 +200,15 @@ function GlosariumAdmin() {
       setPesan({ error: 'Sumber wajib dipilih', sukses: '' });
       return;
     }
+    if (!panel.data.bahasa_id) {
+      setPesan({ error: 'Bahasa wajib dipilih', sukses: '' });
+      return;
+    }
 
     const payload = {
       ...panel.data,
       bidang_id: Number(panel.data.bidang_id),
+      bahasa_id: Number(panel.data.bahasa_id),
       sumber_id: Number(panel.data.sumber_id),
     };
 
@@ -296,7 +305,13 @@ function GlosariumAdmin() {
             onChange={panel.ubahField}
             options={[{ value: '', label: '-- Pilih bidang --' }, ...opsiBidang]}
           />
-          <SelectField label="Bahasa" name="bahasa" value={panel.data.bahasa} onChange={panel.ubahField} options={opsiBahasa} />
+          <SelectField
+            label="Bahasa"
+            name="bahasa_id"
+            value={String(panel.data.bahasa_id || '')}
+            onChange={panel.ubahField}
+            options={[{ value: '', label: '-- Pilih bahasa --' }, ...opsiBahasa]}
+          />
           <SelectField
             label="Sumber"
             name="sumber_id"

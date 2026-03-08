@@ -13,6 +13,7 @@ jest.mock('../../models/modelGlosarium', () => ({
   cariCursor: jest.fn(),
   ambilDetailAsing: jest.fn(),
   ambilDaftarBidang: jest.fn(),
+  ambilDaftarBahasa: jest.fn(),
   ambilDaftarSumber: jest.fn(),
   resolveSlugSumber: jest.fn(),
 }));
@@ -240,6 +241,8 @@ describe('routes backend', () => {
 
   it('GET /api/publik/kamus/kategori mengembalikan data kategori', async () => {
     ModelLabel.ambilSemuaKategori.mockResolvedValue({ ragam: [{ kode: 'cak', nama: 'cak' }] });
+    ModelGlosarium.ambilDaftarBidang.mockResolvedValue([]);
+    ModelGlosarium.ambilDaftarBahasa.mockResolvedValue([]);
 
     const response = await request(createApp()).get('/api/publik/kamus/kategori');
 

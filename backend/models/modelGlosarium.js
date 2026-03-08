@@ -38,6 +38,24 @@ async function resolveMasterId(client, {
   return result.rows[0]?.id || null;
 }
 
+async function resolveBahasaId(client, { explicitId, kode, iso2 }) {
+  const normalizedId = parseOptionalPositiveInt(explicitId);
+  if (normalizedId) return normalizedId;
+
+  const kandKode = String(kode || '').trim();
+  const kandIso = String(iso2 || '').trim();
+  if (!kandKode && !kandIso) return null;
+
+  const result = await client.query(
+    `SELECT id FROM bahasa
+     WHERE ($1 <> '' AND LOWER(kode) = LOWER($1))
+        OR ($2 <> '' AND iso2 = $2)
+     ORDER BY id LIMIT 1`,
+    [kandKode, kandIso]
+  );
+  return result.rows[0]?.id || null;
+}
+
 function buildMasterFilters({
   alias,
   q,
@@ -105,9 +123,9 @@ async function isNormalizedGlosariumSchema() {
      FROM information_schema.columns
      WHERE table_schema = 'public'
        AND table_name = 'glosarium'
-       AND column_name IN ('bidang_id', 'sumber_id')`
+       AND column_name IN ('bidang_id', 'sumber_id', 'bahasa_id')`
   );
-  cachedNormalizedSchema = result.rows.length >= 2;
+  cachedNormalizedSchema = result.rows.length >= 3;
   return cachedNormalizedSchema;
 }
 
@@ -294,10 +312,10 @@ class ModelGlosarium {
       idx += 2;
     }
 
-    if (bahasa === 'id') {
-      conditions.push(`g.bahasa = 'id'`);
-    } else if (bahasa === 'en') {
-      conditions.push(`g.bahasa = 'en'`);
+    if (bahasa) {
+      conditions.push(`(ba.kode = $${idx} OR ba.iso2 = $${idx})`);
+      params.push(bahasa);
+      idx++;
     }
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
@@ -308,6 +326,7 @@ class ModelGlosarium {
          FROM glosarium g
          JOIN bidang b ON b.id = g.bidang_id
          JOIN sumber s ON s.id = g.sumber_id
+         LEFT JOIN bahasa ba ON ba.id = g.bahasa_id
          ${whereClause}`,
         params
       );
@@ -321,7 +340,9 @@ class ModelGlosarium {
            g.bidang_id,
            b.kode AS bidang_kode,
            b.nama AS bidang,
-           g.bahasa,
+           g.bahasa_id,
+           ba.kode AS bahasa_kode,
+           ba.nama AS bahasa,
            g.sumber_id,
            s.kode AS sumber_kode,
            s.nama AS sumber,
@@ -329,6 +350,7 @@ class ModelGlosarium {
          FROM glosarium g
          JOIN bidang b ON b.id = g.bidang_id
          JOIN sumber s ON s.id = g.sumber_id
+         LEFT JOIN bahasa ba ON ba.id = g.bahasa_id
          ${whereClause}
          ORDER BY g.asing ASC
          LIMIT $${idx} OFFSET $${idx + 1}`,
@@ -346,7 +368,9 @@ class ModelGlosarium {
          g.bidang_id,
          b.kode AS bidang_kode,
          b.nama AS bidang,
-         g.bahasa,
+         g.bahasa_id,
+         ba.kode AS bahasa_kode,
+         ba.nama AS bahasa,
          g.sumber_id,
          s.kode AS sumber_kode,
          s.nama AS sumber,
@@ -354,6 +378,7 @@ class ModelGlosarium {
        FROM glosarium g
        JOIN bidang b ON b.id = g.bidang_id
        JOIN sumber s ON s.id = g.sumber_id
+       LEFT JOIN bahasa ba ON ba.id = g.bahasa_id
        ${whereClause}
        ORDER BY g.asing ASC
        LIMIT $${idx} OFFSET $${idx + 1}`,
@@ -568,10 +593,10 @@ class ModelGlosarium {
       idx += 2;
     }
 
-    if (bahasa === 'id') {
-      conditions.push(`g.bahasa = 'id'`);
-    } else if (bahasa === 'en') {
-      conditions.push(`g.bahasa = 'en'`);
+    if (bahasa) {
+      conditions.push(`(ba.kode = $${idx} OR ba.iso2 = $${idx})`);
+      params.push(bahasa);
+      idx++;
     }
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
@@ -583,6 +608,7 @@ class ModelGlosarium {
          FROM glosarium g
          JOIN bidang b ON b.id = g.bidang_id
          JOIN sumber s ON s.id = g.sumber_id
+         LEFT JOIN bahasa ba ON ba.id = g.bahasa_id
          ${whereClause}`,
         params
       );
@@ -621,7 +647,9 @@ class ModelGlosarium {
          g.bidang_id,
          b.kode AS bidang_kode,
          b.nama AS bidang,
-         g.bahasa,
+         g.bahasa_id,
+         ba.kode AS bahasa_kode,
+         ba.nama AS bahasa,
          g.sumber_id,
          s.kode AS sumber_kode,
          s.nama AS sumber,
@@ -629,6 +657,7 @@ class ModelGlosarium {
        FROM glosarium g
        JOIN bidang b ON b.id = g.bidang_id
        JOIN sumber s ON s.id = g.sumber_id
+       LEFT JOIN bahasa ba ON ba.id = g.bahasa_id
        ${whereClause}
        ${cursorClause}
        ORDER BY g.${sortField} ${orderDesc ? 'DESC' : 'ASC'}, g.id ${orderDesc ? 'DESC' : 'ASC'}
@@ -677,14 +706,21 @@ class ModelGlosarium {
   static async ambilDaftarBidang(aktifSaja = true) {
     const kondisiAktif = aktifSaja ? 'WHERE b.aktif = TRUE' : '';
     const result = await db.query(
-      `SELECT
-         b.id,
-         b.kode,
-         b.nama,
-         b.nama AS bidang
+      `SELECT b.id, b.kode, b.nama, b.nama AS bidang
        FROM bidang b
        ${kondisiAktif}
        ORDER BY b.nama`
+    );
+    return result.rows;
+  }
+
+  static async ambilDaftarBahasa(aktifSaja = true) {
+    const kondisiAktif = aktifSaja ? 'WHERE ba.aktif = TRUE' : '';
+    const result = await db.query(
+      `SELECT ba.id, ba.kode, ba.nama, ba.iso2, ba.iso3
+       FROM bahasa ba
+       ${kondisiAktif}
+       ORDER BY ba.nama`
     );
     return result.rows;
   }
@@ -936,6 +972,109 @@ class ModelGlosarium {
     return parseCount(result.rows[0]?.total);
   }
 
+  // ── MASTER BAHASA ─────────────────────────────────────────────────────────
+
+  static async daftarMasterBahasa({ q = '', aktif = '', limit = 50, offset = 0 } = {}) {
+    const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 500);
+    const safeOffset = Math.max(Number(offset) || 0, 0);
+    const params = [];
+    const conditions = buildMasterFilters({ alias: 'ba', q, aktif, params });
+    const whereSql = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    const countResult = await db.query(
+      `SELECT COUNT(*) AS total FROM bahasa ba ${whereSql}`,
+      params
+    );
+
+    const dataResult = await db.query(
+      `SELECT ba.id, ba.kode, ba.nama, ba.iso2, ba.iso3, ba.aktif, ba.keterangan,
+              ba.created_at, ba.updated_at,
+              (
+                (SELECT COUNT(*)::int FROM makna  m WHERE m.bahasa  = ba.kode)
+              + (SELECT COUNT(*)::int FROM contoh c WHERE c.bahasa  = ba.kode)
+              + (SELECT COUNT(*)::int FROM etimologi e WHERE e.bahasa_id = ba.id)
+              + (SELECT COUNT(*)::int FROM glosarium g WHERE g.bahasa_id = ba.id)
+              ) AS jumlah_entri
+       FROM bahasa ba
+       ${whereSql}
+       ORDER BY ba.nama ASC
+       LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
+      [...params, cappedLimit, safeOffset]
+    );
+
+    return { data: dataResult.rows, total: parseCount(countResult.rows[0]?.total) };
+  }
+
+  static async ambilMasterBahasaDenganId(id) {
+    const result = await db.query(
+      `SELECT ba.id, ba.kode, ba.nama, ba.iso2, ba.iso3, ba.aktif, ba.keterangan,
+              ba.created_at, ba.updated_at,
+              (
+                (SELECT COUNT(*)::int FROM makna  m WHERE m.bahasa  = ba.kode)
+              + (SELECT COUNT(*)::int FROM contoh c WHERE c.bahasa  = ba.kode)
+              + (SELECT COUNT(*)::int FROM etimologi e WHERE e.bahasa_id = ba.id)
+              + (SELECT COUNT(*)::int FROM glosarium g WHERE g.bahasa_id = ba.id)
+              ) AS jumlah_entri
+       FROM bahasa ba
+       WHERE ba.id = $1`,
+      [id]
+    );
+    return result.rows[0] || null;
+  }
+
+  static async simpanMasterBahasa({ id, kode, nama, aktif = true, iso2 = '', iso3 = '', keterangan = '' }) {
+    const normalizedAktif = normalizeBoolean(aktif, true);
+    if (id) {
+      const result = await db.query(
+        `UPDATE bahasa
+         SET kode       = $1,
+             nama       = $2,
+             aktif      = $3,
+             iso2       = NULLIF($4, ''),
+             iso3       = NULLIF($5, ''),
+             keterangan = NULLIF($6, '')
+         WHERE id = $7
+         RETURNING id`,
+        [kode, nama, normalizedAktif, iso2, iso3, keterangan, id]
+      );
+      if (!result.rows[0]?.id) return null;
+      return this.ambilMasterBahasaDenganId(result.rows[0].id);
+    }
+
+    const result = await db.query(
+      `INSERT INTO bahasa (kode, nama, aktif, iso2, iso3, keterangan)
+       VALUES ($1, $2, $3, NULLIF($4, ''), NULLIF($5, ''), NULLIF($6, ''))
+       RETURNING id`,
+      [kode, nama, normalizedAktif, iso2, iso3, keterangan]
+    );
+    return this.ambilMasterBahasaDenganId(result.rows[0].id);
+  }
+
+  static async hapusMasterBahasa(id) {
+    const usage = await db.query(
+      `SELECT (
+          (SELECT COUNT(*)::int FROM makna      WHERE bahasa    = (SELECT kode FROM bahasa WHERE id = $1))
+        + (SELECT COUNT(*)::int FROM contoh     WHERE bahasa    = (SELECT kode FROM bahasa WHERE id = $1))
+        + (SELECT COUNT(*)::int FROM etimologi  WHERE bahasa_id = $1)
+        + (SELECT COUNT(*)::int FROM glosarium  WHERE bahasa_id = $1)
+       ) AS total`,
+      [id]
+    );
+    const total = parseCount(usage.rows[0]?.total);
+    if (total > 0) {
+      const error = new Error('Bahasa masih dipakai dan tidak bisa dihapus');
+      error.code = 'MASTER_IN_USE';
+      throw error;
+    }
+    const result = await db.query('DELETE FROM bahasa WHERE id = $1 RETURNING id', [id]);
+    return result.rowCount > 0;
+  }
+
+  static async hitungTotalBahasa() {
+    const result = await db.query('SELECT COUNT(*) AS total FROM bahasa');
+    return parseCount(result.rows[0]?.total);
+  }
+
   static async hitungTotalSumber() {
     const result = await db.query('SELECT COUNT(*) AS total FROM sumber');
     return parseCount(result.rows[0]?.total);
@@ -964,13 +1103,16 @@ class ModelGlosarium {
          g.bidang_id,
          b.kode AS bidang_kode,
          b.nama AS bidang,
-         g.bahasa,
+         g.bahasa_id,
+         ba.kode AS bahasa_kode,
+         ba.nama AS bahasa,
          g.sumber_id,
          s.kode AS sumber_kode,
          s.nama AS sumber,
          g.aktif
        FROM glosarium g
        JOIN bidang b ON b.id = g.bidang_id
+       LEFT JOIN bahasa ba ON ba.id = g.bahasa_id
        JOIN sumber s ON s.id = g.sumber_id
        WHERE g.id = $1`,
       [id]
@@ -992,6 +1134,8 @@ class ModelGlosarium {
     bidang_id: bidangId,
     bidang_kode: bidangKode,
     bahasa,
+    bahasa_id: bahasaId,
+    bahasa_kode: bahasaKode,
     sumber,
     sumber_id: sumberId,
     sumber_kode: sumberKode,
@@ -1031,6 +1175,12 @@ class ModelGlosarium {
         kode: sumberKode,
         nama: sumber,
       });
+      // bahasa: terima bahasa_id, bahasa_kode, atau bahasa sebagai iso2 (misal 'en')
+      const resolvedBahasaId = await resolveBahasaId(client, {
+        explicitId: bahasaId,
+        kode: bahasaKode || bahasa,
+        iso2: bahasa,
+      });
 
       if (!resolvedBidangId) {
         const error = new Error('Bidang tidak valid');
@@ -1042,6 +1192,11 @@ class ModelGlosarium {
         error.code = 'INVALID_SUMBER';
         throw error;
       }
+      if (!resolvedBahasaId) {
+        const error = new Error('Bahasa tidak valid');
+        error.code = 'INVALID_BAHASA';
+        throw error;
+      }
 
       const nilaiAktif = normalizeBoolean(aktif, true);
       if (id) {
@@ -1050,14 +1205,14 @@ class ModelGlosarium {
            SET indonesia = $1,
                asing = $2,
                bidang_id = $3,
-               bahasa = $4,
+               bahasa_id = $4,
                sumber_id = $5,
                aktif = $6,
                updater = $7,
                updated = NOW()
            WHERE id = $8
            RETURNING id`,
-          [indonesia, asing, resolvedBidangId, bahasa || 'en', resolvedSumberId, nilaiAktif, updater, id]
+          [indonesia, asing, resolvedBidangId, resolvedBahasaId, resolvedSumberId, nilaiAktif, updater, id]
         );
 
         if (!result.rows[0]?.id) return null;
@@ -1065,10 +1220,10 @@ class ModelGlosarium {
       }
 
       const result = await client.query(
-        `INSERT INTO glosarium (indonesia, asing, bidang_id, bahasa, sumber_id, aktif, updater, updated)
+        `INSERT INTO glosarium (indonesia, asing, bidang_id, bahasa_id, sumber_id, aktif, updater, updated)
          VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
          RETURNING id`,
-        [indonesia, asing, resolvedBidangId, bahasa || 'en', resolvedSumberId, nilaiAktif, updater]
+        [indonesia, asing, resolvedBidangId, resolvedBahasaId, resolvedSumberId, nilaiAktif, updater]
       );
 
       return this.ambilDenganId(result.rows[0].id);
@@ -1197,12 +1352,14 @@ class ModelGlosarium {
 
     const [persisResult, mengCount, mengResult, mirCount, mirResult] = await Promise.all([
       db.query(
-        `SELECT g.id, g.asing, g.indonesia, g.bahasa,
+        `SELECT g.id, g.asing, g.indonesia,
+                g.bahasa_id, ba.kode AS bahasa_kode, ba.nama AS bahasa,
                 b.kode AS bidang_kode, b.nama AS bidang,
                 s.kode AS sumber_kode, s.nama AS sumber
          FROM glosarium g
          JOIN bidang b ON b.id = g.bidang_id
          JOIN sumber s ON s.id = g.sumber_id
+         LEFT JOIN bahasa ba ON ba.id = g.bahasa_id
          WHERE g.aktif = TRUE AND LOWER(g.asing) = LOWER($1)
          ORDER BY b.nama, s.nama`,
         [trimmed]
@@ -1216,12 +1373,14 @@ class ModelGlosarium {
         [trimmed]
       ),
       db.query(
-        `SELECT g.id, g.asing, g.indonesia, g.bahasa,
+        `SELECT g.id, g.asing, g.indonesia,
+                g.bahasa_id, ba.kode AS bahasa_kode, ba.nama AS bahasa,
                 b.kode AS bidang_kode, b.nama AS bidang,
                 s.kode AS sumber_kode, s.nama AS sumber
          FROM glosarium g
          JOIN bidang b ON b.id = g.bidang_id
          JOIN sumber s ON s.id = g.sumber_id
+         LEFT JOIN bahasa ba ON ba.id = g.bahasa_id
          WHERE g.aktif = TRUE
            AND LOWER(g.asing) != LOWER($1)
            AND LOWER(g.asing) LIKE ('%' || LOWER($1) || '%')
@@ -1242,12 +1401,14 @@ class ModelGlosarium {
         [trimmed]
       ),
       db.query(
-        `SELECT g.id, g.asing, g.indonesia, g.bahasa,
+        `SELECT g.id, g.asing, g.indonesia,
+                g.bahasa_id, ba.kode AS bahasa_kode, ba.nama AS bahasa,
                 b.kode AS bidang_kode, b.nama AS bidang,
                 s.kode AS sumber_kode, s.nama AS sumber
          FROM glosarium g
          JOIN bidang b ON b.id = g.bidang_id
          JOIN sumber s ON s.id = g.sumber_id
+         LEFT JOIN bahasa ba ON ba.id = g.bahasa_id
          WHERE g.aktif = TRUE
            AND LOWER(g.asing) != LOWER($1)
            AND NOT (

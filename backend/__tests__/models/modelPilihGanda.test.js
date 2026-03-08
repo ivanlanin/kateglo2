@@ -248,6 +248,8 @@ describe('ModelPilihGanda', () => {
       jawaban: 1,
       pilihan: ['papan tik', 'tetikus'],
     }));
+    expect(db.query.mock.calls[0][0]).toContain('JOIN bahasa ba ON ba.id = g.bahasa_id');
+    expect(db.query.mock.calls[0][0]).toContain("ba.iso2 = 'en'");
     randomSpy.mockRestore();
 
     db.query.mockReset();

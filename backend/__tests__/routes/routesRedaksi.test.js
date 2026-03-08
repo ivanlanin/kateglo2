@@ -54,6 +54,7 @@ jest.mock('../../models/modelGlosarium', () => ({
   simpan: jest.fn(),
   hapus: jest.fn(),
   hitungTotalBidang: jest.fn(),
+  hitungTotalBahasa: jest.fn(),
   hitungTotalSumber: jest.fn(),
   hitungTotal: jest.fn(),
 }));
@@ -375,6 +376,7 @@ describe('routes/redaksi', () => {
       ModelTagar.hitungTotal.mockResolvedValue(145);
       ModelLabel.hitungTotal.mockResolvedValue(40);
       ModelGlosarium.hitungTotalBidang.mockResolvedValue(70);
+      ModelGlosarium.hitungTotalBahasa.mockResolvedValue(71);
       ModelGlosarium.hitungTotalSumber.mockResolvedValue(80);
       ModelPengguna.hitungTotal.mockResolvedValue(50);
       ModelKomentar.hitungTotal.mockResolvedValue(60);
@@ -395,6 +397,7 @@ describe('routes/redaksi', () => {
         tagar: 145,
         label: 40,
         bidang: 70,
+        bahasa: 71,
         sumber: 80,
         pengguna: 50,
         komentar: 60,
@@ -1713,6 +1716,21 @@ describe('routes/redaksi', () => {
       expect(post.body.message).toBe('Urutan harus bilangan bulat >= 1');
       expect(put.status).toBe(400);
       expect(put.body.message).toBe('Urutan harus bilangan bulat >= 1');
+    });
+
+    it('POST/PUT /api/redaksi/label menolak kategori master bahasa dan bidang', async () => {
+      const post = await callAsAdmin('post', '/api/redaksi/label', {
+        body: { kategori: 'bahasa', kode: 'Ing', nama: 'Inggris' },
+      });
+
+      const put = await callAsAdmin('put', '/api/redaksi/label/1', {
+        body: { kategori: 'bidang', kode: 'Kim', nama: 'Kimia' },
+      });
+
+      expect(post.status).toBe(400);
+      expect(post.body.message).toBe('Kategori bahasa dan bidang dikelola lewat menu master masing-masing');
+      expect(put.status).toBe(400);
+      expect(put.body.message).toBe('Kategori bahasa dan bidang dikelola lewat menu master masing-masing');
     });
 
     it('POST/PUT /api/redaksi/label validasi status aktif tidak valid', async () => {

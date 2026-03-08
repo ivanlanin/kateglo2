@@ -21,6 +21,7 @@ const kartuData = [
   { key: 'tagar', label: 'Tagar', warna: 'text-pink-600', link: '/redaksi/tagar', izin: 'kelola_tagar' },
   { key: 'label', label: 'Label', warna: 'text-cyan-600', link: '/redaksi/label', izin: 'kelola_label' },
   { key: 'bidang', label: 'Bidang', warna: 'text-sky-600', link: '/redaksi/bidang', izin: 'kelola_bidang' },
+  { key: 'bahasa', label: 'Bahasa', warna: 'text-blue-500', link: '/redaksi/bahasa', izin: 'kelola_bahasa' },
   { key: 'sumber', label: 'Sumber', warna: 'text-teal-600', link: '/redaksi/sumber', izin: 'kelola_sumber' },
   { key: 'pengguna', label: 'Pengguna', warna: 'text-purple-600', link: '/redaksi/pengguna', izin: 'kelola_pengguna' },
 ];

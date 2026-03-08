@@ -21,21 +21,23 @@ describe('ModelLabel', () => {
   });
 
   it('ambilSemuaKategori mengelompokkan label serta menambah abjad, bentuk, ekspresi, kelas, dan unsur terikat', async () => {
-    db.query.mockResolvedValue({
-      rows: [
-        { kategori: 'ragam', kode: 'cak', nama: 'cakapan' },
-        { kategori: 'ragam', kode: 'horm', nama: 'hormat' },
-        { kategori: 'ragam', kode: 'ark', nama: 'arkais' },
-        { kategori: 'ragam', kode: 'ksr', nama: 'kasar' },
-        { kategori: 'ragam', kode: 'kls', nama: 'klasik' },
-        { kategori: 'bahasa', kode: 'id', nama: 'Indonesia' },
-        { kategori: 'kelas_kata', kode: 'n', nama: 'nomina' },
-        { kategori: 'kelas_kata', kode: 'adv', nama: 'adverbia' },
-        { kategori: 'kelas_kata', kode: 'prefiks', nama: 'prefiks' },
-        { kategori: 'kelas_kata', kode: 'v', nama: 'verba' },
-        { kategori: 'kelas_kata', kode: 'bentuk_terikat', nama: 'bentuk terikat' },
-      ],
-    });
+    db.query
+      .mockResolvedValueOnce({
+        rows: [
+          { kategori: 'ragam', kode: 'cak', nama: 'cakapan' },
+          { kategori: 'ragam', kode: 'horm', nama: 'hormat' },
+          { kategori: 'ragam', kode: 'ark', nama: 'arkais' },
+          { kategori: 'ragam', kode: 'ksr', nama: 'kasar' },
+          { kategori: 'ragam', kode: 'kls', nama: 'klasik' },
+          { kategori: 'kelas_kata', kode: 'n', nama: 'nomina' },
+          { kategori: 'kelas_kata', kode: 'adv', nama: 'adverbia' },
+          { kategori: 'kelas_kata', kode: 'prefiks', nama: 'prefiks' },
+          { kategori: 'kelas_kata', kode: 'v', nama: 'verba' },
+          { kategori: 'kelas_kata', kode: 'bentuk_terikat', nama: 'bentuk terikat' },
+        ],
+      })
+      .mockResolvedValueOnce({ rows: [{ kode: 'id', nama: 'Indonesia' }] })
+      .mockResolvedValueOnce({ rows: [] });
 
     const result = await ModelLabel.ambilSemuaKategori();
 
@@ -97,15 +99,18 @@ describe('ModelLabel', () => {
   });
 
   it('ambilSemuaKategori mengurutkan prioritas dan fallback alfabet untuk label non-prioritas', async () => {
-    db.query.mockResolvedValue({
-      rows: [
-        { kategori: 'ragam', kode: 'umum', nama: 'umum' },
-        { kategori: 'ragam', kode: 'cak', nama: 'cakapan' },
-        { kategori: 'ragam', kode: 'baku', nama: 'baku' },
-        { kategori: 'kelas_kata', kode: 'verba', nama: 'kata kerja' },
-        { kategori: 'kelas_kata', kode: 'x', nama: 'tak dikenal' },
-      ],
-    });
+    db.query
+      .mockResolvedValueOnce({
+        rows: [
+          { kategori: 'ragam', kode: 'umum', nama: 'umum' },
+          { kategori: 'ragam', kode: 'cak', nama: 'cakapan' },
+          { kategori: 'ragam', kode: 'baku', nama: 'baku' },
+          { kategori: 'kelas_kata', kode: 'verba', nama: 'kata kerja' },
+          { kategori: 'kelas_kata', kode: 'x', nama: 'tak dikenal' },
+        ],
+      })
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [] });
 
     const result = await ModelLabel.ambilSemuaKategori();
 
@@ -127,12 +132,14 @@ describe('ModelLabel', () => {
   });
 
   it('ambilSemuaKategori tetap aman saat kategori ragam/kelas_kata kosong atau nilai label tidak lengkap', async () => {
-    db.query.mockResolvedValue({
-      rows: [
-        { kategori: 'bahasa', kode: 'id', nama: 'Indonesia' },
-        { kategori: 'ragam', kode: null, nama: null },
-      ],
-    });
+    db.query
+      .mockResolvedValueOnce({
+        rows: [
+          { kategori: 'ragam', kode: null, nama: null },
+        ],
+      })
+      .mockResolvedValueOnce({ rows: [{ kode: 'id', nama: 'Indonesia' }] })
+      .mockResolvedValueOnce({ rows: [] });
 
     const result = await ModelLabel.ambilSemuaKategori();
 
@@ -151,14 +158,17 @@ describe('ModelLabel', () => {
   });
 
   it('ambilSemuaKategori mengurutkan ragam saat nama/kode tidak lengkap dengan fallback aman', async () => {
-    db.query.mockResolvedValue({
-      rows: [
-        { kategori: 'ragam', kode: null, nama: null },
-        { kategori: 'ragam', kode: null, nama: null },
-        { kategori: 'ragam', kode: 'zz', nama: null },
-        { kategori: 'ragam', kode: 'aa', nama: '' },
-      ],
-    });
+    db.query
+      .mockResolvedValueOnce({
+        rows: [
+          { kategori: 'ragam', kode: null, nama: null },
+          { kategori: 'ragam', kode: null, nama: null },
+          { kategori: 'ragam', kode: 'zz', nama: null },
+          { kategori: 'ragam', kode: 'aa', nama: '' },
+        ],
+      })
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [] });
 
     const result = await ModelLabel.ambilSemuaKategori();
 
@@ -1264,27 +1274,35 @@ describe('ModelLabel', () => {
   });
 
   it('ambilKategoriUntukRedaksi memakai daftar default dan normalisasi kategori', async () => {
-    db.query.mockResolvedValue({
-      rows: [
-        { kategori: 'kelas_kata', kode: 'n', nama: 'nomina' },
-        { kategori: 'kelas-kata', kode: 'v', nama: 'verba' },
-        { kategori: 'kelas-kata', kode: 'v', nama: 'verba' },
-        { kategori: 'ragam', kode: 'cak', nama: 'cakapan' },
-        { kategori: 'asing', kode: 'x', nama: 'abaikan' },
-      ],
-    });
+    db.query
+      .mockResolvedValueOnce({
+        rows: [
+          { kategori: 'kelas_kata', kode: 'n', nama: 'nomina' },
+          { kategori: 'kelas-kata', kode: 'v', nama: 'verba' },
+          { kategori: 'kelas-kata', kode: 'v', nama: 'verba' },
+          { kategori: 'ragam', kode: 'cak', nama: 'cakapan' },
+          { kategori: 'asing', kode: 'x', nama: 'abaikan' },
+        ],
+      })
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [{ kode: 'id', nama: 'Indonesia' }] });
 
     const result = await ModelLabel.ambilKategoriUntukRedaksi();
 
-    expect(db.query).toHaveBeenCalledWith(
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
       expect.stringContaining('WHERE kategori = ANY($1::text[])'),
-      [expect.arrayContaining(['kelas-kata', 'kelas_kata', 'ragam', 'bidang', 'bahasa'])]
+      [expect.arrayContaining(['kelas-kata', 'kelas_kata', 'ragam'])]
     );
+    expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('FROM bidang'));
+    expect(db.query).toHaveBeenNthCalledWith(3, expect.stringContaining('FROM bahasa'));
     expect(result['kelas-kata']).toEqual([
       { kode: 'n', nama: 'nomina' },
       { kode: 'v', nama: 'verba' },
     ]);
     expect(result.ragam).toEqual([{ kode: 'cak', nama: 'cakapan' }]);
+    expect(result.bahasa).toEqual([{ kode: 'id', nama: 'Indonesia' }]);
+    expect(result.bidang).toEqual([]);
     expect(result).toHaveProperty('bentuk-kata');
     expect(result).toHaveProperty('jenis-rujuk');
     expect(result).toHaveProperty('penyingkatan');

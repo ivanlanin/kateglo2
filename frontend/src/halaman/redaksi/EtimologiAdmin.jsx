@@ -10,6 +10,7 @@ import {
   useAutocompleteEntriEtimologi,
   useSimpanEtimologi,
   useHapusEtimologi,
+  useDaftarBahasaAdmin,
   useDaftarSumberAdmin,
 } from '../../api/apiAdmin';
 import TataLetak from '../../komponen/bersama/TataLetak';
@@ -39,46 +40,11 @@ import {
 } from '../../komponen/redaksi/FormulirAdmin';
 import { buatPathDetailKamus, parsePositiveIntegerParam } from '../../utils/paramUtils';
 
-const daftarBahasaEtimologi = [
-  'Amoy',
-  'Arab',
-  'Belanda',
-  'Hindi',
-  'Ibrani',
-  'Inggris',
-  'Italia',
-  'Jawa',
-  'Jepang',
-  'Jerman',
-  'Kanton',
-  'Latin',
-  'Mandarin',
-  'Persia',
-  'Portugis',
-  'Prancis',
-  'Rusia',
-  'Sanskerta',
-  'Spanyol',
-  'Tamil',
-  'Yunani',
-].sort((a, b) => a.localeCompare(b, 'id'));
-
-const opsiBahasaFormEtimologi = [
-  { value: '', label: 'Pilih bahasa' },
-  ...daftarBahasaEtimologi.map((bahasa) => ({ value: bahasa, label: bahasa })),
-];
-
-const opsiBahasaFilterEtimologi = [
-  { value: '', label: '—Bahasa—' },
-  { value: '__KOSONG__', label: '—Kosong—' },
-  ...daftarBahasaEtimologi.map((bahasa) => ({ value: bahasa, label: bahasa })),
-];
-
 const nilaiAwal = {
   indeks: '',
   homonim: '',
   lafal: '',
-  bahasa: '',
+  bahasa_id: '',
   kata_asal: '',
   arti_asal: '',
   sumber_id: '',
@@ -185,7 +151,24 @@ function EtimologiAdmin() {
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
 
+  const { data: bahasaResp } = useDaftarBahasaAdmin({ limit: 500 });
   const { data: sumberResp } = useDaftarSumberAdmin({ limit: 200, etimologi: '1' });
+  const daftarBahasa = bahasaResp?.data || [];
+  const opsiBahasaFormEtimologi = [
+    { value: '', label: 'Pilih bahasa' },
+    ...daftarBahasa.map((item) => ({
+      value: String(item.id),
+      label: item.kode ? `${item.nama} (${item.kode})` : item.nama,
+    })),
+  ];
+  const opsiBahasaFilterEtimologi = [
+    { value: '', label: '—Bahasa—' },
+    { value: '__KOSONG__', label: '—Kosong—' },
+    ...daftarBahasa.map((item) => ({
+      value: item.kode,
+      label: item.kode ? `${item.nama} (${item.kode})` : item.nama,
+    })),
+  ];
   const opsiSumber = (sumberResp?.data || []).map((item) => ({ value: String(item.id), label: item.nama }));
 
   const panel = useFormPanel(nilaiAwal);
@@ -289,7 +272,12 @@ function EtimologiAdmin() {
       return;
     }
 
-    simpan.mutate(panel.data, {
+    const payload = {
+      ...panel.data,
+      bahasa_id: panel.data.bahasa_id ? Number(panel.data.bahasa_id) : null,
+    };
+
+    simpan.mutate(payload, {
       onSuccess: () => {
         setPesan({ error: '', sukses: 'Tersimpan!' });
         setTimeout(() => tutupPanel(), 600);
@@ -448,8 +436,8 @@ function EtimologiAdmin() {
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             <SelectField
               label="Bahasa"
-              name="bahasa"
-              value={panel.data.bahasa}
+              name="bahasa_id"
+              value={String(panel.data.bahasa_id || '')}
               onChange={panel.ubahField}
               options={opsiBahasaFormEtimologi}
             />

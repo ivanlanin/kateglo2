@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-05T09:47:38.668Z
+-- Generated: 2026-03-08T14:54:53.912Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -181,6 +181,26 @@ create trigger trg_set_timestamp_fields__audit_makna
   for each row
   execute function set_timestamp_fields();
 
+create table bahasa (
+  id serial primary key,
+  kode text not null,
+  nama text not null,
+  iso2 text,
+  iso3 text,
+  aktif boolean not null default true,
+  keterangan text,
+  created_at timestamp without time zone not null default now(),
+  updated_at timestamp without time zone not null default now(),
+  constraint bahasa_kode_key unique (kode),
+  constraint bahasa_nama_key unique (nama)
+);
+create unique index bahasa_kode_key on bahasa using btree (kode);
+create unique index bahasa_nama_key on bahasa using btree (nama);
+create trigger trg_set_timestamp_fields__bahasa
+  before insert or update on bahasa
+  for each row
+  execute function set_timestamp_fields();
+
 create table bidang (
   id serial primary key,
   kode text not null,
@@ -282,7 +302,6 @@ create table etimologi (
   entri_id integer references entri(id) on delete set null,
   homonim integer,
   lafal text,
-  bahasa text,
   sumber_sitasi text,
   sumber_isi text,
   sumber_aksara text,
@@ -297,10 +316,11 @@ create table etimologi (
   arti_asal text,
   sumber_id integer references sumber(id) on delete restrict on update cascade,
   meragukan boolean not null default false,
+  bahasa_id integer references bahasa(id) on delete set null on update cascade,
   constraint etimologi_indeks_check check (TRIM(BOTH FROM indeks) <> ''::text)
 );
 create index idx_etimologi_aktif on etimologi using btree (aktif);
-create index idx_etimologi_bahasa on etimologi using btree (bahasa);
+create index idx_etimologi_bahasa_id on etimologi using btree (bahasa_id);
 create index idx_etimologi_created_at on etimologi using btree (created_at DESC);
 create index idx_etimologi_entri_id on etimologi using btree (entri_id);
 create index idx_etimologi_indeks on etimologi using btree (indeks);
@@ -331,7 +351,6 @@ create table glosarium (
   id serial primary key,
   indonesia text not null,
   asing text not null,
-  bahasa text not null default 'en'::text,
   wpid text,
   wpen text,
   updated timestamp without time zone,
@@ -341,13 +360,15 @@ create table glosarium (
   updated_at timestamp without time zone not null default now(),
   aktif boolean not null default true,
   bidang_id integer references bidang(id) on delete restrict on update cascade not null,
-  sumber_id integer references sumber(id) on delete restrict on update cascade not null
+  sumber_id integer references sumber(id) on delete restrict on update cascade not null,
+  bahasa_id integer references bahasa(id) on delete restrict on update cascade not null
 );
-create index idx_glosarium_aktif_bahasa_indonesia on glosarium using btree (bahasa, indonesia) WHERE (aktif = true);
+create index idx_glosarium_aktif_bahasa_id_indonesia on glosarium using btree (bahasa_id, indonesia) WHERE (aktif = true);
 create index idx_glosarium_aktif_bidang_id_asing on glosarium using btree (bidang_id, asing) WHERE (aktif = true);
 create index idx_glosarium_aktif_sumber_id_asing on glosarium using btree (sumber_id, asing) WHERE (aktif = true);
 create index idx_glosarium_asing on glosarium using btree (asing);
 create index idx_glosarium_asing_trgm on glosarium using gin (asing gin_trgm_ops);
+create index idx_glosarium_bahasa_id on glosarium using btree (bahasa_id);
 create index idx_glosarium_bidang_id on glosarium using btree (bidang_id);
 create index idx_glosarium_indonesia on glosarium using btree (indonesia);
 create index idx_glosarium_indonesia_lower_trgm on glosarium using gin (lower(indonesia) gin_trgm_ops);

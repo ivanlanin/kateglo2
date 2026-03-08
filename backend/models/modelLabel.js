@@ -26,6 +26,10 @@ const URUTAN_KELAS_KATA = ['nomina', 'verba', 'adjektiva', 'adverbia', 'pronomin
 const URUTAN_UNSUR_TERIKAT = ['terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik', 'prakategorial'];
 const URUTAN_RAGAM = ['arkais', 'klasik', 'hormat', 'cakapan', 'kasar'];
 const KATEGORI_LABEL_REDAKSI = ['bentuk-kata', 'jenis-rujuk', 'kelas-kata', 'ragam', 'bidang', 'bahasa', 'penyingkatan'];
+const MASTER_KATEGORI_TABLE = {
+  bahasa: 'bahasa',
+  bidang: 'bidang',
+};
 
 function normalisasiKategoriLabel(kategori = '') {
   const value = String(kategori || '').trim();
@@ -132,6 +136,52 @@ function buildAdminLabelWhereClause({ q = '', aktif = '' } = {}) {
     conditions,
     params,
   };
+}
+
+function getMasterKategoriTable(kategori = '') {
+  return MASTER_KATEGORI_TABLE[kategori] || '';
+}
+
+async function ambilDaftarLabelMaster(kategori = '') {
+  const tableName = getMasterKategoriTable(kategori);
+  if (!tableName) return [];
+
+  const result = await db.query(
+    `SELECT kode, nama
+     FROM ${tableName}
+     WHERE aktif = TRUE
+     ORDER BY nama ASC, kode ASC`
+  );
+
+  return result.rows.map((row) => ({ kode: row.kode, nama: row.nama }));
+}
+
+async function ambilLabelMaster(kategori = '', kodeLower = '', kodeSlug = '') {
+  const tableName = getMasterKategoriTable(kategori);
+  if (!tableName) return null;
+
+  const result = await db.query(
+    `SELECT kode, nama, keterangan
+     FROM ${tableName}
+     WHERE aktif = TRUE
+       AND (
+         LOWER(TRIM(kode)) = $1
+         OR LOWER(TRIM(nama)) = $1
+         OR TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(kode)), '[^a-z0-9]+', '-', 'g')) = $2
+         OR TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(nama)), '[^a-z0-9]+', '-', 'g')) = $2
+       )
+     ORDER BY
+       CASE WHEN LOWER(TRIM(nama)) = $1 THEN 0 ELSE 1 END,
+       CASE WHEN LOWER(TRIM(kode)) = $1 THEN 0 ELSE 1 END,
+       CASE WHEN TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(nama)), '[^a-z0-9]+', '-', 'g')) = $2 THEN 0 ELSE 1 END,
+       CASE WHEN TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(kode)), '[^a-z0-9]+', '-', 'g')) = $2 THEN 0 ELSE 1 END,
+       nama ASC,
+       kode ASC
+     LIMIT 1`,
+    [kodeLower, kodeSlug]
+  );
+
+  return result.rows[0] || null;
 }
 
 class ModelLabel {
@@ -288,6 +338,14 @@ class ModelLabel {
     // Alias kompatibilitas untuk route lama /kamus/jenis/:kode
     grouped.jenis = JENIS_SEMUA.map((jenis) => ({ kode: jenis, nama: jenis }));
 
+    const [bahasaMaster, bidangMaster] = await Promise.all([
+      ambilDaftarLabelMaster('bahasa'),
+      ambilDaftarLabelMaster('bidang'),
+    ]);
+
+    grouped.bahasa = bahasaMaster;
+    grouped.bidang = bidangMaster;
+
     return grouped;
   }
 
@@ -402,29 +460,32 @@ class ModelLabel {
       return { data: [], total: 0, label: null };
     }
 
-    const kategoriKandidat = kandidatKategoriLabel(kategoriNormal);
-
-    // Ambil info label (kode + nama) untuk pencocokan ganda
-    const labelResult = await db.query(
-      `SELECT kategori, kode, nama, keterangan
-       FROM label
-       WHERE kategori = ANY($1::text[]) AND aktif = TRUE
-         AND (
-           LOWER(TRIM(kode)) = $2
-           OR LOWER(TRIM(nama)) = $2
-           OR TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(kode)), '[^a-z0-9]+', '-', 'g')) = $3
-           OR TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(nama)), '[^a-z0-9]+', '-', 'g')) = $3
-         )
-       ORDER BY
-         CASE WHEN LOWER(TRIM(nama)) = $2 THEN 0 ELSE 1 END,
-         CASE WHEN LOWER(TRIM(kode)) = $2 THEN 0 ELSE 1 END,
-         CASE WHEN TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(nama)), '[^a-z0-9]+', '-', 'g')) = $3 THEN 0 ELSE 1 END,
-         CASE WHEN TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(kode)), '[^a-z0-9]+', '-', 'g')) = $3 THEN 0 ELSE 1 END,
-         CASE WHEN kategori = $4 THEN 0 ELSE 1 END
-       LIMIT 1`,
-      [kategoriKandidat, kodeLower, kodeSlug, kategoriNormal]
-    );
-    const label = labelResult.rows[0] || null;
+    let label = null;
+    if (getMasterKategoriTable(kategoriNormal)) {
+      label = await ambilLabelMaster(kategoriNormal, kodeLower, kodeSlug);
+    } else {
+      const kategoriKandidat = kandidatKategoriLabel(kategoriNormal);
+      const labelResult = await db.query(
+        `SELECT kategori, kode, nama, keterangan
+         FROM label
+         WHERE kategori = ANY($1::text[]) AND aktif = TRUE
+           AND (
+             LOWER(TRIM(kode)) = $2
+             OR LOWER(TRIM(nama)) = $2
+             OR TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(kode)), '[^a-z0-9]+', '-', 'g')) = $3
+             OR TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(nama)), '[^a-z0-9]+', '-', 'g')) = $3
+           )
+         ORDER BY
+           CASE WHEN LOWER(TRIM(nama)) = $2 THEN 0 ELSE 1 END,
+           CASE WHEN LOWER(TRIM(kode)) = $2 THEN 0 ELSE 1 END,
+           CASE WHEN TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(nama)), '[^a-z0-9]+', '-', 'g')) = $3 THEN 0 ELSE 1 END,
+           CASE WHEN TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(kode)), '[^a-z0-9]+', '-', 'g')) = $3 THEN 0 ELSE 1 END,
+           CASE WHEN kategori = $4 THEN 0 ELSE 1 END
+         LIMIT 1`,
+        [kategoriKandidat, kodeLower, kodeSlug, kategoriNormal]
+      );
+      label = labelResult.rows[0] || null;
+    }
 
     if (kategoriNormal === 'kelas-kata') {
       if (!label) {
@@ -607,27 +668,32 @@ class ModelLabel {
       return { data: [], total: 0, label: null, hasNext: false, hasPrev: false, nextCursor: null, prevCursor: null };
     }
 
-    const kategoriKandidat = kandidatKategoriLabel(kategoriNormal);
-    const labelResult = await db.query(
-      `SELECT kategori, kode, nama, keterangan
-       FROM label
-       WHERE kategori = ANY($1::text[]) AND aktif = TRUE
-         AND (
-           LOWER(TRIM(kode)) = $2
-           OR LOWER(TRIM(nama)) = $2
-           OR TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(kode)), '[^a-z0-9]+', '-', 'g')) = $3
-           OR TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(nama)), '[^a-z0-9]+', '-', 'g')) = $3
-         )
-       ORDER BY
-         CASE WHEN LOWER(TRIM(nama)) = $2 THEN 0 ELSE 1 END,
-         CASE WHEN LOWER(TRIM(kode)) = $2 THEN 0 ELSE 1 END,
-         CASE WHEN TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(nama)), '[^a-z0-9]+', '-', 'g')) = $3 THEN 0 ELSE 1 END,
-         CASE WHEN TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(kode)), '[^a-z0-9]+', '-', 'g')) = $3 THEN 0 ELSE 1 END,
-         CASE WHEN kategori = $4 THEN 0 ELSE 1 END
-       LIMIT 1`,
-      [kategoriKandidat, kodeLower, kodeSlug, kategoriNormal]
-    );
-    const label = labelResult.rows[0] || null;
+    let label = null;
+    if (getMasterKategoriTable(kategoriNormal)) {
+      label = await ambilLabelMaster(kategoriNormal, kodeLower, kodeSlug);
+    } else {
+      const kategoriKandidat = kandidatKategoriLabel(kategoriNormal);
+      const labelResult = await db.query(
+        `SELECT kategori, kode, nama, keterangan
+         FROM label
+         WHERE kategori = ANY($1::text[]) AND aktif = TRUE
+           AND (
+             LOWER(TRIM(kode)) = $2
+             OR LOWER(TRIM(nama)) = $2
+             OR TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(kode)), '[^a-z0-9]+', '-', 'g')) = $3
+             OR TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(nama)), '[^a-z0-9]+', '-', 'g')) = $3
+           )
+         ORDER BY
+           CASE WHEN LOWER(TRIM(nama)) = $2 THEN 0 ELSE 1 END,
+           CASE WHEN LOWER(TRIM(kode)) = $2 THEN 0 ELSE 1 END,
+           CASE WHEN TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(nama)), '[^a-z0-9]+', '-', 'g')) = $3 THEN 0 ELSE 1 END,
+           CASE WHEN TRIM(BOTH '-' FROM REGEXP_REPLACE(LOWER(TRIM(kode)), '[^a-z0-9]+', '-', 'g')) = $3 THEN 0 ELSE 1 END,
+           CASE WHEN kategori = $4 THEN 0 ELSE 1 END
+         LIMIT 1`,
+        [kategoriKandidat, kodeLower, kodeSlug, kategoriNormal]
+      );
+      label = labelResult.rows[0] || null;
+    }
 
     if (kategoriNormal === 'kelas-kata') {
       if (!label) {
@@ -675,22 +741,32 @@ class ModelLabel {
       return {};
     }
 
-    const kategoriQuery = [...new Set(uniqueRequested.flatMap((item) => kandidatKategoriLabel(item)))];
-
-    const result = await db.query(
-      `SELECT kategori, kode, nama, urutan
-       FROM label
-       WHERE kategori = ANY($1::text[]) AND aktif = TRUE
-       ORDER BY kategori ASC, urutan ASC, nama ASC, kode ASC`,
-      [kategoriQuery]
-    );
-
     const grouped = Object.fromEntries(uniqueRequested.map((kategori) => [kategori, []]));
 
-    for (const row of result.rows) {
-      const normalizedKategori = normalisasiKategoriLabel(row.kategori);
-      if (!grouped[normalizedKategori]) continue;
-      pushLabelUnik(grouped, normalizedKategori, { kode: row.kode, nama: row.nama });
+    const kategoriLabelBiasa = uniqueRequested.filter((item) => !getMasterKategoriTable(item));
+    if (kategoriLabelBiasa.length) {
+      const kategoriQuery = [...new Set(kategoriLabelBiasa.flatMap((item) => kandidatKategoriLabel(item)))];
+      const result = await db.query(
+        `SELECT kategori, kode, nama, urutan
+         FROM label
+         WHERE kategori = ANY($1::text[]) AND aktif = TRUE
+         ORDER BY kategori ASC, urutan ASC, nama ASC, kode ASC`,
+        [kategoriQuery]
+      );
+
+      for (const row of result.rows) {
+        const normalizedKategori = normalisasiKategoriLabel(row.kategori);
+        if (!grouped[normalizedKategori]) continue;
+        pushLabelUnik(grouped, normalizedKategori, { kode: row.kode, nama: row.nama });
+      }
+    }
+
+    const kategoriMaster = uniqueRequested.filter((item) => getMasterKategoriTable(item));
+    if (kategoriMaster.length) {
+      const hasilMaster = await Promise.all(kategoriMaster.map((item) => ambilDaftarLabelMaster(item)));
+      kategoriMaster.forEach((kategori, index) => {
+        grouped[kategori] = hasilMaster[index];
+      });
     }
 
     return grouped;
