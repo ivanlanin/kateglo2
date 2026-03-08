@@ -98,13 +98,13 @@ describe('formatUtils.test.js', () => {
     expect(result).toEqual(['akses', '; ', 'data']);
   });
 
-  it('parseEntriGlosarium menghapus awalan angka dengan titik opsional', () => {
-    const result = parseEntriGlosarium('1 asal-usul; 2. aser; 3. bayar dam');
-    expect(result).toEqual(['asal-usul', '; ', 'aser', '; ', 'bayar dam']);
+  it('parseEntriGlosarium mempertahankan awalan angka yang merupakan bagian dari istilah', () => {
+    const result = parseEntriGlosarium('1H-imidazola; 4-aminoetil');
+    expect(result).toEqual(['1H-imidazola', '; ', '4-aminoetil']);
   });
 
   it('parseEntriGlosarium mendukung renderer tautan per bagian', () => {
-    const nodes = parseEntriGlosarium('1. dam; 2 darah', (part, index) => createElement('a', { href: `/kamus/detail/${part}`, key: index }, part));
+    const nodes = parseEntriGlosarium('dam; darah', (part, index) => createElement('a', { href: `/kamus/detail/${part}`, key: index }, part));
     render(createElement(Fragment, null, ...nodes));
 
     expect(screen.getByRole('link', { name: 'dam' })).toHaveAttribute('href', '/kamus/detail/dam');
@@ -112,9 +112,9 @@ describe('formatUtils.test.js', () => {
     expect(screen.getByText(';')).toBeInTheDocument();
   });
 
-  it('parseEntriGlosarium mengembalikan kosong saat semua bagian terfilter dan renderer non-fungsi', () => {
-    expect(parseEntriGlosarium('1 ; 2 ; 3 .')).toEqual([]);
-    expect(parseEntriGlosarium('1. data; 2. informasi', {})).toEqual(['data', '; ', 'informasi']);
+  it('parseEntriGlosarium mengembalikan kosong untuk input kosong dan renderer non-fungsi', () => {
+    expect(parseEntriGlosarium('; ; ')).toEqual([]);
+    expect(parseEntriGlosarium('data; informasi', {})).toEqual(['data', '; ', 'informasi']);
   });
 
   it('parseEntriGlosarium mengembalikan array kosong untuk input kosong/null', () => {

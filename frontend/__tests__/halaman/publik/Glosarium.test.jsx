@@ -92,7 +92,7 @@ describe('Glosarium', () => {
       if (key === 'glosarium-sumber') return { data: [], isLoading: false, isError: false };
       return {
         data: {
-          data: [{ id: 1, indonesia: '1 istilah; 2 data', asing: 'term' }],
+          data: [{ id: 1, indonesia: 'istilah; data', asing: 'term' }],
           total: 1,
           pageInfo: { hasPrev: false, hasNext: true, nextCursor: 'CUR_NEXT' },
         },

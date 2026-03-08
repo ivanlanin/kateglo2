@@ -82,7 +82,7 @@ function splitEntriGlosarium(value = '') {
 
   return text
     .split(';')
-    .map((part) => part.replace(/^\s*\d+\s*\.?\s*/, '').trim())
+    .map((part) => part.trim())
     .filter(Boolean);
 }
 

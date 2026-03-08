@@ -1,0 +1,23 @@
+-- Membersihkan format penomoran lama di kolom indonesia tabel glosarium.
+-- Format lama: "1 makna1; 2 makna2; 3 makna3" atau "1. makna1; 2. makna2"
+-- Format baru: "makna1; makna2; makna3"
+--
+-- Total yang diubah: 177 baris (176 otomatis + 1 salah ketik tanpa spasi)
+-- Kolom asing tidak terpengaruh (sudah dicek, tidak ada format penomoran).
+--
+-- Perubahan ini berpasangan dengan penghapusan strip angka di frontend
+-- (splitEntriGlosarium di formatUtils.js), sehingga istilah valid berawalan
+-- angka (misal "1H-imidazola", "4-aminoetilglioksalina") tampil dengan benar.
+--
+-- Dieksekusi langsung via skrip JS pada 2026-03-08. SQL ini untuk dokumentasi.
+-- Untuk rollback, diperlukan restore dari backup sebelum tanggal ini.
+
+-- Format tanpa titik: "1 makna; 2 makna"
+-- Format dengan titik: "1. makna; 2. makna"
+-- Format tanpa spasi (salah ketik): "1makna; 2 makna"
+--
+-- Contoh perubahan:
+--   "1 penumpuk; 2 aki"                  → "penumpuk; aki"
+--   "1. pengimbuhan; 2. oksidasi"        → "pengimbuhan; oksidasi"
+--   "1. skala; 2. neraca kasar; 3. ..."  → "skala; neraca kasar; ..."
+--   "1daerah sekitar dubur; 2 bulunggas" → "daerah sekitar dubur; bulunggas"

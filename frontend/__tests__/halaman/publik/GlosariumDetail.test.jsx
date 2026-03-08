@@ -253,7 +253,7 @@ describe('GlosariumDetail', () => {
       error: null,
       data: {
         persis: [
-          { id: 1, indonesia: '1 istilah; 2 data', bidang: 'Kimia', bidang_kode: 'kim', sumber: 'KBBI', sumber_kode: 'kbbi' },
+          { id: 1, indonesia: 'istilah; data', bidang: 'Kimia', bidang_kode: 'kim', sumber: 'KBBI', sumber_kode: 'kbbi' },
           { id: 2, indonesia: 'tanpa badge' },
         ],
         mengandung: [
