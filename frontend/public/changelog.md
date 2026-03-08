@@ -6,6 +6,7 @@
 - Mengubah tampilan paginasi dan daftar hasil pencarian
 - Menyamakan data master bahasa dan bidang di kamus, glosarium, dan etimologi
 - Menghapus kategori label "sumber" dan memindahkannya ke tabel sumber
+- Menganalisis entri singkatan di KBBI
 
 ## 2026-03-07 Sabtu
 
