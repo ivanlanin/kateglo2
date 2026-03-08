@@ -29,7 +29,7 @@ function DaftarRima({
         <Link
           key={item.indeks}
           to={buatPathDetailKamus(item.indeks)}
-          className="kamus-detail-subentry-link rima-hasil-link"
+          className="kamus-detail-subentry-link rima-hasil-link hasil-entry-link"
         >
           {item.indeks}
         </Link>

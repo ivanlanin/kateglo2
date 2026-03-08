@@ -5,7 +5,7 @@ import Paginasi from '../../../src/komponen/bersama/Paginasi';
 describe('Paginasi', () => {
   it('tetap menampilkan info jika total halaman <= 1 tanpa kontrol navigasi', () => {
     render(<Paginasi total={10} limit={20} offset={0} onChange={vi.fn()} />);
-    expect(screen.getByText(/Menampilkan 1–10 dari 10 entri/i)).toBeInTheDocument();
+    expect(screen.getByText(/1–10 dari 10 entri/i)).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Halaman pertama' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Halaman sebelumnya' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Halaman berikutnya' })).not.toBeInTheDocument();
@@ -15,7 +15,7 @@ describe('Paginasi', () => {
   it('menampilkan rentang dan tombol navigasi ikon', () => {
     render(<Paginasi total={120} limit={20} offset={20} onChange={vi.fn()} />);
 
-    expect(screen.getByText(/Menampilkan 21–40 dari 120 entri/i)).toBeInTheDocument();
+    expect(screen.getByText(/21–40 dari 120 entri/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Halaman pertama' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Halaman sebelumnya' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Halaman berikutnya' })).toBeInTheDocument();
@@ -153,6 +153,6 @@ describe('Paginasi', () => {
 
   it('menampilkan rentang 0–0 saat total nol', () => {
     render(<Paginasi total={0} limit={20} offset={0} onChange={vi.fn()} />);
-    expect(screen.getByText(/Menampilkan 0–0 dari 0 entri/i)).toBeInTheDocument();
+    expect(screen.getByText(/0–0 dari 0 entri/i)).toBeInTheDocument();
   });
 });

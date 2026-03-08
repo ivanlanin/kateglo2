@@ -1381,6 +1381,10 @@ code {
     @apply text-blue-300;
   }
 
+  .dark .kamus-kategori-grid-link:hover {
+    @apply bg-blue-950;
+  }
+
   .link-action,
   .kamus-detail-actual-link {
     @apply text-blue-600 hover:underline;
@@ -1597,23 +1601,19 @@ code {
   /* ===== Paginasi ===== */
 
   .paginasi-container {
-    @apply flex flex-col sm:flex-row items-center justify-between gap-3 mt-4;
+    @apply flex items-center gap-1 mt-4;
   }
 
   .paginasi-info {
-    @apply text-sm text-gray-600;
-  }
-
-  .paginasi-controls {
-    @apply flex items-center gap-1;
+    @apply font-semibold text-gray-600 px-2;
   }
 
   .paginasi-btn {
-    @apply px-3 py-1.5 text-sm border border-gray-300 rounded-md disabled:opacity-40 hover:bg-gray-100;
+    @apply px-2 py-1 text-sm rounded disabled:opacity-30 hover:bg-gray-100 transition-colors;
   }
 
   .dark .paginasi-btn {
-    @apply border-dark-border hover:bg-dark-bg-hover text-dark-text;
+    @apply hover:bg-dark-bg-hover text-dark-text;
   }
 
   .paginasi-btn-active {
@@ -1660,11 +1660,11 @@ code {
   }
 
   .kamus-kategori-grid {
-    @apply grid grid-cols-4 gap-x-4 gap-y-1;
+    @apply grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-1;
   }
 
   .kamus-kategori-grid-link {
-    @apply text-blue-700 hover:underline truncate;
+    @apply text-blue-700 hover:underline hover:bg-blue-50 rounded px-1 truncate;
   }
 
   /* ===== Tesaurus hasil pencarian ===== */
@@ -1748,6 +1748,22 @@ code {
     @apply block min-w-0 truncate;
   }
 
+  .hasil-entry-link {
+    @apply hover:bg-blue-50 rounded px-1;
+  }
+
+  .dark .hasil-entry-link {
+    @apply hover:bg-blue-950;
+  }
+
+  .hasil-baris {
+    @apply hover:bg-blue-50 rounded px-2 -mx-2 transition-colors;
+  }
+
+  .dark .hasil-baris {
+    @apply hover:bg-blue-950;
+  }
+
   .rima-heading-actions {
     @apply flex items-center gap-1;
   }
@@ -1783,7 +1799,11 @@ code {
   }
 
   .glosarium-result-row {
-    @apply min-w-0 truncate text-base;
+    @apply min-w-0 truncate text-base hover:bg-blue-50 rounded px-1 transition-colors;
+  }
+
+  .dark .glosarium-result-row {
+    @apply hover:bg-blue-950;
   }
 
   .glosarium-result-original {

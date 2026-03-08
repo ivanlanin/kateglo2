@@ -40,11 +40,8 @@ function Paginasi({
 
   return (
     <div className="paginasi-container">
-      <p className="paginasi-info">
-        Menampilkan {mulai}–{akhir} dari {total.toLocaleString('id-ID')} entri
-      </p>
-      {navigasiAktif && (
-        <div className="paginasi-controls">
+      {navigasiAktif ? (
+        <>
           <button
             type="button"
             onClick={() => (modeCursor ? handleCursor('first') : keHalaman(1))}
@@ -65,6 +62,9 @@ function Paginasi({
           >
             ‹
           </button>
+          <span className="paginasi-info">
+            Halaman {halamanSaatIni} ({mulai}–{akhir} dari {total.toLocaleString('id-ID')} entri)
+          </span>
           <button
             type="button"
             onClick={() => (modeCursor ? handleCursor('next') : keHalaman(halamanSaatIni + 1))}
@@ -85,7 +85,11 @@ function Paginasi({
           >
             »
           </button>
-        </div>
+        </>
+      ) : (
+        <span className="paginasi-info">
+          {mulai}–{akhir} dari {total.toLocaleString('id-ID')} entri
+        </span>
       )}
     </div>
   );

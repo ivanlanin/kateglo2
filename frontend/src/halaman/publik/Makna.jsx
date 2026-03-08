@@ -139,7 +139,7 @@ function Makna() {
               {items.map((item) => {
                 const makna = item.makna_cocok?.[0];
                 return (
-                  <p key={item.id} className="leading-relaxed">
+                  <p key={item.id} className="leading-relaxed hasil-baris">
                     <Link
                       to={buatPathDetailKamus(item.indeks || item.entri)}
                       className="link-action font-bold"

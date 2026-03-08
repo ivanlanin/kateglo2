@@ -131,7 +131,7 @@ function Tesaurus() {
           renderItems={(items) => (
             <div className="space-y-2">
               {items.map((item) => (
-                <p key={item.id} className="leading-relaxed">
+                <p key={item.id} className="leading-relaxed hasil-baris">
                   <Link
                     to={buatPathDetailKamus(item.indeks)}
                     className="link-action font-bold"

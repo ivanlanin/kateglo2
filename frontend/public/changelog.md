@@ -3,6 +3,7 @@
 ## 2026-03-08 Minggu
 
 - Membersihkan data glosarium yang berawalan angka
+- Mengubah tampilan paginasi dan daftar hasil pencarian
 
 ## 2026-03-07 Sabtu
 
