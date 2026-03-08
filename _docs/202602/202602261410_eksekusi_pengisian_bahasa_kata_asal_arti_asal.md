@@ -68,4 +68,4 @@ Catatan:
 Setelah migrasi selesai dijalankan, schema diregenerasi:
 
 - Perintah: `Set-Location backend; node scripts/db-schema.js`
-- Output: `_docs/struktur-data.sql` diperbarui.
+- Output: `_docs/data/struktur.sql` diperbarui.

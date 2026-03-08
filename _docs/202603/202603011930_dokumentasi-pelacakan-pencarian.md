@@ -219,7 +219,7 @@ Frontend:
 
 Dokumen terkait:
 - `_docs/202602/202602232254_sistem-pelacakan-kata-terpopuler-efisien.md`
-- `_docs/struktur-data.sql`
+- `_docs/data/struktur.sql`
 - `_docs/202603/202603011210_tambah-sistem-pelacakan-kata-terpopuler.sql`
 - `_docs/202603/202603011245_refactor-pencarian-tambah-domain-kode.sql`
 - `_docs/202603/202603011950_tambah_timestamp_utc_pencarian.sql`

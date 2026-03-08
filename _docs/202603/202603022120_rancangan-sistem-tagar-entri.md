@@ -357,7 +357,7 @@ Urutan pengerjaan yang disarankan:
 
 11. **[Frontend]** Jalankan `npm run lint && npm run test` di `frontend/`
 
-12. **[DB]** Jalankan `node scripts/db-schema.js` untuk update `_docs/struktur-data.sql`
+12. **[DB]** Jalankan `node scripts/db-schema.js` untuk update `_docs/data/struktur.sql`
 
 ---
 
@@ -377,7 +377,7 @@ Beberapa hal yang perlu dikonfirmasi sebelum implementasi:
 
 ## 8. Referensi
 
-- Skema aktual: [_docs/struktur-data.sql](../../_docs/struktur-data.sql)
+- Skema aktual: [_docs/data/struktur.sql](../../_docs/data/struktur.sql)
 - Pola model label: [backend/models/modelLabel.js](../../backend/models/modelLabel.js)
 - Pola route publik: [backend/routes/publik/kamus.js](../../backend/routes/publik/kamus.js)
 - Pola route redaksi: [backend/routes/redaksi/](../../backend/routes/redaksi/)

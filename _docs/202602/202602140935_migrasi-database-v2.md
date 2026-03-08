@@ -114,5 +114,5 @@ ORDER BY tablename, indexname;
 
 - `_docs/202602/20260214_alter_character_varying_to_text.sql` — Migrasi tipe kolom
 - `_docs/202602/20260214_optimize_indexes.sql` — Migrasi indeks
-- `_docs/struktur-data.sql` — Struktur data (regenerate setelah migrasi)
+- `_docs/data/struktur.sql` — Struktur data (regenerate setelah migrasi)
 - `backend/scripts/db-schema.js` — Script untuk generate schema

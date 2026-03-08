@@ -79,7 +79,7 @@ File: `backend/models/modelEntri.js`
 
 ## Sinkronisasi Schema Referensi
 
-File: `_docs/struktur-data.sql`
+File: `_docs/data/struktur.sql`
 
 - Menambahkan kolom `aktif boolean not null default true` pada definisi tabel `label`.
 

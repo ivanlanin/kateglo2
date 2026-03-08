@@ -193,4 +193,4 @@ main().catch(e => { console.error(e.message); process.exit(1); });
 
 - `_docs/202603/202603050001_deteksi-sisipan-dwipurwa-entri-dasar.md` §9.9
   — temuan dari cross-reference kandidat sisipan dengan data etimologi
-- `_docs/struktur-data.sql` — skema tabel `etimologi`
+- `_docs/data/struktur.sql` — skema tabel `etimologi`
