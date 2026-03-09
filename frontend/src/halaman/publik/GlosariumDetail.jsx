@@ -102,7 +102,7 @@ function AlirEntri({ items, tautAsing = false, tampilkanEdit = false }) {
             <><Link
               to={`/glosarium/bidang/${encodeURIComponent(bidangSlug)}`}
               className="badge-bidang"
-              title={item.bidang || undefined}
+              title={item.bidang}
             >{bidangLabel}</Link>{' '}</>
           )}
           {tampilkanBadgeSumber && (

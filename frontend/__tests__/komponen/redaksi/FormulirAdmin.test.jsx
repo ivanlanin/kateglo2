@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { act } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import {
   CheckboxField,
@@ -12,6 +13,10 @@ import {
   ToggleMeragukan,
   useFormPanel,
 } from '../../../src/komponen/redaksi/FormulirAdmin';
+
+function clickOutside() {
+  fireEvent.mouseDown(document.body);
+}
 
 function HarnessFormPanel() {
   const form = useFormPanel({ nama: 'awal', aktif: 1 });
@@ -139,5 +144,150 @@ describe('FormulirAdmin', () => {
 
     rerender(<ToggleMeragukan value={0} onChange={onChange} />);
     fireEvent.click(screen.getByRole('button'));
+  });
+
+  it('SearchableSelectField menangani hideLabel, pencarian kosong, escape, enter, klik luar, dan disabled', () => {
+    const onChange = vi.fn();
+    const { rerender } = render(
+      <SearchableSelectField
+        label="Bahasa"
+        name="bahasa"
+        value=""
+        onChange={onChange}
+        options={[{ value: 'id', label: 'Indonesia' }, { value: 'en', label: 'Inggris' }]}
+        hideLabel
+        required
+        wrapperClassName="wrapper-kustom"
+        buttonClassName="button-kustom"
+      />
+    );
+
+    fireEvent.click(screen.getByLabelText('Bahasa'));
+    const inputCari = screen.getByLabelText('Cari Bahasa');
+    fireEvent.change(inputCari, { target: { value: 'zzz' } });
+    expect(screen.getByText('Tidak ada hasil.')).toBeInTheDocument();
+
+    fireEvent.keyDown(inputCari, { key: 'Escape' });
+    expect(screen.queryByText('Tidak ada hasil.')).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByLabelText('Bahasa'));
+    fireEvent.change(screen.getByLabelText('Cari Bahasa'), { target: { value: 'ing' } });
+    fireEvent.keyDown(screen.getByLabelText('Cari Bahasa'), { key: 'Enter' });
+    expect(onChange).toHaveBeenCalledWith('bahasa', 'en');
+
+    fireEvent.click(screen.getByLabelText('Bahasa'));
+    clickOutside();
+    expect(screen.queryByRole('listbox', { name: 'Opsi Bahasa' })).not.toBeInTheDocument();
+
+    rerender(
+      <SearchableSelectField
+        label="Bidang"
+        name="bidang"
+        value=""
+        onChange={onChange}
+        options={[{ value: 'umum', label: 'Umum' }]}
+        disabled
+      />
+    );
+
+    fireEvent.click(screen.getByLabelText('Bidang'));
+    expect(screen.queryByRole('listbox', { name: 'Opsi Bidang' })).not.toBeInTheDocument();
+  });
+
+  it('SearchableSelectField memfokuskan input cari saat dropdown dibuka', () => {
+    vi.useFakeTimers();
+    render(
+      <SearchableSelectField
+        label="Sumber"
+        name="sumber"
+        value=""
+        onChange={vi.fn()}
+        options={[{ value: 'kbbi', label: 'KBBI' }]}
+      />
+    );
+
+    fireEvent.click(screen.getByLabelText('Sumber'));
+    act(() => {
+      vi.runAllTimers();
+    });
+
+    expect(screen.getByLabelText('Cari Sumber')).toHaveFocus();
+    vi.useRealTimers();
+  });
+
+  it('SearchableSelectField menutup dropdown lewat toggle, memakai fallback label null, dan menjalankan onMouseDown opsi', () => {
+    const onChange = vi.fn();
+
+    render(
+      <SearchableSelectField
+        label="Kategori"
+        name="kategori"
+        value="pilihan"
+        onChange={onChange}
+        required
+        options={[
+          { value: null, label: null },
+          { value: 'pilihan', label: 'Pilihan' },
+          { value: 'kode-x', label: null },
+        ]}
+      />
+    );
+
+    expect(screen.getByText('Kategori')).toBeInTheDocument();
+    expect(screen.getByText('*')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByLabelText('Kategori'));
+    const inputCari = screen.getByLabelText('Cari Kategori');
+    fireEvent.change(inputCari, { target: { value: 'kode-x' } });
+    expect(screen.getByRole('button', { name: '' })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByLabelText('Kategori'));
+    expect(screen.queryByRole('listbox', { name: 'Opsi Kategori' })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByLabelText('Kategori'));
+    const opsiTerpilih = screen.getByRole('button', { name: /Pilihan/ });
+    expect(opsiTerpilih.className).toContain('bg-blue-50');
+
+    fireEvent.mouseDown(opsiTerpilih);
+    fireEvent.click(opsiTerpilih);
+    expect(onChange).toHaveBeenCalledWith('kategori', 'pilihan');
+  });
+
+  it('ToggleAktif dan ToggleMeragukan mengirim dua arah nilai 0 dan 1', () => {
+    const onChange = vi.fn();
+    const { rerender } = render(<ToggleAktif value={1} onChange={onChange} />);
+
+    fireEvent.click(screen.getByRole('button'));
+    expect(onChange).toHaveBeenCalledWith('aktif', 0);
+
+    rerender(<ToggleAktif value={0} onChange={onChange} />);
+    fireEvent.click(screen.getByRole('button'));
+    expect(onChange).toHaveBeenCalledWith('aktif', 1);
+
+    rerender(<ToggleMeragukan value={1} onChange={onChange} />);
+    fireEvent.click(screen.getByRole('button'));
+    expect(onChange).toHaveBeenCalledWith('meragukan', 0);
+
+    rerender(<ToggleMeragukan value={0} onChange={onChange} />);
+    fireEvent.click(screen.getByRole('button'));
+    expect(onChange).toHaveBeenCalledWith('meragukan', 1);
+  });
+
+  it('SearchableSelectField memakai fallback nilai kosong saat value null', () => {
+    render(
+      <SearchableSelectField
+        label="Bahasa Asal"
+        name="bahasaAsal"
+        value={null}
+        onChange={vi.fn()}
+        options={[
+          { value: '', label: 'Belum dipilih' },
+          { value: 'id', label: 'Indonesia' },
+        ]}
+      />
+    );
+
+    fireEvent.click(screen.getByLabelText('Bahasa Asal'));
+    expect(screen.getByRole('button', { name: /Belum dipilih/ }).className).toContain('bg-blue-50');
   });
 });

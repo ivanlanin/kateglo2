@@ -171,7 +171,7 @@ describe('KamusAdmin', () => {
             bahasa: 'id',
             kiasan: false,
             urutan: 1,
-            contoh: [{ id: 99, urutan: 1, contoh: 'anak baik', makna_contoh: '' }],
+            contoh: [{ id: 99, urutan: 1, contoh: 'anak baik', makna_contoh: 'pelengkap' }],
           },
           {
             id: 11,
@@ -385,6 +385,10 @@ describe('KamusAdmin', () => {
     const formEditContohLagi = screen.getByLabelText('Contoh').closest('div').parentElement;
     fireEvent.change(within(formEditContohLagi).getByLabelText('Urutan'), { target: { value: '2' } });
     fireEvent.click(within(formEditContohLagi).getByRole('button', { name: 'Simpan' }));
+    expect(mutateSimpanContoh).toHaveBeenCalledWith(
+      expect.objectContaining({ urutan: 2 }),
+      expect.any(Object)
+    );
     fireEvent.click(semuaSunting[1]);
     screen.getAllByRole('button', { name: 'Simpan' }).forEach((btn) => fireEvent.click(btn));
 
@@ -447,6 +451,79 @@ describe('KamusAdmin', () => {
 
     fireEvent.click(screen.getByText('Hapus'));
     expect(screen.getByText('Err hapus lema')).toBeInTheDocument();
+  });
+
+  it('menampilkan makna contoh pada mode baca saat tersedia', () => {
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('dasar'));
+    fireEvent.click(screen.getByText('keturunan manusia'));
+    expect(screen.getByText('Makna contoh: pelengkap')).toBeInTheDocument();
+  });
+
+  it('memakai fallback urutan 1 pada contoh baca, sunting, dan tambah', () => {
+    mockUseDaftarMakna.mockReturnValue({
+      isLoading: false,
+      data: {
+        data: [
+          {
+            id: 10,
+            makna: 'uji contoh fallback',
+            kelas_kata: 'n',
+            bidang: 'umum',
+            ragam: 'cakap',
+            bahasa: 'id',
+            kiasan: false,
+            urutan: 1,
+            contoh: [{ id: 99, urutan: 0, contoh: 'anak baik', makna_contoh: '' }],
+          },
+        ],
+      },
+    });
+    mutateSimpanContoh.mockImplementation((_data, opts) => opts.onSuccess?.());
+
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('dasar'));
+    fireEvent.click(screen.getByText('uji contoh fallback'));
+    expect(screen.getByText('Urutan: 1')).toBeInTheDocument();
+
+    fireEvent.click(screen.getAllByText('sunting').at(-1));
+    const formEditContoh = screen.getByLabelText('Contoh').closest('div').parentElement;
+    fireEvent.change(within(formEditContoh).getByLabelText('Urutan'), { target: { value: '' } });
+    fireEvent.click(within(formEditContoh).getByRole('button', { name: 'Simpan' }));
+    expect(mutateSimpanContoh).toHaveBeenCalledWith(expect.objectContaining({ urutan: 1 }), expect.any(Object));
+
+    fireEvent.click(screen.getByText('+ contoh'));
+    const formContohBaru = screen.getAllByLabelText('Contoh').at(-1).closest('div').parentElement;
+    fireEvent.change(within(formContohBaru).getByLabelText('Contoh'), { target: { value: 'contoh baru' } });
+    fireEvent.change(within(formContohBaru).getByLabelText('Urutan'), { target: { value: '' } });
+    fireEvent.click(within(formContohBaru).getByRole('button', { name: 'Simpan' }));
+    expect(mutateSimpanContoh).toHaveBeenCalledWith(expect.objectContaining({ urutan: 1 }), expect.any(Object));
+  });
+
+  it('memakai opsi lookup bidang dan bahasa dari respons master saat tersedia', () => {
+    render(
+      <MemoryRouter>
+        <KamusAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('dasar'));
+    fireEvent.click(screen.getByText('+ Tambah makna'));
+    fireEvent.click(screen.getByLabelText('Bidang'));
+    expect(screen.getByRole('button', { name: 'Umum' })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByLabelText('Bahasa'));
+    expect(screen.getByRole('button', { name: 'Indonesia' })).toBeInTheDocument();
   });
 
   it('menangani fallback error hapus lema default', () => {

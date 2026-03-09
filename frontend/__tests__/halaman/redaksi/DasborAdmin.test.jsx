@@ -5,6 +5,177 @@ import DasborAdmin from '../../../src/halaman/redaksi/DasborAdmin';
 
 const mockUseStatistikAdmin = vi.fn();
 const mockUseAuth = vi.fn();
+const mockFilterKelompokMenuRedaksi = vi.fn();
+
+function buatKelompokMenuRedaksiFixture() {
+  return [
+    {
+      judul: 'Leksikon',
+      items: [
+        {
+          path: '/redaksi/kamus',
+          label: 'Kamus',
+          dashboardLabel: 'Entri Kamus',
+          izin: 'lihat_entri',
+          statistik: { key: 'entri', warna: 'text-blue-600' },
+        },
+        {
+          path: '/redaksi/tesaurus',
+          label: 'Tesaurus',
+          dashboardLabel: 'Entri Tesaurus',
+          izin: 'lihat_tesaurus',
+          statistik: { key: 'tesaurus', warna: 'text-emerald-600' },
+        },
+        {
+          path: '/redaksi/glosarium',
+          label: 'Glosarium',
+          dashboardLabel: 'Entri Glosarium',
+          izin: 'lihat_glosarium',
+          statistik: { key: 'glosarium', warna: 'text-amber-600' },
+        },
+        {
+          path: '/redaksi/etimologi',
+          label: 'Etimologi',
+          dashboardLabel: 'Entri Etimologi',
+          izin: 'kelola_etimologi',
+          statistik: { key: 'etimologi', warna: 'text-indigo-600' },
+        },
+      ],
+    },
+    {
+      judul: 'Audit',
+      items: [
+        {
+          path: '/redaksi/audit-makna',
+          label: 'Makna',
+          dashboardLabel: 'Audit Makna',
+          izin: 'audit_makna',
+          statistik: { key: 'auditMakna', warna: 'text-fuchsia-600' },
+        },
+        {
+          path: '/redaksi/audit-tagar',
+          label: 'Tagar',
+          dashboardLabel: 'Audit Tagar',
+          izin: 'audit_tagar',
+          statistik: { key: 'auditTagar', warna: 'text-violet-600' },
+        },
+      ],
+    },
+    {
+      judul: 'Gim',
+      items: [
+        {
+          path: '/redaksi/susun-kata-harian',
+          label: 'Susun Kata Harian',
+          dashboardLabel: 'Susun Kata Harian',
+          izin: 'kelola_susun_kata',
+          statistik: { key: 'susunKataHarian', warna: 'text-lime-600' },
+        },
+        {
+          path: '/redaksi/susun-kata-bebas',
+          label: 'Susun Kata Bebas',
+          dashboardLabel: 'Susun Kata Bebas',
+          izin: 'kelola_susun_kata',
+          statistik: { key: 'susunKataBebas', warna: 'text-green-600' },
+        },
+      ],
+    },
+    {
+      judul: 'Interaksi',
+      items: [
+        {
+          path: '/redaksi/komentar',
+          label: 'Komentar',
+          dashboardLabel: 'Komentar',
+          izin: 'kelola_komentar',
+          statistik: { key: 'komentar', warna: 'text-rose-600' },
+        },
+        {
+          path: '/redaksi/pencarian',
+          label: 'Pencarian',
+          dashboardLabel: 'Pencarian',
+          izin: 'lihat_pencarian',
+          statistik: { key: 'pencarian', warna: 'text-orange-600' },
+        },
+      ],
+    },
+    {
+      judul: 'Master',
+      items: [
+        {
+          path: '/redaksi/bahasa',
+          label: 'Bahasa',
+          dashboardLabel: 'Bahasa',
+          izin: 'kelola_bahasa',
+          statistik: { key: 'bahasa', warna: 'text-blue-500' },
+        },
+        {
+          path: '/redaksi/bidang',
+          label: 'Bidang',
+          dashboardLabel: 'Bidang',
+          izin: 'kelola_bidang',
+          statistik: { key: 'bidang', warna: 'text-sky-600' },
+        },
+        {
+          path: '/redaksi/sumber',
+          label: 'Sumber',
+          dashboardLabel: 'Sumber',
+          izin: 'kelola_sumber',
+          statistik: { key: 'sumber', warna: 'text-teal-600' },
+        },
+        {
+          path: '/redaksi/tagar',
+          label: 'Tagar',
+          dashboardLabel: 'Tagar',
+          izin: 'kelola_tagar',
+          statistik: { key: 'tagar', warna: 'text-pink-600' },
+        },
+        {
+          path: '/redaksi/label',
+          label: 'Label',
+          dashboardLabel: 'Label',
+          izin: 'kelola_label',
+          statistik: { key: 'label', warna: 'text-cyan-600' },
+        },
+      ],
+    },
+    {
+      judul: 'Akses',
+      items: [
+        {
+          path: '/redaksi/peran',
+          label: 'Peran',
+          dashboardLabel: 'Peran',
+          izin: 'kelola_peran',
+          statistik: { key: 'peran', warna: 'text-red-600' },
+        },
+        {
+          path: '/redaksi/izin',
+          label: 'Izin',
+          dashboardLabel: 'Izin',
+          izin: 'kelola_peran',
+          statistik: { key: 'izin', warna: 'text-amber-700' },
+        },
+        {
+          path: '/redaksi/pengguna',
+          label: 'Pengguna',
+          dashboardLabel: 'Pengguna',
+          izin: 'kelola_pengguna',
+          statistik: { key: 'pengguna', warna: 'text-purple-600' },
+        },
+      ],
+    },
+  ];
+}
+
+function filterKelompokMenuFixture(hasIzin) {
+  return buatKelompokMenuRedaksiFixture()
+    .map((kelompok) => ({
+      ...kelompok,
+      items: kelompok.items.filter((item) => hasIzin(item.izin)),
+    }))
+    .filter((kelompok) => kelompok.items.length > 0);
+}
 
 vi.mock('../../../src/api/apiAdmin', () => ({
   useStatistikAdmin: () => mockUseStatistikAdmin(),
@@ -12,6 +183,10 @@ vi.mock('../../../src/api/apiAdmin', () => ({
 
 vi.mock('../../../src/context/authContext', () => ({
   useAuth: () => mockUseAuth(),
+}));
+
+vi.mock('../../../src/komponen/redaksi/menuRedaksi', () => ({
+  filterKelompokMenuRedaksi: (...args) => mockFilterKelompokMenuRedaksi(...args),
 }));
 
 vi.mock('../../../src/komponen/bersama/TataLetak', () => ({
@@ -30,6 +205,7 @@ describe('DasborAdmin', () => {
       user: { izin: ['lihat_entri', 'lihat_tesaurus', 'lihat_glosarium', 'kelola_komentar', 'kelola_label', 'kelola_bahasa', 'kelola_pengguna'] },
       punyaIzin: () => true,
     });
+    mockFilterKelompokMenuRedaksi.mockImplementation(filterKelompokMenuFixture);
   });
 
   it('menampilkan statistik loading', () => {
@@ -235,5 +411,32 @@ describe('DasborAdmin', () => {
 
     expect(screen.queryByText('Entri Kamus')).not.toBeInTheDocument();
     expect(screen.queryByText('Label')).not.toBeInTheDocument();
+  });
+
+  it('memakai fallback label biasa dan jumlah null saat item tanpa dashboardLabel', () => {
+    mockUseStatistikAdmin.mockReturnValue({ isLoading: false, data: { data: {} } });
+    mockUseAuth.mockReturnValue({
+      user: { izin: ['akses-kustom'] },
+      punyaIzin: () => true,
+    });
+    mockFilterKelompokMenuRedaksi.mockReturnValue([
+      {
+        judul: 'Kustom',
+        items: [
+          { path: '/redaksi/kustom', label: 'Item Biasa' },
+          { path: '/redaksi/stat', label: 'Item Statistik', statistik: { key: 'tidak_ada', warna: 'text-blue-600' } },
+        ],
+      },
+    ]);
+
+    render(
+      <MemoryRouter>
+        <DasborAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Item Biasa')).toBeInTheDocument();
+    expect(screen.getByText('Item Statistik')).toBeInTheDocument();
+    expect(screen.getByText('—')).toBeInTheDocument();
   });
 });

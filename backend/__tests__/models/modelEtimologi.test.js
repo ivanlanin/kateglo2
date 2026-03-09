@@ -11,6 +11,10 @@ describe('ModelEtimologi', () => {
     db.query.mockReset();
   });
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('cariEntriUntukTautan mengembalikan kosong saat query kosong', async () => {
     await expect(ModelEtimologi.cariEntriUntukTautan('')).resolves.toEqual([]);
     await expect(ModelEtimologi.cariEntriUntukTautan('   ')).resolves.toEqual([]);
@@ -177,6 +181,28 @@ describe('ModelEtimologi', () => {
     expect(result).toEqual({ data: [{ id: 14, meragukan: false }], total: 1 });
   });
 
+  it('daftarAdmin dengan bahasaId, sumberId, dan meragukan=1 memakai filter id numerik', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '3' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 21, bahasa_id: 9, sumber_id: 6, meragukan: true }] });
+
+    const result = await ModelEtimologi.daftarAdmin({ bahasaId: '9', sumberId: '6', meragukan: '1', limit: 10, offset: 2 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('e.bahasa_id = $1'),
+      [9, 6, true]
+    );
+    expect(db.query.mock.calls[0][0]).toContain('e.sumber_id = $2');
+    expect(db.query.mock.calls[0][0]).toContain('e.meragukan = $3');
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('LIMIT $4 OFFSET $5'),
+      [9, 6, true, 10, 2]
+    );
+    expect(result).toEqual({ data: [{ id: 21, bahasa_id: 9, sumber_id: 6, meragukan: true }], total: 3 });
+  });
+
   it('daftarAdmin memakai fallback default limit dan offset', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '0' }] })
@@ -273,6 +299,52 @@ describe('ModelEtimologi', () => {
     );
     expect(ambilSpy).toHaveBeenCalledWith(12);
     expect(result).toEqual({ id: 12 });
+  });
+
+  it('simpan dapat meresolusi bahasa dari kode sebelum insert', async () => {
+    const ambilSpy = jest.spyOn(ModelEtimologi, 'ambilDenganId').mockResolvedValue({ id: 13, bahasa_id: 5 });
+    db.query
+      .mockResolvedValueOnce({ rows: [{ id: 5 }] })
+      .mockResolvedValueOnce({ rows: [{ id: 13 }] });
+
+    const result = await ModelEtimologi.simpan({
+      indeks: 'serapan',
+      bahasa: ' Ing ',
+      kata_asal: 'borrowing',
+    });
+
+    expect(db.query).toHaveBeenNthCalledWith(1, 'SELECT id FROM bahasa WHERE LOWER(kode) = LOWER($1) LIMIT 1', ['Ing']);
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('INSERT INTO etimologi'),
+      ['serapan', null, undefined, 5, 'borrowing', undefined, null, undefined, undefined, undefined, undefined, undefined, undefined, null, true, false]
+    );
+    expect(ambilSpy).toHaveBeenCalledWith(13);
+    expect(result).toEqual({ id: 13, bahasa_id: 5 });
+  });
+
+  it('simpan melempar INVALID_BAHASA ketika kode bahasa tidak ditemukan', async () => {
+    db.query.mockResolvedValueOnce({ rows: [] });
+
+    await expect(ModelEtimologi.simpan({ indeks: 'serapan', bahasa: 'xyz' })).rejects.toMatchObject({
+      code: 'INVALID_BAHASA',
+      message: 'Bahasa tidak valid',
+    });
+  });
+
+  it('simpan melewati lookup bahasa saat nilai bahasa hanya spasi', async () => {
+    const ambilSpy = jest.spyOn(ModelEtimologi, 'ambilDenganId').mockResolvedValue({ id: 15, bahasa_id: null });
+    db.query.mockResolvedValueOnce({ rows: [{ id: 15 }] });
+
+    const result = await ModelEtimologi.simpan({ indeks: 'serapan', bahasa: '   ' });
+
+    expect(db.query).toHaveBeenCalledTimes(1);
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO etimologi'),
+      ['serapan', null, undefined, null, undefined, undefined, null, undefined, undefined, undefined, undefined, undefined, undefined, null, false, false]
+    );
+    expect(ambilSpy).toHaveBeenCalledWith(15);
+    expect(result).toEqual({ id: 15, bahasa_id: null });
   });
 
   it('simpan mengembalikan null ketika query tidak me-return id', async () => {

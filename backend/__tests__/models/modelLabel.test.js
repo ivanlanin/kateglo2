@@ -20,6 +20,34 @@ describe('ModelLabel', () => {
     });
   });
 
+  it('helper master label privat mencakup default arg dan fallback kategori tidak dikenal', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ kode: 'kim', nama: 'Kimia' }] })
+      .mockResolvedValueOnce({ rows: [{ kode: 'id', nama: 'Indonesia', keterangan: null }] })
+      .mockResolvedValueOnce({ rows: [{ kode: 'kim', nama: 'Kimia', keterangan: null }] });
+
+    expect(__private.getMasterKategoriTable()).toBe('');
+    expect(__private.getMasterKategoriTable('bahasa')).toBe('bahasa');
+    await expect(__private.ambilDaftarLabelMaster()).resolves.toEqual([]);
+    await expect(__private.ambilDaftarLabelMaster('asing')).resolves.toEqual([]);
+    await expect(__private.ambilDaftarLabelMaster('bidang')).resolves.toEqual([{ kode: 'kim', nama: 'Kimia' }]);
+    await expect(__private.ambilLabelMaster()).resolves.toBeNull();
+    await expect(__private.ambilLabelMaster('asing')).resolves.toBeNull();
+    await expect(__private.ambilLabelMaster('bahasa', 'id', 'id')).resolves.toEqual({
+      kode: 'id',
+      nama: 'Indonesia',
+      keterangan: null,
+    });
+    await expect(__private.ambilLabelMaster('bidang', 'kim', 'kim')).resolves.toEqual({
+      kode: 'kim',
+      nama: 'Kimia',
+      keterangan: null,
+    });
+    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('WHERE kamus = TRUE'));
+    expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('WHERE aktif = TRUE'), ['id', 'id']);
+    expect(db.query).toHaveBeenNthCalledWith(3, expect.stringContaining('WHERE kamus = TRUE'), ['kim', 'kim']);
+  });
+
   it('ambilSemuaKategori mengelompokkan label serta menambah abjad, bentuk, ekspresi, kelas, dan unsur terikat', async () => {
     db.query
       .mockResolvedValueOnce({
@@ -935,6 +963,21 @@ describe('ModelLabel', () => {
       [['n', 'nomina']]
     );
     expect(result.total).toBe(1);
+  });
+
+  it('cariEntriPerLabelCursor kategori master bahasa memakai resolver label master', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ id: 2, kategori: 'bahasa', kode: 'id', nama: 'Indonesia', urutan: 1, keterangan: null }] })
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 1, entri: 'akar', indeks: 'akar', jenis: 'dasar', jenis_rujuk: null, entri_rujuk: null }] });
+
+    const result = await ModelLabel.cariEntriPerLabelCursor('bahasa', 'id', { limit: 2 });
+
+    expect(db.query.mock.calls[0][0]).toContain('FROM bahasa');
+    expect(db.query.mock.calls[1][0]).toContain('m.bahasa = ANY($1::text[])');
+    expect(db.query.mock.calls[1][1]).toEqual([['id', 'Indonesia']]);
+    expect(result.total).toBe(1);
+    expect(result.label).toEqual({ id: 2, kategori: 'bahasa', kode: 'id', nama: 'Indonesia', urutan: 1, keterangan: null });
   });
 
   it('cariEntriPerLabelCursor bentuk invalid mengembalikan kosong', async () => {

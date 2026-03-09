@@ -88,6 +88,7 @@ describe('Beranda', () => {
     expect(screen.getByRole('link', { name: 'istilah' })).toHaveAttribute('href', '/glosarium/detail/istilah');
     expect(screen.getByRole('link', { name: 'arti' })).toHaveAttribute('href', '/makna/cari/arti');
     expect(screen.getByRole('link', { name: 'sajak' })).toHaveAttribute('href', '/rima/cari/sajak');
+    expect(screen.getByRole('link', { name: 'air' })).not.toHaveAttribute('title');
   });
 
   it('memotong frasa populer lebih dari dua kata dan menyimpan judul penuh di tooltip', async () => {

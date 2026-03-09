@@ -1,8 +1,8 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import BidangAdmin from '../../../src/halaman/redaksi/BidangAdmin';
+import BahasaAdmin from '../../../src/halaman/redaksi/BahasaAdmin';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
@@ -22,10 +22,10 @@ const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
 
 vi.mock('../../../src/api/apiAdmin', () => ({
-  useDaftarBidangAdmin: (...args) => mockUseDaftar(...args),
-  useDetailBidangAdmin: (...args) => mockUseDetail(...args),
-  useSimpanBidang: () => ({ mutate: mutateSimpan, isPending: false }),
-  useHapusBidang: () => ({ mutate: mutateHapus, isPending: false }),
+  useDaftarBahasaAdmin: (...args) => mockUseDaftar(...args),
+  useDetailBahasaAdmin: (...args) => mockUseDetail(...args),
+  useSimpanBahasa: () => ({ mutate: mutateSimpan, isPending: false }),
+  useHapusBahasa: () => ({ mutate: mutateHapus, isPending: false }),
 }));
 
 vi.mock('../../../src/komponen/bersama/TataLetak', () => ({
@@ -38,7 +38,12 @@ vi.mock('../../../src/komponen/bersama/TataLetak', () => ({
   ),
 }));
 
-describe('BidangAdmin', () => {
+describe('BahasaAdmin', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+    cleanup();
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
     mockParams = {};
@@ -48,7 +53,7 @@ describe('BidangAdmin', () => {
       isError: false,
       data: {
         total: 1,
-        data: [{ id: 1, kode: 'kimia', nama: 'Kimia', jumlah_entri: 2, aktif: true }],
+        data: [{ id: 1, kode: 'Ing', nama: 'Inggris', iso2: 'en', aktif: true }],
       },
     });
     mockUseDetail.mockReturnValue({ isLoading: false, isError: false, data: null });
@@ -57,13 +62,13 @@ describe('BidangAdmin', () => {
   it('menampilkan daftar dan dapat menyimpan data', () => {
     render(
       <MemoryRouter>
-        <BidangAdmin />
+        <BahasaAdmin />
       </MemoryRouter>
     );
 
     fireEvent.click(screen.getByText('+ Tambah'));
-    fireEvent.change(screen.getByLabelText(/Kode/), { target: { value: 'hukum' } });
-    fireEvent.change(screen.getByLabelText(/Nama/), { target: { value: 'Hukum' } });
+    fireEvent.change(screen.getByLabelText(/Kode/), { target: { value: 'Ar' } });
+    fireEvent.change(screen.getByLabelText(/Nama/), { target: { value: 'Arab' } });
     fireEvent.click(screen.getByText('Simpan'));
 
     expect(mutateSimpan).toHaveBeenCalled();
@@ -74,11 +79,11 @@ describe('BidangAdmin', () => {
 
     render(
       <MemoryRouter>
-        <BidangAdmin />
+        <BahasaAdmin />
       </MemoryRouter>
     );
 
-    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/bidang', { replace: true });
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/bahasa', { replace: true });
   });
 
   it('membuka mode sunting dari detail route lalu dapat ditutup', async () => {
@@ -86,18 +91,38 @@ describe('BidangAdmin', () => {
     mockUseDetail.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { data: { id: 1, kode: 'kim', nama: 'Kimia', keterangan: '', aktif: true } },
+      data: { data: { id: 1, kode: 'Ing', nama: 'Inggris', iso2: 'en', iso3: 'eng', keterangan: '', aktif: true } },
     });
 
     render(
       <MemoryRouter>
-        <BidangAdmin />
+        <BahasaAdmin />
       </MemoryRouter>
     );
 
-    await waitFor(() => expect(screen.getByDisplayValue('kim')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByDisplayValue('Ing')).toBeInTheDocument());
     fireEvent.click(screen.getByLabelText('Tutup panel'));
-    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/bidang', { replace: true });
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/bahasa', { replace: true });
+  });
+
+  it('memakai fallback nilai kosong untuk iso dan keterangan serta toggle status boolean', async () => {
+    mockParams = { id: '1' };
+    mockUseDetail.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { data: { id: 1, kode: 'Ing', nama: 'Inggris', iso2: null, iso3: null, keterangan: null, aktif: 0 } },
+    });
+
+    render(
+      <MemoryRouter>
+        <BahasaAdmin />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => expect(screen.getByLabelText('ISO 2')).toHaveValue(''));
+    expect(screen.getByLabelText('ISO 3')).toHaveValue('');
+    expect(screen.getByLabelText('Keterangan')).toHaveValue('');
+    expect(screen.getAllByText('Nonaktif').length).toBeGreaterThan(0);
   });
 
   it('menangani detail error, validasi wajib, error simpan, dan alur hapus', () => {
@@ -108,81 +133,58 @@ describe('BidangAdmin', () => {
 
     render(
       <MemoryRouter>
-        <BidangAdmin />
+        <BahasaAdmin />
       </MemoryRouter>
     );
 
-    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/bidang', { replace: true });
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/bahasa', { replace: true });
     fireEvent.click(screen.getByText('+ Tambah'));
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Kode wajib diisi')).toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText(/Kode/), { target: { value: 'kim' } });
-    fireEvent.change(screen.getByLabelText(/Nama/), { target: { value: 'Kimia' } });
+    fireEvent.change(screen.getByLabelText(/Kode/), { target: { value: 'Ing' } });
+    fireEvent.change(screen.getByLabelText(/Nama/), { target: { value: 'Inggris' } });
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Gagal menyimpan')).toBeInTheDocument();
-
   });
 
-  it('menjalankan sukses simpan dan sukses hapus', () => {
-    vi.useFakeTimers();
+  it('menjalankan sukses simpan dan sukses hapus', async () => {
     mutateSimpan.mockImplementation((_data, opts) => opts.onSuccess?.());
-
-    render(
-      <MemoryRouter>
-        <BidangAdmin />
-      </MemoryRouter>
-    );
-
-    fireEvent.click(screen.getByText('+ Tambah'));
-    fireEvent.change(screen.getByLabelText(/Kode/), { target: { value: 'fis' } });
-    fireEvent.change(screen.getByLabelText(/Nama/), { target: { value: 'Fisika' } });
-    fireEvent.click(screen.getByText('Simpan'));
-    expect(screen.getByText('Tersimpan!')).toBeInTheDocument();
-
-    act(() => {
-      vi.advanceTimersByTime(700);
-    });
-
-    vi.useRealTimers();
-  });
-
-  it('menjalankan aksi hapus saat mode sunting', async () => {
     mockParams = { id: '1' };
     mockUseDetail.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { data: { id: 1, kode: 'kimia', nama: 'Kimia', keterangan: '', aktif: true } },
+      data: { data: { id: 1, kode: 'Ing', nama: 'Inggris', iso2: 'en', iso3: 'eng', keterangan: '', aktif: true } },
     });
     mutateHapus.mockImplementation((_id, opts) => opts.onSuccess?.());
 
     render(
       <MemoryRouter>
-        <BidangAdmin />
+        <BahasaAdmin />
       </MemoryRouter>
     );
 
-    await waitFor(() => expect(screen.getByText('Hapus')).toBeInTheDocument());
-    global.confirm = vi.fn(() => true);
-    fireEvent.click(screen.getByText('Hapus'));
-    expect(mutateHapus).toHaveBeenCalled();
-  });
+    await waitFor(() => expect(screen.getByDisplayValue('Ing')).toBeInTheDocument());
+    vi.useFakeTimers();
+    fireEvent.change(screen.getByLabelText(/Nama/), { target: { value: 'Inggris Baru' } });
+    fireEvent.click(screen.getByText('Simpan'));
+    expect(mutateSimpan).toHaveBeenCalled();
+    act(() => {
+      vi.runAllTimers();
+    });
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/bahasa', { replace: true });
+    vi.useRealTimers();
 
-  it('toggle konteks kamus dan glosarium dapat diubah saat tambah', () => {
+    mockParams = { id: '1' };
     render(
       <MemoryRouter>
-        <BidangAdmin />
+        <BahasaAdmin />
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByText('+ Tambah'));
-    const tombolKamus = screen.getAllByText('Kamus').at(-1)?.closest('.form-admin-group')?.querySelector('button');
-    const tombolGlosarium = screen.getAllByText('Glosarium').at(-1)?.closest('.form-admin-group')?.querySelector('button');
-
-    fireEvent.click(tombolKamus);
-    fireEvent.click(tombolGlosarium);
-
-    expect(screen.getAllByText(/Aktif|Nonaktif/).length).toBeGreaterThan(0);
+    await waitFor(() => expect(screen.getByDisplayValue('Ing')).toBeInTheDocument());
+    fireEvent.click(screen.getByText('Hapus'));
+    expect(mutateHapus).toHaveBeenCalledWith(1, expect.any(Object));
   });
 
   it('menampilkan pesan saat hapus gagal', async () => {
@@ -190,18 +192,17 @@ describe('BidangAdmin', () => {
     mockUseDetail.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { data: { id: 1, kode: 'kimia', nama: 'Kimia', keterangan: '', aktif: true } },
+      data: { data: { id: 1, kode: 'Ing', nama: 'Inggris', iso2: 'en', iso3: 'eng', keterangan: '', aktif: true } },
     });
     mutateHapus.mockImplementation((_id, opts) => opts.onError?.({}));
 
     render(
       <MemoryRouter>
-        <BidangAdmin />
+        <BahasaAdmin />
       </MemoryRouter>
     );
 
-    await waitFor(() => expect(screen.getByText('Hapus')).toBeInTheDocument());
-    global.confirm = vi.fn(() => true);
+    await waitFor(() => expect(screen.getByDisplayValue('Ing')).toBeInTheDocument());
     fireEvent.click(screen.getByText('Hapus'));
     expect(screen.getByText('Gagal menghapus')).toBeInTheDocument();
   });
@@ -209,33 +210,31 @@ describe('BidangAdmin', () => {
   it('menjalankan cari dan klik baris daftar untuk navigasi detail', () => {
     render(
       <MemoryRouter>
-        <BidangAdmin />
+        <BahasaAdmin />
       </MemoryRouter>
     );
 
-    fireEvent.change(screen.getByPlaceholderText('Cari bidang …'), { target: { value: 'kim' } });
+    fireEvent.change(screen.getByPlaceholderText('Cari bahasa …'), { target: { value: 'ing' } });
     fireEvent.click(screen.getByText('Cari'));
-    fireEvent.click(screen.getByText('Kimia'));
+    fireEvent.click(screen.getByText('Inggris'));
 
-    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/bidang/1');
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/bahasa/1');
   });
 
   it('menjalankan reset filter pencarian', () => {
     render(
       <MemoryRouter>
-        <BidangAdmin />
+        <BahasaAdmin />
       </MemoryRouter>
     );
 
-    fireEvent.change(screen.getByPlaceholderText('Cari bidang …'), { target: { value: 'kim' } });
-    fireEvent.change(screen.getByLabelText('Filter bidang kamus'), { target: { value: '1' } });
-    fireEvent.change(screen.getByLabelText('Filter bidang glosarium'), { target: { value: '0' } });
+    fireEvent.change(screen.getByPlaceholderText('Cari bahasa …'), { target: { value: 'ing' } });
+    fireEvent.change(screen.getByLabelText('Filter status bahasa'), { target: { value: '1' } });
     fireEvent.click(screen.getAllByRole('button', { name: '✕' })[0]);
 
     const panggilanTerakhir = mockUseDaftar.mock.calls.at(-1)?.[0] || {};
     expect(panggilanTerakhir.q).toBe('');
-    expect(panggilanTerakhir.kamus).toBe('');
-    expect(panggilanTerakhir.glosarium).toBe('');
+    expect(panggilanTerakhir.aktif).toBe('');
   });
 
   it('aman saat respons daftar kosong, detail tanpa id, klik item tanpa id, dan batal hapus', async () => {
@@ -249,7 +248,7 @@ describe('BidangAdmin', () => {
 
     render(
       <MemoryRouter>
-        <BidangAdmin />
+        <BahasaAdmin />
       </MemoryRouter>
     );
 
@@ -259,38 +258,39 @@ describe('BidangAdmin', () => {
     mockUseDaftar.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { total: 1, data: [{ id: 0, kode: 'tanpa-id', nama: 'Tanpa ID', aktif: true }] },
+      data: { total: 1, data: [{ id: 0, kode: 'X', nama: 'Tanpa ID', iso2: '', aktif: true }] },
     });
     mockParams = {};
     render(
       <MemoryRouter>
-        <BidangAdmin />
+        <BahasaAdmin />
       </MemoryRouter>
     );
 
     fireEvent.click(screen.getByText('Tanpa ID'));
-    expect(mockNavigate).not.toHaveBeenCalledWith('/redaksi/bidang/undefined');
+    expect(mockNavigate).not.toHaveBeenCalledWith('/redaksi/bahasa/undefined');
     cleanup();
 
     mockParams = { id: '1' };
     mockUseDaftar.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { total: 1, data: [{ id: 1, kode: 'kimia', nama: 'Kimia', aktif: true }] },
+      data: { total: 1, data: [{ id: 1, kode: 'Ing', nama: 'Inggris', iso2: 'en', aktif: true }] },
     });
     mockUseDetail.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { data: { id: 1, kode: 'kimia', nama: 'Kimia', keterangan: '', aktif: true } },
+      data: { data: { id: 1, kode: 'Ing', nama: 'Inggris', iso2: 'en', iso3: 'eng', keterangan: '', aktif: true } },
     });
+    global.confirm = vi.fn(() => false);
+
     render(
       <MemoryRouter>
-        <BidangAdmin />
+        <BahasaAdmin />
       </MemoryRouter>
     );
 
-    await waitFor(() => expect(screen.getByText('Hapus')).toBeInTheDocument());
-    global.confirm = vi.fn(() => false);
+    await waitFor(() => expect(screen.getByDisplayValue('Ing')).toBeInTheDocument());
     fireEvent.click(screen.getByText('Hapus'));
     expect(mutateHapus).not.toHaveBeenCalled();
   });

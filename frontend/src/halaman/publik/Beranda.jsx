@@ -25,7 +25,7 @@ function buatPathPopuler(item, kata) {
 }
 
 function formatLabelPopuler(kata) {
-  const kataAman = String(kata || '').trim();
+  const kataAman = String(kata).trim();
   const daftarKata = kataAman.split(/\s+/).filter(Boolean);
 
   if (daftarKata.length <= 2) {

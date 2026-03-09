@@ -1015,6 +1015,9 @@ module.exports = ModelLabel;
 module.exports.__private = {
   sqlAbjad,
   buildAdminLabelWhereClause,
+  getMasterKategoriTable,
+  ambilDaftarLabelMaster,
+  ambilLabelMaster,
   normalisasiKategoriLabel,
   kandidatKategoriLabel,
   normalizeLabelValue,

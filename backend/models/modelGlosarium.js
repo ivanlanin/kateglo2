@@ -1437,6 +1437,7 @@ module.exports.__private = {
   normalizeBoolean,
   parseOptionalPositiveInt,
   resolveMasterId,
+  resolveBahasaId,
   buildMasterFilters,
   buildSumberFilters,
   buildJumlahEntriSumberSql,

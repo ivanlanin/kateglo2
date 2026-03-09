@@ -219,6 +219,59 @@ describe('KomponenAdmin', () => {
     expect(screen.queryByText('✕')).not.toBeInTheDocument();
   });
 
+  it('BarisFilterCariAdmin tetap aman saat filters bukan array-mapable', () => {
+    render(
+      <BarisFilterCariAdmin
+        nilai=""
+        onChange={vi.fn()}
+        onCari={vi.fn()}
+        onHapus={vi.fn()}
+        filters={{}}
+      />
+    );
+
+    expect(screen.getByText('Cari')).toBeInTheDocument();
+    expect(screen.queryByText('✕')).not.toBeInTheDocument();
+  });
+
+  it('BarisFilterCariAdmin memakai fallback filters kosong saat null', () => {
+    render(
+      <BarisFilterCariAdmin
+        nilai=""
+        onChange={vi.fn()}
+        onCari={vi.fn()}
+        onHapus={vi.fn()}
+        filters={null}
+      />
+    );
+
+    expect(screen.getByText('Cari')).toBeInTheDocument();
+  });
+
+  it('BarisFilterCariAdmin searchable memakai fallback nilai, opsi, dan placeholder bawaan', () => {
+    const onChangeFilter = vi.fn();
+
+    render(
+      <BarisFilterCariAdmin
+        nilai=""
+        onChange={vi.fn()}
+        onCari={vi.fn()}
+        onHapus={vi.fn()}
+        filters={[
+          {
+            key: 'label',
+            onChange: onChangeFilter,
+            searchable: true,
+          },
+        ]}
+      />
+    );
+
+    fireEvent.click(screen.getByLabelText('label'));
+    expect(screen.getByText('Tidak ada hasil.')).toBeInTheDocument();
+    expect(screen.getByLabelText('Cari label')).toHaveAttribute('placeholder', 'Cari label…');
+  });
+
   it('BarisFilterCariAdmin menampilkan tombol reset saat nilai kosong tapi filter aktif', () => {
     const onHapus = vi.fn();
 

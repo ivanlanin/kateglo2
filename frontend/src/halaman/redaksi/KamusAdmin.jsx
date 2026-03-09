@@ -850,8 +850,8 @@ function KamusAdmin() {
   });
   const daftarSaranRujuk = respSaranRujuk?.data || [];
   const { data: respLabelKategori } = useOpsiLabelRedaksi(kategoriLabelRedaksi);
-  const { data: respOpsiBidang } = useOpsiBidangKamusAdmin();
-  const { data: respOpsiBahasa } = useOpsiBahasaKamusAdmin();
+  const { data: respOpsiBidang = { data: [] } } = useOpsiBidangKamusAdmin();
+  const { data: respOpsiBahasa = { data: [] } } = useOpsiBahasaKamusAdmin();
 
   const opsiKategori = useMemo(() => {
     const kategori = respLabelKategori?.data || {};
@@ -862,8 +862,8 @@ function KamusAdmin() {
     );
     const kelasKata = mapOpsiLabel(kategori['kelas-kata'] || [], { emptyLabel: '— Tidak ada —' });
     const ragam = mapOpsiLabel(kategori.ragam || [], { emptyLabel: '— Tidak ada —' });
-    const bidang = mapOpsiLabel(respOpsiBidang?.data || [], { emptyLabel: '— Tidak ada —' });
-    const bahasa = mapOpsiLabel(respOpsiBahasa?.data || [], { emptyLabel: '— Tidak ada —' });
+    const bidang = mapOpsiLabel(respOpsiBidang.data, { emptyLabel: '— Tidak ada —' });
+    const bahasa = mapOpsiLabel(respOpsiBahasa.data, { emptyLabel: '— Tidak ada —' });
     const tipePenyingkat = mapOpsiLabel(kategori.penyingkatan || [], { emptyLabel: '— Tidak ada —' });
 
     return {
@@ -878,8 +878,8 @@ function KamusAdmin() {
   }, [respLabelKategori, respOpsiBidang, respOpsiBahasa]);
 
   const opsiLookupLengkap = useMemo(() => {
-    const bidang = mapOpsiLabel(respOpsiBidang?.data || [], { emptyLabel: '— Tidak ada —' });
-    const bahasa = mapOpsiLabel(respOpsiBahasa?.data || [], { emptyLabel: '— Tidak ada —' });
+    const bidang = mapOpsiLabel(respOpsiBidang.data, { emptyLabel: '— Tidak ada —' });
+    const bahasa = mapOpsiLabel(respOpsiBahasa.data, { emptyLabel: '— Tidak ada —' });
 
     return { bidang, bahasa };
   }, [respOpsiBidang, respOpsiBahasa]);

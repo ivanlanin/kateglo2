@@ -145,7 +145,7 @@ function LabelAdmin() {
       return;
     }
 
-    if (kategoriMasterLabel.has(String(panel.data.kategori || '').trim().toLowerCase())) {
+    if (kategoriMasterLabel.has(String(panel.data.kategori).trim().toLowerCase())) {
       setPesan({ error: pesanKategoriMaster, sukses: '' });
       return;
     }

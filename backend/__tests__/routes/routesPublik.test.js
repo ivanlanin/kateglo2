@@ -242,13 +242,15 @@ describe('routes backend', () => {
 
   it('GET /api/publik/kamus/kategori mengembalikan data kategori', async () => {
     ModelLabel.ambilSemuaKategori.mockResolvedValue({ ragam: [{ kode: 'cak', nama: 'cak' }] });
-    ModelGlosarium.ambilDaftarBidang.mockResolvedValue([]);
-    ModelGlosarium.ambilDaftarBahasa.mockResolvedValue([]);
+    ModelGlosarium.ambilDaftarBidang.mockResolvedValue([{ kode: 'med', nama: 'Medis', lain: 'x' }]);
+    ModelGlosarium.ambilDaftarBahasa.mockResolvedValue([{ kode: 'en', nama: 'Inggris', iso2: 'en' }]);
 
     const response = await request(createApp()).get('/api/publik/kamus/kategori');
 
     expect(response.status).toBe(200);
     expect(response.body.ragam).toHaveLength(1);
+    expect(response.body.bidang).toEqual([{ kode: 'med', nama: 'Medis' }]);
+    expect(response.body.bahasa).toEqual([{ kode: 'en', nama: 'Inggris' }]);
   });
 
   it('GET /api/publik/kamus/kategori meneruskan error ke middleware', async () => {
@@ -1109,6 +1111,17 @@ describe('routes backend', () => {
       lastPage: false,
       sortBy: 'asing',
     });
+  });
+
+  it('GET /api/publik/glosarium/bidang/:bidang melakukan decode dan trim slug sebelum fallback', async () => {
+    ModelGlosarium.resolveSlugBidang.mockResolvedValue(null);
+    ModelGlosarium.cariCursor.mockResolvedValue({ data: [], total: 0 });
+
+    const response = await request(createApp()).get('/api/publik/glosarium/bidang/%20farmasi%20?limit=3');
+
+    expect(response.status).toBe(200);
+    expect(ModelGlosarium.resolveSlugBidang).toHaveBeenCalledWith('farmasi');
+    expect(ModelGlosarium.cariCursor).toHaveBeenCalledWith(expect.objectContaining({ bidangId: null, bidang: 'farmasi' }));
   });
 
   it('GET /api/publik/glosarium/bidang/:bidang meneruskan error', async () => {

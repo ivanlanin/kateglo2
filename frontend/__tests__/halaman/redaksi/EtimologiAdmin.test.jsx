@@ -179,9 +179,10 @@ describe('EtimologiAdmin', () => {
     expect(screen.getByText('Indeks wajib diisi')).toBeInTheDocument();
 
     fireEvent.change(document.getElementById('field-indeks'), { target: { value: 'asal-usul' } });
+    fireEvent.change(document.getElementById('field-bahasa_id'), { target: { value: '10' } });
     fireEvent.change(document.getElementById('field-sumber_id'), { target: { value: '1' } });
     fireEvent.click(screen.getByText('Simpan'));
-    expect(mutateSimpan).toHaveBeenCalled();
+    expect(mutateSimpan).toHaveBeenCalledWith(expect.objectContaining({ bahasa_id: 10 }), expect.any(Object));
   });
 
   it('mengarahkan ke daftar saat id route tidak valid', () => {

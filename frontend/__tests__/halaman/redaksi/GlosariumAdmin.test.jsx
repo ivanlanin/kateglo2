@@ -199,6 +199,36 @@ describe('GlosariumAdmin', () => {
     expect(mutateSimpan).toHaveBeenCalled();
   });
 
+  it('mengisi default bahasa Inggris saat panel tambah dibuka', () => {
+    render(
+      <MemoryRouter>
+        <GlosariumAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    expect(screen.getByLabelText('Bahasa').value).toBe('10');
+  });
+
+  it('mengisi default bahasa saat hanya kode Ing yang tersedia', () => {
+    mockUseOpsiBahasaGlosariumAdmin.mockReturnValue({
+      data: {
+        data: [{ id: 11, kode: 'Ing', nama: 'Inggris', iso2: '' }],
+      },
+      isLoading: false,
+      isError: false,
+    });
+
+    render(
+      <MemoryRouter>
+        <GlosariumAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    expect(screen.getByLabelText('Bahasa').value).toBe('11');
+  });
+
   it('memvalidasi bidang, bahasa, dan sumber wajib dipilih', () => {
     render(
       <MemoryRouter>

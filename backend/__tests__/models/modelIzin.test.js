@@ -12,6 +12,18 @@ describe('ModelIzin', () => {
     db.pool.connect.mockReset();
   });
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it('hitungTotal mengembalikan jumlah ter-parse dan fallback 0', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ total: '9' }] });
+    db.query.mockResolvedValueOnce({ rows: [{}] });
+
+    await expect(ModelIzin.hitungTotal()).resolves.toBe(9);
+    await expect(ModelIzin.hitungTotal()).resolves.toBe(0);
+  });
+
   it('daftarIzin menghitung total dan mengambil data tanpa q', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '2' }] })

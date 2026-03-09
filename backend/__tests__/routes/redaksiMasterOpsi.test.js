@@ -10,14 +10,17 @@ jest.mock('../../middleware/otorisasi', () => ({
 }));
 
 jest.mock('../../models/modelOpsi', () => ({
+  daftarLookupBahasa: jest.fn(),
   daftarMasterBahasa: jest.fn(),
   ambilMasterBahasaDenganId: jest.fn(),
   simpanMasterBahasa: jest.fn(),
   hapusMasterBahasa: jest.fn(),
+  daftarLookupBidang: jest.fn(),
   daftarMasterBidang: jest.fn(),
   ambilMasterBidangDenganId: jest.fn(),
   simpanMasterBidang: jest.fn(),
   hapusMasterBidang: jest.fn(),
+  daftarLookupSumber: jest.fn(),
   daftarMasterSumber: jest.fn(),
   ambilMasterSumberDenganId: jest.fn(),
   simpanMasterSumber: jest.fn(),
@@ -44,6 +47,20 @@ function createApp() {
 describe('routes/redaksi master opsi', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  it('GET /bahasa/opsi mengembalikan lookup dan meneruskan error', async () => {
+    ModelOpsi.daftarLookupBahasa.mockResolvedValueOnce([{ id: 1, kode: 'id', nama: 'Indonesia' }]);
+    ModelOpsi.daftarLookupBahasa.mockRejectedValueOnce(new Error('opsi bahasa gagal'));
+
+    const okResponse = await request(createApp()).get('/api/redaksi/bahasa/opsi?q=%20indo%20');
+    const errorResponse = await request(createApp()).get('/api/redaksi/bahasa/opsi?q=indo');
+
+    expect(okResponse.status).toBe(200);
+    expect(okResponse.body.data).toEqual([{ id: 1, kode: 'id', nama: 'Indonesia' }]);
+    expect(ModelOpsi.daftarLookupBahasa).toHaveBeenNthCalledWith(1, { q: 'indo' });
+    expect(errorResponse.status).toBe(500);
+    expect(errorResponse.body.message).toBe('opsi bahasa gagal');
   });
 
   it('CRUD /bahasa menangani alur utama', async () => {
@@ -101,6 +118,95 @@ describe('routes/redaksi master opsi', () => {
     expect(delete200.status).toBe(200);
   });
 
+  it('GET /bahasa meneruskan aktif tidak valid sebagai string kosong dan meneruskan error', async () => {
+    ModelOpsi.daftarMasterBahasa.mockResolvedValueOnce({ data: [], total: 0 });
+    ModelOpsi.daftarMasterBahasa.mockRejectedValueOnce(new Error('list bahasa gagal'));
+
+    const okResponse = await request(createApp()).get('/api/redaksi/bahasa?aktif=abc');
+    const errorResponse = await request(createApp()).get('/api/redaksi/bahasa');
+
+    expect(okResponse.status).toBe(200);
+    expect(ModelOpsi.daftarMasterBahasa).toHaveBeenNthCalledWith(1, expect.objectContaining({ aktif: '' }));
+    expect(errorResponse.status).toBe(500);
+    expect(errorResponse.body.message).toBe('list bahasa gagal');
+  });
+
+  it('GET /bahasa/:id meneruskan error', async () => {
+    ModelOpsi.ambilMasterBahasaDenganId.mockRejectedValue(new Error('detail bahasa gagal'));
+
+    const response = await request(createApp()).get('/api/redaksi/bahasa/1');
+
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe('detail bahasa gagal');
+  });
+
+  it('POST /bahasa menerapkan aktif default saat tidak valid dan meneruskan error', async () => {
+    ModelOpsi.simpanMasterBahasa.mockResolvedValueOnce({ id: 4, kode: 'fr', nama: 'Prancis' });
+    ModelOpsi.simpanMasterBahasa.mockRejectedValueOnce(new Error('simpan bahasa gagal'));
+
+    const okResponse = await request(createApp())
+      .post('/api/redaksi/bahasa')
+      .send({ kode: ' fr ', nama: ' Prancis ', aktif: 'abc', iso2: ' fr ', iso3: ' fra ', keterangan: ' roman ' });
+    const errorResponse = await request(createApp())
+      .post('/api/redaksi/bahasa')
+      .send({ kode: 'de', nama: 'Jerman' });
+
+    expect(okResponse.status).toBe(201);
+    expect(ModelOpsi.simpanMasterBahasa).toHaveBeenNthCalledWith(1, {
+      kode: 'fr',
+      nama: 'Prancis',
+      iso2: 'fr',
+      iso3: 'fra',
+      keterangan: 'roman',
+      aktif: true,
+    });
+    expect(errorResponse.status).toBe(500);
+    expect(errorResponse.body.message).toBe('simpan bahasa gagal');
+  });
+
+  it('POST /bahasa memvalidasi nama wajib', async () => {
+    const response = await request(createApp())
+      .post('/api/redaksi/bahasa')
+      .send({ kode: 'fr', nama: '' });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('Nama bahasa wajib diisi');
+  });
+
+  it('PUT /bahasa memvalidasi kode dan nama wajib', async () => {
+    const badKode = await request(createApp())
+      .put('/api/redaksi/bahasa/1')
+      .send({ kode: '', nama: 'Inggris' });
+    const badNama = await request(createApp())
+      .put('/api/redaksi/bahasa/1')
+      .send({ kode: 'Ing', nama: '' });
+
+    expect(badKode.status).toBe(400);
+    expect(badKode.body.message).toBe('Kode bahasa wajib diisi');
+    expect(badNama.status).toBe(400);
+    expect(badNama.body.message).toBe('Nama bahasa wajib diisi');
+  });
+
+  it('PUT /bahasa meneruskan error', async () => {
+    ModelOpsi.simpanMasterBahasa.mockRejectedValue(new Error('ubah bahasa gagal'));
+
+    const response = await request(createApp())
+      .put('/api/redaksi/bahasa/1')
+      .send({ kode: 'Ing', nama: 'Inggris' });
+
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe('ubah bahasa gagal');
+  });
+
+  it('DELETE /bahasa meneruskan error selain MASTER_IN_USE', async () => {
+    ModelOpsi.hapusMasterBahasa.mockRejectedValue(new Error('hapus bahasa gagal'));
+
+    const response = await request(createApp()).delete('/api/redaksi/bahasa/1');
+
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe('hapus bahasa gagal');
+  });
+
   it('GET /bidang-master mengembalikan data paginasi', async () => {
     ModelOpsi.daftarMasterBidang.mockResolvedValue({
       data: [{ id: 1, kode: 'kimia', nama: 'Kimia' }],
@@ -112,6 +218,20 @@ describe('routes/redaksi master opsi', () => {
     expect(response.status).toBe(200);
     expect(response.body.success).toBe(true);
     expect(ModelOpsi.daftarMasterBidang).toHaveBeenCalled();
+  });
+
+  it('GET /bidang/opsi mengembalikan lookup dan meneruskan error', async () => {
+    ModelOpsi.daftarLookupBidang.mockResolvedValueOnce([{ id: 1, kode: 'kim', nama: 'Kimia' }]);
+    ModelOpsi.daftarLookupBidang.mockRejectedValueOnce(new Error('opsi bidang gagal'));
+
+    const okResponse = await request(createApp()).get('/api/redaksi/bidang/opsi?q=%20kim%20');
+    const errorResponse = await request(createApp()).get('/api/redaksi/bidang/opsi?q=kim');
+
+    expect(okResponse.status).toBe(200);
+    expect(okResponse.body.data).toEqual([{ id: 1, kode: 'kim', nama: 'Kimia' }]);
+    expect(ModelOpsi.daftarLookupBidang).toHaveBeenNthCalledWith(1, { q: 'kim' });
+    expect(errorResponse.status).toBe(500);
+    expect(errorResponse.body.message).toBe('opsi bidang gagal');
   });
 
   it('GET /bidang-master meneruskan filter kamus/glosarium dan fallback kosong', async () => {
@@ -280,6 +400,32 @@ describe('routes/redaksi master opsi', () => {
     expect(response.status).toBe(200);
     expect(response.body.success).toBe(true);
     expect(ModelOpsi.daftarMasterSumber).toHaveBeenCalled();
+  });
+
+  it('GET /sumber/opsi mengembalikan lookup dan menerapkan filter konteks', async () => {
+    ModelOpsi.daftarLookupSumber.mockResolvedValue([{ id: 1, kode: 'kbbi', nama: 'KBBI' }]);
+
+    const response = await request(createApp())
+      .get('/api/redaksi/sumber/opsi?q=%20kbb%20&glosarium=1&kamus=0&tesaurus=x&etimologi=1');
+
+    expect(response.status).toBe(200);
+    expect(response.body.data).toEqual([{ id: 1, kode: 'kbbi', nama: 'KBBI' }]);
+    expect(ModelOpsi.daftarLookupSumber).toHaveBeenCalledWith({
+      q: 'kbb',
+      glosarium: '1',
+      kamus: '0',
+      tesaurus: '',
+      etimologi: '1',
+    });
+  });
+
+  it('GET /sumber/opsi meneruskan error', async () => {
+    ModelOpsi.daftarLookupSumber.mockRejectedValue(new Error('opsi sumber gagal'));
+
+    const response = await request(createApp()).get('/api/redaksi/sumber/opsi?q=kbbi');
+
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe('opsi sumber gagal');
   });
 
   it('GET /sumber-master meneruskan filter konteks 1/0 dan fallback kosong', async () => {

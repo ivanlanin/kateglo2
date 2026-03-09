@@ -491,3 +491,16 @@ class ModelOpsi {
 }
 
 module.exports = ModelOpsi;
+module.exports.__private = {
+  buildMasterFilters,
+  buildBidangFilters,
+  buildSumberFilters,
+  normalisasiKategoriLabel,
+  kandidatKategoriLabel,
+  normalizeLabelValue,
+  pushLabelUnik,
+  getMasterKategoriTable,
+  ambilDaftarLabelMaster,
+  KATEGORI_LABEL_REDAKSI,
+  MASTER_KATEGORI_TABLE,
+};

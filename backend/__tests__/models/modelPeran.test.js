@@ -12,6 +12,18 @@ describe('ModelPeran', () => {
     db.pool.connect.mockReset();
   });
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it('hitungTotal mengembalikan jumlah ter-parse dan fallback 0', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ total: '4' }] });
+    db.query.mockResolvedValueOnce({ rows: [{}] });
+
+    await expect(ModelPeran.hitungTotal()).resolves.toBe(4);
+    await expect(ModelPeran.hitungTotal()).resolves.toBe(0);
+  });
+
   it('daftarPeran menghitung total dan mengambil data tanpa filter q', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ total: '2' }] })

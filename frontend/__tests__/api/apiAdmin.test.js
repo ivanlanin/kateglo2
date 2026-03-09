@@ -44,11 +44,13 @@ import {
   useDaftarBidangAdmin,
   useOpsiBidangAdmin,
   useOpsiBidangKamusAdmin,
+  useDaftarSemuaBidangAdmin,
   useDetailBidangAdmin,
   useSusunKataHarianAdmin,
   useSusunKataBebasAdmin,
   useDetailSusunKataHarianAdmin,
   useDaftarSumberAdmin,
+  useDaftarSemuaSumberAdmin,
   useOpsiSumberAdmin,
   useDetailSumberAdmin,
   useDaftarLabelAdmin,
@@ -84,8 +86,15 @@ import {
   useHapusGlosarium,
   useSimpanBidang,
   useHapusBidang,
+  useDaftarBahasaAdmin,
+  useDaftarSemuaBahasaAdmin,
+  useDetailBahasaAdmin,
+  useSimpanBahasa,
+  useHapusBahasa,
   useOpsiBahasaAdmin,
   useOpsiBahasaKamusAdmin,
+  useOpsiBahasaGlosariumAdmin,
+  useOpsiBahasaEtimologiAdmin,
   useSimpanSusunKataHarianAdmin,
   useBuatSusunKataHarianAdmin,
   useSimpanSumber,
@@ -359,6 +368,21 @@ describe('apiAdmin', () => {
       },
     });
 
+    const etimologiDenganIdMaster = useDaftarEtimologiAdmin({ bahasaId: 11, sumberId: 22 });
+    await etimologiDenganIdMaster.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/etimologi', {
+      params: {
+        limit: 50,
+        cursor: undefined,
+        direction: 'next',
+        lastPage: undefined,
+        q: undefined,
+        aktif: undefined,
+        bahasa_id: 11,
+        sumber_id: 22,
+      },
+    });
+
     const autocompleteEntriEtimologi = useAutocompleteEntriEtimologi({ q: '  kata ', limit: 9 });
     expect(autocompleteEntriEtimologi.enabled).toBe(true);
     await autocompleteEntriEtimologi.queryFn();
@@ -442,6 +466,20 @@ describe('apiAdmin', () => {
         aktif: '1',
         bidang_id: 12,
         sumber_id: 34,
+      },
+    });
+
+    const glosariumDenganBahasaId = useDaftarGlosariumAdmin({ bahasaId: 56 });
+    await glosariumDenganBahasaId.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium', {
+      params: {
+        limit: 50,
+        cursor: undefined,
+        direction: 'next',
+        lastPage: undefined,
+        q: undefined,
+        aktif: undefined,
+        bahasa_id: 56,
       },
     });
 
@@ -604,12 +642,52 @@ describe('apiAdmin', () => {
     await detailBidang.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/bidang/18');
 
+    const daftarBahasa = useDaftarBahasaAdmin({ limit: 12, q: 'ing', aktif: '1' });
+    await daftarBahasa.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/bahasa', {
+      params: {
+        limit: 12,
+        cursor: undefined,
+        direction: 'next',
+        lastPage: undefined,
+        q: 'ing',
+        aktif: '1',
+      },
+    });
+
+    const daftarSemuaBahasa = useDaftarSemuaBahasaAdmin({ q: 'ar', aktif: '0', enabled: false });
+    expect(daftarSemuaBahasa.enabled).toBe(false);
+    await daftarSemuaBahasa.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/bahasa', {
+      params: {
+        offset: 0,
+        limit: 200,
+        q: 'ar',
+        aktif: '0',
+      },
+    });
+
+    const detailBahasa = useDetailBahasaAdmin(20);
+    expect(detailBahasa.enabled).toBe(true);
+    await detailBahasa.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/bahasa/20');
+
     const opsiBahasaAdmin = useOpsiBahasaAdmin();
     await opsiBahasaAdmin.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/bahasa/opsi', { params: {} });
 
     const opsiBahasaKamus = useOpsiBahasaKamusAdmin();
     await opsiBahasaKamus.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/bahasa/opsi', { params: {} });
+
+    const opsiBahasaGlosarium = useOpsiBahasaGlosariumAdmin({ enabled: false });
+    expect(opsiBahasaGlosarium.enabled).toBe(false);
+    await opsiBahasaGlosarium.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/bahasa/opsi', { params: {} });
+
+    const opsiBahasaEtimologi = useOpsiBahasaEtimologiAdmin({ enabled: false });
+    expect(opsiBahasaEtimologi.enabled).toBe(false);
+    await opsiBahasaEtimologi.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/bahasa/opsi', { params: {} });
 
     const opsiSumberAdmin = useOpsiSumberAdmin({ glosarium: '1' });
@@ -725,6 +803,34 @@ describe('apiAdmin', () => {
       },
     });
 
+    const daftarSemuaBidang = useDaftarSemuaBidangAdmin({ q: 'kim', kamus: '1', glosarium: '0', enabled: false });
+    expect(daftarSemuaBidang.enabled).toBe(false);
+    await daftarSemuaBidang.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/bidang', {
+      params: {
+        limit: 200,
+        q: 'kim',
+        kamus: '1',
+        glosarium: '0',
+        offset: 0,
+      },
+    });
+
+    const daftarSemuaSumber = useDaftarSemuaSumberAdmin({ q: 'kb', glosarium: '1', kamus: '0', tesaurus: '1', etimologi: '0', enabled: false });
+    expect(daftarSemuaSumber.enabled).toBe(false);
+    await daftarSemuaSumber.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/sumber', {
+      params: {
+        limit: 200,
+        q: 'kb',
+        glosarium: '1',
+        kamus: '0',
+        tesaurus: '1',
+        etimologi: '0',
+        offset: 0,
+      },
+    });
+
     const detailSumber = useDetailSumberAdmin(19);
     expect(detailSumber.enabled).toBe(true);
     await detailSumber.queryFn();
@@ -749,6 +855,7 @@ describe('apiAdmin', () => {
     expect(useDetailPengguna(null).enabled).toBe(false);
     expect(useDetailBidangAdmin(null).enabled).toBe(false);
     expect(useDetailSumberAdmin(null).enabled).toBe(false);
+    expect(useDetailBahasaAdmin(null).enabled).toBe(false);
   });
 
   it('mengonfigurasi mutation admin pengguna', async () => {
@@ -901,6 +1008,20 @@ describe('apiAdmin', () => {
     hapusBidang.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-bidang'] });
 
+    const simpanBahasa = useSimpanBahasa();
+    await simpanBahasa.mutationFn({ id: 4, kode: 'Ing', nama: 'Inggris' });
+    await simpanBahasa.mutationFn({ kode: 'Ar', nama: 'Arab' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/bahasa/4', { id: 4, kode: 'Ing', nama: 'Inggris' });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/bahasa', { kode: 'Ar', nama: 'Arab' });
+    simpanBahasa.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-bahasa'] });
+
+    const hapusBahasa = useHapusBahasa();
+    await hapusBahasa.mutationFn(4);
+    expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/bahasa/4');
+    hapusBahasa.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-bahasa'] });
+
     const simpanSusunKata = useSimpanSusunKataHarianAdmin();
     await simpanSusunKata.mutationFn({ tanggal: '2026-03-02', panjang: 5, kata: 'kartu' });
     expect(klien.put).toHaveBeenCalledWith('/api/redaksi/susun-kata/harian', { tanggal: '2026-03-02', panjang: 5, kata: 'kartu' });
@@ -993,6 +1114,41 @@ describe('apiAdmin', () => {
         tesaurus: '1',
       },
     });
+  });
+
+  it('useDaftarAdminSemua menggabungkan banyak halaman dan menangani chunk non-array', async () => {
+    klien.get
+      .mockResolvedValueOnce({
+        data: {
+          data: [{ id: 1 }],
+          total: 3,
+          pageInfo: { hasNext: true },
+        },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          data: [{ id: 2 }, { id: 3 }],
+          total: 3,
+          pageInfo: { hasNext: false },
+        },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          data: null,
+          total: 0,
+          pageInfo: { hasNext: true },
+        },
+      });
+
+    const semuaBidang = useDaftarSemuaBidangAdmin({ q: 'kim' });
+    const hasilBidang = await semuaBidang.queryFn();
+    expect(hasilBidang.data).toEqual([{ id: 1 }, { id: 2 }, { id: 3 }]);
+    expect(hasilBidang.total).toBe(3);
+
+    const semuaSumber = useDaftarSemuaSumberAdmin({ q: 'src' });
+    const hasilSumber = await semuaSumber.queryFn();
+    expect(hasilSumber.data).toEqual([]);
+    expect(hasilSumber.total).toBe(0);
   });
 
   it('mengonfigurasi query pencarian hitam dan detailnya', async () => {

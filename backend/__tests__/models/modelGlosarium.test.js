@@ -6,10 +6,12 @@
 const db = require('../../db');
 const { encodeCursor } = require('../../utils/cursorPagination');
 const ModelGlosarium = require('../../models/modelGlosarium');
+const ModelOpsi = require('../../models/modelOpsi');
 const {
   normalizeBoolean,
   parseOptionalPositiveInt,
   resolveMasterId,
+  resolveBahasaId,
   buildMasterFilters,
   buildSumberFilters,
   buildJumlahEntriSumberSql,
@@ -23,6 +25,10 @@ describe('ModelGlosarium', () => {
     db.query.mockReset();
     db.pool.connect.mockReset();
     resetNormalizedSchemaCache();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it('autocomplete mengembalikan kosong jika query kosong', async () => {
@@ -93,6 +99,20 @@ describe('ModelGlosarium', () => {
       ['%kat%', 'ling', 'kbbi', 10, 5]
     );
     expect(result).toEqual({ data: [{ id: 1, indonesia: 'kata' }], total: 2, hasNext: false });
+  });
+
+  it('cari normalized menambahkan filter bahasa_id ketika diberikan id numerik', async () => {
+    forceNormalizedSchemaForTest(true);
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 4, indonesia: 'istilah' }] });
+
+    const result = await ModelGlosarium.cari({ bahasaId: 7, limit: 5, offset: 2 });
+
+    expect(db.query.mock.calls[0][0]).toContain('g.bahasa_id = $1');
+    expect(db.query).toHaveBeenNthCalledWith(1, expect.any(String), [7]);
+    expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('LIMIT $2 OFFSET $3'), [7, 5, 2]);
+    expect(result).toEqual({ data: [{ id: 4, indonesia: 'istilah' }], total: 1, hasNext: false });
   });
 
   it('cari dengan bahasa en', async () => {
@@ -462,6 +482,17 @@ describe('ModelGlosarium', () => {
     expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM bidang b'));
     expect(db.query).toHaveBeenCalledWith(expect.stringContaining('AS slug'));
     expect(result).toEqual(rows);
+  });
+
+  it('ambilDaftarBahasa mendukung aktifSaja true dan false', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ id: 1, kode: 'id', nama: 'Indonesia' }] });
+    db.query.mockResolvedValueOnce({ rows: [{ id: 2, kode: 'en', nama: 'Inggris' }] });
+
+    await expect(ModelGlosarium.ambilDaftarBahasa()).resolves.toEqual([{ id: 1, kode: 'id', nama: 'Indonesia' }]);
+    await expect(ModelGlosarium.ambilDaftarBahasa(false)).resolves.toEqual([{ id: 2, kode: 'en', nama: 'Inggris' }]);
+
+    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('WHERE ba.aktif = TRUE'));
+    expect(db.query).toHaveBeenNthCalledWith(2, expect.not.stringContaining('WHERE ba.aktif = TRUE'));
   });
 
   it('ambilDaftarSumber mengembalikan rows', async () => {
@@ -875,6 +906,36 @@ describe('ModelGlosarium', () => {
       's.tesaurus = TRUE',
       's.etimologi = FALSE',
     ]));
+  });
+
+  it('buildSumberFilters false branches dan resolveBahasaId mencakup fallback helper', async () => {
+    const params = [];
+    const client = {
+      query: jest.fn().mockResolvedValueOnce({ rows: [{ id: 9 }] }),
+    };
+
+    expect(buildSumberFilters({ q: '', glosarium: '0', kamus: '', tesaurus: '0', etimologi: '', params })).toEqual([
+      's.glosarium = FALSE',
+      's.tesaurus = FALSE',
+    ]);
+    await expect(resolveBahasaId(client, { explicitId: 5, kode: 'id', iso2: 'id' })).resolves.toBe(5);
+    await expect(resolveBahasaId(client, { kode: '', iso2: '' })).resolves.toBeNull();
+    await expect(resolveBahasaId(client, { kode: 'Ing', iso2: '' })).resolves.toBe(9);
+    expect(client.query).toHaveBeenCalledWith(expect.stringContaining('SELECT id FROM bahasa'), ['Ing', '']);
+  });
+
+  it('buildMasterFilters dan buildSumberFilters mencakup cabang nilai truthy lainnya', () => {
+    const paramsMaster = [];
+    const paramsSumber = [];
+    const paramsKosong = [];
+
+    expect(buildMasterFilters({ alias: 'b', q: '', aktif: 'x', params: paramsMaster })).toEqual([]);
+    expect(buildSumberFilters({ q: '', glosarium: '1', kamus: '1', tesaurus: '', etimologi: '1', params: paramsSumber })).toEqual([
+      's.glosarium = TRUE',
+      's.kamus = TRUE',
+      's.etimologi = TRUE',
+    ]);
+    expect(buildSumberFilters({ q: '', glosarium: '', kamus: '', tesaurus: '', etimologi: '', params: paramsKosong })).toEqual([]);
   });
 
   it('buildJumlahEntriSumberSql memakai alias default dan alias kustom', () => {
@@ -1312,6 +1373,26 @@ describe('ModelGlosarium', () => {
     expect(client.release).toHaveBeenCalled();
   });
 
+  it('simpan normalized melempar INVALID_BAHASA jika bahasa tidak valid', async () => {
+    forceNormalizedSchemaForTest(true);
+    const client = {
+      query: jest.fn().mockResolvedValueOnce({ rows: [] }),
+      release: jest.fn(),
+    };
+    db.pool.connect.mockResolvedValue(client);
+
+    await expect(ModelGlosarium.simpan({
+      indonesia: 'istilah',
+      asing: 'term',
+      bidang_id: 2,
+      sumber_id: 3,
+      bahasa: 'xx',
+    })).rejects.toMatchObject({
+      code: 'INVALID_BAHASA',
+    });
+    expect(client.release).toHaveBeenCalled();
+  });
+
   it('simpan normalized update mengembalikan null saat id tidak ditemukan', async () => {
     forceNormalizedSchemaForTest(true);
     const client = {
@@ -1486,6 +1567,45 @@ describe('ModelGlosarium', () => {
     expect(sumber).toEqual({ data: [], total: 0 });
     expect(db.query).toHaveBeenNthCalledWith(1, expect.not.stringContaining('WHERE'), []);
     expect(db.query).toHaveBeenNthCalledWith(3, expect.not.stringContaining('WHERE'), []);
+  });
+
+  it('wrapper master glosarium mendelegasikan lookup, detail, simpan, hapus, dan hitung total ke ModelOpsi', async () => {
+    jest.spyOn(ModelOpsi, 'daftarLookupBidang').mockResolvedValue([{ id: 1 }]);
+    jest.spyOn(ModelOpsi, 'daftarMasterBahasa').mockResolvedValue({ data: [], total: 0 });
+    jest.spyOn(ModelOpsi, 'daftarLookupBahasa').mockResolvedValue([{ id: 2 }]);
+    jest.spyOn(ModelOpsi, 'daftarLookupSumber').mockResolvedValue([{ id: 3 }]);
+    jest.spyOn(ModelOpsi, 'ambilMasterBahasaDenganId').mockResolvedValue({ id: 4 });
+    jest.spyOn(ModelOpsi, 'simpanMasterBahasa').mockResolvedValue({ id: 5 });
+    jest.spyOn(ModelOpsi, 'hapusMasterBahasa').mockResolvedValue(true);
+    jest.spyOn(ModelOpsi, 'hitungTotalBahasa').mockResolvedValue(8);
+    jest.spyOn(ModelOpsi, 'hitungTotalSumber').mockResolvedValue(9);
+
+    await expect(ModelGlosarium.daftarLookupBidang({ q: 'kim' })).resolves.toEqual([{ id: 1 }]);
+    await expect(ModelGlosarium.daftarMasterBahasa({ q: 'ing', aktif: '1', limit: 5, offset: 1 })).resolves.toEqual({ data: [], total: 0 });
+    await expect(ModelGlosarium.daftarLookupBahasa({ q: 'ing' })).resolves.toEqual([{ id: 2 }]);
+    await expect(ModelGlosarium.daftarLookupSumber({ q: 'kbbi', glosarium: '1', kamus: '0', tesaurus: '1', etimologi: '0' })).resolves.toEqual([{ id: 3 }]);
+    await expect(ModelGlosarium.ambilMasterBahasaDenganId(4)).resolves.toEqual({ id: 4 });
+    await expect(ModelGlosarium.simpanMasterBahasa({ kode: 'id', nama: 'Indonesia' })).resolves.toEqual({ id: 5 });
+    await expect(ModelGlosarium.hapusMasterBahasa(5)).resolves.toBe(true);
+    await expect(ModelGlosarium.hitungTotalBahasa()).resolves.toBe(8);
+    await expect(ModelGlosarium.hitungTotalSumber()).resolves.toBe(9);
+  });
+
+  it('wrapper lookup/master bahasa dan sumber mendukung default argumen kosong', async () => {
+    jest.spyOn(ModelOpsi, 'daftarLookupBidang').mockResolvedValue([]);
+    jest.spyOn(ModelOpsi, 'daftarMasterBahasa').mockResolvedValue({ data: [], total: 0 });
+    jest.spyOn(ModelOpsi, 'daftarLookupBahasa').mockResolvedValue([]);
+    jest.spyOn(ModelOpsi, 'daftarLookupSumber').mockResolvedValue([]);
+
+    await expect(ModelGlosarium.daftarLookupBidang()).resolves.toEqual([]);
+    await expect(ModelGlosarium.daftarMasterBahasa()).resolves.toEqual({ data: [], total: 0 });
+    await expect(ModelGlosarium.daftarLookupBahasa()).resolves.toEqual([]);
+    await expect(ModelGlosarium.daftarLookupSumber()).resolves.toEqual([]);
+
+    expect(ModelOpsi.daftarLookupBidang).toHaveBeenCalledWith({ q: '' });
+    expect(ModelOpsi.daftarMasterBahasa).toHaveBeenCalledWith({ q: '', aktif: '', limit: 50, offset: 0 });
+    expect(ModelOpsi.daftarLookupBahasa).toHaveBeenCalledWith({ q: '' });
+    expect(ModelOpsi.daftarLookupSumber).toHaveBeenCalledWith({ q: '', glosarium: '', kamus: '', tesaurus: '', etimologi: '' });
   });
 
   it('ambilMasterBidangDenganId dan ambilDenganId normalized dapat mengembalikan null', async () => {

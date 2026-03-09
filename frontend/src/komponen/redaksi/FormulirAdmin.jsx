@@ -174,7 +174,6 @@ export function SearchableSelectField({
   };
 
   const handleToggleDropdown = () => {
-    if (disabled) return;
     setTampilDropdown((prev) => {
       const next = !prev;
       if (!next) setQuery('');

@@ -1615,26 +1615,36 @@ describe('routes/redaksi', () => {
       invalidBidangError.code = 'INVALID_BIDANG';
       const invalidSumberError = new Error('Sumber tidak valid');
       invalidSumberError.code = 'INVALID_SUMBER';
+      const invalidBahasaError = new Error('Bahasa tidak valid');
+      invalidBahasaError.code = 'INVALID_BAHASA';
 
       ModelGlosarium.simpan
         .mockRejectedValueOnce(invalidBidangError)
         .mockRejectedValueOnce(invalidSumberError)
+        .mockRejectedValueOnce(invalidBahasaError)
         .mockRejectedValueOnce(invalidBidangError)
-        .mockRejectedValueOnce(invalidSumberError);
+        .mockRejectedValueOnce(invalidSumberError)
+        .mockRejectedValueOnce(invalidBahasaError);
 
       const postBidang = await callAsAdmin('post', '/api/redaksi/glosarium', { body: { indonesia: 'istilah', asing: 'term' } });
       const postSumber = await callAsAdmin('post', '/api/redaksi/glosarium', { body: { indonesia: 'istilah', asing: 'term' } });
+      const postBahasa = await callAsAdmin('post', '/api/redaksi/glosarium', { body: { indonesia: 'istilah', asing: 'term' } });
       const putBidang = await callAsAdmin('put', '/api/redaksi/glosarium/1', { body: { indonesia: 'istilah', asing: 'term' } });
       const putSumber = await callAsAdmin('put', '/api/redaksi/glosarium/1', { body: { indonesia: 'istilah', asing: 'term' } });
+      const putBahasa = await callAsAdmin('put', '/api/redaksi/glosarium/1', { body: { indonesia: 'istilah', asing: 'term' } });
 
       expect(postBidang.status).toBe(400);
       expect(postBidang.body.message).toBe('Bidang tidak valid');
       expect(postSumber.status).toBe(400);
       expect(postSumber.body.message).toBe('Sumber tidak valid');
+      expect(postBahasa.status).toBe(400);
+      expect(postBahasa.body.message).toBe('Bahasa tidak valid');
       expect(putBidang.status).toBe(400);
       expect(putBidang.body.message).toBe('Bidang tidak valid');
       expect(putSumber.status).toBe(400);
       expect(putSumber.body.message).toBe('Sumber tidak valid');
+      expect(putBahasa.status).toBe(400);
+      expect(putBahasa.body.message).toBe('Bahasa tidak valid');
     });
 
     it('POST/PUT /api/redaksi/glosarium tetap meneruskan saat error nullish', async () => {

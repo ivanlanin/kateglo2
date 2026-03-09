@@ -63,6 +63,17 @@ describe('routes/redaksi/etimologi', () => {
     expect(response.body.message).toBe('opsi gagal');
   });
 
+  it('GET /opsi-entri mengembalikan 400 untuk INVALID_BAHASA', async () => {
+    const error = new Error('Bahasa tidak valid');
+    error.code = 'INVALID_BAHASA';
+    ModelEtimologi.cariEntriUntukTautan.mockRejectedValue(error);
+
+    const response = await request(createApp()).get('/api/redaksi/etimologi/opsi-entri?q=kata');
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('Bahasa tidak valid');
+  });
+
   it('GET / mengembalikan paginasi list', async () => {
     ModelEtimologi.daftarAdmin.mockResolvedValue({ data: [{ id: 2 }], total: 3 });
 
@@ -104,6 +115,31 @@ describe('routes/redaksi/etimologi', () => {
 
     expect(response.status).toBe(500);
     expect(response.body.message).toBe('list gagal');
+  });
+
+  it('GET / meneruskan bahasa_id, sumber_id, meragukan, dan INVALID_BAHASA', async () => {
+    const invalidBahasa = new Error('Bahasa tidak valid');
+    invalidBahasa.code = 'INVALID_BAHASA';
+    ModelEtimologi.daftarAdmin.mockRejectedValueOnce(invalidBahasa).mockResolvedValueOnce({ data: [], total: 0 });
+
+    const badResponse = await request(createApp())
+      .get('/api/redaksi/etimologi?bahasa_id=3&sumber_id=7&meragukan=1');
+    const okResponse = await request(createApp())
+      .get('/api/redaksi/etimologi?bahasa_id=3&sumber_id=7&meragukan=1');
+
+    expect(badResponse.status).toBe(400);
+    expect(badResponse.body.message).toBe('Bahasa tidak valid');
+    expect(okResponse.status).toBe(200);
+    expect(ModelEtimologi.daftarAdmin).toHaveBeenLastCalledWith({
+      limit: 50,
+      offset: 0,
+      q: '',
+      bahasa: '',
+      bahasaId: 3,
+      sumberId: 7,
+      aktif: '',
+      meragukan: '1',
+    });
   });
 
   it('GET /:id mengembalikan 404 dan 200', async () => {

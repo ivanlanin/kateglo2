@@ -121,6 +121,14 @@ describe('LabelAdmin', () => {
 
     expect(screen.getByText('Kategori bahasa, bidang, dan sumber dikelola lewat menu master masing-masing')).toBeInTheDocument();
     expect(mutateSimpan).not.toHaveBeenCalled();
+
+    fireEvent.change(screen.getByLabelText('Kategori*'), { target: { value: ' bidang ' } });
+    fireEvent.click(screen.getByText('Simpan'));
+    expect(mutateSimpan).not.toHaveBeenCalled();
+
+    fireEvent.change(screen.getByLabelText('Kategori*'), { target: { value: 'Sumber' } });
+    fireEvent.click(screen.getByText('Simpan'));
+    expect(mutateSimpan).not.toHaveBeenCalled();
   });
 
   it('menjalankan sukses simpan, cabang confirm false, dan sukses hapus', () => {
