@@ -338,21 +338,60 @@ export function useDetailKamusAdmin(id) {
   });
 }
 
-export function useOpsiBidangKamusAdmin({ enabled = true } = {}) {
+function useOpsiReferensiAdmin(path, queryKey, { enabled = true, params = {}, queryKeyParams = {} } = {}) {
   return useQuery({
-    queryKey: ['admin-kamus-opsi-bidang'],
-    queryFn: () => klien.get('/api/redaksi/kamus/opsi-bidang').then((r) => r.data),
+    queryKey: [queryKey, queryKeyParams],
+    queryFn: () => klien.get(path, { params }).then((r) => r.data),
     enabled,
     staleTime: 5 * 60 * 1000,
   });
 }
 
-export function useOpsiBahasaKamusAdmin({ enabled = true } = {}) {
-  return useQuery({
-    queryKey: ['admin-kamus-opsi-bahasa'],
-    queryFn: () => klien.get('/api/redaksi/kamus/opsi-bahasa').then((r) => r.data),
+export function useOpsiBidangAdmin({ enabled = true } = {}) {
+  return useOpsiReferensiAdmin('/api/redaksi/bidang/opsi', 'admin-bidang-opsi', { enabled });
+}
+
+export function useOpsiBahasaAdmin({ enabled = true } = {}) {
+  return useOpsiReferensiAdmin('/api/redaksi/bahasa/opsi', 'admin-bahasa-opsi', { enabled });
+}
+
+export function useOpsiSumberAdmin({
+  enabled = true,
+  glosarium = '',
+  kamus = '',
+  tesaurus = '',
+  etimologi = '',
+} = {}) {
+  const params = { glosarium, kamus, tesaurus, etimologi };
+  return useOpsiReferensiAdmin('/api/redaksi/sumber/opsi', 'admin-sumber-opsi', {
     enabled,
-    staleTime: 5 * 60 * 1000,
+    params,
+    queryKeyParams: params,
+  });
+}
+
+export function useOpsiBidangKamusAdmin({ enabled = true } = {}) {
+  return useOpsiBidangAdmin({ enabled });
+}
+
+export function useOpsiBahasaKamusAdmin({ enabled = true } = {}) {
+  return useOpsiBahasaAdmin({ enabled });
+}
+
+export function useOpsiBahasaGlosariumAdmin({ enabled = true } = {}) {
+  return useOpsiBahasaAdmin({ enabled });
+}
+
+export function useOpsiBahasaEtimologiAdmin({ enabled = true } = {}) {
+  return useOpsiBahasaAdmin({ enabled });
+}
+
+export function useOpsiLabelRedaksi(kategori = [], { enabled = true } = {}) {
+  const nama = kategori.join(',');
+  return useOpsiReferensiAdmin('/api/redaksi/label/kategori', 'admin-label-kategori', {
+    enabled,
+    params: { nama: nama || undefined },
+    queryKeyParams: nama,
   });
 }
 
@@ -467,6 +506,8 @@ export function useDaftarEtimologiAdmin({
   lastPage = false,
   q = '',
   bahasa = '',
+  bahasaId = '',
+  sumberId = '',
   aktif = '',
   meragukan = '',
 } = {}) {
@@ -481,10 +522,12 @@ export function useDaftarEtimologiAdmin({
   });
 
   if (bahasa) params.bahasa = bahasa;
+  if (bahasaId) params.bahasa_id = bahasaId;
+  if (sumberId) params.sumber_id = sumberId;
   if (meragukan === '1' || meragukan === '0') params.meragukan = meragukan;
 
   return useQuery({
-    queryKey: ['admin-etimologi', { limit, cursor, direction, lastPage, q, bahasa, aktif, meragukan }],
+    queryKey: ['admin-etimologi', { limit, cursor, direction, lastPage, q, bahasa, bahasaId, sumberId, aktif, meragukan }],
     queryFn: () =>
       klien
         .get('/api/redaksi/etimologi', { params })
@@ -526,6 +569,7 @@ export function useDaftarGlosariumAdmin({
   lastPage = false,
   q = '',
   bidangId = '',
+  bahasaId = '',
   sumberId = '',
   aktif = '',
 } = {}) {
@@ -539,6 +583,7 @@ export function useDaftarGlosariumAdmin({
   });
 
   if (bidangId) params.bidang_id = bidangId;
+  if (bahasaId) params.bahasa_id = bahasaId;
   if (sumberId) params.sumber_id = sumberId;
 
   return useQuery({
@@ -549,6 +594,7 @@ export function useDaftarGlosariumAdmin({
       lastPage,
       q,
       bidangId,
+      bahasaId,
       sumberId,
       aktif,
     }],
@@ -587,6 +633,25 @@ export function useDaftarBidangAdmin({
 
 export function useDaftarSemuaBidangAdmin({ q = '', aktif = '', enabled = true } = {}) {
   return useDaftarAdminSemua('/api/redaksi/bidang', 'admin-bidang', { q, aktif, enabled });
+}
+
+export function useDaftarSemuaSumberAdmin({
+  q = '',
+  enabled = true,
+  glosarium = '',
+  kamus = '',
+  tesaurus = '',
+  etimologi = '',
+} = {}) {
+  return useDaftarAdminSemua('/api/redaksi/sumber', 'admin-sumber', {
+    q,
+    enabled,
+    includeAktif: false,
+    glosarium,
+    kamus,
+    tesaurus,
+    etimologi,
+  });
 }
 
 export function useDetailBidangAdmin(id) {
@@ -712,15 +777,8 @@ export function useDetailLabelAdmin(id) {
   });
 }
 
-export function useKategoriLabelRedaksi(kategori = []) {
-  const nama = kategori.join(',');
-  return useQuery({
-    queryKey: ['admin-label-kategori', nama],
-    queryFn: () =>
-      klien
-        .get('/api/redaksi/label/kategori', { params: { nama: nama || undefined } })
-        .then((r) => r.data),
-  });
+export function useKategoriLabelRedaksi(kategori = [], options = {}) {
+  return useOpsiLabelRedaksi(kategori, options);
 }
 
 // ─── Pengguna ────────────────────────────────────────────────────────────────

@@ -4,6 +4,7 @@
  */
 
 const db = require('../db');
+const ModelOpsi = require('./modelOpsi');
 const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
 const { decodeCursor, encodeCursor } = require('../utils/cursorPagination');
 
@@ -25,7 +26,6 @@ const KELAS_BEBAS = ['adjektiva', 'adverbia', 'nomina', 'numeralia', 'preposisi'
 const URUTAN_KELAS_KATA = ['nomina', 'verba', 'adjektiva', 'adverbia', 'pronomina', 'numeralia', 'preposisi', 'konjungsi', 'interjeksi', 'partikel'];
 const URUTAN_UNSUR_TERIKAT = ['terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik', 'prakategorial'];
 const URUTAN_RAGAM = ['arkais', 'klasik', 'hormat', 'cakapan', 'kasar'];
-const KATEGORI_LABEL_REDAKSI = ['bentuk-kata', 'jenis-rujuk', 'kelas-kata', 'ragam', 'bidang', 'bahasa', 'penyingkatan'];
 const MASTER_KATEGORI_TABLE = {
   bahasa: 'bahasa',
   bidang: 'bidang',
@@ -732,44 +732,7 @@ class ModelLabel {
    * @returns {Promise<Object<string, Array<{kode: string, nama: string}>>>}
    */
   static async ambilKategoriUntukRedaksi(kategoriList = []) {
-    const requested = kategoriList.length
-      ? kategoriList.map((item) => normalisasiKategoriLabel(item)).filter(Boolean)
-      : [...KATEGORI_LABEL_REDAKSI];
-
-    const uniqueRequested = [...new Set(requested)].filter((item) => KATEGORI_LABEL_REDAKSI.includes(item));
-    if (!uniqueRequested.length) {
-      return {};
-    }
-
-    const grouped = Object.fromEntries(uniqueRequested.map((kategori) => [kategori, []]));
-
-    const kategoriLabelBiasa = uniqueRequested.filter((item) => !getMasterKategoriTable(item));
-    if (kategoriLabelBiasa.length) {
-      const kategoriQuery = [...new Set(kategoriLabelBiasa.flatMap((item) => kandidatKategoriLabel(item)))];
-      const result = await db.query(
-        `SELECT kategori, kode, nama, urutan
-         FROM label
-         WHERE kategori = ANY($1::text[]) AND aktif = TRUE
-         ORDER BY kategori ASC, urutan ASC, nama ASC, kode ASC`,
-        [kategoriQuery]
-      );
-
-      for (const row of result.rows) {
-        const normalizedKategori = normalisasiKategoriLabel(row.kategori);
-        if (!grouped[normalizedKategori]) continue;
-        pushLabelUnik(grouped, normalizedKategori, { kode: row.kode, nama: row.nama });
-      }
-    }
-
-    const kategoriMaster = uniqueRequested.filter((item) => getMasterKategoriTable(item));
-    if (kategoriMaster.length) {
-      const hasilMaster = await Promise.all(kategoriMaster.map((item) => ambilDaftarLabelMaster(item)));
-      kategoriMaster.forEach((kategori, index) => {
-        grouped[kategori] = hasilMaster[index];
-      });
-    }
-
-    return grouped;
+    return ModelOpsi.ambilKategoriLabelUntukRedaksi(kategoriList);
   }
 
   /**

@@ -4,7 +4,7 @@
 
 const express = require('express');
 const { periksaIzin } = require('../../middleware/otorisasi');
-const ModelGlosarium = require('../../models/modelGlosarium');
+const ModelOpsi = require('../../models/modelOpsi');
 const {
   buildPaginatedResult,
   parsePagination,
@@ -33,13 +33,23 @@ function parseBahasaPayload(body) {
   };
 }
 
+router.get('/opsi', async (req, res, next) => {
+  try {
+    const q = parseSearchQuery(req.query.q);
+    const data = await ModelOpsi.daftarLookupBahasa({ q });
+    return res.json({ success: true, data });
+  } catch (error) {
+    return next(error);
+  }
+});
+
 router.get('/', periksaIzin('kelola_bahasa'), async (req, res, next) => {
   try {
     const { limit, offset } = parsePagination(req.query);
     const q = parseSearchQuery(req.query.q);
     const aktif = parseAktifParam(req.query.aktif);
 
-    const { data, total } = await ModelGlosarium.daftarMasterBahasa({ q, aktif, limit, offset });
+    const { data, total } = await ModelOpsi.daftarMasterBahasa({ q, aktif, limit, offset });
 
     return res.json({
       success: true,
@@ -52,7 +62,7 @@ router.get('/', periksaIzin('kelola_bahasa'), async (req, res, next) => {
 
 router.get('/:id', periksaIzin('kelola_bahasa'), async (req, res, next) => {
   try {
-    const data = await ModelGlosarium.ambilMasterBahasaDenganId(parseIdParam(req.params.id));
+    const data = await ModelOpsi.ambilMasterBahasaDenganId(parseIdParam(req.params.id));
     if (!data) return res.status(404).json({ success: false, message: 'Bahasa tidak ditemukan' });
     return res.json({ success: true, data });
   } catch (error) {
@@ -66,7 +76,7 @@ router.post('/', periksaIzin('kelola_bahasa'), async (req, res, next) => {
     if (!payload.kode) return res.status(400).json({ success: false, message: 'Kode bahasa wajib diisi' });
     if (!payload.nama) return res.status(400).json({ success: false, message: 'Nama bahasa wajib diisi' });
 
-    const data = await ModelGlosarium.simpanMasterBahasa(payload);
+    const data = await ModelOpsi.simpanMasterBahasa(payload);
     return res.status(201).json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -79,7 +89,7 @@ router.put('/:id', periksaIzin('kelola_bahasa'), async (req, res, next) => {
     if (!payload.kode) return res.status(400).json({ success: false, message: 'Kode bahasa wajib diisi' });
     if (!payload.nama) return res.status(400).json({ success: false, message: 'Nama bahasa wajib diisi' });
 
-    const data = await ModelGlosarium.simpanMasterBahasa({
+    const data = await ModelOpsi.simpanMasterBahasa({
       ...payload,
       id: parseIdParam(req.params.id),
     });
@@ -92,7 +102,7 @@ router.put('/:id', periksaIzin('kelola_bahasa'), async (req, res, next) => {
 
 router.delete('/:id', periksaIzin('kelola_bahasa'), async (req, res, next) => {
   try {
-    const deleted = await ModelGlosarium.hapusMasterBahasa(parseIdParam(req.params.id));
+    const deleted = await ModelOpsi.hapusMasterBahasa(parseIdParam(req.params.id));
     if (!deleted) return res.status(404).json({ success: false, message: 'Bahasa tidak ditemukan' });
     return res.json({ success: true });
   } catch (error) {

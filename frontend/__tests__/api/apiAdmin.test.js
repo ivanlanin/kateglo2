@@ -42,15 +42,18 @@ import {
   useDaftarGlosariumAdmin,
   useDetailGlosariumAdmin,
   useDaftarBidangAdmin,
+  useOpsiBidangAdmin,
   useOpsiBidangKamusAdmin,
   useDetailBidangAdmin,
   useSusunKataHarianAdmin,
   useSusunKataBebasAdmin,
   useDetailSusunKataHarianAdmin,
   useDaftarSumberAdmin,
+  useOpsiSumberAdmin,
   useDetailSumberAdmin,
   useDaftarLabelAdmin,
   useDetailLabelAdmin,
+  useOpsiLabelRedaksi,
   useKategoriLabelRedaksi,
   useDaftarPengguna,
   useDetailPengguna,
@@ -81,6 +84,7 @@ import {
   useHapusGlosarium,
   useSimpanBidang,
   useHapusBidang,
+  useOpsiBahasaAdmin,
   useOpsiBahasaKamusAdmin,
   useSimpanSusunKataHarianAdmin,
   useBuatSusunKataHarianAdmin,
@@ -445,7 +449,7 @@ describe('apiAdmin', () => {
     await label.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/label', { params: { limit: 50, cursor: undefined, direction: 'next', lastPage: undefined, q: undefined, aktif: undefined } });
 
-    const kategoriLabel = useKategoriLabelRedaksi(['ragam', 'kelas-kata']);
+    const kategoriLabel = useOpsiLabelRedaksi(['ragam', 'kelas-kata']);
     await kategoriLabel.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/label/kategori', { params: { nama: 'ragam,kelas-kata' } });
 
@@ -579,18 +583,32 @@ describe('apiAdmin', () => {
       params: { limit: 12, cursor: undefined, direction: 'next', lastPage: undefined, q: 'kim', aktif: '1' },
     });
 
+    const opsiBidangAdmin = useOpsiBidangAdmin();
+    await opsiBidangAdmin.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/bidang/opsi', { params: {} });
+
     const opsiBidangKamus = useOpsiBidangKamusAdmin();
     await opsiBidangKamus.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus/opsi-bidang');
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/bidang/opsi', { params: {} });
 
     const detailBidang = useDetailBidangAdmin(18);
     expect(detailBidang.enabled).toBe(true);
     await detailBidang.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/bidang/18');
 
+    const opsiBahasaAdmin = useOpsiBahasaAdmin();
+    await opsiBahasaAdmin.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/bahasa/opsi', { params: {} });
+
     const opsiBahasaKamus = useOpsiBahasaKamusAdmin();
     await opsiBahasaKamus.queryFn();
-    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus/opsi-bahasa');
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/bahasa/opsi', { params: {} });
+
+    const opsiSumberAdmin = useOpsiSumberAdmin({ glosarium: '1' });
+    await opsiSumberAdmin.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/sumber/opsi', {
+      params: { glosarium: '1', kamus: '', tesaurus: '', etimologi: '' },
+    });
 
     const susunKataHarian = useSusunKataHarianAdmin({ tanggal: '2026-03-02', panjang: '7' });
     await susunKataHarian.queryFn();

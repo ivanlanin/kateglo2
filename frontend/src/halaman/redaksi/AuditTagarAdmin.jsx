@@ -15,7 +15,7 @@ import { buatPathDetailKamus } from '../../utils/paramUtils';
 import {
   useDaftarAuditTagarAdmin,
   useDaftarTagarUntukPilih,
-  useKategoriLabelRedaksi,
+  useOpsiLabelRedaksi,
   useTagarEntri,
   useSimpanTagarEntri,
 } from '../../api/apiAdmin';
@@ -193,7 +193,7 @@ function AuditTagarAdmin() {
   const [filterTagar, setFilterTagar] = useState('');
   const [entriDipilih, setEntriDipilih] = useState(null);
 
-  const { data: respLabelKategori } = useKategoriLabelRedaksi(kategoriLabelRedaksi);
+  const { data: respLabelKategori } = useOpsiLabelRedaksi(kategoriLabelRedaksi);
   const { data: daftarTagarResp } = useDaftarTagarUntukPilih();
 
   const opsiJenis = useMemo(() => {

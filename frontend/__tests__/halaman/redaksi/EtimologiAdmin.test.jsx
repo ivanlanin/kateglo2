@@ -18,9 +18,9 @@ vi.mock('react-router-dom', async () => {
 
 const mockUseDaftar = vi.fn();
 const mockUseDetail = vi.fn();
-const mockUseDaftarBahasaAdmin = vi.fn();
+const mockUseOpsiBahasaEtimologiAdmin = vi.fn();
 const mockUseAutocomplete = vi.fn();
-const mockUseDaftarSumberAdmin = vi.fn();
+const mockUseOpsiSumberAdmin = vi.fn();
 const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
 const mockUseAuth = vi.fn();
@@ -28,11 +28,11 @@ const mockUseAuth = vi.fn();
 vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarEtimologiAdmin: (...args) => mockUseDaftar(...args),
   useDetailEtimologiAdmin: (...args) => mockUseDetail(...args),
-  useDaftarBahasaAdmin: (...args) => mockUseDaftarBahasaAdmin(...args),
+  useOpsiBahasaEtimologiAdmin: (...args) => mockUseOpsiBahasaEtimologiAdmin(...args),
   useAutocompleteEntriEtimologi: (...args) => mockUseAutocomplete(...args),
   useSimpanEtimologi: () => ({ mutate: mutateSimpan, isPending: false }),
   useHapusEtimologi: () => ({ mutate: mutateHapus, isPending: false }),
-  useDaftarSumberAdmin: (...args) => mockUseDaftarSumberAdmin(...args),
+  useOpsiSumberAdmin: (...args) => mockUseOpsiSumberAdmin(...args),
 }));
 
 vi.mock('../../../src/context/authContext', () => ({
@@ -90,10 +90,10 @@ vi.mock('../../../src/komponen/redaksi/FormulirAdmin', () => ({
       <input id={`field-${name}`} type={type} value={value ?? ''} onChange={(e) => onChange(name, e.target.value)} />
     </div>
   ),
-  SelectField: ({ label, name, value, onChange, options = [] }) => (
+  SearchableSelectField: ({ label, name, value, onChange, options = [] }) => (
     <div>
       <label htmlFor={`field-${name}`}>{label}</label>
-      <select id={`field-${name}`} value={value ?? ''} onChange={(e) => onChange(name, e.target.value)}>
+      <select id={`field-${name}`} aria-label={label} value={value ?? ''} onChange={(e) => onChange(name, e.target.value)}>
         {options.map((opt) => (
           <option key={opt.value} value={opt.value}>{opt.label}</option>
         ))}
@@ -149,12 +149,12 @@ describe('EtimologiAdmin', () => {
     });
     mockUseDetail.mockReturnValue({ isLoading: false, isError: false, data: null });
     mockUseAutocomplete.mockReturnValue({ isLoading: false, data: { data: [] } });
-    mockUseDaftarBahasaAdmin.mockReturnValue({
+    mockUseOpsiBahasaEtimologiAdmin.mockReturnValue({
       data: { data: [{ id: 10, kode: 'Ing', nama: 'Inggris' }, { id: 11, kode: 'Ar', nama: 'Arab' }] },
       isLoading: false,
       isError: false,
     });
-    mockUseDaftarSumberAdmin.mockReturnValue({ data: { data: [{ id: 1, nama: 'LWIM' }] } });
+    mockUseOpsiSumberAdmin.mockReturnValue({ data: { data: [{ id: 1, nama: 'LWIM' }] } });
   });
 
   it('menampilkan daftar, dapat cari, klik baris, dan validasi simpan', async () => {
@@ -295,7 +295,7 @@ describe('EtimologiAdmin', () => {
   });
 
   it('tetap aman saat daftar sumber admin kosong', () => {
-    mockUseDaftarSumberAdmin.mockReturnValue({ data: undefined });
+    mockUseOpsiSumberAdmin.mockReturnValue({ data: undefined });
 
     render(
       <MemoryRouter>
@@ -452,12 +452,12 @@ describe('EtimologiAdmin', () => {
 
     mockUseDaftar.mockClear();
 
-    fireEvent.change(screen.getByLabelText('Filter bahasa'), { target: { value: 'Ing' } });
-    expect(mockUseDaftar).toHaveBeenLastCalledWith(expect.objectContaining({ bahasa: '' }));
+    fireEvent.change(screen.getByLabelText('Filter bahasa'), { target: { value: '10' } });
+    expect(mockUseDaftar).toHaveBeenLastCalledWith(expect.objectContaining({ bahasa: '', bahasaId: '' }));
 
     fireEvent.click(screen.getByText('Cari'));
 
-    expect(mockUseDaftar).toHaveBeenLastCalledWith(expect.objectContaining({ bahasa: 'Ing' }));
+    expect(mockUseDaftar).toHaveBeenLastCalledWith(expect.objectContaining({ bahasa: '', bahasaId: '10' }));
   });
 
   it('menerapkan filter bahasa kosong saat pilih opsi —Kosong— dan Cari', () => {
@@ -471,7 +471,22 @@ describe('EtimologiAdmin', () => {
     fireEvent.change(screen.getByLabelText('Filter bahasa'), { target: { value: '__KOSONG__' } });
     fireEvent.click(screen.getByText('Cari'));
 
-    expect(mockUseDaftar).toHaveBeenLastCalledWith(expect.objectContaining({ bahasa: '__KOSONG__' }));
+    expect(mockUseDaftar).toHaveBeenLastCalledWith(expect.objectContaining({ bahasa: '__KOSONG__', bahasaId: '' }));
+  });
+
+  it('menerapkan filter sumber saat tombol Cari ditekan', () => {
+    render(
+      <MemoryRouter>
+        <EtimologiAdmin />
+      </MemoryRouter>
+    );
+
+    mockUseDaftar.mockClear();
+    fireEvent.change(screen.getByLabelText('Filter sumber etimologi'), { target: { value: '1' } });
+    expect(mockUseDaftar).toHaveBeenLastCalledWith(expect.objectContaining({ sumberId: '' }));
+
+    fireEvent.click(screen.getByText('Cari'));
+    expect(mockUseDaftar).toHaveBeenLastCalledWith(expect.objectContaining({ sumberId: '1' }));
   });
 
   it('menerapkan filter status saat tombol Cari ditekan', () => {
@@ -507,7 +522,8 @@ describe('EtimologiAdmin', () => {
     );
 
     fireEvent.change(screen.getByPlaceholderText('Cari etimologi …'), { target: { value: 'asal' } });
-    fireEvent.change(screen.getByLabelText('Filter bahasa'), { target: { value: 'Inggris' } });
+    fireEvent.change(screen.getByLabelText('Filter bahasa'), { target: { value: '10' } });
+    fireEvent.change(screen.getByLabelText('Filter sumber etimologi'), { target: { value: '1' } });
     fireEvent.change(screen.getByLabelText('Filter status etimologi'), { target: { value: '1' } });
 
     mockUseDaftar.mockClear();
@@ -516,6 +532,8 @@ describe('EtimologiAdmin', () => {
     const argTerakhir = mockUseDaftar.mock.calls.at(-1)?.[0] || {};
     expect(argTerakhir.q).toBe('');
     expect(argTerakhir.bahasa).toBe('');
+    expect(argTerakhir.bahasaId).toBe('');
+    expect(argTerakhir.sumberId).toBe('');
     expect(argTerakhir.aktif).toBe('');
   });
 });

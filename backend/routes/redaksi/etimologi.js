@@ -36,9 +36,20 @@ router.get('/', periksaIzin('kelola_etimologi'), async (req, res, next) => {
     const { limit, offset } = parsePagination(req.query);
     const q = parseSearchQuery(req.query.q);
     const bahasa = parseTrimmedString(req.query.bahasa);
+    const bahasaId = Number(req.query.bahasa_id);
+    const sumberId = Number(req.query.sumber_id);
     const aktif = parseTrimmedString(req.query.aktif);
     const meragukan = parseTrimmedString(req.query.meragukan);
-    const { data, total } = await ModelEtimologi.daftarAdmin({ limit, offset, q, bahasa, aktif, meragukan });
+    const { data, total } = await ModelEtimologi.daftarAdmin({
+      limit,
+      offset,
+      q,
+      bahasa,
+      ...(Number.isInteger(bahasaId) && bahasaId > 0 ? { bahasaId } : {}),
+      ...(Number.isInteger(sumberId) && sumberId > 0 ? { sumberId } : {}),
+      aktif,
+      meragukan,
+    });
     return res.json({ success: true, ...buildPaginatedResult({ data, total, pagination: { limit, offset } }) });
   } catch (error) {
     if (error?.code === 'INVALID_BAHASA') {

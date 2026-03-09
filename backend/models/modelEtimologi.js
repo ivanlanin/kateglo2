@@ -66,12 +66,23 @@ class ModelEtimologi {
     return result.rows;
   }
 
-  static async daftarAdmin({ limit = 50, offset = 0, q = '', bahasa = '', aktif = '', meragukan = '' } = {}) {
+  static async daftarAdmin({
+    limit = 50,
+    offset = 0,
+    q = '',
+    bahasa = '',
+    bahasaId = null,
+    sumberId = null,
+    aktif = '',
+    meragukan = '',
+  } = {}) {
     const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
     const safeOffset = Math.max(Number(offset) || 0, 0);
 
     const params = [];
     const conditions = [];
+    const normalizedBahasaId = normalizeIntegerNullable(bahasaId);
+    const normalizedSumberId = normalizeIntegerNullable(sumberId);
 
     if (q) {
       params.push(`%${q}%`);
@@ -89,9 +100,17 @@ class ModelEtimologi {
 
     if (bahasa === '__KOSONG__') {
       conditions.push('e.bahasa_id IS NULL');
+    } else if (normalizedBahasaId) {
+      params.push(normalizedBahasaId);
+      conditions.push(`e.bahasa_id = $${params.length}`);
     } else if (bahasa) {
       params.push(String(bahasa).trim());
       conditions.push(`LOWER(COALESCE(ba.kode, '')) = LOWER($${params.length})`);
+    }
+
+    if (normalizedSumberId) {
+      params.push(normalizedSumberId);
+      conditions.push(`e.sumber_id = $${params.length}`);
     }
 
     if (aktif === '1' || aktif === '0') {

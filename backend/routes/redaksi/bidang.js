@@ -4,7 +4,7 @@
 
 const express = require('express');
 const { periksaIzin } = require('../../middleware/otorisasi');
-const ModelGlosarium = require('../../models/modelGlosarium');
+const ModelOpsi = require('../../models/modelOpsi');
 const {
   buildPaginatedResult,
   parsePagination,
@@ -36,13 +36,23 @@ function parseMasterPayload(body) {
   };
 }
 
+router.get('/opsi', async (req, res, next) => {
+  try {
+    const q = parseSearchQuery(req.query.q);
+    const data = await ModelOpsi.daftarLookupBidang({ q });
+    return res.json({ success: true, data });
+  } catch (error) {
+    return next(error);
+  }
+});
+
 router.get('/', periksaIzin('kelola_bidang'), async (req, res, next) => {
   try {
     const { limit, offset } = parsePagination(req.query);
     const q = parseSearchQuery(req.query.q);
     const aktif = parseAktifParam(req.query.aktif);
 
-    const { data, total } = await ModelGlosarium.daftarMasterBidang({
+    const { data, total } = await ModelOpsi.daftarMasterBidang({
       q,
       aktif,
       limit,
@@ -60,7 +70,7 @@ router.get('/', periksaIzin('kelola_bidang'), async (req, res, next) => {
 
 router.get('/:id', periksaIzin('kelola_bidang'), async (req, res, next) => {
   try {
-    const data = await ModelGlosarium.ambilMasterBidangDenganId(parseIdParam(req.params.id));
+    const data = await ModelOpsi.ambilMasterBidangDenganId(parseIdParam(req.params.id));
     if (!data) return res.status(404).json({ success: false, message: 'Bidang tidak ditemukan' });
     return res.json({ success: true, data });
   } catch (error) {
@@ -74,7 +84,7 @@ router.post('/', periksaIzin('kelola_bidang'), async (req, res, next) => {
     if (!payload.kode) return res.status(400).json({ success: false, message: 'Kode bidang wajib diisi' });
     if (!payload.nama) return res.status(400).json({ success: false, message: 'Nama bidang wajib diisi' });
 
-    const data = await ModelGlosarium.simpanMasterBidang(payload);
+    const data = await ModelOpsi.simpanMasterBidang(payload);
     return res.status(201).json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -87,7 +97,7 @@ router.put('/:id', periksaIzin('kelola_bidang'), async (req, res, next) => {
     if (!payload.kode) return res.status(400).json({ success: false, message: 'Kode bidang wajib diisi' });
     if (!payload.nama) return res.status(400).json({ success: false, message: 'Nama bidang wajib diisi' });
 
-    const data = await ModelGlosarium.simpanMasterBidang({
+    const data = await ModelOpsi.simpanMasterBidang({
       ...payload,
       id: parseIdParam(req.params.id),
     });
@@ -100,7 +110,7 @@ router.put('/:id', periksaIzin('kelola_bidang'), async (req, res, next) => {
 
 router.delete('/:id', periksaIzin('kelola_bidang'), async (req, res, next) => {
   try {
-    const deleted = await ModelGlosarium.hapusMasterBidang(parseIdParam(req.params.id));
+    const deleted = await ModelOpsi.hapusMasterBidang(parseIdParam(req.params.id));
     if (!deleted) return res.status(404).json({ success: false, message: 'Bidang tidak ditemukan' });
     return res.json({ success: true });
   } catch (error) {

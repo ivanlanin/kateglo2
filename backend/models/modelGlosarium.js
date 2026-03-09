@@ -3,6 +3,7 @@
  */
 
 const db = require('../db');
+const ModelOpsi = require('./modelOpsi');
 const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
 const { decodeCursor, encodeCursor } = require('../utils/cursorPagination');
 
@@ -171,6 +172,7 @@ class ModelGlosarium {
     sumberId = null,
     sumberKode = '',
     bahasa = '',
+    bahasaId = null,
     aktif = '',
     limit = 20,
     offset = 0,
@@ -264,6 +266,7 @@ class ModelGlosarium {
     const params = [];
     let idx = 1;
     const normalizedBidangId = parseOptionalPositiveInt(bidangId);
+    const normalizedBahasaId = parseOptionalPositiveInt(bahasaId);
     const normalizedSumberId = parseOptionalPositiveInt(sumberId);
     const normalizedBidangKode = String(bidangKode || '').trim();
     const normalizedSumberKode = String(sumberKode || '').trim();
@@ -312,7 +315,11 @@ class ModelGlosarium {
       idx += 2;
     }
 
-    if (bahasa) {
+    if (normalizedBahasaId) {
+      conditions.push(`g.bahasa_id = $${idx}`);
+      params.push(normalizedBahasaId);
+      idx++;
+    } else if (bahasa) {
       conditions.push(`(ba.kode = $${idx} OR ba.iso2 = $${idx})`);
       params.push(bahasa);
       idx++;
@@ -774,177 +781,39 @@ class ModelGlosarium {
   }
 
   static async daftarMasterBidang({ q = '', aktif = '', limit = 50, offset = 0 } = {}) {
-    const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
-    const safeOffset = Math.max(Number(offset) || 0, 0);
-    const params = [];
-    const conditions = buildMasterFilters({ alias: 'b', q, aktif, params });
-    const whereSql = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
-
-    const countResult = await db.query(
-      `SELECT COUNT(*) AS total
-       FROM bidang b
-       ${whereSql}`,
-      params
-    );
-
-    const dataResult = await db.query(
-      `SELECT b.id, b.kode, b.nama, b.aktif, b.keterangan, b.created_at, b.updated_at,
-              (
-                SELECT COUNT(*)::int
-                FROM glosarium g
-                WHERE g.bidang_id = b.id
-              ) AS jumlah_entri
-       FROM bidang b
-       ${whereSql}
-       ORDER BY b.nama ASC
-       LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
-      [...params, cappedLimit, safeOffset]
-    );
-
-    return { data: dataResult.rows, total: parseCount(countResult.rows[0]?.total) };
+    return ModelOpsi.daftarMasterBidang({ q, aktif, limit, offset });
   }
 
   static async daftarLookupBidang({ q = '' } = {}) {
-    const params = [];
-    const conditions = buildMasterFilters({ alias: 'b', q, aktif: '', params });
-    const whereSql = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
-
-    const result = await db.query(
-      `SELECT b.kode, b.nama
-       FROM bidang b
-       ${whereSql}
-       ORDER BY b.nama ASC`,
-      params
-    );
-
-    return result.rows;
+    return ModelOpsi.daftarLookupBidang({ q });
   }
 
   static async daftarMasterSumber({
     q = '', glosarium = '', kamus = '', tesaurus = '', etimologi = '', limit = 50, offset = 0,
   } = {}) {
-    const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
-    const safeOffset = Math.max(Number(offset) || 0, 0);
-    const params = [];
-    const conditions = buildSumberFilters({ q, glosarium, kamus, tesaurus, etimologi, params });
-    const whereSql = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
-
-    const countResult = await db.query(
-      `SELECT COUNT(*) AS total FROM sumber s ${whereSql}`,
-      params
-    );
-
-    const dataResult = await db.query(
-      `SELECT s.id, s.kode, s.nama, s.glosarium, s.kamus, s.tesaurus, s.etimologi,
-              s.keterangan, s.created_at, s.updated_at,
-              ${buildJumlahEntriSumberSql('s')} AS jumlah_entri
-       FROM sumber s
-       ${whereSql}
-       ORDER BY s.nama ASC
-       LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
-      [...params, cappedLimit, safeOffset]
-    );
-
-    return { data: dataResult.rows, total: parseCount(countResult.rows[0]?.total) };
+    return ModelOpsi.daftarMasterSumber({ q, glosarium, kamus, tesaurus, etimologi, limit, offset });
   }
 
   static async ambilMasterBidangDenganId(id) {
-    const result = await db.query(
-      `SELECT b.id, b.kode, b.nama, b.aktif, b.keterangan, b.created_at, b.updated_at,
-              (
-                SELECT COUNT(*)::int
-                FROM glosarium g
-                WHERE g.bidang_id = b.id
-              ) AS jumlah_entri
-       FROM bidang b
-       WHERE b.id = $1`,
-      [id]
-    );
-    return result.rows[0] || null;
+    return ModelOpsi.ambilMasterBidangDenganId(id);
   }
 
   static async ambilMasterSumberDenganId(id) {
-    const result = await db.query(
-      `SELECT s.id, s.kode, s.nama, s.glosarium, s.kamus, s.tesaurus, s.etimologi,
-              s.keterangan, s.created_at, s.updated_at,
-              ${buildJumlahEntriSumberSql('s')} AS jumlah_entri
-       FROM sumber s
-       WHERE s.id = $1`,
-      [id]
-    );
-    return result.rows[0] || null;
+    return ModelOpsi.ambilMasterSumberDenganId(id);
   }
 
   static async simpanMasterBidang({ id, kode, nama, aktif = true, keterangan = '' }) {
-    const normalizedAktif = normalizeBoolean(aktif, true);
-    if (id) {
-      const result = await db.query(
-        `UPDATE bidang
-         SET kode = $1,
-             nama = $2,
-             aktif = $3,
-             keterangan = NULLIF($4, '')
-         WHERE id = $5
-         RETURNING id`,
-        [kode, nama, normalizedAktif, keterangan, id]
-      );
-      if (!result.rows[0]?.id) return null;
-      return this.ambilMasterBidangDenganId(result.rows[0].id);
-    }
-
-    const result = await db.query(
-      `INSERT INTO bidang (kode, nama, aktif, keterangan)
-       VALUES ($1, $2, $3, NULLIF($4, ''))
-       RETURNING id`,
-      [kode, nama, normalizedAktif, keterangan]
-    );
-
-    return this.ambilMasterBidangDenganId(result.rows[0].id);
+    return ModelOpsi.simpanMasterBidang({ id, kode, nama, aktif, keterangan });
   }
 
   static async simpanMasterSumber({
     id, kode, nama, glosarium = false, kamus = false, tesaurus = false, etimologi = false, keterangan = '',
   }) {
-    const normGlosarium = normalizeBoolean(glosarium, false);
-    const normKamus = normalizeBoolean(kamus, false);
-    const normTesaurus = normalizeBoolean(tesaurus, false);
-    const normEtimologi = normalizeBoolean(etimologi, false);
-    if (id) {
-      const result = await db.query(
-        `UPDATE sumber
-         SET kode = $1, nama = $2, glosarium = $3, kamus = $4,
-             tesaurus = $5, etimologi = $6, keterangan = NULLIF($7, '')
-         WHERE id = $8
-         RETURNING id`,
-        [kode, nama, normGlosarium, normKamus, normTesaurus, normEtimologi, keterangan, id]
-      );
-      if (!result.rows[0]?.id) return null;
-      return this.ambilMasterSumberDenganId(result.rows[0].id);
-    }
-
-    const result = await db.query(
-      `INSERT INTO sumber (kode, nama, glosarium, kamus, tesaurus, etimologi, keterangan)
-       VALUES ($1, $2, $3, $4, $5, $6, NULLIF($7, ''))
-       RETURNING id`,
-      [kode, nama, normGlosarium, normKamus, normTesaurus, normEtimologi, keterangan]
-    );
-    return this.ambilMasterSumberDenganId(result.rows[0].id);
+    return ModelOpsi.simpanMasterSumber({ id, kode, nama, glosarium, kamus, tesaurus, etimologi, keterangan });
   }
 
   static async hapusMasterBidang(id) {
-    const usage = await db.query(
-      'SELECT COUNT(*)::int AS total FROM glosarium WHERE bidang_id = $1',
-      [id]
-    );
-    const total = parseCount(usage.rows[0]?.total);
-    if (total > 0) {
-      const error = new Error('Bidang masih dipakai di glosarium dan tidak bisa dihapus');
-      error.code = 'MASTER_IN_USE';
-      throw error;
-    }
-
-    const result = await db.query('DELETE FROM bidang WHERE id = $1 RETURNING id', [id]);
-    return result.rowCount > 0;
+    return ModelOpsi.hapusMasterBidang(id);
   }
 
   static async hapusMasterSumber(id) {
@@ -984,132 +853,43 @@ class ModelGlosarium {
   }
 
   static async hitungTotalBidang() {
-    const result = await db.query('SELECT COUNT(*) AS total FROM bidang');
-    return parseCount(result.rows[0]?.total);
+    return ModelOpsi.hitungTotalBidang();
   }
 
   // ── MASTER BAHASA ─────────────────────────────────────────────────────────
 
   static async daftarMasterBahasa({ q = '', aktif = '', limit = 50, offset = 0 } = {}) {
-    const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 500);
-    const safeOffset = Math.max(Number(offset) || 0, 0);
-    const params = [];
-    const conditions = buildMasterFilters({ alias: 'ba', q, aktif, params });
-    const whereSql = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
-
-    const countResult = await db.query(
-      `SELECT COUNT(*) AS total FROM bahasa ba ${whereSql}`,
-      params
-    );
-
-    const dataResult = await db.query(
-      `SELECT ba.id, ba.kode, ba.nama, ba.iso2, ba.iso3, ba.aktif, ba.keterangan,
-              ba.created_at, ba.updated_at,
-              (
-                (SELECT COUNT(*)::int FROM makna  m WHERE m.bahasa  = ba.kode)
-              + (SELECT COUNT(*)::int FROM contoh c WHERE c.bahasa  = ba.kode)
-              + (SELECT COUNT(*)::int FROM etimologi e WHERE e.bahasa_id = ba.id)
-              + (SELECT COUNT(*)::int FROM glosarium g WHERE g.bahasa_id = ba.id)
-              ) AS jumlah_entri
-       FROM bahasa ba
-       ${whereSql}
-       ORDER BY ba.nama ASC
-       LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
-      [...params, cappedLimit, safeOffset]
-    );
-
-    return { data: dataResult.rows, total: parseCount(countResult.rows[0]?.total) };
+    return ModelOpsi.daftarMasterBahasa({ q, aktif, limit, offset });
   }
 
   static async daftarLookupBahasa({ q = '' } = {}) {
-    const params = [];
-    const conditions = buildMasterFilters({ alias: 'ba', q, aktif: '', params });
-    const whereSql = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+    return ModelOpsi.daftarLookupBahasa({ q });
+  }
 
-    const result = await db.query(
-      `SELECT ba.kode, ba.nama
-       FROM bahasa ba
-       ${whereSql}
-       ORDER BY ba.nama ASC`,
-      params
-    );
-
-    return result.rows;
+  static async daftarLookupSumber({
+    q = '', glosarium = '', kamus = '', tesaurus = '', etimologi = '',
+  } = {}) {
+    return ModelOpsi.daftarLookupSumber({ q, glosarium, kamus, tesaurus, etimologi });
   }
 
   static async ambilMasterBahasaDenganId(id) {
-    const result = await db.query(
-      `SELECT ba.id, ba.kode, ba.nama, ba.iso2, ba.iso3, ba.aktif, ba.keterangan,
-              ba.created_at, ba.updated_at,
-              (
-                (SELECT COUNT(*)::int FROM makna  m WHERE m.bahasa  = ba.kode)
-              + (SELECT COUNT(*)::int FROM contoh c WHERE c.bahasa  = ba.kode)
-              + (SELECT COUNT(*)::int FROM etimologi e WHERE e.bahasa_id = ba.id)
-              + (SELECT COUNT(*)::int FROM glosarium g WHERE g.bahasa_id = ba.id)
-              ) AS jumlah_entri
-       FROM bahasa ba
-       WHERE ba.id = $1`,
-      [id]
-    );
-    return result.rows[0] || null;
+    return ModelOpsi.ambilMasterBahasaDenganId(id);
   }
 
   static async simpanMasterBahasa({ id, kode, nama, aktif = true, iso2 = '', iso3 = '', keterangan = '' }) {
-    const normalizedAktif = normalizeBoolean(aktif, true);
-    if (id) {
-      const result = await db.query(
-        `UPDATE bahasa
-         SET kode       = $1,
-             nama       = $2,
-             aktif      = $3,
-             iso2       = NULLIF($4, ''),
-             iso3       = NULLIF($5, ''),
-             keterangan = NULLIF($6, '')
-         WHERE id = $7
-         RETURNING id`,
-        [kode, nama, normalizedAktif, iso2, iso3, keterangan, id]
-      );
-      if (!result.rows[0]?.id) return null;
-      return this.ambilMasterBahasaDenganId(result.rows[0].id);
-    }
-
-    const result = await db.query(
-      `INSERT INTO bahasa (kode, nama, aktif, iso2, iso3, keterangan)
-       VALUES ($1, $2, $3, NULLIF($4, ''), NULLIF($5, ''), NULLIF($6, ''))
-       RETURNING id`,
-      [kode, nama, normalizedAktif, iso2, iso3, keterangan]
-    );
-    return this.ambilMasterBahasaDenganId(result.rows[0].id);
+    return ModelOpsi.simpanMasterBahasa({ id, kode, nama, aktif, iso2, iso3, keterangan });
   }
 
   static async hapusMasterBahasa(id) {
-    const usage = await db.query(
-      `SELECT (
-          (SELECT COUNT(*)::int FROM makna      WHERE bahasa    = (SELECT kode FROM bahasa WHERE id = $1))
-        + (SELECT COUNT(*)::int FROM contoh     WHERE bahasa    = (SELECT kode FROM bahasa WHERE id = $1))
-        + (SELECT COUNT(*)::int FROM etimologi  WHERE bahasa_id = $1)
-        + (SELECT COUNT(*)::int FROM glosarium  WHERE bahasa_id = $1)
-       ) AS total`,
-      [id]
-    );
-    const total = parseCount(usage.rows[0]?.total);
-    if (total > 0) {
-      const error = new Error('Bahasa masih dipakai dan tidak bisa dihapus');
-      error.code = 'MASTER_IN_USE';
-      throw error;
-    }
-    const result = await db.query('DELETE FROM bahasa WHERE id = $1 RETURNING id', [id]);
-    return result.rowCount > 0;
+    return ModelOpsi.hapusMasterBahasa(id);
   }
 
   static async hitungTotalBahasa() {
-    const result = await db.query('SELECT COUNT(*) AS total FROM bahasa');
-    return parseCount(result.rows[0]?.total);
+    return ModelOpsi.hitungTotalBahasa();
   }
 
   static async hitungTotalSumber() {
-    const result = await db.query('SELECT COUNT(*) AS total FROM sumber');
-    return parseCount(result.rows[0]?.total);
+    return ModelOpsi.hitungTotalSumber();
   }
 
   /**

@@ -1,11 +1,16 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react';
+import { useState } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import GlosariumAdmin from '../../../src/halaman/redaksi/GlosariumAdmin';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
+
+function pilihOpsi(label, value) {
+  fireEvent.change(screen.getByLabelText(label), { target: { value } });
+}
 
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -18,9 +23,9 @@ vi.mock('react-router-dom', async () => {
 
 const mockUseDaftarGlosariumAdmin = vi.fn();
 const mockUseDetailGlosariumAdmin = vi.fn();
-const mockUseDaftarBidangAdmin = vi.fn();
-const mockUseDaftarBahasaAdmin = vi.fn();
-const mockUseDaftarSumberAdmin = vi.fn();
+const mockUseOpsiBidangAdmin = vi.fn();
+const mockUseOpsiBahasaGlosariumAdmin = vi.fn();
+const mockUseOpsiSumberAdmin = vi.fn();
 const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
 const mockUseAuth = vi.fn();
@@ -28,9 +33,9 @@ const mockUseAuth = vi.fn();
 vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarGlosariumAdmin: (...args) => mockUseDaftarGlosariumAdmin(...args),
   useDetailGlosariumAdmin: (...args) => mockUseDetailGlosariumAdmin(...args),
-  useDaftarBidangAdmin: (...args) => mockUseDaftarBidangAdmin(...args),
-  useDaftarBahasaAdmin: (...args) => mockUseDaftarBahasaAdmin(...args),
-  useDaftarSumberAdmin: (...args) => mockUseDaftarSumberAdmin(...args),
+  useOpsiBidangAdmin: (...args) => mockUseOpsiBidangAdmin(...args),
+  useOpsiBahasaGlosariumAdmin: (...args) => mockUseOpsiBahasaGlosariumAdmin(...args),
+  useOpsiSumberAdmin: (...args) => mockUseOpsiSumberAdmin(...args),
   useSimpanGlosarium: () => ({ mutate: mutateSimpan, isPending: false }),
   useHapusGlosarium: () => ({ mutate: mutateHapus, isPending: false }),
 }));
@@ -46,6 +51,65 @@ vi.mock('../../../src/komponen/bersama/TataLetak', () => ({
       {aksiJudul}
       {children}
     </div>
+  ),
+}));
+
+vi.mock('../../../src/komponen/redaksi/FormulirAdmin', () => ({
+  useFormPanel: (nilaiAwal = {}) => {
+    const [buka, setBuka] = useState(false);
+    const [data, setData] = useState(nilaiAwal);
+    const [modeTambah, setModeTambah] = useState(true);
+
+    return {
+      buka,
+      data,
+      modeTambah,
+      bukaUntukTambah: () => {
+        setData({ ...nilaiAwal });
+        setModeTambah(true);
+        setBuka(true);
+      },
+      bukaUntukSunting: (item) => {
+        setData({ ...item });
+        setModeTambah(false);
+        setBuka(true);
+      },
+      tutup: () => setBuka(false),
+      ubahField: (field, value) => setData((prev) => ({ ...prev, [field]: value })),
+      setData,
+    };
+  },
+  InputField: ({ label, name, value, onChange }) => (
+    <div>
+      <label htmlFor={`field-${name}`}>{label}</label>
+      <input id={`field-${name}`} value={value ?? ''} onChange={(e) => onChange(name, e.target.value)} />
+    </div>
+  ),
+  SearchableSelectField: ({ label, name, value, onChange, options = [] }) => (
+    <div>
+      <label htmlFor={`field-${name}`}>{label}</label>
+      <select id={`field-${name}`} aria-label={label} value={value ?? ''} onChange={(e) => onChange(name, e.target.value)}>
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>{opt.label}</option>
+        ))}
+      </select>
+    </div>
+  ),
+  ToggleAktif: ({ value, onChange }) => (
+    <button type="button" onClick={() => onChange('aktif', value ? 0 : 1)}>toggle</button>
+  ),
+  FormFooter: ({ onSimpan, onBatal, onHapus }) => (
+    <div>
+      <button type="button" onClick={onSimpan}>Simpan</button>
+      <button type="button" onClick={onBatal}>Batal</button>
+      {onHapus ? <button type="button" onClick={onHapus}>Hapus</button> : null}
+    </div>
+  ),
+  PesanForm: ({ error, sukses }) => (
+    <>
+      {error ? <div>{error}</div> : null}
+      {sukses ? <div>{sukses}</div> : null}
+    </>
   ),
 }));
 
@@ -71,21 +135,21 @@ describe('GlosariumAdmin', () => {
         data: [{ id: 1, indonesia: 'air', asing: 'water', bidang_id: 1, bidang: 'Kimia', bahasa_id: 10, bahasa: 'Inggris', sumber_id: 1, sumber: 'KBBI' }],
       },
     });
-    mockUseDaftarBidangAdmin.mockReturnValue({
+    mockUseOpsiBidangAdmin.mockReturnValue({
       data: {
         data: [{ id: 1, kode: 'kimia', nama: 'Kimia' }],
       },
       isLoading: false,
       isError: false,
     });
-    mockUseDaftarBahasaAdmin.mockReturnValue({
+    mockUseOpsiBahasaGlosariumAdmin.mockReturnValue({
       data: {
         data: [{ id: 10, kode: 'Ing', nama: 'Inggris', iso2: 'en' }],
       },
       isLoading: false,
       isError: false,
     });
-    mockUseDaftarSumberAdmin.mockReturnValue({
+    mockUseOpsiSumberAdmin.mockReturnValue({
       data: {
         data: [{ id: 1, kode: 'kbbi', nama: 'KBBI' }],
       },
@@ -128,8 +192,9 @@ describe('GlosariumAdmin', () => {
 
     fireEvent.change(screen.getByLabelText(/Indonesia/), { target: { value: 'api' } });
     fireEvent.change(screen.getByLabelText(/Asing/), { target: { value: 'fire' } });
-    fireEvent.change(screen.getByLabelText(/Bidang/), { target: { value: '1' } });
-    fireEvent.change(screen.getByLabelText(/Sumber/), { target: { value: '1' } });
+    pilihOpsi('Bidang', '1');
+    pilihOpsi('Sumber', '1');
+    pilihOpsi('Bahasa', '10');
     fireEvent.click(screen.getByText('Simpan'));
     expect(mutateSimpan).toHaveBeenCalled();
   });
@@ -147,7 +212,7 @@ describe('GlosariumAdmin', () => {
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Bidang wajib dipilih')).toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText(/Bidang/), { target: { value: '1' } });
+    pilihOpsi('Bidang', '1');
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Sumber wajib dipilih')).toBeInTheDocument();
   });
@@ -163,8 +228,9 @@ describe('GlosariumAdmin', () => {
     );
 
     fireEvent.click(screen.getByText('air'));
-    fireEvent.change(screen.getByLabelText(/Bidang/), { target: { value: '1' } });
-    fireEvent.change(screen.getByLabelText(/Sumber/), { target: { value: '1' } });
+    pilihOpsi('Bidang', '1');
+    pilihOpsi('Sumber', '1');
+    pilihOpsi('Bahasa', '10');
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Err simpan glosarium')).toBeInTheDocument();
 
@@ -185,8 +251,9 @@ describe('GlosariumAdmin', () => {
     );
 
     fireEvent.click(screen.getByText('air'));
-    fireEvent.change(screen.getByLabelText(/Bidang/), { target: { value: '1' } });
-    fireEvent.change(screen.getByLabelText(/Sumber/), { target: { value: '1' } });
+    pilihOpsi('Bidang', '1');
+    pilihOpsi('Sumber', '1');
+    pilihOpsi('Bahasa', '10');
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Tersimpan!')).toBeInTheDocument();
 
@@ -216,8 +283,9 @@ describe('GlosariumAdmin', () => {
     fireEvent.click(screen.getByText('+ Tambah'));
     fireEvent.change(screen.getByLabelText(/Indonesia/), { target: { value: 'uji' } });
     fireEvent.change(screen.getByLabelText(/Asing/), { target: { value: 'test' } });
-    fireEvent.change(screen.getByLabelText(/Bidang/), { target: { value: '1' } });
-    fireEvent.change(screen.getByLabelText(/Sumber/), { target: { value: '1' } });
+    pilihOpsi('Bidang', '1');
+    pilihOpsi('Sumber', '1');
+    pilihOpsi('Bahasa', '10');
     fireEvent.click(screen.getByText('Simpan'));
 
     expect(screen.getByText('Gagal menyimpan')).toBeInTheDocument();
@@ -245,21 +313,24 @@ describe('GlosariumAdmin', () => {
     );
 
     fireEvent.change(screen.getByPlaceholderText('Cari istilah …'), { target: { value: 'air' } });
-    fireEvent.change(screen.getByLabelText('Filter bidang glosarium'), { target: { value: '1' } });
-    fireEvent.change(screen.getByLabelText('Filter sumber glosarium'), { target: { value: '1' } });
+    pilihOpsi('Filter bidang glosarium', '1');
+    pilihOpsi('Filter bahasa glosarium', '10');
+    pilihOpsi('Filter sumber glosarium', '1');
     fireEvent.change(screen.getByLabelText('Filter status glosarium'), { target: { value: '1' } });
     fireEvent.click(screen.getAllByRole('button', { name: '✕' })[0]);
 
     const panggilanTerakhir = mockUseDaftarGlosariumAdmin.mock.calls.at(-1)?.[0] || {};
     expect(panggilanTerakhir.q).toBe('');
     expect(panggilanTerakhir.bidangId).toBe('');
+    expect(panggilanTerakhir.bahasaId).toBe('');
     expect(panggilanTerakhir.sumberId).toBe('');
     expect(panggilanTerakhir.aktif).toBe('');
   });
 
   it('tetap aman saat opsi bidang/sumber dari API kosong', () => {
-    mockUseDaftarBidangAdmin.mockReturnValue({ data: undefined, isLoading: false, isError: false });
-    mockUseDaftarSumberAdmin.mockReturnValue({ data: undefined, isLoading: false, isError: false });
+    mockUseOpsiBidangAdmin.mockReturnValue({ data: undefined, isLoading: false, isError: false });
+    mockUseOpsiBahasaGlosariumAdmin.mockReturnValue({ data: undefined, isLoading: false, isError: false });
+    mockUseOpsiSumberAdmin.mockReturnValue({ data: undefined, isLoading: false, isError: false });
 
     render(
       <MemoryRouter>
@@ -269,6 +340,7 @@ describe('GlosariumAdmin', () => {
 
     fireEvent.click(screen.getByText('+ Tambah'));
     expect(screen.getByLabelText(/Bidang/)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Bahasa/)).toBeInTheDocument();
     expect(screen.getByLabelText(/Sumber/)).toBeInTheDocument();
   });
 
@@ -386,6 +458,7 @@ describe('GlosariumAdmin', () => {
     );
 
     expect(screen.getByLabelText('Filter bidang glosarium')).toHaveDisplayValue('—Bidang—');
+    expect(screen.getByLabelText('Filter bahasa glosarium')).toHaveDisplayValue('—Bahasa—');
     expect(screen.getByLabelText('Filter sumber glosarium')).toHaveDisplayValue('—Sumber—');
     expect(screen.getByLabelText('Filter status glosarium')).toHaveDisplayValue('—Status—');
 

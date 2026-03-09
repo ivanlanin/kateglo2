@@ -9,9 +9,9 @@ import {
   useDetailGlosariumAdmin,
   useSimpanGlosarium,
   useHapusGlosarium,
-  useDaftarBidangAdmin,
-  useDaftarBahasaAdmin,
-  useDaftarSumberAdmin,
+  useOpsiBidangAdmin,
+  useOpsiBahasaGlosariumAdmin,
+  useOpsiSumberAdmin,
 } from '../../api/apiAdmin';
 import TataLetak from '../../komponen/bersama/TataLetak';
 import { useAuth } from '../../context/authContext';
@@ -28,12 +28,13 @@ import PanelGeser from '../../komponen/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
-  SelectField,
+  SearchableSelectField,
   ToggleAktif,
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormulirAdmin';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
+import { ambilDaftarLookup, mapOpsiIdNama } from '../../utils/opsiUtils';
 
 const nilaiAwal = {
   indonesia: '',
@@ -81,9 +82,11 @@ function GlosariumAdmin() {
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
   const [filterBidangDraft, setFilterBidangDraft] = useState('');
+  const [filterBahasaDraft, setFilterBahasaDraft] = useState('');
   const [filterSumberDraft, setFilterSumberDraft] = useState('');
   const [filterAktifDraft, setFilterAktifDraft] = useState('');
   const [filterBidang, setFilterBidang] = useState('');
+  const [filterBahasa, setFilterBahasa] = useState('');
   const [filterSumber, setFilterSumber] = useState('');
   const [filterAktif, setFilterAktif] = useState('');
   const bisaTambah = punyaIzin('tambah_glosarium');
@@ -97,21 +100,22 @@ function GlosariumAdmin() {
     lastPage,
     q,
     bidangId: filterBidang,
+    bahasaId: filterBahasa,
     sumberId: filterSumber,
     aktif: filterAktif,
   });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailGlosariumAdmin(idDariPath);
-  const { data: bidangResp } = useDaftarBidangAdmin({ limit: 200, aktif: '1' });
-  const { data: bahasaResp } = useDaftarBahasaAdmin({ limit: 200 });
-  const { data: sumberResp } = useDaftarSumberAdmin({ limit: 200, glosarium: '1' });
+  const { data: bidangResp } = useOpsiBidangAdmin();
+  const { data: bahasaResp } = useOpsiBahasaGlosariumAdmin();
+  const { data: sumberResp } = useOpsiSumberAdmin({ glosarium: '1' });
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
-  const opsiBidang = (bidangResp?.data || []).map((item) => ({ value: String(item.id), label: item.nama }));
-  const opsiBahasa = (bahasaResp?.data || []).map((item) => ({
-    value: String(item.id),
-    label: item.kode ? `${item.nama} (${item.kode})` : item.nama,
-  }));
-  const opsiSumber = (sumberResp?.data || []).map((item) => ({ value: String(item.id), label: item.nama }));
+  const daftarBidang = ambilDaftarLookup(bidangResp);
+  const daftarBahasa = ambilDaftarLookup(bahasaResp);
+  const daftarSumber = ambilDaftarLookup(sumberResp);
+  const opsiBidang = mapOpsiIdNama(daftarBidang);
+  const opsiBahasa = mapOpsiIdNama(daftarBahasa);
+  const opsiSumber = mapOpsiIdNama(daftarSumber);
 
   const panel = useFormPanel(nilaiAwal);
   const simpan = useSimpanGlosarium();
@@ -156,11 +160,11 @@ function GlosariumAdmin() {
 
   useEffect(() => {
     if (!panel.buka || !panel.modeTambah || panel.data.bahasa_id) return;
-    const defaultBahasa = (bahasaResp?.data || []).find((item) => item.iso2 === 'en' || item.kode === 'Ing');
+    const defaultBahasa = daftarBahasa.find((item) => item.iso2 === 'en' || item.kode === 'Ing');
     if (defaultBahasa?.id) {
       panel.ubahField('bahasa_id', String(defaultBahasa.id));
     }
-  }, [bahasaResp, panel]);
+  }, [daftarBahasa, panel]);
 
   const tutupPanel = () => {
     setPesan({ error: '', sukses: '' });
@@ -228,6 +232,7 @@ function GlosariumAdmin() {
 
   const handleCari = () => {
     setFilterBidang(filterBidangDraft);
+    setFilterBahasa(filterBahasaDraft);
     setFilterSumber(filterSumberDraft);
     setFilterAktif(filterAktifDraft);
     kirimCari(cari);
@@ -235,9 +240,11 @@ function GlosariumAdmin() {
 
   const handleResetFilter = () => {
     setFilterBidangDraft('');
+    setFilterBahasaDraft('');
     setFilterSumberDraft('');
     setFilterAktifDraft('');
     setFilterBidang('');
+    setFilterBahasa('');
     setFilterSumber('');
     setFilterAktif('');
     hapusCari();
@@ -258,6 +265,19 @@ function GlosariumAdmin() {
             onChange: setFilterBidangDraft,
             options: [{ value: '', label: '—Bidang—' }, ...opsiBidang],
             ariaLabel: 'Filter bidang glosarium',
+            searchable: true,
+            placeholder: '—Bidang—',
+            searchPlaceholder: 'Cari bidang…',
+          },
+          {
+            key: 'bahasa',
+            value: filterBahasaDraft,
+            onChange: setFilterBahasaDraft,
+            options: [{ value: '', label: '—Bahasa—' }, ...opsiBahasa],
+            ariaLabel: 'Filter bahasa glosarium',
+            searchable: true,
+            placeholder: '—Bahasa—',
+            searchPlaceholder: 'Cari bahasa…',
           },
           {
             key: 'sumber',
@@ -265,6 +285,9 @@ function GlosariumAdmin() {
             onChange: setFilterSumberDraft,
             options: [{ value: '', label: '—Sumber—' }, ...opsiSumber],
             ariaLabel: 'Filter sumber glosarium',
+            searchable: true,
+            placeholder: '—Sumber—',
+            searchPlaceholder: 'Cari sumber…',
           },
           {
             key: 'aktif',
@@ -298,26 +321,32 @@ function GlosariumAdmin() {
           <PesanForm error={pesan.error} sukses={pesan.sukses} />
           <InputField label="Asing" name="asing" value={panel.data.asing} onChange={panel.ubahField} required />
           <InputField label="Indonesia" name="indonesia" value={panel.data.indonesia} onChange={panel.ubahField} required />
-          <SelectField
+          <SearchableSelectField
             label="Bidang"
             name="bidang_id"
             value={String(panel.data.bidang_id || '')}
             onChange={panel.ubahField}
             options={[{ value: '', label: '-- Pilih bidang --' }, ...opsiBidang]}
+            placeholder="-- Pilih bidang --"
+            searchPlaceholder="Cari bidang…"
           />
-          <SelectField
+          <SearchableSelectField
             label="Bahasa"
             name="bahasa_id"
             value={String(panel.data.bahasa_id || '')}
             onChange={panel.ubahField}
             options={[{ value: '', label: '-- Pilih bahasa --' }, ...opsiBahasa]}
+            placeholder="-- Pilih bahasa --"
+            searchPlaceholder="Cari bahasa…"
           />
-          <SelectField
+          <SearchableSelectField
             label="Sumber"
             name="sumber_id"
             value={String(panel.data.sumber_id || '')}
             onChange={panel.ubahField}
             options={[{ value: '', label: '-- Pilih sumber --' }, ...opsiSumber]}
+            placeholder="-- Pilih sumber --"
+            searchPlaceholder="Cari sumber…"
           />
           <ToggleAktif value={panel.data.aktif} onChange={panel.ubahField} />
           <FormFooter

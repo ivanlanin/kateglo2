@@ -21,7 +21,7 @@ const mockUseDaftarKamusAdmin = vi.fn();
 const mockUseDetailKamusAdmin = vi.fn();
 const mockUseDaftarMakna = vi.fn();
 const mockUseDaftarSumberAdmin = vi.fn();
-const mockUseKategoriLabelRedaksi = vi.fn();
+const mockUseOpsiLabelRedaksi = vi.fn();
 const mockUseOpsiBidangKamusAdmin = vi.fn();
 const mockUseOpsiBahasaKamusAdmin = vi.fn();
 const mockUseAutocompleteIndukKamus = vi.fn();
@@ -45,7 +45,7 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useSimpanKamus: () => ({ mutate: mutateSimpanKamus, isPending: false }),
   useHapusKamus: () => ({ mutate: mutateHapusKamus, isPending: false }),
   useDaftarMakna: (...args) => mockUseDaftarMakna(...args),
-  useKategoriLabelRedaksi: (...args) => mockUseKategoriLabelRedaksi(...args),
+  useOpsiLabelRedaksi: (...args) => mockUseOpsiLabelRedaksi(...args),
   useOpsiBidangKamusAdmin: (...args) => mockUseOpsiBidangKamusAdmin(...args),
   useOpsiBahasaKamusAdmin: (...args) => mockUseOpsiBahasaKamusAdmin(...args),
   useAutocompleteIndukKamus: (...args) => mockUseAutocompleteIndukKamus(...args),
@@ -203,7 +203,7 @@ describe('KamusAdmin', () => {
       isLoading: false,
     });
 
-    mockUseKategoriLabelRedaksi.mockReturnValue({
+    mockUseOpsiLabelRedaksi.mockReturnValue({
       data: {
         data: {
           'bentuk-kata': [
@@ -489,7 +489,7 @@ describe('KamusAdmin', () => {
   });
 
   it('menggunakan fallback kategori default saat respons kategori label tidak ada', () => {
-    mockUseKategoriLabelRedaksi.mockReturnValueOnce({ data: undefined });
+    mockUseOpsiLabelRedaksi.mockReturnValueOnce({ data: undefined });
 
     render(
       <MemoryRouter>
@@ -502,7 +502,7 @@ describe('KamusAdmin', () => {
   });
 
   it('memakai opsi fallback saat kategori label redaksi kosong/tidak lengkap', () => {
-    mockUseKategoriLabelRedaksi.mockReturnValueOnce({
+    mockUseOpsiLabelRedaksi.mockReturnValueOnce({
       data: {
         data: {
           'bentuk-kata': [],
@@ -527,7 +527,7 @@ describe('KamusAdmin', () => {
   });
 
   it('opsi jenis rujuk menghapus nilai invalid dan duplikat case-insensitive', () => {
-    mockUseKategoriLabelRedaksi.mockReturnValueOnce({
+    mockUseOpsiLabelRedaksi.mockReturnValueOnce({
       data: {
         data: {
           'bentuk-kata': [{ kode: 'dasar', nama: 'Dasar' }],
@@ -592,7 +592,7 @@ describe('KamusAdmin', () => {
   });
 
   it('tetap aman saat kategori ragam memuat item tanpa kode', () => {
-    mockUseKategoriLabelRedaksi.mockReturnValue({
+    mockUseOpsiLabelRedaksi.mockReturnValue({
       data: {
         data: {
           'bentuk-kata': [{ kode: 'dasar', nama: 'Dasar' }],
@@ -1111,7 +1111,7 @@ describe('KamusAdmin', () => {
   });
 
   it('opsi filter jenis menghapus nilai kosong', () => {
-    mockUseKategoriLabelRedaksi.mockReturnValueOnce({
+    mockUseOpsiLabelRedaksi.mockReturnValueOnce({
       data: {
         data: {
           'bentuk-kata': [{ kode: '', nama: '' }, { kode: 'dasar', nama: 'Dasar' }],

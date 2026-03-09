@@ -10,8 +10,8 @@ import {
   useAutocompleteEntriEtimologi,
   useSimpanEtimologi,
   useHapusEtimologi,
-  useDaftarBahasaAdmin,
-  useDaftarSumberAdmin,
+  useOpsiBahasaEtimologiAdmin,
+  useOpsiSumberAdmin,
 } from '../../api/apiAdmin';
 import TataLetak from '../../komponen/bersama/TataLetak';
 import { useAuth } from '../../context/authContext';
@@ -32,13 +32,14 @@ import PanelGeser from '../../komponen/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
-  SelectField,
+  SearchableSelectField,
   ToggleAktif,
   ToggleMeragukan,
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormulirAdmin';
 import { buatPathDetailKamus, parsePositiveIntegerParam } from '../../utils/paramUtils';
+import { ambilDaftarLookup, mapOpsiIdNama } from '../../utils/opsiUtils';
 
 const nilaiAwal = {
   indeks: '',
@@ -130,9 +131,11 @@ function EtimologiAdmin() {
   const bisaKelola = punyaIzin('kelola_etimologi');
 
   const [draftFilterBahasa, setDraftFilterBahasa] = useState('');
+  const [draftFilterSumber, setDraftFilterSumber] = useState('');
   const [draftFilterAktif, setDraftFilterAktif] = useState('');
   const [draftFilterMeragukan, setDraftFilterMeragukan] = useState('');
   const [filterBahasa, setFilterBahasa] = useState('');
+  const [filterSumber, setFilterSumber] = useState('');
   const [filterAktif, setFilterAktif] = useState('');
   const [filterMeragukan, setFilterMeragukan] = useState('');
 
@@ -142,7 +145,9 @@ function EtimologiAdmin() {
     direction,
     lastPage,
     q,
-    bahasa: filterBahasa,
+    bahasaId: filterBahasa === '__KOSONG__' ? '' : filterBahasa,
+    bahasa: filterBahasa === '__KOSONG__' ? '__KOSONG__' : '',
+    sumberId: filterSumber,
     aktif: filterAktif,
     meragukan: filterMeragukan,
   });
@@ -151,25 +156,20 @@ function EtimologiAdmin() {
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
 
-  const { data: bahasaResp } = useDaftarBahasaAdmin({ limit: 500 });
-  const { data: sumberResp } = useDaftarSumberAdmin({ limit: 200, etimologi: '1' });
-  const daftarBahasa = bahasaResp?.data || [];
+  const { data: bahasaResp } = useOpsiBahasaEtimologiAdmin();
+  const { data: sumberResp } = useOpsiSumberAdmin({ etimologi: '1' });
+  const daftarBahasa = ambilDaftarLookup(bahasaResp);
+  const daftarSumber = ambilDaftarLookup(sumberResp);
   const opsiBahasaFormEtimologi = [
     { value: '', label: 'Pilih bahasa' },
-    ...daftarBahasa.map((item) => ({
-      value: String(item.id),
-      label: item.kode ? `${item.nama} (${item.kode})` : item.nama,
-    })),
+    ...mapOpsiIdNama(daftarBahasa),
   ];
   const opsiBahasaFilterEtimologi = [
     { value: '', label: '—Bahasa—' },
     { value: '__KOSONG__', label: '—Kosong—' },
-    ...daftarBahasa.map((item) => ({
-      value: item.kode,
-      label: item.kode ? `${item.nama} (${item.kode})` : item.nama,
-    })),
+    ...mapOpsiIdNama(daftarBahasa),
   ];
-  const opsiSumber = (sumberResp?.data || []).map((item) => ({ value: String(item.id), label: item.nama }));
+  const opsiSumber = mapOpsiIdNama(daftarSumber);
 
   const panel = useFormPanel(nilaiAwal);
   const simpan = useSimpanEtimologi();
@@ -316,15 +316,18 @@ function EtimologiAdmin() {
   const handleResetFilter = () => {
     hapusCari();
     setDraftFilterBahasa('');
+    setDraftFilterSumber('');
     setDraftFilterAktif('');
     setDraftFilterMeragukan('');
     setFilterBahasa('');
+    setFilterSumber('');
     setFilterAktif('');
     setFilterMeragukan('');
   };
 
   const handleCari = () => {
     setFilterBahasa(draftFilterBahasa);
+    setFilterSumber(draftFilterSumber);
     setFilterAktif(draftFilterAktif);
     setFilterMeragukan(draftFilterMeragukan);
     kirimCari(cari);
@@ -359,6 +362,19 @@ function EtimologiAdmin() {
             onChange: setDraftFilterBahasa,
             options: opsiBahasaFilterEtimologi,
             ariaLabel: 'Filter bahasa',
+            searchable: true,
+            placeholder: '—Bahasa—',
+            searchPlaceholder: 'Cari bahasa…',
+          },
+          {
+            key: 'sumber',
+            value: draftFilterSumber,
+            onChange: setDraftFilterSumber,
+            options: [{ value: '', label: '—Sumber—' }, ...opsiSumber],
+            ariaLabel: 'Filter sumber etimologi',
+            searchable: true,
+            placeholder: '—Sumber—',
+            searchPlaceholder: 'Cari sumber…',
           },
         ]}
       />
@@ -434,12 +450,14 @@ function EtimologiAdmin() {
           </div>
 
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-            <SelectField
+            <SearchableSelectField
               label="Bahasa"
               name="bahasa_id"
               value={String(panel.data.bahasa_id || '')}
               onChange={panel.ubahField}
               options={opsiBahasaFormEtimologi}
+              placeholder="Pilih bahasa"
+              searchPlaceholder="Cari bahasa…"
             />
             <InputField label="Kata" name="kata_asal" value={panel.data.kata_asal} onChange={panel.ubahField} />
           </div>
@@ -465,7 +483,15 @@ function EtimologiAdmin() {
 
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             <InputField label="Sitasi" name="sumber_sitasi" value={panel.data.sumber_sitasi} onChange={panel.ubahField} />
-            <SelectField label="Sumber" name="sumber_id" value={String(panel.data.sumber_id || '')} onChange={panel.ubahField} options={opsiSumber} />
+            <SearchableSelectField
+              label="Sumber"
+              name="sumber_id"
+              value={String(panel.data.sumber_id || '')}
+              onChange={panel.ubahField}
+              options={[{ value: '', label: 'Pilih sumber' }, ...opsiSumber]}
+              placeholder="Pilih sumber"
+              searchPlaceholder="Cari sumber…"
+            />
           </div>
 
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">

@@ -53,14 +53,28 @@ jest.mock('../../models/modelGlosarium', () => ({
   ambilDenganId: jest.fn(),
   simpan: jest.fn(),
   hapus: jest.fn(),
-  daftarLookupBidang: jest.fn(),
-  daftarLookupBahasa: jest.fn(),
-  daftarMasterBidang: jest.fn(),
-  daftarMasterBahasa: jest.fn(),
   hitungTotalBidang: jest.fn(),
   hitungTotalBahasa: jest.fn(),
   hitungTotalSumber: jest.fn(),
   hitungTotal: jest.fn(),
+}));
+
+jest.mock('../../models/modelOpsi', () => ({
+  daftarLookupBidang: jest.fn(),
+  daftarLookupBahasa: jest.fn(),
+  daftarLookupSumber: jest.fn(),
+  daftarMasterBidang: jest.fn(),
+  daftarMasterBahasa: jest.fn(),
+  daftarMasterSumber: jest.fn(),
+  ambilMasterBidangDenganId: jest.fn(),
+  ambilMasterBahasaDenganId: jest.fn(),
+  ambilMasterSumberDenganId: jest.fn(),
+  simpanMasterBidang: jest.fn(),
+  simpanMasterBahasa: jest.fn(),
+  simpanMasterSumber: jest.fn(),
+  hapusMasterBidang: jest.fn(),
+  hapusMasterBahasa: jest.fn(),
+  hapusMasterSumber: jest.fn(),
 }));
 
 jest.mock('../../models/modelLabel', () => ({
@@ -133,6 +147,7 @@ const ModelLema = require('../../models/modelEntri');
 const ModelTesaurus = require('../../models/modelTesaurus');
 const ModelEtimologi = require('../../models/modelEtimologi');
 const ModelGlosarium = require('../../models/modelGlosarium');
+const ModelOpsi = require('../../models/modelOpsi');
 const ModelLabel = require('../../models/modelLabel');
 const ModelKomentar = require('../../models/modelKomentar');
 const ModelPencarian = require('../../models/modelPencarian');
@@ -665,26 +680,6 @@ describe('routes/redaksi', () => {
 
       expect(response.status).toBe(500);
       expect(response.body.error).toBe('opsi induk gagal');
-    });
-
-    it('GET /api/redaksi/kamus/opsi-bidang mengembalikan lookup bidang', async () => {
-      ModelGlosarium.daftarLookupBidang.mockResolvedValue([{ kode: 'umum', nama: 'Umum' }]);
-
-      const response = await callAsAdmin('get', '/api/redaksi/kamus/opsi-bidang');
-
-      expect(response.status).toBe(200);
-      expect(ModelGlosarium.daftarLookupBidang).toHaveBeenCalledWith({ q: '' });
-      expect(response.body.data).toEqual([{ kode: 'umum', nama: 'Umum' }]);
-    });
-
-    it('GET /api/redaksi/kamus/opsi-bahasa mengembalikan lookup bahasa', async () => {
-      ModelGlosarium.daftarLookupBahasa.mockResolvedValue([{ kode: 'id', nama: 'Indonesia' }]);
-
-      const response = await callAsAdmin('get', '/api/redaksi/kamus/opsi-bahasa');
-
-      expect(response.status).toBe(200);
-      expect(ModelGlosarium.daftarLookupBahasa).toHaveBeenCalledWith({ q: '' });
-      expect(response.body.data).toEqual([{ kode: 'id', nama: 'Indonesia' }]);
     });
 
     it('GET /api/redaksi/kamus/:id meneruskan error', async () => {
@@ -1420,6 +1415,78 @@ describe('routes/redaksi', () => {
     });
   });
 
+  describe('etimologi', () => {
+    it('GET /api/redaksi/etimologi meneruskan filter bahasa_id, sumber_id, dan bahasa kosong', async () => {
+      ModelEtimologi.daftarAdmin.mockResolvedValue({ data: [], total: 0 });
+
+      const responseById = await callAsAdmin('get', '/api/redaksi/etimologi?bahasa_id=10&sumber_id=3', {
+        tokenPayload: { izin: ['kelola_etimologi'] },
+      });
+      const responseKosong = await callAsAdmin('get', '/api/redaksi/etimologi?bahasa=__KOSONG__', {
+        tokenPayload: { izin: ['kelola_etimologi'] },
+      });
+
+      expect(responseById.status).toBe(200);
+      expect(responseKosong.status).toBe(200);
+      expect(ModelEtimologi.daftarAdmin).toHaveBeenNthCalledWith(1, {
+        limit: 50,
+        offset: 0,
+        q: '',
+        bahasa: '',
+        bahasaId: 10,
+        sumberId: 3,
+        aktif: '',
+        meragukan: '',
+      });
+      expect(ModelEtimologi.daftarAdmin).toHaveBeenNthCalledWith(2, {
+        limit: 50,
+        offset: 0,
+        q: '',
+        bahasa: '__KOSONG__',
+        aktif: '',
+        meragukan: '',
+      });
+    });
+  });
+
+  describe('lookup master', () => {
+    it('GET /api/redaksi/bidang/opsi mengembalikan lookup bidang', async () => {
+      ModelOpsi.daftarLookupBidang.mockResolvedValue([{ id: 1, kode: 'umum', nama: 'Umum' }]);
+
+      const response = await callAsAdmin('get', '/api/redaksi/bidang/opsi');
+
+      expect(response.status).toBe(200);
+      expect(ModelOpsi.daftarLookupBidang).toHaveBeenCalledWith({ q: '' });
+      expect(response.body.data).toEqual([{ id: 1, kode: 'umum', nama: 'Umum' }]);
+    });
+
+    it('GET /api/redaksi/bahasa/opsi mengembalikan lookup bahasa', async () => {
+      ModelOpsi.daftarLookupBahasa.mockResolvedValue([{ id: 10, kode: 'Ing', nama: 'Inggris', iso2: 'en' }]);
+
+      const response = await callAsAdmin('get', '/api/redaksi/bahasa/opsi');
+
+      expect(response.status).toBe(200);
+      expect(ModelOpsi.daftarLookupBahasa).toHaveBeenCalledWith({ q: '' });
+      expect(response.body.data).toEqual([{ id: 10, kode: 'Ing', nama: 'Inggris', iso2: 'en' }]);
+    });
+
+    it('GET /api/redaksi/sumber/opsi mengembalikan lookup sumber sesuai konteks', async () => {
+      ModelOpsi.daftarLookupSumber.mockResolvedValue([{ id: 3, kode: 'kbbi', nama: 'KBBI' }]);
+
+      const response = await callAsAdmin('get', '/api/redaksi/sumber/opsi?glosarium=1');
+
+      expect(response.status).toBe(200);
+      expect(ModelOpsi.daftarLookupSumber).toHaveBeenCalledWith({
+        q: '',
+        glosarium: '1',
+        kamus: '',
+        tesaurus: '',
+        etimologi: '',
+      });
+      expect(response.body.data).toEqual([{ id: 3, kode: 'kbbi', nama: 'KBBI' }]);
+    });
+  });
+
   describe('glosarium', () => {
     it('CRUD /api/redaksi/glosarium mencakup cabang utama', async () => {
       ModelGlosarium.cari.mockResolvedValue({ data: [{ id: 1 }], total: 1 });
@@ -1481,10 +1548,10 @@ describe('routes/redaksi', () => {
       });
     });
 
-    it('GET /api/redaksi/glosarium meneruskan filter bidang_id dan sumber_id', async () => {
+    it('GET /api/redaksi/glosarium meneruskan filter bidang_id, bahasa_id, dan sumber_id', async () => {
       ModelGlosarium.cari.mockResolvedValue({ data: [], total: 0 });
 
-      const response = await callAsAdmin('get', '/api/redaksi/glosarium?bidang_id=3&sumber_id=5');
+      const response = await callAsAdmin('get', '/api/redaksi/glosarium?bidang_id=3&bahasa_id=7&sumber_id=5');
 
       expect(response.status).toBe(200);
       expect(ModelGlosarium.cari).toHaveBeenCalledWith({
@@ -1493,6 +1560,7 @@ describe('routes/redaksi', () => {
         offset: 0,
         aktif: '',
         bidangId: 3,
+        bahasaId: 7,
         sumberId: 5,
       });
     });

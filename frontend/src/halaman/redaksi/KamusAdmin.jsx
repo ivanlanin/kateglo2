@@ -10,7 +10,7 @@ import {
   useAutocompleteIndukKamus,
   useDaftarMakna, useSimpanMakna, useHapusMakna,
   useSimpanContoh, useHapusContoh,
-  useKategoriLabelRedaksi,
+  useOpsiLabelRedaksi,
   useDaftarSumberAdmin,
   useTagarEntri, useSimpanTagarEntri, useDaftarTagarUntukPilih,
 } from '../../api/apiAdmin';
@@ -900,7 +900,7 @@ function KamusAdmin() {
     excludeId: panel.data.id || null,
   });
   const daftarSaranRujuk = respSaranRujuk?.data || [];
-  const { data: respLabelKategori } = useKategoriLabelRedaksi(kategoriLabelRedaksi);
+  const { data: respLabelKategori } = useOpsiLabelRedaksi(kategoriLabelRedaksi);
   const { data: respOpsiBidang } = useOpsiBidangKamusAdmin();
   const { data: respOpsiBahasa } = useOpsiBahasaKamusAdmin();
 

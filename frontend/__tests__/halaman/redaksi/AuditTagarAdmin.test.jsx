@@ -5,7 +5,7 @@ import AuditTagarAdmin from '../../../src/halaman/redaksi/AuditTagarAdmin';
 
 const mockUseDaftarAuditTagarAdmin = vi.fn();
 const mockUseDaftarTagarUntukPilih = vi.fn();
-const mockUseKategoriLabelRedaksi = vi.fn();
+const mockUseOpsiLabelRedaksi = vi.fn();
 const mockUseTagarEntri = vi.fn();
 const mutateSimpanTagarEntri = vi.fn();
 let simpanTagarState = { mutate: mutateSimpanTagarEntri, isError: false };
@@ -13,7 +13,7 @@ let simpanTagarState = { mutate: mutateSimpanTagarEntri, isError: false };
 vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarAuditTagarAdmin: (...args) => mockUseDaftarAuditTagarAdmin(...args),
   useDaftarTagarUntukPilih: (...args) => mockUseDaftarTagarUntukPilih(...args),
-  useKategoriLabelRedaksi: (...args) => mockUseKategoriLabelRedaksi(...args),
+  useOpsiLabelRedaksi: (...args) => mockUseOpsiLabelRedaksi(...args),
   useTagarEntri: (...args) => mockUseTagarEntri(...args),
   useSimpanTagarEntri: () => simpanTagarState,
 }));
@@ -31,7 +31,7 @@ describe('AuditTagarAdmin', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     simpanTagarState = { mutate: mutateSimpanTagarEntri, isError: false };
-    mockUseKategoriLabelRedaksi.mockReturnValue({
+    mockUseOpsiLabelRedaksi.mockReturnValue({
       data: { data: { 'bentuk-kata': [{ kode: 'dasar', nama: 'Dasar' }, { kode: 'turunan', nama: 'Turunan' }] } },
     });
     mockUseDaftarTagarUntukPilih.mockReturnValue({
@@ -98,7 +98,7 @@ describe('AuditTagarAdmin', () => {
   });
 
   it('menutup fallback map opsi label, opsi tagar kosong, dan path entri tanpa indeks', () => {
-    mockUseKategoriLabelRedaksi.mockReturnValue({
+    mockUseOpsiLabelRedaksi.mockReturnValue({
       data: { data: { 'bentuk-kata': [{ kode: 'akronim', nama: '' }] } },
     });
     mockUseDaftarTagarUntukPilih.mockReturnValue({ data: { data: undefined } });
@@ -180,7 +180,7 @@ describe('AuditTagarAdmin', () => {
 
   it('memakai fallback opsi jenis bawaan dan menampilkan panel error simpan', () => {
     simpanTagarState = { mutate: mutateSimpanTagarEntri, isError: true };
-    mockUseKategoriLabelRedaksi.mockReturnValue({ data: { data: {} } });
+    mockUseOpsiLabelRedaksi.mockReturnValue({ data: { data: {} } });
     mockUseDaftarAuditTagarAdmin.mockReturnValue({
       isLoading: false,
       isError: false,
@@ -205,7 +205,7 @@ describe('AuditTagarAdmin', () => {
   });
 
   it('menutup fallback respons undefined untuk daftar audit dan kategori', () => {
-    mockUseKategoriLabelRedaksi.mockReturnValue({ data: undefined });
+    mockUseOpsiLabelRedaksi.mockReturnValue({ data: undefined });
     mockUseDaftarTagarUntukPilih.mockReturnValue({ data: undefined });
     mockUseDaftarAuditTagarAdmin.mockReturnValue({
       isLoading: false,
@@ -224,7 +224,7 @@ describe('AuditTagarAdmin', () => {
   });
 
   it('menutup cabang nullish map opsi label dan tagar entri undefined', () => {
-    mockUseKategoriLabelRedaksi.mockReturnValue({
+    mockUseOpsiLabelRedaksi.mockReturnValue({
       data: { data: { 'bentuk-kata': [null] } },
     });
     mockUseDaftarTagarUntukPilih.mockReturnValue({
