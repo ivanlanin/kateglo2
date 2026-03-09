@@ -208,13 +208,13 @@ function SumberAdmin() {
         <PesanForm error={pesan.error} sukses={pesan.sukses} />
         <InputField label="Kode" name="kode" value={panel.data.kode} onChange={panel.ubahField} required />
         <InputField label="Nama" name="nama" value={panel.data.nama} onChange={panel.ubahField} required />
+        <TextareaField label="Keterangan" name="keterangan" value={panel.data.keterangan} onChange={panel.ubahField} rows={3} />
         <div className="grid grid-cols-2 gap-3">
           <ToggleSumberKonteks label="Kamus" name="kamus" value={panel.data.kamus} onChange={panel.ubahField} />
           <ToggleSumberKonteks label="Tesaurus" name="tesaurus" value={panel.data.tesaurus} onChange={panel.ubahField} />
           <ToggleSumberKonteks label="Glosarium" name="glosarium" value={panel.data.glosarium} onChange={panel.ubahField} />
           <ToggleSumberKonteks label="Etimologi" name="etimologi" value={panel.data.etimologi} onChange={panel.ubahField} />
         </div>
-        <TextareaField label="Keterangan" name="keterangan" value={panel.data.keterangan} onChange={panel.ubahField} rows={3} />
         <FormFooter
           onSimpan={handleSimpan}
           onBatal={tutupPanel}

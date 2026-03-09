@@ -81,6 +81,7 @@ function GlosariumAdmin() {
   const idDariPath = parsePositiveIntegerParam(idParam);
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
+  const defaultBahasaSudahDiisi = useRef(false);
   const [filterBidangDraft, setFilterBidangDraft] = useState('');
   const [filterBahasaDraft, setFilterBahasaDraft] = useState('');
   const [filterSumberDraft, setFilterSumberDraft] = useState('');
@@ -159,10 +160,15 @@ function GlosariumAdmin() {
   }, [idDariPath, isDetailError, isDetailLoading, navigate]);
 
   useEffect(() => {
-    if (!panel.buka || !panel.modeTambah || panel.data.bahasa_id) return;
+    if (!panel.buka) {
+      defaultBahasaSudahDiisi.current = false;
+      return;
+    }
+    if (!panel.modeTambah || panel.data.bahasa_id || defaultBahasaSudahDiisi.current) return;
     const defaultBahasa = daftarBahasa.find((item) => item.iso2 === 'en' || item.kode === 'Ing');
     if (defaultBahasa?.id) {
       panel.ubahField('bahasa_id', String(defaultBahasa.id));
+      defaultBahasaSudahDiisi.current = true;
     }
   }, [daftarBahasa, panel]);
 
@@ -200,12 +206,12 @@ function GlosariumAdmin() {
       setPesan({ error: 'Bidang wajib dipilih', sukses: '' });
       return;
     }
-    if (!panel.data.sumber_id) {
-      setPesan({ error: 'Sumber wajib dipilih', sukses: '' });
-      return;
-    }
     if (!panel.data.bahasa_id) {
       setPesan({ error: 'Bahasa wajib dipilih', sukses: '' });
+      return;
+    }
+    if (!panel.data.sumber_id) {
+      setPesan({ error: 'Sumber wajib dipilih', sukses: '' });
       return;
     }
 
@@ -327,6 +333,7 @@ function GlosariumAdmin() {
             value={String(panel.data.bidang_id || '')}
             onChange={panel.ubahField}
             options={[{ value: '', label: '-- Pilih bidang --' }, ...opsiBidang]}
+            required
             placeholder="-- Pilih bidang --"
             searchPlaceholder="Cari bidang…"
           />
@@ -336,6 +343,7 @@ function GlosariumAdmin() {
             value={String(panel.data.bahasa_id || '')}
             onChange={panel.ubahField}
             options={[{ value: '', label: '-- Pilih bahasa --' }, ...opsiBahasa]}
+            required
             placeholder="-- Pilih bahasa --"
             searchPlaceholder="Cari bahasa…"
           />
@@ -345,6 +353,7 @@ function GlosariumAdmin() {
             value={String(panel.data.sumber_id || '')}
             onChange={panel.ubahField}
             options={[{ value: '', label: '-- Pilih sumber --' }, ...opsiSumber]}
+            required
             placeholder="-- Pilih sumber --"
             searchPlaceholder="Cari sumber…"
           />

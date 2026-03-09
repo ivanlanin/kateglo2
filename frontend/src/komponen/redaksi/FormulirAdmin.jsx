@@ -115,6 +115,7 @@ export function SearchableSelectField({
   onChange,
   options,
   disabled,
+  required = false,
   placeholder = 'Pilih opsi',
   searchPlaceholder = 'Ketik untuk mencari…',
   emptySearchText = 'Tidak ada hasil.',
@@ -196,7 +197,7 @@ export function SearchableSelectField({
 
   return (
     <div ref={wrapperRef} className={`form-admin-group relative ${wrapperClassName}`.trim()}>
-      {hideLabel ? <span className="sr-only">{label}</span> : <label className="form-admin-label">{label}</label>}
+      {hideLabel ? <span className="sr-only">{label}</span> : <label className="form-admin-label">{label}{required && <span className="text-red-500 ml-0.5">*</span>}</label>}
       <button
         type="button"
         aria-label={label}

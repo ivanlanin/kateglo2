@@ -199,7 +199,7 @@ describe('GlosariumAdmin', () => {
     expect(mutateSimpan).toHaveBeenCalled();
   });
 
-  it('memvalidasi bidang dan sumber wajib dipilih', () => {
+  it('memvalidasi bidang, bahasa, dan sumber wajib dipilih', () => {
     render(
       <MemoryRouter>
         <GlosariumAdmin />
@@ -213,6 +213,11 @@ describe('GlosariumAdmin', () => {
     expect(screen.getByText('Bidang wajib dipilih')).toBeInTheDocument();
 
     pilihOpsi('Bidang', '1');
+    pilihOpsi('Bahasa', '');
+    fireEvent.click(screen.getByText('Simpan'));
+    expect(screen.getByText('Bahasa wajib dipilih')).toBeInTheDocument();
+
+    pilihOpsi('Bahasa', '10');
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Sumber wajib dipilih')).toBeInTheDocument();
   });
