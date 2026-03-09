@@ -14,6 +14,11 @@ function normalizePeranIds(peranIds) {
 }
 
 class ModelIzin {
+  static async hitungTotal() {
+    const result = await db.query('SELECT COUNT(*) AS total FROM izin');
+    return parseCount(result.rows[0]?.total);
+  }
+
   static async daftarIzin({ limit = 50, offset = 0, q = '' } = {}) {
     const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
     const safeOffset = Math.max(Number(offset) || 0, 0);

@@ -121,6 +121,7 @@ jest.mock('../../models/modelPencarianHitam', () => ({
 }));
 
 jest.mock('../../models/modelPeran', () => ({
+  hitungTotal: jest.fn(),
   daftarPeran: jest.fn(),
   ambilDenganId: jest.fn(),
   daftarIzin: jest.fn(),
@@ -128,6 +129,7 @@ jest.mock('../../models/modelPeran', () => ({
 }));
 
 jest.mock('../../models/modelIzin', () => ({
+  hitungTotal: jest.fn(),
   daftarIzin: jest.fn(),
   ambilDenganId: jest.fn(),
   daftarPeran: jest.fn(),
@@ -397,6 +399,8 @@ describe('routes/redaksi', () => {
       ModelGlosarium.hitungTotalBidang.mockResolvedValue(70);
       ModelGlosarium.hitungTotalBahasa.mockResolvedValue(71);
       ModelGlosarium.hitungTotalSumber.mockResolvedValue(80);
+      ModelPeran.hitungTotal.mockResolvedValue(81);
+      ModelIzin.hitungTotal.mockResolvedValue(82);
       ModelPengguna.hitungTotal.mockResolvedValue(50);
       ModelKomentar.hitungTotal.mockResolvedValue(60);
       ModelPencarian.hitungTotalKataHarian.mockResolvedValue(90);
@@ -418,6 +422,8 @@ describe('routes/redaksi', () => {
         bidang: 70,
         bahasa: 71,
         sumber: 80,
+        peran: 81,
+        izin: 82,
         pengguna: 50,
         komentar: 60,
         pencarian: 90,

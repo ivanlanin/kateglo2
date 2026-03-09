@@ -683,6 +683,50 @@ code {
     @apply bg-dark-bg/80 border-dark-border shadow-none;
   }
 
+  .redaksi-dashboard-sections {
+    @apply grid grid-cols-1 gap-6 xl:grid-cols-2;
+  }
+
+  .redaksi-dashboard-section {
+    @apply relative rounded-2xl border border-gray-200 bg-gray-50 p-5 pt-6 shadow-sm;
+  }
+
+  .dark .redaksi-dashboard-section {
+    @apply bg-dark-bg-elevated border-dark-border shadow-none;
+  }
+
+  .redaksi-dashboard-section-title {
+    @apply absolute left-4 top-0 -translate-y-1/2 rounded-full border border-gray-200 bg-white px-3 py-1 text-sm font-bold uppercase tracking-[0.16em] text-gray-600 shadow-sm;
+  }
+
+  .dark .redaksi-dashboard-section-title {
+    @apply border-dark-border bg-dark-bg text-dark-text shadow-none;
+  }
+
+  .redaksi-dashboard-grid {
+    @apply grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3;
+  }
+
+  .redaksi-dashboard-card {
+    @apply flex min-h-28 flex-col justify-between gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-all hover:border-blue-200 hover:shadow-md;
+  }
+
+  .dark .redaksi-dashboard-card {
+    @apply border-dark-border bg-dark-bg shadow-none hover:border-blue-700;
+  }
+
+  .redaksi-dashboard-card-label {
+    @apply text-base font-semibold text-gray-900;
+  }
+
+  .dark .redaksi-dashboard-card-label {
+    @apply text-dark-text;
+  }
+
+  .redaksi-dashboard-card-value {
+    @apply text-3xl font-bold;
+  }
+
   .beranda-info-title {
     @apply font-semibold text-gray-800 mb-3;
   }

@@ -159,10 +159,11 @@ function useHapusAdmin({ path, queryKeyPrefix }) {
 
 // ─── Statistik ───────────────────────────────────────────────────────────────
 
-export function useStatistikAdmin() {
+export function useStatistikAdmin({ enabled = true } = {}) {
   return useQuery({
     queryKey: ['admin-statistik'],
     queryFn: () => klien.get('/api/redaksi/statistik').then((r) => r.data),
+    enabled,
     staleTime: 60 * 1000,
   });
 }

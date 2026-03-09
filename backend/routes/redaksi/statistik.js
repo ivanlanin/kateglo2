@@ -15,6 +15,8 @@ const ModelSusunKata = require('../../models/modelSusunKata');
 const ModelPencarian = require('../../models/modelPencarian');
 const ModelAuditMakna = require('../../models/modelAuditMakna');
 const ModelTagar = require('../../models/modelTagar');
+const ModelPeran = require('../../models/modelPeran');
+const ModelIzin = require('../../models/modelIzin');
 const {
   buildPaginatedResult,
   parsePagination,
@@ -42,6 +44,8 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
       bidang,
       bahasa,
       sumber,
+      peran,
+      izin,
       pengguna,
       komentar,
       pencarian,
@@ -59,6 +63,8 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
       ModelGlosarium.hitungTotalBidang(),
       ModelGlosarium.hitungTotalBahasa(),
       ModelGlosarium.hitungTotalSumber(),
+      ModelPeran.hitungTotal(),
+      ModelIzin.hitungTotal(),
       ModelPengguna.hitungTotal(),
       ModelKomentar.hitungTotal(),
       ModelPencarian.hitungTotalKataHarian(),
@@ -80,6 +86,8 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
         bidang,
         bahasa,
         sumber,
+        peran,
+        izin,
         pengguna,
         komentar,
         pencarian,

@@ -41,7 +41,7 @@ describe('DasborAdmin', () => {
     );
 
     expect(screen.getByText('Dasbor')).toBeInTheDocument();
-    expect(screen.getAllByText('…')).toHaveLength(16);
+    expect(screen.getAllByText('…')).toHaveLength(18);
   });
 
   it('menampilkan statistik saat data tersedia', () => {
@@ -61,6 +61,8 @@ describe('DasborAdmin', () => {
           bidang: 14,
           bahasa: 19,
           sumber: 18,
+          peran: 17,
+          izin: 23,
           label: 321,
           pengguna: 12,
           komentar: 88,
@@ -86,6 +88,8 @@ describe('DasborAdmin', () => {
     expect(screen.getByText('14')).toBeInTheDocument();
     expect(screen.getByText('19')).toBeInTheDocument();
     expect(screen.getByText('18')).toBeInTheDocument();
+    expect(screen.getByText('17')).toBeInTheDocument();
+    expect(screen.getByText('23')).toBeInTheDocument();
     expect(screen.getByText('321')).toBeInTheDocument();
     expect(screen.getByText('12')).toBeInTheDocument();
     expect(screen.getByText('88')).toBeInTheDocument();
@@ -108,6 +112,8 @@ describe('DasborAdmin', () => {
           bidang: 14,
           bahasa: 19,
           sumber: 18,
+          peran: 7,
+          izin: 8,
           label: 321,
           pengguna: 12,
           komentar: 88,
@@ -148,6 +154,8 @@ describe('DasborAdmin', () => {
           bidang: 7,
           bahasa: 9,
           sumber: 8,
+          peran: 5,
+          izin: 6,
           label: 40,
           pengguna: 50,
           komentar: 60,
@@ -173,7 +181,16 @@ describe('DasborAdmin', () => {
     mockUseStatistikAdmin.mockReturnValue({
       isLoading: false,
       data: {
-        data: { entri: null, tesaurus: undefined, glosarium: undefined, label: undefined, pengguna: undefined, komentar: undefined },
+        data: {
+          entri: null,
+          tesaurus: undefined,
+          glosarium: undefined,
+          label: undefined,
+          peran: undefined,
+          izin: undefined,
+          pengguna: undefined,
+          komentar: undefined,
+        },
       },
     });
 
@@ -201,6 +218,8 @@ describe('DasborAdmin', () => {
           etimologi: 0,
           bidang: 7,
           sumber: 8,
+          peran: 5,
+          izin: 6,
           label: 40,
           pengguna: 50,
           komentar: 60,

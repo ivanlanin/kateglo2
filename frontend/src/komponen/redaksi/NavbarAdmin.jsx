@@ -5,57 +5,7 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/authContext';
-
-const kelompokMenuAdmin = [
-  {
-    judul: 'Leksikon',
-    items: [
-      { path: '/redaksi/kamus', label: 'Kamus', izin: 'lihat_entri' },
-      { path: '/redaksi/tesaurus', label: 'Tesaurus', izin: 'lihat_tesaurus' },
-      { path: '/redaksi/glosarium', label: 'Glosarium', izin: 'lihat_glosarium' },
-      { path: '/redaksi/etimologi', label: 'Etimologi', izin: 'kelola_etimologi' },
-    ],
-  },
-  {
-    judul: 'Gim',
-    items: [
-      { path: '/redaksi/susun-kata-harian', label: 'Susun Kata Harian', izin: 'kelola_susun_kata' },
-      { path: '/redaksi/susun-kata-bebas', label: 'Susun Kata Bebas', izin: 'kelola_susun_kata' },
-    ],
-  },
-  {
-    judul: 'Interaksi',
-    items: [
-      { path: '/redaksi/komentar', label: 'Komentar', izin: 'kelola_komentar' },
-      { path: '/redaksi/pencarian', label: 'Pencarian', izin: 'lihat_pencarian' },
-    ],
-  },
-  {
-    judul: 'Audit',
-    items: [
-      { path: '/redaksi/audit-makna', label: 'Makna', izin: 'audit_makna' },
-      { path: '/redaksi/audit-tagar', label: 'Tagar', izin: 'audit_tagar' },
-    ],
-  },
-  {
-    judul: 'Master',
-    items: [
-      { path: '/redaksi/tagar', label: 'Tagar', izin: 'kelola_tagar' },
-      { path: '/redaksi/label', label: 'Label', izin: 'kelola_label' },
-      { path: '/redaksi/bidang', label: 'Bidang', izin: 'kelola_bidang' },
-      { path: '/redaksi/bahasa', label: 'Bahasa', izin: 'kelola_bahasa' },
-      { path: '/redaksi/sumber', label: 'Sumber', izin: 'kelola_sumber' },
-    ],
-  },
-  {
-    judul: 'Akses',
-    items: [
-      { path: '/redaksi/peran', label: 'Peran', izin: 'kelola_peran' },
-      { path: '/redaksi/izin', label: 'Izin', izin: 'kelola_peran' },
-      { path: '/redaksi/pengguna', label: 'Pengguna', izin: 'kelola_pengguna' },
-    ],
-  },
-];
+import { filterKelompokMenuRedaksi } from './menuRedaksi';
 
 function NavbarAdmin() {
   const { logout, punyaIzin, user } = useAuth();
@@ -64,12 +14,7 @@ function NavbarAdmin() {
     if (typeof punyaIzin === 'function') return punyaIzin(izin);
     return izinPengguna.includes(izin);
   };
-  const menuTampil = kelompokMenuAdmin
-    .map((kelompok) => ({
-      ...kelompok,
-      items: kelompok.items.filter((item) => hasIzin(item.izin)),
-    }))
-    .filter((kelompok) => kelompok.items.length > 0);
+  const menuTampil = filterKelompokMenuRedaksi(hasIzin);
   const navigate = useNavigate();
   const location = useLocation();
   const [menuTerbuka, setMenuTerbuka] = useState(false);
