@@ -122,17 +122,19 @@ function TataLetak({ mode = 'publik', judul, aksiJudul = null, children }) {
             >
               {modeGelap ? '☀️' : '🌙'}
             </button>
-            <span className="text-sm">
-              <Link to="/kebijakan-privasi" className="link-action">Privasi</Link>
-              {' · '}
-              <Link to="/sumber" className="link-action">Sumber</Link>
-              {adalahRedaksi && (
-                <>{' · '}<Link to="/redaksi" className="link-action">Redaksi</Link></>
-              )}
-              {adalahAdmin && (
-                <>{' · '}<Link to="/" className="link-action">Kateglo</Link></>
-              )}
-            </span>
+            <div className="kateglo-footer-links">
+              <span className="text-sm">
+                <Link to="/kebijakan-privasi" className="link-action">Privasi</Link>
+                {' · '}
+                <Link to="/sumber" className="link-action">Sumber</Link>
+                {adalahRedaksi && (
+                  <>{' · '}<Link to="/redaksi" className="link-action">Redaksi</Link></>
+                )}
+                {adalahAdmin && (
+                  <>{' · '}<Link to="/" className="link-action">Kateglo</Link></>
+                )}
+              </span>
+            </div>
           </div>
         </footer>
       </div>

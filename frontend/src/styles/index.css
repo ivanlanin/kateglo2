@@ -1176,6 +1176,10 @@ code {
     @apply w-full px-4 sm:px-6 lg:px-8 py-6 text-sm flex items-center justify-center gap-3;
   }
 
+  .kateglo-footer-links {
+    @apply text-center leading-5;
+  }
+
   .kateglo-version-button {
     @apply text-blue-600 hover:underline;
   }
