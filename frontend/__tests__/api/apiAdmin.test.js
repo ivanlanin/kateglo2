@@ -577,10 +577,18 @@ describe('apiAdmin', () => {
     await detailGlosarium.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/glosarium/15');
 
-    const daftarBidang = useDaftarBidangAdmin({ limit: 12, q: 'kim', aktif: '1' });
+    const daftarBidang = useDaftarBidangAdmin({ limit: 12, q: 'kim', kamus: '1', glosarium: '0' });
     await daftarBidang.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/bidang', {
-      params: { limit: 12, cursor: undefined, direction: 'next', lastPage: undefined, q: 'kim', aktif: '1' },
+      params: {
+        limit: 12,
+        cursor: undefined,
+        direction: 'next',
+        lastPage: undefined,
+        q: 'kim',
+        kamus: '1',
+        glosarium: '0',
+      },
     });
 
     const opsiBidangAdmin = useOpsiBidangAdmin();

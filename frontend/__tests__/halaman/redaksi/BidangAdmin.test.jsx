@@ -211,12 +211,14 @@ describe('BidangAdmin', () => {
     );
 
     fireEvent.change(screen.getByPlaceholderText('Cari bidang …'), { target: { value: 'kim' } });
-    fireEvent.change(screen.getByLabelText('Filter status bidang'), { target: { value: '1' } });
+    fireEvent.change(screen.getByLabelText('Filter bidang kamus'), { target: { value: '1' } });
+    fireEvent.change(screen.getByLabelText('Filter bidang glosarium'), { target: { value: '0' } });
     fireEvent.click(screen.getAllByRole('button', { name: '✕' })[0]);
 
     const panggilanTerakhir = mockUseDaftar.mock.calls.at(-1)?.[0] || {};
     expect(panggilanTerakhir.q).toBe('');
-    expect(panggilanTerakhir.aktif).toBe('');
+    expect(panggilanTerakhir.kamus).toBe('');
+    expect(panggilanTerakhir.glosarium).toBe('');
   });
 
   it('aman saat respons daftar kosong, detail tanpa id, klik item tanpa id, dan batal hapus', async () => {
