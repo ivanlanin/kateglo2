@@ -32,6 +32,7 @@
 - [L2: Pertimbangan Lanjutan](202603090946_pertimbangan-lanjutan-kamus-deskriptif.md)
 - [L3: Strategi Korpus Multi-Genre](202603090956_korpus-multi-genre.md)
 - [L4: Saran Definisi Otomatis](202603091021_saran-definisi-otomatis.md)
+- [L7: Evaluasi, Etika, dan Replikabilitas](202603091215_evaluasi-etika-replikabilitas.md)
 
 ---
 
@@ -309,11 +310,20 @@ Pengaruh keseimbangan genre terhadap jenis kandidat yang dihasilkan menjawab **s
 - Presisi: proporsi kandidat yang pada akhirnya disetujui redaktur
 - Recall: perkiraan neologisme yang berhasil ditangkap vs. yang terlewat (sampel manual)
 - Beban redaktur: waktu rata-rata kurasi per kandidat (dengan vs. tanpa saran definisi otomatis)
+- Inter-annotator agreement: Cohen's kappa dari review ganda 200 kandidat oleh 2–3 redaktur independen
 
 **Evaluasi linguistik (kualitatif):**
 - Analisis 500 kandidat pertama yang disetujui: distribusi tipe, mekanisme pembentukan, ragam
 - Pelacakan kurva saturasi: kapan sistem berhenti menemukan kata genuinely baru dari satu sumber
 - Studi kasus siklus hidup: 20 neologisme dipilih dan dilacak dari kemunculan hingga adopsi/kematian
+- Survival analysis (Kaplan-Meier) untuk operasionalisasi siklus hidup neologisme
+
+**Baseline comparison (eksternal):**
+- Retroaktif: bandingkan output sistem terhadap kata-kata baru yang masuk KBBI edisi terbaru dalam periode observasi
+- Paralel: bandingkan terhadap neologisme yang muncul di Wiktionary bahasa Indonesia dalam periode yang sama
+- Keduanya memberikan anchor evaluasi di luar sistem sendiri
+
+Detail operasionalisasi metrik temporal dan desain studi IAA didokumentasikan di **Lampiran L7**.
 
 ### 6.8 Ancaman terhadap Validitas
 
@@ -437,6 +447,10 @@ CREATE TABLE riwayat_kurasi (
   perubahan    jsonb,           -- diff field yang diubah
   created_at   timestamptz DEFAULT now()
 );
+
+CREATE INDEX idx_riwayat_kandidat  ON riwayat_kurasi (kandidat_id);
+CREATE INDEX idx_riwayat_redaktur  ON riwayat_kurasi (redaktur_id);
+CREATE INDEX idx_riwayat_created   ON riwayat_kurasi (created_at DESC);
 ```
 
 #### Tabel Korpus (Fase 3)
@@ -465,7 +479,20 @@ CREATE TABLE korpus_frekuensi (
   terakhir   date,
   updated_at timestamptz DEFAULT now()
 );
+
+-- Frekuensi token per bulan (kritis untuk analisis temporal, sub-pertanyaan 5)
+CREATE TABLE korpus_frekuensi_bulanan (
+  token      text NOT NULL,
+  bulan      date NOT NULL,        -- hari pertama bulan (2026-03-01, dst.)
+  frekuensi  bigint DEFAULT 0,
+  df         integer DEFAULT 0,     -- document frequency bulan itu
+  PRIMARY KEY (token, bulan)
+);
+
+CREATE INDEX idx_frekuensi_bulanan_bulan ON korpus_frekuensi_bulanan (bulan);
 ```
+
+Tabel `korpus_frekuensi` menyimpan agregat global, sedangkan `korpus_frekuensi_bulanan` memungkinkan analisis tren temporal untuk *seluruh* kosakata korpus — bukan hanya kata-kata yang sudah masuk kandidat. Tanpa tabel ini, pelacakan siklus hidup (sub-pertanyaan 5) hanya bisa dilakukan melalui `atestasi.tanggal_terbit`, yang cakupannya terbatas pada kata-kata yang sudah teridentifikasi.
 
 ### 7.2 Jalur Penjaringan: Implementasi
 
@@ -857,6 +884,10 @@ Keputusan-keputusan berikut telah difinalisasi sebelum implementasi dimulai:
 - **OSCAR Corpus** — Common Crawl-based multilingual corpus. Ortiz Suárez et al. (2019).
 - **IndoNLU Benchmark** — Wilie et al. (2020). IndoNLU: Benchmark and Resources for Evaluating Indonesian Natural Language Understanding. *AACL-IJCNLP 2020*.
 - **Leipzig Corpora Collection** — Quasthoff, U., Richter, M., & Biemann, C. (2006). Corpus Portal for Search in Monolingual Corpora. *LREC 2006*.
+- **Sinclair, J.M.** (1991). *Corpus, Concordance, Collocation*. Oxford University Press.
+- **Zgusta, L.** (1971). *Manual of Lexicography*. Academia / Mouton.
+- **Artstein, R. & Poesio, M.** (2008). Inter-Coder Agreement for Computational Linguistics. *Computational Linguistics*, 34(4), 555–596.
+- **Kleinbaum, D.G. & Klein, M.** (2012). *Survival Analysis: A Self-Learning Text* (edisi ke-3). Springer.
 
 ---
 
@@ -876,3 +907,5 @@ Setiap lampiran dapat dikembangkan menjadi paper atau bab tersendiri.
 - **[L5] `202603091036_infrastruktur-penelitian-terbuka.md`** — Rancangan akses terbuka untuk peneliti: model akses empat tier, lisensi per komponen (MIT/CC-BY/CC-BY-NC), infrastruktur API penelitian, format bulk download, tata kelola, keberlanjutan biaya, potensi mitra institusi (BRIN, Badan Bahasa, universitas), dan preseden proyek serupa.
 
 - **[L6] `202603091108_perdebatan-teoritis-leksikografi.md`** — Perdebatan teoritis: spektrum preskriptif–deskriptif sebagai kontinum (bukan dikotomi), posisi KBBI secara teoritis (normatif dalam tujuan, campuran dalam metodologi), tiga revolusi besar sejarah leksikografi (kamus normatif modern → OED/atestasi → corpus computing dan crowdsourcing), perdebatan yang belum selesai (masalah seleksi, ambang atestasi, otoritas), dan posisi Kadi di antara OED edisi ke-3 dan COBUILD.
+
+- **[L7] `202603091215_evaluasi-etika-replikabilitas.md`** — Kerangka evaluasi lanjutan: desain studi IAA, operasionalisasi siklus hidup neologisme (survival analysis), metodologi baseline comparison eksternal, strategi cold start crowdsourcing, kepatuhan UU PDP dan ethical clearance, penanganan neologisme semantik (makna baru untuk kata lama), dan kerangka replikabilitas.

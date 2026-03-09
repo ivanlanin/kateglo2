@@ -15,6 +15,7 @@ secara berkelanjutan dari korpus multi-genre.
 | [`202603091021_saran-definisi-otomatis.md`](202603091021_saran-definisi-otomatis.md) | L4 — Saran definisi otomatis tanpa generative AI |
 | [`202603091036_infrastruktur-penelitian-terbuka.md`](202603091036_infrastruktur-penelitian-terbuka.md) | L5 — Infrastruktur terbuka untuk peneliti (model akses, lisensi, mitra) |
 | [`202603091108_perdebatan-teoritis-leksikografi.md`](202603091108_perdebatan-teoritis-leksikografi.md) | L6 — Perdebatan teoritis: spektrum preskriptif–deskriptif, posisi KBBI, sejarah leksikografi |
+| [`202603091215_evaluasi-etika-replikabilitas.md`](202603091215_evaluasi-etika-replikabilitas.md) | L7 — Evaluasi (IAA, baseline, survival analysis), etika (UU PDP, ethical clearance), replikabilitas |
 
 ## Posisi dalam Kateglo
 
