@@ -238,10 +238,7 @@ export function SearchableSelectField({
                     onClick={() => pilihOpsi(opt.value)}
                     className={`block w-full px-3 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800 ${isSelected ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300' : 'text-gray-800 dark:text-gray-200'}`}
                   >
-                    <span className="font-medium">{opt.label}</span>
-                    {opt.value !== '' && opt.value !== opt.label ? (
-                      <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">{opt.value}</span>
-                    ) : null}
+                    <span>{opt.label}</span>
                   </button>
                 );
               })

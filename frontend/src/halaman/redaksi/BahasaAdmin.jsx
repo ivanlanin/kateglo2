@@ -30,7 +30,6 @@ import {
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormulirAdmin';
-import { formatBilanganRibuan } from '../../utils/formatUtils';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
 const nilaiAwal = { kode: '', nama: '', iso2: '', iso3: '', keterangan: '', aktif: true };
@@ -39,7 +38,6 @@ const kolom = [
   { key: 'kode', label: 'Kode' },
   { key: 'nama', label: 'Nama' },
   { key: 'iso2', label: 'ISO 2', render: (item) => item.iso2 || '—' },
-  { key: 'jumlah_entri', label: 'Entri', align: 'right', render: (item) => formatBilanganRibuan(item.jumlah_entri) },
   { key: 'aktif', label: 'Status', render: (item) => <BadgeStatus aktif={item.aktif} /> },
 ];
 

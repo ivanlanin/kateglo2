@@ -53,15 +53,6 @@ function buildSumberFilters({ q, glosarium, kamus, tesaurus, etimologi, params }
   return conditions;
 }
 
-function buildJumlahEntriSumberSql(alias = 's') {
-  return `(
-            (SELECT COUNT(*)::int FROM entri e WHERE e.sumber_id = ${alias}.id)
-          + (SELECT COUNT(*)::int FROM tesaurus t WHERE t.sumber_id = ${alias}.id)
-          + (SELECT COUNT(*)::int FROM glosarium g WHERE g.sumber_id = ${alias}.id)
-          + (SELECT COUNT(*)::int FROM etimologi et WHERE et.sumber_id = ${alias}.id)
-         )`;
-}
-
 function normalisasiKategoriLabel(kategori = '') {
   const value = String(kategori || '').trim();
   if (value === 'kelas_kata') return 'kelas-kata';
@@ -127,12 +118,7 @@ class ModelOpsi {
     );
 
     const dataResult = await db.query(
-      `SELECT b.id, b.kode, b.nama, b.aktif, b.keterangan, b.created_at, b.updated_at,
-              (
-                SELECT COUNT(*)::int
-                FROM glosarium g
-                WHERE g.bidang_id = b.id
-              ) AS jumlah_entri
+      `SELECT b.id, b.kode, b.nama, b.aktif, b.keterangan, b.created_at, b.updated_at
        FROM bidang b
        ${whereSql}
        ORDER BY b.nama ASC
@@ -161,12 +147,7 @@ class ModelOpsi {
 
   static async ambilMasterBidangDenganId(id) {
     const result = await db.query(
-      `SELECT b.id, b.kode, b.nama, b.aktif, b.keterangan, b.created_at, b.updated_at,
-              (
-                SELECT COUNT(*)::int
-                FROM glosarium g
-                WHERE g.bidang_id = b.id
-              ) AS jumlah_entri
+      `SELECT b.id, b.kode, b.nama, b.aktif, b.keterangan, b.created_at, b.updated_at
        FROM bidang b
        WHERE b.id = $1`,
       [id]
@@ -231,13 +212,7 @@ class ModelOpsi {
 
     const dataResult = await db.query(
       `SELECT ba.id, ba.kode, ba.nama, ba.iso2, ba.iso3, ba.aktif, ba.keterangan,
-              ba.created_at, ba.updated_at,
-              (
-                (SELECT COUNT(*)::int FROM makna  m WHERE m.bahasa  = ba.kode)
-              + (SELECT COUNT(*)::int FROM contoh c WHERE c.bahasa  = ba.kode)
-              + (SELECT COUNT(*)::int FROM etimologi e WHERE e.bahasa_id = ba.id)
-              + (SELECT COUNT(*)::int FROM glosarium g WHERE g.bahasa_id = ba.id)
-              ) AS jumlah_entri
+              ba.created_at, ba.updated_at
        FROM bahasa ba
        ${whereSql}
        ORDER BY ba.nama ASC
@@ -267,13 +242,7 @@ class ModelOpsi {
   static async ambilMasterBahasaDenganId(id) {
     const result = await db.query(
       `SELECT ba.id, ba.kode, ba.nama, ba.iso2, ba.iso3, ba.aktif, ba.keterangan,
-              ba.created_at, ba.updated_at,
-              (
-                (SELECT COUNT(*)::int FROM makna  m WHERE m.bahasa  = ba.kode)
-              + (SELECT COUNT(*)::int FROM contoh c WHERE c.bahasa  = ba.kode)
-              + (SELECT COUNT(*)::int FROM etimologi e WHERE e.bahasa_id = ba.id)
-              + (SELECT COUNT(*)::int FROM glosarium g WHERE g.bahasa_id = ba.id)
-              ) AS jumlah_entri
+              ba.created_at, ba.updated_at
        FROM bahasa ba
        WHERE ba.id = $1`,
       [id]
@@ -345,8 +314,7 @@ class ModelOpsi {
 
     const dataResult = await db.query(
       `SELECT s.id, s.kode, s.nama, s.glosarium, s.kamus, s.tesaurus, s.etimologi,
-              s.keterangan, s.created_at, s.updated_at,
-              ${buildJumlahEntriSumberSql('s')} AS jumlah_entri
+              s.keterangan, s.created_at, s.updated_at
        FROM sumber s
        ${whereSql}
        ORDER BY s.nama ASC
@@ -378,8 +346,7 @@ class ModelOpsi {
   static async ambilMasterSumberDenganId(id) {
     const result = await db.query(
       `SELECT s.id, s.kode, s.nama, s.glosarium, s.kamus, s.tesaurus, s.etimologi,
-              s.keterangan, s.created_at, s.updated_at,
-              ${buildJumlahEntriSumberSql('s')} AS jumlah_entri
+              s.keterangan, s.created_at, s.updated_at
        FROM sumber s
        WHERE s.id = $1`,
       [id]
