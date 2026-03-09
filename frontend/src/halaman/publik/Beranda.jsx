@@ -24,6 +24,23 @@ function buatPathPopuler(item, kata) {
   return `${item.path}${encodeURIComponent(kata)}`;
 }
 
+function formatLabelPopuler(kata) {
+  const kataAman = String(kata || '').trim();
+  const daftarKata = kataAman.split(/\s+/).filter(Boolean);
+
+  if (daftarKata.length <= 2) {
+    return {
+      teks: kataAman,
+      judul: undefined,
+    };
+  }
+
+  return {
+    teks: `${daftarKata[0]} ...`,
+    judul: kataAman,
+  };
+}
+
 function tanggalLokalBrowser() {
   const now = new Date();
   const tahun = now.getFullYear();
@@ -82,13 +99,17 @@ function Beranda() {
               );
             }
 
+            const label = formatLabelPopuler(kata);
+
             return (
               <Link
                 key={item.key}
                 to={buatPathPopuler(item, kata)}
                 className="beranda-tag-link"
+                title={label.judul}
+                aria-label={label.judul || kata}
               >
-                {kata}
+                {label.teks}
               </Link>
             );
           })}

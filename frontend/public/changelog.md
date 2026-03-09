@@ -1,5 +1,10 @@
 # Riwayat Perubahan
 
+## 2026-03-09 Senin
+
+- Merencanakan Kamus Deskriptif Indonesia (KADI)
+- Membatasi jumlah kata (2) yang ditampilkan di bagian populer di beranda 
+
 ## 2026-03-08 Minggu
 
 - Membersihkan data glosarium yang berawalan angka
