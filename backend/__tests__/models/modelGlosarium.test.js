@@ -915,11 +915,21 @@ describe('ModelGlosarium', () => {
     expect(found).toBe(77);
   });
 
-  it('ambilDaftarBidang dengan aktifSaja=false tidak menambahkan kondisi aktif', async () => {
+  it('ambilDaftarBidang dengan filter all tidak menambahkan kondisi konteks', async () => {
     db.query.mockResolvedValue({ rows: [] });
     await ModelGlosarium.ambilDaftarBidang(false);
     expect(db.query).toHaveBeenCalledWith(
-      expect.not.stringContaining('WHERE b.aktif = TRUE')
+      expect.not.stringContaining('WHERE b.glosarium = TRUE')
+    );
+  });
+
+  it('ambilDaftarBidang dengan mode kamus memfilter bidang.kamus', async () => {
+    db.query.mockResolvedValue({ rows: [] });
+
+    await ModelGlosarium.ambilDaftarBidang(true);
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('WHERE b.kamus = TRUE')
     );
   });
 
@@ -1325,7 +1335,7 @@ describe('ModelGlosarium', () => {
       .mockResolvedValueOnce({ rows: [{ id: 1 }] })
       .mockResolvedValueOnce({ rows: [] });
 
-    const bidang = await ModelGlosarium.daftarMasterBidang({ q: 'kim', aktif: '1', limit: 999, offset: -10 });
+    const bidang = await ModelGlosarium.daftarMasterBidang({ q: 'kim', kamus: '1', glosarium: '0', limit: 999, offset: -10 });
     const sumber = await ModelGlosarium.daftarMasterSumber({ q: 'kb', aktif: '0', limit: 0, offset: 3 });
     const bidangDetail = await ModelGlosarium.ambilMasterBidangDenganId(1);
     const sumberDetail = await ModelGlosarium.ambilMasterSumberDenganId(9);
@@ -1346,7 +1356,7 @@ describe('ModelGlosarium', () => {
       .mockResolvedValueOnce({ rows: [{ id: 6, nama: 'KBBI' }] });
 
     const bidangUpdateMissing = await ModelGlosarium.simpanMasterBidang({ id: 7, kode: 'x', nama: 'X' });
-    const bidangInsert = await ModelGlosarium.simpanMasterBidang({ kode: 'kim', nama: 'Kimia', aktif: '1' });
+    const bidangInsert = await ModelGlosarium.simpanMasterBidang({ kode: 'kim', nama: 'Kimia', kamus: '1', glosarium: '1' });
     const sumberUpdateMissing = await ModelGlosarium.simpanMasterSumber({ id: 8, kode: 'x', nama: 'X' });
     const sumberInsert = await ModelGlosarium.simpanMasterSumber({ kode: 'kbbi', nama: 'KBBI', aktif: 0 });
 
@@ -1363,7 +1373,7 @@ describe('ModelGlosarium', () => {
       .mockResolvedValueOnce({ rows: [{ id: 8 }] })
       .mockResolvedValueOnce({ rows: [{ id: 8, nama: 'Sumber Baru' }] });
 
-    const bidang = await ModelGlosarium.simpanMasterBidang({ id: 7, kode: 'kim', nama: 'Kimia Baru', aktif: false });
+    const bidang = await ModelGlosarium.simpanMasterBidang({ id: 7, kode: 'kim', nama: 'Kimia Baru', kamus: false, glosarium: true });
     const sumber = await ModelGlosarium.simpanMasterSumber({ id: 8, kode: 'kbbi', nama: 'Sumber Baru', aktif: true });
 
     expect(bidang).toEqual({ id: 7, nama: 'Kimia Baru' });
@@ -1389,13 +1399,13 @@ describe('ModelGlosarium', () => {
     await expect(ModelGlosarium.hapusMasterSumber(99)).rejects.toMatchObject({ code: 'MASTER_IN_USE' });
   });
 
-  it('ambilDaftarBidang dan ambilDaftarSumber default menambahkan WHERE aktif/glosarium', async () => {
+  it('ambilDaftarBidang dan ambilDaftarSumber default menambahkan WHERE glosarium', async () => {
     db.query.mockResolvedValueOnce({ rows: [{ id: 1 }] }).mockResolvedValueOnce({ rows: [{ id: 2 }] });
 
     await ModelGlosarium.ambilDaftarBidang();
     await ModelGlosarium.ambilDaftarSumber();
 
-    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('WHERE b.aktif = TRUE'));
+    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('WHERE b.glosarium = TRUE'));
     expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('WHERE s.glosarium = TRUE'));
   });
 

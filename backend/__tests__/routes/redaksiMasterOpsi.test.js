@@ -114,16 +114,16 @@ describe('routes/redaksi master opsi', () => {
     expect(ModelOpsi.daftarMasterBidang).toHaveBeenCalled();
   });
 
-  it('GET /bidang-master meneruskan filter aktif 1/0 dan fallback kosong', async () => {
+  it('GET /bidang-master meneruskan filter kamus/glosarium dan fallback kosong', async () => {
     ModelOpsi.daftarMasterBidang.mockResolvedValue({ data: [], total: 0 });
 
-    await request(createApp()).get('/api/redaksi/bidang?aktif=1');
-    await request(createApp()).get('/api/redaksi/bidang?aktif=0');
-    await request(createApp()).get('/api/redaksi/bidang?aktif=abc');
+    await request(createApp()).get('/api/redaksi/bidang?kamus=1&glosarium=0');
+    await request(createApp()).get('/api/redaksi/bidang?kamus=0&glosarium=1');
+    await request(createApp()).get('/api/redaksi/bidang?kamus=abc&glosarium=xyz');
 
-    expect(ModelOpsi.daftarMasterBidang).toHaveBeenNthCalledWith(1, expect.objectContaining({ aktif: '1' }));
-    expect(ModelOpsi.daftarMasterBidang).toHaveBeenNthCalledWith(2, expect.objectContaining({ aktif: '0' }));
-    expect(ModelOpsi.daftarMasterBidang).toHaveBeenNthCalledWith(3, expect.objectContaining({ aktif: '' }));
+    expect(ModelOpsi.daftarMasterBidang).toHaveBeenNthCalledWith(1, expect.objectContaining({ kamus: '1', glosarium: '0' }));
+    expect(ModelOpsi.daftarMasterBidang).toHaveBeenNthCalledWith(2, expect.objectContaining({ kamus: '0', glosarium: '1' }));
+    expect(ModelOpsi.daftarMasterBidang).toHaveBeenNthCalledWith(3, expect.objectContaining({ kamus: '', glosarium: '' }));
   });
 
   it('GET /bidang-master meneruskan error', async () => {
@@ -173,19 +173,20 @@ describe('routes/redaksi master opsi', () => {
     expect(response.body.message).toBe('Nama bidang wajib diisi');
   });
 
-  it('POST /bidang-master sukses dan memetakan payload aktif', async () => {
+  it('POST /bidang-master sukses dan memetakan payload kamus dan glosarium', async () => {
     ModelOpsi.simpanMasterBidang.mockResolvedValue({ id: 10, kode: 'kim', nama: 'Kimia' });
 
     const response = await request(createApp())
       .post('/api/redaksi/bidang')
-      .send({ kode: ' kim ', nama: ' Kimia ', keterangan: ' ipa ', aktif: '0' });
+      .send({ kode: ' kim ', nama: ' Kimia ', keterangan: ' ipa ', kamus: '0', glosarium: '1' });
 
     expect(response.status).toBe(201);
     expect(ModelOpsi.simpanMasterBidang).toHaveBeenCalledWith({
       kode: 'kim',
       nama: 'Kimia',
       keterangan: 'ipa',
-      aktif: false,
+      kamus: false,
+      glosarium: true,
     });
   });
 
@@ -225,7 +226,8 @@ describe('routes/redaksi master opsi', () => {
       kode: 'kim',
       nama: 'Kimia Baru',
       keterangan: '',
-      aktif: true,
+      kamus: true,
+      glosarium: true,
     });
   });
 

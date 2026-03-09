@@ -74,7 +74,7 @@ describe('ModelOpsi', () => {
       expect.stringContaining('FROM label'),
       [expect.arrayContaining(['kelas-kata', 'kelas_kata', 'ragam'])]
     );
-    expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('FROM bidang'));
+    expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('WHERE kamus = TRUE'));
     expect(db.query).toHaveBeenNthCalledWith(3, expect.stringContaining('FROM bahasa'));
     expect(result['kelas-kata']).toEqual([
       { kode: 'n', nama: 'nomina' },
@@ -90,12 +90,18 @@ describe('ModelOpsi', () => {
       .mockResolvedValueOnce({ rows: [{ id: 9 }] })
       .mockResolvedValueOnce({ rows: [{ id: 9, kode: 'kim', nama: 'Kimia' }] });
 
-    const result = await ModelOpsi.simpanMasterBidang({ kode: 'kim', nama: 'Kimia', aktif: false, keterangan: 'ipa' });
+    const result = await ModelOpsi.simpanMasterBidang({
+      kode: 'kim',
+      nama: 'Kimia',
+      kamus: false,
+      glosarium: true,
+      keterangan: 'ipa',
+    });
 
     expect(db.query).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining('INSERT INTO bidang'),
-      ['kim', 'Kimia', false, 'ipa']
+      ['kim', 'Kimia', false, true, 'ipa']
     );
     expect(result).toEqual({ id: 9, kode: 'kim', nama: 'Kimia' });
   });

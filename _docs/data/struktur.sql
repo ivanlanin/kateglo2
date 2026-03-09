@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-08T14:54:53.912Z
+-- Generated: 2026-03-09T09:31:52.564Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -205,10 +205,11 @@ create table bidang (
   id serial primary key,
   kode text not null,
   nama text not null,
-  aktif boolean not null default true,
+  kamus boolean not null default true,
   keterangan text,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
+  glosarium boolean not null default true,
   constraint bidang_kode_key unique (kode),
   constraint bidang_nama_key unique (nama)
 );
