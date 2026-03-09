@@ -26,13 +26,15 @@ function parseMasterPayload(body) {
   const kode = parseTrimmedString(body?.kode);
   const nama = parseTrimmedString(body?.nama);
   const keterangan = parseTrimmedString(body?.keterangan);
-  const aktif = parseAktifParam(body?.aktif);
+  const kamus = parseAktifParam(body?.kamus);
+  const glosarium = parseAktifParam(body?.glosarium);
 
   return {
     kode,
     nama,
     keterangan,
-    aktif: aktif === '' ? true : aktif === '1',
+    kamus: kamus === '' ? true : kamus === '1',
+    glosarium: glosarium === '' ? true : glosarium === '1',
   };
 }
 
@@ -50,11 +52,13 @@ router.get('/', periksaIzin('kelola_bidang'), async (req, res, next) => {
   try {
     const { limit, offset } = parsePagination(req.query);
     const q = parseSearchQuery(req.query.q);
-    const aktif = parseAktifParam(req.query.aktif);
+    const kamus = parseAktifParam(req.query.kamus);
+    const glosarium = parseAktifParam(req.query.glosarium);
 
     const { data, total } = await ModelOpsi.daftarMasterBidang({
       q,
-      aktif,
+      kamus,
+      glosarium,
       limit,
       offset,
     });

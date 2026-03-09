@@ -32,6 +32,32 @@ function buildMasterFilters({ alias, q, aktif, params }) {
   return conditions;
 }
 
+function buildBidangFilters({ alias, q, kamus, glosarium, params }) {
+  const conditions = [];
+  if (q) {
+    params.push(`%${q}%`);
+    conditions.push(`(
+      ${alias}.kode ILIKE $${params.length}
+      OR ${alias}.nama ILIKE $${params.length}
+      OR COALESCE(${alias}.keterangan, '') ILIKE $${params.length}
+    )`);
+  }
+
+  if (kamus === '1') {
+    conditions.push(`${alias}.kamus = TRUE`);
+  } else if (kamus === '0') {
+    conditions.push(`${alias}.kamus = FALSE`);
+  }
+
+  if (glosarium === '1') {
+    conditions.push(`${alias}.glosarium = TRUE`);
+  } else if (glosarium === '0') {
+    conditions.push(`${alias}.glosarium = FALSE`);
+  }
+
+  return conditions;
+}
+
 function buildSumberFilters({ q, glosarium, kamus, tesaurus, etimologi, params }) {
   const conditions = [];
   if (q) {
@@ -92,10 +118,12 @@ async function ambilDaftarLabelMaster(kategori = '') {
   const tableName = getMasterKategoriTable(kategori);
   if (!tableName) return [];
 
+  const kondisiAktif = kategori === 'bidang' ? 'kamus = TRUE' : 'aktif = TRUE';
+
   const result = await db.query(
     `SELECT kode, nama
      FROM ${tableName}
-     WHERE aktif = TRUE
+     WHERE ${kondisiAktif}
      ORDER BY nama ASC, kode ASC`
   );
 
@@ -103,11 +131,11 @@ async function ambilDaftarLabelMaster(kategori = '') {
 }
 
 class ModelOpsi {
-  static async daftarMasterBidang({ q = '', aktif = '', limit = 50, offset = 0 } = {}) {
+  static async daftarMasterBidang({ q = '', kamus = '', glosarium = '', limit = 50, offset = 0 } = {}) {
     const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
     const safeOffset = Math.max(Number(offset) || 0, 0);
     const params = [];
-    const conditions = buildMasterFilters({ alias: 'b', q, aktif, params });
+    const conditions = buildBidangFilters({ alias: 'b', q, kamus, glosarium, params });
     const whereSql = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
 
     const countResult = await db.query(
@@ -118,7 +146,7 @@ class ModelOpsi {
     );
 
     const dataResult = await db.query(
-      `SELECT b.id, b.kode, b.nama, b.aktif, b.keterangan, b.created_at, b.updated_at
+      `SELECT b.id, b.kode, b.nama, b.kamus, b.glosarium, b.keterangan, b.created_at, b.updated_at
        FROM bidang b
        ${whereSql}
        ORDER BY b.nama ASC
@@ -147,7 +175,7 @@ class ModelOpsi {
 
   static async ambilMasterBidangDenganId(id) {
     const result = await db.query(
-      `SELECT b.id, b.kode, b.nama, b.aktif, b.keterangan, b.created_at, b.updated_at
+      `SELECT b.id, b.kode, b.nama, b.kamus, b.glosarium, b.keterangan, b.created_at, b.updated_at
        FROM bidang b
        WHERE b.id = $1`,
       [id]
@@ -155,28 +183,30 @@ class ModelOpsi {
     return result.rows[0] || null;
   }
 
-  static async simpanMasterBidang({ id, kode, nama, aktif = true, keterangan = '' }) {
-    const normalizedAktif = normalizeBoolean(aktif, true);
+  static async simpanMasterBidang({ id, kode, nama, kamus = true, glosarium = true, keterangan = '' }) {
+    const normalizedKamus = normalizeBoolean(kamus, true);
+    const normalizedGlosarium = normalizeBoolean(glosarium, true);
     if (id) {
       const result = await db.query(
         `UPDATE bidang
          SET kode = $1,
              nama = $2,
-             aktif = $3,
-             keterangan = NULLIF($4, '')
-         WHERE id = $5
+             kamus = $3,
+             glosarium = $4,
+             keterangan = NULLIF($5, '')
+         WHERE id = $6
          RETURNING id`,
-        [kode, nama, normalizedAktif, keterangan, id]
+        [kode, nama, normalizedKamus, normalizedGlosarium, keterangan, id]
       );
       if (!result.rows[0]?.id) return null;
       return this.ambilMasterBidangDenganId(result.rows[0].id);
     }
 
     const result = await db.query(
-      `INSERT INTO bidang (kode, nama, aktif, keterangan)
-       VALUES ($1, $2, $3, NULLIF($4, ''))
+      `INSERT INTO bidang (kode, nama, kamus, glosarium, keterangan)
+       VALUES ($1, $2, $3, $4, NULLIF($5, ''))
        RETURNING id`,
-      [kode, nama, normalizedAktif, keterangan]
+      [kode, nama, normalizedKamus, normalizedGlosarium, keterangan]
     );
 
     return this.ambilMasterBidangDenganId(result.rows[0].id);

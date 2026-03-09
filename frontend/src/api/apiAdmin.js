@@ -620,7 +620,8 @@ export function useDaftarBidangAdmin({
   direction = 'next',
   lastPage = false,
   q = '',
-  aktif = '',
+  kamus = '',
+  glosarium = '',
 } = {}) {
   return useDaftarAdmin('/api/redaksi/bidang', 'admin-bidang', {
     limit,
@@ -628,12 +629,20 @@ export function useDaftarBidangAdmin({
     direction,
     lastPage,
     q,
-    aktif,
+    includeAktif: false,
+    kamus,
+    glosarium,
   });
 }
 
-export function useDaftarSemuaBidangAdmin({ q = '', aktif = '', enabled = true } = {}) {
-  return useDaftarAdminSemua('/api/redaksi/bidang', 'admin-bidang', { q, aktif, enabled });
+export function useDaftarSemuaBidangAdmin({ q = '', kamus = '', glosarium = '', enabled = true } = {}) {
+  return useDaftarAdminSemua('/api/redaksi/bidang', 'admin-bidang', {
+    q,
+    enabled,
+    includeAktif: false,
+    kamus,
+    glosarium,
+  });
 }
 
 export function useDaftarSemuaSumberAdmin({

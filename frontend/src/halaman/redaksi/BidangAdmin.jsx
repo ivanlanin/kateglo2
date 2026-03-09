@@ -26,19 +26,45 @@ import {
   useFormPanel,
   InputField,
   TextareaField,
-  ToggleAktif,
   FormFooter,
   PesanForm,
 } from '../../komponen/redaksi/FormulirAdmin';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
-const nilaiAwal = { kode: '', nama: '', keterangan: '', aktif: true };
+const nilaiAwal = { kode: '', nama: '', keterangan: '', kamus: true, glosarium: true };
 
 const kolom = [
   { key: 'kode', label: 'Kode' },
   { key: 'nama', label: 'Nama' },
-  { key: 'aktif', label: 'Status', render: (item) => <BadgeStatus aktif={item.aktif} /> },
+  { key: 'kamus', label: 'Kamus', render: (item) => <BadgeStatus aktif={Boolean(item.kamus)} /> },
+  { key: 'glosarium', label: 'Glosarium', render: (item) => <BadgeStatus aktif={Boolean(item.glosarium)} /> },
 ];
+
+function ToggleBidangKonteks({ label, name, value, onChange }) {
+  return (
+    <div className="form-admin-group mb-0">
+      <label className="form-admin-label">{label}</label>
+      <div className="flex items-center gap-2 min-w-0">
+        <button
+          type="button"
+          onClick={() => onChange(name, !value)}
+          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+            value ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'
+          }`}
+        >
+          <span
+            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+              value ? 'translate-x-6' : 'translate-x-1'
+            }`}
+          />
+        </button>
+        <span className="text-sm text-gray-600 dark:text-gray-400">
+          {value ? 'Aktif' : 'Nonaktif'}
+        </span>
+      </div>
+    </div>
+  );
+}
 
 function BidangAdmin() {
   const navigate = useNavigate();
@@ -49,6 +75,8 @@ function BidangAdmin() {
   const sedangMenutupDariPath = useRef(false);
   const [filterAktifDraft, setFilterAktifDraft] = useState('');
   const [filterAktif, setFilterAktif] = useState('');
+  const [filterGlosariumDraft, setFilterGlosariumDraft] = useState('');
+  const [filterGlosarium, setFilterGlosarium] = useState('');
 
   const { data: resp, isLoading, isError } = useDaftarBidangAdmin({
     limit,
@@ -56,7 +84,8 @@ function BidangAdmin() {
     direction,
     lastPage,
     q,
-    aktif: filterAktif,
+    kamus: filterAktif,
+    glosarium: filterGlosarium,
   });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailBidangAdmin(idDariPath);
   const daftar = resp?.data || [];
@@ -150,12 +179,15 @@ function BidangAdmin() {
 
   const handleCari = () => {
     setFilterAktif(filterAktifDraft);
+    setFilterGlosarium(filterGlosariumDraft);
     kirimCari(cari);
   };
 
   const handleResetFilter = () => {
     setFilterAktifDraft('');
     setFilterAktif('');
+    setFilterGlosariumDraft('');
+    setFilterGlosarium('');
     hapusCari();
   };
 
@@ -169,11 +201,18 @@ function BidangAdmin() {
         placeholder="Cari bidang …"
         filters={[
           {
-            key: 'aktif',
+            key: 'kamus',
             value: filterAktifDraft,
             onChange: setFilterAktifDraft,
             options: opsiFilterStatusAktif,
-            ariaLabel: 'Filter status bidang',
+            ariaLabel: 'Filter bidang kamus',
+          },
+          {
+            key: 'glosarium',
+            value: filterGlosariumDraft,
+            onChange: setFilterGlosariumDraft,
+            options: opsiFilterStatusAktif,
+            ariaLabel: 'Filter bidang glosarium',
           },
         ]}
       />
@@ -196,8 +235,11 @@ function BidangAdmin() {
         <PesanForm error={pesan.error} sukses={pesan.sukses} />
         <InputField label="Kode" name="kode" value={panel.data.kode} onChange={panel.ubahField} required />
         <InputField label="Nama" name="nama" value={panel.data.nama} onChange={panel.ubahField} required />
-        <ToggleAktif value={Boolean(panel.data.aktif)} onChange={panel.ubahField} />
         <TextareaField label="Keterangan" name="keterangan" value={panel.data.keterangan} onChange={panel.ubahField} rows={3} />
+        <div className="grid grid-cols-2 gap-3">
+          <ToggleBidangKonteks label="Kamus" name="kamus" value={Boolean(panel.data.kamus)} onChange={panel.ubahField} />
+          <ToggleBidangKonteks label="Glosarium" name="glosarium" value={Boolean(panel.data.glosarium)} onChange={panel.ubahField} />
+        </div>
         <FormFooter
           onSimpan={handleSimpan}
           onBatal={tutupPanel}

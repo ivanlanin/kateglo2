@@ -5,6 +5,7 @@
 - Merencanakan Kamus Deskriptif Indonesia (KADI)
 - Membatasi jumlah kata (2) yang ditampilkan di bagian populer di beranda
 - Menambahkan filter untuk pilihan bidang dan bahasa
+- Menambahkan kolom kamus dan glosarium di bidang untuk menunjukkan bidang yang aktif
 
 ## 2026-03-08 Minggu
 

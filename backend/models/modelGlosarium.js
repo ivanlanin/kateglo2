@@ -710,12 +710,22 @@ class ModelGlosarium {
   * Ambil daftar bidang yang memiliki entri glosarium
    * @returns {Promise<Array>}
    */
-  static async ambilDaftarBidang(aktifSaja = true) {
-    const kondisiAktif = aktifSaja ? 'WHERE b.aktif = TRUE' : '';
+  static async ambilDaftarBidang(filterMode = 'glosarium') {
+    const mode = typeof filterMode === 'string'
+      ? filterMode
+      : (filterMode ? 'kamus' : 'all');
+
+    let kondisi = '';
+    if (mode === 'kamus') {
+      kondisi = 'WHERE b.kamus = TRUE';
+    } else if (mode === 'glosarium') {
+      kondisi = 'WHERE b.glosarium = TRUE';
+    }
+
     const result = await db.query(
       `SELECT b.id, b.kode, b.nama, b.nama AS bidang
        FROM bidang b
-       ${kondisiAktif}
+       ${kondisi}
        ORDER BY b.nama`
     );
     return result.rows;
@@ -780,8 +790,8 @@ class ModelGlosarium {
     return result.rows[0] || null;
   }
 
-  static async daftarMasterBidang({ q = '', aktif = '', limit = 50, offset = 0 } = {}) {
-    return ModelOpsi.daftarMasterBidang({ q, aktif, limit, offset });
+  static async daftarMasterBidang({ q = '', kamus = '', glosarium = '', limit = 50, offset = 0 } = {}) {
+    return ModelOpsi.daftarMasterBidang({ q, kamus, glosarium, limit, offset });
   }
 
   static async daftarLookupBidang({ q = '' } = {}) {
@@ -802,8 +812,8 @@ class ModelGlosarium {
     return ModelOpsi.ambilMasterSumberDenganId(id);
   }
 
-  static async simpanMasterBidang({ id, kode, nama, aktif = true, keterangan = '' }) {
-    return ModelOpsi.simpanMasterBidang({ id, kode, nama, aktif, keterangan });
+  static async simpanMasterBidang({ id, kode, nama, kamus = true, glosarium = true, keterangan = '' }) {
+    return ModelOpsi.simpanMasterBidang({ id, kode, nama, kamus, glosarium, keterangan });
   }
 
   static async simpanMasterSumber({

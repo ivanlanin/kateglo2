@@ -146,10 +146,12 @@ async function ambilDaftarLabelMaster(kategori = '') {
   const tableName = getMasterKategoriTable(kategori);
   if (!tableName) return [];
 
+  const kondisiAktif = kategori === 'bidang' ? 'kamus = TRUE' : 'aktif = TRUE';
+
   const result = await db.query(
     `SELECT kode, nama
      FROM ${tableName}
-     WHERE aktif = TRUE
+     WHERE ${kondisiAktif}
      ORDER BY nama ASC, kode ASC`
   );
 
@@ -160,10 +162,12 @@ async function ambilLabelMaster(kategori = '', kodeLower = '', kodeSlug = '') {
   const tableName = getMasterKategoriTable(kategori);
   if (!tableName) return null;
 
+  const kondisiAktif = kategori === 'bidang' ? 'kamus = TRUE' : 'aktif = TRUE';
+
   const result = await db.query(
     `SELECT kode, nama, keterangan
      FROM ${tableName}
-     WHERE aktif = TRUE
+     WHERE ${kondisiAktif}
        AND (
          LOWER(TRIM(kode)) = $1
          OR LOWER(TRIM(nama)) = $1
