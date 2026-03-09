@@ -53,6 +53,10 @@ jest.mock('../../models/modelGlosarium', () => ({
   ambilDenganId: jest.fn(),
   simpan: jest.fn(),
   hapus: jest.fn(),
+  daftarLookupBidang: jest.fn(),
+  daftarLookupBahasa: jest.fn(),
+  daftarMasterBidang: jest.fn(),
+  daftarMasterBahasa: jest.fn(),
   hitungTotalBidang: jest.fn(),
   hitungTotalBahasa: jest.fn(),
   hitungTotalSumber: jest.fn(),
@@ -661,6 +665,26 @@ describe('routes/redaksi', () => {
 
       expect(response.status).toBe(500);
       expect(response.body.error).toBe('opsi induk gagal');
+    });
+
+    it('GET /api/redaksi/kamus/opsi-bidang mengembalikan lookup bidang', async () => {
+      ModelGlosarium.daftarLookupBidang.mockResolvedValue([{ kode: 'umum', nama: 'Umum' }]);
+
+      const response = await callAsAdmin('get', '/api/redaksi/kamus/opsi-bidang');
+
+      expect(response.status).toBe(200);
+      expect(ModelGlosarium.daftarLookupBidang).toHaveBeenCalledWith({ q: '' });
+      expect(response.body.data).toEqual([{ kode: 'umum', nama: 'Umum' }]);
+    });
+
+    it('GET /api/redaksi/kamus/opsi-bahasa mengembalikan lookup bahasa', async () => {
+      ModelGlosarium.daftarLookupBahasa.mockResolvedValue([{ kode: 'id', nama: 'Indonesia' }]);
+
+      const response = await callAsAdmin('get', '/api/redaksi/kamus/opsi-bahasa');
+
+      expect(response.status).toBe(200);
+      expect(ModelGlosarium.daftarLookupBahasa).toHaveBeenCalledWith({ q: '' });
+      expect(response.body.data).toEqual([{ kode: 'id', nama: 'Indonesia' }]);
     });
 
     it('GET /api/redaksi/kamus/:id meneruskan error', async () => {

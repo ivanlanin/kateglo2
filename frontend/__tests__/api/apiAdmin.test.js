@@ -42,6 +42,7 @@ import {
   useDaftarGlosariumAdmin,
   useDetailGlosariumAdmin,
   useDaftarBidangAdmin,
+  useOpsiBidangKamusAdmin,
   useDetailBidangAdmin,
   useSusunKataHarianAdmin,
   useSusunKataBebasAdmin,
@@ -80,6 +81,7 @@ import {
   useHapusGlosarium,
   useSimpanBidang,
   useHapusBidang,
+  useOpsiBahasaKamusAdmin,
   useSimpanSusunKataHarianAdmin,
   useBuatSusunKataHarianAdmin,
   useSimpanSumber,
@@ -577,10 +579,18 @@ describe('apiAdmin', () => {
       params: { limit: 12, cursor: undefined, direction: 'next', lastPage: undefined, q: 'kim', aktif: '1' },
     });
 
+    const opsiBidangKamus = useOpsiBidangKamusAdmin();
+    await opsiBidangKamus.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus/opsi-bidang');
+
     const detailBidang = useDetailBidangAdmin(18);
     expect(detailBidang.enabled).toBe(true);
     await detailBidang.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/bidang/18');
+
+    const opsiBahasaKamus = useOpsiBahasaKamusAdmin();
+    await opsiBahasaKamus.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kamus/opsi-bahasa');
 
     const susunKataHarian = useSusunKataHarianAdmin({ tanggal: '2026-03-02', panjang: '7' });
     await susunKataHarian.queryFn();

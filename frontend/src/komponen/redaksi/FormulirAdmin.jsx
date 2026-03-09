@@ -3,7 +3,7 @@
  * Menyediakan input, select, textarea, dan hook useFormPanel
  */
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 // ─── Hook ────────────────────────────────────────────────────────────────────
 
@@ -101,6 +101,156 @@ export function SelectField({ label, name, value, onChange, options, disabled })
           <option key={opt.value} value={opt.value}>{opt.label}</option>
         ))}
       </select>
+    </div>
+  );
+}
+
+/**
+ * Grup select dengan pencarian lokal untuk daftar opsi panjang
+ */
+export function SearchableSelectField({
+  label,
+  name,
+  value,
+  onChange,
+  options,
+  disabled,
+  placeholder = 'Pilih opsi',
+  searchPlaceholder = 'Ketik untuk mencari…',
+  emptySearchText = 'Tidak ada hasil.',
+  hideLabel = false,
+  wrapperClassName = '',
+  buttonClassName = '',
+}) {
+  const wrapperRef = useRef(null);
+  const searchInputRef = useRef(null);
+  const selectedOption = useMemo(
+    () => options.find((opt) => String(opt.value) === String(value ?? '')) || null,
+    [options, value]
+  );
+  const [query, setQuery] = useState('');
+  const [tampilDropdown, setTampilDropdown] = useState(false);
+
+  useEffect(() => {
+    if (!tampilDropdown) return undefined;
+
+    const timeoutId = window.setTimeout(() => {
+      searchInputRef.current?.focus();
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [tampilDropdown]);
+
+  useEffect(() => {
+    if (!tampilDropdown) return undefined;
+
+    const handlePointerDown = (event) => {
+      if (!wrapperRef.current?.contains(event.target)) {
+        setTampilDropdown(false);
+        setQuery('');
+      }
+    };
+
+    document.addEventListener('mousedown', handlePointerDown);
+    return () => document.removeEventListener('mousedown', handlePointerDown);
+  }, [tampilDropdown]);
+
+  const opsiTersaring = useMemo(() => {
+    const kataKunci = String(query || '').trim().toLowerCase();
+    if (!kataKunci) return options;
+
+    return options.filter((opt) => {
+      const labelOpsi = String(opt?.label || '').toLowerCase();
+      const valueOpsi = String(opt?.value || '').toLowerCase();
+      return labelOpsi.includes(kataKunci) || valueOpsi.includes(kataKunci);
+    });
+  }, [options, query]);
+
+  const pilihOpsi = (selectedValue) => {
+    onChange(name, selectedValue);
+    setTampilDropdown(false);
+    setQuery('');
+  };
+
+  const handleToggleDropdown = () => {
+    if (disabled) return;
+    setTampilDropdown((prev) => {
+      const next = !prev;
+      if (!next) setQuery('');
+      return next;
+    });
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Escape') {
+      setTampilDropdown(false);
+      setQuery('');
+      return;
+    }
+
+    if (event.key === 'Enter' && opsiTersaring.length > 0) {
+      event.preventDefault();
+      pilihOpsi(opsiTersaring[0].value);
+    }
+  };
+
+  return (
+    <div ref={wrapperRef} className={`form-admin-group relative ${wrapperClassName}`.trim()}>
+      {hideLabel ? <span className="sr-only">{label}</span> : <label className="form-admin-label">{label}</label>}
+      <button
+        type="button"
+        aria-label={label}
+        aria-haspopup="listbox"
+        aria-expanded={tampilDropdown}
+        onClick={handleToggleDropdown}
+        disabled={disabled}
+        className={`form-admin-select flex w-full items-center justify-between gap-2 text-left ${buttonClassName}`.trim()}
+      >
+        <span className={selectedOption ? 'text-inherit' : 'text-gray-400 dark:text-gray-500'}>
+          {selectedOption?.label || placeholder}
+        </span>
+        <span className="text-xs text-gray-400 dark:text-gray-500">{tampilDropdown ? '▴' : '▾'}</span>
+      </button>
+      {tampilDropdown && !disabled && (
+        <div className="absolute left-0 right-0 top-full z-20 mt-1 rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-dark-bg-elevated">
+          <div className="border-b border-gray-100 p-2 dark:border-gray-700">
+            <input
+              ref={searchInputRef}
+              type="text"
+              value={query}
+              aria-label={`Cari ${label}`}
+              onChange={(event) => setQuery(event.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder={searchPlaceholder}
+              autoComplete="off"
+              className="form-admin-input"
+            />
+          </div>
+          <div className="max-h-60 overflow-y-auto py-1" role="listbox" aria-label={`Opsi ${label}`}>
+            {opsiTersaring.length > 0 ? (
+              opsiTersaring.map((opt) => {
+                const isSelected = String(opt.value) === String(value ?? '');
+                return (
+                  <button
+                    key={String(opt.value)}
+                    type="button"
+                    onMouseDown={(event) => event.preventDefault()}
+                    onClick={() => pilihOpsi(opt.value)}
+                    className={`block w-full px-3 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800 ${isSelected ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300' : 'text-gray-800 dark:text-gray-200'}`}
+                  >
+                    <span className="font-medium">{opt.label}</span>
+                    {opt.value !== '' && opt.value !== opt.label ? (
+                      <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">{opt.value}</span>
+                    ) : null}
+                  </button>
+                );
+              })
+            ) : (
+              <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">{emptySearchText}</div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

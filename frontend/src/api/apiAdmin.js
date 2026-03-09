@@ -71,6 +71,69 @@ function useDaftarAdmin(path, queryKeyPrefix, {
   });
 }
 
+async function fetchSemuaDaftarAdmin(path, {
+  q = '',
+  aktif = '',
+  includeAktif = true,
+  ...extraParams
+} = {}) {
+  const limit = 200;
+  let offset = 0;
+  let total = 0;
+  let hasNext = true;
+  const semuaData = [];
+
+  while (hasNext) {
+    const params = {
+      ...buildDaftarParams({
+        limit,
+        q,
+        aktif,
+        includeAktif,
+        ...extraParams,
+      }),
+      offset,
+    };
+
+    const response = await klien.get(path, { params }).then((result) => result.data);
+    const chunk = Array.isArray(response?.data) ? response.data : [];
+
+    semuaData.push(...chunk);
+    total = Number(response?.total) || semuaData.length;
+    hasNext = Boolean(response?.pageInfo?.hasNext) && chunk.length > 0 && semuaData.length < total;
+    offset += limit;
+  }
+
+  return {
+    success: true,
+    data: semuaData,
+    total,
+    limit: semuaData.length,
+    offset: 0,
+    pageInfo: {
+      hasPrev: false,
+      hasNext: false,
+      prevCursor: null,
+      nextCursor: null,
+    },
+  };
+}
+
+function useDaftarAdminSemua(path, queryKeyPrefix, {
+  q = '',
+  aktif = '',
+  includeAktif = true,
+  enabled = true,
+  ...extraParams
+} = {}) {
+  return useQuery({
+    queryKey: [`${queryKeyPrefix}-semua`, { q, aktif, ...extraParams }],
+    queryFn: () => fetchSemuaDaftarAdmin(path, { q, aktif, includeAktif, ...extraParams }),
+    enabled,
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
 function useSimpanAdmin({ path, queryKeyPrefix }) {
   const qc = useQueryClient();
   return useMutation({
@@ -272,6 +335,24 @@ export function useDetailKamusAdmin(id) {
     queryKey: ['admin-kamus-detail', id],
     queryFn: () => klien.get(`/api/redaksi/kamus/${id}`).then((r) => r.data),
     enabled: Boolean(id),
+  });
+}
+
+export function useOpsiBidangKamusAdmin({ enabled = true } = {}) {
+  return useQuery({
+    queryKey: ['admin-kamus-opsi-bidang'],
+    queryFn: () => klien.get('/api/redaksi/kamus/opsi-bidang').then((r) => r.data),
+    enabled,
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+export function useOpsiBahasaKamusAdmin({ enabled = true } = {}) {
+  return useQuery({
+    queryKey: ['admin-kamus-opsi-bahasa'],
+    queryFn: () => klien.get('/api/redaksi/kamus/opsi-bahasa').then((r) => r.data),
+    enabled,
+    staleTime: 5 * 60 * 1000,
   });
 }
 
@@ -502,6 +583,10 @@ export function useDaftarBidangAdmin({
     q,
     aktif,
   });
+}
+
+export function useDaftarSemuaBidangAdmin({ q = '', aktif = '', enabled = true } = {}) {
+  return useDaftarAdminSemua('/api/redaksi/bidang', 'admin-bidang', { q, aktif, enabled });
 }
 
 export function useDetailBidangAdmin(id) {
@@ -960,6 +1045,10 @@ export function useDaftarBahasaAdmin({
   return useDaftarAdmin('/api/redaksi/bahasa', 'admin-bahasa', {
     limit, cursor, direction, lastPage, q, aktif,
   });
+}
+
+export function useDaftarSemuaBahasaAdmin({ q = '', aktif = '', enabled = true } = {}) {
+  return useDaftarAdminSemua('/api/redaksi/bahasa', 'admin-bahasa', { q, aktif, enabled });
 }
 
 export function useDetailBahasaAdmin(id) {

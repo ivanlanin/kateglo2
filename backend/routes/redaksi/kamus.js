@@ -4,6 +4,7 @@
 
 const express = require('express');
 const ModelEntri = require('../../models/modelEntri');
+const ModelGlosarium = require('../../models/modelGlosarium');
 const ModelTagar = require('../../models/modelTagar');
 const { periksaIzin } = require('../../middleware/otorisasi');
 const { hapusCacheDetailKamus } = require('../../services/layananKamusPublik');
@@ -106,6 +107,34 @@ router.get('/opsi-induk', periksaIzin('lihat_entri'), async (req, res, next) => 
       limit,
       excludeId: Number.isNaN(excludeId) ? null : excludeId,
     });
+
+    return res.json({ success: true, data });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+/**
+ * GET /api/redaksi/kamus/opsi-bidang
+ * Lookup bidang untuk editor KamusAdmin
+ */
+router.get('/opsi-bidang', periksaIzin('lihat_entri'), async (_req, res, next) => {
+  try {
+    const data = await ModelGlosarium.daftarLookupBidang({ q: '' });
+
+    return res.json({ success: true, data });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+/**
+ * GET /api/redaksi/kamus/opsi-bahasa
+ * Lookup bahasa untuk editor KamusAdmin
+ */
+router.get('/opsi-bahasa', periksaIzin('lihat_entri'), async (_req, res, next) => {
+  try {
+    const data = await ModelGlosarium.daftarLookupBahasa({ q: '' });
 
     return res.json({ success: true, data });
   } catch (error) {

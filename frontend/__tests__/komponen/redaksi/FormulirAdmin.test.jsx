@@ -5,6 +5,7 @@ import {
   FormFooter,
   InputField,
   PesanForm,
+  SearchableSelectField,
   SelectField,
   TextareaField,
   ToggleAktif,
@@ -44,7 +45,7 @@ describe('FormulirAdmin', () => {
     expect(screen.getByTestId('state').textContent).toContain('"buka":false');
   });
 
-  it('InputField, TextareaField, SelectField, ToggleAktif, CheckboxField, FormFooter, PesanForm berfungsi', () => {
+  it('InputField, TextareaField, SelectField, SearchableSelectField, ToggleAktif, CheckboxField, FormFooter, PesanForm berfungsi', () => {
     const onChange = vi.fn();
     const onSimpan = vi.fn();
     const onBatal = vi.fn();
@@ -61,6 +62,13 @@ describe('FormulirAdmin', () => {
           onChange={onChange}
           options={[{ value: 'user', label: 'User' }, { value: 'admin', label: 'Admin' }]}
         />
+        <SearchableSelectField
+          label="Bidang"
+          name="bidang"
+          value="umum"
+          onChange={onChange}
+          options={[{ value: '', label: 'Semua' }, { value: 'umum', label: 'Umum' }, { value: 'bio', label: 'Biologi' }]}
+        />
         <CheckboxField label="Tampilkan" name="tampilkan" value onChange={onChange} />
         <ToggleAktif value={1} onChange={onChange} />
         <ToggleMeragukan value={1} onChange={onChange} />
@@ -72,6 +80,9 @@ describe('FormulirAdmin', () => {
     fireEvent.change(screen.getByLabelText(/Nama/), { target: { value: 'B' } });
     fireEvent.change(screen.getByLabelText(/Catatan/), { target: { value: 'Y' } });
     fireEvent.change(screen.getByLabelText(/Peran/), { target: { value: 'admin' } });
+    fireEvent.click(screen.getByLabelText(/Bidang/));
+    fireEvent.change(screen.getByLabelText(/Cari Bidang/), { target: { value: 'bio' } });
+    fireEvent.click(screen.getByRole('button', { name: /Biologi/ }));
     fireEvent.click(screen.getByLabelText(/Tampilkan/));
     fireEvent.click(screen.getAllByRole('button')[0]);
     fireEvent.click(screen.getAllByRole('button')[1]);
@@ -99,6 +110,14 @@ describe('FormulirAdmin', () => {
         <SelectField
           label="Peran"
           name="peran"
+          value={null}
+          onChange={onChange}
+          options={[{ value: '', label: 'Pilih' }]}
+          disabled
+        />
+        <SearchableSelectField
+          label="Bidang"
+          name="bidang"
           value={null}
           onChange={onChange}
           options={[{ value: '', label: 'Pilih' }]}

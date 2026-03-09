@@ -3,7 +3,8 @@
 ## 2026-03-09 Senin
 
 - Merencanakan Kamus Deskriptif Indonesia (KADI)
-- Membatasi jumlah kata (2) yang ditampilkan di bagian populer di beranda 
+- Membatasi jumlah kata (2) yang ditampilkan di bagian populer di beranda
+- Menambahkan filter untuk pilihan bidang dan bahasa
 
 ## 2026-03-08 Minggu
 

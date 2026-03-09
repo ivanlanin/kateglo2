@@ -3,6 +3,7 @@
  */
 
 import { useState } from 'react';
+import { SearchableSelectField } from './FormulirAdmin';
 import Paginasi from '../bersama/Paginasi';
 import { useCursorPagination } from '../../hooks/bersama/useCursorPagination';
 
@@ -12,7 +13,6 @@ import { useCursorPagination } from '../../hooks/bersama/useCursorPagination';
  * Potong teks panjang, tambahkan elipsis
  * @param {string} teks - Teks asli
  * @param {number} maks - Panjang maksimum
- * @returns {string}
  */
 export function potongTeks(teks, maks = 80) {
   if (!teks) return '—';
@@ -36,13 +36,13 @@ export function validateRequiredFields(data, fields = []) {
 }
 
 /**
- * Ambil pesan error dari respons API
- * @param {unknown} err - Error object
- * @param {string} fallbackMessage - Pesan fallback
+ * Ambil pesan error paling relevan dari respons API
+ * @param {unknown} error - Error object dari request
+ * @param {string} fallback - Pesan fallback
  * @returns {string}
  */
-export function getApiErrorMessage(err, fallbackMessage = 'Terjadi kesalahan') {
-  return err?.response?.data?.error || err?.response?.data?.message || fallbackMessage;
+export function getApiErrorMessage(error, fallback = 'Terjadi kesalahan') {
+  return error?.response?.data?.error || error?.response?.data?.message || fallback;
 }
 
 // ─── Custom Hook ─────────────────────────────────────────────────────────────
@@ -169,7 +169,10 @@ export function BarisFilterCariAdmin({
   placeholder = 'Cari …',
   filters = [],
 }) {
-  const hasActiveFilter = filters.some((item) => isActiveFilterValue(item));
+  const daftarFilter = filters || [];
+  const hasActiveFilter = typeof daftarFilter.some === 'function'
+    ? daftarFilter.some((item) => isActiveFilterValue(item))
+    : false;
   const tampilkanReset = String(nilai ?? '').trim() !== '' || hasActiveFilter;
 
   const handleSubmit = (e) => {
@@ -187,19 +190,42 @@ export function BarisFilterCariAdmin({
         className="flex-1 min-w-[220px] px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-dark-bg-input dark:text-white focus:outline-none focus:border-blue-500"
       />
 
-      {filters.map((item) => (
-        <select
-          key={item.key}
-          value={item.value ?? ''}
-          onChange={(e) => item.onChange(e.target.value)}
-          className={`form-admin-select w-auto min-w-[160px] ${isActiveFilterValue(item) ? 'form-admin-filter-active' : ''}`}
-          aria-label={item.ariaLabel || item.key}
-        >
-          {(item.options || []).map((opt) => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
-          ))}
-        </select>
-      ))}
+      {typeof daftarFilter.map === 'function' && daftarFilter.map((item) => {
+        const label = item.ariaLabel || item.key;
+        const commonClassName = `w-auto min-w-[160px] ${isActiveFilterValue(item) ? 'form-admin-filter-active' : ''}`;
+
+        if (item.searchable) {
+          return (
+            <SearchableSelectField
+              key={item.key}
+              label={label}
+              name={item.key}
+              value={item.value ?? ''}
+              onChange={(_name, value) => item.onChange(value)}
+              options={item.options || []}
+              placeholder={item.placeholder || label}
+              searchPlaceholder={item.searchPlaceholder || `Cari ${label.toLowerCase()}…`}
+              hideLabel
+              wrapperClassName="mb-0"
+              buttonClassName={commonClassName}
+            />
+          );
+        }
+
+        return (
+          <select
+            key={item.key}
+            value={item.value ?? ''}
+            onChange={(e) => item.onChange(e.target.value)}
+            className={`form-admin-select ${commonClassName}`}
+            aria-label={label}
+          >
+            {(item.options || []).map((opt) => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+        );
+      })}
 
       <button
         type="submit"

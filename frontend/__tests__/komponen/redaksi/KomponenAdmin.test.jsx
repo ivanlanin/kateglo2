@@ -162,6 +162,41 @@ describe('KomponenAdmin', () => {
     expect(onHapus).toHaveBeenCalled();
   });
 
+  it('BarisFilterCariAdmin dapat merender filter searchable secara DRY', () => {
+    const onChangeFilter = vi.fn();
+
+    render(
+      <BarisFilterCariAdmin
+        nilai=""
+        onChange={vi.fn()}
+        onCari={vi.fn()}
+        onHapus={vi.fn()}
+        filters={[
+          {
+            key: 'bahasa',
+            value: '',
+            onChange: onChangeFilter,
+            options: [
+              { value: '', label: '—Bahasa—' },
+              { value: 'id', label: 'Indonesia' },
+              { value: 'en', label: 'Inggris' },
+            ],
+            ariaLabel: 'Filter bahasa',
+            searchable: true,
+            placeholder: '—Bahasa—',
+            searchPlaceholder: 'Cari bahasa…',
+          },
+        ]}
+      />
+    );
+
+    fireEvent.click(screen.getByLabelText('Filter bahasa'));
+    fireEvent.change(screen.getByLabelText('Cari Filter bahasa'), { target: { value: 'ing' } });
+    fireEvent.click(screen.getByRole('button', { name: /Inggris/ }));
+
+    expect(onChangeFilter).toHaveBeenCalledWith('en');
+  });
+
   it('BarisFilterCariAdmin tetap aman saat filter tanpa options', () => {
     const onCari = vi.fn();
     const onChange = vi.fn();

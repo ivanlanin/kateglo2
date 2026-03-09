@@ -804,6 +804,22 @@ class ModelGlosarium {
     return { data: dataResult.rows, total: parseCount(countResult.rows[0]?.total) };
   }
 
+  static async daftarLookupBidang({ q = '' } = {}) {
+    const params = [];
+    const conditions = buildMasterFilters({ alias: 'b', q, aktif: '', params });
+    const whereSql = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    const result = await db.query(
+      `SELECT b.kode, b.nama
+       FROM bidang b
+       ${whereSql}
+       ORDER BY b.nama ASC`,
+      params
+    );
+
+    return result.rows;
+  }
+
   static async daftarMasterSumber({
     q = '', glosarium = '', kamus = '', tesaurus = '', etimologi = '', limit = 50, offset = 0,
   } = {}) {
@@ -1003,6 +1019,22 @@ class ModelGlosarium {
     );
 
     return { data: dataResult.rows, total: parseCount(countResult.rows[0]?.total) };
+  }
+
+  static async daftarLookupBahasa({ q = '' } = {}) {
+    const params = [];
+    const conditions = buildMasterFilters({ alias: 'ba', q, aktif: '', params });
+    const whereSql = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    const result = await db.query(
+      `SELECT ba.kode, ba.nama
+       FROM bahasa ba
+       ${whereSql}
+       ORDER BY ba.nama ASC`,
+      params
+    );
+
+    return result.rows;
   }
 
   static async ambilMasterBahasaDenganId(id) {

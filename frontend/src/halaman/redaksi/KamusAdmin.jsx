@@ -6,12 +6,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   useDaftarKamusAdmin, useDetailKamusAdmin, useSimpanKamus, useHapusKamus,
+  useOpsiBidangKamusAdmin, useOpsiBahasaKamusAdmin,
   useAutocompleteIndukKamus,
   useDaftarMakna, useSimpanMakna, useHapusMakna,
   useSimpanContoh, useHapusContoh,
   useKategoriLabelRedaksi,
-  useDaftarBidangAdmin,
-  useDaftarBahasaAdmin,
   useDaftarSumberAdmin,
   useTagarEntri, useSimpanTagarEntri, useDaftarTagarUntukPilih,
 } from '../../api/apiAdmin';
@@ -29,7 +28,7 @@ import {
 } from '../../komponen/redaksi/KomponenAdmin';
 import PanelGeser from '../../komponen/redaksi/PanelGeser';
 import {
-  useFormPanel, InputField, SelectField, TextareaField, ToggleAktif,
+  useFormPanel, InputField, SearchableSelectField, SelectField, TextareaField, ToggleAktif,
   FormFooter, PesanForm,
 } from '../../komponen/redaksi/FormulirAdmin';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
@@ -215,6 +214,7 @@ function ItemContoh({
   isPending,
   opsiRagam,
   opsiBidang,
+  opsiBahasa,
   bisaEditContoh,
   bisaHapusContoh,
 }) {
@@ -224,7 +224,7 @@ function ItemContoh({
   const ubah = (field, val) => setData((p) => ({ ...p, [field]: val }));
 
   const handleSimpan = () => {
-    simpanContoh.mutate({ entriId, maknaId, ...data }, {
+    simpanContoh.mutate({ entriId, maknaId, ...data, urutan: Number(data.urutan) || 1 }, {
       onSuccess: () => setEdit(false),
     });
   };
@@ -239,9 +239,23 @@ function ItemContoh({
       <TextareaField label="Contoh" name="contoh" value={nilaiData.contoh} onChange={onChange} rows={2} />
       <TextareaField label="Makna contoh" name="makna_contoh" value={nilaiData.makna_contoh} onChange={onChange} rows={2} />
       <div className="grid grid-cols-2 gap-2">
+        <InputField label="Urutan" name="urutan" value={nilaiData.urutan} onChange={onChange} type="number" />
         <SelectField label="Ragam" name="ragam" value={nilaiData.ragam} onChange={onChange} options={ensureOpsiMemuatNilai(opsiRagam, nilaiData.ragam)} />
-        <SelectField label="Bidang" name="bidang" value={nilaiData.bidang} onChange={onChange} options={ensureOpsiMemuatNilai(opsiBidang, nilaiData.bidang)} />
       </div>
+      <div className="grid grid-cols-2 gap-2">
+        <SearchableSelectField label="Bidang" name="bidang" value={nilaiData.bidang} onChange={onChange} options={ensureOpsiMemuatNilai(opsiBidang, nilaiData.bidang)} placeholder="Cari bidang…" />
+        <SearchableSelectField label="Bahasa" name="bahasa" value={nilaiData.bahasa} onChange={onChange} options={ensureOpsiMemuatNilai(opsiBahasa, nilaiData.bahasa)} placeholder="Cari bahasa…" />
+      </div>
+      <SelectField
+        label="Kiasan"
+        name="kiasan"
+        value={String(nilaiData.kiasan ? 1 : 0)}
+        onChange={(_field, val) => onChange('kiasan', Number(val))}
+        options={[
+          { value: '0', label: 'Nonkiasan' },
+          { value: '1', label: 'Kiasan' },
+        ]}
+      />
       <ToggleAktif value={nilaiData.aktif} onChange={onChange} />
     </>
   );
@@ -250,7 +264,19 @@ function ItemContoh({
     return (
       <div className="flex items-start gap-2 py-1.5 group">
         <span className="text-gray-500 dark:text-gray-500 text-sm select-none">•</span>
-        <span className="flex-1 text-sm text-gray-700 dark:text-gray-300 italic">{contoh.contoh}</span>
+        <div className="flex-1 min-w-0">
+          <div className="text-sm text-gray-700 dark:text-gray-300 italic">{contoh.contoh}</div>
+          <div className="mt-0.5 flex items-center gap-2 flex-wrap text-[11px] text-gray-500 dark:text-gray-400">
+            <span>Urutan: {Number(contoh.urutan) || 1}</span>
+            {contoh.ragam && <span>Ragam: {contoh.ragam}</span>}
+            {contoh.bidang && <span>Bidang: {contoh.bidang}</span>}
+            {contoh.bahasa && <span>Bahasa: {contoh.bahasa}</span>}
+            {contoh.kiasan ? <span className="italic">kiasan</span> : null}
+          </div>
+          {contoh.makna_contoh && (
+            <div className="mt-0.5 text-[11px] text-gray-500 dark:text-gray-400">Makna contoh: {contoh.makna_contoh}</div>
+          )}
+        </div>
         <BadgeStatus aktif={contoh.aktif ?? 1} />
         {bisaEditContoh && <button onClick={() => setEdit(true)} className="text-xs text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity">sunting</button>}
         {bisaHapusContoh && <button onClick={handleHapus} disabled={isPending} className="text-xs text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">hapus</button>}
@@ -269,12 +295,15 @@ function ItemContoh({
   );
 }
 
-function FormTambahContoh({ entriId, maknaId, simpanContoh, isPending, onBatal, opsiRagam, opsiBidang }) {
+function FormTambahContoh({ entriId, maknaId, simpanContoh, isPending, onBatal, opsiRagam, opsiBidang, opsiBahasa }) {
   const [data, setData] = useState({
+    urutan: 1,
     contoh: '',
     makna_contoh: '',
     ragam: '',
     bidang: '',
+    bahasa: '',
+    kiasan: 0,
     aktif: 1,
   });
 
@@ -282,9 +311,9 @@ function FormTambahContoh({ entriId, maknaId, simpanContoh, isPending, onBatal, 
 
   const handleSimpan = () => {
     if (!data.contoh.trim()) return;
-    simpanContoh.mutate({ entriId, maknaId, ...data, urutan: 1 }, {
+    simpanContoh.mutate({ entriId, maknaId, ...data, urutan: Number(data.urutan) || 1 }, {
       onSuccess: () => {
-        setData({ contoh: '', makna_contoh: '', ragam: '', bidang: '', aktif: 1 });
+        setData({ urutan: 1, contoh: '', makna_contoh: '', ragam: '', bidang: '', bahasa: '', kiasan: 0, aktif: 1 });
         onBatal();
       },
     });
@@ -295,9 +324,23 @@ function FormTambahContoh({ entriId, maknaId, simpanContoh, isPending, onBatal, 
       <TextareaField label="Contoh" name="contoh" value={data.contoh} onChange={ubah} rows={2} />
       <TextareaField label="Makna contoh" name="makna_contoh" value={data.makna_contoh} onChange={ubah} rows={2} />
       <div className="grid grid-cols-2 gap-2">
+        <InputField label="Urutan" name="urutan" value={data.urutan} onChange={ubah} type="number" />
         <SelectField label="Ragam" name="ragam" value={data.ragam} onChange={ubah} options={ensureOpsiMemuatNilai(opsiRagam, data.ragam)} />
-        <SelectField label="Bidang" name="bidang" value={data.bidang} onChange={ubah} options={ensureOpsiMemuatNilai(opsiBidang, data.bidang)} />
       </div>
+      <div className="grid grid-cols-2 gap-2">
+        <SearchableSelectField label="Bidang" name="bidang" value={data.bidang} onChange={ubah} options={ensureOpsiMemuatNilai(opsiBidang, data.bidang)} placeholder="Cari bidang…" />
+        <SearchableSelectField label="Bahasa" name="bahasa" value={data.bahasa} onChange={ubah} options={ensureOpsiMemuatNilai(opsiBahasa, data.bahasa)} placeholder="Cari bahasa…" />
+      </div>
+      <SelectField
+        label="Kiasan"
+        name="kiasan"
+        value={String(data.kiasan ? 1 : 0)}
+        onChange={(_field, val) => ubah('kiasan', Number(val))}
+        options={[
+          { value: '0', label: 'Nonkiasan' },
+          { value: '1', label: 'Kiasan' },
+        ]}
+      />
       <ToggleAktif value={data.aktif} onChange={ubah} />
       <div className="flex gap-2">
         <button onClick={handleSimpan} disabled={isPending || !data.contoh.trim()} className="form-admin-btn-simpan text-xs py-1 px-3">Simpan</button>
@@ -375,8 +418,8 @@ function ItemMakna({
         />
       </div>
       <div className="grid grid-cols-2 gap-2">
-        <SelectField label="Bidang" name="bidang" value={nilaiData.bidang} onChange={onChange} options={ensureOpsiMemuatNilai(opsiBidang, nilaiData.bidang)} />
-        <SelectField label="Bahasa" name="bahasa" value={nilaiData.bahasa} onChange={onChange} options={ensureOpsiMemuatNilai(opsiBahasa, nilaiData.bahasa)} />
+        <SearchableSelectField label="Bidang" name="bidang" value={nilaiData.bidang} onChange={onChange} options={ensureOpsiMemuatNilai(opsiBidang, nilaiData.bidang)} placeholder="Cari bidang…" />
+        <SearchableSelectField label="Bahasa" name="bahasa" value={nilaiData.bahasa} onChange={onChange} options={ensureOpsiMemuatNilai(opsiBahasa, nilaiData.bahasa)} placeholder="Cari bahasa…" />
       </div>
       <div className="grid grid-cols-2 gap-2">
         <InputField label="Ilmiah" name="ilmiah" value={nilaiData.ilmiah} onChange={onChange} />
@@ -469,6 +512,7 @@ function ItemMakna({
                 isPending={isPending}
                 opsiRagam={opsiRagam}
                 opsiBidang={opsiBidang}
+                opsiBahasa={opsiBahasa}
                 onBatal={() => setTambahContoh(false)}
               />
             )}
@@ -485,6 +529,7 @@ function ItemMakna({
                   isPending={isPending}
                   opsiRagam={opsiRagam}
                   opsiBidang={opsiBidang}
+                  opsiBahasa={opsiBahasa}
                   bisaEditContoh={bisaEditContoh}
                   bisaHapusContoh={bisaHapusContoh}
                 />
@@ -710,8 +755,8 @@ function SeksiMakna({
         />
       </div>
       <div className="grid grid-cols-2 gap-2">
-        <SelectField label="Bidang" name="bidang" value={maknaBaru.bidang} onChange={ubahMaknaBaru} options={ensureOpsiMemuatNilai(opsiBidang, maknaBaru.bidang)} />
-        <SelectField label="Bahasa" name="bahasa" value={maknaBaru.bahasa} onChange={ubahMaknaBaru} options={ensureOpsiMemuatNilai(opsiBahasa, maknaBaru.bahasa)} />
+        <SearchableSelectField label="Bidang" name="bidang" value={maknaBaru.bidang} onChange={ubahMaknaBaru} options={ensureOpsiMemuatNilai(opsiBidang, maknaBaru.bidang)} placeholder="Cari bidang…" />
+        <SearchableSelectField label="Bahasa" name="bahasa" value={maknaBaru.bahasa} onChange={ubahMaknaBaru} options={ensureOpsiMemuatNilai(opsiBahasa, maknaBaru.bahasa)} placeholder="Cari bahasa…" />
       </div>
       <div className="grid grid-cols-2 gap-2">
         <InputField label="Ilmiah" name="ilmiah" value={maknaBaru.ilmiah} onChange={ubahMaknaBaru} />
@@ -856,8 +901,8 @@ function KamusAdmin() {
   });
   const daftarSaranRujuk = respSaranRujuk?.data || [];
   const { data: respLabelKategori } = useKategoriLabelRedaksi(kategoriLabelRedaksi);
-  const { data: respBidang } = useDaftarBidangAdmin({ limit: 200, aktif: '1' });
-  const { data: respBahasa } = useDaftarBahasaAdmin({ limit: 200, aktif: '1' });
+  const { data: respOpsiBidang } = useOpsiBidangKamusAdmin();
+  const { data: respOpsiBahasa } = useOpsiBahasaKamusAdmin();
 
   const opsiKategori = useMemo(() => {
     const kategori = respLabelKategori?.data || {};
@@ -868,8 +913,8 @@ function KamusAdmin() {
     );
     const kelasKata = mapOpsiLabel(kategori['kelas-kata'] || [], { emptyLabel: '— Tidak ada —' });
     const ragam = mapOpsiLabel(kategori.ragam || [], { emptyLabel: '— Tidak ada —' });
-    const bidang = mapOpsiLabel(respBidang?.data || [], { emptyLabel: '— Tidak ada —' });
-    const bahasa = mapOpsiLabel(respBahasa?.data || [], { emptyLabel: '— Tidak ada —' });
+    const bidang = mapOpsiLabel(respOpsiBidang?.data || [], { emptyLabel: '— Tidak ada —' });
+    const bahasa = mapOpsiLabel(respOpsiBahasa?.data || [], { emptyLabel: '— Tidak ada —' });
     const tipePenyingkat = mapOpsiLabel(kategori.penyingkatan || [], { emptyLabel: '— Tidak ada —' });
 
     return {
@@ -881,7 +926,14 @@ function KamusAdmin() {
       bahasa,
       tipePenyingkat: tipePenyingkat.length > 1 ? tipePenyingkat : opsiTipePenyingkatBawaan,
     };
-  }, [respLabelKategori, respBidang, respBahasa]);
+  }, [respLabelKategori, respOpsiBidang, respOpsiBahasa]);
+
+  const opsiLookupLengkap = useMemo(() => {
+    const bidang = mapOpsiLabel(respOpsiBidang?.data || [], { emptyLabel: '— Tidak ada —' });
+    const bahasa = mapOpsiLabel(respOpsiBahasa?.data || [], { emptyLabel: '— Tidak ada —' });
+
+    return { bidang, bahasa };
+  }, [respOpsiBidang, respOpsiBahasa]);
 
   const opsiFilterJenis = useMemo(() => {
     const pilihanTanpaKosong = opsiKategori.jenis.filter((item) => String(item?.value || '').trim());
@@ -1252,6 +1304,9 @@ function KamusAdmin() {
             onChange: (value) => setFilterDraftValue('bidang', value),
             options: opsiFilterBidang,
             ariaLabel: 'Filter bidang',
+            searchable: true,
+            placeholder: '—Bidang—',
+            searchPlaceholder: 'Cari bidang…',
           },
           {
             key: 'bahasa',
@@ -1259,6 +1314,9 @@ function KamusAdmin() {
             onChange: (value) => setFilterDraftValue('bahasa', value),
             options: opsiFilterBahasa,
             ariaLabel: 'Filter bahasa',
+            searchable: true,
+            placeholder: '—Bahasa—',
+            searchPlaceholder: 'Cari bahasa…',
           },
           {
             key: 'punya_ilmiah',
@@ -1428,8 +1486,8 @@ function KamusAdmin() {
               opsiKelasKata={opsiKategori.kelasKata}
               opsiRagam={opsiKategori.ragam}
               opsiRagamVarian={opsiRagamVarian}
-              opsiBidang={opsiKategori.bidang}
-              opsiBahasa={opsiKategori.bahasa}
+              opsiBidang={opsiLookupLengkap.bidang}
+              opsiBahasa={opsiLookupLengkap.bahasa}
               opsiPenyingkatan={opsiKategori.tipePenyingkat}
               bisaTambahMakna={bisaTambahMakna}
               bisaEditMakna={bisaEditMakna}

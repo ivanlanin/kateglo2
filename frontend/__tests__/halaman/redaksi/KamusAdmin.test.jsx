@@ -22,6 +22,8 @@ const mockUseDetailKamusAdmin = vi.fn();
 const mockUseDaftarMakna = vi.fn();
 const mockUseDaftarSumberAdmin = vi.fn();
 const mockUseKategoriLabelRedaksi = vi.fn();
+const mockUseOpsiBidangKamusAdmin = vi.fn();
+const mockUseOpsiBahasaKamusAdmin = vi.fn();
 const mockUseAutocompleteIndukKamus = vi.fn();
 const mockUseTagarEntri = vi.fn();
 const mockUseSimpanTagarEntri = vi.fn();
@@ -44,8 +46,8 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useHapusKamus: () => ({ mutate: mutateHapusKamus, isPending: false }),
   useDaftarMakna: (...args) => mockUseDaftarMakna(...args),
   useKategoriLabelRedaksi: (...args) => mockUseKategoriLabelRedaksi(...args),
-  useDaftarBidangAdmin: () => ({ data: undefined }),
-  useDaftarBahasaAdmin: () => ({ data: undefined }),
+  useOpsiBidangKamusAdmin: (...args) => mockUseOpsiBidangKamusAdmin(...args),
+  useOpsiBahasaKamusAdmin: (...args) => mockUseOpsiBahasaKamusAdmin(...args),
   useAutocompleteIndukKamus: (...args) => mockUseAutocompleteIndukKamus(...args),
   useSimpanMakna: () => ({ mutate: mutateSimpanMakna, isPending: false }),
   useHapusMakna: () => ({ mutate: mutateHapusMakna, isPending: false }),
@@ -118,6 +120,8 @@ describe('KamusAdmin', () => {
     mockUseTagarEntri.mockReturnValue({ data: { data: [] }, isLoading: false });
     mockUseDaftarTagarUntukPilih.mockReturnValue({ data: { data: [] }, isLoading: false });
     mockUseSimpanTagarEntri.mockReturnValue({ mutate: mutateSimpanTagar, isPending: false, isError: false });
+    mockUseOpsiBidangKamusAdmin.mockReturnValue({ data: { data: [{ kode: 'umum', nama: 'Umum' }, { kode: 'bio', nama: 'Biologi' }] } });
+    mockUseOpsiBahasaKamusAdmin.mockReturnValue({ data: { data: [{ kode: 'id', nama: 'Indonesia' }, { kode: 'en', nama: 'Inggris' }] } });
 
     mockUseDaftarKamusAdmin.mockReturnValue({
       isLoading: false,
@@ -167,7 +171,7 @@ describe('KamusAdmin', () => {
             bahasa: 'id',
             kiasan: false,
             urutan: 1,
-            contoh: [{ id: 99, contoh: 'anak baik', makna_contoh: '', ragam: '', bidang: '' }],
+            contoh: [{ id: 99, urutan: 1, contoh: 'anak baik', makna_contoh: '', ragam: '', bidang: 'umum', bahasa: 'id', kiasan: 0 }],
           },
           {
             id: 11,
@@ -360,12 +364,27 @@ describe('KamusAdmin', () => {
     expect(mutateSimpanMakna).toHaveBeenCalled();
 
     fireEvent.click(screen.getAllByText('+ contoh')[0]);
+    expect(screen.getByLabelText('Urutan')).toBeInTheDocument();
+    expect(screen.getByLabelText('Bahasa')).toBeInTheDocument();
+    expect(screen.getByLabelText('Kiasan')).toBeInTheDocument();
+    fireEvent.click(screen.getByLabelText('Bidang'));
+    fireEvent.change(screen.getByLabelText('Cari Bidang'), { target: { value: 'bio' } });
+    fireEvent.click(screen.getByRole('button', { name: /Biologi/ }));
+    fireEvent.click(screen.getByLabelText('Bahasa'));
+    fireEvent.change(screen.getByLabelText('Cari Bahasa'), { target: { value: 'ing' } });
+    fireEvent.click(screen.getByRole('button', { name: /Inggris/ }));
     const tombolSimpanKosong = screen.getAllByRole('button', { name: 'Simpan' }).find((btn) => btn.className.includes('text-xs'));
     tombolSimpanKosong.removeAttribute('disabled');
     fireEvent.click(tombolSimpanKosong);
+    fireEvent.change(screen.getByLabelText('Urutan'), { target: { value: '3' } });
+    fireEvent.change(screen.getByLabelText('Kiasan'), { target: { value: '1' } });
     fireEvent.change(screen.getAllByLabelText('Contoh').at(-1), { target: { value: 'contoh tambahan' } });
     screen.getAllByRole('button', { name: 'Simpan' }).forEach((btn) => fireEvent.click(btn));
     expect(mutateSimpanContoh).toHaveBeenCalled();
+    expect(mutateSimpanContoh).toHaveBeenCalledWith(
+      expect.objectContaining({ urutan: 3, bidang: 'bio', bahasa: 'en', kiasan: 1 }),
+      expect.any(Object)
+    );
 
     fireEvent.click(screen.getAllByText('sunting')[1]);
     const formEditContoh = screen.getByLabelText('Contoh').closest('div').parentElement;
@@ -374,6 +393,10 @@ describe('KamusAdmin', () => {
     fireEvent.click(screen.getAllByText('sunting')[1]);
     const formEditContohLagi = screen.getByLabelText('Contoh').closest('div').parentElement;
     fireEvent.change(within(formEditContohLagi).getByLabelText('Ragam'), { target: { value: 'ragam edit' } });
+    fireEvent.change(within(formEditContohLagi).getByLabelText('Urutan'), { target: { value: '2' } });
+    fireEvent.click(within(formEditContohLagi).getByLabelText('Bahasa'));
+    fireEvent.change(within(formEditContohLagi).getByLabelText('Cari Bahasa'), { target: { value: 'indo' } });
+    fireEvent.click(within(formEditContohLagi).getByRole('button', { name: /Indonesia/ }));
     fireEvent.click(within(formEditContohLagi).getByRole('button', { name: 'Simpan' }));
     fireEvent.click(semuaSunting[1]);
     screen.getAllByRole('button', { name: 'Simpan' }).forEach((btn) => fireEvent.click(btn));
@@ -550,14 +573,20 @@ describe('KamusAdmin', () => {
       'Filter kelas kata',
       'Filter ragam',
       'Filter ragam varian',
-      'Filter bidang',
-      'Filter bahasa',
       'Filter kiasan',
     ];
 
     labels.forEach((label) => {
       fireEvent.change(screen.getByLabelText(label), { target: { value: '' } });
     });
+
+    fireEvent.click(screen.getByLabelText('Filter bidang'));
+    fireEvent.change(screen.getByLabelText('Cari Filter bidang'), { target: { value: 'bio' } });
+    fireEvent.click(screen.getByRole('button', { name: /Biologi/ }));
+
+    fireEvent.click(screen.getByLabelText('Filter bahasa'));
+    fireEvent.change(screen.getByLabelText('Cari Filter bahasa'), { target: { value: 'ing' } });
+    fireEvent.click(screen.getByRole('button', { name: /Inggris/ }));
 
     expect(screen.getByRole('heading', { name: 'Kamus' })).toBeInTheDocument();
   });
