@@ -138,7 +138,7 @@ function Glosarium() {
       const namaB = resolveNamaSumberSort(b);
       return namaA.localeCompare(namaB, 'id', { sensitivity: 'base' });
     });
-  const namaBidang = resolveKategoriNama(bidang, bidangList, ['nama', 'bidang'], ['kode']);
+  const namaBidang = resolveKategoriNama(bidang, bidangList, ['nama', 'bidang'], ['kode', 'slug']);
   const namaSumber = resolveKategoriNama(sumber, sumberList, ['nama', 'sumber'], ['kode', 'slug']);
   const detailSumber = resolveKategoriItem(sumber, sumberList, ['nama', 'sumber'], ['kode', 'slug']);
 
@@ -251,7 +251,7 @@ function Glosarium() {
               judul="Bidang"
               items={bidangList}
               getKey={(item) => item.kode || item.bidang || item.nama}
-              getTo={(item) => `/glosarium/bidang/${encodeURIComponent(item.kode || item.bidang || item.nama)}`}
+              getTo={(item) => `/glosarium/bidang/${encodeURIComponent(item.slug || buatSlug(item.nama || item.bidang || '') || item.kode)}`}
               getLabel={(item) => formatNamaBidang(item.nama || item.bidang || '')}
             />
           )}

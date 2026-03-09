@@ -460,6 +460,7 @@ describe('ModelGlosarium', () => {
     const result = await ModelGlosarium.ambilDaftarBidang();
 
     expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM bidang b'));
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('AS slug'));
     expect(result).toEqual(rows);
   });
 
@@ -959,6 +960,30 @@ describe('ModelGlosarium', () => {
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('WHERE s.glosarium = TRUE')
     );
+  });
+
+  it('resolveSlugBidang mengembalikan row pertama atau null', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ id: 4, kode: 'Far', nama: 'Farmasi dan Farmakologi' }] })
+      .mockResolvedValueOnce({ rows: [] });
+
+    await expect(ModelGlosarium.resolveSlugBidang('farmasi-dan-farmakologi')).resolves.toEqual({
+      id: 4,
+      kode: 'Far',
+      nama: 'Farmasi dan Farmakologi',
+    });
+    await expect(ModelGlosarium.resolveSlugBidang('tidak-ada')).resolves.toBeNull();
+    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('FROM bidang'), ['farmasi-dan-farmakologi']);
+    expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('FROM bidang'), ['tidak-ada']);
+  });
+
+  it('resolveSlugBidang memakai fallback string kosong saat slug tidak diberikan', async () => {
+    db.query.mockResolvedValueOnce({ rows: [] });
+
+    const result = await ModelGlosarium.resolveSlugBidang(undefined);
+
+    expect(result).toBeNull();
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('FROM bidang'), ['']);
   });
 
   it('resolveSlugSumber mengembalikan row pertama atau null', async () => {

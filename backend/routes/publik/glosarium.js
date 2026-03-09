@@ -84,13 +84,16 @@ router.get('/bidang', async (_req, res, next) => {
 
 router.get('/bidang/:bidang', async (req, res, next) => {
   try {
+    const slug = decodeURIComponent(req.params.bidang || '').trim();
+    const bidangObj = await ModelGlosarium.resolveSlugBidang(slug);
     const { limit, cursor, direction, lastPage } = parseCursorPagination(req.query, {
       defaultLimit: 100,
       maxLimit: 100,
     });
 
     const result = await ModelGlosarium.cariCursor({
-      bidang: decodeURIComponent(req.params.bidang),
+      bidangId: bidangObj?.id || null,
+      bidang: bidangObj ? '' : slug,
       limit,
       aktifSaja: true,
       hitungTotal: true,

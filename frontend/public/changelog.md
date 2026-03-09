@@ -6,6 +6,7 @@
 - Membatasi jumlah kata (2) yang ditampilkan di bagian populer di beranda
 - Menambahkan filter untuk pilihan bidang dan bahasa
 - Menambahkan kolom kamus dan glosarium di bidang untuk menunjukkan bidang yang aktif
+- Menampilkan lencana kode di detail glosarium agar lebih ringkas
 
 ## 2026-03-08 Minggu
 

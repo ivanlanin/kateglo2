@@ -147,14 +147,16 @@ describe('GlosariumDetail', () => {
     render(
       <AlirEntri
         items={[
-          { id: 1, bidang: 'Kimia', bidang_kode: 'kim', indonesia: 'asam' },
-          { id: 2, bidang: 'Kimia', bidang_kode: 'kim', indonesia: 'basa' },
+          { id: 1, bidang: 'Kimia', bidang_kode: 'Kim', indonesia: 'asam' },
+          { id: 2, bidang: 'Kimia', bidang_kode: 'Kim', indonesia: 'basa' },
           { id: 3, bidang: '', indonesia: 'garam' },
         ]}
       />
     );
 
-    expect(screen.getAllByRole('link', { name: 'Kimia' })).toHaveLength(1);
+    expect(screen.getAllByRole('link', { name: 'Kim' })).toHaveLength(1);
+    expect(screen.getByRole('link', { name: 'Kim' })).toHaveAttribute('href', '/glosarium/bidang/kimia');
+    expect(screen.getByRole('link', { name: 'Kim' })).toHaveAttribute('title', 'Kimia');
   });
 
   it('helper AlirEntri menampilkan tombol edit saat mode asing dan indonesia lengkap', () => {
@@ -199,6 +201,26 @@ describe('GlosariumDetail', () => {
     );
 
     expect(screen.getByRole('link', { name: 'KBBI' })).toHaveAttribute('href', '/glosarium/sumber/');
+  });
+
+  it('helper AlirEntri menampilkan nama lengkap pada hover badge sumber', () => {
+    const AlirEntri = __private.AlirEntri;
+    render(
+      <AlirEntri
+        items={[
+          {
+            id: 72,
+            bidang: 'Kimia',
+            bidang_kode: 'Kim',
+            sumber_kode: 'WHO',
+            sumber: 'World Health Organization',
+            indonesia: 'asam',
+          },
+        ]}
+      />
+    );
+
+    expect(screen.getByRole('link', { name: 'WHO' })).toHaveAttribute('title', 'World Health Organization');
   });
 
   it('helper getBidangSebelumnya menormalisasi bidang sebelumnya', () => {
@@ -253,17 +275,17 @@ describe('GlosariumDetail', () => {
       error: null,
       data: {
         persis: [
-          { id: 1, indonesia: 'istilah; data', bidang: 'Kimia', bidang_kode: 'kim', sumber: 'KBBI', sumber_kode: 'kbbi' },
+          { id: 1, indonesia: 'istilah; data', bidang: 'Kimia', bidang_kode: 'Kim', sumber: 'KBBI', sumber_kode: 'kbbi' },
           { id: 2, indonesia: 'tanpa badge' },
         ],
         mengandung: [
-          { id: 11, asing: 'zero sum game', indonesia: 'permainan jumlah nol', bidang: 'Ekonomi', bidang_kode: '', sumber: 'Istilah', sumber_kode: '' },
-          { id: 12, asing: 'zero day', indonesia: '', bidang: 'Ekonomi', bidang_kode: '', sumber: '' },
+          { id: 11, asing: 'zero sum game', indonesia: 'permainan jumlah nol', bidang: 'Ekonomi', bidang_kode: 'Eko', sumber: 'Istilah', sumber_kode: '' },
+          { id: 12, asing: 'zero day', indonesia: '', bidang: 'Ekonomi', bidang_kode: 'Eko', sumber: '' },
         ],
         mengandungPage: { hasPrev: true, hasNext: true, prevCursor: 'meng-prev', nextCursor: 'meng-next' },
         mengandungTotal: 8,
         mirip: [
-          { id: 21, asing: 'sum', indonesia: 'jumlah', bidang: 'Matematika', bidang_kode: 'mat', sumber: 'KBBI', sumber_kode: 'kbbi' },
+          { id: 21, asing: 'sum', indonesia: 'jumlah', bidang: 'Matematika', bidang_kode: 'Mat', sumber: 'KBBI', sumber_kode: 'kbbi' },
           { id: 22, asing: 'summation', indonesia: 'penjumlahan' },
         ],
         miripPage: { hasPrev: true, hasNext: true, prevCursor: 'mir-prev', nextCursor: 'mir-next' },
@@ -277,8 +299,8 @@ describe('GlosariumDetail', () => {
     expect(screen.getByRole('heading', { name: 'Memuat' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Mirip' })).toBeInTheDocument();
 
-    expect(screen.getByRole('link', { name: 'Kimia' })).toHaveAttribute('href', '/glosarium/bidang/kim');
-    expect(screen.getAllByRole('link', { name: 'Ekonomi' })).toHaveLength(1);
+    expect(screen.getByRole('link', { name: 'Kim' })).toHaveAttribute('href', '/glosarium/bidang/kimia');
+    expect(screen.getAllByRole('link', { name: 'Eko' })).toHaveLength(1);
     expect(screen.queryByRole('link', { name: 'KBBI' })).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'istilah' })).toHaveAttribute('href', '/kamus/detail/istilah');
     expect(screen.getByRole('link', { name: 'zero sum game' })).toHaveAttribute('href', '/glosarium/detail/zero%20sum%20game');

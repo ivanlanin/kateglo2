@@ -7,6 +7,10 @@ const ModelOpsi = require('./modelOpsi');
 const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
 const { decodeCursor, encodeCursor } = require('../utils/cursorPagination');
 
+function buildSlugSql(column) {
+  return `LOWER(TRIM(BOTH '-' FROM REGEXP_REPLACE(TRIM(${column}), '[^a-zA-Z0-9]+', '-', 'g')))`;
+}
+
 function parseOptionalPositiveInt(value) {
   const parsed = Number(value);
   if (!Number.isInteger(parsed) || parsed <= 0) return null;
@@ -723,12 +727,31 @@ class ModelGlosarium {
     }
 
     const result = await db.query(
-      `SELECT b.id, b.kode, b.nama, b.nama AS bidang
+      `SELECT b.id, b.kode, b.nama, b.nama AS bidang,
+              ${buildSlugSql('b.nama')} AS slug
        FROM bidang b
        ${kondisi}
        ORDER BY b.nama`
     );
     return result.rows;
+  }
+
+  /**
+   * Cari bidang berdasarkan slug yang dibentuk dari nama, atau fallback kode/nama
+   * @param {string} slug
+   * @returns {Promise<Object|null>}
+   */
+  static async resolveSlugBidang(slug) {
+    const result = await db.query(
+      `SELECT id, kode, nama
+       FROM bidang
+       WHERE ${buildSlugSql('nama')} = $1
+          OR LOWER(kode) = $1
+          OR LOWER(nama) = $1
+       LIMIT 1`,
+      [String(slug || '').toLowerCase()]
+    );
+    return result.rows[0] || null;
   }
 
   static async ambilDaftarBahasa(aktifSaja = true) {
@@ -766,7 +789,7 @@ class ModelGlosarium {
         s.glosarium,
          s.keterangan,
          s.nama AS sumber,
-         LOWER(TRIM(BOTH '-' FROM REGEXP_REPLACE(TRIM(s.nama), '[^a-zA-Z0-9]+', '-', 'g'))) AS slug
+         ${buildSlugSql('s.nama')} AS slug
        FROM sumber s
        ${kondisi}
        ORDER BY s.keterangan ASC NULLS LAST, s.nama ASC`
@@ -783,7 +806,9 @@ class ModelGlosarium {
     const result = await db.query(
       `SELECT id, kode, nama
        FROM sumber
-       WHERE LOWER(TRIM(BOTH '-' FROM REGEXP_REPLACE(TRIM(nama), '[^a-zA-Z0-9]+', '-', 'g'))) = $1
+       WHERE ${buildSlugSql('nama')} = $1
+          OR LOWER(kode) = $1
+          OR LOWER(nama) = $1
        LIMIT 1`,
       [String(slug || '').toLowerCase()]
     );

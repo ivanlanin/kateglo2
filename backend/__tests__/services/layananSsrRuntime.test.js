@@ -29,6 +29,7 @@ jest.mock('../../services/layananGlosariumPublik', () => ({
 
 jest.mock('../../models/modelGlosarium', () => ({
   cari: jest.fn(),
+  resolveSlugBidang: jest.fn(),
 }));
 
 const logger = require('../../config/logger');
@@ -228,6 +229,7 @@ describe('services/layananSsrRuntime', () => {
   });
 
   it('prefetchSsrData menutup semua route branch + catch error', async () => {
+    ModelGlosarium.resolveSlugBidang.mockResolvedValue({ id: 2, kode: 'Bio', nama: 'Biologi' });
     expect(await runtime.__private.prefetchSsrData()).toBeNull();
 
     const detail = await runtime.__private.prefetchSsrData('/kamus/detail/sara');
@@ -257,6 +259,7 @@ describe('services/layananSsrRuntime', () => {
   });
 
   it('prefetchSsrData menutup branch empty/null pada semua route', async () => {
+    ModelGlosarium.resolveSlugBidang.mockResolvedValue(null);
     ambilDetailKamus.mockResolvedValueOnce(null);
     expect(await runtime.__private.prefetchSsrData('/kamus/detail/kosong')).toBeNull();
 

@@ -69,7 +69,7 @@ describe('Glosarium', () => {
     mockUseQuery.mockImplementation((options) => {
       if (options?.queryFn) options.queryFn();
       const key = options?.queryKey?.[0];
-      if (key === 'glosarium-bidang') return { data: [{ bidang: 'ling' }], isLoading: false, isError: false };
+      if (key === 'glosarium-bidang') return { data: [{ kode: 'Lin', nama: 'Linguistik', slug: 'linguistik' }], isLoading: false, isError: false };
       if (key === 'glosarium-sumber') return { data: [{ sumber: 'kbbi', glosarium: true }], isLoading: false, isError: false };
       return { data: undefined, isLoading: false, isError: false };
     });
@@ -77,7 +77,7 @@ describe('Glosarium', () => {
     render(<Glosarium />);
 
     expect(screen.getAllByText('Glosarium').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByRole('link', { name: 'Ling' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Linguistik' })).toHaveAttribute('href', '/glosarium/bidang/linguistik');
     expect(ambilDaftarBidang).toHaveBeenCalled();
     expect(ambilDaftarSumber).toHaveBeenCalled();
   });
@@ -340,7 +340,7 @@ describe('Glosarium', () => {
 
     render(<Glosarium />);
 
-    expect(screen.getByRole('link', { name: 'Kesehatan' })).toHaveAttribute('href', '/glosarium/bidang/Kesehatan');
+    expect(screen.getByRole('link', { name: 'Kesehatan' })).toHaveAttribute('href', '/glosarium/bidang/kesehatan');
     expect(screen.getByRole('link', { name: 'WHO' })).toHaveAttribute('href', '/glosarium/sumber/who');
   });
 
@@ -513,6 +513,7 @@ describe('Glosarium', () => {
     expect(resolveKategoriNama('abc', [{ kode: 'def', nama: 'Nama' }], ['nama'], ['kode'])).toBe('abc');
     expect(resolveKategoriNama('kim', [{ kode: 'kim', nama: '' }], ['nama', 'bidang'], ['kode'])).toBe('kim');
     expect(resolveKategoriNama('kim', [{ kode: 'kim', nama: 'Kimia' }], ['nama'], ['kode'])).toBe('Kimia');
+    expect(resolveKategoriNama('farmasi-dan-farmakologi', [{ kode: 'Far', nama: 'Farmasi dan Farmakologi', slug: 'farmasi-dan-farmakologi' }], ['nama'], ['kode', 'slug'])).toBe('Farmasi dan Farmakologi');
   });
 
   it('helper resolveKategoriItem menutup cabang validasi list/keys dan fallback null', () => {
@@ -520,8 +521,9 @@ describe('Glosarium', () => {
     expect(resolveKategoriItem('kimia', null, ['nama'], ['kode'])).toBeNull();
     expect(resolveKategoriItem('kimia', [], ['nama'], ['kode'])).toBeNull();
 
-    const list = [{ kode: 'kim', nama: 'Kimia' }, { kode: 'bio', nama: 'Biologi' }];
-    expect(resolveKategoriItem('kimia', list, ['nama'], ['kode'])).toEqual({ kode: 'kim', nama: 'Kimia' });
+    const list = [{ kode: 'kim', nama: 'Kimia', slug: 'kimia' }, { kode: 'bio', nama: 'Biologi' }];
+    expect(resolveKategoriItem('kimia', list, ['nama'], ['kode'])).toEqual({ kode: 'kim', nama: 'Kimia', slug: 'kimia' });
+    expect(resolveKategoriItem('kimia', list, ['nama'], ['kode', 'slug'])).toEqual({ kode: 'kim', nama: 'Kimia', slug: 'kimia' });
     expect(resolveKategoriItem('kimia', list, null, null)).toBeNull();
   });
 

@@ -89,6 +89,8 @@ function AlirEntri({ items, tautAsing = false, tampilkanEdit = false }) {
         const bidangSaatIni = (item.bidang || '').trim().toLowerCase();
         const bidangSebelumnya = getBidangSebelumnya(flowItems, i);
         const tampilkanBadgeBidang = Boolean(item.bidang) && bidangSaatIni !== bidangSebelumnya;
+        const bidangLabel = String(item.bidang_kode || item.bidang || '').trim();
+        const bidangSlug = String(item.bidang_slug || buatSlug(item.bidang || '') || item.bidang_kode || item.bidang || '').trim();
 
         const sumberKodeSaatIni = (item.sumber_kode || '').trim();
         const sumberKodeSebelumnya = getSumberSebelumnya(flowItems, i);
@@ -98,14 +100,16 @@ function AlirEntri({ items, tautAsing = false, tampilkanEdit = false }) {
         <span key={item.id}>
           {tampilkanBadgeBidang && (
             <><Link
-              to={`/glosarium/bidang/${encodeURIComponent(item.bidang_kode || item.bidang)}`}
+              to={`/glosarium/bidang/${encodeURIComponent(bidangSlug)}`}
               className="badge-bidang"
-            >{item.bidang}</Link>{' '}</>
+              title={item.bidang || undefined}
+            >{bidangLabel}</Link>{' '}</>
           )}
           {tampilkanBadgeSumber && (
             <><Link
               to={`/glosarium/sumber/${encodeURIComponent(buatSlug(item.sumber || ''))}`}
               className="badge-sumber"
+              title={item.sumber || undefined}
             >{sumberKodeSaatIni}</Link>{' '}</>
           )}
           {tautAsing ? (

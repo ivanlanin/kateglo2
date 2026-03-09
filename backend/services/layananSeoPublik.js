@@ -178,7 +178,7 @@ async function ambilPathGlosariumKategori() {
   ]);
 
   const bidangPaths = (bidangList || []).map((item) => {
-    const value = item?.kode || item?.bidang || item?.nama;
+    const value = item?.slug || normalisasiSlug(item?.nama || item?.bidang) || item?.kode;
     if (!value) return '';
     return `/glosarium/bidang/${encodePathSegment(value)}`;
   });

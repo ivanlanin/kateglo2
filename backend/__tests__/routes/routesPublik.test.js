@@ -15,6 +15,7 @@ jest.mock('../../models/modelGlosarium', () => ({
   ambilDaftarBidang: jest.fn(),
   ambilDaftarBahasa: jest.fn(),
   ambilDaftarSumber: jest.fn(),
+  resolveSlugBidang: jest.fn(),
   resolveSlugSumber: jest.fn(),
 }));
 
@@ -1069,19 +1070,42 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/glosarium/bidang/:bidang memanggil model', async () => {
+    ModelGlosarium.resolveSlugBidang.mockResolvedValue({ id: 7, kode: 'Far', nama: 'Farmasi dan Farmakologi' });
     ModelGlosarium.cariCursor.mockResolvedValue({ data: [], total: 0 });
 
     const response = await request(createApp())
-      .get('/api/publik/glosarium/bidang/ilmu%20komputer?limit=9&cursor=abc&direction=prev');
+      .get('/api/publik/glosarium/bidang/farmasi-dan-farmakologi?limit=9&cursor=abc&direction=prev');
 
     expect(response.status).toBe(200);
+    expect(ModelGlosarium.resolveSlugBidang).toHaveBeenCalledWith('farmasi-dan-farmakologi');
     expect(ModelGlosarium.cariCursor).toHaveBeenCalledWith({
-      bidang: 'ilmu komputer',
+      bidangId: 7,
+      bidang: '',
       limit: 9,
       aktifSaja: true,
       hitungTotal: true,
       cursor: 'abc',
       direction: 'prev',
+      lastPage: false,
+      sortBy: 'asing',
+    });
+  });
+
+  it('GET /api/publik/glosarium/bidang/:bidang fallback ke param mentah saat slug bidang tidak ditemukan', async () => {
+    ModelGlosarium.resolveSlugBidang.mockResolvedValue(null);
+    ModelGlosarium.cariCursor.mockResolvedValue({ data: [], total: 0 });
+
+    const response = await request(createApp()).get('/api/publik/glosarium/bidang/far?limit=5');
+
+    expect(response.status).toBe(200);
+    expect(ModelGlosarium.cariCursor).toHaveBeenCalledWith({
+      bidangId: null,
+      bidang: 'far',
+      limit: 5,
+      aktifSaja: true,
+      hitungTotal: true,
+      cursor: null,
+      direction: 'next',
       lastPage: false,
       sortBy: 'asing',
     });

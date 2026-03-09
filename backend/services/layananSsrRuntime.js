@@ -137,12 +137,18 @@ async function prefetchSsrData(pathname = '/') {
     if (decoded.startsWith('/glosarium/bidang/')) {
       const bidang = decoded.replace('/glosarium/bidang/', '').trim();
       if (!bidang) return null;
-      const result = await ModelGlosarium.cari({ bidang, limit: 3, hitungTotal: false });
+      const bidangObj = await ModelGlosarium.resolveSlugBidang(bidang);
+      const result = await ModelGlosarium.cari({
+        bidangId: bidangObj?.id || null,
+        bidang: bidangObj ? '' : bidang,
+        limit: 3,
+        hitungTotal: false,
+      });
       const contoh = result.data?.slice(0, 3) || [];
       return {
         type: 'glosarium-bidang',
         bidang,
-        bidangNama: contoh[0]?.bidang || bidang,
+        bidangNama: bidangObj?.nama || contoh[0]?.bidang || bidang,
         total: result.total,
         contoh,
       };

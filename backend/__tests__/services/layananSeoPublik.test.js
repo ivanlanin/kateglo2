@@ -199,7 +199,7 @@ describe('layananSeoPublik private helpers', () => {
 
   it('ambilPathGlosariumKategori memakai fallback bidang/sumber/nama', async () => {
     ModelGlosarium.ambilDaftarBidang.mockResolvedValue([
-      { kode: 'ekonomi' },
+      { kode: 'eko', nama: 'Ekonomi', slug: 'ekonomi' },
       { bidang: 'teknik kimia' },
       { nama: 'sains data' },
       {},
@@ -215,8 +215,8 @@ describe('layananSeoPublik private helpers', () => {
 
     expect(paths).toEqual([
       '/glosarium/bidang/ekonomi',
-      '/glosarium/bidang/teknik%20kimia',
-      '/glosarium/bidang/sains%20data',
+      '/glosarium/bidang/teknik-kimia',
+      '/glosarium/bidang/sains-data',
       '/glosarium/sumber/kateglo',
       '/glosarium/sumber/kemdikbud',
       '/glosarium/sumber/Badan%20Bahasa',
