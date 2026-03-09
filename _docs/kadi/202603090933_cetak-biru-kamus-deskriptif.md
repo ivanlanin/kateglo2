@@ -315,6 +315,19 @@ Pengaruh keseimbangan genre terhadap jenis kandidat yang dihasilkan menjawab **s
 - Pelacakan kurva saturasi: kapan sistem berhenti menemukan kata genuinely baru dari satu sumber
 - Studi kasus siklus hidup: 20 neologisme dipilih dan dilacak dari kemunculan hingga adopsi/kematian
 
+### 6.8 Ancaman terhadap Validitas
+
+Karena penelitian ini menghasilkan artefak yang beroperasi di lingkungan nyata, ancaman terhadap validitas tidak hanya metodologis, tetapi juga operasional. Empat ancaman utama perlu diantisipasi sejak desain awal:
+
+| Ancaman | Bentuk bias | Dampak | Mitigasi yang diusulkan |
+|---|---|---|---|
+| **Bias sumber** | RSS berita dan platform publik tidak merepresentasikan seluruh ekologi bahasa Indonesia | Kandidat terlalu didominasi register jurnalistik/digital urban | Jaga komposisi genre; laporkan distribusi kandidat per genre; jangan generalisasi melampaui cakupan korpus |
+| **False novelty** | Typo, nama produk, judul kampanye, dan noise scraping tampak sebagai kata baru | Presisi turun; backlog redaksi membengkak | Fingerprint artikel, heuristik NE, daftar blokir dinamis, dan review sampel false positive tiap bulan |
+| **Drift redaksional** | Redaktur berbeda dapat menerapkan standar kelayakan yang berbeda | Label dan keputusan kurasi tidak konsisten | Pedoman kurasi tertulis, audit inter-annotator, dan adjudication meeting berkala |
+| **Drift platform** | Sumber digital berubah struktur HTML, kebijakan, atau gaya bahasa | Ketidakstabilan pipeline longitudinal | Versioning parser per sumber, logging kegagalan ekstraksi, dan fallback ke sumber lain |
+
+Selain itu, evaluasi recall harus dinyatakan sebagai **estimasi berbasis sampel manual**, bukan recall absolut. Untuk domain neologisme terbuka, himpunan ground truth penuh hampir mustahil diperoleh; karena itu, transparansi metode sampling lebih penting daripada klaim recall yang terlalu kuat.
+
 ---
 
 ## 7. Rancangan Artefak Penelitian
@@ -521,6 +534,20 @@ Pipeline scraper per artikel:
 - Simpan URL sumber untuk atribusi; tidak simpan artikel penuh kecuali di object storage (Fase 3)
 - User-Agent transparan: `KategloBot/1.0 (+https://kateglo.com/bot)`
 
+#### Guardrail Kualitas Data
+
+Supaya jalur scraper tidak membanjiri redaksi dengan kandidat semu, pipeline perlu dilengkapi guardrail tambahan sejak fase awal:
+
+| Guardrail | Fungsi | Implementasi awal |
+|---|---|---|
+| **Dedup artikel lintas-sindikasi** | Mencegah artikel yang sama dari banyak portal dihitung sebagai bukti berbeda | Simpan fingerprint konten (hash judul + paragraf awal ter-normalisasi) di `korpus_dokumen` |
+| **Dedup kandidat lintas-varian** | Menggabungkan `work from office`, `wfo`, `WFO`, dan ejaan terkait sebagai keluarga kandidat saat perlu | Indeks normalisasi + tabel alias/varian pada fase lanjut |
+| **Quota sumber** | Mencegah satu media mendominasi antrian kandidat | Batas kandidat baru per sumber per hari; sisanya tetap disimpan sebagai atestasi |
+| **Cooling-off window** | Menahan istilah viral sesaat sebelum diprioritaskan | Kandidat dari scraper naik prioritas hanya jika muncul ulang setelah jeda waktu tertentu |
+| **Sampling audit** | Mengukur kualitas filter secara terus-menerus | Audit manual 100 kandidat scraper per bulan untuk menghitung false positive utama |
+
+Guardrail ini penting karena masalah terbesar fase awal biasanya bukan kekurangan data, melainkan **kelebihan kandidat berkualitas rendah**.
+
 ### 7.3 Alur Kurasi Redaksi
 
 #### Siklus Hidup Status Kandidat
@@ -544,6 +571,18 @@ Pipeline scraper per artikel:
 | Definisi tersedia | Wajib | Jelas, tidak tautologis |
 | Bukan nama diri | Wajib | — |
 | Stabilitas penggunaan | — | Bukan tren sesaat |
+
+#### Pedoman Konsistensi Redaksi
+
+Untuk menjaga kualitas keputusan kurasi sebagai data penelitian, redaksi perlu memakai rubric yang eksplisit. Tanpa itu, keputusan `disetujui` atau `ditolak` akan sulit dipakai sebagai label emas untuk evaluasi sistem.
+
+Rubric minimum yang disarankan:
+
+- **Setujui** jika kandidat menunjukkan penggunaan leksikal relatif stabil, bukan sekadar typo, bukan nama diri murni, dan dapat didefinisikan secara non-sirkular.
+- **Tunda** jika bukti penggunaan belum cukup tersebar atau masih tampak sebagai tren sangat sesaat, tetapi ada indikasi akan bertahan.
+- **Tolak** jika kandidat terutama merupakan typo, noise parser, spam SEO, nama kampanye sesaat, atau bentuk yang seluruh nilainya hanya berasal dari kapitalisasi/format.
+
+Secara metodologis, 10–15% kandidat pada fase awal sebaiknya direview ganda oleh dua redaktur untuk mengukur **inter-annotator agreement**. Ketidaksepakatan menjadi bahan revisi rubric, bukan sekadar dianggap noise manusia.
 
 #### Migrasi ke Kamus Utama (Transaksi Atomik)
 
@@ -686,6 +725,19 @@ Setelah 6 bulan, kandidat yang masuk semakin akurat mencerminkan neologisme genu
 | Bandwidth scraping | ~16 MB/hari masuk | Termasuk paket server |
 | FastText model (Fase 3) | ~600 MB RAM | Di server yang ada |
 
+### 9.4 Risiko Operasional yang Perlu Diantisipasi
+
+Secara teknis, rencana ini layak. Tantangan terbesarnya justru ada pada ritme operasional setelah sistem mulai menghasilkan kandidat dalam jumlah nyata.
+
+| Risiko | Gejala | Dampak | Mitigasi |
+|---|---|---|---|
+| **Backlog redaksi** | Kandidat `menunggu` tumbuh lebih cepat daripada kapasitas kurasi | Sistem kehilangan nilai praktis dan data evaluasi memburuk | Skor prioritas, batching per domain, dan mode `triase cepat` untuk redaktur |
+| **Precision collapse pada fase awal** | Banyak kandidat ternyata typo/nama produk/noise | Kepercayaan redaktur terhadap sistem turun | Fokus pada sinyal pencarian + crowdsourcing terlebih dahulu; scraper dibuka bertahap per sumber |
+| **Bias urban-digital** | Kandidat didominasi bahasa media kota besar | Klaim tentang bahasa Indonesia menjadi terlalu sempit | Tambah genre regional dan sumber non-berita secepat mungkin setelah fase dasar stabil |
+| **Ketergantungan pada satu kanal login atau satu platform sumber** | Gangguan OAuth atau perubahan akses sumber menghentikan pemasukan data | Pipeline rapuh | Siapkan login alternatif dan diversifikasi sumber sejak awal |
+
+Secara praktis, saya menilai Fase 1 dan Fase 2 akan jauh lebih aman bila keberhasilan tidak diukur hanya dari jumlah kandidat yang masuk, tetapi juga dari dua rasio kontrol: **median waktu dari masuk ke keputusan** dan **persentase kandidat scraper yang tetap relevan setelah 30 hari**.
+
 ---
 
 ## 10. Kontribusi yang Diharapkan
@@ -720,6 +772,7 @@ Setelah 6 bulan, kandidat yang masuk semakin akurat mencerminkan neologisme genu
 - [ ] Frontend: `/usul-kata` (2 langkah) + `/kata-baru` (lihat kandidat)
 - [ ] Frontend redaksi: `/redaksi/kandidat-kata` (panel split + aksi)
 - [ ] Integrasi pencarian: catat `ditemukan = false`, tampilkan link usul
+- [ ] Rubric kurasi redaksi v1 + template catatan adjudikasi
 
 *Evaluasi Fase 1*: uji coba dengan 3–5 redaktur volunteer selama 1 bulan; ukur beban kerja dan kualitas keputusan kurasi.
 
@@ -734,6 +787,8 @@ Setelah 6 bulan, kandidat yang masuk semakin akurat mencerminkan neologisme genu
 - [ ] Cron harian: kandidatkan dari `pencarian` tidak ditemukan
 - [ ] Saran definisi A–D (apositif, template, Wiktionary, kolokasi)
 - [ ] Dashboard statistik scraper
+- [ ] Dedup lintas-sindikasi + fingerprint artikel
+- [ ] Sampling audit bulanan untuk false positive scraper
 
 *Evaluasi Fase 2*: ukur presisi (% kandidat scraper yang disetujui), recall (sampel manual), dan waktu kurasi dengan vs. tanpa saran definisi.
 
@@ -777,6 +832,8 @@ Keputusan-keputusan berikut telah difinalisasi sebelum implementasi dimulai:
 | 4 | Scope scraper awal | ✅ RSS saja | Tambah sumber lain hanya setelah RSS stabil |
 | 5 | Label ragam khusus | ✅ Gunakan nilai yang ada (`cakapan`, dll.) | Tidak perlu perubahan skema |
 | 6 | Korpus: teks penuh? | ✅ Simpan teks penuh di object storage | PostgreSQL hanya metadata |
+| 7 | Recall penelitian | ✅ Dilaporkan sebagai estimasi berbasis sampel | Hindari klaim recall absolut |
+| 8 | Kualitas keputusan kurasi | ✅ Gunakan rubric eksplisit + review ganda sebagian sampel | Penting untuk validitas label |
 
 ---
 
