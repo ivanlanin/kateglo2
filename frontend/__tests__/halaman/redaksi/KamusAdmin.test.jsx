@@ -171,7 +171,7 @@ describe('KamusAdmin', () => {
             bahasa: 'id',
             kiasan: false,
             urutan: 1,
-            contoh: [{ id: 99, urutan: 1, contoh: 'anak baik', makna_contoh: '', ragam: '', bidang: 'umum', bahasa: 'id', kiasan: 0 }],
+            contoh: [{ id: 99, urutan: 1, contoh: 'anak baik', makna_contoh: '' }],
           },
           {
             id: 11,
@@ -365,24 +365,15 @@ describe('KamusAdmin', () => {
 
     fireEvent.click(screen.getAllByText('+ contoh')[0]);
     expect(screen.getByLabelText('Urutan')).toBeInTheDocument();
-    expect(screen.getByLabelText('Bahasa')).toBeInTheDocument();
-    expect(screen.getByLabelText('Kiasan')).toBeInTheDocument();
-    fireEvent.click(screen.getByLabelText('Bidang'));
-    fireEvent.change(screen.getByLabelText('Cari Bidang'), { target: { value: 'bio' } });
-    fireEvent.click(screen.getByRole('button', { name: /Biologi/ }));
-    fireEvent.click(screen.getByLabelText('Bahasa'));
-    fireEvent.change(screen.getByLabelText('Cari Bahasa'), { target: { value: 'ing' } });
-    fireEvent.click(screen.getByRole('button', { name: /Inggris/ }));
     const tombolSimpanKosong = screen.getAllByRole('button', { name: 'Simpan' }).find((btn) => btn.className.includes('text-xs'));
     tombolSimpanKosong.removeAttribute('disabled');
     fireEvent.click(tombolSimpanKosong);
     fireEvent.change(screen.getByLabelText('Urutan'), { target: { value: '3' } });
-    fireEvent.change(screen.getByLabelText('Kiasan'), { target: { value: '1' } });
     fireEvent.change(screen.getAllByLabelText('Contoh').at(-1), { target: { value: 'contoh tambahan' } });
     screen.getAllByRole('button', { name: 'Simpan' }).forEach((btn) => fireEvent.click(btn));
     expect(mutateSimpanContoh).toHaveBeenCalled();
     expect(mutateSimpanContoh).toHaveBeenCalledWith(
-      expect.objectContaining({ urutan: 3, bidang: 'bio', bahasa: 'en', kiasan: 1 }),
+      expect.objectContaining({ urutan: 3 }),
       expect.any(Object)
     );
 
@@ -392,11 +383,7 @@ describe('KamusAdmin', () => {
 
     fireEvent.click(screen.getAllByText('sunting')[1]);
     const formEditContohLagi = screen.getByLabelText('Contoh').closest('div').parentElement;
-    fireEvent.change(within(formEditContohLagi).getByLabelText('Ragam'), { target: { value: 'ragam edit' } });
     fireEvent.change(within(formEditContohLagi).getByLabelText('Urutan'), { target: { value: '2' } });
-    fireEvent.click(within(formEditContohLagi).getByLabelText('Bahasa'));
-    fireEvent.change(within(formEditContohLagi).getByLabelText('Cari Bahasa'), { target: { value: 'indo' } });
-    fireEvent.click(within(formEditContohLagi).getByRole('button', { name: /Indonesia/ }));
     fireEvent.click(within(formEditContohLagi).getByRole('button', { name: 'Simpan' }));
     fireEvent.click(semuaSunting[1]);
     screen.getAllByRole('button', { name: 'Simpan' }).forEach((btn) => fireEvent.click(btn));

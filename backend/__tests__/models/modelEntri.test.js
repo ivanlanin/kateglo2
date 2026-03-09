@@ -1694,9 +1694,9 @@ describe('ModelEntri', () => {
     const inserted = await ModelEntri.simpanContoh({ makna_id: 11, contoh: 'contoh' });
 
     expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('UPDATE contoh SET makna_id = $1'),
-      [11, 1, 'contoh', null, null, null, 0, null, true, 41]);
+      [11, 1, 'contoh', null, true, 41]);
     expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('INSERT INTO contoh'),
-      [11, 1, 'contoh', null, null, null, 0, null, true]);
+      [11, 1, 'contoh', null, true]);
     expect(updated).toEqual({ id: 41 });
     expect(inserted).toEqual({ id: 42 });
   });

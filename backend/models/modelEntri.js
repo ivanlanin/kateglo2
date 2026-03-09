@@ -489,8 +489,7 @@ class ModelEntri {
     if (!maknaIds.length) return [];
     const kondisiAktif = aktifSaja ? 'AND aktif = TRUE' : '';
     const result = await db.query(
-      `SELECT id, makna_id, urutan, contoh, ragam, bahasa, bidang,
-              kiasan, makna_contoh, aktif
+      `SELECT id, makna_id, urutan, contoh, makna_contoh, aktif
        FROM contoh
        WHERE makna_id = ANY($1::int[])
          ${kondisiAktif}
@@ -1292,8 +1291,7 @@ class ModelEntri {
    */
   static async ambilContohById(id) {
     const result = await db.query(
-      `SELECT id, makna_id, urutan, contoh, ragam, bahasa, bidang,
-              kiasan, makna_contoh, aktif
+      `SELECT id, makna_id, urutan, contoh, makna_contoh, aktif
        FROM contoh WHERE id = $1`,
       [id]
     );
@@ -1305,23 +1303,21 @@ class ModelEntri {
    * @param {Object} data
    * @returns {Promise<Object>}
    */
-  static async simpanContoh({ id, makna_id, urutan, contoh, ragam, bahasa, bidang, kiasan, makna_contoh, aktif }) {
+  static async simpanContoh({ id, makna_id, urutan, contoh, makna_contoh, aktif }) {
     const nilaiAktif = normalizeBoolean(aktif, true);
     if (id) {
       const result = await db.query(
-        `UPDATE contoh SET makna_id = $1, urutan = $2, contoh = $3, ragam = $4,
-                bahasa = $5, bidang = $6, kiasan = $7, makna_contoh = $8, aktif = $9
-         WHERE id = $10 RETURNING *`,
-        [makna_id, urutan ?? 1, contoh, ragam || null, bahasa || null,
-         bidang || null, kiasan ?? 0, makna_contoh || null, nilaiAktif, id]
+        `UPDATE contoh SET makna_id = $1, urutan = $2, contoh = $3,
+                makna_contoh = $4, aktif = $5
+         WHERE id = $6 RETURNING *`,
+        [makna_id, urutan ?? 1, contoh, makna_contoh || null, nilaiAktif, id]
       );
       return result.rows[0];
     }
     const result = await db.query(
-      `INSERT INTO contoh (makna_id, urutan, contoh, ragam, bahasa, bidang, kiasan, makna_contoh, aktif)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
-      [makna_id, urutan ?? 1, contoh, ragam || null, bahasa || null,
-       bidang || null, kiasan ?? 0, makna_contoh || null, nilaiAktif]
+      `INSERT INTO contoh (makna_id, urutan, contoh, makna_contoh, aktif)
+       VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+      [makna_id, urutan ?? 1, contoh, makna_contoh || null, nilaiAktif]
     );
     return result.rows[0];
   }

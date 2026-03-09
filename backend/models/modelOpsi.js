@@ -312,7 +312,6 @@ class ModelOpsi {
     const usage = await db.query(
       `SELECT (
           (SELECT COUNT(*)::int FROM makna      WHERE bahasa    = (SELECT kode FROM bahasa WHERE id = $1))
-        + (SELECT COUNT(*)::int FROM contoh     WHERE bahasa    = (SELECT kode FROM bahasa WHERE id = $1))
         + (SELECT COUNT(*)::int FROM etimologi  WHERE bahasa_id = $1)
         + (SELECT COUNT(*)::int FROM glosarium  WHERE bahasa_id = $1)
        ) AS total`,

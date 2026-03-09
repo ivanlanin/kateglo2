@@ -212,9 +212,6 @@ function ItemContoh({
   simpanContoh,
   hapusContoh,
   isPending,
-  opsiRagam,
-  opsiBidang,
-  opsiBahasa,
   bisaEditContoh,
   bisaHapusContoh,
 }) {
@@ -238,24 +235,7 @@ function ItemContoh({
     <>
       <TextareaField label="Contoh" name="contoh" value={nilaiData.contoh} onChange={onChange} rows={2} />
       <TextareaField label="Makna contoh" name="makna_contoh" value={nilaiData.makna_contoh} onChange={onChange} rows={2} />
-      <div className="grid grid-cols-2 gap-2">
-        <InputField label="Urutan" name="urutan" value={nilaiData.urutan} onChange={onChange} type="number" />
-        <SelectField label="Ragam" name="ragam" value={nilaiData.ragam} onChange={onChange} options={ensureOpsiMemuatNilai(opsiRagam, nilaiData.ragam)} />
-      </div>
-      <div className="grid grid-cols-2 gap-2">
-        <SearchableSelectField label="Bidang" name="bidang" value={nilaiData.bidang} onChange={onChange} options={ensureOpsiMemuatNilai(opsiBidang, nilaiData.bidang)} placeholder="Cari bidang…" />
-        <SearchableSelectField label="Bahasa" name="bahasa" value={nilaiData.bahasa} onChange={onChange} options={ensureOpsiMemuatNilai(opsiBahasa, nilaiData.bahasa)} placeholder="Cari bahasa…" />
-      </div>
-      <SelectField
-        label="Kiasan"
-        name="kiasan"
-        value={String(nilaiData.kiasan ? 1 : 0)}
-        onChange={(_field, val) => onChange('kiasan', Number(val))}
-        options={[
-          { value: '0', label: 'Nonkiasan' },
-          { value: '1', label: 'Kiasan' },
-        ]}
-      />
+      <InputField label="Urutan" name="urutan" value={nilaiData.urutan} onChange={onChange} type="number" />
       <ToggleAktif value={nilaiData.aktif} onChange={onChange} />
     </>
   );
@@ -268,10 +248,6 @@ function ItemContoh({
           <div className="text-sm text-gray-700 dark:text-gray-300 italic">{contoh.contoh}</div>
           <div className="mt-0.5 flex items-center gap-2 flex-wrap text-[11px] text-gray-500 dark:text-gray-400">
             <span>Urutan: {Number(contoh.urutan) || 1}</span>
-            {contoh.ragam && <span>Ragam: {contoh.ragam}</span>}
-            {contoh.bidang && <span>Bidang: {contoh.bidang}</span>}
-            {contoh.bahasa && <span>Bahasa: {contoh.bahasa}</span>}
-            {contoh.kiasan ? <span className="italic">kiasan</span> : null}
           </div>
           {contoh.makna_contoh && (
             <div className="mt-0.5 text-[11px] text-gray-500 dark:text-gray-400">Makna contoh: {contoh.makna_contoh}</div>
@@ -295,15 +271,11 @@ function ItemContoh({
   );
 }
 
-function FormTambahContoh({ entriId, maknaId, simpanContoh, isPending, onBatal, opsiRagam, opsiBidang, opsiBahasa }) {
+function FormTambahContoh({ entriId, maknaId, simpanContoh, isPending, onBatal }) {
   const [data, setData] = useState({
     urutan: 1,
     contoh: '',
     makna_contoh: '',
-    ragam: '',
-    bidang: '',
-    bahasa: '',
-    kiasan: 0,
     aktif: 1,
   });
 
@@ -313,7 +285,7 @@ function FormTambahContoh({ entriId, maknaId, simpanContoh, isPending, onBatal, 
     if (!data.contoh.trim()) return;
     simpanContoh.mutate({ entriId, maknaId, ...data, urutan: Number(data.urutan) || 1 }, {
       onSuccess: () => {
-        setData({ urutan: 1, contoh: '', makna_contoh: '', ragam: '', bidang: '', bahasa: '', kiasan: 0, aktif: 1 });
+        setData({ urutan: 1, contoh: '', makna_contoh: '', aktif: 1 });
         onBatal();
       },
     });
@@ -323,24 +295,7 @@ function FormTambahContoh({ entriId, maknaId, simpanContoh, isPending, onBatal, 
     <div className="border border-dashed border-gray-300 dark:border-gray-600 rounded-md p-3 mt-1 mb-2 space-y-2">
       <TextareaField label="Contoh" name="contoh" value={data.contoh} onChange={ubah} rows={2} />
       <TextareaField label="Makna contoh" name="makna_contoh" value={data.makna_contoh} onChange={ubah} rows={2} />
-      <div className="grid grid-cols-2 gap-2">
-        <InputField label="Urutan" name="urutan" value={data.urutan} onChange={ubah} type="number" />
-        <SelectField label="Ragam" name="ragam" value={data.ragam} onChange={ubah} options={ensureOpsiMemuatNilai(opsiRagam, data.ragam)} />
-      </div>
-      <div className="grid grid-cols-2 gap-2">
-        <SearchableSelectField label="Bidang" name="bidang" value={data.bidang} onChange={ubah} options={ensureOpsiMemuatNilai(opsiBidang, data.bidang)} placeholder="Cari bidang…" />
-        <SearchableSelectField label="Bahasa" name="bahasa" value={data.bahasa} onChange={ubah} options={ensureOpsiMemuatNilai(opsiBahasa, data.bahasa)} placeholder="Cari bahasa…" />
-      </div>
-      <SelectField
-        label="Kiasan"
-        name="kiasan"
-        value={String(data.kiasan ? 1 : 0)}
-        onChange={(_field, val) => ubah('kiasan', Number(val))}
-        options={[
-          { value: '0', label: 'Nonkiasan' },
-          { value: '1', label: 'Kiasan' },
-        ]}
-      />
+      <InputField label="Urutan" name="urutan" value={data.urutan} onChange={ubah} type="number" />
       <ToggleAktif value={data.aktif} onChange={ubah} />
       <div className="flex gap-2">
         <button onClick={handleSimpan} disabled={isPending || !data.contoh.trim()} className="form-admin-btn-simpan text-xs py-1 px-3">Simpan</button>
@@ -510,9 +465,6 @@ function ItemMakna({
                 maknaId={makna.id}
                 simpanContoh={simpanContoh}
                 isPending={isPending}
-                opsiRagam={opsiRagam}
-                opsiBidang={opsiBidang}
-                opsiBahasa={opsiBahasa}
                 onBatal={() => setTambahContoh(false)}
               />
             )}
@@ -527,9 +479,6 @@ function ItemMakna({
                   simpanContoh={simpanContoh}
                   hapusContoh={hapusContoh}
                   isPending={isPending}
-                  opsiRagam={opsiRagam}
-                  opsiBidang={opsiBidang}
-                  opsiBahasa={opsiBahasa}
                   bisaEditContoh={bisaEditContoh}
                   bisaHapusContoh={bisaHapusContoh}
                 />

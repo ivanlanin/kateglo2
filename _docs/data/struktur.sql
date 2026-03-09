@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-09T09:31:52.564Z
+-- Generated: 2026-03-09T15:11:29.622Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -226,10 +226,6 @@ create table contoh (
   makna_id integer references makna(id) on delete cascade not null,
   urutan integer not null default 1,
   contoh text not null,
-  ragam text,
-  bahasa text,
-  bidang text,
-  kiasan integer not null default 0,
   makna_contoh text,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
