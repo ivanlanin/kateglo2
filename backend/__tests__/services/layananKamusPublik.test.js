@@ -281,8 +281,9 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     expect(result.entri[0].subentri.turunan).toHaveLength(1);
     expect(result.entri[1].rujukan).toBe(true);
     expect(result.entri[1].entri_rujuk_indeks).toBe('aktivasi-indeks');
-    expect(ModelEntri.ambilIndeksValidBatch).toHaveBeenCalledWith(['giat', 'aktif', 'pasif']);
+    expect(ModelEntri.ambilIndeksValidBatch).toHaveBeenCalledWith(['giat', 'aktif', 'pasif', 'zat aktif']);
     expect(result.tautan_makna_valid).toEqual([]);
+    expect(result.tautan_indonesia_valid).toEqual([]);
     expect(result.tesaurus).toEqual({ sinonim: ['aktif', 'giat'], antonim: ['pasif'] });
     expect(result.glosarium).toEqual([{ indonesia: 'zat aktif', asing: 'active substance' }]);
     expect(result.navigasi).toEqual({
@@ -351,6 +352,38 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
 
     expect(ModelEntri.ambilIndeksValidBatch).toHaveBeenCalledWith(['kata', 'dua kata', 'lawan']);
     expect(result.tautan_makna_valid).toEqual(['kata', 'dua kata', 'lawan']);
+  });
+
+  it('menyertakan tautan_indonesia_valid untuk cuplikan glosarium di detail kamus', async () => {
+    ModelEntri.ambilEntriPerIndeks.mockResolvedValue([
+      {
+        id: 73,
+        entri: 'uji-glosarium',
+        indeks: 'uji-glosarium',
+        homonim: null,
+        jenis: 'dasar',
+        pemenggalan: null,
+        lafal: null,
+        varian: null,
+        jenis_rujuk: null,
+        entri_rujuk: null,
+      },
+    ]);
+    ModelEntri.ambilMakna.mockResolvedValue([]);
+    ModelEntri.ambilContoh.mockResolvedValue([]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilBentukTidakBakuByRujukId.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
+    ModelTesaurus.ambilDetail.mockResolvedValue(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([
+      { indonesia: 'istilah; data (ark)', asing: 'term' },
+    ]);
+    ModelEntri.ambilIndeksValidBatch.mockResolvedValue(['istilah']);
+
+    const result = await ambilDetailKamus('uji-glosarium');
+
+    expect(ModelEntri.ambilIndeksValidBatch).toHaveBeenCalledWith(['istilah', 'data']);
+    expect(result.tautan_indonesia_valid).toEqual(['istilah']);
   });
 
   it('meminta navigasi indeks tetangga dengan indeks yang sudah ternormalisasi', async () => {

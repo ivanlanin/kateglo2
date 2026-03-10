@@ -93,6 +93,7 @@ describe('Glosarium', () => {
       return {
         data: {
           data: [{ id: 1, indonesia: 'istilah; data', asing: 'term' }],
+          tautan_indonesia_valid: ['istilah'],
           total: 1,
           pageInfo: { hasPrev: false, hasNext: true, nextCursor: 'CUR_NEXT' },
         },
@@ -107,7 +108,9 @@ describe('Glosarium', () => {
     const linksIstilah = screen.getAllByRole('link', { name: 'istilah' });
     expect(linksIstilah.some((el) => el.getAttribute('href') === '/kamus/detail/istilah')).toBe(true);
     expect(linksIstilah.some((el) => el.getAttribute('href') === '/glosarium/detail/istilah')).toBe(true);
-    expect(screen.getByRole('link', { name: 'data' })).toHaveAttribute('href', '/kamus/detail/data');
+    expect(linksIstilah.some((el) => el.className.includes('glosarium-inline-link'))).toBe(true);
+    expect(screen.queryByRole('link', { name: 'data' })).toBeNull();
+    expect(screen.getByText('data')).toBeInTheDocument();
     expect(screen.getByText('term')).toBeInTheDocument();
     expect(cariGlosarium).toHaveBeenCalledWith('istilah', {
       limit: 100,

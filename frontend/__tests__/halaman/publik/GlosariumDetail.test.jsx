@@ -274,6 +274,7 @@ describe('GlosariumDetail', () => {
       isError: false,
       error: null,
       data: {
+        tautan_indonesia_valid: ['istilah'],
         persis: [
           { id: 1, indonesia: 'istilah; data', bidang: 'Kimia', bidang_kode: 'Kim', sumber: 'KBBI', sumber_kode: 'kbbi' },
           { id: 2, indonesia: 'tanpa badge' },

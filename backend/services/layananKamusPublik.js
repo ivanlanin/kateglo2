@@ -62,6 +62,60 @@ function kumpulkanKandidatTautanTesaurus(tesaurus = {}) {
   ].map((item) => normalisasiIndeksKamus(String(item || '')).toLowerCase()).filter(Boolean))];
 }
 
+function splitEntriGlosarium(value = '') {
+  const text = String(value || '').trim();
+  if (!text) return [];
+
+  return text
+    .split(';')
+    .map((part) => part.trim())
+    .filter(Boolean);
+}
+
+function tokenizeKurung(value = '') {
+  const text = String(value || '');
+  if (!text) return [];
+
+  const regex = /\([^()]*\)/g;
+  const chunks = [];
+  let lastIndex = 0;
+  let match = regex.exec(text);
+
+  while (match) {
+    if (match.index > lastIndex) {
+      chunks.push({ text: text.slice(lastIndex, match.index), isKurung: false });
+    }
+    chunks.push({ text: match[0], isKurung: true });
+    lastIndex = match.index + match[0].length;
+    match = regex.exec(text);
+  }
+
+  if (lastIndex < text.length) {
+    chunks.push({ text: text.slice(lastIndex), isKurung: false });
+  }
+
+  return chunks;
+}
+
+function kumpulkanKandidatTautanGlosarium(items = []) {
+  const hasil = [];
+
+  for (const item of items || []) {
+    for (const part of splitEntriGlosarium(item?.indonesia || '')) {
+      for (const token of tokenizeKurung(part)) {
+        if (token.isKurung) continue;
+
+        const indeks = normalisasiIndeksKamus(String(token.text || '')).toLowerCase();
+        if (indeks) {
+          hasil.push(indeks);
+        }
+      }
+    }
+  }
+
+  return [...new Set(hasil)];
+}
+
 function parseDaftarRelasi(teks) {
   if (!teks) return [];
   return teks.split(';').map((item) => item.trim()).filter(Boolean);
@@ -291,15 +345,20 @@ async function ambilDetailKamus(indeksAtauEntri, {
     : { sinonim: [], antonim: [] };
 
   const kandidatTautanSidebar = kumpulkanKandidatTautanTesaurus(tesaurus);
+  const kandidatTautanGlosarium = kumpulkanKandidatTautanGlosarium(glosariumData);
   const tautanMaknaValid = await ModelEntri.ambilIndeksValidBatch([...new Set([
     ...kandidatTautanMakna,
     ...kandidatTautanSidebar,
+    ...kandidatTautanGlosarium,
   ])]);
 
   const result = {
     indeks: indeksTarget,
     entri: entriUntukRespons,
     tautan_makna_valid: tautanMaknaValid,
+    tautan_indonesia_valid: kandidatTautanGlosarium.length > 0
+      ? tautanMaknaValid.filter((item) => kandidatTautanGlosarium.includes(item))
+      : [],
     tesaurus,
     glosarium: glosariumData,
     glosarium_page: glosariumPageInfo,

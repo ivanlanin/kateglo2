@@ -74,6 +74,10 @@ function normalisasiKunciTautanMakna(teks = '') {
   return normalisasiIndeksKamus(teks).trim().toLowerCase();
 }
 
+function normalisasiKunciTautanIndonesia(teks = '') {
+  return normalisasiIndeksKamus(teks).trim().toLowerCase();
+}
+
 /**
  * Render teks makna dengan tautan otomatis ke entri kamus.
  * Tautan hanya dibuat bila seluruh segmen adalah kandidat pendek (1-2 kata)
@@ -352,6 +356,13 @@ function KamusDetail() {
     staleTime: 5 * 60 * 1000,
     placeholderData: (prev) => prev,
   });
+
+  const detailTersedia = !isError && Boolean(data);
+  const tautanIndonesiaValidSet = new Set(
+    ((detailTersedia ? data?.tautan_indonesia_valid : glosariumFallbackData?.tautan_indonesia_valid) || [])
+      .map((item) => normalisasiKunciTautanIndonesia(item))
+      .filter(Boolean)
+  );
 
   useEffect(() => {
     const metaDetail = buildMetaDetailKamus(indeks, data || null);
@@ -1151,6 +1162,22 @@ function KamusDetail() {
                             ))}</em>
                             {item.indonesia ? ': ' : ''}
                             {renderEntriGlosariumTertaut(item.indonesia, (part, info) => (
+                              tautanIndonesiaValidSet.has(normalisasiKunciTautanIndonesia(part)) ? (
+                                <Link
+                                  key={`${item.indonesia}-${part}-${info.partIndex}-${info.tokenIndex}`}
+                                  to={buatPathDetailKamus(part)}
+                                  className="kamus-detail-subentry-link"
+                                >
+                                  {part}
+                                </Link>
+                              ) : (
+                                <span key={`${item.indonesia}-${part}-${info.partIndex}-${info.tokenIndex}`}>{part}</span>
+                              )
+                            ))}
+                          </>
+                        ) : (
+                          <>{renderEntriGlosariumTertaut(item.indonesia, (part, info) => (
+                            tautanIndonesiaValidSet.has(normalisasiKunciTautanIndonesia(part)) ? (
                               <Link
                                 key={`${item.indonesia}-${part}-${info.partIndex}-${info.tokenIndex}`}
                                 to={buatPathDetailKamus(part)}
@@ -1158,17 +1185,9 @@ function KamusDetail() {
                               >
                                 {part}
                               </Link>
-                            ))}
-                          </>
-                        ) : (
-                          <>{renderEntriGlosariumTertaut(item.indonesia, (part, info) => (
-                            <Link
-                              key={`${item.indonesia}-${part}-${info.partIndex}-${info.tokenIndex}`}
-                              to={buatPathDetailKamus(part)}
-                              className="kamus-detail-subentry-link"
-                            >
-                              {part}
-                            </Link>
+                            ) : (
+                              <span key={`${item.indonesia}-${part}-${info.partIndex}-${info.tokenIndex}`}>{part}</span>
+                            )
                           ))}</>
                         )}
                         {i < glosarium.length - 1 && <span>; </span>}

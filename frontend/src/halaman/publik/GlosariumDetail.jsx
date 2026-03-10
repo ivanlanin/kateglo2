@@ -11,11 +11,15 @@ import TombolNavKursor from '../../komponen/publik/TombolNavKursor';
 import HamparanMuatNav from '../../komponen/publik/HamparanMuatNav';
 import TombolSunting from '../../komponen/publik/TombolSunting';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
-import { buatPathDetailKamus, buatSlug } from '../../utils/paramUtils';
+import { buatPathDetailKamus, buatSlug, normalisasiIndeksKamus } from '../../utils/paramUtils';
 import { renderEntriGlosariumTertaut } from '../../utils/formatUtils';
 import { buildMetaDetailGlosarium } from '../../utils/metaUtils';
 import useNavigasiMemuat from '../../hooks/bersama/useNavigasiMemuat';
 import { useAuthOptional } from '../../context/authContext';
+
+function normalisasiKunciTautanIndonesia(teks = '') {
+  return normalisasiIndeksKamus(teks).trim().toLowerCase();
+}
 
 function upsertMetaTag({ name, property, content }) {
   const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
@@ -56,7 +60,7 @@ function getSumberSebelumnya(sortedItems = [], index = 0) {
   return (sortedItems[index - 1]?.sumber_kode || '').trim();
 }
 
-function AlirEntri({ items, tautAsing = false, tampilkanEdit = false }) {
+function AlirEntri({ items, tautAsing = false, tampilkanEdit = false, tautanIndonesiaValidSet = null }) {
   const sortedItems = sortAlirEntriItems(items, {
     prioritizeIndonesia: !tautAsing,
     sortByBidang: true,
@@ -74,13 +78,17 @@ function AlirEntri({ items, tautAsing = false, tampilkanEdit = false }) {
   ));
 
   const renderIndonesia = (item) => renderEntriGlosariumTertaut(item.indonesia, (part, info) => (
-    <Link
-      key={`${item.id}-${part}-${info.partIndex}-${info.tokenIndex}`}
-      to={buatPathDetailKamus(part)}
-      className="kamus-detail-subentry-link"
-    >
-      {part}
-    </Link>
+    tautanIndonesiaValidSet?.has(normalisasiKunciTautanIndonesia(part)) ? (
+      <Link
+        key={`${item.id}-${part}-${info.partIndex}-${info.tokenIndex}`}
+        to={buatPathDetailKamus(part)}
+        className="kamus-detail-subentry-link"
+      >
+        {part}
+      </Link>
+    ) : (
+      <span key={`${item.id}-${part}-${info.partIndex}-${info.tokenIndex}`}>{part}</span>
+    )
   ));
 
   return (
@@ -203,6 +211,9 @@ function GlosariumDetail() {
   const persis = data?.persis || [];
   const mengandung = data?.mengandung || [];
   const mirip = data?.mirip || [];
+  const tautanIndonesiaValidSet = new Set(
+    (data?.tautan_indonesia_valid || []).map((item) => normalisasiKunciTautanIndonesia(item)).filter(Boolean)
+  );
   const mengandungPage = data?.mengandungPage || { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null };
   const miripPage = data?.miripPage || { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null };
   const mengandungTotal = data?.mengandungTotal ?? mengandung.length;
@@ -259,7 +270,7 @@ function GlosariumDetail() {
 
       {persis.length > 0 && (
         <SeksiDetail judul="Persis" jumlah={persis.length}>
-          <AlirEntri items={persis} tampilkanEdit={adalahAdmin} />
+          <AlirEntri items={persis} tampilkanEdit={adalahAdmin} tautanIndonesiaValidSet={tautanIndonesiaValidSet} />
         </SeksiDetail>
       )}
 
@@ -292,6 +303,7 @@ function GlosariumDetail() {
               items={mengandung}
               tautAsing
               tampilkanEdit={adalahAdmin}
+              tautanIndonesiaValidSet={tautanIndonesiaValidSet}
             />
           </HamparanMuatNav>
         </SeksiDetail>
@@ -326,6 +338,7 @@ function GlosariumDetail() {
               items={mirip}
               tautAsing
               tampilkanEdit={adalahAdmin}
+              tautanIndonesiaValidSet={tautanIndonesiaValidSet}
             />
           </HamparanMuatNav>
         </SeksiDetail>

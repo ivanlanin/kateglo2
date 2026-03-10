@@ -17,7 +17,7 @@ import HasilPencarian from '../../komponen/publik/HasilPencarian';
 import KartuKategori from '../../komponen/publik/KartuKategori';
 import TombolSunting from '../../komponen/publik/TombolSunting';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
-import { buatPathDetailKamus, buatSlug } from '../../utils/paramUtils';
+import { buatPathDetailKamus, buatSlug, normalisasiIndeksKamus } from '../../utils/paramUtils';
 import { formatNamaBidang, renderEntriGlosariumTertaut } from '../../utils/formatUtils';
 import { useAuthOptional } from '../../context/authContext';
 import {
@@ -76,6 +76,10 @@ export function resolveNamaSumberSort(item) {
   return String(item?.kode || '').trim();
 }
 
+function normalisasiKunciTautanIndonesia(teks = '') {
+  return normalisasiIndeksKamus(teks).trim().toLowerCase();
+}
+
 function Glosarium() {
   const { kata, bidang, sumber } = useParams();
   const auth = useAuthOptional();
@@ -130,6 +134,9 @@ function Glosarium() {
 
   const results = data?.data || [];
   const total = data?.total || 0;
+  const tautanIndonesiaValidSet = new Set(
+    (data?.tautan_indonesia_valid || []).map((item) => normalisasiKunciTautanIndonesia(item)).filter(Boolean)
+  );
   const sumberKategoriList = (sumberList || [])
     .filter((item) => Boolean(item?.glosarium))
     .slice()
@@ -197,13 +204,17 @@ function Glosarium() {
   ));
 
   const renderIndonesia = (item) => renderEntriGlosariumTertaut(item.indonesia, (part, info) => (
-    <Link
-      key={`${item.id}-${part}-${info.partIndex}-${info.tokenIndex}`}
-      to={buatPathDetailKamus(part)}
-      className="kamus-kategori-grid-link"
-    >
-      {part}
-    </Link>
+    tautanIndonesiaValidSet.has(normalisasiKunciTautanIndonesia(part)) ? (
+      <Link
+        key={`${item.id}-${part}-${info.partIndex}-${info.tokenIndex}`}
+        to={buatPathDetailKamus(part)}
+        className="glosarium-inline-link"
+      >
+        {part}
+      </Link>
+    ) : (
+      <span key={`${item.id}-${part}-${info.partIndex}-${info.tokenIndex}`}>{part}</span>
+    )
   ));
 
   const renderAdminEditLink = (item) => {

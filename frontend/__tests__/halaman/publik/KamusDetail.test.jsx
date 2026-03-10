@@ -276,6 +276,7 @@ describe('KamusDetail', () => {
         isError: false,
         data: {
           entri: 'kata',
+          tautan_indonesia_valid: ['kata kunci'],
           lafal: 'ka-ta',
           pemenggalan: 'ka-ta',
           jenis: 'dasar',
@@ -305,6 +306,45 @@ describe('KamusDetail', () => {
       glosariumDirection: 'next',
       sumberPelacakan: null,
     });
+  });
+
+  it('cuplikan glosarium di detail kamus hanya menautkan istilah Indonesia yang valid', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return { isLoading: false, isError: false, data: {} };
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+          refetch: vi.fn(),
+        };
+      }
+
+      return {
+        isLoading: false,
+        isError: false,
+        isFetching: false,
+        data: {
+          entri: 'kata',
+          makna: [],
+          subentri: {},
+          tesaurus: { sinonim: [], antonim: [] },
+          tautan_indonesia_valid: ['istilah'],
+          glosarium: [{ indonesia: 'istilah; data (ark)', asing: 'term' }],
+          glosarium_page: { total: 1, hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+        },
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByRole('link', { name: 'istilah' })).toHaveAttribute('href', '/kamus/detail/istilah');
+    expect(screen.queryByRole('link', { name: 'data' })).toBeNull();
+    expect(screen.getByText('data')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'term' })).toHaveAttribute('href', '/glosarium/detail/term');
   });
 
   it('menampilkan toggle +x lainnya dan memungkinkan ringkas via klik badge jumlah', () => {

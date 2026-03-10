@@ -87,6 +87,11 @@ jest.mock('../../services/layananKamusPublik', () => ({
 }));
 
 jest.mock('../../services/layananGlosariumPublik', () => ({
+  cariGlosariumPublik: jest.fn(),
+  ambilDaftarBidangPublik: jest.fn(),
+  ambilDaftarSumberPublik: jest.fn(),
+  ambilGlosariumPerBidangPublik: jest.fn(),
+  ambilGlosariumPerSumberPublik: jest.fn(),
   ambilDetailGlosarium: jest.fn(),
 }));
 
@@ -1026,17 +1031,14 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/glosarium/cari/:kata memanggil model sesuai query', async () => {
-    ModelGlosarium.cariCursor.mockResolvedValue({ data: [], total: 0 });
+    layananGlosariumPublik.cariGlosariumPublik.mockResolvedValue({ data: [], total: 0, pageInfo: {} });
 
     const response = await request(createApp())
       .get('/api/publik/glosarium/cari/istilah?limit=999&cursor=abc&direction=prev');
 
     expect(response.status).toBe(200);
-    expect(ModelGlosarium.cariCursor).toHaveBeenCalledWith({
-      q: 'istilah',
+    expect(layananGlosariumPublik.cariGlosariumPublik).toHaveBeenCalledWith('istilah', {
       limit: 100,
-      aktifSaja: true,
-      hitungTotal: true,
       cursor: 'abc',
       direction: 'prev',
       lastPage: false,
@@ -1045,7 +1047,7 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/glosarium/cari/:kata meneruskan error', async () => {
-    ModelGlosarium.cariCursor.mockRejectedValue(new Error('glo cari gagal'));
+    layananGlosariumPublik.cariGlosariumPublik.mockRejectedValue(new Error('glo cari gagal'));
 
     const response = await request(createApp()).get('/api/publik/glosarium/cari/istilah');
 
@@ -1054,7 +1056,7 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/glosarium/bidang mengembalikan daftar bidang', async () => {
-    ModelGlosarium.ambilDaftarBidang.mockResolvedValue([{ bidang: 'ling', jumlah: 10 }]);
+    layananGlosariumPublik.ambilDaftarBidangPublik.mockResolvedValue([{ bidang: 'ling', jumlah: 10 }]);
 
     const response = await request(createApp()).get('/api/publik/glosarium/bidang');
 
@@ -1063,7 +1065,7 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/glosarium/bidang meneruskan error', async () => {
-    ModelGlosarium.ambilDaftarBidang.mockRejectedValue(new Error('bidang gagal'));
+    layananGlosariumPublik.ambilDaftarBidangPublik.mockRejectedValue(new Error('bidang gagal'));
 
     const response = await request(createApp()).get('/api/publik/glosarium/bidang');
 
@@ -1073,59 +1075,53 @@ describe('routes backend', () => {
 
   it('GET /api/publik/glosarium/bidang/:bidang memanggil model', async () => {
     ModelGlosarium.resolveSlugBidang.mockResolvedValue({ id: 7, kode: 'Far', nama: 'Farmasi dan Farmakologi' });
-    ModelGlosarium.cariCursor.mockResolvedValue({ data: [], total: 0 });
+    layananGlosariumPublik.ambilGlosariumPerBidangPublik.mockResolvedValue({ data: [], total: 0, pageInfo: {} });
 
     const response = await request(createApp())
       .get('/api/publik/glosarium/bidang/farmasi-dan-farmakologi?limit=9&cursor=abc&direction=prev');
 
     expect(response.status).toBe(200);
     expect(ModelGlosarium.resolveSlugBidang).toHaveBeenCalledWith('farmasi-dan-farmakologi');
-    expect(ModelGlosarium.cariCursor).toHaveBeenCalledWith({
+    expect(layananGlosariumPublik.ambilGlosariumPerBidangPublik).toHaveBeenCalledWith('Far', {
       bidangId: 7,
       bidang: '',
       limit: 9,
-      aktifSaja: true,
-      hitungTotal: true,
       cursor: 'abc',
       direction: 'prev',
       lastPage: false,
-      sortBy: 'asing',
     });
   });
 
   it('GET /api/publik/glosarium/bidang/:bidang fallback ke param mentah saat slug bidang tidak ditemukan', async () => {
     ModelGlosarium.resolveSlugBidang.mockResolvedValue(null);
-    ModelGlosarium.cariCursor.mockResolvedValue({ data: [], total: 0 });
+    layananGlosariumPublik.ambilGlosariumPerBidangPublik.mockResolvedValue({ data: [], total: 0, pageInfo: {} });
 
     const response = await request(createApp()).get('/api/publik/glosarium/bidang/far?limit=5');
 
     expect(response.status).toBe(200);
-    expect(ModelGlosarium.cariCursor).toHaveBeenCalledWith({
+    expect(layananGlosariumPublik.ambilGlosariumPerBidangPublik).toHaveBeenCalledWith('far', {
       bidangId: null,
       bidang: 'far',
       limit: 5,
-      aktifSaja: true,
-      hitungTotal: true,
       cursor: null,
       direction: 'next',
       lastPage: false,
-      sortBy: 'asing',
     });
   });
 
   it('GET /api/publik/glosarium/bidang/:bidang melakukan decode dan trim slug sebelum fallback', async () => {
     ModelGlosarium.resolveSlugBidang.mockResolvedValue(null);
-    ModelGlosarium.cariCursor.mockResolvedValue({ data: [], total: 0 });
+    layananGlosariumPublik.ambilGlosariumPerBidangPublik.mockResolvedValue({ data: [], total: 0, pageInfo: {} });
 
     const response = await request(createApp()).get('/api/publik/glosarium/bidang/%20farmasi%20?limit=3');
 
     expect(response.status).toBe(200);
     expect(ModelGlosarium.resolveSlugBidang).toHaveBeenCalledWith('farmasi');
-    expect(ModelGlosarium.cariCursor).toHaveBeenCalledWith(expect.objectContaining({ bidangId: null, bidang: 'farmasi' }));
+    expect(layananGlosariumPublik.ambilGlosariumPerBidangPublik).toHaveBeenCalledWith('farmasi', expect.objectContaining({ bidangId: null, bidang: 'farmasi' }));
   });
 
   it('GET /api/publik/glosarium/bidang/:bidang meneruskan error', async () => {
-    ModelGlosarium.cariCursor.mockRejectedValue(new Error('bidang detail gagal'));
+    layananGlosariumPublik.ambilGlosariumPerBidangPublik.mockRejectedValue(new Error('bidang detail gagal'));
 
     const response = await request(createApp()).get('/api/publik/glosarium/bidang/ling');
 
@@ -1134,7 +1130,7 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/glosarium/sumber mengembalikan daftar sumber', async () => {
-    ModelGlosarium.ambilDaftarSumber.mockResolvedValue([{ sumber: 'kbbi', jumlah: 5 }]);
+    layananGlosariumPublik.ambilDaftarSumberPublik.mockResolvedValue([{ sumber: 'kbbi', jumlah: 5 }]);
 
     const response = await request(createApp()).get('/api/publik/glosarium/sumber');
 
@@ -1143,7 +1139,7 @@ describe('routes backend', () => {
   });
 
   it('GET /api/publik/glosarium/sumber meneruskan error', async () => {
-    ModelGlosarium.ambilDaftarSumber.mockRejectedValue(new Error('sumber gagal'));
+    layananGlosariumPublik.ambilDaftarSumberPublik.mockRejectedValue(new Error('sumber gagal'));
 
     const response = await request(createApp()).get('/api/publik/glosarium/sumber');
 
@@ -1153,22 +1149,19 @@ describe('routes backend', () => {
 
   it('GET /api/publik/glosarium/sumber/:sumber memanggil model', async () => {
     ModelGlosarium.resolveSlugSumber.mockResolvedValue({ id: 42, kode: 'kbbi-v', nama: 'KBBI V' });
-    ModelGlosarium.cariCursor.mockResolvedValue({ data: [], total: 0 });
+    layananGlosariumPublik.ambilGlosariumPerSumberPublik.mockResolvedValue({ data: [], total: 0, pageInfo: {} });
 
     const response = await request(createApp())
       .get('/api/publik/glosarium/sumber/kbbi-v?limit=6&cursor=abc&direction=prev');
 
     expect(response.status).toBe(200);
     expect(ModelGlosarium.resolveSlugSumber).toHaveBeenCalledWith('kbbi-v');
-    expect(ModelGlosarium.cariCursor).toHaveBeenCalledWith({
+    expect(layananGlosariumPublik.ambilGlosariumPerSumberPublik).toHaveBeenCalledWith('kbbi-v', {
       sumberId: 42,
       limit: 6,
-      aktifSaja: true,
-      hitungTotal: true,
       cursor: 'abc',
       direction: 'prev',
       lastPage: false,
-      sortBy: 'asing',
     });
   });
 
@@ -1183,7 +1176,7 @@ describe('routes backend', () => {
 
   it('GET /api/publik/glosarium/sumber/:sumber meneruskan error', async () => {
     ModelGlosarium.resolveSlugSumber.mockResolvedValue({ id: 1, kode: 'kbbi', nama: 'KBBI' });
-    ModelGlosarium.cariCursor.mockRejectedValue(new Error('sumber detail gagal'));
+    layananGlosariumPublik.ambilGlosariumPerSumberPublik.mockRejectedValue(new Error('sumber detail gagal'));
 
     const response = await request(createApp()).get('/api/publik/glosarium/sumber/kbbi');
 

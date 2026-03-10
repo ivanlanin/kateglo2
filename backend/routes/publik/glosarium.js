@@ -5,7 +5,14 @@
 const express = require('express');
 const ModelGlosarium = require('../../models/modelGlosarium');
 const ModelPencarian = require('../../models/modelPencarian');
-const { ambilDetailGlosarium } = require('../../services/layananGlosariumPublik');
+const {
+  cariGlosariumPublik,
+  ambilDaftarBidangPublik,
+  ambilDaftarSumberPublik,
+  ambilGlosariumPerBidangPublik,
+  ambilGlosariumPerSumberPublik,
+  ambilDetailGlosarium,
+} = require('../../services/layananGlosariumPublik');
 const { publicSearchLimiter } = require('../../middleware/rateLimiter');
 const { parseCursorPagination } = require('../../utils/routesPublikUtils');
 
@@ -47,11 +54,8 @@ router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
       maxLimit: 100,
     });
 
-    const result = await ModelGlosarium.cariCursor({
-      q: req.params.kata,
+    const result = await cariGlosariumPublik(req.params.kata, {
       limit,
-      aktifSaja: true,
-      hitungTotal: true,
       cursor,
       direction,
       lastPage,
@@ -59,15 +63,7 @@ router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
 
     await ModelPencarian.catatPencarian(req.params.kata, { domain: domainGlosarium });
 
-    return res.json({
-      ...result,
-      pageInfo: {
-        hasPrev: Boolean(result.hasPrev),
-        hasNext: Boolean(result.hasNext),
-        prevCursor: result.prevCursor || null,
-        nextCursor: result.nextCursor || null,
-      },
-    });
+    return res.json(result);
   } catch (error) {
     return next(error);
   }
@@ -75,7 +71,7 @@ router.get('/cari/:kata', publicSearchLimiter, async (req, res, next) => {
 
 router.get('/bidang', async (_req, res, next) => {
   try {
-    const data = await ModelGlosarium.ambilDaftarBidang();
+    const data = await ambilDaftarBidangPublik();
     return res.json(data);
   } catch (error) {
     return next(error);
@@ -91,26 +87,15 @@ router.get('/bidang/:bidang', async (req, res, next) => {
       maxLimit: 100,
     });
 
-    const result = await ModelGlosarium.cariCursor({
+    const result = await ambilGlosariumPerBidangPublik(bidangObj?.kode || bidangObj?.nama || slug, {
       bidangId: bidangObj?.id || null,
       bidang: bidangObj ? '' : slug,
       limit,
-      aktifSaja: true,
-      hitungTotal: true,
       cursor,
       direction,
       lastPage,
-      sortBy: 'asing',
     });
-    return res.json({
-      ...result,
-      pageInfo: {
-        hasPrev: Boolean(result.hasPrev),
-        hasNext: Boolean(result.hasNext),
-        prevCursor: result.prevCursor || null,
-        nextCursor: result.nextCursor || null,
-      },
-    });
+    return res.json(result);
   } catch (error) {
     return next(error);
   }
@@ -118,7 +103,7 @@ router.get('/bidang/:bidang', async (req, res, next) => {
 
 router.get('/sumber', async (_req, res, next) => {
   try {
-    const data = await ModelGlosarium.ambilDaftarSumber('konteks');
+    const data = await ambilDaftarSumberPublik('konteks');
     return res.json(data);
   } catch (error) {
     return next(error);
@@ -138,25 +123,14 @@ router.get('/sumber/:sumber', async (req, res, next) => {
       maxLimit: 100,
     });
 
-    const result = await ModelGlosarium.cariCursor({
+    const result = await ambilGlosariumPerSumberPublik(sumberObj.kode || sumberObj.nama || slug, {
       sumberId: sumberObj.id,
       limit,
-      aktifSaja: true,
-      hitungTotal: true,
       cursor,
       direction,
       lastPage,
-      sortBy: 'asing',
     });
-    return res.json({
-      ...result,
-      pageInfo: {
-        hasPrev: Boolean(result.hasPrev),
-        hasNext: Boolean(result.hasNext),
-        prevCursor: result.prevCursor || null,
-        nextCursor: result.nextCursor || null,
-      },
-    });
+    return res.json(result);
   } catch (error) {
     return next(error);
   }

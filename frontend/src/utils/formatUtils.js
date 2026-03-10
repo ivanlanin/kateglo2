@@ -77,7 +77,9 @@ function formatNamaBidang(value = '') {
 }
 
 function splitEntriGlosarium(value = '') {
-  const text = String(value || '').trim();
+  const text = String(value || '')
+    .replace(/\s*;\s*/g, ';')
+    .trim();
   if (!text) return [];
 
   return text

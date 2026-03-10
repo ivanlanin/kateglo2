@@ -1715,6 +1715,14 @@ code {
     @apply text-blue-700 hover:underline hover:bg-blue-50 rounded px-1 truncate;
   }
 
+  .glosarium-inline-link {
+    @apply text-blue-700 hover:underline;
+  }
+
+  .dark .glosarium-inline-link {
+    @apply text-blue-300;
+  }
+
   /* ===== Tesaurus hasil pencarian ===== */
 
   .tesaurus-result-relasi {

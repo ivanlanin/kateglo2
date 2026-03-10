@@ -103,6 +103,11 @@ describe('formatUtils.test.js', () => {
     expect(result).toEqual(['1H-imidazola', '; ', '4-aminoetil']);
   });
 
+  it('parseEntriGlosarium menormalkan spasi liar di sekitar titik koma', () => {
+    const result = parseEntriGlosarium('abiseka ; penobatan');
+    expect(result).toEqual(['abiseka', '; ', 'penobatan']);
+  });
+
   it('parseEntriGlosarium mendukung renderer tautan per bagian', () => {
     const nodes = parseEntriGlosarium('dam; darah', (part, index) => createElement('a', { href: `/kamus/detail/${part}`, key: index }, part));
     render(createElement(Fragment, null, ...nodes));
@@ -129,6 +134,18 @@ describe('formatUtils.test.js', () => {
     expect(screen.getByRole('link', { name: 'accomplice' })).toHaveAttribute('href', '/glosarium/detail/accomplice');
     expect(screen.getByRole('link', { name: 'accessory' })).toHaveAttribute('href', '/glosarium/detail/accessory');
     expect(screen.getByText(';')).toBeInTheDocument();
+  });
+
+  it('renderEntriGlosariumTertaut tidak menyisakan spasi sebelum titik koma saat bagian pertama ditautkan', () => {
+    const nodes = renderEntriGlosariumTertaut('abiseka ; penobatan', (part, info) => (
+      info.partIndex === 0
+        ? createElement('a', { href: `/kamus/detail/${part}`, key: `${part}-${info.partIndex}` }, part)
+        : createElement('span', { key: `${part}-${info.partIndex}` }, part)
+    ));
+    const { container } = render(createElement(Fragment, null, ...nodes));
+
+    expect(screen.getByRole('link', { name: 'abiseka' })).toHaveAttribute('href', '/kamus/detail/abiseka');
+    expect(container.textContent).toBe('abiseka; penobatan');
   });
 
   it('renderEntriGlosariumTertaut tidak menautkan teks dalam tanda kurung', () => {

@@ -2,7 +2,7 @@
 
 ## 2026-03-10 Selasa
 
-- Membatasi pembuatan tautan di detail kamus hanya untuk entri yang valid
+- Membatasi pembuatan tautan di kamus dan glosarium hanya untuk entri yang valid
 
 ## 2026-03-09 Senin
 
