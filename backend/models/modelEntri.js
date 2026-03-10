@@ -414,6 +414,30 @@ class ModelEntri {
     return result.rows;
   }
 
+  static async ambilIndeksValidBatch(indeksList = []) {
+    const daftarIndeks = [...new Set(
+      (Array.isArray(indeksList) ? indeksList : [])
+        .map((item) => normalisasiIndeks(String(item || '')).toLowerCase())
+        .filter(Boolean)
+    )];
+
+    if (!daftarIndeks.length) return [];
+
+    const result = await db.query(
+      `SELECT DISTINCT LOWER(TRIM(e.indeks)) AS indeks
+       FROM entri e
+       WHERE e.aktif = 1
+         AND COALESCE(TRIM(e.indeks), '') <> ''
+         AND LOWER(TRIM(e.indeks)) = ANY($1::text[])
+       ORDER BY LOWER(TRIM(e.indeks)) ASC`,
+      [daftarIndeks]
+    );
+
+    return result.rows
+      .map((row) => String(row.indeks || '').trim())
+      .filter(Boolean);
+  }
+
   static async ambilNavigasiIndeks(indeks) {
     const indeksAman = String(indeks || '').trim().toLowerCase();
     if (!indeksAman) {

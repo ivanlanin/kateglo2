@@ -7,11 +7,13 @@ jest.mock('../../models/modelEntri', () => {
   const cariEntri = jest.fn();
   const cariEntriCursor = jest.fn();
   const ambilEntriPerIndeks = jest.fn();
+  const ambilIndeksValidBatch = jest.fn();
   const ambilNavigasiIndeks = jest.fn();
   return {
     cariEntri,
     cariEntriCursor,
     ambilEntriPerIndeks,
+    ambilIndeksValidBatch,
     ambilNavigasiIndeks,
     ambilMakna: jest.fn(),
     ambilContoh: jest.fn(),
@@ -120,6 +122,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     getJson.mockResolvedValue(null);
     setJson.mockResolvedValue(undefined);
     delKey.mockResolvedValue(undefined);
+    ModelEntri.ambilIndeksValidBatch.mockResolvedValue([]);
     ModelEntri.ambilNavigasiIndeks.mockResolvedValue({ prev: null, next: null });
     ModelEtimologi.ambilAktifPublikByEntriId.mockResolvedValue([]);
     ModelTagar.ambilTagarEntri.mockResolvedValue([]);
@@ -278,12 +281,76 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     expect(result.entri[0].subentri.turunan).toHaveLength(1);
     expect(result.entri[1].rujukan).toBe(true);
     expect(result.entri[1].entri_rujuk_indeks).toBe('aktivasi-indeks');
+    expect(ModelEntri.ambilIndeksValidBatch).toHaveBeenCalledWith(['giat', 'aktif', 'pasif']);
+    expect(result.tautan_makna_valid).toEqual([]);
     expect(result.tesaurus).toEqual({ sinonim: ['aktif', 'giat'], antonim: ['pasif'] });
     expect(result.glosarium).toEqual([{ indonesia: 'zat aktif', asing: 'active substance' }]);
     expect(result.navigasi).toEqual({
       prev: { indeks: 'akti', label: 'akti' },
       next: { indeks: 'aktifisme', label: 'aktifisme' },
     });
+  });
+
+  it('mengumpulkan kandidat tautan makna yang valid secara batch', async () => {
+    ModelEntri.ambilEntriPerIndeks.mockResolvedValue([
+      {
+        id: 71,
+        entri: 'uji',
+        indeks: 'uji',
+        homonim: null,
+        jenis: 'dasar',
+        pemenggalan: null,
+        lafal: null,
+        varian: null,
+        jenis_rujuk: null,
+        entri_rujuk: null,
+      },
+    ]);
+    ModelEntri.ambilMakna.mockResolvedValue([
+      { id: 710, makna: 'kata; dua kata; tiga kata penuh; *miring*; kata (cak)' },
+    ]);
+    ModelEntri.ambilContoh.mockResolvedValue([]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilBentukTidakBakuByRujukId.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
+    ModelEntri.ambilIndeksValidBatch.mockResolvedValue(['kata', 'dua kata']);
+    ModelTesaurus.ambilDetail.mockResolvedValue(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+
+    const result = await ambilDetailKamus('uji');
+
+    expect(ModelEntri.ambilIndeksValidBatch).toHaveBeenCalledWith(['kata', 'dua kata']);
+    expect(result.tautan_makna_valid).toEqual(['kata', 'dua kata']);
+  });
+
+  it('menggabungkan kandidat tautan dari makna dan tesaurus dalam satu lookup batch', async () => {
+    ModelEntri.ambilEntriPerIndeks.mockResolvedValue([
+      {
+        id: 72,
+        entri: 'uji-tesaurus',
+        indeks: 'uji-tesaurus',
+        homonim: null,
+        jenis: 'dasar',
+        pemenggalan: null,
+        lafal: null,
+        varian: null,
+        jenis_rujuk: null,
+        entri_rujuk: null,
+      },
+    ]);
+    ModelEntri.ambilMakna.mockResolvedValue([{ id: 720, makna: 'kata' }]);
+    ModelEntri.ambilContoh.mockResolvedValue([]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilBentukTidakBakuByRujukId.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
+    ModelTesaurus.ambilDetail.mockResolvedValue({ sinonim: 'dua kata;kata', antonim: 'lawan' });
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+    ModelEntri.ambilIndeksValidBatch.mockResolvedValue(['kata', 'dua kata', 'lawan']);
+
+    const result = await ambilDetailKamus('uji-tesaurus');
+
+    expect(ModelEntri.ambilIndeksValidBatch).toHaveBeenCalledWith(['kata', 'dua kata', 'lawan']);
+    expect(result.tautan_makna_valid).toEqual(['kata', 'dua kata', 'lawan']);
   });
 
   it('meminta navigasi indeks tetangga dengan indeks yang sudah ternormalisasi', async () => {

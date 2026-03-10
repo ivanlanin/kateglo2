@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-03-10 Selasa
+
+- Membatasi pembuatan tautan di detail kamus hanya untuk entri yang valid
+
 ## 2026-03-09 Senin
 
 - Merencanakan Kamus Deskriptif Indonesia (KADI)

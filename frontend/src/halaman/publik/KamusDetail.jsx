@@ -70,12 +70,16 @@ function ekstrakKandidatTautanMakna(segmen = '') {
   };
 }
 
+function normalisasiKunciTautanMakna(teks = '') {
+  return normalisasiIndeksKamus(teks).trim().toLowerCase();
+}
+
 /**
  * Render teks makna dengan tautan otomatis ke entri kamus.
  * Tautan hanya dibuat bila seluruh segmen adalah kandidat pendek (1-2 kata)
  * dengan kurung penjelas opsional di bagian akhir.
  */
-function RenderMakna({ teks }) {
+function RenderMakna({ teks, tautanValidSet = null }) {
   if (!teks) return null;
   const segmen = teks.split(';');
   return (
@@ -83,7 +87,8 @@ function RenderMakna({ teks }) {
       {segmen.map((seg, i) => {
         const trimmed = seg.trim();
         const kandidatTautan = ekstrakKandidatTautanMakna(trimmed);
-        if (kandidatTautan) {
+        const kunciTautan = kandidatTautan ? normalisasiKunciTautanMakna(kandidatTautan.baseText) : '';
+        if (kandidatTautan && tautanValidSet?.has(kunciTautan)) {
           return (
             <Fragment key={i}>
               {i > 0 && '; '}
@@ -155,6 +160,7 @@ function ringkasLabelChip(text = '', maxLength = SUBENTRI_PERIBAHASA_LABEL_LIMIT
 export const __private = {
   formatLabelPenyingkatanBadge,
   ekstrakKandidatTautanMakna,
+  normalisasiKunciTautanMakna,
   RenderMakna,
   ringkasLabelChip,
 };
@@ -330,6 +336,10 @@ function KamusDetail() {
     queryFn: ambilKategoriKamus,
     staleTime: 5 * 60 * 1000,
   });
+
+  const tautanMaknaValidSet = new Set(
+    (data?.tautan_makna_valid || []).map((item) => normalisasiKunciTautanMakna(item)).filter(Boolean)
+  );
 
   const { data: glosariumFallbackData, isFetching: isFetchingGlosariumFallback } = useQuery({
     queryKey: ['glosarium-kamus-fallback', indeks, cursorGlosariumFallback, directionGlosariumFallback],
@@ -508,12 +518,16 @@ function KamusDetail() {
     <>
       {items.map((kata, i) => (
         <span key={`${kata}-${i}`}>
-          <Link
-            to={buatPathDetailKamus(kata)}
-            className="kamus-detail-relation-link"
-          >
-            {kata}
-          </Link>
+          {tautanMaknaValidSet.has(normalisasiKunciTautanMakna(kata)) ? (
+            <Link
+              to={buatPathDetailKamus(kata)}
+              className="kamus-detail-relation-link"
+            >
+              {kata}
+            </Link>
+          ) : (
+            <span>{kata}</span>
+          )}
           {i < items.length - 1 && <span className="secondary-text">; </span>}
         </span>
       ))}
@@ -790,7 +804,7 @@ function KamusDetail() {
                                   </Link>{' '}
                                 </>
                               )}
-                              <RenderMakna teks={m.makna} />
+                              <RenderMakna teks={m.makna} tautanValidSet={tautanMaknaValidSet} />
                               {(m.ilmiah || m.kimia) && (
                                 <span className="kamus-detail-def-extra">
                                   ; {m.ilmiah && <em>{m.ilmiah}</em>}

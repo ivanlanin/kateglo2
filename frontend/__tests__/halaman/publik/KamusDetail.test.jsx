@@ -100,10 +100,17 @@ describe('KamusDetail', () => {
       baseText: 'kata',
       parenthetical: ' (cak)',
     });
+    expect(__private.normalisasiKunciTautanMakna('kata (2)')).toBe('kata');
 
-    const { container } = render(<__private.RenderMakna teks="kata (cak); dua kata; *miring*" />);
+    const { container } = render(
+      <__private.RenderMakna
+        teks="kata (cak); dua kata; *miring*"
+        tautanValidSet={new Set(['kata'])}
+      />
+    );
     expect(screen.getByRole('link', { name: 'kata' })).toHaveAttribute('href', '/kamus/detail/kata');
-    expect(screen.getByRole('link', { name: 'dua kata' })).toHaveAttribute('href', '/kamus/detail/dua%20kata');
+    expect(screen.queryByRole('link', { name: 'dua kata' })).toBeNull();
+    expect(screen.getByText('dua kata')).toBeInTheDocument();
     expect(container.querySelector('em')).not.toBeNull();
   });
 
@@ -409,6 +416,7 @@ describe('KamusDetail', () => {
         isError: false,
         data: {
           entri: 'alat',
+          tautan_makna_valid: ['perkakas'],
           makna: [
             {
               id: 1,
@@ -900,6 +908,7 @@ describe('KamusDetail', () => {
       subentri: {
         turunan: [{ id: 21, entri: 'berkata' }, { id: 22, entri: 'perkataan' }],
       },
+      tautan_makna_valid: ['kata dasar', 'sinonim satu', 'antonim satu', 'sinonim dua'],
       tesaurus: { sinonim: ['sinonim satu', 'sinonim dua'], antonim: ['antonim satu', 'antonim dua'] },
       glosarium: [
         { indonesia: 'kata dasar', asing: 'base word' },
@@ -954,7 +963,8 @@ describe('KamusDetail', () => {
     expect(screen.getByRole('link', { name: 'sinonim satu' })).toHaveAttribute('href', '/kamus/detail/sinonim%20satu');
     expect(screen.getByRole('link', { name: 'antonim satu' })).toHaveAttribute('href', '/kamus/detail/antonim%20satu');
     expect(screen.getByRole('link', { name: 'sinonim dua' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'antonim dua' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'antonim dua' })).toBeNull();
+    expect(screen.getByText('antonim dua')).toBeInTheDocument();
     expect(screen.getByText('Glosarium')).toBeInTheDocument();
     expect(screen.getByText('base word')).toBeInTheDocument();
     expect(screen.getByText('derived word')).toBeInTheDocument();
@@ -2101,6 +2111,7 @@ describe('KamusDetail', () => {
         entri: 'satu-kategori',
         makna: [{ id: 1, kelas_kata: '-', makna: 'makna contoh' }],
         subentri: {},
+        tautan_makna_valid: ['setara'],
         tesaurus: { sinonim: ['setara'], antonim: [] },
         glosarium: [],
       },
@@ -2122,6 +2133,7 @@ describe('KamusDetail', () => {
         entri: 'antonim-saja',
         makna: [{ id: 1, kelas_kata: '-', makna: 'makna contoh' }],
         subentri: {},
+        tautan_makna_valid: ['lawan kata'],
         tesaurus: { sinonim: [], antonim: ['lawan kata'] },
         glosarium: [],
       },

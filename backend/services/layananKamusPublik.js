@@ -21,6 +21,47 @@ function normalisasiIndeksKamus(teks) {
   return tanpaStripTepi.trim() || teks.trim();
 }
 
+function ekstrakKandidatTautanMakna(segmen = '') {
+  const trimmed = String(segmen || '').trim();
+  if (!trimmed || /\*/.test(trimmed)) return null;
+
+  const match = trimmed.match(/^([^()]+?)(\s*(?:\([^)]*\)\s*)*)$/);
+  if (!match) return null;
+
+  const baseText = String(match[1] || '').trim();
+  const wordCount = baseText.split(/\s+/).filter(Boolean).length;
+
+  if (wordCount < 1 || wordCount > 2) return null;
+  return baseText;
+}
+
+function kumpulkanKandidatTautanMakna(entriList = []) {
+  const hasil = [];
+
+  for (const entri of entriList || []) {
+    for (const makna of entri?.makna || []) {
+      for (const segmen of String(makna?.makna || '').split(';')) {
+        const kandidat = ekstrakKandidatTautanMakna(segmen);
+        if (!kandidat) continue;
+
+        const indeks = normalisasiIndeksKamus(kandidat).toLowerCase();
+        if (indeks) {
+          hasil.push(indeks);
+        }
+      }
+    }
+  }
+
+  return [...new Set(hasil)];
+}
+
+function kumpulkanKandidatTautanTesaurus(tesaurus = {}) {
+  return [...new Set([
+    ...(tesaurus?.sinonim || []),
+    ...(tesaurus?.antonim || []),
+  ].map((item) => normalisasiIndeksKamus(String(item || '')).toLowerCase()).filter(Boolean))];
+}
+
 function parseDaftarRelasi(teks) {
   if (!teks) return [];
   return teks.split(';').map((item) => item.trim()).filter(Boolean);
@@ -209,6 +250,8 @@ async function ambilDetailKamus(indeksAtauEntri, {
 
   const entriUntukRespons = entriNonVarian.length > 0 ? entriNonVarian : detailEntri;
 
+  const kandidatTautanMakna = kumpulkanKandidatTautanMakna(entriUntukRespons);
+
   const [tesaurusDetail, glosariumResult, navigasiIndeks] = await Promise.all([
     ModelTesaurus.ambilDetail(indeksTarget),
     ModelGlosarium.cariFrasaMengandungKataUtuh(indeksTarget, {
@@ -247,9 +290,16 @@ async function ambilDetailKamus(indeksAtauEntri, {
     }
     : { sinonim: [], antonim: [] };
 
+  const kandidatTautanSidebar = kumpulkanKandidatTautanTesaurus(tesaurus);
+  const tautanMaknaValid = await ModelEntri.ambilIndeksValidBatch([...new Set([
+    ...kandidatTautanMakna,
+    ...kandidatTautanSidebar,
+  ])]);
+
   const result = {
     indeks: indeksTarget,
     entri: entriUntukRespons,
+    tautan_makna_valid: tautanMaknaValid,
     tesaurus,
     glosarium: glosariumData,
     glosarium_page: glosariumPageInfo,
