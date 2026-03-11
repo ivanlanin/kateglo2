@@ -5,7 +5,7 @@
  *
  * @fileoverview Utility script untuk extract complete database schema dari PostgreSQL
  * menggunakan system catalogs (pg_catalog). Script ini generate DDL statements
- * untuk tables, constraints, indexes, sequences, triggers, dan trigger functions.
+ * untuk tables, constraints, indexes, comments, sequences, triggers, dan trigger functions.
  *
  * USAGE:
  * ```bash
@@ -55,6 +55,21 @@ const ORDER_BY = process.env.DB_ORDER_BY || 'alphabetical';
 const SYNTAX_STYLE = process.env.DB_SYNTAX || 'simplified';
 const INCLUDE_SCHEMA_PREFIX = process.env.DB_INCLUDE_SCHEMA === 'true';
 const OUTPUT_FILE = process.env.DB_OUTPUT_FILE || '../_docs/data/struktur.sql';
+
+function formatSchemaComment(value) {
+  return String(value).replace(/\r?\n+/g, ' ').trim();
+}
+
+function formatDefinitionLine(definition, isLast) {
+  if (isLast) return definition;
+
+  const commentIndex = definition.indexOf(' -- ');
+  if (commentIndex === -1) {
+    return `${definition},`;
+  }
+
+  return `${definition.slice(0, commentIndex)},${definition.slice(commentIndex)}`;
+}
 
 /**
  * Extract complete database schema
@@ -182,7 +197,11 @@ async function extractTableSchema(tableName) {
   const output = [];
   const columns = await getTableColumns(tableName);
   const constraints = await getTableConstraints(tableName);
+  const { tableComment, columnComments } = await getTableComments(tableName);
   const useSimplified = SYNTAX_STYLE === 'simplified';
+  const columnCommentMap = new Map(
+    columnComments.map((column) => [column.column_name, formatSchemaComment(column.comment)])
+  );
 
   const pkConstraint = constraints.find(c => c.constraint_type === 'PRIMARY KEY');
   const pkColumns = pkConstraint ? pkConstraint.column_names.split(', ') : [];
@@ -236,6 +255,11 @@ async function extractTableSchema(tableName) {
       def += ` default ${col.column_default}`;
     }
 
+    const columnComment = columnCommentMap.get(col.column_name);
+    if (columnComment) {
+      def += ` -- ${columnComment}`;
+    }
+
     return def;
   });
 
@@ -271,10 +295,16 @@ async function extractTableSchema(tableName) {
     .filter(Boolean);
 
   const allDefs = [...columnDefs, ...constraintDefs];
+  const renderedDefs = allDefs.map((definition, index) => (
+    formatDefinitionLine(definition, index === allDefs.length - 1)
+  ));
   const tableKeyword = useSimplified ? 'create table' : 'CREATE TABLE';
   const tableFullName = INCLUDE_SCHEMA_PREFIX ? `${SCHEMA_NAME}.${tableName}` : tableName;
+  if (tableComment) {
+    output.push(`-- ${formatSchemaComment(tableComment)}`);
+  }
   output.push(`${tableKeyword} ${tableFullName} (`);
-  output.push(allDefs.join(',\n'));
+  output.push(renderedDefs.join('\n'));
   output.push(');');
 
   return output.join('\n');
@@ -348,6 +378,44 @@ async function getTableConstraints(tableName) {
     }
     return true;
   });
+}
+
+/**
+ * Get table and column comments for a table
+ */
+async function getTableComments(tableName) {
+  const tableQuery = `
+    SELECT obj_description(c.oid, 'pg_class') AS table_comment
+    FROM pg_class c
+    JOIN pg_namespace n ON n.oid = c.relnamespace
+    WHERE n.nspname = $1
+      AND c.relname = $2
+      AND c.relkind = 'r';
+  `;
+
+  const columnQuery = `
+    SELECT a.attname AS column_name, col_description(c.oid, a.attnum) AS comment
+    FROM pg_class c
+    JOIN pg_namespace n ON n.oid = c.relnamespace
+    JOIN pg_attribute a ON a.attrelid = c.oid
+    WHERE n.nspname = $1
+      AND c.relname = $2
+      AND c.relkind = 'r'
+      AND a.attnum > 0
+      AND NOT a.attisdropped
+      AND col_description(c.oid, a.attnum) IS NOT NULL
+    ORDER BY a.attnum;
+  `;
+
+  const [tableResult, columnResult] = await Promise.all([
+    pool.query(tableQuery, [SCHEMA_NAME, tableName]),
+    pool.query(columnQuery, [SCHEMA_NAME, tableName]),
+  ]);
+
+  return {
+    tableComment: tableResult.rows[0]?.table_comment || null,
+    columnComments: columnResult.rows,
+  };
 }
 
 /**
@@ -580,6 +648,7 @@ module.exports = {
   extractTableSchema,
   getTableColumns,
   getTableConstraints,
+  getTableComments,
   getTableIndexes,
   getTableSequences,
   extractTriggerFunctions,

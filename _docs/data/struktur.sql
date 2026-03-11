@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-09T15:11:29.622Z
+-- Generated: 2026-03-11T06:42:13.407Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -155,14 +155,15 @@ $function$
 -- TABLES
 -- ============================================
 
+-- Antrian audit untuk indeks yang jumlah maknanya perlu ditinjau atau diperbaiki
 create table audit_makna (
   id serial primary key,
-  indeks text not null,
-  jumlah integer not null default 0,
-  entri_id integer references entri(id) on delete set null,
-  makna_id integer references makna(id) on delete set null,
-  status text not null default 'tinjau'::text,
-  catatan text,
+  indeks text not null, -- Indeks entri yang sedang diaudit dalam bentuk ternormalisasi
+  jumlah integer not null default 0, -- Jumlah makna yang terdeteksi untuk indeks terkait
+  entri_id integer references entri(id) on delete set null, -- Referensi opsional ke entri yang terkait dengan audit
+  makna_id integer references makna(id) on delete set null, -- Referensi opsional ke makna yang terkait dengan audit
+  status text not null default 'tinjau'::text, -- Status audit: tinjau, salah, tambah, atau nama
+  catatan text, -- Catatan redaksional untuk hasil audit
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
   constraint audit_makna_indeks_key unique (indeks),
@@ -181,14 +182,15 @@ create trigger trg_set_timestamp_fields__audit_makna
   for each row
   execute function set_timestamp_fields();
 
+-- Master bahasa yang dipakai pada etimologi dan glosarium
 create table bahasa (
   id serial primary key,
-  kode text not null,
-  nama text not null,
-  iso2 text,
-  iso3 text,
-  aktif boolean not null default true,
-  keterangan text,
+  kode text not null, -- Kode internal bahasa yang unik
+  nama text not null, -- Nama bahasa untuk tampilan
+  iso2 text, -- Kode ISO 639-1 jika tersedia
+  iso3 text, -- Kode ISO 639-2 atau ISO 639-3 jika tersedia
+  aktif boolean not null default true, -- Flag apakah bahasa aktif dipakai di aplikasi
+  keterangan text, -- Keterangan tambahan tentang bahasa
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
   constraint bahasa_kode_key unique (kode),
@@ -201,15 +203,16 @@ create trigger trg_set_timestamp_fields__bahasa
   for each row
   execute function set_timestamp_fields();
 
+-- Master bidang keilmuan atau kategori topik
 create table bidang (
   id serial primary key,
-  kode text not null,
-  nama text not null,
-  kamus boolean not null default true,
-  keterangan text,
+  kode text not null, -- Kode bidang yang unik
+  nama text not null, -- Nama bidang untuk tampilan
+  kamus boolean not null default true, -- Flag apakah bidang dapat dipakai pada data kamus
+  keterangan text, -- Keterangan tambahan tentang bidang
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
-  glosarium boolean not null default true,
+  glosarium boolean not null default true, -- Flag apakah bidang dapat dipakai pada data glosarium
   constraint bidang_kode_key unique (kode),
   constraint bidang_nama_key unique (nama)
 );
@@ -220,16 +223,17 @@ create trigger trg_set_timestamp_fields__bidang
   for each row
   execute function set_timestamp_fields();
 
+-- Contoh pemakaian untuk satu makna
 create table contoh (
   id serial primary key,
-  legacy_cid integer,
-  makna_id integer references makna(id) on delete cascade not null,
-  urutan integer not null default 1,
-  contoh text not null,
-  makna_contoh text,
+  legacy_cid integer, -- ID contoh dari basis data lama jika berasal dari migrasi
+  makna_id integer references makna(id) on delete cascade not null, -- Referensi ke makna yang memiliki contoh ini
+  urutan integer not null default 1, -- Urutan tampilan contoh dalam satu makna
+  contoh text not null, -- Teks contoh pemakaian
+  makna_contoh text, -- Penjelasan singkat atau arti dari contoh pemakaian
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
-  aktif boolean not null default true,
+  aktif boolean not null default true, -- Flag apakah contoh ditampilkan sebagai data aktif
   constraint contoh_legacy_cid_key unique (legacy_cid),
   constraint contoh_contoh_check check (TRIM(BOTH FROM contoh) <> ''::text)
 );
@@ -244,27 +248,28 @@ create trigger trg_touch_makna_updated_at_from_contoh
   for each row
   execute function touch_makna_updated_at_from_contoh();
 
+-- Entri utama kamus, termasuk kata dasar, turunan, gabungan, dan entri rujukan
 create table entri (
   id serial primary key,
-  legacy_eid integer,
-  entri text not null,
-  jenis text not null,
-  induk integer references entri(id) on delete set null,
-  pemenggalan text,
-  lafal text,
-  varian text,
-  jenis_rujuk text,
-  lema_rujuk text,
-  aktif integer not null default 1,
-  legacy_tabel text,
-  legacy_tid integer,
-  indeks text not null,
-  homonim integer,
+  legacy_eid integer, -- ID entri dari basis data lama jika berasal dari migrasi
+  entri text not null, -- Bentuk entri sebagaimana ditampilkan ke pengguna
+  jenis text not null, -- Jenis entri untuk klasifikasi data dan tampilan
+  induk integer references entri(id) on delete set null, -- Referensi ke entri induk dalam hierarki turunan atau gabungan
+  pemenggalan text, -- Pemenggalan suku kata untuk entri
+  lafal text, -- Representasi lafal atau pelafalan entri
+  varian text, -- Varian ejaan atau bentuk lain dari entri
+  jenis_rujuk text, -- Penanda jenis rujukan, misalnya simbol atau label rujuk
+  lema_rujuk text, -- Teks lema rujukan sebagaimana tersimpan dari sumber lama atau impor
+  aktif integer not null default 1, -- Status aktif entri dengan konvensi 1 aktif dan 0 nonaktif
+  legacy_tabel text, -- Nama tabel sumber lama tempat entri berasal
+  legacy_tid integer, -- ID baris sumber lama pada tabel asal
+  indeks text not null, -- Kunci indeks ternormalisasi untuk pencarian dan pengelompokan entri
+  homonim integer, -- Nomor urut homonim dalam kelompok indeks yang sama
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
-  homograf integer,
-  entri_rujuk integer,
-  sumber_id integer references sumber(id) on delete restrict on update cascade,
+  homograf integer, -- Nomor pengelompokan homograf untuk membedakan entri dengan ejaan sama
+  entri_rujuk integer, -- Referensi ke entri tujuan rujukan
+  sumber_id integer references sumber(id) on delete restrict on update cascade, -- Referensi ke sumber utama entri
   constraint entri_legacy_eid_key unique (legacy_eid),
   constraint entri_entri_check check (TRIM(BOTH FROM entri) <> ''::text)
 );
@@ -285,35 +290,37 @@ create trigger trg_set_timestamp_fields__entri
   for each row
   execute function set_timestamp_fields();
 
+-- Tabel penghubung many-to-many antara entri dan tagar morfologis
 create table entri_tagar (
-  entri_id integer references entri(id) on delete cascade,
-  tagar_id integer references tagar(id) on delete cascade,
+  entri_id integer references entri(id) on delete cascade, -- Referensi ke entri yang diberi tagar
+  tagar_id integer references tagar(id) on delete cascade, -- Referensi ke tagar yang ditempelkan pada entri
   created_at timestamp without time zone not null default now()
 );
 create index idx_entri_tagar_entri_id on entri_tagar using btree (entri_id);
 create index idx_entri_tagar_tagar_id on entri_tagar using btree (tagar_id);
 
+-- Data etimologi untuk entri kamus, termasuk asal kata dan sitasi sumber
 create table etimologi (
   id serial primary key,
-  indeks text not null,
-  entri_id integer references entri(id) on delete set null,
-  homonim integer,
-  lafal text,
-  sumber_sitasi text,
-  sumber_isi text,
-  sumber_aksara text,
-  sumber_lihat text,
-  sumber_varian text,
-  sumber_definisi text,
-  lwim_ref text,
-  aktif boolean not null default false,
+  indeks text not null, -- Indeks entri yang dipakai untuk pencocokan etimologi
+  entri_id integer references entri(id) on delete set null, -- Referensi opsional ke entri yang dipasangi etimologi
+  homonim integer, -- Nomor homonim untuk membantu pencocokan dengan entri
+  lafal text, -- Lafal yang terkait dengan data etimologi bila tersedia
+  sumber_sitasi text, -- Sitasi singkat sumber etimologi
+  sumber_isi text, -- Isi atau kutipan sumber etimologi
+  sumber_aksara text, -- Bentuk aksara asal dari bahasa sumber
+  sumber_lihat text, -- Rujukan lihat dari sumber etimologi
+  sumber_varian text, -- Varian bentuk yang disebut di sumber etimologi
+  sumber_definisi text, -- Definisi atau glosa dari sumber etimologi
+  lwim_ref text, -- Referensi atau penanda entri asal pada sumber LWIM
+  aktif boolean not null default false, -- Flag apakah data etimologi siap ditampilkan
   created_at timestamp with time zone not null,
   updated_at timestamp with time zone not null,
-  kata_asal text,
-  arti_asal text,
-  sumber_id integer references sumber(id) on delete restrict on update cascade,
-  meragukan boolean not null default false,
-  bahasa_id integer references bahasa(id) on delete set null on update cascade,
+  kata_asal text, -- Bentuk kata asal yang direkonstruksi atau dikutip dari sumber
+  arti_asal text, -- Arti atau glosa dari kata asal
+  sumber_id integer references sumber(id) on delete restrict on update cascade, -- Referensi ke sumber utama etimologi
+  meragukan boolean not null default false, -- Flag apakah etimologi masih meragukan dan perlu tinjauan
+  bahasa_id integer references bahasa(id) on delete set null on update cascade, -- Referensi ke bahasa asal kata
   constraint etimologi_indeks_check check (TRIM(BOTH FROM indeks) <> ''::text)
 );
 create index idx_etimologi_aktif on etimologi using btree (aktif);
@@ -327,38 +334,40 @@ create index idx_etimologi_lwim_ref on etimologi using btree (lwim_ref);
 create index idx_etimologi_meragukan on etimologi using btree (meragukan);
 create index idx_etimologi_sumber_id on etimologi using btree (sumber_id);
 
+-- Cache atau hasil ekstraksi mentah etimologi dari sumber LWIM
 create table etimologi_lwim (
-  lwim_id text,
-  indeks_query text not null,
-  lwim_orth text not null,
-  lwim_hom integer,
-  etym_lang text,
-  etym_mentioned text,
-  etym_cite text,
-  etym_aksara text,
-  raw_def text,
-  xr_lihat text,
-  xr_varian text,
-  fetched_at timestamp without time zone not null default now()
+  lwim_id text, -- ID entri pada sumber LWIM bila tersedia
+  indeks_query text not null, -- Indeks yang dipakai saat melakukan kueri ke LWIM
+  lwim_orth text not null, -- Bentuk ortografis entri pada LWIM
+  lwim_hom integer, -- Nomor homonim pada sumber LWIM
+  etym_lang text, -- Bahasa asal menurut LWIM
+  etym_mentioned text, -- Bentuk kata asal yang disebut oleh LWIM
+  etym_cite text, -- Sitasi atau rujukan sumber dari LWIM
+  etym_aksara text, -- Bentuk aksara asal menurut LWIM
+  raw_def text, -- Definisi mentah yang diambil dari LWIM
+  xr_lihat text, -- Rujukan lihat mentah dari LWIM
+  xr_varian text, -- Rujukan varian mentah dari LWIM
+  fetched_at timestamp without time zone not null default now() -- Waktu data LWIM diambil
 );
 create index idx_etimologi_lwim_indeks on etimologi_lwim using btree (indeks_query);
 create index idx_etimologi_lwim_orth on etimologi_lwim using btree (lwim_orth);
 
+-- Istilah glosarium bilingual yang menghubungkan istilah Indonesia dan istilah asing
 create table glosarium (
   id serial primary key,
-  indonesia text not null,
-  asing text not null,
-  wpid text,
-  wpen text,
-  updated timestamp without time zone,
-  updater text not null,
-  wikipedia_updated timestamp without time zone,
+  indonesia text not null, -- Istilah atau padanan dalam bahasa Indonesia
+  asing text not null, -- Istilah padanan dalam bahasa asing
+  wpid text, -- ID halaman Wikipedia bahasa Indonesia jika tersedia
+  wpen text, -- ID halaman Wikipedia bahasa Inggris jika tersedia
+  updated timestamp without time zone, -- Waktu pembaruan data asal glosarium
+  updater text not null, -- Identitas pembaru terakhir pada data asal
+  wikipedia_updated timestamp without time zone, -- Waktu sinkronisasi metadata Wikipedia
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
-  aktif boolean not null default true,
-  bidang_id integer references bidang(id) on delete restrict on update cascade not null,
-  sumber_id integer references sumber(id) on delete restrict on update cascade not null,
-  bahasa_id integer references bahasa(id) on delete restrict on update cascade not null
+  aktif boolean not null default true, -- Flag apakah istilah glosarium aktif ditampilkan
+  bidang_id integer references bidang(id) on delete restrict on update cascade not null, -- Referensi ke bidang keilmuan glosarium
+  sumber_id integer references sumber(id) on delete restrict on update cascade not null, -- Referensi ke sumber glosarium
+  bahasa_id integer references bahasa(id) on delete restrict on update cascade not null -- Referensi ke bahasa asing pada istilah glosarium
 );
 create index idx_glosarium_aktif_bahasa_id_indonesia on glosarium using btree (bahasa_id, indonesia) WHERE (aktif = true);
 create index idx_glosarium_aktif_bidang_id_asing on glosarium using btree (bidang_id, asing) WHERE (aktif = true);
@@ -377,11 +386,12 @@ create trigger trg_set_timestamp_fields__glosarium
   for each row
   execute function set_timestamp_fields();
 
+-- Master izin akses granular untuk fitur administrasi atau redaksi
 create table izin (
   id serial primary key,
-  kode text not null,
-  nama text not null,
-  kelompok text,
+  kode text not null, -- Kode izin yang unik dan dipakai di aplikasi
+  nama text not null, -- Nama izin untuk tampilan admin
+  kelompok text, -- Kelompok modul atau area yang menaungi izin
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
   constraint izin_kode_key unique (kode)
@@ -392,12 +402,13 @@ create trigger trg_set_timestamp_fields__izin
   for each row
   execute function set_timestamp_fields();
 
+-- Komentar pengguna terhadap suatu indeks entri
 create table komentar (
   id serial primary key,
-  indeks text not null,
-  pengguna_id integer references pengguna(id) on delete cascade not null,
-  komentar text not null,
-  aktif boolean not null default false,
+  indeks text not null, -- Indeks entri yang dikomentari
+  pengguna_id integer references pengguna(id) on delete cascade not null, -- Referensi ke pengguna yang membuat komentar
+  komentar text not null, -- Isi komentar pengguna
+  aktif boolean not null default false, -- Flag moderasi apakah komentar ditampilkan
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
   constraint komentar_indeks_pengguna_key unique (indeks, pengguna_id),
@@ -414,16 +425,17 @@ create trigger trg_set_timestamp_fields__komentar
   for each row
   execute function set_timestamp_fields();
 
+-- Master label umum untuk ragam, kelas kata, bahasa, bidang, dan kategori sejenis
 create table label (
   id serial primary key,
-  kategori text not null,
-  kode text not null,
-  nama text not null,
-  keterangan text,
+  kategori text not null, -- Kategori label, misalnya ragam, kelas_kata, bahasa, atau bidang
+  kode text not null, -- Kode label yang unik dalam satu kategori
+  nama text not null, -- Nama label untuk tampilan
+  keterangan text, -- Keterangan tambahan tentang label
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
-  urutan integer not null default 1,
-  aktif boolean not null default true,
+  urutan integer not null default 1, -- Urutan prioritas atau posisi label dalam daftar
+  aktif boolean not null default true, -- Flag apakah label aktif dipakai
   constraint label_kategori_kode_key unique (kategori, kode)
 );
 create index idx_label_kategori_nama on label using btree (kategori, nama);
@@ -433,24 +445,25 @@ create trigger trg_set_timestamp_fields__label
   for each row
   execute function set_timestamp_fields();
 
+-- Definisi atau polisem untuk satu entri kamus
 create table makna (
   id serial primary key,
-  legacy_mid integer,
-  entri_id integer references entri(id) on delete cascade not null,
-  polisem integer not null default 1,
-  makna text not null,
-  ragam text,
-  ragam_varian text,
-  kelas_kata text,
-  bahasa text,
-  bidang text,
-  kiasan boolean not null default false,
-  penyingkatan text,
-  ilmiah text,
-  kimia text,
+  legacy_mid integer, -- ID makna dari basis data lama jika berasal dari migrasi
+  entri_id integer references entri(id) on delete cascade not null, -- Referensi ke entri yang memiliki makna ini
+  polisem integer not null default 1, -- Nomor urut makna dalam satu entri
+  makna text not null, -- Teks definisi utama
+  ragam text, -- Label ragam bahasa yang melekat pada makna
+  ragam_varian text, -- Kode varian ringkas untuk ragam tertentu
+  kelas_kata text, -- Label kelas kata untuk makna
+  bahasa text, -- Label bahasa yang terkait dengan makna
+  bidang text, -- Label bidang keilmuan yang terkait dengan makna
+  kiasan boolean not null default false, -- Flag apakah makna bersifat kiasan
+  penyingkatan text, -- Jenis penyingkatan, misalnya akronim, kependekan, atau singkatan
+  ilmiah text, -- Padanan atau nama ilmiah yang terkait dengan makna
+  kimia text, -- Padanan atau rumus kimia yang terkait dengan makna
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
-  aktif boolean not null default true,
+  aktif boolean not null default true, -- Flag apakah makna aktif ditampilkan
   constraint makna_legacy_mid_key unique (legacy_mid),
   constraint makna_makna_check check (TRIM(BOTH FROM makna) <> ''::text),
   constraint makna_penyingkatan_check check ((penyingkatan IS NULL) OR (penyingkatan = ANY (ARRAY['akronim'::text, 'kependekan'::text, 'singkatan'::text]))),
@@ -469,11 +482,12 @@ create trigger trg_touch_entri_updated_at_from_makna
   for each row
   execute function touch_entri_updated_at_from_makna();
 
+-- Tabel induk statistik pencarian harian lintas domain publik
 create table pencarian (
-  tanggal date not null,
-  kata text not null,
-  jumlah integer not null default 0,
-  domain smallint not null default 1,
+  tanggal date not null, -- Tanggal pencarian dalam zona waktu aplikasi
+  kata text not null, -- Kata atau frasa pencarian yang sudah dinormalisasi
+  jumlah integer not null default 0, -- Akumulasi jumlah pencarian untuk kombinasi tanggal, domain, dan kata
+  domain smallint not null default 1, -- Kode domain pencarian: 1 kamus, 2 tesaurus, 3 glosarium, 4 makna, 5 rima
   created_at timestamp without time zone not null default (now() AT TIME ZONE 'UTC'::text),
   updated_at timestamp without time zone not null default (now() AT TIME ZONE 'UTC'::text),
   constraint pencarian_domain_check check (domain = ANY (ARRAY[1, 2, 3, 4, 5])),
@@ -498,11 +512,12 @@ create table pencarian_202603 (
 );
 create unique index pencarian_202603_tanggal_domain_kata_key on pencarian_202603 using btree (tanggal, domain, kata);
 
+-- Daftar kata yang dikecualikan dari pencatatan statistik pencarian
 create table pencarian_hitam (
   id serial primary key,
-  kata text not null,
-  aktif boolean not null default true,
-  catatan text,
+  kata text not null, -- Kata ternormalisasi huruf kecil yang diblok dari statistik
+  aktif boolean not null default true, -- Flag apakah aturan daftar hitam masih berlaku
+  catatan text, -- Catatan alasan pemblokiran kata dari statistik
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
   constraint pencarian_hitam_kata_check check (btrim(kata) <> ''::text),
@@ -515,15 +530,16 @@ create trigger trg_set_timestamp_fields__pencarian_hitam
   for each row
   execute function set_timestamp_fields();
 
+-- Akun pengguna yang terautentikasi untuk fitur komunitas dan administrasi
 create table pengguna (
   id serial primary key,
-  google_id text not null,
-  surel text not null,
-  nama text not null,
-  foto text,
-  peran_id integer references peran(id) not null default 1,
-  aktif integer not null default 1,
-  login_terakhir timestamp without time zone,
+  google_id text not null, -- Identifier unik pengguna dari Google OAuth
+  surel text not null, -- Alamat surel pengguna
+  nama text not null, -- Nama tampilan pengguna
+  foto text, -- URL foto profil pengguna
+  peran_id integer references peran(id) not null default 1, -- Referensi ke peran pengguna
+  aktif integer not null default 1, -- Status aktif akun dengan konvensi 1 aktif dan 0 nonaktif
+  login_terakhir timestamp without time zone, -- Waktu login terakhir pengguna
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
   constraint pengguna_google_id_key unique (google_id)
@@ -535,14 +551,15 @@ create trigger trg_set_timestamp_fields__pengguna
   for each row
   execute function set_timestamp_fields();
 
+-- Master peran pengguna untuk sistem otorisasi
 create table peran (
   id serial primary key,
-  kode text not null,
-  nama text not null,
-  keterangan text,
+  kode text not null, -- Kode peran yang unik
+  nama text not null, -- Nama peran untuk tampilan
+  keterangan text, -- Keterangan tambahan tentang peran
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
-  akses_redaksi boolean not null default false,
+  akses_redaksi boolean not null default false, -- Flag apakah peran dapat mengakses area redaksi atau admin
   constraint peran_kode_key unique (kode)
 );
 create unique index peran_kode_key on peran using btree (kode);
@@ -551,9 +568,10 @@ create trigger trg_set_timestamp_fields__peran
   for each row
   execute function set_timestamp_fields();
 
+-- Relasi many-to-many antara peran dan izin
 create table peran_izin (
-  peran_id integer references peran(id) on delete cascade,
-  izin_id integer references izin(id) on delete cascade,
+  peran_id integer references peran(id) on delete cascade, -- Referensi ke peran
+  izin_id integer references izin(id) on delete cascade, -- Referensi ke izin
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now()
 );
@@ -562,17 +580,18 @@ create trigger trg_set_timestamp_fields__peran_izin
   for each row
   execute function set_timestamp_fields();
 
+-- Master sumber data untuk kamus, glosarium, tesaurus, dan etimologi
 create table sumber (
   id serial primary key,
-  kode text not null,
-  nama text not null,
-  glosarium boolean not null default true,
-  keterangan text,
+  kode text not null, -- Kode sumber yang unik
+  nama text not null, -- Nama sumber untuk tampilan
+  glosarium boolean not null default true, -- Flag apakah sumber dipakai untuk glosarium
+  keterangan text, -- Keterangan tambahan tentang sumber
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
-  kamus boolean not null default false,
-  tesaurus boolean not null default false,
-  etimologi boolean not null default false,
+  kamus boolean not null default false, -- Flag apakah sumber dipakai untuk kamus
+  tesaurus boolean not null default false, -- Flag apakah sumber dipakai untuk tesaurus
+  etimologi boolean not null default false, -- Flag apakah sumber dipakai untuk etimologi
   constraint sumber_nama_key unique (nama),
   constraint sumber_kode_key unique (kode)
 );
@@ -583,12 +602,13 @@ create trigger trg_set_timestamp_fields__sumber
   for each row
   execute function set_timestamp_fields();
 
+-- Bank soal harian untuk gim susun kata
 create table susun_kata (
   id serial primary key,
-  tanggal date not null,
-  panjang integer not null,
-  kata text not null,
-  keterangan text,
+  tanggal date not null, -- Tanggal soal harian berlaku
+  panjang integer not null, -- Panjang kata target dalam huruf
+  kata text not null, -- Jawaban kata target huruf kecil
+  keterangan text, -- Catatan internal untuk soal
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
   constraint susun_kata_tanggal_panjang_key unique (tanggal, panjang),
@@ -604,16 +624,17 @@ create trigger trg_set_timestamp_fields__susun_kata
   for each row
   execute function set_timestamp_fields();
 
+-- Riwayat permainan mode bebas per pengguna
 create table susun_kata_bebas (
   id serial primary key,
-  tanggal date not null default ((now() AT TIME ZONE 'Asia/Jakarta'::text))::date,
-  panjang integer not null,
-  kata text not null,
-  pengguna_id integer references pengguna(id) on delete cascade not null,
-  percobaan integer not null,
-  tebakan text not null default ''::text,
-  detik integer not null,
-  menang boolean not null,
+  tanggal date not null default ((now() AT TIME ZONE 'Asia/Jakarta'::text))::date, -- Tanggal permainan dicatat
+  panjang integer not null, -- Panjang kata target pada mode bebas
+  kata text not null, -- Kata target huruf kecil
+  pengguna_id integer references pengguna(id) on delete cascade not null, -- Referensi ke pengguna yang bermain
+  percobaan integer not null, -- Jumlah percobaan yang dipakai sampai permainan selesai
+  tebakan text not null default ''::text, -- Rangkaian tebakan yang disimpan untuk kebutuhan replay atau audit
+  detik integer not null, -- Durasi bermain dalam detik
+  menang boolean not null, -- Flag apakah permainan berakhir menang
   created_at timestamp without time zone not null default now(),
   constraint susun_kata_bebas_kata_check check (kata ~ '^[a-z]+$'::text),
   constraint susun_kata_bebas_kata_panjang_check check (char_length(kata) = panjang),
@@ -625,17 +646,18 @@ create index idx_susun_kata_bebas_created_at on susun_kata_bebas using btree (cr
 create index idx_susun_kata_bebas_klasemen on susun_kata_bebas using btree (menang, percobaan, detik, created_at);
 create index idx_susun_kata_bebas_pengguna_created on susun_kata_bebas using btree (pengguna_id, created_at DESC);
 
+-- Skor harian gim susun kata per pengguna
 create table susun_kata_skor (
   id serial primary key,
-  susun_kata_id integer references susun_kata(id) on delete cascade not null,
-  pengguna_id integer references pengguna(id) on delete cascade not null,
-  percobaan integer not null,
-  detik integer not null,
-  menang boolean not null,
+  susun_kata_id integer references susun_kata(id) on delete cascade not null, -- Referensi ke soal harian
+  pengguna_id integer references pengguna(id) on delete cascade not null, -- Referensi ke pengguna yang mengerjakan soal harian
+  percobaan integer not null, -- Jumlah percobaan yang dipakai
+  detik integer not null, -- Durasi penyelesaian dalam detik
+  menang boolean not null, -- Flag apakah pemain berhasil menyelesaikan soal
   created_at timestamp without time zone not null default now(),
-  tebakan text not null default ''::text,
-  selesai boolean not null default true,
-  mulai_at timestamp without time zone not null default now(),
+  tebakan text not null default ''::text, -- Rangkaian tebakan yang disimpan untuk audit permainan
+  selesai boolean not null default true, -- Flag apakah sesi harian sudah ditandai selesai
+  mulai_at timestamp without time zone not null default now(), -- Waktu mulai sesi permainan harian
   updated_at timestamp without time zone not null default now(),
   constraint susun_kata_skor_unik_harian_user unique (susun_kata_id, pengguna_id),
   constraint susun_kata_skor_percobaan_check check ((percobaan >= 1) AND (percobaan <= 6)),
@@ -646,14 +668,15 @@ create index idx_susun_kata_skor_pengguna on susun_kata_skor using btree (penggu
 create index idx_susun_kata_skor_selesai on susun_kata_skor using btree (susun_kata_id, pengguna_id, selesai);
 create unique index susun_kata_skor_unik_harian_user on susun_kata_skor using btree (susun_kata_id, pengguna_id);
 
+-- Master tagar morfologis yang dapat ditempelkan pada entri kamus
 create table tagar (
   id serial primary key,
-  kode text not null,
-  nama text not null,
-  kategori text not null,
-  deskripsi text,
-  urutan integer not null default 1,
-  aktif boolean not null default true,
+  kode text not null, -- Kode tagar unik yang aman dipakai sebagai identifier
+  nama text not null, -- Nama tampilan tagar, misalnya dengan tanda hubung morfologis
+  kategori text not null, -- Kategori tagar, misalnya prefiks, sufiks, infiks, konfiks, atau klitik
+  deskripsi text, -- Deskripsi singkat fungsi atau penggunaan tagar
+  urutan integer not null default 1, -- Urutan tampilan tagar dalam kategorinya
+  aktif boolean not null default true, -- Flag apakah tagar aktif dipakai
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
   constraint tagar_kode_key unique (kode),
@@ -668,15 +691,16 @@ create trigger trg_set_timestamp_fields__tagar
   for each row
   execute function set_timestamp_fields();
 
+-- Data relasi sinonim dan antonim untuk satu indeks
 create table tesaurus (
   id serial primary key,
-  indeks text not null,
-  sinonim text,
-  antonim text,
+  indeks text not null, -- Indeks entri yang menjadi kepala data tesaurus
+  sinonim text, -- Daftar sinonim dalam format teks sesuai sumber
+  antonim text, -- Daftar antonim dalam format teks sesuai sumber
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
-  aktif boolean not null default true,
-  sumber_id integer references sumber(id) on delete restrict on update cascade,
+  aktif boolean not null default true, -- Flag apakah data tesaurus aktif ditampilkan
+  sumber_id integer references sumber(id) on delete restrict on update cascade, -- Referensi ke sumber data tesaurus
   constraint tesaurus_indeks_key unique (indeks)
 );
 create index idx_tesaurus_indeks_lower on tesaurus using btree (lower(indeks));

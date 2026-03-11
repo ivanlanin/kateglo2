@@ -3,6 +3,7 @@
 ## 2026-03-10 Selasa
 
 - Membatasi pembuatan tautan di kamus dan glosarium hanya untuk entri yang valid
+- Memberi komentar di tabel dan kolom untuk dokumentasi basis data
 
 ## 2026-03-09 Senin
 
