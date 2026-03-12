@@ -215,7 +215,7 @@ describe('KamusAdmin', () => {
           ragam: [{ kode: 'cak', nama: 'cakapan' }],
           bidang: [{ kode: 'umum', nama: 'Umum' }],
           bahasa: [{ kode: 'id', nama: 'Indonesia' }],
-          penyingkatan: [{ kode: 'singkatan', nama: 'Singkatan' }],
+          penyingkatan: [{ kode: 'sing', nama: 'Singkatan' }],
         },
       },
     });
@@ -602,7 +602,7 @@ describe('KamusAdmin', () => {
             { kode: 'abc', nama: 'abc' },
             { kode: '→', nama: '→' },
           ],
-          penyingkatan: [{ kode: 'singkatan', nama: 'Singkatan' }],
+          penyingkatan: [{ kode: 'sing', nama: 'Singkatan' }],
         },
       },
     });
@@ -665,7 +665,7 @@ describe('KamusAdmin', () => {
           ragam: [{}, { kode: 'cak', nama: 'cakapan' }],
           bidang: [{ kode: 'umum', nama: 'Umum' }],
           bahasa: [{ kode: 'id', nama: 'Indonesia' }],
-          penyingkatan: [{ kode: 'singkatan', nama: 'Singkatan' }],
+          penyingkatan: [{ kode: 'sing', nama: 'Singkatan' }],
         },
       },
     });
@@ -1180,7 +1180,7 @@ describe('KamusAdmin', () => {
         data: {
           'bentuk-kata': [{ kode: '', nama: '' }, { kode: 'dasar', nama: 'Dasar' }],
           'jenis-rujuk': [{ kode: '', nama: '' }, { kode: 'lihat', nama: 'lihat' }],
-          penyingkatan: [{ kode: 'singkatan', nama: 'Singkatan' }],
+          penyingkatan: [{ kode: 'sing', nama: 'Singkatan' }],
         },
       },
     });

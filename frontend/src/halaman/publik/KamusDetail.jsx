@@ -129,10 +129,15 @@ function formatTitleCase(teks = '') {
 
 function formatLabelPenyingkatanBadge(teks = '') {
   const value = String(teks || '').trim().toLowerCase();
-  if (value === 'akronim' || value === 'kependekan') {
-    return formatTitleCase(value);
-  }
-  return String(teks || '').trim();
+  const petaPenyingkatan = {
+    akr: 'Akronim',
+    akronim: 'Akronim',
+    kp: 'Kependekan',
+    kependekan: 'Kependekan',
+    sing: 'Singkatan',
+    singkatan: 'Singkatan',
+  };
+  return petaPenyingkatan[value] || String(teks || '').trim();
 }
 
 function normalizeToken(teks = '') {
@@ -188,6 +193,15 @@ function buildLabelMap(labels = []) {
 function resolveNamaLabel(nilai, petaLabel = {}) {
   const key = normalizeToken(nilai);
   return petaLabel[key] || String(nilai || '').trim();
+}
+
+function resolveNamaPenyingkatan(nilai, petaLabel = {}) {
+  const namaLabel = resolveNamaLabel(nilai, petaLabel);
+  if (normalizeToken(namaLabel) !== normalizeToken(nilai)) {
+    return namaLabel;
+  }
+
+  return formatLabelPenyingkatanBadge(nilai);
 }
 
 function buatPathKategoriDariLabel(kategori, nilai, petaLabel = {}) {
@@ -380,6 +394,7 @@ function KamusDetail() {
   const petaRagam = buildLabelMap(kategoriKamus?.ragam || []);
   const petaBidang = buildLabelMap(kategoriKamus?.bidang || []);
   const petaBahasa = buildLabelMap(kategoriKamus?.bahasa || []);
+  const petaPenyingkatan = buildLabelMap(kategoriKamus?.bentuk || []);
 
   const komentarData = komentarResponse?.data || {};
   const jumlahKomentarAktif = Number(komentarData.activeCount || 0);
@@ -808,10 +823,10 @@ function KamusDetail() {
                               {m.penyingkatan && (
                                 <>
                                   <Link
-                                    to={buatPathKategoriKamus('bentuk', m.penyingkatan)}
+                                    to={buatPathKategoriKamus('bentuk', normalisasiSlugNama(resolveNamaPenyingkatan(m.penyingkatan, petaPenyingkatan)))}
                                     className="kamus-badge kamus-badge-penyingkat"
                                   >
-                                    {formatLabelPenyingkatanBadge(m.penyingkatan)}
+                                    {resolveNamaPenyingkatan(m.penyingkatan, petaPenyingkatan)}
                                   </Link>{' '}
                                 </>
                               )}

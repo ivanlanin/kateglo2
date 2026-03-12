@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-11T06:42:13.407Z
+-- Generated: 2026-03-12T04:12:48.448Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -466,7 +466,7 @@ create table makna (
   aktif boolean not null default true, -- Flag apakah makna aktif ditampilkan
   constraint makna_legacy_mid_key unique (legacy_mid),
   constraint makna_makna_check check (TRIM(BOTH FROM makna) <> ''::text),
-  constraint makna_penyingkatan_check check ((penyingkatan IS NULL) OR (penyingkatan = ANY (ARRAY['akronim'::text, 'kependekan'::text, 'singkatan'::text]))),
+  constraint makna_penyingkatan_check check ((penyingkatan IS NULL) OR (penyingkatan = ANY (ARRAY['akr'::text, 'kp'::text, 'sing'::text]))),
   constraint makna_ragam_varian_check check ((ragam_varian IS NULL) OR (ragam_varian = ANY (ARRAY['cak'::text, 'hor'::text, 'kl'::text, 'kas'::text])))
 );
 create index idx_makna_bidang on makna using btree (bidang);

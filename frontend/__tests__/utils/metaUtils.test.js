@@ -43,7 +43,7 @@ describe('metaUtils', () => {
     expect(tentukanNamaKategoriDariPath()).toBe('');
 
     expect(tentukanSlugLabel('kelas', { nama: 'Kata Dasar', kode: 'kd' })).toBe('kata-dasar');
-    expect(tentukanSlugLabel('bentuk', { nama: 'Kata Dasar', kode: 'KD' })).toBe('kd');
+    expect(tentukanSlugLabel('bentuk', { nama: 'Kata Dasar', kode: 'KD' })).toBe('kata-dasar');
     expect(tentukanSlugLabel('', {})).toBe('');
 
     const kategori = buildMetaKategoriKamus({ kategori: 'kelas', kode: 'verba' });

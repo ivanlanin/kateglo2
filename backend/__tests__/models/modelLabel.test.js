@@ -78,13 +78,14 @@ describe('ModelLabel', () => {
     ]);
     expect(result.bahasa).toEqual([{ kode: 'id', nama: 'Indonesia' }]);
     expect(result.abjad).toHaveLength(26);
-    expect(result.bentuk).toHaveLength(5);
+    expect(result.bentuk).toHaveLength(6);
     expect(result.bentuk).toEqual([
       { kode: 'dasar', nama: 'dasar' },
       { kode: 'turunan', nama: 'turunan' },
       { kode: 'gabungan', nama: 'gabungan' },
-      { kode: 'akronim', nama: 'akronim' },
-      { kode: 'kependekan', nama: 'kependekan' },
+      { kode: 'akr', nama: 'Akronim' },
+      { kode: 'kp', nama: 'Kependekan' },
+      { kode: 'sing', nama: 'Singkatan' },
     ]);
     expect(result.ekspresi).toHaveLength(3);
     expect(result.ekspresi).toEqual([
@@ -320,17 +321,17 @@ describe('ModelLabel', () => {
     expect(db.query).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining('m.penyingkatan = $1'),
-      ['akronim']
+      ['akr']
     );
     expect(db.query).toHaveBeenNthCalledWith(
       2,
       expect.stringContaining('LIMIT $2 OFFSET $3'),
-      ['akronim', 15, 3]
+      ['akr', 15, 3]
     );
     expect(result).toEqual({
       data: [{ id: 8, entri: 'PBB', jenis: 'akronim' }],
       total: 2,
-      label: { kode: 'akronim', nama: 'akronim' },
+      label: { kode: 'akr', nama: 'Akronim' },
     });
   });
 
@@ -846,10 +847,10 @@ describe('ModelLabel', () => {
     expect(db.query).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining('SELECT COUNT(*) AS total'),
-      ['akronim']
+      ['akr']
     );
     expect(result.total).toBe(1);
-    expect(result.label).toEqual({ kode: 'akronim', nama: 'akronim' });
+    expect(result.label).toEqual({ kode: 'akr', nama: 'Akronim' });
   });
 
   it('cariEntriPerLabelCursor ekspresi valid mengembalikan data', async () => {

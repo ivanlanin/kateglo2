@@ -80,10 +80,10 @@ describe('Kamus', () => {
 
   it('helper gabungkan kategori bentuk/ekspresi menutup semua cabang deduplikasi', () => {
     expect(__private.gabungkanKategoriBentuk([{ kode: 'gabungan', nama: 'gabungan' }]).map((i) => i.kode)).toEqual(
-      expect.arrayContaining(['gabungan', 'akronim', 'kependekan'])
+      expect.arrayContaining(['gabungan', 'akr', 'kp', 'sing'])
     );
     expect(__private.gabungkanKategoriBentuk([{ kode: 'dasar', nama: 'dasar' }]).map((i) => i.kode)).toEqual(
-      expect.arrayContaining(['dasar', 'akronim', 'kependekan'])
+      expect.arrayContaining(['dasar', 'akr', 'kp', 'sing'])
     );
     expect(__private.gabungkanKategoriEkspresi([{ kode: 'idiom', nama: 'idiom' }]).map((i) => i.kode)).toEqual(
       expect.arrayContaining(['kiasan', 'idiom'])
@@ -96,7 +96,7 @@ describe('Kamus', () => {
       __private
         .gabungkanKategoriBentuk([{ kode: 'gabungan' }, { kode: '' }, { kode: 'GABUNGAN' }, { nama: 'tanpa-kode' }])
         .map((i) => i.kode)
-    ).toEqual(['gabungan', 'akronim', 'kependekan']);
+    ).toEqual(['gabungan', 'akr', 'kp', 'sing']);
 
     expect(
       __private
@@ -104,12 +104,12 @@ describe('Kamus', () => {
         .map((i) => i.kode)
     ).toEqual(['kiasan', 'idiom', 'peribahasa']);
 
-    expect(__private.gabungkanKategoriBentuk(null).map((i) => i.kode)).toEqual(['akronim', 'kependekan']);
+    expect(__private.gabungkanKategoriBentuk(null).map((i) => i.kode)).toEqual(['akr', 'kp', 'sing']);
     expect(__private.gabungkanKategoriBentukGabungan(null, [{ kode: 'prefiks', nama: 'prefiks' }, { kode: 'prefiks', nama: 'Prefiks' }]).map((i) => i.kode)).toEqual([
-      'akronim', 'kependekan', 'prefiks',
+      'akr', 'kp', 'sing', 'prefiks',
     ]);
     expect(__private.gabungkanKategoriBentukGabungan([{ kode: '' }, { kode: 'gabungan', nama: 'gabungan' }], [undefined, { kode: 'prefiks', nama: 'prefiks' }]).map((i) => i.kode)).toEqual([
-      'gabungan', 'akronim', 'kependekan', 'prefiks',
+      'gabungan', 'akr', 'kp', 'sing', 'prefiks',
     ]);
     expect(__private.gabungkanKategoriEkspresi(undefined).map((i) => i.kode)).toEqual(['kiasan']);
     expect(__private.gabungkanKategoriEkspresi(null).map((i) => i.kode)).toEqual(['kiasan']);

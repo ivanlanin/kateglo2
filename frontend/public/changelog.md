@@ -1,9 +1,16 @@
 # Riwayat Perubahan
 
+## 2026-03-12 Kamis
+
+- Mengubah `makna.penyingkatan` menjadi kode dan menyiapkan penambahan singkatan
+
+## 2026-03-11 Rabu
+
+- Memberi komentar di tabel dan kolom untuk dokumentasi basis data
+
 ## 2026-03-10 Selasa
 
 - Membatasi pembuatan tautan di kamus dan glosarium hanya untuk entri yang valid
-- Memberi komentar di tabel dan kolom untuk dokumentasi basis data
 
 ## 2026-03-09 Senin
 

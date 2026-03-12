@@ -273,7 +273,7 @@ describe('apiAdmin', () => {
       punyaPemenggalan: '0',
       punyaIlmiah: '1',
       punyaKimia: '0',
-      penyingkatan: 'singkatan',
+      penyingkatan: 'sing',
       punyaKiasan: '1',
       punyaContoh: '1',
     });
@@ -294,7 +294,7 @@ describe('apiAdmin', () => {
         punya_pemenggalan: '0',
         punya_ilmiah: '1',
         punya_kimia: '0',
-        penyingkatan: 'singkatan',
+        penyingkatan: 'sing',
         punya_kiasan: '1',
         punya_contoh: '1',
       },

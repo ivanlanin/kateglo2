@@ -77,11 +77,14 @@ describe('KamusDetail', () => {
     expect(screen.getByText(/Memuat detail/i)).toBeInTheDocument();
   });
 
-  it('helper formatLabelPenyingkatanBadge memformat akronim/kependekan dan mempertahankan label lain', () => {
+  it('helper formatLabelPenyingkatanBadge memformat kode/nama penyingkatan dan mempertahankan label lain', () => {
+    expect(__private.formatLabelPenyingkatanBadge('akr')).toBe('Akronim');
     expect(__private.formatLabelPenyingkatanBadge('akronim')).toBe('Akronim');
+    expect(__private.formatLabelPenyingkatanBadge('kp')).toBe('Kependekan');
     expect(__private.formatLabelPenyingkatanBadge('kependekan')).toBe('Kependekan');
+    expect(__private.formatLabelPenyingkatanBadge('sing')).toBe('Singkatan');
     expect(__private.formatLabelPenyingkatanBadge(' AKRONIM ')).toBe('Akronim');
-    expect(__private.formatLabelPenyingkatanBadge(' singkatan ')).toBe('singkatan');
+    expect(__private.formatLabelPenyingkatanBadge(' singkatan ')).toBe('Singkatan');
     expect(__private.formatLabelPenyingkatanBadge()).toBe('');
   });
 
@@ -988,7 +991,7 @@ describe('KamusDetail', () => {
     expect(screen.getByRole('link', { name: 'slang' })).toHaveAttribute('href', '/kamus/ragam/slang');
     expect(screen.getByRole('link', { name: 'Kiasan' })).toHaveAttribute('href', '/kamus/ekspresi/kiasan');
     expect(screen.getByRole('link', { name: 'Arab' })).toHaveAttribute('href', '/kamus/bahasa/arab');
-    expect(screen.getByRole('link', { name: 'akr' })).toHaveAttribute('href', '/kamus/bentuk/akr');
+    expect(screen.getByRole('link', { name: 'Akronim' })).toHaveAttribute('href', '/kamus/bentuk/akronim');
     expect(screen.getByText('species', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('H2O')).toBeInTheDocument();
     expect(screen.getByText(/arti contoh/i)).toBeInTheDocument();

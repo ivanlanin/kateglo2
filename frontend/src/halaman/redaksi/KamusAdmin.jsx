@@ -65,9 +65,9 @@ const opsiJenisBawaan = [
 
 const opsiTipePenyingkatBawaan = [
   { value: '', label: '— Tidak ada —' },
-  { value: 'akronim', label: 'Akronim' },
-  { value: 'kependekan', label: 'Kependekan' },
-  { value: 'singkatan', label: 'Singkatan' },
+  { value: 'akr', label: 'Akronim' },
+  { value: 'kp', label: 'Kependekan' },
+  { value: 'sing', label: 'Singkatan' },
 ];
 
 const kodeRagamVarianValid = ['cak', 'hor', 'kl', 'kas'];

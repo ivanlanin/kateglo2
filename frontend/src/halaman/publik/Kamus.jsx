@@ -42,8 +42,9 @@ const URUTAN_KATEGORI_TAGAR = ['prefiks', 'infiks', 'sufiks', 'konfiks', 'kombin
 const KATEGORI_TAGAR_AFIX = ['prefiks', 'infiks', 'sufiks', 'konfiks'];
 
 const OPSI_BENTUK_TAMBAHAN = [
-  { kode: 'akronim', nama: 'akronim' },
-  { kode: 'kependekan', nama: 'kependekan' },
+  { kode: 'akr', nama: 'Akronim' },
+  { kode: 'kp', nama: 'Kependekan' },
+  { kode: 'sing', nama: 'Singkatan' },
 ];
 
 const OPSI_EKSPRESI_TAMBAHAN = [

@@ -18,7 +18,11 @@ function sqlAbjad(alias = '') {
   return `UPPER(SUBSTRING(REGEXP_REPLACE(${prefix}entri, '^[^a-zA-Z]*', ''), 1, 1))`;
 }
 const JENIS_BENTUK = ['dasar', 'turunan', 'gabungan'];
-const BENTUK_PENYINGKATAN = ['akronim', 'kependekan'];
+const LABEL_PENYINGKATAN = [
+  { kode: 'akr', nama: 'Akronim', slug: 'akronim' },
+  { kode: 'kp', nama: 'Kependekan', slug: 'kependekan' },
+  { kode: 'sing', nama: 'Singkatan', slug: 'singkatan' },
+];
 const JENIS_EKSPRESI = ['idiom', 'peribahasa'];
 const JENIS_UNSUR_TERIKAT = ['terikat', 'prefiks', 'infiks', 'sufiks', 'konfiks', 'klitik', 'prakategorial'];
 const JENIS_SEMUA = [...JENIS_BENTUK, ...JENIS_EKSPRESI, ...JENIS_UNSUR_TERIKAT, 'varian'];
@@ -60,6 +64,23 @@ function normalizeLabelSlug(value) {
 function denormalizeLabelSlug(value) {
   const cleaned = normalizeLabelSlug(value);
   return cleaned.includes('-') ? cleaned.replace(/-/g, ' ') : cleaned;
+}
+
+function cariLabelPenyingkatan(input = '') {
+  const normalizedInput = normalizeLabelValue(input);
+  const normalizedSlug = normalizeLabelSlug(input);
+  if (!normalizedInput && !normalizedSlug) return null;
+
+  return LABEL_PENYINGKATAN.find((item) => (
+    normalizeLabelValue(item.kode) === normalizedInput
+    || normalizeLabelValue(item.nama) === normalizedInput
+    || item.slug === normalizedSlug
+    || normalizeLabelSlug(item.nama) === normalizedSlug
+  )) || null;
+}
+
+function getLabelPenyingkatanList() {
+  return LABEL_PENYINGKATAN.map((item) => ({ kode: item.kode, nama: item.nama }));
 }
 
 function urutkanLabelPrioritas(labels, urutanPrioritas) {
@@ -335,7 +356,7 @@ class ModelLabel {
     grouped.bentuk = JENIS_BENTUK.map((jenis) => ({ kode: jenis, nama: jenis }));
     grouped.bentuk = [
       ...grouped.bentuk,
-      ...BENTUK_PENYINGKATAN.map((jenis) => ({ kode: jenis, nama: jenis })),
+      ...getLabelPenyingkatanList(),
     ];
     grouped.ekspresi = [{ kode: 'kiasan', nama: 'kiasan' }, ...JENIS_EKSPRESI.map((jenis) => ({ kode: jenis, nama: jenis }))];
 
@@ -378,14 +399,15 @@ class ModelLabel {
         return this._cariEntriPerJenis(kode, jenisBentuk, limit, offset);
       }
 
-      if (BENTUK_PENYINGKATAN.includes(kodeTertrim)) {
+      const labelPenyingkatan = cariLabelPenyingkatan(kodeTertrim);
+      if (labelPenyingkatan) {
         const countResult = await db.query(
           `SELECT COUNT(DISTINCT l.id) AS total
            FROM entri l
            JOIN makna m ON m.entri_id = l.id
            WHERE l.aktif = 1
              AND m.penyingkatan = $1`,
-          [kodeTertrim]
+          [labelPenyingkatan.kode]
         );
         const total = parseCount(countResult.rows[0]?.total);
 
@@ -402,13 +424,13 @@ class ModelLabel {
              )
            ORDER BY l.entri
            LIMIT $2 OFFSET $3`,
-          [kodeTertrim, limit, offset]
+          [labelPenyingkatan.kode, limit, offset]
         );
 
         return {
           data: dataResult.rows,
           total,
-          label: { kode: kodeTertrim, nama: kodeTertrim },
+          label: { kode: labelPenyingkatan.kode, nama: labelPenyingkatan.nama },
         };
       }
 
@@ -578,7 +600,8 @@ class ModelLabel {
         });
       }
 
-      if (BENTUK_PENYINGKATAN.includes(kodeTertrim)) {
+      const labelPenyingkatan = cariLabelPenyingkatan(kodeTertrim);
+      if (labelPenyingkatan) {
         return this._cariEntriCursorDenganKondisi({
           whereSql: `l.aktif = 1
             AND EXISTS (
@@ -587,8 +610,8 @@ class ModelLabel {
               WHERE m.entri_id = l.id
                 AND m.penyingkatan = $1
             )`,
-          params: [kodeTertrim],
-          label: { kode: kodeTertrim, nama: kodeTertrim },
+          params: [labelPenyingkatan.kode],
+          label: { kode: labelPenyingkatan.kode, nama: labelPenyingkatan.nama },
           limit,
           cursor,
           direction,
@@ -1014,8 +1037,11 @@ class ModelLabel {
 module.exports = ModelLabel;
 module.exports.__private = {
   sqlAbjad,
+  LABEL_PENYINGKATAN,
   buildAdminLabelWhereClause,
+  cariLabelPenyingkatan,
   getMasterKategoriTable,
+  getLabelPenyingkatanList,
   ambilDaftarLabelMaster,
   ambilLabelMaster,
   normalisasiKategoriLabel,

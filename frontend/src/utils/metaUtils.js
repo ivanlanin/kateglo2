@@ -35,7 +35,7 @@ export const NAMA_KATEGORI_BROWSE_KAMUS = {
   unsur_terikat: 'Bentuk Terikat',
 };
 
-export const KATEGORI_SLUG_NAMA = new Set(['kelas_kata', 'kelas-kata', 'kelas', 'ragam', 'bahasa', 'bidang']);
+export const KATEGORI_SLUG_NAMA = new Set(['kelas_kata', 'kelas-kata', 'kelas', 'bentuk', 'ragam', 'bahasa', 'bidang']);
 
 function amanDecode(teks = '') {
   const sumber = String(teks || '');
