@@ -1,8 +1,9 @@
 # Analisis Singkatan dalam KBBI VI
 
-**Tanggal**: 2026-03-08
+**Tanggal**: 2026-03-08 (diperbarui 2026-03-12)
 **Sumber**: KBBI VI Daring (kbbi.kemendikdasmen.go.id)
 **Jumlah entri**: 3.381 singkatan unik
+**Data makna**: `_data/kbbi_makna_singkatan.csv` — 3.453 makna (sejumlah entri memiliki lebih dari satu makna)
 
 ---
 
@@ -54,22 +55,26 @@ Kategori terbesar. Terdiri dari singkatan yang dibaca per huruf (*initialisms*) 
 
 ### 2.2 Homonim Bernomor
 
-Sebanyak **503 entri** merupakan singkatan yang sama dengan makna berbeda, dibedakan oleh angka superskrip yang ditulis dalam kurung, misalnya `AB (1)`, `AB (2)`. Ini menunjukkan tingginya tabrakan singkatan di berbagai bidang ilmu dan lembaga.
+Sebanyak **503 entri** memiliki angka pembeda dalam kurung, misalnya `AB (1)`, `AB (2)`. Angka ini menandai bahwa suatu *bentuk* singkatan dipakai untuk lebih dari satu kepanjangan yang berbeda. Jumlah bentuk singkatan unik yang memiliki setidaknya satu homonim bernomor lebih sedikit dari 503, karena setiap kelompok homonim menyumbang minimal dua entri.
 
-Singkatan dengan tabrakan terbanyak:
+Data makna mengkonfirmasi bahwa hampir semua entri singkatan memiliki tepat **satu makna** — berbeda dari entri kata biasa yang bisa punya banyak makna dalam satu entri. Dengan demikian, jumlah homonim bernomor untuk suatu bentuk singkatan praktis setara dengan jumlah total makna berbeda yang dimiliki bentuk itu di KBBI.
 
-| Singkatan | Jumlah makna | Contoh bidang |
-|-----------|-------------|---------------|
-| `PPK`     | 6           | keuangan, kepemiluan, pertanian, ketenagakerjaan |
-| `PP`      | 6           | peraturan pemerintah, lembaga, perguruan, dll. |
-| `AB`      | 5           | militer, administrasi, medis, angkutan |
-| `TB`      | 5           | tuberkulosis, ukuran, kepegawaian |
-| `ATM`     | 4           | perbankan, kimia, fisika, militer |
-| `KKP`     | 4           | kelautan, keuangan, kesehatan, kepolisian |
-| `PBB`     | 4           | pajak, organisasi internasional, olahraga, dll. |
-| `SKP`     | 4           | kepegawaian, kepolisian, ijin, standar |
+Singkatan dengan homonim terbanyak:
 
-Kasus paling ekstrem dari segi penomoran adalah **`BP`**, yang memiliki nomor hingga **(42)** — bukan berarti ada 42 makna, melainkan penomoran mengikuti nomor program/peraturan resmi pemerintah: `BP (3)`, `BP (7)`, `BP (41)`, `BP (42)`. Kasus serupa: `Pph (21)` (Pajak Penghasilan Pasal 21).
+| Singkatan | Jumlah homonim | Kepanjangan (pilihan) |
+|-----------|----------------|-----------------------|
+| `PPK`     | 6              | panitia pemungutan kredit; pejabat pembuat komitmen; dll. |
+| `PP`      | 6              | peraturan pemerintah; dan berbagai kepanjangan lain |
+| `AB`      | 5              | anggaran belanja; anak buah; antibodi; dll. |
+| `TB`      | 5              | tuberkulosis; tinggi badan; tanda bukti; dll. |
+| `ATM`     | 4              | anjungan tunai mandiri; atmosfer; dll. |
+| `KKP`     | 4              | Kementerian Kelautan dan Perikanan; dll. |
+| `PBB`     | 4              | Perserikatan Bangsa-Bangsa; pajak bumi bangunan; dll. |
+| `SKP`     | 4              | sasaran kinerja pegawai; surat keterangan penghasilan; dll. |
+
+> **Catatan**: kolom "Contoh bidang" yang ada pada draf awal dihapus karena terbukti menyesatkan. Data makna mengkonfirmasi (lihat **bagian 4.2**) bahwa hampir tidak ada singkatan yang memiliki label bidang ilmu resmi di KBBI — bidang pada tabel lama adalah inferensi dari nama kepanjangan, bukan atribut dari data.
+
+Kasus paling ekstrem dari segi penomoran adalah **`BP`**, yang memiliki nomor hingga **(42)** — bukan berarti ada 42 makna berbeda dalam satu entri, melainkan penomoran mengikuti nomor program/peraturan resmi pemerintah: `BP (3)`, `BP (7)`, `BP (41)`, `BP (42)`. Kasus serupa: `Pph (21)` (Pajak Penghasilan Pasal 21).
 
 Ini menyingkap kerancuan metodologis dalam KBBI: angka yang di satu tempat bermakna *pembeda homonim*, di tempat lain justru bermakna *bagian dari nama resmi*.
 
@@ -228,6 +233,8 @@ Kasus `dr.` vs. `Dr.` adalah yang paling signifikan secara sosial: satu huruf ka
 
 ## 4. Distribusi Bidang
 
+### 4.1 Kategori tematik (dari pola nama)
+
 Berdasarkan pola nama, singkatan dalam KBBI VI mencerminkan lima bidang utama:
 
 1. **Pemerintahan dan administrasi negara** — terbesar; mencakup nama kementerian, lembaga, dokumen resmi, jabatan struktural
@@ -235,6 +242,20 @@ Berdasarkan pola nama, singkatan dalam KBBI VI mencerminkan lima bidang utama:
 3. **Kesehatan dan kedokteran** — diagnosis, prosedur, lembaga kesehatan, singkatan medis internasional
 4. **Hukum dan keuangan** — peraturan perundangan, instrumen fiskal, perpajakan
 5. **Teknologi dan ilmu pengetahuan** — satuan SI, singkatan IT, lembaga riset
+
+### 4.2 Label bidang aktual dari kolom `Bidang` (data makna)
+
+Data makna mengungkap fakta yang tidak terduga: dari seluruh ~3.453 makna singkatan, **lebih dari 95% tidak memiliki label bidang** (kolom `Bidang` kosong). Ini sangat berbeda dari entri makna biasa dalam KBBI yang banyak diberi label bidang ilmu seperti *Ek*, *Huk*, *Med*, *Bot*.
+
+Singkatan yang mendapat label bidang relatif sedikit dan terkonsentrasi di domain tertentu:
+
+| Label | Contoh entri | Keterangan |
+|-------|-------------|------------|
+| `Isl` | `a.s.`, `BPIH`, `IAIN`, `LPMQ`, `MUI`, `MTQ` | Istilah keislaman |
+| `Ek` | `ABT`, `BEP`, `IHSG`, `KIK` | Istilah ekonomi |
+| `Astron` | `AU` | Satuan astronomi |
+
+Absennya label bidang pada singkatan pemerintahan, militer, dan pendidikan menunjukkan KBBI memperlakukan singkatan-singkatan tersebut sebagai **kosakata umum bahasa Indonesia**, bukan kosakata teknis. Ini konsisten dengan argumen bahwa singkatan lembaga negara, meski spesifik, sudah meresap ke dalam wacana publik sehari-hari.
 
 ---
 
@@ -264,3 +285,115 @@ Jika dipandang dari sudut sosiologi bahasa, koleksi singkatan KBBI VI adalah pot
 **Pengulangan P**: Pola berulang huruf P (`PP`, `PPP`, `PPPP`) mencerminkan budaya birokrasi yang gemar bertumpuk: *Peraturan Pemerintah*, *Pedoman Pelaksanaan Peraturan Pemerintah*, hingga `PPPP (1)` dan `PPPP (2)` sebagai empat-P yang masing-masing merujuk konsep berbeda.
 
 **Gelar sebagai identitas sosial**: 238 dari 3.381 entri (7%) adalah gelar akademik atau gelar kehormatan. Indonesia memiliki ekosistem gelar yang luar biasa kaya: dari `Ir.` (insinyur, gelar era kolonial yang masih bertahan) hingga `M.Adm.S.D.A.` (magister administrasi sumber daya alam) dan `Sp.P.D.-K.H.O.M.` Ini mencerminkan tingginya nilai simbolik gelar dalam hierarki sosial Indonesia.
+
+---
+
+## 7. Wawasan dari Data Makna
+
+*Bagian ini ditambahkan setelah perolehan kolom Makna dari `Admin/Makna` KBBI VI (filter TipePenyingkat=sing, ~3.453 makna). Sebelumnya, analisis hanya didasarkan pada daftar entri tanpa definisi.*
+
+### 7.1 Kelas Kata: Semua Nomina
+
+Satu temuan paling konsisten: **seluruh makna singkatan berkelas `n` (nomina)**. Tidak ada singkatan yang diberi kelas `v` (verba), `a` (adjektiva), atau `adv` (adverbia) — bahkan ketika kepanjangannya adalah frasa verbal atau adjektival. Contoh:
+
+- `MCK` (mandi, cuci, kakus) — kepanjangan verbal, tapi KBBI labeli `n`
+- `CBSA` (cara belajar siswa aktif) — mengandung adjektiva, tapi `n`
+- `dll.` (dan lain-lain) — frasa koordinatif, tapi `n`
+
+Pengecualian minor: beberapa entri seperti `a-` (awalan) masuk sebagai `bentuk terikat` — ini lebih tepat secara morfologis, tapi bukan singkatan sejati.
+
+Implikasi: KBBI secara sistematis menempatkan semua singkatan dalam satu kelas gramatikal. Ini kemungkinan keputusan editorial untuk konsistensi leksikografis, bukan analisis gramatikal per entri.
+
+### 7.2 Asal Bahasa Asing dalam Definisi
+
+Pola `; dr [sumber]` dalam kolom Makna mengungkap asal bahasa singkatan yang tidak kelihatan dari entri saja. Empat bahasa sumber teridentifikasi:
+
+**Bahasa Inggris** (paling banyak):
+
+| Singkatan | Makna Indonesia | Sumber Inggris |
+|-----------|----------------|----------------|
+| `AU` | satuan astronomi | *astronomical unit* |
+| `ATC` | kendali lalu lintas udara | *air traffic control* |
+| `ATM (1)` | anjungan tunai mandiri | *automatic teller machine* |
+| `B.A.` | gelar sarjana | *Bachelor of Arts* |
+| `B.Sc.` | gelar sarjana | *Bachelor of Science* |
+| `DZ` | daerah jatuh | *drop zone* |
+| `kWh` | kilowatt-jam | *kilowatt-hour* |
+
+**Bahasa Belanda** (warisan kolonial):
+
+| Singkatan | Makna | Sumber Belanda |
+|-----------|-------|----------------|
+| `BFO` | komite pengelola RIS | *Bijeenkomst voor Federaal Overleg* |
+| `BH` | beha; kutang | *bustehouder* |
+| `MULO` | sekolah menengah pertama zaman kolonial | *Meer Uitgebreid Lager Onderwijs* |
+
+**Bahasa Arab**:
+
+| Singkatan | Makna | Sumber Arab |
+|-----------|-------|-------------|
+| `a.s.` | gelar nabi/rasul | *alaihi salam* |
+
+**Bahasa Latin**:
+
+| Singkatan | Makna | Sumber Latin |
+|-----------|-------|--------------|
+| `LS` | salam pembuka surat | *lectori salutem* |
+| `n.b.` | perhatikan | *nota bene* |
+| `Dr. h.c.` | doktor kehormatan | *doctor honoris causa* |
+| `Dr. Phil.` | doktor filsafat | *doctor philosophiae* |
+| `Dr.Th.` | doktor teologi | *doctor theologiae* |
+
+Kehadiran singkatan Belanda (`BFO`, `MULO`, `BH`) menunjukkan KBBI mendokumentasikan warisan leksikal kolonial yang masih digunakan. `BH` khususnya menarik: singkatan Belanda yang sudah tidak dikenal sebagai singkatan oleh penutur masa kini — hanya dikenal sebagai kata.
+
+### 7.3 Tipologi Pola Definisi
+
+Kolom Makna mengungkap lima pola penulisan definisi yang berbeda untuk singkatan:
+
+**Pola 1 — Kepanjangan murni** (mayoritas):
+> *administrasi bisnis*, *buang air besar*, *Angkatan Darat*
+
+Definisi = kepanjangan singkatan, tidak ada konteks tambahan.
+
+**Pola 2 — Kepanjangan + padanan atau sinonim** (dengan titik koma):
+> `ATM (1)`: *anjungan tunai mandiri; automatic teller machine*
+> `AC (1)`: *pengondisi udara; penyejuk udara; air conditioning; air conditioner*
+> `AU`: *satuan astronomi; dr astronomical unit*
+
+Definisi mendua: versi Indonesia + versi asing, atau kepanjangan + sinonim Indonesia. Titik koma sebagai pemisah.
+
+**Pola 3 — Kepanjangan + konteks parentetis**:
+> `A.Md.`: *ahli madya (gelar pd pendidikan D-3)*
+> `A.K.B.P.`: *ajun komisaris besar polisi (pangkat perwira menengah polisi dng lambang dua melati, di atas komisaris polisi di bawah komisaris besar polisi)*
+
+Definisi utama adalah kepanjangan; konteks tambahan dalam kurung. Sering digunakan untuk gelar.
+
+**Pola 4 — Definisi ensiklopedis** (panjang, berisi sejarah):
+> `BPUPKI`: *Badan Penyelidik Usaha-usaha Persiapan Kemerdekaan Indonesia (badan yg dibentuk oleh Jepang sbg upaya mendapatkan dukungan dr bangsa Indonesia...)*
+> `G-30-S`: *Gerakan 30 September (peristiwa yg terjadi malam 30 September sampai 1 Oktober 1965 saat tujuh perwira tinggi militer Indonesia beserta beberapa orang lainnya dibunuh oleh PKI)*
+> `KMB (1)`: *Konferensi Meja Bundar (sebuah pertemuan yg bertempat di Den Haag, Belanda, dr 23 Agustus–2 November 1949...)*
+
+Singkatan bersejarah mendapat definisi yang menyerupai entri ensiklopedia — bukan sekedar kepanjangan, melainkan penjelasan lengkap tentang apa institusi atau peristiwa itu.
+
+**Pola 5 — Definisi bermuatan konotatif**:
+> `ABS (1)`: *asal bapak senang (sebutan untuk kata-kata dan sikap manis yg dilakukan untuk menyenangkan hati atasan)*
+
+`ABS` adalah satu-satunya singkatan yang definisinya secara eksplisit memuat kritik sosial terhadap kultur birokrasi — pengakuan bahwa singkatan tersebut bukan istilah netral.
+
+### 7.4 Silang-Rujuk dan Perubahan Nama Lembaga
+
+Beberapa makna secara eksplisit merujuk ke singkatan lain, mengungkap hubungan yang tidak terlihat dari daftar entri:
+
+**Pasangan silang-rujuk simetris** (saling merujuk satu sama lain):
+- `ATHG` ↔ `HTAG`: *"ancaman, tantangan, hambatan, dan gangguan; HTAG"* ↔ *"hambatan, tantangan, ancaman, dan gangguan; ATHG"* — urutan kata berbeda, keduanya hadir sebagai entri resmi KBBI
+
+**Versi lama → versi baru** (lembaga berganti nama):
+- `BMG` → `BMKG`: makna `BMG` mencantumkan *"Badan Meteorologi dan Geofisika; BMKG"*, mengakui BMG sebagai nama lama
+- `BKPM`, `BPUPKI`, `IKKA` memiliki keterangan perubahan nama dalam tanda kurung
+
+**Lembaga yang sudah bubar** (KBBI tetap mendokumentasikan):
+- `BEJ (1)`: *"Bursa Efek Jakarta (bursa saham di Jakarta yg dibubarkan dan digabungkan dng Bursa Efek Surabaya menjadi Bursa Efek Indonesia pd 2007)"*
+- `BHMN`: *"Badan Hukum Milik Negara (... berakhir pd 2012)"*
+- `ABRI`, `AKRI`, `ALRI`, `ADRI`, `APRI`, `AMN` — nama militer era lama yang sudah diubah
+
+Silang-rujuk dan catatan historis ini menjadikan KBBI VI bukan hanya kamus sinkronis, melainkan juga **arsip diakronis** perkembangan kelembagaan Indonesia.
