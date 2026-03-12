@@ -9,6 +9,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
 const routes = require('./routes');
+const cronRoutes = require('./routes/cron');
 const authRoutes = require('./routes/auth');
 const seoPublikRoutes = require('./routes/seoPublik');
 const { pasangFrontendRuntime } = require('./services/layananSsrRuntime');
@@ -148,6 +149,7 @@ app.get('/health', (req, res) => {
 
 // API Routes
 app.use('/auth', authRoutes);
+app.use('/cron', cronRoutes);
 app.use('/api', routes);
 app.use('/', seoPublikRoutes);
 pasangFrontendRuntime(app);

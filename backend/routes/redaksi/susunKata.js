@@ -6,6 +6,7 @@ const express = require('express');
 const { periksaIzin } = require('../../middleware/otorisasi');
 const ModelSusunKata = require('../../models/modelSusunKata');
 const ModelEntri = require('../../models/modelEntri');
+const { jalankanPrefillSusunKataHarian } = require('../../jobs/jobSusunKataHarian');
 
 const router = express.Router();
 
@@ -34,15 +35,7 @@ router.get('/harian', periksaIzin('kelola_susun_kata'), async (req, res, next) =
   try {
     const tanggalFilter = parseTanggal(req.query.tanggal);
     const panjang = parsePanjangFilter(req.query.panjang);
-    let tanggalAcuan = tanggalFilter;
-
-    if (!tanggalAcuan) {
-      tanggalAcuan = await ModelSusunKata.ambilTanggalHariIniJakarta();
-    }
-
-    if (tanggalAcuan) {
-      await ModelSusunKata.buatHarianRentang({ tanggalMulai: tanggalAcuan, totalHari: 30 });
-    }
+    await jalankanPrefillSusunKataHarian({ tanggalMulai: tanggalFilter, totalHari: 30 });
 
     const data = await ModelSusunKata.daftarHarianAdmin({ tanggal: tanggalFilter, panjang, limit: 500 });
 

@@ -4,6 +4,7 @@
 
 - Mengubah `makna.penyingkatan` menjadi kode dan menyiapkan penambahan singkatan
 - Memisahkan halaman redaksi daftar hitam pencarian
+- Menyiapkan infrastruktur cron dan membuat cron untuk susun kata harian
 
 ## 2026-03-11 Rabu
 
