@@ -6,7 +6,6 @@ const express = require('express');
 const { periksaIzin } = require('../../middleware/otorisasi');
 const ModelSusunKata = require('../../models/modelSusunKata');
 const ModelEntri = require('../../models/modelEntri');
-const { jalankanPrefillSusunKataHarian } = require('../../jobs/jobSusunKataHarian');
 
 const router = express.Router();
 
@@ -35,7 +34,6 @@ router.get('/harian', periksaIzin('kelola_susun_kata'), async (req, res, next) =
   try {
     const tanggalFilter = parseTanggal(req.query.tanggal);
     const panjang = parsePanjangFilter(req.query.panjang);
-    await jalankanPrefillSusunKataHarian({ tanggalMulai: tanggalFilter, totalHari: 30 });
 
     const data = await ModelSusunKata.daftarHarianAdmin({ tanggal: tanggalFilter, panjang, limit: 500 });
 
@@ -57,7 +55,7 @@ router.get('/harian/detail', periksaIzin('kelola_susun_kata'), async (req, res, 
       return res.status(400).json({ success: false, message: 'Tanggal wajib format YYYY-MM-DD' });
     }
 
-    const harian = await ModelSusunKata.ambilAtauBuatHarian({ tanggal, panjang });
+    const harian = await ModelSusunKata.ambilHarian({ tanggal, panjang });
 
     if (!harian) {
       return res.status(404).json({ success: false, message: 'Kata harian tidak tersedia' });

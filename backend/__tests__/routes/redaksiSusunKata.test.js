@@ -10,16 +10,13 @@ jest.mock('../../middleware/otorisasi', () => ({
   periksaIzin: () => (_req, _res, next) => next(),
 }));
 
-jest.mock('../../jobs/jobSusunKataHarian', () => ({
-  jalankanPrefillSusunKataHarian: jest.fn(),
-}));
-
 jest.mock('../../models/modelSusunKata', () => ({
   parsePanjang: jest.fn((value, fallback = 5) => {
     const parsed = Number.parseInt(value, 10);
     if (Number.isNaN(parsed)) return fallback;
     return Math.min(Math.max(parsed, 4), 8);
   }),
+  ambilHarian: jest.fn(),
   ambilAtauBuatHarian: jest.fn(),
   daftarHarianAdmin: jest.fn(),
   ambilPesertaHarian: jest.fn(),
@@ -33,7 +30,6 @@ jest.mock('../../models/modelEntri', () => ({
 
 const router = require('../../routes/redaksi/susunKata');
 const { __private } = router;
-const { jalankanPrefillSusunKataHarian } = require('../../jobs/jobSusunKataHarian');
 const ModelSusunKata = require('../../models/modelSusunKata');
 const ModelEntri = require('../../models/modelEntri');
 
@@ -54,13 +50,8 @@ function createApp() {
 describe('routes/redaksi/susunKata', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    jalankanPrefillSusunKataHarian.mockResolvedValue({
-      tanggalMulai: '2026-03-02',
-      totalHari: 30,
-      jumlah: 1,
-      data: [{ id: 10, kata: 'kartu', tanggal: '2026-03-02', panjang: 5 }],
-    });
     ModelSusunKata.daftarHarianAdmin.mockResolvedValue([{ id: 1 }]);
+    ModelSusunKata.ambilHarian.mockResolvedValue({ id: 10, kata: 'kartu', tanggal: '2026-03-02', panjang: 5 });
     ModelSusunKata.ambilAtauBuatHarian.mockResolvedValue({ id: 10, kata: 'kartu', tanggal: '2026-03-02', panjang: 5 });
     ModelEntri.ambilArtiSusunKataByIndeks.mockResolvedValue('alat tulis');
     ModelSusunKata.ambilPesertaHarian.mockResolvedValue([{ pengguna_id: 9 }]);
@@ -80,20 +71,16 @@ describe('routes/redaksi/susunKata', () => {
     expect(__private.parseLimit('9999', 200)).toBe(1000);
   });
 
-  it('GET /harian membuat data rentang 30 hari dengan panjang 5', async () => {
+  it('GET /harian hanya mengembalikan daftar tanpa membuat data harian baru', async () => {
     const withTanggalPanjang = await request(createApp()).get('/api/redaksi/susun-kata/harian?tanggal=2026-03-02&panjang=5');
     expect(withTanggalPanjang.status).toBe(200);
-    expect(jalankanPrefillSusunKataHarian).toHaveBeenCalledWith({ tanggalMulai: '2026-03-02', totalHari: 30 });
+    expect(ModelSusunKata.daftarHarianAdmin).toHaveBeenCalledWith({ tanggal: '2026-03-02', panjang: 5, limit: 500 });
 
     await request(createApp()).get('/api/redaksi/susun-kata/harian?tanggal=2026-03-03');
-    expect(jalankanPrefillSusunKataHarian).toHaveBeenCalledWith({ tanggalMulai: '2026-03-03', totalHari: 30 });
+    expect(ModelSusunKata.daftarHarianAdmin).toHaveBeenCalledWith({ tanggal: '2026-03-03', panjang: 5, limit: 500 });
 
     await request(createApp()).get('/api/redaksi/susun-kata/harian');
-    expect(jalankanPrefillSusunKataHarian).toHaveBeenCalledWith({ tanggalMulai: null, totalHari: 30 });
     expect(ModelSusunKata.daftarHarianAdmin).toHaveBeenCalled();
-
-    await request(createApp()).get('/api/redaksi/susun-kata/harian');
-    expect(jalankanPrefillSusunKataHarian).toHaveBeenLastCalledWith({ tanggalMulai: null, totalHari: 30 });
   });
 
   it('GET /harian meneruskan error', async () => {
@@ -117,7 +104,7 @@ describe('routes/redaksi/susunKata', () => {
   });
 
   it('GET /harian/detail mengembalikan 404 saat kata harian tidak tersedia', async () => {
-    ModelSusunKata.ambilAtauBuatHarian.mockResolvedValueOnce(null);
+    ModelSusunKata.ambilHarian.mockResolvedValueOnce(null);
 
     const response = await request(createApp()).get('/api/redaksi/susun-kata/harian/detail?tanggal=2026-03-02&panjang=5');
 
@@ -129,13 +116,14 @@ describe('routes/redaksi/susunKata', () => {
     const response = await request(createApp()).get('/api/redaksi/susun-kata/harian/detail?tanggal=2026-03-02&panjang=5');
 
     expect(response.status).toBe(200);
+    expect(ModelSusunKata.ambilHarian).toHaveBeenCalledWith({ tanggal: '2026-03-02', panjang: 5 });
     expect(ModelEntri.ambilArtiSusunKataByIndeks).toHaveBeenCalledWith('kartu');
     expect(ModelSusunKata.ambilPesertaHarian).toHaveBeenCalledWith({ susunKataId: 10 });
     expect(response.body.data.jumlahPeserta).toBe(1);
   });
 
   it('GET /harian/detail meneruskan error', async () => {
-    ModelSusunKata.ambilAtauBuatHarian.mockRejectedValueOnce(new Error('detail gagal'));
+    ModelSusunKata.ambilHarian.mockRejectedValueOnce(new Error('detail gagal'));
 
     const response = await request(createApp()).get('/api/redaksi/susun-kata/harian/detail?tanggal=2026-03-02&panjang=5');
 
