@@ -31,6 +31,15 @@ function parseLimit(limit, defaultValue = 200) {
 }
 
 class ModelPencarianHitam {
+  static async hitungTotal() {
+    const result = await db.query(
+      `SELECT COUNT(*)::bigint AS total
+       FROM pencarian_hitam`
+    );
+
+    return Number(result.rows[0]?.total) || 0;
+  }
+
   static resetCache() {
     pencarianHitamCache.kataSet = null;
     pencarianHitamCache.loadedAt = 0;

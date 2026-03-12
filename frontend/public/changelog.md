@@ -3,6 +3,7 @@
 ## 2026-03-12 Kamis
 
 - Mengubah `makna.penyingkatan` menjadi kode dan menyiapkan penambahan singkatan
+- Memisahkan halaman redaksi daftar hitam pencarian
 
 ## 2026-03-11 Rabu
 

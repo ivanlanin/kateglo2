@@ -91,6 +91,13 @@ export const kelompokMenuRedaksi = [
         izin: 'lihat_pencarian',
         statistik: { key: 'pencarian', label: 'Kata Harian', warna: 'text-orange-600' },
       },
+      {
+        path: '/redaksi/pencarian-hitam',
+        label: 'Pencarian Hitam',
+        dashboardLabel: 'Pencarian Hitam',
+        izin: 'lihat_pencarian',
+        statistik: { key: 'pencarianHitam', label: 'Total Kata Diblokir', warna: 'text-stone-600' },
+      },
     ],
   },
   {

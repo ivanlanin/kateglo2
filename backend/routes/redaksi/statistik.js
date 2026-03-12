@@ -13,6 +13,7 @@ const ModelPengguna = require('../../models/modelPengguna');
 const ModelKomentar = require('../../models/modelKomentar');
 const ModelSusunKata = require('../../models/modelSusunKata');
 const ModelPencarian = require('../../models/modelPencarian');
+const ModelPencarianHitam = require('../../models/modelPencarianHitam');
 const ModelAuditMakna = require('../../models/modelAuditMakna');
 const ModelTagar = require('../../models/modelTagar');
 const ModelPeran = require('../../models/modelPeran');
@@ -49,6 +50,7 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
       pengguna,
       komentar,
       pencarian,
+      pencarianHitam,
     ] = await Promise.all([
       ModelEntri.hitungTotal(),
       ModelGlosarium.hitungTotal(),
@@ -68,6 +70,7 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
       ModelPengguna.hitungTotal(),
       ModelKomentar.hitungTotal(),
       ModelPencarian.hitungTotalKataHarian(),
+      ModelPencarianHitam.hitungTotal(),
     ]);
 
     return res.json({
@@ -91,6 +94,7 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
         pengguna,
         komentar,
         pencarian,
+        pencarianHitam,
       },
     });
   } catch (error) {

@@ -114,6 +114,7 @@ jest.mock('../../models/modelTagar', () => ({
 }));
 
 jest.mock('../../models/modelPencarianHitam', () => ({
+  hitungTotal: jest.fn(),
   daftarAdmin: jest.fn(),
   ambilDenganId: jest.fn(),
   simpan: jest.fn(),
@@ -404,6 +405,7 @@ describe('routes/redaksi', () => {
       ModelPengguna.hitungTotal.mockResolvedValue(50);
       ModelKomentar.hitungTotal.mockResolvedValue(60);
       ModelPencarian.hitungTotalKataHarian.mockResolvedValue(90);
+      ModelPencarianHitam.hitungTotal.mockResolvedValue(12);
 
       const response = await callAsAdmin('get', '/api/redaksi/statistik');
 
@@ -427,6 +429,7 @@ describe('routes/redaksi', () => {
         pengguna: 50,
         komentar: 60,
         pencarian: 90,
+        pencarianHitam: 12,
       });
     });
 

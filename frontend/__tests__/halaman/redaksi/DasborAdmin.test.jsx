@@ -97,6 +97,13 @@ function buatKelompokMenuRedaksiFixture() {
           izin: 'lihat_pencarian',
           statistik: { key: 'pencarian', warna: 'text-orange-600' },
         },
+        {
+          path: '/redaksi/pencarian-hitam',
+          label: 'Pencarian Hitam',
+          dashboardLabel: 'Pencarian Hitam',
+          izin: 'lihat_pencarian',
+          statistik: { key: 'pencarianHitam', warna: 'text-stone-600' },
+        },
       ],
     },
     {
@@ -217,7 +224,7 @@ describe('DasborAdmin', () => {
     );
 
     expect(screen.getByText('Dasbor')).toBeInTheDocument();
-    expect(screen.getAllByText('…')).toHaveLength(18);
+    expect(screen.getAllByText('…')).toHaveLength(19);
   });
 
   it('menampilkan statistik saat data tersedia', () => {
@@ -243,6 +250,7 @@ describe('DasborAdmin', () => {
           pengguna: 12,
           komentar: 88,
           pencarian: 999,
+          pencarianHitam: 27,
         },
       },
     });
@@ -270,6 +278,7 @@ describe('DasborAdmin', () => {
     expect(screen.getByText('12')).toBeInTheDocument();
     expect(screen.getByText('88')).toBeInTheDocument();
     expect(screen.getByText('999')).toBeInTheDocument();
+    expect(screen.getByText('27')).toBeInTheDocument();
   });
 
   it('menyembunyikan kartu tanpa izin yang sesuai', () => {

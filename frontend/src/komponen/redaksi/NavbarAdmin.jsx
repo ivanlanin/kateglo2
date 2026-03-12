@@ -24,7 +24,7 @@ function NavbarAdmin() {
     navigate('/', { replace: true });
   };
 
-  const isActive = (item) => location.pathname.startsWith(item.path);
+  const isActive = (item) => location.pathname === item.path || location.pathname.startsWith(`${item.path}/`);
 
   return (
     <header className="navbar-root">

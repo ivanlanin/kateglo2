@@ -35,6 +35,14 @@ describe('ModelPencarianHitam', () => {
     expect(parseLimit()).toBe(200);
   });
 
+  it('hitungTotal mengembalikan jumlah blacklist atau 0', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ total: '11' }] });
+    await expect(ModelPencarianHitam.hitungTotal()).resolves.toBe(11);
+
+    db.query.mockResolvedValueOnce({ rows: [{}] });
+    await expect(ModelPencarianHitam.hitungTotal()).resolves.toBe(0);
+  });
+
   it('daftarAdmin dan simpan bisa dipanggil dengan argumen default object', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [] })
