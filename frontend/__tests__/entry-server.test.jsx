@@ -190,6 +190,14 @@ describe('entry-server', () => {
     const ejaanDetailKosong = __private.buildMetaForPath('/ejaan/---', site);
     expect(ejaanDetailKosong.title).toBe('Ejaan — Kateglo');
 
+    const alat = __private.buildMetaForPath('/alat', site);
+    expect(alat.title).toBe('Alat — Kateglo');
+    expect(alat.description).toContain('alat berikutnya');
+
+    const penganalisisTeks = __private.buildMetaForPath('/alat/penganalisis-teks', site);
+    expect(penganalisisTeks.title).toBe('Penganalisis Teks — Kateglo');
+    expect(penganalisisTeks.description).toContain('paragraf');
+
     const gimSusunKata = __private.buildMetaForPath('/gim/susun-kata', site);
     expect(gimSusunKata.title).toBe('Susun Kata — Kateglo');
     expect(gimSusunKata.description).toContain('susun kata harian');
@@ -230,6 +238,20 @@ describe('entry-server', () => {
     expect(appHtml).toBe('');
     expect(headTags).toContain('canonical');
     expect(headTags).toContain('https://kateglo.org/redaksi/kamus');
+  });
+
+  it('render menghasilkan canonical untuk route alat', async () => {
+    const { appHtml, headTags } = await render('/alat');
+    expect(appHtml).toContain('App SSR Mock');
+    expect(headTags).toContain('Alat — Kateglo');
+    expect(headTags).toContain('https://kateglo.org/alat');
+  });
+
+  it('render menghasilkan canonical untuk route alat penganalisis teks', async () => {
+    const { appHtml, headTags } = await render('/alat/penganalisis-teks');
+    expect(appHtml).toContain('App SSR Mock');
+    expect(headTags).toContain('Penganalisis Teks — Kateglo');
+    expect(headTags).toContain('https://kateglo.org/alat/penganalisis-teks');
   });
 
   it('buildMetaForPath memakai fallback pathname root saat input kosong', () => {

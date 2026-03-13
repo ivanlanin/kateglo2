@@ -5,6 +5,7 @@
 - Memulai implementasi Kamus Deskriptif Indonesia (KADI)
 - Mengecilkan ukuran _build_ dengan memecah paket dan CSS
 - Menyesuaikan bilah navigasi agar kotak cari selalu muncul dan menu hamburger di kiri
+- Menambahkan alat [penganalisis teks](alat/penganalisis-teks) dari [CodePen](https://codepen.io/ivanlanin/full/NWZyweK)
 
 ## 2026-03-12 Kamis
 

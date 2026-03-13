@@ -103,6 +103,20 @@ function buildMetaSusunKata() {
   };
 }
 
+function buildMetaAlat() {
+  return {
+    judul: 'Alat',
+    deskripsi: 'Kumpulan alat bahasa Indonesia di Kateglo. Saat ini tersedia Penganalisis Teks dan halaman ini siap menampung alat berikutnya.',
+  };
+}
+
+function buildMetaPenganalisisTeks() {
+  return {
+    judul: 'Penganalisis Teks',
+    deskripsi: 'Alat untuk menghitung jumlah paragraf, kalimat, dan kata dari teks bahasa Indonesia langsung di Kateglo.',
+  };
+}
+
 function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', prefetchedData = null) {
   const defaultMeta = {
     title: 'Kateglo',
@@ -218,6 +232,15 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
 
   if (path.startsWith('/ejaan/')) {
     return titled(buildMetaEjaan(seg('/ejaan/')));
+  }
+
+  // /alat
+  if (path === '/alat' || path === '/alat/') {
+    return titled(buildMetaAlat());
+  }
+
+  if (path === '/alat/penganalisis-teks' || path === '/alat/penganalisis-teks/') {
+    return titled(buildMetaPenganalisisTeks());
   }
 
   // /kebijakan-privasi

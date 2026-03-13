@@ -277,6 +277,384 @@ code {
     @apply bg-dark-bg-elevated;
   }
 
+  .alat-page {
+    @apply flex flex-col gap-6;
+  }
+
+  .alat-hero {
+    @apply rounded-3xl border border-gray-200 bg-white px-5 py-4 shadow-sm;
+  }
+
+  .dark .alat-hero {
+    @apply border-dark-border bg-dark-bg;
+  }
+
+  .alat-hero-head {
+    @apply flex flex-col gap-2 md:flex-row md:items-end md:justify-between;
+  }
+
+  .alat-kicker {
+    @apply mb-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-blue-700;
+  }
+
+  .dark .alat-kicker {
+    @apply text-blue-300;
+  }
+
+  .alat-title {
+    @apply m-0 text-xl font-semibold text-gray-900 sm:text-2xl;
+  }
+
+  .dark .alat-title {
+    @apply text-dark-text;
+  }
+
+  .alat-hero-note {
+    @apply m-0 text-sm text-gray-500;
+  }
+
+  .dark .alat-hero-note {
+    @apply text-dark-text-muted;
+  }
+
+  .alat-description {
+    @apply mt-2 max-w-3xl text-sm leading-6 text-gray-600;
+  }
+
+  .dark .alat-description {
+    @apply text-dark-text-muted;
+  }
+
+  .alat-actions {
+    @apply mt-4 flex flex-wrap gap-2.5;
+  }
+
+  .alat-list-grid {
+    @apply grid gap-4 md:grid-cols-2 xl:grid-cols-3;
+  }
+
+  .alat-card {
+    @apply flex flex-col rounded-3xl border border-gray-200 bg-white p-5 shadow-sm;
+  }
+
+  .dark .alat-card {
+    @apply border-dark-border bg-dark-bg;
+  }
+
+  .alat-card-top {
+    @apply flex items-center justify-between gap-3;
+  }
+
+  .alat-card-status {
+    @apply inline-flex rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-blue-700;
+  }
+
+  .dark .alat-card-status {
+    @apply bg-blue-900/40 text-blue-200;
+  }
+
+  .alat-card-title {
+    @apply mb-0 mt-4 text-xl font-semibold text-gray-900;
+  }
+
+  .dark .alat-card-title {
+    @apply text-dark-text;
+  }
+
+  .alat-card-description {
+    @apply mb-0 mt-3 flex-1 text-sm leading-6 text-gray-600;
+  }
+
+  .dark .alat-card-description {
+    @apply text-dark-text-muted;
+  }
+
+  .alat-card-actions {
+    @apply mt-5;
+  }
+
+  .alat-link-primary,
+  .alat-link-secondary {
+    @apply inline-flex items-center justify-center rounded-full px-3.5 py-2 text-sm font-medium no-underline transition-colors;
+  }
+
+  .alat-link-primary {
+    @apply bg-blue-700 text-white hover:bg-blue-800;
+  }
+
+  .dark .alat-link-primary {
+    @apply bg-blue-600 hover:bg-blue-500;
+  }
+
+  .alat-link-secondary {
+    @apply border border-gray-300 text-gray-700 hover:bg-gray-100;
+  }
+
+  .dark .alat-link-secondary {
+    @apply border-dark-border text-dark-text hover:bg-dark-bg-hover;
+  }
+
+  .alat-tool-layout {
+    @apply grid gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(20rem,0.95fr)] xl:items-start;
+  }
+
+  .alat-panel {
+    @apply rounded-3xl border border-gray-200 bg-white p-6 shadow-sm;
+  }
+
+  .dark .alat-panel {
+    @apply border-dark-border bg-dark-bg;
+  }
+
+  .alat-panel-header {
+    @apply flex flex-col gap-2;
+  }
+
+  .alat-panel-title {
+    @apply m-0 text-lg font-semibold text-gray-900;
+  }
+
+  .dark .alat-panel-title {
+    @apply text-dark-text;
+  }
+
+  .alat-panel-caption {
+    @apply m-0 text-sm leading-6 text-gray-600;
+  }
+
+  .dark .alat-panel-caption {
+    @apply text-dark-text-muted;
+  }
+
+  .alat-form {
+    @apply mt-5;
+  }
+
+  .alat-error-text {
+    @apply mt-3 mb-0 text-sm font-medium text-red-700;
+  }
+
+  .dark .alat-error-text {
+    @apply text-red-300;
+  }
+
+  .alat-textarea {
+    @apply min-h-[20rem] w-full rounded-2xl border border-gray-300 bg-gray-50 px-4 py-3 text-base leading-7 text-gray-900 outline-none transition-colors focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-200;
+  }
+
+  .dark .alat-textarea {
+    @apply border-dark-border bg-dark-bg-elevated text-dark-text focus:bg-dark-bg focus:ring-blue-900/40;
+  }
+
+  .alat-stat-grid {
+    @apply mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3;
+  }
+
+  .alat-stat-grid-compact {
+    @apply mt-4 grid-cols-1 gap-2;
+  }
+
+  .alat-stat-card {
+    @apply rounded-2xl border border-gray-200 bg-gray-50 px-4 py-4;
+  }
+
+  .dark .alat-stat-card {
+    @apply border-dark-border bg-dark-bg-elevated;
+  }
+
+  .alat-stat-label {
+    @apply block text-xs font-semibold uppercase tracking-[0.14em] text-gray-500;
+  }
+
+  .dark .alat-stat-label {
+    @apply text-dark-text-muted;
+  }
+
+  .alat-stat-value {
+    @apply mt-2 block text-2xl font-semibold text-gray-900;
+  }
+
+  .dark .alat-stat-value {
+    @apply text-dark-text;
+  }
+
+  .alat-stat-value-safe {
+    @apply text-green-700;
+  }
+
+  .alat-stat-value-danger {
+    @apply text-red-700;
+  }
+
+  .dark .alat-stat-value-safe {
+    @apply text-green-300;
+  }
+
+  .dark .alat-stat-value-danger {
+    @apply text-red-300;
+  }
+
+  .alat-result-pills {
+    @apply mt-5 flex flex-wrap gap-2;
+  }
+
+  .alat-pill-button {
+    @apply inline-flex items-center rounded-full border border-gray-200 bg-gray-100 px-3 py-1.5 text-sm font-medium text-gray-600 transition-colors;
+  }
+
+  .alat-pill-button:hover {
+    @apply border-gray-300 bg-gray-200 text-gray-900;
+  }
+
+  .alat-pill-button-active {
+    @apply border-blue-200 bg-blue-100 text-blue-700;
+  }
+
+  .dark .alat-pill-button {
+    @apply border-dark-border bg-dark-bg-elevated text-dark-text-muted;
+  }
+
+  .dark .alat-pill-button:hover {
+    @apply bg-dark-bg-hover text-dark-text;
+  }
+
+  .dark .alat-pill-button-active {
+    @apply border-blue-500/60 bg-blue-900/30 text-blue-200;
+  }
+
+  .alat-result-stack {
+    @apply mt-5;
+  }
+
+  .alat-subpanel {
+    @apply rounded-2xl border border-gray-200 bg-gray-50 p-4;
+  }
+
+  .dark .alat-subpanel {
+    @apply border-dark-border bg-dark-bg-elevated;
+  }
+
+  .alat-subpanel-title {
+    @apply m-0 text-base font-semibold text-gray-900;
+  }
+
+  .dark .alat-subpanel-title {
+    @apply text-dark-text;
+  }
+
+  .alat-empty-text {
+    @apply mb-0 mt-3 text-sm leading-6 text-gray-600;
+  }
+
+  .dark .alat-empty-text {
+    @apply text-dark-text-muted;
+  }
+
+  .alat-frequency-groups {
+    @apply mt-4 space-y-3;
+  }
+
+  .alat-frequency-group strong {
+    @apply block text-sm font-semibold text-gray-800;
+  }
+
+  .dark .alat-frequency-group strong {
+    @apply text-dark-text;
+  }
+
+  .alat-frequency-group p {
+    @apply mb-0 mt-1 text-sm leading-6 text-gray-600;
+    word-break: break-word;
+  }
+
+  .dark .alat-frequency-group p {
+    @apply text-dark-text-muted;
+  }
+
+  .alat-paragraph-list {
+    @apply mb-0 mt-4 space-y-3 pl-5;
+  }
+
+  .alat-paragraph-item {
+    @apply space-y-3;
+  }
+
+  .alat-paragraph-summary {
+    @apply rounded-2xl px-4 py-3 text-sm leading-6;
+  }
+
+  .alat-paragraph-summary-safe {
+    @apply bg-green-50 text-green-800;
+  }
+
+  .alat-paragraph-summary-danger {
+    @apply bg-red-50 text-red-800;
+  }
+
+  .dark .alat-paragraph-summary-safe {
+    @apply bg-green-900/20 text-green-200;
+  }
+
+  .dark .alat-paragraph-summary-danger {
+    @apply bg-red-900/20 text-red-200;
+  }
+
+  .alat-paragraph-badge {
+    @apply mr-2 inline-flex rounded-full bg-white/70 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em];
+  }
+
+  .alat-sentence-list {
+    @apply space-y-2 pl-5;
+  }
+
+  .alat-sentence-item {
+    @apply rounded-xl px-3 py-2 text-left text-sm leading-6;
+  }
+
+  .alat-sentence-item-safe {
+    @apply bg-green-50 text-green-800;
+  }
+
+  .alat-sentence-item-danger {
+    @apply bg-red-50 text-red-800;
+  }
+
+  .dark .alat-sentence-item-safe {
+    @apply bg-green-900/20 text-green-200;
+  }
+
+  .dark .alat-sentence-item-danger {
+    @apply bg-red-900/20 text-red-200;
+  }
+
+  .alat-sentence-item-toggle {
+    @apply w-full cursor-pointer border-0;
+  }
+
+  .alat-sentence-count {
+    @apply mr-1 font-semibold;
+  }
+
+  .alat-notes {
+    @apply mt-5 rounded-2xl border border-dashed border-gray-300 p-4;
+  }
+
+  .dark .alat-notes {
+    @apply border-dark-border;
+  }
+
+  .alat-note-item {
+    @apply m-0 text-sm leading-6 text-gray-600;
+  }
+
+  .alat-note-item + .alat-note-item {
+    @apply mt-2;
+  }
+
+  .dark .alat-note-item {
+    @apply text-dark-text-muted;
+  }
+
   /* ===== Ejaan ===== */
 
   /* Ejaan: layout + daftar bab */

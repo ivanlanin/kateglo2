@@ -119,4 +119,17 @@ describe('MenuUtama', () => {
     render(<MenuUtama />);
     expect(screen.getByRole('link', { name: 'Rahasia' })).toBeInTheDocument();
   });
+
+  it('menempatkan menu Alat di antara Ejaan dan Gim', () => {
+    expect(menuItems.map((item) => item.label)).toEqual([
+      'Kamus',
+      'Tesaurus',
+      'Glosarium',
+      'Makna',
+      'Rima',
+      'Ejaan',
+      'Alat',
+      'Gim',
+    ]);
+  });
 });

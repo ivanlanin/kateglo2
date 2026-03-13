@@ -22,6 +22,10 @@ vi.mock('../src/pages/publik/KamusDetail', () => ({ default: () => <div>Hal Kamu
 vi.mock('../src/pages/publik/Tesaurus', () => ({ default: () => <div>Hal Tesaurus</div> }));
 vi.mock('../src/pages/gim/SusunKata', () => ({ default: () => <div>Hal Susun Kata</div> }));
 vi.mock('../src/pages/publik/Glosarium', () => ({ default: () => <div>Hal Glosarium</div> }));
+vi.mock('../src/pages/publik/alat', () => ({
+  Alat: () => <div>Hal Alat</div>,
+  PenganalisisTeks: () => <div>Hal Penganalisis Teks</div>,
+}));
 vi.mock('../src/pages/publik/AuthCallback', () => ({ default: () => <div>Auth Callback</div> }));
 vi.mock('../src/pages/publik/KebijakanPrivasi', () => ({ default: () => <div>Kebijakan Privasi</div> }));
 vi.mock('../src/pages/redaksi/LoginAdmin', () => ({ default: () => <div>Login Redaksi</div> }));
@@ -267,6 +271,24 @@ describe('App', () => {
       </MemoryRouter>
     );
     expect(screen.getByText('Kebijakan Privasi')).toBeInTheDocument();
+  });
+
+  it('merender route alat', () => {
+    render(
+      <MemoryRouter initialEntries={['/alat']}>
+        <App />
+      </MemoryRouter>
+    );
+    expect(screen.getByText('Hal Alat')).toBeInTheDocument();
+  });
+
+  it('merender route alat penganalisis teks', () => {
+    render(
+      <MemoryRouter initialEntries={['/alat/penganalisis-teks']}>
+        <App />
+      </MemoryRouter>
+    );
+    expect(screen.getByText('Hal Penganalisis Teks')).toBeInTheDocument();
   });
 
   it('merender route gim susun kata', async () => {

@@ -11,6 +11,7 @@ import GlosariumDetail from './pages/publik/GlosariumDetail';
 import Makna from './pages/publik/Makna';
 import Rima from './pages/publik/Rima';
 import Ejaan from './pages/publik/Ejaan';
+import { Alat, PenganalisisTeks } from './pages/publik/alat';
 import AuthCallback from './pages/publik/AuthCallback';
 import KebijakanPrivasi from './pages/publik/KebijakanPrivasi';
 import Sumber from './pages/publik/Sumber';
@@ -155,6 +156,8 @@ function App() {
         <Route path="/rima/cari/:kata" element={<Rima />} />
         <Route path="/ejaan" element={<Ejaan />} />
         <Route path="/ejaan/:slug" element={<Ejaan />} />
+        <Route path="/alat" element={<Alat />} />
+        <Route path="/alat/penganalisis-teks" element={<PenganalisisTeks />} />
         <Route path="/gim/susun-kata" element={<Navigate to="/gim/susun-kata/harian" replace />} />
         <Route path="/gim/susun-kata/:mode" element={bungkusLazy(<SusunKata />)} />
         <Route path="/tesaurus" element={<Tesaurus />} />
