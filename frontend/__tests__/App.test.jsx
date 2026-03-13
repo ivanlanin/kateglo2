@@ -107,7 +107,9 @@ describe('App', () => {
         <App />
       </MemoryRouter>
     );
-    expect(screen.getByText('Kamus Redaksi')).toBeInTheDocument();
+    return screen.findByText('Kamus Redaksi').then((element) => {
+      expect(element).toBeInTheDocument();
+    });
   });
 
   it('mengizinkan route label redaksi saat user admin', () => {
@@ -123,7 +125,9 @@ describe('App', () => {
         <App />
       </MemoryRouter>
     );
-    expect(screen.getByText('Label Redaksi')).toBeInTheDocument();
+    return screen.findByText('Label Redaksi').then((element) => {
+      expect(element).toBeInTheDocument();
+    });
   });
 
   it('mengizinkan route komentar redaksi saat user admin', () => {
@@ -139,10 +143,12 @@ describe('App', () => {
         <App />
       </MemoryRouter>
     );
-    expect(screen.getByText('Komentar Redaksi')).toBeInTheDocument();
+    return screen.findByText('Komentar Redaksi').then((element) => {
+      expect(element).toBeInTheDocument();
+    });
   });
 
-  it('mengizinkan route statistik pencarian saat user punya izin', () => {
+  it('mengizinkan route statistik pencarian saat user punya izin', async () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: true,
       adalahRedaksi: true,
@@ -157,10 +163,10 @@ describe('App', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('Statistik Pencarian Redaksi')).toBeInTheDocument();
+    expect(await screen.findByText('Statistik Pencarian Redaksi')).toBeInTheDocument();
   });
 
-  it('mengizinkan route daftar hitam pencarian saat user punya izin', () => {
+  it('mengizinkan route daftar hitam pencarian saat user punya izin', async () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: true,
       adalahRedaksi: true,
@@ -175,10 +181,10 @@ describe('App', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('Daftar Hitam Pencarian Redaksi')).toBeInTheDocument();
+    expect(await screen.findByText('Daftar Hitam Pencarian Redaksi')).toBeInTheDocument();
   });
 
-  it('mengizinkan route susun kata harian dan bebas saat user punya izin', () => {
+  it('mengizinkan route susun kata harian dan bebas saat user punya izin', async () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: true,
       adalahRedaksi: true,
@@ -192,17 +198,17 @@ describe('App', () => {
         <App />
       </MemoryRouter>
     );
-    expect(screen.getByText('Susun Kata Harian Redaksi')).toBeInTheDocument();
+    expect(await screen.findByText('Susun Kata Harian Redaksi')).toBeInTheDocument();
 
     render(
       <MemoryRouter initialEntries={['/redaksi/susun-kata-bebas']}>
         <App />
       </MemoryRouter>
     );
-    expect(screen.getByText('Susun Kata Bebas Redaksi')).toBeInTheDocument();
+    expect(await screen.findByText('Susun Kata Bebas Redaksi')).toBeInTheDocument();
   });
 
-  it('mengizinkan route audit tagar saat user punya izin audit_tagar', () => {
+  it('mengizinkan route audit tagar saat user punya izin audit_tagar', async () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: true,
       adalahRedaksi: true,
@@ -217,7 +223,7 @@ describe('App', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('Audit Tagar Redaksi')).toBeInTheDocument();
+    expect(await screen.findByText('Audit Tagar Redaksi')).toBeInTheDocument();
   });
 
   it('menampilkan loading untuk route admin saat auth sedang dimuat', () => {
@@ -237,7 +243,7 @@ describe('App', () => {
     expect(screen.getByText('Memuat …')).toBeInTheDocument();
   });
 
-  it('mengalihkan route admin ke dasbor redaksi saat bukan admin', () => {
+  it('mengalihkan route admin ke dasbor redaksi saat bukan admin', async () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: true,
       adalahRedaksi: true,
@@ -251,7 +257,7 @@ describe('App', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('Dasbor Redaksi')).toBeInTheDocument();
+    expect(await screen.findByText('Dasbor Redaksi')).toBeInTheDocument();
   });
 
   it('merender route kebijakan privasi', () => {
@@ -263,13 +269,13 @@ describe('App', () => {
     expect(screen.getByText('Kebijakan Privasi')).toBeInTheDocument();
   });
 
-  it('merender route gim susun kata', () => {
+  it('merender route gim susun kata', async () => {
     render(
       <MemoryRouter initialEntries={['/gim/susun-kata']}>
         <App />
       </MemoryRouter>
     );
-    expect(screen.getByText('Hal Susun Kata')).toBeInTheDocument();
+    expect(await screen.findByText('Hal Susun Kata')).toBeInTheDocument();
   });
 
   it('mengalihkan route izin ke login saat belum autentikasi', () => {
@@ -306,7 +312,7 @@ describe('App', () => {
     expect(screen.getByText('Login Redaksi')).toBeInTheDocument();
   });
 
-  it('RuteIzin redireksi ke dasbor saat punyaIzin mengembalikan false untuk izin wajib', () => {
+  it('RuteIzin redireksi ke dasbor saat punyaIzin mengembalikan false untuk izin wajib', async () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: true,
       adalahRedaksi: true,
@@ -320,7 +326,7 @@ describe('App', () => {
         <App />
       </MemoryRouter>
     );
-    expect(screen.getByText('Dasbor Redaksi')).toBeInTheDocument();
+    expect(await screen.findByText('Dasbor Redaksi')).toBeInTheDocument();
   });
 
   it('RuteIzin menerima izinDibutuhkan bukan array dan memperlakukan sebagai daftar kosong', () => {

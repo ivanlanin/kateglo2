@@ -9,6 +9,9 @@ let mockAuthOptional = { adalahRedaksi: false };
 
 vi.mock('../../../src/komponen/publik/Navbar', () => ({ default: () => <div>Navbar Mock</div> }));
 vi.mock('../../../src/komponen/redaksi/NavbarAdmin', () => ({ default: () => <div>NavbarAdmin Mock</div> }));
+vi.mock('react-markdown', () => ({
+  default: ({ children }) => <div>{String(children).replace(/^#\s+/gm, '')}</div>,
+}));
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   Outlet: () => <div>Outlet Mock</div>,
@@ -140,14 +143,14 @@ describe('TataLetak', () => {
     expect(main.className).toContain('kateglo-main-content-beranda');
   });
 
-  it('mode admin merender tata letak redaksi dan judul halaman admin', () => {
+  it('mode admin merender tata letak redaksi dan judul halaman admin', async () => {
     render(
       <TataLetak mode="admin" judul="Manajemen" aksiJudul={<button type="button">Aksi</button>}>
         <div>Konten Admin</div>
       </TataLetak>
     );
 
-    expect(screen.getByText('NavbarAdmin Mock')).toBeInTheDocument();
+    expect(await screen.findByText('NavbarAdmin Mock')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Manajemen' })).toBeInTheDocument();
     expect(screen.getByText('Aksi')).toBeInTheDocument();
     expect(screen.getByText('Konten Admin')).toBeInTheDocument();
@@ -155,13 +158,14 @@ describe('TataLetak', () => {
     expect(screen.getByRole('button', { name: /Kateglo/i })).toBeInTheDocument();
   });
 
-  it('mode admin tanpa judul memakai title default redaksi', () => {
+  it('mode admin tanpa judul memakai title default redaksi', async () => {
     render(
       <TataLetak mode="admin">
         <div>Konten Admin</div>
       </TataLetak>
     );
 
+    expect(await screen.findByText('NavbarAdmin Mock')).toBeInTheDocument();
     expect(document.title).toBe('Redaksi Kateglo');
   });
 

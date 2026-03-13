@@ -2,12 +2,13 @@
  * @fileoverview Tata letak bersama untuk publik dan admin
  */
 
-import { useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import Navbar from '../publik/Navbar';
-import NavbarAdmin from '../redaksi/NavbarAdmin';
 import { useAuthOptional } from '../../context/authContext';
+
+const ReactMarkdown = lazy(() => import('react-markdown'));
+const NavbarAdmin = lazy(() => import('../redaksi/NavbarAdmin'));
 
 export function hitungModeGelapAwal({ hasWindow, tersimpan, prefersDark }) {
   if (!hasWindow) return false;
@@ -87,7 +88,11 @@ function TataLetak({ mode = 'publik', judul, aksiJudul = null, children }) {
   return (
     <>
       <div className="kateglo-layout-root">
-        {adalahAdmin ? <NavbarAdmin /> : <Navbar />}
+        {adalahAdmin ? (
+          <Suspense fallback={null}>
+            <NavbarAdmin />
+          </Suspense>
+        ) : <Navbar />}
 
         {adalahAdmin ? (
           <main className="halaman-dasar-container flex-1">
@@ -167,9 +172,11 @@ function TataLetak({ mode = 'publik', judul, aksiJudul = null, children }) {
                 <div className="loading-spinner">Memuat …</div>
               ) : (
                 <div className="changelog-content">
-                  <ReactMarkdown>
-                    {tabAktif === 'changelog' ? teksChangelog : teksTodo}
-                  </ReactMarkdown>
+                  <Suspense fallback={<div className="loading-spinner">Memuat …</div>}>
+                    <ReactMarkdown>
+                      {tabAktif === 'changelog' ? teksChangelog : teksTodo}
+                    </ReactMarkdown>
+                  </Suspense>
                 </div>
               )}
             </div>

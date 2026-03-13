@@ -774,7 +774,7 @@ function KamusDetail() {
                                 <>
                                   <Link
                                     to={buatPathKategoriDariLabel('bidang', m.bidang, petaBidang)}
-                                    className="kamus-badge kamus-badge-bidang"
+                                    className="badge-bidang"
                                   >
                                     {resolveNamaLabel(m.bidang, petaBidang)}
                                   </Link>{' '}

@@ -1,3 +1,4 @@
+import { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/authContext';
 import TataLetak from './komponen/bersama/TataLetak';
@@ -10,32 +11,45 @@ import GlosariumDetail from './halaman/publik/GlosariumDetail';
 import Makna from './halaman/publik/Makna';
 import Rima from './halaman/publik/Rima';
 import Ejaan from './halaman/publik/Ejaan';
-import SusunKata from './halaman/gim/SusunKata';
 import AuthCallback from './halaman/publik/AuthCallback';
 import KebijakanPrivasi from './halaman/publik/KebijakanPrivasi';
 import Sumber from './halaman/publik/Sumber';
 import LoginAdmin from './halaman/redaksi/LoginAdmin';
-import DasborAdmin from './halaman/redaksi/DasborAdmin';
-import KamusAdmin from './halaman/redaksi/KamusAdmin';
-import KomentarAdmin from './halaman/redaksi/KomentarAdmin';
-import TesaurusAdmin from './halaman/redaksi/TesaurusAdmin';
-import EtimologiAdmin from './halaman/redaksi/EtimologiAdmin';
-import GlosariumAdmin from './halaman/redaksi/GlosariumAdmin';
-import BidangAdmin from './halaman/redaksi/BidangAdmin';
-import BahasaAdmin from './halaman/redaksi/BahasaAdmin';
-import SumberAdmin from './halaman/redaksi/SumberAdmin';
-import LabelAdmin from './halaman/redaksi/LabelAdmin';
-import TagarAdmin from './halaman/redaksi/TagarAdmin';
-import AuditTagarAdmin from './halaman/redaksi/AuditTagarAdmin';
-import PenggunaAdmin from './halaman/redaksi/PenggunaAdmin';
-import PeranAdmin from './halaman/redaksi/PeranAdmin';
-import IzinAdmin from './halaman/redaksi/IzinAdmin';
-import AuditMaknaAdmin from './halaman/redaksi/AuditMaknaAdmin';
-import PencarianAdmin from './halaman/redaksi/PencarianAdmin';
-import PencarianHitamAdmin from './halaman/redaksi/PencarianHitamAdmin';
-import SusunKataHarian from './halaman/redaksi/SusunKataHarian';
-import SusunKataBebas from './halaman/redaksi/SusunKataBebas';
-import KandidatKataAdmin from './halaman/kadi/KandidatKataAdmin';
+
+const SusunKata = lazy(() => import('./halaman/gim/SusunKata'));
+const DasborAdmin = lazy(() => import('./halaman/redaksi/DasborAdmin'));
+const KamusAdmin = lazy(() => import('./halaman/redaksi/KamusAdmin'));
+const KomentarAdmin = lazy(() => import('./halaman/redaksi/KomentarAdmin'));
+const TesaurusAdmin = lazy(() => import('./halaman/redaksi/TesaurusAdmin'));
+const EtimologiAdmin = lazy(() => import('./halaman/redaksi/EtimologiAdmin'));
+const GlosariumAdmin = lazy(() => import('./halaman/redaksi/GlosariumAdmin'));
+const BidangAdmin = lazy(() => import('./halaman/redaksi/BidangAdmin'));
+const BahasaAdmin = lazy(() => import('./halaman/redaksi/BahasaAdmin'));
+const SumberAdmin = lazy(() => import('./halaman/redaksi/SumberAdmin'));
+const LabelAdmin = lazy(() => import('./halaman/redaksi/LabelAdmin'));
+const TagarAdmin = lazy(() => import('./halaman/redaksi/TagarAdmin'));
+const AuditTagarAdmin = lazy(() => import('./halaman/redaksi/AuditTagarAdmin'));
+const PenggunaAdmin = lazy(() => import('./halaman/redaksi/PenggunaAdmin'));
+const PeranAdmin = lazy(() => import('./halaman/redaksi/PeranAdmin'));
+const IzinAdmin = lazy(() => import('./halaman/redaksi/IzinAdmin'));
+const AuditMaknaAdmin = lazy(() => import('./halaman/redaksi/AuditMaknaAdmin'));
+const PencarianAdmin = lazy(() => import('./halaman/redaksi/PencarianAdmin'));
+const PencarianHitamAdmin = lazy(() => import('./halaman/redaksi/PencarianHitamAdmin'));
+const SusunKataHarian = lazy(() => import('./halaman/redaksi/SusunKataHarian'));
+const SusunKataBebas = lazy(() => import('./halaman/redaksi/SusunKataBebas'));
+const KandidatKataAdmin = lazy(() => import('./halaman/kadi/KandidatKataAdmin'));
+
+function FallbackRoute() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-dark-bg">
+      <p className="text-gray-600 dark:text-gray-400">Memuat …</p>
+    </div>
+  );
+}
+
+function bungkusLazy(element) {
+  return <Suspense fallback={<FallbackRoute />}>{element}</Suspense>;
+}
 
 function RuteRedaksi({ children }) {
   const { isAuthenticated, adalahRedaksi, isLoading } = useAuth();
@@ -90,42 +104,42 @@ function App() {
       <Route path="/auth/callback" element={<AuthCallback />} />
       {/* Redaksi routes — tanpa TataLetak */}
       <Route path="/redaksi/login" element={<LoginAdmin />} />
-      <Route path="/redaksi" element={<RuteRedaksi><DasborAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/kamus" element={<RuteRedaksi><KamusAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/kamus/:id" element={<RuteRedaksi><KamusAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/komentar" element={<RuteRedaksi><KomentarAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/komentar/:id" element={<RuteRedaksi><KomentarAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/audit-makna" element={<RuteIzin izinDibutuhkan={['audit_makna']}><AuditMaknaAdmin /></RuteIzin>} />
-      <Route path="/redaksi/pencarian" element={<RuteIzin izinDibutuhkan={['lihat_pencarian']}><PencarianAdmin /></RuteIzin>} />
-      <Route path="/redaksi/pencarian-hitam" element={<RuteIzin izinDibutuhkan={['lihat_pencarian']}><PencarianHitamAdmin /></RuteIzin>} />
-      <Route path="/redaksi/susun-kata-harian" element={<RuteIzin izinDibutuhkan={['kelola_susun_kata']}><SusunKataHarian /></RuteIzin>} />
-      <Route path="/redaksi/susun-kata-bebas" element={<RuteIzin izinDibutuhkan={['kelola_susun_kata']}><SusunKataBebas /></RuteIzin>} />
-      <Route path="/redaksi/tesaurus" element={<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/tesaurus/:id" element={<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/etimologi" element={<RuteRedaksi><EtimologiAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/etimologi/:id" element={<RuteRedaksi><EtimologiAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/glosarium" element={<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/bidang" element={<RuteRedaksi><BidangAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/bidang/:id" element={<RuteRedaksi><BidangAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/bahasa" element={<RuteRedaksi><BahasaAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/bahasa/:id" element={<RuteRedaksi><BahasaAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/sumber" element={<RuteRedaksi><SumberAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/sumber/:id" element={<RuteRedaksi><SumberAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/glosarium/:id" element={<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>} />
-      <Route path="/redaksi/label" element={<RuteIzin izinDibutuhkan={['kelola_label']}><LabelAdmin /></RuteIzin>} />
-      <Route path="/redaksi/label/:id" element={<RuteIzin izinDibutuhkan={['kelola_label']}><LabelAdmin /></RuteIzin>} />
-      <Route path="/redaksi/tagar" element={<RuteIzin izinDibutuhkan={['kelola_tagar']}><TagarAdmin /></RuteIzin>} />
-      <Route path="/redaksi/tagar/:id" element={<RuteIzin izinDibutuhkan={['kelola_tagar']}><TagarAdmin /></RuteIzin>} />
-      <Route path="/redaksi/audit-tagar" element={<RuteIzin izinDibutuhkan={['audit_tagar']}><AuditTagarAdmin /></RuteIzin>} />
-      <Route path="/redaksi/peran" element={<RuteIzin izinDibutuhkan={['kelola_peran']}><PeranAdmin /></RuteIzin>} />
-      <Route path="/redaksi/peran/:id" element={<RuteIzin izinDibutuhkan={['kelola_peran']}><PeranAdmin /></RuteIzin>} />
-      <Route path="/redaksi/izin" element={<RuteIzin izinDibutuhkan={['kelola_peran']}><IzinAdmin /></RuteIzin>} />
-      <Route path="/redaksi/izin/:id" element={<RuteIzin izinDibutuhkan={['kelola_peran']}><IzinAdmin /></RuteIzin>} />
-      <Route path="/redaksi/pengguna" element={<RuteIzin izinDibutuhkan={['kelola_pengguna']}><PenggunaAdmin /></RuteIzin>} />
-      <Route path="/redaksi/pengguna/:id" element={<RuteIzin izinDibutuhkan={['kelola_pengguna']}><PenggunaAdmin /></RuteIzin>} />
+      <Route path="/redaksi" element={bungkusLazy(<RuteRedaksi><DasborAdmin /></RuteRedaksi>)} />
+      <Route path="/redaksi/kamus" element={bungkusLazy(<RuteRedaksi><KamusAdmin /></RuteRedaksi>)} />
+      <Route path="/redaksi/kamus/:id" element={bungkusLazy(<RuteRedaksi><KamusAdmin /></RuteRedaksi>)} />
+      <Route path="/redaksi/komentar" element={bungkusLazy(<RuteRedaksi><KomentarAdmin /></RuteRedaksi>)} />
+      <Route path="/redaksi/komentar/:id" element={bungkusLazy(<RuteRedaksi><KomentarAdmin /></RuteRedaksi>)} />
+      <Route path="/redaksi/audit-makna" element={bungkusLazy(<RuteIzin izinDibutuhkan={['audit_makna']}><AuditMaknaAdmin /></RuteIzin>)} />
+      <Route path="/redaksi/pencarian" element={bungkusLazy(<RuteIzin izinDibutuhkan={['lihat_pencarian']}><PencarianAdmin /></RuteIzin>)} />
+      <Route path="/redaksi/pencarian-hitam" element={bungkusLazy(<RuteIzin izinDibutuhkan={['lihat_pencarian']}><PencarianHitamAdmin /></RuteIzin>)} />
+      <Route path="/redaksi/susun-kata-harian" element={bungkusLazy(<RuteIzin izinDibutuhkan={['kelola_susun_kata']}><SusunKataHarian /></RuteIzin>)} />
+      <Route path="/redaksi/susun-kata-bebas" element={bungkusLazy(<RuteIzin izinDibutuhkan={['kelola_susun_kata']}><SusunKataBebas /></RuteIzin>)} />
+      <Route path="/redaksi/tesaurus" element={bungkusLazy(<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>)} />
+      <Route path="/redaksi/tesaurus/:id" element={bungkusLazy(<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>)} />
+      <Route path="/redaksi/etimologi" element={bungkusLazy(<RuteRedaksi><EtimologiAdmin /></RuteRedaksi>)} />
+      <Route path="/redaksi/etimologi/:id" element={bungkusLazy(<RuteRedaksi><EtimologiAdmin /></RuteRedaksi>)} />
+      <Route path="/redaksi/glosarium" element={bungkusLazy(<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>)} />
+      <Route path="/redaksi/bidang" element={bungkusLazy(<RuteRedaksi><BidangAdmin /></RuteRedaksi>)} />
+      <Route path="/redaksi/bidang/:id" element={bungkusLazy(<RuteRedaksi><BidangAdmin /></RuteRedaksi>)} />
+      <Route path="/redaksi/bahasa" element={bungkusLazy(<RuteRedaksi><BahasaAdmin /></RuteRedaksi>)} />
+      <Route path="/redaksi/bahasa/:id" element={bungkusLazy(<RuteRedaksi><BahasaAdmin /></RuteRedaksi>)} />
+      <Route path="/redaksi/sumber" element={bungkusLazy(<RuteRedaksi><SumberAdmin /></RuteRedaksi>)} />
+      <Route path="/redaksi/sumber/:id" element={bungkusLazy(<RuteRedaksi><SumberAdmin /></RuteRedaksi>)} />
+      <Route path="/redaksi/glosarium/:id" element={bungkusLazy(<RuteRedaksi><GlosariumAdmin /></RuteRedaksi>)} />
+      <Route path="/redaksi/label" element={bungkusLazy(<RuteIzin izinDibutuhkan={['kelola_label']}><LabelAdmin /></RuteIzin>)} />
+      <Route path="/redaksi/label/:id" element={bungkusLazy(<RuteIzin izinDibutuhkan={['kelola_label']}><LabelAdmin /></RuteIzin>)} />
+      <Route path="/redaksi/tagar" element={bungkusLazy(<RuteIzin izinDibutuhkan={['kelola_tagar']}><TagarAdmin /></RuteIzin>)} />
+      <Route path="/redaksi/tagar/:id" element={bungkusLazy(<RuteIzin izinDibutuhkan={['kelola_tagar']}><TagarAdmin /></RuteIzin>)} />
+      <Route path="/redaksi/audit-tagar" element={bungkusLazy(<RuteIzin izinDibutuhkan={['audit_tagar']}><AuditTagarAdmin /></RuteIzin>)} />
+      <Route path="/redaksi/peran" element={bungkusLazy(<RuteIzin izinDibutuhkan={['kelola_peran']}><PeranAdmin /></RuteIzin>)} />
+      <Route path="/redaksi/peran/:id" element={bungkusLazy(<RuteIzin izinDibutuhkan={['kelola_peran']}><PeranAdmin /></RuteIzin>)} />
+      <Route path="/redaksi/izin" element={bungkusLazy(<RuteIzin izinDibutuhkan={['kelola_peran']}><IzinAdmin /></RuteIzin>)} />
+      <Route path="/redaksi/izin/:id" element={bungkusLazy(<RuteIzin izinDibutuhkan={['kelola_peran']}><IzinAdmin /></RuteIzin>)} />
+      <Route path="/redaksi/pengguna" element={bungkusLazy(<RuteIzin izinDibutuhkan={['kelola_pengguna']}><PenggunaAdmin /></RuteIzin>)} />
+      <Route path="/redaksi/pengguna/:id" element={bungkusLazy(<RuteIzin izinDibutuhkan={['kelola_pengguna']}><PenggunaAdmin /></RuteIzin>)} />
       {/* KADI */}
-      <Route path="/redaksi/kandidat-kata" element={<RuteIzin izinDibutuhkan={['lihat_kandidat']}><KandidatKataAdmin /></RuteIzin>} />
-      <Route path="/redaksi/kandidat-kata/:id" element={<RuteIzin izinDibutuhkan={['lihat_kandidat']}><KandidatKataAdmin /></RuteIzin>} />
+      <Route path="/redaksi/kandidat-kata" element={bungkusLazy(<RuteIzin izinDibutuhkan={['lihat_kandidat']}><KandidatKataAdmin /></RuteIzin>)} />
+      <Route path="/redaksi/kandidat-kata/:id" element={bungkusLazy(<RuteIzin izinDibutuhkan={['lihat_kandidat']}><KandidatKataAdmin /></RuteIzin>)} />
       {/* Public routes */}
       <Route element={<TataLetak />}>
         <Route path="/" element={<Beranda />} />
@@ -142,7 +156,7 @@ function App() {
         <Route path="/ejaan" element={<Ejaan />} />
         <Route path="/ejaan/:slug" element={<Ejaan />} />
         <Route path="/gim/susun-kata" element={<Navigate to="/gim/susun-kata/harian" replace />} />
-        <Route path="/gim/susun-kata/:mode" element={<SusunKata />} />
+        <Route path="/gim/susun-kata/:mode" element={bungkusLazy(<SusunKata />)} />
         <Route path="/tesaurus" element={<Tesaurus />} />
         <Route path="/tesaurus/cari/:kata" element={<Tesaurus />} />
         <Route path="/glosarium" element={<Glosarium />} />

@@ -22,6 +22,7 @@ import { useAuth } from '../../context/authContext';
 import TombolMasuk from '../../komponen/bersama/TombolMasuk';
 import PesanMunculan from '../../komponen/bersama/PesanMunculan';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
+import '../../styles/susunKata.css';
 
 const MAKS_PERCOBAAN = 6;
 const PANJANG_DEFAULT = 5;

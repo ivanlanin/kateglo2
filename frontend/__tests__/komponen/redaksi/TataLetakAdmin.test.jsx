@@ -47,15 +47,15 @@ describe('TataLetakAdmin', () => {
     });
   });
 
-  it('menampilkan judul, user, menu aktif, dan logout', () => {
+  it('menampilkan judul, user, menu aktif, dan logout', async () => {
     render(
       <MemoryRouter initialEntries={['/redaksi/kamus']}>
         <TataLetakAdmin judul="Kamus">Isi Admin</TataLetakAdmin>
       </MemoryRouter>
     );
 
+    expect(await screen.findByRole('link', { name: 'Redaksi Kateglo' }, { timeout: 3000 })).toHaveAttribute('href', '/redaksi');
     expect(document.title).toBe('Kamus — Redaksi Kateglo');
-    expect(screen.getByRole('link', { name: 'Redaksi Kateglo' })).toHaveAttribute('href', '/redaksi');
     expect(screen.getByRole('link', { name: 'Kateglo' })).toHaveAttribute('href', '/');
     expect(screen.queryByRole('link', { name: 'Dasbor' })).not.toBeInTheDocument();
     fireEvent.click(screen.getByLabelText('Buka menu redaksi'));
@@ -71,7 +71,7 @@ describe('TataLetakAdmin', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true });
   });
 
-  it('menangani judul kosong dan fallback nama user', () => {
+  it('menangani judul kosong dan fallback nama user', async () => {
     mockUseAuth.mockReturnValueOnce({ user: { name: 'Redaksi' }, logout: mockLogout, punyaIzin: () => true });
     render(
       <MemoryRouter initialEntries={['/redaksi/kamus']}>
@@ -79,22 +79,22 @@ describe('TataLetakAdmin', () => {
       </MemoryRouter>
     );
 
+    expect(await screen.findByRole('link', { name: 'Redaksi Kateglo' })).toHaveAttribute('href', '/redaksi');
     expect(document.title).toBe('Redaksi Kateglo');
-    expect(screen.getByRole('link', { name: 'Redaksi Kateglo' })).toHaveAttribute('href', '/redaksi');
     expect(screen.queryByText('admin@kateglo.id')).not.toBeInTheDocument();
     fireEvent.click(screen.getByLabelText('Buka menu redaksi'));
     const menuKamus = screen.getAllByRole('link', { name: 'Kamus' });
     expect(menuKamus.some((link) => link.className.includes('navbar-menu-link-active'))).toBe(true);
   });
 
-  it('menampilkan menu burger mobile dan bisa dibuka', () => {
+  it('menampilkan menu burger mobile dan bisa dibuka', async () => {
     render(
       <MemoryRouter initialEntries={['/redaksi/kamus']}>
         <TataLetakAdmin>Konten</TataLetakAdmin>
       </MemoryRouter>
     );
 
-    const toggleBtn = screen.getByLabelText('Buka menu redaksi');
+    const toggleBtn = await screen.findByLabelText('Buka menu redaksi');
     fireEvent.click(toggleBtn);
 
     expect(screen.getByRole('heading', { name: 'Leksikon' })).toBeInTheDocument();
@@ -105,63 +105,63 @@ describe('TataLetakAdmin', () => {
     expect(menuTagar.some((link) => link.getAttribute('href') === '/redaksi/audit-tagar')).toBe(true);
   });
 
-  it('logout tetap berjalan saat panel menu terbuka', () => {
+  it('logout tetap berjalan saat panel menu terbuka', async () => {
     render(
       <MemoryRouter initialEntries={['/redaksi/kamus']}>
         <TataLetakAdmin>Konten</TataLetakAdmin>
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByLabelText('Buka menu redaksi'));
+    fireEvent.click(await screen.findByLabelText('Buka menu redaksi'));
     fireEvent.click(screen.getByRole('button', { name: 'Keluar' }));
 
     expect(mockLogout).toHaveBeenCalledTimes(1);
     expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true });
   });
 
-  it('klik link pada menu mobile menutup panel tanpa logout', () => {
+  it('klik link pada menu mobile menutup panel tanpa logout', async () => {
     render(
       <MemoryRouter initialEntries={['/redaksi/kamus']}>
         <TataLetakAdmin>Konten</TataLetakAdmin>
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByLabelText('Buka menu redaksi'));
+    fireEvent.click(await screen.findByLabelText('Buka menu redaksi'));
     fireEvent.click(screen.getByRole('link', { name: 'Tesaurus' }));
 
     expect(mockLogout).not.toHaveBeenCalled();
     expect(screen.queryByRole('heading', { name: 'Leksikon' })).not.toBeInTheDocument();
   });
 
-  it('tombol tutup panel menu mobile menutup panel', () => {
+  it('tombol tutup panel menu mobile menutup panel', async () => {
     render(
       <MemoryRouter initialEntries={['/redaksi/kamus']}>
         <TataLetakAdmin>Konten</TataLetakAdmin>
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByLabelText('Buka menu redaksi'));
+    fireEvent.click(await screen.findByLabelText('Buka menu redaksi'));
     expect(screen.getByRole('heading', { name: 'Leksikon' })).toBeInTheDocument();
 
     fireEvent.click(screen.getByLabelText('Tutup panel menu'));
     expect(screen.queryByRole('heading', { name: 'Leksikon' })).not.toBeInTheDocument();
   });
 
-  it('overlay menu mobile menutup panel saat diklik', () => {
+  it('overlay menu mobile menutup panel saat diklik', async () => {
     render(
       <MemoryRouter initialEntries={['/redaksi/kamus']}>
         <TataLetakAdmin>Konten</TataLetakAdmin>
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByLabelText('Buka menu redaksi'));
+    fireEvent.click(await screen.findByLabelText('Buka menu redaksi'));
     expect(screen.getByRole('heading', { name: 'Leksikon' })).toBeInTheDocument();
 
     fireEvent.click(screen.getByLabelText('Tutup menu redaksi'));
     expect(screen.queryByRole('heading', { name: 'Leksikon' })).not.toBeInTheDocument();
   });
 
-  it('menu admin memakai fallback user.izin saat punyaIzin tidak tersedia', () => {
+  it('menu admin memakai fallback user.izin saat punyaIzin tidak tersedia', async () => {
     mockUseAuth.mockReturnValue({
       user: { email: 'fallback@kateglo.id', izin: ['lihat_entri', 'kelola_label'] },
       logout: mockLogout,
@@ -174,13 +174,13 @@ describe('TataLetakAdmin', () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByLabelText('Buka menu redaksi'));
+    fireEvent.click(await screen.findByLabelText('Buka menu redaksi'));
     expect(screen.getByRole('link', { name: 'Kamus' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Label' })).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Tesaurus' })).not.toBeInTheDocument();
   });
 
-  it('mode gelap membaca localStorage dan toggle tema memperbarui ikon/title', () => {
+  it('mode gelap membaca localStorage dan toggle tema memperbarui ikon/title', async () => {
     localStorage.getItem.mockReturnValue('dark');
 
     render(
@@ -189,6 +189,7 @@ describe('TataLetakAdmin', () => {
       </MemoryRouter>
     );
 
+    await screen.findByRole('link', { name: 'Redaksi Kateglo' });
     const toggleTheme = document.querySelector('.kateglo-theme-toggle');
     expect(toggleTheme).not.toBeNull();
     const titleAwal = toggleTheme?.getAttribute('title');
@@ -200,7 +201,7 @@ describe('TataLetakAdmin', () => {
     expect(toggleTheme?.textContent).not.toBe(ikonAwal);
   });
 
-  it('mode terang saat localStorage berisi light', () => {
+  it('mode terang saat localStorage berisi light', async () => {
     localStorage.getItem.mockReturnValue('light');
 
     render(
@@ -209,6 +210,7 @@ describe('TataLetakAdmin', () => {
       </MemoryRouter>
     );
 
+    expect(await screen.findByRole('link', { name: 'Redaksi Kateglo' })).toHaveAttribute('href', '/redaksi');
     expect(localStorage.getItem).toHaveBeenCalledWith('kateglo-theme');
     expect(document.documentElement.classList.contains('dark')).toBe(false);
   });

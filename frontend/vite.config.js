@@ -32,6 +32,39 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (!id.includes('node_modules')) {
+            return undefined;
+          }
+
+          if (
+            id.includes('react-markdown')
+            || id.includes('remark-gfm')
+            || id.includes('/remark-')
+            || id.includes('/rehype-')
+            || id.includes('/unified/')
+            || id.includes('/micromark')
+            || id.includes('/mdast')
+            || id.includes('/hast')
+            || id.includes('/vfile')
+          ) {
+            return 'markdown-vendor';
+          }
+
+          if (id.includes('@tanstack/react-query')) {
+            return 'query-vendor';
+          }
+
+          if (id.includes('react-router') || id.includes('@remix-run')) {
+            return 'router-vendor';
+          }
+
+          return undefined;
+        },
+      },
+    },
   },
   test: {
     globals: true,
