@@ -165,7 +165,8 @@ function NavbarPublik() {
           ref={navbarInnerRef}
           className={[
             'navbar-inner',
-            adalahBeranda ? 'navbar-inner-beranda' : '',
+            adalahBeranda && !gunakanHamburger ? 'navbar-inner-beranda' : '',
+            adalahBeranda && gunakanHamburger ? 'navbar-inner-beranda-collapsed' : '',
             gunakanHamburger ? 'navbar-inner-collapsed' : 'navbar-inner-compact',
           ].filter(Boolean).join(' ')}
         >
