@@ -47,11 +47,44 @@ vi.mock('react-router-dom', () => ({
   useLocation: () => mockLocation,
 }));
 
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import NavbarPublik from '../../../src/components/publik/NavbarPublik';
+
+function aturUkuranNavbar({ lebarNavbar = 1200, lebarLogo = 96, lebarMenu = 520 } = {}) {
+  vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockImplementation(function clientWidthGetter() {
+    if (this.classList?.contains('navbar-inner')) {
+      return lebarNavbar;
+    }
+
+    return 0;
+  });
+
+  vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockImplementation(function offsetWidthGetter() {
+    if (this.classList?.contains('navbar-logo')) {
+      return lebarLogo;
+    }
+
+    return 0;
+  });
+
+  vi.spyOn(HTMLElement.prototype, 'scrollWidth', 'get').mockImplementation(function scrollWidthGetter() {
+    if (this.classList?.contains('navbar-menu-measure')) {
+      return lebarMenu;
+    }
+
+    return 0;
+  });
+}
 
 describe('NavbarPublik', () => {
   beforeEach(() => {
+    vi.restoreAllMocks();
+    aturUkuranNavbar();
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+      callback(0);
+      return 1;
+    });
+    vi.spyOn(window, 'cancelAnimationFrame').mockImplementation(() => {});
     mockNavigate.mockClear();
     mockLocation.pathname = '/kamus';
     mockLocation.search = '';
@@ -130,22 +163,22 @@ describe('NavbarPublik', () => {
   });
 
   it('toggle menu mobile saat hamburger diklik', () => {
+    aturUkuranNavbar({ lebarNavbar: 720, lebarMenu: 620 });
+
     render(<NavbarPublik />);
     const toggleBtn = screen.getByLabelText('Toggle menu');
 
-    // Menu mobile belum terlihat (link hanya tampil di desktop)
-    const linksBefore = screen.getAllByText('Kamus');
-    const countBefore = linksBefore.length;
+    expect(document.querySelector('.navbar-mobile-panel')).not.toBeInTheDocument();
 
-    // Klik hamburger
     fireEvent.click(toggleBtn);
 
-    // Sekarang link mobile muncul
-    const linksAfter = screen.getAllByText('Kamus');
-    expect(linksAfter.length).toBeGreaterThan(countBefore);
+    expect(document.querySelector('.navbar-mobile-panel')).toBeInTheDocument();
+    expect(document.querySelector('.navbar-mobile-overlay')).toBeInTheDocument();
   });
 
   it('klik link mobile menutup menu', () => {
+    aturUkuranNavbar({ lebarNavbar: 720, lebarMenu: 620 });
+
     render(<NavbarPublik />);
     const toggleBtn = screen.getByLabelText('Toggle menu');
     fireEvent.click(toggleBtn);
@@ -154,17 +187,23 @@ describe('NavbarPublik', () => {
     const mobileLink = mobileLinks[mobileLinks.length - 1];
     fireEvent.click(mobileLink);
 
-    expect(screen.queryByText('Glosarium', { selector: '.navbar-mobile-link' })).not.toBeInTheDocument();
+    return waitFor(() => {
+      expect(screen.queryByText('Glosarium', { selector: '.navbar-mobile-link' })).not.toBeInTheDocument();
+    });
   });
 
-  it('submit pencarian dari form mobile melakukan navigasi', () => {
-    render(<NavbarPublik />);
-    fireEvent.click(screen.getByLabelText('Toggle menu'));
+  it('tetap bisa submit pencarian saat navbar menggunakan hamburger', async () => {
+    aturUkuranNavbar({ lebarNavbar: 720, lebarMenu: 620 });
 
-    const inputs = screen.getAllByPlaceholderText('Cari kata …');
-    const mobileInput = inputs[inputs.length - 1];
-    fireEvent.change(mobileInput, { target: { value: 'mobile kata' } });
-    fireEvent.submit(mobileInput.closest('form'));
+    render(<NavbarPublik />);
+
+    await waitFor(() => {
+      expect(screen.getByLabelText('Toggle menu')).toBeInTheDocument();
+    });
+
+    const input = screen.getByPlaceholderText('Cari kata …');
+    fireEvent.change(input, { target: { value: 'mobile kata' } });
+    fireEvent.submit(input.closest('form'));
 
     expect(mockNavigate).toHaveBeenCalledWith('/kamus/cari/mobile%20kata');
   });
@@ -172,18 +211,55 @@ describe('NavbarPublik', () => {
   it('menampilkan status loading auth saat isLoading true', () => {
     mockAuthState.isLoading = true;
 
-    render(<NavbarPublik />);
+    const { container } = render(<NavbarPublik />);
 
-    expect(screen.getByText('Memuat …')).toBeInTheDocument();
+    expect(container.querySelector('.navbar-menu-desktop-visible')).toHaveTextContent('Memuat …');
   });
 
   it('menampilkan status loading auth pada panel mobile saat menu dibuka', () => {
     mockAuthState.isLoading = true;
+    aturUkuranNavbar({ lebarNavbar: 720, lebarMenu: 620 });
 
     render(<NavbarPublik />);
     fireEvent.click(screen.getByLabelText('Toggle menu'));
 
-    expect(screen.getAllByText('Memuat …').length).toBeGreaterThanOrEqual(2);
+    expect(document.querySelector('.navbar-mobile-panel')).toHaveTextContent('Memuat …');
+  });
+
+  it('klik backdrop menutup drawer mobile', () => {
+    aturUkuranNavbar({ lebarNavbar: 720, lebarMenu: 620 });
+
+    const { container } = render(<NavbarPublik />);
+    fireEvent.click(screen.getByLabelText('Toggle menu'));
+    fireEvent.click(container.querySelector('.navbar-mobile-overlay'));
+
+    return waitFor(() => {
+      expect(container.querySelector('.navbar-mobile-panel')).not.toBeInTheDocument();
+    });
+  });
+
+  it('tombol tutup menutup drawer mobile', () => {
+    aturUkuranNavbar({ lebarNavbar: 720, lebarMenu: 620 });
+
+    const { container } = render(<NavbarPublik />);
+    fireEvent.click(screen.getByLabelText('Toggle menu'));
+    fireEvent.click(screen.getByLabelText('Tutup menu'));
+
+    return waitFor(() => {
+      expect(container.querySelector('.navbar-mobile-panel')).not.toBeInTheDocument();
+    });
+  });
+
+  it('tombol Escape menutup drawer mobile', () => {
+    aturUkuranNavbar({ lebarNavbar: 720, lebarMenu: 620 });
+
+    const { container } = render(<NavbarPublik />);
+    fireEvent.click(screen.getByLabelText('Toggle menu'));
+    fireEvent.keyDown(document, { key: 'Escape' });
+
+    return waitFor(() => {
+      expect(container.querySelector('.navbar-mobile-panel')).not.toBeInTheDocument();
+    });
   });
 
   it('menampilkan tombol Keluar dan memanggil logout saat sudah autentikasi', () => {
@@ -206,6 +282,8 @@ describe('NavbarPublik', () => {
   });
 
   it('klik menu Masuk di mobile menyimpan return path', () => {
+    aturUkuranNavbar({ lebarNavbar: 720, lebarMenu: 620 });
+
     const { container } = render(<NavbarPublik />);
 
     fireEvent.click(screen.getByLabelText('Toggle menu'));
@@ -219,6 +297,7 @@ describe('NavbarPublik', () => {
     const logoutMock = vi.fn();
     mockAuthState.isAuthenticated = true;
     mockAuthState.logout = logoutMock;
+    aturUkuranNavbar({ lebarNavbar: 720, lebarMenu: 620 });
 
     const { container } = render(<NavbarPublik />);
     fireEvent.click(screen.getByLabelText('Toggle menu'));
@@ -226,6 +305,9 @@ describe('NavbarPublik', () => {
     fireEvent.click(mobileLogoutButton);
 
     expect(logoutMock).toHaveBeenCalledTimes(1);
-    expect(container.querySelector('.navbar-mobile-panel')).not.toBeInTheDocument();
+
+    return waitFor(() => {
+      expect(container.querySelector('.navbar-mobile-panel')).not.toBeInTheDocument();
+    });
   });
 });

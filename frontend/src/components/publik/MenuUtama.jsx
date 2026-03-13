@@ -2,6 +2,7 @@
  * @fileoverview Komponen menu navigasi utama (link + auth) yang dapat dipakai ulang
  */
 
+import { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/authContext';
@@ -17,14 +18,14 @@ export const menuItems = [
   { path: '/gim/susun-kata', label: 'Gim' },
 ];
 
-function MenuUtama({
+const MenuUtama = forwardRef(function MenuUtama({
   containerClassName = '',
   linkClassName = '',
   loadingClassName = '',
   onItemClick = () => {},
   tampilkanMenu = true,
   tampilkanAutentikasi = true,
-}) {
+}, ref) {
   const location = useLocation();
   const {
     isLoading,
@@ -49,7 +50,7 @@ function MenuUtama({
   };
 
   return (
-    <div className={containerClassName}>
+    <div ref={ref} className={containerClassName}>
       {tampilkanMenu && menuItems
         .filter((item) => !item.adminSaja || adalahRedaksi)
         .map((item) => (
@@ -85,7 +86,7 @@ function MenuUtama({
       ))}
     </div>
   );
-}
+});
 
 MenuUtama.propTypes = {
   containerClassName: PropTypes.string,

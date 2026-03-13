@@ -43,11 +43,19 @@ code {
   }
 
   .navbar-container {
-    @apply w-full px-4 sm:px-6 lg:px-8;
+    @apply relative w-full px-4 sm:px-6 lg:px-8;
   }
 
   .navbar-inner {
-    @apply flex items-center justify-between h-14;
+    @apply flex flex-wrap items-center justify-between gap-x-3;
+  }
+
+  .navbar-inner-compact {
+    @apply min-h-14 py-2 flex-nowrap;
+  }
+
+  .navbar-inner-collapsed {
+    @apply flex-nowrap py-2 gap-y-0;
   }
 
   .navbar-inner-beranda {
@@ -63,15 +71,56 @@ code {
   }
 
   .navbar-search-desktop {
-    @apply hidden md:flex items-center flex-1 max-w-md mx-6;
+    @apply flex items-center min-w-0;
   }
 
-  .navbar-search-mobile {
-    @apply mt-3 mb-2;
+  .navbar-search-desktop-expanded {
+    @apply flex-1 min-w-[15rem] max-w-md mx-6;
+  }
+
+  .navbar-search-desktop-collapsed {
+    @apply flex-1 min-w-0 mx-3;
+  }
+
+  .navbar-search-desktop-expanded .kotak-cari,
+  .navbar-search-desktop-collapsed .kotak-cari {
+    @apply w-full min-w-0;
+  }
+
+  .navbar-search-desktop-collapsed .kotak-cari-select {
+    @apply w-24 shrink-0;
+  }
+
+  .navbar-search-desktop-collapsed .kotak-cari-input-wrapper {
+    @apply min-w-0;
+  }
+
+  .navbar-search-desktop-collapsed .kotak-cari-input {
+    @apply min-w-0 pr-6;
+  }
+
+  .navbar-search-desktop-collapsed .kotak-cari-tombol {
+    @apply px-2 shrink-0;
+  }
+
+  .navbar-search-desktop-collapsed .kotak-cari-hapus {
+    @apply right-0.5;
+  }
+
+  .navbar-search-desktop-collapsed .kotak-cari-saran {
+    @apply left-0 right-0;
   }
 
   .navbar-menu-desktop {
-    @apply hidden md:flex items-center space-x-1;
+    @apply items-center space-x-1;
+  }
+
+  .navbar-menu-desktop-visible {
+    @apply flex;
+  }
+
+  .navbar-menu-desktop-hidden {
+    @apply hidden;
   }
 
   .navbar-menu-link {
@@ -99,27 +148,91 @@ code {
   }
 
   .navbar-toggle {
-    @apply md:hidden p-2 text-gray-600 hover:text-gray-900;
+    @apply p-2 text-gray-600 hover:text-gray-900;
   }
 
   .dark .navbar-toggle {
     @apply text-dark-text-muted hover:text-dark-text;
   }
 
+  .navbar-toggle-visible {
+    @apply inline-flex shrink-0;
+  }
+
   .navbar-toggle-icon {
     @apply w-6 h-6;
   }
 
+  .navbar-mobile-overlay {
+    @apply fixed inset-0 z-[60] bg-gray-950/35 backdrop-blur-[1px];
+    transition: opacity 220ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity;
+  }
+
+  .dark .navbar-mobile-overlay {
+    @apply bg-black/55;
+  }
+
+  .navbar-mobile-overlay-active {
+    opacity: 1;
+  }
+
+  .navbar-mobile-overlay-closing {
+    opacity: 0;
+  }
+
   .navbar-mobile-panel {
-    @apply md:hidden pb-4 border-t border-gray-100;
+    @apply h-full w-full max-w-xs bg-white border-r border-gray-200 shadow-2xl px-4 py-4 flex flex-col;
+    transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translate3d(calc(-100% - 12px), 0, 0);
+    opacity: 0;
+    will-change: transform, opacity;
   }
 
   .dark .navbar-mobile-panel {
+    @apply bg-dark-bg-elevated border-dark-border;
+  }
+
+  .navbar-mobile-panel-active {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  .navbar-mobile-panel-closing {
+    transform: translate3d(calc(-100% - 12px), 0, 0);
+    opacity: 0;
+  }
+
+  .navbar-mobile-panel-header {
+    @apply flex items-center justify-between gap-3 pb-3 mb-3 border-b border-gray-200;
+  }
+
+  .dark .navbar-mobile-panel-header {
     @apply border-dark-border;
   }
 
+  .navbar-mobile-title {
+    @apply text-sm font-semibold uppercase tracking-[0.18em] text-gray-500;
+  }
+
+  .dark .navbar-mobile-title {
+    @apply text-dark-text-muted;
+  }
+
+  .navbar-mobile-close {
+    @apply inline-flex items-center justify-center rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors;
+  }
+
+  .dark .navbar-mobile-close {
+    @apply text-dark-text-muted hover:bg-dark-bg-hover hover:text-dark-text;
+  }
+
+  .navbar-mobile-links {
+    @apply flex flex-col gap-1;
+  }
+
   .navbar-mobile-link {
-    @apply block px-3 py-2 text-sm text-gray-700 rounded-md hover:bg-gray-200;
+    @apply block px-3 py-2 text-sm text-gray-700 rounded-xl hover:bg-gray-100;
   }
 
   .dark .navbar-mobile-link {
@@ -132,6 +245,16 @@ code {
 
   .dark .navbar-mobile-auth {
     @apply border-dark-border;
+  }
+
+  .navbar-menu-measure {
+    @apply absolute invisible pointer-events-none overflow-hidden whitespace-nowrap;
+    height: 0;
+    inset: 0 auto auto 0;
+  }
+
+  .navbar-menu-measure-inner {
+    @apply flex items-center space-x-1;
   }
 
   .beranda-container {

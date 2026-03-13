@@ -4,6 +4,7 @@
 
 - Memulai implementasi Kamus Deskriptif Indonesia (KADI)
 - Mengecilkan ukuran _build_ dengan memecah paket dan CSS
+- Menyesuaikan bilah navigasi agar kotak cari selalu muncul dan menu hamburger di kiri
 
 ## 2026-03-12 Kamis
 
