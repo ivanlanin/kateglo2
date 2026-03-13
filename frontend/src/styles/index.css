@@ -192,15 +192,20 @@ code {
     @apply space-y-3;
   }
 
+  .ejaan-sekuens-nav,
+  .kamus-detail-sekuens-nav {
+    @apply flex items-center justify-between gap-2 flex-nowrap;
+  }
+
   .ejaan-sekuens-nav {
-    @apply mt-6 flex items-center justify-between gap-2 flex-nowrap;
+    @apply mt-6;
   }
 
   .ejaan-sekuens-link,
   .ejaan-sidebar-pill,
   .kategori-card-chip-link,
   .kamus-detail-sekuens-link {
-    @apply inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm leading-5 text-blue-800 no-underline transition-colors hover:border-blue-300 hover:bg-blue-100 hover:text-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2;
+    @apply inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm leading-5 text-blue-800 no-underline transition-colors hover:border-blue-300 hover:bg-blue-100 hover:text-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2;
   }
 
   .ejaan-sekuens-link-prev,
@@ -214,6 +219,16 @@ code {
 
   .kamus-detail-sekuens-link-next {
     @apply justify-end text-right;
+  }
+
+  .ejaan-sekuens-label,
+  .kamus-detail-sekuens-label {
+    @apply block truncate;
+  }
+
+  .ejaan-sekuens-arrow,
+  .kamus-detail-sekuens-arrow {
+    @apply shrink-0;
   }
 
   .ejaan-sidebar-pill-grid {
@@ -234,10 +249,18 @@ code {
 
   .dark .ejaan-sidebar-pill,
   .dark .ejaan-sekuens-link,
+  .dark .kamus-detail-sekuens-link,
   .dark .kategori-card-chip-link,
   .dark .ejaan-sidebar-pill-active,
   .dark .ejaan-sidebar-pill-active:hover {
     @apply border-blue-500/70 bg-gray-700 text-blue-100;
+  }
+
+  .dark .ejaan-sidebar-pill:hover,
+  .dark .ejaan-sekuens-link:hover,
+  .dark .kamus-detail-sekuens-link:hover,
+  .dark .kategori-card-chip-link:hover {
+    @apply border-blue-400 bg-gray-600 text-blue-50;
   }
 
   .ejaan-panel-list {
@@ -1922,21 +1945,12 @@ code {
   }
 
   .kamus-detail-sekuens-nav {
-    @apply mt-2 flex items-center justify-between gap-2 flex-nowrap;
+    @apply mt-2;
   }
 
   .kamus-detail-sekuens-link {
-    @apply gap-1.5;
     max-width: 48%;
     min-width: 0;
-  }
-
-  .kamus-detail-sekuens-label {
-    @apply block truncate;
-  }
-
-  .kamus-detail-sekuens-arrow {
-    @apply shrink-0;
   }
 
   .dark .kamus-detail-heading-meta {

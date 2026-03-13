@@ -229,8 +229,10 @@ function Ejaan() {
                   <Link
                     to={`/ejaan/${dokumenSebelumnya.slug}`}
                     className="ejaan-sekuens-link ejaan-sekuens-link-prev"
+                    aria-label={`‹ ${dokumenSebelumnya.judul}`}
                   >
-                    ‹ {dokumenSebelumnya.judul}
+                    <span className="ejaan-sekuens-arrow" aria-hidden="true">{'‹'}</span>
+                    <span className="ejaan-sekuens-label">{dokumenSebelumnya.judul}</span>
                   </Link>
                 )}
 
@@ -238,8 +240,10 @@ function Ejaan() {
                   <Link
                     to={`/ejaan/${dokumenSesudah.slug}`}
                     className="ejaan-sekuens-link ejaan-sekuens-link-next"
+                    aria-label={`${dokumenSesudah.judul} ›`}
                   >
-                    {dokumenSesudah.judul} ›
+                    <span className="ejaan-sekuens-label">{dokumenSesudah.judul}</span>
+                    <span className="ejaan-sekuens-arrow" aria-hidden="true">{'›'}</span>
                   </Link>
                 )}
               </nav>
