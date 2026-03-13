@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-03-13 Jumat
+
+- Memulai implementasi Kamus Deskriptif Indonesia (KADI)
+
 ## 2026-03-12 Kamis
 
 - Mengubah `makna.penyingkatan` menjadi kode dan menyiapkan penambahan singkatan

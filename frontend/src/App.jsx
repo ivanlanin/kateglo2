@@ -35,6 +35,7 @@ import PencarianAdmin from './halaman/redaksi/PencarianAdmin';
 import PencarianHitamAdmin from './halaman/redaksi/PencarianHitamAdmin';
 import SusunKataHarian from './halaman/redaksi/SusunKataHarian';
 import SusunKataBebas from './halaman/redaksi/SusunKataBebas';
+import KandidatKataAdmin from './halaman/kadi/KandidatKataAdmin';
 
 function RuteRedaksi({ children }) {
   const { isAuthenticated, adalahRedaksi, isLoading } = useAuth();
@@ -122,6 +123,9 @@ function App() {
       <Route path="/redaksi/izin/:id" element={<RuteIzin izinDibutuhkan={['kelola_peran']}><IzinAdmin /></RuteIzin>} />
       <Route path="/redaksi/pengguna" element={<RuteIzin izinDibutuhkan={['kelola_pengguna']}><PenggunaAdmin /></RuteIzin>} />
       <Route path="/redaksi/pengguna/:id" element={<RuteIzin izinDibutuhkan={['kelola_pengguna']}><PenggunaAdmin /></RuteIzin>} />
+      {/* KADI */}
+      <Route path="/redaksi/kandidat-kata" element={<RuteIzin izinDibutuhkan={['lihat_kandidat']}><KandidatKataAdmin /></RuteIzin>} />
+      <Route path="/redaksi/kandidat-kata/:id" element={<RuteIzin izinDibutuhkan={['lihat_kandidat']}><KandidatKataAdmin /></RuteIzin>} />
       {/* Public routes */}
       <Route element={<TataLetak />}>
         <Route path="/" element={<Beranda />} />

@@ -34,6 +34,13 @@ export const kelompokMenuRedaksi = [
         izin: 'kelola_etimologi',
         statistik: { key: 'etimologi', label: 'Entri Etimologi', warna: 'text-indigo-600' },
       },
+      {
+        path: '/redaksi/kandidat-kata',
+        label: 'Kandidat Kata',
+        dashboardLabel: 'Kandidat Kata',
+        izin: 'lihat_kandidat',
+        statistik: { key: 'kandidatKata', label: 'Kandidat Kata', warna: 'text-cyan-700' },
+      },
     ],
   },
   {

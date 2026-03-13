@@ -40,6 +40,13 @@ function buatKelompokMenuRedaksiFixture() {
           izin: 'kelola_etimologi',
           statistik: { key: 'etimologi', warna: 'text-indigo-600' },
         },
+        {
+          path: '/redaksi/kandidat-kata',
+          label: 'Kandidat Kata',
+          dashboardLabel: 'Kandidat Kata',
+          izin: 'lihat_kandidat',
+          statistik: { key: 'kandidatKata', warna: 'text-cyan-700' },
+        },
       ],
     },
     {
@@ -224,7 +231,7 @@ describe('DasborAdmin', () => {
     );
 
     expect(screen.getByText('Dasbor')).toBeInTheDocument();
-    expect(screen.getAllByText('…')).toHaveLength(19);
+    expect(screen.getAllByText('…')).toHaveLength(20);
   });
 
   it('menampilkan statistik saat data tersedia', () => {
@@ -236,6 +243,7 @@ describe('DasborAdmin', () => {
           tesaurus: 200,
           glosarium: 50,
           etimologi: 70,
+          kandidatKata: 65,
           susunKataHarian: 77,
           susunKataBebas: 66,
           auditMakna: 44,
@@ -294,6 +302,7 @@ describe('DasborAdmin', () => {
           tesaurus: 200,
           glosarium: 50,
           etimologi: 70,
+          kandidatKata: 65,
           bidang: 14,
           bahasa: 19,
           sumber: 18,
@@ -336,6 +345,7 @@ describe('DasborAdmin', () => {
           tesaurus: 20,
           glosarium: 30,
           etimologi: 0,
+          kandidatKata: 5,
           bidang: 7,
           bahasa: 9,
           sumber: 8,
@@ -370,6 +380,7 @@ describe('DasborAdmin', () => {
           entri: null,
           tesaurus: undefined,
           glosarium: undefined,
+          kandidatKata: undefined,
           label: undefined,
           peran: undefined,
           izin: undefined,
@@ -401,6 +412,7 @@ describe('DasborAdmin', () => {
           tesaurus: 20,
           glosarium: 30,
           etimologi: 0,
+          kandidatKata: 5,
           bidang: 7,
           sumber: 8,
           peran: 5,

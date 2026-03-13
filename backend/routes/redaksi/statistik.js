@@ -18,6 +18,7 @@ const ModelAuditMakna = require('../../models/modelAuditMakna');
 const ModelTagar = require('../../models/modelTagar');
 const ModelPeran = require('../../models/modelPeran');
 const ModelIzin = require('../../models/modelIzin');
+const ModelKandidatEntri = require('../../models/kadi/modelKandidatEntri');
 const {
   buildPaginatedResult,
   parsePagination,
@@ -49,6 +50,7 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
       izin,
       pengguna,
       komentar,
+      kandidatKata,
       pencarian,
       pencarianHitam,
     ] = await Promise.all([
@@ -69,6 +71,7 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
       ModelIzin.hitungTotal(),
       ModelPengguna.hitungTotal(),
       ModelKomentar.hitungTotal(),
+      ModelKandidatEntri.hitungTotal(),
       ModelPencarian.hitungTotalKataHarian(),
       ModelPencarianHitam.hitungTotal(),
     ]);
@@ -93,6 +96,7 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
         izin,
         pengguna,
         komentar,
+        kandidatKata,
         pencarian,
         pencarianHitam,
       },

@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-12T04:12:48.448Z
+-- Generated: 2026-03-13T03:17:26.494Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -154,6 +154,29 @@ $function$
 -- ============================================
 -- TABLES
 -- ============================================
+
+-- Bukti penggunaan kata dari sumber nyata (kutipan + metadata)
+create table atestasi (
+  id serial primary key,
+  kandidat_id integer references kandidat_entri(id) on delete cascade not null,
+  kutipan text not null, -- Kalimat asli yang mengandung kata kandidat
+  konteks_pra text, -- Kalimat sebelumnya (opsional)
+  konteks_pasca text, -- Kalimat sesudahnya (opsional)
+  sumber_tipe text not null, -- Jenis sumber: berita, web, media-sosial, buku, jurnal, kontribusi, ensiklopedia
+  sumber_url text, -- URL sumber asli untuk atribusi
+  sumber_nama text, -- Nama sumber (kode sumber_korpus atau nama manual)
+  sumber_penulis text,
+  tanggal_terbit date,
+  crawler_id text, -- ID proses crawler yang membuat atestasi ini
+  skor_konfiden numeric(3,2), -- Skor kepercayaan 0.00-1.00 dari heuristik NLP
+  penulis_anonim boolean default false,
+  konten_dihapus boolean default false,
+  aktif boolean default true,
+  created_at timestamp without time zone not null default now(),
+  constraint atestasi_sumber_tipe_check check (sumber_tipe = ANY (ARRAY['berita'::text, 'web'::text, 'media-sosial'::text, 'buku'::text, 'jurnal'::text, 'kontribusi'::text, 'ensiklopedia'::text]))
+);
+create index idx_atestasi_kandidat on atestasi using btree (kandidat_id);
+create index idx_atestasi_tanggal on atestasi using btree (tanggal_terbit DESC);
 
 -- Antrian audit untuk indeks yang jumlah maknanya perlu ditinjau atau diperbaiki
 create table audit_makna (
@@ -402,6 +425,37 @@ create trigger trg_set_timestamp_fields__izin
   for each row
   execute function set_timestamp_fields();
 
+-- Staging area untuk kandidat kata baru yang menunggu kurasi redaksi
+create table kandidat_entri (
+  id serial primary key,
+  kata text not null, -- Bentuk kata asli
+  indeks text not null, -- Bentuk ternormalisasi (lowercase, trim) untuk dedup
+  jenis text, -- Jenis kandidat: kata-dasar, kata-majemuk, frasa, singkatan, serapan
+  kelas_kata text,
+  definisi_awal text,
+  ragam text,
+  bahasa_campur text,
+  status text not null default 'menunggu'::text, -- Status kurasi: menunggu, ditinjau, disetujui, ditolak, tunda
+  catatan_redaksi text,
+  entri_id integer references entri(id), -- Referensi ke entri kamus jika sudah dimigrasi
+  kontributor_id integer references pengguna(id),
+  sumber_scraper text, -- Kode sumber asal kandidat (referensi ke sumber_korpus.kode)
+  prioritas smallint default 0, -- 0=normal, 1=tinggi, 2=segera
+  created_at timestamp without time zone not null default now(),
+  updated_at timestamp without time zone not null default now(),
+  constraint kandidat_jenis_check check ((jenis IS NULL) OR (jenis = ANY (ARRAY['kata-dasar'::text, 'kata-majemuk'::text, 'frasa'::text, 'singkatan'::text, 'serapan'::text]))),
+  constraint kandidat_kata_check check (TRIM(BOTH FROM kata) <> ''::text),
+  constraint kandidat_status_check check (status = ANY (ARRAY['menunggu'::text, 'ditinjau'::text, 'disetujui'::text, 'ditolak'::text, 'tunda'::text]))
+);
+create index idx_kandidat_created on kandidat_entri using btree (created_at DESC);
+create unique index idx_kandidat_indeks_uq on kandidat_entri using btree (indeks);
+create index idx_kandidat_prioritas on kandidat_entri using btree (prioritas DESC, created_at DESC);
+create index idx_kandidat_status on kandidat_entri using btree (status);
+create trigger trg_set_timestamp_fields__kandidat_entri
+  before insert or update on kandidat_entri
+  for each row
+  execute function set_timestamp_fields();
+
 -- Komentar pengguna terhadap suatu indeks entri
 create table komentar (
   id serial primary key,
@@ -580,6 +634,22 @@ create trigger trg_set_timestamp_fields__peran_izin
   for each row
   execute function set_timestamp_fields();
 
+-- Audit trail untuk setiap aksi redaksi terhadap kandidat kata
+create table riwayat_kurasi (
+  id serial primary key,
+  kandidat_id integer references kandidat_entri(id) on delete cascade not null,
+  redaktur_id integer references pengguna(id) not null,
+  aksi text not null, -- Jenis aksi: tinjau, setujui, tolak, tunda, edit
+  status_lama text,
+  status_baru text,
+  catatan text,
+  perubahan jsonb, -- Diff field yang diubah (format JSON)
+  created_at timestamp without time zone not null default now()
+);
+create index idx_riwayat_created on riwayat_kurasi using btree (created_at DESC);
+create index idx_riwayat_kandidat on riwayat_kurasi using btree (kandidat_id);
+create index idx_riwayat_redaktur on riwayat_kurasi using btree (redaktur_id);
+
 -- Master sumber data untuk kamus, glosarium, tesaurus, dan etimologi
 create table sumber (
   id serial primary key,
@@ -599,6 +669,31 @@ create unique index sumber_kode_key on sumber using btree (kode);
 create unique index sumber_nama_key on sumber using btree (nama);
 create trigger trg_set_timestamp_fields__sumber
   before insert or update on sumber
+  for each row
+  execute function set_timestamp_fields();
+
+-- Registri sumber data untuk korpus KADI
+create table sumber_korpus (
+  id serial primary key,
+  kode text not null, -- Kode unik sumber, misal wikipedia-id-pilihan
+  nama text not null,
+  tipe text not null, -- Jenis sumber: rss, api, scrape, upload, manual, ensiklopedia
+  genre text, -- Genre korpus sesuai taksonomi KADI
+  subgenre text,
+  url_dasar text,
+  bahasa text default 'id'::text,
+  aktif boolean default true,
+  config jsonb, -- Konfigurasi teknis sumber (rate_limit, selectors, auth)
+  terakhir_crawl timestamp without time zone, -- Waktu terakhir sumber ini di-crawl
+  created_at timestamp without time zone not null default now(),
+  updated_at timestamp without time zone not null default now(),
+  constraint sumber_korpus_kode_key unique (kode),
+  constraint sumber_korpus_tipe_check check (tipe = ANY (ARRAY['rss'::text, 'api'::text, 'scrape'::text, 'upload'::text, 'manual'::text, 'ensiklopedia'::text])),
+  constraint sumber_korpus_genre_check check ((genre IS NULL) OR (genre = ANY (ARRAY['jurnalistik'::text, 'percakapan-digital'::text, 'sastra'::text, 'akademik'::text, 'hukum'::text, 'ensiklopedik'::text, 'lisan'::text, 'bisnis'::text, 'umum'::text])))
+);
+create unique index sumber_korpus_kode_key on sumber_korpus using btree (kode);
+create trigger trg_set_timestamp_fields__sumber_korpus
+  before insert or update on sumber_korpus
   for each row
   execute function set_timestamp_fields();
 

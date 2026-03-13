@@ -4,6 +4,7 @@
 
 const express = require('express');
 const { jalankanPrefillSusunKataHarian, parseTanggal, parseTotalHari } = require('../jobs/jobSusunKataHarian');
+const { jalankanProsesWikipedia } = require('../jobs/kadi/jobWikipedia');
 
 const router = express.Router();
 
@@ -52,6 +53,21 @@ router.post('/susun-kata/harian', autentikasiCron, async (req, res, next) => {
         totalHari: hasil.totalHari,
         jumlah: hasil.jumlah,
       },
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.post('/kadi/wikipedia', autentikasiCron, async (req, res, next) => {
+  try {
+    const batasArtikel = Math.min(Math.max(Number(req.body?.batasArtikel) || 50, 1), 500);
+    const hasil = await jalankanProsesWikipedia({ batasArtikel });
+
+    return res.json({
+      success: true,
+      message: 'Job Wikipedia KADI berhasil dijalankan',
+      data: hasil,
     });
   } catch (error) {
     return next(error);

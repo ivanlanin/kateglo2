@@ -137,6 +137,10 @@ jest.mock('../../models/modelIzin', () => ({
   simpan: jest.fn(),
 }));
 
+jest.mock('../../models/kadi/modelKandidatEntri', () => ({
+  hitungTotal: jest.fn(),
+}));
+
 jest.mock('../../services/layananKamusPublik', () => ({
   hapusCacheDetailKamus: jest.fn(),
 }));
@@ -160,6 +164,7 @@ const ModelTagar = require('../../models/modelTagar');
 const ModelPencarianHitam = require('../../models/modelPencarianHitam');
 const ModelPeran = require('../../models/modelPeran');
 const ModelIzin = require('../../models/modelIzin');
+const ModelKandidatEntri = require('../../models/kadi/modelKandidatEntri');
 const { hapusCacheDetailKamus } = require('../../services/layananKamusPublik');
 const { invalidasiCacheDetailGlosarium } = require('../../services/layananGlosariumPublik');
 const rootRouter = require('../../routes');
@@ -404,6 +409,7 @@ describe('routes/redaksi', () => {
       ModelIzin.hitungTotal.mockResolvedValue(82);
       ModelPengguna.hitungTotal.mockResolvedValue(50);
       ModelKomentar.hitungTotal.mockResolvedValue(60);
+      ModelKandidatEntri.hitungTotal.mockResolvedValue(61);
       ModelPencarian.hitungTotalKataHarian.mockResolvedValue(90);
       ModelPencarianHitam.hitungTotal.mockResolvedValue(12);
 
@@ -428,6 +434,7 @@ describe('routes/redaksi', () => {
         izin: 82,
         pengguna: 50,
         komentar: 60,
+        kandidatKata: 61,
         pencarian: 90,
         pencarianHitam: 12,
       });

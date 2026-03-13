@@ -99,6 +99,7 @@ describe('TataLetakAdmin', () => {
 
     expect(screen.getByRole('heading', { name: 'Leksikon' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Kamus' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Kandidat Kata' })).toBeInTheDocument();
     const menuTagar = screen.getAllByRole('link', { name: 'Tagar' });
     expect(menuTagar.some((link) => link.getAttribute('href') === '/redaksi/tagar')).toBe(true);
     expect(menuTagar.some((link) => link.getAttribute('href') === '/redaksi/audit-tagar')).toBe(true);
