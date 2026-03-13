@@ -3,20 +3,22 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/authContext';
 import TataLetakPublik from './components/bersama/TataLetakPublik';
 import Beranda from './pages/publik/Beranda';
-import Kamus from './pages/publik/Kamus';
-import KamusDetail from './pages/publik/KamusDetail';
-import Tesaurus from './pages/publik/Tesaurus';
-import Glosarium from './pages/publik/Glosarium';
-import GlosariumDetail from './pages/publik/GlosariumDetail';
-import Makna from './pages/publik/Makna';
-import Rima from './pages/publik/Rima';
-import Ejaan from './pages/publik/Ejaan';
-import { Alat, PenghitungHuruf, PenganalisisTeks } from './pages/publik/alat';
-import AuthCallback from './pages/publik/AuthCallback';
-import KebijakanPrivasi from './pages/publik/KebijakanPrivasi';
-import Sumber from './pages/publik/Sumber';
 import LoginAdmin from './pages/redaksi/LoginAdmin';
 
+const AuthCallback = lazy(() => import('./pages/publik/AuthCallback'));
+const Kamus = lazy(() => import('./pages/publik/Kamus'));
+const KamusDetail = lazy(() => import('./pages/publik/KamusDetail'));
+const Tesaurus = lazy(() => import('./pages/publik/Tesaurus'));
+const Glosarium = lazy(() => import('./pages/publik/Glosarium'));
+const GlosariumDetail = lazy(() => import('./pages/publik/GlosariumDetail'));
+const Makna = lazy(() => import('./pages/publik/Makna'));
+const Rima = lazy(() => import('./pages/publik/Rima'));
+const Ejaan = lazy(() => import('./pages/publik/Ejaan'));
+const Alat = lazy(() => import('./pages/publik/alat').then((module) => ({ default: module.Alat })));
+const PenghitungHuruf = lazy(() => import('./pages/publik/alat').then((module) => ({ default: module.PenghitungHuruf })));
+const PenganalisisTeks = lazy(() => import('./pages/publik/alat').then((module) => ({ default: module.PenganalisisTeks })));
+const KebijakanPrivasi = lazy(() => import('./pages/publik/KebijakanPrivasi'));
+const Sumber = lazy(() => import('./pages/publik/Sumber'));
 const SusunKata = lazy(() => import('./pages/gim/SusunKata'));
 const DasborAdmin = lazy(() => import('./pages/redaksi/DasborAdmin'));
 const KamusAdmin = lazy(() => import('./pages/redaksi/KamusAdmin'));
@@ -102,7 +104,7 @@ function RuteIzin({ children, izinDibutuhkan = [] }) {
 function App() {
   return (
     <Routes>
-      <Route path="/auth/callback" element={<AuthCallback />} />
+      <Route path="/auth/callback" element={bungkusLazy(<AuthCallback />)} />
       {/* Redaksi routes — tanpa TataLetak */}
       <Route path="/redaksi/login" element={<LoginAdmin />} />
       <Route path="/redaksi" element={bungkusLazy(<RuteRedaksi><DasborAdmin /></RuteRedaksi>)} />
@@ -144,32 +146,32 @@ function App() {
       {/* Public routes */}
       <Route element={<TataLetakPublik />}>
         <Route path="/" element={<Beranda />} />
-        <Route path="/kamus" element={<Kamus />} />
-        <Route path="/kamus/cari/:kata" element={<Kamus />} />
-        <Route path="/kamus/kelas/:kelas" element={<Kamus />} />
-        <Route path="/kamus/tagar/:tagar" element={<Kamus />} />
-        <Route path="/kamus/:kategori/:kode" element={<Kamus />} />
-        <Route path="/kamus/detail/:indeks" element={<KamusDetail />} />
-        <Route path="/makna" element={<Makna />} />
-        <Route path="/makna/cari/:kata" element={<Makna />} />
-        <Route path="/rima" element={<Rima />} />
-        <Route path="/rima/cari/:kata" element={<Rima />} />
-        <Route path="/ejaan" element={<Ejaan />} />
-        <Route path="/ejaan/:slug" element={<Ejaan />} />
-        <Route path="/alat" element={<Alat />} />
-        <Route path="/alat/penghitung-huruf" element={<PenghitungHuruf />} />
-        <Route path="/alat/penganalisis-teks" element={<PenganalisisTeks />} />
+        <Route path="/kamus" element={bungkusLazy(<Kamus />)} />
+        <Route path="/kamus/cari/:kata" element={bungkusLazy(<Kamus />)} />
+        <Route path="/kamus/kelas/:kelas" element={bungkusLazy(<Kamus />)} />
+        <Route path="/kamus/tagar/:tagar" element={bungkusLazy(<Kamus />)} />
+        <Route path="/kamus/:kategori/:kode" element={bungkusLazy(<Kamus />)} />
+        <Route path="/kamus/detail/:indeks" element={bungkusLazy(<KamusDetail />)} />
+        <Route path="/makna" element={bungkusLazy(<Makna />)} />
+        <Route path="/makna/cari/:kata" element={bungkusLazy(<Makna />)} />
+        <Route path="/rima" element={bungkusLazy(<Rima />)} />
+        <Route path="/rima/cari/:kata" element={bungkusLazy(<Rima />)} />
+        <Route path="/ejaan" element={bungkusLazy(<Ejaan />)} />
+        <Route path="/ejaan/:slug" element={bungkusLazy(<Ejaan />)} />
+        <Route path="/alat" element={bungkusLazy(<Alat />)} />
+        <Route path="/alat/penghitung-huruf" element={bungkusLazy(<PenghitungHuruf />)} />
+        <Route path="/alat/penganalisis-teks" element={bungkusLazy(<PenganalisisTeks />)} />
         <Route path="/gim/susun-kata" element={<Navigate to="/gim/susun-kata/harian" replace />} />
         <Route path="/gim/susun-kata/:mode" element={bungkusLazy(<SusunKata />)} />
-        <Route path="/tesaurus" element={<Tesaurus />} />
-        <Route path="/tesaurus/cari/:kata" element={<Tesaurus />} />
-        <Route path="/glosarium" element={<Glosarium />} />
-        <Route path="/glosarium/cari/:kata" element={<Glosarium />} />
-        <Route path="/glosarium/detail/:asing" element={<GlosariumDetail />} />
-        <Route path="/glosarium/bidang/:bidang" element={<Glosarium />} />
-        <Route path="/glosarium/sumber/:sumber" element={<Glosarium />} />
-        <Route path="/kebijakan-privasi" element={<KebijakanPrivasi />} />
-        <Route path="/sumber" element={<Sumber />} />
+        <Route path="/tesaurus" element={bungkusLazy(<Tesaurus />)} />
+        <Route path="/tesaurus/cari/:kata" element={bungkusLazy(<Tesaurus />)} />
+        <Route path="/glosarium" element={bungkusLazy(<Glosarium />)} />
+        <Route path="/glosarium/cari/:kata" element={bungkusLazy(<Glosarium />)} />
+        <Route path="/glosarium/detail/:asing" element={bungkusLazy(<GlosariumDetail />)} />
+        <Route path="/glosarium/bidang/:bidang" element={bungkusLazy(<Glosarium />)} />
+        <Route path="/glosarium/sumber/:sumber" element={bungkusLazy(<Glosarium />)} />
+        <Route path="/kebijakan-privasi" element={bungkusLazy(<KebijakanPrivasi />)} />
+        <Route path="/sumber" element={bungkusLazy(<Sumber />)} />
       </Route>
     </Routes>
   );

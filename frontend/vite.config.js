@@ -57,8 +57,28 @@ export default defineConfig({
             return 'query-vendor';
           }
 
+          if (
+            id.includes('/react/')
+            || id.includes('/react-dom/')
+            || id.includes('/scheduler/')
+          ) {
+            return 'react-vendor';
+          }
+
           if (id.includes('react-router') || id.includes('@remix-run')) {
             return 'router-vendor';
+          }
+
+          if (id.includes('/axios/')) {
+            return 'http-vendor';
+          }
+
+          if (id.includes('/dayjs/')) {
+            return 'date-vendor';
+          }
+
+          if (id.includes('/lucide-react/')) {
+            return 'icon-vendor';
           }
 
           return undefined;

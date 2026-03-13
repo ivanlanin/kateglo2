@@ -65,13 +65,13 @@ describe('App', () => {
     expect(screen.getByText('Hal Beranda')).toBeInTheDocument();
   });
 
-  it('merender auth callback route', () => {
+  it('merender auth callback route', async () => {
     render(
       <MemoryRouter initialEntries={['/auth/callback']}>
         <App />
       </MemoryRouter>
     );
-    expect(screen.getByText('Auth Callback')).toBeInTheDocument();
+    expect(await screen.findByText('Auth Callback')).toBeInTheDocument();
   });
 
   it('mengalihkan route redaksi ke login saat bukan admin', () => {
@@ -265,40 +265,40 @@ describe('App', () => {
     expect(await screen.findByText('Dasbor Redaksi')).toBeInTheDocument();
   });
 
-  it('merender route kebijakan privasi', () => {
+  it('merender route kebijakan privasi', async () => {
     render(
       <MemoryRouter initialEntries={['/kebijakan-privasi']}>
         <App />
       </MemoryRouter>
     );
-    expect(screen.getByText('Kebijakan Privasi')).toBeInTheDocument();
+    expect(await screen.findByText('Kebijakan Privasi')).toBeInTheDocument();
   });
 
-  it('merender route alat', () => {
+  it('merender route alat', async () => {
     render(
       <MemoryRouter initialEntries={['/alat']}>
         <App />
       </MemoryRouter>
     );
-    expect(screen.getByText('Hal Alat')).toBeInTheDocument();
+    expect(await screen.findByText('Hal Alat')).toBeInTheDocument();
   });
 
-  it('merender route alat penganalisis teks', () => {
+  it('merender route alat penganalisis teks', async () => {
     render(
       <MemoryRouter initialEntries={['/alat/penganalisis-teks']}>
         <App />
       </MemoryRouter>
     );
-    expect(screen.getByText('Hal Penganalisis Teks')).toBeInTheDocument();
+    expect(await screen.findByText('Hal Penganalisis Teks')).toBeInTheDocument();
   });
 
-  it('merender route alat penghitung huruf', () => {
+  it('merender route alat penghitung huruf', async () => {
     render(
       <MemoryRouter initialEntries={['/alat/penghitung-huruf']}>
         <App />
       </MemoryRouter>
     );
-    expect(screen.getByText('Hal Penghitung Huruf')).toBeInTheDocument();
+    expect(await screen.findByText('Hal Penghitung Huruf')).toBeInTheDocument();
   });
 
   it('merender route gim susun kata', async () => {
