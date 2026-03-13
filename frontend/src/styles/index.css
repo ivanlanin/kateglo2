@@ -442,6 +442,10 @@ code {
     @apply min-h-[20rem] w-full rounded-2xl border border-gray-300 bg-gray-50 px-4 py-3 text-base leading-7 text-gray-900 outline-none transition-colors focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-200;
   }
 
+  .alat-textarea-compact {
+    @apply min-h-[12rem];
+  }
+
   .dark .alat-textarea {
     @apply border-dark-border bg-dark-bg-elevated text-dark-text focus:bg-dark-bg focus:ring-blue-900/40;
   }
@@ -526,6 +530,34 @@ code {
     @apply mt-5;
   }
 
+  .alat-summary-inline {
+    @apply mt-5 grid gap-3 sm:grid-cols-2;
+  }
+
+  .alat-mini-stat {
+    @apply rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3;
+  }
+
+  .dark .alat-mini-stat {
+    @apply border-dark-border bg-dark-bg-elevated;
+  }
+
+  .alat-mini-stat-label {
+    @apply block text-xs font-semibold uppercase tracking-[0.14em] text-gray-500;
+  }
+
+  .dark .alat-mini-stat-label {
+    @apply text-dark-text-muted;
+  }
+
+  .alat-mini-stat-value {
+    @apply mt-2 block text-2xl font-semibold text-gray-900;
+  }
+
+  .dark .alat-mini-stat-value {
+    @apply text-dark-text;
+  }
+
   .alat-subpanel {
     @apply rounded-2xl border border-gray-200 bg-gray-50 p-4;
   }
@@ -565,6 +597,57 @@ code {
   .alat-frequency-group p {
     @apply mb-0 mt-1 text-sm leading-6 text-gray-600;
     word-break: break-word;
+  }
+
+  .alat-table-wrap {
+    @apply mt-4 overflow-x-auto;
+  }
+
+  .alat-data-table {
+    @apply w-full border-separate border-spacing-0 overflow-hidden rounded-2xl border border-gray-200 text-sm;
+  }
+
+  .alat-data-table thead th {
+    @apply bg-gray-100 px-4 py-3 text-left font-semibold text-gray-700;
+  }
+
+  .alat-data-table tbody td {
+    @apply border-t border-gray-200 px-4 py-3 text-gray-700;
+  }
+
+  .alat-data-table tbody tr:nth-child(even) td {
+    @apply bg-gray-50;
+  }
+
+  .dark .alat-data-table {
+    @apply border-dark-border;
+  }
+
+  .dark .alat-data-table thead th {
+    @apply bg-dark-bg-hover text-dark-text;
+  }
+
+  .dark .alat-data-table tbody td {
+    @apply border-dark-border text-dark-text-muted;
+  }
+
+  .dark .alat-data-table tbody tr:nth-child(even) td {
+    @apply bg-dark-bg;
+  }
+
+  .alat-chart-shell {
+    @apply mt-4 rounded-2xl border border-gray-200 bg-white p-4;
+    min-height: 24rem;
+  }
+
+  .dark .alat-chart-shell {
+    @apply border-dark-border bg-dark-bg;
+  }
+
+  .alat-chart-canvas {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 20rem;
   }
 
   .dark .alat-frequency-group p {

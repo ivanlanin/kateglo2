@@ -12,6 +12,12 @@ const daftarAlat = [
     deskripsi: 'Hitung jumlah paragraf, kalimat, dan kata dari teks bahasa Indonesia secara cepat.',
     status: 'Tersedia',
   },
+  {
+    slug: 'penghitung-huruf',
+    judul: 'Penghitung Huruf',
+    deskripsi: 'Hitung frekuensi huruf a-z, tampilkan tabel persentase, dan lihat grafik batang distribusinya.',
+    status: 'Tersedia',
+  },
 ];
 
 function AlatIndex() {

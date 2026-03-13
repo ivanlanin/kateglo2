@@ -198,6 +198,10 @@ describe('entry-server', () => {
     expect(penganalisisTeks.title).toBe('Penganalisis Teks — Kateglo');
     expect(penganalisisTeks.description).toContain('paragraf');
 
+    const penghitungHuruf = __private.buildMetaForPath('/alat/penghitung-huruf', site);
+    expect(penghitungHuruf.title).toBe('Penghitung Huruf — Kateglo');
+    expect(penghitungHuruf.description).toContain('frekuensi huruf');
+
     const gimSusunKata = __private.buildMetaForPath('/gim/susun-kata', site);
     expect(gimSusunKata.title).toBe('Susun Kata — Kateglo');
     expect(gimSusunKata.description).toContain('susun kata harian');
@@ -252,6 +256,13 @@ describe('entry-server', () => {
     expect(appHtml).toContain('App SSR Mock');
     expect(headTags).toContain('Penganalisis Teks — Kateglo');
     expect(headTags).toContain('https://kateglo.org/alat/penganalisis-teks');
+  });
+
+  it('render menghasilkan canonical untuk route alat penghitung huruf', async () => {
+    const { appHtml, headTags } = await render('/alat/penghitung-huruf');
+    expect(appHtml).toContain('App SSR Mock');
+    expect(headTags).toContain('Penghitung Huruf — Kateglo');
+    expect(headTags).toContain('https://kateglo.org/alat/penghitung-huruf');
   });
 
   it('buildMetaForPath memakai fallback pathname root saat input kosong', () => {

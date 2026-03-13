@@ -117,6 +117,13 @@ function buildMetaPenganalisisTeks() {
   };
 }
 
+function buildMetaPenghitungHuruf() {
+  return {
+    judul: 'Penghitung Huruf',
+    deskripsi: 'Alat untuk menghitung frekuensi huruf a-z, persentase kemunculan, dan grafik distribusi huruf langsung di Kateglo.',
+  };
+}
+
 function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', prefetchedData = null) {
   const defaultMeta = {
     title: 'Kateglo',
@@ -241,6 +248,10 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
 
   if (path === '/alat/penganalisis-teks' || path === '/alat/penganalisis-teks/') {
     return titled(buildMetaPenganalisisTeks());
+  }
+
+  if (path === '/alat/penghitung-huruf' || path === '/alat/penghitung-huruf/') {
+    return titled(buildMetaPenghitungHuruf());
   }
 
   // /kebijakan-privasi

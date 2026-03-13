@@ -24,6 +24,7 @@ vi.mock('../src/pages/gim/SusunKata', () => ({ default: () => <div>Hal Susun Kat
 vi.mock('../src/pages/publik/Glosarium', () => ({ default: () => <div>Hal Glosarium</div> }));
 vi.mock('../src/pages/publik/alat', () => ({
   Alat: () => <div>Hal Alat</div>,
+  PenghitungHuruf: () => <div>Hal Penghitung Huruf</div>,
   PenganalisisTeks: () => <div>Hal Penganalisis Teks</div>,
 }));
 vi.mock('../src/pages/publik/AuthCallback', () => ({ default: () => <div>Auth Callback</div> }));
@@ -289,6 +290,15 @@ describe('App', () => {
       </MemoryRouter>
     );
     expect(screen.getByText('Hal Penganalisis Teks')).toBeInTheDocument();
+  });
+
+  it('merender route alat penghitung huruf', () => {
+    render(
+      <MemoryRouter initialEntries={['/alat/penghitung-huruf']}>
+        <App />
+      </MemoryRouter>
+    );
+    expect(screen.getByText('Hal Penghitung Huruf')).toBeInTheDocument();
   });
 
   it('merender route gim susun kata', async () => {
