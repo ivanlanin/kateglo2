@@ -1,6 +1,6 @@
 /**
- * @fileoverview Test untuk komponen Navbar
- * @tested_in frontend/src/komponen/publik/Navbar.jsx
+ * @fileoverview Test untuk komponen NavbarPublik
+ * @tested_in frontend/src/komponen/publik/NavbarPublik.jsx
  */
 
 // Mock react-router-dom SEBELUM import komponen
@@ -48,9 +48,9 @@ vi.mock('react-router-dom', () => ({
 }));
 
 import { render, screen, fireEvent } from '@testing-library/react';
-import Navbar from '../../../src/komponen/publik/Navbar';
+import NavbarPublik from '../../../src/komponen/publik/NavbarPublik';
 
-describe('Navbar', () => {
+describe('NavbarPublik', () => {
   beforeEach(() => {
     mockNavigate.mockClear();
     mockLocation.pathname = '/kamus';
@@ -65,41 +65,41 @@ describe('Navbar', () => {
   });
 
   it('menampilkan logo Kateglo', () => {
-    render(<Navbar />);
+    render(<NavbarPublik />);
     expect(screen.getByText('Kateglo')).toBeInTheDocument();
   });
 
   it('di beranda menyembunyikan logo dan kotak cari navbar', () => {
     mockLocation.pathname = '/';
 
-    render(<Navbar />);
+    render(<NavbarPublik />);
 
     expect(screen.queryByText('Kateglo')).not.toBeInTheDocument();
     expect(screen.queryByPlaceholderText('Cari kata …')).not.toBeInTheDocument();
   });
 
   it('menampilkan link menu navigasi', () => {
-    render(<Navbar />);
+    render(<NavbarPublik />);
     expect(screen.getByRole('link', { name: 'Kamus' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Tesaurus' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Glosarium' })).toBeInTheDocument();
   });
 
   it('menampilkan input pencarian', () => {
-    render(<Navbar />);
+    render(<NavbarPublik />);
     expect(screen.getByPlaceholderText('Cari kata …')).toBeInTheDocument();
   });
 
   it('di halaman Susun Kata menyembunyikan kotak cari navbar', () => {
     mockLocation.pathname = '/gim/susun-kata';
 
-    render(<Navbar />);
+    render(<NavbarPublik />);
 
     expect(screen.queryByPlaceholderText('Cari kata …')).not.toBeInTheDocument();
   });
 
   it('navigasi ke halaman kamus saat pencarian di-submit', () => {
-    render(<Navbar />);
+    render(<NavbarPublik />);
     const input = screen.getAllByPlaceholderText('Cari kata …')[0];
     fireEvent.change(input, { target: { value: 'rumah' } });
 
@@ -110,7 +110,7 @@ describe('Navbar', () => {
   });
 
   it('tidak navigasi jika query kosong', () => {
-    render(<Navbar />);
+    render(<NavbarPublik />);
     const input = screen.getAllByPlaceholderText('Cari kata …')[0];
     const form = input.closest('form');
     fireEvent.submit(form);
@@ -119,7 +119,7 @@ describe('Navbar', () => {
   });
 
   it('encode karakter khusus dalam query', () => {
-    render(<Navbar />);
+    render(<NavbarPublik />);
     const input = screen.getAllByPlaceholderText('Cari kata …')[0];
     fireEvent.change(input, { target: { value: 'anak & ibu' } });
 
@@ -130,7 +130,7 @@ describe('Navbar', () => {
   });
 
   it('toggle menu mobile saat hamburger diklik', () => {
-    render(<Navbar />);
+    render(<NavbarPublik />);
     const toggleBtn = screen.getByLabelText('Toggle menu');
 
     // Menu mobile belum terlihat (link hanya tampil di desktop)
@@ -146,7 +146,7 @@ describe('Navbar', () => {
   });
 
   it('klik link mobile menutup menu', () => {
-    render(<Navbar />);
+    render(<NavbarPublik />);
     const toggleBtn = screen.getByLabelText('Toggle menu');
     fireEvent.click(toggleBtn);
 
@@ -158,7 +158,7 @@ describe('Navbar', () => {
   });
 
   it('submit pencarian dari form mobile melakukan navigasi', () => {
-    render(<Navbar />);
+    render(<NavbarPublik />);
     fireEvent.click(screen.getByLabelText('Toggle menu'));
 
     const inputs = screen.getAllByPlaceholderText('Cari kata …');
@@ -172,7 +172,7 @@ describe('Navbar', () => {
   it('menampilkan status loading auth saat isLoading true', () => {
     mockAuthState.isLoading = true;
 
-    render(<Navbar />);
+    render(<NavbarPublik />);
 
     expect(screen.getByText('Memuat …')).toBeInTheDocument();
   });
@@ -180,7 +180,7 @@ describe('Navbar', () => {
   it('menampilkan status loading auth pada panel mobile saat menu dibuka', () => {
     mockAuthState.isLoading = true;
 
-    render(<Navbar />);
+    render(<NavbarPublik />);
     fireEvent.click(screen.getByLabelText('Toggle menu'));
 
     expect(screen.getAllByText('Memuat …').length).toBeGreaterThanOrEqual(2);
@@ -191,14 +191,14 @@ describe('Navbar', () => {
     mockAuthState.isAuthenticated = true;
     mockAuthState.logout = logoutMock;
 
-    render(<Navbar />);
+    render(<NavbarPublik />);
     fireEvent.click(screen.getByRole('button', { name: 'Keluar' }));
 
     expect(logoutMock).toHaveBeenCalledTimes(1);
   });
 
   it('klik menu Masuk menyimpan return path', () => {
-    render(<Navbar />);
+    render(<NavbarPublik />);
 
     fireEvent.click(screen.getByRole('link', { name: 'Masuk' }));
 
@@ -206,7 +206,7 @@ describe('Navbar', () => {
   });
 
   it('klik menu Masuk di mobile menyimpan return path', () => {
-    const { container } = render(<Navbar />);
+    const { container } = render(<NavbarPublik />);
 
     fireEvent.click(screen.getByLabelText('Toggle menu'));
     const mobileLoginLink = container.querySelector('.navbar-mobile-auth a');
@@ -220,7 +220,7 @@ describe('Navbar', () => {
     mockAuthState.isAuthenticated = true;
     mockAuthState.logout = logoutMock;
 
-    const { container } = render(<Navbar />);
+    const { container } = render(<NavbarPublik />);
     fireEvent.click(screen.getByLabelText('Toggle menu'));
     const mobileLogoutButton = container.querySelector('.navbar-mobile-auth button');
     fireEvent.click(mobileLogoutButton);

@@ -28,12 +28,12 @@ vi.mock('../../../src/api/apiKadi', () => ({
   useDaftarRiwayat: (...args) => mockUseDaftarRiwayat(...args),
 }));
 
-vi.mock('../../../src/komponen/bersama/TataLetak', () => ({
+vi.mock('../../../src/komponen/redaksi/TataLetakAdmin', () => ({
   default: (props) => {
     mockTataLetak(props);
     return (
       <div data-testid="tata-letak-admin">
-        <div data-testid="tata-letak-mode">{props.mode}</div>
+        <div data-testid="tata-letak-mode">admin</div>
         <div data-testid="tata-letak-judul">{props.judul}</div>
         {props.children}
       </div>

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ambilDetailGlosarium } from '../../api/apiPublik';
-import HalamanDasar from '../../komponen/publik/HalamanDasar';
+import HalamanPublik from '../../komponen/publik/HalamanPublik';
 import TombolNavKursor from '../../komponen/publik/TombolNavKursor';
 import HamparanMuatNav from '../../komponen/publik/HamparanMuatNav';
 import TombolSunting from '../../komponen/publik/TombolSunting';
@@ -257,7 +257,7 @@ function GlosariumDetail() {
   };
 
   return (
-    <HalamanDasar>
+    <HalamanPublik>
       {asingDecoded && <h1 className="page-title"><em>{asingDecoded}</em></h1>}
 
       <QueryFeedback
@@ -345,7 +345,7 @@ function GlosariumDetail() {
       )}
 
       {kosong && <EmptyResultText text="Tidak ada entri glosarium yang ditemukan." />}
-    </HalamanDasar>
+    </HalamanPublik>
   );
 }
 

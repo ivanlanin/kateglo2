@@ -10,7 +10,7 @@ import {
   useSimpanBahasa,
   useHapusBahasa,
 } from '../../api/apiAdmin';
-import TataLetak from '../../komponen/bersama/TataLetak';
+import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
   BarisFilterCariAdmin,
   TombolAksiAdmin,
@@ -161,7 +161,7 @@ function BahasaAdmin() {
   };
 
   return (
-    <TataLetak mode="admin" judul="Bahasa" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
+    <TataLetakAdmin judul="Bahasa" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -209,7 +209,7 @@ function BahasaAdmin() {
           modeTambah={panel.modeTambah}
         />
       </PanelGeser>
-    </TataLetak>
+    </TataLetakAdmin>
   );
 }
 

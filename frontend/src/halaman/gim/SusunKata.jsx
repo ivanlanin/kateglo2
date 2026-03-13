@@ -16,7 +16,7 @@ import {
   submitSkorSusunKataBebas,
   validasiKataSusunKata,
 } from '../../api/apiPublik';
-import HalamanDasar from '../../komponen/publik/HalamanDasar';
+import HalamanPublik from '../../komponen/publik/HalamanPublik';
 import { QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { useAuth } from '../../context/authContext';
 import TombolMasuk from '../../komponen/bersama/TombolMasuk';
@@ -465,7 +465,7 @@ function SusunKata() {
   });
 
   return (
-    <HalamanDasar
+    <HalamanPublik
       judul="Susun Kata"
       deskripsi="Mainkan gim susun kata harian seperti Wordle untuk menyusun kata bahasa Indonesia dalam enam percobaan."
       tampilkanJudul={false}
@@ -657,7 +657,7 @@ function SusunKata() {
           </>
         )}
       </div>
-    </HalamanDasar>
+    </HalamanPublik>
   );
 }
 

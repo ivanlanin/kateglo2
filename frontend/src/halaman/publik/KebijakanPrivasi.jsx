@@ -2,11 +2,11 @@
  * @fileoverview Halaman kebijakan privasi sederhana
  */
 
-import HalamanDasar from '../../komponen/publik/HalamanDasar';
+import HalamanPublik from '../../komponen/publik/HalamanPublik';
 
 function KebijakanPrivasi() {
   return (
-    <HalamanDasar judul="Kebijakan Privasi">
+    <HalamanPublik judul="Kebijakan Privasi">
       <div className="space-y-4">
         <p className="muted-text">
           Kateglo berkomitmen melindungi data pribadi pengguna. Dokumen ini menjelaskan
@@ -55,7 +55,7 @@ function KebijakanPrivasi() {
 
         <p className="secondary-text">Terakhir diperbarui: 16 Februari 2026</p>
       </div>
-    </HalamanDasar>
+    </HalamanPublik>
   );
 }
 

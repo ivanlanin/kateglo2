@@ -12,7 +12,7 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useSimpanAuditMaknaAdmin: () => ({ mutate: mutateSimpanAudit, isPending: false }),
 }));
 
-vi.mock('../../../src/komponen/bersama/TataLetak', () => ({
+vi.mock('../../../src/komponen/redaksi/TataLetakAdmin', () => ({
   default: ({ children, judul }) => (
     <div>
       <h1>{judul}</h1>

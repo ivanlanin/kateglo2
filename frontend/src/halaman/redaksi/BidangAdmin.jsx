@@ -10,7 +10,7 @@ import {
   useSimpanBidang,
   useHapusBidang,
 } from '../../api/apiAdmin';
-import TataLetak from '../../komponen/bersama/TataLetak';
+import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
   BarisFilterCariAdmin,
   TombolAksiAdmin,
@@ -192,7 +192,7 @@ function BidangAdmin() {
   };
 
   return (
-    <TataLetak mode="admin" judul="Bidang" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
+    <TataLetakAdmin judul="Bidang" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -248,7 +248,7 @@ function BidangAdmin() {
           modeTambah={panel.modeTambah}
         />
       </PanelGeser>
-    </TataLetak>
+    </TataLetakAdmin>
   );
 }
 

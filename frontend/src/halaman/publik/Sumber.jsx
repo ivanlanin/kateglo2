@@ -6,7 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'react-router-dom';
 import { ambilDaftarSumber } from '../../api/apiPublik';
-import HalamanDasar from '../../komponen/publik/HalamanDasar';
+import HalamanPublik from '../../komponen/publik/HalamanPublik';
 import { QueryFeedback } from '../../komponen/publik/StatusKonten';
 
 function Sumber() {
@@ -20,7 +20,7 @@ function Sumber() {
   });
 
   return (
-    <HalamanDasar
+    <HalamanPublik
       judul="Sumber"
       deskripsi="Daftar sumber referensi glosarium Kateglo"
     >
@@ -55,7 +55,7 @@ function Sumber() {
       {!isLoading && !isError && sumberList?.length === 0 && (
         <p className="muted-text">Belum ada sumber yang tersedia.</p>
       )}
-    </HalamanDasar>
+    </HalamanPublik>
   );
 }
 

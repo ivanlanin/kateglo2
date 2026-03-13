@@ -12,7 +12,7 @@ import {
   ambilDaftarBidang,
   ambilDaftarSumber,
 } from '../../api/apiPublik';
-import HalamanDasar from '../../komponen/publik/HalamanDasar';
+import HalamanPublik from '../../komponen/publik/HalamanPublik';
 import HasilPencarian from '../../komponen/publik/HasilPencarian';
 import KartuKategori from '../../komponen/publik/KartuKategori';
 import TombolSunting from '../../komponen/publik/TombolSunting';
@@ -242,7 +242,7 @@ function Glosarium() {
     : <EmptyResultText text="Tidak ada entri glosarium yang ditemukan." />;
 
   return (
-    <HalamanDasar
+    <HalamanPublik
       judul={metaHalaman.judul}
       judulNoda={judulNodaPencarian || judulNodaSumber}
       deskripsi={metaHalaman.deskripsi}
@@ -304,7 +304,7 @@ function Glosarium() {
           ))}
         />
       )}
-    </HalamanDasar>
+    </HalamanPublik>
   );
 }
 

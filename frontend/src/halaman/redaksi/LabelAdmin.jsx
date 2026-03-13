@@ -5,7 +5,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarLabelAdmin, useDetailLabelAdmin, useSimpanLabel, useHapusLabel } from '../../api/apiAdmin';
-import TataLetak from '../../komponen/bersama/TataLetak';
+import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
   BarisFilterCariAdmin,
   TombolAksiAdmin,
@@ -184,7 +184,7 @@ function LabelAdmin() {
   };
 
   return (
-    <TataLetak mode="admin" judul="Label" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
+    <TataLetakAdmin judul="Label" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -232,7 +232,7 @@ function LabelAdmin() {
           modeTambah={panel.modeTambah}
         />
       </PanelGeser>
-    </TataLetak>
+    </TataLetakAdmin>
   );
 }
 

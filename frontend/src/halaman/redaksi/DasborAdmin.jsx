@@ -5,7 +5,7 @@
 import { Link } from 'react-router-dom';
 import { useStatistikAdmin } from '../../api/apiAdmin';
 import { useAuth } from '../../context/authContext';
-import TataLetak from '../../komponen/bersama/TataLetak';
+import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import { filterKelompokMenuRedaksi } from '../../komponen/redaksi/menuRedaksi';
 
 function KartuMenuRedaksi({ item, jumlah, bisaLihatStatistik, isLoading }) {
@@ -42,7 +42,7 @@ function DasborAdmin() {
   const kelompokTampil = filterKelompokMenuRedaksi(hasIzin);
 
   return (
-    <TataLetak mode="admin" judul="Dasbor">
+    <TataLetakAdmin judul="Dasbor">
       <div className="redaksi-dashboard-sections">
         {kelompokTampil.map((kelompok) => (
           <section key={kelompok.judul} className="redaksi-dashboard-section">
@@ -62,7 +62,7 @@ function DasborAdmin() {
           </section>
         ))}
       </div>
-    </TataLetak>
+    </TataLetakAdmin>
   );
 }
 

@@ -15,7 +15,7 @@ import {
   useDaftarAtestasi,
   useDaftarRiwayat,
 } from '../../api/apiKadi';
-import TataLetak from '../../komponen/bersama/TataLetak';
+import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import { useAuth } from '../../context/authContext';
 import {
   BarisFilterCariAdmin,
@@ -404,7 +404,7 @@ export default function KandidatKataAdmin() {
   const detailData = panel.data;
 
   return (
-    <TataLetak mode="admin" judul="Kandidat Kata — KADI">
+    <TataLetakAdmin judul="Kandidat Kata — KADI">
       <PesanForm error={pesan.error} sukses={pesan.sukses} />
 
       <BarStatistik stats={statsQuery.data} />
@@ -521,6 +521,6 @@ export default function KandidatKataAdmin() {
           </div>
         )}
       </PanelGeser>
-    </TataLetak>
+    </TataLetakAdmin>
   );
 }

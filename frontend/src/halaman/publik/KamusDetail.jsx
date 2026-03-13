@@ -9,7 +9,7 @@ import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategor
 import { useAuth } from '../../context/authContext';
 import TombolNavKursor from '../../komponen/publik/TombolNavKursor';
 import PanelLipat from '../../komponen/publik/PanelLipat';
-import HalamanDasar from '../../komponen/publik/HalamanDasar';
+import HalamanPublik from '../../komponen/publik/HalamanPublik';
 import HamparanMuatNav from '../../komponen/publik/HamparanMuatNav';
 import TombolSunting from '../../komponen/publik/TombolSunting';
 import TombolMasuk from '../../komponen/bersama/TombolMasuk';
@@ -502,9 +502,9 @@ function KamusDetail() {
 
   if (isLoading) {
     return (
-      <HalamanDasar>
+      <HalamanPublik>
         <p className="secondary-text">Memuat detail …</p>
-      </HalamanDasar>
+      </HalamanPublik>
     );
   }
 
@@ -567,7 +567,7 @@ function KamusDetail() {
     .join(' ');
 
   return (
-    <HalamanDasar>
+    <HalamanPublik>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Kolom utama: makna */}
         <div className="lg:col-span-2">
@@ -1213,7 +1213,7 @@ function KamusDetail() {
             )}
           </div>
       </div>
-    </HalamanDasar>
+    </HalamanPublik>
   );
 }
 

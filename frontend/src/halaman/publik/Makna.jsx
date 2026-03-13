@@ -6,7 +6,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { cariMakna, ambilContohMakna } from '../../api/apiPublik';
 import { useCursorPagination } from '../../hooks/bersama/useCursorPagination';
-import HalamanDasar from '../../komponen/publik/HalamanDasar';
+import HalamanPublik from '../../komponen/publik/HalamanPublik';
 import HasilPencarian from '../../komponen/publik/HasilPencarian';
 import { QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { formatLemaHomonim } from '../../utils/formatUtils';
@@ -86,7 +86,7 @@ function Makna() {
     : 'Cari kata berdasarkan makna di kamus Kateglo.';
 
   return (
-    <HalamanDasar judul={judulHalaman} deskripsi={deskripsiHalaman}>
+    <HalamanPublik judul={judulHalaman} deskripsi={deskripsiHalaman}>
 
       <QueryFeedback
         isLoading={isLoading}
@@ -161,7 +161,7 @@ function Makna() {
           )}
         />
       )}
-    </HalamanDasar>
+    </HalamanPublik>
   );
 }
 

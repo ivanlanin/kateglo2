@@ -6,7 +6,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ambilContohTesaurus, cariTesaurus } from '../../api/apiPublik';
 import { useCursorPagination } from '../../hooks/bersama/useCursorPagination';
-import HalamanDasar from '../../komponen/publik/HalamanDasar';
+import HalamanPublik from '../../komponen/publik/HalamanPublik';
 import HasilPencarian from '../../komponen/publik/HasilPencarian';
 import TombolSunting from '../../komponen/publik/TombolSunting';
 import { EmptyResultText, QueryFeedback } from '../../komponen/publik/StatusKonten';
@@ -86,7 +86,7 @@ function Tesaurus() {
     : buildMetaBrowseTesaurus();
 
   return (
-    <HalamanDasar judul={metaHalaman.judul} deskripsi={metaHalaman.deskripsi}>
+    <HalamanPublik judul={metaHalaman.judul} deskripsi={metaHalaman.deskripsi}>
 
       <QueryFeedback
         isLoading={isLoading}
@@ -151,7 +151,7 @@ function Tesaurus() {
           )}
         />
       )}
-    </HalamanDasar>
+    </HalamanPublik>
   );
 }
 

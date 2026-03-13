@@ -1,14 +1,12 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import TataLetak from '../../../src/komponen/bersama/TataLetak';
-import { hitungModeGelapAwal } from '../../../src/komponen/bersama/TataLetak';
-import { bacaPreferensiTema } from '../../../src/komponen/bersama/TataLetak';
+import TataLetakPublik from '../../../src/komponen/bersama/TataLetakPublik';
+import { hitungModeGelapAwal, bacaPreferensiTema } from '../../../src/komponen/bersama/KerangkaKateglo';
 
 let mockPathname = '/kamus';
 let mockAuthOptional = { adalahRedaksi: false };
 
-vi.mock('../../../src/komponen/publik/Navbar', () => ({ default: () => <div>Navbar Mock</div> }));
-vi.mock('../../../src/komponen/redaksi/NavbarAdmin', () => ({ default: () => <div>NavbarAdmin Mock</div> }));
+vi.mock('../../../src/komponen/publik/NavbarPublik', () => ({ default: () => <div>Navbar Mock</div> }));
 vi.mock('react-markdown', () => ({
   default: ({ children }) => <div>{String(children).replace(/^#\s+/gm, '')}</div>,
 }));
@@ -22,7 +20,7 @@ vi.mock('../../../src/context/authContext', () => ({
   useAuthOptional: () => mockAuthOptional,
 }));
 
-describe('TataLetak', () => {
+describe('TataLetakPublik', () => {
   beforeEach(() => {
     mockPathname = '/kamus';
     mockAuthOptional = { adalahRedaksi: false };
@@ -30,7 +28,7 @@ describe('TataLetak', () => {
   });
 
   it('merender navbar, outlet, dan toggle tema', () => {
-    render(<TataLetak />);
+    render(<TataLetakPublik />);
 
     expect(screen.getByText('Navbar Mock')).toBeInTheDocument();
     expect(screen.getByText('Outlet Mock')).toBeInTheDocument();
@@ -38,7 +36,7 @@ describe('TataLetak', () => {
   });
 
   it('toggle tema menyimpan preferensi ke localStorage', () => {
-    render(<TataLetak />);
+    render(<TataLetakPublik />);
     fireEvent.click(screen.getByTitle(/Mode gelap|Mode terang/));
     expect(localStorage.setItem).toHaveBeenCalled();
   });
@@ -48,7 +46,7 @@ describe('TataLetak', () => {
       .mockResolvedValueOnce({ text: vi.fn().mockResolvedValue('# Changelog') })
       .mockResolvedValueOnce({ text: vi.fn().mockResolvedValue('# Todo') });
 
-    render(<TataLetak />);
+    render(<TataLetakPublik />);
     fireEvent.click(screen.getByRole('button', { name: /Kateglo/i }));
 
     await waitFor(() => {
@@ -67,7 +65,7 @@ describe('TataLetak', () => {
   it('menampilkan fallback pesan saat fetch gagal', async () => {
     global.fetch.mockRejectedValue(new Error('network error'));
 
-    render(<TataLetak />);
+    render(<TataLetakPublik />);
     fireEvent.click(screen.getByRole('button', { name: /Kateglo/i }));
 
     await waitFor(() => {
@@ -80,7 +78,7 @@ describe('TataLetak', () => {
       .mockResolvedValueOnce({ text: vi.fn().mockResolvedValue('# Changelog') })
       .mockResolvedValueOnce({ text: vi.fn().mockResolvedValue('# Todo') });
 
-    render(<TataLetak />);
+    render(<TataLetakPublik />);
     const versiBtn = screen.getByRole('button', { name: /Kateglo/i });
 
     fireEvent.click(versiBtn);
@@ -97,7 +95,7 @@ describe('TataLetak', () => {
       .mockResolvedValueOnce({ text: vi.fn().mockResolvedValue('# Changelog') })
       .mockResolvedValueOnce({ text: vi.fn().mockResolvedValue('# Todo') });
 
-    const { container } = render(<TataLetak />);
+    const { container } = render(<TataLetakPublik />);
     fireEvent.click(screen.getByRole('button', { name: /Kateglo/i }));
     await waitFor(() => expect(screen.getByText('Changelog')).toBeInTheDocument());
 
@@ -109,7 +107,7 @@ describe('TataLetak', () => {
   it('menggunakan theme tersimpan dari localStorage saat inisialisasi', () => {
     localStorage.getItem.mockReturnValue('dark');
 
-    render(<TataLetak />);
+    render(<TataLetakPublik />);
 
     expect(localStorage.getItem).toHaveBeenCalledWith('kateglo-theme');
     expect(document.documentElement.classList.contains('dark')).toBe(true);
@@ -118,7 +116,7 @@ describe('TataLetak', () => {
   it('menggunakan theme terang saat localStorage berisi light', () => {
     localStorage.getItem.mockReturnValue('light');
 
-    render(<TataLetak />);
+    render(<TataLetakPublik />);
 
     expect(localStorage.getItem).toHaveBeenCalledWith('kateglo-theme');
     expect(document.documentElement.classList.contains('dark')).toBe(false);
@@ -128,7 +126,7 @@ describe('TataLetak', () => {
     localStorage.getItem.mockReturnValue(null);
     window.matchMedia = vi.fn().mockReturnValue({ matches: true, addListener: vi.fn(), removeListener: vi.fn() });
 
-    render(<TataLetak />);
+    render(<TataLetakPublik />);
 
     expect(window.matchMedia).toHaveBeenCalledWith('(prefers-color-scheme: dark)');
     expect(document.documentElement.classList.contains('dark')).toBe(true);
@@ -137,42 +135,16 @@ describe('TataLetak', () => {
   it('menambahkan kelas beranda saat pathname root', () => {
     mockPathname = '/';
 
-    const { container } = render(<TataLetak />);
+    const { container } = render(<TataLetakPublik />);
     const main = container.querySelector('main');
 
     expect(main.className).toContain('kateglo-main-content-beranda');
   });
 
-  it('mode admin merender tata letak redaksi dan judul halaman admin', async () => {
-    render(
-      <TataLetak mode="admin" judul="Manajemen" aksiJudul={<button type="button">Aksi</button>}>
-        <div>Konten Admin</div>
-      </TataLetak>
-    );
-
-    expect(await screen.findByText('NavbarAdmin Mock')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Manajemen' })).toBeInTheDocument();
-    expect(screen.getByText('Aksi')).toBeInTheDocument();
-    expect(screen.getByText('Konten Admin')).toBeInTheDocument();
-    expect(document.title).toBe('Manajemen — Redaksi Kateglo');
-    expect(screen.getByRole('button', { name: /Kateglo/i })).toBeInTheDocument();
-  });
-
-  it('mode admin tanpa judul memakai title default redaksi', async () => {
-    render(
-      <TataLetak mode="admin">
-        <div>Konten Admin</div>
-      </TataLetak>
-    );
-
-    expect(await screen.findByText('NavbarAdmin Mock')).toBeInTheDocument();
-    expect(document.title).toBe('Redaksi Kateglo');
-  });
-
   it('menampilkan tautan Redaksi di footer saat user adalah redaksi', () => {
     mockAuthOptional = { adalahRedaksi: true };
 
-    render(<TataLetak />);
+    render(<TataLetakPublik />);
 
     expect(screen.getByRole('link', { name: 'Redaksi' })).toHaveAttribute('href', '/redaksi');
   });
@@ -182,7 +154,7 @@ describe('TataLetak', () => {
       .mockResolvedValueOnce({ text: vi.fn().mockResolvedValue('# Changelog') })
       .mockResolvedValueOnce({ text: vi.fn().mockResolvedValue('# Todo') });
 
-    render(<TataLetak />);
+    render(<TataLetakPublik />);
     fireEvent.click(screen.getByRole('button', { name: /Kateglo/i }));
     await waitFor(() => expect(screen.getByText('Changelog')).toBeInTheDocument());
 

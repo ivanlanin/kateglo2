@@ -13,7 +13,7 @@ import {
   useOpsiBahasaEtimologiAdmin,
   useOpsiSumberAdmin,
 } from '../../api/apiAdmin';
-import TataLetak from '../../komponen/bersama/TataLetak';
+import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import { useAuth } from '../../context/authContext';
 import {
   BarisFilterCariAdmin,
@@ -334,7 +334,7 @@ function EtimologiAdmin() {
   };
 
   return (
-    <TataLetak mode="admin" judul="Etimologi" aksiJudul={bisaKelola ? <TombolAksiAdmin onClick={bukaTambah} /> : null}>
+    <TataLetakAdmin judul="Etimologi" aksiJudul={bisaKelola ? <TombolAksiAdmin onClick={bukaTambah} /> : null}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -508,7 +508,7 @@ function EtimologiAdmin() {
           />
         </PanelGeser>
       )}
-    </TataLetak>
+    </TataLetakAdmin>
   );
 }
 

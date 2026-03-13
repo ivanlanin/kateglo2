@@ -11,7 +11,7 @@ import {
   cariEntriPerTagar,
 } from '../../api/apiPublik';
 import { useCursorPagination } from '../../hooks/bersama/useCursorPagination';
-import HalamanDasar from '../../komponen/publik/HalamanDasar';
+import HalamanPublik from '../../komponen/publik/HalamanPublik';
 import HasilPencarian from '../../komponen/publik/HasilPencarian';
 import KartuKategori from '../../komponen/publik/KartuKategori';
 import { EmptyResultText, PesanTidakDitemukan, QueryFeedback } from '../../komponen/publik/StatusKonten';
@@ -303,7 +303,7 @@ function Kamus() {
     : null;
 
   return (
-    <HalamanDasar
+    <HalamanPublik
       judul={judulHalaman}
       judulNoda={judulNodaPencarian}
       deskripsi={deskripsiHalaman}
@@ -422,7 +422,7 @@ function Kamus() {
           ))}
         />
       )}
-    </HalamanDasar>
+    </HalamanPublik>
   );
 }
 

@@ -7,7 +7,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ambilContohRima, cariRima } from '../../api/apiPublik';
 import TombolNavKursor from '../../komponen/publik/TombolNavKursor';
-import HalamanDasar from '../../komponen/publik/HalamanDasar';
+import HalamanPublik from '../../komponen/publik/HalamanPublik';
 import HamparanMuatNav from '../../komponen/publik/HamparanMuatNav';
 import { QueryFeedback } from '../../komponen/publik/StatusKonten';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
@@ -112,7 +112,7 @@ function Rima() {
   };
 
   return (
-    <HalamanDasar judul={judulHalaman} deskripsi={deskripsiHalaman}>
+    <HalamanPublik judul={judulHalaman} deskripsi={deskripsiHalaman}>
       <QueryFeedback
         isLoading={isLoading && !data}
         isError={isError}
@@ -214,7 +214,7 @@ function Rima() {
           </div>
         </>
       )}
-    </HalamanDasar>
+    </HalamanPublik>
   );
 }
 

@@ -1,7 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/authContext';
-import TataLetak from './komponen/bersama/TataLetak';
+import TataLetakPublik from './komponen/bersama/TataLetakPublik';
 import Beranda from './halaman/publik/Beranda';
 import Kamus from './halaman/publik/Kamus';
 import KamusDetail from './halaman/publik/KamusDetail';
@@ -141,7 +141,7 @@ function App() {
       <Route path="/redaksi/kandidat-kata" element={bungkusLazy(<RuteIzin izinDibutuhkan={['lihat_kandidat']}><KandidatKataAdmin /></RuteIzin>)} />
       <Route path="/redaksi/kandidat-kata/:id" element={bungkusLazy(<RuteIzin izinDibutuhkan={['lihat_kandidat']}><KandidatKataAdmin /></RuteIzin>)} />
       {/* Public routes */}
-      <Route element={<TataLetak />}>
+      <Route element={<TataLetakPublik />}>
         <Route path="/" element={<Beranda />} />
         <Route path="/kamus" element={<Kamus />} />
         <Route path="/kamus/cari/:kata" element={<Kamus />} />

@@ -37,7 +37,7 @@ vi.mock('../../../src/context/authContext', () => ({
   useAuth: () => mockUseAuth(),
 }));
 
-vi.mock('../../../src/komponen/publik/HalamanDasar', () => ({
+vi.mock('../../../src/komponen/publik/HalamanPublik', () => ({
   default: ({ children }) => <section>{children}</section>,
 }));
 

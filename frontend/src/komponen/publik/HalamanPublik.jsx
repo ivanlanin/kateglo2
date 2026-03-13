@@ -1,5 +1,5 @@
 /**
- * @fileoverview Komponen layout dasar halaman konten
+ * @fileoverview Shell konten publik untuk judul halaman dan metadata
  */
 
 import { useEffect } from 'react';
@@ -21,7 +21,7 @@ function upsertMetaTag({ name, property, content }) {
   tag.setAttribute('content', content);
 }
 
-function HalamanDasar({ judul, judulNoda, deskripsi, tampilkanJudul = true, children }) {
+function HalamanPublik({ judul, judulNoda, deskripsi, tampilkanJudul = true, children }) {
   useEffect(() => {
     document.title = judul
       ? `${judul} — Kateglo`
@@ -43,4 +43,4 @@ function HalamanDasar({ judul, judulNoda, deskripsi, tampilkanJudul = true, chil
   );
 }
 
-export default HalamanDasar;
+export default HalamanPublik;

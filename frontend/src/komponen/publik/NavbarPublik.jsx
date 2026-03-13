@@ -7,7 +7,7 @@ import { Link, useLocation } from 'react-router-dom';
 import KotakCari from './KotakCari';
 import MenuUtama from './MenuUtama';
 
-function Navbar() {
+function NavbarPublik() {
   const [menuTerbuka, setMenuTerbuka] = useState(false);
   const location = useLocation();
   const adalahBeranda = location.pathname === '/';
@@ -84,4 +84,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default NavbarPublik;

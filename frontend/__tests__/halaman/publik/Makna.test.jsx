@@ -28,7 +28,7 @@ vi.mock('../../../src/api/apiPublik', () => ({
   ambilContohMakna: vi.fn(),
 }));
 
-vi.mock('../../../src/komponen/publik/HalamanDasar', () => ({
+vi.mock('../../../src/komponen/publik/HalamanPublik', () => ({
   default: ({ judul, deskripsi, children }) => (
     <section>
       <h1>{judul}</h1>

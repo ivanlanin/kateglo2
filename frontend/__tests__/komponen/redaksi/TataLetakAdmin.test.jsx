@@ -1,12 +1,11 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import TataLetak from '../../../src/komponen/bersama/TataLetak';
-import { hitungModeGelapAwal } from '../../../src/komponen/bersama/TataLetak';
-import { bacaPreferensiTema } from '../../../src/komponen/bersama/TataLetak';
+import TataLetakAdminComponent from '../../../src/komponen/redaksi/TataLetakAdmin';
+import { hitungModeGelapAwal, bacaPreferensiTema } from '../../../src/komponen/bersama/KerangkaKateglo';
 
 function TataLetakAdmin(props) {
-  return <TataLetak mode="admin" {...props} />;
+  return <TataLetakAdminComponent {...props} />;
 }
 
 const mockNavigate = vi.fn();

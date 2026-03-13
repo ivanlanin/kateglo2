@@ -44,7 +44,7 @@ vi.mock('../../../src/context/authContext', () => ({
   useAuth: (...args) => mockUseAuth(...args),
 }));
 
-vi.mock('../../../src/komponen/bersama/TataLetak', () => ({
+vi.mock('../../../src/komponen/redaksi/TataLetakAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>

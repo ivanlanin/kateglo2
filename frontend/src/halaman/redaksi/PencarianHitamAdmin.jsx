@@ -2,8 +2,8 @@
  * @fileoverview Halaman redaksi untuk pengelolaan daftar hitam pencarian
  */
 
-import { useState } from 'react';
-import TataLetak from '../../komponen/bersama/TataLetak';
+import { useEffect, useRef, useState } from 'react';
+import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
   useDaftarPencarianHitamAdmin,
   useHapusPencarianHitamAdmin,
@@ -40,6 +40,7 @@ function formatTanggalSingkat(value) {
 }
 
 function PencarianHitamAdmin() {
+  const timeoutTutupPanelRef = useRef(null);
   const {
     cari,
     setCari,
@@ -60,6 +61,12 @@ function PencarianHitamAdmin() {
   const panel = useFormPanel(nilaiAwalPencarianHitam);
   const simpan = useSimpanPencarianHitamAdmin();
   const hapus = useHapusPencarianHitamAdmin();
+
+  useEffect(() => () => {
+    if (timeoutTutupPanelRef.current) {
+      clearTimeout(timeoutTutupPanelRef.current);
+    }
+  }, []);
 
   const { data, isLoading, isError } = useDaftarPencarianHitamAdmin({
     limit,
@@ -96,6 +103,10 @@ function PencarianHitamAdmin() {
   };
 
   const tutupPanel = () => {
+    if (timeoutTutupPanelRef.current) {
+      clearTimeout(timeoutTutupPanelRef.current);
+      timeoutTutupPanelRef.current = null;
+    }
     setPesan({ error: '', sukses: '' });
     panel.tutup();
   };
@@ -130,7 +141,10 @@ function PencarianHitamAdmin() {
     simpan.mutate(panel.data, {
       onSuccess: () => {
         setPesan({ error: '', sukses: 'Tersimpan!' });
-        setTimeout(() => tutupPanel(), 600);
+        timeoutTutupPanelRef.current = setTimeout(() => {
+          timeoutTutupPanelRef.current = null;
+          tutupPanel();
+        }, 600);
       },
       onError: (err) => {
         setPesan({ error: getApiErrorMessage(err, 'Gagal menyimpan kata daftar hitam'), sukses: '' });
@@ -153,7 +167,7 @@ function PencarianHitamAdmin() {
   };
 
   return (
-    <TataLetak mode="admin" judul="Daftar Hitam Pencarian" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} label="+ Tambah Kata" />}>
+    <TataLetakAdmin judul="Daftar Hitam Pencarian" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} label="+ Tambah Kata" />}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -210,7 +224,7 @@ function PencarianHitamAdmin() {
           modeTambah={panel.modeTambah}
         />
       </PanelGeser>
-    </TataLetak>
+    </TataLetakAdmin>
   );
 }
 

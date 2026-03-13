@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import HalamanDasar from '../../komponen/publik/HalamanDasar';
+import HalamanPublik from '../../komponen/publik/HalamanPublik';
 import PanelLipat from '../../komponen/publik/PanelLipat';
 import KartuKategori from '../../komponen/publik/KartuKategori';
 import { daftarIsiEjaan, daftarItemEjaan } from '../../constants/ejaanData';
@@ -167,7 +167,7 @@ function Ejaan() {
 
   if (modeDaftarIsi) {
     return (
-      <HalamanDasar
+      <HalamanPublik
         judul={metaSeo.judul}
         judulNoda={metaSeo.judulNoda}
         deskripsi={metaSeo.deskripsi}
@@ -193,12 +193,12 @@ function Ejaan() {
             gipsterya/eyd
           </a>
         </p>
-      </HalamanDasar>
+      </HalamanPublik>
     );
   }
 
   return (
-    <HalamanDasar
+    <HalamanPublik
       judul={metaSeo.judul}
       deskripsi={metaSeo.deskripsi}
       tampilkanJudul={false}
@@ -251,7 +251,7 @@ function Ejaan() {
           <DaftarIsiPanel aktifSlug={metadataAktif?.slug || ''} />
         </div>
       </div>
-    </HalamanDasar>
+    </HalamanPublik>
   );
 }
 

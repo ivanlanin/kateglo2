@@ -4,7 +4,7 @@
 
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import TataLetak from '../../komponen/bersama/TataLetak';
+import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
 import {
   BarisFilterCariAdmin,
   TabelAdmin,
@@ -289,7 +289,7 @@ function AuditTagarAdmin() {
   };
 
   return (
-    <TataLetak mode="admin" judul="Audit Tagar">
+    <TataLetakAdmin judul="Audit Tagar">
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -339,7 +339,7 @@ function AuditTagarAdmin() {
         entri={entriDipilih}
         onTutup={() => setEntriDipilih(null)}
       />
-    </TataLetak>
+    </TataLetakAdmin>
   );
 }
 
