@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useStatistikAdmin } from '../../api/apiAdmin';
 import { useAuth } from '../../context/authContext';
 import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
-import { filterKelompokMenuRedaksi } from '../../komponen/redaksi/menuRedaksi';
+import { filterKelompokMenuRedaksi } from '../../constants/menuRedaksi';
 
 function KartuMenuRedaksi({ item, jumlah, bisaLihatStatistik, isLoading }) {
   const statistik = item.statistik;

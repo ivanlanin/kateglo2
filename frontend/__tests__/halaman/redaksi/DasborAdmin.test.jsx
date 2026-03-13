@@ -199,7 +199,7 @@ vi.mock('../../../src/context/authContext', () => ({
   useAuth: () => mockUseAuth(),
 }));
 
-vi.mock('../../../src/komponen/redaksi/menuRedaksi', () => ({
+vi.mock('../../../src/constants/menuRedaksi', () => ({
   filterKelompokMenuRedaksi: (...args) => mockFilterKelompokMenuRedaksi(...args),
 }));
 

@@ -5,7 +5,7 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/authContext';
-import { filterKelompokMenuRedaksi } from './menuRedaksi';
+import { filterKelompokMenuRedaksi } from '../../constants/menuRedaksi';
 import '../../styles/admin.css';
 
 function NavbarAdmin() {
