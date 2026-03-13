@@ -1,12 +1,12 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import TataLetakPublik from '../../../src/komponen/bersama/TataLetakPublik';
-import { hitungModeGelapAwal, bacaPreferensiTema } from '../../../src/komponen/bersama/HalamanDasar';
+import TataLetakPublik from '../../../src/components/bersama/TataLetakPublik';
+import { hitungModeGelapAwal, bacaPreferensiTema } from '../../../src/components/bersama/HalamanDasar';
 
 let mockPathname = '/kamus';
 let mockAuthOptional = { adalahRedaksi: false };
 
-vi.mock('../../../src/komponen/publik/NavbarPublik', () => ({ default: () => <div>Navbar Mock</div> }));
+vi.mock('../../../src/components/publik/NavbarPublik', () => ({ default: () => <div>Navbar Mock</div> }));
 vi.mock('react-markdown', () => ({
   default: ({ children }) => <div>{String(children).replace(/^#\s+/gm, '')}</div>,
 }));

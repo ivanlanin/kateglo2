@@ -16,11 +16,11 @@ import {
   submitSkorSusunKataBebas,
   validasiKataSusunKata,
 } from '../../api/apiPublik';
-import HalamanPublik from '../../komponen/publik/HalamanPublik';
-import { QueryFeedback } from '../../komponen/publik/StatusKonten';
+import HalamanPublik from '../../components/publik/HalamanPublik';
+import { QueryFeedback } from '../../components/publik/StatusKonten';
 import { useAuth } from '../../context/authContext';
-import TombolMasuk from '../../komponen/bersama/TombolMasuk';
-import PesanMunculan from '../../komponen/bersama/PesanMunculan';
+import TombolMasuk from '../../components/bersama/TombolMasuk';
+import PesanMunculan from '../../components/bersama/PesanMunculan';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
 import '../../styles/susunKata.css';
 

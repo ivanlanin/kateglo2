@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Glosarium, { resolveKategoriNama, resolveKategoriItem } from '../../../src/halaman/publik/Glosarium';
-import { resolveNamaSumberSort } from '../../../src/halaman/publik/Glosarium';
+import Glosarium, { resolveKategoriNama, resolveKategoriItem } from '../../../src/pages/publik/Glosarium';
+import { resolveNamaSumberSort } from '../../../src/pages/publik/Glosarium';
 import {
   cariGlosarium,
   ambilGlosariumPerBidang,
@@ -41,7 +41,7 @@ vi.mock('../../../src/context/authContext', () => ({
   useAuthOptional: () => mockAuth,
 }));
 
-vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
+vi.mock('../../../src/components/bersama/Paginasi', () => ({
   default: ({ onNavigateCursor }) => (
     <div>
       <button type="button" aria-label="glosarium-first" onClick={() => onNavigateCursor('first')}>first</button>

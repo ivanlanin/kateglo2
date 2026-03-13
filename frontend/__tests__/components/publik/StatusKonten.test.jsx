@@ -6,7 +6,7 @@ import {
   EmptyResultText,
   PesanTidakDitemukan,
   TableResultCard,
-} from '../../../src/komponen/publik/StatusKonten';
+} from '../../../src/components/publik/StatusKonten';
 
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,

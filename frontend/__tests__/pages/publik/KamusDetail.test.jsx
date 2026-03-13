@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import KamusDetail from '../../../src/halaman/publik/KamusDetail';
+import KamusDetail from '../../../src/pages/publik/KamusDetail';
 import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategoriKamus, cariGlosarium } from '../../../src/api/apiPublik';
 import {
   upsertMetaTag,
@@ -17,7 +17,7 @@ import {
   formatInfoWaktuEntri,
   shouldShowMetaSeparator,
   __private,
-} from '../../../src/halaman/publik/KamusDetail';
+} from '../../../src/pages/publik/KamusDetail';
 
 const mockUseQuery = vi.fn();
 let mockParams = { indeks: 'kata' };

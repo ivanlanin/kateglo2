@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import AuditMaknaAdmin from '../../../src/halaman/redaksi/AuditMaknaAdmin';
+import AuditMaknaAdmin from '../../../src/pages/redaksi/AuditMaknaAdmin';
 
 const mockUseDaftarAuditMaknaAdmin = vi.fn();
 const mutateSimpanAudit = vi.fn();
@@ -12,7 +12,7 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useSimpanAuditMaknaAdmin: () => ({ mutate: mutateSimpanAudit, isPending: false }),
 }));
 
-vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul }) => (
     <div>
       <h1>{judul}</h1>

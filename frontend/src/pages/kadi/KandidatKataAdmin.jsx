@@ -15,15 +15,15 @@ import {
   useDaftarAtestasi,
   useDaftarRiwayat,
 } from '../../api/apiKadi';
-import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
 import { useAuth } from '../../context/authContext';
 import {
   BarisFilterCariAdmin,
   TabelAdmin,
   getApiErrorMessage,
   usePencarianAdmin,
-} from '../../komponen/redaksi/KomponenAdmin';
-import PanelGeser from '../../komponen/redaksi/PanelGeser';
+} from '../../components/redaksi/KomponenAdmin';
+import PanelGeser from '../../components/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -31,7 +31,7 @@ import {
   TextareaField,
   FormFooter,
   PesanForm,
-} from '../../komponen/redaksi/FormulirAdmin';
+} from '../../components/redaksi/FormulirAdmin';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
 // ─── Constants ───────────────────────────────────────────────────────────────

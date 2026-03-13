@@ -12,7 +12,7 @@ import {
   ToggleAktif,
   ToggleMeragukan,
   useFormPanel,
-} from '../../../src/komponen/redaksi/FormulirAdmin';
+} from '../../../src/components/redaksi/FormulirAdmin';
 
 function clickOutside() {
   fireEvent.mouseDown(document.body);

@@ -13,7 +13,7 @@ import {
   useOpsiBahasaGlosariumAdmin,
   useOpsiSumberAdmin,
 } from '../../api/apiAdmin';
-import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
 import { useAuth } from '../../context/authContext';
 import {
   BarisFilterCariAdmin,
@@ -23,8 +23,8 @@ import {
   TabelAdmin,
   getApiErrorMessage,
   usePencarianAdmin,
-} from '../../komponen/redaksi/KomponenAdmin';
-import PanelGeser from '../../komponen/redaksi/PanelGeser';
+} from '../../components/redaksi/KomponenAdmin';
+import PanelGeser from '../../components/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -32,7 +32,7 @@ import {
   ToggleAktif,
   FormFooter,
   PesanForm,
-} from '../../komponen/redaksi/FormulirAdmin';
+} from '../../components/redaksi/FormulirAdmin';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 import { ambilDaftarLookup, mapOpsiIdNama } from '../../utils/opsiUtils';
 

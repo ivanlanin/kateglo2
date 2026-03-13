@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import TesaurusAdmin from '../../../src/halaman/redaksi/TesaurusAdmin';
+import TesaurusAdmin from '../../../src/pages/redaksi/TesaurusAdmin';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
@@ -35,7 +35,7 @@ vi.mock('../../../src/context/authContext', () => ({
   useAuth: (...args) => mockUseAuth(...args),
 }));
 
-vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>

@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import PenggunaAdmin from '../../../src/halaman/redaksi/PenggunaAdmin';
+import PenggunaAdmin from '../../../src/pages/redaksi/PenggunaAdmin';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
@@ -28,7 +28,7 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useSimpanPengguna: () => ({ mutate: mutateSimpanPengguna, isPending: false }),
 }));
 
-vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>

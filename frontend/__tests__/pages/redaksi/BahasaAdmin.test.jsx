@@ -2,7 +2,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import { act } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import BahasaAdmin from '../../../src/halaman/redaksi/BahasaAdmin';
+import BahasaAdmin from '../../../src/pages/redaksi/BahasaAdmin';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
@@ -28,7 +28,7 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useHapusBahasa: () => ({ mutate: mutateHapus, isPending: false }),
 }));
 
-vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>

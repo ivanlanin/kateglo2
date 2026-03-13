@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import MenuUtama, { menuItems } from '../../../src/komponen/publik/MenuUtama';
+import MenuUtama, { menuItems } from '../../../src/components/publik/MenuUtama';
 
 let mockLocation = { pathname: '/kamus', search: '' };
 const mockLogout = vi.fn();

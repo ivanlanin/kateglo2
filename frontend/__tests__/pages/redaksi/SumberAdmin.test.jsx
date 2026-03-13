@@ -2,7 +2,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import { act } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import SumberAdmin from '../../../src/halaman/redaksi/SumberAdmin';
+import SumberAdmin from '../../../src/pages/redaksi/SumberAdmin';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
@@ -28,7 +28,7 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useHapusSumber: () => ({ mutate: mutateHapus, isPending: false }),
 }));
 
-vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>

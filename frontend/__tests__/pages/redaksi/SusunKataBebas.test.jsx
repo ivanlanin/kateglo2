@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import SusunKataBebas from '../../../src/halaman/redaksi/SusunKataBebas';
+import SusunKataBebas from '../../../src/pages/redaksi/SusunKataBebas';
 
 const mockUseSusunKataBebasAdmin = vi.fn();
 
@@ -9,7 +9,7 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useSusunKataBebasAdmin: (...args) => mockUseSusunKataBebasAdmin(...args),
 }));
 
-vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul }) => (
     <div>
       <h1>{judul}</h1>

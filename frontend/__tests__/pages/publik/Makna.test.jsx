@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Makna, { amanDecode } from '../../../src/halaman/publik/Makna';
+import Makna, { amanDecode } from '../../../src/pages/publik/Makna';
 import { cariMakna, ambilContohMakna } from '../../../src/api/apiPublik';
 
 let mockParams = {};
@@ -28,7 +28,7 @@ vi.mock('../../../src/api/apiPublik', () => ({
   ambilContohMakna: vi.fn(),
 }));
 
-vi.mock('../../../src/komponen/publik/HalamanPublik', () => ({
+vi.mock('../../../src/components/publik/HalamanPublik', () => ({
   default: ({ judul, deskripsi, children }) => (
     <section>
       <h1>{judul}</h1>
@@ -38,7 +38,7 @@ vi.mock('../../../src/komponen/publik/HalamanPublik', () => ({
   ),
 }));
 
-vi.mock('../../../src/komponen/publik/HasilPencarian', () => ({
+vi.mock('../../../src/components/publik/HasilPencarian', () => ({
   default: ({ results, renderItems, emptyState, onNavigateCursor }) => (
     <div>
       <button type="button" onClick={() => onNavigateCursor?.('next')}>cursor-next</button>

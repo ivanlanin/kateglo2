@@ -3,7 +3,7 @@ import { act } from 'react';
 import { useState } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import GlosariumAdmin from '../../../src/halaman/redaksi/GlosariumAdmin';
+import GlosariumAdmin from '../../../src/pages/redaksi/GlosariumAdmin';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
@@ -44,7 +44,7 @@ vi.mock('../../../src/context/authContext', () => ({
   useAuth: (...args) => mockUseAuth(...args),
 }));
 
-vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>
@@ -54,7 +54,7 @@ vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
   ),
 }));
 
-vi.mock('../../../src/komponen/redaksi/FormulirAdmin', () => ({
+vi.mock('../../../src/components/redaksi/FormulirAdmin', () => ({
   useFormPanel: (nilaiAwal = {}) => {
     const [buka, setBuka] = useState(false);
     const [data, setData] = useState(nilaiAwal);

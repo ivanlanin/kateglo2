@@ -13,32 +13,32 @@ vi.mock('../src/context/authContext', () => ({
   useAuth: () => mockUseAuth(),
 }));
 
-vi.mock('../src/komponen/bersama/TataLetakPublik', () => ({
+vi.mock('../src/components/bersama/TataLetakPublik', () => ({
   default: () => <div data-testid="layout">Layout <Outlet /></div>,
 }));
-vi.mock('../src/halaman/publik/Beranda', () => ({ default: () => <div>Hal Beranda</div> }));
-vi.mock('../src/halaman/publik/Kamus', () => ({ default: () => <div>Hal Kamus</div> }));
-vi.mock('../src/halaman/publik/KamusDetail', () => ({ default: () => <div>Hal Kamus Detail</div> }));
-vi.mock('../src/halaman/publik/Tesaurus', () => ({ default: () => <div>Hal Tesaurus</div> }));
-vi.mock('../src/halaman/gim/SusunKata', () => ({ default: () => <div>Hal Susun Kata</div> }));
-vi.mock('../src/halaman/publik/Glosarium', () => ({ default: () => <div>Hal Glosarium</div> }));
-vi.mock('../src/halaman/publik/AuthCallback', () => ({ default: () => <div>Auth Callback</div> }));
-vi.mock('../src/halaman/publik/KebijakanPrivasi', () => ({ default: () => <div>Kebijakan Privasi</div> }));
-vi.mock('../src/halaman/redaksi/LoginAdmin', () => ({ default: () => <div>Login Redaksi</div> }));
-vi.mock('../src/halaman/redaksi/DasborAdmin', () => ({ default: () => <div>Dasbor Redaksi</div> }));
-vi.mock('../src/halaman/redaksi/KamusAdmin', () => ({ default: () => <div>Kamus Redaksi</div> }));
-vi.mock('../src/halaman/redaksi/KomentarAdmin', () => ({ default: () => <div>Komentar Redaksi</div> }));
-vi.mock('../src/halaman/redaksi/TesaurusAdmin', () => ({ default: () => <div>Tesaurus Redaksi</div> }));
-vi.mock('../src/halaman/redaksi/GlosariumAdmin', () => ({ default: () => <div>Glosarium Redaksi</div> }));
-vi.mock('../src/halaman/redaksi/BidangGlosariumAdmin', () => ({ default: () => <div>Bidang Glosarium Redaksi</div> }));
-vi.mock('../src/halaman/redaksi/SumberGlosariumAdmin', () => ({ default: () => <div>Sumber Glosarium Redaksi</div> }));
-vi.mock('../src/halaman/redaksi/LabelAdmin', () => ({ default: () => <div>Label Redaksi</div> }));
-vi.mock('../src/halaman/redaksi/AuditTagarAdmin', () => ({ default: () => <div>Audit Tagar Redaksi</div> }));
-vi.mock('../src/halaman/redaksi/PenggunaAdmin', () => ({ default: () => <div>Pengguna Redaksi</div> }));
-vi.mock('../src/halaman/redaksi/PencarianAdmin', () => ({ default: () => <div>Statistik Pencarian Redaksi</div> }));
-vi.mock('../src/halaman/redaksi/PencarianHitamAdmin', () => ({ default: () => <div>Daftar Hitam Pencarian Redaksi</div> }));
-vi.mock('../src/halaman/redaksi/SusunKataHarian', () => ({ default: () => <div>Susun Kata Harian Redaksi</div> }));
-vi.mock('../src/halaman/redaksi/SusunKataBebas', () => ({ default: () => <div>Susun Kata Bebas Redaksi</div> }));
+vi.mock('../src/pages/publik/Beranda', () => ({ default: () => <div>Hal Beranda</div> }));
+vi.mock('../src/pages/publik/Kamus', () => ({ default: () => <div>Hal Kamus</div> }));
+vi.mock('../src/pages/publik/KamusDetail', () => ({ default: () => <div>Hal Kamus Detail</div> }));
+vi.mock('../src/pages/publik/Tesaurus', () => ({ default: () => <div>Hal Tesaurus</div> }));
+vi.mock('../src/pages/gim/SusunKata', () => ({ default: () => <div>Hal Susun Kata</div> }));
+vi.mock('../src/pages/publik/Glosarium', () => ({ default: () => <div>Hal Glosarium</div> }));
+vi.mock('../src/pages/publik/AuthCallback', () => ({ default: () => <div>Auth Callback</div> }));
+vi.mock('../src/pages/publik/KebijakanPrivasi', () => ({ default: () => <div>Kebijakan Privasi</div> }));
+vi.mock('../src/pages/redaksi/LoginAdmin', () => ({ default: () => <div>Login Redaksi</div> }));
+vi.mock('../src/pages/redaksi/DasborAdmin', () => ({ default: () => <div>Dasbor Redaksi</div> }));
+vi.mock('../src/pages/redaksi/KamusAdmin', () => ({ default: () => <div>Kamus Redaksi</div> }));
+vi.mock('../src/pages/redaksi/KomentarAdmin', () => ({ default: () => <div>Komentar Redaksi</div> }));
+vi.mock('../src/pages/redaksi/TesaurusAdmin', () => ({ default: () => <div>Tesaurus Redaksi</div> }));
+vi.mock('../src/pages/redaksi/GlosariumAdmin', () => ({ default: () => <div>Glosarium Redaksi</div> }));
+vi.mock('../src/pages/redaksi/BidangGlosariumAdmin', () => ({ default: () => <div>Bidang Glosarium Redaksi</div> }));
+vi.mock('../src/pages/redaksi/SumberGlosariumAdmin', () => ({ default: () => <div>Sumber Glosarium Redaksi</div> }));
+vi.mock('../src/pages/redaksi/LabelAdmin', () => ({ default: () => <div>Label Redaksi</div> }));
+vi.mock('../src/pages/redaksi/AuditTagarAdmin', () => ({ default: () => <div>Audit Tagar Redaksi</div> }));
+vi.mock('../src/pages/redaksi/PenggunaAdmin', () => ({ default: () => <div>Pengguna Redaksi</div> }));
+vi.mock('../src/pages/redaksi/PencarianAdmin', () => ({ default: () => <div>Statistik Pencarian Redaksi</div> }));
+vi.mock('../src/pages/redaksi/PencarianHitamAdmin', () => ({ default: () => <div>Daftar Hitam Pencarian Redaksi</div> }));
+vi.mock('../src/pages/redaksi/SusunKataHarian', () => ({ default: () => <div>Susun Kata Harian Redaksi</div> }));
+vi.mock('../src/pages/redaksi/SusunKataBebas', () => ({ default: () => <div>Susun Kata Bebas Redaksi</div> }));
 
 describe('App', () => {
   beforeEach(() => {

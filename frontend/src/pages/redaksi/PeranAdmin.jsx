@@ -10,7 +10,7 @@ import {
   useDaftarIzinAdmin,
   useSimpanPeranAdmin,
 } from '../../api/apiAdmin';
-import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
 import {
   BarisFilterCariAdmin,
   TombolAksiAdmin,
@@ -20,16 +20,16 @@ import {
   potongTeks,
   usePencarianAdmin,
   validateRequiredFields,
-} from '../../komponen/redaksi/KomponenAdmin';
-import PanelGeser from '../../komponen/redaksi/PanelGeser';
+} from '../../components/redaksi/KomponenAdmin';
+import PanelGeser from '../../components/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
   TextareaField,
   FormFooter,
   PesanForm,
-} from '../../komponen/redaksi/FormulirAdmin';
-import KotakCentang from '../../komponen/redaksi/KotakCentang';
+} from '../../components/redaksi/FormulirAdmin';
+import KotakCentang from '../../components/redaksi/KotakCentang';
 import { useSelectableIds } from '../../hooks/redaksi/useSelectableIds';
 import { formatBilanganRibuan } from '../../utils/formatUtils';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';

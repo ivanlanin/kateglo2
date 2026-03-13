@@ -5,7 +5,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarKomentarAdmin, useDetailKomentarAdmin, useSimpanKomentarAdmin } from '../../api/apiAdmin';
-import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
 import {
   BarisFilterCariAdmin,
   TabelAdmin,
@@ -15,8 +15,8 @@ import {
   usePencarianAdmin,
   potongTeks,
   validateRequiredFields,
-} from '../../komponen/redaksi/KomponenAdmin';
-import PanelGeser from '../../komponen/redaksi/PanelGeser';
+} from '../../components/redaksi/KomponenAdmin';
+import PanelGeser from '../../components/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -24,7 +24,7 @@ import {
   ToggleAktif,
   FormFooter,
   PesanForm,
-} from '../../komponen/redaksi/FormulirAdmin';
+} from '../../components/redaksi/FormulirAdmin';
 import { formatLocalDateTime } from '../../utils/formatUtils';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 

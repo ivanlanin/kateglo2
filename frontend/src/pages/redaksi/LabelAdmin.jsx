@@ -5,7 +5,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarLabelAdmin, useDetailLabelAdmin, useSimpanLabel, useHapusLabel } from '../../api/apiAdmin';
-import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
 import {
   BarisFilterCariAdmin,
   TombolAksiAdmin,
@@ -16,8 +16,8 @@ import {
   potongTeks,
   usePencarianAdmin,
   validateRequiredFields,
-} from '../../komponen/redaksi/KomponenAdmin';
-import PanelGeser from '../../komponen/redaksi/PanelGeser';
+} from '../../components/redaksi/KomponenAdmin';
+import PanelGeser from '../../components/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -25,7 +25,7 @@ import {
   ToggleAktif,
   FormFooter,
   PesanForm,
-} from '../../komponen/redaksi/FormulirAdmin';
+} from '../../components/redaksi/FormulirAdmin';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
 const nilaiAwal = { kategori: '', kode: '', nama: '', urutan: 1, keterangan: '', aktif: true };

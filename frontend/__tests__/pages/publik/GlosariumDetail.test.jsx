@@ -1,8 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import GlosariumDetail from '../../../src/halaman/publik/GlosariumDetail';
-import { __private } from '../../../src/halaman/publik/GlosariumDetail';
-import { upsertMetaTag } from '../../../src/halaman/publik/GlosariumDetail';
+import GlosariumDetail from '../../../src/pages/publik/GlosariumDetail';
+import { __private } from '../../../src/pages/publik/GlosariumDetail';
+import { upsertMetaTag } from '../../../src/pages/publik/GlosariumDetail';
 import { ambilDetailGlosarium } from '../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();

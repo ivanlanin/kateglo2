@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import PanelGeser from '../../../src/komponen/redaksi/PanelGeser';
+import PanelGeser from '../../../src/components/redaksi/PanelGeser';
 
 describe('PanelGeser', () => {
   it('merender panel tertutup dan tidak merender children', () => {

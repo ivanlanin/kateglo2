@@ -14,9 +14,9 @@ import {
   potongTeks,
   usePencarianAdmin,
   validateRequiredFields,
-} from '../../../src/komponen/redaksi/KomponenAdmin';
+} from '../../../src/components/redaksi/KomponenAdmin';
 
-vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
+vi.mock('../../../src/components/bersama/Paginasi', () => ({
   default: ({ onChange, onNavigateCursor }) => (
     <button onClick={() => (onNavigateCursor ? onNavigateCursor('next') : onChange(20))} data-testid="paginasi-mock">
       Paginasi

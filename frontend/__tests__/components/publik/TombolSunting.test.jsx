@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import TombolSunting from '../../../src/komponen/publik/TombolSunting';
+import TombolSunting from '../../../src/components/publik/TombolSunting';
 
 describe('TombolSunting', () => {
   it('mengembalikan null saat properti to kosong', () => {

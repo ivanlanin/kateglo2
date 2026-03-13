@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import LabelAdmin from '../../../src/halaman/redaksi/LabelAdmin';
+import LabelAdmin from '../../../src/pages/redaksi/LabelAdmin';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
@@ -28,7 +28,7 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useHapusLabel: () => ({ mutate: mutateHapus, isPending: false }),
 }));
 
-vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>

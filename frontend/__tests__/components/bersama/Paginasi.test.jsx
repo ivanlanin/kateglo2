@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import Paginasi from '../../../src/komponen/bersama/Paginasi';
+import Paginasi from '../../../src/components/bersama/Paginasi';
 
 describe('Paginasi', () => {
   it('tetap menampilkan info jika total halaman <= 1 tanpa kontrol navigasi', () => {

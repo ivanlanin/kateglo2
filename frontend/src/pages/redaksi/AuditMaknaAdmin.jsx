@@ -7,15 +7,15 @@ import {
   useDaftarAuditMaknaAdmin,
   useSimpanAuditMaknaAdmin,
 } from '../../api/apiAdmin';
-import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
 import {
   BarisFilterCariAdmin,
   TabelAdmin,
   getApiErrorMessage,
   usePencarianAdmin,
   potongTeks,
-} from '../../komponen/redaksi/KomponenAdmin';
-import PanelGeser from '../../komponen/redaksi/PanelGeser';
+} from '../../components/redaksi/KomponenAdmin';
+import PanelGeser from '../../components/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -23,7 +23,7 @@ import {
   TextareaField,
   FormFooter,
   PesanForm,
-} from '../../komponen/redaksi/FormulirAdmin';
+} from '../../components/redaksi/FormulirAdmin';
 import { formatBilanganRibuan } from '../../utils/formatUtils';
 
 const nilaiAwal = {

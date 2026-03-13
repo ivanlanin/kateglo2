@@ -2,7 +2,7 @@
  * @fileoverview Halaman kebijakan privasi sederhana
  */
 
-import HalamanPublik from '../../komponen/publik/HalamanPublik';
+import HalamanPublik from '../../components/publik/HalamanPublik';
 
 function KebijakanPrivasi() {
   return (

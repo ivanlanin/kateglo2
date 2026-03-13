@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import SusunKata, { buatPetaKeyboard, parseRiwayatDariSkor } from '../../../src/halaman/gim/SusunKata';
+import SusunKata, { buatPetaKeyboard, parseRiwayatDariSkor } from '../../../src/pages/gim/SusunKata';
 import {
   ambilKlasemenSusunKata,
   ambilKlasemenSusunKataBebas,
@@ -37,11 +37,11 @@ vi.mock('../../../src/context/authContext', () => ({
   useAuth: () => mockUseAuth(),
 }));
 
-vi.mock('../../../src/komponen/publik/HalamanPublik', () => ({
+vi.mock('../../../src/components/publik/HalamanPublik', () => ({
   default: ({ children }) => <section>{children}</section>,
 }));
 
-vi.mock('../../../src/komponen/bersama/TombolMasukGoogle', () => ({
+vi.mock('../../../src/components/bersama/TombolMasukGoogle', () => ({
   default: ({ onClick, label }) => (
     <button type="button" onClick={onClick}>{label}</button>
   ),

@@ -2,8 +2,8 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import { act } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import KamusAdmin from '../../../src/halaman/redaksi/KamusAdmin';
-import { __private } from '../../../src/halaman/redaksi/KamusAdmin';
+import KamusAdmin from '../../../src/pages/redaksi/KamusAdmin';
+import { __private } from '../../../src/pages/redaksi/KamusAdmin';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
@@ -62,7 +62,7 @@ vi.mock('../../../src/context/authContext', () => ({
   useAuth: (...args) => mockUseAuth(...args),
 }));
 
-vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>

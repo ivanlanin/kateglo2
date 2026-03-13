@@ -3,21 +3,21 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
-import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
 import {
   getApiErrorMessage,
   TabelAdmin,
   TombolAksiAdmin,
   validateRequiredFields,
-} from '../../komponen/redaksi/KomponenAdmin';
-import PanelGeser from '../../komponen/redaksi/PanelGeser';
+} from '../../components/redaksi/KomponenAdmin';
+import PanelGeser from '../../components/redaksi/PanelGeser';
 import {
   FormFooter,
   InputField,
   PesanForm,
   TextareaField,
   useFormPanel,
-} from '../../komponen/redaksi/FormulirAdmin';
+} from '../../components/redaksi/FormulirAdmin';
 import {
   useBuatSusunKataHarianAdmin,
   useDetailSusunKataHarianAdmin,

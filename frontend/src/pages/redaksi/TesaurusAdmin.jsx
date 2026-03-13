@@ -5,7 +5,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarTesaurusAdmin, useDetailTesaurusAdmin, useSimpanTesaurus, useHapusTesaurus, useDaftarSumberAdmin } from '../../api/apiAdmin';
-import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
 import { useAuth } from '../../context/authContext';
 import {
   BarisFilterCariAdmin,
@@ -17,8 +17,8 @@ import {
   potongTeks,
   usePencarianAdmin,
   validateRequiredFields,
-} from '../../komponen/redaksi/KomponenAdmin';
-import PanelGeser from '../../komponen/redaksi/PanelGeser';
+} from '../../components/redaksi/KomponenAdmin';
+import PanelGeser from '../../components/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -27,7 +27,7 @@ import {
   ToggleAktif,
   FormFooter,
   PesanForm,
-} from '../../komponen/redaksi/FormulirAdmin';
+} from '../../components/redaksi/FormulirAdmin';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 
 const nilaiAwal = { indeks: '', sinonim: '', antonim: '', aktif: 1, sumber_id: '' };

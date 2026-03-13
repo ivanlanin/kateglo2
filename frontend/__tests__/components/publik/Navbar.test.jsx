@@ -1,6 +1,6 @@
 /**
  * @fileoverview Test untuk komponen NavbarPublik
- * @tested_in frontend/src/komponen/publik/NavbarPublik.jsx
+ * @tested_in frontend/src/components/publik/NavbarPublik.jsx
  */
 
 // Mock react-router-dom SEBELUM import komponen
@@ -48,7 +48,7 @@ vi.mock('react-router-dom', () => ({
 }));
 
 import { render, screen, fireEvent } from '@testing-library/react';
-import NavbarPublik from '../../../src/komponen/publik/NavbarPublik';
+import NavbarPublik from '../../../src/components/publik/NavbarPublik';
 
 describe('NavbarPublik', () => {
   beforeEach(() => {

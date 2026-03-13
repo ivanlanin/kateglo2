@@ -1,13 +1,13 @@
 import { render, screen, fireEvent, act, within } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import KotakCari from '../../../src/komponen/publik/KotakCari';
+import KotakCari from '../../../src/components/publik/KotakCari';
 import {
   deteksiKategori,
   ekstrakQuery,
   SorotTeks,
   navigasiCari,
   navigasiSaranSpesifik,
-} from '../../../src/komponen/publik/KotakCari';
+} from '../../../src/components/publik/KotakCari';
 import { autocomplete } from '../../../src/api/apiPublik';
 
 const mockNavigate = vi.fn();

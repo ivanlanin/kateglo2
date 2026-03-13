@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import TombolNavKursor from '../../../src/komponen/publik/TombolNavKursor';
+import TombolNavKursor from '../../../src/components/publik/TombolNavKursor';
 
 describe('TombolNavKursor', () => {
   it('merender simbol dan menjalankan onClick saat tidak loading', () => {

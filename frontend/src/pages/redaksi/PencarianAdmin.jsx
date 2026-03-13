@@ -4,12 +4,12 @@
 
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
 import { useStatistikPencarianAdmin } from '../../api/apiAdmin';
 import {
   TabelAdmin,
   usePencarianAdmin,
-} from '../../komponen/redaksi/KomponenAdmin';
+} from '../../components/redaksi/KomponenAdmin';
 import { formatBilanganRibuan, formatLocalDateTime } from '../../utils/formatUtils';
 
 const opsiPeriode = [

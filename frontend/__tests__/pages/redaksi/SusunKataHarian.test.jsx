@@ -9,7 +9,7 @@ import SusunKataHarian, {
   buildSimpanPayload,
   resolveTanggalBuatKataHarian,
   resolveTanggalSimpan,
-} from '../../../src/halaman/redaksi/SusunKataHarian';
+} from '../../../src/pages/redaksi/SusunKataHarian';
 
 const mutateSimpan = vi.fn();
 const mutateBuat = vi.fn();
@@ -30,7 +30,7 @@ vi.mock('../../../src/utils/formatUtils', () => ({
   formatBilanganRibuan: vi.fn((value) => String(value ?? 0)),
 }));
 
-vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <section>
       <h1>{judul}</h1>
@@ -40,7 +40,7 @@ vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
   ),
 }));
 
-vi.mock('../../../src/komponen/redaksi/PanelGeser', () => ({
+vi.mock('../../../src/components/redaksi/PanelGeser', () => ({
   default: ({ buka, onTutup, children, judul }) => (buka ? (
     <aside>
       <h2>{judul}</h2>
@@ -50,7 +50,7 @@ vi.mock('../../../src/komponen/redaksi/PanelGeser', () => ({
   ) : null),
 }));
 
-vi.mock('../../../src/komponen/redaksi/KomponenAdmin', () => ({
+vi.mock('../../../src/components/redaksi/KomponenAdmin', () => ({
   BarisFilterCariAdmin: ({ nilai, onChange, onCari, onHapus, placeholder, filters = [] }) => (
     <div>
       <input aria-label="Filter tanggal" placeholder={placeholder} value={nilai} onChange={(e) => onChange(e.target.value)} />
@@ -95,7 +95,7 @@ vi.mock('../../../src/komponen/redaksi/KomponenAdmin', () => ({
   getApiErrorMessage: (error, fallback) => error?.message || fallback,
 }));
 
-vi.mock('../../../src/komponen/redaksi/FormulirAdmin', async () => {
+vi.mock('../../../src/components/redaksi/FormulirAdmin', async () => {
   const React = await vi.importActual('react');
   const useFormPanel = (nilaiAwal) => {
     const [buka, setBuka] = React.useState(false);

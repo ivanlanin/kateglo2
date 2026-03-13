@@ -3,7 +3,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
 import {
   useDaftarPencarianHitamAdmin,
   useHapusPencarianHitamAdmin,
@@ -17,8 +17,8 @@ import {
   opsiFilterStatusAktif,
   usePencarianAdmin,
   validateRequiredFields,
-} from '../../komponen/redaksi/KomponenAdmin';
-import PanelGeser from '../../komponen/redaksi/PanelGeser';
+} from '../../components/redaksi/KomponenAdmin';
+import PanelGeser from '../../components/redaksi/PanelGeser';
 import {
   FormFooter,
   InputField,
@@ -26,7 +26,7 @@ import {
   TextareaField,
   ToggleAktif,
   useFormPanel,
-} from '../../komponen/redaksi/FormulirAdmin';
+} from '../../components/redaksi/FormulirAdmin';
 import { formatLocalDateTime } from '../../utils/formatUtils';
 
 const nilaiAwalPencarianHitam = {

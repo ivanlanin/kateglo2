@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import PencarianHitamAdmin, { formatTanggalSingkat } from '../../../src/halaman/redaksi/PencarianHitamAdmin';
+import PencarianHitamAdmin, { formatTanggalSingkat } from '../../../src/pages/redaksi/PencarianHitamAdmin';
 import { formatLocalDateTime } from '../../../src/utils/formatUtils';
 
 const mockUseDaftarPencarianHitamAdmin = vi.fn();
@@ -16,7 +16,7 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useHapusPencarianHitamAdmin: (...args) => mockUseHapusPencarianHitamAdmin(...args),
 }));
 
-vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>
@@ -26,7 +26,7 @@ vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
   ),
 }));
 
-vi.mock('../../../src/komponen/redaksi/PanelGeser', () => ({
+vi.mock('../../../src/components/redaksi/PanelGeser', () => ({
   default: ({ buka, judul, children, onTutup }) => (buka ? (
     <div aria-label={judul} role="dialog">
       <button type="button" onClick={onTutup}>Tutup panel</button>

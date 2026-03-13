@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Beranda from '../../../src/halaman/publik/Beranda';
+import Beranda from '../../../src/pages/publik/Beranda';
 
 const mockAmbilPencarianPopuler = vi.fn();
 
@@ -24,7 +24,7 @@ vi.mock('../../../src/api/apiAuth', () => ({
   simpanReturnTo: vi.fn(),
 }));
 
-vi.mock('../../../src/komponen/publik/GimPilihGanda', () => ({
+vi.mock('../../../src/components/publik/GimPilihGanda', () => ({
   default: () => null,
 }));
 

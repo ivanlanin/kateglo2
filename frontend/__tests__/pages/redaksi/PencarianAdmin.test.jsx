@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import PencarianAdmin, { formatTanggalSingkat } from '../../../src/halaman/redaksi/PencarianAdmin';
+import PencarianAdmin, { formatTanggalSingkat } from '../../../src/pages/redaksi/PencarianAdmin';
 import { formatLocalDateTime } from '../../../src/utils/formatUtils';
 
 const mockUseStatistikPencarianAdmin = vi.fn();
@@ -10,7 +10,7 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useStatistikPencarianAdmin: (...args) => mockUseStatistikPencarianAdmin(...args),
 }));
 
-vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul }) => (
     <div>
       <h1>{judul}</h1>

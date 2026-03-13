@@ -88,7 +88,7 @@ export default defineConfig({
         'node_modules/',
         '**/*.test.{js,jsx}',
         '**/main.jsx',
-        'src/halaman/KebijakanPrivasi.jsx'
+        'src/pages/KebijakanPrivasi.jsx'
       ],
       thresholds: {
         statements: 80,

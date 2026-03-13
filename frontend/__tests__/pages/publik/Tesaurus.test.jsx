@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Tesaurus from '../../../src/halaman/publik/Tesaurus';
+import Tesaurus from '../../../src/pages/publik/Tesaurus';
 import { ambilContohTesaurus, cariTesaurus } from '../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
@@ -25,7 +25,7 @@ vi.mock('../../../src/context/authContext', () => ({
   useAuthOptional: () => mockAuth,
 }));
 
-vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
+vi.mock('../../../src/components/bersama/Paginasi', () => ({
   default: ({ onNavigateCursor }) => (
     <div>
       <button type="button" aria-label="tesaurus-first" onClick={() => onNavigateCursor('first')}>first</button>

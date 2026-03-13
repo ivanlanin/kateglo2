@@ -7,13 +7,13 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategoriKamus, cariGlosarium } from '../../api/apiPublik';
 import { useAuth } from '../../context/authContext';
-import TombolNavKursor from '../../komponen/publik/TombolNavKursor';
-import PanelLipat from '../../komponen/publik/PanelLipat';
-import HalamanPublik from '../../komponen/publik/HalamanPublik';
-import HamparanMuatNav from '../../komponen/publik/HamparanMuatNav';
-import TombolSunting from '../../komponen/publik/TombolSunting';
-import TombolMasuk from '../../komponen/bersama/TombolMasuk';
-import { PesanTidakDitemukan } from '../../komponen/publik/StatusKonten';
+import TombolNavKursor from '../../components/publik/TombolNavKursor';
+import PanelLipat from '../../components/publik/PanelLipat';
+import HalamanPublik from '../../components/publik/HalamanPublik';
+import HamparanMuatNav from '../../components/publik/HamparanMuatNav';
+import TombolSunting from '../../components/publik/TombolSunting';
+import TombolMasuk from '../../components/bersama/TombolMasuk';
+import { PesanTidakDitemukan } from '../../components/publik/StatusKonten';
 import {
   formatLemaHomonim,
   formatLocalDateTime,

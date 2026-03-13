@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import DasborAdmin from '../../../src/halaman/redaksi/DasborAdmin';
+import DasborAdmin from '../../../src/pages/redaksi/DasborAdmin';
 
 const mockUseStatistikAdmin = vi.fn();
 const mockUseAuth = vi.fn();
@@ -203,7 +203,7 @@ vi.mock('../../../src/constants/menuRedaksi', () => ({
   filterKelompokMenuRedaksi: (...args) => mockFilterKelompokMenuRedaksi(...args),
 }));
 
-vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>

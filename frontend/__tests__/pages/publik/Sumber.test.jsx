@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import Sumber from '../../../src/halaman/publik/Sumber';
+import Sumber from '../../../src/pages/publik/Sumber';
 
 const mockUseQuery = vi.fn();
 

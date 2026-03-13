@@ -5,7 +5,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import AuthCallback from '../../../src/halaman/publik/AuthCallback';
+import AuthCallback from '../../../src/pages/publik/AuthCallback';
 
 const mockNavigate = vi.fn();
 const mockSetAuthToken = vi.fn();
@@ -27,7 +27,7 @@ vi.mock('react-router-dom', () => ({
   useSearchParams: () => [{ get: (...args) => mockSearchParamsGet(...args) }],
 }));
 
-describe('halaman/AuthCallback', () => {
+describe('pages/AuthCallback', () => {
   beforeEach(() => {
     mockNavigate.mockReset();
     mockSetAuthToken.mockReset();

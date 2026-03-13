@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarPengguna, useDetailPengguna, useDaftarPeran, useSimpanPengguna } from '../../api/apiAdmin';
 import { formatLocalDateTime } from '../../utils/formatUtils';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
-import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
 import {
   BarisFilterCariAdmin,
   TabelAdmin,
@@ -15,8 +15,8 @@ import {
   getApiErrorMessage,
   opsiFilterStatusAktif,
   usePencarianAdmin,
-} from '../../komponen/redaksi/KomponenAdmin';
-import PanelGeser from '../../komponen/redaksi/PanelGeser';
+} from '../../components/redaksi/KomponenAdmin';
+import PanelGeser from '../../components/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -24,7 +24,7 @@ import {
   ToggleAktif,
   FormFooter,
   PesanForm,
-} from '../../komponen/redaksi/FormulirAdmin';
+} from '../../components/redaksi/FormulirAdmin';
 
 function formatTanggal(dateStr) {
   return formatLocalDateTime(dateStr, { fallback: '—', separator: ', ' });

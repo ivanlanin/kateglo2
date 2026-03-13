@@ -1,6 +1,6 @@
 import { render, screen, act, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import PesanMunculan from '../../../src/komponen/bersama/PesanMunculan';
+import PesanMunculan from '../../../src/components/bersama/PesanMunculan';
 
 describe('PesanMunculan', () => {
   beforeEach(() => {

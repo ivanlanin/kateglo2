@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Rima from '../../../src/halaman/publik/Rima';
+import Rima from '../../../src/pages/publik/Rima';
 import { ambilContohRima, cariRima } from '../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();

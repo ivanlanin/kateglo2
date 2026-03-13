@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Kamus from '../../../src/halaman/publik/Kamus';
-import { __private } from '../../../src/halaman/publik/Kamus';
+import Kamus from '../../../src/pages/publik/Kamus';
+import { __private } from '../../../src/pages/publik/Kamus';
 import { cariEntriPerTagar, cariKamus } from '../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
@@ -23,7 +23,7 @@ vi.mock('@tanstack/react-query', () => ({
   useQuery: (...args) => mockUseQuery(...args),
 }));
 
-vi.mock('../../../src/komponen/bersama/Paginasi', () => ({
+vi.mock('../../../src/components/bersama/Paginasi', () => ({
   default: ({ onNavigateCursor }) => (
     <div>
       <button type="button" aria-label="kamus-first" onClick={() => onNavigateCursor('first')}>first</button>
