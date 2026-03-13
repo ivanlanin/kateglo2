@@ -203,7 +203,7 @@ vi.mock('../../../src/komponen/redaksi/menuRedaksi', () => ({
   filterKelompokMenuRedaksi: (...args) => mockFilterKelompokMenuRedaksi(...args),
 }));
 
-vi.mock('../../../src/komponen/redaksi/TataLetakAdmin', () => ({
+vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>

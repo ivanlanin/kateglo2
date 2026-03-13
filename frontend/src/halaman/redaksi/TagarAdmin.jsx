@@ -11,7 +11,7 @@ import {
   useHapusTagar,
   useKategoriTagarAdmin,
 } from '../../api/apiAdmin';
-import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
+import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
 import {
   BarisFilterCariAdmin,
   TombolAksiAdmin,
@@ -232,7 +232,7 @@ function TagarAdmin() {
   };
 
   return (
-    <TataLetakAdmin judul="Tagar" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
+    <HalamanAdmin judul="Tagar" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -323,7 +323,7 @@ function TagarAdmin() {
           modeTambah={panel.modeTambah}
         />
       </PanelGeser>
-    </TataLetakAdmin>
+    </HalamanAdmin>
   );
 }
 

@@ -5,7 +5,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarTesaurusAdmin, useDetailTesaurusAdmin, useSimpanTesaurus, useHapusTesaurus, useDaftarSumberAdmin } from '../../api/apiAdmin';
-import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
+import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
 import { useAuth } from '../../context/authContext';
 import {
   BarisFilterCariAdmin,
@@ -190,7 +190,7 @@ function TesaurusAdmin() {
   };
 
   return (
-    <TataLetakAdmin judul="Tesaurus" aksiJudul={bisaTambah ? <TombolAksiAdmin onClick={bukaTambah} /> : null}>
+    <HalamanAdmin judul="Tesaurus" aksiJudul={bisaTambah ? <TombolAksiAdmin onClick={bukaTambah} /> : null}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -239,7 +239,7 @@ function TesaurusAdmin() {
           />
         </PanelGeser>
       )}
-    </TataLetakAdmin>
+    </HalamanAdmin>
   );
 }
 

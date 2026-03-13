@@ -5,7 +5,7 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import NavbarPublik from '../publik/NavbarPublik';
 import { useAuthOptional } from '../../context/authContext';
-import KerangkaKateglo from './KerangkaKateglo';
+import HalamanDasar from './HalamanDasar';
 
 function TataLetakPublik() {
   const location = useLocation();
@@ -14,7 +14,7 @@ function TataLetakPublik() {
   const adalahBeranda = location.pathname === '/';
 
   return (
-    <KerangkaKateglo
+    <HalamanDasar
       mode="publik"
       adalahRedaksi={adalahRedaksi}
       navbar={<NavbarPublik />}

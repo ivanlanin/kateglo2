@@ -10,7 +10,7 @@ import {
   useDaftarPeranUntukIzinAdmin,
   useSimpanIzinAdmin,
 } from '../../api/apiAdmin';
-import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
+import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
 import {
   BarisFilterCariAdmin,
   TombolAksiAdmin,
@@ -164,7 +164,7 @@ function IzinAdmin() {
   };
 
   return (
-    <TataLetakAdmin judul="Izin" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
+    <HalamanAdmin judul="Izin" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -210,7 +210,7 @@ function IzinAdmin() {
           modeTambah={panel.modeTambah}
         />
       </PanelGeser>
-    </TataLetakAdmin>
+    </HalamanAdmin>
   );
 }
 

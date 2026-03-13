@@ -13,7 +13,7 @@ import {
   useOpsiBahasaGlosariumAdmin,
   useOpsiSumberAdmin,
 } from '../../api/apiAdmin';
-import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
+import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
 import { useAuth } from '../../context/authContext';
 import {
   BarisFilterCariAdmin,
@@ -257,7 +257,7 @@ function GlosariumAdmin() {
   };
 
   return (
-    <TataLetakAdmin judul="Glosarium" aksiJudul={bisaTambah ? <TombolAksiAdmin onClick={bukaTambah} /> : null}>
+    <HalamanAdmin judul="Glosarium" aksiJudul={bisaTambah ? <TombolAksiAdmin onClick={bukaTambah} /> : null}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -367,7 +367,7 @@ function GlosariumAdmin() {
           />
         </PanelGeser>
       )}
-    </TataLetakAdmin>
+    </HalamanAdmin>
   );
 }
 

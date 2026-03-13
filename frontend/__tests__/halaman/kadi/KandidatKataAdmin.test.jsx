@@ -28,7 +28,7 @@ vi.mock('../../../src/api/apiKadi', () => ({
   useDaftarRiwayat: (...args) => mockUseDaftarRiwayat(...args),
 }));
 
-vi.mock('../../../src/komponen/redaksi/TataLetakAdmin', () => ({
+vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
   default: (props) => {
     mockTataLetak(props);
     return (

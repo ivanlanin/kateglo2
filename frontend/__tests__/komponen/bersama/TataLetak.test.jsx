@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import TataLetakPublik from '../../../src/komponen/bersama/TataLetakPublik';
-import { hitungModeGelapAwal, bacaPreferensiTema } from '../../../src/komponen/bersama/KerangkaKateglo';
+import { hitungModeGelapAwal, bacaPreferensiTema } from '../../../src/komponen/bersama/HalamanDasar';
 
 let mockPathname = '/kamus';
 let mockAuthOptional = { adalahRedaksi: false };

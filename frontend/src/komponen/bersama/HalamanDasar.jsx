@@ -1,5 +1,5 @@
 /**
- * @fileoverview Kerangka aplikasi bersama untuk publik dan redaksi
+ * @fileoverview Halaman dasar bersama untuk publik dan redaksi
  */
 
 import { Suspense, lazy, useEffect, useState } from 'react';
@@ -24,7 +24,7 @@ export function bacaPreferensiTema(runtimeWindow) {
   };
 }
 
-function KerangkaKateglo({ mode = 'publik', navbar, konten, adalahRedaksi = false }) {
+function HalamanDasar({ mode = 'publik', navbar, konten, adalahRedaksi = false }) {
   const adalahAdmin = mode === 'admin';
   const [modalTerbuka, setModalTerbuka] = useState(false);
   const [tabAktif, setTabAktif] = useState('changelog');
@@ -163,4 +163,4 @@ function KerangkaKateglo({ mode = 'publik', navbar, konten, adalahRedaksi = fals
   );
 }
 
-export default KerangkaKateglo;
+export default HalamanDasar;

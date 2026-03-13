@@ -7,7 +7,7 @@ import {
   useDaftarAuditMaknaAdmin,
   useSimpanAuditMaknaAdmin,
 } from '../../api/apiAdmin';
-import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
+import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
 import {
   BarisFilterCariAdmin,
   TabelAdmin,
@@ -148,7 +148,7 @@ function AuditMaknaAdmin() {
   };
 
   return (
-    <TataLetakAdmin judul="Audit Makna">
+    <HalamanAdmin judul="Audit Makna">
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -192,7 +192,7 @@ function AuditMaknaAdmin() {
         <TextareaField label="Catatan" name="catatan" value={panel.data.catatan || ''} onChange={panel.ubahField} rows={3} />
         <FormFooter onSimpan={handleSimpan} onBatal={tutupPanel} isPending={simpan.isPending} modeTambah={false} />
       </PanelGeser>
-    </TataLetakAdmin>
+    </HalamanAdmin>
   );
 }
 

@@ -28,7 +28,7 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useSimpanPeranAdmin: () => ({ mutate: mutateSimpanPeran, isPending: false }),
 }));
 
-vi.mock('../../../src/komponen/redaksi/TataLetakAdmin', () => ({
+vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>

@@ -30,7 +30,7 @@ vi.mock('../../../src/utils/formatUtils', () => ({
   formatBilanganRibuan: vi.fn((value) => String(value ?? 0)),
 }));
 
-vi.mock('../../../src/komponen/redaksi/TataLetakAdmin', () => ({
+vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <section>
       <h1>{judul}</h1>

@@ -1,11 +1,11 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import TataLetakAdminComponent from '../../../src/komponen/redaksi/TataLetakAdmin';
-import { hitungModeGelapAwal, bacaPreferensiTema } from '../../../src/komponen/bersama/KerangkaKateglo';
+import HalamanAdminComponent from '../../../src/komponen/redaksi/HalamanAdmin';
+import { hitungModeGelapAwal, bacaPreferensiTema } from '../../../src/komponen/bersama/HalamanDasar';
 
-function TataLetakAdmin(props) {
-  return <TataLetakAdminComponent {...props} />;
+function HalamanAdmin(props) {
+  return <HalamanAdminComponent {...props} />;
 }
 
 const mockNavigate = vi.fn();
@@ -29,7 +29,7 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-describe('TataLetakAdmin', () => {
+describe('HalamanAdmin', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.clear();
@@ -49,7 +49,7 @@ describe('TataLetakAdmin', () => {
   it('menampilkan judul, user, menu aktif, dan logout', async () => {
     render(
       <MemoryRouter initialEntries={['/redaksi/kamus']}>
-        <TataLetakAdmin judul="Kamus">Isi Admin</TataLetakAdmin>
+        <HalamanAdmin judul="Kamus">Isi Admin</HalamanAdmin>
       </MemoryRouter>
     );
 
@@ -74,7 +74,7 @@ describe('TataLetakAdmin', () => {
     mockUseAuth.mockReturnValueOnce({ user: { name: 'Redaksi' }, logout: mockLogout, punyaIzin: () => true });
     render(
       <MemoryRouter initialEntries={['/redaksi/kamus']}>
-        <TataLetakAdmin>Konten</TataLetakAdmin>
+        <HalamanAdmin>Konten</HalamanAdmin>
       </MemoryRouter>
     );
 
@@ -89,7 +89,7 @@ describe('TataLetakAdmin', () => {
   it('menampilkan menu burger mobile dan bisa dibuka', async () => {
     render(
       <MemoryRouter initialEntries={['/redaksi/kamus']}>
-        <TataLetakAdmin>Konten</TataLetakAdmin>
+        <HalamanAdmin>Konten</HalamanAdmin>
       </MemoryRouter>
     );
 
@@ -107,7 +107,7 @@ describe('TataLetakAdmin', () => {
   it('logout tetap berjalan saat panel menu terbuka', async () => {
     render(
       <MemoryRouter initialEntries={['/redaksi/kamus']}>
-        <TataLetakAdmin>Konten</TataLetakAdmin>
+        <HalamanAdmin>Konten</HalamanAdmin>
       </MemoryRouter>
     );
 
@@ -121,7 +121,7 @@ describe('TataLetakAdmin', () => {
   it('klik link pada menu mobile menutup panel tanpa logout', async () => {
     render(
       <MemoryRouter initialEntries={['/redaksi/kamus']}>
-        <TataLetakAdmin>Konten</TataLetakAdmin>
+        <HalamanAdmin>Konten</HalamanAdmin>
       </MemoryRouter>
     );
 
@@ -135,7 +135,7 @@ describe('TataLetakAdmin', () => {
   it('tombol tutup panel menu mobile menutup panel', async () => {
     render(
       <MemoryRouter initialEntries={['/redaksi/kamus']}>
-        <TataLetakAdmin>Konten</TataLetakAdmin>
+        <HalamanAdmin>Konten</HalamanAdmin>
       </MemoryRouter>
     );
 
@@ -149,7 +149,7 @@ describe('TataLetakAdmin', () => {
   it('overlay menu mobile menutup panel saat diklik', async () => {
     render(
       <MemoryRouter initialEntries={['/redaksi/kamus']}>
-        <TataLetakAdmin>Konten</TataLetakAdmin>
+        <HalamanAdmin>Konten</HalamanAdmin>
       </MemoryRouter>
     );
 
@@ -169,7 +169,7 @@ describe('TataLetakAdmin', () => {
 
     render(
       <MemoryRouter initialEntries={['/redaksi/kamus']}>
-        <TataLetakAdmin>Konten</TataLetakAdmin>
+        <HalamanAdmin>Konten</HalamanAdmin>
       </MemoryRouter>
     );
 
@@ -184,7 +184,7 @@ describe('TataLetakAdmin', () => {
 
     render(
       <MemoryRouter initialEntries={['/redaksi/kamus']}>
-        <TataLetakAdmin>Konten</TataLetakAdmin>
+        <HalamanAdmin>Konten</HalamanAdmin>
       </MemoryRouter>
     );
 
@@ -205,7 +205,7 @@ describe('TataLetakAdmin', () => {
 
     render(
       <MemoryRouter initialEntries={['/redaksi/kamus']}>
-        <TataLetakAdmin>Konten</TataLetakAdmin>
+        <HalamanAdmin>Konten</HalamanAdmin>
       </MemoryRouter>
     );
 

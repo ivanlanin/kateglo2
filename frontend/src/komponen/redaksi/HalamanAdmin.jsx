@@ -1,14 +1,14 @@
 /**
- * @fileoverview Tata letak redaksi untuk halaman admin dan KADI
+ * @fileoverview Halaman redaksi untuk admin dan KADI
  */
 
 import { useEffect } from 'react';
 import { Suspense, lazy } from 'react';
-import KerangkaKateglo from '../bersama/KerangkaKateglo';
+import HalamanDasar from '../bersama/HalamanDasar';
 
 const NavbarAdmin = lazy(() => import('./NavbarAdmin'));
 
-function TataLetakAdmin({ judul, aksiJudul = null, children }) {
+function HalamanAdmin({ judul, aksiJudul = null, children }) {
   useEffect(() => {
     document.title = judul
       ? `${judul} — Redaksi Kateglo`
@@ -16,7 +16,7 @@ function TataLetakAdmin({ judul, aksiJudul = null, children }) {
   }, [judul]);
 
   return (
-    <KerangkaKateglo
+    <HalamanDasar
       mode="admin"
       navbar={(
         <Suspense fallback={null}>
@@ -38,4 +38,4 @@ function TataLetakAdmin({ judul, aksiJudul = null, children }) {
   );
 }
 
-export default TataLetakAdmin;
+export default HalamanAdmin;

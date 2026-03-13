@@ -14,7 +14,7 @@ import {
   useDaftarSumberAdmin,
   useTagarEntri, useSimpanTagarEntri, useDaftarTagarUntukPilih,
 } from '../../api/apiAdmin';
-import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
+import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
 import { useAuth } from '../../context/authContext';
 import { parsePositiveIntegerParam } from '../../utils/paramUtils';
 import {
@@ -1169,7 +1169,7 @@ function KamusAdmin() {
   };
 
   return (
-    <TataLetakAdmin judul="Kamus" aksiJudul={bisaTambah ? <TombolAksiAdmin onClick={bukaTambah} /> : null}>
+    <HalamanAdmin judul="Kamus" aksiJudul={bisaTambah ? <TombolAksiAdmin onClick={bukaTambah} /> : null}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -1448,7 +1448,7 @@ function KamusAdmin() {
           )}
         </PanelGeser>
       )}
-    </TataLetakAdmin>
+    </HalamanAdmin>
   );
 }
 

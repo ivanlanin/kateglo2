@@ -18,7 +18,7 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useSimpanTagarEntri: () => simpanTagarState,
 }));
 
-vi.mock('../../../src/komponen/redaksi/TataLetakAdmin', () => ({
+vi.mock('../../../src/komponen/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul }) => (
     <div>
       <h1>{judul}</h1>

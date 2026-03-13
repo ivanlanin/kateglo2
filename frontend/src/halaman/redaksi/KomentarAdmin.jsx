@@ -5,7 +5,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarKomentarAdmin, useDetailKomentarAdmin, useSimpanKomentarAdmin } from '../../api/apiAdmin';
-import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
+import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
 import {
   BarisFilterCariAdmin,
   TabelAdmin,
@@ -156,7 +156,7 @@ function KomentarAdmin() {
   };
 
   return (
-    <TataLetakAdmin judul="Komentar">
+    <HalamanAdmin judul="Komentar">
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -201,7 +201,7 @@ function KomentarAdmin() {
           modeTambah={false}
         />
       </PanelGeser>
-    </TataLetakAdmin>
+    </HalamanAdmin>
   );
 }
 

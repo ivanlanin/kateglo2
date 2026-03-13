@@ -3,7 +3,7 @@
  */
 
 import { useMemo } from 'react';
-import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
+import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
 import { TabelAdmin } from '../../komponen/redaksi/KomponenAdmin';
 import { useSusunKataBebasAdmin } from '../../api/apiAdmin';
 import { formatBilanganRibuan } from '../../utils/formatUtils';
@@ -37,7 +37,7 @@ function SusunKataBebas() {
   );
 
   return (
-    <TataLetakAdmin judul="Susun Kata Bebas">
+    <HalamanAdmin judul="Susun Kata Bebas">
       <TabelAdmin
         kolom={kolom}
         data={dataTabel}
@@ -48,7 +48,7 @@ function SusunKataBebas() {
         offset={0}
         kunciId="tanggal"
       />
-    </TataLetakAdmin>
+    </HalamanAdmin>
   );
 }
 

@@ -4,7 +4,7 @@
 
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
+import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
 import { useStatistikPencarianAdmin } from '../../api/apiAdmin';
 import {
   TabelAdmin,
@@ -112,7 +112,7 @@ function PencarianAdmin() {
   };
 
   return (
-    <TataLetakAdmin judul="Pencarian">
+    <HalamanAdmin judul="Pencarian">
       <form onSubmit={handleCari} className="mb-4 flex flex-wrap gap-2 items-end">
         <div className="flex flex-col gap-1">
           <label htmlFor="filter-domain" className="text-sm text-gray-600 dark:text-gray-300">Domain</label>
@@ -215,7 +215,7 @@ function PencarianAdmin() {
           kunciId="_rowKey"
         />
       )}
-    </TataLetakAdmin>
+    </HalamanAdmin>
   );
 }
 

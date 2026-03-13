@@ -3,7 +3,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
+import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
 import {
   useDaftarPencarianHitamAdmin,
   useHapusPencarianHitamAdmin,
@@ -167,7 +167,7 @@ function PencarianHitamAdmin() {
   };
 
   return (
-    <TataLetakAdmin judul="Daftar Hitam Pencarian" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} label="+ Tambah Kata" />}>
+    <HalamanAdmin judul="Daftar Hitam Pencarian" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} label="+ Tambah Kata" />}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -224,7 +224,7 @@ function PencarianHitamAdmin() {
           modeTambah={panel.modeTambah}
         />
       </PanelGeser>
-    </TataLetakAdmin>
+    </HalamanAdmin>
   );
 }
 

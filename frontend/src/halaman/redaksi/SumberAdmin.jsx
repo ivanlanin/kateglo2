@@ -10,7 +10,7 @@ import {
   useSimpanSumber,
   useHapusSumber,
 } from '../../api/apiAdmin';
-import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
+import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
 import {
   BarisFilterCariAdmin,
   TombolAksiAdmin,
@@ -181,7 +181,7 @@ function SumberAdmin() {
   };
 
   return (
-    <TataLetakAdmin judul="Sumber" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
+    <HalamanAdmin judul="Sumber" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
       <BarisFilterCariAdmin
         nilai={cari}
         onChange={setCari}
@@ -223,7 +223,7 @@ function SumberAdmin() {
           modeTambah={panel.modeTambah}
         />
       </PanelGeser>
-    </TataLetakAdmin>
+    </HalamanAdmin>
   );
 }
 

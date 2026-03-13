@@ -3,7 +3,7 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
-import TataLetakAdmin from '../../komponen/redaksi/TataLetakAdmin';
+import HalamanAdmin from '../../komponen/redaksi/HalamanAdmin';
 import {
   getApiErrorMessage,
   TabelAdmin,
@@ -213,7 +213,7 @@ function SusunKataHarian() {
   };
 
   return (
-    <TataLetakAdmin judul="Susun Kata Harian" aksiJudul={<TombolAksiAdmin onClick={handleBuatKataHarian} label={buatHarian.isPending ? 'Membuat …' : 'Buat Kata Harian'} />}>
+    <HalamanAdmin judul="Susun Kata Harian" aksiJudul={<TombolAksiAdmin onClick={handleBuatKataHarian} label={buatHarian.isPending ? 'Membuat …' : 'Buat Kata Harian'} />}>
       <TabelAdmin
         kolom={kolom}
         data={dataTabel}
@@ -265,7 +265,7 @@ function SusunKataHarian() {
           )}
         </section>
       </PanelGeser>
-    </TataLetakAdmin>
+    </HalamanAdmin>
   );
 }
 
