@@ -148,6 +148,10 @@ function SusunKata() {
   const [panelAktif, setPanelAktif] = useState('permainan');
   const [putaranBebas, setPutaranBebas] = useState(0);
   const modeDariPath = modeParam === MODE_BEBAS ? MODE_BEBAS : MODE_HARIAN;
+  const judulSeo = modeAktif === MODE_BEBAS ? 'Susun Kata Bebas' : 'Susun Kata Harian';
+  const deskripsiSeo = modeAktif === MODE_BEBAS
+    ? 'Mainkan mode bebas Susun Kata untuk menyusun kata bahasa Indonesia kapan saja dengan ronde baru yang bisa diulang langsung di Kateglo.'
+    : 'Mainkan gim susun kata harian seperti Wordle untuk menyusun kata bahasa Indonesia dalam enam percobaan.';
 
   useEffect(() => {
     setModeAktif(modeDariPath);
@@ -466,8 +470,8 @@ function SusunKata() {
 
   return (
     <HalamanPublik
-      judul="Susun Kata"
-      deskripsi="Mainkan gim susun kata harian seperti Wordle untuk menyusun kata bahasa Indonesia dalam enam percobaan."
+      judul={judulSeo}
+      deskripsi={deskripsiSeo}
       tampilkanJudul={false}
     >
       <div className="susun-kata-wrap">

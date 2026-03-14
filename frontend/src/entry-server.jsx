@@ -96,9 +96,16 @@ function buildMetaEjaan(slug = '') {
   };
 }
 
-function buildMetaSusunKata() {
+function buildMetaSusunKata(mode = 'harian') {
+  if (mode === 'bebas') {
+    return {
+      judul: 'Susun Kata Bebas',
+      deskripsi: 'Mainkan mode bebas Susun Kata untuk menyusun kata bahasa Indonesia kapan saja dengan ronde baru yang bisa diulang langsung di Kateglo.',
+    };
+  }
+
   return {
-    judul: 'Susun Kata',
+    judul: 'Susun Kata Harian',
     deskripsi: 'Mainkan gim susun kata harian seperti Wordle untuk menyusun kata bahasa Indonesia dalam enam percobaan.',
   };
 }
@@ -120,7 +127,7 @@ function buildMetaGim() {
 function buildMetaAlat() {
   return {
     judul: 'Alat',
-    deskripsi: 'Kumpulan alat bahasa Indonesia di Kateglo. Saat ini tersedia Penganalisis Teks dan halaman ini siap menampung alat berikutnya.',
+    deskripsi: 'Kumpulan alat bahasa Indonesia di Kateglo, termasuk Penganalisis Teks dan Penghitung Huruf untuk analisis cepat langsung di peramban.',
   };
 }
 
@@ -284,8 +291,26 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
   }
 
   // /gim/susun-kata, /gim/susun-kata/harian, /gim/susun-kata/bebas
-  if (path === '/gim/susun-kata' || path === '/gim/susun-kata/' || path.startsWith('/gim/susun-kata/')) {
-    return titled(buildMetaSusunKata());
+  if (path === '/gim/susun-kata' || path === '/gim/susun-kata/') {
+    return {
+      ...titled(buildMetaSusunKata('harian')),
+      canonicalUrl: `${siteBaseUrl}/gim/susun-kata/harian`,
+    };
+  }
+
+  if (path === '/gim/susun-kata/bebas' || path === '/gim/susun-kata/bebas/') {
+    return titled(buildMetaSusunKata('bebas'));
+  }
+
+  if (path === '/gim/susun-kata/harian' || path === '/gim/susun-kata/harian/' || path.startsWith('/gim/susun-kata/harian/')) {
+    return titled(buildMetaSusunKata('harian'));
+  }
+
+  if (path.startsWith('/gim/susun-kata/')) {
+    return {
+      ...titled(buildMetaSusunKata('harian')),
+      canonicalUrl: `${siteBaseUrl}/gim/susun-kata/harian`,
+    };
   }
 
   return { ...defaultMeta, canonicalUrl: `${siteBaseUrl}${path}` };

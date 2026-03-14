@@ -192,7 +192,7 @@ describe('entry-server', () => {
 
     const alat = __private.buildMetaForPath('/alat', site);
     expect(alat.title).toBe('Alat — Kateglo');
-    expect(alat.description).toContain('alat berikutnya');
+    expect(alat.description).toContain('Penghitung Huruf');
 
     const penganalisisTeks = __private.buildMetaForPath('/alat/penganalisis-teks', site);
     expect(penganalisisTeks.title).toBe('Penganalisis Teks — Kateglo');
@@ -207,8 +207,17 @@ describe('entry-server', () => {
     expect(gim.description).toContain('Kuis Kata');
 
     const gimSusunKata = __private.buildMetaForPath('/gim/susun-kata', site);
-    expect(gimSusunKata.title).toBe('Susun Kata — Kateglo');
+    expect(gimSusunKata.title).toBe('Susun Kata Harian — Kateglo');
     expect(gimSusunKata.description).toContain('susun kata harian');
+    expect(gimSusunKata.canonicalUrl).toBe('https://kateglo.org/gim/susun-kata/harian');
+
+    const gimSusunKataHarian = __private.buildMetaForPath('/gim/susun-kata/harian', site);
+    expect(gimSusunKataHarian.title).toBe('Susun Kata Harian — Kateglo');
+    expect(gimSusunKataHarian.description).toContain('susun kata harian');
+
+    const gimSusunKataBebas = __private.buildMetaForPath('/gim/susun-kata/bebas', site);
+    expect(gimSusunKataBebas.title).toBe('Susun Kata Bebas — Kateglo');
+    expect(gimSusunKataBebas.description).toContain('mode bebas');
 
     const kuisKata = __private.buildMetaForPath('/gim/kuis-kata', site);
     expect(kuisKata.title).toBe('Kuis Kata — Kateglo');
@@ -271,6 +280,27 @@ describe('entry-server', () => {
     expect(appHtml).toContain('App SSR Mock');
     expect(headTags).toContain('Penghitung Huruf — Kateglo');
     expect(headTags).toContain('https://kateglo.org/alat/penghitung-huruf');
+  });
+
+  it('render menghasilkan canonical dan title SEO untuk route susun kata harian', async () => {
+    const { appHtml, headTags } = await render('/gim/susun-kata/harian');
+    expect(appHtml).toContain('App SSR Mock');
+    expect(headTags).toContain('Susun Kata Harian — Kateglo');
+    expect(headTags).toContain('https://kateglo.org/gim/susun-kata/harian');
+  });
+
+  it('render menghasilkan canonical dan title SEO untuk route susun kata bebas', async () => {
+    const { appHtml, headTags } = await render('/gim/susun-kata/bebas');
+    expect(appHtml).toContain('App SSR Mock');
+    expect(headTags).toContain('Susun Kata Bebas — Kateglo');
+    expect(headTags).toContain('https://kateglo.org/gim/susun-kata/bebas');
+  });
+
+  it('render mengkanonikal-kan route redirect susun kata ke mode harian', async () => {
+    const { appHtml, headTags } = await render('/gim/susun-kata');
+    expect(appHtml).toContain('App SSR Mock');
+    expect(headTags).toContain('Susun Kata Harian — Kateglo');
+    expect(headTags).toContain('https://kateglo.org/gim/susun-kata/harian');
   });
 
   it('buildMetaForPath memakai fallback pathname root saat input kosong', () => {
