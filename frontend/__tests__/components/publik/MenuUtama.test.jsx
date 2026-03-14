@@ -131,5 +131,6 @@ describe('MenuUtama', () => {
       'Alat',
       'Gim',
     ]);
+    expect(menuItems.find((item) => item.label === 'Gim')?.path).toBe('/gim');
   });
 });

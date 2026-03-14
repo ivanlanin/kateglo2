@@ -14,16 +14,16 @@ import {
   useStatistikKandidatKata,
   useDaftarAtestasi,
   useDaftarRiwayat,
-} from '../../api/apiKadi';
-import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
-import { useAuth } from '../../context/authContext';
+} from '../../../api/apiKadi';
+import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
+import { useAuth } from '../../../context/authContext';
 import {
   BarisFilterCariAdmin,
   TabelAdmin,
   getApiErrorMessage,
   usePencarianAdmin,
-} from '../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../components/redaksi/PanelGeser';
+} from '../../../components/redaksi/KomponenAdmin';
+import PanelGeser from '../../../components/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -31,8 +31,8 @@ import {
   TextareaField,
   FormFooter,
   PesanForm,
-} from '../../components/redaksi/FormulirAdmin';
-import { parsePositiveIntegerParam } from '../../utils/paramUtils';
+} from '../../../components/redaksi/FormulirAdmin';
+import { parsePositiveIntegerParam } from '../../../utils/paramUtils';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 

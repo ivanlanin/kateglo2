@@ -11,9 +11,10 @@ describe('AlatIndex', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByRole('heading', { name: 'Kumpulan alat bantu bahasa Indonesia' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Alat' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Penganalisis Teks' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Penghitung Huruf' })).toBeInTheDocument();
+    expect(screen.queryByText('Tersedia')).not.toBeInTheDocument();
     const links = screen.getAllByRole('link', { name: 'Buka alat' });
     expect(links[0]).toHaveAttribute('href', '/alat/penganalisis-teks');
     expect(links[1]).toHaveAttribute('href', '/alat/penghitung-huruf');

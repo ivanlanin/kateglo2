@@ -20,7 +20,9 @@ vi.mock('../src/pages/publik/Beranda', () => ({ default: () => <div>Hal Beranda<
 vi.mock('../src/pages/publik/Kamus', () => ({ default: () => <div>Hal Kamus</div> }));
 vi.mock('../src/pages/publik/KamusDetail', () => ({ default: () => <div>Hal Kamus Detail</div> }));
 vi.mock('../src/pages/publik/Tesaurus', () => ({ default: () => <div>Hal Tesaurus</div> }));
-vi.mock('../src/pages/gim/SusunKata', () => ({ default: () => <div>Hal Susun Kata</div> }));
+vi.mock('../src/pages/publik/gim/GimIndex', () => ({ default: () => <div>Hal Gim</div> }));
+vi.mock('../src/pages/publik/gim/KuisKata', () => ({ default: () => <div>Hal Kuis Kata</div> }));
+vi.mock('../src/pages/publik/gim/SusunKata', () => ({ default: () => <div>Hal Susun Kata</div> }));
 vi.mock('../src/pages/publik/Glosarium', () => ({ default: () => <div>Hal Glosarium</div> }));
 vi.mock('../src/pages/publik/alat', () => ({
   Alat: () => <div>Hal Alat</div>,
@@ -301,6 +303,15 @@ describe('App', () => {
     expect(await screen.findByText('Hal Penghitung Huruf')).toBeInTheDocument();
   });
 
+  it('merender route indeks gim', async () => {
+    render(
+      <MemoryRouter initialEntries={['/gim']}>
+        <App />
+      </MemoryRouter>
+    );
+    expect(await screen.findByText('Hal Gim')).toBeInTheDocument();
+  });
+
   it('merender route gim susun kata', async () => {
     render(
       <MemoryRouter initialEntries={['/gim/susun-kata']}>
@@ -308,6 +319,15 @@ describe('App', () => {
       </MemoryRouter>
     );
     expect(await screen.findByText('Hal Susun Kata')).toBeInTheDocument();
+  });
+
+  it('merender route kuis kata', async () => {
+    render(
+      <MemoryRouter initialEntries={['/gim/kuis-kata']}>
+        <App />
+      </MemoryRouter>
+    );
+    expect(await screen.findByText('Hal Kuis Kata')).toBeInTheDocument();
   });
 
   it('mengalihkan route izin ke login saat belum autentikasi', () => {

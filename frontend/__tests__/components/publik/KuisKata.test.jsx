@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import GimPilihGanda, { gabungRiwayat, __private } from '../../../src/components/publik/GimPilihGanda';
+import KuisKata, { gabungRiwayat, __private } from '../../../src/components/publik/KuisKata';
 
 const mockRemoveQueries = vi.fn();
 const mockUseQuery = vi.fn();
@@ -36,7 +36,7 @@ const rondeMock = [
   },
 ];
 
-describe('GimPilihGanda', () => {
+describe('KuisKata', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     mockRemoveQueries.mockReset();
@@ -120,27 +120,27 @@ describe('GimPilihGanda', () => {
 
   it('menampilkan loading state dan null pada error, ronde kosong, atau soal aktif tak tersedia', () => {
     mockUseQuery.mockReturnValueOnce({ data: null, isLoading: true, isError: false });
-    const loadingView = render(<GimPilihGanda />);
+    const loadingView = render(<KuisKata />);
     expect(screen.getByText('Menyiapkan soal …')).toBeInTheDocument();
     loadingView.unmount();
 
     mockUseQuery.mockReturnValueOnce({ data: null, isLoading: false, isError: true });
-    const errorView = render(<GimPilihGanda />);
+    const errorView = render(<KuisKata />);
     expect(errorView.container.firstChild).toBeNull();
     errorView.unmount();
 
     mockUseQuery.mockReturnValueOnce({ data: { ronde: [] }, isLoading: false, isError: false });
-    const emptyView = render(<GimPilihGanda />);
+    const emptyView = render(<KuisKata />);
     expect(emptyView.container.firstChild).toBeNull();
     emptyView.unmount();
 
     mockUseQuery.mockReturnValueOnce({ data: { ronde: [undefined] }, isLoading: false, isError: false });
-    const noQuestionView = render(<GimPilihGanda />);
+    const noQuestionView = render(<KuisKata />);
     expect(noQuestionView.container.firstChild).toBeNull();
   });
 
   it('langsung pindah ke soal berikutnya setelah jeda singkat', async () => {
-    const { container } = render(<GimPilihGanda />);
+    const { container } = render(<KuisKata />);
     const ambilSoal = () => container.querySelector('.gim-soal');
 
     expect(ambilSoal()).toHaveTextContent('Apa arti alpha?');
@@ -164,7 +164,7 @@ describe('GimPilihGanda', () => {
   });
 
   it('lewati dihitung salah dan tetap lanjut otomatis', async () => {
-    const { container } = render(<GimPilihGanda />);
+    const { container } = render(<KuisKata />);
     const ambilSoal = () => container.querySelector('.gim-soal');
 
     fireEvent.click(screen.getByRole('button', { name: 'Lewati' }));
@@ -181,7 +181,7 @@ describe('GimPilihGanda', () => {
   });
 
   it('mempertahankan skor total antar ronde dan menampilkan opsi benar-salah di ringkasan', async () => {
-    const { container } = render(<GimPilihGanda />);
+    const { container } = render(<KuisKata />);
 
     fireEvent.click(screen.getByRole('button', { name: 'arti alpha' }));
 
@@ -243,7 +243,7 @@ describe('GimPilihGanda', () => {
   });
 
   it('mengabaikan klik jawaban dan lewati setelah soal sudah dijawab', async () => {
-    const { container } = render(<GimPilihGanda />);
+    const { container } = render(<KuisKata />);
 
     fireEvent.click(screen.getByRole('button', { name: 'arti alpha' }));
     fireEvent.click(screen.getByRole('button', { name: 'arti beta' }));

@@ -19,7 +19,9 @@ const PenghitungHuruf = lazy(() => import('./pages/publik/alat').then((module) =
 const PenganalisisTeks = lazy(() => import('./pages/publik/alat').then((module) => ({ default: module.PenganalisisTeks })));
 const KebijakanPrivasi = lazy(() => import('./pages/publik/KebijakanPrivasi'));
 const Sumber = lazy(() => import('./pages/publik/Sumber'));
-const SusunKata = lazy(() => import('./pages/gim/SusunKata'));
+const GimIndex = lazy(() => import('./pages/publik/gim/GimIndex'));
+const KuisKataPage = lazy(() => import('./pages/publik/gim/KuisKata'));
+const SusunKata = lazy(() => import('./pages/publik/gim/SusunKata'));
 const DasborAdmin = lazy(() => import('./pages/redaksi/DasborAdmin'));
 const KamusAdmin = lazy(() => import('./pages/redaksi/KamusAdmin'));
 const KomentarAdmin = lazy(() => import('./pages/redaksi/KomentarAdmin'));
@@ -40,7 +42,7 @@ const PencarianAdmin = lazy(() => import('./pages/redaksi/PencarianAdmin'));
 const PencarianHitamAdmin = lazy(() => import('./pages/redaksi/PencarianHitamAdmin'));
 const SusunKataHarian = lazy(() => import('./pages/redaksi/SusunKataHarian'));
 const SusunKataBebas = lazy(() => import('./pages/redaksi/SusunKataBebas'));
-const KandidatKataAdmin = lazy(() => import('./pages/kadi/KandidatKataAdmin'));
+const KandidatKataAdmin = lazy(() => import('./pages/redaksi/kadi/KandidatKataAdmin'));
 
 function FallbackRoute() {
   return (
@@ -161,6 +163,8 @@ function App() {
         <Route path="/alat" element={bungkusLazy(<Alat />)} />
         <Route path="/alat/penghitung-huruf" element={bungkusLazy(<PenghitungHuruf />)} />
         <Route path="/alat/penganalisis-teks" element={bungkusLazy(<PenganalisisTeks />)} />
+        <Route path="/gim" element={bungkusLazy(<GimIndex />)} />
+        <Route path="/gim/kuis-kata" element={bungkusLazy(<KuisKataPage />)} />
         <Route path="/gim/susun-kata" element={<Navigate to="/gim/susun-kata/harian" replace />} />
         <Route path="/gim/susun-kata/:mode" element={bungkusLazy(<SusunKata />)} />
         <Route path="/tesaurus" element={bungkusLazy(<Tesaurus />)} />

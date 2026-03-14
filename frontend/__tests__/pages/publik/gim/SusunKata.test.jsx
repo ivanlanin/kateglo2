@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import SusunKata, { buatPetaKeyboard, parseRiwayatDariSkor } from '../../../src/pages/gim/SusunKata';
+import SusunKata, { buatPetaKeyboard, parseRiwayatDariSkor } from '../../../../src/pages/publik/gim/SusunKata';
 import {
   ambilKlasemenSusunKata,
   ambilKlasemenSusunKataBebas,
@@ -11,7 +11,7 @@ import {
   submitSkorSusunKata,
   submitSkorSusunKataBebas,
   validasiKataSusunKata,
-} from '../../../src/api/apiPublik';
+} from '../../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
 const mockUseMutation = vi.fn();
@@ -22,7 +22,7 @@ vi.mock('@tanstack/react-query', () => ({
   useMutation: (...args) => mockUseMutation(...args),
 }));
 
-vi.mock('../../../src/api/apiPublik', () => ({
+vi.mock('../../../../src/api/apiPublik', () => ({
   ambilPuzzleSusunKata: vi.fn(),
   ambilBebasSusunKata: vi.fn(),
   validasiKataSusunKata: vi.fn(),
@@ -33,15 +33,15 @@ vi.mock('../../../src/api/apiPublik', () => ({
   ambilKlasemenSusunKataBebas: vi.fn(),
 }));
 
-vi.mock('../../../src/context/authContext', () => ({
+vi.mock('../../../../src/context/authContext', () => ({
   useAuth: () => mockUseAuth(),
 }));
 
-vi.mock('../../../src/components/publik/HalamanPublik', () => ({
+vi.mock('../../../../src/components/publik/HalamanPublik', () => ({
   default: ({ children }) => <section>{children}</section>,
 }));
 
-vi.mock('../../../src/components/bersama/TombolMasukGoogle', () => ({
+vi.mock('../../../../src/components/bersama/TombolMasukGoogle', () => ({
   default: ({ onClick, label }) => (
     <button type="button" onClick={onClick}>{label}</button>
   ),

@@ -1,5 +1,10 @@
 # Riwayat Perubahan
 
+## 2026-03-14 Sabtu
+
+- Menambahkan alat [penghitung huruf](/alat/penghitung-huruf) dari [CodePen](https://codepen.io/ivanlanin/full/ExqdRNL)
+- Memindahkan [Kuis Kata](/gim/kuis-kata) menjadi halaman gim sendiri
+
 ## 2026-03-13 Jumat
 
 - Memulai implementasi Kamus Deskriptif Indonesia (KADI)

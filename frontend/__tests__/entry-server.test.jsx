@@ -202,9 +202,17 @@ describe('entry-server', () => {
     expect(penghitungHuruf.title).toBe('Penghitung Huruf — Kateglo');
     expect(penghitungHuruf.description).toContain('frekuensi huruf');
 
+    const gim = __private.buildMetaForPath('/gim', site);
+    expect(gim.title).toBe('Gim — Kateglo');
+    expect(gim.description).toContain('Kuis Kata');
+
     const gimSusunKata = __private.buildMetaForPath('/gim/susun-kata', site);
     expect(gimSusunKata.title).toBe('Susun Kata — Kateglo');
     expect(gimSusunKata.description).toContain('susun kata harian');
+
+    const kuisKata = __private.buildMetaForPath('/gim/kuis-kata', site);
+    expect(kuisKata.title).toBe('Kuis Kata — Kateglo');
+    expect(kuisKata.description).toContain('pilihan ganda');
 
     expect(__private.buildMetaForPath('/kebijakan-privasi', site).title).toBe('Kebijakan Privasi — Kateglo');
 

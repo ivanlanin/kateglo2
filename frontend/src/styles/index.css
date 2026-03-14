@@ -329,6 +329,146 @@ code {
     @apply mt-4 flex flex-wrap gap-2.5;
   }
 
+  .gim-page {
+    @apply flex flex-col gap-6;
+  }
+
+  .gim-hero {
+    @apply rounded-3xl border border-gray-200 bg-white px-5 py-4 shadow-sm;
+  }
+
+  .dark .gim-hero {
+    @apply border-dark-border bg-dark-bg;
+  }
+
+  .gim-hero-head {
+    @apply flex flex-col gap-2 md:flex-row md:items-end md:justify-between;
+  }
+
+  .gim-kicker {
+    @apply mb-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-700;
+  }
+
+  .dark .gim-kicker {
+    @apply text-emerald-300;
+  }
+
+  .gim-title {
+    @apply m-0 text-xl font-semibold text-gray-900 sm:text-2xl;
+  }
+
+  .dark .gim-title {
+    @apply text-dark-text;
+  }
+
+  .gim-hero-note {
+    @apply m-0 text-sm text-gray-500;
+  }
+
+  .dark .gim-hero-note {
+    @apply text-dark-text-muted;
+  }
+
+  .gim-description {
+    @apply mt-2 max-w-3xl text-sm leading-6 text-gray-600;
+  }
+
+  .dark .gim-description {
+    @apply text-dark-text-muted;
+  }
+
+  .gim-actions {
+    @apply mt-4 flex flex-wrap gap-2.5;
+  }
+
+  .gim-page-wrap {
+    @apply max-w-xl mx-auto;
+  }
+
+  .gim-page-heading-row {
+    @apply relative mb-4 w-full;
+  }
+
+  .gim-page-heading {
+    @apply m-0 text-center text-3xl font-bold text-gray-900;
+  }
+
+  .dark .gim-page-heading {
+    @apply text-dark-text;
+  }
+
+  .gim-page-panel-btn {
+    @apply absolute right-0 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-md bg-transparent text-lg transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-300;
+  }
+
+  .gim-page-panel-btn-left {
+    @apply left-0 right-auto text-blue-700 hover:bg-blue-50;
+  }
+
+  .dark .gim-page-panel-btn {
+    @apply hover:bg-dark-bg-hover focus:ring-blue-700;
+  }
+
+  .dark .gim-page-panel-btn-left {
+    @apply text-blue-300 hover:bg-blue-900/30;
+  }
+
+  .gim-page-info-panel {
+    @apply mb-3 rounded-lg p-2;
+  }
+
+  .gim-page-info-text {
+    @apply mb-3 text-sm leading-6 text-gray-700 last:mb-0;
+  }
+
+  .dark .gim-page-info-text {
+    @apply text-dark-text-muted;
+  }
+
+  .gim-list-grid {
+    @apply grid gap-4 md:grid-cols-2 xl:grid-cols-3;
+  }
+
+  .gim-card {
+    @apply flex flex-col rounded-3xl border border-gray-200 bg-white p-5 shadow-sm;
+  }
+
+  .dark .gim-card {
+    @apply border-dark-border bg-dark-bg;
+  }
+
+  .gim-card-top {
+    @apply flex items-center justify-between gap-3;
+  }
+
+  .gim-card-status {
+    @apply inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-emerald-700;
+  }
+
+  .dark .gim-card-status {
+    @apply bg-emerald-900/40 text-emerald-200;
+  }
+
+  .gim-card-title {
+    @apply mb-0 mt-4 text-xl font-semibold text-gray-900;
+  }
+
+  .dark .gim-card-title {
+    @apply text-dark-text;
+  }
+
+  .gim-card-description {
+    @apply mb-0 mt-3 flex-1 text-sm leading-6 text-gray-600;
+  }
+
+  .dark .gim-card-description {
+    @apply text-dark-text-muted;
+  }
+
+  .gim-card-actions {
+    @apply mt-5;
+  }
+
   .alat-list-grid {
     @apply grid gap-4 md:grid-cols-2 xl:grid-cols-3;
   }

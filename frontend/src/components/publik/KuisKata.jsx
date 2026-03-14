@@ -1,5 +1,5 @@
 /**
- * @fileoverview Widget Gim Pilih Ganda untuk beranda Kateglo.
+ * @fileoverview Komponen Kuis Kata untuk beranda dan halaman gim Kateglo.
  *
  * Lima domain per ronde: kamus, tesaurus, glosarium, makna, rima.
  * Skor hanya di memori sesi (Fase 1 — tanpa login).
@@ -241,7 +241,7 @@ function ItemRingkasan({ soal, pilihanUser }) {
   );
 }
 
-function GimPilihGanda() {
+function KuisKata() {
   const queryClient = useQueryClient();
   const rondeRef = useRef([]);
   const skorAwalRef = useRef(true);
@@ -255,7 +255,7 @@ function GimPilihGanda() {
   const [fase, setFase] = useState('soal'); // 'soal' | 'ringkasan'
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['gim-pilih-ganda', rondeKey, riwayatSoal.map((item) => `${item.mode}:${item.kunciSoal}`).join('|')],
+    queryKey: ['kuis-kata', rondeKey, riwayatSoal.map((item) => `${item.mode}:${item.kunciSoal}`).join('|')],
     queryFn: () => ambilRondePilihGanda({ riwayat: riwayatSoal }),
     staleTime: Infinity,
   });
@@ -312,7 +312,7 @@ function GimPilihGanda() {
   }, [indeks, soalSaatIni]);
 
   const handleRondeBaru = useCallback(() => {
-    queryClient.removeQueries({ queryKey: ['gim-pilih-ganda', rondeKey] });
+    queryClient.removeQueries({ queryKey: ['kuis-kata', rondeKey] });
     setRiwayatSoal((prev) => gabungRiwayat(prev, rondeRef.current));
     setRondeKey((k) => k + 1);
     setIndeks(0);
@@ -451,7 +451,7 @@ function GimPilihGanda() {
   );
 }
 
-export default GimPilihGanda;
+export default KuisKata;
 export { gabungRiwayat };
 export const __private = {
   labelSkor,

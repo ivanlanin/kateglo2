@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ambilPencarianPopuler } from '../../api/apiPublik';
 import KotakCari from '../../components/publik/KotakCari';
-import GimPilihGanda from '../../components/publik/GimPilihGanda';
+import KuisKata from '../../components/publik/KuisKata';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
 
 const daftarDomain = [
@@ -115,7 +115,7 @@ function Beranda() {
           })}
         </div>
       </div>
-      <GimPilihGanda />
+      <KuisKata />
     </div>
   );
 }

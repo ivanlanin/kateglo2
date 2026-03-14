@@ -103,6 +103,20 @@ function buildMetaSusunKata() {
   };
 }
 
+function buildMetaKuisKata() {
+  return {
+    judul: 'Kuis Kata',
+    deskripsi: 'Mainkan kuis kata pilihan ganda di Kateglo untuk menebak arti, sinonim, padanan, makna, dan rima dalam satu ronde cepat.',
+  };
+}
+
+function buildMetaGim() {
+  return {
+    judul: 'Gim',
+    deskripsi: 'Kumpulan gim kata di Kateglo. Saat ini tersedia Kuis Kata dan Susun Kata untuk latihan bahasa Indonesia yang singkat dan interaktif.',
+  };
+}
+
 function buildMetaAlat() {
   return {
     judul: 'Alat',
@@ -252,6 +266,16 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
 
   if (path === '/alat/penghitung-huruf' || path === '/alat/penghitung-huruf/') {
     return titled(buildMetaPenghitungHuruf());
+  }
+
+  // /gim
+  if (path === '/gim' || path === '/gim/') {
+    return titled(buildMetaGim());
+  }
+
+  // /gim/kuis-kata
+  if (path === '/gim/kuis-kata' || path === '/gim/kuis-kata/') {
+    return titled(buildMetaKuisKata());
   }
 
   // /kebijakan-privasi

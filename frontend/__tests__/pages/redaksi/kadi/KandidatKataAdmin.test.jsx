@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import KandidatKataAdmin from '../../../src/pages/kadi/KandidatKataAdmin';
+import KandidatKataAdmin from '../../../../src/pages/redaksi/kadi/KandidatKataAdmin';
 
 const mockUseAuth = vi.fn();
 const mockUseDaftarKandidatKataAdmin = vi.fn();
@@ -13,11 +13,11 @@ const mockUseFormPanel = vi.fn();
 const mockUsePencarianAdmin = vi.fn();
 const mockTataLetak = vi.fn();
 
-vi.mock('../../../src/context/authContext', () => ({
+vi.mock('../../../../src/context/authContext', () => ({
   useAuth: () => mockUseAuth(),
 }));
 
-vi.mock('../../../src/api/apiKadi', () => ({
+vi.mock('../../../../src/api/apiKadi', () => ({
   useDaftarKandidatKataAdmin: (...args) => mockUseDaftarKandidatKataAdmin(...args),
   useDetailKandidatKataAdmin: (...args) => mockUseDetailKandidatKataAdmin(...args),
   useSimpanKandidatKata: () => ({ mutateAsync: vi.fn(), isPending: false }),
@@ -28,7 +28,7 @@ vi.mock('../../../src/api/apiKadi', () => ({
   useDaftarRiwayat: (...args) => mockUseDaftarRiwayat(...args),
 }));
 
-vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
   default: (props) => {
     mockTataLetak(props);
     return (
@@ -41,7 +41,7 @@ vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
   },
 }));
 
-vi.mock('../../../src/components/redaksi/KomponenAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/KomponenAdmin', () => ({
   BarisFilterCariAdmin: () => <div>Filter kandidat</div>,
   TabelAdmin: ({ data }) => (
     <div>
@@ -52,11 +52,11 @@ vi.mock('../../../src/components/redaksi/KomponenAdmin', () => ({
   usePencarianAdmin: (...args) => mockUsePencarianAdmin(...args),
 }));
 
-vi.mock('../../../src/components/redaksi/PanelGeser', () => ({
+vi.mock('../../../../src/components/redaksi/PanelGeser', () => ({
   default: ({ children }) => <div>{children}</div>,
 }));
 
-vi.mock('../../../src/components/redaksi/FormulirAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/FormulirAdmin', () => ({
   useFormPanel: (...args) => mockUseFormPanel(...args),
   InputField: () => <div>Input field</div>,
   SelectField: () => <div>Select field</div>,

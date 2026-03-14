@@ -24,7 +24,7 @@ vi.mock('../../../src/api/apiAuth', () => ({
   simpanReturnTo: vi.fn(),
 }));
 
-vi.mock('../../../src/components/publik/GimPilihGanda', () => ({
+vi.mock('../../../src/components/publik/KuisKata', () => ({
   default: () => null,
 }));
 
