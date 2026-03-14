@@ -151,6 +151,18 @@
     @apply bg-blue-900/25 border-blue-600;
   }
 
+  .form-admin-toolbar-item {
+    @apply mb-0 inline-block flex-none;
+  }
+
+  .form-admin-toolbar-search {
+    @apply w-auto min-w-[16rem] max-w-full flex-none;
+  }
+
+  .form-admin-toolbar-control {
+    @apply w-auto min-w-[160px] max-w-full flex-none;
+  }
+
   .form-admin-textarea {
     @apply w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm text-gray-900 resize-y min-h-[80px] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors;
   }

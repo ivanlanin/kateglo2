@@ -122,6 +122,7 @@ export function SearchableSelectField({
   hideLabel = false,
   wrapperClassName = '',
   buttonClassName = '',
+  fullWidth = true,
 }) {
   const wrapperRef = useRef(null);
   const searchInputRef = useRef(null);
@@ -204,7 +205,7 @@ export function SearchableSelectField({
         aria-expanded={tampilDropdown}
         onClick={handleToggleDropdown}
         disabled={disabled}
-        className={`form-admin-select flex w-full items-center justify-between gap-2 text-left ${buttonClassName}`.trim()}
+        className={`form-admin-select flex ${fullWidth ? 'w-full' : ''} items-center justify-between gap-2 text-left ${buttonClassName}`.trim()}
       >
         <span className={selectedOption ? 'text-inherit' : 'text-gray-400 dark:text-gray-500'}>
           {selectedOption?.label || placeholder}

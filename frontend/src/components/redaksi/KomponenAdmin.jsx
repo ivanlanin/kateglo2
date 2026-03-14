@@ -187,12 +187,12 @@ export function BarisFilterCariAdmin({
         value={nilai}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="flex-1 min-w-[220px] px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-dark-bg-input dark:text-white focus:outline-none focus:border-blue-500"
+        className="form-admin-input form-admin-toolbar-search px-4"
       />
 
       {typeof daftarFilter.map === 'function' && daftarFilter.map((item) => {
         const label = item.ariaLabel || item.key;
-        const commonClassName = `w-auto min-w-[160px] ${isActiveFilterValue(item) ? 'form-admin-filter-active' : ''}`;
+        const commonClassName = `form-admin-toolbar-control ${isActiveFilterValue(item) ? 'form-admin-filter-active' : ''}`;
 
         if (item.searchable) {
           return (
@@ -206,8 +206,9 @@ export function BarisFilterCariAdmin({
               placeholder={item.placeholder || label}
               searchPlaceholder={item.searchPlaceholder || `Cari ${label.toLowerCase()}…`}
               hideLabel
-              wrapperClassName="mb-0"
+              wrapperClassName="form-admin-toolbar-item"
               buttonClassName={commonClassName}
+              fullWidth={false}
             />
           );
         }
