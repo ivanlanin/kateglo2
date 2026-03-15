@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import PencarianHitamAdmin, { formatTanggalSingkat } from '../../../src/pages/redaksi/PencarianHitamAdmin';
@@ -202,5 +202,71 @@ describe('PencarianHitamAdmin', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Batal' }));
 
     expect(screen.queryByLabelText('Kata*')).not.toBeInTheDocument();
+  });
+
+  it('membersihkan timeout sukses saat unmount dan memakai fallback error hapus default', async () => {
+    vi.useFakeTimers();
+    mockUseDaftarPencarianHitamAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        total: 1,
+        pageInfo: {},
+        data: [{ id: 2, kata: 'bising', aktif: 1, catatan: '', updated_at: '2026-03-01 10:00:00' }],
+      },
+    });
+    mutateSimpanHitam.mockImplementationOnce((_data, opts) => opts.onSuccess?.());
+
+    const view = render(
+      <MemoryRouter>
+        <PencarianHitamAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: '+ Tambah Kata' }));
+    fireEvent.change(screen.getByLabelText('Kata*'), { target: { value: 'bising' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Simpan' }));
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(600);
+    });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
+    view.unmount();
+    await act(async () => {
+      await vi.runAllTimersAsync();
+    });
+
+    render(
+      <MemoryRouter>
+        <PencarianHitamAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('bising'));
+    mutateHapusHitam.mockImplementationOnce((_id, opts) => opts.onError?.());
+    fireEvent.click(screen.getByRole('button', { name: 'Hapus' }));
+    expect(screen.getByText('Gagal menghapus kata daftar hitam')).toBeInTheDocument();
+
+    vi.useRealTimers();
+  });
+
+  it('membersihkan timeout simpan saat komponen di-unmount sebelum timer selesai', () => {
+    vi.useFakeTimers();
+    mutateSimpanHitam.mockImplementationOnce((_data, opts) => opts.onSuccess?.());
+
+    const view = render(
+      <MemoryRouter>
+        <PencarianHitamAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: '+ Tambah Kata' }));
+    fireEvent.change(screen.getByLabelText('Kata*'), { target: { value: 'uji' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Simpan' }));
+
+    view.unmount();
+    expect(() => vi.runAllTimers()).not.toThrow();
+    vi.useRealTimers();
   });
 });

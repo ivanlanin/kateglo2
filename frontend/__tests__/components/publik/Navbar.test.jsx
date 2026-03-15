@@ -47,8 +47,8 @@ vi.mock('react-router-dom', () => ({
   useLocation: () => mockLocation,
 }));
 
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import NavbarPublik from '../../../src/components/publik/NavbarPublik';
+import { act, render, screen, fireEvent, waitFor } from '@testing-library/react';
+import NavbarPublik, { __private } from '../../../src/components/publik/NavbarPublik';
 
 function aturUkuranNavbar({ lebarNavbar = 1200, lebarLogo = 96, lebarMenu = 520 } = {}) {
   vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockImplementation(function clientWidthGetter() {
@@ -100,6 +100,47 @@ describe('NavbarPublik', () => {
   it('menampilkan logo Kateglo', () => {
     render(<NavbarPublik />);
     expect(screen.getByText('Kateglo')).toBeInTheDocument();
+  });
+
+  it('helper navbar menghitung kebutuhan hamburger dan kelas beranda secara eksplisit', () => {
+    expect(__private.hitungKebutuhanHamburger({
+      lebarNavbar: 1200,
+      lebarLogo: 100,
+      lebarMenu: 400,
+      tampilkanKotakCari: true,
+      elemenBarisUtama: [{ offsetTop: undefined }, { offsetTop: 0 }],
+    })).toBe(false);
+
+    expect(__private.hitungKebutuhanHamburger({
+      lebarNavbar: 500,
+      lebarLogo: 100,
+      lebarMenu: 400,
+      tampilkanKotakCari: true,
+      elemenBarisUtama: [{ offsetTop: 0 }, { offsetTop: 20 }],
+    })).toBe(true);
+
+    expect(__private.buatKelasNavbar({ adalahBeranda: true, gunakanHamburger: true })).toContain('navbar-inner-beranda-collapsed');
+    expect(__private.buatKelasNavbar({ adalahBeranda: false, gunakanHamburger: false })).toContain('navbar-inner-compact');
+  });
+
+  it('tetap aman saat lebar menu tidak terbaca dan memakai fallback nol', () => {
+    vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockImplementation(function clientWidthGetter() {
+      return this.classList?.contains('navbar-inner') ? 1200 : 0;
+    });
+    vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockImplementation(function offsetWidthGetter() {
+      return this.classList?.contains('navbar-logo') ? 96 : 0;
+    });
+    vi.spyOn(HTMLElement.prototype, 'scrollWidth', 'get').mockImplementation(function scrollWidthGetter() {
+      if (this.classList?.contains('navbar-menu-measure')) {
+        return undefined;
+      }
+
+      return 0;
+    });
+
+    render(<NavbarPublik />);
+
+    expect(screen.queryByLabelText('Toggle menu')).not.toBeInTheDocument();
   });
 
   it('di beranda menyembunyikan logo dan kotak cari navbar', () => {
@@ -309,5 +350,112 @@ describe('NavbarPublik', () => {
     return waitFor(() => {
       expect(container.querySelector('.navbar-mobile-panel')).not.toBeInTheDocument();
     });
+  });
+
+  it('tetap stabil saat ResizeObserver tidak tersedia dan lebar navbar nol', () => {
+    const resizeObserverSebelumnya = global.ResizeObserver;
+    delete global.ResizeObserver;
+    aturUkuranNavbar({ lebarNavbar: 0, lebarMenu: 620 });
+
+    render(<NavbarPublik />);
+
+    expect(screen.queryByLabelText('Toggle menu')).not.toBeInTheDocument();
+    global.ResizeObserver = resizeObserverSebelumnya;
+  });
+
+  it('menutup drawer saat layout berubah kembali ke desktop dan memulihkan overflow body', async () => {
+    aturUkuranNavbar({ lebarNavbar: 720, lebarMenu: 620 });
+
+    const { container } = render(<NavbarPublik />);
+    fireEvent.click(screen.getByLabelText('Toggle menu'));
+
+    expect(document.body.style.overflow).toBe('hidden');
+
+    aturUkuranNavbar({ lebarNavbar: 1440, lebarMenu: 320 });
+    fireEvent(window, new Event('resize'));
+
+    await waitFor(() => {
+      expect(container.querySelector('.navbar-mobile-panel')).not.toBeInTheDocument();
+    });
+
+    expect(document.body.style.overflow).toBe('');
+  });
+
+  it('membatalkan frame pengukuran sebelumnya dan mengamati elemen saat observer tersedia', () => {
+    const callbacks = [];
+    const observerCallbacks = [];
+    const observe = vi.fn();
+    const disconnect = vi.fn();
+
+    global.ResizeObserver = class ResizeObserver {
+      constructor(callback) {
+        this.callback = callback;
+        observerCallbacks.push(callback);
+      }
+
+      observe(element) {
+        observe(element);
+      }
+
+      disconnect() {
+        disconnect();
+      }
+    };
+
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+      callbacks.push(callback);
+      return callbacks.length;
+    });
+    const cancelSpy = vi.spyOn(window, 'cancelAnimationFrame').mockImplementation(() => {});
+
+    render(<NavbarPublik />);
+    fireEvent(window, new Event('resize'));
+
+    expect(cancelSpy).toHaveBeenCalledWith(1);
+    expect(observe).toHaveBeenCalled();
+    expect(disconnect).toHaveBeenCalledTimes(0);
+
+    callbacks.splice(0).forEach((callback) => callback(0));
+
+    aturUkuranNavbar({ lebarNavbar: 720, lebarMenu: 620 });
+    act(() => {
+      observerCallbacks.forEach((callback) => callback());
+      callbacks.splice(0).forEach((callback) => callback(0));
+    });
+
+    expect(screen.getByLabelText('Toggle menu')).toBeInTheDocument();
+  });
+
+  it('membersihkan frame drawer yang tertunda dan timer close saat unmount', async () => {
+    const callbacks = [];
+    aturUkuranNavbar({ lebarNavbar: 720, lebarMenu: 620 });
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+      callbacks.push(callback);
+      return callbacks.length;
+    });
+    const cancelSpy = vi.spyOn(window, 'cancelAnimationFrame').mockImplementation(() => {});
+    const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout');
+
+    const view = render(<NavbarPublik />);
+    act(() => {
+      callbacks.splice(0).forEach((callback) => callback(0));
+    });
+    fireEvent.click(screen.getByLabelText('Toggle menu'));
+    view.unmount();
+
+    expect(cancelSpy).toHaveBeenCalled();
+
+    const mounted = render(<NavbarPublik />);
+    act(() => {
+      callbacks.splice(0).forEach((callback) => callback(0));
+    });
+    fireEvent.click(screen.getByLabelText('Toggle menu'));
+    act(() => {
+      callbacks.splice(0).forEach((callback) => callback(0));
+    });
+    fireEvent.click(screen.getByLabelText('Toggle menu'));
+    mounted.unmount();
+
+    expect(clearTimeoutSpy).toHaveBeenCalled();
   });
 });

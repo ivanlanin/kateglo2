@@ -29,7 +29,7 @@ function hitungFrekuensiHuruf(text = '') {
     .map(([char, count]) => ({
       char,
       count,
-      percentage: totalChars ? Number(((count / totalChars) * 100).toFixed(2)) : 0,
+      percentage: Number(((count / totalChars) * 100).toFixed(2)),
     }));
 
   return {
@@ -52,23 +52,14 @@ function PenghitungHuruf() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return undefined;
-
-    if (chartRef.current) {
-      chartRef.current.destroy();
-      chartRef.current = null;
-    }
-
-    if (!adaHasil || !hasil.items.length) {
-      return undefined;
-    }
+    if (!canvas || !adaHasil) return undefined;
 
     const context = canvas.getContext('2d');
     if (!context) {
       return undefined;
     }
 
-    chartRef.current = new Chart(context, {
+    const chart = new Chart(context, {
       type: 'bar',
       data: {
         labels: hasil.items.map((entry) => entry.char),
@@ -119,9 +110,11 @@ function PenghitungHuruf() {
       plugins: [ChartDataLabels],
     });
 
+    chartRef.current = chart;
+
     return () => {
-      if (chartRef.current) {
-        chartRef.current.destroy();
+      if (chartRef.current === chart) {
+        chart.destroy();
         chartRef.current = null;
       }
     };
@@ -306,5 +299,9 @@ function PenghitungHuruf() {
     </HalamanPublik>
   );
 }
+
+export const __private = {
+  hitungFrekuensiHuruf,
+};
 
 export default PenghitungHuruf;

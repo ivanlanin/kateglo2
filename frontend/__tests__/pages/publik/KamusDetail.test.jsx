@@ -86,6 +86,8 @@ describe('KamusDetail', () => {
     expect(__private.formatLabelPenyingkatanBadge(' AKRONIM ')).toBe('Akronim');
     expect(__private.formatLabelPenyingkatanBadge(' singkatan ')).toBe('Singkatan');
     expect(__private.formatLabelPenyingkatanBadge()).toBe('');
+    expect(__private.resolveNamaPenyingkatan('akr', { akr: 'Akronim' })).toBe('Akronim');
+    expect(__private.resolveNamaPenyingkatan('kp', {})).toBe('Kependekan');
   });
 
   it('helper ringkasLabelChip mempertahankan potongan tanpa mundur ke spasi sebelumnya', () => {
@@ -115,6 +117,18 @@ describe('KamusDetail', () => {
     expect(screen.queryByRole('link', { name: 'dua kata' })).toBeNull();
     expect(screen.getByText('dua kata')).toBeInTheDocument();
     expect(container.querySelector('em')).not.toBeNull();
+  });
+
+  it('renderer makna menambahkan separator untuk item tautan setelah item pertama', () => {
+    const { container } = render(
+      <__private.RenderMakna
+        teks="biasa; kata (cak)"
+        tautanValidSet={new Set(['kata'])}
+      />
+    );
+
+    expect(container.textContent).toContain('biasa; kata (cak)');
+    expect(screen.getByRole('link', { name: 'kata' })).toHaveAttribute('href', '/kamus/detail/kata');
   });
 
   it('query detail kamus memakai placeholderData dari hasil sebelumnya', () => {
@@ -348,6 +362,45 @@ describe('KamusDetail', () => {
     expect(screen.queryByRole('link', { name: 'data' })).toBeNull();
     expect(screen.getByText('data')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'term' })).toHaveAttribute('href', '/glosarium/detail/term');
+  });
+
+  it('cuplikan glosarium tanpa padanan asing tetap merender istilah Indonesia', () => {
+    mockUseQuery.mockImplementation((options) => {
+      if (options?.queryKey?.[0] === 'kamus-kategori') {
+        return { isLoading: false, isError: false, data: {} };
+      }
+
+      if (options?.queryKey?.[0] === 'kamus-komentar') {
+        return {
+          isLoading: false,
+          isError: false,
+          data: { data: { loggedIn: false, activeCount: 0, komentar: [] } },
+          refetch: vi.fn(),
+        };
+      }
+
+      return {
+        isLoading: false,
+        isError: false,
+        isFetching: false,
+        data: {
+          entri: 'kata',
+          makna: [],
+          subentri: {},
+          tesaurus: { sinonim: [], antonim: [] },
+          tautan_indonesia_valid: ['istilah'],
+          glosarium: [{ indonesia: 'istilah; data (ark)', asing: '' }],
+          glosarium_page: { total: 1, hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+        },
+      };
+    });
+
+    render(<KamusDetail />);
+
+    expect(screen.getByRole('link', { name: 'istilah' })).toHaveAttribute('href', '/kamus/detail/istilah');
+    expect(screen.queryByRole('link', { name: 'data' })).toBeNull();
+    expect(screen.getByText('data')).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'term' })).not.toBeInTheDocument();
   });
 
   it('menampilkan toggle +x lainnya dan memungkinkan ringkas via klik badge jumlah', () => {

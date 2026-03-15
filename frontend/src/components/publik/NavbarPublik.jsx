@@ -11,6 +11,29 @@ const minimumSearchWidth = 240;
 const layoutGapAllowance = 64;
 const durasiAnimasiDrawer = 260;
 
+function hitungKebutuhanHamburger({
+  lebarNavbar = 0,
+  lebarLogo = 0,
+  lebarMenu = 0,
+  tampilkanKotakCari = false,
+  elemenBarisUtama = [],
+}) {
+  const ruangPencarian = tampilkanKotakCari ? minimumSearchWidth : 0;
+  const topDasar = elemenBarisUtama[0]?.offsetTop ?? 0;
+  const adaWrap = elemenBarisUtama.some((elemen) => elemen.offsetTop > topDasar);
+
+  return adaWrap || (lebarLogo + lebarMenu + ruangPencarian + layoutGapAllowance) > lebarNavbar;
+}
+
+function buatKelasNavbar({ adalahBeranda, gunakanHamburger }) {
+  return [
+    'navbar-inner',
+    adalahBeranda && !gunakanHamburger ? 'navbar-inner-beranda' : '',
+    adalahBeranda && gunakanHamburger ? 'navbar-inner-beranda-collapsed' : '',
+    gunakanHamburger ? 'navbar-inner-collapsed' : 'navbar-inner-compact',
+  ].filter(Boolean).join(' ');
+}
+
 function NavbarPublik() {
   const [menuTerbuka, setMenuTerbuka] = useState(false);
   const [gunakanHamburger, setGunakanHamburger] = useState(false);
@@ -28,10 +51,6 @@ function NavbarPublik() {
   const tampilkanKotakCari = !adalahBeranda && !sedangMainSusunKata;
 
   useEffect(() => {
-    if (typeof window === 'undefined') {
-      return undefined;
-    }
-
     let frameId = 0;
 
     const ukurNavbar = () => {
@@ -40,21 +59,20 @@ function NavbarPublik() {
       }
 
       frameId = window.requestAnimationFrame(() => {
-        const lebarNavbar = navbarInnerRef.current?.clientWidth ?? 0;
+        const lebarNavbar = Number(navbarInnerRef.current?.clientWidth) || 0;
 
         if (!lebarNavbar) {
           return;
         }
 
-        const lebarLogo = logoRef.current?.offsetWidth ?? 0;
-        const lebarMenu = menuMeasureRef.current?.scrollWidth ?? 0;
-        const ruangPencarian = tampilkanKotakCari ? minimumSearchWidth : 0;
-
         const elemenBarisUtama = [logoRef.current, searchRef.current, desktopMenuRef.current].filter(Boolean);
-        const topDasar = elemenBarisUtama[0]?.offsetTop ?? 0;
-        const adaWrap = elemenBarisUtama.some((elemen) => elemen.offsetTop > topDasar);
-        const butuhHamburger = adaWrap
-          || (lebarLogo + lebarMenu + ruangPencarian + layoutGapAllowance) > lebarNavbar;
+        const butuhHamburger = hitungKebutuhanHamburger({
+          lebarNavbar,
+          lebarLogo: Number(logoRef.current?.offsetWidth) || 0,
+          lebarMenu: Number(menuMeasureRef.current?.scrollWidth) || 0,
+          tampilkanKotakCari,
+          elemenBarisUtama,
+        });
 
         setGunakanHamburger((sebelumnya) => (sebelumnya === butuhHamburger ? sebelumnya : butuhHamburger));
       });
@@ -91,10 +109,8 @@ function NavbarPublik() {
   }, [gunakanHamburger, menuTerbuka]);
 
   useEffect(() => {
-    if (timerDrawerRef.current) {
-      clearTimeout(timerDrawerRef.current);
-      timerDrawerRef.current = null;
-    }
+    clearTimeout(timerDrawerRef.current);
+    timerDrawerRef.current = null;
 
     if (gunakanHamburger && menuTerbuka) {
       setRenderDrawer(true);
@@ -108,9 +124,7 @@ function NavbarPublik() {
 
       return () => {
         window.cancelAnimationFrame(frameId);
-        if (frameIdKedua) {
-          window.cancelAnimationFrame(frameIdKedua);
-        }
+        window.cancelAnimationFrame(frameIdKedua);
       };
     }
 
@@ -123,10 +137,8 @@ function NavbarPublik() {
     }
 
     return () => {
-      if (timerDrawerRef.current) {
-        clearTimeout(timerDrawerRef.current);
-        timerDrawerRef.current = null;
-      }
+      clearTimeout(timerDrawerRef.current);
+      timerDrawerRef.current = null;
     };
   }, [gunakanHamburger, menuTerbuka, renderDrawer]);
 
@@ -153,9 +165,7 @@ function NavbarPublik() {
   }, [gunakanHamburger, renderDrawer]);
 
   useEffect(() => () => {
-    if (timerDrawerRef.current) {
-      clearTimeout(timerDrawerRef.current);
-    }
+    clearTimeout(timerDrawerRef.current);
   }, []);
 
   return (
@@ -163,12 +173,7 @@ function NavbarPublik() {
       <div className="navbar-container">
         <div
           ref={navbarInnerRef}
-          className={[
-            'navbar-inner',
-            adalahBeranda && !gunakanHamburger ? 'navbar-inner-beranda' : '',
-            adalahBeranda && gunakanHamburger ? 'navbar-inner-beranda-collapsed' : '',
-            gunakanHamburger ? 'navbar-inner-collapsed' : 'navbar-inner-compact',
-          ].filter(Boolean).join(' ')}
+          className={buatKelasNavbar({ adalahBeranda, gunakanHamburger })}
         >
           {/* Hamburger (mobile) */}
           {gunakanHamburger && (
@@ -269,5 +274,10 @@ function NavbarPublik() {
     </nav>
   );
 }
+
+export const __private = {
+  hitungKebutuhanHamburger,
+  buatKelasNavbar,
+};
 
 export default NavbarPublik;

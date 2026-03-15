@@ -18,28 +18,44 @@ const formatDesimal = new Intl.NumberFormat('id-ID', {
 });
 
 function escapeSingleQuotes(text = '') {
-  return String(text || '').replace(/'/g, '\\u2019');
+  return String(text).replace(/'/g, '\u2019');
 }
 
 function bersihkanTeks(text = '') {
-  return String(text || '')
+  return String(text)
     .replace(/[()[\]{}]/g, '')
     .replace(/–/g, ' ')
     .replace(/[^a-zA-Z0-9\s'.!?%:-]/g, '');
 }
 
 function pecahKalimat(text = '') {
-  return String(text || '')
+  return String(text)
     .split(/[.!?]+\s*/)
     .map((sentence) => sentence.trim())
     .filter(Boolean);
 }
 
 function pecahKata(text = '') {
-  return String(text || '')
+  return String(text)
     .split(/\s+/)
     .map((word) => word.trim())
     .filter(Boolean);
+}
+
+function bagiAman(pembilang, penyebut) {
+  return penyebut ? pembilang / penyebut : 0;
+}
+
+function getThresholdClass(value) {
+  return value > THRESHOLD ? 'alat-stat-value-danger' : 'alat-stat-value-safe';
+}
+
+function getParagraphSummaryClass(isLong) {
+  return `alat-paragraph-summary ${isLong ? 'alat-paragraph-summary-danger' : 'alat-paragraph-summary-safe'}`;
+}
+
+function getSentenceClass(sentence) {
+  return `alat-sentence-item ${sentence.isLong ? 'alat-sentence-item-danger' : 'alat-sentence-item-safe'}${sentence.canToggle ? ' alat-sentence-item-toggle' : ''}`;
 }
 
 function bangunFrekuensiKata(sentences = []) {
@@ -112,9 +128,9 @@ function analisisTeks(text = '') {
   const wordFrequency = bangunFrekuensiKata(sentences);
   const frequency = kelompokkanFrekuensi(wordFrequency);
 
-  const averageSentencesPerParagraphRaw = paragraphs.length ? sentences.length / paragraphs.length : 0;
-  const averageWordsPerSentenceRaw = sentences.length ? words.length / sentences.length : 0;
-  const averageLettersPerWordRaw = words.length ? letters / words.length : 0;
+  const averageSentencesPerParagraphRaw = bagiAman(sentences.length, paragraphs.length);
+  const averageWordsPerSentenceRaw = bagiAman(words.length, sentences.length);
+  const averageLettersPerWordRaw = bagiAman(letters, words.length);
 
   const paragraphDetails = paragraphs.map((paragraph, paragraphIndex) => {
     const paragraphSentences = pecahKalimat(paragraph);
@@ -338,13 +354,13 @@ function PenganalisisTeks() {
                   </article>
                   <article className="alat-stat-card">
                     <span className="alat-stat-label">Kalimat/Paragraf</span>
-                    <strong className={`alat-stat-value ${hasil?.averageSentencesPerParagraphRaw > THRESHOLD ? 'alat-stat-value-danger' : 'alat-stat-value-safe'}`}>
+                    <strong className={`alat-stat-value ${getThresholdClass(hasil?.averageSentencesPerParagraphRaw || 0)}`}>
                       {hasil?.averageSentencesPerParagraph || '0,00'}
                     </strong>
                   </article>
                   <article className="alat-stat-card">
                     <span className="alat-stat-label">Kata/Kalimat</span>
-                    <strong className={`alat-stat-value ${hasil?.averageWordsPerSentenceRaw > THRESHOLD ? 'alat-stat-value-danger' : 'alat-stat-value-safe'}`}>
+                    <strong className={`alat-stat-value ${getThresholdClass(hasil?.averageWordsPerSentenceRaw || 0)}`}>
                       {hasil?.averageWordsPerSentence || '0,00'}
                     </strong>
                   </article>
@@ -367,7 +383,7 @@ function PenganalisisTeks() {
                   <ol className="alat-paragraph-list">
                     {hasil.paragraphDetails.map((detail, index) => (
                       <li key={detail.id} className="alat-paragraph-item">
-                        <div className={`alat-paragraph-summary ${detail.isLong ? 'alat-paragraph-summary-danger' : 'alat-paragraph-summary-safe'}`}>
+                        <div className={getParagraphSummaryClass(detail.isLong)}>
                           <span className="alat-paragraph-badge">Paragraf {index + 1}</span>
                           <span>
                             {formatAngka.format(detail.words)} kata/{formatAngka.format(detail.sentences)} kalimat ({formatDesimal.format(detail.avgWordsPerSentenceRaw)}): {detail.preview}
@@ -377,7 +393,7 @@ function PenganalisisTeks() {
                           {detail.sentenceList.map((sentence) => {
                             const isExpanded = Boolean(kalimatTerbuka[sentence.id]);
                             const content = isExpanded ? sentence.fullSentence : sentence.preview;
-                            const className = `alat-sentence-item ${sentence.isLong ? 'alat-sentence-item-danger' : 'alat-sentence-item-safe'}${sentence.canToggle ? ' alat-sentence-item-toggle' : ''}`;
+                            const className = getSentenceClass(sentence);
 
                             if (sentence.canToggle) {
                               return (
@@ -468,5 +484,18 @@ function PenganalisisTeks() {
     </HalamanPublik>
   );
 }
+
+export const __private = {
+  analisisTeks,
+  kelompokkanFrekuensi,
+  escapeSingleQuotes,
+  bersihkanTeks,
+  pecahKalimat,
+  pecahKata,
+  bagiAman,
+  getThresholdClass,
+  getParagraphSummaryClass,
+  getSentenceClass,
+};
 
 export default PenganalisisTeks;

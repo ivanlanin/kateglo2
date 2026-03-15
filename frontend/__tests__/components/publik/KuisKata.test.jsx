@@ -5,10 +5,34 @@ import KuisKata, { gabungRiwayat, __private } from '../../../src/components/publ
 const mockRemoveQueries = vi.fn();
 const mockUseQuery = vi.fn();
 const mockMutate = vi.fn();
+const mockAuthState = { isAuthenticated: false };
+const mockMutationMode = { current: 'idle' };
 
 vi.mock('@tanstack/react-query', () => ({
   useQuery: (...args) => mockUseQuery(...args),
-  useMutation: () => ({ mutate: mockMutate, isPending: false }),
+  useMutation: (config) => ({
+    mutate: (payload) => {
+      mockMutate(payload);
+      config.mutationFn?.(payload);
+
+      if (mockMutationMode.current === 'saving') {
+        config.onMutate?.(payload);
+        return;
+      }
+
+      if (mockMutationMode.current === 'success') {
+        config.onMutate?.(payload);
+        config.onSuccess?.({ ok: true }, payload, undefined);
+        return;
+      }
+
+      if (mockMutationMode.current === 'error') {
+        config.onMutate?.(payload);
+        config.onError?.(new Error('gagal simpan'), payload, undefined);
+      }
+    },
+    isPending: mockMutationMode.current === 'pending',
+  }),
   useQueryClient: () => ({ removeQueries: mockRemoveQueries }),
 }));
 
@@ -18,7 +42,7 @@ vi.mock('../../../src/api/apiPublik', () => ({
 }));
 
 vi.mock('../../../src/context/authContext', () => ({
-  useAuthOptional: () => ({ isAuthenticated: false }),
+  useAuthOptional: () => mockAuthState,
 }));
 
 vi.mock('react-router-dom', () => ({
@@ -49,6 +73,8 @@ describe('KuisKata', () => {
     mockRemoveQueries.mockReset();
     mockUseQuery.mockReset();
     mockMutate.mockReset();
+    mockAuthState.isAuthenticated = false;
+    mockMutationMode.current = 'idle';
     mockUseQuery.mockImplementation((options) => {
       if (options?.queryFn) {
         options.queryFn();
@@ -263,5 +289,50 @@ describe('KuisKata', () => {
     });
 
     expect(container.querySelector('.gim-soal')).toHaveTextContent('Apa antonim beta?');
+  });
+
+  it('menampilkan catatan ringkasan untuk tamu, pending, saving, success, dan error', async () => {
+    const mainkanSampaiRingkasan = async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'arti alpha' }));
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(1900);
+      });
+      fireEvent.click(screen.getByRole('button', { name: 'lawan beta' }));
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(1900);
+      });
+    };
+
+    const guestView = render(<KuisKata />);
+    await mainkanSampaiRingkasan();
+    expect(screen.getByText('Masuk untuk ikut ke klasemen harian.')).toBeInTheDocument();
+    guestView.unmount();
+
+    mockAuthState.isAuthenticated = true;
+    mockMutationMode.current = 'pending';
+    const pendingView = render(<KuisKata />);
+    await mainkanSampaiRingkasan();
+    expect(screen.getByText('Skor harian sedang disiapkan.')).toBeInTheDocument();
+    pendingView.unmount();
+
+    mockAuthState.isAuthenticated = true;
+    mockMutationMode.current = 'saving';
+    const savingView = render(<KuisKata />);
+    await mainkanSampaiRingkasan();
+    expect(screen.getByText('Menyimpan skor harian…')).toBeInTheDocument();
+    savingView.unmount();
+
+    mockAuthState.isAuthenticated = true;
+    mockMutationMode.current = 'success';
+    const successView = render(<KuisKata />);
+    await mainkanSampaiRingkasan();
+    expect(screen.getByText('Skor harian tersimpan.')).toBeInTheDocument();
+    successView.unmount();
+
+    mockAuthState.isAuthenticated = true;
+    mockMutationMode.current = 'error';
+    render(<KuisKata />);
+    await mainkanSampaiRingkasan();
+    expect(screen.getByText('Skor harian belum tersimpan.')).toBeInTheDocument();
   });
 });

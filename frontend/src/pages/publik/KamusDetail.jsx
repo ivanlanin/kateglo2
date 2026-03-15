@@ -168,6 +168,7 @@ function ringkasLabelChip(text = '', maxLength = SUBENTRI_PERIBAHASA_LABEL_LIMIT
 
 export const __private = {
   formatLabelPenyingkatanBadge,
+  resolveNamaPenyingkatan,
   ekstrakKandidatTautanMakna,
   normalisasiKunciTautanMakna,
   RenderMakna,

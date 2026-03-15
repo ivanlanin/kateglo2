@@ -83,13 +83,14 @@ function BadgeStatusKandidat({ status }) {
 
 function formatTanggal(dateStr) {
   if (!dateStr) return '-';
-  try {
-    return new Date(dateStr).toLocaleDateString('id-ID', {
-      year: 'numeric', month: 'short', day: 'numeric',
-    });
-  } catch {
+  const date = new Date(dateStr);
+  if (Number.isNaN(date.getTime())) {
     return dateStr;
   }
+
+  return date.toLocaleDateString('id-ID', {
+    year: 'numeric', month: 'short', day: 'numeric',
+  });
 }
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
@@ -188,7 +189,6 @@ function TombolAksiStatus({ kandidat, onUbahStatus, isLoading }) {
     ],
     disetujui: [],
   };
-
   const tombol = tombolKonfig[status] || [];
   if (!tombol.length) return null;
 
@@ -208,6 +208,34 @@ function TombolAksiStatus({ kandidat, onUbahStatus, isLoading }) {
     </div>
   );
 }
+
+function shouldBukaDetailPanel({ sedangMenutupDariPath, idDariPath, isLoading, isError, detailId, idEditTerbuka }) {
+  return !sedangMenutupDariPath
+    && Boolean(idDariPath)
+    && !isLoading
+    && !isError
+    && Boolean(detailId)
+    && idEditTerbuka !== detailId;
+}
+
+function shouldSinkronkanPanel({ detailData, panelBuka, modeTambah, idDariPath, panelDataId }) {
+  return Boolean(detailData)
+    && panelBuka
+    && !modeTambah
+    && Boolean(idDariPath)
+    && panelDataId !== detailData.id;
+}
+
+export const __private = {
+  BadgeStatusKandidat,
+  formatTanggal,
+  BarStatistik,
+  DaftarAtestasi,
+  DaftarRiwayat,
+  TombolAksiStatus,
+  shouldBukaDetailPanel,
+  shouldSinkronkanPanel,
+};
 
 // ─── Main Page ───────────────────────────────────────────────────────────────
 
@@ -261,7 +289,6 @@ export default function KandidatKataAdmin() {
     status: filterStatus,
     jenis: filterJenis,
   });
-
   const resp = daftarQuery.data;
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
@@ -337,7 +364,6 @@ export default function KandidatKataAdmin() {
   }
 
   async function handleHapus() {
-    if (!panel.data?.id) return;
     if (!window.confirm('Hapus kandidat ini? Semua atestasi juga akan terhapus.')) return;
     try {
       await hapusMut.mutateAsync(panel.data.id);
@@ -355,11 +381,16 @@ export default function KandidatKataAdmin() {
   }, [idDariPath, navigate, paramId]);
 
   useEffect(() => {
-    if (sedangMenutupDariPath.current) return;
-    if (!idDariPath || detailQuery.isLoading || detailQuery.isError) return;
     const detail = detailQuery.data?.data;
-    if (!detail?.id) return;
-    if (idEditTerbuka.current === detail.id) return;
+    if (!shouldBukaDetailPanel({
+      sedangMenutupDariPath: sedangMenutupDariPath.current,
+      idDariPath,
+      isLoading: detailQuery.isLoading,
+      isError: detailQuery.isError,
+      detailId: detail?.id,
+      idEditTerbuka: idEditTerbuka.current,
+    })) return;
+
     panel.bukaUntukSunting(detail);
     idEditTerbuka.current = detail.id;
     setTab('atestasi');
@@ -378,9 +409,14 @@ export default function KandidatKataAdmin() {
   }, [detailQuery.isError, detailQuery.isLoading, idDariPath, navigate]);
 
   useEffect(() => {
-    if (!detailQuery.data?.data || !panel.buka || panel.modeTambah) return;
-    if (!idDariPath) return;
-    if (panel.data?.id === detailQuery.data.data.id) return;
+    if (!shouldSinkronkanPanel({
+      detailData: detailQuery.data?.data,
+      panelBuka: panel.buka,
+      modeTambah: panel.modeTambah,
+      idDariPath,
+      panelDataId: panel.data?.id,
+    })) return;
+
     panel.setData(detailQuery.data.data);
   }, [detailQuery.data, idDariPath, panel]);
 

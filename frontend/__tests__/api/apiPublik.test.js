@@ -27,6 +27,8 @@ import {
   ambilContohRima,
   ambilPencarianPopuler,
   ambilRondeKuisKata,
+  submitRekapKuisKata,
+  ambilKlasemenKuisKata,
   ambilPuzzleSusunKata,
   ambilHarianSusunKata,
   ambilBebasSusunKata,
@@ -251,6 +253,55 @@ describe('apiPublik', () => {
     });
     expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/gim/kuis-kata/ronde', {
       params: { riwayat: JSON.stringify([{ mode: 'kamus', kunciSoal: 'kata' }]) },
+    });
+  });
+
+  it('submitRekapKuisKata dan ambilKlasemenKuisKata menormalkan payload kuis kata', async () => {
+    klien.post.mockResolvedValue({ data: { ok: true } });
+    klien.get.mockResolvedValue({ data: { data: [] } });
+
+    await submitRekapKuisKata({
+      jumlahBenar: 999,
+      jumlahPertanyaan: -2,
+      durasiDetik: '999999',
+    });
+    expect(klien.post).toHaveBeenCalledWith('/api/publik/gim/kuis-kata/submit', {
+      jumlahBenar: 100,
+      jumlahPertanyaan: 0,
+      durasiDetik: 86400,
+    });
+
+    await submitRekapKuisKata();
+    expect(klien.post).toHaveBeenCalledWith('/api/publik/gim/kuis-kata/submit', {
+      jumlahBenar: 0,
+      jumlahPertanyaan: 5,
+      durasiDetik: 0,
+    });
+
+    await submitRekapKuisKata({
+      jumlahBenar: 'abc',
+      jumlahPertanyaan: 'bukan-angka',
+      durasiDetik: -4,
+    });
+    expect(klien.post).toHaveBeenCalledWith('/api/publik/gim/kuis-kata/submit', {
+      jumlahBenar: 0,
+      jumlahPertanyaan: 0,
+      durasiDetik: 0,
+    });
+
+    await ambilKlasemenKuisKata({ limit: 70 });
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/gim/kuis-kata/klasemen', {
+      params: { limit: 50 },
+    });
+
+    await ambilKlasemenKuisKata({ limit: 0 });
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/gim/kuis-kata/klasemen', {
+      params: { limit: 10 },
+    });
+
+    await ambilKlasemenKuisKata({ limit: '4' });
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/gim/kuis-kata/klasemen', {
+      params: { limit: 4 },
     });
   });
 

@@ -106,9 +106,7 @@ export default defineConfig({
       include: ['src/**/*.{js,jsx}'],
       exclude: [
         'node_modules/',
-        '**/*.test.{js,jsx}',
-        '**/main.jsx',
-        'src/pages/KebijakanPrivasi.jsx'
+        '**/*.test.{js,jsx}'
       ],
       thresholds: {
         statements: 80,

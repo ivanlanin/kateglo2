@@ -219,6 +219,10 @@ describe('entry-server', () => {
     expect(gimSusunKataBebas.title).toBe('Susun Kata Bebas — Kateglo');
     expect(gimSusunKataBebas.description).toContain('mode bebas');
 
+    const gimSusunKataTakDikenal = __private.buildMetaForPath('/gim/susun-kata/eksperimen', site);
+    expect(gimSusunKataTakDikenal.title).toBe('Susun Kata Harian — Kateglo');
+    expect(gimSusunKataTakDikenal.canonicalUrl).toBe('https://kateglo.org/gim/susun-kata/harian');
+
     const kuisKata = __private.buildMetaForPath('/gim/kuis-kata', site);
     expect(kuisKata.title).toBe('Kuis Kata — Kateglo');
     expect(kuisKata.description).toContain('pilihan ganda');

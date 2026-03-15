@@ -49,6 +49,7 @@ import {
   useSusunKataHarianAdmin,
   useSusunKataBebasAdmin,
   useDetailSusunKataHarianAdmin,
+  useKuisKataAdmin,
   useDaftarSumberAdmin,
   useDaftarSemuaSumberAdmin,
   useOpsiSumberAdmin,
@@ -174,6 +175,42 @@ describe('apiAdmin', () => {
         lastPage: undefined,
         tanggal_mulai: undefined,
         tanggal_selesai: undefined,
+      },
+    });
+
+    const kuisKataDefault = useKuisKataAdmin();
+    await kuisKataDefault.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kuis-kata', {
+      params: {
+        tanggal: undefined,
+        limit: 200,
+      },
+    });
+
+    const kuisKataCustom = useKuisKataAdmin({ tanggal: ' 2026-03-15 ', limit: 5000 });
+    await kuisKataCustom.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kuis-kata', {
+      params: {
+        tanggal: '2026-03-15',
+        limit: 1000,
+      },
+    });
+
+    const kuisKataClampMinimum = useKuisKataAdmin({ tanggal: '   ', limit: -5 });
+    await kuisKataClampMinimum.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kuis-kata', {
+      params: {
+        tanggal: undefined,
+        limit: 1,
+      },
+    });
+
+    const kuisKataNullTanggal = useKuisKataAdmin({ tanggal: null, limit: 'abc' });
+    await kuisKataNullTanggal.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kuis-kata', {
+      params: {
+        tanggal: undefined,
+        limit: 200,
       },
     });
 
