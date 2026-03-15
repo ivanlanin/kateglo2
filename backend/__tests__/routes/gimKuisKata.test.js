@@ -1,30 +1,76 @@
 /**
- * @fileoverview Test route gim pilih ganda
- * @tested_in backend/routes/gim/pilihGanda.js
+ * @fileoverview Test route gim kuis kata
+ * @tested_in backend/routes/gim/kuisKata.js
  */
 
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../models/modelPilihGanda', () => ({
-  ambilRonde: jest.fn(),
+jest.mock('../../middleware/auth', () => ({
+  authenticate: (req, _res, next) => {
+    const pid = req.headers['x-user-pid'];
+    if (pid !== undefined) req.user = { pid };
+    next();
+  },
 }));
 
-const router = require('../../routes/gim/pilihGanda');
-const ModelPilihGanda = require('../../models/modelPilihGanda');
+jest.mock('../../models/modelKuisKata', () => ({
+  ambilRonde: jest.fn(),
+  parseLimit: jest.fn((value, fallback = 10, maksimum = 50) => {
+    const parsed = Number.parseInt(value, 10);
+    if (Number.isNaN(parsed)) return fallback;
+    return Math.min(Math.max(parsed, 1), maksimum);
+  }),
+  parsePenggunaId: jest.fn((value) => {
+    const parsed = Number.parseInt(value, 10);
+    return Number.isNaN(parsed) || parsed <= 0 ? null : parsed;
+  }),
+  parseJumlahBenar: jest.fn((value, fallback = 0) => {
+    const parsed = Number.parseInt(value, 10);
+    if (Number.isNaN(parsed)) return fallback;
+    return Math.min(Math.max(parsed, 0), 100);
+  }),
+  parseJumlahPertanyaan: jest.fn((value, fallback = 0) => {
+    const parsed = Number.parseInt(value, 10);
+    if (Number.isNaN(parsed)) return fallback;
+    return Math.min(Math.max(parsed, 0), 100);
+  }),
+  parseDurasiDetik: jest.fn((value, fallback = 0) => {
+    const parsed = Number.parseInt(value, 10);
+    if (Number.isNaN(parsed)) return fallback;
+    return Math.min(Math.max(parsed, 0), 86400);
+  }),
+  ambilKlasemenHarian: jest.fn(),
+  simpanRekapHarian: jest.fn(),
+}));
+
+const router = require('../../routes/gim/kuisKata');
+const ModelKuisKata = require('../../models/modelKuisKata');
 
 function createApp() {
   const app = express();
-  app.use('/api/publik/gim/pilih-ganda', router);
+  app.use(express.json());
+  app.use('/api/publik/gim/kuis-kata', router);
   app.use((err, _req, res, _next) => {
     res.status(500).json({ error: err.message });
   });
   return app;
 }
 
-describe('routes/gim/pilihGanda', () => {
+describe('routes/gim/kuisKata', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    ModelKuisKata.ambilKlasemenHarian.mockResolvedValue([{ pengguna_id: 9, nama: 'A', skor_total: 40 }]);
+    ModelKuisKata.simpanRekapHarian.mockResolvedValue({
+      id: 1,
+      pengguna_id: 9,
+      tanggal: '2026-03-15',
+      jumlah_benar: 4,
+      jumlah_pertanyaan: 5,
+      durasi_detik: 17,
+      jumlah_main: 1,
+      skor_total: 40,
+    });
   });
 
   it('parseRiwayat memetakan JSON valid per mode', () => {
@@ -72,10 +118,10 @@ describe('routes/gim/pilihGanda', () => {
   });
 
   it('GET /ronde meneruskan riwayat ke model', async () => {
-    ModelPilihGanda.ambilRonde.mockResolvedValueOnce([{ mode: 'kamus', soal: 'alpha' }]);
+    ModelKuisKata.ambilRonde.mockResolvedValueOnce([{ mode: 'kamus', soal: 'alpha' }]);
 
     const response = await request(createApp())
-      .get('/api/publik/gim/pilih-ganda/ronde')
+      .get('/api/publik/gim/kuis-kata/ronde')
       .query({
         riwayat: JSON.stringify([
           { mode: 'kamus', kunciSoal: 'alpha' },
@@ -85,7 +131,7 @@ describe('routes/gim/pilihGanda', () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ ronde: [{ mode: 'kamus', soal: 'alpha' }] });
-    expect(ModelPilihGanda.ambilRonde).toHaveBeenCalledWith({
+    expect(ModelKuisKata.ambilRonde).toHaveBeenCalledWith({
       riwayat: {
         kamus: ['alpha'],
         tesaurus: ['beta'],
@@ -97,20 +143,85 @@ describe('routes/gim/pilihGanda', () => {
   });
 
   it('GET /ronde mengembalikan 503 saat model tidak menghasilkan soal', async () => {
-    ModelPilihGanda.ambilRonde.mockResolvedValueOnce([]);
+    ModelKuisKata.ambilRonde.mockResolvedValueOnce([]);
 
-    const response = await request(createApp()).get('/api/publik/gim/pilih-ganda/ronde');
+    const response = await request(createApp()).get('/api/publik/gim/kuis-kata/ronde');
 
     expect(response.status).toBe(503);
     expect(response.body).toEqual({ error: 'Soal tidak tersedia saat ini' });
   });
 
   it('GET /ronde meneruskan error ke middleware', async () => {
-    ModelPilihGanda.ambilRonde.mockRejectedValueOnce(new Error('db rusak'));
+    ModelKuisKata.ambilRonde.mockRejectedValueOnce(new Error('db rusak'));
 
-    const response = await request(createApp()).get('/api/publik/gim/pilih-ganda/ronde');
+    const response = await request(createApp()).get('/api/publik/gim/kuis-kata/ronde');
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({ error: 'db rusak' });
+  });
+
+  it('GET /klasemen mengembalikan klasemen harian', async () => {
+    const response = await request(createApp()).get('/api/publik/gim/kuis-kata/klasemen?limit=99');
+
+    expect(response.status).toBe(200);
+    expect(ModelKuisKata.ambilKlasemenHarian).toHaveBeenCalledWith({ limit: 50 });
+    expect(response.body).toEqual({
+      success: true,
+      data: [{ pengguna_id: 9, nama: 'A', skor_total: 40 }],
+    });
+  });
+
+  it('POST /submit memerlukan autentikasi pengguna', async () => {
+    const response = await request(createApp())
+      .post('/api/publik/gim/kuis-kata/submit')
+      .send({ jumlahBenar: 4, jumlahPertanyaan: 5, durasiDetik: 17 });
+
+    expect(response.status).toBe(401);
+    expect(ModelKuisKata.simpanRekapHarian).not.toHaveBeenCalled();
+  });
+
+  it('POST /submit memvalidasi payload domain', async () => {
+    const jumlahPertanyaanKosong = await request(createApp())
+      .post('/api/publik/gim/kuis-kata/submit')
+      .set('x-user-pid', '9')
+      .send({ jumlahBenar: 0, jumlahPertanyaan: 0, durasiDetik: 17 });
+
+    expect(jumlahPertanyaanKosong.status).toBe(400);
+
+    const jumlahBenarInvalid = await request(createApp())
+      .post('/api/publik/gim/kuis-kata/submit')
+      .set('x-user-pid', '9')
+      .send({ jumlahBenar: 6, jumlahPertanyaan: 5, durasiDetik: 17 });
+
+    expect(jumlahBenarInvalid.status).toBe(400);
+  });
+
+  it('POST /submit menyimpan rekap harian kuis', async () => {
+    const response = await request(createApp())
+      .post('/api/publik/gim/kuis-kata/submit')
+      .set('x-user-pid', '9')
+      .send({ jumlahBenar: 4, jumlahPertanyaan: 5, durasiDetik: 17 });
+
+    expect(response.status).toBe(201);
+    expect(ModelKuisKata.simpanRekapHarian).toHaveBeenCalledWith({
+      penggunaId: 9,
+      jumlahBenar: 4,
+      jumlahPertanyaan: 5,
+      durasiDetik: 17,
+      jumlahMain: 1,
+    });
+    expect(response.body.success).toBe(true);
+  });
+
+  it('POST /submit memetakan error domain model', async () => {
+    ModelKuisKata.simpanRekapHarian.mockRejectedValueOnce(new Error('Pengguna tidak valid'));
+
+    const response = await request(createApp())
+      .post('/api/publik/gim/kuis-kata/submit')
+      .set('x-user-pid', '9')
+      .send({ jumlahBenar: 4, jumlahPertanyaan: 5, durasiDetik: 17 });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('Pengguna tidak valid');
   });
 });

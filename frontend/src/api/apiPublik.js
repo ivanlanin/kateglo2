@@ -187,11 +187,33 @@ export async function ambilPencarianPopuler({ tanggal = null } = {}) {
   return response.data;
 }
 
-// === GIM: PILIH GANDA ===
+// === GIM: KUIS KATA ===
 
-export async function ambilRondePilihGanda({ riwayat = [] } = {}) {
-  const response = await klien.get('/api/publik/gim/pilih-ganda/ronde', {
+export async function ambilRondeKuisKata({ riwayat = [] } = {}) {
+  const response = await klien.get('/api/publik/gim/kuis-kata/ronde', {
     params: riwayat.length > 0 ? { riwayat: JSON.stringify(riwayat) } : {},
+  });
+  return response.data;
+}
+
+export async function submitRekapKuisKata({
+  jumlahBenar = 0,
+  jumlahPertanyaan = 5,
+  durasiDetik = 0,
+} = {}) {
+  const response = await klien.post('/api/publik/gim/kuis-kata/submit', {
+    jumlahBenar: Math.min(Math.max(Number(jumlahBenar) || 0, 0), 100),
+    jumlahPertanyaan: Math.min(Math.max(Number(jumlahPertanyaan) || 0, 0), 100),
+    durasiDetik: Math.min(Math.max(Number(durasiDetik) || 0, 0), 86400),
+  });
+  return response.data;
+}
+
+export async function ambilKlasemenKuisKata({ limit = 10 } = {}) {
+  const response = await klien.get('/api/publik/gim/kuis-kata/klasemen', {
+    params: {
+      limit: Math.min(Math.max(Number(limit) || 10, 1), 50),
+    },
   });
   return response.data;
 }

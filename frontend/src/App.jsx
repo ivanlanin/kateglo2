@@ -42,6 +42,7 @@ const PencarianAdmin = lazy(() => import('./pages/redaksi/PencarianAdmin'));
 const PencarianHitamAdmin = lazy(() => import('./pages/redaksi/PencarianHitamAdmin'));
 const SusunKataHarian = lazy(() => import('./pages/redaksi/SusunKataHarian'));
 const SusunKataBebas = lazy(() => import('./pages/redaksi/SusunKataBebas'));
+const KuisKataAdmin = lazy(() => import('./pages/redaksi/KuisKataAdmin'));
 const KandidatKataAdmin = lazy(() => import('./pages/redaksi/kadi/KandidatKataAdmin'));
 
 function FallbackRoute() {
@@ -119,6 +120,7 @@ function App() {
       <Route path="/redaksi/pencarian-hitam" element={bungkusLazy(<RuteIzin izinDibutuhkan={['lihat_pencarian']}><PencarianHitamAdmin /></RuteIzin>)} />
       <Route path="/redaksi/susun-kata-harian" element={bungkusLazy(<RuteIzin izinDibutuhkan={['kelola_susun_kata']}><SusunKataHarian /></RuteIzin>)} />
       <Route path="/redaksi/susun-kata-bebas" element={bungkusLazy(<RuteIzin izinDibutuhkan={['kelola_susun_kata']}><SusunKataBebas /></RuteIzin>)} />
+      <Route path="/redaksi/kuis-kata" element={bungkusLazy(<RuteIzin izinDibutuhkan={['kelola_susun_kata']}><KuisKataAdmin /></RuteIzin>)} />
       <Route path="/redaksi/tesaurus" element={bungkusLazy(<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>)} />
       <Route path="/redaksi/tesaurus/:id" element={bungkusLazy(<RuteRedaksi><TesaurusAdmin /></RuteRedaksi>)} />
       <Route path="/redaksi/etimologi" element={bungkusLazy(<RuteRedaksi><EtimologiAdmin /></RuteRedaksi>)} />

@@ -26,7 +26,7 @@ import {
   cariRima,
   ambilContohRima,
   ambilPencarianPopuler,
-  ambilRondePilihGanda,
+  ambilRondeKuisKata,
   ambilPuzzleSusunKata,
   ambilHarianSusunKata,
   ambilBebasSusunKata,
@@ -240,16 +240,16 @@ describe('apiPublik', () => {
     });
   });
 
-  it('ambilRondePilihGanda mengirim riwayat hanya saat tersedia', async () => {
+  it('ambilRondeKuisKata mengirim riwayat hanya saat tersedia', async () => {
     klien.get.mockResolvedValue({ data: { ronde: [] } });
 
-    await ambilRondePilihGanda();
-    await ambilRondePilihGanda({ riwayat: [{ mode: 'kamus', kunciSoal: 'kata' }] });
+    await ambilRondeKuisKata();
+    await ambilRondeKuisKata({ riwayat: [{ mode: 'kamus', kunciSoal: 'kata' }] });
 
-    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/gim/pilih-ganda/ronde', {
+    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/gim/kuis-kata/ronde', {
       params: {},
     });
-    expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/gim/pilih-ganda/ronde', {
+    expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/gim/kuis-kata/ronde', {
       params: { riwayat: JSON.stringify([{ mode: 'kamus', kunciSoal: 'kata' }]) },
     });
   });

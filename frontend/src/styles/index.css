@@ -398,11 +398,35 @@ code {
   }
 
   .gim-page-panel-btn {
-    @apply absolute right-0 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-md bg-transparent text-lg transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-300;
+    @apply inline-flex h-9 w-9 items-center justify-center rounded-md bg-transparent text-lg transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-300;
+  }
+
+  .gim-page-panel-group {
+    @apply absolute top-1/2 -translate-y-1/2 flex items-center gap-1;
+  }
+
+  .gim-page-panel-group-left {
+    @apply left-0;
   }
 
   .gim-page-panel-btn-left {
-    @apply left-0 right-auto text-blue-700 hover:bg-blue-50;
+    @apply text-blue-700 hover:bg-blue-50;
+  }
+
+  .gim-page-panel-btn-main {
+    @apply text-emerald-700 hover:bg-emerald-50 focus:ring-emerald-300;
+  }
+
+  .gim-page-panel-btn-main-active {
+    @apply bg-emerald-100;
+  }
+
+  .gim-page-panel-btn-right {
+    @apply absolute right-0 top-1/2 -translate-y-1/2 text-amber-700 hover:bg-amber-50 focus:ring-amber-300;
+  }
+
+  .dark .gim-page-panel-group {
+    @apply text-dark-text;
   }
 
   .dark .gim-page-panel-btn {
@@ -411,6 +435,22 @@ code {
 
   .dark .gim-page-panel-btn-left {
     @apply text-blue-300 hover:bg-blue-900/30;
+  }
+
+  .dark .gim-page-panel-btn-main {
+    @apply text-emerald-300 hover:bg-emerald-900/30 focus:ring-emerald-700;
+  }
+
+  .dark .gim-page-panel-btn-main-active {
+    @apply bg-emerald-900/40;
+  }
+
+  .dark .gim-page-panel-btn-right {
+    @apply text-amber-700 hover:bg-amber-50 focus:ring-amber-300;
+  }
+
+  .dark .gim-page-panel-btn-right {
+    @apply text-amber-300 hover:bg-amber-900/30 focus:ring-amber-700;
   }
 
   .gim-page-info-panel {
@@ -1486,9 +1526,9 @@ code {
     @apply space-y-2 text-sm list-decimal list-inside;
   }
 
-  /* ===== Gim Pilih Ganda ===== */
+  /* ===== Gim Kuis Kata ===== */
 
-  .gim-pilih-ganda {
+  .gim-kuis-kata {
     @apply max-w-xl mx-auto mt-4 mb-2 px-1;
   }
 
@@ -1737,6 +1777,54 @@ code {
     @apply text-dark-text-muted;
   }
 
+  .gim-ringkasan-catatan {
+    @apply mt-2 text-xs font-medium text-gray-600;
+  }
+
+  .dark .gim-ringkasan-catatan {
+    @apply text-dark-text-muted;
+  }
+
+  .gim-klasemen-panel {
+    @apply mb-3 rounded-lg p-2;
+  }
+
+  .gim-klasemen-list {
+    @apply space-y-1;
+  }
+
+  .gim-klasemen-item {
+    @apply flex items-center gap-2 px-1 py-1 text-base text-gray-900;
+  }
+
+  .dark .gim-klasemen-item {
+    @apply text-dark-text;
+  }
+
+  .gim-klasemen-rank {
+    @apply min-w-8;
+  }
+
+  .gim-klasemen-name {
+    @apply flex-1 truncate;
+  }
+
+  .gim-klasemen-score {
+    @apply text-gray-900;
+  }
+
+  .dark .gim-klasemen-score {
+    @apply text-dark-text;
+  }
+
+  .gim-klasemen-kosong {
+    @apply text-base text-gray-700;
+  }
+
+  .dark .gim-klasemen-kosong {
+    @apply text-dark-text-muted;
+  }
+
   .gim-ringkasan-list {
     @apply divide-y divide-gray-200 border border-gray-200 rounded-xl overflow-hidden mb-5 text-left;
   }
@@ -1829,7 +1917,7 @@ code {
     @apply text-dark-text-muted;
   }
 
-  /* ===== End Gim Pilih Ganda ===== */
+  /* ===== End Gim Kuis Kata ===== */
 
   .kateglo-layout-root {
     @apply min-h-screen bg-gray-50 flex flex-col;

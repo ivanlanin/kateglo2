@@ -1,14 +1,14 @@
 /**
- * @fileoverview Test model gim pilih ganda
- * @tested_in backend/models/modelPilihGanda.js
+ * @fileoverview Test model gim kuis kata
+ * @tested_in backend/models/modelKuisKata.js
  */
 
 const db = require('../../db');
-const ModelPilihGanda = require('../../models/modelPilihGanda');
+const ModelKuisKata = require('../../models/modelKuisKata');
 
-const { __private } = ModelPilihGanda;
+const { __private } = ModelKuisKata;
 
-describe('ModelPilihGanda', () => {
+describe('ModelKuisKata', () => {
   beforeEach(() => {
     db.query.mockReset();
     jest.restoreAllMocks();
@@ -353,7 +353,7 @@ describe('ModelPilihGanda', () => {
     const soalRimaSpy = jest.spyOn(__private, 'soalRima').mockResolvedValueOnce(soalRima);
     const randomSpy = jest.spyOn(Math, 'random').mockReturnValue(0);
 
-    const ronde = await ModelPilihGanda.ambilRonde({
+    const ronde = await ModelKuisKata.ambilRonde({
       riwayat: {
         kamus: ['alpha'],
         tesaurus: ['beta'],
@@ -382,6 +382,6 @@ describe('ModelPilihGanda', () => {
     jest.spyOn(__private, 'soalMakna').mockResolvedValue(null);
     jest.spyOn(__private, 'soalRima').mockResolvedValue(null);
 
-    await expect(ModelPilihGanda.ambilRonde()).resolves.toEqual([]);
+    await expect(ModelKuisKata.ambilRonde()).resolves.toEqual([]);
   });
 });

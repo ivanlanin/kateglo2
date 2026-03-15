@@ -79,6 +79,12 @@ export const kelompokMenuRedaksi = [
         izin: 'kelola_susun_kata',
         statistik: { key: 'susunKataBebas', label: 'Peserta Hari Ini', warna: 'text-green-600' },
       },
+      {
+        path: '/redaksi/kuis-kata',
+        label: 'Kuis Kata',
+        dashboardLabel: 'Kuis Kata',
+        izin: 'kelola_susun_kata',
+      },
     ],
   },
   {

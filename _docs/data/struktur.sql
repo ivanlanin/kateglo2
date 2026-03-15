@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-13T03:17:26.494Z
+-- Generated: 2026-03-15T10:45:46.897Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -478,6 +478,25 @@ create trigger trg_set_timestamp_fields__komentar
   before insert or update on komentar
   for each row
   execute function set_timestamp_fields();
+
+create table kuis_kata (
+  id serial primary key,
+  pengguna_id integer references pengguna(id) on delete cascade not null,
+  tanggal date not null default ((now() AT TIME ZONE 'Asia/Jakarta'::text))::date,
+  jumlah_benar integer not null default 0,
+  jumlah_pertanyaan integer not null default 0,
+  durasi_detik integer not null default 0,
+  jumlah_main integer not null default 0,
+  constraint kuis_kata_pengguna_tanggal_key unique (pengguna_id, tanggal),
+  constraint kuis_kata_jumlah_benar_check check (jumlah_benar >= 0),
+  constraint kuis_kata_jumlah_main_check check (jumlah_main >= 0),
+  constraint kuis_kata_jumlah_pertanyaan_check check (jumlah_pertanyaan >= 0),
+  constraint kuis_kata_durasi_detik_check check (durasi_detik >= 0)
+);
+create index idx_kuis_kata_klasemen_harian on kuis_kata using btree (tanggal DESC, jumlah_benar DESC, durasi_detik, jumlah_main DESC);
+create index idx_kuis_kata_pengguna_tanggal on kuis_kata using btree (pengguna_id, tanggal DESC);
+create index idx_kuis_kata_tanggal on kuis_kata using btree (tanggal DESC);
+create unique index kuis_kata_pengguna_tanggal_key on kuis_kata using btree (pengguna_id, tanggal);
 
 -- Master label umum untuk ragam, kelas kata, bahasa, bidang, dan kategori sejenis
 create table label (

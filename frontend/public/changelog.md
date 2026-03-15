@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-03-15 Minggu
+
+- Mencatat skor harian [Kuis Kata](/gim/kuis-kata)
+
 ## 2026-03-14 Sabtu
 
 - Menambahkan alat [penghitung huruf](/alat/penghitung-huruf) dari [CodePen](https://codepen.io/ivanlanin/full/ExqdRNL)

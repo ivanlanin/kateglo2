@@ -1,10 +1,5 @@
 /**
- * @fileoverview Model untuk gim Pilih Ganda — query soal per domain
- *
- * Lima domain: kamus, tesaurus, glosarium, makna, rima.
- * Setiap metode mengembalikan objek soal lengkap:
- *   { mode, soal, konteks, pilihan, jawaban, penjelasan }
- * Urutan pilihan sudah diacak sehingga jawaban tidak selalu di posisi tetap.
+ * @fileoverview Model gim Kuis Kata untuk generator soal dan rekap harian.
  */
 
 const db = require('../db');
@@ -12,14 +7,25 @@ const db = require('../db');
 const jumlahKandidat = 12;
 const batasRiwayatPerMode = 3;
 
-/**
- * Jalankan SQL yang mengandung TABLESAMPLE. Jika hasilnya kosong
- * (TABLESAMPLE kebetulan tidak menyertakan halaman berisi baris lolos filter),
- * ulangi tanpa TABLESAMPLE agar tetap mendapat hasil.
- * @param {string} sql  - Query SQL yang mengandung `TABLESAMPLE SYSTEM(N)`
- * @param {any[]}  params
- * @returns {Promise<{rows: any[]}>}
- */
+function parseTanggal(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return null;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(raw)) return null;
+  return raw;
+}
+
+function parsePenggunaId(value) {
+  const parsed = Number.parseInt(value, 10);
+  if (Number.isNaN(parsed) || parsed <= 0) return null;
+  return parsed;
+}
+
+function parseBilangan(value, { fallback = 0, min = 0, max = 1000 } = {}) {
+  const parsed = Number.parseInt(value, 10);
+  if (Number.isNaN(parsed)) return fallback;
+  return Math.min(Math.max(parsed, min), max);
+}
+
 async function queryAcak(sql, params = []) {
   const result = await db.query(sql, params);
   if (result.rows.length > 0) return result;
@@ -97,13 +103,6 @@ function buatFilterRiwayat(columnSql, riwayat, startIndex = 1) {
   };
 }
 
-/**
- * Acak urutan array (Fisher-Yates), kembalikan { pilihan, jawaban }
- * dengan jawaban = indeks baru dari item yang semula di posisi 0.
- * @param {string} benar
- * @param {string} salah
- * @returns {{ pilihan: string[], jawaban: number }}
- */
 function acakPilihan(benar, salah) {
   if (Math.random() < 0.5) {
     return { pilihan: [benar, salah], jawaban: 0 };
@@ -111,23 +110,12 @@ function acakPilihan(benar, salah) {
   return { pilihan: [salah, benar], jawaban: 1 };
 }
 
-/**
- * Potong teks agar tidak melebihi batas karakter.
- * @param {string} teks
- * @param {number} maks
- * @returns {string}
- */
 function potong(teks, maks = 80) {
   const t = String(teks || '').trim();
   if (t.length <= maks) return t;
-  return `${t.slice(0, maks - 1)}\u2026`;
+  return `${t.slice(0, maks - 1)}…`;
 }
 
-/**
- * Ambil satu soal mode kamus.
- * Soal: "Apa arti dari [indeks]?"
- * @returns {Promise<object|null>}
- */
 async function soalKamus({ riwayat = [] } = {}) {
   const filterRiwayat = buatFilterRiwayat('e.indeks', riwayat);
   const soalRes = await queryAcak(
@@ -144,7 +132,7 @@ async function soalKamus({ riwayat = [] } = {}) {
        AND CHAR_LENGTH(m.makna) BETWEEN 10 AND 100
        ${filterRiwayat.clause}
      LIMIT ${jumlahKandidat}`,
-     filterRiwayat.params,
+    filterRiwayat.params,
   );
 
   const soal = acakDariArray(soalRes.rows);
@@ -180,11 +168,6 @@ async function soalKamus({ riwayat = [] } = {}) {
   };
 }
 
-/**
- * Ambil satu soal mode tesaurus.
- * Soal: "Apa sinonim/antonim [indeks]?"
- * @returns {Promise<object|null>}
- */
 async function soalTesaurus({ riwayat = [] } = {}) {
   const filterRiwayat = buatFilterRiwayat('t.indeks', riwayat);
   const soalRes = await queryAcak(
@@ -248,11 +231,6 @@ async function soalTesaurus({ riwayat = [] } = {}) {
   };
 }
 
-/**
- * Ambil satu soal mode glosarium.
- * Soal: "Apa padanan Indonesia dari [asing]?"
- * @returns {Promise<object|null>}
- */
 async function soalGlosarium({ riwayat = [] } = {}) {
   const filterRiwayat = buatFilterRiwayat('g.asing', riwayat);
   const soalRes = await queryAcak(
@@ -296,15 +274,10 @@ async function soalGlosarium({ riwayat = [] } = {}) {
     konteks: null,
     pilihan,
     jawaban,
-    penjelasan: `Padanan Indonesia dari \u2018${soal.asing}\u2019 adalah ${soal.indonesia_benar}.`,
+    penjelasan: `Padanan Indonesia dari ‘${soal.asing}’ adalah ${soal.indonesia_benar}.`,
   };
 }
 
-/**
- * Ambil satu soal mode makna (kamus terbalik).
- * Soal: "Kata mana yang bermakna: [makna]?"
- * @returns {Promise<object|null>}
- */
 async function soalMakna({ riwayat = [] } = {}) {
   const filterRiwayat = buatFilterRiwayat('m.makna', riwayat);
   const soalRes = await queryAcak(
@@ -355,17 +328,11 @@ async function soalMakna({ riwayat = [] } = {}) {
     konteks: null,
     pilihan,
     jawaban,
-    penjelasan: `Kata yang bermakna \u2018${maknaDisplay}\u2019 adalah ${soal.indeks_benar}.`,
+    penjelasan: `Kata yang bermakna ‘${maknaDisplay}’ adalah ${soal.indeks_benar}.`,
   };
 }
 
-/**
- * Ambil satu soal mode rima.
- * Soal: "Mana yang berima dengan [kata]?"
- * @returns {Promise<object|null>}
- */
 async function soalRima({ riwayat = [] } = {}) {
-  // Coba maksimal 3 kali agar bisa mendapat pasangan rima yang valid
   for (let coba = 0; coba < 3; coba += 1) {
     const filterRiwayat = buatFilterRiwayat('e.indeks', riwayat);
     // eslint-disable-next-line no-await-in-loop
@@ -447,46 +414,236 @@ async function soalRima({ riwayat = [] } = {}) {
   return null;
 }
 
-/**
- * Ambil satu ronde lengkap: 5 soal dari 5 domain berbeda, urutan diacak.
- * Jika salah satu domain gagal, fallback ke soal kamus tambahan.
- * @returns {Promise<object[]>} Array 5 soal
- */
-async function ambilRonde({ riwayat = {} } = {}) {
-  const privateApi = module.exports.__private;
-  const generator = [
-    () => privateApi.soalKamus({ riwayat: riwayat.kamus }),
-    () => privateApi.soalTesaurus({ riwayat: riwayat.tesaurus }),
-    () => privateApi.soalGlosarium({ riwayat: riwayat.glosarium }),
-    () => privateApi.soalMakna({ riwayat: riwayat.makna }),
-    () => privateApi.soalRima({ riwayat: riwayat.rima }),
-  ];
+class ModelKuisKata {
+  static parseTanggal(value) {
+    return parseTanggal(value);
+  }
 
-  const hasil = await Promise.all(generator.map((fn) => fn().catch(() => null)));
+  static parsePenggunaId(value) {
+    return parsePenggunaId(value);
+  }
 
-  // Ganti slot yang null dengan soal kamus cadangan
-  const soalFinal = [];
-  for (let i = 0; i < hasil.length; i += 1) {
-    if (hasil[i]) {
-      soalFinal.push(hasil[i]);
-    } else {
-      // eslint-disable-next-line no-await-in-loop
-      const cadangan = await privateApi.soalKamus({ riwayat: riwayat.kamus }).catch(() => null);
-      if (cadangan) soalFinal.push(cadangan);
+  static parseJumlahBenar(value, fallback = 0) {
+    return parseBilangan(value, { fallback, min: 0, max: 100 });
+  }
+
+  static parseJumlahPertanyaan(value, fallback = 0) {
+    return parseBilangan(value, { fallback, min: 0, max: 100 });
+  }
+
+  static parseDurasiDetik(value, fallback = 0) {
+    return parseBilangan(value, { fallback, min: 0, max: 86400 });
+  }
+
+  static parseJumlahMain(value, fallback = 1) {
+    return parseBilangan(value, { fallback, min: 0, max: 1000 });
+  }
+
+  static parseLimit(value, fallback = 10, maksimum = 1000) {
+    return parseBilangan(value, { fallback, min: 1, max: maksimum });
+  }
+
+  static async ambilRonde({ riwayat = {} } = {}) {
+    const privateApi = this.__private;
+    const generator = [
+      () => privateApi.soalKamus({ riwayat: riwayat.kamus }),
+      () => privateApi.soalTesaurus({ riwayat: riwayat.tesaurus }),
+      () => privateApi.soalGlosarium({ riwayat: riwayat.glosarium }),
+      () => privateApi.soalMakna({ riwayat: riwayat.makna }),
+      () => privateApi.soalRima({ riwayat: riwayat.rima }),
+    ];
+
+    const hasil = await Promise.all(generator.map((fn) => fn().catch(() => null)));
+
+    const soalFinal = [];
+    for (let i = 0; i < hasil.length; i += 1) {
+      if (hasil[i]) {
+        soalFinal.push(hasil[i]);
+      } else {
+        // eslint-disable-next-line no-await-in-loop
+        const cadangan = await privateApi.soalKamus({ riwayat: riwayat.kamus }).catch(() => null);
+        if (cadangan) soalFinal.push(cadangan);
+      }
     }
+
+    for (let i = soalFinal.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [soalFinal[i], soalFinal[j]] = [soalFinal[j], soalFinal[i]];
+    }
+
+    return soalFinal;
   }
 
-  // Acak urutan soal
-  for (let i = soalFinal.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [soalFinal[i], soalFinal[j]] = [soalFinal[j], soalFinal[i]];
+  static async ambilTanggalHariIniJakarta() {
+    const result = await db.query(
+      `SELECT to_char((now() AT TIME ZONE 'Asia/Jakarta')::date, 'YYYY-MM-DD') AS tanggal`
+    );
+    return result.rows[0]?.tanggal || null;
   }
 
-  return soalFinal;
+  static async simpanRekapHarian({
+    penggunaId,
+    tanggal = null,
+    jumlahBenar,
+    jumlahPertanyaan,
+    durasiDetik = 0,
+    jumlahMain = 1,
+  }) {
+    const penggunaIdAman = parsePenggunaId(penggunaId);
+    if (!penggunaIdAman) {
+      throw new Error('Pengguna tidak valid');
+    }
+
+    const tanggalAman = parseTanggal(tanggal) || await this.ambilTanggalHariIniJakarta();
+    if (!tanggalAman) {
+      throw new Error('Tanggal tidak valid');
+    }
+
+    const jumlahPertanyaanAman = this.parseJumlahPertanyaan(jumlahPertanyaan, 0);
+    const jumlahBenarAman = this.parseJumlahBenar(jumlahBenar, 0);
+    const durasiDetikAman = this.parseDurasiDetik(durasiDetik, 0);
+    const jumlahMainAman = this.parseJumlahMain(jumlahMain, 1);
+
+    if (jumlahPertanyaanAman <= 0) {
+      throw new Error('Jumlah pertanyaan harus lebih dari 0');
+    }
+
+    if (jumlahBenarAman > jumlahPertanyaanAman) {
+      throw new Error('Jumlah benar tidak boleh melebihi jumlah pertanyaan');
+    }
+
+    const result = await db.query(
+      `INSERT INTO kuis_kata (
+         pengguna_id,
+         tanggal,
+         jumlah_benar,
+         jumlah_pertanyaan,
+         durasi_detik,
+         jumlah_main
+       )
+       VALUES ($1, $2::date, $3, $4, $5, $6)
+       ON CONFLICT (pengguna_id, tanggal)
+       DO UPDATE SET
+         jumlah_benar = kuis_kata.jumlah_benar + EXCLUDED.jumlah_benar,
+         jumlah_pertanyaan = kuis_kata.jumlah_pertanyaan + EXCLUDED.jumlah_pertanyaan,
+         durasi_detik = kuis_kata.durasi_detik + EXCLUDED.durasi_detik,
+         jumlah_main = kuis_kata.jumlah_main + EXCLUDED.jumlah_main
+       RETURNING
+         id,
+         pengguna_id,
+         to_char(tanggal, 'YYYY-MM-DD') AS tanggal,
+         jumlah_benar,
+         jumlah_pertanyaan,
+         durasi_detik,
+         jumlah_main`,
+      [
+        penggunaIdAman,
+        tanggalAman,
+        jumlahBenarAman,
+        jumlahPertanyaanAman,
+        durasiDetikAman,
+        jumlahMainAman,
+      ]
+    );
+
+    const row = result.rows[0] || {};
+    return {
+      id: Number(row.id) || 0,
+      pengguna_id: Number(row.pengguna_id) || 0,
+      tanggal: row.tanggal || tanggalAman,
+      jumlah_benar: Number(row.jumlah_benar) || 0,
+      jumlah_pertanyaan: Number(row.jumlah_pertanyaan) || 0,
+      durasi_detik: Number(row.durasi_detik) || 0,
+      jumlah_main: Number(row.jumlah_main) || 0,
+      skor_total: (Number(row.jumlah_benar) || 0) * 10,
+    };
+  }
+
+  static async ambilKlasemenHarian({ tanggal = null, limit = 10 } = {}) {
+    const tanggalAman = parseTanggal(tanggal) || await this.ambilTanggalHariIniJakarta();
+    const limitAman = this.parseLimit(limit, 10, 50);
+
+    const result = await db.query(
+      `SELECT
+         kk.id,
+         kk.pengguna_id,
+         p.nama,
+         to_char(kk.tanggal, 'YYYY-MM-DD') AS tanggal,
+         kk.jumlah_benar,
+         kk.jumlah_pertanyaan,
+         kk.durasi_detik,
+         kk.jumlah_main,
+         (kk.jumlah_benar * 10) AS skor_total
+       FROM kuis_kata kk
+       JOIN pengguna p ON p.id = kk.pengguna_id
+       WHERE kk.tanggal = $1::date
+       ORDER BY kk.jumlah_benar DESC, kk.durasi_detik ASC, kk.jumlah_main DESC, LOWER(p.nama) ASC
+       LIMIT $2`,
+      [tanggalAman, limitAman]
+    );
+
+    return result.rows.map((row) => ({
+      id: Number(row.id) || 0,
+      pengguna_id: Number(row.pengguna_id) || 0,
+      nama: row.nama,
+      tanggal: row.tanggal,
+      jumlah_benar: Number(row.jumlah_benar) || 0,
+      jumlah_pertanyaan: Number(row.jumlah_pertanyaan) || 0,
+      durasi_detik: Number(row.durasi_detik) || 0,
+      jumlah_main: Number(row.jumlah_main) || 0,
+      skor_total: Number(row.skor_total) || 0,
+    }));
+  }
+
+  static async daftarRekapAdmin({ tanggal = null, limit = 200 } = {}) {
+    const tanggalAman = parseTanggal(tanggal);
+    const limitAman = this.parseLimit(limit, 200, 1000);
+    const values = [];
+    const kondisi = [];
+
+    if (tanggalAman) {
+      values.push(tanggalAman);
+      kondisi.push(`kk.tanggal = $${values.length}::date`);
+    }
+
+    values.push(limitAman);
+    const limitParam = values.length;
+    const whereClause = kondisi.length ? `WHERE ${kondisi.join(' AND ')}` : '';
+
+    const result = await db.query(
+      `SELECT
+         kk.id,
+         kk.pengguna_id,
+         p.nama,
+         to_char(kk.tanggal, 'YYYY-MM-DD') AS tanggal,
+         kk.jumlah_benar,
+         kk.jumlah_pertanyaan,
+         kk.durasi_detik,
+         kk.jumlah_main,
+         (kk.jumlah_benar * 10) AS skor_total
+       FROM kuis_kata kk
+       JOIN pengguna p ON p.id = kk.pengguna_id
+       ${whereClause}
+       ORDER BY kk.tanggal DESC, kk.jumlah_benar DESC, kk.durasi_detik ASC, kk.jumlah_main DESC, LOWER(p.nama) ASC
+       LIMIT $${limitParam}`,
+      values
+    );
+
+    return result.rows.map((row) => ({
+      id: Number(row.id) || 0,
+      pengguna_id: Number(row.pengguna_id) || 0,
+      nama: row.nama,
+      tanggal: row.tanggal,
+      jumlah_benar: Number(row.jumlah_benar) || 0,
+      jumlah_pertanyaan: Number(row.jumlah_pertanyaan) || 0,
+      durasi_detik: Number(row.durasi_detik) || 0,
+      jumlah_main: Number(row.jumlah_main) || 0,
+      skor_total: Number(row.skor_total) || 0,
+    }));
+  }
 }
 
-module.exports = { ambilRonde };
-module.exports.__private = {
+ModelKuisKata.__private = {
   acakDariArray,
   acakArray,
   acakPilihan,
@@ -501,5 +658,6 @@ module.exports.__private = {
   soalMakna,
   soalRima,
   soalTesaurus,
-  ambilRonde,
 };
+
+module.exports = ModelKuisKata;

@@ -7,8 +7,9 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { ambilRondePilihGanda } from '../../api/apiPublik';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ambilRondeKuisKata, submitRekapKuisKata } from '../../api/apiPublik';
+import { useAuthOptional } from '../../context/authContext';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
 
 const labelMode = {
@@ -242,9 +243,12 @@ function ItemRingkasan({ soal, pilihanUser }) {
 }
 
 function KuisKata() {
+  const auth = useAuthOptional();
+  const isAuthenticated = Boolean(auth?.isAuthenticated);
   const queryClient = useQueryClient();
   const rondeRef = useRef([]);
   const skorAwalRef = useRef(true);
+  const rondeTerkirimRef = useRef(null);
 
   const [rondeKey, setRondeKey] = useState(0);
   const [riwayatSoal, setRiwayatSoal] = useState([]);
@@ -253,19 +257,40 @@ function KuisKata() {
   const [indeks, setIndeks] = useState(0);
   const [jawabanUser, setJawabanUser] = useState([]);
   const [fase, setFase] = useState('soal'); // 'soal' | 'ringkasan'
+  const [rondeMulaiAt, setRondeMulaiAt] = useState(Date.now());
+  const [statusRekap, setStatusRekap] = useState(isAuthenticated ? 'idle' : 'guest');
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['kuis-kata', rondeKey, riwayatSoal.map((item) => `${item.mode}:${item.kunciSoal}`).join('|')],
-    queryFn: () => ambilRondePilihGanda({ riwayat: riwayatSoal }),
+    queryFn: () => ambilRondeKuisKata({ riwayat: riwayatSoal }),
     staleTime: Infinity,
   });
 
   const ronde = data?.ronde ?? [];
   const soalSaatIni = ronde[indeks];
 
+  const kirimRekap = useMutation({
+    mutationFn: (payload) => submitRekapKuisKata(payload),
+    onMutate: () => {
+      setStatusRekap('saving');
+    },
+    onSuccess: () => {
+      setStatusRekap('saved');
+    },
+    onError: () => {
+      setStatusRekap('error');
+    },
+  });
+
   useEffect(() => {
     rondeRef.current = data?.ronde ?? [];
   }, [data]);
+
+  useEffect(() => {
+    rondeTerkirimRef.current = null;
+    setRondeMulaiAt(Date.now());
+    setStatusRekap(isAuthenticated ? 'idle' : 'guest');
+  }, [isAuthenticated, rondeKey, ronde.length]);
 
   useEffect(() => {
     if (skorAwalRef.current) {
@@ -338,9 +363,31 @@ function KuisKata() {
     };
   }, [fase, indeks, ronde.length, sudahJawab, soalSaatIni]);
 
+  useEffect(() => {
+    if (fase !== 'ringkasan' || !ronde.length) {
+      return;
+    }
+
+    if (!isAuthenticated) {
+      setStatusRekap('guest');
+      return;
+    }
+
+    if (rondeTerkirimRef.current === rondeKey || kirimRekap.isPending) {
+      return;
+    }
+
+    rondeTerkirimRef.current = rondeKey;
+    kirimRekap.mutate({
+      jumlahBenar,
+      jumlahPertanyaan: ronde.length,
+      durasiDetik: Math.max(Math.round((Date.now() - rondeMulaiAt) / 1000), 0),
+    });
+  }, [fase, isAuthenticated, jumlahBenar, kirimRekap, ronde.length, rondeKey, rondeMulaiAt]);
+
   if (isLoading) {
     return (
-      <div className="gim-pilih-ganda">
+      <div className="gim-kuis-kata">
         <div className="gim-muat">
           <span>Menyiapkan soal …</span>
         </div>
@@ -354,13 +401,25 @@ function KuisKata() {
 
   if (fase === 'ringkasan') {
     const kelasSkor = kelasSkorAkhir(jumlahBenar, ronde.length);
+    let catatanRekap = 'Masuk untuk ikut ke klasemen harian.';
+
+    if (isAuthenticated && statusRekap === 'saving') {
+      catatanRekap = 'Menyimpan skor harian…';
+    } else if (isAuthenticated && statusRekap === 'saved') {
+      catatanRekap = 'Skor harian tersimpan.';
+    } else if (isAuthenticated && statusRekap === 'error') {
+      catatanRekap = 'Skor harian belum tersimpan.';
+    } else if (isAuthenticated) {
+      catatanRekap = 'Skor harian sedang disiapkan.';
+    }
 
     return (
-      <div className="gim-pilih-ganda">
+      <div className="gim-kuis-kata">
         <div className="gim-ringkasan-atas">
           <div className="gim-ringkasan">
             <div className={`gim-ringkasan-skor-angka ${kelasSkor}`}>{jumlahBenar}/{ronde.length}</div>
             <div className="gim-ringkasan-label">{labelSkor(jumlahBenar * 10)}</div>
+            <div className="gim-ringkasan-catatan">{catatanRekap}</div>
           </div>
           <button type="button" className="btn-primary shrink-0" onClick={handleRondeBaru}>
             Main lagi!
@@ -378,7 +437,7 @@ function KuisKata() {
   if (!soalSaatIni) return null;
 
   return (
-    <div className="gim-pilih-ganda">
+    <div className="gim-kuis-kata">
       <div className="gim-header">
         <span className="gim-header-mode">{ikonMode(soalSaatIni.mode)} {labelMode[soalSaatIni.mode]}</span>
         <div className="gim-progress" aria-label={`Progres soal ${indeks + 1} dari ${ronde.length}`}>

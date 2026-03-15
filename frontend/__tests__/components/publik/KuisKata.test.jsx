@@ -4,14 +4,21 @@ import KuisKata, { gabungRiwayat, __private } from '../../../src/components/publ
 
 const mockRemoveQueries = vi.fn();
 const mockUseQuery = vi.fn();
+const mockMutate = vi.fn();
 
 vi.mock('@tanstack/react-query', () => ({
   useQuery: (...args) => mockUseQuery(...args),
+  useMutation: () => ({ mutate: mockMutate, isPending: false }),
   useQueryClient: () => ({ removeQueries: mockRemoveQueries }),
 }));
 
 vi.mock('../../../src/api/apiPublik', () => ({
-  ambilRondePilihGanda: vi.fn(),
+  ambilRondeKuisKata: vi.fn(),
+  submitRekapKuisKata: vi.fn(),
+}));
+
+vi.mock('../../../src/context/authContext', () => ({
+  useAuthOptional: () => ({ isAuthenticated: false }),
 }));
 
 vi.mock('react-router-dom', () => ({
@@ -41,6 +48,7 @@ describe('KuisKata', () => {
     vi.useFakeTimers();
     mockRemoveQueries.mockReset();
     mockUseQuery.mockReset();
+    mockMutate.mockReset();
     mockUseQuery.mockImplementation((options) => {
       if (options?.queryFn) {
         options.queryFn();
