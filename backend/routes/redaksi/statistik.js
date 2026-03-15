@@ -12,6 +12,7 @@ const ModelLabel = require('../../models/modelLabel');
 const ModelPengguna = require('../../models/modelPengguna');
 const ModelKomentar = require('../../models/modelKomentar');
 const ModelSusunKata = require('../../models/modelSusunKata');
+const ModelKuisKata = require('../../models/modelKuisKata');
 const ModelPencarian = require('../../models/modelPencarian');
 const ModelPencarianHitam = require('../../models/modelPencarianHitam');
 const ModelAuditMakna = require('../../models/modelAuditMakna');
@@ -39,6 +40,7 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
       etimologi,
       susunKataHarian,
       susunKataBebas,
+      kuisKata,
       auditMakna,
       auditTagar,
       tagar,
@@ -60,6 +62,7 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
       ModelEtimologi.hitungTotal(),
       ModelSusunKata.hitungPesertaHarian(),
       ModelSusunKata.hitungPesertaBebasHarian(),
+      ModelKuisKata.hitungPesertaHarian(),
       ModelAuditMakna.hitungTotal(),
       ModelTagar.hitungTotalBelumBertagar(),
       ModelTagar.hitungTotal(),
@@ -85,6 +88,7 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
         etimologi,
         susunKataHarian,
         susunKataBebas,
+        kuisKata,
         auditMakna,
         auditTagar,
         tagar,

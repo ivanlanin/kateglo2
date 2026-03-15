@@ -104,6 +104,10 @@ jest.mock('../../models/modelSusunKata', () => ({
   hitungPesertaBebasHarian: jest.fn(),
 }));
 
+jest.mock('../../models/modelKuisKata', () => ({
+  hitungPesertaHarian: jest.fn(),
+}));
+
 jest.mock('../../models/modelAuditMakna', () => ({
   hitungTotal: jest.fn(),
 }));
@@ -159,6 +163,7 @@ const ModelLabel = require('../../models/modelLabel');
 const ModelKomentar = require('../../models/modelKomentar');
 const ModelPencarian = require('../../models/modelPencarian');
 const ModelSusunKata = require('../../models/modelSusunKata');
+const ModelKuisKata = require('../../models/modelKuisKata');
 const ModelAuditMakna = require('../../models/modelAuditMakna');
 const ModelTagar = require('../../models/modelTagar');
 const ModelPencarianHitam = require('../../models/modelPencarianHitam');
@@ -398,6 +403,7 @@ describe('routes/redaksi', () => {
       ModelEtimologi.hitungTotal.mockResolvedValue(35);
       ModelSusunKata.hitungPesertaHarian.mockResolvedValue(15);
       ModelSusunKata.hitungPesertaBebasHarian.mockResolvedValue(25);
+      ModelKuisKata.hitungPesertaHarian.mockResolvedValue(17);
       ModelAuditMakna.hitungTotal.mockResolvedValue(95);
       ModelTagar.hitungTotalBelumBertagar.mockResolvedValue(45);
       ModelTagar.hitungTotal.mockResolvedValue(145);
@@ -423,6 +429,7 @@ describe('routes/redaksi', () => {
         etimologi: 35,
         susunKataHarian: 15,
         susunKataBebas: 25,
+        kuisKata: 17,
         auditMakna: 95,
         auditTagar: 45,
         tagar: 145,

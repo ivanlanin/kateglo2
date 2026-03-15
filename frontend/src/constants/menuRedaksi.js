@@ -84,6 +84,7 @@ export const kelompokMenuRedaksi = [
         label: 'Kuis Kata',
         dashboardLabel: 'Kuis Kata',
         izin: 'kelola_susun_kata',
+        statistik: { key: 'kuisKata', label: 'Peserta Hari Ini', warna: 'text-emerald-600' },
       },
     ],
   },

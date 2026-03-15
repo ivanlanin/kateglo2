@@ -85,6 +85,13 @@ function buatKelompokMenuRedaksiFixture() {
           izin: 'kelola_susun_kata',
           statistik: { key: 'susunKataBebas', warna: 'text-green-600' },
         },
+        {
+          path: '/redaksi/kuis-kata',
+          label: 'Kuis Kata',
+          dashboardLabel: 'Kuis Kata',
+          izin: 'kelola_susun_kata',
+          statistik: { key: 'kuisKata', warna: 'text-emerald-600' },
+        },
       ],
     },
     {
@@ -231,7 +238,7 @@ describe('DasborAdmin', () => {
     );
 
     expect(screen.getByText('Dasbor')).toBeInTheDocument();
-    expect(screen.getAllByText('…')).toHaveLength(20);
+    expect(screen.getAllByText('…')).toHaveLength(21);
   });
 
   it('menampilkan statistik saat data tersedia', () => {
@@ -246,6 +253,7 @@ describe('DasborAdmin', () => {
           kandidatKata: 65,
           susunKataHarian: 77,
           susunKataBebas: 66,
+          kuisKata: 55,
           auditMakna: 44,
           auditTagar: 33,
           tagar: 22,
@@ -274,6 +282,7 @@ describe('DasborAdmin', () => {
     expect(screen.getByText('50')).toBeInTheDocument();
     expect(screen.getByText('77')).toBeInTheDocument();
     expect(screen.getByText('66')).toBeInTheDocument();
+    expect(screen.getByText('55')).toBeInTheDocument();
     expect(screen.getByText('44')).toBeInTheDocument();
     expect(screen.getByText('33')).toBeInTheDocument();
     expect(screen.getByText('22')).toBeInTheDocument();

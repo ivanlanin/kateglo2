@@ -595,6 +595,19 @@ class ModelKuisKata {
     }));
   }
 
+  static async hitungPesertaHarian({ tanggal = null } = {}) {
+    const tanggalAman = parseTanggal(tanggal);
+
+    const result = await db.query(
+      `SELECT COUNT(DISTINCT kk.pengguna_id)::bigint AS total
+       FROM kuis_kata kk
+       WHERE kk.tanggal = COALESCE($1::date, (now() AT TIME ZONE 'Asia/Jakarta')::date)`,
+      [tanggalAman]
+    );
+
+    return Number(result.rows[0]?.total) || 0;
+  }
+
   static async daftarRekapAdmin({ tanggal = null, limit = 200 } = {}) {
     const tanggalAman = parseTanggal(tanggal);
     const limitAman = this.parseLimit(limit, 200, 1000);

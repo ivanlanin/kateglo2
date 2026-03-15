@@ -384,4 +384,14 @@ describe('ModelKuisKata', () => {
 
     await expect(ModelKuisKata.ambilRonde()).resolves.toEqual([]);
   });
+
+  it('hitungPesertaHarian menghitung peserta unik kuis kata per hari', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ total: '17' }] });
+
+    await expect(ModelKuisKata.hitungPesertaHarian({ tanggal: '2026-03-15' })).resolves.toBe(17);
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('COUNT(DISTINCT kk.pengguna_id)::bigint AS total'),
+      ['2026-03-15']
+    );
+  });
 });
