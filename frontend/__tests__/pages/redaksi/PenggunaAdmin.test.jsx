@@ -3,6 +3,7 @@ import { act } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import PenggunaAdmin from '../../../src/pages/redaksi/PenggunaAdmin';
+import { formatLocalDateTime } from '../../../src/utils/formatUtils';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
@@ -51,23 +52,25 @@ describe('PenggunaAdmin', () => {
       data: {
         total: 2,
         data: [
-          { id: 7, nama: 'Budi', surel: 'budi@example.com', peran_kode: 'admin', aktif: 1, login_terakhir: null, foto: '' },
-          { id: 8, nama: 'Sari', surel: 'sari@example.com', peran_kode: 'editor', aktif: 0, login_terakhir: '2026-02-16T10:00:00.000Z', foto: 'https://img.test/f.jpg' },
-          { id: 9, nama: 'Tamu', surel: 'tamu@example.com', peran_kode: 'unknown', aktif: 1, login_terakhir: null, foto: '' },
+          { id: 7, nama: 'Budi', surel: 'budi@example.com', peran_kode: 'admin', aktif: 1, login_terakhir: null, created_at: '2026-03-01T08:30:00.000Z', foto: '' },
+          { id: 8, nama: 'Sari', surel: 'sari@example.com', peran_kode: 'editor', aktif: 0, login_terakhir: '2026-02-16T10:00:00.000Z', created_at: '2026-02-15T06:45:00.000Z', foto: 'https://img.test/f.jpg' },
+          { id: 9, nama: 'Tamu', surel: 'tamu@example.com', peran_kode: 'unknown', aktif: 1, login_terakhir: null, created_at: null, foto: '' },
         ],
       },
     });
     mockUseDetailPengguna.mockReturnValue({ isLoading: false, isError: false, data: null });
   });
 
-  it('menampilkan daftar pengguna tanpa edit peran di tabel', () => {
+  it('menampilkan daftar pengguna, filter peran, dan kolom terdaftar', () => {
     render(<MemoryRouter><PenggunaAdmin /></MemoryRouter>);
 
     expect(screen.getByRole('heading', { name: 'Pengguna' })).toBeInTheDocument();
     expect(screen.getByText('Budi')).toBeInTheDocument();
     expect(screen.getByText('Sari')).toBeInTheDocument();
     expect(screen.getByLabelText('Filter status pengguna')).toBeInTheDocument();
-    expect(screen.queryByLabelText(/Peran/i)).not.toBeInTheDocument();
+    expect(screen.getByLabelText('Filter peran pengguna')).toBeInTheDocument();
+    expect(screen.getByText('Terdaftar')).toBeInTheDocument();
+    expect(screen.getByText(formatLocalDateTime('2026-03-01T08:30:00.000Z', { fallback: '—', separator: ', ' }))).toBeInTheDocument();
   });
 
   it('membuka panel sunting dan simpan pengguna', () => {
@@ -210,16 +213,28 @@ describe('PenggunaAdmin', () => {
     expect(panggilanTerakhir.aktif).toBe('1');
   });
 
+  it('menjalankan handler cari dan menerapkan filter peran', () => {
+    render(<MemoryRouter><PenggunaAdmin /></MemoryRouter>);
+
+    fireEvent.change(screen.getByLabelText('Filter peran pengguna'), { target: { value: '2' } });
+    fireEvent.click(screen.getByText('Cari'));
+
+    const panggilanTerakhir = mockUseDaftarPengguna.mock.calls.at(-1)?.[0] || {};
+    expect(panggilanTerakhir.peran_id).toBe('2');
+  });
+
   it('menjalankan reset filter pengguna', () => {
     render(<MemoryRouter><PenggunaAdmin /></MemoryRouter>);
 
     fireEvent.change(screen.getByPlaceholderText('Cari pengguna, surel, atau peran …'), { target: { value: 'budi' } });
     fireEvent.change(screen.getByLabelText('Filter status pengguna'), { target: { value: '1' } });
+    fireEvent.change(screen.getByLabelText('Filter peran pengguna'), { target: { value: '2' } });
     fireEvent.click(screen.getAllByRole('button', { name: '✕' })[0]);
 
     const panggilanTerakhir = mockUseDaftarPengguna.mock.calls.at(-1)?.[0] || {};
     expect(panggilanTerakhir.q).toBe('');
     expect(panggilanTerakhir.aktif).toBe('');
+    expect(panggilanTerakhir.peran_id).toBe('');
   });
 
   it('mengabaikan detail route saat payload detail tidak memiliki id', () => {

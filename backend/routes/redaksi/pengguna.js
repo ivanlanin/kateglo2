@@ -24,11 +24,14 @@ router.get('/', periksaIzin('kelola_pengguna'), async (req, res, next) => {
     const { limit, offset } = parsePagination(req.query);
     const q = parseSearchQuery(req.query.q);
     const aktif = parseTrimmedString(req.query.aktif);
+    const peranIdRaw = parseTrimmedString(req.query.peran_id);
+    const peranId = Number(peranIdRaw);
     const { data, total } = await ModelPengguna.daftarPengguna({
       limit,
       offset,
       q,
       aktif: ['0', '1'].includes(aktif) ? aktif : '',
+      peran_id: Number.isInteger(peranId) && peranId > 0 ? peranId : '',
     });
 
     return res.json({ success: true, ...buildPaginatedResult({ data, total, pagination: { limit, offset } }) });

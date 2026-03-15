@@ -818,6 +818,7 @@ export function useDaftarPengguna({
   lastPage = false,
   q = '',
   aktif = '',
+  peran_id = '',
 } = {}) {
   return useDaftarAdmin('/api/redaksi/pengguna', 'admin-pengguna', {
     limit,
@@ -826,6 +827,7 @@ export function useDaftarPengguna({
     lastPage,
     q,
     aktif,
+    peran_id,
   });
 }
 

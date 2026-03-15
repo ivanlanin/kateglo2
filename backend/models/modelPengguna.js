@@ -99,9 +99,10 @@ class ModelPengguna {
    * @param {{ limit?: number, offset?: number }} options
    * @returns {Promise<{ data: Array, total: number }>}
    */
-  static async daftarPengguna({ limit = 50, offset = 0, q = '', aktif = '' } = {}) {
+  static async daftarPengguna({ limit = 50, offset = 0, q = '', aktif = '', peran_id = '' } = {}) {
     const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
     const safeOffset = Math.max(Number(offset) || 0, 0);
+    const peranId = Number(peran_id);
 
     const params = [];
     const conditions = [];
@@ -117,6 +118,12 @@ class ModelPengguna {
       conditions.push('p.aktif = TRUE');
     } else if (aktif === '0') {
       conditions.push('p.aktif = FALSE');
+    }
+
+    if (Number.isInteger(peranId) && peranId > 0) {
+      conditions.push(`p.peran_id = $${idx}`);
+      params.push(peranId);
+      idx++;
     }
 
     const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';

@@ -36,6 +36,8 @@ function PenggunaAdmin() {
   const { cari, setCari, q, offset, setOffset, kirimCari, hapusCari, limit, currentPage, cursor, direction, lastPage } = usePencarianAdmin(50);
   const [filterAktifDraft, setFilterAktifDraft] = useState('');
   const [filterAktif, setFilterAktif] = useState('');
+  const [filterPeranDraft, setFilterPeranDraft] = useState('');
+  const [filterPeran, setFilterPeran] = useState('');
   const idDariPath = parsePositiveIntegerParam(idParam);
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
@@ -47,6 +49,7 @@ function PenggunaAdmin() {
     lastPage,
     q,
     aktif: filterAktif,
+    peran_id: filterPeran,
   });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailPengguna(idDariPath);
   const { data: peranResp } = useDaftarPeran();
@@ -118,18 +121,26 @@ function PenggunaAdmin() {
 
   const handleCari = () => {
     setFilterAktif(filterAktifDraft);
+    setFilterPeran(filterPeranDraft);
     kirimCari(cari);
   };
 
   const handleResetFilter = () => {
     setFilterAktifDraft('');
     setFilterAktif('');
+    setFilterPeranDraft('');
+    setFilterPeran('');
     hapusCari();
   };
 
   const opsiPeran = [
     { value: '', label: '— Pilih peran —' },
     ...daftarPeran.map((r) => ({ value: r.id, label: r.nama })),
+  ];
+
+  const opsiFilterPeran = [
+    { value: '', label: '—Peran—' },
+    ...daftarPeran.map((r) => ({ value: String(r.id), label: r.nama })),
   ];
 
   const kolom = [
@@ -170,6 +181,11 @@ function PenggunaAdmin() {
       label: 'Masuk Terakhir',
       render: (p) => formatTanggal(p.login_terakhir),
     },
+    {
+      key: 'created_at',
+      label: 'Terdaftar',
+      render: (p) => formatTanggal(p.created_at),
+    },
   ];
 
   return (
@@ -181,6 +197,13 @@ function PenggunaAdmin() {
         onHapus={handleResetFilter}
         placeholder="Cari pengguna, surel, atau peran …"
         filters={[
+          {
+            key: 'peran_id',
+            value: filterPeranDraft,
+            onChange: setFilterPeranDraft,
+            options: opsiFilterPeran,
+            ariaLabel: 'Filter peran pengguna',
+          },
           {
             key: 'aktif',
             value: filterAktifDraft,

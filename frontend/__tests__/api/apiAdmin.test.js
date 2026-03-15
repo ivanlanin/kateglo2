@@ -501,6 +501,12 @@ describe('apiAdmin', () => {
       params: { limit: 20, cursor: undefined, direction: 'next', lastPage: undefined, q: undefined, aktif: undefined },
     });
 
+    const penggunaDenganPeran = useDaftarPengguna({ limit: 20, peran_id: '3' });
+    await penggunaDenganPeran.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/pengguna', {
+      params: { limit: 20, cursor: undefined, direction: 'next', lastPage: undefined, q: undefined, aktif: undefined, peran_id: '3' },
+    });
+
     const peran = useDaftarPeran();
     await peran.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/pengguna/peran');

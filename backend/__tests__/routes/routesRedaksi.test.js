@@ -255,6 +255,7 @@ describe('routes/redaksi', () => {
         offset: 0,
         q: '',
         aktif: '',
+        peran_id: '',
       });
       expect(response.body.total).toBe(1);
     });
@@ -391,6 +392,31 @@ describe('routes/redaksi', () => {
         offset: 0,
         q: '',
         aktif: '1',
+        peran_id: '',
+      });
+    });
+
+    it('GET /api/redaksi/pengguna meneruskan peran_id valid dan mengabaikan yang tidak valid', async () => {
+      ModelPengguna.daftarPengguna.mockResolvedValue({ data: [], total: 0 });
+
+      const validResponse = await callAsAdmin('get', '/api/redaksi/pengguna?peran_id=3');
+      const invalidResponse = await callAsAdmin('get', '/api/redaksi/pengguna?peran_id=abc');
+
+      expect(validResponse.status).toBe(200);
+      expect(invalidResponse.status).toBe(200);
+      expect(ModelPengguna.daftarPengguna).toHaveBeenNthCalledWith(1, {
+        limit: 50,
+        offset: 0,
+        q: '',
+        aktif: '',
+        peran_id: 3,
+      });
+      expect(ModelPengguna.daftarPengguna).toHaveBeenNthCalledWith(2, {
+        limit: 50,
+        offset: 0,
+        q: '',
+        aktif: '',
+        peran_id: '',
       });
     });
   });

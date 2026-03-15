@@ -209,6 +209,21 @@ describe('ModelPengguna', () => {
     );
   });
 
+  it('daftarPengguna menambahkan filter peran_id valid', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 31 }] });
+
+    await ModelPengguna.daftarPengguna({ q: 'admin', aktif: '1', peran_id: '2', limit: 10, offset: 5 });
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('WHERE (p.nama ILIKE $1 OR p.surel ILIKE $1 OR COALESCE(r.nama, \'\') ILIKE $1 OR COALESCE(r.kode, \'\') ILIKE $1) AND p.aktif = TRUE AND p.peran_id = $2'),
+      ['%admin%', 2]
+    );
+    expect(db.query).toHaveBeenNthCalledWith(2, expect.any(String), ['%admin%', 2, 10, 5]);
+  });
+
   it('ubahPeran mengembalikan null jika tidak ada baris terupdate', async () => {
     db.query.mockResolvedValue({ rows: [] });
 
