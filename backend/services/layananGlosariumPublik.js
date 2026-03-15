@@ -68,13 +68,9 @@ function ekstrakKandidatTautanIndonesia(value = '') {
     for (const token of tokens) {
       if (token.isKurung) continue;
 
-      const textUtama = String(token.text || '').trim();
-      if (!textUtama) continue;
-
+      const textUtama = token.text.trim();
       const indeks = normalisasiIndeksKamus(textUtama).toLowerCase();
-      if (indeks) {
-        hasil.push(indeks);
-      }
+      hasil.push(indeks);
     }
   }
 
@@ -82,9 +78,8 @@ function ekstrakKandidatTautanIndonesia(value = '') {
 }
 
 function kumpulkanKandidatTautanIndonesia(items = []) {
-  return [...new Set(
-    (Array.isArray(items) ? items : []).flatMap((item) => ekstrakKandidatTautanIndonesia(item?.indonesia || ''))
-  )];
+  if (!Array.isArray(items)) return [];
+  return [...new Set(items.flatMap((item) => ekstrakKandidatTautanIndonesia(item?.indonesia || '')))];
 }
 
 async function tambahkanTautanIndonesiaValid(payload = {}, items = []) {
@@ -343,7 +338,12 @@ module.exports.__private = {
   tokenizeKurung,
   ekstrakKandidatTautanIndonesia,
   kumpulkanKandidatTautanIndonesia,
+  tambahkanTautanIndonesiaValid,
   shouldCacheBrowseGlosarium,
+  bentukResponsCursor,
+  invalidasiCacheBrowseGlosarium,
+  ambilMasterGlosariumPublik,
+  ambilDaftarGlosariumPublik,
   buatCacheKeyVersion,
   buatCacheKeyVersionBrowseGlosarium,
   buatCacheKeyMasterGlosarium,

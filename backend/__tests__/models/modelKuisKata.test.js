@@ -394,4 +394,209 @@ describe('ModelKuisKata', () => {
       ['2026-03-15']
     );
   });
+
+  it('parser publik menormalisasi tanggal, pengguna, limit, jumlah, dan durasi', () => {
+    expect(__private.parseBilangan()).toBe(0);
+    expect(ModelKuisKata.parseTanggal()).toBeNull();
+    expect(ModelKuisKata.parseTanggal('2026/03/15')).toBeNull();
+    expect(ModelKuisKata.parseTanggal('2026-03-15')).toBe('2026-03-15');
+    expect(ModelKuisKata.parsePenggunaId('0')).toBeNull();
+    expect(ModelKuisKata.parsePenggunaId('7')).toBe(7);
+    expect(ModelKuisKata.parseJumlahBenar('abc', 4)).toBe(4);
+    expect(ModelKuisKata.parseJumlahBenar('120')).toBe(100);
+    expect(ModelKuisKata.parseJumlahPertanyaan('5')).toBe(5);
+    expect(ModelKuisKata.parseJumlahPertanyaan('-1', 5)).toBe(0);
+    expect(ModelKuisKata.parseDurasiDetik('999999')).toBe(86400);
+    expect(ModelKuisKata.parseJumlahMain('5')).toBe(5);
+    expect(ModelKuisKata.parseJumlahMain('9999')).toBe(1000);
+    expect(ModelKuisKata.parseLimit('5')).toBe(5);
+    expect(ModelKuisKata.parseLimit('0', 10, 50)).toBe(1);
+  });
+
+  it('ambilTanggalHariIniJakarta mengembalikan tanggal atau null', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ tanggal: '2026-03-15' }] })
+      .mockResolvedValueOnce({ rows: [] });
+
+    await expect(ModelKuisKata.ambilTanggalHariIniJakarta()).resolves.toBe('2026-03-15');
+    await expect(ModelKuisKata.ambilTanggalHariIniJakarta()).resolves.toBeNull();
+  });
+
+  it('simpanRekapHarian memvalidasi pengguna, tanggal, jumlah pertanyaan, dan jumlah benar', async () => {
+    await expect(ModelKuisKata.simpanRekapHarian({ penggunaId: 'x', jumlahBenar: 1, jumlahPertanyaan: 1 })).rejects.toThrow('Pengguna tidak valid');
+
+    jest.spyOn(ModelKuisKata, 'ambilTanggalHariIniJakarta').mockResolvedValueOnce(null);
+    await expect(ModelKuisKata.simpanRekapHarian({ penggunaId: 1, tanggal: 'invalid', jumlahBenar: 1, jumlahPertanyaan: 1 })).rejects.toThrow('Tanggal tidak valid');
+
+    await expect(ModelKuisKata.simpanRekapHarian({ penggunaId: 1, tanggal: '2026-03-15', jumlahBenar: 0, jumlahPertanyaan: 0 })).rejects.toThrow('Jumlah pertanyaan harus lebih dari 0');
+    await expect(ModelKuisKata.simpanRekapHarian({ penggunaId: 1, tanggal: '2026-03-15', jumlahBenar: 3, jumlahPertanyaan: 2 })).rejects.toThrow('Jumlah benar tidak boleh melebihi jumlah pertanyaan');
+  });
+
+  it('simpanRekapHarian menyimpan rekap dan memetakan skor total', async () => {
+    db.query.mockResolvedValueOnce({
+      rows: [{
+        id: '5',
+        pengguna_id: '7',
+        tanggal: '2026-03-15',
+        jumlah_benar: '4',
+        jumlah_pertanyaan: '5',
+        durasi_detik: '12',
+        jumlah_main: '2',
+      }],
+    });
+
+    await expect(ModelKuisKata.simpanRekapHarian({
+      penggunaId: 7,
+      tanggal: '2026-03-15',
+      jumlahBenar: 4,
+      jumlahPertanyaan: 5,
+      durasiDetik: 12,
+      jumlahMain: 2,
+    })).resolves.toEqual({
+      id: 5,
+      pengguna_id: 7,
+      tanggal: '2026-03-15',
+      jumlah_benar: 4,
+      jumlah_pertanyaan: 5,
+      durasi_detik: 12,
+      jumlah_main: 2,
+      skor_total: 40,
+    });
+
+    db.query.mockResolvedValueOnce({ rows: [{}] });
+    await expect(ModelKuisKata.simpanRekapHarian({
+      penggunaId: 7,
+      tanggal: '2026-03-15',
+      jumlahBenar: 1,
+      jumlahPertanyaan: 1,
+    })).resolves.toEqual({
+      id: 0,
+      pengguna_id: 0,
+      tanggal: '2026-03-15',
+      jumlah_benar: 0,
+      jumlah_pertanyaan: 0,
+      durasi_detik: 0,
+      jumlah_main: 0,
+      skor_total: 0,
+    });
+
+    db.query.mockResolvedValueOnce({ rows: [] });
+    await expect(ModelKuisKata.simpanRekapHarian({
+      penggunaId: 7,
+      tanggal: '2026-03-15',
+      jumlahBenar: 1,
+      jumlahPertanyaan: 1,
+    })).resolves.toEqual({
+      id: 0,
+      pengguna_id: 0,
+      tanggal: '2026-03-15',
+      jumlah_benar: 0,
+      jumlah_pertanyaan: 0,
+      durasi_detik: 0,
+      jumlah_main: 0,
+      skor_total: 0,
+    });
+  });
+
+  it('ambilKlasemenHarian dan daftarRekapAdmin memetakan baris hasil dengan benar', async () => {
+    db.query
+      .mockResolvedValueOnce({
+        rows: [{
+          id: '1',
+          pengguna_id: '2',
+          nama: 'A',
+          tanggal: '2026-03-15',
+          jumlah_benar: '6',
+          jumlah_pertanyaan: '7',
+          durasi_detik: '11',
+          jumlah_main: '1',
+          skor_total: '60',
+        }],
+      })
+      .mockResolvedValueOnce({
+        rows: [{
+          id: '3',
+          pengguna_id: '4',
+          nama: 'B',
+          tanggal: '2026-03-14',
+          jumlah_benar: '5',
+          jumlah_pertanyaan: '7',
+          durasi_detik: '13',
+          jumlah_main: '2',
+          skor_total: '50',
+        }],
+      })
+      .mockResolvedValueOnce({ rows: [] });
+
+    await expect(ModelKuisKata.ambilKlasemenHarian({ tanggal: '2026-03-15', limit: 99 })).resolves.toEqual([
+      {
+        id: 1,
+        pengguna_id: 2,
+        nama: 'A',
+        tanggal: '2026-03-15',
+        jumlah_benar: 6,
+        jumlah_pertanyaan: 7,
+        durasi_detik: 11,
+        jumlah_main: 1,
+        skor_total: 60,
+      },
+    ]);
+    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('LIMIT $2'), ['2026-03-15', 50]);
+
+    await expect(ModelKuisKata.daftarRekapAdmin({ tanggal: '2026-03-14', limit: 5000 })).resolves.toEqual([
+      {
+        id: 3,
+        pengguna_id: 4,
+        nama: 'B',
+        tanggal: '2026-03-14',
+        jumlah_benar: 5,
+        jumlah_pertanyaan: 7,
+        durasi_detik: 13,
+        jumlah_main: 2,
+        skor_total: 50,
+      },
+    ]);
+    expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('WHERE kk.tanggal = $1::date'), ['2026-03-14', 1000]);
+
+    await expect(ModelKuisKata.daftarRekapAdmin()).resolves.toEqual([]);
+    expect(db.query).toHaveBeenNthCalledWith(3, expect.not.stringContaining('WHERE kk.tanggal = $1::date'), [200]);
+
+    db.query
+      .mockResolvedValueOnce({ rows: [{}] })
+      .mockResolvedValueOnce({ rows: [{}] });
+
+    await expect(ModelKuisKata.ambilKlasemenHarian({ tanggal: '2026-03-15', limit: 1 })).resolves.toEqual([
+      {
+        id: 0,
+        pengguna_id: 0,
+        nama: undefined,
+        tanggal: undefined,
+        jumlah_benar: 0,
+        jumlah_pertanyaan: 0,
+        durasi_detik: 0,
+        jumlah_main: 0,
+        skor_total: 0,
+      },
+    ]);
+    await expect(ModelKuisKata.daftarRekapAdmin({ tanggal: '2026-03-15', limit: 1 })).resolves.toEqual([
+      {
+        id: 0,
+        pengguna_id: 0,
+        nama: undefined,
+        tanggal: undefined,
+        jumlah_benar: 0,
+        jumlah_pertanyaan: 0,
+        durasi_detik: 0,
+        jumlah_main: 0,
+        skor_total: 0,
+      },
+    ]);
+
+    jest.spyOn(ModelKuisKata, 'ambilTanggalHariIniJakarta').mockResolvedValueOnce('2026-03-16');
+    db.query.mockResolvedValueOnce({ rows: [] });
+    await expect(ModelKuisKata.ambilKlasemenHarian()).resolves.toEqual([]);
+
+    db.query.mockResolvedValueOnce({ rows: [{}] });
+    await expect(ModelKuisKata.hitungPesertaHarian()).resolves.toBe(0);
+  });
 });

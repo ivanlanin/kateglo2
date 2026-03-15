@@ -657,6 +657,7 @@ class ModelKuisKata {
 }
 
 ModelKuisKata.__private = {
+  parseBilangan,
   acakDariArray,
   acakArray,
   acakPilihan,

@@ -1165,6 +1165,38 @@ describe('routes backend', () => {
     });
   });
 
+  it('GET /api/publik/glosarium/sumber/:sumber memakai nama saat kode sumber tidak ada', async () => {
+    ModelGlosarium.resolveSlugSumber.mockResolvedValue({ id: 77, kode: '', nama: 'KBBI VI' });
+    layananGlosariumPublik.ambilGlosariumPerSumberPublik.mockResolvedValue({ data: [], total: 0, pageInfo: {} });
+
+    const response = await request(createApp()).get('/api/publik/glosarium/sumber/kbbi-vi');
+
+    expect(response.status).toBe(200);
+    expect(layananGlosariumPublik.ambilGlosariumPerSumberPublik).toHaveBeenCalledWith('KBBI VI', {
+      sumberId: 77,
+      limit: 100,
+      cursor: null,
+      direction: 'next',
+      lastPage: false,
+    });
+  });
+
+  it('GET /api/publik/glosarium/sumber/:sumber fallback ke slug saat kode dan nama kosong', async () => {
+    ModelGlosarium.resolveSlugSumber.mockResolvedValue({ id: 88, kode: '', nama: '' });
+    layananGlosariumPublik.ambilGlosariumPerSumberPublik.mockResolvedValue({ data: [], total: 0, pageInfo: {} });
+
+    const response = await request(createApp()).get('/api/publik/glosarium/sumber/sumber-mentah');
+
+    expect(response.status).toBe(200);
+    expect(layananGlosariumPublik.ambilGlosariumPerSumberPublik).toHaveBeenCalledWith('sumber-mentah', {
+      sumberId: 88,
+      limit: 100,
+      cursor: null,
+      direction: 'next',
+      lastPage: false,
+    });
+  });
+
   it('GET /api/publik/glosarium/sumber/:sumber mengembalikan 404 jika sumber tidak ditemukan', async () => {
     ModelGlosarium.resolveSlugSumber.mockResolvedValue(null);
 

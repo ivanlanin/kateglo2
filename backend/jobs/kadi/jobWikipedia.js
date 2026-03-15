@@ -396,6 +396,9 @@ module.exports = {
   tokenisasiDanFilter,
   STOPWORDS,
   __private: {
+    delay,
+    fetchJson,
     ambilDaftarArtikelPilihanDenganFetcher,
+    RATE_LIMIT_MS,
   },
 };

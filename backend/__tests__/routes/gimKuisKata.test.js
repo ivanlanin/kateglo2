@@ -117,6 +117,11 @@ describe('routes/gim/kuisKata', () => {
     });
   });
 
+  it('parseLimit memakai parser model dengan fallback bawaan', () => {
+    expect(router.__private.parseLimit('abc')).toBe(10);
+    expect(router.__private.parseLimit('99')).toBe(50);
+  });
+
   it('GET /ronde meneruskan riwayat ke model', async () => {
     ModelKuisKata.ambilRonde.mockResolvedValueOnce([{ mode: 'kamus', soal: 'alpha' }]);
 
@@ -171,6 +176,15 @@ describe('routes/gim/kuisKata', () => {
     });
   });
 
+  it('GET /klasemen meneruskan error ke middleware', async () => {
+    ModelKuisKata.ambilKlasemenHarian.mockRejectedValueOnce(new Error('klasemen gagal'));
+
+    const response = await request(createApp()).get('/api/publik/gim/kuis-kata/klasemen');
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('klasemen gagal');
+  });
+
   it('POST /submit memerlukan autentikasi pengguna', async () => {
     const response = await request(createApp())
       .post('/api/publik/gim/kuis-kata/submit')
@@ -223,5 +237,35 @@ describe('routes/gim/kuisKata', () => {
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe('Pengguna tidak valid');
+  });
+
+  it('POST /submit memetakan error jumlah pertanyaan dan jumlah benar serta meneruskan error umum', async () => {
+    ModelKuisKata.simpanRekapHarian.mockRejectedValueOnce(new Error('Jumlah pertanyaan harus lebih dari 0'));
+
+    let response = await request(createApp())
+      .post('/api/publik/gim/kuis-kata/submit')
+      .set('x-user-pid', '9')
+      .send({ jumlahBenar: 1, jumlahPertanyaan: 1, durasiDetik: 17 });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toContain('lebih dari 0');
+
+    ModelKuisKata.simpanRekapHarian.mockRejectedValueOnce(new Error('Jumlah benar tidak boleh melebihi jumlah pertanyaan'));
+    response = await request(createApp())
+      .post('/api/publik/gim/kuis-kata/submit')
+      .set('x-user-pid', '9')
+      .send({ jumlahBenar: 1, jumlahPertanyaan: 1, durasiDetik: 17 });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toContain('melebihi');
+
+    ModelKuisKata.simpanRekapHarian.mockRejectedValueOnce(new Error('server rusak'));
+    response = await request(createApp())
+      .post('/api/publik/gim/kuis-kata/submit')
+      .set('x-user-pid', '9')
+      .send({ jumlahBenar: 1, jumlahPertanyaan: 1, durasiDetik: 17 });
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('server rusak');
   });
 });

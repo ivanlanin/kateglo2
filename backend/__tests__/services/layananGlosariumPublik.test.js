@@ -28,6 +28,7 @@ const {
   ambilDaftarBidangPublik,
   ambilDaftarSumberPublik,
   ambilGlosariumPerBidangPublik,
+  ambilGlosariumPerSumberPublik,
   ambilDetailGlosarium,
   invalidasiCacheDetailGlosarium,
   buatCacheKeyDetailGlosarium,
@@ -89,6 +90,123 @@ describe('layananGlosariumPublik', () => {
     expect(__private.buatCacheKeyMasterGlosarium('bidang', 'Glosarium Khusus')).toBe('glosarium:master:bidang:m-glosarium%20khusus');
   });
 
+  it('helper private menormalisasi istilah, memecah entri, token kurung, kandidat tautan, cache browse, dan versi cache', async () => {
+    getJson
+      .mockResolvedValueOnce('0')
+      .mockResolvedValueOnce('abc');
+
+    expect(__private.normalisasiAsing('zero%20sum')).toBe('zero sum');
+    expect(__private.normalisasiIndeksKamus()).toBe('');
+    expect(__private.normalisasiIndeksKamus('Kata (2)')).toBe('Kata');
+    expect(__private.splitEntriGlosarium(' satu ; dua ;  ')).toEqual(['satu', 'dua']);
+    expect(__private.splitEntriGlosarium()).toEqual([]);
+    expect(__private.tokenizeKurung('alpha (beta) gamma')).toEqual([
+      { text: 'alpha ', isKurung: false },
+      { text: '(beta)', isKurung: true },
+      { text: ' gamma', isKurung: false },
+    ]);
+    expect(__private.tokenizeKurung()).toEqual([]);
+    expect(__private.tokenizeKurung('(beta) gamma')).toEqual([
+      { text: '(beta)', isKurung: true },
+      { text: ' gamma', isKurung: false },
+    ]);
+    expect(__private.ekstrakKandidatTautanIndonesia()).toEqual([]);
+    expect(__private.ekstrakKandidatTautanIndonesia('kata (cak); frasa; ')).toEqual(['kata', 'frasa']);
+    expect(__private.ekstrakKandidatTautanIndonesia(' (cak); - ; kata')).toEqual(['-', 'kata']);
+    expect(__private.kumpulkanKandidatTautanIndonesia()).toEqual([]);
+    expect(__private.kumpulkanKandidatTautanIndonesia({})).toEqual([]);
+    expect(__private.kumpulkanKandidatTautanIndonesia([{ indonesia: 'kata; kata; frasa (ark)' }, {}])).toEqual(['kata', 'frasa']);
+    expect(__private.tambahkanTautanIndonesiaValid()).resolves.toEqual({ tautan_indonesia_valid: [] });
+    expect(__private.shouldCacheBrowseGlosarium('cari', {})).toBe(true);
+    expect(__private.shouldCacheBrowseGlosarium('cari', { cursor: 'abc' })).toBe(false);
+    expect(__private.shouldCacheBrowseGlosarium('cari', { direction: 'prev' })).toBe(false);
+    expect(__private.shouldCacheBrowseGlosarium('cari', { lastPage: true })).toBe(false);
+    expect(__private.shouldCacheBrowseGlosarium('bidang')).toBe(true);
+    expect(__private.shouldCacheBrowseGlosarium('sumber')).toBe(true);
+    expect(__private.shouldCacheBrowseGlosarium('lain')).toBe(false);
+    expect(__private.buatCacheKeyMasterGlosarium()).toBe('glosarium:master::m-');
+    expect(buatCacheKeyBrowseGlosarium('scope')).toBe('glosarium:browse:scope:v-0:l-100:c-:d-next:lp-0');
+    expect(buatCacheKeyBrowseGlosarium(undefined, undefined, Number.NaN)).toBe('glosarium:browse::v-0:l-100:c-:d-next:lp-0');
+    expect(buatCacheKeyBrowseGlosarium('scope', { limit: 0 })).toBe('glosarium:browse:scope:v-0:l-100:c-:d-next:lp-0');
+    expect(buatCacheKeyDetailGlosarium('term', undefined, undefined)).toBe('glosarium:detail:term:v-0:l-20:mc-:rc-');
+    await expect(__private.ambilVersiCache('term')).resolves.toBe(0);
+    await expect(__private.ambilVersiCacheBrowseGlosarium()).resolves.toBe(0);
+    await expect(__private.ambilVersiCache()).resolves.toBe(0);
+    expect(__private.bentukResponsCursor({ hasPrev: 0, hasNext: 1, prevCursor: '', nextCursor: 'n' })).toEqual({
+      hasPrev: 0,
+      hasNext: 1,
+      prevCursor: '',
+      nextCursor: 'n',
+      pageInfo: { hasPrev: false, hasNext: true, prevCursor: null, nextCursor: 'n' },
+    });
+  });
+
+  it('helper private invalidasi cache browse, master loader, tautan valid, dan daftar browse langsung', async () => {
+    const nowSpy = jest.spyOn(Date, 'now').mockReturnValue(456789);
+    getTtlSeconds.mockReturnValue(1000);
+    await __private.invalidasiCacheBrowseGlosarium();
+    expect(setJson).toHaveBeenCalledWith('glosarium:browse:version', 456789, 4000);
+
+    getJson.mockReset();
+    getJson.mockResolvedValueOnce(null).mockResolvedValueOnce([{ data: 'cached' }]);
+    setJson.mockClear();
+    const loader = jest.fn().mockResolvedValue([{ kode: 'ling' }]);
+    await expect(__private.ambilMasterGlosariumPublik('bidang', 'glosarium', loader)).resolves.toEqual([{ kode: 'ling' }]);
+    expect(loader).toHaveBeenCalledTimes(1);
+    await expect(__private.ambilMasterGlosariumPublik('bidang', 'glosarium', loader)).resolves.toEqual([{ data: 'cached' }]);
+
+    ModelEntri.ambilIndeksValidBatch.mockResolvedValueOnce(['kata']);
+    await expect(__private.tambahkanTautanIndonesiaValid({ ok: true }, [{ indonesia: 'kata; --' }])).resolves.toEqual({ ok: true, tautan_indonesia_valid: ['kata'] });
+
+    getJson.mockReset();
+    getJson.mockResolvedValue(null);
+    ModelGlosarium.cariCursor.mockResolvedValueOnce({ hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null });
+    ModelEntri.ambilIndeksValidBatch.mockResolvedValueOnce([]);
+    await expect(__private.ambilDaftarGlosariumPublik('lain', null)).resolves.toEqual({
+      hasPrev: false,
+      hasNext: false,
+      prevCursor: null,
+      nextCursor: null,
+      pageInfo: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+      tautan_indonesia_valid: [],
+    });
+
+    getJson.mockResolvedValueOnce(7).mockResolvedValueOnce(null);
+    ModelGlosarium.cariCursor.mockResolvedValueOnce({ data: [], total: 0, hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null });
+    ModelEntri.ambilIndeksValidBatch.mockResolvedValueOnce([]);
+    await expect(__private.ambilDaftarGlosariumPublik('bidang', undefined, { bidangId: 1 }, {})).resolves.toEqual(expect.objectContaining({ tautan_indonesia_valid: [] }));
+    nowSpy.mockRestore();
+  });
+
+  it('ambilDaftarSumberPublik memakai default filterMode konteks', async () => {
+    getJson.mockResolvedValueOnce(null);
+    ModelGlosarium.ambilDaftarSumber.mockResolvedValueOnce([{ kode: 'kbbi', nama: 'KBBI' }]);
+
+    const result = await ambilDaftarSumberPublik();
+
+    expect(ModelGlosarium.ambilDaftarSumber).toHaveBeenCalledWith('konteks');
+    expect(result).toEqual([{ kode: 'kbbi', nama: 'KBBI' }]);
+  });
+
+  it('ambilGlosariumPerBidangPublik dan ambilGlosariumPerSumberPublik memakai opsi default saat tidak diberikan', async () => {
+    getJson.mockReset();
+    getJson.mockResolvedValue(null);
+    ModelGlosarium.cariCursor
+      .mockResolvedValueOnce({ data: [], total: 0, hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null })
+      .mockResolvedValueOnce({ data: [], total: 0, hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null });
+    ModelEntri.ambilIndeksValidBatch.mockResolvedValue([]);
+
+    await ambilGlosariumPerBidangPublik('ling');
+    await ambilGlosariumPerSumberPublik('kbbi', { sumberId: 1 });
+    await ambilGlosariumPerSumberPublik('kbbi');
+    await cariGlosariumPublik('kata');
+
+    expect(ModelGlosarium.cariCursor).toHaveBeenNthCalledWith(1, expect.objectContaining({ bidangId: null, bidang: '', limit: 100, cursor: null, direction: 'next', lastPage: false, sortBy: 'asing' }));
+    expect(ModelGlosarium.cariCursor).toHaveBeenNthCalledWith(2, expect.objectContaining({ sumberId: 1, limit: 100, cursor: null, direction: 'next', lastPage: false, sortBy: 'asing' }));
+    expect(ModelGlosarium.cariCursor).toHaveBeenNthCalledWith(3, expect.objectContaining({ sumberId: undefined, limit: 100, cursor: null, direction: 'next', lastPage: false, sortBy: 'asing' }));
+    expect(ModelGlosarium.cariCursor).toHaveBeenNthCalledWith(4, expect.objectContaining({ q: 'kata', limit: 100, cursor: null, direction: 'next', lastPage: false }));
+  });
+
   it('ambilDetailGlosarium langsung ke model untuk istilah kosong', async () => {
     ModelGlosarium.ambilDetailAsing.mockResolvedValue({ data: [] });
 
@@ -115,6 +233,7 @@ describe('layananGlosariumPublik', () => {
   });
 
   it('ambilDetailGlosarium mengembalikan data cache saat tersedia', async () => {
+    getJson.mockReset();
     getJson
       .mockResolvedValueOnce(12)
       .mockResolvedValueOnce({ data: [{ indonesia: 'jumlah nol' }] });
@@ -128,6 +247,8 @@ describe('layananGlosariumPublik', () => {
   });
 
   it('ambilDetailGlosarium query model + simpan cache saat cache miss', async () => {
+    getJson.mockReset();
+    getJson.mockResolvedValueOnce(0).mockResolvedValueOnce(null);
     ModelGlosarium.ambilDetailAsing.mockResolvedValue({ persis: [{ indonesia: 'uji' }], mengandung: [], mirip: [] });
 
     const result = await ambilDetailGlosarium('Term', {
@@ -233,6 +354,45 @@ describe('layananGlosariumPublik', () => {
     expect(ModelGlosarium.ambilDaftarSumber).not.toHaveBeenCalled();
     expect(setJson).not.toHaveBeenCalled();
     expect(result).toEqual([{ kode: 'kbbi', nama: 'KBBI' }]);
+  });
+
+  it('ambilGlosariumPerSumberPublik memuat dari model dan menyimpan cache browse', async () => {
+    getJson
+      .mockResolvedValueOnce(8)
+      .mockResolvedValueOnce(null);
+    ModelGlosarium.cariCursor.mockResolvedValue({
+      data: [{ id: 2, indonesia: 'kata', asing: 'term' }],
+      total: 1,
+      hasPrev: true,
+      hasNext: true,
+      prevCursor: 'p',
+      nextCursor: 'n',
+    });
+    ModelEntri.ambilIndeksValidBatch.mockResolvedValue(['kata']);
+
+    const result = await ambilGlosariumPerSumberPublik('kbbi', { sumberId: 3, limit: 10 });
+
+    expect(ModelGlosarium.cariCursor).toHaveBeenCalledWith({
+      sumberId: 3,
+      limit: 10,
+      aktifSaja: true,
+      hitungTotal: true,
+      cursor: null,
+      direction: 'next',
+      lastPage: false,
+      sortBy: 'asing',
+    });
+    expect(setJson).toHaveBeenCalledWith('glosarium:browse:sumber%3Akbbi:v-8:l-10:c-:d-next:lp-0', {
+      data: [{ id: 2, indonesia: 'kata', asing: 'term' }],
+      total: 1,
+      hasPrev: true,
+      hasNext: true,
+      prevCursor: 'p',
+      nextCursor: 'n',
+      pageInfo: { hasPrev: true, hasNext: true, prevCursor: 'p', nextCursor: 'n' },
+      tautan_indonesia_valid: ['kata'],
+    }, 300);
+    expect(result.tautan_indonesia_valid).toEqual(['kata']);
   });
 
   it('ambilDetailGlosarium memaksa versi 0 saat cache version invalid', async () => {

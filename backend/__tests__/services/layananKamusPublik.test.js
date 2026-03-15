@@ -57,6 +57,7 @@ const {
   ambilDetailKamus,
   hapusCacheDetailKamus,
   buatCacheKeyDetailKamus,
+  __private,
 } = require('../../services/layananKamusPublik');
 
 describe('layananKamusPublik.cariKamus', () => {
@@ -113,6 +114,43 @@ describe('layananKamusPublik.cariKamus', () => {
       lastPage: true,
       hitungTotal: true,
     });
+  });
+
+  it('helper privat membaca teks entri, menormalisasi indeks, memecah relasi, dan menjaga unik tanpa beda kapitalisasi', () => {
+    expect(__private.bacaTeksEntri({ entri: 'kata' })).toBe('kata');
+    expect(__private.bacaTeksEntri()).toBe('');
+    expect(__private.normalisasiIndeksKamus('-Kata-')).toBe('Kata');
+    expect(__private.ekstrakKandidatTautanMakna()).toBeNull();
+    expect(__private.ekstrakKandidatTautanMakna('kata (cak)')).toBe('kata');
+    expect(__private.ekstrakKandidatTautanMakna('*kata*')).toBeNull();
+    expect(__private.ekstrakKandidatTautanMakna('(')).toBeNull();
+    expect(__private.ekstrakKandidatTautanMakna('tiga kata penuh')).toBeNull();
+    expect(__private.kumpulkanKandidatTautanMakna()).toEqual([]);
+    expect(__private.kumpulkanKandidatTautanMakna([{ makna: [{ makna: 'kata; dua kata; *abaikan*' }] }])).toEqual(['kata', 'dua kata']);
+    expect(__private.kumpulkanKandidatTautanMakna([{ makna: null }, {}])).toEqual([]);
+    expect(__private.kumpulkanKandidatTautanMakna([{ makna: [{}] }])).toEqual([]);
+    expect(__private.kumpulkanKandidatTautanTesaurus()).toEqual([]);
+    expect(__private.kumpulkanKandidatTautanTesaurus({ sinonim: [''], antonim: [] })).toEqual([]);
+    expect(__private.kumpulkanKandidatTautanTesaurus({ sinonim: ['Kata', 'kata'], antonim: ['Lawan (2)'] })).toEqual(['kata', 'lawan']);
+    expect(__private.splitEntriGlosarium()).toEqual([]);
+    expect(__private.splitEntriGlosarium('satu; dua')).toEqual(['satu', 'dua']);
+    expect(__private.tokenizeKurung()).toEqual([]);
+    expect(__private.tokenizeKurung('(beta) gamma')).toEqual([
+      { text: '(beta)', isKurung: true },
+      { text: ' gamma', isKurung: false },
+    ]);
+    expect(__private.tokenizeKurung('alpha (beta) gamma')).toEqual([
+      { text: 'alpha ', isKurung: false },
+      { text: '(beta)', isKurung: true },
+      { text: ' gamma', isKurung: false },
+    ]);
+    expect(__private.kumpulkanKandidatTautanGlosarium()).toEqual([]);
+    expect(__private.kumpulkanKandidatTautanGlosarium([{}])).toEqual([]);
+    expect(__private.kumpulkanKandidatTautanGlosarium([{ indonesia: 'kata (cak); dua kata' }])).toEqual(['kata', 'dua kata']);
+    expect(__private.parseDaftarRelasi()).toEqual([]);
+    expect(__private.parseDaftarRelasi('a; b; ')).toEqual(['a', 'b']);
+    expect(__private.unikTanpaBedaKapitalisasi(['Kata', 'kata', 'Lawan'])).toEqual(['Kata', 'Lawan']);
+    expect(__private.unikTanpaBedaKapitalisasi([])).toEqual([]);
   });
 });
 

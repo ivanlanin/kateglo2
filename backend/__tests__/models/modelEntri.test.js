@@ -900,6 +900,21 @@ describe('ModelEntri', () => {
     expect(result).toEqual(rows);
   });
 
+  it('ambilIndeksValidBatch menormalisasi, menghapus duplikasi, dan aman untuk input kosong', async () => {
+    await expect(ModelEntri.ambilIndeksValidBatch()).resolves.toEqual([]);
+    expect(db.query).not.toHaveBeenCalled();
+
+    await expect(ModelEntri.ambilIndeksValidBatch('aktif')).resolves.toEqual([]);
+
+    db.query.mockResolvedValueOnce({ rows: [{ indeks: 'aktif' }, { indeks: 'zat aktif' }] });
+
+    await expect(ModelEntri.ambilIndeksValidBatch([' Aktif ', 'aktif', '-Zat Aktif-', '', null])).resolves.toEqual(['aktif', 'zat aktif']);
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('LOWER(TRIM(e.indeks)) = ANY($1::text[])'), [['aktif', 'zat aktif']]);
+
+    db.query.mockResolvedValueOnce({ rows: [{ indeks: null }, { indeks: 'aktif' }] });
+    await expect(ModelEntri.ambilIndeksValidBatch(['aktif'])).resolves.toEqual(['aktif']);
+  });
+
   it('ambilNavigasiIndeks mengembalikan prev/next null saat indeks kosong', async () => {
     await expect(ModelEntri.ambilNavigasiIndeks('')).resolves.toEqual({ prev: null, next: null });
     expect(db.query).not.toHaveBeenCalled();

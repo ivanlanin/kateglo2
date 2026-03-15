@@ -20,6 +20,23 @@ describe('ModelLabel', () => {
     });
   });
 
+  it('helper label privat menormalisasi kategori, slug, dan daftar kecocokan penyingkatan', () => {
+    expect(__private.cariLabelPenyingkatan()).toBeNull();
+    expect(__private.normalisasiKategoriLabel('kelas_kata')).toBe('kelas-kata');
+    expect(__private.normalisasiKategoriLabel('kelas')).toBe('kelas-kata');
+    expect(__private.kandidatKategoriLabel('kelas')).toEqual(['kelas-kata', 'kelas_kata']);
+    expect(__private.kandidatKategoriLabel('')).toEqual([]);
+    expect(__private.cariLabelPenyingkatan('Akronim')).toEqual({ kode: 'akr', nama: 'Akronim', slug: 'akronim' });
+    expect(__private.cariLabelPenyingkatan('kependekan')).toEqual({ kode: 'kp', nama: 'Kependekan', slug: 'kependekan' });
+    expect(__private.cariLabelPenyingkatan('tidak-ada')).toBeNull();
+    expect(__private.buildNilaiCocokLabel('kelas-kata', { kode: 'n', nama: 'Nomina' })).toEqual(['kelas-kata', 'kelas kata', 'n', 'Nomina']);
+    expect(__private.getLabelPenyingkatanList()).toEqual([
+      { kode: 'akr', nama: 'Akronim' },
+      { kode: 'kp', nama: 'Kependekan' },
+      { kode: 'sing', nama: 'Singkatan' },
+    ]);
+  });
+
   it('helper master label privat mencakup default arg dan fallback kategori tidak dikenal', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ kode: 'kim', nama: 'Kimia' }] })

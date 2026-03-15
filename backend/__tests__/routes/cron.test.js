@@ -20,9 +20,14 @@ jest.mock('../../jobs/jobSusunKataHarian', () => ({
   }),
 }));
 
+jest.mock('../../jobs/kadi/jobWikipedia', () => ({
+  jalankanProsesWikipedia: jest.fn(),
+}));
+
 const router = require('../../routes/cron');
 const { __private } = router;
 const { jalankanPrefillSusunKataHarian } = require('../../jobs/jobSusunKataHarian');
+const { jalankanProsesWikipedia } = require('../../jobs/kadi/jobWikipedia');
 
 function createApp() {
   const app = express();
@@ -44,6 +49,7 @@ describe('routes/cron', () => {
       jumlah: 30,
       data: [],
     });
+    jalankanProsesWikipedia.mockResolvedValue({ artikelDiproses: 5, kandidatBaru: 2 });
   });
 
   afterAll(() => {
@@ -112,5 +118,33 @@ describe('routes/cron', () => {
 
     expect(response.status).toBe(500);
     expect(response.body.message).toBe('job gagal');
+  });
+
+  it('POST /cron/kadi/wikipedia menjalankan job wikipedia dengan clamp batas artikel', async () => {
+    const response = await request(createApp())
+      .post('/cron/kadi/wikipedia')
+      .set('X-Cron-Secret', 'cron-secret-test')
+      .send({ batasArtikel: 9999 });
+
+    expect(response.status).toBe(200);
+    expect(jalankanProsesWikipedia).toHaveBeenCalledWith({ batasArtikel: 500 });
+    expect(response.body.data).toEqual({ artikelDiproses: 5, kandidatBaru: 2 });
+  });
+
+  it('POST /cron/kadi/wikipedia memakai fallback minimum dan meneruskan error job', async () => {
+    await request(createApp())
+      .post('/cron/kadi/wikipedia')
+      .set('Authorization', 'Bearer cron-secret-test')
+      .send({ batasArtikel: 0 });
+
+    expect(jalankanProsesWikipedia).toHaveBeenCalledWith({ batasArtikel: 50 });
+
+    jalankanProsesWikipedia.mockRejectedValueOnce(new Error('wiki gagal'));
+    const response = await request(createApp())
+      .post('/cron/kadi/wikipedia')
+      .set('Authorization', 'Bearer cron-secret-test');
+
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe('wiki gagal');
   });
 });

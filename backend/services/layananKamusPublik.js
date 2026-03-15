@@ -28,7 +28,7 @@ function ekstrakKandidatTautanMakna(segmen = '') {
   const match = trimmed.match(/^([^()]+?)(\s*(?:\([^)]*\)\s*)*)$/);
   if (!match) return null;
 
-  const baseText = String(match[1] || '').trim();
+  const baseText = String(match[1]).trim();
   const wordCount = baseText.split(/\s+/).filter(Boolean).length;
 
   if (wordCount < 1 || wordCount > 2) return null;
@@ -38,16 +38,14 @@ function ekstrakKandidatTautanMakna(segmen = '') {
 function kumpulkanKandidatTautanMakna(entriList = []) {
   const hasil = [];
 
-  for (const entri of entriList || []) {
+  for (const entri of entriList) {
     for (const makna of entri?.makna || []) {
       for (const segmen of String(makna?.makna || '').split(';')) {
         const kandidat = ekstrakKandidatTautanMakna(segmen);
         if (!kandidat) continue;
 
         const indeks = normalisasiIndeksKamus(kandidat).toLowerCase();
-        if (indeks) {
-          hasil.push(indeks);
-        }
+        hasil.push(indeks);
       }
     }
   }
@@ -63,7 +61,7 @@ function kumpulkanKandidatTautanTesaurus(tesaurus = {}) {
 }
 
 function splitEntriGlosarium(value = '') {
-  const text = String(value || '').trim();
+  const text = String(value).trim();
   if (!text) return [];
 
   return text
@@ -73,7 +71,7 @@ function splitEntriGlosarium(value = '') {
 }
 
 function tokenizeKurung(value = '') {
-  const text = String(value || '');
+  const text = String(value);
   if (!text) return [];
 
   const regex = /\([^()]*\)/g;
@@ -100,15 +98,13 @@ function tokenizeKurung(value = '') {
 function kumpulkanKandidatTautanGlosarium(items = []) {
   const hasil = [];
 
-  for (const item of items || []) {
+  for (const item of items) {
     for (const part of splitEntriGlosarium(item?.indonesia || '')) {
       for (const token of tokenizeKurung(part)) {
         if (token.isKurung) continue;
 
-        const indeks = normalisasiIndeksKamus(String(token.text || '')).toLowerCase();
-        if (indeks) {
-          hasil.push(indeks);
-        }
+        const indeks = normalisasiIndeksKamus(String(token.text)).toLowerCase();
+        hasil.push(indeks);
       }
     }
   }
@@ -377,4 +373,17 @@ module.exports = {
   ambilDetailKamus,
   hapusCacheDetailKamus,
   buatCacheKeyDetailKamus,
+};
+
+module.exports.__private = {
+  bacaTeksEntri,
+  normalisasiIndeksKamus,
+  ekstrakKandidatTautanMakna,
+  kumpulkanKandidatTautanMakna,
+  kumpulkanKandidatTautanTesaurus,
+  splitEntriGlosarium,
+  tokenizeKurung,
+  kumpulkanKandidatTautanGlosarium,
+  parseDaftarRelasi,
+  unikTanpaBedaKapitalisasi,
 };
