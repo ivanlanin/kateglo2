@@ -30,7 +30,7 @@ function NavbarAdmin() {
   return (
     <header className="navbar-root">
       <div className="navbar-container relative">
-        <div className="navbar-inner">
+        <div className="navbar-inner navbar-inner-compact">
           <div className="flex items-center gap-2">
             <button
               type="button"
