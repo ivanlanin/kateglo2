@@ -2,8 +2,8 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import { act } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import KamusAdmin from '../../../src/pages/redaksi/KamusAdmin';
-import { __private } from '../../../src/pages/redaksi/KamusAdmin';
+import KamusAdmin from '../../../../src/pages/redaksi/leksikon/KamusAdmin';
+import { __private } from '../../../../src/pages/redaksi/leksikon/KamusAdmin';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
@@ -38,7 +38,7 @@ const mutateHapusContoh = vi.fn();
 const mutateSimpanTagar = vi.fn();
 const mockUseAuth = vi.fn();
 
-vi.mock('../../../src/api/apiAdmin', () => ({
+vi.mock('../../../../src/api/apiAdmin', () => ({
   useDaftarKamusAdmin: (...args) => mockUseDaftarKamusAdmin(...args),
   useDetailKamusAdmin: (...args) => mockUseDetailKamusAdmin(...args),
   useDaftarSumberAdmin: (...args) => mockUseDaftarSumberAdmin(...args),
@@ -58,11 +58,11 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useDaftarTagarUntukPilih: (...args) => mockUseDaftarTagarUntukPilih(...args),
 }));
 
-vi.mock('../../../src/context/authContext', () => ({
+vi.mock('../../../../src/context/authContext', () => ({
   useAuth: (...args) => mockUseAuth(...args),
 }));
 
-vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>

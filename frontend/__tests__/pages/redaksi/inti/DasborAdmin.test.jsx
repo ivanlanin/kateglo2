@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import DasborAdmin from '../../../src/pages/redaksi/DasborAdmin';
+import DasborAdmin from '../../../../src/pages/redaksi/inti/DasborAdmin';
 
 const mockUseStatistikAdmin = vi.fn();
 const mockUseAuth = vi.fn();
@@ -198,19 +198,19 @@ function filterKelompokMenuFixture(hasIzin) {
     .filter((kelompok) => kelompok.items.length > 0);
 }
 
-vi.mock('../../../src/api/apiAdmin', () => ({
+vi.mock('../../../../src/api/apiAdmin', () => ({
   useStatistikAdmin: () => mockUseStatistikAdmin(),
 }));
 
-vi.mock('../../../src/context/authContext', () => ({
+vi.mock('../../../../src/context/authContext', () => ({
   useAuth: () => mockUseAuth(),
 }));
 
-vi.mock('../../../src/constants/menuRedaksi', () => ({
+vi.mock('../../../../src/constants/menuRedaksi', () => ({
   filterKelompokMenuRedaksi: (...args) => mockFilterKelompokMenuRedaksi(...args),
 }));
 
-vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>

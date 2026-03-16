@@ -9,8 +9,8 @@ import {
   useDetailIzinAdmin,
   useDaftarPeranUntukIzinAdmin,
   useSimpanIzinAdmin,
-} from '../../api/apiAdmin';
-import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
+} from '../../../api/apiAdmin';
+import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
 import {
   BarisFilterCariAdmin,
   TombolAksiAdmin,
@@ -19,18 +19,18 @@ import {
   potongTeks,
   usePencarianAdmin,
   validateRequiredFields,
-} from '../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../components/redaksi/PanelGeser';
+} from '../../../components/redaksi/KomponenAdmin';
+import PanelGeser from '../../../components/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
   FormFooter,
   PesanForm,
-} from '../../components/redaksi/FormulirAdmin';
-import KotakCentang from '../../components/redaksi/KotakCentang';
-import { useSelectableIds } from '../../hooks/redaksi/useSelectableIds';
-import { formatBilanganRibuan } from '../../utils/formatUtils';
-import { parsePositiveIntegerParam } from '../../utils/paramUtils';
+} from '../../../components/redaksi/FormulirAdmin';
+import KotakCentang from '../../../components/redaksi/KotakCentang';
+import { useSelectableIds } from '../../../hooks/redaksi/useSelectableIds';
+import { formatBilanganRibuan } from '../../../utils/formatUtils';
+import { parsePositiveIntegerParam } from '../../../utils/paramUtils';
 
 const nilaiAwal = { kode: '', nama: '', kelompok: '', peran_ids: [] };
 

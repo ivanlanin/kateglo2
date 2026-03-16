@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import KomentarAdmin from '../../../src/pages/redaksi/KomentarAdmin';
+import KomentarAdmin from '../../../../src/pages/redaksi/interaksi/KomentarAdmin';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
@@ -19,13 +19,13 @@ const mockUseDaftarKomentarAdmin = vi.fn();
 const mockUseDetailKomentarAdmin = vi.fn();
 const mutateSimpanKomentar = vi.fn();
 
-vi.mock('../../../src/api/apiAdmin', () => ({
+vi.mock('../../../../src/api/apiAdmin', () => ({
   useDaftarKomentarAdmin: (...args) => mockUseDaftarKomentarAdmin(...args),
   useDetailKomentarAdmin: (...args) => mockUseDetailKomentarAdmin(...args),
   useSimpanKomentarAdmin: () => ({ mutate: mutateSimpanKomentar, isPending: false }),
 }));
 
-vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>

@@ -1,15 +1,15 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import KuisKataAdmin from '../../../src/pages/redaksi/KuisKataAdmin';
+import KuisKataAdmin from '../../../../src/pages/redaksi/gim/KuisKataAdmin';
 
 const mockUseKuisKataAdmin = vi.fn();
 const mockTabelAdmin = vi.fn();
 
-vi.mock('../../../src/api/apiAdmin', () => ({
+vi.mock('../../../../src/api/apiAdmin', () => ({
   useKuisKataAdmin: (...args) => mockUseKuisKataAdmin(...args),
 }));
 
-vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul }) => (
     <div>
       <h1>{judul}</h1>
@@ -18,7 +18,7 @@ vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
   ),
 }));
 
-vi.mock('../../../src/components/redaksi/KomponenAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/KomponenAdmin', () => ({
   TabelAdmin: (props) => {
     mockTabelAdmin(props);
     return (

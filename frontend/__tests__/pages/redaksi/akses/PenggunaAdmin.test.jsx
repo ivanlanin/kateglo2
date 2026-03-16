@@ -2,8 +2,8 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import PenggunaAdmin from '../../../src/pages/redaksi/PenggunaAdmin';
-import { formatLocalDateTime } from '../../../src/utils/formatUtils';
+import PenggunaAdmin from '../../../../src/pages/redaksi/akses/PenggunaAdmin';
+import { formatLocalDateTime } from '../../../../src/utils/formatUtils';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
@@ -22,14 +22,14 @@ const mockUseDetailPengguna = vi.fn();
 const mockUseDaftarPeran = vi.fn();
 const mutateSimpanPengguna = vi.fn();
 
-vi.mock('../../../src/api/apiAdmin', () => ({
+vi.mock('../../../../src/api/apiAdmin', () => ({
   useDaftarPengguna: (...args) => mockUseDaftarPengguna(...args),
   useDetailPengguna: (...args) => mockUseDetailPengguna(...args),
   useDaftarPeran: (...args) => mockUseDaftarPeran(...args),
   useSimpanPengguna: () => ({ mutate: mutateSimpanPengguna, isPending: false }),
 }));
 
-vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>

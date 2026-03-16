@@ -3,28 +3,28 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
-import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
 import {
   getApiErrorMessage,
   TabelAdmin,
   TombolAksiAdmin,
   validateRequiredFields,
-} from '../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../components/redaksi/PanelGeser';
+} from '../../../components/redaksi/KomponenAdmin';
+import PanelGeser from '../../../components/redaksi/PanelGeser';
 import {
   FormFooter,
   InputField,
   PesanForm,
   TextareaField,
   useFormPanel,
-} from '../../components/redaksi/FormulirAdmin';
+} from '../../../components/redaksi/FormulirAdmin';
 import {
   useBuatSusunKataHarianAdmin,
   useDetailSusunKataHarianAdmin,
   useSimpanSusunKataHarianAdmin,
   useSusunKataHarianAdmin,
-} from '../../api/apiAdmin';
-import { formatBilanganRibuan, formatLocalDateTime } from '../../utils/formatUtils';
+} from '../../../api/apiAdmin';
+import { formatBilanganRibuan, formatLocalDateTime } from '../../../utils/formatUtils';
 
 function tanggalHariIni() {
   const sekarang = new Date();
@@ -101,7 +101,7 @@ export function resolveTanggalSimpan(tanggalForm, tanggalQuery) {
   return String(tanggalForm || '').trim() || tanggalQuery;
 }
 
-function SusunKataHarian() {
+function SusunKataHarianAdmin() {
   const [tanggalAcuan, setTanggalAcuan] = useState(tanggalHariIni());
   const [selected, setSelected] = useState({ tanggal: '', panjang: '' });
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
@@ -269,4 +269,4 @@ function SusunKataHarian() {
   );
 }
 
-export default SusunKataHarian;
+export default SusunKataHarianAdmin;

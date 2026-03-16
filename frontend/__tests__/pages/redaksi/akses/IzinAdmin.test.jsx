@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import IzinAdmin from '../../../src/pages/redaksi/IzinAdmin';
+import IzinAdmin from '../../../../src/pages/redaksi/akses/IzinAdmin';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
@@ -21,14 +21,14 @@ const mockUseDetailIzinAdmin = vi.fn();
 const mockUseDaftarPeranUntukIzinAdmin = vi.fn();
 const mutateSimpanIzin = vi.fn();
 
-vi.mock('../../../src/api/apiAdmin', () => ({
+vi.mock('../../../../src/api/apiAdmin', () => ({
   useDaftarIzinKelolaAdmin: (...args) => mockUseDaftarIzinKelolaAdmin(...args),
   useDetailIzinAdmin: (...args) => mockUseDetailIzinAdmin(...args),
   useDaftarPeranUntukIzinAdmin: (...args) => mockUseDaftarPeranUntukIzinAdmin(...args),
   useSimpanIzinAdmin: () => ({ mutate: mutateSimpanIzin, isPending: false }),
 }));
 
-vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>

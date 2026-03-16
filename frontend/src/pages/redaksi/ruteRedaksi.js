@@ -1,0 +1,47 @@
+import { DasborAdmin } from './inti';
+import { AuditMaknaAdmin, AuditTagarAdmin } from './audit';
+import { IzinAdmin, PenggunaAdmin, PeranAdmin } from './akses';
+import { KuisKataAdmin, SusunKataBebasAdmin, SusunKataHarianAdmin } from './gim';
+import { KandidatKataAdmin } from './kadi';
+import { EtimologiAdmin, GlosariumAdmin, KamusAdmin, TesaurusAdmin } from './leksikon';
+import { KomentarAdmin, PencarianAdmin, PencarianHitamAdmin } from './interaksi';
+import { BahasaAdmin, BidangAdmin, LabelAdmin, SumberAdmin, TagarAdmin } from './master';
+
+export const ruteHalamanRedaksi = [
+  { path: '/redaksi', Component: DasborAdmin },
+  { path: '/redaksi/kamus', Component: KamusAdmin },
+  { path: '/redaksi/kamus/:id', Component: KamusAdmin },
+  { path: '/redaksi/komentar', Component: KomentarAdmin },
+  { path: '/redaksi/komentar/:id', Component: KomentarAdmin },
+  { path: '/redaksi/audit-makna', Component: AuditMaknaAdmin, izinDibutuhkan: ['audit_makna'] },
+  { path: '/redaksi/pencarian', Component: PencarianAdmin, izinDibutuhkan: ['lihat_pencarian'] },
+  { path: '/redaksi/pencarian-hitam', Component: PencarianHitamAdmin, izinDibutuhkan: ['lihat_pencarian'] },
+  { path: '/redaksi/susun-kata-harian', Component: SusunKataHarianAdmin, izinDibutuhkan: ['kelola_susun_kata'] },
+  { path: '/redaksi/susun-kata-bebas', Component: SusunKataBebasAdmin, izinDibutuhkan: ['kelola_susun_kata'] },
+  { path: '/redaksi/kuis-kata', Component: KuisKataAdmin, izinDibutuhkan: ['kelola_susun_kata'] },
+  { path: '/redaksi/tesaurus', Component: TesaurusAdmin },
+  { path: '/redaksi/tesaurus/:id', Component: TesaurusAdmin },
+  { path: '/redaksi/etimologi', Component: EtimologiAdmin },
+  { path: '/redaksi/etimologi/:id', Component: EtimologiAdmin },
+  { path: '/redaksi/glosarium', Component: GlosariumAdmin },
+  { path: '/redaksi/glosarium/:id', Component: GlosariumAdmin },
+  { path: '/redaksi/bidang', Component: BidangAdmin },
+  { path: '/redaksi/bidang/:id', Component: BidangAdmin },
+  { path: '/redaksi/bahasa', Component: BahasaAdmin },
+  { path: '/redaksi/bahasa/:id', Component: BahasaAdmin },
+  { path: '/redaksi/sumber', Component: SumberAdmin },
+  { path: '/redaksi/sumber/:id', Component: SumberAdmin },
+  { path: '/redaksi/label', Component: LabelAdmin, izinDibutuhkan: ['kelola_label'] },
+  { path: '/redaksi/label/:id', Component: LabelAdmin, izinDibutuhkan: ['kelola_label'] },
+  { path: '/redaksi/tagar', Component: TagarAdmin, izinDibutuhkan: ['kelola_tagar'] },
+  { path: '/redaksi/tagar/:id', Component: TagarAdmin, izinDibutuhkan: ['kelola_tagar'] },
+  { path: '/redaksi/audit-tagar', Component: AuditTagarAdmin, izinDibutuhkan: ['audit_tagar'] },
+  { path: '/redaksi/peran', Component: PeranAdmin, izinDibutuhkan: ['kelola_peran'] },
+  { path: '/redaksi/peran/:id', Component: PeranAdmin, izinDibutuhkan: ['kelola_peran'] },
+  { path: '/redaksi/izin', Component: IzinAdmin, izinDibutuhkan: ['kelola_peran'] },
+  { path: '/redaksi/izin/:id', Component: IzinAdmin, izinDibutuhkan: ['kelola_peran'] },
+  { path: '/redaksi/pengguna', Component: PenggunaAdmin, izinDibutuhkan: ['kelola_pengguna'] },
+  { path: '/redaksi/pengguna/:id', Component: PenggunaAdmin, izinDibutuhkan: ['kelola_pengguna'] },
+  { path: '/redaksi/kandidat-kata', Component: KandidatKataAdmin, izinDibutuhkan: ['lihat_kandidat'] },
+  { path: '/redaksi/kandidat-kata/:id', Component: KandidatKataAdmin, izinDibutuhkan: ['lihat_kandidat'] },
+];

@@ -12,9 +12,9 @@ import {
   useOpsiBidangAdmin,
   useOpsiBahasaGlosariumAdmin,
   useOpsiSumberAdmin,
-} from '../../api/apiAdmin';
-import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
-import { useAuth } from '../../context/authContext';
+} from '../../../api/apiAdmin';
+import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
+import { useAuth } from '../../../context/authContext';
 import {
   BarisFilterCariAdmin,
   TombolAksiAdmin,
@@ -23,8 +23,8 @@ import {
   TabelAdmin,
   getApiErrorMessage,
   usePencarianAdmin,
-} from '../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../components/redaksi/PanelGeser';
+} from '../../../components/redaksi/KomponenAdmin';
+import PanelGeser from '../../../components/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -32,9 +32,9 @@ import {
   ToggleAktif,
   FormFooter,
   PesanForm,
-} from '../../components/redaksi/FormulirAdmin';
-import { parsePositiveIntegerParam } from '../../utils/paramUtils';
-import { ambilDaftarLookup, mapOpsiIdNama } from '../../utils/opsiUtils';
+} from '../../../components/redaksi/FormulirAdmin';
+import { parsePositiveIntegerParam } from '../../../utils/paramUtils';
+import { ambilDaftarLookup, mapOpsiIdNama } from '../../../utils/opsiUtils';
 
 const nilaiAwal = {
   indonesia: '',

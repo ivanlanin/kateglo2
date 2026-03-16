@@ -10,8 +10,8 @@ import {
   useSimpanTagar,
   useHapusTagar,
   useKategoriTagarAdmin,
-} from '../../api/apiAdmin';
-import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
+} from '../../../api/apiAdmin';
+import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
 import {
   BarisFilterCariAdmin,
   TombolAksiAdmin,
@@ -22,8 +22,8 @@ import {
   potongTeks,
   usePencarianAdmin,
   validateRequiredFields,
-} from '../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../components/redaksi/PanelGeser';
+} from '../../../components/redaksi/KomponenAdmin';
+import PanelGeser from '../../../components/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -32,9 +32,9 @@ import {
   ToggleAktif,
   FormFooter,
   PesanForm,
-} from '../../components/redaksi/FormulirAdmin';
-import { formatBilanganRibuan } from '../../utils/formatUtils';
-import { parsePositiveIntegerParam } from '../../utils/paramUtils';
+} from '../../../components/redaksi/FormulirAdmin';
+import { formatBilanganRibuan } from '../../../utils/formatUtils';
+import { parsePositiveIntegerParam } from '../../../utils/paramUtils';
 
 const nilaiAwal = {
   kode: '',

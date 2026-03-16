@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-03-16 Senin
+
+- Mengatur subfolder `frontend/src/pages/redaksi`
+
 ## 2026-03-15 Minggu
 
 - Mencatat skor harian [Kuis Kata](/gim/kuis-kata)

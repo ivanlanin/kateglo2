@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import AuditTagarAdmin from '../../../src/pages/redaksi/AuditTagarAdmin';
+import AuditTagarAdmin from '../../../../src/pages/redaksi/audit/AuditTagarAdmin';
 
 const mockUseDaftarAuditTagarAdmin = vi.fn();
 const mockUseDaftarTagarUntukPilih = vi.fn();
@@ -10,7 +10,7 @@ const mockUseTagarEntri = vi.fn();
 const mutateSimpanTagarEntri = vi.fn();
 let simpanTagarState = { mutate: mutateSimpanTagarEntri, isError: false };
 
-vi.mock('../../../src/api/apiAdmin', () => ({
+vi.mock('../../../../src/api/apiAdmin', () => ({
   useDaftarAuditTagarAdmin: (...args) => mockUseDaftarAuditTagarAdmin(...args),
   useDaftarTagarUntukPilih: (...args) => mockUseDaftarTagarUntukPilih(...args),
   useOpsiLabelRedaksi: (...args) => mockUseOpsiLabelRedaksi(...args),
@@ -18,7 +18,7 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useSimpanTagarEntri: () => simpanTagarState,
 }));
 
-vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul }) => (
     <div>
       <h1>{judul}</h1>

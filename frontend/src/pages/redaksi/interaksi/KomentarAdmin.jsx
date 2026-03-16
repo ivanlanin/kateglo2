@@ -4,8 +4,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDaftarKomentarAdmin, useDetailKomentarAdmin, useSimpanKomentarAdmin } from '../../api/apiAdmin';
-import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
+import { useDaftarKomentarAdmin, useDetailKomentarAdmin, useSimpanKomentarAdmin } from '../../../api/apiAdmin';
+import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
 import {
   BarisFilterCariAdmin,
   TabelAdmin,
@@ -15,8 +15,8 @@ import {
   usePencarianAdmin,
   potongTeks,
   validateRequiredFields,
-} from '../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../components/redaksi/PanelGeser';
+} from '../../../components/redaksi/KomponenAdmin';
+import PanelGeser from '../../../components/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -24,9 +24,9 @@ import {
   ToggleAktif,
   FormFooter,
   PesanForm,
-} from '../../components/redaksi/FormulirAdmin';
-import { formatLocalDateTime } from '../../utils/formatUtils';
-import { parsePositiveIntegerParam } from '../../utils/paramUtils';
+} from '../../../components/redaksi/FormulirAdmin';
+import { formatLocalDateTime } from '../../../utils/formatUtils';
+import { parsePositiveIntegerParam } from '../../../utils/paramUtils';
 
 const nilaiAwal = {
   id: null,

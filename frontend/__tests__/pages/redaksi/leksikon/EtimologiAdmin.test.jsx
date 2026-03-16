@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { useState } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import EtimologiAdmin from '../../../src/pages/redaksi/EtimologiAdmin';
+import EtimologiAdmin from '../../../../src/pages/redaksi/leksikon/EtimologiAdmin';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
@@ -25,7 +25,7 @@ const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
 const mockUseAuth = vi.fn();
 
-vi.mock('../../../src/api/apiAdmin', () => ({
+vi.mock('../../../../src/api/apiAdmin', () => ({
   useDaftarEtimologiAdmin: (...args) => mockUseDaftar(...args),
   useDetailEtimologiAdmin: (...args) => mockUseDetail(...args),
   useOpsiBahasaEtimologiAdmin: (...args) => mockUseOpsiBahasaEtimologiAdmin(...args),
@@ -35,11 +35,11 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useOpsiSumberAdmin: (...args) => mockUseOpsiSumberAdmin(...args),
 }));
 
-vi.mock('../../../src/context/authContext', () => ({
+vi.mock('../../../../src/context/authContext', () => ({
   useAuth: (...args) => mockUseAuth(...args),
 }));
 
-vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>
@@ -49,7 +49,7 @@ vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
   ),
 }));
 
-vi.mock('../../../src/components/redaksi/PanelGeser', () => ({
+vi.mock('../../../../src/components/redaksi/PanelGeser', () => ({
   default: ({ buka, onTutup, judul, children }) => (
     <div data-testid="panel-geser" data-buka={String(Boolean(buka))}>
       <h2>{judul}</h2>
@@ -59,7 +59,7 @@ vi.mock('../../../src/components/redaksi/PanelGeser', () => ({
   ),
 }));
 
-vi.mock('../../../src/components/redaksi/FormulirAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/FormulirAdmin', () => ({
   useFormPanel: (nilaiAwal = {}) => {
     const [buka, setBuka] = useState(false);
     const [data, setData] = useState(nilaiAwal);

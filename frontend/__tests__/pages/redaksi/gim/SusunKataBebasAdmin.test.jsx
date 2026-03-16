@@ -1,15 +1,15 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import SusunKataBebas from '../../../src/pages/redaksi/SusunKataBebas';
+import SusunKataBebasAdmin from '../../../../src/pages/redaksi/gim/SusunKataBebasAdmin';
 
 const mockUseSusunKataBebasAdmin = vi.fn();
 
-vi.mock('../../../src/api/apiAdmin', () => ({
+vi.mock('../../../../src/api/apiAdmin', () => ({
   useSusunKataBebasAdmin: (...args) => mockUseSusunKataBebasAdmin(...args),
 }));
 
-vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul }) => (
     <div>
       <h1>{judul}</h1>
@@ -18,7 +18,7 @@ vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
   ),
 }));
 
-describe('SusunKataBebas', () => {
+describe('SusunKataBebasAdmin', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -49,7 +49,7 @@ describe('SusunKataBebas', () => {
 
     render(
       <MemoryRouter>
-        <SusunKataBebas />
+        <SusunKataBebasAdmin />
       </MemoryRouter>
     );
 
@@ -70,7 +70,7 @@ describe('SusunKataBebas', () => {
 
     render(
       <MemoryRouter>
-        <SusunKataBebas />
+        <SusunKataBebasAdmin />
       </MemoryRouter>
     );
 
@@ -84,14 +84,14 @@ describe('SusunKataBebas', () => {
 
     const { rerender } = render(
       <MemoryRouter>
-        <SusunKataBebas />
+        <SusunKataBebasAdmin />
       </MemoryRouter>
     );
     expect(screen.getByText('Memuat data …')).toBeInTheDocument();
 
     rerender(
       <MemoryRouter>
-        <SusunKataBebas />
+        <SusunKataBebasAdmin />
       </MemoryRouter>
     );
     expect(screen.getByText('Gagal memuat data.')).toBeInTheDocument();

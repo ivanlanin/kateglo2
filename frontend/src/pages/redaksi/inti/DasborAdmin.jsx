@@ -3,10 +3,10 @@
  */
 
 import { Link } from 'react-router-dom';
-import { useStatistikAdmin } from '../../api/apiAdmin';
-import { useAuth } from '../../context/authContext';
-import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
-import { filterKelompokMenuRedaksi } from '../../constants/menuRedaksi';
+import { useStatistikAdmin } from '../../../api/apiAdmin';
+import { useAuth } from '../../../context/authContext';
+import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
+import { filterKelompokMenuRedaksi } from '../../../constants/menuRedaksi';
 
 function KartuMenuRedaksi({ item, jumlah, bisaLihatStatistik, isLoading }) {
   const statistik = item.statistik;

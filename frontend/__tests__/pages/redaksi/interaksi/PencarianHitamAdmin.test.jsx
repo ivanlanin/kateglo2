@@ -1,8 +1,8 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import PencarianHitamAdmin, { formatTanggalSingkat } from '../../../src/pages/redaksi/PencarianHitamAdmin';
-import { formatLocalDateTime } from '../../../src/utils/formatUtils';
+import PencarianHitamAdmin, { formatTanggalSingkat } from '../../../../src/pages/redaksi/interaksi/PencarianHitamAdmin';
+import { formatLocalDateTime } from '../../../../src/utils/formatUtils';
 
 const mockUseDaftarPencarianHitamAdmin = vi.fn();
 const mockUseSimpanPencarianHitamAdmin = vi.fn();
@@ -10,13 +10,13 @@ const mockUseHapusPencarianHitamAdmin = vi.fn();
 const mutateSimpanHitam = vi.fn();
 const mutateHapusHitam = vi.fn();
 
-vi.mock('../../../src/api/apiAdmin', () => ({
+vi.mock('../../../../src/api/apiAdmin', () => ({
   useDaftarPencarianHitamAdmin: (...args) => mockUseDaftarPencarianHitamAdmin(...args),
   useSimpanPencarianHitamAdmin: (...args) => mockUseSimpanPencarianHitamAdmin(...args),
   useHapusPencarianHitamAdmin: (...args) => mockUseHapusPencarianHitamAdmin(...args),
 }));
 
-vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>
@@ -26,7 +26,7 @@ vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
   ),
 }));
 
-vi.mock('../../../src/components/redaksi/PanelGeser', () => ({
+vi.mock('../../../../src/components/redaksi/PanelGeser', () => ({
   default: ({ buka, judul, children, onTutup }) => (buka ? (
     <div aria-label={judul} role="dialog">
       <button type="button" onClick={onTutup}>Tutup panel</button>

@@ -3,7 +3,7 @@ import { act } from 'react';
 import { useState } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import GlosariumAdmin from '../../../src/pages/redaksi/GlosariumAdmin';
+import GlosariumAdmin from '../../../../src/pages/redaksi/leksikon/GlosariumAdmin';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
@@ -30,7 +30,7 @@ const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
 const mockUseAuth = vi.fn();
 
-vi.mock('../../../src/api/apiAdmin', () => ({
+vi.mock('../../../../src/api/apiAdmin', () => ({
   useDaftarGlosariumAdmin: (...args) => mockUseDaftarGlosariumAdmin(...args),
   useDetailGlosariumAdmin: (...args) => mockUseDetailGlosariumAdmin(...args),
   useOpsiBidangAdmin: (...args) => mockUseOpsiBidangAdmin(...args),
@@ -40,11 +40,11 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useHapusGlosarium: () => ({ mutate: mutateHapus, isPending: false }),
 }));
 
-vi.mock('../../../src/context/authContext', () => ({
+vi.mock('../../../../src/context/authContext', () => ({
   useAuth: (...args) => mockUseAuth(...args),
 }));
 
-vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>
@@ -54,7 +54,7 @@ vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
   ),
 }));
 
-vi.mock('../../../src/components/redaksi/FormulirAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/FormulirAdmin', () => ({
   useFormPanel: (nilaiAwal = {}) => {
     const [buka, setBuka] = useState(false);
     const [data, setData] = useState(nilaiAwal);

@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import TagarAdmin from '../../../src/pages/redaksi/TagarAdmin';
+import TagarAdmin from '../../../../src/pages/redaksi/master/TagarAdmin';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
@@ -22,7 +22,7 @@ const mockUseKategoriTagarAdmin = vi.fn();
 const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
 
-vi.mock('../../../src/api/apiAdmin', () => ({
+vi.mock('../../../../src/api/apiAdmin', () => ({
   useDaftarTagarAdmin: (...args) => mockUseDaftarTagarAdmin(...args),
   useDetailTagarAdmin: (...args) => mockUseDetailTagarAdmin(...args),
   useKategoriTagarAdmin: (...args) => mockUseKategoriTagarAdmin(...args),
@@ -30,7 +30,7 @@ vi.mock('../../../src/api/apiAdmin', () => ({
   useHapusTagar: () => ({ mutate: mutateHapus, isPending: false }),
 }));
 
-vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>

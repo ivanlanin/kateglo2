@@ -6,16 +6,16 @@ import { useState } from 'react';
 import {
   useDaftarAuditMaknaAdmin,
   useSimpanAuditMaknaAdmin,
-} from '../../api/apiAdmin';
-import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
+} from '../../../api/apiAdmin';
+import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
 import {
   BarisFilterCariAdmin,
   TabelAdmin,
   getApiErrorMessage,
   usePencarianAdmin,
   potongTeks,
-} from '../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../components/redaksi/PanelGeser';
+} from '../../../components/redaksi/KomponenAdmin';
+import PanelGeser from '../../../components/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -23,8 +23,8 @@ import {
   TextareaField,
   FormFooter,
   PesanForm,
-} from '../../components/redaksi/FormulirAdmin';
-import { formatBilanganRibuan } from '../../utils/formatUtils';
+} from '../../../components/redaksi/FormulirAdmin';
+import { formatBilanganRibuan } from '../../../utils/formatUtils';
 
 const nilaiAwal = {
   id: null,

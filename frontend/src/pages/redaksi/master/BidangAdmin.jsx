@@ -9,8 +9,8 @@ import {
   useDetailBidangAdmin,
   useSimpanBidang,
   useHapusBidang,
-} from '../../api/apiAdmin';
-import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
+} from '../../../api/apiAdmin';
+import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
 import {
   BarisFilterCariAdmin,
   TombolAksiAdmin,
@@ -20,16 +20,16 @@ import {
   getApiErrorMessage,
   usePencarianAdmin,
   validateRequiredFields,
-} from '../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../components/redaksi/PanelGeser';
+} from '../../../components/redaksi/KomponenAdmin';
+import PanelGeser from '../../../components/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
   TextareaField,
   FormFooter,
   PesanForm,
-} from '../../components/redaksi/FormulirAdmin';
-import { parsePositiveIntegerParam } from '../../utils/paramUtils';
+} from '../../../components/redaksi/FormulirAdmin';
+import { parsePositiveIntegerParam } from '../../../utils/paramUtils';
 
 const nilaiAwal = { kode: '', nama: '', keterangan: '', kamus: true, glosarium: true };
 

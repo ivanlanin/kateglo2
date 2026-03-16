@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import SusunKataHarian, {
+import SusunKataHarianAdmin, {
   buildPanelDataFromDetail,
   buildSelectedFromItem,
   buildSuntingDataFromItem,
@@ -9,7 +9,7 @@ import SusunKataHarian, {
   buildSimpanPayload,
   resolveTanggalBuatKataHarian,
   resolveTanggalSimpan,
-} from '../../../src/pages/redaksi/SusunKataHarian';
+} from '../../../../src/pages/redaksi/gim/SusunKataHarianAdmin';
 
 const mutateSimpan = vi.fn();
 const mutateBuat = vi.fn();
@@ -18,19 +18,19 @@ const mockUseDetail = vi.fn();
 let buatPending = false;
 let paksaPesanValidasi = null;
 
-vi.mock('../../../src/api/apiAdmin', () => ({
+vi.mock('../../../../src/api/apiAdmin', () => ({
   useSusunKataHarianAdmin: (...args) => mockUseHarian(...args),
   useDetailSusunKataHarianAdmin: (...args) => mockUseDetail(...args),
   useSimpanSusunKataHarianAdmin: () => ({ mutate: mutateSimpan, isPending: false }),
   useBuatSusunKataHarianAdmin: () => ({ mutate: mutateBuat, isPending: buatPending }),
 }));
 
-vi.mock('../../../src/utils/formatUtils', () => ({
+vi.mock('../../../../src/utils/formatUtils', () => ({
   formatLocalDateTime: vi.fn(() => '2026-03-02 10:00'),
   formatBilanganRibuan: vi.fn((value) => String(value ?? 0)),
 }));
 
-vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <section>
       <h1>{judul}</h1>
@@ -40,7 +40,7 @@ vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
   ),
 }));
 
-vi.mock('../../../src/components/redaksi/PanelGeser', () => ({
+vi.mock('../../../../src/components/redaksi/PanelGeser', () => ({
   default: ({ buka, onTutup, children, judul }) => (buka ? (
     <aside>
       <h2>{judul}</h2>
@@ -50,7 +50,7 @@ vi.mock('../../../src/components/redaksi/PanelGeser', () => ({
   ) : null),
 }));
 
-vi.mock('../../../src/components/redaksi/KomponenAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/KomponenAdmin', () => ({
   BarisFilterCariAdmin: ({ nilai, onChange, onCari, onHapus, placeholder, filters = [] }) => (
     <div>
       <input aria-label="Filter tanggal" placeholder={placeholder} value={nilai} onChange={(e) => onChange(e.target.value)} />
@@ -95,7 +95,7 @@ vi.mock('../../../src/components/redaksi/KomponenAdmin', () => ({
   getApiErrorMessage: (error, fallback) => error?.message || fallback,
 }));
 
-vi.mock('../../../src/components/redaksi/FormulirAdmin', async () => {
+vi.mock('../../../../src/components/redaksi/FormulirAdmin', async () => {
   const React = await vi.importActual('react');
   const useFormPanel = (nilaiAwal) => {
     const [buka, setBuka] = React.useState(false);
@@ -155,7 +155,7 @@ vi.mock('../../../src/components/redaksi/FormulirAdmin', async () => {
   };
 });
 
-describe('SusunKataHarian', () => {
+describe('SusunKataHarianAdmin', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     buatPending = false;
@@ -201,7 +201,7 @@ describe('SusunKataHarian', () => {
   function renderPage() {
     return render(
       <MemoryRouter>
-        <SusunKataHarian />
+        <SusunKataHarianAdmin />
       </MemoryRouter>
     );
   }

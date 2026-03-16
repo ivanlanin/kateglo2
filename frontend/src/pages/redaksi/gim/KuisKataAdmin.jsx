@@ -3,10 +3,10 @@
  */
 
 import { useMemo } from 'react';
-import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
-import { TabelAdmin } from '../../components/redaksi/KomponenAdmin';
-import { useKuisKataAdmin } from '../../api/apiAdmin';
-import { formatBilanganRibuan } from '../../utils/formatUtils';
+import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
+import { TabelAdmin } from '../../../components/redaksi/KomponenAdmin';
+import { useKuisKataAdmin } from '../../../api/apiAdmin';
+import { formatBilanganRibuan } from '../../../utils/formatUtils';
 
 function formatDurasiDetik(value) {
   const angka = Number(value);

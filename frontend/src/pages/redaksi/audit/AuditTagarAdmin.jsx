@@ -4,21 +4,21 @@
 
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
 import {
   BarisFilterCariAdmin,
   TabelAdmin,
   usePencarianAdmin,
-} from '../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../components/redaksi/PanelGeser';
-import { buatPathDetailKamus } from '../../utils/paramUtils';
+} from '../../../components/redaksi/KomponenAdmin';
+import PanelGeser from '../../../components/redaksi/PanelGeser';
+import { buatPathDetailKamus } from '../../../utils/paramUtils';
 import {
   useDaftarAuditTagarAdmin,
   useDaftarTagarUntukPilih,
   useOpsiLabelRedaksi,
   useTagarEntri,
   useSimpanTagarEntri,
-} from '../../api/apiAdmin';
+} from '../../../api/apiAdmin';
 
 const opsiJenisBawaan = [
   { value: 'dasar', label: 'Dasar' },

@@ -4,8 +4,8 @@
 
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../context/authContext';
-import TombolMasuk from '../../components/bersama/TombolMasuk';
+import { useAuth } from '../../../context/authContext';
+import TombolMasuk from '../../../components/bersama/TombolMasuk';
 
 function LoginAdmin() {
   const { isAuthenticated, adalahRedaksi, isLoading, loginDenganGoogle } = useAuth();

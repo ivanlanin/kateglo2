@@ -3,10 +3,10 @@
  */
 
 import { useMemo } from 'react';
-import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
-import { TabelAdmin } from '../../components/redaksi/KomponenAdmin';
-import { useSusunKataBebasAdmin } from '../../api/apiAdmin';
-import { formatBilanganRibuan } from '../../utils/formatUtils';
+import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
+import { TabelAdmin } from '../../../components/redaksi/KomponenAdmin';
+import { useSusunKataBebasAdmin } from '../../../api/apiAdmin';
+import { formatBilanganRibuan } from '../../../utils/formatUtils';
 
 function formatPersen(value) {
   const angka = Number(value);
@@ -22,7 +22,7 @@ const kolom = [
   { key: 'menang', label: 'Menang', align: 'right', render: (item) => formatPersen(item.menang) },
 ];
 
-function SusunKataBebas() {
+function SusunKataBebasAdmin() {
   const { data, isLoading, isError } = useSusunKataBebasAdmin();
 
   const dataTabel = useMemo(
@@ -52,4 +52,4 @@ function SusunKataBebas() {
   );
 }
 
-export default SusunKataBebas;
+export default SusunKataBebasAdmin;

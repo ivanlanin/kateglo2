@@ -4,13 +4,13 @@
 
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
-import { useStatistikPencarianAdmin } from '../../api/apiAdmin';
+import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
+import { useStatistikPencarianAdmin } from '../../../api/apiAdmin';
 import {
   TabelAdmin,
   usePencarianAdmin,
-} from '../../components/redaksi/KomponenAdmin';
-import { formatBilanganRibuan, formatLocalDateTime } from '../../utils/formatUtils';
+} from '../../../components/redaksi/KomponenAdmin';
+import { formatBilanganRibuan, formatLocalDateTime } from '../../../utils/formatUtils';
 
 const opsiPeriode = [
   { value: 'hariini', label: 'Hari ini' },

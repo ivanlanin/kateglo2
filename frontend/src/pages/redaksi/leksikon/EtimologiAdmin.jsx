@@ -12,9 +12,9 @@ import {
   useHapusEtimologi,
   useOpsiBahasaEtimologiAdmin,
   useOpsiSumberAdmin,
-} from '../../api/apiAdmin';
-import HalamanAdmin from '../../components/redaksi/HalamanAdmin';
-import { useAuth } from '../../context/authContext';
+} from '../../../api/apiAdmin';
+import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
+import { useAuth } from '../../../context/authContext';
 import {
   BarisFilterCariAdmin,
   TombolAksiAdmin,
@@ -27,8 +27,8 @@ import {
   potongTeks,
   usePencarianAdmin,
   validateRequiredFields,
-} from '../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../components/redaksi/PanelGeser';
+} from '../../../components/redaksi/KomponenAdmin';
+import PanelGeser from '../../../components/redaksi/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -37,9 +37,9 @@ import {
   ToggleMeragukan,
   FormFooter,
   PesanForm,
-} from '../../components/redaksi/FormulirAdmin';
-import { buatPathDetailKamus, parsePositiveIntegerParam } from '../../utils/paramUtils';
-import { ambilDaftarLookup, mapOpsiIdNama } from '../../utils/opsiUtils';
+} from '../../../components/redaksi/FormulirAdmin';
+import { buatPathDetailKamus, parsePositiveIntegerParam } from '../../../utils/paramUtils';
+import { ambilDaftarLookup, mapOpsiIdNama } from '../../../utils/opsiUtils';
 
 const nilaiAwal = {
   indeks: '',

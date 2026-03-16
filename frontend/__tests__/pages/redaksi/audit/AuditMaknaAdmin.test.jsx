@@ -2,17 +2,17 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import AuditMaknaAdmin from '../../../src/pages/redaksi/AuditMaknaAdmin';
+import AuditMaknaAdmin from '../../../../src/pages/redaksi/audit/AuditMaknaAdmin';
 
 const mockUseDaftarAuditMaknaAdmin = vi.fn();
 const mutateSimpanAudit = vi.fn();
 
-vi.mock('../../../src/api/apiAdmin', () => ({
+vi.mock('../../../../src/api/apiAdmin', () => ({
   useDaftarAuditMaknaAdmin: (...args) => mockUseDaftarAuditMaknaAdmin(...args),
   useSimpanAuditMaknaAdmin: () => ({ mutate: mutateSimpanAudit, isPending: false }),
 }));
 
-vi.mock('../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
   default: ({ children, judul }) => (
     <div>
       <h1>{judul}</h1>
