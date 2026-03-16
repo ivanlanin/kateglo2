@@ -11,6 +11,17 @@ describe('LencanaStatus', () => {
     expect(screen.getByText('Nonaktif')).toBeInTheDocument();
   });
 
+  it('menerima prop aktif dan meragukan dalam bentuk numerik', () => {
+    const { rerender } = render(<LencanaStatus aktif={1} />);
+    expect(screen.getByText('Aktif')).toBeInTheDocument();
+
+    rerender(<LencanaStatus meragukan={1} />);
+    expect(screen.getByText('Ragu')).toBeInTheDocument();
+
+    rerender(<LencanaStatus meragukan={0} />);
+    expect(screen.getByText('Pasti')).toBeInTheDocument();
+  });
+
   it('memprioritaskan mode meragukan dan nilai eksplisit', () => {
     const { rerender } = render(<LencanaStatus meragukan />);
     expect(screen.getByText('Ragu')).toBeInTheDocument();
