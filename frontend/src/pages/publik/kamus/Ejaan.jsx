@@ -6,10 +6,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import HalamanPublik from '../../components/publik/HalamanPublik';
-import PanelLipat from '../../components/publik/PanelLipat';
-import KartuKategori from '../../components/publik/KartuKategori';
-import { daftarIsiEjaan, daftarItemEjaan } from '../../constants/ejaanData';
+import HalamanPublik from '../../../components/publik/HalamanPublik';
+import PanelLipat from '../../../components/publik/PanelLipat';
+import KartuKategori from '../../../components/publik/KartuKategori';
+import { daftarIsiEjaan, daftarItemEjaan } from '../../../constants/ejaanData';
 
 function bacaIsiMarkdown(mardownMentah = '') {
   return mardownMentah.replace(/^---[\s\S]*?---\s*/m, '');

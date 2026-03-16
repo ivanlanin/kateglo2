@@ -5,24 +5,24 @@
 import { Fragment, useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategoriKamus, cariGlosarium } from '../../api/apiPublik';
-import { useAuth } from '../../context/authContext';
-import TombolNavKursor from '../../components/publik/TombolNavKursor';
-import PanelLipat from '../../components/publik/PanelLipat';
-import HalamanPublik from '../../components/publik/HalamanPublik';
-import HamparanMuatNav from '../../components/publik/HamparanMuatNav';
-import TombolSunting from '../../components/publik/TombolSunting';
-import TombolMasuk from '../../components/bersama/TombolMasuk';
-import { PesanTidakDitemukan } from '../../components/publik/StatusKonten';
+import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategoriKamus, cariGlosarium } from '../../../api/apiPublik';
+import { useAuth } from '../../../context/authContext';
+import TombolNavKursor from '../../../components/publik/TombolNavKursor';
+import PanelLipat from '../../../components/publik/PanelLipat';
+import HalamanPublik from '../../../components/publik/HalamanPublik';
+import HamparanMuatNav from '../../../components/publik/HamparanMuatNav';
+import TombolSunting from '../../../components/publik/TombolSunting';
+import TombolMasuk from '../../../components/bersama/TombolMasuk';
+import { PesanTidakDitemukan } from '../../../components/publik/StatusKonten';
 import {
   formatLemaHomonim,
   formatLocalDateTime,
   parseUtcDate,
   renderEntriGlosariumTertaut,
-} from '../../utils/formatUtils';
-import { buatPathDetailKamus, normalisasiIndeksKamus } from '../../utils/paramUtils';
-import { buildMetaDetailKamus } from '../../utils/metaUtils';
-import useNavigasiMemuat from '../../hooks/bersama/useNavigasiMemuat';
+} from '../../../utils/formatUtils';
+import { buatPathDetailKamus, normalisasiIndeksKamus } from '../../../utils/paramUtils';
+import { buildMetaDetailKamus } from '../../../utils/metaUtils';
+import useNavigasiMemuat from '../../../hooks/bersama/useNavigasiMemuat';
 
 const GLOSARIUM_LIMIT = 20;
 const SUBENTRI_PREVIEW_LIMIT = 8;

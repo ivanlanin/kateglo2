@@ -5,17 +5,17 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ambilDetailGlosarium } from '../../api/apiPublik';
-import HalamanPublik from '../../components/publik/HalamanPublik';
-import TombolNavKursor from '../../components/publik/TombolNavKursor';
-import HamparanMuatNav from '../../components/publik/HamparanMuatNav';
-import TombolSunting from '../../components/publik/TombolSunting';
-import { EmptyResultText, QueryFeedback } from '../../components/publik/StatusKonten';
-import { buatPathDetailKamus, buatSlug, normalisasiIndeksKamus } from '../../utils/paramUtils';
-import { renderEntriGlosariumTertaut } from '../../utils/formatUtils';
-import { buildMetaDetailGlosarium } from '../../utils/metaUtils';
-import useNavigasiMemuat from '../../hooks/bersama/useNavigasiMemuat';
-import { useAuthOptional } from '../../context/authContext';
+import { ambilDetailGlosarium } from '../../../api/apiPublik';
+import HalamanPublik from '../../../components/publik/HalamanPublik';
+import TombolNavKursor from '../../../components/publik/TombolNavKursor';
+import HamparanMuatNav from '../../../components/publik/HamparanMuatNav';
+import TombolSunting from '../../../components/publik/TombolSunting';
+import { EmptyResultText, QueryFeedback } from '../../../components/publik/StatusKonten';
+import { buatPathDetailKamus, buatSlug, normalisasiIndeksKamus } from '../../../utils/paramUtils';
+import { renderEntriGlosariumTertaut } from '../../../utils/formatUtils';
+import { buildMetaDetailGlosarium } from '../../../utils/metaUtils';
+import useNavigasiMemuat from '../../../hooks/bersama/useNavigasiMemuat';
+import { useAuthOptional } from '../../../context/authContext';
 
 function normalisasiKunciTautanIndonesia(teks = '') {
   return normalisasiIndeksKamus(teks).trim().toLowerCase();

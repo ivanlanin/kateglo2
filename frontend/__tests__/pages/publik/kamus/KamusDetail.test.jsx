@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import KamusDetail from '../../../src/pages/publik/KamusDetail';
-import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategoriKamus, cariGlosarium } from '../../../src/api/apiPublik';
+import KamusDetail from '../../../../src/pages/publik/kamus/KamusDetail';
+import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategoriKamus, cariGlosarium } from '../../../../src/api/apiPublik';
 import {
   upsertMetaTag,
   renderMarkdown,
@@ -17,7 +17,7 @@ import {
   formatInfoWaktuEntri,
   shouldShowMetaSeparator,
   __private,
-} from '../../../src/pages/publik/KamusDetail';
+} from '../../../../src/pages/publik/kamus/KamusDetail';
 
 const mockUseQuery = vi.fn();
 let mockParams = { indeks: 'kata' };
@@ -28,7 +28,7 @@ const mockUseAuth = vi.fn(() => ({
   loginDenganGoogle: vi.fn(),
 }));
 
-vi.mock('../../../src/api/apiPublik', () => ({
+vi.mock('../../../../src/api/apiPublik', () => ({
   ambilDetailKamus: vi.fn().mockResolvedValue(null),
   ambilKomentarKamus: vi.fn().mockResolvedValue({
     success: true,
@@ -39,7 +39,7 @@ vi.mock('../../../src/api/apiPublik', () => ({
   cariGlosarium: vi.fn().mockResolvedValue({ data: [], total: 0, pageInfo: {} }),
 }));
 
-vi.mock('../../../src/context/authContext', () => ({
+vi.mock('../../../../src/context/authContext', () => ({
   useAuth: () => mockUseAuth(),
 }));
 

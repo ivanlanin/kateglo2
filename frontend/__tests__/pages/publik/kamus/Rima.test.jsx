@@ -1,12 +1,12 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Rima from '../../../src/pages/publik/Rima';
-import { ambilContohRima, cariRima } from '../../../src/api/apiPublik';
+import Rima from '../../../../src/pages/publik/kamus/Rima';
+import { ambilContohRima, cariRima } from '../../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
 let mockParams = { kata: 'kata' };
 
-vi.mock('../../../src/api/apiPublik', () => ({
+vi.mock('../../../../src/api/apiPublik', () => ({
   cariRima: vi.fn(),
   ambilContohRima: vi.fn().mockResolvedValue({ data: [] }),
 }));

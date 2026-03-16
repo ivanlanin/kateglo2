@@ -16,21 +16,39 @@ vi.mock('../src/context/authContext', () => ({
 vi.mock('../src/components/bersama/TataLetakPublik', () => ({
   default: () => <div data-testid="layout">Layout <Outlet /></div>,
 }));
-vi.mock('../src/pages/publik/Beranda', () => ({ default: () => <div>Hal Beranda</div> }));
-vi.mock('../src/pages/publik/Kamus', () => ({ default: () => <div>Hal Kamus</div> }));
-vi.mock('../src/pages/publik/KamusDetail', () => ({ default: () => <div>Hal Kamus Detail</div> }));
-vi.mock('../src/pages/publik/Tesaurus', () => ({ default: () => <div>Hal Tesaurus</div> }));
+vi.mock('../src/pages/publik/inti', () => ({
+  Beranda: () => <div>Hal Beranda</div>,
+  AuthCallback: () => <div>Auth Callback</div>,
+}));
+vi.mock('../src/pages/publik/kamus', () => ({
+  Kamus: () => <div>Hal Kamus</div>,
+  KamusDetail: () => <div>Hal Kamus Detail</div>,
+  Tesaurus: () => <div>Hal Tesaurus</div>,
+  Makna: () => <div>Hal Makna</div>,
+  Rima: () => <div>Hal Rima</div>,
+  Ejaan: () => <div>Hal Ejaan</div>,
+}));
 vi.mock('../src/pages/publik/gim/GimIndex', () => ({ default: () => <div>Hal Gim</div> }));
 vi.mock('../src/pages/publik/gim/KuisKata', () => ({ default: () => <div>Hal Kuis Kata</div> }));
 vi.mock('../src/pages/publik/gim/SusunKata', () => ({ default: () => <div>Hal Susun Kata</div> }));
-vi.mock('../src/pages/publik/Glosarium', () => ({ default: () => <div>Hal Glosarium</div> }));
+vi.mock('../src/pages/publik/glosarium', () => ({
+  Glosarium: () => <div>Hal Glosarium</div>,
+  GlosariumDetail: () => <div>Hal Glosarium Detail</div>,
+}));
 vi.mock('../src/pages/publik/alat', () => ({
   Alat: () => <div>Hal Alat</div>,
   PenghitungHuruf: () => <div>Hal Penghitung Huruf</div>,
   PenganalisisTeks: () => <div>Hal Penganalisis Teks</div>,
 }));
-vi.mock('../src/pages/publik/AuthCallback', () => ({ default: () => <div>Auth Callback</div> }));
-vi.mock('../src/pages/publik/KebijakanPrivasi', () => ({ default: () => <div>Kebijakan Privasi</div> }));
+vi.mock('../src/pages/publik/gim', () => ({
+  GimIndex: () => <div>Hal Gim</div>,
+  KuisKata: () => <div>Hal Kuis Kata</div>,
+  SusunKata: () => <div>Hal Susun Kata</div>,
+}));
+vi.mock('../src/pages/publik/informasi', () => ({
+  KebijakanPrivasi: () => <div>Kebijakan Privasi</div>,
+  Sumber: () => <div>Hal Sumber</div>,
+}));
 vi.mock('../src/pages/redaksi/inti/LoginAdmin', () => ({ default: () => <div>Login Redaksi</div> }));
 vi.mock('../src/pages/redaksi/inti/DasborAdmin', () => ({ default: () => <div>Dasbor Redaksi</div> }));
 vi.mock('../src/pages/redaksi/leksikon/KamusAdmin', () => ({ default: () => <div>Kamus Redaksi</div> }));

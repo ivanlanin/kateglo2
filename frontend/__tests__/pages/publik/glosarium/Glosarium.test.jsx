@@ -1,20 +1,20 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Glosarium, { resolveKategoriNama, resolveKategoriItem } from '../../../src/pages/publik/Glosarium';
-import { resolveNamaSumberSort } from '../../../src/pages/publik/Glosarium';
+import Glosarium, { resolveKategoriNama, resolveKategoriItem } from '../../../../src/pages/publik/glosarium/Glosarium';
+import { resolveNamaSumberSort } from '../../../../src/pages/publik/glosarium/Glosarium';
 import {
   cariGlosarium,
   ambilGlosariumPerBidang,
   ambilGlosariumPerSumber,
   ambilDaftarBidang,
   ambilDaftarSumber,
-} from '../../../src/api/apiPublik';
+} from '../../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
 let mockParams = {};
 let mockAuth = { adalahAdmin: false };
 
-vi.mock('../../../src/api/apiPublik', () => ({
+vi.mock('../../../../src/api/apiPublik', () => ({
   cariGlosarium: vi.fn().mockResolvedValue({ data: [], total: 0 }),
   ambilGlosariumPerBidang: vi.fn().mockResolvedValue({ data: [], total: 0 }),
   ambilGlosariumPerSumber: vi.fn().mockResolvedValue({ data: [], total: 0 }),
@@ -37,11 +37,11 @@ vi.mock('@tanstack/react-query', () => ({
   useQuery: (...args) => mockUseQuery(...args),
 }));
 
-vi.mock('../../../src/context/authContext', () => ({
+vi.mock('../../../../src/context/authContext', () => ({
   useAuthOptional: () => mockAuth,
 }));
 
-vi.mock('../../../src/components/bersama/Paginasi', () => ({
+vi.mock('../../../../src/components/bersama/Paginasi', () => ({
   default: ({ onNavigateCursor }) => (
     <div>
       <button type="button" aria-label="glosarium-first" onClick={() => onNavigateCursor('first')}>first</button>

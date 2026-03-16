@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Makna, { amanDecode } from '../../../src/pages/publik/Makna';
-import { cariMakna, ambilContohMakna } from '../../../src/api/apiPublik';
+import Makna, { amanDecode } from '../../../../src/pages/publik/kamus/Makna';
+import { cariMakna, ambilContohMakna } from '../../../../src/api/apiPublik';
 
 let mockParams = {};
 const mockUseQuery = vi.fn();
@@ -16,19 +16,19 @@ vi.mock('@tanstack/react-query', () => ({
   useQuery: (...args) => mockUseQuery(...args),
 }));
 
-vi.mock('../../../src/hooks/bersama/useCursorPagination', () => ({
+vi.mock('../../../../src/hooks/bersama/useCursorPagination', () => ({
   useCursorPagination: () => ({
     cursorState: { page: 1, cursor: 'c1', direction: 'next', lastPage: false },
     handleCursor: mockHandleCursor,
   }),
 }));
 
-vi.mock('../../../src/api/apiPublik', () => ({
+vi.mock('../../../../src/api/apiPublik', () => ({
   cariMakna: vi.fn(),
   ambilContohMakna: vi.fn(),
 }));
 
-vi.mock('../../../src/components/publik/HalamanPublik', () => ({
+vi.mock('../../../../src/components/publik/HalamanPublik', () => ({
   default: ({ judul, deskripsi, children }) => (
     <section>
       <h1>{judul}</h1>
@@ -38,7 +38,7 @@ vi.mock('../../../src/components/publik/HalamanPublik', () => ({
   ),
 }));
 
-vi.mock('../../../src/components/publik/HasilPencarian', () => ({
+vi.mock('../../../../src/components/publik/HasilPencarian', () => ({
   default: ({ results, renderItems, emptyState, onNavigateCursor }) => (
     <div>
       <button type="button" onClick={() => onNavigateCursor?.('next')}>cursor-next</button>

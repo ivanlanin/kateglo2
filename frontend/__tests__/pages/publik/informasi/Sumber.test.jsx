@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import Sumber from '../../../src/pages/publik/Sumber';
+import Sumber from '../../../../src/pages/publik/informasi/Sumber';
 
 const mockUseQuery = vi.fn();
 
@@ -9,7 +9,7 @@ vi.mock('@tanstack/react-query', () => ({
   useQuery: (...args) => mockUseQuery(...args),
 }));
 
-vi.mock('../../../src/api/apiPublik', () => ({
+vi.mock('../../../../src/api/apiPublik', () => ({
   ambilDaftarSumber: vi.fn(),
 }));
 

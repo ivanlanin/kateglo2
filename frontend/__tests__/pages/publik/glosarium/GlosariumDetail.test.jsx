@@ -1,9 +1,9 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import GlosariumDetail from '../../../src/pages/publik/GlosariumDetail';
-import { __private } from '../../../src/pages/publik/GlosariumDetail';
-import { upsertMetaTag } from '../../../src/pages/publik/GlosariumDetail';
-import { ambilDetailGlosarium } from '../../../src/api/apiPublik';
+import GlosariumDetail from '../../../../src/pages/publik/glosarium/GlosariumDetail';
+import { __private } from '../../../../src/pages/publik/glosarium/GlosariumDetail';
+import { upsertMetaTag } from '../../../../src/pages/publik/glosarium/GlosariumDetail';
+import { ambilDetailGlosarium } from '../../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
 let mockParams = { asing: 'zero%20sum' };
@@ -16,7 +16,7 @@ let queryState = {
   error: null,
 };
 
-vi.mock('../../../src/api/apiPublik', () => ({
+vi.mock('../../../../src/api/apiPublik', () => ({
   ambilDetailGlosarium: vi.fn().mockResolvedValue({}),
 }));
 
@@ -29,7 +29,7 @@ vi.mock('react-router-dom', () => ({
   useParams: () => mockParams,
 }));
 
-vi.mock('../../../src/context/authContext', () => ({
+vi.mock('../../../../src/context/authContext', () => ({
   useAuthOptional: () => mockAuth,
 }));
 

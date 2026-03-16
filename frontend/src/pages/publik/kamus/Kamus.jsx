@@ -9,14 +9,14 @@ import {
   ambilKategoriKamus,
   ambilEntriPerKategori,
   cariEntriPerTagar,
-} from '../../api/apiPublik';
-import { useCursorPagination } from '../../hooks/bersama/useCursorPagination';
-import HalamanPublik from '../../components/publik/HalamanPublik';
-import HasilPencarian from '../../components/publik/HasilPencarian';
-import KartuKategori from '../../components/publik/KartuKategori';
-import { EmptyResultText, PesanTidakDitemukan, QueryFeedback } from '../../components/publik/StatusKonten';
-import { formatLemaHomonim } from '../../utils/formatUtils';
-import { buatPathDetailKamus } from '../../utils/paramUtils';
+} from '../../../api/apiPublik';
+import { useCursorPagination } from '../../../hooks/bersama/useCursorPagination';
+import HalamanPublik from '../../../components/publik/HalamanPublik';
+import HasilPencarian from '../../../components/publik/HasilPencarian';
+import KartuKategori from '../../../components/publik/KartuKategori';
+import { EmptyResultText, PesanTidakDitemukan, QueryFeedback } from '../../../components/publik/StatusKonten';
+import { formatLemaHomonim } from '../../../utils/formatUtils';
+import { buatPathDetailKamus } from '../../../utils/paramUtils';
 import {
   buildMetaBrowseKamus,
   buildMetaKategoriKamus,
@@ -26,7 +26,7 @@ import {
   NAMA_KATEGORI_BROWSE_KAMUS,
   NAMA_KATEGORI_KAMUS,
   tentukanSlugLabel,
-} from '../../utils/metaUtils';
+} from '../../../utils/metaUtils';
 
 const BARIS_KATEGORI = [
   ['abjad'],

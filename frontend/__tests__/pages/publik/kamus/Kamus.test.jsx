@@ -1,13 +1,13 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Kamus from '../../../src/pages/publik/Kamus';
-import { __private } from '../../../src/pages/publik/Kamus';
-import { cariEntriPerTagar, cariKamus } from '../../../src/api/apiPublik';
+import Kamus from '../../../../src/pages/publik/kamus/Kamus';
+import { __private } from '../../../../src/pages/publik/kamus/Kamus';
+import { cariEntriPerTagar, cariKamus } from '../../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
 let mockParams = {};
 
-vi.mock('../../../src/api/apiPublik', () => ({
+vi.mock('../../../../src/api/apiPublik', () => ({
   cariKamus: vi.fn().mockResolvedValue({ data: [], total: 0 }),
   ambilKategoriKamus: vi.fn().mockResolvedValue({}),
   ambilEntriPerKategori: vi.fn().mockResolvedValue({ data: [], total: 0, label: null }),
@@ -23,7 +23,7 @@ vi.mock('@tanstack/react-query', () => ({
   useQuery: (...args) => mockUseQuery(...args),
 }));
 
-vi.mock('../../../src/components/bersama/Paginasi', () => ({
+vi.mock('../../../../src/components/bersama/Paginasi', () => ({
   default: ({ onNavigateCursor }) => (
     <div>
       <button type="button" aria-label="kamus-first" onClick={() => onNavigateCursor('first')}>first</button>

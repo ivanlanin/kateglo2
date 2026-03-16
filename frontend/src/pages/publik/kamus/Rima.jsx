@@ -5,14 +5,14 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ambilContohRima, cariRima } from '../../api/apiPublik';
-import TombolNavKursor from '../../components/publik/TombolNavKursor';
-import HalamanPublik from '../../components/publik/HalamanPublik';
-import HamparanMuatNav from '../../components/publik/HamparanMuatNav';
-import { QueryFeedback } from '../../components/publik/StatusKonten';
-import { buatPathDetailKamus } from '../../utils/paramUtils';
+import { ambilContohRima, cariRima } from '../../../api/apiPublik';
+import TombolNavKursor from '../../../components/publik/TombolNavKursor';
+import HalamanPublik from '../../../components/publik/HalamanPublik';
+import HamparanMuatNav from '../../../components/publik/HamparanMuatNav';
+import { QueryFeedback } from '../../../components/publik/StatusKonten';
+import { buatPathDetailKamus } from '../../../utils/paramUtils';
 import { amanDecode } from './Makna';
-import useNavigasiMemuat from '../../hooks/bersama/useNavigasiMemuat';
+import useNavigasiMemuat from '../../../hooks/bersama/useNavigasiMemuat';
 
 const LIMIT = 50;
 
