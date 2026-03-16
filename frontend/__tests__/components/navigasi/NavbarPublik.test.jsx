@@ -48,7 +48,7 @@ vi.mock('react-router-dom', () => ({
 }));
 
 import { act, render, screen, fireEvent, waitFor } from '@testing-library/react';
-import NavbarPublik, { __private } from '../../../src/components/navigasi/NavbarPublik';
+import NavbarPublik, { __private, menuItems } from '../../../src/components/navigasi/NavbarPublik';
 
 function aturUkuranNavbar({ lebarNavbar = 1200, lebarLogo = 96, lebarMenu = 520 } = {}) {
   vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockImplementation(function clientWidthGetter() {
@@ -157,6 +157,23 @@ describe('NavbarPublik', () => {
     expect(screen.getByRole('link', { name: 'Kamus' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Tesaurus' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Glosarium' })).toBeInTheDocument();
+  });
+
+  it('menyaring item adminSaja untuk non-admin dan menampilkannya untuk admin', () => {
+    const originalItems = [...menuItems];
+    menuItems.length = 0;
+    menuItems.push(...originalItems, { path: '/rahasia', label: 'Rahasia', adminSaja: true });
+
+    const { rerender } = render(<NavbarPublik />);
+    expect(screen.queryByRole('link', { name: 'Rahasia' })).not.toBeInTheDocument();
+
+    mockAuthState.adalahRedaksi = true;
+    rerender(<NavbarPublik />);
+    expect(screen.getByRole('link', { name: 'Rahasia' })).toBeInTheDocument();
+
+    menuItems.length = 0;
+    menuItems.push(...originalItems);
+    mockAuthState.adalahRedaksi = false;
   });
 
   it('menampilkan input pencarian', () => {
@@ -277,6 +294,16 @@ describe('NavbarPublik', () => {
     return waitFor(() => {
       expect(container.querySelector('.navbar-mobile-panel')).not.toBeInTheDocument();
     });
+  });
+
+  it('klik panel mobile tidak menutup drawer karena propagasi dihentikan', () => {
+    aturUkuranNavbar({ lebarNavbar: 720, lebarMenu: 620 });
+
+    const { container } = render(<NavbarPublik />);
+    fireEvent.click(screen.getByLabelText('Toggle menu'));
+    fireEvent.click(container.querySelector('.navbar-mobile-panel'));
+
+    expect(container.querySelector('.navbar-mobile-panel')).toBeInTheDocument();
   });
 
   it('tombol tutup menutup drawer mobile', () => {

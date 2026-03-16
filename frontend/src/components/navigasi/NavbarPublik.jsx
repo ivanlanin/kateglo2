@@ -77,9 +77,9 @@ function NavbarPublik() {
     simpanReturnTo(`${location.pathname}${location.search}`);
   };
 
-  const handleLogoutClick = (onItemClick = () => {}) => {
+  const handleLogoutClick = (onItemClick = null) => {
     logout();
-    onItemClick();
+    onItemClick?.();
   };
 
   const renderMenu = ({
