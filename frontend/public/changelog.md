@@ -3,6 +3,7 @@
 ## 2026-03-16 Senin
 
 - Mengatur subfolder `frontend/src/pages`
+- Merencanakan integrasi dengan Wordnet dan Wikidata
 
 ## 2026-03-15 Minggu
 
