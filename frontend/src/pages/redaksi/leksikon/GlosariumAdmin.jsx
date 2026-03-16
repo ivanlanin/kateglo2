@@ -13,18 +13,13 @@ import {
   useOpsiBahasaGlosariumAdmin,
   useOpsiSumberAdmin,
 } from '../../../api/apiAdmin';
-import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../../components/tampilan/HalamanAdmin';
 import { useAuth } from '../../../context/authContext';
-import {
-  BarisFilterCariAdmin,
-  TombolAksiAdmin,
-  BadgeStatus,
-  opsiFilterStatusAktif,
-  TabelAdmin,
-  getApiErrorMessage,
-  usePencarianAdmin,
-} from '../../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../../components/redaksi/PanelGeser';
+import BarisFilterCariAdmin from '../../../components/formulir/FilterCariAdmin';
+import BadgeStatus from '../../../components/data/LencanaStatus';
+import TabelAdmin from '../../../components/data/TabelAdmin';
+import TombolAksiAdmin from '../../../components/tombol/TombolAksiAdmin';
+import PanelGeser from '../../../components/panel/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -32,7 +27,9 @@ import {
   ToggleAktif,
   FormFooter,
   PesanForm,
-} from '../../../components/redaksi/FormulirAdmin';
+} from '../../../components/formulir/FormulirAdmin';
+import usePencarianAdmin from '../../../hooks/usePencarianAdmin';
+import { getApiErrorMessage, opsiFilterStatusAktif } from '../../../utils/adminUtils';
 import { parsePositiveIntegerParam } from '../../../utils/paramUtils';
 import { ambilDaftarLookup, mapOpsiIdNama } from '../../../utils/opsiUtils';
 

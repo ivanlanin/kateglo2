@@ -10,11 +10,11 @@ const mockApiPublik = vi.hoisted(() => ({
 
 const originalError = console.error;
 
-vi.mock('../../../../src/components/publik/KuisKata', () => ({
+vi.mock('../../../../src/components/gim/KuisKata', () => ({
   default: () => <div>Komponen Kuis Kata</div>,
 }));
 
-vi.mock('../../../../src/components/publik/HalamanPublik', () => ({
+vi.mock('../../../../src/components/tampilan/HalamanPublik', () => ({
   default: ({ children }) => <div>{children}</div>,
 }));
 

@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import HalamanAdminComponent from '../../../src/components/redaksi/HalamanAdmin';
-import { hitungModeGelapAwal, bacaPreferensiTema } from '../../../src/components/bersama/HalamanDasar';
+import HalamanAdminComponent from '../../../src/components/tampilan/HalamanAdmin';
+import { hitungModeGelapAwal, bacaPreferensiTema } from '../../../src/components/tampilan/HalamanDasar';
 
 function HalamanAdmin(props) {
   return <HalamanAdminComponent {...props} />;

@@ -6,9 +6,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import HalamanPublik from '../../../components/publik/HalamanPublik';
-import PanelLipat from '../../../components/publik/PanelLipat';
-import KartuKategori from '../../../components/publik/KartuKategori';
+import HalamanPublik from '../../../components/tampilan/HalamanPublik';
+import PanelLipat from '../../../components/panel/PanelLipat';
+import KartuKategori from '../../../components/data/KartuKategori';
 import { daftarIsiEjaan, daftarItemEjaan } from '../../../constants/ejaanData';
 
 function bacaIsiMarkdown(mardownMentah = '') {

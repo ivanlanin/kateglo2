@@ -37,11 +37,11 @@ vi.mock('../../../../src/context/authContext', () => ({
   useAuth: () => mockUseAuth(),
 }));
 
-vi.mock('../../../../src/components/publik/HalamanPublik', () => ({
+vi.mock('../../../../src/components/tampilan/HalamanPublik', () => ({
   default: ({ children }) => <section>{children}</section>,
 }));
 
-vi.mock('../../../../src/components/bersama/TombolMasukGoogle', () => ({
+vi.mock('../../../../src/components/tombol/TombolMasuk', () => ({
   default: ({ onClick, label }) => (
     <button type="button" onClick={onClick}>{label}</button>
   ),

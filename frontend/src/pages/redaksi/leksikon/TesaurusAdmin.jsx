@@ -5,20 +5,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarTesaurusAdmin, useDetailTesaurusAdmin, useSimpanTesaurus, useHapusTesaurus, useDaftarSumberAdmin } from '../../../api/apiAdmin';
-import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../../components/tampilan/HalamanAdmin';
 import { useAuth } from '../../../context/authContext';
-import {
-  BarisFilterCariAdmin,
-  TombolAksiAdmin,
-  BadgeStatus,
-  opsiFilterStatusAktif,
-  TabelAdmin,
-  getApiErrorMessage,
-  potongTeks,
-  usePencarianAdmin,
-  validateRequiredFields,
-} from '../../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../../components/redaksi/PanelGeser';
+import BarisFilterCariAdmin from '../../../components/formulir/FilterCariAdmin';
+import BadgeStatus from '../../../components/data/LencanaStatus';
+import TabelAdmin from '../../../components/data/TabelAdmin';
+import TombolAksiAdmin from '../../../components/tombol/TombolAksiAdmin';
+import PanelGeser from '../../../components/panel/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -27,7 +20,14 @@ import {
   ToggleAktif,
   FormFooter,
   PesanForm,
-} from '../../../components/redaksi/FormulirAdmin';
+} from '../../../components/formulir/FormulirAdmin';
+import usePencarianAdmin from '../../../hooks/usePencarianAdmin';
+import {
+  getApiErrorMessage,
+  opsiFilterStatusAktif,
+  potongTeks,
+  validateRequiredFields,
+} from '../../../utils/adminUtils';
 import { parsePositiveIntegerParam } from '../../../utils/paramUtils';
 
 const nilaiAwal = { indeks: '', sinonim: '', antonim: '', aktif: 1, sumber_id: '' };

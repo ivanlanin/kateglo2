@@ -29,7 +29,7 @@ vi.mock('../../../../src/api/apiAdmin', () => ({
   useSimpanPengguna: () => ({ mutate: mutateSimpanPengguna, isPending: false }),
 }));
 
-vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/tampilan/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>

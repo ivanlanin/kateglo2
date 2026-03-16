@@ -1,6 +1,6 @@
 /**
  * @fileoverview Test untuk komponen NavbarPublik
- * @tested_in frontend/src/components/publik/NavbarPublik.jsx
+ * @tested_in frontend/src/components/navigasi/NavbarPublik.jsx
  */
 
 // Mock react-router-dom SEBELUM import komponen
@@ -48,7 +48,7 @@ vi.mock('react-router-dom', () => ({
 }));
 
 import { act, render, screen, fireEvent, waitFor } from '@testing-library/react';
-import NavbarPublik, { __private } from '../../../src/components/publik/NavbarPublik';
+import NavbarPublik, { __private } from '../../../src/components/navigasi/NavbarPublik';
 
 function aturUkuranNavbar({ lebarNavbar = 1200, lebarLogo = 96, lebarMenu = 520 } = {}) {
   vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockImplementation(function clientWidthGetter() {

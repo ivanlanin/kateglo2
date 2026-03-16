@@ -7,13 +7,13 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategoriKamus, cariGlosarium } from '../../../api/apiPublik';
 import { useAuth } from '../../../context/authContext';
-import TombolNavKursor from '../../../components/publik/TombolNavKursor';
-import PanelLipat from '../../../components/publik/PanelLipat';
-import HalamanPublik from '../../../components/publik/HalamanPublik';
-import HamparanMuatNav from '../../../components/publik/HamparanMuatNav';
-import TombolSunting from '../../../components/publik/TombolSunting';
-import TombolMasuk from '../../../components/bersama/TombolMasuk';
-import { PesanTidakDitemukan } from '../../../components/publik/StatusKonten';
+import PaginasiKursor from '../../../components/navigasi/PaginasiKursor';
+import PanelLipat from '../../../components/panel/PanelLipat';
+import HalamanPublik from '../../../components/tampilan/HalamanPublik';
+import MuatData from '../../../components/status/MuatData';
+import TombolSunting from '../../../components/tombol/TombolSunting';
+import TombolMasuk from '../../../components/tombol/TombolMasuk';
+import { PesanTidakDitemukan } from '../../../components/status/StatusKonten';
 import {
   formatLemaHomonim,
   formatLocalDateTime,
@@ -22,7 +22,7 @@ import {
 } from '../../../utils/formatUtils';
 import { buatPathDetailKamus, normalisasiIndeksKamus } from '../../../utils/paramUtils';
 import { buildMetaDetailKamus } from '../../../utils/metaUtils';
-import useNavigasiMemuat from '../../../hooks/bersama/useNavigasiMemuat';
+import useNavigasiMemuat from '../../../hooks/useNavigasiMemuat';
 
 const GLOSARIUM_LIMIT = 20;
 const SUBENTRI_PREVIEW_LIMIT = 8;
@@ -1143,13 +1143,13 @@ function KamusDetail() {
                 aksen={true}
                 aksiKanan={(
                   <div className="rima-heading-nav">
-                    <TombolNavKursor
+                    <PaginasiKursor
                       symbol="‹"
                       onClick={handlePrevGlosarium}
                       disabled={isFetchingGlosarium || !glosariumPageInfo.hasPrev}
                       className="paginasi-btn rima-heading-nav-button"
                     />
-                    <TombolNavKursor
+                    <PaginasiKursor
                       symbol="›"
                       onClick={handleNextGlosarium}
                       disabled={isFetchingGlosarium || !glosariumPageInfo.hasNext}
@@ -1158,7 +1158,7 @@ function KamusDetail() {
                   </div>
                 )}
               >
-                <HamparanMuatNav
+                <MuatData
                   isLoading={isNavigasiGlosariumMemuat}
                   loadingText="Memuat glosarium …"
                   contentClassName="text-sm leading-relaxed"
@@ -1209,7 +1209,7 @@ function KamusDetail() {
                         {i < glosarium.length - 1 && <span>; </span>}
                       </span>
                     ))}
-                </HamparanMuatNav>
+                </MuatData>
               </PanelLipat>
             )}
           </div>

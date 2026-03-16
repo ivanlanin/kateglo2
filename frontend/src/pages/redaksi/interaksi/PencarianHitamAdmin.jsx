@@ -3,22 +3,16 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../../components/tampilan/HalamanAdmin';
 import {
   useDaftarPencarianHitamAdmin,
   useHapusPencarianHitamAdmin,
   useSimpanPencarianHitamAdmin,
 } from '../../../api/apiAdmin';
-import {
-  BarisFilterCariAdmin,
-  TombolAksiAdmin,
-  TabelAdmin,
-  getApiErrorMessage,
-  opsiFilterStatusAktif,
-  usePencarianAdmin,
-  validateRequiredFields,
-} from '../../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../../components/redaksi/PanelGeser';
+import BarisFilterCariAdmin from '../../../components/formulir/FilterCariAdmin';
+import TabelAdmin from '../../../components/data/TabelAdmin';
+import TombolAksiAdmin from '../../../components/tombol/TombolAksiAdmin';
+import PanelGeser from '../../../components/panel/PanelGeser';
 import {
   FormFooter,
   InputField,
@@ -26,8 +20,10 @@ import {
   TextareaField,
   ToggleAktif,
   useFormPanel,
-} from '../../../components/redaksi/FormulirAdmin';
+} from '../../../components/formulir/FormulirAdmin';
 import { formatLocalDateTime } from '../../../utils/formatUtils';
+import usePencarianAdmin from '../../../hooks/usePencarianAdmin';
+import { getApiErrorMessage, opsiFilterStatusAktif, validateRequiredFields } from '../../../utils/adminUtils';
 
 const nilaiAwalPencarianHitam = {
   kata: '',

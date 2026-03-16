@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import KuisKata, { gabungRiwayat, __private } from '../../../src/components/publik/KuisKata';
+import KuisKata, { gabungRiwayat, __private } from '../../../src/components/gim/KuisKata';
 
 const mockRemoveQueries = vi.fn();
 const mockUseQuery = vi.fn();

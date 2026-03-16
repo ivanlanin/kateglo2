@@ -15,15 +15,11 @@ import {
   useDaftarAtestasi,
   useDaftarRiwayat,
 } from '../../../api/apiKadi';
-import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../../components/tampilan/HalamanAdmin';
 import { useAuth } from '../../../context/authContext';
-import {
-  BarisFilterCariAdmin,
-  TabelAdmin,
-  getApiErrorMessage,
-  usePencarianAdmin,
-} from '../../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../../components/redaksi/PanelGeser';
+import BarisFilterCariAdmin from '../../../components/formulir/FilterCariAdmin';
+import TabelAdmin from '../../../components/data/TabelAdmin';
+import PanelGeser from '../../../components/panel/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -31,7 +27,9 @@ import {
   TextareaField,
   FormFooter,
   PesanForm,
-} from '../../../components/redaksi/FormulirAdmin';
+} from '../../../components/formulir/FormulirAdmin';
+import usePencarianAdmin from '../../../hooks/usePencarianAdmin';
+import { getApiErrorMessage } from '../../../utils/adminUtils';
 import { parsePositiveIntegerParam } from '../../../utils/paramUtils';
 
 // ─── Constants ───────────────────────────────────────────────────────────────

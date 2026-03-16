@@ -35,7 +35,7 @@ vi.mock('../../../../src/context/authContext', () => ({
   useAuth: (...args) => mockUseAuth(...args),
 }));
 
-vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/tampilan/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>

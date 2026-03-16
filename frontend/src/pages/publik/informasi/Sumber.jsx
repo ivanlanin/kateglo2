@@ -6,8 +6,8 @@ import ReactMarkdown from 'react-markdown';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'react-router-dom';
 import { ambilDaftarSumber } from '../../../api/apiPublik';
-import HalamanPublik from '../../../components/publik/HalamanPublik';
-import { QueryFeedback } from '../../../components/publik/StatusKonten';
+import HalamanPublik from '../../../components/tampilan/HalamanPublik';
+import { QueryFeedback } from '../../../components/status/StatusKonten';
 
 function Sumber() {
   const location = useLocation();

@@ -25,7 +25,7 @@ vi.mock('../../../../src/context/authContext', () => ({
   useAuthOptional: () => mockAuth,
 }));
 
-vi.mock('../../../../src/components/bersama/Paginasi', () => ({
+vi.mock('../../../../src/components/navigasi/Paginasi', () => ({
   default: ({ onNavigateCursor }) => (
     <div>
       <button type="button" aria-label="tesaurus-first" onClick={() => onNavigateCursor('first')}>first</button>

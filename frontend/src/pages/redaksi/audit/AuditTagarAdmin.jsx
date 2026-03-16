@@ -4,13 +4,11 @@
 
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
-import {
-  BarisFilterCariAdmin,
-  TabelAdmin,
-  usePencarianAdmin,
-} from '../../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../../components/redaksi/PanelGeser';
+import HalamanAdmin from '../../../components/tampilan/HalamanAdmin';
+import BarisFilterCariAdmin from '../../../components/formulir/FilterCariAdmin';
+import TabelAdmin from '../../../components/data/TabelAdmin';
+import PanelGeser from '../../../components/panel/PanelGeser';
+import usePencarianAdmin from '../../../hooks/usePencarianAdmin';
 import { buatPathDetailKamus } from '../../../utils/paramUtils';
 import {
   useDaftarAuditTagarAdmin,

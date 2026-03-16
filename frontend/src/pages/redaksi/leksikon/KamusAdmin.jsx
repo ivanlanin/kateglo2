@@ -14,23 +14,20 @@ import {
   useDaftarSumberAdmin,
   useTagarEntri, useSimpanTagarEntri, useDaftarTagarUntukPilih,
 } from '../../../api/apiAdmin';
-import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../../components/tampilan/HalamanAdmin';
 import { useAuth } from '../../../context/authContext';
 import { parsePositiveIntegerParam } from '../../../utils/paramUtils';
-import {
-  BarisFilterCariAdmin,
-  TombolAksiAdmin,
-  TabelAdmin,
-  BadgeStatus,
-  getApiErrorMessage,
-  usePencarianAdmin,
-  validateRequiredFields,
-} from '../../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../../components/redaksi/PanelGeser';
+import BarisFilterCariAdmin from '../../../components/formulir/FilterCariAdmin';
+import TabelAdmin from '../../../components/data/TabelAdmin';
+import BadgeStatus from '../../../components/data/LencanaStatus';
+import TombolAksiAdmin from '../../../components/tombol/TombolAksiAdmin';
+import PanelGeser from '../../../components/panel/PanelGeser';
 import {
   useFormPanel, InputField, SearchableSelectField, SelectField, TextareaField, ToggleAktif,
   FormFooter, PesanForm,
-} from '../../../components/redaksi/FormulirAdmin';
+} from '../../../components/formulir/FormulirAdmin';
+import usePencarianAdmin from '../../../hooks/usePencarianAdmin';
+import { getApiErrorMessage, validateRequiredFields } from '../../../utils/adminUtils';
 import { buatPathDetailKamus } from '../../../utils/paramUtils';
 
 // ─── Constants ───────────────────────────────────────────────────────────────

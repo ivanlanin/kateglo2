@@ -3,7 +3,7 @@
  */
 
 import { Link } from 'react-router-dom';
-import HalamanPublik from '../../../components/publik/HalamanPublik';
+import HalamanPublik from '../../../components/tampilan/HalamanPublik';
 
 const daftarAlat = [
   {

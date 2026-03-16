@@ -2,7 +2,7 @@
  * @fileoverview Komponen pembungkus hasil pencarian dengan paginasi di atas tabel
  */
 
-import Paginasi from '../bersama/Paginasi';
+import Paginasi from '../navigasi/Paginasi';
 
 function HasilPencarian({
   results = [],

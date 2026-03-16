@@ -4,7 +4,7 @@
 
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import HalamanPublik from '../../../components/publik/HalamanPublik';
+import HalamanPublik from '../../../components/tampilan/HalamanPublik';
 
 const THRESHOLD = 25;
 const contohTeks = `Bahasa berkembang bersama cara kita memakainya.

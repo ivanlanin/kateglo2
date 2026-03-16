@@ -5,19 +5,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarLabelAdmin, useDetailLabelAdmin, useSimpanLabel, useHapusLabel } from '../../../api/apiAdmin';
-import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
-import {
-  BarisFilterCariAdmin,
-  TombolAksiAdmin,
-  BadgeStatus,
-  opsiFilterStatusAktif,
-  TabelAdmin,
-  getApiErrorMessage,
-  potongTeks,
-  usePencarianAdmin,
-  validateRequiredFields,
-} from '../../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../../components/redaksi/PanelGeser';
+import HalamanAdmin from '../../../components/tampilan/HalamanAdmin';
+import FilterCariAdmin from '../../../components/formulir/FilterCariAdmin';
+import TabelAdmin from '../../../components/data/TabelAdmin';
+import LencanaStatus from '../../../components/data/LencanaStatus';
+import TombolAksiAdmin from '../../../components/tombol/TombolAksiAdmin';
+import PanelGeser from '../../../components/panel/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -25,7 +18,9 @@ import {
   ToggleAktif,
   FormFooter,
   PesanForm,
-} from '../../../components/redaksi/FormulirAdmin';
+} from '../../../components/formulir/FormulirAdmin';
+import usePencarianAdmin from '../../../hooks/usePencarianAdmin';
+import { getApiErrorMessage, opsiFilterStatusAktif, potongTeks, validateRequiredFields } from '../../../utils/adminUtils';
 import { parsePositiveIntegerParam } from '../../../utils/paramUtils';
 
 const nilaiAwal = { kategori: '', kode: '', nama: '', urutan: 1, keterangan: '', aktif: true };
@@ -40,7 +35,7 @@ const kolom = [
   {
     key: 'aktif',
     label: 'Status',
-    render: (item) => <BadgeStatus aktif={item.aktif} />,
+    render: (item) => <LencanaStatus aktif={item.aktif} />,
   },
   {
     key: 'keterangan',
@@ -185,7 +180,7 @@ function LabelAdmin() {
 
   return (
     <HalamanAdmin judul="Label" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
-      <BarisFilterCariAdmin
+      <FilterCariAdmin
         nilai={cari}
         onChange={setCari}
         onCari={handleCari}

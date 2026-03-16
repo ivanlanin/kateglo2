@@ -16,7 +16,7 @@ vi.mock('../../../../src/api/apiAdmin', () => ({
   useHapusPencarianHitamAdmin: (...args) => mockUseHapusPencarianHitamAdmin(...args),
 }));
 
-vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/tampilan/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>
@@ -26,7 +26,7 @@ vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
   ),
 }));
 
-vi.mock('../../../../src/components/redaksi/PanelGeser', () => ({
+vi.mock('../../../../src/components/panel/PanelGeser', () => ({
   default: ({ buka, judul, children, onTutup }) => (buka ? (
     <div aria-label={judul} role="dialog">
       <button type="button" onClick={onTutup}>Tutup panel</button>

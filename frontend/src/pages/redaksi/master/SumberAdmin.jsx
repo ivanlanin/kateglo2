@@ -10,24 +10,21 @@ import {
   useSimpanSumber,
   useHapusSumber,
 } from '../../../api/apiAdmin';
-import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
-import {
-  BarisFilterCariAdmin,
-  TombolAksiAdmin,
-  TabelAdmin,
-  BadgeStatus,
-  getApiErrorMessage,
-  usePencarianAdmin,
-  validateRequiredFields,
-} from '../../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../../components/redaksi/PanelGeser';
+import HalamanAdmin from '../../../components/tampilan/HalamanAdmin';
+import FilterCariAdmin from '../../../components/formulir/FilterCariAdmin';
+import TabelAdmin from '../../../components/data/TabelAdmin';
+import LencanaStatus from '../../../components/data/LencanaStatus';
+import TombolAksiAdmin from '../../../components/tombol/TombolAksiAdmin';
+import PanelGeser from '../../../components/panel/PanelGeser';
 import {
   useFormPanel,
   InputField,
   TextareaField,
   FormFooter,
   PesanForm,
-} from '../../../components/redaksi/FormulirAdmin';
+} from '../../../components/formulir/FormulirAdmin';
+import usePencarianAdmin from '../../../hooks/usePencarianAdmin';
+import { getApiErrorMessage, validateRequiredFields } from '../../../utils/adminUtils';
 import { parsePositiveIntegerParam } from '../../../utils/paramUtils';
 
 const nilaiAwal = { kode: '', nama: '', keterangan: '', glosarium: false, kamus: false, tesaurus: false, etimologi: false };
@@ -35,10 +32,10 @@ const nilaiAwal = { kode: '', nama: '', keterangan: '', glosarium: false, kamus:
 const kolom = [
   { key: 'kode', label: 'Kode' },
   { key: 'nama', label: 'Nama' },
-  { key: 'kamus', label: 'Kamus', render: (item) => <BadgeStatus aktif={Boolean(item.kamus)} /> },
-  { key: 'tesaurus', label: 'Tesaurus', render: (item) => <BadgeStatus aktif={Boolean(item.tesaurus)} /> },
-  { key: 'glosarium', label: 'Glosarium', render: (item) => <BadgeStatus aktif={Boolean(item.glosarium)} /> },
-  { key: 'etimologi', label: 'Etimologi', render: (item) => <BadgeStatus aktif={Boolean(item.etimologi)} /> },
+  { key: 'kamus', label: 'Kamus', render: (item) => <LencanaStatus aktif={Boolean(item.kamus)} /> },
+  { key: 'tesaurus', label: 'Tesaurus', render: (item) => <LencanaStatus aktif={Boolean(item.tesaurus)} /> },
+  { key: 'glosarium', label: 'Glosarium', render: (item) => <LencanaStatus aktif={Boolean(item.glosarium)} /> },
+  { key: 'etimologi', label: 'Etimologi', render: (item) => <LencanaStatus aktif={Boolean(item.etimologi)} /> },
 ];
 
 function ToggleSumberKonteks({ label, name, value, onChange }) {
@@ -182,7 +179,7 @@ function SumberAdmin() {
 
   return (
     <HalamanAdmin judul="Sumber" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
-      <BarisFilterCariAdmin
+      <FilterCariAdmin
         nilai={cari}
         onChange={setCari}
         onCari={handleCari}

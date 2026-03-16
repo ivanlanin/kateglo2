@@ -3,27 +3,24 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
-import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
-import {
-  getApiErrorMessage,
-  TabelAdmin,
-  TombolAksiAdmin,
-  validateRequiredFields,
-} from '../../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../../components/redaksi/PanelGeser';
+import HalamanAdmin from '../../../components/tampilan/HalamanAdmin';
+import TabelAdmin from '../../../components/data/TabelAdmin';
+import TombolAksiAdmin from '../../../components/tombol/TombolAksiAdmin';
+import PanelGeser from '../../../components/panel/PanelGeser';
 import {
   FormFooter,
   InputField,
   PesanForm,
   TextareaField,
   useFormPanel,
-} from '../../../components/redaksi/FormulirAdmin';
+} from '../../../components/formulir/FormulirAdmin';
 import {
   useBuatSusunKataHarianAdmin,
   useDetailSusunKataHarianAdmin,
   useSimpanSusunKataHarianAdmin,
   useSusunKataHarianAdmin,
 } from '../../../api/apiAdmin';
+import { getApiErrorMessage, validateRequiredFields } from '../../../utils/adminUtils';
 import { formatBilanganRibuan, formatLocalDateTime } from '../../../utils/formatUtils';
 
 function tanggalHariIni() {

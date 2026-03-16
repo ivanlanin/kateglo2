@@ -3,8 +3,8 @@
  */
 
 import { useMemo } from 'react';
-import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
-import { TabelAdmin } from '../../../components/redaksi/KomponenAdmin';
+import HalamanAdmin from '../../../components/tampilan/HalamanAdmin';
+import TabelAdmin from '../../../components/data/TabelAdmin';
 import { useSusunKataBebasAdmin } from '../../../api/apiAdmin';
 import { formatBilanganRibuan } from '../../../utils/formatUtils';
 

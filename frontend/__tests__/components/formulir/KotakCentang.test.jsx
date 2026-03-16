@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import KotakCentang from '../../../src/components/redaksi/KotakCentang';
+import KotakCentang from '../../../src/components/formulir/KotakCentang';
 
 describe('KotakCentang', () => {
   it('menampilkan loading text saat isLoading=true', () => {

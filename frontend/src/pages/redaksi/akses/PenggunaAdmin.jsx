@@ -7,16 +7,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarPengguna, useDetailPengguna, useDaftarPeran, useSimpanPengguna } from '../../../api/apiAdmin';
 import { formatLocalDateTime } from '../../../utils/formatUtils';
 import { parsePositiveIntegerParam } from '../../../utils/paramUtils';
-import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
-import {
-  BarisFilterCariAdmin,
-  TabelAdmin,
-  BadgeStatus,
-  getApiErrorMessage,
-  opsiFilterStatusAktif,
-  usePencarianAdmin,
-} from '../../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../../components/redaksi/PanelGeser';
+import HalamanAdmin from '../../../components/tampilan/HalamanAdmin';
+import BarisFilterCariAdmin from '../../../components/formulir/FilterCariAdmin';
+import TabelAdmin from '../../../components/data/TabelAdmin';
+import BadgeStatus from '../../../components/data/LencanaStatus';
+import PanelGeser from '../../../components/panel/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -24,7 +19,9 @@ import {
   ToggleAktif,
   FormFooter,
   PesanForm,
-} from '../../../components/redaksi/FormulirAdmin';
+} from '../../../components/formulir/FormulirAdmin';
+import usePencarianAdmin from '../../../hooks/usePencarianAdmin';
+import { getApiErrorMessage, opsiFilterStatusAktif } from '../../../utils/adminUtils';
 
 function formatTanggal(dateStr) {
   return formatLocalDateTime(dateStr, { fallback: '—', separator: ', ' });

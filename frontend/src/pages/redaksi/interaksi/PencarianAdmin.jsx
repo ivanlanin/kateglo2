@@ -4,12 +4,10 @@
 
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../../components/tampilan/HalamanAdmin';
 import { useStatistikPencarianAdmin } from '../../../api/apiAdmin';
-import {
-  TabelAdmin,
-  usePencarianAdmin,
-} from '../../../components/redaksi/KomponenAdmin';
+import TabelAdmin from '../../../components/data/TabelAdmin';
+import usePencarianAdmin from '../../../hooks/usePencarianAdmin';
 import { formatBilanganRibuan, formatLocalDateTime } from '../../../utils/formatUtils';
 
 const opsiPeriode = [

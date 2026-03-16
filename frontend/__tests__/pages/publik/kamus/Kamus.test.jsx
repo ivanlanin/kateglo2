@@ -23,7 +23,7 @@ vi.mock('@tanstack/react-query', () => ({
   useQuery: (...args) => mockUseQuery(...args),
 }));
 
-vi.mock('../../../../src/components/bersama/Paginasi', () => ({
+vi.mock('../../../../src/components/navigasi/Paginasi', () => ({
   default: ({ onNavigateCursor }) => (
     <div>
       <button type="button" aria-label="kamus-first" onClick={() => onNavigateCursor('first')}>first</button>

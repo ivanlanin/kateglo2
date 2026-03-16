@@ -30,7 +30,7 @@ vi.mock('../../../../src/utils/formatUtils', () => ({
   formatBilanganRibuan: vi.fn((value) => String(value ?? 0)),
 }));
 
-vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/tampilan/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <section>
       <h1>{judul}</h1>
@@ -40,7 +40,7 @@ vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
   ),
 }));
 
-vi.mock('../../../../src/components/redaksi/PanelGeser', () => ({
+vi.mock('../../../../src/components/panel/PanelGeser', () => ({
   default: ({ buka, onTutup, children, judul }) => (buka ? (
     <aside>
       <h2>{judul}</h2>
@@ -50,8 +50,8 @@ vi.mock('../../../../src/components/redaksi/PanelGeser', () => ({
   ) : null),
 }));
 
-vi.mock('../../../../src/components/redaksi/KomponenAdmin', () => ({
-  BarisFilterCariAdmin: ({ nilai, onChange, onCari, onHapus, placeholder, filters = [] }) => (
+vi.mock('../../../../src/components/formulir/FilterCariAdmin', () => ({
+  default: ({ nilai, onChange, onCari, onHapus, placeholder, filters = [] }) => (
     <div>
       <input aria-label="Filter tanggal" placeholder={placeholder} value={nilai} onChange={(e) => onChange(e.target.value)} />
       {filters.map((item) => (
@@ -68,7 +68,10 @@ vi.mock('../../../../src/components/redaksi/KomponenAdmin', () => ({
       <button type="button" onClick={onHapus}>✕</button>
     </div>
   ),
-  TabelAdmin: ({ data = [], onKlikBaris, kolom = [], onOffset }) => {
+}));
+
+vi.mock('../../../../src/components/data/TabelAdmin', () => ({
+  default: ({ data = [], onKlikBaris, kolom = [], onOffset }) => {
     const barisPertama = data[0] || {};
     kolom.forEach((item) => {
       if (typeof item.render === 'function') item.render(barisPertama);
@@ -86,7 +89,13 @@ vi.mock('../../../../src/components/redaksi/KomponenAdmin', () => ({
       </div>
     );
   },
-  TombolAksiAdmin: ({ onClick, label }) => <button type="button" onClick={onClick}>{label}</button>,
+}));
+
+vi.mock('../../../../src/components/tombol/TombolAksiAdmin', () => ({
+  default: ({ onClick, label }) => <button type="button" onClick={onClick}>{label}</button>,
+}));
+
+vi.mock('../../../../src/utils/adminUtils', () => ({
   validateRequiredFields: (data, fields) => {
     if (paksaPesanValidasi !== null) return paksaPesanValidasi;
     const itemKosong = fields.find((field) => !String(data?.[field.name] || '').trim());
@@ -95,7 +104,7 @@ vi.mock('../../../../src/components/redaksi/KomponenAdmin', () => ({
   getApiErrorMessage: (error, fallback) => error?.message || fallback,
 }));
 
-vi.mock('../../../../src/components/redaksi/FormulirAdmin', async () => {
+vi.mock('../../../../src/components/formulir/FormulirAdmin', async () => {
   const React = await vi.importActual('react');
   const useFormPanel = (nilaiAwal) => {
     const [buka, setBuka] = React.useState(false);

@@ -13,22 +13,14 @@ import {
   useOpsiBahasaEtimologiAdmin,
   useOpsiSumberAdmin,
 } from '../../../api/apiAdmin';
-import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../../components/tampilan/HalamanAdmin';
 import { useAuth } from '../../../context/authContext';
-import {
-  BarisFilterCariAdmin,
-  TombolAksiAdmin,
-  TabelAdmin,
-  BadgeStatus,
-  BadgeMeragukan,
-  opsiFilterStatusAktif,
-  opsiFilterMeragukan,
-  getApiErrorMessage,
-  potongTeks,
-  usePencarianAdmin,
-  validateRequiredFields,
-} from '../../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../../components/redaksi/PanelGeser';
+import BarisFilterCariAdmin from '../../../components/formulir/FilterCariAdmin';
+import TabelAdmin from '../../../components/data/TabelAdmin';
+import BadgeStatus from '../../../components/data/LencanaStatus';
+import BadgeMeragukan from '../../../components/data/LencanaStatus';
+import TombolAksiAdmin from '../../../components/tombol/TombolAksiAdmin';
+import PanelGeser from '../../../components/panel/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -37,7 +29,15 @@ import {
   ToggleMeragukan,
   FormFooter,
   PesanForm,
-} from '../../../components/redaksi/FormulirAdmin';
+} from '../../../components/formulir/FormulirAdmin';
+import usePencarianAdmin from '../../../hooks/usePencarianAdmin';
+import {
+  getApiErrorMessage,
+  opsiFilterMeragukan,
+  opsiFilterStatusAktif,
+  potongTeks,
+  validateRequiredFields,
+} from '../../../utils/adminUtils';
 import { buatPathDetailKamus, parsePositiveIntegerParam } from '../../../utils/paramUtils';
 import { ambilDaftarLookup, mapOpsiIdNama } from '../../../utils/opsiUtils';
 

@@ -6,7 +6,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Chart from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import HalamanPublik from '../../../components/publik/HalamanPublik';
+import HalamanPublik from '../../../components/tampilan/HalamanPublik';
 
 Chart.register(ChartDataLabels);
 

@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { useSelectableIds } from '../../src/hooks/redaksi/useSelectableIds';
+import { useSelectableIds } from '../../src/hooks/useSelectableIds';
 
 describe('useSelectableIds', () => {
   it('menormalisasi selectedIds dan hasId bekerja', () => {

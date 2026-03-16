@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { useCursorPagination } from '../../src/hooks/bersama/useCursorPagination';
+import { useCursorPagination } from '../../src/hooks/useCursorPagination';
 
 describe('useCursorPagination', () => {
   it('mode offset: resetOn mereset offset dan handleCursor menangani first/last/next/prev', () => {

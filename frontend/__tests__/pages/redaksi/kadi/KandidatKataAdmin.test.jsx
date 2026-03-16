@@ -50,7 +50,7 @@ vi.mock('../../../../src/api/apiKadi', () => ({
   useDaftarRiwayat: (...args) => mockUseDaftarRiwayat(...args),
 }));
 
-vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/tampilan/HalamanAdmin', () => ({
   default: (props) => {
     mockTataLetak(props);
     return (
@@ -63,8 +63,8 @@ vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
   },
 }));
 
-vi.mock('../../../../src/components/redaksi/KomponenAdmin', () => ({
-  BarisFilterCariAdmin: ({ nilai, onChange, onCari, onHapus, filters }) => (
+vi.mock('../../../../src/components/formulir/FilterCariAdmin', () => ({
+  default: ({ nilai, onChange, onCari, onHapus, filters }) => (
     <div>
       <input aria-label="Cari kandidat" value={nilai} onChange={(event) => onChange(event.target.value)} />
       {filters.map((filter) => (
@@ -79,7 +79,10 @@ vi.mock('../../../../src/components/redaksi/KomponenAdmin', () => ({
       <button type="button" onClick={onHapus}>Reset</button>
     </div>
   ),
-  TabelAdmin: ({ data, kolom, onKlikBaris, onNavigateCursor, isLoading, isError }) => (
+}));
+
+vi.mock('../../../../src/components/data/TabelAdmin', () => ({
+  default: ({ data, kolom, onKlikBaris, onNavigateCursor, isLoading, isError }) => (
     <div>
       <div>loading:{String(isLoading)}</div>
       <div>error:{String(isError)}</div>
@@ -96,11 +99,16 @@ vi.mock('../../../../src/components/redaksi/KomponenAdmin', () => ({
       ))}
     </div>
   ),
-  getApiErrorMessage: (...args) => mockGetApiErrorMessage(...args),
-  usePencarianAdmin: (...args) => mockUsePencarianAdmin(...args),
+}));
+vi.mock('../../../../src/hooks/usePencarianAdmin', () => ({
+  default: (...args) => mockUsePencarianAdmin(...args),
 }));
 
-vi.mock('../../../../src/components/redaksi/PanelGeser', () => ({
+vi.mock('../../../../src/utils/adminUtils', () => ({
+  getApiErrorMessage: (...args) => mockGetApiErrorMessage(...args),
+}));
+
+vi.mock('../../../../src/components/panel/PanelGeser', () => ({
   default: ({ buka, children, judul, onTutup }) => (buka ? (
     <div role="dialog" aria-label={judul}>
       <button type="button" onClick={onTutup}>Tutup</button>
@@ -109,7 +117,7 @@ vi.mock('../../../../src/components/redaksi/PanelGeser', () => ({
   ) : null),
 }));
 
-vi.mock('../../../../src/components/redaksi/FormulirAdmin', () => ({
+vi.mock('../../../../src/components/formulir/FormulirAdmin', () => ({
   useFormPanel: (...args) => mockUseFormPanel(...args),
   InputField: ({ label, name, value, onChange }) => (
     <label>

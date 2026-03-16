@@ -10,18 +10,12 @@ import {
   useSimpanBahasa,
   useHapusBahasa,
 } from '../../../api/apiAdmin';
-import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
-import {
-  BarisFilterCariAdmin,
-  TombolAksiAdmin,
-  BadgeStatus,
-  opsiFilterStatusAktif,
-  TabelAdmin,
-  getApiErrorMessage,
-  usePencarianAdmin,
-  validateRequiredFields,
-} from '../../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../../components/redaksi/PanelGeser';
+import HalamanAdmin from '../../../components/tampilan/HalamanAdmin';
+import FilterCariAdmin from '../../../components/formulir/FilterCariAdmin';
+import TabelAdmin from '../../../components/data/TabelAdmin';
+import LencanaStatus from '../../../components/data/LencanaStatus';
+import TombolAksiAdmin from '../../../components/tombol/TombolAksiAdmin';
+import PanelGeser from '../../../components/panel/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -29,7 +23,9 @@ import {
   ToggleAktif,
   FormFooter,
   PesanForm,
-} from '../../../components/redaksi/FormulirAdmin';
+} from '../../../components/formulir/FormulirAdmin';
+import usePencarianAdmin from '../../../hooks/usePencarianAdmin';
+import { getApiErrorMessage, opsiFilterStatusAktif, validateRequiredFields } from '../../../utils/adminUtils';
 import { parsePositiveIntegerParam } from '../../../utils/paramUtils';
 
 const nilaiAwal = { kode: '', nama: '', iso2: '', iso3: '', keterangan: '', aktif: true };
@@ -38,7 +34,7 @@ const kolom = [
   { key: 'kode', label: 'Kode' },
   { key: 'nama', label: 'Nama' },
   { key: 'iso2', label: 'ISO 2', render: (item) => item.iso2 || '—' },
-  { key: 'aktif', label: 'Status', render: (item) => <BadgeStatus aktif={item.aktif} /> },
+  { key: 'aktif', label: 'Status', render: (item) => <LencanaStatus aktif={item.aktif} /> },
 ];
 
 function BahasaAdmin() {
@@ -162,7 +158,7 @@ function BahasaAdmin() {
 
   return (
     <HalamanAdmin judul="Bahasa" aksiJudul={<TombolAksiAdmin onClick={bukaTambah} />}>
-      <BarisFilterCariAdmin
+      <FilterCariAdmin
         nilai={cari}
         onChange={setCari}
         onCari={handleCari}

@@ -3,7 +3,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import GimIndex from '../../../../src/pages/publik/gim/GimIndex';
 
-vi.mock('../../../../src/components/publik/HalamanPublik', () => ({
+vi.mock('../../../../src/components/tampilan/HalamanPublik', () => ({
   default: ({ children }) => <div>{children}</div>,
 }));
 

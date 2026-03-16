@@ -10,25 +10,21 @@ import {
   useDaftarPeranUntukIzinAdmin,
   useSimpanIzinAdmin,
 } from '../../../api/apiAdmin';
-import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
-import {
-  BarisFilterCariAdmin,
-  TombolAksiAdmin,
-  TabelAdmin,
-  getApiErrorMessage,
-  potongTeks,
-  usePencarianAdmin,
-  validateRequiredFields,
-} from '../../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../../components/redaksi/PanelGeser';
+import HalamanAdmin from '../../../components/tampilan/HalamanAdmin';
+import BarisFilterCariAdmin from '../../../components/formulir/FilterCariAdmin';
+import TabelAdmin from '../../../components/data/TabelAdmin';
+import TombolAksiAdmin from '../../../components/tombol/TombolAksiAdmin';
+import PanelGeser from '../../../components/panel/PanelGeser';
 import {
   useFormPanel,
   InputField,
   FormFooter,
   PesanForm,
-} from '../../../components/redaksi/FormulirAdmin';
-import KotakCentang from '../../../components/redaksi/KotakCentang';
-import { useSelectableIds } from '../../../hooks/redaksi/useSelectableIds';
+} from '../../../components/formulir/FormulirAdmin';
+import KotakCentang from '../../../components/formulir/KotakCentang';
+import usePencarianAdmin from '../../../hooks/usePencarianAdmin';
+import { useSelectableIds } from '../../../hooks/useSelectableIds';
+import { getApiErrorMessage, potongTeks, validateRequiredFields } from '../../../utils/adminUtils';
 import { formatBilanganRibuan } from '../../../utils/formatUtils';
 import { parsePositiveIntegerParam } from '../../../utils/paramUtils';
 

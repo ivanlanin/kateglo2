@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/authContext';
-import TataLetakPublik from './components/bersama/TataLetakPublik';
+import TataLetakPublik from './components/tampilan/TataLetakPublik';
 import { LoginAdmin } from './pages/redaksi/inti';
 import { ruteHalamanRedaksi } from './pages/redaksi/ruteRedaksi';
 import { AuthCallbackPublik, ruteHalamanPublik } from './pages/publik/rutePublik';

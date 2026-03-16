@@ -5,8 +5,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ambilPencarianPopuler } from '../../../api/apiPublik';
-import KotakCari from '../../../components/publik/KotakCari';
-import KuisKata from '../../../components/publik/KuisKata';
+import KotakCariPublik from '../../../components/formulir/KotakCariPublik';
+import KuisKata from '../../../components/gim/KuisKata';
 import { buatPathDetailKamus } from '../../../utils/paramUtils';
 
 const daftarDomain = [
@@ -88,7 +88,7 @@ function Beranda() {
           Kamus, Tesaurus, dan Glosarium Bahasa Indonesia
         </p>
         {/* Pencarian Utama */}
-        <KotakCari varian="beranda" autoFocus />
+        <KotakCariPublik varian="beranda" autoFocus />
         <div className="beranda-populer-wrapper" aria-label="Pencarian populer">
           <span className="beranda-populer-label">Populer:</span>
           {daftarDomain.map((item) => {

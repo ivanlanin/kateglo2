@@ -3,7 +3,7 @@
  */
 
 import { Outlet, useLocation } from 'react-router-dom';
-import NavbarPublik from '../publik/NavbarPublik';
+import NavbarPublik from '../navigasi/NavbarPublik';
 import { useAuthOptional } from '../../context/authContext';
 import HalamanDasar from './HalamanDasar';
 

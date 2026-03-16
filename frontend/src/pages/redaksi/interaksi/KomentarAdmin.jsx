@@ -5,18 +5,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDaftarKomentarAdmin, useDetailKomentarAdmin, useSimpanKomentarAdmin } from '../../../api/apiAdmin';
-import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
-import {
-  BarisFilterCariAdmin,
-  TabelAdmin,
-  BadgeStatus,
-  opsiFilterStatusAktif,
-  getApiErrorMessage,
-  usePencarianAdmin,
-  potongTeks,
-  validateRequiredFields,
-} from '../../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../../components/redaksi/PanelGeser';
+import HalamanAdmin from '../../../components/tampilan/HalamanAdmin';
+import BarisFilterCariAdmin from '../../../components/formulir/FilterCariAdmin';
+import TabelAdmin from '../../../components/data/TabelAdmin';
+import BadgeStatus from '../../../components/data/LencanaStatus';
+import PanelGeser from '../../../components/panel/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -24,9 +17,16 @@ import {
   ToggleAktif,
   FormFooter,
   PesanForm,
-} from '../../../components/redaksi/FormulirAdmin';
+} from '../../../components/formulir/FormulirAdmin';
 import { formatLocalDateTime } from '../../../utils/formatUtils';
 import { parsePositiveIntegerParam } from '../../../utils/paramUtils';
+import usePencarianAdmin from '../../../hooks/usePencarianAdmin';
+import {
+  getApiErrorMessage,
+  opsiFilterStatusAktif,
+  potongTeks,
+  validateRequiredFields,
+} from '../../../utils/adminUtils';
 
 const nilaiAwal = {
   id: null,

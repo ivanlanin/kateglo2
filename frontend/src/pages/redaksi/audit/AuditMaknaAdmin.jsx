@@ -7,15 +7,10 @@ import {
   useDaftarAuditMaknaAdmin,
   useSimpanAuditMaknaAdmin,
 } from '../../../api/apiAdmin';
-import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
-import {
-  BarisFilterCariAdmin,
-  TabelAdmin,
-  getApiErrorMessage,
-  usePencarianAdmin,
-  potongTeks,
-} from '../../../components/redaksi/KomponenAdmin';
-import PanelGeser from '../../../components/redaksi/PanelGeser';
+import HalamanAdmin from '../../../components/tampilan/HalamanAdmin';
+import BarisFilterCariAdmin from '../../../components/formulir/FilterCariAdmin';
+import TabelAdmin from '../../../components/data/TabelAdmin';
+import PanelGeser from '../../../components/panel/PanelGeser';
 import {
   useFormPanel,
   InputField,
@@ -23,8 +18,10 @@ import {
   TextareaField,
   FormFooter,
   PesanForm,
-} from '../../../components/redaksi/FormulirAdmin';
+} from '../../../components/formulir/FormulirAdmin';
 import { formatBilanganRibuan } from '../../../utils/formatUtils';
+import usePencarianAdmin from '../../../hooks/usePencarianAdmin';
+import { getApiErrorMessage, potongTeks } from '../../../utils/adminUtils';
 
 const nilaiAwal = {
   id: null,

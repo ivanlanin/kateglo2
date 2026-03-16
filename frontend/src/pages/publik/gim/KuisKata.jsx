@@ -6,8 +6,8 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Info, Play, Trophy } from 'lucide-react';
 import { ambilKlasemenKuisKata } from '../../../api/apiPublik';
-import HalamanPublik from '../../../components/publik/HalamanPublik';
-import KuisKataKomponen from '../../../components/publik/KuisKata';
+import HalamanPublik from '../../../components/tampilan/HalamanPublik';
+import KuisKataKomponen from '../../../components/gim/KuisKata';
 
 const formatBilanganId = new Intl.NumberFormat('id-ID');
 

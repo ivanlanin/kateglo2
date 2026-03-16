@@ -5,11 +5,11 @@
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ambilContohTesaurus, cariTesaurus } from '../../../api/apiPublik';
-import { useCursorPagination } from '../../../hooks/bersama/useCursorPagination';
-import HalamanPublik from '../../../components/publik/HalamanPublik';
-import HasilPencarian from '../../../components/publik/HasilPencarian';
-import TombolSunting from '../../../components/publik/TombolSunting';
-import { EmptyResultText, QueryFeedback } from '../../../components/publik/StatusKonten';
+import { useCursorPagination } from '../../../hooks/useCursorPagination';
+import HalamanPublik from '../../../components/tampilan/HalamanPublik';
+import HasilPencarian from '../../../components/data/HasilPencarian';
+import TombolSunting from '../../../components/tombol/TombolSunting';
+import { EmptyResultText, QueryFeedback } from '../../../components/status/StatusKonten';
 import { useAuthOptional } from '../../../context/authContext';
 import { formatLemaHomonim } from '../../../utils/formatUtils';
 import { buatPathDetailKamus } from '../../../utils/paramUtils';

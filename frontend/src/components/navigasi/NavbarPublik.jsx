@@ -4,12 +4,24 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import KotakCari from './KotakCari';
-import MenuUtama from './MenuUtama';
+import { useAuth } from '../../context/authContext';
+import { buatUrlLoginGoogle, simpanReturnTo } from '../../api/apiAuth';
+import KotakCariPublik from '../formulir/KotakCariPublik';
 
 const minimumSearchWidth = 240;
 const layoutGapAllowance = 64;
 const durasiAnimasiDrawer = 260;
+
+export const menuItems = [
+  { path: '/kamus', label: 'Kamus' },
+  { path: '/tesaurus', label: 'Tesaurus' },
+  { path: '/glosarium', label: 'Glosarium' },
+  { path: '/makna', label: 'Makna' },
+  { path: '/rima', label: 'Rima' },
+  { path: '/ejaan', label: 'Ejaan' },
+  { path: '/alat', label: 'Alat' },
+  { path: '/gim', label: 'Gim' },
+];
 
 function hitungKebutuhanHamburger({
   lebarNavbar = 0,
@@ -40,6 +52,12 @@ function NavbarPublik() {
   const [renderDrawer, setRenderDrawer] = useState(false);
   const [drawerAktif, setDrawerAktif] = useState(false);
   const location = useLocation();
+  const {
+    isLoading,
+    isAuthenticated,
+    adalahRedaksi,
+    logout,
+  } = useAuth();
   const navbarInnerRef = useRef(null);
   const logoRef = useRef(null);
   const searchRef = useRef(null);
@@ -49,6 +67,69 @@ function NavbarPublik() {
   const adalahBeranda = location.pathname === '/';
   const sedangMainSusunKata = location.pathname.startsWith('/gim/susun-kata');
   const tampilkanKotakCari = !adalahBeranda && !sedangMainSusunKata;
+  const loginUrl = buatUrlLoginGoogle('');
+
+  const isActive = (path) => (
+    location.pathname === path || location.pathname.startsWith(`${path}/`)
+  );
+
+  const handleLoginClick = () => {
+    simpanReturnTo(`${location.pathname}${location.search}`);
+  };
+
+  const handleLogoutClick = (onItemClick = () => {}) => {
+    logout();
+    onItemClick();
+  };
+
+  const renderMenu = ({
+    containerClassName = '',
+    linkClassName = '',
+    loadingClassName = '',
+    onItemClick = () => {},
+    tampilkanMenu = true,
+    tampilkanAutentikasi = true,
+    forwardedRef = null,
+  } = {}) => (
+    <div ref={forwardedRef} className={containerClassName}>
+      {tampilkanMenu && menuItems
+        .filter((item) => !item.adminSaja || adalahRedaksi)
+        .map((item) => (
+          <Link
+            key={item.path}
+            to={item.path}
+            onClick={onItemClick}
+            className={`${linkClassName} ${isActive(item.path) ? 'navbar-menu-link-active' : ''}`.trim()}
+            aria-current={isActive(item.path) ? 'page' : undefined}
+          >
+            {item.label}
+          </Link>
+        ))}
+
+      {tampilkanAutentikasi && (isLoading ? (
+        <span className={loadingClassName}>Memuat …</span>
+      ) : isAuthenticated ? (
+        <button
+          type="button"
+          onClick={() => handleLogoutClick(onItemClick)}
+          className={linkClassName}
+        >
+          Keluar
+        </button>
+      ) : (
+        <a
+          href={loginUrl}
+          onClick={() => {
+            handleLoginClick();
+            onItemClick();
+          }}
+          className={linkClassName}
+        >
+          Masuk
+        </a>
+      ))}
+    </div>
+  );
 
   useEffect(() => {
     let frameId = 0;
@@ -201,11 +282,11 @@ function NavbarPublik() {
           )}
 
           <div ref={menuMeasureRef} className="navbar-menu-measure" aria-hidden="true">
-            <MenuUtama
-              containerClassName="navbar-menu-measure-inner"
-              linkClassName="navbar-menu-link navbar-menu-link-measure"
-              loadingClassName="navbar-auth-loading"
-            />
+            {renderMenu({
+              containerClassName: 'navbar-menu-measure-inner',
+              linkClassName: 'navbar-menu-link navbar-menu-link-measure',
+              loadingClassName: 'navbar-auth-loading',
+            })}
           </div>
 
           {/* Pencarian */}
@@ -214,17 +295,17 @@ function NavbarPublik() {
               ref={searchRef}
               className={`navbar-search-desktop ${gunakanHamburger ? 'navbar-search-desktop-collapsed' : 'navbar-search-desktop-expanded'}`}
             >
-              <KotakCari varian="navbar" />
+              <KotakCariPublik varian="navbar" />
             </div>
           )}
 
           {/* Menu (desktop) */}
-          <MenuUtama
-            ref={desktopMenuRef}
-            containerClassName={`navbar-menu-desktop ${gunakanHamburger ? 'navbar-menu-desktop-hidden' : 'navbar-menu-desktop-visible'}`}
-            linkClassName="navbar-menu-link"
-            loadingClassName="navbar-auth-loading"
-          />
+          {renderMenu({
+            forwardedRef: desktopMenuRef,
+            containerClassName: `navbar-menu-desktop ${gunakanHamburger ? 'navbar-menu-desktop-hidden' : 'navbar-menu-desktop-visible'}`,
+            linkClassName: 'navbar-menu-link',
+            loadingClassName: 'navbar-auth-loading',
+          })}
         </div>
 
         {/* Menu mobile */}
@@ -253,20 +334,20 @@ function NavbarPublik() {
                   </svg>
                 </button>
               </div>
-              <MenuUtama
-                containerClassName="navbar-mobile-links"
-                linkClassName="navbar-mobile-link"
-                loadingClassName="navbar-auth-loading"
-                onItemClick={() => setMenuTerbuka(false)}
-                tampilkanAutentikasi={false}
-              />
-              <MenuUtama
-                containerClassName="navbar-mobile-auth"
-                linkClassName="navbar-mobile-link"
-                loadingClassName="navbar-auth-loading"
-                onItemClick={() => setMenuTerbuka(false)}
-                tampilkanMenu={false}
-              />
+              {renderMenu({
+                containerClassName: 'navbar-mobile-links',
+                linkClassName: 'navbar-mobile-link',
+                loadingClassName: 'navbar-auth-loading',
+                onItemClick: () => setMenuTerbuka(false),
+                tampilkanAutentikasi: false,
+              })}
+              {renderMenu({
+                containerClassName: 'navbar-mobile-auth',
+                linkClassName: 'navbar-mobile-link',
+                loadingClassName: 'navbar-auth-loading',
+                onItemClick: () => setMenuTerbuka(false),
+                tampilkanMenu: false,
+              })}
             </div>
           </div>
         )}

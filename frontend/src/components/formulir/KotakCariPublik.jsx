@@ -119,7 +119,7 @@ function navigasiSaranSpesifik(navigate, kategori, kata, slug = '') {
   navigasiCari(navigate, kategori, kata);
 }
 
-function KotakCari({ varian = 'navbar', autoFocus = true }) {
+function KotakCariPublik({ varian = 'navbar', autoFocus = true }) {
   const location = useLocation();
   const navigate = useNavigate();
   const [query, setQuery] = useState(() => ekstrakQuery(location.pathname));
@@ -352,4 +352,4 @@ export {
   navigasiSaranSpesifik,
 };
 
-export default KotakCari;
+export default KotakCariPublik;

@@ -2,8 +2,9 @@
 
 ## 2026-03-16 Senin
 
-- Mengatur subfolder `frontend/src/pages`
+- Mengatur subfolder `frontend/src/pages` dan `frontend/src/components`
 - Merencanakan integrasi dengan Wordnet dan Wikidata
+- Memecah `KomponenAdmin` menjadi komponen, _hooks_, dan _utils_
 
 ## 2026-03-15 Minggu
 

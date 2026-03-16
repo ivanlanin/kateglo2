@@ -9,7 +9,7 @@ vi.mock('../../../../src/api/apiAdmin', () => ({
   useKuisKataAdmin: (...args) => mockUseKuisKataAdmin(...args),
 }));
 
-vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
+vi.mock('../../../../src/components/tampilan/HalamanAdmin', () => ({
   default: ({ children, judul }) => (
     <div>
       <h1>{judul}</h1>
@@ -18,8 +18,8 @@ vi.mock('../../../../src/components/redaksi/HalamanAdmin', () => ({
   ),
 }));
 
-vi.mock('../../../../src/components/redaksi/KomponenAdmin', () => ({
-  TabelAdmin: (props) => {
+vi.mock('../../../../src/components/data/TabelAdmin', () => ({
+  default: (props) => {
     mockTabelAdmin(props);
     return (
       <div>

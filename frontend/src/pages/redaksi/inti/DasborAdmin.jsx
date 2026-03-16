@@ -5,7 +5,7 @@
 import { Link } from 'react-router-dom';
 import { useStatistikAdmin } from '../../../api/apiAdmin';
 import { useAuth } from '../../../context/authContext';
-import HalamanAdmin from '../../../components/redaksi/HalamanAdmin';
+import HalamanAdmin from '../../../components/tampilan/HalamanAdmin';
 import { filterKelompokMenuRedaksi } from '../../../constants/menuRedaksi';
 
 function KartuMenuRedaksi({ item, jumlah, bisaLihatStatistik, isLoading }) {

@@ -4,7 +4,7 @@
 
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { useCursorPagination } from '../../../hooks/bersama/useCursorPagination';
+import { useCursorPagination } from '../../../hooks/useCursorPagination';
 import {
   cariGlosarium,
   ambilGlosariumPerBidang,
@@ -12,11 +12,11 @@ import {
   ambilDaftarBidang,
   ambilDaftarSumber,
 } from '../../../api/apiPublik';
-import HalamanPublik from '../../../components/publik/HalamanPublik';
-import HasilPencarian from '../../../components/publik/HasilPencarian';
-import KartuKategori from '../../../components/publik/KartuKategori';
-import TombolSunting from '../../../components/publik/TombolSunting';
-import { EmptyResultText, QueryFeedback } from '../../../components/publik/StatusKonten';
+import HalamanPublik from '../../../components/tampilan/HalamanPublik';
+import HasilPencarian from '../../../components/data/HasilPencarian';
+import KartuKategori from '../../../components/data/KartuKategori';
+import TombolSunting from '../../../components/tombol/TombolSunting';
+import { EmptyResultText, QueryFeedback } from '../../../components/status/StatusKonten';
 import { buatPathDetailKamus, buatSlug, normalisasiIndeksKamus } from '../../../utils/paramUtils';
 import { formatNamaBidang, renderEntriGlosariumTertaut } from '../../../utils/formatUtils';
 import { useAuthOptional } from '../../../context/authContext';

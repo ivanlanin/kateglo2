@@ -6,15 +6,15 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ambilDetailGlosarium } from '../../../api/apiPublik';
-import HalamanPublik from '../../../components/publik/HalamanPublik';
-import TombolNavKursor from '../../../components/publik/TombolNavKursor';
-import HamparanMuatNav from '../../../components/publik/HamparanMuatNav';
-import TombolSunting from '../../../components/publik/TombolSunting';
-import { EmptyResultText, QueryFeedback } from '../../../components/publik/StatusKonten';
+import HalamanPublik from '../../../components/tampilan/HalamanPublik';
+import PaginasiKursor from '../../../components/navigasi/PaginasiKursor';
+import MuatData from '../../../components/status/MuatData';
+import TombolSunting from '../../../components/tombol/TombolSunting';
+import { EmptyResultText, QueryFeedback } from '../../../components/status/StatusKonten';
 import { buatPathDetailKamus, buatSlug, normalisasiIndeksKamus } from '../../../utils/paramUtils';
 import { renderEntriGlosariumTertaut } from '../../../utils/formatUtils';
 import { buildMetaDetailGlosarium } from '../../../utils/metaUtils';
-import useNavigasiMemuat from '../../../hooks/bersama/useNavigasiMemuat';
+import useNavigasiMemuat from '../../../hooks/useNavigasiMemuat';
 import { useAuthOptional } from '../../../context/authContext';
 
 function normalisasiKunciTautanIndonesia(teks = '') {
@@ -280,13 +280,13 @@ function GlosariumDetail() {
           jumlah={mengandungTotal}
           actions={(
             <div className="rima-heading-nav">
-              <TombolNavKursor
+              <PaginasiKursor
                 symbol="‹"
                 onClick={handlePrevMengandung}
                 disabled={isFetching || !mengandungPage?.hasPrev}
                 className="paginasi-btn rima-heading-nav-button"
               />
-              <TombolNavKursor
+              <PaginasiKursor
                 symbol="›"
                 onClick={handleNextMengandung}
                 disabled={isFetching || !mengandungPage?.hasNext}
@@ -295,7 +295,7 @@ function GlosariumDetail() {
             </div>
           )}
         >
-          <HamparanMuatNav
+          <MuatData
             isLoading={isMemuatMengandung}
             loadingText="Memuat glosarium …"
           >
@@ -305,7 +305,7 @@ function GlosariumDetail() {
               tampilkanEdit={adalahAdmin}
               tautanIndonesiaValidSet={tautanIndonesiaValidSet}
             />
-          </HamparanMuatNav>
+          </MuatData>
         </SeksiDetail>
       )}
 
@@ -315,13 +315,13 @@ function GlosariumDetail() {
           jumlah={miripTotal}
           actions={(
             <div className="rima-heading-nav">
-              <TombolNavKursor
+              <PaginasiKursor
                 symbol="‹"
                 onClick={handlePrevMirip}
                 disabled={isFetching || !miripPage?.hasPrev}
                 className="paginasi-btn rima-heading-nav-button"
               />
-              <TombolNavKursor
+              <PaginasiKursor
                 symbol="›"
                 onClick={handleNextMirip}
                 disabled={isFetching || !miripPage?.hasNext}
@@ -330,7 +330,7 @@ function GlosariumDetail() {
             </div>
           )}
         >
-          <HamparanMuatNav
+          <MuatData
             isLoading={isMemuatMirip}
             loadingText="Memuat glosarium …"
           >
@@ -340,7 +340,7 @@ function GlosariumDetail() {
               tampilkanEdit={adalahAdmin}
               tautanIndonesiaValidSet={tautanIndonesiaValidSet}
             />
-          </HamparanMuatNav>
+          </MuatData>
         </SeksiDetail>
       )}
 

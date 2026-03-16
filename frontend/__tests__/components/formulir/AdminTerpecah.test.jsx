@@ -1,22 +1,41 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import {
-  BadgeMeragukan,
-  BadgeStatus,
-  BarisFilterCariAdmin,
-  getApiErrorMessage,
-  InfoTotal,
-  isActiveFilterValue,
-  KotakCariAdmin,
-  KotakCariTambahAdmin,
-  TabelAdmin,
-  TombolAksiAdmin,
-  potongTeks,
-  usePencarianAdmin,
-  validateRequiredFields,
-} from '../../../src/components/redaksi/KomponenAdmin';
+import BarisFilterCariAdmin, { isActiveFilterValue } from '../../../src/components/formulir/FilterCariAdmin';
+import KotakCariAdmin from '../../../src/components/formulir/KotakCariAdmin';
+import BadgeMeragukan from '../../../src/components/data/LencanaStatus';
+import BadgeStatus from '../../../src/components/data/LencanaStatus';
+import InfoTotal from '../../../src/components/data/InfoTotal';
+import TabelAdmin from '../../../src/components/data/TabelAdmin';
+import TombolAksiAdmin from '../../../src/components/tombol/TombolAksiAdmin';
+import usePencarianAdmin from '../../../src/hooks/usePencarianAdmin';
+import { getApiErrorMessage, potongTeks, validateRequiredFields } from '../../../src/utils/adminUtils';
 
-vi.mock('../../../src/components/bersama/Paginasi', () => ({
+function KotakCariTambahAdmin({
+  nilai,
+  onChange,
+  onCari,
+  onHapus,
+  onTambah,
+  placeholder = 'Cari …',
+  labelTambah = '+ Tambah',
+}) {
+  return (
+    <div className="mb-4 flex flex-wrap gap-2 items-center">
+      <KotakCariAdmin
+        nilai={nilai}
+        onChange={onChange}
+        onCari={onCari}
+        onHapus={onHapus}
+        placeholder={placeholder}
+      />
+      <button type="button" onClick={onTambah} className="form-admin-btn-simpan whitespace-nowrap ml-4">
+        {labelTambah}
+      </button>
+    </div>
+  );
+}
+
+vi.mock('../../../src/components/navigasi/Paginasi', () => ({
   default: ({ onChange, onNavigateCursor }) => (
     <button onClick={() => (onNavigateCursor ? onNavigateCursor('next') : onChange(20))} data-testid="paginasi-mock">
       Paginasi
@@ -44,7 +63,7 @@ function HarnessPencarian() {
   );
 }
 
-describe('KomponenAdmin', () => {
+describe('AdminTerpecah', () => {
   it('potongTeks menangani teks kosong, pendek, dan panjang', () => {
     expect(potongTeks('')).toBe('—');
     expect(potongTeks('pendek', 10)).toBe('pendek');

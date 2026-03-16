@@ -4,9 +4,10 @@
 
 import { useEffect } from 'react';
 import { Suspense, lazy } from 'react';
-import HalamanDasar from '../bersama/HalamanDasar';
+import HalamanDasar from './HalamanDasar';
+import KepalaAdmin from './KepalaAdmin';
 
-const NavbarAdmin = lazy(() => import('./NavbarAdmin'));
+const NavbarAdmin = lazy(() => import('../navigasi/NavbarAdmin'));
 
 function HalamanAdmin({ judul, aksiJudul = null, children }) {
   useEffect(() => {
@@ -25,12 +26,7 @@ function HalamanAdmin({ judul, aksiJudul = null, children }) {
       )}
       konten={(
         <main className="halaman-dasar-container flex-1">
-          {judul && (
-            <div className="mb-6 flex items-center justify-between gap-3">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{judul}</h2>
-              {aksiJudul}
-            </div>
-          )}
+          <KepalaAdmin judul={judul} aksi={aksiJudul} />
           {children}
         </main>
       )}
