@@ -12,17 +12,31 @@ const { ambilDetailTesaurus } = require('../publik/layananTesaurusPublik');
 const { ambilDetailGlosarium } = require('../publik/layananGlosariumPublik');
 const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
 
-const rootDir = path.resolve(__dirname, '..', '..');
-const frontendDistDir = path.join(rootDir, 'frontend', 'dist');
-const frontendTemplatePath = path.join(frontendDistDir, 'index.html');
-const frontendServerEntryPath = path.join(frontendDistDir, 'server', 'entry-server.js');
+const backendRootDir = path.resolve(__dirname, '..', '..');
+const workspaceRootDir = path.resolve(backendRootDir, '..');
+const frontendBuildCandidates = [
+  path.join(workspaceRootDir, 'frontend', 'dist'),
+  path.join(backendRootDir, 'frontend', 'dist'),
+];
+
+function resolveFrontendDistDir() {
+  return frontendBuildCandidates.find((candidate) => fs.existsSync(path.join(candidate, 'index.html'))) || frontendBuildCandidates[0];
+}
+
+function getFrontendTemplatePath() {
+  return path.join(resolveFrontendDistDir(), 'index.html');
+}
+
+function getFrontendServerEntryPath() {
+  return path.join(resolveFrontendDistDir(), 'server', 'entry-server.js');
+}
 
 function punyaFrontendBuild() {
-  return fs.existsSync(frontendTemplatePath);
+  return frontendBuildCandidates.some((candidate) => fs.existsSync(path.join(candidate, 'index.html')));
 }
 
 function punyaSsrBundle() {
-  return fs.existsSync(frontendServerEntryPath);
+  return fs.existsSync(getFrontendServerEntryPath());
 }
 
 function isAssetRequest(requestPath = '') {
@@ -75,7 +89,7 @@ function injectAppHtml(htmlTemplate, appHtml = '') {
 }
 
 async function loadSsrRenderer(options = {}) {
-  const entryPath = options.entryPath || frontendServerEntryPath;
+  const entryPath = options.entryPath || getFrontendServerEntryPath();
   const importModule = options.importModule || ((moduleUrl) => import(moduleUrl));
   const moduleUrl = pathToFileURL(entryPath).href;
   const ssrModule = await importModule(moduleUrl);
@@ -217,6 +231,8 @@ async function prefetchSsrData(pathname = '/') {
 function pasangFrontendRuntime(app, options = {}) {
   const loadRenderer = options.loadSsrRenderer || loadSsrRenderer;
   const prefetchData = options.prefetchSsrData || prefetchSsrData;
+  const frontendDistDir = resolveFrontendDistDir();
+  const frontendTemplatePath = getFrontendTemplatePath();
 
   if (!punyaFrontendBuild()) {
     logger.warn('Frontend build belum tersedia. Lewati pemasangan runtime frontend pada backend.');
@@ -271,6 +287,12 @@ function pasangFrontendRuntime(app, options = {}) {
 module.exports = {
   pasangFrontendRuntime,
   __private: {
+    backendRootDir,
+    workspaceRootDir,
+    frontendBuildCandidates,
+    resolveFrontendDistDir,
+    getFrontendTemplatePath,
+    getFrontendServerEntryPath,
     punyaFrontendBuild,
     punyaSsrBundle,
     isAssetRequest,

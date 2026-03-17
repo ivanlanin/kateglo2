@@ -39,8 +39,9 @@ const { ambilDetailGlosarium } = require('../../../services/publik/layananGlosar
 const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
 const runtime = require('../../../services/sistem/layananSsrRuntime');
 
-const workspaceRoot = path.resolve(__dirname, '..', '..', '..');
-const frontendDistDir = path.join(workspaceRoot, 'frontend', 'dist');
+const repoRoot = path.resolve(__dirname, '..', '..', '..', '..');
+const frontendDistDir = path.join(repoRoot, 'frontend', 'dist');
+const legacyFrontendDistDir = path.join(repoRoot, 'backend', 'frontend', 'dist');
 const templatePath = path.join(frontendDistDir, 'index.html');
 const serverDir = path.join(frontendDistDir, 'server');
 const serverEntryPath = path.join(serverDir, 'entry-server.js');
@@ -323,10 +324,7 @@ describe('services/sistem/layananSsrRuntime', () => {
   });
 
   it('pasangFrontendRuntime skip saat frontend build tidak ada', () => {
-    const existsSpy = jest.spyOn(fs, 'existsSync').mockImplementation((target) => {
-      if (target === templatePath) return false;
-      return true;
-    });
+    const existsSpy = jest.spyOn(fs, 'existsSync').mockReturnValue(false);
 
     const app = { use: jest.fn(), get: jest.fn() };
     runtime.pasangFrontendRuntime(app);
@@ -334,6 +332,21 @@ describe('services/sistem/layananSsrRuntime', () => {
     expect(logger.warn).toHaveBeenCalledWith('Frontend build belum tersedia. Lewati pemasangan runtime frontend pada backend.');
     expect(app.use).not.toHaveBeenCalled();
     expect(app.get).not.toHaveBeenCalled();
+    existsSpy.mockRestore();
+  });
+
+  it('resolveFrontendDistDir memprioritaskan frontend/dist di root workspace', () => {
+    const legacyTemplatePath = path.join(legacyFrontendDistDir, 'index.html');
+    const existsSpy = jest.spyOn(fs, 'existsSync').mockImplementation((target) => {
+      if (target === templatePath) return true;
+      if (target === legacyTemplatePath) return true;
+      return false;
+    });
+
+    expect(runtime.__private.resolveFrontendDistDir()).toBe(frontendDistDir);
+    expect(runtime.__private.getFrontendTemplatePath()).toBe(templatePath);
+    expect(runtime.__private.getFrontendServerEntryPath()).toBe(serverEntryPath);
+
     existsSpy.mockRestore();
   });
 
