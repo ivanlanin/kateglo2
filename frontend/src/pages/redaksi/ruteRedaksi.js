@@ -1,11 +1,27 @@
-import Dasbor from './Dasbor';
-import { AuditMaknaAdmin, AuditTagarAdmin } from './audit';
-import { IzinAdmin, PenggunaAdmin, PeranAdmin } from './akses';
-import { KuisKataAdmin, SusunKataBebasAdmin, SusunKataHarianAdmin } from './gim';
-import { KandidatKataAdmin } from './kadi';
-import { EtimologiAdmin, GlosariumAdmin, KamusAdmin, TesaurusAdmin } from './leksikon';
-import { KomentarAdmin, PencarianAdmin, PencarianHitamAdmin } from './interaksi';
-import { BahasaAdmin, BidangAdmin, LabelAdmin, SumberAdmin, TagarAdmin } from './master';
+import {
+  AuditMaknaAdmin,
+  AuditTagarAdmin,
+  BahasaAdmin,
+  BidangAdmin,
+  Dasbor,
+  EtimologiAdmin,
+  GlosariumAdmin,
+  IzinAdmin,
+  KamusAdmin,
+  KandidatKataAdmin,
+  KomentarAdmin,
+  KuisKataAdmin,
+  LabelAdmin,
+  PenggunaAdmin,
+  PencarianAdmin,
+  PencarianHitamAdmin,
+  PeranAdmin,
+  SumberAdmin,
+  SusunKataBebasAdmin,
+  SusunKataHarianAdmin,
+  TagarAdmin,
+  TesaurusAdmin,
+} from '.';
 
 export const ruteHalamanRedaksi = [
   { path: '/redaksi', Component: Dasbor },

@@ -1,0 +1,8 @@
+export { default as Dasbor } from './Dasbor';
+export * from './akses';
+export * from './audit';
+export * from './gim';
+export * from './interaksi';
+export * from './kadi';
+export * from './leksikon';
+export * from './master';
