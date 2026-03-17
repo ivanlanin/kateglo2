@@ -1,12 +1,12 @@
 /**
  * @fileoverview Test route cron internal
- * @tested_in backend/routes/cron.js
+ * @tested_in backend/routes/sistem/cron.js
  */
 
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../jobs/jobSusunKataHarian', () => ({
+jest.mock('../../../jobs/jobSusunKataHarian', () => ({
   jalankanPrefillSusunKataHarian: jest.fn(),
   parseTanggal: jest.fn((value) => {
     const raw = String(value || '').trim();
@@ -20,14 +20,14 @@ jest.mock('../../jobs/jobSusunKataHarian', () => ({
   }),
 }));
 
-jest.mock('../../jobs/jobWikipedia', () => ({
+jest.mock('../../../jobs/jobWikipedia', () => ({
   jalankanProsesWikipedia: jest.fn(),
 }));
 
-const router = require('../../routes/cron');
+const router = require('../../../routes/sistem/cron');
 const { __private } = router;
-const { jalankanPrefillSusunKataHarian } = require('../../jobs/jobSusunKataHarian');
-const { jalankanProsesWikipedia } = require('../../jobs/jobWikipedia');
+const { jalankanPrefillSusunKataHarian } = require('../../../jobs/jobSusunKataHarian');
+const { jalankanProsesWikipedia } = require('../../../jobs/jobWikipedia');
 
 function createApp() {
   const app = express();
@@ -39,7 +39,7 @@ function createApp() {
   return app;
 }
 
-describe('routes/cron', () => {
+describe('routes/sistem/cron', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     process.env.CRON_SECRET = 'cron-secret-test';

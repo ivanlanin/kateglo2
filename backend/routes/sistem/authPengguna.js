@@ -1,5 +1,5 @@
 /**
- * @fileoverview Endpoint autentikasi user frontend publik
+ * @fileoverview Endpoint autentikasi sesi pengguna frontend
  */
 
 const express = require('express');

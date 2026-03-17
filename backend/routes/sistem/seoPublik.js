@@ -8,7 +8,7 @@ const {
   buildRobotsTxt,
   buildSitemapXml,
   generateSitemapPaths,
-} = require('../services/layananSeoPublik');
+} = require('../../services/layananSeoPublik');
 
 const router = express.Router();
 

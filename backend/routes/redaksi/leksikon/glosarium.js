@@ -3,7 +3,7 @@
  */
 
 const express = require('express');
-const { periksaIzin } = require('../../../middleware/otorisasi');
+const { periksaIzin } = require('../../../middleware/authorization');
 const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
 const { invalidasiCacheDetailGlosarium } = require('../../../services/layananGlosariumPublik');
 const {

@@ -5,7 +5,7 @@
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../../../middleware/otorisasi', () => ({
+jest.mock('../../../../middleware/authorization', () => ({
   periksaIzin: () => (_req, _res, next) => next(),
 }));
 

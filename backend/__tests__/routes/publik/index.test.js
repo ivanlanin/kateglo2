@@ -1221,6 +1221,44 @@ describe('routes backend', () => {
 
     expect(response.status).toBe(401);
     expect(response.body.success).toBe(false);
+    expect(response.headers.deprecation).toBe('true');
+    expect(response.headers.link).toContain('</api/pengguna/me>; rel="successor-version"');
+  });
+
+  it('GET /api/pengguna/me mengembalikan profil saat token valid', async () => {
+    process.env.JWT_SECRET = 'test-secret-routes';
+    const token = jwt.sign(
+      {
+        sub: 'google-pengguna-123',
+        pid: 1,
+        email: 'pengguna@example.com',
+        name: 'Pengguna Test',
+        picture: 'https://img.example/pengguna.png',
+        peran: 'pengguna',
+        izin: ['lihat_lema'],
+        provider: 'google',
+      },
+      process.env.JWT_SECRET
+    );
+
+    const response = await request(createApp())
+      .get('/api/pengguna/me')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.data).toEqual({
+      id: 'google-pengguna-123',
+      pid: 1,
+      email: 'pengguna@example.com',
+      name: 'Pengguna Test',
+      picture: 'https://img.example/pengguna.png',
+      peran: 'pengguna',
+      akses_redaksi: false,
+      izin: ['lihat_lema'],
+      provider: 'google',
+    });
+    delete process.env.JWT_SECRET;
   });
 
   it('GET /api/publik/auth/me mengembalikan profil saat token valid', async () => {

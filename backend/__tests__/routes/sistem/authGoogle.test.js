@@ -1,16 +1,16 @@
 /**
  * @fileoverview Test route OAuth eksternal
- * @tested_in backend/routes/auth.js
+ * @tested_in backend/routes/sistem/authGoogle.js
  */
 
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../config/logger', () => ({
+jest.mock('../../../config/logger', () => ({
   warn: jest.fn(),
 }));
 
-jest.mock('../../services/layananAuthGoogle', () => ({
+jest.mock('../../../services/layananAuthGoogle', () => ({
   buildOAuthState: jest.fn(),
   parseOAuthState: jest.fn(),
   buildGoogleAuthUrl: jest.fn(),
@@ -21,17 +21,17 @@ jest.mock('../../services/layananAuthGoogle', () => ({
   buildFrontendErrorRedirect: jest.fn(),
 }));
 
-jest.mock('../../models/akses/modelPengguna', () => ({
+jest.mock('../../../models/akses/modelPengguna', () => ({
   upsertDariGoogle: jest.fn(),
   bootstrapAdmin: jest.fn(),
   ambilPeranUntukAuth: jest.fn(),
   ambilIzin: jest.fn(),
 }));
 
-const logger = require('../../config/logger');
-const layananAuthGoogle = require('../../services/layananAuthGoogle');
-const ModelPengguna = require('../../models/akses/modelPengguna');
-const authRouter = require('../../routes/auth');
+const logger = require('../../../config/logger');
+const layananAuthGoogle = require('../../../services/layananAuthGoogle');
+const ModelPengguna = require('../../../models/akses/modelPengguna');
+const authRouter = require('../../../routes/sistem/authGoogle');
 
 function createApp() {
   const app = express();
@@ -42,7 +42,7 @@ function createApp() {
   return app;
 }
 
-describe('routes/auth', () => {
+describe('routes/sistem/authGoogle', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     layananAuthGoogle.buildOAuthState.mockReturnValue('encoded-state');

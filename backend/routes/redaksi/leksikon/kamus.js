@@ -5,7 +5,7 @@
 const express = require('express');
 const ModelEntri = require('../../../models/leksikon/modelEntri');
 const ModelTagar = require('../../../models/master/modelTagar');
-const { periksaIzin } = require('../../../middleware/otorisasi');
+const { periksaIzin } = require('../../../middleware/authorization');
 const { hapusCacheDetailKamus } = require('../../../services/layananKamusPublik');
 const {
   buildPaginatedResult,

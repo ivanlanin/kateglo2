@@ -153,7 +153,7 @@ describe('apiAuth', () => {
 
     const result = await ambilProfilSaya('token-123');
 
-    expect(klien.get).toHaveBeenCalledWith('/api/publik/auth/me', {
+    expect(klien.get).toHaveBeenCalledWith('/api/pengguna/me', {
       headers: {
         Authorization: 'Bearer token-123',
       },

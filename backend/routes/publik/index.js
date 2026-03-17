@@ -6,6 +6,12 @@ const express = require('express');
 const { publicApiLimiter } = require('../../middleware/rateLimiter');
 const router = express.Router();
 
+function tandaiAuthPublikDeprecated(_req, res, next) {
+  res.set('Deprecation', 'true');
+  res.set('Link', '</api/pengguna/me>; rel="successor-version"');
+  return next();
+}
+
 router.use(publicApiLimiter);
 
 router.get('/health', (_req, res) => {
@@ -17,8 +23,8 @@ router.get('/health', (_req, res) => {
 });
 
 router.use('/', require('./leksikon'));
-router.use('/pencarian', require('./pencarian'));
+router.use('/', require('./interaksi'));
 router.use('/gim', require('./gim'));
-router.use('/auth', require('./auth'));
+router.use('/auth', tandaiAuthPublikDeprecated, require('../sistem/authPengguna'));
 
 module.exports = router;

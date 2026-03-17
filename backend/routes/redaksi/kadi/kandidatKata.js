@@ -4,7 +4,7 @@
 
 const express = require('express');
 const ModelKandidatEntri = require('../../../models/kadi/modelKandidatEntri');
-const { periksaIzin } = require('../../../middleware/otorisasi');
+const { periksaIzin } = require('../../../middleware/authorization');
 const {
   buildPaginatedResult,
   parsePagination,

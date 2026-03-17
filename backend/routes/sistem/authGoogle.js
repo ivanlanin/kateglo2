@@ -3,7 +3,7 @@
  */
 
 const express = require('express');
-const logger = require('../config/logger');
+const logger = require('../../config/logger');
 const {
   buildOAuthState,
   parseOAuthState,
@@ -13,8 +13,8 @@ const {
   buildAppToken,
   buildFrontendCallbackRedirect,
   buildFrontendErrorRedirect,
-} = require('../services/layananAuthGoogle');
-const ModelPengguna = require('../models/akses/modelPengguna');
+} = require('../../services/layananAuthGoogle');
+const ModelPengguna = require('../../models/akses/modelPengguna');
 
 const router = express.Router();
 

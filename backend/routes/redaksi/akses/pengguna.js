@@ -3,7 +3,7 @@
  */
 
 const express = require('express');
-const { periksaIzin } = require('../../../middleware/otorisasi');
+const { periksaIzin } = require('../../../middleware/authorization');
 const ModelPengguna = require('../../../models/akses/modelPengguna');
 const {
   buildPaginatedResult,

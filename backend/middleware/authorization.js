@@ -1,5 +1,5 @@
 /**
- * @fileoverview Middleware otorisasi berbasis izin (permission-based)
+ * @fileoverview Middleware authorization berbasis izin dan peran
  */
 
 /**

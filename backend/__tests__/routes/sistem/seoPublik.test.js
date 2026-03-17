@@ -1,20 +1,20 @@
 /**
  * @fileoverview Test routes SEO publik
- * @tested_in backend/routes/seoPublik.js
+ * @tested_in backend/routes/sistem/seoPublik.js
  */
 
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../services/layananSeoPublik', () => ({
+jest.mock('../../../services/layananSeoPublik', () => ({
   resolveSiteBaseUrl: jest.fn(),
   buildRobotsTxt: jest.fn(),
   buildSitemapXml: jest.fn(),
   generateSitemapPaths: jest.fn(),
 }));
 
-const layananSeoPublik = require('../../services/layananSeoPublik');
-const seoPublikRouter = require('../../routes/seoPublik');
+const layananSeoPublik = require('../../../services/layananSeoPublik');
+const seoPublikRouter = require('../../../routes/sistem/seoPublik');
 
 function createApp() {
   const app = express();
@@ -25,7 +25,7 @@ function createApp() {
   return app;
 }
 
-describe('routes/seoPublik', () => {
+describe('routes/sistem/seoPublik', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     layananSeoPublik.resolveSiteBaseUrl.mockReturnValue('https://kateglo.org');

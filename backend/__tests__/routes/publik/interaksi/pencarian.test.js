@@ -1,23 +1,23 @@
 /**
  * @fileoverview Test route publik pencarian populer
- * @tested_in backend/routes/publik/pencarian.js
+ * @tested_in backend/routes/publik/interaksi/pencarian.js
  */
 
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../../models/interaksi/modelPencarian', () => ({
+jest.mock('../../../../models/interaksi/modelPencarian', () => ({
   ambilFrasaPopulerPerDomain: jest.fn(),
 }));
 
-jest.mock('../../../services/layananCache', () => ({
+jest.mock('../../../../services/layananCache', () => ({
   getJson: jest.fn(),
   setJson: jest.fn(),
 }));
 
-const router = require('../../../routes/publik/pencarian');
-const ModelPencarian = require('../../../models/interaksi/modelPencarian');
-const cacheService = require('../../../services/layananCache');
+const router = require('../../../../routes/publik/interaksi/pencarian');
+const ModelPencarian = require('../../../../models/interaksi/modelPencarian');
+const cacheService = require('../../../../services/layananCache');
 
 function createApp() {
   const app = express();
@@ -28,7 +28,7 @@ function createApp() {
   return app;
 }
 
-describe('routes/publik/pencarian', () => {
+describe('routes/publik/interaksi/pencarian', () => {
   const originalTtl = process.env.POPULAR_SEARCH_CACHE_TTL_SECONDS;
 
   beforeEach(() => {

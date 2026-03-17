@@ -1,9 +1,9 @@
 /**
- * @fileoverview Test middleware otorisasi berbasis izin/peran
- * @tested_in backend/middleware/otorisasi.js
+ * @fileoverview Test middleware authorization berbasis izin/peran
+ * @tested_in backend/middleware/authorization.js
  */
 
-const { periksaIzin, adminSaja, redaksiSaja } = require('../../middleware/otorisasi');
+const { periksaIzin, adminSaja, redaksiSaja } = require('../../middleware/authorization');
 
 function createRes() {
   return {
@@ -12,7 +12,7 @@ function createRes() {
   };
 }
 
-describe('middleware/otorisasi', () => {
+describe('middleware/authorization', () => {
   describe('periksaIzin', () => {
     it('mengembalikan 401 saat req.user tidak ada', () => {
       const req = {};
