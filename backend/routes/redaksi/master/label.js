@@ -3,15 +3,15 @@
  */
 
 const express = require('express');
-const { periksaIzin } = require('../../middleware/otorisasi');
-const ModelLabel = require('../../models/master/modelLabel');
+const { periksaIzin } = require('../../../middleware/otorisasi');
+const ModelLabel = require('../../../models/master/modelLabel');
 const {
   buildPaginatedResult,
   parsePagination,
   parseSearchQuery,
   parseIdParam,
   parseTrimmedString,
-} = require('../../utils/routesRedaksiUtils');
+} = require('../../../utils/routesRedaksiUtils');
 
 const router = express.Router();
 const kategoriMasterLabel = new Set(['bahasa', 'bidang', 'sumber']);

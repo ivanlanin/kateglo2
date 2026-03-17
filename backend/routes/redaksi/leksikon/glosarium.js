@@ -3,16 +3,16 @@
  */
 
 const express = require('express');
-const { periksaIzin } = require('../../middleware/otorisasi');
-const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
-const { invalidasiCacheDetailGlosarium } = require('../../services/layananGlosariumPublik');
+const { periksaIzin } = require('../../../middleware/otorisasi');
+const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
+const { invalidasiCacheDetailGlosarium } = require('../../../services/layananGlosariumPublik');
 const {
   buildPaginatedResult,
   parsePagination,
   parseSearchQuery,
   parseIdParam,
   parseTrimmedString,
-} = require('../../utils/routesRedaksiUtils');
+} = require('../../../utils/routesRedaksiUtils');
 
 const router = express.Router();
 

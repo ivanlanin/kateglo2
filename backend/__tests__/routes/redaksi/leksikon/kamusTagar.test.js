@@ -6,27 +6,27 @@
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../../middleware/otorisasi', () => ({
+jest.mock('../../../../middleware/otorisasi', () => ({
   periksaIzin: () => (_req, _res, next) => next(),
 }));
 
-jest.mock('../../../models/leksikon/modelEntri', () => ({
+jest.mock('../../../../models/leksikon/modelEntri', () => ({
   simpanContoh: jest.fn(),
   hapusContoh: jest.fn(),
 }));
 
-jest.mock('../../../models/master/modelTagar', () => ({
+jest.mock('../../../../models/master/modelTagar', () => ({
   ambilTagarEntri: jest.fn(),
   simpanTagarEntri: jest.fn(),
 }));
 
-jest.mock('../../../services/layananKamusPublik', () => ({
+jest.mock('../../../../services/layananKamusPublik', () => ({
   hapusCacheDetailKamus: jest.fn(),
   ambilDetailKamus: jest.fn(),
 }));
 
-const router = require('../../../routes/redaksi/kamus');
-const ModelTagar = require('../../../models/master/modelTagar');
+const router = require('../../../../routes/redaksi/leksikon/kamus');
+const ModelTagar = require('../../../../models/master/modelTagar');
 
 function createApp() {
   const app = express();

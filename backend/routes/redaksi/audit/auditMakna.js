@@ -3,15 +3,15 @@
  */
 
 const express = require('express');
-const { periksaIzin } = require('../../middleware/otorisasi');
-const ModelAuditMakna = require('../../models/audit/modelAuditMakna');
+const { periksaIzin } = require('../../../middleware/otorisasi');
+const ModelAuditMakna = require('../../../models/audit/modelAuditMakna');
 const {
   buildPaginatedResult,
   parsePagination,
   parseSearchQuery,
   parseIdParam,
   parseTrimmedString,
-} = require('../../utils/routesRedaksiUtils');
+} = require('../../../utils/routesRedaksiUtils');
 
 const router = express.Router();
 const statusValid = ['tinjau', 'salah', 'tambah', 'nama'];

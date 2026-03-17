@@ -5,11 +5,11 @@
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../../middleware/otorisasi', () => ({
+jest.mock('../../../../middleware/otorisasi', () => ({
   periksaIzin: () => (_req, _res, next) => next(),
 }));
 
-jest.mock('../../../models/master/modelOpsi', () => ({
+jest.mock('../../../../models/master/modelOpsi', () => ({
   daftarLookupBahasa: jest.fn(),
   daftarMasterBahasa: jest.fn(),
   ambilMasterBahasaDenganId: jest.fn(),
@@ -27,10 +27,10 @@ jest.mock('../../../models/master/modelOpsi', () => ({
   hapusMasterSumber: jest.fn(),
 }));
 
-const routerBahasa = require('../../../routes/redaksi/bahasa');
-const routerBidang = require('../../../routes/redaksi/bidang');
-const routerSumber = require('../../../routes/redaksi/sumber');
-const ModelOpsi = require('../../../models/master/modelOpsi');
+const routerBahasa = require('../../../../routes/redaksi/master/bahasa');
+const routerBidang = require('../../../../routes/redaksi/master/bidang');
+const routerSumber = require('../../../../routes/redaksi/master/sumber');
+const ModelOpsi = require('../../../../models/master/modelOpsi');
 
 function createApp() {
   const app = express();

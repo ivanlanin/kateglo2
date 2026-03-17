@@ -3,15 +3,15 @@
  */
 
 const express = require('express');
-const { periksaIzin } = require('../../middleware/otorisasi');
-const ModelEtimologi = require('../../models/leksikon/modelEtimologi');
+const { periksaIzin } = require('../../../middleware/otorisasi');
+const ModelEtimologi = require('../../../models/leksikon/modelEtimologi');
 const {
   buildPaginatedResult,
   parsePagination,
   parseSearchQuery,
   parseIdParam,
   parseTrimmedString,
-} = require('../../utils/routesRedaksiUtils');
+} = require('../../../utils/routesRedaksiUtils');
 
 const router = express.Router();
 

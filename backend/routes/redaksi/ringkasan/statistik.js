@@ -3,27 +3,27 @@
  */
 
 const express = require('express');
-const { periksaIzin } = require('../../middleware/otorisasi');
-const ModelEntri = require('../../models/leksikon/modelEntri');
-const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
-const ModelTesaurus = require('../../models/leksikon/modelTesaurus');
-const ModelEtimologi = require('../../models/leksikon/modelEtimologi');
-const ModelLabel = require('../../models/master/modelLabel');
-const ModelPengguna = require('../../models/akses/modelPengguna');
-const ModelKomentar = require('../../models/interaksi/modelKomentar');
-const ModelSusunKata = require('../../models/gim/modelSusunKata');
-const ModelKuisKata = require('../../models/gim/modelKuisKata');
-const ModelPencarian = require('../../models/interaksi/modelPencarian');
-const ModelPencarianHitam = require('../../models/interaksi/modelPencarianHitam');
-const ModelAuditMakna = require('../../models/audit/modelAuditMakna');
-const ModelTagar = require('../../models/master/modelTagar');
-const ModelPeran = require('../../models/akses/modelPeran');
-const ModelIzin = require('../../models/akses/modelIzin');
-const ModelKandidatEntri = require('../../models/kadi/modelKandidatEntri');
+const { periksaIzin } = require('../../../middleware/otorisasi');
+const ModelEntri = require('../../../models/leksikon/modelEntri');
+const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
+const ModelTesaurus = require('../../../models/leksikon/modelTesaurus');
+const ModelEtimologi = require('../../../models/leksikon/modelEtimologi');
+const ModelLabel = require('../../../models/master/modelLabel');
+const ModelPengguna = require('../../../models/akses/modelPengguna');
+const ModelKomentar = require('../../../models/interaksi/modelKomentar');
+const ModelSusunKata = require('../../../models/gim/modelSusunKata');
+const ModelKuisKata = require('../../../models/gim/modelKuisKata');
+const ModelPencarian = require('../../../models/interaksi/modelPencarian');
+const ModelPencarianHitam = require('../../../models/interaksi/modelPencarianHitam');
+const ModelAuditMakna = require('../../../models/audit/modelAuditMakna');
+const ModelTagar = require('../../../models/master/modelTagar');
+const ModelPeran = require('../../../models/akses/modelPeran');
+const ModelIzin = require('../../../models/akses/modelIzin');
+const ModelKandidatEntri = require('../../../models/kadi/modelKandidatEntri');
 const {
   buildPaginatedResult,
   parsePagination,
-} = require('../../utils/routesRedaksiUtils');
+} = require('../../../utils/routesRedaksiUtils');
 
 const router = express.Router();
 

@@ -3,17 +3,17 @@
  */
 
 const express = require('express');
-const ModelEntri = require('../../models/leksikon/modelEntri');
-const ModelTagar = require('../../models/master/modelTagar');
-const { periksaIzin } = require('../../middleware/otorisasi');
-const { hapusCacheDetailKamus } = require('../../services/layananKamusPublik');
+const ModelEntri = require('../../../models/leksikon/modelEntri');
+const ModelTagar = require('../../../models/master/modelTagar');
+const { periksaIzin } = require('../../../middleware/otorisasi');
+const { hapusCacheDetailKamus } = require('../../../services/layananKamusPublik');
 const {
   buildPaginatedResult,
   parsePagination,
   parseSearchQuery,
   parseIdParam,
   parseTrimmedString,
-} = require('../../utils/routesRedaksiUtils');
+} = require('../../../utils/routesRedaksiUtils');
 
 const router = express.Router();
 

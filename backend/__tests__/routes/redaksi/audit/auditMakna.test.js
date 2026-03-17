@@ -6,17 +6,17 @@
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../../middleware/otorisasi', () => ({
+jest.mock('../../../../middleware/otorisasi', () => ({
   periksaIzin: () => (_req, _res, next) => next(),
 }));
 
-jest.mock('../../../models/audit/modelAuditMakna', () => ({
+jest.mock('../../../../models/audit/modelAuditMakna', () => ({
   daftarAdmin: jest.fn(),
   simpanStatus: jest.fn(),
 }));
 
-const router = require('../../../routes/redaksi/auditMakna');
-const ModelAuditMakna = require('../../../models/audit/modelAuditMakna');
+const router = require('../../../../routes/redaksi/audit/auditMakna');
+const ModelAuditMakna = require('../../../../models/audit/modelAuditMakna');
 
 function createApp() {
   const app = express();
