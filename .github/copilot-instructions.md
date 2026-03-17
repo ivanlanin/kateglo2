@@ -73,7 +73,7 @@ kateglo2/
 ```
 
 ### Key Files for AI Reference
-- **Database Schema**: `_docs/data/struktur.sql` — MANDATORY reference before any DB work
+- **Database Schema**: `_docs/data/skema.sql` — MANDATORY reference before any DB work
 - **Backend DB**: `backend/db/index.js` — PostgreSQL pool + query builder
 - **Backend Models**: `backend/models/` — Fat model layer (all DB queries here)
 - **API Routes**: `backend/routes/api/public/` — Public endpoints
@@ -178,9 +178,9 @@ const result = await db.query(
 ```
 
 ### Database Schema Reference (MANDATORY)
-- **ALWAYS CHECK SCHEMA FIRST**: Sebelum membuat migration, query, atau mengubah model, WAJIB check `_docs/data/struktur.sql`
+- **ALWAYS CHECK SCHEMA FIRST**: Sebelum membuat migration, query, atau mengubah model, WAJIB check `_docs/data/skema.sql`
 - **Generate/Update Schema**: `Set-Location backend; node scripts/db-schema.js`
-- **Quick Search**: `Select-String -Path "_docs/data/struktur.sql" -Pattern "create table phrase"`
+- **Quick Search**: `Select-String -Path "_docs/data/skema.sql" -Pattern "create table phrase"`
 
 ### Core Tables
 | Table | Purpose | Key Columns |
@@ -398,7 +398,7 @@ Set-Location frontend; npm run lint; npm run test
 ```
 
 ### Database Work
-1. **Check schema first**: `Select-String -Path "_docs/data/struktur.sql" -Pattern "table_name"`
+1. **Check schema first**: `Select-String -Path "_docs/data/skema.sql" -Pattern "table_name"`
 2. **Create migration**: Add SQL file to `_docs/YYYYMM/` with format `YYYYMMDDHHMM_nama-migrasi.sql` (HHMM dari waktu pembuatan file)
 3. **Run migration (default wajib)**: Setelah file SQL migration dibuat, **langsung eksekusi SQL tersebut** ke database target (development) pada sesi yang sama, kecuali user secara eksplisit meminta untuk tidak menjalankan.
 4. **Run migration**: Use temp script in `backend/` atau `psql` dengan `DATABASE_URL` dari `backend/.env`
@@ -442,7 +442,7 @@ npm run dev
 Set-Location backend; node scripts/db-schema.js
 
 # Check schema for a table
-Select-String -Path "_docs/data/struktur.sql" -Pattern "create table phrase"
+Select-String -Path "_docs/data/skema.sql" -Pattern "create table phrase"
 
 # Kill port conflicts
 npx kill-port 3000; npx kill-port 5173
