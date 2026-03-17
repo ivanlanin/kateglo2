@@ -92,4 +92,26 @@ describe('TabelAdmin', () => {
       total: 100,
     });
   });
+
+  it('mode cursor fallback memakai onOffset saat pageInfo ada tetapi handler cursor tidak diberikan', () => {
+    const onOffset = vi.fn();
+
+    render(
+      <TabelAdmin
+        kolom={[{ key: 'nama', label: 'Nama' }]}
+        data={[{ id: 1, nama: 'Admin' }]}
+        isLoading={false}
+        isError={false}
+        total={100}
+        limit={10}
+        offset={0}
+        onOffset={onOffset}
+        pageInfo={{ hasPrev: false, hasNext: true, nextCursor: 'cursor-2' }}
+        currentPage={1}
+      />
+    );
+
+    fireEvent.click(screen.getAllByTestId('paginasi-mock')[0]);
+    expect(onOffset).toHaveBeenCalledWith('next');
+  });
 });
