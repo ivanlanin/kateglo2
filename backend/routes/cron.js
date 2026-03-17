@@ -4,7 +4,7 @@
 
 const express = require('express');
 const { jalankanPrefillSusunKataHarian, parseTanggal, parseTotalHari } = require('../jobs/jobSusunKataHarian');
-const { jalankanProsesWikipedia } = require('../jobs/kadi/jobWikipedia');
+const { jalankanProsesWikipedia } = require('../jobs/jobWikipedia');
 
 const router = express.Router();
 

@@ -20,14 +20,14 @@ jest.mock('../../jobs/jobSusunKataHarian', () => ({
   }),
 }));
 
-jest.mock('../../jobs/kadi/jobWikipedia', () => ({
+jest.mock('../../jobs/jobWikipedia', () => ({
   jalankanProsesWikipedia: jest.fn(),
 }));
 
 const router = require('../../routes/cron');
 const { __private } = router;
 const { jalankanPrefillSusunKataHarian } = require('../../jobs/jobSusunKataHarian');
-const { jalankanProsesWikipedia } = require('../../jobs/kadi/jobWikipedia');
+const { jalankanProsesWikipedia } = require('../../jobs/jobWikipedia');
 
 function createApp() {
   const app = express();

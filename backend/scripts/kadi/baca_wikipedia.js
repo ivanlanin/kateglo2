@@ -10,7 +10,7 @@
 
 require('dotenv').config({ path: require('path').join(__dirname, '../../.env') });
 const db = require('../../db');
-const { jalankanProsesWikipedia } = require('../../jobs/kadi/jobWikipedia');
+const { jalankanProsesWikipedia } = require('../../jobs/jobWikipedia');
 
 const args = process.argv.slice(2);
 const limitIdx = args.indexOf('--limit');

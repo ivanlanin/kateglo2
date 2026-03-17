@@ -13,8 +13,8 @@
 
 const https = require('https');
 const cheerio = require('cheerio');
-const db = require('../../db');
-const ModelKandidatEntri = require('../../models/kadi/modelKandidatEntri');
+const db = require('../db');
+const ModelKandidatEntri = require('../models/kadi/modelKandidatEntri');
 
 const API_URL = 'https://id.wikipedia.org/w/api.php';
 const USER_AGENT = 'KategloBot/1.0 (https://kateglo.com/bot)';

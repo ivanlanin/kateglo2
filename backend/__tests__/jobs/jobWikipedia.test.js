@@ -1,6 +1,6 @@
 /**
  * @fileoverview Test job Wikipedia KADI
- * @tested_in backend/jobs/kadi/jobWikipedia.js
+ * @tested_in backend/jobs/jobWikipedia.js
  */
 
 const { EventEmitter } = require('events');
@@ -9,21 +9,21 @@ jest.mock('https', () => ({
   request: jest.fn(),
 }));
 
-jest.mock('../../../models/kadi/modelKandidatEntri', () => ({
+jest.mock('../../models/kadi/modelKandidatEntri', () => ({
   bulkUpsertDariScraper: jest.fn(),
   tambahBanyakAtestasi: jest.fn(),
 }));
 
 const https = require('https');
-const db = require('../../../db');
-const ModelKandidatEntri = require('../../../models/kadi/modelKandidatEntri');
+const db = require('../../db');
+const ModelKandidatEntri = require('../../models/kadi/modelKandidatEntri');
 const {
   ambilDaftarArtikelPilihan,
   ambilTeksArtikel,
   jalankanProsesWikipedia,
   tokenisasiDanFilter,
   __private,
-} = require('../../../jobs/kadi/jobWikipedia');
+} = require('../../jobs/jobWikipedia');
 
 function mockHttpsResponses(responses) {
   const queue = [...responses];
@@ -70,7 +70,7 @@ function mockHttpsResponses(responses) {
   });
 }
 
-describe('jobs/kadi/jobWikipedia', () => {
+describe('jobs/jobWikipedia', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     db.query.mockReset();
