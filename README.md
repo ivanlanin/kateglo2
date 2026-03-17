@@ -7,7 +7,9 @@ Kamus, Tesaurus, dan Glosarium Bahasa Indonesia — versi modern.
 Monorepo dengan 2 aplikasi utama:
 
 - **backend/** — API Server (Express.js + PostgreSQL)
-- **frontend/** — Situs publik + panel redaksi terintegrasi (`/redaksi/*`)
+- **frontend/** — Aplikasi React untuk situs publik + panel redaksi (`/redaksi/*`)
+
+Pada mode production, backend juga melayani runtime frontend SSR dan aset hasil build.
 
 ## Tech Stack
 
@@ -94,64 +96,47 @@ SEO publik digenerate otomatis oleh backend (bukan file statis di `frontend/publ
 
 Generator sitemap mengambil path statis + path dinamis kategori kamus/glosarium. Path statis mencakup halaman utama termasuk `gim/susun-kata/harian`, `gim/susun-kata/bebas`, dan `sumber`.
 
-## Fitur Utama
+## Fitur yang Tersedia
 
-- Pencarian kamus (prefix-first + fallback contains)
-- Frasa pencarian populer di beranda (kamus, tesaurus, glosarium, makna, rima)
-- Detail entri: makna, contoh, subentri, tesaurus, glosarium
-- Login Google + RBAC untuk redaksi
-- Panel redaksi terintegrasi di frontend (`/redaksi/*`)
-- Gim Susun Kata dengan 2 mode:
-   - `harian` (kata harian 5 huruf, klasemen harian pemenang)
-   - `bebas` (kata acak 4-6 huruf, klasemen harian berbasis rata-rata pemenang)
-- Sidebar komentar pada halaman detail kamus per `indeks`:
-   - pengguna login dapat melihat komentar terbaca dan mengirim komentar
-   - pengguna belum login melihat teaser jumlah komentar aktif
-   - moderasi komentar dilakukan dari halaman redaksi `Komentar`
+Daftar ini disusun dari rute frontend dan endpoint backend yang ada saat ini. Jika sebuah kemampuan belum terlihat jelas dari route atau handler yang terpasang, fitur itu tidak saya klaim di sini.
 
-## Menu dan Cakupan Fitur
+### Area Publik
 
-### Status Susun Kata (per 2026-03-02)
+- **Beranda** (`/`) dengan kotak pencarian utama dan widget pencarian populer untuk domain `kamus`, `tesaurus`, `glosarium`, `makna`, dan `rima`.
+- **Kamus** di `/kamus` dengan varian route untuk pencarian kata, filter kelas kata, filter tagar, kategori, dan detail entri di `/kamus/detail/:indeks`.
+- **Interaksi kamus** melalui endpoint komentar publik: komentar dapat diambil dari `/api/publik/kamus/komentar/:indeks`, dan pengiriman komentar tersedia untuk pengguna terautentikasi.
+- **Tesaurus** dengan route publik untuk contoh, autocomplete, pencarian, dan detail kata.
+- **Glosarium** dengan pencarian, autocomplete, detail istilah, serta jelajah berdasarkan bidang dan sumber.
+- **Makna** dengan halaman publik dan endpoint pencarian berdasarkan isi makna.
+- **Rima** dengan halaman publik, contoh, autocomplete, dan pencarian.
+- **Ejaan** tersedia sebagai halaman publik di `/ejaan` dan `/ejaan/:slug`.
+- **Alat bahasa** di `/alat`, dengan halaman khusus untuk penghitung huruf dan penganalisis teks.
+- **Gim kata** di `/gim`, terdiri dari `Kuis Kata` dan `Susun Kata`; backend publik menyediakan endpoint ronde, submit, puzzle, progres, validasi, dan klasemen.
+- **Halaman informasi** untuk kebijakan privasi dan sumber.
+- **Autentikasi pengguna** melalui Google OAuth, callback frontend `/auth/callback`, dan endpoint sesi `/api/pengguna/me`.
 
-- URL publik mode terpisah: `/gim/susun-kata/harian` dan `/gim/susun-kata/bebas`.
-- URL lama `/gim/susun-kata` diarahkan ke mode harian.
-- Mode harian menggunakan kata yang sama untuk semua pemain pada tanggal yang sama (zona Asia/Jakarta).
-- Mode bebas memilih kata dasar acak 4-6 huruf per sesi.
-- Klasemen harian menampilkan pemenang (`menang=true`) untuk hari berjalan.
-- Klasemen bebas juga per hari, menampilkan pemenang dengan format: `rata_poin; rata_detik; total_main`.
-- Tabel yang dipakai: `susun_kata`, `susun_kata_skor`, `susun_kata_bebas`.
+### Area Redaksi
 
-### Menu Publik
+- **Dasbor redaksi** di `/redaksi`.
+- **Kamus**: daftar/detail entri, tambah, ubah, hapus, serta pengelolaan makna, contoh, dan tagar per entri.
+- **Tesaurus**: daftar/detail dan operasi tambah, ubah, hapus.
+- **Etimologi**: daftar/detail dan operasi tambah, ubah, hapus.
+- **Glosarium**: daftar/detail dan operasi tambah, ubah, hapus.
+- **Moderasi komentar** melalui modul komentar redaksi.
+- **Audit** untuk makna dan tagar.
+- **Master data** untuk bidang, bahasa, sumber, label, dan tagar.
+- **Manajemen akses** untuk pengguna, peran, dan izin.
+- **Pemantauan pencarian** melalui statistik pencarian dan daftar pencarian hitam.
+- **Gim redaksi** untuk pengelolaan Susun Kata harian, Susun Kata bebas, dan Kuis Kata.
+- **KADI** (`kandidat kata`) dengan statistik, detail, pembaruan data, perubahan status, penghapusan, atestasi, dan riwayat.
 
-- **Kamus**: pencarian entri, jelajah kategori (abjad, kelas kata, bentuk/unsur terikat, ekspresi, ragam, bahasa, bidang), hasil berpaginasi, tautan ke detail entri.
-- **Tesaurus**: pencarian sinonim/antonim, tampilan relasi kata, contoh kata saat belum melakukan pencarian.
-- **Glosarium**: pencarian istilah teknis, jelajah berdasarkan bidang dan sumber, detail istilah, tautan silang ke entri kamus.
-- **Makna**: kamus terbalik (mencari kata berdasarkan isi makna).
-- **Rima**: pencarian rima akhir dan rima awal (aliterasi), masing-masing dengan navigasi cursor.
-- **Gim**: Susun Kata mode harian dan bebas.
-- **Redaksi**: tampil hanya untuk akun dengan akses redaksi.
-- **Masuk/Keluar**: autentikasi Google OAuth untuk pengguna.
+Semua route redaksi diproteksi oleh autentikasi dan pemeriksaan izin per endpoint. Artinya, tidak semua modul otomatis tersedia untuk setiap akun redaksi.
 
-### Halaman Publik Pendukung
+### Permukaan API yang Terlihat
 
-- **Beranda** (`/`): hero + kotak pencarian utama.
-- **Pencarian Populer** (`/api/publik/pencarian/populer?tanggal=YYYY-MM-DD`): 1 frasa teratas per domain berdasarkan tanggal browser pengguna; jika tanggal belum ada, otomatis mundur ke tanggal sebelumnya yang tersedia.
-- **Kebijakan Privasi** (`/kebijakan-privasi`).
-- **Footer**: tombol versi `Kateglo <versi>` (modal **Riwayat** dan **Tugas**) + toggle tema terang/gelap.
-
-### Menu Redaksi
-
-- **Dasbor**: ringkasan statistik (entri, tesaurus, glosarium, komentar, label, pengguna) dan navigasi cepat.
-- **Kamus**: daftar/cari/filter entri; tambah/sunting/hapus entri; kelola makna dan contoh.
-- **Tesaurus**: daftar/cari/filter status; tambah/sunting/hapus entri tesaurus.
-- **Glosarium**: daftar/cari/filter (bidang, sumber, status); tambah/sunting/hapus istilah.
-- **Bidang**: kelola master bidang glosarium.
-- **Sumber**: kelola master sumber glosarium.
-- **Komentar**: moderasi komentar kamus (isi dan status aktif).
-- **Label**: kelola label (kategori, kode, nama, urutan, status).
-- **Peran**: kelola peran dan pemetaan izin per peran.
-- **Izin**: kelola izin dan pemetaan peran yang memiliki izin.
-- **Pengguna**: kelola pengguna (profil dasar, peran, status aktif).
+- **Publik**: `health`, rumpun `kamus`, `makna`, `rima`, `tesaurus`, `glosarium`, interaksi pencarian populer, dan endpoint gim.
+- **Sistem**: Google OAuth (`/auth/google`, `/auth/google/callback`), profil pengguna (`/api/pengguna/me`), `robots.txt`, `sitemap.xml`, dan `health`.
+- **Redaksi**: `statistik`, `kamus`, `tesaurus`, `etimologi`, `glosarium`, `komentar`, `audit-makna`, `audit-tagar`, `bidang`, `bahasa`, `sumber`, `label`, `tagar`, `pengguna`, `peran`, `izin`, `pencarianHitam`, `susun-kata`, `kuis-kata`, dan `kandidat-kata`.
 
 ## Deployment (Render)
 
@@ -175,26 +160,36 @@ Set-Location frontend; npm run lint; npm run test
 ## Project Structure
 
 ```
-kateglo2/
-├── backend/              # Express.js API (Port 3000)
+kateglo/
+├── .github/              # Workflow dan panduan agent/Copilot
+├── backend/              # Express.js API + SSR runtime (Port 3000)
+│   ├── config/           # Logger dan konfigurasi backend
+│   ├── db/               # PostgreSQL pool + query helper
+│   ├── frontend/         # Artefak frontend untuk runtime production
+│   │   └── dist/
+│   ├── jobs/             # Job/background worker backend
+│   ├── middleware/       # Auth, validation, limiter, error handler
+│   ├── models/           # Fat model per domain
 │   ├── routes/
-│   │   ├── publik/       # Public routes
-│   │   └── redaksi/      # Admin routes (protected)
-│   ├── models/           # Database models (fat model)
-│   ├── services/         # Business logic
-│   ├── middleware/       # Auth, validation, limiter
-│   └── db/               # PostgreSQL connection
-│
-├── frontend/             # Public website + redaksi (Port 5173)
-│   ├── src/
-│   │   ├── halaman/      # Halaman publik + redaksi
-│   │   ├── komponen/     # Reusable components
-│   │   ├── api/          # API client
-│   │   └── utils/        # Utilities frontend
-│   └── public/
-│
-├── _docs/                # Documentation + SQL migrations + struktur data
-└── _kode/                # Reference code (not committed)
+│   │   ├── publik/       # Route API publik
+│   │   ├── redaksi/      # Route API redaksi (protected)
+│   │   └── sistem/       # Auth, cron, SEO, route sistem
+│   ├── scripts/          # Utility scripts backend
+│   ├── services/         # Service layer publik dan sistem
+│   └── utils/            # Utility backend
+├── frontend/             # App React publik + redaksi (Port 5173)
+│   ├── public/           # Static public assets
+│   ├── scripts/          # Build helpers, termasuk SSR build
+│   └── src/
+│       ├── api/          # API client (`apiPublik`, `apiAdmin`, `apiAuth`)
+│       ├── components/   # Komponen reusable UI
+│       ├── context/      # Auth context dan provider
+│       ├── hooks/        # Custom hooks frontend
+│       ├── pages/        # Halaman publik, auth, dan redaksi
+│       ├── styles/       # Tailwind entry + stylesheet semantik
+│       └── utils/        # Utility frontend
+├── _docs/                # Dokumentasi + SQL migrations + struktur data
+└── _kode/                # Kode referensi (tidak untuk deployment)
 ```
 
 ## Environment Variables

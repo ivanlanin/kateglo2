@@ -3,8 +3,8 @@
 <!-- MACHINE-METADATA
 {
   "title": "Pedoman Pengembangan Kateglo 2.0",
-  "version": "1.0",
-  "lastUpdated": "2026-02-14",
+  "version": "1.1",
+  "lastUpdated": "2026-03-17",
   "shell": "powershell",
   "primary_audience": ["developers", "ai-agents"]
 }
@@ -34,32 +34,38 @@
 - Backend: Express.js 4 + PostgreSQL (Native PG) + Winston Logging (Port 3000)
 - Database: PostgreSQL (hosted on Render, remote access via SSL)
 - Authentication: JWT-based dengan role-based access control
-- Admin: Terintegrasi dalam frontend di `/admin/*` (route terproteksi, hanya role admin)
+- Redaksi: Terintegrasi dalam frontend di `/redaksi/*` (route terproteksi, akses redaksi + izin per endpoint)
 
 ## Project Infrastructure
 
 ### Root Project Structure
 ```
-kateglo2/
+kateglo/
 ├── .github/              # GitHub workflows & copilot-instructions
-├── backend/              # Express.js API (Port 3000)
+├── backend/              # Express.js API + SSR runtime (Port 3000)
 │   ├── config/           # Logger configuration
 │   ├── db/               # PostgreSQL connection & query builder
-│   ├── middleware/        # Auth, validation, error handler
+│   ├── frontend/         # Frontend SSR build artifacts for production runtime
+│   ├── jobs/             # Background jobs / scheduled tasks
+│   ├── middleware/       # Auth, validation, limiter, error handler
 │   ├── models/           # Database models (Fat Model pattern)
-│   ├── routes/api/       # API routes
-│   │   ├── public/       # Public routes (no auth)
-│   │   └── admin/        # Admin routes (auth required)
-│   ├── scripts/          # Utility scripts (db-schema.js, etc.)
-│   └── services/         # Business logic layer
+│   ├── routes/           # API and system routes
+│   │   ├── publik/       # Public routes (no auth)
+│   │   ├── redaksi/      # Redaksi routes (auth + authorization)
+│   │   └── sistem/       # Auth, cron, SEO, and support routes
+│   ├── scripts/          # Utility scripts (db-schema.js, start-production.js, etc.)
+│   ├── services/         # Business logic layer
+│   └── utils/            # Shared backend utilities
 │
-├── frontend/             # Website publik + admin (Port 5173)
+├── frontend/             # Website publik + redaksi (Port 5173)
+│   ├── public/           # Static assets
+│   ├── scripts/          # Frontend build helpers (SSR/mobile)
 │   └── src/
-│       ├── api/          # API client (axios + publicApi + apiAdmin)
+│       ├── api/          # API client (apiPublik, apiAdmin, apiAuth)
+│       ├── components/   # Reusable components
 │       ├── context/      # Auth context (authContext)
-│       ├── komponen/     # Reusable components
-│       ├── halaman/      # Page components (publik)
-│       │   └── admin/    # Admin pages (terproteksi)
+│       ├── hooks/        # Custom hooks
+│       ├── pages/        # Public, auth, and redaksi pages
 │       └── styles/       # TailwindCSS styles
 │
 ├── _kode/                # Reference code (NOT committed)
@@ -76,11 +82,17 @@ kateglo2/
 - **Database Schema**: `_docs/data/skema.sql` — MANDATORY reference before any DB work
 - **Backend DB**: `backend/db/index.js` — PostgreSQL pool + query builder
 - **Backend Models**: `backend/models/` — Fat model layer (all DB queries here)
-- **API Routes**: `backend/routes/api/public/` — Public endpoints
+- **API Router Entry**: `backend/routes/index.js` — mounts `publik`, `redaksi`, dan `pengguna`
+- **Public Routes**: `backend/routes/publik/` — public endpoints
+- **Redaksi Routes**: `backend/routes/redaksi/` — protected editorial endpoints
+- **System Routes**: `backend/routes/sistem/` — auth, cron, SEO, route sistem
 - **Frontend API**: `frontend/src/api/apiPublik.js` — API call functions (publik)
 - **Admin API**: `frontend/src/api/apiAdmin.js` — API call functions (admin)
-- **Frontend Pages**: `frontend/src/halaman/` — React page components
-- **Admin Pages**: `frontend/src/halaman/admin/` — Admin page components
+- **Frontend Auth API**: `frontend/src/api/apiAuth.js` — auth/session API client
+- **Frontend Pages**: `frontend/src/pages/` — React page components
+- **Public Page Routes**: `frontend/src/pages/publik/rutePublik.js`
+- **Redaksi Page Routes**: `frontend/src/pages/redaksi/ruteRedaksi.js`
+- **Frontend Layout Components**: `frontend/src/components/tampilan/`
 
 ## Shell & CLI Conventions
 
@@ -92,8 +104,8 @@ kateglo2/
 ### JSON Escape Safety (Wajib untuk Agent/Tool Payload)
 - Hindari path Windows mentah dengan backslash tunggal di payload JSON (contoh rawan: `C:\Kode\...` jika tidak di-escape benar).
 - Untuk mencegah `Bad Unicode escape in JSON`, gunakan salah satu pola aman:
-  - Ganti ke slash (`C:/Kode/Kateglo/kateglo2/...`), atau
-  - Escape backslash ganda secara konsisten (`C:\\Kode\\Kateglo\\kateglo2\\...`).
+  - Ganti ke slash (`C:/Kode/Kateglo/kateglo/...`), atau
+  - Escape backslash ganda secara konsisten (`C:\\Kode\\Kateglo\\kateglo\\...`).
 - Jangan menulis sequence escape parsial seperti `\u`, `\x`, `\U` di string JSON kecuali memang escape valid lengkap.
 - Saat menulis patch/tool input besar, pecah perubahan per blok kecil agar error encoding/escape mudah dilokalisasi.
 - Setelah setiap patch signifikan, validasi cepat dengan lint/test terarah sebelum lanjut perubahan berikutnya.
@@ -108,14 +120,14 @@ kateglo2/
 ### Interpreter Standar Workspace
 
 ```powershell
-$py = "C:/Kode/Kateglo/kateglo2/.venv/Scripts/python.exe"
+$py = "C:/Kode/Kateglo/kateglo/.venv/Scripts/python.exe"
 ```
 
 ### Diagnostik Cepat (Wajib sebelum analisis/migrasi SQLite)
 
 ```powershell
-Set-Location "C:/Kode/Kateglo/kateglo2"
-$py = "C:/Kode/Kateglo/kateglo2/.venv/Scripts/python.exe"
+Set-Location "C:/Kode/Kateglo/kateglo"
+$py = "C:/Kode/Kateglo/kateglo/.venv/Scripts/python.exe"
 
 # 1) Cek runtime
 & $py --version
@@ -271,12 +283,12 @@ function SearchBar({ onSearch }) {
 ### API Calls with React Query
 ```jsx
 import { useQuery } from '@tanstack/react-query';
-import { searchDictionary } from '../api/publicApi';
+import { cariKamus } from '../api/apiPublik';
 
 function SearchResults({ query }) {
   const { data, isLoading, error } = useQuery({
     queryKey: ['dictionary-search', query],
-    queryFn: () => searchDictionary(query),
+    queryFn: () => cariKamus(query),
     enabled: Boolean(query),
   });
 
@@ -291,11 +303,12 @@ function SearchResults({ query }) {
 ```jsx
 // frontend/src/App.jsx
 <Routes>
-  <Route path="/" element={<Home />} />
-  <Route path="/kamus/:slug" element={<Dictionary />} />
-  <Route path="/glosarium" element={<Glossary />} />
-  <Route path="/peribahasa" element={<Proverb />} />
-  <Route path="/singkatan" element={<Abbreviation />} />
+  <Route path="/auth/callback" element={<AuthCallback />} />
+  <Route path="/redaksi/login" element={<LoginAdmin />} />
+  <Route path="/" element={<Beranda />} />
+  <Route path="/kamus/detail/:indeks" element={<KamusDetail />} />
+  <Route path="/glosarium" element={<Glosarium />} />
+  <Route path="/redaksi" element={<Dasbor />} />
 </Routes>
 ```
 
@@ -311,25 +324,30 @@ function SearchResults({ query }) {
 
 ## API Routes Structure
 
-### Public Routes (no auth)
+### Public & System Routes
 ```
-GET  /api/public/search?q=kata&type=dictionary&limit=20
-GET  /api/public/dictionary/:slug
-GET  /api/public/glossary?q=&discipline=&source=&limit=20
-GET  /api/public/proverb?q=&limit=20
-GET  /api/public/abbreviation?q=&limit=20
-GET  /api/public/stats        (homepage statistics)
-GET  /api/public/health
+GET  /api/publik/health
+GET  /api/publik/kamus/...
+GET  /api/publik/makna/...
+GET  /api/publik/rima/...
+GET  /api/publik/tesaurus/...
+GET  /api/publik/glosarium/...
+GET  /api/publik/gim/...
+GET  /api/pengguna/me
+GET  /auth/google
+GET  /health
 ```
 
-### Admin Routes (auth required)
+### Redaksi Routes (auth required)
 ```
-POST   /api/admin/auth/login
-GET    /api/admin/phrases
-POST   /api/admin/phrases
-PUT    /api/admin/phrases/:id
-DELETE /api/admin/phrases/:id
-GET    /api/admin/analytics
+GET    /api/redaksi/health
+GET    /api/redaksi/statistik
+GET    /api/redaksi/kamus
+POST   /api/redaksi/kamus
+PUT    /api/redaksi/kamus/:id
+DELETE /api/redaksi/kamus/:id
+GET    /api/redaksi/glosarium
+GET    /api/redaksi/pengguna
 ```
 
 ## Error Handling & Security
@@ -433,7 +451,7 @@ Set-Location frontend; npm run lint; npm run test
 
 ```powershell
 # Project root
-Set-Location "C:\Kode\Kateglo\kateglo2"
+Set-Location "C:\Kode\Kateglo\kateglo"
 
 # Run development
 npm run dev
@@ -448,16 +466,16 @@ Select-String -Path "_docs/data/skema.sql" -Pattern "create table phrase"
 npx kill-port 3000; npx kill-port 5173
 
 # Run targeted tests first (recommended)
-Set-Location frontend; npm run lint; npx vitest related --run src/komponen/bersama/TataLetak.jsx
-Set-Location backend; npm run lint; npx jest --findRelatedTests models/modelFrasa.js
+Set-Location frontend; npm run lint; npx vitest related --run src/components/tampilan/TataLetakPublik.jsx
+Set-Location backend; npm run lint; npx jest --findRelatedTests models/leksikon/modelEntri.js
 
 # Run full suite only when needed
 Set-Location frontend; npm run test
 Set-Location backend; npm run test
 
 # Python diagnostics (SQLite source)
-Set-Location "C:/Kode/Kateglo/kateglo2"
-$py = "C:/Kode/Kateglo/kateglo2/.venv/Scripts/python.exe"
+Set-Location "C:/Kode/Kateglo/kateglo"
+$py = "C:/Kode/Kateglo/kateglo/.venv/Scripts/python.exe"
 & $py --version
 & $py -c "import sqlite3; print(sqlite3.sqlite_version)"
 ```
@@ -490,6 +508,7 @@ Gunakan `_kode/` sebagai referensi:
 - Keep documentation proportional to code complexity
 
 ### Deployment
-Deploy ke Render dengan 2 services:
-- `kateglo-api` — Backend (Web Service)
-- `kateglo-public` — Frontend Public + Admin (Static Site)
+Default deploy menggunakan single-service SSR + API dari root repo:
+- Build: `npm ci --include=dev && npm run sim:production:build`
+- Start: `npm run sim:production:start`
+- Backend production akan melayani SSR frontend dari `backend/frontend/dist`
