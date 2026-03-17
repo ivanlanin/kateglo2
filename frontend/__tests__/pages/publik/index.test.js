@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import * as publikPages from '../../../src/pages/publik';
-import * as intiPages from '../../../src/pages/publik/inti';
+import Beranda from '../../../src/pages/publik/Beranda';
 import * as kamusPages from '../../../src/pages/publik/kamus';
 import * as glosariumPages from '../../../src/pages/publik/glosarium';
 import * as alatPages from '../../../src/pages/publik/alat';
@@ -9,8 +9,7 @@ import * as informasiPages from '../../../src/pages/publik/informasi';
 
 describe('pages/publik index', () => {
   it('me-reexport semua modul publik utama', () => {
-    expect(publikPages.AuthCallback).toBe(intiPages.AuthCallback);
-    expect(publikPages.Beranda).toBe(intiPages.Beranda);
+    expect(publikPages.Beranda).toBe(Beranda);
     expect(publikPages.Ejaan).toBe(kamusPages.Ejaan);
     expect(publikPages.Kamus).toBe(kamusPages.Kamus);
     expect(publikPages.KamusDetail).toBe(kamusPages.KamusDetail);

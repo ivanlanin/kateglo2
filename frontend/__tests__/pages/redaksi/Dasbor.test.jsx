@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import DasborAdmin from '../../../../src/pages/redaksi/inti/DasborAdmin';
+import Dasbor from '../../../src/pages/redaksi/Dasbor';
 
 const mockUseStatistikAdmin = vi.fn();
 const mockUseAuth = vi.fn();
@@ -198,19 +198,19 @@ function filterKelompokMenuFixture(hasIzin) {
     .filter((kelompok) => kelompok.items.length > 0);
 }
 
-vi.mock('../../../../src/api/apiAdmin', () => ({
+vi.mock('../../../src/api/apiAdmin', () => ({
   useStatistikAdmin: () => mockUseStatistikAdmin(),
 }));
 
-vi.mock('../../../../src/context/authContext', () => ({
+vi.mock('../../../src/context/authContext', () => ({
   useAuth: () => mockUseAuth(),
 }));
 
-vi.mock('../../../../src/constants/menuRedaksi', () => ({
+vi.mock('../../../src/constants/menuRedaksi', () => ({
   filterKelompokMenuRedaksi: (...args) => mockFilterKelompokMenuRedaksi(...args),
 }));
 
-vi.mock('../../../../src/components/tampilan/HalamanAdmin', () => ({
+vi.mock('../../../src/components/tampilan/HalamanAdmin', () => ({
   default: ({ children, judul, aksiJudul }) => (
     <div>
       <h1>{judul}</h1>
@@ -220,7 +220,7 @@ vi.mock('../../../../src/components/tampilan/HalamanAdmin', () => ({
   ),
 }));
 
-describe('DasborAdmin', () => {
+describe('Dasbor', () => {
   beforeEach(() => {
     mockUseAuth.mockReturnValue({
       user: { izin: ['lihat_entri', 'lihat_tesaurus', 'lihat_glosarium', 'kelola_komentar', 'kelola_label', 'kelola_bahasa', 'kelola_pengguna'] },
@@ -233,7 +233,7 @@ describe('DasborAdmin', () => {
     mockUseStatistikAdmin.mockReturnValue({ data: null, isLoading: true });
     render(
       <MemoryRouter>
-        <DasborAdmin />
+        <Dasbor />
       </MemoryRouter>
     );
 
@@ -273,7 +273,7 @@ describe('DasborAdmin', () => {
 
     render(
       <MemoryRouter>
-        <DasborAdmin />
+        <Dasbor />
       </MemoryRouter>
     );
 
@@ -326,7 +326,7 @@ describe('DasborAdmin', () => {
 
     render(
       <MemoryRouter>
-        <DasborAdmin />
+        <Dasbor />
       </MemoryRouter>
     );
 
@@ -369,7 +369,7 @@ describe('DasborAdmin', () => {
 
     render(
       <MemoryRouter>
-        <DasborAdmin />
+        <Dasbor />
       </MemoryRouter>
     );
 
@@ -401,7 +401,7 @@ describe('DasborAdmin', () => {
 
     render(
       <MemoryRouter>
-        <DasborAdmin />
+        <Dasbor />
       </MemoryRouter>
     );
 
@@ -435,7 +435,7 @@ describe('DasborAdmin', () => {
 
     render(
       <MemoryRouter>
-        <DasborAdmin />
+        <Dasbor />
       </MemoryRouter>
     );
 
@@ -461,7 +461,7 @@ describe('DasborAdmin', () => {
 
     render(
       <MemoryRouter>
-        <DasborAdmin />
+        <Dasbor />
       </MemoryRouter>
     );
 

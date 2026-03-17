@@ -1,12 +1,12 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import LoginAdmin from '../../../../src/pages/redaksi/inti/LoginAdmin';
+import LoginAdmin from '../../../src/pages/auth/LoginAdmin';
 
 const mockUseAuth = vi.fn();
 const mockNavigate = vi.fn();
 
-vi.mock('../../../../src/context/authContext', () => ({
+vi.mock('../../../src/context/authContext', () => ({
   useAuth: () => mockUseAuth(),
 }));
 

@@ -4,10 +4,10 @@
 
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ambilPencarianPopuler } from '../../../api/apiPublik';
-import KotakCariPublik from '../../../components/formulir/KotakCariPublik';
-import KuisKata from '../../../components/gim/KuisKata';
-import { buatPathDetailKamus } from '../../../utils/paramUtils';
+import { ambilPencarianPopuler } from '../../api/apiPublik';
+import KotakCariPublik from '../../components/formulir/KotakCariPublik';
+import KuisKata from '../../components/gim/KuisKata';
+import { buatPathDetailKamus } from '../../utils/paramUtils';
 
 const daftarDomain = [
   { key: 'kamus', buildPath: (kata) => buatPathDetailKamus(kata) },

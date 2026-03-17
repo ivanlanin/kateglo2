@@ -1,4 +1,4 @@
-export * from './inti';
+export { default as Beranda } from './Beranda';
 export * from './kamus';
 export * from './glosarium';
 export * from './alat';

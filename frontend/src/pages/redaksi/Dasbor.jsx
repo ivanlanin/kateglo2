@@ -3,10 +3,10 @@
  */
 
 import { Link } from 'react-router-dom';
-import { useStatistikAdmin } from '../../../api/apiAdmin';
-import { useAuth } from '../../../context/authContext';
-import HalamanAdmin from '../../../components/tampilan/HalamanAdmin';
-import { filterKelompokMenuRedaksi } from '../../../constants/menuRedaksi';
+import { useStatistikAdmin } from '../../api/apiAdmin';
+import { useAuth } from '../../context/authContext';
+import HalamanAdmin from '../../components/tampilan/HalamanAdmin';
+import { filterKelompokMenuRedaksi } from '../../constants/menuRedaksi';
 
 function KartuMenuRedaksi({ item, jumlah, bisaLihatStatistik, isLoading }) {
   const statistik = item.statistik;
@@ -29,7 +29,7 @@ function KartuMenuRedaksi({ item, jumlah, bisaLihatStatistik, isLoading }) {
   );
 }
 
-function DasborAdmin() {
+function Dasbor() {
   const { punyaIzin, user } = useAuth();
   const izinPengguna = Array.isArray(user?.izin) ? user.izin : [];
   const hasIzin = (izin) => {
@@ -66,4 +66,4 @@ function DasborAdmin() {
   );
 }
 
-export default DasborAdmin;
+export default Dasbor;

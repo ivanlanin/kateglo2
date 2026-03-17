@@ -16,9 +16,12 @@ vi.mock('../src/context/authContext', () => ({
 vi.mock('../src/components/tampilan/TataLetakPublik', () => ({
   default: () => <div data-testid="layout">Layout <Outlet /></div>,
 }));
-vi.mock('../src/pages/publik/inti', () => ({
-  Beranda: () => <div>Hal Beranda</div>,
+vi.mock('../src/pages/publik/Beranda', () => ({
+  default: () => <div>Hal Beranda</div>,
+}));
+vi.mock('../src/pages/auth', () => ({
   AuthCallback: () => <div>Auth Callback</div>,
+  LoginAdmin: () => <div>Login Redaksi</div>,
 }));
 vi.mock('../src/pages/publik/kamus', () => ({
   Kamus: () => <div>Hal Kamus</div>,
@@ -49,8 +52,7 @@ vi.mock('../src/pages/publik/informasi', () => ({
   KebijakanPrivasi: () => <div>Kebijakan Privasi</div>,
   Sumber: () => <div>Hal Sumber</div>,
 }));
-vi.mock('../src/pages/redaksi/inti/LoginAdmin', () => ({ default: () => <div>Login Redaksi</div> }));
-vi.mock('../src/pages/redaksi/inti/DasborAdmin', () => ({ default: () => <div>Dasbor Redaksi</div> }));
+vi.mock('../src/pages/redaksi/Dasbor', () => ({ default: () => <div>Dasbor Redaksi</div> }));
 vi.mock('../src/pages/redaksi/leksikon/KamusAdmin', () => ({ default: () => <div>Kamus Redaksi</div> }));
 vi.mock('../src/pages/redaksi/interaksi/KomentarAdmin', () => ({ default: () => <div>Komentar Redaksi</div> }));
 vi.mock('../src/pages/redaksi/leksikon/TesaurusAdmin', () => ({ default: () => <div>Tesaurus Redaksi</div> }));

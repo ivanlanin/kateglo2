@@ -1,2 +1,2 @@
 export { default as AuthCallback } from './AuthCallback';
-export { default as Beranda } from './Beranda';
+export { default as LoginAdmin } from './LoginAdmin';

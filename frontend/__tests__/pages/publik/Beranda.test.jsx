@@ -1,17 +1,17 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Beranda from '../../../../src/pages/publik/inti/Beranda';
+import Beranda from '../../../src/pages/publik/Beranda';
 
 const mockAmbilPencarianPopuler = vi.fn();
 
 const mockNavigate = vi.fn();
 
-vi.mock('../../../../src/api/apiPublik', () => ({
+vi.mock('../../../src/api/apiPublik', () => ({
   autocomplete: vi.fn().mockResolvedValue([]),
   ambilPencarianPopuler: (...args) => mockAmbilPencarianPopuler(...args),
 }));
 
-vi.mock('../../../../src/context/authContext', () => ({
+vi.mock('../../../src/context/authContext', () => ({
   useAuth: () => ({
     isLoading: false,
     isAuthenticated: false,
@@ -19,12 +19,12 @@ vi.mock('../../../../src/context/authContext', () => ({
   }),
 }));
 
-vi.mock('../../../../src/api/apiAuth', () => ({
+vi.mock('../../../src/api/apiAuth', () => ({
   buatUrlLoginGoogle: vi.fn(() => 'http://localhost:3000/auth/google'),
   simpanReturnTo: vi.fn(),
 }));
 
-vi.mock('../../../../src/components/gim/KuisKata', () => ({
+vi.mock('../../../src/components/gim/KuisKata', () => ({
   default: () => null,
 }));
 

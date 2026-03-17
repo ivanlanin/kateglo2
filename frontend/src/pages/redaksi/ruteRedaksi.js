@@ -1,4 +1,4 @@
-import { DasborAdmin } from './inti';
+import Dasbor from './Dasbor';
 import { AuditMaknaAdmin, AuditTagarAdmin } from './audit';
 import { IzinAdmin, PenggunaAdmin, PeranAdmin } from './akses';
 import { KuisKataAdmin, SusunKataBebasAdmin, SusunKataHarianAdmin } from './gim';
@@ -8,7 +8,7 @@ import { KomentarAdmin, PencarianAdmin, PencarianHitamAdmin } from './interaksi'
 import { BahasaAdmin, BidangAdmin, LabelAdmin, SumberAdmin, TagarAdmin } from './master';
 
 export const ruteHalamanRedaksi = [
-  { path: '/redaksi', Component: DasborAdmin },
+  { path: '/redaksi', Component: Dasbor },
   { path: '/redaksi/kamus', Component: KamusAdmin },
   { path: '/redaksi/kamus/:id', Component: KamusAdmin },
   { path: '/redaksi/komentar', Component: KomentarAdmin },
