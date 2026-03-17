@@ -5,10 +5,10 @@
 const fs = require('node:fs');
 const path = require('node:path');
 
-const ModelLabel = require('../models/master/modelLabel');
-const ModelGlosarium = require('../models/leksikon/modelGlosarium');
+const ModelLabel = require('../../models/master/modelLabel');
+const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
 
-const rootDir = path.resolve(__dirname, '..', '..');
+const rootDir = path.resolve(__dirname, '..', '..', '..');
 const ejaanDocsDir = path.join(rootDir, 'frontend', 'public', 'ejaan');
 
 const KATEGORI_SLUG_NAMA = new Set(['kelas_kata', 'kelas-kata', 'kelas', 'ragam', 'bahasa', 'bidang']);

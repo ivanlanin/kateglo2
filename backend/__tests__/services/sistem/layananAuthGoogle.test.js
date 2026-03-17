@@ -1,6 +1,6 @@
 /**
  * @fileoverview Test layanan autentikasi Google OAuth
- * @tested_in backend/services/layananAuthGoogle.js
+ * @tested_in backend/services/sistem/layananAuthGoogle.js
  */
 
 jest.mock('jsonwebtoken', () => ({
@@ -9,12 +9,12 @@ jest.mock('jsonwebtoken', () => ({
 
 function loadServiceWithJwt() {
   jest.resetModules();
-  const service = require('../../services/layananAuthGoogle');
+  const service = require('../../../services/sistem/layananAuthGoogle');
   const jwt = require('jsonwebtoken');
   return { service, jwt };
 }
 
-describe('services/layananAuthGoogle', () => {
+describe('services/sistem/layananAuthGoogle', () => {
   const originalEnv = process.env;
 
   beforeEach(() => {

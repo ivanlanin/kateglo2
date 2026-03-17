@@ -10,14 +10,14 @@ jest.mock('../../../../models/interaksi/modelPencarian', () => ({
   ambilFrasaPopulerPerDomain: jest.fn(),
 }));
 
-jest.mock('../../../../services/layananCache', () => ({
+jest.mock('../../../../services/sistem/layananCache', () => ({
   getJson: jest.fn(),
   setJson: jest.fn(),
 }));
 
 const router = require('../../../../routes/publik/interaksi/pencarian');
 const ModelPencarian = require('../../../../models/interaksi/modelPencarian');
-const cacheService = require('../../../../services/layananCache');
+const cacheService = require('../../../../services/sistem/layananCache');
 
 function createApp() {
   const app = express();

@@ -3,7 +3,7 @@
  */
 
 const express = require('express');
-const { cariTesaurus, ambilDetailTesaurus } = require('../../../services/layananTesaurusPublik');
+const { cariTesaurus, ambilDetailTesaurus } = require('../../../services/publik/layananTesaurusPublik');
 const ModelTesaurus = require('../../../models/leksikon/modelTesaurus');
 const ModelPencarian = require('../../../models/interaksi/modelPencarian');
 const { publicSearchLimiter } = require('../../../middleware/rateLimiter');

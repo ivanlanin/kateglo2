@@ -2,7 +2,7 @@
  * @fileoverview Layanan tesaurus publik — business logic untuk pencarian tesaurus
  */
 
-const ModelTesaurus = require('../models/leksikon/modelTesaurus');
+const ModelTesaurus = require('../../models/leksikon/modelTesaurus');
 
 function parseRelasi(teks) {
   if (!teks) return [];

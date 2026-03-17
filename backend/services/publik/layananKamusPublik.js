@@ -2,12 +2,12 @@
  * @fileoverview Layanan kamus publik — business logic untuk pencarian dan detail kamus
  */
 
-const ModelEntri = require('../models/leksikon/modelEntri');
-const ModelTesaurus = require('../models/leksikon/modelTesaurus');
-const ModelGlosarium = require('../models/leksikon/modelGlosarium');
-const ModelEtimologi = require('../models/leksikon/modelEtimologi');
-const ModelTagar = require('../models/master/modelTagar');
-const { getJson, setJson, delKey, getTtlSeconds } = require('./layananCache');
+const ModelEntri = require('../../models/leksikon/modelEntri');
+const ModelTesaurus = require('../../models/leksikon/modelTesaurus');
+const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
+const ModelEtimologi = require('../../models/leksikon/modelEtimologi');
+const ModelTagar = require('../../models/master/modelTagar');
+const { getJson, setJson, delKey, getTtlSeconds } = require('../sistem/layananCache');
 
 const cachePrefixDetailKamus = 'kamus:detail:';
 

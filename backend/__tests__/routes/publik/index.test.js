@@ -81,12 +81,12 @@ jest.mock('../../../models/akses/modelPengguna', () => ({
   ambilIzin: jest.fn(),
 }));
 
-jest.mock('../../../services/layananKamusPublik', () => ({
+jest.mock('../../../services/publik/layananKamusPublik', () => ({
   cariKamus: jest.fn(),
   ambilDetailKamus: jest.fn(),
 }));
 
-jest.mock('../../../services/layananGlosariumPublik', () => ({
+jest.mock('../../../services/publik/layananGlosariumPublik', () => ({
   cariGlosariumPublik: jest.fn(),
   ambilDaftarBidangPublik: jest.fn(),
   ambilDaftarSumberPublik: jest.fn(),
@@ -95,7 +95,7 @@ jest.mock('../../../services/layananGlosariumPublik', () => ({
   ambilDetailGlosarium: jest.fn(),
 }));
 
-jest.mock('../../../services/layananTesaurusPublik', () => ({
+jest.mock('../../../services/publik/layananTesaurusPublik', () => ({
   cariTesaurus: jest.fn(),
   ambilDetailTesaurus: jest.fn(),
 }));
@@ -108,9 +108,9 @@ const ModelKomentar = require('../../../models/interaksi/modelKomentar');
 const ModelPencarian = require('../../../models/interaksi/modelPencarian');
 const ModelTesaurus = require('../../../models/leksikon/modelTesaurus');
 const ModelPengguna = require('../../../models/akses/modelPengguna');
-const layananKamusPublik = require('../../../services/layananKamusPublik');
-const layananGlosariumPublik = require('../../../services/layananGlosariumPublik');
-const layananTesaurusPublik = require('../../../services/layananTesaurusPublik');
+const layananKamusPublik = require('../../../services/publik/layananKamusPublik');
+const layananGlosariumPublik = require('../../../services/publik/layananGlosariumPublik');
+const layananTesaurusPublik = require('../../../services/publik/layananTesaurusPublik');
 const rootRouter = require('../../../routes');
 
 function createApp() {

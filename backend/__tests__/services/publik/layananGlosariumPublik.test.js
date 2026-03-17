@@ -1,28 +1,28 @@
 /**
  * @fileoverview Test layananGlosariumPublik
- * @tested_in backend/services/layananGlosariumPublik.js
+ * @tested_in backend/services/publik/layananGlosariumPublik.js
  */
 
-jest.mock('../../models/leksikon/modelGlosarium', () => ({
+jest.mock('../../../models/leksikon/modelGlosarium', () => ({
   cariCursor: jest.fn(),
   ambilDaftarBidang: jest.fn(),
   ambilDaftarSumber: jest.fn(),
   ambilDetailAsing: jest.fn(),
 }));
 
-jest.mock('../../models/leksikon/modelEntri', () => ({
+jest.mock('../../../models/leksikon/modelEntri', () => ({
   ambilIndeksValidBatch: jest.fn(),
 }));
 
-jest.mock('../../services/layananCache', () => ({
+jest.mock('../../../services/sistem/layananCache', () => ({
   getJson: jest.fn(),
   setJson: jest.fn(),
   getTtlSeconds: jest.fn(() => 300),
 }));
 
-const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
-const ModelEntri = require('../../models/leksikon/modelEntri');
-const { getJson, setJson, getTtlSeconds } = require('../../services/layananCache');
+const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
+const ModelEntri = require('../../../models/leksikon/modelEntri');
+const { getJson, setJson, getTtlSeconds } = require('../../../services/sistem/layananCache');
 const {
   cariGlosariumPublik,
   ambilDaftarBidangPublik,
@@ -34,7 +34,7 @@ const {
   buatCacheKeyDetailGlosarium,
   buatCacheKeyBrowseGlosarium,
   __private,
-} = require('../../services/layananGlosariumPublik');
+} = require('../../../services/publik/layananGlosariumPublik');
 
 describe('layananGlosariumPublik', () => {
   beforeEach(() => {

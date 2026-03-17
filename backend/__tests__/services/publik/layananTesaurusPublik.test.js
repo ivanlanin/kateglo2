@@ -1,15 +1,15 @@
 /**
  * @fileoverview Test layananTesaurusPublik
- * @tested_in backend/services/layananTesaurusPublik.js
+ * @tested_in backend/services/publik/layananTesaurusPublik.js
  */
 
-jest.mock('../../models/leksikon/modelTesaurus', () => ({
+jest.mock('../../../models/leksikon/modelTesaurus', () => ({
   cariCursor: jest.fn(),
   ambilDetail: jest.fn(),
 }));
 
-const ModelTesaurus = require('../../models/leksikon/modelTesaurus');
-const { cariTesaurus, ambilDetailTesaurus } = require('../../services/layananTesaurusPublik');
+const ModelTesaurus = require('../../../models/leksikon/modelTesaurus');
+const { cariTesaurus, ambilDetailTesaurus } = require('../../../services/publik/layananTesaurusPublik');
 
 describe('layananTesaurusPublik.cariTesaurus', () => {
   beforeEach(() => {

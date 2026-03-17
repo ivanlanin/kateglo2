@@ -145,11 +145,11 @@ jest.mock('../../../models/kadi/modelKandidatEntri', () => ({
   hitungTotal: jest.fn(),
 }));
 
-jest.mock('../../../services/layananKamusPublik', () => ({
+jest.mock('../../../services/publik/layananKamusPublik', () => ({
   hapusCacheDetailKamus: jest.fn(),
 }));
 
-jest.mock('../../../services/layananGlosariumPublik', () => ({
+jest.mock('../../../services/publik/layananGlosariumPublik', () => ({
   invalidasiCacheDetailGlosarium: jest.fn(),
 }));
 
@@ -170,8 +170,8 @@ const ModelPencarianHitam = require('../../../models/interaksi/modelPencarianHit
 const ModelPeran = require('../../../models/akses/modelPeran');
 const ModelIzin = require('../../../models/akses/modelIzin');
 const ModelKandidatEntri = require('../../../models/kadi/modelKandidatEntri');
-const { hapusCacheDetailKamus } = require('../../../services/layananKamusPublik');
-const { invalidasiCacheDetailGlosarium } = require('../../../services/layananGlosariumPublik');
+const { hapusCacheDetailKamus } = require('../../../services/publik/layananKamusPublik');
+const { invalidasiCacheDetailGlosarium } = require('../../../services/publik/layananGlosariumPublik');
 const rootRouter = require('../../../routes');
 
 function createApp() {

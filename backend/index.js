@@ -12,7 +12,7 @@ const routes = require('./routes');
 const cronRoutes = require('./routes/sistem/cron');
 const authRoutes = require('./routes/sistem/authGoogle');
 const seoPublikRoutes = require('./routes/sistem/seoPublik');
-const { pasangFrontendRuntime } = require('./services/layananSsrRuntime');
+const { pasangFrontendRuntime } = require('./services/sistem/layananSsrRuntime');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 const logger = require('./config/logger');
 

@@ -5,7 +5,7 @@
 const express = require('express');
 const { periksaIzin } = require('../../../middleware/authorization');
 const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
-const { invalidasiCacheDetailGlosarium } = require('../../../services/layananGlosariumPublik');
+const { invalidasiCacheDetailGlosarium } = require('../../../services/publik/layananGlosariumPublik');
 const {
   buildPaginatedResult,
   parsePagination,

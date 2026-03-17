@@ -4,7 +4,7 @@
 
 const express = require('express');
 const { authenticate, authenticateOptional } = require('../../../middleware/auth');
-const { cariKamus, ambilDetailKamus } = require('../../../services/layananKamusPublik');
+const { cariKamus, ambilDetailKamus } = require('../../../services/publik/layananKamusPublik');
 const ModelLabel = require('../../../models/master/modelLabel');
 const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
 const ModelTagar = require('../../../models/master/modelTagar');

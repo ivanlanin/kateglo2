@@ -1,6 +1,6 @@
 /**
  * @fileoverview Test layanan cache (Redis + memory fallback)
- * @tested_in backend/services/layananCache.js
+ * @tested_in backend/services/sistem/layananCache.js
  */
 
 function setupModule({
@@ -36,18 +36,18 @@ function setupModule({
 
   const createClient = jest.fn(() => client);
 
-  jest.doMock('../../config/logger', () => mockLogger);
+  jest.doMock('../../../config/logger', () => mockLogger);
   jest.doMock('redis', () => ({ createClient }));
 
   let cache;
   jest.isolateModules(() => {
-    cache = require('../../services/layananCache');
+    cache = require('../../../services/sistem/layananCache');
   });
 
   return { cache, client, createClient, mockLogger };
 }
 
-describe('services/layananCache', () => {
+describe('services/sistem/layananCache', () => {
   afterEach(() => {
     delete process.env.CACHE_ENABLED;
     delete process.env.CACHE_FALLBACK_MEMORY;

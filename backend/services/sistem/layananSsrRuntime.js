@@ -6,11 +6,11 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 const express = require('express');
-const logger = require('../config/logger');
-const { ambilDetailKamus } = require('./layananKamusPublik');
-const { ambilDetailTesaurus } = require('./layananTesaurusPublik');
-const { ambilDetailGlosarium } = require('./layananGlosariumPublik');
-const ModelGlosarium = require('../models/leksikon/modelGlosarium');
+const logger = require('../../config/logger');
+const { ambilDetailKamus } = require('../publik/layananKamusPublik');
+const { ambilDetailTesaurus } = require('../publik/layananTesaurusPublik');
+const { ambilDetailGlosarium } = require('../publik/layananGlosariumPublik');
+const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
 
 const rootDir = path.resolve(__dirname, '..', '..');
 const frontendDistDir = path.join(rootDir, 'frontend', 'dist');

@@ -13,7 +13,7 @@ const {
   buildAppToken,
   buildFrontendCallbackRedirect,
   buildFrontendErrorRedirect,
-} = require('../../services/layananAuthGoogle');
+} = require('../../services/sistem/layananAuthGoogle');
 const ModelPengguna = require('../../models/akses/modelPengguna');
 
 const router = express.Router();

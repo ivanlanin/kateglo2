@@ -12,7 +12,7 @@ const {
   ambilGlosariumPerBidangPublik,
   ambilGlosariumPerSumberPublik,
   ambilDetailGlosarium,
-} = require('../../../services/layananGlosariumPublik');
+} = require('../../../services/publik/layananGlosariumPublik');
 const { publicSearchLimiter } = require('../../../middleware/rateLimiter');
 const { parseCursorPagination } = require('../../../utils/routesPublikUtils');
 

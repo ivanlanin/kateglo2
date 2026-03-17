@@ -6,14 +6,14 @@
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../../services/layananSeoPublik', () => ({
+jest.mock('../../../services/publik/layananSeoPublik', () => ({
   resolveSiteBaseUrl: jest.fn(),
   buildRobotsTxt: jest.fn(),
   buildSitemapXml: jest.fn(),
   generateSitemapPaths: jest.fn(),
 }));
 
-const layananSeoPublik = require('../../../services/layananSeoPublik');
+const layananSeoPublik = require('../../../services/publik/layananSeoPublik');
 const seoPublikRouter = require('../../../routes/sistem/seoPublik');
 
 function createApp() {

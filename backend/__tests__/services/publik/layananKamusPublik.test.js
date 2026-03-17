@@ -1,9 +1,9 @@
 /**
  * @fileoverview Test layananKamusPublik
- * @tested_in backend/services/layananKamusPublik.js
+ * @tested_in backend/services/publik/layananKamusPublik.js
  */
 
-jest.mock('../../models/leksikon/modelEntri', () => {
+jest.mock('../../../models/leksikon/modelEntri', () => {
   const cariEntri = jest.fn();
   const cariEntriCursor = jest.fn();
   const ambilEntriPerIndeks = jest.fn();
@@ -23,42 +23,42 @@ jest.mock('../../models/leksikon/modelEntri', () => {
   };
 });
 
-jest.mock('../../models/leksikon/modelTesaurus', () => ({
+jest.mock('../../../models/leksikon/modelTesaurus', () => ({
   ambilDetail: jest.fn()
 }));
 
-jest.mock('../../models/leksikon/modelGlosarium', () => ({
+jest.mock('../../../models/leksikon/modelGlosarium', () => ({
   cariFrasaMengandungKataUtuh: jest.fn()
 }));
 
-jest.mock('../../models/leksikon/modelEtimologi', () => ({
+jest.mock('../../../models/leksikon/modelEtimologi', () => ({
   ambilAktifPublikByEntriId: jest.fn(),
 }));
 
-jest.mock('../../models/master/modelTagar', () => ({
+jest.mock('../../../models/master/modelTagar', () => ({
   ambilTagarEntri: jest.fn(),
 }));
 
-jest.mock('../../services/layananCache', () => ({
+jest.mock('../../../services/sistem/layananCache', () => ({
   getJson: jest.fn(),
   setJson: jest.fn(),
   delKey: jest.fn(),
   getTtlSeconds: jest.fn(() => 900),
 }));
 
-const ModelEntri = require('../../models/leksikon/modelEntri');
-const ModelTesaurus = require('../../models/leksikon/modelTesaurus');
-const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
-const ModelEtimologi = require('../../models/leksikon/modelEtimologi');
-const ModelTagar = require('../../models/master/modelTagar');
-const { getJson, setJson, delKey } = require('../../services/layananCache');
+const ModelEntri = require('../../../models/leksikon/modelEntri');
+const ModelTesaurus = require('../../../models/leksikon/modelTesaurus');
+const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
+const ModelEtimologi = require('../../../models/leksikon/modelEtimologi');
+const ModelTagar = require('../../../models/master/modelTagar');
+const { getJson, setJson, delKey } = require('../../../services/sistem/layananCache');
 const {
   cariKamus,
   ambilDetailKamus,
   hapusCacheDetailKamus,
   buatCacheKeyDetailKamus,
   __private,
-} = require('../../services/layananKamusPublik');
+} = require('../../../services/publik/layananKamusPublik');
 
 describe('layananKamusPublik.cariKamus', () => {
   beforeEach(() => {

@@ -1,6 +1,6 @@
 /**
  * @fileoverview Test runtime SSR frontend (helper, prefetch, dan runtime fallback)
- * @tested_in backend/services/layananSsrRuntime.js
+ * @tested_in backend/services/sistem/layananSsrRuntime.js
  */
 
 const fs = require('node:fs');
@@ -9,35 +9,35 @@ const { pathToFileURL } = require('node:url');
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../config/logger', () => ({
+jest.mock('../../../config/logger', () => ({
   warn: jest.fn(),
   info: jest.fn(),
   error: jest.fn(),
 }));
 
-jest.mock('../../services/layananKamusPublik', () => ({
+jest.mock('../../../services/publik/layananKamusPublik', () => ({
   ambilDetailKamus: jest.fn(),
 }));
 
-jest.mock('../../services/layananTesaurusPublik', () => ({
+jest.mock('../../../services/publik/layananTesaurusPublik', () => ({
   ambilDetailTesaurus: jest.fn(),
 }));
 
-jest.mock('../../services/layananGlosariumPublik', () => ({
+jest.mock('../../../services/publik/layananGlosariumPublik', () => ({
   ambilDetailGlosarium: jest.fn(),
 }));
 
-jest.mock('../../models/leksikon/modelGlosarium', () => ({
+jest.mock('../../../models/leksikon/modelGlosarium', () => ({
   cari: jest.fn(),
   resolveSlugBidang: jest.fn(),
 }));
 
-const logger = require('../../config/logger');
-const { ambilDetailKamus } = require('../../services/layananKamusPublik');
-const { ambilDetailTesaurus } = require('../../services/layananTesaurusPublik');
-const { ambilDetailGlosarium } = require('../../services/layananGlosariumPublik');
-const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
-const runtime = require('../../services/layananSsrRuntime');
+const logger = require('../../../config/logger');
+const { ambilDetailKamus } = require('../../../services/publik/layananKamusPublik');
+const { ambilDetailTesaurus } = require('../../../services/publik/layananTesaurusPublik');
+const { ambilDetailGlosarium } = require('../../../services/publik/layananGlosariumPublik');
+const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
+const runtime = require('../../../services/sistem/layananSsrRuntime');
 
 const workspaceRoot = path.resolve(__dirname, '..', '..', '..');
 const frontendDistDir = path.join(workspaceRoot, 'frontend', 'dist');
@@ -96,7 +96,7 @@ function createApp(loadSsrRenderer, prefetchSsrData) {
   return app;
 }
 
-describe('services/layananSsrRuntime', () => {
+describe('services/sistem/layananSsrRuntime', () => {
   beforeAll(() => {
     originalTemplateExisted = fs.existsSync(templatePath);
     if (originalTemplateExisted) originalTemplate = fs.readFileSync(templatePath, 'utf8');

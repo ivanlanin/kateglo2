@@ -20,7 +20,7 @@ jest.mock('../../../../models/master/modelTagar', () => ({
   simpanTagarEntri: jest.fn(),
 }));
 
-jest.mock('../../../../services/layananKamusPublik', () => ({
+jest.mock('../../../../services/publik/layananKamusPublik', () => ({
   hapusCacheDetailKamus: jest.fn(),
   ambilDetailKamus: jest.fn(),
 }));

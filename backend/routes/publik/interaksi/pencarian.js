@@ -4,7 +4,7 @@
 
 const express = require('express');
 const ModelPencarian = require('../../../models/interaksi/modelPencarian');
-const cacheService = require('../../../services/layananCache');
+const cacheService = require('../../../services/sistem/layananCache');
 
 const router = express.Router();
 const popularCacheTtlDefault = 300;

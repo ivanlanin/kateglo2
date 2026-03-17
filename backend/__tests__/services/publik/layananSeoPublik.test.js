@@ -1,28 +1,28 @@
 /**
  * @fileoverview Test layananSeoPublik
- * @tested_in backend/services/layananSeoPublik.js
+ * @tested_in backend/services/publik/layananSeoPublik.js
  */
 
 const fs = require('node:fs');
 
-jest.mock('../../models/master/modelLabel', () => ({
+jest.mock('../../../models/master/modelLabel', () => ({
   ambilSemuaKategori: jest.fn(),
 }));
 
-jest.mock('../../models/leksikon/modelGlosarium', () => ({
+jest.mock('../../../models/leksikon/modelGlosarium', () => ({
   ambilDaftarBidang: jest.fn(),
   ambilDaftarSumber: jest.fn(),
 }));
 
-const ModelLabel = require('../../models/master/modelLabel');
-const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
+const ModelLabel = require('../../../models/master/modelLabel');
+const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
 const {
   resolveSiteBaseUrl,
   buildRobotsTxt,
   buildSitemapXml,
   generateSitemapPaths,
   __private,
-} = require('../../services/layananSeoPublik');
+} = require('../../../services/publik/layananSeoPublik');
 
 describe('layananSeoPublik.buildRobotsTxt', () => {
   it('membuat robots.txt dengan sitemap dan blok redaksi/api/auth', () => {

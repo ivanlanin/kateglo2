@@ -10,7 +10,7 @@ jest.mock('../../../config/logger', () => ({
   warn: jest.fn(),
 }));
 
-jest.mock('../../../services/layananAuthGoogle', () => ({
+jest.mock('../../../services/sistem/layananAuthGoogle', () => ({
   buildOAuthState: jest.fn(),
   parseOAuthState: jest.fn(),
   buildGoogleAuthUrl: jest.fn(),
@@ -29,7 +29,7 @@ jest.mock('../../../models/akses/modelPengguna', () => ({
 }));
 
 const logger = require('../../../config/logger');
-const layananAuthGoogle = require('../../../services/layananAuthGoogle');
+const layananAuthGoogle = require('../../../services/sistem/layananAuthGoogle');
 const ModelPengguna = require('../../../models/akses/modelPengguna');
 const authRouter = require('../../../routes/sistem/authGoogle');
 

@@ -3,7 +3,7 @@
  */
 
 const { createClient } = require('redis');
-const logger = require('../config/logger');
+const logger = require('../../config/logger');
 
 const memoryCache = new Map();
 
