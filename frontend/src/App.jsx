@@ -2,9 +2,9 @@ import { Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/authContext';
 import TataLetakPublik from './components/tampilan/TataLetakPublik';
-import { LoginAdmin } from './pages/auth';
+import { AuthCallback, LoginAdmin } from './pages/auth';
 import { ruteHalamanRedaksi } from './pages/redaksi/ruteRedaksi';
-import { AuthCallbackPublik, ruteHalamanPublik } from './pages/publik/rutePublik';
+import { ruteHalamanPublik } from './pages/publik/rutePublik';
 
 function FallbackRoute() {
   return (
@@ -84,7 +84,7 @@ function RuteIzin({ children, izinDibutuhkan = [] }) {
 function App() {
   return (
     <Routes>
-      <Route path="/auth/callback" element={bungkusLazy(<AuthCallbackPublik />)} />
+      <Route path="/auth/callback" element={bungkusLazy(<AuthCallback />)} />
       {/* Redaksi routes — tanpa TataLetak */}
       <Route path="/redaksi/login" element={<LoginAdmin />} />
       {ruteHalamanRedaksi.map(({ path, Component, izinDibutuhkan = [] }) => (

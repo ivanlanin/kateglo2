@@ -6,7 +6,6 @@ function buatLazyNamedExport(loader, exportName) {
   return lazy(() => loader().then((module) => ({ default: module[exportName] })));
 }
 
-const AuthCallbackPublik = buatLazyNamedExport(() => import('../auth'), 'AuthCallback');
 const Kamus = buatLazyNamedExport(() => import('./kamus'), 'Kamus');
 const KamusDetail = buatLazyNamedExport(() => import('./kamus'), 'KamusDetail');
 const Tesaurus = buatLazyNamedExport(() => import('./kamus'), 'Tesaurus');
@@ -55,5 +54,3 @@ export const ruteHalamanPublik = [
   { path: '/kebijakan-privasi', Component: KebijakanPrivasi },
   { path: '/sumber', Component: Sumber },
 ];
-
-export { AuthCallbackPublik };
