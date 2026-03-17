@@ -2,8 +2,8 @@
  * @fileoverview Model untuk etimologi redaksi
  */
 
-const db = require('../db');
-const { parseCount } = require('../utils/modelUtils');
+const db = require('../../db');
+const { parseCount } = require('../../utils/modelUtils');
 
 function normalizeIntegerNullable(value) {
   if (value === null || value === undefined || value === '') return null;
@@ -374,3 +374,4 @@ class ModelEtimologi {
 }
 
 module.exports = ModelEtimologi;
+

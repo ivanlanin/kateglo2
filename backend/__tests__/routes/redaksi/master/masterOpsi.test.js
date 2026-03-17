@@ -5,11 +5,11 @@
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../middleware/otorisasi', () => ({
+jest.mock('../../../middleware/otorisasi', () => ({
   periksaIzin: () => (_req, _res, next) => next(),
 }));
 
-jest.mock('../../models/modelOpsi', () => ({
+jest.mock('../../../models/master/modelOpsi', () => ({
   daftarLookupBahasa: jest.fn(),
   daftarMasterBahasa: jest.fn(),
   ambilMasterBahasaDenganId: jest.fn(),
@@ -27,10 +27,10 @@ jest.mock('../../models/modelOpsi', () => ({
   hapusMasterSumber: jest.fn(),
 }));
 
-const routerBahasa = require('../../routes/redaksi/bahasa');
-const routerBidang = require('../../routes/redaksi/bidang');
-const routerSumber = require('../../routes/redaksi/sumber');
-const ModelOpsi = require('../../models/modelOpsi');
+const routerBahasa = require('../../../routes/redaksi/bahasa');
+const routerBidang = require('../../../routes/redaksi/bidang');
+const routerSumber = require('../../../routes/redaksi/sumber');
+const ModelOpsi = require('../../../models/master/modelOpsi');
 
 function createApp() {
   const app = express();
@@ -575,3 +575,5 @@ describe('routes/redaksi master opsi', () => {
     expect(error.body.message).toBe('hapus sumber gagal');
   });
 });
+
+

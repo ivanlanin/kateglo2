@@ -4,7 +4,7 @@
 
 const express = require('express');
 const { periksaIzin } = require('../../middleware/otorisasi');
-const ModelGlosarium = require('../../models/modelGlosarium');
+const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
 const { invalidasiCacheDetailGlosarium } = require('../../services/layananGlosariumPublik');
 const {
   buildPaginatedResult,

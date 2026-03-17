@@ -8,11 +8,11 @@
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../middleware/otorisasi', () => ({
+jest.mock('../../../middleware/otorisasi', () => ({
   periksaIzin: () => (_req, _res, next) => next(),
 }));
 
-jest.mock('../../models/modelTagar', () => ({
+jest.mock('../../../models/master/modelTagar', () => ({
   ambilDaftarKategori: jest.fn(),
   ambilSemuaTagarRedaksi: jest.fn(),
   daftarAdminCursor: jest.fn(),
@@ -23,19 +23,19 @@ jest.mock('../../models/modelTagar', () => ({
   hitungCakupan: jest.fn(),
 }));
 
-jest.mock('../../models/modelPencarianHitam', () => ({
+jest.mock('../../../models/interaksi/modelPencarianHitam', () => ({
   daftarAdmin: jest.fn(),
   ambilDenganId: jest.fn(),
   simpan: jest.fn(),
   hapus: jest.fn(),
 }));
 
-const routerTagar = require('../../routes/redaksi/tagar');
-const routerAuditTagar = require('../../routes/redaksi/auditTagar');
-const routerPencarianHitam = require('../../routes/redaksi/pencarianHitam');
+const routerTagar = require('../../../routes/redaksi/tagar');
+const routerAuditTagar = require('../../../routes/redaksi/auditTagar');
+const routerPencarianHitam = require('../../../routes/redaksi/pencarianHitam');
 const { __private: pencarianHitamPrivate } = routerPencarianHitam;
-const ModelTagar = require('../../models/modelTagar');
-const ModelPencarianHitam = require('../../models/modelPencarianHitam');
+const ModelTagar = require('../../../models/master/modelTagar');
+const ModelPencarianHitam = require('../../../models/interaksi/modelPencarianHitam');
 
 function createApp() {
   const app = express();
@@ -285,3 +285,5 @@ describe('routes/redaksi/tagar + auditTagar + pencarianHitam', () => {
     expect(delErr.status).toBe(500);
   });
 });
+
+

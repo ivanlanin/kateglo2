@@ -5,17 +5,17 @@
 
 const fs = require('node:fs');
 
-jest.mock('../../models/modelLabel', () => ({
+jest.mock('../../models/master/modelLabel', () => ({
   ambilSemuaKategori: jest.fn(),
 }));
 
-jest.mock('../../models/modelGlosarium', () => ({
+jest.mock('../../models/leksikon/modelGlosarium', () => ({
   ambilDaftarBidang: jest.fn(),
   ambilDaftarSumber: jest.fn(),
 }));
 
-const ModelLabel = require('../../models/modelLabel');
-const ModelGlosarium = require('../../models/modelGlosarium');
+const ModelLabel = require('../../models/master/modelLabel');
+const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
 const {
   resolveSiteBaseUrl,
   buildRobotsTxt,
@@ -263,3 +263,4 @@ describe('layananSeoPublik private helpers', () => {
     existsSpy.mockRestore();
   });
 });
+

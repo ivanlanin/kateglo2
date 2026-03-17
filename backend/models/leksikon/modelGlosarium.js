@@ -2,10 +2,10 @@
  * @fileoverview Model untuk glosarium (istilah teknis bilingual)
  */
 
-const db = require('../db');
-const ModelOpsi = require('./modelOpsi');
-const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
-const { decodeCursor, encodeCursor } = require('../utils/cursorPagination');
+const db = require('../../db');
+const ModelOpsi = require('../master/modelOpsi');
+const { normalizeBoolean, parseCount } = require('../../utils/modelUtils');
+const { decodeCursor, encodeCursor } = require('../../utils/cursorPagination');
 
 function buildSlugSql(column) {
   return `LOWER(TRIM(BOTH '-' FROM REGEXP_REPLACE(TRIM(${column}), '[^a-zA-Z0-9]+', '-', 'g')))`;
@@ -1450,3 +1450,4 @@ module.exports.__private = {
     forcedNormalizedSchemaForTest = null;
   },
 };
+

@@ -4,7 +4,7 @@
 
 const express = require('express');
 const { periksaIzin } = require('../../middleware/otorisasi');
-const ModelOpsi = require('../../models/modelOpsi');
+const ModelOpsi = require('../../models/master/modelOpsi');
 const {
   buildPaginatedResult,
   parsePagination,

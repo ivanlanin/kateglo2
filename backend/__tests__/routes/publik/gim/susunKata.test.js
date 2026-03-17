@@ -1,12 +1,12 @@
 /**
  * @fileoverview Test route gim susun kata
- * @tested_in backend/routes/gim/susunKata.js
+ * @tested_in backend/routes/publik/gim/susunKata.js
  */
 
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../middleware/auth', () => ({
+jest.mock('../../../../middleware/auth', () => ({
   authenticate: (req, _res, next) => {
     const pid = req.headers['x-user-pid'];
     if (pid !== undefined) req.user = { pid };
@@ -19,12 +19,12 @@ jest.mock('../../middleware/auth', () => ({
   },
 }));
 
-jest.mock('../../models/modelEntri', () => ({
+jest.mock('../../../../models/leksikon/modelEntri', () => ({
   ambilArtiSusunKataByIndeks: jest.fn(),
   cekKataSusunKataValid: jest.fn(),
 }));
 
-jest.mock('../../models/modelSusunKata', () => ({
+jest.mock('../../../../models/gim/modelSusunKata', () => ({
   parsePanjang: jest.fn((value, fallback = 5) => {
     const parsed = Number.parseInt(value, 10);
     if (Number.isNaN(parsed)) return fallback;
@@ -52,9 +52,9 @@ jest.mock('../../models/modelSusunKata', () => ({
   ambilKlasemenBebas: jest.fn(),
 }));
 
-const router = require('../../routes/gim/susunKata');
-const ModelEntri = require('../../models/modelEntri');
-const ModelSusunKata = require('../../models/modelSusunKata');
+const router = require('../../../../routes/publik/gim/susunKata');
+const ModelEntri = require('../../../../models/leksikon/modelEntri');
+const ModelSusunKata = require('../../../../models/gim/modelSusunKata');
 const { __private } = router;
 
 function createApp() {
@@ -67,7 +67,7 @@ function createApp() {
   return app;
 }
 
-describe('routes/gim/susunKata', () => {
+describe('routes/publik/gim/susunKata', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
@@ -510,3 +510,5 @@ describe('routes/gim/susunKata', () => {
     expect(response.body.mode).toBe('bebas');
   });
 });
+
+

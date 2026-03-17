@@ -4,21 +4,21 @@
 
 const express = require('express');
 const { periksaIzin } = require('../../middleware/otorisasi');
-const ModelEntri = require('../../models/modelEntri');
-const ModelGlosarium = require('../../models/modelGlosarium');
-const ModelTesaurus = require('../../models/modelTesaurus');
-const ModelEtimologi = require('../../models/modelEtimologi');
-const ModelLabel = require('../../models/modelLabel');
-const ModelPengguna = require('../../models/modelPengguna');
-const ModelKomentar = require('../../models/modelKomentar');
-const ModelSusunKata = require('../../models/modelSusunKata');
-const ModelKuisKata = require('../../models/modelKuisKata');
-const ModelPencarian = require('../../models/modelPencarian');
-const ModelPencarianHitam = require('../../models/modelPencarianHitam');
-const ModelAuditMakna = require('../../models/modelAuditMakna');
-const ModelTagar = require('../../models/modelTagar');
-const ModelPeran = require('../../models/modelPeran');
-const ModelIzin = require('../../models/modelIzin');
+const ModelEntri = require('../../models/leksikon/modelEntri');
+const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
+const ModelTesaurus = require('../../models/leksikon/modelTesaurus');
+const ModelEtimologi = require('../../models/leksikon/modelEtimologi');
+const ModelLabel = require('../../models/master/modelLabel');
+const ModelPengguna = require('../../models/akses/modelPengguna');
+const ModelKomentar = require('../../models/interaksi/modelKomentar');
+const ModelSusunKata = require('../../models/gim/modelSusunKata');
+const ModelKuisKata = require('../../models/gim/modelKuisKata');
+const ModelPencarian = require('../../models/interaksi/modelPencarian');
+const ModelPencarianHitam = require('../../models/interaksi/modelPencarianHitam');
+const ModelAuditMakna = require('../../models/audit/modelAuditMakna');
+const ModelTagar = require('../../models/master/modelTagar');
+const ModelPeran = require('../../models/akses/modelPeran');
+const ModelIzin = require('../../models/akses/modelIzin');
 const ModelKandidatEntri = require('../../models/kadi/modelKandidatEntri');
 const {
   buildPaginatedResult,

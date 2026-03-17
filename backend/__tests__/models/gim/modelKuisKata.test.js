@@ -1,10 +1,10 @@
 /**
  * @fileoverview Test model gim kuis kata
- * @tested_in backend/models/modelKuisKata.js
+ * @tested_in backend/models/gim/modelKuisKata.js
  */
 
-const db = require('../../db');
-const ModelKuisKata = require('../../models/modelKuisKata');
+const db = require('../../../db');
+const ModelKuisKata = require('../../../models/gim/modelKuisKata');
 
 const { __private } = ModelKuisKata;
 
@@ -600,3 +600,5 @@ describe('ModelKuisKata', () => {
     await expect(ModelKuisKata.hitungPesertaHarian()).resolves.toBe(0);
   });
 });
+
+

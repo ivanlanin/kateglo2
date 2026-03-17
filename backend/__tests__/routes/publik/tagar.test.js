@@ -1,18 +1,18 @@
 /**
  * @fileoverview Test route publik tagar
- * @tested_in backend/routes/publik/tagar.js
+ * @tested_in backend/routes/publik/leksikon/tagar.js
  */
 
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../models/modelTagar', () => ({
+jest.mock('../../../models/master/modelTagar', () => ({
   ambilSemuaTagar: jest.fn(),
   cariEntriPerTagar: jest.fn(),
 }));
 
-const router = require('../../routes/publik/tagar');
-const ModelTagar = require('../../models/modelTagar');
+const router = require('../../../routes/publik/leksikon/tagar');
+const ModelTagar = require('../../../models/master/modelTagar');
 
 function createApp() {
   const app = express();
@@ -125,3 +125,5 @@ describe('routes/publik/tagar', () => {
     expect(response.body.message).toBe('detail gagal');
   });
 });
+
+

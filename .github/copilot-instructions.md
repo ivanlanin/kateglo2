@@ -179,7 +179,7 @@ const result = await db.query(
 
 ### Database Schema Reference (MANDATORY)
 - **ALWAYS CHECK SCHEMA FIRST**: Sebelum membuat migration, query, atau mengubah model, WAJIB check `_docs/data/skema.sql`
-- **Generate/Update Schema**: `Set-Location backend; node scripts/db-schema.js`
+- **Generate/Update Schema**: `Set-Location backend; node scripts/sistem/db-schema.js`
 - **Quick Search**: `Select-String -Path "_docs/data/skema.sql" -Pattern "create table phrase"`
 
 ### Core Tables
@@ -402,7 +402,7 @@ Set-Location frontend; npm run lint; npm run test
 2. **Create migration**: Add SQL file to `_docs/YYYYMM/` with format `YYYYMMDDHHMM_nama-migrasi.sql` (HHMM dari waktu pembuatan file)
 3. **Run migration (default wajib)**: Setelah file SQL migration dibuat, **langsung eksekusi SQL tersebut** ke database target (development) pada sesi yang sama, kecuali user secara eksplisit meminta untuk tidak menjalankan.
 4. **Run migration**: Use temp script in `backend/` atau `psql` dengan `DATABASE_URL` dari `backend/.env`
-5. **Regenerate schema**: `Set-Location backend; node scripts/db-schema.js`
+5. **Regenerate schema**: `Set-Location backend; node scripts/sistem/db-schema.js`
 6. **Update models**: Update relevant model files
 
 ### Temporary Scripts & Database Checks
@@ -439,7 +439,7 @@ Set-Location "C:\Kode\Kateglo\kateglo2"
 npm run dev
 
 # Generate database schema
-Set-Location backend; node scripts/db-schema.js
+Set-Location backend; node scripts/sistem/db-schema.js
 
 # Check schema for a table
 Select-String -Path "_docs/data/skema.sql" -Pattern "create table phrase"

@@ -35,6 +35,6 @@ router.use('/susun-kata', require('./susunKata'));
 router.use('/kuis-kata', require('./kuisKata'));
 
 // KADI — Kamus Deskriptif Indonesia
-router.use('/kandidat-kata', require('../kadi/kandidatKata'));
+router.use('/kandidat-kata', require('./kadi/kandidatKata'));
 
 module.exports = router;

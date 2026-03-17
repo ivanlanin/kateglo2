@@ -3,14 +3,14 @@
  * @tested_in backend/services/layananGlosariumPublik.js
  */
 
-jest.mock('../../models/modelGlosarium', () => ({
+jest.mock('../../models/leksikon/modelGlosarium', () => ({
   cariCursor: jest.fn(),
   ambilDaftarBidang: jest.fn(),
   ambilDaftarSumber: jest.fn(),
   ambilDetailAsing: jest.fn(),
 }));
 
-jest.mock('../../models/modelEntri', () => ({
+jest.mock('../../models/leksikon/modelEntri', () => ({
   ambilIndeksValidBatch: jest.fn(),
 }));
 
@@ -20,8 +20,8 @@ jest.mock('../../services/layananCache', () => ({
   getTtlSeconds: jest.fn(() => 300),
 }));
 
-const ModelGlosarium = require('../../models/modelGlosarium');
-const ModelEntri = require('../../models/modelEntri');
+const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
+const ModelEntri = require('../../models/leksikon/modelEntri');
 const { getJson, setJson, getTtlSeconds } = require('../../services/layananCache');
 const {
   cariGlosariumPublik,
@@ -446,3 +446,4 @@ describe('layananGlosariumPublik', () => {
     nowSpy.mockRestore();
   });
 });
+

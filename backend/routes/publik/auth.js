@@ -4,7 +4,7 @@
 
 const express = require('express');
 const { authenticate } = require('../../middleware/auth');
-const ModelPengguna = require('../../models/modelPengguna');
+const ModelPengguna = require('../../models/akses/modelPengguna');
 
 const router = express.Router();
 

@@ -3,12 +3,12 @@
  * @tested_in backend/jobs/jobSusunKataHarian.js
  */
 
-jest.mock('../../models/modelSusunKata', () => ({
+jest.mock('../../models/gim/modelSusunKata', () => ({
   ambilTanggalHariIniJakarta: jest.fn(),
   buatHarianRentang: jest.fn(),
 }));
 
-const ModelSusunKata = require('../../models/modelSusunKata');
+const ModelSusunKata = require('../../models/gim/modelSusunKata');
 const { jalankanPrefillSusunKataHarian, parseTanggal, parseTotalHari } = require('../../jobs/jobSusunKataHarian');
 
 describe('jobs/jobSusunKataHarian', () => {

@@ -1,19 +1,19 @@
 /**
  * @fileoverview Test route redaksi kandidat kata KADI
- * @tested_in backend/routes/kadi/kandidatKata.js
+ * @tested_in backend/routes/redaksi/kadi/kandidatKata.js
  */
 
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../middleware/otorisasi', () => ({
+jest.mock('../../../../middleware/otorisasi', () => ({
   periksaIzin: () => (req, _res, next) => {
     req.user = { id: 99 };
     next();
   },
 }));
 
-jest.mock('../../models/kadi/modelKandidatEntri', () => ({
+jest.mock('../../../../models/kadi/modelKandidatEntri', () => ({
   statistikAntrian: jest.fn(),
   daftarAdmin: jest.fn(),
   ambilDenganId: jest.fn(),
@@ -25,8 +25,8 @@ jest.mock('../../models/kadi/modelKandidatEntri', () => ({
   daftarRiwayat: jest.fn(),
 }));
 
-const router = require('../../routes/kadi/kandidatKata');
-const ModelKandidatEntri = require('../../models/kadi/modelKandidatEntri');
+const router = require('../../../../routes/redaksi/kadi/kandidatKata');
+const ModelKandidatEntri = require('../../../../models/kadi/modelKandidatEntri');
 
 function createApp() {
   const app = express();
@@ -38,7 +38,7 @@ function createApp() {
   return app;
 }
 
-describe('routes/kadi/kandidatKata', () => {
+describe('routes/redaksi/kadi/kandidatKata', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     ModelKandidatEntri.statistikAntrian.mockResolvedValue([{ status: 'menunggu', jumlah: 2 }]);
@@ -225,3 +225,4 @@ describe('routes/kadi/kandidatKata', () => {
     expect(resAtestasi.status).toHaveBeenCalledWith(400);
   });
 });
+

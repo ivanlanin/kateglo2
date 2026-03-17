@@ -3,10 +3,10 @@
  */
 
 const express = require('express');
-const ModelEntri = require('../../models/modelEntri');
-const ModelPencarian = require('../../models/modelPencarian');
-const { publicSearchLimiter } = require('../../middleware/rateLimiter');
-const { parseCursorPagination } = require('../../utils/routesPublikUtils');
+const ModelEntri = require('../../../models/leksikon/modelEntri');
+const ModelPencarian = require('../../../models/interaksi/modelPencarian');
+const { publicSearchLimiter } = require('../../../middleware/rateLimiter');
+const { parseCursorPagination } = require('../../../utils/routesPublikUtils');
 
 const router = express.Router();
 const domainMakna = 4;

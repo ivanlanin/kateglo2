@@ -21,23 +21,23 @@
  * Skrip HANYA membaca database; tidak mengubah data apapun.
  *
  * Penggunaan:
- *   node scripts/deteksi-sisipan-dwipurwa.js              # ringkasan ke konsol
- *   node scripts/deteksi-sisipan-dwipurwa.js --verbose    # tampilkan semua kandidat
- *   node scripts/deteksi-sisipan-dwipurwa.js --csv        # simpan CSV ke _docs/
- *   node scripts/deteksi-sisipan-dwipurwa.js --dasar-only # hanya basis berjenis 'dasar'
+ *   node scripts/analisis/deteksi-sisipan-dwipurwa.js              # ringkasan ke konsol
+ *   node scripts/analisis/deteksi-sisipan-dwipurwa.js --verbose    # tampilkan semua kandidat
+ *   node scripts/analisis/deteksi-sisipan-dwipurwa.js --csv        # simpan CSV ke _docs/
+ *   node scripts/analisis/deteksi-sisipan-dwipurwa.js --dasar-only # hanya basis berjenis 'dasar'
  *
  * @example
  *   # Preview cepat (ringkasan per pola)
- *   cd backend && node scripts/deteksi-sisipan-dwipurwa.js
+ *   cd backend && node scripts/analisis/deteksi-sisipan-dwipurwa.js
  *
  *   # Detail + simpan CSV
- *   cd backend && node scripts/deteksi-sisipan-dwipurwa.js --verbose --csv
+ *   cd backend && node scripts/analisis/deteksi-sisipan-dwipurwa.js --verbose --csv
  */
 
 'use strict';
 
-require('dotenv').config({ path: '.env' });
-const db = require('../db');
+require('dotenv').config({ path: require('path').resolve(__dirname, '..', '..', '.env') });
+const db = require('../../db');
 const fs = require('fs');
 const path = require('path');
 

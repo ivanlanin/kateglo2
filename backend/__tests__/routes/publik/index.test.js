@@ -7,7 +7,7 @@ const express = require('express');
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 
-jest.mock('../../models/modelGlosarium', () => ({
+jest.mock('../../../models/leksikon/modelGlosarium', () => ({
   autocomplete: jest.fn(),
   cari: jest.fn(),
   cariCursor: jest.fn(),
@@ -19,13 +19,13 @@ jest.mock('../../models/modelGlosarium', () => ({
   resolveSlugSumber: jest.fn(),
 }));
 
-jest.mock('../../models/modelLabel', () => ({
+jest.mock('../../../models/master/modelLabel', () => ({
   ambilSemuaKategori: jest.fn(),
   cariEntriPerLabel: jest.fn(),
   cariEntriPerLabelCursor: jest.fn(),
 }));
 
-jest.mock('../../models/modelEntri', () => {
+jest.mock('../../../models/leksikon/modelEntri', () => {
   const saranEntri = jest.fn();
   return {
     autocomplete: jest.fn(),
@@ -40,7 +40,7 @@ jest.mock('../../models/modelEntri', () => {
   };
 });
 
-jest.mock('../../models/modelSusunKata', () => ({
+jest.mock('../../../models/gim/modelSusunKata', () => ({
   parsePanjang: jest.fn((value) => {
     const parsed = Number.parseInt(value, 10);
     if (Number.isNaN(parsed)) return 5;
@@ -58,35 +58,35 @@ jest.mock('../../models/modelSusunKata', () => ({
   ambilKlasemenHarian: jest.fn(),
 }));
 
-jest.mock('../../models/modelKomentar', () => ({
+jest.mock('../../../models/interaksi/modelKomentar', () => ({
   hitungKomentarAktif: jest.fn(),
   ambilKomentarTerbaca: jest.fn(),
   upsertKomentarPengguna: jest.fn(),
 }));
 
-jest.mock('../../models/modelPencarian', () => ({
+jest.mock('../../../models/interaksi/modelPencarian', () => ({
   catatPencarian: jest.fn(),
   ambilKataTerpopuler: jest.fn(),
   ambilFrasaPopulerPerDomain: jest.fn(),
 }));
 
-jest.mock('../../models/modelTesaurus', () => ({
+jest.mock('../../../models/leksikon/modelTesaurus', () => ({
   contohAcak: jest.fn(),
   autocomplete: jest.fn(),
 }));
 
-jest.mock('../../models/modelPengguna', () => ({
+jest.mock('../../../models/akses/modelPengguna', () => ({
   ambilDenganId: jest.fn(),
   ambilPeranUntukAuth: jest.fn(),
   ambilIzin: jest.fn(),
 }));
 
-jest.mock('../../services/layananKamusPublik', () => ({
+jest.mock('../../../services/layananKamusPublik', () => ({
   cariKamus: jest.fn(),
   ambilDetailKamus: jest.fn(),
 }));
 
-jest.mock('../../services/layananGlosariumPublik', () => ({
+jest.mock('../../../services/layananGlosariumPublik', () => ({
   cariGlosariumPublik: jest.fn(),
   ambilDaftarBidangPublik: jest.fn(),
   ambilDaftarSumberPublik: jest.fn(),
@@ -95,23 +95,23 @@ jest.mock('../../services/layananGlosariumPublik', () => ({
   ambilDetailGlosarium: jest.fn(),
 }));
 
-jest.mock('../../services/layananTesaurusPublik', () => ({
+jest.mock('../../../services/layananTesaurusPublik', () => ({
   cariTesaurus: jest.fn(),
   ambilDetailTesaurus: jest.fn(),
 }));
 
-const ModelGlosarium = require('../../models/modelGlosarium');
-const ModelLabel = require('../../models/modelLabel');
-const ModelEntri = require('../../models/modelEntri');
-const ModelSusunKata = require('../../models/modelSusunKata');
-const ModelKomentar = require('../../models/modelKomentar');
-const ModelPencarian = require('../../models/modelPencarian');
-const ModelTesaurus = require('../../models/modelTesaurus');
-const ModelPengguna = require('../../models/modelPengguna');
-const layananKamusPublik = require('../../services/layananKamusPublik');
-const layananGlosariumPublik = require('../../services/layananGlosariumPublik');
-const layananTesaurusPublik = require('../../services/layananTesaurusPublik');
-const rootRouter = require('../../routes');
+const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
+const ModelLabel = require('../../../models/master/modelLabel');
+const ModelEntri = require('../../../models/leksikon/modelEntri');
+const ModelSusunKata = require('../../../models/gim/modelSusunKata');
+const ModelKomentar = require('../../../models/interaksi/modelKomentar');
+const ModelPencarian = require('../../../models/interaksi/modelPencarian');
+const ModelTesaurus = require('../../../models/leksikon/modelTesaurus');
+const ModelPengguna = require('../../../models/akses/modelPengguna');
+const layananKamusPublik = require('../../../services/layananKamusPublik');
+const layananGlosariumPublik = require('../../../services/layananGlosariumPublik');
+const layananTesaurusPublik = require('../../../services/layananTesaurusPublik');
+const rootRouter = require('../../../routes');
 
 function createApp() {
   const app = express();
@@ -928,7 +928,7 @@ describe('routes backend', () => {
   });
 
   it('handler detail glosarium memakai fallback param kosong saat req.params.asing undefined', async () => {
-    const glosariumRouter = require('../../routes/publik/glosarium');
+    const glosariumRouter = require('../../../routes/publik/leksikon/glosarium');
     const layer = glosariumRouter.stack.find((item) => item.route && item.route.path === '/detail/:asing');
     const handler = layer.route.stack[1].handle;
 
@@ -1568,4 +1568,6 @@ describe('routes backend', () => {
     delete process.env.JWT_SECRET;
   });
 });
+
+
 

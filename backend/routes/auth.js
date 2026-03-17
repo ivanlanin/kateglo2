@@ -14,7 +14,7 @@ const {
   buildFrontendCallbackRedirect,
   buildFrontendErrorRedirect,
 } = require('../services/layananAuthGoogle');
-const ModelPengguna = require('../models/modelPengguna');
+const ModelPengguna = require('../models/akses/modelPengguna');
 
 const router = express.Router();
 

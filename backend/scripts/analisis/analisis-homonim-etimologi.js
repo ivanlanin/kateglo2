@@ -7,16 +7,16 @@
  *    paling cocok dengan sumber_definisi / arti_asal di etimologi
  *
  * Mode:
- *   node scripts/analisis-homonim-etimologi.js           -- ringkasan
- *   node scripts/analisis-homonim-etimologi.js --orphan  -- detail orphan + kandidat
- *   node scripts/analisis-homonim-etimologi.js --homonim -- detail mismatch + kandidat
- *   node scripts/analisis-homonim-etimologi.js --csv     -- simpan hasil ke CSV
+ *   node scripts/analisis/analisis-homonim-etimologi.js           -- ringkasan
+ *   node scripts/analisis/analisis-homonim-etimologi.js --orphan  -- detail orphan + kandidat
+ *   node scripts/analisis/analisis-homonim-etimologi.js --homonim -- detail mismatch + kandidat
+ *   node scripts/analisis/analisis-homonim-etimologi.js --csv     -- simpan hasil ke CSV
  */
 
-require('dotenv').config({ path: '.env' });
+require('dotenv').config({ path: require('path').resolve(__dirname, '..', '..', '.env') });
 const fs = require('fs');
 const path = require('path');
-const db = require('../db');
+const db = require('../../db');
 
 const args = process.argv.slice(2);
 const modeOrphan  = args.includes('--orphan');

@@ -1,10 +1,10 @@
 /**
  * @fileoverview Test ModelPengguna
- * @tested_in backend/models/modelPengguna.js
+ * @tested_in backend/models/akses/modelPengguna.js
  */
 
-const db = require('../../db');
-const ModelPengguna = require('../../models/modelPengguna');
+const db = require('../../../db');
+const ModelPengguna = require('../../../models/akses/modelPengguna');
 
 describe('ModelPengguna', () => {
   beforeEach(() => {
@@ -333,3 +333,6 @@ describe('ModelPengguna', () => {
     expect(result.peran_id).toBe(1);
   });
 });
+
+
+

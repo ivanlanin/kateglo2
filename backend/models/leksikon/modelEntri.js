@@ -3,10 +3,10 @@
  * Menggunakan tabel baru: entri, makna, contoh, label
  */
 
-const db = require('../db');
-const autocomplete = require('../db/autocomplete');
-const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
-const { decodeCursor, encodeCursor } = require('../utils/cursorPagination');
+const db = require('../../db');
+const autocomplete = require('../../db/autocomplete');
+const { normalizeBoolean, parseCount } = require('../../utils/modelUtils');
+const { decodeCursor, encodeCursor } = require('../../utils/cursorPagination');
 
 function normalisasiIndeks(entri = '') {
   const tanpaNomor = entri.replace(/\s*\([0-9]+\)\s*$/, '');
@@ -1365,3 +1365,4 @@ module.exports.__private = {
   normalisasiRagamVarian,
   normalizeBoolean,
 };
+

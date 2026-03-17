@@ -27,7 +27,7 @@ jest.mock('../../services/layananGlosariumPublik', () => ({
   ambilDetailGlosarium: jest.fn(),
 }));
 
-jest.mock('../../models/modelGlosarium', () => ({
+jest.mock('../../models/leksikon/modelGlosarium', () => ({
   cari: jest.fn(),
   resolveSlugBidang: jest.fn(),
 }));
@@ -36,7 +36,7 @@ const logger = require('../../config/logger');
 const { ambilDetailKamus } = require('../../services/layananKamusPublik');
 const { ambilDetailTesaurus } = require('../../services/layananTesaurusPublik');
 const { ambilDetailGlosarium } = require('../../services/layananGlosariumPublik');
-const ModelGlosarium = require('../../models/modelGlosarium');
+const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
 const runtime = require('../../services/layananSsrRuntime');
 
 const workspaceRoot = path.resolve(__dirname, '..', '..', '..');
@@ -484,3 +484,4 @@ describe('services/layananSsrRuntime', () => {
     expect(response.text).toContain('TemplateTitle');
   });
 });
+

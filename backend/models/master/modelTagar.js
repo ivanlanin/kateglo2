@@ -2,9 +2,9 @@
  * @fileoverview Model untuk tabel tagar dan entri_tagar (tagar morfologis entri kamus)
  */
 
-const db = require('../db');
-const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
-const { decodeCursor, encodeCursor } = require('../utils/cursorPagination');
+const db = require('../../db');
+const { normalizeBoolean, parseCount } = require('../../utils/modelUtils');
+const { decodeCursor, encodeCursor } = require('../../utils/cursorPagination');
 
 function buildAdminWhereClause(filters) {
   const q = filters?.q || '';
@@ -554,3 +554,4 @@ class ModelTagar {
 }
 
 module.exports = ModelTagar;
+

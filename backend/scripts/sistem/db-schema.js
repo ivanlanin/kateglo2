@@ -1,4 +1,4 @@
-// backend/scripts/db-schema.js
+// backend/scripts/sistem/db-schema.js
 
 /**
  * Database Schema Extractor untuk Kateglo PostgreSQL
@@ -10,10 +10,10 @@
  * USAGE:
  * ```bash
  * # Export schema ke file (default: _docs/data/skema.sql)
- * node backend/scripts/db-schema.js
+ * node backend/scripts/sistem/db-schema.js
  *
  * # Export dengan custom output
- * DB_OUTPUT_FILE=../_docs/schema_backup.sql node backend/scripts/db-schema.js
+ * DB_OUTPUT_FILE=../_docs/schema_backup.sql node backend/scripts/sistem/db-schema.js
  * ```
  *
  * ENVIRONMENT VARIABLES:
@@ -32,7 +32,7 @@
 // Suppress dotenv output untuk clean schema generation
 const originalConsoleLog = console.log;
 console.log = () => {};
-require('dotenv').config({ path: require('path').resolve(__dirname, '..', '.env') });
+require('dotenv').config({ path: require('path').resolve(__dirname, '..', '..', '.env') });
 console.log = originalConsoleLog;
 
 const { Pool } = require('pg');

@@ -7,7 +7,7 @@ const express = require('express');
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 
-jest.mock('../../models/modelPengguna', () => ({
+jest.mock('../../../models/akses/modelPengguna', () => ({
   daftarPengguna: jest.fn(),
   ambilDenganId: jest.fn(),
   ubahPeran: jest.fn(),
@@ -16,7 +16,7 @@ jest.mock('../../models/modelPengguna', () => ({
   hitungTotal: jest.fn(),
 }));
 
-jest.mock('../../models/modelEntri', () => ({
+jest.mock('../../../models/leksikon/modelEntri', () => ({
   daftarAdmin: jest.fn(),
   cariIndukAdmin: jest.fn(),
   ambilDenganId: jest.fn(),
@@ -31,7 +31,7 @@ jest.mock('../../models/modelEntri', () => ({
   hitungTotal: jest.fn(),
 }));
 
-jest.mock('../../models/modelTesaurus', () => ({
+jest.mock('../../../models/leksikon/modelTesaurus', () => ({
   daftarAdmin: jest.fn(),
   daftarAdminCursor: jest.fn(),
   ambilDenganId: jest.fn(),
@@ -40,7 +40,7 @@ jest.mock('../../models/modelTesaurus', () => ({
   hitungTotal: jest.fn(),
 }));
 
-jest.mock('../../models/modelEtimologi', () => ({
+jest.mock('../../../models/leksikon/modelEtimologi', () => ({
   daftarAdmin: jest.fn(),
   ambilDenganId: jest.fn(),
   simpan: jest.fn(),
@@ -48,7 +48,7 @@ jest.mock('../../models/modelEtimologi', () => ({
   hitungTotal: jest.fn(),
 }));
 
-jest.mock('../../models/modelGlosarium', () => ({
+jest.mock('../../../models/leksikon/modelGlosarium', () => ({
   cari: jest.fn(),
   ambilDenganId: jest.fn(),
   simpan: jest.fn(),
@@ -59,7 +59,7 @@ jest.mock('../../models/modelGlosarium', () => ({
   hitungTotal: jest.fn(),
 }));
 
-jest.mock('../../models/modelOpsi', () => ({
+jest.mock('../../../models/master/modelOpsi', () => ({
   daftarLookupBidang: jest.fn(),
   daftarLookupBahasa: jest.fn(),
   daftarLookupSumber: jest.fn(),
@@ -77,7 +77,7 @@ jest.mock('../../models/modelOpsi', () => ({
   hapusMasterSumber: jest.fn(),
 }));
 
-jest.mock('../../models/modelLabel', () => ({
+jest.mock('../../../models/master/modelLabel', () => ({
   daftarAdmin: jest.fn(),
   daftarAdminCursor: jest.fn(),
   ambilKategoriUntukRedaksi: jest.fn(),
@@ -87,37 +87,37 @@ jest.mock('../../models/modelLabel', () => ({
   hitungTotal: jest.fn(),
 }));
 
-jest.mock('../../models/modelKomentar', () => ({
+jest.mock('../../../models/interaksi/modelKomentar', () => ({
   daftarAdmin: jest.fn(),
   ambilDenganId: jest.fn(),
   simpanAdmin: jest.fn(),
   hitungTotal: jest.fn(),
 }));
 
-jest.mock('../../models/modelPencarian', () => ({
+jest.mock('../../../models/interaksi/modelPencarian', () => ({
   ambilStatistikRedaksi: jest.fn(),
   hitungTotalKataHarian: jest.fn(),
 }));
 
-jest.mock('../../models/modelSusunKata', () => ({
+jest.mock('../../../models/gim/modelSusunKata', () => ({
   hitungPesertaHarian: jest.fn(),
   hitungPesertaBebasHarian: jest.fn(),
 }));
 
-jest.mock('../../models/modelKuisKata', () => ({
+jest.mock('../../../models/gim/modelKuisKata', () => ({
   hitungPesertaHarian: jest.fn(),
 }));
 
-jest.mock('../../models/modelAuditMakna', () => ({
+jest.mock('../../../models/audit/modelAuditMakna', () => ({
   hitungTotal: jest.fn(),
 }));
 
-jest.mock('../../models/modelTagar', () => ({
+jest.mock('../../../models/master/modelTagar', () => ({
   hitungTotalBelumBertagar: jest.fn(),
   hitungTotal: jest.fn(),
 }));
 
-jest.mock('../../models/modelPencarianHitam', () => ({
+jest.mock('../../../models/interaksi/modelPencarianHitam', () => ({
   hitungTotal: jest.fn(),
   daftarAdmin: jest.fn(),
   ambilDenganId: jest.fn(),
@@ -125,7 +125,7 @@ jest.mock('../../models/modelPencarianHitam', () => ({
   hapus: jest.fn(),
 }));
 
-jest.mock('../../models/modelPeran', () => ({
+jest.mock('../../../models/akses/modelPeran', () => ({
   hitungTotal: jest.fn(),
   daftarPeran: jest.fn(),
   ambilDenganId: jest.fn(),
@@ -133,7 +133,7 @@ jest.mock('../../models/modelPeran', () => ({
   simpan: jest.fn(),
 }));
 
-jest.mock('../../models/modelIzin', () => ({
+jest.mock('../../../models/akses/modelIzin', () => ({
   hitungTotal: jest.fn(),
   daftarIzin: jest.fn(),
   ambilDenganId: jest.fn(),
@@ -141,38 +141,38 @@ jest.mock('../../models/modelIzin', () => ({
   simpan: jest.fn(),
 }));
 
-jest.mock('../../models/kadi/modelKandidatEntri', () => ({
+jest.mock('../../../models/kadi/modelKandidatEntri', () => ({
   hitungTotal: jest.fn(),
 }));
 
-jest.mock('../../services/layananKamusPublik', () => ({
+jest.mock('../../../services/layananKamusPublik', () => ({
   hapusCacheDetailKamus: jest.fn(),
 }));
 
-jest.mock('../../services/layananGlosariumPublik', () => ({
+jest.mock('../../../services/layananGlosariumPublik', () => ({
   invalidasiCacheDetailGlosarium: jest.fn(),
 }));
 
-const ModelPengguna = require('../../models/modelPengguna');
-const ModelLema = require('../../models/modelEntri');
-const ModelTesaurus = require('../../models/modelTesaurus');
-const ModelEtimologi = require('../../models/modelEtimologi');
-const ModelGlosarium = require('../../models/modelGlosarium');
-const ModelOpsi = require('../../models/modelOpsi');
-const ModelLabel = require('../../models/modelLabel');
-const ModelKomentar = require('../../models/modelKomentar');
-const ModelPencarian = require('../../models/modelPencarian');
-const ModelSusunKata = require('../../models/modelSusunKata');
-const ModelKuisKata = require('../../models/modelKuisKata');
-const ModelAuditMakna = require('../../models/modelAuditMakna');
-const ModelTagar = require('../../models/modelTagar');
-const ModelPencarianHitam = require('../../models/modelPencarianHitam');
-const ModelPeran = require('../../models/modelPeran');
-const ModelIzin = require('../../models/modelIzin');
-const ModelKandidatEntri = require('../../models/kadi/modelKandidatEntri');
-const { hapusCacheDetailKamus } = require('../../services/layananKamusPublik');
-const { invalidasiCacheDetailGlosarium } = require('../../services/layananGlosariumPublik');
-const rootRouter = require('../../routes');
+const ModelPengguna = require('../../../models/akses/modelPengguna');
+const ModelLema = require('../../../models/leksikon/modelEntri');
+const ModelTesaurus = require('../../../models/leksikon/modelTesaurus');
+const ModelEtimologi = require('../../../models/leksikon/modelEtimologi');
+const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
+const ModelOpsi = require('../../../models/master/modelOpsi');
+const ModelLabel = require('../../../models/master/modelLabel');
+const ModelKomentar = require('../../../models/interaksi/modelKomentar');
+const ModelPencarian = require('../../../models/interaksi/modelPencarian');
+const ModelSusunKata = require('../../../models/gim/modelSusunKata');
+const ModelKuisKata = require('../../../models/gim/modelKuisKata');
+const ModelAuditMakna = require('../../../models/audit/modelAuditMakna');
+const ModelTagar = require('../../../models/master/modelTagar');
+const ModelPencarianHitam = require('../../../models/interaksi/modelPencarianHitam');
+const ModelPeran = require('../../../models/akses/modelPeran');
+const ModelIzin = require('../../../models/akses/modelIzin');
+const ModelKandidatEntri = require('../../../models/kadi/modelKandidatEntri');
+const { hapusCacheDetailKamus } = require('../../../services/layananKamusPublik');
+const { invalidasiCacheDetailGlosarium } = require('../../../services/layananGlosariumPublik');
+const rootRouter = require('../../../routes');
 
 function createApp() {
   const app = express();
@@ -1976,4 +1976,6 @@ describe('routes/redaksi', () => {
     });
   });
 });
+
+
 

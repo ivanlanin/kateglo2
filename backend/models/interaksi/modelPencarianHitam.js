@@ -2,8 +2,8 @@
  * @fileoverview Model pengelolaan daftar hitam kata pencarian
  */
 
-const db = require('../db');
-const logger = require('../config/logger');
+const db = require('../../db');
+const logger = require('../../config/logger');
 
 const pencarianHitamCache = {
   kataSet: null,
@@ -254,3 +254,4 @@ ModelPencarianHitam.__private = {
 };
 
 module.exports = ModelPencarianHitam;
+

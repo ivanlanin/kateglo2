@@ -3,9 +3,9 @@
  */
 
 const express = require('express');
-const { authenticate, authenticateOptional } = require('../../middleware/auth');
-const ModelEntri = require('../../models/modelEntri');
-const ModelSusunKata = require('../../models/modelSusunKata');
+const { authenticate, authenticateOptional } = require('../../../middleware/auth');
+const ModelEntri = require('../../../models/leksikon/modelEntri');
+const ModelSusunKata = require('../../../models/gim/modelSusunKata');
 
 const router = express.Router();
 

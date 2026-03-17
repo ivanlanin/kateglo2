@@ -1,11 +1,11 @@
 /**
  * @fileoverview Test ModelTagar
- * @tested_in backend/models/modelTagar.js
+ * @tested_in backend/models/master/modelTagar.js
  */
 
-const db = require('../../db');
-const { encodeCursor } = require('../../utils/cursorPagination');
-const ModelTagar = require('../../models/modelTagar');
+const db = require('../../../db');
+const { encodeCursor } = require('../../../utils/cursorPagination');
+const ModelTagar = require('../../../models/master/modelTagar');
 
 describe('ModelTagar', () => {
   beforeEach(() => {
@@ -303,3 +303,6 @@ describe('ModelTagar', () => {
     expect(db.query).toHaveBeenNthCalledWith(3, 'COMMIT');
   });
 });
+
+
+

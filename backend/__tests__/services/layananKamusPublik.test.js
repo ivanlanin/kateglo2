@@ -3,7 +3,7 @@
  * @tested_in backend/services/layananKamusPublik.js
  */
 
-jest.mock('../../models/modelEntri', () => {
+jest.mock('../../models/leksikon/modelEntri', () => {
   const cariEntri = jest.fn();
   const cariEntriCursor = jest.fn();
   const ambilEntriPerIndeks = jest.fn();
@@ -23,19 +23,19 @@ jest.mock('../../models/modelEntri', () => {
   };
 });
 
-jest.mock('../../models/modelTesaurus', () => ({
+jest.mock('../../models/leksikon/modelTesaurus', () => ({
   ambilDetail: jest.fn()
 }));
 
-jest.mock('../../models/modelGlosarium', () => ({
+jest.mock('../../models/leksikon/modelGlosarium', () => ({
   cariFrasaMengandungKataUtuh: jest.fn()
 }));
 
-jest.mock('../../models/modelEtimologi', () => ({
+jest.mock('../../models/leksikon/modelEtimologi', () => ({
   ambilAktifPublikByEntriId: jest.fn(),
 }));
 
-jest.mock('../../models/modelTagar', () => ({
+jest.mock('../../models/master/modelTagar', () => ({
   ambilTagarEntri: jest.fn(),
 }));
 
@@ -46,11 +46,11 @@ jest.mock('../../services/layananCache', () => ({
   getTtlSeconds: jest.fn(() => 900),
 }));
 
-const ModelEntri = require('../../models/modelEntri');
-const ModelTesaurus = require('../../models/modelTesaurus');
-const ModelGlosarium = require('../../models/modelGlosarium');
-const ModelEtimologi = require('../../models/modelEtimologi');
-const ModelTagar = require('../../models/modelTagar');
+const ModelEntri = require('../../models/leksikon/modelEntri');
+const ModelTesaurus = require('../../models/leksikon/modelTesaurus');
+const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
+const ModelEtimologi = require('../../models/leksikon/modelEtimologi');
+const ModelTagar = require('../../models/master/modelTagar');
 const { getJson, setJson, delKey } = require('../../services/layananCache');
 const {
   cariKamus,
@@ -948,3 +948,4 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     expect(result.entri[0].subentri.varian).toBeUndefined();
   });
 });
+

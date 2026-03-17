@@ -3,8 +3,8 @@
  */
 
 const express = require('express');
-const { authenticate } = require('../../middleware/auth');
-const ModelKuisKata = require('../../models/modelKuisKata');
+const { authenticate } = require('../../../middleware/auth');
+const ModelKuisKata = require('../../../models/gim/modelKuisKata');
 
 const router = express.Router();
 

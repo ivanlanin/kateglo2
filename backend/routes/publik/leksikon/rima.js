@@ -3,9 +3,9 @@
  */
 
 const express = require('express');
-const ModelEntri = require('../../models/modelEntri');
-const ModelPencarian = require('../../models/modelPencarian');
-const { publicSearchLimiter } = require('../../middleware/rateLimiter');
+const ModelEntri = require('../../../models/leksikon/modelEntri');
+const ModelPencarian = require('../../../models/interaksi/modelPencarian');
+const { publicSearchLimiter } = require('../../../middleware/rateLimiter');
 
 const router = express.Router();
 const domainRima = 5;

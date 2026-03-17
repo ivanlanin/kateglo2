@@ -2,7 +2,7 @@
  * @fileoverview Model gim Kuis Kata untuk generator soal dan rekap harian.
  */
 
-const db = require('../db');
+const db = require('../../db');
 
 const jumlahKandidat = 12;
 const batasRiwayatPerMode = 3;

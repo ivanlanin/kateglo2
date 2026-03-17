@@ -1,18 +1,18 @@
 /**
  * @fileoverview Test model pelacakan kata terpopuler
- * @tested_in backend/models/modelPencarian.js
+ * @tested_in backend/models/interaksi/modelPencarian.js
  */
 
-jest.mock('../../config/logger', () => ({
+jest.mock('../../../config/logger', () => ({
   warn: jest.fn(),
   info: jest.fn(),
   error: jest.fn(),
   debug: jest.fn(),
 }));
 
-const db = require('../../db');
-const logger = require('../../config/logger');
-const ModelPencarian = require('../../models/modelPencarian');
+const db = require('../../../db');
+const logger = require('../../../config/logger');
+const ModelPencarian = require('../../../models/interaksi/modelPencarian');
 
 const { __private } = ModelPencarian;
 
@@ -528,3 +528,6 @@ describe('ModelPencarian', () => {
     await expect(ModelPencarian.hitungTotalKataHarian()).resolves.toBe(0);
   });
 });
+
+
+

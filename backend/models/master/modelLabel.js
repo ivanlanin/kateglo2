@@ -3,10 +3,10 @@
  * (ragam, kelas_kata, bahasa, bidang, abjad, bentuk, ekspresi)
  */
 
-const db = require('../db');
+const db = require('../../db');
 const ModelOpsi = require('./modelOpsi');
-const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
-const { decodeCursor, encodeCursor } = require('../utils/cursorPagination');
+const { normalizeBoolean, parseCount } = require('../../utils/modelUtils');
+const { decodeCursor, encodeCursor } = require('../../utils/cursorPagination');
 
 /**
  * Ekspresi SQL untuk mengekstrak huruf pertama Latin dari entri.
@@ -1052,3 +1052,4 @@ module.exports.__private = {
   pushLabelUnik,
   normalizeBoolean,
 };
+

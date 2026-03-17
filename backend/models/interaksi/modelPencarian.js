@@ -2,8 +2,8 @@
  * @fileoverview Model pelacakan kata pencarian terpopuler
  */
 
-const db = require('../db');
-const logger = require('../config/logger');
+const db = require('../../db');
+const logger = require('../../config/logger');
 
 const domainKode = Object.freeze({
   kamus: 1,
@@ -400,3 +400,4 @@ ModelPencarian.__private = {
 };
 
 module.exports = ModelPencarian;
+

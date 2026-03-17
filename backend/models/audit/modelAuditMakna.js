@@ -2,8 +2,8 @@
  * @fileoverview Model untuk audit indeks dari makna yang belum ada di entri
  */
 
-const db = require('../db');
-const { parseCount } = require('../utils/modelUtils');
+const db = require('../../db');
+const { parseCount } = require('../../utils/modelUtils');
 
 const SQL_CREATED_AT = "to_char(a.created_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS created_at";
 const SQL_UPDATED_AT = "to_char(a.updated_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS updated_at";
@@ -109,3 +109,4 @@ module.exports.__private = {
   parseNonNegativeInteger,
   normalizeStatus,
 };
+

@@ -3,8 +3,8 @@
  */
 
 const express = require('express');
-const ModelGlosarium = require('../../models/modelGlosarium');
-const ModelPencarian = require('../../models/modelPencarian');
+const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
+const ModelPencarian = require('../../../models/interaksi/modelPencarian');
 const {
   cariGlosariumPublik,
   ambilDaftarBidangPublik,
@@ -12,9 +12,9 @@ const {
   ambilGlosariumPerBidangPublik,
   ambilGlosariumPerSumberPublik,
   ambilDetailGlosarium,
-} = require('../../services/layananGlosariumPublik');
-const { publicSearchLimiter } = require('../../middleware/rateLimiter');
-const { parseCursorPagination } = require('../../utils/routesPublikUtils');
+} = require('../../../services/layananGlosariumPublik');
+const { publicSearchLimiter } = require('../../../middleware/rateLimiter');
+const { parseCursorPagination } = require('../../../utils/routesPublikUtils');
 
 const router = express.Router();
 const domainGlosarium = 3;

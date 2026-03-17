@@ -2,8 +2,8 @@
  * @fileoverview Model untuk pengelolaan pengguna dan otorisasi
  */
 
-const db = require('../db');
-const { parseCount } = require('../utils/modelUtils');
+const db = require('../../db');
+const { parseCount } = require('../../utils/modelUtils');
 
 class ModelPengguna {
   /**
@@ -240,3 +240,4 @@ class ModelPengguna {
 }
 
 module.exports = ModelPengguna;
+

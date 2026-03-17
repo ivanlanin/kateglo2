@@ -21,7 +21,7 @@ jest.mock('../../services/layananAuthGoogle', () => ({
   buildFrontendErrorRedirect: jest.fn(),
 }));
 
-jest.mock('../../models/modelPengguna', () => ({
+jest.mock('../../models/akses/modelPengguna', () => ({
   upsertDariGoogle: jest.fn(),
   bootstrapAdmin: jest.fn(),
   ambilPeranUntukAuth: jest.fn(),
@@ -30,7 +30,7 @@ jest.mock('../../models/modelPengguna', () => ({
 
 const logger = require('../../config/logger');
 const layananAuthGoogle = require('../../services/layananAuthGoogle');
-const ModelPengguna = require('../../models/modelPengguna');
+const ModelPengguna = require('../../models/akses/modelPengguna');
 const authRouter = require('../../routes/auth');
 
 function createApp() {
@@ -168,3 +168,4 @@ describe('routes/auth', () => {
     });
   });
 });
+

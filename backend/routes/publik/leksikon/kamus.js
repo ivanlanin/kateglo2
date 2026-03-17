@@ -3,16 +3,16 @@
  */
 
 const express = require('express');
-const { authenticate, authenticateOptional } = require('../../middleware/auth');
-const { cariKamus, ambilDetailKamus } = require('../../services/layananKamusPublik');
-const ModelLabel = require('../../models/modelLabel');
-const ModelGlosarium = require('../../models/modelGlosarium');
-const ModelTagar = require('../../models/modelTagar');
-const ModelEntri = require('../../models/modelEntri');
-const ModelKomentar = require('../../models/modelKomentar');
-const ModelPencarian = require('../../models/modelPencarian');
-const { publicSearchLimiter } = require('../../middleware/rateLimiter');
-const { parseCursorPagination } = require('../../utils/routesPublikUtils');
+const { authenticate, authenticateOptional } = require('../../../middleware/auth');
+const { cariKamus, ambilDetailKamus } = require('../../../services/layananKamusPublik');
+const ModelLabel = require('../../../models/master/modelLabel');
+const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
+const ModelTagar = require('../../../models/master/modelTagar');
+const ModelEntri = require('../../../models/leksikon/modelEntri');
+const ModelKomentar = require('../../../models/interaksi/modelKomentar');
+const ModelPencarian = require('../../../models/interaksi/modelPencarian');
+const { publicSearchLimiter } = require('../../../middleware/rateLimiter');
+const { parseCursorPagination } = require('../../../utils/routesPublikUtils');
 
 const router = express.Router();
 const domainKamus = 1;

@@ -12,10 +12,10 @@
  *   K  = konsonan, termasuk digraf ng, ny, kh, sy (= K tunggal)
  */
 
-require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
+require('dotenv').config({ path: require('path').join(__dirname, '..', '..', '.env') });
 const fs   = require('fs');
 const path = require('path');
-const db   = require('../db');
+const db   = require('../../db');
 
 const OUT = path.join(__dirname, '../../_docs/202603/202603060001_analisis-pola-suku-kata.md');
 

@@ -1,10 +1,10 @@
 /**
  * @fileoverview Test ModelOpsi
- * @tested_in backend/models/modelOpsi.js
+ * @tested_in backend/models/master/modelOpsi.js
  */
 
-const db = require('../../db');
-const ModelOpsi = require('../../models/modelOpsi');
+const db = require('../../../db');
+const ModelOpsi = require('../../../models/master/modelOpsi');
 const {
   buildMasterFilters,
   buildBidangFilters,
@@ -15,7 +15,7 @@ const {
   pushLabelUnik,
   getMasterKategoriTable,
   ambilDaftarLabelMaster,
-} = require('../../models/modelOpsi').__private;
+} = require('../../../models/master/modelOpsi').__private;
 
 describe('ModelOpsi', () => {
   beforeEach(() => {
@@ -513,3 +513,5 @@ describe('ModelOpsi', () => {
     });
   });
 });
+
+

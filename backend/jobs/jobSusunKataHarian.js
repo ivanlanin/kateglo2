@@ -2,7 +2,7 @@
  * @fileoverview Job generator Susun Kata harian
  */
 
-const ModelSusunKata = require('../models/modelSusunKata');
+const ModelSusunKata = require('../models/gim/modelSusunKata');
 
 function parseTanggal(value) {
   const raw = String(value || '').trim();

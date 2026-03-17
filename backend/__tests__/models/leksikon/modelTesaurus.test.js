@@ -1,15 +1,15 @@
 /**
  * @fileoverview Test ModelTesaurus
- * @tested_in backend/models/modelTesaurus.js
+ * @tested_in backend/models/leksikon/modelTesaurus.js
  */
 
-jest.mock('../../db/autocomplete', () => jest.fn());
+jest.mock('../../../db/autocomplete', () => jest.fn());
 
-const db = require('../../db');
-const autocomplete = require('../../db/autocomplete');
-const { encodeCursor } = require('../../utils/cursorPagination');
-const ModelTesaurus = require('../../models/modelTesaurus');
-const { normalizeBoolean, buildAdminWhereClause } = require('../../models/modelTesaurus').__private;
+const db = require('../../../db');
+const autocomplete = require('../../../db/autocomplete');
+const { encodeCursor } = require('../../../utils/cursorPagination');
+const ModelTesaurus = require('../../../models/leksikon/modelTesaurus');
+const { normalizeBoolean, buildAdminWhereClause } = require('../../../models/leksikon/modelTesaurus').__private;
 
 describe('ModelTesaurus', () => {
   beforeEach(() => {
@@ -768,3 +768,6 @@ describe('ModelTesaurus', () => {
     expect(result.hasNext).toBe(false);
   });
 });
+
+
+

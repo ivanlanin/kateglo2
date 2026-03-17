@@ -3,12 +3,12 @@
  * @tested_in backend/services/layananTesaurusPublik.js
  */
 
-jest.mock('../../models/modelTesaurus', () => ({
+jest.mock('../../models/leksikon/modelTesaurus', () => ({
   cariCursor: jest.fn(),
   ambilDetail: jest.fn(),
 }));
 
-const ModelTesaurus = require('../../models/modelTesaurus');
+const ModelTesaurus = require('../../models/leksikon/modelTesaurus');
 const { cariTesaurus, ambilDetailTesaurus } = require('../../services/layananTesaurusPublik');
 
 describe('layananTesaurusPublik.cariTesaurus', () => {
@@ -91,3 +91,4 @@ describe('layananTesaurusPublik.ambilDetailTesaurus', () => {
     });
   });
 });
+

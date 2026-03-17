@@ -2,10 +2,10 @@
  * @fileoverview Model untuk tesaurus (sinonim, antonim, relasi kata)
  */
 
-const db = require('../db');
-const autocomplete = require('../db/autocomplete');
-const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
-const { decodeCursor, encodeCursor } = require('../utils/cursorPagination');
+const db = require('../../db');
+const autocomplete = require('../../db/autocomplete');
+const { normalizeBoolean, parseCount } = require('../../utils/modelUtils');
+const { decodeCursor, encodeCursor } = require('../../utils/cursorPagination');
 
 function normalizeRelasiList(teks) {
   if (!teks) return null;
@@ -447,3 +447,4 @@ module.exports.__private = {
   normalizeRelasiList,
   buildAdminWhereClause,
 };
+

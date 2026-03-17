@@ -6,18 +6,18 @@
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../models/modelPencarian', () => ({
+jest.mock('../../../models/interaksi/modelPencarian', () => ({
   ambilFrasaPopulerPerDomain: jest.fn(),
 }));
 
-jest.mock('../../services/layananCache', () => ({
+jest.mock('../../../services/layananCache', () => ({
   getJson: jest.fn(),
   setJson: jest.fn(),
 }));
 
-const router = require('../../routes/publik/pencarian');
-const ModelPencarian = require('../../models/modelPencarian');
-const cacheService = require('../../services/layananCache');
+const router = require('../../../routes/publik/pencarian');
+const ModelPencarian = require('../../../models/interaksi/modelPencarian');
+const cacheService = require('../../../services/layananCache');
 
 function createApp() {
   const app = express();
@@ -165,3 +165,5 @@ describe('routes/publik/pencarian', () => {
     expect(response.body.error).toBe('cache gagal');
   });
 });
+
+

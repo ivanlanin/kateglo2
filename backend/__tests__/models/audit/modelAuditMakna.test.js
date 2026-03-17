@@ -1,10 +1,10 @@
 /**
  * @fileoverview Test ModelAuditMakna
- * @tested_in backend/models/modelAuditMakna.js
+ * @tested_in backend/models/audit/modelAuditMakna.js
  */
 
-const db = require('../../db');
-const ModelAuditMakna = require('../../models/modelAuditMakna');
+const db = require('../../../db');
+const ModelAuditMakna = require('../../../models/audit/modelAuditMakna');
 
 const { __private } = ModelAuditMakna;
 
@@ -127,3 +127,6 @@ describe('ModelAuditMakna', () => {
     expect(result).toBeNull();
   });
 });
+
+
+

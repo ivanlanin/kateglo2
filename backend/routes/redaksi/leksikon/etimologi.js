@@ -4,7 +4,7 @@
 
 const express = require('express');
 const { periksaIzin } = require('../../middleware/otorisasi');
-const ModelEtimologi = require('../../models/modelEtimologi');
+const ModelEtimologi = require('../../models/leksikon/modelEtimologi');
 const {
   buildPaginatedResult,
   parsePagination,

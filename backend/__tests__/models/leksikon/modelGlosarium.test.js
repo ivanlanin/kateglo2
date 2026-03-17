@@ -1,12 +1,12 @@
 /**
  * @fileoverview Test ModelGlosarium
- * @tested_in backend/models/modelGlosarium.js
+ * @tested_in backend/models/leksikon/modelGlosarium.js
  */
 
-const db = require('../../db');
-const { encodeCursor } = require('../../utils/cursorPagination');
-const ModelGlosarium = require('../../models/modelGlosarium');
-const ModelOpsi = require('../../models/modelOpsi');
+const db = require('../../../db');
+const { encodeCursor } = require('../../../utils/cursorPagination');
+const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
+const ModelOpsi = require('../../../models/master/modelOpsi');
 const {
   normalizeBoolean,
   parseOptionalPositiveInt,
@@ -18,7 +18,7 @@ const {
   isNormalizedGlosariumSchema,
   forceNormalizedSchemaForTest,
   resetNormalizedSchemaCache,
-} = require('../../models/modelGlosarium').__private;
+} = require('../../../models/leksikon/modelGlosarium').__private;
 
 describe('ModelGlosarium', () => {
   beforeEach(() => {
@@ -1796,3 +1796,6 @@ describe('ModelGlosarium', () => {
     expect(db.query).toHaveBeenNthCalledWith(3, expect.stringContaining('LIMIT $2 OFFSET $3'), ['term', 21, 0]);
   });
 });
+
+
+

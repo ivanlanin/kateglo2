@@ -16,14 +16,9 @@ router.get('/health', (_req, res) => {
   });
 });
 
-router.use('/kamus', require('./kamus'));
-router.use('/tagar', require('./tagar'));
-router.use('/makna', require('./makna'));
-router.use('/rima', require('./rima'));
-router.use('/tesaurus', require('./tesaurus'));
-router.use('/glosarium', require('./glosarium'));
+router.use('/', require('./leksikon'));
 router.use('/pencarian', require('./pencarian'));
-router.use('/gim', require('../gim'));
+router.use('/gim', require('./gim'));
 router.use('/auth', require('./auth'));
 
 module.exports = router;

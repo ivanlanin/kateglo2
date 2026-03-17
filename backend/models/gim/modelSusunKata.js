@@ -2,8 +2,8 @@
  * @fileoverview Model gim Susun Kata harian dan skor
  */
 
-const db = require('../db');
-const ModelEntri = require('./modelEntri');
+const db = require('../../db');
+const ModelEntri = require('../leksikon/modelEntri');
 
 const BASE_TANGGAL = '2026-01-01';
 
@@ -741,3 +741,4 @@ ModelSusunKata.__private = {
 };
 
 module.exports = ModelSusunKata;
+

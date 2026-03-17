@@ -6,11 +6,11 @@
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../middleware/otorisasi', () => ({
+jest.mock('../../../middleware/otorisasi', () => ({
   periksaIzin: () => (_req, _res, next) => next(),
 }));
 
-jest.mock('../../models/modelSusunKata', () => ({
+jest.mock('../../../models/gim/modelSusunKata', () => ({
   parsePanjang: jest.fn((value, fallback = 5) => {
     const parsed = Number.parseInt(value, 10);
     if (Number.isNaN(parsed)) return fallback;
@@ -24,14 +24,14 @@ jest.mock('../../models/modelSusunKata', () => ({
   daftarRekapBebasAdmin: jest.fn(),
 }));
 
-jest.mock('../../models/modelEntri', () => ({
+jest.mock('../../../models/leksikon/modelEntri', () => ({
   ambilArtiSusunKataByIndeks: jest.fn(),
 }));
 
-const router = require('../../routes/redaksi/susunKata');
+const router = require('../../../routes/redaksi/susunKata');
 const { __private } = router;
-const ModelSusunKata = require('../../models/modelSusunKata');
-const ModelEntri = require('../../models/modelEntri');
+const ModelSusunKata = require('../../../models/gim/modelSusunKata');
+const ModelEntri = require('../../../models/leksikon/modelEntri');
 
 function createApp() {
   const app = express();
@@ -202,3 +202,5 @@ describe('routes/redaksi/susunKata', () => {
     expect(response.body.message).toBe('rekap gagal');
   });
 });
+
+

@@ -1,17 +1,17 @@
 /**
  * @fileoverview Test model Susun Kata
- * @tested_in backend/models/modelSusunKata.js
+ * @tested_in backend/models/gim/modelSusunKata.js
  */
 
-jest.mock('../../models/modelEntri', () => ({
+jest.mock('../../../models/leksikon/modelEntri', () => ({
   ambilKamusSusunKata: jest.fn(),
   cekKataSusunKataValid: jest.fn(),
   ambilArtiSusunKataByIndeks: jest.fn(),
 }));
 
-const db = require('../../db');
-const ModelEntri = require('../../models/modelEntri');
-const ModelSusunKata = require('../../models/modelSusunKata');
+const db = require('../../../db');
+const ModelEntri = require('../../../models/leksikon/modelEntri');
+const ModelSusunKata = require('../../../models/gim/modelSusunKata');
 const { __private } = ModelSusunKata;
 
 describe('ModelSusunKata', () => {
@@ -612,3 +612,6 @@ describe('ModelSusunKata', () => {
     });
   });
 });
+
+
+

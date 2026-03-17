@@ -6,11 +6,11 @@
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../middleware/otorisasi', () => ({
+jest.mock('../../../middleware/otorisasi', () => ({
   periksaIzin: () => (_req, _res, next) => next(),
 }));
 
-jest.mock('../../models/modelEtimologi', () => ({
+jest.mock('../../../models/leksikon/modelEtimologi', () => ({
   cariEntriUntukTautan: jest.fn(),
   daftarAdmin: jest.fn(),
   ambilDenganId: jest.fn(),
@@ -18,8 +18,8 @@ jest.mock('../../models/modelEtimologi', () => ({
   hapus: jest.fn(),
 }));
 
-const router = require('../../routes/redaksi/etimologi');
-const ModelEtimologi = require('../../models/modelEtimologi');
+const router = require('../../../routes/redaksi/etimologi');
+const ModelEtimologi = require('../../../models/leksikon/modelEtimologi');
 
 function createApp() {
   const app = express();
@@ -296,3 +296,5 @@ describe('routes/redaksi/etimologi', () => {
     expect(response.body.message).toBe('hapus gagal');
   });
 });
+
+

@@ -2,8 +2,8 @@
  * @fileoverview Model untuk pengelolaan peran dan izin redaksi
  */
 
-const db = require('../db');
-const { parseCount } = require('../utils/modelUtils');
+const db = require('../../db');
+const { parseCount } = require('../../utils/modelUtils');
 
 function normalizeIzinIds(izinIds) {
   if (!Array.isArray(izinIds)) return [];

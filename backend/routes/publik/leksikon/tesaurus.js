@@ -3,11 +3,11 @@
  */
 
 const express = require('express');
-const { cariTesaurus, ambilDetailTesaurus } = require('../../services/layananTesaurusPublik');
-const ModelTesaurus = require('../../models/modelTesaurus');
-const ModelPencarian = require('../../models/modelPencarian');
-const { publicSearchLimiter } = require('../../middleware/rateLimiter');
-const { parseCursorPagination } = require('../../utils/routesPublikUtils');
+const { cariTesaurus, ambilDetailTesaurus } = require('../../../services/layananTesaurusPublik');
+const ModelTesaurus = require('../../../models/leksikon/modelTesaurus');
+const ModelPencarian = require('../../../models/interaksi/modelPencarian');
+const { publicSearchLimiter } = require('../../../middleware/rateLimiter');
+const { parseCursorPagination } = require('../../../utils/routesPublikUtils');
 
 const router = express.Router();
 const domainTesaurus = 2;

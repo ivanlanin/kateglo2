@@ -3,7 +3,7 @@
  */
 
 const express = require('express');
-const ModelPencarian = require('../../models/modelPencarian');
+const ModelPencarian = require('../../models/interaksi/modelPencarian');
 const cacheService = require('../../services/layananCache');
 
 const router = express.Router();

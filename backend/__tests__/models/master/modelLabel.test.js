@@ -1,12 +1,12 @@
 /**
  * @fileoverview Test ModelLabel
- * @tested_in backend/models/modelLabel.js
+ * @tested_in backend/models/master/modelLabel.js
  */
 
-const db = require('../../db');
-const { encodeCursor } = require('../../utils/cursorPagination');
-const ModelLabel = require('../../models/modelLabel');
-const { __private } = require('../../models/modelLabel');
+const db = require('../../../db');
+const { encodeCursor } = require('../../../utils/cursorPagination');
+const ModelLabel = require('../../../models/master/modelLabel');
+const { __private } = require('../../../models/master/modelLabel');
 
 describe('ModelLabel', () => {
   beforeEach(() => {
@@ -1451,3 +1451,6 @@ describe('ModelLabel', () => {
     expect(__private.buildNilaiCocokLabel('kelas-kata')).toEqual(['kelas-kata', 'kelas kata']);
   });
 });
+
+
+

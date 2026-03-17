@@ -2,8 +2,8 @@
  * @fileoverview Model untuk pengelolaan izin dan relasi peran
  */
 
-const db = require('../db');
-const { parseCount } = require('../utils/modelUtils');
+const db = require('../../db');
+const { parseCount } = require('../../utils/modelUtils');
 
 function normalizePeranIds(peranIds) {
   if (!Array.isArray(peranIds)) return [];

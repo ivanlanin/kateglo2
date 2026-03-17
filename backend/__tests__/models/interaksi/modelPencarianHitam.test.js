@@ -1,11 +1,11 @@
 /**
  * @fileoverview Test ModelPencarianHitam
- * @tested_in backend/models/modelPencarianHitam.js
+ * @tested_in backend/models/interaksi/modelPencarianHitam.js
  */
 
-const db = require('../../db');
-const logger = require('../../config/logger');
-const ModelPencarianHitam = require('../../models/modelPencarianHitam');
+const db = require('../../../db');
+const logger = require('../../../config/logger');
+const ModelPencarianHitam = require('../../../models/interaksi/modelPencarianHitam');
 
 describe('ModelPencarianHitam', () => {
   beforeEach(() => {
@@ -200,3 +200,6 @@ describe('ModelPencarianHitam', () => {
     await expect(ModelPencarianHitam.hapus(4)).resolves.toBe(true);
   });
 });
+
+
+

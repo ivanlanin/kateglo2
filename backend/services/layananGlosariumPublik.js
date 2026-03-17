@@ -2,8 +2,8 @@
  * @fileoverview Layanan glosarium publik — business logic detail glosarium + cache
  */
 
-const ModelGlosarium = require('../models/modelGlosarium');
-const ModelEntri = require('../models/modelEntri');
+const ModelGlosarium = require('../models/leksikon/modelGlosarium');
+const ModelEntri = require('../models/leksikon/modelEntri');
 const { getJson, setJson, getTtlSeconds } = require('./layananCache');
 
 const cachePrefixDetailGlosarium = 'glosarium:detail:';

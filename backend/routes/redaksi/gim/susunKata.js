@@ -4,8 +4,8 @@
 
 const express = require('express');
 const { periksaIzin } = require('../../middleware/otorisasi');
-const ModelSusunKata = require('../../models/modelSusunKata');
-const ModelEntri = require('../../models/modelEntri');
+const ModelSusunKata = require('../../models/gim/modelSusunKata');
+const ModelEntri = require('../../models/leksikon/modelEntri');
 
 const router = express.Router();
 

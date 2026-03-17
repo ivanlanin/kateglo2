@@ -3,8 +3,8 @@
  */
 
 const express = require('express');
-const ModelTagar = require('../../models/modelTagar');
-const { parseCursorPagination } = require('../../utils/routesPublikUtils');
+const ModelTagar = require('../../../models/master/modelTagar');
+const { parseCursorPagination } = require('../../../utils/routesPublikUtils');
 
 const router = express.Router();
 

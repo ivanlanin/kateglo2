@@ -3,8 +3,8 @@
  * dan opsi label read-only yang dipakai lintas modul redaksi.
  */
 
-const db = require('../db');
-const { normalizeBoolean, parseCount } = require('../utils/modelUtils');
+const db = require('../../db');
+const { normalizeBoolean, parseCount } = require('../../utils/modelUtils');
 
 const KATEGORI_LABEL_REDAKSI = ['bentuk-kata', 'jenis-rujuk', 'kelas-kata', 'ragam', 'bidang', 'bahasa', 'penyingkatan'];
 const MASTER_KATEGORI_TABLE = {

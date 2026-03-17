@@ -10,7 +10,7 @@ const logger = require('../config/logger');
 const { ambilDetailKamus } = require('./layananKamusPublik');
 const { ambilDetailTesaurus } = require('./layananTesaurusPublik');
 const { ambilDetailGlosarium } = require('./layananGlosariumPublik');
-const ModelGlosarium = require('../models/modelGlosarium');
+const ModelGlosarium = require('../models/leksikon/modelGlosarium');
 
 const rootDir = path.resolve(__dirname, '..', '..');
 const frontendDistDir = path.join(rootDir, 'frontend', 'dist');

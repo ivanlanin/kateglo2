@@ -1,10 +1,10 @@
 /**
  * @fileoverview Test ModelIzin
- * @tested_in backend/models/modelIzin.js
+ * @tested_in backend/models/akses/modelIzin.js
  */
 
-const db = require('../../db');
-const ModelIzin = require('../../models/modelIzin');
+const db = require('../../../db');
+const ModelIzin = require('../../../models/akses/modelIzin');
 
 describe('ModelIzin', () => {
   beforeEach(() => {
@@ -186,3 +186,6 @@ describe('ModelIzin', () => {
     expect(client.release).toHaveBeenCalled();
   });
 });
+
+
+

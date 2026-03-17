@@ -1,20 +1,20 @@
 /**
  * @fileoverview Test ModelEntri
- * @tested_in backend/models/modelEntri.js
+ * @tested_in backend/models/leksikon/modelEntri.js
  */
 
-jest.mock('../../db/autocomplete', () => jest.fn());
+jest.mock('../../../db/autocomplete', () => jest.fn());
 
-const db = require('../../db');
-const autocomplete = require('../../db/autocomplete');
-const { encodeCursor } = require('../../utils/cursorPagination');
-const ModelEntri = require('../../models/modelEntri');
+const db = require('../../../db');
+const autocomplete = require('../../../db/autocomplete');
+const { encodeCursor } = require('../../../utils/cursorPagination');
+const ModelEntri = require('../../../models/leksikon/modelEntri');
 const {
   normalizeBoolean,
   normalisasiIndeks,
   parseNullableInteger,
   normalisasiRagamVarian,
-} = require('../../models/modelEntri').__private;
+} = require('../../../models/leksikon/modelEntri').__private;
 
 describe('ModelEntri', () => {
   beforeEach(() => {
@@ -1843,3 +1843,6 @@ describe('ModelEntri', () => {
   });
 
 });
+
+
+

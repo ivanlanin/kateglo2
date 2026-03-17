@@ -1,11 +1,11 @@
 /**
  * @fileoverview Test ModelKomentar
- * @tested_in backend/models/modelKomentar.js
+ * @tested_in backend/models/interaksi/modelKomentar.js
  */
 
-const db = require('../../db');
-const ModelKomentar = require('../../models/modelKomentar');
-const { __private } = require('../../models/modelKomentar');
+const db = require('../../../db');
+const ModelKomentar = require('../../../models/interaksi/modelKomentar');
+const { __private } = require('../../../models/interaksi/modelKomentar');
 
 describe('ModelKomentar', () => {
   beforeEach(() => {
@@ -227,3 +227,6 @@ describe('ModelKomentar', () => {
     expect(__private.normalizeBoolean({})).toBe(false);
   });
 });
+
+
+

@@ -1,10 +1,10 @@
 /**
  * @fileoverview Test ModelPeran
- * @tested_in backend/models/modelPeran.js
+ * @tested_in backend/models/akses/modelPeran.js
  */
 
-const db = require('../../db');
-const ModelPeran = require('../../models/modelPeran');
+const db = require('../../../db');
+const ModelPeran = require('../../../models/akses/modelPeran');
 
 describe('ModelPeran', () => {
   beforeEach(() => {
@@ -189,3 +189,6 @@ describe('ModelPeran', () => {
     expect(client.release).toHaveBeenCalled();
   });
 });
+
+
+

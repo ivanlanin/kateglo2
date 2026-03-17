@@ -1,10 +1,10 @@
 /**
  * @fileoverview Test ModelEtimologi
- * @tested_in backend/models/modelEtimologi.js
+ * @tested_in backend/models/leksikon/modelEtimologi.js
  */
 
-const db = require('../../db');
-const ModelEtimologi = require('../../models/modelEtimologi');
+const db = require('../../../db');
+const ModelEtimologi = require('../../../models/leksikon/modelEtimologi');
 
 describe('ModelEtimologi', () => {
   beforeEach(() => {
@@ -413,3 +413,6 @@ describe('ModelEtimologi', () => {
     expect(result).toEqual([{ id: 9 }]);
   });
 });
+
+
+

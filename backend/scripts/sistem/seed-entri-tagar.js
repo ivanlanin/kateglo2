@@ -8,13 +8,13 @@
  * Sisanya (~0.6%) perlu pengisian manual via antarmuka admin.
  *
  * Penggunaan:
- *   node scripts/seed-entri-tagar.js --dry-run          # Preview tanpa tulis
- *   node scripts/seed-entri-tagar.js --dry-run --verbose # + daftar tidak terdeteksi
- *   node scripts/seed-entri-tagar.js                    # Jalankan sebenarnya
+ *   node scripts/sistem/seed-entri-tagar.js --dry-run          # Preview tanpa tulis
+ *   node scripts/sistem/seed-entri-tagar.js --dry-run --verbose # + daftar tidak terdeteksi
+ *   node scripts/sistem/seed-entri-tagar.js                    # Jalankan sebenarnya
  */
 
-require('dotenv').config({ path: '.env' });
-const db = require('../db');
+require('dotenv').config({ path: require('path').resolve(__dirname, '..', '..', '.env') });
+const db = require('../../db');
 
 const DRY_RUN = process.argv.includes('--dry-run');
 const VERBOSE = process.argv.includes('--verbose');

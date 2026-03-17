@@ -3,15 +3,15 @@
  */
 
 const express = require('express');
-const ModelKandidatEntri = require('../../models/kadi/modelKandidatEntri');
-const { periksaIzin } = require('../../middleware/otorisasi');
+const ModelKandidatEntri = require('../../../models/kadi/modelKandidatEntri');
+const { periksaIzin } = require('../../../middleware/otorisasi');
 const {
   buildPaginatedResult,
   parsePagination,
   parseSearchQuery,
   parseIdParam,
   parseTrimmedString,
-} = require('../../utils/routesRedaksiUtils');
+} = require('../../../utils/routesRedaksiUtils');
 
 const router = express.Router();
 

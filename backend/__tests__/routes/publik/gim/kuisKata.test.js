@@ -1,12 +1,12 @@
 /**
  * @fileoverview Test route gim kuis kata
- * @tested_in backend/routes/gim/kuisKata.js
+ * @tested_in backend/routes/publik/gim/kuisKata.js
  */
 
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../middleware/auth', () => ({
+jest.mock('../../../../middleware/auth', () => ({
   authenticate: (req, _res, next) => {
     const pid = req.headers['x-user-pid'];
     if (pid !== undefined) req.user = { pid };
@@ -14,7 +14,7 @@ jest.mock('../../middleware/auth', () => ({
   },
 }));
 
-jest.mock('../../models/modelKuisKata', () => ({
+jest.mock('../../../../models/gim/modelKuisKata', () => ({
   ambilRonde: jest.fn(),
   parseLimit: jest.fn((value, fallback = 10, maksimum = 50) => {
     const parsed = Number.parseInt(value, 10);
@@ -44,8 +44,8 @@ jest.mock('../../models/modelKuisKata', () => ({
   simpanRekapHarian: jest.fn(),
 }));
 
-const router = require('../../routes/gim/kuisKata');
-const ModelKuisKata = require('../../models/modelKuisKata');
+const router = require('../../../../routes/publik/gim/kuisKata');
+const ModelKuisKata = require('../../../../models/gim/modelKuisKata');
 
 function createApp() {
   const app = express();
@@ -57,7 +57,7 @@ function createApp() {
   return app;
 }
 
-describe('routes/gim/kuisKata', () => {
+describe('routes/publik/gim/kuisKata', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     ModelKuisKata.ambilKlasemenHarian.mockResolvedValue([{ pengguna_id: 9, nama: 'A', skor_total: 40 }]);
@@ -269,3 +269,4 @@ describe('routes/gim/kuisKata', () => {
     expect(response.body.error).toBe('server rusak');
   });
 });
+

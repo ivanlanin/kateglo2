@@ -6,11 +6,11 @@
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('../../middleware/otorisasi', () => ({
+jest.mock('../../../middleware/otorisasi', () => ({
   periksaIzin: () => (_req, _res, next) => next(),
 }));
 
-jest.mock('../../models/modelKuisKata', () => ({
+jest.mock('../../../models/gim/modelKuisKata', () => ({
   parseTanggal: jest.fn((value) => {
     const raw = String(value || '').trim();
     if (!raw || !/^\d{4}-\d{2}-\d{2}$/.test(raw)) return null;
@@ -24,8 +24,8 @@ jest.mock('../../models/modelKuisKata', () => ({
   daftarRekapAdmin: jest.fn(),
 }));
 
-const router = require('../../routes/redaksi/kuisKata');
-const ModelKuisKata = require('../../models/modelKuisKata');
+const router = require('../../../routes/redaksi/kuisKata');
+const ModelKuisKata = require('../../../models/gim/modelKuisKata');
 
 function createApp() {
   const app = express();
@@ -73,3 +73,4 @@ describe('routes/redaksi/kuisKata', () => {
     expect(response.body.message).toBe('rekap kuis gagal');
   });
 });
+
