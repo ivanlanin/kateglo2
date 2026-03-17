@@ -37,4 +37,7 @@ router.use('/kuis-kata', require('./gim/kuisKata'));
 // KADI — Kamus Deskriptif Indonesia
 router.use('/kandidat-kata', require('./kadi/kandidatKata'));
 
+// WordNet — Kurasi sinset
+router.use('/sinset', require('./wordnet/sinset'));
+
 module.exports = router;
