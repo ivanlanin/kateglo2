@@ -4,7 +4,7 @@
 
 const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
 const ModelEntri = require('../../models/leksikon/modelEntri');
-const { getJson, setJson, getTtlSeconds } = require('../sistem/layananCache');
+const { getJson, setJson, getTtlSeconds, delKey } = require('../sistem/layananCache');
 
 const cachePrefixDetailGlosarium = 'glosarium:detail:';
 const cachePrefixDetailGlosariumVersion = 'glosarium:detail:version:';
@@ -191,6 +191,15 @@ async function ambilMasterGlosariumPublik(resource, filterMode, loader) {
   return result;
 }
 
+async function invalidasiCacheMasterGlosarium() {
+  const keys = [
+    buatCacheKeyMasterGlosarium('bidang', 'glosarium'),
+    buatCacheKeyMasterGlosarium('sumber', 'konteks'),
+    buatCacheKeyMasterGlosarium('sumber', 'glosarium'),
+  ];
+  await Promise.all(keys.map(k => delKey(k)));
+}
+
 async function invalidasiCacheDetailGlosarium(asing) {
   const trimmed = normalisasiAsing(asing);
   await invalidasiCacheBrowseGlosarium();
@@ -327,6 +336,7 @@ module.exports = {
   ambilGlosariumPerSumberPublik,
   ambilDetailGlosarium,
   invalidasiCacheDetailGlosarium,
+  invalidasiCacheMasterGlosarium,
   buatCacheKeyDetailGlosarium,
   buatCacheKeyBrowseGlosarium,
 };

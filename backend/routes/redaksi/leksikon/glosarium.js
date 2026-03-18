@@ -5,7 +5,7 @@
 const express = require('express');
 const { periksaIzin } = require('../../../middleware/authorization');
 const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
-const { invalidasiCacheDetailGlosarium } = require('../../../services/publik/layananGlosariumPublik');
+const { invalidasiCacheDetailGlosarium, invalidasiCacheMasterGlosarium } = require('../../../services/publik/layananGlosariumPublik');
 const {
   buildPaginatedResult,
   parsePagination,
@@ -162,6 +162,19 @@ router.delete('/:id', periksaIzin('hapus_glosarium'), async (req, res, next) => 
     if (!deleted) return res.status(404).json({ success: false, message: 'Glosarium tidak ditemukan' });
     await invalidasiCacheDetailGlosarium(asingSebelum);
     return res.json({ success: true });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+/**
+ * POST /api/redaksi/glosarium/cache/invalidasi-master
+ * Invalidasi cache daftar bidang dan sumber glosarium di Redis.
+ */
+router.post('/cache/invalidasi-master', periksaIzin('kelola_glosarium'), async (_req, res, next) => {
+  try {
+    await invalidasiCacheMasterGlosarium();
+    return res.json({ success: true, message: 'Cache master glosarium berhasil diinvalidasi' });
   } catch (error) {
     return next(error);
   }

@@ -3,6 +3,7 @@
 ## 2026-03-18 Rabu
 
 - Mempelajari struktur korpus Leipzig
+- Menambahkan 2.596 entri glosarium dari kamus pariwisata, perhotelan, dan usaha perjalanan wisata
 
 ## 2026-03-17 Selasa
 
