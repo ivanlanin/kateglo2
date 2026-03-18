@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-03-18 Rabu
+
+- Mempelajari struktur korpus Leipzig
+
 ## 2026-03-17 Selasa
 
 - Menata ulang folder lapis pungkur
