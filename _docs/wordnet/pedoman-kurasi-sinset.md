@@ -46,6 +46,7 @@ Di bagian atas terlihat ringkasan:
 - **Status** — filter draf/tinjau/terverifikasi
 - **Kelas Kata** — filter nomina/verba/adjektiva/adverbia
 - **Pemetaan** — "Ada pemetaan" (sudah ada lema → makna) atau "Belum dipetakan"
+- **Hierarki** — "Akar" (sinset tanpa hipernim, paling umum) atau "Nonakar" (punya induk yang lebih umum)
 
 ### 4. Menyunting Sinset
 Klik baris sinset → panel detail terbuka di kanan.
@@ -95,18 +96,29 @@ WordNet memiliki struktur hierarki. Setiap kelas kata punya **akar** (root synse
 ### Urutan Kerja yang Disarankan
 
 #### Fase 1: Sinset Akar (Entity, Act, State, ...)
-Filter: **Status = tinjau** (sudah punya definisi ID dari wordnetid lama)
+Gunakan filter **Hierarki = Akar** untuk melihat semua sinset tanpa hipernim.
 
 Verifikasi definisi yang sudah ada, perbaiki jika perlu, lalu set status = terverifikasi.
 
-**Root synsets utama:**
-- `00001740-n` — **entity** (entitas) — akar semua nomina
-- `00001740-v` — **breathe** — salah satu akar verba
-- `00001740-a` — **able** — salah satu akar adjektiva
+**Jumlah akar per kelas kata:**
+| Kelas Kata | Jumlah Akar | Catatan |
+|------------|-------------|---------|
+| Nomina (n) | ~25 | Pohon paling rapi, sedikit akar |
+| Verba (v) | ~4.214 | Hierarki datar, banyak akar |
+| Adjektiva (a) | ~620 | Cukup banyak akar |
+| Adverbia (r) | ~3.154 | Mayoritas tanpa hipernim |
+
+**Root nomina utama (mulai dari sini):**
+- `00001740-n` — **entity** — akar semua nomina
+- `00001930-n` — **physical entity** — entitas fisik
+- `00023100-n` — **abstraction** — entitas abstrak
+- `00004258-n` — **thing** — benda
+
+**Cara kerja:** Filter Hierarki = Akar + Kelas = Nomina → mulai dari sini, lalu turun ke hiponim melalui relasi di panel detail.
 
 #### Fase 2: Sinset Level 1 (Hiponim langsung dari akar)
-Dari sinset akar yang sudah terverifikasi, lihat relasi **hiponim** (keluar).
-Buka sinset-sinset anak, verifikasi/tulis definisi.
+Dari sinset akar yang sudah terverifikasi, lihat relasi **hiponim** (keluar) di panel detail.
+Klik ID sinset anak untuk membukanya, verifikasi/tulis definisi, lalu lanjut ke anak berikutnya.
 
 Contoh dari `entity`:
 - `00001930-n` — physical entity (entitas fisik)

@@ -64,6 +64,7 @@ router.get('/', izin, async (req, res, next) => {
     const status = parseTrimmedString(req.query.status);
     const kelasKata = parseTrimmedString(req.query.kelas_kata);
     const adaPemetaan = parseTrimmedString(req.query.ada_pemetaan);
+    const akar = parseTrimmedString(req.query.akar);
 
     const result = await ModelSinset.daftar({
       limit,
@@ -71,6 +72,7 @@ router.get('/', izin, async (req, res, next) => {
       status,
       kelasKata,
       adaPemetaan,
+      akar,
       cursor,
       direction,
       lastPage,

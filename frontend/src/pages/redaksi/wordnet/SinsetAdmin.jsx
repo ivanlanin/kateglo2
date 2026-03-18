@@ -59,6 +59,12 @@ const opsiPemetaan = [
   { value: '0', label: 'Belum dipetakan' },
 ];
 
+const opsiAkar = [
+  { value: '', label: '— Hierarki —' },
+  { value: '1', label: 'Akar (tanpa hipernim)' },
+  { value: '0', label: 'Nonakar (punya hipernim)' },
+];
+
 const nilaiAwal = { definisi_id: '', contoh_id: [], status: 'draf', catatan: '' };
 
 function LencanaStatusSinset({ status }) {
@@ -128,6 +134,8 @@ function SinsetAdmin() {
   const [filterKelas, setFilterKelas] = useState('');
   const [filterPemetaanDraft, setFilterPemetaanDraft] = useState('');
   const [filterPemetaan, setFilterPemetaan] = useState('');
+  const [filterAkarDraft, setFilterAkarDraft] = useState('');
+  const [filterAkar, setFilterAkar] = useState('');
 
   // ─── Queries ───────────────────────────────────────────────────────────────
 
@@ -140,6 +148,7 @@ function SinsetAdmin() {
     status: filterStatus,
     kelas_kata: filterKelas,
     ada_pemetaan: filterPemetaan,
+    akar: filterAkar,
   });
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
@@ -217,6 +226,7 @@ function SinsetAdmin() {
     setFilterStatus(filterStatusDraft);
     setFilterKelas(filterKelasDraft);
     setFilterPemetaan(filterPemetaanDraft);
+    setFilterAkar(filterAkarDraft);
     kirimCari(cari);
   };
 
@@ -227,6 +237,8 @@ function SinsetAdmin() {
     setFilterKelas('');
     setFilterPemetaanDraft('');
     setFilterPemetaan('');
+    setFilterAkarDraft('');
+    setFilterAkar('');
     hapusCari();
   };
 
@@ -267,6 +279,13 @@ function SinsetAdmin() {
             onChange: setFilterPemetaanDraft,
             options: opsiPemetaan,
             ariaLabel: 'Filter pemetaan',
+          },
+          {
+            key: 'akar',
+            value: filterAkarDraft,
+            onChange: setFilterAkarDraft,
+            options: opsiAkar,
+            ariaLabel: 'Filter akar atau nonakar',
           },
         ]}
       />

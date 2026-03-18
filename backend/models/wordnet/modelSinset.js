@@ -23,7 +23,7 @@ function parseNullableInteger(value) {
 /**
  * Build WHERE clause fragments from filter params.
  */
-function buildSinsetWhereClause({ q = '', status = '', kelasKata = '', adaPemetaan = '' } = {}) {
+function buildSinsetWhereClause({ q = '', status = '', kelasKata = '', adaPemetaan = '', akar = '' } = {}) {
   const conditions = [];
   const params = [];
 
@@ -58,6 +58,20 @@ function buildSinsetWhereClause({ q = '', status = '', kelasKata = '', adaPemeta
       SELECT 1 FROM sinset_lema sl3 WHERE sl3.sinset_id = s.id
     ) AND NOT EXISTS (
       SELECT 1 FROM sinset_lema sl4 WHERE sl4.sinset_id = s.id AND sl4.makna_id IS NOT NULL
+    )`);
+  }
+
+  if (akar === '1') {
+    conditions.push(`NOT EXISTS (
+      SELECT 1 FROM relasi_sinset rs_akar
+      WHERE rs_akar.sinset_asal = s.id
+        AND rs_akar.tipe_relasi IN ('hipernim', 'hipernim_instans')
+    )`);
+  } else if (akar === '0') {
+    conditions.push(`EXISTS (
+      SELECT 1 FROM relasi_sinset rs_akar
+      WHERE rs_akar.sinset_asal = s.id
+        AND rs_akar.tipe_relasi IN ('hipernim', 'hipernim_instans')
     )`);
   }
 
@@ -151,12 +165,13 @@ class ModelSinset {
     status = '',
     kelasKata = '',
     adaPemetaan = '',
+    akar = '',
     cursor = null,
     direction = 'next',
     lastPage = false,
   } = {}) {
     const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
-    const { conditions, params } = buildSinsetWhereClause({ q, status, kelasKata, adaPemetaan });
+    const { conditions, params } = buildSinsetWhereClause({ q, status, kelasKata, adaPemetaan, akar });
     const baseParams = [...params];
     const cursorPayload = decodeCursor(cursor);
     const isPrev = direction === 'prev';

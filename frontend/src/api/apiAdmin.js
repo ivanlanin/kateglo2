@@ -1340,6 +1340,7 @@ export function useDaftarSinsetAdmin({
   status = '',
   kelas_kata = '',
   ada_pemetaan = '',
+  akar = '',
 } = {}) {
   return useDaftarAdmin('/api/redaksi/sinset', 'admin-sinset', {
     limit,
@@ -1351,6 +1352,7 @@ export function useDaftarSinsetAdmin({
     status,
     kelas_kata,
     ada_pemetaan,
+    akar,
   });
 }
 
