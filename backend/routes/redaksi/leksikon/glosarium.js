@@ -171,7 +171,7 @@ router.delete('/:id', periksaIzin('hapus_glosarium'), async (req, res, next) => 
  * POST /api/redaksi/glosarium/cache/invalidasi-master
  * Invalidasi cache daftar bidang dan sumber glosarium di Redis.
  */
-router.post('/cache/invalidasi-master', periksaIzin('kelola_glosarium'), async (_req, res, next) => {
+router.post('/cache/invalidasi-master', async (_req, res, next) => {
   try {
     await invalidasiCacheMasterGlosarium();
     return res.json({ success: true, message: 'Cache master glosarium berhasil diinvalidasi' });
