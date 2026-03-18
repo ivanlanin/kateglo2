@@ -3,6 +3,7 @@
 ## 2026-03-17 Selasa
 
 - Menata ulang folder lapis pungkur
+- Menginisiasi struktur WordNet
 
 ## 2026-03-16 Senin
 

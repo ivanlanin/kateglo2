@@ -44,6 +44,18 @@ export const kelompokMenuRedaksi = [
     ],
   },
   {
+    judul: 'WordNet',
+    items: [
+      {
+        path: '/redaksi/sinset',
+        label: 'Sinset',
+        dashboardLabel: 'Sinset',
+        izin: 'kelola_sinset',
+        statistik: { key: 'sinset', label: 'Total Sinset', warna: 'text-violet-600' },
+      },
+    ],
+  },
+  {
     judul: 'Audit',
     items: [
       {

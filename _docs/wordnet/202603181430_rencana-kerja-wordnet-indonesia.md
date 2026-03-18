@@ -155,14 +155,37 @@ Skrip: `_data/wordnet/impor-ke-db.js`
 
 Status awal: 108,019 draf + 2,733 tinjau (punya definisi ID)
 
-### Tahap 4: Halaman Redaksi untuk Kurasi
+### Tahap 4: Halaman Redaksi untuk Kurasi [SELESAI]
 **Tujuan:** Antarmuka untuk verifikasi manual oleh redaksi.
 
-Fitur utama:
-- **Daftar synset** — filter berdasarkan status, kelas kata, ada/tidaknya pemetaan
-- **Detail synset** — tampilkan definisi EN/ID, kata-kata, relasi, dan kandidat makna Kateglo
-- **Pemetaan** — pilih makna.id yang cocok untuk setiap kata dalam synset
-- **Progres** — dashboard: berapa synset draf/tinjau/terverifikasi per kelas kata
+#### 4a. Backend API [SELESAI]
+- Model: `backend/models/wordnet/modelSinset.js`
+- Route: `backend/routes/redaksi/wordnet/sinset.js`
+- Izin: `kelola_sinset` (di-assign ke role admin)
+
+Endpoints:
+| Method | Path | Fungsi |
+|--------|------|--------|
+| GET | `/api/redaksi/sinset/statistik` | Dashboard statistik |
+| GET | `/api/redaksi/sinset/tipe-relasi` | 26 tipe relasi |
+| GET | `/api/redaksi/sinset` | Daftar + filter (q, status, kelas_kata, ada_pemetaan) + cursor pagination |
+| GET | `/api/redaksi/sinset/:id` | Detail synset + lema + relasi keluar/masuk |
+| PUT | `/api/redaksi/sinset/:id` | Update definisi_id, status, catatan |
+| GET | `/api/redaksi/sinset/:id/lema/:lemaId/kandidat` | Kandidat makna (cocok POS + semua) |
+| PUT | `/api/redaksi/sinset/:id/lema/:lemaId` | Set makna_id + terverifikasi |
+
+#### 4b. Frontend Halaman Redaksi [SELESAI]
+- Halaman: `frontend/src/pages/redaksi/wordnet/SinsetAdmin.jsx`
+- API hooks: di `frontend/src/api/apiAdmin.js`
+- Menu: kelompok "WordNet" di dasbor redaksi
+- Rute: `/redaksi/sinset` dan `/redaksi/sinset/:id`
+
+Fitur:
+- **Dashboard statistik** — kartu ringkas: total/draf/tinjau/terverifikasi, lema terpetakan
+- **Daftar synset** — tabel dengan filter status, kelas kata, pemetaan + cursor pagination
+- **Detail panel** — info EN (lema, definisi, contoh), form edit (definisi ID, status, catatan)
+- **Pemetaan lema** — klik "pilih makna" → lihat kandidat makna cocok POS → klik "Pilih"
+- **Relasi** — daftar relasi keluar/masuk dengan tipe publik
 
 Pelacakan progres:
 ```
@@ -204,8 +227,8 @@ Tahap 1 dipecah menjadi langkah kecil yang bisa dikerjakan per sesi:
 - [x] 2b. Eksekusi migration + seed 26 tipe relasi — berhasil
 - [x] 3a. Impor 110,752 synset + 225,246 lema + 3,832 pemetaan otomatis
 - [x] 3b. Impor 101,256 relasi antar-synset
-- [ ] 4a. Backend: model + route untuk WordNet (GET/PUT synset, statistik)
-- [ ] 4b. Frontend: halaman redaksi WordNet (daftar, detail, pemetaan)
+- [x] 4a. Backend: model + route + izin `kelola_sinset`
+- [x] 4b. Frontend: SinsetAdmin (daftar, detail, pemetaan lema, relasi, statistik)
 
 ---
 

@@ -14,6 +14,12 @@ const STATUS_VALID = ['draf', 'tinjau', 'terverifikasi'];
 
 const NAMA_KELAS = { n: 'nomina', v: 'verba', a: 'adjektiva', r: 'adverbia' };
 
+function parseNullableInteger(value) {
+  if (value === null || value === undefined || value === '') return null;
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : null;
+}
+
 /**
  * Build WHERE clause fragments from filter params.
  */
@@ -332,6 +338,63 @@ class ModelSinset {
   }
 
   /**
+   * Tambah satu lema Indonesia ke sinset dari entri kamus yang sudah ada.
+   */
+  static async tambahLema(sinsetId, { entri_id, urutan = null, sumber = 'redaksi' } = {}) {
+    const entriId = parseNullableInteger(entri_id);
+    if (!sinsetId || !entriId) {
+      return { error: 'invalid_input' };
+    }
+
+    const entriResult = await db.query(
+      `SELECT id, entri
+       FROM entri
+       WHERE id = $1 AND aktif = 1`,
+      [entriId]
+    );
+    const entri = entriResult.rows[0];
+    if (!entri) {
+      return { error: 'entri_not_found' };
+    }
+
+    const lema = String(entri.entri || '').trim();
+    if (!lema) {
+      return { error: 'invalid_input' };
+    }
+
+    const duplikatResult = await db.query(
+      `SELECT id, sinset_id, lema, entri_id, makna_id, urutan, terverifikasi
+       FROM sinset_lema
+       WHERE sinset_id = $1 AND LOWER(lema) = LOWER($2)
+       LIMIT 1`,
+      [sinsetId, lema]
+    );
+    if (duplikatResult.rows[0]) {
+      return { error: 'duplicate', data: duplikatResult.rows[0] };
+    }
+
+    let urutanFinal = parseNullableInteger(urutan);
+    if (urutanFinal === null) {
+      const urutanResult = await db.query(
+        `SELECT COALESCE(MAX(urutan), -1) + 1 AS urutan
+         FROM sinset_lema
+         WHERE sinset_id = $1`,
+        [sinsetId]
+      );
+      urutanFinal = Number(urutanResult.rows[0]?.urutan) || 0;
+    }
+
+    const insertResult = await db.query(
+      `INSERT INTO sinset_lema (sinset_id, lema, entri_id, urutan, sumber)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING id, sinset_id, lema, entri_id, makna_id, urutan, terverifikasi, sumber`,
+      [sinsetId, lema, entri.id, urutanFinal, String(sumber || 'redaksi').trim() || 'redaksi']
+    );
+
+    return { data: insertResult.rows[0] || null };
+  }
+
+  /**
    * Update pemetaan lema: set makna_id dan terverifikasi.
    */
   static async simpanPemetaanLema(lemaId, { makna_id, terverifikasi } = {}) {
@@ -379,7 +442,14 @@ class ModelSinset {
     const { lema, entri_id, kelas_kata } = lemaResult.rows[0];
 
     if (!entri_id) {
-      return { lema, entri_id: null, kandidat: [] };
+      return {
+        lema,
+        entri_id: null,
+        kelas_kata_sinset: kelas_kata,
+        kelas_kata_db: kelas_kata === 'r' ? 'adv' : kelas_kata,
+        kandidat: [],
+        semuaMakna: [],
+      };
     }
 
     // Kelas kata mapping: sinset uses n/v/a/r, makna uses n/v/a/adv
@@ -387,8 +457,15 @@ class ModelSinset {
 
     // Ambil semua makna dari entri ini yang cocok kelas kata
     const maknaResult = await db.query(
-      `SELECT m.id, m.polisem, m.makna, m.kelas_kata, m.contoh
+      `SELECT m.id, m.polisem, m.makna, m.kelas_kata, contoh_ringkas.contoh
        FROM makna m
+       LEFT JOIN LATERAL (
+         SELECT c.contoh
+         FROM contoh c
+         WHERE c.makna_id = m.id AND c.aktif = true
+         ORDER BY c.urutan, c.id
+         LIMIT 1
+       ) contoh_ringkas ON TRUE
        WHERE m.entri_id = $1 AND m.kelas_kata = $2 AND m.aktif = true
        ORDER BY m.polisem`,
       [entri_id, kelasDb]
@@ -396,8 +473,15 @@ class ModelSinset {
 
     // Also get all makna regardless of POS for context
     const semuaMaknaResult = await db.query(
-      `SELECT m.id, m.polisem, m.makna, m.kelas_kata, m.contoh
+      `SELECT m.id, m.polisem, m.makna, m.kelas_kata, contoh_ringkas.contoh
        FROM makna m
+       LEFT JOIN LATERAL (
+         SELECT c.contoh
+         FROM contoh c
+         WHERE c.makna_id = m.id AND c.aktif = true
+         ORDER BY c.urutan, c.id
+         LIMIT 1
+       ) contoh_ringkas ON TRUE
        WHERE m.entri_id = $1 AND m.aktif = true
        ORDER BY m.polisem`,
       [entri_id]
@@ -411,6 +495,14 @@ class ModelSinset {
       kandidat: maknaResult.rows,
       semuaMakna: semuaMaknaResult.rows,
     };
+  }
+
+  /**
+   * Hitung total sinset (untuk dasbor umum).
+   */
+  static async hitungTotal() {
+    const result = await db.query('SELECT COUNT(*) AS total FROM sinset');
+    return parseCount(result.rows[0]?.total);
   }
 
   /**

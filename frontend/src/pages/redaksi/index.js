@@ -6,3 +6,4 @@ export * from './interaksi';
 export * from './kadi';
 export * from './leksikon';
 export * from './master';
+export * from './wordnet';

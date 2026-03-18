@@ -20,6 +20,7 @@ const ModelTagar = require('../../../models/master/modelTagar');
 const ModelPeran = require('../../../models/akses/modelPeran');
 const ModelIzin = require('../../../models/akses/modelIzin');
 const ModelKandidatEntri = require('../../../models/kadi/modelKandidatEntri');
+const ModelSinset = require('../../../models/wordnet/modelSinset');
 const {
   buildPaginatedResult,
   parsePagination,
@@ -55,6 +56,7 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
       kandidatKata,
       pencarian,
       pencarianHitam,
+      sinset,
     ] = await Promise.all([
       ModelEntri.hitungTotal(),
       ModelGlosarium.hitungTotal(),
@@ -77,6 +79,7 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
       ModelKandidatEntri.hitungTotal(),
       ModelPencarian.hitungTotalKataHarian(),
       ModelPencarianHitam.hitungTotal(),
+      ModelSinset.hitungTotal(),
     ]);
 
     return res.json({
@@ -103,6 +106,7 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
         kandidatKata,
         pencarian,
         pencarianHitam,
+        sinset,
       },
     });
   } catch (error) {

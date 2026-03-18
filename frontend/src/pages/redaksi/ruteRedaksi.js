@@ -12,6 +12,7 @@ import {
   KomentarAdmin,
   KuisKataAdmin,
   LabelAdmin,
+  SinsetAdmin,
   PenggunaAdmin,
   PencarianAdmin,
   PencarianHitamAdmin,
@@ -60,4 +61,6 @@ export const ruteHalamanRedaksi = [
   { path: '/redaksi/pengguna/:id', Component: PenggunaAdmin, izinDibutuhkan: ['kelola_pengguna'] },
   { path: '/redaksi/kandidat-kata', Component: KandidatKataAdmin, izinDibutuhkan: ['lihat_kandidat'] },
   { path: '/redaksi/kandidat-kata/:id', Component: KandidatKataAdmin, izinDibutuhkan: ['lihat_kandidat'] },
+  { path: '/redaksi/sinset', Component: SinsetAdmin, izinDibutuhkan: ['kelola_sinset'] },
+  { path: '/redaksi/sinset/:id', Component: SinsetAdmin, izinDibutuhkan: ['kelola_sinset'] },
 ];

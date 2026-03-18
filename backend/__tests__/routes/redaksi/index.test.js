@@ -145,6 +145,18 @@ jest.mock('../../../models/kadi/modelKandidatEntri', () => ({
   hitungTotal: jest.fn(),
 }));
 
+jest.mock('../../../models/wordnet/modelSinset', () => ({
+  statistik: jest.fn(),
+  daftarTipeRelasi: jest.fn(),
+  daftar: jest.fn(),
+  ambilDenganId: jest.fn(),
+  simpan: jest.fn(),
+  tambahLema: jest.fn(),
+  ambilKandidatMakna: jest.fn(),
+  simpanPemetaanLema: jest.fn(),
+  hitungTotal: jest.fn(),
+}));
+
 jest.mock('../../../services/publik/layananKamusPublik', () => ({
   hapusCacheDetailKamus: jest.fn(),
 }));
@@ -170,6 +182,7 @@ const ModelPencarianHitam = require('../../../models/interaksi/modelPencarianHit
 const ModelPeran = require('../../../models/akses/modelPeran');
 const ModelIzin = require('../../../models/akses/modelIzin');
 const ModelKandidatEntri = require('../../../models/kadi/modelKandidatEntri');
+const ModelSinset = require('../../../models/wordnet/modelSinset');
 const { hapusCacheDetailKamus } = require('../../../services/publik/layananKamusPublik');
 const { invalidasiCacheDetailGlosarium } = require('../../../services/publik/layananGlosariumPublik');
 const rootRouter = require('../../../routes');
@@ -219,6 +232,7 @@ function buildToken(overrides = {}) {
         'tambah_glosarium',
         'edit_glosarium',
         'hapus_glosarium',
+        'kelola_sinset',
       ],
       ...overrides,
     },
@@ -421,6 +435,63 @@ describe('routes/redaksi', () => {
     });
   });
 
+  describe('sinset', () => {
+    it('GET /api/redaksi/sinset/:id/opsi-lema mengembalikan kosong saat q kosong', async () => {
+      const response = await callAsAdmin('get', '/api/redaksi/sinset/01316949-n/opsi-lema?q=   ');
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toEqual([]);
+      expect(ModelLema.cariIndukAdmin).not.toHaveBeenCalled();
+    });
+
+    it('GET /api/redaksi/sinset/:id/opsi-lema meneruskan q dan limit', async () => {
+      ModelLema.cariIndukAdmin.mockResolvedValue([{ id: 4, entri: 'hewan', indeks: 'hewan' }]);
+
+      const response = await callAsAdmin('get', '/api/redaksi/sinset/01316949-n/opsi-lema?q=hew&limit=99');
+
+      expect(response.status).toBe(200);
+      expect(ModelLema.cariIndukAdmin).toHaveBeenCalledWith('hew', { limit: 20, excludeId: null });
+      expect(response.body.data).toHaveLength(1);
+    });
+
+    it('POST /api/redaksi/sinset/:id/lema memvalidasi entri_id', async () => {
+      const response = await callAsAdmin('post', '/api/redaksi/sinset/01316949-n/lema', {
+        body: {},
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe('Entri kamus wajib dipilih');
+    });
+
+    it('POST /api/redaksi/sinset/:id/lema mengembalikan 201 saat berhasil', async () => {
+      ModelSinset.tambahLema.mockResolvedValue({
+        data: { id: 7, sinset_id: '01316949-n', lema: 'hewan pekerja', entri_id: 55, urutan: 0, makna_id: null, terverifikasi: false, sumber: 'redaksi' },
+      });
+
+      const response = await callAsAdmin('post', '/api/redaksi/sinset/01316949-n/lema', {
+        body: { entri_id: 55 },
+      });
+
+      expect(response.status).toBe(201);
+      expect(ModelSinset.tambahLema).toHaveBeenCalledWith('01316949-n', {
+        entri_id: 55,
+        urutan: undefined,
+        sumber: undefined,
+      });
+    });
+
+    it('POST /api/redaksi/sinset/:id/lema mengembalikan konflik saat duplikat', async () => {
+      ModelSinset.tambahLema.mockResolvedValue({ error: 'duplicate', data: { id: 7 } });
+
+      const response = await callAsAdmin('post', '/api/redaksi/sinset/01316949-n/lema', {
+        body: { entri_id: 55 },
+      });
+
+      expect(response.status).toBe(409);
+      expect(response.body.message).toBe('Lema sudah ada pada sinset ini');
+    });
+  });
+
   describe('statistik', () => {
     it('GET /api/redaksi/statistik mengembalikan ringkasan', async () => {
       ModelLema.hitungTotal.mockResolvedValue(10);
@@ -444,6 +515,7 @@ describe('routes/redaksi', () => {
       ModelKandidatEntri.hitungTotal.mockResolvedValue(61);
       ModelPencarian.hitungTotalKataHarian.mockResolvedValue(90);
       ModelPencarianHitam.hitungTotal.mockResolvedValue(12);
+      ModelSinset.hitungTotal.mockResolvedValue(110752);
 
       const response = await callAsAdmin('get', '/api/redaksi/statistik');
 
@@ -470,6 +542,7 @@ describe('routes/redaksi', () => {
         kandidatKata: 61,
         pencarian: 90,
         pencarianHitam: 12,
+        sinset: 110752,
       });
     });
 

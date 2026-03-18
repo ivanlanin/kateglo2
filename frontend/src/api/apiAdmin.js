@@ -1311,6 +1311,114 @@ export function useHapusTagar() {
   return useHapusAdmin({ path: '/api/redaksi/tagar', queryKeyPrefix: 'admin-tagar' });
 }
 
+// ─── WordNet (Sinset) ────────────────────────────────────────────────────────
+
+export function useStatistikSinsetAdmin({ enabled = true } = {}) {
+  return useQuery({
+    queryKey: ['admin-sinset-statistik'],
+    queryFn: () => klien.get('/api/redaksi/sinset/statistik').then((r) => r.data),
+    enabled,
+    staleTime: 60 * 1000,
+  });
+}
+
+export function useTipeRelasiAdmin({ enabled = true } = {}) {
+  return useQuery({
+    queryKey: ['admin-sinset-tipe-relasi'],
+    queryFn: () => klien.get('/api/redaksi/sinset/tipe-relasi').then((r) => r.data),
+    enabled,
+    staleTime: 10 * 60 * 1000,
+  });
+}
+
+export function useDaftarSinsetAdmin({
+  limit = 50,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+  q = '',
+  status = '',
+  kelas_kata = '',
+  ada_pemetaan = '',
+} = {}) {
+  return useDaftarAdmin('/api/redaksi/sinset', 'admin-sinset', {
+    limit,
+    cursor,
+    direction,
+    lastPage,
+    q,
+    includeAktif: false,
+    status,
+    kelas_kata,
+    ada_pemetaan,
+  });
+}
+
+export function useDetailSinsetAdmin(id) {
+  return useQuery({
+    queryKey: ['admin-sinset-detail', id],
+    queryFn: () => klien.get(`/api/redaksi/sinset/${id}`).then((r) => r.data),
+    enabled: Boolean(id),
+  });
+}
+
+export function useAutocompleteLemaSinset({ sinsetId, q = '', limit = 8 } = {}) {
+  const query = String(q || '').trim();
+  return useQuery({
+    queryKey: ['admin-sinset-lema-autocomplete', { sinsetId, q: query, limit }],
+    queryFn: () =>
+      klien.get(`/api/redaksi/sinset/${sinsetId}/opsi-lema`, {
+        params: {
+          q: query || undefined,
+          limit,
+        },
+      }).then((r) => r.data),
+    enabled: Boolean(sinsetId) && query.length >= 1,
+  });
+}
+
+export function useKandidatMaknaSinset(sinsetId, lemaId) {
+  return useQuery({
+    queryKey: ['admin-sinset-kandidat', sinsetId, lemaId],
+    queryFn: () =>
+      klien.get(`/api/redaksi/sinset/${sinsetId}/lema/${lemaId}/kandidat`).then((r) => r.data),
+    enabled: Boolean(sinsetId) && Boolean(lemaId),
+  });
+}
+
+export function useSimpanSinset() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...data }) =>
+      klien.put(`/api/redaksi/sinset/${id}`, data).then((r) => r.data),
+    onSuccess: () => {
+      invalidateQueryKeys(qc, ['admin-sinset', 'admin-sinset-detail', 'admin-sinset-statistik']);
+    },
+  });
+}
+
+export function useSimpanPemetaanLema() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ sinsetId, lemaId, ...data }) =>
+      klien.put(`/api/redaksi/sinset/${sinsetId}/lema/${lemaId}`, data).then((r) => r.data),
+    onSuccess: () => {
+      invalidateQueryKeys(qc, ['admin-sinset-detail', 'admin-sinset-statistik']);
+    },
+  });
+}
+
+export function useTambahLemaSinset() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ sinsetId, ...data }) =>
+      klien.post(`/api/redaksi/sinset/${sinsetId}/lema`, data).then((r) => r.data),
+    onSuccess: () => {
+      invalidateQueryKeys(qc, ['admin-sinset-detail', 'admin-sinset-statistik']);
+    },
+  });
+}
+
 /** Simpan (replace) tagar untuk satu entri */
 export function useSimpanTagarEntri() {
   const qc = useQueryClient();
