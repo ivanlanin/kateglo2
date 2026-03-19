@@ -44,6 +44,12 @@ PDF tersimpan di: `_data/gramatika/Tata Bahasa Baku Bahasa Indonesia TBBBI IV (2
 
 ```
 frontend/public/gramatika/
+├── adverbia/
+│   ├── batasan-dan-ciri.md
+│   ├── makna-adverbia.md
+│   ├── posisi-adverbia.md
+│   ├── bentuk-adverbia.md
+│   └── adverbial-dan-kelas-kata-lain.md
 └── kata-tugas/               ← slug bab
     ├── batasan-dan-ciri.md
     ├── preposisi.md
@@ -73,7 +79,7 @@ Formula Python pdfplumber (0-indeks): `range(PDF_awal - 1, PDF_akhir)`
 | III | Bunyi Bahasa dan Tata Bunyi | 69 | 118 | 50 | — |
 | IV  | Verba | 119 | 216 | 98 | — |
 | V   | Adjektiva | 217 | 257 | 41 | — |
-| VI  | Adverbia | 258 | 281 | 24 | — |
+| VI  | Adverbia | 258 | 281 | 24 | ✓ |
 | VII | Nomina, Pronomina, dan Numeralia | 282 | 395 | 114 | — |
 | VIII | Kata Tugas | 396 | 429 | 34 | ✓ |
 | IX  | Kalimat | 430 | 534 | 105 | — |
@@ -109,15 +115,14 @@ Urutan mempertimbangkan: panjang bab, kualitas OCR yang dapat diharapkan, kepada
 
 ---
 
-### ☐ 2. Bab VI — Adverbia (24 hal PDF)
+### ✓ 2. Bab VI — Adverbia (24 hal PDF) — **SELESAI**
 
 - Bab kedua terpendek.
 - Struktur sederhana: klasifikasi semantis → sintaktis → bentuk.
 - Tidak ada bagan pohon; tabel minimal.
 - Relevan untuk pengguna kamus (kata seperti *sangat*, *selalu*, *hampir*).
-- OCR diperkirakan bersih karena mayoritas prosa.
 
-**Subbab yang disarankan:** Batasan dan Ciri · Jenis Adverbia Berdasarkan Makna · Posisi Sintaktis · Bentuk Adverbia
+**Subbab:** Batasan dan Ciri · Makna Adverbia (8 jenis) · Posisi Adverbia (6 posisi) · Bentuk Adverbia · Adverbial dan Kelas Kata Lain
 
 ---
 

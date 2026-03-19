@@ -2,7 +2,7 @@
 
 ## 2026-03-19 Kamis
 
-- Menambahkan menu [Gramatika](/gramatika) dengan isi dari TBBBI
+- Menambahkan menu [Gramatika](/gramatika) dengan isi awal adverbia dan kata tugas
 
 ## 2026-03-18 Rabu
 

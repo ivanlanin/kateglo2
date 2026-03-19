@@ -4,6 +4,17 @@
 
 const daftarIsiGramatika = [
   {
+    judul: 'Adverbia',
+    slug: 'adverbia',
+    items: [
+      { judul: 'Batasan dan Ciri Adverbia', slug: 'batasan-dan-ciri' },
+      { judul: 'Makna Adverbia', slug: 'makna-adverbia' },
+      { judul: 'Posisi Adverbia', slug: 'posisi-adverbia' },
+      { judul: 'Bentuk Adverbia', slug: 'bentuk-adverbia' },
+      { judul: 'Adverbial dan Kelas Kata Lain', slug: 'adverbial-dan-kelas-kata-lain' },
+    ],
+  },
+  {
     judul: 'Kata Tugas',
     slug: 'kata-tugas',
     items: [
