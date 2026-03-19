@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-03-20 Jumat
+
+- Menambahkan bagian adjektiva, nomina, pronomina, dan numeralia di [Gramatika](/gramatika)
+
 ## 2026-03-19 Kamis
 
 - Menambahkan menu [Gramatika](/gramatika) dengan isi awal adverbia dan kata tugas

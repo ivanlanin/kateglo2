@@ -28,6 +28,37 @@ const daftarIsiGramatika = [
     ],
   },
   {
+    judul: 'Nomina',
+    slug: 'nomina',
+    items: [
+      { judul: 'Batasan dan Ciri Nomina', slug: 'batasan-dan-ciri-nomina' },
+      { judul: 'Makna Nomina', slug: 'makna-nomina' },
+      { judul: 'Acuan Nomina', slug: 'acuan-nomina' },
+      { judul: 'Fungsi Nomina', slug: 'fungsi-nomina' },
+      { judul: 'Jenis Nomina', slug: 'jenis-nomina' },
+      { judul: 'Frasa Nominal', slug: 'frasa-nominal' },
+      { judul: 'Frasa Nominal Vokatif', slug: 'frasa-nominal-vokatif' },
+    ],
+  },
+  {
+    judul: 'Pronomina',
+    slug: 'pronomina',
+    items: [
+      { judul: 'Batasan dan Ciri Pronomina', slug: 'batasan-dan-ciri-pronomina' },
+      { judul: 'Jenis Pronomina', slug: 'jenis-pronomina' },
+      { judul: 'Frasa Pronominal', slug: 'frasa-pronominal' },
+    ],
+  },
+  {
+    judul: 'Numeralia',
+    slug: 'numeralia',
+    items: [
+      { judul: 'Numeralia Pokok', slug: 'numeralia-pokok' },
+      { judul: 'Numeralia Tingkat', slug: 'numeralia-tingkat' },
+      { judul: 'Frasa Numeral', slug: 'frasa-numeral' },
+    ],
+  },
+  {
     judul: 'Kata Tugas',
     slug: 'kata-tugas',
     items: [
