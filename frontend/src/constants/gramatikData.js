@@ -13,7 +13,6 @@ const daftarIsiGramatika = [
       { judul: 'Fungsi Nomina', slug: 'fungsi-nomina' },
       { judul: 'Jenis Nomina', slug: 'jenis-nomina' },
       { judul: 'Frasa Nominal', slug: 'frasa-nominal' },
-      { judul: 'Frasa Nominal Vokatif', slug: 'frasa-nominal-vokatif' },
     ],
   },
   {
@@ -51,6 +50,7 @@ const daftarIsiGramatika = [
       { judul: 'Makna Adverbia', slug: 'makna-adverbia' },
       { judul: 'Posisi Adverbia', slug: 'posisi-adverbia' },
       { judul: 'Bentuk Adverbia', slug: 'bentuk-adverbia' },
+      { judul: 'Bentuk Adverbial', slug: 'bentuk-adverbial' },
       { judul: 'Adverbia dan Kelas Kata Lain', slug: 'adverbia-dan-kelas-kata-lain' },
     ],
   },
