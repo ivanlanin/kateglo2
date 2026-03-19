@@ -73,10 +73,10 @@ Kata *kaum* pada (333b) tidak dapat dipakai karena nomina *guru* mengacu pada ke
 | brahmana-brahmana | kaum brahmana | para brahmana |
 | pedagang-pedagang | kaum pedagang | para pedagang |
 | petani-petani | kaum petani | para petani |
-| orang-orang komunis | kaum komunis | — |
-| orang-orang sosialis | kaum sosialis | — |
-| orang-orang terpelajar | kaum terpelajar | — |
-| orang-orang tertindas | kaum tertindas | — |
+| orang-orang komunis | kaum komunis |—|
+| orang-orang sosialis | kaum sosialis |—|
+| orang-orang terpelajar | kaum terpelajar |—|
+| orang-orang tertindas | kaum tertindas |—|
 
 ### Kata *umat* (7.4.4)
 
@@ -105,7 +105,7 @@ Dari uraian dan contoh-contoh di atas tampak bahwa bentuk nomina dalam bahasa In
 
 Contoh:
 
-- (339a) *Anjing suka tulang.* (generik — satu, banyak, atau semua anjing)
+- (339a) *Anjing suka tulang.* (generik—satu, banyak, atau semua anjing)
 - (339b) *Anjing saya sudah mati.* (cenderung tunggal)
 - (339c) *Anjing saya sudah mati semua.* (jamak, ditandai *semua*)
 - (339d) *Anjing saya berebut tulang.* (jamak, ditandai verba *berebut*)

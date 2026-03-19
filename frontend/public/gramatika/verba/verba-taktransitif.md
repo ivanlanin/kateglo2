@@ -280,8 +280,8 @@ Makna umum dari bentukan ini adalah adversatif, yang menggambarkan keadaan yang 
 
 Perilaku semantis verba berkonfiks *ke-...-an* agak berbeda dengan verba transitif atau taktransitif pada umumnya:
 
-- (271) *Buruh bangunan itu kejatuhan pasir.* — *buruh bangunan itu* bukan pelaku melainkan penderita; *pasir* yang berada di belakang verba *kejatuhan* justru merupakan benda yang jatuh.
-- (272) *Orang itu kecurian sepeda.* — subjek *orang itu* merupakan penderita, sedangkan pelengkap *sepeda* merupakan 'sasaran' yang dicuri.
+- (271) *Buruh bangunan itu kejatuhan pasir.*—*buruh bangunan itu* bukan pelaku melainkan penderita; *pasir* yang berada di belakang verba *kejatuhan* justru merupakan benda yang jatuh.
+- (272) *Orang itu kecurian sepeda.*—subjek *orang itu* merupakan penderita, sedangkan pelengkap *sepeda* merupakan 'sasaran' yang dicuri.
 
 Karena makna seperti itulah verba *ke-...-an* sering dihubungkan dengan verba pasif. Namun, verba *ke-...-an* mengandung pula makna adversatif, sedangkan verba pasif dengan *di-* tidak.
 

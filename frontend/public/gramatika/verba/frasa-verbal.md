@@ -57,9 +57,9 @@ Dari contoh-contoh tersebut jelaslah bahwa kata-kata pewatas depan, seperti *aka
 
 **Pemarkah negasi** *tidak* berperilaku sebagai berikut:
 
-- (342) *Dia tidak menikah.* — *tidak* mengingkarkan verba *menikah*
-- (343) *Dia tidak harus menikah.* — yang diingkarkan adalah *harus* atau *harus menikah*
-- (344) *Dia harus tidak menikah.* — yang dikenai ingkar hanyalah *menikah* saja (maknanya 'dia harus lajang')
+- (342) *Dia tidak menikah.*—*tidak* mengingkarkan verba *menikah*
+- (343) *Dia tidak harus menikah.*—yang diingkarkan adalah *harus* atau *harus menikah*
+- (344) *Dia harus tidak menikah.*—yang dikenai ingkar hanyalah *menikah* saja (maknanya 'dia harus lajang')
 
 Pada dasarnya, pemarkah pengingkar *tidak* tidak dapat ditempatkan di antara pemarkah modalitas, di antara pemarkah aspektualitas, atau di antara kedua kelompok itu. Demikian pula kata *belum* yang dapat diartikan 'masih dalam keadaan tidak ...'. Berikut adalah beberapa contoh tambahan.
 

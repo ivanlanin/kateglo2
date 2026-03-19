@@ -55,7 +55,7 @@ Partikel *-lah* cenderung dilekatkan pada **predikat** kalimat.
 
 ## Partikel *-tah* (8.2.5.3)
 
-Partikel *-tah*, yang juga berbentuk klitika, dipakai dalam kalimat interogatif ketika penanya sebenarnya tidak mengharapkan jawaban — seolah-olah hanya bertanya kepada diri sendiri karena keheranan atau kesangsian.
+Partikel *-tah*, yang juga berbentuk klitika, dipakai dalam kalimat interogatif ketika penanya sebenarnya tidak mengharapkan jawaban—seolah-olah hanya bertanya kepada diri sendiri karena keheranan atau kesangsian.
 
 - *Apatah artinya hidup ini tanpa engkau?*
 - *Siapatah gerangan orangnya yang mau menolongku?*

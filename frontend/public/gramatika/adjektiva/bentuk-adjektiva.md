@@ -88,11 +88,11 @@ Contoh:
 | *alam* | *alami* | *alamiah* |
 | *islam* | *islami* | *islamiah* |
 | *insan* | *insani* | *insaniah* |
-| *hewan* | *hewani* | — |
-| *dunia* | *duniawi* | — |
-| *manusia* | *manusiawi* | — |
-| *gereja* | *gerejawi* | — |
-| *raga* | *ragawi* | — |
+| *hewan* | *hewani* |—|
+| *dunia* | *duniawi* |—|
+| *manusia* | *manusiawi* |—|
+| *gereja* | *gerejawi* |—|
+| *raga* | *ragawi* |—|
 
 (77)
 - a. *Pewarna alami makanan dapat dibuat dari daun suji.*
@@ -169,26 +169,26 @@ Adjektiva majemuk perlu dibedakan menjadi dua macam, yaitu (1) yang berupa gabun
 Contoh berikut merupakan adjektiva majemuk yang merupakan gabungan antara morfem terikat dan morfem bebas. Pada kata *adikodrati*, misalnya, terdapat morfem terikat *adi-* dan morfem bebas *kodrati*. Contoh lain yang sejenis dengan itu adalah sebagai berikut.
 
 (83)
-- *adikodrati* — *panteistis*
-- *anasional* — *paranormal*
-- *antarbangsa* — *pascajual*
-- *antiperang* — *nirgelar*
-- *asusila* — *pascalahir*
-- *awahama* — *prokomunis*
-- *diapositif* — *purnawaktu*
-- *diatonik* — *semipermanen*
-- *dursila* — *serbaguna*
-- *ekstrakurikuler* — *subtropis*
-- *hiperkorek* — *superberat*
-- *inframerah* — *supranasional*
-- *inkonstitusional* — *swasembada*
-- *interfakultas* — *takorganik*
-- *interlokal* — *taktakrif*
-- *internasional* — *transkontinental*
-- *mahabesar* — *tunakarya*
-- *mahasuci* — *tunanetra*
-- *multinasional* — *ultrakanan*
-- *niraksara* — *ultramodern*
+- *adikodrati*—*panteistis*
+- *anasional*—*paranormal*
+- *antarbangsa*—*pascajual*
+- *antiperang*—*nirgelar*
+- *asusila*—*pascalahir*
+- *awahama*—*prokomunis*
+- *diapositif*—*purnawaktu*
+- *diatonik*—*semipermanen*
+- *dursila*—*serbaguna*
+- *ekstrakurikuler*—*subtropis*
+- *hiperkorek*—*superberat*
+- *inframerah*—*supranasional*
+- *inkonstitusional*—*swasembada*
+- *interfakultas*—*takorganik*
+- *interlokal*—*taktakrif*
+- *internasional*—*transkontinental*
+- *mahabesar*—*tunakarya*
+- *mahasuci*—*tunanetra*
+- *multinasional*—*ultrakanan*
+- *niraksara*—*ultramodern*
 
 #### Gabungan Morfem Bebas dengan Morfem Bebas (5.5.4.2)
 

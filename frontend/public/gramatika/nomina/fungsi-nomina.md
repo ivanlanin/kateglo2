@@ -47,11 +47,11 @@ Nomina atau frasa nominal juga berfungsi sebagai pelengkap preposisi pada frasa 
 
 Contoh:
 
-- (14) *di kantor* — *di persimpangan jalan*
-- *ke desa* — *ke negeri jauh*
-- *dari markas* — *dari tempat persembunyian*
-- *pada masa ini* — *pada hari ulang tahun*
-- *untuk adikmu* — *untuk kepentingan umum*
+- (14) *di kantor*—*di persimpangan jalan*
+- *ke desa*—*ke negeri jauh*
+- *dari markas*—*dari tempat persembunyian*
+- *pada masa ini*—*pada hari ulang tahun*
+- *untuk adikmu*—*untuk kepentingan umum*
 
 ### Nomina sebagai Inti Frasa Nominal
 

@@ -13,7 +13,7 @@ Kata tugas memiliki tiga ciri utama yang membedakannya dari kelas kata lain.
 
 **1. Hanya bermakna gramatikal, tidak bermakna leksikal**
 
-Arti suatu kata tugas ditentukan bukan oleh kata itu secara lepas, melainkan oleh kaitannya dengan kata lain dalam frasa atau kalimat. Jika arti suatu kata yang tergolong nomina, misalnya *buku*, dapat diberikan berdasarkan kodrat kata itu sendiri — benda yang terdiri atas kumpulan kertas bertulisan — cara yang sama tidak dapat ditempuh untuk arti suatu kata tugas. Kata tugas seperti *dan* atau *ke* baru akan mempunyai arti apabila dirangkai dengan kata lain menjadi, misalnya, *ayah dan ibu* dan *ke pasar*. Kata *dan* dalam frasa *ayah dan ibu* menyatakan makna hubungan gabungan antara kata *ayah* dan *ibu*. Kata *ke* pada frasa *ke pasar* menyatakan makna arah yang dituju, dalam hal ini *pasar*.
+Arti suatu kata tugas ditentukan bukan oleh kata itu secara lepas, melainkan oleh kaitannya dengan kata lain dalam frasa atau kalimat. Jika arti suatu kata yang tergolong nomina, misalnya *buku*, dapat diberikan berdasarkan kodrat kata itu sendiri—benda yang terdiri atas kumpulan kertas bertulisan—cara yang sama tidak dapat ditempuh untuk arti suatu kata tugas. Kata tugas seperti *dan* atau *ke* baru akan mempunyai arti apabila dirangkai dengan kata lain menjadi, misalnya, *ayah dan ibu* dan *ke pasar*. Kata *dan* dalam frasa *ayah dan ibu* menyatakan makna hubungan gabungan antara kata *ayah* dan *ibu*. Kata *ke* pada frasa *ke pasar* menyatakan makna arah yang dituju, dalam hal ini *pasar*.
 
 **2. Tidak dapat menjadi dasar pembentukan kata lain**
 
@@ -27,8 +27,8 @@ Berbeda dengan kelas verba, adjektiva, adverbia, dan nomina yang merupakan kelas
 
 Berdasarkan peranannya dalam frasa atau kalimat, kata tugas dalam bahasa Indonesia dapat dikelompokkan atas lima jenis:
 
-1. **Preposisi** — kata depan yang menandai hubungan makna antara konstituen dalam frasa preposisional
-2. **Konjungsi** — kata hubung yang menghubungkan dua satuan bahasa
-3. **Interjeksi** — kata seru yang mengungkapkan rasa hati pembicara
-4. **Artikula** — kata yang membatasi makna nomina
-5. **Partikel penegas** — kata yang menampilkan unsur yang diiringinya
+1. **Preposisi**—kata depan yang menandai hubungan makna antara konstituen dalam frasa preposisional
+2. **Konjungsi**—kata hubung yang menghubungkan dua satuan bahasa
+3. **Interjeksi**—kata seru yang mengungkapkan rasa hati pembicara
+4. **Artikula**—kata yang membatasi makna nomina
+5. **Partikel penegas**—kata yang menampilkan unsur yang diiringinya

@@ -137,8 +137,8 @@ Di samping penggolong nomina, bahasa Indonesia juga menggunakan sejumlah kata, s
 
 Berbeda dengan penggolong, partitif pada frasa nominal yang penentunya berupa numeralia umumnya wajib hadir. Jika partitifnya tidak hadir, maknanya cenderung berbeda atau kalimatnya tidak berterima.
 
-- (124a) *Saya membeli dua **bungkus** nasi.* — ✓
-- (124b) **Saya membeli dua nasi.* — ✗
+- (124a) *Saya membeli dua **bungkus** nasi.*—✓
+- (124b) **Saya membeli dua nasi.*—✗
 
 Berkaitan dengan penggunaan penggolong dan partitif itu perlu ditambahkan dua hal. Pertama, jika penentu berupa numeralia taktentu, hanya *beberapa* dan *tiap* yang dapat diikuti oleh penggolong atau partitif. Kedua, partitif *belah* hanya dapat mengikuti numeralia klitik *se-*, seperti pada *sebelah mata*, *sebelah tangan*, dan *sebelah kaki* atau numeralia kolektif *kedua*, seperti pada *kedua belah mata*, *kedua belah tangan*, dan *kedua belah pipi*.
 
@@ -158,8 +158,8 @@ Berikut adalah beberapa contoh frasa nominal yang dibentuk melalui perluasan nom
 | satu / se- | bungkus | rokok |
 | beberapa | butir | telur |
 | tiap | helai | kertas |
-| banyak | — | tikus |
-| semua | — | tamu |
+| banyak |—| tikus |
+| semua |—| tamu |
 
 Penggolong dan partitif merupakan konstituen frasa numeralia. Hal itu didasarkan pada kenyataan bahwa kehadiran penggolong atau partitif lebih banyak dipicu oleh numeralia daripada oleh nomina inti. Dalam kalimat, nomina inti sering mendahului frasa numeralia untuk memberikan pementingan pada nomina inti itu:
 
@@ -201,7 +201,7 @@ Frasa nominal yang pewatasnya nomina dapat diperluas lagi dengan menambahkan nom
 
 Acap kali terdapat frasa nominal yang hubungan konstituen-konstituennya lebih daripada satu kemungkinan. Hal ini terjadi karena salah satu konstituennya dapat mewatasi nomina atau frasa nominal yang langsung mendahuluinya:
 
-- (133) *lembaga bahasa nasional* — dapat ditafsirkan (a) lembaga yang mengurusi bahasa nasional atau (b) lembaga bahasa yang bersifat nasional.
+- (133) *lembaga bahasa nasional*—dapat ditafsirkan (a) lembaga yang mengurusi bahasa nasional atau (b) lembaga bahasa yang bersifat nasional.
 
 ### Adjektiva Pewatas (7.1.5.4.2)
 
@@ -228,19 +228,19 @@ Kata *yang* harus disisipkan antara nomina inti dan pewatas yang berupa frasa ad
 
 Frasa nominal dapat dibentuk dengan menambahkan verba sebagai pewatas pada nomina inti. Verba pewatas pada frasa nominal dapat bersifat atributif:
 
-> *rumah bertingkat* — rumah yang bertingkat
-> *ban berjalan* — ban yang berjalan
-> *kendaraan bermotor* — kendaraan yang dijalankan motor
-> *pembunuhan berencana* — pembunuhan yang direncanakan
-> *kacang rebus* — kacang yang direbus
-> *nasi goreng* — nasi yang digoreng
+> *rumah bertingkat*—rumah yang bertingkat
+> *ban berjalan*—ban yang berjalan
+> *kendaraan bermotor*—kendaraan yang dijalankan motor
+> *pembunuhan berencana*—pembunuhan yang direncanakan
+> *kacang rebus*—kacang yang direbus
+> *nasi goreng*—nasi yang digoreng
 
 Verba pewatas nomina dapat pula bersifat deskriptif:
 
-> *kamar belajar* — kamar untuk belajar
-> *tempat beristirahat* — tempat untuk beristirahat
-> *ruang rapat* — ruang untuk mengadakan rapat
-> *jam bicara* — waktu untuk berbicara (berkonsultasi)
+> *kamar belajar*—kamar untuk belajar
+> *tempat beristirahat*—tempat untuk beristirahat
+> *ruang rapat*—ruang untuk mengadakan rapat
+> *jam bicara*—waktu untuk berbicara (berkonsultasi)
 
 ### Frasa Preposisional sebagai Pewatas (7.1.5.4.4)
 
@@ -303,9 +303,9 @@ Nomina dalam bahasa Indonesia dapat diikuti pewatas yang terdiri atas dua kata a
 
 **1)** Pewatas berupa nomina cenderung mendahului adjektiva atau verba dalam suatu frasa nominal yang kompleks:
 
-> *buku pelajaran (yang) baru* — ✓ &nbsp;&nbsp;&nbsp; \**buku baru pelajaran* — ✗
-> *lemari besi (yang) tua* — ✓ &nbsp;&nbsp;&nbsp; \**lemari tua besi* — ✗
-> *rumah batu (yang) bertingkat* — ✓ &nbsp;&nbsp;&nbsp; \**rumah bertingkat batu* — ✗
+> *buku pelajaran (yang) baru*—✓ &nbsp;&nbsp;&nbsp; \**buku baru pelajaran*—✗
+> *lemari besi (yang) tua*—✓ &nbsp;&nbsp;&nbsp; \**lemari tua besi*—✗
+> *rumah batu (yang) bertingkat*—✓ &nbsp;&nbsp;&nbsp; \**rumah bertingkat batu*—✗
 
 **2)** Pewatas berupa adjektiva dapat mengikuti langsung nomina inti jika konstituen pewatas yang mengikutinya membentuk kesatuan makna yang erat:
 
@@ -322,11 +322,11 @@ Nomina inti dapat diperluas dengan menambahkan pewatas dengan atau tanpa penentu
 
 Contoh:
 
-- (152a) ***kedua** mahasiswa bimbingan **beliau tadi*** — FNum + N + N/pewatas + Pmk + Penk
-- (152b) ***seorang** anak laki-laki **keluarga itu*** — FNum + N + N/pewatas + Pmk + Penj
-- (152c) ***kedua** buku baru **saya itu*** — FNum + N + Adj/pewatas + Pmk + Penj
-- (152d) *anak perempuan **pertama mereka itu*** — N + N/pewatas + FNum + Pmk + Penj
-- (152e) *mobil Mercy **kedua Pak Jaksa itu*** — N + N/pewatas + FNum + Pmk + Penj
+- (152a) ***kedua** mahasiswa bimbingan **beliau tadi***—FNum + N + N/pewatas + Pmk + Penk
+- (152b) ***seorang** anak laki-laki **keluarga itu***—FNum + N + N/pewatas + Pmk + Penj
+- (152c) ***kedua** buku baru **saya itu***—FNum + N + Adj/pewatas + Pmk + Penj
+- (152d) *anak perempuan **pertama mereka itu***—N + N/pewatas + FNum + Pmk + Penj
+- (152e) *mobil Mercy **kedua Pak Jaksa itu***—N + N/pewatas + FNum + Pmk + Penj
 
 Perubahan susunan konstituen frasa nominal dapat terjadi dengan memindahkan pronomina/nomina pemilik mendahului frasa numeralia atau pewatas. Konstituen frasa numeralia atau pewatas yang dipindahkan ke belakang harus didahului *yang*:
 

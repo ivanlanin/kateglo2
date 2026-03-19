@@ -49,8 +49,8 @@ Ada pula kata lain seperti *kaum* dan *umat* yang juga menyatakan makna kelompok
 
 Artikula *si* dapat mengacu pada makna tunggal atau generik, bergantung pada konteks:
 
-- *Tak sampai hatiku melihat **si** miskin mengambil makanan dari tumpukan sampah itu.* (acuan tunggal — satu orang yang kebetulan miskin)
-- *Dalam masa krisis **si** miskinlah yang selalu menderita.* (acuan generik — kaum miskin)
+- *Tak sampai hatiku melihat **si** miskin mengambil makanan dari tumpukan sampah itu.* (acuan tunggal—satu orang yang kebetulan miskin)
+- *Dalam masa krisis **si** miskinlah yang selalu menderita.* (acuan generik—kaum miskin)
 
 Contoh pemakaian:
 
@@ -81,8 +81,8 @@ Artikula *yang* berfungsi ganda: (1) membentuk frasa nominal dari verba, adjekti
 
 Perbedaan dengan tanpa *yang*:
 
-- *Pak Marto bekerja di perusahaan terkenal.* — takdefinit
-- *Pak Marto bekerja di perusahaan **yang** terkenal.* — definit
+- *Pak Marto bekerja di perusahaan terkenal.*—takdefinit
+- *Pak Marto bekerja di perusahaan **yang** terkenal.*—definit
 
-- *Rayanti membeli pakaian mahal.* — takdefinit
-- *Rayanti membeli pakaian **yang** mahal.* — definit
+- *Rayanti membeli pakaian mahal.*—takdefinit
+- *Rayanti membeli pakaian **yang** mahal.*—definit

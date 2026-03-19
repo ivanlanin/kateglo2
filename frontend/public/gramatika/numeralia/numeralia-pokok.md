@@ -15,13 +15,13 @@ Numeralia pokok adalah bilangan yang menjadi dasar dari bilangan yang lain. Nume
 
 Numeralia pokok tentu mengacu pada bilangan pokok, baik yang berupa satu kata yang terdiri atas satu unsur atau lebih maupun yang berupa gugus kata yang terdiri atas dua unsur atau lebih.
 
-**1) Numeralia monomorfemis** — satu kata, satu lambang dalam sistem angka Arab:
+**1) Numeralia monomorfemis**—satu kata, satu lambang dalam sistem angka Arab:
 
 > 0 → *nol*; 1 → *satu*; 2 → *dua*; 3 → *tiga*; 4 → *empat*; 5 → *lima*; 6 → *enam*; 7 → *tujuh*; 8 → *delapan*; 9 → *sembilan*
 
 Bilangan 1, 2, 3, ... 8, dan 9 lazim disebut bilangan asli.
 
-**2) Numeralia polimorfemis** — dinyatakan dengan dua lambang atau lebih. Perlu diingat bahwa *se-* yang ditempelkan pada nomina numeralia seperti *sepuluh*, *seratus*, dan *seribu* berarti 'satu'.
+**2) Numeralia polimorfemis**—dinyatakan dengan dua lambang atau lebih. Perlu diingat bahwa *se-* yang ditempelkan pada nomina numeralia seperti *sepuluh*, *seratus*, dan *seribu* berarti 'satu'.
 
 a) Bilangan asli + nomina numeralia *belas*:
 
@@ -49,21 +49,21 @@ Dalam bahasa Indonesia baku, numeralia pokok ditempatkan di muka nomina dan dapa
 
 Jika numeralia ditempatkan di belakang nomina, dalam bahasa baku kata penggolongnya tidak dapat ditinggalkan:
 
-- (312a) \**Belilah buku tulis tiga.* — ✗
-- (312b) *Belilah buku tulis tiga **buah**.* — ✓
+- (312a) \**Belilah buku tulis tiga.*—✗
+- (312b) *Belilah buku tulis tiga **buah**.*—✓
 
 ## Numeralia Pokok Kolektif (7.3.1.2)
 
 Numeralia pokok kolektif dibentuk dengan prefiks *ke-* yang ditempatkan di muka nomina yang diterangkan:
 
-> ***ketiga** pemain* — semua pemain dari nomor satu sampai ke nomor tiga
-> ***kedua** gedung* — baik gedung pertama maupun gedung kedua
-> ***kesepuluh** anggota* — anggota nomor 1 sampai dengan 10
+> ***ketiga** pemain*—semua pemain dari nomor satu sampai ke nomor tiga
+> ***kedua** gedung*—baik gedung pertama maupun gedung kedua
+> ***kesepuluh** anggota*—anggota nomor 1 sampai dengan 10
 
 Jika tidak diikuti oleh nomina, biasanya bentuk itu diulang dan diikuti dengan *-nya*:
 
-> Anda mau apel atau durian? — *Kedua-duanya.*
-> Ayah, Ibu, atau Adik yang pergi ke pasar? — *Ketiga-tiganya.*
+> Anda mau apel atau durian?—*Kedua-duanya.*
+> Ayah, Ibu, atau Adik yang pergi ke pasar?—*Ketiga-tiganya.*
 
 Numeralia kolektif dapat juga dibentuk dengan cara berikut.
 
@@ -93,18 +93,18 @@ Numeralia pokok taktentu yang lazim disebut pemerbanyak adalah kata yang mengacu
 
 Sebagian dari numeralia itu mengandung pengertian kejamakan. Selain numeralia, konsep kejamakan dalam bahasa Indonesia juga dinyatakan dengan reduplikasi bentuk nomina. Akan tetapi, dalam pemakaian, hanya salah satu yang bisa digunakan untuk menyatakan kejamakan:
 
-- (320a) ***Banyak** orang yang menghadiri konser itu.* — ✓
-- (320b) ***Orang-orang** yang menghadiri konser itu dari berbagai lapisan.* — ✓
-- (320c) \****Banyak** orang-orang yang menghadiri konser itu.* — ✗
+- (320a) ***Banyak** orang yang menghadiri konser itu.*—✓
+- (320b) ***Orang-orang** yang menghadiri konser itu dari berbagai lapisan.*—✓
+- (320c) \****Banyak** orang-orang yang menghadiri konser itu.*—✗
 
 Pada tataran sintaksis nomina numeralia taktentu dapat pula dibentuk dari numeralia pokok tentu:
 
-**1) Penambahan prefiks *ber-* pada nomina numeral lalu diulang** — menyatakan kelipatan tidak tentu:
+**1) Penambahan prefiks *ber-* pada nomina numeral lalu diulang**—menyatakan kelipatan tidak tentu:
 
 > *Berpuluh-puluh mahasiswa yang datang terlambat.*
 > *Beratus-ratus juta pasang mata menyaksikan pertandingan sepak bola itu.*
 
-**2) Penambahan sufiks *-an*** — menyatakan makna 'sekitar' nomina numeralia:
+**2) Penambahan sufiks *-an***—menyatakan makna 'sekitar' nomina numeralia:
 
 > *Ratusan orang tidak membeli karcis.*
 > *Puluhan ribu orang menghadiri rapat umum itu.*

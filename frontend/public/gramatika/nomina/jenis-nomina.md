@@ -17,41 +17,41 @@ Nomina dalam bahasa Indonesia, khususnya yang tergolong nama jenis yang acuannya
 
 Berdasarkan jenis acuannya, nomina yang tergolong nama jenis dapat dibedakan sebagai berikut.
 
-**1) Nomina manusia** — kata yang mengacu pada orang, dapat diberi penggolong *(se)orang*.
+**1) Nomina manusia**—kata yang mengacu pada orang, dapat diberi penggolong *(se)orang*.
 
 > *adik, guru, hakim, dokter, polisi*
 
-**2) Nomina binatang** — kata yang mengacu pada binatang, dapat diberi penggolong *(se)ekor*.
+**2) Nomina binatang**—kata yang mengacu pada binatang, dapat diberi penggolong *(se)ekor*.
 
 > *ayam, ikan, kucing, ular, belalang*
 
-**3) Nomina tumbuhan** — kata yang mengacu pada berbagai tumbuhan, baik yang berbatang maupun yang tidak berbatang, lazim diberi penggolong *(se)batang*.
+**3) Nomina tumbuhan**—kata yang mengacu pada berbagai tumbuhan, baik yang berbatang maupun yang tidak berbatang, lazim diberi penggolong *(se)batang*.
 
 > *bambu, rotan, kayu, padi, tebu*
 
-**4) Nomina benda** — kata yang mengacu pada benda/fenomena alam, benda budaya, atau benda angkasa. Nomina yang tergolong kelompok ini dapat diberi penggolong *(se)buah* jika bentuknya relatif tetap. Kata-kata yang tidak dapat diberi penggolong *(se)buah* dapat diberi penggolong atau partitif lain, seperti *(se)bidang (tanah)*, *(se)gelas (air)*, atau *(se)karung (pasir)*.
+**4) Nomina benda**—kata yang mengacu pada benda/fenomena alam, benda budaya, atau benda angkasa. Nomina yang tergolong kelompok ini dapat diberi penggolong *(se)buah* jika bentuknya relatif tetap. Kata-kata yang tidak dapat diberi penggolong *(se)buah* dapat diberi penggolong atau partitif lain, seperti *(se)bidang (tanah)*, *(se)gelas (air)*, atau *(se)karung (pasir)*.
 
 > *bintang, candi, halilintar, gunung, meja*
 
-**5) Nomina temporal** — kata yang mengacu pada waktu. Nomina kelompok ini dapat didahului numeralia. Anggota kelompok nomina temporal ini relatif terbatas.
+**5) Nomina temporal**—kata yang mengacu pada waktu. Nomina kelompok ini dapat didahului numeralia. Anggota kelompok nomina temporal ini relatif terbatas.
 
 > *hari, minggu, bulan, tahun, abad, windu, malam, jam, menit*
 
-**6) Nomina numeralia** — kata yang menyatakan satuan bilangan. Nomina numeralia dalam bahasa Indonesia terbatas.
+**6) Nomina numeralia**—kata yang menyatakan satuan bilangan. Nomina numeralia dalam bahasa Indonesia terbatas.
 
 > *puluh, belas, ratus, laksa, ribu, juta, miliar, triliun*
 
-**7) Nomina ukuran** — kata yang menyatakan satuan ukuran panjang, isi, berat, jarak, atau kuantitas. Anggota nomina ukuran ini terbatas. Kata yang tergolong nomina ukuran biasanya didahului oleh kata bilangan.
+**7) Nomina ukuran**—kata yang menyatakan satuan ukuran panjang, isi, berat, jarak, atau kuantitas. Anggota nomina ukuran ini terbatas. Kata yang tergolong nomina ukuran biasanya didahului oleh kata bilangan.
 
 > *barel, gantang, gram, kaki, kati, knot, kodi, liter, lusin, meter, mil*
 
 Di samping kata-kata di atas, dalam bahasa Indonesia dikenal juga satuan ukuran lain yang sifatnya relatif karena tidak ditera, seperti *jengkal*, *hasta*, *depa*, dan *langkah*.
 
-**8) Nomina konsep** — kata yang menyatakan konsep atau pengertian. Umumnya nomina yang tergolong dalam kelompok ini tidak dapat didahului penggolong.
+**8) Nomina konsep**—kata yang menyatakan konsep atau pengertian. Umumnya nomina yang tergolong dalam kelompok ini tidak dapat didahului penggolong.
 
 > *atas, bawah, luas, panjang, cinta, kasih, hormat, kesedihan, masalah*
 
-**9) Nomina lokatif** — kata yang mengacu pada benda yang menyatakan tempat.
+**9) Nomina lokatif**—kata yang mengacu pada benda yang menyatakan tempat.
 
 > *kota, kampung, jalan, pelabuhan, rumah*
 
@@ -59,49 +59,49 @@ Di samping kata-kata di atas, dalam bahasa Indonesia dikenal juga satuan ukuran 
 
 Nomina yang tergolong nama diri digunakan untuk mengacu, antara lain, pada orang, dewa, tempat, gejala geografi, waktu, benda angkasa, atau badan tertentu. Pada dasarnya nama diri tidak dapat didahului numeralia atau penggolong. Nama diri dapat terdiri atas satu kata dan dapat pula terdiri atas dua kata atau lebih. Perlu diingat bahwa huruf awal tiap kata nama diri ditulis dengan huruf kapital.
 
-**1) Nama diri orang** — kata yang digunakan untuk mengacu atau mengidentifikasi orang tertentu.
+**1) Nama diri orang**—kata yang digunakan untuk mengacu atau mengidentifikasi orang tertentu.
 
 > *Agus, Basri, Indri, Tri, Elvi*
 
-**2) Nama diri lokatif** — kata yang mengacu pada tempat tertentu.
+**2) Nama diri lokatif**—kata yang mengacu pada tempat tertentu.
 
 > *Bandung, London, Makassar, Merauke, Tokyo*
 
-**3) Nama diri geografi** — kata yang mengacu pada fenomena geografi tertentu, seperti benua, pulau, laut(an), danau, sungai, dan gunung.
+**3) Nama diri geografi**—kata yang mengacu pada fenomena geografi tertentu, seperti benua, pulau, laut(an), danau, sungai, dan gunung.
 
 > *Asia, (Laut) Jawa, Papua, (Gunung) Merapi, (Sungai) Musi*
 
 Kata-kata nama jenis, seperti *laut*, *selat*, *sungai*, *kali*, *danau*, dan *gunung* pada contoh di atas ditulis dengan huruf kapital karena diperlakukan sebagai bagian dari nama diri.
 
-**4) Nama diri temporal** — kata yang mengacu pada waktu atau hari penting tertentu.
+**4) Nama diri temporal**—kata yang mengacu pada waktu atau hari penting tertentu.
 
 > *Senin, Februari, Idulfitri, Natal, Galungan, Saka*
 
-**5) Nama diri bangsa, negara, atau bahasa** — kata yang mengacu pada bangsa, ras, etnis, negara, atau bahasa tertentu. Kata-kata yang menjadi nama diri ini umumnya didahului kata-kata, seperti *bangsa*, *suku*, *orang*, *negara*, *negeri*, atau *bahasa*.
+**5) Nama diri bangsa, negara, atau bahasa**—kata yang mengacu pada bangsa, ras, etnis, negara, atau bahasa tertentu. Kata-kata yang menjadi nama diri ini umumnya didahului kata-kata, seperti *bangsa*, *suku*, *orang*, *negara*, *negeri*, atau *bahasa*.
 
 > *(bangsa) Indonesia, (negeri) Mesir, (negara) Jepang, (bahasa) Inggris, (suku) Jawa, (orang) Sumatra*
 
-**6) Nama diri keagamaan** — kata yang mengacu pada agama atau kitab suci agama tertentu.
+**6) Nama diri keagamaan**—kata yang mengacu pada agama atau kitab suci agama tertentu.
 
 > *Islam, Buddha, Hindu, Kristen, Alquran*
 
-**7) Nama diri benda langit** — kata yang mengacu pada bintang atau planet.
+**7) Nama diri benda langit**—kata yang mengacu pada bintang atau planet.
 
 > *Pluto, Yupiter, Neptunus, Saturnus, Venus*
 
-**8) Nama diri Tuhan atau dewa** — kata yang mengacu pada pribadi Tuhan atau dewa tertentu.
+**8) Nama diri Tuhan atau dewa**—kata yang mengacu pada pribadi Tuhan atau dewa tertentu.
 
 > *Allah, Brahma, Syiwa, Wisnu, Zeus*
 
-**9) Nama diri lembaga** — kata yang mengacu pada lembaga, badan, atau fasilitas umum tertentu.
+**9) Nama diri lembaga**—kata yang mengacu pada lembaga, badan, atau fasilitas umum tertentu.
 
 > *Badan Pengembangan dan Pembinaan Bahasa, Perserikatan Bangsa-Bangsa, Kementerian Pendidikan dan Kebudayaan, Garuda Indonesia Airways (GIA), Hotel Indonesia*
 
-**10) Nama diri peristiwa atau dokumen penting** — kata-kata yang mengacu pada peristiwa atau dokumen penting.
+**10) Nama diri peristiwa atau dokumen penting**—kata-kata yang mengacu pada peristiwa atau dokumen penting.
 
 > *Hari Proklamasi Kemerdekaan, Hari Sumpah Pemuda, Kongres Bahasa Indonesia, Undang-Undang Dasar 1945, Magna Charta, Perang Dunia II*
 
-**11) Nama diri terbitan** — kata-kata yang mengacu pada judul buku, majalah, jurnal, koran, atau artikel.
+**11) Nama diri terbitan**—kata-kata yang mengacu pada judul buku, majalah, jurnal, koran, atau artikel.
 
 > *Republika, Tempo, Salah Asuhan, Tata Bahasa Baku Bahasa Indonesia, Metalingua, Widya Parwa*
 
@@ -242,11 +242,11 @@ Perlu diingat bahwa tidak semua nomina dengan *peng-* memiliki salah satu arti y
 
 Perkembangan bahasa Indonesia selanjutnya memunculkan pula bentuk-bentuk kontras antara nomina pelaku (agentif) dan nomina pengalam (sasaran):
 
-> *penyuruh* — yang menyuruh vs. *pesuruh* — yang disuruh
-> *peninju* — yang meninju vs. *petinju* — yang bertinju
-> *penyerta* — yang menyertai vs. *peserta* — yang ikut serta
-> *penatar* — yang menatar vs. *petatar* — yang ditatar
-> *penyuluh* — yang menyuluh vs. *pesuluh* — yang disuluh
+> *penyuruh*—yang menyuruh vs. *pesuruh*—yang disuruh
+> *peninju*—yang meninju vs. *petinju*—yang bertinju
+> *penyerta*—yang menyertai vs. *peserta*—yang ikut serta
+> *penatar*—yang menatar vs. *petatar*—yang ditatar
+> *penyuluh*—yang menyuluh vs. *pesuluh*—yang disuluh
 
 **Penurunan Nomina dengan *-an*:**
 
@@ -258,7 +258,7 @@ a) Nomina dengan *-an* yang diturunkan dari verba yang menyatakan perbuatan umum
 
 b) Nomina dengan *-an* yang diturunkan dari verba keadaan atau nomina dapat juga menyatakan makna 'lokasi':
 
-> *akhiran* — yang ditempatkan di akhir; *awalan* — yang ditempatkan di awal; *belokan* — tempat membelok; *tanjakan* — tempat yang menanjak; *tepian* — tempat menepi atau bagian yang di tepi; *turunan* — tempat yang menurun; *daratan* — bagian permukaan bumi berupa darat yang luas; *lautan* — bagian permukaan bumi berupa laut yang luas
+> *akhiran*—yang ditempatkan di akhir; *awalan*—yang ditempatkan di awal; *belokan*—tempat membelok; *tanjakan*—tempat yang menanjak; *tepian*—tempat menepi atau bagian yang di tepi; *turunan*—tempat yang menurun; *daratan*—bagian permukaan bumi berupa darat yang luas; *lautan*—bagian permukaan bumi berupa laut yang luas
 
 c) Nomina dengan *-an* yang diturunkan dari nomina numeralia menyatakan bilangan kelipatan numeralia dasar:
 
@@ -266,7 +266,7 @@ c) Nomina dengan *-an* yang diturunkan dari nomina numeralia menyatakan bilangan
 
 d) Nomina dengan *-an* dapat diturunkan dari verba untuk menyatakan makna 'kumpulan orang, hewan, atau alat untuk melakukan yang dinyatakan verba':
 
-> *kawanan* — sejumlah orang atau hewan yang berkawan; *pasukan* — sejumlah orang atau binatang yang berpasuk-pasuk; *gerombolan* — sejumlah orang atau binatang yang bergerombol; *pimpinan* — sejumlah orang yang memimpin secara bersamaan; *mainan* — alat yang dijadikan untuk bermain
+> *kawanan*—sejumlah orang atau hewan yang berkawan; *pasukan*—sejumlah orang atau binatang yang berpasuk-pasuk; *gerombolan*—sejumlah orang atau binatang yang bergerombol; *pimpinan*—sejumlah orang yang memimpin secara bersamaan; *mainan*—alat yang dijadikan untuk bermain
 
 **Penurunan Nomina dengan *peng-...-an*:**
 
@@ -362,14 +362,14 @@ Sufiks *-(is)asi* berpadanan dengan konfiks *peng-...-an*, dan sufiks *-tas* ser
 
 Dalam bahasa Indonesia dewasa ini terdapat sekelompok nomina dengan klitik numeralia *se-* yang diperlakukan sebagai kesatuan leksikal:
 
-> *seantero* — Berita itu sudah tersiar di seantero dunia.
-> *sebelah* — Ruangannya ada di sebelah kiri.
-> *sekeliling* — Dia berjalan-jalan di sekeliling taman.
-> *sekitar* — Anak itu bermain di sekitar rumah saja.
-> *sepanjang* — Kami tidak bertemu seorang pun di sepanjang pantai.
-> *seputar* — Polisi yakin bahwa buronan itu masih ada di seputar Jakarta.
-> *sejumlah* — Dia diberhentikan karena menerima uang sejumlah lima ratus juta rupiah.
-> *selama* — Pak Andi mengambil cuti selama lima hari.
+> *seantero*—Berita itu sudah tersiar di seantero dunia.
+> *sebelah*—Ruangannya ada di sebelah kiri.
+> *sekeliling*—Dia berjalan-jalan di sekeliling taman.
+> *sekitar*—Anak itu bermain di sekitar rumah saja.
+> *sepanjang*—Kami tidak bertemu seorang pun di sepanjang pantai.
+> *seputar*—Polisi yakin bahwa buronan itu masih ada di seputar Jakarta.
+> *sejumlah*—Dia diberhentikan karena menerima uang sejumlah lima ratus juta rupiah.
+> *selama*—Pak Andi mengambil cuti selama lima hari.
 
 Perlu diingat bahwa bentuk *se-* pada kata-kata tersebut tidak dapat disubstitusi dengan *satu*.
 
@@ -399,7 +399,7 @@ d) Terdapat pula sejumlah bentuk perulangan yang maknanya tidak ada hubungannya 
 
 Nomina perulangan salin suara diperoleh dengan jalan mengulang bentuk pangkal, lalu mengubah bunyi salah satu ruasnya.
 
-a) Jika vokal akhir ruas pertama /a/, vokal akhir ruas kedua adalah /i/, /u/, /e/, atau /o/ — menyatakan makna keanekaan:
+a) Jika vokal akhir ruas pertama /a/, vokal akhir ruas kedua adalah /i/, /u/, /e/, atau /o/—menyatakan makna keanekaan:
 
 > *bolak-balik* 'berulang-ulang pergi dan pulang'; *corat-coret* 'aneka coretan'; *lika-liku* 'aneka liku/rintangan'; *gerak-gerik* 'aneka ragam gerak'; *warna-warni* 'aneka warna'
 
@@ -407,7 +407,7 @@ b) Beberapa bentuk perulangan yang vokal akhir ruas keduanya /a/ dan vokal akhir
 
 > *gunung-ganang* 'aneka ragam gunung'; *huru-hara* 'rentetan perbuatan mengacaukan'
 
-c) Perulangan salin suara pada bunyi konsonan — perubahan konsonan awal kata dasar menjadi konsonan labial pada ruas kedua:
+c) Perulangan salin suara pada bunyi konsonan—perubahan konsonan awal kata dasar menjadi konsonan labial pada ruas kedua:
 
 > *coreng-moreng* 'aneka coretan takteratur'; *lauk-pauk* 'aneka macam lauk'; *sayur-mayur* 'aneka macam sayur'
 
@@ -449,13 +449,13 @@ Nomina dalam bahasa Indonesia dapat pula diturunkan melalui pemajemukan, yaitu p
 
 **Nomina Majemuk Berdasarkan Bentuk Morfologisnya:**
 
-a) Nomina majemuk dasar — komponennya terdiri atas kata dasar:
+a) Nomina majemuk dasar—komponennya terdiri atas kata dasar:
 
 > *anak cucu, buku ajar, cetak coba, doa restu, ganti rugi, ibu jari, kereta api, lomba lari, rem angin, simpang tiga, suami istri, suka duka, tertib hukum, uang muka, uang pangkal, uang saku, peran serta, wajib pajak, unjuk rasa, mata kaki*
 
 Sebagai bandingan, idiom: *buah hati, darah daging, jantung hati, kabar burung, kaki tangan, kambing hitam, kepala batu, kutu buku, sepak terjang, tangan kanan*
 
-b) Nomina majemuk berafiks — salah satu atau kedua komponennya mempunyai afiks:
+b) Nomina majemuk berafiks—salah satu atau kedua komponennya mempunyai afiks:
 
 > *buku harian, cuti tahunan, kakak beradik, kata pengantar, kata sambutan, lagu kebangsaan, lemari pakaian, pekerja sosial, pakaian dalam, pedagang eceran, pekerjaan sambilan, pendapat umum, penyakit menular, perguruan tinggi, perjanjian kerja, perlindungan anak, sekolah menengah, surat keputusan, surat keterangan*
 
@@ -469,14 +469,14 @@ d) Nomina majemuk dari bentuk terikat dan bentuk terikat:
 
 **Nomina Majemuk Berdasarkan Hubungan Komponennya:**
 
-a) Nomina majemuk kopulatif — kedua komponen gabungan itu secara gramatikal setara:
+a) Nomina majemuk kopulatif—kedua komponen gabungan itu secara gramatikal setara:
 
 > *anak cucu, atas bawah, ayah bunda, doa restu, ibu bapak, kaki tangan, kiri kanan, putra-putri, laki bini, mata telinga, meja kursi, muka belakang, nenek moyang, nini mamak, piring mangkuk, sawah ladang, sendok garpu, suami istri, suka duka, tikar bantal*
 
-b) Nomina majemuk endosentrik — salah satu komponennya berfungsi sebagai inti dan yang lainnya sebagai pewatas. Makna kata majemuk ini merupakan hiponim dari makna intinya:
+b) Nomina majemuk endosentrik—salah satu komponennya berfungsi sebagai inti dan yang lainnya sebagai pewatas. Makna kata majemuk ini merupakan hiponim dari makna intinya:
 
 > *anak kandung, anak murid, cetak coba, dana cadangan, dokter kandungan, gambar alir, ganti rugi, kamar tidur, ahli bedah, pedagang eceran, pekerjaan sambilan, penyakit dalam, peran serta, polisi wanita, rumah sakit, sekolah dasar, sepak bola, sumbangan wajib, uang muka, unjuk rasa*
 
-c) Nomina majemuk eksosentrik — salah satu komponennya berfungsi sebagai inti, tetapi maknanya bukan hiponim dari makna inti gramatikalnya. Jenis ini banyak ditemukan sebagai nama binatang dan tumbuhan:
+c) Nomina majemuk eksosentrik—salah satu komponennya berfungsi sebagai inti, tetapi maknanya bukan hiponim dari makna inti gramatikalnya. Jenis ini banyak ditemukan sebagai nama binatang dan tumbuhan:
 
 > *batu anggur, jari ayam, kaki kuning, kaki lima, kumis kucing, kuping gajah, lidah ayam, lidah buaya, mata angin, pacar cina, putri malu, raja badar, raja udang, roda gila, mata sapi, tahi angin, tahi lalat, tanah air*

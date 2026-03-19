@@ -15,15 +15,15 @@ Pronomina persona adalah pronomina yang dipakai untuk mengacu pada orang. Pronom
 
 | Persona | Tunggal | Jamak Netral | Jamak Eksklusif | Jamak Inklusif |
 |---|---|---|---|---|
-| Pertama | *saya, aku, daku, ku-, -ku* | — | *kami* | *kita* |
-| Kedua | *engkau, kamu, Anda, dikau, kau-, -mu* | *kalian, kamu sekalian* | — | — |
-| Ketiga | *ia, dia, beliau, -nya* | *mereka* | — | — |
+| Pertama | *saya, aku, daku, ku-, -ku* |—| *kami* | *kita* |
+| Kedua | *engkau, kamu, Anda, dikau, kau-, -mu* | *kalian, kamu sekalian* |—|—|
+| Ketiga | *ia, dia, beliau, -nya* | *mereka* |—|—|
 
 Pada tabel tampak bahwa bentuk pronomina, khususnya yang bermakna tunggal, ada yang berupa kata utuh dan ada yang berupa bentuk terikat, seperti *ku-*, *-ku*, dan *kau-* yang lazim disebut klitika. Lebih jauh tampak bahwa sebagian besar pronomina persona bahasa Indonesia memiliki lebih dari dua wujud. Hal itu disebabkan oleh budaya bangsa Indonesia yang sangat memperhatikan hubungan sosial antarmanusia. Tata krama dalam kehidupan bermasyarakat menuntut adanya aturan yang serasi dan sesuai dengan martabat masing-masing. Pada umumnya ada tiga parameter yang dipakai sebagai ukuran: (1) umur, (2) status sosial, dan (3) keakraban.
 
 Secara budaya orang yang muda diharapkan menunjukkan rasa hormat kepada yang lebih tua. Sebaliknya, orang yang tua diharapkan pula menunjukkan tenggang rasa terhadap yang muda. Unsur timbal balik seperti itu tecermin dalam pemakaian pronomina dalam bahasa Indonesia. Pronomina *saya*, misalnya, lebih umum dipakai daripada *aku* oleh orang muda terhadap orang tua. Untuk menunjukkan rasa hormat, dipakai pronomina *beliau* alih-alih *dia*.
 
-Status sosial — baik kedudukan dalam masyarakat maupun badan resmi di suatu instansi — ikut pula memengaruhi pemakaian pronomina. Seorang kepala kantor dapat memakai pronomina *kamu*, misalnya, apabila ia berbicara dengan pegawainya yang umurnya lebih muda. Sebaliknya, ia akan memakai kata *Saudara* atau *Bapak* jika yang diajak berbicara itu adalah tamu yang sebaya, baik dalam umur maupun kedudukan.
+Status sosial—baik kedudukan dalam masyarakat maupun badan resmi di suatu instansi—ikut pula memengaruhi pemakaian pronomina. Seorang kepala kantor dapat memakai pronomina *kamu*, misalnya, apabila ia berbicara dengan pegawainya yang umurnya lebih muda. Sebaliknya, ia akan memakai kata *Saudara* atau *Bapak* jika yang diajak berbicara itu adalah tamu yang sebaya, baik dalam umur maupun kedudukan.
 
 Parameter ketiga adalah keakraban yang dapat menyilang garis pemisah umur dan status sosial meskipun kadang-kadang hanya dalam situasi-situasi tertentu.
 
@@ -59,8 +59,8 @@ Bentuk terikat *ku-* berbeda pemakaiannya dengan *-ku*. Pertama, *ku-* dilekatka
 
 Di samping pronomina persona pertama tunggal, bahasa Indonesia juga mengenal pronomina persona pertama jamak. Ada dua macam pronomina persona pertama jamak, yakni *kami* dan *kita*. *Kami* bersifat eksklusif; artinya, pronomina itu mencakupi pembicara/penulis dan orang lain di luar orang yang diajak berbicara/pendengar. Sebaliknya, *kita* bersifat inklusif; artinya, pronomina itu mencakupi tidak saja pembicara/penulis, tetapi juga pendengar/pembaca, dan mungkin pula pihak lain. Dengan demikian, kedua kalimat berikut mempunyai pengertian yang berbeda.
 
-- (159) ***Kami** akan berangkat pukul enam pagi.* — pendengar tidak ikut
-- (160) ***Kita** akan berangkat pukul enam pagi.* — pendengar ikut
+- (159) ***Kami** akan berangkat pukul enam pagi.*—pendengar tidak ikut
+- (160) ***Kita** akan berangkat pukul enam pagi.*—pendengar ikut
 
 Persona pertama jamak tidak mempunyai variasi bentuk. Untuk menyatakan hubungan pemilikan atau dalam pemakaiannya dengan preposisi, bentuknya tetap sama: *rumah kami*, *masalah kita*, *kepada kami*, *untuk kita*.
 
@@ -116,7 +116,7 @@ Ada dua macam pronomina persona ketiga tunggal, yaitu (1) *ia*, *dia*, atau *-ny
 
 | Posisi | *ia* | *dia* | *-nya* |
 |---|---|---|---|
-| Subjek / depan verba | ✓ | ✓ | — |
+| Subjek / depan verba | ✓ | ✓ |—|
 | Objek | ✗ | ✓ | ✓ |
 | Sebelah kanan yang diterangkan | ✗ | ✓ | ✓ |
 | Objek preposisi | ✗ | ✓ | ✓ |
@@ -140,18 +140,18 @@ Pronomina persona ketiga dalam bentuk *-nya* juga dipakai untuk mengubah kategor
 
 Persona ketiga *-nya* juga dipakai untuk subjek dalam kalimat topik-komen:
 
-> (197) *Rumah kami atap**nya** bocor.* — *Rumah kami* = topik, *atapnya* = subjek
+> (197) *Rumah kami atap**nya** bocor.*—*Rumah kami* = topik, *atapnya* = subjek
 > (198) *Petani sukses itu pendidikan**nya** hanya sekolah dasar.*
 
 Bentuk *-nya* ini sering juga dipakai hanya sebagai penanda ketakrifan suatu nomina atau frasa nominal. Apabila suatu konsep telah disajikan, bagian wajib dari konsep tersebut harus dianggap takrif. Wujud ketakrifan itu adalah *-nya*:
 
-> (200a) *Kemarin Pak Ali membeli mobil. Ban**nya** baru.* — *ban* bagian wajib dari *mobil*
-> (200b) *Tadi pagi Jenderal Agus meninggal. Jenazah**nya** akan dimakamkan di Kalibata.* — *jenazah* perikutan makna *meninggal*
+> (200a) *Kemarin Pak Ali membeli mobil. Ban**nya** baru.*—*ban* bagian wajib dari *mobil*
+> (200b) *Tadi pagi Jenderal Agus meninggal. Jenazah**nya** akan dimakamkan di Kalibata.*—*jenazah* perikutan makna *meninggal*
 
 Pronomina persona ketiga jamak adalah *mereka*. Di samping arti jamak, *mereka* berbeda dengan pronomina persona tunggal dalam acuannya. Pada umumnya *mereka* hanya dipakai untuk insan. Benda atau konsep yang jamak dinyatakan dengan cara yang lain:
 
-- (201) *Teman-teman akan datang. **Mereka** akan membawa makanan sendiri.* — ✓
-- (203) *Bu Mantik baru membeli empat buah buku. \***Mereka** ada di meja sekarang.* — ✗
+- (201) *Teman-teman akan datang. **Mereka** akan membawa makanan sendiri.*—✓
+- (203) *Bu Mantik baru membeli empat buah buku. \***Mereka** ada di meja sekarang.*—✗
 
 Akan tetapi, pada cerita fiksi atau narasi lain, kata *mereka* kadang-kadang juga dipakai untuk mengacu pada binatang atau benda yang dianggap bernyawa.
 
@@ -172,7 +172,7 @@ Nomina penyapa dan pengacu, baik yang berdasarkan hubungan kekerabatan maupun ya
 
 Jika nomina tidak diikuti oleh nama diri, bentuk yang pendek tidak dipakai:
 
-- (211) \**Tadi pagi Pak pergi ke mana?* — tidak berterima
+- (211) \**Tadi pagi Pak pergi ke mana?*—tidak berterima
 
 Jika bentuk yang pendek akan dipakai tanpa nama, kalimatnya harus berakhir dengan sapaan (vokatif):
 
@@ -191,10 +191,10 @@ Pronomina penunjuk umum dalam bahasa Indonesia ada dua, yakni *ini* dan *itu*. K
 
 Contoh:
 
-- (217a) *Apa buku **ini** kepunyaanmu?* — kata penunjuk
-- (217b) *Apa **ini** bukumu?* — pronomina
-- (219a) *Lukisan **itu** dibeli di mana?* — kata penunjuk
-- (219b) ***Itu** saya beli di Bali.* — pronomina
+- (217a) *Apa buku **ini** kepunyaanmu?*—kata penunjuk
+- (217b) *Apa **ini** bukumu?*—pronomina
+- (219a) *Lukisan **itu** dibeli di mana?*—kata penunjuk
+- (219b) ***Itu** saya beli di Bali.*—pronomina
 
 ### Pronomina Penunjuk Tempat (7.2.2.3.2)
 
@@ -311,8 +311,8 @@ Kata tanya *berapa* juga dapat dipakai sebagai pewatas untuk nomina:
 
 Dalam gabungannya dengan kata-kata tertentu, *berapa* dapat ditempatkan di muka atau di belakang nomina, dan penempatan itu memunculkan arti yang berbeda:
 
-- (267a) ***Berapa** jam kamu dilatih?* — menanyakan jumlah jam
-- (267b) *Pukul **berapa** kamu dilatih?* — menanyakan titik waktu
+- (267a) ***Berapa** jam kamu dilatih?*—menanyakan jumlah jam
+- (267b) *Pukul **berapa** kamu dilatih?*—menanyakan titik waktu
 
 Kata tanya *berapa* dapat pula diberi prefiks *ke-* sehingga menjadi *keberapa* yang selalu ditempatkan di belakang nomina. Kata ini merujuk pada bilangan tingkat:
 
@@ -331,8 +331,8 @@ Di samping kata tanya yang telah digambarkan di atas, ada pula frasa tanya yang 
 
 Untuk memberikan implikasi kejamakan, kata tanya *apa*, *siapa*, *di mana*, *ke mana*, dan *dari mana* diikuti oleh kata *saja*:
 
-- (276) *Kamu tadi pergi dengan **siapa**?* — jawaban bisa satu orang atau lebih
-- (277) *Kamu tadi pergi dengan **siapa saja**?* — asumsi penanya: beberapa orang
+- (276) *Kamu tadi pergi dengan **siapa**?*—jawaban bisa satu orang atau lebih
+- (277) *Kamu tadi pergi dengan **siapa saja**?*—asumsi penanya: beberapa orang
 
 ### Gabungan Kata Tanya dengan Kata *Saja* dan Implikasi Ketaktentuan (7.2.2.4.9)
 

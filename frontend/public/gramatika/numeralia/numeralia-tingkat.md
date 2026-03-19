@@ -23,6 +23,6 @@ Karena numeralia kolektif juga dibentuk dengan *ke-*, bentuk kedua macam numeral
 | *ketiga pemain* | *pemain ketiga* |
 | *kedua jawaban itu* | *jawaban kedua itu* |
 | *kelima anak saya* | *anak saya yang kelima; anak kelima saya* |
-| — (\**kesatu suara*) | *suara pertama* |
+|—(\**kesatu suara*) | *suara pertama* |
 
 Perhatikan pula bahwa pada numeralia kolektif tidak ada bentuk *kesatu* atau *pertama*, sedangkan pada numeralia tingkat ada.

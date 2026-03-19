@@ -69,26 +69,26 @@ Konjungsi *dan* dapat bergantian dengan *serta*, tetapi secara semantis unsur ya
 
 Sebagai penghubung klausa, konjungsi *dan* dapat mempunyai empat implikasi semantik:
 
-a) Klausa kedua merupakan **tambahan** klausa pertama yang secara semantis sepadan — *Dia berbaju putih dan (dia) memakai dasi kupu-kupu.*
+a) Klausa kedua merupakan **tambahan** klausa pertama yang secara semantis sepadan—*Dia berbaju putih dan (dia) memakai dasi kupu-kupu.*
 
-b) Klausa kedua merupakan **akibat** klausa pertama — *Saya melihat seorang anak tetangga menangis dan (karena itu) saya langsung memanggil ibunya.*
+b) Klausa kedua merupakan **akibat** klausa pertama—*Saya melihat seorang anak tetangga menangis dan (karena itu) saya langsung memanggil ibunya.*
 
-c) Klausa kedua secara kronologis merupakan **lanjutan** klausa pertama — *Dia memarkir mobilnya dan (kemudian) berjalan ke kantornya.*
+c) Klausa kedua secara kronologis merupakan **lanjutan** klausa pertama—*Dia memarkir mobilnya dan (kemudian) berjalan ke kantornya.*
 
-d) Klausa kedua merupakan **komentar** terhadap klausa pertama — *Ibu Rina perhatian sekali dan tidak heran kalau suaminya sering memberinya hadiah.*
+d) Klausa kedua merupakan **komentar** terhadap klausa pertama—*Ibu Rina perhatian sekali dan tidak heran kalau suaminya sering memberinya hadiah.*
 
 Selain contoh (a), klausa pertama dan kedua pada contoh (b)–(d) tidak dapat dipertukarkan letaknya.
 
 ### Konjungsi *atau* Eksklusif dan Inklusif
 
-**Konjungsi *atau* eksklusif** menyatakan pilihan salah satu dari dua kemungkinan atau lebih — hanya ada satu pilihan yang mungkin diambil.
+**Konjungsi *atau* eksklusif** menyatakan pilihan salah satu dari dua kemungkinan atau lebih—hanya ada satu pilihan yang mungkin diambil.
 
 - *Anda pilih merah atau biru?*
 - *Anaknya laki-laki atau perempuan?*
 
 **Konjungsi *atau* inklusif** menyatakan pemilihan satu atau lebih dari dua kemungkinan. Dapat diikuti partikel *pun* atau ditulis *dan/atau* dalam bahasa formal.
 
-- *Karyawan yang malas ataupun yang tidak jujur akan ditindak.* (inklusif — keduanya bisa)
+- *Karyawan yang malas ataupun yang tidak jujur akan ditindak.* (inklusif—keduanya bisa)
 - *Ragam bahasa baku secara politis sering berfungsi sebagai bahasa resmi ataupun bahasa nasional.*
 - *Orang yang diajak berkomunikasi akan mendengar dan/atau melihat apa yang dikomunikasikan.*
 
@@ -113,7 +113,7 @@ Konjungsi korelatif adalah sepasang konjungsi koordinatif yang menghubungkan dua
 
 ## Konjungsi Subordinatif (8.2.2.3)
 
-Konjungsi subordinatif menghubungkan dua klausa atau lebih yang tidak memiliki status sintaktis yang sama — salah satunya merupakan klausa subordinatif.
+Konjungsi subordinatif menghubungkan dua klausa atau lebih yang tidak memiliki status sintaktis yang sama—salah satunya merupakan klausa subordinatif.
 
 ### 1) Waktu
 

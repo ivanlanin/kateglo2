@@ -88,8 +88,8 @@ Berdasarkan uraian di atas, tipe verba berikut fitur semantisnya dapat digambark
 
 | Tipe Verba | Perubahan Berangsur | Perubahan Dinamis | Keduratifan | Ketelisan |
 |---|---|---|---|---|
-| a) Verba Keadaan | — | — | duratif | (tidak relevan) |
-| b) Verba Proses | + | — | duratif | taktelis |
-| c) Verba Aktivitas tindakan | — | + | duratif | taktelis |
-| c) Verba Aktivitas capaian | — | + | pungtual | telis |
-| c) Verba Aktivitas rampungan | — | + | duratif | telis |
+| a) Verba Keadaan |—|—| duratif | (tidak relevan) |
+| b) Verba Proses | + |—| duratif | taktelis |
+| c) Verba Aktivitas tindakan |—| + | duratif | taktelis |
+| c) Verba Aktivitas capaian |—| + | pungtual | telis |
+| c) Verba Aktivitas rampungan |—| + | duratif | telis |
