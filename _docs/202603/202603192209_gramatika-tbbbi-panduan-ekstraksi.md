@@ -57,6 +57,7 @@ frontend/public/gramatika/
 │   ├── makna-adverbia.md
 │   ├── posisi-adverbia.md
 │   ├── bentuk-adverbia.md
+│   ├── bentuk-adverbial.md
 │   └── adverbia-dan-kelas-kata-lain.md
 ├── nomina/
 │   ├── batasan-dan-ciri-nomina.md
@@ -64,8 +65,7 @@ frontend/public/gramatika/
 │   ├── acuan-nomina.md
 │   ├── fungsi-nomina.md
 │   ├── jenis-nomina.md
-│   ├── frasa-nominal.md
-│   └── frasa-nominal-vokatif.md
+│   └── frasa-nominal.md
 ├── pronomina/
 │   ├── batasan-dan-ciri-pronomina.md
 │   ├── jenis-pronomina.md
@@ -93,6 +93,49 @@ frontend/public/gramatika/
 
 frontend/src/constants/gramatikData.js   ← daftar isi semua bab + item
 ```
+
+---
+
+## Pola Struktur Deskripsi Kelas Kata
+
+TBBBI menggunakan kerangka deskripsi yang konsisten untuk setiap kelas kata. Setiap bab pada dasarnya menjawab pertanyaan yang sama secara berurutan:
+
+| Urutan | Pertanyaan | Label di TBBBI |
+|:---:|---|---|
+| 1 | Apa itu & bagaimana mengenalinya? | Batasan & Ciri |
+| 2 | Apa yang dikandungnya secara semantis? | Makna / Fitur Semantis |
+| 3 | Bagaimana perilakunya dalam kalimat? | Fungsi / Perilaku Sintaktis / Posisi |
+| 4 | Apa saja jenisnya? | Jenis / Transitif+Taktransitif / Pokok+Tingkat |
+| 5 | Bagaimana bentuk morfologisnya? | Bentuk |
+| 6 | Bagaimana membentuk frasa? | Frasa |
+| 7 | Apa hubungannya dengan kelas kata lain? | ... dan Kelas Kata Lain *(opsional)* |
+
+Pemetaan tiap bab ke kerangka ini:
+
+| Topik | Nom | Ver | Adj | Adv | Pro | Num | KTg |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Batasan & Ciri | ✓ | ✓¹ | ✓ | ✓ | ✓ | — | ✓ |
+| Makna / Fitur Semantis | ✓ | ✓ | ✓ | ✓ | — | — | — |
+| Fungsi / Perilaku Sintaktis / Posisi | ✓ | ✓ | ✓ | ✓ | — | — | — |
+| Jenis | ✓ | ✓² | — | — | ✓ | ✓³ | — |
+| Bentuk | — | ✓ | ✓ | ✓ | — | — | — |
+| Frasa | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
+| ... dan Kelas Kata Lain | — | — | ✓ | ✓ | — | — | — |
+| Acuan *(semantik)* | ✓ | — | — | — | — | — | — |
+| Pertarafan *(sintaktis)* | — | — | ✓ | — | — | — | — |
+| Sub-item bertingkat⁴ | — | — | — | — | — | — | ✓ |
+
+¹ Dipecah jadi 2 halaman: Fitur Semantis (4.1.1) + Perilaku Sintaktis (4.1.2)
+² Dipecah jadi 4 halaman: Transitif · Taktransitif · Reduplikasi · Majemuk
+³ Dipecah jadi 2 halaman: Pokok · Tingkat
+⁴ Preposisi & Konjungsi punya sub-jenis yang dalam (tunggal/gabungan, koordinatif/subordinatif/dll.)
+
+### Catatan per Bab
+
+- **Nomina**: punya *Acuan* — deskripsi semantis tentang rujukan nomina ke dunia nyata, setara dengan dimensi semantik.
+- **Adjektiva**: punya *Pertarafan* — menggambarkan konstruksi derajat (*sangat*, *lebih*, *paling*, *ter-*, *se-...-nya*); berbasis sintaktis dengan latar semantis gradabilitas.
+- **Verba & Numeralia**: "Jenis" dipecah menjadi beberapa halaman karena materinya panjang.
+- **Kata Tugas**: anomali — tidak memiliki analisis semantik, sintaktis, morfologis, atau frasa sendiri. Seluruh bab berisi inventarisasi jenis-jenis kata tugas beserta sub-jenisnya.
 
 ---
 
@@ -245,7 +288,7 @@ Urutan mempertimbangkan: panjang bab, kualitas OCR yang dapat diharapkan, kepada
 - Bab terpanjang keseluruhan; tiga kelas kata digabung dalam satu bab.
 - Dipecah menjadi tiga entri terpisah di `gramatikData.js`: Nomina (7 item), Pronomina (3 item), Numeralia (3 item).
 
-**Subbab Nomina:** Batasan dan Ciri · Makna · Acuan · Fungsi · Jenis · Frasa Nominal · Frasa Nominal Vokatif
+**Subbab Nomina:** Batasan dan Ciri · Makna · Acuan · Fungsi · Jenis · Frasa Nominal (7.1.5–7.1.6)
 
 **Subbab Pronomina:** Batasan dan Ciri · Jenis (persona, penunjuk, penanya) · Frasa Pronominal
 
