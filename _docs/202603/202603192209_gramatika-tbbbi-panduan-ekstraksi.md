@@ -78,7 +78,7 @@ Formula Python pdfplumber (0-indeks): `range(PDF_awal - 1, PDF_akhir)`
 | II  | Tata Bahasa: Tinjauan Selayang Pandang | 47 | 68 | 22 | — |
 | III | Bunyi Bahasa dan Tata Bunyi | 69 | 118 | 50 | — |
 | IV  | Verba | 119 | 216 | 98 | — |
-| V   | Adjektiva | 217 | 257 | 41 | — |
+| V   | Adjektiva | 217 | 257 | 41 | ✓ |
 | VI  | Adverbia | 258 | 281 | 24 | ✓ |
 | VII | Nomina, Pronomina, dan Numeralia | 282 | 395 | 114 | — |
 | VIII | Kata Tugas | 396 | 429 | 34 | ✓ |
@@ -126,7 +126,7 @@ Urutan mempertimbangkan: panjang bab, kualitas OCR yang dapat diharapkan, kepada
 
 ---
 
-### ☐ 3. Bab V — Adjektiva (41 hal PDF)
+### ✓ 3. Bab V — Adjektiva (41 hal PDF) — **SELESAI**
 
 - Panjang sedang; struktur mirip Bab VIII.
 - Bagian pertarafan (tingkat positif, intensif, elatif, dll.) menghasilkan tabel ringkas yang baik.

@@ -4,6 +4,19 @@
 
 const daftarIsiGramatika = [
   {
+    judul: 'Adjektiva',
+    slug: 'adjektiva',
+    items: [
+      { judul: 'Batasan dan Ciri Adjektiva', slug: 'batasan-dan-ciri-adjektiva' },
+      { judul: 'Makna Adjektiva', slug: 'makna-adjektiva' },
+      { judul: 'Fungsi Adjektiva', slug: 'fungsi-adjektiva' },
+      { judul: 'Pertarafan Adjektiva', slug: 'pertarafan-adjektiva' },
+      { judul: 'Bentuk Adjektiva', slug: 'bentuk-adjektiva' },
+      { judul: 'Frasa Adjektival', slug: 'frasa-adjektival' },
+      { judul: 'Adjektiva dan Kelas Kata Lain', slug: 'adjektiva-dan-kelas-kata-lain' },
+    ],
+  },
+  {
     judul: 'Adverbia',
     slug: 'adverbia',
     items: [
