@@ -4,6 +4,33 @@
 
 const daftarIsiGramatika = [
   {
+    judul: 'Nomina',
+    slug: 'nomina',
+    items: [
+      { judul: 'Batasan dan Ciri Nomina', slug: 'batasan-dan-ciri-nomina' },
+      { judul: 'Makna Nomina', slug: 'makna-nomina' },
+      { judul: 'Acuan Nomina', slug: 'acuan-nomina' },
+      { judul: 'Fungsi Nomina', slug: 'fungsi-nomina' },
+      { judul: 'Jenis Nomina', slug: 'jenis-nomina' },
+      { judul: 'Frasa Nominal', slug: 'frasa-nominal' },
+      { judul: 'Frasa Nominal Vokatif', slug: 'frasa-nominal-vokatif' },
+    ],
+  },
+  {
+    judul: 'Verba',
+    slug: 'verba',
+    items: [
+      { judul: 'Fitur Semantis Verba', slug: 'fitur-semantis-verba' },
+      { judul: 'Perilaku Sintaktis Verba', slug: 'perilaku-sintaktis-verba' },
+      { judul: 'Bentuk Verba', slug: 'bentuk-verba' },
+      { judul: 'Verba Transitif', slug: 'verba-transitif' },
+      { judul: 'Verba Taktransitif', slug: 'verba-taktransitif' },
+      { judul: 'Verba Hasil Reduplikasi', slug: 'verba-reduplikasi' },
+      { judul: 'Verba Majemuk', slug: 'verba-majemuk' },
+      { judul: 'Frasa Verbal', slug: 'frasa-verbal' },
+    ],
+  },
+  {
     judul: 'Adjektiva',
     slug: 'adjektiva',
     items: [
@@ -25,19 +52,6 @@ const daftarIsiGramatika = [
       { judul: 'Posisi Adverbia', slug: 'posisi-adverbia' },
       { judul: 'Bentuk Adverbia', slug: 'bentuk-adverbia' },
       { judul: 'Adverbia dan Kelas Kata Lain', slug: 'adverbia-dan-kelas-kata-lain' },
-    ],
-  },
-  {
-    judul: 'Nomina',
-    slug: 'nomina',
-    items: [
-      { judul: 'Batasan dan Ciri Nomina', slug: 'batasan-dan-ciri-nomina' },
-      { judul: 'Makna Nomina', slug: 'makna-nomina' },
-      { judul: 'Acuan Nomina', slug: 'acuan-nomina' },
-      { judul: 'Fungsi Nomina', slug: 'fungsi-nomina' },
-      { judul: 'Jenis Nomina', slug: 'jenis-nomina' },
-      { judul: 'Frasa Nominal', slug: 'frasa-nominal' },
-      { judul: 'Frasa Nominal Vokatif', slug: 'frasa-nominal-vokatif' },
     ],
   },
   {

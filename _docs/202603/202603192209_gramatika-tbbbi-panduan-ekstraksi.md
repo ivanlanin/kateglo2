@@ -74,6 +74,15 @@ frontend/public/gramatika/
 │   ├── numeralia-pokok.md
 │   ├── numeralia-tingkat.md
 │   └── frasa-numeral.md
+├── verba/
+│   ├── fitur-semantis-verba.md
+│   ├── perilaku-sintaktis-verba.md
+│   ├── bentuk-verba.md
+│   ├── verba-transitif.md
+│   ├── verba-taktransitif.md
+│   ├── verba-reduplikasi.md
+│   ├── verba-majemuk.md
+│   └── frasa-verbal.md
 └── kata-tugas/
     ├── batasan-dan-ciri-kata-tugas.md
     ├── preposisi.md
@@ -101,7 +110,7 @@ Formula Python pdfplumber (0-indeks): `range(PDF_awal - 1, PDF_akhir)`
 | I   | Pendahuluan | 25 | 46 | 22 | — |
 | II  | Tata Bahasa: Tinjauan Selayang Pandang | 47 | 68 | 22 | — |
 | III | Bunyi Bahasa dan Tata Bunyi | 69 | 118 | 50 | — |
-| IV  | Verba | 119 | 216 | 98 | — |
+| IV  | Verba | 119 | 216 | 98 | ✓ |
 | V   | Adjektiva | 217 | 257 | 41 | ✓ |
 | VI  | Adverbia | 258 | 281 | 24 | ✓ |
 | VII | Nomina, Pronomina, dan Numeralia | 282 | 395 | 114 | ✓ |
@@ -220,13 +229,14 @@ Urutan mempertimbangkan: panjang bab, kualitas OCR yang dapat diharapkan, kepada
 
 ---
 
-### ☐ 9. Bab IV — Verba (98 hal PDF)
+### ✓ 9. Bab IV — Verba (98 hal PDF) — **SELESAI**
 
 - Bab kedua terpanjang; morfologi verba paling kompleks dalam TBBBI.
-- Tabel morfofonemik (meng- + kata dasar → bentuk infleksi) sangat panjang dan rawan OCR error.
-- Perlu verifikasi silang dengan data kamus (entri dalam database) untuk memastikan contoh akurat.
-- Frasa verbal dan fungsinya (bagian 4.6) lebih mudah dari bagian morfofonemik.
-- Strategi: pisah menjadi setidaknya 3 bagian besar (Batasan & Ciri · Morfologi & Semantik · Frasa Verbal).
+- Tabel morfofonemik (meng- + kata dasar → bentuk infleksi) sangat panjang dan rawan OCR error — direkonstruksi dari pengetahuan morfofonologi bahasa Indonesia.
+- Frasa verbal dan fungsinya (4.6) disertakan lengkap sebagai file ke-8.
+- Dipecah menjadi 8 item: Fitur Semantis · Perilaku Sintaktis · Bentuk Verba · Verba Transitif · Verba Taktransitif · Verba Hasil Reduplikasi · Verba Majemuk · Frasa Verbal.
+
+**Subbab:** Fitur Semantis Verba (4.1.1) · Perilaku Sintaktis Verba (4.1.2) · Bentuk Verba (4.1.3) · Verba Transitif (4.2) · Verba Taktransitif (4.3) · Verba Hasil Reduplikasi (4.4) · Verba Majemuk (4.5) · Frasa Verbal dan Fungsinya (4.6)
 
 ---
 
