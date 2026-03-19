@@ -2,7 +2,7 @@
  * @fileoverview Navbar navigasi utama dengan pencarian global
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/authContext';
 import { buatUrlLoginGoogle, simpanReturnTo } from '../../api/apiAuth';
@@ -17,8 +17,9 @@ export const menuItems = [
   { path: '/tesaurus', label: 'Tesaurus' },
   { path: '/glosarium', label: 'Glosarium' },
   { path: '/makna', label: 'Makna' },
-  { path: '/rima', label: 'Rima' },
-  { path: '/ejaan', label: 'Ejaan' },
+  { path: '/rima', label: 'Rima', pemisahSetelah: true },
+  { path: '/gramatika', label: 'Gramatika' },
+  { path: '/ejaan', label: 'Ejaan', pemisahSetelah: true },
   { path: '/alat', label: 'Alat' },
   { path: '/gim', label: 'Gim' },
 ];
@@ -89,21 +90,26 @@ function NavbarPublik() {
     onItemClick = () => {},
     tampilkanMenu = true,
     tampilkanAutentikasi = true,
+    tampilkanPemisah = false,
     forwardedRef = null,
   } = {}) => (
     <div ref={forwardedRef} className={containerClassName}>
       {tampilkanMenu && menuItems
         .filter((item) => !item.adminSaja || adalahRedaksi)
         .map((item) => (
-          <Link
-            key={item.path}
-            to={item.path}
-            onClick={onItemClick}
-            className={`${linkClassName} ${isActive(item.path) ? 'navbar-menu-link-active' : ''}`.trim()}
-            aria-current={isActive(item.path) ? 'page' : undefined}
-          >
-            {item.label}
-          </Link>
+          <Fragment key={item.path}>
+            <Link
+              to={item.path}
+              onClick={onItemClick}
+              className={`${linkClassName} ${isActive(item.path) ? 'navbar-menu-link-active' : ''}`.trim()}
+              aria-current={isActive(item.path) ? 'page' : undefined}
+            >
+              {item.label}
+            </Link>
+            {tampilkanPemisah && item.pemisahSetelah && (
+              <hr className="navbar-mobile-separator" aria-hidden="true" />
+            )}
+          </Fragment>
         ))}
 
       {tampilkanAutentikasi && (isLoading ? (
@@ -340,6 +346,7 @@ function NavbarPublik() {
                 loadingClassName: 'navbar-auth-loading',
                 onItemClick: () => setMenuTerbuka(false),
                 tampilkanAutentikasi: false,
+                tampilkanPemisah: true,
               })}
               {renderMenu({
                 containerClassName: 'navbar-mobile-auth',

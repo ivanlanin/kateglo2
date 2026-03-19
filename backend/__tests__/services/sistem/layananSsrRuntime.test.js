@@ -160,11 +160,19 @@ describe('services/sistem/layananSsrRuntime', () => {
     expect(runtime.__private.isEjaanPagePath('  /ejaan/huruf-kecil  ')).toBe(true);
     expect(runtime.__private.isEjaanPagePath('/ejaan/penggunaan-huruf/huruf-kapital')).toBe(false);
 
+    expect(runtime.__private.isGramatikaPagePath()).toBe(false);
+    expect(runtime.__private.isGramatikaPagePath('/gramatika')).toBe(true);
+    expect(runtime.__private.isGramatikaPagePath('/gramatika/')).toBe(true);
+    expect(runtime.__private.isGramatikaPagePath('/gramatika/preposisi')).toBe(true);
+    expect(runtime.__private.isGramatikaPagePath('/gramatika/kata-tugas/preposisi')).toBe(false);
+
     const previousTtl = process.env.CACHE_TTL_SECONDS;
     delete process.env.CACHE_TTL_SECONDS;
     expect(runtime.__private.resolvePageCacheControl()).toBe('');
     expect(runtime.__private.resolvePageCacheControl('/kamus')).toBe('');
     expect(runtime.__private.resolvePageCacheControl('/ejaan')).toBe('public, max-age=1800');
+    expect(runtime.__private.resolvePageCacheControl('/gramatika')).toBe('public, max-age=1800');
+    expect(runtime.__private.resolvePageCacheControl('/gramatika/preposisi')).toBe('public, max-age=1800');
     process.env.CACHE_TTL_SECONDS = '3600';
     expect(runtime.__private.resolvePageCacheControl('/ejaan/huruf-kapital')).toBe('public, max-age=3600');
     process.env.CACHE_TTL_SECONDS = '0';

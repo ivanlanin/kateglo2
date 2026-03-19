@@ -10,6 +10,7 @@ const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
 
 const rootDir = path.resolve(__dirname, '..', '..', '..');
 const ejaanDocsDir = path.join(rootDir, 'frontend', 'public', 'ejaan');
+const gramatikaDocsDir = path.join(rootDir, 'frontend', 'public', 'gramatika');
 
 const KATEGORI_SLUG_NAMA = new Set(['kelas_kata', 'kelas-kata', 'kelas', 'ragam', 'bahasa', 'bidang']);
 
@@ -134,6 +135,7 @@ function ambilPathStatis() {
     '/makna',
     '/rima',
     '/ejaan',
+    '/gramatika',
     '/kebijakan-privasi',
   ];
 }
@@ -148,6 +150,22 @@ function ambilPathEjaan() {
       const basename = path.basename(entry.name, '.md').trim();
       if (!basename) return '';
       return `/ejaan/${encodePathSegment(basename)}`;
+    })
+    .filter(Boolean);
+
+  return [...new Set(detailPaths)];
+}
+
+function ambilPathGramatika() {
+  if (!fs.existsSync(gramatikaDocsDir)) return [];
+
+  const entries = fs.readdirSync(gramatikaDocsDir, { recursive: true, withFileTypes: true });
+  const detailPaths = entries
+    .filter((entry) => entry.isFile() && entry.name.toLowerCase().endsWith('.md'))
+    .map((entry) => {
+      const basename = path.basename(entry.name, '.md').trim();
+      if (!basename) return '';
+      return `/gramatika/${encodePathSegment(basename)}`;
     })
     .filter(Boolean);
 
@@ -205,12 +223,14 @@ async function generateSitemapPaths() {
   ]);
 
   const ejaanPaths = ambilPathEjaan();
+  const gramatikaPaths = ambilPathGramatika();
 
   return [
     ...ambilPathStatis(),
     ...kamusKategori,
     ...glosariumKategori,
     ...ejaanPaths,
+    ...gramatikaPaths,
   ];
 }
 
@@ -230,6 +250,7 @@ module.exports = {
     ambilPathKamusKategori,
     ambilPathGlosariumKategori,
     ambilPathEjaan,
+    ambilPathGramatika,
     escapeXml,
   },
 };

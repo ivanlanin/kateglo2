@@ -12,6 +12,7 @@ const Tesaurus = buatLazyNamedExport(() => import('./kamus'), 'Tesaurus');
 const Makna = buatLazyNamedExport(() => import('./kamus'), 'Makna');
 const Rima = buatLazyNamedExport(() => import('./kamus'), 'Rima');
 const Ejaan = buatLazyNamedExport(() => import('./kamus'), 'Ejaan');
+const Gramatika = buatLazyNamedExport(() => import('./kamus'), 'Gramatika');
 const Glosarium = buatLazyNamedExport(() => import('./glosarium'), 'Glosarium');
 const GlosariumDetail = buatLazyNamedExport(() => import('./glosarium'), 'GlosariumDetail');
 const Alat = buatLazyNamedExport(() => import('./alat'), 'Alat');
@@ -37,6 +38,8 @@ export const ruteHalamanPublik = [
   { path: '/rima/cari/:kata', Component: Rima },
   { path: '/ejaan', Component: Ejaan },
   { path: '/ejaan/:slug', Component: Ejaan },
+  { path: '/gramatika', Component: Gramatika },
+  { path: '/gramatika/:slug', Component: Gramatika },
   { path: '/alat', Component: Alat },
   { path: '/alat/penghitung-huruf', Component: PenghitungHuruf },
   { path: '/alat/penganalisis-teks', Component: PenganalisisTeks },

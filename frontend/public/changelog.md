@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-03-19 Kamis
+
+- Menambahkan menu [Gramatika](/gramatika) dengan isi dari TBBBI
+
 ## 2026-03-18 Rabu
 
 - Mempelajari struktur korpus Leipzig

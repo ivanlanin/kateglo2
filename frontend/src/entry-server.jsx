@@ -21,6 +21,7 @@ import {
   buildMetaSumberGlosarium,
 } from './utils/metaUtils';
 import { petaItemEjaanBySlug, formatJudulEjaanDariSlug } from './constants/ejaanData';
+import { petaItemGramatikaBySlug, formatJudulGramatikaDariSlug } from './constants/gramatikData';
 
 function escapeHtml(value = '') {
   return String(value)
@@ -93,6 +94,27 @@ function buildMetaEjaan(slug = '') {
   return {
     judul: metadata.judul,
     deskripsi: `Kaidah ${metadata.judul} pada bab ${metadata.judulBab} dalam pedoman ejaan bahasa Indonesia di Kateglo.`,
+  };
+}
+
+function buildMetaGramatika(slug = '') {
+  const slugAman = String(slug || '').trim().replace(/\/+$/, '');
+  if (!slugAman) {
+    return {
+      judul: 'Gramatika',
+      deskripsi:
+        'Panduan tata bahasa Indonesia mencakup kelas kata, kalimat, dan hubungan antarklausa berdasarkan Tata Bahasa Baku Bahasa Indonesia.',
+    };
+  }
+
+  const metadata = petaItemGramatikaBySlug[slugAman] || {
+    judul: formatJudulGramatikaDariSlug(slugAman) || 'Gramatika',
+    judulBab: 'Gramatika',
+  };
+
+  return {
+    judul: metadata.judul,
+    deskripsi: `Penjelasan tentang ${metadata.judul} pada bab ${metadata.judulBab} dalam panduan tata bahasa Indonesia di Kateglo.`,
   };
 }
 
@@ -260,6 +282,15 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
 
   if (path.startsWith('/ejaan/')) {
     return titled(buildMetaEjaan(seg('/ejaan/')));
+  }
+
+  // /gramatika dan /gramatika/:slug
+  if (path === '/gramatika' || path === '/gramatika/') {
+    return titled(buildMetaGramatika());
+  }
+
+  if (path.startsWith('/gramatika/')) {
+    return titled(buildMetaGramatika(seg('/gramatika/')));
   }
 
   // /alat

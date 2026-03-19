@@ -190,6 +190,19 @@ describe('entry-server', () => {
     const ejaanDetailKosong = __private.buildMetaForPath('/ejaan/---', site);
     expect(ejaanDetailKosong.title).toBe('Ejaan — Kateglo');
 
+    const gramatikaIndex = __private.buildMetaForPath('/gramatika', site);
+    expect(gramatikaIndex.title).toBe('Gramatika — Kateglo');
+    expect(gramatikaIndex.description).toContain('tata bahasa');
+
+    const gramatikaDetail = __private.buildMetaForPath('/gramatika/preposisi', site);
+    expect(gramatikaDetail.title).toBe('Preposisi — Kateglo');
+    expect(gramatikaDetail.description).toContain('Kata Tugas');
+
+    const gramatikaDetailUnknown = __private.buildMetaForPath('/gramatika/klausa-baru', site);
+    expect(gramatikaDetailUnknown.title).toBe('Klausa Baru — Kateglo');
+    const gramatikaDetailKosong = __private.buildMetaForPath('/gramatika/---', site);
+    expect(gramatikaDetailKosong.title).toBe('Gramatika — Kateglo');
+
     const alat = __private.buildMetaForPath('/alat', site);
     expect(alat.title).toBe('Alat — Kateglo');
     expect(alat.description).toContain('Penghitung Huruf');

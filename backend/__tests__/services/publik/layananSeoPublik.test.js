@@ -143,6 +143,7 @@ describe('layananSeoPublik.generateSitemapPaths', () => {
     expect(paths).toContain('/gim/susun-kata/bebas');
     expect(paths).toContain('/ejaan');
     expect(paths).toContain('/ejaan/huruf-kapital');
+    expect(paths).toContain('/gramatika');
     expect(paths).toContain('/kamus/kelas/nomina');
     expect(paths).toContain('/kamus/bidang/teknologi-informasi');
     expect(paths).toContain('/kamus/abjad/a');
@@ -259,6 +260,34 @@ describe('layananSeoPublik private helpers', () => {
     const paths = __private.ambilPathEjaan();
 
     expect(paths).toEqual([]);
+    readdirSpy.mockRestore();
+    existsSpy.mockRestore();
+  });
+
+  it('ambilPathGramatika mengembalikan array kosong saat folder gramatika tidak ada', () => {
+    const existsSpy = jest.spyOn(fs, 'existsSync').mockReturnValue(false);
+
+    const paths = __private.ambilPathGramatika();
+
+    expect(paths).toEqual([]);
+    existsSpy.mockRestore();
+  });
+
+  it('ambilPathGramatika mengembalikan path gramatika dari file markdown', () => {
+    const existsSpy = jest.spyOn(fs, 'existsSync').mockReturnValue(true);
+    const readdirSpy = jest.spyOn(fs, 'readdirSync').mockReturnValue([
+      { isFile: () => true, name: 'preposisi.md' },
+      { isFile: () => true, name: 'konjungsi.md' },
+      { isFile: () => false, name: 'kata-tugas' },
+      { isFile: () => true, name: '.md' },
+    ]);
+
+    const paths = __private.ambilPathGramatika();
+
+    expect(paths).toContain('/gramatika/preposisi');
+    expect(paths).toContain('/gramatika/konjungsi');
+    expect(paths).not.toContain('/gramatika/kata-tugas');
+    expect(paths).not.toContain('/gramatika/');
     readdirSpy.mockRestore();
     existsSpy.mockRestore();
   });

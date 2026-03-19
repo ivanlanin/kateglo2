@@ -53,8 +53,12 @@ function isEjaanPagePath(requestPath = '') {
   return /^\/ejaan(?:\/[^/]+)?\/?$/.test(String(requestPath || '').trim());
 }
 
+function isGramatikaPagePath(requestPath = '') {
+  return /^\/gramatika(?:\/[^/]+)?\/?$/.test(String(requestPath || '').trim());
+}
+
 function resolvePageCacheControl(requestPath = '') {
-  if (!isEjaanPagePath(requestPath)) return '';
+  if (!isEjaanPagePath(requestPath) && !isGramatikaPagePath(requestPath)) return '';
 
   const parsed = Number.parseInt(process.env.CACHE_TTL_SECONDS, 10);
   const ttl = Number.isFinite(parsed) && parsed > 0 ? parsed : 1800;
@@ -298,6 +302,7 @@ module.exports = {
     isAssetRequest,
     isBypassPath,
     isEjaanPagePath,
+    isGramatikaPagePath,
     resolvePageCacheControl,
     stripReplaceableMeta,
     injectHeadTags,

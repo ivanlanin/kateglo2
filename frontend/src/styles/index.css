@@ -251,6 +251,14 @@ code {
     @apply border-dark-border;
   }
 
+  .navbar-mobile-separator {
+    @apply border-0 border-t border-gray-100 my-1;
+  }
+
+  .dark .navbar-mobile-separator {
+    @apply border-dark-border;
+  }
+
   .navbar-menu-measure {
     @apply absolute invisible pointer-events-none overflow-hidden whitespace-nowrap;
     height: 0;
