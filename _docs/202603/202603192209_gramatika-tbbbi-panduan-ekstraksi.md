@@ -24,19 +24,21 @@ PDF tersimpan di: `_data/gramatika/Tata Bahasa Baku Bahasa Indonesia TBBBI IV (2
            print(f"=== hal {i+1} ===")
            print(pdf.pages[i].extract_text())
    ```
-2. **Identifikasi artefak OCR** yang umum terjadi pada PDF ini:
+2. **Salin semua teks dari PDF secara lengkap** — jangan diringkas, jangan dipotong. Setiap contoh, setiap kalimat penjelasan dari TBBBI harus disertakan. Peringkasan menyebabkan konten hilang dan harus dikerjakan ulang. Satu-satunya pengecualian: bagan/diagram pohon yang tidak dapat dirender markdown (lihat poin 3).
+3. **Identifikasi artefak OCR** yang umum terjadi pada PDF ini:
    - `ü` / `ii` → `u` (ligarur font menjadi dua karakter atau umlaut)
    - `l` → `/` dalam daftar pilihan (`a / b / c`)
    - `{` → `(`, `}` → `)`
    - Pemisahan baris pada kata berimbuhan: `digu-\nnakan` → `digunakan`
    - Baris header/footer halaman menyusup ke body text (nomor halaman, nama bab)
    - `c` untuk `t`, `daiam` → `dalam`, `tiigas` → `tugas`, dll.
-3. **Bagan dan tabel** yang tidak dapat direproduksi sebagai markdown:
+4. **Bagan dan tabel** yang tidak dapat direproduksi sebagai markdown:
    - Bagan pohon sintaksis: dideskripsikan dalam prosa
    - Tabel yang OCR-nya kacau: direkonstruksi dari konteks dan pengetahuan TBBBI
-4. **Tulis file markdown** per subbab ke `frontend/public/gramatika/{bab-slug}/{item-slug}.md`
-5. **Daftarkan item** di `frontend/src/constants/gramatikData.js`
-6. **Jalankan lint + test** setelah setiap perubahan kode
+5. **Tulis file markdown** per subbab ke `frontend/public/gramatika/{bab-slug}/{item-slug}.md`
+   - Tambahkan **nomor subbab** setelah judul heading: `## Bentuk Preposisi (8.2.1.1)`
+6. **Daftarkan item** di `frontend/src/constants/gramatikData.js`
+7. **Jalankan lint + test** setelah setiap perubahan kode
 
 ### Struktur File
 
@@ -57,6 +59,13 @@ frontend/src/constants/gramatikData.js   ← daftar isi semua bab + item
 
 ## Nomor Halaman PDF per Bab
 
+Nomor halaman di bawah adalah nomor halaman **aktual dalam file PDF** (1-indeks, sesuai tampilan di PDF viewer).
+
+Formula Python pdfplumber (0-indeks): `range(PDF_awal - 1, PDF_akhir)`
+- Contoh Bab VIII: `range(395, 429)` → mencetak hal 396 s.d. 429
+
+### Bagian Bab
+
 | Bab | Judul | PDF awal | PDF akhir | Jml hal PDF | Selesai |
 |-----|-------|----------|-----------|------------|---------|
 | I   | Pendahuluan | 25 | 46 | 22 | — |
@@ -69,6 +78,16 @@ frontend/src/constants/gramatikData.js   ← daftar isi semua bab + item
 | VIII | Kata Tugas | 396 | 429 | 34 | ✓ |
 | IX  | Kalimat | 430 | 534 | 105 | — |
 | X   | Hubungan Antarklausa | 535 | 574 | 40 | — |
+
+### Bagian Lainnya
+
+| Bagian | PDF awal | PDF akhir |
+|--------|----------|-----------|
+| Daftar Isi | 15 | 24 |
+| Daftar Pustaka | 575 | 592 |
+| Daftar Istilah | 593 | 610 |
+| Indeks | 611 | 615 |
+| Sampul Belakang | 616 | 616 |
 
 ---
 

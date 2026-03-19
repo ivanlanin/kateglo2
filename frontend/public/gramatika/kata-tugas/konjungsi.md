@@ -1,9 +1,18 @@
 ---
 id: 3
-title: Konjungsi
+title: Konjungsi (8.2.2)
 ---
 
-**Konjungsi** (kata hubung) adalah kata tugas yang menghubungkan dua satuan bahasa, baik yang setara (sederajat) maupun yang tidak setara.
+**Konjungsi** (kata hubung) adalah kata tugas yang menghubungkan dua satuan bahasa, baik yang setara (sederajat) maupun yang tidak setara. Konjungsi yang setara menghubungkan kata dengan kata, frasa dengan frasa, atau klausa dengan klausa yang setara.
+
+Konjungsi yang tidak setara, seperti *karena*, *sejak*, dan *setelah*, dapat menghubungkan kata, frasa, atau klausa yang tidak setara. Dalam hubungannya dengan kata dan frasa, bentuk-bentuk itu berfungsi sebagai **preposisi**; dalam hubungannya dengan klausa, berfungsi sebagai **konjungsi**.
+
+Contoh:
+
+- *Dia tidak pergi berlibur karena masalah keuangan.* (preposisi)
+- *Dia tidak pergi berlibur karena uangnya habis.* (konjungsi)
+- *Dia sudah tinggal di sini sejak bulan Agustus.* (preposisi)
+- *Anak Pak Ante sudah tinggal di sini sejak dia berumur dua tahun.* (konjungsi)
 
 Berdasarkan perilaku sintaktisnya, konjungsi dibagi menjadi empat kelompok:
 
@@ -29,7 +38,7 @@ Contoh: kata *sebelum* berfungsi sebagai **konjungsi** dalam *Dia berangkat sebe
 
 ---
 
-## Konjungsi Koordinatif
+## Konjungsi Koordinatif (8.2.2.1)
 
 Konjungsi koordinatif menghubungkan dua unsur atau lebih yang memiliki status sintaktis yang sama.
 
@@ -44,6 +53,8 @@ Konjungsi koordinatif menghubungkan dua unsur atau lebih yang memiliki status si
 | *tetapi* | hubungan perlawanan |
 | *dan/atau* | hubungan jumlah atau pilihan |
 
+Konjungsi *dan*, *serta*, *atau*, dan *tetapi* dapat menghubungkan kata/frasa sekaligus klausa. Konjungsi *dan* dan *atau* dapat menghubungkan dua unsur atau lebih, sedangkan *tetapi* hanya dapat menghubungkan dua unsur.
+
 Contoh:
 
 - Dia tertawa *dan* istrinya pun tertawa.
@@ -52,16 +63,38 @@ Contoh:
 - Dia pura-pura tidak tahu, *padahal* tahu banyak.
 - Ibu sedang masak, *sedangkan* ayah membaca koran.
 
-Konjungsi *dan* dan *atau* dapat menghubungkan dua unsur atau lebih, sedangkan *tetapi* hanya dapat menghubungkan dua unsur.
+Konjungsi *dan* dapat bergantian dengan *serta*, tetapi secara semantis unsur yang dihubungkan oleh *dan* mempunyai kedudukan yang sama, sedangkan unsur kedua yang dihubungkan oleh *serta* cenderung ditafsirkan bersifat sekunder.
 
-**Konjungsi *atau* eksklusif** menyatakan makna pilihan salah satu dari dua kemungkinan atau lebih. **Konjungsi *atau* inklusif** menyatakan pemilihan satu atau lebih dari dua kemungkinan — dapat diikuti partikel *pun* atau ditulis *dan/atau*.
+### Implikasi Semantik Konjungsi *dan*
 
-- *Karyawan yang malas ataupun yang tidak jujur akan ditindak.* (inklusif)
-- *Anda pilih merah atau biru?* (eksklusif)
+Sebagai penghubung klausa, konjungsi *dan* dapat mempunyai empat implikasi semantik:
+
+a) Klausa kedua merupakan **tambahan** klausa pertama yang secara semantis sepadan — *Dia berbaju putih dan (dia) memakai dasi kupu-kupu.*
+
+b) Klausa kedua merupakan **akibat** klausa pertama — *Saya melihat seorang anak tetangga menangis dan (karena itu) saya langsung memanggil ibunya.*
+
+c) Klausa kedua secara kronologis merupakan **lanjutan** klausa pertama — *Dia memarkir mobilnya dan (kemudian) berjalan ke kantornya.*
+
+d) Klausa kedua merupakan **komentar** terhadap klausa pertama — *Ibu Rina perhatian sekali dan tidak heran kalau suaminya sering memberinya hadiah.*
+
+Selain contoh (a), klausa pertama dan kedua pada contoh (b)–(d) tidak dapat dipertukarkan letaknya.
+
+### Konjungsi *atau* Eksklusif dan Inklusif
+
+**Konjungsi *atau* eksklusif** menyatakan pilihan salah satu dari dua kemungkinan atau lebih — hanya ada satu pilihan yang mungkin diambil.
+
+- *Anda pilih merah atau biru?*
+- *Anaknya laki-laki atau perempuan?*
+
+**Konjungsi *atau* inklusif** menyatakan pemilihan satu atau lebih dari dua kemungkinan. Dapat diikuti partikel *pun* atau ditulis *dan/atau* dalam bahasa formal.
+
+- *Karyawan yang malas ataupun yang tidak jujur akan ditindak.* (inklusif — keduanya bisa)
+- *Ragam bahasa baku secara politis sering berfungsi sebagai bahasa resmi ataupun bahasa nasional.*
+- *Orang yang diajak berkomunikasi akan mendengar dan/atau melihat apa yang dikomunikasikan.*
 
 ---
 
-## Konjungsi Korelatif
+## Konjungsi Korelatif (8.2.2.2)
 
 Konjungsi korelatif adalah sepasang konjungsi koordinatif yang menghubungkan dua kata, frasa, atau klausa yang memiliki status sintaktis yang sama. Konjungsi ini terdiri atas dua bagian yang umumnya terpisah satu dengan yang lain.
 
@@ -78,7 +111,7 @@ Konjungsi korelatif adalah sepasang konjungsi koordinatif yang menghubungkan dua
 
 ---
 
-## Konjungsi Subordinatif
+## Konjungsi Subordinatif (8.2.2.3)
 
 Konjungsi subordinatif menghubungkan dua klausa atau lebih yang tidak memiliki status sintaktis yang sama — salah satunya merupakan klausa subordinatif.
 
@@ -141,10 +174,11 @@ Contoh pemakaian:
 - *Hari ini dia tidak masuk kantor karena sakit.*
 - *Ayah dan Ibu berkata bahwa mereka akan mengunjungi kami besok pagi.*
 - *Ani sangat menyukai sepatu yang dibelinya di Cibaduyut.*
+- *Widati lebih cantik daripada Laela.*
 
 ---
 
-## Konjungsi Antarkalimat
+## Konjungsi Antarkalimat (8.2.2.4)
 
 Konjungsi antarkalimat menghubungkan satu kalimat dengan kalimat yang lain. Karena itu, konjungsi ini selalu:
 - digunakan di **awal kalimat baru**
@@ -181,6 +215,6 @@ Contoh:
 ## Simpulan
 
 1. **Konjungsi koordinatif** menggabungkan kata atau klausa yang setara → membentuk **kalimat majemuk**.
-2. **Konjungsi korelatif** membentuk frasa atau kalimat dengan unsur yang memiliki status sintaktis sama.
+2. **Konjungsi korelatif** membentuk frasa atau kalimat dengan unsur yang memiliki status sintaktis sama. Ada kalanya terbentuk kalimat majemuk, ada kalanya kalimat kompleks, bahkan kalimat dengan dua subjek dan satu predikat.
 3. **Konjungsi subordinatif** membentuk klausa subordinatif → penggabungannya dengan klausa utama menghasilkan **kalimat kompleks**.
 4. **Konjungsi antarkalimat** merangkaikan dua kalimat yang masing-masing merupakan kalimat utuh.

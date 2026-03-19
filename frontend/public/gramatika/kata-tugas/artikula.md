@@ -1,13 +1,13 @@
 ---
 id: 5
-title: Artikula
+title: Artikula (8.2.4)
 ---
 
 **Artikula** adalah kata tugas yang membatasi makna nomina. Dalam bahasa Indonesia ada tiga kelompok artikula: (1) yang bersifat gelar, (2) yang mengacu pada makna kelompok, dan (3) yang menominalkan.
 
 ---
 
-## Artikula yang Bersifat Gelar
+## Artikula yang Bersifat Gelar (8.2.4.1)
 
 Artikula ini bertalian dengan orang atau hal yang dianggap bermartabat.
 
@@ -29,7 +29,7 @@ Contoh:
 
 ---
 
-## Artikula yang Mengacu pada Makna Kelompok
+## Artikula yang Mengacu pada Makna Kelompok (8.2.4.2)
 
 Artikula yang mengacu pada makna kelompok atau makna kolektif adalah **para**.
 
@@ -39,9 +39,11 @@ Karena artikula ini mengisyaratkan ketaktunggalan, nomina yang diiringinya **tid
 
 > Bentuk seperti ~~*para anak*~~, ~~*para orang*~~, dan ~~*para manusia*~~ tidak digunakan dalam bahasa Indonesia.
 
+Ada pula kata lain seperti *kaum* dan *umat* yang juga menyatakan makna kelompok, tetapi kedua kata itu termasuk **nomina**, bukan artikula.
+
 ---
 
-## Artikula yang Menominalkan
+## Artikula yang Menominalkan (8.2.4.3)
 
 ### Artikula *si*
 
@@ -49,6 +51,15 @@ Artikula *si* dapat mengacu pada makna tunggal atau generik, bergantung pada kon
 
 - *Tak sampai hatiku melihat **si** miskin mengambil makanan dari tumpukan sampah itu.* (acuan tunggal — satu orang yang kebetulan miskin)
 - *Dalam masa krisis **si** miskinlah yang selalu menderita.* (acuan generik — kaum miskin)
+
+Contoh pemakaian:
+
+- *Si Amat akan meminang si Halimah minggu depan.*
+- *Aduh, cantiknya si hitam manis itu!*
+- *Si terdakwa tidak dapat menjawab pertanyaan hakim.*
+- *Mengapa si dia tidak kamu ajak datang?*
+
+Artikula *si* juga dapat menunjukkan perasaan negatif pembicara: *Ini gara-gara si Sutomo*. Tentu saja, *si* di depan nama yang menunjukkan rasa negatif tidak dipakai jika orang yang bersangkutan hadir.
 
 Pemakaian artikula *si*:
 

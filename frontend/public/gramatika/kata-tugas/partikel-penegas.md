@@ -1,13 +1,13 @@
 ---
 id: 6
-title: Partikel Penegas
+title: Partikel Penegas (8.2.5)
 ---
 
 **Partikel penegas** adalah kata yang tidak tertakluk pada kaidah perubahan bentuk dan berfungsi menampilkan unsur yang diiringinya. Ada empat macam partikel penegas: *-kah*, *-lah*, *-tah*, dan *pun*. Tiga bentuk pertama berupa **klitika** (ditulis serangkai dengan kata yang diiringinya), sedangkan *pun* bukan klitika.
 
 ---
 
-## Partikel *-kah*
+## Partikel *-kah* (8.2.5.1)
 
 Partikel *-kah*, yang berbentuk klitika dan bersifat **manasuka**, dapat menegaskan kalimat interogatif.
 
@@ -32,7 +32,7 @@ Jika dalam kalimat interogatif sudah ada kata tanya seperti *apa*, *bagaimana*, 
 
 ---
 
-## Partikel *-lah*
+## Partikel *-lah* (8.2.5.2)
 
 Partikel *-lah*, yang juga berbentuk klitika, dipakai dalam kalimat imperatif atau kalimat deklaratif.
 
@@ -45,6 +45,7 @@ Partikel *-lah*, yang juga berbentuk klitika, dipakai dalam kalimat imperatif at
 **2) Memberikan ketegasan dalam kalimat deklaratif**
 
 - *Dari ceritamu, jelas kamu yang salah.* → *Dari ceritamu, jelaslah kamu yang salah.*
+- *Ambil berapa saja yang kamu perlukan.* → *Ambil berapa sajalah yang kamu perlukan.*
 - *Ini gerakan pembaruan.* → *Inilah gerakan pembaruan.*
 - *Dia yang menggugat soal itu.* → *Dialah yang menggugat soal itu.*
 
@@ -52,7 +53,7 @@ Partikel *-lah* cenderung dilekatkan pada **predikat** kalimat.
 
 ---
 
-## Partikel *-tah*
+## Partikel *-tah* (8.2.5.3)
 
 Partikel *-tah*, yang juga berbentuk klitika, dipakai dalam kalimat interogatif ketika penanya sebenarnya tidak mengharapkan jawaban — seolah-olah hanya bertanya kepada diri sendiri karena keheranan atau kesangsian.
 
@@ -63,7 +64,7 @@ Partikel *-tah*, yang juga berbentuk klitika, dipakai dalam kalimat interogatif 
 
 ---
 
-## Partikel *pun*
+## Partikel *pun* (8.2.5.4)
 
 Partikel *pun* hanya dipakai dalam kalimat deklaratif. Dalam bentuk tulisan, partikel ini **dipisahkan** dari kata yang mendahuluinya.
 
@@ -79,6 +80,7 @@ Partikel *pun* cenderung dilekatkan pada **subjek** kalimat.
 
 - *Tidak lama kemudian hujan pun turunlah dengan derasnya.*
 - *Para demonstran itu pun berbarislah dengan teratur.*
+- *Para anggota yang menolak pun mulai berpikir-pikir lagi.*
 
 > **Perhatian tentang penulisan:**
 >

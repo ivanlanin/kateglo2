@@ -1,6 +1,6 @@
 ---
 id: 4
-title: Interjeksi
+title: Interjeksi (8.2.3)
 ---
 
 **Interjeksi** (kata seru) adalah kata tugas yang mengungkapkan rasa hati pembicara. Interjeksi mengungkapkan perasaan seperti rasa kagum, sedih, heran, dan jijik di samping kalimat yang mengandung makna pokok.
@@ -11,7 +11,7 @@ Interjeksi dipakai dalam bahasa lisan atau bahasa tulis yang berbentuk percakapa
 
 ---
 
-## Jenis-Jenis Interjeksi
+## Jenis-Jenis Interjeksi (8.2.3)
 
 ### 1) Kejijikan
 *bah, cih, cis, ih, idih*

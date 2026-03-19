@@ -1,6 +1,6 @@
 ---
 id: 2
-title: Preposisi
+title: Preposisi (8.2.1)
 ---
 
 **Preposisi** (kata depan) adalah kata tugas yang menandai berbagai hubungan makna antara konstituen di depan preposisi tersebut dan konstituen di belakangnya.
@@ -9,11 +9,11 @@ Dari segi perilaku sintaktisnya, preposisi berada di depan nomina, adjektiva, at
 
 ---
 
-## Bentuk Preposisi
+## Bentuk Preposisi (8.2.1.1)
 
 Preposisi dibedakan menjadi **preposisi tunggal** dan **preposisi gabungan**.
 
-### Preposisi Tunggal
+### Preposisi Tunggal (8.2.1.1.1)
 
 Preposisi tunggal adalah preposisi yang hanya terdiri atas satu kata. Bentuknya dapat berupa (1) kata dasar atau (2) kata berafiks.
 
@@ -81,7 +81,7 @@ Preposisi berupa kata berafiks dibentuk dengan menambahkan afiks pada bentuk das
 
 ---
 
-### Preposisi Gabungan
+### Preposisi Gabungan (8.2.1.1.2)
 
 Preposisi gabungan terdiri atas (1) dua preposisi yang berdampingan dan (2) dua preposisi yang berkorelasi.
 
@@ -111,6 +111,15 @@ Preposisi gabungan jenis pertama terdiri atas dua preposisi yang letaknya beruru
 >
 > - a. *\*Kita harus dapat menyimak keluhan-keluhan daripada para siswa.*
 > - b. Kita harus dapat menyimak keluhan-keluhan (dari) para siswa.
+>
+> - a. *\*Dalam rapat yang lalu jawaban daripada badan pengurus tidak memuaskan.*
+> - b. Dalam rapat yang lalu jawaban (dari) badan pengurus tidak memuaskan.
+>
+> - a. *\*Kami sudah mempertimbangkan daripada persoalan itu.*
+> - b. Kami sudah mempertimbangkan persoalan itu.
+>
+> - a. *\*Sambil menunggu daripada hasil panen, Indonesia akan mengimpor beras.*
+> - b. Sambil menunggu hasil panen, Indonesia akan mengimpor beras.
 
 #### Berkorelasi
 
@@ -130,16 +139,24 @@ Preposisi gabungan jenis kedua terdiri atas dua unsur yang dipakai berpasangan, 
 
 #### Preposisi dan Nomina Lokatif
 
-Preposisi juga dapat bergabung dengan nomina yang mempunyai ciri lokatif, seperti pada frasa *di atas meja*, *ke dalam rumah*, dan *dari sekitar kampus*.
+Suatu preposisi juga dapat bergabung dengan nomina yang mempunyai ciri lokatif, seperti pada frasa *di atas meja*, *ke dalam rumah*, dan *dari sekitar kampus*. Dalam contoh tersebut, *atas*, *dalam*, dan *sekitar* merupakan bagian dari frasa nominal (*atas meja*, *dalam rumah*, *sekitar kampus*), bukan merupakan frasa gabungan *di atas*, *ke dalam*, *dari sekitar*.
 
-Dalam contoh tersebut, *atas*, *dalam*, dan *sekitar* merupakan bagian dari frasa nominal (*atas meja*, *dalam rumah*, *sekitar kampus*), bukan frasa gabungan *di atas*, *ke dalam*, *dari sekitar*.
+Sebagian dari nomina lokatif (N₁) ada yang **wajib** muncul dan ada yang **manasuka**. Nomina lokatif yang tidak wajib muncul adalah, misalnya, *atas* dan *dalam*. Muncul atau tidaknya N₁ dipengaruhi oleh ciri semantik benda yang dimaksud. Karena *meja*, misalnya, mempunyai dimensi dua (panjang dan lebar), *di meja* diartikan sama dengan *di atas meja*.
 
 Contoh pemakaian dengan dan tanpa nomina lokatif yang manasuka:
 
 - Letakkan piring itu di (atas) meja.
 - Naikkan barang itu ke (atas) truk.
+- Dagangan itu diturunkan dari (atas) kapal.
 - Buku itu ada di (dalam) lemari.
 - Dia memasukkan kunci itu ke (dalam) laci.
+- Pisau itu diambilnya dari (dalam) peti.
+
+Bentuk preposisi gabungan *di dalam* dapat juga beralternasi dengan *dalam* saja, terutama apabila nomina yang mengikutinya merujuk ke benda yang berdimensi tiga.
+
+- Baju itu (di) dalam lemari.
+- Uangnya disimpan (di) dalam tas.
+- Kejengkelannya itu disembunyikan (di) dalam hati.
 
 Dalam kasus tertentu, kehadiran atau ketiadaan nomina lokatif dapat menimbulkan **perbedaan makna**:
 
@@ -147,9 +164,43 @@ Dalam kasus tertentu, kehadiran atau ketiadaan nomina lokatif dapat menimbulkan 
 - *Dia pergi ke atas bukit.* (≠ *ke bukit*)
 - *Kucing itu meloncat dari atas mobil.* (≠ *dari mobil*)
 
+Apabila rujukan jelas karena konteks kalimat atau konteks situasi, frasa preposisional dapat pula muncul tanpa N₁. Berikut adalah frasa preposisional yang dapat muncul tanpa N₁ jika konteks kalimat atau situasinya jelas.
+
+| | ke ... | dari ... |
+|---|--------|----------|
+| *di depan* | *ke depan* | *dari depan* |
+| *di muka* | *ke muka* | *dari muka* |
+| *di pinggir* | *ke pinggir* | *dari pinggir* |
+| *di samping* | *ke samping* | *dari samping* |
+| *di sebelah* | *ke sebelah* | *dari sebelah* |
+| *di tengah* | *ke tengah* | *dari tengah* |
+
+Sebaliknya, ada pula frasa preposisional yang mensyaratkan munculnya N₂:
+
+- *di antara* ... / *ke antara* ... / *dari antara* ...
+- *di balik* ... / *ke balik* ... / *dari balik* ...
+- *di dekat* ... / *ke dekat* ... / *dari dekat* ...
+
+Contoh: *Polisi terlihat di antara para pengunjuk rasa* (berterima), tetapi *\*Polisi terlihat di antara* (tidak berterima). Demikian pula *di balik* dan *di dekat* mensyaratkan N₂-nya.
+
+Khusus *dari dekat*, frasa preposisional ini tidak selalu mensyaratkan N₂ apabila N₂-nya dapat dipahami dari konteks kalimat:
+
+- Dia menyaksikan peristiwa itu dari dekat rumah.
+- Dia menyaksikan peristiwa itu dari dekat. *(berterima jika konteks jelas)*
+
+> **Catatan:** Bentuk-bentuk *di sini*, *di situ*, dan *di sana*; *ke sini*, *ke situ*, dan *ke sana*; *dari sini*, *dari situ*, dan *dari sana* merupakan **pronomina penunjuk tempat**, bukan frasa preposisional.
+
 ---
 
-## Peran Semantis Preposisi
+Bentuk-bentuk preposisi bahasa Indonesia dapat disajikan dalam bagan taksonomi berikut.
+
+**Preposisi Tunggal:** kata dasar · kata berafiks (berprefiks / bersufiks / berprefiks+bersufiks)
+
+**Preposisi Gabungan:** preposisi berdampingan · preposisi berkorelasi
+
+---
+
+## Peran Semantis Preposisi (8.2.1.2)
 
 Preposisi berfungsi sebagai penanda hubungan makna antara konstituen. Peran semantis preposisi yang lazim dalam bahasa Indonesia adalah sebagai penanda hubungan berikut.
 
@@ -224,7 +275,7 @@ Preposisi berfungsi sebagai penanda hubungan makna antara konstituen. Peran sema
 
 ---
 
-## Peran Sintaktis Preposisi
+## Peran Sintaktis Preposisi (8.2.1.3)
 
 Frasa preposisional dalam bahasa Indonesia pada umumnya berfungsi sebagai **keterangan** (adverbial) dalam kalimat, seperti pada:
 
@@ -232,10 +283,22 @@ Frasa preposisional dalam bahasa Indonesia pada umumnya berfungsi sebagai **kete
 - *Mereka sudah berangkat ke sekolah.*
 - *Uangnya ditabung di bank.*
 
-Verba yang mengandung makna gerakan (*pergi*, *datang*, *berangkat*) umumnya dapat diikuti oleh frasa preposisional dengan preposisi *ke* (arah/tujuan) atau *dari* (asal).
+Verba yang mengandung makna gerakan (*pergi*, *datang*, *berangkat*) umumnya dapat diikuti oleh frasa preposisional dengan preposisi *ke* (arah/tujuan) atau *dari* (asal). Kalimat berpredikat frasa preposisional dan kalimat berpredikat verba gerakan cenderung memiliki perilaku sintaktis yang sama jika konteks ujarannya jelas.
 
-Selain sebagai keterangan, frasa preposisional yang telah bergabung dengan nomina tempat juga dapat menjadi **predikat kalimat**:
+Contoh:
 
-- *Wati ke Bandung.*
-- *Ruli di Bandung sekarang.*
+- *Wati ke Bandung.* (sepadan dengan *Wati pergi/berangkat ke Bandung.*)
+- *Ruli di Bandung sekarang.* (sepadan dengan *Ruli (ber)ada di Bandung sekarang.*)
+- *Jalannya seperti robot.* (sepadan dengan *Jalannya sama dengan/menyerupai robot.*)
+
+Preposisi *dari* yang diikuti nomina tempat sebagai predikat mengandung ciri makna 'asal tempat tinggal atau bahan'. Jika yang dimaksud adalah 'asal tindakan' atau 'gerakan', preposisi *dari* perlu disertai verba:
+
+- *Dani dari Medan.* (asal tempat tinggal)
+- *Dani datang/berasal dari Medan.* (asal gerakan/asal-usul)
+
+Frasa preposisional yang telah bergabung dengan nomina tertentu juga dapat menjadi **predikat kalimat**, seperti *untuk*, *bagi*, *tentang*, atau *mengenai* + nomina:
+
 - *Buku ini untuk hadiah ulang tahunmu.*
+- *Makalahnya tentang kebudayaan daerah.*
+
+Keberagaman perilaku sintaktis frasa preposisional yang menjadi predikat dapat dimengerti karena preposisi dalam bahasa Indonesia ada yang berasal dari nomina, verba, adjektiva, atau kelas kata lain.
