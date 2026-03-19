@@ -11,7 +11,7 @@ const daftarIsiGramatika = [
       { judul: 'Makna Adverbia', slug: 'makna-adverbia' },
       { judul: 'Posisi Adverbia', slug: 'posisi-adverbia' },
       { judul: 'Bentuk Adverbia', slug: 'bentuk-adverbia' },
-      { judul: 'Adverbial dan Kelas Kata Lain', slug: 'adverbial-dan-kelas-kata-lain' },
+      { judul: 'Adverbia dan Kelas Kata Lain', slug: 'adverbia-dan-kelas-kata-lain' },
     ],
   },
   {

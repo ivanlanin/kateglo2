@@ -1,6 +1,6 @@
 ---
 id: 5
-title: Adverbial dan Kelas Kata Lain (6.5–6.6)
+title: Adverbia dan Kelas Kata Lain
 ---
 
 ## Bentuk Adverbial (6.5)
