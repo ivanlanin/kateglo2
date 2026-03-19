@@ -7,7 +7,7 @@ const daftarIsiGramatika = [
     judul: 'Adverbia',
     slug: 'adverbia',
     items: [
-      { judul: 'Batasan dan Ciri Adverbia', slug: 'batasan-dan-ciri' },
+      { judul: 'Batasan dan Ciri Adverbia', slug: 'batasan-dan-ciri-adverbia' },
       { judul: 'Makna Adverbia', slug: 'makna-adverbia' },
       { judul: 'Posisi Adverbia', slug: 'posisi-adverbia' },
       { judul: 'Bentuk Adverbia', slug: 'bentuk-adverbia' },
@@ -18,7 +18,7 @@ const daftarIsiGramatika = [
     judul: 'Kata Tugas',
     slug: 'kata-tugas',
     items: [
-      { judul: 'Batasan dan Ciri', slug: 'batasan-dan-ciri' },
+      { judul: 'Batasan dan Ciri Kata Tugas', slug: 'batasan-dan-ciri-kata-tugas' },
       { judul: 'Preposisi', slug: 'preposisi' },
       { judul: 'Konjungsi', slug: 'konjungsi' },
       { judul: 'Interjeksi', slug: 'interjeksi' },
