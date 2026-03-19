@@ -1,3 +1,8 @@
+---
+id: 2
+title: Makna Nomina (7.1.2)
+---
+
 # Makna Nomina (7.1.2)
 
 ## Nomina dari Segi Perilaku Semantisnya (7.1.2)

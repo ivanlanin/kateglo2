@@ -1,3 +1,8 @@
+---
+id: 1
+title: Numeralia Pokok (7.3.1)
+---
+
 # Numeralia Pokok (7.3.1)
 
 Numeralia atau kata bilangan adalah kata yang dipakai untuk menghitung banyaknya maujud (orang, binatang, atau barang) dan konsep. Frasa seperti *lima hari*, *setengah abad*, *orang ketiga*, dan *beberapa masalah* masing-masing mengandung numeralia, yakni *lima*, *setengah*, *ketiga*, dan *beberapa*.

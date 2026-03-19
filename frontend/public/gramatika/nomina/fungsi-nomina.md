@@ -1,3 +1,8 @@
+---
+id: 4
+title: Fungsi Nomina (7.1.3)
+---
+
 # Fungsi Nomina (7.1.3)
 
 ## Nomina dari Segi Perilaku Sintaktisnya (7.1.3)

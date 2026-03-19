@@ -44,14 +44,38 @@ PDF tersimpan di: `_data/gramatika/Tata Bahasa Baku Bahasa Indonesia TBBBI IV (2
 
 ```
 frontend/public/gramatika/
+├── adjektiva/
+│   ├── batasan-dan-ciri-adjektiva.md
+│   ├── makna-adjektiva.md
+│   ├── fungsi-adjektiva.md
+│   ├── pertarafan-adjektiva.md
+│   ├── bentuk-adjektiva.md
+│   ├── frasa-adjektival.md
+│   └── adjektiva-dan-kelas-kata-lain.md
 ├── adverbia/
-│   ├── batasan-dan-ciri.md
+│   ├── batasan-dan-ciri-adverbia.md
 │   ├── makna-adverbia.md
 │   ├── posisi-adverbia.md
 │   ├── bentuk-adverbia.md
-│   └── adverbial-dan-kelas-kata-lain.md
-└── kata-tugas/               ← slug bab
-    ├── batasan-dan-ciri.md
+│   └── adverbia-dan-kelas-kata-lain.md
+├── nomina/
+│   ├── batasan-dan-ciri-nomina.md
+│   ├── makna-nomina.md
+│   ├── acuan-nomina.md
+│   ├── fungsi-nomina.md
+│   ├── jenis-nomina.md
+│   ├── frasa-nominal.md
+│   └── frasa-nominal-vokatif.md
+├── pronomina/
+│   ├── batasan-dan-ciri-pronomina.md
+│   ├── jenis-pronomina.md
+│   └── frasa-pronominal.md
+├── numeralia/
+│   ├── numeralia-pokok.md
+│   ├── numeralia-tingkat.md
+│   └── frasa-numeral.md
+└── kata-tugas/
+    ├── batasan-dan-ciri-kata-tugas.md
     ├── preposisi.md
     ├── konjungsi.md
     ├── interjeksi.md
@@ -80,7 +104,7 @@ Formula Python pdfplumber (0-indeks): `range(PDF_awal - 1, PDF_akhir)`
 | IV  | Verba | 119 | 216 | 98 | — |
 | V   | Adjektiva | 217 | 257 | 41 | ✓ |
 | VI  | Adverbia | 258 | 281 | 24 | ✓ |
-| VII | Nomina, Pronomina, dan Numeralia | 282 | 395 | 114 | — |
+| VII | Nomina, Pronomina, dan Numeralia | 282 | 395 | 114 | ✓ |
 | VIII | Kata Tugas | 396 | 429 | 34 | ✓ |
 | IX  | Kalimat | 430 | 534 | 105 | — |
 | X   | Hubungan Antarklausa | 535 | 574 | 40 | — |
@@ -133,7 +157,7 @@ Urutan mempertimbangkan: panjang bab, kualitas OCR yang dapat diharapkan, kepada
 - Beberapa morfofonemik (adjektiva berimbuhan) tapi tidak sekompleks Bab IV.
 - Relevan bagi pengguna kamus (pemahaman gradasi kata sifat).
 
-**Subbab yang disarankan:** Batasan dan Ciri · Jenis Adjektiva (semantis) · Pertarafan · Bentuk Adjektiva · Frasa Adjektival
+**Subbab:** Batasan dan Ciri · Makna (8 jenis semantis) · Fungsi (atributif, predikatif, adverbial) · Pertarafan (6 tingkat kualitas + 3 tingkat pembandingan) · Bentuk · Frasa Adjektival · Adjektiva dan Kelas Kata Lain
 
 ---
 
@@ -206,13 +230,16 @@ Urutan mempertimbangkan: panjang bab, kualitas OCR yang dapat diharapkan, kepada
 
 ---
 
-### ☐ 10. Bab VII — Nomina, Pronomina, dan Numeralia (114 hal PDF)
+### ✓ 4. Bab VII — Nomina, Pronomina, dan Numeralia (114 hal PDF) — **SELESAI**
 
 - Bab terpanjang keseluruhan; tiga kelas kata digabung dalam satu bab.
-- Nomina: klasifikasi sangat beragam (berdasarkan acuan, bentuk morfologis, frasa nominal).
-- Pronomina: tabel paradigma lengkap (persona 1/2/3, formal/informal, tunggal/jamak).
-- Numeralia: pecahan, ordinal, klitika → tabel berlapis.
-- Strategi: pecah menjadi minimal 4 dokumen terpisah per kelas kata utama, tambah 1 untuk frasa nominal.
+- Dipecah menjadi tiga entri terpisah di `gramatikData.js`: Nomina (7 item), Pronomina (3 item), Numeralia (3 item).
+
+**Subbab Nomina:** Batasan dan Ciri · Makna · Acuan · Fungsi · Jenis · Frasa Nominal · Frasa Nominal Vokatif
+
+**Subbab Pronomina:** Batasan dan Ciri · Jenis (persona, penunjuk, penanya) · Frasa Pronominal
+
+**Subbab Numeralia:** Numeralia Pokok (tentu, kolektif, distributif, taktentu, klitika, pecahan) · Numeralia Tingkat · Frasa Numeral
 
 ---
 

@@ -1,3 +1,8 @@
+---
+id: 3
+title: Acuan Nomina (7.4)
+---
+
 # Acuan Nomina (7.4)
 
 ## Konsep Tunggal, Jamak, dan Generik (7.4)

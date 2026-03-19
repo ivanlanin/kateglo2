@@ -1,3 +1,8 @@
+---
+id: 5
+title: Jenis Nomina (7.1.4)
+---
+
 # Jenis Nomina (7.1.4)
 
 ## Nomina Berdasarkan Acuannya (7.1.4.1)

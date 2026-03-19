@@ -1,3 +1,8 @@
+---
+id: 1
+title: Batasan dan Ciri Nomina (7.1.1)
+---
+
 # Batasan dan Ciri Nomina (7.1.1)
 
 Pembahasan dalam bab ini mencakup nomina (7.1), pronomina (7.2), dan numeralia (7.3). Ketiga kelas kata itu berhubungan erat dalam pemakaian. Pronomina dipakai untuk menggantikan nomina atau frasa nominal dalam kalimat dan numeralia biasanya hadir dalam kalimat bersama nomina.

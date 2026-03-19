@@ -1,3 +1,8 @@
+---
+id: 2
+title: Numeralia Tingkat (7.3.2)
+---
+
 # Numeralia Tingkat (7.3.2)
 
 Numeralia pokok dapat diubah menjadi numeralia tingkat. Cara mengubahnya adalah dengan menambahkan *ke-* di muka bilangan yang bersangkutan. Khusus untuk bilangan satu dipakai pula istilah *pertama*.

@@ -1,3 +1,8 @@
+---
+id: 7
+title: Frasa Nominal Vokatif (7.1.6)
+---
+
 # Frasa Nominal Vokatif (7.1.6)
 
 Nomina atau frasa nominal yang digunakan untuk memanggil atau menyapa orang disebut nomina atau frasa nominal vokatif. Unsur vokatif itu bersifat manasuka dan letaknya dapat di awal, tengah, atau akhir kalimat seperti tampak pada contoh berikut.
