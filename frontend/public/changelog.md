@@ -2,7 +2,8 @@
 
 ## 2026-03-20 Jumat
 
-- Menambahkan bagian adjektiva, nomina, pronomina, dan numeralia di [Gramatika](/gramatika)
+- Menambahkan bagian adjektiva, nomina, pronomina, numeralia, dan verba di [Gramatika](/gramatika)
+- Merapikan format halaman di [Gramatika](/gramatika)
 
 ## 2026-03-19 Kamis
 
