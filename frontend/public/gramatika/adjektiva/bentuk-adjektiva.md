@@ -3,10 +3,6 @@ id: 5
 title: Bentuk Adjektiva (5.5)
 ---
 
-# Adjektiva dari Segi Bentuk (5.5)
-
-Dari segi bentuknya, adjektiva dapat dibedakan menjadi adjektiva dasar dan adjektiva turunan.
-
 ## Adjektiva Dasar (5.5.1)
 
 Meskipun sebagian besar adjektiva dasar merupakan bentuk yang monomorfemis, ada juga adjektiva dasar yang berbentuk perulangan semu.

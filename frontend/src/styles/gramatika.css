@@ -299,12 +299,14 @@
 
 .ejaan-markdown-content ul {
   @apply columns-1 md:columns-2 gap-8;
+  list-style-type: disc;
   list-style-position: outside;
   padding-left: 1.25rem;
   margin-left: 0;
 }
 
 .ejaan-markdown-content ol {
+  list-style-type: decimal;
   list-style-position: outside;
   padding-left: 1.25rem;
   margin-left: 0;

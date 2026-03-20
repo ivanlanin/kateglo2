@@ -3,8 +3,6 @@ id: 1
 title: Batasan dan Ciri Pronomina (7.2.1)
 ---
 
-# Batasan dan Ciri Pronomina (7.2.1)
-
 Jika dilihat dari segi artinya, pronomina adalah kata yang berfungsi sebagai pengganti nomina. Seperti halnya nomina, fungsi utama pronomina adalah sebagai inti frasa nominal walaupun pewatasnya terbatas. Tidak jarang pronomina (tanpa pewatas) dapat menduduki fungsi frasa nominal dalam kalimat, seperti subjek, objek, pelengkap, ataupun predikat.
 
 Sebagai kata pengganti nomina atau frasa nominal, pronomina digunakan untuk mengacu pada orang atau benda. Apabila tafsiran acuan pronomina itu ditentukan oleh faktor peristiwa ujaran (siapa berbicara dan siapa yang diajak berbicara), pronomina itu bersifat deiksis. Apabila acuannya sama dengan acuan nomina atau frasa nominal tertentu dalam teks, pronomina tersebut (*-nya*) bersifat anaforis.

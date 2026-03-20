@@ -3,8 +3,6 @@ id: 2
 title: Jenis Pronomina (7.2.2)
 ---
 
-# Jenis Pronomina (7.2.2)
-
 Ada tiga macam pronomina dalam bahasa Indonesia, yakni (1) pronomina persona, (2) pronomina penunjuk, dan (3) pronomina penanya.
 
 ## Pronomina Persona (7.2.2.1)

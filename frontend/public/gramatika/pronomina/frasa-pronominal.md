@@ -3,8 +3,6 @@ id: 3
 title: Frasa Pronominal (7.2.3)
 ---
 
-# Frasa Pronominal (7.2.3)
-
 Pronomina dapat juga menjadi inti frasa dengan mengikuti kaidah berikut.
 
 ## 1) Penambahan Numeralia Kolektif

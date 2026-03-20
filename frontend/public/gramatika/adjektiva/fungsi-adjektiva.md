@@ -3,8 +3,6 @@ id: 3
 title: Fungsi Adjektiva (5.3)
 ---
 
-# Adjektiva dari Segi Perilaku Sintaktis (5.3)
-
 Sebagaimana yang telah disinggung pada 5.1, adjektiva memiliki fungsi atributif, fungsi predikatif, dan fungsi adverbial atau keterangan.
 
 ## Fungsi Atributif (5.3.1)

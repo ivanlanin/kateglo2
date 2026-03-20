@@ -3,8 +3,6 @@ id: 5
 title: Bentuk Adverbial (6.5)
 ---
 
-# Bentuk Adverbial (6.5)
-
 Paparan tentang pewatas verba, pewatas adjektiva, atau pewatas adverbia lain, sebagaimana telah dipaparkan pada 6.1, merupakan salah satu ciri adverbia. Selain itu, ada satu ciri lagi yang sering disebut **adverbial**. Perbedaannya ialah bahwa adverbia merupakan salah satu kategori gramatikal atau kelas kata, sedangkan adverbial merupakan salah satu fungsi sintaktis.
 
 Dalam konteks kalimat, adverbial dapat berupa nomina atau frasa nominal, verba atau frasa verbal, adjektiva atau frasa adjektival, atau frasa preposisional.
