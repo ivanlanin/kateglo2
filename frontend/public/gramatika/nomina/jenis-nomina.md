@@ -117,16 +117,16 @@ Nomina dasar umum adalah nomina yang dapat menjadi dasar untuk penurunan kata at
 
 Contoh:
 
-> *orang* → orang-orangan, perseorangan
-> *meja* → meja makan, meja tulis
-> *rumah* → rumah-rumahan, perumahan
-> *malam* → bermalam, kemalaman
-> *gambar* → gambarkan, gambaran
-> *minggu* → mingguan, berminggu-minggu
-> *pisau* → pisau dapur, pisau lipat
-> *tongkat* → bertongkat, tongkat komando
-> *cinta* → bercinta, mencintai
-> *bawah* → bawahan, membawahi
+- *orang* → orang-orangan, perseorangan
+- *meja* → meja makan, meja tulis
+- *rumah* → rumah-rumahan, perumahan
+- *malam* → bermalam, kemalaman
+- *gambar* → gambarkan, gambaran
+- *minggu* → mingguan, berminggu-minggu
+- *pisau* → pisau dapur, pisau lipat
+- *tongkat* → bertongkat, tongkat komando
+- *cinta* → bercinta, mencintai
+- *bawah* → bawahan, membawahi
 
 **2) Nomina Dasar Khusus**
 
@@ -149,9 +149,9 @@ Bentuk pangkal itu dapat berupa pangkal (monomorfemis) dan dapat pula berupa kat
 
 Proses yang sama juga terjadi pada penurunan nomina-nomina lain seperti terlihat dalam contoh-contoh berikut.
 
-> *darat* (N) → *daratan* (N); *mendarat(kan)* (V) → *pendaratan* (N)
-> *kosong* (Adj) → *kekosongan* (N); *mengosongkan* (V) → *pengosongan* (N)
-> *satu* (Num) → *kesatuan* (N); *bersatu* (V) → *persatuan* (N); *menyatukan* (V) → *penyatuan* (N)
+- *darat* (N) → *daratan* (N); *mendarat(kan)* (V) → *pendaratan* (N)
+- *kosong* (Adj) → *kekosongan* (N); *mengosongkan* (V) → *pengosongan* (N)
+- *satu* (Num) → *kesatuan* (N); *bersatu* (V) → *persatuan* (N); *menyatukan* (V) → *penyatuan* (N)
 
 Karena keterkaitan makna merupakan dasar untuk menentukan bentuk pangkal penurunan, dalam kebanyakan hal nomina turunan mempunyai bentuk pangkal sendiri-sendiri. Nomina *temuan*, *pertemuan*, dan *penemuan*, misalnya, masing-masing diturunkan dari bentuk pangkal yang berbeda, yakni *temu*, *bertemu*, dan *menemukan*.
 
@@ -240,11 +240,11 @@ Perlu diingat bahwa tidak semua nomina dengan *peng-* memiliki salah satu arti y
 
 Perkembangan bahasa Indonesia selanjutnya memunculkan pula bentuk-bentuk kontras antara nomina pelaku (agentif) dan nomina pengalam (sasaran):
 
-> *penyuruh*—yang menyuruh vs. *pesuruh*—yang disuruh
-> *peninju*—yang meninju vs. *petinju*—yang bertinju
-> *penyerta*—yang menyertai vs. *peserta*—yang ikut serta
-> *penatar*—yang menatar vs. *petatar*—yang ditatar
-> *penyuluh*—yang menyuluh vs. *pesuluh*—yang disuluh
+- *penyuruh*—yang menyuruh vs. *pesuruh*—yang disuruh
+- *peninju*—yang meninju vs. *petinju*—yang bertinju
+- *penyerta*—yang menyertai vs. *peserta*—yang ikut serta
+- *penatar*—yang menatar vs. *petatar*—yang ditatar
+- *penyuluh*—yang menyuluh vs. *pesuluh*—yang disuluh
 
 **Penurunan Nomina dengan *-an*:**
 
@@ -360,14 +360,14 @@ Sufiks *-(is)asi* berpadanan dengan konfiks *peng-...-an*, dan sufiks *-tas* ser
 
 Dalam bahasa Indonesia dewasa ini terdapat sekelompok nomina dengan klitik numeralia *se-* yang diperlakukan sebagai kesatuan leksikal:
 
-> *seantero*—Berita itu sudah tersiar di seantero dunia.
-> *sebelah*—Ruangannya ada di sebelah kiri.
-> *sekeliling*—Dia berjalan-jalan di sekeliling taman.
-> *sekitar*—Anak itu bermain di sekitar rumah saja.
-> *sepanjang*—Kami tidak bertemu seorang pun di sepanjang pantai.
-> *seputar*—Polisi yakin bahwa buronan itu masih ada di seputar Jakarta.
-> *sejumlah*—Dia diberhentikan karena menerima uang sejumlah lima ratus juta rupiah.
-> *selama*—Pak Andi mengambil cuti selama lima hari.
+- *seantero*—Berita itu sudah tersiar di seantero dunia.
+- *sebelah*—Ruangannya ada di sebelah kiri.
+- *sekeliling*—Dia berjalan-jalan di sekeliling taman.
+- *sekitar*—Anak itu bermain di sekitar rumah saja.
+- *sepanjang*—Kami tidak bertemu seorang pun di sepanjang pantai.
+- *seputar*—Polisi yakin bahwa buronan itu masih ada di seputar Jakarta.
+- *sejumlah*—Dia diberhentikan karena menerima uang sejumlah lima ratus juta rupiah.
+- *selama*—Pak Andi mengambil cuti selama lima hari.
 
 Perlu diingat bahwa bentuk *se-* pada kata-kata tersebut tidak dapat disubstitusi dengan *satu*.
 

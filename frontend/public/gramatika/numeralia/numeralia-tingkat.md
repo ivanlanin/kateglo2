@@ -9,10 +9,10 @@ Numeralia pokok dapat diubah menjadi numeralia tingkat. Cara mengubahnya adalah 
 
 Contoh:
 
-> *kesatu* atau *pertama*
-> *kedua*
-> *kelima*
-> *kesepuluh*
+- *kesatu* atau *pertama*
+- *kedua*
+- *kelima*
+- *kesepuluh*
 
 ## Perbedaan dengan Numeralia Kolektif
 

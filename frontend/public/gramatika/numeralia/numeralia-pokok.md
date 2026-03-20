@@ -39,8 +39,8 @@ c) Bilangan asli + nomina numeralia *ratus*, *ribu*, atau *juta*:
 
 Indonesia mengikuti pola campuran. Untuk bilangan dengan sembilan nol Indonesia mengikuti Eropa dan memakai istilah *miliar*, sedangkan untuk bilangan dengan dua belas nol mengikuti Amerika Serikat dan menggunakan istilah *triliun*:
 
-> satu miliar → 1.000.000.000
-> satu triliun → 1.000.000.000.000
+- satu miliar → 1.000.000.000
+- satu triliun → 1.000.000.000.000
 
 Dalam bahasa Indonesia baku, numeralia pokok ditempatkan di muka nomina dan dapat diselingi oleh kata penggolong seperti *orang*, *ekor*, dan *buah*. Urutannya menjadi [numeralia – penggolong – nomina]. Akan tetapi, kata penggolong itu sering tidak digunakan:
 
@@ -56,14 +56,14 @@ Jika numeralia ditempatkan di belakang nomina, dalam bahasa baku kata penggolong
 
 Numeralia pokok kolektif dibentuk dengan prefiks *ke-* yang ditempatkan di muka nomina yang diterangkan:
 
-> ***ketiga** pemain*—semua pemain dari nomor satu sampai ke nomor tiga
-> ***kedua** gedung*—baik gedung pertama maupun gedung kedua
-> ***kesepuluh** anggota*—anggota nomor 1 sampai dengan 10
+- ***ketiga** pemain*—semua pemain dari nomor satu sampai ke nomor tiga
+- ***kedua** gedung*—baik gedung pertama maupun gedung kedua
+- ***kesepuluh** anggota*—anggota nomor 1 sampai dengan 10
 
 Jika tidak diikuti oleh nomina, biasanya bentuk itu diulang dan diikuti dengan *-nya*:
 
-> Anda mau apel atau durian?—*Kedua-duanya.*
-> Ayah, Ibu, atau Adik yang pergi ke pasar?—*Ketiga-tiganya.*
+- Anda mau apel atau durian?—*Kedua-duanya.*
+- Ayah, Ibu, atau Adik yang pergi ke pasar?—*Ketiga-tiganya.*
 
 Numeralia kolektif dapat juga dibentuk dengan cara berikut.
 
@@ -101,14 +101,14 @@ Pada tataran sintaksis nomina numeralia taktentu dapat pula dibentuk dari numera
 
 **1) Penambahan prefiks *ber-* pada nomina numeral lalu diulang**—menyatakan kelipatan tidak tentu:
 
-> *Berpuluh-puluh mahasiswa yang datang terlambat.*
-> *Beratus-ratus juta pasang mata menyaksikan pertandingan sepak bola itu.*
+- *Berpuluh-puluh mahasiswa yang datang terlambat.*
+- *Beratus-ratus juta pasang mata menyaksikan pertandingan sepak bola itu.*
 
 **2) Penambahan sufiks *-an***—menyatakan makna 'sekitar' nomina numeralia:
 
-> *Ratusan orang tidak membeli karcis.*
-> *Puluhan ribu orang menghadiri rapat umum itu.*
-> *Belasan siswa datang terlambat karena banjir.*
+- *Ratusan orang tidak membeli karcis.*
+- *Puluhan ribu orang menghadiri rapat umum itu.*
+- *Belasan siswa datang terlambat karena banjir.*
 
 ## Numeralia Pokok Klitika (7.3.1.5)
 
@@ -128,15 +128,15 @@ Dalam bahasa Indonesia dewasa ini terdapat sejumlah numeralia yang dipungut dari
 
 Tiap bilangan pokok dapat dipecah menjadi bagian yang lebih kecil yang dinamakan numeralia pecahan. Cara membentuk numeralia itu ialah dengan memakai kata *per-* di antara bilangan pembagi dan penyebut. Dalam bentuk huruf, *per-* ditempelkan pada bilangan yang mengikutinya. Dalam bentuk angka, dipakai garis yang memisahkan kedua bilangan itu.
 
-> ½ → *seperdua, setengah, separuh*
-> ⅒ → *sepersepuluh*
-> ¹⁄₁₀₀₀ → *seperseribu*
-> ⅗ → *tiga perlima*
-> ⁷⁄₁₆ → *tujuh perenam belas*
-> ⅝ → *lima perdelapan*
+- ½ → *seperdua, setengah, separuh*
+- ⅒ → *sepersepuluh*
+- ¹⁄₁₀₀₀ → *seperseribu*
+- ⅗ → *tiga perlima*
+- ⁷⁄₁₆ → *tujuh perenam belas*
+- ⅝ → *lima perdelapan*
 
 Bilangan pecahan dapat mengikuti bilangan pokok:
 
-> 2½ → *dua setengah*
-> 7,6 → *tujuh koma enam*
-> 9,75 → *sembilan koma tujuh lima*
+- 2½ → *dua setengah*
+- 7,6 → *tujuh koma enam*
+- 9,75 → *sembilan koma tujuh lima*

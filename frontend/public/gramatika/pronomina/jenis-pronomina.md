@@ -43,11 +43,11 @@ Pronomina persona *saya*, *aku*, dan *daku* dapat dipakai bersama dengan preposi
 
 **Kelompok *bagi* (bentuk terikat *-ku* dapat dipakai):**
 
-> *bagi* → *bagiku, bagi aku, bagi saya*
-> *buat* → *buatku, buat aku, buat saya*
-> *bersama* → *bersamaku, bersama aku, bersama saya*
-> *kepada* → *kepadaku, kepada aku, kepada saya*
-> *untuk* → *untukku, untuk aku, untuk saya*
+- *bagi* → *bagiku, bagi aku, bagi saya*
+- *buat* → *buatku, buat aku, buat saya*
+- *bersama* → *bersamaku, bersama aku, bersama saya*
+- *kepada* → *kepadaku, kepada aku, kepada saya*
+- *untuk* → *untukku, untuk aku, untuk saya*
 
 Bentuk terikat *ku-* berbeda pemakaiannya dengan *-ku*. Pertama, *ku-* dilekatkan pada kata yang terletak di belakangnya. Kedua, kata yang terletak di belakang *ku-* adalah verba.
 
@@ -133,18 +133,18 @@ Dari keempat pronomina persona ketiga itu, hanya *dia*, *-nya*, dan *beliau* yan
 
 Pronomina persona ketiga dalam bentuk *-nya* juga dipakai untuk mengubah kategori suatu verba menjadi nomina. Apabila *-nya* dilekatkan pada verba, verba tersebut berubah kategorinya menjadi nomina:
 
-> (196a) *Datang**nya** kapan?*
-> (196c) *Ditunda**nya** ujian itu membuat mahasiswa bersorak.*
+- (196a) *Datang**nya** kapan?*
+- (196c) *Ditunda**nya** ujian itu membuat mahasiswa bersorak.*
 
 Persona ketiga *-nya* juga dipakai untuk subjek dalam kalimat topik-komen:
 
-> (197) *Rumah kami atap**nya** bocor.*—*Rumah kami* = topik, *atapnya* = subjek
-> (198) *Petani sukses itu pendidikan**nya** hanya sekolah dasar.*
+- (197) *Rumah kami atap**nya** bocor.*—*Rumah kami* = topik, *atapnya* = subjek
+- (198) *Petani sukses itu pendidikan**nya** hanya sekolah dasar.*
 
 Bentuk *-nya* ini sering juga dipakai hanya sebagai penanda ketakrifan suatu nomina atau frasa nominal. Apabila suatu konsep telah disajikan, bagian wajib dari konsep tersebut harus dianggap takrif. Wujud ketakrifan itu adalah *-nya*:
 
-> (200a) *Kemarin Pak Ali membeli mobil. Ban**nya** baru.*—*ban* bagian wajib dari *mobil*
-> (200b) *Tadi pagi Jenderal Agus meninggal. Jenazah**nya** akan dimakamkan di Kalibata.*—*jenazah* perikutan makna *meninggal*
+- (200a) *Kemarin Pak Ali membeli mobil. Ban**nya** baru.*—*ban* bagian wajib dari *mobil*
+- (200b) *Tadi pagi Jenderal Agus meninggal. Jenazah**nya** akan dimakamkan di Kalibata.*—*jenazah* perikutan makna *meninggal*
 
 Pronomina persona ketiga jamak adalah *mereka*. Di samping arti jamak, *mereka* berbeda dengan pronomina persona tunggal dalam acuannya. Pada umumnya *mereka* hanya dipakai untuk insan. Benda atau konsep yang jamak dinyatakan dengan cara yang lain:
 

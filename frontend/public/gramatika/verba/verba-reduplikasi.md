@@ -20,10 +20,10 @@ Reduplikasi pada contoh tersebut berlangsung ke arah kanan, sesuai dengan urutan
 
 Contoh:
 
-> *pukul-memukul* ← *memukul*
-> *cinta-mencintai* ← *mencintai*
-> *maaf-memaafkan* ← *memaafkan*
-> *hormat-menghormati* ← *menghormati*
+- *pukul-memukul* ← *memukul*
+- *cinta-mencintai* ← *mencintai*
+- *maaf-memaafkan* ← *memaafkan*
+- *hormat-menghormati* ← *menghormati*
 
 Proses pengulangan itu dapat terjadi pada tataran morfologi sebagai peranti pembentukan leksem baru. Pengulangan itu disebut **reduplikasi leksikal** atau **reduplikasi morfemis**. Pengulangan pada tataran sintaksis menghasilkan bentuk kata (*word-form*) yang bersifat morfosintaksis dan bertalian dengan makna berbagai kategori semantik atau kategori gramatikal. Pengulangan semacam itu disebut **reduplikasi sintaksis**.
 

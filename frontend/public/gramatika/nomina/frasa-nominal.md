@@ -209,8 +209,8 @@ Frasa nominal dapat dibentuk dengan menambahkan adjektiva sebagai pewatas pada n
 
 Contoh:
 
-> *orang kaya*: Rumah semewah itu hanya mampu dibeli orang *yang* kaya.
-> *mobil merah*: Mereka naik mobil *yang* hitam, bukan mobil *yang* merah.
+- *orang kaya*: Rumah semewah itu hanya mampu dibeli orang *yang* kaya.
+- *mobil merah*: Mereka naik mobil *yang* hitam, bukan mobil *yang* merah.
 
 Deretan nomina dan adjektiva yang berupa idiom atau majemuk frasa tidak dapat diselipi *yang*:
 
@@ -228,28 +228,28 @@ Kata *yang* harus disisipkan antara nomina inti dan pewatas yang berupa frasa ad
 
 Frasa nominal dapat dibentuk dengan menambahkan verba sebagai pewatas pada nomina inti. Verba pewatas pada frasa nominal dapat bersifat atributif:
 
-> *rumah bertingkat*—rumah yang bertingkat
-> *ban berjalan*—ban yang berjalan
-> *kendaraan bermotor*—kendaraan yang dijalankan motor
-> *pembunuhan berencana*—pembunuhan yang direncanakan
-> *kacang rebus*—kacang yang direbus
-> *nasi goreng*—nasi yang digoreng
+- *rumah bertingkat*—rumah yang bertingkat
+- *ban berjalan*—ban yang berjalan
+- *kendaraan bermotor*—kendaraan yang dijalankan motor
+- *pembunuhan berencana*—pembunuhan yang direncanakan
+- *kacang rebus*—kacang yang direbus
+- *nasi goreng*—nasi yang digoreng
 
 Verba pewatas nomina dapat pula bersifat deskriptif:
 
-> *kamar belajar*—kamar untuk belajar
-> *tempat beristirahat*—tempat untuk beristirahat
-> *ruang rapat*—ruang untuk mengadakan rapat
-> *jam bicara*—waktu untuk berbicara (berkonsultasi)
+- *kamar belajar*—kamar untuk belajar
+- *tempat beristirahat*—tempat untuk beristirahat
+- *ruang rapat*—ruang untuk mengadakan rapat
+- *jam bicara*—waktu untuk berbicara (berkonsultasi)
 
 ### Frasa Preposisional sebagai Pewatas (7.1.5.4.4)
 
 Nomina dapat diperluas dengan menambahkan frasa preposisional sebagai pewatas. Pewatas berupa frasa preposisional itu dapat bersifat deskriptif:
 
-> *berita tentang perkelahian mahasiswa*
-> *dana untuk pembangunan gedung sekolah*
-> *pembicaraan antara kedua kepala negara itu*
-> *seminar tentang pemanasan global*
+- *berita tentang perkelahian mahasiswa*
+- *dana untuk pembangunan gedung sekolah*
+- *pembicaraan antara kedua kepala negara itu*
+- *seminar tentang pemanasan global*
 
 Pewatas berupa frasa preposisional dapat juga bersifat atributif. Oleh karena itu, kata *yang* dapat disisipkan antara inti dan pewatas:
 
@@ -261,11 +261,11 @@ Nomina dapat diperluas dengan menambahkan klausa sebagai pewatasnya. Klausa pewa
 
 Contoh:
 
-> *anak **yang** berbaju merah itu*
-> *candi **yang** dibangun pada abad ketujuh*
-> *buku **yang** saya beli di toko buku*
-> *rumah **yang** terletak di Jalan Diponegoro*
-> *(orang) **yang** berkuasa selama tiga puluh dua tahun*
+- *anak **yang** berbaju merah itu*
+- *candi **yang** dibangun pada abad ketujuh*
+- *buku **yang** saya beli di toko buku*
+- *rumah **yang** terletak di Jalan Diponegoro*
+- *(orang) **yang** berkuasa selama tiga puluh dua tahun*
 
 ### Apositif sebagai Pewatas (7.1.5.4.6)
 
@@ -279,10 +279,10 @@ Contoh apositif restriktif:
 
 Selain apositif yang restriktif, ada juga apositif yang nonrestriktif:
 
-> *Pancasila*, dasar negara Republik Indonesia
-> *Soekarno*, presiden Republik Indonesia yang pertama
-> *Jakarta*, ibukota Republik Indonesia
-> *Pak Aris*, suaminya
+- *Pancasila*, dasar negara Republik Indonesia
+- *Soekarno*, presiden Republik Indonesia yang pertama
+- *Jakarta*, ibukota Republik Indonesia
+- *Pak Aris*, suaminya
 
 ### Frasa Nominal Majemuk (7.1.5.4.7)
 
@@ -290,10 +290,10 @@ Suatu nomina atau frasa nominal dapat diperluas dengan nomina atau frasa nominal
 
 Contoh:
 
-> *ayah dan ibu*: Ayah dan Ibu belum pulang.
-> *buku dan pensil*: Dia ke toko membeli buku dan pensil.
-> *mahasiswa lama dan (mahasiswa) baru*: Mahasiswa lama dan (mahasiswa) baru mempunyai hak yang sama.
-> *pengurus (partai) dan anggota partai*: Pengurus (partai) dan anggota partai harus saling mendukung.
+- *ayah dan ibu*: Ayah dan Ibu belum pulang.
+- *buku dan pensil*: Dia ke toko membeli buku dan pensil.
+- *mahasiswa lama dan (mahasiswa) baru*: Mahasiswa lama dan (mahasiswa) baru mempunyai hak yang sama.
+- *pengurus (partai) dan anggota partai*: Pengurus (partai) dan anggota partai harus saling mendukung.
 
 Dua contoh terakhir memperlihatkan bahwa konstituen yang sama pada frasa majemuk koordinatif dapat dilesapkan. Jika intinya sama, pelesapan terjadi pada ruas kedua dan jika pewatasnya yang sama, pelesapan terjadi pada ruas pertama.
 
@@ -303,22 +303,22 @@ Nomina dalam bahasa Indonesia dapat diikuti pewatas yang terdiri atas dua kata a
 
 **1)** Pewatas berupa nomina cenderung mendahului adjektiva atau verba dalam suatu frasa nominal yang kompleks:
 
-> *buku pelajaran (yang) baru*—✓ &nbsp;&nbsp;&nbsp; \**buku baru pelajaran*—✗
-> *lemari besi (yang) tua*—✓ &nbsp;&nbsp;&nbsp; \**lemari tua besi*—✗
-> *rumah batu (yang) bertingkat*—✓ &nbsp;&nbsp;&nbsp; \**rumah bertingkat batu*—✗
+- *buku pelajaran (yang) baru*—✓ &nbsp;&nbsp;&nbsp; \**buku baru pelajaran*—✗
+- *lemari besi (yang) tua*—✓ &nbsp;&nbsp;&nbsp; \**lemari tua besi*—✗
+- *rumah batu (yang) bertingkat*—✓ &nbsp;&nbsp;&nbsp; \**rumah bertingkat batu*—✗
 
 **2)** Pewatas berupa adjektiva dapat mengikuti langsung nomina inti jika konstituen pewatas yang mengikutinya membentuk kesatuan makna yang erat:
 
-> *buku pelajaran sejarah yang baru* ~ *buku baru pelajaran sejarah*
-> *ragam bahasa Indonesia (yang) baku* ~ *ragam baku bahasa Indonesia*
-> *edisi kamus istilah (yang) terbaru* ~ *edisi terbaru kamus istilah*
+- *buku pelajaran sejarah yang baru* ~ *buku baru pelajaran sejarah*
+- *ragam bahasa Indonesia (yang) baku* ~ *ragam baku bahasa Indonesia*
+- *edisi kamus istilah (yang) terbaru* ~ *edisi terbaru kamus istilah*
 
 ### Pola Kanonik Frasa Nominal
 
 Nomina inti dapat diperluas dengan menambahkan pewatas dengan atau tanpa penentu. Penentu yang mengikuti nomina inti, jika hadir semua, akan mempunyai urutan dasar: numeralia (Num), kemudian pronomina/nomina penanda kepemilikan (Pmk), dan terakhir penanda ketakrifan/penunjuk (Penk/Penj). Berdasarkan uraian di atas, pola kanonik frasa nominal:
 
-> **(a)** (FNum) + Nomina inti + (Pewatas) + (Pmk) + (Penk/Penj)
-> **(b)** Nomina inti + (Pewatas) + (FNum) + (Pmk) + (Penk/Penj)
+- **(a)** (FNum) + Nomina inti + (Pewatas) + (Pmk) + (Penk/Penj)
+- **(b)** Nomina inti + (Pewatas) + (FNum) + (Pmk) + (Penk/Penj)
 
 Contoh:
 
