@@ -1,9 +1,7 @@
 ---
-id: 2
+id: 3
 title: Perilaku Sintaktis Verba (4.1.2)
 ---
-
-# Perilaku Sintaktis Verba (4.1.2)
 
 Verba merupakan unsur yang penting dalam kalimat karena dalam banyak hal verba berpengaruh besar terhadap unsur lain yang harus atau boleh ada dalam kalimat tersebut. Verba *mendekat*, misalnya, mengharuskan adanya subjek sebagai pelaku, tetapi tidak menuntut kehadiran objek. Sebaliknya, verba *mendekati* atau *mendekatkan* mengharuskan adanya objek di belakangnya. Perilaku sintaktis seperti itu berkaitan erat dengan makna dan sifat ketransitifan verba.
 

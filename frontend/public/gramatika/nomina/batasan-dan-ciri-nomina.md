@@ -3,12 +3,6 @@ id: 1
 title: Batasan dan Ciri Nomina (7.1.1)
 ---
 
-# Batasan dan Ciri Nomina (7.1.1)
-
-Pembahasan dalam bab ini mencakup nomina (7.1), pronomina (7.2), dan numeralia (7.3). Ketiga kelas kata itu berhubungan erat dalam pemakaian. Pronomina dipakai untuk menggantikan nomina atau frasa nominal dalam kalimat dan numeralia biasanya hadir dalam kalimat bersama nomina.
-
-## Batasan dan Ciri Nomina (7.1.1)
-
 Nomina dapat dikenali dan dibedakan dari kelas kata yang lain dengan mengamati (1) perilaku semantis, (2) perilaku sintaktis, dan (3) bentuk morfologisnya. Dari segi semantis, nomina adalah kata yang mengacu pada manusia, binatang, benda, dan konsep atau pengertian. Kata *anak*, *kuda*, dan *air* termasuk nomina yang masing-masing mengacu pada manusia, binatang, dan benda. Ketiga kata itu tergolong nomina konkret. Sebaliknya, kata-kata, seperti *waktu*, *cinta*, *kesedihan*, dan *kemanusiaan* termasuk nomina abstrak yang mengacu pada konsep atau pengertian. Kata-kata yang disebutkan di atas tergolong nomina umum. Acuannya berubah-ubah bergantung pada kapan, di mana, dan siapa yang menggunakannya. Selain nomina umum, ada nomina yang acuannya spesifik dalam arti relatif tidak berubah, seperti *Andi*, *Depok*, *Badan Bahasa*, dan *Indonesia*. Kata-kata jenis itu lazim disebut nama diri.
 
 Dari segi sintaktis, nomina dapat dikenali dengan mengamati ciri-ciri berikut.

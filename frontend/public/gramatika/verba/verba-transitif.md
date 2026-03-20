@@ -1,9 +1,7 @@
 ---
-id: 4
+id: 5
 title: Verba Transitif (4.2)
 ---
-
-# Verba Transitif (4.2)
 
 ## Morfologi dan Semantik Verba Transitif (4.2)
 

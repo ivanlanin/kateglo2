@@ -3,8 +3,6 @@ id: 5
 title: Jenis Nomina (7.1.4)
 ---
 
-# Jenis Nomina (7.1.4)
-
 ## Nomina Berdasarkan Acuannya (7.1.4.1)
 
 Pada 7.1.1 telah dikemukakan bahwa nomina, berdasarkan jenis acuannya, dapat dikelompokkan atas (1) nomina umum dan (2) nama diri. Nomina berdasarkan acuannya juga dapat dibedakan atas nomina konkret (misalnya *buku*, *murid*, dan *air*) dan nomina abstrak (misalnya *kasih*, *masalah*, dan *kesulitan*). Di samping itu, nomina berdasarkan acuannya juga dapat dibedakan atas nomina terbilang (misalnya *guru*, *meja*, dan *masalah*) dan nomina takterbilang (misalnya *rambut*, *hujan*, dan *hormat*). Nomina terbilang dapat diulang untuk menyatakan kejamakan (misalnya *buku-buku*, *mobil-mobil*, dan *kemudahan-kemudahan*) atau didahului langsung oleh bilangan untuk menyatakan jumlah (misalnya *satu rumah*, *dua mahasiswa*, dan *tiga masalah*). Sebaliknya, nomina takterbilang tidak dapat diulang atau didahului langsung oleh bilangan. Jadi, bentuk seperti *hujan-hujan*, *rambut-rambut*, *dua kesedihan*, dan *tiga hormat* tidak lazim digunakan dalam bahasa Indonesia untuk menyatakan makna jamak.

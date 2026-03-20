@@ -1,9 +1,7 @@
 ---
-id: 6
+id: 7
 title: Verba Hasil Reduplikasi (4.4)
 ---
-
-# Verba Hasil Reduplikasi (4.4)
 
 Verba yang dihasilkan dengan pengulangan atau reduplikasi bertolak dari verba dasar, verba berafiks, atau verba majemuk. Ada reduplikasi utuh dan reduplikasi parsial. Pada reduplikasi utuh terjadi pengulangan verba sepenuhnya, sedangkan pada reduplikasi parsial hanya pangkal verba yang diulang.
 

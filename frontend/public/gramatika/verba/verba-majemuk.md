@@ -1,9 +1,7 @@
 ---
-id: 7
+id: 8
 title: Verba Majemuk (4.5)
 ---
-
-# Verba Majemuk (4.5)
 
 Verba majemuk adalah verba yang terbentuk lewat proses penggabungan kata. Dalam verba majemuk penjejeran dua kata atau lebih menghasilkan makna yang masih dapat dirunut dari tiap-tiap kata yang tergabung. Misalnya, bentuk *adu* dan *lari* dapat digabungkan menjadi *adu lari*. Makna bentuk paduan itu masih dapat disimpulkan dari makna komponennya.
 

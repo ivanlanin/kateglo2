@@ -1,21 +1,7 @@
 ---
-id: 1
+id: 2
 title: Fitur Semantis Verba (4.1.1)
 ---
-
-# Fitur Semantis Verba (4.1.1)
-
-## 4.1 Batasan dan Ciri Verba
-
-Ciri verba dapat diketahui dengan mengamati (1) fitur semantis, (2) perilaku sintaktis, dan (3) bentuk morfologisnya. Secara umum verba dapat dibedakan dari kelas kata yang lain, terutama dari adjektiva, dengan identifikasi sebagai berikut.
-
-a) Verba secara semantis menyatakan keadaan, proses, atau aktivitas.
-b) Verba memiliki fungsi sintaktis utama sebagai predikat.
-c) Verba secara morfologis dapat dikenal dari pelekatan afiks, seperti *meng-*, *di-*, *-kan*, dan *-i*.
-
-Di dalam bab ini akan diuraikan ciri-ciri verba dari ketiga sudut pandang itu secara terperinci.
-
-## Verba dari Segi Fitur Semantisnya (4.1.1)
 
 Verba memiliki fitur semantis yang memerikan ciri waktu inheren yang ada padanya. Fitur semantis yang dimiliki verba mengacu pada ada tidaknya fitur perubahan, fitur keduratifan, dan/atau fitur ketelisan. Fitur perubahan mencakup perubahan secara berangsur dan perubahan secara dinamis. Fitur keduratifan mencakup jangka waktu yang duratif dan waktu sesaat (pungtual). Fitur ketelisan mencakup fitur telis (ciri aktivitas yang mempunyai penyelesaian) dan fitur taktelis (ciri aktivitas yang tidak mempunyai penyelesaian).
 

@@ -19,6 +19,7 @@ const daftarIsiGramatika = [
     judul: 'Verba',
     slug: 'verba',
     items: [
+      { judul: 'Batasan dan Ciri Verba', slug: 'batasan-dan-ciri-verba' },
       { judul: 'Fitur Semantis Verba', slug: 'fitur-semantis-verba' },
       { judul: 'Perilaku Sintaktis Verba', slug: 'perilaku-sintaktis-verba' },
       { judul: 'Bentuk Verba', slug: 'bentuk-verba' },

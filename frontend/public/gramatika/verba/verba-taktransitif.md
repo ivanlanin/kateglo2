@@ -1,9 +1,7 @@
 ---
-id: 5
+id: 6
 title: Verba Taktransitif (4.3)
 ---
-
-# Verba Taktransitif (4.3)
 
 ## Morfologi dan Semantik Verba Taktransitif (4.3)
 
