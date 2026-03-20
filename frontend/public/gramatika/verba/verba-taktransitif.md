@@ -3,8 +3,6 @@ id: 6
 title: Verba Taktransitif (4.3)
 ---
 
-## Morfologi dan Semantik Verba Taktransitif (4.3)
-
 Bentuk verba taktransitif ada yang berupa kata monomorfemis (kata dasar) dan ada pula yang berupa kata polimorfemis (kata turunan). Penurunan (derivasi) verba taktransitif terjadi lewat pengafiksan, pengulangan, atau pemajemukan. Sebagian verba taktransitif berwujud verba dasar. Jumlah verba ini terbatas dan maknanya harus dilihat dari tiap kata secara leksikal.
 
 Contoh verba dasar taktransitif:

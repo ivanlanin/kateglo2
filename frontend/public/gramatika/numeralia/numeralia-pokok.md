@@ -1,13 +1,7 @@
 ---
-id: 1
+id: 2
 title: Numeralia Pokok (7.3.1)
 ---
-
-# Numeralia Pokok (7.3.1)
-
-Numeralia atau kata bilangan adalah kata yang dipakai untuk menghitung banyaknya maujud (orang, binatang, atau barang) dan konsep. Frasa seperti *lima hari*, *setengah abad*, *orang ketiga*, dan *beberapa masalah* masing-masing mengandung numeralia, yakni *lima*, *setengah*, *ketiga*, dan *beberapa*.
-
-Pada dasarnya dalam bahasa Indonesia ada dua macam numeralia, yaitu (1) numeralia pokok, yang memberi jawab atas pertanyaan "Berapa?" dan (2) numeralia tingkat yang memberi jawab atas pertanyaan "Yang keberapa?" Numeralia pokok juga disebut numeralia kardinal, sedangkan numeralia tingkat disebut pula numeralia ordinal.
 
 Numeralia pokok adalah bilangan yang menjadi dasar dari bilangan yang lain. Numeralia pokok terbagi menjadi (a) pokok tentu, (b) kolektif, (c) distributif, dan (d) pokok taktentu. Di samping itu, ada (e) numeralia klitika dan (f) numeralia pecahan.
 

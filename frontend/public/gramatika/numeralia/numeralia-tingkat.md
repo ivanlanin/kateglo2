@@ -1,9 +1,7 @@
 ---
-id: 2
+id: 3
 title: Numeralia Tingkat (7.3.2)
 ---
-
-# Numeralia Tingkat (7.3.2)
 
 Numeralia pokok dapat diubah menjadi numeralia tingkat. Cara mengubahnya adalah dengan menambahkan *ke-* di muka bilangan yang bersangkutan. Khusus untuk bilangan satu dipakai pula istilah *pertama*.
 
@@ -14,7 +12,7 @@ Contoh:
 - *kelima*
 - *kesepuluh*
 
-## Perbedaan dengan Numeralia Kolektif
+### Perbedaan dengan Numeralia Kolektif
 
 Karena numeralia kolektif juga dibentuk dengan *ke-*, bentuk kedua macam numeralia itu sama. Perbedaannya terletak pada bagaimana masing-masing dipakai. Sebagai numeralia kolektif, numeralia ini diletakkan di muka nomina yang diterangkan; sebagai numeralia tingkat, ia diletakkan di belakang nomina yang diterangkan.
 

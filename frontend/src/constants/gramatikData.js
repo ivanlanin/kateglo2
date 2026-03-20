@@ -68,6 +68,7 @@ const daftarIsiGramatika = [
     judul: 'Numeralia',
     slug: 'numeralia',
     items: [
+      { judul: 'Batasan dan Ciri Numeralia', slug: 'batasan-dan-ciri-numeralia' },
       { judul: 'Numeralia Pokok', slug: 'numeralia-pokok' },
       { judul: 'Numeralia Tingkat', slug: 'numeralia-tingkat' },
       { judul: 'Frasa Numeral', slug: 'frasa-numeral' },
