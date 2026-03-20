@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { rehypeCollapsibleHeadings } from '../../../utils/rehypeCollapsibleHeadings';
 import HalamanPublik from '../../../components/tampilan/HalamanPublik';
 import PanelLipat from '../../../components/panel/PanelLipat';
 import KartuKategori from '../../../components/data/KartuKategori';
@@ -204,7 +205,7 @@ function Gramatika() {
 
             {!sedangMemuat && !galat && (
               <div className="ejaan-markdown-content">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeCollapsibleHeadings]}>
                   {isiMarkdown}
                 </ReactMarkdown>
               </div>

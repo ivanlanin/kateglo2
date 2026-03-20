@@ -332,3 +332,47 @@
   display: block;
   margin-top: 0.5rem;
 }
+
+/* ===== Collapsible headings (details/summary) ===== */
+
+.ejaan-markdown-content details {
+  /* spacing from heading margins is preserved */
+}
+
+.ejaan-markdown-content summary {
+  @apply cursor-pointer select-none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  list-style: none;
+}
+
+.ejaan-markdown-content summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Triangle toggle indicator */
+.ejaan-markdown-content summary::before {
+  content: '▶';
+  flex-shrink: 0;
+  font-size: 0.5em;
+  @apply text-gray-400;
+  transition: transform 0.2s ease;
+  padding-top: 1px;
+}
+
+.dark .ejaan-markdown-content summary::before {
+  @apply text-gray-500;
+}
+
+.ejaan-markdown-content details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+/* Remove vertical margin from heading inside summary (summary provides spacing) */
+.ejaan-markdown-content summary > h2,
+.ejaan-markdown-content summary > h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  flex: 1;
+}

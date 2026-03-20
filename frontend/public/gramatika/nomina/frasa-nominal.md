@@ -336,7 +336,7 @@ Perubahan susunan konstituen frasa nominal dapat terjadi dengan memindahkan pron
 
 ---
 
-## Frasa Nominal Vokatif (7.1.6)
+# Frasa Nominal Vokatif (7.1.6)
 
 Nomina atau frasa nominal yang digunakan untuk memanggil atau menyapa orang disebut nomina atau frasa nominal vokatif. Unsur vokatif itu bersifat manasuka dan letaknya dapat di awal, tengah, atau akhir kalimat seperti tampak pada contoh berikut.
 
@@ -348,7 +348,7 @@ Unsur vokatif itu tidak merupakan unsur integral dari kalimat dan hal itu tampak
 
 Fungsi utama nomina atau frasa nominal vokatif adalah untuk meminta perhatian orang yang dipanggil atau disapa, terutama jika ada pendengar lain. Bentuk vokatif yang dipakai juga mencerminkan hubungan antara pembicara dan pendengar atau sikap emotif pembicara terhadap pendengar (orang yang disapa).
 
-### Bentuk Vokatif yang Lazim
+## Bentuk Vokatif yang Lazim
 
 Berikut adalah nomina atau frasa nominal yang lazim digunakan dengan fungsi vokatif dalam bahasa Indonesia.
 
@@ -366,10 +366,10 @@ Berikut adalah nomina atau frasa nominal yang lazim digunakan dengan fungsi voka
 
 **g)** Pronomina persona kedua: *kamu*, *kamu sekalian*, *Anda semua*.
 
-### Keakraban dan Pemendekan
+## Keakraban dan Pemendekan
 
 Bentuk-bentuk vokatif umumnya digunakan untuk mengisyaratkan sikap positif pembicara dan untuk menunjukkan rasa hormat atau keakraban. Makin akrab pembicara dengan lawan bicara, makin singkat bentuk vokatif yang digunakan. Itu sebabnya nama orang dan istilah kekerabatan biasa disingkat dengan satu atau dua suku awal atau akhir.
 
-### Vokatif dan Ungkapan Penyapa
+## Vokatif dan Ungkapan Penyapa
 
 Bentuk vokatif akan menjadi ungkapan penyapa apabila unsur itu menjadi bagian integral dari kalimat. Jadi, *Pak Dar, (Anda) mau minum apa?* dapat diubah menjadi *Pak Dar mau minum apa?* Bentuk *Pak Dar* yang pertama berfungsi sebagai vokatif, tetapi pada kalimat yang kedua berfungsi sebagai ungkapan penyapa.
