@@ -86,6 +86,18 @@ const daftarIsiGramatika = [
       { judul: 'Partikel Penegas', slug: 'partikel-penegas' },
     ],
   },
+  {
+    judul: 'Kalimat',
+    slug: 'kalimat',
+    items: [
+      { judul: 'Batasan dan Ciri Kalimat', slug: 'batasan-dan-ciri-kalimat' },
+      { judul: 'Unsur Kalimat', slug: 'unsur-kalimat' },
+      { judul: 'Kategori, Fungsi, dan Peran', slug: 'kategori-fungsi-dan-peran' },
+      { judul: 'Kalimat Dasar', slug: 'kalimat-dasar' },
+      { judul: 'Jenis Kalimat', slug: 'jenis-kalimat' },
+      { judul: 'Pengingkaran', slug: 'pengingkaran' },
+    ],
+  },
 ];
 
 const daftarItemGramatika = daftarIsiGramatika.flatMap((bab) =>

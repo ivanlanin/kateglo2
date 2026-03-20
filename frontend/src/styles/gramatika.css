@@ -165,6 +165,10 @@
 
 /* ===== Gramatika / Ejaan: konten markdown ===== */
 
+.ejaan-markdown-content > :first-child {
+  margin-top: 0;
+}
+
 .ejaan-markdown-content p {
   @apply mb-3 text-gray-700 leading-relaxed;
 }
@@ -174,7 +178,7 @@
 }
 
 .ejaan-markdown-content h1 {
-  @apply text-xl font-bold mb-4 text-gray-900 mt-4;
+  @apply text-xl font-bold mt-8 mb-3 text-gray-900;
 }
 
 .dark .ejaan-markdown-content h1 {
@@ -182,7 +186,7 @@
 }
 
 .ejaan-markdown-content h2 {
-  @apply text-lg font-semibold mb-3 text-gray-900 mt-3;
+  @apply text-lg font-semibold mt-7 mb-3 text-gray-900;
 }
 
 .dark .ejaan-markdown-content h2 {
@@ -190,7 +194,7 @@
 }
 
 .ejaan-markdown-content h3 {
-  @apply text-base font-medium mb-2 text-gray-900 mt-3;
+  @apply text-base font-medium mt-6 mb-2 text-gray-900;
 }
 
 .dark .ejaan-markdown-content h3 {
@@ -198,7 +202,7 @@
 }
 
 .ejaan-markdown-content h4 {
-  @apply text-sm font-medium mb-2 text-gray-800 mt-2;
+  @apply text-sm font-medium mt-5 mb-2 text-gray-800;
 }
 
 .dark .ejaan-markdown-content h4 {

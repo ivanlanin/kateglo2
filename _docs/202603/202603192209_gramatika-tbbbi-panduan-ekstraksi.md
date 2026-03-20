@@ -158,7 +158,7 @@ Formula Python pdfplumber (0-indeks): `range(PDF_awal - 1, PDF_akhir)`
 | VI  | Adverbia | 258 | 281 | 24 | ✓ |
 | VII | Nomina, Pronomina, dan Numeralia | 282 | 395 | 114 | ✓ |
 | VIII | Kata Tugas | 396 | 429 | 34 | ✓ |
-| IX  | Kalimat | 430 | 534 | 105 | — |
+| IX  | Kalimat | 430 | 534 | 105 | ✓ |
 | X   | Hubungan Antarklausa | 535 | 574 | 40 | — |
 
 ### Bagian Lainnya
