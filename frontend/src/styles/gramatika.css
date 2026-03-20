@@ -1,0 +1,332 @@
+/* ===== Gramatika / Ejaan: layout + daftar bab ===== */
+
+.ejaan-layout {
+  @apply grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px];
+}
+
+.ejaan-kategori-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+}
+
+.ejaan-kategori-card {
+  @apply p-5;
+}
+
+.ejaan-kategori-title {
+  @apply text-base font-semibold text-gray-900 text-center mb-3;
+}
+
+.dark .ejaan-kategori-title {
+  @apply text-dark-text;
+}
+
+.ejaan-kategori-list {
+  @apply list-none p-0 m-0 space-y-1;
+}
+
+.ejaan-kategori-item {
+  @apply m-0;
+}
+
+.ejaan-kategori-link {
+  @apply text-sm text-blue-700 hover:underline;
+}
+
+.dark .ejaan-kategori-link {
+  @apply text-blue-300;
+}
+
+/* ===== Gramatika / Ejaan: sidebar navigasi ===== */
+
+.ejaan-panel-wrap {
+  @apply space-y-3;
+}
+
+.ejaan-sekuens-nav {
+  @apply flex items-center justify-between gap-2 flex-nowrap mt-6;
+}
+
+.ejaan-sekuens-link,
+.ejaan-sidebar-pill {
+  @apply inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm leading-5 text-blue-800 no-underline transition-colors hover:border-blue-300 hover:bg-blue-100 hover:text-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2;
+}
+
+.ejaan-sekuens-link-prev {
+  @apply justify-start text-left;
+}
+
+.ejaan-sekuens-link-next {
+  @apply justify-end text-right;
+}
+
+.ejaan-sekuens-label {
+  @apply block truncate;
+}
+
+.ejaan-sekuens-arrow {
+  @apply shrink-0;
+}
+
+.ejaan-sidebar-pill-grid {
+  @apply grid grid-cols-2 gap-2 list-none p-0 m-0;
+}
+
+.ejaan-sidebar-pill-item {
+  @apply flex justify-center;
+}
+
+.ejaan-sidebar-pill {
+  @apply w-full text-center justify-center;
+}
+
+.ejaan-sidebar-pill-active {
+  @apply w-full text-center inline-flex items-center justify-center rounded-full border border-blue-300 bg-blue-100 px-3 py-1 text-sm leading-5 text-blue-900 font-medium cursor-default no-underline;
+}
+
+.dark .ejaan-sidebar-pill,
+.dark .ejaan-sekuens-link,
+.dark .ejaan-sidebar-pill-active,
+.dark .ejaan-sidebar-pill-active:hover {
+  @apply border-blue-500/70 bg-gray-700 text-blue-100;
+}
+
+.dark .ejaan-sidebar-pill:hover,
+.dark .ejaan-sekuens-link:hover {
+  @apply border-blue-400 bg-gray-600 text-blue-50;
+}
+
+.ejaan-panel-list {
+  @apply list-none p-0 m-0 space-y-1;
+}
+
+.ejaan-panel-link {
+  @apply block text-sm text-blue-700 hover:underline;
+}
+
+.dark .ejaan-panel-link {
+  @apply text-blue-300;
+}
+
+.ejaan-panel-link-active {
+  @apply font-semibold text-gray-900;
+}
+
+.dark .ejaan-panel-link-active {
+  @apply text-dark-text;
+}
+
+.ejaan-nav-panel {
+  @apply rounded-xl border border-gray-200 bg-white p-4 h-fit sticky top-20;
+}
+
+.dark .ejaan-nav-panel {
+  @apply border-dark-border bg-dark-bg;
+}
+
+.ejaan-nav-group + .ejaan-nav-group {
+  @apply mt-5 pt-5 border-t border-gray-200;
+}
+
+.dark .ejaan-nav-group + .ejaan-nav-group {
+  @apply border-dark-border;
+}
+
+.ejaan-nav-title {
+  @apply text-sm font-semibold text-gray-700 m-0;
+}
+
+.dark .ejaan-nav-title {
+  @apply text-dark-text;
+}
+
+.ejaan-nav-list {
+  @apply mt-2 flex flex-col gap-1 list-none m-0 p-0;
+}
+
+.ejaan-nav-item {
+  @apply m-0;
+}
+
+.ejaan-nav-link {
+  @apply block w-full text-left rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-100;
+}
+
+.dark .ejaan-nav-link {
+  @apply text-dark-text-muted hover:bg-dark-bg-hover;
+}
+
+.ejaan-nav-link-active {
+  @apply bg-blue-100 text-blue-700 font-medium;
+}
+
+.dark .ejaan-nav-link-active {
+  @apply bg-blue-900/40 text-blue-300;
+}
+
+/* ===== Gramatika / Ejaan: konten markdown ===== */
+
+.ejaan-markdown-content p {
+  @apply mb-3 text-gray-700 leading-relaxed;
+}
+
+.dark .ejaan-markdown-content p {
+  @apply text-dark-text;
+}
+
+.ejaan-markdown-content h1 {
+  @apply text-xl font-bold mb-4 text-gray-900 mt-4;
+}
+
+.dark .ejaan-markdown-content h1 {
+  @apply text-dark-text;
+}
+
+.ejaan-markdown-content h2 {
+  @apply text-lg font-semibold mb-3 text-gray-900 mt-3;
+}
+
+.dark .ejaan-markdown-content h2 {
+  @apply text-dark-text;
+}
+
+.ejaan-markdown-content h3 {
+  @apply text-base font-medium mb-2 text-gray-900 mt-3;
+}
+
+.dark .ejaan-markdown-content h3 {
+  @apply text-dark-text;
+}
+
+.ejaan-markdown-content code {
+  @apply text-sm px-1 py-0.5 rounded bg-gray-100 text-gray-800;
+}
+
+.dark .ejaan-markdown-content code {
+  @apply bg-dark-bg-input text-dark-text;
+}
+
+.ejaan-markdown-content pre {
+  @apply p-4 rounded-lg bg-gray-100 overflow-x-auto mb-4;
+}
+
+.dark .ejaan-markdown-content pre {
+  @apply bg-dark-bg-input;
+}
+
+.ejaan-markdown-content pre code {
+  @apply bg-transparent p-0;
+}
+
+.ejaan-markdown-content a {
+  @apply text-blue-600 hover:text-blue-700 underline;
+}
+
+.dark .ejaan-markdown-content a {
+  @apply text-blue-400 hover:text-blue-300;
+}
+
+.ejaan-markdown-content table {
+  @apply my-4 w-full text-sm border-separate border-spacing-0 border border-gray-300 rounded-lg overflow-hidden;
+  display: table;
+  table-layout: fixed;
+}
+
+.ejaan-markdown-content thead th {
+  @apply bg-gray-100 text-gray-800 font-semibold px-3 py-2 text-center border-b border-gray-300;
+}
+
+.ejaan-markdown-content tbody td {
+  @apply px-3 py-2 align-top text-center text-gray-700 border-b border-gray-300;
+}
+
+.ejaan-markdown-content th,
+.ejaan-markdown-content td {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.ejaan-markdown-content th + th,
+.ejaan-markdown-content td + td {
+  @apply border-l border-gray-300;
+}
+
+.ejaan-markdown-content tbody tr:nth-child(even) {
+  @apply bg-gray-50;
+}
+
+.ejaan-markdown-content tbody tr:hover {
+  @apply bg-gray-100/70;
+}
+
+.dark .ejaan-markdown-content table {
+  @apply border-dark-border;
+}
+
+.dark .ejaan-markdown-content thead th {
+  @apply bg-dark-bg-hover text-white border-dark-border;
+}
+
+.dark .ejaan-markdown-content tbody td {
+  @apply text-dark-text border-dark-border;
+}
+
+.dark .ejaan-markdown-content th + th,
+.dark .ejaan-markdown-content td + td {
+  @apply border-dark-border;
+}
+
+.dark .ejaan-markdown-content tbody tr:nth-child(even) {
+  @apply bg-dark-bg-elevated;
+}
+
+.dark .ejaan-markdown-content tbody tr:hover {
+  @apply bg-dark-bg-hover;
+}
+
+.ejaan-markdown-content blockquote,
+.ejaan-markdown-content blockquote p,
+.ejaan-markdown-content blockquote li {
+  @apply font-semibold leading-relaxed text-[17px];
+}
+
+.ejaan-markdown-content blockquote:not(:first-of-type) {
+  @apply border-t border-gray-300 pt-3 mt-3;
+}
+
+.dark .ejaan-markdown-content blockquote:not(:first-of-type) {
+  @apply border-dark-border;
+}
+
+.ejaan-markdown-content ul {
+  @apply columns-1 md:columns-2 gap-8;
+  list-style-position: outside;
+  padding-left: 1.25rem;
+  margin-left: 0;
+}
+
+.ejaan-markdown-content ol {
+  list-style-position: outside;
+  padding-left: 1.25rem;
+  margin-left: 0;
+}
+
+.ejaan-markdown-content li {
+  @apply text-gray-700;
+  text-indent: 0;
+  padding-left: 0;
+  break-inside: avoid;
+}
+
+.dark .ejaan-markdown-content li {
+  @apply text-dark-text;
+}
+
+.ejaan-markdown-content li > p {
+  display: inline;
+  margin: 0;
+}
+
+.ejaan-markdown-content li > p + p {
+  display: block;
+  margin-top: 0.5rem;
+}

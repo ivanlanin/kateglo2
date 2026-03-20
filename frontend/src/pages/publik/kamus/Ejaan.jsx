@@ -2,6 +2,7 @@
  * @fileoverview Halaman tunggal kaidah ejaan berbasis markdown statis di public/ejaan
  */
 
+import '../../../styles/gramatika.css';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
@@ -216,7 +217,7 @@ function Ejaan() {
             {!sedangMemuat && galat && <p className="secondary-text">{galat}</p>}
 
             {!sedangMemuat && !galat && (
-              <div className="changelog-content ejaan-markdown-content">
+              <div className="ejaan-markdown-content">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                   {isiMarkdown}
                 </ReactMarkdown>
