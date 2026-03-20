@@ -44,10 +44,13 @@ Pengonversian adalah penurunan kata yang memperlihatkan pengalihan kata dari kat
 
 Contoh:
 
-- (72) a. *kubur* (nomina): *Ia berziarah ke kubur ayahnya.*
-  - b. *kubur* (verba): *Segera kubur bangkai itu!*
-- (73) a. *sayang* (nomina): *Sayang, tolong ambilkan segelas air!*
-  - b. *sayang* (verba): *Tiada ibu yang tidak sayang kepada anaknya.*
+(72)
+- a. *kubur* (nomina): *Ia berziarah ke kubur ayahnya.*
+- b. *kubur* (verba): *Segera kubur bangkai itu!*
+
+(73)
+- a. *sayang* (nomina): *Sayang, tolong ambilkan segelas air!*
+- b. *sayang* (verba): *Tiada ibu yang tidak sayang kepada anaknya.*
 
 Berikut merupakan contoh lain bentuk verba hasil konversi dari nomina dan adjektiva:
 
@@ -114,7 +117,8 @@ Urutan penurunan verba mengikuti kaidah berikut:
 
 **d)** Urutan penambahan prefiks dan sufiks dalam pembentukan verba ditentukan oleh makna jika gabungan keduanya tidak merupakan konfiks. Pangkal verba transitif *berhentikan*, misalnya, diturunkan dari *berhenti*, lalu ditambah *-kan*, bukan dari *hentikan* lalu ditambah *ber-*. Itulah sebabnya verba *berhentikan* bermakna 'membuat jadi berhenti'. Pangkal verba *berhentikan* dapat dilengkapi dengan prefiks infleksional *meng-* yang menghasilkan verba *memberhentikan*.
 
-- (82) *angkat* → *berangkat* → *berangkatkan* → *memberangkatkan*
+(82)
+- *angkat* → *berangkat* → *berangkatkan* → *memberangkatkan*
 - *daya* → *berdaya* → *berdayakan* → *memberdayakan*
 - *diri* → *berdiri* → *berdirikan* → *memberdirikan*
 - *jaya* → *berjaya* → *berjayakan* → *memberjayakan*

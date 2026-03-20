@@ -200,15 +200,25 @@ Verba taktransitif yang berawalan *ter-* terbatas jumlahnya, ada yang berpangkal
 
 Kebanyakan verba *ter-* termasuk salah satu kategori berikut: verba pasif+perfektif; verba kebetulan atau ketidaksengajaan; serta verba kebisaan, kemampuan, atau kebolehan. Verba *ter-* yang pasif perfektif bertalian dengan verba *di-* beserta makna aspektualitas perfektif 'sudah'.
 
-- (251) a. *Uangnya terletak di atas meja.* b. *Uangnya sudah diletakkan di atas meja.*
-- (252) a. *Harga yang tertulis pada barang itu ialah Rp5.000,00.* b. *Harga yang sudah ditulis pada barang itu ialah Rp5.000,00.*
+(251)
+- a. *Uangnya terletak di atas meja.*
+- b. *Uangnya sudah diletakkan di atas meja.*
+
+(252)
+- a. *Harga yang tertulis pada barang itu ialah Rp5.000,00.*
+- b. *Harga yang sudah ditulis pada barang itu ialah Rp5.000,00.*
 
 Contoh lain: *terkenal* 'sudah dikenal'; *terhormat* 'sudah dihormati'; *tercinta* 'sudah dicintai'; *terbuka* 'sudah dibuka'; *tersebut* 'sudah disebut(kan)'
 
 Verba *ter-* dengan makna kebetulan (aksidental) atau ketaksengajaan mencakupi verba yang mengacu pada perbuatan yang dilakukan tidak dengan sengaja:
 
-- (254) a. *Tasnya tertinggal di rumah.* (tidak sengaja) b. *Tasnya ditinggalkan di rumah.* (dengan sengaja)
-- (255) a. *Jam tangannya terjatuh.* (tidak sengaja) b. *Jam tangannya dijatuhkan.* (dengan sengaja)
+(254)
+- a. *Tasnya tertinggal di rumah.* (tidak sengaja)
+- b. *Tasnya ditinggalkan di rumah.* (dengan sengaja)
+
+(255)
+- a. *Jam tangannya terjatuh.* (tidak sengaja)
+- b. *Jam tangannya dijatuhkan.* (dengan sengaja)
 
 Contoh: *terbawa olehnya, terpakai oleh sopirnya, tersebat rotan, tertipu makelar palsu*; begitu juga *terbunuh, terluka, termakan, tertabrak, tertembak, terpergok, tersingkir, terpengaruh, terpesona*.
 
@@ -227,8 +237,15 @@ Pengafiksan verba dengan prefiks *se-* terjadi pada tataran kalimat dan menghasi
 
 **Kelompok pertama** mencakupi *setiba*, *sedatang*, *sesampai*, *sepulang*, *sekembali*, dan *setamat*.
 
-- (262) a. *Sedatang di Bandung, rombongan mahasiswa itu mencari rumah makan.* b. *Setiba di Bandung, rombongan mahasiswa itu mencari rumah makan.* c. *Sesampai di Bandung, rombongan mahasiswa itu mencari rumah makan.*
-- (263) a. *Biasanya sepulang dari kantor, ia bersantai di teras rumah.* b. *Biasanya sekembali dari kantor, ia bersantai di teras rumah.* c. *Setamat belajar di Amerika Serikat, Ahmad mengembangkan industri rumahan berbasis potensi kelautan.*
+(262)
+- a. *Sedatang di Bandung, rombongan mahasiswa itu mencari rumah makan.*
+- b. *Setiba di Bandung, rombongan mahasiswa itu mencari rumah makan.*
+- c. *Sesampai di Bandung, rombongan mahasiswa itu mencari rumah makan.*
+
+(263)
+- a. *Biasanya sepulang dari kantor, ia bersantai di teras rumah.*
+- b. *Biasanya sekembali dari kantor, ia bersantai di teras rumah.*
+- c. *Setamat belajar di Amerika Serikat, Ahmad mengembangkan industri rumahan berbasis potensi kelautan.*
 
 Makna gramatikal yang dinyatakan oleh *se-* itu ialah 'segera setelah perbuatan yang digambarkan verba'. Konstruksi yang dimulai dengan *se-*+verba membentuk klausa subordinatif adverbial.
 
@@ -281,13 +298,19 @@ Perilaku semantis verba berkonfiks *ke-...-an* agak berbeda dengan verba transit
 
 Karena makna seperti itulah verba *ke-...-an* sering dihubungkan dengan verba pasif. Namun, verba *ke-...-an* mengandung pula makna adversatif, sedangkan verba pasif dengan *di-* tidak.
 
-- (273) a. *Buku itu ditinggalkan di perpustakaan.* (mungkin disengaja, tidak ada aspek negatif)
-  - b. *Buku itu ketinggalan di perpustakaan.* (tidak disengaja, si pemilik rugi)
+(273)
+- a. *Buku itu ditinggalkan di perpustakaan.* (mungkin disengaja, tidak ada aspek negatif)
+- b. *Buku itu ketinggalan di perpustakaan.* (tidak disengaja, si pemilik rugi)
 
 Semua bentuk pasif dengan prefiks *di-* dapat diikuti kata *oleh*. Sebagian verba dengan konfiks *ke-...-an* juga dapat diikuti kata *oleh*, tetapi sebagian yang lain tidak dapat:
 
-- (274) a. *Perbuatan itu ketahuan istrinya.* b. *Perbuatan itu ketahuan oleh istrinya.*
-- (275) a. *Siswa itu kemasukan jin.* b. \**Siswa itu kemasukan oleh jin.*
+(274)
+- a. *Perbuatan itu ketahuan istrinya.*
+- b. *Perbuatan itu ketahuan oleh istrinya.*
+
+(275)
+- a. *Siswa itu kemasukan jin.*
+- b. \**Siswa itu kemasukan oleh jin.*
 
 Di samping ketiga kelompok verba tersebut, ada dua verba berkonfiks *ke-...-an* yang tidak mengandung makna adversatif. Makna kelompok kecil itu adalah 'dapat di-...':
 

@@ -44,12 +44,12 @@ Verba *mencarikan* dan *membelikan* pada kalimat (22) dan (23) merupakan verba t
 
 Sejumlah verba transitif memiliki ciri semantis yang membedakan fungsi objek dari pelengkap yang berupa nama, julukan, gelar, atau kedudukan. Perhatikan kalimat berikut.
 
-- (24) *Mereka menamai bayi itu Sarah.*
-  - a. *Bayi itu dinamai mereka Sarah.*
-  - b. *Bayi itu dinamai Sarah oleh mereka.*
-  - c. *Bayi itu mereka namai Sarah.*
-  - d. *Bayi itu dinamai oleh mereka Sarah.*
-  - e. *Oleh mereka bayi itu dinamai Sarah.*
+(24) *Mereka menamai bayi itu Sarah.*
+- a. *Bayi itu dinamai mereka Sarah.*
+- b. *Bayi itu dinamai Sarah oleh mereka.*
+- c. *Bayi itu mereka namai Sarah.*
+- d. *Bayi itu dinamai oleh mereka Sarah.*
+- e. *Oleh mereka bayi itu dinamai Sarah.*
 - (25) *Masyarakat menuduh dia pencuri.*
 - (26) *Dia memanggil saudaranya Alan.*
 
@@ -131,12 +131,17 @@ Dalam bahasa Indonesia ditemukan verba taktransitif yang memerlukan pelengkap be
 
 Contoh:
 
-- (44) a. *Saya sering berbicara tentang hal ini.*
-  - b. \**Tentang hal ini saya sering berbicara.*
-- (45) a. *Harganya sudah sesuai dengan mutunya.*
-  - b. \**Dengan mutunya harganya sudah sesuai.*
-- (46) a. *Keberhasilan pembangunan banyak bergantung pada mentalitas para pelaksananya.*
-  - b. \**Pada mentalitas para pelaksananya keberhasilan pembangunan banyak bergantung.*
+(44)
+- a. *Saya sering berbicara tentang hal ini.*
+- b. \**Tentang hal ini saya sering berbicara.*
+
+(45)
+- a. *Harganya sudah sesuai dengan mutunya.*
+- b. \**Dengan mutunya harganya sudah sesuai.*
+
+(46)
+- a. *Keberhasilan pembangunan banyak bergantung pada mentalitas para pelaksananya.*
+- b. \**Pada mentalitas para pelaksananya keberhasilan pembangunan banyak bergantung.*
 
 Pemilihan preposisi pada kelompok verba seperti itu bersifat idiomatis. Artinya, paduan verba dan preposisi itu bersifat khas karena teradat sehingga tidak ada alasan bernalar mengapa orang menggunakan paduan seperti itu.
 
@@ -162,40 +167,53 @@ Di antara verba yang diikuti preposisi, ada yang sama atau hampir sama artinya d
 
 Contoh:
 
-- (48) a. *Ia senang berbicara tentang politik.*
-  - b. *Ia senang membicarakan politik.*
-- (49) a. *Timnas Indonesia sudah beberapa kali berhadapan dengan timnas Malaysia.*
-  - b. *Timnas Indonesia sudah beberapa kali menghadapi timnas Malaysia.*
-- (50) a. *Ayah bertemu dengan teman bisnisnya.*
-  - b. *Ayah menemui teman bisnisnya.*
+(48)
+- a. *Ia senang berbicara tentang politik.*
+- b. *Ia senang membicarakan politik.*
+
+(49)
+- a. *Timnas Indonesia sudah beberapa kali berhadapan dengan timnas Malaysia.*
+- b. *Timnas Indonesia sudah beberapa kali menghadapi timnas Malaysia.*
+
+(50)
+- a. *Ayah bertemu dengan teman bisnisnya.*
+- b. *Ayah menemui teman bisnisnya.*
 
 Ada dua hal yang perlu diperhatikan dalam pemakaian verba yang diikuti preposisi. Pertama, orang sering memakai bentuk transitif, tetapi juga menyertakan preposisinya sehingga terjadilah kesalahan seperti pada (51a) dan (52a). Bentuk yang benar adalah seperti pada (51b) atau (51c) dan (52b) atau (52c).
 
-- (51) a. \**Saya tidak mengetahui tentang anugerah itu.*
-  - b. *Saya tidak mengetahui anugerah itu.*
-  - c. *Saya tidak tahu tentang anugerah itu.*
-- (52) a. \**Kami belum membicarakan tentang usul Anda.*
-  - b. *Kami belum membicarakan usul Anda.*
-  - c. *Kami belum berbicara tentang usul Anda.*
+(51)
+- a. \**Saya tidak mengetahui tentang anugerah itu.*
+- b. *Saya tidak mengetahui anugerah itu.*
+- c. *Saya tidak tahu tentang anugerah itu.*
+
+(52)
+- a. \**Kami belum membicarakan tentang usul Anda.*
+- b. *Kami belum membicarakan usul Anda.*
+- c. *Kami belum berbicara tentang usul Anda.*
 
 Kekeliruan seperti pada (51a) dan (52a) terlihat juga dalam kalimat (53a). Frasa preposisional *tentang usul Anda* dalam kalimat (53) berikut tidak tepat karena mengisi fungsi subjek. Kalimat (53a) tersebut seharusnya diungkapkan dengan kalimat (53b) atau (53c).
 
-- (53) a. \**Tentang usul Anda belum kami bicarakan.*
-  - b. *Usul Anda belum kami bicarakan.*
-  - c. *Tentang usul Anda, kami belum berbicara.*
+(53)
+- a. \**Tentang usul Anda belum kami bicarakan.*
+- b. *Usul Anda belum kami bicarakan.*
+- c. *Tentang usul Anda, kami belum berbicara.*
 
 Kedua, dalam ragam bahasa yang tidak baku, orang sering menghilangkan preposisi pada verba taktransitif yang semestinya diikuti frasa preposisional. Agar menjadi kalimat yang baku, preposisi tersebut harus dimunculkan kembali seperti dalam kalimat (54b) dan (55b).
 
-- (54) a. \**Saya bertemu tetangga saya.*
-  - b. *Saya bertemu dengan tetangga saya.*
-- (55) a. \**Aku cinta bahasa Indonesia.*
-  - b. *Aku cinta pada bahasa Indonesia.*
+(54)
+- a. \**Saya bertemu tetangga saya.*
+- b. *Saya bertemu dengan tetangga saya.*
+
+(55)
+- a. \**Aku cinta bahasa Indonesia.*
+- b. *Aku cinta pada bahasa Indonesia.*
 
 Perlu juga diperhatikan bahwa frasa preposisional yang mengikuti verba, seperti *tentang hal ini* (44), *dengan mutunya* (45), dan *pada mentalitas para pelaksananya* (46) berfungsi sebagai pelengkap. Akan tetapi, jika verba yang diikuti frasa preposisional tersebut diubah menjadi verba berafiks *meng-*, bagian kalimat yang mengikuti verba itu berubah menjadi nomina atau frasa nominal. Oleh karena itu, preposisinya harus hilang dan fungsi pelengkapnya pun berubah menjadi objek. Karena berubah fungsi menjadi objek, bagian itu dapat menjadi subjek kalimat pasif (56c).
 
-- (56) a. *Dia tahu akan hal itu.*
-  - b. *Dia mengetahui hal itu.*
-  - c. *Hal itu diketahui olehnya.*
+(56)
+- a. *Dia tahu akan hal itu.*
+- b. *Dia mengetahui hal itu.*
+- c. *Hal itu diketahui olehnya.*
 
 ---
 
@@ -234,7 +252,10 @@ Selain itu, ada dua verba yang dipakai dengan fungsi verba perakit, yakni *(men)
 
 Kalimat, baik dengan maupun tanpa verba perakit, disebut kalimat ekuatif jika subjek dan predikat kalimat itu berupa nomina atau frasa nominal dan keduanya memiliki acuan yang sama. Sebagai bukti bahwa kalimat itu merupakan kalimat ekuatif, unsur yang berfungsi subjek dapat dipertukarkan.
 
-- (64) a. *Bapak saya adalah salah seorang guru di sekolah itu.*
-  - b. *Salah seorang guru di sekolah itu adalah bapak saya.*
-- (65) a. *Keris ini ialah peninggalan yang tersisa.*
-  - b. *Peninggalan yang tersisa ialah keris ini.*
+(64)
+- a. *Bapak saya adalah salah seorang guru di sekolah itu.*
+- b. *Salah seorang guru di sekolah itu adalah bapak saya.*
+
+(65)
+- a. *Keris ini ialah peninggalan yang tersisa.*
+- b. *Peninggalan yang tersisa ialah keris ini.*

@@ -129,17 +129,21 @@ Sebagai pewatas belakang, *lagi* dan *kembali* memiliki ciri makna yang sama.
 
 Jika didahului pemarkah negasi *tidak*, kedua pewatas itu memperlihatkan perilaku sintaktis yang berbeda.
 
-- (381) a. *Dia tidak ingin dipenjara lagi.*
-  b. *Dia tidak ingin lagi dipenjara.*
-  c. *Dia tidak lagi ingin dipenjara.*
-- (382) a. *Dia tidak ingin dipenjara kembali.*
-  b. *Dia tidak ingin kembali dipenjara.*
-  c. \**Dia tidak kembali ingin dipenjara.*
+(381)
+- a. *Dia tidak ingin dipenjara lagi.*
+- b. *Dia tidak ingin lagi dipenjara.*
+- c. *Dia tidak lagi ingin dipenjara.*
+
+(382)
+- a. *Dia tidak ingin dipenjara kembali.*
+- b. *Dia tidak ingin kembali dipenjara.*
+- c. \**Dia tidak kembali ingin dipenjara.*
 
 Dari contoh tersebut dapat dikatakan bahwa *tidak lagi ingin* merupakan bentuk yang berterima, sedangkan \**tidak kembali ingin* takberterima. Ketakberterimaan ini menyangkut kata *kembali* sebagai pewatas belakang yang digabungkan dalam frasa verbal yang mengandung pemarkah negasi *tidak*. Bandingkan dengan *tidak kembali* yang berterima karena *kembali* digunakan sebagai verba, bukan sebagai pewatas verba.
 
-- (383) a. *Sudah lama sekali dia tidak kembali ke kota kelahirannya.*
-  b. *Sudah lama sekali dia tidak pulang ke kota kelahirannya.*
+(383)
+- a. *Sudah lama sekali dia tidak kembali ke kota kelahirannya.*
+- b. *Sudah lama sekali dia tidak pulang ke kota kelahirannya.*
 
 ### Frasa Endosentrik Koordinatif (4.6.2.2)
 

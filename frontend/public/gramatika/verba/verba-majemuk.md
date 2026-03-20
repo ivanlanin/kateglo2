@@ -24,9 +24,10 @@ Verba majemuk seperti *temu wicara* dan *maju mundur* merupakan verba majemuk da
 
 Contoh lain:
 
-- (312) a. *hancur lebur*, *pulang pergi*, *hilang lenyap*, *ikut campur*, *jual beli*, *jatuh bangun*
-  - b. *kurang makan*, *berani mati*, *berani sumpah*, *salah dengar*, *salah hitung*, *kurang pikir*
-  - c. *mabuk laut*, *gegar otak*, *jumpa pers*, *terjun payung*, *tatap muka*, *bunuh diri*
+(312)
+- a. *hancur lebur*, *pulang pergi*, *hilang lenyap*, *ikut campur*, *jual beli*, *jatuh bangun*
+- b. *kurang makan*, *berani mati*, *berani sumpah*, *salah dengar*, *salah hitung*, *kurang pikir*
+- c. *mabuk laut*, *gegar otak*, *jumpa pers*, *terjun payung*, *tatap muka*, *bunuh diri*
 
 Sebagaimana dapat dilihat pada contoh tersebut, ada tiga pola verba majemuk dasar yang paling umum, yaitu:
 
@@ -70,9 +71,10 @@ Contoh:
 
 Verba majemuk berafiks yang pangkalnya berupa bentuk majemuk yang dapat berdiri sendiri disebut verba majemuk bebas. Verba kelompok ini banyak jumlahnya dan dasarnya dapat berupa (a) verba, (b) nomina, atau (c) adjektiva.
 
-- (321) a. *melipatgandakan*, *menaikturunkan*, *merataptangisi*, *memberi tahu*, *menggarisbawahi*, *memukul mundur*
-  - b. *membalas budi*, *menganaktirikan*, *berinduk semang*, *mendarmabaktikan*
-  - c. *membagi rata*, *menghitamlegamkan*, *mengawetmudakan*, *memerahpadamkan*
+(321)
+- a. *melipatgandakan*, *menaikturunkan*, *merataptangisi*, *memberi tahu*, *menggarisbawahi*, *memukul mundur*
+- b. *membalas budi*, *menganaktirikan*, *berinduk semang*, *mendarmabaktikan*
+- c. *membagi rata*, *menghitamlegamkan*, *mengawetmudakan*, *memerahpadamkan*
 
 Dari contoh tersebut dapat dilihat bahwa berbagai afiks dapat ditambahkan untuk membentuk verba majemuk berafiks. Sebagaimana pengafiksan umumnya, yang menjadi kendala terhadap penambahan afiks pada pangkal yang berupa bentuk majemuk bebas terutama adalah faktor semantis.
 

@@ -109,13 +109,23 @@ d) Prefiks *per-* yang menyatakan makna 'memanggil' atau 'menganggap': *Jangan p
 
 Pengafiksan verba transitif dengan prefiks infleksi *per-* dengan pangkal verba mencakup dua bentuk, yaitu *perbuat* dan *peroleh* yang bertalian maknanya dengan *berbuat* dan *beroleh*.
 
-- (139) a. *Perbuatlah sesuatu yang bermanfaat untuk orang banyak.* b. *Janganlah kita berbuat (dosa).*
-- (140) a. *Apa yang kamu peroleh dari pertemuan itu?* b. *Kami beroleh banyak manfaat.*
+(139)
+- a. *Perbuatlah sesuatu yang bermanfaat untuk orang banyak.*
+- b. *Janganlah kita berbuat (dosa).*
+
+(140)
+- a. *Apa yang kamu peroleh dari pertemuan itu?*
+- b. *Kami beroleh banyak manfaat.*
 
 Verba berprefiks *per-* dengan pangkal adjektiva tergolong verba kausatif yang menyebabkan objek bertingkat lebih tinggi daripada keadaan sebelumnya. Perbedaannya dengan verba bersufiks *-kan* yang termasuk kausatif juga ialah verba bersufiks *-kan* menyebabkan objek menjadi apa yang digambarkan oleh pangkal adjektiva.
 
-- (141) a. *Perbesar foto 2x3 cm menjadi 4x6 cm.* b. *Dia berusaha keras untuk membesarkan anaknya hingga dewasa.*
-- (142) a. *Perpanjang KTP-mu selekas mungkin.* b. *Karena merasa dingin, ia memanjangkan lengan bajunya.*
+(141)
+- a. *Perbesar foto 2x3 cm menjadi 4x6 cm.*
+- b. *Dia berusaha keras untuk membesarkan anaknya hingga dewasa.*
+
+(142)
+- a. *Perpanjang KTP-mu selekas mungkin.*
+- b. *Karena merasa dingin, ia memanjangkan lengan bajunya.*
 
 Contoh lain: *perlemah, persempit, perkaya, perkuat, permudah, percepat, perbanyak, persulit*
 
@@ -274,14 +284,16 @@ Golongan verba transitif yang bersufiks *-i* pada umumnya menandai objek yang me
 
 **12)** Ada verba bersufiks *-i* yang jelas berbeda artinya dengan verba bersufiks *-kan* yang sifatnya kausatif:
 
-- (210) *memberati* dan *memberatkan*: *Ia memberati tali itu dengan batu. / Permasalahan itu memberatkan bebannya.*
+(210)
+- *memberati* dan *memberatkan*: *Ia memberati tali itu dengan batu. / Permasalahan itu memberatkan bebannya.*
 - *menghitami* dan *menghitamkan*: *Pemain teater itu menghitami wajahnya. / Kakek menghitamkan rambutnya yang beruban.*
 - *menerangi* dan *menerangkan*: *Obor itu menerangi gua. / Ayah menerangkan manfaat menabung.*
 - *mengurangi* dan *mengurangkan*: *Susi mengurangi makanan berlemak. / Peristiwa itu mengurangkan tekadnya.*
 
 **13)** Ada verba bersufiks *-i* yang maknanya nyaris berbeda dari verba bersufiks *-kan*. Jumlahnya sangat terbatas:
 
-- (211) *menghabisi* dan *menghabiskan*: *Ia menghabisi ceritanya dengan nasihat. / Ia menghabiskan uang jajannya untuk membeli mainan.*
+(211)
+- *menghabisi* dan *menghabiskan*: *Ia menghabisi ceritanya dengan nasihat. / Ia menghabiskan uang jajannya untuk membeli mainan.*
 - *melengkapi* dan *melengkapkan*: *Ia melengkapi tulisannya dengan catatan kaki. / Ia melengkapkan makalahnya hingga lima belas halaman.*
 
 **14)** Verba bersufiks *-i* dengan pangkal nomina mengandung arti pemberian atau penerapan acuan nomina pada objek:
@@ -304,7 +316,8 @@ Demikian pula pada bentuk seperti *membawahi* dan *membelakangi*, justru objekny
 
 Ada pula golongan verba transitif yang sudah berprefiks *ber-* atau *per-* lalu menjadi pangkal sekunder untuk penambahan sufiks *-i*:
 
-- (216) *pelajari* (bertalian dengan makna 'belajar tentang'): *Teknik itu harus kalian pelajari lebih dalam.*
+(216)
+- *pelajari* (bertalian dengan makna 'belajar tentang'): *Teknik itu harus kalian pelajari lebih dalam.*
 - *persenjatai* ('menjadikan bersenjata'): *Persenjatai diri kalian dengan iman dan ilmu!*
 - *perlindungi* ('menjadikan berlindung'): *Anak yatim piatu itu harus kita perlindungi.*
 - *perlengkapi* ('menjadi berlengkap'): *Telah ia perlengkapi anaknya dengan berbagai bekal.*

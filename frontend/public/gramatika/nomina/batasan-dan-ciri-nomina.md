@@ -26,7 +26,8 @@ Nomina, sebagai inti frasa, dapat diikuti kelas kata lain seperti adjektiva, ver
 
 Contoh:
 
-- (5) *rumah besar*—*rumah yang besar*
+(5)
+- *rumah besar*—*rumah yang besar*
 - *pakaian dibeli*—*pakaian yang dibeli*
 - *hari ketiga*—*hari yang ketiga*
 - *buku di meja*—*buku yang di meja*
@@ -39,7 +40,8 @@ Nomina sebagai inti frasa juga dapat diikuti oleh kata penunjuk *ini* atau *itu*
 
 Contoh:
 
-- (6) *kota ini*—*kota besar ini*
+(6)
+- *kota ini*—*kota besar ini*
 - *orang ini*—*orang kaya ini*
 - *anak itu*—*anak (yang) di pojok itu*
 - *pekerjaan itu*—*pekerjaan rumah itu*
