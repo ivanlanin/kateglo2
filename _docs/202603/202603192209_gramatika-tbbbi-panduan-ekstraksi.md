@@ -139,37 +139,122 @@ Pemetaan tiap bab ke kerangka ini:
 
 ---
 
-## Nomor Halaman PDF per Bab
+## Nomor Halaman
 
-Nomor halaman di bawah adalah nomor halaman **aktual dalam file PDF** (1-indeks, sesuai tampilan di PDF viewer).
+### Konversi Nomor Halaman
 
-Formula Python pdfplumber (0-indeks): `range(PDF_awal - 1, PDF_akhir)`
-- Contoh Bab VIII: `range(395, 429)` → mencetak hal 396 s.d. 429
+PDF tersimpan di: `_data/gramatika/Tata Bahasa Baku Bahasa Indonesia TBBBI IV (2017).pdf`
+
+Terdapat dua sistem penomoran yang berbeda:
+- **Nomor halaman PDF** (1-indeks) — nomor urut halaman dalam file PDF; digunakan sebagai nama file JPG
+- **Nomor halaman buku** — angka yang tercetak di pojok halaman
+
+Formula: `nomor_buku = nomor_PDF − 23`
+
+Contoh terkonfirmasi: file `bab-ix-h475.jpg` menampilkan nomor halaman buku 452 di bagian bawah (475 − 23 = 452). File `bab-ix-h430.jpg` menampilkan halaman judul "BAB IX KALIMAT" (PDF halaman 430 = halaman buku 407).
 
 ### Bagian Bab
 
-| Bab | Judul | PDF awal | PDF akhir | Jml hal PDF | Selesai |
-|-----|-------|----------|-----------|------------|---------|
-| I   | Pendahuluan | 25 | 46 | 22 | — |
-| II  | Tata Bahasa: Tinjauan Selayang Pandang | 47 | 68 | 22 | — |
-| III | Bunyi Bahasa dan Tata Bunyi | 69 | 118 | 50 | — |
-| IV  | Verba | 119 | 216 | 98 | ✓ |
-| V   | Adjektiva | 217 | 257 | 41 | ✓ |
-| VI  | Adverbia | 258 | 281 | 24 | ✓ |
-| VII | Nomina, Pronomina, dan Numeralia | 282 | 395 | 114 | ✓ |
-| VIII | Kata Tugas | 396 | 429 | 34 | ✓ |
-| IX  | Kalimat | 430 | 534 | 105 | ✓ |
-| X   | Hubungan Antarklausa | 535 | 574 | 40 | — |
+Semua nomor adalah **nomor halaman PDF** (1-indeks).
+
+| Bab | Judul | PDF awal | PDF akhir | Jml hal | JPG | Markdown |
+|-----|-------|:---:|:---:|:---:|:---:|:---:|
+| I   | Pendahuluan | 25 | 46 | 22 | — | — |
+| II  | Tata Bahasa: Tinjauan Selayang Pandang | 47 | 68 | 22 | — | — |
+| III | Bunyi Bahasa dan Tata Bunyi | 69 | 118 | 50 | — | — |
+| IV  | Verba | 119 | 216 | 98 | — | ✓ |
+| V   | Adjektiva | 217 | 257 | 41 | — | ✓ |
+| VI  | Adverbia | 258 | 281 | 24 | — | ✓ |
+| VII | Nomina, Pronomina, Numeralia | 282 | 395 | 114 | — | ✓ |
+| VIII | Kata Tugas | 396 | 429 | 34 | — | ✓ |
+| IX  | Kalimat | 430 | 534 | 105 | ✓ | ✓ |
+| X   | Hubungan Antarklausa | 535 | 574 | 40 | — | — |
 
 ### Bagian Lainnya
 
-| Bagian | PDF awal | PDF akhir |
-|--------|----------|-----------|
-| Daftar Isi | 15 | 24 |
-| Daftar Pustaka | 575 | 592 |
-| Daftar Istilah | 593 | 610 |
-| Indeks | 611 | 615 |
-| Sampul Belakang | 616 | 616 |
+| Bagian | PDF awal | PDF akhir | Jml hal | JPG |
+|--------|:---:|:---:|:---:|:---:|
+| Daftar Isi | 15 | 24 | 10 | — |
+| Daftar Pustaka | 575 | 592 | 18 | — |
+| Daftar Istilah | 593 | 610 | 18 | — |
+| Indeks | 611 | 615 | 5 | — |
+| Kover Belakang | 616 | 616 | 1 | — |
+
+---
+
+## Pendekatan JPG per Halaman
+
+### Mengapa JPG lebih baik daripada ekstraksi teks OCR
+
+Ekstraksi teks PDF dengan `pdfplumber` menghasilkan banyak artefak OCR (karakter salah, baris tergabung, tabel berantakan). Pendekatan alternatif yang terbukti lebih efektif:
+
+1. **Konversi PDF → JPG per halaman** menggunakan PyMuPDF (`fitz`)
+2. **Claude membaca gambar langsung** (multimodal) — jauh lebih akurat untuk teks berformat kompleks, contoh bernomor, dan tabel
+3. **Tidak perlu perbaikan OCR manual** — Claude langsung menginterpretasi layout halaman
+
+### Lokasi File JPG
+
+```
+_data/gramatika/
+├── Tata Bahasa Baku Bahasa Indonesia TBBBI IV (2017).pdf
+├── bab-ix-jpg/          ← sudah ada (Bab IX, 106 file)
+│   ├── bab-ix-h430.jpg
+│   └── ...
+└── bab-x-jpg/           ← belum dibuat
+    └── ...
+```
+
+Konvensi nama: `bab-{angka-romawi-kecil}-h{NNN}.jpg` di mana `NNN` = nomor PDF 1-indeks (tiga digit).
+
+Contoh: `bab-ix-h475.jpg` = halaman PDF ke-475 = halaman buku 452.
+
+### Script Konversi JPG
+
+Simpan sementara di `backend/temp_pdf_to_jpg.py`, hapus setelah selesai.
+
+```python
+import fitz  # PyMuPDF — install: python -m pip install PyMuPDF
+import os
+
+PDF_PATH = "c:/Kode/Kateglo/kateglo/_data/gramatika/Tata Bahasa Baku Bahasa Indonesia TBBBI IV (2017).pdf"
+
+# Sesuaikan per bab:
+BAB_SLUG   = "bab-x"                          # nama subfolder & prefix file
+PDF_AWAL   = 558                               # 1-indeks, inklusif
+PDF_AKHIR  = 597                               # 1-indeks, inklusif
+OUTPUT_DIR = f"c:/Kode/Kateglo/kateglo/_data/gramatika/{BAB_SLUG}-jpg"
+
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+doc = fitz.open(PDF_PATH)
+mat = fitz.Matrix(150/72, 150/72)  # 150 DPI
+
+for page_num in range(PDF_AWAL - 1, PDF_AKHIR):   # fitz pakai 0-indeks
+    page = doc[page_num]
+    pix  = page.get_pixmap(matrix=mat)
+    nama = f"{BAB_SLUG}-h{page_num + 1:03d}.jpg"
+    pix.save(os.path.join(OUTPUT_DIR, nama))
+    print(f"Disimpan: {nama}")
+
+doc.close()
+print("Selesai.")
+```
+
+### Status JPG per Bab
+
+| Bab | Subfolder | Rentang file | Status |
+|-----|-----------|-------------|--------|
+| IX  | `bab-ix-jpg/` | h453–h557 | ✓ selesai |
+| I   | `bab-i-jpg/` | h048–h069 | — |
+| II  | `bab-ii-jpg/` | h070–h091 | — |
+| III | `bab-iii-jpg/` | h092–h141 | — |
+| IV  | `bab-iv-jpg/` | h142–h239 | — |
+| V   | `bab-v-jpg/` | h240–h280 | — |
+| VI  | `bab-vi-jpg/` | h281–h304 | — |
+| VII | `bab-vii-jpg/` | h305–h418 | — |
+| VIII | `bab-viii-jpg/` | h419–h452 | — |
+| X   | `bab-x-jpg/` | h558–h597 | — |
+
+**Prioritas berikutnya:** Bab X (Hubungan Antarklausa, 40 hal) — bab yang belum ada markdownnya dan paling pendek.
 
 ---
 
@@ -260,15 +345,14 @@ Urutan mempertimbangkan: panjang bab, kualitas OCR yang dapat diharapkan, kepada
 
 ---
 
-### ☐ 8. Bab IX — Kalimat (105 hal PDF)
+### ✓ 8. Bab IX — Kalimat (105 hal PDF) — **SELESAI**
 
 - Bab terpanjang kedua; 9 subbab utama dengan banyak subbab bersarang.
-- Mengandung bagan pohon kalimat (tidak dapat dirender markdown).
-- Klasifikasi berdasarkan jumlah klausa, predikat, tujuan komunikatif, kelengkapan unsur, dan kemasan informasi → sangat banyak subtopik.
-- Bagian fungsi sintaktis (S, P, O, Pel, Ket) dan peran semantis paling berguna.
-- Strategi: ekstrak per subbab besar, tidak sekaligus.
+- Mengandung bagan pohon kalimat (tidak dapat dirender markdown — dideskripsikan atau dilewati).
+- Dikerjakan dengan bantuan JPG per halaman (`_data/gramatika/bab-ix-jpg/`) karena OCR teks tidak memadai.
+- Dipecah menjadi 6 file markdown.
 
-**Subbab prioritas pertama:** Unsur Kalimat · Kategori-Fungsi-Peran · Kalimat Dasar · Jenis Kalimat (berdasarkan predikat + sintaktis)
+**Subbab:** Batasan dan Ciri Kalimat (9.1) · Unsur Kalimat (9.2) · Kategori, Fungsi, dan Peran (9.3) · Kalimat Dasar (9.4) · Jenis Kalimat (9.5) · Pengingkaran (9.6)
 
 ---
 

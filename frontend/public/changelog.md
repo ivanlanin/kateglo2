@@ -4,7 +4,7 @@
 
 - Menambahkan bagian adjektiva, nomina, pronomina, numeralia, dan verba di [Gramatika](/gramatika)
 - Merapikan format halaman di [Gramatika](/gramatika)
-- Menambahkan bagian kalimat di [Gramatika](/gramatika)
+- Menambahkan bagian kalimat dan hubungan antarklausa di [Gramatika](/gramatika)
 
 ## 2026-03-19 Kamis
 

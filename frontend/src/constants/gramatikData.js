@@ -98,6 +98,15 @@ const daftarIsiGramatika = [
       { judul: 'Pengingkaran', slug: 'pengingkaran' },
     ],
   },
+  {
+    judul: 'Hubungan Antarklausa',
+    slug: 'hubungan-antarklausa',
+    items: [
+      { judul: 'Hubungan Koordinatif', slug: 'hubungan-koordinatif' },
+      { judul: 'Hubungan Subordinatif', slug: 'hubungan-subordinatif' },
+      { judul: 'Pelesapan', slug: 'pelesapan' },
+    ],
+  },
 ];
 
 const daftarItemGramatika = daftarIsiGramatika.flatMap((bab) =>
