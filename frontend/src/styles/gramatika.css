@@ -294,23 +294,27 @@
 .ejaan-markdown-content blockquote,
 .ejaan-markdown-content blockquote p,
 .ejaan-markdown-content blockquote li {
-  @apply font-semibold leading-relaxed text-[17px];
+  @apply font-normal leading-relaxed text-[17px];
 }
 
-.ejaan-markdown-content blockquote:not(:first-of-type) {
+.ejaan-markdown-content blockquote + blockquote {
   @apply border-t border-gray-300 pt-3 mt-3;
 }
 
-.dark .ejaan-markdown-content blockquote:not(:first-of-type) {
+.dark .ejaan-markdown-content blockquote + blockquote {
   @apply border-dark-border;
 }
 
 .ejaan-markdown-content ul {
-  @apply columns-1 md:columns-2 gap-8;
+  @apply columns-1 md:columns-2 gap-8 mb-3;
   list-style-type: disc;
   list-style-position: outside;
   padding-left: 1.25rem;
   margin-left: 0;
+}
+
+.gramatika-markdown-content ul {
+  @apply columns-1;
 }
 
 .ejaan-markdown-content ol {
@@ -318,6 +322,7 @@
   list-style-position: outside;
   padding-left: 1.25rem;
   margin-left: 0;
+  margin-bottom: 0.75rem;
 }
 
 .ejaan-markdown-content li {

@@ -204,7 +204,7 @@ function Gramatika() {
             {!sedangMemuat && galat && <p className="secondary-text">{galat}</p>}
 
             {!sedangMemuat && !galat && (
-              <div className="ejaan-markdown-content">
+              <div className="ejaan-markdown-content gramatika-markdown-content">
                 <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeCollapsibleHeadings]}>
                   {isiMarkdown}
                 </ReactMarkdown>
