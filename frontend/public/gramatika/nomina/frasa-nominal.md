@@ -3,15 +3,15 @@ id: 6
 title: Frasa Nominal (7.1.5–7.1.6)
 ---
 
-# Frasa Nominal (7.1.5)
+## Frasa Nominal (7.1.5)
 
 Frasa nominal adalah frasa yang intinya nomina. Frasa nominal dibentuk dengan jalan memperluas suatu nomina ke kiri dan/atau ke kanan. Dari nomina *buku*, misalnya, dapat dibentuk frasa nominal dengan menambahkan kata *kedua*, *buah*, *baru*, dan *itu* sehingga menjadi *kedua buah buku baru itu*. Kata *kedua* dan *itu* pada frasa itu berfungsi sebagai penentu yang membatasi atau menentukan acuan nomina *buku*. Kata *buah* lazim disebut penggolong nomina dan kata *baru* berfungsi sebagai pewatas yang memberikan informasi lebih lanjut mengenai ihwal nomina *buku*.
 
-## Penentu (7.1.5.1)
+### Penentu (7.1.5.1)
 
 Kata atau kelompok kata yang dapat berfungsi sebagai penentu pada frasa nominal adalah (1) numeralia, (2) penunjuk (demonstrativa), (3) penanda ketakrifan, dan (4) pronomina/nomina yang menyatakan kepemilikan.
 
-### Numeralia (7.1.5.1.1)
+#### Numeralia (7.1.5.1.1)
 
 Numeralia lazim dibedakan atas numeralia tentu dan taktentu. Numeralia tentu meliputi numeralia pokok (kardinal), numeralia tingkat (ordinal), dan pecahan (lihat seksi 7.3). Baik numeralia tentu maupun taktentu dapat berfungsi sebagai penentu pada frasa nominal. Numeralia pokok, seperti *dua*, *lima*, dan *ketiga* (kolektif) dan pecahan, seperti *sepertiga* yang menyatakan jumlah mendahului nomina inti, sedangkan numeralia pokok yang menyatakan posisi dalam suatu seri mengikuti nomina inti. Numeralia tingkat, seperti *kesepuluh* mengikuti nomina inti.
 
@@ -32,7 +32,7 @@ Contoh:
 - (113b) ***Semua** tamu harus melapor ke pos jaga.*
 - (113c) ***Beberapa** orang murid datang terlambat.*
 
-### Penunjuk atau Demonstrativa (7.1.5.1.2)
+#### Penunjuk atau Demonstrativa (7.1.5.1.2)
 
 Dalam bahasa Indonesia terdapat dua kata penunjuk umum, yakni *ini* dan *itu*. Kata *ini* digunakan untuk menunjuk sesuatu atau seseorang yang relatif dekat dengan pembicara, sedangkan kata *itu* untuk yang relatif jauh dari pembicara. Kedua kata itu selalu mengikuti nomina atau frasa nominal yang diacu.
 
@@ -45,7 +45,7 @@ Contoh:
 
 Selain kata *ini* dan *itu*, bahasa Indonesia juga mengenal kata penunjuk *begini* dan *begitu* untuk mengacu pada perbuatan peragaan. Dalam memberikan penjelasan mengenai cara menggunakan suatu alat, misalnya, orang biasanya menggunakan kata *begini*, lalu diikuti perbuatan peragaan. Jika peragaan sudah selesai, biasanya digunakan kata *begitu* untuk mengacu perbuatan peragaan yang sudah dilakukan itu. Kata *begini* dan *begitu* dapat diganti dengan kata *demikian*.
 
-### Penanda Ketakrifan (7.1.5.1.3)
+#### Penanda Ketakrifan (7.1.5.1.3)
 
 Dalam bahasa Indonesia terdapat lima bentuk penanda ketakrifan, yakni *ini*, *itu*, *tersebut*, *tadi*, dan *-nya*. Bentuk-bentuk itu selalu mengikuti nomina inti dan digunakan untuk mengacu pada suatu nomina atau frasa nominal yang sudah diketahui bersama oleh pembicara dan pendengar, baik karena telah disebutkan, karena kehadirannya secara fisik, maupun karena pengetahuan umum yang dimiliki.
 
@@ -63,7 +63,7 @@ Kata *tersebut* sering digunakan di dalam tulisan untuk mengacu pada nomina yang
 
 Kata *tadi* lazim digunakan terutama dalam bahasa lisan untuk mengacu kembali nomina yang menyatakan orang atau sesuatu yang sudah disebutkan atau belum lama berlalu (116c). Bentuk *-nya* digunakan dalam ragam informal untuk mengacu nomina yang telah disebutkan (116d). Bentuk *-nya* juga dipakai untuk mengacu sesuatu atau seseorang yang kehadirannya dipraanggapkan oleh pembicara dan pendengar seperti pada (116e), adanya air untuk kegiatan mandi diketahui oleh pembicara dan pendengar.
 
-### Pronomina dan Nomina Pemilik (7.1.5.1.4)
+#### Pronomina dan Nomina Pemilik (7.1.5.1.4)
 
 Pronomina atau nomina yang menyatakan makna kepemilikan berfungsi sebagai penentu pada frasa nominal. Letaknya selalu mengikuti nomina inti dan mendahului kata penunjuk atau penanda ketakrifan.
 
@@ -73,7 +73,7 @@ Contoh:
 - (117b) *Rumah **Pak Amin** kebanjiran.*
 - (117c) *Pintu kamar **itu** tidak bisa dikunci.*
 
-## Penggolong dan Partitif (7.1.5.2)
+### Penggolong dan Partitif (7.1.5.2)
 
 Jika penentu pada frasa nominal berupa numeralia atau pemerbanyak, orang dapat menyisipkan kata penggolong di antara penentu dan nomina inti. Penggolong adalah kata yang digunakan bersama numeralia di depan nomina untuk menyatakan jenis dan/atau bentuk nomina yang mengikutinya. Kehadiran penggolong di antara nomina inti dan numeralia dalam frasa nominal tidak memengaruhi makna dasar frasa nominal tersebut.
 
@@ -142,7 +142,7 @@ Berbeda dengan penggolong, partitif pada frasa nominal yang penentunya berupa nu
 
 Berkaitan dengan penggunaan penggolong dan partitif itu perlu ditambahkan dua hal. Pertama, jika penentu berupa numeralia taktentu, hanya *beberapa* dan *tiap* yang dapat diikuti oleh penggolong atau partitif. Kedua, partitif *belah* hanya dapat mengikuti numeralia klitik *se-*, seperti pada *sebelah mata*, *sebelah tangan*, dan *sebelah kaki* atau numeralia kolektif *kedua*, seperti pada *kedua belah mata*, *kedua belah tangan*, dan *kedua belah pipi*.
 
-## Nomina dengan Perluasan ke Kiri (7.1.5.3)
+### Nomina dengan Perluasan ke Kiri (7.1.5.3)
 
 Perluasan ke kiri dilakukan dengan menambahkan penentu (Pen) berupa numeralia (Num) atau numeralia taktentu (Num tt) dengan atau tanpa penggolong (Pgl) atau partitif (Prt). Pembentukan frasa nominal melalui perluasan ke kiri akan mempunyai struktur:
 
@@ -168,11 +168,11 @@ Penggolong dan partitif merupakan konstituen frasa numeralia. Hal itu didasarkan
 
 Perlu ditambahkan bahwa perluasan nomina ke kiri hanya bisa dengan frasa numeralia.
 
-## Perluasan Nomina ke Kanan (7.1.5.4)
+### Perluasan Nomina ke Kanan (7.1.5.4)
 
 Perluasan ke kanan dilakukan dengan menambahkan pewatas dengan atau tanpa penentu. Penentu yang terletak di sebelah kanan dapat berupa penunjuk, penanda ketakrifan, dan pronomina (juga nomina) yang menyatakan kepemilikan atau numeralia tingkat. Pewatas pada frasa nominal dapat berupa nomina atau frasa nominal, adjektiva atau frasa adjektival, verba atau frasa verbal, frasa preposisional, dan/atau klausa.
 
-### Nomina Pewatas (7.1.5.4.1)
+#### Nomina Pewatas (7.1.5.4.1)
 
 Pada frasa nominal, suatu nomina dapat diikuti langsung oleh nomina lain sebagai pewatas. Nomina pewatas umumnya bersifat deskriptif atau bersifat atributif, tetapi makna hubungan antara nomina inti dan nomina pewatas sangat bergantung pada makna kedua nomina itu.
 
@@ -203,7 +203,7 @@ Acap kali terdapat frasa nominal yang hubungan konstituen-konstituennya lebih da
 
 - (133) *lembaga bahasa nasional*—dapat ditafsirkan (a) lembaga yang mengurusi bahasa nasional atau (b) lembaga bahasa yang bersifat nasional.
 
-### Adjektiva Pewatas (7.1.5.4.2)
+#### Adjektiva Pewatas (7.1.5.4.2)
 
 Frasa nominal dapat dibentuk dengan menambahkan adjektiva sebagai pewatas pada nomina inti. Adjektiva yang mengikuti nomina itu berfungsi sebagai atribut terhadap nomina inti. Antara nomina inti dan adjektiva pewatas dapat disisipkan kata *yang*. Kata *yang* itu berfungsi sebagai ligatur untuk memberi pementingan pada adjektiva tersebut.
 
@@ -224,7 +224,7 @@ Kata *yang* harus disisipkan antara nomina inti dan pewatas yang berupa frasa ad
 
 > *murid yang sangat rajin*, *saudagar yang paling kaya di kota ini*, *baju yang merah muda*, *anak yang rajin dan pandai*
 
-### Verba Pewatas (7.1.5.4.3)
+#### Verba Pewatas (7.1.5.4.3)
 
 Frasa nominal dapat dibentuk dengan menambahkan verba sebagai pewatas pada nomina inti. Verba pewatas pada frasa nominal dapat bersifat atributif:
 
@@ -242,7 +242,7 @@ Verba pewatas nomina dapat pula bersifat deskriptif:
 - *ruang rapat*—ruang untuk mengadakan rapat
 - *jam bicara*—waktu untuk berbicara (berkonsultasi)
 
-### Frasa Preposisional sebagai Pewatas (7.1.5.4.4)
+#### Frasa Preposisional sebagai Pewatas (7.1.5.4.4)
 
 Nomina dapat diperluas dengan menambahkan frasa preposisional sebagai pewatas. Pewatas berupa frasa preposisional itu dapat bersifat deskriptif:
 
@@ -255,7 +255,7 @@ Pewatas berupa frasa preposisional dapat juga bersifat atributif. Oleh karena it
 
 > *anak (yang) di belakang*, *jalan (yang) ke kantor pos*, *buku (yang) di atas meja*, *orang (yang) seperti robot*
 
-### Klausa sebagai Pewatas (7.1.5.4.5)
+#### Klausa sebagai Pewatas (7.1.5.4.5)
 
 Nomina dapat diperluas dengan menambahkan klausa sebagai pewatasnya. Klausa pewatas ini lazim disebut klausa relatif. Klausa relatif selalu didahului kata *yang*.
 
@@ -267,7 +267,7 @@ Contoh:
 - *rumah **yang** terletak di Jalan Diponegoro*
 - *(orang) **yang** berkuasa selama tiga puluh dua tahun*
 
-### Apositif sebagai Pewatas (7.1.5.4.6)
+#### Apositif sebagai Pewatas (7.1.5.4.6)
 
 Nomina dapat diperluas dengan apositif sebagai pewatas yang bersifat restriktif. Konstituen apositif merupakan nomina yang dapat menggantikan frasa nominal matriks, frasa nominal yang mengandungnya.
 
@@ -284,7 +284,7 @@ Selain apositif yang restriktif, ada juga apositif yang nonrestriktif:
 - *Jakarta*, ibukota Republik Indonesia
 - *Pak Aris*, suaminya
 
-### Frasa Nominal Majemuk (7.1.5.4.7)
+#### Frasa Nominal Majemuk (7.1.5.4.7)
 
 Suatu nomina atau frasa nominal dapat diperluas dengan nomina atau frasa nominal lain sebagai inti dengan menggunakan konjungsi *dan*.
 
@@ -297,7 +297,7 @@ Contoh:
 
 Dua contoh terakhir memperlihatkan bahwa konstituen yang sama pada frasa majemuk koordinatif dapat dilesapkan. Jika intinya sama, pelesapan terjadi pada ruas kedua dan jika pewatasnya yang sama, pelesapan terjadi pada ruas pertama.
 
-## Susunan Kata pada Frasa Nominal (7.1.5.5)
+### Susunan Kata pada Frasa Nominal (7.1.5.5)
 
 Nomina dalam bahasa Indonesia dapat diikuti pewatas yang terdiri atas dua kata atau lebih dari kelas kata yang berbeda. Susunan kata yang berfungsi sebagai pewatas dalam suatu frasa nominal banyak ditentukan oleh faktor berikut.
 
@@ -313,7 +313,7 @@ Nomina dalam bahasa Indonesia dapat diikuti pewatas yang terdiri atas dua kata a
 - *ragam bahasa Indonesia (yang) baku* ~ *ragam baku bahasa Indonesia*
 - *edisi kamus istilah (yang) terbaru* ~ *edisi terbaru kamus istilah*
 
-### Pola Kanonik Frasa Nominal
+#### Pola Kanonik Frasa Nominal
 
 Nomina inti dapat diperluas dengan menambahkan pewatas dengan atau tanpa penentu. Penentu yang mengikuti nomina inti, jika hadir semua, akan mempunyai urutan dasar: numeralia (Num), kemudian pronomina/nomina penanda kepemilikan (Pmk), dan terakhir penanda ketakrifan/penunjuk (Penk/Penj). Berdasarkan uraian di atas, pola kanonik frasa nominal:
 
@@ -336,7 +336,7 @@ Perubahan susunan konstituen frasa nominal dapat terjadi dengan memindahkan pron
 
 ---
 
-# Frasa Nominal Vokatif (7.1.6)
+## Frasa Nominal Vokatif (7.1.6)
 
 Nomina atau frasa nominal yang digunakan untuk memanggil atau menyapa orang disebut nomina atau frasa nominal vokatif. Unsur vokatif itu bersifat manasuka dan letaknya dapat di awal, tengah, atau akhir kalimat seperti tampak pada contoh berikut.
 
@@ -348,7 +348,7 @@ Unsur vokatif itu tidak merupakan unsur integral dari kalimat dan hal itu tampak
 
 Fungsi utama nomina atau frasa nominal vokatif adalah untuk meminta perhatian orang yang dipanggil atau disapa, terutama jika ada pendengar lain. Bentuk vokatif yang dipakai juga mencerminkan hubungan antara pembicara dan pendengar atau sikap emotif pembicara terhadap pendengar (orang yang disapa).
 
-## Bentuk Vokatif yang Lazim
+### Bentuk Vokatif yang Lazim
 
 Berikut adalah nomina atau frasa nominal yang lazim digunakan dengan fungsi vokatif dalam bahasa Indonesia.
 
@@ -366,10 +366,10 @@ Berikut adalah nomina atau frasa nominal yang lazim digunakan dengan fungsi voka
 
 **g)** Pronomina persona kedua: *kamu*, *kamu sekalian*, *Anda semua*.
 
-## Keakraban dan Pemendekan
+### Keakraban dan Pemendekan
 
 Bentuk-bentuk vokatif umumnya digunakan untuk mengisyaratkan sikap positif pembicara dan untuk menunjukkan rasa hormat atau keakraban. Makin akrab pembicara dengan lawan bicara, makin singkat bentuk vokatif yang digunakan. Itu sebabnya nama orang dan istilah kekerabatan biasa disingkat dengan satu atau dua suku awal atau akhir.
 
-## Vokatif dan Ungkapan Penyapa
+### Vokatif dan Ungkapan Penyapa
 
 Bentuk vokatif akan menjadi ungkapan penyapa apabila unsur itu menjadi bagian integral dari kalimat. Jadi, *Pak Dar, (Anda) mau minum apa?* dapat diubah menjadi *Pak Dar mau minum apa?* Bentuk *Pak Dar* yang pertama berfungsi sebagai vokatif, tetapi pada kalimat yang kedua berfungsi sebagai ungkapan penyapa.

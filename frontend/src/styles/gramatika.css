@@ -197,6 +197,14 @@
   @apply text-dark-text;
 }
 
+.ejaan-markdown-content h4 {
+  @apply text-sm font-medium mb-2 text-gray-800 mt-2;
+}
+
+.dark .ejaan-markdown-content h4 {
+  @apply text-dark-text-muted;
+}
+
 .ejaan-markdown-content code {
   @apply text-sm px-1 py-0.5 rounded bg-gray-100 text-gray-800;
 }
@@ -371,7 +379,8 @@
 
 /* Remove vertical margin from heading inside summary (summary provides spacing) */
 .ejaan-markdown-content summary > h2,
-.ejaan-markdown-content summary > h3 {
+.ejaan-markdown-content summary > h3,
+.ejaan-markdown-content summary > h4 {
   margin-top: 0;
   margin-bottom: 0;
   flex: 1;

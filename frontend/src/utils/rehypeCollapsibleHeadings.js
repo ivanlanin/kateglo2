@@ -5,7 +5,7 @@
  */
 export function rehypeCollapsibleHeadings() {
   return (tree) => {
-    tree.children = groupSections(tree.children, [2, 3]);
+    tree.children = groupSections(tree.children, [2, 3, 4]);
   };
 }
 
