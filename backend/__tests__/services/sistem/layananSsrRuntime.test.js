@@ -207,6 +207,12 @@ describe('services/sistem/layananSsrRuntime', () => {
     const withApp = runtime.__private.injectAppHtml('<div id="root"></div>', '<main>x</main>');
     expect(withApp).toContain('<div id="root"><main>x</main></div>');
     expect(runtime.__private.injectAppHtml('<div id="root"></div>')).toContain('<div id="root"></div>');
+
+    const parsedMarkdown = runtime.__private.parseMarkdownFrontmatter('---\ntitle: Judul\ndescription: Ringkas\n---\nIsi');
+    expect(parsedMarkdown.frontmatter.title).toBe('Judul');
+    expect(parsedMarkdown.body).toBe('Isi');
+    expect(runtime.__private.extractMarkdownSummary('# Judul\n\nParagraf ringkas pertama.')).toBe('Paragraf ringkas pertama.');
+    expect(runtime.__private.buildMarkdownSlugMap('')).toBeInstanceOf(Map);
   });
 
   it('validateRendererModule mengembalikan render atau melempar error', async () => {
@@ -241,6 +247,8 @@ describe('services/sistem/layananSsrRuntime', () => {
     ModelGlosarium.resolveSlugBidang.mockResolvedValue({ id: 2, kode: 'Bio', nama: 'Biologi' });
     expect(await runtime.__private.prefetchSsrData()).toBeNull();
 
+    const ejaanDetail = await runtime.__private.prefetchSsrData('/ejaan/huruf-kapital');
+    const gramatikaDetail = await runtime.__private.prefetchSsrData('/gramatika/preposisi');
     const detail = await runtime.__private.prefetchSsrData('/kamus/detail/sara');
     const tesaurusCari = await runtime.__private.prefetchSsrData('/tesaurus/cari/besar');
     const tesaurusRoot = await runtime.__private.prefetchSsrData('/tesaurus');
@@ -251,6 +259,10 @@ describe('services/sistem/layananSsrRuntime', () => {
     const kamusCari = await runtime.__private.prefetchSsrData('/kamus/cari/air');
     const unknown = await runtime.__private.prefetchSsrData('/apa-saja');
 
+    expect(ejaanDetail.type).toBe('static-markdown');
+    expect(ejaanDetail.section).toBe('ejaan');
+    expect(gramatikaDetail.type).toBe('static-markdown');
+    expect(gramatikaDetail.section).toBe('gramatika');
     expect(detail.type).toBe('kamus-detail');
     expect(tesaurusCari.type).toBe('tesaurus-detail');
     expect(tesaurusRoot).toBeNull();
@@ -298,6 +310,12 @@ describe('services/sistem/layananSsrRuntime', () => {
     expect(await runtime.__private.prefetchSsrData('/glosarium/cari/%20')).toBeNull();
     expect(await runtime.__private.prefetchSsrData('/glosarium/detail/%20')).toBeNull();
     expect(await runtime.__private.prefetchSsrData('/kamus/cari/%20')).toBeNull();
+
+    const ejaanTidakAda = await runtime.__private.prefetchSsrData('/ejaan/slug-tidak-ada');
+    expect(ejaanTidakAda.notFound).toBe(true);
+
+    const gramatikaTidakAda = await runtime.__private.prefetchSsrData('/gramatika/slug-tidak-ada');
+    expect(gramatikaTidakAda.notFound).toBe(true);
 
     ambilDetailTesaurus.mockResolvedValueOnce(null);
     expect(await runtime.__private.prefetchSsrData('/tesaurus/cari/tidak-ada')).toBeNull();
@@ -401,6 +419,22 @@ describe('services/sistem/layananSsrRuntime', () => {
     expect(response.status).toBe(200);
     expect(response.headers['cache-control']).toBeDefined();
     existsSpy.mockRestore();
+  });
+
+  it('pasangFrontendRuntime mengirim status 404 saat renderer menandai markdown tidak ditemukan', async () => {
+    const app = createApp(
+      async () => async (_url, data) => ({
+        appHtml: '<main>not-found</main>',
+        headTags: '<title>Not Found</title>',
+        statusCode: data?.notFound ? 404 : 200,
+      }),
+      async () => ({ type: 'static-markdown', section: 'gramatika', slug: 'slug-tidak-ada', notFound: true })
+    );
+
+    const response = await request(app).get('/gramatika/slug-tidak-ada');
+
+    expect(response.status).toBe(404);
+    expect(response.text).toContain('not-found');
   });
 
   it('pasangFrontendRuntime dengan default loader/prefetch saat bundle ada', async () => {

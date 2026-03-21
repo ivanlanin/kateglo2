@@ -3,6 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import App from './App';
 import { AuthProvider } from './context/authContext';
+import { SsrPrefetchProvider } from './context/ssrPrefetchContext';
 import {
   buildDeskripsiDetailKamus,
   buildDeskripsiPencarianGlosarium,
@@ -30,6 +31,15 @@ function escapeHtml(value = '') {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+function escapeJsonForHtml(value = '') {
+  return String(value)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
 }
 
 function stripTrailingSlash(url = '') {
@@ -76,8 +86,14 @@ function buildMetaRima(kata = '') {
   };
 }
 
-function buildMetaEjaan(slug = '') {
+function buildMetaEjaan(slug = '', prefetchedData = null) {
   const slugAman = String(slug || '').trim().replace(/\/+$/, '');
+  const dataMarkdown = prefetchedData?.type === 'static-markdown'
+    && prefetchedData.section === 'ejaan'
+    && prefetchedData.slug === slugAman
+    ? prefetchedData
+    : null;
+
   if (!slugAman) {
     return {
       judul: 'Ejaan',
@@ -86,19 +102,34 @@ function buildMetaEjaan(slug = '') {
     };
   }
 
+  if (dataMarkdown?.notFound) {
+    return {
+      judul: 'Ejaan Tidak Ditemukan',
+      deskripsi: 'Halaman ejaan yang diminta tidak ditemukan di Kateglo.',
+    };
+  }
+
   const metadata = petaItemEjaanBySlug[slugAman] || {
     judul: formatJudulEjaanDariSlug(slugAman) || 'Ejaan',
     judulBab: 'Ejaan',
   };
 
+  const deskripsiSpesifik = String(dataMarkdown?.description || '').trim();
+
   return {
     judul: metadata.judul,
-    deskripsi: `Kaidah ${metadata.judul} pada bab ${metadata.judulBab} dalam pedoman ejaan bahasa Indonesia di Kateglo.`,
+    deskripsi: deskripsiSpesifik || `Kaidah ${metadata.judul} pada bab ${metadata.judulBab} dalam pedoman ejaan bahasa Indonesia di Kateglo.`,
   };
 }
 
-function buildMetaGramatika(slug = '') {
+function buildMetaGramatika(slug = '', prefetchedData = null) {
   const slugAman = String(slug || '').trim().replace(/\/+$/, '');
+  const dataMarkdown = prefetchedData?.type === 'static-markdown'
+    && prefetchedData.section === 'gramatika'
+    && prefetchedData.slug === slugAman
+    ? prefetchedData
+    : null;
+
   if (!slugAman) {
     return {
       judul: 'Gramatika',
@@ -107,22 +138,46 @@ function buildMetaGramatika(slug = '') {
     };
   }
 
+  if (dataMarkdown?.notFound) {
+    return {
+      judul: 'Gramatika Tidak Ditemukan',
+      deskripsi: 'Halaman gramatika yang diminta tidak ditemukan di Kateglo.',
+    };
+  }
+
   const metadata = petaItemGramatikaBySlug[slugAman] || {
     judul: formatJudulGramatikaDariSlug(slugAman) || 'Gramatika',
     judulBab: 'Gramatika',
   };
 
+  const deskripsiSpesifik = String(dataMarkdown?.description || '').trim();
+
   if (metadata.tipe === 'bab') {
     return {
       judul: metadata.judul,
-      deskripsi: `Ikhtisar bab ${metadata.judul} dalam panduan tata bahasa Indonesia di Kateglo.`,
+      deskripsi: deskripsiSpesifik || `Ikhtisar bab ${metadata.judul} dalam panduan tata bahasa Indonesia di Kateglo.`,
     };
   }
 
   return {
     judul: metadata.judul,
-    deskripsi: `Penjelasan tentang ${metadata.judul} pada bab ${metadata.judulBab} dalam panduan tata bahasa Indonesia di Kateglo.`,
+    deskripsi: deskripsiSpesifik || `Penjelasan tentang ${metadata.judul} pada bab ${metadata.judulBab} dalam panduan tata bahasa Indonesia di Kateglo.`,
   };
+}
+
+function buildSerializedSsrDataScript(prefetchedData = null) {
+  if (!prefetchedData) return '';
+
+  const dataJson = escapeJsonForHtml(JSON.stringify(prefetchedData));
+  return `<script>window.__KATEGLO_SSR_DATA__ = ${dataJson};</script>`;
+}
+
+function resolveSsrStatusCode(prefetchedData = null) {
+  if (prefetchedData?.type === 'static-markdown' && prefetchedData.notFound) {
+    return 404;
+  }
+
+  return 200;
 }
 
 function buildMetaSusunKata(mode = 'harian') {
@@ -288,7 +343,7 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
   }
 
   if (path.startsWith('/ejaan/')) {
-    return titled(buildMetaEjaan(seg('/ejaan/')));
+    return titled(buildMetaEjaan(seg('/ejaan/'), prefetchedData));
   }
 
   // /gramatika dan /gramatika/:slug
@@ -297,7 +352,7 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
   }
 
   if (path.startsWith('/gramatika/')) {
-    return titled(buildMetaGramatika(seg('/gramatika/')));
+    return titled(buildMetaGramatika(seg('/gramatika/'), prefetchedData));
   }
 
   // /alat
@@ -370,6 +425,8 @@ export async function render(url = '/', prefetchedData = null) {
       },
     },
   });
+  const serializedStateScript = buildSerializedSsrDataScript(prefetchedData);
+  const statusCode = resolveSsrStatusCode(prefetchedData);
 
   if (shouldSkipSsr(pathname)) {
     const meta = buildMetaForPath(pathname, siteBaseUrl, prefetchedData);
@@ -395,17 +452,20 @@ export async function render(url = '/', prefetchedData = null) {
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${title}" />
     <meta name="twitter:description" content="${description}" />
-    <meta name="twitter:image" content="${escapedImageUrl}" />`;
+    <meta name="twitter:image" content="${escapedImageUrl}" />
+    ${serializedStateScript}`;
 
-    return { appHtml: '', headTags };
+    return { appHtml: '', headTags, statusCode };
   }
 
   const appHtml = renderToString(
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <MemoryRouter initialEntries={[url]}>
-          <App />
-        </MemoryRouter>
+        <SsrPrefetchProvider value={prefetchedData}>
+          <MemoryRouter initialEntries={[url]}>
+            <App />
+          </MemoryRouter>
+        </SsrPrefetchProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
@@ -433,18 +493,24 @@ export async function render(url = '/', prefetchedData = null) {
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${title}" />
     <meta name="twitter:description" content="${description}" />
-    <meta name="twitter:image" content="${escapedImageUrl}" />`;
+    <meta name="twitter:image" content="${escapedImageUrl}" />
+    ${serializedStateScript}`;
 
-  return { appHtml, headTags };
+  return { appHtml, headTags, statusCode };
 }
 
 export const __private = {
   escapeHtml,
+  escapeJsonForHtml,
   stripTrailingSlash,
   truncate,
   buildKamusDescription: buildDeskripsiDetailKamus,
   buildTesaurusDescription: buildDeskripsiPencarianTesaurus,
   buildGlosariumCariDescription: buildDeskripsiPencarianGlosarium,
+  buildMetaEjaan,
+  buildMetaGramatika,
+  buildSerializedSsrDataScript,
+  resolveSsrStatusCode,
   buildMetaForPath,
   shouldSkipSsr,
 };

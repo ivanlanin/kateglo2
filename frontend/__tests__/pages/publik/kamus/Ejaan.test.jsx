@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import Ejaan from '../../../../src/pages/publik/kamus/Ejaan';
+import { SsrPrefetchProvider } from '../../../../src/context/ssrPrefetchContext';
 
 vi.mock('../../../../src/constants/ejaanData', () => {
   const daftarIsiEjaan = [
@@ -43,14 +44,16 @@ vi.mock('../../../../src/constants/ejaanData', () => {
   };
 });
 
-function renderHalaman(pathname = '/ejaan') {
+function renderHalaman(pathname = '/ejaan', ssrData = null) {
   return render(
-    <MemoryRouter initialEntries={[pathname]}>
-      <Routes>
-        <Route path="/ejaan" element={<Ejaan />} />
-        <Route path="/ejaan/:slug" element={<Ejaan />} />
-      </Routes>
-    </MemoryRouter>
+    <SsrPrefetchProvider value={ssrData}>
+      <MemoryRouter initialEntries={[pathname]}>
+        <Routes>
+          <Route path="/ejaan" element={<Ejaan />} />
+          <Route path="/ejaan/:slug" element={<Ejaan />} />
+        </Routes>
+      </MemoryRouter>
+    </SsrPrefetchProvider>
   );
 }
 
@@ -90,6 +93,21 @@ describe('Ejaan', () => {
     expect(document.querySelector('.ejaan-sidebar-pill-active')).toHaveTextContent('Huruf Kapital');
   });
 
+  it('mode detail memakai markdown dari SSR tanpa fetch ulang', async () => {
+    renderHalaman('/ejaan/huruf-kapital', {
+      type: 'static-markdown',
+      section: 'ejaan',
+      slug: 'huruf-kapital',
+      markdown: '# Huruf Kapital SSR\n\nIsi dari SSR.',
+      description: 'Isi dari SSR.',
+      notFound: false,
+    });
+
+    expect(screen.queryByText('Memuat dokumen ejaan …')).not.toBeInTheDocument();
+    expect(screen.getByText('Huruf Kapital SSR')).toBeInTheDocument();
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
   it('menampilkan galat saat metadata dokumen ada tetapi path dokumen kosong', async () => {
     renderHalaman('/ejaan/tanpa-dok');
 
@@ -123,12 +141,14 @@ describe('Ejaan', () => {
     });
   });
 
-  it('slug tidak valid diarahkan kembali ke halaman daftar isi', async () => {
+  it('slug tidak valid menampilkan halaman tidak ditemukan', async () => {
     renderHalaman('/ejaan/slug-tidak-ada');
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { name: 'Ejaan' })).toBeInTheDocument();
+      expect(screen.getByText('Halaman ejaan tidak ditemukan.')).toBeInTheDocument();
     });
+
+    expect(global.fetch).not.toHaveBeenCalled();
   });
 
   it('panel daftar isi menandai item aktif dan membuka panel saat aktif', async () => {

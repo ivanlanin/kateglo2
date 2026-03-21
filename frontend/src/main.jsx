@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import App from './App';
 import { AuthProvider } from './context/authContext';
+import { SsrPrefetchProvider } from './context/ssrPrefetchContext';
 import './styles/index.css';
 
 if (import.meta.env.DEV && typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
@@ -23,14 +24,19 @@ const queryClient = new QueryClient({
 });
 
 const rootElement = document.getElementById('root');
+const ssrPrefetchedData = typeof window !== 'undefined'
+  ? window.__KATEGLO_SSR_DATA__ ?? null
+  : null;
 
 const appElement = (
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <SsrPrefetchProvider value={ssrPrefetchedData}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </SsrPrefetchProvider>
       </AuthProvider>
     </QueryClientProvider>
   </React.StrictMode>

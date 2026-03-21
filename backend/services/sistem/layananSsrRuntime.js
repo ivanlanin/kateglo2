@@ -14,6 +14,8 @@ const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
 
 const backendRootDir = path.resolve(__dirname, '..', '..');
 const workspaceRootDir = path.resolve(backendRootDir, '..');
+const ejaanDocsDir = path.join(workspaceRootDir, 'frontend', 'public', 'ejaan');
+const gramatikaDocsDir = path.join(workspaceRootDir, 'frontend', 'public', 'gramatika');
 const frontendBuildCandidates = [
   path.join(workspaceRootDir, 'frontend', 'dist'),
   path.join(backendRootDir, 'frontend', 'dist'),
@@ -92,6 +94,132 @@ function injectAppHtml(htmlTemplate, appHtml = '') {
   return htmlTemplate.replace('<div id="root"></div>', `<div id="root">${appHtml}</div>`);
 }
 
+function parseMarkdownFrontmatter(markdown = '') {
+  const content = String(markdown || '');
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---\s*/);
+  if (!match) {
+    return { frontmatter: {}, body: content };
+  }
+
+  const frontmatter = {};
+  const lines = match[1].split(/\r?\n/);
+  for (const line of lines) {
+    const pemisah = line.indexOf(':');
+    if (pemisah <= 0) continue;
+    const key = line.slice(0, pemisah).trim();
+    const value = line.slice(pemisah + 1).trim();
+    if (!key) continue;
+    frontmatter[key] = value.replace(/^['"]|['"]$/g, '');
+  }
+
+  return {
+    frontmatter,
+    body: content.slice(match[0].length),
+  };
+}
+
+function bersihkanTeksMarkdown(markdown = '') {
+  return String(markdown || '')
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/^[#>*-]\s+/gm, '')
+    .replace(/^\d+\.\s+/gm, '')
+    .replace(/[*_~]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function extractMarkdownSummary(markdown = '', maxLen = 155) {
+  const paragraphs = String(markdown || '')
+    .split(/\r?\n\s*\r?\n/)
+    .map((bagian) => ({
+      raw: String(bagian || '').trim(),
+      cleaned: bersihkanTeksMarkdown(bagian),
+    }))
+    .filter((bagian) => bagian.cleaned);
+
+  const preferredParagraph = paragraphs.find((bagian) => {
+    if (/^#+\s/.test(bagian.raw)) return false;
+    if (/^\d+\.?\s/.test(bagian.cleaned)) return false;
+    return true;
+  });
+
+  const summary = preferredParagraph?.cleaned || paragraphs[0]?.cleaned || '';
+  if (!summary) return '';
+  if (summary.length <= maxLen) return summary;
+
+  const potong = summary.slice(0, maxLen);
+  const batasKata = potong.lastIndexOf(' ');
+  return `${(batasKata > maxLen * 0.6 ? potong.slice(0, batasKata) : potong).trim()} …`;
+}
+
+function listMarkdownDocumentPaths(docsDir = '') {
+  if (!fs.existsSync(docsDir)) return [];
+
+  return fs.readdirSync(docsDir, { recursive: true })
+    .filter((entry) => typeof entry === 'string' && entry.toLowerCase().endsWith('.md'))
+    .map((entry) => entry.replace(/\\/g, '/'))
+    .filter((entry) => {
+      const segments = entry.split('/').filter(Boolean);
+      const basename = path.basename(entry, '.md').trim().toLowerCase();
+      if (!basename || basename === 'readme') return false;
+      return !segments.some((segment) => segment.startsWith('_'));
+    });
+}
+
+function buildMarkdownSlugMap(docsDir = '') {
+  const slugMap = new Map();
+
+  for (const relativePath of listMarkdownDocumentPaths(docsDir)) {
+    const basename = path.basename(relativePath, '.md').trim().toLowerCase();
+    if (!basename || slugMap.has(basename)) continue;
+    slugMap.set(basename, path.join(docsDir, relativePath));
+  }
+
+  return slugMap;
+}
+
+function readStaticMarkdownDocument(section = '', slug = '') {
+  const sectionAman = String(section || '').trim().toLowerCase();
+  const slugAman = decodeURIComponent(String(slug || '').trim()).toLowerCase();
+  const docsDir = sectionAman === 'ejaan'
+    ? ejaanDocsDir
+    : sectionAman === 'gramatika'
+      ? gramatikaDocsDir
+      : '';
+
+  if (!docsDir || !slugAman) return null;
+
+  const slugMap = buildMarkdownSlugMap(docsDir);
+  const filePath = slugMap.get(slugAman);
+  if (!filePath) {
+    return {
+      type: 'static-markdown',
+      section: sectionAman,
+      slug: slugAman,
+      markdown: '',
+      frontmatter: {},
+      description: '',
+      notFound: true,
+    };
+  }
+
+  const rawMarkdown = fs.readFileSync(filePath, 'utf8');
+  const { frontmatter, body } = parseMarkdownFrontmatter(rawMarkdown);
+
+  return {
+    type: 'static-markdown',
+    section: sectionAman,
+    slug: slugAman,
+    markdown: body,
+    frontmatter,
+    description: String(frontmatter.description || '').trim() || extractMarkdownSummary(body),
+    notFound: false,
+  };
+}
+
 async function loadSsrRenderer(options = {}) {
   const entryPath = options.entryPath || getFrontendServerEntryPath();
   const importModule = options.importModule || ((moduleUrl) => import(moduleUrl));
@@ -115,6 +243,14 @@ async function prefetchSsrData(pathname = '/') {
   const decoded = decodeURIComponent(pathname);
 
   try {
+    if (/^\/ejaan\/[^/]+\/?$/.test(decoded)) {
+      return readStaticMarkdownDocument('ejaan', decoded.replace('/ejaan/', '').trim().replace(/\/+$/, ''));
+    }
+
+    if (/^\/gramatika\/[^/]+\/?$/.test(decoded)) {
+      return readStaticMarkdownDocument('gramatika', decoded.replace('/gramatika/', '').trim().replace(/\/+$/, ''));
+    }
+
     // /kamus/detail/:indeks
     if (decoded.startsWith('/kamus/detail/')) {
       const indeks = decoded.replace('/kamus/detail/', '').trim();
@@ -269,11 +405,12 @@ function pasangFrontendRuntime(app, options = {}) {
       const rendered = await render(req.originalUrl, prefetchedData);
       const appHtml = rendered?.appHtml || '';
       const headTags = rendered?.headTags || '';
+      const statusCode = Number.isInteger(rendered?.statusCode) ? rendered.statusCode : 200;
 
       const withHead = injectHeadTags(htmlTemplate, headTags);
       const finalHtml = injectAppHtml(withHead, appHtml);
       if (cacheControl) res.set('Cache-Control', cacheControl);
-      return res.type('html').send(finalHtml);
+      return res.status(statusCode).type('html').send(finalHtml);
     } catch (error) {
       logger.warn(`SSR runtime fallback ke template statis: ${error.message}`);
       try {
@@ -307,6 +444,12 @@ module.exports = {
     stripReplaceableMeta,
     injectHeadTags,
     injectAppHtml,
+    parseMarkdownFrontmatter,
+    bersihkanTeksMarkdown,
+    extractMarkdownSummary,
+    listMarkdownDocumentPaths,
+    buildMarkdownSlugMap,
+    readStaticMarkdownDocument,
     loadSsrRenderer,
     validateRendererModule,
     prefetchSsrData,

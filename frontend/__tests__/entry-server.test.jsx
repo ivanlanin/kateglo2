@@ -259,6 +259,44 @@ describe('entry-server', () => {
     expect(headTags).toContain('https://kateglo.org/kamus/detail/sara');
     expect(headTags).toContain('&lt;');
     expect(headTags).toContain('&amp;');
+    expect(headTags).toContain('__KATEGLO_SSR_DATA__');
+  });
+
+  it('render memakai deskripsi spesifik dari markdown SSR untuk route ejaan dan gramatika', async () => {
+    const hasilEjaan = await render('/ejaan/huruf-kapital', {
+      type: 'static-markdown',
+      section: 'ejaan',
+      slug: 'huruf-kapital',
+      markdown: '# Huruf Kapital\n\nRingkasan huruf kapital.',
+      description: 'Ringkasan huruf kapital.',
+      notFound: false,
+    });
+
+    const hasilGramatika = await render('/gramatika/preposisi', {
+      type: 'static-markdown',
+      section: 'gramatika',
+      slug: 'preposisi',
+      markdown: '# Preposisi\n\nRingkasan preposisi.',
+      description: 'Ringkasan preposisi.',
+      notFound: false,
+    });
+
+    expect(hasilEjaan.headTags).toContain('Ringkasan huruf kapital.');
+    expect(hasilGramatika.headTags).toContain('Ringkasan preposisi.');
+  });
+
+  it('render mengembalikan status 404 untuk markdown statis yang tidak ditemukan', async () => {
+    const hasil = await render('/gramatika/slug-tidak-ada', {
+      type: 'static-markdown',
+      section: 'gramatika',
+      slug: 'slug-tidak-ada',
+      markdown: '',
+      description: '',
+      notFound: true,
+    });
+
+    expect(hasil.statusCode).toBe(404);
+    expect(hasil.headTags).toContain('Gramatika Tidak Ditemukan');
   });
 
   it('render fallback site URL saat process/global/env tidak tersedia', async () => {

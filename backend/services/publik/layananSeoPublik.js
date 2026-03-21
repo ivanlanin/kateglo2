@@ -148,7 +148,7 @@ function ambilPathEjaan() {
     .filter((entry) => entry.isFile() && entry.name.toLowerCase().endsWith('.md'))
     .map((entry) => {
       const basename = path.basename(entry.name, '.md').trim();
-      if (!basename) return '';
+      if (!basename || basename.toLowerCase() === 'readme') return '';
       return `/ejaan/${encodePathSegment(basename)}`;
     })
     .filter(Boolean);
@@ -164,7 +164,7 @@ function ambilPathGramatika() {
     .filter((entry) => entry.isFile() && entry.name.toLowerCase().endsWith('.md'))
     .map((entry) => {
       const basename = path.basename(entry.name, '.md').trim();
-      if (!basename) return '';
+      if (!basename || basename.toLowerCase() === 'readme') return '';
       return `/gramatika/${encodePathSegment(basename)}`;
     })
     .filter(Boolean);

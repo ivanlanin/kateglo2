@@ -4,13 +4,14 @@
 
 import '../../../styles/gramatika.css';
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { rehypeCollapsibleHeadings } from '../../../utils/rehypeCollapsibleHeadings';
 import HalamanPublik from '../../../components/tampilan/HalamanPublik';
 import PanelLipat from '../../../components/panel/PanelLipat';
 import KartuKategori from '../../../components/data/KartuKategori';
+import { useSsrPrefetch } from '../../../context/ssrPrefetchContext';
 import { daftarIsiGramatika, daftarItemGramatika } from '../../../constants/gramatikData';
 
 function bacaIsiMarkdown(markdownMentah = '') {
@@ -87,8 +88,8 @@ function DaftarIsiPanel({ aktifSlug = '' }) {
 }
 
 function Gramatika() {
-  const navigate = useNavigate();
   const { slug } = useParams();
+  const ssrPrefetch = useSsrPrefetch();
   const [isiMarkdown, setIsiMarkdown] = useState('');
   const [sedangMemuat, setSedangMemuat] = useState(true);
   const [galat, setGalat] = useState('');
@@ -99,6 +100,11 @@ function Gramatika() {
   );
 
   const metadataAktif = semuaDokumen.find((item) => item.slug === slug) || null;
+  const dataMarkdownSsr = useMemo(() => {
+    if (ssrPrefetch?.type !== 'static-markdown' || ssrPrefetch.section !== 'gramatika') return null;
+    if (String(ssrPrefetch.slug || '') !== String(slug || '')) return null;
+    return ssrPrefetch;
+  }, [ssrPrefetch, slug]);
   const dokumenValid = metadataAktif?.dokumen || '';
   const indeksAktif = metadataAktif
     ? semuaDokumen.findIndex((item) => item.slug === metadataAktif.slug)
@@ -109,6 +115,7 @@ function Gramatika() {
     : null;
 
   const modeDaftarIsi = !slug;
+  const halamanTidakDitemukan = Boolean(slug && (!metadataAktif || dataMarkdownSsr?.notFound));
 
   const metaSeo = useMemo(() => {
     if (modeDaftarIsi) {
@@ -119,10 +126,17 @@ function Gramatika() {
       };
     }
 
+    if (halamanTidakDitemukan) {
+      return {
+        judul: 'Gramatika Tidak Ditemukan',
+        deskripsi: 'Halaman gramatika yang diminta tidak ditemukan di Kateglo.',
+      };
+    }
+
     if (metadataAktif?.tipe === 'bab') {
       return {
         judul: metadataAktif.judul,
-        deskripsi: `Ikhtisar bab ${metadataAktif.judul} dalam panduan tata bahasa Indonesia di Kateglo.`,
+        deskripsi: dataMarkdownSsr?.description || `Ikhtisar bab ${metadataAktif.judul} dalam panduan tata bahasa Indonesia di Kateglo.`,
       };
     }
 
@@ -135,19 +149,27 @@ function Gramatika() {
 
     return {
       judul: metadataAktif.judul,
-      deskripsi: `Penjelasan tentang ${metadataAktif.judul} pada bab ${metadataAktif.judulBab} dalam panduan tata bahasa Indonesia di Kateglo.`,
+      deskripsi: dataMarkdownSsr?.description || `Penjelasan tentang ${metadataAktif.judul} pada bab ${metadataAktif.judulBab} dalam panduan tata bahasa Indonesia di Kateglo.`,
     };
-  }, [modeDaftarIsi, metadataAktif]);
-
-  useEffect(() => {
-    if (slug && !metadataAktif) {
-      navigate('/gramatika', { replace: true });
-    }
-  }, [slug, metadataAktif, navigate]);
+  }, [modeDaftarIsi, metadataAktif, halamanTidakDitemukan, dataMarkdownSsr]);
 
   useEffect(() => {
     if (modeDaftarIsi) {
       setIsiMarkdown('');
+      setSedangMemuat(false);
+      setGalat('');
+      return;
+    }
+
+    if (halamanTidakDitemukan) {
+      setIsiMarkdown('');
+      setSedangMemuat(false);
+      setGalat('Halaman gramatika tidak ditemukan.');
+      return;
+    }
+
+    if (dataMarkdownSsr && !dataMarkdownSsr.notFound) {
+      setIsiMarkdown(bacaIsiMarkdown(dataMarkdownSsr.markdown || ''));
       setSedangMemuat(false);
       setGalat('');
       return;
@@ -187,7 +209,7 @@ function Gramatika() {
 
     muat();
     return () => controller.abort();
-  }, [dokumenValid, modeDaftarIsi]);
+  }, [dokumenValid, modeDaftarIsi, halamanTidakDitemukan, dataMarkdownSsr]);
 
   if (modeDaftarIsi) {
     return (
@@ -203,6 +225,14 @@ function Gramatika() {
           Edisi Keempat (2017), Badan Pengembangan dan Pembinaan Bahasa,
           Kementerian Pendidikan dan Kebudayaan.
         </p>
+      </HalamanPublik>
+    );
+  }
+
+  if (halamanTidakDitemukan) {
+    return (
+      <HalamanPublik judul={metaSeo.judul} deskripsi={metaSeo.deskripsi}>
+        <p className="secondary-text">Halaman gramatika tidak ditemukan.</p>
       </HalamanPublik>
     );
   }

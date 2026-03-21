@@ -278,6 +278,7 @@ describe('layananSeoPublik private helpers', () => {
     const readdirSpy = jest.spyOn(fs, 'readdirSync').mockReturnValue([
       { isFile: () => true, name: 'preposisi.md' },
       { isFile: () => true, name: 'konjungsi.md' },
+      { isFile: () => true, name: 'README.md' },
       { isFile: () => false, name: 'kata-tugas' },
       { isFile: () => true, name: '.md' },
     ]);
@@ -286,6 +287,7 @@ describe('layananSeoPublik private helpers', () => {
 
     expect(paths).toContain('/gramatika/preposisi');
     expect(paths).toContain('/gramatika/konjungsi');
+    expect(paths).not.toContain('/gramatika/README');
     expect(paths).not.toContain('/gramatika/kata-tugas');
     expect(paths).not.toContain('/gramatika/');
     readdirSpy.mockRestore();

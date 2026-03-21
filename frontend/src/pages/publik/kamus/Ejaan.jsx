@@ -4,13 +4,14 @@
 
 import '../../../styles/gramatika.css';
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { rehypeCollapsibleHeadings } from '../../../utils/rehypeCollapsibleHeadings';
 import HalamanPublik from '../../../components/tampilan/HalamanPublik';
 import PanelLipat from '../../../components/panel/PanelLipat';
 import KartuKategori from '../../../components/data/KartuKategori';
+import { useSsrPrefetch } from '../../../context/ssrPrefetchContext';
 import { daftarIsiEjaan, daftarItemEjaan } from '../../../constants/ejaanData';
 
 function bacaIsiMarkdown(mardownMentah = '') {
@@ -72,8 +73,8 @@ function DaftarIsiPanel({ aktifSlug = '' }) {
 }
 
 function Ejaan() {
-  const navigate = useNavigate();
   const { slug } = useParams();
+  const ssrPrefetch = useSsrPrefetch();
   const [isiMarkdown, setIsiMarkdown] = useState('');
   const [sedangMemuat, setSedangMemuat] = useState(true);
   const [galat, setGalat] = useState('');
@@ -84,6 +85,11 @@ function Ejaan() {
   );
 
   const metadataAktif = semuaDokumen.find((item) => item.slug === slug) || null;
+  const dataMarkdownSsr = useMemo(() => {
+    if (ssrPrefetch?.type !== 'static-markdown' || ssrPrefetch.section !== 'ejaan') return null;
+    if (String(ssrPrefetch.slug || '') !== String(slug || '')) return null;
+    return ssrPrefetch;
+  }, [ssrPrefetch, slug]);
   const dokumenValid = metadataAktif?.dokumen || '';
   const indeksAktif = metadataAktif
     ? semuaDokumen.findIndex((item) => item.slug === metadataAktif.slug)
@@ -94,6 +100,7 @@ function Ejaan() {
     : null;
 
   const modeDaftarIsi = !slug;
+  const halamanTidakDitemukan = Boolean(slug && (!metadataAktif || dataMarkdownSsr?.notFound));
 
   const metaSeo = useMemo(() => {
     if (modeDaftarIsi) {
@@ -101,6 +108,13 @@ function Ejaan() {
         judul: 'Ejaan',
         judulNoda: 'Ejaan',
         deskripsi: 'Panduan kaidah ejaan bahasa Indonesia mencakup penggunaan huruf, penulisan kata, tanda baca, dan unsur serapan.',
+      };
+    }
+
+    if (halamanTidakDitemukan) {
+      return {
+        judul: 'Ejaan Tidak Ditemukan',
+        deskripsi: 'Halaman ejaan yang diminta tidak ditemukan di Kateglo.',
       };
     }
 
@@ -113,19 +127,27 @@ function Ejaan() {
 
     return {
       judul: metadataAktif.judul,
-      deskripsi: `Kaidah ${metadataAktif.judul} pada bab ${metadataAktif.judulBab} dalam pedoman ejaan bahasa Indonesia di Kateglo.`,
+      deskripsi: dataMarkdownSsr?.description || `Kaidah ${metadataAktif.judul} pada bab ${metadataAktif.judulBab} dalam pedoman ejaan bahasa Indonesia di Kateglo.`,
     };
-  }, [modeDaftarIsi, metadataAktif]);
-
-  useEffect(() => {
-    if (slug && !metadataAktif) {
-      navigate('/ejaan', { replace: true });
-    }
-  }, [slug, metadataAktif, navigate]);
+  }, [modeDaftarIsi, metadataAktif, halamanTidakDitemukan, dataMarkdownSsr]);
 
   useEffect(() => {
     if (modeDaftarIsi) {
       setIsiMarkdown('');
+      setSedangMemuat(false);
+      setGalat('');
+      return;
+    }
+
+    if (halamanTidakDitemukan) {
+      setIsiMarkdown('');
+      setSedangMemuat(false);
+      setGalat('Halaman ejaan tidak ditemukan.');
+      return;
+    }
+
+    if (dataMarkdownSsr && !dataMarkdownSsr.notFound) {
+      setIsiMarkdown(bacaIsiMarkdown(dataMarkdownSsr.markdown || ''));
       setSedangMemuat(false);
       setGalat('');
       return;
@@ -165,7 +187,7 @@ function Ejaan() {
 
     muat();
     return () => controller.abort();
-  }, [dokumenValid, modeDaftarIsi]);
+  }, [dokumenValid, modeDaftarIsi, halamanTidakDitemukan, dataMarkdownSsr]);
 
   if (modeDaftarIsi) {
     return (
@@ -195,6 +217,14 @@ function Ejaan() {
             gipsterya/eyd
           </a>
         </p>
+      </HalamanPublik>
+    );
+  }
+
+  if (halamanTidakDitemukan) {
+    return (
+      <HalamanPublik judul={metaSeo.judul} deskripsi={metaSeo.deskripsi}>
+        <p className="secondary-text">Halaman ejaan tidak ditemukan.</p>
       </HalamanPublik>
     );
   }
