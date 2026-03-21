@@ -50,8 +50,8 @@ function HalamanDasar({ mode = 'publik', navbar, konten, adalahRedaksi = false }
     setSedangMemuat(true);
     try {
       const [resChangelog, resTodo] = await Promise.all([
-        fetch('/changelog.md'),
-        fetch('/todo.md'),
+        fetch('/docs/changelog.md'),
+        fetch('/docs/todo.md'),
       ]);
 
       const [isiChangelog, isiTodo] = await Promise.all([
