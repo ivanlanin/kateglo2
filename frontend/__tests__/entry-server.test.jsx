@@ -289,7 +289,7 @@ describe('entry-server', () => {
     expect(hasilGramatika.headTags).toContain('Ringkasan preposisi.');
     expect(hasilEjaan.headTags).toContain('https://kateglo.org/og/ejaan/huruf-kapital.png?title=Huruf+Kapital&amp;context=Ringkasan+huruf+kapital.');
     expect(hasilGramatika.headTags).toContain('https://kateglo.org/og/gramatika/preposisi.png?title=Preposisi&amp;context=Ringkasan+preposisi.');
-    expect(hasilGramatika.headTags).toContain('Preposisi | Kata Tugas | Kateglo');
+    expect(hasilGramatika.headTags).toContain('Preposisi — Kata Tugas — Kateglo');
   });
 
   it('render mengembalikan status 404 untuk markdown statis yang tidak ditemukan', async () => {
@@ -317,9 +317,10 @@ describe('entry-server', () => {
   });
 
   it('helper sosial membangun judul dan path gambar yang lebih kaya untuk ejaan dan gramatika', () => {
-    expect(__private.buildSocialTitle('/gramatika/preposisi', 'Preposisi — Kateglo')).toBe('Preposisi | Kata Tugas | Kateglo');
-    expect(__private.buildSocialTitle('/ejaan/huruf-kapital', 'Huruf Kapital — Kateglo')).toBe('Huruf Kapital | Penggunaan Huruf | Kateglo');
-    expect(__private.buildSocialTitle('/kamus/detail/sara', 'sara — Kateglo')).toBe('sara | Kateglo');
+    expect(__private.buildSocialTitle('/gramatika/preposisi', 'Preposisi — Kateglo')).toBe('Preposisi — Kata Tugas — Kateglo');
+    expect(__private.buildSocialTitle('/ejaan/huruf-kapital', 'Huruf Kapital — Kateglo')).toBe('Huruf Kapital — Penggunaan Huruf — Kateglo');
+    expect(__private.buildSocialTitle('/kamus/detail/sara', 'sara — Kateglo')).toBe('sara — Kateglo');
+    expect(__private.buildSocialTitle('/gramatika/verba', 'Verba — Kateglo')).toBe('Verba — Kateglo');
     expect(__private.stripKategloSuffix('Preposisi — Kateglo')).toBe('Preposisi');
     expect(__private.buildOgQueryString({ title: 'Huruf Kapital', context: 'Penggunaan Huruf' })).toBe('?title=Huruf+Kapital&context=Penggunaan+Huruf');
     expect(__private.buildGenericSocialContext('/kamus/detail/sara')).toEqual({ section: 'kamus', context: 'Entri Kamus Bahasa Indonesia' });

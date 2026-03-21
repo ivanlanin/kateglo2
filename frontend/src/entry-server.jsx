@@ -176,8 +176,25 @@ function buildSocialTitle(pathname = '/', fallbackTitle = '') {
   const path = decodeURIComponent(pathname || '/');
   const fallback = stripKategloSuffix(fallbackTitle) || 'Kateglo';
 
+  const gabungSocialTitle = (...segments) => {
+    const uniqueSegments = [];
+    const seen = new Set();
+
+    segments.forEach((segment) => {
+      const normalized = String(segment || '').trim();
+      if (!normalized) return;
+
+      const key = normalized.toLowerCase();
+      if (seen.has(key)) return;
+      seen.add(key);
+      uniqueSegments.push(normalized);
+    });
+
+    return uniqueSegments.join(' — ');
+  };
+
   if (path === '/ejaan' || path === '/ejaan/') {
-    return 'Panduan Ejaan Bahasa Indonesia | Kateglo';
+    return gabungSocialTitle('Panduan Ejaan Bahasa Indonesia', 'Kateglo');
   }
 
   if (path.startsWith('/ejaan/')) {
@@ -186,11 +203,11 @@ function buildSocialTitle(pathname = '/', fallbackTitle = '') {
       judul: formatJudulEjaanDariSlug(slug) || 'Ejaan',
       judulBab: 'Ejaan',
     };
-    return `${metadata.judul} | ${metadata.judulBab} | Kateglo`;
+    return gabungSocialTitle(metadata.judul, metadata.judulBab, 'Kateglo');
   }
 
   if (path === '/gramatika' || path === '/gramatika/') {
-    return 'Panduan Tata Bahasa Indonesia | Kateglo';
+    return gabungSocialTitle('Panduan Tata Bahasa Indonesia', 'Kateglo');
   }
 
   if (path.startsWith('/gramatika/')) {
@@ -200,10 +217,10 @@ function buildSocialTitle(pathname = '/', fallbackTitle = '') {
       judulBab: 'Gramatika',
     };
     const konteks = metadata.parentJudul || metadata.judulBab || 'Gramatika';
-    return `${metadata.judul} | ${konteks} | Kateglo`;
+    return gabungSocialTitle(metadata.judul, konteks, 'Kateglo');
   }
 
-  return `${fallback} | Kateglo`;
+  return gabungSocialTitle(fallback, 'Kateglo');
 }
 
 function stripKategloSuffix(value = '') {
