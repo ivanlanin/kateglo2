@@ -83,13 +83,24 @@ frontend/public/gramatika/
 │   ├── verba-reduplikasi.md
 │   ├── verba-majemuk.md
 │   └── frasa-verbal.md
-└── kata-tugas/
-    ├── batasan-dan-ciri-kata-tugas.md
-    ├── preposisi.md
-    ├── konjungsi.md
-    ├── interjeksi.md
-    ├── artikula.md
-    └── partikel-penegas.md
+├── kata-tugas/
+│   ├── batasan-dan-ciri-kata-tugas.md
+│   ├── preposisi.md
+│   ├── konjungsi.md
+│   ├── interjeksi.md
+│   ├── artikula.md
+│   └── partikel-penegas.md
+├── kalimat/
+│   ├── batasan-dan-ciri-kalimat.md
+│   ├── unsur-kalimat.md
+│   ├── kategori-fungsi-dan-peran.md
+│   ├── kalimat-dasar.md
+│   ├── jenis-kalimat.md
+│   └── pengingkaran.md
+└── hubungan-antarklausa/
+    ├── hubungan-koordinatif.md
+    ├── hubungan-subordinatif.md
+    └── pelesapan.md
 
 frontend/src/constants/gramatikData.js   ← daftar isi semua bab + item
 ```
@@ -168,7 +179,7 @@ Semua nomor adalah **nomor halaman PDF** (1-indeks).
 | VII | Nomina, Pronomina, Numeralia | 282 | 395 | 114 | — | ✓ |
 | VIII | Kata Tugas | 396 | 429 | 34 | — | ✓ |
 | IX  | Kalimat | 430 | 534 | 105 | ✓ | ✓ |
-| X   | Hubungan Antarklausa | 535 | 574 | 40 | — | — |
+| X   | Hubungan Antarklausa | 535 | 574 | 40 | — | ✓ |
 
 ### Bagian Lainnya
 
@@ -197,16 +208,17 @@ Ekstraksi teks PDF dengan `pdfplumber` menghasilkan banyak artefak OCR (karakter
 ```
 _data/gramatika/
 ├── Tata Bahasa Baku Bahasa Indonesia TBBBI IV (2017).pdf
-├── bab-ix-jpg/          ← sudah ada (Bab IX, 106 file)
-│   ├── bab-ix-h430.jpg
+├── bab-09/          ← sudah ada (Bab IX, 105 file)
+│   ├── bab-09-h430.jpg
 │   └── ...
-└── bab-x-jpg/           ← belum dibuat
+└── bab-10/          ← sudah ada (Bab X, digunakan untuk verifikasi OCR)
+    ├── bab-10-h535.jpg
     └── ...
 ```
 
-Konvensi nama: `bab-{angka-romawi-kecil}-h{NNN}.jpg` di mana `NNN` = nomor PDF 1-indeks (tiga digit).
+Konvensi nama: `bab-{NN}-h{NNN}.jpg` di mana `NN` = nomor bab dua digit, `NNN` = nomor PDF 1-indeks (tiga digit).
 
-Contoh: `bab-ix-h475.jpg` = halaman PDF ke-475 = halaman buku 452.
+Contoh: `bab-09-h475.jpg` = halaman PDF ke-475 = halaman buku 452.
 
 ### Script Konversi JPG
 
@@ -243,18 +255,16 @@ print("Selesai.")
 
 | Bab | Subfolder | Rentang file | Status |
 |-----|-----------|-------------|--------|
-| IX  | `bab-ix-jpg/` | h453–h557 | ✓ selesai |
-| I   | `bab-i-jpg/` | h048–h069 | — |
-| II  | `bab-ii-jpg/` | h070–h091 | — |
-| III | `bab-iii-jpg/` | h092–h141 | — |
-| IV  | `bab-iv-jpg/` | h142–h239 | — |
-| V   | `bab-v-jpg/` | h240–h280 | — |
-| VI  | `bab-vi-jpg/` | h281–h304 | — |
-| VII | `bab-vii-jpg/` | h305–h418 | — |
-| VIII | `bab-viii-jpg/` | h419–h452 | — |
-| X   | `bab-x-jpg/` | h558–h597 | — |
-
-**Prioritas berikutnya:** Bab X (Hubungan Antarklausa, 40 hal) — bab yang belum ada markdownnya dan paling pendek.
+| IX  | `bab-09/` | h430–h534 | ✓ selesai |
+| X   | `bab-10/` | h535–h574 | ✓ selesai |
+| I   | `bab-01/` | h025–h046 | — |
+| II  | `bab-02/` | h047–h068 | — |
+| III | `bab-03/` | h069–h118 | — |
+| IV  | `bab-04/` | h119–h216 | — |
+| V   | `bab-05/` | h217–h257 | — |
+| VI  | `bab-06/` | h258–h281 | — |
+| VII | `bab-07/` | h282–h395 | — |
+| VIII | `bab-08/` | h396–h429 | — |
 
 ---
 
@@ -310,15 +320,17 @@ Urutan mempertimbangkan: panjang bab, kualitas OCR yang dapat diharapkan, kepada
 
 ---
 
-### ☐ 5. Bab X — Hubungan Antarklausa (40 hal PDF)
+### ✓ 5. Bab X — Hubungan Antarklausa (40 hal PDF) — **SELESAI**
 
 - Panjang sedang.
 - Dua bagian besar: koordinatif dan subordinatif — struktur hirarkis yang rapi.
 - Tabel jenis hubungan semantis dapat direkonstruksi dengan baik.
 - Relevan untuk memahami konjungsi (hubungan dengan Bab VIII).
-- OCR diperkirakan cukup bersih (banyak contoh kalimat pendek).
+- Diekstrak dari PDF dengan PyMuPDF (`fitz`), dikonfirmasi dengan JPG per halaman dari `_data/gramatika/bab-10/`.
+- Banyak artefak OCR sistematis pada halaman 565–574: `cl→d`, `c→t`, `e→t`, `b→6` — semua diperbaiki.
+- Simbol pelesapan `△` (segitiga) digunakan mengganti artefak OCR `6.`.
 
-**Subbab yang disarankan:** Hubungan Koordinatif · Hubungan Subordinatif · Hubungan Semantis Antarklausa · Pelesapan
+**Subbab:** Hubungan Koordinatif (10.1) · Hubungan Subordinatif (10.2) · Pelesapan (10.3)
 
 ---
 

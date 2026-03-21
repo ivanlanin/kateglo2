@@ -4,6 +4,23 @@
 
 const daftarIsiGramatika = [
   {
+    judul: 'Pendahuluan',
+    slug: 'pendahuluan',
+    items: [
+      { judul: 'Kedudukan Bahasa Indonesia', slug: 'kedudukan-bahasa-indonesia' },
+      { judul: 'Ragam Bahasa', slug: 'ragam-bahasa' },
+      { judul: 'Diglosia', slug: 'diglosia' },
+      { judul: 'Pembakuan Bahasa', slug: 'pembakuan-bahasa' },
+      { judul: 'Bahasa Baku', slug: 'bahasa-baku' },
+      { judul: 'Fungsi Bahasa Baku', slug: 'fungsi-bahasa-baku' },
+      { judul: 'Bahasa yang Baik dan Benar', slug: 'bahasa-yang-baik-dan-benar' },
+      {
+        judul: 'Hubungan Bahasa Indonesia dengan Bahasa Daerah dan Bahasa Asing',
+        slug: 'hubungan-bahasa-indonesia-dengan-bahasa-daerah-dan-bahasa-asing',
+      },
+    ],
+  },
+  {
     judul: 'Nomina',
     slug: 'nomina',
     items: [
