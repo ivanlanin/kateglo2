@@ -8,7 +8,20 @@ const daftarIsiGramatika = [
     slug: 'pendahuluan',
     items: [
       { judul: 'Kedudukan Bahasa Indonesia', slug: 'kedudukan-bahasa-indonesia' },
-      { judul: 'Ragam Bahasa', slug: 'ragam-bahasa' },
+      {
+        judul: 'Ragam Bahasa',
+        slug: 'ragam-bahasa',
+        turunan: [
+          {
+            judul: 'Ragam Menurut Golongan Penutur',
+            slug: 'ragam-menurut-golongan-penutur',
+          },
+          {
+            judul: 'Ragam Menurut Jenis Pemakaian',
+            slug: 'ragam-menurut-jenis-pemakaian',
+          },
+        ],
+      },
       { judul: 'Diglosia', slug: 'diglosia' },
       { judul: 'Pembakuan Bahasa', slug: 'pembakuan-bahasa' },
       { judul: 'Bahasa Baku', slug: 'bahasa-baku' },
@@ -135,7 +148,15 @@ const daftarIsiGramatika = [
     items: [
       { judul: 'Batasan dan Ciri Kalimat', slug: 'batasan-dan-ciri-kalimat' },
       { judul: 'Unsur Kalimat', slug: 'unsur-kalimat' },
-      { judul: 'Kategori, Fungsi, dan Peran', slug: 'kategori-fungsi-dan-peran' },
+      {
+        judul: 'Kategori, Fungsi, dan Peran',
+        slug: 'kategori-fungsi-dan-peran',
+        turunan: [
+          { judul: 'Kategori', slug: 'kategori' },
+          { judul: 'Fungsi Sintaktis', slug: 'fungsi-sintaktis' },
+          { judul: 'Peran', slug: 'peran' },
+        ],
+      },
       { judul: 'Kalimat Dasar', slug: 'kalimat-dasar' },
       { judul: 'Jenis Kalimat', slug: 'jenis-kalimat' },
       { judul: 'Pengingkaran', slug: 'pengingkaran' },
@@ -161,14 +182,26 @@ const daftarItemGramatika = daftarIsiGramatika.flatMap((bab) => [
     dokumen: `${bab.slug}/${bab.slug}.md`,
     tipe: 'bab',
   },
-  ...bab.items.map((item) => ({
-    judulBab: bab.judul,
-    babSlug: bab.slug,
-    judul: item.judul,
-    slug: item.slug,
-    dokumen: `${bab.slug}/${item.slug}.md`,
-    tipe: 'item',
-  })),
+  ...bab.items.flatMap((item) => [
+    {
+      judulBab: bab.judul,
+      babSlug: bab.slug,
+      judul: item.judul,
+      slug: item.slug,
+      dokumen: `${bab.slug}/${item.slug}.md`,
+      tipe: 'item',
+    },
+    ...((item.turunan || []).map((turunan) => ({
+      judulBab: bab.judul,
+      babSlug: bab.slug,
+      judul: turunan.judul,
+      slug: turunan.slug,
+      dokumen: `${bab.slug}/${turunan.slug}.md`,
+      tipe: 'subitem',
+      parentSlug: item.slug,
+      parentJudul: item.judul,
+    }))),
+  ]),
 ]);
 
 const petaItemGramatikaBySlug = daftarItemGramatika.reduce((acc, item) => {

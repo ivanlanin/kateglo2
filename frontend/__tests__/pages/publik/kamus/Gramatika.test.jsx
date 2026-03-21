@@ -33,6 +33,16 @@ vi.mock('../../../../src/constants/gramatikData', () => {
       dokumen: 'kata-tugas/preposisi.md',
       tipe: 'item',
     },
+    {
+      judul: 'Preposisi Dasar',
+      judulBab: 'Kata Tugas',
+      babSlug: 'kata-tugas',
+      slug: 'preposisi-dasar',
+      dokumen: 'kata-tugas/preposisi-dasar.md',
+      tipe: 'subitem',
+      parentSlug: 'preposisi',
+      parentJudul: 'Preposisi',
+    },
   ];
 
   return {
@@ -85,5 +95,28 @@ describe('Gramatika', () => {
     });
 
     expect(global.fetch).not.toHaveBeenCalled();
+  });
+
+  it('subhalaman mengikuti urutan prev next dan menyorot item induk di sidebar', async () => {
+    renderHalaman('/gramatika/preposisi-dasar', {
+      type: 'static-markdown',
+      section: 'gramatika',
+      slug: 'preposisi-dasar',
+      markdown: 'Preposisi dasar adalah bentuk paling sederhana.',
+      description: 'Preposisi dasar adalah bentuk paling sederhana.',
+      notFound: false,
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Preposisi Dasar')).toBeInTheDocument();
+    });
+
+    const prevLink = screen.getByRole('link', { name: '‹ Preposisi' });
+    const parentLink = screen.getByRole('link', { name: 'Preposisi' });
+
+    expect(prevLink).toHaveAttribute('href', '/gramatika/preposisi');
+    expect(parentLink).toHaveAttribute('href', '/gramatika/preposisi');
+    expect(parentLink).toHaveAttribute('aria-current', 'page');
+    expect(screen.queryByRole('link', { name: 'Preposisi Dasar' })).not.toBeInTheDocument();
   });
 });

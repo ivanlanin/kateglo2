@@ -36,11 +36,13 @@ function DaftarIsiGramatikaGrid() {
   );
 }
 
-function DaftarIsiPanel({ aktifSlug = '' }) {
+function DaftarIsiPanel({ aktifSlug = '', aktifSlugSebagaiTautan = '' }) {
   return (
     <div className="space-y-4">
       {daftarIsiGramatika.map((bab) => {
-        const kategoriAktif = bab.slug === aktifSlug || bab.items.some((item) => item.slug === aktifSlug);
+        const kategoriAktif = bab.slug === aktifSlug
+          || bab.slug === aktifSlugSebagaiTautan
+          || bab.items.some((item) => item.slug === aktifSlug || item.slug === aktifSlugSebagaiTautan);
         return (
           <PanelLipat
             key={`${bab.slug}-${aktifSlug}`}
@@ -69,6 +71,14 @@ function DaftarIsiPanel({ aktifSlug = '' }) {
                     <span className="ejaan-sidebar-pill ejaan-sidebar-pill-active" aria-current="page">
                       {item.judul}
                     </span>
+                  ) : aktifSlugSebagaiTautan === item.slug ? (
+                    <Link
+                      to={`/gramatika/${item.slug}`}
+                      className="ejaan-sidebar-pill ejaan-sidebar-pill-active"
+                      aria-current="page"
+                    >
+                      {item.judul}
+                    </Link>
                   ) : (
                     <Link
                       to={`/gramatika/${item.slug}`}
@@ -113,6 +123,8 @@ function Gramatika() {
   const dokumenSesudah = indeksAktif >= 0 && indeksAktif < semuaDokumen.length - 1
     ? semuaDokumen[indeksAktif + 1]
     : null;
+  const aktifSlugSidebar = metadataAktif?.tipe === 'subitem' ? '' : (metadataAktif?.slug || '');
+  const aktifSlugSidebarSebagaiTautan = metadataAktif?.tipe === 'subitem' ? (metadataAktif.parentSlug || '') : '';
 
   const modeDaftarIsi = !slug;
   const halamanTidakDitemukan = Boolean(slug && (!metadataAktif || dataMarkdownSsr?.notFound));
@@ -292,7 +304,10 @@ function Gramatika() {
         </article>
 
         <div>
-          <DaftarIsiPanel aktifSlug={metadataAktif?.slug || ''} />
+          <DaftarIsiPanel
+            aktifSlug={aktifSlugSidebar}
+            aktifSlugSebagaiTautan={aktifSlugSidebarSebagaiTautan}
+          />
         </div>
       </div>
     </HalamanPublik>
