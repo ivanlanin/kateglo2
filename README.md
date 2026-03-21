@@ -11,6 +11,11 @@ Monorepo dengan 2 aplikasi utama:
 
 Pada mode production, backend juga melayani runtime frontend SSR dan aset hasil build.
 
+Dokumentasi teknis terkait SSR/SEO:
+
+- `_docs/202603/202603221100_dokumentasi-ssr-seo-aktual.md` — referensi implementasi SSR/SEO yang aktif saat ini.
+- `_docs/202603/202603212130_penerapan-og-image-dinamis.md` — detail khusus Open Graph image dinamis.
+
 ## Tech Stack
 
 ### Backend
