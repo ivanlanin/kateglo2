@@ -18,11 +18,12 @@ jest.mock('../../../services/sistem/layananCache', () => ({
   getJson: jest.fn(),
   setJson: jest.fn(),
   getTtlSeconds: jest.fn(() => 300),
+  delKey: jest.fn(),
 }));
 
 const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
 const ModelEntri = require('../../../models/leksikon/modelEntri');
-const { getJson, setJson, getTtlSeconds } = require('../../../services/sistem/layananCache');
+const { getJson, setJson, getTtlSeconds, delKey } = require('../../../services/sistem/layananCache');
 const {
   cariGlosariumPublik,
   ambilDaftarBidangPublik,
@@ -31,6 +32,7 @@ const {
   ambilGlosariumPerSumberPublik,
   ambilDetailGlosarium,
   invalidasiCacheDetailGlosarium,
+  invalidasiCacheMasterGlosarium,
   buatCacheKeyDetailGlosarium,
   buatCacheKeyBrowseGlosarium,
   __private,
@@ -444,6 +446,17 @@ describe('layananGlosariumPublik', () => {
     expect(setJson).toHaveBeenNthCalledWith(1, 'glosarium:browse:version', 123456, 3600);
     expect(setJson).toHaveBeenNthCalledWith(2, 'glosarium:detail:version:zero%20sum', 123456, 3600);
     nowSpy.mockRestore();
+  });
+
+  it('invalidasiCacheMasterGlosarium menghapus semua cache master terkait', async () => {
+    delKey.mockResolvedValue(undefined);
+
+    await invalidasiCacheMasterGlosarium();
+
+    expect(delKey).toHaveBeenCalledTimes(3);
+    expect(delKey).toHaveBeenNthCalledWith(1, 'glosarium:master:bidang:m-glosarium');
+    expect(delKey).toHaveBeenNthCalledWith(2, 'glosarium:master:sumber:m-konteks');
+    expect(delKey).toHaveBeenNthCalledWith(3, 'glosarium:master:sumber:m-glosarium');
   });
 });
 

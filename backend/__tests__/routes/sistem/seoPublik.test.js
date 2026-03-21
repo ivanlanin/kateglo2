@@ -95,4 +95,19 @@ describe('routes/sistem/seoPublik', () => {
     expect(response.status).toBe(500);
     expect(response.body).toEqual({ error: 'gagal render og' });
   });
+
+  it('GET /og/kamus.png mengirim og image tanpa slug', async () => {
+    layananSeoPublik.renderOgImagePng.mockReturnValue(Buffer.from('png-section'));
+
+    const response = await request(createApp()).get('/og/kamus.png?title=Kamus');
+
+    expect(response.status).toBe(200);
+    expect(layananSeoPublik.renderOgImagePng).toHaveBeenCalledWith({
+      section: 'kamus',
+      slug: '',
+      title: 'Kamus',
+      context: undefined,
+    });
+    expect(response.headers['content-type']).toContain('image/png');
+  });
 });

@@ -313,6 +313,96 @@ describe('layananSeoPublik private helpers', () => {
     expect(__private.renderSvgTextLines(['Baris Satu', 'Baris Dua'], { x: 10, y: 20, lineHeight: 30 })).toContain('<tspan x="10" y="20">Baris Satu</tspan>');
     expect(__private.ogImageDimensions).toEqual({ width: 1200, height: 630 });
   });
+
+  it('helper og image menutup branch array, slug kosong, dan potong tanpa spasi', () => {
+    expect(__private.pickQueryValue()).toBe('');
+    expect(__private.pickQueryValue([])).toBe('');
+    expect(__private.pickQueryValue(['judul array'])).toBe('judul array');
+    expect(__private.truncatePlainText()).toBe('');
+    expect(__private.truncatePlainText('abcdefghij', 5)).toBe('abcde…');
+    expect(__private.formatTitleFromSlug()).toBe('');
+    expect(__private.normalizeOgSection()).toBe('default');
+    expect(buildOgImagePayload()).toMatchObject({
+      section: 'default',
+      sectionLabel: 'Bahasa Indonesia',
+    });
+    expect(buildOgImagePayload({ section: 'ejaan' })).toMatchObject({
+      title: 'Panduan Ejaan Bahasa Indonesia',
+      context: 'Pedoman Bahasa Indonesia',
+    });
+    expect(buildOgImagePayload({ section: 'ejaan', slug: 'huruf-kapital' })).toMatchObject({
+      section: 'ejaan',
+      title: 'Huruf Kapital',
+      context: 'Kaidah Bahasa Indonesia',
+    });
+  });
+
+  it('helper og image menutup branch teks kosong, pemotongan, dan fallback palette', () => {
+    expect(__private.splitOgTextIntoLines()).toEqual(['Kateglo']);
+    expect(__private.splitOgTextIntoLines(null, 10, 2)).toEqual(['Kateglo']);
+    expect(__private.splitOgTextIntoLines('', 10, 2)).toEqual(['Kateglo']);
+    expect(__private.splitOgTextIntoLines('supercalifragilistic kata lain lagi', 10, 2)).toEqual(['supercalifragilistic', 'kata lain']);
+    expect(__private.splitOgTextIntoLines('satu dua tiga empat lima', 8, 2)).toEqual(['satu dua', 'tiga']);
+    expect(__private.splitOgTextIntoLines('satu dua tiga empat lima enam tujuh', 8, 1)).toEqual(['satu dua']);
+    expect(__private.splitOgTextIntoLines('aa bb cc', 2, 1)).toEqual(['aa']);
+    expect(__private.splitOgTextIntoLines('aaaa bbbbbbbbbbbbbbbb cccccccccccccccc', 8, 2)[1]).toMatch(/…$/);
+
+    const svg = buildOgImageSvg({
+      section: 'tidak-ada',
+      title: '',
+      context: 'Ringkas',
+      eyebrow: 'Kateglo',
+      sectionLabel: 'Bahasa Indonesia',
+      footer: 'Footer',
+      cta: 'CTA',
+    });
+
+    expect(svg).toContain('linearGradient');
+    expect(svg).toContain('Bahasa Indonesia');
+    expect(buildOgImageSvg()).toContain('<svg');
+    expect(buildOgImageSvg(buildOgImagePayload({ title: 'satu dua tiga empat lima enam tujuh delapan sembilan sepuluh sebelas' }))).toContain('font-size="68"');
+    expect(__private.renderSvgTextLines()).toBe('');
+    expect(Buffer.isBuffer(renderOgImagePng())).toBe(true);
+  });
+
+  it('buildOgImagePayload menutup semua fallback section OG', () => {
+    expect(buildOgImagePayload({ section: 'tesaurus' })).toMatchObject({
+      section: 'tesaurus',
+      sectionLabel: 'Tesaurus',
+      context: 'Sinonim, antonim, dan relasi kata',
+    });
+    expect(buildOgImagePayload({ section: 'glosarium' })).toMatchObject({
+      section: 'glosarium',
+      sectionLabel: 'Glosarium',
+      context: 'Istilah dan padanan bidang ilmu',
+    });
+    expect(buildOgImagePayload({ section: 'makna' })).toMatchObject({
+      section: 'makna',
+      sectionLabel: 'Makna',
+      context: 'Cari kata berdasarkan makna',
+    });
+    expect(buildOgImagePayload({ section: 'rima' })).toMatchObject({
+      section: 'rima',
+      sectionLabel: 'Rima',
+      context: 'Cari kata berdasarkan rima',
+    });
+    expect(buildOgImagePayload({ section: 'alat' })).toMatchObject({
+      section: 'alat',
+      sectionLabel: 'Alat',
+      context: 'Penganalisis teks dan penghitung huruf',
+    });
+    expect(buildOgImagePayload({ section: 'gim' })).toMatchObject({
+      section: 'gim',
+      sectionLabel: 'Gim',
+      context: 'Kuis kata dan susun kata',
+    });
+    expect(buildOgImagePayload({ section: 'gramatika' })).toMatchObject({
+      section: 'gramatika',
+      sectionLabel: 'Gramatika',
+      title: 'Panduan Tata Bahasa Indonesia',
+      context: 'Panduan Bahasa Indonesia',
+    });
+  });
 });
 
 describe('layananSeoPublik dynamic og image', () => {

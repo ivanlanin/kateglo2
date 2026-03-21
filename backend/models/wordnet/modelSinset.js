@@ -534,3 +534,7 @@ class ModelSinset {
 }
 
 module.exports = ModelSinset;
+module.exports.__private = {
+  parseNullableInteger,
+  buildSinsetWhereClause,
+};

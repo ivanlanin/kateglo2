@@ -305,7 +305,8 @@ function buildOgImagePayload({ section = 'default', slug = '', title = '', conte
 }
 
 function splitOgTextIntoLines(text = '', maxChars = 26, maxLines = 3) {
-  const words = String(text || '').split(/\s+/).filter(Boolean);
+  const normalizedText = String(text ?? '');
+  const words = normalizedText.split(/\s+/).filter(Boolean);
   const lines = [];
   let current = '';
 
@@ -327,7 +328,7 @@ function splitOgTextIntoLines(text = '', maxChars = 26, maxLines = 3) {
   if (!lines.length) return ['Kateglo'];
 
   const joined = lines.join(' ');
-  if (joined.length < String(text || '').trim().length) {
+  if (joined.length < normalizedText.trim().length) {
     lines[lines.length - 1] = truncatePlainText(lines[lines.length - 1], Math.max(12, maxChars - 2));
   }
 

@@ -506,6 +506,56 @@ describe('ModelGlosarium', () => {
     expect(result).toEqual(rows);
   });
 
+  it('ambilPersisAsing mengembalikan kosong untuk input kosong', async () => {
+    await expect(ModelGlosarium.ambilPersisAsing('   ')).resolves.toEqual([]);
+    expect(db.query).not.toHaveBeenCalled();
+  });
+
+  it('ambilPersisAsing juga mengembalikan kosong saat asing undefined', async () => {
+    await expect(ModelGlosarium.ambilPersisAsing()).resolves.toEqual([]);
+    expect(db.query).not.toHaveBeenCalled();
+  });
+
+  it('ambilPersisAsing memakai query legacy saat schema belum ternormalisasi', async () => {
+    forceNormalizedSchemaForTest(false);
+    db.query.mockResolvedValueOnce({ rows: [{ id: 1, asing: 'term', indonesia: 'istilah' }] });
+
+    const result = await ModelGlosarium.ambilPersisAsing(' term ');
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('COALESCE(g.bidang, \'\') AS bidang'),
+      ['term']
+    );
+    expect(result).toEqual([{ id: 1, asing: 'term', indonesia: 'istilah' }]);
+  });
+
+  it('ambilPersisAsing memakai query normalized saat schema ternormalisasi', async () => {
+    forceNormalizedSchemaForTest(true);
+    db.query.mockResolvedValueOnce({ rows: [{ id: 2, bahasa_kode: 'en', bidang_kode: 'ling', sumber_kode: 'kbbi' }] });
+
+    const result = await ModelGlosarium.ambilPersisAsing('term');
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('JOIN bidang b ON b.id = g.bidang_id'),
+      ['term']
+    );
+    expect(result).toEqual([{ id: 2, bahasa_kode: 'en', bidang_kode: 'ling', sumber_kode: 'kbbi' }]);
+  });
+
+  it('ambilDetailAsing mengembalikan halaman kosong saat istilah kosong', async () => {
+    const result = await ModelGlosarium.ambilDetailAsing('   ');
+
+    expect(result).toEqual({
+      persis: [],
+      mengandung: [],
+      mengandungPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+      mengandungTotal: 0,
+      mirip: [],
+      miripPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
+      miripTotal: 0,
+    });
+  });
+
   it('cariFrasaMengandungKataUtuh mengembalikan kosong jika kata kosong', async () => {
     const result = await ModelGlosarium.cariFrasaMengandungKataUtuh('   ', 20);
 

@@ -214,6 +214,71 @@ describe('services/sistem/layananSsrRuntime', () => {
     expect(runtime.__private.buildMarkdownSlugMap('')).toBeInstanceOf(Map);
   });
 
+  it('helper markdown menutup branch tanpa frontmatter dan truncate tanpa spasi', () => {
+    expect(runtime.__private.parseMarkdownFrontmatter()).toEqual({ frontmatter: {}, body: '' });
+    expect(runtime.__private.parseMarkdownFrontmatter('Isi polos')).toEqual({
+      frontmatter: {},
+      body: 'Isi polos',
+    });
+    expect(runtime.__private.truncateText()).toBe('');
+    expect(runtime.__private.truncateText('abc', 5)).toBe('abc');
+    expect(runtime.__private.truncateText('abc def ghij', 8)).toBe('abc def …');
+    expect(runtime.__private.truncateText('abcdefghijk', 5)).toBe('abcde …');
+  });
+
+  it('helper markdown menutup branch invalid line, list pendek, dan summary kosong', () => {
+    expect(runtime.__private.parseMarkdownFrontmatter('---\ninvalid\n:key\n : Kosong\njudul: Halo\n---\nIsi')).toEqual({
+      frontmatter: { judul: 'Halo' },
+      body: 'Isi',
+    });
+    expect(runtime.__private.bersihkanTeksMarkdown()).toBe('');
+    expect(runtime.__private.rapikanItemRingkasanDaftarIsi()).toBe('');
+    expect(runtime.__private.extractMarkdownListSummary('Satu baris saja')).toBe('');
+    expect(runtime.__private.extractMarkdownListSummary()).toBe('');
+    expect(runtime.__private.extractMarkdownListSummary('Paragraf biasa\n\nBaris dua')).toBe('');
+    expect(runtime.__private.extractMarkdownSummary('### Judul')).toBe('### Judul');
+    expect(runtime.__private.extractMarkdownSummary('123 test')).toBe('123 test');
+    expect(runtime.__private.extractMarkdownSummary('1. Nomor saja', 20)).toBe('Nomor saja');
+    expect(runtime.__private.extractMarkdownSummary('123abc')).toBe('123abc');
+    expect(runtime.__private.extractMarkdownSummary(undefined)).toBe('');
+    expect(runtime.__private.extractMarkdownSummary('')).toBe('');
+  });
+
+  it('helper markdown menutup branch slug duplikat dan section/slug invalid', () => {
+    const existsSpy = jest.spyOn(fs, 'existsSync').mockReturnValue(true);
+    const readdirSpy = jest.spyOn(fs, 'readdirSync').mockReturnValue([
+      'bab-01/pendahuluan.md',
+      'bab-02/pendahuluan.md',
+    ]);
+
+    const slugMap = runtime.__private.buildMarkdownSlugMap('C:/dummy');
+    expect(slugMap.size).toBe(1);
+    expect(runtime.__private.readStaticMarkdownDocument()).toBeNull();
+    expect(runtime.__private.readStaticMarkdownDocument('', 'slug')).toBeNull();
+    expect(runtime.__private.readStaticMarkdownDocument('ejaan', '')).toBeNull();
+    readdirSpy.mockRestore();
+    existsSpy.mockRestore();
+
+    expect(runtime.__private.listMarkdownDocumentPaths()).toEqual([]);
+    expect(runtime.__private.buildMarkdownSlugMap()).toBeInstanceOf(Map);
+  });
+
+  it('listMarkdownDocumentPaths memfilter README, basename kosong, dan folder tersembunyi', () => {
+    const existsSpy = jest.spyOn(fs, 'existsSync').mockReturnValue(true);
+    const readdirSpy = jest.spyOn(fs, 'readdirSync').mockReturnValue([
+      'README.md',
+      '.md',
+      '_arsip/tersembunyi.md',
+      'bab-01/pendahuluan.md',
+    ]);
+
+    const result = runtime.__private.listMarkdownDocumentPaths('C:/dummy');
+
+    expect(result).toEqual(['bab-01/pendahuluan.md']);
+    readdirSpy.mockRestore();
+    existsSpy.mockRestore();
+  });
+
   it('validateRendererModule mengembalikan render atau melempar error', async () => {
     const fn = jest.fn();
     expect(runtime.__private.validateRendererModule({ render: fn })).toBe(fn);
