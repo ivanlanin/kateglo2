@@ -53,13 +53,13 @@ Dari pola umum (166) itu dapat diturunkan enam tipe kalimat dasar:
 
 ### Konstituen Kalimat Dasar (9.4.1.2)
 
-Kehadiran objek, pelengkap, atau keterangan wajib sangat ditentukan oleh bentuk dan jenis verba predikat. Verba *menjadi* pada *Dia menjadi ketua koperasi* menghasilkan kalimat tipe S-P-Pel, sedangkan verba *tinggal* pada *Kami tinggal di Jakarta* menghasilkan kalimat tipe S-P-Ket — meskipun kedua verba itu sama-sama taktransitif.
+Kehadiran objek, pelengkap, atau keterangan wajib sangat ditentukan oleh bentuk dan jenis verba predikat. Verba *menjadi* pada *Dia menjadi ketua koperasi* menghasilkan kalimat tipe S-P-Pel, sedangkan verba *tinggal* pada *Kami tinggal di Jakarta* menghasilkan kalimat tipe S-P-Ket—meskipun kedua verba itu sama-sama taktransitif.
 
 (167) Ayah membeli baju baru.
-— S P O
+—S P O
 
 (168) Ayah membelikan adik saya baju baru.
-— S P O Pel
+—S P O Pel
 
 Verba *membeli* menuntut kehadiran dua konstituen kalimat: *ayah* (yang membeli) dan *baju baru* (yang dibeli). Berbeda dengan *membeli*, verba *membelikan* menuntut, setidaknya secara potensial, hadirnya tiga konstituen kalimat: *ayah* (yang membeli), *baju baru* (yang dibeli), dan *adik saya* (yang dibelikan).
 
@@ -74,16 +74,16 @@ Konstituen objek, pelengkap, dan keterangan wajib sering juga disebut **konstitu
 Hubungan struktural unsur-unsur kalimat dasar:
 
 (169) Dia sedang tidur (di kamar sebelah).
-— Subjek: FN | Predikat: FV | (Keterangan: FPrep)
+—Subjek: FN | Predikat: FV | (Keterangan: FPrep)
 
 (170) Dia sedang belajar (matematika) (sekarang).
-— Subjek: FN | Predikat: FV | (Pelengkap: FN) | (Keterangan: FN)
+—Subjek: FN | Predikat: FV | (Pelengkap: FN) | (Keterangan: FN)
 
 (171) Pancasila merupakan dasar negara kita.
-— Subjek: FN | Predikat: FV | Pelengkap: FN *(wajib)*
+—Subjek: FN | Predikat: FV | Pelengkap: FN *(wajib)*
 
 (172) Dia tinggal di Bogor (tahun lalu).
-— Subjek: FN | Predikat: FV | Keterangan: FPrep *(wajib)* | (Keterangan: FN)
+—Subjek: FN | Predikat: FV | Keterangan: FPrep *(wajib)* | (Keterangan: FN)
 
 ---
 
@@ -168,7 +168,9 @@ Aposisi takrestriktif biasanya terbatas pada frasa nominal. Makna unsur kedua da
 - a. Alasannya, *seperti tempat tinggal yang jauh*, tidak bisa diterima. *[pemberian contoh]*
 - b. Dia suka membaca *buku, terutama cerita detektif*. *[pengkhususan]*
 
-*[Bagan 9.2 Jenis Aposisi — tidak dapat dirender dalam teks biasa]*
+![Bagan 9.2 Jenis Aposisi](/gramatika/_gambar/bab-09/bagan-09-02-jenis-aposisi.webp)
+
+*Bagan 9.2 Jenis Aposisi*
 
 ### Suplementasi (9.4.2.2)
 
@@ -181,8 +183,8 @@ Suplementasi dibedakan menjadi dua:
 (187)
 - a. Kongres Bahasa Indonesia IX, **diikuti oleh peserta dari dalam dan luar negeri**, telah menghasilkan rumusan ... *(interpolasi)*
 - b. Makassar **(terkenal dengan sebutan Kota Angin Mamiri)** menjadi pusat pengembangan wilayah Indonesia timur. *(interpolasi)*
-- c. Orang itu — **konon selalu mendapat peringkat satu ketika menjadi taruna** — terpilih sebagai tokoh berbahasa Indonesia terbaik pada tahun 2003. *(interpolasi)*
-- d. Musisi itu menyindir perilaku pejabat melalui lagu-lagu yang diciptakannya — **dan saya setuju dengan cara itu**. *(lampiran)*
+- c. Orang itu—**konon selalu mendapat peringkat satu ketika menjadi taruna**—terpilih sebagai tokoh berbahasa Indonesia terbaik pada tahun 2003. *(interpolasi)*
+- d. Musisi itu menyindir perilaku pejabat melalui lagu-lagu yang diciptakannya—**dan saya setuju dengan cara itu**. *(lampiran)*
 - e. Obama terpilih sebagai presiden Amerika berkulit hitam pertama **(hal yang tidak pernah terbayangkan 50 tahun lalu)**. *(lampiran)*
 
 Contoh (187a–187c) di atas merupakan interpolasi, sedangkan contoh (187d–187e) merupakan lampiran.

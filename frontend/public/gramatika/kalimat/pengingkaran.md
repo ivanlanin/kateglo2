@@ -43,7 +43,7 @@ Makna kalimat (408b.i), (408c.i), dan (408d.i) yang menggunakan *tidak* masing-m
 
 ### Pengingkaran Kalimat (9.6.1.1)
 
-Pengingkaran kalimat dilakukan dengan menambahkan kata ingkar yang sesuai dengan predikatnya — kata ingkar *tidak* atau *bukan* ditempatkan di awal predikat.
+Pengingkaran kalimat dilakukan dengan menambahkan kata ingkar yang sesuai dengan predikatnya—kata ingkar *tidak* atau *bukan* ditempatkan di awal predikat.
 
 **Kata ingkar *tidak*** digunakan untuk mengingkarkan:
 - predikat verbal, jenis deklaratif dan interogatif
@@ -81,7 +81,7 @@ Jika predikat mengandung kata *sudah*, kalimatnya diingkarkan dengan mengganti *
 - a. Uangnya sudah banyak. → Uangnya **belum** banyak.
 - b. Apa anaknya sudah dua? → Apa anaknya **belum** dua?
 
-Kata ingkar *belum* digunakan pada kalimat berpredikat verbal, adjektival, dan numeralia taktentu, jenis deklaratif dan interogatif. Berbeda dengan *tidak* yang dapat mengingkarkan kalimat adjektival eksklamatif, kata *belum* tidak pernah digunakan dalam kalimat eksklamatif — kalimat eksklamatif selalu menyatakan perasaan yang dalam tentang sesuatu yang timbul secara tiba-tiba, sedangkan *belum* mengandung ciri makna proses/peristiwa yang melibatkan jangka waktu tertentu.
+Kata ingkar *belum* digunakan pada kalimat berpredikat verbal, adjektival, dan numeralia taktentu, jenis deklaratif dan interogatif. Berbeda dengan *tidak* yang dapat mengingkarkan kalimat adjektival eksklamatif, kata *belum* tidak pernah digunakan dalam kalimat eksklamatif—kalimat eksklamatif selalu menyatakan perasaan yang dalam tentang sesuatu yang timbul secara tiba-tiba, sedangkan *belum* mengandung ciri makna proses/peristiwa yang melibatkan jangka waktu tertentu.
 
 **Kata ingkar *jangan*** digunakan untuk mengingkarkan kalimat imperatif (verbal dan adjektival imperatif):
 
@@ -102,7 +102,7 @@ Kata ingkar *belum* digunakan pada kalimat berpredikat verbal, adjektival, dan n
 - a. Luas tanah itu 2.000 meter persegi. → Luas tanah itu **bukan** 2.000 meter persegi.
 - b. Apa harga televisi ini 500.000 rupiah? → Apa harga televisi ini **bukan** 500.000 rupiah?
 
-Kata ingkar *bukan* juga dipakai sebagai ekor kalimat interogatif embelan (retoris) yang berbentuk deklaratif — baik yang positif maupun negatif — yang menghendaki jawaban positif:
+Kata ingkar *bukan* juga dipakai sebagai ekor kalimat interogatif embelan (retoris) yang berbentuk deklaratif—baik yang positif maupun negatif—yang menghendaki jawaban positif:
 
 (418) Dia pergi ke dokter, **bukan**?
 Dia tidak pergi ke dokter, **bukan**?
@@ -118,11 +118,11 @@ Penggunaan kata ingkar dapat dirangkum sebagai berikut:
 
 | Jenis Predikat | Deklaratif | Interogatif | Imperatif | Eksklamatif |
 |---|---|---|---|---|
-| Verbal | tidak, belum | tidak, belum | jangan | — |
+| Verbal | tidak, belum | tidak, belum | jangan |—|
 | Adjektival | tidak, belum | tidak, belum | jangan | tidak |
-| Nominal | bukan | bukan | — | — |
-| Numeral tentu | bukan | bukan | — | — |
-| Numeral taktentu | tidak | tidak | — | — |
+| Nominal | bukan | bukan |—|—|
+| Numeral tentu | bukan | bukan |—|—|
+| Numeral taktentu | tidak | tidak |—|—|
 
 *Catatan: Bentuk belum (yang mengandung makna aspek imperfektif) merupakan bentuk negasi dari sudah.*
 
@@ -146,7 +146,7 @@ Untuk menguatkan pengontrasan, kata ingkar *bukan* ditambahi partikel *-nya* men
 
 Pada contoh-contoh (420) tampak dua bentuk penghubung: *melainkan* (420a, b) dan *malah* (420c, d). Bentuk *melainkan* digunakan untuk unsur-unsur yang tidak kontradiktif, sedangkan *malah* digunakan khusus untuk mempertentangkan dua unsur yang kontradiktif.
 
-Pengingkaran unsur kalimat tertentu juga terjadi pada kalimat verbal yang mengandung bentuk seperti *mungkin*, *mau*, *boleh*, *bisa*, dan *perlu*. Penempatan ingkar *tidak* di depan kata-kata itu cenderung hanya mengingkarkan kata tersebut — berbeda dengan penempatan *tidak* di depan verba predikat yang mengingkarkan kalimat secara keseluruhan:
+Pengingkaran unsur kalimat tertentu juga terjadi pada kalimat verbal yang mengandung bentuk seperti *mungkin*, *mau*, *boleh*, *bisa*, dan *perlu*. Penempatan ingkar *tidak* di depan kata-kata itu cenderung hanya mengingkarkan kata tersebut—berbeda dengan penempatan *tidak* di depan verba predikat yang mengingkarkan kalimat secara keseluruhan:
 
 (421)
 - a. Dia **tidak mungkin** datang. → Tidak mungkin dia datang. *(mengingkarkan* mungkin*)*

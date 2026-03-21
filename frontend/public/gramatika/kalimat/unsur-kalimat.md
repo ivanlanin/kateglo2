@@ -7,7 +7,11 @@ Jika dilihat dari segi bentuknya, kalimat adalah konstruksi sintaktis terbesar y
 
 Hubungan kalimat dengan bagian-bagiannya yang lebih kecil yang disebut konstituen-konstituen kalimat bersifat hierarkis. Struktur serta hierarki konstituen kalimat *Anak itu melempar bola ke lapangan* dapat digambarkan seperti pada contoh (3) berikut.
 
-(3) *[Diagram pohon — tidak dapat dirender dalam teks biasa]* Kalimat *Anak itu melempar bola ke lapangan* dipecah menjadi dua cabang: frasa nominal *Anak itu* (terdiri atas *Anak* dan *itu*) dan frasa verbal *melempar bola ke lapangan* (terdiri atas frasa verbal *melempar bola* yang memuat verba *melempar* dan nomina *bola*, serta frasa preposisional *ke lapangan* yang memuat preposisi *ke* dan nomina *lapangan*).
+(3) Kalimat *Anak itu melempar bola ke lapangan* dipecah menjadi dua cabang: frasa nominal *Anak itu* (terdiri atas *Anak* dan *itu*) dan frasa verbal *melempar bola ke lapangan* (terdiri atas frasa verbal *melempar bola* yang memuat verba *melempar* dan nomina *bola*, serta frasa preposisional *ke lapangan* yang memuat preposisi *ke* dan nomina *lapangan*).
+
+![Diagram pohon kalimat (3)](/gramatika/_gambar/bab-09/diagram-09-02-struktur-konstituen-kalimat-3.webp)
+
+*Diagram pohon kalimat (3)*
 
 Pada diagram tersebut tampak bahwa kata merupakan konstituen terkecil. Terdapat simpul, berupa pertemuan cabang, yang menunjukkan kata-kata yang membentuk konstituen yang lebih besar. Makin dekat simpul itu ke akar, makin besar konstituen yang diwakilinya.
 
@@ -15,7 +19,7 @@ Kalimat *Anak itu melempar bola ke lapangan* mempunyai dua konstituen langsung b
 
 Konstituen yang bukan konstituen langsung dari suatu konstruksi lazim disebut **konstituen taklangsung**. Konstituen kalimat yang berupa kata (*anak*, *itu*, *melempar*, *bola*, *ke*, dan *lapangan*) disebut **konstituen akhir** kalimat tersebut karena tidak dapat dibagi lagi ke dalam konstituen yang lebih kecil.
 
-Pengelompokan kata dalam satuan yang lebih besar didasarkan pada hubungan makna kata-kata tersebut. Kata *itu* lebih erat hubungannya dengan *anak* daripada dengan *melempar* karena *itu* membentuk satu satuan yang lebih besar — *anak itu*. Hubungan antara kata *bola* dan *melempar* lebih erat daripada antara *bola* dan *ke*, dan kata *ke* lebih dekat dengan *lapangan*. Ungkapan *ke lapangan* dapat ditulis berurutan, sedangkan *bola ke* tidak dapat disatukan.
+Pengelompokan kata dalam satuan yang lebih besar didasarkan pada hubungan makna kata-kata tersebut. Kata *itu* lebih erat hubungannya dengan *anak* daripada dengan *melempar* karena *itu* membentuk satu satuan yang lebih besar—*anak itu*. Hubungan antara kata *bola* dan *melempar* lebih erat daripada antara *bola* dan *ke*, dan kata *ke* lebih dekat dengan *lapangan*. Ungkapan *ke lapangan* dapat ditulis berurutan, sedangkan *bola ke* tidak dapat disatukan.
 
 ## Kalimat, Klausa, dan Frasa (9.2.1)
 
@@ -71,6 +75,10 @@ Contoh kalimat (7–9) dapat diterima, tetapi kalimat (10–12) tidak.
 Berdasarkan uraian singkat tersebut, unsur kalimat dapat dibedakan atas **unsur wajib** dan **unsur takwajib** (manasuka). Unsur wajib adalah unsur kalimat yang harus hadir, sedangkan unsur takwajib adalah unsur kalimat yang dapat tidak hadir. Dengan demikian, bentuk *mereka menghadiri pertemuan itu* pada kalimat (6) merupakan unsur wajib, sedangkan *barangkali* dan *kemarin sore* merupakan unsur takwajib.
 
 Perlu diingat bahwa pembedaan unsur kalimat atas wajib dan takwajib tidak berkaitan langsung dengan bentuk dan fungsi konstituen kalimat. Pada umumnya konstituen yang berfungsi sebagai keterangan, seperti *barangkali* dan *kemarin sore* pada contoh (6) di atas, dapat dihilangkan. Demikian pula halnya dengan keterangan (alat) *dengan pisau* pada *Dia memotong kue dengan pisau*, keterangan (tempat) *ke sekolah* pada *Dia sudah berangkat ke sekolah*, dan keterangan (cara) *dengan diam-diam* pada *Saya meninggalkan rapat dengan diam-diam*.
+
+![Bagan 9.1 Unsur dalam Kalimat](/gramatika/_gambar/bab-09/bagan-09-01-unsur-dalam-kalimat.webp)
+
+*Bagan 9.1 Unsur dalam Kalimat*
 
 Akan tetapi, pada kalimat tertentu konstituen yang berfungsi sebagai keterangan itu wajib hadir atau tidak dapat dihilangkan.
 
@@ -172,7 +180,7 @@ Pada konstruksi pemilikan yang anteseden nomina miliknya berupa nomina jamak, pe
 - a. Murid-murid itu menyelesaikan tugas mereka pada waktunya.
 - b. Murid-murid itu menyelesaikan tugas mereka masing-masing pada waktunya.
 
-Pada (21a) *tugas* mengandung makna tunggal — merupakan nomina milik bersama murid-murid. Pada (21b) perlu ditambahkan bentuk *masing-masing* sesudah pronomina pemilik untuk menyatakan bahwa tugas itu bersifat perseorangan.
+Pada (21a) *tugas* mengandung makna tunggal—merupakan nomina milik bersama murid-murid. Pada (21b) perlu ditambahkan bentuk *masing-masing* sesudah pronomina pemilik untuk menyatakan bahwa tugas itu bersifat perseorangan.
 
 Dalam bahasa Indonesia terdapat sejumlah verba yang menuntut nomina jamak sebagai subjek. Verba itu biasanya berafiks *ber-*.
 

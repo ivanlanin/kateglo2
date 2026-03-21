@@ -14,7 +14,11 @@ Suatu bentuk kata yang tergolong dalam kategori tertentu dapat mempunyai fungsi 
 
 Dengan demikian, antara bentuk, kategori, fungsi, dan peran tidak ada hubungan satu lawan satu. Fungsi merupakan suatu "tempat" dalam struktur kalimat dengan unsur pengisi berupa bentuk (bahasa) yang termasuk dalam kategori tertentu dan mempunyai peran tematis tertentu pula. Hubungan antara bentuk, kategori, fungsi, dan peran yang telah dipaparkan secara lebih jelas dapat dilihat pada Tabel 9.1.
 
-**Tabel 9.1 Hubungan Bentuk, Kategori, Fungsi, dan Peran Unsur Kalimat** — *[Diagram tabel — tidak dapat dirender dalam teks biasa]* Tabel ini menganalisis kalimat *Ibu saya akan membeli baju baru untuk kami minggu depan* kata per kata. Setiap kata diklasifikasikan berdasarkan: (1) **Kategori Kata** — N (Ibu), Pron (saya), Adv (akan), V (membeli), N (baju), Adj (baru), Prep (untuk), N (kami), N (minggu), N (depan); (2) **Kategori Frasa** — FN (Ibu saya), FV (akan membeli), FN (baju baru), FPrep (untuk kami), FN (minggu depan); (3) **Fungsi** — Subjek (Ibu saya), Predikat (akan membeli), Objek (baju baru), Keterangan (untuk kami), Keterangan (minggu depan); (4) **Peran** — Pelaku (Ibu saya), Predikat (akan membeli), Sasaran (baju baru), Peruntung (untuk kami), Waktu (minggu depan).
+![Tabel 9.1 Hubungan Bentuk, Kategori, Fungsi, dan Peran Unsur Kalimat](/gramatika/_gambar/bab-09/tabel-09-01-hubungan-bentuk-kategori-fungsi-dan-peran-unsur-kalimat.webp)
+
+*Tabel 9.1 Hubungan Bentuk, Kategori, Fungsi, dan Peran Unsur Kalimat*
+
+Tabel ini menganalisis kalimat *Ibu saya akan membeli baju baru untuk kami minggu depan* kata per kata. Setiap kata diklasifikasikan berdasarkan: (1) **Kategori Kata**—N (Ibu), Pron (saya), Adv (akan), V (membeli), N (baju), Adj (baru), Prep (untuk), N (kami), N (minggu), N (depan); (2) **Kategori Frasa**—FN (Ibu saya), FV (akan membeli), FN (baju baru), FPrep (untuk kami), FN (minggu depan); (3) **Fungsi**—Subjek (Ibu saya), Predikat (akan membeli), Objek (baju baru), Keterangan (untuk kami), Keterangan (minggu depan); (4) **Peran**—Pelaku (Ibu saya), Predikat (akan membeli), Sasaran (baju baru), Peruntung (untuk kami), Waktu (minggu depan).
 
 ---
 
@@ -44,7 +48,7 @@ Perlu diingat bahwa tidak ada frasa yang unsur utamanya berupa konjungsi, interj
 - *sering* (Adv) → *sering sekali* (FAdv)
 - *kepada* (Prep) → *kepada saya* (FPrep)
 
-Sementara itu, perlu dibedakan antara kategori dan bentuk kata karena ada kata tertentu yang memiliki keanggotaan rangkap — tergolong dalam dua kategori atau lebih.
+Sementara itu, perlu dibedakan antara kategori dan bentuk kata karena ada kata tertentu yang memiliki keanggotaan rangkap—tergolong dalam dua kategori atau lebih.
 
 (29)
 
@@ -76,16 +80,16 @@ Predikat merupakan unsur pokok yang disertai subjek di sebelah kiri dan, jika ad
 - d. Dia *sedang tidur*. (P=FV)
 - e. Gadis itu *cantik sekali*. (P=FAdj)
 
-Kalimat seperti (30a) yang subjeknya FN dan predikatnya FN relatif sukar untuk diketahui apakah kalimat itu berpola S-P ataukah P-S. Cara pertama adalah melihat FN yang dilekati partikel *-lah*: FN yang dilekati *-lah* selalu berfungsi sebagai predikat. Cara kedua adalah memperhatikan pola intonasi — unsur predikat mempunyai pola intonasi menurun, yaitu (2) 3 1 pada pola S-P dan (2) 3 2 pada pola P-S.
+Kalimat seperti (30a) yang subjeknya FN dan predikatnya FN relatif sukar untuk diketahui apakah kalimat itu berpola S-P ataukah P-S. Cara pertama adalah melihat FN yang dilekati partikel *-lah*: FN yang dilekati *-lah* selalu berfungsi sebagai predikat. Cara kedua adalah memperhatikan pola intonasi—unsur predikat mempunyai pola intonasi menurun, yaitu (2) 3 1 pada pola S-P dan (2) 3 2 pada pola P-S.
 
 (31)
 
 - a.
   - i. Penulisnya dia.
-  - ii. Anak itu teman Tono. (2 — 23 / 2 — 31↓#)
+  - ii. Anak itu teman Tono. (2—23 / 2—31↓#)
 - b.
   - i. Dialah penulisnya.
-  - ii. Teman Tono anak itu. (2 — 32(2) / 2 — 21↓#)
+  - ii. Teman Tono anak itu. (2—32(2) / 2—21↓#)
 
 Predikat dalam bahasa Indonesia dapat mengisyaratkan makna jumlah FN subjek.
 
@@ -135,7 +139,7 @@ Subjek pada kalimat aktif transitif akan menjadi pelaku apabila kalimat itu dipa
 
 ### Objek (9.3.2.3)
 
-Objek adalah fungsi sintaktis yang kehadirannya ditentukan oleh predikat yang berupa verba transitif pada kalimat aktif. Letaknya selalu langsung setelah predikat. Predikat yang berupa verba transitif biasanya ditandai oleh kehadiran afiks tertentu — sufiks *-kan* dan *-i* pada umumnya merupakan pemarkah verba transitif. Pada contoh berikut terlihat penggunaan verba transitif dengan atau tanpa sufiks *-kan* atau *-i*.
+Objek adalah fungsi sintaktis yang kehadirannya ditentukan oleh predikat yang berupa verba transitif pada kalimat aktif. Letaknya selalu langsung setelah predikat. Predikat yang berupa verba transitif biasanya ditandai oleh kehadiran afiks tertentu—sufiks *-kan* dan *-i* pada umumnya merupakan pemarkah verba transitif. Pada contoh berikut terlihat penggunaan verba transitif dengan atau tanpa sufiks *-kan* atau *-i*.
 
 (38)
 
@@ -175,7 +179,7 @@ Selain satuan berupa nomina dan frasa nominal, objek dapat pula berupa klausa ya
 - a. Pemerintah mengumumkan *bahwa harga BBM akan naik*.
 - b. Kami menyadari *bahwa pendidikan itu penting*.
 
-Objek pada kalimat aktif transitif akan menjadi subjek jika kalimat itu dipasifkan — inilah ciri utama yang membedakan objek dari pelengkap. Potensi ketersulihan unsur objek dengan *-nya* (contoh 39–41) dan pengedepanannya menjadi subjek kalimat pasif (contoh 43) merupakan ciri utama yang membedakan objek dari pelengkap yang berupa nomina atau frasa nominal.
+Objek pada kalimat aktif transitif akan menjadi subjek jika kalimat itu dipasifkan—inilah ciri utama yang membedakan objek dari pelengkap. Potensi ketersulihan unsur objek dengan *-nya* (contoh 39–41) dan pengedepanannya menjadi subjek kalimat pasif (contoh 43) merupakan ciri utama yang membedakan objek dari pelengkap yang berupa nomina atau frasa nominal.
 
 (43)
 
@@ -271,7 +275,7 @@ Makna keterangan ditentukan oleh perpaduan makna unsur-unsurnya. *Sebelum semina
 | No. | Jenis Keterangan | Preposisi/Konjungsi | Contoh |
 |:---:|---|---|---|
 | 1 | Tempat | *di, ke, dari, (di) dalam, pada* | *di kamar, di kota; ke Medan, ke rumahnya; dari Manado, dari sawah; (di) dalam rumah, dalam lemari; pada saya, pada permukaan* |
-| 2 | Waktu | —, *sejak, pada, dalam, setiba, sepulang, sebelum, sesudah, selama, sepanjang, ketika* | *kemarin, sekarang, besok; sejak hari ini, sejak kemarin; pada pukul 05.00, pada hari ini; dalam minggu ini, dalam dua hari ini; setiba di rumah; sepulang dari kantor; sebelum merdeka; sesudah pensiun; selama bekerja; sepanjang hari; ketika sedang asyik bekerja, ketika itu* |
+| 2 | Waktu |—,*sejak, pada, dalam, setiba, sepulang, sebelum, sesudah, selama, sepanjang, ketika* | *kemarin, sekarang, besok; sejak hari ini, sejak kemarin; pada pukul 05.00, pada hari ini; dalam minggu ini, dalam dua hari ini; setiba di rumah; sepulang dari kantor; sebelum merdeka; sesudah pensiun; selama bekerja; sepanjang hari; ketika sedang asyik bekerja, ketika itu* |
 | 3 | Alat | *dengan* | *dengan (memakai) gunting, dengan mobil* |
 | 4 | Tujuan | *agar/supaya, untuk, bagi, demi, kepada, terhadap* | *agar kamu pintar, supaya dia menang; untuk kemerdekaan; bagi masa depanmu; demi orang tuanya; kepada negara; terhadap sesama* |
 | 5 | Cara | *dengan, secara, dengan cara, dengan jalan* | *dengan diam-diam; secara hati-hati; dengan cara damai; dengan jalan berunding* |

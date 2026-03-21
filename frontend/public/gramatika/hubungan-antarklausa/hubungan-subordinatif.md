@@ -12,11 +12,15 @@ title: Hubungan Subordinatif (10.2)
 
 Klausa (69a) dan (69b) digabungkan dengan cara subordinatif sehingga terbentuk kalimat kompleks (69c).
 
-*[Bagan 10.2 Hubungan Subordinatif — tidak dapat dirender dalam teks biasa]*
+![Bagan 10.2 Hubungan Subordinatif](/gramatika/_gambar/bab-10/bagan-10-02-hubungan-subordinatif.webp)
+
+*Bagan 10.2 Hubungan Subordinatif*
 
 Pada bagan di atas tampak bahwa klausa 2 berkedudukan sebagai konstituen klausa 1. Klausa 2 yang berkedudukan sebagai konstituen klausa 1 disebut **klausa subordinatif**, sedangkan klausa 1, tempat dilekatkannya klausa 2, disebut **klausa utama**.
 
-*[Diagram pohon kalimat (69c) — tidak dapat dirender dalam teks biasa]*
+![Diagram pohon kalimat (69c)](/gramatika/_gambar/bab-10/diagram-10-02-kalimat-69c.webp)
+
+*Diagram pohon kalimat (69c)*
 
 Pada diagram itu tampak bahwa klausa utama *Embo mengatakan* digabungkan dengan klausa subordinatif *Rini mencintai pemuda itu sepenuh hati* dengan menggunakan konjungsi *bahwa*. Dalam struktur kalimat (69c) klausa subordinatif menduduki posisi objek (O). Dengan kata lain, klausa subordinatif itu merupakan klausa nominal karena menduduki fungsi yang biasa diduduki oleh nomina. Selain konjungsi *bahwa*, klausa nominal yang disubordinasikan dapat pula ditandai dengan konjungsi berupa kata tanya seperti *apakah* (atau *tidak*).
 
@@ -55,7 +59,9 @@ Klausa subordinatif dapat pula berupa klausa adverbial dalam arti klausa itu ber
 - l. Orang *yang* sedang membaca buku itu teman saya.
 - m. Novel itu lebih bagus daripada novel ini.
 
-*[Diagram pohon kalimat (71a) — tidak dapat dirender dalam teks biasa]*
+![Diagram pohon kalimat (71a)](/gramatika/_gambar/bab-10/diagram-10-02-kalimat-71a.webp)
+
+*Diagram pohon kalimat (71a)*
 
 Kalimat kompleks dapat pula disusun dengan memperluas salah satu fungsi sintaktisnya (fungsi S, P, O, Pel, dan Ket) dengan klausa. Perluasan itu dilakukan dengan menggunakan *yang*.
 
@@ -67,7 +73,9 @@ Kalimat kompleks dapat pula disusun dengan memperluas salah satu fungsi sintakti
 
 Dalam kalimat (72a) fungsi S (*Paman saya*) diperluas dengan klausa *yang tinggal di Bogor*. Dalam kalimat (72b) fungsi O (*buku*) diperluas dengan klausa *yang mengisahkan perjuangan Pangeran Diponegoro*. Dalam kalimat (72c) fungsi Pel (*patung*) diperluas dengan klausa *yang cantik*. Dalam kalimat (72d) fungsi Ket (*di daerah transmigrasi*) diperluas dengan klausa *yang menampung transmigran dari Jawa dan Bali*. Klausa perluasan dengan *yang* yang disematkan dalam klausa utama disebut sebagai **klausa relatif** dan berfungsi sebagai pewatas (keterangan) bagi fungsi sintaktis tertentu.
 
-*[Diagram pohon kalimat (72a) — tidak dapat dirender dalam teks biasa]*
+![Diagram pohon kalimat (72a)](/gramatika/_gambar/bab-10/diagram-10-02-kalimat-72a.webp)
+
+*Diagram pohon kalimat (72a)*
 
 Kalimat kompleks dapat pula terbentuk apabila dua proposisi diperbandingkan, satu dinyatakan pada klausa utama dan satu lagi pada klausa subordinatif. Klausa subordinatif itu disebut **klausa pembandingan**. Klausa pembandingan biasanya dibentuk dengan menggunakan bentuk *lebih ... daripada*, *kurang ... daripada*, atau *sama ... dengan*.
 
@@ -76,7 +84,9 @@ Kalimat kompleks dapat pula terbentuk apabila dua proposisi diperbandingkan, sat
 - b. Saya berbicara kurang fasih dalam bahasa daerah daripada (saya berbicara [fasih]) dalam bahasa Indonesia.
 - c. Kapitalisme sama berbahayanya dengan komunisme (berbahaya).
 
-*[Diagram pohon kalimat (73a) — tidak dapat dirender dalam teks biasa]*
+![Diagram pohon kalimat (73a)](/gramatika/_gambar/bab-10/diagram-10-02-kalimat-73a.webp)
+
+*Diagram pohon kalimat (73a)*
 
 Perlu diingat bahwa predikat *bekerja* dan keterangan *lebih lama* pada klausa subordinatif pada (73a) harus dilesapkan.
 
@@ -90,7 +100,9 @@ Ada empat ciri sintaktis dalam hubungan subordinatif.
 
 (74) Ketua partai itu tetap menyatakan kebanggaannya karena ternyata partainya masih dapat meraih hampir 14 juta suara pemilih setelah suara itu dihitung ulang.
 
-*[Diagram pohon kalimat (74) — tidak dapat dirender dalam teks biasa]*
+![Diagram pohon kalimat (74)](/gramatika/_gambar/bab-10/diagram-10-02-kalimat-74.webp)
+
+*Diagram pohon kalimat (74)*
 
 2) Pada umumnya klausa-klausa yang dihubungkan oleh konjungsi subordinatif dapat dipertukarkan tempatnya.
 

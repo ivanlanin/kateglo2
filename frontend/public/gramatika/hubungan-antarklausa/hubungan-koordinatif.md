@@ -11,7 +11,9 @@ Pada 9.5.1 telah dikemukakan bahwa berdasarkan jumlah klausanya, kalimat dapat d
 
 Secara diagramatik hubungan itu dapat dilihat dalam bagan berikut yang memperlihatkan bahwa konjungsi tidak termasuk dalam klausa mana pun, tetapi merupakan konstituen tersendiri.
 
-*[Bagan 10.1 Hubungan Koordinatif — tidak dapat dirender dalam teks biasa]*
+![Bagan 10.1 Hubungan Koordinatif](/gramatika/_gambar/bab-10/bagan-10-01-hubungan-koordinatif.webp)
+
+*Bagan 10.1 Hubungan Koordinatif*
 
 Untuk memperjelas bagan di atas, perhatikanlah contoh berikut ini!
 
@@ -22,7 +24,9 @@ Untuk memperjelas bagan di atas, perhatikanlah contoh berikut ini!
 
 Klausa (1a) dan (1b) digabungkan dengan menggunakan konjungsi *dan* sehingga terbentuklah kalimat majemuk (1c). Karena klausa-klausa dalam kalimat majemuk yang disusun dengan cara koordinasi mempunyai kedudukan setara atau sama, klausa-klausa itu merupakan klausa utama.
 
-*[Diagram pohon kalimat (1c) — tidak dapat dirender dalam teks biasa]*
+![Diagram pohon kalimat (1c)](/gramatika/_gambar/bab-10/diagram-10-01-kalimat-1c.webp)
+
+*Diagram pohon kalimat (1c)*
 
 Pada diagram di atas dapat dilihat bahwa kedua klausanya setara. Klausa yang satu bukan merupakan bagian dari klausa yang lain: keduanya mempunyai kedudukan yang sama dan dihubungkan oleh konjungsi *dan*. Selain *dan*, ada beberapa konjungsi lain untuk menyusun hubungan koordinatif, yaitu *atau*, *tetapi*, *serta*, *lalu*, *kemudian*, *lagi pula*, *hanya*, *padahal*, *sedangkan*, *baik ... maupun ...*, *tidak ... tetapi ...*, dan *bukan(nya) ... melainkan ...*. Perhatikan beberapa contoh berikut ini!
 
@@ -62,7 +66,9 @@ Kalimat majemuk yang hubungan antarklausanya bercorak koordinatif ini memiliki c
 
 (14) Saya mengetahui kedatangannya, tetapi saya tidak mengetahui maksud serta tujuannya dan tidak menemuinya.
 
-*[Diagram pohon kalimat (14) — tidak dapat dirender dalam teks biasa]*
+![Diagram pohon kalimat (14)](/gramatika/_gambar/bab-10/diagram-10-01-kalimat-14.webp)
+
+*Diagram pohon kalimat (14)*
 
 2) Pada umumnya posisi klausa yang didahului oleh konjungsi *dan*, *atau*, atau *tetapi* tidak dapat diubah tempatnya karena alasan semantis atau alasan sintaktis.
 
@@ -100,7 +106,9 @@ Penggunaan konjungsi koordinatif *kemudian* sesudah konjungsi koordinatif *dan* 
 
 (21) Andi sedang belajar, tetapi adiknya hanya menonton TV.
 
-*[Diagram pohon kalimat (21) — tidak dapat dirender dalam teks biasa]*
+![Diagram pohon kalimat (21)](/gramatika/_gambar/bab-10/diagram-10-01-kalimat-21.webp)
+
+*Diagram pohon kalimat (21)*
 
 ---
 

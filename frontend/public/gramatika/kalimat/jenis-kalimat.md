@@ -13,7 +13,7 @@ Berdasarkan jumlah klausanya, kalimat dapat dibagi atas kalimat simpleks, kalima
 
 ### Kalimat Simpleks (9.5.1.1)
 
-**Kalimat simpleks**, yang lazim disebut kalimat tunggal, adalah kalimat yang terdiri atas satu klausa. Unsur untuk tiap bagian kalimat — seperti subjek dan predikat — hanyalah satu dan merupakan satu kesatuan. Kalimat simpleks tidak selalu pendek, tetapi juga dapat panjang.
+**Kalimat simpleks**, yang lazim disebut kalimat tunggal, adalah kalimat yang terdiri atas satu klausa. Unsur untuk tiap bagian kalimat—seperti subjek dan predikat—hanyalah satu dan merupakan satu kesatuan. Kalimat simpleks tidak selalu pendek, tetapi juga dapat panjang.
 
 (188)
 - a. Dia akan pergi. (S-P)
@@ -83,14 +83,14 @@ Kalimat taktransitif hanya memiliki dua unsur wajib: subjek dan predikat. Urutan
 - e. Kami (biasanya) berenang (pada hari Minggu pagi).
 - f. Padi mulai menguning.
 
-Ada verba taktransitif yang diikuti nomina yang merupakan bagian dari paduan verba (idiom verbal) — bukan objek atau pelengkap:
+Ada verba taktransitif yang diikuti nomina yang merupakan bagian dari paduan verba (idiom verbal)—bukan objek atau pelengkap:
 
 (197)
 - a. Irak sudah **bertekuk lutut**. *(verba majemuk idiomatis)*
 - b. Pak Ahmad akan **naik haji**. *(naik haji = satu kesatuan makna)*
 - c. Guntur selalu naik **sepeda** ke sekolah. *(sepeda = pelengkap, bukan idiom)*
 
-Ada pula verba taktransitif yang diikuti langsung oleh nomina atau frasa nominal yang berfungsi sebagai **pelengkap** (bukan objek — tidak dapat dijadikan subjek kalimat pasif):
+Ada pula verba taktransitif yang diikuti langsung oleh nomina atau frasa nominal yang berfungsi sebagai **pelengkap** (bukan objek—tidak dapat dijadikan subjek kalimat pasif):
 
 (202)
 - a. Botol itu berisi air putih.
@@ -112,25 +112,25 @@ Selain itu, ada verba taktransitif berafiks *ke-...-an* yang dapat diikuti nomin
 
 Kalimat transitif mempunyai tiga unsur wajib: subjek, predikat, dan objek. Kalimat transitif dibedakan menjadi tiga berdasarkan kehadiran objeknya:
 
-(a) **Objek manasuka** — tanpa objek, kalimat tetap berterima:
+(a) **Objek manasuka**—tanpa objek, kalimat tetap berterima:
 
 (205)
 - a. Ardi sedang membaca buku.
 - b. Ardi sedang membaca. *(berterima)*
 
-(b) **Objek wajib** — tanpa objek, kalimat tidak gramatikal:
+(b) **Objek wajib**—tanpa objek, kalimat tidak gramatikal:
 
 (206)
 - a. Saadi segera menyurati sahabatnya.
 - b. \*Saadi menyurati. *(tidak berterima)*
 
-(c) **Objek wajib + pelengkap** (verba dwitransitif) — ada dua nomina di kanan verba:
+(c) **Objek wajib + pelengkap** (verba dwitransitif)—ada dua nomina di kanan verba:
 
 (209) Ida membelikan adiknya buku. *(adiknya = objek; buku = pelengkap)*
 
 (210) Ida sedang mencarikan adiknya pekerjaan.
-— *adiknya* = objek (dapat menjadi subjek pasif: *Adiknya dicarikan pekerjaan oleh Ida.*)
-— *pekerjaan* = pelengkap (tidak dapat menjadi subjek pasif)
+—*adiknya* = objek (dapat menjadi subjek pasif: *Adiknya dicarikan pekerjaan oleh Ida.*)
+—*pekerjaan* = pelengkap (tidak dapat menjadi subjek pasif)
 
 Makna khas verba dwitransitif benefaktif (makna 'untuk orang lain') vs. direktif ('kepada objek'):
 
@@ -188,7 +188,7 @@ Jika subjek kalimat aktif panjang, hanya cara pertama yang dapat digunakan.
 - a. Muatan itu dilempar ke laut. *(sengaja)*
 - b. Muatan itu terlempar ke laut. *(tidak sengaja / kodrat)*
 
-(254) Gunung Merapi terletak di Pulau Jawa. *(kekodratan — bukan kesengajaan)*
+(254) Gunung Merapi terletak di Pulau Jawa. *(kekodratan—bukan kesengajaan)*
 
 - Pasif *ke-...-an* → menyatakan **makna adversatif** (tidak menyenangkan):
 
@@ -354,9 +354,9 @@ Kalimat imperatif yang berpredikat verba transitif mirip dengan konstruksi kalim
 
 (299) Konsep perjanjian itu diketik serapi-rapinya, ya! *(imperatif pasif)*
 
-Pemakaian bentuk pasif dalam kalimat imperatif sangat umum dalam bahasa Indonesia karena terasa lebih halus — si penyuruh hanya menekankan pada kenyataan bahwa sesuatu harus segera diselesaikan.
+Pemakaian bentuk pasif dalam kalimat imperatif sangat umum dalam bahasa Indonesia karena terasa lebih halus—si penyuruh hanya menekankan pada kenyataan bahwa sesuatu harus segera diselesaikan.
 
-**1) Kalimat Imperatif Halus** — menggunakan kata *tolong, coba, silakan, sudilah, kiranya* dan dapat ditambah partikel *-lah* atau sufiks *-kan*:
+**1) Kalimat Imperatif Halus**—menggunakan kata *tolong, coba, silakan, sudilah, kiranya* dan dapat ditambah partikel *-lah* atau sufiks *-kan*:
 
 (300)
 - a. Tolong tunjukkan kontrak ini.
@@ -368,7 +368,7 @@ Pemakaian bentuk pasif dalam kalimat imperatif sangat umum dalam bahasa Indonesi
 
 (304) Sudilah Bapak mengunjungi pameran kami.
 
-**2) Kalimat Imperatif Permintaan** — ditandai kata *minta* atau *mohon*:
+**2) Kalimat Imperatif Permintaan**—ditandai kata *minta* atau *mohon*:
 
 (305)
 - a. Saya *minta* perhatian, Saudara-Saudara!
@@ -391,7 +391,7 @@ Makin pendek kalimat imperatif, makin terasa kasar maknanya:
 - a. Keluar!
 - b. Keluarlah karena saya ada tamu yang menunggu.
 
-**3) Kalimat Imperatif Ajakan dan Harapan** — didahului *ayo/ayolah, mari/marilah, harap, hendaknya*:
+**3) Kalimat Imperatif Ajakan dan Harapan**—didahului *ayo/ayolah, mari/marilah, harap, hendaknya*:
 
 (309)
 - a. Ayolah, masuk!
@@ -401,7 +401,7 @@ Makin pendek kalimat imperatif, makin terasa kasar maknanya:
 
 (312) Hendaknya Anda pulang saja.
 
-**4) Kalimat Imperatif Larangan** — menggunakan *jangan/janganlah* (lunak) atau *dilarang* (keras):
+**4) Kalimat Imperatif Larangan**—menggunakan *jangan/janganlah* (lunak) atau *dilarang* (keras):
 
 (313)
 - a. Jangan parkir di depan pintu!
@@ -409,14 +409,14 @@ Makin pendek kalimat imperatif, makin terasa kasar maknanya:
 
 (314) Dilarang membuang sampah sembarangan!
 
-**5) Kalimat Imperatif Peringatan** — ditandai *awas* atau *hati-hati*:
+**5) Kalimat Imperatif Peringatan**—ditandai *awas* atau *hati-hati*:
 
 (315)
 - a. Awas tegangan tinggi!
 - b. Awas ada jalan licin!
 - c. Hati-hati di jalan!
 
-**6) Kalimat Imperatif Pembiaran** — dinyatakan dengan *biar(lah)* atau *biarkan(lah)*:
+**6) Kalimat Imperatif Pembiaran**—dinyatakan dengan *biar(lah)* atau *biarkan(lah)*:
 
 (316)
 - a. Biar saja mereka yang menyelesaikan!
@@ -593,14 +593,14 @@ Konstruksi inversi dengan verba *adalah* sering digunakan dalam wacana untuk mem
 
 (379)
 - a. Dia membeli novel itu sejak pagi. *(pola dasar)*
-- b. Novel itu dia baca sejak pagi. *(pengedepanan/pemasifan — FN takrif)*
-- c. Sejak pagi dia membeli novel itu. *(permutasi keterangan — FPrep takrif)*
+- b. Novel itu dia baca sejak pagi. *(pengedepanan/pemasifan—FN takrif)*
+- c. Sejak pagi dia membeli novel itu. *(permutasi keterangan—FPrep takrif)*
 
 Hanya keterangan yang mengandung nomina takrif yang dapat ditempatkan di awal kalimat:
 
 (380)
 - a. Di dusun **itu** dia tinggal serumah. ✓ *(takrif)*
-- b. ?Di **sebuah** dusun dia tinggal serumah. *(taktakrif — terasa janggal)*
+- b. ?Di **sebuah** dusun dia tinggal serumah. *(taktakrif—terasa janggal)*
 
 Pengedepanan untuk memperkenalkan kembali topik disebut **topikalisasi**:
 
