@@ -38,7 +38,15 @@ const daftarIsiGramatika = [
     slug: 'tata-bahasa',
     items: [
       { judul: 'Deskripsi dan Teori', slug: 'deskripsi-dan-teori' },
-      { judul: 'Pengertian Tata Bahasa', slug: 'pengertian-tata-bahasa' },
+      {
+        judul: 'Pengertian Tata Bahasa',
+        slug: 'pengertian-tata-bahasa',
+        turunan: [
+          { judul: 'Fonologi', slug: 'fonologi' },
+          { judul: 'Morfologi', slug: 'morfologi' },
+          { judul: 'Sintaksis', slug: 'sintaksis' },
+        ],
+      },
       {
         judul: 'Semantik, Pragmatik, dan Relasi Makna',
         slug: 'semantik-pragmatik-dan-relasi-makna',
@@ -52,8 +60,27 @@ const daftarIsiGramatika = [
       {
         judul: 'Batasan dan Ciri Bunyi Bahasa',
         slug: 'batasan-dan-ciri-bunyi-bahasa',
+        turunan: [
+          { judul: 'Vokal', slug: 'vokal' },
+          { judul: 'Konsonan', slug: 'konsonan' },
+          { judul: 'Diftong', slug: 'diftong' },
+          { judul: 'Gugus Konsonan', slug: 'gugus-konsonan' },
+          { judul: 'Fonem dan Grafem', slug: 'fonem-dan-grafem' },
+          { judul: 'Fonem Segmental dan Suprasegmental', slug: 'fonem-segmental-dan-suprasegmental' },
+          { judul: 'Suku Kata', slug: 'suku-kata' },
+        ],
       },
-      { judul: 'Vokal dan Konsonan', slug: 'vokal-dan-konsonan' },
+      {
+        judul: 'Vokal dan Konsonan',
+        slug: 'vokal-dan-konsonan',
+        turunan: [
+          { judul: 'Vokal dan Alofon Vokal', slug: 'vokal-dan-alofon-vokal' },
+          { judul: 'Diftong dan Deret Vokal', slug: 'diftong-dan-deret-vokal' },
+          { judul: 'Cara Penulisan Vokal', slug: 'cara-penulisan-vokal' },
+          { judul: 'Konsonan dan Alofon Konsonan', slug: 'konsonan-dan-alofon-konsonan' },
+          { judul: 'Gugus dan Deret Konsonan', slug: 'gugus-dan-deret-konsonan' },
+        ],
+      },
       { judul: 'Struktur Suku Kata dan Kata', slug: 'struktur-suku-kata-dan-kata' },
       { judul: 'Pemenggalan Kata', slug: 'pemenggalan-kata' },
       { judul: 'Ciri Suprasegmental', slug: 'ciri-suprasegmental' },
@@ -67,8 +94,22 @@ const daftarIsiGramatika = [
       { judul: 'Makna Nomina', slug: 'makna-nomina' },
       { judul: 'Acuan Nomina', slug: 'acuan-nomina' },
       { judul: 'Fungsi Nomina', slug: 'fungsi-nomina' },
-      { judul: 'Jenis Nomina', slug: 'jenis-nomina' },
-      { judul: 'Frasa Nominal', slug: 'frasa-nominal' },
+      {
+        judul: 'Jenis Nomina',
+        slug: 'jenis-nomina',
+        turunan: [
+          { judul: 'Nomina Berdasarkan Acuannya', slug: 'nomina-berdasarkan-acuannya' },
+          { judul: 'Nomina Berdasarkan Bentuk Morfologisnya', slug: 'nomina-berdasarkan-bentuk-morfologisnya' },
+        ],
+      },
+      {
+        judul: 'Frasa Nominal',
+        slug: 'frasa-nominal',
+        turunan: [
+          { judul: 'Frasa Nominal', slug: 'frasa-nominal-umum' },
+          { judul: 'Frasa Nominal Vokatif', slug: 'frasa-nominal-vokatif' },
+        ],
+      },
     ],
   },
   {
@@ -78,8 +119,23 @@ const daftarIsiGramatika = [
       { judul: 'Batasan dan Ciri Verba', slug: 'batasan-dan-ciri-verba' },
       { judul: 'Fitur Semantis Verba', slug: 'fitur-semantis-verba' },
       { judul: 'Perilaku Sintaktis Verba', slug: 'perilaku-sintaktis-verba' },
-      { judul: 'Bentuk Verba', slug: 'bentuk-verba' },
-      { judul: 'Verba Transitif', slug: 'verba-transitif' },
+      {
+        judul: 'Bentuk Verba',
+        slug: 'bentuk-verba',
+        turunan: [
+          { judul: 'Verba Dasar', slug: 'verba-dasar' },
+          { judul: 'Verba Turunan', slug: 'verba-turunan' },
+          { judul: 'Morfofonemik dalam Pengafiksan Verba', slug: 'morfofonemik-dalam-pengafiksan-verba' },
+        ],
+      },
+      {
+        judul: 'Verba Transitif',
+        slug: 'verba-transitif',
+        turunan: [
+          { judul: 'Penurunan Melalui Konversi', slug: 'penurunan-melalui-konversi' },
+          { judul: 'Penurunan Verba Transitif Melalui Pengafiksan', slug: 'penurunan-verba-transitif-melalui-pengafiksan' },
+        ],
+      },
       { judul: 'Verba Taktransitif', slug: 'verba-taktransitif' },
       { judul: 'Verba Hasil Reduplikasi', slug: 'verba-reduplikasi' },
       { judul: 'Verba Majemuk', slug: 'verba-majemuk' },
@@ -116,7 +172,17 @@ const daftarIsiGramatika = [
     slug: 'pronomina',
     items: [
       { judul: 'Batasan dan Ciri Pronomina', slug: 'batasan-dan-ciri-pronomina' },
-      { judul: 'Jenis Pronomina', slug: 'jenis-pronomina' },
+      {
+        judul: 'Jenis Pronomina',
+        slug: 'jenis-pronomina',
+        turunan: [
+          { judul: 'Pronomina Persona', slug: 'pronomina-persona' },
+          { judul: 'Pronomina Penunjuk', slug: 'pronomina-penunjuk' },
+          { judul: 'Pronomina Tanya', slug: 'pronomina-tanya' },
+          { judul: 'Pronomina Taktentu', slug: 'pronomina-taktentu' },
+          { judul: 'Pronomina Jumlah', slug: 'pronomina-jumlah' },
+        ],
+      },
       { judul: 'Frasa Pronominal', slug: 'frasa-pronominal' },
     ],
   },
@@ -134,8 +200,26 @@ const daftarIsiGramatika = [
     slug: 'kata-tugas',
     items: [
       { judul: 'Batasan dan Ciri Kata Tugas', slug: 'batasan-dan-ciri-kata-tugas' },
-      { judul: 'Preposisi', slug: 'preposisi' },
-      { judul: 'Konjungsi', slug: 'konjungsi' },
+      {
+        judul: 'Preposisi',
+        slug: 'preposisi',
+        turunan: [
+          { judul: 'Bentuk Preposisi', slug: 'bentuk-preposisi' },
+          { judul: 'Peran Semantis Preposisi', slug: 'peran-semantis-preposisi' },
+          { judul: 'Peran Sintaktis Preposisi', slug: 'peran-sintaktis-preposisi' },
+        ],
+      },
+      {
+        judul: 'Konjungsi',
+        slug: 'konjungsi',
+        turunan: [
+          { judul: 'Konjungsi Koordinatif', slug: 'konjungsi-koordinatif' },
+          { judul: 'Konjungsi Korelatif', slug: 'konjungsi-korelatif' },
+          { judul: 'Konjungsi Subordinatif', slug: 'konjungsi-subordinatif' },
+          { judul: 'Konjungsi Antarkalimat', slug: 'konjungsi-antarkalimat' },
+          { judul: 'Simpulan', slug: 'simpulan' },
+        ],
+      },
       { judul: 'Interjeksi', slug: 'interjeksi' },
       { judul: 'Artikula', slug: 'artikula' },
       { judul: 'Partikel Penegas', slug: 'partikel-penegas' },
@@ -152,12 +236,32 @@ const daftarIsiGramatika = [
         slug: 'kategori-fungsi-dan-peran',
         turunan: [
           { judul: 'Kategori', slug: 'kategori' },
-          { judul: 'Fungsi Sintaktis', slug: 'fungsi-sintaktis' },
+          {
+            judul: 'Fungsi Sintaktis',
+            slug: 'fungsi-sintaktis',
+            turunan: [
+              { judul: 'Predikat', slug: 'predikat' },
+              { judul: 'Subjek', slug: 'subjek' },
+              { judul: 'Objek', slug: 'objek' },
+              { judul: 'Pelengkap', slug: 'pelengkap' },
+              { judul: 'Keterangan', slug: 'keterangan' },
+            ],
+          },
           { judul: 'Peran', slug: 'peran' },
         ],
       },
       { judul: 'Kalimat Dasar', slug: 'kalimat-dasar' },
-      { judul: 'Jenis Kalimat', slug: 'jenis-kalimat' },
+      {
+        judul: 'Jenis Kalimat',
+        slug: 'jenis-kalimat',
+        turunan: [
+          { judul: 'Kalimat Berdasarkan Jumlah Klausanya', slug: 'kalimat-berdasarkan-jumlah-klausanya' },
+          { judul: 'Kalimat Berdasarkan Predikat', slug: 'kalimat-berdasarkan-predikat' },
+          { judul: 'Kalimat Berdasarkan Klasifikasi Sintaktis', slug: 'kalimat-berdasarkan-klasifikasi-sintaktis' },
+          { judul: 'Kalimat Berdasarkan Kelengkapan Unsur', slug: 'kalimat-berdasarkan-kelengkapan-unsur' },
+          { judul: 'Kalimat dan Kemasan Informasi', slug: 'kalimat-dan-kemasan-informasi' },
+        ],
+      },
       { judul: 'Pengingkaran', slug: 'pengingkaran' },
     ],
   },
@@ -165,12 +269,49 @@ const daftarIsiGramatika = [
     judul: 'Hubungan Antarklausa',
     slug: 'hubungan-antarklausa',
     items: [
-      { judul: 'Hubungan Koordinatif', slug: 'hubungan-koordinatif' },
-      { judul: 'Hubungan Subordinatif', slug: 'hubungan-subordinatif' },
+      {
+        judul: 'Hubungan Koordinatif',
+        slug: 'hubungan-koordinatif',
+        turunan: [
+          { judul: 'Ciri-Ciri Sintaktis Hubungan Koordinatif', slug: 'ciri-ciri-sintaktis-hubungan-koordinatif' },
+          { judul: 'Ciri-Ciri Semantis Hubungan Koordinatif', slug: 'ciri-ciri-semantis-hubungan-koordinatif' },
+          { judul: 'Hubungan Semantis Antarklausa dalam Kalimat Majemuk', slug: 'hubungan-semantis-antarklausa-dalam-kalimat-majemuk' },
+        ],
+      },
+      {
+        judul: 'Hubungan Subordinatif',
+        slug: 'hubungan-subordinatif',
+        turunan: [
+          { judul: 'Ciri-Ciri Sintaktis Hubungan Subordinatif', slug: 'ciri-ciri-sintaktis-hubungan-subordinatif' },
+          { judul: 'Ciri-Ciri Semantis Hubungan Subordinatif', slug: 'ciri-ciri-semantis-hubungan-subordinatif' },
+          { judul: 'Hubungan Semantis Antarklausa dalam Kalimat Kompleks', slug: 'hubungan-semantis-antarklausa-dalam-kalimat-kompleks' },
+          { judul: 'Hubungan Optatif', slug: 'hubungan-optatif' },
+        ],
+      },
       { judul: 'Pelesapan', slug: 'pelesapan' },
     ],
   },
 ];
+
+function flattenItemGramatika(bab, item, visibleParent = null) {
+  const currentItem = {
+    judulBab: bab.judul,
+    babSlug: bab.slug,
+    judul: item.judul,
+    slug: item.slug,
+    dokumen: `${bab.slug}/${item.slug}.md`,
+    tipe: visibleParent ? 'subitem' : 'item',
+    ...(visibleParent ? {
+      parentSlug: visibleParent.slug,
+      parentJudul: visibleParent.judul,
+    } : {}),
+  };
+
+  return [
+    currentItem,
+    ...((item.turunan || []).flatMap((turunan) => flattenItemGramatika(bab, turunan, visibleParent || item))),
+  ];
+}
 
 const daftarItemGramatika = daftarIsiGramatika.flatMap((bab) => [
   {
@@ -181,26 +322,7 @@ const daftarItemGramatika = daftarIsiGramatika.flatMap((bab) => [
     dokumen: `${bab.slug}/${bab.slug}.md`,
     tipe: 'bab',
   },
-  ...bab.items.flatMap((item) => [
-    {
-      judulBab: bab.judul,
-      babSlug: bab.slug,
-      judul: item.judul,
-      slug: item.slug,
-      dokumen: `${bab.slug}/${item.slug}.md`,
-      tipe: 'item',
-    },
-    ...((item.turunan || []).map((turunan) => ({
-      judulBab: bab.judul,
-      babSlug: bab.slug,
-      judul: turunan.judul,
-      slug: turunan.slug,
-      dokumen: `${bab.slug}/${turunan.slug}.md`,
-      tipe: 'subitem',
-      parentSlug: item.slug,
-      parentJudul: item.judul,
-    }))),
-  ]),
+  ...bab.items.flatMap((item) => flattenItemGramatika(bab, item)),
 ]);
 
 const petaItemGramatikaBySlug = daftarItemGramatika.reduce((acc, item) => {
