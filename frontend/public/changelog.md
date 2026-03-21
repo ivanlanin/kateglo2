@@ -1,5 +1,10 @@
 # Riwayat Perubahan
 
+## 2026-03-21 Sabtu
+
+- Menambahkan bab 1–3 dari TBBBI ke [Gramatika](/gramatika)
+- Menambahkan bagan-bagan
+
 ## 2026-03-20 Jumat
 
 - Menambahkan bagian adjektiva, nomina, pronomina, numeralia, dan verba di [Gramatika](/gramatika)
