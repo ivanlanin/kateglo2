@@ -23,11 +23,8 @@ jest.mock('../../../services/publik/layananTesaurusPublik', () => ({
   ambilDetailTesaurus: jest.fn(),
 }));
 
-jest.mock('../../../services/publik/layananGlosariumPublik', () => ({
-  ambilDetailGlosarium: jest.fn(),
-}));
-
 jest.mock('../../../models/leksikon/modelGlosarium', () => ({
+  ambilPersisAsing: jest.fn(),
   cari: jest.fn(),
   resolveSlugBidang: jest.fn(),
 }));
@@ -35,7 +32,6 @@ jest.mock('../../../models/leksikon/modelGlosarium', () => ({
 const logger = require('../../../config/logger');
 const { ambilDetailKamus } = require('../../../services/publik/layananKamusPublik');
 const { ambilDetailTesaurus } = require('../../../services/publik/layananTesaurusPublik');
-const { ambilDetailGlosarium } = require('../../../services/publik/layananGlosariumPublik');
 const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
 const runtime = require('../../../services/sistem/layananSsrRuntime');
 
@@ -131,15 +127,7 @@ describe('services/sistem/layananSsrRuntime', () => {
     });
     ambilDetailTesaurus.mockResolvedValue({ indeks: 'besar', sinonim: ['agung'], antonim: ['kecil'] });
     ModelGlosarium.cari.mockResolvedValue({ total: 2, data: [{ indonesia: 'istilah', asing: 'term' }] });
-    ambilDetailGlosarium.mockResolvedValue({
-      persis: [{ id: 1, asing: 'bankrupt', indonesia: 'bangkrut' }],
-      mengandung: [],
-      mengandungPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
-      mengandungTotal: 0,
-      mirip: [],
-      miripPage: { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null },
-      miripTotal: 0,
-    });
+    ModelGlosarium.ambilPersisAsing.mockResolvedValue([{ id: 1, asing: 'bankrupt', indonesia: 'bangkrut' }]);
   });
 
   it('helper isAssetRequest dan isBypassPath menutup semua cabang', () => {
@@ -343,7 +331,7 @@ describe('services/sistem/layananSsrRuntime', () => {
     const cariKosong = await runtime.__private.prefetchSsrData('/glosarium/cari/kosong');
     expect(cariKosong.contoh).toEqual([]);
 
-    ambilDetailGlosarium.mockResolvedValueOnce(null);
+    ModelGlosarium.ambilPersisAsing.mockResolvedValueOnce(null);
     const detailKosong = await runtime.__private.prefetchSsrData('/glosarium/detail/tidak-ada');
     expect(detailKosong.type).toBe('glosarium-detail');
     expect(detailKosong.persis).toEqual([]);

@@ -9,7 +9,6 @@ const express = require('express');
 const logger = require('../../config/logger');
 const { ambilDetailKamus } = require('../publik/layananKamusPublik');
 const { ambilDetailTesaurus } = require('../publik/layananTesaurusPublik');
-const { ambilDetailGlosarium } = require('../publik/layananGlosariumPublik');
 const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
 
 const backendRootDir = path.resolve(__dirname, '..', '..');
@@ -368,11 +367,11 @@ async function prefetchSsrData(pathname = '/') {
     if (decoded.startsWith('/glosarium/detail/')) {
       const asing = decoded.replace('/glosarium/detail/', '').trim();
       if (!asing) return null;
-      const detail = await ambilDetailGlosarium(asing, { limit: 1 });
+      const persis = await ModelGlosarium.ambilPersisAsing(asing);
       return {
         type: 'glosarium-detail',
         asing,
-        persis: detail?.persis || [],
+        persis: persis || [],
       };
     }
 

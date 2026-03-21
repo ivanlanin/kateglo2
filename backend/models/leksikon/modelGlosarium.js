@@ -1089,6 +1089,44 @@ class ModelGlosarium {
     return result.rowCount > 0;
   }
 
+  static async ambilPersisAsing(asing) {
+    const trimmed = (asing || '').trim();
+    if (!trimmed) {
+      return [];
+    }
+
+    const normalizedSchema = await isNormalizedGlosariumSchema();
+
+    if (!normalizedSchema) {
+      const result = await db.query(
+        `SELECT g.id, g.asing, g.indonesia, g.bahasa,
+                COALESCE(g.bidang, '') AS bidang, '' AS bidang_kode,
+                COALESCE(g.sumber, '') AS sumber, '' AS sumber_kode
+         FROM glosarium g
+         WHERE g.aktif = TRUE AND LOWER(g.asing) = LOWER($1)
+         ORDER BY g.bidang, g.sumber`,
+        [trimmed]
+      );
+      return result.rows;
+    }
+
+    const result = await db.query(
+      `SELECT g.id, g.asing, g.indonesia,
+              g.bahasa_id, ba.kode AS bahasa_kode, ba.nama AS bahasa,
+              b.kode AS bidang_kode, b.nama AS bidang,
+              s.kode AS sumber_kode, s.nama AS sumber
+       FROM glosarium g
+       JOIN bidang b ON b.id = g.bidang_id
+       JOIN sumber s ON s.id = g.sumber_id
+       LEFT JOIN bahasa ba ON ba.id = g.bahasa_id
+       WHERE g.aktif = TRUE AND LOWER(g.asing) = LOWER($1)
+       ORDER BY b.nama, s.nama`,
+      [trimmed]
+    );
+
+    return result.rows;
+  }
+
   static async ambilDetailAsing(asing, { limit = 20, mengandungCursor = null, miripCursor = null } = {}) {
     const trimmed = (asing || '').trim();
     const emptyPage = { hasPrev: false, hasNext: false, prevCursor: null, nextCursor: null };
