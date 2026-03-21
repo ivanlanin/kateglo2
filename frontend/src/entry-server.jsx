@@ -254,16 +254,17 @@ function buildGenericSocialContext(pathname = '/') {
 function buildSocialImageUrl(pathname = '/', siteBaseUrl = 'https://kateglo.org', prefetchedData = null, fallbackTitle = '') {
   const path = decodeURIComponent(pathname || '/');
   const baseUrl = stripTrailingSlash(siteBaseUrl || 'https://kateglo.org');
+  const meta = buildMetaForPath(path, baseUrl, prefetchedData);
   const genericConfig = buildGenericSocialContext(path);
   const defaultImageUrl = `${baseUrl}/og/default.png${buildOgQueryString({
-    title: stripKategloSuffix(fallbackTitle) || 'Kateglo',
-    context: 'Kamus, Tesaurus, dan Glosarium Bahasa Indonesia',
+    title: stripKategloSuffix(meta.title || fallbackTitle) || 'Kateglo',
+    context: meta.description || 'Kamus, Tesaurus, dan Glosarium Bahasa Indonesia',
   })}`;
 
   if (path === '/ejaan' || path === '/ejaan/') {
     return `${baseUrl}/og/ejaan.png${buildOgQueryString({
       title: 'Panduan Ejaan Bahasa Indonesia',
-      context: 'Pedoman Bahasa Indonesia',
+      context: meta.description || 'Pedoman Bahasa Indonesia',
     })}`;
   }
 
@@ -276,14 +277,14 @@ function buildSocialImageUrl(pathname = '/', siteBaseUrl = 'https://kateglo.org'
     };
     return `${baseUrl}/og/ejaan/${encodeURIComponent(slug)}.png${buildOgQueryString({
       title: metadata.judul,
-      context: metadata.judulBab || 'Ejaan',
+      context: meta.description || metadata.judulBab || 'Ejaan',
     })}`;
   }
 
   if (path === '/gramatika' || path === '/gramatika/') {
     return `${baseUrl}/og/gramatika.png${buildOgQueryString({
       title: 'Panduan Tata Bahasa Indonesia',
-      context: 'Tata Bahasa Indonesia',
+      context: meta.description || 'Tata Bahasa Indonesia',
     })}`;
   }
 
@@ -296,13 +297,13 @@ function buildSocialImageUrl(pathname = '/', siteBaseUrl = 'https://kateglo.org'
     };
     return `${baseUrl}/og/gramatika/${encodeURIComponent(slug)}.png${buildOgQueryString({
       title: metadata.judul,
-      context: metadata.parentJudul || metadata.judulBab || 'Gramatika',
+      context: meta.description || metadata.parentJudul || metadata.judulBab || 'Gramatika',
     })}`;
   }
 
   return `${baseUrl}/og/${genericConfig.section}.png${buildOgQueryString({
-    title: stripKategloSuffix(fallbackTitle) || 'Kateglo',
-    context: genericConfig.context,
+    title: stripKategloSuffix(meta.title || fallbackTitle) || 'Kateglo',
+    context: meta.description || genericConfig.context,
   })}`;
 }
 

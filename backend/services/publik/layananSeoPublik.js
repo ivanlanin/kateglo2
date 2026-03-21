@@ -12,6 +12,7 @@ const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
 const rootDir = path.resolve(__dirname, '..', '..', '..');
 const ejaanDocsDir = path.join(rootDir, 'frontend', 'public', 'ejaan');
 const gramatikaDocsDir = path.join(rootDir, 'frontend', 'public', 'gramatika');
+const ogLogoPath = path.join(rootDir, 'frontend', 'public', 'images', 'logo-persegi.png');
 
 const KATEGORI_SLUG_NAMA = new Set(['kelas_kata', 'kelas-kata', 'kelas', 'ragam', 'bahasa', 'bidang']);
 const ogImageDimensions = { width: 1200, height: 630 };
@@ -128,6 +129,8 @@ const ogSectionPalette = {
   },
 };
 
+let cachedOgLogoDataUri;
+
 function normalisasiBaseUrl(value = '') {
   const trimmed = String(value || '').trim();
   if (!trimmed) return '';
@@ -203,13 +206,21 @@ function pickQueryValue(value = '') {
 }
 
 function truncatePlainText(value = '', maxLen = 80) {
+  return truncatePlainTextWithOptions(value, maxLen);
+}
+
+function truncatePlainTextWithOptions(value = '', maxLen = 80, options = {}) {
   const normalized = String(value || '').replace(/\s+/g, ' ').trim();
+  const ellipsis = options.leadingSpaceBeforeEllipsis ? ' …' : '…';
+  if (options.forceEllipsis && normalized) {
+    if (normalized.length <= maxLen) return `${normalized}${ellipsis}`;
+  }
   if (normalized.length <= maxLen) return normalized;
 
   const cut = normalized.slice(0, maxLen);
   const lastSpace = cut.lastIndexOf(' ');
   const safeCut = lastSpace > Math.floor(maxLen * 0.6) ? cut.slice(0, lastSpace) : cut;
-  return `${safeCut.trim()}…`;
+  return `${safeCut.trim()}${ellipsis}`;
 }
 
 function formatTitleFromSlug(value = '') {
@@ -231,6 +242,42 @@ function normalizeOgSection(value = '') {
   const normalized = normalisasiSlug(value);
   if (Object.prototype.hasOwnProperty.call(ogSectionPalette, normalized)) return normalized;
   return 'default';
+}
+
+function getOgLogoDataUri() {
+  if (cachedOgLogoDataUri !== undefined) return cachedOgLogoDataUri;
+
+  try {
+    const imageBuffer = fs.readFileSync(ogLogoPath);
+    cachedOgLogoDataUri = `data:image/png;base64,${imageBuffer.toString('base64')}`;
+  } catch {
+    cachedOgLogoDataUri = '';
+  }
+
+  return cachedOgLogoDataUri;
+}
+
+function escapeRegex(value = '') {
+  return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function stripRepeatedOgContextTitle(title = '', context = '') {
+  const normalizedTitle = String(title || '').replace(/\s+/g, ' ').trim();
+  const normalizedContext = String(context || '').replace(/\s+/g, ' ').trim();
+  if (!normalizedTitle || !normalizedContext) return normalizedContext;
+
+  const titlePattern = new RegExp(`^${escapeRegex(normalizedTitle)}\\s*[:;,-–—]\\s*`, 'i');
+  const stripped = normalizedContext.replace(titlePattern, '').trim();
+  if (stripped && stripped !== normalizedContext) return stripped;
+
+  const leadingTitlePattern = new RegExp(`^${escapeRegex(normalizedTitle)}\\b\\s+`, 'i');
+  const strippedLeadingTitle = normalizedContext.replace(leadingTitlePattern, '').trim();
+  return strippedLeadingTitle || normalizedContext;
+}
+
+function normalizeOgContext(title = '', context = '', fallbackContext = '') {
+  const candidate = stripRepeatedOgContextTitle(title, pickQueryValue(context) || fallbackContext);
+  return candidate;
 }
 
 function buildOgImagePayload({ section = 'default', slug = '', title = '', context = '' } = {}) {
@@ -296,15 +343,14 @@ function buildOgImagePayload({ section = 'default', slug = '', title = '', conte
   return {
     section: sectionKey,
     sectionLabel,
-    eyebrow: 'Kateglo',
     title: truncatePlainText(pickQueryValue(title) || fallbackTitle, 88),
-    context: truncatePlainText(pickQueryValue(context) || fallbackContext, 52),
-    footer: 'Baca selengkapnya di kateglo.org',
+    context: normalizeOgContext(pickQueryValue(title) || fallbackTitle, context, fallbackContext),
     cta: 'Baca di Kateglo',
+    logoDataUri: getOgLogoDataUri(),
   };
 }
 
-function splitOgTextIntoLines(text = '', maxChars = 26, maxLines = 3) {
+function splitOgTextIntoLines(text = '', maxChars = 26, maxLines = 3, options = {}) {
   const normalizedText = String(text ?? '');
   const words = normalizedText.split(/\s+/).filter(Boolean);
   const lines = [];
@@ -328,8 +374,16 @@ function splitOgTextIntoLines(text = '', maxChars = 26, maxLines = 3) {
   if (!lines.length) return ['Kateglo'];
 
   const joined = lines.join(' ');
-  if (joined.length < normalizedText.trim().length) {
-    lines[lines.length - 1] = truncatePlainText(lines[lines.length - 1], Math.max(12, maxChars - 2));
+  const overflowed = joined.length < normalizedText.trim().length;
+  if (overflowed) {
+    lines[lines.length - 1] = truncatePlainTextWithOptions(
+      lines[lines.length - 1],
+      Math.max(12, maxChars - 2),
+      {
+        leadingSpaceBeforeEllipsis: options.leadingSpaceBeforeEllipsis === true,
+        forceEllipsis: true,
+      }
+    );
   }
 
   return lines.slice(0, maxLines);
@@ -344,7 +398,14 @@ function renderSvgTextLines(lines = [], { x = 72, y = 220, lineHeight = 78 } = {
 function buildOgImageSvg(payload = {}) {
   const palette = ogSectionPalette[payload.section] || ogSectionPalette.default;
   const titleLines = splitOgTextIntoLines(payload.title, 28, 3);
-  const lineHeight = titleLines.length >= 3 ? 70 : 78;
+  const titleLineHeight = titleLines.length >= 3 ? 70 : 78;
+  const contextLines = splitOgTextIntoLines(payload.context, 50, 5, { leadingSpaceBeforeEllipsis: true });
+  const contextLineHeight = 28;
+  const titleStartY = 208;
+  const lastTitleY = titleStartY + ((titleLines.length - 1) * titleLineHeight);
+  const contextStartY = lastTitleY + 58;
+  const ctaY = 472;
+  const hasLogo = Boolean(payload.logoDataUri);
 
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${ogImageDimensions.width}" height="${ogImageDimensions.height}" viewBox="0 0 ${ogImageDimensions.width} ${ogImageDimensions.height}" role="img" aria-label="${escapeXml(payload.title)}">`,
@@ -358,16 +419,16 @@ function buildOgImageSvg(payload = {}) {
     `  <circle cx="1030" cy="92" r="160" fill="${palette.accentSoft}" opacity="0.7" />`,
     `  <circle cx="980" cy="520" r="190" fill="${palette.accentSoft}" opacity="0.42" />`,
     `  <rect x="44" y="44" width="1112" height="542" rx="30" fill="none" stroke="${palette.border}" stroke-width="2" />`,
-    `  <text x="72" y="92" fill="${palette.accent}" font-family="Segoe UI, Arial, sans-serif" font-size="32" font-weight="700">${escapeXml(payload.eyebrow)}</text>`,
-    `  <rect x="72" y="118" width="220" height="46" rx="23" fill="${palette.badgeBg}" />`,
-    `  <text x="182" y="148" fill="${palette.badgeText}" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle">${escapeXml(payload.sectionLabel)}</text>`,
-    `  <text fill="${palette.title}" font-family="Segoe UI, Arial, sans-serif" font-size="68" font-weight="700">${renderSvgTextLines(titleLines, { x: 72, y: 244, lineHeight })}</text>`,
-    `  <text x="72" y="466" fill="${palette.body}" font-family="Segoe UI, Arial, sans-serif" font-size="26">${escapeXml(payload.context)}</text>`,
-    `  <text x="72" y="548" fill="${palette.body}" font-family="Segoe UI, Arial, sans-serif" font-size="24">${escapeXml(payload.footer)}</text>`,
-    `  <rect x="874" y="500" width="236" height="58" rx="29" fill="${palette.accent}" />`,
-    `  <text x="992" y="536" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle">${escapeXml(payload.cta)}</text>`,
+    hasLogo ? `  <rect x="1016" y="68" width="100" height="100" rx="30" fill="#ffffff" opacity="0.9" />` : '',
+    hasLogo ? `  <image href="${payload.logoDataUri}" x="1030" y="82" width="72" height="72" preserveAspectRatio="xMidYMid meet" />` : '',
+    `  <rect x="72" y="92" width="220" height="46" rx="23" fill="${palette.badgeBg}" />`,
+    `  <text x="182" y="122" fill="${palette.badgeText}" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle">${escapeXml(payload.sectionLabel)}</text>`,
+    `  <text fill="${palette.title}" font-family="Segoe UI, Arial, sans-serif" font-size="68" font-weight="700">${renderSvgTextLines(titleLines, { x: 72, y: titleStartY, lineHeight: titleLineHeight })}</text>`,
+    `  <text fill="${palette.body}" font-family="Segoe UI, Arial, sans-serif" font-size="22">${renderSvgTextLines(contextLines, { x: 72, y: contextStartY, lineHeight: contextLineHeight })}</text>`,
+    `  <rect x="874" y="${ctaY}" width="236" height="58" rx="29" fill="${palette.accent}" />`,
+    `  <text x="992" y="${ctaY + 36}" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle">${escapeXml(payload.cta)}</text>`,
     '</svg>',
-  ].join('\n');
+  ].filter(Boolean).join('\n');
 }
 
 function renderOgImagePng(options = {}) {
@@ -550,8 +611,11 @@ module.exports = {
     encodePathSegment,
     pickQueryValue,
     truncatePlainText,
+    truncatePlainTextWithOptions,
     formatTitleFromSlug,
     normalizeOgSection,
+    stripRepeatedOgContextTitle,
+    normalizeOgContext,
     ambilPathStatis,
     buildPathKamusKategori,
     ambilPathKamusKategori,
@@ -561,6 +625,7 @@ module.exports = {
     escapeXml,
     splitOgTextIntoLines,
     renderSvgTextLines,
+    getOgLogoDataUri,
     ogImageDimensions,
   },
 };

@@ -302,10 +302,13 @@ describe('layananSeoPublik private helpers', () => {
     expect(__private.pickQueryValue()).toBe('');
     expect(__private.truncatePlainText('kata pendek', 20)).toBe('kata pendek');
     expect(__private.truncatePlainText('ini teks yang cukup panjang untuk dipotong secara aman', 24)).toMatch(/…$/);
+    expect(__private.truncatePlainTextWithOptions('ini teks yang cukup panjang untuk dipotong secara aman', 24, { leadingSpaceBeforeEllipsis: true })).toMatch(/ …$/);
     expect(__private.formatTitleFromSlug('huruf-kapital')).toBe('Huruf Kapital');
     expect(__private.normalizeOgSection('Gramatika')).toBe('gramatika');
     expect(__private.normalizeOgSection('Kamus')).toBe('kamus');
     expect(__private.normalizeOgSection('lainnya')).toBe('default');
+    expect(__private.stripRepeatedOgContextTitle('gajah', 'gajah: binatang besar')).toBe('binatang besar');
+    expect(__private.normalizeOgContext('gajah', 'gajah: binatang menyusui berbelalai bergading berkaki besar dan berkulit tebal berdaun telinga lebar', 'fallback')).toMatch(/^binatang menyusui/);
 
     const lines = __private.splitOgTextIntoLines('Preposisi dalam konstruksi verba taktransitif yang panjang sekali', 16, 3);
     expect(lines.length).toBeGreaterThan(0);
@@ -335,33 +338,37 @@ describe('layananSeoPublik private helpers', () => {
       title: 'Huruf Kapital',
       context: 'Kaidah Bahasa Indonesia',
     });
+    expect(buildOgImagePayload().logoDataUri).toMatch(/^data:image\/png;base64,/);
   });
 
   it('helper og image menutup branch teks kosong, pemotongan, dan fallback palette', () => {
     expect(__private.splitOgTextIntoLines()).toEqual(['Kateglo']);
     expect(__private.splitOgTextIntoLines(null, 10, 2)).toEqual(['Kateglo']);
     expect(__private.splitOgTextIntoLines('', 10, 2)).toEqual(['Kateglo']);
-    expect(__private.splitOgTextIntoLines('supercalifragilistic kata lain lagi', 10, 2)).toEqual(['supercalifragilistic', 'kata lain']);
-    expect(__private.splitOgTextIntoLines('satu dua tiga empat lima', 8, 2)).toEqual(['satu dua', 'tiga']);
-    expect(__private.splitOgTextIntoLines('satu dua tiga empat lima enam tujuh', 8, 1)).toEqual(['satu dua']);
-    expect(__private.splitOgTextIntoLines('aa bb cc', 2, 1)).toEqual(['aa']);
+    expect(__private.splitOgTextIntoLines('supercalifragilistic kata lain lagi', 10, 2)).toEqual(['supercalifragilistic', 'kata lain…']);
+    expect(__private.splitOgTextIntoLines('satu dua tiga empat lima', 8, 2)).toEqual(['satu dua', 'tiga…']);
+    expect(__private.splitOgTextIntoLines('satu dua tiga empat lima enam tujuh', 8, 1)).toEqual(['satu dua…']);
+    expect(__private.splitOgTextIntoLines('aa bb cc', 2, 1)).toEqual(['aa…']);
     expect(__private.splitOgTextIntoLines('aaaa bbbbbbbbbbbbbbbb cccccccccccccccc', 8, 2)[1]).toMatch(/…$/);
+    expect(__private.splitOgTextIntoLines('satu dua tiga empat lima enam tujuh delapan sembilan sepuluh sebelas dua belas', 10, 3, { leadingSpaceBeforeEllipsis: true })[2]).toMatch(/ …$/);
 
     const svg = buildOgImageSvg({
       section: 'tidak-ada',
       title: '',
       context: 'Ringkas',
-      eyebrow: 'Kateglo',
       sectionLabel: 'Bahasa Indonesia',
-      footer: 'Footer',
       cta: 'CTA',
+      logoDataUri: 'data:image/png;base64,abc',
     });
 
     expect(svg).toContain('linearGradient');
     expect(svg).toContain('Bahasa Indonesia');
+    expect(svg).toContain('<image href="data:image/png;base64,abc"');
+    expect(svg).not.toContain('font-size="32"');
     expect(buildOgImageSvg()).toContain('<svg');
     expect(buildOgImageSvg(buildOgImagePayload({ title: 'satu dua tiga empat lima enam tujuh delapan sembilan sepuluh sebelas' }))).toContain('font-size="68"');
     expect(__private.renderSvgTextLines()).toBe('');
+    expect(__private.getOgLogoDataUri()).toMatch(/^data:image\/png;base64,/);
     expect(Buffer.isBuffer(renderOgImagePng())).toBe(true);
   });
 
@@ -410,14 +417,14 @@ describe('layananSeoPublik dynamic og image', () => {
     expect(buildOgImagePayload({ section: 'gramatika', slug: 'preposisi' })).toEqual({
       section: 'gramatika',
       sectionLabel: 'Gramatika',
-      eyebrow: 'Kateglo',
       title: 'Preposisi',
       context: 'Tata Bahasa Indonesia',
-      footer: 'Baca selengkapnya di kateglo.org',
       cta: 'Baca di Kateglo',
+      logoDataUri: expect.stringMatching(/^data:image\/png;base64,/),
     });
 
     expect(buildOgImagePayload({ section: 'default', title: 'Kamus', context: 'Bahasa' }).title).toBe('Kamus');
+    expect(buildOgImagePayload({ section: 'kamus', title: 'gajah', context: 'gajah: binatang menyusui berbelalai bergading berkaki besar berkulit tebal' }).context).toBe('binatang menyusui berbelalai bergading berkaki besar berkulit tebal');
     expect(buildOgImagePayload({ section: 'kamus' })).toMatchObject({
       section: 'kamus',
       sectionLabel: 'Kamus',
@@ -436,6 +443,7 @@ describe('layananSeoPublik dynamic og image', () => {
     expect(svg).toContain('<svg');
     expect(svg).toContain('Huruf Kapital');
     expect(svg).toContain('Penggunaan Huruf');
+    expect(svg).toContain('<image href="data:image/png;base64,');
 
     const pngBuffer = renderOgImagePng({
       section: 'ejaan',
