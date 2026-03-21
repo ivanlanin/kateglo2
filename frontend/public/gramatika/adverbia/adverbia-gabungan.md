@@ -64,9 +64,12 @@ Selain yang telah dikemukakan, yaitu adverbia gabungan yang berdampingan dan yan
 Contoh:
 
 (58)
-- a. i. Dia *tidak lagi* tinggal di sini.
-     ii. Dia *tidak* tinggal di sini *lagi*.
-- b. i. Sudah dua jam menunggu, dia *belum juga* datang.
-     ii. Sudah dua jam menunggu, dia *belum* datang *juga*.
-- c. i. Karena sudah tidak tahan lagi, dia *ingin segera* minta berhenti.
-     ii. Karena sudah tidak tahan lagi, dia *ingin* minta berhenti *segera*.
+- a.
+     - i. Dia *tidak lagi* tinggal di sini.
+     - ii. Dia *tidak* tinggal di sini *lagi*.
+- b.
+     - i. Sudah dua jam menunggu, dia *belum juga* datang.
+     - ii. Sudah dua jam menunggu, dia *belum* datang *juga*.
+- c.
+     - i. Karena sudah tidak tahan lagi, dia *ingin segera* minta berhenti.
+     - ii. Karena sudah tidak tahan lagi, dia *ingin* minta berhenti *segera*.

@@ -15,15 +15,18 @@ Contoh:
 - c. Mereka *masih* tetap tinggal bersama orang tuanya.
 
 (38)
-- a. i. *Seharusnya* dia datang sebelum pukul delapan.
-     ii. Dia *seharusnya* datang sebelum pukul delapan.
-    iii. Dia datang sebelum pukul delapan *seharusnya*.
-- b. i. *Agaknya* penjelasan pejabat itu tidak mereka pahami.
-     ii. Penjelasan pejabat itu *agaknya* tidak mereka pahami.
-    iii. Penjelasan pejabat itu tidak mereka pahami *agaknya*.
-- c. i. *Sebaiknya* Saudara tidak usah datang.
-     ii. Saudara *sebaiknya* tidak usah datang.
-    iii. Saudara tidak usah datang *sebaiknya*.
+- a.
+    - i. *Seharusnya* dia datang sebelum pukul delapan.
+    - ii. Dia *seharusnya* datang sebelum pukul delapan.
+    - iii. Dia datang sebelum pukul delapan *seharusnya*.
+- b.
+    - i. *Agaknya* penjelasan pejabat itu tidak mereka pahami.
+    - ii. Penjelasan pejabat itu *agaknya* tidak mereka pahami.
+    - iii. Penjelasan pejabat itu tidak mereka pahami *agaknya*.
+- c.
+    - i. *Sebaiknya* Saudara tidak usah datang.
+    - ii. Saudara *sebaiknya* tidak usah datang.
+    - iii. Saudara tidak usah datang *sebaiknya*.
 
 Penggunaan adverbia yang terikat pada tataran frasa terlihat pada contoh (37), sedangkan yang terikat pada tataran klausa atau kalimat dicontohkan pada (38). Adverbia *sudah*, *sangat*, dan *masih* pada (37) masing-masing menerangkan verba *makan*, adjektiva *ramah*, dan frasa verbal *tetap tinggal*. Baik *sudah makan*, *sangat ramah* maupun *masih tetap tinggal* ketiga-tiganya merupakan satuan pada tataran frasa yang berfungsi sebagai predikat.
 

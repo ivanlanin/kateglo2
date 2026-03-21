@@ -270,15 +270,18 @@ Perlu ditambahkan bahwa adjektiva cerapan tertentu tidak hanya berhubungan denga
 Contoh:
 
 (23)
-- a. i. *Masakannya sedap sekali.* [pencitarasaan]
-       ii. *Penampilannya sedap dipandang mata.* [penglihatan]
-       iii. *Bau masakannya sangat sedap.* [penghiduan]
-       iv. *Suaranya sedap didengar.* [pendengaran]
-- b. i. *Kulit bayi itu sangat lembut.* [perabaan]
-       ii. *Jika dibandingkan dengan yang lain, bau parfum ini lebih lembut.* [penghiduan]
-       iii. *Setelah mendengar suara lembut ibunya, bayi itu berhenti menangis.* [pendengaran]
-       iv. *Lukisan itu didominasi oleh sapuan warna lembut.* [penglihatan]
-- c. i. *Pisau itu tidak tajam lagi.* [perabaan]
-       ii. *Di antara saudara-saudaranya, Ante adalah anak yang pendengarannya paling tajam.* [pendengaran]
-       iii. *Sebelum mobil itu meledak, tercium bau gas yang sangat tajam.* [penghiduan]
-       iv. *Meskipun dia sudah tua, penglihatannya masih cukup tajam.* [penglihatan]
+- a.
+       - i. *Masakannya sedap sekali.* [pencitarasaan]
+       - ii. *Penampilannya sedap dipandang mata.* [penglihatan]
+       - iii. *Bau masakannya sangat sedap.* [penghiduan]
+       - iv. *Suaranya sedap didengar.* [pendengaran]
+- b.
+       - i. *Kulit bayi itu sangat lembut.* [perabaan]
+       - ii. *Jika dibandingkan dengan yang lain, bau parfum ini lebih lembut.* [penghiduan]
+       - iii. *Setelah mendengar suara lembut ibunya, bayi itu berhenti menangis.* [pendengaran]
+       - iv. *Lukisan itu didominasi oleh sapuan warna lembut.* [penglihatan]
+- c.
+       - i. *Pisau itu tidak tajam lagi.* [perabaan]
+       - ii. *Di antara saudara-saudaranya, Ante adalah anak yang pendengarannya paling tajam.* [pendengaran]
+       - iii. *Sebelum mobil itu meledak, tercium bau gas yang sangat tajam.* [penghiduan]
+       - iv. *Meskipun dia sudah tua, penglihatannya masih cukup tajam.* [penglihatan]

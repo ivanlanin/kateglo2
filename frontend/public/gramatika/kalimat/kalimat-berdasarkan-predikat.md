@@ -112,9 +112,10 @@ Jika subjek kalimat aktif berupa pronomina persona ketiga atau nama diri, padana
 
 (248)
 - a. Dia sudah membaca buku itu.
-- b. i. Buku itu sudah dibaca olehnya / (oleh) dia. *(cara pertama)*
-  ii. Buku itu sudah dia baca. *(cara kedua)*
-  iii. Buku itu sudah dibacanya. *(cara kedua, klitika -nya)*
+- b.
+  - i. Buku itu sudah dibaca olehnya / (oleh) dia. *(cara pertama)*
+  - ii. Buku itu sudah dia baca. *(cara kedua)*
+  - iii. Buku itu sudah dibacanya. *(cara kedua, klitika -nya)*
 
 Jika subjek kalimat aktif panjang, hanya cara pertama yang dapat digunakan.
 

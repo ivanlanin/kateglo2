@@ -21,15 +21,9 @@ Pada dasarnya setiap kalimat mengandung bagian-bagian yang lebih kecil yang dise
 
 Kalimat sederhana yang terdiri atas satu klausa *Anak itu membeli sebuah buku*, misalnya, pertama-tama dapat dibagi atas *Anak itu* (subjek) dan *membeli sebuah buku* (predikat). Bagian (frasa) *anak itu* dapat dibagi atas *anak* dan *itu*. Demikian juga dengan *membeli sebuah buku* yang dapat dibagi atas *membeli* dan *sebuah buku*. Yang terakhir, *sebuah buku*, dapat dibagi lebih lanjut atas *sebuah* dan *buku*. Struktur kalimat itu dapat digambarkan seperti pada (4) berikut.
 
-```text
-(4)
-                  _________________________________
-                 /                                 \
-            ____/___                         _______\________
-           /        \                       /                \
-        Anak        itu                 membeli         ____/___
-                                                    sebuah    buku
-```
+![Diagram (4) Struktur Konstituen Kalimat](/gramatika/_gambar/bab-02/diagram-02-02-struktur-konstituen-kalimat-4.webp)
+
+*Diagram (4) Struktur Konstituen Kalimat*
 
 Representasi struktur konstituen seperti itu lazim disebut diagram pohon atau pohon (walaupun pohonnya terbalik, akarnya terdapat di atas dan bagian-bagian terkecil dari cabang pohon itu terdapat di bawah). Pada diagram pohon itu tampak bahwa kata merupakan konstituen terkecil dan simpul berupa pertemuan cabang menunjukkan kata-kata yang membentuk konstituen yang lebih besar. Makin dekat simpul cabang itu ke akar, makin besar konstituen yang diwakilinya. Bentuk *Anak itu*, misalnya, membentuk satu konstituen karena deretan kata itu berada di bawah satu simpul cabang yang sama dalam diagram pohon itu; demikian pula dengan *membeli sebuah buku* dan *sebuah buku*.
 
@@ -37,16 +31,19 @@ Bagian kalimat yang terdapat langsung di bawah suatu konstituen, *Anak itu* dan 
 
 Kebenaran analisis kalimat itu tentu saja ditentukan oleh keseluruhan gramatika yang memperlihatkan, melalui koherensi deskripsi yang disajikan, bukti bahwa garis pemisahan bagian-bagian kalimat dilakukan pada tempat yang tepat. Sebagai ilustrasi dapat dilihat pada contoh (5) berikut. Kata (adverbial) *tadi* dapat disisipkan dalam kalimat (paling tidak kalimat sederhana) yang diwatasinya tanpa mengubah makna dasarnya atau proposisinya asal tidak memisahkan suatu konstituen.
 
-```text
-(5) a)  i. Tadi anak itu membeli sebuah buku.
-        ii. *Anak tadi itu membeli sebuah buku.
+(5)
 
-    b)  i. Anak itu tadi membeli sebuah buku.
-        ii. *Anak itu membeli tadi sebuah buku.
+- a.
+  - i. Tadi anak itu membeli sebuah buku.
+  - ii. *Anak tadi itu membeli sebuah buku.
 
-    c)  i. Anak itu membeli sebuah buku tadi.
-        ii. *Anak itu membeli sebuah tadi buku.
-```
+- b.
+  - i. Anak itu tadi membeli sebuah buku.
+  - ii. *Anak itu membeli tadi sebuah buku.
+
+- c.
+  - i. Anak itu membeli sebuah buku tadi.
+  - ii. *Anak itu membeli sebuah tadi buku.
 
 Kalimat-kalimat (a)ii, (b)ii, dan (c)ii tidak berterima karena kata *tadi* memisahkan kata-kata yang membentuk satu konstituen seperti tampak pada (4) di atas. Dengan kata lain, analisis kalimat berdasarkan konstituen seperti yang dilakukan di atas memungkinkan dibuat pernyataan umum mengenai tempat adverbial waktu seperti *tadi* di dalam kalimat.
 
@@ -99,26 +96,18 @@ Konstituen yang terdiri atas dua kata atau lebih (khususnya yang mengandung satu
 
 Struktur kalimat dapat digambarkan dengan jalan memberi label kategori konstituennya seperti tampak pada (8) berikut.
 
-```text
-(8)                    Klausa
-                      /     \
-                    FN       FV
-                   /  \     /  \
-                  N   Pen   V    FN
-                                 / \
-                               Pen  N
+![Diagram (8) Struktur Kategori Kalimat](/gramatika/_gambar/bab-02/diagram-02-03-struktur-kategori-kalimat-8.webp)
 
-                 anak  itu membeli sebuah buku
-```
+*Diagram (8) Struktur Kategori Kalimat*
 
 ## Konstruksi Tata Bahasa dan Fungsinya (2.2.3.3)
 
 Pengertian teoretis utama berikutnya yang perlu dikemukakan adalah bahwa setiap konstituen selalu mempunyai peran di dalam konstruksi yang lebih besar. Peran itu disebut fungsi gramatikal. Pada contoh kalimat di atas, frasa *anak itu* dan *sebuah buku* tergolong dalam satu kategori yang sama, yaitu FN, tetapi mempunyai fungsi yang berbeda, masing-masing sebagai subjek dan objek. Keduanya tergolong dalam satu kategori karena kedua frasa itu serupa dalam struktur internalnya (keduanya memiliki nomina sebagai unsur utama), tetapi mempunyai fungsi yang berbeda karena berada dalam hubungan yang berbeda dengan verba. Hal sebaliknya terlihat dalam contoh berikut.
 
-```text
-(9) a. Kesalahannya jelas.
-    b. Bahwa dia bersalah jelas.
-```
+(9)
+
+- a. *Kesalahannya* jelas.
+- b. *Bahwa dia bersalah* jelas.
 
 Konstituen *kesalahannya* pada (9a) dan *bahwa dia bersalah* pada (9b) mempunyai fungsi yang sama (subjek), tetapi tergolong dalam kategori berbeda (FN dan Klausa). Kedua konstituen tersebut mempunyai fungsi yang sama karena keduanya mempunyai hubungan yang sama dengan predikat dan tergolong dalam kategori yang berbeda, yaitu yang pertama berpusat pada nomina (*kesalahan*) dan yang kedua berpusat pada verba (*bersalah*).
 
@@ -136,11 +125,11 @@ Noninti merupakan fungsi yang sangat umum. Untuk berbagai keperluan, jenis-jenis
 
 Contoh:
 
-```text
-(10) a. gambar anjing yang mereka bawa itu
-     b. gambar anjing yang mereka bawa itu
-     c. gambar anjing yang mereka bawa itu
-```
+(10)
+
+- a. gambar *anjing* yang mereka bawa itu
+- b. gambar anjing *yang mereka bawa* itu
+- c. gambar anjing yang mereka bawa *itu*
 
 Pada contoh (10a) *anjing* melengkapi nomina inti *gambar*, *yang mereka bawa* pada (10b) mewatasi frasa nominal *gambar anjing*, dan *itu* pada (10c) menentukan frasa nominal *gambar anjing yang mereka bawa*.
 
@@ -150,12 +139,12 @@ Fungsi penentu hanya terdapat pada struktur FN, sedangkan fungsi komplemen dan p
 
 Pada umumnya konstruksi mempunyai inti, tetapi ada juga sejumlah konstruksi tanpa inti, seperti pada contoh berikut.
 
-```text
-(11) a. Dia membeli sayuran, buah, dan ikan.
-        (koordinatif)
-     b. Hujan lebat menghanyutkan, demikian diberitakan, puluhan kendaraan.
-        (suplementasi)
-```
+(11)
+
+- a. Dia membeli *sayuran, buah, dan ikan*.
+  (koordinatif)
+- b. Hujan lebat menghanyutkan, *demikian diberitakan*, puluhan kendaraan.
+  (suplementasi)
 
 Nomina yang dicetak miring pada (11a) mempunyai kedudukan sintaksis yang sama dan tidak dapat dinyatakan bahwa yang satu merupakan inti dan yang lain sebagai noninti. Ketiganya (*sayuran, buah, dan ikan*) memiliki fungsi yang sama, yakni fungsi koordinatif.
 
@@ -165,31 +154,15 @@ Pada (11b) konstituen yang dicetak miring disebut suplementasi, yang tidak terin
 
 Telah dikemukakan di atas bahwa fungsi pada dasarnya adalah konsep relasi dan penetapan fungsi suatu konstituen pada hakikatnya merupakan pengidentifikasian relasinya dalam konstruksi yang mengandungnya. Salah satu cara untuk menyatakan hal itu adalah dengan menuliskan nama fungsi pada garis (cabang) pada diagram yang menghubungkan konstituen yang bersangkutan dalam konstruksi. Langkah pertama diagram kalimat akan tampak seperti contoh (12) berikut.
 
-```text
-(12)          Klausa
-             /      \
-        Subjek      Predikat
-          |            |
-         FN           FV
-```
+![Diagram (12) Representasi Fungsi Kalimat](/gramatika/_gambar/bab-02/diagram-02-04-representasi-fungsi-kalimat-12.webp)
+
+*Diagram (12) Representasi Fungsi Kalimat*
 
 Dalam kasus yang lebih kompleks, bentuk diagram dapat menimbulkan masalah. Oleh karena itu, fungsi-fungsi tersebut dituliskan di atas label kategori seperti pada (13) berikut.
 
-```text
-(13)                    Klausa
-                       /      \
-                 Subjek       Predikat
-                    |             |
-                    FN            FV
-                   /  \         /    \
-                  N   Pen  Predikator Objek
-                              |        |
-                              V        FN
-                                      /  \
-                                    Pen   N
+![Diagram (13) Representasi Fungsi dengan Label Kategori](/gramatika/_gambar/bab-02/diagram-02-05-representasi-fungsi-kalimat-13.webp)
 
-                 anak  itu        membeli sebuah buku
-```
+*Diagram (13) Representasi Fungsi dengan Label Kategori*
 
 ### Cabang Tunggal (2.2.3.3.5)
 
@@ -197,39 +170,23 @@ Selain yang telah dikemukakan di atas, ada pula inti tanpa unsur noninti yang me
 
 Contoh:
 
-```text
-(14) a. Anak-anak itu sedang bermain di taman.
-     b. Anak-anak sedang bermain di taman.
-```
+(14)
+
+- a. *Anak-anak itu* sedang bermain di taman.
+- b. *Anak-anak* sedang bermain di taman.
 
 Konstituen yang dicetak miring tergolong FN yang berfungsi sebagai subjek klausa, *anak-anak* merupakan inti dan *itu* sebagai noninti pada (14a), tetapi berdiri sendiri tanpa unsur noninti pada (14b). Bagan dari struktur yang bersangkutan dapat disajikan seperti pada (15) berikut.
 
-```text
-(15) a.            FN                     b.           FN
-                  /  \                                 |
-                 N   Pen                               N
-                 |    |                                |
-             anak-anak itu                         anak-anak
-```
+![Diagram (15) Cabang Tunggal pada Frasa Nominal](/gramatika/_gambar/bab-02/diagram-02-06-cabang-tunggal-15.webp)
+
+*Diagram (15) Cabang Tunggal pada Frasa Nominal*
 
 ### Model Diagram (2.2.3.3.6)
 
 Diagram pada dasarnya berfungsi untuk memperjelas sesuatu yang kalau dideskripsikan secara verbal akan lebih panjang. Dalam kaitannya dengan deskripsi kalimat, diagram berfungsi menggambarkan struktur suatu konstruksi secara ringkas dan padat, tetapi sederhana dan benar. Kenyataan bahwa kalimat terdiri atas beberapa klausa menyebabkan buku ini memilih model diagram pohon seperti pada (16) berikut.
 
-```text
-(16) a. Ibu belum makan sejak pagi, tetapi dia tidak lapar.
+![Diagram (16) Model Diagram Kalimat](/gramatika/_gambar/bab-02/diagram-02-07-model-diagram-kalimat-16.webp)
 
-                               K
-                    __________/|\__________
-                   /           |           \
-                 Kl          Konj           Kl
-              ___/|\___        |         ___/ \___
-             /    |    \       |        /         \
-           Sbj   Pred  Ket   tetapi    Sbj       Pred
-            |      |    |               |          |
-           FN     FV   FN             Pron       FAdj
-            |      |    |               |          |
-           Ibu belum makan sejak pagi  dia    tidak lapar
-```
+*Diagram (16) Model Diagram Kalimat*
 
 Kehadiran label K di puncak memperjelas bahwa satuan bahasa itu adalah satu kalimat. Penggunaan label Sbj, Pred, dan Ket memberikan informasi tentang fungsi satuan di bawahnya walaupun tidak termasuk kategori sintaksis.

@@ -13,24 +13,18 @@ Dengan kata lain, morfologi infleksional berkaitan dengan deskripsi perubahan be
 
 Contoh:
 
-```text
-(2) a) darat
-    b) daratkan/darati/mendaratkan/mendarati/mendarat
-    c) pendaratan/daratan
-```
+(2)
+
+- a. darat
+- b. daratkan/darati/mendaratkan/mendarati/mendarat
+- c. pendaratan/daratan
 
 Semua bentuk pada contoh di atas bertalian dengan kata *darat*. Bentuk-bentuk pada (2b) dan (2c) merupakan bentuk turunan yang dilakukan dengan penambahan afiks. Penambahan afiks itu akan menghasilkan leksem baru jika penambahan itu merupakan tuntutan makna. Jika penambahan afiks itu merupakan tuntutan gramatika, hasilnya merupakan varian dari leksem pangkalnya. Persoalannya adalah mana yang merupakan leksem baru yang diturunkan dari pangkalnya dan mana bentuk varian leksem tertentu. Untuk itu, perlu diketahui mana bentuk pangkal dari suatu bentuk turunan.
 
 Pada (2b) hanya ada dua leksem baru, yaitu *daratkan* (dengan varian *darati*, *mendaratkan*, *mendarati*) dan *mendarat*. Pada (2c) ada dua leksem, yaitu *pendaratan* dan *daratan*. Proses pembentukan kata-kata di atas dapat diperlihatkan lebih jelas pada (3) berikut.
 
-```text
-                 mendarat
+![Diagram (3) Pembentukan Kata dari darat](/gramatika/_gambar/bab-02/diagram-02-01-pembentukan-kata-darat.webp)
 
-     daratkan    mendaratkan    pendaratan
-(3)  darat
-     darati      mendarati
-
-                 daratan
-```
+*Diagram (3) Pembentukan Kata dari darat*
 
 Bentuk *pendaratan* dapat diturunkan dari bentuk *mendarat* atau dari *mendaratkan/mendarati* (bukan dari *daratkan/darati*). Pembahasan aspek morfologis bahasa Indonesia lebih lanjut dikemukakan pada Bab IV-VIII.

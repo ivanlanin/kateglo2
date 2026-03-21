@@ -48,6 +48,34 @@ Bab VIII tetap menjadi pilot awal, tetapi pola kerja di bawah ini sudah divalida
 6. **Daftarkan item** di `frontend/src/constants/gramatikData.js`
 7. **Jalankan lint + test** setelah setiap perubahan kode
 
+### Konvensi Format Daftar Markdown
+
+- Untuk halaman daftar bab, gunakan ordered list Markdown biasa dengan indentasi 3 spasi untuk anak daftar.
+- Contoh yang benar:
+
+    ```md
+    1. [Ragam Bahasa](/gramatika/ragam-bahasa)
+         1. [Ragam Menurut Golongan Penutur](/gramatika/ragam-menurut-golongan-penutur)
+         2. [Ragam Menurut Jenis Pemakaian](/gramatika/ragam-menurut-jenis-pemakaian)
+    ```
+
+- Untuk contoh bertingkat di dalam uraian, jangan menulis label datar seperti `- a. i. Kalimat ...` karena renderer akan menganggapnya satu tingkat bullet saja.
+- Gunakan nested list seperti berikut:
+
+    ```md
+    (35)
+    - a.
+        - i. Wati ke Bandung.
+        - ii. Wati akan/sudah/belum/tidak ke Bandung.
+    - b.
+        - i. Wati pergi ke Bandung.
+    ```
+
+- Jika ada kelanjutan penjelasan untuk satu butir, indentasikan tetap di bawah butir yang sama; jangan dibiarkan sebagai baris gantung tanpa struktur list yang jelas.
+- Hindari mencampur pola ordered list, unordered list, dan penomoran manual dalam satu blok jika hubungan hierarkinya sebenarnya sama.
+- Jangan membungkus contoh biasa yang masih berupa daftar atau kalimat dengan blok `text`; gunakan markdown biasa agar tipografi dan spasi mengikuti halaman lain.
+- Blok `text` dipakai hanya untuk diagram ASCII, bagan pohon, atau susunan visual monospace yang memang akan rusak jika diubah menjadi paragraf/list biasa.
+
 ### Konvensi Gambar
 
 - Semua asset gambar Gramatika dipusatkan di `frontend/public/gramatika/_gambar/`
