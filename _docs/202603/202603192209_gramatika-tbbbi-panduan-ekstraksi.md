@@ -171,7 +171,7 @@ Semua nomor adalah **nomor halaman PDF** (1-indeks).
 | Bab | Judul | PDF awal | PDF akhir | Jml hal | JPG | Markdown |
 |-----|-------|:---:|:---:|:---:|:---:|:---:|
 | I   | Pendahuluan | 25 | 46 | 22 | — | — |
-| II  | Tata Bahasa: Tinjauan Selayang Pandang | 47 | 68 | 22 | — | — |
+| II  | Tata Bahasa: Tinjauan Selayang Pandang | 47 | 68 | 22 | ✓ | ✓ |
 | III | Bunyi Bahasa dan Tata Bunyi | 69 | 118 | 50 | — | — |
 | IV  | Verba | 119 | 216 | 98 | — | ✓ |
 | V   | Adjektiva | 217 | 257 | 41 | — | ✓ |
@@ -258,7 +258,7 @@ print("Selesai.")
 | IX  | `bab-09/` | h430–h534 | ✓ selesai |
 | X   | `bab-10/` | h535–h574 | ✓ selesai |
 | I   | `bab-01/` | h025–h046 | — |
-| II  | `bab-02/` | h047–h068 | — |
+| II  | `bab-02/` | h047–h068 | ✓ selesai |
 | III | `bab-03/` | h069–h118 | — |
 | IV  | `bab-04/` | h119–h216 | — |
 | V   | `bab-05/` | h217–h257 | — |
@@ -334,14 +334,14 @@ Urutan mempertimbangkan: panjang bab, kualitas OCR yang dapat diharapkan, kepada
 
 ---
 
-### ☐ 6. Bab II — Tata Bahasa: Tinjauan Selayang Pandang (22 hal PDF)
+### ✓ 6. Bab II — Tata Bahasa: Tinjauan Selayang Pandang (22 hal PDF) — **SELESAI**
 
-- Singkat, tapi sangat abstrak (proposisi, perikutan, deiksis, implikatur).
-- Terminologi filosofis → perlu penerjemahan konsep yang cermat.
-- Nilai praktis rendah bagi pengguna kamus biasa.
-- Cocok sebagai bab terakhir dalam kelompok "lebih mudah" karena butuh pengerjaan konseptual lebih teliti.
+- Diekstrak dengan metode hibrida: teks dasar dari PDF, diverifikasi silang dengan JPG per halaman di `_data/gramatika/bab-02/`.
+- Bab ini sangat konseptual, tetapi struktur sumber akhirnya lebih tepat dipertahankan mengikuti pembagian asli TBBBI, bukan dipecah per subseksi kecil.
+- Diagram sintaksis pada bagian struktur konstituen, fungsi, dan model diagram direpresentasikan ulang ke bentuk teks/ASCII agar substansinya tetap hadir di markdown.
+- Tabel kategori leksikal, kategori frasa, dan contoh fonologi dikonfirmasi dengan gambar untuk membetulkan artefak OCR.
 
-**Subbab yang disarankan:** Pengertian Tata Bahasa · Fonologi · Morfologi · Sintaksis · Semantik dan Pragmatik
+**Subbab:** Deskripsi dan Teori (2.1) · Pengertian Tata Bahasa (2.2) · Semantik, Pragmatik, dan Relasi Makna (2.3)
 
 ---
 

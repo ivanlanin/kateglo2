@@ -21,6 +21,18 @@ const daftarIsiGramatika = [
     ],
   },
   {
+    judul: 'Tata Bahasa',
+    slug: 'tata-bahasa',
+    items: [
+      { judul: 'Deskripsi dan Teori', slug: 'deskripsi-dan-teori' },
+      { judul: 'Pengertian Tata Bahasa', slug: 'pengertian-tata-bahasa' },
+      {
+        judul: 'Semantik, Pragmatik, dan Relasi Makna',
+        slug: 'semantik-pragmatik-dan-relasi-makna',
+      },
+    ],
+  },
+  {
     judul: 'Nomina',
     slug: 'nomina',
     items: [
