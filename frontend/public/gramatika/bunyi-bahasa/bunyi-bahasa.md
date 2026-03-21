@@ -15,5 +15,5 @@
 3. [Struktur Suku Kata dan Kata](/gramatika/struktur-suku-kata-dan-kata)
 4. [Pemenggalan Kata](/gramatika/pemenggalan-kata)
 5. [Ciri Suprasegmental](/gramatika/ciri-suprasegmental)
-   1. [Tekanan dan Aksen](/gramatika/ciri-suprasegmental)
-   2. [Intonasi dan Ritme](/gramatika/ciri-suprasegmental)
+   1. [Tekanan dan Aksen](/gramatika/tekanan-dan-aksen)
+   2. [Intonasi dan Ritme](/gramatika/intonasi-dan-ritme)

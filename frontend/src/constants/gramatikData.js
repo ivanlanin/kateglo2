@@ -50,6 +50,12 @@ const daftarIsiGramatika = [
       {
         judul: 'Semantik, Pragmatik, dan Relasi Makna',
         slug: 'semantik-pragmatik-dan-relasi-makna',
+        turunan: [
+          { judul: 'Kondisi Kebenaran dan Perikutan', slug: 'kondisi-kebenaran-dan-perikutan' },
+          { judul: 'Aspek Takberkondisi Benar Makna Kalimat', slug: 'aspek-takberkondisi-benar-makna-kalimat' },
+          { judul: 'Pragmatik dan Implikatur Percakapan', slug: 'pragmatik-dan-implikatur-percakapan' },
+          { judul: 'Pengacuan dan Deiksis', slug: 'pengacuan-dan-deiksis' },
+        ],
       },
     ],
   },
@@ -83,7 +89,14 @@ const daftarIsiGramatika = [
       },
       { judul: 'Struktur Suku Kata dan Kata', slug: 'struktur-suku-kata-dan-kata' },
       { judul: 'Pemenggalan Kata', slug: 'pemenggalan-kata' },
-      { judul: 'Ciri Suprasegmental', slug: 'ciri-suprasegmental' },
+      {
+        judul: 'Ciri Suprasegmental',
+        slug: 'ciri-suprasegmental',
+        turunan: [
+          { judul: 'Tekanan dan Aksen', slug: 'tekanan-dan-aksen' },
+          { judul: 'Intonasi dan Ritme', slug: 'intonasi-dan-ritme' },
+        ],
+      },
     ],
   },
   {
@@ -118,7 +131,18 @@ const daftarIsiGramatika = [
     items: [
       { judul: 'Batasan dan Ciri Verba', slug: 'batasan-dan-ciri-verba' },
       { judul: 'Fitur Semantis Verba', slug: 'fitur-semantis-verba' },
-      { judul: 'Perilaku Sintaktis Verba', slug: 'perilaku-sintaktis-verba' },
+      {
+        judul: 'Perilaku Sintaktis Verba',
+        slug: 'perilaku-sintaktis-verba',
+        turunan: [
+          { judul: 'Verba Transitif Berobjek', slug: 'verba-transitif-berobjek' },
+          { judul: 'Verba Transitif Berobjek dan Berpelengkap', slug: 'verba-transitif-berobjek-dan-berpelengkap' },
+          { judul: 'Verba Semitransitif', slug: 'verba-semitransitif' },
+          { judul: 'Verba Taktransitif Takberpelengkap', slug: 'verba-taktransitif-takberpelengkap' },
+          { judul: 'Verba Taktransitif Berpelengkap', slug: 'verba-taktransitif-berpelengkap' },
+          { judul: 'Verba Taktransitif Berpelengkap Nomina dengan Preposisi Tetap', slug: 'verba-taktransitif-berpelengkap-nomina-dengan-preposisi-tetap' },
+        ],
+      },
       {
         judul: 'Bentuk Verba',
         slug: 'bentuk-verba',
@@ -136,10 +160,35 @@ const daftarIsiGramatika = [
           { judul: 'Penurunan Verba Transitif Melalui Pengafiksan', slug: 'penurunan-verba-transitif-melalui-pengafiksan' },
         ],
       },
-      { judul: 'Verba Taktransitif', slug: 'verba-taktransitif' },
+      {
+        judul: 'Verba Taktransitif',
+        slug: 'verba-taktransitif',
+        turunan: [
+          { judul: 'Penurunan Verba Taktransitif dengan Pengafiksan', slug: 'penurunan-verba-taktransitif-dengan-pengafiksan' },
+          { judul: 'Penurunan Verba Taktransitif dengan Reduplikasi', slug: 'penurunan-verba-taktransitif-dengan-reduplikasi' },
+        ],
+      },
       { judul: 'Verba Hasil Reduplikasi', slug: 'verba-reduplikasi' },
-      { judul: 'Verba Majemuk', slug: 'verba-majemuk' },
-      { judul: 'Frasa Verbal', slug: 'frasa-verbal' },
+      {
+        judul: 'Verba Majemuk',
+        slug: 'verba-majemuk',
+        turunan: [
+          { judul: 'Verba Majemuk Dasar', slug: 'verba-majemuk-dasar' },
+          { judul: 'Verba Majemuk Berafiks', slug: 'verba-majemuk-berafiks' },
+          { judul: 'Verba Majemuk Berulang', slug: 'verba-majemuk-berulang' },
+          { judul: 'Verba Majemuk Subordinatif dan Koordinatif', slug: 'verba-majemuk-subordinatif-dan-koordinatif' },
+          { judul: 'Verba Majemuk Idiom', slug: 'verba-majemuk-idiom' },
+        ],
+      },
+      {
+        judul: 'Frasa Verbal',
+        slug: 'frasa-verbal',
+        turunan: [
+          { judul: 'Batasan Frasa Verbal', slug: 'batasan-frasa-verbal' },
+          { judul: 'Jenis Frasa Verbal', slug: 'jenis-frasa-verbal' },
+          { judul: 'Fungsi Verba dan Frasa Verbal', slug: 'fungsi-verba-dan-frasa-verbal' },
+        ],
+      },
     ],
   },
   {
@@ -149,8 +198,22 @@ const daftarIsiGramatika = [
       { judul: 'Batasan dan Ciri Adjektiva', slug: 'batasan-dan-ciri-adjektiva' },
       { judul: 'Makna Adjektiva', slug: 'makna-adjektiva' },
       { judul: 'Fungsi Adjektiva', slug: 'fungsi-adjektiva' },
-      { judul: 'Pertarafan Adjektiva', slug: 'pertarafan-adjektiva' },
-      { judul: 'Bentuk Adjektiva', slug: 'bentuk-adjektiva' },
+      {
+        judul: 'Pertarafan Adjektiva',
+        slug: 'pertarafan-adjektiva',
+        turunan: [
+          { judul: 'Tingkat Kualitas', slug: 'tingkat-kualitas' },
+          { judul: 'Tingkat Pembandingan', slug: 'tingkat-pembandingan' },
+        ],
+      },
+      {
+        judul: 'Bentuk Adjektiva',
+        slug: 'bentuk-adjektiva',
+        turunan: [
+          { judul: 'Adjektiva Dasar', slug: 'adjektiva-dasar' },
+          { judul: 'Adjektiva Turunan', slug: 'adjektiva-turunan' },
+        ],
+      },
       { judul: 'Frasa Adjektival', slug: 'frasa-adjektival' },
       { judul: 'Adjektiva dan Kelas Kata Lain', slug: 'adjektiva-dan-kelas-kata-lain' },
     ],
@@ -161,8 +224,26 @@ const daftarIsiGramatika = [
     items: [
       { judul: 'Batasan dan Ciri Adverbia', slug: 'batasan-dan-ciri-adverbia' },
       { judul: 'Makna Adverbia', slug: 'makna-adverbia' },
-      { judul: 'Posisi Adverbia', slug: 'posisi-adverbia' },
-      { judul: 'Bentuk Adverbia', slug: 'bentuk-adverbia' },
+      {
+        judul: 'Posisi Adverbia',
+        slug: 'posisi-adverbia',
+        turunan: [
+          { judul: 'Adverbia Sebelum Kata yang Diterangkan', slug: 'adverbia-sebelum-kata-yang-diterangkan' },
+          { judul: 'Adverbia Sesudah Kata yang Diterangkan', slug: 'adverbia-sesudah-kata-yang-diterangkan' },
+          { judul: 'Adverbia Sebelum atau Sesudah Kata yang Diterangkan', slug: 'adverbia-sebelum-atau-sesudah-kata-yang-diterangkan' },
+          { judul: 'Adverbia Sebelum dan Sesudah Kata yang Diterangkan', slug: 'adverbia-sebelum-dan-sesudah-kata-yang-diterangkan' },
+          { judul: 'Adverbia Pembuka Wacana', slug: 'adverbia-pembuka-wacana' },
+          { judul: 'Adverbia Intraklausal dan Ekstraklausal', slug: 'adverbia-intraklausal-dan-ekstraklausal' },
+        ],
+      },
+      {
+        judul: 'Bentuk Adverbia',
+        slug: 'bentuk-adverbia',
+        turunan: [
+          { judul: 'Adverbia Tunggal', slug: 'adverbia-tunggal' },
+          { judul: 'Adverbia Gabungan', slug: 'adverbia-gabungan' },
+        ],
+      },
       { judul: 'Bentuk Adverbial', slug: 'bentuk-adverbial' },
       { judul: 'Adverbia dan Kelas Kata Lain', slug: 'adverbia-dan-kelas-kata-lain' },
     ],
@@ -230,7 +311,15 @@ const daftarIsiGramatika = [
     slug: 'kalimat',
     items: [
       { judul: 'Batasan dan Ciri Kalimat', slug: 'batasan-dan-ciri-kalimat' },
-      { judul: 'Unsur Kalimat', slug: 'unsur-kalimat' },
+      {
+        judul: 'Unsur Kalimat',
+        slug: 'unsur-kalimat',
+        turunan: [
+          { judul: 'Kalimat, Klausa, dan Frasa', slug: 'kalimat-klausa-dan-frasa' },
+          { judul: 'Unsur Wajib dan Unsur Takwajib', slug: 'unsur-wajib-dan-unsur-takwajib' },
+          { judul: 'Keserasian Antarunsur', slug: 'keserasian-antarunsur' },
+        ],
+      },
       {
         judul: 'Kategori, Fungsi, dan Peran',
         slug: 'kategori-fungsi-dan-peran',
@@ -250,7 +339,14 @@ const daftarIsiGramatika = [
           { judul: 'Peran', slug: 'peran' },
         ],
       },
-      { judul: 'Kalimat Dasar', slug: 'kalimat-dasar' },
+      {
+        judul: 'Kalimat Dasar',
+        slug: 'kalimat-dasar',
+        turunan: [
+          { judul: 'Batasan Kalimat Dasar', slug: 'batasan-kalimat-dasar' },
+          { judul: 'Perluasan Kalimat Dasar', slug: 'perluasan-kalimat-dasar' },
+        ],
+      },
       {
         judul: 'Jenis Kalimat',
         slug: 'jenis-kalimat',

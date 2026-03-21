@@ -3,9 +3,9 @@
  * h2 sections wrap first; h3 subsections within h2 wrap recursively.
  * No markdown files need to be modified.
  */
-export function rehypeCollapsibleHeadings() {
+export function rehypeCollapsibleHeadings({ defaultOpen = false } = {}) {
   return (tree) => {
-    tree.children = groupSections(tree.children, [2, 3, 4]);
+    tree.children = groupSections(tree.children, [2, 3, 4], defaultOpen);
   };
 }
 
@@ -20,11 +20,11 @@ function isHeadingAtOrAbove(node, level) {
   return false;
 }
 
-function makeDetails(headingNode, contentNodes) {
+function makeDetails(headingNode, contentNodes, defaultOpen) {
   return {
     type: 'element',
     tagName: 'details',
-    properties: {},
+    properties: defaultOpen ? { open: true } : {},
     children: [
       {
         type: 'element',
@@ -37,7 +37,7 @@ function makeDetails(headingNode, contentNodes) {
   };
 }
 
-function groupSections(children, levels) {
+function groupSections(children, levels, defaultOpen) {
   if (!children || levels.length === 0) return children || [];
 
   const [currentLevel, ...remainingLevels] = levels;
@@ -57,8 +57,8 @@ function groupSections(children, levels) {
         i++;
       }
 
-      const processedContent = groupSections(contentNodes, remainingLevels);
-      result.push(makeDetails(node, processedContent));
+      const processedContent = groupSections(contentNodes, remainingLevels, defaultOpen);
+      result.push(makeDetails(node, processedContent, defaultOpen));
     } else {
       result.push(node);
       i++;

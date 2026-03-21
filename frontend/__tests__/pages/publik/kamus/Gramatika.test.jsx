@@ -75,7 +75,7 @@ describe('Gramatika', () => {
       type: 'static-markdown',
       section: 'gramatika',
       slug: 'preposisi',
-      markdown: '# Preposisi SSR\n\nPreposisi adalah kata tugas.',
+      markdown: '# Preposisi SSR\n\n## Jenis Preposisi\n\nPreposisi adalah kata tugas.',
       description: 'Preposisi adalah kata tugas.',
       notFound: false,
     });
@@ -85,6 +85,7 @@ describe('Gramatika', () => {
     });
 
     expect(global.fetch).not.toHaveBeenCalled();
+    expect(document.querySelector('details[open]')).not.toBeNull();
   });
 
   it('slug tidak valid menampilkan halaman tidak ditemukan', async () => {

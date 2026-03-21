@@ -412,6 +412,10 @@ a.ejaan-sidebar-pill-active {
   transform: rotate(90deg);
 }
 
+.ejaan-markdown-content details[open] > summary {
+  @apply mb-3;
+}
+
 /* Remove vertical margin from heading inside summary (summary provides spacing) */
 .ejaan-markdown-content summary > h2,
 .ejaan-markdown-content summary > h3,

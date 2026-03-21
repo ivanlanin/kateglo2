@@ -269,7 +269,7 @@ function Gramatika() {
 
             {!sedangMemuat && !galat && (
               <div className="ejaan-markdown-content gramatika-markdown-content">
-                <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeCollapsibleHeadings]}>
+                <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[[rehypeCollapsibleHeadings, { defaultOpen: true }]]}>
                   {isiMarkdown}
                 </ReactMarkdown>
               </div>
