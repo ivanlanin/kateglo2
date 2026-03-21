@@ -1,6 +1,6 @@
 ---
 id: 4.2.1
-title: Penurunan Melalui Konversi (4.2.1)
+title: Penurunan Verba Transitif dengan Konversi (4.2.1)
 ---
 
 Ada kelompok kata dalam bahasa Indonesia yang melalui konversi memiliki kelas kata ganda, misalnya sebagai nomina atau sebagai pangkal verba transitif. Kata-kata, seperti *jalan*, *telepon*, dan *cangkul*, dapat dipakai sebagai verba transitif atau sebagai nomina. Dengan demikian, kata *cangkul* dapat dipakai sebagai verba dalam kalimat *Tanah itu dicangkul oleh petani* atau *Mari kita cangkul ladang itu*, atau sebagai nomina seperti dalam kalimat *Cangkul ini untuk siapa?*.

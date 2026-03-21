@@ -156,8 +156,8 @@ const daftarIsiGramatika = [
         judul: 'Verba Transitif',
         slug: 'verba-transitif',
         turunan: [
-          { judul: 'Penurunan Melalui Konversi', slug: 'penurunan-melalui-konversi' },
-          { judul: 'Penurunan Verba Transitif Melalui Pengafiksan', slug: 'penurunan-verba-transitif-melalui-pengafiksan' },
+          { judul: 'Penurunan Verba Transitif dengan Konversi', slug: 'penurunan-verba-transitif-dengan-konversi' },
+          { judul: 'Penurunan Verba Transitif dengan Pengafiksan', slug: 'penurunan-verba-transitif-dengan-pengafiksan' },
         ],
       },
       {

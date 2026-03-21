@@ -1,6 +1,6 @@
 ---
 id: 4.2.2
-title: Penurunan Verba Transitif Melalui Pengafiksan (4.2.2)
+title: Penurunan Verba Transitif dengan Pengafiksan (4.2.2)
 ---
 
 Pengafiksan pada verba transitif tidak dilakukan serentak, tetapi secara bertahap menurut urutan tertentu. Jika pangkal verba sudah transitif, penambahan prefiks infleksi menghasilkan sejumlah kata gramatikal yang semuanya termasuk satu kata leksikal, atau leksem, yang sama juga. Jika pangkal verba itu berupa verba taktransitif atau kata lain yang bukan verba, pangkal verba itu harus ditransitifkan dengan penambahan sufiks derivasi *-kan* atau *-i*, kemudian baru diberi prefiks infleksi yang sesuai.
