@@ -13,7 +13,13 @@ Pada prinsipnya, ketika seseorang berbicara, paru-paru mengembuskan udara melalu
 
 ## Bagan Alat Ucap (3.1)
 
-Bagan 3.1 memperlihatkan alat ucap manusia. Unsur-unsurnya adalah sebagai berikut.
+Bagan 3.1 memperlihatkan alat ucap manusia.
+
+![Bagan 3.1 Alat Ucap](/gramatika/_gambar/bab-03/bagan-03-01-alat-ucap.webp)
+
+*Bagan 3.1 Alat Ucap*
+
+Unsur-unsurnya adalah sebagai berikut.
 
 1. bibir atas (*labium*)
 2. bibir bawah (*labium*)

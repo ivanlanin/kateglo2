@@ -237,6 +237,14 @@
   @apply text-blue-400 hover:text-blue-300;
 }
 
+.ejaan-markdown-content img {
+  @apply my-5 block max-w-full h-auto rounded-lg border border-gray-200 bg-white;
+}
+
+.dark .ejaan-markdown-content img {
+  @apply border-dark-border bg-dark-bg-elevated;
+}
+
 .ejaan-markdown-content table {
   @apply my-4 w-full text-sm border-separate border-spacing-0 border border-gray-300 rounded-lg overflow-hidden;
   display: table;

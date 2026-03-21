@@ -13,13 +13,9 @@ Dalam masyarakat diglosia di Indonesia, umumnya bahasa Indonesia merupakan bahas
 
 Dalam bahasa Indonesia ada enam fonem vokal, yaitu /i/, /e/, /ə/, /a/, /o/, dan /u/. Meskipun memengaruhi kualitas vokal, dalam bahasa Indonesia bentuk bibir tidak memegang peranan penting karena tidak membedakan makna. Bagan 3.2 memperlihatkan keenam vokal bahasa Indonesia berdasarkan parameter tinggi-rendah dan depan-belakang lidah pada waktu pembentukannya. Pada bagan itu tampak bahwa bahasa Indonesia memiliki dua vokal tinggi, tiga vokal sedang, dan satu vokal rendah. Berdasarkan parameter depan-belakang lidah, dua vokal merupakan vokal depan, dua merupakan vokal tengah, dan dua yang lain merupakan vokal belakang.
 
-**Bagan 3.2 Vokal**
+![Bagan 3.2 Vokal](/gramatika/_gambar/bab-03/bagan-03-02-vokal.webp)
 
-|  | Depan | Tengah | Belakang |
-|---|---|---|---|
-| Tinggi | i |  | u |
-| Sedang | e | ə | o |
-| Rendah |  | a |  |
+**Bagan 3.2 Vokal**
 
 Dalam realisasinya vokal bahasa Indonesia dapat mempunyai alofon atau variasi. Pada umumnya alofon vokal itu mengikuti pola berikut: lidah yang berada pada posisi tertentu bergerak ke atas atau ke bawah sehingga posisinya hampir berimpitan dengan posisi untuk menghasilkan vokal yang ada di atas atau di bawahnya. Di antara enam fonem vokal bahasa Indonesia itu, empat vokal, yaitu /i/, /e/, /o/, dan /u/ masing-masing mempunyai dua alofon.
 

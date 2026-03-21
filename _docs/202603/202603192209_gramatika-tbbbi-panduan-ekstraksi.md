@@ -10,6 +10,8 @@ Sumber primer: *Tata Bahasa Baku Bahasa Indonesia Edisi Keempat* (2017), Badan P
 
 PDF tersimpan di: `_data/gramatika/Tata Bahasa Baku Bahasa Indonesia TBBBI IV (2017).pdf`
 
+Asset gambar pendukung Gramatika dipusatkan di: `frontend/public/gramatika/_gambar/`
+
 ---
 
 ## Pelajaran dari Pilot (Bab VIII)
@@ -35,10 +37,30 @@ PDF tersimpan di: `_data/gramatika/Tata Bahasa Baku Bahasa Indonesia TBBBI IV (2
 4. **Bagan dan tabel** yang tidak dapat direproduksi sebagai markdown:
    - Bagan pohon sintaksis: dideskripsikan dalam prosa
    - Tabel yang OCR-nya kacau: direkonstruksi dari konteks dan pengetahuan TBBBI
+    - Jika bagan/diagram kehilangan makna visual saat ditranskripsi, sisipkan gambar dari `frontend/public/gramatika/_gambar/` dan tetap pertahankan caption serta uraian teksnya
 5. **Tulis file markdown** per subbab ke `frontend/public/gramatika/{bab-slug}/{item-slug}.md`
    - Tambahkan **nomor subbab** setelah judul heading: `## Bentuk Preposisi (8.2.1.1)`
 6. **Daftarkan item** di `frontend/src/constants/gramatikData.js`
 7. **Jalankan lint + test** setelah setiap perubahan kode
+
+### Konvensi Gambar
+
+- Semua asset gambar Gramatika dipusatkan di `frontend/public/gramatika/_gambar/`
+- Gunakan subfolder per bab bila diperlukan, misalnya `frontend/public/gramatika/_gambar/bab-03/`
+- Pola nama file: `{jenis}-{bab-dua-digit}-{nomor-dua-digit}-{slug}`
+- Contoh nama file: `bagan-03-01-alat-ucap.webp`
+- Simpan `png` sebagai master kerja dan gunakan `webp` sebagai file frontend bila kualitas tetap tajam
+- Jika hasil konversi `webp` menurunkan keterbacaan teks kecil atau garis tipis, pakai `png` langsung di markdown
+- Referensi dari markdown harus memakai path absolut publik, misalnya:
+
+  ```md
+  ![Bagan 3.1 Alat Ucap](/gramatika/_gambar/bab-03/bagan-03-01-alat-ucap.webp)
+
+  *Bagan 3.1 Alat Ucap*
+  ```
+
+- Gunakan gambar untuk bagan anatomi, diagram posisi, pohon sintaksis, atau tabel kompleks yang tidak nyaman dibaca sebagai markdown
+- Untuk aksesibilitas dan fallback, jangan mengganti seluruh isi dengan gambar saja; pertahankan transkripsi atau deskripsi singkat setelah gambar
 
 ### Struktur File
 
