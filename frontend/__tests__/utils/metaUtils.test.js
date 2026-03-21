@@ -62,6 +62,9 @@ describe('metaUtils', () => {
       makna: [{ kelas_kata: 'n', makna: panjang }],
     });
     expect(deskripsi.endsWith(' …')).toBe(true);
+    expect(deskripsi.startsWith('(n) ')).toBe(true);
+    expect(deskripsi).not.toContain('/ka.ta/');
+    expect(deskripsi).not.toContain('kata:');
 
     const kataPanjangTanpaSpasi = 'x'.repeat(200);
     const deskripsiMultiMakna = buildDeskripsiDetailKamus('kata', {
@@ -72,6 +75,7 @@ describe('metaUtils', () => {
     });
     expect(deskripsiMultiMakna.endsWith(' …')).toBe(true);
     expect(deskripsiMultiMakna).toContain('(1)');
+    expect(deskripsiMultiMakna).not.toContain('kata:');
 
     expect(buildMetaDetailKamus('', null).judul).toBe('Kamus');
     expect(buildMetaDetailKamus('kata', { makna: [{ makna: 'arti' }] }).judul).toBe('kata');
@@ -79,7 +83,7 @@ describe('metaUtils', () => {
     const tanpaMakna = buildDeskripsiDetailKamus('kata', {
       makna: [{ kelas_kata: 'n', makna: '' }],
     });
-    expect(tanpaMakna).toContain('kata');
+    expect(tanpaMakna).toBe('Lihat detail kamus di Kateglo.');
 
     const multiTanpaMakna = buildDeskripsiDetailKamus('kata', {
       makna: [
@@ -87,7 +91,9 @@ describe('metaUtils', () => {
         { kelas_kata: 'v', makna: 'aksi' },
       ],
     });
-    expect(multiTanpaMakna).toContain('(1)');
+    expect(multiTanpaMakna).toContain('(2)');
+    expect(multiTanpaMakna).not.toContain('(1)');
+    expect(multiTanpaMakna).not.toContain('kata:');
 
     const tagarKosong = buildMetaTagarKamus(null, 0);
     expect(tagarKosong.judul).toBe('Tagar');

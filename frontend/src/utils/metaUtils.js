@@ -183,26 +183,29 @@ export function buildDeskripsiDetailKamus(indeks, data = {}) {
     return META_DESKRIPSI_KAMUS_UMUM;
   }
 
-  const parts = [baseLabel];
-  if (data?.lafal) parts[0] += ` ${data.lafal}`;
-
   const maknaList = ekstrakMaknaDetailKamus(data);
   if (maknaList.length === 0) {
-    return `Lihat detail entri kamus “${baseLabel}” di Kateglo.`;
+    return 'Lihat detail kamus di Kateglo.';
   }
 
   if (maknaList.length === 1) {
     const m = maknaList[0];
+    const isiMakna = String(m?.makna || '').trim();
+    if (!isiMakna) return 'Lihat detail kamus di Kateglo.';
     const kelasPrefix = m?.kelas_kata ? `(${m.kelas_kata}) ` : '';
-    return truncate(`${parts[0]}: ${kelasPrefix}${m?.makna || ''}`, 155);
+    const deskripsiMakna = `${kelasPrefix}${isiMakna}`.trim();
+    return truncate(deskripsiMakna, 155);
   }
 
   const formattedMakna = maknaList.slice(0, 4).map((m, i) => {
     const kelasPrefix = m?.kelas_kata ? `(${m.kelas_kata}) ` : '';
-    return `(${i + 1}) ${kelasPrefix}${m?.makna || ''}`;
-  });
+    const isiMakna = String(m?.makna || '').trim();
+    if (!isiMakna) return '';
+    return `(${i + 1}) ${kelasPrefix}${isiMakna}`;
+  }).filter(Boolean);
 
-  return truncate(`${parts[0]}: ${formattedMakna.join('; ')}`, 155);
+  if (!formattedMakna.length) return 'Lihat detail kamus di Kateglo.';
+  return truncate(formattedMakna.join('; '), 155);
 }
 
 export function buildMetaDetailKamus(indeks = '', data = null) {

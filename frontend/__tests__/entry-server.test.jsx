@@ -38,13 +38,14 @@ describe('entry-server', () => {
   });
 
   it('builder deskripsi kamus menutup semua cabang', () => {
-    expect(__private.buildKamusDescription('sara', { semuaMakna: [], lafal: '' })).toContain('Lihat detail entri kamus');
+    expect(__private.buildKamusDescription('sara', { semuaMakna: [], lafal: '' })).toBe('Lihat detail kamus di Kateglo.');
 
     const satuMakna = __private.buildKamusDescription('sara', {
       lafal: '/sa.ra/',
       semuaMakna: [{ makna: 'makna tunggal', kelas_kata: 'n' }],
     });
-    expect(satuMakna).toContain('/sa.ra/');
+    expect(satuMakna).not.toContain('/sa.ra/');
+    expect(satuMakna).not.toContain('sara');
     expect(satuMakna).toContain('(n)');
 
     const multiMakna = __private.buildKamusDescription('sara', {
@@ -89,6 +90,8 @@ describe('entry-server', () => {
       lafal: '/sa.ra/',
     });
     expect(kamusDetailRich.title).toBe('sara — Kateglo');
+    expect(kamusDetailRich.description).not.toContain('sara');
+    expect(kamusDetailRich.description).not.toContain('/sa.ra/');
     expect(kamusDetailRich.description).toContain('makna detail');
 
     expect(__private.buildMetaForPath('/kamus/cari/%20', site).title).toBe('Kamus — Kateglo');
@@ -259,7 +262,7 @@ describe('entry-server', () => {
     expect(headTags).toContain('https://kateglo.org/kamus/detail/sara');
     expect(headTags).toContain('&lt;');
     expect(headTags).toContain('&amp;');
-    expect(headTags).toContain('https://kateglo.org/og/kamus.png?title=sara&amp;context=sara+%2Fsa.ra%2F%3A+%28n%29+x+%3C+y+%26+z');
+    expect(headTags).toContain('https://kateglo.org/og/kamus.png?title=sara&amp;context=%28n%29+x+%3C+y+%26+z');
     expect(headTags).toContain('__KATEGLO_SSR_DATA__');
   });
 
@@ -326,7 +329,7 @@ describe('entry-server', () => {
       type: 'kamus-detail',
       lafal: '/sa.ra/',
       semuaMakna: [{ makna: 'makna detail', kelas_kata: 'n' }],
-    }, 'sara — Kateglo')).toBe('https://kateglo.org/og/kamus.png?title=sara&context=sara+%2Fsa.ra%2F%3A+%28n%29+makna+detail');
+    }, 'sara — Kateglo')).toBe('https://kateglo.org/og/kamus.png?title=sara&context=%28n%29+makna+detail');
     expect(__private.buildSocialImageUrl('/random', 'https://kateglo.org', null, 'Kamus — Kateglo')).toBe('https://kateglo.org/og/default.png?title=Kateglo&context=Kamus%2C+Tesaurus%2C+dan+Glosarium+Bahasa+Indonesia');
   });
 
