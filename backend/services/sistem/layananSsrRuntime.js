@@ -124,14 +124,51 @@ function bersihkanTeksMarkdown(markdown = '') {
     .replace(/`([^`]+)`/g, '$1')
     .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
     .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
-    .replace(/^[#>*-]\s+/gm, '')
-    .replace(/^\d+\.\s+/gm, '')
+    .replace(/^\s*[#>*-]\s+/gm, '')
+    .replace(/^\s*\d+\.\s+/gm, '')
     .replace(/[*_~]/g, '')
     .replace(/\s+/g, ' ')
     .trim();
 }
 
+function rapikanItemRingkasanDaftarIsi(text = '') {
+  return String(text || '')
+    .replace(/^\d+\)\s+/, '')
+    .replace(/^\(?\d+(?:\.\d+)*\)?\s+/, '')
+    .trim();
+}
+
+function extractMarkdownListSummary(markdown = '') {
+  const lines = String(markdown || '')
+    .split(/\r?\n/)
+    .map((line) => String(line || '').trimEnd())
+    .filter((line) => line.trim());
+
+  if (lines.length < 2) return '';
+
+  const isListOnlyDocument = lines.every((line) => /^\s*(?:[-*+]\s+|\d+\.\s+)/.test(line));
+  if (!isListOnlyDocument) return '';
+
+  const items = lines
+    .map((line) => bersihkanTeksMarkdown(line))
+    .map((line) => rapikanItemRingkasanDaftarIsi(line))
+    .filter(Boolean);
+
+  return items.join(', ');
+}
+
+function truncateText(text = '', maxLen = 155) {
+  if (text.length <= maxLen) return text;
+
+  const potong = text.slice(0, maxLen);
+  const batasKata = potong.lastIndexOf(' ');
+  return `${(batasKata > maxLen * 0.6 ? potong.slice(0, batasKata) : potong).trim()} …`;
+}
+
 function extractMarkdownSummary(markdown = '', maxLen = 155) {
+  const listSummary = extractMarkdownListSummary(markdown);
+  if (listSummary) return truncateText(listSummary, maxLen);
+
   const paragraphs = String(markdown || '')
     .split(/\r?\n\s*\r?\n/)
     .map((bagian) => ({
@@ -148,11 +185,7 @@ function extractMarkdownSummary(markdown = '', maxLen = 155) {
 
   const summary = preferredParagraph?.cleaned || paragraphs[0]?.cleaned || '';
   if (!summary) return '';
-  if (summary.length <= maxLen) return summary;
-
-  const potong = summary.slice(0, maxLen);
-  const batasKata = potong.lastIndexOf(' ');
-  return `${(batasKata > maxLen * 0.6 ? potong.slice(0, batasKata) : potong).trim()} …`;
+  return truncateText(summary, maxLen);
 }
 
 function listMarkdownDocumentPaths(docsDir = '') {
@@ -446,6 +479,9 @@ module.exports = {
     injectAppHtml,
     parseMarkdownFrontmatter,
     bersihkanTeksMarkdown,
+    rapikanItemRingkasanDaftarIsi,
+    extractMarkdownListSummary,
+    truncateText,
     extractMarkdownSummary,
     listMarkdownDocumentPaths,
     buildMarkdownSlugMap,

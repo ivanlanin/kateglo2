@@ -212,6 +212,17 @@ describe('services/sistem/layananSsrRuntime', () => {
     expect(parsedMarkdown.frontmatter.title).toBe('Judul');
     expect(parsedMarkdown.body).toBe('Isi');
     expect(runtime.__private.extractMarkdownSummary('# Judul\n\nParagraf ringkas pertama.')).toBe('Paragraf ringkas pertama.');
+    expect(runtime.__private.rapikanItemRingkasanDaftarIsi('1) Nomina sebagai Subjek')).toBe('Nomina sebagai Subjek');
+    expect(runtime.__private.extractMarkdownListSummary([
+      '1. [Batasan dan Ciri Nomina](/gramatika/batasan-dan-ciri-nomina)',
+      '   1. [1) Nomina sebagai Subjek](/gramatika/batasan-dan-ciri-nomina)',
+      '2. [Makna Nomina](/gramatika/makna-nomina)',
+    ].join('\n'))).toBe('Batasan dan Ciri Nomina, Nomina sebagai Subjek, Makna Nomina');
+    expect(runtime.__private.extractMarkdownSummary([
+      '1. [Batasan dan Ciri Nomina](/gramatika/batasan-dan-ciri-nomina)',
+      '   1. [1) Nomina sebagai Subjek](/gramatika/batasan-dan-ciri-nomina)',
+      '2. [Makna Nomina](/gramatika/makna-nomina)',
+    ].join('\n'), 80)).toBe('Batasan dan Ciri Nomina, Nomina sebagai Subjek, Makna Nomina');
     expect(runtime.__private.buildMarkdownSlugMap('')).toBeInstanceOf(Map);
   });
 
