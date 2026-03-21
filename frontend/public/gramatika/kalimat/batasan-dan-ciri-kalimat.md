@@ -5,19 +5,11 @@ title: Batasan dan Ciri Kalimat (9.1)
 
 Kalimat adalah satuan gramatikal terbesar yang mengandung predikat dan mengungkapkan sebuah pikiran.
 
-## Wujud Lisan
-
 Dalam wujud lisan, kalimat ditandai oleh intonasi akhir (lihat 3.5.2). Intonasi itu ditandai dengan tinggi rendah nada, panjang pendek durasi, dan keras lembut tekanan, serta disela dengan jeda dan diakhiri intonasi akhir. Intonasi akhir tersebut diikuti oleh kesenyapan untuk menghindari perpaduan, asimilasi bunyi, atau proses fonologis lainnya.
-
-## Wujud Tulisan
 
 Dalam wujud tulisan berhuruf Latin, kalimat dimulai dengan huruf kapital dan diakhiri dengan tanda titik (.), tanda seru (!), atau tanda tanya (?). Sementara itu, di dalamnya dapat disertakan pula berbagai tanda baca, seperti koma (,), titik koma (;), titik dua (:), tanda pisah (-), atau tanda kurung (()). Tanda titik, tanda tanya, atau tanda seru sepadan dengan intonasi akhir yang disertai kesenyapan, sedangkan tanda baca lain sepadan dengan jeda.
 
-## Struktur Gramatikal
-
 Secara gramatikal kalimat pada dasarnya terdiri atas unsur subjek dan predikat yang dapat diikuti oleh objek, pelengkap, dan/atau keterangan. Perlu atau tidaknya kehadiran objek, pelengkap, dan/atau keterangan bergantung pada verba pengisi predikat.
-
-## Kalimat dalam Wacana
 
 Kehadiran suatu kalimat tidak saja dipengaruhi oleh kalimat yang mendahuluinya, tetapi juga memengaruhi kalimat yang mengikutinya. Oleh karena itu, dalam sebuah wacana (teks) ada kalimat yang hanya terdiri atas satu frasa atau satu kata. Frasa atau kata itu, jika dilihat dari fungsi sintaktisnya, dapat berupa subjek, predikat, objek, pelengkap, atau keterangan.
 

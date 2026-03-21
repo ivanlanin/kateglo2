@@ -9,12 +9,7 @@ Secara struktural, interjeksi **tidak bertalian** dengan unsur kalimat yang lain
 
 Interjeksi dipakai dalam bahasa lisan atau bahasa tulis yang berbentuk percakapan. Pada bahasa tulis formal, interjeksi hampir tidak pernah dipakai.
 
----
-
-## Jenis-Jenis Interjeksi (8.2.3)
-
-### 1) Kejijikan
-*bah, cih, cis, ih, idih*
+1) Kejijikan: *bah, cih, cis, ih, idih*
 
 - *Bah*, pergi kau dari rumah ini!
 - *Cih*, tidak tahu malu mengemis belas kasihan orang!
@@ -22,31 +17,27 @@ Interjeksi dipakai dalam bahasa lisan atau bahasa tulis yang berbentuk percakapa
 - *Ih*, gigimu sudah ompong!
 - *Idih*, kau suka mengada-ada saja!
 
-### 2) Kekesalan
-*brengsek, sialan, buset, keparat*
+2) Kekesalan: *brengsek, sialan, buset, keparat*
 
 - *Brengsek*, sudah malas nuntut gaji tinggi pula!
 - *Sialan*, baru masuk sudah diberi banyak kerjaan rumah!
 
-### 3) Kekaguman atau Kepuasan
-*aduhai, amboi, asyik*
+3) Kekaguman atau Kepuasan: *aduhai, amboi, asyik*
 
 - *Aduhai*, indahnya pemandangan ini!
 - *Amboi*, akhirnya sampai juga kita dengan selamat!
 - *Asyik*, nikmatnya kita duduk-duduk di pantai seperti ini!
 
-### 4) Kesyukuran
-*syukur, alhamdulillah*
+4) Kesyukuran: *syukur, alhamdulillah*
 
 - *Syukur*, anak kita diterima di sekolah ini!
 - *Alhamdulillah*, anak saya semuanya naik kelas!
 
-### 5) Harapan
-*insyaallah*
+5) Harapan: *insyaallah*
 
 - *Insyaallah*, saya akan datang ke pesta perkawinanmu!
 
-### 6) Keheranan
+6) Keheranan
 *aduh, aih, ai, la, duilah, eh, oh, ah*
 
 - *Aduh*, kalau begini bisa rusak acara kita!
@@ -54,27 +45,23 @@ Interjeksi dipakai dalam bahasa lisan atau bahasa tulis yang berbentuk percakapa
 - *La*, kamu 'kan teman sekolahku di SMP!
 - *Duilah*, begitu saja kamu tidak bisa!
 
-### 7) Kekagetan
-*astaga, astagfirullah, masyaallah*
+7) Kekagetan: *astaga, astagfirullah, masyaallah*
 
 - *Astaga*, alangkah mahalnya barang ini!
 - *Astagfirullah*, belum tua, tetapi dia sudah pelupa.
 - *Masyaallah*, anak sekecil itu mampu meraih juara.
 
-### 8) Ajakan
-*ayo, mari*
+8) Ajakan: *ayo, mari*
 
 - *Ayo*, kita pergi sekarang!
 - *Mari*, jangan malu-malu!
 
-### 9) Panggilan
-*hai, he, eh, halo*
+9) Panggilan: *hai, he, eh, halo*
 
 - *Hai*, kapan kamu datang?
 - *He*, di mana dia tinggal sekarang?
 - *Halo*, apa kabar?
 
-### 10) Simpulan
-*nah*
+10) Simpulan: *nah*
 
 - *Nah*, bersyukurlah kita karena musibah itu sudah lewat!

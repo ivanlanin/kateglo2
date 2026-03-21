@@ -1,11 +1,13 @@
 ---
 id: 2
-title: Numeralia Pokok (7.3.1)
+title: Jenis Numeralia (7.3)
 ---
+
+## Numeralia Pokok (7.3.1)
 
 Numeralia pokok adalah bilangan yang menjadi dasar dari bilangan yang lain. Numeralia pokok terbagi menjadi (a) pokok tentu, (b) kolektif, (c) distributif, dan (d) pokok taktentu. Di samping itu, ada (e) numeralia klitika dan (f) numeralia pecahan.
 
-## Numeralia Pokok Tentu (7.3.1.1)
+### Numeralia Pokok Tentu (7.3.1.1)
 
 Numeralia pokok tentu mengacu pada bilangan pokok, baik yang berupa satu kata yang terdiri atas satu unsur atau lebih maupun yang berupa gugus kata yang terdiri atas dua unsur atau lebih.
 
@@ -46,7 +48,7 @@ Jika numeralia ditempatkan di belakang nomina, dalam bahasa baku kata penggolong
 - (312a) \**Belilah buku tulis tiga.*—✗
 - (312b) *Belilah buku tulis tiga **buah**.*—✓
 
-## Numeralia Pokok Kolektif (7.3.1.2)
+### Numeralia Pokok Kolektif (7.3.1.2)
 
 Numeralia pokok kolektif dibentuk dengan prefiks *ke-* yang ditempatkan di muka nomina yang diterangkan:
 
@@ -69,7 +71,7 @@ Numeralia kolektif dapat juga dibentuk dengan cara berikut.
 
 > *(kamu) berdua, (kami) berenam, (kita) berdua, (mereka) bertiga*
 
-## Numeralia Pokok Distributif (7.3.1.3)
+### Numeralia Pokok Distributif (7.3.1.3)
 
 Pada tataran sintaksis numeralia pokok distributif dapat dibentuk dengan cara mengulang kata bilangan dengan arti (1) '(Num) demi (Num)', (2) 'masing-masing (Num)':
 
@@ -79,7 +81,7 @@ Pada tataran sintaksis numeralia pokok distributif dapat dibentuk dengan cara me
 
 Kata *(se)tiap*, *tiap-tiap*, dan *masing-masing* termasuk juga numeralia distributif karena kata-kata itu menyatakan makna ketunggalan atau keindividualan anggota suatu kumpulan. *(Se)tiap* atau *tiap-tiap* mempunyai arti yang sangat mirip dengan *masing-masing*, tetapi kata *masing-masing* dapat berdiri sendiri tanpa nomina, sedangkan *(se)tiap* dan *tiap-tiap* tidak.
 
-## Numeralia Pokok Taktentu (7.3.1.4)
+### Numeralia Pokok Taktentu (7.3.1.4)
 
 Numeralia pokok taktentu yang lazim disebut pemerbanyak adalah kata yang mengacu pada jumlah yang tidak pasti. Sebagian besar numeralia ini tidak dapat menjadi jawaban atas pertanyaan yang memakai kata tanya *berapa*. Yang termasuk ke dalam numeralia taktentu adalah *banyak*, *berbagai*, *beberapa*, *pelbagai*, *sedikit*, *semua*, *seluruh*, *segala*, dan *segenap*. Numeralia pokok taktentu ditempatkan di muka nomina yang diterangkannya.
 
@@ -104,7 +106,7 @@ Pada tataran sintaksis nomina numeralia taktentu dapat pula dibentuk dari numera
 - *Puluhan ribu orang menghadiri rapat umum itu.*
 - *Belasan siswa datang terlambat karena banjir.*
 
-## Numeralia Pokok Klitika (7.3.1.5)
+### Numeralia Pokok Klitika (7.3.1.5)
 
 Dalam bahasa Indonesia dewasa ini terdapat sejumlah numeralia yang dipungut dari bahasa Jawa Kuno, tetapi numeralia itu umumnya ditempelkan di awal nomina (proklitika):
 
@@ -118,7 +120,7 @@ Dalam bahasa Indonesia dewasa ini terdapat sejumlah numeralia yang dipungut dari
 | *sapta* | 'tujuh' | *saptamarga* 'tujuh peraturan prajurit' |
 | *dasa* | 'sepuluh' | *dasalomba* 'sepuluh perlombaan' |
 
-## Numeralia Pecahan (7.3.1.6)
+### Numeralia Pecahan (7.3.1.6)
 
 Tiap bilangan pokok dapat dipecah menjadi bagian yang lebih kecil yang dinamakan numeralia pecahan. Cara membentuk numeralia itu ialah dengan memakai kata *per-* di antara bilangan pembagi dan penyebut. Dalam bentuk huruf, *per-* ditempelkan pada bilangan yang mengikutinya. Dalam bentuk angka, dipakai garis yang memisahkan kedua bilangan itu.
 
@@ -134,3 +136,25 @@ Bilangan pecahan dapat mengikuti bilangan pokok:
 - 2½ → *dua setengah*
 - 7,6 → *tujuh koma enam*
 - 9,75 → *sembilan koma tujuh lima*
+
+## Numeralia Tingkat (7.3.2)
+
+Numeralia pokok dapat diubah menjadi numeralia tingkat. Cara mengubahnya adalah dengan menambahkan *ke-* di muka bilangan yang bersangkutan. Khusus untuk bilangan satu dipakai pula istilah *pertama*.
+
+Contoh:
+
+- *kesatu* atau *pertama*
+- *kedua*
+- *kelima*
+- *kesepuluh*
+
+Karena numeralia kolektif juga dibentuk dengan *ke-*, bentuk kedua macam numeralia itu sama. Perbedaannya terletak pada bagaimana masing-masing dipakai. Sebagai numeralia kolektif, numeralia ini diletakkan di muka nomina yang diterangkan; sebagai numeralia tingkat, ia diletakkan di belakang nomina yang diterangkan.
+
+| Kolektif | Tingkat |
+|---|---|
+| *ketiga pemain* | *pemain ketiga* |
+| *kedua jawaban itu* | *jawaban kedua itu* |
+| *kelima anak saya* | *anak saya yang kelima; anak kelima saya* |
+|—(\**kesatu suara*) | *suara pertama* |
+
+Perhatikan pula bahwa pada numeralia kolektif tidak ada bentuk *kesatu* atau *pertama*, sedangkan pada numeralia tingkat ada.

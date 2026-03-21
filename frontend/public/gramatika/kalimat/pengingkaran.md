@@ -21,10 +21,6 @@ Kehadiran kata ingkar dapat mengingkarkan (1) seluruh kalimat, seperti pada (405
 
 Kata *tidak* pada (407a) mengingkarkan verba predikat *berangkat* pada klausa kedua (yang dapat dilesapkan), sedangkan *bukan* pada (407b) mengingkarkan frasa nominal *hari ini*.
 
----
-
-## Lingkup Pengingkaran (9.6.1)
-
 Kata ingkar seperti *tidak* mempunyai ruang lingkup pengingkaran yang berbeda-beda bergantung pada ada tidaknya keterangan.
 
 (408)
@@ -41,7 +37,7 @@ Kata ingkar seperti *tidak* mempunyai ruang lingkup pengingkaran yang berbeda-be
 
 Makna kalimat (408b.i), (408c.i), dan (408d.i) yang menggunakan *tidak* masing-masing mengungkapkan makna yang sama dengan (408b.ii), (408c.ii), dan (408d.ii) yang menggunakan *bukan*. Tampak bahwa makna pengingkaran berpindah-pindah sesuai dengan tekanan yang diberikan.
 
-### Pengingkaran Kalimat (9.6.1.1)
+## Pengingkaran Kalimat (9.6.1.1)
 
 Pengingkaran kalimat dilakukan dengan menambahkan kata ingkar yang sesuai dengan predikatnya—kata ingkar *tidak* atau *bukan* ditempatkan di awal predikat.
 
@@ -126,7 +122,7 @@ Penggunaan kata ingkar dapat dirangkum sebagai berikut:
 
 *Catatan: Bentuk belum (yang mengandung makna aspek imperfektif) merupakan bentuk negasi dari sudah.*
 
-### Pengingkaran Bagian Kalimat (9.6.1.2)
+## Pengingkaran Bagian Kalimat (9.6.1.2)
 
 Bagian kalimat tertentu dapat diingkarkan dengan menempatkan kata ingkar yang sesuai di depan unsur yang diingkarkan. Salah satu jenis pengingkaran unsur kalimat adalah **pengingkaran pengontrasan**. Kata ingkar yang digunakan adalah ***bukan* ... *melainkan*** atau ***tidak* ... *tetapi***.
 

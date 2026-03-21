@@ -6,8 +6,3 @@
    4. [Pronomina Taktentu](/gramatika/jenis-pronomina)
    5. [Pronomina Jumlah](/gramatika/jenis-pronomina)
 3. [Frasa Pronominal](/gramatika/frasa-pronominal)
-   1. [1) Penambahan Numeralia Kolektif](/gramatika/frasa-pronominal)
-   2. [2) Penambahan Kata Penunjuk](/gramatika/frasa-pronominal)
-   3. [3) Penambahan Kata *Sendiri*](/gramatika/frasa-pronominal)
-   4. [4) Penambahan Klausa dengan *Yang*](/gramatika/frasa-pronominal)
-   5. [5) Penambahan Frasa Nominal yang Berfungsi Apositif](/gramatika/frasa-pronominal)

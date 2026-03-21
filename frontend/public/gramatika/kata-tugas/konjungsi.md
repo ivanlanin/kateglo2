@@ -21,10 +21,6 @@ Berdasarkan perilaku sintaktisnya, konjungsi dibagi menjadi empat kelompok:
 3. Konjungsi subordinatif
 4. Konjungsi antarkalimat
 
----
-
-## Preposisi dan Konjungsi
-
 Ada bentuk kata yang hanya dapat berfungsi sebagai preposisi, ada yang hanya berfungsi sebagai konjungsi, dan ada yang dapat berfungsi sebagai keduanya.
 
 | Hanya Preposisi | Preposisi dan Konjungsi | Hanya Konjungsi |
