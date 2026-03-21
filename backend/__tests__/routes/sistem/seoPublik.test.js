@@ -11,6 +11,7 @@ jest.mock('../../../services/publik/layananSeoPublik', () => ({
   buildRobotsTxt: jest.fn(),
   buildSitemapXml: jest.fn(),
   generateSitemapPaths: jest.fn(),
+  renderOgImagePng: jest.fn(),
 }));
 
 const layananSeoPublik = require('../../../services/publik/layananSeoPublik');
@@ -66,5 +67,32 @@ describe('routes/sistem/seoPublik', () => {
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({ error: 'gagal generate sitemap' });
+  });
+
+  it('GET /og/gramatika/preposisi.png mengembalikan png dinamis dengan header cache', async () => {
+    layananSeoPublik.renderOgImagePng.mockReturnValue(Buffer.from('png-binary'));
+
+    const response = await request(createApp()).get('/og/gramatika/preposisi.png?title=Preposisi&context=Kata%20Tugas');
+
+    expect(response.status).toBe(200);
+    expect(layananSeoPublik.renderOgImagePng).toHaveBeenCalledWith({
+      section: 'gramatika',
+      slug: 'preposisi',
+      title: 'Preposisi',
+      context: 'Kata Tugas',
+    });
+    expect(response.headers['content-type']).toContain('image/png');
+    expect(response.headers['cache-control']).toBe('public, max-age=86400');
+  });
+
+  it('GET /og/default.png meneruskan error render ke middleware', async () => {
+    layananSeoPublik.renderOgImagePng.mockImplementation(() => {
+      throw new Error('gagal render og');
+    });
+
+    const response = await request(createApp()).get('/og/default.png');
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ error: 'gagal render og' });
   });
 });

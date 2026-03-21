@@ -4,6 +4,7 @@
 
 - Menambahkan bab 1–3 dari TBBBI ke [Gramatika](/gramatika)
 - Menambahkan bagan-bagan
+- Menerapkan gambar pratayang Open Graph dinamis
 
 ## 2026-03-20 Jumat
 

@@ -172,6 +172,140 @@ function buildSerializedSsrDataScript(prefetchedData = null) {
   return `<script>window.__KATEGLO_SSR_DATA__ = ${dataJson};</script>`;
 }
 
+function buildSocialTitle(pathname = '/', fallbackTitle = '') {
+  const path = decodeURIComponent(pathname || '/');
+  const fallback = stripKategloSuffix(fallbackTitle) || 'Kateglo';
+
+  if (path === '/ejaan' || path === '/ejaan/') {
+    return 'Panduan Ejaan Bahasa Indonesia | Kateglo';
+  }
+
+  if (path.startsWith('/ejaan/')) {
+    const slug = path.replace('/ejaan/', '').trim().replace(/\/+$/, '');
+    const metadata = petaItemEjaanBySlug[slug] || {
+      judul: formatJudulEjaanDariSlug(slug) || 'Ejaan',
+      judulBab: 'Ejaan',
+    };
+    return `${metadata.judul} | ${metadata.judulBab} | Kateglo`;
+  }
+
+  if (path === '/gramatika' || path === '/gramatika/') {
+    return 'Panduan Tata Bahasa Indonesia | Kateglo';
+  }
+
+  if (path.startsWith('/gramatika/')) {
+    const slug = path.replace('/gramatika/', '').trim().replace(/\/+$/, '');
+    const metadata = petaItemGramatikaBySlug[slug] || {
+      judul: formatJudulGramatikaDariSlug(slug) || 'Gramatika',
+      judulBab: 'Gramatika',
+    };
+    const konteks = metadata.parentJudul || metadata.judulBab || 'Gramatika';
+    return `${metadata.judul} | ${konteks} | Kateglo`;
+  }
+
+  return `${fallback} | Kateglo`;
+}
+
+function stripKategloSuffix(value = '') {
+  return String(value || '').replace(/\s+[—-]\s+Kateglo$/, '').trim();
+}
+
+function buildOgQueryString(params = {}) {
+  const searchParams = new URLSearchParams();
+
+  Object.entries(params).forEach(([key, value]) => {
+    const normalized = String(value || '').trim();
+    if (normalized) searchParams.set(key, normalized);
+  });
+
+  const queryString = searchParams.toString();
+  return queryString ? `?${queryString}` : '';
+}
+
+function buildGenericSocialContext(pathname = '/') {
+  const path = decodeURIComponent(pathname || '/');
+
+  if (path.startsWith('/kamus/detail/')) return { section: 'kamus', context: 'Entri Kamus Bahasa Indonesia' };
+  if (path.startsWith('/kamus/cari/')) return { section: 'kamus', context: 'Hasil Pencarian Kamus' };
+  if (path === '/kamus' || path === '/kamus/') return { section: 'kamus', context: 'Kamus Bahasa Indonesia' };
+  if (path.startsWith('/kamus/')) return { section: 'kamus', context: 'Kategori Kamus Bahasa Indonesia' };
+
+  if (path.startsWith('/tesaurus/cari/')) return { section: 'tesaurus', context: 'Hasil Pencarian Tesaurus' };
+  if (path.startsWith('/tesaurus')) return { section: 'tesaurus', context: 'Sinonim dan Antonim' };
+
+  if (path.startsWith('/glosarium/detail/')) return { section: 'glosarium', context: 'Padanan Istilah Bahasa Indonesia' };
+  if (path.startsWith('/glosarium/cari/')) return { section: 'glosarium', context: 'Hasil Pencarian Glosarium' };
+  if (path.startsWith('/glosarium/bidang/')) return { section: 'glosarium', context: 'Glosarium per Bidang' };
+  if (path.startsWith('/glosarium/sumber/')) return { section: 'glosarium', context: 'Glosarium per Sumber' };
+  if (path.startsWith('/glosarium')) return { section: 'glosarium', context: 'Istilah dan Padanan Bidang Ilmu' };
+
+  if (path.startsWith('/makna')) return { section: 'makna', context: 'Cari Kata Berdasarkan Makna' };
+  if (path.startsWith('/rima')) return { section: 'rima', context: 'Cari Kata Berdasarkan Rima' };
+
+  if (path === '/alat' || path === '/alat/') return { section: 'alat', context: 'Perangkat Bahasa Indonesia' };
+  if (path.startsWith('/alat/')) return { section: 'alat', context: 'Alat Bahasa Indonesia' };
+
+  if (path === '/gim' || path === '/gim/') return { section: 'gim', context: 'Permainan Kata Bahasa Indonesia' };
+  if (path.startsWith('/gim/')) return { section: 'gim', context: 'Permainan Bahasa Indonesia' };
+
+  return { section: 'default', context: 'Kamus, Tesaurus, dan Glosarium Bahasa Indonesia' };
+}
+
+function buildSocialImageUrl(pathname = '/', siteBaseUrl = 'https://kateglo.org', prefetchedData = null, fallbackTitle = '') {
+  const path = decodeURIComponent(pathname || '/');
+  const baseUrl = stripTrailingSlash(siteBaseUrl || 'https://kateglo.org');
+  const genericConfig = buildGenericSocialContext(path);
+  const defaultImageUrl = `${baseUrl}/og/default.png${buildOgQueryString({
+    title: stripKategloSuffix(fallbackTitle) || 'Kateglo',
+    context: 'Kamus, Tesaurus, dan Glosarium Bahasa Indonesia',
+  })}`;
+
+  if (path === '/ejaan' || path === '/ejaan/') {
+    return `${baseUrl}/og/ejaan.png${buildOgQueryString({
+      title: 'Panduan Ejaan Bahasa Indonesia',
+      context: 'Pedoman Bahasa Indonesia',
+    })}`;
+  }
+
+  if (path.startsWith('/ejaan/')) {
+    const slug = path.replace('/ejaan/', '').trim().replace(/\/+$/, '');
+    if (!slug || prefetchedData?.notFound) return defaultImageUrl;
+    const metadata = petaItemEjaanBySlug[slug] || {
+      judul: formatJudulEjaanDariSlug(slug) || 'Ejaan',
+      judulBab: 'Ejaan',
+    };
+    return `${baseUrl}/og/ejaan/${encodeURIComponent(slug)}.png${buildOgQueryString({
+      title: metadata.judul,
+      context: metadata.judulBab || 'Ejaan',
+    })}`;
+  }
+
+  if (path === '/gramatika' || path === '/gramatika/') {
+    return `${baseUrl}/og/gramatika.png${buildOgQueryString({
+      title: 'Panduan Tata Bahasa Indonesia',
+      context: 'Tata Bahasa Indonesia',
+    })}`;
+  }
+
+  if (path.startsWith('/gramatika/')) {
+    const slug = path.replace('/gramatika/', '').trim().replace(/\/+$/, '');
+    if (!slug || prefetchedData?.notFound) return defaultImageUrl;
+    const metadata = petaItemGramatikaBySlug[slug] || {
+      judul: formatJudulGramatikaDariSlug(slug) || 'Gramatika',
+      judulBab: 'Gramatika',
+    };
+    return `${baseUrl}/og/gramatika/${encodeURIComponent(slug)}.png${buildOgQueryString({
+      title: metadata.judul,
+      context: metadata.parentJudul || metadata.judulBab || 'Gramatika',
+    })}`;
+  }
+
+  return `${baseUrl}/og/${genericConfig.section}.png${buildOgQueryString({
+    title: stripKategloSuffix(fallbackTitle) || 'Kateglo',
+    context: genericConfig.context,
+  })}`;
+}
+
 function resolveSsrStatusCode(prefetchedData = null) {
   if (prefetchedData?.type === 'static-markdown' && prefetchedData.notFound) {
     return 404;
@@ -431,8 +565,9 @@ export async function render(url = '/', prefetchedData = null) {
   if (shouldSkipSsr(pathname)) {
     const meta = buildMetaForPath(pathname, siteBaseUrl, prefetchedData);
     const canonicalUrl = meta.canonicalUrl;
-    const imageUrl = `${siteBaseUrl}/logo-kateglo-sosial.png`;
+    const imageUrl = buildSocialImageUrl(pathname, siteBaseUrl, prefetchedData, meta.title);
     const title = escapeHtml(meta.title);
+    const socialTitle = escapeHtml(buildSocialTitle(pathname, meta.title));
     const description = escapeHtml(meta.description);
     const escapedCanonicalUrl = escapeHtml(canonicalUrl);
     const escapedImageUrl = escapeHtml(imageUrl);
@@ -445,14 +580,18 @@ export async function render(url = '/', prefetchedData = null) {
     <meta property="og:site_name" content="Kateglo" />
     <meta property="og:locale" content="id_ID" />
     <meta property="og:url" content="${escapedCanonicalUrl}" />
-    <meta property="og:title" content="${title}" />
+    <meta property="og:title" content="${socialTitle}" />
     <meta property="og:description" content="${description}" />
     <meta property="og:image" content="${escapedImageUrl}" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Logo Kateglo" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="${title}" />
+    <meta name="twitter:title" content="${socialTitle}" />
     <meta name="twitter:description" content="${description}" />
     <meta name="twitter:image" content="${escapedImageUrl}" />
+    <meta name="twitter:image:alt" content="Logo Kateglo" />
     ${serializedStateScript}`;
 
     return { appHtml: '', headTags, statusCode };
@@ -472,8 +611,9 @@ export async function render(url = '/', prefetchedData = null) {
 
   const meta = buildMetaForPath(pathname, siteBaseUrl, prefetchedData);
   const canonicalUrl = meta.canonicalUrl || `${siteBaseUrl}${pathname}`;
-  const imageUrl = `${siteBaseUrl}/logo-kateglo-sosial.png`;
+  const imageUrl = buildSocialImageUrl(pathname, siteBaseUrl, prefetchedData, meta.title);
   const title = escapeHtml(meta.title);
+  const socialTitle = escapeHtml(buildSocialTitle(pathname, meta.title));
   const description = escapeHtml(meta.description);
   const escapedCanonicalUrl = escapeHtml(canonicalUrl);
   const escapedImageUrl = escapeHtml(imageUrl);
@@ -486,14 +626,18 @@ export async function render(url = '/', prefetchedData = null) {
     <meta property="og:site_name" content="Kateglo" />
     <meta property="og:locale" content="id_ID" />
     <meta property="og:url" content="${escapedCanonicalUrl}" />
-    <meta property="og:title" content="${title}" />
+    <meta property="og:title" content="${socialTitle}" />
     <meta property="og:description" content="${description}" />
     <meta property="og:image" content="${escapedImageUrl}" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Logo Kateglo" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="${title}" />
+    <meta name="twitter:title" content="${socialTitle}" />
     <meta name="twitter:description" content="${description}" />
     <meta name="twitter:image" content="${escapedImageUrl}" />
+    <meta name="twitter:image:alt" content="Logo Kateglo" />
     ${serializedStateScript}`;
 
   return { appHtml, headTags, statusCode };
@@ -504,11 +648,16 @@ export const __private = {
   escapeJsonForHtml,
   stripTrailingSlash,
   truncate,
+  stripKategloSuffix,
+  buildOgQueryString,
+  buildGenericSocialContext,
   buildKamusDescription: buildDeskripsiDetailKamus,
   buildTesaurusDescription: buildDeskripsiPencarianTesaurus,
   buildGlosariumCariDescription: buildDeskripsiPencarianGlosarium,
   buildMetaEjaan,
   buildMetaGramatika,
+  buildSocialTitle,
+  buildSocialImageUrl,
   buildSerializedSsrDataScript,
   resolveSsrStatusCode,
   buildMetaForPath,

@@ -4,6 +4,7 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
+const { Resvg } = require('@resvg/resvg-js');
 
 const ModelLabel = require('../../models/master/modelLabel');
 const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
@@ -13,6 +14,119 @@ const ejaanDocsDir = path.join(rootDir, 'frontend', 'public', 'ejaan');
 const gramatikaDocsDir = path.join(rootDir, 'frontend', 'public', 'gramatika');
 
 const KATEGORI_SLUG_NAMA = new Set(['kelas_kata', 'kelas-kata', 'kelas', 'ragam', 'bahasa', 'bidang']);
+const ogImageDimensions = { width: 1200, height: 630 };
+const ogSectionPalette = {
+  default: {
+    start: '#F8FBFF',
+    end: '#FFF4E6',
+    accent: '#1F2B8F',
+    accentSoft: '#E8EEFF',
+    badgeText: '#B45309',
+    badgeBg: '#FFF1DC',
+    title: '#12205D',
+    body: '#475569',
+    border: '#D8E1F6',
+  },
+  ejaan: {
+    start: '#F4FBFF',
+    end: '#E9FFF7',
+    accent: '#0F766E',
+    accentSoft: '#DDF8F2',
+    badgeText: '#0F766E',
+    badgeBg: '#DDF8F2',
+    title: '#134E4A',
+    body: '#4B5563',
+    border: '#C9F0E8',
+  },
+  gramatika: {
+    start: '#FFF9F2',
+    end: '#F6F6FF',
+    accent: '#9A3412',
+    accentSoft: '#FFE7D6',
+    badgeText: '#9A3412',
+    badgeBg: '#FFE7D6',
+    title: '#7C2D12',
+    body: '#57534E',
+    border: '#F7D7C1',
+  },
+  kamus: {
+    start: '#EEF6FF',
+    end: '#FFF6EC',
+    accent: '#1D4ED8',
+    accentSoft: '#DCEAFE',
+    badgeText: '#1D4ED8',
+    badgeBg: '#DBEAFE',
+    title: '#1E3A8A',
+    body: '#475569',
+    border: '#C7D8FB',
+  },
+  tesaurus: {
+    start: '#F3F0FF',
+    end: '#FFF5FB',
+    accent: '#7C3AED',
+    accentSoft: '#E9DDFF',
+    badgeText: '#7C3AED',
+    badgeBg: '#EDE9FE',
+    title: '#5B21B6',
+    body: '#5B556C',
+    border: '#DCCBFF',
+  },
+  glosarium: {
+    start: '#ECFEF7',
+    end: '#F2FFFC',
+    accent: '#0F766E',
+    accentSoft: '#CCFBF1',
+    badgeText: '#0F766E',
+    badgeBg: '#CCFBF1',
+    title: '#115E59',
+    body: '#4B5563',
+    border: '#BFEDE3',
+  },
+  makna: {
+    start: '#FFF7ED',
+    end: '#FFFDF5',
+    accent: '#C2410C',
+    accentSoft: '#FFEDD5',
+    badgeText: '#C2410C',
+    badgeBg: '#FFEDD5',
+    title: '#9A3412',
+    body: '#57534E',
+    border: '#F8D6BB',
+  },
+  rima: {
+    start: '#F4F7FF',
+    end: '#F7FBFF',
+    accent: '#2563EB',
+    accentSoft: '#DBEAFE',
+    badgeText: '#2563EB',
+    badgeBg: '#DBEAFE',
+    title: '#1D4ED8',
+    body: '#475569',
+    border: '#CCDBFF',
+  },
+  alat: {
+    start: '#FFF8F0',
+    end: '#F5FCFF',
+    accent: '#B45309',
+    accentSoft: '#FFEDD5',
+    badgeText: '#B45309',
+    badgeBg: '#FEF3C7',
+    title: '#92400E',
+    body: '#57534E',
+    border: '#F6DEB5',
+  },
+  gim: {
+    start: '#FFF7F7',
+    end: '#F5FFF8',
+    accent: '#BE123C',
+    accentSoft: '#FFE4E6',
+    badgeText: '#BE123C',
+    badgeBg: '#FFE4E6',
+    title: '#9F1239',
+    body: '#5B556C',
+    border: '#F8CDD6',
+  },
+};
 
 function normalisasiBaseUrl(value = '') {
   const trimmed = String(value || '').trim();
@@ -81,6 +195,191 @@ function escapeXml(value = '') {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;');
+}
+
+function pickQueryValue(value = '') {
+  if (Array.isArray(value)) return String(value[0] || '');
+  return String(value || '');
+}
+
+function truncatePlainText(value = '', maxLen = 80) {
+  const normalized = String(value || '').replace(/\s+/g, ' ').trim();
+  if (normalized.length <= maxLen) return normalized;
+
+  const cut = normalized.slice(0, maxLen);
+  const lastSpace = cut.lastIndexOf(' ');
+  const safeCut = lastSpace > Math.floor(maxLen * 0.6) ? cut.slice(0, lastSpace) : cut;
+  return `${safeCut.trim()}…`;
+}
+
+function formatTitleFromSlug(value = '') {
+  const decoded = decodeURIComponent(String(value || '').trim())
+    .replace(/[-_]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (!decoded) return '';
+
+  return decoded
+    .split(' ')
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+function normalizeOgSection(value = '') {
+  const normalized = normalisasiSlug(value);
+  if (Object.prototype.hasOwnProperty.call(ogSectionPalette, normalized)) return normalized;
+  return 'default';
+}
+
+function buildOgImagePayload({ section = 'default', slug = '', title = '', context = '' } = {}) {
+  const sectionKey = normalizeOgSection(section);
+  const sectionLabel = sectionKey === 'ejaan'
+    ? 'Ejaan'
+    : sectionKey === 'gramatika'
+      ? 'Gramatika'
+      : sectionKey === 'kamus'
+        ? 'Kamus'
+        : sectionKey === 'tesaurus'
+          ? 'Tesaurus'
+          : sectionKey === 'glosarium'
+            ? 'Glosarium'
+            : sectionKey === 'makna'
+              ? 'Makna'
+              : sectionKey === 'rima'
+                ? 'Rima'
+                : sectionKey === 'alat'
+                  ? 'Alat'
+                  : sectionKey === 'gim'
+                    ? 'Gim'
+      : 'Bahasa Indonesia';
+  const fallbackTitle = sectionKey === 'ejaan'
+    ? (slug ? formatTitleFromSlug(slug) : 'Panduan Ejaan Bahasa Indonesia')
+    : sectionKey === 'gramatika'
+      ? (slug ? formatTitleFromSlug(slug) : 'Panduan Tata Bahasa Indonesia')
+      : sectionKey === 'kamus'
+        ? 'Kamus Bahasa Indonesia'
+        : sectionKey === 'tesaurus'
+          ? 'Tesaurus Bahasa Indonesia'
+          : sectionKey === 'glosarium'
+            ? 'Glosarium Bahasa Indonesia'
+            : sectionKey === 'makna'
+              ? 'Pencarian Makna'
+              : sectionKey === 'rima'
+                ? 'Pencarian Rima'
+                : sectionKey === 'alat'
+                  ? 'Alat Bahasa Indonesia'
+                  : sectionKey === 'gim'
+                    ? 'Gim Kata Indonesia'
+      : 'Kamus, Tesaurus, dan Glosarium Bahasa Indonesia';
+  const fallbackContext = sectionKey === 'ejaan'
+    ? (slug ? 'Kaidah Bahasa Indonesia' : 'Pedoman Bahasa Indonesia')
+    : sectionKey === 'gramatika'
+      ? (slug ? 'Tata Bahasa Indonesia' : 'Panduan Bahasa Indonesia')
+      : sectionKey === 'kamus'
+        ? 'Entri dan pencarian kamus'
+        : sectionKey === 'tesaurus'
+          ? 'Sinonim, antonim, dan relasi kata'
+          : sectionKey === 'glosarium'
+            ? 'Istilah dan padanan bidang ilmu'
+            : sectionKey === 'makna'
+              ? 'Cari kata berdasarkan makna'
+              : sectionKey === 'rima'
+                ? 'Cari kata berdasarkan rima'
+                : sectionKey === 'alat'
+                  ? 'Penganalisis teks dan penghitung huruf'
+                  : sectionKey === 'gim'
+                    ? 'Kuis kata dan susun kata'
+      : 'kateglo.org';
+
+  return {
+    section: sectionKey,
+    sectionLabel,
+    eyebrow: 'Kateglo',
+    title: truncatePlainText(pickQueryValue(title) || fallbackTitle, 88),
+    context: truncatePlainText(pickQueryValue(context) || fallbackContext, 52),
+    footer: 'Baca selengkapnya di kateglo.org',
+    cta: 'Baca di Kateglo',
+  };
+}
+
+function splitOgTextIntoLines(text = '', maxChars = 26, maxLines = 3) {
+  const words = String(text || '').split(/\s+/).filter(Boolean);
+  const lines = [];
+  let current = '';
+
+  for (const word of words) {
+    const candidate = current ? `${current} ${word}` : word;
+    if (candidate.length <= maxChars) {
+      current = candidate;
+      continue;
+    }
+
+    if (current) lines.push(current);
+    current = word;
+
+    if (lines.length === maxLines) break;
+  }
+
+  if (current && lines.length < maxLines) lines.push(current);
+
+  if (!lines.length) return ['Kateglo'];
+
+  const joined = lines.join(' ');
+  if (joined.length < String(text || '').trim().length) {
+    lines[lines.length - 1] = truncatePlainText(lines[lines.length - 1], Math.max(12, maxChars - 2));
+  }
+
+  return lines.slice(0, maxLines);
+}
+
+function renderSvgTextLines(lines = [], { x = 72, y = 220, lineHeight = 78 } = {}) {
+  return lines
+    .map((line, index) => `<tspan x="${x}" y="${y + (index * lineHeight)}">${escapeXml(line)}</tspan>`)
+    .join('');
+}
+
+function buildOgImageSvg(payload = {}) {
+  const palette = ogSectionPalette[payload.section] || ogSectionPalette.default;
+  const titleLines = splitOgTextIntoLines(payload.title, 28, 3);
+  const lineHeight = titleLines.length >= 3 ? 70 : 78;
+
+  return [
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${ogImageDimensions.width}" height="${ogImageDimensions.height}" viewBox="0 0 ${ogImageDimensions.width} ${ogImageDimensions.height}" role="img" aria-label="${escapeXml(payload.title)}">`,
+    '  <defs>',
+    `    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">`,
+    `      <stop offset="0%" stop-color="${palette.start}" />`,
+    `      <stop offset="100%" stop-color="${palette.end}" />`,
+    '    </linearGradient>',
+    '  </defs>',
+    `  <rect width="${ogImageDimensions.width}" height="${ogImageDimensions.height}" rx="36" fill="url(#bg)" />`,
+    `  <circle cx="1030" cy="92" r="160" fill="${palette.accentSoft}" opacity="0.7" />`,
+    `  <circle cx="980" cy="520" r="190" fill="${palette.accentSoft}" opacity="0.42" />`,
+    `  <rect x="44" y="44" width="1112" height="542" rx="30" fill="none" stroke="${palette.border}" stroke-width="2" />`,
+    `  <text x="72" y="92" fill="${palette.accent}" font-family="Segoe UI, Arial, sans-serif" font-size="32" font-weight="700">${escapeXml(payload.eyebrow)}</text>`,
+    `  <rect x="72" y="118" width="220" height="46" rx="23" fill="${palette.badgeBg}" />`,
+    `  <text x="182" y="148" fill="${palette.badgeText}" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle">${escapeXml(payload.sectionLabel)}</text>`,
+    `  <text fill="${palette.title}" font-family="Segoe UI, Arial, sans-serif" font-size="68" font-weight="700">${renderSvgTextLines(titleLines, { x: 72, y: 244, lineHeight })}</text>`,
+    `  <text x="72" y="466" fill="${palette.body}" font-family="Segoe UI, Arial, sans-serif" font-size="26">${escapeXml(payload.context)}</text>`,
+    `  <text x="72" y="548" fill="${palette.body}" font-family="Segoe UI, Arial, sans-serif" font-size="24">${escapeXml(payload.footer)}</text>`,
+    `  <rect x="874" y="500" width="236" height="58" rx="29" fill="${palette.accent}" />`,
+    `  <text x="992" y="536" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle">${escapeXml(payload.cta)}</text>`,
+    '</svg>',
+  ].join('\n');
+}
+
+function renderOgImagePng(options = {}) {
+  const payload = buildOgImagePayload(options);
+  const svg = buildOgImageSvg(payload);
+  const renderer = new Resvg(svg, {
+    fitTo: {
+      mode: 'width',
+      value: ogImageDimensions.width,
+    },
+  });
+
+  return renderer.render().asPng();
 }
 
 function buildRobotsTxt(baseUrl) {
@@ -239,12 +538,19 @@ module.exports = {
   buildRobotsTxt,
   buildSitemapXml,
   generateSitemapPaths,
+  buildOgImagePayload,
+  buildOgImageSvg,
+  renderOgImagePng,
   __private: {
     normalisasiBaseUrl,
     normalisasiSlug,
     normalisasiKategoriPath,
     tentukanSlugLabel,
     encodePathSegment,
+    pickQueryValue,
+    truncatePlainText,
+    formatTitleFromSlug,
+    normalizeOgSection,
     ambilPathStatis,
     buildPathKamusKategori,
     ambilPathKamusKategori,
@@ -252,5 +558,8 @@ module.exports = {
     ambilPathEjaan,
     ambilPathGramatika,
     escapeXml,
+    splitOgTextIntoLines,
+    renderSvgTextLines,
+    ogImageDimensions,
   },
 };

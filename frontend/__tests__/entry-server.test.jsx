@@ -259,6 +259,7 @@ describe('entry-server', () => {
     expect(headTags).toContain('https://kateglo.org/kamus/detail/sara');
     expect(headTags).toContain('&lt;');
     expect(headTags).toContain('&amp;');
+    expect(headTags).toContain('https://kateglo.org/og/kamus.png?title=sara&amp;context=Entri+Kamus+Bahasa+Indonesia');
     expect(headTags).toContain('__KATEGLO_SSR_DATA__');
   });
 
@@ -283,6 +284,9 @@ describe('entry-server', () => {
 
     expect(hasilEjaan.headTags).toContain('Ringkasan huruf kapital.');
     expect(hasilGramatika.headTags).toContain('Ringkasan preposisi.');
+    expect(hasilEjaan.headTags).toContain('https://kateglo.org/og/ejaan/huruf-kapital.png?title=Huruf+Kapital&amp;context=Penggunaan+Huruf');
+    expect(hasilGramatika.headTags).toContain('https://kateglo.org/og/gramatika/preposisi.png?title=Preposisi&amp;context=Kata+Tugas');
+    expect(hasilGramatika.headTags).toContain('Preposisi | Kata Tugas | Kateglo');
   });
 
   it('render mengembalikan status 404 untuk markdown statis yang tidak ditemukan', async () => {
@@ -304,9 +308,22 @@ describe('entry-server', () => {
     delete globalThis.process;
 
     const { headTags } = await render('/');
-    expect(headTags).toContain('https://kateglo.org/logo-kateglo-sosial.png');
+    expect(headTags).toContain('https://kateglo.org/og/default.png?title=Kateglo&amp;context=Kamus%2C+Tesaurus%2C+dan+Glosarium+Bahasa+Indonesia');
 
     globalThis.process = originalGlobal;
+  });
+
+  it('helper sosial membangun judul dan path gambar yang lebih kaya untuk ejaan dan gramatika', () => {
+    expect(__private.buildSocialTitle('/gramatika/preposisi', 'Preposisi — Kateglo')).toBe('Preposisi | Kata Tugas | Kateglo');
+    expect(__private.buildSocialTitle('/ejaan/huruf-kapital', 'Huruf Kapital — Kateglo')).toBe('Huruf Kapital | Penggunaan Huruf | Kateglo');
+    expect(__private.buildSocialTitle('/kamus/detail/sara', 'sara — Kateglo')).toBe('sara | Kateglo');
+    expect(__private.stripKategloSuffix('Preposisi — Kateglo')).toBe('Preposisi');
+    expect(__private.buildOgQueryString({ title: 'Huruf Kapital', context: 'Penggunaan Huruf' })).toBe('?title=Huruf+Kapital&context=Penggunaan+Huruf');
+    expect(__private.buildGenericSocialContext('/kamus/detail/sara')).toEqual({ section: 'kamus', context: 'Entri Kamus Bahasa Indonesia' });
+    expect(__private.buildGenericSocialContext('/glosarium/cari/air')).toEqual({ section: 'glosarium', context: 'Hasil Pencarian Glosarium' });
+    expect(__private.buildSocialImageUrl('/gramatika/preposisi', 'https://kateglo.org')).toBe('https://kateglo.org/og/gramatika/preposisi.png?title=Preposisi&context=Kata+Tugas');
+    expect(__private.buildSocialImageUrl('/kamus/detail/sara', 'https://kateglo.org', null, 'sara — Kateglo')).toBe('https://kateglo.org/og/kamus.png?title=sara&context=Entri+Kamus+Bahasa+Indonesia');
+    expect(__private.buildSocialImageUrl('/random', 'https://kateglo.org', null, 'Kamus — Kateglo')).toBe('https://kateglo.org/og/default.png?title=Kamus&context=Kamus%2C+Tesaurus%2C+dan+Glosarium+Bahasa+Indonesia');
   });
 
   it('render melewati SSR untuk route redaksi agar hydrasi client yang mengelola auth', async () => {

@@ -21,6 +21,9 @@ const {
   buildRobotsTxt,
   buildSitemapXml,
   generateSitemapPaths,
+  buildOgImagePayload,
+  buildOgImageSvg,
+  renderOgImagePng,
   __private,
 } = require('../../../services/publik/layananSeoPublik');
 
@@ -292,6 +295,67 @@ describe('layananSeoPublik private helpers', () => {
     expect(paths).not.toContain('/gramatika/');
     readdirSpy.mockRestore();
     existsSpy.mockRestore();
+  });
+
+  it('helper og image menormalisasi input dan membagi baris judul', () => {
+    expect(__private.pickQueryValue(['judul utama', 'cadangan'])).toBe('judul utama');
+    expect(__private.pickQueryValue()).toBe('');
+    expect(__private.truncatePlainText('kata pendek', 20)).toBe('kata pendek');
+    expect(__private.truncatePlainText('ini teks yang cukup panjang untuk dipotong secara aman', 24)).toMatch(/…$/);
+    expect(__private.formatTitleFromSlug('huruf-kapital')).toBe('Huruf Kapital');
+    expect(__private.normalizeOgSection('Gramatika')).toBe('gramatika');
+    expect(__private.normalizeOgSection('Kamus')).toBe('kamus');
+    expect(__private.normalizeOgSection('lainnya')).toBe('default');
+
+    const lines = __private.splitOgTextIntoLines('Preposisi dalam konstruksi verba taktransitif yang panjang sekali', 16, 3);
+    expect(lines.length).toBeGreaterThan(0);
+    expect(lines.length).toBeLessThanOrEqual(3);
+    expect(__private.renderSvgTextLines(['Baris Satu', 'Baris Dua'], { x: 10, y: 20, lineHeight: 30 })).toContain('<tspan x="10" y="20">Baris Satu</tspan>');
+    expect(__private.ogImageDimensions).toEqual({ width: 1200, height: 630 });
+  });
+});
+
+describe('layananSeoPublik dynamic og image', () => {
+  it('buildOgImagePayload memberi fallback sesuai section', () => {
+    expect(buildOgImagePayload({ section: 'gramatika', slug: 'preposisi' })).toEqual({
+      section: 'gramatika',
+      sectionLabel: 'Gramatika',
+      eyebrow: 'Kateglo',
+      title: 'Preposisi',
+      context: 'Tata Bahasa Indonesia',
+      footer: 'Baca selengkapnya di kateglo.org',
+      cta: 'Baca di Kateglo',
+    });
+
+    expect(buildOgImagePayload({ section: 'default', title: 'Kamus', context: 'Bahasa' }).title).toBe('Kamus');
+    expect(buildOgImagePayload({ section: 'kamus' })).toMatchObject({
+      section: 'kamus',
+      sectionLabel: 'Kamus',
+      context: 'Entri dan pencarian kamus',
+    });
+  });
+
+  it('buildOgImageSvg menghasilkan svg branded dan renderOgImagePng mengembalikan buffer png', () => {
+    const svg = buildOgImageSvg(buildOgImagePayload({
+      section: 'ejaan',
+      slug: 'huruf-kapital',
+      title: 'Huruf Kapital',
+      context: 'Penggunaan Huruf',
+    }));
+
+    expect(svg).toContain('<svg');
+    expect(svg).toContain('Huruf Kapital');
+    expect(svg).toContain('Penggunaan Huruf');
+
+    const pngBuffer = renderOgImagePng({
+      section: 'ejaan',
+      slug: 'huruf-kapital',
+      title: 'Huruf Kapital',
+      context: 'Penggunaan Huruf',
+    });
+
+    expect(Buffer.isBuffer(pngBuffer)).toBe(true);
+    expect(pngBuffer.length).toBeGreaterThan(1000);
   });
 });
 
