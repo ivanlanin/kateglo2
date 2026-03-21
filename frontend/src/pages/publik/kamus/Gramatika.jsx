@@ -24,6 +24,7 @@ function DaftarIsiGramatikaGrid() {
         <KartuKategori
           key={bab.slug}
           judul={bab.judul}
+          judulTo={`/gramatika/${bab.slug}`}
           items={bab.items}
           getKey={(item) => item.slug}
           getTo={(item) => `/gramatika/${item.slug}`}
@@ -38,7 +39,7 @@ function DaftarIsiPanel({ aktifSlug = '' }) {
   return (
     <div className="space-y-4">
       {daftarIsiGramatika.map((bab) => {
-        const kategoriAktif = bab.items.some((item) => item.slug === aktifSlug);
+        const kategoriAktif = bab.slug === aktifSlug || bab.items.some((item) => item.slug === aktifSlug);
         return (
           <PanelLipat
             key={`${bab.slug}-${aktifSlug}`}
@@ -47,6 +48,20 @@ function DaftarIsiPanel({ aktifSlug = '' }) {
             aksen={true}
           >
             <ul className="ejaan-sidebar-pill-grid">
+              <li key={`${bab.slug}-ikhtisar`} className="ejaan-sidebar-pill-item">
+                {aktifSlug === bab.slug ? (
+                  <span className="ejaan-sidebar-pill ejaan-sidebar-pill-active" aria-current="page">
+                    Ikhtisar Bab
+                  </span>
+                ) : (
+                  <Link
+                    to={`/gramatika/${bab.slug}`}
+                    className="ejaan-sidebar-pill"
+                  >
+                    Ikhtisar Bab
+                  </Link>
+                )}
+              </li>
               {bab.items.map((item) => (
                 <li key={item.slug} className="ejaan-sidebar-pill-item">
                   {aktifSlug === item.slug ? (
@@ -101,6 +116,13 @@ function Gramatika() {
         judul: 'Gramatika',
         judulNoda: 'Gramatika',
         deskripsi: 'Panduan tata bahasa Indonesia mencakup kelas kata, kalimat, dan hubungan antarklausa berdasarkan Tata Bahasa Baku Bahasa Indonesia.',
+      };
+    }
+
+    if (metadataAktif?.tipe === 'bab') {
+      return {
+        judul: metadataAktif.judul,
+        deskripsi: `Ikhtisar bab ${metadataAktif.judul} dalam panduan tata bahasa Indonesia di Kateglo.`,
       };
     }
 

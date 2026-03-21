@@ -237,6 +237,14 @@
   @apply text-blue-400 hover:text-blue-300;
 }
 
+.gramatika-markdown-content a {
+  @apply no-underline;
+}
+
+.gramatika-markdown-content a:hover {
+  @apply no-underline;
+}
+
 .ejaan-markdown-content img {
   @apply my-5 block max-w-full h-auto rounded-lg border border-gray-200 bg-white;
 }
@@ -335,6 +343,12 @@
   padding-left: 1.25rem;
   margin-left: 0;
   margin-bottom: 0.75rem;
+}
+
+.ejaan-markdown-content li > ol,
+.ejaan-markdown-content li > ul {
+  margin-top: 0.25rem;
+  margin-bottom: 0;
 }
 
 .ejaan-markdown-content li {

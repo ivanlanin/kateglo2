@@ -152,15 +152,24 @@ const daftarIsiGramatika = [
   },
 ];
 
-const daftarItemGramatika = daftarIsiGramatika.flatMap((bab) =>
-  bab.items.map((item) => ({
+const daftarItemGramatika = daftarIsiGramatika.flatMap((bab) => [
+  {
+    judulBab: bab.judul,
+    babSlug: bab.slug,
+    judul: bab.judul,
+    slug: bab.slug,
+    dokumen: `${bab.slug}/${bab.slug}.md`,
+    tipe: 'bab',
+  },
+  ...bab.items.map((item) => ({
     judulBab: bab.judul,
     babSlug: bab.slug,
     judul: item.judul,
     slug: item.slug,
     dokumen: `${bab.slug}/${item.slug}.md`,
-  }))
-);
+    tipe: 'item',
+  })),
+]);
 
 const petaItemGramatikaBySlug = daftarItemGramatika.reduce((acc, item) => {
   acc[item.slug] = item;

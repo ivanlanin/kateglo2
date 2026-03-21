@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 function KartuKategori({
   judul,
+  judulTo,
   items = [],
   getKey,
   getTo,
@@ -16,7 +17,15 @@ function KartuKategori({
 
   return (
     <div className={className}>
-      <h3 className="beranda-info-title">{judul}</h3>
+      <h3 className="beranda-info-title">
+        {judulTo ? (
+          <Link to={judulTo} className="hover:underline underline-offset-4">
+            {judul}
+          </Link>
+        ) : (
+          judul
+        )}
+      </h3>
       <div className="kategori-card-chip-list">
         {items.map((item, index) => (
           <Link

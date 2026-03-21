@@ -112,6 +112,13 @@ function buildMetaGramatika(slug = '') {
     judulBab: 'Gramatika',
   };
 
+  if (metadata.tipe === 'bab') {
+    return {
+      judul: metadata.judul,
+      deskripsi: `Ikhtisar bab ${metadata.judul} dalam panduan tata bahasa Indonesia di Kateglo.`,
+    };
+  }
+
   return {
     judul: metadata.judul,
     deskripsi: `Penjelasan tentang ${metadata.judul} pada bab ${metadata.judulBab} dalam panduan tata bahasa Indonesia di Kateglo.`,
