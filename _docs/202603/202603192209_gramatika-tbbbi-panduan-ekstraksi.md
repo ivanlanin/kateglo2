@@ -172,7 +172,7 @@ Semua nomor adalah **nomor halaman PDF** (1-indeks).
 |-----|-------|:---:|:---:|:---:|:---:|:---:|
 | I   | Pendahuluan | 25 | 46 | 22 | — | — |
 | II  | Tata Bahasa: Tinjauan Selayang Pandang | 47 | 68 | 22 | ✓ | ✓ |
-| III | Bunyi Bahasa dan Tata Bunyi | 69 | 118 | 50 | — | — |
+| III | Bunyi Bahasa dan Tata Bunyi | 69 | 118 | 50 | ✓ | ✓ |
 | IV  | Verba | 119 | 216 | 98 | — | ✓ |
 | V   | Adjektiva | 217 | 257 | 41 | — | ✓ |
 | VI  | Adverbia | 258 | 281 | 24 | — | ✓ |
@@ -259,7 +259,7 @@ print("Selesai.")
 | X   | `bab-10/` | h535–h574 | ✓ selesai |
 | I   | `bab-01/` | h025–h046 | — |
 | II  | `bab-02/` | h047–h068 | ✓ selesai |
-| III | `bab-03/` | h069–h118 | — |
+| III | `bab-03/` | h069–h118 | ✓ selesai |
 | IV  | `bab-04/` | h119–h216 | — |
 | V   | `bab-05/` | h217–h257 | — |
 | VI  | `bab-06/` | h258–h281 | — |
@@ -345,15 +345,14 @@ Urutan mempertimbangkan: panjang bab, kualitas OCR yang dapat diharapkan, kepada
 
 ---
 
-### ☐ 7. Bab III — Bunyi Bahasa dan Tata Bunyi (50 hal PDF)
+### ✓ 7. Bab III — Bunyi Bahasa dan Tata Bunyi (50 hal PDF) — **SELESAI**
 
-- Mengandung bagan vokal dan konsonan (diagram artikulasi) yang tidak dapat dirender dalam markdown.
-- Simbol IPA tidak selalu terbaca dengan benar oleh OCR.
-- Tabel alofon vokal dan konsonan panjang dan kompleks.
-- Pemenggalan kata dan tekanan bisa disajikan dalam prosa + tabel sederhana.
-- Relevan tapi butuh keputusan editorial tentang cara menyajikan fonetik tanpa diagram.
+- Diekstrak dengan metode hibrida: teks dasar dari PDF, diverifikasi dengan JPG per halaman di `_data/gramatika/bab-03/`.
+- Bagan alat ucap dan bagan vokal direpresentasikan ulang dalam bentuk daftar/tabel markdown karena diagram aslinya tidak bisa ditampilkan langsung.
+- Tabel konsonan, tabel alofon vokal, daftar gugus konsonan, dan deret konsonan dibersihkan dari artefak OCR menggunakan konfirmasi silang dari gambar halaman.
+- Simbol fonetik dipertahankan sejauh diperlukan agar isi Bab III tetap lengkap dan tidak tereduksi menjadi paraprase.
 
-**Pendekatan:** Abaikan bagan fonetik, gunakan deskripsi prosa untuk posisi artikulasi; fokus pada pemenggalan kata dan struktur suku kata yang paling berguna.
+**Subbab:** Batasan dan Ciri Bunyi Bahasa (3.1) · Vokal dan Konsonan (3.2) · Struktur Suku Kata dan Kata (3.3) · Pemenggalan Kata (3.4) · Ciri Suprasegmental (3.5)
 
 ---
 

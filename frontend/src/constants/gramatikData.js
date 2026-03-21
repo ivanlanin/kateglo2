@@ -33,6 +33,20 @@ const daftarIsiGramatika = [
     ],
   },
   {
+    judul: 'Bunyi Bahasa',
+    slug: 'bunyi-bahasa',
+    items: [
+      {
+        judul: 'Batasan dan Ciri Bunyi Bahasa',
+        slug: 'batasan-dan-ciri-bunyi-bahasa',
+      },
+      { judul: 'Vokal dan Konsonan', slug: 'vokal-dan-konsonan' },
+      { judul: 'Struktur Suku Kata dan Kata', slug: 'struktur-suku-kata-dan-kata' },
+      { judul: 'Pemenggalan Kata', slug: 'pemenggalan-kata' },
+      { judul: 'Ciri Suprasegmental', slug: 'ciri-suprasegmental' },
+    ],
+  },
+  {
     judul: 'Nomina',
     slug: 'nomina',
     items: [
