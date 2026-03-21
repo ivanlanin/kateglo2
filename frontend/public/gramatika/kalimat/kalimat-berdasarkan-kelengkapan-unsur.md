@@ -39,4 +39,3 @@ Ada pula ungkapan tetap (formula) yang berdiri sendiri dan tidak mempunyai padan
 
 (370) Selamat malam. / Apa kabar? / Merdeka! / Selamat jalan.
 
----

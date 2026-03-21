@@ -12,7 +12,6 @@ Perilaku sintaktis adverbia dapat dilihat berdasarkan posisinya terhadap kata at
 - e) Adverbia pembuka wacana;
 - f) Adverbia intraklausal dan ekstraklausal.
 
----
 
 1. [Adverbia Sebelum Kata yang Diterangkan](/gramatika/adverbia-sebelum-kata-yang-diterangkan)
 

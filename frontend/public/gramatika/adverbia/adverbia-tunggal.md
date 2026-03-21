@@ -116,4 +116,3 @@ Contoh:
 
 > Perhatikan bahwa pada bentuk ulang dengan *se-*, *-an*, dan *se-...-nya*, bentuk dasar yang mengalami pengulangan itu tergolong adjektiva.
 
----

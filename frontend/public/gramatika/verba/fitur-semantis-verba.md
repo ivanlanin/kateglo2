@@ -66,7 +66,6 @@ Contoh lain:
 
 > *menulis (surat), memasak (sayur), melahirkan (anak), bangkit*
 
----
 
 Berdasarkan uraian di atas, tipe verba berikut fitur semantisnya dapat digambarkan dalam tabel berikut.
 

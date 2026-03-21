@@ -50,4 +50,3 @@ Contoh:
 
 > (322) *haus kekuasaan*, *hilang ingatan*, *hilang pikiran*
 
----

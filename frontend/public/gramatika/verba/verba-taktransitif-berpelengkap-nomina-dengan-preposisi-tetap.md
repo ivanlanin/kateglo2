@@ -91,7 +91,6 @@ Perlu juga diperhatikan bahwa frasa preposisional yang mengikuti verba, seperti 
 - b. *Dia mengetahui hal itu.*
 - c. *Hal itu diketahui olehnya.*
 
----
 
 Dari uraian mengenai perilaku sintaktis verba seperti yang diuraikan pada bagian ini, ketransitifan verba dapat disimpulkan seperti yang terlihat pada bagan berikut.
 
@@ -109,7 +108,6 @@ Dari uraian mengenai perilaku sintaktis verba seperti yang diuraikan pada bagian
   - berpelengkap manasuka
   - berpelengkap nomina dengan preposisi tetap
 
----
 
 Di samping golongan verba transitif dan taktransitif masih ada verba perakit atau kopula yang jumlahnya terbatas. Verba perakit dapat muncul di antara subjek dan predikat jika predikat itu bukan verba. Kata seperti *ialah* dan *adalah* merupakan (verba) perakit yang digunakan di depan predikat nonverbal.
 

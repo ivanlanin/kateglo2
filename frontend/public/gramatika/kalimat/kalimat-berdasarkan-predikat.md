@@ -206,4 +206,3 @@ Predikat kalimat dalam bahasa Indonesia dapat pula berupa frasa preposisional.
 
 Perlu diperhatikan bahwa tidak semua frasa preposisional dapat menjadi predikat kalimat. Frasa preposisional *dengan ibunya*, *sepanjang malam*, *mengenai reformasi*, dan *kepada saya* tidak berfungsi sebagai predikat.
 
----

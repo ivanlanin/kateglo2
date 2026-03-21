@@ -20,7 +20,6 @@ Dengan demikian, antara bentuk, kategori, fungsi, dan peran tidak ada hubungan s
 
 Tabel ini menganalisis kalimat *Ibu saya akan membeli baju baru untuk kami minggu depan* kata per kata. Setiap kata diklasifikasikan berdasarkan: (1) **Kategori Kata**—N (Ibu), Pron (saya), Adv (akan), V (membeli), N (baju), Adj (baru), Prep (untuk), N (kami), N (minggu), N (depan); (2) **Kategori Frasa**—FN (Ibu saya), FV (akan membeli), FN (baju baru), FPrep (untuk kami), FN (minggu depan); (3) **Fungsi**—Subjek (Ibu saya), Predikat (akan membeli), Objek (baju baru), Keterangan (untuk kami), Keterangan (minggu depan); (4) **Peran**—Pelaku (Ibu saya), Predikat (akan membeli), Sasaran (baju baru), Peruntung (untuk kami), Waktu (minggu depan).
 
----
 
 1. [Kategori](/gramatika/kategori)
 2. [Fungsi Sintaktis](/gramatika/fungsi-sintaktis)

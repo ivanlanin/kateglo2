@@ -31,4 +31,3 @@ Contoh:
 
 > Kata-kata *arkian*, *syahdan*, *sebermula*, *kalakian*, dan *hatta* saat ini telah menjadi bentuk arkais.
 
----

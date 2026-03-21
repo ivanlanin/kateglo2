@@ -53,4 +53,3 @@ Penggunaan konjungsi koordinatif *kemudian* sesudah konjungsi koordinatif *dan* 
 
 *Diagram pohon kalimat (21)*
 
----

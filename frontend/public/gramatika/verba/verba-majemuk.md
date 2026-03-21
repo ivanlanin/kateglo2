@@ -11,7 +11,6 @@ Pada seksi 4.1.3.2 butir (4) dijelaskan bahwa ada majemuk kata dan majemuk frasa
 
 Verba majemuk dapat dibagi berdasarkan bentuk morfologis dan hubungan komponennya. Berdasarkan bentuk morfologisnya, verba majemuk terbagi atas (1) verba majemuk dasar, (2) verba majemuk berafiks, dan (3) verba majemuk berulang.
 
----
 
 1. [Verba Majemuk Dasar](/gramatika/verba-majemuk-dasar)
 

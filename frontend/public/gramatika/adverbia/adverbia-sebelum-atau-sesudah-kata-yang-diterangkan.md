@@ -24,4 +24,3 @@ Contoh:
 - c. Ia *terus* bekerja menyelesaikan tugas untuk besok.
   Ia bekerja *terus* menyelesaikan tugas untuk besok.
 
----

@@ -135,4 +135,3 @@ Wujud frasa endosentrik koordinatif sangatlah sederhana, yakni dua verba yang di
 
 Pewatas pada frasa koordinatif itu memberi keterangan tambahan pada kedua verba yang bersangkutan dan bukan pada verba yang pertama saja. Dengan demikian, pewatas *tidak akan* pada kalimat (388) memberi keterangan tambahan pada *mengakui* dan *mengingkari*, bukan pada *mengakui* saja.
 
----

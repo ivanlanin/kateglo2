@@ -20,4 +20,3 @@ Dalam parafrasa tersebut terlihat bahwa komponen kedua tiap-tiap verba majemuk t
 
 Jelaslah bahwa bukan satu komponen yang menjadi inti, tetapi keduanya. Dari parafrasanya terlihat bahwa hubungan kedua komponen bersifat koordinatif.
 
----

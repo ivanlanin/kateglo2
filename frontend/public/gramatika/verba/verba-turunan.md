@@ -109,7 +109,6 @@ Unsur bentuk majemuk bebas terdiri atas (1) bentuk dasar dan bentuk dasar, (2) b
 
 Verba turunan yang terbentuk melalui pemajemukan disebut verba majemuk. Pengafiksan dan reduplikasi dapat juga terjadi pada verba majemuk, misalnya *memperjualbelikan*, *menghancur-leburkan*, dan *jatuh-bangun*.
 
----
 
 Berdasarkan uraian di atas, pengelompokan verba dari segi bentuknya adalah:
 

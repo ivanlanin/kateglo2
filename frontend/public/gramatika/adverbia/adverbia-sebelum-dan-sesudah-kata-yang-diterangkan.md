@@ -21,4 +21,3 @@ Contoh:
 
 Adverbia gabungan *sangat ... sekali* seperti pada (26b) dan *hanya ... saja* seperti pada (26c) sering digunakan dalam ragam tidak formal.
 
----

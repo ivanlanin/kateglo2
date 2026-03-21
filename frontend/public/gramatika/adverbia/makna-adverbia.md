@@ -5,7 +5,6 @@ title: Makna Adverbia (6.2)
 
 Berdasarkan perilaku semantisnya, dapat dibedakan delapan jenis adverbia, yaitu (1) adverbia kualitatif, (2) adverbia kuantitatif, (3) adverbia limitatif, (4) adverbia frekuentatif, (5) adverbia kewaktuan, (6) adverbia kecaraan, (7) adverbia kontrastif, dan (8) adverbia keniscayaan.
 
----
 
 ## Adverbia Kualitatif (6.2.1)
 
@@ -20,7 +19,6 @@ Contoh:
 - d. Permainannya *kurang* sempurna.
 - e. Lin Dan *agak* kerepotan mengembalikan smes Taufik.
 
----
 
 ## Adverbia Kuantitatif (6.2.2)
 
@@ -34,7 +32,6 @@ Contoh:
 - c. Setiap hari dia memerlukan uang belanja *kira-kira* seratus ribu rupiah.
 - d. Gaji bulanannya hanya *cukup* untuk hidup seminggu.
 
----
 
 ## Adverbia Limitatif (6.2.3)
 
@@ -49,7 +46,6 @@ Contoh:
 
 Adverbia *hanya* pada (13a) membatasi berbagai dampak obat itu pada menghambat penyakit ('tidak menyembuhkan penyakit'). Adverbia *saja* pada (13b) membatasi kegiatan subjek *kami* pada *(tinggal) di rumah* selama liburan. Adverbia *sekadar* pada (13c) membatasi kegiatan subjek *ia* pada *mencoba menarik hatiku* ('tidak untuk menjadi calon istrinya').
 
----
 
 ## Adverbia Frekuentatif (6.2.4)
 
@@ -63,7 +59,6 @@ Contoh:
 - c. Para siswa yang rajin *jarang* tinggal kelas.
 - d. *Kadang-kadang* saya terkejut dengan usulnya yang tidak terduga.
 
----
 
 ## Adverbia Kewaktuan (6.2.5)
 
@@ -77,7 +72,6 @@ Contoh:
 - c. Dia *langsung* pergi setelah mendengar berita itu.
 - d. Semoga pekerjaan itu *lekas* selesai.
 
----
 
 ## Adverbia Kecaraan (6.2.6)
 
@@ -90,7 +84,6 @@ Contoh:
 - b. Kami akan menyelesaikan tugas itu *secepatnya*.
 - c. *Pelan-pelan* ia membuka pintu kamar itu.
 
----
 
 ## Adverbia Kontrastif (6.2.7)
 
@@ -103,7 +96,6 @@ Contoh:
 - b. Jangankan saya diberi ongkos pulang, dia *malahan* mau pinjam uang dari saya.
 - c. Siapa bilang dia kikir, *justru* dia yang menyumbang paling banyak.
 
----
 
 ## Adverbia Keniscayaan (6.2.8)
 

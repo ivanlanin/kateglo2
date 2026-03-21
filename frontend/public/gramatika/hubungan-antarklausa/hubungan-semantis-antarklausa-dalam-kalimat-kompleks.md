@@ -368,4 +368,3 @@ Klausa relatif *yang tinggal di Bogor* pada (176) tidak diapit oleh tanda koma, 
 
 (186) Para pegawai, yang gajinya kecil, ikut memberi sumbangan.
 
----

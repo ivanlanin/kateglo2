@@ -55,4 +55,3 @@ Pada kalimat majemuk, unsur subjek pada klausa kedua yang sama dengan klausa per
 - b. Riedl menegaskan **bahwa** ia siap menerima tawaran PSSI **dan** mantan pemain nasional Austria itu berjanji akan membentuk timnas yang andal. *(dua kompleks dihubungkan dan)*
 - c. **Bahwa** bahasa Indonesia menjadi bahasa negara sudah banyak diketahui orang, **tetapi** tidak semua orang Indonesia merasa bangga **karena** bahasa Indonesia dianggap tidak bergengsi. *(empat klausa)*
 
----

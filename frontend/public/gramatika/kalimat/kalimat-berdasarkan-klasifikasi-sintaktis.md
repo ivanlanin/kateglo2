@@ -246,4 +246,3 @@ Jika kalimat interogatif menjadi bagian kalimat deklaratif, ia kehilangan sifat 
 (360) Anak itu sangat cerdas.
 → (Alangkah/Betapa/Bukan main) cerdasnya anak itu!
 
----

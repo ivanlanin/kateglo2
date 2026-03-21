@@ -332,4 +332,3 @@ Perubahan susunan konstituen frasa nominal dapat terjadi dengan memindahkan pron
 - (153b.i) *buku merah saya itu* → (153b.ii) *buku saya **yang** merah itu*
 - (153c.i) *rumah bertingkat keluarga kaya itu* → (153c.ii) *rumah keluarga kaya **yang** bertingkat itu*
 
----

@@ -42,4 +42,3 @@ Pemakaian tanda baca koma dalam bahasa tulis atau jeda panjang dalam bahasa lisa
 
 Kalimat (79b), yang merupakan kalimat kompleks yang dimulai dengan konjungsi subordinatif, berterima dan maknanya relatif sama dengan (79a). Kalimat (79c) yang dibentuk dari (79a), dengan mengedepankan klausa kedua tanpa mengikutsertakan konjungsi (*karena*), tidak berterima karena maknanya berubah dari makna kalimat (79a).
 
----

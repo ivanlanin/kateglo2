@@ -15,4 +15,3 @@ Dalam kalimat (22) informasi yang dinyatakan dalam klausa *Orang tua itu bekerja
 
 Ciri-ciri semantis dalam hubungan koordinatif ditentukan oleh makna dari macam konjungsi yang dipakai dan makna leksikal atau gramatikal dari klausa yang dibentuk. Konjungsi *dan*, misalnya, menyatakan gabungan antara satu klausa dan klausa lainnya. Sebaliknya, konjungsi *tetapi* menyatakan pertentangan. Makna leksikal dari *bekerja dengan sungguh-sungguh* dan *anak-anaknya berhasil* pada (22) dan *bekerja keras* dan *berhasil* pada (23) menyatakan hubungan sebab-akibat, sedangkan makna leksikal dari *telah tiada ... berhasil meraih gelar sarjana* pada (24) menyatakan hubungan pertentangan. Biasanya kegagalan seseorang dalam "bersekolah" disebabkan oleh banyak faktor, salah satu di antaranya adalah faktor orang tua yang meninggal. Namun, contoh (24) tidak memperlihatkan berlakunya kebiasaan itu karena meskipun sang ayah sudah meninggal, si anak dapat berhasil menjadi sarjana.
 
----

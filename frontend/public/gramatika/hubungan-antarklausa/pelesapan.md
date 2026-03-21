@@ -39,7 +39,6 @@ Contoh (192) memperlihatkan pelesapan struktural. Unsur yang dilesapkan dapat di
 
 Contoh (193) memperlihatkan pelesapan situasional. Unsur yang dilesapkan tidak dapat ditemukan dari teks, tetapi dari konteks situasional. Unsur yang dilesapkan pada (193a) dapat saja *kopi*, *teh*, *air*, atau jenis minuman lain. Mereka yang terlibat dalam percakapan itu pasti tahu benar jenis minuman yang disuguhkan. Pada (193b) unsur *saya* merupakan satu-satunya kemungkinan jika ungkapan itu diucapkan di depan seseorang yang menjadi mitra wicara.
 
----
 
 Telah disinggung dalam bab-bab terdahulu bahwa dalam kalimat majemuk dan kalimat kompleks ada kemungkinan terjadinya pelesapan, yakni penghapusan suatu unsur karena alasan tertentu. Unsur yang dapat dilesapkan dapat berupa subjek, predikat, objek, atau pelengkap. Perhatikan pelesapan subjek pada contoh berikut.
 

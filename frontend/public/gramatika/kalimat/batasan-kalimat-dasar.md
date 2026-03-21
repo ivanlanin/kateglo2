@@ -83,4 +83,3 @@ Hubungan struktural unsur-unsur kalimat dasar:
 (172) Dia tinggal di Bogor (tahun lalu).
 —Subjek: FN | Predikat: FV | Keterangan: FPrep *(wajib)* | (Keterangan: FN)
 
----

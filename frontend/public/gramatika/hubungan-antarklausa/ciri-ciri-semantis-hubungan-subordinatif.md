@@ -25,4 +25,3 @@ Kedua, kalimat subordinatif yang dihubungkan oleh konjungsi pada umumnya dapat d
 - a. Saya tidak tahu kapan dia akan pindah.
 - b. Saya tidak tahu waktu kepindahannya.
 
----

@@ -28,4 +28,3 @@ Contoh:
 - d. Kami *hanya* menulis apa yang dikatakannya.
 - e. Murid yang *paling* pintar mendapat hadiah dari sekolahnya.
 
----

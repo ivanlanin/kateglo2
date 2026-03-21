@@ -11,4 +11,3 @@ Contoh:
 - (324) *Sudah tiga tahun ia tidak pulang-pulang kampung.*
 - (325) *Pesawat televisi itu ternyata berpindah-pindah tangan.*
 
----

@@ -27,4 +27,3 @@ Contoh:
 - d. Warna baju yang dikenakannya mencolok *sekali*.
 - e. Karena semua buruh ikut berunjuk rasa, pabrik *pun* diliburkan.
 
----

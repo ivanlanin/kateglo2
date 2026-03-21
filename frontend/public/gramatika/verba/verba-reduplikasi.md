@@ -41,7 +41,6 @@ Reduplikasi leksikal lain ialah kelompok bentuk ulang yang menyatakan 'perihal y
 
 > *tarik-menarik* ← *menarik*; *sahut-menyahut* ← *menyahut*; *tolak-menolak* ← *menolak*; *sikut-menyikut* ← *menyikut*; *tembak-menembak* ← *menembak*
 
----
 
 Reduplikasi sintaksis diterapkan untuk memarkahi berbagai kategori semantik atau gramatikal, yaitu (1) kejamakan (pluralitas), (2) keanekaan (diversitas), (3) keserempakan (kesimultanan), (4) kesalingan (keresiprokalan), (5) perulangan (keiteratifan), (6) keberlanjutan (keduratifan), (7) peningkatan atau pengurangan intensitas, (8) kesantaian atau kesambillaluan, (9) ketakterdugaan, (10) kekonsesifan (penguluran), dan (11) kesertamertaan.
 

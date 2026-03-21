@@ -73,6 +73,5 @@ Verba dan perluasannya dapat juga bersifat apositif, yaitu sebagai keterangan ya
 
 Verba dan perluasannya *mengajar*, *berdagang kain*, serta *bertani dan beternak* dalam kalimat-kalimat di atas berfungsi sebagai aposisi. Konstruksi tersebut masing-masing menambah keterangan pada *pekerjaannya*, *usaha Pak Suroso*, dan *sumber pencarian penduduk desa itu*. Sebagaimana dapat dilihat, verba (dengan perluasannya) yang berfungsi sebagai aposisi tersebut diapit tanda koma. Dalam bahasa lisan, keterangan yang ditambahkan seperti itu biasanya dinyatakan dengan intonasi yang direndahkan.
 
----
 
 Dari uraian yang dinyatakan pada 4.6.3.1—4.6.3.5 dapat disimpulkan bahwa verba pada tataran klausa dapat berfungsi sebagai predikat, pelengkap, keterangan, atribut, dan aposisi. Pada tataran frasa, verba menjadi inti frasa verbal.

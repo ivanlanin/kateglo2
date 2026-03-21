@@ -16,4 +16,3 @@ Konstruksi *sudah membaik*, *akan mendarat*, *tidak harus pergi*, *harus menulis
 
 Yang menjadi verba inti pada kalimat (327–330) masing-masing adalah *membaik*, *mendarat*, *pergi*, dan *menulis*. Pada kalimat (331) dan (332) kedua verba pada tiap-tiap kalimat, yaitu *makan* dan *minum* dan *menyanyi* atau *menari*, menjadi inti dengan *dan* serta *atau* sebagai penghubungnya.
 
----

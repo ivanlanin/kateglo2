@@ -25,4 +25,3 @@ b. Komponen pertama berupa adjektiva dan komponen kedua berupa verba, seperti *k
 
 c. Komponen pertama berupa verba dasar dan komponen kedua berupa nomina dasar, seperti *mabuk laut* dan *gegar otak*.
 
----
