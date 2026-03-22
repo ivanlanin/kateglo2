@@ -1,6 +1,6 @@
 ---
 id: 3
-title: Posisi Adverbia (6.3)
+title: Perilaku Sintaksis Adverbia (6.3)
 ---
 
 Perilaku sintaktis adverbia dapat dilihat berdasarkan posisinya terhadap kata atau bagian kalimat yang dijelaskan oleh adverbia yang bersangkutan. Atas dasar itu, dapat dibedakan enam macam posisi adverbia sebagai berikut:

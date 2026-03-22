@@ -189,8 +189,8 @@ const daftarIsiGramatika = [
     slug: 'adjektiva',
     items: [
       { judul: 'Batasan dan Ciri Adjektiva', slug: 'batasan-dan-ciri-adjektiva' },
-      { judul: 'Makna Adjektiva', slug: 'makna-adjektiva' },
-      { judul: 'Fungsi Adjektiva', slug: 'fungsi-adjektiva' },
+      { judul: 'Ciri Semantis Adjektiva', slug: 'ciri-semantis-adjektiva' },
+      { judul: 'Perilaku Sintaksis Adjektiva', slug: 'perilaku-sintaksis-adjektiva' },
       {
         judul: 'Pertarafan Adjektiva',
         slug: 'pertarafan-adjektiva',
@@ -216,10 +216,10 @@ const daftarIsiGramatika = [
     slug: 'adverbia',
     items: [
       { judul: 'Batasan dan Ciri Adverbia', slug: 'batasan-dan-ciri-adverbia' },
-      { judul: 'Makna Adverbia', slug: 'makna-adverbia' },
+      { judul: 'Perilaku Semantis Adverbia', slug: 'perilaku-semantis-adverbia' },
       {
-        judul: 'Posisi Adverbia',
-        slug: 'posisi-adverbia',
+        judul: 'Perilaku Sintaksis Adverbia',
+        slug: 'perilaku-sintaksis-adverbia',
         turunan: [
           { judul: 'Adverbia Sebelum Kata yang Diterangkan', slug: 'adverbia-sebelum-kata-yang-diterangkan' },
           { judul: 'Adverbia Sesudah Kata yang Diterangkan', slug: 'adverbia-sesudah-kata-yang-diterangkan' },

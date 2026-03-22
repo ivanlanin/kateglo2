@@ -1,6 +1,6 @@
 ---
 id: 2
-title: Makna Adverbia (6.2)
+title: Perilaku Semantis Adverbia (6.2)
 ---
 
 Berdasarkan perilaku semantisnya, dapat dibedakan delapan jenis adverbia, yaitu (1) adverbia kualitatif, (2) adverbia kuantitatif, (3) adverbia limitatif, (4) adverbia frekuentatif, (5) adverbia kewaktuan, (6) adverbia kecaraan, (7) adverbia kontrastif, dan (8) adverbia keniscayaan.
