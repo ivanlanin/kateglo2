@@ -1,6 +1,6 @@
 ---
 id: 2
-title: Makna Nomina (7.1.2)
+title: Perilaku Semantis Nomina (7.1.2)
 ---
 
 Pada dasarnya tiap kata, termasuk nomina, yang mempunyai makna leksikal akan memiliki sejumlah komponen makna atau fitur semantis yang terkandung pada kata itu. Di antara fitur-fitur semantis itu ada yang sifatnya kodrati dan ada yang sifatnya budaya. Ciri yang kodrati bersifat universal. Makna yang dalam bahasa Indonesia disebut 'kuda' dalam bahasa mana pun akan memiliki fitur-fitur semantis kodrati yang sama, misalnya, kakinya empat, matanya dua, dan warnanya ada yang hitam, putih, cokelat, atau abu-abu. Jika ada kelompok masyarakat yang memahami makna kuda sebagai makanan, fitur makanan pada makna kuda bersifat budaya.

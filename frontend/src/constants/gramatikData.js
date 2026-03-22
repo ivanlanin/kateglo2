@@ -104,9 +104,8 @@ const daftarIsiGramatika = [
     slug: 'nomina',
     items: [
       { judul: 'Batasan dan Ciri Nomina', slug: 'batasan-dan-ciri-nomina' },
-      { judul: 'Makna Nomina', slug: 'makna-nomina' },
-      { judul: 'Acuan Nomina', slug: 'acuan-nomina' },
-      { judul: 'Fungsi Nomina', slug: 'fungsi-nomina' },
+      { judul: 'Perilaku Semantis Nomina', slug: 'perilaku-semantis-nomina' },
+      { judul: 'Perilaku Sintaksis Nomina', slug: 'perilaku-sintaksis-nomina' },
       {
         judul: 'Jenis Nomina',
         slug: 'jenis-nomina',
@@ -115,14 +114,8 @@ const daftarIsiGramatika = [
           { judul: 'Nomina Berdasarkan Bentuk Morfologisnya', slug: 'nomina-berdasarkan-bentuk-morfologisnya' },
         ],
       },
-      {
-        judul: 'Frasa Nominal',
-        slug: 'frasa-nominal',
-        turunan: [
-          { judul: 'Frasa Nominal', slug: 'frasa-nominal-umum' },
-          { judul: 'Frasa Nominal Vokatif', slug: 'frasa-nominal-vokatif' },
-        ],
-      },
+      { judul: 'Frasa Nominal', slug: 'frasa-nominal' },
+      { judul: 'Konsep Tunggal, Jamak, dan Generik', slug: 'konsep-tunggal-jamak-dan-generik' },
     ],
   },
   {

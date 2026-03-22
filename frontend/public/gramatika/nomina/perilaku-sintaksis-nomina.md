@@ -1,6 +1,6 @@
 ---
 id: 4
-title: Fungsi Nomina (7.1.3)
+title: Perilaku Sintaksis Nomina (7.1.3)
 ---
 
 Nomina atau frasa nominal dapat menduduki fungsi subjek (13a), objek (13b), pelengkap (13c), keterangan atau adverbial (13d), dan predikat (13e) pada tataran kalimat.

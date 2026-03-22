@@ -1,6 +1,6 @@
 ---
 id: 3
-title: Acuan Nomina (7.4)
+title: Konsep Tunggal, Jamak, dan Generik (7.4)
 ---
 
 Seperti halnya dengan kebanyakan bahasa di dunia ini, bahasa Indonesia juga mengenal konsep tunggal, jamak, generik, dan spesifik. Konsep tunggal dan konsep jamak mengacu pada banyaknya individu atau benda yang diacu oleh suatu (frasa) nomina. Jika individu (benda) yang diacu hanya satu, nomina tersebut disebut (bermakna) tunggal. Jika individu (benda) yang diacu lebih dari satu, nomina itu disebut (bermakna) jamak. Konsep generik dan spesifik bertalian dengan individu (benda) yang diacu oleh suatu (frasa) nomina. Jika suatu nomina mengacu pada seluruh individu (benda) dalam suatu kelas, nomina tersebut dikatakan bermakna generik. Jika (frasa) nomina mengacu pada individu (individu-individu) atau benda (benda-benda) tertentu, nomina tersebut dikatakan bermakna spesifik.
