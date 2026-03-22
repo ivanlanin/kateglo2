@@ -176,51 +176,27 @@ function buildSocialTitle(pathname = '/', fallbackTitle = '') {
   const path = decodeURIComponent(pathname || '/');
   const fallback = stripKategloSuffix(fallbackTitle) || 'Kateglo';
 
-  const gabungSocialTitle = (...segments) => {
-    const uniqueSegments = [];
-    const seen = new Set();
-
-    segments.forEach((segment) => {
-      const normalized = String(segment || '').trim();
-      if (!normalized) return;
-
-      const key = normalized.toLowerCase();
-      if (seen.has(key)) return;
-      seen.add(key);
-      uniqueSegments.push(normalized);
-    });
-
-    return uniqueSegments.join(' — ');
+  const routeToDomainLabel = () => {
+    if (path === '/kamus' || path === '/kamus/' || path.startsWith('/kamus/')) return 'Kamus';
+    if (path === '/tesaurus' || path === '/tesaurus/' || path.startsWith('/tesaurus/')) return 'Tesaurus';
+    if (path === '/glosarium' || path === '/glosarium/' || path.startsWith('/glosarium/')) return 'Glosarium';
+    if (path === '/makna' || path === '/makna/' || path.startsWith('/makna/')) return 'Makna';
+    if (path === '/rima' || path === '/rima/' || path.startsWith('/rima/')) return 'Rima';
+    if (path === '/gramatika' || path === '/gramatika/' || path.startsWith('/gramatika/')) return 'Gramatika';
+    if (path === '/ejaan' || path === '/ejaan/' || path.startsWith('/ejaan/')) return 'Ejaan';
+    if (path === '/alat' || path === '/alat/' || path.startsWith('/alat/')) return 'Alat';
+    if (path === '/gim' || path === '/gim/' || path.startsWith('/gim/')) return 'Gim';
+    return '';
   };
 
-  if (path === '/ejaan' || path === '/ejaan/') {
-    return gabungSocialTitle('Panduan Ejaan Bahasa Indonesia', 'Kateglo');
+  const domainLabel = routeToDomainLabel();
+  if (!domainLabel) return `${fallback} — Kateglo`;
+
+  if (!fallback || fallback.toLowerCase() === domainLabel.toLowerCase()) {
+    return `${domainLabel} — Kateglo`;
   }
 
-  if (path.startsWith('/ejaan/')) {
-    const slug = path.replace('/ejaan/', '').trim().replace(/\/+$/, '');
-    const metadata = petaItemEjaanBySlug[slug] || {
-      judul: formatJudulEjaanDariSlug(slug) || 'Ejaan',
-      judulBab: 'Ejaan',
-    };
-    return gabungSocialTitle(metadata.judul, metadata.judulBab, 'Kateglo');
-  }
-
-  if (path === '/gramatika' || path === '/gramatika/') {
-    return gabungSocialTitle('Panduan Tata Bahasa Indonesia', 'Kateglo');
-  }
-
-  if (path.startsWith('/gramatika/')) {
-    const slug = path.replace('/gramatika/', '').trim().replace(/\/+$/, '');
-    const metadata = petaItemGramatikaBySlug[slug] || {
-      judul: formatJudulGramatikaDariSlug(slug) || 'Gramatika',
-      judulBab: 'Gramatika',
-    };
-    const konteks = metadata.parentJudul || metadata.judulBab || 'Gramatika';
-    return gabungSocialTitle(metadata.judul, konteks, 'Kateglo');
-  }
-
-  return gabungSocialTitle(fallback, 'Kateglo');
+  return `${fallback} — ${domainLabel} — Kateglo`;
 }
 
 function stripKategloSuffix(value = '') {
