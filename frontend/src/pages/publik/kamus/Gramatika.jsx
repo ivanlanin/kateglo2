@@ -3,7 +3,7 @@
  */
 
 import '../../../styles/gramatika.css';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -16,6 +16,17 @@ import { daftarIsiGramatika, daftarItemGramatika } from '../../../constants/gram
 
 function bacaIsiMarkdown(markdownMentah = '') {
   return markdownMentah.replace(/^---[\s\S]*?---\s*/m, '');
+}
+
+function setStatusHeadingLipat(container, terbuka) {
+  if (!container) return 0;
+
+  const daftarHeadingLipat = container.querySelectorAll('details');
+  daftarHeadingLipat.forEach((heading) => {
+    heading.open = terbuka;
+  });
+
+  return daftarHeadingLipat.length;
 }
 
 function DaftarIsiGramatikaGrid() {
@@ -100,9 +111,12 @@ function DaftarIsiPanel({ aktifSlug = '', aktifSlugSebagaiTautan = '' }) {
 function Gramatika() {
   const { slug } = useParams();
   const ssrPrefetch = useSsrPrefetch();
+  const markdownContainerRef = useRef(null);
   const [isiMarkdown, setIsiMarkdown] = useState('');
   const [sedangMemuat, setSedangMemuat] = useState(true);
   const [galat, setGalat] = useState('');
+  const [semuaHeadingTerbuka, setSemuaHeadingTerbuka] = useState(true);
+  const [adaHeadingLipat, setAdaHeadingLipat] = useState(false);
 
   const semuaDokumen = useMemo(
     () => daftarItemGramatika,
@@ -128,6 +142,12 @@ function Gramatika() {
 
   const modeDaftarIsi = !slug;
   const halamanTidakDitemukan = Boolean(slug && (!metadataAktif || dataMarkdownSsr?.notFound));
+
+  const toggleSemuaHeading = () => {
+    const statusBerikutnya = !semuaHeadingTerbuka;
+    setSemuaHeadingTerbuka(statusBerikutnya);
+    setStatusHeadingLipat(markdownContainerRef.current, statusBerikutnya);
+  };
 
   const metaSeo = useMemo(() => {
     if (modeDaftarIsi) {
@@ -164,6 +184,10 @@ function Gramatika() {
       deskripsi: dataMarkdownSsr?.description || `Penjelasan tentang ${metadataAktif.judul} pada bab ${metadataAktif.judulBab} dalam panduan tata bahasa Indonesia di Kateglo.`,
     };
   }, [modeDaftarIsi, metadataAktif, halamanTidakDitemukan, dataMarkdownSsr]);
+
+  useEffect(() => {
+    setSemuaHeadingTerbuka(true);
+  }, [slug]);
 
   useEffect(() => {
     if (modeDaftarIsi) {
@@ -223,6 +247,16 @@ function Gramatika() {
     return () => controller.abort();
   }, [dokumenValid, modeDaftarIsi, halamanTidakDitemukan, dataMarkdownSsr]);
 
+  useEffect(() => {
+    if (sedangMemuat || galat || !isiMarkdown.trim()) {
+      setAdaHeadingLipat(false);
+      return;
+    }
+
+    const jumlahHeadingLipat = setStatusHeadingLipat(markdownContainerRef.current, semuaHeadingTerbuka);
+    setAdaHeadingLipat(jumlahHeadingLipat > 0);
+  }, [semuaHeadingTerbuka, sedangMemuat, galat, isiMarkdown]);
+
   if (modeDaftarIsi) {
     return (
       <HalamanPublik
@@ -261,6 +295,16 @@ function Gramatika() {
             <h1 className="kamus-detail-heading">
               <span className="kamus-detail-heading-main">{metadataAktif?.judul || 'Gramatika'}</span>
             </h1>
+            {adaHeadingLipat && (
+              <button
+                type="button"
+                onClick={toggleSemuaHeading}
+                className="gramatika-heading-toggle"
+                aria-pressed={!semuaHeadingTerbuka}
+              >
+                {semuaHeadingTerbuka ? 'Ciutkan' : 'Luaskan'}
+              </button>
+            )}
           </div>
 
           <div className="mt-6">
@@ -268,7 +312,10 @@ function Gramatika() {
             {!sedangMemuat && galat && <p className="secondary-text">{galat}</p>}
 
             {!sedangMemuat && !galat && (
-              <div className="ejaan-markdown-content gramatika-markdown-content">
+              <div
+                ref={markdownContainerRef}
+                className="ejaan-markdown-content gramatika-markdown-content"
+              >
                 <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[[rehypeCollapsibleHeadings, { defaultOpen: true }]]}>
                   {isiMarkdown}
                 </ReactMarkdown>

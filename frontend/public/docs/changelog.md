@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-03-22 Minggu
+
+- Menambahkan tombol alih "Ciutkan" & "Luaskan" di [Gramatika](/gramatika)
+
 ## 2026-03-21 Sabtu
 
 - Menambahkan bab 1–3 dari TBBBI ke [Gramatika](/gramatika)

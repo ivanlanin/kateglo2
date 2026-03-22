@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import Gramatika from '../../../../src/pages/publik/kamus/Gramatika';
@@ -86,6 +86,28 @@ describe('Gramatika', () => {
 
     expect(global.fetch).not.toHaveBeenCalled();
     expect(document.querySelector('details[open]')).not.toBeNull();
+  });
+
+  it('menyediakan toggle untuk menciutkan dan meluaskan semua heading', async () => {
+    renderHalaman('/gramatika/preposisi', {
+      type: 'static-markdown',
+      section: 'gramatika',
+      slug: 'preposisi',
+      markdown: '# Preposisi SSR\n\n## Jenis Preposisi\n\n### Preposisi Dasar\n\nPreposisi adalah kata tugas.',
+      description: 'Preposisi adalah kata tugas.',
+      notFound: false,
+    });
+
+    const tombolToggle = await screen.findByRole('button', { name: 'Ciutkan' });
+    expect(document.querySelectorAll('details[open]')).toHaveLength(2);
+
+    fireEvent.click(tombolToggle);
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Luaskan' })).toBeInTheDocument();
+    });
+
+    expect(document.querySelectorAll('details[open]')).toHaveLength(0);
   });
 
   it('slug tidak valid menampilkan halaman tidak ditemukan', async () => {
