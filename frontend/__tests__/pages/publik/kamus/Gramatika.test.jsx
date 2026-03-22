@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import Gramatika from '../../../../src/pages/publik/kamus/Gramatika';
@@ -131,15 +131,23 @@ describe('Gramatika', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText('Preposisi Dasar')).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Preposisi Dasar' })).toBeInTheDocument();
     });
 
+    const breadcrumb = screen.getByRole('navigation', { name: 'Breadcrumb gramatika' });
+    const breadcrumbLinks = within(breadcrumb).getAllByRole('link');
     const prevLink = screen.getByRole('link', { name: '‹ Preposisi' });
-    const parentLink = screen.getByRole('link', { name: 'Preposisi' });
+    const parentLink = within(breadcrumb).getByRole('link', { name: 'Preposisi' });
+    const sidebarParentLink = screen.getAllByRole('link', { name: 'Preposisi' })
+      .find((element) => element.getAttribute('aria-current') === 'page');
 
     expect(prevLink).toHaveAttribute('href', '/gramatika/preposisi');
     expect(parentLink).toHaveAttribute('href', '/gramatika/preposisi');
-    expect(parentLink).toHaveAttribute('aria-current', 'page');
+    expect(sidebarParentLink).toBeDefined();
+    expect(sidebarParentLink).toHaveAttribute('href', '/gramatika/preposisi');
+    expect(sidebarParentLink).toHaveAttribute('aria-current', 'page');
+    expect(breadcrumbLinks).toHaveLength(3);
+    expect(within(breadcrumb).queryByText('Preposisi Dasar')).not.toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Preposisi Dasar' })).not.toBeInTheDocument();
   });
 });

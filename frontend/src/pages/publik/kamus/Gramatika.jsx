@@ -108,6 +108,37 @@ function DaftarIsiPanel({ aktifSlug = '', aktifSlugSebagaiTautan = '' }) {
   );
 }
 
+function buildBreadcrumbGramatika(metadataAktif) {
+  const breadcrumbs = [
+    {
+      label: 'Gramatika',
+      to: '/gramatika',
+    },
+  ];
+
+  if (!metadataAktif) {
+    return breadcrumbs;
+  }
+
+  if (metadataAktif.tipe === 'bab') {
+    return breadcrumbs;
+  }
+
+  breadcrumbs.push({
+    label: metadataAktif.judulBab,
+    to: `/gramatika/${metadataAktif.babSlug}`,
+  });
+
+  if (metadataAktif.tipe === 'subitem' && metadataAktif.parentJudul && metadataAktif.parentSlug) {
+    breadcrumbs.push({
+      label: metadataAktif.parentJudul,
+      to: `/gramatika/${metadataAktif.parentSlug}`,
+    });
+  }
+
+  return breadcrumbs;
+}
+
 function Gramatika() {
   const { slug } = useParams();
   const ssrPrefetch = useSsrPrefetch();
@@ -139,6 +170,7 @@ function Gramatika() {
     : null;
   const aktifSlugSidebar = metadataAktif?.tipe === 'subitem' ? '' : (metadataAktif?.slug || '');
   const aktifSlugSidebarSebagaiTautan = metadataAktif?.tipe === 'subitem' ? (metadataAktif.parentSlug || '') : '';
+  const breadcrumbItems = useMemo(() => buildBreadcrumbGramatika(metadataAktif), [metadataAktif]);
 
   const modeDaftarIsi = !slug;
   const halamanTidakDitemukan = Boolean(slug && (!metadataAktif || dataMarkdownSsr?.notFound));
@@ -291,6 +323,25 @@ function Gramatika() {
     >
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <article className="lg:col-span-2">
+          <nav className="kamus-detail-breadcrumb" aria-label="Breadcrumb gramatika">
+            {breadcrumbItems.map((item, index) => {
+              return (
+                <span key={`${item.label}-${item.to || 'current'}`}>
+                  {index > 0 && <span aria-hidden="true"> / </span>}
+                  {item.to ? (
+                    <Link to={item.to} className="kamus-detail-breadcrumb-link">
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <span className="kamus-detail-breadcrumb-current">
+                      {item.label}
+                    </span>
+                  )}
+                </span>
+              );
+            })}
+          </nav>
+
           <div className="kamus-detail-heading-row">
             <h1 className="kamus-detail-heading">
               <span className="kamus-detail-heading-main">{metadataAktif?.judul || 'Gramatika'}</span>
