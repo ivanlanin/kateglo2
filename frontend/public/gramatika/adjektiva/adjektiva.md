@@ -15,5 +15,8 @@
 5. [Bentuk Adjektiva](/gramatika/bentuk-adjektiva)
    1. [Adjektiva Dasar](/gramatika/adjektiva-dasar)
    2. [Adjektiva Turunan](/gramatika/adjektiva-turunan)
+      1. [Adjektiva Berimbuhan](/gramatika/adjektiva-berimbuhan)
+      2. [Adjektiva Berulang](/gramatika/adjektiva-berulang)
+      3. [Adjektiva Majemuk](/gramatika/adjektiva-majemuk)
 6. [Frasa Adjektival](/gramatika/frasa-adjektival)
 7. [Adjektiva dan Kelas Kata Lain](/gramatika/adjektiva-dan-kelas-kata-lain)
