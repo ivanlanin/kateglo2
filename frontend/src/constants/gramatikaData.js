@@ -117,7 +117,24 @@ const daftarIsiGramatika = [
             turunan: [
               { judul: 'Nomina Dasar', slug: 'nomina-dasar' },
               { judul: 'Penurunan Nomina dengan Konversi', slug: 'penurunan-nomina-dengan-konversi' },
-              { judul: 'Penurunan Nomina melalui Pengafiksan', slug: 'penurunan-nomina-melalui-pengafiksan' },
+              {
+                judul: 'Penurunan Nomina melalui Pengafiksan',
+                slug: 'penurunan-nomina-melalui-pengafiksan',
+                turunan: [
+                  { judul: 'Penurunan Nomina dengan ke-', slug: 'penurunan-nomina-dengan-ke' },
+                  { judul: 'Penurunan Nomina dengan per-', slug: 'penurunan-nomina-dengan-per' },
+                  { judul: 'Penurunan Nomina dengan peng-', slug: 'penurunan-nomina-dengan-peng' },
+                  { judul: 'Penurunan Nomina dengan -an', slug: 'penurunan-nomina-dengan-an' },
+                  { judul: 'Penurunan Nomina dengan peng-...-an', slug: 'penurunan-nomina-dengan-peng-an' },
+                  { judul: 'Penurunan Nomina dengan per-...-an', slug: 'penurunan-nomina-dengan-per-an' },
+                  { judul: 'Penurunan Nomina dengan ke-...-an', slug: 'penurunan-nomina-dengan-ke-an' },
+                  { judul: 'Penurunan Nomina dengan Sisipan', slug: 'penurunan-nomina-dengan-sisipan' },
+                  { judul: 'Penurunan Nomina dengan -wan/-wati', slug: 'penurunan-nomina-dengan-wan-wati' },
+                  { judul: 'Penurunan Nomina dengan -a dan -i', slug: 'penurunan-nomina-dengan-a-dan-i' },
+                  { judul: 'Penurunan Nomina dengan -isme, -(is)asi, -logi, dan -tas', slug: 'penurunan-nomina-dengan-isme-isasi-logi-dan-tas' },
+                  { judul: 'Penurunan Nomina dengan se-', slug: 'penurunan-nomina-dengan-se' },
+                ],
+              },
               { judul: 'Penurunan Nomina melalui Perulangan', slug: 'penurunan-nomina-melalui-perulangan' },
               { judul: 'Penurunan Nomina melalui Pemajemukan', slug: 'penurunan-nomina-melalui-pemajemukan' },
             ],
@@ -163,7 +180,20 @@ const daftarIsiGramatika = [
         turunan: [
           { judul: 'Verba Dasar', slug: 'verba-dasar' },
           { judul: 'Verba Turunan', slug: 'verba-turunan' },
-          { judul: 'Morfofonemik dalam Pengafiksan Verba', slug: 'morfofonemik-dalam-pengafiksan-verba' },
+          {
+            judul: 'Morfofonemik dalam Pengafiksan Verba',
+            slug: 'morfofonemik-dalam-pengafiksan-verba',
+            turunan: [
+              { judul: 'Morfofonemik Prefiks ber-', slug: 'morfofonemik-prefiks-ber' },
+              { judul: 'Morfofonemik Prefiks per-', slug: 'morfofonemik-prefiks-per' },
+              { judul: 'Morfofonemik Prefiks meng-', slug: 'morfofonemik-prefiks-meng' },
+              { judul: 'Morfofonemik Prefiks di-', slug: 'morfofonemik-prefiks-di' },
+              { judul: 'Morfofonemik Prefiks ter-', slug: 'morfofonemik-prefiks-ter' },
+              { judul: 'Morfofonemik Sufiks -kan', slug: 'morfofonemik-sufiks-kan' },
+              { judul: 'Morfofonemik Sufiks -i', slug: 'morfofonemik-sufiks-i' },
+              { judul: 'Morfofonemik Sufiks -an', slug: 'morfofonemik-sufiks-an' },
+            ],
+          },
         ],
       },
       {
@@ -358,7 +388,25 @@ const daftarIsiGramatika = [
     slug: 'numeralia',
     items: [
       { judul: 'Batasan dan Ciri Numeralia', slug: 'batasan-dan-ciri-numeralia' },
-      { judul: 'Jenis Numeralia', slug: 'jenis-numeralia' },
+      {
+        judul: 'Jenis Numeralia',
+        slug: 'jenis-numeralia',
+        turunan: [
+          {
+            judul: 'Numeralia Pokok',
+            slug: 'numeralia-pokok',
+            turunan: [
+              { judul: 'Numeralia Pokok Tentu', slug: 'numeralia-pokok-tentu' },
+              { judul: 'Numeralia Pokok Kolektif', slug: 'numeralia-pokok-kolektif' },
+              { judul: 'Numeralia Pokok Distributif', slug: 'numeralia-pokok-distributif' },
+              { judul: 'Numeralia Pokok Taktentu', slug: 'numeralia-pokok-taktentu' },
+              { judul: 'Numeralia Pokok Klitika', slug: 'numeralia-pokok-klitika' },
+              { judul: 'Numeralia Pecahan', slug: 'numeralia-pecahan' },
+            ],
+          },
+          { judul: 'Numeralia Tingkat', slug: 'numeralia-tingkat' },
+        ],
+      },
       { judul: 'Frasa Numeral', slug: 'frasa-numeral' },
     ],
   },
@@ -371,7 +419,29 @@ const daftarIsiGramatika = [
         judul: 'Preposisi',
         slug: 'preposisi',
         turunan: [
-          { judul: 'Bentuk Preposisi', slug: 'bentuk-preposisi' },
+          {
+            judul: 'Bentuk Preposisi',
+            slug: 'bentuk-preposisi',
+            turunan: [
+              {
+                judul: 'Preposisi Tunggal',
+                slug: 'preposisi-tunggal',
+                turunan: [
+                  { judul: 'Kata Dasar', slug: 'preposisi-kata-dasar' },
+                  { judul: 'Kata Berafiks', slug: 'preposisi-kata-berafiks' },
+                ],
+              },
+              {
+                judul: 'Preposisi Gabungan',
+                slug: 'preposisi-gabungan',
+                turunan: [
+                  { judul: 'Berdampingan', slug: 'preposisi-berdampingan' },
+                  { judul: 'Berkorelasi', slug: 'preposisi-berkorelasi' },
+                  { judul: 'Preposisi dan Nomina Lokatif', slug: 'preposisi-dan-nomina-lokatif' },
+                ],
+              },
+            ],
+          },
           { judul: 'Peran Semantis Preposisi', slug: 'peran-semantis-preposisi' },
           { judul: 'Peran Sintaktis Preposisi', slug: 'peran-sintaktis-preposisi' },
         ],
@@ -456,7 +526,25 @@ const daftarIsiGramatika = [
         slug: 'jenis-kalimat',
         turunan: [
           { judul: 'Kalimat Berdasarkan Jumlah Klausanya', slug: 'kalimat-berdasarkan-jumlah-klausanya' },
-          { judul: 'Kalimat Berdasarkan Predikat', slug: 'kalimat-berdasarkan-predikat' },
+          {
+            judul: 'Kalimat Berdasarkan Predikat',
+            slug: 'kalimat-berdasarkan-predikat',
+            turunan: [
+              {
+                judul: 'Kalimat Berpredikat Verbal',
+                slug: 'kalimat-berpredikat-verbal',
+                turunan: [
+                  { judul: 'Kalimat Taktransitif', slug: 'kalimat-taktransitif' },
+                  { judul: 'Kalimat Transitif', slug: 'kalimat-transitif' },
+                  { judul: 'Kalimat Pasif', slug: 'kalimat-pasif' },
+                ],
+              },
+              { judul: 'Kalimat Adjektival', slug: 'kalimat-adjektival' },
+              { judul: 'Kalimat Nominal', slug: 'kalimat-nominal' },
+              { judul: 'Kalimat Numeral', slug: 'kalimat-numeral' },
+              { judul: 'Kalimat Frasa Preposisional', slug: 'kalimat-frasa-preposisional' },
+            ],
+          },
           {
             judul: 'Kalimat Berdasarkan Klasifikasi Sintaktis',
             slug: 'kalimat-berdasarkan-klasifikasi-sintaktis',
@@ -484,7 +572,32 @@ const daftarIsiGramatika = [
         turunan: [
           { judul: 'Ciri-Ciri Sintaktis Hubungan Koordinatif', slug: 'ciri-ciri-sintaktis-hubungan-koordinatif' },
           { judul: 'Ciri-Ciri Semantis Hubungan Koordinatif', slug: 'ciri-ciri-semantis-hubungan-koordinatif' },
-          { judul: 'Hubungan Semantis Antarklausa dalam Kalimat Majemuk', slug: 'hubungan-semantis-antarklausa-dalam-kalimat-majemuk' },
+          {
+            judul: 'Hubungan Semantis Antarklausa dalam Kalimat Majemuk',
+            slug: 'hubungan-semantis-antarklausa-dalam-kalimat-majemuk',
+            turunan: [
+              {
+                judul: 'Hubungan Penjumlahan',
+                slug: 'hubungan-penjumlahan',
+                turunan: [
+                  { judul: 'Hubungan Penjumlahan yang Menyatakan Sebab-Akibat', slug: 'hubungan-penjumlahan-yang-menyatakan-sebab-akibat' },
+                  { judul: 'Hubungan Penjumlahan yang Menyatakan Waktu', slug: 'hubungan-penjumlahan-yang-menyatakan-waktu' },
+                  { judul: 'Hubungan Penjumlahan yang Menyatakan Pertentangan', slug: 'hubungan-penjumlahan-yang-menyatakan-pertentangan' },
+                  { judul: 'Hubungan Penjumlahan yang Menyatakan Perluasan', slug: 'hubungan-penjumlahan-yang-menyatakan-perluasan' },
+                ],
+              },
+              {
+                judul: 'Hubungan Perlawanan',
+                slug: 'hubungan-perlawanan',
+                turunan: [
+                  { judul: 'Hubungan Perlawanan yang Menyatakan Penguatan', slug: 'hubungan-perlawanan-yang-menyatakan-penguatan' },
+                  { judul: 'Hubungan Perlawanan yang Menyatakan Implikasi', slug: 'hubungan-perlawanan-yang-menyatakan-implikasi' },
+                  { judul: 'Hubungan Perlawanan yang Menyatakan Perluasan', slug: 'hubungan-perlawanan-yang-menyatakan-perluasan' },
+                ],
+              },
+              { judul: 'Hubungan Pemilihan', slug: 'hubungan-pemilihan' },
+            ],
+          },
         ],
       },
       {
