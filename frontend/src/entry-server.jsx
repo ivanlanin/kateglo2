@@ -254,6 +254,14 @@ function buildSocialImageUrl(pathname = '/', siteBaseUrl = 'https://kateglo.org'
     context: meta.description || 'Kamus, Tesaurus, dan Glosarium Bahasa Indonesia',
   })}`;
 
+  if (path.startsWith('/kamus/detail/')) {
+    return `${baseUrl}/og/kamus.png${buildOgQueryString({
+      title: stripKategloSuffix(meta.title || fallbackTitle) || 'Kateglo',
+      context: meta.description || 'Entri dan pencarian kamus',
+      stripTitle: '1',
+    })}`;
+  }
+
   if (path === '/ejaan' || path === '/ejaan/') {
     return `${baseUrl}/og/ejaan.png${buildOgQueryString({
       title: 'Panduan Ejaan Bahasa Indonesia',

@@ -308,7 +308,8 @@ describe('layananSeoPublik private helpers', () => {
     expect(__private.normalizeOgSection('Kamus')).toBe('kamus');
     expect(__private.normalizeOgSection('lainnya')).toBe('default');
     expect(__private.stripRepeatedOgContextTitle('gajah', 'gajah: binatang besar')).toBe('binatang besar');
-    expect(__private.normalizeOgContext('gajah', 'gajah: binatang menyusui berbelalai bergading berkaki besar dan berkulit tebal berdaun telinga lebar', 'fallback')).toMatch(/^binatang menyusui/);
+    expect(__private.normalizeOgContext('gajah', 'gajah: binatang menyusui berbelalai bergading berkaki besar dan berkulit tebal berdaun telinga lebar', 'fallback', { stripRepeatedTitle: true })).toMatch(/^binatang menyusui/);
+    expect(__private.normalizeOgContext('gajah', 'gajah: binatang menyusui', 'fallback')).toBe('gajah: binatang menyusui');
 
     const lines = __private.splitOgTextIntoLines('Preposisi dalam konstruksi verba taktransitif yang panjang sekali', 16, 3);
     expect(lines.length).toBeGreaterThan(0);
@@ -424,7 +425,8 @@ describe('layananSeoPublik dynamic og image', () => {
     });
 
     expect(buildOgImagePayload({ section: 'default', title: 'Kamus', context: 'Bahasa' }).title).toBe('Kamus');
-    expect(buildOgImagePayload({ section: 'kamus', title: 'gajah', context: 'gajah: binatang menyusui berbelalai bergading berkaki besar berkulit tebal' }).context).toBe('binatang menyusui berbelalai bergading berkaki besar berkulit tebal');
+    expect(buildOgImagePayload({ section: 'kamus', title: 'gajah', context: 'gajah: binatang menyusui berbelalai bergading berkaki besar berkulit tebal', stripRepeatedTitle: true }).context).toBe('binatang menyusui berbelalai bergading berkaki besar berkulit tebal');
+    expect(buildOgImagePayload({ section: 'glosarium', title: 'accounting', context: 'accounting: istilah akuntansi' }).context).toBe('accounting: istilah akuntansi');
     expect(buildOgImagePayload({ section: 'kamus' })).toMatchObject({
       section: 'kamus',
       sectionLabel: 'Kamus',

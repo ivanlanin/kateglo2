@@ -262,7 +262,7 @@ describe('entry-server', () => {
     expect(headTags).toContain('https://kateglo.org/kamus/detail/sara');
     expect(headTags).toContain('&lt;');
     expect(headTags).toContain('&amp;');
-    expect(headTags).toContain('https://kateglo.org/og/kamus.png?title=sara&amp;context=%28n%29+x+%3C+y+%26+z');
+    expect(headTags).toContain('https://kateglo.org/og/kamus.png?title=sara&amp;context=%28n%29+x+%3C+y+%26+z&amp;stripTitle=1');
     expect(headTags).toContain('__KATEGLO_SSR_DATA__');
   });
 
@@ -331,7 +331,11 @@ describe('entry-server', () => {
       type: 'kamus-detail',
       lafal: '/sa.ra/',
       semuaMakna: [{ makna: 'makna detail', kelas_kata: 'n' }],
-    }, 'sara — Kateglo')).toBe('https://kateglo.org/og/kamus.png?title=sara&context=%28n%29+makna+detail');
+    }, 'sara — Kateglo')).toBe('https://kateglo.org/og/kamus.png?title=sara&context=%28n%29+makna+detail&stripTitle=1');
+    expect(__private.buildSocialImageUrl('/glosarium/detail/accounting', 'https://kateglo.org', {
+      type: 'glosarium-detail',
+      persis: [{ id: 1, asing: 'accounting', indonesia: 'akuntansi' }],
+    }, 'accounting — Kateglo')).toBe('https://kateglo.org/og/glosarium.png?title=accounting&context=Istilah+%22accounting%22+dalam+glosarium+bahasa+Indonesia+%E2%80%94+1+padanan+Indonesia+ditemukan.');
     expect(__private.buildSocialImageUrl('/random', 'https://kateglo.org', null, 'Kamus — Kateglo')).toBe('https://kateglo.org/og/default.png?title=Kateglo&context=Kamus%2C+Tesaurus%2C+dan+Glosarium+Bahasa+Indonesia');
   });
 

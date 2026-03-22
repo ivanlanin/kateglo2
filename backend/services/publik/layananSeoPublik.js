@@ -275,12 +275,13 @@ function stripRepeatedOgContextTitle(title = '', context = '') {
   return strippedLeadingTitle || normalizedContext;
 }
 
-function normalizeOgContext(title = '', context = '', fallbackContext = '') {
-  const candidate = stripRepeatedOgContextTitle(title, pickQueryValue(context) || fallbackContext);
-  return candidate;
+function normalizeOgContext(title = '', context = '', fallbackContext = '', options = {}) {
+  const rawContext = pickQueryValue(context) || fallbackContext;
+  if (options.stripRepeatedTitle !== true) return rawContext;
+  return stripRepeatedOgContextTitle(title, rawContext);
 }
 
-function buildOgImagePayload({ section = 'default', slug = '', title = '', context = '' } = {}) {
+function buildOgImagePayload({ section = 'default', slug = '', title = '', context = '', stripRepeatedTitle = false } = {}) {
   const sectionKey = normalizeOgSection(section);
   const sectionLabel = sectionKey === 'ejaan'
     ? 'Ejaan'
@@ -344,7 +345,9 @@ function buildOgImagePayload({ section = 'default', slug = '', title = '', conte
     section: sectionKey,
     sectionLabel,
     title: truncatePlainText(pickQueryValue(title) || fallbackTitle, 88),
-    context: normalizeOgContext(pickQueryValue(title) || fallbackTitle, context, fallbackContext),
+    context: normalizeOgContext(pickQueryValue(title) || fallbackTitle, context, fallbackContext, {
+      stripRepeatedTitle,
+    }),
     cta: 'Baca di Kateglo',
     logoDataUri: getOgLogoDataUri(),
   };

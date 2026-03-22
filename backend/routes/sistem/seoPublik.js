@@ -43,6 +43,7 @@ function kirimOgImage(section, slug, req, res, next) {
       slug,
       title: req.query.title,
       context: req.query.context,
+      stripRepeatedTitle: req.query.stripTitle === '1',
     });
 
     res.set('Content-Type', 'image/png');
