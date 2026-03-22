@@ -126,6 +126,35 @@ describe('Gramatika', () => {
     expect(global.fetch).not.toHaveBeenCalled();
   });
 
+  it('halaman bab memakai markdown SSR tanpa fetch ulang', async () => {
+    renderHalaman('/gramatika/kata-tugas', {
+      type: 'static-markdown',
+      section: 'gramatika',
+      slug: 'kata-tugas',
+      markdown: '1. [Batasan dan Ciri Kata Tugas](/gramatika/batasan-dan-ciri-kata-tugas)\n2. [Preposisi](/gramatika/preposisi)\n   1. [Preposisi Dasar](/gramatika/preposisi-dasar)',
+      description: 'Ikhtisar bab Kata Tugas.',
+      notFound: false,
+    });
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: 'Kata Tugas' })).toBeInTheDocument();
+    });
+
+    const konten = document.querySelector('.gramatika-markdown-content');
+    const daftarTingkatAtas = konten?.querySelector('ol');
+    const itemPreposisi = within(konten).getByRole('link', { name: 'Preposisi' });
+    const itemPreposisiDasar = within(konten).getByRole('link', { name: 'Preposisi Dasar' });
+    const nestedList = itemPreposisi.closest('li')?.querySelector('ol');
+
+    expect(global.fetch).not.toHaveBeenCalled();
+    expect(konten).not.toBeNull();
+    expect(daftarTingkatAtas).not.toBeNull();
+    expect(itemPreposisi).toHaveAttribute('href', '/gramatika/preposisi');
+    expect(itemPreposisiDasar).toHaveAttribute('href', '/gramatika/preposisi-dasar');
+    expect(nestedList).not.toBeNull();
+    expect(within(nestedList).getByRole('link', { name: 'Preposisi Dasar' })).toBeInTheDocument();
+  });
+
   it('subhalaman mengikuti urutan prev next dan menyorot item induk di sidebar', async () => {
     renderHalaman('/gramatika/preposisi-dasar', {
       type: 'static-markdown',

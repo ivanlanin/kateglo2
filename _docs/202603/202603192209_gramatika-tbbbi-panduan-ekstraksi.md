@@ -7,7 +7,7 @@ Dimutakhirkan: 2026-03-21
 
 Halaman Gramatika (`/gramatika`) dibangun dengan pola yang sama seperti Ejaan: konten berupa file `.md` statis di `frontend/public/gramatika/`, dirender dengan `ReactMarkdown`, dilengkapi SSR meta, cache-control, dan sitemap. Bab pertama yang diselesaikan sebagai pilot adalah **Bab VIII: Kata Tugas** (~34 halaman PDF).
 
-Per 2026-03-21, seluruh bab inti TBBBI I-X sudah tersedia dalam markdown di `frontend/public/gramatika/`, dengan daftar isi terpusat di `frontend/src/constants/gramatikData.js`. Dokumen ini berfungsi sebagai panduan kerja sekaligus catatan status terkini.
+Per 2026-03-21, seluruh bab inti TBBBI I-X sudah tersedia dalam markdown di `frontend/public/gramatika/`, dengan daftar isi terpusat di `frontend/src/constants/gramatikaData.js`. Dokumen ini berfungsi sebagai panduan kerja sekaligus catatan status terkini.
 
 Sumber primer: *Tata Bahasa Baku Bahasa Indonesia Edisi Keempat* (2017), Badan Pengembangan dan Pembinaan Bahasa. Tercatat di tabel `sumber` dengan kode `TBBBI` (id 46).
 
@@ -45,7 +45,7 @@ Bab VIII tetap menjadi pilot awal, tetapi pola kerja di bawah ini sudah divalida
     - Jika bagan/diagram kehilangan makna visual saat ditranskripsi, sisipkan gambar dari `frontend/public/gramatika/_gambar/` dan tetap pertahankan caption serta uraian teksnya
 5. **Tulis file markdown** per subbab ke `frontend/public/gramatika/{bab-slug}/{item-slug}.md`
    - Tambahkan **nomor subbab** setelah judul heading: `## Bentuk Preposisi (8.2.1.1)`
-6. **Daftarkan item** di `frontend/src/constants/gramatikData.js`
+6. **Daftarkan item** di `frontend/src/constants/gramatikaData.js`
 7. **Jalankan lint + test** setelah setiap perubahan kode
 
 ### Konvensi Format Daftar Markdown
@@ -178,7 +178,7 @@ frontend/public/gramatika/
     ├── hubungan-subordinatif.md
     └── pelesapan.md
 
-frontend/src/constants/gramatikData.js   ← daftar isi semua bab + item
+frontend/src/constants/gramatikaData.js   ← daftar isi semua bab + item
 ```
 
 ---
@@ -466,7 +466,7 @@ Urutan berikut merekam jalur kerja yang ditempuh saat proyek ekstraksi berjalan.
 ### ✓ 10. Bab VII — Nomina, Pronomina, dan Numeralia (114 hal PDF) — **SELESAI**
 
 - Bab terpanjang keseluruhan; tiga kelas kata digabung dalam satu bab.
-- Dipecah menjadi tiga entri terpisah di `gramatikData.js`: Nomina (6 item), Pronomina (3 item), Numeralia (4 item).
+- Dipecah menjadi tiga entri terpisah di `gramatikaData.js`: Nomina (6 item), Pronomina (3 item), Numeralia (4 item).
 
 **Subbab Nomina:** Batasan dan Ciri · Makna · Acuan · Fungsi · Jenis · Frasa Nominal (7.1.5–7.1.6)
 

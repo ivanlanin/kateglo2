@@ -1,5 +1,3 @@
 1. [Batasan dan Ciri Numeralia](/gramatika/batasan-dan-ciri-numeralia)
 2. [Jenis Numeralia](/gramatika/jenis-numeralia)
-   1. [Numeralia Pokok](/gramatika/jenis-numeralia)
-   2. [Numeralia Tingkat](/gramatika/jenis-numeralia)
-4. [Frasa Numeral](/gramatika/frasa-numeral)
+3. [Frasa Numeral](/gramatika/frasa-numeral)
