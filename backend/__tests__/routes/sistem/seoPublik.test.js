@@ -80,6 +80,7 @@ describe('routes/sistem/seoPublik', () => {
       slug: 'preposisi',
       title: 'Preposisi',
       context: 'Kata Tugas',
+      stripRepeatedTitle: false,
     });
     expect(response.headers['content-type']).toContain('image/png');
     expect(response.headers['cache-control']).toBe('public, max-age=86400');
@@ -107,6 +108,7 @@ describe('routes/sistem/seoPublik', () => {
       slug: '',
       title: 'Kamus',
       context: undefined,
+      stripRepeatedTitle: false,
     });
     expect(response.headers['content-type']).toContain('image/png');
   });
