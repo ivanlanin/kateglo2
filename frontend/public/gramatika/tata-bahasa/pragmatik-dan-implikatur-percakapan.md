@@ -7,14 +7,16 @@ Pragmatik dirumuskan pada awal seksi ini sebagai telaah makna menurut si pembica
 
 Contoh:
 
-```text
-(25) A: "Apa Mama sudah makan?"
-     B: "Mama sudah kasih makan kucing."
+(25)
 
-(26) A: "Selamat pagi, Bu. Saya mau ujian."
-     B: "Apa kamu sudah menghadap Dekan?"
-     A: "Sudah, Bu."
-```
+- A: "Apa Mama sudah makan?"
+- B: "Mama sudah kasih makan kucing."
+
+(26)
+
+- A: "Selamat pagi, Bu. Saya mau ujian."
+- B: "Apa kamu sudah menghadap Dekan?"
+- A: "Sudah, Bu."
 
 Contoh (25) adalah percakapan antara suami (A) dan istri (B). Jawaban istri tidak menjawab pertanyaan si suami jika hanya melihat kata-kata yang digunakan. Akan tetapi, si suami akan menafsirkan jawaban si istri bahwa ia sudah makan. Si suami tahu bahwa, sesuai dengan kebiasaan, kucing diberi makan setelah si istri makan.
 

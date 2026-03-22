@@ -11,24 +11,24 @@ Pengacuan atau referensi adalah hubungan antara satuan bahasa dan maujud berupa 
 
 1) diketahui atau dikenal oleh pembicara dan lawan bicara,
 
-```text
-(27) a. Dia ada di kebun. (definit)
-     b. Rektor sedang ada tamu. (definit)
-```
+(27)
+
+- a. Dia ada di kebun. (definit)
+- b. Rektor sedang ada tamu. (definit)
 
 2) telah disebutkan sebelumnya,
 
-```text
-(28) a. Ada orang di luar. Orang itu (definit) ingin bertemu dengan Anda.
-     b. Saya sudah membeli buku. Entah di mana buku itu (definit) sekarang.
-```
+(28)
+
+- a. Ada orang di luar. Orang itu (definit) ingin bertemu dengan Anda.
+- b. Saya sudah membeli buku. Entah di mana buku itu (definit) sekarang.
 
 3) diwatasi oleh konstruksi seperti klausa,
 
-```text
-(29) a. Kursi yang ada di luar (definit) akan dijual.
-     b. Tugas untuk besok (definit) belum dibagikan.
-```
+(29)
+
+- a. Kursi yang ada di luar (definit) akan dijual.
+- b. Tugas untuk besok (definit) belum dibagikan.
 
 Secara sintaktis dapat dikatakan bahwa dalam bahasa Indonesia ketakrifan unsur kalimat dimarkahi oleh pewatas yang berupa artikula, demonstrativa, pronomina, numeralia, nama diri, atau nomina pengacu.
 
@@ -41,12 +41,12 @@ Secara sintaktis dapat dikatakan bahwa dalam bahasa Indonesia ketakrifan unsur k
 
 Jika frasa nominal mengacu pada maujud secara umum atau pada sesuatu yang belum diidentifikasi oleh pembicara, pengacuan tersebut bersifat taktakrif atau takdefinit.
 
-```text
-(30) a. Ia memiliki kebun teh. (takdefinit)
-     b. Nanang mencari seorang pembantu. (takdefinit)
-     c. Ruang rapat itu kekurangan kursi. (takdefinit)
-     d. Pak Andi membeli sebuah mobil baru. (takdefinit)
-```
+(30)
+
+- a. Ia memiliki kebun teh. (takdefinit)
+- b. Nanang mencari seorang pembantu. (takdefinit)
+- c. Ruang rapat itu kekurangan kursi. (takdefinit)
+- d. Pak Andi membeli sebuah mobil baru. (takdefinit)
 
 Semua frasa nominal yang dicetak miring pada contoh di atas pengacuannya bersifat umum atau acuannya belum teridentifikasi secara pasti. Oleh karena itu, masing-masing bersifat taktakrif.
 
@@ -54,11 +54,11 @@ Semua frasa nominal yang dicetak miring pada contoh di atas pengacuannya bersifa
 
 Deiksis adalah gejala semantik yang terdapat pada kata atau konstruksi yang hanya dapat ditafsirkan acuannya dengan memperhitungkan situasi pembicaraan. Kata atau konstruksi seperti itu bersifat deiktis. Perhatikan kata *sekarang* pada contoh berikut.
 
-```text
-(31) a. Kita harus berangkat sekarang.
-     b. Harga barang naik semua sekarang.
-     c. Sekarang pemalsuan barang terjadi di mana-mana.
-```
+(31)
+
+- a. Kita harus berangkat sekarang.
+- b. Harga barang naik semua sekarang.
+- c. Sekarang pemalsuan barang terjadi di mana-mana.
 
 Pada kalimat (31a) *sekarang* merujuk pada jam (titik waktu) berbicara. Pada kalimat (31b) cakupan waktunya lebih lama, mungkin seminggu sebelumnya hingga waktu berbicara. Pada (31c) cakupannya lebih luas lagi, mungkin berbulan-bulan, atau bahkan bertahun-tahun. Selain *sekarang*, kata-kata lain yang termasuk deiksis temporal, antara lain, *kemarin*, *(tahun) lalu*, *nanti*, *besok*, dan *(tahun) depan*.
 
@@ -66,11 +66,11 @@ Jenis deiksis lain adalah deiksis spasial dan deiksis persona. Deiksis spasial p
 
 Contoh:
 
-```text
-(32) a. Kamu duduklah di sini.
-     b. Di sini dijual gas elpiji.
-     c. Di sini orang harus hati-hati menyeberang jalan.
-```
+(32)
+
+- a. Kamu duduklah di sini.
+- b. Di sini dijual gas elpiji.
+- c. Di sini orang harus hati-hati menyeberang jalan.
 
 Pada kalimat (32a) *di sini* merujuk pada kursi tertentu. Pada kalimat (32b) *di sini* merujuk pada tempat yang lebih besar, yakni toko dan pada (32c) *di sini* merujuk pada tempat yang jauh lebih besar, yakni kota. Kata-kata lain yang termasuk deiksis spasial adalah *ke sini*, *ke sana*, *ke situ*, dan *di situ*.
 

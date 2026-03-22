@@ -20,8 +20,10 @@ Pada kedua contoh di atas unsur-unsur yang dilesapkan dapat ditelusuri balik dar
 
 Pada (190a) unsur yang dilesapkan (dilambangkan dengan △) bisa *motor* dan bisa juga *toko penyalur*. Untuk mendapatkan tafsiran yang tepat diperlukan konteks yang lebih luas seperti terlihat pada (190b) atau (190c). Ketertelusuran balik unsur yang dilesapkan tampaknya berbeda-beda tarafnya.
 
-(191) A: Apa kamu melihat Joni?
-B: Tadi ke sini, tetapi sebelum tengah hari dia sudah pulang (ke rumah).
+(191)
+
+- A: Apa kamu melihat Joni?
+- B: Tadi ke sini, tetapi sebelum tengah hari dia sudah pulang (ke rumah).
 
 Jawaban B pada (191) terdiri atas dua klausa yang predikatnya dipertentangkan. Unsur yang dipertentangkan haruslah yang sejenis. Oleh karena itu, predikat klausa pertama haruslah verba yang berlawanan dalam hal makna dengan *pulang*. Atas dasar itu, predikat klausa pertama adalah verba *datang*.
 

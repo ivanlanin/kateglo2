@@ -11,10 +11,10 @@ Pada seksi ini akan dibicarakan makna kalimat yang bertalian dengan pembedaan an
 
 Contoh:
 
-```text
-(22) a. Wali kota itu mengunjungi rumah warga.
-     b. Apakah wali kota itu mengunjungi rumah warga?
-```
+(22)
+
+- a. Wali kota itu mengunjungi rumah warga.
+- b. Apakah wali kota itu mengunjungi rumah warga?
 
 Kalimat (22b) tidak dipakai untuk membuat pernyataan dan karena itu ia tidak mempunyai kondisi kebenaran atau perikutan. Walaupun begitu, terasa ada kemiripan di samping perbedaan antara (22a) dan (22b), baik dalam bentuk maupun dalam makna. Dari segi bentuk, perbedaan terletak pada tipe klausanya, yaitu deklaratif (22a) dan interogatif (22b). Persamaannya ialah bahwa (22b) merupakan pasangan interogatif dari (22a). Korelasi semantik tipe klausa disebut makna ilokusi. Makna ilokusi kalimat deklaratif (22a) adalah untuk membuat pernyataan dan kalimat interogatif (22b) untuk membuat pertanyaan.
 
@@ -26,13 +26,15 @@ Sering terdapat dua kalimat dengan ilokusi yang sama dan mempunyai kondisi keben
 
 Contoh:
 
-```text
-(23) a. Adi bekerja pagi hari dan belajar sore hari.
-     b. Adi bekerja pagi hari, tetapi belajar sore hari.
+(23)
 
-(24) a. Andi menganggap soal ujian itu sulit.
-     b. Andi saja menganggap soal ujian itu sulit.
-```
+- a. Adi bekerja pagi hari dan belajar sore hari.
+- b. Adi bekerja pagi hari, tetapi belajar sore hari.
+
+(24)
+
+- a. Andi menganggap soal ujian itu sulit.
+- b. Andi saja menganggap soal ujian itu sulit.
 
 Kedua kalimat pada (23) mempunyai kondisi kebenaran dan perikutan yang sama, asal saja memang Adi bekerja pada pagi hari dan belajar sore hari; keduanya akan salah jika Adi, misalnya, bekerja pagi hari dan berolahraga sore hari. Keduanya mengikutkan, misalnya, makna 'Adi rajin'. Akan tetapi, kedua kalimat itu tidak sepenuhnya sama maknanya karena perbedaan konjungsinya. Kalimat (23a) hanya mengekspresikan kegiatan seseorang (Adi), terasa hanya menyatakan fakta yang diketahui. Akan tetapi, kalimat (23b) menyiratkan bahwa kegiatan belajar itu dilakukan dengan motivasi tertentu, misalnya, Adi ingin meningkatkan pengetahuannya walaupun sudah bekerja.
 

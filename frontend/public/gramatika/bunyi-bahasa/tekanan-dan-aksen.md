@@ -66,14 +66,20 @@ Dalam kaitannya dengan informasi baru, aksen jatuh pada kata yang menjadi jawaba
 
 Contoh:
 
-7. T: "Apa marga anak itu?"
-   J: "Marga anak itu *Siregar*."
+7.
 
-8. T: "Di mana keluarganya tinggal?"
-   J: "Mereka tinggal di *Siantar*."
+- T: "Apa marga anak itu?"
+- J: "Marga anak itu *Siregar*."
 
-9. T: "Tahun berapa mereka menikah?"
-   J: "Tahun 1964 mereka bertunangan. Setahun kemudian menikah."
+8.
+
+- T: "Di mana keluarganya tinggal?"
+- J: "Mereka tinggal di *Siantar*."
+
+9.
+
+- T: "Tahun berapa mereka menikah?"
+- J: "Tahun 1964 mereka bertunangan. Setahun kemudian menikah."
 
 Setiap kata yang dikontraskan di dalam sebuah kalimat mendapat aksen.
 

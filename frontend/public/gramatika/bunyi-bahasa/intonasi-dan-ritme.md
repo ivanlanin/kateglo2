@@ -101,12 +101,12 @@ Pola intonasi berita yang tampak pada kalimat (27) diawali dengan nada dasar 2 d
 
 Pola intonasi serupa juga tampak pada kalimat yang mengalami topikalisasi atau dislokasi, yakni pengutamaan bagian kalimat tertentu dengan menempatkannya di awal kalimat.
 
-```text
-(30) a. Jendela kamar itu / rusak.
-        2-33 / 231#
-     b. Kamar itu, / jendelanya / rusak.
-        2-33 / 2-33 / 231#
-```
+(30)
+
+- a. Jendela kamar itu / rusak.
+     2-33 / 231#
+- b. Kamar itu, / jendelanya / rusak.
+     2-33 / 2-33 / 231#
 
 Intonasi kalimat tanya pada contoh (28) dimulai dengan nada 2 dan diakhiri oleh nada 3. Kecenderungan perubahan nada dalam intonasi kalimat tanya ini adalah menaik. Akan tetapi, kalimat tanya yang menggunakan pemarkah tanya, entah berupa pronomina tanya ataupun berupa partikel, tidak menunjukkan kecenderungan seperti itu. Dalam tipe kalimat tanya bermarkah itu, pola intonasi dasarnya adalah pola intonasi pokok kalimat pernyataan yang diikuti alir nada naik pada pemarkah. Corak intonasi tanya dalam kalimat seperti itu terdapat pada pemarkah tanya itu.
 
@@ -138,14 +138,14 @@ Dalam kalimat tanya itu, posisi tekanan pada tataran kata berlaku, yaitu pada su
 
 Intonasi kalimat perintah pada dasarnya mirip dengan intonasi kalimat berita. Perbedaannya adalah nada akhir intonasi kalimat perintah tidak selalu lebih rendah daripada nada dasar. Nada akhir itu boleh lebih rendah, boleh sama, atau lebih tinggi bergantung pada empatisitas perintahnya. Intonasi kalimat berikut bisa bermacam-macam.
 
-```text
-(37) a. Makanlah!
-        223#
-     b. Makanlah!
-        213#
-     c. Makanlah!
-        231#
-```
+(37)
+
+- a. Makanlah!
+     223#
+- b. Makanlah!
+     213#
+- c. Makanlah!
+     231#
 
 Pada dasarnya intonasi perintah berpola alir nada turun atau datar kemudian ditutup dengan nada naik pada suku kata terakhir. Alir nada turun pada suku kata terakhir memberikan efek penurunan kadar perintah menuju ke permohonan. Dengan demikian, dalam konstruksi yang panjang, intonasi kalimat perintah tidak berbeda dengan kalimat berita, kecuali ada penambahan sebuah alir nada seperti yang terdapat dalam kalimat (37) pada verba utama di awal kalimat.
 
