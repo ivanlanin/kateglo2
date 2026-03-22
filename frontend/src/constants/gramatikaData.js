@@ -350,7 +350,25 @@ const daftarIsiGramatika = [
               { judul: 'Subjek', slug: 'subjek' },
               { judul: 'Objek', slug: 'objek' },
               { judul: 'Pelengkap', slug: 'pelengkap' },
-              { judul: 'Keterangan', slug: 'keterangan' },
+              {
+                judul: 'Keterangan',
+                slug: 'keterangan',
+                turunan: [
+                  { judul: 'Keterangan Tempat', slug: 'keterangan-tempat' },
+                  { judul: 'Keterangan Waktu', slug: 'keterangan-waktu' },
+                  { judul: 'Keterangan Alat', slug: 'keterangan-alat' },
+                  { judul: 'Keterangan Tujuan', slug: 'keterangan-tujuan' },
+                  { judul: 'Keterangan Cara', slug: 'keterangan-cara' },
+                  { judul: 'Keterangan Penyerta', slug: 'keterangan-penyerta' },
+                  { judul: 'Keterangan Pembandingan', slug: 'keterangan-pembandingan' },
+                  { judul: 'Keterangan Kesalingan', slug: 'keterangan-kesalingan' },
+                  { judul: 'Keterangan Sebab', slug: 'keterangan-sebab' },
+                  { judul: 'Keterangan Akibat', slug: 'keterangan-akibat' },
+                  { judul: 'Keterangan Kuantitas', slug: 'keterangan-kuantitas' },
+                  { judul: 'Keterangan Kualitas', slug: 'keterangan-kualitas' },
+                  { judul: 'Keterangan Sudut Pandang', slug: 'keterangan-sudut-pandang' },
+                ],
+              },
             ],
           },
           { judul: 'Peran', slug: 'peran' },
@@ -397,7 +415,24 @@ const daftarIsiGramatika = [
         turunan: [
           { judul: 'Ciri-Ciri Sintaktis Hubungan Subordinatif', slug: 'ciri-ciri-sintaktis-hubungan-subordinatif' },
           { judul: 'Ciri-Ciri Semantis Hubungan Subordinatif', slug: 'ciri-ciri-semantis-hubungan-subordinatif' },
-          { judul: 'Hubungan Semantis Antarklausa dalam Kalimat Kompleks', slug: 'hubungan-semantis-antarklausa-dalam-kalimat-kompleks' },
+          {
+            judul: 'Hubungan Semantis Antarklausa dalam Kalimat Kompleks',
+            slug: 'hubungan-semantis-antarklausa-dalam-kalimat-kompleks',
+            turunan: [
+              { judul: 'Hubungan Waktu', slug: 'hubungan-waktu' },
+              { judul: 'Hubungan Syarat', slug: 'hubungan-syarat' },
+              { judul: 'Hubungan Pengandaian', slug: 'hubungan-pengandaian' },
+              { judul: 'Hubungan Tujuan', slug: 'hubungan-tujuan' },
+              { judul: 'Hubungan Konsesif', slug: 'hubungan-konsesif' },
+              { judul: 'Hubungan Pembandingan', slug: 'hubungan-pembandingan' },
+              { judul: 'Hubungan Penyebaban', slug: 'hubungan-penyebaban' },
+              { judul: 'Hubungan Hasil', slug: 'hubungan-hasil' },
+              { judul: 'Hubungan Cara', slug: 'hubungan-cara' },
+              { judul: 'Hubungan Alat', slug: 'hubungan-alat' },
+              { judul: 'Hubungan Komplementasi', slug: 'hubungan-komplementasi' },
+              { judul: 'Hubungan Atributif', slug: 'hubungan-atributif' },
+            ],
+          },
           { judul: 'Hubungan Optatif', slug: 'hubungan-optatif' },
         ],
       },
@@ -406,23 +441,35 @@ const daftarIsiGramatika = [
   },
 ];
 
-function flattenItemGramatika(bab, item, visibleParent = null) {
+function flattenItemGramatika(bab, item, ancestors = []) {
+  const visibleParent = ancestors[0] || null;
+  const directParent = ancestors[ancestors.length - 1] || null;
   const currentItem = {
     judulBab: bab.judul,
     babSlug: bab.slug,
     judul: item.judul,
     slug: item.slug,
     dokumen: `${bab.slug}/${item.slug}.md`,
-    tipe: visibleParent ? 'subitem' : 'item',
+    tipe: ancestors.length ? 'subitem' : 'item',
     ...(visibleParent ? {
       parentSlug: visibleParent.slug,
       parentJudul: visibleParent.judul,
+    } : {}),
+    ...(directParent ? {
+      directParentSlug: directParent.slug,
+      directParentJudul: directParent.judul,
+    } : {}),
+    ...(ancestors.length ? {
+      ancestorTrail: ancestors.map((ancestor) => ({
+        slug: ancestor.slug,
+        judul: ancestor.judul,
+      })),
     } : {}),
   };
 
   return [
     currentItem,
-    ...((item.turunan || []).flatMap((turunan) => flattenItemGramatika(bab, turunan, visibleParent || item))),
+    ...((item.turunan || []).flatMap((turunan) => flattenItemGramatika(bab, turunan, [...ancestors, item]))),
   ];
 }
 

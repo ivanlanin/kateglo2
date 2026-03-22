@@ -129,12 +129,18 @@ function buildBreadcrumbGramatika(metadataAktif) {
     to: `/gramatika/${metadataAktif.babSlug}`,
   });
 
-  if (metadataAktif.tipe === 'subitem' && metadataAktif.parentJudul && metadataAktif.parentSlug) {
+  const ancestorTrail = Array.isArray(metadataAktif.ancestorTrail) && metadataAktif.ancestorTrail.length
+    ? metadataAktif.ancestorTrail
+    : metadataAktif.tipe === 'subitem' && metadataAktif.parentJudul && metadataAktif.parentSlug
+      ? [{ judul: metadataAktif.parentJudul, slug: metadataAktif.parentSlug }]
+      : [];
+
+  ancestorTrail.forEach((ancestor) => {
     breadcrumbs.push({
-      label: metadataAktif.parentJudul,
-      to: `/gramatika/${metadataAktif.parentSlug}`,
+      label: ancestor.judul,
+      to: `/gramatika/${ancestor.slug}`,
     });
-  }
+  });
 
   return breadcrumbs;
 }
