@@ -114,7 +114,18 @@ const daftarIsiGramatika = [
           { judul: 'Nomina Berdasarkan Bentuk Morfologisnya', slug: 'nomina-berdasarkan-bentuk-morfologisnya' },
         ],
       },
-      { judul: 'Frasa Nominal', slug: 'frasa-nominal' },
+      {
+        judul: 'Frasa Nominal',
+        slug: 'frasa-nominal',
+        turunan: [
+          { judul: 'Penentu', slug: 'penentu' },
+          { judul: 'Penggolong dan Partitif', slug: 'penggolong-dan-partitif' },
+          { judul: 'Nomina dengan Perluasan ke Kiri', slug: 'nomina-dengan-perluasan-ke-kiri' },
+          { judul: 'Perluasan Nomina ke Kanan', slug: 'perluasan-nomina-ke-kanan' },
+          { judul: 'Susunan Kata pada Frasa Nominal', slug: 'susunan-kata-pada-frasa-nominal' },
+          { judul: 'Frasa Nominal Vokatif', slug: 'frasa-nominal-vokatif' },
+        ],
+      },
       { judul: 'Konsep Tunggal, Jamak, dan Generik', slug: 'konsep-tunggal-jamak-dan-generik' },
     ],
   },
@@ -189,7 +200,20 @@ const daftarIsiGramatika = [
     slug: 'adjektiva',
     items: [
       { judul: 'Batasan dan Ciri Adjektiva', slug: 'batasan-dan-ciri-adjektiva' },
-      { judul: 'Ciri Semantis Adjektiva', slug: 'ciri-semantis-adjektiva' },
+      {
+        judul: 'Ciri Semantis Adjektiva',
+        slug: 'ciri-semantis-adjektiva',
+        turunan: [
+          { judul: 'Adjektiva Pemeri Sifat', slug: 'adjektiva-pemeri-sifat' },
+          { judul: 'Adjektiva Ukuran', slug: 'adjektiva-ukuran' },
+          { judul: 'Adjektiva Warna', slug: 'adjektiva-warna' },
+          { judul: 'Adjektiva Bentuk', slug: 'adjektiva-bentuk' },
+          { judul: 'Adjektiva Waktu', slug: 'adjektiva-waktu' },
+          { judul: 'Adjektiva Jarak', slug: 'adjektiva-jarak' },
+          { judul: 'Adjektiva Sikap Batin', slug: 'adjektiva-sikap-batin' },
+          { judul: 'Adjektiva Cerapan', slug: 'adjektiva-cerapan' },
+        ],
+      },
       { judul: 'Perilaku Sintaksis Adjektiva', slug: 'perilaku-sintaksis-adjektiva' },
       {
         judul: 'Pertarafan Adjektiva',

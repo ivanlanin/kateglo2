@@ -12,7 +12,7 @@ import HalamanPublik from '../../../components/tampilan/HalamanPublik';
 import PanelLipat from '../../../components/panel/PanelLipat';
 import KartuKategori from '../../../components/data/KartuKategori';
 import { useSsrPrefetch } from '../../../context/ssrPrefetchContext';
-import { daftarIsiGramatika, daftarItemGramatika } from '../../../constants/gramatikData';
+import { daftarIsiGramatika, daftarItemGramatika } from '../../../constants/gramatikaData';
 
 function bacaIsiMarkdown(markdownMentah = '') {
   return markdownMentah.replace(/^---[\s\S]*?---\s*/m, '');
@@ -138,7 +138,6 @@ function buildBreadcrumbGramatika(metadataAktif) {
 
   return breadcrumbs;
 }
-
 function Gramatika() {
   const { slug } = useParams();
   const ssrPrefetch = useSsrPrefetch();

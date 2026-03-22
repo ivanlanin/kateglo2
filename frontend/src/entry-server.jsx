@@ -22,7 +22,7 @@ import {
   buildMetaSumberGlosarium,
 } from './utils/metaUtils';
 import { petaItemEjaanBySlug, formatJudulEjaanDariSlug } from './constants/ejaanData';
-import { petaItemGramatikaBySlug, formatJudulGramatikaDariSlug } from './constants/gramatikData';
+import { petaItemGramatikaBySlug, formatJudulGramatikaDariSlug } from './constants/gramatikaData';
 
 function escapeHtml(value = '') {
   return String(value)

@@ -4,14 +4,20 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import Gramatika from '../../../../src/pages/publik/kamus/Gramatika';
 import { SsrPrefetchProvider } from '../../../../src/context/ssrPrefetchContext';
 
-vi.mock('../../../../src/constants/gramatikData', () => {
+vi.mock('../../../../src/constants/gramatikaData', () => {
   const daftarIsiGramatika = [
     {
       slug: 'kata-tugas',
       judul: 'Kata Tugas',
       items: [
         { slug: 'batasan-dan-ciri-kata-tugas', judul: 'Batasan dan Ciri Kata Tugas' },
-        { slug: 'preposisi', judul: 'Preposisi' },
+        {
+          slug: 'preposisi',
+          judul: 'Preposisi',
+          turunan: [
+            { slug: 'preposisi-dasar', judul: 'Preposisi Dasar' },
+          ],
+        },
       ],
     },
   ];
