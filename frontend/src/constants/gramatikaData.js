@@ -171,7 +171,18 @@ const daftarIsiGramatika = [
         slug: 'verba-transitif',
         turunan: [
           { judul: 'Penurunan Verba Transitif dengan Konversi', slug: 'penurunan-verba-transitif-dengan-konversi' },
-          { judul: 'Penurunan Verba Transitif dengan Pengafiksan', slug: 'penurunan-verba-transitif-dengan-pengafiksan' },
+          {
+            judul: 'Penurunan Verba Transitif dengan Pengafiksan',
+            slug: 'penurunan-verba-transitif-dengan-pengafiksan',
+            turunan: [
+              { judul: 'Verba Transitif dengan Prefiks Infleksi meng-', slug: 'verba-transitif-dengan-prefiks-infleksi-meng' },
+              { judul: 'Verba Transitif dengan Prefiks Infleksi di-', slug: 'verba-transitif-dengan-prefiks-infleksi-di' },
+              { judul: 'Verba Transitif dengan Prefiks Infleksi ter-', slug: 'verba-transitif-dengan-prefiks-infleksi-ter' },
+              { judul: 'Verba Transitif dengan Prefiks per-', slug: 'verba-transitif-dengan-prefiks-per' },
+              { judul: 'Verba Transitif dengan Sufiks -kan', slug: 'verba-transitif-dengan-sufiks-kan' },
+              { judul: 'Verba Transitif dengan Sufiks -i', slug: 'verba-transitif-dengan-sufiks-i' },
+            ],
+          },
         ],
       },
       {
@@ -270,7 +281,20 @@ const daftarIsiGramatika = [
     slug: 'adverbia',
     items: [
       { judul: 'Batasan dan Ciri Adverbia', slug: 'batasan-dan-ciri-adverbia' },
-      { judul: 'Perilaku Semantis Adverbia', slug: 'perilaku-semantis-adverbia' },
+      {
+        judul: 'Perilaku Semantis Adverbia',
+        slug: 'perilaku-semantis-adverbia',
+        turunan: [
+          { judul: 'Adverbia Kualitatif', slug: 'adverbia-kualitatif' },
+          { judul: 'Adverbia Kuantitatif', slug: 'adverbia-kuantitatif' },
+          { judul: 'Adverbia Limitatif', slug: 'adverbia-limitatif' },
+          { judul: 'Adverbia Frekuentatif', slug: 'adverbia-frekuentatif' },
+          { judul: 'Adverbia Kewaktuan', slug: 'adverbia-kewaktuan' },
+          { judul: 'Adverbia Kecaraan', slug: 'adverbia-kecaraan' },
+          { judul: 'Adverbia Kontrastif', slug: 'adverbia-kontrastif' },
+          { judul: 'Adverbia Keniscayaan', slug: 'adverbia-keniscayaan' },
+        ],
+      },
       {
         judul: 'Perilaku Sintaksis Adverbia',
         slug: 'perilaku-sintaksis-adverbia',
@@ -306,7 +330,22 @@ const daftarIsiGramatika = [
         turunan: [
           { judul: 'Pronomina Persona', slug: 'pronomina-persona' },
           { judul: 'Pronomina Penunjuk', slug: 'pronomina-penunjuk' },
-          { judul: 'Pronomina Tanya', slug: 'pronomina-tanya' },
+          {
+            judul: 'Pronomina Tanya',
+            slug: 'pronomina-tanya',
+            turunan: [
+              { judul: 'Apa dan Siapa', slug: 'apa-dan-siapa' },
+              { judul: 'Mana', slug: 'mana' },
+              { judul: 'Mengapa dan Kenapa', slug: 'mengapa-dan-kenapa' },
+              { judul: 'Kapan, Bila(mana), dan (Apa)bila', slug: 'kapan-bilamana-dan-apabila' },
+              { judul: 'Bagaimana', slug: 'bagaimana' },
+              { judul: 'Berapa', slug: 'berapa' },
+              { judul: 'Gabungan Preposisi dengan Kata Tanya', slug: 'gabungan-preposisi-dengan-kata-tanya' },
+              { judul: 'Gabungan Kata Tanya dengan Kata Saja dan Implikasi Kejamakan', slug: 'gabungan-kata-tanya-dengan-kata-saja-dan-implikasi-kejamakan' },
+              { judul: 'Gabungan Kata Tanya dengan Kata Saja dan Implikasi Ketaktentuan', slug: 'gabungan-kata-tanya-dengan-kata-saja-dan-implikasi-ketaktentuan' },
+              { judul: 'Reduplikasi Apa, Siapa, dan Mana', slug: 'reduplikasi-apa-siapa-dan-mana' },
+            ],
+          },
           { judul: 'Pronomina Taktentu', slug: 'pronomina-taktentu' },
           { judul: 'Pronomina Jumlah', slug: 'pronomina-jumlah' },
         ],
@@ -418,7 +457,16 @@ const daftarIsiGramatika = [
         turunan: [
           { judul: 'Kalimat Berdasarkan Jumlah Klausanya', slug: 'kalimat-berdasarkan-jumlah-klausanya' },
           { judul: 'Kalimat Berdasarkan Predikat', slug: 'kalimat-berdasarkan-predikat' },
-          { judul: 'Kalimat Berdasarkan Klasifikasi Sintaktis', slug: 'kalimat-berdasarkan-klasifikasi-sintaktis' },
+          {
+            judul: 'Kalimat Berdasarkan Klasifikasi Sintaktis',
+            slug: 'kalimat-berdasarkan-klasifikasi-sintaktis',
+            turunan: [
+              { judul: 'Kalimat Deklaratif', slug: 'kalimat-deklaratif' },
+              { judul: 'Kalimat Imperatif', slug: 'kalimat-imperatif' },
+              { judul: 'Kalimat Interogatif', slug: 'kalimat-interogatif' },
+              { judul: 'Kalimat Eksklamatif', slug: 'kalimat-eksklamatif' },
+            ],
+          },
           { judul: 'Kalimat Berdasarkan Kelengkapan Unsur', slug: 'kalimat-berdasarkan-kelengkapan-unsur' },
           { judul: 'Kalimat dan Kemasan Informasi', slug: 'kalimat-dan-kemasan-informasi' },
         ],
