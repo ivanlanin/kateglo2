@@ -17,13 +17,13 @@ Pembakuan atau standardisasi bahasa dapat dilakukan oleh badan pemerintah yang r
 
 Mengingat kedudukan bahasa nasional yang amat penting dalam kehidupan masyarakat penutur suatu bahasa, di Indonesia ada badan pemerintah yang ditugasi menangani pembakuan bahasa, yaitu Badan Pengembangan dan Pembinaan Bahasa. Karena ragam bahasa dunia pendidikan diprioritaskan dalam proses pembakuan, kerja sama antara Badan Pengembangan dan Pembinaan Bahasa, para guru, dan pengembang ilmu di berbagai jenis lembaga pendidikan merupakan prasyarat bagi berhasilnya pembakuan bahasa. Hal itu tidak berarti bahwa kerja sama dan dukungan golongan lain, seperti pengasuh media massa dan tokoh masyarakat, tidak diperlukan.
 
-### Pembakuan Ejaan
+## Pembakuan Ejaan
 
 Ejaan atau tata cara menulis bahasa Indonesia dengan huruf Latin untuk ketiga kalinya dibakukan secara resmi pada tahun 1972, setelah berlakunya Ejaan Van Ophuijsen (1901) dan Ejaan Soewandi (1947). Untuk memudahkan penerapan ejaan itu, telah diterbitkan *Pedoman Umum Ejaan Bahasa Indonesia yang Disempurnakan* dengan beberapa kali penyempurnaan. Edisi pertama pedoman itu diterbitkan tahun 1975, yang selain mengatur tata tulis secara umum, juga menetapkan perubahan penulisan huruf, misalnya dari *dj*, *nj*, dan *tj* masing-masing menjadi *j*, *ny*, dan *c*. Edisi kedua tahun 1988 dan edisi ketiga tahun 2009 lebih banyak menguraikan kaidah tanda baca, selain penggunaan huruf dengan mengakomodasi kemajuan ilmu pengetahuan dan teknologi. Edisi mutakhir pedoman ejaan disebut dengan *Pedoman Umum Ejaan Bahasa Indonesia* (PUEBI) yang ditetapkan dalam Permendikbud Nomor 50 Tahun 2015.
 
 Meskipun dapat dikatakan bahwa kaidah ejaan kini sudah dibakukan dan mempunyai dasar penyusunan yang memenuhi syarat kecendekiaan, pelaksanaannya belum dapat dikatakan mantap karena terbukti masih ditemukan penulisan kata *hutang* di samping *utang*, misalnya. Mengingat toleransi pelafalan bahasa Indonesia akibat banyaknya ragam kedaerahan yang berpengaruh terhadap tata tulis sangat besar, penerapan ejaan baku dapat mengurangi kesalahpahaman antarpenutur yang tersebar di kepulauan Indonesia. Oleh karena itu, apa pun lafal kata yang mengacu ke 'mobil tumpangan yang dapat memuat orang banyak' di Tapanuli, Jawa Barat, Jawa Tengah, atau Minahasa, misalnya, perlu disepakati ejaan baku kata itu ialah *bus*, bukan *bis* atau *bes*. Tentu saja, *bis* atau *bes* dapat dipakai dalam ragam bahasa yang tidak formal.
 
-### Pembakuan Lafal
+## Pembakuan Lafal
 
 Sebagaimana dinyatakan di atas, lafal bahasa Indonesia banyak coraknya. Upaya pembakuan tidak saja berhadapan dengan ragam kedaerahan, tetapi juga berhadapan dengan ragam orang yang berpendidikan rendah, yang sistem bunyi bahasanya berbeda antara yang satu dan yang lain. Jika ditinjau dari sudut pembakuan, ada dua pandangan atau sikap yang patut dipertimbangkan. Pandangan pertama beranggapan bahwa variasi lafal tidak perlu dipersoalkan selama lafal itu tidak mengganggu arus komunikasi antarpenuturnya. Artinya, kebebasan dalam hal pelafalan seyogianya dibiarkan saja sejauh kelancaran komunikasi tidak terkendala. Bukankah lafal bahasa Inggris yang dituturkan di Australia, India, Britania, Kanada, dan Amerika juga tidak menimbulkan gangguan komunikasi?
 
@@ -31,7 +31,7 @@ Pandangan kedua beranggapan bahwa lafal yang santun mutlak diperlukan. Golongan 
 
 Masalahnya adalah bahwa lafal yang santun atau lafal yang baku tidak mudah ditetapkan di Indonesia. Lafal siapa dan lafal daerah mana yang harus dijadikan tolok ukur agar dapat disebut lafal Indonesia baku belum bisa diputuskan. Oleh karena itu, agaknya upaya pembakuan lafal ini belum dapat dilakukan secara jelas, tegas, dan menyeluruh. Perlu ditambahkan bahwa karena banyak dan beragamnya logat atau lafal kedaerahan yang secara langsung atau tidak langsung berpengaruh pada pelafalan bahasa Indonesia, lafal baku bahasa Indonesia diberi batasan sebagai **lafal yang tidak memperlihatkan ciri atau warna kedaerahan penuturnya**.
 
-### Pembakuan Kosakata
+## Pembakuan Kosakata
 
 Selain masalah ejaan yang menyangkut ragam tulis dan masalah lafal yang berhubungan dengan ragam lisan, komponen yang tidak kalah penting dalam pembakuan adalah satuan bahasa yang lazim disebut kata. Di dalam setiap bahasa, dengan perangkat bunyi dan huruf yang jumlahnya terbatas, dapat disusun kata, baik dalam ujaran maupun dalam tulisan, yang jumlahnya tak terbatas. Satuan bahasa itu dipakai untuk mengacu ke barang, perbuatan, sifat, atau gagasan apa saja yang bertalian dengan kehidupan. Kumpulan kata itu disebut kosakata yang menggambarkan perbendaharaan atau kekayaan kata suatu bahasa. Istilah *leksikon* dipakai dengan makna yang sama, tetapi kadang-kadang dimaknai juga sebagai pengacu kumpulan seluruh jumlah morfem sehingga semua afiks juga termasuk di dalamnya.
 
@@ -41,7 +41,7 @@ Sehubungan dengan pembakuan kata, ada kalanya orang bertanya, apakah kata, seper
 
 Pembakuan kata, terutama dalam hal peristilahan, sudah lama dilakukan, yaitu dimulai sejak tahun 1942 dengan adanya Komisi Bahasa Indonesia. Akan tetapi, baru pada tahun 1975 diterbitkan *Pedoman Umum Pembentukan Istilah*, yang memberikan patokan menyeluruh sehingga tata istilah bahasa Indonesia memenuhi syarat kemantapan, kecendekiaan, dan keseragaman. Penyusunan istilah khusus dan pengembangannya pada hakikatnya merupakan unsur sertaan pengembangan ilmu. Oleh karena itu, penataan istilah bahasa Indonesia yang baku juga diamanatkan kepada para ahli di berbagai bidang.
 
-### Pembakuan Tata Bahasa
+## Pembakuan Tata Bahasa
 
 Hingga tahun 1988 pembakuan tata bahasa Indonesia belum pernah dilakukan secara resmi. Buku tata bahasa, baik yang berupa saduran karangan ahli bahasa dari Belanda maupun yang berupa karya asli, masih sering digunakan di lembaga pendidikan tinggi dan buku itu tidak sedikit pengaruhnya dalam upaya pembakuan karena sering dijadikan sumber rujukan. Buku yang cukup kuat pengaruhnya terhadap pertumbuhan dan perkembangan penulisan tata bahasa di Indonesia adalah buku-buku yang ditulis oleh, antara lain, Ch.A. van Ophuijsen, S.M. Zain, Madong Loebis, S.T. Alisjahbana, C.A. Mees, A.A. Fokker, I.R. Poedjawijatna, P.J. Zoetmulder, Slametmuljana, Gorys Keraf, W.J.S. Poerwadarminta, Samsuri, dan M. Ramlan.
 

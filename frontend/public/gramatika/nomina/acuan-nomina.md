@@ -9,7 +9,7 @@ Dalam bahasa Indonesia konsep tunggal itu ditandai oleh pemakaian kata seperti *
 
 Selain melalui perulangan, bahasa Indonesia juga menggunakan secara terbatas bentuk perulangan dengan afiks *-an*, *para*, *kaum*, dan *umat* untuk menyatakan konsep kejamakan.
 
-### Bentuk Perulangan + *-an* (7.4.1)
+## Bentuk Perulangan + *-an* (7.4.1)
 
 Bentuk perulangan dengan sufiks *-an* digunakan untuk menyatakan kumpulan atau keberagaman dari benda yang dinyatakan nomina pangkal. Nomina yang mengalami pengulangan dan penambahan afiks itu umumnya terbatas pada nomina yang menyatakan flora. Nomina yang menyatakan benda bukan flora, jika mengalami perulangan dengan afiksasi demikian, akan mempunyai makna kemiripan atau tiruan (lihat 7.1.4.2).
 
@@ -28,7 +28,7 @@ Bentuk perulangan dengan sufiks *-an* digunakan untuk menyatakan kumpulan atau k
 
 Dari daftar di atas hanya nomina *batu* dan *runtuhan* yang bukan flora. Pada umumnya bentuk perulangan + *-an* di atas dapat bervariasi dengan perulangan suku pertama (dwipurwa) seperti *bebatuan*, *dedaunan*, *rerumputan*, *pepohonan*, dan *tetumbuhan*.
 
-### Kata *para* (7.4.2)
+## Kata *para* (7.4.2)
 
 Kata *para* dapat digunakan untuk menyatakan makna kolektif kelompok orang. Nomina yang dapat didahului oleh *para* terbatas pada nomina yang menyatakan kelompok orang yang mempunyai karakteristik tertentu, seperti pekerjaan atau status.
 
@@ -47,7 +47,7 @@ Kata *para* dapat digunakan untuk menyatakan makna kolektif kelompok orang. Nomi
 
 Nomina hubungan kekerabatan dan pertemanan umumnya bisa diulang, tetapi tidak bisa didahului *para*. Jadi, bentuk seperti *anak-anak*, *adik-adik*, *bapak-bapak*, *teman-teman*, dan *kawan-kawan* lazim digunakan dalam bahasa Indonesia, tetapi bentuk seperti \**para anak*, \**para adik*, \**para bapak*, \**para teman*, dan \**para kawan* tidak berterima. Sebaliknya, nomina berawalan *ter-* dapat didahului oleh *para*, tetapi tidak dapat diulang. Bentuk seperti *para terdakwa*, *para terpidana*, *para terhukum*, *para tertuduh*, dan *para tersangka* lazim digunakan dalam bahasa Indonesia, tetapi bentuk \**terdakwa-terdakwa*, \**terpidana-terpidana*, \**terhukum-terhukum*, \**tertuduh-tertuduh*, dan \**tersangka-tersangka* tidak berterima.
 
-### Kata *kaum* (7.4.3)
+## Kata *kaum* (7.4.3)
 
 Kata *kaum* digunakan untuk menyatakan makna kolektif kelompok besar orang yang mempunyai paham, status, pekerjaan, atau nasib yang sama. Nomina yang bisa didahului *kaum* umumnya mempunyai bentuk ulang dan bentuk ulang tanpa kata *orang* umumnya dapat juga didahului *para* jika nomina tersebut mengacu pada kelompok yang besar.
 
@@ -74,7 +74,7 @@ Kata *kaum* pada (333b) tidak dapat dipakai karena nomina *guru* mengacu pada ke
 | orang-orang terpelajar | kaum terpelajar |—|
 | orang-orang tertindas | kaum tertindas |—|
 
-### Kata *umat* (7.4.4)
+## Kata *umat* (7.4.4)
 
 Kata *umat* digunakan untuk menyatakan makna kolektif kelompok besar penganut agama tertentu dan makna generik manusia. Nomina yang dapat didahului *umat* dapat mempunyai bentuk ulang yang dimulai dengan *orang*.
 
@@ -84,7 +84,7 @@ Kata *umat* digunakan untuk menyatakan makna kolektif kelompok besar penganut ag
 
 Bentuk *umat* pada (336b) terasa janggal karena nomina *Hindu* mengacu pada kelompok kecil oleh kehadiran frasa preposisional *di kampung ini*. Bentuk *manusia-manusia* pada (336c) terasa janggal. Bentuk ulang itu, jika dipakai, dimaksudkan untuk memberi penekanan pada nomina tersebut.
 
-### Hubungan Jumlah dan Pengacuan
+## Hubungan Jumlah dan Pengacuan
 
 Lebih lanjut perlu diingat bahwa konsep jumlah (tunggal/jamak) tidak mempunyai hubungan langsung dengan konsep pengacuan (generik/spesifik).
 
@@ -112,7 +112,7 @@ Contoh:
 - (340c) *Murid itu sering membaca buku komik.* (lebih dari satu, karena *sering*)
 - (340d) *Murid itu sering membaca buku komik itu.* (satu buku yang sama, karena penunjuk *itu*)
 
-### Simpulan
+## Simpulan
 
 Dari uraian di atas dapat dikemukakan beberapa hal berikut.
 
