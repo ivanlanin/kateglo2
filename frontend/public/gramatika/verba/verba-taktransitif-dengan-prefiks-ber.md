@@ -1,6 +1,6 @@
 ---
 id: 4.3.1.1
-title: Pengafiksan Verba Taktransitif dengan Prefiks ber- (4.3.1.1)
+title: Verba Taktransitif dengan Prefiks ber- (4.3.1.1)
 ---
 
 Ada lima jenis verba *ber-* yang dibahas: (1) dengan pangkal verba, (2) dengan pangkal adjektiva, (3) dengan pangkal nomina, (4) dengan pangkal numeralia, dan (5) dengan pangkal bermacam frasa.

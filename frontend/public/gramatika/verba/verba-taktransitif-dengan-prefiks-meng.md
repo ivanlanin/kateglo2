@@ -1,6 +1,6 @@
 ---
 id: 4.3.1.3
-title: Pengafiksan Verba Taktransitif dengan Prefiks meng- (4.3.1.3)
+title: Verba Taktransitif dengan Prefiks meng- (4.3.1.3)
 ---
 
 ## Pangkal Verba

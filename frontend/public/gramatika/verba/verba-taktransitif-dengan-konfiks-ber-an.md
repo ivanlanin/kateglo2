@@ -1,6 +1,6 @@
 ---
 id: 4.3.1.2
-title: Pengafiksan Verba Taktransitif dengan Konfiks ber-...-an (4.3.1.2)
+title: Verba Taktransitif dengan Konfiks ber-...-an (4.3.1.2)
 ---
 
 Perlu dibedakan verba dengan konfiks *ber-...-an* dari verba dengan prefiks *ber-* yang ditambahkan pada bentuk yang sebelumnya telah memiliki sufiks *-an*. Misalnya, *bepergian* diturunkan dari pangkal *pergi* dengan konfiks *ber-...-an*. Akan tetapi, *berhalangan* diturunkan dengan prefiks *ber-* dari bentuk yang sudah memiliki sufiks *-an*, yakni *halangan*.

@@ -1,6 +1,6 @@
 ---
 id: 4.3.1.5
-title: Pengafiksan Verba Taktransitif dengan Prefiks se- (4.3.1.5)
+title: Verba Taktransitif dengan Prefiks se- (4.3.1.5)
 ---
 
 Pengafiksan verba dengan prefiks *se-* terjadi pada tataran kalimat dan menghasilkan klausa subordinatif dalam kalimat kompleks. Jumlah bentuk verba jenis ini sangat terbatas. Terdapat dua kelompok.

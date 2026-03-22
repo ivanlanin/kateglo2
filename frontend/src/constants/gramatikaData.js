@@ -110,10 +110,10 @@ const daftarIsiGramatika = [
         judul: 'Jenis Nomina',
         slug: 'jenis-nomina',
         turunan: [
-          { judul: 'Nomina Berdasarkan Acuannya', slug: 'nomina-berdasarkan-acuannya' },
+          { judul: 'Nomina Berdasarkan Acuan', slug: 'nomina-berdasarkan-acuan' },
           {
-            judul: 'Nomina Berdasarkan Bentuk Morfologisnya',
-            slug: 'nomina-berdasarkan-bentuk-morfologisnya',
+            judul: 'Nomina Berdasarkan Bentuk Morfologis',
+            slug: 'nomina-berdasarkan-bentuk-morfologis',
             turunan: [
               { judul: 'Nomina Dasar', slug: 'nomina-dasar' },
               { judul: 'Penurunan Nomina dengan Konversi', slug: 'penurunan-nomina-dengan-konversi' },
@@ -147,7 +147,7 @@ const daftarIsiGramatika = [
         turunan: [
           { judul: 'Penentu', slug: 'penentu' },
           { judul: 'Penggolong dan Partitif', slug: 'penggolong-dan-partitif' },
-          { judul: 'Nomina dengan Perluasan ke Kiri', slug: 'nomina-dengan-perluasan-ke-kiri' },
+          { judul: 'Perluasan Nomina ke Kiri', slug: 'perluasan-nomina-ke-kiri' },
           { judul: 'Perluasan Nomina ke Kanan', slug: 'perluasan-nomina-ke-kanan' },
           { judul: 'Susunan Kata pada Frasa Nominal', slug: 'susunan-kata-pada-frasa-nominal' },
           { judul: 'Frasa Nominal Vokatif', slug: 'frasa-nominal-vokatif' },
@@ -223,13 +223,13 @@ const daftarIsiGramatika = [
             judul: 'Penurunan Verba Taktransitif dengan Pengafiksan',
             slug: 'penurunan-verba-taktransitif-dengan-pengafiksan',
             turunan: [
-              { judul: 'Pengafiksan Verba Taktransitif dengan Prefiks ber-', slug: 'pengafiksan-verba-taktransitif-dengan-prefiks-ber' },
-              { judul: 'Pengafiksan Verba Taktransitif dengan Konfiks ber-...-an', slug: 'pengafiksan-verba-taktransitif-dengan-konfiks-ber-an' },
-              { judul: 'Pengafiksan Verba Taktransitif dengan Prefiks meng-', slug: 'pengafiksan-verba-taktransitif-dengan-prefiks-meng' },
-              { judul: 'Pengafiksan Verba Taktransitif dengan Prefiks ter-', slug: 'pengafiksan-verba-taktransitif-dengan-prefiks-ter' },
-              { judul: 'Pengafiksan Verba Taktransitif dengan Prefiks se-', slug: 'pengafiksan-verba-taktransitif-dengan-prefiks-se' },
-              { judul: 'Pengafiksan Verba Taktransitif dengan Infiks', slug: 'pengafiksan-verba-taktransitif-dengan-infiks' },
-              { judul: 'Pengafiksan Verba Taktransitif dengan Konfiks ke-...-an', slug: 'pengafiksan-verba-taktransitif-dengan-konfiks-ke-an' },
+              { judul: 'Verba Taktransitif dengan Prefiks ber-', slug: 'verba-taktransitif-dengan-prefiks-ber' },
+              { judul: 'Verba Taktransitif dengan Konfiks ber-...-an', slug: 'verba-taktransitif-dengan-konfiks-ber-an' },
+              { judul: 'Verba Taktransitif dengan Prefiks meng-', slug: 'verba-taktransitif-dengan-prefiks-meng' },
+              { judul: 'Verba Taktransitif dengan Prefiks ter-', slug: 'verba-taktransitif-dengan-prefiks-ter' },
+              { judul: 'Verba Taktransitif dengan Prefiks se-', slug: 'verba-taktransitif-dengan-prefiks-se' },
+              { judul: 'Verba Taktransitif dengan Infiks', slug: 'verba-taktransitif-dengan-infiks' },
+              { judul: 'Verba Taktransitif dengan Konfiks ke-...-an', slug: 'verba-taktransitif-dengan-konfiks-ke-an' },
             ],
           },
           { judul: 'Penurunan Verba Taktransitif dengan Reduplikasi', slug: 'penurunan-verba-taktransitif-dengan-reduplikasi' },

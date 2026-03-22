@@ -1,6 +1,6 @@
 ---
 id: 4.3.1.6
-title: Pengafiksan Verba Taktransitif dengan Infiks (4.3.1.6)
+title: Verba Taktransitif dengan Infiks (4.3.1.6)
 ---
 
 Pembentukan verba dengan infiks tidak begitu produktif. Artinya, tidak mudah membuat bentuk baru dengan menambahkan infiks pada verba, adjektiva, atau nomina. Contoh yang dapat disebutkan untuk keempat infiks itu masing-masing terdaftar di bawah ini.

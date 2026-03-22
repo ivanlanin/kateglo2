@@ -1,6 +1,6 @@
 ---
 id: 4.3.1.7
-title: Pengafiksan Verba Taktransitif dengan Konfiks Verbal ke-...-an (4.3.1.7)
+title: Verba Taktransitif dengan Konfiks Verbal ke-...-an (4.3.1.7)
 ---
 
 Jika dilihat dari segi wajib-tidaknya nomina yang hadir, termasuk jumlah nominanya, verba yang diturunkan dengan konfiks *ke-...-an* dapat dibagi menjadi tiga kelompok, yakni kelompok yang (1) bernomina satu, (2) bernomina dua dan wajib, dan (3) bernomina dua, tetapi nomina kedua bersifat manasuka. Pangkal yang dipakai dapat berupa verba, adjektiva, atau nomina.

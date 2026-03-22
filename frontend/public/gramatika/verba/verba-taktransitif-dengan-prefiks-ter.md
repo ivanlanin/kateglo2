@@ -1,6 +1,6 @@
 ---
 id: 4.3.1.4
-title: Pengafiksan Verba Taktransitif dengan Prefiks ter- (4.3.1.4)
+title: Verba Taktransitif dengan Prefiks ter- (4.3.1.4)
 ---
 
 Verba taktransitif yang berawalan *ter-* terbatas jumlahnya, ada yang berpangkal verba dasar yang juga taktransitif. Selain memarkahi aspektualitas perfektif, jenis verba ini juga menggambarkan subjek yang mengalami sesuatu yang tiba-tiba, takterduga, atau tidak sengaja.

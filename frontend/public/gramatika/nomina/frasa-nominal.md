@@ -7,7 +7,7 @@ Frasa nominal adalah frasa yang intinya nomina. Frasa nominal dibentuk dengan ja
 
 - [Penentu](/gramatika/penentu)
 - [Penggolong dan Partitif](/gramatika/penggolong-dan-partitif)
-- [Nomina dengan Perluasan ke Kiri](/gramatika/nomina-dengan-perluasan-ke-kiri)
+- [Perluasan Nomina ke Kiri](/gramatika/perluasan-nomina-ke-kiri)
 - [Perluasan Nomina ke Kanan](/gramatika/perluasan-nomina-ke-kanan)
 - [Susunan Kata pada Frasa Nominal](/gramatika/susunan-kata-pada-frasa-nominal)
 - [Frasa Nominal Vokatif](/gramatika/frasa-nominal-vokatif)

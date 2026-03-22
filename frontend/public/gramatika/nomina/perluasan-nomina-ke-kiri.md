@@ -1,6 +1,6 @@
 ---
 id: 7.1.5.3
-title: Nomina dengan Perluasan ke Kiri (7.1.5.3)
+title: Perluasan Nomina ke Kiri (7.1.5.3)
 ---
 
 Perluasan ke kiri dilakukan dengan menambahkan penentu (Pen) berupa numeralia (Num) atau numeralia taktentu (Num tt) dengan atau tanpa penggolong (Pgl) atau partitif (Prt). Pembentukan frasa nominal melalui perluasan ke kiri akan mempunyai struktur:
