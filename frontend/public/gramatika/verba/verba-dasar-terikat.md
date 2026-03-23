@@ -1,0 +1,10 @@
+---
+id: 4.1.3.1.2
+title: Verba Dasar Terikat (4.1.3.1.2)
+---
+
+Verba dasar terikat adalah bentuk dasar yang secara potensial berkategori verba karena bentuk itu akan berubah menjadi verba setelah mengalami pengafiksan dengan prefiks *meng-*, *ber-*, atau *ter-* dan sufiks *-kan* atau *-i*. Bentuk dasar *julang*, *siar*, *timpali*, *juang*, dan *giur* termasuk verba dasar terikat. Bentuk-bentuk itu merupakan pangkal primer verba *menjulang*, *menyiarkan*, *menimpali*, *berjuang*, dan *tergiur*. Dengan kata lain, verba dasar terikat hanya dapat berfungsi secara gramatikal setelah dilekati afiks pembentuk verba.
+
+Berikut adalah contoh lain bentuk verba dasar terikat:
+
+- (71) *alih, alir, anggur, anjak, anjur, antuk, apung, bebar, baring, belalak, benam, bengkalai, bentur, bincang, cadang, cantum, cebur, cengang, cengkam, cenung, cucur, curah, dadak, duyun, edar, embus, empas, endap, engah, foya, gayut, gebu, gegas, genang, gesa, golong, gopoh, gubris, gumul, haru, hela, hindar, hirau, hubung, hunjam, huyung, idam, idap, igau, impi, inap, jabar, jaja, jangkit, jeblos, jejal, jelma, jerembap, jerumus, jingkat, jubel, jungkir, juntai, kelahi, kenan, kendara, kedip, keriap, kerumun, kibar, kibas, kilik, kitar, koar, kobar, kulai, kunjung, kutik, laden, lambai, lampias, lampir, lamun, langkau, lanjur, lantar, lantun, lempang, lempem, lenceng, linang, lindung, luap, lumur, lunta, maktub, mangu, menung, naung, nukil, oyak, paling, pantul, papas, pencar, pencil, pental, pergok, rambat, rampat, rangkak, rasuk, rembet, repet, rinding, ringis, ronta, rosot, rundung, saing, saji, samun, sandar, sandung, sangkut, saruk, sasar, selinap, seling, selip, selonong, selundup, seloyong, sembul, serak, singkir, singsing, sisih, sisip, sodor, sua, suai, suguh, suruk, susup, talar, tanding, tanjak, tapis, tarung, tatar, taut, tegun, tekur, tele, temu, tengger, terjemah, tetas, tikai, tikung, timbrung, tongkrong, tonjol, tular, tumpang, ungsi, utik, wawas*

@@ -92,6 +92,7 @@ Untuk tiap item:
 - Untuk subbab yang punya turunan, pastikan halaman induk hanya memuat pengantar dan navigasi bila memang begitu struktur sumbernya.
 - Jika halaman induk tidak memiliki pengantar asli yang perlu dipertahankan, tampilkan daftar subhalaman saja tanpa menambahkan pengantar baru.
 - Di halaman induk konten, tampilkan hanya anak langsung. Jangan tampilkan cucu atau turunan yang lebih dalam pada daftar tautan halaman induk.
+- Penamaan slug dan judul file turunan diputuskan per file berdasarkan cakupan isi aktual. Jangan memaksakan satu pola kaku jika hasilnya ambigu. Jika heading asal terlalu generik atau bentrok dengan bab lain, gunakan judul dan slug yang lebih spesifik secara semantis, misalnya `numeralia-tentu-dan-taktentu` alih-alih `numeralia` atau `penentu-numeralia`.
 - Bedakan koreksi sumber dari styling editorial. Huruf tebal, italic, dan penekanan visual lain hanya dipertahankan jika memang berasal dari TBBBI atau dibutuhkan secara teknis.
 - Untuk isi paragraf dan label intra-paragraf, anggap huruf tebal sebagai tidak sah secara default. Jika PDF hanya menampilkan roman biasa atau italic, hapus bold tambahan di markdown. Pengecualian utamanya adalah heading/subheading yang memang tampak menonjol sebagai struktur di sumber, bukan sebagai penekanan editorial baru.
 - Setelah batch selesai, jalankan ulang generator manifest agar status dan antrian berikutnya sinkron.

@@ -336,8 +336,24 @@ const daftarIsiGramatika = [
         judul: 'Bentuk Verba',
         slug: 'bentuk-verba',
         turunan: [
-          { judul: 'Verba Dasar', slug: 'verba-dasar' },
-          { judul: 'Verba Turunan', slug: 'verba-turunan' },
+          {
+            judul: 'Verba Dasar',
+            slug: 'verba-dasar',
+            turunan: [
+              { judul: 'Verba Dasar Bebas', slug: 'verba-dasar-bebas' },
+              { judul: 'Verba Dasar Terikat', slug: 'verba-dasar-terikat' },
+            ],
+          },
+          {
+            judul: 'Verba Turunan',
+            slug: 'verba-turunan',
+            turunan: [
+              { judul: 'Verba Hasil Pengonversian', slug: 'verba-hasil-pengonversian' },
+              { judul: 'Verba Turunan melalui Pengafiksan', slug: 'verba-turunan-melalui-pengafiksan' },
+              { judul: 'Verba Turunan melalui Pengulangan', slug: 'verba-turunan-melalui-pengulangan' },
+              { judul: 'Verba Turunan melalui Pemajemukan', slug: 'verba-turunan-melalui-pemajemukan' },
+            ],
+          },
           {
             judul: 'Morfofonemik dalam Pengafiksan Verba',
             slug: 'morfofonemik-dalam-pengafiksan-verba',
@@ -367,7 +383,15 @@ const daftarIsiGramatika = [
               { judul: 'Verba Transitif dengan Prefiks Infleksi di-', slug: 'verba-transitif-dengan-prefiks-infleksi-di' },
               { judul: 'Verba Transitif dengan Prefiks Infleksi ter-', slug: 'verba-transitif-dengan-prefiks-infleksi-ter' },
               { judul: 'Verba Transitif dengan Prefiks per-', slug: 'verba-transitif-dengan-prefiks-per' },
-              { judul: 'Verba Transitif dengan Sufiks -kan', slug: 'verba-transitif-dengan-sufiks-kan' },
+              {
+                judul: 'Verba Transitif dengan Sufiks -kan',
+                slug: 'verba-transitif-dengan-sufiks-kan',
+                turunan: [
+                  { judul: 'Pangkal Verba + -kan', slug: 'pangkal-verba-sufiks-kan' },
+                  { judul: 'Pangkal Adjektiva + -kan', slug: 'pangkal-adjektiva-sufiks-kan' },
+                  { judul: 'Pangkal Nomina + -kan', slug: 'pangkal-nomina-sufiks-kan' },
+                ],
+              },
               { judul: 'Verba Transitif dengan Sufiks -i', slug: 'verba-transitif-dengan-sufiks-i' },
             ],
           },
@@ -381,11 +405,47 @@ const daftarIsiGramatika = [
             judul: 'Penurunan Verba Taktransitif dengan Pengafiksan',
             slug: 'penurunan-verba-taktransitif-dengan-pengafiksan',
             turunan: [
-              { judul: 'Verba Taktransitif dengan Prefiks ber-', slug: 'verba-taktransitif-dengan-prefiks-ber' },
+              {
+                judul: 'Verba Taktransitif dengan Prefiks ber-',
+                slug: 'verba-taktransitif-dengan-prefiks-ber',
+                turunan: [
+                  { judul: 'Pengafiksan Verba ber- dengan Pangkal Verba', slug: 'pengafiksan-verba-ber-dengan-pangkal-verba' },
+                  { judul: 'Pengafiksan Verba ber- dengan Pangkal Adjektiva', slug: 'pengafiksan-verba-ber-dengan-pangkal-adjektiva' },
+                  { judul: 'Pengafiksan Verba ber- dengan Pangkal Nomina', slug: 'pengafiksan-verba-ber-dengan-pangkal-nomina' },
+                  { judul: 'Pengafiksan Verba ber- dengan Pangkal Numeralia', slug: 'pengafiksan-verba-ber-dengan-pangkal-numeralia' },
+                  { judul: 'Pengafiksan Verba ber- dengan Pangkal Berbagai Frasa', slug: 'pengafiksan-verba-ber-dengan-pangkal-berbagai-frasa' },
+                ],
+              },
               { judul: 'Verba Taktransitif dengan Konfiks ber-...-an', slug: 'verba-taktransitif-dengan-konfiks-ber-an' },
-              { judul: 'Verba Taktransitif dengan Prefiks meng-', slug: 'verba-taktransitif-dengan-prefiks-meng' },
+              {
+                judul: 'Verba Taktransitif dengan Prefiks meng-',
+                slug: 'verba-taktransitif-dengan-prefiks-meng',
+                turunan: [
+                  { judul: 'Pangkal Verba', slug: 'pangkal-verba-prefiks-meng' },
+                  { judul: 'Pangkal Adjektiva', slug: 'pangkal-adjektiva-prefiks-meng' },
+                  {
+                    judul: 'Pangkal Nomina',
+                    slug: 'pangkal-nomina-prefiks-meng',
+                    turunan: [
+                      { judul: 'Nomina Berfitur Suara atau Bunyi', slug: 'nomina-berfitur-suara-atau-bunyi' },
+                      { judul: 'Nomina Berfitur Tempatan', slug: 'nomina-berfitur-tempatan' },
+                      { judul: 'Nomina Berfitur Bangun atau Wujud', slug: 'nomina-berfitur-bangun-atau-wujud' },
+                      { judul: 'Nomina Berfitur Barang Konsumsi', slug: 'nomina-berfitur-barang-konsumsi' },
+                      { judul: 'Nomina Berfitur Hasil Bumi', slug: 'nomina-berfitur-hasil-bumi' },
+                    ],
+                  },
+                  { judul: 'Pangkal Numeralia', slug: 'pangkal-numeralia-prefiks-meng' },
+                ],
+              },
               { judul: 'Verba Taktransitif dengan Prefiks ter-', slug: 'verba-taktransitif-dengan-prefiks-ter' },
-              { judul: 'Verba Taktransitif dengan Prefiks se-', slug: 'verba-taktransitif-dengan-prefiks-se' },
+              {
+                judul: 'Verba Taktransitif dengan Prefiks se-',
+                slug: 'verba-taktransitif-dengan-prefiks-se',
+                turunan: [
+                  { judul: 'Bentuk se- Pembentuk Klausa Subordinatif Adverbial', slug: 'bentuk-se-pembentuk-klausa-subordinatif-adverbial' },
+                  { judul: 'Bentuk se- Berciri Nominal', slug: 'bentuk-se-berciri-nominal' },
+                ],
+              },
               { judul: 'Verba Taktransitif dengan Infiks', slug: 'verba-taktransitif-dengan-infiks' },
               { judul: 'Verba Taktransitif dengan Konfiks ke-...-an', slug: 'verba-taktransitif-dengan-konfiks-ke-an' },
             ],
@@ -410,8 +470,32 @@ const daftarIsiGramatika = [
         slug: 'frasa-verbal',
         turunan: [
           { judul: 'Batasan Frasa Verbal', slug: 'batasan-frasa-verbal' },
-          { judul: 'Jenis Frasa Verbal', slug: 'jenis-frasa-verbal' },
-          { judul: 'Fungsi Verba dan Frasa Verbal', slug: 'fungsi-verba-dan-frasa-verbal' },
+          {
+            judul: 'Jenis Frasa Verbal',
+            slug: 'jenis-frasa-verbal',
+            turunan: [
+              {
+                judul: 'Frasa Endosentrik Atributif',
+                slug: 'frasa-endosentrik-atributif',
+                turunan: [
+                  { judul: 'Pewatas Depan', slug: 'pewatas-depan' },
+                  { judul: 'Pewatas Belakang', slug: 'pewatas-belakang' },
+                ],
+              },
+              { judul: 'Frasa Endosentrik Koordinatif', slug: 'frasa-endosentrik-koordinatif' },
+            ],
+          },
+          {
+            judul: 'Fungsi Verba dan Frasa Verbal',
+            slug: 'fungsi-verba-dan-frasa-verbal',
+            turunan: [
+              { judul: 'Verba dan Frasa Verbal sebagai Predikat', slug: 'verba-dan-frasa-verbal-sebagai-predikat' },
+              { judul: 'Verba dan Frasa Verbal sebagai Pelengkap', slug: 'verba-dan-frasa-verbal-sebagai-pelengkap' },
+              { judul: 'Verba dan Frasa Verbal sebagai Keterangan', slug: 'verba-dan-frasa-verbal-sebagai-keterangan' },
+              { judul: 'Verba yang Bersifat Atributif', slug: 'verba-yang-bersifat-atributif' },
+              { judul: 'Verba yang Bersifat Apositif', slug: 'verba-yang-bersifat-apositif' },
+            ],
+          },
         ],
       },
     ],

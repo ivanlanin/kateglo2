@@ -18,6 +18,7 @@ Mencatat halaman Gramatika yang masih memuat heading internal `##`, `###`, dan s
 - [disepakati] Di halaman induk konten, tampilkan hanya anak langsung; cucu dan turunan yang lebih dalam tidak ditampilkan pada daftar tautan induk.
 - [disepakati] Setiap file baru wajib memiliki frontmatter minimal `id` dan `title`.
 - [disepakati] Setelah mengubah `frontend/src/constants/gramatikaData.js`, selalu jalankan `node frontend/scripts/sync-gramatika-toc.mjs` untuk memutakhirkan halaman daftar isi bab.
+- [disepakati] Penamaan judul dan slug turunan diputuskan per file berdasarkan cakupan isi aktual. Untuk heading generik atau bentrok, pilih nama yang paling spesifik dan paling mudah dibedakan, tidak harus selalu memakai pola parent-first.
 
 ## Konsekuensi Implementasi
 
@@ -30,6 +31,7 @@ Mencatat halaman Gramatika yang masih memuat heading internal `##`, `###`, dan s
 4. Halaman daftar isi bab yang digenerate dari `sync-gramatika-toc.mjs` tetap mengikuti struktur rekursif penuh per subfolder.
 5. Karena breadcrumb dibangun dari `ancestorTrail`, `parentSlug`, dan `directParentSlug`, penambahan turunan baru tidak boleh dilakukan hanya di markdown tanpa pembaruan `gramatikaData.js`.
 6. Untuk halaman induk yang isinya sebelumnya berupa teks penuh lalu dipecah, isi induk boleh direduksi menjadi daftar subhalaman saja jika memang tidak ada pengantar asli yang perlu dipertahankan.
+7. Untuk judul/slug yang berpotensi ambigu, keputusan akhir mengikuti cakupan isi file hasil pecahan, bukan sekadar heading mentah. Contoh: subhalaman di bawah `penentu.md` memakai `numeralia-tentu-dan-taktentu` karena isi file memang mencakup dua kategori itu sekaligus.
 
 ## Sumber Audit
 
@@ -257,6 +259,73 @@ Implikasi:
 - pola implementasi per subfolder tetap konsisten pada Bab IV: halaman bab rekursif penuh, halaman induk konten anak langsung saja
 - batch berikutnya dapat lanjut ke Bab V
 
+### Batch 5: Bab V Verba
+
+Status: selesai dipecah dan tervalidasi dengan strategi mikro-batch
+
+Hasil verifikasi:
+
+- subfolder `frontend/public/gramatika/verba/` sekarang tidak memiliki heading internal `##`, `###`, dan seterusnya
+- halaman bab `verba.md` sudah disinkronkan ulang dari `gramatikaData.js` melalui `sync-gramatika-toc.mjs` dengan struktur daftar isi rekursif penuh
+- semua halaman induk konten Verba yang sebelumnya mengandung heading internal kini dirapikan agar hanya menampilkan anak langsung
+- `verba-taktransitif-dengan-prefiks-meng.md` diperluas menjadi parent bertingkat karena bagian `pangkal nomina` masih memiliki lima subkelompok
+- heading generik pada `verba-taktransitif-dengan-prefiks-se.md` dinormalisasi secara semantis menjadi dua subhalaman yang membedakan pola adverbial dan nominal
+- struktur Bab V di `frontend/src/constants/gramatikaData.js` sudah diperluas untuk area `Bentuk Verba`, `Verba Transitif`, `Verba Taktransitif`, dan `Frasa Verbal` agar breadcrumb dan sidebar mengikuti hierarki baru
+- validasi frontend lulus melalui `npm run lint` dan `vitest` untuk area terkait setelah setiap mikro-batch dan setelah batch final
+
+File baru yang ditambahkan pada Bab V:
+
+- `frontend/public/gramatika/verba/verba-dasar-bebas.md`
+- `frontend/public/gramatika/verba/verba-dasar-terikat.md`
+- `frontend/public/gramatika/verba/verba-hasil-pengonversian.md`
+- `frontend/public/gramatika/verba/verba-turunan-melalui-pengafiksan.md`
+- `frontend/public/gramatika/verba/verba-turunan-melalui-pengulangan.md`
+- `frontend/public/gramatika/verba/verba-turunan-melalui-pemajemukan.md`
+- `frontend/public/gramatika/verba/frasa-endosentrik-atributif.md`
+- `frontend/public/gramatika/verba/pewatas-depan.md`
+- `frontend/public/gramatika/verba/pewatas-belakang.md`
+- `frontend/public/gramatika/verba/frasa-endosentrik-koordinatif.md`
+- `frontend/public/gramatika/verba/verba-dan-frasa-verbal-sebagai-predikat.md`
+- `frontend/public/gramatika/verba/verba-dan-frasa-verbal-sebagai-pelengkap.md`
+- `frontend/public/gramatika/verba/verba-dan-frasa-verbal-sebagai-keterangan.md`
+- `frontend/public/gramatika/verba/verba-yang-bersifat-atributif.md`
+- `frontend/public/gramatika/verba/verba-yang-bersifat-apositif.md`
+- `frontend/public/gramatika/verba/bentuk-se-pembentuk-klausa-subordinatif-adverbial.md`
+- `frontend/public/gramatika/verba/bentuk-se-berciri-nominal.md`
+- `frontend/public/gramatika/verba/pangkal-verba-sufiks-kan.md`
+- `frontend/public/gramatika/verba/pangkal-adjektiva-sufiks-kan.md`
+- `frontend/public/gramatika/verba/pangkal-nomina-sufiks-kan.md`
+- `frontend/public/gramatika/verba/pengafiksan-verba-ber-dengan-pangkal-verba.md`
+- `frontend/public/gramatika/verba/pengafiksan-verba-ber-dengan-pangkal-adjektiva.md`
+- `frontend/public/gramatika/verba/pengafiksan-verba-ber-dengan-pangkal-nomina.md`
+- `frontend/public/gramatika/verba/pengafiksan-verba-ber-dengan-pangkal-numeralia.md`
+- `frontend/public/gramatika/verba/pengafiksan-verba-ber-dengan-pangkal-berbagai-frasa.md`
+- `frontend/public/gramatika/verba/pangkal-verba-prefiks-meng.md`
+- `frontend/public/gramatika/verba/pangkal-adjektiva-prefiks-meng.md`
+- `frontend/public/gramatika/verba/pangkal-nomina-prefiks-meng.md`
+- `frontend/public/gramatika/verba/nomina-berfitur-suara-atau-bunyi.md`
+- `frontend/public/gramatika/verba/nomina-berfitur-tempatan.md`
+- `frontend/public/gramatika/verba/nomina-berfitur-bangun-atau-wujud.md`
+- `frontend/public/gramatika/verba/nomina-berfitur-barang-konsumsi.md`
+- `frontend/public/gramatika/verba/nomina-berfitur-hasil-bumi.md`
+- `frontend/public/gramatika/verba/pangkal-numeralia-prefiks-meng.md`
+
+Halaman induk Bab V yang diubah menjadi daftar subhalaman hierarkis:
+
+- `frontend/public/gramatika/verba/verba-dasar.md`
+- `frontend/public/gramatika/verba/verba-turunan.md`
+- `frontend/public/gramatika/verba/jenis-frasa-verbal.md`
+- `frontend/public/gramatika/verba/fungsi-verba-dan-frasa-verbal.md`
+- `frontend/public/gramatika/verba/verba-taktransitif-dengan-prefiks-se.md`
+- `frontend/public/gramatika/verba/verba-transitif-dengan-sufiks-kan.md`
+- `frontend/public/gramatika/verba/verba-taktransitif-dengan-prefiks-ber.md`
+- `frontend/public/gramatika/verba/verba-taktransitif-dengan-prefiks-meng.md`
+
+Implikasi:
+
+- strategi mikro-batch terbukti efektif untuk subfolder padat seperti Verba dan layak dipakai lagi pada bab lain yang berisiko memicu batas memori
+- batch berikutnya dapat lanjut ke bab berikutnya di luar Verba
+
 ## Prioritas Pemecahan
 
 File dengan kepadatan heading paling tinggi sebaiknya diproses lebih dulu karena memberi pengurangan kompleksitas paling besar per file.
@@ -285,7 +354,7 @@ Hanya ada satu bentrok langsung terhadap slug global yang sudah ada di `gramatik
 Rekomendasi untuk kasus ini:
 
 - jangan gunakan `numeralia.md` sebagai file pecahan baru
-- pilih slug berinduk atau judul semantis yang lebih spesifik, misalnya `numeralia-tentu-dan-taktentu.md` atau `numeralia-sebagai-penentu.md`
+- pilih nama yang benar-benar mencerminkan isi file hasil pecahan; untuk implementasi Bab IV digunakan `numeralia-tentu-dan-taktentu.md`
 
 ## Risiko Penamaan yang Perlu Diantisipasi
 
@@ -347,8 +416,8 @@ Rekomendasi:
 Gunakan hirarki berikut saat memecah halaman menjadi file baru.
 
 1. Jika heading menghasilkan slug yang spesifik, tidak diawali angka, dan tidak bentrok, pakai slug mentah.
-2. Jika slug terlalu generik atau pendek, prefiks dengan slug file induk saat ini.
-3. Jika slug masih ambigu, prefiks dengan slug parent terdekat dari `gramatikaData.js`.
+2. Jika slug terlalu generik atau pendek, pertimbangkan dulu nama semantis yang paling akurat terhadap isi file hasil pecahan.
+3. Jika nama semantis yang akurat masih ambigu, baru prefiks dengan slug file induk atau parent terdekat dari `gramatikaData.js`.
 4. Jika heading memakai angka urut, buang angka dari slug final.
 5. Jika heading memuat simbol fonetik, ganti dengan label semantis yang stabil, bukan karakter IPA mentah.
 
