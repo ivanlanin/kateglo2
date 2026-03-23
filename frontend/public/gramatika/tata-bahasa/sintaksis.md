@@ -17,12 +17,4 @@ Hal yang pertama, bahwa setiap kalimat terdiri atas beberapa bagian dan tiap bag
 
 1. [Struktur Konstituen](/gramatika/struktur-konstituen)
 2. [Kategori Sintaksis](/gramatika/kategori-sintaksis)
-   1. [Kategori Leksikal](/gramatika/kategori-leksikal)
-   2. [Kategori Frasa](/gramatika/kategori-frasa)
 3. [Konstruksi Tata Bahasa dan Fungsinya](/gramatika/konstruksi-tata-bahasa-dan-fungsinya)
-   1. [Inti (Hulu) dan Noninti (Terikat)](/gramatika/inti-dan-noninti)
-   2. [Jenis-Jenis Noninti](/gramatika/jenis-jenis-noninti)
-   3. [Konstruksi Tanpa Inti](/gramatika/konstruksi-tanpa-inti)
-   4. [Representasi Fungsi dengan Diagram](/gramatika/representasi-fungsi-dengan-diagram)
-   5. [Cabang Tunggal](/gramatika/cabang-tunggal)
-   6. [Model Diagram](/gramatika/model-diagram)

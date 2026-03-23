@@ -15,7 +15,9 @@ Mencatat halaman Gramatika yang masih memuat heading internal `##`, `###`, dan s
 - [disepakati] Proses dikerjakan per subfolder agar perubahan lebih mudah dilacak.
 - [disepakati] Batch dimulai dari Bab I, lalu lanjut subfolder berikutnya secara berurutan.
 - [disepakati] Halaman induk setelah dipecah tidak perlu diberi pengantar baru; jika tidak ada pengantar asli yang layak dipertahankan, cukup tampilkan daftar subhalaman.
+- [disepakati] Di halaman induk konten, tampilkan hanya anak langsung; cucu dan turunan yang lebih dalam tidak ditampilkan pada daftar tautan induk.
 - [disepakati] Setiap file baru wajib memiliki frontmatter minimal `id` dan `title`.
+- [disepakati] Setelah mengubah `frontend/src/constants/gramatikaData.js`, selalu jalankan `node frontend/scripts/sync-gramatika-toc.mjs` untuk memutakhirkan halaman daftar isi bab.
 
 ## Konsekuensi Implementasi
 
@@ -23,8 +25,11 @@ Mencatat halaman Gramatika yang masih memuat heading internal `##`, `###`, dan s
   - file markdown induk dan anak di `frontend/public/gramatika/<subfolder>/`
   - struktur hierarki di `frontend/src/constants/gramatikaData.js`
   - daftar tautan pada halaman induk agar sinkron dengan struktur baru
-2. Karena breadcrumb dibangun dari `ancestorTrail`, `parentSlug`, dan `directParentSlug`, penambahan turunan baru tidak boleh dilakukan hanya di markdown tanpa pembaruan `gramatikaData.js`.
-3. Untuk halaman induk yang isinya sebelumnya berupa teks penuh lalu dipecah, isi induk boleh direduksi menjadi daftar subhalaman saja jika memang tidak ada pengantar asli yang perlu dipertahankan.
+2. Setelah `gramatikaData.js` diubah, halaman daftar isi bab harus digenerate ulang dengan `node frontend/scripts/sync-gramatika-toc.mjs`.
+3. Daftar tautan pada halaman induk konten hanya menampilkan anak langsung dari halaman itu.
+4. Halaman daftar isi bab yang digenerate dari `sync-gramatika-toc.mjs` tetap mengikuti struktur rekursif penuh per subfolder.
+5. Karena breadcrumb dibangun dari `ancestorTrail`, `parentSlug`, dan `directParentSlug`, penambahan turunan baru tidak boleh dilakukan hanya di markdown tanpa pembaruan `gramatikaData.js`.
+6. Untuk halaman induk yang isinya sebelumnya berupa teks penuh lalu dipecah, isi induk boleh direduksi menjadi daftar subhalaman saja jika memang tidak ada pengantar asli yang perlu dipertahankan.
 
 ## Sumber Audit
 
@@ -93,8 +98,10 @@ Hasil verifikasi:
 
 - subfolder `frontend/public/gramatika/tata-bahasa/` sekarang tidak memiliki heading internal `##`, `###`, dan seterusnya
 - halaman bab `tata-bahasa.md` sudah berupa daftar isi bab
+- halaman bab `tata-bahasa.md` sudah disinkronkan ulang dari `gramatikaData.js` melalui `sync-gramatika-toc.mjs` dengan struktur daftar isi rekursif penuh
 - halaman induk `pengertian-tata-bahasa.md` sudah memakai pola induk-anak yang benar dan menaut ke `fonologi`, `morfologi`, dan `sintaksis`
 - halaman induk `semantik-pragmatik-dan-relasi-makna.md` sudah memakai pola induk-anak yang benar dan menaut ke empat subhalaman turunannya
+- halaman induk `sintaksis.md` dirapikan agar hanya menampilkan anak langsung, bukan cucu, tanpa mengubah sifat rekursif halaman daftar isi bab
 - struktur Bab II di `frontend/src/constants/gramatikaData.js` sudah diperluas agar breadcrumb mengikuti hierarki baru sampai level turunan
 - validasi frontend lulus melalui `npm run lint` dan `vitest` untuk `Gramatika.test.jsx`
 

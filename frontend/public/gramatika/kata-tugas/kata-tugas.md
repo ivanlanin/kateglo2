@@ -1,10 +1,3 @@
----
-id: 8.2
-title: Kata Tugas (8.2)
----
-
-Berdasarkan peranannya dalam frasa atau kalimat, kata tugas dalam bahasa Indonesia dapat dikelompokkan atas preposisi, konjungsi, interjeksi, artikula, dan partikel. Pembahasan dalam bab ini meliputi (1) preposisi, (2) konjungsi, (3) interjeksi, (4) artikula, dan (5) partikel.
-
 1. [Batasan dan Ciri Kata Tugas](/gramatika/batasan-dan-ciri-kata-tugas)
 2. [Preposisi](/gramatika/preposisi)
    1. [Bentuk Preposisi](/gramatika/bentuk-preposisi)

@@ -10,12 +10,15 @@ const frontendRoot = path.resolve(__dirname, '..');
 const gramatikaRoot = path.join(frontendRoot, 'public', 'gramatika');
 
 function buildOrderedList(items = [], level = 0) {
-  const indent = '   '.repeat(level);
-
   return items.flatMap((item, index) => {
-    const currentLine = `${indent}${index + 1}. [${item.judul}](/gramatika/${item.slug})`;
-    const childLines = buildOrderedList(item.turunan || [], level + 1);
-    return [currentLine, ...childLines];
+    const indent = '   '.repeat(level);
+    const lines = [`${indent}${index + 1}. [${item.judul}](/gramatika/${item.slug})`];
+
+    if (item.turunan?.length) {
+      lines.push(...buildOrderedList(item.turunan, level + 1));
+    }
+
+    return lines;
   });
 }
 

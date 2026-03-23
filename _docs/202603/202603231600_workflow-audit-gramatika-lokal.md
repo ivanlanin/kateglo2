@@ -90,9 +90,12 @@ Untuk tiap item:
 - Jika menemukan bab atau item yang butuh keputusan editorial, tandai `Tunda` dan tulis alasannya singkat.
 - Jangan melakukan pemecahan struktur baru sebelum item di bab itu stabil.
 - Untuk subbab yang punya turunan, pastikan halaman induk hanya memuat pengantar dan navigasi bila memang begitu struktur sumbernya.
+- Jika halaman induk tidak memiliki pengantar asli yang perlu dipertahankan, tampilkan daftar subhalaman saja tanpa menambahkan pengantar baru.
+- Di halaman induk konten, tampilkan hanya anak langsung. Jangan tampilkan cucu atau turunan yang lebih dalam pada daftar tautan halaman induk.
 - Bedakan koreksi sumber dari styling editorial. Huruf tebal, italic, dan penekanan visual lain hanya dipertahankan jika memang berasal dari TBBBI atau dibutuhkan secara teknis.
 - Untuk isi paragraf dan label intra-paragraf, anggap huruf tebal sebagai tidak sah secara default. Jika PDF hanya menampilkan roman biasa atau italic, hapus bold tambahan di markdown. Pengecualian utamanya adalah heading/subheading yang memang tampak menonjol sebagai struktur di sumber, bukan sebagai penekanan editorial baru.
 - Setelah batch selesai, jalankan ulang generator manifest agar status dan antrian berikutnya sinkron.
+- Setelah mengubah `frontend/src/constants/gramatikaData.js`, selalu jalankan `node frontend/scripts/sync-gramatika-toc.mjs` untuk memutakhirkan halaman daftar isi bab seperti `tata-bahasa.md` agar tidak drift terhadap struktur terbaru. Halaman daftar isi bab mengikuti struktur rekursif penuh sesuai skrip, berbeda dari halaman induk konten yang hanya menampilkan anak langsung.
 
 ## Target Selesai
 
