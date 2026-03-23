@@ -422,6 +422,40 @@ Implikasi:
 - bab dengan jumlah heading kecil bisa diselesaikan aman dalam satu batch tanpa perlu mikro-batch tambahan
 - batch berikutnya dapat lanjut ke bab berikutnya di luar Adverbia
 
+### Batch 8: Bab VIII Pronomina
+
+Status: selesai dipecah dan tervalidasi
+
+Hasil verifikasi:
+
+- subfolder `frontend/public/gramatika/pronomina/` sekarang tidak memiliki heading internal `##`, `###`, dan seterusnya
+- halaman bab `pronomina.md` sudah disinkronkan ulang dari `gramatikaData.js` melalui `sync-gramatika-toc.mjs` dengan struktur daftar isi rekursif penuh
+- halaman induk `pronomina-persona.md` dan `pronomina-penunjuk.md` kini hanya menampilkan anak langsung
+- halaman `jenis-pronomina.md` ikut diselaraskan dengan hierarki baru sehingga daftar anak langsungnya lengkap
+- struktur Bab VIII di `frontend/src/constants/gramatikaData.js` sudah diperluas untuk `Pronomina Persona`, simpul mandiri `Nomina Penyapa dan Pengacu sebagai Pengganti Pronomina Persona`, serta `Pronomina Penunjuk`
+- validasi frontend lulus melalui `npm run lint` dan `vitest` untuk area terkait setelah batch final
+
+File baru yang ditambahkan pada Bab VIII:
+
+- `frontend/public/gramatika/pronomina/pronomina-persona-pertama.md`
+- `frontend/public/gramatika/pronomina/pronomina-persona-kedua.md`
+- `frontend/public/gramatika/pronomina/pronomina-persona-ketiga.md`
+- `frontend/public/gramatika/pronomina/nomina-penyapa-dan-pengacu-sebagai-pengganti-pronomina-persona.md`
+- `frontend/public/gramatika/pronomina/pronomina-penunjuk-umum.md`
+- `frontend/public/gramatika/pronomina/pronomina-penunjuk-tempat.md`
+- `frontend/public/gramatika/pronomina/pronomina-penunjuk-ihwal.md`
+
+Halaman Bab VIII yang diubah:
+
+- `frontend/public/gramatika/pronomina/jenis-pronomina.md`
+- `frontend/public/gramatika/pronomina/pronomina-persona.md`
+- `frontend/public/gramatika/pronomina/pronomina-penunjuk.md`
+
+Implikasi:
+
+- bagian yang secara penomoran sejajar tetapi sebelumnya menumpang di file lain perlu dipromosikan menjadi simpul sendiri di `gramatikaData.js` agar navigasi tetap semantis
+- batch berikutnya dapat lanjut ke bab berikutnya di luar Pronomina
+
 ## Prioritas Pemecahan
 
 File dengan kepadatan heading paling tinggi sebaiknya diproses lebih dulu karena memberi pengurangan kompleksitas paling besar per file.

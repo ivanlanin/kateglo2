@@ -699,8 +699,28 @@ const daftarIsiGramatika = [
         judul: 'Jenis Pronomina',
         slug: 'jenis-pronomina',
         turunan: [
-          { judul: 'Pronomina Persona', slug: 'pronomina-persona' },
-          { judul: 'Pronomina Penunjuk', slug: 'pronomina-penunjuk' },
+          {
+            judul: 'Pronomina Persona',
+            slug: 'pronomina-persona',
+            turunan: [
+              { judul: 'Pronomina Persona Pertama', slug: 'pronomina-persona-pertama' },
+              { judul: 'Pronomina Persona Kedua', slug: 'pronomina-persona-kedua' },
+              { judul: 'Pronomina Persona Ketiga', slug: 'pronomina-persona-ketiga' },
+            ],
+          },
+          {
+            judul: 'Nomina Penyapa dan Pengacu sebagai Pengganti Pronomina Persona',
+            slug: 'nomina-penyapa-dan-pengacu-sebagai-pengganti-pronomina-persona',
+          },
+          {
+            judul: 'Pronomina Penunjuk',
+            slug: 'pronomina-penunjuk',
+            turunan: [
+              { judul: 'Pronomina Penunjuk Umum', slug: 'pronomina-penunjuk-umum' },
+              { judul: 'Pronomina Penunjuk Tempat', slug: 'pronomina-penunjuk-tempat' },
+              { judul: 'Pronomina Penunjuk Ihwal', slug: 'pronomina-penunjuk-ihwal' },
+            ],
+          },
           {
             judul: 'Pronomina Tanya',
             slug: 'pronomina-tanya',
