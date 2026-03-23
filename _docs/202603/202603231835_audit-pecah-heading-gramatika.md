@@ -504,6 +504,36 @@ Implikasi:
 - bab dengan hanya dua parent bertingkat bisa diselesaikan aman dalam satu batch kecil
 - batch berikutnya dapat lanjut ke bab berikutnya di luar Kata Tugas
 
+### Batch 11: Bab XI Kalimat
+
+Status: selesai dipecah dan tervalidasi
+
+Hasil verifikasi:
+
+- subfolder `frontend/public/gramatika/kalimat/` sekarang tidak memiliki heading internal `##`, `###`, dan seterusnya
+- halaman bab `kalimat.md` sudah disinkronkan ulang dari `gramatikaData.js` melalui `sync-gramatika-toc.mjs` dengan struktur daftar isi rekursif penuh
+- semua halaman induk konten Kalimat yang sebelumnya mengandung heading internal kini dirapikan agar hanya menampilkan anak langsung
+- struktur Bab XI di `frontend/src/constants/gramatikaData.js` sudah diperluas untuk area `Unsur Kalimat`, `Kategori, Fungsi, dan Peran`, `Kalimat Dasar`, `Jenis Kalimat`, dan `Pengingkaran` agar breadcrumb dan sidebar mengikuti hierarki baru
+- validasi frontend lulus melalui `npm run lint` dan `vitest` untuk area terkait setelah batch final
+
+Ringkasan area yang dipecah pada Bab XI:
+
+- `keserasian-antarunsur.md` → `keserasian-makna.md`, `keserasian-bentuk.md`
+- `batasan-kalimat-dasar.md` → `pola-kalimat-dasar.md`, `konstituen-kalimat-dasar.md`
+- `perluasan-kalimat-dasar.md` → `aposisi.md`, `suplementasi.md`
+- `kalimat-berdasarkan-jumlah-klausanya.md` → `kalimat-simpleks.md`, `kalimat-kompleks.md`, `kalimat-majemuk.md`, `kalimat-majemuk-kompleks.md`
+- `kalimat-berdasarkan-kelengkapan-unsur.md` → `kalimat-lengkap.md`, `kalimat-taklengkap.md`
+- `peran.md` → 14 halaman peran tematis (`pelaku` s.d. `sumber-bahan`)
+- `pengingkaran.md` → `pengingkaran-kalimat.md`, `pengingkaran-bagian-kalimat.md`
+- `kalimat-dan-kemasan-informasi.md` → `inversi.md`, `pengedepanan.md`, `pengebelakangan.md`, `dislokasi-kiri.md`, `dislokasi-kanan.md`, `ekstraposisi.md`, `pembelahan.md`
+- `kalimat-interogatif.md` → 4 halaman metode pembentukan kalimat interogatif
+- `kalimat-imperatif.md` → 8 halaman jenis/bentuk kalimat imperatif
+
+Implikasi:
+
+- bab terpadat tetap bisa diselesaikan aman dengan mikro-batch bertahap selama hierarki dan parent content diperbarui konsisten di setiap gelombang
+- batch berikutnya dapat lanjut ke bab berikutnya di luar Kalimat
+
 ## Prioritas Pemecahan
 
 File dengan kepadatan heading paling tinggi sebaiknya diproses lebih dulu karena memberi pengurangan kompleksitas paling besar per file.

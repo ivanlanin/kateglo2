@@ -851,7 +851,14 @@ const daftarIsiGramatika = [
         turunan: [
           { judul: 'Kalimat, Klausa, dan Frasa', slug: 'kalimat-klausa-dan-frasa' },
           { judul: 'Unsur Wajib dan Unsur Takwajib', slug: 'unsur-wajib-dan-unsur-takwajib' },
-          { judul: 'Keserasian Antarunsur', slug: 'keserasian-antarunsur' },
+          {
+            judul: 'Keserasian Antarunsur',
+            slug: 'keserasian-antarunsur',
+            turunan: [
+              { judul: 'Keserasian Makna', slug: 'keserasian-makna' },
+              { judul: 'Keserasian Bentuk', slug: 'keserasian-bentuk' },
+            ],
+          },
         ],
       },
       {
@@ -888,22 +895,64 @@ const daftarIsiGramatika = [
               },
             ],
           },
-          { judul: 'Peran', slug: 'peran' },
+          {
+            judul: 'Peran',
+            slug: 'peran',
+            turunan: [
+              { judul: 'Pelaku', slug: 'pelaku' },
+              { judul: 'Agen', slug: 'agen' },
+              { judul: 'Sasaran', slug: 'sasaran' },
+              { judul: 'Pengalam', slug: 'pengalam' },
+              { judul: 'Peruntung', slug: 'peruntung' },
+              { judul: 'Penerima', slug: 'penerima' },
+              { judul: 'Penyebab', slug: 'penyebab' },
+              { judul: 'Tema', slug: 'tema' },
+              { judul: 'Tetara', slug: 'tetara' },
+              { judul: 'Hasil', slug: 'hasil' },
+              { judul: 'Lokasi', slug: 'lokasi' },
+              { judul: 'Alat', slug: 'alat' },
+              { judul: 'Tujuan', slug: 'tujuan' },
+              { judul: 'Sumber / Bahan', slug: 'sumber-bahan' },
+            ],
+          },
         ],
       },
       {
         judul: 'Kalimat Dasar',
         slug: 'kalimat-dasar',
         turunan: [
-          { judul: 'Batasan Kalimat Dasar', slug: 'batasan-kalimat-dasar' },
-          { judul: 'Perluasan Kalimat Dasar', slug: 'perluasan-kalimat-dasar' },
+          {
+            judul: 'Batasan Kalimat Dasar',
+            slug: 'batasan-kalimat-dasar',
+            turunan: [
+              { judul: 'Pola Kalimat Dasar', slug: 'pola-kalimat-dasar' },
+              { judul: 'Konstituen Kalimat Dasar', slug: 'konstituen-kalimat-dasar' },
+            ],
+          },
+          {
+            judul: 'Perluasan Kalimat Dasar',
+            slug: 'perluasan-kalimat-dasar',
+            turunan: [
+              { judul: 'Aposisi', slug: 'aposisi' },
+              { judul: 'Suplementasi', slug: 'suplementasi' },
+            ],
+          },
         ],
       },
       {
         judul: 'Jenis Kalimat',
         slug: 'jenis-kalimat',
         turunan: [
-          { judul: 'Kalimat Berdasarkan Jumlah Klausanya', slug: 'kalimat-berdasarkan-jumlah-klausanya' },
+          {
+            judul: 'Kalimat Berdasarkan Jumlah Klausanya',
+            slug: 'kalimat-berdasarkan-jumlah-klausanya',
+            turunan: [
+              { judul: 'Kalimat Simpleks', slug: 'kalimat-simpleks' },
+              { judul: 'Kalimat Kompleks', slug: 'kalimat-kompleks' },
+              { judul: 'Kalimat Majemuk', slug: 'kalimat-majemuk' },
+              { judul: 'Kalimat Majemuk Kompleks', slug: 'kalimat-majemuk-kompleks' },
+            ],
+          },
           {
             judul: 'Kalimat Berdasarkan Predikat',
             slug: 'kalimat-berdasarkan-predikat',
@@ -928,16 +977,64 @@ const daftarIsiGramatika = [
             slug: 'kalimat-berdasarkan-klasifikasi-sintaktis',
             turunan: [
               { judul: 'Kalimat Deklaratif', slug: 'kalimat-deklaratif' },
-              { judul: 'Kalimat Imperatif', slug: 'kalimat-imperatif' },
-              { judul: 'Kalimat Interogatif', slug: 'kalimat-interogatif' },
+              {
+                judul: 'Kalimat Imperatif',
+                slug: 'kalimat-imperatif',
+                turunan: [
+                  { judul: 'Kalimat Imperatif Taktransitif', slug: 'kalimat-imperatif-taktransitif' },
+                  { judul: 'Kalimat Imperatif Transitif', slug: 'kalimat-imperatif-transitif' },
+                  { judul: 'Kalimat Imperatif Halus', slug: 'kalimat-imperatif-halus' },
+                  { judul: 'Kalimat Imperatif Permintaan', slug: 'kalimat-imperatif-permintaan' },
+                  { judul: 'Kalimat Imperatif Ajakan dan Harapan', slug: 'kalimat-imperatif-ajakan-dan-harapan' },
+                  { judul: 'Kalimat Imperatif Larangan', slug: 'kalimat-imperatif-larangan' },
+                  { judul: 'Kalimat Imperatif Peringatan', slug: 'kalimat-imperatif-peringatan' },
+                  { judul: 'Kalimat Imperatif Pembiaran', slug: 'kalimat-imperatif-pembiaran' },
+                ],
+              },
+              {
+                judul: 'Kalimat Interogatif',
+                slug: 'kalimat-interogatif',
+                turunan: [
+                  { judul: 'Menambahkan Partikel Penanya Apa atau Apakah', slug: 'menambahkan-partikel-penanya-apa-atau-apakah' },
+                  { judul: 'Mengubah Urutan Kata dari Kalimat Deklaratif', slug: 'mengubah-urutan-kata-dari-kalimat-deklaratif' },
+                  { judul: 'Menempatkan Kata Bukan, Bukankah, Belum, atau Tidak', slug: 'menempatkan-kata-bukan-bukankah-belum-atau-tidak' },
+                  { judul: 'Memakai Kata Tanya', slug: 'memakai-kata-tanya' },
+                ],
+              },
               { judul: 'Kalimat Eksklamatif', slug: 'kalimat-eksklamatif' },
             ],
           },
-          { judul: 'Kalimat Berdasarkan Kelengkapan Unsur', slug: 'kalimat-berdasarkan-kelengkapan-unsur' },
-          { judul: 'Kalimat dan Kemasan Informasi', slug: 'kalimat-dan-kemasan-informasi' },
+          {
+            judul: 'Kalimat Berdasarkan Kelengkapan Unsur',
+            slug: 'kalimat-berdasarkan-kelengkapan-unsur',
+            turunan: [
+              { judul: 'Kalimat Lengkap', slug: 'kalimat-lengkap' },
+              { judul: 'Kalimat Taklengkap', slug: 'kalimat-taklengkap' },
+            ],
+          },
+          {
+            judul: 'Kalimat dan Kemasan Informasi',
+            slug: 'kalimat-dan-kemasan-informasi',
+            turunan: [
+              { judul: 'Inversi', slug: 'inversi' },
+              { judul: 'Pengedepanan', slug: 'pengedepanan' },
+              { judul: 'Pengebelakangan', slug: 'pengebelakangan' },
+              { judul: 'Dislokasi Kiri', slug: 'dislokasi-kiri' },
+              { judul: 'Dislokasi Kanan', slug: 'dislokasi-kanan' },
+              { judul: 'Ekstraposisi', slug: 'ekstraposisi' },
+              { judul: 'Pembelahan', slug: 'pembelahan' },
+            ],
+          },
         ],
       },
-      { judul: 'Pengingkaran', slug: 'pengingkaran' },
+      {
+        judul: 'Pengingkaran',
+        slug: 'pengingkaran',
+        turunan: [
+          { judul: 'Pengingkaran Kalimat', slug: 'pengingkaran-kalimat' },
+          { judul: 'Pengingkaran Bagian Kalimat', slug: 'pengingkaran-bagian-kalimat' },
+        ],
+      },
     ],
   },
   {
