@@ -519,13 +519,40 @@ const daftarIsiGramatika = [
           { judul: 'Adjektiva Cerapan', slug: 'adjektiva-cerapan' },
         ],
       },
-      { judul: 'Perilaku Sintaksis Adjektiva', slug: 'perilaku-sintaksis-adjektiva' },
+      {
+        judul: 'Perilaku Sintaksis Adjektiva',
+        slug: 'perilaku-sintaksis-adjektiva',
+        turunan: [
+          { judul: 'Fungsi Atributif', slug: 'fungsi-atributif' },
+          { judul: 'Fungsi Predikatif', slug: 'fungsi-predikatif' },
+          { judul: 'Fungsi Adverbial atau Keterangan', slug: 'fungsi-adverbial-atau-keterangan' },
+        ],
+      },
       {
         judul: 'Pertarafan Adjektiva',
         slug: 'pertarafan-adjektiva',
         turunan: [
-          { judul: 'Tingkat Kualitas', slug: 'tingkat-kualitas' },
-          { judul: 'Tingkat Pembandingan', slug: 'tingkat-pembandingan' },
+          {
+            judul: 'Tingkat Kualitas',
+            slug: 'tingkat-kualitas',
+            turunan: [
+              { judul: 'Tingkat Positif', slug: 'tingkat-positif' },
+              { judul: 'Tingkat Intensif', slug: 'tingkat-intensif' },
+              { judul: 'Tingkat Elatif', slug: 'tingkat-elatif' },
+              { judul: 'Tingkat Eksesif', slug: 'tingkat-eksesif' },
+              { judul: 'Tingkat Augmentatif', slug: 'tingkat-augmentatif' },
+              { judul: 'Tingkat Atenuatif', slug: 'tingkat-atenuatif' },
+            ],
+          },
+          {
+            judul: 'Tingkat Pembandingan',
+            slug: 'tingkat-pembandingan',
+            turunan: [
+              { judul: 'Tingkat Ekuatif', slug: 'tingkat-ekuatif' },
+              { judul: 'Tingkat Komparatif', slug: 'tingkat-komparatif' },
+              { judul: 'Tingkat Superlatif', slug: 'tingkat-superlatif' },
+            ],
+          },
         ],
       },
       {
@@ -537,15 +564,63 @@ const daftarIsiGramatika = [
             judul: 'Adjektiva Turunan',
             slug: 'adjektiva-turunan',
             turunan: [
-              { judul: 'Adjektiva Berimbuhan', slug: 'adjektiva-berimbuhan' },
+              {
+                judul: 'Adjektiva Berimbuhan',
+                slug: 'adjektiva-berimbuhan',
+                turunan: [
+                  { judul: 'Adjektiva Berprefiks', slug: 'adjektiva-berprefiks' },
+                  { judul: 'Adjektiva Berinfiks', slug: 'adjektiva-berinfiks' },
+                  { judul: 'Adjektiva Bersufiks', slug: 'adjektiva-bersufiks' },
+                  { judul: 'Adjektiva Berkonfiks', slug: 'adjektiva-berkonfiks' },
+                ],
+              },
               { judul: 'Adjektiva Berulang', slug: 'adjektiva-berulang' },
-              { judul: 'Adjektiva Majemuk', slug: 'adjektiva-majemuk' },
+              {
+                judul: 'Adjektiva Majemuk',
+                slug: 'adjektiva-majemuk',
+                turunan: [
+                  { judul: 'Gabungan Morfem Terikat dengan Morfem Bebas', slug: 'gabungan-morfem-terikat-dengan-morfem-bebas' },
+                  {
+                    judul: 'Gabungan Morfem Bebas dengan Morfem Bebas',
+                    slug: 'gabungan-morfem-bebas-dengan-morfem-bebas',
+                    turunan: [
+                      { judul: 'Pola Adjektiva + Adjektiva', slug: 'pola-adjektiva-adjektiva' },
+                      { judul: 'Pola Adjektiva + Nomina', slug: 'pola-adjektiva-nomina' },
+                      { judul: 'Pola Adjektiva + Verba', slug: 'pola-adjektiva-verba' },
+                    ],
+                  },
+                ],
+              },
             ],
           },
         ],
       },
-      { judul: 'Frasa Adjektival', slug: 'frasa-adjektival' },
-      { judul: 'Adjektiva dan Kelas Kata Lain', slug: 'adjektiva-dan-kelas-kata-lain' },
+      {
+        judul: 'Frasa Adjektival',
+        slug: 'frasa-adjektival',
+        turunan: [
+          { judul: 'Frasa Adjektival dengan Pemarkah Negasi', slug: 'frasa-adjektival-dengan-pemarkah-negasi' },
+          { judul: 'Frasa Adjektival dengan Pemarkah Keaspekan', slug: 'frasa-adjektival-dengan-pemarkah-keaspekan' },
+          { judul: 'Frasa Adjektival dengan Pemarkah Modalitas', slug: 'frasa-adjektival-dengan-pemarkah-modalitas' },
+          { judul: 'Frasa Adjektival dengan Pemarkah Kualitas', slug: 'frasa-adjektival-dengan-pemarkah-kualitas' },
+          { judul: 'Frasa Adjektival dengan Pemarkah Pembandingan', slug: 'frasa-adjektival-dengan-pemarkah-pembandingan' },
+        ],
+      },
+      {
+        judul: 'Adjektiva dan Kelas Kata Lain',
+        slug: 'adjektiva-dan-kelas-kata-lain',
+        turunan: [
+          { judul: 'Adjektiva Deverbal', slug: 'adjektiva-deverbal' },
+          {
+            judul: 'Adjektiva Denominal',
+            slug: 'adjektiva-denominal',
+            turunan: [
+              { judul: 'Adjektiva Bentuk pe(r)- atau peng-', slug: 'adjektiva-bentuk-per-atau-peng' },
+              { judul: 'Adjektiva Bentuk ke-...-an dengan Reduplikasi', slug: 'adjektiva-bentuk-ke-an-dengan-reduplikasi' },
+            ],
+          },
+        ],
+      },
     ],
   },
   {

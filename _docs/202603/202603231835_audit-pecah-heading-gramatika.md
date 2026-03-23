@@ -326,6 +326,67 @@ Implikasi:
 - strategi mikro-batch terbukti efektif untuk subfolder padat seperti Verba dan layak dipakai lagi pada bab lain yang berisiko memicu batas memori
 - batch berikutnya dapat lanjut ke bab berikutnya di luar Verba
 
+### Batch 6: Bab VI Adjektiva
+
+Status: selesai dipecah dan tervalidasi dengan strategi mikro-batch
+
+Hasil verifikasi:
+
+- subfolder `frontend/public/gramatika/adjektiva/` sekarang tidak memiliki heading internal `##`, `###`, dan seterusnya
+- halaman bab `adjektiva.md` sudah disinkronkan ulang dari `gramatikaData.js` melalui `sync-gramatika-toc.mjs` dengan struktur daftar isi rekursif penuh
+- semua halaman induk konten Adjektiva yang sebelumnya mengandung heading internal kini dirapikan agar hanya menampilkan anak langsung
+- `adjektiva-majemuk.md` dan `adjektiva-dan-kelas-kata-lain.md` diperluas menjadi parent bertingkat karena masing-masing masih memiliki subcabang di bawah salah satu anak langsungnya
+- struktur Bab VI di `frontend/src/constants/gramatikaData.js` sudah diperluas untuk area `Perilaku Sintaksis Adjektiva`, `Pertarafan Adjektiva`, `Bentuk Adjektiva`, `Frasa Adjektival`, dan `Adjektiva dan Kelas Kata Lain` agar breadcrumb dan sidebar mengikuti hierarki baru
+- validasi frontend lulus melalui `npm run lint` dan `vitest` untuk area terkait setelah batch final
+
+File baru yang ditambahkan pada Bab VI:
+
+- `frontend/public/gramatika/adjektiva/fungsi-atributif.md`
+- `frontend/public/gramatika/adjektiva/fungsi-predikatif.md`
+- `frontend/public/gramatika/adjektiva/fungsi-adverbial-atau-keterangan.md`
+- `frontend/public/gramatika/adjektiva/tingkat-ekuatif.md`
+- `frontend/public/gramatika/adjektiva/tingkat-komparatif.md`
+- `frontend/public/gramatika/adjektiva/tingkat-superlatif.md`
+- `frontend/public/gramatika/adjektiva/frasa-adjektival-dengan-pemarkah-negasi.md`
+- `frontend/public/gramatika/adjektiva/frasa-adjektival-dengan-pemarkah-keaspekan.md`
+- `frontend/public/gramatika/adjektiva/frasa-adjektival-dengan-pemarkah-modalitas.md`
+- `frontend/public/gramatika/adjektiva/frasa-adjektival-dengan-pemarkah-kualitas.md`
+- `frontend/public/gramatika/adjektiva/frasa-adjektival-dengan-pemarkah-pembandingan.md`
+- `frontend/public/gramatika/adjektiva/adjektiva-berprefiks.md`
+- `frontend/public/gramatika/adjektiva/adjektiva-berinfiks.md`
+- `frontend/public/gramatika/adjektiva/adjektiva-bersufiks.md`
+- `frontend/public/gramatika/adjektiva/adjektiva-berkonfiks.md`
+- `frontend/public/gramatika/adjektiva/tingkat-positif.md`
+- `frontend/public/gramatika/adjektiva/tingkat-intensif.md`
+- `frontend/public/gramatika/adjektiva/tingkat-elatif.md`
+- `frontend/public/gramatika/adjektiva/tingkat-eksesif.md`
+- `frontend/public/gramatika/adjektiva/tingkat-augmentatif.md`
+- `frontend/public/gramatika/adjektiva/tingkat-atenuatif.md`
+- `frontend/public/gramatika/adjektiva/adjektiva-deverbal.md`
+- `frontend/public/gramatika/adjektiva/adjektiva-denominal.md`
+- `frontend/public/gramatika/adjektiva/adjektiva-bentuk-per-atau-peng.md`
+- `frontend/public/gramatika/adjektiva/adjektiva-bentuk-ke-an-dengan-reduplikasi.md`
+- `frontend/public/gramatika/adjektiva/gabungan-morfem-terikat-dengan-morfem-bebas.md`
+- `frontend/public/gramatika/adjektiva/gabungan-morfem-bebas-dengan-morfem-bebas.md`
+- `frontend/public/gramatika/adjektiva/pola-adjektiva-adjektiva.md`
+- `frontend/public/gramatika/adjektiva/pola-adjektiva-nomina.md`
+- `frontend/public/gramatika/adjektiva/pola-adjektiva-verba.md`
+
+Halaman induk Bab VI yang diubah menjadi daftar subhalaman hierarkis:
+
+- `frontend/public/gramatika/adjektiva/perilaku-sintaksis-adjektiva.md`
+- `frontend/public/gramatika/adjektiva/tingkat-pembandingan.md`
+- `frontend/public/gramatika/adjektiva/frasa-adjektival.md`
+- `frontend/public/gramatika/adjektiva/adjektiva-berimbuhan.md`
+- `frontend/public/gramatika/adjektiva/tingkat-kualitas.md`
+- `frontend/public/gramatika/adjektiva/adjektiva-majemuk.md`
+- `frontend/public/gramatika/adjektiva/adjektiva-dan-kelas-kata-lain.md`
+
+Implikasi:
+
+- strategi mikro-batch tetap efektif untuk bab yang memiliki kombinasi parent sederhana dan parent bertingkat
+- batch berikutnya dapat lanjut ke bab berikutnya di luar Adjektiva
+
 ## Prioritas Pemecahan
 
 File dengan kepadatan heading paling tinggi sebaiknya diproses lebih dulu karena memberi pengurangan kompleksitas paling besar per file.
