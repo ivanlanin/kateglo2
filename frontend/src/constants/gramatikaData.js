@@ -991,16 +991,7 @@ const daftarIsiGramatika = [
                   { judul: 'Kalimat Imperatif Pembiaran', slug: 'kalimat-imperatif-pembiaran' },
                 ],
               },
-              {
-                judul: 'Kalimat Interogatif',
-                slug: 'kalimat-interogatif',
-                turunan: [
-                  { judul: 'Menambahkan Partikel Penanya Apa atau Apakah', slug: 'menambahkan-partikel-penanya-apa-atau-apakah' },
-                  { judul: 'Mengubah Urutan Kata dari Kalimat Deklaratif', slug: 'mengubah-urutan-kata-dari-kalimat-deklaratif' },
-                  { judul: 'Menempatkan Kata Bukan, Bukankah, Belum, atau Tidak', slug: 'menempatkan-kata-bukan-bukankah-belum-atau-tidak' },
-                  { judul: 'Memakai Kata Tanya', slug: 'memakai-kata-tanya' },
-                ],
-              },
+              { judul: 'Kalimat Interogatif', slug: 'kalimat-interogatif' },
               { judul: 'Kalimat Eksklamatif', slug: 'kalimat-eksklamatif' },
             ],
           },

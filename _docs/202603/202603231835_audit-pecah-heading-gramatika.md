@@ -526,7 +526,7 @@ Ringkasan area yang dipecah pada Bab XI:
 - `peran.md` → 14 halaman peran tematis (`pelaku` s.d. `sumber-bahan`)
 - `pengingkaran.md` → `pengingkaran-kalimat.md`, `pengingkaran-bagian-kalimat.md`
 - `kalimat-dan-kemasan-informasi.md` → `inversi.md`, `pengedepanan.md`, `pengebelakangan.md`, `dislokasi-kiri.md`, `dislokasi-kanan.md`, `ekstraposisi.md`, `pembelahan.md`
-- `kalimat-interogatif.md` → 4 halaman metode pembentukan kalimat interogatif
+- `kalimat-interogatif.md` dipertahankan sebagai satu halaman utuh tanpa pemecahan subhalaman, dan isi gabungannya dirapikan tanpa judul subbab internal agar mengalir sebagai satu tulisan
 - `kalimat-imperatif.md` → 8 halaman jenis/bentuk kalimat imperatif
 
 Implikasi:
