@@ -5,7 +5,7 @@ title: Tekanan dan Aksen (3.5.1)
 
 Dalam suatu kata atau kelompok kata selalu ada satu suku kata yang menonjol. Penonjolan suku kata tersebut dilakukan dengan cara memperpanjang pengucapan, meninggikan nada, atau memperbesar intensitas suara suku kata itu. Gejala itulah yang dinamakan tekanan. Jadi, tekanan pada prinsipnya adalah hasil penonjolan suku kata tertentu dengan menggunakan ciri nada, durasi, atau intensitas.
 
-Dalam bahasa tertentu ciri suprasegmental dapat memengaruhi arti kata. Letak tekanan pada suku kata yang berbeda pada kata yang sama akan membedakan arti kata itu. Sebagai contoh, arti kata *kapitano* (bahasa Italia) akan berbeda bergantung pada posisi tekanan di dalam kata itu. Kata [kápitano], dengan tekanan pada suku kata pertama, berarti 'mereka tiba', sedangkan [kapítano], dengan tekanan pada suku kata kedua, berarti 'mualim'. Gejala seperti dalam bahasa Italia itu juga dapat ditemukan dalam bahasa Batak.
+Dalam bahasa tertentu ciri suprasegmental dapat memengaruhi arti kata. Letak tekanan pada suku kata yang berbeda pada kata yang sama akan membedakan arti kata itu. Sebagai contoh, arti kata *kapitano* (bahasa Italia) akan berbeda bergantung pada posisi tekanan di dalam kata itu. Kata [kápitano]—dengan tekanan pada suku kata pertama—berarti 'mereka tiba', sedangkan [kapítano]—dengan tekanan pada suku kata kedua—berarti 'mualim'. Gejala seperti dalam bahasa Italia itu juga dapat ditemukan dalam bahasa Batak.
 
 Tidak seperti dalam bahasa Italia atau bahasa Batak, tekanan dalam bahasa Indonesia tidak membedakan arti. Tekanan kata biasanya jatuh pada suku kata sebelum suku kata terakhir (penultima).
 

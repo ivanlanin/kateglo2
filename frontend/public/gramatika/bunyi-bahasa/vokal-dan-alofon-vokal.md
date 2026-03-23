@@ -61,7 +61,7 @@ Pada kata serapan dari bahasa Indo-Eropa, vokal /i/ cenderung dilafalkan [i] wal
 
 ## 2) Vokal /u/
 
-Vokal /u/ adalah vokal belakang tinggi bundar. Vokal ini diucapkan dengan meninggikan bagian belakang lidah dengan kedua bibir agak maju ke depan dan sedikit membundar.
+Vokal /u/ adalah vokal belakang-tinggi bundar. Vokal ini diucapkan dengan meninggikan bagian belakang lidah dengan kedua bibir agak maju ke depan dan sedikit membundar.
 
 Contoh:
 
@@ -106,7 +106,7 @@ Contoh:
 
 ## 3) Vokal /e/
 
-Vokal /e/ adalah vokal sedang depan. Vokal ini dihasilkan dengan daun lidah dinaikkan, tetapi agak lebih rendah daripada posisi lidah untuk menghasilkan vokal /i/. Vokal sedang depan itu diiringi dengan bentuk bibir yang netral, artinya, tidak terentang dan juga tidak membundar.
+Vokal /e/ adalah vokal sedang-depan. Vokal ini dihasilkan dengan daun lidah dinaikkan, tetapi agak lebih rendah daripada posisi lidah untuk menghasilkan vokal /i/. Vokal sedang depan itu diiringi dengan bentuk bibir yang netral, artinya, tidak terentang dan juga tidak membundar.
 
 Vokal /e/ mempunyai dua alofon, yaitu [e] dan [ɛ]. Vokal /e/ dilafalkan [e] jika terdapat pada (1) suku kata buka dan (2) suku kata itu tidak diikuti oleh suku kata yang mengandung alofon [ɛ]. Jika suku kata yang mengikutinya mengandung [ɛ], vokal /e/ pada suku kata buka itu juga menjadi [ɛ]. Vokal /e/ juga dilafalkan [ɛ] jika terdapat pada suku kata tutup akhir.
 
@@ -120,7 +120,7 @@ Contoh:
 
 ## 4) Vokal /o/
 
-Vokal /o/ adalah vokal sedang belakang. Perbedaan antara /e/ dan /i/ dalam hal ketinggian lidah mirip dengan perbedaan antara /o/ dan /u/. Vokal ini dihasilkan dengan bentuk bibir kurang bundar jika dibandingkan dengan bentuk bibir untuk menghasilkan vokal /u/.
+Vokal /o/ adalah vokal sedang-belakang. Perbedaan antara /e/ dan /i/ dalam hal ketinggian lidah mirip dengan perbedaan antara /o/ dan /u/. Vokal ini dihasilkan dengan bentuk bibir kurang bundar jika dibandingkan dengan bentuk bibir untuk menghasilkan vokal /u/.
 
 Vokal /o/ mempunyai dua alofon, yaitu [o] dan [ɔ]. Vokal /o/ dilafalkan [o] jika terdapat pada suku kata tutup atau suku kata buka yang diikuti oleh suku kata yang mengandung [ɔ]. Vokal /o/ dilafalkan [ɔ] jika terdapat pada suku kata buka dan suku kata itu tidak diikuti oleh suku kata lain yang mengandung alofon [o].
 
@@ -134,7 +134,7 @@ Contoh:
 
 ## 5) Vokal /ə/
 
-Vokal /ə/ adalah vokal sedang tengah. Vokal ini dihasilkan dengan agak menaikkan bagian tengah lidah dengan bentuk bibir netral. Dalam tataran grafemis, vokal ini dilambangkan dengan huruf <e>, sama dengan lambang fonem /e/.
+Vokal /ə/ adalah vokal sedang-tengah. Vokal ini dihasilkan dengan agak menaikkan bagian tengah lidah dengan bentuk bibir netral. Dalam tataran grafemis, vokal ini dilambangkan dengan huruf <e>, sama dengan lambang fonem /e/.
 
 Vokal ini hanya mempunyai satu alofon, yaitu [ə] yang bisa terdapat pada suku kata buka dan suku kata tutup. Vokal /ə/ pada akhir kata hanya terdapat pada kata serapan seperti pada kata *tante*, *orde*, *kode*, *mode*, *brigade*, *palem*, dan *modem*.
 
@@ -152,7 +152,7 @@ Contoh:
 
 ## 6) Vokal /a/
 
-Vokal /a/ adalah satu-satunya vokal rendah tengah dalam bahasa Indonesia. Vokal /a/ hanya mempunyai satu alofon, yaitu [a].
+Vokal /a/ adalah satu-satunya vokal rendah-tengah dalam bahasa Indonesia. Vokal /a/ hanya mempunyai satu alofon, yaitu [a].
 
 Contoh:
 

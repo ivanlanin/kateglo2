@@ -35,7 +35,7 @@ Untuk setiap item markdown di `frontend/public/gramatika/` lakukan pemeriksaan b
 |---|---|---|---|
 | Bab I Pendahuluan | `frontend/public/gramatika/pendahuluan/` | OK | Audit ulang 2026-03-23: ditemukan dan diperbaiki 26 ketidaksesuaian terhadap PDF di 7 file — em-dash/koma, tanda kurung, kata terlewat, label editorial, dan perubahan kalimat pembuka 1.2.2. |
 | II Tata Bahasa | `frontend/public/gramatika/tata-bahasa/` | OK | Audit 2026-03-24: ditemukan dan diperbaiki 4 ketidaksesuaian terhadap PDF di 3 file — label contoh (1)/(6)/(7) yang hilang, dan satu kesalahan parafrase pertanyaan literal. |
-| III Bunyi Bahasa | `frontend/public/gramatika/bunyi-bahasa/` | Belum | — |
+| III Bunyi Bahasa | `frontend/public/gramatika/bunyi-bahasa/` | OK | Audit 2026-03-23: ditemukan dan diperbaiki 13 ketidaksesuaian terhadap PDF di 8 file — em-dash parenthetical (5 instances di 5 file), notasi fonem rusak /t> (1), hyphen deskripsi posisi vokal (5 instances), dan kalimat peringatan pelafalan yang hilang (3 instances di seksi /f/, /ʃ/, /x/). |
 | IV Verba | `frontend/public/gramatika/verba/` | Belum | — |
 | V Adjektiva | `frontend/public/gramatika/adjektiva/` | Belum | — |
 | VI Adverbia | `frontend/public/gramatika/adverbia/` | Belum | — |
@@ -91,6 +91,38 @@ Sumber audit:
 | 2.3.2 Aspek Takberkondisi Benar Makna Kalimat | `frontend/public/gramatika/tata-bahasa/aspek-takberkondisi-benar-makna-kalimat.md` | 63-65 | OK | Contoh (22)–(24) dan teks penjelasan sesuai sumber; OCR typo "kovensional" dan "had" sudah dikembalikan ke bentuk baku. |
 | 2.3.3 Pragmatik dan Implikatur Percakapan | `frontend/public/gramatika/tata-bahasa/pragmatik-dan-implikatur-percakapan.md` | 65-66 | OK | 1 perbaikan: "Apa kamu sudah mendapat izin dari Dekan?" dikembalikan ke "Apa kamu sudah menghadap Dekan?" sesuai pertanyaan literal di sumber (implikatur tetap "dapat izin"). |
 | 2.3.4 Pengacuan dan Deiksis | `frontend/public/gramatika/tata-bahasa/pengacuan-dan-deiksis.md` | 66-68 | OK | Contoh (27)–(32) dan teks penjelasan sesuai sumber; OCR errors (Omngitu, huku, la, deksis, seorangpemhantu) sudah dikoreksi. |
+
+### Bab III Bunyi Bahasa
+
+Sumber audit:
+
+- PDF bab: `_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf`
+- JPG verifikasi: `_data/gramatika/bab-03/bab-03-h069.jpg` s.d. `_data/gramatika/bab-03/bab-03-h118.jpg`
+
+| Item | File | Hal. PDF | Status | Hasil ringkas |
+|---|---|:---:|---|---|
+| Bab III Bunyi Bahasa | `frontend/public/gramatika/bunyi-bahasa/bunyi-bahasa.md` | — | OK | Halaman landing; daftar isi sinkron dengan gramatikaData.js. |
+| 3.1 Batasan dan Ciri Bunyi Bahasa | `frontend/public/gramatika/bunyi-bahasa/batasan-dan-ciri-bunyi-bahasa.md` | 69-71 | OK | 1 perbaikan: em-dash parenthetical "—dengan demikian pita suara tidak bergetar—" dipulihkan dari koma. |
+| 3.1.1 Vokal | `frontend/public/gramatika/bunyi-bahasa/vokal.md` | 72 | OK | 1 perbaikan: em-dash parenthetical "—terutama bagian depan, tengah, dan belakang lidah—" dipulihkan dari koma. |
+| 3.1.2 Konsonan | `frontend/public/gramatika/bunyi-bahasa/konsonan.md` | 73-74 | OK | Bersih; artefak OCR sudah tepat. |
+| 3.1.3 Diftong | `frontend/public/gramatika/bunyi-bahasa/diftong.md` | 74-75 | OK | 1 perbaikan: em-dash parenthetical "—bukan diftong—" dipulihkan dari koma. |
+| 3.1.4 Gugus Konsonan | `frontend/public/gramatika/bunyi-bahasa/gugus-konsonan.md` | 75 | OK | Bersih. |
+| 3.1.5 Fonem dan Grafem | `frontend/public/gramatika/bunyi-bahasa/fonem-dan-grafem.md` | 75-77 | OK | 1 perbaikan: notasi fonem rusak "/t>" diperbaiki menjadi "/t/". |
+| 3.1.6 Fonem Segmental dan Suprasegmental | `frontend/public/gramatika/bunyi-bahasa/fonem-segmental-dan-suprasegmental.md` | 77-78 | OK | Bersih. |
+| 3.1.7 Suku Kata | `frontend/public/gramatika/bunyi-bahasa/suku-kata.md` | 78 | OK | Bersih. |
+| 3.2 Vokal dan Konsonan | `frontend/public/gramatika/bunyi-bahasa/vokal-dan-konsonan.md` | 79 | OK | Halaman landing; bersih. |
+| 3.2.1 Vokal dan Alofon Vokal | `frontend/public/gramatika/bunyi-bahasa/vokal-dan-alofon-vokal.md` | 79-85 | OK | 5 perbaikan: hyphen pada deskripsi posisi vokal — "belakang-tinggi", "sedang-depan", "sedang-belakang", "sedang-tengah", "rendah-tengah" sesuai PDF. |
+| 3.2.2 Diftong dan Deret Vokal | `frontend/public/gramatika/bunyi-bahasa/diftong-dan-deret-vokal.md` | 86-87 | OK | Bersih. |
+| 3.2.3 Cara Penulisan Vokal | `frontend/public/gramatika/bunyi-bahasa/cara-penulisan-vokal.md` | 88-89 | OK | Bersih. |
+| 3.2.4 Konsonan dan Alofon Konsonan | `frontend/public/gramatika/bunyi-bahasa/konsonan-dan-alofon-konsonan.md` | 90-102 | OK | 3 perbaikan: kalimat peringatan pelafalan dipulihkan — seksi /f/ ("hendaklah dihindari"), seksi /ʃ/ ("harus dihindari"), seksi /x/ (kalimat lengkap dengan contoh [kas]/[tarik]/[akir] dan koreksi [xas]/[tarix]/[axir]). |
+| 3.2.5 Gugus dan Deret Konsonan | `frontend/public/gramatika/bunyi-bahasa/gugus-dan-deret-konsonan.md` | 102-104 | OK | Bersih. |
+| 3.3 Struktur Suku Kata dan Kata | `frontend/public/gramatika/bunyi-bahasa/struktur-suku-kata-dan-kata.md` | 105-106 | OK | Bersih. |
+| 3.4 Pemenggalan Kata | `frontend/public/gramatika/bunyi-bahasa/pemenggalan-kata.md` | 106-107 | OK | Bersih. |
+| 3.5 Ciri Suprasegmental | `frontend/public/gramatika/bunyi-bahasa/ciri-suprasegmental.md` | 108 | OK | 1 perbaikan: em-dash parenthetical "—baik dalam bentuk kata, frasa maupun kalimat—" dipulihkan dan koma editorial sebelum "maupun" dihapus. |
+| 3.5.1 Tekanan dan Aksen | `frontend/public/gramatika/bunyi-bahasa/tekanan-dan-aksen.md` | 108-111 | OK | 1 perbaikan: dua em-dash parenthetical pada [kápitano]/[kapítano] dipulihkan dari koma. |
+| 3.5.2 Intonasi dan Ritme | `frontend/public/gramatika/bunyi-bahasa/intonasi-dan-ritme.md` | 111-118 | OK | Bersih. |
+
+Catatan: pola temuan terbanyak adalah em-dash parenthetical yang diganti koma saat konversi PDF ke markdown (5 dari 8 file lintasan perbaikan). Pola ini konsisten dengan temuan Bab I.
 
 ## Catatan Kerja
 

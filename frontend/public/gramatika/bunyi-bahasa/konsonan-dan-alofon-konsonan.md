@@ -80,7 +80,7 @@ Konsonan /f/ adalah konsonan frikatif labiodental. Artinya, konsonan itu dihasil
 
 Contoh: *fakultas*, *lafal*, *positif*, *varia*, *visa*, *level*.
 
-Konsonan /f/ mempunyai satu alofon, yakni [f] yang posisinya terdapat pada awal atau akhir suku kata. Karena pengaruh sistem bunyi bahasa ibunya, sebagian orang sukar melafalkan bunyi ini dan menggantinya dengan bunyi /p/ sehingga pelafalan seperti [pakultas], [lapal], dan [positip] muncul. Pelafalan [f] menjadi [p] tidak baku dalam bahasa Indonesia.
+Konsonan /f/ mempunyai satu alofon, yakni [f] yang posisinya terdapat pada awal atau akhir suku kata. Karena pengaruh sistem bunyi bahasa ibunya, sebagian orang sukar melafalkan bunyi ini dan menggantinya dengan bunyi /p/ sehingga pelafalan seperti [pakultas], [lapal], dan [positip] muncul. Pelafalan [f] menjadi [p] tidak baku dalam bahasa Indonesia. Oleh karena itu, pelafalan seperti itu hendaklah dihindari.
 
 ## 6) Konsonan /s/ dan /z/
 
@@ -94,7 +94,7 @@ Konsonan /s/ mempunyai satu alofon, yakni [s] yang terdapat pada awal atau akhir
 
 Konsonan /ʃ/ adalah konsonan frikatif palatal takbersuara. Konsonan ini dihasilkan dengan cara merapatkan bagian depan lidah pada langit-langit keras, kemudian mengembuskan udara melewati celah sempit antara lidah dan langit-langit keras sehingga menimbulkan bunyi desis.
 
-Konsonan /ʃ/ hanya mempunyai satu alofon, yakni [ʃ] yang terdapat hanya pada awal suku kata. Akibat kesulitan pelafalan, konsonan /ʃ/ sering kali dilafalkan sebagai /s/.
+Konsonan /ʃ/ hanya mempunyai satu alofon, yakni [ʃ] yang terdapat hanya pada awal suku kata. Akibat kesulitan pelafalan, konsonan /ʃ/ sering kali dilafalkan sebagai /s/ yang tentu saja ini harus dihindari.
 
 Contoh: *syak* bandingkan dengan *sak*; *syah* bandingkan dengan *sah*; *syarat* bandingkan dengan *sarat*.
 
@@ -104,7 +104,7 @@ Konsonan /x/ adalah konsonan frikatif velar takbersuara. Konsonan ini dihasilkan
 
 Contoh: *khas* bandingkan dengan *kas*; *tarikh* bandingkan dengan *tarik*; *akhir*.
 
-Dalam tulisan, konsonan ini dilambangkan dengan huruf <kh>, bukan <x>. Huruf <x> melambangkan deret dua konsonan, yaitu /k/ dan /s/. Kesalahan pelafalan konsonan ini ialah mengubah pelafalannya menjadi konsonan [k] atau [h].
+Dalam tulisan, konsonan ini dilambangkan dengan huruf <kh>, bukan <x>. Huruf <x> melambangkan deret dua konsonan, yaitu /k/ dan /s/. Kesalahan pelafalan konsonan ini ialah mengubah pelafalannya menjadi konsonan [k] atau [h] sehingga kata *khas*, *tarikh*, dan *akhir* dilafalkan [kas], [tarik], dan [akir] atau [has], [tarih], dan [ahir]. Seharusnya, ketiga kata itu dilafalkan [xas], [tarix], dan [axir].
 
 ## 9) Konsonan /h/
 
