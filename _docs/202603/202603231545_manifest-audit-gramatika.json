@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-03-23T02:53:26.084Z",
+  "generatedAt": "2026-03-23T03:20:51.627Z",
   "source": {
     "gramatikaData": "frontend/src/constants/gramatikaData.js",
     "checklistAudit": "_docs/202603/202603231430_checklist-audit-gramatika-tbbbi.md"
   },
   "summary": {
     "totalItem": 308,
-    "totalOk": 3,
+    "totalOk": 11,
     "totalPerluRevisi": 0,
     "totalTunda": 0,
     "totalSedang": 0,
-    "totalBelum": 305
+    "totalBelum": 297
   },
   "summaryByChapter": [
     {
@@ -19,11 +19,11 @@
       "nomorBab": "I",
       "urutanBab": 1,
       "total": 11,
-      "selesai": 3,
+      "selesai": 11,
       "revisi": 0,
       "tunda": 0,
       "sedang": 0,
-      "belum": 8
+      "belum": 0
     },
     {
       "babSlug": "tata-bahasa",
@@ -160,69 +160,6 @@
   ],
   "queue": [
     {
-      "nomorBab": "I",
-      "nomorSubbab": null,
-      "labelAntrian": "I",
-      "judul": "Pendahuluan",
-      "fileMarkdown": "frontend/public/gramatika/pendahuluan/pendahuluan.md"
-    },
-    {
-      "nomorBab": "I",
-      "nomorSubbab": "1.2.2",
-      "labelAntrian": "1.2.2",
-      "judul": "Ragam Menurut Jenis Pemakaian",
-      "fileMarkdown": "frontend/public/gramatika/pendahuluan/ragam-menurut-jenis-pemakaian.md"
-    },
-    {
-      "nomorBab": "I",
-      "nomorSubbab": "1.3",
-      "labelAntrian": "1.3",
-      "judul": "Diglosia",
-      "fileMarkdown": "frontend/public/gramatika/pendahuluan/diglosia.md"
-    },
-    {
-      "nomorBab": "I",
-      "nomorSubbab": "1.4",
-      "labelAntrian": "1.4",
-      "judul": "Pembakuan Bahasa",
-      "fileMarkdown": "frontend/public/gramatika/pendahuluan/pembakuan-bahasa.md"
-    },
-    {
-      "nomorBab": "I",
-      "nomorSubbab": "1.5",
-      "labelAntrian": "1.5",
-      "judul": "Bahasa Baku",
-      "fileMarkdown": "frontend/public/gramatika/pendahuluan/bahasa-baku.md"
-    },
-    {
-      "nomorBab": "I",
-      "nomorSubbab": "1.6",
-      "labelAntrian": "1.6",
-      "judul": "Fungsi Bahasa Baku",
-      "fileMarkdown": "frontend/public/gramatika/pendahuluan/fungsi-bahasa-baku.md"
-    },
-    {
-      "nomorBab": "I",
-      "nomorSubbab": "1.7",
-      "labelAntrian": "1.7",
-      "judul": "Bahasa yang Baik dan Benar",
-      "fileMarkdown": "frontend/public/gramatika/pendahuluan/bahasa-yang-baik-dan-benar.md"
-    },
-    {
-      "nomorBab": "I",
-      "nomorSubbab": "1.8",
-      "labelAntrian": "1.8",
-      "judul": "Hubungan Bahasa Indonesia dengan Bahasa Daerah dan Bahasa Asing",
-      "fileMarkdown": "frontend/public/gramatika/pendahuluan/hubungan-bahasa-indonesia-dengan-bahasa-daerah-dan-bahasa-asing.md"
-    },
-    {
-      "nomorBab": "II",
-      "nomorSubbab": null,
-      "labelAntrian": "II",
-      "judul": "Tata Bahasa",
-      "fileMarkdown": "frontend/public/gramatika/tata-bahasa/tata-bahasa.md"
-    },
-    {
       "nomorBab": "II",
       "nomorSubbab": "2.1",
       "labelAntrian": "2.1",
@@ -294,13 +231,6 @@
     },
     {
       "nomorBab": "III",
-      "nomorSubbab": null,
-      "labelAntrian": "III",
-      "judul": "Bunyi Bahasa",
-      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/bunyi-bahasa.md"
-    },
-    {
-      "nomorBab": "III",
       "nomorSubbab": "3.1",
       "labelAntrian": "3.1",
       "judul": "Batasan dan Ciri Bunyi Bahasa",
@@ -333,6 +263,76 @@
       "labelAntrian": "3.1.4",
       "judul": "Gugus Konsonan",
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/gugus-konsonan.md"
+    },
+    {
+      "nomorBab": "III",
+      "nomorSubbab": "3.1.5",
+      "labelAntrian": "3.1.5",
+      "judul": "Fonem dan Grafem",
+      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/fonem-dan-grafem.md"
+    },
+    {
+      "nomorBab": "III",
+      "nomorSubbab": "3.1.6",
+      "labelAntrian": "3.1.6",
+      "judul": "Fonem Segmental dan Suprasegmental",
+      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/fonem-segmental-dan-suprasegmental.md"
+    },
+    {
+      "nomorBab": "III",
+      "nomorSubbab": "3.1.7",
+      "labelAntrian": "3.1.7",
+      "judul": "Suku Kata",
+      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/suku-kata.md"
+    },
+    {
+      "nomorBab": "III",
+      "nomorSubbab": "3.2",
+      "labelAntrian": "3.2",
+      "judul": "Vokal dan Konsonan",
+      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/vokal-dan-konsonan.md"
+    },
+    {
+      "nomorBab": "III",
+      "nomorSubbab": "3.2.1",
+      "labelAntrian": "3.2.1",
+      "judul": "Vokal dan Alofon Vokal",
+      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/vokal-dan-alofon-vokal.md"
+    },
+    {
+      "nomorBab": "III",
+      "nomorSubbab": "3.2.2",
+      "labelAntrian": "3.2.2",
+      "judul": "Diftong dan Deret Vokal",
+      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/diftong-dan-deret-vokal.md"
+    },
+    {
+      "nomorBab": "III",
+      "nomorSubbab": "3.2.3",
+      "labelAntrian": "3.2.3",
+      "judul": "Cara Penulisan Vokal",
+      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/cara-penulisan-vokal.md"
+    },
+    {
+      "nomorBab": "III",
+      "nomorSubbab": "3.2.4",
+      "labelAntrian": "3.2.4",
+      "judul": "Konsonan dan Alofon Konsonan",
+      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/konsonan-dan-alofon-konsonan.md"
+    },
+    {
+      "nomorBab": "III",
+      "nomorSubbab": "3.2.5",
+      "labelAntrian": "3.2.5",
+      "judul": "Gugus dan Deret Konsonan",
+      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/gugus-dan-deret-konsonan.md"
+    },
+    {
+      "nomorBab": "III",
+      "nomorSubbab": "3.3",
+      "labelAntrian": "3.3",
+      "judul": "Struktur Suku Kata dan Kata",
+      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/struktur-suku-kata-dan-kata.md"
     }
   ],
   "items": [
@@ -350,9 +350,9 @@
       "frontmatterTitle": null,
       "fileMarkdown": "frontend/public/gramatika/pendahuluan/pendahuluan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Halaman landing bab berfungsi sebagai daftar isi turunan dan sudah sinkron dengan struktur item Bab I di `gramatikaData.js`; tidak memerlukan audit teks PDF langsung.",
+      "halamanPdf": "—",
       "sumber": {
         "judulBabPdf": "Pendahuluan",
         "filePdfBab": "_data/gramatika/bab-01/bab-01-pendahuluan.pdf",
@@ -479,9 +479,9 @@
       "frontmatterTitle": "Ragam Menurut Jenis Pemakaian (1.2.2)",
       "fileMarkdown": "frontend/public/gramatika/pendahuluan/ragam-menurut-jenis-pemakaian.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": "30-34",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Isi lengkap terhadap sumber; ditambahkan kembali uraian tentang ragam tulis yang muncul kemudian, peran *lingua franca* Melayu, dan kalimat penutup transisi sebelum 1.3.",
+      "halamanPdf": "30-32",
       "sumber": {
         "judulBabPdf": "Pendahuluan",
         "filePdfBab": "_data/gramatika/bab-01/bab-01-pendahuluan.pdf",
@@ -515,9 +515,9 @@
       "frontmatterTitle": "Diglosia (1.3)",
       "fileMarkdown": "frontend/public/gramatika/pendahuluan/diglosia.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": "35-36",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Isi sesuai dua halaman sumber, termasuk oposisi ragam tinggi-rendah, kodifikasi, dan paradoks mudah-sukar dalam pemakaian bahasa Indonesia.",
+      "halamanPdf": "33-34",
       "sumber": {
         "judulBabPdf": "Pendahuluan",
         "filePdfBab": "_data/gramatika/bab-01/bab-01-pendahuluan.pdf",
@@ -546,9 +546,9 @@
       "frontmatterTitle": "Pembakuan Bahasa (1.4)",
       "fileMarkdown": "frontend/public/gramatika/pendahuluan/pembakuan-bahasa.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": "37-39",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Uraian norma monosentris-majemuk serta contoh *perusak/pengrusak* dan kata penggolong sudah lengkap dan bersih dari artefak OCR.",
+      "halamanPdf": "34-35",
       "sumber": {
         "judulBabPdf": "Pendahuluan",
         "filePdfBab": "_data/gramatika/bab-01/bab-01-pendahuluan.pdf",
@@ -577,9 +577,9 @@
       "frontmatterTitle": "Bahasa Baku (1.5)",
       "fileMarkdown": "frontend/public/gramatika/pendahuluan/bahasa-baku.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": "39-41",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Tiga ciri ragam baku tercakup lengkap; istilah, contoh, dan makna pembakuan tetap sesuai sumber.",
+      "halamanPdf": "36-37",
       "sumber": {
         "judulBabPdf": "Pendahuluan",
         "filePdfBab": "_data/gramatika/bab-01/bab-01-pendahuluan.pdf",
@@ -608,9 +608,9 @@
       "frontmatterTitle": "Fungsi Bahasa Baku (1.6)",
       "fileMarkdown": "frontend/public/gramatika/pendahuluan/fungsi-bahasa-baku.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": "41-43",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Empat fungsi bahasa baku dan lanjutan pembakuan ejaan, lafal, kosakata, serta tata bahasa sudah lengkap; ditambahkan lagi rincian edisi kamus dan konteks contoh idiom yang sebelumnya hilang.",
+      "halamanPdf": "37-42",
       "sumber": {
         "judulBabPdf": "Pendahuluan",
         "filePdfBab": "_data/gramatika/bab-01/bab-01-pendahuluan.pdf",
@@ -639,8 +639,8 @@
       "frontmatterTitle": "Bahasa yang Baik dan Benar (1.7)",
       "fileMarkdown": "frontend/public/gramatika/pendahuluan/bahasa-yang-baik-dan-benar.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Penjelasan perbedaan bahasa yang benar dan bahasa yang baik tetap lengkap; dua contoh percakapan pasar masih mewakili substansi sumber dengan jelas.",
       "halamanPdf": "43-44",
       "sumber": {
         "judulBabPdf": "Pendahuluan",
@@ -670,8 +670,8 @@
       "frontmatterTitle": "Hubungan Bahasa Indonesia dengan Bahasa Daerah dan Bahasa Asing (1.8)",
       "fileMarkdown": "frontend/public/gramatika/pendahuluan/hubungan-bahasa-indonesia-dengan-bahasa-daerah-dan-bahasa-asing.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Uraian fungsi antarbahasa lengkap; koreksi dilakukan pada contoh sumber serapan agar kembali mengikuti sumber, termasuk penyebutan bahasa Cina.",
       "halamanPdf": "44-46",
       "sumber": {
         "judulBabPdf": "Pendahuluan",

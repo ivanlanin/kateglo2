@@ -333,7 +333,7 @@ async function main() {
   };
 
   const queue = manifestItems
-    .filter((item) => item.statusAudit === 'Belum')
+    .filter((item) => item.statusAudit === 'Belum' && item.tipe !== 'bab')
     .slice(0, 25)
     .map((item) => ({
       nomorBab: item.nomorBab,

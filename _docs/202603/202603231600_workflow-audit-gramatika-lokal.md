@@ -1,8 +1,8 @@
-# Workflow Audit Gramatika dengan Copilot
+# Workflow Audit Gramatika Lokal
 
 Tanggal dibuat: 2026-03-23
 
-Dokumen ini menjelaskan cara memakai GitHub Copilot di VS Code untuk menyelesaikan audit Gramatika secara bertahap sampai tuntas.
+Dokumen ini menjelaskan alur audit Gramatika yang dikerjakan secara lokal di repo. Copilot bersifat opsional sebagai alat bantu baca, ringkas, atau edit, tetapi alur kerja utamanya tidak bergantung pada sesi CLI atau agent tertentu.
 
 ## Artefak Kerja
 
@@ -21,6 +21,11 @@ Dokumen ini menjelaskan cara memakai GitHub Copilot di VS Code untuk menyelesaik
 5. Perbarui checklist audit.
 6. Segarkan manifest lagi agar antrian berikutnya akurat.
 
+Catatan:
+
+- Antrian manifest dipakai untuk item audit teks. Halaman landing bab yang hanya berisi daftar isi tidak perlu masuk antrian `Belum`.
+- Jika suatu halaman memang hanya berfungsi sebagai daftar isi bab, cukup cek kesinkronannya dengan `gramatikaData.js` dan catat di checklist.
+
 ## Perintah Utama
 
 Jalankan dari root repo:
@@ -28,6 +33,10 @@ Jalankan dari root repo:
 ```powershell
 node backend/scripts/gramatika/generate-audit-manifest.js
 ```
+
+## Copilot Opsional
+
+Copilot dapat dipakai untuk mempercepat audit, tetapi bukan prasyarat. Jika ingin bekerja sepenuhnya manual, gunakan checklist, PDF bab, JPG halaman, dan manifest saja.
 
 ## Template Prompt Copilot
 
@@ -45,6 +54,7 @@ Tugas:
 - cek kelengkapan teks
 - cek artefak OCR yang belum dibersihkan
 - cek apakah format daftar, italic, dan contoh masih setia ke sumber
+- cek apakah markdown menambahkan huruf tebal atau penekanan visual baru yang tidak ada di sumber
 - jangan edit dulu
 - simpulkan status: OK / Perlu Revisi / Tunda
 ```
@@ -80,6 +90,7 @@ Untuk tiap item:
 - Jika menemukan bab atau item yang butuh keputusan editorial, tandai `Tunda` dan tulis alasannya singkat.
 - Jangan melakukan pemecahan struktur baru sebelum item di bab itu stabil.
 - Untuk subbab yang punya turunan, pastikan halaman induk hanya memuat pengantar dan navigasi bila memang begitu struktur sumbernya.
+- Bedakan koreksi sumber dari styling editorial. Huruf tebal, italic, dan penekanan visual lain hanya dipertahankan jika memang berasal dari TBBBI atau dibutuhkan secara teknis.
 - Setelah batch selesai, jalankan ulang generator manifest agar status dan antrian berikutnya sinkron.
 
 ## Target Selesai
