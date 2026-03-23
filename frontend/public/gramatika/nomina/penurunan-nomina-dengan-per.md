@@ -7,14 +7,14 @@ Prefiks *per-* mempunyai tiga alomorf, yaitu *pel-*, *per-*, dan *pe-*. Distribu
 
 Nomina yang masih mempertahankan bentuk *per-*:
 
-> *perlambang* <- berlambang; *persegi* <- bersegi; *pertanda* <- bertanda; *pertapa* <- bertapa
+> *perlambang* ⟵ berlambang; *persegi* ⟵ bersegi; *pertanda* ⟵ bertanda; *pertapa* ⟵ bertapa
 
 Nomina turunan lain muncul dengan *pe-* walaupun berkaitan dengan verba *ber-*:
 
 - (45)
-> *pedagang* <- berdagang; *pejalan (kaki)* <- berjalan (kaki); *pejuang* <- berjuang; *petani* <- bertani; *pemain* <- bermain; *penyanyi* <- bernyanyi; *petinju* <- bertinju
+> *pedagang* ⟵ berdagang; *pejalan (kaki)* ⟵ berjalan (kaki); *pejuang* ⟵ berjuang; *petani* ⟵ bertani; *pemain* ⟵ bermain; *penyanyi* ⟵ bernyanyi; *petinju* ⟵ bertinju
 
-- (46) *pedagang* / *perdagangan* <- *berdagang*; *pejalan* / *perjalanan* <- *berjalan*; *pejuang* / *perjuangan* <- *berjuang*; *pemain* / *permainan* <- *bermain*; *petani* / *pertanian* <- *bertani*; *petinju* / *pertinjuan* <- *bertinju*
+- (46) *pedagang* / *perdagangan* ⟵ *berdagang*; *pejalan* / *perjalanan* ⟵ *berjalan*; *pejuang* / *perjuangan* ⟵ *berjuang*; *pemain* / *permainan* ⟵ *bermain*; *petani* / *pertanian* ⟵ *bertani*; *petinju* / *pertinjuan* ⟵ *bertinju*
 
 Selain *pe-* yang berkaitan dengan verba dengan *ber-*, ada nomina turunan dengan *pe-* yang tidak berkaitan langsung dengan verba dengan *ber-*. Penurunan nomina dengan *pe-* jenis ini didasarkan pada analogi. Fungsi *pe-* di sini adalah membentuk nomina pelaku atau pengalam profesi yang dinyatakan oleh pangkal:
 
@@ -23,4 +23,4 @@ Selain *pe-* yang berkaitan dengan verba dengan *ber-*, ada nomina turunan denga
 
 Berikut adalah nomina turunan dengan *pe-* yang berkaitan dengan verba berawalan *be-*:
 
-> *pekerja* <- bekerja; *perenang* <- berenang; *peternak* <- beternak; *peserta* <- beserta; *pesolek* <- bersolek
+> *pekerja* ⟵ bekerja; *perenang* ⟵ berenang; *peternak* ⟵ beternak; *peserta* ⟵ beserta; *pesolek* ⟵ bersolek

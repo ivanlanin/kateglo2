@@ -19,7 +19,7 @@ Contoh:
 
 (69)
 
-| Adjektiva | <- | Nomina |
+| Adjektiva | ⟵ | Nomina |
 |-----------|---|--------|
 | *gemetar* | | *getar* |
 | *gemuruh* | | *guruh* |
@@ -29,13 +29,13 @@ Contoh:
 
 (70)
 
-| Adjektiva | <- | Verba |
+| Adjektiva | ⟵ | Verba |
 |-----------|---|-------|
 | *semerbak* | | *serbak* |
 
 (71)
 
-| Adjektiva | <- | Adjektiva |
+| Adjektiva | ⟵ | Adjektiva |
 |-----------|---|-----------|
 | *gemerlap* | | *gerlap* |
 | *gemilang* | | *gilang* |

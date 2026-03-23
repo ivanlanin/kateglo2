@@ -165,9 +165,9 @@ Unsur verba pada gabungan morfem bebas jenis ini dihasilkan melalui proses morfo
 Contoh:
 
 (91)
-- *laik laut* <- *layak (untuk) melaut atau berlayar*
-- *laik udara* <- *layak (untuk) mengudara atau terbang*
-- *siap kerja* <- *siap (untuk) bekerja*
-- *siap tempur* <- *siap (untuk) bertempur*
+- *laik laut* ⟵ *layak (untuk) melaut atau berlayar*
+- *laik udara* ⟵ *layak (untuk) mengudara atau terbang*
+- *siap kerja* ⟵ *siap (untuk) bekerja*
+- *siap tempur* ⟵ *siap (untuk) bertempur*
 
 Tidak semua gabungan morfem bebas jenis ini mengalami proses morfosintaktis seperti yang telah disebutkan. Ketika menyampaikan laporan tentang tingkat kepadatan lalu lintas, misalnya, sering digunakan penyebutan seperti *ramai lancar* dan *padat merayap*. Bentuk *ramai lancar* tergolong gabungan morfem bebas dengan morfem bebas yang berpola adjektiva + adjektiva sehingga bentuk itu dapat diparafrasa menjadi *ramai dan lancar* atau *ramai, tetapi lancar*. Perlu diingat bahwa bentuk *padat merayap* mempunyai pola adjektiva + verba, bukan adjektiva + adjektiva.

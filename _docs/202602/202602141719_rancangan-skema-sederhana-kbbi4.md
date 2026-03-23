@@ -46,12 +46,12 @@ Berdasarkan tangkapan layar admin rujukan:
 ### 2) `makna`
 
 - Sumber: `makna` (legacy).
-- `makna` <- `makna.makna`
-- `polisem_no` <- nomor urut per `eid`
-- `is_kiasan` <- interpretasi dari `makna.ki`
-- `tipe_penyingkat` <- interpretasi dari `makna.akr`
-- `ilmiah` <- `ilmiah.nama` (join by `mid`)
-- `kimia` <- `kimia.rumus` (join by `mid`)
+- `makna` ⟵ `makna.makna`
+- `polisem_no` ⟵ nomor urut per `eid`
+- `is_kiasan` ⟵ interpretasi dari `makna.ki`
+- `tipe_penyingkat` ⟵ interpretasi dari `makna.akr`
+- `ilmiah` ⟵ `ilmiah.nama` (join by `mid`)
+- `kimia` ⟵ `kimia.rumus` (join by `mid`)
 
 ### 3) `label` + kolom label teks di `makna`
 
@@ -70,12 +70,12 @@ Berdasarkan tangkapan layar admin rujukan:
 
 ### 4) `contoh`
 
-- `isi_contoh` <- `contoh.contoh`
-- `makna_contoh` <- `maknacontoh.makna_contoh` (left join via `cid`)
-- `ragam_label` <- lookup `maknacontoh.ragam`
-- `bahasa_label` <- lookup `maknacontoh.bahasa`
-- `bidang_label` <- lookup `maknacontoh.bidang`
-- `kiasan` <- interpretasi dari `maknacontoh.ki`
+- `isi_contoh` ⟵ `contoh.contoh`
+- `makna_contoh` ⟵ `maknacontoh.makna_contoh` (left join via `cid`)
+- `ragam_label` ⟵ lookup `maknacontoh.ragam`
+- `bahasa_label` ⟵ lookup `maknacontoh.bahasa`
+- `bidang_label` ⟵ lookup `maknacontoh.bidang`
+- `kiasan` ⟵ interpretasi dari `maknacontoh.ki`
 - Jika satu `cid` punya lebih dari satu baris `maknacontoh`, maka:
   - `makna_contoh` digabung menjadi satu string (delimiter `; `),
   - label contoh (`ragam/bahasa/bidang`) mengambil nilai pertama yang valid,

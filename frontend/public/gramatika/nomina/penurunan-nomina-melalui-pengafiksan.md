@@ -20,7 +20,7 @@ Pada dasarnya ada tiga prefiks dan satu sufiks yang dipakai untuk menandai nomin
 
 > *ke-*, *-an*, *ke-...-an*, *per-*, *peng-*, *peng-...-an*, *per-...-an*
 
-- (44) *pedagang* <- *berdagang*; *petani* <- *bertani*; *petinju* <- *bertinju*
+- (44) *pedagang* ⟵ *berdagang*; *petani* ⟵ *bertani*; *petinju* ⟵ *bertinju*
 
 1. [Penurunan Nomina dengan ke-](/gramatika/penurunan-nomina-dengan-ke)
 2. [Penurunan Nomina dengan per-](/gramatika/penurunan-nomina-dengan-per)
