@@ -45,7 +45,7 @@ Untuk setiap item markdown di `frontend/public/gramatika/` lakukan pemeriksaan b
 | VII Numeralia | `frontend/public/gramatika/numeralia/` | OK | Audit 2026-03-23 selesai: struktur 7.3 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial dan normalisasi penanda bentuk takberterima. |
 | VIII Kata Tugas | `frontend/public/gramatika/kata-tugas/` | OK | Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber. |
 | IX Kalimat | `frontend/public/gramatika/kalimat/` | OK | Audit 2026-03-24 selesai: Bab IX tervalidasi terhadap PDF sumber. Temuan utama mencakup pembersihan bold editorial, pemulihan paragraf/contoh yang semula diringkas atau hilang, perbaikan penanda bentuk takberterima, serta pelengkapan seksi 9.5.2-9.6 yang sebelumnya paling terdorong menjadi ringkasan. |
-| X Hubungan Antarklausa | `frontend/public/gramatika/hubungan-antarklausa/` | Belum | — |
+| X Hubungan Antarklausa | `frontend/public/gramatika/hubungan-antarklausa/` | OK | Audit 2026-03-23 selesai: struktur Bab X tervalidasi terhadap PDF sumber. Temuan edit terbatas pada pembersihan 19 bold editorial di 7 file; subbagian yang paling ringkas seperti hubungan hasil, cara, alat, dan optatif tetap dipertahankan karena memang singkat pada sumber. |
 
 ## Audit Berjalan
 
@@ -254,6 +254,21 @@ Ringkasan hasil:
 - Pada seksi 9.5.1-9.5.4, dipulihkan kembali klasifikasi kalimat berdasarkan jumlah klausa, jenis predikat, fungsi sintaktis, dan kelengkapan unsur. Beberapa file yang semula sangat ringkas dan diperluas ulang secara substansial adalah `kalimat-transitif.md`, `kalimat-pasif.md`, `kalimat-imperatif.md`, dan `kalimat-interogatif.md`.
 - Pada seksi 9.5.5 dan 9.6, audit memulihkan uraian pengemasan informasi serta pengingkaran, termasuk contoh-contoh yang sebelumnya hilang, sekaligus menurunkan bold editorial yang tidak didukung PDF.
 - Verifikasi akhir menunjukkan Bab IX sudah konsisten dengan sumber pada aspek isi, penomoran contoh, struktur subbab, dan batas penggunaan penekanan visual. Validasi frontend setelah edit juga lulus: `npm run lint` bersih dan `npm run test` lulus 91 file test / 896 test.
+
+### Bab X Hubungan Antarklausa
+
+Sumber audit:
+
+- PDF bab: `_data/gramatika/bab-10/bab-10-hubungan-antarklausa.pdf`
+- JPG verifikasi: `_data/gramatika/bab-10/` (dipakai selektif untuk halaman bagan/diagram dan bagian dengan OCR paling bising)
+
+Ringkasan hasil:
+
+- Struktur publik Bab X pada folder `hubungan-antarklausa` diverifikasi silang dengan `frontend/src/constants/gramatikaData.js` dan urutan subbab pada PDF sumber.
+- Audit Bab X menunjukkan isi utama pada file-file substantif sudah lengkap dan tetap dekat dengan PDF, termasuk bagian koordinatif, subordinatif, komplementasi, atributif, dan pelesapan.
+- Subbagian yang paling ringkas, seperti `hubungan-hasil.md`, `hubungan-cara.md`, `hubungan-alat.md`, dan `hubungan-optatif.md`, diverifikasi memang singkat pada sumber sehingga tidak diperluas secara editorial.
+- Temuan edit terbatas pada 19 bold editorial yang tidak didukung PDF dan dibersihkan dari 7 file: `hubungan-koordinatif.md`, `hubungan-penjumlahan.md`, `hubungan-perlawanan.md`, `hubungan-pemilihan.md`, `hubungan-subordinatif.md`, `hubungan-atributif.md`, dan `pelesapan.md`.
+- Verifikasi akhir menunjukkan Bab X sudah konsisten dengan sumber pada aspek isi, struktur subbab, dan batas penggunaan penekanan visual; tahap berikutnya tinggal validasi frontend setelah edit.
 
 ## Catatan Kerja
 

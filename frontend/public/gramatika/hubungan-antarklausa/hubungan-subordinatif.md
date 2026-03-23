@@ -3,7 +3,7 @@ id: 2
 title: Hubungan Subordinatif (10.2)
 ---
 
-**Konjungsi subordinatif** menggabungkan dua klausa atau lebih sehingga membentuk kalimat kompleks yang salah satu klausanya menjadi bagian dari klausa yang lain. Jadi, klausa-klausa dalam kalimat kompleks yang disusun dengan menggunakan konjungsi itu tidak mempunyai kedudukan yang setara. Dengan kata lain, dalam kalimat kompleks terdapat klausa yang berfungsi sebagai konstituen klausa yang lain. Hubungan antara klausa-klausa itu bersifat hierarkis. Oleh karena itu, kalimat kompleks disebut juga kalimat majemuk bertingkat dalam buku-buku tata bahasa. Perhatikan contoh penggabungan klausa dengan cara subordinatif berikut ini.
+Konjungsi subordinatif menggabungkan dua klausa atau lebih sehingga membentuk kalimat kompleks yang salah satu klausanya menjadi bagian dari klausa yang lain. Jadi, klausa-klausa dalam kalimat kompleks yang disusun dengan menggunakan konjungsi itu tidak mempunyai kedudukan yang setara. Dengan kata lain, dalam kalimat kompleks terdapat klausa yang berfungsi sebagai konstituen klausa yang lain. Hubungan antara klausa-klausa itu bersifat hierarkis. Oleh karena itu, kalimat kompleks disebut juga kalimat majemuk bertingkat dalam buku-buku tata bahasa. Perhatikan contoh penggabungan klausa dengan cara subordinatif berikut ini.
 
 (69)
 - a. Embo mengatakan (sesuatu).
@@ -16,7 +16,7 @@ Klausa (69a) dan (69b) digabungkan dengan cara subordinatif sehingga terbentuk k
 
 *Bagan 10.2 Hubungan Subordinatif*
 
-Pada bagan di atas tampak bahwa klausa 2 berkedudukan sebagai konstituen klausa 1. Klausa 2 yang berkedudukan sebagai konstituen klausa 1 disebut **klausa subordinatif**, sedangkan klausa 1, tempat dilekatkannya klausa 2, disebut **klausa utama**.
+Pada bagan di atas tampak bahwa klausa 2 berkedudukan sebagai konstituen klausa 1. Klausa 2 yang berkedudukan sebagai konstituen klausa 1 disebut klausa subordinatif, sedangkan klausa 1, tempat dilekatkannya klausa 2, disebut klausa utama.
 
 ![Diagram pohon kalimat (69c)](/gramatika/_gambar/bab-10/diagram-10-02-kalimat-69c.webp)
 
@@ -71,13 +71,13 @@ Kalimat kompleks dapat pula disusun dengan memperluas salah satu fungsi sintakti
 - c. Wahyu menganggap Laksmi patung *yang* cantik.
 - d. Pemerintah membangun jalan raya di daerah transmigrasi yang menampung transmigran dari Jawa dan Bali.
 
-Dalam kalimat (72a) fungsi S (*Paman saya*) diperluas dengan klausa *yang tinggal di Bogor*. Dalam kalimat (72b) fungsi O (*buku*) diperluas dengan klausa *yang mengisahkan perjuangan Pangeran Diponegoro*. Dalam kalimat (72c) fungsi Pel (*patung*) diperluas dengan klausa *yang cantik*. Dalam kalimat (72d) fungsi Ket (*di daerah transmigrasi*) diperluas dengan klausa *yang menampung transmigran dari Jawa dan Bali*. Klausa perluasan dengan *yang* yang disematkan dalam klausa utama disebut sebagai **klausa relatif** dan berfungsi sebagai pewatas (keterangan) bagi fungsi sintaktis tertentu.
+Dalam kalimat (72a) fungsi S (*Paman saya*) diperluas dengan klausa *yang tinggal di Bogor*. Dalam kalimat (72b) fungsi O (*buku*) diperluas dengan klausa *yang mengisahkan perjuangan Pangeran Diponegoro*. Dalam kalimat (72c) fungsi Pel (*patung*) diperluas dengan klausa *yang cantik*. Dalam kalimat (72d) fungsi Ket (*di daerah transmigrasi*) diperluas dengan klausa *yang menampung transmigran dari Jawa dan Bali*. Klausa perluasan dengan *yang* yang disematkan dalam klausa utama disebut sebagai klausa relatif dan berfungsi sebagai pewatas (keterangan) bagi fungsi sintaktis tertentu.
 
 ![Diagram pohon kalimat (72a)](/gramatika/_gambar/bab-10/diagram-10-02-kalimat-72a.webp)
 
 *Diagram pohon kalimat (72a)*
 
-Kalimat kompleks dapat pula terbentuk apabila dua proposisi diperbandingkan, satu dinyatakan pada klausa utama dan satu lagi pada klausa subordinatif. Klausa subordinatif itu disebut **klausa pembandingan**. Klausa pembandingan biasanya dibentuk dengan menggunakan bentuk *lebih ... daripada*, *kurang ... daripada*, atau *sama ... dengan*.
+Kalimat kompleks dapat pula terbentuk apabila dua proposisi diperbandingkan, satu dinyatakan pada klausa utama dan satu lagi pada klausa subordinatif. Klausa subordinatif itu disebut klausa pembandingan. Klausa pembandingan biasanya dibentuk dengan menggunakan bentuk *lebih ... daripada*, *kurang ... daripada*, atau *sama ... dengan*.
 
 (73)
 - a. Dia bekerja lebih lama daripada istrinya (bekerja).

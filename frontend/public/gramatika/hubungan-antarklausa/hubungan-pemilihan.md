@@ -3,7 +3,7 @@ id: 10.1.3.3
 title: Hubungan Pemilihan (10.1.3.3)
 ---
 
-Yang dimaksudkan dengan **hubungan pemilihan** ialah hubungan yang menyatakan pilihan di antara dua kemungkinan atau lebih yang dinyatakan oleh klausa-klausa yang dihubungkan. Konjungsi yang digunakan untuk menyatakan hubungan pemilihan itu ialah *atau*. Hubungan pemilihan itu sering juga menyatakan pertentangan. Kalimat (64–68) merupakan contoh-contoh kalimat yang memiliki hubungan pemilihan yang menyatakan pertentangan, sedangkan kalimat (63) merupakan contoh kalimat yang mempunyai hubungan pemilihan yang tidak menyatakan pertentangan.
+Yang dimaksudkan dengan hubungan pemilihan ialah hubungan yang menyatakan pilihan di antara dua kemungkinan atau lebih yang dinyatakan oleh klausa-klausa yang dihubungkan. Konjungsi yang digunakan untuk menyatakan hubungan pemilihan itu ialah *atau*. Hubungan pemilihan itu sering juga menyatakan pertentangan. Kalimat (64–68) merupakan contoh-contoh kalimat yang memiliki hubungan pemilihan yang menyatakan pertentangan, sedangkan kalimat (63) merupakan contoh kalimat yang mempunyai hubungan pemilihan yang tidak menyatakan pertentangan.
 
 (63) Dalam keadaan seperti itu dia terpaksa menyerah atau bertahan.
 

@@ -3,13 +3,13 @@ id: 3
 title: Pelesapan (10.3)
 ---
 
-Penggabungan dua klausa, baik secara subordinatif maupun secara koordinatif dapat mengakibatkan terdapatnya dua unsur yang sama dalam satu kalimat. Pengulangan unsur yang sama itu merupakan suatu kelewahan atau redundansi dari segi informasi. Salah satu alat sintaktis untuk mengurangi taraf kelewahan itu adalah **pelesapan** atau **elipsis**, yaitu penghilangan unsur tertentu dari satu kalimat atau teks.
+Penggabungan dua klausa, baik secara subordinatif maupun secara koordinatif dapat mengakibatkan terdapatnya dua unsur yang sama dalam satu kalimat. Pengulangan unsur yang sama itu merupakan suatu kelewahan atau redundansi dari segi informasi. Salah satu alat sintaktis untuk mengurangi taraf kelewahan itu adalah pelesapan atau elipsis, yaitu penghilangan unsur tertentu dari satu kalimat atau teks.
 
 (188) Ayahnya datang ke pesta itu, tetapi ibunya tidak (datang ke pesta itu).
 
 (189) Karena (Pak Andi) sakit, Pak Andi tidak masuk kantor.
 
-Unsur kalimat *datang ke pesta itu* dan *Pak Andi* yang ditulis di dalam tanda kurung pada contoh di atas dapat dilesapkan tanpa mengurangi makna kalimat. Unsur yang sama yang tidak dilesapkan disebut **anteseden** dari unsur yang dilesapkan. Elipsis yang antesedennya mendahului unsur yang dilesapkan seperti pada (188) disebut **pelesapan anaforis**, sedangkan elipsis yang antesedennya mengikuti unsur yang dilesapkan seperti pada (189) disebut **pelesapan kataforis** (lihat juga 7.2.1).
+Unsur kalimat *datang ke pesta itu* dan *Pak Andi* yang ditulis di dalam tanda kurung pada contoh di atas dapat dilesapkan tanpa mengurangi makna kalimat. Unsur yang sama yang tidak dilesapkan disebut anteseden dari unsur yang dilesapkan. Elipsis yang antesedennya mendahului unsur yang dilesapkan seperti pada (188) disebut pelesapan anaforis, sedangkan elipsis yang antesedennya mengikuti unsur yang dilesapkan seperti pada (189) disebut pelesapan kataforis (lihat juga 7.2.1).
 
 Pada kedua contoh di atas unsur-unsur yang dilesapkan dapat ditelusuri balik dari teks secara tepat. Ketertelusuran balik secara tepat tidak berarti bahwa tidak ada ketaksaan dalam pelesapan.
 
@@ -27,7 +27,7 @@ Pada (190a) unsur yang dilesapkan (dilambangkan dengan △) bisa *motor* dan bis
 
 Jawaban B pada (191) terdiri atas dua klausa yang predikatnya dipertentangkan. Unsur yang dipertentangkan haruslah yang sejenis. Oleh karena itu, predikat klausa pertama haruslah verba yang berlawanan dalam hal makna dengan *pulang*. Atas dasar itu, predikat klausa pertama adalah verba *datang*.
 
-Di samping pelesapan yang unsurnya ditelusuri balik dari teks (**pelesapan tekstual**), ada pelesapan yang unsurnya dapat ditelusuri balik berdasarkan struktur (**pelesapan struktural**) dan ada pula pelesapan yang unsurnya dapat ditelusuri balik berdasarkan situasi (**pelesapan situasional**).
+Di samping pelesapan yang unsurnya ditelusuri balik dari teks (pelesapan tekstual), ada pelesapan yang unsurnya dapat ditelusuri balik berdasarkan struktur (pelesapan struktural) dan ada pula pelesapan yang unsurnya dapat ditelusuri balik berdasarkan situasi (pelesapan situasional).
 
 (192)
 - a. Saya yakin △ kamu tidak bersalah. (△ = bahwa)

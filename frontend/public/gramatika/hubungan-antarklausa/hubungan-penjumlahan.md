@@ -3,7 +3,7 @@ id: 10.1.3.1
 title: Hubungan Penjumlahan (10.1.3.1)
 ---
 
-Yang dimaksudkan dengan **hubungan penjumlahan** ialah hubungan yang menyatakan penjumlahan atau gabungan kegiatan, keadaan, peristiwa, atau proses.
+Yang dimaksudkan dengan hubungan penjumlahan ialah hubungan yang menyatakan penjumlahan atau gabungan kegiatan, keadaan, peristiwa, atau proses.
 
 Hubungan itu ditandai oleh konjungsi *dan*, *serta*, atau *baik ... maupun*. Kadang-kadang konjungsi bersifat manasuka karena boleh dipakai dan boleh tidak. Jika diperhatikan konteksnya, hubungan penjumlahan dapat menyatakan (1) sebab-akibat, (2) urutan waktu, (3) pertentangan, atau (4) perluasan.
 
