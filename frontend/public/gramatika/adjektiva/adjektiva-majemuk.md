@@ -78,14 +78,14 @@ Di antara gabungan yang bersinonim dapat disisipkan kata *dan*, sedangkan kata *
 Contoh:
 
 (86)
-- *basah kuyup* -> *basah dan kuyup*
-- *cantik jelita* -> *cantik dan jelita*
-- *gagah berani* -> *gagah dan berani*
+- *basah kuyup* → *basah dan kuyup*
+- *cantik jelita* → *cantik dan jelita*
+- *gagah berani* → *gagah dan berani*
 
 (87)
-- *kaya miskin* -> *kaya atau miskin*
-- *besar kecil* -> *besar atau kecil*
-- *kalah menang* -> *kalah atau menang*
+- *kaya miskin* → *kaya atau miskin*
+- *besar kecil* → *besar atau kecil*
+- *kalah menang* → *kalah atau menang*
 
 ### Pola Adjektiva + Nomina
 

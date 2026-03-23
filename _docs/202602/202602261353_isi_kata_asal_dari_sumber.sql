@@ -1,7 +1,7 @@
 -- =============================================================================
 -- Langkah 2: Isi kolom kata_asal
 -- Aturan:
---   1) sumber_aksara + sumber_isi -> "<aksara> <latin>"
+--   1) sumber_aksara + sumber_isi → "<aksara> <latin>"
 --   2) sumber_aksara saja
 --   3) sumber_isi saja
 --   4) fallback parse dari sumber_definisi

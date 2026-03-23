@@ -9,11 +9,11 @@ Suku kata dalam bahasa Indonesia selalu memiliki vokal sebagai inti. Inti itu da
 
 Contoh:
 
-- ambil -> am-bil
-- dia -> di-a
-- instruksi -> ins-truk-si
-- kepergian -> ke-per-gi-an
-- kompleks -> kom-pleks
-- pergi -> per-gi
+- ambil → am-bil
+- dia → di-a
+- instruksi → ins-truk-si
+- kepergian → ke-per-gi-an
+- kompleks → kom-pleks
+- pergi → per-gi
 
 Suku kata yang berakhir dengan vokal, (K)V, disebut suku kata buka dan suku kata yang berakhir dengan konsonan, (K)VK, disebut suku kata tutup. Penyukuan kata dilakukan atas dasar pengucapan, sedangkan pemenggalan kata dilakukan atas dasar penulisan (lihat lebih lanjut 3.2.3).

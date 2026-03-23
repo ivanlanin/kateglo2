@@ -33,12 +33,12 @@ Berdasarkan tangkapan layar admin rujukan:
 
 - Sumber utama: `entri` (legacy), ditambah join ke tabel detail berdasarkan `entri.tabel` + `entri.tid`.
 - Mapping jenis:
-  - `kata` -> `entri_dasar`
-  - `berimbuhan` -> `kata_turunan`
-  - `gabungan` -> `gabungan_kata`
-  - `idiom` -> `idiom`
-  - `peribahasa` -> `peribahasa`
-  - `varian` -> `varian`
+  - `kata` → `entri_dasar`
+  - `berimbuhan` → `kata_turunan`
+  - `gabungan` → `gabungan_kata`
+  - `idiom` → `idiom`
+  - `peribahasa` → `peribahasa`
+  - `varian` → `varian`
 - Data `kata` dimigrasi lebih dulu agar `lema.id = kata.kid`.
 - Kolom `induk` menyimpan relasi ke `lema.id` (kata dasar).
 - Data `rujuk` diterapkan sebagai atribut pada `lema` existing melalui kolom `jenis_rujuk` dan `lema_rujuk` (tanpa membuat baris `jenis='rujuk'`).

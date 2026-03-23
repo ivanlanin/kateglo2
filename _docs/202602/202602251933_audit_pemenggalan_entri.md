@@ -91,10 +91,10 @@ WHERE (pemenggalan IS NULL OR BTRIM(pemenggalan) = '')
 ### Hasil Eksekusi
 - Jumlah baris ter-update: **95**.
 - Contoh normalisasi:
-  - `si (1)` -> `si`
-  - `si (2)` -> `si`
-  - `si (3)` -> `si`
-  - `si- (2)` -> `si-`
+  - `si (1)` → `si`
+  - `si (2)` → `si`
+  - `si (3)` → `si`
+  - `si- (2)` → `si-`
 
 ## Rekap Setelah Perubahan
 Sisa entri tanpa `pemenggalan` (berdasarkan seluruh `distinct(entri.jenis)`):

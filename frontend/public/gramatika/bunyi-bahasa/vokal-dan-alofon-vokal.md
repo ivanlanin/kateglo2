@@ -51,9 +51,9 @@ Jika tekanan kata berpindah pada /i/, vokal /i/ yang semula dilafalkan [ɪ] akan
 
 Contoh:
 
-- [bantɪŋ] -> [bantiŋan]
-- [salɪn] -> [salinan]
-- [kirɪm] -> [kiriman]
+- [bantɪŋ] → [bantiŋan]
+- [salɪn] → [salinan]
+- [kirɪm] → [kiriman]
 
 Perpindahan tekanan itu disebabkan oleh kecenderungan penempatan tekanan pada suku kata kedua dari akhir sehingga kata turunan itu dilafalkan [bantiŋan], [kiriman], dan [salinan]. Karena pengaruh ucapan tersebut, kata turunan itu kadang-kadang dipenggal secara salah pada akhir baris menjadi *banti-ngan*, *kiri-man*, dan *sali-nan*. Padahal, semestinya *banting-an*, *kirim-an*, dan *salin-an*.
 
@@ -100,9 +100,9 @@ Jika tekanan kata berpindah, vokal /u/ yang semula dilafalkan [ʊ] akan menjadi 
 
 Contoh:
 
-- [ampʊn] -> [ampunan]
-- [kumpʊl] -> [kumpulan]
-- [simpʊl] -> [simpulan]
+- [ampʊn] → [ampunan]
+- [kumpʊl] → [kumpulan]
+- [simpʊl] → [simpulan]
 
 ## 3) Vokal /e/
 

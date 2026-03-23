@@ -1,5 +1,5 @@
 -- Refactor notasi reduplikasi:
--- 1) R -> R.penuh
+-- 1) R → R.penuh
 -- 2) Hapus R-an dan R-nya (diganti kombinasi R.penuh + -an/-nya)
 
 BEGIN;
@@ -16,7 +16,7 @@ BEGIN
     UPDATE tagar
     SET kode = 'R.penuh',
         nama = 'R.penuh',
-        deskripsi = 'Reduplikasi penuh (X -> X-X)'
+        deskripsi = 'Reduplikasi penuh (X → X-X)'
     WHERE id = r_id;
   ELSIF r_id IS NOT NULL AND rpenuh_id IS NOT NULL THEN
     UPDATE entri_tagar
@@ -26,7 +26,7 @@ BEGIN
     DELETE FROM tagar WHERE id = r_id;
   ELSIF r_id IS NULL AND rpenuh_id IS NULL THEN
     INSERT INTO tagar (kode, nama, kategori, deskripsi, urutan, aktif)
-    VALUES ('R.penuh', 'R.penuh', 'reduplikasi', 'Reduplikasi penuh (X -> X-X)', 1, TRUE);
+    VALUES ('R.penuh', 'R.penuh', 'reduplikasi', 'Reduplikasi penuh (X → X-X)', 1, TRUE);
   END IF;
 END $$;
 

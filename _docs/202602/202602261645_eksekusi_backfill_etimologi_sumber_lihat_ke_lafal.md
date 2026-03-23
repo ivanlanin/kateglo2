@@ -47,11 +47,11 @@ Aturan referensi:
 
 Contoh hasil update setelah migrasi:
 
-- `adjektif` (`sumber_lihat = adjéktiva`) -> `bahasa = Belanda`, `kata_asal = adjectief or`
-- `adpertensi` (`sumber_lihat = adverténsi`) -> `bahasa = Belanda`, `kata_asal = advertentie`
-- `aestetika` (`sumber_lihat = éstétika`) -> `bahasa = Belanda`, `kata_asal = esthetica`
-- `ajektiva` (`sumber_lihat = adjéktiva`) -> `bahasa = Belanda`, `kata_asal = adjectief or`
-- `alferes` (`sumber_lihat = alpérés`) -> `bahasa = Portugis`, `kata_asal = alferes`
+- `adjektif` (`sumber_lihat = adjéktiva`) → `bahasa = Belanda`, `kata_asal = adjectief or`
+- `adpertensi` (`sumber_lihat = adverténsi`) → `bahasa = Belanda`, `kata_asal = advertentie`
+- `aestetika` (`sumber_lihat = éstétika`) → `bahasa = Belanda`, `kata_asal = esthetica`
+- `ajektiva` (`sumber_lihat = adjéktiva`) → `bahasa = Belanda`, `kata_asal = adjectief or`
+- `alferes` (`sumber_lihat = alpérés`) → `bahasa = Portugis`, `kata_asal = alferes`
 
 ## Catatan
 

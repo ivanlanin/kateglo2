@@ -1,4 +1,4 @@
--- Draft skema sederhana KBBI4 -> Kateglo
+-- Draft skema sederhana KBBI4 → Kateglo
 -- Date: 2026-02-14
 -- Prinsip:
 --   1) Inti data: entri, makna, contoh, label

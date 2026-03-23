@@ -1,5 +1,5 @@
 -- Memisahkan akhiran -i pada pemenggalan entri turunan bertagar -i.
--- Contoh: meng.i.ringi -> meng.i.ring.i
+-- Contoh: meng.i.ringi → meng.i.ring.i
 
 BEGIN;
 

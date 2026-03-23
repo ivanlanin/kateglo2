@@ -55,7 +55,7 @@ Verba taktransitif berprefiks *meng-* dengan pangkal nomina berfitur hasil bumi 
 
 Verba taktransitif dengan prefiks *meng-* juga dapat diturunkan dari kelas kata numeralia, tetapi jumlahnya sangat terbatas:
 
-(248) *satu* -> *menyatu* 'menjadi satu'; *dua* -> *mendua* 'menjadi atau berhaluan dua'
+(248) *satu* → *menyatu* 'menjadi satu'; *dua* → *mendua* 'menjadi atau berhaluan dua'
 
 Ada beberapa pasang verba taktransitif dengan prefiks *meng-* yang maknanya tidak berbeda dengan verba yang berprefiks *ber-*:
 

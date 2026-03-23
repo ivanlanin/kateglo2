@@ -56,11 +56,11 @@ Jika komplemen preposisi itu berupa frasa nominal, preposisinya dapat berupa *de
 
 Keterangan cara juga dapat dibentuk dengan menambahkan *se-...-nya* pada bentuk ulang kata tertentu.
 
-(111) Kamu boleh makan *sepuas-puasnya*. -> *sepuasnya*
+(111) Kamu boleh makan *sepuas-puasnya*. → *sepuasnya*
 
-(112) Carilah contoh *sebanyak-banyaknya*. -> *sebanyaknya*
+(112) Carilah contoh *sebanyak-banyaknya*. → *sebanyaknya*
 
-(113) Kita harus menyelesaikan masalah ini *secepat-cepatnya*. -> *secepatnya*
+(113) Kita harus menyelesaikan masalah ini *secepat-cepatnya*. → *secepatnya*
 
 Bentuk ulang dengan *se-...-nya* itu menyatakan makna elatif. Makna elatif itu dapat pula dinyatakan dengan *se-... mungkin*. Bandingkan contoh (111-113) dengan (111a-113a) berikut.
 

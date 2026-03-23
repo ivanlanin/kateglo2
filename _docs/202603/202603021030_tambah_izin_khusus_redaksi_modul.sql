@@ -1,7 +1,7 @@
 -- Tambah izin khusus per modul redaksi:
--- 1) kelola_susun_kata -> SusunKataAdmin
--- 2) lihat_pencarian   -> PencarianAdmin
--- 3) audit_makna       -> AuditMaknaAdmin
+-- 1) kelola_susun_kata → SusunKataAdmin
+-- 2) lihat_pencarian   → PencarianAdmin
+-- 3) audit_makna       → AuditMaknaAdmin
 
 BEGIN;
 

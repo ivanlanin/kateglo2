@@ -1,4 +1,4 @@
--- Migrasi ref_source -> label (kategori: sumber)
+-- Migrasi ref_source → label (kategori: sumber)
 
 BEGIN;
 

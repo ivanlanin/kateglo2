@@ -2,7 +2,7 @@
 -- Batch sebelumnya mengisi lafal kosong dengan nilai sibling yang sama.
 -- Sesuai keputusan terbaru, Kasus D harus diisi dengan bentuk kebalikan:
 -- e <-> ə
--- Contoh: apel -> apəl
+-- Contoh: apel → apəl
 
 UPDATE entri
 SET lafal = translate(lafal, 'eəEƏ', 'əeƏE'),

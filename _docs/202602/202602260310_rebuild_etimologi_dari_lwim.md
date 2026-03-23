@@ -65,7 +65,7 @@ Breakdown rule candidate:
 
 ## Interpretasi
 
-Pendekatan rebuild ini **lebih meyakinkan untuk kelengkapan data etimologi mentah** karena semua field LWIM inti masuk langsung, khususnya `raw_def -> sumber_definisi`.
+Pendekatan rebuild ini **lebih meyakinkan untuk kelengkapan data etimologi mentah** karena semua field LWIM inti masuk langsung, khususnya `raw_def → sumber_definisi`.
 
 Dengan rule ke-4 diaktifkan, coverage pemetaan kembali tinggi sambil tetap menjaga prinsip kandidat tunggal untuk auto-link.
 

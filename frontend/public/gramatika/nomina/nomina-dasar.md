@@ -12,16 +12,16 @@ Nomina dasar umum adalah nomina yang dapat menjadi dasar untuk penurunan kata at
 Contoh:
 
 - (35)
-- *orang* -> orang-orangan, perseorangan
-- *meja* -> meja makan, meja tulis
-- *rumah* -> rumah-rumahan, perumahan
-- *malam* -> bermalam, kemalaman
-- *gambar* -> gambarkan, gambaran
-- *minggu* -> mingguan, berminggu-minggu
-- *pisau* -> pisau dapur, pisau lipat
-- *tongkat* -> bertongkat, tongkat komando
-- *cinta* -> bercinta, mencintai
-- *bawah* -> bawahan, membawahi
+- *orang* → orang-orangan, perseorangan
+- *meja* → meja makan, meja tulis
+- *rumah* → rumah-rumahan, perumahan
+- *malam* → bermalam, kemalaman
+- *gambar* → gambarkan, gambaran
+- *minggu* → mingguan, berminggu-minggu
+- *pisau* → pisau dapur, pisau lipat
+- *tongkat* → bertongkat, tongkat komando
+- *cinta* → bercinta, mencintai
+- *bawah* → bawahan, membawahi
 
 ## Nomina Dasar Khusus
 

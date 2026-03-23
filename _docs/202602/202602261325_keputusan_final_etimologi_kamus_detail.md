@@ -27,9 +27,9 @@ Format akhir `arti_asal` disepakati sebagai:
 
 Contoh:
 
-- `...[< Belanda ... (< Latin < Yunani)]` -> ambil **Belanda**
-- `...[< Inggris ... (< Prancis)]` -> ambil **Inggris**
-- `...[< Belanda or < Inggris ...]` -> ambil **Belanda** (yang muncul pertama)
+- `...[< Belanda ... (< Latin < Yunani)]` → ambil **Belanda**
+- `...[< Inggris ... (< Prancis)]` → ambil **Inggris**
+- `...[< Belanda or < Inggris ...]` → ambil **Belanda** (yang muncul pertama)
 
 ### Prioritas sumber
 
@@ -38,7 +38,7 @@ Contoh:
 
 ### Catatan normalisasi
 
-- Nama bahasa tetap dinormalisasi ke bentuk Indonesia (mis. `Dutch` -> `Belanda`, `English` -> `Inggris`).
+- Nama bahasa tetap dinormalisasi ke bentuk Indonesia (mis. `Dutch` → `Belanda`, `English` → `Inggris`).
 
 ---
 
@@ -52,10 +52,10 @@ Jika tersedia `sumber_aksara`, gabungkan ke `kata_asal` dengan format:
 
 ### Prioritas sumber
 
-1. Jika `sumber_aksara` **dan** `sumber_isi` terisi -> `kata_asal = "{sumber_aksara} {sumber_isi}"`
-2. Jika hanya `sumber_aksara` terisi -> `kata_asal = sumber_aksara`
-3. Jika hanya `sumber_isi` terisi -> `kata_asal = sumber_isi`
-4. Jika keduanya kosong -> fallback parse kandidat bentuk kata dari `sumber_definisi`
+1. Jika `sumber_aksara` **dan** `sumber_isi` terisi → `kata_asal = "{sumber_aksara} {sumber_isi}"`
+2. Jika hanya `sumber_aksara` terisi → `kata_asal = sumber_aksara`
+3. Jika hanya `sumber_isi` terisi → `kata_asal = sumber_isi`
+4. Jika keduanya kosong → fallback parse kandidat bentuk kata dari `sumber_definisi`
 
 ### Catatan
 
@@ -74,9 +74,9 @@ Jika tersedia `sumber_aksara`, gabungkan ke `kata_asal` dengan format:
 
 Untuk menjaga transparansi dan audit:
 
-- `arti_asal_id` -> hasil terjemahan Indonesia
-- `arti_asal_en` -> gloss Inggris asli
-- `arti_asal_tampil` -> gabungan `"{arti_asal_id} ({arti_asal_en})"`
+- `arti_asal_id` → hasil terjemahan Indonesia
+- `arti_asal_en` → gloss Inggris asli
+- `arti_asal_tampil` → gabungan `"{arti_asal_id} ({arti_asal_en})"`
 
 ### Catatan kualitas
 

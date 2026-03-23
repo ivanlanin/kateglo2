@@ -32,9 +32,9 @@ Contoh:
 
 Konsonan /b/ mempunyai satu alofon, yakni [b] yang posisinya selalu mengawali suku kata. (Di dalam kata, posisinya dapat juga di tengah.) Dalam tataran grafem, huruf *b* bisa berposisi pada akhir kata, tetapi huruf itu dilafalkan [p] bukan [b]. Namun, huruf itu kembali dilafalkan [b] apabila kata itu mendapat akhiran yang berawal vokal, yaitu akhiran *-an*.
 
-Contoh: *adab* -> *peradaban*, *wajib* -> *kewajiban*, *jawab* -> *jawaban*.
+Contoh: *adab* → *peradaban*, *wajib* → *kewajiban*, *jawab* → *jawaban*.
 
-Konsonan /p/ mempunyai dua alofon, yakni [p] dan [pʔ]. Alofon [p] adalah alofon yang lepas, terdapat pada posisi awal suku kata. Sebaliknya, alofon [pʔ] adalah alofon taklepas, terdapat pada posisi akhir suku kata yang pada umumnya juga merupakan akhir kata. Jika kata yang diakhiri oleh alofon [pʔ] itu diberi imbuhan yang diawali vokal, misalnya *-an*, alofon itu berubah menjadi [p]. Contoh: *tangkap* -> *tangkapan*, *ucap* -> *ucapan*.
+Konsonan /p/ mempunyai dua alofon, yakni [p] dan [pʔ]. Alofon [p] adalah alofon yang lepas, terdapat pada posisi awal suku kata. Sebaliknya, alofon [pʔ] adalah alofon taklepas, terdapat pada posisi akhir suku kata yang pada umumnya juga merupakan akhir kata. Jika kata yang diakhiri oleh alofon [pʔ] itu diberi imbuhan yang diawali vokal, misalnya *-an*, alofon itu berubah menjadi [p]. Contoh: *tangkap* → *tangkapan*, *ucap* → *ucapan*.
 
 ## 2) Konsonan /d/ dan /t/
 
@@ -58,7 +58,7 @@ Contoh:
 - /agar/ `agar` ; /akar/ `akar`
 - /sagu/ `sagu` ; /saku/ `saku`
 
-Konsonan /g/ hanya mempunyai satu alofon, yakni [g] yang terdapat pada awal suku kata. Pada akhir suku kata konsonan /g/ dilafalkan sebagai [k]. Akan tetapi, jika kata yang berakhir dengan konsonan /g/ itu diikuti akhiran yang berawal vokal, konsonan itu akan dilafalkan sebagai [g] atau [k]. Contoh: *ajeg* -> *keajegan*, *keajekan*.
+Konsonan /g/ hanya mempunyai satu alofon, yakni [g] yang terdapat pada awal suku kata. Pada akhir suku kata konsonan /g/ dilafalkan sebagai [k]. Akan tetapi, jika kata yang berakhir dengan konsonan /g/ itu diikuti akhiran yang berawal vokal, konsonan itu akan dilafalkan sebagai [g] atau [k]. Contoh: *ajeg* → *keajegan*, *keajekan*.
 
 Konsonan /k/ mempunyai tiga alofon, yakni [k], [kʔ], dan [?]. Alofon [k] lepas terdapat pada awal suku kata, sedangkan alofon [kʔ] taklepas dan [?] hambat glotal terdapat pada akhir suku kata. Di akhir kata, terutama kata-kata asal bahasa Melayu dan serapan dari bahasa non-Eropa, alofon [kʔ] bervariasi bebas dengan [?]. Contoh: *rusak*, *tidak*. Dalam fonotaktik bahasa Indonesia, jika terdapat dua vokal dalam satu kata, konsonan hambat glotal [?] akan muncul untuk memisahkan kedua vokal itu, seperti pada *maaf*, *saat*, *suun*, *soal*, *doa*, *seikat*, *keadilan*, dan *peubah*.
 

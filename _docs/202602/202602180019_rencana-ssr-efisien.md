@@ -128,7 +128,7 @@ Output:
 ## Redirect/Rewrite
 - Saat masih memakai Static Site sebagai domain utama:
    - Route SEO prioritas harus diarahkan ke backend SSR
-  - Catch-all `/* -> /index.html` tetap paling bawah
+   - Catch-all `/* → /index.html` tetap paling bawah
 - Setelah cutover ke backend:
   - rewrite static di Static Site tidak lagi kritikal untuk produksi
 

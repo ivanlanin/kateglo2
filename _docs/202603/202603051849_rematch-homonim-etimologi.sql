@@ -12,6 +12,6 @@ BEGIN;
 -- YAKIN: cocok via homonim persis
 -- 1 baris; aktif=true untuk yang bahasa terisi & bukan meragukan
 -- -----------------------------------------------------------------------
-UPDATE etimologi SET entri_id = 14, aktif = true, updated_at = NOW() WHERE id = 7; -- abah hom=1 (Arab) -> "abah (1)"
+UPDATE etimologi SET entri_id = 14, aktif = true, updated_at = NOW() WHERE id = 7; -- abah hom=1 (Arab) → "abah (1)"
 
 COMMIT;

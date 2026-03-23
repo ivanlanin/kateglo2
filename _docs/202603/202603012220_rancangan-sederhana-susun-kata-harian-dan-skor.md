@@ -73,8 +73,8 @@ Tujuan: hasil game user per hari.
 Kolom:
 - `id` bigserial PK
 - `tanggal` date NOT NULL
-- `susun_kata_id` bigint NOT NULL FK -> `susun_kata.id`
-- `pengguna_id` bigint NOT NULL FK -> `pengguna.id`
+- `susun_kata_id` bigint NOT NULL FK → `susun_kata.id`
+- `pengguna_id` bigint NOT NULL FK → `pengguna.id`
 - `percobaan` smallint NOT NULL
 - `waktu` integer NOT NULL  (detik)
 - `menang` boolean NOT NULL

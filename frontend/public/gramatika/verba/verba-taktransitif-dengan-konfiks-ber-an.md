@@ -9,16 +9,16 @@ Penurunan verba taktransitif yang memakai konfiks *ber-...-an* kurang produktif.
 
 (240)
 
-| Pangkal | -> | Bentuk *ber-...-an* |
+| Pangkal | → | Bentuk *ber-...-an* |
 |---|---|---|
-| *datang* | -> | *berdatangan* |
-| *gugur* | -> | *berguguran* |
-| *jatuh* | -> | *berjatuhan* |
-| *kejar* | -> | *berkejaran* |
-| *lari* | -> | *berlarian* |
-| *muncul* | -> | *bermunculan* |
-| *pergi* | -> | *bepergian* |
-| *terbang* | -> | *beterbangan* |
+| *datang* | → | *berdatangan* |
+| *gugur* | → | *berguguran* |
+| *jatuh* | → | *berjatuhan* |
+| *kejar* | → | *berkejaran* |
+| *lari* | → | *berlarian* |
+| *muncul* | → | *bermunculan* |
+| *pergi* | → | *bepergian* |
+| *terbang* | → | *beterbangan* |
 
 Verba berkonfiks *ber-...-an* dapat pula diturunkan dari pangkal adjektiva atau nomina yang menyatakan hubungan timbal balik atau berbalasan:
 

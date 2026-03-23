@@ -1,6 +1,6 @@
 -- Refactor unsur terikat:
 -- 1) Hilangkan constraint entri.jenis
--- 2) Normalisasi nilai jenis 'bentuk terikat' -> 'terikat'
+-- 2) Normalisasi nilai jenis 'bentuk terikat' → 'terikat'
 -- 3) Pindahkan klasifikasi unsur terikat ke entri.jenis
 -- 4) Perbaikan khusus kasus entri si-/si
 -- Date: 2026-02-17
@@ -60,7 +60,7 @@ FROM kandidat k
 WHERE e.id = k.entri_id
   AND k.jenis_terikat IS NOT NULL;
 
--- Perbaikan khusus: si- (4) -> si- (1)
+-- Perbaikan khusus: si- (4) → si- (1)
 UPDATE entri
 SET entri = 'si- (1)',
     indeks = 'si',

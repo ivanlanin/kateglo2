@@ -21,7 +21,7 @@
 
 Aturan yang dipakai:
 - Ambil **bahasa pertama** dari jejak etimologi (`[< ...]` atau `(f ...)`).
-- Normalisasi ke nama bahasa Indonesia (`Dutch -> Belanda`, `English -> Inggris`, dst.).
+- Normalisasi ke nama bahasa Indonesia (`Dutch → Belanda`, `English → Inggris`, dst.).
 
 ### 2) Isi `kata_asal`
 
@@ -31,9 +31,9 @@ Aturan yang dipakai:
 8. `_docs/202602/202602261403_perbaiki_fallback_kata_asal_rantai_bertingkat.sql`
 
 Aturan yang dipakai:
-- `sumber_aksara + sumber_isi` -> `"<aksara> <latin>"`
-- `sumber_aksara` saja -> `sumber_aksara`
-- `sumber_isi` saja -> `sumber_isi`
+- `sumber_aksara + sumber_isi` → `"<aksara> <latin>"`
+- `sumber_aksara` saja → `sumber_aksara`
+- `sumber_isi` saja → `sumber_isi`
 - fallback dari `sumber_definisi` untuk kasus kosong/ambigu.
 
 ### 3) Isi `arti_asal`

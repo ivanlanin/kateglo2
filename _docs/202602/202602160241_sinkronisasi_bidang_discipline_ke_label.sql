@@ -2,7 +2,7 @@
 -- Tanggal: 2026-02-16
 -- Catatan:
 -- - Menambahkan label bidang baru: Umum (umum)
--- - Mapping keputusan user: agama -> Isl, *umum* -> Umum
+-- - Mapping keputusan user: agama → Isl, *umum* → Umum
 
 BEGIN;
 

@@ -1,5 +1,5 @@
 -- =============================================================================
--- Migrasi: Backfill etimologi dari sumber_lihat -> indeks
+-- Migrasi: Backfill etimologi dari sumber_lihat → indeks
 -- Aturan:
 --   - Target: baris etimologi yang punya sumber_lihat dan bahasa/kata_asal masih kosong.
 --   - Referensi: baris etimologi dengan indeks = sumber_lihat (trim) yang memiliki

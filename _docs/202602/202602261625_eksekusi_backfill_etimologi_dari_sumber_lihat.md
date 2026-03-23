@@ -45,12 +45,12 @@ Jika kandidat rujukan lebih dari satu, dipilih urutan prioritas:
 
 Contoh hasil pengisian yang tervalidasi setelah migrasi:
 
-- `aba` (`sumber_lihat = abu`) -> `bahasa = Arab`, `kata_asal = abū`
-- `abah` (`sumber_lihat = abu`) -> `bahasa = Arab`, `kata_asal = abū`
-- `abang` (`sumber_lihat = bang`) -> `bahasa = Persia`, `kata_asal = bāng`
-- `ablur` (`sumber_lihat = hablur`) -> `bahasa = Persia`, `kata_asal = bulūr`
-- `acik` (`sumber_lihat = aci`) -> `bahasa = Amoy`, `kata_asal = 阿姊 阿姊 á chí`
+- `aba` (`sumber_lihat = abu`) → `bahasa = Arab`, `kata_asal = abū`
+- `abah` (`sumber_lihat = abu`) → `bahasa = Arab`, `kata_asal = abū`
+- `abang` (`sumber_lihat = bang`) → `bahasa = Persia`, `kata_asal = bāng`
+- `ablur` (`sumber_lihat = hablur`) → `bahasa = Persia`, `kata_asal = bulūr`
+- `acik` (`sumber_lihat = aci`) → `bahasa = Amoy`, `kata_asal = 阿姊 阿姊 á chí`
 
 ## Catatan
 
-Sisa `bahasa` yang masih kosong (**987**) saat ini tidak terselesaikan oleh aturan `sumber_lihat -> indeks` ini, sehingga butuh strategi lanjutan (misalnya parse pola naratif lain atau enrichment dari sumber data tambahan).
+Sisa `bahasa` yang masih kosong (**987**) saat ini tidak terselesaikan oleh aturan `sumber_lihat → indeks` ini, sehingga butuh strategi lanjutan (misalnya parse pola naratif lain atau enrichment dari sumber data tambahan).

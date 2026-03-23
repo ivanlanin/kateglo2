@@ -8,9 +8,9 @@ Nomina dapat diturunkan melalui pengafiksan dengan sejumlah prefiks, sufiks, kon
 Proses yang sama juga terjadi pada penurunan nomina-nomina lain seperti terlihat dalam contoh-contoh berikut.
 
 - (43)
-- *darat* (N) -> *daratan* (N); *mendarat(kan)* (V) -> *pendaratan* (N)
-- *kosong* (Adj) -> *kekosongan* (N); *mengosongkan* (V) -> *pengosongan* (N)
-- *satu* (Num) -> *kesatuan* (N); *bersatu* (V) -> *persatuan* (N); *menyatukan* (V) -> *penyatuan* (N)
+- *darat* (N) → *daratan* (N); *mendarat(kan)* (V) → *pendaratan* (N)
+- *kosong* (Adj) → *kekosongan* (N); *mengosongkan* (V) → *pengosongan* (N)
+- *satu* (Num) → *kesatuan* (N); *bersatu* (V) → *persatuan* (N); *menyatukan* (V) → *penyatuan* (N)
 
 Karena keterkaitan makna merupakan dasar untuk menentukan bentuk pangkal penurunan, dalam kebanyakan hal nomina turunan mempunyai bentuk pangkal sendiri-sendiri. Nomina *temuan, pertemuan,* dan *penemuan*, misalnya, masing-masing diturunkan dari bentuk pangkal yang berbeda, yakni *temu, bertemu,* dan *menemukan*.
 

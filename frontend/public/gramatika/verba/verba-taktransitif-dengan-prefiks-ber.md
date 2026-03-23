@@ -17,20 +17,20 @@ Beberapa pangkal verba transitif, jika berprefiks *ber-*, menjadi verba taktrans
 
 (219)
 
-| Pangkal | -> | Bentuk *ber-* |
+| Pangkal | → | Bentuk *ber-* |
 |---|---|---|
-| *ubah* | -> | *berubah* |
-| *tukar* | -> | *bertukar* |
-| *gantung* | -> | *bergantung* |
-| *harap* | -> | *berharap* |
-| *tambah* | -> | *bertambah* |
-| *salin* | -> | *bersalin* |
-| *buat* | -> | *berbuat* |
-| *buka* | -> | *berbuka* |
-| *ikut* | -> | *berikut* |
-| *pegang* | -> | *berpegang* |
-| *cukur* | -> | *bercukur* |
-| *angkat* | -> | *berangkat* |
+| *ubah* | → | *berubah* |
+| *tukar* | → | *bertukar* |
+| *gantung* | → | *bergantung* |
+| *harap* | → | *berharap* |
+| *tambah* | → | *bertambah* |
+| *salin* | → | *bersalin* |
+| *buat* | → | *berbuat* |
+| *buka* | → | *berbuka* |
+| *ikut* | → | *berikut* |
+| *pegang* | → | *berpegang* |
+| *cukur* | → | *bercukur* |
+| *angkat* | → | *berangkat* |
 
 Ada sejumlah verba dengan prefiks *ber-* dengan pangkal verba yang bermakna 'perbuatan refleksif':
 
@@ -120,15 +120,15 @@ Verba berprefiks *ber-* juga dapat diturunkan dari numeralia meskipun ada kendal
 
 (236)
 
-| Pangkal | -> | Bentuk *ber-* |
+| Pangkal | → | Bentuk *ber-* |
 |---|---|---|
-| *satu* | -> | *bersatu* |
-| *dua* | -> | *berdua* |
-| *enam* | -> | *berenam* |
-| *puluh* | -> | *berpuluh-puluh* |
-| *ratus* | -> | *beratus-ratus* |
-| *lusin* | -> | *berlusin-lusin* |
-| *juta* | -> | *berjuta-juta* |
+| *satu* | → | *bersatu* |
+| *dua* | → | *berdua* |
+| *enam* | → | *berenam* |
+| *puluh* | → | *berpuluh-puluh* |
+| *ratus* | → | *beratus-ratus* |
+| *lusin* | → | *berlusin-lusin* |
+| *juta* | → | *berjuta-juta* |
 
 ## Pengafiksan Verba ber- dengan Pangkal Berbagai Frasa (4.3.1.1.5)
 

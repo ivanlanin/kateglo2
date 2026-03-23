@@ -109,10 +109,10 @@ Adjektiva yang bersufiks *-if, -er, -al, -is,* dan *-us* yang diserap dari bahas
 
 Adjektiva dengan konfiks *ke-...-an* pada umumnya digunakan pada bentuk dasar yang juga berupa adjektiva seperti pada contoh berikut.
 
-- *sempit* -> *kesempitan*
-- *haus* -> *kehausan*
-- *sakit* -> *kesakitan*
-- *girang* -> *kegirangan*
+- *sempit* → *kesempitan*
+- *haus* → *kehausan*
+- *sakit* → *kesakitan*
+- *girang* → *kegirangan*
 
 Contoh:
 

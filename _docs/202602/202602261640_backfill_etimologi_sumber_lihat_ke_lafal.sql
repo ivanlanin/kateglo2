@@ -1,5 +1,5 @@
 -- =============================================================================
--- Migrasi: Backfill etimologi dari sumber_lihat -> lafal
+-- Migrasi: Backfill etimologi dari sumber_lihat → lafal
 -- Aturan:
 --   - Target: baris etimologi dengan bahasa kosong dan sumber_lihat terisi.
 --   - Referensi: baris etimologi dengan lafal = TRIM(sumber_lihat) yang memiliki
