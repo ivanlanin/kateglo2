@@ -55,4 +55,4 @@ Contoh: kata *sebelum* berfungsi sebagai konjungsi dalam *Dia berangkat sebelum 
 2. [Konjungsi Korelatif](/gramatika/konjungsi-korelatif)
 3. [Konjungsi Subordinatif](/gramatika/konjungsi-subordinatif)
 4. [Konjungsi Antarkalimat](/gramatika/konjungsi-antarkalimat)
-5. [Simpulan](/gramatika/simpulan)
+5. [Simpulan](/gramatika/simpulan-konjungsi)

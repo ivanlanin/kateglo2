@@ -454,7 +454,7 @@ const daftarIsiGramatika = [
           { judul: 'Konjungsi Korelatif', slug: 'konjungsi-korelatif' },
           { judul: 'Konjungsi Subordinatif', slug: 'konjungsi-subordinatif' },
           { judul: 'Konjungsi Antarkalimat', slug: 'konjungsi-antarkalimat' },
-          { judul: 'Simpulan', slug: 'simpulan' },
+          { judul: 'Simpulan', slug: 'simpulan-konjungsi' },
         ],
       },
       { judul: 'Interjeksi', slug: 'interjeksi' },

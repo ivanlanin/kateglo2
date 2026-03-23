@@ -22,7 +22,7 @@ Berdasarkan peranannya dalam frasa atau kalimat, kata tugas dalam bahasa Indones
    2. [Konjungsi Korelatif](/gramatika/konjungsi-korelatif)
    3. [Konjungsi Subordinatif](/gramatika/konjungsi-subordinatif)
    4. [Konjungsi Antarkalimat](/gramatika/konjungsi-antarkalimat)
-   5. [Simpulan](/gramatika/simpulan)
+   5. [Simpulan](/gramatika/simpulan-konjungsi)
 4. [Interjeksi](/gramatika/interjeksi)
 5. [Artikula](/gramatika/artikula)
 6. [Partikel Penegas](/gramatika/partikel-penegas)
