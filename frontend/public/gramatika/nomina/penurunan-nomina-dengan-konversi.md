@@ -18,15 +18,29 @@ Nomina konversi dalam bahasa Indonesia dapat berasal dari adjektiva dasar atau a
 
 Nomina turunan dari adjektiva yang menyatakan ukuran atau sukatan:
 
-- (40)
-> *dalam, tinggi, lebar, panjang, luas, berat*
+(40)
+- dalam
+- tinggi
+- lebar
+- panjang
+- luas
+- berat
 
 Nomina turunan dari adjektiva turunan yang menyatakan terbitan atau peristiwa yang dilakukan secara berkala:
 
-- (41)
-> *harian, bulanan, mingguan, tahunan*
+(41)
+- harian
+- bulanan
+- mingguan
+- tahunan
 
 Nomina turunan dari verba yang menyatakan orang yang mengalami hal yang dinyatakan bentuk pangkal:
 
-- (42)
-> *terdakwa, terpidana, termohon, tergugat, tersangka, terhukum, tertuduh*
+(42)
+- terdakwa
+- terpidana
+- termohon
+- tergugat
+- tersangka
+- terhukum
+- tertuduh

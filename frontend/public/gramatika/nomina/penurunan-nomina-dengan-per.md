@@ -18,8 +18,17 @@ Nomina turunan lain muncul dengan *pe-* walaupun berkaitan dengan verba *ber-*:
 
 Selain *pe-* yang berkaitan dengan verba dengan *ber-*, ada nomina turunan dengan *pe-* yang tidak berkaitan langsung dengan verba dengan *ber-*. Penurunan nomina dengan *pe-* jenis ini didasarkan pada analogi. Fungsi *pe-* di sini adalah membentuk nomina pelaku atau pengalam profesi yang dinyatakan oleh pangkal:
 
-- (47)
-> *pebasket, pebulu tangkis, pegolf, perenang, pehoki, pesinetron, petenis, peselancar, pesepak bola, petatar*
+(47)
+- pebasket
+- pebulu tangkis
+- pegolf
+- perenang
+- pehoki
+- pesinetron
+- petenis
+- peselancar
+- pesepak bola
+- petatar
 
 Berikut adalah nomina turunan dengan *pe-* yang berkaitan dengan verba berawalan *be-*:
 
