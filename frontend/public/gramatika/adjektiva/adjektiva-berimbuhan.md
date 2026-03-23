@@ -15,17 +15,31 @@ Yang perlu ditambahkan ialah bahwa jika suku kata pertama bentuk dasarnya berakh
 
 Pengafiksan dengan infiks atau sisipan *-em-* digunakan pada bentuk dasar yang berupa nomina, verba, atau adjektiva yang jumlahnya sangat terbatas.
 
-| Adjektiva Berinfiks | <- | Bentuk Dasar |
-|---------------------|---|--------------|
-| *gemetar* | | *getar* (nomina) |
-| *gemuruh* | | *guruh* (nomina) |
-| *kemilap* | | *kilap* (nomina) |
-| *kemilau* | | *kilau* (nomina) |
-| *temaram* | | *taram* (nomina) |
-| *semerbak* | | *serbak* (verba) |
-| *gemerlap* | | *gerlap* (adjektiva) |
-| *gemilang* | | *gilang* (adjektiva) |
-| *semilir* | | *silir* (adjektiva) |
+Contoh:
+
+(69)
+
+| Adjektiva | <- | Nomina |
+|-----------|---|--------|
+| *gemetar* | | *getar* |
+| *gemuruh* | | *guruh* |
+| *kemilap* | | *kilap* |
+| *kemilau* | | *kilau* |
+| *temaram* | | *taram* |
+
+(70)
+
+| Adjektiva | <- | Verba |
+|-----------|---|-------|
+| *semerbak* | | *serbak* |
+
+(71)
+
+| Adjektiva | <- | Adjektiva |
+|-----------|---|-----------|
+| *gemerlap* | | *gerlap* |
+| *gemilang* | | *gilang* |
+| *semilir* | | *silir* |
 
 Perlu diperhatikan perbedaan perilaku sintaktis dari bentuk dasar nomina, verba, dan adjektiva yang disisipi *-em-* tersebut. Bentuk dasar nomina dapat berdiri sendiri tanpa penyisipan *-em-* terlebih dahulu. Sebaliknya, bentuk dasar verba dan adjektiva tidak dapat berfungsi sebagai unsur sintaksis sebelum disisipi *-em-*.
 
@@ -57,10 +71,15 @@ Contoh:
 | *islam* | *islami* | *islamiah* |
 | *insan* | *insani* | *insaniah* |
 | *hewan* | *hewani* | - |
-| *dunia* | *duniawi* | - |
-| *manusia* | *manusiawi* | - |
-| *gereja* | *gerejawi* | - |
-| *raga* | *ragawi* | - |
+
+(76)
+
+| Nomina | Adjektiva (-i/-wi) |
+|--------|--------------------|
+| *dunia* | *duniawi* |
+| *manusia* | *manusiawi* |
+| *gereja* | *gerejawi* |
+| *raga* | *ragawi* |
 
 (77)
 - a. *Pewarna alami makanan dapat dibuat dari daun suji.*
@@ -71,6 +90,8 @@ Contoh:
 Aturan pemakaian sufiks *-i/-wi* atau *-iah/-wiah* dalam banyak hal ditentukan oleh aturan fonologi dan tata bahasa Arab. Secara umum, sufiks *-i/-wi* muncul di belakang kata yang berakhir dengan konsonan, sedangkan sufiks *-iah/-wiah* di belakang kata yang berakhir dengan vokal /a/. Ada pula bentuk turunan yang diserap secara utuh, seperti *hakiki, rohani, ilmiah,* dan *harfiah*.
 
 Adjektiva yang bersufiks *-if, -er, -al, -is,* dan *-us* yang diserap dari bahasa Belanda atau bahasa Inggris berasal dari nomina.
+
+(78)
 
 | Nomina | Adjektiva |
 |--------|-----------|

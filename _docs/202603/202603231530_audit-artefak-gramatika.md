@@ -1,6 +1,6 @@
 # Audit Artefak Gramatika
 
-Dibuat: 2026-03-23T09:37:47.768Z
+Dibuat: 2026-03-23T09:55:39.527Z
 
 Artefak yang diaudit:
 
@@ -18,13 +18,13 @@ Artefak yang diaudit:
 |---|---:|---:|---:|---:|---|---|
 | Bab I Pendahuluan | 10 | 0 | 0 | 0 | Tidak | Tidak |
 | Bab II Tata Bahasa | 28 | 32 | 0 | 0 | Tidak | Tidak |
-| Bab III Bunyi Bahasa | 19 | 28 | 5 | 2 | Ya | Tidak |
-| Bab IV Verba | 72 | 407 | 2 | 3 | Ya | Ya |
-| Bab V Adjektiva | 45 | 109 | 1 | 0 | Ya | Tidak |
+| Bab III Bunyi Bahasa | 19 | 44 | 5 | 2 | Tidak | Tidak |
+| Bab IV Verba | 72 | 410 | 2 | 3 | Ya | Ya |
+| Bab V Adjektiva | 45 | 114 | 1 | 0 | Tidak | Tidak |
 | Bab VI Adverbia | 31 | 65 | 0 | 0 | Tidak | Tidak |
-| Bab VII Nomina, Pronomina, dan Numeralia | 78 | 103 | 2 | 0 | Ya | Ya |
-| Bab VIII Kata Tugas | 27 | 97 | 1 | 2 | Ya | Ya |
-| Bab IX Kalimat | 86 | 412 | 5 | 2 | Ya | Ya |
+| Bab VII Nomina, Pronomina, dan Numeralia | 78 | 116 | 2 | 0 | Ya | Ya |
+| Bab VIII Kata Tugas | 27 | 98 | 1 | 2 | Tidak | Ya |
+| Bab IX Kalimat | 86 | 415 | 5 | 2 | Ya | Ya |
 | Bab X Hubungan Antarklausa | 40 | 206 | 0 | 2 | Tidak | Ya |
 
 ## Detail per Bab
@@ -109,15 +109,15 @@ File sumber:
 
 - Folder: `bunyi-bahasa`
 - Jumlah subbab: 19
-- Jumlah contoh: 28
+- Jumlah contoh: 44
 - Jumlah tabel: 5
 - Jumlah bagan: 2
 - Rentang subbab: 3.1, 3.1.1, 3.1.2, 3.1.3, 3.1.4, 3.1.5, 3.1.6, 3.1.7, 3.2, 3.2.1, 3.2.2, 3.2.3, ... (+7)
-- Rentang contoh: 13-16, 21-44
+- Rentang contoh: 1-44
 - Tabel: 3.1, 3.2, 3.3, 3.4, 3.5
 - Bagan: 3.1, 3.2
 - Gap subbab: -
-- Gap contoh: 17-20
+- Gap contoh: -
 - Gap tabel: -
 - Gap bagan: -
 - Duplikat subbab (representasional): -
@@ -156,15 +156,15 @@ File sumber:
 
 - Folder: `verba`
 - Jumlah subbab: 72
-- Jumlah contoh: 407
+- Jumlah contoh: 410
 - Jumlah tabel: 2
 - Jumlah bagan: 3
 - Rentang subbab: 4.1, 4.1.2.1, 4.1.2.2, 4.1.2.3, 4.1.2.4, 4.1.2.5, 4.1.2.6, 4.1.3.1, 4.1.3.1.1, 4.1.3.1.2, 4.1.3.2, 4.1.3.2.1, ... (+60)
-- Rentang contoh: 1-70, 72-99, 101-112, 114-239, 242-319, 321, 323-325, 327-415
+- Rentang contoh: 1-70, 72-99, 101-112, 114-239, 242-415
 - Tabel: 4.1, 4.2
 - Bagan: 4.1, 4.2, 4.3
 - Gap subbab: -
-- Gap contoh: 71, 100, 113, 240-241, 320, 322, 326
+- Gap contoh: 71, 100, 113, 240-241
 - Gap tabel: -
 - Gap bagan: -
 - Duplikat subbab (representasional): -
@@ -235,15 +235,15 @@ File sumber:
 
 - Folder: `adjektiva`
 - Jumlah subbab: 45
-- Jumlah contoh: 109
+- Jumlah contoh: 114
 - Jumlah tabel: 1
 - Jumlah bagan: 0
 - Rentang subbab: 5.1, 5.2, 5.2.1, 5.2.2, 5.2.3, 5.2.4, 5.2.5, 5.2.6, 5.2.7, 5.2.8, 5.3, 5.3.1, ... (+33)
-- Rentang contoh: 1-68, 72-75, 77, 79-114
+- Rentang contoh: 1-114
 - Tabel: 5.1
 - Bagan: -
 - Gap subbab: -
-- Gap contoh: 69-71, 76, 78
+- Gap contoh: -
 - Gap tabel: -
 - Gap bagan: -
 - Duplikat subbab (representasional): -
@@ -335,15 +335,15 @@ File sumber:
 
 - Folder: `nomina`, `pronomina`, `numeralia`
 - Jumlah subbab: 78
-- Jumlah contoh: 103
+- Jumlah contoh: 116
 - Jumlah tabel: 2
 - Jumlah bagan: 0
 - Rentang subbab: 7.1, 7.1.4.1, 7.1.4.1.1, 7.1.4.1.2, 7.1.4.2, 7.1.4.2.1, 7.1.4.2.2.1, 7.1.4.2.2.2, 7.1.4.2.2.2.1, 7.1.4.2.2.2.2, 7.1.4.2.2.2.3, 7.1.4.2.2.2.4, ... (+66)
-- Rentang contoh: 1-12, 14, 36-39, 112-114, 116-119, 124, 129, 131, 133, 146, 152, 154-160, 176-177, 179, 196-198, 200-201, 203, 208-209, 211, 214-215, 217, 219, 221, 223-224, 226-228, 230, 245, 247-252, 254, 257-258, 262, 267, 270-271, 273-274, 276-277, 281-282, 284, 290-293, 296, 299-302, 309, 312, 317-318, 320, 330, 333-334, 336-340
+- Rentang contoh: 1-12, 14, 36-39, 112-114, 116-119, 124, 129, 131, 133, 146, 152, 154-164, 167-170, 176-177, 179, 189-190, 196-198, 200-201, 203, 208-209, 211, 214-215, 217, 219, 221-224, 226-228, 230, 245, 247-252, 254, 257-258, 260, 262, 264, 267, 270-271, 273-274, 276-277, 281-282, 284, 290-293, 296, 299-302, 309, 312, 317-318, 320, 330, 333-334, 336-340
 - Tabel: 7.1, 7.2
 - Bagan: -
 - Gap subbab: -
-- Gap contoh: 13, 15-35, 40-111, 115, 120-123, 125-128, 130, 132, 134-145, 147-151, 153, 161-175, 178, 180-195, 199, 202, 204-207, 210, 212-213, 216, 218, 220, 222, 225, 229, 231-244, 246, 253, 255-256, 259-261, 263-266, 268-269, 272, 275, 278-280, 283, 285-289, 294-295, 297-298, 303-308, 310-311, 313-316, 319, 321-329, 331-332, 335
+- Gap contoh: 13, 15-35, 40-111, 115, 120-123, 125-128, 130, 132, 134-145, 147-151, 153, 165-166, 171-175, 178, 180-188, 191-195, 199, 202, 204-207, 210, 212-213, 216, 218, 220, 225, 229, 231-244, 246, 253, 255-256, 259, 261, 263, 265-266, 268-269, 272, 275, 278-280, 283, 285-289, 294-295, 297-298, 303-308, 310-311, 313-316, 319, 321-329, 331-332, 335
 - Gap tabel: -
 - Gap bagan: -
 - Duplikat subbab (representasional): -
@@ -425,21 +425,21 @@ File sumber:
 
 - Folder: `kata-tugas`
 - Jumlah subbab: 27
-- Jumlah contoh: 97
+- Jumlah contoh: 98
 - Jumlah tabel: 1
 - Jumlah bagan: 2
 - Rentang subbab: 8.1, 8.2, 8.2.1.1, 8.2.1.1.1, 8.2.1.1.1.1, 8.2.1.1.1.2, 8.2.1.1.2, 8.2.1.1.2.1, 8.2.1.1.2.2, 8.2.1.1.2.3, 8.2.1.2, 8.2.1.3, ... (+15)
-- Rentang contoh: 1-70, 72-98
+- Rentang contoh: 1-98
 - Tabel: 8.1
 - Bagan: 8.1, 8.2
 - Gap subbab: -
-- Gap contoh: 71
+- Gap contoh: -
 - Gap tabel: -
 - Gap bagan: -
 - Duplikat subbab (representasional): -
 - Duplikat subbab (perlu telaah): 8.5 x2 [frontmatter] @ 2 file
 - Duplikat contoh (representasional): -
-- Duplikat contoh (perlu telaah): -
+- Duplikat contoh (perlu telaah): 1 x2 [direct/inline-example] @ 2 file, 2 x2 [direct/inline-example] @ 2 file, 3 x2 [direct/inline-example] @ 2 file, 4 x2 [direct/inline-example] @ 2 file, 5 x2 [direct/inline-example] @ 2 file
 - Duplikat tabel (representasional): -
 - Duplikat tabel (perlu telaah): -
 - Duplikat bagan (representasional): 8.1 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/kata-tugas/preposisi-dan-nomina-lokatif.md, 8.2 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/kata-tugas/preposisi-dan-nomina-lokatif.md
@@ -474,21 +474,21 @@ File sumber:
 
 - Folder: `kalimat`
 - Jumlah subbab: 86
-- Jumlah contoh: 412
+- Jumlah contoh: 415
 - Jumlah tabel: 5
 - Jumlah bagan: 2
 - Rentang subbab: 9.1, 9.2, 9.2.1, 9.2.2, 9.2.3, 9.2.3.1, 9.2.3.2, 9.3, 9.3.1, 9.3.2, 9.3.2.1, 9.3.2.2, ... (+74)
-- Rentang contoh: 2-3, 5-165, 167-197, 202-257, 259-264, 267-368, 370-375, 377, 379-425
+- Rentang contoh: 1-197, 202-257, 259-264, 267-368, 370-375, 377, 379-425
 - Tabel: 9.1, 9.2, 9.3, 9.4, 9.5
 - Bagan: 9.1, 9.2
 - Gap subbab: -
-- Gap contoh: 4, 166, 198-201, 258, 265-266, 369, 376, 378
+- Gap contoh: 198-201, 258, 265-266, 369, 376, 378
 - Gap tabel: -
 - Gap bagan: -
 - Duplikat subbab (representasional): -
 - Duplikat subbab (perlu telaah): -
 - Duplikat contoh (representasional): -
-- Duplikat contoh (perlu telaah): 111 x2 [direct] @ frontend/public/gramatika/kalimat/keterangan-cara.md, 112 x2 [direct] @ frontend/public/gramatika/kalimat/keterangan-cara.md, 113 x2 [direct] @ frontend/public/gramatika/kalimat/keterangan-cara.md, 15 x3 [direct] @ frontend/public/gramatika/kalimat/unsur-wajib-dan-unsur-takwajib.md, 168 x3 [direct] @ frontend/public/gramatika/kalimat/batasan-kalimat-dasar.md, 328 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md, 329 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md, 330 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md, 331 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md, 343 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md, 344 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md
+- Duplikat contoh (perlu telaah): 111 x2 [direct] @ frontend/public/gramatika/kalimat/keterangan-cara.md, 112 x2 [direct] @ frontend/public/gramatika/kalimat/keterangan-cara.md, 113 x2 [direct] @ frontend/public/gramatika/kalimat/keterangan-cara.md, 15 x3 [direct] @ frontend/public/gramatika/kalimat/unsur-wajib-dan-unsur-takwajib.md, 168 x3 [direct] @ frontend/public/gramatika/kalimat/batasan-kalimat-dasar.md, 2 x2 [direct/inline-example] @ 2 file, 3 x2 [direct/inline-example] @ 2 file, 328 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md, 329 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md, 330 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md, 331 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md, 343 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md, ... (+1)
 - Duplikat tabel (representasional): 9.1 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/kalimat/kategori-fungsi-dan-peran.md, 9.4 x2 [image-alt/plain-caption] @ frontend/public/gramatika/kalimat/batasan-kalimat-dasar.md
 - Duplikat tabel (perlu telaah): 9.3 x2 [plain-caption] @ frontend/public/gramatika/kalimat/keterangan.md
 - Duplikat bagan (representasional): 9.1 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/kalimat/unsur-wajib-dan-unsur-takwajib.md, 9.2 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/kalimat/perluasan-kalimat-dasar.md

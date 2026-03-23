@@ -17,14 +17,15 @@ Artikula yang bersifat gelar pada umumnya bertalian dengan orang atau hal yang d
 
 Contoh:
 
-- *Sang* juara, Ellyas Pical, dapat merobohkan petinju Australia.
-- *Sang* Merah Putih berkibar dengan jaya di seluruh tanah air.
-- *Sang* suami mengapa tidak ikut?
-- Karena pernyataan siswa tadi rupanya *sang* guru menjadi reda amarahnya.
-- Baru-baru ini *Sri* Paus berkunjung ke Australia.
-- Kedatangan *Sri* Baginda dan *Sri* Ratu disambut dengan meriah.
-- Segera *Hang* Tuah pergi merantau.
-- *Dang* Merdu adalah tokoh terkenal dalam hikayat sastra Melayu.
+(71)
+- a. *Sang* juara, Ellyas Pical, dapat merobohkan petinju Australia.
+- b. *Sang* Merah Putih berkibar dengan jaya di seluruh tanah air.
+- c. *Sang* suami mengapa tidak ikut?
+- d. Karena pernyataan siswa tadi rupanya *sang* guru menjadi reda amarahnya.
+- e. Baru-baru ini *Sri* Paus berkunjung ke Australia.
+- f. Kedatangan *Sri* Baginda dan *Sri* Ratu disambut dengan meriah.
+- g. Segera *Hang* Tuah pergi merantau.
+- h. *Dang* Merdu adalah tokoh terkenal dalam hikayat sastra Melayu.
 
 
 ## Artikula yang Mengacu pada Makna Kelompok (8.2.4.2)

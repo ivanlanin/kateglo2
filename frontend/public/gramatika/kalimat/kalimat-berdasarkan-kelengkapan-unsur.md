@@ -44,6 +44,13 @@ Di luar konteks wacana, kalimat taklengkap sering digunakan dalam iklan, papan p
 - b. Belok kiri langsung.
 - c. Merdeka atau mati.
 
+Bentuk-bentuk pada (368) itu tampaknya, secara berurutan, berasal dari bentuk lengkap berikut.
+
+(369)
+- a. Kami menerima pegawai baru untuk ditempatkan di luar Jakarta.
+- b. Yang akan berbelok ke kiri langsung membelok.
+- c. Tekad para pejuang dulu hanya satu: merdeka atau mati.
+
 Ada pula ungkapan tetap (formula) yang berdiri sendiri dan tidak mempunyai padanan bentuk lengkap:
 
 (370) Selamat malam. / Apa kabar? / Merdeka! / Selamat jalan.

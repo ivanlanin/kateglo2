@@ -5,11 +5,17 @@ title: Kalimat Adjektival (9.5.2.2)
 
 Predikat kalimat dalam bahasa Indonesia dapat pula berupa adjektiva atau frasa adjektival seperti terlihat pada contoh berikut.
 
+(258)
+- a. Anaknya pintar.
+- b. Pernyataan orang itu benar.
+- c. Alasan para pengunjuk rasa agak aneh.
+
+Subjek kalimat pada ketiga contoh di atas adalah *anaknya*, *pernyataan orang itu*, dan *alasan para pengunjuk rasa*, sedangkan predikatnya adalah *pintar*, *benar*, dan *agak aneh*. Kalimat yang predikatnya adjektiva atau frasa adjektival sering juga dinamakan kalimat statif.
+
 (259)
 - a. Pernyataan ketua organisasi itu adalah tidak benar.
 - b. Gerakan badannya pada tarian yang pertama adalah anggun dan memesona.
 - c. Tindakan main hakim sendiri oleh tokoh masyarakat itu adalah sangat tidak pantas.
-- d. Pernyataan orang itu benar.
 
 Predikat dalam kalimat statif kadang-kadang diikuti oleh kata atau frasa lain.
 

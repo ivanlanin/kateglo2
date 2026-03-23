@@ -38,12 +38,23 @@ Pada contoh (373), nomina ayah, ibu, Andi, dan saya termasuk takrif yang menjadi
 
 Verba ada dalam kalimat inversi tertentu dapat digantikan dengan terdapat:
 
-(375) Ada / Terdapat perbedaan penilaian antara dia dan saya.
+(375)
+- a. Ada perbedaan penilaian antara dia dan saya.
+- b. Terdapat perbedaan penilaian antara dia dan saya.
+
+(376)
+- a. Ada kekeliruan dalam laporan itu.
+- b. Terdapat kekeliruan dalam laporan itu.
 
 Konstruksi inversi dengan verba adalah sering digunakan dalam wacana untuk memperkenalkan topik:
 
-(377) Adalah sebuah kisah tentang seorang raja yang sangat termasyhur.
-→ Tersebutlah sebuah kisah tentang seorang raja yang sangat termasyhur.
+(377)
+- a. Adalah sebuah kisah tentang seorang raja yang sangat termasyhur pada masa itu.
+- b. Tersebutlah sebuah kisah tentang seorang raja yang sangat termasyhur pada masa itu.
+
+(378)
+- a. Adalah sebuah kerajaan yang termasyhur pada masa itu.
+- b. Tersebutlah sebuah kerajaan yang termasyhur pada masa itu.
 
 ## Pengedepanan (9.5.5.2)
 

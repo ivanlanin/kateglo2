@@ -222,7 +222,7 @@ async function getMarkdownFiles(folderPath) {
 }
 
 function extractExampleOccurrenceFromLine(line) {
-  const directExampleMatch = line.match(/^\s*(?:-\s*)?\((\d+)([a-z])?\)/i);
+  const directExampleMatch = line.match(/^\s*(?:>\s*)?(?:-\s*)?\((\d+)([a-z])?\)/i);
   if (directExampleMatch) {
     return {
       value: Number.parseInt(directExampleMatch[1], 10),
@@ -240,6 +240,46 @@ function extractExampleOccurrenceFromLine(line) {
   }
 
   return null;
+}
+
+function extractTableExampleOccurrence(lines, currentIndex) {
+  const line = lines[currentIndex];
+  const match = line.match(/\bcontoh\s*\((\d+)([a-z])?\)\s+berikut\b/i);
+  if (!match) {
+    return null;
+  }
+
+  for (let index = currentIndex + 1; index < lines.length; index += 1) {
+    const candidate = lines[index].trim();
+    if (!candidate) {
+      continue;
+    }
+    if (candidate.startsWith('|')) {
+      return {
+        value: Number.parseInt(match[1], 10),
+        source: 'table-reference',
+      };
+    }
+    break;
+  }
+
+  return null;
+}
+
+function extractInlineExampleOccurrenceFromLine(line, inExampleSection) {
+  if (!inExampleSection) {
+    return null;
+  }
+
+  const inlineExampleMatch = line.match(/^\s*(\d+)\.(?:\s+|$)/);
+  if (!inlineExampleMatch) {
+    return null;
+  }
+
+  return {
+    value: Number.parseInt(inlineExampleMatch[1], 10),
+    source: 'inline-example',
+  };
 }
 
 function extractArtifactOccurrenceFromLine(line, kind) {
@@ -324,13 +364,31 @@ async function analyzeBabGroup(babGroup) {
       );
 
       const lines = content.split(/\r?\n/);
-      for (const line of lines) {
-        const exampleOccurrence = extractExampleOccurrenceFromLine(line);
+      let inExampleSection = false;
+      for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
+        const line = lines[lineIndex];
+        if (/^\s*Contoh[:;]?\s*$/i.test(line)) {
+          inExampleSection = true;
+          continue;
+        }
+
+        if (/^#{1,6}\s+/.test(line)) {
+          inExampleSection = false;
+        }
+
+        const exampleOccurrence = extractExampleOccurrenceFromLine(line)
+          ?? extractInlineExampleOccurrenceFromLine(line, inExampleSection)
+          ?? extractTableExampleOccurrence(lines, lineIndex);
         if (exampleOccurrence !== null) {
           exampleOccurrences.push({
             ...exampleOccurrence,
             file: relativeFilePath,
           });
+          continue;
+        }
+
+        if (line.trim() === '') {
+          continue;
         }
 
         const tableOccurrence = extractArtifactOccurrenceFromLine(line, 'Tabel');
@@ -362,7 +420,7 @@ async function analyzeBabGroup(babGroup) {
   const uniqueTableLabels = [...new Set(tableLabels)].sort((left, right) => left.localeCompare(right, undefined, { numeric: true }));
   const uniqueBaganLabels = [...new Set(baganLabels)].sort((left, right) => left.localeCompare(right, undefined, { numeric: true }));
   const duplicateSubbab = collectDuplicates(subbabOccurrences, new Set(['frontmatter', 'heading']));
-  const duplicateExamples = collectDuplicates(exampleOccurrences, new Set(['direct', 'diagram-image-alt', 'diagram-inline']));
+  const duplicateExamples = collectDuplicates(exampleOccurrences, new Set(['direct', 'diagram-image-alt', 'diagram-inline', 'inline-example', 'table-reference']));
   const duplicateTables = collectDuplicates(tableOccurrences, new Set(['image-alt', 'emphasis-caption', 'plain-caption']));
   const duplicateBagan = collectDuplicates(baganOccurrences, new Set(['image-alt', 'emphasis-caption', 'plain-caption']));
 
