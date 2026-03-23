@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-03-23T04:52:28.101Z",
+  "generatedAt": "2026-03-23T05:20:29.262Z",
   "source": {
     "gramatikaData": "frontend/src/constants/gramatikaData.js",
     "checklistAudit": "_docs/202603/202603231430_checklist-audit-gramatika-tbbbi.md"
   },
   "summary": {
     "totalItem": 308,
-    "totalOk": 94,
+    "totalOk": 117,
     "totalPerluRevisi": 0,
     "totalTunda": 0,
     "totalSedang": 0,
-    "totalBelum": 214
+    "totalBelum": 191
   },
   "summaryByChapter": [
     {
@@ -67,11 +67,11 @@
       "nomorBab": "V",
       "urutanBab": 5,
       "total": 23,
-      "selesai": 0,
+      "selesai": 23,
       "revisi": 0,
       "tunda": 0,
       "sedang": 0,
-      "belum": 23
+      "belum": 0
     },
     {
       "babSlug": "adverbia",
@@ -4906,9 +4906,9 @@
       "frontmatterTitle": null,
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Halaman landing bab berfungsi sebagai daftar isi dan sudah sinkron dengan struktur item Bab V di `gramatikaData.js`.",
+      "halamanPdf": "—",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -4937,9 +4937,9 @@
       "frontmatterTitle": "Batasan dan Ciri Adjektiva (5.1)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/batasan-dan-ciri-adjektiva.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Isi, penomoran contoh (1)-(3), dan italic pada contoh sesuai sumber. Tidak ada temuan baru.",
+      "halamanPdf": "217-218",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -4960,17 +4960,17 @@
       "urutanBab": 5,
       "judulBab": "Adjektiva",
       "babSlug": "adjektiva",
-      "judul": "Ciri Semantis Adjektiva",
+      "judul": "Jenis Adjektiva Berdasarkan Ciri Semantis",
       "slug": "ciri-semantis-adjektiva",
       "tipe": "item",
       "nomorSubbab": "5.2",
       "frontmatterId": "2",
-      "frontmatterTitle": "Ciri Semantis Adjektiva (5.2)",
+      "frontmatterTitle": "Jenis Adjektiva Berdasarkan Ciri Semantis (5.2)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/ciri-semantis-adjektiva.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Isi sesuai sumber; judul dipulihkan dari parafrase `Ciri Semantis Adjektiva` menjadi `Jenis Adjektiva Berdasarkan Ciri Semantis` agar sama dengan heading PDF.",
+      "halamanPdf": "218-220",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -4999,9 +4999,9 @@
       "frontmatterTitle": "Adjektiva Pemeri Sifat (5.2.1)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-pemeri-sifat.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Definisi singkat dan daftar contoh (6) sesuai sumber. Tidak ada temuan baru.",
+      "halamanPdf": "220",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -5010,13 +5010,13 @@
       },
       "navigasi": {
         "parentSlug": "ciri-semantis-adjektiva",
-        "parentJudul": "Ciri Semantis Adjektiva",
+        "parentJudul": "Jenis Adjektiva Berdasarkan Ciri Semantis",
         "directParentSlug": "ciri-semantis-adjektiva",
-        "directParentJudul": "Ciri Semantis Adjektiva",
+        "directParentJudul": "Jenis Adjektiva Berdasarkan Ciri Semantis",
         "ancestorTrail": [
           {
             "slug": "ciri-semantis-adjektiva",
-            "judul": "Ciri Semantis Adjektiva"
+            "judul": "Jenis Adjektiva Berdasarkan Ciri Semantis"
           }
         ]
       }
@@ -5035,9 +5035,9 @@
       "frontmatterTitle": "Adjektiva Ukuran (5.2.2)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-ukuran.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Definisi singkat dan daftar contoh (7) sesuai sumber. Tidak ada temuan baru.",
+      "halamanPdf": "220",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -5046,13 +5046,13 @@
       },
       "navigasi": {
         "parentSlug": "ciri-semantis-adjektiva",
-        "parentJudul": "Ciri Semantis Adjektiva",
+        "parentJudul": "Jenis Adjektiva Berdasarkan Ciri Semantis",
         "directParentSlug": "ciri-semantis-adjektiva",
-        "directParentJudul": "Ciri Semantis Adjektiva",
+        "directParentJudul": "Jenis Adjektiva Berdasarkan Ciri Semantis",
         "ancestorTrail": [
           {
             "slug": "ciri-semantis-adjektiva",
-            "judul": "Ciri Semantis Adjektiva"
+            "judul": "Jenis Adjektiva Berdasarkan Ciri Semantis"
           }
         ]
       }
@@ -5071,9 +5071,9 @@
       "frontmatterTitle": "Adjektiva Warna (5.2.3)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-warna.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "1 perbaikan: contoh (14) dipulihkan dari `putih merah` menjadi `putih metah` sesuai PDF; daftar contoh (8)-(16) selebihnya sesuai sumber.",
+      "halamanPdf": "221-223",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -5082,13 +5082,13 @@
       },
       "navigasi": {
         "parentSlug": "ciri-semantis-adjektiva",
-        "parentJudul": "Ciri Semantis Adjektiva",
+        "parentJudul": "Jenis Adjektiva Berdasarkan Ciri Semantis",
         "directParentSlug": "ciri-semantis-adjektiva",
-        "directParentJudul": "Ciri Semantis Adjektiva",
+        "directParentJudul": "Jenis Adjektiva Berdasarkan Ciri Semantis",
         "ancestorTrail": [
           {
             "slug": "ciri-semantis-adjektiva",
-            "judul": "Ciri Semantis Adjektiva"
+            "judul": "Jenis Adjektiva Berdasarkan Ciri Semantis"
           }
         ]
       }
@@ -5107,9 +5107,9 @@
       "frontmatterTitle": "Adjektiva Bentuk (5.2.4)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-bentuk.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Definisi dan daftar contoh (17)-(18) sesuai sumber. Tidak ada temuan baru.",
+      "halamanPdf": "223-224",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -5118,13 +5118,13 @@
       },
       "navigasi": {
         "parentSlug": "ciri-semantis-adjektiva",
-        "parentJudul": "Ciri Semantis Adjektiva",
+        "parentJudul": "Jenis Adjektiva Berdasarkan Ciri Semantis",
         "directParentSlug": "ciri-semantis-adjektiva",
-        "directParentJudul": "Ciri Semantis Adjektiva",
+        "directParentJudul": "Jenis Adjektiva Berdasarkan Ciri Semantis",
         "ancestorTrail": [
           {
             "slug": "ciri-semantis-adjektiva",
-            "judul": "Ciri Semantis Adjektiva"
+            "judul": "Jenis Adjektiva Berdasarkan Ciri Semantis"
           }
         ]
       }
@@ -5143,9 +5143,9 @@
       "frontmatterTitle": "Adjektiva Waktu (5.2.5)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-waktu.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Definisi dan daftar contoh (19) sesuai sumber. Tidak ada temuan baru.",
+      "halamanPdf": "224",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -5154,13 +5154,13 @@
       },
       "navigasi": {
         "parentSlug": "ciri-semantis-adjektiva",
-        "parentJudul": "Ciri Semantis Adjektiva",
+        "parentJudul": "Jenis Adjektiva Berdasarkan Ciri Semantis",
         "directParentSlug": "ciri-semantis-adjektiva",
-        "directParentJudul": "Ciri Semantis Adjektiva",
+        "directParentJudul": "Jenis Adjektiva Berdasarkan Ciri Semantis",
         "ancestorTrail": [
           {
             "slug": "ciri-semantis-adjektiva",
-            "judul": "Ciri Semantis Adjektiva"
+            "judul": "Jenis Adjektiva Berdasarkan Ciri Semantis"
           }
         ]
       }
@@ -5179,9 +5179,9 @@
       "frontmatterTitle": "Adjektiva Jarak (5.2.6)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-jarak.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Definisi singkat dan daftar contoh (20) sesuai sumber. Tidak ada temuan baru.",
+      "halamanPdf": "225",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -5190,13 +5190,13 @@
       },
       "navigasi": {
         "parentSlug": "ciri-semantis-adjektiva",
-        "parentJudul": "Ciri Semantis Adjektiva",
+        "parentJudul": "Jenis Adjektiva Berdasarkan Ciri Semantis",
         "directParentSlug": "ciri-semantis-adjektiva",
-        "directParentJudul": "Ciri Semantis Adjektiva",
+        "directParentJudul": "Jenis Adjektiva Berdasarkan Ciri Semantis",
         "ancestorTrail": [
           {
             "slug": "ciri-semantis-adjektiva",
-            "judul": "Ciri Semantis Adjektiva"
+            "judul": "Jenis Adjektiva Berdasarkan Ciri Semantis"
           }
         ]
       }
@@ -5215,9 +5215,9 @@
       "frontmatterTitle": "Adjektiva Sikap Batin (5.2.7)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-sikap-batin.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Definisi singkat dan daftar contoh (21) sesuai sumber. Tidak ada temuan baru.",
+      "halamanPdf": "225",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -5226,13 +5226,13 @@
       },
       "navigasi": {
         "parentSlug": "ciri-semantis-adjektiva",
-        "parentJudul": "Ciri Semantis Adjektiva",
+        "parentJudul": "Jenis Adjektiva Berdasarkan Ciri Semantis",
         "directParentSlug": "ciri-semantis-adjektiva",
-        "directParentJudul": "Ciri Semantis Adjektiva",
+        "directParentJudul": "Jenis Adjektiva Berdasarkan Ciri Semantis",
         "ancestorTrail": [
           {
             "slug": "ciri-semantis-adjektiva",
-            "judul": "Ciri Semantis Adjektiva"
+            "judul": "Jenis Adjektiva Berdasarkan Ciri Semantis"
           }
         ]
       }
@@ -5251,9 +5251,9 @@
       "frontmatterTitle": "Adjektiva Cerapan (5.2.8)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-cerapan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Uraian pancaindra serta contoh (22)-(23) sesuai sumber. Tidak ada temuan baru.",
+      "halamanPdf": "226-227",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -5262,13 +5262,13 @@
       },
       "navigasi": {
         "parentSlug": "ciri-semantis-adjektiva",
-        "parentJudul": "Ciri Semantis Adjektiva",
+        "parentJudul": "Jenis Adjektiva Berdasarkan Ciri Semantis",
         "directParentSlug": "ciri-semantis-adjektiva",
-        "directParentJudul": "Ciri Semantis Adjektiva",
+        "directParentJudul": "Jenis Adjektiva Berdasarkan Ciri Semantis",
         "ancestorTrail": [
           {
             "slug": "ciri-semantis-adjektiva",
-            "judul": "Ciri Semantis Adjektiva"
+            "judul": "Jenis Adjektiva Berdasarkan Ciri Semantis"
           }
         ]
       }
@@ -5287,9 +5287,9 @@
       "frontmatterTitle": "Perilaku Sintaksis Adjektiva (5.3)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/perilaku-sintaksis-adjektiva.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Fungsi atributif, predikatif, dan adverbial beserta contoh (24)-(32) sesuai sumber. Tidak ada temuan baru.",
+      "halamanPdf": "228-231",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -5318,9 +5318,9 @@
       "frontmatterTitle": "Pertarafan Adjektiva (5.4)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/pertarafan-adjektiva.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Halaman pengantar dan navigasi tingkat kualitas/pembandingan sesuai struktur sumber.",
+      "halamanPdf": "231",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -5349,9 +5349,9 @@
       "frontmatterTitle": "Tingkat Kualitas (5.4.1)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/tingkat-kualitas.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Uraian tingkat positif sampai atenuatif dan contoh (33)-(45) sesuai sumber. Tidak ada temuan baru.",
+      "halamanPdf": "231-235",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -5385,9 +5385,9 @@
       "frontmatterTitle": "Tingkat Pembandingan (5.4.2)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/tingkat-pembandingan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Tingkat ekuatif, komparatif, dan superlatif beserta contoh (46)-(67) sesuai sumber. Tidak ada temuan baru.",
+      "halamanPdf": "235-242",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -5421,9 +5421,9 @@
       "frontmatterTitle": "Bentuk Adjektiva (5.5)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/bentuk-adjektiva.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Halaman pengantar dan navigasi ke bentuk dasar serta turunan sesuai struktur sumber.",
+      "halamanPdf": "242",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -5452,9 +5452,9 @@
       "frontmatterTitle": "Adjektiva Dasar (5.5.1)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-dasar.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Uraian singkat dan daftar contoh (68) sesuai sumber. Tidak ada temuan baru.",
+      "halamanPdf": "242",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -5488,9 +5488,9 @@
       "frontmatterTitle": "Adjektiva Turunan (5.5.2)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-turunan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Uraian pengantar dan navigasi ke adjektiva berimbuhan, berulang, dan majemuk sesuai struktur sumber.",
+      "halamanPdf": "243",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -5524,9 +5524,9 @@
       "frontmatterTitle": "Adjektiva Berimbuhan (5.5.2.1)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-berimbuhan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Uraian prefiks, infiks, sufiks, dan konfiks serta contoh (72)-(79) sesuai sumber. Tidak ada temuan baru.",
+      "halamanPdf": "243-245",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -5564,9 +5564,9 @@
       "frontmatterTitle": "Adjektiva Berulang (5.5.3)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-berulang.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Uraian tiga pola reduplikasi dan contoh (80)-(82) sesuai sumber. Tidak ada temuan baru.",
+      "halamanPdf": "245-246",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -5604,9 +5604,9 @@
       "frontmatterTitle": "Adjektiva Majemuk (5.5.4)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-majemuk.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Subjenis majemuk dan contoh (83)-(91) sesuai sumber. Tidak ada temuan baru.",
+      "halamanPdf": "246-251",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -5644,9 +5644,9 @@
       "frontmatterTitle": "Frasa Adjektival (5.6)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/frasa-adjektival.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Lima tipe pemarkah pada frasa adjektival dan contoh (92)-(101) sesuai sumber. Tidak ada temuan baru.",
+      "halamanPdf": "252-254",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",
@@ -5675,9 +5675,9 @@
       "frontmatterTitle": "Adjektiva dan Kelas Kata Lain (5.7)",
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-dan-kelas-kata-lain.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Uraian adjektiva deverbal dan denominal serta contoh (102)-(114) sesuai sumber. Tidak ada temuan baru.",
+      "halamanPdf": "255-257",
       "sumber": {
         "judulBabPdf": "Adjektiva",
         "filePdfBab": "_data/gramatika/bab-05/bab-05-adjektiva.pdf",

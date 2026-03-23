@@ -38,7 +38,7 @@ Untuk setiap item markdown di `frontend/public/gramatika/` lakukan pemeriksaan b
 | II Tata Bahasa | `frontend/public/gramatika/tata-bahasa/` | OK | Audit 2026-03-24: ditemukan dan diperbaiki 4 ketidaksesuaian terhadap PDF di 3 file — label contoh (1)/(6)/(7) yang hilang, dan satu kesalahan parafrase pertanyaan literal. |
 | III Bunyi Bahasa | `frontend/public/gramatika/bunyi-bahasa/` | OK | Audit 2026-03-23: ditemukan dan diperbaiki 13 ketidaksesuaian terhadap PDF di 8 file — em-dash parenthetical (5 instances di 5 file), notasi fonem rusak /t> (1), hyphen deskripsi posisi vokal (5 instances), dan kalimat peringatan pelafalan yang hilang (3 instances di seksi /f/, /ʃ/, /x/). |
 | IV Verba | `frontend/public/gramatika/verba/` | OK | Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2. |
-| V Adjektiva | `frontend/public/gramatika/adjektiva/` | Belum | — |
+| V Adjektiva | `frontend/public/gramatika/adjektiva/` | OK | Audit 2026-03-23 selesai: seluruh Bab V (5.1-5.7) tervalidasi. Dua koreksi diterapkan selama audit, yaitu pemulihan judul 5.2 sesuai heading PDF dan pengembalian `putih metah` pada 5.2.3 dari salah baca OCR. |
 | VI Adverbia | `frontend/public/gramatika/adverbia/` | Belum | — |
 | VII Nomina | `frontend/public/gramatika/nomina/` | Belum | — |
 | VII Pronomina | `frontend/public/gramatika/pronomina/` | Belum | — |
@@ -140,6 +140,39 @@ Ringkasan hasil:
 - Pada `verba-turunan.md` dipulihkan satu blok derivasi yang terpotong, yakni contoh (78) untuk *darat/layar/kuning*, dan contoh (83) untuk pengulangan.
 - Pada subbagian morfofonemik, verba transitif, verba taktransitif, dan reduplikasi, audit menormalkan kembali penomoran contoh sesuai PDF tanpa menambah struktur editorial baru di luar kebutuhan teknis markdown.
 - Verifikasi akhir menunjukkan sisa mismatch numerasi yang terdeteksi otomatis terutama berasal dari tumpang-tindih rentang halaman antar-subbagian, bukan dari contoh yang benar-benar hilang di file target.
+
+### Bab V Adjektiva
+
+Sumber audit:
+
+- PDF bab: `_data/gramatika/bab-05/bab-05-adjektiva.pdf`
+- JPG verifikasi: `_data/gramatika/bab-05/bab-05-h217.jpg` s.d. `_data/gramatika/bab-05/bab-05-h257.jpg`
+
+| Item | File | Hal. PDF | Status | Hasil ringkas |
+|---|---|:---:|---|---|
+| Bab V Adjektiva | `frontend/public/gramatika/adjektiva/adjektiva.md` | — | OK | Halaman landing bab berfungsi sebagai daftar isi dan sudah sinkron dengan struktur item Bab V di `gramatikaData.js`. |
+| 5.1 Batasan dan Ciri Adjektiva | `frontend/public/gramatika/adjektiva/batasan-dan-ciri-adjektiva.md` | 217-218 | OK | Isi, penomoran contoh (1)-(3), dan italic pada contoh sesuai sumber. Tidak ada temuan baru. |
+| 5.2 Jenis Adjektiva Berdasarkan Ciri Semantis | `frontend/public/gramatika/adjektiva/ciri-semantis-adjektiva.md` | 218-220 | OK | Isi sesuai sumber; judul dipulihkan dari parafrase `Ciri Semantis Adjektiva` menjadi `Jenis Adjektiva Berdasarkan Ciri Semantis` agar sama dengan heading PDF. |
+| 5.2.1 Adjektiva Pemeri Sifat | `frontend/public/gramatika/adjektiva/adjektiva-pemeri-sifat.md` | 220 | OK | Definisi singkat dan daftar contoh (6) sesuai sumber. Tidak ada temuan baru. |
+| 5.2.2 Adjektiva Ukuran | `frontend/public/gramatika/adjektiva/adjektiva-ukuran.md` | 220 | OK | Definisi singkat dan daftar contoh (7) sesuai sumber. Tidak ada temuan baru. |
+| 5.2.3 Adjektiva Warna | `frontend/public/gramatika/adjektiva/adjektiva-warna.md` | 221-223 | OK | 1 perbaikan: contoh (14) dipulihkan dari `putih merah` menjadi `putih metah` sesuai PDF; daftar contoh (8)-(16) selebihnya sesuai sumber. |
+| 5.2.4 Adjektiva Bentuk | `frontend/public/gramatika/adjektiva/adjektiva-bentuk.md` | 223-224 | OK | Definisi dan daftar contoh (17)-(18) sesuai sumber. Tidak ada temuan baru. |
+| 5.2.5 Adjektiva Waktu | `frontend/public/gramatika/adjektiva/adjektiva-waktu.md` | 224 | OK | Definisi dan daftar contoh (19) sesuai sumber. Tidak ada temuan baru. |
+| 5.2.6 Adjektiva Jarak | `frontend/public/gramatika/adjektiva/adjektiva-jarak.md` | 225 | OK | Definisi singkat dan daftar contoh (20) sesuai sumber. Tidak ada temuan baru. |
+| 5.2.7 Adjektiva Sikap Batin | `frontend/public/gramatika/adjektiva/adjektiva-sikap-batin.md` | 225 | OK | Definisi singkat dan daftar contoh (21) sesuai sumber. Tidak ada temuan baru. |
+| 5.2.8 Adjektiva Cerapan | `frontend/public/gramatika/adjektiva/adjektiva-cerapan.md` | 226-227 | OK | Uraian pancaindra serta contoh (22)-(23) sesuai sumber. Tidak ada temuan baru. |
+| 5.3 Perilaku Sintaksis Adjektiva | `frontend/public/gramatika/adjektiva/perilaku-sintaksis-adjektiva.md` | 228-231 | OK | Fungsi atributif, predikatif, dan adverbial beserta contoh (24)-(32) sesuai sumber. Tidak ada temuan baru. |
+| 5.4 Pertarafan Adjektiva | `frontend/public/gramatika/adjektiva/pertarafan-adjektiva.md` | 231 | OK | Halaman pengantar dan navigasi tingkat kualitas/pembandingan sesuai struktur sumber. |
+| 5.4.1 Tingkat Kualitas | `frontend/public/gramatika/adjektiva/tingkat-kualitas.md` | 231-235 | OK | Uraian tingkat positif sampai atenuatif dan contoh (33)-(45) sesuai sumber. Tidak ada temuan baru. |
+| 5.4.2 Tingkat Pembandingan | `frontend/public/gramatika/adjektiva/tingkat-pembandingan.md` | 235-242 | OK | Tingkat ekuatif, komparatif, dan superlatif beserta contoh (46)-(67) sesuai sumber. Tidak ada temuan baru. |
+| 5.5 Bentuk Adjektiva | `frontend/public/gramatika/adjektiva/bentuk-adjektiva.md` | 242 | OK | Halaman pengantar dan navigasi ke bentuk dasar serta turunan sesuai struktur sumber. |
+| 5.5.1 Adjektiva Dasar | `frontend/public/gramatika/adjektiva/adjektiva-dasar.md` | 242 | OK | Uraian singkat dan daftar contoh (68) sesuai sumber. Tidak ada temuan baru. |
+| 5.5.2 Adjektiva Turunan | `frontend/public/gramatika/adjektiva/adjektiva-turunan.md` | 243 | OK | Uraian pengantar dan navigasi ke adjektiva berimbuhan, berulang, dan majemuk sesuai struktur sumber. |
+| 5.5.2.1 Adjektiva Berimbuhan | `frontend/public/gramatika/adjektiva/adjektiva-berimbuhan.md` | 243-245 | OK | Uraian prefiks, infiks, sufiks, dan konfiks serta contoh (72)-(79) sesuai sumber. Tidak ada temuan baru. |
+| 5.5.3 Adjektiva Berulang | `frontend/public/gramatika/adjektiva/adjektiva-berulang.md` | 245-246 | OK | Uraian tiga pola reduplikasi dan contoh (80)-(82) sesuai sumber. Tidak ada temuan baru. |
+| 5.5.4 Adjektiva Majemuk | `frontend/public/gramatika/adjektiva/adjektiva-majemuk.md` | 246-251 | OK | Subjenis majemuk dan contoh (83)-(91) sesuai sumber. Tidak ada temuan baru. |
+| 5.6 Frasa Adjektival | `frontend/public/gramatika/adjektiva/frasa-adjektival.md` | 252-254 | OK | Lima tipe pemarkah pada frasa adjektival dan contoh (92)-(101) sesuai sumber. Tidak ada temuan baru. |
+| 5.7 Adjektiva dan Kelas Kata Lain | `frontend/public/gramatika/adjektiva/adjektiva-dan-kelas-kata-lain.md` | 255-257 | OK | Uraian adjektiva deverbal dan denominal serta contoh (102)-(114) sesuai sumber. Tidak ada temuan baru. |
 
 ## Catatan Kerja
 

@@ -264,7 +264,7 @@ const daftarIsiGramatika = [
     items: [
       { judul: 'Batasan dan Ciri Adjektiva', slug: 'batasan-dan-ciri-adjektiva' },
       {
-        judul: 'Ciri Semantis Adjektiva',
+        judul: 'Jenis Adjektiva Berdasarkan Ciri Semantis',
         slug: 'ciri-semantis-adjektiva',
         turunan: [
           { judul: 'Adjektiva Pemeri Sifat', slug: 'adjektiva-pemeri-sifat' },

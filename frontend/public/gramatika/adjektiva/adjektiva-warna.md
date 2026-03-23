@@ -75,7 +75,7 @@ Nama warna lain banyak yang diambil dari nama buah atau tumbuhan, seperti *cokel
 - *putih kuning*
 - *putih lesi*
 - *putih timah*
-- *putih merah*
+- *putih metah*
 - *putih mutiara*
 - *putih tulang*
 

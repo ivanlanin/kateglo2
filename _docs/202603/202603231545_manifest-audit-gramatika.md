@@ -1,17 +1,17 @@
 # Manifest Audit Gramatika TBBBI
 
-Dibuat: 2026-03-23T04:52:28.101Z
+Dibuat: 2026-03-23T05:20:29.262Z
 
 Dokumen ini dihasilkan otomatis dari `frontend/src/constants/gramatikaData.js`, file markdown Gramatika, dan checklist audit aktif.
 
 ## Ringkasan
 
 - Total item audit: 308
-- Sudah OK: 94
+- Sudah OK: 117
 - Perlu revisi: 0
 - Tunda: 0
 - Sedang: 0
-- Belum: 214
+- Belum: 191
 
 ## Status per Bab
 
@@ -21,7 +21,7 @@ Dokumen ini dihasilkan otomatis dari `frontend/src/constants/gramatikaData.js`, 
 | II Tata Bahasa | 11 | 11 | 0 | 0 | 0 | 0 |
 | III Bunyi Bahasa | 20 | 20 | 0 | 0 | 0 | 0 |
 | IV Verba | 52 | 52 | 0 | 0 | 0 | 0 |
-| V Adjektiva | 23 | 0 | 0 | 0 | 0 | 23 |
+| V Adjektiva | 23 | 23 | 0 | 0 | 0 | 0 |
 | VI Adverbia | 23 | 0 | 0 | 0 | 0 | 23 |
 | VII Nomina | 32 | 0 | 0 | 0 | 0 | 32 |
 | VII Pronomina | 19 | 0 | 0 | 0 | 0 | 19 |

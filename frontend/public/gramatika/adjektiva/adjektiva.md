@@ -1,5 +1,5 @@
 1. [Batasan dan Ciri Adjektiva](/gramatika/batasan-dan-ciri-adjektiva)
-2. [Ciri Semantis Adjektiva](/gramatika/ciri-semantis-adjektiva)
+2. [Jenis Adjektiva Berdasarkan Ciri Semantis](/gramatika/ciri-semantis-adjektiva)
    1. [Adjektiva Pemeri Sifat](/gramatika/adjektiva-pemeri-sifat)
    2. [Adjektiva Ukuran](/gramatika/adjektiva-ukuran)
    3. [Adjektiva Warna](/gramatika/adjektiva-warna)

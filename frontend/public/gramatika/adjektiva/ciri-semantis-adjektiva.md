@@ -1,6 +1,6 @@
 ---
 id: 2
-title: Ciri Semantis Adjektiva (5.2)
+title: Jenis Adjektiva Berdasarkan Ciri Semantis (5.2)
 ---
 
 Berdasarkan ciri semantisnya, adjektiva digunakan untuk menyatakan berbagai tingkat kualitas atau berbagai tingkat perbandingan, sebagaimana yang diungkapkan oleh kata, seperti *sangat*, *agak*, *lebih*, dan *paling*.
