@@ -819,8 +819,25 @@ const daftarIsiGramatika = [
         ],
       },
       { judul: 'Interjeksi', slug: 'interjeksi' },
-      { judul: 'Artikula', slug: 'artikula' },
-      { judul: 'Partikel Penegas', slug: 'partikel-penegas' },
+      {
+        judul: 'Artikula',
+        slug: 'artikula',
+        turunan: [
+          { judul: 'Artikula yang Bersifat Gelar', slug: 'artikula-yang-bersifat-gelar' },
+          { judul: 'Artikula yang Mengacu pada Makna Kelompok', slug: 'artikula-yang-mengacu-pada-makna-kelompok' },
+          { judul: 'Artikula yang Menominalkan', slug: 'artikula-yang-menominalkan' },
+        ],
+      },
+      {
+        judul: 'Partikel Penegas',
+        slug: 'partikel-penegas',
+        turunan: [
+          { judul: 'Partikel -kah', slug: 'partikel-kah' },
+          { judul: 'Partikel -lah', slug: 'partikel-lah' },
+          { judul: 'Partikel -tah', slug: 'partikel-tah' },
+          { judul: 'Partikel pun', slug: 'partikel-pun' },
+        ],
+      },
     ],
   },
   {

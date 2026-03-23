@@ -456,6 +456,54 @@ Implikasi:
 - bagian yang secara penomoran sejajar tetapi sebelumnya menumpang di file lain perlu dipromosikan menjadi simpul sendiri di `gramatikaData.js` agar navigasi tetap semantis
 - batch berikutnya dapat lanjut ke bab berikutnya di luar Pronomina
 
+### Batch 9: Bab IX Numeralia
+
+Status: tidak perlu dipecah lagi
+
+Hasil verifikasi:
+
+- subfolder `frontend/public/gramatika/numeralia/` tidak memiliki heading internal `##`, `###`, dan seterusnya
+- struktur Bab IX di `frontend/src/constants/gramatikaData.js` sudah lengkap dan konsisten dengan isi subfolder
+- halaman induk `jenis-numeralia.md` dan `numeralia-pokok.md` sudah berada dalam bentuk daftar anak langsung
+- halaman bab `numeralia.md` juga sudah sinkron dengan struktur rekursif yang ada
+
+Implikasi:
+
+- Bab IX dapat dilewati tanpa perubahan konten karena normalisasi hierarki dan pecahan subhalaman sudah selesai sebelumnya
+- batch berikutnya dapat langsung lanjut ke bab berikutnya di luar Numeralia
+
+### Batch 10: Bab X Kata Tugas
+
+Status: selesai dipecah dan tervalidasi
+
+Hasil verifikasi:
+
+- subfolder `frontend/public/gramatika/kata-tugas/` sekarang tidak memiliki heading internal `##`, `###`, dan seterusnya
+- halaman bab `kata-tugas.md` akan disinkronkan ulang dari `gramatikaData.js` melalui `sync-gramatika-toc.mjs` dengan struktur daftar isi rekursif penuh
+- halaman induk `artikula.md` dan `partikel-penegas.md` kini hanya menampilkan anak langsung
+- struktur Bab X di `frontend/src/constants/gramatikaData.js` sudah diperluas untuk `Artikula` dan `Partikel Penegas` agar breadcrumb dan sidebar mengikuti hierarki baru
+- validasi frontend dijalankan setelah batch final untuk memastikan navigasi Gramatika tetap konsisten
+
+File baru yang ditambahkan pada Bab X:
+
+- `frontend/public/gramatika/kata-tugas/artikula-yang-bersifat-gelar.md`
+- `frontend/public/gramatika/kata-tugas/artikula-yang-mengacu-pada-makna-kelompok.md`
+- `frontend/public/gramatika/kata-tugas/artikula-yang-menominalkan.md`
+- `frontend/public/gramatika/kata-tugas/partikel-kah.md`
+- `frontend/public/gramatika/kata-tugas/partikel-lah.md`
+- `frontend/public/gramatika/kata-tugas/partikel-tah.md`
+- `frontend/public/gramatika/kata-tugas/partikel-pun.md`
+
+Halaman Bab X yang diubah:
+
+- `frontend/public/gramatika/kata-tugas/artikula.md`
+- `frontend/public/gramatika/kata-tugas/partikel-penegas.md`
+
+Implikasi:
+
+- bab dengan hanya dua parent bertingkat bisa diselesaikan aman dalam satu batch kecil
+- batch berikutnya dapat lanjut ke bab berikutnya di luar Kata Tugas
+
 ## Prioritas Pemecahan
 
 File dengan kepadatan heading paling tinggi sebaiknya diproses lebih dulu karena memberi pengurangan kompleksitas paling besar per file.
