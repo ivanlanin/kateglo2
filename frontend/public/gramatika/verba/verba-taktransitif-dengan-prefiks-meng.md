@@ -59,4 +59,4 @@ Verba taktransitif dengan prefiks *meng-* juga dapat diturunkan dari kelas kata 
 
 Ada beberapa pasang verba taktransitif dengan prefiks *meng-* yang maknanya tidak berbeda dengan verba yang berprefiks *ber-*:
 
-(249) *membekas* <-> *berbekas*; *meneduh* <-> *berteduh*; *menyanyi* <-> *bernyanyi*; *menyebar* <-> *bersebar*; *meludah* <-> *berludah*
+(249) *membekas* ↔ *berbekas*; *meneduh* ↔ *berteduh*; *menyanyi* ↔ *bernyanyi*; *menyebar* ↔ *bersebar*; *meludah* ↔ *berludah*

@@ -56,7 +56,7 @@ Kadang-kadang beberapa bentuk di atas berawalan *bersi-* tanpa perbedaan leksika
 
 (224)
 
-> *berkeras* <-> *bersikeras*; *bertegang* <-> *bersitegang*; *berkukuh* <-> *bersikukuh*; *berjingkat* <-> *bersijingkat*
+> *berkeras* ↔ *bersikeras*; *bertegang* ↔ *bersitegang*; *berkukuh* ↔ *bersikukuh*; *berjingkat* ↔ *bersijingkat*
 
 ## Pengafiksan Verba ber- dengan Pangkal Nomina (4.3.1.1.3)
 
