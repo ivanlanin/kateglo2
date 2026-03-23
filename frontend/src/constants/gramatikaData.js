@@ -658,12 +658,36 @@ const daftarIsiGramatika = [
         judul: 'Bentuk Adverbia',
         slug: 'bentuk-adverbia',
         turunan: [
-          { judul: 'Adverbia Tunggal', slug: 'adverbia-tunggal' },
-          { judul: 'Adverbia Gabungan', slug: 'adverbia-gabungan' },
+          {
+            judul: 'Adverbia Tunggal',
+            slug: 'adverbia-tunggal',
+            turunan: [
+              { judul: 'Adverbia Berupa Kata Dasar', slug: 'adverbia-berupa-kata-dasar' },
+              { judul: 'Adverbia Berupa Kata Berafiks', slug: 'adverbia-berupa-kata-berafiks' },
+              { judul: 'Adverbia Berupa Kata Ulang', slug: 'adverbia-berupa-kata-ulang' },
+            ],
+          },
+          {
+            judul: 'Adverbia Gabungan',
+            slug: 'adverbia-gabungan',
+            turunan: [
+              { judul: 'Adverbia Gabungan yang Berdampingan', slug: 'adverbia-gabungan-yang-berdampingan' },
+              { judul: 'Adverbia Gabungan yang Tidak Berdampingan', slug: 'adverbia-gabungan-yang-tidak-berdampingan' },
+            ],
+          },
         ],
       },
       { judul: 'Bentuk Adverbial', slug: 'bentuk-adverbial' },
-      { judul: 'Adverbia dan Kelas Kata Lain', slug: 'adverbia-dan-kelas-kata-lain' },
+      {
+        judul: 'Adverbia dan Kelas Kata Lain',
+        slug: 'adverbia-dan-kelas-kata-lain',
+        turunan: [
+          { judul: 'Adverbia Deverbal', slug: 'adverbia-deverbal' },
+          { judul: 'Adverbia Deadjektival', slug: 'adverbia-deadjektival' },
+          { judul: 'Adverbia Denominal', slug: 'adverbia-denominal' },
+          { judul: 'Adverbia Denumeral', slug: 'adverbia-denumeral' },
+        ],
+      },
     ],
   },
   {

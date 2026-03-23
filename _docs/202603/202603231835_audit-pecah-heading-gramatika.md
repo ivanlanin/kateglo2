@@ -387,6 +387,41 @@ Implikasi:
 - strategi mikro-batch tetap efektif untuk bab yang memiliki kombinasi parent sederhana dan parent bertingkat
 - batch berikutnya dapat lanjut ke bab berikutnya di luar Adjektiva
 
+### Batch 7: Bab VII Adverbia
+
+Status: selesai dipecah dan tervalidasi
+
+Hasil verifikasi:
+
+- subfolder `frontend/public/gramatika/adverbia/` sekarang tidak memiliki heading internal `##`, `###`, dan seterusnya
+- halaman bab `adverbia.md` sudah disinkronkan ulang dari `gramatikaData.js` melalui `sync-gramatika-toc.mjs` dengan struktur daftar isi rekursif penuh
+- semua halaman induk konten Adverbia yang sebelumnya mengandung heading internal kini dirapikan agar hanya menampilkan anak langsung
+- struktur Bab VII di `frontend/src/constants/gramatikaData.js` sudah diperluas untuk area `Bentuk Adverbia` dan `Adverbia dan Kelas Kata Lain` agar breadcrumb dan sidebar mengikuti hierarki baru
+- validasi frontend lulus melalui `npm run lint` dan `vitest` untuk area terkait setelah batch final
+
+File baru yang ditambahkan pada Bab VII:
+
+- `frontend/public/gramatika/adverbia/adverbia-berupa-kata-dasar.md`
+- `frontend/public/gramatika/adverbia/adverbia-berupa-kata-berafiks.md`
+- `frontend/public/gramatika/adverbia/adverbia-berupa-kata-ulang.md`
+- `frontend/public/gramatika/adverbia/adverbia-gabungan-yang-berdampingan.md`
+- `frontend/public/gramatika/adverbia/adverbia-gabungan-yang-tidak-berdampingan.md`
+- `frontend/public/gramatika/adverbia/adverbia-deverbal.md`
+- `frontend/public/gramatika/adverbia/adverbia-deadjektival.md`
+- `frontend/public/gramatika/adverbia/adverbia-denominal.md`
+- `frontend/public/gramatika/adverbia/adverbia-denumeral.md`
+
+Halaman induk Bab VII yang diubah menjadi daftar subhalaman hierarkis:
+
+- `frontend/public/gramatika/adverbia/adverbia-tunggal.md`
+- `frontend/public/gramatika/adverbia/adverbia-gabungan.md`
+- `frontend/public/gramatika/adverbia/adverbia-dan-kelas-kata-lain.md`
+
+Implikasi:
+
+- bab dengan jumlah heading kecil bisa diselesaikan aman dalam satu batch tanpa perlu mikro-batch tambahan
+- batch berikutnya dapat lanjut ke bab berikutnya di luar Adverbia
+
 ## Prioritas Pemecahan
 
 File dengan kepadatan heading paling tinggi sebaiknya diproses lebih dulu karena memberi pengurangan kompleksitas paling besar per file.
