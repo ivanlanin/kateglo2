@@ -2,7 +2,8 @@
 
 ## Aturan Wajib Setelah Edit Kode
 
-Setiap kali selesai mengedit file di `backend/` atau `frontend/`, WAJIB jalankan lint dan test untuk area yang terdampak sebelum menganggap tugas selesai.
+Setiap kali selesai mengedit file kode di `backend/` atau `frontend/`, WAJIB jalankan lint dan test untuk area yang terdampak sebelum menganggap tugas selesai.
+Pengecualian: perubahan yang hanya menyentuh markdown konten publik di `frontend/public/` tidak wajib menjalankan lint/test selama tidak mengubah renderer/parser/SSR/skrip yang memproses konten tersebut.
 Gunakan urutan berikut:
 
 1. **Validasi terarah dulu** (default)

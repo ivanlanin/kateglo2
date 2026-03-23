@@ -8,6 +8,7 @@
     "build": "vite build",
     "build:ssr": "node scripts/build-ssr.mjs",
     "sync:gramatika-toc": "node scripts/sync-gramatika-toc.mjs",
+    "audit:gramatika-artefak": "node scripts/audit-gramatika-artefak.js --write",
     "mobile:build": "npm run build && npx cap sync",
     "mobile:sync": "npx cap sync",
     "mobile:android": "npx cap open android",

@@ -400,6 +400,8 @@ npm run dev:public        # Port 5173
   - diminta eksplisit oleh user, atau
   - hasil test terarah mengindikasikan potensi regresi lebih luas.
 - **Pengecualian**: jika perubahan **hanya data** (misalnya SQL migration, backfill data, dokumentasi `_docs/`, tanpa perubahan kode aplikasi di `backend/` atau `frontend/src`), **tidak wajib** menjalankan lint/test.
+- **Pengecualian frontend publik**: jika perubahan **hanya konten markdown** di `frontend/public/` (misalnya Gramatika, changelog, todo, atau dokumen publik lain) dan **tidak** mengubah komponen React, utilitas parser/renderer markdown, route, SSR, atau skrip yang membaca/menghasilkan konten tersebut, **tidak wajib** menjalankan lint/test.
+- Jika perubahan markdown publik disertai perubahan pada renderer, parser, utilitas, SSR, atau skrip sinkronisasi/audit yang memprosesnya, perlakukan sebagai perubahan kode frontend biasa dan jalankan validasi.
 - **Tidak perlu menjalankan build** sebagai langkah default validasi perubahan.
 - Jika command `related/findRelatedTests` tidak tersedia atau gagal memetakan dependensi, gunakan test paling sempit yang relevan (folder/file test terkait), baru fallback ke full package.
 
