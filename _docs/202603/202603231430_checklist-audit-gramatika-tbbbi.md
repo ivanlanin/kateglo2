@@ -39,7 +39,7 @@ Untuk setiap item markdown di `frontend/public/gramatika/` lakukan pemeriksaan b
 | III Bunyi Bahasa | `frontend/public/gramatika/bunyi-bahasa/` | OK | Audit 2026-03-23: ditemukan dan diperbaiki 13 ketidaksesuaian terhadap PDF di 8 file — em-dash parenthetical (5 instances di 5 file), notasi fonem rusak /t> (1), hyphen deskripsi posisi vokal (5 instances), dan kalimat peringatan pelafalan yang hilang (3 instances di seksi /f/, /ʃ/, /x/). |
 | IV Verba | `frontend/public/gramatika/verba/` | OK | Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2. |
 | V Adjektiva | `frontend/public/gramatika/adjektiva/` | OK | Audit 2026-03-23 selesai: seluruh Bab V (5.1-5.7) tervalidasi. Dua koreksi diterapkan selama audit, yaitu pemulihan judul 5.2 sesuai heading PDF dan pengembalian `putih metah` pada 5.2.3 dari salah baca OCR. |
-| VI Adverbia | `frontend/public/gramatika/adverbia/` | Belum | — |
+| VI Adverbia | `frontend/public/gramatika/adverbia/` | OK | Audit 2026-03-23 selesai: seluruh Bab VI (6.1-6.6) tervalidasi. Temuan yang perlu diedit terbatas pada 14 bold editorial yang tidak ada di PDF dan dibersihkan dari 5 file; tidak ada kehilangan isi substantif. |
 | VII Nomina | `frontend/public/gramatika/nomina/` | Belum | — |
 | VII Pronomina | `frontend/public/gramatika/pronomina/` | Belum | — |
 | VII Numeralia | `frontend/public/gramatika/numeralia/` | Belum | — |
@@ -173,6 +173,39 @@ Sumber audit:
 | 5.5.4 Adjektiva Majemuk | `frontend/public/gramatika/adjektiva/adjektiva-majemuk.md` | 246-251 | OK | Subjenis majemuk dan contoh (83)-(91) sesuai sumber. Tidak ada temuan baru. |
 | 5.6 Frasa Adjektival | `frontend/public/gramatika/adjektiva/frasa-adjektival.md` | 252-254 | OK | Lima tipe pemarkah pada frasa adjektival dan contoh (92)-(101) sesuai sumber. Tidak ada temuan baru. |
 | 5.7 Adjektiva dan Kelas Kata Lain | `frontend/public/gramatika/adjektiva/adjektiva-dan-kelas-kata-lain.md` | 255-257 | OK | Uraian adjektiva deverbal dan denominal serta contoh (102)-(114) sesuai sumber. Tidak ada temuan baru. |
+
+### Bab VI Adverbia
+
+Sumber audit:
+
+- PDF bab: `_data/gramatika/bab-06/bab-06-adverbia.pdf`
+- JPG verifikasi: `_data/gramatika/bab-06/bab-06-h258.jpg` s.d. `_data/gramatika/bab-06/bab-06-h281.jpg`
+
+| Item | File | Hal. PDF | Status | Hasil ringkas |
+|---|---|:---:|---|---|
+| Bab VI Adverbia | `frontend/public/gramatika/adverbia/adverbia.md` | — | OK | Halaman landing bab berfungsi sebagai daftar isi dan sudah sinkron dengan struktur item Bab VI di `gramatikaData.js`. |
+| 6.1 Batasan dan Ciri Adverbia | `frontend/public/gramatika/adverbia/batasan-dan-ciri-adverbia.md` | 258-261 | OK | Isi dan penomoran contoh (1)-(10) sesuai sumber. 2 bold editorial pada pembuka paragraf dan istilah *inversi* dihapus agar kembali sama dengan PDF. |
+| 6.2 Perilaku Semantis Adverbia | `frontend/public/gramatika/adverbia/perilaku-semantis-adverbia.md` | 262 | OK | Halaman pengantar dan navigasi delapan jenis adverbia sesuai struktur sumber. |
+| 6.2.1 Adverbia Kualitatif | `frontend/public/gramatika/adverbia/adverbia-kualitatif.md` | 262 | OK | Definisi singkat dan contoh (11) sesuai sumber. Tidak ada temuan baru. |
+| 6.2.2 Adverbia Kuantitatif | `frontend/public/gramatika/adverbia/adverbia-kuantitatif.md` | 262 | OK | Definisi singkat dan contoh (12) sesuai sumber. Tidak ada temuan baru. |
+| 6.2.3 Adverbia Limitatif | `frontend/public/gramatika/adverbia/adverbia-limitatif.md` | 262-263 | OK | Uraian makna pembatasan dan contoh (13) sesuai sumber. Tidak ada temuan baru. |
+| 6.2.4 Adverbia Frekuentatif | `frontend/public/gramatika/adverbia/adverbia-frekuentatif.md` | 263 | OK | Definisi singkat dan contoh (14) sesuai sumber. Tidak ada temuan baru. |
+| 6.2.5 Adverbia Kewaktuan | `frontend/public/gramatika/adverbia/adverbia-kewaktuan.md` | 263 | OK | Definisi singkat dan contoh (15) sesuai sumber. Tidak ada temuan baru. |
+| 6.2.6 Adverbia Kecaraan | `frontend/public/gramatika/adverbia/adverbia-kecaraan.md` | 264 | OK | Definisi singkat dan contoh (16) sesuai sumber. Tidak ada temuan baru. |
+| 6.2.7 Adverbia Kontrastif | `frontend/public/gramatika/adverbia/adverbia-kontrastif.md` | 264 | OK | Definisi singkat dan contoh (17) sesuai sumber. Tidak ada temuan baru. |
+| 6.2.8 Adverbia Keniscayaan | `frontend/public/gramatika/adverbia/adverbia-keniscayaan.md` | 264 | OK | Definisi singkat dan contoh (18) sesuai sumber. Tidak ada temuan baru. |
+| 6.3 Perilaku Sintaksis Adverbia | `frontend/public/gramatika/adverbia/perilaku-sintaksis-adverbia.md` | 265 | OK | Halaman pengantar dan navigasi enam posisi sintaktis adverbia sesuai struktur sumber. |
+| 6.3.1 Adverbia Sebelum Kata yang Diterangkan | `frontend/public/gramatika/adverbia/adverbia-sebelum-kata-yang-diterangkan.md` | 265 | OK | Tabel (19) dan contoh (20) sesuai sumber. Tidak ada temuan baru. |
+| 6.3.2 Adverbia Sesudah Kata yang Diterangkan | `frontend/public/gramatika/adverbia/adverbia-sesudah-kata-yang-diterangkan.md` | 265-266 | OK | Tabel (21) dan contoh (22) sesuai sumber. Tidak ada temuan baru. |
+| 6.3.3 Adverbia Sebelum atau Sesudah Kata yang Diterangkan | `frontend/public/gramatika/adverbia/adverbia-sebelum-atau-sesudah-kata-yang-diterangkan.md` | 266 | OK | Tabel (23) dan contoh (24) sesuai sumber. Tidak ada temuan baru. |
+| 6.3.4 Adverbia Sebelum dan Sesudah Kata yang Diterangkan | `frontend/public/gramatika/adverbia/adverbia-sebelum-dan-sesudah-kata-yang-diterangkan.md` | 266-267 | OK | Contoh (25)-(26) sesuai sumber. 1 bold editorial pada kata penghubung dihapus agar kembali sama dengan PDF. |
+| 6.3.5 Adverbia Pembuka Wacana | `frontend/public/gramatika/adverbia/adverbia-pembuka-wacana.md` | 267-268 | OK | Uraian jenis pembuka wacana, contoh (27)-(36), dan catatan bentuk arkais sesuai sumber. Tidak ada temuan baru. |
+| 6.3.6 Adverbia Intraklausal dan Ekstraklausal | `frontend/public/gramatika/adverbia/adverbia-intraklausal-dan-ekstraklausal.md` | 269-270 | OK | Uraian lingkup frasa/klausa dan contoh (37)-(40) sesuai sumber. 2 bold editorial pada istilah intraklausal/ekstraklausal dihapus agar kembali sama dengan PDF. |
+| 6.4 Bentuk Adverbia | `frontend/public/gramatika/adverbia/bentuk-adverbia.md` | 271 | OK | Halaman pengantar dan navigasi bentuk tunggal/gabungan sesuai struktur sumber. |
+| 6.4.1 Adverbia Tunggal | `frontend/public/gramatika/adverbia/adverbia-tunggal.md` | 271-275 | OK | Uraian kata dasar, kata berafiks, kata ulang, serta contoh (41)-(53) sesuai sumber. 6 label bernomor yang dibold secara editorial dihapus. |
+| 6.4.2 Adverbia Gabungan | `frontend/public/gramatika/adverbia/adverbia-gabungan.md` | 276-278 | OK | Uraian gabungan berdampingan/tidak berdampingan dan contoh (54)-(58) sesuai sumber. Tidak ada temuan baru. |
+| 6.5 Bentuk Adverbial | `frontend/public/gramatika/adverbia/bentuk-adverbial.md` | 278-279 | OK | Uraian fungsi adverbial dan contoh (59)-(61) sesuai sumber. 4 bold editorial pada istilah dan label subbagian dihapus agar kembali sama dengan PDF. |
+| 6.6 Adverbia dan Kelas Kata Lain | `frontend/public/gramatika/adverbia/adverbia-dan-kelas-kata-lain.md` | 279-281 | OK | Uraian adverbia deverbal, deadjektival, denominal, dan denumeral beserta contoh (62)-(65) sesuai sumber. Tidak ada temuan baru. |
 
 ## Catatan Kerja
 

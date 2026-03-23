@@ -3,7 +3,7 @@ id: 1
 title: Batasan dan Ciri Adverbia (6.1)
 ---
 
-**Adverbia** yang lazim disebut kata keterangan adalah kata yang menjelaskan verba, adjektiva, atau adverbia lain. Hal itu berarti bahwa adverbia digunakan sebagai pewatas, baik pewatas verba, pewatas adjektiva maupun pewatas adverbia.
+Adverbia yang lazim disebut kata keterangan adalah kata yang menjelaskan verba, adjektiva, atau adverbia lain. Hal itu berarti bahwa adverbia digunakan sebagai pewatas, baik pewatas verba, pewatas adjektiva maupun pewatas adverbia.
 
 Contoh:
 
@@ -101,4 +101,4 @@ Contoh:
 - b. *Hanya petani yang menanam jagung.*
 - c. *Yang menanam jagung hanya petani.*
 
-Dalam ragam formal contoh (10a) dianggap berasal dari (10b) melalui penghilangan kata *yang*, sedangkan (10b) itu berasal dari (10c). Berdasarkan hal itu, *yang menanam jagung* pada (10b)–(10c) merupakan subjek dan *hanya petani* sebagai predikat. Perubahan (10c) menjadi (10b) terjadi melalui pemfokusan predikat. Perubahan seperti itu lazim disebut **inversi**.
+Dalam ragam formal contoh (10a) dianggap berasal dari (10b) melalui penghilangan kata *yang*, sedangkan (10b) itu berasal dari (10c). Berdasarkan hal itu, *yang menanam jagung* pada (10b)–(10c) merupakan subjek dan *hanya petani* sebagai predikat. Perubahan (10c) menjadi (10b) terjadi melalui pemfokusan predikat. Perubahan seperti itu lazim disebut inversi.

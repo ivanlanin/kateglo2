@@ -24,7 +24,7 @@ Fitur semantis untuk kuda mencakupi pula berbagai kegiatan yang dapat dilakukan 
 
 Kalimat (9a) berterima karena nomina subjek *kuda* memiliki fitur semantis bernyawa dan berkaki yang merupakan syarat untuk dapat melakukan perbuatan berlari. Akan tetapi, kalimat (9b) terasa aneh karena fitur manusia yang merupakan syarat untuk dapat melakukan perbuatan bersiul tidak ada pada kuda.
 
-**Fitur Semantis dan Frasa Preposisional**
+Fitur Semantis dan Frasa Preposisional
 
 Pada tataran frasa, nomina atau frasa nominal dapat menjadi pelengkap frasa preposisional. Makna frasa preposisional itu dapat berbeda-beda bergantung pada fitur semantis nomina pelengkap preposisi itu.
 

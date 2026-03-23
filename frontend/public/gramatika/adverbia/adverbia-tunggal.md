@@ -36,7 +36,7 @@ Sehubungan dengan senarai adverbia di atas, perlu dikemukakan catatan mengenai k
 
 Adverbia yang berupa kata berafiks diperoleh dengan menambahkan gabungan afiks *se-...-nya* atau afiks *-nya* pada kata dasar.
 
-**1) Yang berupa penambahan gabungan afiks *se-...-nya* pada kata dasar**
+1) Yang berupa penambahan gabungan afiks *se-...-nya* pada kata dasar
 
 Contoh:
 
@@ -48,7 +48,7 @@ Contoh:
 - c. Dia *sepatutnya* berterima kasih kepada orang yang telah menolongnya.
 - d. Mereka *sesungguhnya* tidak bersalah.
 
-**2) Yang berupa penambahan *-nya* pada kata dasar**
+2) Yang berupa penambahan *-nya* pada kata dasar
 
 Contoh:
 
@@ -66,7 +66,7 @@ Di dalam bahasa Indonesia terdapat juga adverbia berafiks yang dilihat dari segi
 
 Menurut bentuknya adverbia yang berupa kata ulang dapat diperinci lagi menjadi empat macam, yaitu (a) pengulangan kata dasar, (b) pengulangan kata dasar dan penambahan afiks *se-*, (c) pengulangan kata dasar dan penambahan sufiks *-an*, dan (d) pengulangan kata dasar dan penambahan gabungan afiks *se-...-nya*.
 
-**1) Adverbia yang berupa pengulangan kata dasar**
+1) Adverbia yang berupa pengulangan kata dasar
 
 Contoh:
 
@@ -78,7 +78,7 @@ Contoh:
 - c. Anak itu *pelan-pelan* membuka matanya.
 - d. *Mula-mula* kami merasa takut kepadanya.
 
-**2) Adverbia yang berupa pengulangan kata dasar dengan penambahan prefiks *se-***
+2) Adverbia yang berupa pengulangan kata dasar dengan penambahan prefiks *se-*
 
 Contoh:
 
@@ -90,7 +90,7 @@ Contoh:
 - c. Sesabar-sabar manusia tentu ada batasnya.
 - d. Segalak-galak macan tidak akan memangsa anaknya sendiri.
 
-**3) Adverbia yang berupa pengulangan kata dasar dengan penambahan sufiks *-an***
+3) Adverbia yang berupa pengulangan kata dasar dengan penambahan sufiks *-an*
 
 Contoh:
 
@@ -102,7 +102,7 @@ Contoh:
 - c. Kalian dapat berdagang *kecil-kecilan* di desa.
 - d. *Gila-gilaan* ia memacu motornya.
 
-**4) Adverbia yang berupa pengulangan kata dasar dengan penambahan gabungan afiks *se-...-nya***
+4) Adverbia yang berupa pengulangan kata dasar dengan penambahan gabungan afiks *se-...-nya*
 
 Contoh:
 

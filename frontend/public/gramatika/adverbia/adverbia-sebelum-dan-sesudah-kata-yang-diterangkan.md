@@ -3,7 +3,7 @@ id: 6.3.4
 title: Adverbia Sebelum dan Sesudah Kata yang Diterangkan (6.3.4)
 ---
 
-Ada adverbia yang terdiri atas dua kata yang digunakan sebelum **dan** sesudah kata yang diterangkan. Dengan demikian, jenis adverbia yang dimaksudkan tergolong adverbia gabungan yang tidak berdampingan (lihat 6.4.2.2).
+Ada adverbia yang terdiri atas dua kata yang digunakan sebelum dan sesudah kata yang diterangkan. Dengan demikian, jenis adverbia yang dimaksudkan tergolong adverbia gabungan yang tidak berdampingan (lihat 6.4.2.2).
 
 Contoh:
 

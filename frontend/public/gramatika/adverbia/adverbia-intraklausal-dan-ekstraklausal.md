@@ -32,7 +32,7 @@ Penggunaan adverbia yang terikat pada tataran frasa terlihat pada contoh (37), s
 
 Pada contoh (38) *seharusnya*, *agaknya*, dan *sebaiknya* tidak memberikan keterangan pada predikat kalimat yang bersangkutan, tetapi pada seluruh kalimat. Dengan demikian, *seharusnya* pada (38a) mewatasi klausa *Dia datang sebelum pukul delapan*, *agaknya* pada (38b) mewatasi klausa *Penjelasan pejabat itu tidak mereka pahami*, dan *sebaiknya* pada (38c) mewatasi klausa *Saudara tidak usah datang*.
 
-Berdasarkan lingkup strukturnya itu, terdapat perbedaan antara pewatas pada tataran frasa dan pewatas pada tataran klausa. Pewatas pada tataran frasa merupakan **adverbia intraklausal**, sedangkan pewatas yang mengacu pada tataran klausa merupakan **adverbia ekstraklausal**.
+Berdasarkan lingkup strukturnya itu, terdapat perbedaan antara pewatas pada tataran frasa dan pewatas pada tataran klausa. Pewatas pada tataran frasa merupakan adverbia intraklausal, sedangkan pewatas yang mengacu pada tataran klausa merupakan adverbia ekstraklausal.
 
 Yang perlu diperhatikan sehubungan dengan perbedaan itu ialah unsur atau bagian kalimat yang diterangkan oleh adverbia yang bersangkutan. Adverbia intraklausal mewatasi frasa dan adverbia ekstraklausal mewatasi klausa. Pada contoh (39) berikut terlihat bahwa *benar-benar*, meskipun dalam posisi sintaktis yang berbeda-beda, tetap mewatasi verba *memperhatikan*. Tidaklah demikian halnya dengan *sebenarnya* pada contoh (40). Adverbia *sebenarnya*, baik digunakan di awal, di tengah, maupun di akhir kalimat, tetap merupakan pewatas pada klausa *Dia termasuk murid yang pandai*.
 
