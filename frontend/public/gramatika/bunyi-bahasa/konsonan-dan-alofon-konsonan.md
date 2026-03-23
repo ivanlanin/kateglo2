@@ -5,7 +5,7 @@ title: Konsonan dan Alofon Konsonan (3.2.4)
 
 Dalam bahasa Indonesia terdapat 22 fonem konsonan. Berdasarkan parameter tempat artikulasi, cara artikulasi, dan keadaan pita suara ketika konsonan itu diucapkan, konsonan bahasa Indonesia dapat dipetakan di dalam tabel berikut.
 
-**Tabel 3.4 Konsonan**
+Tabel 3.4 Konsonan
 
 | Cara Artikulasi | Keadaan | Bilabial | Labiodental | Dental/Alveolar | Palatal | Velar | Glotal |
 |---|---|---|---|---|---|---|---|

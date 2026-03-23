@@ -5,7 +5,7 @@ title: Diftong dan Deret Vokal (3.2.2)
 
 Dalam bahasa Indonesia terdapat empat buah diftong, yakni /ay/, /aw/, /oy/, dan /ey/ yang masing-masing dapat dituliskan *ai*, *au*, *oi*, dan *ei*. Keempat diftong itu bersifat fonemis. Kedua huruf vokal pada diftong melambangkan satu bunyi vokal yang tidak dapat dipisahkan. Hal itu harus dibedakan dari deretan dua vokal yang berjejer. Bandingkan diftong berikut dengan deret vokal.
 
-**Tabel 3.2 Diftong**
+Tabel 3.2 Diftong
 
 | Diftong | Bentuk |
 |---|---|
@@ -14,7 +14,7 @@ Dalam bahasa Indonesia terdapat empat buah diftong, yakni /ay/, /aw/, /oy/, dan 
 | /səkoy/ | `sekoi` |
 | /survey/ | `survei` |
 
-**Tabel 3.3 Deret Vokal**
+Tabel 3.3 Deret Vokal
 
 | Deret Vokal | Bentuk |
 |---|---|

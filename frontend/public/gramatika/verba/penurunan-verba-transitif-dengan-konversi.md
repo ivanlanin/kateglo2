@@ -7,7 +7,7 @@ Ada kelompok kata dalam bahasa Indonesia yang melalui konversi memiliki kelas ka
 
 Dalam bahasa formal, nomina yang dikonversikan menjadi pangkal verba transitif diberi tambahan afiks; afiks ini tidak mengubah makna leksikal, tetapi mengubah makna gramatikalnya.
 
-**Tabel 4.2 Konversi Verba**
+Tabel 4.2 Konversi Verba
 
 | Nomina | Pangkal Verba | Bentuk Gramatikal |
 |---|---|---|
