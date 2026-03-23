@@ -33,7 +33,7 @@ Untuk setiap item markdown di `frontend/public/gramatika/` lakukan pemeriksaan b
 
 | Bab | Folder | Status | Catatan |
 |---|---|---|---|
-| I Pendahuluan | `frontend/public/gramatika/pendahuluan/` | OK | Semua item Bab I sudah diaudit; 1.2.2, 1.6, dan 1.8 dikoreksi agar kembali setia ke sumber |
+| I Pendahuluan | `frontend/public/gramatika/pendahuluan/` | OK | Semua item Bab I sudah diaudit; 1.2.2, 1.6, dan 1.8 dikoreksi secara isi, lalu Bab I diaudit ulang untuk menghapus penekanan editorial yang tidak ada di sumber |
 | II Tata Bahasa | `frontend/public/gramatika/tata-bahasa/` | Belum | — |
 | III Bunyi Bahasa | `frontend/public/gramatika/bunyi-bahasa/` | Belum | — |
 | IV Verba | `frontend/public/gramatika/verba/` | Belum | — |
@@ -69,7 +69,7 @@ Sumber audit:
 | 1.7 Bahasa yang Baik dan Benar | `frontend/public/gramatika/pendahuluan/bahasa-yang-baik-dan-benar.md` | 43-44 | OK | Penjelasan perbedaan bahasa yang benar dan bahasa yang baik tetap lengkap; dua contoh percakapan pasar masih mewakili substansi sumber dengan jelas. |
 | 1.8 Hubungan Bahasa Indonesia dengan Bahasa Daerah dan Bahasa Asing | `frontend/public/gramatika/pendahuluan/hubungan-bahasa-indonesia-dengan-bahasa-daerah-dan-bahasa-asing.md` | 44-46 | OK | Uraian fungsi antarbahasa lengkap; koreksi dilakukan pada contoh sumber serapan agar kembali mengikuti sumber, termasuk penyebutan bahasa Cina. |
 
-Catatan: beberapa rentang halaman Bab I saling tumpang-tindih karena heading subbab berikutnya mulai pada halaman yang sama dengan paragraf penutup subbab sebelumnya.
+Catatan: beberapa rentang halaman Bab I saling tumpang-tindih karena heading subbab berikutnya mulai pada halaman yang sama dengan paragraf penutup subbab sebelumnya. Audit ulang Bab I juga menormalkan format markdown agar tidak menambahkan bold, heading tambahan, atau blockquote editorial yang tidak tampak pada TBBBI.
 
 ## Catatan Kerja
 

@@ -11,18 +11,10 @@ Di Indonesia keadaannya agak berlainan. Para pejabat tinggi dan tokoh masyarakat
 
 Kenyataan yang tidak menggembirakan itu perlu dikembalikan ke salah satu peran dunia pendidikan sebagai ajang persemaian para pemimpin masa depan. Ragam bahasa yang diajarkan dan dikembangkan di dalam lingkungan itulah yang akan menjadi ragam bahasa calon pemimpin sehingga pada suatu saat bahasa Indonesia yang baku memang dapat disamakan dengan ragam bahasa para tokoh dan pemimpin yang memancarkan gengsi dan wibawa kemasyarakatan. Oleh sebab itu, di Indonesia semua pembakuan hendaknya bermula pada ragam bahasa pendidikan dengan berbagai coraknya dari sudut pandang sikap, bidang, dan sarananya.
 
-Ragam bahasa baku memiliki tiga ciri utama.
-
-**1. Kemantapan dinamis**
-
 Ragam bahasa baku memiliki sifat kemantapan dinamis, yang berupa kaidah dan aturan yang tetap serta tidak dapat berubah setiap saat. Kaidah pembentukan kata yang memunculkan bentuk *perasa* dan *perumus* dengan taat asas harus dapat menghasilkan bentuk lain, seperti *perajin* dan *perusak*, bukan *pengrajin* dan *pengrusak*.
 
 Kehomoniman yang timbul akibat penerapan kaidah itu bukan alasan yang cukup kuat untuk menghalalkan penyimpangan itu. Bahasa mana pun tidak dapat terpisah dari kehomoniman. Di pihak lain, kemantapan itu tidak kaku, tetapi cukup luwes sehingga memungkinkan perubahan yang bersistem dan teratur di bidang kosakata dan peristilahan serta mengizinkan perkembangan berbagai ragam yang diperlukan di dalam kehidupan modern. Misalnya, di bidang peristilahan muncul keperluan untuk membedakan *pelanggan* 'orang yang berlangganan' dan *langganan* 'orang yang tetap menjual barang kepada orang lain; hal menerima terbitan atau jasa atas pesanan secara teratur'. Ragam baku yang baru, antara lain, dalam penulisan laporan, karangan ilmiah, undangan, dan percakapan telepon perlu dikembangkan lebih lanjut.
 
-**2. Kecendekiaan**
-
 Ciri kedua yang menandai bahasa baku ialah sifat kecendekiaannya. Perwujudannya dalam kalimat, paragraf, dan satuan bahasa lain yang lebih besar mengungkapkan pernalaran atau pemikiran yang teratur dan logis. Proses pencendekiaan bahasa Indonesia itu amat penting karena pengenalan ilmu dan teknologi modern, yang kini umumnya masih menggunakan sarana bahasa asing, harus dapat dilakukan lewat buku yang menggunakan bahasa Indonesia. Akan tetapi, karena proses bernalar secara cendekia bersifat semesta dan bukan monopoli suatu bangsa semata-mata, pencendekiaan bahasa Indonesia tidak perlu diartikan sebagai pembaratan bahasa.
-
-**3. Keseragaman**
 
 Yang tersirat di balik yang tersurat dari kata *baku* atau *standar* itu ialah praanggapan tentang adanya keseragaman. Dengan demikian, sampai taraf tertentu pembakuan berarti penyeragaman kaidah, bukan penyamaan ragam bahasa atau penyeragaman variasi bahasa. Itulah ciri ketiga ragam bahasa yang baku. Setelah mengenali ketiga ciri umum ragam bahasa baku, yang perlu dicermati berikutnya adalah pembakuan di bidang ejaan, lafal, kosakata, dan tata bahasa.
