@@ -10,14 +10,14 @@ Pronomina tanya *apa* mempunyai dua peran yang berbeda. Pertama, kata itu semata
 
 Kedua, kata *apa* juga dapat menggantikan barang atau hal yang ditanyakan:
 
-- (228) *Yusyanti membeli mobil.* → *Yusyanti membeli **apa**?*
+- (228) *Yusyanti membeli mobil.* → *Yusyanti membeli apa?*
 
 Jika kata *apa* dipindahkan ke posisi awal kalimat, seluruh struktur kalimat mengalami perubahan dan kata *yang* harus ditambahkan:
 
-- (230) *Yusyanti membeli apa?* → ***Apa** yang dia beli?*
+- (230) *Yusyanti membeli apa?* → *Apa yang dia beli?*
 
 Kata *apa* dan *siapa* berlainan dalam dua hal: (1) *apa* mengacu pada benda, hal, atau binatang, sedangkan *siapa* mengacu pada manusia saja; dan (2) *apa* dapat berfungsi semata-mata sebagai pemarkah kalimat tanya, sedangkan *siapa* harus menggantikan nomina dalam kalimat.
 
-1) *Siapa* dapat menggantikan objek tanpa mengubah urutan kata: *Ibu mencari Pak Dahlan.* → *Ibu mencari **siapa**?*
-2) Jika *siapa* diletakkan di awal kalimat, ia menjadi predikat: *Ibu mencari siapa?* → ***Siapa**(kah) yang Ibu cari?*
-3) *Siapa* dapat pula menggantikan subjek: ***Siapa** yang takut ulat?*
+1) *Siapa* dapat menggantikan objek tanpa mengubah urutan kata: *Ibu mencari Pak Dahlan.* → *Ibu mencari siapa?*
+2) Jika *siapa* diletakkan di awal kalimat, ia menjadi predikat: *Ibu mencari siapa?* → *Siapa(kah) yang Ibu cari?*
+3) *Siapa* dapat pula menggantikan subjek: *Siapa yang takut ulat?*

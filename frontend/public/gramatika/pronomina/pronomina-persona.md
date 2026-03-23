@@ -5,7 +5,7 @@ title: Pronomina Persona (7.2.2.1)
 
 Pronomina persona adalah pronomina yang dipakai untuk mengacu pada orang. Pronomina persona dapat mengacu pada diri sendiri (pronomina persona pertama), mengacu pada orang yang diajak berbicara (pronomina persona kedua), atau mengacu pada orang yang dibicarakan (pronomina persona ketiga). Di antara pronomina itu, ada yang mengacu pada jumlah satu atau lebih dari satu. Ada bentuk yang bersifat eksklusif, ada yang bersifat inklusif, dan ada yang bersifat netral seperti yang terlihat pada tabel berikut.
 
-**Tabel 7.1 Pronomina Persona**
+Tabel 7.1 Pronomina Persona
 
 | Persona | Tunggal | Jamak Netral | Jamak Eksklusif | Jamak Inklusif |
 |---|---|---|---|---|
@@ -33,11 +33,11 @@ Berbeda dengan *aku*, bentuk *saya* dapat dipakai untuk menyatakan hubungan pemi
 
 Pronomina persona *saya*, *aku*, dan *daku* dapat dipakai bersama dengan preposisi. Akan tetapi, tiap preposisi mempersyaratkan pronomina tertentu yang dapat dipakai.
 
-**Kelompok *demi* (dapat diikuti *saya*, *aku*, *daku*):**
+Kelompok *demi* (dapat diikuti *saya*, *aku*, *daku*):
 
 > *demi, kecuali, mengenai, selain, seperti, tentang*
 
-**Kelompok *bagi* (bentuk terikat *-ku* dapat dipakai):**
+Kelompok *bagi* (bentuk terikat *-ku* dapat dipakai):
 
 - *bagi* → *bagiku, bagi aku, bagi saya*
 - *buat* → *buatku, buat aku, buat saya*
@@ -47,14 +47,14 @@ Pronomina persona *saya*, *aku*, dan *daku* dapat dipakai bersama dengan preposi
 
 Bentuk terikat *ku-* berbeda pemakaiannya dengan *-ku*. Pertama, *ku-* dilekatkan pada kata yang terletak di belakangnya. Kedua, kata yang terletak di belakang *ku-* adalah verba.
 
-- (156) *Suratmu telah **ku**kirimkan tadi pagi.*
-- (157) *Ya. Mobilnya akan **ku**pakai nanti siang.*
-- (158) *Kini **ku** tahu kau tak setia padaku.* (puitis)
+- (156) *Suratmu telah kukirimkan tadi pagi.*
+- (157) *Ya. Mobilnya akan kupakai nanti siang.*
+- (158) *Kini ku tahu kau tak setia padaku.* (puitis)
 
 Di samping pronomina persona pertama tunggal, bahasa Indonesia juga mengenal pronomina persona pertama jamak. Ada dua macam pronomina persona pertama jamak, yakni *kami* dan *kita*. *Kami* bersifat eksklusif; artinya, pronomina itu mencakupi pembicara/penulis dan orang lain di luar orang yang diajak berbicara/pendengar. Sebaliknya, *kita* bersifat inklusif; artinya, pronomina itu mencakupi tidak saja pembicara/penulis, tetapi juga pendengar/pembaca, dan mungkin pula pihak lain. Dengan demikian, kedua kalimat berikut mempunyai pengertian yang berbeda.
 
-- (159) ***Kami** akan berangkat pukul enam pagi.*—pendengar tidak ikut
-- (160) ***Kita** akan berangkat pukul enam pagi.*—pendengar ikut
+- (159) *Kami akan berangkat pukul enam pagi.*—pendengar tidak ikut
+- (160) *Kita akan berangkat pukul enam pagi.*—pendengar ikut
 
 Persona pertama jamak tidak mempunyai variasi bentuk. Untuk menyatakan hubungan pemilikan atau dalam pemakaiannya dengan preposisi, bentuknya tetap sama: *rumah kami*, *masalah kita*, *kepada kami*, *untuk kita*.
 
@@ -62,7 +62,7 @@ Persona pertama jamak tidak mempunyai variasi bentuk. Untuk menyatakan hubungan 
 
 Pronomina persona kedua tunggal mempunyai beberapa wujud, yakni *engkau*, *kamu*, *Anda*, *dikau*, *kau-*, dan *-mu*. Berikut ini adalah kaidah pemakaiannya.
 
-**1)** Pronomina persona kedua *engkau*, *kamu*, dan *-mu* dipakai oleh pembicara dalam situasi berikut.
+1) Pronomina persona kedua *engkau*, *kamu*, dan *-mu* dipakai oleh pembicara dalam situasi berikut.
 
 a) Orang tua terhadap orang muda yang telah dikenal dengan baik dan lama:
 
@@ -78,27 +78,27 @@ c) Orang yang mempunyai hubungan akrab, tanpa memandang umur atau status sosial.
 
 Dalam bahasa takformal, bentuk *engkau* sering disingkat menjadi *kau*, seperti pada kalimat *Kau ikut tidak?*
 
-**2)** Pronomina persona kedua *Anda* dimaksudkan untuk menetralkan hubungan. Meskipun kata itu telah banyak dipakai, struktur serta nilai sosial budaya masih membatasi pemakaian pronomina itu. Pada saat ini pronomina *Anda* dipakai dalam situasi sebagai berikut.
+2) Pronomina persona kedua *Anda* dimaksudkan untuk menetralkan hubungan. Meskipun kata itu telah banyak dipakai, struktur serta nilai sosial budaya masih membatasi pemakaian pronomina itu. Pada saat ini pronomina *Anda* dipakai dalam situasi sebagai berikut.
 
 a) Hubungan antara pembicara dan pendengar tak bersifat pribadi sehingga *Anda* tidak diarahkan pada satu orang khusus:
 
-> - (167) *Sebentar lagi kita akan mengudara; **Anda** kami persilakan mengenakan sabuk pengaman.*
-> - (168) *Pakailah sabun ini; kulit **Anda** akan bersih.*
+> - (167) *Sebentar lagi kita akan mengudara; Anda kami persilakan mengenakan sabuk pengaman.*
+> - (168) *Pakailah sabun ini; kulit Anda akan bersih.*
 
 b) Hubungan antara pembicara dan pendengar bersemuka, tetapi pembicara tidak ingin bersikap terlalu formal ataupun terlalu akrab:
 
-> - (169) ***Anda** sekarang tinggal di mana?*
-> - (170) *Apa **Anda** sudah mendengar berita itu?*
+> - (169) *Anda sekarang tinggal di mana?*
+> - (170) *Apa Anda sudah mendengar berita itu?*
 
-**3)** Seperti halnya dengan *daku*, *dikau* juga dipakai dalam ragam bahasa tertentu, khususnya ragam sastra.
+3) Seperti halnya dengan *daku*, *dikau* juga dipakai dalam ragam bahasa tertentu, khususnya ragam sastra.
 
 Pronomina persona kedua mempunyai bentuk jamak. Ada dua macam bentuk jamak: (1) *kalian* dan (2) persona kedua ditambah dengan kata *sekalian*: *Anda sekalian* atau *kamu sekalian*.
 
 Pronomina persona kedua yang memiliki variasi bentuk hanya *engkau* dan *kamu*. Bentuk terikatnya masing-masing adalah *kau-* dan *-mu*. Semua pronomina persona kedua yang berbentuk utuh dapat dipakai untuk menyatakan hubungan pemilikan dengan menempatkannya di belakang nomina yang mengacu pada milik. Sebaliknya, hanya klitika *-mu* yang juga dapat mengacu pada pemilik, sedangkan *kau-* tidak.
 
-- (176) *Adik **kamu** di mana sekarang?*
-- (177) *Pertanyaan **Anda** tidak masuk akal.*
-- (179) *Adik**mu** di mana sekarang?*
+- (176) *Adik kamu di mana sekarang?*
+- (177) *Pertanyaan Anda tidak masuk akal.*
+- (179) *Adikmu di mana sekarang?*
 
 Dalam konstruksi pemilikan itu, *-mu* hanya mewakili *engkau* dan *kamu*. Dengan demikian, *-mu* dengan bentuk jamak yang tersurat tidak dapat diterima: \**usulmu sekalian* atau \**permintaanmu sekalian*. Untuk mengacu pada pemilik bentuk jamak, yang dipakai adalah bentuk yang utuh: *usul kamu sekalian*, *permintaan Anda sekalian*.
 
@@ -106,7 +106,7 @@ Dalam konstruksi pemilikan itu, *-mu* hanya mewakili *engkau* dan *kamu*. Dengan
 
 Ada dua macam pronomina persona ketiga tunggal, yaitu (1) *ia*, *dia*, atau *-nya* dan (2) *beliau*. Meskipun *ia* dan *dia* dalam banyak hal berfungsi sama, ada kendala tertentu yang dimiliki oleh masing-masing.
 
-**Distribusi *ia*, *dia*, dan *-nya*:**
+Distribusi *ia*, *dia*, dan *-nya*:
 
 | Posisi | *ia* | *dia* | *-nya* |
 |---|---|---|---|
@@ -117,35 +117,35 @@ Ada dua macam pronomina persona ketiga tunggal, yaitu (1) *ia*, *dia*, atau *-ny
 
 Karena ada kebutuhan untuk memakai pronomina yang tidak mengacu pada manusia, terutama dalam tulisan ilmiah, orang juga mulai memakai *ia* (bukan *dia*) untuk mengacu pada sesuatu yang tunggal yang telah dinyatakan sebelumnya:
 
-> (189) *Dalam artikel tersebut, numeralia ini diletakkan di muka nomina dan sebagai numeralia tingkat, **ia** diletakkan di belakang nomina.*
+> (189) *Dalam artikel tersebut, numeralia ini diletakkan di muka nomina dan sebagai numeralia tingkat, ia diletakkan di belakang nomina.*
 
 Pronomina persona ketiga tunggal *beliau* digunakan untuk menyatakan rasa hormat:
 
-> (190) *Menteri baru saja menelepon dan mengatakan bahwa **beliau** tidak dapat hadir.*
+> (190) *Menteri baru saja menelepon dan mengatakan bahwa beliau tidak dapat hadir.*
 
 Dari keempat pronomina persona ketiga itu, hanya *dia*, *-nya*, dan *beliau* yang dapat dipakai untuk menyatakan milik.
 
-**Fungsi khusus *-nya*:**
+Fungsi khusus *-nya*:
 
 Pronomina persona ketiga dalam bentuk *-nya* juga dipakai untuk mengubah kategori suatu verba menjadi nomina. Apabila *-nya* dilekatkan pada verba, verba tersebut berubah kategorinya menjadi nomina:
 
-- (196a) *Datang**nya** kapan?*
-- (196c) *Ditunda**nya** ujian itu membuat mahasiswa bersorak.*
+- (196a) *Datangnya kapan?*
+- (196c) *Ditundanya ujian itu membuat mahasiswa bersorak.*
 
 Persona ketiga *-nya* juga dipakai untuk subjek dalam kalimat topik-komen:
 
-- (197) *Rumah kami atap**nya** bocor.*—*Rumah kami* = topik, *atapnya* = subjek
-- (198) *Petani sukses itu pendidikan**nya** hanya sekolah dasar.*
+- (197) *Rumah kami atapnya bocor.*—*Rumah kami* = topik, *atapnya* = subjek
+- (198) *Petani sukses itu pendidikannya hanya sekolah dasar.*
 
 Bentuk *-nya* ini sering juga dipakai hanya sebagai penanda ketakrifan suatu nomina atau frasa nominal. Apabila suatu konsep telah disajikan, bagian wajib dari konsep tersebut harus dianggap takrif. Wujud ketakrifan itu adalah *-nya*:
 
-- (200a) *Kemarin Pak Ali membeli mobil. Ban**nya** baru.*—*ban* bagian wajib dari *mobil*
-- (200b) *Tadi pagi Jenderal Agus meninggal. Jenazah**nya** akan dimakamkan di Kalibata.*—*jenazah* perikutan makna *meninggal*
+- (200a) *Kemarin Pak Ali membeli mobil. Bannya baru.*—*ban* bagian wajib dari *mobil*
+- (200b) *Tadi pagi Jenderal Agus meninggal. Jenazahnya akan dimakamkan di Kalibata.*—*jenazah* perikutan makna *meninggal*
 
 Pronomina persona ketiga jamak adalah *mereka*. Di samping arti jamak, *mereka* berbeda dengan pronomina persona tunggal dalam acuannya. Pada umumnya *mereka* hanya dipakai untuk insan. Benda atau konsep yang jamak dinyatakan dengan cara yang lain:
 
-- (201) *Teman-teman akan datang. **Mereka** akan membawa makanan sendiri.*—✓
-- (203) *Bu Mantik baru membeli empat buah buku. \***Mereka** ada di meja sekarang.*—✗
+- (201) *Teman-teman akan datang. Mereka akan membawa makanan sendiri.*—✓
+- (203) *Bu Mantik baru membeli empat buah buku. \**Mereka ada di meja sekarang.*—✗
 
 Akan tetapi, pada cerita fiksi atau narasi lain, kata *mereka* kadang-kadang juga dipakai untuk mengacu pada binatang atau benda yang dianggap bernyawa.
 
@@ -161,8 +161,8 @@ Budaya bangsa Indonesia yang memperhatikan benar tata krama dalam pergaulan seri
 
 Nomina penyapa dan pengacu, baik yang berdasarkan hubungan kekerabatan maupun yang berdasarkan jabatan atau hierarki, mempunyai bentuk yang lebih pendek, seperti *pak*, *bu*, *prof*, dan *dok*. Apabila nama diri mengikuti nomina itu, kedua bentuk itu dapat dipakai:
 
-- (208a) ***Bapak Daryanto** (Pak Daryanto) sekarang tinggal di mana?*
-- (209) ***Ibu Kasanti** (Bu Kasanti) duduk di sana saja supaya tidak masuk angin.*
+- (208a) *Bapak Daryanto (Pak Daryanto) sekarang tinggal di mana?*
+- (209) *Ibu Kasanti (Bu Kasanti) duduk di sana saja supaya tidak masuk angin.*
 
 Jika nomina tidak diikuti oleh nama diri, bentuk yang pendek tidak dipakai:
 
@@ -170,7 +170,7 @@ Jika nomina tidak diikuti oleh nama diri, bentuk yang pendek tidak dipakai:
 
 Jika bentuk yang pendek akan dipakai tanpa nama, kalimatnya harus berakhir dengan sapaan (vokatif):
 
-- (214) *Tadi pagi pergi ke mana, **Pak**?*
-- (215) *Apa sudah makan, **Bu**?*
+- (214) *Tadi pagi pergi ke mana, Pak?*
+- (215) *Apa sudah makan, Bu?*
 
 Dari pembahasan di atas dapat disimpulkan bahwa perlu dibedakan pronomina persona dari nomina penyapa dan nomina pengacu persona. Nomina penyapa dipakai untuk menyapa pendengar/pembaca, sedangkan pengacu digunakan untuk mengacu pada orang yang dibicarakan. Namun, keduanya bukan pronomina dan bukan pengganti pronomina.

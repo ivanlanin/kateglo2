@@ -40,9 +40,9 @@ Untuk setiap item markdown di `frontend/public/gramatika/` lakukan pemeriksaan b
 | IV Verba | `frontend/public/gramatika/verba/` | OK | Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2. |
 | V Adjektiva | `frontend/public/gramatika/adjektiva/` | OK | Audit 2026-03-23 selesai: seluruh Bab V (5.1-5.7) tervalidasi. Dua koreksi diterapkan selama audit, yaitu pemulihan judul 5.2 sesuai heading PDF dan pengembalian `putih metah` pada 5.2.3 dari salah baca OCR. |
 | VI Adverbia | `frontend/public/gramatika/adverbia/` | OK | Audit 2026-03-23 selesai: seluruh Bab VI (6.1-6.6) tervalidasi. Temuan yang perlu diedit terbatas pada 14 bold editorial yang tidak ada di PDF dan dibersihkan dari 5 file; tidak ada kehilangan isi substantif. |
-| VII Nomina | `frontend/public/gramatika/nomina/` | Belum | — |
-| VII Pronomina | `frontend/public/gramatika/pronomina/` | Belum | — |
-| VII Numeralia | `frontend/public/gramatika/numeralia/` | Belum | — |
+| VII Nomina | `frontend/public/gramatika/nomina/` | OK | Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`. |
+| VII Pronomina | `frontend/public/gramatika/pronomina/` | OK | Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif. |
+| VII Numeralia | `frontend/public/gramatika/numeralia/` | OK | Audit 2026-03-23 selesai: struktur 7.3 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial dan normalisasi penanda bentuk takberterima. |
 | VIII Kata Tugas | `frontend/public/gramatika/kata-tugas/` | Belum | — |
 | IX Kalimat | `frontend/public/gramatika/kalimat/` | Belum | — |
 | X Hubungan Antarklausa | `frontend/public/gramatika/hubungan-antarklausa/` | Belum | — |
@@ -206,6 +206,22 @@ Sumber audit:
 | 6.4.2 Adverbia Gabungan | `frontend/public/gramatika/adverbia/adverbia-gabungan.md` | 276-278 | OK | Uraian gabungan berdampingan/tidak berdampingan dan contoh (54)-(58) sesuai sumber. Tidak ada temuan baru. |
 | 6.5 Bentuk Adverbial | `frontend/public/gramatika/adverbia/bentuk-adverbial.md` | 278-279 | OK | Uraian fungsi adverbial dan contoh (59)-(61) sesuai sumber. 4 bold editorial pada istilah dan label subbagian dihapus agar kembali sama dengan PDF. |
 | 6.6 Adverbia dan Kelas Kata Lain | `frontend/public/gramatika/adverbia/adverbia-dan-kelas-kata-lain.md` | 279-281 | OK | Uraian adverbia deverbal, deadjektival, denominal, dan denumeral beserta contoh (62)-(65) sesuai sumber. Tidak ada temuan baru. |
+
+### Bab VII Nomina, Pronomina, dan Numeralia
+
+Sumber audit:
+
+- PDF bab: `_data/gramatika/bab-07/bab-07-nomina-pronomina-dan-numeralia.pdf`
+- JPG verifikasi: `_data/gramatika/bab-07/` (dipakai selektif pada halaman yang ekstraksinya paling bising)
+
+Ringkasan hasil:
+
+- Audit Bab VII mengikuti struktur publik yang dipecah ke tiga folder: `nomina`, `pronomina`, dan `numeralia`; pemetaan ini diverifikasi silang dengan `frontend/src/constants/gramatikaData.js` dan PDF sumber.
+- Posisi khusus subbab 7.4 dipastikan benar berada di `frontend/public/gramatika/nomina/konsep-tunggal-jamak-dan-generik.md`, meskipun secara sumber tetap bagian dari Bab VII yang sama.
+- Pada folder `nomina`, isi 7.1 dan 7.4 tervalidasi terhadap PDF. Satu-satunya edit yang diperlukan adalah penghapusan 1 bold editorial pada `perilaku-semantis-nomina.md`; tidak ditemukan kehilangan paragraf atau contoh substantif.
+- Pada folder `pronomina`, struktur 7.2 beserta turunan pronomina tanya, persona, penunjuk, taktentu, jumlah, dan frasa pronominal tervalidasi terhadap PDF. Temuan yang perlu diedit terbatas pada bold editorial di tabel, label intra-paragraf, dan contoh; seluruhnya dibersihkan tanpa mengubah isi atau penomoran contoh.
+- Pada folder `numeralia`, struktur 7.3 dan turunannya tervalidasi terhadap PDF. Temuan edit terbatas pada bold editorial di label subbagian dan contoh; penanda bentuk takberterima tetap dipertahankan sebagai `\**`.
+- Verifikasi akhir menunjukkan tidak ada mismatch isi substantif yang tersisa pada Bab VII; sisa penanda `**` yang terdeteksi otomatis hanya berasal dari notasi takberterima teknis seperti `\**bentuk`.
 
 ## Catatan Kerja
 

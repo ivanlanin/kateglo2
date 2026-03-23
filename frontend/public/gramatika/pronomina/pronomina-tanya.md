@@ -20,7 +20,7 @@ Di samping itu, ada kata tanya lain yang meskipun bukan pronomina, mempertanyaka
 
 Jika ditinjau dari segi bentuknya, sebenarnya hanya ada dua unsur yang mendasari semua kata tanya, yakni *apa* dan *mana*.
 
-**Tabel 7.2 Kata Tanya**
+Tabel 7.2 Kata Tanya
 
 | Dasar | Pembentukan |
 |---|---|

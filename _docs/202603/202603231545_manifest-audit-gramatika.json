@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-03-23T06:12:10.947Z",
+  "generatedAt": "2026-03-23T06:25:17.021Z",
   "source": {
     "gramatikaData": "frontend/src/constants/gramatikaData.js",
     "checklistAudit": "_docs/202603/202603231430_checklist-audit-gramatika-tbbbi.md"
   },
   "summary": {
     "totalItem": 308,
-    "totalOk": 140,
+    "totalOk": 203,
     "totalPerluRevisi": 0,
     "totalTunda": 0,
     "totalSedang": 0,
-    "totalBelum": 168
+    "totalBelum": 105
   },
   "summaryByChapter": [
     {
@@ -91,11 +91,11 @@
       "nomorBab": "VII",
       "urutanBab": 7,
       "total": 32,
-      "selesai": 0,
+      "selesai": 32,
       "revisi": 0,
       "tunda": 0,
       "sedang": 0,
-      "belum": 32
+      "belum": 0
     },
     {
       "babSlug": "pronomina",
@@ -103,11 +103,11 @@
       "nomorBab": "VII",
       "urutanBab": 8,
       "total": 19,
-      "selesai": 0,
+      "selesai": 19,
       "revisi": 0,
       "tunda": 0,
       "sedang": 0,
-      "belum": 19
+      "belum": 0
     },
     {
       "babSlug": "numeralia",
@@ -115,11 +115,11 @@
       "nomorBab": "VII",
       "urutanBab": 9,
       "total": 12,
-      "selesai": 0,
+      "selesai": 12,
       "revisi": 0,
       "tunda": 0,
       "sedang": 0,
-      "belum": 12
+      "belum": 0
     },
     {
       "babSlug": "kata-tugas",
@@ -160,179 +160,179 @@
   ],
   "queue": [
     {
-      "nomorBab": "VII",
-      "nomorSubbab": "7.1.1",
-      "labelAntrian": "7.1.1",
-      "judul": "Batasan dan Ciri Nomina",
-      "fileMarkdown": "frontend/public/gramatika/nomina/batasan-dan-ciri-nomina.md"
+      "nomorBab": "VIII",
+      "nomorSubbab": "8.1",
+      "labelAntrian": "8.1",
+      "judul": "Batasan dan Ciri Kata Tugas",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/batasan-dan-ciri-kata-tugas.md"
     },
     {
-      "nomorBab": "VII",
-      "nomorSubbab": "7.1.2",
-      "labelAntrian": "7.1.2",
-      "judul": "Perilaku Semantis Nomina",
-      "fileMarkdown": "frontend/public/gramatika/nomina/perilaku-semantis-nomina.md"
+      "nomorBab": "VIII",
+      "nomorSubbab": "8.2.1",
+      "labelAntrian": "8.2.1",
+      "judul": "Preposisi",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi.md"
     },
     {
-      "nomorBab": "VII",
-      "nomorSubbab": "7.1.3",
-      "labelAntrian": "7.1.3",
-      "judul": "Perilaku Sintaksis Nomina",
-      "fileMarkdown": "frontend/public/gramatika/nomina/perilaku-sintaksis-nomina.md"
+      "nomorBab": "VIII",
+      "nomorSubbab": "8.2.1.1",
+      "labelAntrian": "8.2.1.1",
+      "judul": "Bentuk Preposisi",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/bentuk-preposisi.md"
     },
     {
-      "nomorBab": "VII",
-      "nomorSubbab": "7.1.4",
-      "labelAntrian": "7.1.4",
-      "judul": "Jenis Nomina",
-      "fileMarkdown": "frontend/public/gramatika/nomina/jenis-nomina.md"
+      "nomorBab": "VIII",
+      "nomorSubbab": "8.2.1.1.1",
+      "labelAntrian": "8.2.1.1.1",
+      "judul": "Preposisi Tunggal",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-tunggal.md"
     },
     {
-      "nomorBab": "VII",
-      "nomorSubbab": "7.1.4.1",
-      "labelAntrian": "7.1.4.1",
-      "judul": "Nomina Berdasarkan Acuan",
-      "fileMarkdown": "frontend/public/gramatika/nomina/nomina-berdasarkan-acuan.md"
-    },
-    {
-      "nomorBab": "VII",
-      "nomorSubbab": "7.1.4.2",
-      "labelAntrian": "7.1.4.2",
-      "judul": "Nomina Berdasarkan Bentuk Morfologis",
-      "fileMarkdown": "frontend/public/gramatika/nomina/nomina-berdasarkan-bentuk-morfologis.md"
-    },
-    {
-      "nomorBab": "VII",
-      "nomorSubbab": "7.1.4.2.1",
-      "labelAntrian": "7.1.4.2.1",
-      "judul": "Nomina Dasar",
-      "fileMarkdown": "frontend/public/gramatika/nomina/nomina-dasar.md"
-    },
-    {
-      "nomorBab": "VII",
-      "nomorSubbab": "7.1.4.2.2.1",
-      "labelAntrian": "7.1.4.2.2.1",
-      "judul": "Penurunan Nomina dengan Konversi",
-      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-konversi.md"
-    },
-    {
-      "nomorBab": "VII",
-      "nomorSubbab": "7.1.4.2.2.2",
-      "labelAntrian": "7.1.4.2.2.2",
-      "judul": "Penurunan Nomina melalui Pengafiksan",
-      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-melalui-pengafiksan.md"
-    },
-    {
-      "nomorBab": "VII",
+      "nomorBab": "VIII",
       "nomorSubbab": null,
-      "labelAntrian": "VII",
-      "judul": "Penurunan Nomina dengan ke-",
-      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-ke.md"
+      "labelAntrian": "VIII",
+      "judul": "Kata Dasar",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-kata-dasar.md"
     },
     {
-      "nomorBab": "VII",
+      "nomorBab": "VIII",
       "nomorSubbab": null,
-      "labelAntrian": "VII",
-      "judul": "Penurunan Nomina dengan per-",
-      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-per.md"
+      "labelAntrian": "VIII",
+      "judul": "Kata Berafiks",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-kata-berafiks.md"
     },
     {
-      "nomorBab": "VII",
+      "nomorBab": "VIII",
+      "nomorSubbab": "8.2.1.1.2",
+      "labelAntrian": "8.2.1.1.2",
+      "judul": "Preposisi Gabungan",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-gabungan.md"
+    },
+    {
+      "nomorBab": "VIII",
       "nomorSubbab": null,
-      "labelAntrian": "VII",
-      "judul": "Penurunan Nomina dengan peng-",
-      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-peng.md"
+      "labelAntrian": "VIII",
+      "judul": "Berdampingan",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-berdampingan.md"
     },
     {
-      "nomorBab": "VII",
+      "nomorBab": "VIII",
       "nomorSubbab": null,
-      "labelAntrian": "VII",
-      "judul": "Penurunan Nomina dengan -an",
-      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-an.md"
+      "labelAntrian": "VIII",
+      "judul": "Berkorelasi",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-berkorelasi.md"
     },
     {
-      "nomorBab": "VII",
+      "nomorBab": "VIII",
       "nomorSubbab": null,
-      "labelAntrian": "VII",
-      "judul": "Penurunan Nomina dengan peng-...-an",
-      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-peng-an.md"
+      "labelAntrian": "VIII",
+      "judul": "Preposisi dan Nomina Lokatif",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-dan-nomina-lokatif.md"
     },
     {
-      "nomorBab": "VII",
+      "nomorBab": "VIII",
+      "nomorSubbab": "8.2.1.2",
+      "labelAntrian": "8.2.1.2",
+      "judul": "Peran Semantis Preposisi",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/peran-semantis-preposisi.md"
+    },
+    {
+      "nomorBab": "VIII",
+      "nomorSubbab": "8.2.1.3",
+      "labelAntrian": "8.2.1.3",
+      "judul": "Peran Sintaktis Preposisi",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/peran-sintaktis-preposisi.md"
+    },
+    {
+      "nomorBab": "VIII",
+      "nomorSubbab": "8.2.2",
+      "labelAntrian": "8.2.2",
+      "judul": "Konjungsi",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/konjungsi.md"
+    },
+    {
+      "nomorBab": "VIII",
+      "nomorSubbab": "8.2.2.1",
+      "labelAntrian": "8.2.2.1",
+      "judul": "Konjungsi Koordinatif",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/konjungsi-koordinatif.md"
+    },
+    {
+      "nomorBab": "VIII",
+      "nomorSubbab": "8.2.2.2",
+      "labelAntrian": "8.2.2.2",
+      "judul": "Konjungsi Korelatif",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/konjungsi-korelatif.md"
+    },
+    {
+      "nomorBab": "VIII",
+      "nomorSubbab": "8.2.2.3",
+      "labelAntrian": "8.2.2.3",
+      "judul": "Konjungsi Subordinatif",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/konjungsi-subordinatif.md"
+    },
+    {
+      "nomorBab": "VIII",
+      "nomorSubbab": "8.2.2.4",
+      "labelAntrian": "8.2.2.4",
+      "judul": "Konjungsi Antarkalimat",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/konjungsi-antarkalimat.md"
+    },
+    {
+      "nomorBab": "VIII",
       "nomorSubbab": null,
-      "labelAntrian": "VII",
-      "judul": "Penurunan Nomina dengan per-...-an",
-      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-per-an.md"
+      "labelAntrian": "VIII",
+      "judul": "Simpulan",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/simpulan.md"
     },
     {
-      "nomorBab": "VII",
-      "nomorSubbab": null,
-      "labelAntrian": "VII",
-      "judul": "Penurunan Nomina dengan ke-...-an",
-      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-ke-an.md"
+      "nomorBab": "VIII",
+      "nomorSubbab": "8.2.3",
+      "labelAntrian": "8.2.3",
+      "judul": "Interjeksi",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/interjeksi.md"
     },
     {
-      "nomorBab": "VII",
-      "nomorSubbab": null,
-      "labelAntrian": "VII",
-      "judul": "Penurunan Nomina dengan Sisipan",
-      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-sisipan.md"
+      "nomorBab": "VIII",
+      "nomorSubbab": "8.2.4",
+      "labelAntrian": "8.2.4",
+      "judul": "Artikula",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/artikula.md"
     },
     {
-      "nomorBab": "VII",
-      "nomorSubbab": null,
-      "labelAntrian": "VII",
-      "judul": "Penurunan Nomina dengan -wan/-wati",
-      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-wan-wati.md"
+      "nomorBab": "VIII",
+      "nomorSubbab": "8.2.5",
+      "labelAntrian": "8.2.5",
+      "judul": "Partikel Penegas",
+      "fileMarkdown": "frontend/public/gramatika/kata-tugas/partikel-penegas.md"
     },
     {
-      "nomorBab": "VII",
-      "nomorSubbab": null,
-      "labelAntrian": "VII",
-      "judul": "Penurunan Nomina dengan -a dan -i",
-      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-a-dan-i.md"
+      "nomorBab": "IX",
+      "nomorSubbab": "9.1",
+      "labelAntrian": "9.1",
+      "judul": "Batasan dan Ciri Kalimat",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/batasan-dan-ciri-kalimat.md"
     },
     {
-      "nomorBab": "VII",
-      "nomorSubbab": null,
-      "labelAntrian": "VII",
-      "judul": "Penurunan Nomina dengan -isme, -(is)asi, -logi, dan -tas",
-      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-isme-isasi-logi-dan-tas.md"
+      "nomorBab": "IX",
+      "nomorSubbab": "9.2",
+      "labelAntrian": "9.2",
+      "judul": "Unsur Kalimat",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/unsur-kalimat.md"
     },
     {
-      "nomorBab": "VII",
-      "nomorSubbab": null,
-      "labelAntrian": "VII",
-      "judul": "Penurunan Nomina dengan se-",
-      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-se.md"
+      "nomorBab": "IX",
+      "nomorSubbab": "9.2.1",
+      "labelAntrian": "9.2.1",
+      "judul": "Kalimat, Klausa, dan Frasa",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat-klausa-dan-frasa.md"
     },
     {
-      "nomorBab": "VII",
-      "nomorSubbab": "7.1.4.2.2.3",
-      "labelAntrian": "7.1.4.2.2.3",
-      "judul": "Penurunan Nomina melalui Perulangan",
-      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-melalui-perulangan.md"
-    },
-    {
-      "nomorBab": "VII",
-      "nomorSubbab": "7.1.4.2.2.4",
-      "labelAntrian": "7.1.4.2.2.4",
-      "judul": "Penurunan Nomina melalui Pemajemukan",
-      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-melalui-pemajemukan.md"
-    },
-    {
-      "nomorBab": "VII",
-      "nomorSubbab": "7.1.5-7.1.6",
-      "labelAntrian": "7.1.5-7.1.6",
-      "judul": "Frasa Nominal",
-      "fileMarkdown": "frontend/public/gramatika/nomina/frasa-nominal.md"
-    },
-    {
-      "nomorBab": "VII",
-      "nomorSubbab": "7.1.5.1",
-      "labelAntrian": "7.1.5.1",
-      "judul": "Penentu",
-      "fileMarkdown": "frontend/public/gramatika/nomina/penentu.md"
+      "nomorBab": "IX",
+      "nomorSubbab": "9.2.2",
+      "labelAntrian": "9.2.2",
+      "judul": "Unsur Wajib dan Unsur Takwajib",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/unsur-wajib-dan-unsur-takwajib.md"
     }
   ],
   "items": [
@@ -1767,8 +1767,8 @@
       "frontmatterTitle": null,
       "fileMarkdown": "frontend/public/gramatika/nomina/nomina.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -1798,8 +1798,8 @@
       "frontmatterTitle": "Batasan dan Ciri Nomina (7.1.1)",
       "fileMarkdown": "frontend/public/gramatika/nomina/batasan-dan-ciri-nomina.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -1829,8 +1829,8 @@
       "frontmatterTitle": "Perilaku Semantis Nomina (7.1.2)",
       "fileMarkdown": "frontend/public/gramatika/nomina/perilaku-semantis-nomina.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -1860,8 +1860,8 @@
       "frontmatterTitle": "Perilaku Sintaksis Nomina (7.1.3)",
       "fileMarkdown": "frontend/public/gramatika/nomina/perilaku-sintaksis-nomina.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -1891,8 +1891,8 @@
       "frontmatterTitle": "Jenis Nomina (7.1.4)",
       "fileMarkdown": "frontend/public/gramatika/nomina/jenis-nomina.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -1922,8 +1922,8 @@
       "frontmatterTitle": "Nomina Berdasarkan Acuan (7.1.4.1)",
       "fileMarkdown": "frontend/public/gramatika/nomina/nomina-berdasarkan-acuan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -1958,8 +1958,8 @@
       "frontmatterTitle": "Nomina Berdasarkan Bentuk Morfologis (7.1.4.2)",
       "fileMarkdown": "frontend/public/gramatika/nomina/nomina-berdasarkan-bentuk-morfologis.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -1994,8 +1994,8 @@
       "frontmatterTitle": "Nomina Dasar (7.1.4.2.1)",
       "fileMarkdown": "frontend/public/gramatika/nomina/nomina-dasar.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2034,8 +2034,8 @@
       "frontmatterTitle": "Penurunan Nomina dengan Konversi (7.1.4.2.2.1)",
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-konversi.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2074,8 +2074,8 @@
       "frontmatterTitle": "Penurunan Nomina melalui Pengafiksan (7.1.4.2.2.2)",
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-melalui-pengafiksan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2114,8 +2114,8 @@
       "frontmatterTitle": "Penurunan Nomina dengan ke-",
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-ke.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2158,8 +2158,8 @@
       "frontmatterTitle": "Penurunan Nomina dengan per-",
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-per.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2202,8 +2202,8 @@
       "frontmatterTitle": "Penurunan Nomina dengan peng-",
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-peng.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2246,8 +2246,8 @@
       "frontmatterTitle": "Penurunan Nomina dengan -an",
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-an.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2290,8 +2290,8 @@
       "frontmatterTitle": "Penurunan Nomina dengan peng-...-an",
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-peng-an.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2334,8 +2334,8 @@
       "frontmatterTitle": "Penurunan Nomina dengan per-...-an",
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-per-an.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2378,8 +2378,8 @@
       "frontmatterTitle": "Penurunan Nomina dengan ke-...-an",
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-ke-an.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2422,8 +2422,8 @@
       "frontmatterTitle": "Penurunan Nomina dengan Sisipan",
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-sisipan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2466,8 +2466,8 @@
       "frontmatterTitle": "Penurunan Nomina dengan -wan/-wati",
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-wan-wati.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2510,8 +2510,8 @@
       "frontmatterTitle": "Penurunan Nomina dengan -a dan -i",
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-a-dan-i.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2554,8 +2554,8 @@
       "frontmatterTitle": "Penurunan Nomina dengan -isme, -(is)asi, -logi, dan -tas",
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-isme-isasi-logi-dan-tas.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2598,8 +2598,8 @@
       "frontmatterTitle": "Penurunan Nomina dengan se-",
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-se.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2642,8 +2642,8 @@
       "frontmatterTitle": "Penurunan Nomina melalui Perulangan (7.1.4.2.2.3)",
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-melalui-perulangan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2682,8 +2682,8 @@
       "frontmatterTitle": "Penurunan Nomina melalui Pemajemukan (7.1.4.2.2.4)",
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-melalui-pemajemukan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2722,8 +2722,8 @@
       "frontmatterTitle": "Frasa Nominal (7.1.5-7.1.6)",
       "fileMarkdown": "frontend/public/gramatika/nomina/frasa-nominal.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2753,8 +2753,8 @@
       "frontmatterTitle": "Penentu (7.1.5.1)",
       "fileMarkdown": "frontend/public/gramatika/nomina/penentu.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2789,8 +2789,8 @@
       "frontmatterTitle": "Penggolong dan Partitif (7.1.5.2)",
       "fileMarkdown": "frontend/public/gramatika/nomina/penggolong-dan-partitif.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2825,8 +2825,8 @@
       "frontmatterTitle": "Perluasan Nomina ke Kiri (7.1.5.3)",
       "fileMarkdown": "frontend/public/gramatika/nomina/perluasan-nomina-ke-kiri.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2861,8 +2861,8 @@
       "frontmatterTitle": "Perluasan Nomina ke Kanan (7.1.5.4)",
       "fileMarkdown": "frontend/public/gramatika/nomina/perluasan-nomina-ke-kanan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2897,8 +2897,8 @@
       "frontmatterTitle": "Susunan Kata pada Frasa Nominal (7.1.5.5)",
       "fileMarkdown": "frontend/public/gramatika/nomina/susunan-kata-pada-frasa-nominal.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2933,8 +2933,8 @@
       "frontmatterTitle": "Frasa Nominal Vokatif (7.1.6)",
       "fileMarkdown": "frontend/public/gramatika/nomina/frasa-nominal-vokatif.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2969,8 +2969,8 @@
       "frontmatterTitle": "Konsep Tunggal, Jamak, dan Generik (7.4)",
       "fileMarkdown": "frontend/public/gramatika/nomina/konsep-tunggal-jamak-dan-generik.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6499,8 +6499,8 @@
       "frontmatterTitle": null,
       "fileMarkdown": "frontend/public/gramatika/pronomina/pronomina.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6530,8 +6530,8 @@
       "frontmatterTitle": "Batasan dan Ciri Pronomina (7.2.1)",
       "fileMarkdown": "frontend/public/gramatika/pronomina/batasan-dan-ciri-pronomina.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6561,8 +6561,8 @@
       "frontmatterTitle": "Jenis Pronomina (7.2.2)",
       "fileMarkdown": "frontend/public/gramatika/pronomina/jenis-pronomina.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6592,8 +6592,8 @@
       "frontmatterTitle": "Pronomina Persona (7.2.2.1)",
       "fileMarkdown": "frontend/public/gramatika/pronomina/pronomina-persona.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6628,8 +6628,8 @@
       "frontmatterTitle": "Pronomina Penunjuk (7.2.2.3)",
       "fileMarkdown": "frontend/public/gramatika/pronomina/pronomina-penunjuk.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6664,8 +6664,8 @@
       "frontmatterTitle": "Pronomina Tanya (7.2.2.4)",
       "fileMarkdown": "frontend/public/gramatika/pronomina/pronomina-tanya.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6700,8 +6700,8 @@
       "frontmatterTitle": "Apa dan Siapa (7.2.2.4.1)",
       "fileMarkdown": "frontend/public/gramatika/pronomina/apa-dan-siapa.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6740,8 +6740,8 @@
       "frontmatterTitle": "Mana (7.2.2.4.2)",
       "fileMarkdown": "frontend/public/gramatika/pronomina/mana.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6780,8 +6780,8 @@
       "frontmatterTitle": "Mengapa dan Kenapa (7.2.2.4.3)",
       "fileMarkdown": "frontend/public/gramatika/pronomina/mengapa-dan-kenapa.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6820,8 +6820,8 @@
       "frontmatterTitle": "Kapan, Bila(mana), dan (Apa)bila (7.2.2.4.4)",
       "fileMarkdown": "frontend/public/gramatika/pronomina/kapan-bilamana-dan-apabila.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6860,8 +6860,8 @@
       "frontmatterTitle": "Bagaimana (7.2.2.4.5)",
       "fileMarkdown": "frontend/public/gramatika/pronomina/bagaimana.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6900,8 +6900,8 @@
       "frontmatterTitle": "Berapa (7.2.2.4.6)",
       "fileMarkdown": "frontend/public/gramatika/pronomina/berapa.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6940,8 +6940,8 @@
       "frontmatterTitle": "Gabungan Preposisi dengan Kata Tanya (7.2.2.4.7)",
       "fileMarkdown": "frontend/public/gramatika/pronomina/gabungan-preposisi-dengan-kata-tanya.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6980,8 +6980,8 @@
       "frontmatterTitle": "Gabungan Kata Tanya dengan Kata Saja dan Implikasi Kejamakan (7.2.2.4.8)",
       "fileMarkdown": "frontend/public/gramatika/pronomina/gabungan-kata-tanya-dengan-kata-saja-dan-implikasi-kejamakan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7020,8 +7020,8 @@
       "frontmatterTitle": "Gabungan Kata Tanya dengan Kata Saja dan Implikasi Ketaktentuan (7.2.2.4.9)",
       "fileMarkdown": "frontend/public/gramatika/pronomina/gabungan-kata-tanya-dengan-kata-saja-dan-implikasi-ketaktentuan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7060,8 +7060,8 @@
       "frontmatterTitle": "Reduplikasi Apa, Siapa, dan Mana (7.2.2.4.10)",
       "fileMarkdown": "frontend/public/gramatika/pronomina/reduplikasi-apa-siapa-dan-mana.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7100,8 +7100,8 @@
       "frontmatterTitle": "Pronomina Taktentu (7.2.2.5)",
       "fileMarkdown": "frontend/public/gramatika/pronomina/pronomina-taktentu.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7136,8 +7136,8 @@
       "frontmatterTitle": "Pronomina Jumlah (7.2.2.6)",
       "fileMarkdown": "frontend/public/gramatika/pronomina/pronomina-jumlah.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7172,8 +7172,8 @@
       "frontmatterTitle": "Frasa Pronominal (7.2.3)",
       "fileMarkdown": "frontend/public/gramatika/pronomina/frasa-pronominal.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7203,8 +7203,8 @@
       "frontmatterTitle": null,
       "fileMarkdown": "frontend/public/gramatika/numeralia/numeralia.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.3 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial dan normalisasi penanda bentuk takberterima.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7234,8 +7234,8 @@
       "frontmatterTitle": "Batasan dan Ciri Numeralia",
       "fileMarkdown": "frontend/public/gramatika/numeralia/batasan-dan-ciri-numeralia.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.3 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial dan normalisasi penanda bentuk takberterima.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7265,8 +7265,8 @@
       "frontmatterTitle": "Jenis Numeralia (7.3)",
       "fileMarkdown": "frontend/public/gramatika/numeralia/jenis-numeralia.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.3 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial dan normalisasi penanda bentuk takberterima.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7296,8 +7296,8 @@
       "frontmatterTitle": "Numeralia Pokok (7.3.1)",
       "fileMarkdown": "frontend/public/gramatika/numeralia/numeralia-pokok.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.3 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial dan normalisasi penanda bentuk takberterima.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7332,8 +7332,8 @@
       "frontmatterTitle": "Numeralia Pokok Tentu (7.3.1.1)",
       "fileMarkdown": "frontend/public/gramatika/numeralia/numeralia-pokok-tentu.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.3 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial dan normalisasi penanda bentuk takberterima.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7372,8 +7372,8 @@
       "frontmatterTitle": "Numeralia Pokok Kolektif (7.3.1.2)",
       "fileMarkdown": "frontend/public/gramatika/numeralia/numeralia-pokok-kolektif.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.3 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial dan normalisasi penanda bentuk takberterima.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7412,8 +7412,8 @@
       "frontmatterTitle": "Numeralia Pokok Distributif (7.3.1.3)",
       "fileMarkdown": "frontend/public/gramatika/numeralia/numeralia-pokok-distributif.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.3 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial dan normalisasi penanda bentuk takberterima.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7452,8 +7452,8 @@
       "frontmatterTitle": "Numeralia Pokok Taktentu (7.3.1.4)",
       "fileMarkdown": "frontend/public/gramatika/numeralia/numeralia-pokok-taktentu.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.3 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial dan normalisasi penanda bentuk takberterima.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7492,8 +7492,8 @@
       "frontmatterTitle": "Numeralia Pokok Klitika (7.3.1.5)",
       "fileMarkdown": "frontend/public/gramatika/numeralia/numeralia-pokok-klitika.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.3 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial dan normalisasi penanda bentuk takberterima.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7532,8 +7532,8 @@
       "frontmatterTitle": "Numeralia Pecahan (7.3.1.6)",
       "fileMarkdown": "frontend/public/gramatika/numeralia/numeralia-pecahan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.3 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial dan normalisasi penanda bentuk takberterima.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7572,8 +7572,8 @@
       "frontmatterTitle": "Numeralia Tingkat (7.3.2)",
       "fileMarkdown": "frontend/public/gramatika/numeralia/numeralia-tingkat.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.3 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial dan normalisasi penanda bentuk takberterima.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7608,8 +7608,8 @@
       "frontmatterTitle": "Frasa Numeral (7.3.3)",
       "fileMarkdown": "frontend/public/gramatika/numeralia/frasa-numeral.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: struktur 7.3 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial dan normalisasi penanda bentuk takberterima.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
