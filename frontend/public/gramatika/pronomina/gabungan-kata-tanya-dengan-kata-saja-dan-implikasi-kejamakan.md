@@ -8,9 +8,14 @@ Untuk memberikan implikasi kejamakan, kata tanya *apa*, *siapa*, *di mana*, *ke 
 - (276) *Kamu tadi pergi dengan siapa?*—jawaban bisa satu orang atau lebih
 - (277) *Kamu tadi pergi dengan siapa saja?*—asumsi penanya: beberapa orang
 
-- (278a) *Di sana Anda akan membeli apa?*
-- (278b) *Di sana Anda akan membeli apa saja?*
-- (279a) *Tadi malam kamu pergi ke mana?*
-- (279b) *Tadi malam kamu pergi ke mana saja?*
-- (280a) *Dari mana kamu, jam begini baru pulang?*
-- (280b) *Dari mana saja kamu, jam begini baru pulang?*
+(278)
+- a. Di sana Anda akan membeli apa?
+- b. Di sana Anda akan membeli apa saja?
+
+(279)
+- a. Tadi malam kamu pergi ke mana?
+- b. Tadi malam kamu pergi ke mana saja?
+
+(280)
+- a. Dari mana kamu, jam begini baru pulang?
+- b. Dari mana saja kamu, jam begini baru pulang?

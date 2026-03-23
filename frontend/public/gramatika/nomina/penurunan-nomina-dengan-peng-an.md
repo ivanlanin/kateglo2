@@ -5,21 +5,33 @@ title: Penurunan Nomina dengan peng-...-an
 
 Nomina dengan *peng-...-an* umumnya diturunkan dari verba dengan *meng-* yang berstatus transitif. Konfiks *peng-...-an* lazimnya digunakan untuk membentuk nomina dengan menyubstitusi prefiks *meng-* dengan *peng-* lalu menambahkan sufiks *-an* pada pangkal setelah semua sufiks verba ditanggalkan.
 
-- (58a) *Hayam Wuruk menyatukan seluruh Nusantara.*
-- (58b) *Penyatuan seluruh Nusantara dilakukan oleh Hayam Wuruk.*
-- (59a) *Seluruh Nusantara bersatu.*
-- (59b) *\*Persatuan seluruh Nusantara dilakukan oleh Hayam Wuruk.*
+(58)
+- a. Hayam Wuruk menyatukan seluruh Nusantara.
+- b. Penyatuan seluruh Nusantara dilakukan oleh Hayam Wuruk.
 
-- (60a) *Pembangunan jembatan itu dilakukan oleh kontraktor Jepang.*
-- (60b) *Perbuatan membangun jembatan itu dilakukan oleh kontraktor Jepang.*
-- (61a) *Pembangunan jembatan itu berlangsung selama dua tahun.*
-- (61b) *Proses membangun jembatan itu berlangsung selama dua tahun.*
-- (62a) *Pembangunan jembatan itu memperlancar lalu lintas barang.*
-- (62b) *Hasil membangun jembatan itu memperlancar lalu lintas barang.*
-- (63a) *Pengakuannya di depan guru dilakukannya karena terpaksa.*
-- (63b) *Perbuatannya mengaku di depan guru dilakukannya karena terpaksa.*
-- (64a) *Pengakuannya di depan polisi disangkalnya di pengadilan.*
-- (64b) *Hal yang diakuinya di depan polisi disangkalnya di pengadilan.*
+(59)
+- a. Seluruh Nusantara bersatu.
+- b. \**Persatuan seluruh Nusantara dilakukan oleh Hayam Wuruk.*
+
+(60)
+- a. Pembangunan jembatan itu dilakukan oleh kontraktor Jepang.
+- b. Perbuatan membangun jembatan itu dilakukan oleh kontraktor Jepang.
+
+(61)
+- a. Pembangunan jembatan itu berlangsung selama dua tahun.
+- b. Proses membangun jembatan itu berlangsung selama dua tahun.
+
+(62)
+- a. Pembangunan jembatan itu memperlancar lalu lintas barang.
+- b. Hasil membangun jembatan itu memperlancar lalu lintas barang.
+
+(63)
+- a. Pengakuannya di depan guru dilakukannya karena terpaksa.
+- b. Perbuatannya mengaku di depan guru dilakukannya karena terpaksa.
+
+(64)
+- a. Pengakuannya di depan polisi disangkalnya di pengadilan.
+- b. Hal yang diakuinya di depan polisi disangkalnya di pengadilan.
 - (65) *Pengakuannya di depan polisi dilakukannya selama satu jam.*
 
 a) Nomina dengan *peng-...-an* umumnya menyatakan perbuatan:

@@ -24,10 +24,12 @@ Berikut adalah beberapa contoh frasa nominal yang dibentuk melalui perluasan nom
 
 Penggolong dan partitif merupakan konstituen frasa numeralia. Hal itu didasarkan pada kenyataan bahwa kehadiran penggolong atau partitif lebih banyak dipicu oleh numeralia daripada oleh nomina inti. Dalam kalimat, nomina inti sering mendahului frasa numeralia untuk memberikan pementingan pada nomina inti itu:
 
-- (129a) *Dia membeli tiga buah buku.*
-- (129b) *Dia membeli buku tiga buah.*
+(129)
+- a. Dia membeli tiga buah buku.
+- b. Dia membeli buku tiga buah.
 
-- (130a) *Dia minum dua gelas air.*
-- (130b) *Dia minum air dua gelas.*
+(130)
+- a. Dia minum dua gelas air.
+- b. Dia minum air dua gelas.
 
 Perlu ditambahkan bahwa perluasan nomina ke kiri hanya bisa dengan frasa numeralia.

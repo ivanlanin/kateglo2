@@ -11,10 +11,14 @@ title: Reduplikasi Apa, Siapa, dan Mana (7.2.2.4.10)
 
 *Di mana* dan *dari mana* dapat pula diulang, dan bentuk itu dipakai dengan arti yang sama dengan *di mana saja* dan *dari mana saja*:
 
-- (293a) *Barang seperti itu dapat dibeli di mana saja.*
-- (293b) *Barang seperti itu dapat dibeli di mana-mana.*
+(293)
+- a. Barang seperti itu dapat dibeli di mana saja.
+- b. Barang seperti itu dapat dibeli di mana-mana.
 
-- (294a) *Pengungsi itu datang dari mana saja.*
-- (294b) *Pengungsi itu datang dari mana-mana.*
-- (295a) *Saudara boleh pergi ke mana saja.*
-- (295b) *Saudara boleh pergi ke mana-mana.*
+(294)
+- a. Pengungsi itu datang dari mana saja.
+- b. Pengungsi itu datang dari mana-mana.
+
+(295)
+- a. Saudara boleh pergi ke mana saja.
+- b. Saudara boleh pergi ke mana-mana.

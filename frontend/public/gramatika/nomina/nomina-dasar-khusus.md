@@ -7,9 +7,12 @@ Nomina dasar khusus adalah nomina yang relatif tidak dapat menjadi dasar penurun
 
 Contoh:
 
-- (36a) *Mereka bercakap-cakap dalam bahasa Indonesia.*
-- (36b) *Mereka berusaha mengindonesiakan istilah-istilah asing.*
-- (37a) *Pak Anwar banyak bergaul dengan orang-orang Belanda.*
-- (37b) *Karena pergaulannya, Pak Anwar menjadi kebelanda-belandaan.*
+(36)
+- a. Mereka bercakap-cakap dalam bahasa Indonesia.
+- b. Mereka berusaha mengindonesiakan istilah-istilah asing.
+
+(37)
+- a. Pak Anwar banyak bergaul dengan orang-orang Belanda.
+- b. Karena pergaulannya, Pak Anwar menjadi kebelanda-belandaan.
 
 Dari nama diri *Indonesia* dan *Belanda* verba *mengindonesiakan* dan adjektiva *kebelanda-belandaan* dapat diturunkan.

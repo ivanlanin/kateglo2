@@ -7,6 +7,7 @@ Pronomina atau nomina yang menyatakan makna kepemilikan berfungsi sebagai penent
 
 Contoh:
 
-- (117a) *Negara kita berdasarkan Pancasila.*
-- (117b) *Rumah Pak Amin kebanjiran.*
-- (117c) *Pintu kamar itu tidak bisa dikunci.*
+(117)
+- a. Negara kita berdasarkan Pancasila.
+- b. Rumah Pak Amin kebanjiran.
+- c. Pintu kamar itu tidak bisa dikunci.

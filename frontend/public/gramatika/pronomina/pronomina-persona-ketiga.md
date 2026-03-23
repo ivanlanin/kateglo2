@@ -44,11 +44,12 @@ Fungsi khusus *-nya*:
 
 Pronomina persona ketiga dalam bentuk *-nya* juga dipakai untuk mengubah kategori suatu verba menjadi nomina. Apabila *-nya* dilekatkan pada verba, verba tersebut berubah kategorinya menjadi nomina:
 
-- (196a) *Datangnya kapan?*
-- (196b) *Perginya naik apa?*
-- (196c) *Ditundanya ujian itu membuat mahasiswa bersorak.*
-- (196d) *Tertangkapnya penjahat itu membuat desa ini aman.*
-- (196e) *Tidak tertangkapnya penjahat itu membuat warga cemas.*
+(196)
+- a. Datangnya kapan?
+- b. Perginya naik apa?
+- c. Ditundanya ujian itu membuat mahasiswa bersorak.
+- d. Tertangkapnya penjahat itu membuat desa ini aman.
+- e. Tidak tertangkapnya penjahat itu membuat warga cemas.
 
 Persona ketiga *-nya* juga dipakai untuk subjek dalam kalimat topik-komen:
 
@@ -58,9 +59,10 @@ Persona ketiga *-nya* juga dipakai untuk subjek dalam kalimat topik-komen:
 
 Bentuk *-nya* ini sering juga dipakai hanya sebagai penanda ketakrifan suatu nomina atau frasa nominal. Apabila suatu konsep telah disajikan, bagian wajib dari konsep tersebut harus dianggap takrif. Wujud ketakrifan itu adalah *-nya*:
 
-- (200a) *Kemarin Pak Ali membeli mobil. Bannya baru.*—*ban* bagian wajib dari *mobil*
-- (200b) *Tadi pagi Jenderal Agus meninggal. Jenazahnya akan dimakamkan di Kalibata.*—*jenazah* perikutan makna *meninggal*
-- (200c) *Minggu lalu Pak Sakerah menjual mobil. Uangnya akan dibelikan tanah.*
+(200)
+- a. Kemarin Pak Ali membeli mobil. Bannya baru. — *ban* bagian wajib dari *mobil*
+- b. Tadi pagi Jenderal Agus meninggal. Jenazahnya akan dimakamkan di Kalibata. — *jenazah* perikutan makna *meninggal*
+- c. Minggu lalu Pak Sakerah menjual mobil. Uangnya akan dibelikan tanah.
 
 Pronomina persona ketiga jamak adalah *mereka*. Di samping arti jamak, *mereka* berbeda dengan pronomina persona tunggal dalam acuannya. Pada umumnya *mereka* hanya dipakai untuk insan. Benda atau konsep yang jamak dinyatakan dengan cara yang lain:
 

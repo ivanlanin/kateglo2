@@ -11,10 +11,13 @@ Budaya bangsa Indonesia yang memperhatikan benar tata krama dalam pergaulan seri
 
 Nomina penyapa dan pengacu, baik yang berdasarkan hubungan kekerabatan maupun yang berdasarkan jabatan atau hierarki, mempunyai bentuk yang lebih pendek, seperti *pak*, *bu*, *prof*, dan *dok*. Apabila nama diri mengikuti nomina itu, kedua bentuk itu dapat dipakai:
 
-- (207a) *Baiklah, usul Saudara akan kami pertimbangkan.*
-- (207b) *Bagaimana pendapat Saudara Supriyanti?*
-- (208a) *Bapak Daryanto (Pak Daryanto) sekarang tinggal di mana?*
-- (208b) *Antarkan surat ini kepada Bapak!* *(Permintaan kepada pendengar yang membicarakan persona ketiga)*
+(207)
+- a. Baiklah, usul Saudara akan kami pertimbangkan.
+- b. Bagaimana pendapat Saudara Supriyanti?
+
+(208)
+- a. Bapak Daryanto (Pak Daryanto) sekarang tinggal di mana?
+- b. Antarkan surat ini kepada Bapak! (Permintaan kepada pendengar yang membicarakan persona ketiga)
 - (209) *Ibu Kasanti (Bu Kasanti) duduk di sana saja supaya tidak masuk angin.*
 - (210) *Profesor Aman (Prof. Aman) mau minum apa?*
 
