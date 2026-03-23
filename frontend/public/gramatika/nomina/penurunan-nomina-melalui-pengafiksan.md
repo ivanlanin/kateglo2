@@ -7,6 +7,7 @@ Nomina dapat diturunkan melalui pengafiksan dengan sejumlah prefiks, sufiks, kon
 
 Proses yang sama juga terjadi pada penurunan nomina-nomina lain seperti terlihat dalam contoh-contoh berikut.
 
+- (43)
 - *darat* (N) -> *daratan* (N); *mendarat(kan)* (V) -> *pendaratan* (N)
 - *kosong* (Adj) -> *kekosongan* (N); *mengosongkan* (V) -> *pengosongan* (N)
 - *satu* (Num) -> *kesatuan* (N); *bersatu* (V) -> *persatuan* (N); *menyatukan* (V) -> *penyatuan* (N)
@@ -18,6 +19,8 @@ Dalam bahasa Indonesia sering ada dua verba yang maknanya sangat dekat. Verba *m
 Pada dasarnya ada tiga prefiks dan satu sufiks yang dipakai untuk menandai nomina, yaitu prefiks *ke-*, *per-*, dan *peng-* serta sufiks *-an*. Di samping itu, terdapat tiga gabungan afiks, sehingga seluruhnya ada tujuh macam afiksasi dalam penurunan nomina:
 
 > *ke-*, *-an*, *ke-...-an*, *per-*, *peng-*, *peng-...-an*, *per-...-an*
+
+- (44) *pedagang* <- *berdagang*; *petani* <- *bertani*; *petinju* <- *bertinju*
 
 1. [Penurunan Nomina dengan ke-](/gramatika/penurunan-nomina-dengan-ke)
 2. [Penurunan Nomina dengan per-](/gramatika/penurunan-nomina-dengan-per)

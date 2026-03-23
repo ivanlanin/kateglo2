@@ -5,6 +5,7 @@ title: Penurunan Nomina dengan se-
 
 Dalam bahasa Indonesia dewasa ini terdapat sekelompok nomina dengan klitik numeralia *se-* yang diperlakukan sebagai kesatuan leksikal:
 
+- (88)
 - *seantero* - Berita itu sudah tersiar di seantero dunia.
 - *sebelah* - Ruangannya ada di sebelah kiri.
 - *sekeliling* - Dia berjalan-jalan di sekeliling taman.

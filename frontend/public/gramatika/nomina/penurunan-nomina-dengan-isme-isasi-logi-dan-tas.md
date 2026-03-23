@@ -5,8 +5,10 @@ title: Penurunan Nomina dengan -isme, -(is)asi, -logi, dan -tas
 
 Mula-mula nomina dengan sufiks *-isme* dan *-tas* diserap dari bahasa asing. Akan tetapi, lambat laun sufiks ini menjadi produktif.
 
+- (86)
 > *komunisme, sukuisme*; *kolonialisasi, kaderisasi*; *biologi, Javanologi*; *kualitas, sportivitas*
 
 Sufiks *-(is)asi* berpadanan dengan konfiks *peng-...-an*, dan sufiks *-tas* sering berpadanan dengan konfiks *ke-...-an*:
 
+- (87)
 > *ionisasi* / *pengionan*; *standardisasi* / *penstandaran/pembakuan*; *efektivitas* / *keefektifan*; *produktivitas* / *keproduktifan*

@@ -5,18 +5,39 @@ title: Penurunan Nomina dengan peng-...-an
 
 Nomina dengan *peng-...-an* umumnya diturunkan dari verba dengan *meng-* yang berstatus transitif. Konfiks *peng-...-an* lazimnya digunakan untuk membentuk nomina dengan menyubstitusi prefiks *meng-* dengan *peng-* lalu menambahkan sufiks *-an* pada pangkal setelah semua sufiks verba ditanggalkan.
 
+- (58a) *Hayam Wuruk menyatukan seluruh Nusantara.*
+- (58b) *Penyatuan seluruh Nusantara dilakukan oleh Hayam Wuruk.*
+- (59a) *Seluruh Nusantara bersatu.*
+- (59b) *\*Persatuan seluruh Nusantara dilakukan oleh Hayam Wuruk.*
+
+- (60a) *Pembangunan jembatan itu dilakukan oleh kontraktor Jepang.*
+- (60b) *Perbuatan membangun jembatan itu dilakukan oleh kontraktor Jepang.*
+- (61a) *Pembangunan jembatan itu berlangsung selama dua tahun.*
+- (61b) *Proses membangun jembatan itu berlangsung selama dua tahun.*
+- (62a) *Pembangunan jembatan itu memperlancar lalu lintas barang.*
+- (62b) *Hasil membangun jembatan itu memperlancar lalu lintas barang.*
+- (63a) *Pengakuannya di depan guru dilakukannya karena terpaksa.*
+- (63b) *Perbuatannya mengaku di depan guru dilakukannya karena terpaksa.*
+- (64a) *Pengakuannya di depan polisi disangkalnya di pengadilan.*
+- (64b) *Hal yang diakuinya di depan polisi disangkalnya di pengadilan.*
+- (65) *Pengakuannya di depan polisi dilakukannya selama satu jam.*
+
 a) Nomina dengan *peng-...-an* umumnya menyatakan perbuatan:
 
+- (66)
 > *pemberdayaan, pemberhentian, pemukulan, pengampunan, penindakan*
 
 b) Nomina dengan *peng-...-an* dapat menyatakan makna proses di samping makna perbuatan:
 
+- (67)
 > *pembelajaran, pembicaraan, pengurusan, pengadilan, penulisan*
 
 c) Nomina dengan *peng-...-an* dapat juga menyatakan makna hasil atau hal yang dinyatakan verba:
 
+- (68)
 > *pemberitahuan*
 
 Ada juga nomina *peng-...-an* yang maknanya belum tentu berkaitan dengan makna verba pangkal:
 
+- (69)
 > *pemandangan, pendapatan, pendengaran, pendirian*

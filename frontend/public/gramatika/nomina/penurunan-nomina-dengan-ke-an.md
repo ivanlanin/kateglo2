@@ -7,16 +7,20 @@ Nomina dengan *ke-...-an* dapat diturunkan dari pangkal verba, adjektiva, atau n
 
 a) Nomina *ke-...-an* yang diturunkan dari verba mempunyai makna 'hal atau keadaan yang dinyatakan verba':
 
+- (74)
 > *keberhasilan, kedatangan, kehadiran, kepergian*
 
 b) Nomina *ke-...-an* yang diturunkan dari adjektiva mempunyai makna 'hal atau keadaan yang dinyatakan adjektiva':
 
+- (75)
 > *keberanian, kebimbangan, kekosongan, keragu-raguan, keseimbangan*
 
 c) Nomina *ke-...-an* yang diturunkan dari dasar nomina mempunyai makna 'hal mengenai nomina' atau 'kantor/wilayah kekuasaan nomina':
 
+- (76)
 > *kebangsaan, kemanusiaan, kerakyatan, kedutaan, kelurahan, kecamatan, kementerian, kerajaan, kepulauan*
 
 d) Nomina *ke-...-an* dapat pula diturunkan dari frasa verbal atau adjektival yang bermakna 'hal yang dinyatakan bentuk pangkal':
 
+- (77)
 > *keingintahuan, ketidaktahuan, ketidakjelasan, ketidakhadiran, kekurangmampuan*

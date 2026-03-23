@@ -1,6 +1,6 @@
 # Audit Artefak Gramatika
 
-Dibuat: 2026-03-23T10:29:32.259Z
+Dibuat: 2026-03-23T10:41:11.739Z
 
 Artefak yang diaudit:
 
@@ -22,7 +22,7 @@ Artefak yang diaudit:
 | Bab IV Verba | 72 | 415 | 2 | 3 | Tidak | Ya |
 | Bab V Adjektiva | 45 | 114 | 1 | 0 | Tidak | Tidak |
 | Bab VI Adverbia | 31 | 65 | 0 | 0 | Tidak | Tidak |
-| Bab VII Nomina, Pronomina, dan Numeralia | 78 | 247 | 2 | 0 | Ya | Ya |
+| Bab VII Nomina, Pronomina, dan Numeralia | 78 | 340 | 2 | 0 | Tidak | Ya |
 | Bab VIII Kata Tugas | 27 | 98 | 1 | 2 | Tidak | Ya |
 | Bab IX Kalimat | 86 | 425 | 5 | 2 | Tidak | Ya |
 | Bab X Hubungan Antarklausa | 40 | 206 | 0 | 2 | Tidak | Ya |
@@ -335,21 +335,21 @@ File sumber:
 
 - Folder: `nomina`, `pronomina`, `numeralia`
 - Jumlah subbab: 78
-- Jumlah contoh: 247
+- Jumlah contoh: 340
 - Jumlah tabel: 2
 - Jumlah bagan: 0
 - Rentang subbab: 7.1, 7.1.4.1, 7.1.4.1.1, 7.1.4.1.2, 7.1.4.2, 7.1.4.2.1, 7.1.4.2.2.1, 7.1.4.2.2.2, 7.1.4.2.2.2.1, 7.1.4.2.2.2.2, 7.1.4.2.2.2.3, 7.1.4.2.2.2.4, ... (+66)
-- Rentang contoh: 1-14, 36-39, 112-340
+- Rentang contoh: 1-340
 - Tabel: 7.1, 7.2
 - Bagan: -
 - Gap subbab: -
-- Gap contoh: 15-35, 40-111
+- Gap contoh: -
 - Gap tabel: -
 - Gap bagan: -
 - Duplikat subbab (representasional): -
 - Duplikat subbab (perlu telaah): 7.1 x3 [frontmatter] @ 3 file, 7.2 x3 [frontmatter] @ 3 file, 7.3 x2 [frontmatter] @ 2 file, 7.4 x2 [frontmatter] @ 2 file
 - Duplikat contoh (representasional): -
-- Duplikat contoh (perlu telaah): 10 x3 [direct] @ frontend/public/gramatika/nomina/perilaku-semantis-nomina.md, 112 x6 [direct] @ frontend/public/gramatika/nomina/penentu.md, 113 x3 [direct] @ frontend/public/gramatika/nomina/penentu.md, 114 x4 [direct] @ frontend/public/gramatika/nomina/penentu.md, 116 x5 [direct] @ frontend/public/gramatika/nomina/penentu.md, 117 x3 [direct] @ frontend/public/gramatika/nomina/penentu.md, 118 x4 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 119 x2 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 12 x3 [direct] @ frontend/public/gramatika/nomina/perilaku-semantis-nomina.md, 120 x2 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 121 x2 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 122 x2 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, ... (+82)
+- Duplikat contoh (perlu telaah): 10 x3 [direct] @ frontend/public/gramatika/nomina/perilaku-semantis-nomina.md, 112 x6 [direct] @ frontend/public/gramatika/nomina/penentu.md, 113 x3 [direct] @ frontend/public/gramatika/nomina/penentu.md, 114 x4 [direct] @ frontend/public/gramatika/nomina/penentu.md, 116 x5 [direct] @ frontend/public/gramatika/nomina/penentu.md, 117 x3 [direct] @ frontend/public/gramatika/nomina/penentu.md, 118 x4 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 119 x2 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 12 x3 [direct] @ frontend/public/gramatika/nomina/perilaku-semantis-nomina.md, 120 x2 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 121 x2 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 122 x2 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, ... (+89)
 - Duplikat tabel (representasional): -
 - Duplikat tabel (perlu telaah): -
 - Duplikat bagan (representasional): -

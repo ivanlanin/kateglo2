@@ -11,6 +11,7 @@ Nomina dasar umum adalah nomina yang dapat menjadi dasar untuk penurunan kata at
 
 Contoh:
 
+- (35)
 - *orang* -> orang-orangan, perseorangan
 - *meja* -> meja makan, meja tulis
 - *rumah* -> rumah-rumahan, perumahan
