@@ -3,9 +3,11 @@ id: 9.5.4
 title: Kalimat Berdasarkan Kelengkapan Unsur (9.5.4)
 ---
 
+Berdasarkan kelengkapan unsurnya, kalimat dapat dibedakan atas (1) kalimat lengkap atau kalimat mayor dan (2) kalimat taklengkap atau kalimat minor. Pengertian lengkap di sini mengacu pada kalimat yang terdiri atas unsur utama, yaitu S-P-(O)-(Pel)-(Ket). Kalimat lengkap dapat berupa kalimat dasar atau kalimat luas. Berikut ini dipaparkan kedua jenis kalimat tersebut berdasarkan kelengkapan unsurnya itu.
+
 ## Kalimat Lengkap (9.5.4.1)
 
-**Kalimat lengkap** (kalimat mayor) adalah kalimat yang terdiri atas unsur utama S-P-(O)-(Pel)-(Ket). Kalimat lengkap dapat berupa kalimat dasar atau kalimat luas.
+Apabila dicermati, kalimat lengkap (kalimat mayor) dapat berupa kalimat dasar atau kalimat luas. Oleh karena itu, kalimat lengkap dapat berupa S-P, S-P-O, S-P-O-Pel, atau berupa S-P-Ket, S-P-O-Ket, S-P-O-Pel-Ket. Predikat kalimat lengkap yang berpola S-P dapat berupa verba atau frasa verbal, nomina atau frasa nominal, adjektiva atau frasa adjektival, atau numeralia atau frasa numeralia.
 
 (361)
 - a. Mereka belum tidur. (S-P)
@@ -17,16 +19,23 @@ title: Kalimat Berdasarkan Kelengkapan Unsur (9.5.4)
 
 (363) Sponsor lomba mengarang itu memberi para pemenang uang dan buku. (S-P-O-Pel)
 
-(364) Mereka belum tidur *waktu itu*. (+ keterangan)
+(364)
 
-(365) Kami sedang merancang gedung *untuk perkantoran*. (+ keterangan)
+- a. Mereka belum tidur *waktu itu*.
+- b. Perjalanan *dari Bogor ke Jakarta* lancar.
+- c. Indonesia negara hukum *sejak dulu*.
+- d. Rumahnya tiga buah *besar-besar*.
+
+(365) Kami sedang merancang gedung *untuk perkantoran*.
+
+(366) Panitia akan mengumumkan para pemenang lomba *pada acara itu*.
 
 ## Kalimat Taklengkap (9.5.4.2)
 
-**Kalimat taklengkap** (kalimat minor) adalah kalimat yang unsur-unsurnya tidak lengkap. Keberterimaan kalimat itu sangat ditentukan oleh hadirnya kalimat lain dalam konteks wacana.
+Kalimat taklengkap (kalimat minor) pada dasarnya adalah kalimat yang unsur-unsurnya tidak lengkap. Keberterimaan kalimat itu sangat ditentukan oleh hadirnya kalimat lain dalam konteks wacana, baik karena sudah diketahui maupun karena sudah disebutkan. Perhatikan penggalan percakapan berikut.
 
 (367) Himawan: Kamu tinggal di mana, Gas?
-Agastya: **Di Kampung Melayu.** *(= Saya tinggal di Kampung Melayu.)*
+Agastya: Di Kampung Melayu.
 
 Di luar konteks wacana, kalimat taklengkap sering digunakan dalam iklan, papan petunjuk, atau slogan:
 

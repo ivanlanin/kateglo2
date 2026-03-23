@@ -44,7 +44,7 @@ Untuk setiap item markdown di `frontend/public/gramatika/` lakukan pemeriksaan b
 | VII Pronomina | `frontend/public/gramatika/pronomina/` | OK | Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif. |
 | VII Numeralia | `frontend/public/gramatika/numeralia/` | OK | Audit 2026-03-23 selesai: struktur 7.3 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial dan normalisasi penanda bentuk takberterima. |
 | VIII Kata Tugas | `frontend/public/gramatika/kata-tugas/` | OK | Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber. |
-| IX Kalimat | `frontend/public/gramatika/kalimat/` | Belum | — |
+| IX Kalimat | `frontend/public/gramatika/kalimat/` | OK | Audit 2026-03-24 selesai: Bab IX tervalidasi terhadap PDF sumber. Temuan utama mencakup pembersihan bold editorial, pemulihan paragraf/contoh yang semula diringkas atau hilang, perbaikan penanda bentuk takberterima, serta pelengkapan seksi 9.5.2-9.6 yang sebelumnya paling terdorong menjadi ringkasan. |
 | X Hubungan Antarklausa | `frontend/public/gramatika/hubungan-antarklausa/` | Belum | — |
 
 ## Audit Berjalan
@@ -238,6 +238,22 @@ Ringkasan hasil:
 - Pada `frontend/public/gramatika/kata-tugas/interjeksi.md` dan `frontend/public/gramatika/kata-tugas/artikula.md` dipulihkan kembali nomor contoh sumber, masing-masing (61)-(70) dan (71)-(75).
 - Temuan edit selebihnya didominasi bold editorial, heading intra-uraian, catatan blockquote, dan penanda visual lain yang tidak muncul pada PDF; semuanya dibersihkan atau diturunkan menjadi teks biasa agar struktur markdown kembali setia pada sumber.
 - Verifikasi akhir menunjukkan sisa penanda `**` pada Bab VIII hanya berasal dari notasi takberterima teknis `\**` di `artikula.md`; tidak ada mismatch isi substantif yang tersisa.
+
+### Bab IX Kalimat
+
+Sumber audit:
+
+- PDF bab: `_data/gramatika/bab-09/bab-09-kalimat.pdf`
+- JPG verifikasi: `_data/gramatika/bab-09/` (dipakai selektif pada halaman dengan ekstraksi teks yang paling bising)
+
+Ringkasan hasil:
+
+- Struktur publik Bab IX pada folder `kalimat` diverifikasi silang dengan `frontend/src/constants/gramatikaData.js` dan urutan subbab pada PDF sumber.
+- Temuan pada Bab IX tidak terbatas pada bold editorial; sejumlah file ternyata memadatkan isi PDF menjadi ringkasan singkat. Audit karena itu memulihkan kembali paragraf penjelas, contoh bernomor, dan hubungan antarseksi yang hilang.
+- Pada seksi 9.2-9.4, perbaikan utama mencakup pemulihan uraian unsur kalimat, keserasian antarunsur, fungsi/kategori/peran, pelengkap dan keterangan, serta paragraf pengantar `kalimat-dasar.md` yang semula terlalu tipis dibanding sumber.
+- Pada seksi 9.5.1-9.5.4, dipulihkan kembali klasifikasi kalimat berdasarkan jumlah klausa, jenis predikat, fungsi sintaktis, dan kelengkapan unsur. Beberapa file yang semula sangat ringkas dan diperluas ulang secara substansial adalah `kalimat-transitif.md`, `kalimat-pasif.md`, `kalimat-imperatif.md`, dan `kalimat-interogatif.md`.
+- Pada seksi 9.5.5 dan 9.6, audit memulihkan uraian pengemasan informasi serta pengingkaran, termasuk contoh-contoh yang sebelumnya hilang, sekaligus menurunkan bold editorial yang tidak didukung PDF.
+- Verifikasi akhir menunjukkan Bab IX sudah konsisten dengan sumber pada aspek isi, penomoran contoh, struktur subbab, dan batas penggunaan penekanan visual. Validasi frontend setelah edit juga lulus: `npm run lint` bersih dan `npm run test` lulus 91 file test / 896 test.
 
 ## Catatan Kerja
 
