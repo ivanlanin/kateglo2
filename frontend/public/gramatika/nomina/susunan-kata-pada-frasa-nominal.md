@@ -5,6 +5,11 @@ title: Susunan Kata pada Frasa Nominal (7.1.5.5)
 
 Nomina dalam bahasa Indonesia dapat diikuti pewatas yang terdiri atas dua kata atau lebih dari kelas kata yang berbeda. Susunan kata yang berfungsi sebagai pewatas dalam suatu frasa nominal banyak ditentukan oleh faktor berikut.
 
+- (149a) *anak saya yang sedang sakit itu tidak dapat masuk sekolah*
+- (149b) *penjahat yang merampok rumah saya sudah tertangkap*
+- (150a) *daerah yang subur itu sangat padat penduduknya*
+- (150b) *pekerjaan yang berat itu dapat diselesaikannya juga*
+
 1) Pewatas berupa nomina cenderung mendahului adjektiva atau verba dalam suatu frasa nominal yang kompleks:
 
 - *buku pelajaran (yang) baru*—✓   \**buku baru pelajaran*—✗
@@ -16,6 +21,9 @@ Nomina dalam bahasa Indonesia dapat diikuti pewatas yang terdiri atas dua kata a
 - *buku pelajaran sejarah yang baru* ~ *buku baru pelajaran sejarah*
 - *ragam bahasa Indonesia (yang) baku* ~ *ragam baku bahasa Indonesia*
 - *edisi kamus istilah (yang) terbaru* ~ *edisi terbaru kamus istilah*
+
+- (151a) *Bapak Hasan, guru saya, akan pergi haji tahun depan.*
+- (151b) *Guru saya, Bapak Hasan, akan pergi haji tahun depan.*
 
 ## Pola Kanonik Frasa Nominal
 
@@ -33,6 +41,8 @@ Contoh:
 - (152e) *mobil Mercy kedua Pak Jaksa itu*—N + N/pewatas + FNum + Pmk + Penj
 
 Perubahan susunan konstituen frasa nominal dapat terjadi dengan memindahkan pronomina/nomina pemilik mendahului frasa numeralia atau pewatas. Konstituen frasa numeralia atau pewatas yang dipindahkan ke belakang harus didahului *yang*:
+
+- (153)
 
 - (153a.i) *anak laki-laki kedua* → (153a.ii) *anak laki-laki Pak Aris yang kedua*
 - (153b.i) *buku merah saya itu* → (153b.ii) *buku saya yang merah itu*

@@ -9,6 +9,8 @@ Perluasan ke kiri dilakukan dengan menambahkan penentu (Pen) berupa numeralia (N
 
 Berikut adalah beberapa contoh frasa nominal yang dibentuk melalui perluasan nomina inti ke kiri dengan penambahan frasa numeralia:
 
+- (128)
+
 | Numeralia (Pemerbanyak) | Penggolong (Partitif) | Nomina |
 |---|---|---|
 | dua | orang | mahasiswa |
@@ -24,5 +26,8 @@ Penggolong dan partitif merupakan konstituen frasa numeralia. Hal itu didasarkan
 
 - (129a) *Dia membeli tiga buah buku.*
 - (129b) *Dia membeli buku tiga buah.*
+
+- (130a) *Dia minum dua gelas air.*
+- (130b) *Dia minum air dua gelas.*
 
 Perlu ditambahkan bahwa perluasan nomina ke kiri hanya bisa dengan frasa numeralia.

@@ -32,9 +32,13 @@ Frasa nominal yang pewatasnya nomina dapat diperluas lagi dengan menambahkan nom
 - (131a) *buku sejarah kebudayaan nasional*
 - (131b) *kursus bahasa Jepang Jakarta*
 
+- (132) Struktur hubungan bertingkat pada frasa nominal itu dapat diperluas lagi ke kanan sesuai dengan pewatas yang langsung mengikuti inti atau frasa nominal sebelumnya.
+
 Acap kali terdapat frasa nominal yang hubungan konstituen-konstituennya lebih daripada satu kemungkinan. Hal ini terjadi karena salah satu konstituennya dapat mewatasi nomina atau frasa nominal yang langsung mendahuluinya:
 
 - (133) *lembaga bahasa nasional*—dapat ditafsirkan (a) lembaga yang mengurusi bahasa nasional atau (b) lembaga bahasa yang bersifat nasional.
+
+- (134) Ketaksaan itu menunjukkan bahwa pewatas dapat membentuk hubungan yang berbeda bergantung pada konstituen yang langsung didahuluinya.
 
 ## Adjektiva Pewatas (7.1.5.4.2)
 
@@ -42,10 +46,15 @@ Frasa nominal dapat dibentuk dengan menambahkan adjektiva sebagai pewatas pada n
 
 Contoh:
 
+- (135) *orang kaya*: Rumah semewah itu hanya mampu dibeli orang *yang* kaya.
+- (136) *mobil merah*: Mereka naik mobil *yang* hitam, bukan mobil *yang* merah.
+
 - *orang kaya*: Rumah semewah itu hanya mampu dibeli orang *yang* kaya.
 - *mobil merah*: Mereka naik mobil *yang* hitam, bukan mobil *yang* merah.
 
 Deretan nomina dan adjektiva yang berupa idiom atau majemuk frasa tidak dapat diselipi *yang*:
+
+- (137) Deretan nomina dan adjektiva yang idiomatis tidak dapat disisipi *yang*.
 
 | Frasa dengan *yang* | Frasa tanpa *yang* (idiom/majemuk) |
 |---|---|
@@ -55,11 +64,19 @@ Deretan nomina dan adjektiva yang berupa idiom atau majemuk frasa tidak dapat di
 
 Kata *yang* harus disisipkan antara nomina inti dan pewatas yang berupa frasa adjektival:
 
+- (138) *murid yang sangat rajin*
+- (139) *saudagar yang paling kaya di kota ini*
+- (140) *baju yang merah muda*
+- (141) *anak yang rajin dan pandai*
+
 > *murid yang sangat rajin*, *saudagar yang paling kaya di kota ini*, *baju yang merah muda*, *anak yang rajin dan pandai*
 
 ## Verba Pewatas (7.1.5.4.3)
 
 Frasa nominal dapat dibentuk dengan menambahkan verba sebagai pewatas pada nomina inti. Verba pewatas pada frasa nominal dapat bersifat atributif:
+
+- (142) *rumah bertingkat*—rumah yang bertingkat
+- (143) *kendaraan bermotor*—kendaraan yang dijalankan motor
 
 - *rumah bertingkat*—rumah yang bertingkat
 - *ban berjalan*—ban yang berjalan
@@ -69,6 +86,9 @@ Frasa nominal dapat dibentuk dengan menambahkan verba sebagai pewatas pada nomin
 - *nasi goreng*—nasi yang digoreng
 
 Verba pewatas nomina dapat pula bersifat deskriptif:
+
+- (144) *kamar belajar*—kamar untuk belajar
+- (145) *ruang rapat*—ruang untuk mengadakan rapat
 
 - *kamar belajar*—kamar untuk belajar
 - *tempat beristirahat*—tempat untuk beristirahat
@@ -111,6 +131,9 @@ Contoh apositif restriktif:
 - (146c) *Mereka ingin ke kebun binatang Ragunan.* → *Mereka ingin ke Ragunan.*
 
 Selain apositif yang restriktif, ada juga apositif yang nonrestriktif:
+
+- (147) *Pancasila*, dasar negara Republik Indonesia
+- (148) *Soekarno*, presiden Republik Indonesia yang pertama
 
 - *Pancasila*, dasar negara Republik Indonesia
 - *Soekarno*, presiden Republik Indonesia yang pertama

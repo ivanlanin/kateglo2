@@ -39,6 +39,10 @@ Contoh:
 
 Selain kata *ini* dan *itu*, bahasa Indonesia juga mengenal kata penunjuk *begini* dan *begitu* untuk mengacu pada perbuatan peragaan. Dalam memberikan penjelasan mengenai cara menggunakan suatu alat, misalnya, orang biasanya menggunakan kata *begini*, lalu diikuti perbuatan peragaan. Jika peragaan sudah selesai, biasanya digunakan kata *begitu* untuk mengacu perbuatan peragaan yang sudah dilakukan itu. Kata *begini* dan *begitu* dapat diganti dengan kata *demikian*.
 
+- (115) A: *Bagaimana cara menggunakan alat ini?*
+	B1: *Cara menggunakannya begini/demikian ....* *(diikuti dengan peragaan)*
+	B2: *Beginilah/demikianlah cara menggunakan alat ini.* *(sesudah peragaan)*
+
 ## Penanda Ketakrifan (7.1.5.1.3)
 
 Dalam bahasa Indonesia terdapat lima bentuk penanda ketakrifan, yakni *ini*, *itu*, *tersebut*, *tadi*, dan *-nya*. Bentuk-bentuk itu selalu mengikuti nomina inti dan digunakan untuk mengacu pada suatu nomina atau frasa nominal yang sudah diketahui bersama oleh pembicara dan pendengar, baik karena telah disebutkan, karena kehadirannya secara fisik, maupun karena pengetahuan umum yang dimiliki.

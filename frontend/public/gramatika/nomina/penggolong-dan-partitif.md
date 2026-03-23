@@ -49,6 +49,15 @@ Jika numeralia bukan *se-*, penggolong tidak wajib:
 - (119a) *Pak Maman mempunyai dua orang anak.*
 - (119b) *Pak Maman mempunyai dua anak.*
 
+- (120a) *Dia baru menjual tiga ekor sapi.*
+- (120b) *Dia baru menjual tiga sapi.*
+- (121a) *Saya belum membaca satu buah buku pun.*
+- (121b) *Saya belum membaca satu buku pun.*
+- (122a) *Ibu membelikan saya dua helai baju.*
+- (122b) *Ibu membelikan saya dua baju.*
+- (123a) *Pak Karta membawa beberapa batang bambu.*
+- (123b) *Pak Karta membawa beberapa bambu.*
+
 Dalam bahasa Indonesia masa kini timbul dua kecenderungan. Pertama, orang meniadakan numeralia *se-* bersama penggolong yang mengikutinya jika dari konteksnya jelas bahwa hal yang dimaksud adalah tunggal. Kedua, ada kecenderungan untuk menyederhanakan penggunaan penggolong yang banyak itu dengan memadatkan menjadi tiga, yakni *orang* untuk nomina yang bermakna manusia, *ekor* untuk binatang, dan *buah* untuk yang bukan manusia dan bukan binatang.
 
 Partitif:
@@ -67,5 +76,12 @@ Berbeda dengan penggolong, partitif pada frasa nominal yang penentunya berupa nu
 
 - (124a) *Saya membeli dua bungkus nasi.*—✓
 - (124b) *Saya membeli dua nasi.*—✗
+
+- (125a) *Sarapannya dua iris roti.*
+- (125b) *\*Sarapannya dua roti.*
+- (126a) *Dia perlu minum delapan gelas air.*
+- (126b) *\*Dia perlu minum delapan air.*
+- (127a) *Kita perlu membeli beberapa liter bensin.*
+- (127b) *\*Kita perlu membeli beberapa bensin.*
 
 Berkaitan dengan penggunaan penggolong dan partitif itu perlu ditambahkan dua hal. Pertama, jika penentu berupa numeralia taktentu, hanya *beberapa* dan *tiap* yang dapat diikuti oleh penggolong atau partitif. Kedua, partitif *belah* hanya dapat mengikuti numeralia klitik *se-*, seperti pada *sebelah mata*, *sebelah tangan*, dan *sebelah kaki* atau numeralia kolektif *kedua*, seperti pada *kedua belah mata*, *kedua belah tangan*, dan *kedua belah pipi*.
