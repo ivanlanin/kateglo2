@@ -37,8 +37,9 @@ Karena tidak membedakan arti kata, penutur bahasa Indonesia sering kali tidak pe
 
 Contoh:
 
-1. Dia itu mengatakan *parang*, bukan *padang*.
-2. Hubungannya telah *disambung* kembali, bukan *tersambung*.
+(1) Dia itu mengatakan *parang*, bukan *padang*.
+
+(2) Hubungannya telah *disambung* kembali, bukan *tersambung*.
 
 Tekanan kata yang biasanya jatuh pada suku kata kedua sebelum suku kata terakhir bergeser ke suku kata terakhir pada kalimat (1) untuk mengontraskan *rang* dan *dang* pada kata *parang* dan *padang*. Pengubahan letak tekanan untuk alasan yang sama juga dilakukan dalam kalimat (2) sehingga kata yang seharusnya diucapkan [disambuq] atau [tərsambuq] diubah menjadi [di'sambuq] atau [tər'sambuq].
 
@@ -46,8 +47,9 @@ Untuk alasan penekanan juga, suku kata yang bervokal [ə] juga dapat memperoleh 
 
 Contoh:
 
-3. Maksud saya *perang* bukan *pirang*.
-4. Jelas ada perbedaan arti kata *serak* dan *serak*.
+(3) Maksud saya *perang* bukan *pirang*.
+
+(4) Jelas ada perbedaan arti kata *serak* dan *serak*.
 
 Tekanan dalam bahasa Indonesia memang tidak membedakan arti, tetapi peletakan tekanan secara tidak tepat akan mengakibatkan kejanggalan.
 
@@ -57,8 +59,9 @@ Letak aksen di dalam kalimat ditentukan oleh dipentingkan atau tidak dipentingka
 
 Dalam keadaan normal, kalimat *Dia sedang membaca buku* akan diberi aksen pada kata *membaca*. Akan tetapi, aksen dapat juga diletakkan pada kata *sedang* atau *buku* bergantung pada informasi mana yang ditonjolkan dalam kalimat itu. Perhatikan kontras pasangan kalimat berikut untuk memperjelas perbedaan letak aksen itu.
 
-5. Dia *sedang* membaca buku. (bukan telah membaca buku).
-6. Dia sedang membaca *buku*. (bukan sedang membaca koran).
+(5) Dia *sedang* membaca buku. (bukan telah membaca buku).
+
+(6) Dia sedang membaca *buku*. (bukan sedang membaca koran).
 
 Jika *sedang* mendapat aksen, kalimat itu mengandung informasi agar pendengar mengerti bahwa dia memang *sedang* membaca buku, bukan telah membaca buku atau akan membaca buku. Jika *buku* mendapat aksen, makna kalimat itu mengandung informasi bahwa dia memang sedang membaca *buku*, bukan membaca koran atau jenis bacaan lain.
 
@@ -66,23 +69,25 @@ Dalam kaitannya dengan informasi baru, aksen jatuh pada kata yang menjadi jawaba
 
 Contoh:
 
-7.
+(7)
 
 - T: "Apa marga anak itu?"
 - J: "Marga anak itu *Siregar*."
 
-8.
+(8)
 
 - T: "Di mana keluarganya tinggal?"
 - J: "Mereka tinggal di *Siantar*."
 
-9.
+(9)
 
 - T: "Tahun berapa mereka menikah?"
 - J: "Tahun 1964 mereka bertunangan. Setahun kemudian menikah."
 
 Setiap kata yang dikontraskan di dalam sebuah kalimat mendapat aksen.
 
-10. Dalam keadaan seperti ini, kita harus kerja keras atau kelaparan.
-11. Mereka itu tidak memancing, tetapi menjala ikan.
-12. Kalau bukan Rina, pasti Sinta yang menelepon dia kemarin.
+(10) Dalam keadaan seperti ini, kita harus kerja keras atau kelaparan.
+
+(11) Mereka itu tidak memancing, tetapi menjala ikan.
+
+(12) Kalau bukan Rina, pasti Sinta yang menelepon dia kemarin.

@@ -143,12 +143,20 @@ function collectDuplicates(occurrences, expectedSources) {
 
     const files = new Set(entries.map((entry) => entry.file));
     const sources = new Set(entries.map((entry) => entry.source));
+    const rawLabels = new Set(entries.map((entry) => entry.rawLabel ?? String(entry.value)));
     const isExpectedDuplicate =
       files.size === 1
       && sources.size > 1
       && [...sources].every((source) => expectedSources.has(source));
 
-    if (isExpectedDuplicate) {
+    const isExpectedVariantDuplicate =
+      files.size === 1
+      && sources.size === 1
+      && [...sources].every((source) => expectedSources.has(source))
+      && rawLabels.size === entries.length
+      && [...rawLabels].some((label) => label !== String(value));
+
+    if (isExpectedDuplicate || isExpectedVariantDuplicate) {
       expected.push(formatDuplicateOccurrence(value, entries));
       continue;
     }
@@ -221,11 +229,28 @@ async function getMarkdownFiles(folderPath) {
     .sort((left, right) => left.localeCompare(right));
 }
 
-function extractExampleOccurrenceFromLine(line) {
-  const directExampleMatch = line.match(/^\s*(?:>\s*)?(?:-\s*)?\((\d+)([a-z])?\)/i);
+function extractExampleOccurrenceFromLine(lines, currentIndex) {
+  const line = lines[currentIndex];
+  const directExampleMatch = line.match(/^\s*(?:>\s*)?(?:-\s*)?\((\d+)([a-z])?\)(?:\s*([a-z])\.)?/i);
   if (directExampleMatch) {
+    let rawSuffix = directExampleMatch[2] ?? directExampleMatch[3] ?? '';
+    if (!rawSuffix) {
+      for (let index = currentIndex + 1; index < lines.length; index += 1) {
+        const candidate = lines[index].trim();
+        if (!candidate) {
+          continue;
+        }
+        const nextVariantMatch = candidate.match(/^(?:-\s*)?([a-z])\./i);
+        if (nextVariantMatch) {
+          rawSuffix = nextVariantMatch[1].toLowerCase();
+        }
+        break;
+      }
+    }
+    const rawLabel = `${directExampleMatch[1]}${rawSuffix}`;
     return {
       value: Number.parseInt(directExampleMatch[1], 10),
+      rawLabel,
       source: 'direct',
     };
   }
@@ -233,8 +258,10 @@ function extractExampleOccurrenceFromLine(line) {
   const diagramExampleMatch = line.match(/\bDiagram\s*\((\d+)([a-z])?\)/i);
   if (diagramExampleMatch) {
     const source = /^\s*!\[/.test(line) ? 'diagram-image-alt' : 'diagram-inline';
+    const rawLabel = `${diagramExampleMatch[1]}${diagramExampleMatch[2] ?? ''}`;
     return {
       value: Number.parseInt(diagramExampleMatch[1], 10),
+      rawLabel,
       source,
     };
   }
@@ -257,6 +284,7 @@ function extractTableExampleOccurrence(lines, currentIndex) {
     if (candidate.startsWith('|')) {
       return {
         value: Number.parseInt(match[1], 10),
+        rawLabel: `${match[1]}${match[2] ?? ''}`,
         source: 'table-reference',
       };
     }
@@ -266,18 +294,49 @@ function extractTableExampleOccurrence(lines, currentIndex) {
   return null;
 }
 
-function extractInlineExampleOccurrenceFromLine(line, inExampleSection) {
+function extractInlineExampleOccurrenceFromLine(lines, currentIndex, inExampleSection) {
   if (!inExampleSection) {
     return null;
   }
 
-  const inlineExampleMatch = line.match(/^\s*(\d+)\.(?:\s+|$)/);
+  const line = lines[currentIndex];
+
+  if (/\[[^\]]+\]\([^)]+\)/.test(line)) {
+    return null;
+  }
+
+  const inlineBlockMatch = line.match(/^\s*(\d+)\.\s*$/);
+  if (inlineBlockMatch) {
+    for (let index = currentIndex + 1; index < lines.length; index += 1) {
+      const candidate = lines[index].trim();
+      if (!candidate) {
+        continue;
+      }
+      if (/^(?:-|>|\* )/.test(candidate)) {
+        return {
+          value: Number.parseInt(inlineBlockMatch[1], 10),
+          rawLabel: inlineBlockMatch[1],
+          source: 'inline-example',
+        };
+      }
+      break;
+    }
+
+    return null;
+  }
+
+  const inlineExampleMatch = line.match(/^\s*(\d+)\.\s+/);
   if (!inlineExampleMatch) {
+    return null;
+  }
+
+  if (!/[[*"“”/]/.test(line)) {
     return null;
   }
 
   return {
     value: Number.parseInt(inlineExampleMatch[1], 10),
+    rawLabel: inlineExampleMatch[1],
     source: 'inline-example',
   };
 }
@@ -294,7 +353,7 @@ function extractArtifactOccurrenceFromLine(line, kind) {
       source: 'emphasis-caption',
     },
     {
-      pattern: new RegExp(`^\\s*(?:[*_]{1,2})?${escapedKind}\\s+(\\d+(?:\\.\\d+)*)\\b`, 'i'),
+      pattern: new RegExp(`^\\s*(?:[*_]{1,2})?${escapedKind}\\s+(\\d+(?:\\.\\d+)*)\\b(?:\\s+[A-Z(][^\\n]*)?\\s*$`),
       source: 'plain-caption',
     },
   ];
@@ -316,8 +375,13 @@ function extractSubbabIdsFromContent(content, babNumber) {
   const occurrences = [];
 
   const frontmatterIdMatch = content.match(/^id:\s*([^\n]+)$/m);
+  const titleIdMatch = content.match(/^title:\s*.*?\((\d+(?:\.\d+)+)\)\s*$/m);
   if (frontmatterIdMatch) {
-    const normalizedId = normalizeSubbabId(frontmatterIdMatch[1], babNumber);
+    const rawId = String(frontmatterIdMatch[1] || '').trim();
+    let normalizedId = normalizeSubbabId(rawId, babNumber);
+    if (titleIdMatch && !rawId.startsWith(`${babNumber}.`)) {
+      normalizedId = normalizeSubbabId(titleIdMatch[1], babNumber);
+    }
     if (normalizedId) {
       occurrences.push({
         value: normalizedId,
@@ -376,8 +440,8 @@ async function analyzeBabGroup(babGroup) {
           inExampleSection = false;
         }
 
-        const exampleOccurrence = extractExampleOccurrenceFromLine(line)
-          ?? extractInlineExampleOccurrenceFromLine(line, inExampleSection)
+        const exampleOccurrence = extractExampleOccurrenceFromLine(lines, lineIndex)
+          ?? extractInlineExampleOccurrenceFromLine(lines, lineIndex, inExampleSection)
           ?? extractTableExampleOccurrence(lines, lineIndex);
         if (exampleOccurrence !== null) {
           exampleOccurrences.push({
@@ -385,6 +449,10 @@ async function analyzeBabGroup(babGroup) {
             file: relativeFilePath,
           });
           continue;
+        }
+
+        if (inExampleSection && line.trim() !== '' && !/^\s*[>|-]/.test(line) && !/^\s+/.test(line) && !/^\s*\|/.test(line)) {
+          inExampleSection = false;
         }
 
         if (line.trim() === '') {
