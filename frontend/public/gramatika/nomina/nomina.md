@@ -60,4 +60,4 @@
    3. [Kata kaum](/gramatika/kata-kaum)
    4. [Kata umat](/gramatika/kata-umat)
    5. [Hubungan Jumlah dan Pengacuan](/gramatika/hubungan-jumlah-dan-pengacuan)
-   6. [Simpulan](/gramatika/konsep-tunggal-jamak-dan-generik-simpulan)
+   6. [Simpulan](/gramatika/simpulan-konsep-tunggal-jamak-dan-generik)
