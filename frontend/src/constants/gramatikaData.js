@@ -681,6 +681,16 @@ const petaItemGramatikaBySlug = daftarItemGramatika.reduce((acc, item) => {
   return acc;
 }, {});
 
+const daftarAutocompleteGramatika = daftarItemGramatika.map((item) => ({
+  value: item.judul,
+  slug: item.slug,
+}));
+
+const petaAutocompleteGramatika = daftarAutocompleteGramatika.reduce((acc, item) => {
+  acc[item.slug] = item.value;
+  return acc;
+}, {});
+
 function formatJudulGramatikaDariSlug(slug = '') {
   return String(slug || '')
     .split('-')
@@ -693,5 +703,7 @@ export {
   daftarIsiGramatika,
   daftarItemGramatika,
   petaItemGramatikaBySlug,
+  daftarAutocompleteGramatika,
+  petaAutocompleteGramatika,
   formatJudulGramatikaDariSlug,
 };

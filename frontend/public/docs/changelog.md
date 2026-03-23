@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-03-23 Senin
+
+- Menambahkan kotak pencarian [Gramatika](/gramatika)
+
 ## 2026-03-22 Minggu
 
 - Menambahkan tombol alih "Ciutkan" & "Luaskan" di [Gramatika](/gramatika)

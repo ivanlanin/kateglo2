@@ -7,6 +7,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { autocomplete } from '../../api/apiPublik';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
 import {
+  daftarAutocompleteGramatika,
+  petaAutocompleteGramatika,
+  formatJudulGramatikaDariSlug,
+} from '../../constants/gramatikaData';
+import {
   daftarAutocompleteEjaan,
   petaAutocompleteEjaan,
   formatJudulEjaanDariSlug,
@@ -18,10 +23,11 @@ const opsiKategori = [
   { value: 'glosarium', label: 'Glosarium', placeholder: 'Cari istilah \u2026' },
   { value: 'makna', label: 'Makna', placeholder: 'Cari berdasarkan makna \u2026' },
   { value: 'rima', label: 'Rima', placeholder: 'Cari kata yang berima \u2026' },
+  { value: 'gramatika', label: 'Gramatika', placeholder: 'Cari kaidah gramatika \u2026' },
   { value: 'ejaan', label: 'Ejaan', placeholder: 'Cari kaidah ejaan \u2026' },
 ];
 
-function normalisasiPencarianEjaan(teks = '') {
+function normalisasiPencarianStatis(teks = '') {
   return String(teks || '')
     .trim()
     .toLowerCase()
@@ -29,30 +35,47 @@ function normalisasiPencarianEjaan(teks = '') {
     .replace(/[\u0300-\u036f]/g, '');
 }
 
-function cariAutocompleteEjaan(kata = '') {
-  const query = normalisasiPencarianEjaan(kata);
+function cariAutocompleteStatis(daftarAutocomplete, kata = '') {
+  const query = normalisasiPencarianStatis(kata);
   if (!query) return [];
 
-  return daftarAutocompleteEjaan
+  return daftarAutocomplete
     .filter((item) => {
-      const nilai = normalisasiPencarianEjaan(item.value);
+      const nilai = normalisasiPencarianStatis(item.value);
       return nilai.includes(query) || item.slug.includes(query);
     })
     .slice(0, 8);
 }
 
-function cariSlugEjaanDariKata(kata = '') {
-  const query = normalisasiPencarianEjaan(kata);
+function cariSlugStatisDariKata(daftarAutocomplete, kata = '') {
+  const query = normalisasiPencarianStatis(kata);
   if (!query) return '';
 
-  const cocokPersis = daftarAutocompleteEjaan.find(
-    (item) => normalisasiPencarianEjaan(item.value) === query || item.slug === query
+  const cocokPersis = daftarAutocomplete.find(
+    (item) => normalisasiPencarianStatis(item.value) === query || item.slug === query
   );
 
   return cocokPersis?.slug || '';
 }
 
+function cariAutocompleteEjaan(kata = '') {
+  return cariAutocompleteStatis(daftarAutocompleteEjaan, kata);
+}
+
+function cariAutocompleteGramatika(kata = '') {
+  return cariAutocompleteStatis(daftarAutocompleteGramatika, kata);
+}
+
+function cariSlugEjaanDariKata(kata = '') {
+  return cariSlugStatisDariKata(daftarAutocompleteEjaan, kata);
+}
+
+function cariSlugGramatikaDariKata(kata = '') {
+  return cariSlugStatisDariKata(daftarAutocompleteGramatika, kata);
+}
+
 function deteksiKategori(pathname) {
+  if (pathname.startsWith('/gramatika')) return 'gramatika';
   if (pathname.startsWith('/ejaan')) return 'ejaan';
   if (pathname.startsWith('/makna')) return 'makna';
   if (pathname.startsWith('/rima')) return 'rima';
@@ -68,6 +91,11 @@ function ekstrakQuery(pathname) {
   if (matchEjaan) {
     const slug = decodeURIComponent(matchEjaan[1]);
     return petaAutocompleteEjaan[slug] || formatJudulEjaanDariSlug(slug);
+  }
+  const matchGramatika = pathname.match(/^\/gramatika\/([^/]+)$/);
+  if (matchGramatika) {
+    const slug = decodeURIComponent(matchGramatika[1]);
+    return petaAutocompleteGramatika[slug] || formatJudulGramatikaDariSlug(slug);
   }
   const matchDetail = pathname.match(/^\/kamus\/detail\/(.+)$/);
   if (matchDetail) return decodeURIComponent(matchDetail[1]);
@@ -98,6 +126,11 @@ function SorotTeks({ teks, query, italic = false }) {
 }
 
 function navigasiCari(navigate, kategori, kata) {
+  if (kategori === 'gramatika') {
+    const slug = cariSlugGramatikaDariKata(kata);
+    navigate(slug ? `/gramatika/${encodeURIComponent(slug)}` : '/gramatika');
+    return;
+  }
   if (kategori === 'ejaan') {
     const slug = cariSlugEjaanDariKata(kata);
     navigate(slug ? `/ejaan/${encodeURIComponent(slug)}` : '/ejaan');
@@ -109,6 +142,11 @@ function navigasiCari(navigate, kategori, kata) {
 function navigasiSaranSpesifik(navigate, kategori, kata, slug = '') {
   if (kategori === 'kamus') {
     navigate(buatPathDetailKamus(kata));
+    return;
+  }
+  if (kategori === 'gramatika') {
+    const slugTarget = String(slug || '').trim() || cariSlugGramatikaDariKata(kata);
+    navigate(slugTarget ? `/gramatika/${encodeURIComponent(slugTarget)}` : '/gramatika');
     return;
   }
   if (kategori === 'ejaan') {
@@ -179,9 +217,14 @@ function KotakCariPublik({ varian = 'navbar', autoFocus = true }) {
     const idPermintaan = ++permintaanTerakhirRef.current;
 
     try {
-      const hasil = kat === 'ejaan'
-        ? cariAutocompleteEjaan(kata)
-        : await autocomplete(kat, kata);
+      let hasil;
+      if (kat === 'gramatika') {
+        hasil = cariAutocompleteGramatika(kata);
+      } else if (kat === 'ejaan') {
+        hasil = cariAutocompleteEjaan(kata);
+      } else {
+        hasil = await autocomplete(kat, kata);
+      }
       if (!isMountedRef.current || idPermintaan !== permintaanTerakhirRef.current) return;
       setSaran(hasil);
       setTampilSaran(hasil.length > 0);

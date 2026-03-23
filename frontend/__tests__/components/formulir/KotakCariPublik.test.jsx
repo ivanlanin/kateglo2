@@ -66,6 +66,7 @@ describe('KotakCari', () => {
   });
 
   it('helper deteksi/ekstrak/navigasi bekerja sesuai input', () => {
+    expect(deteksiKategori('/gramatika/frasa-nominal')).toBe('gramatika');
     expect(deteksiKategori('/ejaan/huruf-kapital')).toBe('ejaan');
     expect(deteksiKategori('/makna/cari/air')).toBe('makna');
     expect(deteksiKategori('/rima/cari/air')).toBe('rima');
@@ -73,6 +74,8 @@ describe('KotakCari', () => {
     expect(deteksiKategori('/glosarium/cari/kata')).toBe('glosarium');
     expect(deteksiKategori('/kamus')).toBe('kamus');
 
+    expect(ekstrakQuery('/gramatika/frasa-nominal')).toBe('Frasa Nominal');
+    expect(ekstrakQuery('/gramatika/aturan-baru')).toBe('Aturan Baru');
     expect(ekstrakQuery('/ejaan/huruf-kapital')).toBe('Huruf Kapital');
     expect(ekstrakQuery('/ejaan/aturan-baru')).toBe('Aturan Baru');
     expect(ekstrakQuery('/kamus/cari/anak%20ibu')).toBe('anak ibu');
@@ -91,6 +94,18 @@ describe('KotakCari', () => {
     navigate.mockReset();
     navigasiSaranSpesifik(navigate, 'tesaurus', 'anak ibu');
     expect(navigate).toHaveBeenCalledWith('/tesaurus/cari/anak%20ibu');
+
+    navigate.mockReset();
+    navigasiCari(navigate, 'gramatika', 'Frasa Nominal');
+    expect(navigate).toHaveBeenCalledWith('/gramatika/frasa-nominal');
+
+    navigate.mockReset();
+    navigasiCari(navigate, 'gramatika', 'entri tidak ada');
+    expect(navigate).toHaveBeenCalledWith('/gramatika');
+
+    navigate.mockReset();
+    navigasiSaranSpesifik(navigate, 'gramatika', 'Frasa Nominal', 'frasa-nominal');
+    expect(navigate).toHaveBeenCalledWith('/gramatika/frasa-nominal');
 
     navigate.mockReset();
     navigasiCari(navigate, 'ejaan', 'Huruf Kapital');
@@ -117,11 +132,11 @@ describe('KotakCari', () => {
     expect(navigate).toHaveBeenCalledWith('/ejaan/huruf-kapital');
   });
 
-  it('menampilkan pilihan kategori Ejaan setelah Rima', () => {
+  it('menampilkan pilihan kategori Gramatika sebelum Ejaan', () => {
     render(<KotakCari autoFocus={false} />);
 
     const options = Array.from(screen.getByRole('combobox').querySelectorAll('option')).map((opt) => opt.textContent);
-    expect(options).toEqual(['Kamus', 'Tesaurus', 'Glosarium', 'Makna', 'Rima', 'Ejaan']);
+    expect(options).toEqual(['Kamus', 'Tesaurus', 'Glosarium', 'Makna', 'Rima', 'Gramatika', 'Ejaan']);
   });
 
   it('SorotTeks menangani query kosong dan query tidak ditemukan', () => {
@@ -479,6 +494,36 @@ describe('KotakCari', () => {
 
     fireEvent.mouseDown(option);
     expect(mockNavigate).toHaveBeenCalledWith('/ejaan/huruf-kapital');
+  });
+
+  it('mode gramatika memakai autocomplete lokal daftar isi dan navigasi ke halaman gramatika', async () => {
+    render(<KotakCari autoFocus={false} />);
+
+    fireEvent.change(screen.getByDisplayValue('Kamus'), { target: { value: 'gramatika' } });
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'frasa nom' } });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(300);
+    });
+    await act(async () => {});
+
+    expect(autocomplete).not.toHaveBeenCalled();
+
+    const [option] = within(screen.getByRole('listbox')).getAllByRole('option');
+    expect(option).toHaveTextContent('Frasa Nominal');
+
+    fireEvent.mouseDown(option);
+    expect(mockNavigate).toHaveBeenCalledWith('/gramatika/frasa-nominal');
+  });
+
+  it('submit gramatika dengan kata bebas mengarah ke halaman gramatika paling relevan', () => {
+    render(<KotakCari autoFocus={false} />);
+
+    fireEvent.change(screen.getByDisplayValue('Kamus'), { target: { value: 'gramatika' } });
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'konsep tidak ada' } });
+    fireEvent.submit(screen.getByRole('button', { name: 'Cari' }).closest('form'));
+
+    expect(mockNavigate).toHaveBeenCalledWith('/gramatika');
   });
 
   it('mode ejaan dengan query yang ternormalisasi kosong tidak menampilkan saran', async () => {
