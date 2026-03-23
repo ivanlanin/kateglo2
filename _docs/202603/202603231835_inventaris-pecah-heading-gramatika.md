@@ -78,32 +78,7 @@ Tidak ada heading internal `##+` yang perlu dipecah pada subfolder `frontend/pub
 
 ## Bunyi Bahasa
 
-### frontend/public/gramatika/bunyi-bahasa/konsonan-dan-alofon-konsonan.md
-- L23 `1) Konsonan /b/ dan /p/` -> `1-konsonan-b-dan-p`
-- L39 `2) Konsonan /d/ dan /t/` -> `2-konsonan-d-dan-t`
-- L51 `3) Konsonan /g/ dan /k/` -> `3-konsonan-g-dan-k`
-- L65 `4) Konsonan /j/ dan /c/` -> `4-konsonan-j-dan-c`
-- L77 `5) Konsonan /f/` -> `5-konsonan-f`
-- L85 `6) Konsonan /s/ dan /z/` -> `6-konsonan-s-dan-z`
-- L93 `7) Konsonan /ʃ/` -> `7-konsonan`
-- L101 `8) Konsonan /x/` -> `8-konsonan-x`
-- L109 `9) Konsonan /h/` -> `9-konsonan-h`
-- L117 `10) Konsonan /m/` -> `10-konsonan-m`
-- L123 `11) Konsonan /n/` -> `11-konsonan-n`
-- L129 `12) Konsonan /ɲ/` -> `12-konsonan`
-- L137 `13) Konsonan /ŋ/` -> `13-konsonan`
-- L143 `14) Konsonan /r/` -> `14-konsonan-r`
-- L151 `15) Konsonan /l/` -> `15-konsonan-l`
-- L161 `16) Konsonan /w/` -> `16-konsonan-w`
-- L167 `17) Konsonan /y/` -> `17-konsonan-y`
-
-### frontend/public/gramatika/bunyi-bahasa/vokal-dan-alofon-vokal.md
-- L14 `1) Vokal /i/` -> `1-vokal-i`
-- L62 `2) Vokal /u/` -> `2-vokal-u`
-- L107 `3) Vokal /e/` -> `3-vokal-e`
-- L121 `4) Vokal /o/` -> `4-vokal-o`
-- L135 `5) Vokal /ə/` -> `5-vokal`
-- L153 `6) Vokal /a/` -> `6-vokal-a`
+Tidak ada heading internal `##+` yang perlu dipecah pada subfolder `frontend/public/gramatika/bunyi-bahasa`.
 
 ## Hubungan Antarklausa
 

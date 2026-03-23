@@ -49,9 +49,9 @@ Mencatat halaman Gramatika yang masih memuat heading internal `##`, `###`, dan s
 
 ## Ringkasan Temuan
 
-- Total halaman konten yang masih memiliki heading internal: 47 file
-- Total heading internal yang terdeteksi: 199 heading
-- Bab yang terdampak: 9 bab
+- Total halaman konten yang masih memiliki heading internal: 45 file
+- Total heading internal yang terdeteksi: 176 heading
+- Bab yang terdampak: 8 bab
 - Duplikasi antar kandidat heading baru: 0
 - Bentrok langsung dengan slug/file yang sudah ada: 1 kasus
 
@@ -62,7 +62,7 @@ Mencatat halaman Gramatika yang masih memuat heading internal `##`, `###`, dan s
 | pendahuluan | 0 | 0 |
 | adjektiva | 7 | 30 |
 | adverbia | 3 | 9 |
-| bunyi-bahasa | 2 | 23 |
+| bunyi-bahasa | 0 | 0 |
 | hubungan-antarklausa | 3 | 8 |
 | kalimat | 10 | 47 |
 | kata-tugas | 2 | 7 |
@@ -138,17 +138,68 @@ Implikasi:
 - pola implementasi per bab terbukti bisa langsung dipakai setelah audit minimum dan pembaruan `gramatikaData.js` pada batch yang sama
 - batch berikutnya dapat langsung memakai pola yang sama untuk Bab III
 
+### Batch 3: Bab III Bunyi Bahasa
+
+Status: selesai dipecah dan tervalidasi
+
+Hasil verifikasi:
+
+- subfolder `frontend/public/gramatika/bunyi-bahasa/` sekarang tidak memiliki heading internal `##`, `###`, dan seterusnya
+- halaman bab `bunyi-bahasa.md` sudah disinkronkan ulang dari `gramatikaData.js` melalui `sync-gramatika-toc.mjs` dengan struktur daftar isi rekursif penuh
+- halaman induk `vokal-dan-konsonan.md` tetap berupa daftar tautan hierarkis untuk subbab 3.2
+- halaman induk `vokal-dan-alofon-vokal.md` dirapikan agar hanya menampilkan enam anak langsung
+- halaman induk `konsonan-dan-alofon-konsonan.md` dirapikan agar hanya menampilkan tujuh belas anak langsung
+- struktur Bab III di `frontend/src/constants/gramatikaData.js` sudah diperluas agar breadcrumb mengikuti hierarki baru sampai level turunan fonem
+- slug berisiko untuk `/ə/`, `/ʃ/`, `/ɲ/`, dan `/ŋ/` dinormalisasi menjadi `vokal-pepet`, `konsonan-sy`, `konsonan-ny`, dan `konsonan-ng`
+- validasi frontend lulus melalui `npm run lint` dan `vitest` untuk area terkait
+
+File baru yang ditambahkan pada Bab III:
+
+- `frontend/public/gramatika/bunyi-bahasa/vokal-i.md`
+- `frontend/public/gramatika/bunyi-bahasa/vokal-u.md`
+- `frontend/public/gramatika/bunyi-bahasa/vokal-e.md`
+- `frontend/public/gramatika/bunyi-bahasa/vokal-o.md`
+- `frontend/public/gramatika/bunyi-bahasa/vokal-pepet.md`
+- `frontend/public/gramatika/bunyi-bahasa/vokal-a.md`
+- `frontend/public/gramatika/bunyi-bahasa/konsonan-b-dan-p.md`
+- `frontend/public/gramatika/bunyi-bahasa/konsonan-d-dan-t.md`
+- `frontend/public/gramatika/bunyi-bahasa/konsonan-g-dan-k.md`
+- `frontend/public/gramatika/bunyi-bahasa/konsonan-j-dan-c.md`
+- `frontend/public/gramatika/bunyi-bahasa/konsonan-f.md`
+- `frontend/public/gramatika/bunyi-bahasa/konsonan-s-dan-z.md`
+- `frontend/public/gramatika/bunyi-bahasa/konsonan-sy.md`
+- `frontend/public/gramatika/bunyi-bahasa/konsonan-kh.md`
+- `frontend/public/gramatika/bunyi-bahasa/konsonan-h.md`
+- `frontend/public/gramatika/bunyi-bahasa/konsonan-m.md`
+- `frontend/public/gramatika/bunyi-bahasa/konsonan-n.md`
+- `frontend/public/gramatika/bunyi-bahasa/konsonan-ny.md`
+- `frontend/public/gramatika/bunyi-bahasa/konsonan-ng.md`
+- `frontend/public/gramatika/bunyi-bahasa/konsonan-r.md`
+- `frontend/public/gramatika/bunyi-bahasa/konsonan-l.md`
+- `frontend/public/gramatika/bunyi-bahasa/konsonan-w.md`
+- `frontend/public/gramatika/bunyi-bahasa/konsonan-y.md`
+
+Halaman induk Bab III yang diubah menjadi daftar subhalaman hierarkis:
+
+- `frontend/public/gramatika/bunyi-bahasa/vokal-dan-alofon-vokal.md`
+- `frontend/public/gramatika/bunyi-bahasa/konsonan-dan-alofon-konsonan.md`
+
+Implikasi:
+
+- pola pemecahan Bab II tetap valid untuk Bab III, termasuk kombinasi daftar isi bab rekursif dan halaman induk konten yang hanya menampilkan anak langsung
+- batch berikutnya dapat lanjut ke Bab IV
+
 ## Prioritas Pemecahan
 
 File dengan kepadatan heading paling tinggi sebaiknya diproses lebih dulu karena memberi pengurangan kompleksitas paling besar per file.
 
-1. `frontend/public/gramatika/bunyi-bahasa/konsonan-dan-alofon-konsonan.md` — 17 heading
-2. `frontend/public/gramatika/kalimat/peran.md` — 14 heading
-3. `frontend/public/gramatika/verba/verba-taktransitif-dengan-prefiks-meng.md` — 9 heading
-4. `frontend/public/gramatika/kalimat/kalimat-imperatif.md` — 8 heading
-5. `frontend/public/gramatika/kalimat/kalimat-dan-kemasan-informasi.md` — 7 heading
-6. `frontend/public/gramatika/nomina/perluasan-nomina-ke-kanan.md` — 7 heading
-7. `frontend/public/gramatika/adjektiva/tingkat-kualitas.md` — 6 heading
+1. `frontend/public/gramatika/kalimat/peran.md` — 14 heading
+2. `frontend/public/gramatika/verba/verba-taktransitif-dengan-prefiks-meng.md` — 9 heading
+3. `frontend/public/gramatika/kalimat/kalimat-imperatif.md` — 8 heading
+4. `frontend/public/gramatika/kalimat/kalimat-dan-kemasan-informasi.md` — 7 heading
+5. `frontend/public/gramatika/nomina/perluasan-nomina-ke-kanan.md` — 7 heading
+6. `frontend/public/gramatika/adjektiva/tingkat-kualitas.md` — 6 heading
+7. `frontend/public/gramatika/adjektiva/adjektiva-majemuk.md` — 5 heading
 
 Catatan eksekusi:
 
