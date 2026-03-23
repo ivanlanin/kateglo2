@@ -13,3 +13,8 @@ title: Reduplikasi Apa, Siapa, dan Mana (7.2.2.4.10)
 
 - (293a) *Barang seperti itu dapat dibeli di mana saja.*
 - (293b) *Barang seperti itu dapat dibeli di mana-mana.*
+
+- (294a) *Pengungsi itu datang dari mana saja.*
+- (294b) *Pengungsi itu datang dari mana-mana.*
+- (295a) *Saudara boleh pergi ke mana saja.*
+- (295b) *Saudara boleh pergi ke mana-mana.*

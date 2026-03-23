@@ -7,5 +7,9 @@ Dalam bahasa Indonesia terdapat dua pronomina taktentu yang diperoleh melalui pe
 
 - (296a) *Ada seorang anak yang ingin bertemu dengan Bapak.*
 - (296b) *Ada seseorang yang ingin bertemu dengan Bapak.*
+- (297a) *Kita memerlukan (seorang) pembantu di rumah.*
+- (297b) *Kita memerlukan seseorang untuk membantu di rumah.*
+- (298a) *Saya melihat (seekor) anjing di jalan.*
+- (298b) *Saya melihat sesuatu di jalan.*
 - (299a) *Dia menemukan (sebuah) dompet di jalan.*
 - (299b) *Dia menemukan sesuatu di jalan.*

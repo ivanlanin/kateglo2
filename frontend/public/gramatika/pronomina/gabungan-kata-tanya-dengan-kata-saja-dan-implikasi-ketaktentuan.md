@@ -7,4 +7,17 @@ Frasa *apa saja*, *siapa saja*, dan *di mana saja* dapat pula tidak berfungsi se
 
 - (281) *Silakan, ambil apa saja/pun yang Anda inginkan.*
 - (282) *Gombloh dapat bergaul dengan siapa saja/pun.*
+- (283) *Ke mana saja/pun orang Belanda itu pergi, anak-anak mengikutinya.*
 - (284) *Selamat menikmati acara ini, di mana saja/pun Anda berada.*
+- (285) *Ambillah berapa saja/pun yang Anda perlukan.*
+
+Karena urutan kata atau macam kata tanya dalam kalimat berita dan kalimat tanya dapat sama, yang membedakan kalimat satu dengan yang lain adalah tanda titik dan tanda tanya dalam bahasa tulisan, serta intonasi dalam bahasa lisan.
+
+- (286a) *Kami boleh membeli apa saja?*
+- (286b) *Kami boleh membeli apa saja.*
+- (287a) *Dia diizinkan pergi dengan siapa saja?*
+- (287b) *Dia diizinkan pergi dengan siapa saja.*
+- (288a) *Orang asing itu boleh tinggal di mana saja?*
+- (288b) *Orang asing itu boleh tinggal di mana saja.*
+- (289a) *Nita boleh bermain ke mana saja?*
+- (289b) *Nita boleh bermain ke mana saja.*

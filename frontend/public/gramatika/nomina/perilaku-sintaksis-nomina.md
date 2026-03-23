@@ -7,6 +7,8 @@ Nomina atau frasa nominal dapat menduduki fungsi subjek (13a), objek (13b), pele
 
 Contoh:
 
+(13)
+
 a. Subjek:
 
 - *Manusia pasti mati.*

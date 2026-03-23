@@ -17,7 +17,7 @@ Tabel 4.2 Konversi Verba
 | *parang* | *parang* | *memarang* |
 | *sendok* | *sendok* | *menyendok* |
 
-Contoh pemakaian:
+(113)
 
 - *menyapu*: Pekerjaannya menyapu halaman Keraton Yogyakarta.
 - *menggunting*: Para jemaah haji harus menggunting rambutnya ketika menunaikan ibadah haji.

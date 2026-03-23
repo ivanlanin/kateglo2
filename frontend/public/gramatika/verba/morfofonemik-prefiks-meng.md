@@ -145,6 +145,8 @@ Contoh:
 
 8) Jika verba yang berafiks direduplikasi, pangkalnya diulangi dengan mempertahankan asimilasi konsonan pertamanya. Pangkal yang bersuku satu mempertahankan unsur *nge-* di depan pangkal yang direduplikasi. Sufiks (jika ada) tidak ikut direduplikasi.
 
+(100)
+
 | Pangkal | Bentuk dasar berafiks | Bentuk reduplikasi |
 |---|---|---|
 | *baca* | *membaca* | *membaca-baca* |

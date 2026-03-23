@@ -1,6 +1,6 @@
 # Audit Artefak Gramatika
 
-Dibuat: 2026-03-23T09:55:39.527Z
+Dibuat: 2026-03-23T10:12:28.018Z
 
 Artefak yang diaudit:
 
@@ -19,12 +19,12 @@ Artefak yang diaudit:
 | Bab I Pendahuluan | 10 | 0 | 0 | 0 | Tidak | Tidak |
 | Bab II Tata Bahasa | 28 | 32 | 0 | 0 | Tidak | Tidak |
 | Bab III Bunyi Bahasa | 19 | 44 | 5 | 2 | Tidak | Tidak |
-| Bab IV Verba | 72 | 410 | 2 | 3 | Ya | Ya |
+| Bab IV Verba | 72 | 415 | 2 | 3 | Tidak | Ya |
 | Bab V Adjektiva | 45 | 114 | 1 | 0 | Tidak | Tidak |
 | Bab VI Adverbia | 31 | 65 | 0 | 0 | Tidak | Tidak |
-| Bab VII Nomina, Pronomina, dan Numeralia | 78 | 116 | 2 | 0 | Ya | Ya |
+| Bab VII Nomina, Pronomina, dan Numeralia | 78 | 149 | 2 | 0 | Ya | Ya |
 | Bab VIII Kata Tugas | 27 | 98 | 1 | 2 | Tidak | Ya |
-| Bab IX Kalimat | 86 | 415 | 5 | 2 | Ya | Ya |
+| Bab IX Kalimat | 86 | 425 | 5 | 2 | Tidak | Ya |
 | Bab X Hubungan Antarklausa | 40 | 206 | 0 | 2 | Tidak | Ya |
 
 ## Detail per Bab
@@ -156,15 +156,15 @@ File sumber:
 
 - Folder: `verba`
 - Jumlah subbab: 72
-- Jumlah contoh: 410
+- Jumlah contoh: 415
 - Jumlah tabel: 2
 - Jumlah bagan: 3
 - Rentang subbab: 4.1, 4.1.2.1, 4.1.2.2, 4.1.2.3, 4.1.2.4, 4.1.2.5, 4.1.2.6, 4.1.3.1, 4.1.3.1.1, 4.1.3.1.2, 4.1.3.2, 4.1.3.2.1, ... (+60)
-- Rentang contoh: 1-70, 72-99, 101-112, 114-239, 242-415
+- Rentang contoh: 1-415
 - Tabel: 4.1, 4.2
 - Bagan: 4.1, 4.2, 4.3
 - Gap subbab: -
-- Gap contoh: 71, 100, 113, 240-241
+- Gap contoh: -
 - Gap tabel: -
 - Gap bagan: -
 - Duplikat subbab (representasional): -
@@ -335,21 +335,21 @@ File sumber:
 
 - Folder: `nomina`, `pronomina`, `numeralia`
 - Jumlah subbab: 78
-- Jumlah contoh: 116
+- Jumlah contoh: 149
 - Jumlah tabel: 2
 - Jumlah bagan: 0
 - Rentang subbab: 7.1, 7.1.4.1, 7.1.4.1.1, 7.1.4.1.2, 7.1.4.2, 7.1.4.2.1, 7.1.4.2.2.1, 7.1.4.2.2.2, 7.1.4.2.2.2.1, 7.1.4.2.2.2.2, 7.1.4.2.2.2.3, 7.1.4.2.2.2.4, ... (+66)
-- Rentang contoh: 1-12, 14, 36-39, 112-114, 116-119, 124, 129, 131, 133, 146, 152, 154-164, 167-170, 176-177, 179, 189-190, 196-198, 200-201, 203, 208-209, 211, 214-215, 217, 219, 221-224, 226-228, 230, 245, 247-252, 254, 257-258, 260, 262, 264, 267, 270-271, 273-274, 276-277, 281-282, 284, 290-293, 296, 299-302, 309, 312, 317-318, 320, 330, 333-334, 336-340
+- Rentang contoh: 1-14, 36-39, 112-114, 116-119, 124, 129, 131, 133, 146, 152, 154-164, 167-170, 176-177, 179, 189-190, 196-198, 200-201, 203, 208-209, 211, 214-215, 217, 219, 221-224, 226-228, 230, 245-309, 312, 317-318, 320, 330, 333-334, 336-340
 - Tabel: 7.1, 7.2
 - Bagan: -
 - Gap subbab: -
-- Gap contoh: 13, 15-35, 40-111, 115, 120-123, 125-128, 130, 132, 134-145, 147-151, 153, 165-166, 171-175, 178, 180-188, 191-195, 199, 202, 204-207, 210, 212-213, 216, 218, 220, 225, 229, 231-244, 246, 253, 255-256, 259, 261, 263, 265-266, 268-269, 272, 275, 278-280, 283, 285-289, 294-295, 297-298, 303-308, 310-311, 313-316, 319, 321-329, 331-332, 335
+- Gap contoh: 15-35, 40-111, 115, 120-123, 125-128, 130, 132, 134-145, 147-151, 153, 165-166, 171-175, 178, 180-188, 191-195, 199, 202, 204-207, 210, 212-213, 216, 218, 220, 225, 229, 231-244, 310-311, 313-316, 319, 321-329, 331-332, 335
 - Gap tabel: -
 - Gap bagan: -
 - Duplikat subbab (representasional): -
 - Duplikat subbab (perlu telaah): 7.1 x3 [frontmatter] @ 3 file, 7.2 x3 [frontmatter] @ 3 file, 7.3 x2 [frontmatter] @ 2 file, 7.4 x2 [frontmatter] @ 2 file
 - Duplikat contoh (representasional): -
-- Duplikat contoh (perlu telaah): 10 x3 [direct] @ frontend/public/gramatika/nomina/perilaku-semantis-nomina.md, 112 x6 [direct] @ frontend/public/gramatika/nomina/penentu.md, 113 x3 [direct] @ frontend/public/gramatika/nomina/penentu.md, 114 x4 [direct] @ frontend/public/gramatika/nomina/penentu.md, 116 x5 [direct] @ frontend/public/gramatika/nomina/penentu.md, 117 x3 [direct] @ frontend/public/gramatika/nomina/penentu.md, 118 x4 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 119 x2 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 12 x3 [direct] @ frontend/public/gramatika/nomina/perilaku-semantis-nomina.md, 124 x2 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 129 x2 [direct] @ frontend/public/gramatika/nomina/perluasan-nomina-ke-kiri.md, 131 x2 [direct] @ frontend/public/gramatika/nomina/perluasan-nomina-ke-kanan.md, ... (+34)
+- Duplikat contoh (perlu telaah): 10 x3 [direct] @ frontend/public/gramatika/nomina/perilaku-semantis-nomina.md, 112 x6 [direct] @ frontend/public/gramatika/nomina/penentu.md, 113 x3 [direct] @ frontend/public/gramatika/nomina/penentu.md, 114 x4 [direct] @ frontend/public/gramatika/nomina/penentu.md, 116 x5 [direct] @ frontend/public/gramatika/nomina/penentu.md, 117 x3 [direct] @ frontend/public/gramatika/nomina/penentu.md, 118 x4 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 119 x2 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 12 x3 [direct] @ frontend/public/gramatika/nomina/perilaku-semantis-nomina.md, 124 x2 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 129 x2 [direct] @ frontend/public/gramatika/nomina/perluasan-nomina-ke-kiri.md, 131 x2 [direct] @ frontend/public/gramatika/nomina/perluasan-nomina-ke-kanan.md, ... (+57)
 - Duplikat tabel (representasional): -
 - Duplikat tabel (perlu telaah): -
 - Duplikat bagan (representasional): -
@@ -474,15 +474,15 @@ File sumber:
 
 - Folder: `kalimat`
 - Jumlah subbab: 86
-- Jumlah contoh: 415
+- Jumlah contoh: 425
 - Jumlah tabel: 5
 - Jumlah bagan: 2
 - Rentang subbab: 9.1, 9.2, 9.2.1, 9.2.2, 9.2.3, 9.2.3.1, 9.2.3.2, 9.3, 9.3.1, 9.3.2, 9.3.2.1, 9.3.2.2, ... (+74)
-- Rentang contoh: 1-197, 202-257, 259-264, 267-368, 370-375, 377, 379-425
+- Rentang contoh: 1-425
 - Tabel: 9.1, 9.2, 9.3, 9.4, 9.5
 - Bagan: 9.1, 9.2
 - Gap subbab: -
-- Gap contoh: 198-201, 258, 265-266, 369, 376, 378
+- Gap contoh: -
 - Gap tabel: -
 - Gap bagan: -
 - Duplikat subbab (representasional): -
@@ -606,3 +606,4 @@ File sumber:
 - `frontend/public/gramatika/hubungan-antarklausa/hubungan-tujuan.md`
 - `frontend/public/gramatika/hubungan-antarklausa/hubungan-waktu.md`
 - `frontend/public/gramatika/hubungan-antarklausa/pelesapan.md`
+
