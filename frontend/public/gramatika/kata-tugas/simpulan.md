@@ -1,6 +1,6 @@
 ---
-id: 5
-title: Simpulan
+id: 8.2.2.5
+title: Simpulan (8.2.2.5)
 ---
 
 Dari uraian mengenai berbagai konjungsi di atas dapat ditarik simpulan berikut.

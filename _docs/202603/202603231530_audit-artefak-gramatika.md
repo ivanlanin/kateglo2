@@ -1,17 +1,17 @@
-# Audit Artefak Gramatika
+matika-artefak.js                                                                                                   # Audit Artefak Gramatika
 
-Dibuat: 2026-03-23T11:12:35.493Z
+Dibuat: 2026-03-23T11:16:37.339Z
 
 Artefak yang diaudit:
 
-- Subbab: nomor pada `id:` frontmatter dan heading bernomor seperti `## ... (7.2.2.2)`, dinormalisasi ke nomor bab.
-- Contoh: nomor contoh berbentuk `(xx)` pada awal baris; varian huruf seperti `(72a)` dihitung ke basis nomor `72`.
-- Diagram bernomor seperti `Diagram (3)` diperlakukan sebagai bentuk penyajian contoh dan dihitung ke nomor contoh terkait.
-- Tabel: caption `Tabel ...`, termasuk yang muncul sebagai alt image atau baris miring/tebal.
+- Subbab: nomor pada `id:` frontmatter dan heading bernomor seperti `## ... (7.2.2.2)`, dinormalisasi ke nomor bab. 
+- Contoh: nomor contoh berbentuk `(xx)` pada awal baris; varian huruf seperti `(72a)` dihitung ke basis nomor `72`. 
+- Diagram bernomor seperti `Diagram (3)` diperlakukan sebagai bentuk penyajian contoh dan dihitung ke nomor contoh t
+erkait.                                                                                                             - Tabel: caption `Tabel ...`, termasuk yang muncul sebagai alt image atau baris miring/tebal.
 - Bagan: caption `Bagan ...`, termasuk yang muncul sebagai alt image atau baris miring/tebal.
 - Diagram tidak diaudit sebagai artefak tersendiri; diagram diperlakukan sebagai bentuk penyajian contoh.
-- Duplikat representasional dalam file yang sama (misalnya alt gambar + caption, atau frontmatter + heading) dipisahkan dari duplikat yang perlu ditelaah.
-
+- Duplikat representasional dalam file yang sama (misalnya alt gambar + caption, atau frontmatter + heading) dipisah
+kan dari duplikat yang perlu ditelaah.                                                                              
 ## Ringkasan
 
 | Bab | Subbab | Contoh | Tabel | Bagan | Gap? | Duplikat? |
@@ -22,8 +22,8 @@ Artefak yang diaudit:
 | Bab IV Verba | 72 | 415 | 2 | 3 | Tidak | Tidak |
 | Bab V Adjektiva | 45 | 114 | 1 | 0 | Tidak | Tidak |
 | Bab VI Adverbia | 31 | 65 | 0 | 0 | Tidak | Tidak |
-| Bab VII Nomina, Pronomina, dan Numeralia | 84 | 340 | 2 | 0 | Ya | Tidak |
-| Bab VIII Kata Tugas | 28 | 98 | 1 | 2 | Ya | Tidak |
+| Bab VII Nomina, Pronomina, dan Numeralia | 85 | 340 | 2 | 0 | Tidak | Tidak |
+| Bab VIII Kata Tugas | 29 | 98 | 1 | 2 | Tidak | Tidak |
 | Bab IX Kalimat | 86 | 425 | 5 | 2 | Tidak | Tidak |
 | Bab X Hubungan Antarklausa | 40 | 206 | 0 | 2 | Tidak | Tidak |
 
@@ -59,7 +59,7 @@ File sumber:
 - `frontend/public/gramatika/pendahuluan/bahasa-yang-baik-dan-benar.md`
 - `frontend/public/gramatika/pendahuluan/diglosia.md`
 - `frontend/public/gramatika/pendahuluan/fungsi-bahasa-baku.md`
-- `frontend/public/gramatika/pendahuluan/hubungan-bahasa-indonesia-dengan-bahasa-daerah-dan-bahasa-asing.md`
+- `frontend/public/gramatika/pendahuluan/hubungan-bahasa-indonesia-dengan-bahasa-daerah-dan-bahasa-asing.md`        
 - `frontend/public/gramatika/pendahuluan/kedudukan-bahasa-indonesia.md`
 - `frontend/public/gramatika/pendahuluan/pembakuan-bahasa.md`
 - `frontend/public/gramatika/pendahuluan/pendahuluan.md`
@@ -74,8 +74,8 @@ File sumber:
 - Jumlah contoh: 32
 - Jumlah tabel: 0
 - Jumlah bagan: 0
-- Rentang subbab: 2.1, 2.2, 2.2.1, 2.2.2, 2.2.3, 2.2.3.1, 2.2.3.2, 2.2.3.2.1, 2.2.3.2.2, 2.2.3.3, 2.2.3.3.1, 2.2.3.3.2, ... (+16)
-- Rentang contoh: 1-32
+- Rentang subbab: 2.1, 2.2, 2.2.1, 2.2.2, 2.2.3, 2.2.3.1, 2.2.3.2, 2.2.3.2.1, 2.2.3.2.2, 2.2.3.3, 2.2.3.3.1, 2.2.3.3
+.2, ... (+16)                                                                                                       - Rentang contoh: 1-32
 - Tabel: -
 - Bagan: -
 - Gap subbab: -
@@ -84,8 +84,8 @@ File sumber:
 - Gap bagan: -
 - Duplikat subbab (representasional): -
 - Duplikat subbab (perlu telaah): -
-- Duplikat contoh (representasional): 12 x2 [diagram-image-alt/diagram-inline] @ frontend/public/gramatika/tata-bahasa/sintaksis.md, 13 x2 [diagram-image-alt/diagram-inline] @ frontend/public/gramatika/tata-bahasa/sintaksis.md, 15 x2 [diagram-image-alt/diagram-inline] @ frontend/public/gramatika/tata-bahasa/sintaksis.md, 16 x2 [diagram-image-alt/diagram-inline] @ frontend/public/gramatika/tata-bahasa/sintaksis.md, 3 x2 [diagram-image-alt/diagram-inline] @ frontend/public/gramatika/tata-bahasa/morfologi.md, 4 x3 [diagram-image-alt/diagram-inline] @ frontend/public/gramatika/tata-bahasa/sintaksis.md, 8 x2 [diagram-image-alt/diagram-inline] @ frontend/public/gramatika/tata-bahasa/sintaksis.md
-- Duplikat contoh (perlu telaah): -
+- Duplikat contoh (representasional): 12 x2 [diagram-image-alt/diagram-inline] @ frontend/public/gramatika/tata-baha
+sa/sintaksis.md, 13 x2 [diagram-image-alt/diagram-inline] @ frontend/public/gramatika/tata-bahasa/sintaksis.md, 15 x2 [diagram-image-alt/diagram-inline] @ frontend/public/gramatika/tata-bahasa/sintaksis.md, 16 x2 [diagram-image-alt/diagram-inline] @ frontend/public/gramatika/tata-bahasa/sintaksis.md, 3 x2 [diagram-image-alt/diagram-inline] @ frontend/public/gramatika/tata-bahasa/morfologi.md, 4 x3 [diagram-image-alt/diagram-inline] @ frontend/public/gramatika/tata-bahasa/sintaksis.md, 8 x2 [diagram-image-alt/diagram-inline] @ frontend/public/gramatika/tata-bahasa/sintaksis.md                                                                                                                  - Duplikat contoh (perlu telaah): -
 - Duplikat tabel (representasional): -
 - Duplikat tabel (perlu telaah): -
 - Duplikat bagan (representasional): -
@@ -126,8 +126,8 @@ File sumber:
 - Duplikat contoh (perlu telaah): -
 - Duplikat tabel (representasional): -
 - Duplikat tabel (perlu telaah): -
-- Duplikat bagan (representasional): 3.1 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/bunyi-bahasa/batasan-dan-ciri-bunyi-bahasa.md, 3.2 x2 [image-alt/plain-caption] @ frontend/public/gramatika/bunyi-bahasa/vokal-dan-alofon-vokal.md
-- Duplikat bagan (perlu telaah): -
+- Duplikat bagan (representasional): 3.1 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/bunyi-bahasa/ba
+tasan-dan-ciri-bunyi-bahasa.md, 3.2 x2 [image-alt/plain-caption] @ frontend/public/gramatika/bunyi-bahasa/vokal-dan-alofon-vokal.md                                                                                                     - Duplikat bagan (perlu telaah): -
 
 File sumber:
 
@@ -159,8 +159,8 @@ File sumber:
 - Jumlah contoh: 415
 - Jumlah tabel: 2
 - Jumlah bagan: 3
-- Rentang subbab: 4.1, 4.1.1, 4.1.2, 4.1.2.1, 4.1.2.2, 4.1.2.3, 4.1.2.4, 4.1.2.5, 4.1.2.6, 4.1.3, 4.1.3.1, 4.1.3.1.1, ... (+60)
-- Rentang contoh: 1-415
+- Rentang subbab: 4.1, 4.1.1, 4.1.2, 4.1.2.1, 4.1.2.2, 4.1.2.3, 4.1.2.4, 4.1.2.5, 4.1.2.6, 4.1.3, 4.1.3.1, 4.1.3.1.1
+, ... (+60)                                                                                                         - Rentang contoh: 1-415
 - Tabel: 4.1, 4.2
 - Bagan: 4.1, 4.2, 4.3
 - Gap subbab: -
@@ -169,12 +169,12 @@ File sumber:
 - Gap bagan: -
 - Duplikat subbab (representasional): -
 - Duplikat subbab (perlu telaah): -
-- Duplikat contoh (representasional): 16 x2 [direct] @ frontend/public/gramatika/verba/verba-transitif-berobjek.md, 17 x2 [direct] @ frontend/public/gramatika/verba/verba-transitif-berobjek.md, 18 x2 [direct] @ frontend/public/gramatika/verba/verba-transitif-berobjek.md, 19 x2 [direct] @ frontend/public/gramatika/verba/verba-transitif-berobjek.md, 20 x2 [direct] @ frontend/public/gramatika/verba/verba-transitif-berobjek.md, 39 x2 [direct] @ frontend/public/gramatika/verba/verba-taktransitif-berpelengkap.md, 40 x2 [direct] @ frontend/public/gramatika/verba/verba-taktransitif-berpelengkap.md, 41 x2 [direct] @ frontend/public/gramatika/verba/verba-taktransitif-berpelengkap.md, 43 x2 [direct] @ frontend/public/gramatika/verba/verba-taktransitif-berpelengkap.md
-- Duplikat contoh (perlu telaah): -
+- Duplikat contoh (representasional): 16 x2 [direct] @ frontend/public/gramatika/verba/verba-transitif-berobjek.md, 
+17 x2 [direct] @ frontend/public/gramatika/verba/verba-transitif-berobjek.md, 18 x2 [direct] @ frontend/public/gramatika/verba/verba-transitif-berobjek.md, 19 x2 [direct] @ frontend/public/gramatika/verba/verba-transitif-berobjek.md, 20 x2 [direct] @ frontend/public/gramatika/verba/verba-transitif-berobjek.md, 39 x2 [direct] @ frontend/public/gramatika/verba/verba-taktransitif-berpelengkap.md, 40 x2 [direct] @ frontend/public/gramatika/verba/verba-taktransitif-berpelengkap.md, 41 x2 [direct] @ frontend/public/gramatika/verba/verba-taktransitif-berpelengkap.md, 43 x2 [direct] @ frontend/public/gramatika/verba/verba-taktransitif-berpelengkap.md                                              - Duplikat contoh (perlu telaah): -
 - Duplikat tabel (representasional): -
 - Duplikat tabel (perlu telaah): -
-- Duplikat bagan (representasional): 4.2 x2 [image-alt/plain-caption] @ frontend/public/gramatika/verba/verba-turunan.md
-- Duplikat bagan (perlu telaah): -
+- Duplikat bagan (representasional): 4.2 x2 [image-alt/plain-caption] @ frontend/public/gramatika/verba/verba-turuna
+n.md                                                                                                                - Duplikat bagan (perlu telaah): -
 
 File sumber:
 
@@ -334,22 +334,22 @@ File sumber:
 ## Bab VII Nomina, Pronomina, dan Numeralia
 
 - Folder: `nomina`, `pronomina`, `numeralia`
-- Jumlah subbab: 84
+- Jumlah subbab: 85
 - Jumlah contoh: 340
 - Jumlah tabel: 2
 - Jumlah bagan: 0
-- Rentang subbab: 7.1, 7.1.1, 7.1.2, 7.1.3, 7.1.4, 7.1.4.1, 7.1.4.1.1, 7.1.4.1.2, 7.1.4.2, 7.1.4.2.1, 7.1.4.2.2.1, 7.1.4.2.2.2, ... (+72)
-- Rentang contoh: 1-340
+- Rentang subbab: 7.1, 7.1.1, 7.1.2, 7.1.3, 7.1.4, 7.1.4.1, 7.1.4.1.1, 7.1.4.1.2, 7.1.4.2, 7.1.4.2.1, 7.1.4.2.2.1, 7
+.1.4.2.2.2, ... (+73)                                                                                               - Rentang contoh: 1-340
 - Tabel: 7.1, 7.2
 - Bagan: -
-- Gap subbab: 7.1.5, 7.2, 7.5
+- Gap subbab: -
 - Gap contoh: -
 - Gap tabel: -
 - Gap bagan: -
 - Duplikat subbab (representasional): -
 - Duplikat subbab (perlu telaah): -
-- Duplikat contoh (representasional): 10 x3 [direct] @ frontend/public/gramatika/nomina/perilaku-semantis-nomina.md, 112 x6 [direct] @ frontend/public/gramatika/nomina/penentu.md, 113 x3 [direct] @ frontend/public/gramatika/nomina/penentu.md, 114 x4 [direct] @ frontend/public/gramatika/nomina/penentu.md, 116 x5 [direct] @ frontend/public/gramatika/nomina/penentu.md, 117 x3 [direct] @ frontend/public/gramatika/nomina/penentu.md, 118 x4 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 119 x2 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 12 x3 [direct] @ frontend/public/gramatika/nomina/perilaku-semantis-nomina.md, 120 x2 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 121 x2 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 122 x2 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, ... (+89)
-- Duplikat contoh (perlu telaah): -
+- Duplikat contoh (representasional): 10 x3 [direct] @ frontend/public/gramatika/nomina/perilaku-semantis-nomina.md,
+ 112 x6 [direct] @ frontend/public/gramatika/nomina/penentu.md, 113 x3 [direct] @ frontend/public/gramatika/nomina/penentu.md, 114 x4 [direct] @ frontend/public/gramatika/nomina/penentu.md, 116 x5 [direct] @ frontend/public/gramatika/nomina/penentu.md, 117 x3 [direct] @ frontend/public/gramatika/nomina/penentu.md, 118 x4 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 119 x2 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 12 x3 [direct] @ frontend/public/gramatika/nomina/perilaku-semantis-nomina.md, 120 x2 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 121 x2 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, 122 x2 [direct] @ frontend/public/gramatika/nomina/penggolong-dan-partitif.md, ... (+89)             - Duplikat contoh (perlu telaah): -
 - Duplikat tabel (representasional): -
 - Duplikat tabel (perlu telaah): -
 - Duplikat bagan (representasional): -
@@ -424,15 +424,15 @@ File sumber:
 ## Bab VIII Kata Tugas
 
 - Folder: `kata-tugas`
-- Jumlah subbab: 28
+- Jumlah subbab: 29
 - Jumlah contoh: 98
 - Jumlah tabel: 1
 - Jumlah bagan: 2
-- Rentang subbab: 8.1, 8.2.1, 8.2.1.1, 8.2.1.1.1, 8.2.1.1.1.1, 8.2.1.1.1.2, 8.2.1.1.2, 8.2.1.1.2.1, 8.2.1.1.2.2, 8.2.1.1.2.3, 8.2.1.2, 8.2.1.3, ... (+16)
-- Rentang contoh: 1-98
+- Rentang subbab: 8.1, 8.2, 8.2.1, 8.2.1.1, 8.2.1.1.1, 8.2.1.1.1.1, 8.2.1.1.1.2, 8.2.1.1.2, 8.2.1.1.2.1, 8.2.1.1.2.2
+, 8.2.1.1.2.3, 8.2.1.2, ... (+17)                                                                                   - Rentang contoh: 1-98
 - Tabel: 8.1
 - Bagan: 8.1, 8.2
-- Gap subbab: 8.2, 8.3, 8.4
+- Gap subbab: -
 - Gap contoh: -
 - Gap tabel: -
 - Gap bagan: -
@@ -442,8 +442,8 @@ File sumber:
 - Duplikat contoh (perlu telaah): -
 - Duplikat tabel (representasional): -
 - Duplikat tabel (perlu telaah): -
-- Duplikat bagan (representasional): 8.1 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/kata-tugas/preposisi-dan-nomina-lokatif.md, 8.2 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/kata-tugas/preposisi-dan-nomina-lokatif.md
-- Duplikat bagan (perlu telaah): -
+- Duplikat bagan (representasional): 8.1 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/kata-tugas/prep
+osisi-dan-nomina-lokatif.md, 8.2 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/kata-tugas/preposisi-dan-nomina-lokatif.md                                                                                                 - Duplikat bagan (perlu telaah): -
 
 File sumber:
 
@@ -477,7 +477,7 @@ File sumber:
 - Jumlah contoh: 425
 - Jumlah tabel: 5
 - Jumlah bagan: 2
-- Rentang subbab: 9.1, 9.2, 9.2.1, 9.2.2, 9.2.3, 9.2.3.1, 9.2.3.2, 9.3, 9.3.1, 9.3.2, 9.3.2.1, 9.3.2.2, ... (+74)
+- Rentang subbab: 9.1, 9.2, 9.2.1, 9.2.2, 9.2.3, 9.2.3.1, 9.2.3.2, 9.3, 9.3.1, 9.3.2, 9.3.2.1, 9.3.2.2, ... (+74)   
 - Rentang contoh: 1-425
 - Tabel: 9.1, 9.2, 9.3, 9.4, 9.5
 - Bagan: 9.1, 9.2
@@ -487,12 +487,12 @@ File sumber:
 - Gap bagan: -
 - Duplikat subbab (representasional): -
 - Duplikat subbab (perlu telaah): -
-- Duplikat contoh (representasional): 111 x2 [direct] @ frontend/public/gramatika/kalimat/keterangan-cara.md, 112 x2 [direct] @ frontend/public/gramatika/kalimat/keterangan-cara.md, 113 x2 [direct] @ frontend/public/gramatika/kalimat/keterangan-cara.md, 15 x3 [direct] @ frontend/public/gramatika/kalimat/unsur-wajib-dan-unsur-takwajib.md, 168 x3 [direct] @ frontend/public/gramatika/kalimat/batasan-kalimat-dasar.md, 328 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md, 329 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md, 330 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md, 331 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md, 343 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md, 344 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md
-- Duplikat contoh (perlu telaah): -
-- Duplikat tabel (representasional): 9.1 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/kalimat/kategori-fungsi-dan-peran.md, 9.4 x2 [image-alt/plain-caption] @ frontend/public/gramatika/kalimat/batasan-kalimat-dasar.md
-- Duplikat tabel (perlu telaah): -
-- Duplikat bagan (representasional): 9.1 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/kalimat/unsur-wajib-dan-unsur-takwajib.md, 9.2 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/kalimat/perluasan-kalimat-dasar.md
-- Duplikat bagan (perlu telaah): -
+- Duplikat contoh (representasional): 111 x2 [direct] @ frontend/public/gramatika/kalimat/keterangan-cara.md, 112 x2
+ [direct] @ frontend/public/gramatika/kalimat/keterangan-cara.md, 113 x2 [direct] @ frontend/public/gramatika/kalimat/keterangan-cara.md, 15 x3 [direct] @ frontend/public/gramatika/kalimat/unsur-wajib-dan-unsur-takwajib.md, 168 x3 [direct] @ frontend/public/gramatika/kalimat/batasan-kalimat-dasar.md, 328 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md, 329 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md, 330 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md, 331 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md, 343 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md, 344 x2 [direct] @ frontend/public/gramatika/kalimat/kalimat-interogatif.md                                                        - Duplikat contoh (perlu telaah): -
+- Duplikat tabel (representasional): 9.1 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/kalimat/kategor
+i-fungsi-dan-peran.md, 9.4 x2 [image-alt/plain-caption] @ frontend/public/gramatika/kalimat/batasan-kalimat-dasar.md- Duplikat tabel (perlu telaah): -
+- Duplikat bagan (representasional): 9.1 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/kalimat/unsur-w
+ajib-dan-unsur-takwajib.md, 9.2 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/kalimat/perluasan-kalimat-dasar.md                                                                                                          - Duplikat bagan (perlu telaah): -
 
 File sumber:
 
@@ -554,8 +554,8 @@ File sumber:
 - Jumlah contoh: 206
 - Jumlah tabel: 0
 - Jumlah bagan: 2
-- Rentang subbab: 10.1, 10.1.1, 10.1.2, 10.1.3, 10.1.3.1, 10.1.3.1.1, 10.1.3.1.2, 10.1.3.1.3, 10.1.3.1.4, 10.1.3.2, 10.1.3.2.1, 10.1.3.2.2, ... (+28)
-- Rentang contoh: 1-206
+- Rentang subbab: 10.1, 10.1.1, 10.1.2, 10.1.3, 10.1.3.1, 10.1.3.1.1, 10.1.3.1.2, 10.1.3.1.3, 10.1.3.1.4, 10.1.3.2, 
+10.1.3.2.1, 10.1.3.2.2, ... (+28)                                                                                   - Rentang contoh: 1-206
 - Tabel: -
 - Bagan: 10.1, 10.2
 - Gap subbab: -
@@ -564,12 +564,12 @@ File sumber:
 - Gap bagan: -
 - Duplikat subbab (representasional): -
 - Duplikat subbab (perlu telaah): -
-- Duplikat contoh (representasional): 121 x2 [direct] @ frontend/public/gramatika/hubungan-antarklausa/hubungan-konsesif.md, 15 x2 [direct] @ frontend/public/gramatika/hubungan-antarklausa/ciri-ciri-sintaktis-hubungan-koordinatif.md, 16 x2 [direct] @ frontend/public/gramatika/hubungan-antarklausa/ciri-ciri-sintaktis-hubungan-koordinatif.md, 17 x2 [direct] @ frontend/public/gramatika/hubungan-antarklausa/ciri-ciri-sintaktis-hubungan-koordinatif.md, 75 x2 [direct] @ frontend/public/gramatika/hubungan-antarklausa/ciri-ciri-sintaktis-hubungan-subordinatif.md, 76 x2 [direct] @ frontend/public/gramatika/hubungan-antarklausa/ciri-ciri-sintaktis-hubungan-subordinatif.md, 77 x2 [direct] @ frontend/public/gramatika/hubungan-antarklausa/ciri-ciri-sintaktis-hubungan-subordinatif.md
-- Duplikat contoh (perlu telaah): -
+- Duplikat contoh (representasional): 121 x2 [direct] @ frontend/public/gramatika/hubungan-antarklausa/hubungan-kons
+esif.md, 15 x2 [direct] @ frontend/public/gramatika/hubungan-antarklausa/ciri-ciri-sintaktis-hubungan-koordinatif.md, 16 x2 [direct] @ frontend/public/gramatika/hubungan-antarklausa/ciri-ciri-sintaktis-hubungan-koordinatif.md, 17 x2 [direct] @ frontend/public/gramatika/hubungan-antarklausa/ciri-ciri-sintaktis-hubungan-koordinatif.md, 75 x2 [direct] @ frontend/public/gramatika/hubungan-antarklausa/ciri-ciri-sintaktis-hubungan-subordinatif.md, 76 x2 [direct] @ frontend/public/gramatika/hubungan-antarklausa/ciri-ciri-sintaktis-hubungan-subordinatif.md, 77 x2 [direct] @ frontend/public/gramatika/hubungan-antarklausa/ciri-ciri-sintaktis-hubungan-subordinatif.md                                - Duplikat contoh (perlu telaah): -
 - Duplikat tabel (representasional): -
 - Duplikat tabel (perlu telaah): -
-- Duplikat bagan (representasional): 10.1 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/hubungan-antarklausa/hubungan-koordinatif.md, 10.2 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/hubungan-antarklausa/hubungan-subordinatif.md
-- Duplikat bagan (perlu telaah): -
+- Duplikat bagan (representasional): 10.1 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/hubungan-antar
+klausa/hubungan-koordinatif.md, 10.2 x2 [emphasis-caption/image-alt] @ frontend/public/gramatika/hubungan-antarklausa/hubungan-subordinatif.md                                                                                          - Duplikat bagan (perlu telaah): -
 
 File sumber:
 

@@ -1,3 +1,8 @@
+---
+id: 7.2
+title: Pronomina (7.2)
+---
+
 1. [Batasan dan Ciri Pronomina](/gramatika/batasan-dan-ciri-pronomina)
 2. [Jenis Pronomina](/gramatika/jenis-pronomina)
    1. [Pronomina Persona](/gramatika/pronomina-persona)
