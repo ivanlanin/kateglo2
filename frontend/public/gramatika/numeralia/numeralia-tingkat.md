@@ -7,6 +7,7 @@ Numeralia pokok dapat diubah menjadi numeralia tingkat. Cara mengubahnya adalah 
 
 Contoh:
 
+(328)
 - *kesatu* atau *pertama*
 - *kedua*
 - *kelima*
@@ -20,5 +21,14 @@ Karena numeralia kolektif juga dibentuk dengan *ke-*, bentuk kedua macam numeral
 | *kedua jawaban itu* | *jawaban kedua itu* |
 | *kelima anak saya* | *anak saya yang kelima; anak kelima saya* |
 |—(\**kesatu suara*) | *suara pertama* |
+
+(329)
+
+| Kolektif | Tingkat |
+|---|---|
+| *ketiga pemain* | *pemain ketiga* |
+| *kedua jawaban itu* | *jawaban kedua itu* |
+| *kelima anak saya* | *anak saya yang kelima; anak kelima saya* |
+| \**kesatu suara* / \**pertama suara* | *suara kesatu* / *suara pertama* |
 
 Perhatikan pula bahwa pada numeralia kolektif tidak ada bentuk *kesatu* atau *pertama*, sedangkan pada numeralia tingkat ada.

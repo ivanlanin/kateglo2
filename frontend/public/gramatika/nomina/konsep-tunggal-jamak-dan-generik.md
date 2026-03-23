@@ -13,6 +13,8 @@ Selain melalui perulangan, bahasa Indonesia juga menggunakan secara terbatas ben
 
 Bentuk perulangan dengan sufiks *-an* digunakan untuk menyatakan kumpulan atau keberagaman dari benda yang dinyatakan nomina pangkal. Nomina yang mengalami pengulangan dan penambahan afiks itu umumnya terbatas pada nomina yang menyatakan flora. Nomina yang menyatakan benda bukan flora, jika mengalami perulangan dengan afiksasi demikian, akan mempunyai makna kemiripan atau tiruan (lihat 7.1.4.2).
 
+(331)
+
 | Perulangan | Perulangan + *-an* |
 |---|---|
 | batu-batu | batu-batuan |
@@ -31,6 +33,8 @@ Dari daftar di atas hanya nomina *batu* dan *runtuhan* yang bukan flora. Pada um
 ## Kata *para* (7.4.2)
 
 Kata *para* dapat digunakan untuk menyatakan makna kolektif kelompok orang. Nomina yang dapat didahului oleh *para* terbatas pada nomina yang menyatakan kelompok orang yang mempunyai karakteristik tertentu, seperti pekerjaan atau status.
+
+(332)
 
 | Perulangan | *Para* + Nomina |
 |---|---|
@@ -59,6 +63,8 @@ Contoh:
 - (334b) *Orang-orang/\*kaum (yang) terpelajar di desa itu tidak banyak.*
 
 Kata *kaum* pada (333b) tidak dapat dipakai karena nomina *guru* mengacu pada kelompok yang relatif kecil oleh kehadiran frasa preposisional *di sekolah itu*. Kata *para* pada (334a) tidak berterima karena bentuk *terpelajar* bukan nomina. Kata *kaum* pada (334b) tidak berterima karena *(yang) terpelajar* mengacu pada jumlah yang kecil oleh kehadiran frasa *di desa itu*.
+
+(335)
 
 | Perulangan | *Kaum* + Nomina | *Para* + Nomina |
 |---|---|---|

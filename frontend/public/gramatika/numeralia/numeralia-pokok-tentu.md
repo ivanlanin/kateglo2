@@ -36,8 +36,14 @@ Dalam bahasa Indonesia baku, numeralia pokok ditempatkan di muka nomina dan dapa
 
 - (309a) *Belilah tiga buah buku tulis.*
 - (309b) *Belilah tiga buku tulis.*
+- (310a) *Majalah kami memerlukan tiga orang penyunting.*
+- (310b) *Majalah kami memerlukan tiga penyunting.*
+- (311a) *Pak Husain mempunyai dua ekor burung merak.*
+- (311b) *Pak Husain mempunyai dua burung merak.*
 
 Jika numeralia ditempatkan di belakang nomina, dalam bahasa baku kata penggolongnya tidak dapat ditinggalkan:
 
 - (312a) \**Belilah buku tulis tiga.*—✗
 - (312b) *Belilah buku tulis tiga buah.*—✓
+- (313a) \**Penerbit itu memerlukan penyunting tiga.*
+- (313b) *Penerbit itu memerlukan penyunting tiga orang.*
