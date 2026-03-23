@@ -5,58 +5,58 @@ title: Konjungsi Subordinatif (8.2.2.3)
 
 Konjungsi subordinatif adalah konjungsi yang menghubungkan dua klausa atau lebih dan klausa itu tidak memiliki status sintaktis yang sama. Salah satu dari klausa itu merupakan klausa subordinatif. Dari perilaku sintaktis dan semantisnya, konjungsi subordinatif dapat dibagi menjadi tiga belas kelompok. Penggunaan ketiga belas konjungsi subordinatif itu dibicarakan pada Bab X. Berikut adalah pembagian konjungsi subordinatif.
 
-## 1) Waktu
+1) Konjungsi Subordinatif Waktu
 
 - a) menunjukkan awal peristiwa: *sejak, sedari, semenjak*
 - b) menunjukkan awal suatu peristiwa yang ditandai dengan peristiwa lain: *begitu, demi, ketika, sambil, selagi, selama, sementara, seraya, sewaktu, tatkala*
 - c) menunjukkan awal suatu peristiwa yang didahului dengan peristiwa lain: *setelah, sebelum, sehabis, selesai, sesudah, seusai*
 - d) menunjukkan lamanya suatu peristiwa yang ditandai dengan peristiwa tertentu: *hingga, sampai*
 
-## 2) Syarat
+2) Konjungsi Subordinatif Syarat
 
 *asal(kan), apabila, jika, jikalau, kalau, manakala*
 
-## 3) Pengandaian
+3) Konjungsi Subordinatif Pengandaian
 
 *andaikan, seandainya, sekiranya, seumpamanya, andai kata*
 
-## 4) Tujuan
+4) Konjungsi Subordinatif Tujuan
 
 *agar, biar, supaya*
 
-## 5) Konsesif
+5) Konjungsi Subordinatif Konsesif
 
 *biarpun, kendati(pun), meski(pun), sekalipun, sungguhpun, walau(pun)*
 
-## 6) Pembandingan
+6) Konjungsi Subordinatif Pembandingan
 
 *alih-alih, daripada, ibarat, laksana, seakan-akan, sebagai, sebagaimana, seolah-olah, seperti*
 
-## 7) Sebab
+7) Konjungsi Subordinatif Sebab
 
 *karena, sebab, oleh karena, oleh sebab*
 
-## 8) Hasil
+8) Konjungsi Subordinatif Hasil
 
 *maka(nya), sehingga, sampai(-sampai)*
 
-## 9) Alat
+9) Konjungsi Subordinatif Alat
 
 *dengan, tanpa*
 
-## 10) Cara
+10) Konjungsi Subordinatif Cara
 
 *dengan, tanpa*
 
-## 11) Komplementasi
+11) Konjungsi Subordinatif Komplementasi
 
 *bahwa*
 
-## 12) Atributif
+12) Konjungsi Subordinatif Atributif
 
 *yang*
 
-## 13) Perbandingan
+13) Konjungsi Subordinatif Perbandingan
 
 - *... sama ... dengan ...*
 - *... lebih ... dari ... dari(pada)*

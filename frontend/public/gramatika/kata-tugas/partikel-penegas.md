@@ -10,7 +10,7 @@ Partikel adalah kata yang tidak tertakluk pada kaidah perubahan bentuk, seperti 
 
 Partikel *-kah*, yang berbentuk klitika dan bersifat manasuka, dapat menegaskan kalimat interogatif. Berikut ini adalah kaidah pemakaiannya.
 
-**1) Mengubah kalimat deklaratif menjadi kalimat interogatif**
+1) Jika dipakai dalam kalimat deklaratif, *-kah* mengubah kalimat tersebut menjadi kalimat interogatif.
 
 Contoh:
 
@@ -22,9 +22,7 @@ Contoh:
 - a. Hari ini pekerjaan itu harus selesai.
 - b. Hari inikah pekerjaan itu harus selesai?
 
-**2) Menjadikan kalimat interogatif lebih formal dan halus**
-
-Jika dalam kalimat interogatif sudah ada kata tanya seperti *apa*, *bagaimana*, dan *ke mana*, partikel *-kah* bersifat manasuka. Pemakaian *-kah* menjadikan kalimatnya lebih formal dan sedikit lebih halus.
+2) Jika dalam kalimat interogatif sudah ada kata tanya seperti *apa*, *bagaimana*, dan *ke mana*, *-kah* bersifat manasuka. Pemakaian *-kah* menjadikan kalimatnya lebih formal dan sedikit lebih halus.
 
 Contoh:
 
@@ -40,7 +38,7 @@ Contoh:
 - a. Ke mana anak-anak pergi?
 - b. Ke manakah anak-anak pergi?
 
-**3) Memperjelas kalimat tanpa kata tanya sebagai kalimat interogatif**
+3) Jika dalam kalimat tidak ada kata tanya, tetapi intonasinya adalah intonasi interogatif, *-kah* akan memperjelas kalimat itu sebagai kalimat interogatif. Kadang-kadang urutan katanya dibalik.
 
 Contoh:
 
@@ -61,7 +59,7 @@ Contoh:
 
 Partikel *-lah*, yang juga berbentuk klitika, dipakai dalam kalimat imperatif atau kalimat deklaratif. Berikut adalah kaidah pemakaiannya.
 
-**1) Menghaluskan nada perintah dalam kalimat imperatif**
+1) Dalam kalimat imperatif, *-lah* dipakai untuk menghaluskan nada perintah yang terkandung dalam kalimat itu.
 
 Contoh:
 
@@ -77,7 +75,7 @@ Contoh:
 - a. Kalau Anda mau, ambil satu atau dua buah!
 - b. Kalau Anda mau, ambillah satu atau dua buah!
 
-**2) Memberikan ketegasan dalam kalimat deklaratif**
+2) Dalam kalimat deklaratif, *-lah* dipakai untuk memberikan ketegasan.
 
 Contoh:
 
@@ -97,12 +95,12 @@ Contoh:
 - a. Dia yang menggugat soal itu.
 - b. Dialah yang menggugat soal itu.
 
-Partikel *-lah* cenderung dilekatkan pada **predikat** kalimat.
+Dari pemakaian partikel *-lah* pada contoh di atas tampak bahwa partikel itu cenderung dilekatkan pada predikat kalimat.
 
 
 ## Partikel *-tah* (8.2.5.3)
 
-Partikel *-tah*, yang juga berbentuk klitika, dipakai dalam kalimat interogatif, tetapi penanya sebenarnya tidak mengharapkan jawaban. Ia seolah-olah hanya bertanya kepada diri sendiri karena keheranan atau kesangsiannya.
+Partikel *-tah*, yang juga berbentuk klitika, dipakai dalam kalimat interogatif, tetapi penanya sebenarnya tidak mengharapkan jawaban. Ia seolah-olah hanya bertanya kepada diri sendiri karena keheranan atau kesangsiannya. Partikel *-tah* sering dipakai dalam sastra lama, tetapi sekarang tidak lagi dipakai.
 
 Contoh:
 
@@ -112,14 +110,11 @@ Contoh:
 (92)
 - *Siapatah gerangan orangnya yang mau menolongku?*
 
-> **Catatan:** Partikel *-tah* sering dipakai dalam sastra lama, tetapi sekarang tidak lagi dipakai.
-
-
 ## Partikel *pun* (8.2.5.4)
 
 Partikel *pun* hanya dipakai dalam kalimat deklaratif dan dalam bentuk tulisan partikel itu dipisahkan dari kata yang mendahuluinya. Kaidah pemakaiannya adalah sebagai berikut.
 
-**1) Mengeraskan arti kata yang diiringinya**
+1) *Pun* dipakai untuk mengeraskan arti kata yang diiringinya.
 
 Contoh:
 
@@ -132,9 +127,9 @@ Contoh:
 (95)
 - *Siapa pun yang tidak setuju pasti akan ditanyakan alasannya.*
 
-Dari pemakaian partikel *pun* pada contoh di atas tampak bahwa partikel itu cenderung dilekatkan pada subjek kalimat.
+Dari pemakaian partikel *pun* pada contoh (93)-(95) tampak bahwa partikel itu cenderung dilekatkan pada subjek kalimat. Perlu diperhatikan bahwa partikel *pun* pada konjungsi ditulis serangkai: *walaupun, meskipun, kendatipun, adapun, sekalipun, biarpun*, dan *sungguhpun*. Bedakan ejaan itu dengan ejaan-ejaan berikut: *mereka pun, makan pun, itu pun, ini pun*.
 
-**2) Bersama *-lah* untuk menandakan perbuatan atau proses mulai berlaku**
+2) Dengan arti yang sama seperti pada bagian 1), *pun* sering pula dipakai bersama *-lah* untuk menandakan perbuatan atau proses mulai berlaku atau mulai terjadi.
 
 Contoh:
 
@@ -147,4 +142,3 @@ Contoh:
 (98)
 - *Para anggota yang menolak pun mulai berpikir-pikir lagi.*
 
-Perlu diperhatikan bahwa partikel *pun* pada konjungsi ditulis serangkai: *walaupun, meskipun, kendatipun, adapun, sekalipun, biarpun*, dan *sungguhpun*. Bedakan ejaan itu dengan ejaan-ejaan berikut: *mereka pun, makan pun, itu pun, ini pun*.

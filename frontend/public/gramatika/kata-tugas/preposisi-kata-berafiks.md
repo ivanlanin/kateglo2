@@ -5,7 +5,7 @@ title: Kata Berafiks
 
 Preposisi dalam kelompok ini dibentuk dengan menambahkan afiks pada bentuk dasar yang termasuk kelas kata verba, adjektiva, atau nomina. Pengafiksan dalam pembentukan itu dapat berbentuk penambahan prefiks, sufiks, atau gabungan keduanya. Pembentukan preposisi dengan penambahan afiks ini sangat terbatas. Berikut adalah preposisi berafiks yang ada dalam bahasa Indonesia.
 
-**a) Preposisi yang Berupa Kata Berprefiks**
+a) Preposisi yang Berupa Kata Berprefiks
 
 (2)
 - *bersama*: Arya senang pergi bersama kakaknya.
@@ -15,12 +15,12 @@ Preposisi dalam kelompok ini dibentuk dengan menambahkan afiks pada bentuk dasar
 - *menurut*: Menurut rencana, buku ini akan diluncurkan bulan depan.
 - *terhadap*: Terhadap ketentuan itu, Pak Amin enggan berkomentar.
 
-**b) Preposisi yang Berupa Kata Bersufiks**
+b) Preposisi yang Berupa Kata Bersufiks
 
 (3)
 - *bagaikan*: Sumi cantik bagaikan bidadari.
 
-**c) Preposisi yang Berupa Kata Berprefiks dan Bersufiks**
+c) Preposisi yang Berupa Kata Berprefiks dan Bersufiks
 
 (4)
 - *melalui*: Surat itu telah dikirim melalui pos.

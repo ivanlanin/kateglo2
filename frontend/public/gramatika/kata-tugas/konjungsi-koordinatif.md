@@ -39,8 +39,6 @@ Di antara konjungsi koordinatif di atas, konjungsi *dan*, *atau*, dan *tetapi* t
 
 Konjungsi *dan* pada contoh di atas dapat bergantian (beralternasi) dengan *serta*. Akan tetapi, secara semantis unsur yang dihubungkan oleh *dan* mempunyai kedudukan yang sama, sedangkan unsur kedua yang dihubungkan oleh *serta* cenderung ditafsirkan bersifat sekunder.
 
-## Implikasi Semantik Konjungsi *dan*
-
 Sebagai penghubung klausa, konjungsi *dan* dapat mempunyai implikasi semantik seperti berikut.
 
 a) Klausa kedua merupakan tambahan klausa pertama dengan catatan kedua klausa itu secara semantis sepadan (kongruen) (48a).
@@ -60,8 +58,6 @@ Contoh:
 - d. Ibu Rina perhatian sekali dan tidak heran kalau suaminya sering memberinya hadiah.
 
 Selain contoh pada (48a), klausa pertama dan kedua pada contoh (48b)-(48d) itu tidak dapat dipertukarkan letaknya.
-
-## Konjungsi *atau* Eksklusif dan Inklusif
 
 Konjungsi *atau* dalam bahasa Indonesia pada dasarnya menyatakan makna pilihan eksklusif, yaitu pilihan salah satu dari dua kemungkinan atau lebih. Perhatikan contoh berikut.
 

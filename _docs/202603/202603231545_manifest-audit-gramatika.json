@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-03-23T06:25:17.021Z",
+  "generatedAt": "2026-03-23T06:34:20.744Z",
   "source": {
     "gramatikaData": "frontend/src/constants/gramatikaData.js",
     "checklistAudit": "_docs/202603/202603231430_checklist-audit-gramatika-tbbbi.md"
   },
   "summary": {
     "totalItem": 308,
-    "totalOk": 203,
+    "totalOk": 225,
     "totalPerluRevisi": 0,
     "totalTunda": 0,
     "totalSedang": 0,
-    "totalBelum": 105
+    "totalBelum": 83
   },
   "summaryByChapter": [
     {
@@ -127,11 +127,11 @@
       "nomorBab": "VIII",
       "urutanBab": 10,
       "total": 22,
-      "selesai": 0,
+      "selesai": 22,
       "revisi": 0,
       "tunda": 0,
       "sedang": 0,
-      "belum": 22
+      "belum": 0
     },
     {
       "babSlug": "kalimat",
@@ -160,153 +160,6 @@
   ],
   "queue": [
     {
-      "nomorBab": "VIII",
-      "nomorSubbab": "8.1",
-      "labelAntrian": "8.1",
-      "judul": "Batasan dan Ciri Kata Tugas",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/batasan-dan-ciri-kata-tugas.md"
-    },
-    {
-      "nomorBab": "VIII",
-      "nomorSubbab": "8.2.1",
-      "labelAntrian": "8.2.1",
-      "judul": "Preposisi",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi.md"
-    },
-    {
-      "nomorBab": "VIII",
-      "nomorSubbab": "8.2.1.1",
-      "labelAntrian": "8.2.1.1",
-      "judul": "Bentuk Preposisi",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/bentuk-preposisi.md"
-    },
-    {
-      "nomorBab": "VIII",
-      "nomorSubbab": "8.2.1.1.1",
-      "labelAntrian": "8.2.1.1.1",
-      "judul": "Preposisi Tunggal",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-tunggal.md"
-    },
-    {
-      "nomorBab": "VIII",
-      "nomorSubbab": null,
-      "labelAntrian": "VIII",
-      "judul": "Kata Dasar",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-kata-dasar.md"
-    },
-    {
-      "nomorBab": "VIII",
-      "nomorSubbab": null,
-      "labelAntrian": "VIII",
-      "judul": "Kata Berafiks",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-kata-berafiks.md"
-    },
-    {
-      "nomorBab": "VIII",
-      "nomorSubbab": "8.2.1.1.2",
-      "labelAntrian": "8.2.1.1.2",
-      "judul": "Preposisi Gabungan",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-gabungan.md"
-    },
-    {
-      "nomorBab": "VIII",
-      "nomorSubbab": null,
-      "labelAntrian": "VIII",
-      "judul": "Berdampingan",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-berdampingan.md"
-    },
-    {
-      "nomorBab": "VIII",
-      "nomorSubbab": null,
-      "labelAntrian": "VIII",
-      "judul": "Berkorelasi",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-berkorelasi.md"
-    },
-    {
-      "nomorBab": "VIII",
-      "nomorSubbab": null,
-      "labelAntrian": "VIII",
-      "judul": "Preposisi dan Nomina Lokatif",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-dan-nomina-lokatif.md"
-    },
-    {
-      "nomorBab": "VIII",
-      "nomorSubbab": "8.2.1.2",
-      "labelAntrian": "8.2.1.2",
-      "judul": "Peran Semantis Preposisi",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/peran-semantis-preposisi.md"
-    },
-    {
-      "nomorBab": "VIII",
-      "nomorSubbab": "8.2.1.3",
-      "labelAntrian": "8.2.1.3",
-      "judul": "Peran Sintaktis Preposisi",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/peran-sintaktis-preposisi.md"
-    },
-    {
-      "nomorBab": "VIII",
-      "nomorSubbab": "8.2.2",
-      "labelAntrian": "8.2.2",
-      "judul": "Konjungsi",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/konjungsi.md"
-    },
-    {
-      "nomorBab": "VIII",
-      "nomorSubbab": "8.2.2.1",
-      "labelAntrian": "8.2.2.1",
-      "judul": "Konjungsi Koordinatif",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/konjungsi-koordinatif.md"
-    },
-    {
-      "nomorBab": "VIII",
-      "nomorSubbab": "8.2.2.2",
-      "labelAntrian": "8.2.2.2",
-      "judul": "Konjungsi Korelatif",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/konjungsi-korelatif.md"
-    },
-    {
-      "nomorBab": "VIII",
-      "nomorSubbab": "8.2.2.3",
-      "labelAntrian": "8.2.2.3",
-      "judul": "Konjungsi Subordinatif",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/konjungsi-subordinatif.md"
-    },
-    {
-      "nomorBab": "VIII",
-      "nomorSubbab": "8.2.2.4",
-      "labelAntrian": "8.2.2.4",
-      "judul": "Konjungsi Antarkalimat",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/konjungsi-antarkalimat.md"
-    },
-    {
-      "nomorBab": "VIII",
-      "nomorSubbab": null,
-      "labelAntrian": "VIII",
-      "judul": "Simpulan",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/simpulan.md"
-    },
-    {
-      "nomorBab": "VIII",
-      "nomorSubbab": "8.2.3",
-      "labelAntrian": "8.2.3",
-      "judul": "Interjeksi",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/interjeksi.md"
-    },
-    {
-      "nomorBab": "VIII",
-      "nomorSubbab": "8.2.4",
-      "labelAntrian": "8.2.4",
-      "judul": "Artikula",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/artikula.md"
-    },
-    {
-      "nomorBab": "VIII",
-      "nomorSubbab": "8.2.5",
-      "labelAntrian": "8.2.5",
-      "judul": "Partikel Penegas",
-      "fileMarkdown": "frontend/public/gramatika/kata-tugas/partikel-penegas.md"
-    },
-    {
       "nomorBab": "IX",
       "nomorSubbab": "9.1",
       "labelAntrian": "9.1",
@@ -333,6 +186,153 @@
       "labelAntrian": "9.2.2",
       "judul": "Unsur Wajib dan Unsur Takwajib",
       "fileMarkdown": "frontend/public/gramatika/kalimat/unsur-wajib-dan-unsur-takwajib.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.2.3",
+      "labelAntrian": "9.2.3",
+      "judul": "Keserasian Antarunsur",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/keserasian-antarunsur.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.3",
+      "labelAntrian": "9.3",
+      "judul": "Kategori, Fungsi, dan Peran",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/kategori-fungsi-dan-peran.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.3.1",
+      "labelAntrian": "9.3.1",
+      "judul": "Kategori",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/kategori.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.3.2",
+      "labelAntrian": "9.3.2",
+      "judul": "Fungsi Sintaktis",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/fungsi-sintaktis.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.3.2.1",
+      "labelAntrian": "9.3.2.1",
+      "judul": "Predikat",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/predikat.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.3.2.2",
+      "labelAntrian": "9.3.2.2",
+      "judul": "Subjek",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/subjek.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.3.2.3",
+      "labelAntrian": "9.3.2.3",
+      "judul": "Objek",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/objek.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.3.2.4",
+      "labelAntrian": "9.3.2.4",
+      "judul": "Pelengkap",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/pelengkap.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.3.2.5",
+      "labelAntrian": "9.3.2.5",
+      "judul": "Keterangan",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.3.2.5.1",
+      "labelAntrian": "9.3.2.5.1",
+      "judul": "Keterangan Tempat",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-tempat.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.3.2.5.2",
+      "labelAntrian": "9.3.2.5.2",
+      "judul": "Keterangan Waktu",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-waktu.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.3.2.5.3",
+      "labelAntrian": "9.3.2.5.3",
+      "judul": "Keterangan Alat",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-alat.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.3.2.5.4",
+      "labelAntrian": "9.3.2.5.4",
+      "judul": "Keterangan Tujuan",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-tujuan.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.3.2.5.5",
+      "labelAntrian": "9.3.2.5.5",
+      "judul": "Keterangan Cara",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-cara.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.3.2.5.6",
+      "labelAntrian": "9.3.2.5.6",
+      "judul": "Keterangan Penyerta",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-penyerta.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.3.2.5.7",
+      "labelAntrian": "9.3.2.5.7",
+      "judul": "Keterangan Pembandingan",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-pembandingan.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.3.2.5.8",
+      "labelAntrian": "9.3.2.5.8",
+      "judul": "Keterangan Kesalingan",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-kesalingan.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.3.2.5.9",
+      "labelAntrian": "9.3.2.5.9",
+      "judul": "Keterangan Sebab",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-sebab.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.3.2.5.10",
+      "labelAntrian": "9.3.2.5.10",
+      "judul": "Keterangan Akibat",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-akibat.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.3.2.5.11",
+      "labelAntrian": "9.3.2.5.11",
+      "judul": "Keterangan Kuantitas",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-kuantitas.md"
+    },
+    {
+      "nomorBab": "IX",
+      "nomorSubbab": "9.3.2.5.12",
+      "labelAntrian": "9.3.2.5.12",
+      "judul": "Keterangan Kualitas",
+      "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-kualitas.md"
     }
   ],
   "items": [
@@ -7639,8 +7639,8 @@
       "frontmatterTitle": null,
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/kata-tugas.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -7670,8 +7670,8 @@
       "frontmatterTitle": "Batasan dan Ciri Kata Tugas (8.1)",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/batasan-dan-ciri-kata-tugas.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -7701,8 +7701,8 @@
       "frontmatterTitle": "Preposisi (8.2.1)",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -7732,8 +7732,8 @@
       "frontmatterTitle": "Bentuk Preposisi (8.2.1.1)",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/bentuk-preposisi.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -7768,8 +7768,8 @@
       "frontmatterTitle": "Preposisi Tunggal (8.2.1.1.1)",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-tunggal.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -7808,8 +7808,8 @@
       "frontmatterTitle": "Kata Dasar",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-kata-dasar.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -7852,8 +7852,8 @@
       "frontmatterTitle": "Kata Berafiks",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-kata-berafiks.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -7896,8 +7896,8 @@
       "frontmatterTitle": "Preposisi Gabungan (8.2.1.1.2)",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-gabungan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -7936,8 +7936,8 @@
       "frontmatterTitle": "Berdampingan",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-berdampingan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -7980,8 +7980,8 @@
       "frontmatterTitle": "Berkorelasi",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-berkorelasi.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8024,8 +8024,8 @@
       "frontmatterTitle": "Preposisi dan Nomina Lokatif",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-dan-nomina-lokatif.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8068,8 +8068,8 @@
       "frontmatterTitle": "Peran Semantis Preposisi (8.2.1.2)",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/peran-semantis-preposisi.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8104,8 +8104,8 @@
       "frontmatterTitle": "Peran Sintaktis Preposisi (8.2.1.3)",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/peran-sintaktis-preposisi.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8140,8 +8140,8 @@
       "frontmatterTitle": "Konjungsi (8.2.2)",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/konjungsi.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8171,8 +8171,8 @@
       "frontmatterTitle": "Konjungsi Koordinatif (8.2.2.1)",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/konjungsi-koordinatif.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8207,8 +8207,8 @@
       "frontmatterTitle": "Konjungsi Korelatif (8.2.2.2)",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/konjungsi-korelatif.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8243,8 +8243,8 @@
       "frontmatterTitle": "Konjungsi Subordinatif (8.2.2.3)",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/konjungsi-subordinatif.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8279,8 +8279,8 @@
       "frontmatterTitle": "Konjungsi Antarkalimat (8.2.2.4)",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/konjungsi-antarkalimat.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8315,8 +8315,8 @@
       "frontmatterTitle": "Simpulan",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/simpulan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8351,8 +8351,8 @@
       "frontmatterTitle": "Interjeksi (8.2.3)",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/interjeksi.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8382,8 +8382,8 @@
       "frontmatterTitle": "Artikula (8.2.4)",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/artikula.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8413,8 +8413,8 @@
       "frontmatterTitle": "Partikel Penegas (8.2.5)",
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/partikel-penegas.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "—",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",

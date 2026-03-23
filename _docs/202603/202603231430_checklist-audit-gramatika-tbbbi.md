@@ -43,7 +43,7 @@ Untuk setiap item markdown di `frontend/public/gramatika/` lakukan pemeriksaan b
 | VII Nomina | `frontend/public/gramatika/nomina/` | OK | Audit 2026-03-23 selesai: struktur 7.1 dan 7.4 pada folder `nomina` tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada 1 bold editorial di `perilaku-semantis-nomina.md`. |
 | VII Pronomina | `frontend/public/gramatika/pronomina/` | OK | Audit 2026-03-23 selesai: struktur 7.2 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial di contoh, label tabel, dan label intra-paragraf tanpa kehilangan isi substantif. |
 | VII Numeralia | `frontend/public/gramatika/numeralia/` | OK | Audit 2026-03-23 selesai: struktur 7.3 tervalidasi terhadap PDF Bab VII; temuan edit terbatas pada pembersihan bold editorial dan normalisasi penanda bentuk takberterima. |
-| VIII Kata Tugas | `frontend/public/gramatika/kata-tugas/` | Belum | — |
+| VIII Kata Tugas | `frontend/public/gramatika/kata-tugas/` | OK | Audit 2026-03-23 selesai: seluruh Bab VIII (8.1-8.2.5) tervalidasi terhadap PDF. Temuan edit mencakup 1 blok contoh pembuka konjungsi yang semula hilang, pemulihan nomor contoh pada interjeksi dan artikula, serta pembersihan bold/heading editorial yang tidak didukung sumber. |
 | IX Kalimat | `frontend/public/gramatika/kalimat/` | Belum | — |
 | X Hubungan Antarklausa | `frontend/public/gramatika/hubungan-antarklausa/` | Belum | — |
 
@@ -222,6 +222,22 @@ Ringkasan hasil:
 - Pada folder `pronomina`, struktur 7.2 beserta turunan pronomina tanya, persona, penunjuk, taktentu, jumlah, dan frasa pronominal tervalidasi terhadap PDF. Temuan yang perlu diedit terbatas pada bold editorial di tabel, label intra-paragraf, dan contoh; seluruhnya dibersihkan tanpa mengubah isi atau penomoran contoh.
 - Pada folder `numeralia`, struktur 7.3 dan turunannya tervalidasi terhadap PDF. Temuan edit terbatas pada bold editorial di label subbagian dan contoh; penanda bentuk takberterima tetap dipertahankan sebagai `\**`.
 - Verifikasi akhir menunjukkan tidak ada mismatch isi substantif yang tersisa pada Bab VII; sisa penanda `**` yang terdeteksi otomatis hanya berasal dari notasi takberterima teknis seperti `\**bentuk`.
+
+### Bab VIII Kata Tugas
+
+Sumber audit:
+
+- PDF bab: `_data/gramatika/bab-08/bab-08-kata-tugas.pdf`
+- JPG verifikasi: `_data/gramatika/bab-08/` (dipakai selektif pada bagian dengan ekstraksi teks yang paling bising)
+
+Ringkasan hasil:
+
+- Struktur publik Bab VIII pada folder `kata-tugas` diverifikasi silang dengan `frontend/src/constants/gramatikaData.js` dan urutan subbab pada PDF sumber.
+- Seluruh subbagian preposisi, konjungsi, interjeksi, artikula, dan partikel penegas tervalidasi terhadap PDF; tidak ditemukan paragraf substantif yang hilang di luar satu temuan penting pada `konjungsi.md`.
+- Pada `frontend/public/gramatika/kata-tugas/konjungsi.md` dipulihkan blok contoh pembuka (39)-(44) yang ada di PDF tetapi belum tercakup di markdown.
+- Pada `frontend/public/gramatika/kata-tugas/interjeksi.md` dan `frontend/public/gramatika/kata-tugas/artikula.md` dipulihkan kembali nomor contoh sumber, masing-masing (61)-(70) dan (71)-(75).
+- Temuan edit selebihnya didominasi bold editorial, heading intra-uraian, catatan blockquote, dan penanda visual lain yang tidak muncul pada PDF; semuanya dibersihkan atau diturunkan menjadi teks biasa agar struktur markdown kembali setia pada sumber.
+- Verifikasi akhir menunjukkan sisa penanda `**` pada Bab VIII hanya berasal dari notasi takberterima teknis `\**` di `artikula.md`; tidak ada mismatch isi substantif yang tersisa.
 
 ## Catatan Kerja
 
