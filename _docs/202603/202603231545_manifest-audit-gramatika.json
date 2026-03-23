@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-03-23T03:20:51.627Z",
+  "generatedAt": "2026-03-23T04:52:28.101Z",
   "source": {
     "gramatikaData": "frontend/src/constants/gramatikaData.js",
     "checklistAudit": "_docs/202603/202603231430_checklist-audit-gramatika-tbbbi.md"
   },
   "summary": {
     "totalItem": 308,
-    "totalOk": 11,
+    "totalOk": 94,
     "totalPerluRevisi": 0,
     "totalTunda": 0,
     "totalSedang": 0,
-    "totalBelum": 297
+    "totalBelum": 214
   },
   "summaryByChapter": [
     {
@@ -31,11 +31,11 @@
       "nomorBab": "II",
       "urutanBab": 2,
       "total": 11,
-      "selesai": 0,
+      "selesai": 11,
       "revisi": 0,
       "tunda": 0,
       "sedang": 0,
-      "belum": 11
+      "belum": 0
     },
     {
       "babSlug": "bunyi-bahasa",
@@ -43,11 +43,11 @@
       "nomorBab": "III",
       "urutanBab": 3,
       "total": 20,
-      "selesai": 0,
+      "selesai": 20,
       "revisi": 0,
       "tunda": 0,
       "sedang": 0,
-      "belum": 20
+      "belum": 0
     },
     {
       "babSlug": "verba",
@@ -55,11 +55,11 @@
       "nomorBab": "IV",
       "urutanBab": 4,
       "total": 52,
-      "selesai": 0,
+      "selesai": 52,
       "revisi": 0,
       "tunda": 0,
       "sedang": 0,
-      "belum": 52
+      "belum": 0
     },
     {
       "babSlug": "adjektiva",
@@ -160,179 +160,179 @@
   ],
   "queue": [
     {
-      "nomorBab": "II",
-      "nomorSubbab": "2.1",
-      "labelAntrian": "2.1",
-      "judul": "Deskripsi dan Teori",
-      "fileMarkdown": "frontend/public/gramatika/tata-bahasa/deskripsi-dan-teori.md"
+      "nomorBab": "VII",
+      "nomorSubbab": "7.1.1",
+      "labelAntrian": "7.1.1",
+      "judul": "Batasan dan Ciri Nomina",
+      "fileMarkdown": "frontend/public/gramatika/nomina/batasan-dan-ciri-nomina.md"
     },
     {
-      "nomorBab": "II",
-      "nomorSubbab": "2.2",
-      "labelAntrian": "2.2",
-      "judul": "Pengertian Tata Bahasa",
-      "fileMarkdown": "frontend/public/gramatika/tata-bahasa/pengertian-tata-bahasa.md"
+      "nomorBab": "VII",
+      "nomorSubbab": "7.1.2",
+      "labelAntrian": "7.1.2",
+      "judul": "Perilaku Semantis Nomina",
+      "fileMarkdown": "frontend/public/gramatika/nomina/perilaku-semantis-nomina.md"
     },
     {
-      "nomorBab": "II",
-      "nomorSubbab": "2.2.1",
-      "labelAntrian": "2.2.1",
-      "judul": "Fonologi",
-      "fileMarkdown": "frontend/public/gramatika/tata-bahasa/fonologi.md"
+      "nomorBab": "VII",
+      "nomorSubbab": "7.1.3",
+      "labelAntrian": "7.1.3",
+      "judul": "Perilaku Sintaksis Nomina",
+      "fileMarkdown": "frontend/public/gramatika/nomina/perilaku-sintaksis-nomina.md"
     },
     {
-      "nomorBab": "II",
-      "nomorSubbab": "2.2.2",
-      "labelAntrian": "2.2.2",
-      "judul": "Morfologi",
-      "fileMarkdown": "frontend/public/gramatika/tata-bahasa/morfologi.md"
+      "nomorBab": "VII",
+      "nomorSubbab": "7.1.4",
+      "labelAntrian": "7.1.4",
+      "judul": "Jenis Nomina",
+      "fileMarkdown": "frontend/public/gramatika/nomina/jenis-nomina.md"
     },
     {
-      "nomorBab": "II",
-      "nomorSubbab": "2.2.3",
-      "labelAntrian": "2.2.3",
-      "judul": "Sintaksis",
-      "fileMarkdown": "frontend/public/gramatika/tata-bahasa/sintaksis.md"
+      "nomorBab": "VII",
+      "nomorSubbab": "7.1.4.1",
+      "labelAntrian": "7.1.4.1",
+      "judul": "Nomina Berdasarkan Acuan",
+      "fileMarkdown": "frontend/public/gramatika/nomina/nomina-berdasarkan-acuan.md"
     },
     {
-      "nomorBab": "II",
-      "nomorSubbab": "2.3",
-      "labelAntrian": "2.3",
-      "judul": "Semantik, Pragmatik, dan Relasi Makna",
-      "fileMarkdown": "frontend/public/gramatika/tata-bahasa/semantik-pragmatik-dan-relasi-makna.md"
+      "nomorBab": "VII",
+      "nomorSubbab": "7.1.4.2",
+      "labelAntrian": "7.1.4.2",
+      "judul": "Nomina Berdasarkan Bentuk Morfologis",
+      "fileMarkdown": "frontend/public/gramatika/nomina/nomina-berdasarkan-bentuk-morfologis.md"
     },
     {
-      "nomorBab": "II",
-      "nomorSubbab": "2.3.1",
-      "labelAntrian": "2.3.1",
-      "judul": "Kondisi Kebenaran dan Perikutan",
-      "fileMarkdown": "frontend/public/gramatika/tata-bahasa/kondisi-kebenaran-dan-perikutan.md"
+      "nomorBab": "VII",
+      "nomorSubbab": "7.1.4.2.1",
+      "labelAntrian": "7.1.4.2.1",
+      "judul": "Nomina Dasar",
+      "fileMarkdown": "frontend/public/gramatika/nomina/nomina-dasar.md"
     },
     {
-      "nomorBab": "II",
-      "nomorSubbab": "2.3.2",
-      "labelAntrian": "2.3.2",
-      "judul": "Aspek Takberkondisi Benar Makna Kalimat",
-      "fileMarkdown": "frontend/public/gramatika/tata-bahasa/aspek-takberkondisi-benar-makna-kalimat.md"
+      "nomorBab": "VII",
+      "nomorSubbab": "7.1.4.2.2.1",
+      "labelAntrian": "7.1.4.2.2.1",
+      "judul": "Penurunan Nomina dengan Konversi",
+      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-konversi.md"
     },
     {
-      "nomorBab": "II",
-      "nomorSubbab": "2.3.3",
-      "labelAntrian": "2.3.3",
-      "judul": "Pragmatik dan Implikatur Percakapan",
-      "fileMarkdown": "frontend/public/gramatika/tata-bahasa/pragmatik-dan-implikatur-percakapan.md"
+      "nomorBab": "VII",
+      "nomorSubbab": "7.1.4.2.2.2",
+      "labelAntrian": "7.1.4.2.2.2",
+      "judul": "Penurunan Nomina melalui Pengafiksan",
+      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-melalui-pengafiksan.md"
     },
     {
-      "nomorBab": "II",
-      "nomorSubbab": "2.3.4",
-      "labelAntrian": "2.3.4",
-      "judul": "Pengacuan dan Deiksis",
-      "fileMarkdown": "frontend/public/gramatika/tata-bahasa/pengacuan-dan-deiksis.md"
+      "nomorBab": "VII",
+      "nomorSubbab": null,
+      "labelAntrian": "VII",
+      "judul": "Penurunan Nomina dengan ke-",
+      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-ke.md"
     },
     {
-      "nomorBab": "III",
-      "nomorSubbab": "3.1",
-      "labelAntrian": "3.1",
-      "judul": "Batasan dan Ciri Bunyi Bahasa",
-      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/batasan-dan-ciri-bunyi-bahasa.md"
+      "nomorBab": "VII",
+      "nomorSubbab": null,
+      "labelAntrian": "VII",
+      "judul": "Penurunan Nomina dengan per-",
+      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-per.md"
     },
     {
-      "nomorBab": "III",
-      "nomorSubbab": "3.1.1",
-      "labelAntrian": "3.1.1",
-      "judul": "Vokal",
-      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/vokal.md"
+      "nomorBab": "VII",
+      "nomorSubbab": null,
+      "labelAntrian": "VII",
+      "judul": "Penurunan Nomina dengan peng-",
+      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-peng.md"
     },
     {
-      "nomorBab": "III",
-      "nomorSubbab": "3.1.2",
-      "labelAntrian": "3.1.2",
-      "judul": "Konsonan",
-      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/konsonan.md"
+      "nomorBab": "VII",
+      "nomorSubbab": null,
+      "labelAntrian": "VII",
+      "judul": "Penurunan Nomina dengan -an",
+      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-an.md"
     },
     {
-      "nomorBab": "III",
-      "nomorSubbab": "3.1.3",
-      "labelAntrian": "3.1.3",
-      "judul": "Diftong",
-      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/diftong.md"
+      "nomorBab": "VII",
+      "nomorSubbab": null,
+      "labelAntrian": "VII",
+      "judul": "Penurunan Nomina dengan peng-...-an",
+      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-peng-an.md"
     },
     {
-      "nomorBab": "III",
-      "nomorSubbab": "3.1.4",
-      "labelAntrian": "3.1.4",
-      "judul": "Gugus Konsonan",
-      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/gugus-konsonan.md"
+      "nomorBab": "VII",
+      "nomorSubbab": null,
+      "labelAntrian": "VII",
+      "judul": "Penurunan Nomina dengan per-...-an",
+      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-per-an.md"
     },
     {
-      "nomorBab": "III",
-      "nomorSubbab": "3.1.5",
-      "labelAntrian": "3.1.5",
-      "judul": "Fonem dan Grafem",
-      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/fonem-dan-grafem.md"
+      "nomorBab": "VII",
+      "nomorSubbab": null,
+      "labelAntrian": "VII",
+      "judul": "Penurunan Nomina dengan ke-...-an",
+      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-ke-an.md"
     },
     {
-      "nomorBab": "III",
-      "nomorSubbab": "3.1.6",
-      "labelAntrian": "3.1.6",
-      "judul": "Fonem Segmental dan Suprasegmental",
-      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/fonem-segmental-dan-suprasegmental.md"
+      "nomorBab": "VII",
+      "nomorSubbab": null,
+      "labelAntrian": "VII",
+      "judul": "Penurunan Nomina dengan Sisipan",
+      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-sisipan.md"
     },
     {
-      "nomorBab": "III",
-      "nomorSubbab": "3.1.7",
-      "labelAntrian": "3.1.7",
-      "judul": "Suku Kata",
-      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/suku-kata.md"
+      "nomorBab": "VII",
+      "nomorSubbab": null,
+      "labelAntrian": "VII",
+      "judul": "Penurunan Nomina dengan -wan/-wati",
+      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-wan-wati.md"
     },
     {
-      "nomorBab": "III",
-      "nomorSubbab": "3.2",
-      "labelAntrian": "3.2",
-      "judul": "Vokal dan Konsonan",
-      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/vokal-dan-konsonan.md"
+      "nomorBab": "VII",
+      "nomorSubbab": null,
+      "labelAntrian": "VII",
+      "judul": "Penurunan Nomina dengan -a dan -i",
+      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-a-dan-i.md"
     },
     {
-      "nomorBab": "III",
-      "nomorSubbab": "3.2.1",
-      "labelAntrian": "3.2.1",
-      "judul": "Vokal dan Alofon Vokal",
-      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/vokal-dan-alofon-vokal.md"
+      "nomorBab": "VII",
+      "nomorSubbab": null,
+      "labelAntrian": "VII",
+      "judul": "Penurunan Nomina dengan -isme, -(is)asi, -logi, dan -tas",
+      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-isme-isasi-logi-dan-tas.md"
     },
     {
-      "nomorBab": "III",
-      "nomorSubbab": "3.2.2",
-      "labelAntrian": "3.2.2",
-      "judul": "Diftong dan Deret Vokal",
-      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/diftong-dan-deret-vokal.md"
+      "nomorBab": "VII",
+      "nomorSubbab": null,
+      "labelAntrian": "VII",
+      "judul": "Penurunan Nomina dengan se-",
+      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-se.md"
     },
     {
-      "nomorBab": "III",
-      "nomorSubbab": "3.2.3",
-      "labelAntrian": "3.2.3",
-      "judul": "Cara Penulisan Vokal",
-      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/cara-penulisan-vokal.md"
+      "nomorBab": "VII",
+      "nomorSubbab": "7.1.4.2.2.3",
+      "labelAntrian": "7.1.4.2.2.3",
+      "judul": "Penurunan Nomina melalui Perulangan",
+      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-melalui-perulangan.md"
     },
     {
-      "nomorBab": "III",
-      "nomorSubbab": "3.2.4",
-      "labelAntrian": "3.2.4",
-      "judul": "Konsonan dan Alofon Konsonan",
-      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/konsonan-dan-alofon-konsonan.md"
+      "nomorBab": "VII",
+      "nomorSubbab": "7.1.4.2.2.4",
+      "labelAntrian": "7.1.4.2.2.4",
+      "judul": "Penurunan Nomina melalui Pemajemukan",
+      "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-melalui-pemajemukan.md"
     },
     {
-      "nomorBab": "III",
-      "nomorSubbab": "3.2.5",
-      "labelAntrian": "3.2.5",
-      "judul": "Gugus dan Deret Konsonan",
-      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/gugus-dan-deret-konsonan.md"
+      "nomorBab": "VII",
+      "nomorSubbab": "7.1.5-7.1.6",
+      "labelAntrian": "7.1.5-7.1.6",
+      "judul": "Frasa Nominal",
+      "fileMarkdown": "frontend/public/gramatika/nomina/frasa-nominal.md"
     },
     {
-      "nomorBab": "III",
-      "nomorSubbab": "3.3",
-      "labelAntrian": "3.3",
-      "judul": "Struktur Suku Kata dan Kata",
-      "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/struktur-suku-kata-dan-kata.md"
+      "nomorBab": "VII",
+      "nomorSubbab": "7.1.5.1",
+      "labelAntrian": "7.1.5.1",
+      "judul": "Penentu",
+      "fileMarkdown": "frontend/public/gramatika/nomina/penentu.md"
     }
   ],
   "items": [
@@ -382,7 +382,7 @@
       "fileMarkdown": "frontend/public/gramatika/pendahuluan/kedudukan-bahasa-indonesia.md",
       "fileMarkdownAda": true,
       "statusAudit": "OK",
-      "ringkasanAudit": "Teks markdown lengkap terhadap dua halaman sumber; koreksi OCR seperti `keperiuan`→`keperluan`, `Francis`→`Prancis`, dan `Arena`→`Atena` sudah benar.",
+      "ringkasanAudit": "Audit ulang: kalimat *lingua franca* dikembalikan dari em-dash ke koma sesuai sumber; hapus koma editorial setelah \"manusia\".",
       "halamanPdf": "25-26",
       "sumber": {
         "judulBabPdf": "Pendahuluan",
@@ -413,7 +413,7 @@
       "fileMarkdown": "frontend/public/gramatika/pendahuluan/ragam-bahasa.md",
       "fileMarkdownAda": true,
       "statusAudit": "OK",
-      "ringkasanAudit": "Dua paragraf pembuka sesuai halaman sumber; sisa uraian memang diteruskan ke dua file turunan sehingga halaman induk berfungsi sebagai pengantar + navigasi.",
+      "ringkasanAudit": "Tidak ada temuan baru; isi sesuai dua paragraf pembuka, sisanya di file turunan.",
       "halamanPdf": "27",
       "sumber": {
         "judulBabPdf": "Pendahuluan",
@@ -444,7 +444,7 @@
       "fileMarkdown": "frontend/public/gramatika/pendahuluan/ragam-menurut-golongan-penutur.md",
       "fileMarkdownAda": true,
       "statusAudit": "OK",
-      "ringkasanAudit": "Isi sesuai pecahan sumber setelah paragraf pengantar 1.2; koreksi OCR pada istilah, italic, dan simbol bunyi sudah rapi, lalu transisi ke 1.2.2 dimulai di halaman berikutnya.",
+      "ringkasanAudit": "Audit ulang: 5 perbaikan — tanda kurung *misalnya* dan *(darat, laut, udara)/(cetak, elektronik)* dikembalikan; em-dash *persekolahan* dikembalikan; \"dan jenis pemakaiannya—yang dapat disebut langgam atau gaya—\" dipulihkan; \"(bahasa Jawa)\" setelah *gerah* ditambahkan kembali.",
       "halamanPdf": "27-29",
       "sumber": {
         "judulBabPdf": "Pendahuluan",
@@ -480,7 +480,7 @@
       "fileMarkdown": "frontend/public/gramatika/pendahuluan/ragam-menurut-jenis-pemakaian.md",
       "fileMarkdownAda": true,
       "statusAudit": "OK",
-      "ringkasanAudit": "Isi lengkap terhadap sumber; ditambahkan kembali uraian tentang ragam tulis yang muncul kemudian, peran *lingua franca* Melayu, dan kalimat penutup transisi sebelum 1.3.",
+      "ringkasanAudit": "Audit ulang: 5 perbaikan — \"dan/atau\"; em-dash fungsi gramatikal dan \"dan\" (bukan \"serta\"); kalimat pembuka paragraf percampuran dikembalikan ke sumber; em-dash *teras bersamanya*; \"dimaksudkan\".",
       "halamanPdf": "30-32",
       "sumber": {
         "judulBabPdf": "Pendahuluan",
@@ -516,7 +516,7 @@
       "fileMarkdown": "frontend/public/gramatika/pendahuluan/diglosia.md",
       "fileMarkdownAda": true,
       "statusAudit": "OK",
-      "ringkasanAudit": "Isi sesuai dua halaman sumber, termasuk oposisi ragam tinggi-rendah, kodifikasi, dan paradoks mudah-sukar dalam pemakaian bahasa Indonesia.",
+      "ringkasanAudit": "Audit ulang: titik koma → koma sebelum \"sebaliknya\"; hapus koma sebelum \"maupun kosakata\".",
       "halamanPdf": "33-34",
       "sumber": {
         "judulBabPdf": "Pendahuluan",
@@ -547,7 +547,7 @@
       "fileMarkdown": "frontend/public/gramatika/pendahuluan/pembakuan-bahasa.md",
       "fileMarkdownAda": true,
       "statusAudit": "OK",
-      "ringkasanAudit": "Uraian norma monosentris-majemuk serta contoh *perusak/pengrusak* dan kata penggolong sudah lengkap dan bersih dari artefak OCR.",
+      "ringkasanAudit": "Tidak ada temuan baru.",
       "halamanPdf": "34-35",
       "sumber": {
         "judulBabPdf": "Pendahuluan",
@@ -578,7 +578,7 @@
       "fileMarkdown": "frontend/public/gramatika/pendahuluan/bahasa-baku.md",
       "fileMarkdownAda": true,
       "statusAudit": "OK",
-      "ringkasanAudit": "Tiga ciri ragam baku tercakup lengkap; istilah, contoh, dan makna pembakuan tetap sesuai sumber.",
+      "ringkasanAudit": "Tidak ada temuan baru.",
       "halamanPdf": "36-37",
       "sumber": {
         "judulBabPdf": "Pendahuluan",
@@ -609,7 +609,7 @@
       "fileMarkdown": "frontend/public/gramatika/pendahuluan/fungsi-bahasa-baku.md",
       "fileMarkdownAda": true,
       "statusAudit": "OK",
-      "ringkasanAudit": "Empat fungsi bahasa baku dan lanjutan pembakuan ejaan, lafal, kosakata, serta tata bahasa sudah lengkap; ditambahkan lagi rincian edisi kamus dan konteks contoh idiom yang sebelumnya hilang.",
+      "ringkasanAudit": "Audit ulang: 8 perbaikan — hapus 4 label editorial \"Fungsi X.\" yang tidak ada di sumber; koma → tanda kurung *(dan mungkin juga di Afrika)*; \"atau\" → tanda kurung pada istilah fonologi/morfologi/sintaksis; hapus koma setelah \"karya asli\"; \"populer, maupun\" → \"populer maupun\".",
       "halamanPdf": "37-42",
       "sumber": {
         "judulBabPdf": "Pendahuluan",
@@ -640,7 +640,7 @@
       "fileMarkdown": "frontend/public/gramatika/pendahuluan/bahasa-yang-baik-dan-benar.md",
       "fileMarkdownAda": true,
       "statusAudit": "OK",
-      "ringkasanAudit": "Penjelasan perbedaan bahasa yang benar dan bahasa yang baik tetap lengkap; dua contoh percakapan pasar masih mewakili substansi sumber dengan jelas.",
+      "ringkasanAudit": "Audit ulang: em-dash dikembalikan ke koma pada kalimat pembuka sesuai sumber.",
       "halamanPdf": "43-44",
       "sumber": {
         "judulBabPdf": "Pendahuluan",
@@ -671,7 +671,7 @@
       "fileMarkdown": "frontend/public/gramatika/pendahuluan/hubungan-bahasa-indonesia-dengan-bahasa-daerah-dan-bahasa-asing.md",
       "fileMarkdownAda": true,
       "statusAudit": "OK",
-      "ringkasanAudit": "Uraian fungsi antarbahasa lengkap; koreksi dilakukan pada contoh sumber serapan agar kembali mengikuti sumber, termasuk penyebutan bahasa Cina.",
+      "ringkasanAudit": "Audit ulang: 3 perbaikan — hapus koma sebelum \"maupun\" (2 tempat); kembalikan tanda kurung referensi UU No. 20 Tahun 2003.",
       "halamanPdf": "44-46",
       "sumber": {
         "judulBabPdf": "Pendahuluan",
@@ -701,9 +701,9 @@
       "frontmatterTitle": null,
       "fileMarkdown": "frontend/public/gramatika/tata-bahasa/tata-bahasa.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Halaman landing; daftar isi sinkron dengan gramatikaData.js.",
+      "halamanPdf": "—",
       "sumber": {
         "judulBabPdf": "Tata Bahasa: Tinjauan Selayang Pandang",
         "filePdfBab": "_data/gramatika/bab-02/bab-02-tata-bahasa-tinjauan-selayang-pandang.pdf",
@@ -732,9 +732,9 @@
       "frontmatterTitle": "Deskripsi dan Teori (2.1)",
       "fileMarkdown": "frontend/public/gramatika/tata-bahasa/deskripsi-dan-teori.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Bersih; koreksi OCR sudah tepat.",
+      "halamanPdf": "47-48",
       "sumber": {
         "judulBabPdf": "Tata Bahasa: Tinjauan Selayang Pandang",
         "filePdfBab": "_data/gramatika/bab-02/bab-02-tata-bahasa-tinjauan-selayang-pandang.pdf",
@@ -763,9 +763,9 @@
       "frontmatterTitle": "Pengertian Tata Bahasa (2.2)",
       "fileMarkdown": "frontend/public/gramatika/tata-bahasa/pengertian-tata-bahasa.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Teks dan navigasi sesuai sumber.",
+      "halamanPdf": "49",
       "sumber": {
         "judulBabPdf": "Tata Bahasa: Tinjauan Selayang Pandang",
         "filePdfBab": "_data/gramatika/bab-02/bab-02-tata-bahasa-tinjauan-selayang-pandang.pdf",
@@ -794,9 +794,9 @@
       "frontmatterTitle": "Fonologi (2.2.1)",
       "fileMarkdown": "frontend/public/gramatika/tata-bahasa/fonologi.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "1 perbaikan: label `(1)` ditambahkan sebelum tabel tulisan/fonemis/fonetis; teks merujuk \"contoh (1)\" dua kali.",
+      "halamanPdf": "49-51",
       "sumber": {
         "judulBabPdf": "Tata Bahasa: Tinjauan Selayang Pandang",
         "filePdfBab": "_data/gramatika/bab-02/bab-02-tata-bahasa-tinjauan-selayang-pandang.pdf",
@@ -830,9 +830,9 @@
       "frontmatterTitle": "Morfologi (2.2.2)",
       "fileMarkdown": "frontend/public/gramatika/tata-bahasa/morfologi.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Contoh (2) dan diagram (3) sudah berlabel benar, tidak ada temuan.",
+      "halamanPdf": "51-52",
       "sumber": {
         "judulBabPdf": "Tata Bahasa: Tinjauan Selayang Pandang",
         "filePdfBab": "_data/gramatika/bab-02/bab-02-tata-bahasa-tinjauan-selayang-pandang.pdf",
@@ -866,9 +866,9 @@
       "frontmatterTitle": "Sintaksis (2.2.3)",
       "fileMarkdown": "frontend/public/gramatika/tata-bahasa/sintaksis.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "2 perbaikan: label `(6)` ditetapkan sebelum tabel kategori leksikal; label `(7)` ditetapkan sebelum tabel kategori frasa.",
+      "halamanPdf": "52-61",
       "sumber": {
         "judulBabPdf": "Tata Bahasa: Tinjauan Selayang Pandang",
         "filePdfBab": "_data/gramatika/bab-02/bab-02-tata-bahasa-tinjauan-selayang-pandang.pdf",
@@ -902,9 +902,9 @@
       "frontmatterTitle": "Semantik, Pragmatik, dan Relasi Makna (2.3)",
       "fileMarkdown": "frontend/public/gramatika/tata-bahasa/semantik-pragmatik-dan-relasi-makna.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Halaman landing; satu paragraf pembuka dan navigasi sesuai sumber.",
+      "halamanPdf": "61",
       "sumber": {
         "judulBabPdf": "Tata Bahasa: Tinjauan Selayang Pandang",
         "filePdfBab": "_data/gramatika/bab-02/bab-02-tata-bahasa-tinjauan-selayang-pandang.pdf",
@@ -933,9 +933,9 @@
       "frontmatterTitle": "Kondisi Kebenaran dan Perikutan (2.3.1)",
       "fileMarkdown": "frontend/public/gramatika/tata-bahasa/kondisi-kebenaran-dan-perikutan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Contoh (17)–(21) dan teks penjelasan sesuai sumber; OCR artifacts tidak terbawa.",
+      "halamanPdf": "62-63",
       "sumber": {
         "judulBabPdf": "Tata Bahasa: Tinjauan Selayang Pandang",
         "filePdfBab": "_data/gramatika/bab-02/bab-02-tata-bahasa-tinjauan-selayang-pandang.pdf",
@@ -969,9 +969,9 @@
       "frontmatterTitle": "Aspek Takberkondisi Benar Makna Kalimat (2.3.2)",
       "fileMarkdown": "frontend/public/gramatika/tata-bahasa/aspek-takberkondisi-benar-makna-kalimat.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Contoh (22)–(24) dan teks penjelasan sesuai sumber; OCR typo \"kovensional\" dan \"had\" sudah dikembalikan ke bentuk baku.",
+      "halamanPdf": "63-65",
       "sumber": {
         "judulBabPdf": "Tata Bahasa: Tinjauan Selayang Pandang",
         "filePdfBab": "_data/gramatika/bab-02/bab-02-tata-bahasa-tinjauan-selayang-pandang.pdf",
@@ -1005,9 +1005,9 @@
       "frontmatterTitle": "Pragmatik dan Implikatur Percakapan (2.3.3)",
       "fileMarkdown": "frontend/public/gramatika/tata-bahasa/pragmatik-dan-implikatur-percakapan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "1 perbaikan: \"Apa kamu sudah mendapat izin dari Dekan?\" dikembalikan ke \"Apa kamu sudah menghadap Dekan?\" sesuai pertanyaan literal di sumber (implikatur tetap \"dapat izin\").",
+      "halamanPdf": "65-66",
       "sumber": {
         "judulBabPdf": "Tata Bahasa: Tinjauan Selayang Pandang",
         "filePdfBab": "_data/gramatika/bab-02/bab-02-tata-bahasa-tinjauan-selayang-pandang.pdf",
@@ -1041,9 +1041,9 @@
       "frontmatterTitle": "Pengacuan dan Deiksis (2.3.4)",
       "fileMarkdown": "frontend/public/gramatika/tata-bahasa/pengacuan-dan-deiksis.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Contoh (27)–(32) dan teks penjelasan sesuai sumber; OCR errors (Omngitu, huku, la, deksis, seorangpemhantu) sudah dikoreksi.",
+      "halamanPdf": "66-68",
       "sumber": {
         "judulBabPdf": "Tata Bahasa: Tinjauan Selayang Pandang",
         "filePdfBab": "_data/gramatika/bab-02/bab-02-tata-bahasa-tinjauan-selayang-pandang.pdf",
@@ -1077,9 +1077,9 @@
       "frontmatterTitle": null,
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/bunyi-bahasa.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Halaman landing; daftar isi sinkron dengan gramatikaData.js.",
+      "halamanPdf": "—",
       "sumber": {
         "judulBabPdf": "Bunyi Bahasa dan Tata Bunyi",
         "filePdfBab": "_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf",
@@ -1108,9 +1108,9 @@
       "frontmatterTitle": "Batasan dan Ciri Bunyi Bahasa (3.1)",
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/batasan-dan-ciri-bunyi-bahasa.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "1 perbaikan: em-dash parenthetical \"—dengan demikian pita suara tidak bergetar—\" dipulihkan dari koma.",
+      "halamanPdf": "69-71",
       "sumber": {
         "judulBabPdf": "Bunyi Bahasa dan Tata Bunyi",
         "filePdfBab": "_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf",
@@ -1139,9 +1139,9 @@
       "frontmatterTitle": "Vokal (3.1.1)",
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/vokal.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "1 perbaikan: em-dash parenthetical \"—terutama bagian depan, tengah, dan belakang lidah—\" dipulihkan dari koma.",
+      "halamanPdf": "72",
       "sumber": {
         "judulBabPdf": "Bunyi Bahasa dan Tata Bunyi",
         "filePdfBab": "_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf",
@@ -1175,9 +1175,9 @@
       "frontmatterTitle": "Konsonan (3.1.2)",
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/konsonan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Bersih; artefak OCR sudah tepat.",
+      "halamanPdf": "73-74",
       "sumber": {
         "judulBabPdf": "Bunyi Bahasa dan Tata Bunyi",
         "filePdfBab": "_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf",
@@ -1211,9 +1211,9 @@
       "frontmatterTitle": "Diftong (3.1.3)",
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/diftong.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "1 perbaikan: em-dash parenthetical \"—bukan diftong—\" dipulihkan dari koma.",
+      "halamanPdf": "74-75",
       "sumber": {
         "judulBabPdf": "Bunyi Bahasa dan Tata Bunyi",
         "filePdfBab": "_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf",
@@ -1247,9 +1247,9 @@
       "frontmatterTitle": "Gugus Konsonan (3.1.4)",
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/gugus-konsonan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Bersih.",
+      "halamanPdf": "75",
       "sumber": {
         "judulBabPdf": "Bunyi Bahasa dan Tata Bunyi",
         "filePdfBab": "_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf",
@@ -1283,9 +1283,9 @@
       "frontmatterTitle": "Fonem dan Grafem (3.1.5)",
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/fonem-dan-grafem.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "1 perbaikan: notasi fonem rusak \"/t>\" diperbaiki menjadi \"/t/\".",
+      "halamanPdf": "75-77",
       "sumber": {
         "judulBabPdf": "Bunyi Bahasa dan Tata Bunyi",
         "filePdfBab": "_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf",
@@ -1319,9 +1319,9 @@
       "frontmatterTitle": "Fonem Segmental dan Suprasegmental (3.1.6)",
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/fonem-segmental-dan-suprasegmental.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Bersih.",
+      "halamanPdf": "77-78",
       "sumber": {
         "judulBabPdf": "Bunyi Bahasa dan Tata Bunyi",
         "filePdfBab": "_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf",
@@ -1355,9 +1355,9 @@
       "frontmatterTitle": "Suku Kata (3.1.7)",
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/suku-kata.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Bersih.",
+      "halamanPdf": "78",
       "sumber": {
         "judulBabPdf": "Bunyi Bahasa dan Tata Bunyi",
         "filePdfBab": "_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf",
@@ -1391,9 +1391,9 @@
       "frontmatterTitle": "Vokal dan Konsonan (3.2)",
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/vokal-dan-konsonan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Halaman landing; bersih.",
+      "halamanPdf": "79",
       "sumber": {
         "judulBabPdf": "Bunyi Bahasa dan Tata Bunyi",
         "filePdfBab": "_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf",
@@ -1422,9 +1422,9 @@
       "frontmatterTitle": "Vokal dan Alofon Vokal (3.2.1)",
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/vokal-dan-alofon-vokal.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "5 perbaikan: hyphen pada deskripsi posisi vokal — \"belakang-tinggi\", \"sedang-depan\", \"sedang-belakang\", \"sedang-tengah\", \"rendah-tengah\" sesuai PDF.",
+      "halamanPdf": "79-85",
       "sumber": {
         "judulBabPdf": "Bunyi Bahasa dan Tata Bunyi",
         "filePdfBab": "_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf",
@@ -1458,9 +1458,9 @@
       "frontmatterTitle": "Diftong dan Deret Vokal (3.2.2)",
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/diftong-dan-deret-vokal.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Bersih.",
+      "halamanPdf": "86-87",
       "sumber": {
         "judulBabPdf": "Bunyi Bahasa dan Tata Bunyi",
         "filePdfBab": "_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf",
@@ -1494,9 +1494,9 @@
       "frontmatterTitle": "Cara Penulisan Vokal (3.2.3)",
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/cara-penulisan-vokal.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Bersih.",
+      "halamanPdf": "88-89",
       "sumber": {
         "judulBabPdf": "Bunyi Bahasa dan Tata Bunyi",
         "filePdfBab": "_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf",
@@ -1530,9 +1530,9 @@
       "frontmatterTitle": "Konsonan dan Alofon Konsonan (3.2.4)",
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/konsonan-dan-alofon-konsonan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "3 perbaikan: kalimat peringatan pelafalan dipulihkan — seksi /f/ (\"hendaklah dihindari\"), seksi /ʃ/ (\"harus dihindari\"), seksi /x/ (kalimat lengkap dengan contoh [kas]/[tarik]/[akir] dan koreksi [xas]/[tarix]/[axir]).",
+      "halamanPdf": "90-102",
       "sumber": {
         "judulBabPdf": "Bunyi Bahasa dan Tata Bunyi",
         "filePdfBab": "_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf",
@@ -1566,9 +1566,9 @@
       "frontmatterTitle": "Gugus dan Deret Konsonan (3.2.5)",
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/gugus-dan-deret-konsonan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Bersih.",
+      "halamanPdf": "102-104",
       "sumber": {
         "judulBabPdf": "Bunyi Bahasa dan Tata Bunyi",
         "filePdfBab": "_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf",
@@ -1602,9 +1602,9 @@
       "frontmatterTitle": "Struktur Suku Kata dan Kata (3.3)",
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/struktur-suku-kata-dan-kata.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Bersih.",
+      "halamanPdf": "105-106",
       "sumber": {
         "judulBabPdf": "Bunyi Bahasa dan Tata Bunyi",
         "filePdfBab": "_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf",
@@ -1633,9 +1633,9 @@
       "frontmatterTitle": "Pemenggalan Kata (3.4)",
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/pemenggalan-kata.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Bersih.",
+      "halamanPdf": "106-107",
       "sumber": {
         "judulBabPdf": "Bunyi Bahasa dan Tata Bunyi",
         "filePdfBab": "_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf",
@@ -1664,9 +1664,9 @@
       "frontmatterTitle": "Ciri Suprasegmental (3.5)",
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/ciri-suprasegmental.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "1 perbaikan: em-dash parenthetical \"—baik dalam bentuk kata, frasa maupun kalimat—\" dipulihkan dan koma editorial sebelum \"maupun\" dihapus.",
+      "halamanPdf": "108",
       "sumber": {
         "judulBabPdf": "Bunyi Bahasa dan Tata Bunyi",
         "filePdfBab": "_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf",
@@ -1695,9 +1695,9 @@
       "frontmatterTitle": "Tekanan dan Aksen (3.5.1)",
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/tekanan-dan-aksen.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "1 perbaikan: dua em-dash parenthetical pada [kápitano]/[kapítano] dipulihkan dari koma.",
+      "halamanPdf": "108-111",
       "sumber": {
         "judulBabPdf": "Bunyi Bahasa dan Tata Bunyi",
         "filePdfBab": "_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf",
@@ -1731,9 +1731,9 @@
       "frontmatterTitle": "Intonasi dan Ritme (3.5.2)",
       "fileMarkdown": "frontend/public/gramatika/bunyi-bahasa/intonasi-dan-ritme.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
-      "halamanPdf": null,
+      "statusAudit": "OK",
+      "ringkasanAudit": "Bersih.",
+      "halamanPdf": "111-118",
       "sumber": {
         "judulBabPdf": "Bunyi Bahasa dan Tata Bunyi",
         "filePdfBab": "_data/gramatika/bab-03/bab-03-bunyi-bahasa-dan-tata-bunyi.pdf",
@@ -1768,7 +1768,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/nomina.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -1799,7 +1799,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/batasan-dan-ciri-nomina.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -1830,7 +1830,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/perilaku-semantis-nomina.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -1861,7 +1861,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/perilaku-sintaksis-nomina.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -1892,7 +1892,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/jenis-nomina.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -1923,7 +1923,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/nomina-berdasarkan-acuan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -1959,7 +1959,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/nomina-berdasarkan-bentuk-morfologis.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -1995,7 +1995,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/nomina-dasar.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2035,7 +2035,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-konversi.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2075,7 +2075,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-melalui-pengafiksan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2115,7 +2115,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-ke.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2159,7 +2159,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-per.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2203,7 +2203,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-peng.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2247,7 +2247,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-an.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2291,7 +2291,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-peng-an.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2335,7 +2335,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-per-an.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2379,7 +2379,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-ke-an.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2423,7 +2423,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-sisipan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2467,7 +2467,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-wan-wati.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2511,7 +2511,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-a-dan-i.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2555,7 +2555,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-isme-isasi-logi-dan-tas.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2599,7 +2599,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-dengan-se.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2643,7 +2643,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-melalui-perulangan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2683,7 +2683,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/penurunan-nomina-melalui-pemajemukan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2723,7 +2723,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/frasa-nominal.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2754,7 +2754,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/penentu.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2790,7 +2790,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/penggolong-dan-partitif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2826,7 +2826,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/perluasan-nomina-ke-kiri.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2862,7 +2862,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/perluasan-nomina-ke-kanan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2898,7 +2898,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/susunan-kata-pada-frasa-nominal.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2934,7 +2934,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/frasa-nominal-vokatif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -2970,7 +2970,7 @@
       "fileMarkdown": "frontend/public/gramatika/nomina/konsep-tunggal-jamak-dan-generik.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -3000,8 +3000,8 @@
       "frontmatterTitle": null,
       "fileMarkdown": "frontend/public/gramatika/verba/verba.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3031,8 +3031,8 @@
       "frontmatterTitle": "Batasan dan Ciri Verba (4.1)",
       "fileMarkdown": "frontend/public/gramatika/verba/batasan-dan-ciri-verba.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3062,8 +3062,8 @@
       "frontmatterTitle": "Fitur Semantis Verba (4.1.1)",
       "fileMarkdown": "frontend/public/gramatika/verba/fitur-semantis-verba.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3093,8 +3093,8 @@
       "frontmatterTitle": "Perilaku Sintaktis Verba (4.1.2)",
       "fileMarkdown": "frontend/public/gramatika/verba/perilaku-sintaktis-verba.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3124,8 +3124,8 @@
       "frontmatterTitle": "Verba Transitif Berobjek (4.1.2.1)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-transitif-berobjek.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3160,8 +3160,8 @@
       "frontmatterTitle": "Verba Transitif Berobjek dan Berpelengkap (4.1.2.2)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-transitif-berobjek-dan-berpelengkap.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3196,8 +3196,8 @@
       "frontmatterTitle": "Verba Semitransitif (4.1.2.3)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-semitransitif.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3232,8 +3232,8 @@
       "frontmatterTitle": "Verba Taktransitif Takberpelengkap (4.1.2.4)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-taktransitif-takberpelengkap.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3268,8 +3268,8 @@
       "frontmatterTitle": "Verba Taktransitif Berpelengkap (4.1.2.5)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-taktransitif-berpelengkap.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3304,8 +3304,8 @@
       "frontmatterTitle": "Verba Taktransitif Berpelengkap Nomina dengan Preposisi Tetap (4.1.2.6)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-taktransitif-berpelengkap-nomina-dengan-preposisi-tetap.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3340,8 +3340,8 @@
       "frontmatterTitle": "Bentuk Verba (4.1.3)",
       "fileMarkdown": "frontend/public/gramatika/verba/bentuk-verba.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3371,8 +3371,8 @@
       "frontmatterTitle": "Verba Dasar (4.1.3.1)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-dasar.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3407,8 +3407,8 @@
       "frontmatterTitle": "Verba Turunan (4.1.3.2)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-turunan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3443,8 +3443,8 @@
       "frontmatterTitle": "Morfofonemik dalam Pengafiksan Verba (4.1.3.3)",
       "fileMarkdown": "frontend/public/gramatika/verba/morfofonemik-dalam-pengafiksan-verba.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3479,8 +3479,8 @@
       "frontmatterTitle": "Morfofonemik Prefiks ber- (4.1.3.3.1)",
       "fileMarkdown": "frontend/public/gramatika/verba/morfofonemik-prefiks-ber.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3519,8 +3519,8 @@
       "frontmatterTitle": "Morfofonemik Prefiks per- (4.1.3.3.2)",
       "fileMarkdown": "frontend/public/gramatika/verba/morfofonemik-prefiks-per.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3559,8 +3559,8 @@
       "frontmatterTitle": "Morfofonemik Prefiks meng- (4.1.3.3.3)",
       "fileMarkdown": "frontend/public/gramatika/verba/morfofonemik-prefiks-meng.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3599,8 +3599,8 @@
       "frontmatterTitle": "Morfofonemik Prefiks di- (4.1.3.3.4)",
       "fileMarkdown": "frontend/public/gramatika/verba/morfofonemik-prefiks-di.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3639,8 +3639,8 @@
       "frontmatterTitle": "Morfofonemik Prefiks ter- (4.1.3.3.5)",
       "fileMarkdown": "frontend/public/gramatika/verba/morfofonemik-prefiks-ter.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3679,8 +3679,8 @@
       "frontmatterTitle": "Morfofonemik Sufiks -kan (4.1.3.3.6)",
       "fileMarkdown": "frontend/public/gramatika/verba/morfofonemik-sufiks-kan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3719,8 +3719,8 @@
       "frontmatterTitle": "Morfofonemik Sufiks -i (4.1.3.3.7)",
       "fileMarkdown": "frontend/public/gramatika/verba/morfofonemik-sufiks-i.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3759,8 +3759,8 @@
       "frontmatterTitle": "Morfofonemik Sufiks -an (4.1.3.3.8)",
       "fileMarkdown": "frontend/public/gramatika/verba/morfofonemik-sufiks-an.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3799,8 +3799,8 @@
       "frontmatterTitle": "Verba Transitif (4.2)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-transitif.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3830,8 +3830,8 @@
       "frontmatterTitle": "Penurunan Verba Transitif dengan Konversi (4.2.1)",
       "fileMarkdown": "frontend/public/gramatika/verba/penurunan-verba-transitif-dengan-konversi.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3866,8 +3866,8 @@
       "frontmatterTitle": "Penurunan Verba Transitif dengan Pengafiksan (4.2.2)",
       "fileMarkdown": "frontend/public/gramatika/verba/penurunan-verba-transitif-dengan-pengafiksan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3902,8 +3902,8 @@
       "frontmatterTitle": "Verba Transitif dengan Prefiks Infleksi meng- (4.2.2.1)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-transitif-dengan-prefiks-infleksi-meng.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3942,8 +3942,8 @@
       "frontmatterTitle": "Verba Transitif dengan Prefiks Infleksi di- (4.2.2.2)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-transitif-dengan-prefiks-infleksi-di.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -3982,8 +3982,8 @@
       "frontmatterTitle": "Verba Transitif dengan Prefiks Infleksi ter- (4.2.2.3)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-transitif-dengan-prefiks-infleksi-ter.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4022,8 +4022,8 @@
       "frontmatterTitle": "Verba Transitif dengan Prefiks per- (4.2.2.4)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-transitif-dengan-prefiks-per.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4062,8 +4062,8 @@
       "frontmatterTitle": "Verba Transitif dengan Sufiks -kan (4.2.2.5)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-transitif-dengan-sufiks-kan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4102,8 +4102,8 @@
       "frontmatterTitle": "Verba Transitif dengan Sufiks -i (4.2.2.6)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-transitif-dengan-sufiks-i.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4142,8 +4142,8 @@
       "frontmatterTitle": "Verba Taktransitif (4.3)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-taktransitif.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4173,8 +4173,8 @@
       "frontmatterTitle": "Penurunan Verba Taktransitif dengan Pengafiksan (4.3.1)",
       "fileMarkdown": "frontend/public/gramatika/verba/penurunan-verba-taktransitif-dengan-pengafiksan.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4209,8 +4209,8 @@
       "frontmatterTitle": "Verba Taktransitif dengan Prefiks ber- (4.3.1.1)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-taktransitif-dengan-prefiks-ber.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4249,8 +4249,8 @@
       "frontmatterTitle": "Verba Taktransitif dengan Konfiks ber-...-an (4.3.1.2)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-taktransitif-dengan-konfiks-ber-an.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4289,8 +4289,8 @@
       "frontmatterTitle": "Verba Taktransitif dengan Prefiks meng- (4.3.1.3)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-taktransitif-dengan-prefiks-meng.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4329,8 +4329,8 @@
       "frontmatterTitle": "Verba Taktransitif dengan Prefiks ter- (4.3.1.4)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-taktransitif-dengan-prefiks-ter.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4369,8 +4369,8 @@
       "frontmatterTitle": "Verba Taktransitif dengan Prefiks se- (4.3.1.5)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-taktransitif-dengan-prefiks-se.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4409,8 +4409,8 @@
       "frontmatterTitle": "Verba Taktransitif dengan Infiks (4.3.1.6)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-taktransitif-dengan-infiks.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4449,8 +4449,8 @@
       "frontmatterTitle": "Verba Taktransitif dengan Konfiks Verbal ke-...-an (4.3.1.7)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-taktransitif-dengan-konfiks-ke-an.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4489,8 +4489,8 @@
       "frontmatterTitle": "Penurunan Verba Taktransitif dengan Reduplikasi (4.3.2)",
       "fileMarkdown": "frontend/public/gramatika/verba/penurunan-verba-taktransitif-dengan-reduplikasi.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4525,8 +4525,8 @@
       "frontmatterTitle": "Verba Hasil Reduplikasi (4.4)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-reduplikasi.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4556,8 +4556,8 @@
       "frontmatterTitle": "Verba Majemuk (4.5)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-majemuk.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4587,8 +4587,8 @@
       "frontmatterTitle": "Verba Majemuk Dasar (4.5.1)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-majemuk-dasar.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4623,8 +4623,8 @@
       "frontmatterTitle": "Verba Majemuk Berafiks (4.5.2)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-majemuk-berafiks.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4659,8 +4659,8 @@
       "frontmatterTitle": "Verba Majemuk Berulang (4.5.3)",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-majemuk-berulang.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4695,8 +4695,8 @@
       "frontmatterTitle": "Verba Majemuk Subordinatif dan Koordinatif",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-majemuk-subordinatif-dan-koordinatif.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4731,8 +4731,8 @@
       "frontmatterTitle": "Verba Majemuk Idiom",
       "fileMarkdown": "frontend/public/gramatika/verba/verba-majemuk-idiom.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4767,8 +4767,8 @@
       "frontmatterTitle": "Frasa Verbal dan Fungsinya (4.6)",
       "fileMarkdown": "frontend/public/gramatika/verba/frasa-verbal.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4798,8 +4798,8 @@
       "frontmatterTitle": "Batasan Frasa Verbal (4.6.1)",
       "fileMarkdown": "frontend/public/gramatika/verba/batasan-frasa-verbal.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4834,8 +4834,8 @@
       "frontmatterTitle": "Jenis Frasa Verbal (4.6.2)",
       "fileMarkdown": "frontend/public/gramatika/verba/jenis-frasa-verbal.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4870,8 +4870,8 @@
       "frontmatterTitle": "Fungsi Verba dan Frasa Verbal (4.6.3)",
       "fileMarkdown": "frontend/public/gramatika/verba/fungsi-verba-dan-frasa-verbal.md",
       "fileMarkdownAda": true,
-      "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "statusAudit": "OK",
+      "ringkasanAudit": "Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2.",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Verba",
@@ -4907,7 +4907,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -4938,7 +4938,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/batasan-dan-ciri-adjektiva.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -4969,7 +4969,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/ciri-semantis-adjektiva.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5000,7 +5000,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-pemeri-sifat.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5036,7 +5036,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-ukuran.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5072,7 +5072,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-warna.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5108,7 +5108,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-bentuk.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5144,7 +5144,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-waktu.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5180,7 +5180,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-jarak.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5216,7 +5216,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-sikap-batin.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5252,7 +5252,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-cerapan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5288,7 +5288,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/perilaku-sintaksis-adjektiva.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5319,7 +5319,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/pertarafan-adjektiva.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5350,7 +5350,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/tingkat-kualitas.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5386,7 +5386,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/tingkat-pembandingan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5422,7 +5422,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/bentuk-adjektiva.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5453,7 +5453,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-dasar.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5489,7 +5489,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-turunan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5525,7 +5525,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-berimbuhan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5565,7 +5565,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-berulang.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5605,7 +5605,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-majemuk.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5645,7 +5645,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/frasa-adjektival.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5676,7 +5676,7 @@
       "fileMarkdown": "frontend/public/gramatika/adjektiva/adjektiva-dan-kelas-kata-lain.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adjektiva",
@@ -5707,7 +5707,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/adverbia.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -5738,7 +5738,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/batasan-dan-ciri-adverbia.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -5769,7 +5769,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/perilaku-semantis-adverbia.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -5800,7 +5800,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/adverbia-kualitatif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -5836,7 +5836,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/adverbia-kuantitatif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -5872,7 +5872,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/adverbia-limitatif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -5908,7 +5908,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/adverbia-frekuentatif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -5944,7 +5944,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/adverbia-kewaktuan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -5980,7 +5980,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/adverbia-kecaraan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -6016,7 +6016,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/adverbia-kontrastif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -6052,7 +6052,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/adverbia-keniscayaan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -6088,7 +6088,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/perilaku-sintaksis-adverbia.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -6119,7 +6119,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/adverbia-sebelum-kata-yang-diterangkan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -6155,7 +6155,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/adverbia-sesudah-kata-yang-diterangkan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -6191,7 +6191,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/adverbia-sebelum-atau-sesudah-kata-yang-diterangkan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -6227,7 +6227,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/adverbia-sebelum-dan-sesudah-kata-yang-diterangkan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -6263,7 +6263,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/adverbia-pembuka-wacana.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -6299,7 +6299,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/adverbia-intraklausal-dan-ekstraklausal.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -6335,7 +6335,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/bentuk-adverbia.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -6366,7 +6366,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/adverbia-tunggal.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -6402,7 +6402,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/adverbia-gabungan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -6438,7 +6438,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/bentuk-adverbial.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -6469,7 +6469,7 @@
       "fileMarkdown": "frontend/public/gramatika/adverbia/adverbia-dan-kelas-kata-lain.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Adverbia",
@@ -6500,7 +6500,7 @@
       "fileMarkdown": "frontend/public/gramatika/pronomina/pronomina.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6531,7 +6531,7 @@
       "fileMarkdown": "frontend/public/gramatika/pronomina/batasan-dan-ciri-pronomina.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6562,7 +6562,7 @@
       "fileMarkdown": "frontend/public/gramatika/pronomina/jenis-pronomina.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6593,7 +6593,7 @@
       "fileMarkdown": "frontend/public/gramatika/pronomina/pronomina-persona.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6629,7 +6629,7 @@
       "fileMarkdown": "frontend/public/gramatika/pronomina/pronomina-penunjuk.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6665,7 +6665,7 @@
       "fileMarkdown": "frontend/public/gramatika/pronomina/pronomina-tanya.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6701,7 +6701,7 @@
       "fileMarkdown": "frontend/public/gramatika/pronomina/apa-dan-siapa.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6741,7 +6741,7 @@
       "fileMarkdown": "frontend/public/gramatika/pronomina/mana.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6781,7 +6781,7 @@
       "fileMarkdown": "frontend/public/gramatika/pronomina/mengapa-dan-kenapa.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6821,7 +6821,7 @@
       "fileMarkdown": "frontend/public/gramatika/pronomina/kapan-bilamana-dan-apabila.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6861,7 +6861,7 @@
       "fileMarkdown": "frontend/public/gramatika/pronomina/bagaimana.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6901,7 +6901,7 @@
       "fileMarkdown": "frontend/public/gramatika/pronomina/berapa.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6941,7 +6941,7 @@
       "fileMarkdown": "frontend/public/gramatika/pronomina/gabungan-preposisi-dengan-kata-tanya.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -6981,7 +6981,7 @@
       "fileMarkdown": "frontend/public/gramatika/pronomina/gabungan-kata-tanya-dengan-kata-saja-dan-implikasi-kejamakan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7021,7 +7021,7 @@
       "fileMarkdown": "frontend/public/gramatika/pronomina/gabungan-kata-tanya-dengan-kata-saja-dan-implikasi-ketaktentuan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7061,7 +7061,7 @@
       "fileMarkdown": "frontend/public/gramatika/pronomina/reduplikasi-apa-siapa-dan-mana.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7101,7 +7101,7 @@
       "fileMarkdown": "frontend/public/gramatika/pronomina/pronomina-taktentu.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7137,7 +7137,7 @@
       "fileMarkdown": "frontend/public/gramatika/pronomina/pronomina-jumlah.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7173,7 +7173,7 @@
       "fileMarkdown": "frontend/public/gramatika/pronomina/frasa-pronominal.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7204,7 +7204,7 @@
       "fileMarkdown": "frontend/public/gramatika/numeralia/numeralia.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7235,7 +7235,7 @@
       "fileMarkdown": "frontend/public/gramatika/numeralia/batasan-dan-ciri-numeralia.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7266,7 +7266,7 @@
       "fileMarkdown": "frontend/public/gramatika/numeralia/jenis-numeralia.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7297,7 +7297,7 @@
       "fileMarkdown": "frontend/public/gramatika/numeralia/numeralia-pokok.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7333,7 +7333,7 @@
       "fileMarkdown": "frontend/public/gramatika/numeralia/numeralia-pokok-tentu.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7373,7 +7373,7 @@
       "fileMarkdown": "frontend/public/gramatika/numeralia/numeralia-pokok-kolektif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7413,7 +7413,7 @@
       "fileMarkdown": "frontend/public/gramatika/numeralia/numeralia-pokok-distributif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7453,7 +7453,7 @@
       "fileMarkdown": "frontend/public/gramatika/numeralia/numeralia-pokok-taktentu.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7493,7 +7493,7 @@
       "fileMarkdown": "frontend/public/gramatika/numeralia/numeralia-pokok-klitika.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7533,7 +7533,7 @@
       "fileMarkdown": "frontend/public/gramatika/numeralia/numeralia-pecahan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7573,7 +7573,7 @@
       "fileMarkdown": "frontend/public/gramatika/numeralia/numeralia-tingkat.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7609,7 +7609,7 @@
       "fileMarkdown": "frontend/public/gramatika/numeralia/frasa-numeral.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Nomina, Pronomina, dan Numeralia",
@@ -7640,7 +7640,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/kata-tugas.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -7671,7 +7671,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/batasan-dan-ciri-kata-tugas.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -7702,7 +7702,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -7733,7 +7733,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/bentuk-preposisi.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -7769,7 +7769,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-tunggal.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -7809,7 +7809,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-kata-dasar.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -7853,7 +7853,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-kata-berafiks.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -7897,7 +7897,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-gabungan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -7937,7 +7937,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-berdampingan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -7981,7 +7981,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-berkorelasi.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8025,7 +8025,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/preposisi-dan-nomina-lokatif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8069,7 +8069,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/peran-semantis-preposisi.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8105,7 +8105,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/peran-sintaktis-preposisi.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8141,7 +8141,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/konjungsi.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8172,7 +8172,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/konjungsi-koordinatif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8208,7 +8208,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/konjungsi-korelatif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8244,7 +8244,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/konjungsi-subordinatif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8280,7 +8280,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/konjungsi-antarkalimat.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8316,7 +8316,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/simpulan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8352,7 +8352,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/interjeksi.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8383,7 +8383,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/artikula.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8414,7 +8414,7 @@
       "fileMarkdown": "frontend/public/gramatika/kata-tugas/partikel-penegas.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kata Tugas",
@@ -8445,7 +8445,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -8476,7 +8476,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/batasan-dan-ciri-kalimat.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -8507,7 +8507,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/unsur-kalimat.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -8538,7 +8538,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat-klausa-dan-frasa.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -8574,7 +8574,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/unsur-wajib-dan-unsur-takwajib.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -8610,7 +8610,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/keserasian-antarunsur.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -8646,7 +8646,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kategori-fungsi-dan-peran.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -8677,7 +8677,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kategori.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -8713,7 +8713,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/fungsi-sintaktis.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -8749,7 +8749,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/predikat.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -8789,7 +8789,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/subjek.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -8829,7 +8829,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/objek.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -8869,7 +8869,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/pelengkap.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -8909,7 +8909,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -8949,7 +8949,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-tempat.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -8993,7 +8993,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-waktu.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9037,7 +9037,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-alat.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9081,7 +9081,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-tujuan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9125,7 +9125,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-cara.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9169,7 +9169,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-penyerta.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9213,7 +9213,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-pembandingan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9257,7 +9257,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-kesalingan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9301,7 +9301,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-sebab.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9345,7 +9345,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-akibat.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9389,7 +9389,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-kuantitas.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9433,7 +9433,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-kualitas.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9477,7 +9477,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/keterangan-sudut-pandang.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9521,7 +9521,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/peran.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9557,7 +9557,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat-dasar.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9588,7 +9588,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/batasan-kalimat-dasar.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9624,7 +9624,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/perluasan-kalimat-dasar.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9660,7 +9660,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/jenis-kalimat.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9691,7 +9691,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat-berdasarkan-jumlah-klausanya.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9727,7 +9727,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat-berdasarkan-predikat.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9763,7 +9763,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat-berpredikat-verbal.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9803,7 +9803,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat-taktransitif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9847,7 +9847,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat-transitif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9891,7 +9891,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat-pasif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9935,7 +9935,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat-adjektival.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -9975,7 +9975,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat-nominal.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -10015,7 +10015,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat-numeral.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -10055,7 +10055,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat-frasa-preposisional.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -10095,7 +10095,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat-berdasarkan-klasifikasi-sintaktis.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -10131,7 +10131,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat-deklaratif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -10171,7 +10171,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat-imperatif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -10211,7 +10211,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat-interogatif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -10251,7 +10251,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat-eksklamatif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -10291,7 +10291,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat-berdasarkan-kelengkapan-unsur.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -10327,7 +10327,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/kalimat-dan-kemasan-informasi.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -10363,7 +10363,7 @@
       "fileMarkdown": "frontend/public/gramatika/kalimat/pengingkaran.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Kalimat",
@@ -10394,7 +10394,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-antarklausa.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -10425,7 +10425,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-koordinatif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -10456,7 +10456,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/ciri-ciri-sintaktis-hubungan-koordinatif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -10492,7 +10492,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/ciri-ciri-semantis-hubungan-koordinatif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -10528,7 +10528,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-semantis-antarklausa-dalam-kalimat-majemuk.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -10564,7 +10564,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-penjumlahan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -10604,7 +10604,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-penjumlahan-yang-menyatakan-sebab-akibat.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -10648,7 +10648,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-penjumlahan-yang-menyatakan-waktu.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -10692,7 +10692,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-penjumlahan-yang-menyatakan-pertentangan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -10736,7 +10736,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-penjumlahan-yang-menyatakan-perluasan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -10780,7 +10780,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-perlawanan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -10820,7 +10820,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-perlawanan-yang-menyatakan-penguatan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -10864,7 +10864,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-perlawanan-yang-menyatakan-implikasi.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -10908,7 +10908,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-perlawanan-yang-menyatakan-perluasan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -10952,7 +10952,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-pemilihan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -10992,7 +10992,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-subordinatif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -11023,7 +11023,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/ciri-ciri-sintaktis-hubungan-subordinatif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -11059,7 +11059,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/ciri-ciri-semantis-hubungan-subordinatif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -11095,7 +11095,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-semantis-antarklausa-dalam-kalimat-kompleks.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -11131,7 +11131,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-waktu.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -11171,7 +11171,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-syarat.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -11211,7 +11211,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-pengandaian.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -11251,7 +11251,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-tujuan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -11291,7 +11291,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-konsesif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -11331,7 +11331,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-pembandingan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -11371,7 +11371,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-penyebaban.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -11411,7 +11411,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-hasil.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -11451,7 +11451,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-cara.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -11491,7 +11491,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-alat.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -11531,7 +11531,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-komplementasi.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -11571,7 +11571,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-atributif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -11611,7 +11611,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/hubungan-optatif.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",
@@ -11647,7 +11647,7 @@
       "fileMarkdown": "frontend/public/gramatika/hubungan-antarklausa/pelesapan.md",
       "fileMarkdownAda": true,
       "statusAudit": "Belum",
-      "ringkasanAudit": "",
+      "ringkasanAudit": "—",
       "halamanPdf": null,
       "sumber": {
         "judulBabPdf": "Hubungan Antarklausa",

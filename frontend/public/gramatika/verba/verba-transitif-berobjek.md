@@ -23,4 +23,4 @@ Kata yang dicetak miring pada contoh (16—20) merupakan verba transitif, yang m
 
 Berikut adalah contoh berbagai verba transitif:
 
-> *membawa, membeli, membuktikan, mengadili, mengerjakan, memperbaiki, memperbesar, mempermainkan, merestui, membelanjakan*
+- (21) *membawa, membeli, membuktikan, mengadili, mengerjakan, memperbaiki, memperbesar, mempermainkan, merestui, membelanjakan*

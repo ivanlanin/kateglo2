@@ -30,7 +30,9 @@ Verba berprefiks *per-* dengan pangkal adjektiva tergolong verba kausatif yang m
 - a. *Perpanjang KTP-mu selekas mungkin.*
 - b. *Karena merasa dingin, ia memanjangkan lengan bajunya.*
 
-Contoh lain: *perlemah, persempit, perkaya, perkuat, permudah, percepat, perbanyak, persulit*
+Contoh lain:
+
+(143) *perlemah, persempit, perkaya, perkuat, permudah, percepat, perbanyak, persulit*
 
 Verba berprefiks *per-* dengan pangkal nomina artinya 'menjadikan atau memperlakukan objek menjadi apa yang dinyatakan oleh pangkal nomina itu':
 

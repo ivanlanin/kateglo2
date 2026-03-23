@@ -128,6 +128,10 @@ function toPosix(value) {
   return String(value).replace(/\\/g, '/');
 }
 
+function normalizeRelativeDirPath(value) {
+  return toPosix(value).replace(/\/+$/, '');
+}
+
 function readFrontmatter(markdownPath) {
   if (!fs.existsSync(markdownPath)) {
     return { exists: false, id: null, title: null };
@@ -169,28 +173,40 @@ function parseNomorSubbab(titleFromFrontmatter) {
 
 function parseChecklistStatuses(markdownPath) {
   if (!fs.existsSync(markdownPath)) {
-    return {};
+    return { itemStatusMap: {}, chapterStatusMap: {} };
   }
 
-  const statusMap = {};
+  const itemStatusMap = {};
+  const chapterStatusMap = {};
   const content = fs.readFileSync(markdownPath, 'utf8');
 
   for (const line of content.split(/\r?\n/)) {
-    const match = line.match(/^\|\s*([^|]+?)\s*\|\s*`([^`]+)`\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*(.+?)\s*\|$/);
-    if (!match) {
+    const itemMatch = line.match(/^\|\s*([^|]+?)\s*\|\s*`([^`]+)`\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*(.+?)\s*\|$/);
+    if (itemMatch) {
+      const file = itemMatch[2].trim();
+      itemStatusMap[file] = {
+        itemLabel: itemMatch[1].trim(),
+        halamanPdf: itemMatch[3].trim(),
+        status: itemMatch[4].trim(),
+        ringkasan: itemMatch[5].trim(),
+      };
       continue;
     }
 
-    const file = match[2].trim();
-    statusMap[file] = {
-      itemLabel: match[1].trim(),
-      halamanPdf: match[3].trim(),
-      status: match[4].trim(),
-      ringkasan: match[5].trim(),
+    const chapterMatch = line.match(/^\|\s*([^|]+?)\s*\|\s*`([^`]+)`\s*\|\s*([^|]+?)\s*\|\s*(.+?)\s*\|$/);
+    if (!chapterMatch) {
+      continue;
+    }
+
+    const folder = normalizeRelativeDirPath(chapterMatch[2].trim());
+    chapterStatusMap[folder] = {
+      babLabel: chapterMatch[1].trim(),
+      status: chapterMatch[3].trim(),
+      ringkasan: chapterMatch[4].trim(),
     };
   }
 
-  return statusMap;
+  return { itemStatusMap, chapterStatusMap };
 }
 
 function buildChapterSummary(items) {
@@ -274,7 +290,7 @@ function buildMarkdownReport(summaryByChapter, queue, manifest) {
 
 async function main() {
   const { daftarItemGramatika } = await import(pathToFileURL(gramatikaDataPath).href);
-  const checklistStatus = parseChecklistStatuses(checklistPath);
+  const { itemStatusMap: checklistStatus, chapterStatusMap } = parseChecklistStatuses(checklistPath);
 
   const manifestItems = daftarItemGramatika.map((item, index) => {
     const config = babConfig[item.babSlug];
@@ -285,7 +301,10 @@ async function main() {
     const markdownRelativePath = toPosix(path.join('frontend', 'public', 'gramatika', item.dokumen));
     const markdownAbsolutePath = path.join(repoRoot, markdownRelativePath);
     const frontmatter = readFrontmatter(markdownAbsolutePath);
+    const chapterFolderRelativePath = normalizeRelativeDirPath(path.join('frontend', 'public', 'gramatika', item.babSlug));
     const checklist = checklistStatus[markdownRelativePath] || null;
+    const chapterChecklist = chapterStatusMap[chapterFolderRelativePath] || null;
+    const effectiveChecklist = checklist || chapterChecklist;
     const nomorSubbab = parseNomorSubbab(frontmatter.title);
     const babPdfRelativePath = toPosix(path.join('_data', 'gramatika', config.folderSumber, config.namaPdfBab));
 
@@ -303,8 +322,8 @@ async function main() {
       frontmatterTitle: frontmatter.title,
       fileMarkdown: markdownRelativePath,
       fileMarkdownAda: frontmatter.exists,
-      statusAudit: checklist?.status || 'Belum',
-      ringkasanAudit: checklist?.ringkasan || '',
+      statusAudit: effectiveChecklist?.status || 'Belum',
+      ringkasanAudit: effectiveChecklist?.ringkasan || '',
       halamanPdf: checklist?.halamanPdf || null,
       sumber: {
         judulBabPdf: config.judulSumber,

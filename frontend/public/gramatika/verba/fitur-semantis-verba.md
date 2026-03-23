@@ -11,7 +11,7 @@ Verba aktivitas tindakan menggambarkan perbuatan yang dinamis, duratif, dan takt
 
 Berdasarkan fitur semantis waktu yang secara inheren melekat pada verba, verba dapat dibedakan menjadi tiga tipe berikut.
 
-**1) Verba keadaan** berfitur duratif dan statis
+1) Verba keadaan berfitur duratif dan statis
 
 Contoh:
 
@@ -20,9 +20,9 @@ Contoh:
 
 Contoh lain:
 
-> *membenci, duduk, menyukai, mengharapkan, mendambakan, berminat, mendengki, tahu, mengingini, berpikir, berlutut, berdiri, berbaring, bertengger*
+- (3) *membenci, duduk, menyukai, mengharapkan, mendambakan, berminat, mendengki, tahu, mengingini, berpikir, berlutut, berdiri, berbaring, bertengger*
 
-**2) Verba proses** berfitur perubahan berangsur, duratif, dan taktelis
+2) Verba proses berfitur perubahan berangsur, duratif, dan taktelis
 
 Contoh:
 
@@ -31,11 +31,11 @@ Contoh:
 
 Contoh lain:
 
-> *menguning, bertumbuh, merasakan, mendengar, menghidu*
+- (6) *menguning, bertumbuh, merasakan, mendengar, menghidu*
 
-**3) Verba aktivitas** terbagi menjadi:
+3) Verba aktivitas terbagi menjadi:
 
-a. **Verba aktivitas tindakan** berfitur dinamis, duratif, dan taktelis
+a. Verba aktivitas tindakan berfitur dinamis, duratif, dan taktelis
 
 Contoh:
 
@@ -44,32 +44,34 @@ Contoh:
 
 Contoh lain:
 
-> *berenang, berputar, bermain, berbicara, berdebat*
+- (9) *berenang, berputar, bermain, berbicara, berdebat*
 
-b. **Verba aktivitas capaian** berfitur dinamis, pungtual, dan telis
+b. Verba aktivitas capaian berfitur dinamis, pungtual, dan telis
 
 Contoh:
 
 - (10) *Akhirnya perahu kami sampai di pantai.*
+- (11) *Ia memukul meja keras-keras.*
 
 Contoh lain:
 
-> *mencapai, merampas, tiba, meninggal, menyepak, menendang*
+- (12) *mencapai, merampas, tiba, meninggal, menyepak, menendang*
 
-c. **Verba aktivitas rampungan** berfitur dinamis, duratif, dan telis
+c. Verba aktivitas rampungan berfitur dinamis, duratif, dan telis
 
 Contoh:
 
-- (13) *Rapat membahas masalah kenakalan remaja di perkotaan.*
+- (13) *Basir memotong kayu di hutan.*
+- (14) *Rapat membahas masalah kenakalan remaja di perkotaan.*
 
 Contoh lain:
 
-> *menulis (surat), memasak (sayur), melahirkan (anak), bangkit*
+- (15) *menulis (surat), bangkit, memasak (sayur), melahirkan (anak)*
 
 
 Berdasarkan uraian di atas, tipe verba berikut fitur semantisnya dapat digambarkan dalam tabel berikut.
 
-**Tabel 4.1 Tipe Verba dengan Fitur Semantis**
+Tabel 4.1 Tipe Verba dengan Fitur Semantis
 
 | Tipe Verba | Perubahan Berangsur | Perubahan Dinamis | Keduratifan | Ketelisan |
 |---|---|---|---|---|

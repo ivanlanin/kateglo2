@@ -29,4 +29,4 @@ Sementara itu, ada pula verba transitif, seperti *memanggil* dan *menyebut*, yan
 
 Contoh lain verba transitif berobjek dan berpelengkap:
 
-> *membawakan, membelikan, mencarikan, mengambilkan, menugasi, menganugerahi, menyerahi, mengirimi, menyebut, memanggil, menuduh, menjuluki*
+- (27) *membawakan, membelikan, mencarikan, mengambilkan, menugasi, menganugerahi, menyerahi, mengirimi, menyebut, memanggil, menuduh, menjuluki*

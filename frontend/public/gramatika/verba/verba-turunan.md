@@ -68,6 +68,14 @@ Verba *kecurian* secara sepintas dapat dipisahkan menjadi *ke-* dan *curian* kar
 - *berdatangan*: *ber-* + *datang* + *-an* (konfiks, serentak)
 - *berhalangan*: *ber-* + *halangan* (*ber-* dan *-an* = afiks gabung, bukan konfiks)
 
+Sebagaimana telah disebutkan terdahulu, ada prefiks derivasional yang diperlukan untuk menurunkan verba. Bentuk dasar bebas seperti *darat* dan *layar* masing-masing perlu mendapat prefiks *meng-* dan *ber-* untuk mengubah kelas kata nomina menjadi verba. Demikian pula adjektiva seperti *kuning* harus dibubuhi prefiks *meng-* untuk menjadi verba. Ketiga contoh tersebut memperlihatkan prefiks *meng-* dan *ber-* yang derivasional yang berfungsi sebagai pembentuk verba.
+
+(78)
+
+- *darat* (nomina) → *mendarat* (verba)
+- *layar* (nomina) → *berlayar* (verba)
+- *kuning* (adjektiva) → *menguning* (verba)
+
 Urutan penurunan verba mengikuti kaidah berikut:
 
 **a)** Jika prefiks tertentu diperlukan untuk mengubah kata dari kelas tertentu menjadi verba, prefiks itu didahulukan dalam urutan pengafiksan verba.
@@ -99,7 +107,7 @@ Pengulangan bentuk verba pada tataran sintaksis, antara lain bertalian dengan ma
 
 Contoh:
 
-> *melempar-lempar, memanas-manasi, berbondong-bondong, menjadi-jadi*
+- (83) *melempar-lempar, memanas-manasi, berbondong-bondong, menjadi-jadi*
 
 ## Pemajemukan (4.1.3.2.4)
 

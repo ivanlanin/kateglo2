@@ -7,7 +7,7 @@ Bentuk verba taktransitif ada yang berupa kata monomorfemis (kata dasar) dan ada
 
 Contoh verba dasar taktransitif:
 
-> *ada, awas, bangun, datang, duduk, hidup, hilang, ingat, jadi, jatuh, kalah, lupa, makan, maklum, mandi, mati, minum, paham, peduli, percaya, pergi, pulang, punya, sampai, terbit, tiba, tidur, timbul, tunduk, turun*
+- (217) *ada, awas, bangun, datang, duduk, hidup, hilang, ingat, jadi, jatuh, kalah, lupa, makan, maklum, mandi, mati, minum, paham, peduli, percaya, pergi, pulang, punya, sampai, terbit, tiba, tidur, timbul, tunduk, turun*
 
 Verba taktransitif yang polimorfemis mencakupi golongan verba yang berafiks, verba dengan pengulangan utuh atau sebagian, dan verba majemuk.
 

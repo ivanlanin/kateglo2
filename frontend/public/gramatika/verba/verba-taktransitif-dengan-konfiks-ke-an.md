@@ -34,7 +34,7 @@ Semua bentuk pasif dengan prefiks *di-* dapat diikuti kata *oleh*. Sebagian verb
 
 Di samping ketiga kelompok verba tersebut, ada dua verba berkonfiks *ke-...-an* yang tidak mengandung makna adversatif. Makna kelompok kecil itu adalah 'dapat di-...':
 
-> *kelihatan* 'dapat dilihat' / 'terlihat'; *kedengaran* 'dapat didengar' / 'terdengar'
+(276) *kelihatan* 'dapat dilihat' / 'terlihat'; *kedengaran* 'dapat didengar' / 'terdengar'
 
 - (277) *Mobil Adi dicuri.*
 - (278) *Adi kecurian mobil.*

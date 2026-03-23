@@ -23,6 +23,8 @@ Pemilihan preposisi pada kelompok verba seperti itu bersifat idiomatis. Artinya,
 
 Contoh lain:
 
+(47)
+
 | Verba | Preposisi | Verba | Preposisi |
 |---|---|---|---|
 | *berangkat* | *ke/dari* | *menyesal* | *atas* |

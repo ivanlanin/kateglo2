@@ -10,4 +10,4 @@ Verba semitransitif adalah verba yang diikuti atau tidak diikuti objek karena se
 
 Contoh lain verba semitransitif:
 
-> *membaca, minum, menulis, menonton, menyimak, melahirkan*
+- (30) *membaca, minum, menulis, menonton, menyimak, melahirkan*

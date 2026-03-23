@@ -7,6 +7,10 @@ Penambahan prefiks *per-* pada pangkal tertentu akan mengubah prefiks itu menjad
 
 **1)** Prefiks *per-* berubah menjadi *pe-* apabila ditambahkan pada pangkal yang dimulai dengan fonem /r/ atau pangkal yang suku pertamanya mengandung /ar/ (pepet).
 
+Contoh:
+
+(88)
+
 | Prefiks | + | Pangkal | → | Hasil |
 |---|---|---|---|---|
 | *per-* | + | *rendah* | → | *perendah* |
@@ -17,6 +21,12 @@ Penambahan prefiks *per-* pada pangkal tertentu akan mengubah prefiks itu menjad
 
 **2)** Prefiks *per-* berubah menjadi *pel-* apabila ditambahkan pada pangkal *ajar*:
 
-> *per-* + *ajar* → *pelajar*
+Contoh:
 
-Prefiks *per-* tidak mengalami perubahan bentuk apabila bergabung dengan pangkal lain: *per-* + *lebar* → *perlebar*; *per-* + *panjang* → *perpanjang*; *per-* + *luas* → *perluas*.
+(89) *per-* + *ajar* → *pelajar*
+
+Prefiks *per-* tidak mengalami perubahan bentuk apabila bergabung dengan pangkal lain.
+
+Contoh:
+
+(90) *per-* + *lebar* → *perlebar*; *per-* + *panjang* → *perpanjang*; *per-* + *luas* → *perluas*.

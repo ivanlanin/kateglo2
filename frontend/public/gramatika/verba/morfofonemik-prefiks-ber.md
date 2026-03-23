@@ -9,6 +9,8 @@ Penambahan prefiks *ber-* pada pangkal tertentu akan mengubah prefiks itu menjad
 
 Contoh:
 
+(84)
+
 | Prefiks | + | Pangkal | → | Hasil |
 |---|---|---|---|---|
 | *ber-* | + | *ranting* | → | *beranting* |
@@ -21,6 +23,8 @@ Contoh:
 
 Untuk membedakan dua bentuk yang mengelirukan, dapat digunakan tanda hubung antara prefiks *ber-* dan pangkalnya:
 
+(85)
+
 | Pangkal | Bentuk tanpa tanda hubung | Bentuk dengan tanda hubung |
 |---|---|---|
 | *evolusi* | *berevolusi* (be- + revolusi) | *ber-evolusi* |
@@ -32,6 +36,8 @@ Untuk membedakan dua bentuk yang mengelirukan, dapat digunakan tanda hubung anta
 
 **2)** Prefiks *ber-* berubah menjadi *bel-* jika ditambahkan pada dasar tertentu:
 
+(86)
+
 | Prefiks | + | Pangkal | → | Hasil |
 |---|---|---|---|---|
 | *ber-* | + | *ajar* | → | *belajar* |
@@ -39,4 +45,8 @@ Untuk membedakan dua bentuk yang mengelirukan, dapat digunakan tanda hubung anta
 | *ber-* | + | *leter* | → | *beleter* |
 | *ber-* | + | *lagu* | → | *belagu* |
 
-Prefiks *ber-* tidak berubah bentuknya apabila digabungkan dengan pangkal di luar kaidah 1 dan 2 di atas: *ber-* + *layar* → *berlayar*; *ber-* + *main* → *bermain*; *ber-* + *peran* → *berperan*.
+Prefiks *ber-* tidak berubah bentuknya apabila digabungkan dengan pangkal di luar kaidah 1 dan 2 di atas.
+
+Contoh:
+
+(87) *ber-* + *layar* → *berlayar*; *ber-* + *main* → *bermain*; *ber-* + *peran* → *berperan*.

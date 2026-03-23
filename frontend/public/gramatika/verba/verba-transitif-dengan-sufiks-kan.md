@@ -89,16 +89,16 @@ Ada pula pasangan verba transitif yang harus dikaji maknanya masing-masing: *men
 Berikut ada golongan verba transitif yang sudah berprefiks *ber-* atau *per-* yang kemudian menjadi pangkal sekunder untuk penambahan sufiks *-kan*:
 
 1) Verba transitif dengan pangkal verba:
-   > *pertemukan* 'menjadikan bertemu'; *pertarungkan* 'menjadikan bertarung'; *pertanggungjawabkan* 'menjadikan bertanggung jawab'; *pertahankan* 'menjadikan bertahan'; *perhentikan* 'menjadikan berhenti'; *perbandingkan* 'menjadikan berbanding'; *percakapkan* 'menjadikan pokok bercakap'; *perkenankan* 'menjadikan berkenan'; *pergunakan* 'menjadikan berguna'
+   (192) *pertemukan* 'menjadikan bertemu'; *pertarungkan* 'menjadikan bertarung'; *pertanggungjawabkan* 'menjadikan bertanggung jawab'; *pertahankan* 'menjadikan bertahan'; *perhentikan* 'menjadikan berhenti'; *perbandingkan* 'menjadikan berbanding'; *percakapkan* 'menjadikan pokok bercakap'; *perkenankan* 'menjadikan berkenan'; *pergunakan* 'menjadikan berguna'
 
 2) Verba transitif dengan pangkal nomina berfitur 'relasi':
-   > *peristrikan* 'menjadikan beristri'; *persuamikan* 'menjadikan bersuami'; *permasalahkan* 'menjadikan bermasalah'; *permadukan* 'menjadikan bermadu'
+   (193) *peristrikan* 'menjadikan beristri'; *persuamikan* 'menjadikan bersuami'; *permasalahkan* 'menjadikan bermasalah'; *permadukan* 'menjadikan bermadu'
 
 3) Verba dengan pangkal nomina berfitur 'pendapat':
-   > *perdebatkan* 'berdebat tentang'; *persengketakan* 'bersengketa tentang'; *perbalahkan* 'berbalah tentang'
+   (194) *perdebatkan* 'berdebat tentang'; *persengketakan* 'bersengketa tentang'; *perbalahkan* 'berbalah tentang'
 
 4) Verba dengan dasar numeralia:
-   > *persatukan* 'menjadikan bersatu'
+   (195) *persatukan* 'menjadikan bersatu'
 
 5) Verba bersufiks *-kan* dengan pangkal frasa preposisional (*ke* + nomina lokatif) mengungkapkan makna 'subjek membawa objek ke tempat yang dinyatakan oleh verba':
 

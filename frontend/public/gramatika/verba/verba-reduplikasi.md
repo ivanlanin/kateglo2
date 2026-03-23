@@ -7,6 +7,8 @@ Verba yang dihasilkan dengan pengulangan atau reduplikasi bertolak dari verba da
 
 Contoh:
 
+(295)
+
 | Pangkal | → | Bentuk Reduplikasi |
 |---|---|---|
 | *makan* | → | *makan-makan* |
@@ -19,6 +21,8 @@ Contoh:
 Reduplikasi pada contoh tersebut berlangsung ke arah kanan, sesuai dengan urutan ujaran. Jenis reduplikasi itu dapat disebut **reduplikasi progresif**. Reduplikasi dapat juga dilakukan ke arah yang berlawanan, yakni ke kiri. Jenis reduplikasi tersebut dinamakan **reduplikasi regresif**.
 
 Contoh:
+
+(296)
 
 - *pukul-memukul* ← *memukul*
 - *cinta-mencintai* ← *mencintai*
@@ -33,11 +37,15 @@ Pada reduplikasi utuh yang leksikal atau morfemis, verba yang diulang merupakan 
 
 Reduplikasi leksikal juga terjadi pada kelompok tiruan bunyi yang sangat terbatas (dengan variasi fonem):
 
+(298)
+
 > *cas-cis-cus, ngak-ngik-ngok, dag-dig-dug, dar-der-dor, tak-tik-tuk*
 
 Contoh tersebut memperlihatkan pola reduplikasi progresif dan regresif sekaligus yang dapat dianggap dasarnya *cis*, *ngik*, *dug*, *dor*, dan *tik*.
 
 Reduplikasi leksikal lain ialah kelompok bentuk ulang yang menyatakan 'perihal yang dinyatakan verba itu' atau 'segala hal yang berkenaan dengan aktivitas yang dinyatakan verba':
+
+(299)
 
 > *tarik-menarik* ← *menarik*; *sahut-menyahut* ← *menyahut*; *tolak-menolak* ← *menolak*; *sikut-menyikut* ← *menyikut*; *tembak-menembak* ← *menembak*
 
@@ -46,33 +54,49 @@ Reduplikasi sintaksis diterapkan untuk memarkahi berbagai kategori semantik atau
 
 **1) Kejamakan**
 
+(300)
+
 > *cerai-berai, bolak-balik, pontang-panting, obrak-abrik, mondar-mandir, desas-desus*
 
 **2) Keserempakan**
+
+(301)
 
 > *berlari-larian, beramai-ramai, berduyun-duyun, berbondong-bondong, berdesak-desakan*
 
 **3) Kesalingan (keresiprokalan)**
 
+(302)
+
 > *pukul-memukul, sahut-menyahut, tolong-menolong, cinta-mencintai, maaf-memaafkan, pinjam-meminjam, tawar-menawar, tukar-menukar, bersahut-sahutan, berpukul-pukulan, berpeluk-pelukan, berpandang-pandangan, berkirim-kiriman*
 
 **4) Perulangan (keiteratifan)**
+
+(303)
 
 > *mengingat-ingat, memukul-mukul, mengecek-ngecek, mengetes-ngetes, berteriak-teriak, berganti-ganti, disimpan-simpan*
 
 **5) Keberlanjutan (keduratifan)**
 
+(304)
+
 > *berjam-jam, bertahun-tahun, berhari-hari, berlarut-larut, berturut-turut*
 
 **6) Peningkatan atau pengurangan intensitas**
+
+(305)
 
 > *membongkar-bongkar, diangkat-angkat, tergila-gila, terheran-heran, awas-awas, ingat-ingat, menjadi-jadi*
 
 **7) Kesantaian**
 
+(306)
+
 > *tidur-tiduran, duduk-duduk, makan-makan, melihat-lihat*
 
 **8) Ketakterdugaan**
+
+(307)
 
 > *mengira-ngira, tahu-tahu mati, tidak datang-datang, tidak muncul-muncul*
 

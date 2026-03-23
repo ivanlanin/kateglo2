@@ -7,16 +7,24 @@ Sufiks *-an* pada *ke-...-an* dan *ber-...-an* (termasuk pada konfiks *per-...-a
 
 **1)** Jika pangkal berakhir dengan fonem /a/ atau /ā/, di antara fonem akhir pangkal dan sufiks *-an* muncul bunyi hamzah:
 
-> *sapa* → *bersapaan* [bərsapa?an]
+Contoh:
+
+(109) *sapa* → *bersapaan* [bərsapa?an]
 
 **2)** Jika pangkal berakhir dengan fonem /e/ atau /i/, di antara fonem akhir pangkal dan sufiks *-an* muncul bunyi [y]:
 
-> *sakti* → *kesaktian* [kəsaktiyan]
+Contoh:
+
+(110) *sakti* → *kesaktian* [kəsaktiyan]
 
 **3)** Jika pangkal berakhir dengan fonem /o/ atau /u/, di antara fonem akhir pangkal dan sufiks *-an* muncul bunyi [w]:
 
-> *adu* → *pengaduan* [pəŋaduwân]
+Contoh:
+
+(111) *adu* → *pengaduan* [pəŋaduwân]
 
 **4)** Jika fonem akhir berupa konsonan, pelafalan konsonan atau gugusan konsonan dan sufiks *-an* membentuk satu silabel atau suku kata:
 
-> *makan* → *makanan* [ma-ka-nan]; *kompleks* → *kekompleksan* [kə-kom-plek-san]
+Contoh:
+
+(112) *makan* → *makanan* [ma-ka-nan]; *kompleks* → *kekompleksan* [kə-kom-plek-san]

@@ -18,7 +18,7 @@ Contoh:
 
 Selain verba *tinggal*, *tiba*, *tidur*, dan *lihat* dalam contoh (66)—(69), berikut adalah contoh lain bentuk verba dasar bebas:
 
-> *ada, bangkit, bangun, datang, diam, duduk, gagal, gugur, habis, hadir, hilang, hinggap, ikut, jadi, jatuh, karam, keluar, kembali, lahir, lalu, lari, lenyap, lewat, lulus, lunas, luput, makan, mandi, mangkir, masuk, mati, minta, minum, mohon, mulai, muncul, naik, pecah, pergi, pingsan, pindah, pulang, punya, putus, rebah, roboh, sampai, selesai, singgah, tampil, tanggal, tenggelam, terbang, terjun, timbul, tumbang, turut, usai*
+- (70) *ada, bangkit, bangun, datang, diam, duduk, gagal, gugur, habis, hadir, hilang, hinggap, ikut, jadi, jatuh, karam, keluar, kembali, lahir, lalu, lari, lenyap, lewat, lulus, lunas, luput, makan, mandi, mangkir, masuk, mati, minta, minum, mohon, mulai, muncul, naik, pecah, pergi, pingsan, pindah, pulang, punya, putus, rebah, roboh, sampai, selesai, singgah, tampil, tanggal, tenggelam, terbang, terjun, timbul, tumbang, turut, usai*
 
 ## Verba Dasar Terikat (4.1.3.1.2)
 

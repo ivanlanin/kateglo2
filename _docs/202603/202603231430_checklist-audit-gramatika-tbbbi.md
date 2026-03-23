@@ -36,7 +36,7 @@ Untuk setiap item markdown di `frontend/public/gramatika/` lakukan pemeriksaan b
 | Bab I Pendahuluan | `frontend/public/gramatika/pendahuluan/` | OK | Audit ulang 2026-03-23: ditemukan dan diperbaiki 26 ketidaksesuaian terhadap PDF di 7 file — em-dash/koma, tanda kurung, kata terlewat, label editorial, dan perubahan kalimat pembuka 1.2.2. |
 | II Tata Bahasa | `frontend/public/gramatika/tata-bahasa/` | OK | Audit 2026-03-24: ditemukan dan diperbaiki 4 ketidaksesuaian terhadap PDF di 3 file — label contoh (1)/(6)/(7) yang hilang, dan satu kesalahan parafrase pertanyaan literal. |
 | III Bunyi Bahasa | `frontend/public/gramatika/bunyi-bahasa/` | OK | Audit 2026-03-23: ditemukan dan diperbaiki 13 ketidaksesuaian terhadap PDF di 8 file — em-dash parenthetical (5 instances di 5 file), notasi fonem rusak /t> (1), hyphen deskripsi posisi vokal (5 instances), dan kalimat peringatan pelafalan yang hilang (3 instances di seksi /f/, /ʃ/, /x/). |
-| IV Verba | `frontend/public/gramatika/verba/` | Belum | — |
+| IV Verba | `frontend/public/gramatika/verba/` | OK | Audit 2026-03-23: ditemukan dan diperbaiki ketidaksesuaian terhadap PDF di 25 file — terutama nomor contoh/daftar yang hilang, 4 contoh yang terlewat pada 4.1.1, dan satu blok derivasi (78) yang terpotong pada 4.1.3.2. |
 | V Adjektiva | `frontend/public/gramatika/adjektiva/` | Belum | — |
 | VI Adverbia | `frontend/public/gramatika/adverbia/` | Belum | — |
 | VII Nomina | `frontend/public/gramatika/nomina/` | Belum | — |
@@ -123,6 +123,22 @@ Sumber audit:
 | 3.5.2 Intonasi dan Ritme | `frontend/public/gramatika/bunyi-bahasa/intonasi-dan-ritme.md` | 111-118 | OK | Bersih. |
 
 Catatan: pola temuan terbanyak adalah em-dash parenthetical yang diganti koma saat konversi PDF ke markdown (5 dari 8 file lintasan perbaikan). Pola ini konsisten dengan temuan Bab I.
+
+### Bab IV Verba
+
+Sumber audit:
+
+- PDF bab: `_data/gramatika/bab-04/bab-04-verba.pdf`
+- JPG verifikasi: `_data/gramatika/bab-04/bab-04-h119.jpg` s.d. `_data/gramatika/bab-04/bab-04-h216.jpg`
+
+Ringkasan hasil:
+
+- Halaman landing `verba.md`, `verba-transitif.md`, `verba-taktransitif.md`, `verba-majemuk.md`, dan `frasa-verbal.md` tetap sinkron dengan struktur item di `gramatikaData.js`; yang perlu dikoreksi terutama ada pada file subbab.
+- Temuan terbesar adalah nomor contoh, nomor daftar, dan label tabel/bagan yang hilang saat konversi PDF ke markdown; pola ini diperbaiki di 25 file agar referensi silang kembali sama dengan sumber.
+- Pada `fitur-semantis-verba.md` dipulihkan contoh (11), (12), (14), dan (15), serta contoh (3), (6), dan (9) yang sebelumnya hanya tampil sebagai daftar tanpa nomor.
+- Pada `verba-turunan.md` dipulihkan satu blok derivasi yang terpotong, yakni contoh (78) untuk *darat/layar/kuning*, dan contoh (83) untuk pengulangan.
+- Pada subbagian morfofonemik, verba transitif, verba taktransitif, dan reduplikasi, audit menormalkan kembali penomoran contoh sesuai PDF tanpa menambah struktur editorial baru di luar kebutuhan teknis markdown.
+- Verifikasi akhir menunjukkan sisa mismatch numerasi yang terdeteksi otomatis terutama berasal dari tumpang-tindih rentang halaman antar-subbagian, bukan dari contoh yang benar-benar hilang di file target.
 
 ## Catatan Kerja
 
