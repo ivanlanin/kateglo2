@@ -261,7 +261,7 @@ const daftarIsiGramatika = [
             judul: 'Penentu',
             slug: 'penentu',
             turunan: [
-              { judul: 'Penentu Numeralia', slug: 'penentu-numeralia' },
+              { judul: 'Numeralia Tentu dan Taktentu', slug: 'numeralia-tentu-dan-taktentu' },
               { judul: 'Penunjuk atau Demonstrativa', slug: 'penunjuk-atau-demonstrativa' },
               { judul: 'Penanda Ketakrifan', slug: 'penanda-ketakrifan' },
               { judul: 'Pronomina dan Nomina Pemilik', slug: 'pronomina-dan-nomina-pemilik' },

@@ -198,7 +198,7 @@ Hasil verifikasi:
 - subfolder `frontend/public/gramatika/nomina/` sekarang tidak memiliki heading internal `##`, `###`, dan seterusnya
 - halaman bab `nomina.md` sudah disinkronkan ulang dari `gramatikaData.js` melalui `sync-gramatika-toc.mjs` dengan struktur daftar isi rekursif penuh
 - semua halaman induk konten Nomina yang sebelumnya mengandung heading internal kini dirapikan agar hanya menampilkan anak langsung
-- bentrok slug `numeralia` di bawah `penentu.md` diselesaikan dengan slug aman `penentu-numeralia`
+- bentrok slug `numeralia` di bawah `penentu.md` diselesaikan dengan slug aman `numeralia-tentu-dan-taktentu`
 - struktur Bab IV di `frontend/src/constants/gramatikaData.js` sudah diperluas untuk seluruh turunan baru agar breadcrumb dan sidebar mengikuti hierarki baru
 - validasi frontend lulus melalui `npm run lint` dan `vitest` untuk area terkait
 
@@ -215,7 +215,7 @@ File baru yang ditambahkan pada Bab IV:
 - `frontend/public/gramatika/nomina/perulangan-sinonim.md`
 - `frontend/public/gramatika/nomina/nomina-majemuk-berdasarkan-bentuk-morfologisnya.md`
 - `frontend/public/gramatika/nomina/nomina-majemuk-berdasarkan-hubungan-komponennya.md`
-- `frontend/public/gramatika/nomina/penentu-numeralia.md`
+- `frontend/public/gramatika/nomina/numeralia-tentu-dan-taktentu.md`
 - `frontend/public/gramatika/nomina/penunjuk-atau-demonstrativa.md`
 - `frontend/public/gramatika/nomina/penanda-ketakrifan.md`
 - `frontend/public/gramatika/nomina/pronomina-dan-nomina-pemilik.md`
@@ -285,7 +285,7 @@ Hanya ada satu bentrok langsung terhadap slug global yang sudah ada di `gramatik
 Rekomendasi untuk kasus ini:
 
 - jangan gunakan `numeralia.md` sebagai file pecahan baru
-- pilih slug berinduk, misalnya `penentu-numeralia.md` atau `numeralia-sebagai-penentu.md`
+- pilih slug berinduk atau judul semantis yang lebih spesifik, misalnya `numeralia-tentu-dan-taktentu.md` atau `numeralia-sebagai-penentu.md`
 
 ## Risiko Penamaan yang Perlu Diantisipasi
 
@@ -354,7 +354,7 @@ Gunakan hirarki berikut saat memecah halaman menjadi file baru.
 
 Contoh:
 
-- `Numeralia` di bawah `penentu.md` -> `penentu-numeralia`
+- `Numeralia` di bawah `penentu.md` -> `numeralia-tentu-dan-taktentu`
 - `Pelaku` di bawah `peran.md` -> `kalimat-pelaku` atau `peran-pelaku`
 - `Pengacuan` di bawah `pengacuan-dan-deiksis.md` -> `tata-bahasa-pengacuan` atau `pengacuan-bagian`
 - `Konsonan /ʃ/` di bawah `konsonan-dan-alofon-konsonan.md` -> `konsonan-sy`

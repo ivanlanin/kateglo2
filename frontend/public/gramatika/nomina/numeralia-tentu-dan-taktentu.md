@@ -1,6 +1,6 @@
 ---
 id: 7.1.5.1.1
-title: Penentu Numeralia (7.1.5.1.1)
+title: Numeralia Tentu dan Taktentu (7.1.5.1.1)
 ---
 
 Numeralia lazim dibedakan atas numeralia tentu dan taktentu. Numeralia tentu meliputi numeralia pokok (kardinal), numeralia tingkat (ordinal), dan pecahan (lihat seksi 7.3). Baik numeralia tentu maupun taktentu dapat berfungsi sebagai penentu pada frasa nominal. Numeralia pokok, seperti *dua*, *lima*, dan *ketiga* (kolektif) dan pecahan, seperti *sepertiga* yang menyatakan jumlah mendahului nomina inti, sedangkan numeralia pokok yang menyatakan posisi dalam suatu seri mengikuti nomina inti. Numeralia tingkat, seperti *kesepuluh* mengikuti nomina inti.

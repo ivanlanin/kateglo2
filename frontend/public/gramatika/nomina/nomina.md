@@ -34,7 +34,7 @@
          2. [Nomina Majemuk Berdasarkan Hubungan Komponennya](/gramatika/nomina-majemuk-berdasarkan-hubungan-komponennya)
 5. [Frasa Nominal](/gramatika/frasa-nominal)
    1. [Penentu](/gramatika/penentu)
-      1. [Penentu Numeralia](/gramatika/penentu-numeralia)
+      1. [Numeralia Tentu dan Taktentu](/gramatika/numeralia-tentu-dan-taktentu)
       2. [Penunjuk atau Demonstrativa](/gramatika/penunjuk-atau-demonstrativa)
       3. [Penanda Ketakrifan](/gramatika/penanda-ketakrifan)
       4. [Pronomina dan Nomina Pemilik](/gramatika/pronomina-dan-nomina-pemilik)
