@@ -39,24 +39,33 @@ b) Penggolong khas:
 
 Kehadiran penggolong pada frasa nominal yang mengikuti numeralia tidak wajib, kecuali numeralia itu berupa *se-*. Dalam hal demikian, penggolong wajib hadir, seperti tampak pada contoh berikut.
 
-- (118a) *Pak Lurah baru membeli sebidang sawah.*
-- (118b) *Dia telah menerima sepucuk surat.*
-- (118c) *Beliau sedang berbicara dengan seorang tamu.*
-- (118d) *Kita memerlukan sebuah meja.*
+(118)
+- a. Pak Lurah baru membeli sebidang sawah.
+- b. Dia telah menerima sepucuk surat.
+- c. Beliau sedang berbicara dengan seorang tamu.
+- d. Kita memerlukan sebuah meja.
 
 Jika numeralia bukan *se-*, penggolong tidak wajib:
 
-- (119a) *Pak Maman mempunyai dua orang anak.*
-- (119b) *Pak Maman mempunyai dua anak.*
+(119)
+- a. Pak Maman mempunyai dua orang anak.
+- b. Pak Maman mempunyai dua anak.
 
-- (120a) *Dia baru menjual tiga ekor sapi.*
-- (120b) *Dia baru menjual tiga sapi.*
-- (121a) *Saya belum membaca satu buah buku pun.*
-- (121b) *Saya belum membaca satu buku pun.*
-- (122a) *Ibu membelikan saya dua helai baju.*
-- (122b) *Ibu membelikan saya dua baju.*
-- (123a) *Pak Karta membawa beberapa batang bambu.*
-- (123b) *Pak Karta membawa beberapa bambu.*
+(120)
+- a. Dia baru menjual tiga ekor sapi.
+- b. Dia baru menjual tiga sapi.
+
+(121)
+- a. Saya belum membaca satu buah buku pun.
+- b. Saya belum membaca satu buku pun.
+
+(122)
+- a. Ibu membelikan saya dua helai baju.
+- b. Ibu membelikan saya dua baju.
+
+(123)
+- a. Pak Karta membawa beberapa batang bambu.
+- b. Pak Karta membawa beberapa bambu.
 
 Dalam bahasa Indonesia masa kini timbul dua kecenderungan. Pertama, orang meniadakan numeralia *se-* bersama penggolong yang mengikutinya jika dari konteksnya jelas bahwa hal yang dimaksud adalah tunggal. Kedua, ada kecenderungan untuk menyederhanakan penggunaan penggolong yang banyak itu dengan memadatkan menjadi tiga, yakni *orang* untuk nomina yang bermakna manusia, *ekor* untuk binatang, dan *buah* untuk yang bukan manusia dan bukan binatang.
 
@@ -74,14 +83,20 @@ Di samping penggolong nomina, bahasa Indonesia juga menggunakan sejumlah kata, s
 
 Berbeda dengan penggolong, partitif pada frasa nominal yang penentunya berupa numeralia umumnya wajib hadir. Jika partitifnya tidak hadir, maknanya cenderung berbeda atau kalimatnya tidak berterima.
 
-- (124a) *Saya membeli dua bungkus nasi.* ✓
-- (124b) *Saya membeli dua nasi.* ✗
+(124)
+- a. Saya membeli dua bungkus nasi.
+- b. *Saya membeli dua nasi.
 
-- (125a) *Sarapannya dua iris roti.*
-- (125b) *\*Sarapannya dua roti.*
-- (126a) *Dia perlu minum delapan gelas air.*
-- (126b) *\*Dia perlu minum delapan air.*
-- (127a) *Kita perlu membeli beberapa liter bensin.*
-- (127b) *\*Kita perlu membeli beberapa bensin.*
+(125)
+- a. Sarapannya dua iris roti.
+- b. *Sarapannya dua roti.
+
+(126)
+- a. Dia perlu minum delapan gelas air.
+- b. *Dia perlu minum delapan air.
+
+(127)
+- a. Kita perlu membeli beberapa liter bensin.
+- b. *Kita perlu membeli beberapa bensin.
 
 Berkaitan dengan penggunaan penggolong dan partitif itu perlu ditambahkan dua hal. Pertama, jika penentu berupa numeralia taktentu, hanya *beberapa* dan *tiap* yang dapat diikuti oleh penggolong atau partitif. Kedua, partitif *belah* hanya dapat mengikuti numeralia klitik *se-*, seperti pada *sebelah mata*, *sebelah tangan*, dan *sebelah kaki* atau numeralia kolektif *kedua*, seperti pada *kedua belah mata*, *kedua belah tangan*, dan *kedua belah pipi*.

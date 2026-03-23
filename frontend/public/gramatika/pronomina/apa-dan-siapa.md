@@ -22,19 +22,25 @@ Jika kata *apa* dipindahkan ke posisi awal kalimat, seluruh struktur kalimat men
 
 Jika partikel *-kah* ditambahkan pada *apa* di konstruksi awal kalimat, bentuk itu tidak dapat dipertahankan ketika susunannya dibalik.
 
-- (233a) *Apa(kah) yang dibeli Yusyanti?*
-- (233b) *Yang dibeli Yusyanti apa?*
-- (233c) \**Yang dibeli Yusyanti apakah?*
-- (234a) *Apa(kah) yang dipelihara Pak Tampu?*
-- (234b) *Yang dipelihara Pak Tampu apa?*
-- (234c) \**Yang dipelihara Pak Tampu apakah?*
+(233)
+- a. Apa(kah) yang dibeli Yusyanti?
+- b. Yang dibeli Yusyanti apa?
+- c. *Yang dibeli Yusyanti apakah?
+
+(234)
+- a. Apa(kah) yang dipelihara Pak Tampu?
+- b. Yang dipelihara Pak Tampu apa?
+- c. *Yang dipelihara Pak Tampu apakah?
 
 Pemakaian kata *yang* sesudah kata *apa* menyebabkan perubahan urutan subjek dan predikat dalam kalimat.
 
-- (235a) *Udang dapat menyebabkan sakit perut.*
-- (235b) *Apa yang dapat menyebabkan sakit perut?*
-- (236a) *Hasil ujian kemarin mengecewakan mahasiswa.*
-- (236b) *Apa yang mengecewakan mahasiswa?*
+(235)
+- a. Udang dapat menyebabkan sakit perut.
+- b. Apa yang dapat menyebabkan sakit perut?
+
+(236)
+- a. Hasil ujian kemarin mengecewakan mahasiswa.
+- b. Apa yang mengecewakan mahasiswa?
 
 Kata *apa* dan *siapa* berlainan dalam dua hal: (1) *apa* mengacu pada benda, hal, atau binatang, sedangkan *siapa* mengacu pada manusia saja; dan (2) *apa* dapat berfungsi semata-mata sebagai pemarkah kalimat tanya, sedangkan *siapa* harus menggantikan nomina dalam kalimat. Dalam perilaku sintaktisnya, *siapa* mengikuti pola yang diikuti oleh *apa*.
 
@@ -55,12 +61,15 @@ Kata *apa* dan *siapa* berlainan dalam dua hal: (1) *apa* mengacu pada benda, ha
 
 4) Dalam kalimat yang subjeknya dimulai dengan *yang*, dengan urutan S-P, partikel *-kah* tidak dapat dipakai di belakang predikat.
 
-- (243a) *Siapakah yang menangis?*
-- (243b) *Yang menangis siapa?*
-- (243c) \**Yang menangis siapakah?*
-- (244a) *Siapakah yang menulis laporan ini?*
-- (244b) *Yang menulis laporan ini siapa?*
-- (244c) \**Yang menulis laporan ini siapakah?*
+(243)
+- a. Siapakah yang menangis?
+- b. Yang menangis siapa?
+- c. *Yang menangis siapakah?
+
+(244)
+- a. Siapakah yang menulis laporan ini?
+- b. Yang menulis laporan ini siapa?
+- c. *Yang menulis laporan ini siapakah?
 
 Kata *apa* dan *siapa* berlainan dalam dua hal: (1) *apa* mengacu pada benda, hal, atau binatang, sedangkan *siapa* mengacu pada manusia saja; dan (2) *apa* dapat berfungsi semata-mata sebagai pemarkah kalimat tanya, sedangkan *siapa* harus menggantikan nomina dalam kalimat.
 

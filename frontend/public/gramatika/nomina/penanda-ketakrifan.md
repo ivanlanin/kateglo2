@@ -7,11 +7,12 @@ Dalam bahasa Indonesia terdapat lima bentuk penanda ketakrifan, yakni *ini*, *it
 
 Contoh:
 
-- (116a) *Ada seorang saudagar. Saudagar ini/itu sangat kaya.*
-- (116b) *Besok akan ada rapat. Dalam rapat tersebut akan dibahas masalah anggaran.*
-- (116c) *Pidato kemenangan tadi sangat memukau para pendengar.*
-- (116d) *Dua hari lalu saya mengirim surat kepada Anda. Mudah-mudahan suratnya sudah sampai.*
-- (116e) *Saya ingin mandi, tetapi airnya habis.*
+(116)
+- a. Ada seorang saudagar. Saudagar ini/itu sangat kaya.
+- b. Besok akan ada rapat. Dalam rapat tersebut akan dibahas masalah anggaran.
+- c. Pidato kemenangan tadi sangat memukau para pendengar.
+- d. Dua hari lalu saya mengirim surat kepada Anda. Mudah-mudahan suratnya sudah sampai.
+- e. Saya ingin mandi, tetapi airnya habis.
 
 Penanda ketakrifan *ini* dan *itu* pada dasarnya bersifat deiktik, yaitu berkaitan dengan jarak pembicara dengan nomina yang diacu, tetapi dalam teks atau cerita kedua kata itu sering dipertukarkan seperti tampak pada (116a).
 

@@ -11,12 +11,17 @@ Pronomina *mana* pada umumnya digunakan untuk menanyakan suatu pilihan tentang o
 
 Jika digabung dengan preposisi *di*, *ke*, dan *dari*, kata *di mana* menanyakan tempat berada, *ke mana* tempat yang dituju, dan *dari mana* tempat asal:
 
-- (248a) *Sekarang Pak Wisnu tinggal di Jatinegara.*
-- (248b) *Sekarang Pak Wisnu tinggal di mana?*
-- (248c) *Di mana sekarang Pak Wisnu tinggal?*
-- (249a) *Besok mereka akan pergi ke Puncak.*
-- (249b) *Besok mereka akan pergi ke mana?*
-- (249c) *Ke mana besok mereka akan pergi?*
-- (250a) *Pak Sakerah berasal dari Surabaya.*
-- (250b) *Pak Sakerah berasal dari mana?*
-- (250c) *Dari mana Pak Sakerah berasal?*
+(248)
+- a. Sekarang Pak Wisnu tinggal di Jatinegara.
+- b. Sekarang Pak Wisnu tinggal di mana?
+- c. Di mana sekarang Pak Wisnu tinggal?
+
+(249)
+- a. Besok mereka akan pergi ke Puncak.
+- b. Besok mereka akan pergi ke mana?
+- c. Ke mana besok mereka akan pergi?
+
+(250)
+- a. Pak Sakerah berasal dari Surabaya.
+- b. Pak Sakerah berasal dari mana?
+- c. Dari mana Pak Sakerah berasal?

@@ -7,17 +7,19 @@ Numeralia lazim dibedakan atas numeralia tentu dan taktentu. Numeralia tentu mel
 
 Contoh:
 
-- (112a) *Dia membeli dua buku.*
-- (112b) *Mereka memelihara lima ekor anjing.*
-- (112c) *Ketiga anaknya sudah berkeluarga.*
-- (112d) *Sepertiga gajinya dikirimkan kepada ibunya.*
-- (112e) *Kami tinggal di Jalan Damai Nomor 5.*
-- (112f) *Candi itu didirikan pada abad kesepuluh.*
+(112)
+- a. Dia membeli dua buku.
+- b. Mereka memelihara lima ekor anjing.
+- c. Ketiga anaknya sudah berkeluarga.
+- d. Sepertiga gajinya dikirimkan kepada ibunya.
+- e. Kami tinggal di Jalan Damai Nomor 5.
+- f. Candi itu didirikan pada abad kesepuluh.
 
 Numeralia taktentu meliputi kata-kata, seperti *banyak*, *beberapa*, *sedikit*, *semua*, dan *(se)tiap*. Kata-kata itu dapat berfungsi sebagai penentu pada frasa nominal dan letaknya selalu mendahului nomina inti.
 
 Contoh:
 
-- (113a) *Banyak orang kehilangan pekerjaan akibat resesi global.*
-- (113b) *Semua tamu harus melapor ke pos jaga.*
-- (113c) *Beberapa orang murid datang terlambat.*
+(113)
+- a. Banyak orang kehilangan pekerjaan akibat resesi global.
+- b. Semua tamu harus melapor ke pos jaga.
+- c. Beberapa orang murid datang terlambat.

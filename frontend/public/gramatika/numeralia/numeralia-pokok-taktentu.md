@@ -13,13 +13,15 @@ Sebagian dari numeralia itu mengandung pengertian kejamakan. Selain numeralia, k
 
 > *banyak orang, berbagai masalah, pelbagai budaya, sedikit air, semua jawaban, seluruh rakyat, segala penjuru, segenap anggota*
 
-- (320a) *Banyak orang yang menghadiri konser itu.* ✓
-- (320b) *Orang-orang yang menghadiri konser itu dari berbagai lapisan.* ✓
-- (320c) \**Banyak orang-orang yang menghadiri konser itu.* ✗
+(320)
+- a. Banyak orang yang menghadiri konser itu. ✓
+- b. Orang-orang yang menghadiri konser itu dari berbagai lapisan. ✓
+- c. *Banyak orang-orang yang menghadiri konser itu. ✗
 
-- (321a) *Semua jawaban harus dalam bentuk tertulis.*
-- (321b) *Jawaban-jawaban mahasiswa harus dalam bentuk tertulis.*
-- (321c) \**Semua jawaban-jawaban harus dalam bentuk tertulis.*
+(321)
+- a. Semua jawaban harus dalam bentuk tertulis.
+- b. Jawaban-jawaban mahasiswa harus dalam bentuk tertulis.
+- c. *Semua jawaban-jawaban harus dalam bentuk tertulis. ✗
 
 Pada tataran sintaksis nomina numeralia taktentu dapat pula dibentuk dari numeralia pokok tentu:
 
