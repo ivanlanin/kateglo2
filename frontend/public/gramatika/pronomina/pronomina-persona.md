@@ -177,10 +177,10 @@ Bentuk *-nya* ini sering juga dipakai hanya sebagai penanda ketakrifan suatu nom
 
 Pronomina persona ketiga jamak adalah *mereka*. Di samping arti jamak, *mereka* berbeda dengan pronomina persona tunggal dalam acuannya. Pada umumnya *mereka* hanya dipakai untuk insan. Benda atau konsep yang jamak dinyatakan dengan cara yang lain:
 
-- (201) *Teman-teman akan datang. Mereka akan membawa makanan sendiri.*—✓
-- (202) *Pak Ramlan mempunyai tiga orang anak. Mereka semua belajar di Gadjah Mada.*—✓
-- (203) *Bu Mantik baru membeli empat buah buku. \**Mereka ada di meja sekarang.*—✗
-- (204) *Ide-ide yang dikemukakan politikus itu sangat baik. \**Mereka terasa sangat segar.*—✗
+- (201) *Teman-teman akan datang. Mereka akan membawa makanan sendiri.* ✓
+- (202) *Pak Ramlan mempunyai tiga orang anak. Mereka semua belajar di Gadjah Mada.* ✓
+- (203) *Bu Mantik baru membeli empat buah buku. \**Mereka ada di meja sekarang.* ✗
+- (204) *Ide-ide yang dikemukakan politikus itu sangat baik. \**Mereka terasa sangat segar.* ✗
 
 Akan tetapi, pada cerita fiksi atau narasi lain, kata *mereka* kadang-kadang juga dipakai untuk mengacu pada binatang atau benda yang dianggap bernyawa.
 

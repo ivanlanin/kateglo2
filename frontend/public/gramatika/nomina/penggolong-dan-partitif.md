@@ -74,8 +74,8 @@ Di samping penggolong nomina, bahasa Indonesia juga menggunakan sejumlah kata, s
 
 Berbeda dengan penggolong, partitif pada frasa nominal yang penentunya berupa numeralia umumnya wajib hadir. Jika partitifnya tidak hadir, maknanya cenderung berbeda atau kalimatnya tidak berterima.
 
-- (124a) *Saya membeli dua bungkus nasi.*—✓
-- (124b) *Saya membeli dua nasi.*—✗
+- (124a) *Saya membeli dua bungkus nasi.* ✓
+- (124b) *Saya membeli dua nasi.* ✗
 
 - (125a) *Sarapannya dua iris roti.*
 - (125b) *\*Sarapannya dua roti.*

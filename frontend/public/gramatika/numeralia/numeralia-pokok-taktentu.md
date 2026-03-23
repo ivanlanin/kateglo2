@@ -13,9 +13,9 @@ Sebagian dari numeralia itu mengandung pengertian kejamakan. Selain numeralia, k
 
 > *banyak orang, berbagai masalah, pelbagai budaya, sedikit air, semua jawaban, seluruh rakyat, segala penjuru, segenap anggota*
 
-- (320a) *Banyak orang yang menghadiri konser itu.*—✓
-- (320b) *Orang-orang yang menghadiri konser itu dari berbagai lapisan.*—✓
-- (320c) \**Banyak orang-orang yang menghadiri konser itu.*—✗
+- (320a) *Banyak orang yang menghadiri konser itu.* ✓
+- (320b) *Orang-orang yang menghadiri konser itu dari berbagai lapisan.* ✓
+- (320c) \**Banyak orang-orang yang menghadiri konser itu.* ✗
 
 - (321a) *Semua jawaban harus dalam bentuk tertulis.*
 - (321b) *Jawaban-jawaban mahasiswa harus dalam bentuk tertulis.*

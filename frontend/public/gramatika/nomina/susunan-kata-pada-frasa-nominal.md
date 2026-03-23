@@ -12,9 +12,9 @@ Nomina dalam bahasa Indonesia dapat diikuti pewatas yang terdiri atas dua kata a
 
 1) Pewatas berupa nomina cenderung mendahului adjektiva atau verba dalam suatu frasa nominal yang kompleks:
 
-- *buku pelajaran (yang) baru*—✓   \**buku baru pelajaran*—✗
-- *lemari besi (yang) tua*—✓   \**lemari tua besi*—✗
-- *rumah batu (yang) bertingkat*—✓   \**rumah bertingkat batu*—✗
+- *buku pelajaran (yang) baru* ✓   \**buku baru pelajaran* ✗
+- *lemari besi (yang) tua* ✓   \**lemari tua besi* ✗
+- *rumah batu (yang) bertingkat* ✓   \**rumah bertingkat batu* ✗
 
 2) Pewatas berupa adjektiva dapat mengikuti langsung nomina inti jika konstituen pewatas yang mengikutinya membentuk kesatuan makna yang erat:
 

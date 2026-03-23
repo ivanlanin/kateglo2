@@ -43,7 +43,7 @@ Dalam bahasa Indonesia baku, numeralia pokok ditempatkan di muka nomina dan dapa
 
 Jika numeralia ditempatkan di belakang nomina, dalam bahasa baku kata penggolongnya tidak dapat ditinggalkan:
 
-- (312a) \**Belilah buku tulis tiga.*—✗
-- (312b) *Belilah buku tulis tiga buah.*—✓
+- (312a) \**Belilah buku tulis tiga.* ✗
+- (312b) *Belilah buku tulis tiga buah.* ✓
 - (313a) \**Penerbit itu memerlukan penyunting tiga.*
 - (313b) *Penerbit itu memerlukan penyunting tiga orang.*
