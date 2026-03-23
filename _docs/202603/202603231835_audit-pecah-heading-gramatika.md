@@ -54,6 +54,7 @@ Mencatat halaman Gramatika yang masih memuat heading internal `##`, `###`, dan s
 
 | Bab | File | Heading Internal |
 | --- | ---: | ---: |
+| pendahuluan | 0 | 0 |
 | adjektiva | 7 | 30 |
 | adverbia | 3 | 9 |
 | bunyi-bahasa | 2 | 23 |
@@ -64,6 +65,25 @@ Mencatat halaman Gramatika yang masih memuat heading internal `##`, `###`, dan s
 | pronomina | 2 | 7 |
 | tata-bahasa | 4 | 18 |
 | verba | 8 | 34 |
+
+## Status Eksekusi Batch
+
+### Batch 1: Bab I Pendahuluan
+
+Status: selesai diperiksa, tidak perlu pemecahan
+
+Hasil verifikasi:
+
+- subfolder `frontend/public/gramatika/pendahuluan/` tidak memiliki heading internal `##`, `###`, dan seterusnya
+- halaman induk `pendahuluan.md` sudah berupa daftar isi bab
+- halaman `ragam-bahasa.md` sudah memakai pola induk-anak yang benar dan menaut ke dua subhalaman turunannya
+- struktur Bab I di `frontend/src/constants/gramatikaData.js` sudah konsisten dengan file markdown yang ada
+
+Implikasi:
+
+- tidak ada file baru yang perlu dibuat untuk Bab I
+- tidak ada perubahan yang diperlukan pada `frontend/src/constants/gramatikaData.js` untuk Bab I
+- batch berikutnya dapat lanjut ke Bab II
 
 ## Prioritas Pemecahan
 

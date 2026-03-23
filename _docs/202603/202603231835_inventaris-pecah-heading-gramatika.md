@@ -9,6 +9,10 @@ Catatan:
 - `[BENTROK]` berarti kandidat slug bertabrakan dengan slug/file yang sudah ada.
 - Kandidat yang diawali angka atau kehilangan informasi fonetik perlu dinormalisasi lagi saat implementasi.
 
+## Pendahuluan
+
+Tidak ada heading internal `##+` yang perlu dipecah pada subfolder `frontend/public/gramatika/pendahuluan`.
+
 ## Adjektiva
 
 ### frontend/public/gramatika/adjektiva/adjektiva-berimbuhan.md
