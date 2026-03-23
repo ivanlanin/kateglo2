@@ -309,7 +309,7 @@ const daftarIsiGramatika = [
           { judul: 'Kata kaum', slug: 'kata-kaum' },
           { judul: 'Kata umat', slug: 'kata-umat' },
           { judul: 'Hubungan Jumlah dan Pengacuan', slug: 'hubungan-jumlah-dan-pengacuan' },
-            { judul: 'Simpulan', slug: 'simpulan-konsep-tunggal-jamak-dan-generik' },
+          { judul: 'Simpulan', slug: 'simpulan-konsep-tunggal-jamak-dan-generik' },
         ],
       },
     ],
