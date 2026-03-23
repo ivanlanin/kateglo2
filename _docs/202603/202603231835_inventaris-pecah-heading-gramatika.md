@@ -274,31 +274,7 @@ Tidak ada heading internal `##+` yang perlu dipecah pada subfolder `frontend/pub
 
 ## Tata Bahasa
 
-### frontend/public/gramatika/tata-bahasa/aspek-takberkondisi-benar-makna-kalimat.md
-- L8 `Makna Ilokusi dan Isi Proposisi (2.3.2.1)` -> `makna-ilokusi-dan-isi-proposisi`
-- L23 `Implikatur Konvensional (2.3.2.2)` -> `implikatur-konvensional`
-
-### frontend/public/gramatika/tata-bahasa/kondisi-kebenaran-dan-perikutan.md
-- L8 `Proposisi Kalimat (2.3.1.1)` -> `proposisi-kalimat`
-- L32 `Perikutan (2.3.1.2)` -> `perikutan`
-- L50 `Proposisi Tertutup dan Proposisi Terbuka (2.3.1.3)` -> `proposisi-tertutup-dan-proposisi-terbuka`
-
-### frontend/public/gramatika/tata-bahasa/pengacuan-dan-deiksis.md
-- L8 `Pengacuan (2.3.4.1)` -> `pengacuan`
-- L53 `Deiksis (2.3.4.2)` -> `deiksis`
-
-### frontend/public/gramatika/tata-bahasa/sintaksis.md
-- L18 `Struktur Konstituen (2.2.3.1)` -> `struktur-konstituen`
-- L52 `Kategori Sintaksis (2.2.3.2)` -> `kategori-sintaksis`
-- L58 `Kategori Leksikal (2.2.3.2.1)` -> `kategori-leksikal`
-- L85 `Kategori Frasa (2.2.3.2.2)` -> `kategori-frasa`
-- L107 `Konstruksi Tata Bahasa dan Fungsinya (2.2.3.3)` -> `konstruksi-tata-bahasa-dan-fungsinya`
-- L118 `Inti (Hulu) dan Noninti (Terikat) (2.2.3.3.1)` -> `inti-dan-noninti`
-- L126 `Jenis-Jenis Noninti (2.2.3.3.2)` -> `jenis-jenis-noninti`
-- L142 `Konstruksi Tanpa Inti (2.2.3.3.3)` -> `konstruksi-tanpa-inti`
-- L157 `Representasi Fungsi dengan Diagram (2.2.3.3.4)` -> `representasi-fungsi-dengan-diagram`
-- L171 `Cabang Tunggal (2.2.3.3.5)` -> `cabang-tunggal`
-- L188 `Model Diagram (2.2.3.3.6)` -> `model-diagram`
+Tidak ada heading internal `##+` yang perlu dipecah pada subfolder `frontend/public/gramatika/tata-bahasa` karena Bab II sudah dipecah penuh.
 
 ## Verba
 

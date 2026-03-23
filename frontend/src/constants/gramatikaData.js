@@ -44,17 +44,65 @@ const daftarIsiGramatika = [
         turunan: [
           { judul: 'Fonologi', slug: 'fonologi' },
           { judul: 'Morfologi', slug: 'morfologi' },
-          { judul: 'Sintaksis', slug: 'sintaksis' },
+          {
+            judul: 'Sintaksis',
+            slug: 'sintaksis',
+            turunan: [
+              { judul: 'Struktur Konstituen', slug: 'struktur-konstituen' },
+              {
+                judul: 'Kategori Sintaksis',
+                slug: 'kategori-sintaksis',
+                turunan: [
+                  { judul: 'Kategori Leksikal', slug: 'kategori-leksikal' },
+                  { judul: 'Kategori Frasa', slug: 'kategori-frasa' },
+                ],
+              },
+              {
+                judul: 'Konstruksi Tata Bahasa dan Fungsinya',
+                slug: 'konstruksi-tata-bahasa-dan-fungsinya',
+                turunan: [
+                  { judul: 'Inti (Hulu) dan Noninti (Terikat)', slug: 'inti-dan-noninti' },
+                  { judul: 'Jenis-Jenis Noninti', slug: 'jenis-jenis-noninti' },
+                  { judul: 'Konstruksi Tanpa Inti', slug: 'konstruksi-tanpa-inti' },
+                  { judul: 'Representasi Fungsi dengan Diagram', slug: 'representasi-fungsi-dengan-diagram' },
+                  { judul: 'Cabang Tunggal', slug: 'cabang-tunggal' },
+                  { judul: 'Model Diagram', slug: 'model-diagram' },
+                ],
+              },
+            ],
+          },
         ],
       },
       {
         judul: 'Semantik, Pragmatik, dan Relasi Makna',
         slug: 'semantik-pragmatik-dan-relasi-makna',
         turunan: [
-          { judul: 'Kondisi Kebenaran dan Perikutan', slug: 'kondisi-kebenaran-dan-perikutan' },
-          { judul: 'Aspek Takberkondisi Benar Makna Kalimat', slug: 'aspek-takberkondisi-benar-makna-kalimat' },
+          {
+            judul: 'Kondisi Kebenaran dan Perikutan',
+            slug: 'kondisi-kebenaran-dan-perikutan',
+            turunan: [
+              { judul: 'Proposisi Kalimat', slug: 'proposisi-kalimat' },
+              { judul: 'Perikutan', slug: 'perikutan' },
+              { judul: 'Proposisi Tertutup dan Proposisi Terbuka', slug: 'proposisi-tertutup-dan-proposisi-terbuka' },
+            ],
+          },
+          {
+            judul: 'Aspek Takberkondisi Benar Makna Kalimat',
+            slug: 'aspek-takberkondisi-benar-makna-kalimat',
+            turunan: [
+              { judul: 'Makna Ilokusi dan Isi Proposisi', slug: 'makna-ilokusi-dan-isi-proposisi' },
+              { judul: 'Implikatur Konvensional', slug: 'implikatur-konvensional' },
+            ],
+          },
           { judul: 'Pragmatik dan Implikatur Percakapan', slug: 'pragmatik-dan-implikatur-percakapan' },
-          { judul: 'Pengacuan dan Deiksis', slug: 'pengacuan-dan-deiksis' },
+          {
+            judul: 'Pengacuan dan Deiksis',
+            slug: 'pengacuan-dan-deiksis',
+            turunan: [
+              { judul: 'Pengacuan', slug: 'pengacuan' },
+              { judul: 'Deiksis', slug: 'deiksis' },
+            ],
+          },
         ],
       },
     ],
