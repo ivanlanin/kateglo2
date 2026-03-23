@@ -676,6 +676,13 @@ Daftar file terdampak beserta kandidat slug per heading tercatat di dokumen terp
 
 - `_docs/202603/202603231835_inventaris-pecah-heading-gramatika.md`
 
+## Status Akhir
+
+- seluruh halaman konten yang dipakai oleh navigasi Gramatika di `frontend/public/gramatika/` sudah tidak memiliki heading internal `##`, `###`, dan seterusnya yang perlu dipecah lagi
+- struktur `frontend/src/constants/gramatikaData.js` sudah diselaraskan dengan seluruh file hasil pecahan sehingga breadcrumb, sidebar, dan urutan prev/next mengikuti hierarki akhir
+- satu-satunya heading `##` yang masih tersisa di bawah pohon `frontend/public/gramatika/` berada pada `frontend/public/gramatika/_gambar/README.md`, yaitu file dokumentasi internal aset gambar, bukan halaman konten yang dirender sebagai bagian dari Gramatika
+- dengan demikian, pekerjaan pemecahan heading untuk seluruh halaman konten Gramatika dapat dianggap selesai
+
 ## Kesimpulan Kerja Lanjut
 
 - Struktur `gramatikaData.js` sudah cukup baik sebagai kanvas hierarki target.
