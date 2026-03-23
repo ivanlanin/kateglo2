@@ -3,7 +3,7 @@ id: 9.5.2.3
 title: Kalimat Nominal (9.5.2.3)
 ---
 
-Dalam bahasa Indonesia ada kalimat yang predikatnya berupa nomina (termasuk pronomina) atau frasa nominal. Kalimat jenis ini sering dinamakan **kalimat ekuatif**.
+Dalam bahasa Indonesia ada kalimat yang predikatnya berupa nomina (termasuk pronomina) atau frasa nominal. Kalimat jenis ini sering dinamakan kalimat ekuatif.
 
 (263)
 - a. Buku cetakan Bandung itu → *frasa nominal* (bukan kalimat)

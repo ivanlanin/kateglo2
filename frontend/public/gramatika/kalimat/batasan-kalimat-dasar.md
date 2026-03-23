@@ -3,9 +3,9 @@ id: 9.4.1
 title: Batasan Kalimat Dasar (9.4.1)
 ---
 
-**Kalimat dasar** adalah kalimat yang (1) terdiri atas satu klausa, (2) unsur-unsurnya lengkap, (3) susunan unsur-unsurnya menurut urutan yang paling umum, dan (4) tidak mengandung pertanyaan, perintah, seruan, atau pengingkaran. Dengan kata lain, kalimat dasar identik dengan kalimat tunggal deklaratif afirmatif yang unsur-unsurnya bersifat wajib dan urutannya paling lazim:
+Kalimat dasar adalah kalimat yang (1) terdiri atas satu klausa, (2) unsur-unsurnya lengkap, (3) susunan unsur-unsurnya menurut urutan yang paling umum, dan (4) tidak mengandung pertanyaan, perintah, seruan, atau pengingkaran. Dengan kata lain, kalimat dasar identik dengan kalimat tunggal deklaratif afirmatif yang unsur-unsurnya bersifat wajib dan urutannya paling lazim:
 
-> **S P (O) (Pel) (Ket)**
+> S P (O) (Pel) (Ket)
 
 ## Pola Kalimat Dasar (9.4.1.1)
 
@@ -34,7 +34,7 @@ Banyak pula kalimat yang predikatnya mendahului subjek, tetapi pada umumnya dapa
 
 Berdasarkan pertimbangan di atas, pola umum kalimat dasar dalam bahasa Indonesia adalah:
 
-> **(166) S - P - (O) - (Pel) - (Ket)**
+> (166) S - P - (O) - (Pel) - (Ket)
 
 Catatan: unsur dalam tanda kurung tidak selalu harus hadir; keterangan dapat lebih dari satu.
 
@@ -67,7 +67,7 @@ Kalimat (168) memang dapat ditambah dengan konstituen *untuk adik saya* sehingga
 
 Akan tetapi, konstituen *untuk adik saya* tidak dituntut kehadirannya oleh verba *membeli*. Sementara pada *membelikan*, pengertian bahwa baju dibeli untuk seseorang tetap tersirat meskipun konstituen itu tidak hadir secara eksplisit.
 
-Konstituen objek, pelengkap, dan keterangan wajib sering juga disebut **konstituen komplementasi** karena berfungsi melengkapi verba predikat.
+Konstituen objek, pelengkap, dan keterangan wajib sering juga disebut konstituen komplementasi karena berfungsi melengkapi verba predikat.
 
 Hubungan struktural unsur-unsur kalimat dasar:
 

@@ -23,7 +23,7 @@ Kalimat (6) itu terdiri atas empat unsur, yaitu *barangkali*, *mereka*, *menghad
 
 Contoh kalimat (7–9) dapat diterima, tetapi kalimat (10–12) tidak.
 
-Berdasarkan uraian singkat tersebut, unsur kalimat dapat dibedakan atas **unsur wajib** dan **unsur takwajib** (manasuka). Unsur wajib adalah unsur kalimat yang harus hadir, sedangkan unsur takwajib adalah unsur kalimat yang dapat tidak hadir. Dengan demikian, bentuk *mereka menghadiri pertemuan itu* pada kalimat (6) merupakan unsur wajib, sedangkan *barangkali* dan *kemarin sore* merupakan unsur takwajib.
+Berdasarkan uraian singkat tersebut, unsur kalimat dapat dibedakan atas unsur wajib dan unsur takwajib (manasuka). Unsur wajib adalah unsur kalimat yang harus hadir, sedangkan unsur takwajib adalah unsur kalimat yang dapat tidak hadir. Dengan demikian, bentuk *mereka menghadiri pertemuan itu* pada kalimat (6) merupakan unsur wajib, sedangkan *barangkali* dan *kemarin sore* merupakan unsur takwajib.
 
 Perlu diingat bahwa pembedaan unsur kalimat atas wajib dan takwajib tidak berkaitan langsung dengan bentuk dan fungsi konstituen kalimat. Pada umumnya konstituen yang berfungsi sebagai keterangan, seperti *barangkali* dan *kemarin sore* pada contoh (6) di atas, dapat dihilangkan. Demikian pula halnya dengan keterangan (alat) *dengan pisau* pada *Dia memotong kue dengan pisau*, keterangan (tempat) *ke sekolah* pada *Dia sudah berangkat ke sekolah*, dan keterangan (cara) *dengan diam-diam* pada *Saya meninggalkan rapat dengan diam-diam*.
 

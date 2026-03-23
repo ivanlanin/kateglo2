@@ -16,7 +16,7 @@ Inversi adalah pembalikan urutan antara subjek dan predikat kalimat. Dalam bahas
 
 (371)
 - a. Anak itu sedang tidur.
-- b. **Sedang tidur** anak itu. *(predikat jadi kontrastif/fokus)*
+- b. Sedang tidur anak itu.
 
 (372)
 - a. ?Tamu ada di luar.

@@ -16,11 +16,11 @@ Kalimat taktransitif hanya memiliki dua unsur wajib: subjek dan predikat. Urutan
 Ada verba taktransitif yang diikuti nomina yang merupakan bagian dari paduan verba (idiom verbal)—bukan objek atau pelengkap:
 
 (197)
-- a. Irak sudah **bertekuk lutut**. *(verba majemuk idiomatis)*
-- b. Pak Ahmad akan **naik haji**. *(naik haji = satu kesatuan makna)*
-- c. Guntur selalu naik **sepeda** ke sekolah. *(sepeda = pelengkap, bukan idiom)*
+- a. Irak sudah bertekuk lutut. *(verba majemuk idiomatis)*
+- b. Pak Ahmad akan naik haji. *(naik haji = satu kesatuan makna)*
+- c. Guntur selalu naik sepeda ke sekolah. *(sepeda = pelengkap, bukan idiom)*
 
-Ada pula verba taktransitif yang diikuti langsung oleh nomina atau frasa nominal yang berfungsi sebagai **pelengkap** (bukan objek—tidak dapat dijadikan subjek kalimat pasif):
+Ada pula verba taktransitif yang diikuti langsung oleh nomina atau frasa nominal yang berfungsi sebagai pelengkap, bukan objek, sehingga tidak dapat dijadikan subjek kalimat pasif:
 
 (202)
 - a. Botol itu berisi air putih.
