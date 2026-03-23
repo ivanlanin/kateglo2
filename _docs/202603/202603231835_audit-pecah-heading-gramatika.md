@@ -534,6 +534,40 @@ Implikasi:
 - bab terpadat tetap bisa diselesaikan aman dengan mikro-batch bertahap selama hierarki dan parent content diperbarui konsisten di setiap gelombang
 - batch berikutnya dapat lanjut ke bab berikutnya di luar Kalimat
 
+### Batch 12: Bab XII Hubungan Antarklausa
+
+Status: selesai dipecah dan tervalidasi
+
+Hasil verifikasi:
+
+- subfolder `frontend/public/gramatika/hubungan-antarklausa/` sekarang tidak memiliki heading internal `##`, `###`, dan seterusnya
+- halaman bab `hubungan-antarklausa.md` akan disinkronkan ulang dari `gramatikaData.js` melalui `sync-gramatika-toc.mjs` dengan struktur daftar isi rekursif penuh
+- halaman induk `hubungan-waktu.md`, `hubungan-pembandingan.md`, dan `hubungan-atributif.md` kini hanya menampilkan anak langsung
+- struktur Bab XII di `frontend/src/constants/gramatikaData.js` sudah diperluas untuk `Hubungan Waktu`, `Hubungan Pembandingan`, dan `Hubungan Atributif` agar breadcrumb dan sidebar mengikuti hierarki baru
+- validasi frontend dijalankan setelah batch final untuk memastikan navigasi Gramatika tetap konsisten
+
+File baru yang ditambahkan pada Bab XII:
+
+- `frontend/public/gramatika/hubungan-antarklausa/waktu-batas-permulaan.md`
+- `frontend/public/gramatika/hubungan-antarklausa/waktu-bersamaan.md`
+- `frontend/public/gramatika/hubungan-antarklausa/waktu-berurutan.md`
+- `frontend/public/gramatika/hubungan-antarklausa/waktu-batas-akhir-terjadinya-peristiwa-atau-keadaan.md`
+- `frontend/public/gramatika/hubungan-antarklausa/hubungan-ekuatif.md`
+- `frontend/public/gramatika/hubungan-antarklausa/hubungan-komparatif.md`
+- `frontend/public/gramatika/hubungan-antarklausa/hubungan-atributif-restriktif.md`
+- `frontend/public/gramatika/hubungan-antarklausa/hubungan-atributif-takrestriktif.md`
+
+Halaman Bab XII yang diubah:
+
+- `frontend/public/gramatika/hubungan-antarklausa/hubungan-waktu.md`
+- `frontend/public/gramatika/hubungan-antarklausa/hubungan-pembandingan.md`
+- `frontend/public/gramatika/hubungan-antarklausa/hubungan-atributif.md`
+
+Implikasi:
+
+- bab dengan sisa heading yang hanya terkonsentrasi di sedikit file dapat diselesaikan aman dalam satu batch kecil tanpa mikro-batch tambahan
+- batch berikutnya dapat lanjut ke bab berikutnya di luar Hubungan Antarklausa
+
 ## Prioritas Pemecahan
 
 File dengan kepadatan heading paling tinggi sebaiknya diproses lebih dulu karena memberi pengurangan kompleksitas paling besar per file.
