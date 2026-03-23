@@ -34,7 +34,7 @@ Untuk setiap item markdown di `frontend/public/gramatika/` lakukan pemeriksaan b
 | Bab | Folder | Status | Catatan |
 |---|---|---|---|
 | Bab I Pendahuluan | `frontend/public/gramatika/pendahuluan/` | OK | Audit ulang 2026-03-23: ditemukan dan diperbaiki 26 ketidaksesuaian terhadap PDF di 7 file — em-dash/koma, tanda kurung, kata terlewat, label editorial, dan perubahan kalimat pembuka 1.2.2. |
-| II Tata Bahasa | `frontend/public/gramatika/tata-bahasa/` | Belum | — |
+| II Tata Bahasa | `frontend/public/gramatika/tata-bahasa/` | OK | Audit 2026-03-24: ditemukan dan diperbaiki 4 ketidaksesuaian terhadap PDF di 3 file — label contoh (1)/(6)/(7) yang hilang, dan satu kesalahan parafrase pertanyaan literal. |
 | III Bunyi Bahasa | `frontend/public/gramatika/bunyi-bahasa/` | Belum | — |
 | IV Verba | `frontend/public/gramatika/verba/` | Belum | — |
 | V Adjektiva | `frontend/public/gramatika/adjektiva/` | Belum | — |
@@ -70,6 +70,27 @@ Sumber audit:
 | 1.8 Hubungan Bahasa Indonesia dengan Bahasa Daerah dan Bahasa Asing | `frontend/public/gramatika/pendahuluan/hubungan-bahasa-indonesia-dengan-bahasa-daerah-dan-bahasa-asing.md` | 44-46 | OK | Audit ulang: 3 perbaikan — hapus koma sebelum "maupun" (2 tempat); kembalikan tanda kurung referensi UU No. 20 Tahun 2003. |
 
 Catatan: beberapa rentang halaman Bab I saling tumpang-tindih karena heading subbab berikutnya mulai pada halaman yang sama dengan paragraf penutup subbab sebelumnya. Audit ulang Bab I juga menormalkan format markdown agar tidak menambahkan bold, heading tambahan, atau blockquote editorial yang tidak tampak pada TBBBI.
+
+### Bab II Tata Bahasa
+
+Sumber audit:
+
+- PDF bab: `_data/gramatika/bab-02/bab-02-tata-bahasa-tinjauan-selayang-pandang.pdf`
+- JPG verifikasi: `_data/gramatika/bab-02/bab-02-h047.jpg` s.d. `_data/gramatika/bab-02/bab-02-h068.jpg`
+
+| Item | File | Hal. PDF | Status | Hasil ringkas |
+|---|---|:---:|---|---|
+| Bab II Tata Bahasa | `frontend/public/gramatika/tata-bahasa/tata-bahasa.md` | — | OK | Halaman landing; daftar isi sinkron dengan gramatikaData.js. |
+| 2.1 Deskripsi dan Teori | `frontend/public/gramatika/tata-bahasa/deskripsi-dan-teori.md` | 47-48 | OK | Bersih; koreksi OCR sudah tepat. |
+| 2.2 Pengertian Tata Bahasa | `frontend/public/gramatika/tata-bahasa/pengertian-tata-bahasa.md` | 49 | OK | Teks dan navigasi sesuai sumber. |
+| 2.2.1 Fonologi | `frontend/public/gramatika/tata-bahasa/fonologi.md` | 49-51 | OK | 1 perbaikan: label `(1)` ditambahkan sebelum tabel tulisan/fonemis/fonetis; teks merujuk "contoh (1)" dua kali. |
+| 2.2.2 Morfologi | `frontend/public/gramatika/tata-bahasa/morfologi.md` | 51-52 | OK | Contoh (2) dan diagram (3) sudah berlabel benar, tidak ada temuan. |
+| 2.2.3 Sintaksis | `frontend/public/gramatika/tata-bahasa/sintaksis.md` | 52-61 | OK | 2 perbaikan: label `(6)` ditetapkan sebelum tabel kategori leksikal; label `(7)` ditetapkan sebelum tabel kategori frasa. |
+| 2.3 Semantik, Pragmatik, dan Relasi Makna | `frontend/public/gramatika/tata-bahasa/semantik-pragmatik-dan-relasi-makna.md` | 61 | OK | Halaman landing; satu paragraf pembuka dan navigasi sesuai sumber. |
+| 2.3.1 Kondisi Kebenaran dan Perikutan | `frontend/public/gramatika/tata-bahasa/kondisi-kebenaran-dan-perikutan.md` | 62-63 | OK | Contoh (17)–(21) dan teks penjelasan sesuai sumber; OCR artifacts tidak terbawa. |
+| 2.3.2 Aspek Takberkondisi Benar Makna Kalimat | `frontend/public/gramatika/tata-bahasa/aspek-takberkondisi-benar-makna-kalimat.md` | 63-65 | OK | Contoh (22)–(24) dan teks penjelasan sesuai sumber; OCR typo "kovensional" dan "had" sudah dikembalikan ke bentuk baku. |
+| 2.3.3 Pragmatik dan Implikatur Percakapan | `frontend/public/gramatika/tata-bahasa/pragmatik-dan-implikatur-percakapan.md` | 65-66 | OK | 1 perbaikan: "Apa kamu sudah mendapat izin dari Dekan?" dikembalikan ke "Apa kamu sudah menghadap Dekan?" sesuai pertanyaan literal di sumber (implikatur tetap "dapat izin"). |
+| 2.3.4 Pengacuan dan Deiksis | `frontend/public/gramatika/tata-bahasa/pengacuan-dan-deiksis.md` | 66-68 | OK | Contoh (27)–(32) dan teks penjelasan sesuai sumber; OCR errors (Omngitu, huku, la, deksis, seorangpemhantu) sudah dikoreksi. |
 
 ## Catatan Kerja
 

@@ -61,6 +61,8 @@ Setiap teori sintaksis yang bersifat umum, seperti yang dikemukakan di sini dan 
 
 Secara historis istilah-istilah itu berasal dari tata bahasa bahasa Latin klasik dan bahasa Yunani klasik. Meskipun diperkenalkan sekitar dua ribu tahun lalu, istilah-istilah itu masih dapat dipakai untuk mendeskripsikan hampir semua bahasa manusia. Berikut ini disajikan daftar kategori yang dipakai disertai contoh keanggotaan sebagai ilustrasi.
 
+(6)
+
 | Kategori | Label | Contoh |
 |---|---|---|
 | a. nomina | N | anak, kuda, buku, air, Bogor, persatuan |
@@ -83,6 +85,8 @@ Secara historis istilah-istilah itu berasal dari tata bahasa bahasa Latin klasik
 ### Kategori Frasa (2.2.3.2.2)
 
 Konstituen yang terdiri atas dua kata atau lebih (khususnya yang mengandung satu kata yang terpenting yang diperluas dengan kata lain yang mengelaborasi kontribusinya terhadap kalimat) disebut frasa. Penentuan label kategori frasa didasarkan pada kategori leksikal kata terpenting dalam frasa tersebut. Sebuah frasa yang terdiri atas nomina yang diperluas dengan konstituen lain, misalnya adjektiva atau penentu, disebut frasa nominal; verba dengan berbagai komplemennya membentuk frasa verbal; frasa nominal dan frasa verbal membentuk klausa dan seterusnya. Di bawah ini diberikan daftar kategori frasa yang digunakan dalam buku ini.
+
+(7)
 
 | Kategori | Label | Contoh |
 |---|---|---|

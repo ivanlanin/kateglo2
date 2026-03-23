@@ -7,6 +7,8 @@ Istilah fonologi umumnya digunakan untuk mengacu pada deskripsi sistem bunyi bah
 
 Dalam penggunaan bahasa sehari-hari, umumnya digunakan bentuk tulisan tanpa ditandai kurung sudut. Hubungan ketiga bentuk visual (unsur-unsur) bahasa itu dapat diperlihatkan pada contoh berikut.
 
+(1)
+
 | Tulisan | Fonemis | Fonetis |
 |---|---|---|
 | anak | /anak/ | [ana?] |
