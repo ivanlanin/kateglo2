@@ -7,31 +7,31 @@ Nomina atau frasa nominal dapat menduduki fungsi subjek (13a), objek (13b), pele
 
 Contoh:
 
-**a. Subjek:**
+a. Subjek:
 
 - *Manusia pasti mati.*
 - *Masalah penduduk memerlukan penanganan yang serius.*
 - *Pemerintahan Orde Baru berlangsung selama 32 tahun.*
 
-**b. Objek:**
+b. Objek:
 
 - *Perusahaan bus kota membutuhkan sopir.*
 - *Perusahaan itu sedang mencari manajer yang terampil.*
 - *Pemerintah Indonesia akan mengekspor beras.*
 
-**c. Pelengkap:**
+c. Pelengkap:
 
 - *Petani mulai enggan bertanam padi.*
 - *Itu baru merupakan suatu pendapat.*
 - *Ibunya meninggal sepuluh tahun lalu.*
 
-**d. Keterangan/adverbial:**
+d. Keterangan/adverbial:
 
 - *Dia menyerupai ibunya.*
 - *Mereka akan tiba Minggu pagi.*
 - *Dia baru akan kembali bulan depan.*
 
-**e. Predikat:**
+e. Predikat:
 
 - *Andi murid terpandai di kelasnya.*
 - *Pak Hendri karyawan baru di kantor ini.*

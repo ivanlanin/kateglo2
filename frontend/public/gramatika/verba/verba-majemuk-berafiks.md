@@ -21,7 +21,7 @@ Ada juga verba majemuk berafiks yang salah satu komponennya, biasanya komponen k
 
 Berdasarkan uraian di atas, verba majemuk berafiks dapat dibagi menjadi tiga kelompok.
 
-**1) Verba majemuk terikat**
+1) Verba majemuk terikat
 
 Verba majemuk berafiks yang pangkalnya berupa bentuk majemuk yang tidak dapat berdiri sendiri dalam kalimat disebut verba majemuk terikat. Jumlah verba kelompok ini tidak banyak.
 
@@ -29,7 +29,7 @@ Contoh:
 
 > (320) *beriba hati*, *berkembang biak*, *bertolak pinggang*, *bertutur sapa*
 
-**2) Verba majemuk bebas**
+2) Verba majemuk bebas
 
 Verba majemuk berafiks yang pangkalnya berupa bentuk majemuk yang dapat berdiri sendiri disebut verba majemuk bebas. Verba kelompok ini banyak jumlahnya dan dasarnya dapat berupa (a) verba, (b) nomina, atau (c) adjektiva.
 
@@ -42,7 +42,7 @@ Dari contoh tersebut dapat dilihat bahwa berbagai afiks dapat ditambahkan untuk 
 
 Sekali lagi ditekankan bahwa jika pangkal majemuk diapit prefiks dan sufiks atau konfiks, komponen majemuk itu dirangkaikan menjadi satu, seperti *babak belur* setelah diberi konfiks menjadi *membabakbelurkan*. Akan tetapi, jika afiks itu hanya berupa prefiks atau sufiks, komponennya tetap dituliskan terpisah, seperti *daya guna* setelah diberi prefiks menjadi *berdaya guna* dan *tanda tangan* setelah diberi sufiks menjadi *tanda tangani* dan setelah diberi konfiks menjadi *menandatangani*.
 
-**3) Verba majemuk berafiks dengan komponen yang telah berafiks**
+3) Verba majemuk berafiks dengan komponen yang telah berafiks
 
 Verba majemuk berafiks yang salah satu komponennya telah berafiks tidak banyak jumlahnya.
 

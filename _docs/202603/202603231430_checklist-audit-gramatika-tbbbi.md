@@ -16,6 +16,7 @@ Untuk setiap item markdown di `frontend/public/gramatika/` lakukan pemeriksaan b
 - [ ] Artefak OCR sudah dibersihkan tanpa mengubah isi.
 - [ ] Format penting dipertahankan dengan benar: daftar, penomoran, huruf miring, tabel, atau bagan yang dideskripsikan.
 - [ ] Tidak ada penekanan editorial baru yang tidak didukung sumber, seperti huruf tebal, huruf miring tambahan, heading tambahan, atau label dekoratif yang tidak muncul di TBBBI, kecuali memang diperlukan secara teknis oleh halaman.
+- [ ] Huruf tebal pada isi paragraf, label intra-paragraf, atau contoh dihapus jika PDF hanya menampilkan teks biasa atau italic; huruf tebal dipertahankan hanya untuk struktur yang memang tampak sebagai heading/subheading pada sumber.
 - [ ] Header/footer halaman TBBBI tidak ikut terbawa ke markdown.
 - [ ] Jika PDF extraction meragukan, sudah diverifikasi silang dengan JPG per halaman.
 - [ ] Jika item mengandung turunan atau navigasi khusus, sinkron dengan `frontend/src/constants/gramatikaData.js`.
@@ -145,4 +146,4 @@ Ringkasan hasil:
 - Audit pertama sebaiknya dimulai dari bab yang pendek agar format pencatatan cepat stabil.
 - PDF per bab sekarang memudahkan audit tanpa perlu membuka file sumber 616 halaman.
 - Jika sebuah item terbukti `OK`, pemecahan lebih lanjut baru dipertimbangkan setelah semua item dalam bab itu diaudit.
-- Audit format bukan pemolesan editorial. Jika sumber menampilkan paragraf biasa, markdown tidak boleh menambahkan huruf tebal atau penekanan visual baru hanya untuk memperindah tampilan.
+- Audit format bukan pemolesan editorial. Jika sumber menampilkan paragraf biasa, markdown tidak boleh menambahkan huruf tebal atau penekanan visual baru hanya untuk memperindah tampilan. Secara praktik, bold di tubuh teks harus diasumsikan salah sampai terbukti ada pada PDF.

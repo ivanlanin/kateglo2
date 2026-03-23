@@ -39,11 +39,11 @@ Berikut merupakan contoh lain bentuk verba hasil konversi dari nomina dan adjekt
 
 Pengafiksan adalah penambahan afiks (imbuhan), baik prefiks (awalan), sufiks (akhiran), konfiks (apitan) maupun infiks (sisipan) pada pangkal primer, pangkal sekunder, dan pangkal tersier. Jika pada pengafiksan itu pangkal verba belum berafiks, pangkal verba itu disebut pangkal primer. Dasar yang sudah berafiks, kemudian mengalami pengafiksan lagi disebut pangkal sekunder. Demikian juga, jika pangkal sekunder mengalami pengafiksan lagi disebut pangkal tersier.
 
-Jika ditinjau dari sudut hasilnya, ada dua tipe pengafiksan. Tipe pengafiksan yang pertama menghasilkan leksem atau kata leksikal baru dengan atau tanpa pengubahan kelas kata. Misalnya, adjektiva *tua* + akhiran *-kan* menghasilkan pangkal verba sekunder *tuakan* dengan pengubahan kelas kata. Pada pengafiksan verba *ada* + akhiran *-kan*, yang menghasilkan pangkal verba sekunder *adakan*, tidak terjadi pengubahan kelas. Tipe pengafiksan yang diuraikan itu disebut **pengafiksan derivasional**.
+Jika ditinjau dari sudut hasilnya, ada dua tipe pengafiksan. Tipe pengafiksan yang pertama menghasilkan leksem atau kata leksikal baru dengan atau tanpa pengubahan kelas kata. Misalnya, adjektiva *tua* + akhiran *-kan* menghasilkan pangkal verba sekunder *tuakan* dengan pengubahan kelas kata. Pada pengafiksan verba *ada* + akhiran *-kan*, yang menghasilkan pangkal verba sekunder *adakan*, tidak terjadi pengubahan kelas. Tipe pengafiksan yang diuraikan itu disebut pengafiksan derivasional.
 
 Contoh: verba *memberdayakan* berasal dari pengafiksan bertahap. Awalnya terjadi penambahan prefiks derivasi *ber-* pada nomina *daya* (pangkal primer) yang menghasilkan verba taktransitif *berdaya*. Bentuk *berdaya* itu menjadi pangkal sekunder pada proses penambahan akhiran derivasional *-kan* yang menghasilkan pangkal verba tersier *berdayakan*. Bentuk *berdayakan* pada gilirannya menjadi pangkal tersier pada pengafiksan dengan prefiks infleksional *meng-* yang menghasilkan verba turunan *memberdayakan*.
 
-Tipe pengafiksan yang kedua bertalian dengan fungsi sintaksis verba yang bersangkutan. Pengafiksan tipe itu menghasilkan berbagai bentuk kata (*word-form*) yang termasuk satu leksem yang sama juga. Proses penurunan seperti itu disebut **pengafiksan infleksional**.
+Tipe pengafiksan yang kedua bertalian dengan fungsi sintaksis verba yang bersangkutan. Pengafiksan tipe itu menghasilkan berbagai bentuk kata (*word-form*) yang termasuk satu leksem yang sama juga. Proses penurunan seperti itu disebut pengafiksan infleksional.
 
 Yang perlu disadari ialah bahwa di antara afiks bahasa Indonesia terdapat relasi homonimi. Homonimi (kehomoniman) ialah relasi di antara wujud yang sama bentuknya, tetapi berbeda maknanya karena asalnya berlainan. Misalnya, ada prefiks verbal *ter-* seperti pada *terlihat* dan prefiks adjektival *ter-* seperti pada *terbesar*. Ada konfiks verbal *ke-...-an* seperti pada *kecurian* dan konfiks nominal *ke-...-an* seperti pada *keindahan*. Keempat afiks tersebut mewujudkan empat morfem yang berbeda.
 
@@ -78,19 +78,19 @@ Sebagaimana telah disebutkan terdahulu, ada prefiks derivasional yang diperlukan
 
 Urutan penurunan verba mengikuti kaidah berikut:
 
-**a)** Jika prefiks tertentu diperlukan untuk mengubah kata dari kelas tertentu menjadi verba, prefiks itu didahulukan dalam urutan pengafiksan verba.
+a) Jika prefiks tertentu diperlukan untuk mengubah kata dari kelas tertentu menjadi verba, prefiks itu didahulukan dalam urutan pengafiksan verba.
 
 - (79) *darat* (nomina) → *mendarat*; *layar* (nomina) → *berlayar*; *kuning* (adjektiva) → *menguning*; *satu* (numeralia) → *bersatu*
 
-**b)** Jika prefiks digunakan bersama-sama dengan sufiks, sufiks lebih dahulu dilekatkan pada pangkal daripada prefiks jika penambahan sufiks pada pangkal telah memunculkan makna tersendiri. Penambahan prefiks itu bersifat infleksional karena hanya mengubah makna gramatikal bentuk tersebut.
+b) Jika prefiks digunakan bersama-sama dengan sufiks, sufiks lebih dahulu dilekatkan pada pangkal daripada prefiks jika penambahan sufiks pada pangkal telah memunculkan makna tersendiri. Penambahan prefiks itu bersifat infleksional karena hanya mengubah makna gramatikal bentuk tersebut.
 
 - (80) *darat* → *daratkan* → *mendaratkan*; *kuning* → *kuningkan* → *menguningkan*; *restu* → *restui* → *merestui*; *adil* → *adili* → *mengadili*; *beli* → *belikan* → *membelikan*; *dekat* → *dekati* → *mendekati*
 
-**c)** Prefiks dan sufiks tertentu mempunyai kedudukan yang sama dalam penurunan verba jika kehadiran kedua afiks itu terpadu dan maknanya pun tidak terpisahkan. Gabungan prefiks dan sufiks seperti itu merupakan konfiks.
+c) Prefiks dan sufiks tertentu mempunyai kedudukan yang sama dalam penurunan verba jika kehadiran kedua afiks itu terpadu dan maknanya pun tidak terpisahkan. Gabungan prefiks dan sufiks seperti itu merupakan konfiks.
 
 - (81) *jatuh* → *kejatuhan*; *banjir* → *kebanjiran*; *datang* → *berdatangan*; *pergi* → *bepergian*
 
-**d)** Urutan penambahan prefiks dan sufiks dalam pembentukan verba ditentukan oleh makna jika gabungan keduanya tidak merupakan konfiks. Pangkal verba transitif *berhentikan*, misalnya, diturunkan dari *berhenti*, lalu ditambah *-kan*, bukan dari *hentikan* lalu ditambah *ber-*. Itulah sebabnya verba *berhentikan* bermakna 'membuat jadi berhenti'. Pangkal verba *berhentikan* dapat dilengkapi dengan prefiks infleksional *meng-* yang menghasilkan verba *memberhentikan*.
+d) Urutan penambahan prefiks dan sufiks dalam pembentukan verba ditentukan oleh makna jika gabungan keduanya tidak merupakan konfiks. Pangkal verba transitif *berhentikan*, misalnya, diturunkan dari *berhenti*, lalu ditambah *-kan*, bukan dari *hentikan* lalu ditambah *ber-*. Itulah sebabnya verba *berhentikan* bermakna 'membuat jadi berhenti'. Pangkal verba *berhentikan* dapat dilengkapi dengan prefiks infleksional *meng-* yang menghasilkan verba *memberhentikan*.
 
 (82)
 - *angkat* → *berangkat* → *berangkatkan* → *memberangkatkan*

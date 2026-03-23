@@ -11,20 +11,20 @@ Numeralia lazim dibedakan atas numeralia tentu dan taktentu. Numeralia tentu mel
 
 Contoh:
 
-- (112a) *Dia membeli **dua** buku.*
-- (112b) *Mereka memelihara **lima** ekor anjing.*
-- (112c) ***Ketiga** anaknya sudah berkeluarga.*
-- (112d) ***Sepertiga** gajinya dikirimkan kepada ibunya.*
-- (112e) *Kami tinggal di Jalan Damai Nomor **5**.*
-- (112f) *Candi itu didirikan pada abad **kesepuluh**.*
+- (112a) *Dia membeli dua buku.*
+- (112b) *Mereka memelihara lima ekor anjing.*
+- (112c) *Ketiga anaknya sudah berkeluarga.*
+- (112d) *Sepertiga gajinya dikirimkan kepada ibunya.*
+- (112e) *Kami tinggal di Jalan Damai Nomor 5.*
+- (112f) *Candi itu didirikan pada abad kesepuluh.*
 
 Numeralia taktentu meliputi kata-kata, seperti *banyak*, *beberapa*, *sedikit*, *semua*, dan *(se)tiap*. Kata-kata itu dapat berfungsi sebagai penentu pada frasa nominal dan letaknya selalu mendahului nomina inti.
 
 Contoh:
 
-- (113a) ***Banyak** orang kehilangan pekerjaan akibat resesi global.*
-- (113b) ***Semua** tamu harus melapor ke pos jaga.*
-- (113c) ***Beberapa** orang murid datang terlambat.*
+- (113a) *Banyak orang kehilangan pekerjaan akibat resesi global.*
+- (113b) *Semua tamu harus melapor ke pos jaga.*
+- (113c) *Beberapa orang murid datang terlambat.*
 
 ## Penunjuk atau Demonstrativa (7.1.5.1.2)
 
@@ -32,10 +32,10 @@ Dalam bahasa Indonesia terdapat dua kata penunjuk umum, yakni *ini* dan *itu*. K
 
 Contoh:
 
-- (114a) *Meja **ini** terlalu besar untuk saya.*
-- (114b) *Jakarta **ini** sangat panas.*
-- (114c) *Rumah **itu** akan dijual.*
-- (114d) *Mobil **itu** buatan Jepang.*
+- (114a) *Meja ini terlalu besar untuk saya.*
+- (114b) *Jakarta ini sangat panas.*
+- (114c) *Rumah itu akan dijual.*
+- (114d) *Mobil itu buatan Jepang.*
 
 Selain kata *ini* dan *itu*, bahasa Indonesia juga mengenal kata penunjuk *begini* dan *begitu* untuk mengacu pada perbuatan peragaan. Dalam memberikan penjelasan mengenai cara menggunakan suatu alat, misalnya, orang biasanya menggunakan kata *begini*, lalu diikuti perbuatan peragaan. Jika peragaan sudah selesai, biasanya digunakan kata *begitu* untuk mengacu perbuatan peragaan yang sudah dilakukan itu. Kata *begini* dan *begitu* dapat diganti dengan kata *demikian*.
 
@@ -45,11 +45,11 @@ Dalam bahasa Indonesia terdapat lima bentuk penanda ketakrifan, yakni *ini*, *it
 
 Contoh:
 
-- (116a) *Ada seorang saudagar. Saudagar **ini/itu** sangat kaya.*
-- (116b) *Besok akan ada rapat. Dalam rapat **tersebut** akan dibahas masalah anggaran.*
-- (116c) *Pidato kemenangan **tadi** sangat memukau para pendengar.*
-- (116d) *Dua hari lalu saya mengirim surat kepada Anda. Mudah-mudahan surat**nya** sudah sampai.*
-- (116e) *Saya ingin mandi, tetapi air**nya** habis.*
+- (116a) *Ada seorang saudagar. Saudagar ini/itu sangat kaya.*
+- (116b) *Besok akan ada rapat. Dalam rapat tersebut akan dibahas masalah anggaran.*
+- (116c) *Pidato kemenangan tadi sangat memukau para pendengar.*
+- (116d) *Dua hari lalu saya mengirim surat kepada Anda. Mudah-mudahan suratnya sudah sampai.*
+- (116e) *Saya ingin mandi, tetapi airnya habis.*
 
 Penanda ketakrifan *ini* dan *itu* pada dasarnya bersifat deiktik, yaitu berkaitan dengan jarak pembicara dengan nomina yang diacu, tetapi dalam teks atau cerita kedua kata itu sering dipertukarkan seperti tampak pada (116a).
 
@@ -63,6 +63,6 @@ Pronomina atau nomina yang menyatakan makna kepemilikan berfungsi sebagai penent
 
 Contoh:
 
-- (117a) *Negara **kita** berdasarkan Pancasila.*
-- (117b) *Rumah **Pak Amin** kebanjiran.*
-- (117c) *Pintu kamar **itu** tidak bisa dikunci.*
+- (117a) *Negara kita berdasarkan Pancasila.*
+- (117b) *Rumah Pak Amin kebanjiran.*
+- (117c) *Pintu kamar itu tidak bisa dikunci.*

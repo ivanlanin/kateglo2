@@ -3,17 +3,17 @@ id: 4.6.2
 title: Jenis Frasa Verbal (4.6.2)
 ---
 
-Jika dilihat dari konstruksinya, frasa verbal terdiri atas verba inti dan kata lain yang bertindak sebagai penambah arti verba tersebut. Konstruksi seperti *sudah membaik*, *akan mendarat*, dan *tidak harus pergi* pada contoh di atas merupakan jenis **frasa verbal endosentrik atributif**. Frasa verbal seperti *makan dan minum* serta *menyanyi atau menari* masing-masing mempunyai dua verba inti yang dihubungkan dengan kata *dan* dan *atau*. Frasa seperti itu disebut **frasa verbal endosentrik koordinatif**.
+Jika dilihat dari konstruksinya, frasa verbal terdiri atas verba inti dan kata lain yang bertindak sebagai penambah arti verba tersebut. Konstruksi seperti *sudah membaik*, *akan mendarat*, dan *tidak harus pergi* pada contoh di atas merupakan jenis frasa verbal endosentrik atributif. Frasa verbal seperti *makan dan minum* serta *menyanyi atau menari* masing-masing mempunyai dua verba inti yang dihubungkan dengan kata *dan* dan *atau*. Frasa seperti itu disebut frasa verbal endosentrik koordinatif.
 
 ## Frasa Endosentrik Atributif (4.6.2.1)
 
-Frasa verbal yang endosentrik atributif terdiri atas inti verba dan pewatas (*modifier*) yang ditempatkan di muka atau di belakang verba inti. Yang di muka dinamakan **pewatas depan** dan yang di belakang dinamakan **pewatas belakang**.
+Frasa verbal yang endosentrik atributif terdiri atas inti verba dan pewatas (*modifier*) yang ditempatkan di muka atau di belakang verba inti. Yang di muka dinamakan pewatas depan dan yang di belakang dinamakan pewatas belakang.
 
 ### Pewatas Depan (4.6.2.1.1)
 
 Berdasarkan ciri semantisnya, kata-kata yang tergolong sebagai pewatas depan dapat dibedakan menjadi tiga macam, yaitu pewatas depan yang digunakan sebagai (1) pemarkah modalitas, (2) pemarkah negasi, dan (3) pemarkah aspektualitas.
 
-**Pemarkah modalitas** terlihat dalam penggunaan kata *akan*, *hendak*, *harus*, *mesti*, *perlu*, *dapat*, *bisa*, *boleh*, *suka*, *ingin*, dan *mau*. Dalam konstruksi frasa verbal pemarkah modalitas itu dapat digunakan secara tersendiri ataupun secara berdampingan dengan pemarkah modalitas yang lain. Contoh berikut memperlihatkan bahwa *akan* dan *harus* (termasuk *mesti*) mendahului pemarkah modalitas lainnya.
+Pewatas depan pemarkah modalitas terlihat dalam penggunaan kata *akan*, *hendak*, *harus*, *mesti*, *perlu*, *dapat*, *bisa*, *boleh*, *suka*, *ingin*, dan *mau*. Dalam konstruksi frasa verbal pemarkah modalitas itu dapat digunakan secara tersendiri ataupun secara berdampingan dengan pemarkah modalitas yang lain. Contoh berikut memperlihatkan bahwa *akan* dan *harus* (termasuk *mesti*) mendahului pemarkah modalitas lainnya.
 
 - (333) *akan harus*, *akan dapat*, *akan bisa*, *akan suka*, *harus boleh*, *harus dapat*, *harus bisa*, *harus suka*
 
@@ -30,7 +30,7 @@ Contoh pemakaian pewatas depan dalam kalimat:
 
 Dari contoh-contoh tersebut jelaslah bahwa kata-kata pewatas depan, seperti *akan*, *harus*, dan *dapat* yang merupakan pemarkah modalitas itu mematuhi urutan tertentu.
 
-**Pemarkah negasi** *tidak* berperilaku sebagai berikut:
+Contoh:
 
 - (342) *Dia tidak menikah.*—*tidak* mengingkarkan verba *menikah*
 - (343) *Dia tidak harus menikah.*—yang diingkarkan adalah *harus* atau *harus menikah*
@@ -46,7 +46,7 @@ Pada dasarnya, pemarkah pengingkar *tidak* tidak dapat ditempatkan di antara pem
 - (350) *Dia akan tidak dapat menepati janji.*
 - (351) *Dia tidak akan tidak mau datang.*
 
-**Pemarkah aspektualitas** yang digunakan sebagai pewatas depan dalam frasa verbal endosentrik atributif ialah *mulai*, *sedang*, *tengah*, *masih*, *baru*, *sudah*, dan *telah*.
+Pemarkah aspektualitas yang digunakan sebagai pewatas depan dalam frasa verbal endosentrik atributif ialah *mulai*, *sedang*, *tengah*, *masih*, *baru*, *sudah*, dan *telah*.
 
 - (352) *Karyawan mulai bekerja pukul delapan pagi.*
 - (353) *Mereka masih menunggu bus kota.*

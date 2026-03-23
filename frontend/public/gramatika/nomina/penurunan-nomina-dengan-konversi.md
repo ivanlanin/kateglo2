@@ -16,14 +16,14 @@ Bahwa nomina *tinggi*, *panjang*, dan *dalam* merupakan bentuk turunan melalui k
 
 Nomina konversi dalam bahasa Indonesia dapat berasal dari adjektiva dasar atau adjektiva turunan dan dapat pula dari verba.
 
-**Nomina turunan dari adjektiva yang menyatakan ukuran atau sukatan:**
+Nomina turunan dari adjektiva yang menyatakan ukuran atau sukatan:
 
 > *dalam, tinggi, lebar, panjang, luas, berat*
 
-**Nomina turunan dari adjektiva turunan yang menyatakan terbitan atau peristiwa yang dilakukan secara berkala:**
+Nomina turunan dari adjektiva turunan yang menyatakan terbitan atau peristiwa yang dilakukan secara berkala:
 
 > *harian, bulanan, mingguan, tahunan*
 
-**Nomina turunan dari verba yang menyatakan orang yang mengalami hal yang dinyatakan bentuk pangkal:**
+Nomina turunan dari verba yang menyatakan orang yang mengalami hal yang dinyatakan bentuk pangkal:
 
 > *terdakwa, terpidana, termohon, tergugat, tersangka, terhukum, tertuduh*

@@ -32,14 +32,14 @@ Kata *subur* dalam kalimat (43a) bukan pelengkap, melainkan keterangan. Hal itu 
 
 Berdasarkan uraian di atas terdapat berbagai contoh verba taktransitif.
 
-**a) Verba Taktransitif yang Takberpelengkap**
+a) Verba Taktransitif yang Takberpelengkap
 
 > *berdiri, berlari, datang, duduk, pergi, membaik, memburuk, membusuk, kedinginan, kemalaman, terkejut, terkecoh, timbul, tenggelam, menghijau, menguning*
 
-**b) Verba Taktransitif yang Berpelengkap Wajib**
+b) Verba Taktransitif yang Berpelengkap Wajib
 
 > *beratapkan, berdasarkan, berkata (bahwa), berkesimpulan (bahwa), berlandaskan, berpandangan (bahwa), berpesan (bahwa), merupakan, kehilangan, kejatuhan, menyerupai, bersendikan*
 
-**c) Verba Taktransitif yang Berpelengkap Manasuka**
+c) Verba Taktransitif yang Berpelengkap Manasuka
 
 > *beratap, berbaju, bercat, berdinding, berharga, berhenti, berpola, berpakaian, berpintu, kecopetan, kehujanan, ketahuan, merasa, naik, turun, kedinginan, kesiangan, kejatuhan*

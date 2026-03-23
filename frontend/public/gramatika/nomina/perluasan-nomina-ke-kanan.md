@@ -94,11 +94,11 @@ Nomina dapat diperluas dengan menambahkan klausa sebagai pewatasnya. Klausa pewa
 
 Contoh:
 
-- *anak **yang** berbaju merah itu*
-- *candi **yang** dibangun pada abad ketujuh*
-- *buku **yang** saya beli di toko buku*
-- *rumah **yang** terletak di Jalan Diponegoro*
-- *(orang) **yang** berkuasa selama tiga puluh dua tahun*
+- *anak yang berbaju merah itu*
+- *candi yang dibangun pada abad ketujuh*
+- *buku yang saya beli di toko buku*
+- *rumah yang terletak di Jalan Diponegoro*
+- *(orang) yang berkuasa selama tiga puluh dua tahun*
 
 ## Apositif sebagai Pewatas (7.1.5.4.6)
 

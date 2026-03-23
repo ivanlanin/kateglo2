@@ -7,19 +7,19 @@ Pangkal verba yang dimaksudkan dapat berupa verba dasar (primer), verba yang tel
 
 ## Pangkal Verba + *-kan* (4.2.2.5.1)
 
-**1)** Objek perbuatan yang digambarkan oleh verba menjadi sasaran:
+1) Objek perbuatan yang digambarkan oleh verba menjadi sasaran:
 
 - (150) *Ia melemparkan bola itu kepada temannya.*
 - (151) *Pamanku meninggalkan anak-anak yang sudah dewasa.*
 
-**2)** Objek kalimat menjadi alat tindakan:
+2) Objek kalimat menjadi alat tindakan:
 
 - (152) *Ia memukulkan kayu ke dinding rumah yang akan dipugar.*
 - (153) *Salah seorang petani menikamkan tombaknya ke ular pemangsa ternaknya.*
 - (154) *Ia mengikatkan tali ke leher kerbau.*
 - (155) *Ia membalutkan perban pada kakinya yang luka.*
 
-**3)** Perbuatan yang dinyatakan verba memberikan untung atau manfaat pada objek (benefaktif):
+3) Perbuatan yang dinyatakan verba memberikan untung atau manfaat pada objek (benefaktif):
 
 - (156) *Ia mengambilkan tamu air minum.*
 - (157) *Ia membuatkan ibunya baju kebaya.*
@@ -27,7 +27,7 @@ Pangkal verba yang dimaksudkan dapat berupa verba dasar (primer), verba yang tel
 - (159) *Adik membukakan ayah pintu.*
 - (160) *Kakak mengambilkan ibu air.*
 
-**4)** Subjek menyebabkan suatu pihak melakukan perbuatan yang dinyatakan verba transitif pada objek:
+4) Subjek menyebabkan suatu pihak melakukan perbuatan yang dinyatakan verba transitif pada objek:
 
 - (161) *Banyak penderita katarak memeriksakan mata ke RS Cicendo.*
 - (162) *Banyak anak kos mencucikan pakaian di penatu.*
@@ -38,12 +38,12 @@ Pangkal verba yang dimaksudkan dapat berupa verba dasar (primer), verba yang tel
 
 ## Pangkal Adjektiva + *-kan* (4.2.2.5.2)
 
-**1)** Subjek menyebabkan objek menjadi apa yang diacu oleh verba (kausatif):
+1) Subjek menyebabkan objek menjadi apa yang diacu oleh verba (kausatif):
 
 - (167) *Aparat keamanan telah berhasil mengamankan daerah yang dilanda kerusuhan.*
 - (168) *Pasukan PBB telah membebaskan kota itu dari tangan pemberontak.*
 
-**2)** Objek (bernyawa) mengalami sikap atau perasaan yang dinyatakan oleh verba. Subkelompok verba ini secara sintaktis dapat juga berfungsi sebagai adjektiva:
+2) Objek (bernyawa) mengalami sikap atau perasaan yang dinyatakan oleh verba. Subkelompok verba ini secara sintaktis dapat juga berfungsi sebagai adjektiva:
 
 - (169) *Putusan hakim itu agaknya sudah memuaskan kedua belah pihak.*
 - (170) *Gedung-gedung tinggi itulah yang mengagumkan kami.*
@@ -54,7 +54,7 @@ Pangkal verba yang dimaksudkan dapat berupa verba dasar (primer), verba yang tel
 - (175) *Kemalangan itu sangat menyedihkan hatinya.*
 - (176) *Ular kobra itu sangat menakutkan (saya).*
 
-**3)** Subjek (bernyawa) mengalami sikap atau perasaan yang dinyatakan oleh verba:
+3) Subjek (bernyawa) mengalami sikap atau perasaan yang dinyatakan oleh verba:
 
 - (177) *Dia merindukan ibunya.*
 - (178) *Dia mencemaskan keadaan anaknya.*
@@ -64,14 +64,14 @@ Sufiks *-kan* pada golongan verba di atas dapat ditafsirkan sebagai hasil penggr
 
 ## Pangkal Nomina + *-kan* (4.2.2.5.3)
 
-**1)** Subjek memasukkan atau membawa objek ke tempat yang dinyatakan oleh verba:
+1) Subjek memasukkan atau membawa objek ke tempat yang dinyatakan oleh verba:
 
 - (180) *Dia mengandangkan kerbaunya.*
 - (181) *Rendra mementaskan drama Kereta Kencana bersama kelompok teaternya di Taman Ismail Marzuki.*
 - (182) *PSSI meliburkan pertandingan babak delapan besar.*
 - (183) *Sopir itu berusaha meminggirkan mobilnya setelah ban belakangnya pecah.*
 
-**2)** Subjek menyebabkan objek menjadi atau berada di lokasi yang dinyatakan verba:
+2) Subjek menyebabkan objek menjadi atau berada di lokasi yang dinyatakan verba:
 
 - (184) *Rakyat ingin merajakan Hang Rasi.*
 - (185) *Dia telah mendoktorkan mahasiswanya lebih dari dua puluh orang.*

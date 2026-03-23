@@ -91,6 +91,7 @@ Untuk tiap item:
 - Jangan melakukan pemecahan struktur baru sebelum item di bab itu stabil.
 - Untuk subbab yang punya turunan, pastikan halaman induk hanya memuat pengantar dan navigasi bila memang begitu struktur sumbernya.
 - Bedakan koreksi sumber dari styling editorial. Huruf tebal, italic, dan penekanan visual lain hanya dipertahankan jika memang berasal dari TBBBI atau dibutuhkan secara teknis.
+- Untuk isi paragraf dan label intra-paragraf, anggap huruf tebal sebagai tidak sah secara default. Jika PDF hanya menampilkan roman biasa atau italic, hapus bold tambahan di markdown. Pengecualian utamanya adalah heading/subheading yang memang tampak menonjol sebagai struktur di sumber, bukan sebagai penekanan editorial baru.
 - Setelah batch selesai, jalankan ulang generator manifest agar status dan antrian berikutnya sinkron.
 
 ## Target Selesai

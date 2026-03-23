@@ -5,9 +5,9 @@ title: Frasa Nominal Vokatif (7.1.6)
 
 Nomina atau frasa nominal yang digunakan untuk memanggil atau menyapa orang disebut nomina atau frasa nominal vokatif. Unsur vokatif itu bersifat manasuka dan letaknya dapat di awal, tengah, atau akhir kalimat seperti tampak pada contoh berikut.
 
-- (154a) ***Mir**, ada telepon.*
-- (154b) *Dan **kamu**, kamu jangan bermain saja.*
-- (154c) *Minggu depan ulangan, **Anak-anak**.*
+- (154a) *Mir, ada telepon.*
+- (154b) *Dan kamu, kamu jangan bermain saja.*
+- (154c) *Minggu depan ulangan, Anak-anak.*
 
 Unsur vokatif itu tidak merupakan unsur integral dari kalimat dan hal itu tampak pada intonasi. Unsur vokatif terpisah dari bagian kalimat lainnya dari segi intonasi dengan membentuk satuan alir nada tersendiri atau menjadi ekor suatu alir nada. Jenis intonasi yang lazim bagi unsur vokatif adalah intonasi naik. Vokatif yang di awal kalimat, terutama yang digunakan untuk memanggil, sering menggunakan intonasi turun-naik.
 
@@ -17,19 +17,19 @@ Fungsi utama nomina atau frasa nominal vokatif adalah untuk meminta perhatian or
 
 Berikut adalah nomina atau frasa nominal yang lazim digunakan dengan fungsi vokatif dalam bahasa Indonesia.
 
-**a)** Nama orang dengan atau tanpa gelar, panggilan, atau julukan, seperti *Amir*, *Linda*, *Dr. Hadi*, *Prof. Bambang*, *Bu Tuti*, *Pak Jamal*, *Haji Rusli*, *Bung Tomo*, dan *Bang Ali*.
+a) Nama orang dengan atau tanpa gelar, panggilan, atau julukan, seperti *Amir*, *Linda*, *Dr. Hadi*, *Prof. Bambang*, *Bu Tuti*, *Pak Jamal*, *Haji Rusli*, *Bung Tomo*, dan *Bang Ali*.
 
-**b)** Istilah kekerabatan, seperti *ayah/yah*, *bapak/pak*, *ibu/bu*, *papa*, *mama/ma*, *kakak/kak*, *adik/dik*, dan *abang/bang*.
+b) Istilah kekerabatan, seperti *ayah/yah*, *bapak/pak*, *ibu/bu*, *papa*, *mama/ma*, *kakak/kak*, *adik/dik*, dan *abang/bang*.
 
-**c)** Istilah ungkapan kasih-sayang, seperti *sayang*, *manis*, *mungil*, *cantik*, dan *ganteng*.
+c) Istilah ungkapan kasih-sayang, seperti *sayang*, *manis*, *mungil*, *cantik*, dan *ganteng*.
 
-**d)** Istilah jabatan dengan didahului *bapak/pak*, *ibu/bu*, atau *saudara*, seperti *Bapak Presiden*, *Pak Bupati*, *Bu Camat*, *Bapak Direktur*, *Bapak Komandan*, *Saudara Ketua*, dan *Saudara Sekretaris*.
+d) Istilah jabatan dengan didahului *bapak/pak*, *ibu/bu*, atau *saudara*, seperti *Bapak Presiden*, *Pak Bupati*, *Bu Camat*, *Bapak Direktur*, *Bapak Komandan*, *Saudara Ketua*, dan *Saudara Sekretaris*.
 
-**e)** Istilah profesi atau pangkat dengan atau tanpa diikuti nama, seperti *profesor*, *dokter*, *kapten*, *Prof. Kamal*, *Dokter Sri*, dan *Kapten Johan*.
+e) Istilah profesi atau pangkat dengan atau tanpa diikuti nama, seperti *profesor*, *dokter*, *kapten*, *Prof. Kamal*, *Dokter Sri*, dan *Kapten Johan*.
 
-**f)** Istilah penanda status dengan atau tanpa diikuti nama, seperti *Pak Haji*, *Bu Haji*, *Pastor Johanes*, *Romo Puji*, dan *Pendeta Andreas*.
+f) Istilah penanda status dengan atau tanpa diikuti nama, seperti *Pak Haji*, *Bu Haji*, *Pastor Johanes*, *Romo Puji*, dan *Pendeta Andreas*.
 
-**g)** Pronomina persona kedua: *kamu*, *kamu sekalian*, *Anda semua*.
+g) Pronomina persona kedua: *kamu*, *kamu sekalian*, *Anda semua*.
 
 ## Keakraban dan Pemendekan
 

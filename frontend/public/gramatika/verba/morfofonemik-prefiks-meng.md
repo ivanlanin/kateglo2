@@ -5,7 +5,7 @@ title: Morfofonemik Prefiks meng- (4.1.3.3.3)
 
 Prefiks *meng-* mengalami proses morfofonemik yang didasarkan pada fonem awal dan jumlah suku kata yang menjadi pangkal. Ada delapan kaidah morfofonemik untuk prefiks *meng-*. Kaidah 1—5 tidak berlaku untuk pangkal yang bersuku satu, yang dicakup pada kaidah 6. Kaidah 7 berlaku untuk sejumlah pangkal asing dan kaidah 8 memerikan pola reduplikasi yang berprefiks *meng-*.
 
-**1)** Prefiks *meng-* tidak mengalami perubahan jika ditambahkan pada pangkal yang dimulai dengan vokal atau konsonan /k/, /g/, /h/, /x/, atau gabungan konsonan /kh/.
+1) Prefiks *meng-* tidak mengalami perubahan jika ditambahkan pada pangkal yang dimulai dengan vokal atau konsonan /k/, /g/, /h/, /x/, atau gabungan konsonan /kh/.
 
 Contoh:
 
@@ -31,7 +31,7 @@ Contoh:
 
 (92) *meng-* + *ke muka* → *mengemukakan*; *meng-* + *ke samping* → *mengesampingkan*; *meng-* + *ke depan* → *mengedepankan*
 
-**2)** Jika ditambahkan pada pangkal yang dimulai dengan fonem /l/, /m/, /n/, /ny/, /ng/, /r/, /y/, atau /w/, bentuk *meng-* berubah menjadi *me-*.
+2) Jika ditambahkan pada pangkal yang dimulai dengan fonem /l/, /m/, /n/, /ny/, /ng/, /r/, /y/, atau /w/, bentuk *meng-* berubah menjadi *me-*.
 
 Contoh:
 
@@ -48,7 +48,7 @@ Contoh:
 | *meng-* | + | *yakinkan* | → | *meyakinkan* |
 | *meng-* | + | *wajibkan* | → | *mewajibkan* |
 
-**3)** Jika ditambahkan pada pangkal yang dimulai dengan fonem /d/ atau /t/, prefiks *meng-* berubah menjadi *men-*. Fonem /t/ berasimilasi (luluh) ke dalam /n/ pada prefiks, sementara /d/ dipertahankan.
+3) Jika ditambahkan pada pangkal yang dimulai dengan fonem /d/ atau /t/, prefiks *meng-* berubah menjadi *men-*. Fonem /t/ berasimilasi (luluh) ke dalam /n/ pada prefiks, sementara /d/ dipertahankan.
 
 Contoh:
 
@@ -65,7 +65,7 @@ Contoh:
 
 Kaidah asimilasi ini tidak berlaku pada pangkal yang dimulai dengan prefiks *ter-* seperti dalam kata *tertawa*. Itulah sebabnya *meng-* + *tertawakan* = *mentertawakan*, bukan *menertawakan*.
 
-**4)** Jika ditambahkan pada pangkal yang dimulai dengan fonem /b/, /p/, /f/, atau /v/, bentuk *meng-* berubah menjadi *mem-*. Fonem /p/ luluh, sementara /b/, /f/, /v/ dipertahankan.
+4) Jika ditambahkan pada pangkal yang dimulai dengan fonem /b/, /p/, /f/, atau /v/, bentuk *meng-* berubah menjadi *mem-*. Fonem /p/ luluh, sementara /b/, /f/, /v/ dipertahankan.
 
 Contoh:
 
@@ -86,7 +86,7 @@ Contoh:
 
 (96) *meng-* + *pertinggi* → *mempertinggi*; *meng-* + *pertegas* → *mempertegas*; *meng-* + *perdalam* → *memperdalam*.
 
-**5)** Jika ditambahkan pada pangkal yang dimulai dengan fonem /c/, /j/, /s/, dan /sy/, bentuk *meng-* berubah menjadi *meny-*. Di dalam penulisan, prefiks *meny-* ini ditulis atau disederhanakan menjadi *men-* (fonem /s/ luluh, /c/ dan /j/ dipertahankan).
+5) Jika ditambahkan pada pangkal yang dimulai dengan fonem /c/, /j/, /s/, dan /sy/, bentuk *meng-* berubah menjadi *meny-*. Di dalam penulisan, prefiks *meny-* ini ditulis atau disederhanakan menjadi *men-* (fonem /s/ luluh, /c/ dan /j/ dipertahankan).
 
 Contoh:
 
@@ -101,7 +101,7 @@ Contoh:
 | *meng-* | + | *sulih* | → | *menyulih* (/s/ luluh) |
 | *meng-* | + | *syukuri* | → | *mensyukuri* (/sy/ dipertahankan) |
 
-**6)** Jika ditambahkan pada bentuk dasar yang bersuku satu, prefiks *meng-* berubah menjadi *menge-*. Bentuk pasif dari verba turunan ini ialah *di-* ditambah bentuk dasar itu.
+6) Jika ditambahkan pada bentuk dasar yang bersuku satu, prefiks *meng-* berubah menjadi *menge-*. Bentuk pasif dari verba turunan ini ialah *di-* ditambah bentuk dasar itu.
 
 Contoh:
 
@@ -122,7 +122,7 @@ Jika bentuk dasar yang berawal dengan fonem /s/ berbentuk gugus konsonan, prefik
 
 Bentuk seperti *membom*, *mencek*, *mempel*, *merem*, dan *mentik* merupakan bentuk yang tidak baku.
 
-**7)** Jika ditambahkan pada pangkal yang bergugus konsonan, seperti /pr/, /pl/, /kl/, /tr/, /kh/, /kr/, prefiks *meng-* tidak berasimilasi dengan konsonan awal pangkal itu.
+7) Jika ditambahkan pada pangkal yang bergugus konsonan, seperti /pr/, /pl/, /kl/, /tr/, /kh/, /kr/, prefiks *meng-* tidak berasimilasi dengan konsonan awal pangkal itu.
 
 Contoh:
 
@@ -143,7 +143,7 @@ Contoh:
 | *meng-* | + | *kremasi* | → | *mengkremasi* |
 | *meng-* | + | *kristal* | → | *mengkristal* |
 
-**8)** Jika verba yang berafiks direduplikasi, pangkalnya diulangi dengan mempertahankan asimilasi konsonan pertamanya. Pangkal yang bersuku satu mempertahankan unsur *nge-* di depan pangkal yang direduplikasi. Sufiks (jika ada) tidak ikut direduplikasi.
+8) Jika verba yang berafiks direduplikasi, pangkalnya diulangi dengan mempertahankan asimilasi konsonan pertamanya. Pangkal yang bersuku satu mempertahankan unsur *nge-* di depan pangkal yang direduplikasi. Sufiks (jika ada) tidak ikut direduplikasi.
 
 | Pangkal | Bentuk dasar berafiks | Bentuk reduplikasi |
 |---|---|---|

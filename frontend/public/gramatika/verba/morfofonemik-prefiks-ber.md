@@ -5,7 +5,7 @@ title: Morfofonemik Prefiks ber- (4.1.3.3.1)
 
 Penambahan prefiks *ber-* pada pangkal tertentu akan mengubah prefiks itu menjadi *be-* atau *bel-* dengan kaidah morfofonemik sebagai berikut.
 
-**1)** Prefiks *ber-* berubah menjadi *be-* jika ditambahkan pada pangkal yang dimulai dengan fonem /r/ atau pada pangkal yang suku pertamanya mengandung /ar/ (termasuk pepet /ə/).
+1) Prefiks *ber-* berubah menjadi *be-* jika ditambahkan pada pangkal yang dimulai dengan fonem /r/ atau pada pangkal yang suku pertamanya mengandung /ar/ (termasuk pepet /ə/).
 
 Contoh:
 
@@ -34,7 +34,7 @@ Untuk membedakan dua bentuk yang mengelirukan, dapat digunakan tanda hubung anta
 | *uang* | *beruang* | *ber-uang* |
 | *ruang* | *beruang* | *be-ruang* |
 
-**2)** Prefiks *ber-* berubah menjadi *bel-* jika ditambahkan pada dasar tertentu:
+2) Prefiks *ber-* berubah menjadi *bel-* jika ditambahkan pada dasar tertentu:
 
 (86)
 
