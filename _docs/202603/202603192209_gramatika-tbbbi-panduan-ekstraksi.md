@@ -1,7 +1,7 @@
 # Panduan Ekstraksi Bab TBBBI untuk Halaman Gramatika
 
 Tanggal dibuat: 2026-03-19
-Dimutakhirkan: 2026-03-21
+Dimutakhirkan: 2026-03-23
 
 ## Latar Belakang
 
@@ -279,7 +279,7 @@ Ekstraksi teks PDF dengan `pdfplumber` menghasilkan banyak artefak OCR (karakter
 2. **Model multimodal membaca gambar langsung** — jauh lebih akurat untuk teks berformat kompleks, contoh bernomor, dan tabel
 3. **Beban perbaikan OCR manual jauh berkurang** karena layout halaman bisa diverifikasi langsung dari gambar
 
-### Lokasi File JPG
+### Lokasi File JPG dan PDF per Bab
 
 ```
 _data/gramatika/
@@ -304,6 +304,29 @@ _data/gramatika/
 Konvensi nama: `bab-{NN}-h{NNN}.jpg` di mana `NN` = nomor bab dua digit, `NNN` = nomor PDF 1-indeks (tiga digit).
 
 Contoh: `bab-09-h475.jpg` = halaman PDF ke-475 = halaman buku 452.
+
+Mulai 2026-03-23, setiap folder `bab-{NN}/` juga menyimpan PDF hasil pecahan dari sumber utama untuk memudahkan audit per bab tanpa harus membuka PDF 616 halaman penuh.
+
+Konvensi nama PDF per bab: `bab-{NN}-{slug-bab}.pdf`
+
+Contoh:
+
+- `bab-01/bab-01-pendahuluan.pdf`
+- `bab-04/bab-04-verba.pdf`
+- `bab-10/bab-10-hubungan-antarklausa.pdf`
+
+Rentang yang dipakai untuk PDF per bab mengikuti tabel status ekstraksi di dokumen ini:
+
+- Bab I: PDF 25-46
+- Bab II: PDF 47-68
+- Bab III: PDF 69-118
+- Bab IV: PDF 119-216
+- Bab V: PDF 217-257
+- Bab VI: PDF 258-281
+- Bab VII: PDF 282-395
+- Bab VIII: PDF 396-429
+- Bab IX: PDF 430-534
+- Bab X: PDF 535-574
 
 ### Script Konversi JPG
 
