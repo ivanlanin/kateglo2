@@ -33,7 +33,7 @@ Untuk setiap item markdown di `frontend/public/gramatika/` lakukan pemeriksaan b
 
 | Bab | Folder | Status | Catatan |
 |---|---|---|---|
-| I Pendahuluan | `frontend/public/gramatika/pendahuluan/` | OK | Semua item Bab I sudah diaudit; 1.2.2, 1.6, dan 1.8 dikoreksi secara isi, lalu Bab I diaudit ulang untuk menghapus penekanan editorial yang tidak ada di sumber |
+| Bab I Pendahuluan | `frontend/public/gramatika/pendahuluan/` | OK | Audit ulang 2026-03-23: ditemukan dan diperbaiki 26 ketidaksesuaian terhadap PDF di 7 file — em-dash/koma, tanda kurung, kata terlewat, label editorial, dan perubahan kalimat pembuka 1.2.2. |
 | II Tata Bahasa | `frontend/public/gramatika/tata-bahasa/` | Belum | — |
 | III Bunyi Bahasa | `frontend/public/gramatika/bunyi-bahasa/` | Belum | — |
 | IV Verba | `frontend/public/gramatika/verba/` | Belum | — |
@@ -58,16 +58,16 @@ Sumber audit:
 | Item | File | Hal. PDF | Status | Hasil ringkas |
 |---|---|:---:|---|---|
 | Bab I Pendahuluan | `frontend/public/gramatika/pendahuluan/pendahuluan.md` | — | OK | Halaman landing bab berfungsi sebagai daftar isi turunan dan sudah sinkron dengan struktur item Bab I di `gramatikaData.js`; tidak memerlukan audit teks PDF langsung. |
-| 1.1 Kedudukan Bahasa Indonesia | `frontend/public/gramatika/pendahuluan/kedudukan-bahasa-indonesia.md` | 25-26 | OK | Teks markdown lengkap terhadap dua halaman sumber; koreksi OCR seperti `keperiuan`→`keperluan`, `Francis`→`Prancis`, dan `Arena`→`Atena` sudah benar. |
-| 1.2 Ragam Bahasa | `frontend/public/gramatika/pendahuluan/ragam-bahasa.md` | 27 | OK | Dua paragraf pembuka sesuai halaman sumber; sisa uraian memang diteruskan ke dua file turunan sehingga halaman induk berfungsi sebagai pengantar + navigasi. |
-| 1.2.1 Ragam Menurut Golongan Penutur | `frontend/public/gramatika/pendahuluan/ragam-menurut-golongan-penutur.md` | 27-29 | OK | Isi sesuai pecahan sumber setelah paragraf pengantar 1.2; koreksi OCR pada istilah, italic, dan simbol bunyi sudah rapi, lalu transisi ke 1.2.2 dimulai di halaman berikutnya. |
-| 1.2.2 Ragam Menurut Jenis Pemakaian | `frontend/public/gramatika/pendahuluan/ragam-menurut-jenis-pemakaian.md` | 30-32 | OK | Isi lengkap terhadap sumber; ditambahkan kembali uraian tentang ragam tulis yang muncul kemudian, peran *lingua franca* Melayu, dan kalimat penutup transisi sebelum 1.3. |
-| 1.3 Diglosia | `frontend/public/gramatika/pendahuluan/diglosia.md` | 33-34 | OK | Isi sesuai dua halaman sumber, termasuk oposisi ragam tinggi-rendah, kodifikasi, dan paradoks mudah-sukar dalam pemakaian bahasa Indonesia. |
-| 1.4 Pembakuan Bahasa | `frontend/public/gramatika/pendahuluan/pembakuan-bahasa.md` | 34-35 | OK | Uraian norma monosentris-majemuk serta contoh *perusak/pengrusak* dan kata penggolong sudah lengkap dan bersih dari artefak OCR. |
-| 1.5 Bahasa Baku | `frontend/public/gramatika/pendahuluan/bahasa-baku.md` | 36-37 | OK | Tiga ciri ragam baku tercakup lengkap; istilah, contoh, dan makna pembakuan tetap sesuai sumber. |
-| 1.6 Fungsi Bahasa Baku | `frontend/public/gramatika/pendahuluan/fungsi-bahasa-baku.md` | 37-42 | OK | Empat fungsi bahasa baku dan lanjutan pembakuan ejaan, lafal, kosakata, serta tata bahasa sudah lengkap; ditambahkan lagi rincian edisi kamus dan konteks contoh idiom yang sebelumnya hilang. |
-| 1.7 Bahasa yang Baik dan Benar | `frontend/public/gramatika/pendahuluan/bahasa-yang-baik-dan-benar.md` | 43-44 | OK | Penjelasan perbedaan bahasa yang benar dan bahasa yang baik tetap lengkap; dua contoh percakapan pasar masih mewakili substansi sumber dengan jelas. |
-| 1.8 Hubungan Bahasa Indonesia dengan Bahasa Daerah dan Bahasa Asing | `frontend/public/gramatika/pendahuluan/hubungan-bahasa-indonesia-dengan-bahasa-daerah-dan-bahasa-asing.md` | 44-46 | OK | Uraian fungsi antarbahasa lengkap; koreksi dilakukan pada contoh sumber serapan agar kembali mengikuti sumber, termasuk penyebutan bahasa Cina. |
+| 1.1 Kedudukan Bahasa Indonesia | `frontend/public/gramatika/pendahuluan/kedudukan-bahasa-indonesia.md` | 25-26 | OK | Audit ulang: kalimat *lingua franca* dikembalikan dari em-dash ke koma sesuai sumber; hapus koma editorial setelah "manusia". |
+| 1.2 Ragam Bahasa | `frontend/public/gramatika/pendahuluan/ragam-bahasa.md` | 27 | OK | Tidak ada temuan baru; isi sesuai dua paragraf pembuka, sisanya di file turunan. |
+| 1.2.1 Ragam Menurut Golongan Penutur | `frontend/public/gramatika/pendahuluan/ragam-menurut-golongan-penutur.md` | 27-29 | OK | Audit ulang: 5 perbaikan — tanda kurung *misalnya* dan *(darat, laut, udara)/(cetak, elektronik)* dikembalikan; em-dash *persekolahan* dikembalikan; "dan jenis pemakaiannya—yang dapat disebut langgam atau gaya—" dipulihkan; "(bahasa Jawa)" setelah *gerah* ditambahkan kembali. |
+| 1.2.2 Ragam Menurut Jenis Pemakaian | `frontend/public/gramatika/pendahuluan/ragam-menurut-jenis-pemakaian.md` | 30-32 | OK | Audit ulang: 5 perbaikan — "dan/atau"; em-dash fungsi gramatikal dan "dan" (bukan "serta"); kalimat pembuka paragraf percampuran dikembalikan ke sumber; em-dash *teras bersamanya*; "dimaksudkan". |
+| 1.3 Diglosia | `frontend/public/gramatika/pendahuluan/diglosia.md` | 33-34 | OK | Audit ulang: titik koma → koma sebelum "sebaliknya"; hapus koma sebelum "maupun kosakata". |
+| 1.4 Pembakuan Bahasa | `frontend/public/gramatika/pendahuluan/pembakuan-bahasa.md` | 34-35 | OK | Tidak ada temuan baru. |
+| 1.5 Bahasa Baku | `frontend/public/gramatika/pendahuluan/bahasa-baku.md` | 36-37 | OK | Tidak ada temuan baru. |
+| 1.6 Fungsi Bahasa Baku | `frontend/public/gramatika/pendahuluan/fungsi-bahasa-baku.md` | 37-42 | OK | Audit ulang: 8 perbaikan — hapus 4 label editorial "Fungsi X." yang tidak ada di sumber; koma → tanda kurung *(dan mungkin juga di Afrika)*; "atau" → tanda kurung pada istilah fonologi/morfologi/sintaksis; hapus koma setelah "karya asli"; "populer, maupun" → "populer maupun". |
+| 1.7 Bahasa yang Baik dan Benar | `frontend/public/gramatika/pendahuluan/bahasa-yang-baik-dan-benar.md` | 43-44 | OK | Audit ulang: em-dash dikembalikan ke koma pada kalimat pembuka sesuai sumber. |
+| 1.8 Hubungan Bahasa Indonesia dengan Bahasa Daerah dan Bahasa Asing | `frontend/public/gramatika/pendahuluan/hubungan-bahasa-indonesia-dengan-bahasa-daerah-dan-bahasa-asing.md` | 44-46 | OK | Audit ulang: 3 perbaikan — hapus koma sebelum "maupun" (2 tempat); kembalikan tanda kurung referensi UU No. 20 Tahun 2003. |
 
 Catatan: beberapa rentang halaman Bab I saling tumpang-tindih karena heading subbab berikutnya mulai pada halaman yang sama dengan paragraf penutup subbab sebelumnya. Audit ulang Bab I juga menormalkan format markdown agar tidak menambahkan bold, heading tambahan, atau blockquote editorial yang tidak tampak pada TBBBI.
 

@@ -3,7 +3,7 @@ id: 7
 title: Bahasa yang Baik dan Benar (1.7)
 ---
 
-Jika bahasa sudah baku atau standar—baik yang ditetapkan secara resmi lewat surat putusan pejabat pemerintah maupun yang diterima berdasarkan kesepakatan umum dan yang wujudnya dapat disaksikan dalam praktik pengajaran bahasa—pembedaan antara bahasa yang benar dan yang tidak benar dapat dilakukan dengan lebih mudah. Bahasa yang sesuai dengan kaidah baku itulah yang disebut bahasa yang benar.
+Jika bahasa sudah baku atau standar, baik yang ditetapkan secara resmi lewat surat putusan pejabat pemerintah maupun yang diterima berdasarkan kesepakatan umum dan yang wujudnya dapat disaksikan dalam praktik pengajaran bahasa, pembedaan antara bahasa yang benar dan yang tidak benar dapat dilakukan dengan lebih mudah. Bahasa yang sesuai dengan kaidah baku itulah yang disebut bahasa yang benar.
 
 Pada kenyataannya seseorang mungkin berhadapan dengan bahasa yang (1) semua tatarannya sudah dibakukan; (2) sebagian sudah baku, sedangkan bagian yang lain masih dalam proses pembakuan; atau (3) semua bagiannya belum atau tidak akan dibakukan. Bahasa Indonesia agaknya termasuk ke dalam golongan yang kedua karena kaidah ejaan, pembentukan kata dan istilah, serta tata kalimatnya sudah dibakukan, tetapi pelaksanaannya belum mantap.
 
