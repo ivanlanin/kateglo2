@@ -49,9 +49,9 @@ Mencatat halaman Gramatika yang masih memuat heading internal `##`, `###`, dan s
 
 ## Ringkasan Temuan
 
-- Total halaman konten yang masih memiliki heading internal: 45 file
-- Total heading internal yang terdeteksi: 176 heading
-- Bab yang terdampak: 8 bab
+- Total halaman konten yang masih memiliki heading internal: 35 file
+- Total heading internal yang terdeteksi: 142 heading
+- Bab yang terdampak: 7 bab
 - Duplikasi antar kandidat heading baru: 0
 - Bentrok langsung dengan slug/file yang sudah ada: 1 kasus
 
@@ -66,7 +66,7 @@ Mencatat halaman Gramatika yang masih memuat heading internal `##`, `###`, dan s
 | hubungan-antarklausa | 3 | 8 |
 | kalimat | 10 | 47 |
 | kata-tugas | 2 | 7 |
-| nomina | 10 | 34 |
+| nomina | 0 | 0 |
 | pronomina | 2 | 7 |
 | tata-bahasa | 0 | 0 |
 | verba | 8 | 34 |
@@ -189,6 +189,74 @@ Implikasi:
 - pola pemecahan Bab II tetap valid untuk Bab III, termasuk kombinasi daftar isi bab rekursif dan halaman induk konten yang hanya menampilkan anak langsung
 - batch berikutnya dapat lanjut ke Bab IV
 
+### Batch 4: Bab IV Nomina
+
+Status: selesai dipecah dan tervalidasi
+
+Hasil verifikasi:
+
+- subfolder `frontend/public/gramatika/nomina/` sekarang tidak memiliki heading internal `##`, `###`, dan seterusnya
+- halaman bab `nomina.md` sudah disinkronkan ulang dari `gramatikaData.js` melalui `sync-gramatika-toc.mjs` dengan struktur daftar isi rekursif penuh
+- semua halaman induk konten Nomina yang sebelumnya mengandung heading internal kini dirapikan agar hanya menampilkan anak langsung
+- bentrok slug `numeralia` di bawah `penentu.md` diselesaikan dengan slug aman `penentu-numeralia`
+- struktur Bab IV di `frontend/src/constants/gramatikaData.js` sudah diperluas untuk seluruh turunan baru agar breadcrumb dan sidebar mengikuti hierarki baru
+- validasi frontend lulus melalui `npm run lint` dan `vitest` untuk area terkait
+
+File baru yang ditambahkan pada Bab IV:
+
+- `frontend/public/gramatika/nomina/nama-jenis.md`
+- `frontend/public/gramatika/nomina/nama-diri.md`
+- `frontend/public/gramatika/nomina/nomina-dasar-umum.md`
+- `frontend/public/gramatika/nomina/nomina-dasar-khusus.md`
+- `frontend/public/gramatika/nomina/perulangan-utuh.md`
+- `frontend/public/gramatika/nomina/perulangan-salin-suara.md`
+- `frontend/public/gramatika/nomina/perulangan-sebagian.md`
+- `frontend/public/gramatika/nomina/perulangan-disertai-pengafiksan.md`
+- `frontend/public/gramatika/nomina/perulangan-sinonim.md`
+- `frontend/public/gramatika/nomina/nomina-majemuk-berdasarkan-bentuk-morfologisnya.md`
+- `frontend/public/gramatika/nomina/nomina-majemuk-berdasarkan-hubungan-komponennya.md`
+- `frontend/public/gramatika/nomina/penentu-numeralia.md`
+- `frontend/public/gramatika/nomina/penunjuk-atau-demonstrativa.md`
+- `frontend/public/gramatika/nomina/penanda-ketakrifan.md`
+- `frontend/public/gramatika/nomina/pronomina-dan-nomina-pemilik.md`
+- `frontend/public/gramatika/nomina/nomina-sebagai-pelengkap-preposisi.md`
+- `frontend/public/gramatika/nomina/nomina-sebagai-inti-frasa-nominal.md`
+- `frontend/public/gramatika/nomina/nomina-pewatas.md`
+- `frontend/public/gramatika/nomina/adjektiva-pewatas.md`
+- `frontend/public/gramatika/nomina/verba-pewatas.md`
+- `frontend/public/gramatika/nomina/frasa-preposisional-sebagai-pewatas.md`
+- `frontend/public/gramatika/nomina/klausa-sebagai-pewatas.md`
+- `frontend/public/gramatika/nomina/apositif-sebagai-pewatas.md`
+- `frontend/public/gramatika/nomina/frasa-nominal-majemuk.md`
+- `frontend/public/gramatika/nomina/pola-kanonik-frasa-nominal.md`
+- `frontend/public/gramatika/nomina/bentuk-vokatif-yang-lazim.md`
+- `frontend/public/gramatika/nomina/keakraban-dan-pemendekan.md`
+- `frontend/public/gramatika/nomina/vokatif-dan-ungkapan-penyapa.md`
+- `frontend/public/gramatika/nomina/bentuk-perulangan-an.md`
+- `frontend/public/gramatika/nomina/kata-para.md`
+- `frontend/public/gramatika/nomina/kata-kaum.md`
+- `frontend/public/gramatika/nomina/kata-umat.md`
+- `frontend/public/gramatika/nomina/hubungan-jumlah-dan-pengacuan.md`
+- `frontend/public/gramatika/nomina/konsep-tunggal-jamak-dan-generik-simpulan.md`
+
+Halaman induk Bab IV yang diubah menjadi daftar subhalaman hierarkis:
+
+- `frontend/public/gramatika/nomina/nomina-berdasarkan-acuan.md`
+- `frontend/public/gramatika/nomina/nomina-dasar.md`
+- `frontend/public/gramatika/nomina/penurunan-nomina-melalui-perulangan.md`
+- `frontend/public/gramatika/nomina/penurunan-nomina-melalui-pemajemukan.md`
+- `frontend/public/gramatika/nomina/penentu.md`
+- `frontend/public/gramatika/nomina/perilaku-sintaksis-nomina.md`
+- `frontend/public/gramatika/nomina/perluasan-nomina-ke-kanan.md`
+- `frontend/public/gramatika/nomina/susunan-kata-pada-frasa-nominal.md`
+- `frontend/public/gramatika/nomina/frasa-nominal-vokatif.md`
+- `frontend/public/gramatika/nomina/konsep-tunggal-jamak-dan-generik.md`
+
+Implikasi:
+
+- pola implementasi per subfolder tetap konsisten pada Bab IV: halaman bab rekursif penuh, halaman induk konten anak langsung saja
+- batch berikutnya dapat lanjut ke Bab V
+
 ## Prioritas Pemecahan
 
 File dengan kepadatan heading paling tinggi sebaiknya diproses lebih dulu karena memberi pengurangan kompleksitas paling besar per file.
@@ -197,9 +265,9 @@ File dengan kepadatan heading paling tinggi sebaiknya diproses lebih dulu karena
 2. `frontend/public/gramatika/verba/verba-taktransitif-dengan-prefiks-meng.md` — 9 heading
 3. `frontend/public/gramatika/kalimat/kalimat-imperatif.md` — 8 heading
 4. `frontend/public/gramatika/kalimat/kalimat-dan-kemasan-informasi.md` — 7 heading
-5. `frontend/public/gramatika/nomina/perluasan-nomina-ke-kanan.md` — 7 heading
-6. `frontend/public/gramatika/adjektiva/tingkat-kualitas.md` — 6 heading
-7. `frontend/public/gramatika/adjektiva/adjektiva-majemuk.md` — 5 heading
+5. `frontend/public/gramatika/adjektiva/tingkat-kualitas.md` — 6 heading
+6. `frontend/public/gramatika/adjektiva/adjektiva-majemuk.md` — 5 heading
+7. `frontend/public/gramatika/verba/fungsi-verba-dan-frasa-verbal.md` — 5 heading
 
 Catatan eksekusi:
 

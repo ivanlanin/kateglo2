@@ -191,12 +191,26 @@ const daftarIsiGramatika = [
         judul: 'Jenis Nomina',
         slug: 'jenis-nomina',
         turunan: [
-          { judul: 'Nomina Berdasarkan Acuan', slug: 'nomina-berdasarkan-acuan' },
+          {
+            judul: 'Nomina Berdasarkan Acuan',
+            slug: 'nomina-berdasarkan-acuan',
+            turunan: [
+              { judul: 'Nama Jenis', slug: 'nama-jenis' },
+              { judul: 'Nama Diri', slug: 'nama-diri' },
+            ],
+          },
           {
             judul: 'Nomina Berdasarkan Bentuk Morfologis',
             slug: 'nomina-berdasarkan-bentuk-morfologis',
             turunan: [
-              { judul: 'Nomina Dasar', slug: 'nomina-dasar' },
+              {
+                judul: 'Nomina Dasar',
+                slug: 'nomina-dasar',
+                turunan: [
+                  { judul: 'Nomina Dasar Umum', slug: 'nomina-dasar-umum' },
+                  { judul: 'Nomina Dasar Khusus', slug: 'nomina-dasar-khusus' },
+                ],
+              },
               { judul: 'Penurunan Nomina dengan Konversi', slug: 'penurunan-nomina-dengan-konversi' },
               {
                 judul: 'Penurunan Nomina melalui Pengafiksan',
@@ -216,8 +230,25 @@ const daftarIsiGramatika = [
                   { judul: 'Penurunan Nomina dengan se-', slug: 'penurunan-nomina-dengan-se' },
                 ],
               },
-              { judul: 'Penurunan Nomina melalui Perulangan', slug: 'penurunan-nomina-melalui-perulangan' },
-              { judul: 'Penurunan Nomina melalui Pemajemukan', slug: 'penurunan-nomina-melalui-pemajemukan' },
+              {
+                judul: 'Penurunan Nomina melalui Perulangan',
+                slug: 'penurunan-nomina-melalui-perulangan',
+                turunan: [
+                  { judul: 'Perulangan Utuh', slug: 'perulangan-utuh' },
+                  { judul: 'Perulangan Salin Suara', slug: 'perulangan-salin-suara' },
+                  { judul: 'Perulangan Sebagian', slug: 'perulangan-sebagian' },
+                  { judul: 'Perulangan Disertai Pengafiksan', slug: 'perulangan-disertai-pengafiksan' },
+                  { judul: 'Perulangan Sinonim', slug: 'perulangan-sinonim' },
+                ],
+              },
+              {
+                judul: 'Penurunan Nomina melalui Pemajemukan',
+                slug: 'penurunan-nomina-melalui-pemajemukan',
+                turunan: [
+                  { judul: 'Nomina Majemuk Berdasarkan Bentuk Morfologisnya', slug: 'nomina-majemuk-berdasarkan-bentuk-morfologisnya' },
+                  { judul: 'Nomina Majemuk Berdasarkan Hubungan Komponennya', slug: 'nomina-majemuk-berdasarkan-hubungan-komponennya' },
+                ],
+              },
             ],
           },
         ],
@@ -226,15 +257,61 @@ const daftarIsiGramatika = [
         judul: 'Frasa Nominal',
         slug: 'frasa-nominal',
         turunan: [
-          { judul: 'Penentu', slug: 'penentu' },
+          {
+            judul: 'Penentu',
+            slug: 'penentu',
+            turunan: [
+              { judul: 'Penentu Numeralia', slug: 'penentu-numeralia' },
+              { judul: 'Penunjuk atau Demonstrativa', slug: 'penunjuk-atau-demonstrativa' },
+              { judul: 'Penanda Ketakrifan', slug: 'penanda-ketakrifan' },
+              { judul: 'Pronomina dan Nomina Pemilik', slug: 'pronomina-dan-nomina-pemilik' },
+            ],
+          },
           { judul: 'Penggolong dan Partitif', slug: 'penggolong-dan-partitif' },
           { judul: 'Perluasan Nomina ke Kiri', slug: 'perluasan-nomina-ke-kiri' },
-          { judul: 'Perluasan Nomina ke Kanan', slug: 'perluasan-nomina-ke-kanan' },
-          { judul: 'Susunan Kata pada Frasa Nominal', slug: 'susunan-kata-pada-frasa-nominal' },
-          { judul: 'Frasa Nominal Vokatif', slug: 'frasa-nominal-vokatif' },
+          {
+            judul: 'Perluasan Nomina ke Kanan',
+            slug: 'perluasan-nomina-ke-kanan',
+            turunan: [
+              { judul: 'Nomina Pewatas', slug: 'nomina-pewatas' },
+              { judul: 'Adjektiva Pewatas', slug: 'adjektiva-pewatas' },
+              { judul: 'Verba Pewatas', slug: 'verba-pewatas' },
+              { judul: 'Frasa Preposisional sebagai Pewatas', slug: 'frasa-preposisional-sebagai-pewatas' },
+              { judul: 'Klausa sebagai Pewatas', slug: 'klausa-sebagai-pewatas' },
+              { judul: 'Apositif sebagai Pewatas', slug: 'apositif-sebagai-pewatas' },
+              { judul: 'Frasa Nominal Majemuk', slug: 'frasa-nominal-majemuk' },
+            ],
+          },
+          {
+            judul: 'Susunan Kata pada Frasa Nominal',
+            slug: 'susunan-kata-pada-frasa-nominal',
+            turunan: [
+              { judul: 'Pola Kanonik Frasa Nominal', slug: 'pola-kanonik-frasa-nominal' },
+            ],
+          },
+          {
+            judul: 'Frasa Nominal Vokatif',
+            slug: 'frasa-nominal-vokatif',
+            turunan: [
+              { judul: 'Bentuk Vokatif yang Lazim', slug: 'bentuk-vokatif-yang-lazim' },
+              { judul: 'Keakraban dan Pemendekan', slug: 'keakraban-dan-pemendekan' },
+              { judul: 'Vokatif dan Ungkapan Penyapa', slug: 'vokatif-dan-ungkapan-penyapa' },
+            ],
+          },
         ],
       },
-      { judul: 'Konsep Tunggal, Jamak, dan Generik', slug: 'konsep-tunggal-jamak-dan-generik' },
+      {
+        judul: 'Konsep Tunggal, Jamak, dan Generik',
+        slug: 'konsep-tunggal-jamak-dan-generik',
+        turunan: [
+          { judul: 'Bentuk Perulangan + -an', slug: 'bentuk-perulangan-an' },
+          { judul: 'Kata para', slug: 'kata-para' },
+          { judul: 'Kata kaum', slug: 'kata-kaum' },
+          { judul: 'Kata umat', slug: 'kata-umat' },
+          { judul: 'Hubungan Jumlah dan Pengacuan', slug: 'hubungan-jumlah-dan-pengacuan' },
+          { judul: 'Simpulan', slug: 'konsep-tunggal-jamak-dan-generik-simpulan' },
+        ],
+      },
     ],
   },
   {

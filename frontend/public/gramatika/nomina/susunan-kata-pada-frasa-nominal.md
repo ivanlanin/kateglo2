@@ -25,25 +25,4 @@ Nomina dalam bahasa Indonesia dapat diikuti pewatas yang terdiri atas dua kata a
 - (151a) *Bapak Hasan, guru saya, akan pergi haji tahun depan.*
 - (151b) *Guru saya, Bapak Hasan, akan pergi haji tahun depan.*
 
-## Pola Kanonik Frasa Nominal
-
-Nomina inti dapat diperluas dengan menambahkan pewatas dengan atau tanpa penentu. Penentu yang mengikuti nomina inti, jika hadir semua, akan mempunyai urutan dasar: numeralia (Num), kemudian pronomina/nomina penanda kepemilikan (Pmk), dan terakhir penanda ketakrifan/penunjuk (Penk/Penj). Berdasarkan uraian di atas, pola kanonik frasa nominal:
-
-- (a) (FNum) + Nomina inti + (Pewatas) + (Pmk) + (Penk/Penj)
-- (b) Nomina inti + (Pewatas) + (FNum) + (Pmk) + (Penk/Penj)
-
-Contoh:
-
-- (152a) *kedua mahasiswa bimbingan beliau tadi*—FNum + N + N/pewatas + Pmk + Penk
-- (152b) *seorang anak laki-laki keluarga itu*—FNum + N + N/pewatas + Pmk + Penj
-- (152c) *kedua buku baru saya itu*—FNum + N + Adj/pewatas + Pmk + Penj
-- (152d) *anak perempuan pertama mereka itu*—N + N/pewatas + FNum + Pmk + Penj
-- (152e) *mobil Mercy kedua Pak Jaksa itu*—N + N/pewatas + FNum + Pmk + Penj
-
-Perubahan susunan konstituen frasa nominal dapat terjadi dengan memindahkan pronomina/nomina pemilik mendahului frasa numeralia atau pewatas. Konstituen frasa numeralia atau pewatas yang dipindahkan ke belakang harus didahului *yang*:
-
-- (153)
-
-- (153a.i) *anak laki-laki kedua* → (153a.ii) *anak laki-laki Pak Aris yang kedua*
-- (153b.i) *buku merah saya itu* → (153b.ii) *buku saya yang merah itu*
-- (153c.i) *rumah bertingkat keluarga kaya itu* → (153c.ii) *rumah keluarga kaya yang bertingkat itu*
+1. [Pola Kanonik Frasa Nominal](/gramatika/pola-kanonik-frasa-nominal)

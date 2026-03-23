@@ -180,59 +180,7 @@ Tidak ada heading internal `##+` yang perlu dipecah pada subfolder `frontend/pub
 
 ## Nomina
 
-### frontend/public/gramatika/nomina/frasa-nominal-vokatif.md
-- L16 `Bentuk Vokatif yang Lazim` -> `bentuk-vokatif-yang-lazim`
-- L34 `Keakraban dan Pemendekan` -> `keakraban-dan-pemendekan`
-- L38 `Vokatif dan Ungkapan Penyapa` -> `vokatif-dan-ungkapan-penyapa`
-
-### frontend/public/gramatika/nomina/konsep-tunggal-jamak-dan-generik.md
-- L12 `Bentuk Perulangan + *-an* (7.4.1)` -> `bentuk-perulangan-an`
-- L33 `Kata *para* (7.4.2)` -> `kata-para`
-- L54 `Kata *kaum* (7.4.3)` -> `kata-kaum`
-- L83 `Kata *umat* (7.4.4)` -> `kata-umat`
-- L93 `Hubungan Jumlah dan Pengacuan` -> `hubungan-jumlah-dan-pengacuan`
-- L121 `Simpulan` -> `simpulan`
-
-### frontend/public/gramatika/nomina/nomina-berdasarkan-acuan.md
-- L12 `Nama Jenis (7.1.4.1.1)` -> `nama-jenis`
-- L63 `Nama Diri (7.1.4.1.2)` -> `nama-diri`
-
-### frontend/public/gramatika/nomina/nomina-dasar.md
-- L8 `Nomina Dasar Umum` -> `nomina-dasar-umum`
-- L26 `Nomina Dasar Khusus` -> `nomina-dasar-khusus`
-
-### frontend/public/gramatika/nomina/penentu.md
-- L8 `Numeralia (7.1.5.1.1)` -> `numeralia` `[BENTROK]`
-- L29 `Penunjuk atau Demonstrativa (7.1.5.1.2)` -> `penunjuk-atau-demonstrativa`
-- L46 `Penanda Ketakrifan (7.1.5.1.3)` -> `penanda-ketakrifan`
-- L64 `Pronomina dan Nomina Pemilik (7.1.5.1.4)` -> `pronomina-dan-nomina-pemilik`
-
-### frontend/public/gramatika/nomina/penurunan-nomina-melalui-pemajemukan.md
-- L8 `Nomina Majemuk Berdasarkan Bentuk Morfologisnya` -> `nomina-majemuk-berdasarkan-bentuk-morfologisnya`
-- L34 `Nomina Majemuk Berdasarkan Hubungan Komponennya` -> `nomina-majemuk-berdasarkan-hubungan-komponennya`
-
-### frontend/public/gramatika/nomina/penurunan-nomina-melalui-perulangan.md
-- L8 `Perulangan Utuh` -> `perulangan-utuh`
-- L30 `Perulangan Salin Suara` -> `perulangan-salin-suara`
-- L51 `Perulangan Sebagian` -> `perulangan-sebagian`
-- L63 `Perulangan Disertai Pengafiksan` -> `perulangan-disertai-pengafiksan`
-- L84 `Perulangan Sinonim` -> `perulangan-sinonim`
-
-### frontend/public/gramatika/nomina/perilaku-sintaksis-nomina.md
-- L42 `Nomina sebagai Pelengkap Preposisi` -> `nomina-sebagai-pelengkap-preposisi`
-- L55 `Nomina sebagai Inti Frasa Nominal` -> `nomina-sebagai-inti-frasa-nominal`
-
-### frontend/public/gramatika/nomina/perluasan-nomina-ke-kanan.md
-- L8 `Nomina Pewatas (7.1.5.4.1)` -> `nomina-pewatas`
-- L43 `Adjektiva Pewatas (7.1.5.4.2)` -> `adjektiva-pewatas`
-- L74 `Verba Pewatas (7.1.5.4.3)` -> `verba-pewatas`
-- L98 `Frasa Preposisional sebagai Pewatas (7.1.5.4.4)` -> `frasa-preposisional-sebagai-pewatas`
-- L111 `Klausa sebagai Pewatas (7.1.5.4.5)` -> `klausa-sebagai-pewatas`
-- L123 `Apositif sebagai Pewatas (7.1.5.4.6)` -> `apositif-sebagai-pewatas`
-- L143 `Frasa Nominal Majemuk (7.1.5.4.7)` -> `frasa-nominal-majemuk`
-
-### frontend/public/gramatika/nomina/susunan-kata-pada-frasa-nominal.md
-- L28 `Pola Kanonik Frasa Nominal` -> `pola-kanonik-frasa-nominal`
+Tidak ada heading internal `##+` yang perlu dipecah pada subfolder `frontend/public/gramatika/nomina`.
 
 ## Pronomina
 
