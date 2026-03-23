@@ -3,7 +3,7 @@ id: 9.2.3
 title: Keserasian Antarunsur (9.2.3)
 ---
 
-Penggabungan dua kata atau lebih dalam satu kalimat menuntut adanya keserasian di antara unsur-unsur tersebut, baik dari segi makna maupun dari segi bentuk.
+Penggabungan dua kata atau lebih dalam satu kalimat menuntut adanya keserasian di antara unsur-unsur tersebut, baik dari segi makna maupun dari segi bentuk. Berdasarkan hal itu, berikut ini dikemukakan keserasian unsur-unsur kalimat tersebut, yakni keserasian makna dan keserasian bentuk.
 
 ## Keserasian Makna (9.2.3.1)
 
@@ -14,7 +14,7 @@ Pada dasarnya orang membuat kalimat berdasarkan pengetahuannya tentang dunia di 
 - a. \*Batu itu memakan rumput.
 - b. \*Kuda kami membaca radio.
 
-Kejanggalan makna pada (16a) timbul karena verba *memakan* menuntut nomina insani sebagai pelakunya. Kenyataan bahwa *batu itu* bukan insani mengakibatkan untaian (16a) itu terasa janggal. Kejanggalan makna pada (16b) juga timbul karena verba *membaca* menuntut nomina insani sebagai pelakunya, sedangkan verba *membaca* menuntut nomina yang berwujud sesuatu yang dapat dibaca sebagai objeknya.
+Kejanggalan makna pada (16a) timbul karena verba *memakan* menuntut nomina insani sebagai pelakunya. Kenyataan bahwa *batu itu* bukan insani mengakibatkan untaian (16a) itu terasa janggal. Kejanggalan makna pada (16b) juga timbul karena verba *membaca* menuntut nomina insani sebagai pelakunya, sedangkan verba *membaca* menuntut nomina yang berwujud sesuatu yang dapat dibaca sebagai objeknya. Kenyataan bahwa *kuda kami* bukan orang dan *radio* tidak berwujud sesuatu yang dibaca mengakibatkan kalimat pada (16b) itu terasa aneh.
 
 Kejanggalan lain dapat timbul karena dilandasi oleh faktor budaya suatu bangsa sehingga yang janggal bagi suatu bangsa belum tentu janggal bagi bangsa lain.
 
@@ -23,7 +23,7 @@ Kejanggalan lain dapat timbul karena dilandasi oleh faktor budaya suatu bangsa s
 - a. ?Bu Fulani memanjat pohon kelapa di kebunnya.
 - b. ?Tuti akan menyembelih hewan kurban besok.
 
-Verba *memanjat* dan *menyembelih* dalam bahasa dan budaya Indonesia pada umumnya menuntut pelaku seorang pria. Kedua kalimat di atas tidak lazim digunakan karena tidak sesuai dengan budaya atau kebiasaan yang berlaku di Indonesia.
+Verba *memanjat* dan *menyembelih* dalam bahasa dan budaya Indonesia pada umumnya menuntut pelaku seorang pria. Seorang pria biasa memanjat pohon dan menyembelih hewan kurban. Kedua kalimat di atas tidak lazim digunakan karena tidak sesuai dengan budaya atau kebiasaan yang berlaku di Indonesia. Seandainya kalimat seperti itu dipakai, akan muncullah citra khusus mengenai Bu Fulani dan Tuti.
 
 Berkaitan dengan keserasian makna tersebut, perlu dikemukakan bahwa acap kali orang tidak menyatakan bagian yang dapat dipulihkan / dipahami sendiri oleh pendengar / pembaca.
 

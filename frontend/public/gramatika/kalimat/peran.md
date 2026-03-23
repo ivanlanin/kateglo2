@@ -7,11 +7,11 @@ Pada dasarnya setiap kalimat memerikan suatu peristiwa atau keadaan yang melibat
 
 (147) Ida memberikan hadiah kepada ibunya.
 
-Pada kalimat (147) terdapat tiga argumen, yaitu *Ida*, *hadiah*, dan *ibunya*. Kalimat itu mengandung subjek *Ida* sebagai pelaku, objek *hadiah* sebagai sasaran, dan keterangan *ibunya* sebagai peruntung atau pihak yang memperoleh manfaat. Oleh karena itu, dalam pemerian kalimat, kategori leksikal perlu dibedakan dari fungsi sintaktis dan peran tematis unsur kalimat. Setiap bentuk kata atau frasa yang menjadi unsur kalimat termasuk dalam kategori kata atau frasa tertentu dan masing-masing mempunyai fungsi sintaktis serta peran tematis. Pada 9.3.3.1—9.3.3.14 berikut dibicarakan peran tematis (1) pelaku, (2) agen, (3) sasaran, (4) pengalam, (5) peruntung, (6) penerima, (7) penyebab, (8) tema, (9) tetara, (10) hasil, (11) lokasi, (12) alat, (13) tujuan, dan (14) sumber/bahan.
+Pada kalimat (147) terdapat tiga argumen, yaitu *Ida*, *hadiah*, dan *ibunya*. Kalimat itu mengandung subjek *Ida* sebagai pelaku, objek *hadiah* sebagai sasaran, dan keterangan *ibunya* sebagai peruntung atau pihak yang memperoleh manfaat. Oleh karena itu, dalam pemerian kalimat, kategori leksikal perlu dibedakan dari fungsi sintaktis dan peran tematis unsur kalimat. Setiap bentuk kata atau frasa yang menjadi unsur kalimat termasuk dalam kategori kata atau frasa tertentu dan masing-masing mempunyai fungsi sintaktis serta peran tematis. Pada 9.3.3.1—9.3.3.14 berikut dibicarakan peran tematis (1) pelaku (aktor), (2) agen, (3) sasaran, (4) pengalam, (5) peruntung, (6) penerima, (7) penyebab, (8) tema, (9) tetara, (10) hasil, (11) lokasi, (12) alat, (13) tujuan, dan (14) sumber (bahan).
 
 ## Pelaku (9.3.3.1)
 
-Peran pelaku atau aktor mengacu pada argumen yang **melakukan perbuatan** yang dinyatakan oleh verba predikat yang **tidak memengaruhi argumen lainnya**. Pelaku pada umumnya adalah manusia atau binatang. Merupakan peran tematis subjek pada kalimat aktif dan pelengkap pada kalimat pasif.
+Peran pelaku atau aktor mengacu pada argumen yang melakukan perbuatan yang dinyatakan oleh verba predikat yang tidak memengaruhi argumen lainnya. Pelaku pada umumnya adalah manusia atau binatang. Peran pelaku itu merupakan peran tematis subjek pada kalimat aktif dan pelengkap pada kalimat pasif.
 
 (148)
 
@@ -19,9 +19,15 @@ Peran pelaku atau aktor mengacu pada argumen yang **melakukan perbuatan** yang d
 - b. Kucing saya selalu tidur di kursi.
 - c. Burung-burung berkicau menyambut terbit matahari.
 
+(149)
+
+- a. Koran sedang dibaca Tina.
+- b. Mobil saya dipakai anak saya.
+- c. Berbagai upaya dilakukan pemerintah untuk mengatasi kemiskinan.
+
 ## Agen (9.3.3.2)
 
-Peran agen mengacu pada argumen yang **melakukan perbuatan yang memengaruhi argumen lainnya**. Agen pada umumnya berupa manusia atau binatang. Merupakan peran tematis subjek pada kalimat aktif.
+Peran agen mengacu pada argumen yang melakukan perbuatan yang memengaruhi argumen lainnya. Agen pada umumnya berupa manusia atau binatang. Peran agen itu merupakan peran tematis subjek pada kalimat aktif.
 
 (150)
 
@@ -30,7 +36,7 @@ Peran agen mengacu pada argumen yang **melakukan perbuatan yang memengaruhi argu
 
 ## Sasaran (9.3.3.3)
 
-Peran sasaran mengacu pada argumen yang **dikenai perbuatan** yang dinyatakan oleh predikat. Merupakan peran objek atau pelengkap.
+Peran sasaran mengacu pada argumen yang dikenai perbuatan yang dinyatakan oleh predikat. Peran sasaran itu merupakan peran objek atau pelengkap.
 
 (151)
 
@@ -44,7 +50,7 @@ Peran sasaran mengacu pada argumen yang **dikenai perbuatan** yang dinyatakan ol
 
 ## Pengalam (9.3.3.4)
 
-Peran pengalam mengacu pada argumen yang **mengalami keadaan atau peristiwa** yang dinyatakan predikat. Merupakan peran unsur subjek kalimat yang predikatnya adjektiva atau verba taktransitif yang lebih menyatakan keadaan.
+Peran pengalam mengacu pada argumen yang mengalami keadaan atau peristiwa yang dinyatakan predikat. Peran pengalam merupakan peran unsur subjek kalimat yang predikatnya adjektiva atau verba taktransitif yang lebih menyatakan keadaan, seperti *saya*, *mereka*, dan *para pengungsi* pada contoh berikut.
 
 (153)
 
@@ -54,17 +60,19 @@ Peran pengalam mengacu pada argumen yang **mengalami keadaan atau peristiwa** ya
 
 ## Peruntung (9.3.3.5)
 
-Peran peruntung atau benefaktif mengacu pada argumen yang **memperoleh keuntungan atau manfaat** dari keadaan, peristiwa, atau perbuatan yang dinyatakan oleh predikat. Dimarkahi preposisi *demi, untuk,* dan *bagi*, atau muncul setelah predikat bersufiks *-kan*.
+Peran peruntung atau benefaktif mengacu pada argumen yang memperoleh keuntungan atau manfaat dari keadaan, peristiwa, atau perbuatan yang dinyatakan oleh predikat. Peran peruntung pada umumnya dimarkahi preposisi *demi, untuk,* dan *bagi*. Selain itu, peran peruntung merupakan peran argumen yang hadir setelah predikat bersufiks *-kan*.
 
 (154)
 
-- a. Ibu membeli kalung untuk *Tuti* / Ibu membelikan *Tuti* kalung.
+- a.
+	- i. Ibu membeli kalung untuk *Tuti*.
+	- ii. Ibu membelikan *Tuti* kalung.
 - b. Mereka membanting tulang demi *keluarganya*.
 - c. Ruang kerja ini disediakan bagi *direktur yang baru*.
 
 ## Penerima (9.3.3.6)
 
-Peran penerima (*recipient*) mengacu pada argumen yang **menerima sesuatu** dari keadaan, peristiwa, atau perbuatan yang dinyatakan oleh predikat.
+Peran penerima (*recipient*) atau resipien mengacu pada argumen yang menerima sesuatu dari keadaan, peristiwa, atau perbuatan yang dinyatakan oleh predikat. Misalnya, *dia* pada (155a) atau *para spekulan* pada (155b) merupakan penerima.
 
 (155)
 
@@ -73,7 +81,7 @@ Peran penerima (*recipient*) mengacu pada argumen yang **menerima sesuatu** dari
 
 ## Penyebab (9.3.3.7)
 
-Peran penyebab mengacu pada argumen yang **menyebabkan terjadinya sesuatu**.
+Peran penyebab mengacu pada argumen yang menyebabkan terjadinya sesuatu. Misalnya, *tsunami* pada (156a) dan *pembangunan jembatan* pada (156b) berikut ini.
 
 (156)
 
@@ -82,25 +90,28 @@ Peran penyebab mengacu pada argumen yang **menyebabkan terjadinya sesuatu**.
 
 ## Tema (9.3.3.8)
 
-Peran tema (*theme*) mengacu pada argumen yang **terlibat atau menjadi pokok pembicaraan** dalam keadaan, perbuatan, atau proses yang dinyatakan oleh predikat. Dalam kalimat nominal dan ekuatif, subjek kalimat berperan sebagai tema.
+Peran tema (*theme*) mengacu pada argumen yang terlibat (mengenai atau dikenai) dalam keadaan, perbuatan, atau proses yang dinyatakan oleh predikat. Dalam kalimat nominal dan kalimat ekuatif, konstituen kalimat yang berfungsi sebagai subjek merupakan unsur yang dijelaskan atau yang menjadi pokok pembicaraan. Oleh karena itu, jika dilihat dari segi peran, unsur kalimat yang berfungsi sebagai subjek itu berperan sebagai tema.
 
 (157)
 
 - a. *Jakarta* adalah ibu kota negara Republik Indonesia.
 - b. *Jaya Wijaya* adalah gunung tertinggi di Indonesia.
+- c. *Indonesia* adalah negara yang memiliki keberagaman budaya.
 
 ## Tetara (9.3.3.9)
 
-Peran tetara (*associate*) mengacu pada argumen yang **menjelaskan status atau identitas** argumen lain.
+Peran tetara (*associate*) mengacu pada argumen yang menjelaskan status atau identitas argumen lain.
 
 (158)
 
 - a. Bapak itu *guru saya*. *(guru saya = tetara dari bapak itu)*
 - b. Wanita itu *ibunya*. *(ibunya = tetara dari wanita itu)*
 
+*Guru saya* pada (158a) berperan sebagai tetara karena *guru saya* dan *Bapak itu* identik acuannya. Demikian pula *ibunya* pada kalimat (158b) identik acuannya dengan *wanita itu*.
+
 ## Hasil (9.3.3.10)
 
-Peran hasil (*factitive*) mengacu pada argumen yang merupakan **hasil dari proses** yang dinyatakan oleh verba predikat.
+Peran hasil (*factitive*) mengacu pada argumen yang merupakan hasil dari proses yang dinyatakan oleh verba predikat. Pada contoh (159) terlihat bahwa *jembatan dan puskesmas*, *tenda darurat*, dan *lubang perlindungan* masing-masing merupakan hasil dari proses atau perbuatan yang dinyatakan oleh verba *membangun*, *membuat*, dan *menggali*.
 
 (159)
 
@@ -110,7 +121,7 @@ Peran hasil (*factitive*) mengacu pada argumen yang merupakan **hasil dari prose
 
 ## Lokasi (9.3.3.11)
 
-Peran lokasi mengacu pada argumen yang **menggambarkan ruang dan/atau waktu** terjadinya peristiwa atau proses. Dimarkahi oleh preposisi lokatif *di, dari,* dan *ke*.
+Peran lokasi mengacu pada argumen yang menggambarkan ruang dan/atau waktu terjadinya peristiwa atau proses. Peran itu dimarkahi oleh preposisi lokatif *di, dari,* dan *ke*.
 
 (160)
 
@@ -120,7 +131,7 @@ Peran lokasi mengacu pada argumen yang **menggambarkan ruang dan/atau waktu** te
 
 ## Alat (9.3.3.12)
 
-Peran alat atau instrumen mengacu pada argumen yang **menggambarkan alat atau sarana** yang dipakai untuk tujuan tertentu. Dimarkahi dengan preposisi *dengan* atau *tanpa*.
+Peran alat atau instrumen mengacu pada argumen yang menggambarkan alat atau sarana yang dipakai untuk tujuan tertentu. Peran itu biasanya dimarkahi dengan preposisi *dengan* atau *tanpa*.
 
 (161)
 
@@ -129,7 +140,7 @@ Peran alat atau instrumen mengacu pada argumen yang **menggambarkan alat atau sa
 
 ## Tujuan (9.3.3.13)
 
-Peran tujuan mengacu pada argumen yang **menggambarkan akhir atau ujung** gerakan atau peristiwa.
+Peran tujuan mengacu pada argumen yang menggambarkan akhir atau ujung gerakan atau peristiwa.
 
 (162)
 
@@ -138,7 +149,7 @@ Peran tujuan mengacu pada argumen yang **menggambarkan akhir atau ujung** geraka
 
 ## Sumber / Bahan (9.3.3.14)
 
-Peran sumber atau bahan mengacu pada argumen yang **menggambarkan asal atau bahan baku** sesuatu.
+Peran sumber atau bahan mengacu pada argumen yang menggambarkan asal atau bahan baku sesuatu. Perhatikan *ban mobil* pada (163a) dan *tanah* pada (163b) berikut.
 
 (163)
 

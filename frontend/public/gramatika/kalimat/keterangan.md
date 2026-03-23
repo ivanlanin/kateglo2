@@ -19,9 +19,9 @@ Bentuk *di kantor*, *kemarin pagi*, *lima hektare*, dan *secepat-cepatnya* pada 
 - a. Darwis menghampiri profesor itu *sebelum seminar itu berakhir*.
 - b. Dani memotong rambutnya *segera setelah dia diterima bekerja di bank*.
 
-Makna keterangan ditentukan oleh perpaduan makna unsur-unsurnya. *Sebelum seminar itu berakhir* (51a) dan *segera setelah dia diterima bekerja di bank* (51b) merupakan keterangan yang berupa klausa yang mengandung makna waktu. Berdasarkan makna-makna keterangan seperti yang telah disebutkan di atas, berikut ini didaftarkan beberapa jenis keterangan yang lazim digunakan dalam bahasa Indonesia.
+Makna keterangan ditentukan oleh perpaduan makna unsur-unsurnya. Dengan demikian, keterangan *di kantor* (50a) mengandung makna tempat, *kemarin pagi* (50b) mengandung makna waktu, *lima hektare* (50c) mengandung makna kuantitas, dan *secepat-cepatnya* (50d) mengandung makna cara. Sementara itu, *sebelum seminar itu berakhir* (51a) dan *segera setelah dia diterima bekerja di bank* (51b) merupakan keterangan yang berupa klausa yang mengandung makna waktu. Berdasarkan makna-makna keterangan seperti yang telah disebutkan di atas, berikut ini didaftarkan beberapa jenis keterangan yang lazim digunakan dalam bahasa Indonesia.
 
-**Tabel 9.3 Jenis Keterangan**
+Tabel 9.3 Jenis Keterangan
 
 | No. | Jenis Keterangan | Preposisi/Konjungsi | Contoh |
 |:---:|---|---|---|
@@ -52,5 +52,7 @@ Makna keterangan ditentukan oleh perpaduan makna unsur-unsurnya. *Sebelum semina
 11. [Keterangan Kuantitas](/gramatika/keterangan-kuantitas)
 12. [Keterangan Kualitas](/gramatika/keterangan-kualitas)
 13. [Keterangan Sudut Pandang](/gramatika/keterangan-sudut-pandang)
+
+Tabel 9.3 memperlihatkan tiga belas jenis keterangan yang berturut-turut menyatakan tempat, waktu, alat, tujuan, cara, penyerta, pembandingan/kemiripan, kesalingan, sebab, akibat, kuantitas, kualitas, dan sudut pandang. Paparan setiap jenis keterangan itu adalah sebagai berikut.
 
 Di samping ketiga belas jenis keterangan tersebut, ada pula jenis keterangan lain yang selalu berbentuk klausa subordinatif, yaitu keterangan syarat, keterangan pengandaian, keterangan konsesif, dan keterangan hasil (lihat Bab X).

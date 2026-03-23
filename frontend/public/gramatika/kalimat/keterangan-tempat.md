@@ -15,7 +15,7 @@ Keterangan tempat adalah keterangan yang menunjukkan tempat terjadinya peristiwa
 
 (56) Keluarganya akan pindah *ke Jakarta*.
 
-(57) \**Keluarganya akan pindah ke tahun.* *(tahun tidak berciri tempat)*
+(57) \*Keluarganya akan pindah ke tahun. *(tahun tidak berciri tempat)*
 
 Frasa preposisional yang wujudnya mirip dapat menyatakan keterangan yang berbeda. Preposisi *sampai*, misalnya, dapat dipakai dengan kata yang berciri semantis tempat atau waktu, seperti dapat dilihat pada contoh (58) dan (59).
 

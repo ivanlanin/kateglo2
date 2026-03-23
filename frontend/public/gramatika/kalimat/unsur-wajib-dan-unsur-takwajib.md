@@ -3,7 +3,7 @@ id: 9.2.2
 title: Unsur Wajib dan Unsur Takwajib (9.2.2)
 ---
 
-Kalimat sekurang-kurangnya terdiri atas unsur predikat dan unsur subjek. Kedua unsur kalimat itu merupakan unsur yang kehadirannya selalu wajib. Di samping kedua unsur itu, dalam suatu kalimat kadang-kadang ada kata atau kelompok kata yang dapat dihilangkan tanpa memengaruhi bagian yang tersisa sebagai kalimat, tetapi ada pula yang tidak.
+Seperti telah disinggung dalam 9.1, kalimat sekurang-kurangnya terdiri atas unsur predikat dan unsur subjek. Kedua unsur kalimat itu merupakan unsur yang kehadirannya selalu wajib. Di samping kedua unsur itu, dalam suatu kalimat kadang-kadang ada kata atau kelompok kata yang dapat dihilangkan tanpa memengaruhi bagian yang tersisa sebagai kalimat, tetapi ada pula yang tidak.
 
 (6) Barangkali mereka menghadiri pertemuan itu kemarin sore.
 
