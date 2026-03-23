@@ -8,6 +8,7 @@ import { Link, useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { rehypeCollapsibleHeadings } from '../../../utils/rehypeCollapsibleHeadings';
+import { rehypeStatusSymbols } from '../../../utils/rehypeStatusSymbols';
 import HalamanPublik from '../../../components/tampilan/HalamanPublik';
 import PanelLipat from '../../../components/panel/PanelLipat';
 import KartuKategori from '../../../components/data/KartuKategori';
@@ -249,7 +250,7 @@ function Ejaan() {
 
             {!sedangMemuat && !galat && (
               <div className="ejaan-markdown-content">
-                <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeCollapsibleHeadings]}>
+                <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeCollapsibleHeadings, rehypeStatusSymbols]}>
                   {isiMarkdown}
                 </ReactMarkdown>
               </div>

@@ -257,6 +257,22 @@ a.ejaan-sidebar-pill-active {
   @apply no-underline;
 }
 
+.ejaan-markdown-content .status-symbol-yes {
+  @apply text-emerald-600 font-semibold;
+}
+
+.dark .ejaan-markdown-content .status-symbol-yes {
+  @apply text-emerald-400;
+}
+
+.ejaan-markdown-content .status-symbol-no {
+  @apply text-red-600 font-semibold;
+}
+
+.dark .ejaan-markdown-content .status-symbol-no {
+  @apply text-red-400;
+}
+
 .ejaan-markdown-content img {
   @apply my-5 block max-w-full h-auto rounded-lg border border-gray-200 bg-white;
 }
