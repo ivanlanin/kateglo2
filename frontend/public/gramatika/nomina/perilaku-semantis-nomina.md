@@ -9,13 +9,13 @@ Fitur semantis, terutama yang bersifat kodrati, memegang peranan penting dalam b
 
 (7)
 - a. Kuda saya hitam. ✓
-- b. \**Kuda saya hijau.* ✗
+- b. \*Kuda saya hijau. ✗
 
 Kalimat (7a) berterima, tetapi kalimat (7b) terasa aneh karena fitur semantis *hijau* tidak lazim pada kuda. Warna kuda hanya bisa hitam, putih, cokelat, atau abu-abu (dan mungkin juga belang-belang atau campuran dari warna-warna itu). Fitur semantis yang menyangkut warna pada kuda itu bisa lebih dari satu, tetapi ada pula fitur semantis, seperti mata atau kaki yang mutlak dalam arti fitur tersebut tidak terpisahkan dari makna kuda. Oleh karena itu, kalimat (8a) berikut terasa lumrah, tetapi kalimat (8b) terasa aneh.
 
 (8)
 - a. Kuda saya ada belangnya. ✓
-- b. \**Kuda saya ada matanya.* ✗
+- b. \*Kuda saya ada matanya. ✗
 
 Kalimat (8b) terasa aneh karena kalimat tersebut menyiratkan bahwa ada kuda yang tidak mempunyai mata. Mata dan kaki merupakan bagian yang tidak terpisahkan dari kuda.
 
@@ -23,7 +23,7 @@ Fitur semantis untuk kuda mencakupi pula berbagai kegiatan yang dapat dilakukan 
 
 (9)
 - a. Kuda hitam itu sedang berlari. ✓
-- b. \**Kuda hitam itu sedang bersiul.* ✗
+- b. \*Kuda hitam itu sedang bersiul. ✗
 
 Kalimat (9a) berterima karena nomina subjek *kuda* memiliki fitur semantis bernyawa dan berkaki yang merupakan syarat untuk dapat melakukan perbuatan berlari. Akan tetapi, kalimat (9b) terasa aneh karena fitur manusia yang merupakan syarat untuk dapat melakukan perbuatan bersiul tidak ada pada kuda.
 

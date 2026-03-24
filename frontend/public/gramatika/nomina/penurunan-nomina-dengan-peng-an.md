@@ -11,7 +11,7 @@ Nomina dengan *peng-...-an* umumnya diturunkan dari verba dengan *meng-* yang be
 
 (59)
 - a. Seluruh Nusantara bersatu.
-- b. \**Persatuan seluruh Nusantara dilakukan oleh Hayam Wuruk.*
+- b. \*Persatuan seluruh Nusantara dilakukan oleh Hayam Wuruk.
 
 (60)
 - a. Pembangunan jembatan itu dilakukan oleh kontraktor Jepang.

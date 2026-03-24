@@ -17,25 +17,25 @@ Preposisi gabungan jenis pertama terdiri atas dua preposisi yang letaknya beruru
 Perlu diperhatikan pemakaian preposisi *daripada* sering digunakan secara tidak tepat. Kata *daripada* dipakai hanya untuk menyatakan perbandingan dan tidak untuk menyatakan milik, menyatakan asal, atau menghubungkan verba dengan unsur yang mengikutinya. Berikut adalah beberapa contoh pemakaian yang keliru (kalimat a) yang disertai perbaikannya (kalimat b).
 
 (6)
-- a. *Masalah daripada penduduk harus dipecahkan secara nasional.*
+- a. Masalah daripada penduduk harus dipecahkan secara nasional.
 - b. Masalah penduduk harus dipecahkan secara nasional.
 
 (7)
-- a. *Jakarta adalah ibu kota daripada Indonesia.*
+- a. Jakarta adalah ibu kota daripada Indonesia.
 - b. Jakarta adalah ibu kota Indonesia.
 
 (8)
-- a. *Kita harus dapat menyimak keluhan-keluhan daripada para siswa.*
+- a. Kita harus dapat menyimak keluhan-keluhan daripada para siswa.
 - b. Kita harus dapat menyimak keluhan-keluhan (dari) para siswa.
 
 (9)
-- a. *Dalam rapat yang lalu jawaban daripada badan pengurus tidak memuaskan.*
+- a. Dalam rapat yang lalu jawaban daripada badan pengurus tidak memuaskan.
 - b. Dalam rapat yang lalu jawaban (dari) badan pengurus tidak memuaskan.
 
 (10)
-- a. *Kami sudah mempertimbangkan daripada persoalan itu.*
+- a. Kami sudah mempertimbangkan daripada persoalan itu.
 - b. Kami sudah mempertimbangkan persoalan itu.
 
 (11)
-- a. *Sambil menunggu daripada hasil panen, Indonesia akan mengimpor beras.*
+- a. Sambil menunggu daripada hasil panen, Indonesia akan mengimpor beras.
 - b. Sambil menunggu hasil panen, Indonesia akan mengimpor beras.

@@ -37,11 +37,11 @@ Dalam kasus tertentu bentuk yang beralternasi dapat menimbulkan perbedaan makna.
 Contoh:
 
 (15)
-- a. *Waktu itu saya sedang di dalam rumah.*
+- a. Waktu itu saya sedang di dalam rumah.
   (di dalam rumah tidak sama dengan di rumah)
-- b. *Dia pergi ke atas bukit.*
+- b. Dia pergi ke atas bukit.
   (ke atas bukit tidak sama dengan ke bukit)
-- c. *Kucing itu meloncat dari atas mobil.*
+- c. Kucing itu meloncat dari atas mobil.
   (dari atas mobil tidak sama dengan dari mobil)
 
 Apabila rujukan jelas, karena konteks kalimat atau konteks situasi, frasa preposisional itu dapat pula muncul tanpa N2. Contoh (16) dan (17) memperlihatkan konteks kalimat dan konteks situasi yang jelas.
@@ -75,27 +75,27 @@ Bandingkan a dan b pada contoh berikut.
 
 (20)
 - a. Polisi terlihat di antara para pengunjuk rasa.
-- b. *Polisi terlihat di antara.*
+- b. Polisi terlihat di antara.
 
 (21)
 - a. Aktris itu bersiap-siap di balik layar.
-- b. *Aktris itu bersiap-siap di balik.*
+- b. Aktris itu bersiap-siap di balik.
 
 (22)
 - a. Mereka tinggal di dekat pabrik.
-- b. *Mereka tinggal di dekat.*
+- b. Mereka tinggal di dekat.
 
 (23)
 - a. Dia menuju ke dekat pintu keluar.
-- b. *Dia menuju ke dekat.*
+- b. Dia menuju ke dekat.
 
 (24)
 - a. Gadis itu mengintip jejaka dari balik jendela.
-- b. *Gadis itu mengintip jejaka dari balik.*
+- b. Gadis itu mengintip jejaka dari balik.
 
 (25)
 - a. Mereka berlari ke balik semak-semak.
-- b. *Mereka berlari ke balik.*
+- b. Mereka berlari ke balik.
 
 Khusus mengenai *dari dekat*, frasa preposisional ini tidak mengharuskan munculnya N2. Perlu diingat bahwa bentuk *dari dekat* dapat merupakan frasa yang terdiri atas preposisi dan adjektiva. Dalam hal demikian titik acuan adalah tempat peristiwa itu. Sejajar dengan itu, terdapat juga bentuk *dari jauh*.
 

@@ -19,30 +19,30 @@ Perilaku semantis verba berkonfiks *ke-...-an* agak berbeda dengan verba transit
 Karena makna seperti itulah verba *ke-...-an* sering dihubungkan dengan verba pasif. Namun, verba *ke-...-an* mengandung pula makna adversatif, sedangkan verba pasif dengan *di-* tidak.
 
 (273)
-- a. *Buku itu ditinggalkan di perpustakaan.*
-- b. *Buku itu ketinggalan di perpustakaan.*
+- a. Buku itu ditinggalkan di perpustakaan.
+- b. Buku itu ketinggalan di perpustakaan.
 
 Semua bentuk pasif dengan prefiks *di-* dapat diikuti kata *oleh*. Sebagian verba dengan konfiks *ke-...-an* juga dapat diikuti kata *oleh*, tetapi sebagian yang lain tidak dapat:
 
 (274)
-- a. *Perbuatan itu ketahuan istrinya.*
-- b. *Perbuatan itu ketahuan oleh istrinya.*
+- a. Perbuatan itu ketahuan istrinya.
+- b. Perbuatan itu ketahuan oleh istrinya.
 
 (275)
-- a. *Siswa itu kemasukan jin.*
-- b. *Siswa itu kemasukan oleh jin.*
+- a. Siswa itu kemasukan jin.
+- b. Siswa itu kemasukan oleh jin.
 
 Di samping ketiga kelompok verba tersebut, ada dua verba berkonfiks *ke-...-an* yang tidak mengandung makna adversatif. Makna kelompok kecil itu adalah 'dapat di-...':
 
 (276) *kelihatan* 'dapat dilihat' / 'terlihat'; *kedengaran* 'dapat didengar' / 'terdengar'
 
-- (277) *Mobil Adi dicuri.*
-- (278) *Adi kecurian mobil.*
+- (277) Mobil Adi dicuri.
+- (278) Adi kecurian mobil.
 
 Konfiks *ke-...-an* dari verba dasar taktransitif:
 
-- (279) *Buku agenda saya hilang.*
-- (280) *Saya kehilangan buku agenda.*
+- (279) Buku agenda saya hilang.
+- (280) Saya kehilangan buku agenda.
 - (281) *kehabisan uang* (uang habis); *kematian saudara* (saudara mati); *kekurangan bensin* (bensin kurang); *keguguran (janin)* (janin gugur)
 
 Konfiks *ke-...-an* dari verba transitif:

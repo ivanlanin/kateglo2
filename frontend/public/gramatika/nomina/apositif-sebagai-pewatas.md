@@ -9,8 +9,8 @@ Contoh apositif restriktif:
 
 (146)
 - a. *Indonesia* merdeka pada tahun 1945. → *Indonesia* dapat menggantikan keseluruhan
-- b. *Dia lahir di kota Padang.* → *Dia lahir di Padang.*
-- c. *Mereka ingin ke kebun binatang Ragunan.* → *Mereka ingin ke Ragunan.*
+- b. Dia lahir di kota Padang. → Dia lahir di Padang.
+- c. Mereka ingin ke kebun binatang Ragunan. → Mereka ingin ke Ragunan.
 
 Selain apositif yang restriktif, ada juga apositif yang nonrestriktif:
 

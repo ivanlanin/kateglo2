@@ -8,12 +8,12 @@ Pengonversian adalah penurunan kata yang memperlihatkan pengalihan kata dari kat
 Contoh:
 
 (72)
-- a. *kubur* (nomina): *Ia berziarah ke kubur ayahnya.*
-- b. *kubur* (verba): *Segera kubur bangkai itu!*
+- a. *kubur* (nomina): Ia berziarah ke kubur ayahnya.
+- b. *kubur* (verba): Segera kubur bangkai itu!
 
 (73)
-- a. *sayang* (nomina): *Sayang, tolong ambilkan segelas air!*
-- b. *sayang* (verba): *Tiada ibu yang tidak sayang kepada anaknya.*
+- a. *sayang* (nomina): Sayang, tolong ambilkan segelas air!
+- b. *sayang* (verba): Tiada ibu yang tidak sayang kepada anaknya.
 
 Berikut merupakan contoh lain bentuk verba hasil konversi dari nomina dan adjektiva:
 

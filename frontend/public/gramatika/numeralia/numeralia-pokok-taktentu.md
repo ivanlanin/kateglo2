@@ -28,13 +28,13 @@ Pada tataran sintaksis nomina numeralia taktentu dapat pula dibentuk dari numera
 1) Penambahan prefiks *ber-* pada nomina numeral lalu diulang—menyatakan kelipatan tidak tentu:
 
 (322)
-- a. *Berpuluh-puluh mahasiswa yang datang terlambat.*
-- b. *Berpuluh-puluh ribu orang tua tidak mampu membayar uang kuliah anaknya.*
-- c. *Beratus-ratus juta pasang mata menyaksikan pertandingan sepak bola itu.*
+- a. Berpuluh-puluh mahasiswa yang datang terlambat.
+- b. Berpuluh-puluh ribu orang tua tidak mampu membayar uang kuliah anaknya.
+- c. Beratus-ratus juta pasang mata menyaksikan pertandingan sepak bola itu.
 
 2) Penambahan sufiks *-an*—menyatakan makna 'sekitar' nomina numeralia:
 
 (323)
-- a. *Ratusan orang tidak membeli karcis pertunjukan.*
-- b. *Puluhan ribu orang menghadiri rapat umum itu.*
-- c. *Belasan siswa datang terlambat karena banjir.*
+- a. Ratusan orang tidak membeli karcis pertunjukan.
+- b. Puluhan ribu orang menghadiri rapat umum itu.
+- c. Belasan siswa datang terlambat karena banjir.
