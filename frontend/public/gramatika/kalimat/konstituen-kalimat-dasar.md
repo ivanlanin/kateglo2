@@ -27,30 +27,24 @@ Sudah beberapa kali disinggung bahwa kehadiran unsur objek, pelengkap, dan/atau 
 
 (169) *Dia sedang tidur* (*di kamar sebelah*).
 
-- Kalimat
-- Subjek: FN
-- Predikat: FV
-- (Keterangan): FPrep
+![Diagram pohon kalimat (169)](/gramatika/_gambar/bab-09/diagram-09-04-konstituen-kalimat-dasar-169.webp)
+
+*Diagram pohon kalimat (169)*
 
 (170) *Dia sedang belajar* (*matematika*) (*sekarang*).
 
-- Kalimat
-- Subjek: FN
-- Predikat: FV
-- (Pelengkap): FN
-- (Keterangan): FN
+![Diagram pohon kalimat (170)](/gramatika/_gambar/bab-09/diagram-09-04-konstituen-kalimat-dasar-170.webp)
+
+*Diagram pohon kalimat (170)*
 
 (171) *Pancasila merupakan dasar negara kita*.
 
-- Kalimat
-- Subjek: FN
-- Predikat: FV
-- Pelengkap: FN
+![Diagram pohon kalimat (171)](/gramatika/_gambar/bab-09/diagram-09-04-konstituen-kalimat-dasar-171.webp)
+
+*Diagram pohon kalimat (171)*
 
 (172) *Dia tinggal di Bogor* (*tahun lalu*).
 
-- Kalimat
-- Subjek: FN
-- Predikat: FV
-- Keterangan: FPrep
-- (Keterangan): FN
+![Diagram pohon kalimat (172)](/gramatika/_gambar/bab-09/diagram-09-04-konstituen-kalimat-dasar-172.webp)
+
+*Diagram pohon kalimat (172)*

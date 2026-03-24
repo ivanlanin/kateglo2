@@ -40,7 +40,7 @@
       11. [Lokasi](/gramatika/lokasi)
       12. [Alat](/gramatika/alat)
       13. [Tujuan](/gramatika/tujuan)
-      14. [Sumber / Bahan](/gramatika/sumber-bahan)
+      14. [Sumber (Bahan)](/gramatika/sumber-bahan)
 4. [Kalimat Dasar](/gramatika/kalimat-dasar)
    1. [Batasan Kalimat Dasar](/gramatika/batasan-kalimat-dasar)
       1. [Pola Kalimat Dasar](/gramatika/pola-kalimat-dasar)

@@ -22,4 +22,4 @@ Pada kalimat (147) terdapat tiga argumen, yaitu *Ida*, *hadiah*, dan *ibunya*. K
 11. [Lokasi](/gramatika/lokasi)
 12. [Alat](/gramatika/alat)
 13. [Tujuan](/gramatika/tujuan)
-14. [Sumber / Bahan](/gramatika/sumber-bahan)
+14. [Sumber (Bahan)](/gramatika/sumber-bahan)

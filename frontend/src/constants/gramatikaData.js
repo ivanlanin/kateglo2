@@ -910,7 +910,7 @@ const daftarIsiGramatika = [
               { judul: 'Lokasi', slug: 'lokasi' },
               { judul: 'Alat', slug: 'alat' },
               { judul: 'Tujuan', slug: 'tujuan' },
-              { judul: 'Sumber / Bahan', slug: 'sumber-bahan' },
+              { judul: 'Sumber (Bahan)', slug: 'sumber-bahan' },
             ],
           },
         ],
