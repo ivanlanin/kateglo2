@@ -10,7 +10,7 @@ Koordinasi berarti menggabungkan dua klausa atau lebih yang masing-masing mempun
 
 Secara diagramatik hubungan itu dapat dilihat dalam bagan berikut yang memperlihatkan bahwa konjungsi tidak termasuk dalam klausa mana pun, tetapi merupakan konstituen tersendiri.
 
-![Bagan 10.1 Hubungan Koordinatif](/gramatika/_gambar/bab-10/bagan-10-01-hubungan-koordinatif.webp)
+![Bagan 10.1 Hubungan Koordinatif](/gramatika/gambar/bab-10/bagan-10-01-hubungan-koordinatif.webp)
 
 **Bagan 10.1 Hubungan Koordinatif**
 
@@ -25,7 +25,7 @@ Klausa (1a) dan (1b) digabungkan dengan menggunakan konjungsi *dan* sehingga ter
 
 Sesuai dengan Bagan 10.1 di atas, pembentukan kalimat (1c) dapat dijelaskan dalam diagram berikut.
 
-![Diagram pohon kalimat (1c)](/gramatika/_gambar/bab-10/diagram-10-01-kalimat-1c.webp)
+![Diagram pohon kalimat (1c)](/gramatika/gambar/bab-10/diagram-10-01-kalimat-1c.webp)
 
 *Diagram pohon kalimat (1c)*
 

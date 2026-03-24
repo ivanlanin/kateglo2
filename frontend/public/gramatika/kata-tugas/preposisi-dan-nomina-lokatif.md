@@ -5,7 +5,7 @@ title: Preposisi dan Nomina Lokatif
 
 Suatu preposisi juga dapat bergabung dengan dua nomina asalkan nomina itu mempunyai ciri lokatif, seperti pada frasa preposisional *di atas meja*, *ke dalam rumah*, dan *dari sekitar kampus*. Struktur frasa preposisional tersebut dapat digambarkan dengan bagan berikut.
 
-![Bagan 8.1 Struktur Frasa Preposisional](/gramatika/_gambar/bab-08/bagan-08-01-struktur-frasa-preposisional.webp)
+![Bagan 8.1 Struktur Frasa Preposisional](/gramatika/gambar/bab-08/bagan-08-01-struktur-frasa-preposisional.webp)
 
 **Bagan 8.1 Struktur Frasa Preposisional**
 
@@ -111,7 +111,7 @@ Bentuk-bentuk *di sini*, *di situ*, dan *di sana*; *ke sini*, *ke situ*, dan *ke
 
 Bentuk-bentuk preposisi bahasa Indonesia yang dibicarakan di atas dapat disajikan dalam bentuk bagan sebagai berikut.
 
-![Bagan 8.2 Preposisi](/gramatika/_gambar/bab-08/bagan-08-02-preposisi.webp)
+![Bagan 8.2 Preposisi](/gramatika/gambar/bab-08/bagan-08-02-preposisi.webp)
 
 **Bagan 8.2 Preposisi**
 

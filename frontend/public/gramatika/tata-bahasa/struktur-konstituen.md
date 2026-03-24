@@ -7,7 +7,7 @@ Pada dasarnya setiap kalimat mengandung bagian-bagian yang lebih kecil yang dise
 
 Kalimat sederhana yang terdiri atas satu klausa *Anak itu membeli sebuah buku*, misalnya, pertama-tama dapat dibagi atas *Anak itu* (subjek) dan *membeli sebuah buku* (predikat). Bagian (frasa) *anak itu* dapat dibagi atas *anak* dan *itu*. Demikian juga dengan *membeli sebuah buku* yang dapat dibagi atas *membeli* dan *sebuah buku*. Yang terakhir, *sebuah buku*, dapat dibagi lebih lanjut atas *sebuah* dan *buku*. Struktur kalimat itu dapat digambarkan seperti pada (4) berikut.
 
-![Diagram (4) Struktur Konstituen Kalimat](/gramatika/_gambar/bab-02/diagram-02-02-struktur-konstituen-kalimat-4.webp)
+![Diagram (4) Struktur Konstituen Kalimat](/gramatika/gambar/bab-02/diagram-02-02-struktur-konstituen-kalimat-4.webp)
 
 *Diagram (4) Struktur Konstituen Kalimat*
 

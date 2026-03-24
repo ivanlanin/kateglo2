@@ -36,4 +36,4 @@ Apabila konstituen kalimat dasar yang tidak wajib hadir diabaikan, dari pola umu
 
 **Tabel 9.4 Pola Kalimat Dasar Bahasa Indonesia**
 
-![Tabel 9.4 Pola Kalimat Dasar Bahasa Indonesia](/gramatika/_gambar/bab-09/tabel-09-04-pola-kalimat-dasar-bahasa-indonesia.webp)
+![Tabel 9.4 Pola Kalimat Dasar Bahasa Indonesia](/gramatika/gambar/bab-09/tabel-09-04-pola-kalimat-dasar-bahasa-indonesia.webp)

@@ -23,7 +23,7 @@ Semua bentuk pada contoh di atas bertalian dengan kata *darat*. Bentuk-bentuk pa
 
 Pada (2b) hanya ada dua leksem baru, yaitu *daratkan* (dengan varian *darati*, *mendaratkan*, *mendarati*) dan *mendarat*. Pada (2c) ada dua leksem, yaitu *pendaratan* dan *daratan*. Proses pembentukan kata-kata di atas dapat diperlihatkan lebih jelas pada (3) berikut.
 
-![Diagram (3) Pembentukan Kata dari darat](/gramatika/_gambar/bab-02/diagram-02-01-pembentukan-kata-darat.webp)
+![Diagram (3) Pembentukan Kata dari darat](/gramatika/gambar/bab-02/diagram-02-01-pembentukan-kata-darat.webp)
 
 *Diagram (3) Pembentukan Kata dari darat*
 

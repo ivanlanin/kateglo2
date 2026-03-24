@@ -9,7 +9,7 @@ Hubungan kalimat dengan bagian-bagiannya yang lebih kecil yang disebut konstitue
 
 (3)
 
-![Diagram pohon kalimat (3)](/gramatika/_gambar/bab-09/diagram-09-02-struktur-konstituen-kalimat-3.webp)
+![Diagram pohon kalimat (3)](/gramatika/gambar/bab-09/diagram-09-02-struktur-konstituen-kalimat-3.webp)
 
 *Diagram pohon kalimat (3)*
 

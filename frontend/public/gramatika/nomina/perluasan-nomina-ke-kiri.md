@@ -7,7 +7,7 @@ Perluasan ke kiri dilakukan dengan menambahkan penentu (Pen) berupa numeralia (N
 
 > FN → Pen (FNum: Num + Pgl/Prt) + N (inti)
 
-![Diagram (128) Perluasan nomina ke kiri](/gramatika/_gambar/bab-07/diagram-07-03-perluasan-nomina-ke-kiri-128.webp)
+![Diagram (128) Perluasan nomina ke kiri](/gramatika/gambar/bab-07/diagram-07-03-perluasan-nomina-ke-kiri-128.webp)
 
 *Diagram (128) Perluasan nomina ke kiri*
 

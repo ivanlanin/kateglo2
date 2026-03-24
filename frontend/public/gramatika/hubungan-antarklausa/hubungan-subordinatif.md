@@ -14,7 +14,7 @@ Klausa (69a) dan (69b) digabungkan dengan cara subordinatif sehingga terbentuk k
 
 Hubungan subordinatif dapat digambarkan sebagai berikut.
 
-![Bagan 10.1 Hubungan Subordinatif](/gramatika/_gambar/bab-10/bagan-10-02-hubungan-subordinatif.webp)
+![Bagan 10.1 Hubungan Subordinatif](/gramatika/gambar/bab-10/bagan-10-02-hubungan-subordinatif.webp)
 
 **Bagan 10.1 Hubungan Subordinatif**
 
@@ -22,7 +22,7 @@ Pada Bagan 10.1 di atas tampak bahwa klausa 2 berkedudukan sebagai konstituen kl
 
 Sesuai dengan bagan di atas, pembentukan kalimat kompleks (69c) dapat dijelaskan dalam diagram berikut.
 
-![Diagram pohon kalimat (69c)](/gramatika/_gambar/bab-10/diagram-10-02-kalimat-69c.webp)
+![Diagram pohon kalimat (69c)](/gramatika/gambar/bab-10/diagram-10-02-kalimat-69c.webp)
 
 *Diagram pohon kalimat (69c)*
 
@@ -65,7 +65,7 @@ Klausa subordinatif dapat pula berupa klausa adverbial dalam arti klausa itu ber
 
 Kalimat (71a) yang mengandung klausa adverbial yang menyatakan waktu dapat digambarkan sebagai berikut.
 
-![Diagram pohon kalimat (71a)](/gramatika/_gambar/bab-10/diagram-10-02-kalimat-71a.webp)
+![Diagram pohon kalimat (71a)](/gramatika/gambar/bab-10/diagram-10-02-kalimat-71a.webp)
 
 *Diagram pohon kalimat (71a)*
 
@@ -81,7 +81,7 @@ Dalam kalimat (72a) fungsi S (*Paman saya*) diperluas dengan klausa *yang tingga
 
 Kalimat (72a) yang merupakan kalimat kompleks dengan klausa relatif keterangan subjek dapat digambarkan dalam diagram berikut.
 
-![Diagram pohon kalimat (72a)](/gramatika/_gambar/bab-10/diagram-10-02-kalimat-72a.webp)
+![Diagram pohon kalimat (72a)](/gramatika/gambar/bab-10/diagram-10-02-kalimat-72a.webp)
 
 *Diagram pohon kalimat (72a)*
 
@@ -94,7 +94,7 @@ Kalimat kompleks dapat pula terbentuk apabila dua proposisi diperbandingkan, sat
 
 Kalimat kompleks (73a) itu dapat dinyatakan dalam bentuk diagram berikut.
 
-![Diagram pohon kalimat (73a)](/gramatika/_gambar/bab-10/diagram-10-02-kalimat-73a.webp)
+![Diagram pohon kalimat (73a)](/gramatika/gambar/bab-10/diagram-10-02-kalimat-73a.webp)
 
 *Diagram pohon kalimat (73a)*
 

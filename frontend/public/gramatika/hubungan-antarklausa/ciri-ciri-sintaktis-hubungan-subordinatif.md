@@ -11,7 +11,7 @@ Ada empat ciri sintaktis dalam hubungan subordinatif.
 
 Kalimat (74) itu dapat dinyatakan dalam bentuk diagram seperti berikut.
 
-![Diagram pohon kalimat (74)](/gramatika/_gambar/bab-10/diagram-10-02-kalimat-74.webp)
+![Diagram pohon kalimat (74)](/gramatika/gambar/bab-10/diagram-10-02-kalimat-74.webp)
 
 *Diagram pohon kalimat (74)*
 

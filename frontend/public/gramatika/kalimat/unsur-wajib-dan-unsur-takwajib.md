@@ -27,7 +27,7 @@ Berdasarkan uraian singkat tersebut, unsur kalimat dapat dibedakan atas unsur wa
 
 Perlu diingat bahwa pembedaan unsur kalimat atas wajib dan takwajib tidak berkaitan langsung dengan bentuk dan fungsi konstituen kalimat. Pada umumnya konstituen yang berfungsi sebagai keterangan, seperti *barangkali* dan *kemarin sore* pada contoh (6) di atas, dapat dihilangkan. Demikian pula halnya dengan keterangan (alat) *dengan pisau* pada *Dia memotong kue dengan pisau*, keterangan (tempat) *ke sekolah* pada *Dia sudah berangkat ke sekolah*, dan keterangan (cara) *dengan diam-diam* pada *Saya meninggalkan rapat dengan diam-diam*.
 
-![Bagan 9.1 Unsur dalam Kalimat](/gramatika/_gambar/bab-09/bagan-09-01-unsur-dalam-kalimat.webp)
+![Bagan 9.1 Unsur dalam Kalimat](/gramatika/gambar/bab-09/bagan-09-01-unsur-dalam-kalimat.webp)
 
 **Bagan 9.1 Unsur dalam Kalimat**
 

@@ -5,7 +5,7 @@ title: Vokal dan Alofon Vokal (3.2.1)
 
 Dalam bahasa Indonesia ada enam fonem vokal, yaitu /i/, /e/, /ə/, /a/, /o/, dan /u/. Meskipun memengaruhi kualitas vokal, dalam bahasa Indonesia bentuk bibir tidak memegang peranan penting karena tidak membedakan makna. Bagan 3.2 memperlihatkan keenam vokal bahasa Indonesia berdasarkan parameter tinggi-rendah dan depan-belakang lidah pada waktu pembentukannya. Pada bagan itu tampak bahwa bahasa Indonesia memiliki dua vokal tinggi, tiga vokal sedang, dan satu vokal rendah. Berdasarkan parameter depan-belakang lidah, dua vokal merupakan vokal depan, dua merupakan vokal tengah, dan dua yang lain merupakan vokal belakang.
 
-![Bagan 3.2 Vokal](/gramatika/_gambar/bab-03/bagan-03-02-vokal.webp)
+![Bagan 3.2 Vokal](/gramatika/gambar/bab-03/bagan-03-02-vokal.webp)
 
 **Bagan 3.2 Vokal**
 

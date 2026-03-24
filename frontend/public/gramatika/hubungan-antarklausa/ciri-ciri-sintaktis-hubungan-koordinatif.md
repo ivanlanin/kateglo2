@@ -11,7 +11,7 @@ Kalimat majemuk yang hubungan antarklausanya bercorak koordinatif ini memiliki c
 
 Kalimat (14) dapat digambarkan sebagai berikut.
 
-![Diagram pohon kalimat (14)](/gramatika/_gambar/bab-10/diagram-10-01-kalimat-14.webp)
+![Diagram pohon kalimat (14)](/gramatika/gambar/bab-10/diagram-10-01-kalimat-14.webp)
 
 *Diagram pohon kalimat (14)*
 
@@ -51,7 +51,7 @@ Penggunaan konjungsi koordinatif *kemudian* sesudah konjungsi koordinatif *dan* 
 
 (21) Andi sedang belajar, tetapi adiknya hanya menonton TV.
 
-![Diagram pohon kalimat (21)](/gramatika/_gambar/bab-10/diagram-10-01-kalimat-21.webp)
+![Diagram pohon kalimat (21)](/gramatika/gambar/bab-10/diagram-10-01-kalimat-21.webp)
 
 *Diagram pohon kalimat (21)*
 

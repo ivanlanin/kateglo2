@@ -77,6 +77,6 @@ Contoh:
 
 Berdasarkan uraian di atas dapatlah dirangkum jenis aposisi seperti Bagan 9.2 berikut ini.
 
-![Bagan 9.2 Jenis Aposisi](/gramatika/_gambar/bab-09/bagan-09-02-jenis-aposisi.webp)
+![Bagan 9.2 Jenis Aposisi](/gramatika/gambar/bab-09/bagan-09-02-jenis-aposisi.webp)
 
 **Bagan 9.2 Jenis Aposisi**

@@ -11,7 +11,7 @@ Bunyi yang dihasilkan oleh alat ucap manusia itu dicirikan oleh tiga faktor utam
 
 Pada prinsipnya, ketika seseorang berbicara, paru-paru mengembuskan udara melalui tenggorokan. Arus udara menggetarkan pita suara yang terletak pada pangkal tenggorokan (laring). Suara yang keluar dari pita suara dihambat oleh beberapa organ ucap sehingga menghasilkan variasi bunyi bahasa.
 
-![Bagan 3.1 Alat Ucap](/gramatika/_gambar/bab-03/bagan-03-01-alat-ucap.webp)
+![Bagan 3.1 Alat Ucap](/gramatika/gambar/bab-03/bagan-03-01-alat-ucap.webp)
 
 **Bagan 3.1 Alat Ucap**
 

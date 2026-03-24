@@ -19,6 +19,6 @@ Konstituen yang terdiri atas dua kata atau lebih (khususnya yang mengandung satu
 
 Struktur kalimat dapat digambarkan dengan jalan memberi label kategori konstituennya seperti tampak pada (8) berikut.
 
-![Diagram (8) Struktur Kategori Kalimat](/gramatika/_gambar/bab-02/diagram-02-03-struktur-kategori-kalimat-8.webp)
+![Diagram (8) Struktur Kategori Kalimat](/gramatika/gambar/bab-02/diagram-02-03-struktur-kategori-kalimat-8.webp)
 
 *Diagram (8) Struktur Kategori Kalimat*

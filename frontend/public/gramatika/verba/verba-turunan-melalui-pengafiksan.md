@@ -17,7 +17,7 @@ Pengafiksan derivasional, seperti pada pembentukan nomina deverbal, mengikuti po
 
 Uraian di atas dapat dirangkum dalam bagan pembentukan kata sebagai berikut.
 
-![Bagan 4.2 Proses Pembentukan Kata](/gramatika/_gambar/bab-04/bagan-04-02-proses-pembentukan-kata.webp)
+![Bagan 4.2 Proses Pembentukan Kata](/gramatika/gambar/bab-04/bagan-04-02-proses-pembentukan-kata.webp)
 
 **Bagan 4.2 Proses Pembentukan Kata**
 

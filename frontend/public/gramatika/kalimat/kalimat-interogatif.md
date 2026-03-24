@@ -202,7 +202,7 @@ Dalam kalimat interogatif yang memakai kata tanya *siapa* atau *apa* yang juga m
 
 Penempatan *apa* dan *siapa* di awal kalimat mengakibatkan dua hal, yaitu (1) kata sambung relatif *yang* harus muncul dan (2) klausa sesudah *yang* berbentuk pasif. Sebagai akibat dari perubahan itu, urutannya menjadi predikat dan subjek, seperti terlihat pada diagram berikut.
 
-![Diagram struktur kalimat interogatif (343d) dan (344d)](/gramatika/_gambar/bab-09/diagram-09-06-kalimat-interogatif-343-344.webp)
+![Diagram struktur kalimat interogatif (343d) dan (344d)](/gramatika/gambar/bab-09/diagram-09-06-kalimat-interogatif-343-344.webp)
 
 Kata tanya *apa* dan *siapa* pada contoh (343a) dan (344b) menggantikan objek pada kalimat sebelumnya yang kemudian dipindahkan ke depan. Ada pula pemakaian lain dari kedua kata itu, yakni untuk menggantikan subjek pada kalimat sebelumnya.
 

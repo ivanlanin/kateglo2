@@ -4,9 +4,9 @@ Folder ini menampung gambar statis yang dipakai oleh halaman Gramatika.
 
 ## Aturan penempatan
 
-- Semua gambar Gramatika dipusatkan di `frontend/public/gramatika/_gambar/`.
+- Semua gambar Gramatika dipusatkan di `frontend/public/gramatika/gambar/`.
 - Gunakan subfolder per bab jika jumlah gambar mulai bertambah, misalnya `bab-03/`, `bab-04/`, dan seterusnya.
-- Referensi dari markdown memakai path absolut publik, misalnya `/gramatika/_gambar/bab-03/bagan-03-01-alat-ucap.webp`.
+- Referensi dari markdown memakai path absolut publik, misalnya `/gramatika/gambar/bab-03/bagan-03-01-alat-ucap.webp`.
 
 ## Aturan penamaan
 
@@ -28,7 +28,7 @@ Folder ini menampung gambar statis yang dipakai oleh halaman Gramatika.
 ## Contoh markdown
 
 ```md
-![Bagan 3.1 Alat Ucap](/gramatika/_gambar/bab-03/bagan-03-01-alat-ucap.webp)
+![Bagan 3.1 Alat Ucap](/gramatika/gambar/bab-03/bagan-03-01-alat-ucap.webp)
 
 **Bagan 3.1 Alat Ucap**
 ```

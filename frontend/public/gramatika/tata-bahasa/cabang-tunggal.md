@@ -14,6 +14,6 @@ Contoh:
 
 Konstituen yang dicetak miring tergolong FN yang berfungsi sebagai subjek klausa, *anak-anak* merupakan inti dan *itu* sebagai noninti pada (14a), tetapi berdiri sendiri tanpa unsur noninti pada (14b). Bagan dari struktur yang bersangkutan dapat disajikan seperti pada (15) berikut.
 
-![Diagram (15) Cabang Tunggal pada Frasa Nominal](/gramatika/_gambar/bab-02/diagram-02-06-cabang-tunggal-15.webp)
+![Diagram (15) Cabang Tunggal pada Frasa Nominal](/gramatika/gambar/bab-02/diagram-02-06-cabang-tunggal-15.webp)
 
 *Diagram (15) Cabang Tunggal pada Frasa Nominal*

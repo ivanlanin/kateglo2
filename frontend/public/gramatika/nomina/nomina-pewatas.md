@@ -34,7 +34,7 @@ Frasa nominal *kursus bahasa Jepang Jakarta* (131b) dibentuk dengan memperluas n
 
 (132)
 
-![Diagram (132) Hubungan konstituen frasa nominal](/gramatika/_gambar/bab-07/diagram-07-04-hubungan-konstituen-frasa-nominal-132.webp)
+![Diagram (132) Hubungan konstituen frasa nominal](/gramatika/gambar/bab-07/diagram-07-04-hubungan-konstituen-frasa-nominal-132.webp)
 
 *Diagram (132) Hubungan konstituen frasa nominal*
 
@@ -46,6 +46,6 @@ Frasa nominal itu dapat ditafsirkan (a) lembaga yang mengurusi bahasa nasional a
 
 (134)
 
-![Diagram (134) Tafsiran frasa nominal lembaga bahasa nasional](/gramatika/_gambar/bab-07/diagram-07-05-tafsiran-frasa-nominal-134.webp)
+![Diagram (134) Tafsiran frasa nominal lembaga bahasa nasional](/gramatika/gambar/bab-07/diagram-07-05-tafsiran-frasa-nominal-134.webp)
 
 *Diagram (134) Tafsiran frasa nominal lembaga bahasa nasional*
