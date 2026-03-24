@@ -8,6 +8,6 @@ Kata seperti *lebih*, *kurang*, dan *paling* merupakan pemarkah pembandingan yan
 Contoh:
 
 (101)
-- a. *Saya lebih senang di sini daripada di sana.*
-- b. *Partai oposisi itu kurang puas dengan hasil kerja pemerintah selama tiga tahun terakhir ini.*
-- c. *Anaknya yang paling besar pernah mengikuti UKBI di Badan Bahasa.*
+- a. Saya lebih senang di sini daripada di sana.
+- b. Partai oposisi itu kurang puas dengan hasil kerja pemerintah selama tiga tahun terakhir ini.
+- c. Anaknya yang paling besar pernah mengikuti UKBI di Badan Bahasa.

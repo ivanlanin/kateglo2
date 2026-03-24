@@ -18,28 +18,28 @@ Tiap-tiap kata dalam pengelompokan di atas dapat juga digunakan sebagai verba. K
 Contoh:
 
 (103)
-- a. *Pertunjukan itu menarik perhatian gubernur.*
-- b. *Senyumnya memikat hati siapa pun yang melihatnya.*
-- c. *Suara burung gagak membuat suasana kampung makin mencekam.*
+- a. Pertunjukan itu menarik perhatian gubernur.
+- b. Senyumnya memikat hati siapa pun yang melihatnya.
+- c. Suara burung gagak membuat suasana kampung makin mencekam.
 
 (104)
-- a. *Cairnya bantuan itu menggembirakan rakyat.*
-- b. *Penampilan siswanya dalam turnamen tidak memalukan gurunya.*
-- c. *Adanya jaminan keamanan menenteramkan para wisatawan.*
+- a. Cairnya bantuan itu menggembirakan rakyat.
+- b. Penampilan siswanya dalam turnamen tidak memalukan gurunya.
+- c. Adanya jaminan keamanan menenteramkan para wisatawan.
 
 Kata pada kelompok (i-ii) di atas dapat pula digunakan sebagai adjektiva. Dalam hal itu, nomina setelah verba tidak harus hadir, terutama apabila nomina ini merujuk pada pembicara atau pada orang dalam arti yang umum. Dengan demikian, contoh di atas dapat diubah menjadi sebagai berikut.
 
 Contoh:
 
 (105)
-- a. *Pertunjukan itu menarik.*
-- b. *Senyumnya memikat.*
-- c. *Suasana kampung itu mencekam.*
+- a. Pertunjukan itu menarik.
+- b. Senyumnya memikat.
+- c. Suasana kampung itu mencekam.
 
 (106)
-- a. *Cairnya bantuan itu menggembirakan.*
-- b. *Penampilan siswanya tidak memalukan.*
-- c. *Adanya jaminan keamanan menenteramkan.*
+- a. Cairnya bantuan itu menggembirakan.
+- b. Penampilan siswanya tidak memalukan.
+- c. Adanya jaminan keamanan menenteramkan.
 
 Perhatikan bahwa sebagai adjektiva, bentuk-bentuk itu dapat dibubuhi pewatas seperti *sangat*, *paling*, atau *lebih* sehingga terbentuklah frasa adjektival seperti *sangat menarik*, *sangat memikat*, *sangat mencekam*, *paling menarik*, *paling memikat*, *paling mencekam*, dan *lebih menarik*, *lebih memikat*, *lebih mencekam*, dan *lebih menenteramkan*.
 
@@ -48,25 +48,25 @@ Kata pada kelompok (iii) juga dapat digunakan sebagai adjektiva sehingga dapat p
 Contoh:
 
 (107)
-- a. *Penyair Chairil Anwar sangat terkenal.*
-- b. *Penyair Chairil Anwar juga dikenal oleh anak muda.*
+- a. Penyair Chairil Anwar sangat terkenal.
+- b. Penyair Chairil Anwar juga dikenal oleh anak muda.
 
 (108)
-- a. *Kami terkejut ketika dia datang dengan pakaian adat lengkap.*
-- b. *Kami dikejutkan oleh kedatangan dia dengan pakaian adat lengkap.*
+- a. Kami terkejut ketika dia datang dengan pakaian adat lengkap.
+- b. Kami dikejutkan oleh kedatangan dia dengan pakaian adat lengkap.
 
 Kata pada kelompok (iv), seperti *beruntung* dan *berbahaya*, dapat diberi pewatas adjektiva seperti *paling*, *lebih*, atau *agak*.
 
 Contoh:
 
 (109)
-- a. *Dalam hal ini kami memang beruntung.*
-- b. *Dalam hal ini kami memang paling beruntung.*
-- c. *Dalam hal ini kami memang lebih beruntung.*
-- d. *Dalam hal ini kami memang agak beruntung.*
+- a. Dalam hal ini kami memang beruntung.
+- b. Dalam hal ini kami memang paling beruntung.
+- c. Dalam hal ini kami memang lebih beruntung.
+- d. Dalam hal ini kami memang agak beruntung.
 
 (110)
-- a. *Vetsin berbahaya bagi kesehatan manusia.*
-- b. *Vetsin paling berbahaya bagi kesehatan manusia.*
-- c. *Vetsin lebih berbahaya bagi kesehatan manusia.*
-- d. *Vetsin agak berbahaya bagi kesehatan manusia.*
+- a. Vetsin berbahaya bagi kesehatan manusia.
+- b. Vetsin paling berbahaya bagi kesehatan manusia.
+- c. Vetsin lebih berbahaya bagi kesehatan manusia.
+- d. Vetsin agak berbahaya bagi kesehatan manusia.

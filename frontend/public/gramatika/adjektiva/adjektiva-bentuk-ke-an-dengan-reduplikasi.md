@@ -18,6 +18,6 @@ Contoh:
 | *Belanda* | | *kebelandaan* | | *kebelanda-belandaan* |
 
 (114)
-- a. *Meskipun masih muda, gadis itu memiliki sifat keibu-ibuan.*
-- b. *Walaupun sudah dewasa, dia sering berperilaku kekanak-kanakan.*
-- c. *Sepulang dari Eropa, gayanya berubah kebarat-baratan.*
+- a. Meskipun masih muda, gadis itu memiliki sifat keibu-ibuan.
+- b. Walaupun sudah dewasa, dia sering berperilaku kekanak-kanakan.
+- c. Sepulang dari Eropa, gayanya berubah kebarat-baratan.

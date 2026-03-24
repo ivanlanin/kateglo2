@@ -20,6 +20,6 @@ Contoh:
 - *penyayang*
 
 (112)
-- a. *Gadis itu pemalu, sering menunduk jika diajak berbicara.*
-- b. *Tuhan yang Maha Pengasih dan Maha Penyayang mencintai makhluk-Nya.*
-- c. *Meskipun pendiam, dia mampu berbicara lancar di depan khalayak.*
+- a. Gadis itu pemalu, sering menunduk jika diajak berbicara.
+- b. Tuhan yang Maha Pengasih dan Maha Penyayang mencintai makhluk-Nya.
+- c. Meskipun pendiam, dia mampu berbicara lancar di depan khalayak.

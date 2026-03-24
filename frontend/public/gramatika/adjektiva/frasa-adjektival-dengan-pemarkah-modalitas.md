@@ -8,7 +8,7 @@ Sama halnya dengan pemarkah negasi dan pemarkah keaspekan, pemarkah modalitas, s
 Contoh:
 
 (99)
-- a. *Setiap orang pasti ingin selamat di dunia dan akhirat.*
-- b. *Jika Anda mau aman dalam perjalanan, mobil harus diservis dulu.*
-- c. *Dalam era kesejagatan, kita harus berani menghadapi berbagai tantangan.*
-- d. *Sebagai anggota pramuka, kita mesti setia pada Dasadarma Pramuka.*
+- a. Setiap orang pasti ingin selamat di dunia dan akhirat.
+- b. Jika Anda mau aman dalam perjalanan, mobil harus diservis dulu.
+- c. Dalam era kesejagatan, kita harus berani menghadapi berbagai tantangan.
+- d. Sebagai anggota pramuka, kita mesti setia pada Dasadarma Pramuka.

@@ -8,16 +8,16 @@ Tingkat eksesif mengacu pada kadar kualitas atau intensitas yang berlebihan atau
 Contoh:
 
 (41)
-- a. *Mobil itu terlalu mahal.*
-- b. *Soal yang diberikan tadi terlampau sukar.*
-- c. *Orang yang melamar kelewat banyak.*
+- a. Mobil itu terlalu mahal.
+- b. Soal yang diberikan tadi terlampau sukar.
+- c. Orang yang melamar kelewat banyak.
 
 Tingkat eksesif dapat juga dinyatakan dengan penambahan sufiks *ke-...-an* pada adjektiva.
 
 Contoh:
 
 (42)
-- a. *Jas yang saya kenakan kebesaran.*
-- b. *Anda membeli mobil itu kemahalan.*
-- c. *Stasiun bus antarkota kejauhan bagi saya.*
-- d. *Kakinya sakit karena sepatunya kekecilan.*
+- a. Jas yang saya kenakan kebesaran.
+- b. Anda membeli mobil itu kemahalan.
+- c. Stasiun bus antarkota kejauhan bagi saya.
+- d. Kakinya sakit karena sepatunya kekecilan.

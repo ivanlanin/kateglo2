@@ -8,18 +8,18 @@ Tingkat intensif menekankan kadar kualitas atau intensitas dan dinyatakan oleh p
 Contoh:
 
 (35)
-- a. *Pak Asep senang benar dengan pekerjaannya.*
-- b. *Mobil itu kencang betul jalannya.*
-- c. *Pemandangan di gunung itu sungguh menakjubkan.*
+- a. Pak Asep senang benar dengan pekerjaannya.
+- b. Mobil itu kencang betul jalannya.
+- c. Pemandangan di gunung itu sungguh menakjubkan.
 
 Penafian atau pengingkaran yang sungguh-sungguh terhadap intensitas atau kualitas dinyatakan dengan pemakaian pewatas *sama sekali tidak*, *tidak ... sama sekali*, *tidak ... sedikit pun (juga)*, atau *sedikit pun (juga) tidak ...*.
 
 Contoh:
 
 (36)
-- a. *Adik saya sama sekali tidak sombong.*
-- b. *Adik saya tidak sombong sama sekali.*
-- c. *Sama sekali adik saya tidak sombong.*
-- d. *Adik saya tidak sombong sedikit pun.*
-- e. *Sedikit pun (juga) adik saya tidak sombong.*
-- f. *Dia sedikit pun (juga) tidak sombong.*
+- a. Adik saya sama sekali tidak sombong.
+- b. Adik saya tidak sombong sama sekali.
+- c. Sama sekali adik saya tidak sombong.
+- d. Adik saya tidak sombong sedikit pun.
+- e. Sedikit pun (juga) adik saya tidak sombong.
+- f. Dia sedikit pun (juga) tidak sombong.

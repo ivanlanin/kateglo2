@@ -8,9 +8,9 @@ Pemarkah kualitas ada yang mendahului adjektiva, seperti *agak*, *sangat*, *cuku
 Contoh:
 
 (100)
-- a. *Anak itu sangat kuat.*
-- b. *Agak jauh juga rumahnya.*
-- c. *Meskipun tidak menjadi juara kelas, anak itu cukup gembira dengan hasil belajarnya selama ini.*
-- d. *Bagi dia yang hidupnya pas-pasan, harga rumah itu terlalu mahal.*
-- e. *Jalan di depan rumahnya becek sekali kalau hujan.*
-- f. *Sejuk benar udara di sini.*
+- a. Anak itu sangat kuat.
+- b. Agak jauh juga rumahnya.
+- c. Meskipun tidak menjadi juara kelas, anak itu cukup gembira dengan hasil belajarnya selama ini.
+- d. Bagi dia yang hidupnya pas-pasan, harga rumah itu terlalu mahal.
+- e. Jalan di depan rumahnya becek sekali kalau hujan.
+- f. Sejuk benar udara di sini.

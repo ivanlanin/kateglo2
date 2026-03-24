@@ -8,11 +8,11 @@ Fungsi atributif adjektiva merupakan bagian dari frasa nominal. Adjektiva yang b
 Contoh:
 
 (24)
-- a. *Baju merah itu merupakan baju kesayangannya.*
-- b. *Gadis kecil itu biasa bermain di kebun di belakang rumahnya.*
-- c. *Saya sering mendengar suara lembutnya lewat radio.*
-- d. *Hidupnya amat sederhana sehingga di rumahnya tak satu pun terlihat barang mahal.*
-- e. *Ibu saya menyukai mawar putih.*
+- a. Baju merah itu merupakan baju kesayangannya.
+- b. Gadis kecil itu biasa bermain di kebun di belakang rumahnya.
+- c. Saya sering mendengar suara lembutnya lewat radio.
+- d. Hidupnya amat sederhana sehingga di rumahnya tak satu pun terlihat barang mahal.
+- e. Ibu saya menyukai mawar putih.
 
 Contoh di atas memperlihatkan fungsi adjektiva sebagai pewatas pada frasa nominal. Pewatas nomina yang lebih dari satu lazim dirangkaikan dengan *yang*.
 

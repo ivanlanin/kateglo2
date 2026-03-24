@@ -36,13 +36,13 @@ Perlu diperhatikan perbedaan perilaku sintaktis dari bentuk dasar nomina, verba,
 Contoh:
 
 (72)
-- a. *Ada getar perasaan yang dalam pada dirinya.*
-- b. *Jangan gemetar, dia bukan orang jahat.*
+- a. Ada getar perasaan yang dalam pada dirinya.
+- b. Jangan gemetar, dia bukan orang jahat.
 
 (73)
-- a. *Ketika angin berembus, taman bunga itu semerbak baunya.*
-- b. *?Ketika angin berembus, taman bunga itu serbak baunya.*
+- a. Ketika angin berembus, taman bunga itu semerbak baunya.
+- b. ?Ketika angin berembus, taman bunga itu serbak baunya.
 
 (74)
-- a. *Banyak orang berdandan serba gemerlap.*
-- b. *?Banyak orang berdandan serba gerlap.*
+- a. Banyak orang berdandan serba gemerlap.
+- b. ?Banyak orang berdandan serba gerlap.

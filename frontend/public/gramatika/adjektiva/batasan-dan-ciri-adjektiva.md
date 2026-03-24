@@ -38,10 +38,10 @@ Adjektiva dapat ditinjau dari ciri semantis dan sintaksis. Jika dilihat dari cir
 Contoh:
 
 (3)
-- a. *Bus itu melaju sangat cepat di jalan tol.*
-- b. *Keputusan hakim itu sah.*
-- c. *Di ruang kerjanya terdapat beberapa buku tebal.*
-- d. *Pekerjaan itu terlalu berat jika harus diselesaikan dalam dua hari.*
-- e. *Burung itu terbang tinggi.*
+- a. Bus itu melaju sangat cepat di jalan tol.
+- b. Keputusan hakim itu sah.
+- c. Di ruang kerjanya terdapat beberapa buku tebal.
+- d. Pekerjaan itu terlalu berat jika harus diselesaikan dalam dua hari.
+- e. Burung itu terbang tinggi.
 
 Contoh (3a) dan (3b) merupakan adjektiva bertaraf dan takbertaraf, sedangkan (3c), (3d), dan (3e) merupakan adjektiva atributif, predikatif, dan adverbial.

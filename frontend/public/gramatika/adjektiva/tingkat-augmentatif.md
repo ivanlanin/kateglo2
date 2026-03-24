@@ -8,8 +8,8 @@ Tingkat augmentatif menggambarkan makin tingginya tingkat kualitas atau intensit
 Contoh:
 
 (43)
-- a. *Sutarno menjadi makin kaya.*
-- b. *Makin banyak peserta makin baik.*
-- c. *Saya rasa udara di Jakarta (makin lama) makin panas.*
-- d. *Penyediaan rumah untuk rakyat (kian lama) menjadi kian penting.*
-- e. *Anak itu makin besar makin pintar.*
+- a. Sutarno menjadi makin kaya.
+- b. Makin banyak peserta makin baik.
+- c. Saya rasa udara di Jakarta (makin lama) makin panas.
+- d. Penyediaan rumah untuk rakyat (kian lama) menjadi kian penting.
+- e. Anak itu makin besar makin pintar.

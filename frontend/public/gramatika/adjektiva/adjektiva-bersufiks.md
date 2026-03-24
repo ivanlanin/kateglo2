@@ -26,10 +26,10 @@ Contoh:
 | *raga* | *ragawi* |
 
 (77)
-- a. *Pewarna alami makanan dapat dibuat dari daun suji.*
-- b. *Dia menghindari makanan yang mengandung protein hewani.*
-- c. *Hal itu terjadi semata-mata karena kesalahan manusiawi.*
-- d. *Antropologi ragawi diajarkan di beberapa fakultas.*
+- a. Pewarna alami makanan dapat dibuat dari daun suji.
+- b. Dia menghindari makanan yang mengandung protein hewani.
+- c. Hal itu terjadi semata-mata karena kesalahan manusiawi.
+- d. Antropologi ragawi diajarkan di beberapa fakultas.
 
 Aturan pemakaian sufiks *-i/-wi* atau *-iah/-wiah* dalam banyak hal ditentukan oleh aturan fonologi dan tata bahasa Arab. Secara umum, sufiks *-i/-wi* muncul di belakang kata yang berakhir dengan konsonan, sedangkan sufiks *-iah/-wiah* di belakang kata yang berakhir dengan vokal /a/. Ada pula bentuk turunan yang diserap secara utuh, seperti *hakiki, rohani, ilmiah,* dan *harfiah*.
 

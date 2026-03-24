@@ -8,22 +8,22 @@ Tingkat elatif menggambarkan tingkat kualitas atau intensitas adjektiva yang tin
 Contoh:
 
 (37)
-- a. *Sikapnya amat ramah ketika menerima kami.*
-- b. *Sikapnya sangat ramah ketika menerima kami.*
-- c. *Sikapnya ramah sekali ketika menerima kami.*
+- a. Sikapnya amat ramah ketika menerima kami.
+- b. Sikapnya sangat ramah ketika menerima kami.
+- c. Sikapnya ramah sekali ketika menerima kami.
 
 (38)
-- a. *Gaya kerjanya amat sangat cekatan.*
-- b. *Orang itu memang amat cerdas sekali.*
-- c. *Orang itu memang sangat cerdas sekali.*
+- a. Gaya kerjanya amat sangat cekatan.
+- b. Orang itu memang amat cerdas sekali.
+- c. Orang itu memang sangat cerdas sekali.
 
 Konstruksi *amat sangat* tidak dapat diubah menjadi *sangat amat*. Demikian pula halnya dengan *(amat) sangat ... sekali* yang tidak dapat diubah menjadi *sangat (amat) ... sekali* sehingga dalam contoh berikut, ada konstruksi yang memang tidak pernah digunakan (39a) dan ada pula yang tidak lazim karena hanya sesekali saja digunakan, terutama dalam bahasa lisan (39b).
 
 Contoh:
 
 (39)
-- a. *Gaya kerjanya sangat amat cekatan.*
-- b. *Gaya kerjanya amat sangat cekatan sekali.*
+- a. Gaya kerjanya sangat amat cekatan.
+- b. Gaya kerjanya amat sangat cekatan sekali.
 
 Ketiga pewatas tingkat elatif ini, *amat*, *sangat*, dan *sekali*, memiliki makna yang sama. Atas dasar itu, seyogianya dapat dibedakan antara *amat malas*, *sangat malas*, atau *malas sekali* yang merupakan bentuk baku (terutama dalam ragam tulis) dan *amat sangat malas* atau *amat sangat malas sekali* yang merupakan bentuk tidak baku yang biasanya hanya digunakan dalam ragam lisan yang takformal.
 
