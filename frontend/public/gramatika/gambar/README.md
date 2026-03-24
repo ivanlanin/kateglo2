@@ -21,9 +21,8 @@ Folder ini menampung gambar statis yang dipakai oleh halaman Gramatika.
 
 - Gunakan gambar hanya untuk bagan, diagram, pohon, atau tabel kompleks yang kehilangan makna jika dipaksa ke markdown biasa.
 - Tetap pertahankan transkripsi teks, caption, atau uraian singkat di bawah gambar agar isi tetap dapat dicari dan dibaca tanpa bergantung penuh pada asset visual.
-- Simpan `png` sebagai master kerja.
-- Gunakan `webp` sebagai file yang dirujuk oleh frontend selama hasilnya tetap tajam.
-- Jika ketajaman garis atau teks kecil turun saat dikonversi, gunakan `png` langsung di markdown.
+- Simpan aset yang dipakai frontend dalam format `webp`.
+- Jika perlu menyimpan master kerja dengan format lain, letakkan di luar folder publik ini agar tidak ikut terlayani ke frontend.
 
 ## Contoh markdown
 
