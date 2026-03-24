@@ -3,11 +3,9 @@ id: 9.5.3.3
 title: Kalimat Interogatif (9.5.3.3)
 ---
 
-Kalimat interogatif atau kalimat tanya secara formal ditandai oleh kehadiran kata tanya seperti apa, siapa, berapa, kapan, bila, bagaimana, dan di mana dengan atau tanpa partikel -kah. Dalam bahasa tulis, kalimat interogatif diakhiri dengan tanda tanya (?), sedangkan dalam bahasa lisan diakhiri dengan intonasi naik.
+Kalimat interogatif, lazim digunakan untuk bertanya dan karena itu sering disebut kalimat tanya, secara formal ditandai oleh kehadiran kata tanya seperti *apa*, *siapa*, *berapa*, *kapan*, *bila*, *bagaimana*, dan *di mana* dengan atau tanpa partikel *-kah* sebagai penegas. Kalimat interogatif diakhiri dengan tanda tanya (?) pada bahasa tulis atau dengan intonasi naik pada bahasa lisan, terutama jika tidak ada kata tanya atau intonasi turun.
 
-Kalimat interogatif dapat dibentuk dengan beberapa cara.
-
-Salah satu caranya adalah dengan menambahkan partikel penanya *apa* atau *apakah*.
+Kalimat interogatif biasanya digunakan untuk meminta (1) jawaban *ya* atau *tidak* atau (2) informasi mengenai sesuatu atau seseorang kepada lawan bicara atau pembaca. Ada tiga cara untuk membentuk kalimat interogatif dari kalimat deklaratif, yaitu (1) dengan menambahkan partikel penanya *apa*, yang harus dibedakan dari kata tanya *apa*, (2) dengan membalikkan susunan kata, dan (3) dengan menggunakan kata *bukan*, *bukankah*, *tidak*, atau *tidakkah*. Kalimat deklaratif dapat diubah menjadi kalimat interogatif dengan menambahkan kata *apa* pada kalimat tersebut. Partikel *-kah* dapat ditambahkan pada partikel tanya untuk mempertegas pertanyaan. Intonasi yang dipakai dapat sama dengan intonasi kalimat berita.
 
 Contoh:
 
@@ -146,17 +144,7 @@ Pembentukan kalimat interogatif juga dapat dilakukan dengan mempertahankan uruta
 
 (342) Anggi kuliah di Fakultas Teknik?
 
-Cara lain untuk membentuk kalimat interogatif adalah dengan memakai kata tanya seperti *apa*, *bagaimana*, *berapa*, *bilamana*, *kapan*, *ke mana*, *mengapa*, atau *siapa*. Sebagian besar dari kata tanya itu digunakan untuk menanyakan unsur wajib dalam kalimat, sebagian yang lain digunakan untuk menanyakan unsur takwajib. Jawaban atas berbagai pertanyaan itu dapat berupa sasaran, cara, keadaan, jumlah, syarat, waktu, tempat, perbuatan, atau pelaku. Jawaban atas berbagai pertanyaan itu bukan *ya* atau *tidak*.
-
-| Kata Tanya | Menanyakan | Contoh |
-|---|---|---|
-| *apa* | sasaran (objek) | Pak Tarigan meminjam apa? |
-| *siapa* | pelaku/sasaran | Dia mencari siapa? |
-| *bagaimana* | cara/keadaan | Bagaimana dia memecahkan masalah itu? |
-| *berapa* | jumlah | Berapa jumlah penduduk Indonesia? |
-| *kapan/bilamana* | waktu | Kapan mereka akan berangkat ke Jayapura? |
-| *ke mana* | arah/tujuan | Keluarga Daryanto akan pindah ke mana? |
-| *mengapa* | perbuatan | Nyoman sedang mengapa? |
+Cara terakhir untuk membentuk kalimat interogatif adalah dengan memakai kata tanya seperti *apa*, *bagaimana*, *berapa*, *bilamana*, *kapan*, *ke mana*, *mengapa*, atau *siapa*. Sebagian besar dari kata tanya itu digunakan untuk menanyakan unsur wajib dalam kalimat seperti pada (343b) dan (344b), sebagian lain digunakan untuk menanyakan unsur takwajib seperti pada (345b) dan (348b). Jawaban atas berbagai pertanyaan itu dapat berupa sasaran (343-344), cara (345), keadaan (346), jumlah (347), syarat (348), waktu (349), tempat (350), perbuatan (351), atau pelaku (352). Jawaban atas berbagai pertanyaan itu bukan *ya* atau *tidak*.
 
 Contoh:
 
@@ -202,7 +190,7 @@ Contoh:
 
 Letak sebagian besar kata tanya itu dapat berpindah tanpa mengakibatkan perubahan apa pun. Dengan demikian, kalimat *Keluarga Daryanto akan pindah ke mana?* dapat diubah menjadi *Ke mana keluarga Daryanto akan pindah?* dan seterusnya. Sebagian yang lain, seperti *bagaimana*, mempunyai letak yang tegar, yakni di awal kalimat. Jadi, kalimat (345b) tidak dapat diubah menjadi *Dia memecahkan masalah itu bagaimana?* karena mengubah makna. Jika kata tanya itu terletak di bagian akhir kalimat, misalnya *Sekarang penyelesaian masalah itu bagaimana?* maknanya berubah. Dalam kalimat tersebut yang dipertanyakan adalah kelanjutan penyelesaian masalah itu dan bukan cara penyelesaiannya.
 
-Dalam kalimat interogatif yang memakai kata tanya *siapa* atau *apa* yang juga menggantikan unsur wajib, pemindahan kata tanya tersebut ke depan akan mengakibatkan perubahan struktur kalimat. Perhatikan kembali kalimat (343b) dan (344b) di atas. Jika *apa* dan *siapa* dipindahkan ke depan, seluruh konstruksi kalimat berubah.
+Dalam kalimat interogatif yang memakai kata tanya *siapa* atau *apa* yang juga menggantikan unsur wajib, pemindahan kata tanya tersebut ke depan akan mengakibatkan perubahan struktur kalimat. Perhatikan kembali kalimat (343b) dan (344b) di atas. Jika *apa* dan *siapa* dipindahkan ke depan, seluruh konstruksi kalimat berubah. Bandingkan kalimat (c) dan (d) pada contoh berikut.
 
 (343)
 - c. Pak Tarigan membaca apa?
@@ -212,7 +200,11 @@ Dalam kalimat interogatif yang memakai kata tanya *siapa* atau *apa* yang juga m
 - c. Dia mencari siapa?
 - d. Siapa yang dia cari?
 
-Penempatan *apa* dan *siapa* di awal kalimat mengakibatkan dua hal, yaitu (1) kata sambung yang harus muncul dan (2) klausa sesudahnya berbentuk pasif. Ada pula pemakaian lain dari kedua kata itu, yakni untuk menggantikan subjek pada kalimat sebelumnya.
+Penempatan *apa* dan *siapa* di awal kalimat mengakibatkan dua hal, yaitu (1) kata sambung relatif *yang* harus muncul dan (2) klausa sesudah *yang* berbentuk pasif. Sebagai akibat dari perubahan itu, urutannya menjadi predikat dan subjek, seperti terlihat pada diagram berikut.
+
+![Diagram struktur kalimat interogatif (343d) dan (344d)](/gramatika/_gambar/bab-09/diagram-09-06-kalimat-interogatif-343-344.webp)
+
+Kata tanya *apa* dan *siapa* pada contoh (343a) dan (344b) menggantikan objek pada kalimat sebelumnya yang kemudian dipindahkan ke depan. Ada pula pemakaian lain dari kedua kata itu, yakni untuk menggantikan subjek pada kalimat sebelumnya.
 
 Contoh:
 
@@ -224,9 +216,7 @@ Contoh:
 - a. Taufik memenangi pertandingan itu.
 - b. Siapa yang memenangi pertandingan itu?
 
-Pada contoh (353b) dan (354b), *apa* dan *siapa* masing-masing menggantikan subjek pada kalimat sebelumnya. Dalam contoh itu pula, *apa* dan *siapa* menjadi predikat, sedangkan konstituen lain menjadi subjek.
-
-Selain itu, jika kalimat interogatif menjadi bagian kalimat deklaratif, kalimat interogatif itu kehilangan sifat keinterogatifannya sehingga tanda baca yang dipakai adalah tanda titik, bukan tanda tanya.
+Pada contoh (b) di atas, *apa* dan *siapa* masing-masing menggantikan subjek *angin puting beliung* dan *Taufik* pada contoh (a). Pada contoh (353a) dan (354a) di atas kata *yang* harus muncul mengikuti *apa* dan *siapa*. Perlu diperhatikan bahwa *apa* dan *siapa* dalam kalimat (353b) dan (354b) itu menjadi predikat, sedangkan konstituen lain menjadi subjek. Selain itu, jika kalimat interogatif menjadi bagian kalimat deklaratif, kalimat interogatif itu kehilangan sifat keinterogatifannya sehingga tanda baca yang dipakai pun adalah tanda titik, bukan tanda tanya.
 
 (355) Saya tidak tahu kapan mereka akan berangkat.
 
