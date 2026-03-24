@@ -11,6 +11,6 @@ Contoh:
 
 | Suku Kata Buka | Pelafalan | Suku Kata Tutup | Pelafalan |
 |---|---|---|---|
-| to-ko | [toko] | ro-kok | [rokoʔ] |
-| ro-da | [roda] | po-jok | [pojoʔ] |
-| bi-ro | [biro] | mo-mok | [momoʔ] |
+| to-ko | [toko] | ro-kok | [rɔkɔʔ] |
+| ro-da | [roda] | po-jok | [pɔjɔʔ] |
+| bi-ro | [biro] | mo-mok | [mɔmɔʔ] |

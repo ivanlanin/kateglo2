@@ -29,12 +29,12 @@ Tabel 3.1 Vokal dan Alofonnya
 | Vokal | Alofon | Contoh |
 |---|---|---|
 | /i/ | [i] | [tari], [gigi] |
-| /i/ | [ɪ] | [tarɪʔ], [gigih] |
+| /i/ | [ɪ] | [tarɪʔ], [gigɪh] |
 | /e/ | [e] | [lele], [sore] |
 | /e/ | [ɛ] | [lɛlɛh], [nɛnɛʔ] |
 | /u/ | [u] | [batu], [cucu] |
 | /u/ | [ʊ] | [batʊk], [rapʊh] |
 | /o/ | [o] | [toko], [soto] |
-| /o/ | [ɔ] | [tokɔh], [pɔhɔn] |
-| /ə/ | [ə] | [əmas], [kədəl] |
+| /o/ | [ɔ] | [tɔkɔh], [pɔhɔn] |
+| /ə/ | [ə] | [əmas], [kodə] |
 | /a/ | [a] | [ada], [panah] |
