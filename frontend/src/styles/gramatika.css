@@ -342,7 +342,7 @@ a.ejaan-sidebar-pill-active {
 .ejaan-markdown-content blockquote,
 .ejaan-markdown-content blockquote p,
 .ejaan-markdown-content blockquote li {
-  @apply font-normal leading-relaxed text-[17px];
+  @apply font-normal leading-relaxed text-base;
 }
 
 .ejaan-markdown-content blockquote + blockquote {

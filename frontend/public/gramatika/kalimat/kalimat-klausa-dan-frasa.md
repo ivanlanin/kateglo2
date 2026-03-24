@@ -9,6 +9,8 @@ Baik kalimat maupun klausa merupakan konstruksi sintaktis yang mengandung unsur 
 
 Perhatikan contoh (4) berikut.
 
+(4)
+
 | Subjek | Predikat | Objek | Pelengkap | Keterangan |
 |--------|----------|-------|-----------|------------|
 | Dia | cantik | | | |

@@ -49,3 +49,6 @@ Kehadiran verba *bersahutan*, *mengerumuni*, dan *lalu-lalang* pada contoh terse
 
 - a. Murid di sekolah ini pintar-pintar.
 - b. Rumah di kampung itu bagus-bagus.
+- c. Buku di toko itu mahal-mahal.
+
+Bentuk *pintar-pintar*, *bagus-bagus*, dan *mahal-mahal* mengisyaratkan bahwa *murid*, *rumah*, dan *buku* mengandung makna jamak dan sekaligus menyatakan makna 'keberagaman'.

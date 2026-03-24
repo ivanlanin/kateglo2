@@ -7,6 +7,3 @@ Penggabungan dua kata atau lebih dalam satu kalimat menuntut adanya keserasian d
 
 1. [Keserasian Makna](/gramatika/keserasian-makna)
 2. [Keserasian Bentuk](/gramatika/keserasian-bentuk)
-- c. Buku di toko itu mahal-mahal.
-
-Bentuk *pintar-pintar*, *bagus-bagus*, dan *mahal-mahal* mengisyaratkan bahwa *murid*, *rumah*, dan *buku* mengandung makna jamak dan sekaligus menyatakan makna 'keberagaman'.
