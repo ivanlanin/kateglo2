@@ -19,20 +19,20 @@ Contoh:
 
 (47)
 - a.
-       - i. *Pertunjukan hari ini semenjemukan pertunjukan kemarin.*
-       - ii. *Pertunjukan hari ini tidak semenjemukan pertunjukan kemarin.*
+  - i. *Pertunjukan hari ini semenjemukan pertunjukan kemarin.*
+  - ii. *Pertunjukan hari ini tidak semenjemukan pertunjukan kemarin.*
 - b.
-       - i. *Naik bus malam seberbahaya naik sepeda motor.*
-       - ii. *Naik bus malam tidak seberbahaya naik sepeda motor.*
+  - i. *Naik bus malam seberbahaya naik sepeda motor.*
+  - ii. *Naik bus malam tidak seberbahaya naik sepeda motor.*
 - c.
-       - i. *Mandor itu seceroboh pendahulunya.*
-       - ii. *Mandor itu tidak seceroboh pendahulunya.*
+  - i. *Mandor itu seceroboh pendahulunya.*
+  - ii. *Mandor itu tidak seceroboh pendahulunya.*
 - d.
-       - i. *Perilaku koruptor sejahat perilaku teroris.*
-       - ii. *Perilaku koruptor tidak sejahat perilaku teroris.*
+  - i. *Perilaku koruptor sejahat perilaku teroris.*
+  - ii. *Perilaku koruptor tidak sejahat perilaku teroris.*
 - e.
-       - i. *Tutur katanya seindah wajahnya.*
-       - ii. *Tutur katanya tidak seindah wajahnya.*
+  - i. *Tutur katanya seindah wajahnya.*
+  - ii. *Tutur katanya tidak seindah wajahnya.*
 
 Bentuk *se-* kurang lazim ditambahkan pada adjektiva yang berupa gabungan sinonim.
 
