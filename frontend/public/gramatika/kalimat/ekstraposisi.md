@@ -25,6 +25,8 @@ Ekstraposisi adalah pemindahan unsur kalimat panjang yang berupa klausa ke akhir
 
 Kalimat (397b)-(400b) merupakan hasil ekstraposisi seluruh konstituen yang berupa klausa atau frasa nominal plus klausa. Kalimat (399c) dan (400c) merupakan hasil ekstraposisi klausa yang berhulu frasa nominal.
 
+Klausa berhulu frasa nominal dapat mengalami dislokasi kanan seperti tampak pada contoh berikut.
+
 (401)
 - a. Waktu untuk menyerahkan laporan sudah tiba.
 - b. Waktu(nya) sudah tiba untuk menyerahkan laporan.
@@ -34,3 +36,5 @@ Kalimat (397b)-(400b) merupakan hasil ekstraposisi seluruh konstituen yang berup
 - a. Manfaat orang rajin membaca banyak sekali.
 - b. Manfaat(nya) banyak sekali orang rajin membaca.
 - c. Manfaat(nya) banyak sekali, orang rajin membaca.
+
+Kalimat (401b) dan (402b) merupakan hasil ekstraposisi klausa komplemen frasa nominal, sedangkan kalimat (401c) dan (402c) merupakan hasil dislokasi kanan klausa komplemen frasa nominal tersebut. Perbedaan (401b) dan (401c) terletak pada adanya jeda sesudah predikat untuk kalimat (401c), sedangkan untuk (402b) tidak ada.

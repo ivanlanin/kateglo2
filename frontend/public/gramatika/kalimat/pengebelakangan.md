@@ -24,3 +24,5 @@ Keberterimaan pengebelakangan tidak hanya bergantung pada panjangnya unsur yang 
   ii. ?Anda akan menemukan di antara tumpukan map di atas meja panjang yang terletak dekat jendela laporan keuangan terakhir perusahaan itu.
 - c. i. Bapak akan menemukan laporan yang dibuat oleh perusahaan itu sesuai dengan saran-saran yang Bapak berikan di atas meja Bapak.
   ii. Bapak akan menemukan di atas meja Bapak laporan yang dibuat perusahaan itu sesuai dengan saran-saran yang Bapak berikan.
+
+Pada contoh (386a) tampak bahwa panjang frasa nominal objek dan frasa preposisional keterangan tempat hampir sama. Oleh karena itu, pengebelakangan frasa nominal objek tidak mudah. Pada (386b.ii) frasa nominal objek relatif lebih pendek daripada frasa preposisional keterangan tempat. Oleh karena itu, pengebelakangan mengakibatkan kalimat yang janggal. Sebaliknya, pada (386c) frasa nominal jauh lebih panjang daripada frasa preposisional keterangan tempat. Oleh karena itu, pengebelakangan frasa nominal objek terasa mutlak.
