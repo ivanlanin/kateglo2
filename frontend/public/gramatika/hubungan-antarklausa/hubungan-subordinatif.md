@@ -12,11 +12,15 @@ Konjungsi subordinatif menggabungkan dua klausa atau lebih sehingga membentuk ka
 
 Klausa (69a) dan (69b) digabungkan dengan cara subordinatif sehingga terbentuk kalimat kompleks (69c).
 
-![Bagan 10.2 Hubungan Subordinatif](/gramatika/_gambar/bab-10/bagan-10-02-hubungan-subordinatif.webp)
+Hubungan subordinatif dapat digambarkan sebagai berikut.
 
-**Bagan 10.2 Hubungan Subordinatif**
+![Bagan 10.1 Hubungan Subordinatif](/gramatika/_gambar/bab-10/bagan-10-02-hubungan-subordinatif.webp)
 
-Pada bagan di atas tampak bahwa klausa 2 berkedudukan sebagai konstituen klausa 1. Klausa 2 yang berkedudukan sebagai konstituen klausa 1 disebut klausa subordinatif, sedangkan klausa 1, tempat dilekatkannya klausa 2, disebut klausa utama.
+**Bagan 10.1 Hubungan Subordinatif**
+
+Pada Bagan 10.1 di atas tampak bahwa klausa 2 berkedudukan sebagai konstituen klausa 1. Klausa 2 yang berkedudukan sebagai konstituen klausa 1 disebut klausa subordinatif, sedangkan klausa 1, tempat dilekatkannya klausa 2, disebut klausa utama.
+
+Sesuai dengan bagan di atas, pembentukan kalimat kompleks (69c) dapat dijelaskan dalam diagram berikut.
 
 ![Diagram pohon kalimat (69c)](/gramatika/_gambar/bab-10/diagram-10-02-kalimat-69c.webp)
 
@@ -59,6 +63,8 @@ Klausa subordinatif dapat pula berupa klausa adverbial dalam arti klausa itu ber
 - l. Orang *yang* sedang membaca buku itu teman saya.
 - m. Novel itu lebih bagus daripada novel ini.
 
+Kalimat (71a) yang mengandung klausa adverbial yang menyatakan waktu dapat digambarkan sebagai berikut.
+
 ![Diagram pohon kalimat (71a)](/gramatika/_gambar/bab-10/diagram-10-02-kalimat-71a.webp)
 
 *Diagram pohon kalimat (71a)*
@@ -73,6 +79,8 @@ Kalimat kompleks dapat pula disusun dengan memperluas salah satu fungsi sintakti
 
 Dalam kalimat (72a) fungsi S (*Paman saya*) diperluas dengan klausa *yang tinggal di Bogor*. Dalam kalimat (72b) fungsi O (*buku*) diperluas dengan klausa *yang mengisahkan perjuangan Pangeran Diponegoro*. Dalam kalimat (72c) fungsi Pel (*patung*) diperluas dengan klausa *yang cantik*. Dalam kalimat (72d) fungsi Ket (*di daerah transmigrasi*) diperluas dengan klausa *yang menampung transmigran dari Jawa dan Bali*. Klausa perluasan dengan *yang* yang disematkan dalam klausa utama disebut sebagai klausa relatif dan berfungsi sebagai pewatas (keterangan) bagi fungsi sintaktis tertentu.
 
+Kalimat (72a) yang merupakan kalimat kompleks dengan klausa relatif keterangan subjek dapat digambarkan dalam diagram berikut.
+
 ![Diagram pohon kalimat (72a)](/gramatika/_gambar/bab-10/diagram-10-02-kalimat-72a.webp)
 
 *Diagram pohon kalimat (72a)*
@@ -83,6 +91,8 @@ Kalimat kompleks dapat pula terbentuk apabila dua proposisi diperbandingkan, sat
 - a. Dia bekerja lebih lama daripada istrinya (bekerja).
 - b. Saya berbicara kurang fasih dalam bahasa daerah daripada (saya berbicara [fasih]) dalam bahasa Indonesia.
 - c. Kapitalisme sama berbahayanya dengan komunisme (berbahaya).
+
+Kalimat kompleks (73a) itu dapat dinyatakan dalam bentuk diagram berikut.
 
 ![Diagram pohon kalimat (73a)](/gramatika/_gambar/bab-10/diagram-10-02-kalimat-73a.webp)
 

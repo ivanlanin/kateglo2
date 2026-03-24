@@ -9,6 +9,8 @@ Kalimat majemuk yang hubungan antarklausanya bercorak koordinatif ini memiliki c
 
 (14) Saya mengetahui kedatangannya, tetapi saya tidak mengetahui maksud serta tujuannya dan tidak menemuinya.
 
+Kalimat (14) dapat digambarkan sebagai berikut.
+
 ![Diagram pohon kalimat (14)](/gramatika/_gambar/bab-10/diagram-10-01-kalimat-14.webp)
 
 *Diagram pohon kalimat (14)*

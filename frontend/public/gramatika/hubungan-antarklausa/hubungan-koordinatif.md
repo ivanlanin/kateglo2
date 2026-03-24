@@ -23,6 +23,8 @@ Untuk memperjelas bagan di atas, perhatikanlah contoh berikut ini!
 
 Klausa (1a) dan (1b) digabungkan dengan menggunakan konjungsi *dan* sehingga terbentuklah kalimat majemuk (1c). Karena klausa-klausa dalam kalimat majemuk yang disusun dengan cara koordinasi mempunyai kedudukan setara atau sama, klausa-klausa itu merupakan klausa utama.
 
+Sesuai dengan Bagan 10.1 di atas, pembentukan kalimat (1c) dapat dijelaskan dalam diagram berikut.
+
 ![Diagram pohon kalimat (1c)](/gramatika/_gambar/bab-10/diagram-10-01-kalimat-1c.webp)
 
 *Diagram pohon kalimat (1c)*
