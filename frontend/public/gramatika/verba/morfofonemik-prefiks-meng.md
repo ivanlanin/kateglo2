@@ -29,7 +29,10 @@ Proses asimilasi fonem /k/ juga berlaku pada pangkal primer berpreposisi *ke*:
 
 Contoh:
 
-(92) *meng-* + *ke muka* → *mengemukakan*; *meng-* + *ke samping* → *mengesampingkan*; *meng-* + *ke depan* → *mengedepankan*
+(92)
+- *meng-* + *ke muka* → *mengemukakan*
+- *meng-* + *ke samping* → *mengesampingkan*
+- *meng-* + *ke depan* → *mengedepankan*
 
 2) Jika ditambahkan pada pangkal yang dimulai dengan fonem /l/, /m/, /n/, /ny/, /ng/, /r/, /y/, atau /w/, bentuk *meng-* berubah menjadi *me-*.
 
@@ -84,7 +87,10 @@ Proses asimilasi ini tidak terjadi pada bentuk pangkal yang berprefiks *per-*: *
 
 Contoh:
 
-(96) *meng-* + *pertinggi* → *mempertinggi*; *meng-* + *pertegas* → *mempertegas*; *meng-* + *perdalam* → *memperdalam*.
+(96)
+- *meng-* + *pertinggi* → *mempertinggi*
+- *meng-* + *pertegas* → *mempertegas*
+- *meng-* + *perdalam* → *memperdalam*
 
 5) Jika ditambahkan pada pangkal yang dimulai dengan fonem /c/, /j/, /s/, dan /sy/, bentuk *meng-* berubah menjadi *meny-*. Di dalam penulisan, prefiks *meny-* ini ditulis atau disederhanakan menjadi *men-* (fonem /s/ luluh, /c/ dan /j/ dipertahankan).
 

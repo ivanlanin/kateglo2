@@ -27,4 +27,6 @@ Contoh:
 
 Contoh:
 
-(112) *makan* → *makanan* [ma-ka-nan]; *kompleks* → *kekompleksan* [kə-kom-plek-san]
+(112)
+- *makan* → *makanan* [ma-ka-nan]
+- *kompleks* → *kekompleksan* [kə-kom-plek-san]
