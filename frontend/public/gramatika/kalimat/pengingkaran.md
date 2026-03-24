@@ -1,5 +1,5 @@
 ---
-id: 6
+id: 9.6
 title: Pengingkaran (9.6)
 ---
 
@@ -35,7 +35,7 @@ Kata ingkar seperti *tidak* mempunyai ruang lingkup pengingkaran yang berbeda-be
   - i. Dia tidak membeli mobil baru kemarin di pameran mobil.
   - ii. Bukan di pameran mobil dia membeli mobil baru kemarin.
 
-Makna kalimat (408b.i), (408c.i), dan (408d.i) yang menggunakan *tidak* masing-masing mengungkapkan makna yang sama dengan (408b.ii), (408c.ii), dan (408d.ii) yang menggunakan *bukan*. Tampak bahwa makna pengingkaran berpindah-pindah sesuai dengan tekanan yang diberikan.
+Makna kalimat (408b.i), (408c.i), dan (408d.i) yang menggunakan *tidak* masing-masing mengungkapkan makna yang sama dengan (408b.ii), (408c.ii), dan (408d.ii) yang menggunakan *bukan*. Dari contoh di atas tampak bahwa makna pengingkaran berpindah-pindah sesuai dengan tekanan yang diberikan. Untuk itu, paparan selanjutnya tentang pengingkaran ini berkaitan dengan pengingkaran kalimat dan pengingkaran bagian kalimat.
 
 1. [Pengingkaran Kalimat](/gramatika/pengingkaran-kalimat)
 2. [Pengingkaran Bagian Kalimat](/gramatika/pengingkaran-bagian-kalimat)
