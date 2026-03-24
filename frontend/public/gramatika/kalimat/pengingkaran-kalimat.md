@@ -74,7 +74,7 @@ Dia orang Bugis, bukan? / Dia bukan orang Bugis, bukan?
 
 Penggunaan kata ingkar dapat dirangkum sebagai berikut:
 
-Tabel 9.5 Kata Ingkar
+**Tabel 9.5 Kata Ingkar**
 
 | Jenis Predikat | Deklaratif | Interogatif | Imperatif | Eksklamatif |
 |---|---|---|---|---|

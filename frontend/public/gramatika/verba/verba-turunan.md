@@ -13,7 +13,7 @@ Verba turunan adalah verba yang dapat menjalankan fungsi gramatikalnya dalam kla
 
 Berdasarkan uraian di atas, pengelompokan verba dari segi bentuknya adalah:
 
-Bagan 4.3 Pengelompokan Verba Berdasarkan Bentuk
+**Bagan 4.3 Pengelompokan Verba Berdasarkan Bentuk**
 
 - Verba dasar
   - verba dasar bebas

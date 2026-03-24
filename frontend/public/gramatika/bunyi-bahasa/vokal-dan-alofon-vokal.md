@@ -7,7 +7,7 @@ Dalam bahasa Indonesia ada enam fonem vokal, yaitu /i/, /e/, /ə/, /a/, /o/, dan
 
 ![Bagan 3.2 Vokal](/gramatika/_gambar/bab-03/bagan-03-02-vokal.webp)
 
-Bagan 3.2 Vokal
+**Bagan 3.2 Vokal**
 
 Dalam realisasinya vokal bahasa Indonesia dapat mempunyai alofon atau variasi. Pada umumnya alofon vokal itu mengikuti pola berikut: lidah yang berada pada posisi tertentu bergerak ke atas atau ke bawah sehingga posisinya hampir berimpitan dengan posisi untuk menghasilkan vokal yang ada di atas atau di bawahnya. Di antara enam fonem vokal bahasa Indonesia itu, empat vokal, yaitu /i/, /e/, /o/, dan /u/ masing-masing mempunyai dua alofon.
 
@@ -24,7 +24,7 @@ Kata *toko* dan *tokoh* oleh penutur bahasa Jawa cenderung dilafalkan [toko] dan
 
 Secara singkat vokal dan alofonnya dalam bahasa Indonesia dapat digambarkan sebagai berikut.
 
-Tabel 3.1 Vokal dan Alofonnya
+**Tabel 3.1 Vokal dan Alofonnya**
 
 | Vokal | Alofon | Contoh |
 |---|---|---|

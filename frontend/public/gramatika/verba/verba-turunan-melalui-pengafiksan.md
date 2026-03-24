@@ -19,7 +19,7 @@ Uraian di atas dapat dirangkum dalam bagan pembentukan kata sebagai berikut.
 
 ![Bagan 4.2 Proses Pembentukan Kata](/gramatika/_gambar/bab-04/bagan-04-02-proses-pembentukan-kata.webp)
 
-Bagan 4.2 Proses Pembentukan Kata
+**Bagan 4.2 Proses Pembentukan Kata**
 
 Dalam bahasa Indonesia terdapat prefiks verbal *meng-*, *ber-*, *per-*, *di-*, dan *ter-*. Prefiks *di-* dan *ter-* dapat menggantikan *meng-* pada jenis klausa atau kalimat tertentu. Selain itu, juga terdapat sufiks verbal *-kan* dan *-i* serta konfiks verbal *ke-...-an* dan *ber-...-an*.
 

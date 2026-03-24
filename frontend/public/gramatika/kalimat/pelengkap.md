@@ -12,7 +12,7 @@ Pengertian objek dan pelengkap sering dicampuradukkan. Hal itu dapat dipahami ka
 
 Pada kedua contoh di atas tampak bahwa *barang-barang elektronik* adalah frasa nominal dan terletak di sebelah kanan verba *menjual* dan *berjualan*. Akan tetapi, pada kalimat (44a) frasa nominal itu dinamakan objek, sedangkan pada (44b) disebut pelengkap, yang juga dinamakan komplemen. Persamaan dan perbedaan antara objek dan pelengkap dapat dilihat pada ciri-ciri berikut.
 
-Tabel 9.2 Ciri Objek dan Pelengkap
+**Tabel 9.2 Ciri Objek dan Pelengkap**
 
 | | Objek | Pelengkap |
 |---|---|---|

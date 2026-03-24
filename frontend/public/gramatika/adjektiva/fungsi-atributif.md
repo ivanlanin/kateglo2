@@ -16,7 +16,7 @@ Contoh:
 
 Contoh di atas memperlihatkan fungsi adjektiva sebagai pewatas pada frasa nominal. Pewatas nomina yang lebih dari satu lazim dirangkaikan dengan *yang*.
 
-Tabel 5.1 Pewatas Nomina
+**Tabel 5.1 Pewatas Nomina**
 
 | Nomina | Pewatas | Frasa Nominal |
 |--------|---------|---------------|

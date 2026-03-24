@@ -38,7 +38,7 @@ Konjungsi yang tidak setara, seperti *karena*, *sejak*, dan *setelah*, dapat men
 
 Ada bentuk yang hanya dapat berfungsi sebagai preposisi; ada bentuk yang hanya berfungsi sebagai konjungsi; dan ada bentuk yang dapat berfungsi sebagai preposisi dan konjungsi.
 
-Tabel 8.1 Preposisi dan Konjungsi
+**Tabel 8.1 Preposisi dan Konjungsi**
 
 | Hanya Preposisi | Preposisi dan Konjungsi | Hanya Konjungsi |
 |:----------------|:------------------------|:----------------|

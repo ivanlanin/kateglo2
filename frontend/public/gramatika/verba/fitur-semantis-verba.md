@@ -71,7 +71,7 @@ Contoh lain:
 
 Berdasarkan uraian di atas, tipe verba berikut fitur semantisnya dapat digambarkan dalam tabel berikut.
 
-Tabel 4.1 Tipe Verba dengan Fitur Semantis
+**Tabel 4.1 Tipe Verba dengan Fitur Semantis**
 
 | Tipe Verba | Perubahan Berangsur | Perubahan Dinamis | Keduratifan | Ketelisan |
 |---|---|---|---|---|

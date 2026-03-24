@@ -14,9 +14,9 @@ Suatu bentuk kata yang tergolong dalam kategori tertentu dapat mempunyai fungsi 
 
 Hubungan antara bentuk, kategori, fungsi, dan peran yang telah dipaparkan secara lebih jelas dapat dilihat pada Tabel 9.1.
 
-![Tabel 9.1 Hubungan Bentuk, Kategori, Fungsi, dan Peran Unsur Kalimat](/gramatika/_gambar/bab-09/tabel-09-01-hubungan-bentuk-kategori-fungsi-dan-peran-unsur-kalimat.webp)
+**Tabel 9.1 Hubungan Bentuk, Kategori, Fungsi, dan Peran Unsur Kalimat**
 
-*Tabel 9.1 Hubungan Bentuk, Kategori, Fungsi, dan Peran Unsur Kalimat*
+![Tabel 9.1 Hubungan Bentuk, Kategori, Fungsi, dan Peran Unsur Kalimat](/gramatika/_gambar/bab-09/tabel-09-01-hubungan-bentuk-kategori-fungsi-dan-peran-unsur-kalimat.webp)
 
 
 1. [Kategori](/gramatika/kategori)

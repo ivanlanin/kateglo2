@@ -34,6 +34,6 @@ Catatan: unsur objek, pelengkap, dan keterangan yang ditulis di antara tanda kur
 
 Apabila konstituen kalimat dasar yang tidak wajib hadir diabaikan, dari pola umum (166) itu dapat diturunkan enam tipe kalimat dasar. Keenam tipe kalimat dasar itu, yang dibedakan berdasarkan pola urutan unsurnya yang wajib, terlihat pada Tabel 9.4 berikut.
 
-Tabel 9.4 Pola Kalimat Dasar Bahasa Indonesia
+**Tabel 9.4 Pola Kalimat Dasar Bahasa Indonesia**
 
 ![Tabel 9.4 Pola Kalimat Dasar Bahasa Indonesia](/gramatika/_gambar/bab-09/tabel-09-04-pola-kalimat-dasar-bahasa-indonesia.webp)

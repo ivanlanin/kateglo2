@@ -14,7 +14,7 @@ Klausa (69a) dan (69b) digabungkan dengan cara subordinatif sehingga terbentuk k
 
 ![Bagan 10.2 Hubungan Subordinatif](/gramatika/_gambar/bab-10/bagan-10-02-hubungan-subordinatif.webp)
 
-*Bagan 10.2 Hubungan Subordinatif*
+**Bagan 10.2 Hubungan Subordinatif**
 
 Pada bagan di atas tampak bahwa klausa 2 berkedudukan sebagai konstituen klausa 1. Klausa 2 yang berkedudukan sebagai konstituen klausa 1 disebut klausa subordinatif, sedangkan klausa 1, tempat dilekatkannya klausa 2, disebut klausa utama.
 

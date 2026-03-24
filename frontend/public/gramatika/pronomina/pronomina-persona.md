@@ -5,7 +5,7 @@ title: Pronomina Persona (7.2.2.1)
 
 Pronomina persona adalah pronomina yang dipakai untuk mengacu pada orang. Pronomina persona dapat mengacu pada diri sendiri (pronomina persona pertama), mengacu pada orang yang diajak berbicara (pronomina persona kedua), atau mengacu pada orang yang dibicarakan (pronomina persona ketiga). Di antara pronomina itu, ada yang mengacu pada jumlah satu atau lebih dari satu. Ada bentuk yang bersifat eksklusif, ada yang bersifat inklusif, dan ada yang bersifat netral seperti yang terlihat pada tabel berikut.
 
-Tabel 7.1 Pronomina Persona
+**Tabel 7.1 Pronomina Persona**
 
 | Persona | Tunggal | Jamak Netral | Jamak Eksklusif | Jamak Inklusif |
 |---|---|---|---|---|

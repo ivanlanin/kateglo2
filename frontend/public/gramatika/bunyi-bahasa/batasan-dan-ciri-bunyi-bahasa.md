@@ -13,7 +13,7 @@ Pada prinsipnya, ketika seseorang berbicara, paru-paru mengembuskan udara melalu
 
 ![Bagan 3.1 Alat Ucap](/gramatika/_gambar/bab-03/bagan-03-01-alat-ucap.webp)
 
-*Bagan 3.1 Alat Ucap*
+**Bagan 3.1 Alat Ucap**
 
 Keterangan:
 

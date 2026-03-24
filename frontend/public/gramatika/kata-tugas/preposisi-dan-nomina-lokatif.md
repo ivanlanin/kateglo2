@@ -7,7 +7,7 @@ Suatu preposisi juga dapat bergabung dengan dua nomina asalkan nomina itu mempun
 
 ![Bagan 8.1 Struktur Frasa Preposisional](/gramatika/_gambar/bab-08/bagan-08-01-struktur-frasa-preposisional.webp)
 
-*Bagan 8.1 Struktur Frasa Preposisional*
+**Bagan 8.1 Struktur Frasa Preposisional**
 
 Dari bagan di atas tampak bahwa *atas*, *dalam*, dan *sekitar* merupakan bagian dari frasa nominal *atas meja*, *dalam rumah*, dan *sekitar kampus* dan bukan frasa gabungan *di atas*, *ke dalam*, dan *dari sekitar*.
 
@@ -113,7 +113,7 @@ Bentuk-bentuk preposisi bahasa Indonesia yang dibicarakan di atas dapat disajika
 
 ![Bagan 8.2 Preposisi](/gramatika/_gambar/bab-08/bagan-08-02-preposisi.webp)
 
-*Bagan 8.2 Preposisi*
+**Bagan 8.2 Preposisi**
 
 - preposisi tunggal: dasar; berafiks (berprefiks, bersufiks, berprefiks + bersufiks)
 - preposisi gabungan: preposisi berdampingan; preposisi berkorelasi

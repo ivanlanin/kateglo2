@@ -12,7 +12,7 @@ Secara diagramatik hubungan itu dapat dilihat dalam bagan berikut yang memperlih
 
 ![Bagan 10.1 Hubungan Koordinatif](/gramatika/_gambar/bab-10/bagan-10-01-hubungan-koordinatif.webp)
 
-*Bagan 10.1 Hubungan Koordinatif*
+**Bagan 10.1 Hubungan Koordinatif**
 
 Untuk memperjelas bagan di atas, perhatikanlah contoh berikut ini!
 

@@ -29,7 +29,7 @@ Perlu diingat bahwa pembedaan unsur kalimat atas wajib dan takwajib tidak berkai
 
 ![Bagan 9.1 Unsur dalam Kalimat](/gramatika/_gambar/bab-09/bagan-09-01-unsur-dalam-kalimat.webp)
 
-*Bagan 9.1 Unsur dalam Kalimat*
+**Bagan 9.1 Unsur dalam Kalimat**
 
 Akan tetapi, pada kalimat tertentu konstituen yang berfungsi sebagai keterangan itu wajib hadir atau tidak dapat dihilangkan.
 

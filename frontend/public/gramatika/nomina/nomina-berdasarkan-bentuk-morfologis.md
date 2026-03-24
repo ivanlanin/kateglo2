@@ -7,7 +7,7 @@ Jika dilihat dari segi bentuk morfologisnya, nomina dapat dikelompokkan atas dua
 
 ![Bagan 7.1 Nomina](/gramatika/_gambar/bab-07/bagan-07-01-nomina.webp)
 
-*Bagan 7.1 Nomina*
+**Bagan 7.1 Nomina**
 
 1. [Nomina Dasar](./nomina-dasar)
 2. [Nomina Turunan](./nomina-turunan)

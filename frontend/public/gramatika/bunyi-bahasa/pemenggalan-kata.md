@@ -13,7 +13,7 @@ Kata *berani* dapat dipenggal menjadi *be-rani* atau *bera-ni*, tetapi tidak dap
 
 Harus pula dihindari pemenggalan pada akhir kata yang hanya terdiri atas satu huruf saja. Dengan demikian, *meliputi*, misalnya, dapat dipenggal menjadi *me-liputi*, tetapi tidak boleh menjadi *meliput-i* karena huruf *-i* menjadi berdiri sendiri. Berikut adalah contoh-contoh lain. Untuk gambaran yang lebih lengkap, lihatlah *Pedoman Umum Ejaan Bahasa Indonesia*.
 
-Tabel 3.5 Pemenggalan Kata
+**Tabel 3.5 Pemenggalan Kata**
 
 | Bentuk | Pemenggalan benar | Pemenggalan yang tidak tepat |
 |---|---|---|

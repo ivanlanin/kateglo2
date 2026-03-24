@@ -96,7 +96,7 @@ Perlu juga diperhatikan bahwa frasa preposisional yang mengikuti verba, seperti 
 
 Dari uraian mengenai perilaku sintaktis verba seperti yang diuraikan pada bagian ini, ketransitifan verba dapat disimpulkan seperti yang terlihat pada bagan berikut.
 
-Bagan 4.1 Klasifikasi Verba Transitif dan Taktransitif
+**Bagan 4.1 Klasifikasi Verba Transitif dan Taktransitif**
 
 - Verba transitif
   - berobjek

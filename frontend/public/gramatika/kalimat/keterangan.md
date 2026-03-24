@@ -21,7 +21,7 @@ Bentuk *di kantor*, *kemarin pagi*, *lima hektare*, dan *secepat-cepatnya* pada 
 
 Makna keterangan ditentukan oleh perpaduan makna unsur-unsurnya. Dengan demikian, keterangan *di kantor* (50a) mengandung makna tempat, *kemarin pagi* (50b) mengandung makna waktu, *lima hektare* (50c) mengandung makna kuantitas, dan *secepat-cepatnya* (50d) mengandung makna cara. Sementara itu, *sebelum seminar itu berakhir* (51a) dan *segera setelah dia diterima bekerja di bank* (51b) merupakan keterangan yang berupa klausa yang mengandung makna waktu. Berdasarkan makna-makna keterangan seperti yang telah disebutkan di atas, berikut ini didaftarkan beberapa jenis keterangan yang lazim digunakan dalam bahasa Indonesia.
 
-Tabel 9.3 Jenis Keterangan
+**Tabel 9.3 Jenis Keterangan**
 
 | No. | Jenis Keterangan | Preposisi/Konjungsi | Contoh |
 |:---:|---|---|---|

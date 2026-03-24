@@ -67,4 +67,4 @@ Aposisi takrestriktif biasanya terbatas pada frasa nominal. Makna unsur kedua da
 
 ![Bagan 9.2 Jenis Aposisi](/gramatika/_gambar/bab-09/bagan-09-02-jenis-aposisi.webp)
 
-*Bagan 9.2 Jenis Aposisi*
+**Bagan 9.2 Jenis Aposisi**
