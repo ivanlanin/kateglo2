@@ -21,7 +21,7 @@ Semua contoh di atas menunjukkan bahwa verba yang terdapat dalam tiap-tiap kalim
 
 Pemasifan dalam bahasa Indonesia dilakukan dengan dua cara: (1) menggunakan verba berprefiks *di-* dan (2) menggunakan verba tanpa prefiks *di-*. Jika digunakan simbol S untuk subjek, P untuk predikat, dan O untuk objek, kaidah pembentukan kalimat pasif dari kalimat aktif dalam bahasa Indonesia adalah sebagai berikut.
 
-Cara Pertama
+**Cara Pertama**
 
 1. Pertukarkanlah S dengan O.
 2. Gantilah prefiks *meng-* menjadi *di-* pada P.
@@ -56,7 +56,7 @@ Pemasifan dengan cara pertama itu pada umumnya digunakan jika subjek kalimat akt
 - a. Tugas itu harus diselesaikan oleh kamu dan saya.
 - b. ?Tugas itu harus kamu dan saya selesaikan.
 
-Cara Kedua
+**Cara Kedua**
 
 Seperti telah disinggung di atas, padanan pasif dari kalimat aktif transitif yang subjeknya berupa pronomina dibentuk dengan cara kedua. Adapun kaidah pembentukan kalimat pasif cara kedua itu adalah sebagai berikut.
 
@@ -132,6 +132,8 @@ Perubahan kalimat aktif transitif yang mengandung kata modal, seperti *ingin*, *
 
 Pada kalimat (252a) jelas bahwa yang ingin melakukan perbuatan *menyalami* adalah Andi, tetapi (252b) cenderung ditafsirkan bahwa yang menginginkan salaman itu adalah Tuti, bukan Andi.
 
+Tafsiran makna kalimat pasif yang berbeda dengan makna padanan kalimat aktif itu timbul karena kodrat kata *ingin* yang cenderung dikaitkan dengan unsur di sebelah kiri yang mendahuluinya. Hal itu tampak lebih nyata pada keganjilan pasangan kalimat *Andi ingin mencuci mobilnya* dan *Mobilnya ingin dicuci Andi*.
+
 Arti pasif dapat pula bergabung dengan unsur lain seperti unsur ketaksengajaan. Jika kalimat aktif diubah menjadi kalimat pasif dan dalam kalimat pasif itu terkandung pula pengertian bahwa perbuatan yang dinyatakan oleh verba itu mengandung unsur ketaksengajaan, prefiks yang digunakan untuk verba bukan lagi *di-*, melainkan *ter-*.
 
 (253)
@@ -140,6 +142,8 @@ Arti pasif dapat pula bergabung dengan unsur lain seperti unsur ketaksengajaan. 
 - b. Muatan itu terlempar ke laut.
 
 Kalimat (253a) menunjukkan bahwa seseorang melakukan perbuatan itu dengan niat dan kesengajaan. Sebaliknya, kalimat (253b) mengacu pada suatu keadaan yang menggambarkan ketaksengajaan si pelaku perbuatan.
+
+Pada (253b) mungkin saja muatan itu terlempar oleh orang lain atau mungkin juga oleh guncangan kapal yang terlalu keras.
 
 Di samping makna ketaksengajaan itu, verba pasif yang memakai *ter-* juga dapat menunjukkan kekodratan. Artinya, kita tidak memasalahkan siapa yang melakukan perbuatan tersebut sehingga seolah-olah sudah menjadi kodrat bahwa sesuatu harus demikian keadaannya.
 

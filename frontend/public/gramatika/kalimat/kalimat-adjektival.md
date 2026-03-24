@@ -12,6 +12,8 @@ Predikat kalimat dalam bahasa Indonesia dapat pula berupa adjektiva atau frasa a
 
 Subjek kalimat pada ketiga contoh di atas adalah *anaknya*, *pernyataan orang itu*, dan *alasan para pengunjuk rasa*, sedangkan predikatnya adalah *pintar*, *benar*, dan *agak aneh*. Kalimat yang predikatnya adjektiva atau frasa adjektival sering juga dinamakan kalimat statif.
 
+Kalimat statif kadang-kadang memanfaatkan verba *adalah* untuk memisahkan subjek dari predikatnya. Hal itu dilakukan apabila subjek, predikat, atau kedua-duanya panjang.
+
 (259)
 - a. Pernyataan ketua organisasi itu adalah tidak benar.
 - b. Gerakan badannya pada tarian yang pertama adalah anggun dan memesona.
