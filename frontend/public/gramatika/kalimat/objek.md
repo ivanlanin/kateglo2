@@ -49,3 +49,5 @@ Objek pada kalimat aktif transitif akan menjadi subjek jika kalimat itu dipasifk
 
 - a. Pembantu membersihkan *ruangan saya*. [O]
 - b. *Ruangan saya* [S] dibersihkan (oleh) pembantu.
+
+Potensi ketersulihan unsur objek dengan *-nya* (contoh 39—41) dan pengedepanannya menjadi subjek kalimat pasif itu (contoh 43) merupakan ciri utama yang membedakan objek dari pelengkap yang berupa nomina atau frasa nominal.

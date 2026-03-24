@@ -10,16 +10,18 @@ Pengertian objek dan pelengkap sering dicampuradukkan. Hal itu dapat dipahami ka
 - a. Dia menjual *barang-barang elektronik* di Glodok. *(barang-barang elektronik = objek)*
 - b. Dia berjualan *barang-barang elektronik* di Glodok. *(barang-barang elektronik = pelengkap)*
 
-Pada kedua contoh di atas tampak bahwa *barang-barang elektronik* adalah frasa nominal dan terletak di sebelah kanan verba *menjual* dan *berjualan*. Akan tetapi, pada kalimat (44a) frasa nominal itu dinamakan objek, sedangkan pada (44b) disebut pelengkap, yang juga dinamakan komplemen. Persamaan dan perbedaan antara objek dan pelengkap dapat dilihat pada ciri-ciri berikut.
+Pada kedua contoh di atas tampak bahwa *barang-barang elektronik* adalah frasa nominal dan terletak di sebelah kanan verba *menjual* dan *berjualan*. Akan tetapi, pada kalimat (44a) frasa nominal itu dinamakan objek, sedangkan pada (44b) disebut pelengkap, yang juga dinamakan komplemen.
+
+Persamaan dan perbedaan antara objek dan pelengkap dapat dilihat pada ciri-ciri berikut.
 
 **Tabel 9.2 Ciri Objek dan Pelengkap**
 
 | | Objek | Pelengkap |
 |---|---|---|
-| Wujud | Berwujud frasa nominal atau klausa | Berwujud frasa nominal, frasa verbal, frasa adjektival, frasa preposisional, atau klausa |
-| Posisi | Berada langsung di sebelah kanan predikat verba atau frasa verbal transitif | Berada langsung di sebelah kanan predikat verba atau frasa verbal taktransitif, atau berada di belakang objek jika predikatnya berupa verba transitif |
-| Pemasifan | Dapat menjadi subjek dalam pemasifan kalimat | Tidak dapat menjadi subjek dalam pemasifan kalimat |
-| Penggantian | Dapat diganti dengan *-nya* | Tidak dapat diganti dengan *-nya*, kecuali dalam kombinasi preposisi selain *ke*, *dari*, dan *akan* |
+| Wujud | berwujud frasa nominal atau klausa | berwujud frasa nominal, frasa verbal, frasa adjektival, frasa preposisional, atau klausa |
+| Posisi | berada langsung di sebelah kanan predikat verba atau frasa verbal transitif | berada langsung di sebelah kanan predikat verba atau frasa verbal taktransitif, atau berada di belakang objek jika predikatnya berupa verba transitif |
+| Pemasifan | dapat menjadi subjek dalam pemasifan kalimat | tidak dapat menjadi subjek dalam pemasifan kalimat |
+| Penggantian | dapat diganti dengan *-nya* | tidak dapat diganti dengan *-nya*, kecuali dalam kombinasi preposisi selain *ke*, *dari*, dan *akan* |
 
 Berikut adalah beberapa contoh pelengkap dengan predikat yang berupa verba taktransitif (45), verba transitif (46), dan adjektiva (47).
 

@@ -7,15 +7,32 @@ Pada Bab IV–VIII telah dibahas lima kategori kata utama (26a) dan enam kategor
 
 (26)
 
-- a. Verba (V), Adjektiva (Adj), Adverbia (Adv), Nomina (N), Numeralia (Num)
-- b. Preposisi (Prep), Konjungsi (Konj), Interjeksi (Interj), Artikula (Art), Partikel (Part), Pronomina (Pron)
+- a.
+  - Verba (V)
+  - Adjektiva (Adj)
+  - Adverbia (Adv)
+  - Nomina (N)
+  - Numeralia (Num)
+- b.
+  - Preposisi (Prep)
+  - Konjungsi (Konj)
+  - Interjeksi (Interj)
+  - Artikula (Art)
+  - Partikel (Part)
+  - Pronomina (Pron)
 
 Kelas kata numeralia lazim juga dikelompokkan sebagai adjektiva, tetapi pada buku ini numeralia diperlakukan sebagai kelas kata tersendiri. Selain kelas kata itu, terdapat kategori frasa yang dibedakan berdasarkan unsur utamanya.
 
 (27)
 
-- a. Frasa Nominal (FN), Frasa Verbal (FV), Frasa Adjektival (FAdj), Frasa Adverbial (FAdv), Frasa Numeralia (FNum)
-- b. Frasa Preposisional (FPrep)
+- a.
+  - Frasa Nominal (FN)
+  - Frasa Verbal (FV)
+  - Frasa Adjektival (FAdj)
+  - Frasa Adverbial (FAdv)
+  - Frasa Numeralia (FNum)
+- b.
+  - Frasa Preposisional (FPrep)
 
 Perlu diingat bahwa tidak ada frasa yang unsur utamanya berupa konjungsi, interjeksi, artikula, atau partikel. Pada (26a) unsur utamanya berturut-turut adalah nomina, verba, adjektiva, adverbia, dan numeralia, sedangkan pada (26b) unsur utamanya adalah preposisi. Hubungan antara kelas kata dan kategori frasa dapat dilihat pada contoh berikut.
 
