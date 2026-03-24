@@ -3,24 +3,9 @@ id: 7.1.4.2.2.2
 title: Penurunan Nomina melalui Pengafiksan (7.1.4.2.2.2)
 ---
 
-Nomina dapat diturunkan melalui pengafiksan dengan sejumlah prefiks, sufiks, konfiks, dan sisipan. Bentuk pangkal itu dapat berupa pangkal monomorfemis dan dapat pula berupa kata turunan polimorfemis. Bentuk yang menjadi pangkal penurunan nomina ditentukan oleh keterkaitan makna antara bentuk pangkal dan turunannya.
-
-Proses yang sama juga terjadi pada penurunan nomina-nomina lain seperti terlihat dalam contoh-contoh berikut.
-
-- (43)
-- *darat* (N) → *daratan* (N); *mendarat(kan)* (V) → *pendaratan* (N)
-- *kosong* (Adj) → *kekosongan* (N); *mengosongkan* (V) → *pengosongan* (N)
-- *satu* (Num) → *kesatuan* (N); *bersatu* (V) → *persatuan* (N); *menyatukan* (V) → *penyatuan* (N)
-
-Karena keterkaitan makna merupakan dasar untuk menentukan bentuk pangkal penurunan, dalam kebanyakan hal nomina turunan mempunyai bentuk pangkal sendiri-sendiri. Nomina *temuan, pertemuan,* dan *penemuan*, misalnya, masing-masing diturunkan dari bentuk pangkal yang berbeda, yakni *temu, bertemu,* dan *menemukan*.
-
-Dalam bahasa Indonesia sering ada dua verba yang maknanya sangat dekat. Verba *membesarkan* dan *memperbesar*, misalnya, sama-sama mengandung makna 'menyebabkan sesuatu menjadi besar atau lebih besar'. Karena kedekatan makna verba itu, bentuk pangkal nomina *pembesaran* bisa *membesarkan* dan bisa juga *memperbesar*.
-
 Pada dasarnya ada tiga prefiks dan satu sufiks yang dipakai untuk menandai nomina, yaitu prefiks *ke-*, *per-*, dan *peng-* serta sufiks *-an*. Di samping itu, terdapat tiga gabungan afiks, sehingga seluruhnya ada tujuh macam afiksasi dalam penurunan nomina:
 
 > *ke-*, *-an*, *ke-...-an*, *per-*, *peng-*, *peng-...-an*, *per-...-an*
-
-- (44) *pedagang* ← *berdagang*; *petani* ← *bertani*; *petinju* ← *bertinju*
 
 1. [Penurunan Nomina dengan ke-](/gramatika/penurunan-nomina-dengan-ke)
 2. [Penurunan Nomina dengan per-](/gramatika/penurunan-nomina-dengan-per)
