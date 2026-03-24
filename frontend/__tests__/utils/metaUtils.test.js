@@ -79,6 +79,7 @@ describe('metaUtils', () => {
 
     expect(buildMetaDetailKamus('', null).judul).toBe('Kamus');
     expect(buildMetaDetailKamus('kata', { makna: [{ makna: 'arti' }] }).judul).toBe('kata');
+    expect(buildMetaDetailKamus('kata', null).deskripsi).toBe('Lihat detail kamus di Kateglo.');
 
     const tanpaMakna = buildDeskripsiDetailKamus('kata', {
       makna: [{ kelas_kata: 'n', makna: '' }],
@@ -94,6 +95,14 @@ describe('metaUtils', () => {
     expect(multiTanpaMakna).toContain('(2)');
     expect(multiTanpaMakna).not.toContain('(1)');
     expect(multiTanpaMakna).not.toContain('kata:');
+
+    const multiSemuaKosong = buildDeskripsiDetailKamus('kata', {
+      makna: [
+        { kelas_kata: 'n', makna: '' },
+        { kelas_kata: 'v', makna: '   ' },
+      ],
+    });
+    expect(multiSemuaKosong).toBe('Lihat detail kamus di Kateglo.');
 
     const tagarKosong = buildMetaTagarKamus(null, 0);
     expect(tagarKosong.judul).toBe('Tagar');

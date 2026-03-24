@@ -37,4 +37,22 @@ describe('KartuKategori', () => {
     expect(screen.getByRole('link', { name: 'Kimia' })).toHaveAttribute('href', '/glosarium/bidang/Kimia');
     expect(screen.getByRole('link', { name: 'Biologi' })).toBeInTheDocument();
   });
+
+  it('merender judul sebagai tautan saat judulTo diberikan', () => {
+    render(
+      <MemoryRouter>
+        <KartuKategori
+          judul="Gramatika"
+          judulTo="/gramatika/kata-tugas"
+          items={[{ slug: 'preposisi', judul: 'Preposisi' }]}
+          getKey={(item) => item.slug}
+          getTo={(item) => `/gramatika/${item.slug}`}
+          getLabel={(item) => item.judul}
+        />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByRole('link', { name: 'Gramatika' })).toHaveAttribute('href', '/gramatika/kata-tugas');
+    expect(screen.getByRole('link', { name: 'Preposisi' })).toHaveAttribute('href', '/gramatika/preposisi');
+  });
 });

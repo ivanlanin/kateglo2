@@ -119,13 +119,6 @@ function Ejaan() {
       };
     }
 
-    if (!metadataAktif) {
-      return {
-        judul: 'Ejaan',
-        deskripsi: 'Panduan kaidah ejaan bahasa Indonesia untuk penulisan yang tepat dan konsisten.',
-      };
-    }
-
     return {
       judul: metadataAktif.judul,
       deskripsi: dataMarkdownSsr?.description || `Kaidah ${metadataAktif.judul} pada bab ${metadataAktif.judulBab} dalam pedoman ejaan bahasa Indonesia di Kateglo.`,
@@ -240,7 +233,7 @@ function Ejaan() {
         <article className="lg:col-span-2">
           <div className="kamus-detail-heading-row">
             <h1 className="kamus-detail-heading">
-              <span className="kamus-detail-heading-main">{metadataAktif?.judul || 'Ejaan'}</span>
+              <span className="kamus-detail-heading-main">{metadataAktif.judul}</span>
             </h1>
           </div>
 
@@ -285,11 +278,17 @@ function Ejaan() {
         </article>
 
         <div>
-          <DaftarIsiPanel aktifSlug={metadataAktif?.slug || ''} />
+          <DaftarIsiPanel aktifSlug={metadataAktif.slug} />
         </div>
       </div>
     </HalamanPublik>
   );
 }
+
+export const __private = {
+  bacaIsiMarkdown,
+  DaftarIsiEjaanGrid,
+  DaftarIsiPanel,
+};
 
 export default Ejaan;

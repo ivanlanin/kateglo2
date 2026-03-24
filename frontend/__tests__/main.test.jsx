@@ -34,6 +34,10 @@ vi.mock('../src/context/authContext', () => ({
   AuthProvider: ({ children }) => <>{children}</>,
 }));
 
+vi.mock('../src/context/ssrPrefetchContext', () => ({
+  SsrPrefetchProvider: ({ children }) => <>{children}</>,
+}));
+
 vi.mock('../src/App', () => ({
   default: () => <div>App Root</div>,
 }));
@@ -94,5 +98,19 @@ describe('main.jsx', () => {
 
     expect(mocks.createRoot).not.toHaveBeenCalled();
     expect(mocks.hydrateRoot).not.toHaveBeenCalled();
+  });
+
+  it('tetap merender saat service worker tidak tersedia dan data SSR ada di window', async () => {
+    document.body.innerHTML = '<div id="root"></div>';
+    window.__KATEGLO_SSR_DATA__ = { kamus: ['air'] };
+    vi.stubGlobal('navigator', {});
+
+    await import('../src/main.jsx');
+
+    expect(mocks.getRegistrations).not.toHaveBeenCalled();
+    expect(mocks.createRoot).toHaveBeenCalledWith(document.getElementById('root'));
+    expect(mocks.hydrateRoot).not.toHaveBeenCalled();
+
+    delete window.__KATEGLO_SSR_DATA__;
   });
 });

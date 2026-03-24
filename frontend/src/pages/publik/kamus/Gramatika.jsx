@@ -175,7 +175,7 @@ function Gramatika() {
     ? semuaDokumen[indeksAktif + 1]
     : null;
   const aktifSlugSidebar = metadataAktif?.tipe === 'subitem' ? '' : (metadataAktif?.slug || '');
-  const aktifSlugSidebarSebagaiTautan = metadataAktif?.tipe === 'subitem' ? (metadataAktif.parentSlug || '') : '';
+  const aktifSlugSidebarSebagaiTautan = metadataAktif?.tipe === 'subitem' ? metadataAktif.parentSlug : '';
   const breadcrumbItems = useMemo(() => buildBreadcrumbGramatika(metadataAktif), [metadataAktif]);
 
   const modeDaftarIsi = !slug;
@@ -207,13 +207,6 @@ function Gramatika() {
       return {
         judul: metadataAktif.judul,
         deskripsi: dataMarkdownSsr?.description || `Ikhtisar bab ${metadataAktif.judul} dalam panduan tata bahasa Indonesia di Kateglo.`,
-      };
-    }
-
-    if (!metadataAktif) {
-      return {
-        judul: 'Gramatika',
-        deskripsi: 'Panduan tata bahasa Indonesia untuk memahami struktur dan kaidah bahasa Indonesia.',
       };
     }
 
@@ -334,15 +327,9 @@ function Gramatika() {
               return (
                 <span key={`${item.label}-${item.to || 'current'}`}>
                   {index > 0 && <span aria-hidden="true"> / </span>}
-                  {item.to ? (
-                    <Link to={item.to} className="kamus-detail-breadcrumb-link">
-                      {item.label}
-                    </Link>
-                  ) : (
-                    <span className="kamus-detail-breadcrumb-current">
-                      {item.label}
-                    </span>
-                  )}
+                  <Link to={item.to} className="kamus-detail-breadcrumb-link">
+                    {item.label}
+                  </Link>
                 </span>
               );
             })}
@@ -350,7 +337,7 @@ function Gramatika() {
 
           <div className="kamus-detail-heading-row">
             <h1 className="kamus-detail-heading">
-              <span className="kamus-detail-heading-main">{metadataAktif?.judul || 'Gramatika'}</span>
+              <span className="kamus-detail-heading-main">{metadataAktif.judul}</span>
             </h1>
             {adaHeadingLipat && (
               <button
@@ -417,5 +404,13 @@ function Gramatika() {
     </HalamanPublik>
   );
 }
+
+export const __private = {
+  bacaIsiMarkdown,
+  setStatusHeadingLipat,
+  buildBreadcrumbGramatika,
+  DaftarIsiGramatikaGrid,
+  DaftarIsiPanel,
+};
 
 export default Gramatika;

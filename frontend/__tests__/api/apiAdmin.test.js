@@ -113,6 +113,15 @@ import {
   useSimpanTagar,
   useHapusTagar,
   useSimpanTagarEntri,
+  useStatistikSinsetAdmin,
+  useTipeRelasiAdmin,
+  useDaftarSinsetAdmin,
+  useDetailSinsetAdmin,
+  useAutocompleteLemaSinset,
+  useKandidatMaknaSinset,
+  useSimpanSinset,
+  useSimpanPemetaanLema,
+  useTambahLemaSinset,
 } from '../../src/api/apiAdmin';
 
 describe('apiAdmin', () => {
@@ -1335,9 +1344,126 @@ describe('apiAdmin', () => {
     expect(kategoriTagar.staleTime).toBe(5 * 60 * 1000);
     await kategoriTagar.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/tagar/kategori');
+
+    const statistikSinset = useStatistikSinsetAdmin();
+    expect(statistikSinset.enabled).toBe(true);
+    await statistikSinset.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/sinset/statistik');
+
+    expect(useStatistikSinsetAdmin({ enabled: false }).enabled).toBe(false);
+
+    const tipeRelasi = useTipeRelasiAdmin();
+    expect(tipeRelasi.enabled).toBe(true);
+    expect(tipeRelasi.staleTime).toBe(10 * 60 * 1000);
+    await tipeRelasi.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/sinset/tipe-relasi');
+
+    expect(useTipeRelasiAdmin({ enabled: false }).enabled).toBe(false);
+
+    const daftarSinset = useDaftarSinsetAdmin({
+      limit: 25,
+      cursor: 'abc',
+      direction: 'prev',
+      lastPage: true,
+      q: 'air',
+      status: 'tinjau',
+      kelas_kata: 'n',
+      ada_pemetaan: '1',
+      akar: '0',
+    });
+    await daftarSinset.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/sinset', {
+      params: {
+        limit: 25,
+        cursor: 'abc',
+        direction: 'prev',
+        lastPage: '1',
+        q: 'air',
+        status: 'tinjau',
+        kelas_kata: 'n',
+        ada_pemetaan: '1',
+        akar: '0',
+      },
+    });
+
+    const daftarSinsetKosong = useDaftarSinsetAdmin();
+    await daftarSinsetKosong.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/sinset', {
+      params: {
+        limit: 50,
+        cursor: undefined,
+        direction: 'next',
+        lastPage: undefined,
+        q: undefined,
+        status: undefined,
+        kelas_kata: undefined,
+        ada_pemetaan: undefined,
+        akar: undefined,
+      },
+    });
+
+    const detailSinset = useDetailSinsetAdmin('syn-1');
+    expect(detailSinset.enabled).toBe(true);
+    await detailSinset.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/sinset/syn-1');
+    expect(useDetailSinsetAdmin('').enabled).toBe(false);
+
+    const autocompleteLema = useAutocompleteLemaSinset({ sinsetId: 'syn-1', q: ' air ', limit: 3 });
+    expect(autocompleteLema.enabled).toBe(true);
+    await autocompleteLema.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/sinset/syn-1/opsi-lema', {
+      params: {
+        q: 'air',
+        limit: 3,
+      },
+    });
+
+    const autocompleteLemaKosong = useAutocompleteLemaSinset({ sinsetId: 'syn-1', q: '   ', limit: 3 });
+    expect(autocompleteLemaKosong.enabled).toBe(false);
+    await autocompleteLemaKosong.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/sinset/syn-1/opsi-lema', {
+      params: {
+        q: undefined,
+        limit: 3,
+      },
+    });
+
+    const autocompleteLemaNull = useAutocompleteLemaSinset({ sinsetId: 'syn-1', q: null, limit: 2 });
+    expect(autocompleteLemaNull.enabled).toBe(false);
+    await autocompleteLemaNull.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/sinset/syn-1/opsi-lema', {
+      params: {
+        q: undefined,
+        limit: 2,
+      },
+    });
+
+    const kandidatMakna = useKandidatMaknaSinset('syn-1', 9);
+    expect(kandidatMakna.enabled).toBe(true);
+    await kandidatMakna.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/sinset/syn-1/lema/9/kandidat');
+    expect(useKandidatMaknaSinset('', null).enabled).toBe(false);
   });
 
   it('mengonfigurasi mutation tagar dan asosiasi tagar-entri', async () => {
+    const simpanSinset = useSimpanSinset();
+    await simpanSinset.mutationFn({ id: 'syn-1', definisi_id: 'arti', status: 'tinjau' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/sinset/syn-1', { definisi_id: 'arti', status: 'tinjau' });
+    simpanSinset.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-sinset'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-sinset-detail'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-sinset-statistik'] });
+
+    const simpanPemetaan = useSimpanPemetaanLema();
+    await simpanPemetaan.mutationFn({ sinsetId: 'syn-1', lemaId: 4, makna_id: 9, terverifikasi: true });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/sinset/syn-1/lema/4', { makna_id: 9, terverifikasi: true });
+    simpanPemetaan.onSuccess();
+
+    const tambahLema = useTambahLemaSinset();
+    await tambahLema.mutationFn({ sinsetId: 'syn-1', entri_id: 7 });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/sinset/syn-1/lema', { entri_id: 7 });
+    tambahLema.onSuccess();
+
     const simpanTagar = useSimpanTagar();
     await simpanTagar.mutationFn({ id: 4, kode: 'me', nama: 'me-' });
     await simpanTagar.mutationFn({ kode: 'an', nama: '-an' });

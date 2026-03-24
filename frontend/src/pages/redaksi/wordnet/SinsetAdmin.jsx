@@ -474,11 +474,6 @@ function TambahLemaForm({ sinsetId, tambahLema }) {
   };
 
   const handleTambah = () => {
-    if (!entriTerpilih?.id) {
-      setPesan({ error: 'Pilih entri kamus dari daftar saran terlebih dahulu.', sukses: '' });
-      return;
-    }
-
     tambahLema.mutate(
       { sinsetId, entri_id: entriTerpilih.id },
       {
@@ -736,5 +731,25 @@ function DaftarRelasi({ relasiKeluar = [], relasiMasuk = [] }) {
     </div>
   );
 }
+
+export const __private = {
+  NAMA_KELAS,
+  WARNA_STATUS,
+  opsiStatus,
+  opsiKelasKata,
+  opsiPemetaan,
+  opsiAkar,
+  nilaiAwal,
+  kolom,
+  LencanaStatusSinset,
+  StatistikRingkas,
+  KartuStatistik,
+  DetailSinsetPanel,
+  TambahLemaForm,
+  DaftarLema,
+  ItemLema,
+  PanelKandidatMakna,
+  DaftarRelasi,
+};
 
 export default SinsetAdmin;

@@ -24,9 +24,7 @@ const queryClient = new QueryClient({
 });
 
 const rootElement = document.getElementById('root');
-const ssrPrefetchedData = typeof window !== 'undefined'
-  ? window.__KATEGLO_SSR_DATA__ ?? null
-  : null;
+const ssrPrefetchedData = window.__KATEGLO_SSR_DATA__ ?? null;
 
 const appElement = (
   <React.StrictMode>

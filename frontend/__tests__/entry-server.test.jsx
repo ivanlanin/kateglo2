@@ -322,11 +322,41 @@ describe('entry-server', () => {
     expect(__private.buildSocialTitle('/kamus/detail/sara', 'sara — Kateglo')).toBe('sara — Kamus — Kateglo');
     expect(__private.buildSocialTitle('/gramatika/verba', 'Verba — Kateglo')).toBe('Verba — Gramatika — Kateglo');
     expect(__private.buildSocialTitle('/glosarium/detail/accounting', 'accounting — Kateglo')).toBe('accounting — Glosarium — Kateglo');
+    expect(__private.buildSocialTitle('/tesaurus/cari/besar', 'Tesaurus — Kateglo')).toBe('Tesaurus — Kateglo');
+    expect(__private.buildSocialTitle('/makna/cari/air', '')).toBe('Kateglo — Makna — Kateglo');
+    expect(__private.buildSocialTitle('/rima/cari/air', 'Rima — Kateglo')).toBe('Rima — Kateglo');
+    expect(__private.buildSocialTitle('/alat/penghitung-huruf', 'Penghitung Huruf — Kateglo')).toBe('Penghitung Huruf — Alat — Kateglo');
+    expect(__private.buildSocialTitle('/gim/kuis-kata', 'Kuis Kata — Kateglo')).toBe('Kuis Kata — Gim — Kateglo');
     expect(__private.stripKategloSuffix('Preposisi — Kateglo')).toBe('Preposisi');
     expect(__private.buildOgQueryString({ title: 'Huruf Kapital', context: 'Penggunaan Huruf' })).toBe('?title=Huruf+Kapital&context=Penggunaan+Huruf');
+    expect(__private.buildOgQueryString({ title: '  ', context: 'Makna', empty: '' })).toBe('?context=Makna');
     expect(__private.buildGenericSocialContext('/kamus/detail/sara')).toEqual({ section: 'kamus', context: 'Entri Kamus Bahasa Indonesia' });
+    expect(__private.buildGenericSocialContext('/kamus')).toEqual({ section: 'kamus', context: 'Kamus Bahasa Indonesia' });
+    expect(__private.buildGenericSocialContext('/kamus/kelas-kata/nomina')).toEqual({ section: 'kamus', context: 'Kategori Kamus Bahasa Indonesia' });
+    expect(__private.buildGenericSocialContext('/makna/cari/air')).toEqual({ section: 'makna', context: 'Cari Kata Berdasarkan Makna' });
+    expect(__private.buildGenericSocialContext('/rima/cari/air')).toEqual({ section: 'rima', context: 'Cari Kata Berdasarkan Rima' });
+    expect(__private.buildGenericSocialContext('/tesaurus/cari/besar')).toEqual({ section: 'tesaurus', context: 'Hasil Pencarian Tesaurus' });
+    expect(__private.buildGenericSocialContext('/tesaurus')).toEqual({ section: 'tesaurus', context: 'Sinonim dan Antonim' });
     expect(__private.buildGenericSocialContext('/glosarium/cari/air')).toEqual({ section: 'glosarium', context: 'Hasil Pencarian Glosarium' });
+    expect(__private.buildGenericSocialContext('/glosarium/bidang/biologi')).toEqual({ section: 'glosarium', context: 'Glosarium per Bidang' });
+    expect(__private.buildGenericSocialContext('/glosarium')).toEqual({ section: 'glosarium', context: 'Istilah dan Padanan Bidang Ilmu' });
+    expect(__private.buildGenericSocialContext('/glosarium/sumber/pusba')).toEqual({ section: 'glosarium', context: 'Glosarium per Sumber' });
+    expect(__private.buildGenericSocialContext('/alat')).toEqual({ section: 'alat', context: 'Perangkat Bahasa Indonesia' });
+    expect(__private.buildGenericSocialContext('/alat/penghitung-huruf')).toEqual({ section: 'alat', context: 'Alat Bahasa Indonesia' });
+    expect(__private.buildGenericSocialContext('/gim')).toEqual({ section: 'gim', context: 'Permainan Kata Bahasa Indonesia' });
+    expect(__private.buildGenericSocialContext('/gim/kuis-kata')).toEqual({ section: 'gim', context: 'Permainan Bahasa Indonesia' });
+    expect(__private.buildGenericSocialContext('/random')).toEqual({ section: 'default', context: 'Kamus, Tesaurus, dan Glosarium Bahasa Indonesia' });
+    expect(__private.buildMetaGramatika('kata-tugas').deskripsi).toContain('Ikhtisar bab');
+    expect(__private.buildMetaGramatika('slug-baru').deskripsi).toContain('Penjelasan tentang');
+    expect(__private.buildMetaEjaan('slug-baru', { type: 'static-markdown', section: 'ejaan', slug: 'lain', description: 'abaikan', notFound: false }).deskripsi).toContain('Kaidah');
+    expect(__private.buildMetaGramatika('slug-baru', { type: 'static-markdown', section: 'gramatika', slug: 'lain', description: 'abaikan', notFound: false }).deskripsi).toContain('Penjelasan tentang');
     expect(__private.buildSocialImageUrl('/gramatika/preposisi', 'https://kateglo.org')).toBe('https://kateglo.org/og/gramatika/preposisi.png?title=Preposisi&context=Penjelasan+tentang+Preposisi+pada+bab+Kata+Tugas+dalam+panduan+tata+bahasa+Indonesia+di+Kateglo.');
+    expect(__private.buildSocialImageUrl('/ejaan', 'https://kateglo.org')).toBe('https://kateglo.org/og/ejaan.png?title=Panduan+Ejaan+Bahasa+Indonesia&context=Panduan+kaidah+ejaan+bahasa+Indonesia+mencakup+penggunaan+huruf%2C+penulisan+kata%2C+tanda+baca%2C+dan+unsur+serapan.');
+    expect(__private.buildSocialImageUrl('/gramatika', 'https://kateglo.org')).toBe('https://kateglo.org/og/gramatika.png?title=Panduan+Tata+Bahasa+Indonesia&context=Panduan+tata+bahasa+Indonesia+mencakup+kelas+kata%2C+kalimat%2C+dan+hubungan+antarklausa+berdasarkan+Tata+Bahasa+Baku+Bahasa+Indonesia.');
+    expect(__private.buildSocialImageUrl('/ejaan/slug-baru', 'https://kateglo.org')).toBe('https://kateglo.org/og/ejaan/slug-baru.png?title=Slug+Baru&context=Kaidah+Slug+Baru+pada+bab+Ejaan+dalam+pedoman+ejaan+bahasa+Indonesia+di+Kateglo.');
+    expect(__private.buildSocialImageUrl('/gramatika/klausa-baru', 'https://kateglo.org')).toBe('https://kateglo.org/og/gramatika/klausa-baru.png?title=Klausa+Baru&context=Penjelasan+tentang+Klausa+Baru+pada+bab+Gramatika+dalam+panduan+tata+bahasa+Indonesia+di+Kateglo.');
+    expect(__private.buildSocialImageUrl('/ejaan/', 'https://kateglo.org')).toBe('https://kateglo.org/og/ejaan.png?title=Panduan+Ejaan+Bahasa+Indonesia&context=Panduan+kaidah+ejaan+bahasa+Indonesia+mencakup+penggunaan+huruf%2C+penulisan+kata%2C+tanda+baca%2C+dan+unsur+serapan.');
+    expect(__private.buildSocialImageUrl('/gramatika/', 'https://kateglo.org')).toBe('https://kateglo.org/og/gramatika.png?title=Panduan+Tata+Bahasa+Indonesia&context=Panduan+tata+bahasa+Indonesia+mencakup+kelas+kata%2C+kalimat%2C+dan+hubungan+antarklausa+berdasarkan+Tata+Bahasa+Baku+Bahasa+Indonesia.');
     expect(__private.buildSocialImageUrl('/kamus/detail/sara', 'https://kateglo.org', {
       type: 'kamus-detail',
       lafal: '/sa.ra/',
@@ -337,6 +367,28 @@ describe('entry-server', () => {
       persis: [{ id: 1, asing: 'accounting', indonesia: 'akuntansi' }],
     }, 'accounting — Kateglo')).toBe('https://kateglo.org/og/glosarium.png?title=accounting&context=Istilah+%22accounting%22+dalam+glosarium+bahasa+Indonesia+%E2%80%94+1+padanan+Indonesia+ditemukan.');
     expect(__private.buildSocialImageUrl('/random', 'https://kateglo.org', null, 'Kamus — Kateglo')).toBe('https://kateglo.org/og/default.png?title=Kateglo&context=Kamus%2C+Tesaurus%2C+dan+Glosarium+Bahasa+Indonesia');
+    expect(__private.buildSocialImageUrl('/ejaan/slug-tidak-ada', 'https://kateglo.org', {
+      type: 'static-markdown',
+      section: 'ejaan',
+      slug: 'slug-tidak-ada',
+      notFound: true,
+    }, 'Ejaan Tidak Ditemukan — Kateglo')).toBe('https://kateglo.org/og/default.png?title=Ejaan+Tidak+Ditemukan&context=Halaman+ejaan+yang+diminta+tidak+ditemukan+di+Kateglo.');
+    expect(__private.buildSocialImageUrl('/gramatika/slug-tidak-ada', 'https://kateglo.org', {
+      type: 'static-markdown',
+      section: 'gramatika',
+      slug: 'slug-tidak-ada',
+      notFound: true,
+    }, 'Gramatika Tidak Ditemukan — Kateglo')).toBe('https://kateglo.org/og/default.png?title=Gramatika+Tidak+Ditemukan&context=Halaman+gramatika+yang+diminta+tidak+ditemukan+di+Kateglo.');
+    expect(__private.buildSocialImageUrl('/alat', 'https://kateglo.org', null, 'Alat — Kateglo')).toBe('https://kateglo.org/og/alat.png?title=Alat&context=Kumpulan+alat+bahasa+Indonesia+di+Kateglo%2C+termasuk+Penganalisis+Teks+dan+Penghitung+Huruf+untuk+analisis+cepat+langsung+di+peramban.');
+    expect(__private.buildSocialImageUrl('/gim/kuis-kata', 'https://kateglo.org', null, 'Kuis Kata — Kateglo')).toBe('https://kateglo.org/og/gim.png?title=Kuis+Kata&context=Mainkan+kuis+kata+pilihan+ganda+di+Kateglo+untuk+menebak+arti%2C+sinonim%2C+padanan%2C+makna%2C+dan+rima+dalam+satu+ronde+cepat.');
+  });
+
+  it('helper SSR menutup cabang serialisasi, status code, dan skip SSR', () => {
+    expect(__private.buildSerializedSsrDataScript(null)).toBe('');
+    expect(__private.buildSerializedSsrDataScript({ html: '<script>' })).toContain('\\u003cscript\\u003e');
+    expect(__private.resolveSsrStatusCode()).toBe(200);
+    expect(__private.resolveSsrStatusCode({ type: 'static-markdown', notFound: true })).toBe(404);
+    expect(__private.shouldSkipSsr('/redaksi')).toBe(true);
   });
 
   it('render melewati SSR untuk route redaksi agar hydrasi client yang mengelola auth', async () => {

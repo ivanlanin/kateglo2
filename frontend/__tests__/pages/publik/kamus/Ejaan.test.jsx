@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import Ejaan from '../../../../src/pages/publik/kamus/Ejaan';
+import Ejaan, { __private } from '../../../../src/pages/publik/kamus/Ejaan';
 import { SsrPrefetchProvider } from '../../../../src/context/ssrPrefetchContext';
 
 vi.mock('../../../../src/constants/ejaanData', () => {
@@ -108,6 +108,85 @@ describe('Ejaan', () => {
     expect(global.fetch).not.toHaveBeenCalled();
   });
 
+  it('mengabaikan SSR yang slug-nya tidak cocok lalu memuat dokumen dari fetch', async () => {
+    global.fetch.mockResolvedValue({
+      ok: true,
+      text: async () => '# Huruf Kapital dari Fetch',
+    });
+
+    renderHalaman('/ejaan/huruf-kapital', {
+      type: 'static-markdown',
+      section: 'ejaan',
+      slug: 'huruf-miring',
+      markdown: '# Salah Halaman',
+      description: 'Salah halaman.',
+      notFound: false,
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Huruf Kapital dari Fetch')).toBeInTheDocument();
+    });
+
+    expect(global.fetch).toHaveBeenCalledWith('/ejaan/penggunaan-huruf/huruf-kapital.md', expect.any(Object));
+  });
+
+  it('mengabaikan SSR dengan section salah dan menerima markdown SSR kosong', async () => {
+    global.fetch.mockResolvedValueOnce({
+      ok: true,
+      text: async () => '# Huruf Kapital dari Fetch Lagi',
+    });
+
+    const view = renderHalaman('/ejaan/huruf-kapital', {
+      type: 'static-markdown',
+      section: 'gramatika',
+      slug: 'huruf-kapital',
+      markdown: '# Salah Section',
+      description: 'Salah section.',
+      notFound: false,
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Huruf Kapital dari Fetch Lagi')).toBeInTheDocument();
+    });
+
+    view.unmount();
+
+    renderHalaman('/ejaan/huruf-kapital', {
+      type: 'static-markdown',
+      section: 'ejaan',
+      slug: 'huruf-kapital',
+      markdown: '',
+      description: '',
+      notFound: false,
+    });
+
+    await waitFor(() => {
+      expect(screen.queryByText('Memuat dokumen ejaan …')).not.toBeInTheDocument();
+    });
+
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+  });
+
+  it('mengabaikan SSR saat slug SSR kosong meski section cocok', async () => {
+    global.fetch.mockResolvedValueOnce({
+      ok: true,
+      text: async () => '# Huruf Kapital dari Fetch Ketiga',
+    });
+
+    renderHalaman('/ejaan/huruf-kapital', {
+      type: 'static-markdown',
+      section: 'ejaan',
+      slug: '',
+      markdown: '# SSR Kosong',
+      description: '',
+      notFound: false,
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Huruf Kapital dari Fetch Ketiga')).toBeInTheDocument();
+    });
+  });
+
   it('menampilkan galat saat metadata dokumen ada tetapi path dokumen kosong', async () => {
     renderHalaman('/ejaan/tanpa-dok');
 
@@ -166,5 +245,28 @@ describe('Ejaan', () => {
     const current = document.querySelector('.ejaan-sidebar-pill-active');
     expect(current).toHaveAttribute('aria-current', 'page');
     expect(screen.getByRole('link', { name: 'Huruf Kapital' })).toHaveAttribute('href', '/ejaan/huruf-kapital');
+    expect(screen.queryByRole('link', { name: 'Huruf Miring ›' })).not.toBeInTheDocument();
+  });
+
+  it('helper internal menutup pembersihan frontmatter dan render daftar isi', () => {
+    expect(__private.bacaIsiMarkdown('---\njudul: Tes\n---\n# Isi')).toBe('# Isi');
+    expect(__private.bacaIsiMarkdown('# Tanpa Frontmatter')).toBe('# Tanpa Frontmatter');
+
+    const { rerender } = render(
+      <MemoryRouter>
+        <__private.DaftarIsiPanel aktifSlug="huruf-kapital" />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Huruf Kapital')).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('link', { name: 'Huruf Miring' })).toHaveAttribute('href', '/ejaan/huruf-miring');
+
+    rerender(
+      <MemoryRouter>
+        <__private.DaftarIsiEjaanGrid />
+      </MemoryRouter>
+    );
+
+    expect(screen.getAllByRole('link', { name: 'Huruf Kapital' }).length).toBeGreaterThan(0);
   });
 });

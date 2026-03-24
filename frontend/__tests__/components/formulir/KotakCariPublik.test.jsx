@@ -108,6 +108,18 @@ describe('KotakCari', () => {
     expect(navigate).toHaveBeenCalledWith('/gramatika/frasa-nominal');
 
     navigate.mockReset();
+    navigasiSaranSpesifik(navigate, 'gramatika', 'Frasa Nominal', '');
+    expect(navigate).toHaveBeenCalledWith('/gramatika/frasa-nominal');
+
+    navigate.mockReset();
+    navigasiSaranSpesifik(navigate, 'gramatika', null, '   ');
+    expect(navigate).toHaveBeenCalledWith('/gramatika');
+
+    navigate.mockReset();
+    navigasiSaranSpesifik(navigate, 'gramatika', '  ', '  frasa-nominal  ');
+    expect(navigate).toHaveBeenCalledWith('/gramatika/frasa-nominal');
+
+    navigate.mockReset();
     navigasiCari(navigate, 'ejaan', 'Huruf Kapital');
     expect(navigate).toHaveBeenCalledWith('/ejaan/huruf-kapital');
 

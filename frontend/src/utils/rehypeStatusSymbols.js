@@ -13,6 +13,10 @@ function visitNode(node, insideExcludedParent) {
   const nextChildren = [];
 
   for (const child of node.children) {
+    if (!child) {
+      continue;
+    }
+
     if (child.type === 'text' && !isExcludedParent) {
       nextChildren.push(...splitStatusText(child.value));
       continue;
