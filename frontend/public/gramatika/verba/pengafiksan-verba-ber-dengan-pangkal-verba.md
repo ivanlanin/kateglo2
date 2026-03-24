@@ -34,8 +34,18 @@ Ada sejumlah verba dengan prefiks *ber-* dengan pangkal verba yang bermakna 'per
 
 > *berjemur, berangkat, berhias, berputar, bercukur, berbaring*
 
-- (221) *Saya berangkat ke kantor pukul 06.30.* / *Dia berbaring di tempat tidurnya ketika ditengok oleh temannya.* / *Murid-murid itu sedang belajar karate.* / *Kehidupan sosial sekarang sudah berubah karena kemajuan teknologi informasi.* / *Pesawat itu berputar empat kali sebelum mendarat.* / *Jantungnya berhenti berdenyut.* / *Ia berpikir sebelum menjawab pertanyaan saya.*
+(221)
+- Saya berangkat ke kantor pukul 06.30.
+- Dia berbaring di tempat tidurnya ketika ditengok oleh temannya.
+- Murid-murid itu sedang belajar karate.
+- Kehidupan sosial sekarang sudah berubah karena kemajuan teknologi informasi.
+- Pesawat itu berputar empat kali sebelum mendarat.
+- Jantungnya berhenti berdenyut.
+- Ia berpikir sebelum menjawab pertanyaan saya.
 
 Di samping itu, terdapat sejumlah verba dengan prefiks *ber-* dengan pangkal verba yang membentuk verba pasif bermakna 'di-':
 
-- (222) *bersambut*: *Harapannya tidak bersambut.* / *berterima*: *Usulnya tidak berterima di kalangan mahasiswa.* / *berbalas*: *Hingga kini suratku tidak berbalas.*
+(222)
+- bersambut: Harapannya tidak bersambut.
+- berterima: Usulnya tidak berterima di kalangan mahasiswa.
+- berbalas: Hingga kini suratku tidak berbalas.
