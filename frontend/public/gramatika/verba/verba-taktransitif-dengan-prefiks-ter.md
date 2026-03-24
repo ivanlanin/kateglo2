@@ -21,7 +21,12 @@ Kebanyakan verba *ter-* termasuk salah satu kategori berikut: verba pasif+perfek
 
 Contoh lain:
 
-(253) *terkenal* 'sudah dikenal'; *terhormat* 'sudah dihormati'; *tercinta* 'sudah dicintai'; *terbuka* 'sudah dibuka'; *tersebut* 'sudah disebut(kan)'.
+(253)
+- terkenal 'sudah dikenal'
+- terhormat 'sudah dihormati'
+- tercinta 'sudah dicintai'
+- terbuka 'sudah dibuka'
+- tersebut 'sudah disebut(kan)'
 
 Verba *ter-* dengan makna kebetulan atau ketaksengajaan mencakupi verba yang mengacu pada perbuatan yang dilakukan tidak dengan sengaja:
 
@@ -35,7 +40,20 @@ Verba *ter-* dengan makna kebetulan atau ketaksengajaan mencakupi verba yang men
 
 Contoh:
 
-(256) *terbawa olehnya, terpakai oleh sopirnya, tersebat rotan, tertipu makelar palsu*; begitu juga *terbunuh, terluka, termakan, tertabrak, tertembak, terpergok, tersingkir, terpengaruh, terpesona*.
+(256)
+- terbawa olehnya
+- terpakai oleh sopirnya
+- tersebat rotan
+- tertipu makelar palsu
+- terbunuh
+- terluka
+- termakan
+- tertabrak
+- tertembak
+- terpergok
+- tersingkir
+- terpengaruh
+- terpesona
 
 Verba berprefiks *ter-* dengan makna kebisaan atau kemampuan menyatakan bahwa pelaku bisa atau mampu melakukan perbuatan yang digambarkan oleh verba. Jenis verba ini biasanya diingkari dengan kata *tidak* sehingga maknanya mengisyaratkan ketakmampuan pelaku.
 

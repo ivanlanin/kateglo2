@@ -7,7 +7,15 @@ Berdasarkan ciri semantisnya, kata-kata yang tergolong sebagai pewatas depan dap
 
 Pewatas depan pemarkah modalitas terlihat dalam penggunaan kata *akan*, *hendak*, *harus*, *mesti*, *perlu*, *dapat*, *bisa*, *boleh*, *suka*, *ingin*, dan *mau*. Dalam konstruksi frasa verbal pemarkah modalitas itu dapat digunakan secara tersendiri ataupun secara berdampingan dengan pemarkah modalitas yang lain. Contoh berikut memperlihatkan bahwa *akan* dan *harus* (termasuk *mesti*) mendahului pemarkah modalitas lainnya.
 
-- (333) *akan harus*, *akan dapat*, *akan bisa*, *akan suka*, *harus boleh*, *harus dapat*, *harus bisa*, *harus suka*
+(333)
+- akan harus
+- akan dapat
+- akan bisa
+- akan suka
+- harus boleh
+- harus dapat
+- harus bisa
+- harus suka
 
 Contoh pemakaian pewatas depan dalam kalimat:
 

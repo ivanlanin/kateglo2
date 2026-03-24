@@ -9,7 +9,17 @@ Adverbia yang berupa kata berafiks diperoleh dengan menambahkan gabungan afiks *
 
 Contoh:
 
-(42) *sebaiknya*, *sesungguhnya*, *sebenarnya*, *sebetulnya*, *seharusnya*, *sejatinya*, *seyogianya*, *selayaknya*, *semestinya*, *sepatutnya*
+(42)
+- sebaiknya
+- sesungguhnya
+- sebenarnya
+- sebetulnya
+- seharusnya
+- sejatinya
+- seyogianya
+- selayaknya
+- semestinya
+- sepatutnya
 
 (43)
 - a. *Sebaiknya* kita segera membayarkan pajak itu.
@@ -21,7 +31,22 @@ Contoh:
 
 Contoh:
 
-(44) *agaknya*, *biasanya*, *khususnya*, *kiranya*, *lazimnya*, *malangnya*, *mestinya*, *nyatanya*, *rupanya*, *sayangnya*, *tampaknya*, *untungnya*, *pokoknya*, *umumnya*, *rasanya*
+(44)
+- agaknya
+- biasanya
+- khususnya
+- kiranya
+- lazimnya
+- malangnya
+- mestinya
+- nyatanya
+- rupanya
+- sayangnya
+- tampaknya
+- untungnya
+- pokoknya
+- umumnya
+- rasanya
 
 (45)
 - a. *Agaknya* gurauan itu membuatnya marah.

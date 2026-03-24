@@ -9,7 +9,19 @@ Menurut bentuknya adverbia yang berupa kata ulang dapat diperinci lagi menjadi e
 
 Contoh:
 
-(46) *belum-belum*, *diam-diam*, *jarang-jarang*, *kadang-kadang*, *kira-kira*, *lagi-lagi*, *lekas-lekas*, *mula-mula*, *pelan-pelan*, *sering-sering*, *malam-malam*, *tiba-tiba*
+(46)
+- belum-belum
+- diam-diam
+- jarang-jarang
+- kadang-kadang
+- kira-kira
+- lagi-lagi
+- lekas-lekas
+- mula-mula
+- pelan-pelan
+- sering-sering
+- malam-malam
+- tiba-tiba
 
 (47)
 - a. Kami duduk *diam-diam* mendengarkan ceramah.
@@ -21,7 +33,16 @@ Contoh:
 
 Contoh:
 
-(48) *secepat-cepat*, *sedekat-dekat*, *sejauh-jauh*, *setinggi-tinggi*, *sekuat-kuat*, *sejelek-jelek*, *sekeras-keras*, *sepandai-pandai*, *sesabar-sabar*
+(48)
+- secepat-cepat
+- sedekat-dekat
+- sejauh-jauh
+- setinggi-tinggi
+- sekuat-kuat
+- sejelek-jelek
+- sekeras-keras
+- sepandai-pandai
+- sesabar-sabar
 
 (49)
 - a. Setinggi-tinggi bangau terbang, jatuhnya ke kubangan juga.
@@ -33,7 +54,15 @@ Contoh:
 
 Contoh:
 
-(50) *besar-besaran*, *gelap-gelapan*, *gila-gilaan*, *habis-habisan*, *kecil-kecilan*, *mabuk-mabukan*, *mati-matian*, *terang-terangan*
+(50)
+- besar-besaran
+- gelap-gelapan
+- gila-gilaan
+- habis-habisan
+- kecil-kecilan
+- mabuk-mabukan
+- mati-matian
+- terang-terangan
 
 (51)
 - a. Ia memukul musuhnya *habis-habisan* kemarin.
@@ -45,7 +74,22 @@ Contoh:
 
 Contoh:
 
-(52) *sebanyak-banyaknya*, *secepat-cepatnya*, *sedalam-dalamnya*, *sehalus-halusnya*, *seikhlas-ikhlasnya*, *sekecil-kecilnya*, *sekeras-kerasnya*, *sekuat-kuatnya*, *sekurang-kurangnya*, *selambat-lambatnya*, *seluas-luasnya*, *sepuas-puasnya*, *serajin-rajinnya*, *setinggi-tingginya*, *setulus-tulusnya*
+(52)
+- sebanyak-banyaknya
+- secepat-cepatnya
+- sedalam-dalamnya
+- sehalus-halusnya
+- seikhlas-ikhlasnya
+- sekecil-kecilnya
+- sekeras-kerasnya
+- sekuat-kuatnya
+- sekurang-kurangnya
+- selambat-lambatnya
+- seluas-luasnya
+- sepuas-puasnya
+- serajin-rajinnya
+- setinggi-tingginya
+- setulus-tulusnya
 
 (53)
 - a. Layang-layang terbang *setinggi-tingginya*.

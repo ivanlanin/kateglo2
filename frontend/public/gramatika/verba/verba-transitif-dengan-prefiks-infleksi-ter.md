@@ -9,7 +9,13 @@ Paparan tentang verba transitif dengan prefiks infleksi *ter-* dikemukakan berda
 
 2) Ada seperangkat verba transitif berprefiks *ter-* yang melalui proses konversi digunakan selaku nomina di ranah hukum:
 
-(124) *tersangka* 'yang sudah disangka'; *tertuduh* 'yang sudah dituduh'; *terdakwa* 'yang sudah didakwa'; *terpidana* 'yang sudah dipidana'; *termohon* 'yang sudah dimohon'; *tergugat* 'yang sudah digugat'
+(124)
+- tersangka 'yang sudah disangka'
+- tertuduh 'yang sudah dituduh'
+- terdakwa 'yang sudah didakwa'
+- terpidana 'yang sudah dipidana'
+- termohon 'yang sudah dimohon'
+- tergugat 'yang sudah digugat'
 
 Kebanyakan verba berprefiks *ter-* termasuk salah satu dari tiga kategori berikut.
 
@@ -19,7 +25,14 @@ a) Kategori pertama bertalian dengan verba berprefiks *di-* dengan tambahan makn
 
 Begitu juga verba berikut:
 
-(126) *terbuka*, *tercatat* (oleh lurah), *terputus* (karena banjir), *terkenal* (di Jawa), *terhormat* (di kalangan pegawai), *terhubung* (oleh jembatan), *tercemar* (zat kimia).
+(126)
+- terbuka
+- tercatat (oleh lurah)
+- terputus (karena banjir)
+- terkenal (di Jawa)
+- terhormat (di kalangan pegawai)
+- terhubung (oleh jembatan)
+- tercemar (zat kimia)
 
 b) Kategori kedua menyangkut perbuatan yang sudah berlaku atau yang sudah dilakukan, tetapi tidak dengan kesadaran atau dengan sengaja.
 
@@ -40,6 +53,14 @@ c) Kategori ketiga menyangkut verba berprefiks *ter-* yang disertai pengingkar *
 
 Contoh verba *ter-* lain yang bertalian dengan kemampuan:
 
-(138) *tertahankan*, *terselesaikan*, *terpisahkan*, *terbantahkan*, *terelakkan*, *terkatakan*, *teramalkan*, *termaafkan*.
+(138)
+- tertahankan
+- terselesaikan
+- terpisahkan
+- terbantahkan
+- terelakkan
+- terkatakan
+- teramalkan
+- termaafkan
 
 Di samping itu, ada sejumlah bentuk verba dengan prefiks *ter-* yang proses pembentukannya sukar dirunut kembali, termasuk bentuk seperti *tertawa*, *terhadap*, *terlalu*, *termasuk*, dan *terlambat* yang mengalami proses gramatikalisasi dan konversi.
