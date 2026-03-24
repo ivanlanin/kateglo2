@@ -5,21 +5,21 @@ title: Pangkal Nomina + -kan (4.2.2.5.3)
 
 1) Subjek memasukkan atau membawa objek ke tempat yang dinyatakan oleh verba:
 
-- (180) *Dia mengandangkan kerbaunya.*
-- (181) *Rendra mementaskan drama Kereta Kencana bersama kelompok teaternya di Taman Ismail Marzuki.*
-- (182) *PSSI meliburkan pertandingan babak delapan besar.*
-- (183) *Sopir itu berusaha meminggirkan mobilnya setelah ban belakangnya pecah.*
+- (180) Dia mengandangkan kerbaunya.
+- (181) Rendra mementaskan drama Kereta Kencana bersama kelompok teaternya di Taman Ismail Marzuki.
+- (182) PSSI meliburkan pertandingan babak delapan besar.
+- (183) Sopir itu berusaha meminggirkan mobilnya setelah ban belakangnya pecah.
 
 2) Subjek menyebabkan objek menjadi atau berada di lokasi yang dinyatakan verba:
 
-- (184) *Rakyat ingin merajakan Hang Rasi.*
-- (185) *Dia telah mendoktorkan mahasiswanya lebih dari dua puluh orang.*
-- (186) *Mereka mencalonkan Rudi untuk menjadi ketua.*
-- (187) *Para pahlawan mengorbankan jiwanya untuk kemerdekaan Indonesia.*
-- (188) *Ia menghadiahkan sebagian dari keuntungannya itu kepada fakir miskin.*
-- (189) *Ia merencanakan gaji bulan depan untuk membahagiakan orang tuanya.*
-- (190) *Pengikut aliran kepercayaan itu mendewakan pemimpinnya.*
-- (191) *Kita harus menyukseskan program keluarga berencana.*
+- (184) Rakyat ingin merajakan Hang Rasi.
+- (185) Dia telah mendoktorkan mahasiswanya lebih dari dua puluh orang.
+- (186) Mereka mencalonkan Rudi untuk menjadi ketua.
+- (187) Para pahlawan mengorbankan jiwanya untuk kemerdekaan Indonesia.
+- (188) Ia menghadiahkan sebagian dari keuntungannya itu kepada fakir miskin.
+- (189) Ia merencanakan gaji bulan depan untuk membahagiakan orang tuanya.
+- (190) Pengikut aliran kepercayaan itu mendewakan pemimpinnya.
+- (191) Kita harus menyukseskan program keluarga berencana.
 
 Ada sebagian kata dasar yang dengan atau tanpa sufiks *-kan* tidak memiliki perbedaan makna yang signifikan: *mengantar–mengantarkan*, *membalik–membalikkan*, *mencipta–menciptakan*, *mengganti–menggantikan*, *memalsu–memalsukan*.
 
@@ -41,8 +41,8 @@ Berikut ada golongan verba transitif yang sudah berprefiks *ber-* atau *per-* ya
 
 5) Verba bersufiks *-kan* dengan pangkal frasa preposisional (*ke* + nomina lokatif) mengungkapkan makna 'subjek membawa objek ke tempat yang dinyatakan oleh verba':
 
-- (196) *Ia mengemukakan usul yang sulit diterima.*
-- (197) *Para nelayan itu mengetengahkan perahunya bersama-sama.*
-- (198) *Ia mengeluarkan uang dari kantongnya.*
-- (199) *Ia mengedepankan kursi tamu.*
-- (200) *Pejabat itu mengesampingkan urusan pribadinya di kantor.*
+- (196) Ia mengemukakan usul yang sulit diterima.
+- (197) Para nelayan itu mengetengahkan perahunya bersama-sama.
+- (198) Ia mengeluarkan uang dari kantongnya.
+- (199) Ia mengedepankan kursi tamu.
+- (200) Pejabat itu mengesampingkan urusan pribadinya di kantor.
