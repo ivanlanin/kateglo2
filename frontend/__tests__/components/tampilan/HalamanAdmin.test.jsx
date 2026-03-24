@@ -9,6 +9,10 @@ function HalamanAdmin(props) {
 
 const mockNavigate = vi.fn();
 const mockLogout = vi.fn();
+let mockPathname = '/redaksi/kamus';
+let mockSearch = '';
+let mockHash = '';
+let mockNavigationType = 'PUSH';
 const mockUseAuth = vi.fn(() => ({
   user: { email: 'admin@kateglo.id' },
   logout: mockLogout,
@@ -25,13 +29,20 @@ vi.mock('react-router-dom', async () => {
   return {
     ...actual,
     useNavigate: () => mockNavigate,
+    useLocation: () => ({ pathname: mockPathname, search: mockSearch, hash: mockHash }),
+    useNavigationType: () => mockNavigationType,
   };
 });
 
 describe('HalamanAdmin', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockPathname = '/redaksi/kamus';
+    mockSearch = '';
+    mockHash = '';
+    mockNavigationType = 'PUSH';
     localStorage.clear();
+    window.scrollTo = vi.fn();
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
       value: vi.fn().mockReturnValue({
@@ -67,6 +78,43 @@ describe('HalamanAdmin', () => {
     fireEvent.click(screen.getAllByRole('button', { name: 'Keluar' })[0]);
     expect(mockLogout).toHaveBeenCalled();
     expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true });
+  });
+
+  it('reset scroll ke atas saat navigasi route redaksi baru', async () => {
+    render(
+      <MemoryRouter initialEntries={['/redaksi/kamus']}>
+        <HalamanAdmin judul="Kamus">Isi Admin</HalamanAdmin>
+      </MemoryRouter>
+    );
+
+    await screen.findByRole('link', { name: 'Redaksi Kateglo' });
+    expect(window.scrollTo).toHaveBeenCalledWith({ top: 0, left: 0, behavior: 'auto' });
+  });
+
+  it('tidak reset scroll saat navigasi browser back atau forward', async () => {
+    mockNavigationType = 'POP';
+
+    render(
+      <MemoryRouter initialEntries={['/redaksi/kamus']}>
+        <HalamanAdmin judul="Kamus">Isi Admin</HalamanAdmin>
+      </MemoryRouter>
+    );
+
+    await screen.findByRole('link', { name: 'Redaksi Kateglo' });
+    expect(window.scrollTo).not.toHaveBeenCalled();
+  });
+
+  it('tidak reset scroll saat navigasi ke anchor hash', async () => {
+    mockHash = '#bagian-1';
+
+    render(
+      <MemoryRouter initialEntries={['/redaksi/kamus']}>
+        <HalamanAdmin judul="Kamus">Isi Admin</HalamanAdmin>
+      </MemoryRouter>
+    );
+
+    await screen.findByRole('link', { name: 'Redaksi Kateglo' });
+    expect(window.scrollTo).not.toHaveBeenCalled();
   });
 
   it('menangani judul kosong dan fallback nama user', async () => {
