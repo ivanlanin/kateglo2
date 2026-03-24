@@ -30,6 +30,8 @@ Bandingkan contoh (179) itu dengan contoh berikut.
 - a. Alasannya sukar diterima. ✓
 - b. \*Bahwa anaknya sakit keras sukar diterima. ✗ *(berbeda makna)*
 
+Bentuk (180b) tidak sama maknanya dengan (179) karena bentuk *bahwa anaknya sakit keras* tidak menyatakan *alasan*, tetapi *kenyataan*. Jenis konstruksi aposisi demikian disebut aposisi sebagian, seperti juga yang terlihat pada contoh berikut.
+
 (181)
 - a. Dokter Pepen, waktu itu dokter Puskesmas, mengoperasi saya.
 - b. Dia membelikan anaknya sebuah boneka, hadiah ulang tahunnya.
@@ -37,20 +39,28 @@ Bandingkan contoh (179) itu dengan contoh berikut.
 
 Pada contoh (181) itu hanya konstituen pertama (*Dokter Pepen*, *sebuah boneka*, dan *pemberantasan korupsi*) yang dapat digunakan untuk menggantikan konstruksi aposisi yang berkaitan dengan makna yang relatif sama.
 
-Pada contoh-contoh aposisi di atas, konstituen pertama dan kedua dipisahkan dengan tanda koma untuk mengisyaratkan bahwa konstituen kedua tidak mewatasi makna konstituen yang mendahuluinya. Konstruksi ini disebut aposisi takmewatasi atau aposisi takrestriktif.
-
-Sebaliknya, aposisi mewatasi (restriktif) menjadikan acuan konstituen pertama terbatas pada orang/hal tertentu:
+Pada contoh-contoh aposisi di atas tampak bahwa konstituen pertama dan kedua dipisahkan dengan tanda koma untuk mengisyaratkan bahwa konstituen yang kedua tidak mewatasi makna konstituen yang mendahuluinya. Dalam bahasa lisan konstituen kedua itu akan diucapkan dengan kelompok tona tersendiri. Konstituen kedua pada contoh-contoh di atas berfungsi hanya sebagai penjelasan atau keterangan tambahan terhadap unsur pertama. Atas dasar itu, konstruksi aposisi seperti pada contoh-contoh di atas disebut juga aposisi takmewatasi atau aposisi takrestriktif. Bandingkan dengan kalimat berikut.
 
 (182) Affandi pelukis itu akan tetap dikenang. *(pelukis itu mewatasi Affandi mana yang dimaksud)*
 
-(183) Ustad Amir, Kolonel Jafar, Dokter Baba *(nama diri mewatasi gelar/pangkat/jabatan)*
+Bentuk *Affandi* diwatasi oleh *pelukis itu* dalam arti acuan bentuk *Affandi* itu menjadi terbatas pada orang tertentu yang profesinya adalah pelukis. Pada umumnya frasa nominal yang terdiri atas gelar, pangkat, atau jabatan yang diikuti nama diri tergolong aposisi mewatasi atau aposisi restriktif.
 
-Aposisi takrestriktif biasanya terbatas pada frasa nominal. Makna unsur kedua dari bentuk aposisi yang takmewatasi itu dapat:
-- menyatakan jabatan, julukan, atau pangkat (*Kolonel Edi, komandan operasi itu*)
-- mengidentifikasi atau merumuskan kembali makna konstituen pertama (*alat-alat yang diperlukan, yakni palu, paku, dan tang*)
-- berfungsi sebagai atribut terhadap konstituen pertama (*Banyak pemuda, pejuang kemerdekaan kita, yang gugur*)
-- menyatakan pemberian contoh (*Alasannya, seperti tempat tinggal yang jauh, tidak bisa diterima*)
-- menyatakan pengkhususan (*Dia suka membaca buku, terutama cerita detektif*)
+Contoh:
+
+(183)
+- a. Ustad Amir tidak mengajar hari ini.
+- b. Kolonel Jafar memimpin rapat.
+- c. Dokter Baba belum datang.
+
+Bentuk *Amir*, *Jafar*, dan *Baba* merupakan nama diri dan masing-masing mewatasi makna atau acuan bentuk *ustad*, *kolonel*, dan *dokter* karena selain *Amir*, *Jafar*, dan *Baba* banyak ustad, kolonel, dan dokter lain.
+
+Aposisi takrestriktif biasanya terbatas pada frasa nominal. Makna unsur kedua dari bentuk aposisi yang takmewatasi itu dapat
+
+- a) sama dengan yang pertama dengan makna yang (a) menyatakan jabatan, julukan, atau pangkat; (b) mengidentifikasi makna (acuan) konstituen pertama; (c) merumuskan kembali makna konstituen pertama;
+- b) berfungsi sebagai atribut terhadap konstituen pertama;
+- c) menyatakan bagian unsur pertama yang berupa (a) pemberian contoh atau (b) pengkhususan.
+
+Contoh:
 
 (184)
 - a. Komandan operasi itu, *(yaitu) Kolonel Edi*, memerintahkan penyerangan. *[menyatakan pangkat]*
@@ -64,6 +74,8 @@ Aposisi takrestriktif biasanya terbatas pada frasa nominal. Makna unsur kedua da
 (186)
 - a. Alasannya, *seperti tempat tinggal yang jauh*, tidak bisa diterima. *[pemberian contoh]*
 - b. Dia suka membaca *buku, terutama cerita detektif*. *[pengkhususan]*
+
+Berdasarkan uraian di atas dapatlah dirangkum jenis aposisi seperti Bagan 9.2 berikut ini.
 
 ![Bagan 9.2 Jenis Aposisi](/gramatika/_gambar/bab-09/bagan-09-02-jenis-aposisi.webp)
 
