@@ -7,36 +7,16 @@ Konfiks *per-...-an* umumnya digunakan untuk menurunkan nomina dari verba taktra
 
 a) Nomina dengan *per-...-an* yang diturunkan dari verba dengan *ber-* umumnya menyatakan hal yang dinyatakan bentuk pangkal:
 
-(70)
-- pergerakan
-- perjuangan
-- perselisihan
-- pertanian
-- peternakan
+> *pergerakan* 'hal bergerak'; *perjuangan* 'hal berjuang'; *perselisihan* 'hal berselisih'; *pertanian* 'hal bertani'; *peternakan* 'hal beternak'
 
 b) Nomina dengan *per-...-an* yang diturunkan dari verba tertentu yang berawalan *ber-* dapat bermakna 'perbuatan atau hasil perbuatan':
 
-(71)
-- percakapan
-- perkelahian
-- perjanjian
-- pertemuan
-- perzinahan
+> *percakapan* 'perbuatan atau hasil bercakap-cakap'; *perkelahian* 'perbuatan atau hasil berkelahi'; *perjanjian* 'perbuatan atau hasil berjanji'; *pertemuan* 'perbuatan atau hasil bertemu'; *perzinahan* 'perbuatan berzinah'
 
 c) Nomina dengan *per-...-an* yang diturunkan dari verba dengan *memper-* umumnya bermakna 'perbuatan atau hasil perbuatan':
 
-(72)
-- pergelaran
-- perhatian
-- peringatan
-- perkenalan
-- pertunjukan
+> *pergelaran* 'perbuatan atau hasil mempergelarkan'; *perhatian* 'perbuatan atau hasil memperhatikan'; *peringatan* 'perbuatan atau hasil memperingati atau memperingatkan'; *perkenalan* 'perbuatan atau hal memperkenalkan atau berkenalan'; *pertunjukan* 'perbuatan atau hasil mempertunjukkan'
 
 d) Nomina dengan *per-...-an* dapat pula diturunkan dari bentuk dasar nomina dengan makna 'hal yang berkaitan dengan nomina pangkal':
 
-(73)
-- perbengkelan
-- perbukuan
-- perhotelan
-- perkapalan
-- persuratkabaran
+> *perbengkelan* 'hal yang berkaitan dengan bengkel'; *perbukuan* 'hal yang berkaitan dengan buku'; *perhotelan* 'hal yang berkaitan dengan hotel'; *perkapalan* 'hal yang berkaitan dengan kapal'; *persuratkabaran* 'hal yang berkaitan dengan surat kabar'

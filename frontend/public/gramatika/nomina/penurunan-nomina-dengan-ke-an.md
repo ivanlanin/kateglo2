@@ -7,39 +7,16 @@ Nomina dengan *ke-...-an* dapat diturunkan dari pangkal verba, adjektiva, atau n
 
 a) Nomina *ke-...-an* yang diturunkan dari verba mempunyai makna 'hal atau keadaan yang dinyatakan verba':
 
-(74)
-- keberhasilan
-- kedatangan
-- kehadiran
-- kepergian
+> *keberhasilan* 'hal berhasil'; *kedatangan* 'hal datang'; *kehadiran* 'hal hadir'; *kepergian* 'hal pergi'
 
 b) Nomina *ke-...-an* yang diturunkan dari adjektiva mempunyai makna 'hal atau keadaan yang dinyatakan adjektiva':
 
-(75)
-- keberanian
-- kebimbangan
-- kekosongan
-- keragu-raguan
-- keseimbangan
+> *keberanian* 'keadaan berani'; *kebimbangan* 'keadaan bimbang'; *kekosongan* 'keadaan kosong'; *keragu-raguan* 'keadaan ragu-ragu'; *keseimbangan* 'keadaan seimbang'
 
 c) Nomina *ke-...-an* yang diturunkan dari dasar nomina mempunyai makna 'hal mengenai nomina' atau 'kantor/wilayah kekuasaan nomina':
 
-(76)
-- kebangsaan
-- kemanusiaan
-- kerakyatan
-- kedutaan
-- kelurahan
-- kecamatan
-- kementerian
-- kerajaan
-- kepulauan
+> *kebangsaan* 'hal mengenai bangsa'; *kemanusiaan* 'hal mengenai manusia'; *kerakyatan* 'hal mengenai rakyat'; *kedutaan* 'kantor atau wilayah kekuasaan duta'; *kelurahan* 'kantor atau wilayah kekuasaan lurah'; *kecamatan* 'kantor atau wilayah kekuasaan camat'; *kementerian* 'kantor atau wilayah tanggung jawab menteri'; *kerajaan* 'wilayah kekuasaan raja'; *kepulauan* 'wilayah yang terdiri atas pulau-pulau'
 
 d) Nomina *ke-...-an* dapat pula diturunkan dari frasa verbal atau adjektival yang bermakna 'hal yang dinyatakan bentuk pangkal':
 
-(77)
-- keingintahuan
-- ketidaktahuan
-- ketidakjelasan
-- ketidakhadiran
-- kekurangmampuan
+> *keingintahuan* 'hal ingin tahu/mengetahui'; *ketidaktahuan* 'hal tidak tahu/tidak mengetahui'; *ketidakjelasan* 'hal tidak jelas'; *ketidakhadiran* 'hal tidak hadir'; *kekurangmampuan* 'hal kurang mampu'

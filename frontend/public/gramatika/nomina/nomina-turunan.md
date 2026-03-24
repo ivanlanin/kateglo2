@@ -7,12 +7,15 @@ Nomina dapat diturunkan melalui konversi, pengafiksan, pengulangan, atau pemajem
 
 Bentuk pangkal itu dapat berupa pangkal monomorfemis dan dapat pula berupa kata turunan polimorfemis. Nomina turunan, seperti *kebesaran*, memang diturunkan dari pangkal *besar* (adjektiva), tetapi *pembesaran* tidak diturunkan dari pangkal yang sama, melainkan dari *membesarkan* (verba). Bentuk yang menjadi pangkal penurunan nomina ditentukan oleh keterkaitan makna antara bentuk pangkal dan turunannya.
 
+![Diagram penurunan nomina dari besar](/gramatika/_gambar/bab-07/diagram-07-01-penurunan-nomina-besar-pembesaran.webp)
+
+*Diagram penurunan nomina dari besar menjadi kebesaran dan pembesaran*
+
 Proses yang sama juga terjadi pada penurunan nomina-nomina lain seperti terlihat dalam contoh-contoh berikut.
 
-- (43)
-- *darat* (N) -> *daratan* (N); *mendarat(kan)* (V) -> *pendaratan* (N)
-- *kosong* (Adj) -> *kekosongan* (N); *mengosongkan* (V) -> *pengosongan* (N)
-- *satu* (Num) -> *kesatuan* (N); *bersatu* (V) -> *persatuan* (N); *menyatukan* (V) -> *penyatuan* (N)
+![Diagram penurunan nomina dari darat, kosong, dan satu](/gramatika/_gambar/bab-07/diagram-07-02-penurunan-nomina-darat-kosong-satu.webp)
+
+*Diagram penurunan nomina dari darat, kosong, dan satu*
 
 Karena keterkaitan makna merupakan dasar untuk menentukan bentuk pangkal penurunan, dalam kebanyakan hal nomina turunan mempunyai bentuk pangkal sendiri-sendiri. Nomina *temuan, pertemuan,* dan *penemuan*, misalnya, masing-masing diturunkan dari bentuk pangkal yang berbeda, yakni *temu, bertemu,* dan *menemukan*.
 

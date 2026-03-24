@@ -30,8 +30,16 @@ Frasa nominal yang pewatasnya nomina dapat diperluas lagi dengan menambahkan nom
 
 - (132) Struktur hubungan bertingkat pada frasa nominal itu dapat diperluas lagi ke kanan sesuai dengan pewatas yang langsung mengikuti inti atau frasa nominal sebelumnya.
 
+![Diagram (132) Hubungan konstituen frasa nominal](/gramatika/_gambar/bab-07/diagram-07-04-hubungan-konstituen-frasa-nominal-132.webp)
+
+*Diagram (132) Hubungan konstituen frasa nominal*
+
 Acap kali terdapat frasa nominal yang hubungan konstituen-konstituennya lebih daripada satu kemungkinan. Hal ini terjadi karena salah satu konstituennya dapat mewatasi nomina atau frasa nominal yang langsung mendahuluinya:
 
 - (133) *lembaga bahasa nasional*—dapat ditafsirkan (a) lembaga yang mengurusi bahasa nasional atau (b) lembaga bahasa yang bersifat nasional.
 
 - (134) Ketaksaan itu menunjukkan bahwa pewatas dapat membentuk hubungan yang berbeda bergantung pada konstituen yang langsung didahuluinya.
+
+![Diagram (134) Tafsiran frasa nominal lembaga bahasa nasional](/gramatika/_gambar/bab-07/diagram-07-05-tafsiran-frasa-nominal-134.webp)
+
+*Diagram (134) Tafsiran frasa nominal lembaga bahasa nasional*

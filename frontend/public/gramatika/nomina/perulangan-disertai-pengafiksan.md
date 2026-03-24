@@ -5,11 +5,7 @@ title: Perulangan Disertai Pengafiksan (7.1.4.2.2.3.4)
 
 a) Nomina perulangan yang diturunkan dari nomina umumnya menyatakan keanekaan atau kumpulan:
 
-(99)
-- batu-batuan
-- daun-daunan
-- sayur-sayuran
-- kacang-kacangan
+> *batu-batuan* 'berbagai jenis batu'; *daun-daunan* 'kumpulan berbagai daun'; *sayur-sayuran* 'aneka macam sayur'; *kacang-kacangan* 'berbagai jenis kacang'
 
 Bentuk-bentuk ini cenderung disingkat dengan perulangan suku pertama: *bebatuan, dedaunan, rerumputan, reruntuhan, tetumbuhan*.
 
@@ -17,16 +13,8 @@ Bentuk-bentuk ini cenderung disingkat dengan perulangan suku pertama: *bebatuan,
 
 b) Nomina perulangan dengan afiks *-an* dari bentuk pangkal tertentu dapat menyatakan makna kemiripan:
 
-(101)
-- gunung-gunungan
-- kuda-kudaan
-- mobil-mobilan
-- orang-orangan
-- rumah-rumahan
+> *gunung-gunungan* 'sesuatu berupa tiruan gunung'; *kuda-kudaan* 'mainan yang berupa kuda'; *mobil-mobilan* 'mainan yang berupa mobil'; *orang-orangan* 'sesuatu yang menyerupai orang'; *rumah-rumahan* 'mainan berbentuk rumah'
 
 c) Terdapat juga perulangan dengan menggunakan infiks:
 
-(102)
-- gunung-gemunung
-- jari-jemari
-- tali-temali
+> *gunung-gemunung* 'banyak dan beragam gunung'; *jari-jemari* 'banyak macam jari'; *tali-temali* 'aneka macam tali'

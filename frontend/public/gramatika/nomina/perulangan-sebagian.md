@@ -12,7 +12,6 @@ Contoh:
 (97)
 - jaksa-jaksa tinggi ← jaksa tinggi-jaksa tinggi 'aneka macam jaksa tinggi'
 - meja-meja tulis ← meja tulis-meja tulis 'aneka macam meja tulis'
-- orang-orang tua ← orang tua-orang tua 'aneka macam orang tua'
 - rumah-rumah sakit ← rumah sakit-rumah sakit 'aneka macam rumah sakit'
 - surat-surat kabar ← surat kabar-surat kabar 'aneka macam surat kabar'
 

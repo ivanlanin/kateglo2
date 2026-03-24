@@ -8,3 +8,5 @@ Nomina dengan afiks *-wan/-wati* mengacu pada (1) orang yang ahli dalam bidang t
 - (82) *ilmuwan, budayawan, sejarawan, rohaniwan, bahasawan*
 - (83) *karyawan, wartawan, usahawan, olahragawan*
 - (84) *dermawan, hartawan, rupawan, bangsawan*
+
+Contoh yang lazim dipakai adalah *ilmuwan* 'orang yang ahli dalam bidang ilmu'; *budayawan* 'orang yang ahli dalam bidang budaya'; *sejarawan* 'orang yang ahli dalam bidang sejarah'; *karyawan* 'orang yang mata pencariannya berkarya'; *wartawan* 'orang yang mata pencariannya dalam bidang pewartaan'; *dermawan* 'orang yang suka berderma'; *hartawan* 'orang yang memiliki banyak harta'; *rupawan* 'orang yang memiliki rupa elok'.

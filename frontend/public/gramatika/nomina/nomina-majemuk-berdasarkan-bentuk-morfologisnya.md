@@ -29,8 +29,6 @@ a) Nomina majemuk dasar, komponennya terdiri atas kata dasar:
 
 Sebagai bandingan, idiom: *buah hati, darah daging, jantung hati, kabar burung, kaki tangan, kambing hitam, kepala batu, kutu buku, sepak terjang, tangan kanan*.
 
-- (105) *buah hati, darah daging, jantung hati, kabar burung, kaki tangan, kambing hitam, kepala batu, kutu buku, sepak terjang, tangan kanan*
-
 b) Nomina majemuk berafiks, salah satu atau kedua komponennya mempunyai afiks:
 
 (106)

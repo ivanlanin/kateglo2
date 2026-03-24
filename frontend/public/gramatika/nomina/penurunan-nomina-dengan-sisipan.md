@@ -9,10 +9,10 @@ Penurunan nomina dengan memakai sisipan atau infiks dalam bahasa Indonesia tidak
 > *telunjuk* ← *tunjuk*; *pelatuk* ← *patuk*; *gelembung* ← *gembung*; *telapak* ← *tapak*; *kelelawar* ← *kelawar*
 
 (79)
-> *kemilau* ← *kilau*; *kemuning* ← *kuning*; *temali* ← *tali*; *kemelut* ← *kelut*; *gemuruh* ← *guruh*
+> *kemilau* ← *kilau*; *kemuning* ← *kuning*; *temali* ← *tali*
 
 (80)
-> *serabut* ← *sabut*; *seruling* ← *suling*; *gerigi* ← *gigi*; *kerudung* ← *kudung*
+> *serabut* ← *sabut*; *seruling* ← *suling*; *gerigi* ← *gigi*
 
 (81)
-> *kinerja* ← *kerja*; *sinambung* ← *sambung*; *tinambah* ← *tambah*; *kinasih* ← *kasih*
+> *kinasih* ← *kasih*; *sinambung* ← *sambung*; *tinambah* ← *tambah*

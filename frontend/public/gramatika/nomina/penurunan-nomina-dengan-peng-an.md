@@ -36,31 +36,16 @@ Nomina dengan *peng-...-an* umumnya diturunkan dari verba dengan *meng-* yang be
 
 a) Nomina dengan *peng-...-an* umumnya menyatakan perbuatan:
 
-(66)
-- pemberdayaan
-- pemberhentian
-- pemukulan
-- pengampunan
-- penindakan
+> *pemberdayaan* 'perbuatan memberdayakan'; *pemberhentian* 'perbuatan memberhentikan'; *pemukulan* 'perbuatan memukul'; *pengampunan* 'perbuatan mengampuni'; *penindakan* 'perbuatan menindak'
 
 b) Nomina dengan *peng-...-an* dapat menyatakan makna proses di samping makna perbuatan:
 
-(67)
-- pembelajaran
-- pembicaraan
-- pengurusan
-- pengadilan
-- penulisan
+> *pembelajaran* 'proses membelajarkan'; *pembicaraan* 'proses membicarakan'; *pengurusan* 'proses mengurus'; *pengadilan* 'proses mengadili'; *penulisan* 'proses menulis'
 
 c) Nomina dengan *peng-...-an* dapat juga menyatakan makna hasil atau hal yang dinyatakan verba:
 
-- (68)
-> *pemberitahuan*
+> *pemberitahuan* 'hasil atau hal memberitahukan'
 
 Ada juga nomina *peng-...-an* yang maknanya belum tentu berkaitan dengan makna verba pangkal:
 
-(69)
-- pemandangan
-- pendapatan
-- pendengaran
-- pendirian
+> *pemandangan* 'panorama (yang dapat dipandang)'; *pendapatan* 'gaji; yang didapat'; *pendengaran* 'kemampuan mendengar atau yang didengar'; *pendirian* 'pendapat yang dinyatakan atau perbuatan mendirikan'

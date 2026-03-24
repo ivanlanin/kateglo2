@@ -15,21 +15,8 @@ b) Apabila bentuk pangkalnya nomina takterbilang, bentuk perulangan itu menyatak
 
 c) Apabila bentuk perulangan tidak menyatakan keragaman atau kejamakan, perulangan penuh itu akan menyatakan kemiripan dengan makna pangkalnya:
 
-(91)
-- jari-jari
-- kuda-kuda
-- langit-langit
-- undur-undur
+> *jari-jari* 'sengkang roda yang bentuknya mirip jari-jari orang'; *kuda-kuda* 'alat penyangga berupa balok berpalang'; *langit-langit* 'bagian atas penutup ruangan atau rongga mulut'; *undur-undur* 'binatang kecil yang jalannya selalu mundur'
 
 d) Terdapat pula sejumlah bentuk perulangan yang maknanya tidak ada hubungannya dengan makna bentuk pangkalnya:
 
-(92)
-- balai-balai
-- kunang-kunang
-- lumba-lumba
-- cumi-cumi
-- kupu-kupu
-- paru-paru
-- kisi-kisi
-- kura-kura
-- rama-rama
+> *balai-balai, kunang-kunang, lumba-lumba, cumi-cumi, kupu-kupu, paru-paru, kisi-kisi, kura-kura, rama-rama*
