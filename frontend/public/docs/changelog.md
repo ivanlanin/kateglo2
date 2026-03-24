@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-03-24 Selasa
+
+- Memperbaiki posisi gulir dan transisi navigasi antarhalaman
+
 ## 2026-03-23 Senin
 
 - Menambahkan kotak pencarian [Gramatika](/gramatika)

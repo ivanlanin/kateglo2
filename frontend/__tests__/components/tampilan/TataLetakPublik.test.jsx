@@ -3,6 +3,9 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import TataLetakPublik from '../../../src/components/tampilan/TataLetakPublik';
 
 let mockPathname = '/kamus';
+let mockSearch = '';
+let mockHash = '';
+let mockNavigationType = 'PUSH';
 let mockAuthOptional = { adalahRedaksi: false };
 
 vi.mock('../../../src/components/navigasi/NavbarPublik', () => ({ default: () => <div>Navbar Mock</div> }));
@@ -12,7 +15,8 @@ vi.mock('react-markdown', () => ({
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   Outlet: () => <div>Outlet Mock</div>,
-  useLocation: () => ({ pathname: mockPathname }),
+  useLocation: () => ({ pathname: mockPathname, search: mockSearch, hash: mockHash }),
+  useNavigationType: () => mockNavigationType,
 }));
 
 vi.mock('../../../src/context/authContext', () => ({
@@ -22,8 +26,12 @@ vi.mock('../../../src/context/authContext', () => ({
 describe('TataLetakPublik', () => {
   beforeEach(() => {
     mockPathname = '/kamus';
+    mockSearch = '';
+    mockHash = '';
+    mockNavigationType = 'PUSH';
     mockAuthOptional = { adalahRedaksi: false };
     global.fetch.mockReset();
+    window.scrollTo = vi.fn();
   });
 
   it('merender navbar, outlet, dan toggle tema', () => {
@@ -32,6 +40,28 @@ describe('TataLetakPublik', () => {
     expect(screen.getByText('Navbar Mock')).toBeInTheDocument();
     expect(screen.getByText('Outlet Mock')).toBeInTheDocument();
     expect(screen.getByTitle(/Mode gelap|Mode terang/)).toBeInTheDocument();
+  });
+
+  it('reset scroll ke atas saat navigasi route publik baru', () => {
+    render(<TataLetakPublik />);
+
+    expect(window.scrollTo).toHaveBeenCalledWith({ top: 0, left: 0, behavior: 'auto' });
+  });
+
+  it('tidak reset scroll saat navigasi browser back/forward', () => {
+    mockNavigationType = 'POP';
+
+    render(<TataLetakPublik />);
+
+    expect(window.scrollTo).not.toHaveBeenCalled();
+  });
+
+  it('tidak reset scroll saat navigasi hash anchor', () => {
+    mockHash = '#bagian-1';
+
+    render(<TataLetakPublik />);
+
+    expect(window.scrollTo).not.toHaveBeenCalled();
   });
 
   it('toggle tema menyimpan preferensi ke localStorage', () => {
