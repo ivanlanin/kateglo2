@@ -291,18 +291,10 @@ const daftarIsiGramatika = [
           {
             judul: 'Susunan Kata pada Frasa Nominal',
             slug: 'susunan-kata-pada-frasa-nominal',
-            turunan: [
-              { judul: 'Pola Kanonik Frasa Nominal', slug: 'pola-kanonik-frasa-nominal' },
-            ],
           },
           {
             judul: 'Frasa Nominal Vokatif',
             slug: 'frasa-nominal-vokatif',
-            turunan: [
-              { judul: 'Bentuk Vokatif yang Lazim', slug: 'bentuk-vokatif-yang-lazim' },
-              { judul: 'Keakraban dan Pemendekan', slug: 'keakraban-dan-pemendekan' },
-              { judul: 'Vokatif dan Ungkapan Penyapa', slug: 'vokatif-dan-ungkapan-penyapa' },
-            ],
           },
         ],
       },

@@ -7,7 +7,7 @@ Suatu nomina atau frasa nominal dapat diperluas dengan nomina atau frasa nominal
 
 Contoh:
 
-- *ayah dan ibu*: Ayah dan Ibu belum pulang.
+- (148) *ayah dan ibu*: Ayah dan Ibu belum pulang.
 - *buku dan pensil*: Dia ke toko membeli buku dan pensil.
 - *mahasiswa lama dan (mahasiswa) baru*: Mahasiswa lama dan (mahasiswa) baru mempunyai hak yang sama.
 - *pengurus (partai) dan anggota partai*: Pengurus (partai) dan anggota partai harus saling mendukung.

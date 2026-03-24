@@ -7,6 +7,8 @@ Nomina dapat diperluas dengan menambahkan klausa sebagai pewatasnya. Klausa pewa
 
 Contoh:
 
+(145)
+
 - *anak yang berbaju merah itu*
 - *candi yang dibangun pada abad ketujuh*
 - *buku yang saya beli di toko buku*

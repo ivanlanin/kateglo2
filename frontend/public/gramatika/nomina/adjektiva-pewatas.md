@@ -9,25 +9,25 @@ Contoh:
 
 - (135) *orang kaya*: Rumah semewah itu hanya mampu dibeli orang *yang* kaya.
 - (136) *mobil merah*: Mereka naik mobil *yang* hitam, bukan mobil *yang* merah.
-
-- *orang kaya*: Rumah semewah itu hanya mampu dibeli orang *yang* kaya.
-- *mobil merah*: Mereka naik mobil *yang* hitam, bukan mobil *yang* merah.
+- (137) *air keruh*: Jangan mandi di air *yang* keruh supaya kulitmu tidak gatal.
+- (138) *minuman manis*: Saya mau air putih saja. Saya tidak suka minuman *yang* manis.
 
 Deretan nomina dan adjektiva yang berupa idiom atau majemuk frasa tidak dapat diselipi *yang*:
 
-- (137) Deretan nomina dan adjektiva yang idiomatis tidak dapat disisipi *yang*.
+(139)
 
 | Frasa dengan *yang* | Frasa tanpa *yang* (idiom/majemuk) |
 |---|---|
 | kamar *yang* kecil | kamar kecil (toilet) |
 | orang *yang* tua | orang tua (bapak dan ibu) |
 | meja *yang* hijau | meja hijau (pengadilan) |
+| kambing *yang* hitam | kambing hitam (orang yang dipersalahkan) |
 
 Kata *yang* harus disisipkan antara nomina inti dan pewatas yang berupa frasa adjektival:
 
-- (138) *murid yang sangat rajin*
-- (139) *saudagar yang paling kaya di kota ini*
-- (140) *baju yang merah muda*
-- (141) *anak yang rajin dan pandai*
+(140)
 
-> *murid yang sangat rajin*, *saudagar yang paling kaya di kota ini*, *baju yang merah muda*, *anak yang rajin dan pandai*
+- *murid yang sangat rajin*: Dedi adalah murid *yang* sangat rajin.
+- *saudagar yang paling kaya*: Dia adalah saudagar *yang* paling kaya di kota ini.
+- *baju yang merah muda*: Saya akan memakai baju *yang* merah muda malam ini.
+- *anak yang rajin dan pandai*: Ahmad adalah anak *yang* rajin dan pandai.

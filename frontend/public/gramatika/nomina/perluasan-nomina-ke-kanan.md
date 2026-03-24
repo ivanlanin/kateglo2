@@ -3,7 +3,9 @@ id: 7.1.5.4
 title: Perluasan Nomina ke Kanan (7.1.5.4)
 ---
 
-Perluasan ke kanan dilakukan dengan menambahkan pewatas dengan atau tanpa penentu. Penentu yang terletak di sebelah kanan dapat berupa penunjuk, penanda ketakrifan, dan pronomina (juga nomina) yang menyatakan kepemilikan atau numeralia tingkat. Pewatas pada frasa nominal dapat berupa nomina atau frasa nominal, adjektiva atau frasa adjektival, verba atau frasa verbal, frasa preposisional, dan/atau klausa.
+Perluasan ke kanan dilakukan dengan menambahkan pewatas dengan atau tanpa penentu. Penentu yang terletak di sebelah kanan dapat berupa penunjuk, penanda ketakrifan, dan pronomina (juga nomina) yang menyatakan kepemilikan atau numeralia tingkat.
+
+Uraian di bawah ini berkisar pada unsur pewatas pada frasa nominal. Pewatas pada frasa nominal dapat berupa nomina atau frasa nominal, adjektiva atau frasa adjektival, verba atau frasa verbal, frasa preposisional, dan/atau klausa.
 
 1. [Nomina Pewatas](/gramatika/nomina-pewatas)
 2. [Adjektiva Pewatas](/gramatika/adjektiva-pewatas)

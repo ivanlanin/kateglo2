@@ -14,8 +14,7 @@ Contoh apositif restriktif:
 
 Selain apositif yang restriktif, ada juga apositif yang nonrestriktif:
 
-- (147) *Pancasila*, dasar negara Republik Indonesia
-- (148) *Soekarno*, presiden Republik Indonesia yang pertama
+(147)
 
 - *Pancasila*, dasar negara Republik Indonesia
 - *Soekarno*, presiden Republik Indonesia yang pertama

@@ -5,8 +5,7 @@ title: Verba Pewatas (7.1.5.4.3)
 
 Frasa nominal dapat dibentuk dengan menambahkan verba sebagai pewatas pada nomina inti. Verba pewatas pada frasa nominal dapat bersifat atributif:
 
-- (142) *rumah bertingkat*—rumah yang bertingkat
-- (143) *kendaraan bermotor*—kendaraan yang dijalankan motor
+(141)
 
 - *rumah bertingkat*—rumah yang bertingkat
 - *ban berjalan*—ban yang berjalan
@@ -17,8 +16,7 @@ Frasa nominal dapat dibentuk dengan menambahkan verba sebagai pewatas pada nomin
 
 Verba pewatas nomina dapat pula bersifat deskriptif:
 
-- (144) *kamar belajar*—kamar untuk belajar
-- (145) *ruang rapat*—ruang untuk mengadakan rapat
+(142)
 
 - *kamar belajar*—kamar untuk belajar
 - *tempat beristirahat*—tempat untuk beristirahat
