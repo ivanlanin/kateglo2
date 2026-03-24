@@ -21,10 +21,6 @@ function HalamanAdmin({ judul, aksiJudul = null, children }) {
   }, [judul]);
 
   useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
     if (navigationType === 'POP' || location.hash) {
       return;
     }

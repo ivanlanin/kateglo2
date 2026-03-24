@@ -187,6 +187,20 @@ describe('Ejaan', () => {
     });
   });
 
+  it('mode daftar isi tetap stabil saat SSR static-markdown memakai slug kosong', () => {
+    renderHalaman('/ejaan', {
+      type: 'static-markdown',
+      section: 'ejaan',
+      slug: '',
+      markdown: '# Daftar Isi SSR',
+      description: 'Tidak dipakai pada mode daftar isi.',
+      notFound: false,
+    });
+
+    expect(screen.getByRole('heading', { name: 'Ejaan' })).toBeInTheDocument();
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
   it('menampilkan galat saat metadata dokumen ada tetapi path dokumen kosong', async () => {
     renderHalaman('/ejaan/tanpa-dok');
 

@@ -16,10 +16,6 @@ function TataLetakPublik() {
   const adalahBeranda = location.pathname === '/';
 
   useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
     if (navigationType === 'POP' || location.hash) {
       return;
     }

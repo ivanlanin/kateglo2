@@ -361,7 +361,7 @@ describe('SinsetAdmin', () => {
     expect(lemaIdView.container).toHaveTextContent('—');
     lemaIdView.unmount();
 
-    const lemaEnView = render(__private.kolom[3].render({ lema_en: [] }));
+    const lemaEnView = render(__private.kolom[3].render({ lema_en: null }));
     expect(lemaEnView.container.textContent).toBe('');
     lemaEnView.unmount();
 
@@ -466,7 +466,9 @@ describe('SinsetAdmin', () => {
 
     fireEvent.focus(screen.getByPlaceholderText('Cari entri kamus …'));
     fireEvent.change(screen.getByPlaceholderText('Cari entri kamus …'), { target: { value: 'air' } });
-    fireEvent.click(screen.getByRole('button', { name: /air/i }));
+    const tombolSaran = screen.getByRole('button', { name: /air/i });
+    fireEvent.mouseDown(tombolSaran);
+    fireEvent.click(tombolSaran);
     expect(screen.getByRole('button', { name: 'Tambah lema' })).toBeEnabled();
   fireEvent.change(screen.getByPlaceholderText('Cari entri kamus …'), { target: { value: 'air baru' } });
   expect(screen.getByRole('button', { name: 'Tambah lema' })).toBeDisabled();
@@ -515,6 +517,77 @@ describe('SinsetAdmin', () => {
     mutatePemetaan.mockImplementationOnce((_payload, options) => options.onError(new Error('gagal petakan')));
     fireEvent.click(screen.getAllByRole('button', { name: 'Pilih' })[0]);
     expect(screen.getByText('gagal petakan')).toBeInTheDocument();
+  });
+
+  it('subkomponen lema menutup handler blur, toggle pilih, dan pilih makna detail', async () => {
+    mockUseAutocompleteLemaSinset.mockReturnValue({
+      data: { data: [{ id: 7, entri: 'air', indeks: '1', jenis: 'dasar' }] },
+      isLoading: false,
+    });
+
+    const setLemaAktif = vi.fn();
+    const daftarView = render(
+      <__private.DaftarLema
+        lema={[{ id: 4, lema: 'air', terverifikasi: false, makna_id: null, makna_teks: '' }]}
+        lemaAktif={null}
+        setLemaAktif={setLemaAktif}
+        sinsetId="syn-1"
+        simpanLema={{ mutate: mutatePemetaan, isPending: false }}
+        tambahLema={{ mutate: mutateTambahLema, isPending: false }}
+      />
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'pilih makna' }));
+    expect(setLemaAktif).toHaveBeenCalledWith(4);
+
+    daftarView.unmount();
+
+    render(
+      <__private.DaftarLema
+        lema={[{ id: 4, lema: 'air', terverifikasi: false, makna_id: null, makna_teks: '' }]}
+        lemaAktif={4}
+        setLemaAktif={setLemaAktif}
+        sinsetId="syn-1"
+        simpanLema={{ mutate: mutatePemetaan, isPending: false }}
+        tambahLema={{ mutate: mutateTambahLema, isPending: false }}
+      />
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'tutup' }));
+    expect(setLemaAktif).toHaveBeenCalledWith(null);
+
+    const inputCari = screen.getByPlaceholderText('Cari entri kamus …');
+    fireEvent.focus(inputCari);
+    fireEvent.change(inputCari, { target: { value: 'air' } });
+    expect(screen.getByRole('button', { name: /air/i })).toBeInTheDocument();
+
+    fireEvent.blur(inputCari);
+    await waitFor(() => {
+      expect(screen.queryByRole('button', { name: /air/i })).not.toBeInTheDocument();
+    });
+
+    mockUseKandidatMaknaSinset.mockReturnValue({
+      data: {
+        data: {
+          kelas_kata_sinset: 'n',
+          kelas_kata_db: 'n',
+          entri_id: 4,
+          kandidat: [{ id: 9, polisem: 1, kelas_kata: 'n', makna: 'zat cair', contoh: '' }],
+          semuaMakna: [
+            { id: 9, polisem: 1, kelas_kata: 'n', makna: 'zat cair' },
+            { id: 10, polisem: 2, kelas_kata: 'n', makna: 'wilayah perairan' },
+          ],
+        },
+      },
+      isLoading: false,
+      isError: false,
+      error: null,
+    });
+
+    const onPetakan = vi.fn();
+    render(<__private.PanelKandidatMakna sinsetId="syn-1" lemaId={4} onPetakan={onPetakan} />);
+    fireEvent.click(screen.getAllByRole('button', { name: 'Pilih' }).at(-1));
+    expect(onPetakan).toHaveBeenCalledWith(10);
   });
 
   it('form tambah lema memakai fallback daftar saran kosong saat respons tanpa data', () => {

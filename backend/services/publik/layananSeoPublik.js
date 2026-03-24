@@ -266,13 +266,16 @@ function stripRepeatedOgContextTitle(title = '', context = '') {
   const normalizedContext = String(context || '').replace(/\s+/g, ' ').trim();
   if (!normalizedTitle || !normalizedContext) return normalizedContext;
 
-  const titlePattern = new RegExp(`^${escapeRegex(normalizedTitle)}\\s*[:;,-–—]\\s*`, 'i');
+  const titlePattern = new RegExp(`^${escapeRegex(normalizedTitle)}\\s*(?:[:;,]|-|–|—)\\s*`, 'i');
   const stripped = normalizedContext.replace(titlePattern, '').trim();
   if (stripped && stripped !== normalizedContext) return stripped;
 
+  if (normalizedContext.toLowerCase() === normalizedTitle.toLowerCase()) {
+    return normalizedContext;
+  }
+
   const leadingTitlePattern = new RegExp(`^${escapeRegex(normalizedTitle)}\\b\\s+`, 'i');
-  const strippedLeadingTitle = normalizedContext.replace(leadingTitlePattern, '').trim();
-  return strippedLeadingTitle || normalizedContext;
+  return normalizedContext.replace(leadingTitlePattern, '').trim();
 }
 
 function normalizeOgContext(title = '', context = '', fallbackContext = '', options = {}) {
@@ -617,6 +620,7 @@ module.exports = {
     truncatePlainTextWithOptions,
     formatTitleFromSlug,
     normalizeOgSection,
+    escapeRegex,
     stripRepeatedOgContextTitle,
     normalizeOgContext,
     ambilPathStatis,

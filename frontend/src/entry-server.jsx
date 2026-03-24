@@ -244,20 +244,20 @@ function buildGenericSocialContext(pathname = '/') {
   return { section: 'default', context: 'Kamus, Tesaurus, dan Glosarium Bahasa Indonesia' };
 }
 
-function buildSocialImageUrl(pathname = '/', siteBaseUrl = 'https://kateglo.org', prefetchedData = null, fallbackTitle = '') {
+function buildSocialImageUrl(pathname = '/', siteBaseUrl = 'https://kateglo.org', prefetchedData = null) {
   const path = decodeURIComponent(pathname || '/');
   const baseUrl = stripTrailingSlash(siteBaseUrl || 'https://kateglo.org');
   const meta = buildMetaForPath(path, baseUrl, prefetchedData);
   const genericConfig = buildGenericSocialContext(path);
   const defaultImageUrl = `${baseUrl}/og/default.png${buildOgQueryString({
-    title: stripKategloSuffix(meta.title || fallbackTitle) || 'Kateglo',
-    context: meta.description || 'Kamus, Tesaurus, dan Glosarium Bahasa Indonesia',
+    title: stripKategloSuffix(meta.title),
+    context: meta.description,
   })}`;
 
   if (path.startsWith('/kamus/detail/')) {
     return `${baseUrl}/og/kamus.png${buildOgQueryString({
-      title: stripKategloSuffix(meta.title || fallbackTitle) || 'Kateglo',
-      context: meta.description || 'Entri dan pencarian kamus',
+      title: stripKategloSuffix(meta.title),
+      context: meta.description,
       stripTitle: '1',
     })}`;
   }
@@ -265,7 +265,7 @@ function buildSocialImageUrl(pathname = '/', siteBaseUrl = 'https://kateglo.org'
   if (path === '/ejaan' || path === '/ejaan/') {
     return `${baseUrl}/og/ejaan.png${buildOgQueryString({
       title: 'Panduan Ejaan Bahasa Indonesia',
-      context: meta.description || 'Pedoman Bahasa Indonesia',
+      context: meta.description,
     })}`;
   }
 
@@ -278,14 +278,14 @@ function buildSocialImageUrl(pathname = '/', siteBaseUrl = 'https://kateglo.org'
     };
     return `${baseUrl}/og/ejaan/${encodeURIComponent(slug)}.png${buildOgQueryString({
       title: metadata.judul,
-      context: meta.description || metadata.judulBab || 'Ejaan',
+      context: meta.description,
     })}`;
   }
 
   if (path === '/gramatika' || path === '/gramatika/') {
     return `${baseUrl}/og/gramatika.png${buildOgQueryString({
       title: 'Panduan Tata Bahasa Indonesia',
-      context: meta.description || 'Tata Bahasa Indonesia',
+      context: meta.description,
     })}`;
   }
 
@@ -298,13 +298,13 @@ function buildSocialImageUrl(pathname = '/', siteBaseUrl = 'https://kateglo.org'
     };
     return `${baseUrl}/og/gramatika/${encodeURIComponent(slug)}.png${buildOgQueryString({
       title: metadata.judul,
-      context: meta.description || metadata.parentJudul || metadata.judulBab || 'Gramatika',
+      context: meta.description,
     })}`;
   }
 
   return `${baseUrl}/og/${genericConfig.section}.png${buildOgQueryString({
-    title: stripKategloSuffix(meta.title || fallbackTitle) || 'Kateglo',
-    context: meta.description || genericConfig.context,
+    title: stripKategloSuffix(meta.title),
+    context: meta.description,
   })}`;
 }
 

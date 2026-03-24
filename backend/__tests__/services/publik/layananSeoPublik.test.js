@@ -300,7 +300,9 @@ describe('layananSeoPublik private helpers', () => {
   it('helper og image menormalisasi input dan membagi baris judul', () => {
     expect(__private.pickQueryValue(['judul utama', 'cadangan'])).toBe('judul utama');
     expect(__private.pickQueryValue()).toBe('');
+    expect(__private.truncatePlainTextWithOptions()).toBe('');
     expect(__private.truncatePlainText('kata pendek', 20)).toBe('kata pendek');
+    expect(__private.truncatePlainTextWithOptions('kata pendek', 20, { forceEllipsis: true })).toBe('kata pendek…');
     expect(__private.truncatePlainText('ini teks yang cukup panjang untuk dipotong secara aman', 24)).toMatch(/…$/);
     expect(__private.truncatePlainTextWithOptions('ini teks yang cukup panjang untuk dipotong secara aman', 24, { leadingSpaceBeforeEllipsis: true })).toMatch(/ …$/);
     expect(__private.formatTitleFromSlug('huruf-kapital')).toBe('Huruf Kapital');
@@ -340,6 +342,20 @@ describe('layananSeoPublik private helpers', () => {
       context: 'Kaidah Bahasa Indonesia',
     });
     expect(buildOgImagePayload().logoDataUri).toMatch(/^data:image\/png;base64,/);
+  });
+
+  it('helper og image menutup branch judul berulang tanpa pemisah', () => {
+    expect(__private.escapeRegex()).toBe('');
+    expect(__private.escapeRegex('c++')).toBe('c\\+\\+');
+    expect(__private.stripRepeatedOgContextTitle()).toBe('');
+    expect(__private.stripRepeatedOgContextTitle('', '  konteks tanpa judul  ')).toBe('konteks tanpa judul');
+    expect(__private.stripRepeatedOgContextTitle('gajah', '')).toBe('');
+    expect(__private.stripRepeatedOgContextTitle('gajah', 'gajah binatang besar')).toBe('binatang besar');
+    expect(__private.stripRepeatedOgContextTitle('gajah', 'gajah')).toBe('gajah');
+    expect(__private.stripRepeatedOgContextTitle('c++', 'c++: bahasa pemrograman')).toBe('bahasa pemrograman');
+    expect(__private.normalizeOgContext()).toBe('');
+    expect(__private.normalizeOgContext('', '', 'fallback')).toBe('fallback');
+    expect(__private.normalizeOgContext('gajah', 'gajah binatang besar', 'fallback', { stripRepeatedTitle: true })).toBe('binatang besar');
   });
 
   it('helper og image menutup branch teks kosong, pemotongan, dan fallback palette', () => {
@@ -414,6 +430,20 @@ describe('layananSeoPublik private helpers', () => {
 });
 
 describe('layananSeoPublik dynamic og image', () => {
+  it('getOgLogoDataUri fallback ke string kosong saat logo gagal dibaca', () => {
+    const readFileSpy = jest.spyOn(fs, 'readFileSync').mockImplementation(() => {
+      throw new Error('logo tidak tersedia');
+    });
+
+    let isolatedPrivate;
+    jest.isolateModules(() => {
+      ({ __private: isolatedPrivate } = require('../../../services/publik/layananSeoPublik'));
+    });
+
+    expect(isolatedPrivate.getOgLogoDataUri()).toBe('');
+    readFileSpy.mockRestore();
+  });
+
   it('buildOgImagePayload memberi fallback sesuai section', () => {
     expect(buildOgImagePayload({ section: 'gramatika', slug: 'preposisi' })).toEqual({
       section: 'gramatika',

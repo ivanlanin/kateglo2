@@ -279,6 +279,20 @@ describe('Gramatika', () => {
     expect(parentLink).toHaveAttribute('href', '/gramatika/preposisi');
   });
 
+  it('mode daftar isi tetap stabil saat SSR static-markdown memakai slug kosong', () => {
+    renderHalaman('/gramatika', {
+      type: 'static-markdown',
+      section: 'gramatika',
+      slug: '',
+      markdown: '# Daftar Isi SSR',
+      description: 'Tidak dipakai pada mode daftar isi.',
+      notFound: false,
+    });
+
+    expect(screen.getByRole('heading', { name: 'Gramatika' })).toBeInTheDocument();
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
   it('halaman bab memakai markdown SSR tanpa fetch ulang', async () => {
     renderHalaman('/gramatika/kata-tugas', {
       type: 'static-markdown',

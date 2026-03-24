@@ -317,6 +317,7 @@ describe('entry-server', () => {
   });
 
   it('helper sosial membangun judul dan path gambar yang lebih kaya untuk ejaan dan gramatika', () => {
+    expect(__private.buildSocialTitle('', '')).toBe('Kateglo — Kateglo');
     expect(__private.buildSocialTitle('/gramatika/preposisi', 'Preposisi — Kateglo')).toBe('Preposisi — Gramatika — Kateglo');
     expect(__private.buildSocialTitle('/ejaan/huruf-kapital', 'Huruf Kapital — Kateglo')).toBe('Huruf Kapital — Ejaan — Kateglo');
     expect(__private.buildSocialTitle('/kamus/detail/sara', 'sara — Kateglo')).toBe('sara — Kamus — Kateglo');
@@ -328,9 +329,12 @@ describe('entry-server', () => {
     expect(__private.buildSocialTitle('/alat/penghitung-huruf', 'Penghitung Huruf — Kateglo')).toBe('Penghitung Huruf — Alat — Kateglo');
     expect(__private.buildSocialTitle('/gim/kuis-kata', 'Kuis Kata — Kateglo')).toBe('Kuis Kata — Gim — Kateglo');
     expect(__private.stripKategloSuffix('Preposisi — Kateglo')).toBe('Preposisi');
+    expect(__private.buildOgQueryString({})).toBe('');
     expect(__private.buildOgQueryString({ title: 'Huruf Kapital', context: 'Penggunaan Huruf' })).toBe('?title=Huruf+Kapital&context=Penggunaan+Huruf');
     expect(__private.buildOgQueryString({ title: '  ', context: 'Makna', empty: '' })).toBe('?context=Makna');
+    expect(__private.buildGenericSocialContext('')).toEqual({ section: 'default', context: 'Kamus, Tesaurus, dan Glosarium Bahasa Indonesia' });
     expect(__private.buildGenericSocialContext('/kamus/detail/sara')).toEqual({ section: 'kamus', context: 'Entri Kamus Bahasa Indonesia' });
+    expect(__private.buildGenericSocialContext('/kamus/cari/air')).toEqual({ section: 'kamus', context: 'Hasil Pencarian Kamus' });
     expect(__private.buildGenericSocialContext('/kamus')).toEqual({ section: 'kamus', context: 'Kamus Bahasa Indonesia' });
     expect(__private.buildGenericSocialContext('/kamus/kelas-kata/nomina')).toEqual({ section: 'kamus', context: 'Kategori Kamus Bahasa Indonesia' });
     expect(__private.buildGenericSocialContext('/makna/cari/air')).toEqual({ section: 'makna', context: 'Cari Kata Berdasarkan Makna' });
@@ -350,11 +354,14 @@ describe('entry-server', () => {
     expect(__private.buildMetaGramatika('slug-baru').deskripsi).toContain('Penjelasan tentang');
     expect(__private.buildMetaEjaan('slug-baru', { type: 'static-markdown', section: 'ejaan', slug: 'lain', description: 'abaikan', notFound: false }).deskripsi).toContain('Kaidah');
     expect(__private.buildMetaGramatika('slug-baru', { type: 'static-markdown', section: 'gramatika', slug: 'lain', description: 'abaikan', notFound: false }).deskripsi).toContain('Penjelasan tentang');
+    expect(__private.buildSocialImageUrl('', '', null, '')).toBe('https://kateglo.org/og/default.png?title=Kateglo&context=Kamus%2C+Tesaurus%2C+dan+Glosarium+Bahasa+Indonesia');
     expect(__private.buildSocialImageUrl('/gramatika/preposisi', 'https://kateglo.org')).toBe('https://kateglo.org/og/gramatika/preposisi.png?title=Preposisi&context=Penjelasan+tentang+Preposisi+pada+bab+Kata+Tugas+dalam+panduan+tata+bahasa+Indonesia+di+Kateglo.');
     expect(__private.buildSocialImageUrl('/ejaan', 'https://kateglo.org')).toBe('https://kateglo.org/og/ejaan.png?title=Panduan+Ejaan+Bahasa+Indonesia&context=Panduan+kaidah+ejaan+bahasa+Indonesia+mencakup+penggunaan+huruf%2C+penulisan+kata%2C+tanda+baca%2C+dan+unsur+serapan.');
     expect(__private.buildSocialImageUrl('/gramatika', 'https://kateglo.org')).toBe('https://kateglo.org/og/gramatika.png?title=Panduan+Tata+Bahasa+Indonesia&context=Panduan+tata+bahasa+Indonesia+mencakup+kelas+kata%2C+kalimat%2C+dan+hubungan+antarklausa+berdasarkan+Tata+Bahasa+Baku+Bahasa+Indonesia.');
     expect(__private.buildSocialImageUrl('/ejaan/slug-baru', 'https://kateglo.org')).toBe('https://kateglo.org/og/ejaan/slug-baru.png?title=Slug+Baru&context=Kaidah+Slug+Baru+pada+bab+Ejaan+dalam+pedoman+ejaan+bahasa+Indonesia+di+Kateglo.');
+    expect(__private.buildSocialImageUrl('/ejaan/---', 'https://kateglo.org')).toBe('https://kateglo.org/og/ejaan/---.png?title=Ejaan&context=Kaidah+Ejaan+pada+bab+Ejaan+dalam+pedoman+ejaan+bahasa+Indonesia+di+Kateglo.');
     expect(__private.buildSocialImageUrl('/gramatika/klausa-baru', 'https://kateglo.org')).toBe('https://kateglo.org/og/gramatika/klausa-baru.png?title=Klausa+Baru&context=Penjelasan+tentang+Klausa+Baru+pada+bab+Gramatika+dalam+panduan+tata+bahasa+Indonesia+di+Kateglo.');
+    expect(__private.buildSocialImageUrl('/gramatika/---', 'https://kateglo.org')).toBe('https://kateglo.org/og/gramatika/---.png?title=Gramatika&context=Penjelasan+tentang+Gramatika+pada+bab+Gramatika+dalam+panduan+tata+bahasa+Indonesia+di+Kateglo.');
     expect(__private.buildSocialImageUrl('/ejaan/', 'https://kateglo.org')).toBe('https://kateglo.org/og/ejaan.png?title=Panduan+Ejaan+Bahasa+Indonesia&context=Panduan+kaidah+ejaan+bahasa+Indonesia+mencakup+penggunaan+huruf%2C+penulisan+kata%2C+tanda+baca%2C+dan+unsur+serapan.');
     expect(__private.buildSocialImageUrl('/gramatika/', 'https://kateglo.org')).toBe('https://kateglo.org/og/gramatika.png?title=Panduan+Tata+Bahasa+Indonesia&context=Panduan+tata+bahasa+Indonesia+mencakup+kelas+kata%2C+kalimat%2C+dan+hubungan+antarklausa+berdasarkan+Tata+Bahasa+Baku+Bahasa+Indonesia.');
     expect(__private.buildSocialImageUrl('/kamus/detail/sara', 'https://kateglo.org', {

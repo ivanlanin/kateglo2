@@ -325,7 +325,7 @@ function Gramatika() {
           <nav className="kamus-detail-breadcrumb" aria-label="Breadcrumb gramatika">
             {breadcrumbItems.map((item, index) => {
               return (
-                <span key={`${item.label}-${item.to || 'current'}`}>
+                <span key={`${item.label}-${item.to}`}>
                   {index > 0 && <span aria-hidden="true"> / </span>}
                   <Link to={item.to} className="kamus-detail-breadcrumb-link">
                     {item.label}
