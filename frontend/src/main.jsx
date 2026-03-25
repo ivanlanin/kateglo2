@@ -6,6 +6,7 @@ import App from './App';
 import { AuthProvider } from './context/authContext';
 import { SsrPrefetchProvider } from './context/ssrPrefetchContext';
 import './styles/index.css';
+import './styles/alat.css';
 
 if (import.meta.env.DEV && typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations()

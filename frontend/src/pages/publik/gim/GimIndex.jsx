@@ -4,21 +4,14 @@
 
 import { Link } from 'react-router-dom';
 import HalamanPublik from '../../../components/tampilan/HalamanPublik';
-
-const daftarGim = [
-  {
-    slug: 'kuis-kata',
-    judul: 'Kuis Kata',
-    deskripsi: 'Jawab soal pilihan ganda dari kamus, tesaurus, glosarium, makna, dan rima dalam satu ronde cepat.',
-  },
-  {
-    slug: 'susun-kata',
-    judul: 'Susun Kata',
-    deskripsi: 'Tebak kata bahasa Indonesia dalam enam percobaan dengan mode harian dan bebas.',
-  },
-];
+import { useAuthOptional } from '../../../context/authContext';
+import { ambilDaftarGim } from '../../../constants/katalogFitur';
 
 function GimIndex() {
+  const auth = useAuthOptional();
+  const bolehLihatInternal = Boolean(auth?.adalahRedaksi || auth?.adalahAdmin);
+  const daftarGim = ambilDaftarGim(bolehLihatInternal);
+
   return (
     <HalamanPublik
       judul="Gim"
@@ -31,13 +24,15 @@ function GimIndex() {
         <section className="gim-list-grid" aria-label="Daftar gim">
           {daftarGim.map((gim) => (
             <article key={gim.slug} className="gim-card">
+              {bolehLihatInternal && gim.tampilPublik === false && (
+                <div className="gim-card-top">
+                  <span className="gim-card-status">Internal</span>
+                </div>
+              )}
               <h2 className="gim-card-title">{gim.judul}</h2>
               <p className="gim-card-description">{gim.deskripsi}</p>
               <div className="gim-card-actions">
-                <Link
-                  to={gim.slug === 'susun-kata' ? '/gim/susun-kata/harian' : `/gim/${gim.slug}`}
-                  className="alat-link-primary"
-                >
+                <Link to={gim.href} className="alat-link-primary">
                   Buka gim
                 </Link>
               </div>

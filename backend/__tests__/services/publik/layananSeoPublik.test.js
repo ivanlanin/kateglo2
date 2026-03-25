@@ -5,6 +5,14 @@
 
 const fs = require('node:fs');
 
+jest.mock('@resvg/resvg-js', () => ({
+  Resvg: jest.fn().mockImplementation(() => ({
+    render: () => ({
+      asPng: () => Buffer.alloc(2048, 1),
+    }),
+  })),
+}));
+
 jest.mock('../../../models/master/modelLabel', () => ({
   ambilSemuaKategori: jest.fn(),
 }));

@@ -4,21 +4,14 @@
 
 import { Link } from 'react-router-dom';
 import HalamanPublik from '../../../components/tampilan/HalamanPublik';
-
-const daftarAlat = [
-  {
-    slug: 'penganalisis-teks',
-    judul: 'Penganalisis Teks',
-    deskripsi: 'Hitung jumlah paragraf, kalimat, dan kata dari teks bahasa Indonesia secara cepat.',
-  },
-  {
-    slug: 'penghitung-huruf',
-    judul: 'Penghitung Huruf',
-    deskripsi: 'Hitung frekuensi huruf a-z, tampilkan tabel persentase, dan lihat grafik batang distribusinya.',
-  },
-];
+import { useAuthOptional } from '../../../context/authContext';
+import { ambilDaftarAlat } from '../../../constants/katalogFitur';
 
 function AlatIndex() {
+  const auth = useAuthOptional();
+  const bolehLihatInternal = Boolean(auth?.adalahRedaksi || auth?.adalahAdmin);
+  const daftarAlat = ambilDaftarAlat(bolehLihatInternal);
+
   return (
     <HalamanPublik
       judul="Alat"
@@ -31,10 +24,15 @@ function AlatIndex() {
         <section className="alat-list-grid" aria-label="Daftar alat">
           {daftarAlat.map((alat) => (
             <article key={alat.slug} className="alat-card">
+              {bolehLihatInternal && alat.tampilPublik === false && (
+                <div className="alat-card-top">
+                  <span className="alat-card-status">Internal</span>
+                </div>
+              )}
               <h2 className="alat-card-title">{alat.judul}</h2>
               <p className="alat-card-description">{alat.deskripsi}</p>
               <div className="alat-card-actions">
-                <Link to={`/alat/${alat.slug}`} className="alat-link-primary">
+                <Link to={alat.href} className="alat-link-primary">
                   Buka alat
                 </Link>
               </div>

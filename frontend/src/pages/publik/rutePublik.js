@@ -1,5 +1,6 @@
 import { createElement, lazy } from 'react';
 import { Navigate } from 'react-router-dom';
+import { aksesRuteInteraktif, katalogAlat, katalogGim } from '../../constants/katalogFitur';
 import Beranda from './Beranda';
 
 function buatLazyNamedExport(loader, exportName) {
@@ -18,11 +19,37 @@ const GlosariumDetail = buatLazyNamedExport(() => import('./glosarium'), 'Glosar
 const Alat = buatLazyNamedExport(() => import('./alat'), 'Alat');
 const PenghitungHuruf = buatLazyNamedExport(() => import('./alat'), 'PenghitungHuruf');
 const PenganalisisTeks = buatLazyNamedExport(() => import('./alat'), 'PenganalisisTeks');
+const PohonKalimat = buatLazyNamedExport(() => import('./alat'), 'PohonKalimat');
 const GimIndex = buatLazyNamedExport(() => import('./gim'), 'GimIndex');
 const KuisKata = buatLazyNamedExport(() => import('./gim'), 'KuisKata');
 const SusunKata = buatLazyNamedExport(() => import('./gim'), 'SusunKata');
 const KebijakanPrivasi = buatLazyNamedExport(() => import('./informasi'), 'KebijakanPrivasi');
 const Sumber = buatLazyNamedExport(() => import('./informasi'), 'Sumber');
+
+const komponenAlat = {
+  'penghitung-huruf': PenghitungHuruf,
+  'penganalisis-teks': PenganalisisTeks,
+  'pohon-kalimat': PohonKalimat,
+};
+
+const komponenGim = {
+  'kuis-kata': KuisKata,
+  'susun-kata': SusunKata,
+};
+
+const ruteAlatInteraktif = katalogAlat.map((item) => ({
+  path: item.routePath,
+  Component: komponenAlat[item.slug],
+  aksesPublik: aksesRuteInteraktif(item),
+  redirectTo: '/alat',
+}));
+
+const ruteGimInteraktif = katalogGim.map((item) => ({
+  path: item.routePath,
+  Component: komponenGim[item.slug],
+  aksesPublik: aksesRuteInteraktif(item),
+  redirectTo: '/gim',
+}));
 
 export const ruteHalamanPublik = [
   { path: '/', Component: Beranda },
@@ -41,12 +68,10 @@ export const ruteHalamanPublik = [
   { path: '/gramatika', Component: Gramatika },
   { path: '/gramatika/:slug', Component: Gramatika },
   { path: '/alat', Component: Alat },
-  { path: '/alat/penghitung-huruf', Component: PenghitungHuruf },
-  { path: '/alat/penganalisis-teks', Component: PenganalisisTeks },
+  ...ruteAlatInteraktif,
   { path: '/gim', Component: GimIndex },
-  { path: '/gim/kuis-kata', Component: KuisKata },
   { path: '/gim/susun-kata', element: createElement(Navigate, { to: '/gim/susun-kata/harian', replace: true }) },
-  { path: '/gim/susun-kata/:mode', Component: SusunKata },
+  ...ruteGimInteraktif,
   { path: '/tesaurus', Component: Tesaurus },
   { path: '/tesaurus/cari/:kata', Component: Tesaurus },
   { path: '/glosarium', Component: Glosarium },

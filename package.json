@@ -5,8 +5,7 @@
   "private": true,
   "workspaces": [
     "backend",
-    "frontend",
-    "shared"
+    "frontend"
   ],
   "scripts": {
     "start": "npm run sim:production:start",
@@ -21,7 +20,8 @@
     "build:ssr": "npm run build:ssr --prefix frontend",
     "build:backend": "node -e \"console.log('Backend tidak memerlukan langkah build')\"",
     "build:public": "npm run build --prefix frontend",
-    "test": "npm run test --prefix backend && npm run test --prefix frontend",
+    "test": "node -e \"console.error(['Jangan jalankan tes dari root workspace.','Gunakan salah satu perintah berikut:','- npm run test --prefix backend','- npm run test --prefix frontend','- npm run test:all'].join('\\n')); process.exit(1)\"",
+    "test:all": "npm run test --prefix backend && npm run test --prefix frontend",
     "lint": "npm run lint --prefix backend && npm run lint --prefix frontend"
   },
   "devDependencies": {
@@ -32,9 +32,5 @@
     "npm": ">=9.0.0"
   },
   "author": "Ivan Lanin",
-  "license": "GPL-3.0",
-  "dependencies": {
-    "chart.js": "^4.5.1",
-    "chartjs-plugin-datalabels": "^2.2.0"
-  }
+  "license": "GPL-3.0"
 }

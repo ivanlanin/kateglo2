@@ -4,7 +4,6 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
-const { Resvg } = require('@resvg/resvg-js');
 
 const ModelLabel = require('../../models/master/modelLabel');
 const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
@@ -130,6 +129,13 @@ const ogSectionPalette = {
 };
 
 let cachedOgLogoDataUri;
+let cachedResvgClass;
+
+function getResvgClass() {
+  if (cachedResvgClass) return cachedResvgClass;
+  ({ Resvg: cachedResvgClass } = require('@resvg/resvg-js'));
+  return cachedResvgClass;
+}
 
 function normalisasiBaseUrl(value = '') {
   const trimmed = String(value || '').trim();
@@ -440,6 +446,7 @@ function buildOgImageSvg(payload = {}) {
 function renderOgImagePng(options = {}) {
   const payload = buildOgImagePayload(options);
   const svg = buildOgImageSvg(payload);
+  const Resvg = getResvgClass();
   const renderer = new Resvg(svg, {
     fitTo: {
       mode: 'width',

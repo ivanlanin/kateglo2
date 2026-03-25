@@ -1,5 +1,10 @@
 # Riwayat Perubahan
 
+## 2026-03-26 Kamis
+
+- Menambahkan alat [Pohon Kalimat](/alat/pohon-kalimat)
+- Menambahkan `katalogFitur` untuk mengatur fitur yang dapat dilihat publik
+
 ## 2026-03-25 Rabu
 
 - Menambahkan daftar isi, daftar istilah, daftar tabel, dan daftar gambar di [Gramatika](/gramatika)

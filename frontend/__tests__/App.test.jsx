@@ -4,8 +4,8 @@
 
 import { render, screen } from '@testing-library/react';
 import { describe, it, vi, beforeEach, expect } from 'vitest';
-import { MemoryRouter, Outlet } from 'react-router-dom';
-import App, { RuteIzin } from '../src/App';
+import { MemoryRouter, Outlet, Route, Routes } from 'react-router-dom';
+import App, { RuteIzin, RutePublikTerkendali } from '../src/App';
 
 const mockUseAuth = vi.fn();
 
@@ -42,6 +42,7 @@ vi.mock('../src/pages/publik/alat', () => ({
   Alat: () => <div>Hal Alat</div>,
   PenghitungHuruf: () => <div>Hal Penghitung Huruf</div>,
   PenganalisisTeks: () => <div>Hal Penganalisis Teks</div>,
+  PohonKalimat: () => <div>Hal Pohon Kalimat</div>,
 }));
 vi.mock('../src/pages/publik/gim', () => ({
   GimIndex: () => <div>Hal Gim</div>,
@@ -323,6 +324,15 @@ describe('App', () => {
     expect(await screen.findByText('Hal Penghitung Huruf')).toBeInTheDocument();
   });
 
+  it('mengalihkan route alat pohon kalimat ke indeks alat untuk pengguna biasa', async () => {
+    render(
+      <MemoryRouter initialEntries={['/alat/pohon-kalimat']}>
+        <App />
+      </MemoryRouter>
+    );
+    expect(await screen.findByText('Hal Alat')).toBeInTheDocument();
+  });
+
   it('merender route indeks gim', async () => {
     render(
       <MemoryRouter initialEntries={['/gim']}>
@@ -416,5 +426,51 @@ describe('App', () => {
       </MemoryRouter>
     );
     expect(screen.getByText('isi-izin')).toBeInTheDocument();
+  });
+
+  it('RutePublikTerkendali mengalihkan pengguna biasa ke route fallback', async () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      adalahRedaksi: false,
+      adalahAdmin: false,
+      isLoading: false,
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/alat/internal']}>
+        <Routes>
+          <Route
+            path="/alat/internal"
+            element={<RutePublikTerkendali redirectTo="/alat"><div>Konten internal</div></RutePublikTerkendali>}
+          />
+          <Route path="/alat" element={<div>Daftar alat</div>} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByText('Daftar alat')).toBeInTheDocument();
+  });
+
+  it('RutePublikTerkendali mengizinkan redaksi melihat route internal', async () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      adalahRedaksi: true,
+      adalahAdmin: false,
+      isLoading: false,
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/alat/internal']}>
+        <Routes>
+          <Route
+            path="/alat/internal"
+            element={<RutePublikTerkendali redirectTo="/alat"><div>Konten internal</div></RutePublikTerkendali>}
+          />
+          <Route path="/alat" element={<div>Daftar alat</div>} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByText('Konten internal')).toBeInTheDocument();
   });
 });

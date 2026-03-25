@@ -18,12 +18,16 @@ function bungkusLazy(element) {
   return <Suspense fallback={<FallbackRoute />}>{element}</Suspense>;
 }
 
-function renderRutePublik({ Component, element = null }) {
+function renderRutePublik({ Component, element = null, aksesPublik = 'publik', redirectTo = '/' }) {
   if (element) {
     return element;
   }
 
-  return bungkusLazy(<Component />);
+  const elementPublik = aksesPublik === 'admin'
+    ? <RutePublikTerkendali redirectTo={redirectTo}><Component /></RutePublikTerkendali>
+    : <Component />;
+
+  return bungkusLazy(elementPublik);
 }
 
 function renderRuteRedaksi(Component, izinDibutuhkan = []) {
@@ -81,6 +85,24 @@ function RuteIzin({ children, izinDibutuhkan = [] }) {
   return children;
 }
 
+function RutePublikTerkendali({ children, redirectTo = '/' }) {
+  const { adalahRedaksi, adalahAdmin, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-dark-bg">
+        <p className="text-gray-600 dark:text-gray-400">Memuat …</p>
+      </div>
+    );
+  }
+
+  if (!(adalahRedaksi || adalahAdmin)) {
+    return <Navigate to={redirectTo} replace />;
+  }
+
+  return children;
+}
+
 function App() {
   return (
     <Routes>
@@ -92,8 +114,8 @@ function App() {
       ))}
       {/* Public routes */}
       <Route element={<TataLetakPublik />}>
-        {ruteHalamanPublik.map(({ path, Component, element = null }) => (
-          <Route key={path} path={path} element={renderRutePublik({ Component, element })} />
+        {ruteHalamanPublik.map(({ path, Component, element = null, aksesPublik = 'publik', redirectTo = '/' }) => (
+          <Route key={path} path={path} element={renderRutePublik({ Component, element, aksesPublik, redirectTo })} />
         ))}
       </Route>
     </Routes>
@@ -101,4 +123,5 @@ function App() {
 }
 
 export default App;
-export { RuteIzin };
+export { RuteIzin, RutePublikTerkendali };
+
