@@ -8,30 +8,30 @@ Adjektiva adalah kata yang memberikan keterangan tentang sesuatu yang dinyatakan
 Contoh:
 
 (1)
-- *lampu merah*
-- *kartu kuning*
-- *langit biru*
-- *kelas berat*
-- *untung besar*
-- *rumah sempit*
-- *tetangga dekat*
-- *saudara jauh*
-- *hubungan renggang*
+- lampu merah
+- kartu kuning
+- langit biru
+- kelas berat
+- untung besar
+- rumah sempit
+- tetangga dekat
+- saudara jauh
+- hubungan renggang
 
 Adjektiva dapat didahului atau diikuti oleh kata yang menjadi pewatasnya. Pewatas yang mendahului adjektiva, antara lain, adalah kata *sangat*, *lebih*, *paling*, *makin*, dan *terlalu*. Pewatas yang mengikuti adjektiva, antara lain, adalah kata *benar*, *betul*, *nian*, dan *sekali*.
 
 Contoh:
 
 (2)
-- *sangat sabar*
-- *lebih lebar*
-- *paling pandai*
-- *makin gemuk*
-- *terlalu manja*
-- *pelik benar*
-- *berani betul*
-- *indah nian*
-- *rajin sekali*
+- sangat sabar
+- lebih lebar
+- paling pandai
+- makin gemuk
+- terlalu manja
+- pelik benar
+- berani betul
+- indah nian
+- rajin sekali
 
 Adjektiva dapat ditinjau dari ciri semantis dan sintaksis. Jika dilihat dari ciri semantisnya, adjektiva terdiri atas adjektiva bertaraf dan takbertaraf. Sementara itu, jika dilihat dari ciri sintaksis (yang lazim disebut perilaku sintaksis), adjektiva memiliki tiga fungsi, yaitu fungsi atributif, fungsi predikatif, dan fungsi adverbial atau keterangan (lihat 5.3 dan 6.5).
 

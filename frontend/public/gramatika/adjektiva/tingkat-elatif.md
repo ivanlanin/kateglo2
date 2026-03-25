@@ -32,18 +32,18 @@ Yang juga termasuk adjektiva dalam tingkat elatif ialah adjektiva yang diawali u
 Contoh:
 
 (40)
-- *Mahaagung*
-- *Mahakuasa*
-- *Mahakudus*
-- *Mahasuci*
-- *Mahatahu*
-- *Maha Pengasih*
-- *Maha Penyayang*
-- *Maha Pemurah*
-- *Maha Pengampun*
-- *Maha Mengetahui*
-- *adibusana*
-- *adikodrati*
-- *adikuasa*
-- *adiluhung*
-- *adikarya*
+- Mahaagung
+- Mahakuasa
+- Mahakudus
+- Mahasuci
+- Mahatahu
+- Maha Pengasih
+- Maha Penyayang
+- Maha Pemurah
+- Maha Pengampun
+- Maha Mengetahui
+- adibusana
+- adikodrati
+- adikuasa
+- adiluhung
+- adikarya

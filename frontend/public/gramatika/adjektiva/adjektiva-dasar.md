@@ -8,11 +8,11 @@ Meskipun sebagian besar adjektiva dasar merupakan bentuk yang monomorfemis, ada 
 Contoh:
 
 (68)
-- *besar*
-- *bundar*
-- *sakit*
-- *merah*
-- *pura-pura*
-- *hati-hati*
-- *sia-sia*
-- *remang-remang*
+- besar
+- bundar
+- sakit
+- merah
+- pura-pura
+- hati-hati
+- sia-sia
+- remang-remang

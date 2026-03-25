@@ -20,17 +20,17 @@ Numeralia kolektif dapat juga dibentuk dengan cara berikut.
 1) Penambahan prefiks *ber-* atau kadang-kadang *se-* pada nomina tertentu setelah numeralia:
 
 (315)
-- *tiga bersaudara*
-- *empat beranak*
-- *lima bersahabat*
-- *tiga serangkai*
-- *tiga sekawan*
-- *dua sejoli*
+- tiga bersaudara
+- empat beranak
+- lima bersahabat
+- tiga serangkai
+- tiga sekawan
+- dua sejoli
 
 2) Penambahan prefiks *ber-* pada numeralia pokok yang diletakkan sesudah pronomina persona:
 
 (316)
-- *(kamu) berdua*
-- *(kami) berenam*
-- *(kita) berdua*
-- *(mereka) bertiga*
+- (kamu) berdua
+- (kami) berenam
+- (kita) berdua
+- (mereka) bertiga

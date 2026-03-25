@@ -8,24 +8,24 @@ Berdasarkan ciri semantisnya, adjektiva digunakan untuk menyatakan berbagai ting
 Contoh:
 
 (4)
-- *sangat mudah*
-- *agak besar*
-- *lebih pendek*
-- *paling tua*
+- sangat mudah
+- agak besar
+- lebih pendek
+- paling tua
 
 Tidak semua adjektiva memperlihatkan ciri semantis seperti itu. Artinya, tidak semua adjektiva dapat mengungkapkan tingkat kualitas atau tingkat perbandingan sehingga pewatas gradasi seperti *sangat*, *agak*, *lebih*, dan *paling* itu pun tidak dapat mendahului adjektiva yang bersangkutan. Adjektiva yang demikian tampak pada contoh berikut.
 
 Contoh:
 
 (5)
-- *abadi*
-- *buntu*
-- *gaib*
-- *kekal*
-- *lancang*
-- *langgeng*
-- *mutlak*
-- *sah*
+- abadi
+- buntu
+- gaib
+- kekal
+- lancang
+- langgeng
+- mutlak
+- sah
 
 Dengan demikian, yang dicontohkan tersebut termasuk adjektiva tingkat kualitas yang mutlak.
 

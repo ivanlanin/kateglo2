@@ -8,12 +8,12 @@ Adjektiva pemeri sifat adalah adjektiva yang memerikan kualitas atau intensitas,
 Contoh:
 
 (6)
-- *boros*
-- *ganas*
-- *kaya*
-- *kikir*
-- *miskin*
-- *rindu*
-- *sedih*
-- *sehat*
-- *sengsara*
+- boros
+- ganas
+- kaya
+- kikir
+- miskin
+- rindu
+- sedih
+- sehat
+- sengsara

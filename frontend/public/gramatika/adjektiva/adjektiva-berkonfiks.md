@@ -13,7 +13,7 @@ Adjektiva dengan konfiks *ke-...-an* pada umumnya digunakan pada bentuk dasar ya
 Contoh:
 
 (79)
-- *Hampir semua bajunya kesempitan karena dia sekarang bertambah gemuk.*
-- *Karena udara panas, anak itu kehausan.*
-- *Kakinya masih kesakitan gara-gara terantuk batu di tempat yang gelap.*
-- *Dia kegirangan mendapat hadiah komputer.*
+- Hampir semua bajunya kesempitan karena dia sekarang bertambah gemuk.
+- Karena udara panas, anak itu kehausan.
+- Kakinya masih kesakitan gara-gara terantuk batu di tempat yang gelap.
+- Dia kegirangan mendapat hadiah komputer.

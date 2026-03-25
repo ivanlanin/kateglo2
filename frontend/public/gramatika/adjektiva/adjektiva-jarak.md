@@ -8,9 +8,9 @@ Adjektiva jarak adalah adjektiva yang mengacu pada ruang di antara dua benda, te
 Contoh:
 
 (20)
-- *jauh*
-- *dekat*
-- *lebar*
-- *rapat*
-- *renggang*
-- *akrab*
+- jauh
+- dekat
+- lebar
+- rapat
+- renggang
+- akrab

@@ -8,11 +8,11 @@ Adjektiva waktu adalah adjektiva yang mengacu pada masa atau waktu tertentu yang
 Contoh:
 
 (19)
-- *lama*
-- *cepat*
-- *larut*
-- *suntuk*
-- *lambat*
-- *singkat*
-- *perlahan*
-- *mendadak*
+- lama
+- cepat
+- larut
+- suntuk
+- lambat
+- singkat
+- perlahan
+- mendadak

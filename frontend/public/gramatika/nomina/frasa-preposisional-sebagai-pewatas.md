@@ -7,10 +7,10 @@ Nomina dapat diperluas dengan menambahkan frasa preposisional sebagai pewatas. P
 
 (143)
 
-- *berita tentang perkelahian mahasiswa*
-- *dana untuk pembangunan gedung sekolah*
-- *pembicaraan antara kedua kepala negara itu*
-- *seminar tentang pemanasan global*
+- berita tentang perkelahian mahasiswa
+- dana untuk pembangunan gedung sekolah
+- pembicaraan antara kedua kepala negara itu
+- seminar tentang pemanasan global
 
 Pewatas berupa frasa preposisional dapat juga bersifat atributif. Oleh karena itu, kata *yang* dapat disisipkan antara inti dan pewatas.
 
@@ -18,7 +18,7 @@ Contoh:
 
 (144)
 
-- *anak (yang) di belakang*
-- *jalan (yang) ke kantor pos*
-- *buku (yang) di atas meja*
-- *orang (yang) seperti robot*
+- anak (yang) di belakang
+- jalan (yang) ke kantor pos
+- buku (yang) di atas meja
+- orang (yang) seperti robot

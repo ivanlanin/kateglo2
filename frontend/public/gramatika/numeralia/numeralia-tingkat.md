@@ -9,9 +9,9 @@ Contoh:
 
 (328)
 - *kesatu* atau *pertama*
-- *kedua*
-- *kelima*
-- *kesepuluh*
+- kedua
+- kelima
+- kesepuluh
 
 Karena numeralia kolektif juga dibentuk dengan *ke-*, bentuk kedua macam numeralia itu sama. Perbedaannya terletak pada bagaimana masing-masing dipakai. Sebagai numeralia kolektif, numeralia ini diletakkan di muka nomina yang diterangkan; sebagai numeralia tingkat, ia diletakkan di belakang nomina yang diterangkan.
 

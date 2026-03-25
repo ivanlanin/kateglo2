@@ -8,36 +8,36 @@ Berdasarkan makna unsur-unsurnya, adjektiva gabungan morfem bebas yang terdiri a
 Contoh yang bersinonim:
 
 (84)
-- *aman sejahtera*
-- *arif bijaksana*
-- *basah kuyup*
-- *cantik jelita*
-- *cerah ceria*
-- *gagah berani*
-- *gagah perkasa*
-- *gelap gulita*
-- *lemah lembut*
-- *letih lesu*
-- *muda belia*
-- *muda remaja*
-- *pahit getir*
-- *siap sedia*
-- *siap siaga*
-- *sunyi senyap*
+- aman sejahtera
+- arif bijaksana
+- basah kuyup
+- cantik jelita
+- cerah ceria
+- gagah berani
+- gagah perkasa
+- gelap gulita
+- lemah lembut
+- letih lesu
+- muda belia
+- muda remaja
+- pahit getir
+- siap sedia
+- siap siaga
+- sunyi senyap
 
 Contoh yang berantonim:
 
 (85)
-- *baik buruk*
-- *besar kecil*
-- *kalah menang*
-- *kaya miskin*
-- *pahit manis*
-- *panjang pendek*
-- *suka duka*
-- *susah senang*
-- *tinggi rendah*
-- *tua muda*
+- baik buruk
+- besar kecil
+- kalah menang
+- kaya miskin
+- pahit manis
+- panjang pendek
+- suka duka
+- susah senang
+- tinggi rendah
+- tua muda
 
 Di antara gabungan yang bersinonim dapat disisipkan kata *dan*, sedangkan kata *atau* dapat digunakan di antara gabungan yang berantonim.
 

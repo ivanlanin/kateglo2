@@ -8,24 +8,24 @@ Adjektiva sikap batin adalah adjektiva yang menggambarkan suasana hati atau pera
 Contoh:
 
 (21)
-- *bahagia*
-- *bangga*
-- *benci*
-- *berani*
-- *bosan*
-- *cemas*
-- *gembira*
-- *heran*
-- *ragu-ragu*
-- *iba*
-- *jemu*
-- *kagum*
-- *kesal*
-- *ngeri*
-- *rindu*
-- *risau*
-- *sayang*
-- *sedih*
-- *segan*
-- *pilu*
-- *takut*
+- bahagia
+- bangga
+- benci
+- berani
+- bosan
+- cemas
+- gembira
+- heran
+- ragu-ragu
+- iba
+- jemu
+- kagum
+- kesal
+- ngeri
+- rindu
+- risau
+- sayang
+- sedih
+- segan
+- pilu
+- takut

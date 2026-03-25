@@ -8,7 +8,7 @@ Partikel *-tah*, yang juga berbentuk klitika, dipakai dalam kalimat interogatif,
 Contoh:
 
 (91)
-- *Apatah artinya hidup ini tanpa engkau?*
+- Apatah artinya hidup ini tanpa engkau?
 
 (92)
-- *Siapatah gerangan orangnya yang mau menolongku?*
+- Siapatah gerangan orangnya yang mau menolongku?

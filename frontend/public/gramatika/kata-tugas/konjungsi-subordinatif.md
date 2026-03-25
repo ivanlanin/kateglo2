@@ -58,8 +58,8 @@ Konjungsi subordinatif adalah konjungsi yang menghubungkan dua klausa atau lebih
 
 13) Konjungsi Subordinatif Perbandingan
 
-- *... sama ... dengan ...*
-- *... lebih ... dari ... dari(pada)*
+- ... sama ... dengan ...
+- ... lebih ... dari ... dari(pada)
 
 Seperti halnya dengan kelompok konjungsi koordinatif, dalam kelompok konjungsi subordinatif ada anggota yang termasuk dalam kelompok preposisi. Kata seperti *sebelum* dan *karena* dapat diikuti oleh klausa dan dapat pula diikuti oleh kata. Jika diikuti klausa, kata itu berfungsi sebagai konjungsi, sedangkan jika diikuti kata, kata-kata itu merupakan preposisi. Kata *sebelum* pada kalimat *Dia berangkat sebelum saya datang* dan *Dia berangkat sebelum pukul lima* masing-masing merupakan konjungsi dan preposisi. Berikut adalah contoh kelompok masing-masing.
 

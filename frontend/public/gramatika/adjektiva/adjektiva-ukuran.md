@@ -8,15 +8,15 @@ Adjektiva ukuran adalah adjektiva yang mengacu pada kualitas yang sifatnya dapat
 Contoh:
 
 (7)
-- *berat*
-- *besar*
-- *kecil*
-- *lapang*
-- *longgar*
-- *luas*
-- *panjang*
-- *pendek*
-- *rendah*
-- *ringan*
-- *sempit*
-- *tinggi*
+- berat
+- besar
+- kecil
+- lapang
+- longgar
+- luas
+- panjang
+- pendek
+- rendah
+- ringan
+- sempit
+- tinggi
