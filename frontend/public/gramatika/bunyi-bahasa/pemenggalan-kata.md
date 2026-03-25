@@ -15,13 +15,15 @@ Harus pula dihindari pemenggalan pada akhir kata yang hanya terdiri atas satu hu
 
 **Tabel 3.5 Pemenggalan Kata**
 
-| Bentuk | Pemenggalan benar | Pemenggalan yang tidak tepat |
+| Kata | Benar | Salah |
 |---|---|---|
-| *abdimu* | *abdi-mu*, *ab-di-mu* | *a-bdimu* |
-| *berarti* | *ber-arti*, *be-rarti* | *berar-ti*, *berart-i* |
-| *kebanyakan* | *ke-banyakan*, *kebanya-kan*, *keba-nyakan* | *kebanyaka-n* |
-| *menanyakan* | *me-nanyakan*, *menan-yakan*, *mena-nyakan* | *menanya-kan* |
-| *menangani* | *me-nangani*, *mena-ngani* | *menangan-i* |
-| *perubahan* | *per-ubahan*, *pe-rubahan*, *perubah-an* | *pemb-ahan*, *pem-bahan*, *peruba-han* |
-| *dengan* | *de-ngan*, *deng-an* | - |
-| *bendungan* | *ben-dungan*, *bendung-an*, *be-ndungan* | *bendun-gan* |
+| abdimu | abdi-mu, ab-di-mu | a-bdimu, abd-imu |
+| sabuk | sa-buk | sab-uk |
+| berarti | ber-arti, berar-ti | berart-i, be-rarti |
+| kebanyakan | kebanyak-an, ke-banyakan, keba-nyakan | kebanya-kan |
+| menanyakan | menanya-kan, me-nanyakan, mena-nyakan | menan-yakan |
+| menangani | me-nangani, mena-ngani | men-angani, menangan-i |
+| abadi | (tidak dipenggal) | a-bad |
+| perubahan | per-ubahan, perubah-an, peru-bahan | pe-rubahan, perub-ahan, peruba-han |
+| dengan | de-ngan | deng-an |
+| bendungan | bendung-an, ben-dungan | bendu-ngan, bendun-gan, be-ndungan |
