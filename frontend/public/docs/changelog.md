@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-03-25 Rabu
+
+- Menambahkan daftar isi, daftar istilah, daftar tabel, dan daftar gambar di [Gramatika](/gramatika)
+
 ## 2026-03-24 Selasa
 
 - Memperbaiki posisi gulir dan transisi navigasi antarhalaman

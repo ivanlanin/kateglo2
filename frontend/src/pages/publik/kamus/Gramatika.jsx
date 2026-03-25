@@ -37,6 +37,14 @@ function setStatusHeadingLipat(container, terbuka) {
 function DaftarIsiGramatikaGrid() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <KartuKategori
+        judul="Daftar"
+        items={daftarHalamanReferensiGramatika}
+        getKey={(item) => item.slug}
+        getTo={(item) => `/gramatika/${item.slug}`}
+        getLabel={(item) => item.judul}
+        className="beranda-feature-card text-center md:col-span-2"
+      />
       {daftarIsiGramatika.map((bab) => (
         <KartuKategori
           key={bab.slug}
@@ -113,19 +121,25 @@ function DaftarIsiPanel({ aktifSlug = '', aktifSlugSebagaiTautan = '' }) {
   );
 }
 
-function DaftarRujukanGramatika() {
+function DaftarReferensiPanel({ aktifSlug = '' }) {
   return (
-    <section className="gramatika-reference-section" aria-label="Daftar rujukan gramatika">
-      <h2 className="section-heading">Daftar Rujukan</h2>
-      <div className="gramatika-reference-grid">
+    <PanelLipat judul="Daftar" terbukaAwal={true} aksen={true}>
+      <ul className="ejaan-sidebar-pill-grid">
         {daftarHalamanReferensiGramatika.map((item) => (
-          <Link key={item.slug} to={`/gramatika/${item.slug}`} className="gramatika-reference-card">
-            <h3 className="gramatika-reference-title">{item.judul}</h3>
-            <p className="secondary-text">{item.ringkasan}</p>
-          </Link>
+          <li key={item.slug} className="ejaan-sidebar-pill-item">
+            {aktifSlug === item.slug ? (
+              <span className="ejaan-sidebar-pill ejaan-sidebar-pill-active" aria-current="page">
+                {item.judul}
+              </span>
+            ) : (
+              <Link to={`/gramatika/${item.slug}`} className="ejaan-sidebar-pill">
+                {item.judul}
+              </Link>
+            )}
+          </li>
         ))}
-      </div>
-    </section>
+      </ul>
+    </PanelLipat>
   );
 }
 
@@ -143,6 +157,16 @@ function buildBreadcrumbGramatika(metadataAktif) {
 
   if (metadataAktif.tipe === 'bab') {
     return breadcrumbs;
+  }
+
+  if (metadataAktif.tipe === 'daftar') {
+    return [
+      ...breadcrumbs,
+      {
+        label: 'Daftar',
+        to: null,
+      },
+    ];
   }
 
   breadcrumbs.push({
@@ -187,12 +211,15 @@ function Gramatika() {
     return ssrPrefetch;
   }, [ssrPrefetch, slug]);
   const dokumenValid = metadataAktif?.dokumen || '';
+  const urutanNavigasi = metadataAktif?.tipe === 'daftar'
+    ? daftarHalamanReferensiGramatika
+    : daftarItemGramatika;
   const indeksAktif = metadataAktif
-    ? daftarItemGramatika.findIndex((item) => item.slug === metadataAktif.slug)
+    ? urutanNavigasi.findIndex((item) => item.slug === metadataAktif.slug)
     : -1;
-  const dokumenSebelumnya = indeksAktif > 0 ? daftarItemGramatika[indeksAktif - 1] : null;
-  const dokumenSesudah = indeksAktif >= 0 && indeksAktif < daftarItemGramatika.length - 1
-    ? daftarItemGramatika[indeksAktif + 1]
+  const dokumenSebelumnya = indeksAktif > 0 ? urutanNavigasi[indeksAktif - 1] : null;
+  const dokumenSesudah = indeksAktif >= 0 && indeksAktif < urutanNavigasi.length - 1
+    ? urutanNavigasi[indeksAktif + 1]
     : null;
   const aktifSlugSidebar = metadataAktif?.tipe === 'subitem' ? '' : (metadataAktif?.slug || '');
   const aktifSlugSidebarSebagaiTautan = metadataAktif?.tipe === 'subitem' ? metadataAktif.parentSlug : '';
@@ -329,7 +356,6 @@ function Gramatika() {
           Edisi Keempat (2017), Badan Pengembangan dan Pembinaan Bahasa,
           Kementerian Pendidikan dan Kebudayaan.
         </p>
-        <DaftarRujukanGramatika />
       </HalamanPublik>
     );
   }
@@ -355,9 +381,13 @@ function Gramatika() {
               return (
                 <span key={`${item.label}-${item.to}`}>
                   {index > 0 && <span aria-hidden="true"> / </span>}
-                  <Link to={item.to} className="kamus-detail-breadcrumb-link">
-                    {item.label}
-                  </Link>
+                  {item.to ? (
+                    <Link to={item.to} className="kamus-detail-breadcrumb-link">
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <span aria-current="page">{item.label}</span>
+                  )}
                 </span>
               );
             })}
@@ -395,7 +425,7 @@ function Gramatika() {
             )}
 
             {!sedangMemuat && !galat && (dokumenSebelumnya || dokumenSesudah) && (
-              <nav className="ejaan-sekuens-nav" aria-label="Navigasi bab gramatika">
+              <nav className="ejaan-sekuens-nav" aria-label="Navigasi gramatika">
                 {dokumenSebelumnya && (
                   <Link
                     to={`/gramatika/${dokumenSebelumnya.slug}`}
@@ -422,7 +452,8 @@ function Gramatika() {
           </div>
         </article>
 
-        <div>
+        <div className="space-y-4">
+          <DaftarReferensiPanel aktifSlug={metadataAktif?.tipe === 'daftar' ? metadataAktif.slug : ''} />
           <DaftarIsiPanel
             aktifSlug={aktifSlugSidebar}
             aktifSlugSebagaiTautan={aktifSlugSidebarSebagaiTautan}
@@ -438,8 +469,8 @@ export const __private = {
   setStatusHeadingLipat,
   buildBreadcrumbGramatika,
   DaftarIsiGramatikaGrid,
+  DaftarReferensiPanel,
   DaftarIsiPanel,
-  DaftarRujukanGramatika,
 };
 
 export default Gramatika;
