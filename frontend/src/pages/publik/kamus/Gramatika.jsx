@@ -13,7 +13,11 @@ import HalamanPublik from '../../../components/tampilan/HalamanPublik';
 import PanelLipat from '../../../components/panel/PanelLipat';
 import KartuKategori from '../../../components/data/KartuKategori';
 import { useSsrPrefetch } from '../../../context/ssrPrefetchContext';
-import { daftarIsiGramatika, daftarItemGramatika } from '../../../constants/gramatikaData';
+import {
+  daftarHalamanReferensiGramatika,
+  daftarIsiGramatika,
+  daftarItemGramatika,
+} from '../../../constants/gramatikaData';
 
 function bacaIsiMarkdown(markdownMentah = '') {
   return markdownMentah.replace(/^---[\s\S]*?---\s*/m, '');
@@ -109,6 +113,22 @@ function DaftarIsiPanel({ aktifSlug = '', aktifSlugSebagaiTautan = '' }) {
   );
 }
 
+function DaftarRujukanGramatika() {
+  return (
+    <section className="gramatika-reference-section" aria-label="Daftar rujukan gramatika">
+      <h2 className="section-heading">Daftar Rujukan</h2>
+      <div className="gramatika-reference-grid">
+        {daftarHalamanReferensiGramatika.map((item) => (
+          <Link key={item.slug} to={`/gramatika/${item.slug}`} className="gramatika-reference-card">
+            <h3 className="gramatika-reference-title">{item.judul}</h3>
+            <p className="secondary-text">{item.ringkasan}</p>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function buildBreadcrumbGramatika(metadataAktif) {
   const breadcrumbs = [
     {
@@ -156,7 +176,7 @@ function Gramatika() {
   const [adaHeadingLipat, setAdaHeadingLipat] = useState(false);
 
   const semuaDokumen = useMemo(
-    () => daftarItemGramatika,
+    () => [...daftarItemGramatika, ...daftarHalamanReferensiGramatika],
     [],
   );
 
@@ -168,11 +188,11 @@ function Gramatika() {
   }, [ssrPrefetch, slug]);
   const dokumenValid = metadataAktif?.dokumen || '';
   const indeksAktif = metadataAktif
-    ? semuaDokumen.findIndex((item) => item.slug === metadataAktif.slug)
+    ? daftarItemGramatika.findIndex((item) => item.slug === metadataAktif.slug)
     : -1;
-  const dokumenSebelumnya = indeksAktif > 0 ? semuaDokumen[indeksAktif - 1] : null;
-  const dokumenSesudah = indeksAktif >= 0 && indeksAktif < semuaDokumen.length - 1
-    ? semuaDokumen[indeksAktif + 1]
+  const dokumenSebelumnya = indeksAktif > 0 ? daftarItemGramatika[indeksAktif - 1] : null;
+  const dokumenSesudah = indeksAktif >= 0 && indeksAktif < daftarItemGramatika.length - 1
+    ? daftarItemGramatika[indeksAktif + 1]
     : null;
   const aktifSlugSidebar = metadataAktif?.tipe === 'subitem' ? '' : (metadataAktif?.slug || '');
   const aktifSlugSidebarSebagaiTautan = metadataAktif?.tipe === 'subitem' ? metadataAktif.parentSlug : '';
@@ -207,6 +227,13 @@ function Gramatika() {
       return {
         judul: metadataAktif.judul,
         deskripsi: dataMarkdownSsr?.description || `Ikhtisar bab ${metadataAktif.judul} dalam panduan tata bahasa Indonesia di Kateglo.`,
+      };
+    }
+
+    if (metadataAktif?.tipe === 'daftar') {
+      return {
+        judul: metadataAktif.judul,
+        deskripsi: dataMarkdownSsr?.description || metadataAktif.deskripsi,
       };
     }
 
@@ -302,6 +329,7 @@ function Gramatika() {
           Edisi Keempat (2017), Badan Pengembangan dan Pembinaan Bahasa,
           Kementerian Pendidikan dan Kebudayaan.
         </p>
+        <DaftarRujukanGramatika />
       </HalamanPublik>
     );
   }
@@ -411,6 +439,7 @@ export const __private = {
   buildBreadcrumbGramatika,
   DaftarIsiGramatikaGrid,
   DaftarIsiPanel,
+  DaftarRujukanGramatika,
 };
 
 export default Gramatika;

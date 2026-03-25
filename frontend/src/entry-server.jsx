@@ -159,6 +159,13 @@ function buildMetaGramatika(slug = '', prefetchedData = null) {
     };
   }
 
+  if (metadata.tipe === 'daftar') {
+    return {
+      judul: metadata.judul,
+      deskripsi: deskripsiSpesifik || metadata.deskripsi || `Rujukan ${metadata.judul} dalam panduan tata bahasa Indonesia di Kateglo.`,
+    };
+  }
+
   return {
     judul: metadata.judul,
     deskripsi: deskripsiSpesifik || `Penjelasan tentang ${metadata.judul} pada bab ${metadata.judulBab} dalam panduan tata bahasa Indonesia di Kateglo.`,

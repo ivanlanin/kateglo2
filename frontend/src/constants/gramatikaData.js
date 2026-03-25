@@ -1163,12 +1163,53 @@ const daftarItemGramatika = daftarIsiGramatika.flatMap((bab) => [
   ...bab.items.flatMap((item) => flattenItemGramatika(bab, item)),
 ]);
 
-const petaItemGramatikaBySlug = daftarItemGramatika.reduce((acc, item) => {
+const daftarHalamanReferensiGramatika = [
+  {
+    judul: 'Daftar Isi',
+    slug: 'daftar-isi',
+    dokumen: 'daftar/daftar-isi.md',
+    tipe: 'daftar',
+    judulBab: 'Gramatika',
+    ringkasan: 'Susunan lengkap bab dan subbab Gramatika Kateglo.',
+    deskripsi: 'Susunan lengkap bab dan subbab Gramatika Kateglo yang diselaraskan dengan daftar isi TBBBI IV (2017).',
+  },
+  {
+    judul: 'Daftar Istilah',
+    slug: 'daftar-istilah',
+    dokumen: 'daftar/daftar-istilah.md',
+    tipe: 'daftar',
+    judulBab: 'Gramatika',
+    ringkasan: 'Istilah-istilah pokok gramatika yang ditautkan ke halaman terkait.',
+    deskripsi: 'Istilah-istilah pokok dalam Gramatika Kateglo yang diselaraskan dengan daftar istilah TBBBI IV (2017).',
+  },
+  {
+    judul: 'Daftar Bagan',
+    slug: 'daftar-bagan',
+    dokumen: 'daftar/daftar-bagan.md',
+    tipe: 'daftar',
+    judulBab: 'Gramatika',
+    ringkasan: 'Daftar seluruh bagan yang muncul di dokumen gramatika publik.',
+    deskripsi: 'Daftar seluruh bagan yang terdeteksi pada file markdown Gramatika Kateglo.',
+  },
+  {
+    judul: 'Daftar Tabel',
+    slug: 'daftar-tabel',
+    dokumen: 'daftar/daftar-tabel.md',
+    tipe: 'daftar',
+    judulBab: 'Gramatika',
+    ringkasan: 'Daftar seluruh tabel yang muncul di dokumen gramatika publik.',
+    deskripsi: 'Daftar seluruh tabel yang terdeteksi pada file markdown Gramatika Kateglo.',
+  },
+];
+
+const daftarItemGramatikaSemua = [...daftarItemGramatika, ...daftarHalamanReferensiGramatika];
+
+const petaItemGramatikaBySlug = daftarItemGramatikaSemua.reduce((acc, item) => {
   acc[item.slug] = item;
   return acc;
 }, {});
 
-const daftarAutocompleteGramatika = daftarItemGramatika.map((item) => ({
+const daftarAutocompleteGramatika = daftarItemGramatikaSemua.map((item) => ({
   value: item.judul,
   slug: item.slug,
 }));
@@ -1189,6 +1230,7 @@ function formatJudulGramatikaDariSlug(slug = '') {
 export {
   daftarIsiGramatika,
   daftarItemGramatika,
+  daftarHalamanReferensiGramatika,
   petaItemGramatikaBySlug,
   daftarAutocompleteGramatika,
   petaAutocompleteGramatika,

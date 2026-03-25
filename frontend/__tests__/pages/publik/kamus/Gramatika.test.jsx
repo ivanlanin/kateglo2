@@ -60,9 +60,12 @@ vi.mock('../../../../src/constants/gramatikaData', () => {
     },
   ];
 
+  const daftarHalamanReferensiGramatika = [];
+
   return {
     daftarIsiGramatika,
     daftarItemGramatika,
+    daftarHalamanReferensiGramatika,
   };
 });
 
