@@ -5,10 +5,10 @@ title: Adjektiva Berkonfiks (5.5.2.1.4)
 
 Adjektiva dengan konfiks *ke-...-an* pada umumnya digunakan pada bentuk dasar yang juga berupa adjektiva seperti pada contoh berikut.
 
-- *sempit* → *kesempitan*
-- *haus* → *kehausan*
-- *sakit* → *kesakitan*
-- *girang* → *kegirangan*
+- sempit → kesempitan
+- haus → kehausan
+- sakit → kesakitan
+- girang → kegirangan
 
 Contoh:
 

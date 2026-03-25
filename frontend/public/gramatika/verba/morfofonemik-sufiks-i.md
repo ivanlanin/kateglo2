@@ -20,6 +20,6 @@ Sufiks *-i* akan menyatu dengan vokal terakhir pangkal yang berakhir dengan voka
 Contoh:
 
 (108)
-- *memberi* + *-i* → *memberi* (\**memberii*)
-- *mengisi* + *-i* → *mengisi* (\**mengisii*)
-- *dicari* + *-i* → *dicari* (\**dicarii*)
+- memberi + -i → memberi (\**memberii*)
+- mengisi + -i → mengisi (\**mengisii*)
+- dicari + -i → dicari (\**dicarii*)

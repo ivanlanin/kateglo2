@@ -8,10 +8,10 @@ Prefiks *di-* tidak mengalami perubahan morfofonemik apabila digabung dengan fon
 Contoh:
 
 (101)
-- *di-* + *beli* → *dibeli*
-- *di-* + *ambil* → *diambil*
-- *di-* + *pukul* → *dipukul*
-- *di-* + *tes* → *dites*
+- di- + beli → dibeli
+- di- + ambil → diambil
+- di- + pukul → dipukul
+- di- + tes → dites
 
 Perhatikan bahwa *di-* sebagai prefiks harus dibedakan dari *di* sebagai preposisi. Jika *di* diikuti oleh kata yang menunjukkan tempat, penulisannya dipisah.
 

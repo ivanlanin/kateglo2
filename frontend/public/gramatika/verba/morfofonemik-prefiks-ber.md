@@ -50,6 +50,6 @@ Prefiks *ber-* tidak berubah bentuknya apabila digabungkan dengan pangkal di lua
 Contoh:
 
 (87)
-- *ber-* + *layar* → *berlayar*
-- *ber-* + *main* → *bermain*
-- *ber-* + *peran* → *berperan*
+- ber- + layar → berlayar
+- ber- + main → bermain
+- ber- + peran → berperan

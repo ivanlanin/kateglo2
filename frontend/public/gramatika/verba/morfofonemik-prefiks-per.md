@@ -24,13 +24,13 @@ Contoh:
 Contoh:
 
 (89)
-- *per-* + *ajar* → *pelajar*
+- per- + ajar → pelajar
 
 Prefiks *per-* tidak mengalami perubahan bentuk apabila bergabung dengan pangkal lain.
 
 Contoh:
 
 (90)
-- *per-* + *lebar* → *perlebar*
-- *per-* + *panjang* → *perpanjang*
-- *per-* + *luas* → *perluas*
+- per- + lebar → perlebar
+- per- + panjang → perpanjang
+- per- + luas → perluas

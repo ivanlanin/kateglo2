@@ -19,11 +19,11 @@ Kelompok *demi* (dapat diikuti *saya*, *aku*, *daku*):
 
 Kelompok *bagi* (bentuk terikat *-ku* dapat dipakai):
 
-- *bagi* → *bagiku, bagi aku, bagi saya*
-- *buat* → *buatku, buat aku, buat saya*
-- *bersama* → *bersamaku, bersama aku, bersama saya*
-- *kepada* → *kepadaku, kepada aku, kepada saya*
-- *untuk* → *untukku, untuk aku, untuk saya*
+- bagi → bagiku, bagi aku, bagi saya
+- buat → buatku, buat aku, buat saya
+- bersama → bersamaku, bersama aku, bersama saya
+- kepada → kepadaku, kepada aku, kepada saya
+- untuk → untukku, untuk aku, untuk saya
 
 Bentuk terikat *ku-* berbeda pemakaiannya dengan *-ku*. Pertama, *ku-* dilekatkan pada kata yang terletak di belakangnya. Kedua, kata yang terletak di belakang *ku-* adalah verba.
 

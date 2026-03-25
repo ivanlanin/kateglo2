@@ -75,10 +75,10 @@ c) Prefiks dan sufiks tertentu mempunyai kedudukan yang sama dalam penurunan ver
 d) Urutan penambahan prefiks dan sufiks dalam pembentukan verba ditentukan oleh makna jika gabungan keduanya tidak merupakan konfiks, tetapi menentukan makna leksikal. Pangkal verba transitif *berhentikan*, misalnya, diturunkan dari *berhenti*, lalu ditambah *-kan*, bukan dari *hentikan*, lalu ditambah *ber-*. Itulah sebabnya verba *berhentikan* bermakna 'membuat jadi berhenti' dan tidak ada kaitannya dengan verba imperatif *hentikan*. Pangkal verba *berhentikan* dapat dilengkapi dengan prefiks infleksional *meng-* yang menghasilkan verba *memberhentikan*.
 
 (82)
-- *angkat* → *berangkat* → *berangkatkan* → *memberangkatkan*
-- *daya* → *berdaya* → *berdayakan* → *memberdayakan*
-- *diri* → *berdiri* → *berdirikan* → *memberdirikan*
-- *jaya* → *berjaya* → *berjayakan* → *memberjayakan*
-- *laku* → *berlaku* → *berlakukan* → *memberlakukan*
+- angkat → berangkat → berangkatkan → memberangkatkan
+- daya → berdaya → berdayakan → memberdayakan
+- diri → berdiri → berdirikan → memberdirikan
+- jaya → berjaya → berjayakan → memberjayakan
+- laku → berlaku → berlakukan → memberlakukan
 
 Dari keempat kaidah tersebut tampaklah bahwa yang menjadi patokan utama ialah proses pengafiksan yang berurutan.
