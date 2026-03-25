@@ -3,6 +3,7 @@
 ## 2026-03-25 Rabu
 
 - Menambahkan daftar isi, daftar istilah, daftar tabel, dan daftar gambar di [Gramatika](/gramatika)
+- Menambahkan 3.220 glosarium dari [Kamus Linguistik](glosarium/sumber/kamus-linguistik)
 
 ## 2026-03-24 Selasa
 
