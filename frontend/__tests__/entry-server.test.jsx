@@ -243,7 +243,9 @@ describe('entry-server', () => {
     expect(kuisKata.title).toBe('Kuis Kata — Kateglo');
     expect(kuisKata.description).toContain('pilihan ganda');
 
-    expect(__private.buildMetaForPath('/kebijakan-privasi', site).title).toBe('Kebijakan Privasi — Kateglo');
+    expect(__private.buildMetaForPath('/privasi', site).title).toBe('Kebijakan Privasi — Kateglo');
+    expect(__private.buildMetaForPath('/privasi', site).canonicalUrl).toBe('https://kateglo.org/privasi');
+    expect(__private.buildMetaForPath('/kebijakan-privasi', site).canonicalUrl).toBe('https://kateglo.org/privasi');
 
     const defaultMeta = __private.buildMetaForPath('/random', site);
     expect(defaultMeta.title).toBe('Kateglo');

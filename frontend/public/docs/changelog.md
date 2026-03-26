@@ -4,6 +4,7 @@
 
 - Menambahkan alat [Pohon Kalimat](/alat/pohon-kalimat)
 - Menambahkan `katalogFitur` untuk mengatur fitur yang dapat dilihat publik
+- Menambahkan halaman [Ihwal](/ihwal) dan memindahkan info ke markdown
 
 ## 2026-03-25 Rabu
 

@@ -1421,6 +1421,82 @@ code {
     @apply text-blue-400 hover:text-blue-300;
   }
 
+  .halaman-markdown-content > :first-child {
+    margin-top: 0;
+  }
+
+  .halaman-markdown-content p {
+    @apply mb-3 text-gray-700 leading-relaxed;
+  }
+
+  .dark .halaman-markdown-content p {
+    @apply text-dark-text;
+  }
+
+  .halaman-markdown-content h1 {
+    @apply text-xl font-bold mt-2 mb-4 text-gray-900;
+  }
+
+  .dark .halaman-markdown-content h1 {
+    @apply text-dark-text;
+  }
+
+  .halaman-markdown-content h2 {
+    @apply text-lg font-semibold mt-7 mb-3 text-gray-900;
+  }
+
+  .dark .halaman-markdown-content h2 {
+    @apply text-dark-text;
+  }
+
+  .halaman-markdown-content h3 {
+    @apply text-base font-medium mt-6 mb-2 text-gray-900;
+  }
+
+  .dark .halaman-markdown-content h3 {
+    @apply text-dark-text;
+  }
+
+  .halaman-markdown-content ul,
+  .halaman-markdown-content ol {
+    @apply mb-4 space-y-1;
+    list-style-position: outside;
+    padding-left: 1.25rem;
+    margin-left: 0;
+  }
+
+  .halaman-markdown-content ul {
+    list-style-type: disc;
+  }
+
+  .halaman-markdown-content ol {
+    list-style-type: decimal;
+  }
+
+  .halaman-markdown-content li {
+    @apply text-gray-700;
+  }
+
+  .dark .halaman-markdown-content li {
+    @apply text-dark-text;
+  }
+
+  .halaman-markdown-content a {
+    @apply text-blue-600 hover:text-blue-700 underline;
+  }
+
+  .dark .halaman-markdown-content a {
+    @apply text-blue-400 hover:text-blue-300;
+  }
+
+  .halaman-markdown-content strong {
+    @apply font-semibold text-gray-900;
+  }
+
+  .dark .halaman-markdown-content strong {
+    @apply text-white;
+  }
+
   /* ===== Shared: Content Card ===== */
 
   .content-card {

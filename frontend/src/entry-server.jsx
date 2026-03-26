@@ -344,6 +344,13 @@ function buildMetaKuisKata() {
   };
 }
 
+function buildMetaIhwal() {
+  return {
+    judul: 'Ihwal Kateglo',
+    deskripsi: 'Penjelasan singkat tentang Kateglo, cakupan layanan, sumber, dan arah pengembangannya.',
+  };
+}
+
 function buildMetaGim() {
   return {
     judul: 'Gim',
@@ -521,9 +528,27 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
     return titled(buildMetaKuisKata());
   }
 
+  // /ihwal
+  if (path === '/ihwal' || path === '/ihwal/') {
+    return titled(buildMetaIhwal());
+  }
+
+  // /privasi
+  if (path === '/privasi' || path === '/privasi/') {
+    return {
+      title: 'Kebijakan Privasi — Kateglo',
+      description: 'Kebijakan privasi layanan Kateglo.',
+      canonicalUrl: `${siteBaseUrl}/privasi`,
+    };
+  }
+
   // /kebijakan-privasi
   if (path.startsWith('/kebijakan-privasi')) {
-    return { title: 'Kebijakan Privasi \u2014 Kateglo', description: 'Kebijakan privasi layanan Kateglo.' };
+    return {
+      title: 'Kebijakan Privasi \u2014 Kateglo',
+      description: 'Kebijakan privasi layanan Kateglo.',
+      canonicalUrl: `${siteBaseUrl}/privasi`,
+    };
   }
 
   // /gim/susun-kata, /gim/susun-kata/harian, /gim/susun-kata/bebas

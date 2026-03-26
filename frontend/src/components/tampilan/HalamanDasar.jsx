@@ -95,7 +95,9 @@ function HalamanDasar({ mode = 'publik', navbar, konten, adalahRedaksi = false }
             </button>
             <div className="kateglo-footer-links">
               <span className="text-sm">
-                <Link to="/kebijakan-privasi" className="link-action">Privasi</Link>
+                <Link to="/ihwal" className="link-action">Ihwal</Link>
+                {' · '}
+                <Link to="/privasi" className="link-action">Privasi</Link>
                 {' · '}
                 <Link to="/sumber" className="link-action">Sumber</Link>
                 {adalahRedaksi && (

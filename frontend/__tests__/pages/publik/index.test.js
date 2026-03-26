@@ -24,7 +24,8 @@ describe('pages/publik index', () => {
     expect(publikPages.GimIndex).toBe(gimPages.GimIndex);
     expect(publikPages.KuisKata).toBe(gimPages.KuisKata);
     expect(publikPages.SusunKata).toBe(gimPages.SusunKata);
-    expect(publikPages.KebijakanPrivasi).toBe(informasiPages.KebijakanPrivasi);
+    expect(publikPages.Ihwal).toBe(informasiPages.Ihwal);
+    expect(publikPages.Privasi).toBe(informasiPages.Privasi);
     expect(publikPages.Sumber).toBe(informasiPages.Sumber);
   });
 });

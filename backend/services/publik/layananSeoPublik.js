@@ -510,6 +510,7 @@ function ambilPathStatis() {
     '/rima',
     '/ejaan',
     '/gramatika',
+    '/privasi',
     '/kebijakan-privasi',
   ];
 }

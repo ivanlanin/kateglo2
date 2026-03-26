@@ -1,22 +1,40 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import KebijakanPrivasi from '../../../../src/pages/publik/informasi/KebijakanPrivasi';
+import Privasi from '../../../../src/pages/publik/informasi/Privasi';
 
-describe('KebijakanPrivasi', () => {
-  it('menampilkan isi kebijakan privasi', () => {
+describe('Privasi', () => {
+  beforeEach(() => {
+    global.fetch.mockResolvedValue({
+      ok: true,
+      text: vi.fn().mockResolvedValue([
+        '# Kebijakan Privasi',
+        '',
+        '## Data yang Diproses',
+        '',
+        '## Tujuan Penggunaan',
+        '',
+        '## Penyimpanan',
+        '',
+        '## Hak Pengguna',
+        '',
+        'Terakhir diperbarui: 26 Maret 2026',
+      ].join('\n')),
+    });
+  });
+
+  it('menampilkan isi kebijakan privasi', async () => {
     render(
       <MemoryRouter>
-        <KebijakanPrivasi />
+        <Privasi />
       </MemoryRouter>
     );
 
     expect(screen.getByRole('heading', { name: 'Kebijakan Privasi' })).toBeInTheDocument();
-    expect(screen.getByText('1. Data yang kami proses')).toBeInTheDocument();
-    expect(screen.getByText('2. Penggunaan data')).toBeInTheDocument();
-    expect(screen.getByText('3. Penyimpanan dan keamanan')).toBeInTheDocument();
-    expect(screen.getByText('4. Hak pengguna')).toBeInTheDocument();
-    expect(screen.getByText('5. Perubahan kebijakan')).toBeInTheDocument();
-    expect(screen.getByText('Terakhir diperbarui: 16 Februari 2026')).toBeInTheDocument();
+    expect(await screen.findByText('Data yang Diproses')).toBeInTheDocument();
+    expect(screen.getByText('Tujuan Penggunaan')).toBeInTheDocument();
+    expect(screen.getByText('Penyimpanan')).toBeInTheDocument();
+    expect(screen.getByText('Hak Pengguna')).toBeInTheDocument();
+    expect(screen.getByText('Terakhir diperbarui: 26 Maret 2026')).toBeInTheDocument();
   });
 });

@@ -7,26 +7,19 @@ import { useQuery } from '@tanstack/react-query';
 import { Info, Play, Trophy } from 'lucide-react';
 import { ambilKlasemenKuisKata } from '../../../api/apiPublik';
 import HalamanPublik from '../../../components/tampilan/HalamanPublik';
+import KontenMarkdownStatis from '../../../components/tampilan/KontenMarkdownStatis';
 import KuisKataKomponen from '../../../components/gim/KuisKata';
 
 const formatBilanganId = new Intl.NumberFormat('id-ID');
 
 function PanelInfoKuisKata() {
   return (
-    <div className="gim-page-info-panel">
-      <p className="gim-page-info-text">
-        Kuis Kata adalah gim pilihan ganda untuk menebak arti, sinonim, padanan, makna, dan rima kata bahasa Indonesia langsung di Kateglo.
-      </p>
-      <p className="gim-page-info-text">
-        Setiap ronde memuat lima soal dari domain yang berbeda. Tiap jawaban benar menambah skor, lalu di akhir ronde kamu akan melihat ringkasan hasil per soal.
-      </p>
-      <p className="gim-page-info-text">
-        Kuis ini dibuat untuk sesi singkat: buka halaman, jawab cepat, lalu main lagi jika ingin mengulang dengan ronde baru.
-      </p>
-      <p className="gim-page-info-text">
-        Skor harian hanya dicatat untuk pengguna yang sudah masuk log. Klasemen harian menampilkan akumulasi skor benar per hari.
-      </p>
-    </div>
+    <KontenMarkdownStatis
+      src="/halaman/gim/kuis-kata.md"
+      className="halaman-markdown-content gim-page-info-panel"
+      loadingText="Memuat petunjuk gim ..."
+      errorText="Gagal memuat petunjuk gim."
+    />
   );
 }
 

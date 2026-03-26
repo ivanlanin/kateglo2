@@ -17,6 +17,7 @@ import {
   validasiKataSusunKata,
 } from '../../../api/apiPublik';
 import HalamanPublik from '../../../components/tampilan/HalamanPublik';
+import KontenMarkdownStatis from '../../../components/tampilan/KontenMarkdownStatis';
 import { QueryFeedback } from '../../../components/status/StatusKonten';
 import { useAuth } from '../../../context/authContext';
 import TombolMasuk from '../../../components/tombol/TombolMasuk';
@@ -112,26 +113,35 @@ export function parseRiwayatDariSkor(tebakanRaw, panjang) {
 }
 
 function PanelInfoSusunKata() {
+  const komponenMarkdown = {
+    strong: ({ children, ...props }) => {
+      const label = Array.isArray(children) ? children.join('') : String(children || '');
+      const labelBersih = label.trim().toLowerCase();
+
+      if (labelBersih === 'hijau') {
+        return <span {...props} className="susun-kata-info-badge susun-kata-info-badge-benar">{children}</span>;
+      }
+
+      if (labelBersih === 'kuning') {
+        return <span {...props} className="susun-kata-info-badge susun-kata-info-badge-ada">{children}</span>;
+      }
+
+      if (labelBersih === 'abu-abu') {
+        return <span {...props} className="susun-kata-info-badge susun-kata-info-badge-salah">{children}</span>;
+      }
+
+      return <strong {...props}>{children}</strong>;
+    },
+  };
+
   return (
-    <div className="susun-kata-info-panel">
-      <p className="susun-kata-info-text">
-        Susun Kata adalah gim menyusun huruf untuk membentuk kata bahasa Indonesia yang ada di kamus Kateglo. Gim ini terinspirasi oleh Wordle dari Josh Wardle untuk kata bahasa Inggris.
-      </p>
-      <p className="susun-kata-info-text">
-        Peserta harus masuk log agar sesi permainan dapat direkam. Ada dua mode permainan (harian dan bebas) yang dapat diikuti dengan tiap sesi permainan mendapat enam kesempatan untuk menebak.
-      </p>
-      <p className="susun-kata-info-text">
-        Pada mode harian, kata dasar lima huruf yang sama ditentukan untuk ditebak semua peserta. Pada mode bebas, kata dasar 4–6 huruf akan dipilih secara acak oleh sistem dan berbeda baik antarpeserta maupun antarsesi.
-      </p>
-      <p className="susun-kata-info-text">
-        Masukkan huruf untuk membentuk kata. Tekan enter untuk mengirim tebakan. Warna kotak dan tombol kibor di layar akan menunjukkan huruf yang sudah dipilih dan statusnya.
-      </p>
-      <ul className="susun-kata-info-list">
-        <li><span className="susun-kata-info-badge susun-kata-info-badge-benar">Hijau</span>: Huruf dan tempatnya benar.</li>
-        <li><span className="susun-kata-info-badge susun-kata-info-badge-ada">Kuning</span>: Huruf benar, tetapi tempatnya salah.</li>
-        <li><span className="susun-kata-info-badge susun-kata-info-badge-salah">Abu-abu</span>: Huruf salah.</li>
-      </ul>
-    </div>
+    <KontenMarkdownStatis
+      src="/halaman/gim/susun-kata.md"
+      className="halaman-markdown-content susun-kata-info-panel"
+      loadingText="Memuat petunjuk gim ..."
+      errorText="Gagal memuat petunjuk gim."
+      components={komponenMarkdown}
+    />
   );
 }
 

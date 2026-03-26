@@ -50,7 +50,8 @@ vi.mock('../src/pages/publik/gim', () => ({
   SusunKata: () => <div>Hal Susun Kata</div>,
 }));
 vi.mock('../src/pages/publik/informasi', () => ({
-  KebijakanPrivasi: () => <div>Kebijakan Privasi</div>,
+  Ihwal: () => <div>Ihwal Kateglo</div>,
+  Privasi: () => <div>Kebijakan Privasi</div>,
   Sumber: () => <div>Hal Sumber</div>,
 }));
 vi.mock('../src/pages/redaksi/Dasbor', () => ({ default: () => <div>Dasbor Redaksi</div> }));
@@ -290,7 +291,7 @@ describe('App', () => {
 
   it('merender route kebijakan privasi', async () => {
     render(
-      <MemoryRouter initialEntries={['/kebijakan-privasi']}>
+      <MemoryRouter initialEntries={['/privasi']}>
         <App />
       </MemoryRouter>
     );

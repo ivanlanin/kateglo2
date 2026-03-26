@@ -66,6 +66,17 @@ describe('SusunKata', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     loginDenganGoogle.mockReset();
+    global.fetch.mockResolvedValue({
+      ok: true,
+      text: vi.fn().mockResolvedValue([
+        '# Susun Kata',
+        '',
+        'Susun Kata adalah gim menyusun huruf untuk membentuk kata bahasa Indonesia yang tersedia di kamus Kateglo.',
+        '',
+        '- Hijau: huruf dan tempatnya benar.',
+        '- Kuning: huruf benar, tetapi tempatnya salah.',
+      ].join('\n')),
+    });
     puzzleData = {
       panjang: 5,
       target: 'kartu',
@@ -176,7 +187,7 @@ describe('SusunKata', () => {
     expect(screen.getByText('Masukkan tepat 5 huruf.')).toBeInTheDocument();
   });
 
-  it('mode belum login menampilkan deskripsi dan tombol masuk', () => {
+  it('mode belum login menampilkan deskripsi dan tombol masuk', async () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
@@ -186,8 +197,8 @@ describe('SusunKata', () => {
     renderSusunKata();
 
     expect(screen.getByRole('heading', { name: 'Susun Kata' })).toBeInTheDocument();
-    expect(screen.getByText(/Susun Kata adalah gim menyusun huruf untuk membentuk kata bahasa Indonesia/i)).toBeInTheDocument();
-    expect(screen.getByText('Hijau')).toBeInTheDocument();
+    expect(await screen.findByText(/Susun Kata adalah gim menyusun huruf untuk membentuk kata bahasa Indonesia/i)).toBeInTheDocument();
+    expect(screen.getByText(/Hijau/i)).toBeInTheDocument();
     expect(screen.getByText(/Huruf dan tempatnya benar/i)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Masuk untuk Bermain' }));
     expect(loginDenganGoogle).toHaveBeenCalledWith('/gim/susun-kata/harian');
@@ -238,7 +249,7 @@ describe('SusunKata', () => {
     await screen.findByText('Kata tidak ada di kamus Susun Kata.');
 
     fireEvent.click(screen.getByRole('button', { name: 'Lihat petunjuk gim' }));
-    expect(screen.getByText(/Huruf benar, tetapi tempatnya salah/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Huruf benar, tetapi tempatnya salah/i)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Kembali ke papan permainan' }));
 
     fireEvent.click(screen.getByRole('button', { name: 'Lihat klasemen harian' }));

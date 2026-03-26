@@ -26,6 +26,14 @@ describe('KuisKataPage', () => {
   beforeEach(() => {
     mockApiPublik.ambilKlasemenKuisKata.mockReset();
     mockApiPublik.ambilKlasemenKuisKata.mockResolvedValue({ data: [] });
+    global.fetch.mockResolvedValue({
+      ok: true,
+      text: vi.fn().mockResolvedValue([
+        '# Kuis Kata',
+        '',
+        'Kuis Kata adalah gim pilihan ganda untuk menebak arti, sinonim, padanan, makna, dan rima kata bahasa Indonesia langsung di Kateglo.',
+      ].join('\n')),
+    });
     console.error = vi.fn();
   });
 
@@ -49,7 +57,7 @@ describe('KuisKataPage', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Lihat petunjuk gim' }));
 
-    expect(screen.getByText(/kuis kata adalah gim pilihan ganda/i)).toBeInTheDocument();
+    expect(await screen.findByText(/kuis kata adalah gim pilihan ganda/i)).toBeInTheDocument();
     expect(screen.queryByText('Komponen Kuis Kata')).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Kembali ke kuis kata' })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Kembali ke kuis kata' }));
