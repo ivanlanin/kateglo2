@@ -287,6 +287,18 @@
     @apply mt-5;
   }
 
+  .alat-summary-stack {
+    @apply mt-5 space-y-3;
+  }
+
+  .alat-stat-grid-row {
+    @apply grid gap-3 md:grid-cols-3;
+  }
+
+  .alat-stat-grid-row-tight {
+    @apply mt-0;
+  }
+
   .alat-summary-inline {
     @apply mt-5 grid gap-3 sm:grid-cols-2;
   }
@@ -423,6 +435,10 @@
     @apply rounded-2xl px-4 py-3 text-sm leading-6;
   }
 
+  .alat-paragraph-summary-header {
+    @apply flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between;
+  }
+
   .alat-paragraph-summary-safe {
     @apply bg-green-50 text-green-800;
   }
@@ -443,8 +459,40 @@
     @apply mr-2 inline-flex rounded-full bg-white/70 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em];
   }
 
+  .alat-paragraph-metrics {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .alat-paragraph-metric {
+    @apply inline-flex rounded-full border border-white/70 bg-white/60 px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .alat-paragraph-preview {
+    @apply mb-0 mt-3 text-sm leading-6;
+  }
+
+  .alat-paragraph-disclosure {
+    @apply rounded-2xl border border-gray-200 bg-white px-4 py-3;
+  }
+
+  .dark .alat-paragraph-disclosure {
+    @apply border-dark-border bg-dark-bg;
+  }
+
+  .alat-paragraph-disclosure-summary {
+    @apply cursor-pointer text-sm font-semibold text-gray-700;
+  }
+
+  .dark .alat-paragraph-disclosure-summary {
+    @apply text-dark-text;
+  }
+
+  .alat-paragraph-empty {
+    @apply mt-0;
+  }
+
   .alat-sentence-list {
-    @apply space-y-2 pl-5;
+    @apply mt-3 space-y-2 pl-5;
   }
 
   .alat-sentence-item {
@@ -472,6 +520,10 @@
   }
 
   .alat-sentence-count {
+    @apply mr-1 font-semibold;
+  }
+
+  .alat-sentence-order {
     @apply mr-1 font-semibold;
   }
 

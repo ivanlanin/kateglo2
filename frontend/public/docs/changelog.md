@@ -1,8 +1,12 @@
 # Riwayat Perubahan
 
+## 2026-03-27 Jumat
+
+- Merapikan dan menstandarkan tampilan [alat](/alat)
+- Menambahkan alat [Pohon Kalimat](/alat/pohon-kalimat)
+
 ## 2026-03-26 Kamis
 
-- Menambahkan alat [Pohon Kalimat](/alat/pohon-kalimat)
 - Menambahkan `katalogFitur` untuk mengatur fitur yang dapat dilihat publik
 - Menambahkan halaman [Ihwal](/ihwal) dan memindahkan info ke markdown
 

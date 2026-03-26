@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import PenganalisisTeks, { __private } from '../../../../src/pages/publik/alat/PenganalisisTeks';
@@ -77,14 +77,14 @@ describe('PenganalisisTeks', () => {
     expect(screen.queryByLabelText('Teks untuk dianalisis')).not.toBeInTheDocument();
   });
 
-  it('menampilkan hasil dalam panel kanan dan pill ringkasan aktif setelah analisis', () => {
+  it('menampilkan ringkasan langsung di panel hasil dan mengaktifkan tab detail paragraf setelah analisis', () => {
     render(
       <MemoryRouter>
         <PenganalisisTeks />
       </MemoryRouter>
     );
 
-    expect(screen.getByRole('tab', { name: 'Ringkasan' })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByRole('tab', { name: 'Detail Paragraf' })).toHaveAttribute('aria-selected', 'true');
 
     fireEvent.change(screen.getByLabelText('Teks untuk dianalisis'), {
       target: { value: 'Satu kalimat.\n\nDua kalimat pertama. Dua kalimat kedua! 12.30 50% Andi.' },
@@ -92,10 +92,11 @@ describe('PenganalisisTeks', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Analisis' }));
 
     expect(screen.getByText('Karakter/Kata')).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: 'Ringkasan' })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.queryByRole('tab', { name: 'Ringkasan' })).not.toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: 'Detail Paragraf' })).toHaveAttribute('aria-selected', 'true');
   });
 
-  it('berpindah antar pill hasil, menukar tampilan kalimat, dan membersihkan hasil', () => {
+  it('berpindah antar pill hasil, membuka rincian paragraf, dan membersihkan hasil', () => {
     render(
       <MemoryRouter>
         <PenganalisisTeks />
@@ -107,18 +108,20 @@ describe('PenganalisisTeks', () => {
 
     fireEvent.click(screen.getByRole('tab', { name: 'Detail Paragraf' }));
     expect(screen.getByRole('tab', { name: 'Detail Paragraf' })).toHaveAttribute('aria-selected', 'true');
+  expect(screen.getByText('Lihat 1 kalimat')).toBeInTheDocument();
+    expect(screen.getAllByText(/6 kata/i).length).toBeGreaterThan(0);
 
-    const toggleButton = screen.getByRole('button', { name: /6 kata:Bahasa berkembang ....?/i });
-    fireEvent.click(toggleButton);
-    expect(screen.getByRole('button', { name: /6 kata:Bahasa berkembang bersama cara kita memakainya\./i })).toBeInTheDocument();
+    const detailParagraf = screen.getByText('Lihat 1 kalimat').closest('details');
+    expect(detailParagraf).not.toHaveAttribute('open');
+
+    fireEvent.click(screen.getByText('Lihat 1 kalimat'));
+    expect(detailParagraf).toHaveAttribute('open');
+    expect(within(detailParagraf).getByText(/Bahasa berkembang bersama cara kita memakainya\./i)).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('tab', { name: 'Frekuensi Kata' }));
     expect(screen.getByRole('tab', { name: 'Frekuensi Kata' })).toHaveAttribute('aria-selected', 'true');
     expect(screen.getByText('Kata (1x)')).toBeInTheDocument();
     expect(screen.getByText(/bahasa \(1\)/i)).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole('tab', { name: 'Ringkasan' }));
-    expect(screen.getByRole('tab', { name: 'Ringkasan' })).toHaveAttribute('aria-selected', 'true');
 
     fireEvent.click(screen.getByRole('button', { name: 'Bersihkan' }));
     expect(screen.getByDisplayValue('')).toBeInTheDocument();
@@ -150,6 +153,9 @@ describe('PenganalisisTeks', () => {
     });
     fireEvent.click(screen.getByRole('button', { name: 'Analisis' }));
     fireEvent.click(screen.getByRole('tab', { name: 'Detail Paragraf' }));
+
+    const summaries = screen.getAllByText((_, element) => element?.tagName.toLowerCase() === 'summary');
+    fireEvent.click(summaries[0]);
 
     expect(screen.getAllByText(/2 kata:/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Halo dunia\./i).length).toBeGreaterThan(0);

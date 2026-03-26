@@ -18,4 +18,5 @@ Alat ini berguna untuk melihat huruf yang paling sering muncul, membandingkan pe
 
 ## Catatan
 
-Alat ini hanya menghitung huruf latin a-z dan tidak membedakan huruf besar dan kecil.
+- Alat ini hanya menghitung huruf latin a-z dan tidak membedakan huruf besar dan kecil.
+- Tabel dan grafik selalu dibangun dari teks terakhir yang dihitung.

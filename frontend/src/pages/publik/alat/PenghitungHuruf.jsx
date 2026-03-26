@@ -180,10 +180,7 @@ function PenghitungHuruf() {
           <div className="alat-tool-layout">
           <section className="alat-panel" aria-labelledby="alat-huruf-input-title">
             <div className="alat-panel-header alat-panel-header-split">
-              <div>
-                <h2 id="alat-huruf-input-title" className="alat-panel-title">Masukan</h2>
-                <p className="alat-panel-caption">Huruf yang dihitung hanya a-z dan tidak peka huruf besar-kecil.</p>
-              </div>
+              <h2 id="alat-huruf-input-title" className="alat-panel-title">Masukan</h2>
               <button type="button" className="alat-link-secondary alat-panel-action-button" onClick={handleIsiContoh}>Isi contoh</button>
             </div>
 
@@ -210,9 +207,6 @@ function PenghitungHuruf() {
           <section className="alat-panel" aria-labelledby="alat-huruf-output-title">
             <div className="alat-panel-header">
               <h2 id="alat-huruf-output-title" className="alat-panel-title">Hasil</h2>
-              <p className="alat-panel-caption">
-                {adaHasil ? 'Tabel dan grafik dibangun dari teks terakhir yang dihitung.' : 'Belum ada hasil. Jalankan hitung setelah mengisi teks.'}
-              </p>
             </div>
 
             <div className="alat-summary-inline">

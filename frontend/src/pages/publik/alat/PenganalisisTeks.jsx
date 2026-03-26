@@ -192,8 +192,7 @@ function PenganalisisTeks() {
   const [teksMasukan, setTeksMasukan] = useState('');
   const [teksAnalisis, setTeksAnalisis] = useState('');
   const [pesanGalat, setPesanGalat] = useState('');
-  const [kalimatTerbuka, setKalimatTerbuka] = useState({});
-  const [tabHasilAktif, setTabHasilAktif] = useState('ringkasan');
+  const [tabHasilAktif, setTabHasilAktif] = useState('paragraf');
   const [panelInfoTerbuka, setPanelInfoTerbuka] = useState(false);
 
   const hasil = useMemo(() => analisisTeks(teksAnalisis), [teksAnalisis]);
@@ -209,31 +208,21 @@ function PenganalisisTeks() {
 
     setPesanGalat('');
     setTeksAnalisis(teksMasukan);
-    setKalimatTerbuka({});
-    setTabHasilAktif('ringkasan');
+    setTabHasilAktif('paragraf');
   };
 
   const handleBersihkan = () => {
     setTeksMasukan('');
     setTeksAnalisis('');
     setPesanGalat('');
-    setKalimatTerbuka({});
-    setTabHasilAktif('ringkasan');
+    setTabHasilAktif('paragraf');
   };
 
   const handleIsiContoh = () => {
     setTeksMasukan(contohTeks);
     setTeksAnalisis(contohTeks);
     setPesanGalat('');
-    setKalimatTerbuka({});
-    setTabHasilAktif('ringkasan');
-  };
-
-  const toggleSentence = (sentenceId) => {
-    setKalimatTerbuka((previous) => ({
-      ...previous,
-      [sentenceId]: !previous[sentenceId],
-    }));
+    setTabHasilAktif('paragraf');
   };
 
   return (
@@ -268,10 +257,7 @@ function PenganalisisTeks() {
           <div className="alat-tool-layout">
           <section className="alat-panel" aria-labelledby="alat-input-title">
             <div className="alat-panel-header alat-panel-header-split">
-              <div>
-                <h2 id="alat-input-title" className="alat-panel-title">Masukan</h2>
-                <p className="alat-panel-caption">Masukkan teks yang ingin dianalisis jumlah paragraf, kalimat, dan katanya.</p>
-              </div>
+              <h2 id="alat-input-title" className="alat-panel-title">Masukan</h2>
               <button type="button" className="alat-link-secondary alat-panel-action-button" onClick={handleIsiContoh}>Isi contoh</button>
             </div>
 
@@ -298,23 +284,44 @@ function PenganalisisTeks() {
           <section className="alat-panel" aria-labelledby="alat-output-title">
             <div className="alat-panel-header">
               <h2 id="alat-output-title" className="alat-panel-title">Hasil</h2>
-              <p className="alat-panel-caption">
-                {adaHasil ? 'Perhitungan diambil dari teks terakhir yang dianalisis.' : 'Belum ada hasil. Jalankan analisis setelah mengisi teks.'}
-              </p>
+            </div>
+
+            <div className="alat-summary-stack" aria-label="Ringkasan penganalisis teks">
+              <div className="alat-stat-grid-row">
+                <article className="alat-stat-card">
+                  <span className="alat-stat-label">Paragraf</span>
+                  <strong className="alat-stat-value">{formatAngka.format(hasil?.paragraphs.length || 0)}</strong>
+                </article>
+                <article className="alat-stat-card">
+                  <span className="alat-stat-label">Kalimat</span>
+                  <strong className="alat-stat-value">{formatAngka.format(hasil?.sentences.length || 0)}</strong>
+                </article>
+                <article className="alat-stat-card">
+                  <span className="alat-stat-label">Kata</span>
+                  <strong className="alat-stat-value">{formatAngka.format(hasil?.words.length || 0)}</strong>
+                </article>
+              </div>
+              <div className="alat-stat-grid-row alat-stat-grid-row-tight">
+                <article className="alat-stat-card">
+                  <span className="alat-stat-label">Kalimat/Paragraf</span>
+                  <strong className={`alat-stat-value ${getThresholdClass(hasil?.averageSentencesPerParagraphRaw || 0)}`}>
+                    {hasil?.averageSentencesPerParagraph || '0,00'}
+                  </strong>
+                </article>
+                <article className="alat-stat-card">
+                  <span className="alat-stat-label">Kata/Kalimat</span>
+                  <strong className={`alat-stat-value ${getThresholdClass(hasil?.averageWordsPerSentenceRaw || 0)}`}>
+                    {hasil?.averageWordsPerSentence || '0,00'}
+                  </strong>
+                </article>
+                <article className="alat-stat-card">
+                  <span className="alat-stat-label">Karakter/Kata</span>
+                  <strong className="alat-stat-value">{hasil?.averageLettersPerWord || '0,00'}</strong>
+                </article>
+              </div>
             </div>
 
             <div className="alat-result-pills" role="tablist" aria-label="Kategori hasil penganalisis teks">
-              <button
-                id="alat-pill-ringkasan"
-                type="button"
-                role="tab"
-                aria-selected={tabHasilAktif === 'ringkasan'}
-                aria-controls="alat-hasil-ringkasan"
-                className={`alat-pill-button ${tabHasilAktif === 'ringkasan' ? 'alat-pill-button-active' : ''}`}
-                onClick={() => setTabHasilAktif('ringkasan')}
-              >
-                Ringkasan
-              </button>
               <button
                 id="alat-pill-paragraf"
                 type="button"
@@ -340,46 +347,6 @@ function PenganalisisTeks() {
             </div>
 
             <div className="alat-result-stack">
-              <aside
-                id="alat-hasil-ringkasan"
-                role="tabpanel"
-                aria-labelledby="alat-pill-ringkasan"
-                hidden={tabHasilAktif !== 'ringkasan'}
-                className="alat-subpanel alat-summary-panel"
-              >
-                <h3 id="alat-summary-title" className="alat-subpanel-title">Ringkasan</h3>
-                <div className="alat-stat-grid alat-stat-grid-compact">
-                  <article className="alat-stat-card">
-                    <span className="alat-stat-label">Paragraf</span>
-                    <strong className="alat-stat-value">{formatAngka.format(hasil?.paragraphs.length || 0)}</strong>
-                  </article>
-                  <article className="alat-stat-card">
-                    <span className="alat-stat-label">Kalimat</span>
-                    <strong className="alat-stat-value">{formatAngka.format(hasil?.sentences.length || 0)}</strong>
-                  </article>
-                  <article className="alat-stat-card">
-                    <span className="alat-stat-label">Kata</span>
-                    <strong className="alat-stat-value">{formatAngka.format(hasil?.words.length || 0)}</strong>
-                  </article>
-                  <article className="alat-stat-card">
-                    <span className="alat-stat-label">Kalimat/Paragraf</span>
-                    <strong className={`alat-stat-value ${getThresholdClass(hasil?.averageSentencesPerParagraphRaw || 0)}`}>
-                      {hasil?.averageSentencesPerParagraph || '0,00'}
-                    </strong>
-                  </article>
-                  <article className="alat-stat-card">
-                    <span className="alat-stat-label">Kata/Kalimat</span>
-                    <strong className={`alat-stat-value ${getThresholdClass(hasil?.averageWordsPerSentenceRaw || 0)}`}>
-                      {hasil?.averageWordsPerSentence || '0,00'}
-                    </strong>
-                  </article>
-                  <article className="alat-stat-card">
-                    <span className="alat-stat-label">Karakter/Kata</span>
-                    <strong className="alat-stat-value">{hasil?.averageLettersPerWord || '0,00'}</strong>
-                  </article>
-                </div>
-              </aside>
-
               <section
                 id="alat-hasil-paragraf"
                 role="tabpanel"
@@ -392,41 +359,36 @@ function PenganalisisTeks() {
                   <ol className="alat-paragraph-list">
                     {hasil.paragraphDetails.map((detail, index) => (
                       <li key={detail.id} className="alat-paragraph-item">
-                        <div className={getParagraphSummaryClass(detail.isLong)}>
-                          <span className="alat-paragraph-badge">Paragraf {index + 1}</span>
-                          <span>
-                            {formatAngka.format(detail.words)} kata/{formatAngka.format(detail.sentences)} kalimat ({formatDesimal.format(detail.avgWordsPerSentenceRaw)}): {detail.preview}
-                          </span>
-                        </div>
-                        <ol className="alat-sentence-list">
-                          {detail.sentenceList.map((sentence) => {
-                            const isExpanded = Boolean(kalimatTerbuka[sentence.id]);
-                            const content = isExpanded ? sentence.fullSentence : sentence.preview;
-                            const className = getSentenceClass(sentence);
+                        <article className={getParagraphSummaryClass(detail.isLong)}>
+                          <div className="alat-paragraph-summary-header">
+                            <span className="alat-paragraph-badge">Paragraf {index + 1}</span>
+                            <div className="alat-paragraph-metrics" aria-label={`Ringkasan paragraf ${index + 1}`}>
+                              <span className="alat-paragraph-metric">{formatAngka.format(detail.words)} kata</span>
+                              <span className="alat-paragraph-metric">{formatAngka.format(detail.sentences)} kalimat</span>
+                              <span className="alat-paragraph-metric">{formatDesimal.format(detail.avgWordsPerSentenceRaw)} kata/kalimat</span>
+                            </div>
+                          </div>
+                          <p className="alat-paragraph-preview">{detail.preview || 'Paragraf belum memuat kata yang dapat dihitung.'}</p>
+                        </article>
 
-                            if (sentence.canToggle) {
-                              return (
-                                <li key={sentence.id}>
-                                  <button
-                                    type="button"
-                                    className={className}
-                                    onClick={() => toggleSentence(sentence.id)}
-                                  >
-                                    <span className="alat-sentence-count">{formatAngka.format(sentence.wordCount)} kata:</span>
-                                    <span>{content}</span>
-                                  </button>
+                        {detail.sentenceList.length ? (
+                          <details className="alat-paragraph-disclosure">
+                            <summary className="alat-paragraph-disclosure-summary">
+                              Lihat {formatAngka.format(detail.sentenceList.length)} kalimat
+                            </summary>
+                            <ol className="alat-sentence-list">
+                              {detail.sentenceList.map((sentence, sentenceIndex) => (
+                                <li key={sentence.id} className={getSentenceClass({ ...sentence, canToggle: false })}>
+                                  <span className="alat-sentence-order">{sentenceIndex + 1}.</span>
+                                  <span className="alat-sentence-count">{formatAngka.format(sentence.wordCount)} kata:</span>
+                                  <span>{sentence.fullSentence}</span>
                                 </li>
-                              );
-                            }
-
-                            return (
-                              <li key={sentence.id} className={className}>
-                                <span className="alat-sentence-count">{formatAngka.format(sentence.wordCount)} kata:</span>
-                                <span>{content}</span>
-                              </li>
-                            );
-                          })}
-                        </ol>
+                              ))}
+                            </ol>
+                          </details>
+                        ) : (
+                          <p className="alat-empty-text alat-paragraph-empty">Belum ada kalimat yang terdeteksi pada paragraf ini.</p>
+                        )}
                       </li>
                     ))}
                   </ol>
@@ -474,18 +436,6 @@ function PenganalisisTeks() {
                   <p className="alat-empty-text">Belum ada frekuensi yang ditampilkan.</p>
                 )}
               </section>
-            </div>
-
-            <div className="alat-notes">
-              <p className="alat-note-item">
-                Teks dibersihkan dengan menghapus tanda kurung dan tanda baca yang tidak dipakai dalam analisis.
-              </p>
-              <p className="alat-note-item">
-                Ambang penanda merah mengikuti logika asli: lebih dari 25 kata per kalimat atau rata-ratanya.
-              </p>
-              <p className="alat-note-item">
-                Klik butir kalimat yang memiliki lebih dari dua kata untuk beralih antara tampilan ringkas dan lengkap.
-              </p>
             </div>
           </section>
           </div>
