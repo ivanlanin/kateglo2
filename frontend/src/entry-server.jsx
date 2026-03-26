@@ -21,6 +21,7 @@ import {
   buildMetaPencarianTesaurus,
   buildMetaSumberGlosarium,
 } from './utils/metaUtils';
+import { ambilMetaFiturInteraktif } from './constants/katalogFitur';
 import { petaItemEjaanBySlug, formatJudulEjaanDariSlug } from './constants/ejaanData';
 import { petaItemGramatikaBySlug, formatJudulGramatikaDariSlug } from './constants/gramatikaData';
 
@@ -323,59 +324,10 @@ function resolveSsrStatusCode(prefetchedData = null) {
   return 200;
 }
 
-function buildMetaSusunKata(mode = 'harian') {
-  if (mode === 'bebas') {
-    return {
-      judul: 'Susun Kata Bebas',
-      deskripsi: 'Mainkan mode bebas Susun Kata untuk menyusun kata bahasa Indonesia kapan saja dengan ronde baru yang bisa diulang langsung di Kateglo.',
-    };
-  }
-
-  return {
-    judul: 'Susun Kata Harian',
-    deskripsi: 'Mainkan gim susun kata harian seperti Wordle untuk menyusun kata bahasa Indonesia dalam enam percobaan.',
-  };
-}
-
-function buildMetaKuisKata() {
-  return {
-    judul: 'Kuis Kata',
-    deskripsi: 'Mainkan kuis kata pilihan ganda di Kateglo untuk menebak arti, sinonim, padanan, makna, dan rima dalam satu ronde cepat.',
-  };
-}
-
 function buildMetaIhwal() {
   return {
     judul: 'Ihwal Kateglo',
     deskripsi: 'Penjelasan singkat tentang Kateglo, cakupan layanan, sumber, dan arah pengembangannya.',
-  };
-}
-
-function buildMetaGim() {
-  return {
-    judul: 'Gim',
-    deskripsi: 'Kumpulan gim kata di Kateglo. Saat ini tersedia Kuis Kata dan Susun Kata untuk latihan bahasa Indonesia yang singkat dan interaktif.',
-  };
-}
-
-function buildMetaAlat() {
-  return {
-    judul: 'Alat',
-    deskripsi: 'Kumpulan alat bahasa Indonesia di Kateglo, termasuk Penganalisis Teks dan Penghitung Huruf untuk analisis cepat langsung di peramban.',
-  };
-}
-
-function buildMetaPenganalisisTeks() {
-  return {
-    judul: 'Penganalisis Teks',
-    deskripsi: 'Alat untuk menghitung jumlah paragraf, kalimat, dan kata dari teks bahasa Indonesia langsung di Kateglo.',
-  };
-}
-
-function buildMetaPenghitungHuruf() {
-  return {
-    judul: 'Penghitung Huruf',
-    deskripsi: 'Alat untuk menghitung frekuensi huruf a-z, persentase kemunculan, dan grafik distribusi huruf langsung di Kateglo.',
   };
 }
 
@@ -505,27 +457,12 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
     return titled(buildMetaGramatika(seg('/gramatika/'), prefetchedData));
   }
 
-  // /alat
-  if (path === '/alat' || path === '/alat/') {
-    return titled(buildMetaAlat());
-  }
-
-  if (path === '/alat/penganalisis-teks' || path === '/alat/penganalisis-teks/') {
-    return titled(buildMetaPenganalisisTeks());
-  }
-
-  if (path === '/alat/penghitung-huruf' || path === '/alat/penghitung-huruf/') {
-    return titled(buildMetaPenghitungHuruf());
-  }
-
-  // /gim
-  if (path === '/gim' || path === '/gim/') {
-    return titled(buildMetaGim());
-  }
-
-  // /gim/kuis-kata
-  if (path === '/gim/kuis-kata' || path === '/gim/kuis-kata/') {
-    return titled(buildMetaKuisKata());
+  const metaInteraktif = ambilMetaFiturInteraktif(path);
+  if (metaInteraktif) {
+    return {
+      ...titled(metaInteraktif),
+      canonicalUrl: metaInteraktif.canonicalPath ? `${siteBaseUrl}${metaInteraktif.canonicalPath}` : undefined,
+    };
   }
 
   // /ihwal
@@ -548,29 +485,6 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
       title: 'Kebijakan Privasi \u2014 Kateglo',
       description: 'Kebijakan privasi layanan Kateglo.',
       canonicalUrl: `${siteBaseUrl}/privasi`,
-    };
-  }
-
-  // /gim/susun-kata, /gim/susun-kata/harian, /gim/susun-kata/bebas
-  if (path === '/gim/susun-kata' || path === '/gim/susun-kata/') {
-    return {
-      ...titled(buildMetaSusunKata('harian')),
-      canonicalUrl: `${siteBaseUrl}/gim/susun-kata/harian`,
-    };
-  }
-
-  if (path === '/gim/susun-kata/bebas' || path === '/gim/susun-kata/bebas/') {
-    return titled(buildMetaSusunKata('bebas'));
-  }
-
-  if (path === '/gim/susun-kata/harian' || path === '/gim/susun-kata/harian/' || path.startsWith('/gim/susun-kata/harian/')) {
-    return titled(buildMetaSusunKata('harian'));
-  }
-
-  if (path.startsWith('/gim/susun-kata/')) {
-    return {
-      ...titled(buildMetaSusunKata('harian')),
-      canonicalUrl: `${siteBaseUrl}/gim/susun-kata/harian`,
     };
   }
 

@@ -218,6 +218,10 @@ describe('entry-server', () => {
     expect(penghitungHuruf.title).toBe('Penghitung Huruf — Kateglo');
     expect(penghitungHuruf.description).toContain('frekuensi huruf');
 
+    const pohonKalimat = __private.buildMetaForPath('/alat/pohon-kalimat', site);
+    expect(pohonKalimat.title).toBe('Pohon Kalimat — Kateglo');
+    expect(pohonKalimat.description).toContain('diagram pohon sintaksis');
+
     const gim = __private.buildMetaForPath('/gim', site);
     expect(gim.title).toBe('Gim — Kateglo');
     expect(gim.description).toContain('Kuis Kata');

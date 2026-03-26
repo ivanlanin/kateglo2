@@ -1,0 +1,125 @@
+{
+  "alat": {
+    "index": {
+      "judul": "Alat",
+      "deskripsi": "Kumpulan alat bahasa Indonesia di Kateglo, termasuk Penganalisis Teks dan Penghitung Huruf untuk analisis cepat langsung di peramban.",
+      "href": "/alat",
+      "canonicalPath": "/alat",
+      "sitemap": true,
+      "tampilPublik": true
+    },
+    "items": [
+      {
+        "slug": "penganalisis-teks",
+        "judul": "Penganalisis Teks",
+        "deskripsi": "Hitung jumlah paragraf, kalimat, dan kata dari teks bahasa Indonesia secara cepat.",
+        "href": "/alat/penganalisis-teks",
+        "routePath": "/alat/penganalisis-teks",
+        "tampilPublik": true,
+        "seoJudul": "Penganalisis Teks",
+        "seoDeskripsi": "Alat untuk menghitung jumlah paragraf, kalimat, dan kata dari teks bahasa Indonesia langsung di Kateglo.",
+        "canonicalPath": "/alat/penganalisis-teks",
+        "sitemapPaths": [
+          "/alat/penganalisis-teks"
+        ]
+      },
+      {
+        "slug": "penghitung-huruf",
+        "judul": "Penghitung Huruf",
+        "deskripsi": "Hitung frekuensi huruf a-z, tampilkan tabel persentase, dan lihat grafik batang distribusinya.",
+        "href": "/alat/penghitung-huruf",
+        "routePath": "/alat/penghitung-huruf",
+        "tampilPublik": true,
+        "seoJudul": "Penghitung Huruf",
+        "seoDeskripsi": "Alat untuk menghitung frekuensi huruf a-z, persentase kemunculan, dan grafik distribusi huruf langsung di Kateglo.",
+        "canonicalPath": "/alat/penghitung-huruf",
+        "sitemapPaths": [
+          "/alat/penghitung-huruf"
+        ]
+      },
+      {
+        "slug": "pohon-kalimat",
+        "judul": "Pohon Kalimat",
+        "deskripsi": "Buat diagram pohon sintaksis kalimat bahasa Indonesia - tunggal, majemuk, dan bertingkat.",
+        "href": "/alat/pohon-kalimat",
+        "routePath": "/alat/pohon-kalimat",
+        "tampilPublik": false,
+        "seoJudul": "Pohon Kalimat",
+        "seoDeskripsi": "Alat untuk menyusun diagram pohon sintaksis kalimat bahasa Indonesia secara interaktif di Kateglo.",
+        "canonicalPath": "/alat/pohon-kalimat",
+        "sitemapPaths": []
+      }
+    ]
+  },
+  "gim": {
+    "index": {
+      "judul": "Gim",
+      "deskripsi": "Kumpulan gim kata di Kateglo. Saat ini tersedia Kuis Kata dan Susun Kata untuk latihan bahasa Indonesia yang singkat dan interaktif.",
+      "href": "/gim",
+      "canonicalPath": "/gim",
+      "sitemap": true,
+      "tampilPublik": true
+    },
+    "items": [
+      {
+        "slug": "kuis-kata",
+        "judul": "Kuis Kata",
+        "deskripsi": "Jawab soal pilihan ganda dari kamus, tesaurus, glosarium, makna, dan rima dalam satu ronde cepat.",
+        "href": "/gim/kuis-kata",
+        "routePath": "/gim/kuis-kata",
+        "tampilPublik": true,
+        "seoJudul": "Kuis Kata",
+        "seoDeskripsi": "Mainkan kuis kata pilihan ganda di Kateglo untuk menebak arti, sinonim, padanan, makna, dan rima dalam satu ronde cepat.",
+        "canonicalPath": "/gim/kuis-kata",
+        "sitemapPaths": [
+          "/gim/kuis-kata"
+        ]
+      },
+      {
+        "slug": "susun-kata",
+        "judul": "Susun Kata",
+        "deskripsi": "Tebak kata bahasa Indonesia dalam enam percobaan dengan mode harian dan bebas.",
+        "href": "/gim/susun-kata/harian",
+        "routePath": "/gim/susun-kata/:mode",
+        "tampilPublik": true,
+        "seoJudul": "Susun Kata Harian",
+        "seoDeskripsi": "Mainkan gim susun kata harian seperti Wordle untuk menyusun kata bahasa Indonesia dalam enam percobaan.",
+        "canonicalPath": "/gim/susun-kata/harian",
+        "sitemapPaths": [
+          "/gim/susun-kata/harian",
+          "/gim/susun-kata/bebas"
+        ],
+        "seoAliases": [
+          {
+            "path": "/gim/susun-kata",
+            "judul": "Susun Kata Harian",
+            "deskripsi": "Mainkan gim susun kata harian seperti Wordle untuk menyusun kata bahasa Indonesia dalam enam percobaan.",
+            "canonicalPath": "/gim/susun-kata/harian"
+          }
+        ],
+        "seoVariants": [
+          {
+            "path": "/gim/susun-kata/harian",
+            "judul": "Susun Kata Harian",
+            "deskripsi": "Mainkan gim susun kata harian seperti Wordle untuk menyusun kata bahasa Indonesia dalam enam percobaan.",
+            "canonicalPath": "/gim/susun-kata/harian",
+            "sitemap": true
+          },
+          {
+            "path": "/gim/susun-kata/bebas",
+            "judul": "Susun Kata Bebas",
+            "deskripsi": "Mainkan mode bebas Susun Kata untuk menyusun kata bahasa Indonesia kapan saja dengan ronde baru yang bisa diulang langsung di Kateglo.",
+            "canonicalPath": "/gim/susun-kata/bebas",
+            "sitemap": true
+          }
+        ],
+        "seoFallback": {
+          "pathPrefix": "/gim/susun-kata",
+          "judul": "Susun Kata Harian",
+          "deskripsi": "Mainkan gim susun kata harian seperti Wordle untuk menyusun kata bahasa Indonesia dalam enam percobaan.",
+          "canonicalPath": "/gim/susun-kata/harian"
+        }
+      }
+    ]
+  }
+}

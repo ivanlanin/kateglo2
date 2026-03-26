@@ -148,6 +148,7 @@ describe('layananSeoPublik.generateSitemapPaths', () => {
     expect(paths).toContain('/alat');
     expect(paths).toContain('/alat/penganalisis-teks');
     expect(paths).toContain('/alat/penghitung-huruf');
+    expect(paths).not.toContain('/alat/pohon-kalimat');
     expect(paths).toContain('/gim');
     expect(paths).toContain('/gim/kuis-kata');
     expect(paths).toContain('/gim/susun-kata/harian');

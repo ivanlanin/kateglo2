@@ -9,6 +9,7 @@ const ModelLabel = require('../../models/master/modelLabel');
 const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
 
 const rootDir = path.resolve(__dirname, '..', '..', '..');
+const katalogFiturData = require(path.join(rootDir, 'frontend', 'src', 'constants', 'katalogFiturData.json'));
 const ejaanDocsDir = path.join(rootDir, 'frontend', 'public', 'ejaan');
 const gramatikaDocsDir = path.join(rootDir, 'frontend', 'public', 'gramatika');
 const ogLogoPath = path.join(rootDir, 'frontend', 'public', 'images', 'logo-persegi.png');
@@ -493,19 +494,35 @@ function buildSitemapXml(baseUrl, paths = []) {
 }
 
 function ambilPathStatis() {
+  const pathFiturInteraktif = [];
+
+  [katalogFiturData.alat, katalogFiturData.gim].forEach((grup) => {
+    if (grup?.index?.sitemap !== false) {
+      const indexPath = grup.index.canonicalPath || grup.index.href;
+      if (indexPath) pathFiturInteraktif.push(indexPath);
+    }
+
+    (grup?.items || []).forEach((item) => {
+      const sitemapPaths = Array.isArray(item.sitemapPaths) ? item.sitemapPaths : [];
+      if (sitemapPaths.length) {
+        pathFiturInteraktif.push(...sitemapPaths);
+        return;
+      }
+
+      if (item.sitemap !== false && item.tampilPublik !== false) {
+        const itemPath = item.canonicalPath || item.href;
+        if (itemPath) pathFiturInteraktif.push(itemPath);
+      }
+    });
+  });
+
   return [
     '/',
     '/kamus',
     '/tesaurus',
     '/glosarium',
     '/sumber',
-    '/alat',
-    '/alat/penganalisis-teks',
-    '/alat/penghitung-huruf',
-    '/gim',
-    '/gim/kuis-kata',
-    '/gim/susun-kata/harian',
-    '/gim/susun-kata/bebas',
+    ...pathFiturInteraktif,
     '/makna',
     '/rima',
     '/ejaan',
