@@ -752,3 +752,7 @@
   .dark .pohon-svg-wrap {
     @apply border-dark-border bg-white;
   }
+
+  .pohon-empty-text {
+    @apply ml-4 mr-4;
+  }

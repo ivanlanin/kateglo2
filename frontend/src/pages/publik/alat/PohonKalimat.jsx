@@ -342,8 +342,7 @@ function PohonKalimat() {
           {/* ── Panel builder ── */}
           <section className="alat-panel" aria-labelledby="pohon-input-title">
             <div className="alat-panel-header">
-              <h2 id="pohon-input-title" className="alat-panel-title">Builder</h2>
-              <p className="alat-panel-caption">Susun konstituen kalimat, lalu lihat pohonnya di sebelah kanan.</p>
+              <h2 id="pohon-input-title" className="alat-panel-title">Masukan</h2>
             </div>
 
             <div className="alat-contoh-row" aria-label="Contoh cepat pohon kalimat">
@@ -444,10 +443,7 @@ function PohonKalimat() {
           <section className="alat-panel pohon-panel-hasil" aria-labelledby="pohon-output-title">
             <div className="pohon-hasil-header">
               <div className="alat-panel-header">
-                <h2 id="pohon-output-title" className="alat-panel-title">Pohon</h2>
-                <p className="alat-panel-caption">
-                  {adaPohon ? 'Diperbarui otomatis saat builder berubah.' : 'Isi teks konstituen untuk melihat pohon.'}
-                </p>
+                <h2 id="pohon-output-title" className="alat-panel-title">Hasil</h2>
               </div>
               <div className="pohon-hasil-aksi">
                 <button
@@ -475,7 +471,7 @@ function PohonKalimat() {
               {adaPohon ? (
                 <PohonKalimatDiagram ref={svgRef} state={state} berwarna={berwarna} />
               ) : (
-                <p className="alat-empty-text">Pohon akan muncul di sini.</p>
+                <p className="alat-empty-text pohon-empty-text">Pohon akan muncul di sini.</p>
               )}
             </div>
 
