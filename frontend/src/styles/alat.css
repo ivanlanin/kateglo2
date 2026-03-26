@@ -756,3 +756,85 @@
   .pohon-empty-text {
     @apply ml-4 mr-4;
   }
+
+  /* ── Pohon Kalimat: kelas tambahan untuk fitur bertingkat ── */
+
+  .pohon-baris-pilihan {
+    @apply flex-1;
+  }
+
+  .pohon-realisasi-toggle {
+    @apply inline-flex overflow-hidden rounded-full border border-gray-300;
+  }
+
+  .dark .pohon-realisasi-toggle {
+    @apply border-dark-border;
+  }
+
+  .pohon-realisasi-btn {
+    @apply cursor-pointer px-3 py-1 text-xs font-medium text-gray-600 transition-colors;
+  }
+
+  .pohon-realisasi-btn:hover {
+    @apply bg-gray-100;
+  }
+
+  .pohon-realisasi-btn-active {
+    @apply bg-blue-700 text-white;
+  }
+
+  .dark .pohon-realisasi-btn {
+    @apply text-dark-text-muted hover:bg-dark-bg-hover;
+  }
+
+  .dark .pohon-realisasi-btn-active {
+    @apply bg-blue-600 text-white;
+  }
+
+  .pohon-konstituen-frasa {
+    @apply flex flex-col gap-2;
+  }
+
+  .pohon-konstituen-realisasi-label {
+    @apply flex-1 text-xs italic text-gray-500;
+  }
+
+  .dark .pohon-konstituen-realisasi-label {
+    @apply text-dark-text-muted;
+  }
+
+  .pohon-klausa-anak-blok {
+    @apply flex flex-col gap-2 rounded-xl border border-amber-300 bg-amber-50 p-2.5;
+  }
+
+  .dark .pohon-klausa-anak-blok {
+    @apply border-amber-800/40 bg-amber-950/20;
+  }
+
+  .pohon-klausa-meta {
+    @apply flex items-center gap-2 mb-1;
+  }
+
+  .pohon-segitiga-toggle {
+    @apply inline-flex cursor-pointer items-center gap-1 text-xs text-gray-600;
+  }
+
+  .dark .pohon-segitiga-toggle {
+    @apply text-dark-text-muted;
+  }
+
+  .pohon-klausa-utama-toggle {
+    @apply inline-flex cursor-pointer items-center gap-2 text-sm text-gray-700 mb-1;
+  }
+
+  .dark .pohon-klausa-utama-toggle {
+    @apply text-dark-text-muted;
+  }
+
+  .pohon-select-sm {
+    @apply text-xs py-1 px-2;
+  }
+
+  .pohon-konstituen-baris-sm {
+    @apply p-2 rounded-xl;
+  }

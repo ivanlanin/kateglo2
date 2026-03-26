@@ -32,12 +32,12 @@ describe('pohonKalimatModel', () => {
 
     expect(rootTunggal.label).toBe('Kalimat');
     expect(rootTunggal.anak).toHaveLength(2);
-    expect(rootTunggal.anak[0].label).toBe('Subjek');
-    expect(rootTunggal.anak[0].anak[0].label).toBe('Frasa Nominal');
+    expect(rootTunggal.anak[0].label).toBe('S');
+    expect(rootTunggal.anak[0].anak[0].label).toBe('FN');
     expect(rootTunggal.anak[0].anak[0].anak[0].label).toBe('Pancasila');
 
-    const rootMajemuk = buatPohon(CONTOH[2].state, false);
-    expect(rootMajemuk.label).toBe('K');
+    const rootMajemuk = buatPohon(CONTOH[3].state, false);
+    expect(rootMajemuk.label).toBe('Kalimat');
     expect(rootMajemuk.anak).toHaveLength(3);
     expect(rootMajemuk.anak[0].label).toBe('Kl₁');
     expect(rootMajemuk.anak[1].label).toBe('dan');
