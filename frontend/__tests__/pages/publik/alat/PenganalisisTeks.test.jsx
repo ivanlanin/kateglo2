@@ -1,7 +1,11 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import PenganalisisTeks, { __private } from '../../../../src/pages/publik/alat/PenganalisisTeks';
+
+beforeEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe('PenganalisisTeks helpers', () => {
   it('analisisTeks dan kelompokkanFrekuensi menutup cabang preview kalimat dan grup angka', () => {
@@ -54,6 +58,25 @@ describe('PenganalisisTeks helpers', () => {
 });
 
 describe('PenganalisisTeks', () => {
+  it('membuka panel informasi markdown alat', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+      ok: true,
+      text: async () => '## Fungsi\n\nAlat ini mengurai teks.',
+    });
+
+    render(
+      <MemoryRouter>
+        <PenganalisisTeks />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Lihat informasi alat' }));
+
+    expect(await screen.findByRole('heading', { name: 'Fungsi' })).toBeInTheDocument();
+    expect(await screen.findByText('Alat ini mengurai teks.')).toBeInTheDocument();
+    expect(screen.queryByLabelText('Teks untuk dianalisis')).not.toBeInTheDocument();
+  });
+
   it('menampilkan hasil dalam panel kanan dan pill ringkasan aktif setelah analisis', () => {
     render(
       <MemoryRouter>

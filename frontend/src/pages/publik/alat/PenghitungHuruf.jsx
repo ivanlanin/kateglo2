@@ -3,10 +3,11 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Info } from 'lucide-react';
 import Chart from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import HalamanPublik from '../../../components/tampilan/HalamanPublik';
+import KontenMarkdownStatis from '../../../components/tampilan/KontenMarkdownStatis';
 
 Chart.register(ChartDataLabels);
 
@@ -44,6 +45,7 @@ function PenghitungHuruf() {
   const [teksAnalisis, setTeksAnalisis] = useState('');
   const [pesanGalat, setPesanGalat] = useState('');
   const [tabHasilAktif, setTabHasilAktif] = useState('tabel');
+  const [panelInfoTerbuka, setPanelInfoTerbuka] = useState(false);
   const canvasRef = useRef(null);
   const chartRef = useRef(null);
 
@@ -153,28 +155,36 @@ function PenghitungHuruf() {
       tampilkanJudul={false}
     >
       <div className="alat-page">
-        <section className="alat-hero">
-          <div className="alat-hero-head">
-            <div>
-              <p className="alat-kicker">Alat Bahasa</p>
-              <h1 className="alat-title">Penghitung Huruf</h1>
-            </div>
-            <p className="alat-hero-note">Distribusi huruf a-z dalam satu panel analisis yang ringkas.</p>
-          </div>
-          <p className="alat-description">
-            Masukkan teks, lalu lihat sebaran huruf alfabet Latin dalam bentuk tabel persentase dan grafik batang.
-          </p>
-          <div className="alat-actions">
-            <Link to="/alat" className="alat-link-secondary">Kembali ke daftar alat</Link>
-            <button type="button" className="alat-link-secondary" onClick={handleIsiContoh}>Isi contoh</button>
-          </div>
-        </section>
+        <div className="alat-heading-row">
+          <h1 className="alat-page-heading">Penghitung Huruf</h1>
+          <button
+            type="button"
+            className="alat-heading-info-button"
+            aria-label={panelInfoTerbuka ? 'Kembali ke alat' : 'Lihat informasi alat'}
+            onClick={() => setPanelInfoTerbuka((value) => !value)}
+          >
+            <Info size={20} strokeWidth={2.2} aria-hidden="true" />
+          </button>
+        </div>
 
-        <div className="alat-tool-layout">
+        {panelInfoTerbuka ? (
+          <section className="alat-panel alat-info-panel">
+            <KontenMarkdownStatis
+              src="/halaman/alat/penghitung-huruf.md"
+              className="halaman-markdown-content"
+              loadingText="Memuat informasi alat ..."
+              errorText="Gagal memuat informasi alat."
+            />
+          </section>
+        ) : (
+          <div className="alat-tool-layout">
           <section className="alat-panel" aria-labelledby="alat-huruf-input-title">
-            <div className="alat-panel-header">
-              <h2 id="alat-huruf-input-title" className="alat-panel-title">Masukan</h2>
-              <p className="alat-panel-caption">Huruf yang dihitung hanya a-z dan tidak peka huruf besar-kecil.</p>
+            <div className="alat-panel-header alat-panel-header-split">
+              <div>
+                <h2 id="alat-huruf-input-title" className="alat-panel-title">Masukan</h2>
+                <p className="alat-panel-caption">Huruf yang dihitung hanya a-z dan tidak peka huruf besar-kecil.</p>
+              </div>
+              <button type="button" className="alat-link-secondary alat-panel-action-button" onClick={handleIsiContoh}>Isi contoh</button>
             </div>
 
             <form onSubmit={handleHitung} className="alat-form">
@@ -294,7 +304,8 @@ function PenghitungHuruf() {
               </section>
             </div>
           </section>
-        </div>
+          </div>
+        )}
       </div>
     </HalamanPublik>
   );

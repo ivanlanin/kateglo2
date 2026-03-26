@@ -1,9 +1,32 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import PohonKalimat from '../../../../src/pages/publik/alat/PohonKalimat';
 
 describe('PohonKalimat', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('membuka panel informasi markdown alat', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+      ok: true,
+      text: async () => '## Fungsi\n\nAlat ini membantu menyusun pohon kalimat.',
+    });
+
+    render(
+      <MemoryRouter>
+        <PohonKalimat />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Lihat informasi alat' }));
+
+    expect(await screen.findByRole('heading', { name: 'Fungsi' })).toBeInTheDocument();
+    expect(await screen.findByText('Alat ini membantu menyusun pohon kalimat.')).toBeInTheDocument();
+    expect(screen.queryByText('Pohon akan muncul di sini.')).not.toBeInTheDocument();
+  });
+
   it('merender builder tunggal dan memunculkan pohon setelah contoh dipilih', () => {
     render(
       <MemoryRouter>

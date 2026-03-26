@@ -2,6 +2,26 @@
     @apply flex flex-col gap-6;
   }
 
+  .alat-heading-row {
+    @apply flex items-center justify-between gap-4;
+  }
+
+  .alat-page-heading {
+    @apply m-0 text-3xl font-bold text-gray-900;
+  }
+
+  .dark .alat-page-heading {
+    @apply text-dark-text;
+  }
+
+  .alat-heading-info-button {
+    @apply inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-transparent text-blue-700 transition-colors hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-300;
+  }
+
+  .dark .alat-heading-info-button {
+    @apply text-blue-300 hover:bg-blue-900/30 focus:ring-blue-700;
+  }
+
   .alat-hero {
     @apply rounded-3xl border border-gray-200 bg-white px-5 py-4 shadow-sm;
   }
@@ -62,8 +82,8 @@
     @apply border-dark-border bg-dark-bg;
   }
 
-  .alat-card-top {
-    @apply flex items-center justify-between gap-3;
+  .alat-card-title-row {
+    @apply flex items-start gap-3;
   }
 
   .alat-card-status {
@@ -75,7 +95,7 @@
   }
 
   .alat-card-title {
-    @apply mb-0 mt-4 text-xl font-semibold text-gray-900;
+    @apply m-0 flex-1 text-xl font-semibold text-gray-900;
   }
 
   .dark .alat-card-title {
@@ -131,6 +151,14 @@
     @apply flex flex-col gap-2;
   }
 
+  .alat-panel-header-split {
+    @apply gap-3 md:flex-row md:items-start md:justify-between;
+  }
+
+  .alat-panel-action-button {
+    @apply self-start;
+  }
+
   .alat-panel-title {
     @apply m-0 text-lg font-semibold text-gray-900;
   }
@@ -149,6 +177,14 @@
 
   .alat-form {
     @apply mt-5;
+  }
+
+  .alat-info-panel {
+    @apply p-6;
+  }
+
+  .alat-contoh-row {
+    @apply mt-4 flex flex-wrap gap-2;
   }
 
   .alat-error-text {

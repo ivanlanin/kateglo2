@@ -3,8 +3,9 @@
  */
 
 import { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Info } from 'lucide-react';
 import HalamanPublik from '../../../components/tampilan/HalamanPublik';
+import KontenMarkdownStatis from '../../../components/tampilan/KontenMarkdownStatis';
 import PohonKalimatDiagram, { unduPng, unduSvg } from './pohon-kalimat/PohonKalimatDiagram';
 import {
   CONTOH,
@@ -150,6 +151,7 @@ function PohonKalimat() {
   const svgRef = useRef(null);
   const [state, setState] = useState(buatStateTunggal);
   const [berwarna, setBerwarna] = useState(true);
+  const [panelInfoTerbuka, setPanelInfoTerbuka] = useState(false);
 
   // ── Ganti jenis tunggal/majemuk ──
   const gantiJenis = (jenis) => {
@@ -314,34 +316,42 @@ function PohonKalimat() {
       tampilkanJudul={false}
     >
       <div className="alat-page">
-        <section className="alat-hero">
-          <div className="alat-hero-head">
-            <div>
-              <p className="alat-kicker">Alat Bahasa</p>
-              <h1 className="alat-title">Pohon Kalimat</h1>
-            </div>
-            <p className="alat-hero-note">Diagram sintaksis kalimat bahasa Indonesia.</p>
-          </div>
-          <p className="alat-description">
-            Susun struktur sintaksis kalimat secara interaktif dan lihat hasilnya langsung sebagai pohon diagram.
-            Dukung kalimat tunggal, majemuk, dan sub-klausa tersisip.
-          </p>
-          <div className="alat-actions">
-            <Link to="/alat" className="alat-link-secondary">Kembali ke daftar alat</Link>
-            {CONTOH.map((c, i) => (
-              <button key={i} type="button" className="alat-link-secondary" onClick={() => isiContoh(c)}>
-                {c.judul}
-              </button>
-            ))}
-          </div>
-        </section>
+        <div className="alat-heading-row">
+          <h1 className="alat-page-heading">Pohon Kalimat</h1>
+          <button
+            type="button"
+            className="alat-heading-info-button"
+            aria-label={panelInfoTerbuka ? 'Kembali ke alat' : 'Lihat informasi alat'}
+            onClick={() => setPanelInfoTerbuka((value) => !value)}
+          >
+            <Info size={20} strokeWidth={2.2} aria-hidden="true" />
+          </button>
+        </div>
 
-        <div className="alat-tool-layout pohon-tool-layout">
+        {panelInfoTerbuka ? (
+          <section className="alat-panel alat-info-panel">
+            <KontenMarkdownStatis
+              src="/halaman/alat/pohon-kalimat.md"
+              className="halaman-markdown-content"
+              loadingText="Memuat informasi alat ..."
+              errorText="Gagal memuat informasi alat."
+            />
+          </section>
+        ) : (
+          <div className="alat-tool-layout pohon-tool-layout">
           {/* ── Panel builder ── */}
           <section className="alat-panel" aria-labelledby="pohon-input-title">
             <div className="alat-panel-header">
               <h2 id="pohon-input-title" className="alat-panel-title">Builder</h2>
               <p className="alat-panel-caption">Susun konstituen kalimat, lalu lihat pohonnya di sebelah kanan.</p>
+            </div>
+
+            <div className="alat-contoh-row" aria-label="Contoh cepat pohon kalimat">
+              {CONTOH.map((c, i) => (
+                <button key={i} type="button" className="alat-pill-button" onClick={() => isiContoh(c)}>
+                  {c.judul}
+                </button>
+              ))}
             </div>
 
             {/* Toggle jenis */}
@@ -474,7 +484,8 @@ function PohonKalimat() {
               <p className="alat-note-item">Unduh SVG untuk hasil vektor (skala bebas). Unduh PNG untuk gambar resolusi 2×.</p>
             </div>
           </section>
-        </div>
+          </div>
+        )}
       </div>
     </HalamanPublik>
   );

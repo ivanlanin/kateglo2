@@ -3,8 +3,9 @@
  */
 
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Info } from 'lucide-react';
 import HalamanPublik from '../../../components/tampilan/HalamanPublik';
+import KontenMarkdownStatis from '../../../components/tampilan/KontenMarkdownStatis';
 
 const THRESHOLD = 25;
 const contohTeks = `Bahasa berkembang bersama cara kita memakainya.
@@ -193,6 +194,7 @@ function PenganalisisTeks() {
   const [pesanGalat, setPesanGalat] = useState('');
   const [kalimatTerbuka, setKalimatTerbuka] = useState({});
   const [tabHasilAktif, setTabHasilAktif] = useState('ringkasan');
+  const [panelInfoTerbuka, setPanelInfoTerbuka] = useState(false);
 
   const hasil = useMemo(() => analisisTeks(teksAnalisis), [teksAnalisis]);
   const adaHasil = Boolean(hasil);
@@ -241,29 +243,36 @@ function PenganalisisTeks() {
       tampilkanJudul={false}
     >
       <div className="alat-page">
-        <section className="alat-hero">
-          <div className="alat-hero-head">
-            <div>
-              <p className="alat-kicker">Alat Bahasa</p>
-              <h1 className="alat-title">Penganalisis Teks</h1>
-            </div>
-            <p className="alat-hero-note">Ringkas, lokal, dan langsung menyatu dengan Kateglo.</p>
-          </div>
-          <p className="alat-description">
-            Hitung paragraf, kalimat, kata, huruf rata-rata, frekuensi kata, dan rincian tiap paragraf
-            dari satu tempat tanpa layanan pihak ketiga.
-          </p>
-          <div className="alat-actions">
-            <Link to="/alat" className="alat-link-secondary">Kembali ke daftar alat</Link>
-            <button type="button" className="alat-link-secondary" onClick={handleIsiContoh}>Isi contoh</button>
-          </div>
-        </section>
+        <div className="alat-heading-row">
+          <h1 className="alat-page-heading">Penganalisis Teks</h1>
+          <button
+            type="button"
+            className="alat-heading-info-button"
+            aria-label={panelInfoTerbuka ? 'Kembali ke alat' : 'Lihat informasi alat'}
+            onClick={() => setPanelInfoTerbuka((value) => !value)}
+          >
+            <Info size={20} strokeWidth={2.2} aria-hidden="true" />
+          </button>
+        </div>
 
-        <div className="alat-tool-layout">
+        {panelInfoTerbuka ? (
+          <section className="alat-panel alat-info-panel">
+            <KontenMarkdownStatis
+              src="/halaman/alat/penganalisis-teks.md"
+              className="halaman-markdown-content"
+              loadingText="Memuat informasi alat ..."
+              errorText="Gagal memuat informasi alat."
+            />
+          </section>
+        ) : (
+          <div className="alat-tool-layout">
           <section className="alat-panel" aria-labelledby="alat-input-title">
-            <div className="alat-panel-header">
-              <h2 id="alat-input-title" className="alat-panel-title">Masukan</h2>
-              <p className="alat-panel-caption">Masukkan teks yang ingin dianalisis jumlah paragraf, kalimat, dan katanya.</p>
+            <div className="alat-panel-header alat-panel-header-split">
+              <div>
+                <h2 id="alat-input-title" className="alat-panel-title">Masukan</h2>
+                <p className="alat-panel-caption">Masukkan teks yang ingin dianalisis jumlah paragraf, kalimat, dan katanya.</p>
+              </div>
+              <button type="button" className="alat-link-secondary alat-panel-action-button" onClick={handleIsiContoh}>Isi contoh</button>
             </div>
 
             <form onSubmit={handleAnalisis} className="alat-form">
@@ -479,7 +488,8 @@ function PenganalisisTeks() {
               </p>
             </div>
           </section>
-        </div>
+          </div>
+        )}
       </div>
     </HalamanPublik>
   );

@@ -433,8 +433,8 @@ code {
     @apply border-dark-border bg-dark-bg;
   }
 
-  .gim-card-top {
-    @apply flex items-center justify-between gap-3;
+  .gim-card-title-row {
+    @apply flex items-start gap-3;
   }
 
   .gim-card-status {
@@ -446,7 +446,7 @@ code {
   }
 
   .gim-card-title {
-    @apply mb-0 mt-4 text-xl font-semibold text-gray-900;
+    @apply m-0 flex-1 text-xl font-semibold text-gray-900;
   }
 
   .dark .gim-card-title {

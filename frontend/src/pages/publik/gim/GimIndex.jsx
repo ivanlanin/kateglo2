@@ -16,20 +16,17 @@ function GimIndex() {
     <HalamanPublik
       judul="Gim"
       deskripsi="Kumpulan gim kata di Kateglo. Saat ini tersedia Kuis Kata dan Susun Kata untuk latihan bahasa Indonesia yang singkat dan interaktif."
-      tampilkanJudul={false}
     >
       <div className="gim-page">
-        <h1 className="gim-title">Gim</h1>
-
         <section className="gim-list-grid" aria-label="Daftar gim">
           {daftarGim.map((gim) => (
             <article key={gim.slug} className="gim-card">
-              {bolehLihatInternal && gim.tampilPublik === false && (
-                <div className="gim-card-top">
+              <div className="gim-card-title-row">
+                <h2 className="gim-card-title">{gim.judul}</h2>
+                {bolehLihatInternal && gim.tampilPublik === false && (
                   <span className="gim-card-status">Internal</span>
-                </div>
-              )}
-              <h2 className="gim-card-title">{gim.judul}</h2>
+                )}
+              </div>
               <p className="gim-card-description">{gim.deskripsi}</p>
               <div className="gim-card-actions">
                 <Link to={gim.href} className="alat-link-primary">

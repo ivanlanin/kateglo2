@@ -4,7 +4,12 @@ import { MemoryRouter } from 'react-router-dom';
 import GimIndex from '../../../../src/pages/publik/gim/GimIndex';
 
 vi.mock('../../../../src/components/tampilan/HalamanPublik', () => ({
-  default: ({ children }) => <div>{children}</div>,
+  default: ({ children, judul, tampilkanJudul = true }) => (
+    <div>
+      {tampilkanJudul ? <h1>{judul}</h1> : null}
+      {children}
+    </div>
+  ),
 }));
 
 describe('GimIndex', () => {

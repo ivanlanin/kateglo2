@@ -25,9 +25,29 @@ vi.mock('chartjs-plugin-datalabels', () => ({
 
 describe('PenghitungHuruf', () => {
   beforeEach(() => {
+    vi.restoreAllMocks();
     chartMock.mockClear();
     chartDestroy.mockClear();
     HTMLCanvasElement.prototype.getContext = vi.fn(() => ({}));
+  });
+
+  it('membuka panel informasi markdown alat', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+      ok: true,
+      text: async () => '## Fungsi\n\nAlat ini menghitung huruf latin.',
+    });
+
+    render(
+      <MemoryRouter>
+        <PenghitungHuruf />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Lihat informasi alat' }));
+
+    expect(await screen.findByRole('heading', { name: 'Fungsi' })).toBeInTheDocument();
+    expect(await screen.findByText('Alat ini menghitung huruf latin.')).toBeInTheDocument();
+    expect(screen.queryByLabelText('Teks untuk dihitung hurufnya')).not.toBeInTheDocument();
   });
 
   it('menghitung frekuensi huruf dan menampilkan tabel hasil', () => {
