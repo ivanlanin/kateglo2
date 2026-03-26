@@ -38,11 +38,12 @@ describe('PohonKalimat', () => {
     expect(screen.getByRole('button', { name: 'Tunggal' })).toBeInTheDocument();
     expect(screen.getByText('Pohon akan muncul di sini.')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Kalimat tunggal — tiga unsur' }));
+    fireEvent.change(screen.getByLabelText('Pilih contoh pohon kalimat'), {
+      target: { value: '0' },
+    });
 
     expect(screen.getByLabelText('Pohon sintaksis kalimat')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Unduh SVG' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Unduh PNG' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Unduh' })).toBeInTheDocument();
   });
 
   it('berpindah ke mode majemuk dan dapat menambah sub-klausa tersisip', () => {

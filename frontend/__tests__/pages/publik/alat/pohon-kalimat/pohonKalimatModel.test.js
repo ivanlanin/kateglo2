@@ -40,7 +40,8 @@ describe('pohonKalimatModel', () => {
     expect(rootMajemuk.label).toBe('Kalimat');
     expect(rootMajemuk.anak).toHaveLength(3);
     expect(rootMajemuk.anak[0].label).toBe('Kl₁');
-    expect(rootMajemuk.anak[1].label).toBe('dan');
-    expect(rootMajemuk.anak[2].anak.some((anak) => anak.label === 'karena')).toBe(true);
+    expect(rootMajemuk.anak[1].label).toBe('Konj');
+    expect(rootMajemuk.anak[1].anak[0].label).toBe('dan');
+    expect(rootMajemuk.anak[2].anak.some((anak) => anak.label === 'Konj')).toBe(true);
   });
 });

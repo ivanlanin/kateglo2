@@ -6,7 +6,7 @@ import { useRef, useState } from 'react';
 import { Info } from 'lucide-react';
 import HalamanPublik from '../../../components/tampilan/HalamanPublik';
 import KontenMarkdownStatis from '../../../components/tampilan/KontenMarkdownStatis';
-import PohonKalimatDiagram, { unduPng, unduSvg } from './pohon-kalimat/PohonKalimatDiagram';
+import PohonKalimatDiagram, { unduPng } from './pohon-kalimat/PohonKalimatDiagram';
 import {
   CONTOH,
   JENIS_FRASA,
@@ -48,28 +48,9 @@ function BlokKlausaAnak({ klausa, onChange, onUbahKonstituen, onTambahKonstituen
             ))}
           </select>
         </BarisPilihan>
-        <label className="pohon-segitiga-toggle">
-          <input
-            type="checkbox"
-            checked={klausa.segitiga}
-            onChange={() => onChange('segitiga', !klausa.segitiga)}
-            aria-label="Tampilkan sebagai segitiga"
-          />
-          <span>Segitiga</span>
-        </label>
       </div>
 
-      {klausa.segitiga ? (
-        <input
-          type="text"
-          className="pohon-input"
-          placeholder="Isi klausa (ditampilkan di dasar segitiga)…"
-          value={klausa.teksSegitiga}
-          onChange={(e) => onChange('teksSegitiga', e.target.value)}
-          aria-label="Teks segitiga klausa anak"
-        />
-      ) : (
-        <>
+      <>
           {klausa.konstituen.map((k) => (
             <div key={k.id} className="pohon-konstituen-baris pohon-konstituen-baris-sm">
               <div className="pohon-konstituen-selects">
@@ -81,7 +62,7 @@ function BlokKlausaAnak({ klausa, onChange, onUbahKonstituen, onTambahKonstituen
                     onChange={(e) => onUbahKonstituen(k.id, 'peran', e.target.value)}
                   >
                     {PERAN.map((p) => (
-                      <option key={p.kode} value={p.kode}>{p.kode} — {p.label}</option>
+                      <option key={p.kode} value={p.kode}>{p.label}</option>
                     ))}
                   </select>
                 </BarisPilihan>
@@ -94,7 +75,7 @@ function BlokKlausaAnak({ klausa, onChange, onUbahKonstituen, onTambahKonstituen
                       onChange={(e) => onUbahKonstituen(k.id, 'jenisFrasa', e.target.value)}
                     >
                       {JENIS_FRASA.map((f) => (
-                        <option key={f.kode} value={f.kode}>{f.kode}</option>
+                        <option key={f.kode} value={f.kode}>{f.label}</option>
                       ))}
                     </select>
                   </BarisPilihan>
@@ -126,8 +107,7 @@ function BlokKlausaAnak({ klausa, onChange, onUbahKonstituen, onTambahKonstituen
           <button type="button" className="pohon-btn-tambah" onClick={onTambahKonstituen}>
             + Tambah konstituen
           </button>
-        </>
-      )}
+      </>
     </div>
   );
 }
@@ -156,7 +136,7 @@ function BarisKonstituen({
             onChange={(e) => onChange(k.id, 'peran', e.target.value)}
           >
             {PERAN.map((p) => (
-              <option key={p.kode} value={p.kode}>{p.kode} — {p.label}</option>
+              <option key={p.kode} value={p.kode}>{p.label}</option>
             ))}
           </select>
         </BarisPilihan>
@@ -199,7 +179,7 @@ function BarisKonstituen({
                 onChange={(e) => onChange(k.id, 'jenisFrasa', e.target.value)}
               >
                 {JENIS_FRASA.map((f) => (
-                  <option key={f.kode} value={f.kode}>{f.kode} — {f.label}</option>
+                  <option key={f.kode} value={f.kode}>{f.label}</option>
                 ))}
               </select>
             </BarisPilihan>
@@ -257,8 +237,6 @@ function BlokKlausa({
   onTambahTersisip,
   onHapusTersisip,
   onUbahLabel,
-  onToggleSegitiga,
-  onUbahTeksSegitiga,
   onToggleRealisasiKonstituen,
   onKlausaAnakChange,
   onKlausaAnakUbahKonstituen,
@@ -267,7 +245,7 @@ function BlokKlausa({
 }) {
   return (
     <div className="pohon-klausa-blok">
-      {/* Header: label + segitiga */}
+      {/* Header: label klausa */}
       <div className="pohon-klausa-meta">
         <BarisPilihan label="Label klausa" htmlFor={`klausa-label-${klausa.id}`}>
           <select
@@ -285,28 +263,9 @@ function BlokKlausa({
             )}
           </select>
         </BarisPilihan>
-        <label className="pohon-segitiga-toggle">
-          <input
-            type="checkbox"
-            checked={klausa.segitiga}
-            onChange={() => onToggleSegitiga(klausa.id)}
-            aria-label={`Tampilkan ${klausa.label} sebagai segitiga`}
-          />
-          <span>Segitiga</span>
-        </label>
       </div>
 
-      {klausa.segitiga ? (
-        <input
-          type="text"
-          className="pohon-input"
-          placeholder="Isi klausa (ditampilkan di dasar segitiga)…"
-          value={klausa.teksSegitiga}
-          onChange={(e) => onUbahTeksSegitiga(klausa.id, e.target.value)}
-          aria-label="Teks segitiga klausa"
-        />
-      ) : (
-        <>
+      <>
           {klausa.konstituen.map((k) => (
             <BarisKonstituen
               key={k.id}
@@ -371,8 +330,7 @@ function BlokKlausa({
               + Tambah sub-klausa tersisip
             </button>
           )}
-        </>
-      )}
+      </>
     </div>
   );
 }
@@ -384,13 +342,16 @@ function PohonKalimat() {
   const [state, setState] = useState(buatStateTunggal);
   const [berwarna, setBerwarna] = useState(true);
   const [panelInfoTerbuka, setPanelInfoTerbuka] = useState(false);
+  const [contohAktif, setContohAktif] = useState('');
 
   // ── Ganti jenis tunggal/majemuk ──
   const gantiJenis = (jenis) => {
+    setContohAktif('');
     setState(jenis === 'tunggal' ? buatStateTunggal() : buatStateMajemuk());
   };
 
-  const isiContoh = (contoh) => {
+  const isiContoh = (contoh, indeks = '') => {
+    setContohAktif(String(indeks));
     setState(JSON.parse(JSON.stringify(contoh.state)));
   };
 
@@ -411,7 +372,6 @@ function PohonKalimat() {
   }
 
   // ── Mutasi tunggal ──
-  const toggleKlausaUtama = () => setState((prev) => ({ ...prev, klausaUtama: !prev.klausaUtama }));
 
   const ubahKonstituen = (id, field, value) => {
     setState((prev) => ({
@@ -549,20 +509,6 @@ function PohonKalimat() {
     }));
   };
 
-  const toggleSegitigaKlausa = (klausaId) => {
-    setState((prev) => ({
-      ...prev,
-      segmen: updateSegmenKlausa(prev.segmen, klausaId, (kl) => ({ ...kl, segitiga: !kl.segitiga })),
-    }));
-  };
-
-  const ubahTeksSegitigaKlausa = (klausaId, teks) => {
-    setState((prev) => ({
-      ...prev,
-      segmen: updateSegmenKlausa(prev.segmen, klausaId, (kl) => ({ ...kl, teksSegitiga: teks })),
-    }));
-  };
-
   const toggleRealisasiKonstituenKlausa = (klausaId, konstituenId) => {
     setState((prev) => ({
       ...prev,
@@ -680,9 +626,7 @@ function PohonKalimat() {
 
   const adaPohon = state.jenis === 'tunggal'
     ? state.konstituen.some((k) => k.teks.trim() || k.realisasi === 'klausa')
-    : state.segmen.some((s) => s.tipe === 'klausa' && (
-        s.segitiga ? s.teksSegitiga.trim() : s.konstituen.some((k) => k.teks.trim() || k.realisasi === 'klausa')
-      ));
+    : state.segmen.some((s) => s.tipe === 'klausa' && s.konstituen.some((k) => k.teks.trim() || k.realisasi === 'klausa'));
 
   return (
     <HalamanPublik
@@ -716,16 +660,24 @@ function PohonKalimat() {
           <div className="alat-tool-layout pohon-tool-layout">
           {/* ── Panel builder ── */}
           <section className="alat-panel" aria-labelledby="pohon-input-title">
-            <div className="alat-panel-header">
+            <div className="alat-panel-header alat-panel-header-split">
               <h2 id="pohon-input-title" className="alat-panel-title">Masukan</h2>
-            </div>
-
-            <div className="alat-contoh-row" aria-label="Contoh cepat pohon kalimat">
-              {CONTOH.map((c, i) => (
-                <button key={i} type="button" className="alat-pill-button" onClick={() => isiContoh(c)}>
-                  {c.judul}
-                </button>
-              ))}
+              <select
+                id="pohon-contoh"
+                className="pohon-select alat-contoh-select"
+                value={contohAktif}
+                onChange={(e) => {
+                  const indeks = e.target.value;
+                  if (indeks === '') return;
+                  isiContoh(CONTOH[Number(indeks)], indeks);
+                }}
+                aria-label="Pilih contoh pohon kalimat"
+              >
+                <option value="">Pilih contoh…</option>
+                {CONTOH.map((contoh, indeks) => (
+                  <option key={contoh.judul} value={String(indeks)}>{contoh.judul}</option>
+                ))}
+              </select>
             </div>
 
             {/* Toggle jenis */}
@@ -749,15 +701,6 @@ function PohonKalimat() {
             {/* Builder tunggal */}
             {state.jenis === 'tunggal' && (
               <div className="pohon-builder-tunggal">
-                <label className="pohon-klausa-utama-toggle">
-                  <input
-                    type="checkbox"
-                    checked={state.klausaUtama}
-                    onChange={toggleKlausaUtama}
-                    aria-label="Tampilkan Klausa Utama"
-                  />
-                  <span>Tampilkan node Klausa Utama</span>
-                </label>
                 {state.konstituen.map((k) => (
                   <BarisKonstituen
                     key={k.id}
@@ -808,8 +751,6 @@ function PohonKalimat() {
                       onHapusTersisip={hapusTersisip}
                       onUbahTersisip={ubahTersisip}
                       onUbahLabel={ubahLabelKlausa}
-                      onToggleSegitiga={toggleSegitigaKlausa}
-                      onUbahTeksSegitiga={ubahTeksSegitigaKlausa}
                       onToggleRealisasiKonstituen={(kId) => toggleRealisasiKonstituenKlausa(seg.id, kId)}
                       onKlausaAnakChange={(kId, field, val) => ubahKlausaAnakPropMajemuk(seg.id, kId, field, val)}
                       onKlausaAnakUbahKonstituen={(kId, subId, field, val) => ubahKonstituenKlausaAnakMajemuk(seg.id, kId, subId, field, val)}
@@ -852,14 +793,9 @@ function PohonKalimat() {
                   {berwarna ? 'Berwarna' : 'Hitam-Putih'}
                 </button>
                 {adaPohon && (
-                  <>
-                    <button type="button" className="alat-link-secondary pohon-ekspor-btn" onClick={() => svgRef.current && unduSvg(svgRef.current)}>
-                      Unduh SVG
-                    </button>
-                    <button type="button" className="alat-link-secondary pohon-ekspor-btn" onClick={() => svgRef.current && unduPng(svgRef.current)}>
-                      Unduh PNG
-                    </button>
-                  </>
+                  <button type="button" className="alat-link-secondary pohon-ekspor-btn" onClick={() => svgRef.current && unduPng(svgRef.current)}>
+                    Unduh
+                  </button>
                 )}
               </div>
             </div>
@@ -870,10 +806,6 @@ function PohonKalimat() {
               ) : (
                 <p className="alat-empty-text pohon-empty-text">Pohon akan muncul di sini.</p>
               )}
-            </div>
-
-            <div className="alat-notes">
-              <p className="alat-note-item">Keterangan singkatan ditampilkan langsung di dalam bagan. Unduh SVG untuk hasil vektor (skala bebas). Unduh PNG untuk gambar resolusi 2×.</p>
             </div>
           </section>
           </div>

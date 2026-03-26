@@ -184,7 +184,11 @@
   }
 
   .alat-contoh-row {
-    @apply mt-4 flex flex-wrap gap-2;
+    @apply mt-4 flex items-center gap-3;
+  }
+
+  .alat-contoh-select {
+    @apply w-full max-w-full md:w-auto md:min-w-[18rem] sm:max-w-md;
   }
 
   .alat-error-text {

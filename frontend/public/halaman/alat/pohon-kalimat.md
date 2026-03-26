@@ -8,19 +8,22 @@ Alat ini membantu memvisualkan struktur konstituen kalimat, baik untuk kalimat t
 
 - Pilih mode Tunggal atau Majemuk.
 - Isi konstituen yang diperlukan pada panel masukan.
-- Gunakan contoh cepat jika ingin memulai dari pola yang sudah tersedia.
-- Lihat diagram yang diperbarui otomatis pada panel hasil.
+- Dropdown peran dan jenis frasa menampilkan nama penuh agar lebih mudah dibaca.
+- Gunakan dropdown di kanan judul panel masukan jika ingin memulai dari pola yang sudah tersedia.
+- Lihat bagan yang diperbarui otomatis pada panel hasil.
 
 ## Fitur
 
 - Dukungan kalimat tunggal dan majemuk
 - Penambahan atau penghapusan konstituen
-- Sub-klausa tersisip untuk struktur yang lebih kompleks
-- Ekspor hasil ke SVG atau PNG
+- Klausa anak dan subklausa tersisip untuk struktur yang lebih kompleks
+- Ekspor hasil ke PNG
+- Legenda singkatan otomatis menampilkan hanya singkatan yang sedang dipakai
 
 ## Catatan
 
 - Hasil diperbarui otomatis setiap kali susunan konstituen berubah.
-- FN = Frasa Nominal, FV = Frasa Verbal, FAdj = Frasa Adjektival, FAdv = Frasa Adverbial, FNum = Frasa Numeralia, FPrep = Frasa Preposisional.
-- Unduh SVG untuk hasil vektor dengan skala bebas. Unduh PNG untuk gambar raster resolusi 2×.
+- Konjungsi di bagan selalu ditampilkan dengan induk `Konj` agar relasinya lebih jelas.
+- Peran keterangan disederhanakan menjadi satu pilihan saja, yaitu `Keterangan`.
+- Tombol `Unduh` menghasilkan gambar PNG resolusi 2×.
 - Pohon Kalimat saat ini masih merupakan alat internal. Struktur yang dihasilkan ditujukan sebagai bantuan visual dan penyusunan awal, bukan sebagai parser otomatis yang sudah final.

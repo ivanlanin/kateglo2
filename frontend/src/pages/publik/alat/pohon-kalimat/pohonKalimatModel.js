@@ -1,5 +1,5 @@
 /**
- * @fileoverview Model data, builder, dan konversi pohon untuk Pohon Kalimat.
+ * @fileoverview Model data, builder, dan konversi pohon ke nodus untuk Pohon Kalimat.
  */
 
 export const JENIS_FRASA = [
@@ -23,7 +23,6 @@ export const PERAN = [
   { kode: 'O',      label: 'Objek' },
   { kode: 'Pel',    label: 'Pelengkap' },
   { kode: 'Ket',    label: 'Keterangan' },
-  { kode: 'KetOps', label: '(Keterangan)' },
   { kode: 'Konj',   label: 'Konjungsi' },
 ];
 
@@ -42,13 +41,11 @@ export const WARNA_PERAN = {
   O: '#dc2626',
   Pel: '#ea580c',
   Ket: '#7c3aed',
-  KetOps: '#7c3aed',
   Konj: '#6b7280',
 };
 
 const WARNA_NETRAL = '#111827';
 const WARNA_FRASA = '#6b7280';
-const WARNA_KONJ = '#6b7280';
 
 let counter = 0;
 
@@ -78,8 +75,6 @@ export function buatKlausa(label = 'Klausa') {
       buatKonstituen({ peran: 'P', jenisFrasa: 'FV' }),
     ],
     klausaTersisip: null,
-    segitiga: false,
-    teksSegitiga: '',
   };
 }
 
@@ -92,8 +87,6 @@ export function buatKlausaAnak(label = 'Klausa Subordinatif') {
       buatKonstituen({ peran: 'P', jenisFrasa: 'FV' }),
     ],
     klausaTersisip: null,
-    segitiga: false,
-    teksSegitiga: '',
   };
 }
 
@@ -131,13 +124,24 @@ function warnaPeran(kode, berwarna) {
   return WARNA_PERAN[kode] ?? WARNA_NETRAL;
 }
 
-function konstituenKeNode(konstituen, berwarna) {
+function buatNodusKonjungsi(id, teks, berwarna) {
+  return {
+    id,
+    label: 'Konj',
+    warna: warnaPeran('Konj', berwarna),
+    anak: teks.trim()
+      ? [{ id: `${id}-teks`, label: teks.trim(), warna: WARNA_NETRAL, anak: [] }]
+      : [],
+  };
+}
+
+function konstituenKeNodus(konstituen, berwarna) {
   if (konstituen.realisasi === 'klausa' && konstituen.klausaAnak) {
     return {
       id: konstituen.id,
       label: konstituen.peran,
       warna: warnaPeran(konstituen.peran, berwarna),
-      anak: [klausaKeNode(konstituen.klausaAnak, berwarna)],
+      anak: [klausaKeNodus(konstituen.klausaAnak, berwarna)],
     };
   }
 
@@ -155,7 +159,7 @@ function konstituenKeNode(konstituen, berwarna) {
     };
   }
 
-  const frasaNode = {
+  const frasaNodus = {
     id: `${konstituen.id}-frasa`,
     label: konstituen.jenisFrasa,
     warna: berwarna ? WARNA_FRASA : WARNA_NETRAL,
@@ -166,33 +170,17 @@ function konstituenKeNode(konstituen, berwarna) {
     id: konstituen.id,
     label: konstituen.peran,
     warna: warnaPeran(konstituen.peran, berwarna),
-    anak: [frasaNode],
+    anak: [frasaNodus],
   };
 }
 
-function klausaKeNode(klausa, berwarna) {
-  if (klausa.segitiga) {
-    return {
-      id: klausa.id,
-      label: klausa.label,
-      warna: WARNA_NETRAL,
-      anak: [],
-      segitiga: true,
-      teksSegitiga: klausa.teksSegitiga || '…',
-    };
-  }
-
-  const anak = klausa.konstituen.map((k) => konstituenKeNode(k, berwarna));
+function klausaKeNodus(klausa, berwarna) {
+  const anak = klausa.konstituen.map((k) => konstituenKeNodus(k, berwarna));
 
   if (klausa.klausaTersisip) {
     const { konjungsi, klausa: subklausa } = klausa.klausaTersisip;
-    anak.push({
-      id: `${klausa.id}-tersisip-konj`,
-      label: konjungsi.trim() || '…',
-      warna: berwarna ? WARNA_KONJ : WARNA_NETRAL,
-      anak: [],
-    });
-    anak.push(klausaKeNode(subklausa, berwarna));
+    anak.push(buatNodusKonjungsi(`${klausa.id}-tersisip-konj`, konjungsi, berwarna));
+    anak.push(klausaKeNodus(subklausa, berwarna));
   }
 
   return {
@@ -205,7 +193,7 @@ function klausaKeNode(klausa, berwarna) {
 
 export function buatPohon(state, berwarna = true) {
   if (state.jenis === 'tunggal') {
-    const konstituenNodes = state.konstituen.map((k) => konstituenKeNode(k, berwarna));
+    const konstituenNodus = state.konstituen.map((k) => konstituenKeNodus(k, berwarna));
     if (state.klausaUtama) {
       return {
         id: 'root',
@@ -215,7 +203,7 @@ export function buatPohon(state, berwarna = true) {
           id: 'klausa-utama',
           label: 'Klausa Utama',
           warna: WARNA_NETRAL,
-          anak: konstituenNodes,
+          anak: konstituenNodus,
         }],
       };
     }
@@ -223,18 +211,13 @@ export function buatPohon(state, berwarna = true) {
       id: 'root',
       label: 'Kalimat',
       warna: WARNA_NETRAL,
-      anak: konstituenNodes,
+      anak: konstituenNodus,
     };
   }
 
   const anak = state.segmen.map((segmen) => {
-    if (segmen.tipe === 'klausa') return klausaKeNode(segmen, berwarna);
-    return {
-      id: segmen.id,
-      label: segmen.teks.trim() || '…',
-      warna: berwarna ? WARNA_KONJ : WARNA_NETRAL,
-      anak: [],
-    };
+    if (segmen.tipe === 'klausa') return klausaKeNodus(segmen, berwarna);
+    return buatNodusKonjungsi(segmen.id, segmen.teks, berwarna);
   });
 
   return {
@@ -247,7 +230,7 @@ export function buatPohon(state, berwarna = true) {
 
 export const CONTOH = [
   {
-    judul: 'Kalimat tunggal — tiga unsur',
+    judul: 'Kalimat tunggal tiga unsur',
     state: {
       jenis: 'tunggal',
       klausaUtama: false,
@@ -259,7 +242,7 @@ export const CONTOH = [
     },
   },
   {
-    judul: 'Kalimat tunggal — dengan keterangan',
+    judul: 'Kalimat tunggal dengan keterangan',
     state: {
       jenis: 'tunggal',
       klausaUtama: false,
@@ -267,29 +250,29 @@ export const CONTOH = [
         { id: 'c2-k1', peran: 'S', jenisFrasa: 'FN', teks: 'Dia', realisasi: 'frasa', klausaAnak: null },
         { id: 'c2-k2', peran: 'P', jenisFrasa: 'FV', teks: 'sedang belajar', realisasi: 'frasa', klausaAnak: null },
         { id: 'c2-k3', peran: 'O', jenisFrasa: 'FN', teks: 'matematika', realisasi: 'frasa', klausaAnak: null },
-        { id: 'c2-k4', peran: 'KetOps', jenisFrasa: 'FN', teks: 'sekarang', realisasi: 'frasa', klausaAnak: null },
+        { id: 'c2-k4', peran: 'Ket', jenisFrasa: 'FN', teks: 'sekarang', realisasi: 'frasa', klausaAnak: null },
       ],
     },
   },
   {
-    judul: 'Majemuk koordinatif — segitiga',
+    judul: 'Majemuk koordinatif',
     state: {
       jenis: 'majemuk',
       segmen: [
         {
           tipe: 'klausa', id: 'c3-kl1', label: 'Kl₁',
-          segitiga: true, teksSegitiga: 'Andi sedang belajar',
           konstituen: [
-            { id: 'c3-k1', peran: 'S', jenisFrasa: 'FN', teks: 'Andi sedang belajar', realisasi: 'frasa', klausaAnak: null },
+            { id: 'c3-k1', peran: 'S', jenisFrasa: 'FN', teks: 'Andi', realisasi: 'frasa', klausaAnak: null },
+            { id: 'c3-k2', peran: 'P', jenisFrasa: 'FV', teks: 'sedang belajar', realisasi: 'frasa', klausaAnak: null },
           ],
           klausaTersisip: null,
         },
         { tipe: 'konjungsi', id: 'c3-konj1', teks: 'tetapi' },
         {
           tipe: 'klausa', id: 'c3-kl2', label: 'Kl₂',
-          segitiga: true, teksSegitiga: 'adiknya hanya menonton TV',
           konstituen: [
-            { id: 'c3-k2', peran: 'S', jenisFrasa: 'FN', teks: 'adiknya hanya menonton TV', realisasi: 'frasa', klausaAnak: null },
+            { id: 'c3-k3', peran: 'S', jenisFrasa: 'FN', teks: 'adiknya', realisasi: 'frasa', klausaAnak: null },
+            { id: 'c3-k4', peran: 'P', jenisFrasa: 'FV', teks: 'hanya menonton TV', realisasi: 'frasa', klausaAnak: null },
           ],
           klausaTersisip: null,
         },
@@ -297,13 +280,12 @@ export const CONTOH = [
     },
   },
   {
-    judul: 'Majemuk — dengan sub-klausa',
+    judul: 'Majemuk dengan subklausa',
     state: {
       jenis: 'majemuk',
       segmen: [
         {
           tipe: 'klausa', id: 'c4-kl1', label: 'Kl₁',
-          segitiga: false, teksSegitiga: '',
           konstituen: [
             { id: 'c4-k1', peran: 'S', jenisFrasa: 'FN', teks: 'Dia', realisasi: 'frasa', klausaAnak: null },
             { id: 'c4-k2', peran: 'P', jenisFrasa: 'FV', teks: 'pergi', realisasi: 'frasa', klausaAnak: null },
@@ -314,7 +296,6 @@ export const CONTOH = [
         { tipe: 'konjungsi', id: 'c4-konj1', teks: 'dan' },
         {
           tipe: 'klausa', id: 'c4-kl2', label: 'Kl₂',
-          segitiga: false, teksSegitiga: '',
           konstituen: [
             { id: 'c4-k4', peran: 'S', jenisFrasa: 'FN', teks: 'adiknya', realisasi: 'frasa', klausaAnak: null },
             { id: 'c4-k5', peran: 'P', jenisFrasa: 'FV', teks: 'menangis', realisasi: 'frasa', klausaAnak: null },
@@ -322,7 +303,7 @@ export const CONTOH = [
           klausaTersisip: {
             konjungsi: 'karena',
             klausa: {
-              id: 'c4-kl3', label: 'Klausa', segitiga: false, teksSegitiga: '',
+              id: 'c4-kl3', label: 'Klausa',
               konstituen: [
                 { id: 'c4-k6', peran: 'S', jenisFrasa: 'FN', teks: 'ia', realisasi: 'frasa', klausaAnak: null },
                 { id: 'c4-k7', peran: 'P', jenisFrasa: 'FV', teks: 'merindukan ibunya', realisasi: 'frasa', klausaAnak: null },
@@ -335,7 +316,7 @@ export const CONTOH = [
     },
   },
   {
-    judul: 'Bertingkat — O sebagai klausa subordinatif',
+    judul: 'Bertingkat O sebagai klausa subordinatif',
     state: {
       jenis: 'tunggal',
       klausaUtama: true,
@@ -345,7 +326,7 @@ export const CONTOH = [
         {
           id: 'c5-k3', peran: 'O', jenisFrasa: 'FN', teks: '', realisasi: 'klausa',
           klausaAnak: {
-            id: 'c5-ka1', label: 'Klausa Subordinatif', segitiga: false, teksSegitiga: '',
+            id: 'c5-ka1', label: 'Klausa Subordinatif',
             klausaTersisip: null,
             konstituen: [
               { id: 'c5-sk1', peran: 'Konj', jenisFrasa: '—', teks: 'bahwa', realisasi: 'frasa', klausaAnak: null },
