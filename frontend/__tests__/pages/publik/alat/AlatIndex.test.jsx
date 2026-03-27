@@ -24,11 +24,12 @@ describe('AlatIndex', () => {
     expect(screen.getByRole('heading', { name: 'Alat' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Penganalisis Teks' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Penghitung Huruf' })).toBeInTheDocument();
-    expect(screen.queryByRole('heading', { name: 'Pohon Kalimat' })).not.toBeInTheDocument();
-    expect(screen.queryByText('Tersedia')).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Pohon Kalimat' })).toBeInTheDocument();
+    expect(screen.queryByText('Internal')).not.toBeInTheDocument();
     const links = screen.getAllByRole('link', { name: 'Buka alat' });
     expect(links[0]).toHaveAttribute('href', '/alat/penganalisis-teks');
     expect(links[1]).toHaveAttribute('href', '/alat/penghitung-huruf');
+    expect(links[2]).toHaveAttribute('href', '/alat/pohon-kalimat');
   });
 
   it('menampilkan alat internal untuk redaksi', () => {
@@ -44,7 +45,7 @@ describe('AlatIndex', () => {
     );
 
     expect(screen.getByRole('heading', { name: 'Pohon Kalimat' })).toBeInTheDocument();
-    expect(screen.getByText('Internal')).toBeInTheDocument();
+    expect(screen.queryByText('Internal')).not.toBeInTheDocument();
     const links = screen.getAllByRole('link', { name: 'Buka alat' });
     expect(links).toHaveLength(3);
     expect(links.map((link) => link.getAttribute('href'))).toEqual([

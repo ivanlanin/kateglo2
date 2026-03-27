@@ -43,11 +43,13 @@
         "deskripsi": "Buat diagram pohon sintaksis kalimat bahasa Indonesia - tunggal, majemuk, dan bertingkat.",
         "href": "/alat/pohon-kalimat",
         "routePath": "/alat/pohon-kalimat",
-        "tampilPublik": false,
+        "tampilPublik": true,
         "seoJudul": "Pohon Kalimat",
         "seoDeskripsi": "Alat untuk menyusun diagram pohon sintaksis kalimat bahasa Indonesia secara interaktif di Kateglo.",
         "canonicalPath": "/alat/pohon-kalimat",
-        "sitemapPaths": []
+        "sitemapPaths": [
+          "/alat/pohon-kalimat"
+        ]
       }
     ]
   },

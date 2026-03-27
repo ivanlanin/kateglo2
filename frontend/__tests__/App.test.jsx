@@ -325,13 +325,13 @@ describe('App', () => {
     expect(await screen.findByText('Hal Penghitung Huruf')).toBeInTheDocument();
   });
 
-  it('mengalihkan route alat pohon kalimat ke indeks alat untuk pengguna biasa', async () => {
+  it('merender route alat pohon kalimat', async () => {
     render(
       <MemoryRouter initialEntries={['/alat/pohon-kalimat']}>
         <App />
       </MemoryRouter>
     );
-    expect(await screen.findByText('Hal Alat')).toBeInTheDocument();
+    expect(await screen.findByText('Hal Pohon Kalimat')).toBeInTheDocument();
   });
 
   it('merender route indeks gim', async () => {

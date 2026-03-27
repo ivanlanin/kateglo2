@@ -27,7 +27,7 @@ describe('PohonKalimat', () => {
     expect(screen.queryByText('Pohon akan muncul di sini.')).not.toBeInTheDocument();
   });
 
-  it('merender builder tunggal dan memunculkan pohon setelah contoh dipilih', () => {
+  it('merender builder dan memunculkan pohon setelah contoh dipilih', () => {
     render(
       <MemoryRouter>
         <PohonKalimat />
@@ -35,7 +35,6 @@ describe('PohonKalimat', () => {
     );
 
     expect(screen.getByRole('heading', { name: 'Pohon Kalimat' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Tunggal' })).toBeInTheDocument();
     expect(screen.getByText('Pohon akan muncul di sini.')).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText('Pilih contoh pohon kalimat'), {
@@ -46,23 +45,16 @@ describe('PohonKalimat', () => {
     expect(screen.getByRole('button', { name: 'Unduh' })).toBeInTheDocument();
   });
 
-  it('berpindah ke mode majemuk dan dapat menambah sub-klausa tersisip', () => {
+  it('dapat menambah klausa kedua', () => {
     render(
       <MemoryRouter>
         <PohonKalimat />
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByRole('button', { name: 'Majemuk' }));
+    fireEvent.click(screen.getByRole('button', { name: '+ Tambah klausa' }));
 
     expect(screen.getByLabelText('Konjungsi')).toBeInTheDocument();
-    const tombolTambahTersisip = screen.getAllByRole('button', { name: '+ Tambah sub-klausa tersisip' });
-    expect(tombolTambahTersisip.length).toBeGreaterThan(0);
-
-    fireEvent.click(tombolTambahTersisip[0]);
-
-    expect(screen.getByText('Sub-klausa tersisip')).toBeInTheDocument();
-    expect(screen.getByLabelText('Konjungsi sub-klausa')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Hapus sub-klausa' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '− Hapus klausa terakhir' })).toBeInTheDocument();
   });
 });

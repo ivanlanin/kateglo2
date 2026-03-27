@@ -7,8 +7,8 @@ import { buatPohon, JENIS_FRASA, PERAN } from './pohonKalimatModel';
 
 const CHAR_W = 7.2;
 const NODUS_MIN_W = 48;
-const SIBLING_GAP = 16;
-const LEVEL_H = 68;
+const SIBLING_GAP = 4;
+const LEVEL_H = 52;
 const FONT_SIZE = 13;
 const FONT_FAMILY = 'Georgia, "Times New Roman", serif';
 const PAD_X = 28;
@@ -130,13 +130,15 @@ const PohonKalimatDiagram = forwardRef(function PohonKalimatDiagram({ state, ber
       <rect width={svgW} height={svgH} fill={SVG_BG} />
 
       {daftarSisi.map((sisi, index) => {
+        const y1 = sisi.dari.spacer ? sisi.dari.y : sisi.dari.y + FONT_SIZE * 0.6;
+        const y2 = sisi.ke.spacer ? sisi.ke.y : sisi.ke.y - FONT_SIZE * 0.8;
         return (
           <line
             key={index}
             x1={sisi.dari.x}
-            y1={sisi.dari.y + FONT_SIZE * 0.6}
+            y1={y1}
             x2={sisi.ke.x}
-            y2={sisi.ke.y - FONT_SIZE * 0.8}
+            y2={y2}
             stroke="#d1d5db"
             strokeWidth="1"
           />
