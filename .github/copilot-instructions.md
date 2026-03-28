@@ -3,8 +3,8 @@
 <!-- MACHINE-METADATA
 {
   "title": "Pedoman Pengembangan Kateglo 2.0",
-  "version": "1.1",
-  "lastUpdated": "2026-03-17",
+  "version": "1.2",
+  "lastUpdated": "2026-03-27",
   "shell": "powershell",
   "primary_audience": ["developers", "ai-agents"]
 }
@@ -49,22 +49,39 @@ kateglo/
 │   ├── jobs/             # Background jobs / scheduled tasks
 │   ├── middleware/       # Auth, validation, limiter, error handler
 │   ├── models/           # Database models (Fat Model pattern)
+│   │   ├── akses/        # Pengguna, peran, izin
+│   │   ├── audit/        # Audit makna
+│   │   ├── gim/          # Susun Kata, Kuis Kata
+│   │   ├── interaksi/    # Pencarian, komentar, pencarian hitam
+│   │   ├── kadi/         # Kandidat entri (KADI)
+│   │   ├── leksikon/     # Entri, glosarium, tesaurus, etimologi
+│   │   ├── master/       # Label, tagar, opsi
+│   │   └── wordnet/      # Sinset
 │   ├── routes/           # API and system routes
 │   │   ├── publik/       # Public routes (no auth)
+│   │   │   ├── leksikon/ # Kamus, makna, rima, tesaurus, glosarium, ejaan
+│   │   │   ├── interaksi/ # Pencarian, komentar
+│   │   │   └── gim/      # Susun Kata, Kuis Kata
 │   │   ├── redaksi/      # Redaksi routes (auth + authorization)
 │   │   └── sistem/       # Auth, cron, SEO, and support routes
 │   ├── scripts/          # Utility scripts (db-schema.js, start-production.js, etc.)
 │   ├── services/         # Business logic layer
+│   │   ├── publik/       # layananKamusPublik, layananGlosariumPublik, etc.
+│   │   └── sistem/       # layananAuthGoogle, layananCache, layananSsrRuntime
 │   └── utils/            # Shared backend utilities
 │
 ├── frontend/             # Website publik + redaksi (Port 5173)
-│   ├── public/           # Static assets
+│   ├── public/           # Static assets + markdown content
+│   │   ├── docs/         # changelog.md, todo.md
+│   │   ├── ejaan/        # Panduan ejaan (markdown)
+│   │   ├── gramatika/    # Tata bahasa TBBBI (markdown)
+│   │   └── halaman/      # Halaman statis (alat, gim, info)
 │   ├── scripts/          # Frontend build helpers (SSR/mobile)
 │   └── src/
-│       ├── api/          # API client (apiPublik, apiAdmin, apiAuth)
-│       ├── components/   # Reusable components
-│       ├── context/      # Auth context (authContext)
-│       ├── hooks/        # Custom hooks
+│       ├── api/          # API client (apiPublik, apiAdmin, apiAuth, apiKadi)
+│       ├── components/   # Reusable components (data, formulir, gim, navigasi, panel, status, tampilan, tombol)
+│       ├── context/      # Auth context (authContext), SSR prefetch (ssrPrefetchContext)
+│       ├── hooks/        # Custom hooks (useCursorPagination, useNavigasiMemuat, etc.)
 │       ├── pages/        # Public, auth, and redaksi pages
 │       └── styles/       # TailwindCSS styles
 │
@@ -89,10 +106,13 @@ kateglo/
 - **Frontend API**: `frontend/src/api/apiPublik.js` — API call functions (publik)
 - **Admin API**: `frontend/src/api/apiAdmin.js` — API call functions (admin)
 - **Frontend Auth API**: `frontend/src/api/apiAuth.js` — auth/session API client
+- **KADI API**: `frontend/src/api/apiKadi.js` — KADI API client
 - **Frontend Pages**: `frontend/src/pages/` — React page components
 - **Public Page Routes**: `frontend/src/pages/publik/rutePublik.js`
 - **Redaksi Page Routes**: `frontend/src/pages/redaksi/ruteRedaksi.js`
 - **Frontend Layout Components**: `frontend/src/components/tampilan/`
+- **Changelog**: `frontend/public/docs/changelog.md`
+- **Todo**: `frontend/public/docs/todo.md`
 
 ## Shell & CLI Conventions
 
@@ -175,16 +195,16 @@ DB_CONNECTION_TIMEOUT_MS=15000
 ```javascript
 // ✅ CORRECT - Use query builder (chaining syntax)
 const db = require('../db');
-const { data } = await db.from('phrase')
+const { data } = await db.from('entri')
   .select('*')
-  .eq('lex_class', 'n')
-  .order('phrase', true)
+  .eq('jenis', 'dasar')
+  .order('indeks', true)
   .limit(20)
   .execute();
 
 // ✅ ALSO CORRECT - Raw SQL for complex queries
 const result = await db.query(
-  'SELECT * FROM phrase WHERE phrase ILIKE $1 LIMIT $2',
+  'SELECT * FROM entri WHERE indeks ILIKE $1 LIMIT $2',
   [`%${search}%`, 20]
 );
 ```
@@ -197,17 +217,44 @@ const result = await db.query(
 ### Core Tables
 | Table | Purpose | Key Columns |
 |-------|---------|-------------|
-| `phrase` | Entri kamus utama | phrase, lex_class, phrase_type, actual_phrase, info |
-| `definition` | Definisi kata | phrase, def_num, def_text, lex_class, discipline |
-| `relation` | Sinonim, antonim, tesaurus | root_phrase, related_phrase, rel_type |
-| `glossary` | Istilah teknis bilingual | phrase, original, discipline, ref_source |
-| `proverb` | Peribahasa | phrase, proverb, meaning, prv_type |
-| `abbr_entry` | Singkatan/akronim | abbr_key, abbr_id, abbr_en, abbr_type |
-| `lexical_class` | Kelas kata (n, v, adj, dll) | lex_class, lex_class_name |
-| `discipline` | Bidang ilmu | discipline, discipline_name |
-| `ref_source` | Sumber referensi | ref_source, ref_source_name |
-| `relation_type` | Tipe relasi (s/c/etc) | rel_type, rel_type_name |
-| `searched_phrase` | Statistik pencarian | phrase, search_count |
+| `entri` | Entri kamus utama | indeks, aktif, jenis, jenis_rujuk |
+| `makna` | Definisi/makna kata | entri_id, def_text, lex_class, discipline |
+| `contoh` | Contoh penggunaan | makna_id, contoh_text |
+| `etimologi` | Asal-usul kata | entri_id, bahasa, kata_asal |
+| `tesaurus` | Sinonim, antonim | root_phrase, related_phrase, rel_type |
+| `glosarium` | Istilah teknis bilingual | asing, makna, bahasa, bidang |
+| `atestasi` | Kutipan/sitasi | entri_id, sumber, konteks |
+| `bahasa` | Daftar bahasa | kode, nama |
+| `bidang` | Bidang ilmu | kode, nama |
+| `sumber` | Sumber referensi | kode, nama |
+| `label` | Label/metadata | kategori, kode, nama |
+| `tagar` | Tag entri (afiks, dll) | kode, kategori, subtipe |
+| `entri_tagar` | Relasi entri-tagar | entri_id, tagar_id |
+| `tipe_relasi` | Tipe relasi tesaurus | rel_type, rel_type_name |
+| `pencarian` | Statistik pencarian (partisi bulanan) | kata, created_at |
+| `pencarian_hitam` | Daftar hitam pencarian | kata, alasan |
+
+### Game & Module Tables
+| Table | Purpose |
+|-------|---------||
+| `kuis_kata` | Skor harian Kuis Kata per pengguna |
+| `susun_kata` | Puzzle harian Susun Kata |
+| `susun_kata_bebas` | Rekaman Susun Kata mode bebas |
+| `susun_kata_skor` | Skor Susun Kata harian per pengguna |
+| `kandidat_entri` | Kandidat kata KADI |
+| `sinset` | Synset WordNet |
+| `sinset_lema` | Relasi synset-lema |
+| `relasi_sinset` | Relasi antar-synset |
+
+### Access & Interaction Tables
+| Table | Purpose |
+|-------|---------||
+| `pengguna` | Pengguna (OAuth, nama, email, peran) |
+| `peran` | Daftar peran |
+| `peran_izin` | Relasi peran-izin |
+| `izin` | Daftar izin (permission codes) |
+| `komentar` | Komentar pengguna |
+| `riwayat_kurasi` | Riwayat kurasi editorial |
 
 ## Backend Architecture Pattern (MANDATORY)
 
@@ -222,8 +269,8 @@ router.get('/', async (req, res) => {
 
 // ✅ CORRECT - Delegate to service/model
 router.get('/', async (req, res) => {
-  const phrases = await PhraseModel.searchDictionary(query, limit);
-  res.json(phrases);
+  const entries = await ModelEntri.cariKamus(query, limit);
+  res.json(entries);
 });
 ```
 
@@ -235,23 +282,22 @@ router.get('/', async (req, res) => {
 
 ### Model Pattern Example
 ```javascript
-// backend/models/modelFrasa.js
-const db = require('../db');
+// backend/models/leksikon/modelEntri.js
+const db = require('../../db');
 
-class ModelFrasa {
-  static async searchDictionary(query, limit = 20) {
-    // Prefix search first, then contains fallback
-    const prefixResult = await db.query(
-      'SELECT phrase, lex_class FROM phrase WHERE phrase ILIKE $1 ORDER BY phrase LIMIT $2',
+class ModelEntri {
+  static async cariKamus(query, limit = 20) {
+    const result = await db.query(
+      'SELECT indeks, aktif, jenis FROM entri WHERE indeks ILIKE $1 ORDER BY indeks LIMIT $2',
       [`${query}%`, limit]
     );
-    return prefixResult.rows;
+    return result.rows;
   }
 
-  static async getPhraseBySlug(slug) {
+  static async ambilEntriByIndeks(indeks) {
     const result = await db.query(
-      'SELECT * FROM phrase WHERE LOWER(phrase) = LOWER($1)',
-      [slug]
+      'SELECT * FROM entri WHERE LOWER(indeks) = LOWER($1)',
+      [indeks]
     );
     return result.rows[0] || null;
   }
@@ -301,15 +347,22 @@ function SearchResults({ query }) {
 
 ### Routing (React Router 7)
 ```jsx
-// frontend/src/App.jsx
-<Routes>
-  <Route path="/auth/callback" element={<AuthCallback />} />
-  <Route path="/redaksi/login" element={<LoginAdmin />} />
-  <Route path="/" element={<Beranda />} />
-  <Route path="/kamus/detail/:indeks" element={<KamusDetail />} />
-  <Route path="/glosarium" element={<Glosarium />} />
-  <Route path="/redaksi" element={<Dasbor />} />
-</Routes>
+// Rute didefinisikan di:
+// - frontend/src/pages/publik/rutePublik.js (publik)
+// - frontend/src/pages/redaksi/ruteRedaksi.js (admin)
+// Contoh rute publik:
+//   /, /kamus, /kamus/cari/:kata, /kamus/detail/:indeks
+//   /tesaurus, /makna, /rima, /ejaan, /gramatika
+//   /glosarium, /glosarium/bidang/:bidang
+//   /alat, /alat/penghitung-huruf, /alat/penganalisis-teks, /alat/pohon-kalimat
+//   /gim, /gim/susun-kata/harian, /gim/susun-kata/bebas, /gim/kuis-kata
+//   /ihwal, /privasi, /sumber
+// Contoh rute redaksi:
+//   /redaksi, /redaksi/kamus, /redaksi/tesaurus, /redaksi/etimologi
+//   /redaksi/glosarium, /redaksi/audit-makna, /redaksi/audit-tagar
+//   /redaksi/kuis-kata, /redaksi/susun-kata-harian, /redaksi/susun-kata-bebas
+//   /redaksi/pengguna, /redaksi/peran, /redaksi/izin
+//   /redaksi/kandidat-kata, /redaksi/sinset
 ```
 
 ### Styling: TailwindCSS
@@ -324,30 +377,60 @@ function SearchResults({ query }) {
 
 ## API Routes Structure
 
-### Public & System Routes
+### Public Routes (`/api/publik/`)
 ```
 GET  /api/publik/health
+# Leksikon
 GET  /api/publik/kamus/...
 GET  /api/publik/makna/...
 GET  /api/publik/rima/...
 GET  /api/publik/tesaurus/...
 GET  /api/publik/glosarium/...
-GET  /api/publik/gim/...
+GET  /api/publik/ejaan/...
+# Interaksi
+POST /api/publik/pencarian/...
+GET  /api/publik/komentar/...
+# Gim
+GET  /api/publik/gim/susun-kata/harian
+GET  /api/publik/gim/susun-kata/bebas
+POST /api/publik/gim/susun-kata/harian/submit
+GET  /api/publik/gim/kuis-kata/ronde
+POST /api/publik/gim/kuis-kata/submit
+```
+
+### System Routes
+```
 GET  /api/pengguna/me
 GET  /auth/google
 GET  /health
+POST /cron/susun-kata/harian      # Cron: prefill puzzle harian
 ```
 
-### Redaksi Routes (auth required)
+### Redaksi Routes (`/api/redaksi/`, auth required)
 ```
 GET    /api/redaksi/health
 GET    /api/redaksi/statistik
-GET    /api/redaksi/kamus
-POST   /api/redaksi/kamus
-PUT    /api/redaksi/kamus/:id
-DELETE /api/redaksi/kamus/:id
-GET    /api/redaksi/glosarium
-GET    /api/redaksi/pengguna
+# Leksikon
+GET|POST|PUT|DELETE /api/redaksi/kamus/:id
+GET|POST|PUT|DELETE /api/redaksi/tesaurus/:id
+GET|POST|PUT|DELETE /api/redaksi/etimologi/:id
+GET|POST|PUT|DELETE /api/redaksi/glosarium/:id
+# Gim
+GET|POST|PUT|DELETE /api/redaksi/susun-kata/:id
+GET|POST|PUT|DELETE /api/redaksi/kuis-kata/:id
+# Audit
+GET    /api/redaksi/audit-makna
+GET    /api/redaksi/audit-tagar
+# Interaksi
+GET    /api/redaksi/komentar
+GET    /api/redaksi/pencarianHitam
+# Master data
+GET    /api/redaksi/bidang|bahasa|sumber|label|tagar
+# Akses
+GET    /api/redaksi/pengguna|peran|izin
+# Module
+GET    /api/redaksi/kandidat-kata     # KADI
+GET    /api/redaksi/sinset            # WordNet
 ```
 
 ## Error Handling & Security
@@ -372,7 +455,7 @@ const Joi = require('joi');
 
 const searchSchema = Joi.object({
   q: Joi.string().min(1).max(255).required(),
-  type: Joi.string().valid('dictionary', 'glossary', 'proverb').default('dictionary'),
+  type: Joi.string().valid('kamus', 'glosarium', 'tesaurus').default('kamus'),
   limit: Joi.number().integer().min(1).max(100).default(20),
 });
 ```
@@ -433,7 +516,7 @@ Set-Location frontend; npm run lint; npm run test
   require('dotenv').config({ path: '.env' });
   const db = require('./db');
   
-  db.query("SELECT * FROM phrase LIMIT 5")
+  db.query("SELECT * FROM entri LIMIT 5")
     .then(r => { console.log(JSON.stringify(r.rows, null, 2)); db.close(); })
     .catch(e => { console.error(e.message); db.close(); });
   ```
@@ -441,13 +524,13 @@ Set-Location frontend; npm run lint; npm run test
 
 ## Changelog
 
-- Catatan perubahan user-facing disimpan di `frontend/public/changelog.md`.
-- Daftar pekerjaan aktif disimpan di `frontend/public/todo.md`.
+- Catatan perubahan user-facing disimpan di `frontend/public/docs/changelog.md`.
+- Daftar pekerjaan aktif disimpan di `frontend/public/docs/todo.md`.
 - Untuk perubahan teknis detail, tetap buat dokumen periodik di `_docs/YYYYMM/`.
 
 ## Changelog Manual Edit Policy
 
-- Abaikan perubahan tak terduga pada `frontend/public/changelog.md` karena user dapat mengubahnya secara manual.
+- Abaikan perubahan tak terduga pada `frontend/public/docs/changelog.md` karena user dapat mengubahnya secara manual.
 
 ## Cheat-sheet (Quick Commands)
 
@@ -462,7 +545,7 @@ npm run dev
 Set-Location backend; node scripts/sistem/db-schema.js
 
 # Check schema for a table
-Select-String -Path "_docs/data/skema.sql" -Pattern "create table phrase"
+Select-String -Path "_docs/data/skema.sql" -Pattern "create table entri"
 
 # Kill port conflicts
 npx kill-port 3000; npx kill-port 5173
@@ -492,7 +575,7 @@ Gunakan `_kode/` sebagai referensi:
 ## Important Conventions
 
 ### Naming
-- **Files**: camelCase untuk JS files (e.g., `modelFrasa.js`, `apiPublik.js`)
+- **Files**: camelCase untuk JS files (e.g., `modelEntri.js`, `apiPublik.js`)
 - **Components**: PascalCase (e.g., `SearchBar.jsx`, `DictionaryDetail.jsx`)
 - **Constants**: camelCase (NOT SCREAMING_SNAKE_CASE)
 - **Database**: snake_case (matching PostgreSQL convention)
