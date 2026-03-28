@@ -7,11 +7,9 @@ Uraian mengenai sintaksis sebagai telaah kalimat menduduki bagian terbesar dalam
 
 Meskipun begitu, terdapat hal yang sama pada hampir semua kalimat yang menjadi dasar teori sintaksis yang digunakan dalam buku ini. Hal itu dapat dirumuskan sebagai berikut.
 
-a) Semua kalimat terdiri atas beberapa bagian dan tiap bagian dapat pula terdiri atas beberapa bagian yang lebih kecil.
-
-b) Bagian-bagian kalimat itu tergolong dalam jenis atau tipe yang jumlahnya terbatas.
-
-c) Tiap-tiap bagian kalimat itu mempunyai peran dan fungsi tersendiri di dalam bagian kalimat yang lebih besar.
+- a) Semua kalimat terdiri atas beberapa bagian dan tiap bagian dapat pula terdiri atas beberapa bagian yang lebih kecil.
+- b) Bagian-bagian kalimat itu tergolong dalam jenis atau tipe yang jumlahnya terbatas.
+- c) Tiap-tiap bagian kalimat itu mempunyai peran dan fungsi tersendiri di dalam bagian kalimat yang lebih besar.
 
 Hal yang pertama, bahwa setiap kalimat terdiri atas beberapa bagian dan tiap bagian dapat terdiri atas beberapa bagian yang lebih kecil, menjadi dasar analisis struktur konstituen dalam sintaksis. Hal kedua, bahwa setiap bagian tergolong dalam jenis atau tipe tertentu yang dapat dirujuk dalam deskripsi, menjadi dasar analisis kategori sintaksis. Hal ketiga, bahwa bagian-bagian kalimat itu mempunyai peran dan fungsi tersendiri atau tempat yang dapat diisi dalam bagian yang lebih besar, menjadi dasar analisis fungsi gramatikal.
 

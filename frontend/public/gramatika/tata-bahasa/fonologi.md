@@ -12,12 +12,12 @@ Dalam penggunaan bahasa sehari-hari, umumnya digunakan bentuk tulisan tanpa dita
 | Tulisan | Fonemis | Fonetis |
 |---|---|---|
 | anak | /anak/ | [ana?] |
-| ember | /ember/ | [ember] |
+| ember | /ember/ | [ɛmbɛr] |
 | dengan | /dəŋan/ | [dəŋan] |
 | syarat | /ʃarat/ | [ʃarat] |
 | sofa | /sofa/ | [sofa] |
 | visa | /fisa/ | [fisa] |
-| mau | /mau/ | [mau] |
+| mau | /mau/ | [maʊ] |
 | harimau | /harimaw/ | [harimaw] |
 
 Dari contoh di atas tampak bahwa hubungan antara huruf dalam representasi tulisan, lambang yang bertalian dalam representasi fonemis, dan lambang dalam representasi fonetis cukup rumit. Diperlukan konsep analitis untuk memilih lambang-lambang yang akan digunakan dalam representasi. Pemilihan lambang itu harus memperhatikan prinsip ekonomi (tidak terlalu banyak) dan prinsip kepraktisan (mudah dalam mengingat dan memakainya). Untaian bunyi yang membentuk satuan-satuan bahasa dalam berbicara dilihat sebagai (a) untaian bunyi, yaitu bunyi yang satu muncul setelah bunyi yang lain dan (b) gejala suara yang menyertai untaian bunyi itu. Atas dasar itu, fonologi dapat dibedakan atas (a) fonologi segmental dan (b) fonologi suprasegmental.

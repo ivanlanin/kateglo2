@@ -5,11 +5,15 @@ title: Ragam Menurut Jenis Pemakaian (1.2.2)
 
 Ragam bahasa menurut jenis pemakaiannya dapat diperinci menjadi (1) ragam menurut bidang atau pokok persoalan, (2) ragam menurut sarana yang digunakan, dan (3) ragam yang mengalami percampuran.
 
+**Ragam menurut Bidang**
+
 Setiap penutur bahasa hidup dalam lingkungan masyarakat yang adat istiadat atau tata cara pergaulannya berbeda-beda. Perbedaan itu terlihat pula dalam pemakaian bahasanya sesuai dengan atau bergantung pada pergaulan, pendidikan, profesi, kegemaran, dan/atau pengalamannya. Orang yang ingin turut terlibat dalam pembicaraan bidang tertentu atau yang ingin membicarakan pokok persoalan yang berkaitan dengan itu harus memilih salah satu ragam yang dikuasainya dan sesuai dengan bidang atau pokok pembicaraan. Bidang yang dimaksudkan itu, misalnya, ialah agama, politik, ilmu, teknologi, pertukangan, perdagangan, seni rupa, seni sastra, olahraga, perundang-undangan, atau angkatan bersenjata.
 
 Perbedaan ragam itu terlihat, antara lain, dalam pemakaian sejumlah kata atau istilah tertentu yang dihubungkan dengan bidangnya, misalnya kata *akidah*, *akad nikah*, dan *nabi* untuk bidang agama; *atom*, *nuklir*, dan *radiasi* untuk bidang fisika; serta *libero*, *wasit*, dan *maraton* untuk bidang olahraga. Di samping itu, ada juga variasi tata bahasa pada setiap ragam. Perhatikanlah bangun kalimat yang tersusun dalam, misalnya, uraian resep dapur, wacana ilmiah, surat keputusan, undang-undang, wawancara, doa, iklan, dan susastra. Penulis karya ilmiah, misalnya, sering menghindari pemakaian kata *aku*, *saya*, atau bahkan *pengarang itu* dan menggantinya dengan *kami* atau *penulis ini*. Penulis karya ilmiah lebih suka menggunakan kalimat pasif sehingga bentuk verbanya hampir selalu menggunakan awalan *di-*. Sementara itu, pemakaian kosakata dan tata bahasa dalam seni kata yang menghasilkan ragam susastra tidak terlalu diatur.
 
 Dalam pemakaian ragam menurut bidang atau pokok persoalan yang dibicarakan itu, ada praanggapan pemakaian ragam bahasa yang lain. Misalnya, kalimat yang berkaitan dengan topik dalam bidang ekonomi atau manajemen juga mengisyaratkan pemakaian ragam bahasa orang yang terpelajar.
+
+**Ragam menurut Sarana**
 
 Ragam bahasa menurut sarananya lazim dibagi atas ragam lisan atau ujaran dan ragam tulis. Karena setiap masyarakat bahasa memiliki ragam lisan, sedangkan ragam tulis baru muncul kemudian, masalah yang perlu ditelaah ialah bagaimana orang menuangkan ujarannya ke dalam bentuk tulisan. Bahasa Melayu sejak dahulu dianggap berperan sebagai *lingua franca*. Bahasa bersama itu, untuk sebagian besar penduduk Indonesia, berupa ragam lisan untuk keperluan yang agak terbatas. Sampai masa kini pun, bagi berjuta-juta orang yang masih buta huruf, bahasa Indonesia yang dikuasainya hanyalah ragam lisan.
 
@@ -22,6 +26,8 @@ Dalam hal cara yang digunakan dalam ujaran, yang membedakan ragam lisan dari rag
 Setiap penutur bahasa pada dasarnya dapat memanfaatkan ragam lisan dan ragam tulis sesuai dengan keperluannya apa pun latar belakangnya. Meskipun demikian, kemampuan setiap orang berbeda dalam menggunakan ragam tulis sesuai dengan tingkat pendidikannya. Pokok pengajaran bahasa di sekolah pada hakikatnya berkisar pada upaya meningkatkan keterampilan dalam menggunakan kedua ragam itu.
 
 Di dalam penggunaan ragam lisan dan tulis masih terdapat kendala atau hambatan lain. Artinya, ada bidang atau pokok persoalan yang lebih mudah dituangkan ke dalam ragam yang satu daripada yang lain. Misalnya, laporan keuangan dengan tabel bilangan dan grafik, uraian kimia yang berisi lambang unsur dan rumus hidrolisis, atau peraturan perundang-undangan yang struktur kalimatnya bersusun-susun lebih mudah disusun dan dibaca dalam ragam tulis. Sebaliknya, laporan pandangan mata tentang pertandingan olahraga yang disampaikan dalam bentuk lisan sulit dipahami orang jika ditranskripsikan sebagaimana adanya ke dalam bentuk tulisan.
+
+**Ragam yang Mengalami Percampuran**
 
 Walaupun diakui adanya proses saling memengaruhi di antara bahasa yang digunakan secara berdampingan, seperti halnya di Indonesia, interaksi kebahasaan itu ada batasnya. Selama pemasukan unsur suatu bahasa ke dalam bahasa yang lain dimaksudkan untuk mengisi kekosongan kosakata atau memperkaya kesinoniman, gejala itu dianggap wajar. Akan tetapi, apabila unsur bahasa yang bersangkutan itu mengganggu keefektifan penyampaian informasi, ragam bahasa yang tercampur unsur itu hendaknya dihindari. Itulah yang disebut ragam bahasa yang mengalami gangguan pencampuran atau interferensi. Tentu saja tidak terlalu jelas batas antara pencampuran yang mengganggu dan yang tidak. Banyaknya unsur pungutan yang berasal dari bahasa Jawa, misalnya, dianggap memperkaya bahasa Indonesia, tetapi masuknya unsur pungutan bahasa Inggris oleh sebagian orang dianggap mencemari keaslian dan kemurnian bahasa Indonesia. Lafal Indonesia yang kesunda-sundaan masih dapat diterima orang.
 

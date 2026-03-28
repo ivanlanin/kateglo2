@@ -3,6 +3,8 @@ id: 2.1
 title: Ragam Menurut Golongan Penutur (1.2.1)
 ---
 
+**Ragam Daerah**
+
 Ragam daerah dikenal juga dengan nama logat atau dialek. Bahasa yang menyebar luas selalu mengenal logat. Setiap dialek dapat dipahami secara timbal balik oleh penuturnya, sekurang-kurangnya oleh penutur dialek yang daerahnya berdampingan. Jika di dalam wilayah pemakaiannya orang tidak mudah berhubungan (misalnya, karena tempat kediamannya dipisahkan oleh pegunungan, hutan, selat, atau laut), lambat laun logat itu akan banyak berubah sehingga dianggap sebagai bahasa yang berbeda. Hal itu pernah terjadi dahulu kala pada logat-logat bahasa Nusantara Purba, seperti yang sekarang disebut bahasa Batak, Jawa, Sunda, Bali, dan Tagalog. Berkat sarana perhubungan yang makin maju, baik yang berupa alat transportasi (darat, laut, udara) maupun media massa (cetak, elektronik), logat daerah bahasa Indonesia yang sekarang masih dikenali agaknya tidak akan berkembang menjadi bahasa tersendiri.
 
 Logat daerah dapat dikenali dari tata bunyinya. Logat Indonesia-Batak yang dilafalkan oleh putra Tapanuli dapat dikenali, misalnya, karena tekanan kata yang amat jelas; logat Indonesia orang Bali mudah dikenali karena pelafalan bunyi /t/ dan /d/-nya; logat bahasa Indonesia orang Aceh mudah dikenali karena pelafalan bunyi /t/ dan /th/-nya. Ciri-ciri khas yang meliputi tekanan, turun-naiknya nada, dan panjang-pendeknya bunyi bahasa membangun aksen yang berbeda-beda. Perbedaan kosakata dan variasi gramatikal tentu ada juga walaupun kurang tampak. Logat dengan sendirinya erat hubungannya dengan bahasa ibu si penutur.
@@ -11,11 +13,15 @@ Berapa banyak jumlah logat dalam bahasa Indonesia? Jawaban atas pertanyaan itu b
 
 Sikap penutur bahasa Indonesia terhadap aksen penutur lain berbeda-beda. Akan tetapi, umumnya seseorang dapat menerima perbedaan aksen orang lain selama bahasa Indonesia orang tersebut masih dapat dipahami. Hal itu menunjukkan bahwa toleransi orang Indonesia terhadap logat sangat tinggi. Selain itu, mungkin juga polarisasi logat yang belum jelas itu disebabkan oleh kenyataan bahwa bahasa Indonesia belum terlalu lama berperan sebagai bahasa persatuan.
 
+**Ragam menurut Pendidikan**
+
 Ragam bahasa menurut pendidikan penuturnya, yang berbeda dari ragam dialek, menunjukkan perbedaan antara kaum yang berpendidikan dan yang tidak. Tata bunyi bahasa Indonesia golongan yang tidak terpelajar pada umumnya berbeda dengan tata bunyi kaum terpelajar. Bunyi /f/, /j/, /x/, dan gugus konsonan /ks/, misalnya, sering tidak terdapat dalam ujaran orang yang tidak berpendidikan atau hanya berpendidikan rendah. Kata *efektif*, *syarat*, *khusus*, dan *ekspres* yang dilafalkan [efektif], [syarat], [xusus], dan [ekspres] sering dilafalkan [epektip], [sarat], [kusus], dan [ekpres] karena terpengaruh etnis tertentu.
 
 Perbedaan ragam kedua kelompok itu juga tampak pada tata bahasa. Kalimat *Saya mau tulis itu surat kepamanku* sering ditemukan dalam tuturan nonformal. Kalimat tersebut cukup jelas maksudnya, tetapi bentuk bahasa formal yang digunakan oleh kaum berpendidikan adalah *Saya mau menulis surat itu kepada paman saya.*
 
 Rangkaian kata dalam bahasa Indonesia dapat disusun menjadi kalimat dalam bahasa Indonesia, tetapi tidak setiap kalimat dalam bahasa Indonesia termasuk kalimat yang apik. Hal itu dapat dianalogikan dengan Ali yang berpakaian lusuh dan koyak atau Ali yang berdandan dengan rapi, tetap disebut Ali. Akan tetapi, jika Ali ingin diperlakukan dengan baik dalam pergaulannya, sebaiknya ia memelihara penampilan dan berpakaian bersih. Itulah sebabnya bahasa orang yang berpendidikan/terpelajar—yang lazim disebut dengan bahasa persekolahan—pada umumnya memperlihatkan pemakaian bahasa yang apik. Badan pemerintah, seperti lembaga perwakilan rakyat, lembaga kehakiman, pers, radio, televisi, mimbar agama, dan forum ilmiah seharusnya menggunakan ragam bahasa orang terpelajar yang lazim digolongkan dan diterima sebagai ragam baku.
+
+**Ragam menurut Sikap Penutur dan Jenis Pemakaian**
 
 Selain ragam baku, ada juga pengelompokan ragam bahasa yang didasarkan pada sikap penutur dan jenis pemakaiannya.
 
