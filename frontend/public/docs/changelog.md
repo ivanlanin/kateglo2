@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-03-30 Senin
+
+- Memastikan soal susun kata harian unik per hari
+
 ## 2026-03-27 Jumat
 
 - Merapikan dan menstandarkan tampilan [alat](/alat)

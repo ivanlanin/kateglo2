@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-17T18:42:09.602Z
+-- Generated: 2026-03-28T13:47:53.243Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -789,13 +789,15 @@ create table susun_kata (
   keterangan text, -- Catatan internal untuk soal
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
+  constraint susun_kata_kata_key unique (kata),
   constraint susun_kata_tanggal_panjang_key unique (tanggal, panjang),
-  constraint susun_kata_kata_check check (kata ~ '^[a-z]+$'::text),
   constraint susun_kata_kata_panjang_check check (char_length(kata) = panjang),
-  constraint susun_kata_panjang_check check ((panjang >= 4) AND (panjang <= 8))
+  constraint susun_kata_panjang_check check ((panjang >= 4) AND (panjang <= 8)),
+  constraint susun_kata_kata_check check (kata ~ '^[a-z]+$'::text)
 );
 create index idx_susun_kata_panjang_tanggal on susun_kata using btree (panjang, tanggal DESC);
 create index idx_susun_kata_tanggal on susun_kata using btree (tanggal DESC);
+create unique index susun_kata_kata_key on susun_kata using btree (kata);
 create unique index susun_kata_tanggal_panjang_key on susun_kata using btree (tanggal, panjang);
 create trigger trg_set_timestamp_fields__susun_kata
   before insert or update on susun_kata

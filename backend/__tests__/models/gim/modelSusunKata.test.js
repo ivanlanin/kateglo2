@@ -320,12 +320,14 @@ describe('ModelSusunKata', () => {
     await expect(ModelSusunKata.buatHarianOtomatis({ tanggal: '2026-03-02', panjang: 5 })).resolves.toBeNull();
 
     ModelEntri.ambilKamusSusunKata.mockResolvedValueOnce(['kartu', 'katun']);
-    db.query.mockResolvedValueOnce({ rows: [{ id: 3, kata: 'kartu' }] });
+    db.query.mockResolvedValueOnce({ rows: [] }); // ambilKataSudahTerpakai
+    db.query.mockResolvedValueOnce({ rows: [{ id: 3, kata: 'kartu' }] }); // INSERT
     const inserted = await ModelSusunKata.buatHarianOtomatis({ tanggal: '2026-03-02', panjang: 5 });
     expect(inserted).toEqual({ id: 3, kata: 'kartu' });
 
     ModelEntri.ambilKamusSusunKata.mockResolvedValueOnce(['kartu']);
-    db.query.mockResolvedValueOnce({ rows: [] });
+    db.query.mockResolvedValueOnce({ rows: [] }); // ambilKataSudahTerpakai
+    db.query.mockResolvedValueOnce({ rows: [] }); // INSERT conflict
     const spyAmbilHarian = jest.spyOn(ModelSusunKata, 'ambilHarian').mockResolvedValueOnce({ id: 4, kata: 'kartu' });
     const fallback = await ModelSusunKata.buatHarianOtomatis({ tanggal: '2026-03-03', panjang: 5 });
     expect(spyAmbilHarian).toHaveBeenCalledWith({ tanggal: '2026-03-03', panjang: 5 });
@@ -333,19 +335,15 @@ describe('ModelSusunKata', () => {
     spyAmbilHarian.mockRestore();
 
     ModelEntri.ambilKamusSusunKata.mockResolvedValueOnce([undefined]);
-    db.query.mockResolvedValueOnce({ rows: [{ id: 6, kata: '' }] });
+    db.query.mockResolvedValueOnce({ rows: [] }); // ambilKataSudahTerpakai
     const kataKosong = await ModelSusunKata.buatHarianOtomatis({ tanggal: '2026-03-04', panjang: 5 });
-    expect(kataKosong).toEqual({ id: 6, kata: '' });
-    expect(db.query).toHaveBeenNthCalledWith(
-      3,
-      expect.stringContaining('INSERT INTO susun_kata'),
-      ['2026-03-04', 5, '']
-    );
+    expect(kataKosong).toBeNull();
   });
 
   it('buatHarianOtomatis tetap memilih indeks valid saat step awal tidak relatif prima', async () => {
     ModelEntri.ambilKamusSusunKata.mockResolvedValueOnce(['aaaa', 'bbbb', 'cccc', 'dddd']);
-    db.query.mockResolvedValueOnce({ rows: [{ id: 15, kata: 'bbbb' }] });
+    db.query.mockResolvedValueOnce({ rows: [] }); // ambilKataSudahTerpakai
+    db.query.mockResolvedValueOnce({ rows: [{ id: 15, kata: 'bbbb' }] }); // INSERT
 
     const result = await ModelSusunKata.buatHarianOtomatis({ tanggal: '2026-03-02', panjang: 4 });
 
@@ -422,7 +420,8 @@ describe('ModelSusunKata', () => {
     await expect(ModelSusunKata.simpanHarianAdmin({ tanggal: '2026-03-02', panjang: 5, kata: 'kartu', penggunaId: 1 })).rejects.toThrow('Kata tidak ditemukan pada kamus Susun Kata');
 
     ModelEntri.cekKataSusunKataValid.mockResolvedValueOnce(true);
-    db.query.mockResolvedValueOnce({ rows: [{ id: 12, kata: 'kartu', keterangan: null }] });
+    db.query.mockResolvedValueOnce({ rows: [] }); // duplicate check
+    db.query.mockResolvedValueOnce({ rows: [{ id: 12, kata: 'kartu', keterangan: null }] }); // INSERT
 
     await expect(ModelSusunKata.simpanHarianAdmin({
       tanggal: '2026-03-02',
@@ -439,8 +438,13 @@ describe('ModelSusunKata', () => {
     );
 
     ModelEntri.cekKataSusunKataValid.mockResolvedValueOnce(true);
-    db.query.mockResolvedValueOnce({ rows: [] });
+    db.query.mockResolvedValueOnce({ rows: [] }); // duplicate check
+    db.query.mockResolvedValueOnce({ rows: [] }); // INSERT returns empty
     await expect(ModelSusunKata.simpanHarianAdmin({ tanggal: '2026-03-02', panjang: 5, kata: 'kartu', penggunaId: 1 })).resolves.toBeNull();
+
+    ModelEntri.cekKataSusunKataValid.mockResolvedValueOnce(true);
+    db.query.mockResolvedValueOnce({ rows: [{ id: 99, tanggal: '2026-01-15' }] }); // duplicate found
+    await expect(ModelSusunKata.simpanHarianAdmin({ tanggal: '2026-03-02', panjang: 5, kata: 'kartu', penggunaId: 1 })).rejects.toThrow('sudah digunakan');
   });
 
   it('ambilSkorPenggunaHarian validasi id dan mengembalikan baris', async () => {

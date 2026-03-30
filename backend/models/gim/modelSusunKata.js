@@ -270,13 +270,16 @@ class ModelSusunKata {
     const kamus = await ModelEntri.ambilKamusSusunKata({ panjang: panjangAman, limit: 10000 });
     if (!kamus.length) return null;
 
+    const sudahTerpakai = await this.ambilKataSudahTerpakai({ panjang: panjangAman });
+
     const offsetHari = hitungOffsetHari(tanggalAman);
-    const indexKata = pilihIndexKata({
+    const kata = this.pilihKataUnik({
+      kamus,
+      sudahTerpakai,
       panjang: panjangAman,
       offsetHari,
-      totalKamus: kamus.length,
     });
-    const kata = String(kamus[indexKata] || '').trim().toLowerCase();
+    if (!kata) return null;
 
     const insertResult = await db.query(
       `INSERT INTO susun_kata (tanggal, panjang, kata)
@@ -297,6 +300,44 @@ class ModelSusunKata {
     const existing = await this.ambilHarian({ tanggal, panjang });
     if (existing) return existing;
     return this.buatHarianOtomatis({ tanggal, panjang });
+  }
+
+  static async ambilKataSudahTerpakai({ panjang }) {
+    const panjangAman = parsePanjangHarian(panjang, 5);
+    const result = await db.query(
+      `SELECT kata FROM susun_kata WHERE panjang = $1`,
+      [panjangAman]
+    );
+    return new Set(result.rows.map((row) => row.kata));
+  }
+
+  static pilihKataUnik({ kamus, sudahTerpakai, panjang, offsetHari }) {
+    const totalKamus = kamus.length;
+    if (!totalKamus) return null;
+
+    const indexAwal = pilihIndexKata({ panjang, offsetHari, totalKamus });
+
+    if (totalKamus <= 1) {
+      return String(kamus[0] || '').trim().toLowerCase();
+    }
+
+    const seed = `susun-kata:${BASE_TANGGAL}:${panjang}`;
+    let step = (hash32(`${seed}:step`) % (totalKamus - 1)) + 1;
+    while (gcd(step, totalKamus) !== 1) {
+      step = (step % (totalKamus - 1)) + 1;
+    }
+
+    let index = indexAwal;
+    for (let i = 0; i < totalKamus; i += 1) {
+      const kandidat = String(kamus[index] || '').trim().toLowerCase();
+      if (kandidat && !sudahTerpakai.has(kandidat)) {
+        return kandidat;
+      }
+      index = (index + step) % totalKamus;
+    }
+
+    // All words exhausted; fall back to original pick
+    return String(kamus[indexAwal] || '').trim().toLowerCase();
   }
 
   static async buatHarianRentang({ tanggalMulai, totalHari }) {
@@ -331,6 +372,16 @@ class ModelSusunKata {
 
     const valid = await ModelEntri.cekKataSusunKataValid(kataAman, { panjang: panjangAman });
     if (!valid) throw new Error('Kata tidak ditemukan pada kamus Susun Kata');
+
+    const duplikat = await db.query(
+      `SELECT id, tanggal FROM susun_kata WHERE kata = $1 AND tanggal <> $2::date LIMIT 1`,
+      [kataAman, tanggalAman]
+    );
+    if (duplikat.rows.length) {
+      const tgl = duplikat.rows[0].tanggal;
+      const tglStr = typeof tgl === 'string' ? tgl : tgl.toISOString().slice(0, 10);
+      throw new Error(`Kata "${kataAman}" sudah digunakan pada ${tglStr}`);
+    }
 
     const result = await db.query(
       `INSERT INTO susun_kata (tanggal, panjang, kata, keterangan)
