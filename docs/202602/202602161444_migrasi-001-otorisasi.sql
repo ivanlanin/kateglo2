@@ -1,5 +1,5 @@
 -- Migrasi 001: Tabel otorisasi pengguna
--- Jalankan: psql $DATABASE_URL -f _docs/migrasi-001-otorisasi.sql
+-- Jalankan: psql $DATABASE_URL -f docs/migrasi-001-otorisasi.sql
 
 BEGIN;
 

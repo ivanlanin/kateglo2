@@ -14,7 +14,7 @@ Tujuan operasional:
 
 ## File Migrasi
 
-- `_docs/202602/20260223_migrasi_audit_kata_makna.sql`
+- `docs/202602/20260223_migrasi_audit_kata_makna.sql`
 
 ## Struktur Tabel
 

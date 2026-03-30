@@ -23,7 +23,7 @@
  * Penggunaan:
  *   node scripts/analisis/deteksi-sisipan-dwipurwa.js              # ringkasan ke konsol
  *   node scripts/analisis/deteksi-sisipan-dwipurwa.js --verbose    # tampilkan semua kandidat
- *   node scripts/analisis/deteksi-sisipan-dwipurwa.js --csv        # simpan CSV ke _docs/
+ *   node scripts/analisis/deteksi-sisipan-dwipurwa.js --csv        # simpan CSV ke docs/
  *   node scripts/analisis/deteksi-sisipan-dwipurwa.js --dasar-only # hanya basis berjenis 'dasar'
  *
  * @example
@@ -322,7 +322,7 @@ async function main() {
     const yyyymm = `${now.getFullYear()}${pad(now.getMonth() + 1)}`;
     const ts = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}`;
 
-    const outDir = path.resolve(__dirname, '../../_docs', yyyymm);
+    const outDir = path.resolve(__dirname, '../../docs', yyyymm);
     if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
 
     const outFile = path.join(outDir, `${ts}_kandidat-sisipan-dwipurwa.csv`);

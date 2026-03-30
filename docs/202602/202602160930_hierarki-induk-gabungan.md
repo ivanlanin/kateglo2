@@ -25,7 +25,7 @@ Padahal, "berlatih tanding" secara linguistik adalah turunan dari "berlatih", bu
 
 ### 1. Migrasi Database
 
-File: `_docs/202602/20260216_hierarki_induk_gabungan.sql`
+File: `docs/202602/20260216_hierarki_induk_gabungan.sql`
 
 Untuk setiap lema gabungan yang `induk`-nya lema dasar, cari lema berimbuhan saudara yang menjadi prefix (kata pertama). Jika cocok, pindahkan `induk` ke berimbuhan tersebut. Pilih berimbuhan terpanjang untuk menghindari ambiguitas.
 

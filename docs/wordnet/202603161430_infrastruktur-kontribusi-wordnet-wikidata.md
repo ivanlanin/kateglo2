@@ -377,7 +377,7 @@ Kontribusi massal membutuhkan koordinasi dengan komunitas terkait agar diterima 
 - [Wikidata Lexicographical Data](https://www.wikidata.org/wiki/Wikidata:Lexicographical_data)
 - [Wikidata API — wbeditentity](https://www.wikidata.org/w/api.php?action=help&modules=wbeditentity)
 - [Wikidata Bot Policy](https://www.wikidata.org/wiki/Wikidata:Bots)
-- Rencana model relasi: `_docs/202603/202603161259_rencana-model-relasi-wordnet.md`
+- Rencana model relasi: `docs/202603/202603161259_rencana-model-relasi-wordnet.md`
 
 ## File Data Lokal
 

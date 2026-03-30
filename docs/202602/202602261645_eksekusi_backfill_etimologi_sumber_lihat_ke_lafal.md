@@ -19,7 +19,7 @@ Aturan referensi:
 
 ## Migrasi yang Dijalankan
 
-- SQL: `_docs/202602/202602261640_backfill_etimologi_sumber_lihat_ke_lafal.sql`
+- SQL: `docs/202602/202602261640_backfill_etimologi_sumber_lihat_ke_lafal.sql`
 
 ## Ringkasan Hasil
 

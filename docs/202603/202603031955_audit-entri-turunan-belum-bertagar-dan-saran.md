@@ -10,14 +10,14 @@
 
 - Total entri turunan aktif yang belum punya tagar saat audit ini: **455 entri**.
 - Status terbaru setelah beberapa iterasi rule + auto-assign ada pada:
-  - `_docs/202603/202603032245_pembaruan-otomasi-nirtagar-dan-notasi-reduplikasi.md`
-  - `_docs/202603/202603032210_ringkasan-identifikasi-nirtagar.md`
+  - `docs/202603/202603032245_pembaruan-otomasi-nirtagar-dan-notasi-reduplikasi.md`
+  - `docs/202603/202603032210_ringkasan-identifikasi-nirtagar.md`
 - Daftar lengkap tersedia pada file:
-  - `_docs/202603/202603031950_entri-turunan-belum-bertagar.csv`
+  - `docs/202603/202603031950_entri-turunan-belum-bertagar.csv`
 - Daftar lengkap + **saran per entri** tersedia pada file:
-  - `_docs/202603/202603031951_entri-turunan-belum-bertagar-dengan-saran.csv`
+  - `docs/202603/202603031951_entri-turunan-belum-bertagar-dengan-saran.csv`
 - Ringkasan kategori tersedia pada file:
-  - `_docs/202603/202603031951_ringkasan-entri-turunan-belum-bertagar.json`
+  - `docs/202603/202603031951_ringkasan-entri-turunan-belum-bertagar.json`
 
 ---
 
@@ -107,7 +107,7 @@
 ## C. Quality gate
 1. Setelah penambahan aturan baru, jalankan ulang seeder `entri_tagar`.
 2. Rekam delta jumlah entri belum bertagar (target bertahap: < 300, lalu < 150).
-3. Simpan daftar residual terbaru ke dokumen periodik `_docs/YYYYMM/`.
+3. Simpan daftar residual terbaru ke dokumen periodik `docs/YYYYMM/`.
 
 ---
 

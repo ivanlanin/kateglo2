@@ -5,8 +5,8 @@
 **Subproyek**: Kadi (Kamus Deskriptif Indonesia) — bagian dari Kateglo 2.0
 **Tanggal**: 2026-03-09
 **Status**: Draft Proposal (v1.0)
-**Lokasi dokumen**: `_docs/kadi/`
-**Terkait kode**: `_docs/data/struktur.sql`, `backend/models/modelEntri.js`, `backend/models/modelGlosarium.js`
+**Lokasi dokumen**: `docs/kadi/`
+**Terkait kode**: `docs/data/struktur.sql`, `backend/models/modelEntri.js`, `backend/models/modelGlosarium.js`
 
 ---
 

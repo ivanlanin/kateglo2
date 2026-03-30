@@ -312,13 +312,13 @@ Design Science Research menuntut artefak yang dapat **dievaluasi dan direplikasi
 | Komponen | Bentuk | Lisensi |
 |---|---|---|
 | **Kode sistem** | Repository GitHub (backend + frontend + pipeline scraper) | MIT |
-| **Skema database** | SQL migration files di `_docs/` | MIT |
+| **Skema database** | SQL migration files di `docs/` | MIT |
 | **Konfigurasi scraper** | File konfigurasi per sumber (URL, selector, rate limit) | MIT |
 | **Pipeline normalisasi** | Modul terpisah: peta varian, afiks cakapan, filter NE | MIT |
 | **Rubric kurasi** | Dokumen teks di repository | CC-BY |
 | **Dataset kandidat berlabel** | Ekspor CSV/JSON: kata, status, atestasi, metadata | CC-BY |
 | **Dataset frekuensi** | Ekspor CSV: token, frekuensi, df, pertama, terakhir | CC-BY |
-| **Dokumentasi metodologi** | Dokumen `_docs/kadi/` | CC-BY |
+| **Dokumentasi metodologi** | Dokumen `docs/kadi/` | CC-BY |
 
 ### 7.3 Configuration-as-Code
 

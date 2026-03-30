@@ -284,7 +284,7 @@ Implementasi final memakai `modeTagar` eksplisit di `Kamus.jsx` yang memanggil e
 - ✅ 26 tagar seed (8 prefiks, 3 sufiks, 4 infiks, 7 klitik, 4 reduplikasi)
 - ✅ Izin `kelola_tagar` ditambahkan, di-assign ke peran `admin` dan `penyunting`
 - ✅ Izin `audit_tagar` ditambahkan, di-assign ke peran `admin` dan `penyunting`
-- ✅ `_docs/data/struktur.sql` diperbarui
+- ✅ `docs/data/struktur.sql` diperbarui
 
 ### Backend — ✅ Selesai
 | File | Status |

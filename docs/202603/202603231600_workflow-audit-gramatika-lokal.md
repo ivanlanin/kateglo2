@@ -6,9 +6,9 @@ Dokumen ini menjelaskan alur audit Gramatika yang dikerjakan secara lokal di rep
 
 ## Artefak Kerja
 
-- Manifest machine-readable: `_docs/202603/202603231545_manifest-audit-gramatika.json`
-- Manifest ringkas: `_docs/202603/202603231545_manifest-audit-gramatika.md`
-- Checklist aktif: `_docs/202603/202603231430_checklist-audit-gramatika-tbbbi.md`
+- Manifest machine-readable: `docs/202603/202603231545_manifest-audit-gramatika.json`
+- Manifest ringkas: `docs/202603/202603231545_manifest-audit-gramatika.md`
+- Checklist aktif: `docs/202603/202603231430_checklist-audit-gramatika-tbbbi.md`
 - Sumber data tunggal navigasi: `frontend/src/constants/gramatikaData.js`
 - Sumber primer audit: `_data/gramatika/bab-*/` berisi PDF bab dan JPG halaman
 
@@ -46,7 +46,7 @@ Copilot dapat dipakai untuk mempercepat audit, tetapi bukan prasyarat. Jika ingi
 Audit item gramatika berikut terhadap sumber TBBBI.
 
 File markdown: frontend/public/gramatika/pendahuluan/ragam-menurut-jenis-pemakaian.md
-Checklist: _docs/202603/202603231430_checklist-audit-gramatika-tbbbi.md
+Checklist: docs/202603/202603231430_checklist-audit-gramatika-tbbbi.md
 Sumber PDF: _data/gramatika/bab-01/bab-01-pendahuluan.pdf
 Sumber JPG: _data/gramatika/bab-01/
 

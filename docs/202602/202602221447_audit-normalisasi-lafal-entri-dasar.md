@@ -119,7 +119,7 @@ Contoh konkret hasil audit:
 
 Catatan:
 - Hasil ini menegaskan keputusan user: Kasus D harus diisi sebagai pasangan lafal lawan dari bentuk yang sudah ada.
-- Untuk kebutuhan audit rinci, daftar lengkap homonim yang terisi ada di `_docs/202602/20260222_kasus-d-homonim-terisi.md` (90 baris, 50 indeks).
+- Untuk kebutuhan audit rinci, daftar lengkap homonim yang terisi ada di `docs/202602/20260222_kasus-d-homonim-terisi.md` (90 baris, 50 indeks).
 
 Tindakan: **selesai (untuk batch ini)**.
 
@@ -220,7 +220,7 @@ Output yang diharapkan:
 
 ## 6) Checklist Eksekusi Teknis
 
-1. Buat migration SQL di `_docs/202602/` (2 file terpisah: fase aman & fase semi-aman).  
+1. Buat migration SQL di `docs/202602/` (2 file terpisah: fase aman & fase semi-aman).  
 2. Jalankan migration ke DB development (sesuai SOP proyek).  
 3. Regenerate schema: `backend/scripts/db-schema.js` bila ada perubahan struktur (untuk kasus ini kemungkinan tidak perlu).  
 4. Simpan laporan ringkas before/after (jumlah baris terdampak, contoh 20 data).  
@@ -232,9 +232,9 @@ Output yang diharapkan:
 
 Agar pekerjaan mudah dilanjutkan, berikut file yang disarankan dibuat di langkah berikutnya:
 
-- `_docs/202602/20260222_normalisasi-lafal-fase1-aman.sql`
-- `_docs/202602/20260222_normalisasi-lafal-fase2-semi-aman.sql`
-- `_docs/202602/20260222_laporan-hasil-normalisasi-lafal.md`
+- `docs/202602/20260222_normalisasi-lafal-fase1-aman.sql`
+- `docs/202602/20260222_normalisasi-lafal-fase2-semi-aman.sql`
+- `docs/202602/20260222_laporan-hasil-normalisasi-lafal.md`
 
 ---
 

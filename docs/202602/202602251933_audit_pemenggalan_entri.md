@@ -4,7 +4,7 @@
 Mengidentifikasi entri yang **belum memiliki `entri.pemenggalan`** (`NULL` atau string kosong), lalu memetakannya berdasarkan `entri.jenis`.
 
 ## Referensi Skema
-- Sumber skema: `_docs/data/struktur.sql`
+- Sumber skema: `docs/data/struktur.sql`
 - Tabel: `entri`
 - Kolom kunci: `jenis`, `pemenggalan`, `aktif`
 

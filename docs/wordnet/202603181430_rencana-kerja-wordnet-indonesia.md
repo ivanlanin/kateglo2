@@ -128,7 +128,7 @@ _data/wordnet/output/
 ### Tahap 2: Skema Database [SELESAI]
 **Tujuan:** Buat tabel di PostgreSQL untuk menyimpan data WordNet.
 
-Migration: `_docs/wordnet/202603181840_sinset-tabel-baru.sql`
+Migration: `docs/wordnet/202603181840_sinset-tabel-baru.sql`
 
 4 tabel dibuat:
 - `tipe_relasi` — 26 tipe relasi dalam 5 kategori (dengan kebalikan + simetris)
@@ -223,7 +223,7 @@ Tahap 1 dipecah menjadi langkah kecil yang bisa dikerjakan per sesi:
 - [x] 1a. `bangun-kerangka.js` — 30,053 synset kerangka bersih
 - [x] 1b. `cocokkan-makna.js` — 3,827 otomatis + 20,308 kandidat + 5,918 tanpa makna
 - [ ] 1c. Review output, cek kualitas pemetaan dengan sampel manual
-- [x] 2a. SQL migration: `_docs/wordnet/202603181840_sinset-tabel-baru.sql`
+- [x] 2a. SQL migration: `docs/wordnet/202603181840_sinset-tabel-baru.sql`
 - [x] 2b. Eksekusi migration + seed 26 tipe relasi — berhasil
 - [x] 3a. Impor 110,752 synset + 225,246 lema + 3,832 pemetaan otomatis
 - [x] 3b. Impor 101,256 relasi antar-synset

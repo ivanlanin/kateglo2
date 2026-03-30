@@ -265,7 +265,7 @@ async function main() {
   if (modeCsv) {
     const now = new Date();
     const ts = now.toISOString().replace(/[-:T]/g, '').slice(0, 12);
-    const dirOut = path.join(__dirname, '../../_docs/202603');
+    const dirOut = path.join(__dirname, '../../docs/202603');
     fs.mkdirSync(dirOut, { recursive: true });
 
     const fileOrphan   = path.join(dirOut, `${ts}_kandidat-rematch-orphan-etimologi.csv`);

@@ -46,7 +46,7 @@ kateglo2/
 │   └── dist/                  # output build client (generated)
 │
 ├── shared/                    # util shared (opsional)
-├── _docs/
+├── docs/
 └── package.json               # workspace root
 ```
 

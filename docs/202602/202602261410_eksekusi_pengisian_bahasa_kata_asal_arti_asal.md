@@ -10,14 +10,14 @@
 
 ### Persiapan Kolom Baru
 
-1. `_docs/202602/202602261351_tambah_kolom_kata_asal_arti_asal.sql`
+1. `docs/202602/202602261351_tambah_kolom_kata_asal_arti_asal.sql`
    - Menambah kolom `etimologi.kata_asal` dan `etimologi.arti_asal`.
 
 ### 1) Isi `bahasa` yang kosong
 
-2. `_docs/202602/202602261352_isi_bahasa_kosong_dari_sumber_definisi.sql`
-3. `_docs/202602/202602261356_perbaiki_isi_bahasa_kosong_langkah1.sql`
-4. `_docs/202602/202602261359_perbaiki_lagi_bahasa_kata_asal.sql` (bagian A)
+2. `docs/202602/202602261352_isi_bahasa_kosong_dari_sumber_definisi.sql`
+3. `docs/202602/202602261356_perbaiki_isi_bahasa_kosong_langkah1.sql`
+4. `docs/202602/202602261359_perbaiki_lagi_bahasa_kata_asal.sql` (bagian A)
 
 Aturan yang dipakai:
 - Ambil **bahasa pertama** dari jejak etimologi (`[< ...]` atau `(f ...)`).
@@ -25,10 +25,10 @@ Aturan yang dipakai:
 
 ### 2) Isi `kata_asal`
 
-5. `_docs/202602/202602261353_isi_kata_asal_dari_sumber.sql`
-6. `_docs/202602/202602261357_perbaiki_kata_asal_langkah2.sql`
-7. `_docs/202602/202602261359_perbaiki_lagi_bahasa_kata_asal.sql` (bagian B)
-8. `_docs/202602/202602261403_perbaiki_fallback_kata_asal_rantai_bertingkat.sql`
+5. `docs/202602/202602261353_isi_kata_asal_dari_sumber.sql`
+6. `docs/202602/202602261357_perbaiki_kata_asal_langkah2.sql`
+7. `docs/202602/202602261359_perbaiki_lagi_bahasa_kata_asal.sql` (bagian B)
+8. `docs/202602/202602261403_perbaiki_fallback_kata_asal_rantai_bertingkat.sql`
 
 Aturan yang dipakai:
 - `sumber_aksara + sumber_isi` → `"<aksara> <latin>"`
@@ -38,7 +38,7 @@ Aturan yang dipakai:
 
 ### 3) Isi `arti_asal`
 
-9. `_docs/202602/202602261354_isi_arti_asal_dengan_format_indonesia_inggris.sql`
+9. `docs/202602/202602261354_isi_arti_asal_dengan_format_indonesia_inggris.sql`
 
 Aturan yang dipakai:
 - Ambil gloss Inggris dari `sumber_definisi`.
@@ -68,4 +68,4 @@ Catatan:
 Setelah migrasi selesai dijalankan, schema diregenerasi:
 
 - Perintah: `Set-Location backend; node scripts/db-schema.js`
-- Output: `_docs/data/struktur.sql` diperbarui.
+- Output: `docs/data/struktur.sql` diperbarui.

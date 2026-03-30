@@ -135,9 +135,9 @@ Bidirectional: query `sinset_asal` DAN `sinset_tujuan`, mapping ke relasi kebali
 
 | Langkah | File | Aksi |
 |---------|------|------|
-| 1.1 | `_docs/202603/YYYYMMDDHHMM_sinset-tabel-baru.sql` | DDL 4 tabel + seed `tipe_relasi` + trigger |
+| 1.1 | `docs/202603/YYYYMMDDHHMM_sinset-tabel-baru.sql` | DDL 4 tabel + seed `tipe_relasi` + trigger |
 | 1.2 | `backend/temp_impor_wordnet.js` | Baca file `_data/wordnet/*.tab`, batch INSERT ke DB. Cross-ref dengan tabel `entri` untuk set `terverifikasi`. Hapus setelah selesai. |
-| 1.3 | Regenerasi `_docs/data/struktur.sql` | `node scripts/db-schema.js` |
+| 1.3 | Regenerasi `docs/data/struktur.sql` | `node scripts/db-schema.js` |
 
 **Strategi filter kata Melayu**: Impor semua data B+I. Set `terverifikasi=TRUE` jika lema ada di tabel `entri`. Prioritaskan kata terverifikasi saat tampil publik.
 
@@ -246,7 +246,7 @@ curl http://localhost:3000/api/publik/tesaurus/besar  # cek data diperkaya
 ```
 
 ## File Kunci yang Perlu Dirujuk
-- `_docs/data/struktur.sql` — skema lengkap saat ini
+- `docs/data/struktur.sql` — skema lengkap saat ini
 - `backend/models/modelTesaurus.js` — pola model yang harus diikuti
 - `backend/db/index.js` — query builder & raw query
 - `backend/routes/publik/tesaurus.js` — pola router publik

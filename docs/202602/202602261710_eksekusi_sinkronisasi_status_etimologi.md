@@ -12,7 +12,7 @@ Menetapkan status etimologi (`aktif`) agar konsisten dengan isi kolom `bahasa`:
 
 ## Migrasi yang Dijalankan
 
-- SQL: `_docs/202602/202602261705_sinkronisasi_status_etimologi_berdasarkan_bahasa.sql`
+- SQL: `docs/202602/202602261705_sinkronisasi_status_etimologi_berdasarkan_bahasa.sql`
 
 ## Hasil Setelah Eksekusi
 

@@ -2,7 +2,7 @@
 
 **Tanggal**: 2026-03-18
 **Status**: Draft
-**Terkait**: `_docs/kadi/202603091036_infrastruktur-penelitian-terbuka.md`
+**Terkait**: `docs/kadi/202603091036_infrastruktur-penelitian-terbuka.md`
 
 ---
 
@@ -187,7 +187,7 @@ Build/Deploy:
 
 **Pro**: deploy artifact tetap kecil, R2 gratis untuk 10 GB storage + 10 juta
 read/bulan, bisa menambah korpus baru tanpa redeploy, sesuai pola di dokumen
-infrastruktur penelitian (`_docs/kadi/202603091036`).
+infrastruktur penelitian (`docs/kadi/202603091036`).
 **Kontra**: deploy lebih lambat (download step), perlu setup R2, perlu persistent
 disk di Render (atau download ulang tiap deploy).
 
@@ -479,7 +479,7 @@ Atribusi yang disarankan:
 **Catatan kalimat contoh**: kalimat berasal dari sumber berita berhak cipta.
 Untuk tampilan publik di Kateglo, ini termasuk fair use (kutipan pendek untuk
 keperluan linguistik/leksikografis) — konsisten dengan pendekatan Leipzig sendiri
-dan analisis hak cipta di `_docs/kadi/202603091036`.
+dan analisis hak cipta di `docs/kadi/202603091036`.
 
 ---
 
@@ -522,5 +522,5 @@ dan analisis hak cipta di `_docs/kadi/202603091036`.
 - Situs Leipzig Corpora: https://corpora.uni-leipzig.de/
 - Halaman unduh: https://wortschatz-leipzig.de/en/download/ind
 - API Swagger (tidak ada korpus Indonesia): https://api.wortschatz-leipzig.de/ws/swagger-ui/
-- Dokumen infrastruktur penelitian Kateglo: `_docs/kadi/202603091036_infrastruktur-penelitian-terbuka.md`
+- Dokumen infrastruktur penelitian Kateglo: `docs/kadi/202603091036_infrastruktur-penelitian-terbuka.md`
 - Data lokal: `_data/leipzig/`

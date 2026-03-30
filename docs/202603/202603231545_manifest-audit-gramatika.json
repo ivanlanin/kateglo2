@@ -2,7 +2,7 @@
   "generatedAt": "2026-03-23T06:34:20.744Z",
   "source": {
     "gramatikaData": "frontend/src/constants/gramatikaData.js",
-    "checklistAudit": "_docs/202603/202603231430_checklist-audit-gramatika-tbbbi.md"
+    "checklistAudit": "docs/202603/202603231430_checklist-audit-gramatika-tbbbi.md"
   },
   "summary": {
     "totalItem": 308,

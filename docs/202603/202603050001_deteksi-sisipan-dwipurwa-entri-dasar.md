@@ -3,8 +3,8 @@
 **Tanggal dibuat**: 2026-03-05
 **Diperbarui**: 2026-03-05 (ditambah: analisis etimologi + masalah homonim)
 **Skrip**: `backend/scripts/deteksi-sisipan-dwipurwa.js`
-**CSV hasil**: `_docs/202603/202603051204_kandidat-sisipan-dwipurwa.csv`
-**CSV terfilter (makna)**: `_docs/202603/202603051219_kandidat-sisipan-dwipurwa-lolos-makna.csv`
+**CSV hasil**: `docs/202603/202603051204_kandidat-sisipan-dwipurwa.csv`
+**CSV terfilter (makna)**: `docs/202603/202603051219_kandidat-sisipan-dwipurwa-lolos-makna.csv`
 **Status**: Pendataan awal + penyaringan makna selesai — belum menulis ke database
 
 ---
@@ -310,7 +310,7 @@ node scripts/deteksi-sisipan-dwipurwa.js --verbose
 # Hanya kandidat yang basisnya juga berjenis 'dasar'
 node scripts/deteksi-sisipan-dwipurwa.js --dasar-only
 
-# Simpan hasil ke CSV (di _docs/YYYYMM/)
+# Simpan hasil ke CSV (di docs/YYYYMM/)
 node scripts/deteksi-sisipan-dwipurwa.js --csv
 
 # Kombinasi lengkap
@@ -438,7 +438,7 @@ mencantumkan kata dasar — ini merupakan **bukti kuat** keterkaitan.
 - Tidak lolos 931 → **masih perlu evaluasi manual**: mayoritas kandidat genuine memang tidak lolos
   karena KBBI mendefinisikan dengan cara deskriptif, bukan derivasional
 - Filter makna berguna sebagai **lapisan konfirmasi**, bukan sebagai satu-satunya filter
-- **CSV terfilter** tersedia di `_docs/202603/202603051219_kandidat-sisipan-dwipurwa-lolos-makna.csv`
+- **CSV terfilter** tersedia di `docs/202603/202603051219_kandidat-sisipan-dwipurwa-lolos-makna.csv`
   (50 entri, kolom: entri, pola, basis, makna_snippet)
 
 ---
@@ -856,8 +856,8 @@ dengan 'e' (sama seperti vokal "penyisip" pada R.purwa).
 - `backend/scripts/deteksi-sisipan-dwipurwa.js` — skrip deteksi
 - `backend/scripts/seed-entri-tagar.js` — fungsi `detectDwipurwa` dan
   `detectInfiks` (untuk entri 'turunan' dengan induk diketahui)
-- `_docs/202603/202603051204_kandidat-sisipan-dwipurwa.csv` — CSV semua kandidat (2.086)
-- `_docs/202603/202603051219_kandidat-sisipan-dwipurwa-lolos-makna.csv` — CSV kandidat lolos filter makna (50)
-- `_docs/202603/202603022120_rancangan-sistem-tagar-entri.md` — rancangan sistem tagar
-- `_docs/202603/202603031955_audit-entri-turunan-belum-bertagar-dan-saran.md`
+- `docs/202603/202603051204_kandidat-sisipan-dwipurwa.csv` — CSV semua kandidat (2.086)
+- `docs/202603/202603051219_kandidat-sisipan-dwipurwa-lolos-makna.csv` — CSV kandidat lolos filter makna (50)
+- `docs/202603/202603022120_rancangan-sistem-tagar-entri.md` — rancangan sistem tagar
+- `docs/202603/202603031955_audit-entri-turunan-belum-bertagar-dan-saran.md`
   — audit entri turunan belum bertagar

@@ -3,7 +3,7 @@
 **Tanggal**: 2026-03-05
 **Status**: Selesai — lihat `202603051600_perbaikan-data-etimologi.md` untuk laporan pelaksanaan
 **Konteks**: Temuan dari proyek deteksi sisipan/dwipurwa
-**Dokumen terkait**: `_docs/202603/202603050001_deteksi-sisipan-dwipurwa-entri-dasar.md` §9.9
+**Dokumen terkait**: `docs/202603/202603050001_deteksi-sisipan-dwipurwa-entri-dasar.md` §9.9
 
 ---
 
@@ -191,6 +191,6 @@ main().catch(e => { console.error(e.message); process.exit(1); });
 
 ## 6. Referensi
 
-- `_docs/202603/202603050001_deteksi-sisipan-dwipurwa-entri-dasar.md` §9.9
+- `docs/202603/202603050001_deteksi-sisipan-dwipurwa-entri-dasar.md` §9.9
   — temuan dari cross-reference kandidat sisipan dengan data etimologi
-- `_docs/data/struktur.sql` — skema tabel `etimologi`
+- `docs/data/struktur.sql` — skema tabel `etimologi`

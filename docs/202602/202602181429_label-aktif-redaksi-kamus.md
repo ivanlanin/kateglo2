@@ -12,7 +12,7 @@ Perubahan ini mencakup:
 
 ## SQL Migration
 
-- File migrasi: `_docs/202602/20260218_tambah_aktif_pada_label.sql`
+- File migrasi: `docs/202602/20260218_tambah_aktif_pada_label.sql`
 - Isi utama:
   - `ALTER TABLE label ADD COLUMN IF NOT EXISTS aktif BOOLEAN NOT NULL DEFAULT TRUE;`
   - Backfill aman: `UPDATE label SET aktif = TRUE WHERE aktif IS NULL;`
@@ -79,7 +79,7 @@ File: `backend/models/modelEntri.js`
 
 ## Sinkronisasi Schema Referensi
 
-File: `_docs/data/struktur.sql`
+File: `docs/data/struktur.sql`
 
 - Menambahkan kolom `aktif boolean not null default true` pada definisi tabel `label`.
 

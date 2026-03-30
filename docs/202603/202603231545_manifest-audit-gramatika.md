@@ -60,5 +60,5 @@ Dokumen ini dihasilkan otomatis dari `frontend/src/constants/gramatikaData.js`, 
 
 ## Output Terkait
 
-- JSON: `_docs/202603/202603231545_manifest-audit-gramatika.json`
-- Checklist aktif: `_docs/202603/202603231430_checklist-audit-gramatika-tbbbi.md`
+- JSON: `docs/202603/202603231545_manifest-audit-gramatika.json`
+- Checklist aktif: `docs/202603/202603231430_checklist-audit-gramatika-tbbbi.md`

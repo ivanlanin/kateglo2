@@ -3,8 +3,8 @@
 **Tanggal**: 2026-03-05
 **Status**: Selesai
 **File terkait**:
-- `_docs/202603/202603051849_rematch-homonim-etimologi.sql` (migrasi yang diterapkan)
-- `_docs/202603/202603051849_rematch-homonim-etimologi.csv` (hasil analisis lengkap)
+- `docs/202603/202603051849_rematch-homonim-etimologi.sql` (migrasi yang diterapkan)
+- `docs/202603/202603051849_rematch-homonim-etimologi.csv` (hasil analisis lengkap)
 - `backend/scripts/analisis-homonim-etimologi.js` (skrip analisis lama — lihat §4)
 
 ---

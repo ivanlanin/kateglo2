@@ -90,7 +90,7 @@ Berdasarkan tangkapan layar admin rujukan:
 
 ## Berkas Draft SQL
 
-- `_docs/202602/20260214_draft-skema-sederhana-kbbi4.sql`
+- `docs/202602/20260214_draft-skema-sederhana-kbbi4.sql`
 
 ## Skrip ETL Tahap 1 (Sudah Tersedia)
 
@@ -146,4 +146,4 @@ Hasil SQLite baru berisi tabel:
    - entri dasar dengan kimia,
    - entri rujuk tanpa makna,
    - entri dengan >1 makna dan >1 contoh.
-3. Setelah valid, finalisasi migration SQL versioned di `_docs/YYYYMM/`.
+3. Setelah valid, finalisasi migration SQL versioned di `docs/YYYYMM/`.

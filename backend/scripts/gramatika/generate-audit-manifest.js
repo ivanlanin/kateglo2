@@ -9,9 +9,9 @@ const { pathToFileURL } = require('url');
 
 const repoRoot = path.resolve(__dirname, '..', '..', '..');
 const gramatikaDataPath = path.join(repoRoot, 'frontend', 'src', 'constants', 'gramatikaData.js');
-const checklistPath = path.join(repoRoot, '_docs', '202603', '202603231430_checklist-audit-gramatika-tbbbi.md');
-const outputJsonPath = path.join(repoRoot, '_docs', '202603', '202603231545_manifest-audit-gramatika.json');
-const outputMarkdownPath = path.join(repoRoot, '_docs', '202603', '202603231545_manifest-audit-gramatika.md');
+const checklistPath = path.join(repoRoot, 'docs', '202603', '202603231430_checklist-audit-gramatika-tbbbi.md');
+const outputJsonPath = path.join(repoRoot, 'docs', '202603', '202603231545_manifest-audit-gramatika.json');
+const outputMarkdownPath = path.join(repoRoot, 'docs', '202603', '202603231545_manifest-audit-gramatika.md');
 
 const babConfig = {
   pendahuluan: {

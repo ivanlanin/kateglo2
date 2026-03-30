@@ -116,7 +116,7 @@ Waktu eksekusi: `2026-03-06T09:11:34.014Z`
 ## Lampiran
 Daftar turunan untuk masing-masing entri dasar pada Top 30 tersedia di:
 
-- `_docs/202603/202603061607_lampiran-daftar-turunan-top30.md`
+- `docs/202603/202603061607_lampiran-daftar-turunan-top30.md`
 
 ## Interpretasi Awal
 - Peringkat pertama pada snapshot ini adalah `dua (1)` dengan `22` turunan.

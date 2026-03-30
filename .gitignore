@@ -1,6 +1,5 @@
 # References
-_kode/
-_data/
+.data/
 
 # Temporaries
 .tmp/

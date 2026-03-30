@@ -5,8 +5,8 @@
 Dokumentasi SSR/SEO di repo ini sebelumnya sudah ada, tetapi masih tersebar dan belum menjadi referensi operasional tunggal:
 
 - `README.md` menjelaskan cara menjalankan SSR production dan menyebut `robots.txt` serta `sitemap.xml` secara ringkas.
-- `_docs/202602/202602180019_rencana-ssr-efisien.md` dan `_docs/202602/202602180024_ssr-penuh-struktur-folder.md` berisi rencana arsitektur, bukan keadaan implementasi final saat ini.
-- `_docs/202603/202603212130_penerapan-og-image-dinamis.md` sudah mendokumentasikan Open Graph image dinamis secara khusus.
+- `docs/202602/202602180019_rencana-ssr-efisien.md` dan `docs/202602/202602180024_ssr-penuh-struktur-folder.md` berisi rencana arsitektur, bukan keadaan implementasi final saat ini.
+- `docs/202603/202603212130_penerapan-og-image-dinamis.md` sudah mendokumentasikan Open Graph image dinamis secara khusus.
 
 Dokumen ini melengkapi gap tersebut dengan menjelaskan implementasi SSR/SEO yang aktif sekarang, alur request, cakupan route, jenis render, dan contoh untuk tiap jenis.
 
@@ -338,7 +338,7 @@ Jenis yang dipakai saat ini:
 | Slug-level | `/og/ejaan/huruf-kapital.png?title=Huruf+Kapital&context=Huruf` | ejaan detail |
 | Slug-level | `/og/gramatika/preposisi.png?title=Preposisi&context=Kata+Tugas` | gramatika detail |
 
-Detail implementasi lebih spesifik untuk OG image ada di `_docs/202603/202603212130_penerapan-og-image-dinamis.md`.
+Detail implementasi lebih spesifik untuk OG image ada di `docs/202603/202603212130_penerapan-og-image-dinamis.md`.
 
 ## Matriks Route dan Contoh per Jenis
 
@@ -419,6 +419,6 @@ Gunakan dokumen ini sebagai referensi utama bila perlu:
 - `frontend/src/entry-server.jsx`
 - `backend/routes/sistem/seoPublik.js`
 - `backend/services/publik/layananSeoPublik.js`
-- `_docs/202603/202603212130_penerapan-og-image-dinamis.md`
-- `_docs/202602/202602180019_rencana-ssr-efisien.md`
-- `_docs/202602/202602180024_ssr-penuh-struktur-folder.md`
+- `docs/202603/202603212130_penerapan-og-image-dinamis.md`
+- `docs/202602/202602180019_rencana-ssr-efisien.md`
+- `docs/202602/202602180024_ssr-penuh-struktur-folder.md`

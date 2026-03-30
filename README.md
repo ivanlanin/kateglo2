@@ -13,8 +13,8 @@ Pada mode production, backend juga melayani runtime frontend SSR dan aset hasil 
 
 Dokumentasi teknis terkait SSR/SEO:
 
-- `_docs/202603/202603221100_dokumentasi-ssr-seo-aktual.md` — referensi implementasi SSR/SEO yang aktif saat ini.
-- `_docs/202603/202603212130_penerapan-og-image-dinamis.md` — detail khusus Open Graph image dinamis.
+- `docs/202603/202603221100_dokumentasi-ssr-seo-aktual.md` — referensi implementasi SSR/SEO yang aktif saat ini.
+- `docs/202603/202603212130_penerapan-og-image-dinamis.md` — detail khusus Open Graph image dinamis.
 
 ## Tech Stack
 
@@ -193,7 +193,7 @@ kateglo/
 │       ├── pages/        # Halaman publik, auth, dan redaksi
 │       ├── styles/       # Tailwind entry + stylesheet semantik
 │       └── utils/        # Utility frontend
-├── _docs/                # Dokumentasi + SQL migrations + struktur data
+├── docs/                # Dokumentasi + SQL migrations + struktur data
 └── _kode/                # Kode referensi (tidak untuk deployment)
 ```
 

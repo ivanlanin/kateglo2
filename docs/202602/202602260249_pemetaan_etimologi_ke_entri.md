@@ -14,7 +14,7 @@ Menyiapkan tabel `etimologi` agar siap untuk alur redaksi:
 
 ## Perubahan Skema
 
-File migrasi: `_docs/202602/20260226_etimologi_tambah_entri_id_aktif_dan_pemetaan.sql`
+File migrasi: `docs/202602/20260226_etimologi_tambah_entri_id_aktif_dan_pemetaan.sql`
 
 Perubahan utama:
 

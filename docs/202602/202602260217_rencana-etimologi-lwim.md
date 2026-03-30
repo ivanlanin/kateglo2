@@ -6,7 +6,7 @@
 **Status**: Rencana implementasi + temuan pembacaan korpus
 
 > Pembaruan keputusan final untuk format tampilan KamusDetail dan aturan ekstraksi (`bahasa`, `kata_asal`, `arti_asal`) ada di dokumen:
-> `_docs/202602/202602261325_keputusan_final_etimologi_kamus_detail.md`.
+> `docs/202602/202602261325_keputusan_final_etimologi_kamus_detail.md`.
 
 ---
 

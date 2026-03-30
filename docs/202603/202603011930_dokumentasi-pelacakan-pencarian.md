@@ -8,7 +8,7 @@ Status: Implemented
 Sistem pelacakan pencarian digunakan untuk merekam kata yang dicari pengguna dan menampilkan statistik terpopuler untuk kebutuhan publik (fitur kata terpopuler) serta redaksi (analitik lintas domain).
 
 Implementasi mengikuti rancangan awal pada dokumen:
-- `_docs/202602/202602232254_sistem-pelacakan-kata-terpopuler-efisien.md`
+- `docs/202602/202602232254_sistem-pelacakan-kata-terpopuler-efisien.md`
 
 ## Tujuan
 
@@ -78,8 +78,8 @@ Manfaat:
 - query rentang waktu lebih efisien.
 
 Referensi migrasi terkait:
-- `_docs/202603/202603011210_tambah-sistem-pelacakan-kata-terpopuler.sql`
-- `_docs/202603/202603011245_refactor-pencarian-tambah-domain-kode.sql`
+- `docs/202603/202603011210_tambah-sistem-pelacakan-kata-terpopuler.sql`
+- `docs/202603/202603011245_refactor-pencarian-tambah-domain-kode.sql`
 
 ## Konfigurasi Environment
 
@@ -218,8 +218,8 @@ Frontend:
 - `frontend/src/komponen/redaksi/NavbarAdmin.jsx`
 
 Dokumen terkait:
-- `_docs/202602/202602232254_sistem-pelacakan-kata-terpopuler-efisien.md`
-- `_docs/data/struktur.sql`
-- `_docs/202603/202603011210_tambah-sistem-pelacakan-kata-terpopuler.sql`
-- `_docs/202603/202603011245_refactor-pencarian-tambah-domain-kode.sql`
-- `_docs/202603/202603011950_tambah_timestamp_utc_pencarian.sql`
+- `docs/202602/202602232254_sistem-pelacakan-kata-terpopuler-efisien.md`
+- `docs/data/struktur.sql`
+- `docs/202603/202603011210_tambah-sistem-pelacakan-kata-terpopuler.sql`
+- `docs/202603/202603011245_refactor-pencarian-tambah-domain-kode.sql`
+- `docs/202603/202603011950_tambah_timestamp_utc_pencarian.sql`

@@ -1,7 +1,7 @@
 /**
  * @fileoverview Analisis pola suku kata dari kolom entri.pemenggalan.
  *
- * Menghasilkan dokumen Markdown di _docs/202603/202603060001_analisis-pola-suku-kata.md.
+ * Menghasilkan dokumen Markdown di docs/202603/202603060001_analisis-pola-suku-kata.md.
  * Jalankan kapan saja setelah data pemenggalan berubah untuk memperbarui dokumen.
  *
  * Cakupan: entri jenis 'dasar' dan 'prakategorial' yang aktif,
@@ -17,7 +17,7 @@ const fs   = require('fs');
 const path = require('path');
 const db   = require('../../db');
 
-const OUT = path.join(__dirname, '../../_docs/202603/202603060001_analisis-pola-suku-kata.md');
+const OUT = path.join(__dirname, '../../docs/202603/202603060001_analisis-pola-suku-kata.md');
 
 // ── Normalisasi ────────────────────────────────────────────────────────────
 function normDigraf(s) {

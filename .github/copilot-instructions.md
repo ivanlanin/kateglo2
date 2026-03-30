@@ -90,13 +90,13 @@ kateglo/
 │   └── narakita/         # Modern reference project (patterns)
 │
 ├── _data/                # Data migration scripts
-├── _docs/                # Documentation + SQL migrations + struktur data
+├── docs/                # Documentation + SQL migrations + struktur data
 │
 └── package.json          # Root workspace configuration
 ```
 
 ### Key Files for AI Reference
-- **Database Schema**: `_docs/data/skema.sql` — MANDATORY reference before any DB work
+- **Database Schema**: `docs/data/skema.sql` — MANDATORY reference before any DB work
 - **Backend DB**: `backend/db/index.js` — PostgreSQL pool + query builder
 - **Backend Models**: `backend/models/` — Fat model layer (all DB queries here)
 - **API Router Entry**: `backend/routes/index.js` — mounts `publik`, `redaksi`, dan `pengguna`
@@ -210,9 +210,9 @@ const result = await db.query(
 ```
 
 ### Database Schema Reference (MANDATORY)
-- **ALWAYS CHECK SCHEMA FIRST**: Sebelum membuat migration, query, atau mengubah model, WAJIB check `_docs/data/skema.sql`
+- **ALWAYS CHECK SCHEMA FIRST**: Sebelum membuat migration, query, atau mengubah model, WAJIB check `docs/data/skema.sql`
 - **Generate/Update Schema**: `Set-Location backend; node scripts/sistem/db-schema.js`
-- **Quick Search**: `Select-String -Path "_docs/data/skema.sql" -Pattern "create table phrase"`
+- **Quick Search**: `Select-String -Path "docs/data/skema.sql" -Pattern "create table phrase"`
 
 ### Core Tables
 | Table | Purpose | Key Columns |
@@ -482,7 +482,7 @@ npm run dev:public        # Port 5173
   - menyentuh shared utilities, auth, routing utama, atau lapisan DB/model,
   - diminta eksplisit oleh user, atau
   - hasil test terarah mengindikasikan potensi regresi lebih luas.
-- **Pengecualian**: jika perubahan **hanya data** (misalnya SQL migration, backfill data, dokumentasi `_docs/`, tanpa perubahan kode aplikasi di `backend/` atau `frontend/src`), **tidak wajib** menjalankan lint/test.
+- **Pengecualian**: jika perubahan **hanya data** (misalnya SQL migration, backfill data, dokumentasi `docs/`, tanpa perubahan kode aplikasi di `backend/` atau `frontend/src`), **tidak wajib** menjalankan lint/test.
 - **Pengecualian frontend publik**: jika perubahan **hanya konten markdown** di `frontend/public/` (misalnya Gramatika, changelog, todo, atau dokumen publik lain) dan **tidak** mengubah komponen React, utilitas parser/renderer markdown, route, SSR, atau skrip yang membaca/menghasilkan konten tersebut, **tidak wajib** menjalankan lint/test.
 - Jika perubahan markdown publik disertai perubahan pada renderer, parser, utilitas, SSR, atau skrip sinkronisasi/audit yang memprosesnya, perlakukan sebagai perubahan kode frontend biasa dan jalankan validasi.
 - **Tidak perlu menjalankan build** sebagai langkah default validasi perubahan.
@@ -501,8 +501,8 @@ Set-Location frontend; npm run lint; npm run test
 ```
 
 ### Database Work
-1. **Check schema first**: `Select-String -Path "_docs/data/skema.sql" -Pattern "table_name"`
-2. **Create migration**: Add SQL file to `_docs/YYYYMM/` with format `YYYYMMDDHHMM_nama-migrasi.sql` (HHMM dari waktu pembuatan file)
+1. **Check schema first**: `Select-String -Path "docs/data/skema.sql" -Pattern "table_name"`
+2. **Create migration**: Add SQL file to `docs/YYYYMM/` with format `YYYYMMDDHHMM_nama-migrasi.sql` (HHMM dari waktu pembuatan file)
 3. **Run migration (default wajib)**: Setelah file SQL migration dibuat, **langsung eksekusi SQL tersebut** ke database target (development) pada sesi yang sama, kecuali user secara eksplisit meminta untuk tidak menjalankan.
 4. **Run migration**: Use temp script in `backend/` atau `psql` dengan `DATABASE_URL` dari `backend/.env`
 5. **Regenerate schema**: `Set-Location backend; node scripts/sistem/db-schema.js`
@@ -526,7 +526,7 @@ Set-Location frontend; npm run lint; npm run test
 
 - Catatan perubahan user-facing disimpan di `frontend/public/docs/changelog.md`.
 - Daftar pekerjaan aktif disimpan di `frontend/public/docs/todo.md`.
-- Untuk perubahan teknis detail, tetap buat dokumen periodik di `_docs/YYYYMM/`.
+- Untuk perubahan teknis detail, tetap buat dokumen periodik di `docs/YYYYMM/`.
 
 ## Changelog Manual Edit Policy
 
@@ -545,7 +545,7 @@ npm run dev
 Set-Location backend; node scripts/sistem/db-schema.js
 
 # Check schema for a table
-Select-String -Path "_docs/data/skema.sql" -Pattern "create table entri"
+Select-String -Path "docs/data/skema.sql" -Pattern "create table entri"
 
 # Kill port conflicts
 npx kill-port 3000; npx kill-port 5173
@@ -579,8 +579,8 @@ Gunakan `_kode/` sebagai referensi:
 - **Components**: PascalCase (e.g., `SearchBar.jsx`, `DictionaryDetail.jsx`)
 - **Constants**: camelCase (NOT SCREAMING_SNAKE_CASE)
 - **Database**: snake_case (matching PostgreSQL convention)
-- **Changelog docs**: `YYYYMMDDHHMM_nama-topik.md` (di `_docs/YYYYMM/`, HHMM wajib untuk menghindari bentrok nama dalam satu hari)
-- **SQL migration files**: `YYYYMMDDHHMM_nama-migrasi.sql` (di `_docs/YYYYMM/`, HHMM wajib)
+- **Changelog docs**: `YYYYMMDDHHMM_nama-topik.md` (di `docs/YYYYMM/`, HHMM wajib untuk menghindari bentrok nama dalam satu hari)
+- **SQL migration files**: `YYYYMMDDHHMM_nama-migrasi.sql` (di `docs/YYYYMM/`, HHMM wajib)
 
 ### Language
 - **Code**: English (variable names, functions, comments in code)

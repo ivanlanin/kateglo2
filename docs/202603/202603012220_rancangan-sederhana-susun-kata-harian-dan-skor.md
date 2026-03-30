@@ -220,7 +220,7 @@ Tidak perlu fitur tambahan dulu (history kompleks, bulk schedule, dll).
 
 ## Referensi
 
-- `_docs/data/struktur.sql`
+- `docs/data/struktur.sql`
 - `backend/models/modelEntri.js`
 - `backend/routes/gim/susunKata.js`
 - `frontend/src/halaman/gim/SusunKata.jsx`

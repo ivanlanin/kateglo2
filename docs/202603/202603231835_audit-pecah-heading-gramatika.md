@@ -37,7 +37,7 @@ Mencatat halaman Gramatika yang masih memuat heading internal `##`, `###`, dan s
 
 - Struktur kanonik navigasi: `frontend/src/constants/gramatikaData.js`
 - Konten halaman aktual: `frontend/public/gramatika/**/*.md`
-- Manifest audit terdahulu: `_docs/202603/202603231545_manifest-audit-gramatika.md`
+- Manifest audit terdahulu: `docs/202603/202603231545_manifest-audit-gramatika.md`
 
 ## Metode
 
@@ -674,7 +674,7 @@ Contoh:
 
 Daftar file terdampak beserta kandidat slug per heading tercatat di dokumen terpisah:
 
-- `_docs/202603/202603231835_inventaris-pecah-heading-gramatika.md`
+- `docs/202603/202603231835_inventaris-pecah-heading-gramatika.md`
 
 ## Status Akhir
 

@@ -2,7 +2,7 @@
 
 **Tanggal**: 2026-02-26  
 **Status**: Selesai dijalankan di database development  
-**File migrasi**: `_docs/202602/20260226_rebuild_etimologi_dari_lwim.sql`
+**File migrasi**: `docs/202602/20260226_rebuild_etimologi_dari_lwim.sql`
 
 ## Tujuan
 

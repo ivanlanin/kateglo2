@@ -5,7 +5,7 @@
 
 ## Migrasi yang Dijalankan
 
-- File SQL: `_docs/202602/202602261415_migrasi_pola_based_on_bahasa_kata_asal.sql`
+- File SQL: `docs/202602/202602261415_migrasi_pola_based_on_bahasa_kata_asal.sql`
 - Tujuan: isi `bahasa` dan `kata_asal` untuk pola:
   - `[based on <bahasa> <kata_asal>]`
   - termasuk variasi seperti: `[based on Belanda absurditeit (< Prancis)]`

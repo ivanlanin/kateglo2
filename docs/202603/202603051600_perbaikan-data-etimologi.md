@@ -3,15 +3,15 @@
 **Tanggal**: 2026-03-05
 **Status**: Selesai
 **Dokumen terkait**:
-- `_docs/202603/202603051318_audit-dan-rencana-perbaikan-tabel-etimologi.md` (rencana awal)
-- `_docs/202603/202603050920_tambah-kolom-meragukan-etimologi.sql` (migrasi 1)
-- `_docs/202603/202603051430_bersihkan-kata-asal-etimologi.sql` (migrasi 2)
-- `_docs/202603/202603051849_rematch-homonim-etimologi.sql` (migrasi 3)
-- `_docs/202603/202603051914_isi-bahasa-dari-sumber-definisi.sql` (migrasi 4)
-- `_docs/202603/202603051929_isi-kata-asal-compound-aktif.sql` (migrasi 5)
-- `_docs/202603/202603052000_aktifkan-compound-sejati-etimologi.sql` (migrasi 6)
-- `_docs/202603/202603051849_disambiguasi-homonim-etimologi.md` (metode disambiguasi)
-- `_docs/202603/202603051914_isi-bahasa-kata-asal-dari-sumber-definisi.md` (metode ekstraksi bahasa)
+- `docs/202603/202603051318_audit-dan-rencana-perbaikan-tabel-etimologi.md` (rencana awal)
+- `docs/202603/202603050920_tambah-kolom-meragukan-etimologi.sql` (migrasi 1)
+- `docs/202603/202603051430_bersihkan-kata-asal-etimologi.sql` (migrasi 2)
+- `docs/202603/202603051849_rematch-homonim-etimologi.sql` (migrasi 3)
+- `docs/202603/202603051914_isi-bahasa-dari-sumber-definisi.sql` (migrasi 4)
+- `docs/202603/202603051929_isi-kata-asal-compound-aktif.sql` (migrasi 5)
+- `docs/202603/202603052000_aktifkan-compound-sejati-etimologi.sql` (migrasi 6)
+- `docs/202603/202603051849_disambiguasi-homonim-etimologi.md` (metode disambiguasi)
+- `docs/202603/202603051914_isi-bahasa-kata-asal-dari-sumber-definisi.md` (metode ekstraksi bahasa)
 
 ---
 
@@ -220,7 +220,7 @@ node scripts/analisis-homonim-etimologi.js --csv     # simpan ke CSV
 ```
 
 CSV orphan (156 baris, 3 bisa auto-match):
-- `_docs/202603/202603051003_kandidat-rematch-orphan-etimologi.csv`
+- `docs/202603/202603051003_kandidat-rematch-orphan-etimologi.csv`
 
 ---
 
@@ -229,7 +229,7 @@ CSV orphan (156 baris, 3 bisa auto-match):
 ### 5.1 Orphan Pemetaan (156 baris)
 
 156 baris dengan `entri_id IS NULL` — 3 bisa auto-match, 153 perlu review manual.
-CSV tersedia di `_docs/202603/202603051003_kandidat-rematch-orphan-etimologi.csv`.
+CSV tersedia di `docs/202603/202603051003_kandidat-rematch-orphan-etimologi.csv`.
 
 ### 5.2 Frontend
 

@@ -1,5 +1,5 @@
 -- Sistem pelacakan kata terpopuler (minimal, efisien)
--- Referensi: _docs/202602/202602232254_sistem-pelacakan-kata-terpopuler-efisien.md
+-- Referensi: docs/202602/202602232254_sistem-pelacakan-kata-terpopuler-efisien.md
 
 CREATE TABLE IF NOT EXISTS pencarian (
   tanggal date NOT NULL,

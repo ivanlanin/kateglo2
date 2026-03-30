@@ -17,7 +17,7 @@ Jika kandidat rujukan lebih dari satu, dipilih urutan prioritas:
 
 ## Migrasi yang Dijalankan
 
-- SQL: `_docs/202602/202602261620_backfill_etimologi_dari_sumber_lihat.sql`
+- SQL: `docs/202602/202602261620_backfill_etimologi_dari_sumber_lihat.sql`
 
 ## Ringkasan Hasil
 

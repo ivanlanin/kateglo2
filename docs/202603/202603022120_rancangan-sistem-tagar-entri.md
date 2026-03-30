@@ -327,7 +327,7 @@ Di `frontend/src/halaman/redaksi/KamusAdmin.jsx` (form edit entri), tambahkan se
 
 Urutan pengerjaan yang disarankan:
 
-1. **[DB]** Buat file migrasi SQL: `_docs/202603/YYYYMMDDHHMM_tambah-tabel-tagar.sql`
+1. **[DB]** Buat file migrasi SQL: `docs/202603/YYYYMMDDHHMM_tambah-tabel-tagar.sql`
    - CREATE TABLE `tagar` dan `entri_tagar`
    - INSERT izin `kelola_tagar`
    - INSERT data awal tagar (seed morfologis)
@@ -357,7 +357,7 @@ Urutan pengerjaan yang disarankan:
 
 11. **[Frontend]** Jalankan `npm run lint && npm run test` di `frontend/`
 
-12. **[DB]** Jalankan `node scripts/db-schema.js` untuk update `_docs/data/struktur.sql`
+12. **[DB]** Jalankan `node scripts/db-schema.js` untuk update `docs/data/struktur.sql`
 
 ---
 
@@ -377,7 +377,7 @@ Beberapa hal yang perlu dikonfirmasi sebelum implementasi:
 
 ## 8. Referensi
 
-- Skema aktual: [_docs/data/struktur.sql](../../_docs/data/struktur.sql)
+- Skema aktual: [docs/data/struktur.sql](../../docs/data/struktur.sql)
 - Pola model label: [backend/models/modelLabel.js](../../backend/models/modelLabel.js)
 - Pola route publik: [backend/routes/publik/kamus.js](../../backend/routes/publik/kamus.js)
 - Pola route redaksi: [backend/routes/redaksi/](../../backend/routes/redaksi/)

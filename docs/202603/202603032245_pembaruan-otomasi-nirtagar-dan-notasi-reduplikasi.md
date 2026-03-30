@@ -37,13 +37,13 @@ Hasil:
 - Residual nirtagar setelah auto-assign: **313 entri**
 
 Log hasil auto-assign:
-- `_docs/202603/202603032235_auto-assign-reduplikasi-sedang-tinggi.csv`
+- `docs/202603/202603032235_auto-assign-reduplikasi-sedang-tinggi.csv`
 
 ## 2.1) Migrasi notasi ke subtipe (iterasi terbaru)
 
 Perubahan yang dijalankan:
 - Menambahkan tagar baru ke tabel `tagar`: `R.salin`, `R.purwa`, `R.wasana`, `R.tri`
-- File SQL: `_docs/202603/202603032320_tambah_tagar_subtipe_reduplikasi.sql`
+- File SQL: `docs/202603/202603032320_tambah_tagar_subtipe_reduplikasi.sql`
 - Migrasi data lama: entri yang sebelumnya bertagar `R` dan terdeteksi non-penuh dipindahkan ke subtipe
 
 Hasil migrasi data:
@@ -87,23 +87,23 @@ Hasil:
 
 Dokumen terkait:
 - Ringkasan audit dasar terbaru:
-  - `_docs/202603/202603032335_ringkasan-audit-dasar-reduplikasi-hyphen.md`
+  - `docs/202603/202603032335_ringkasan-audit-dasar-reduplikasi-hyphen.md`
 - Lampiran audit dasar:
-  - `_docs/202603/202603032335_audit-dasar-reduplikasi-hyphen.csv`
+  - `docs/202603/202603032335_audit-dasar-reduplikasi-hyphen.csv`
 - Log batch auto-assign:
-  - `_docs/202603/202603032350_auto-assign-dasar-reduplikasi-hyphen.csv`
+  - `docs/202603/202603032350_auto-assign-dasar-reduplikasi-hyphen.csv`
 
 ---
 
 ## 3) Dokumen yang dimutakhirkan
 
 - Ringkasan identifikasi residual (terbaru):
-  - `_docs/202603/202603032210_ringkasan-identifikasi-nirtagar.md`
+  - `docs/202603/202603032210_ringkasan-identifikasi-nirtagar.md`
 - Lampiran lengkap residual (terbaru):
-  - `_docs/202603/202603032210_identifikasi-nirtagar-notasi-reduplikasi-baru.csv`
+  - `docs/202603/202603032210_identifikasi-nirtagar-notasi-reduplikasi-baru.csv`
 - Audit khusus `jenis=dasar` (hyphen-only, normalisasi `(x)`):
-  - `_docs/202603/202603032335_ringkasan-audit-dasar-reduplikasi-hyphen.md`
-  - `_docs/202603/202603032335_audit-dasar-reduplikasi-hyphen.csv`
+  - `docs/202603/202603032335_ringkasan-audit-dasar-reduplikasi-hyphen.md`
+  - `docs/202603/202603032335_audit-dasar-reduplikasi-hyphen.csv`
 
 Distribusi residual terbaru (post auto-assign):
 - `(tanpa reduplikasi)`: 217
