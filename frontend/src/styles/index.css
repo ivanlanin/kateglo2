@@ -2105,7 +2105,15 @@ code {
   }
 
   .kamus-detail-heading-meta {
-    @apply text-base leading-relaxed text-gray-700 mt-1;
+    @apply text-base leading-relaxed text-gray-700 mt-1 flex items-center flex-wrap gap-x-1;
+  }
+
+  .kamus-detail-btn-lafal {
+    @apply inline-flex items-center justify-center rounded-full p-1 text-gray-500 transition-colors hover:text-blue-600 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400;
+  }
+
+  .dark .kamus-detail-btn-lafal {
+    @apply text-gray-400 hover:text-blue-300 hover:bg-blue-900/30;
   }
 
   .kamus-detail-sekuens-nav {

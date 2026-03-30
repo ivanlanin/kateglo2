@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-03-31 Selasa
+
+- Menambahkan pelafalan kata di halaman detail kamus dengan tombol audio dan notasi IPA
+
 ## 2026-03-30 Senin
 
 - Memastikan soal susun kata harian unik per hari

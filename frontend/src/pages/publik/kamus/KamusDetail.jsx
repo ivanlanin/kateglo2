@@ -2,7 +2,7 @@
  * @fileoverview Halaman detail kamus — makna, contoh, sublema, tesaurus, glosarium
  */
 
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategoriKamus, cariGlosarium } from '../../../api/apiPublik';
@@ -268,6 +268,75 @@ function normalisasiNilaiMeta(teks = '', { hapusSlash = false } = {}) {
     nilai = nilai.replace(/^\/+|\/+$/g, '').trim();
   }
   return nilai.toLowerCase();
+}
+
+/** Tombol pelafalan menggunakan Web Speech API */
+function TombolLafal({ kata }) {
+  const [sedangBicara, setSedangBicara] = useState(false);
+  const utteranceRef = useRef(null);
+
+  const didukung = typeof window !== 'undefined' && 'speechSynthesis' in window;
+
+  const ucapkan = useCallback(() => {
+    if (!didukung || !kata) return;
+    const synth = window.speechSynthesis;
+
+    if (synth.speaking) {
+      synth.cancel();
+      setSedangBicara(false);
+      return;
+    }
+
+    // Strip trailing homonym suffix e.g. "seri (1)" → "seri"
+    const kataBersih = kata.replace(/\s*\(\d+\)$/, '');
+    const utt = new SpeechSynthesisUtterance(kataBersih);
+    utt.lang = 'id-ID';
+    utt.rate = 0.9;
+
+    // Pick Indonesian voice if available
+    const voices = synth.getVoices();
+    const voiceId = voices.find((v) => v.lang.startsWith('id'));
+    if (voiceId) utt.voice = voiceId;
+
+    utt.onstart = () => setSedangBicara(true);
+    utt.onend = () => setSedangBicara(false);
+    utt.onerror = () => setSedangBicara(false);
+    utteranceRef.current = utt;
+    synth.speak(utt);
+  }, [kata, didukung]);
+
+  useEffect(() => {
+    return () => {
+      if (typeof window !== 'undefined' && window.speechSynthesis?.speaking) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
+  if (!didukung) return null;
+
+  return (
+    <button
+      type="button"
+      onClick={ucapkan}
+      className="kamus-detail-btn-lafal"
+      aria-label={sedangBicara ? 'Hentikan pelafalan' : `Dengarkan pelafalan ${kata}`}
+      title={sedangBicara ? 'Hentikan' : 'Dengarkan pelafalan'}
+    >
+      {sedangBicara ? (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden="true">
+          <path d="M11 5L6 9H2v6h4l5 4V5z" />
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+        </svg>
+      ) : (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden="true">
+          <path d="M11 5L6 9H2v6h4l5 4V5z" />
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+        </svg>
+      )}
+    </button>
+  );
 }
 
 export function shouldShowMetaSeparator(infoWaktu, sumberKodeEntri, adalahAdmin, entriId) {
@@ -707,6 +776,12 @@ function KamusDetail() {
                             <span title="Pelafalan">/{formatLemaHomonim(entriItem.lafal)}/</span>
                           </>
                         )}
+                        <TombolLafal kata={entriItem.entri} />
+                      </p>
+                    )}
+                    {!adaPemenggalan && !adaLafal && (
+                      <p className="kamus-detail-heading-meta">
+                        <TombolLafal kata={entriItem.entri} />
                       </p>
                     )}
                   </div>
