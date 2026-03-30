@@ -3,8 +3,8 @@
 <!-- MACHINE-METADATA
 {
   "title": "Pedoman Pengembangan Kateglo 2.0",
-  "version": "1.2",
-  "lastUpdated": "2026-03-27",
+  "version": "1.3",
+  "lastUpdated": "2026-03-30",
   "shell": "powershell",
   "primary_audience": ["developers", "ai-agents"]
 }
@@ -85,12 +85,8 @@ kateglo/
 │       ├── pages/        # Public, auth, and redaksi pages
 │       └── styles/       # TailwindCSS styles
 │
-├── _kode/                # Reference code (NOT committed)
-│   ├── kateglo/          # Old PHP codebase (reference)
-│   └── narakita/         # Modern reference project (patterns)
-│
-├── _data/                # Data migration scripts
-├── docs/                # Documentation + SQL migrations + struktur data
+├── .data/                # Data lokal (ignored, tidak di-commit)
+├── docs/                 # Documentation + SQL migrations + struktur data
 │
 └── package.json          # Root workspace configuration
 ```
@@ -158,7 +154,7 @@ $py = "C:/Kode/Kateglo/kateglo/.venv/Scripts/python.exe"
 # 3) Cek akses file db + query dasar
 $code = @"
 import sqlite3
-conn = sqlite3.connect('_data/kbbi4.db')
+conn = sqlite3.connect('.data/kbbi4.db')
 cur = conn.cursor()
 print('tables', cur.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table'").fetchone()[0])
 print('entri', cur.execute("SELECT COUNT(*) FROM entri").fetchone()[0])
@@ -567,10 +563,7 @@ $py = "C:/Kode/Kateglo/kateglo/.venv/Scripts/python.exe"
 
 ## Reference Code
 
-Gunakan `_kode/` sebagai referensi:
-
-- **Kateglo Lama** (`_kode/kateglo/`): Database schema, business logic, UI patterns dari PHP codebase
-- **Narakita** (`_kode/narakita/`): Modern React patterns, testing strategies, clean architecture
+Folder `_kode/` sudah tidak ada di workspace. Referensi kode lama tidak lagi dipakai.
 
 ## Important Conventions
 

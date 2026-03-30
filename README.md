@@ -193,8 +193,8 @@ kateglo/
 │       ├── pages/        # Halaman publik, auth, dan redaksi
 │       ├── styles/       # Tailwind entry + stylesheet semantik
 │       └── utils/        # Utility frontend
-├── docs/                # Dokumentasi + SQL migrations + struktur data
-└── _kode/                # Kode referensi (tidak untuk deployment)
+├── docs/                 # Dokumentasi + SQL migrations + struktur data
+└── .data/                # Data lokal (ignored, tidak di-commit)
 ```
 
 ## Environment Variables
