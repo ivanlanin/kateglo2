@@ -55,7 +55,7 @@ Script untuk mengisi kolom `lafal` secara massal dengan aturan grapheme-to-IPA:
 | /u/ | [ʊ] | Suku tutup terakhir (tak bertekanan) | TBBBI §3.2.1.2 |
 | /e/ | [ɛ] | Suku tutup terakhir + harmoni mundur ke suku buka sebelumnya | TBBBI §3.2.1.3 |
 | /o/ | [ɔ] | Suku tutup terakhir + harmoni mundur ke suku buka sebelumnya | TBBBI §3.2.1.4 |
-| /k/ | [kʔ] | Akhir kata (variasi bebas [kʔ]/[ʔ], diambil yang aman) | TBBBI §3.2.4.3 |
+| /k/ | [k] | Akhir kata tetap /k/ (transkripsi lebar; TBBBI §3.2.4.3: variasi bebas [k] ~ [k̚] ~ [ʔ]) | TBBBI §3.2.4.3 |
 
 #### Contoh Keluaran
 | Kata | Pemenggalan | IPA | Catatan |
@@ -64,12 +64,12 @@ Script untuk mengisi kolom `lafal` secara massal dengan aturan grapheme-to-IPA:
 | banting | ban.ting | /ban.tɪŋ/ | /i/ di suku tutup terakhir → [ɪ] |
 | tunda | tun.da | /tun.da/ | /u/ di penultima tetap [u] |
 | warung | wa.rung | /wa.rʊŋ/ | /u/ di suku tutup terakhir → [ʊ] |
-| rokok | ro.kok | /rɔ.kɔkʔ/ | /o/ → [ɔ] + harmoni mundur |
+| rokok | ro.kok | /rɔ.kɔk/ | /o/ → [ɔ] + harmoni mundur |
 | tokoh | to.koh | /tɔ.kɔh/ | /o/ → [ɔ] + harmoni mundur |
 | toko | to.ko | /to.ko/ | suku buka, tidak ada lowering |
-| nenek | ne.nek | /nɛ.nɛkʔ/ | /e/ → [ɛ] + harmoni mundur (setelah restore e-taling) |
+| nenek | ne.nek | /nɛ.nɛk/ | /e/ → [ɛ] + harmoni mundur (setelah restore e-taling) |
 | sore | so.re | /so.re/ | suku buka, tidak ada lowering |
-| batik | ba.tik | /ba.tɪkʔ/ | /k/ akhir → [kʔ], /i/ → [ɪ] |
+| batik | ba.tik | /ba.tɪk/ | /i/ → [ɪ] di suku tutup terakhir |
 | aktif | ak.tif | /ak.tɪf/ | /i/ hanya di suku terakhir |
 | vaksin | vak.sin | /fak.sɪn/ | v→f, /i/ di suku tutup terakhir |
 | xilofon | xi.lo.fon | /si.lo.fɔn/ | x awal→s, /o/ suku tutup → [ɔ] |

@@ -139,9 +139,6 @@ function applyEtalingToIpa(kata, currentIpa, etalingPositions) {
     } else if (kc === 'x' && (ic === 's' || ipaRemaining.startsWith('ks'))) {
       kataAdvance = 1;
       ipaAdvance = ipaRemaining.startsWith('ks') ? 2 : 1;
-    } else if (kc === 'k' && (ic === 'ʔ' || ipaRemaining.startsWith('kʔ'))) {
-      kataAdvance = 1;
-      ipaAdvance = ipaRemaining.startsWith('kʔ') ? 2 : 1;
     } else if (kc === "'" && ic === 'ʔ') {
       kataAdvance = 1; ipaAdvance = 1;
     } else {

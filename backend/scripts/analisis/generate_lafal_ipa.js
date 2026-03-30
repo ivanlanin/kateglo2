@@ -207,7 +207,8 @@ function isVowel(ch) {
  *   - /u/ → [ʊ] in final closed syllable (unstressed) (§3.2.1.2)
  *   - /e/ → [ɛ] in final closed syllable, with backward harmony (§3.2.1.3)
  *   - /o/ → [ɔ] in final closed syllable, with backward harmony (§3.2.1.4)
- *   - /k/ → [kʔ] word-finally — unreleased + glottal (§3.2.4.3, variasi bebas)
+ *   - Word-final /k/ kept as /k/ (broad transcription; TBBBI §3.2.4.3 notes
+ *     free variation [k] ~ [k̚] ~ [ʔ])
  */
 function generateIpa(entri, pemenggalan = '') {
   const kata = String(entri || '').trim().toLowerCase();
@@ -240,8 +241,8 @@ function generateIpa(entri, pemenggalan = '') {
     ipa = graphemeToIpa(kata, true);
   }
 
-  // Word-final /k/ → [kʔ] (unreleased velar stop, variasi bebas with [ʔ])
-  ipa = ipa.replace(/k$/, 'kʔ');
+  // Word-final /k/: kept as /k/ (broad transcription).
+  // TBBBI §3.2.4.3: free variation [k] ~ [k̚] ~ [ʔ] — no single correct form.
 
   return ipa;
 }
