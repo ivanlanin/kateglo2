@@ -66,6 +66,7 @@ const {
   cariKamus,
   ambilDetailKamus,
   ambilKataHariIni,
+  ambilEntriAcak,
   generateKataHariIni,
   hapusCacheDetailKamus,
   buatCacheKeyDetailKamus,
@@ -539,6 +540,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     expect(__private.hashTanggal('2026-03-31')).toBeGreaterThan(0);
     expect(__private.normalisasiCuplikan('  satu   dua  ', 20)).toBe('satu dua');
     expect(__private.normalisasiCuplikan('a'.repeat(30), 10)).toBe('aaaaaaa...');
+    expect(__private.buatUrlDetailKamus(' aktif (2) ')).toBe('/kamus/detail/aktif');
 
     const payload = __private.bentukPayloadKataHariIni({
       indeks: 'aktif',
@@ -743,6 +745,58 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
 
     expect(result).toBeNull();
     expect(ModelEntri.hitungKandidatKataHariIni).toHaveBeenCalledTimes(1);
+    expect(ModelEntri.ambilKandidatKataHariIni).not.toHaveBeenCalled();
+  });
+
+  it('ambilEntriAcak memilih kandidat acak tanpa syarat etimologi', async () => {
+    jest.spyOn(Math, 'random').mockReturnValueOnce(0.5);
+    ModelEntri.hitungKandidatKataHariIni.mockResolvedValueOnce(6);
+    ModelEntri.ambilKandidatKataHariIni.mockResolvedValueOnce({ indeks: 'Aktif (2)' });
+
+    const result = await ambilEntriAcak();
+
+    expect(ModelEntri.hitungKandidatKataHariIni).toHaveBeenCalledWith({ requireEtimologi: false });
+    expect(ModelEntri.ambilKandidatKataHariIni).toHaveBeenCalledWith({
+      offset: 3,
+      requireEtimologi: false,
+    });
+    expect(result).toEqual({
+      indeks: 'Aktif',
+      url: '/kamus/detail/Aktif',
+    });
+    Math.random.mockRestore();
+  });
+
+  it('ambilEntriAcak mencoba offset berikutnya saat kandidat pertama kosong', async () => {
+    jest.spyOn(Math, 'random').mockReturnValueOnce(0.25);
+    ModelEntri.hitungKandidatKataHariIni.mockResolvedValueOnce(4);
+    ModelEntri.ambilKandidatKataHariIni
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce({ indeks: 'acak' });
+
+    const result = await ambilEntriAcak();
+
+    expect(ModelEntri.ambilKandidatKataHariIni).toHaveBeenNthCalledWith(1, {
+      offset: 1,
+      requireEtimologi: false,
+    });
+    expect(ModelEntri.ambilKandidatKataHariIni).toHaveBeenNthCalledWith(2, {
+      offset: 2,
+      requireEtimologi: false,
+    });
+    expect(result).toEqual({
+      indeks: 'acak',
+      url: '/kamus/detail/acak',
+    });
+    Math.random.mockRestore();
+  });
+
+  it('ambilEntriAcak mengembalikan null jika tidak ada kandidat', async () => {
+    ModelEntri.hitungKandidatKataHariIni.mockResolvedValueOnce(0);
+
+    const result = await ambilEntriAcak();
+
+    expect(result).toBeNull();
     expect(ModelEntri.ambilKandidatKataHariIni).not.toHaveBeenCalled();
   });
 

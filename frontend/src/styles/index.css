@@ -708,6 +708,10 @@ code {
     @apply flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between;
   }
 
+  .beranda-sorotan-heading {
+    @apply min-w-0 flex-1;
+  }
+
   .beranda-sorotan-kicker {
     @apply m-0 text-[11px] font-semibold uppercase tracking-[0.22em] text-gray-600;
   }
@@ -805,7 +809,11 @@ code {
   }
 
   .beranda-sorotan-actions {
-    @apply mt-4 flex items-start;
+    @apply flex flex-wrap items-center gap-2 self-start sm:justify-end;
+  }
+
+  .beranda-sorotan-action-button {
+    @apply whitespace-nowrap;
   }
 
   .beranda-sorotan-placeholder {
@@ -826,6 +834,10 @@ code {
 
   .dark .beranda-sorotan-placeholder-line {
     @apply bg-dark-bg-hover;
+  }
+
+  .kamus-acak-status {
+    @apply m-0;
   }
 
   .beranda-feature-grid {

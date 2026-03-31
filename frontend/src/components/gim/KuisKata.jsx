@@ -519,7 +519,7 @@ function KuisKata() {
     let catatanRekap = 'Masuk untuk ikut ke klasemen harian.';
 
     if (isAuthenticated && statusRekap === 'saving') {
-      catatanRekap = 'Menyimpan skor harian…';
+      catatanRekap = 'Menyimpan skor harian …';
     } else if (isAuthenticated && statusRekap === 'saved') {
       catatanRekap = 'Skor harian tersimpan.';
     } else if (isAuthenticated && statusRekap === 'error') {

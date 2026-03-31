@@ -25,11 +25,13 @@ vi.mock('../src/pages/auth', () => ({
 }));
 vi.mock('../src/pages/publik/kamus', () => ({
   Kamus: () => <div>Hal Kamus</div>,
+  KamusAcak: () => <div>Hal Kamus Acak</div>,
   KamusDetail: () => <div>Hal Kamus Detail</div>,
   Tesaurus: () => <div>Hal Tesaurus</div>,
   Makna: () => <div>Hal Makna</div>,
   Rima: () => <div>Hal Rima</div>,
   Ejaan: () => <div>Hal Ejaan</div>,
+  Gramatika: () => <div>Hal Gramatika</div>,
 }));
 vi.mock('../src/pages/publik/gim/GimIndex', () => ({ default: () => <div>Hal Gim</div> }));
 vi.mock('../src/pages/publik/gim/KuisKata', () => ({ default: () => <div>Hal Kuis Kata</div> }));
@@ -87,6 +89,17 @@ describe('App', () => {
     );
     expect(screen.getByTestId('layout')).toBeInTheDocument();
     expect(screen.getByText('Hal Beranda')).toBeInTheDocument();
+  });
+
+  it('merender route kamus acak dalam tata letak', async () => {
+    render(
+      <MemoryRouter initialEntries={['/kamus/acak']}>
+        <App />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByTestId('layout')).toBeInTheDocument();
+    expect(await screen.findByText('Hal Kamus Acak')).toBeInTheDocument();
   });
 
   it('merender auth callback route', async () => {

@@ -138,7 +138,7 @@ function PanelInfoSusunKata() {
     <KontenMarkdownStatis
       src="/halaman/gim/susun-kata.md"
       className="halaman-markdown-content susun-kata-info-panel"
-      loadingText="Memuat petunjuk gim ..."
+      loadingText="Memuat petunjuk gim …"
       errorText="Gagal memuat petunjuk gim."
       components={komponenMarkdown}
     />

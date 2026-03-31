@@ -178,6 +178,15 @@ function normalisasiCuplikan(value = '', maxLength = 180) {
   return `${text.slice(0, maxLength - 3).trimEnd()}...`;
 }
 
+function buatUrlDetailKamus(indeks = '') {
+  const indeksAman = normalisasiIndeksKamus(String(indeks || ''));
+  if (!indeksAman) {
+    return null;
+  }
+
+  return `/kamus/detail/${encodeURIComponent(indeksAman)}`;
+}
+
 function ambilMaknaUtama(entriList = [], preferredEntriId = null) {
   const preferredId = Number(preferredEntriId) || null;
 
@@ -286,7 +295,7 @@ function bentukPayloadKataHariIni(detail = null, tanggal = null, preferredEntriI
     indeks: detail.indeks,
     entri: entri.entri || detail.indeks,
     homonim: Number.isFinite(homonim) ? homonim : null,
-    url: `/kamus/detail/${encodeURIComponent(detail.indeks)}`,
+    url: buatUrlDetailKamus(detail.indeks),
     kelas_kata: makna?.kelas_kata || null,
     makna: normalisasiCuplikan(makna?.makna, 180),
     contoh: normalisasiCuplikan(contoh?.contoh, 220),
@@ -636,10 +645,42 @@ async function generateKataHariIni({ tanggal = null } = {}) {
   return { tanggal: tanggalReferensi, indeks: kandidat.indeks };
 }
 
+async function ambilEntriAcak() {
+  const total = await ModelEntri.hitungKandidatKataHariIni({ requireEtimologi: false });
+  if (total <= 0) {
+    return null;
+  }
+
+  const offsetAwal = Math.floor(Math.random() * total);
+  const batasPercobaan = Math.min(total, 3);
+
+  for (let langkah = 0; langkah < batasPercobaan; langkah += 1) {
+    const offset = (offsetAwal + langkah) % total;
+    const kandidat = await ModelEntri.ambilKandidatKataHariIni({
+      offset,
+      requireEtimologi: false,
+    });
+    const indeks = normalisasiIndeksKamus(String(kandidat?.indeks || ''));
+    const url = buatUrlDetailKamus(indeks);
+
+    if (!indeks || !url) {
+      continue;
+    }
+
+    return {
+      indeks,
+      url,
+    };
+  }
+
+  return null;
+}
+
 module.exports = {
   cariKamus,
   ambilDetailKamus,
   ambilKataHariIni,
+  ambilEntriAcak,
   generateKataHariIni,
   hapusCacheDetailKamus,
   hapusCacheKataHariIni,
@@ -663,6 +704,7 @@ module.exports.__private = {
   hapusCacheKataHariIni,
   hashTanggal,
   normalisasiCuplikan,
+  buatUrlDetailKamus,
   ambilMaknaUtama,
   ambilContohUtama,
   ambilRingkasanMakna,

@@ -6,6 +6,7 @@
 - Menambahkan Kata Hari Ini (KTI)
 - Menampilkan skor kumulatif dan jumlah ronde harian di [Kuis Kata](/gim/kuis-kata)
 - Menambahkan _cron_ dan _job_ untuk Kata Hari Ini
+- Menambahkan tombol "Entri Acak" di beranda untuk mengarahkan ke entri kamus acak
 
 ## 2026-03-30 Senin
 

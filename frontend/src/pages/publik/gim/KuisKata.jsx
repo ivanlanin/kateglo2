@@ -17,7 +17,7 @@ function PanelInfoKuisKata() {
     <KontenMarkdownStatis
       src="/halaman/gim/kuis-kata.md"
       className="halaman-markdown-content gim-page-info-panel"
-      loadingText="Memuat petunjuk gim ..."
+      loadingText="Memuat petunjuk gim …"
       errorText="Gagal memuat petunjuk gim."
     />
   );
@@ -77,7 +77,7 @@ function KuisKataPage() {
           <PanelInfoKuisKata />
         ) : panelKlasemenTerbuka ? (
           <div className="gim-klasemen-panel">
-            {isLoading ? <p className="gim-klasemen-kosong">Memuat klasemen harian…</p> : null}
+            {isLoading ? <p className="gim-klasemen-kosong">Memuat klasemen harian …</p> : null}
             {!isLoading && isError ? <p className="gim-klasemen-kosong">Gagal memuat klasemen harian.</p> : null}
             {!isLoading && !isError && daftarKlasemen.length ? (
               <ol className="gim-klasemen-list">

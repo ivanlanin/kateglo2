@@ -4,7 +4,12 @@
 
 const express = require('express');
 const { authenticate, authenticateOptional } = require('../../../middleware/auth');
-const { cariKamus, ambilDetailKamus, ambilKataHariIni } = require('../../../services/publik/layananKamusPublik');
+const {
+  cariKamus,
+  ambilDetailKamus,
+  ambilKataHariIni,
+  ambilEntriAcak,
+} = require('../../../services/publik/layananKamusPublik');
 const ModelLabel = require('../../../models/master/modelLabel');
 const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
 const ModelTagar = require('../../../models/master/modelTagar');
@@ -139,6 +144,24 @@ router.get('/kata-hari-ini', async (req, res, next) => {
         error: 'Tidak Ditemukan',
         message: 'Kata Hari Ini belum tersedia',
         tanggal,
+      });
+    }
+
+    return res.json(data);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.get('/acak', async (_req, res, next) => {
+  try {
+    const data = await ambilEntriAcak();
+    res.set('Cache-Control', 'no-store');
+
+    if (!data?.url) {
+      return res.status(404).json({
+        error: 'Tidak Ditemukan',
+        message: 'Entri acak belum tersedia',
       });
     }
 

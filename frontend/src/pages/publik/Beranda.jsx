@@ -38,7 +38,7 @@ function formatLabelPopuler(kata) {
   }
 
   return {
-    teks: `${daftarKata[0]} ...`,
+    teks: `${daftarKata[0]} …`,
     judul: kataAman,
   };
 }
@@ -231,7 +231,7 @@ function Beranda() {
       <div className="beranda-sorotan-grid">
         <section className="beranda-sorotan-card beranda-sorotan-card-kata" aria-label="Kata Hari Ini" aria-busy={statusKataHariIni === 'loading'}>
           <div className="beranda-sorotan-header">
-            <div>
+            <div className="beranda-sorotan-heading">
               <p className="beranda-sorotan-kicker">Kata Hari Ini</p>
               <div className="beranda-sorotan-title-row">
                 {statusKataHariIni === 'ready' && lemaKataHariIni ? (
@@ -243,6 +243,21 @@ function Beranda() {
                   <TombolLafal kata={kataLafalKataHariIni} size="large" />
                 ) : null}
               </div>
+            </div>
+
+            <div className="beranda-sorotan-actions">
+              {statusKataHariIni === 'ready' && kataHariIni?.url ? (
+                <Link to={kataHariIni.url} className="alat-link-primary beranda-sorotan-action-button">
+                  Lihat entri
+                </Link>
+              ) : (
+                <span className="alat-link-primary beranda-sorotan-action-button beranda-sorotan-link-disabled" aria-hidden="true">
+                  Lihat entri
+                </span>
+              )}
+              <Link to="/kamus/acak" className="alat-link-primary beranda-sorotan-action-button">
+                Entri acak
+              </Link>
             </div>
           </div>
 
@@ -265,18 +280,6 @@ function Beranda() {
           {statusKataHariIni === 'ready' && etimologiKataHariIni ? (
             <p className="beranda-sorotan-footnote">{etimologiKataHariIni}</p>
           ) : null}
-
-          <div className="beranda-sorotan-actions">
-            {statusKataHariIni === 'ready' && kataHariIni?.url ? (
-              <Link to={kataHariIni.url} className="beranda-sorotan-link">
-                Lihat Entri
-              </Link>
-            ) : (
-              <span className="beranda-sorotan-link beranda-sorotan-link-disabled" aria-hidden="true">
-                Lihat Entri
-              </span>
-            )}
-          </div>
         </section>
 
         <section className="beranda-sorotan-card beranda-sorotan-card-kuis" aria-label="Kuis Kata">

@@ -13,7 +13,7 @@ function Ihwal() {
     >
       <KontenMarkdownStatis
         src="/halaman/info/ihwal-kateglo.md"
-        loadingText="Memuat ihwal Kateglo ..."
+        loadingText="Memuat ihwal Kateglo …"
         errorText="Gagal memuat ihwal Kateglo."
       />
     </HalamanPublik>

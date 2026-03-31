@@ -85,6 +85,7 @@ jest.mock('../../../services/publik/layananKamusPublik', () => ({
   cariKamus: jest.fn(),
   ambilDetailKamus: jest.fn(),
   ambilKataHariIni: jest.fn(),
+  ambilEntriAcak: jest.fn(),
 }));
 
 jest.mock('../../../services/publik/layananGlosariumPublik', () => ({
@@ -165,6 +166,10 @@ describe('routes backend', () => {
       pemenggalan: 'ak.tif',
       lafal: 'aktif',
     });
+    layananKamusPublik.ambilEntriAcak.mockResolvedValue({
+      indeks: 'acak',
+      url: '/kamus/detail/acak',
+    });
     delete process.env.JWT_SECRET;
   });
 
@@ -180,6 +185,30 @@ describe('routes backend', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.status).toBe('ok');
+  });
+
+  it('GET /api/publik/kamus/acak mengembalikan entri acak dari backend', async () => {
+    const response = await request(createApp()).get('/api/publik/kamus/acak');
+
+    expect(response.status).toBe(200);
+    expect(response.headers['cache-control']).toBe('no-store');
+    expect(response.body).toEqual({
+      indeks: 'acak',
+      url: '/kamus/detail/acak',
+    });
+    expect(layananKamusPublik.ambilEntriAcak).toHaveBeenCalledTimes(1);
+  });
+
+  it('GET /api/publik/kamus/acak mengembalikan 404 saat kandidat tidak tersedia', async () => {
+    layananKamusPublik.ambilEntriAcak.mockResolvedValueOnce(null);
+
+    const response = await request(createApp()).get('/api/publik/kamus/acak');
+
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual({
+      error: 'Tidak Ditemukan',
+      message: 'Entri acak belum tersedia',
+    });
   });
 
   it('GET /api/redaksi/health mengembalikan status ok dengan token admin', async () => {

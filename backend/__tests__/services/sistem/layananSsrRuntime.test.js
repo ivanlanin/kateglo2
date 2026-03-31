@@ -17,6 +17,7 @@ jest.mock('../../../config/logger', () => ({
 
 jest.mock('../../../services/publik/layananKamusPublik', () => ({
   ambilDetailKamus: jest.fn(),
+  ambilEntriAcak: jest.fn(),
 }));
 
 jest.mock('../../../services/publik/layananTesaurusPublik', () => ({
@@ -30,7 +31,7 @@ jest.mock('../../../models/leksikon/modelGlosarium', () => ({
 }));
 
 const logger = require('../../../config/logger');
-const { ambilDetailKamus } = require('../../../services/publik/layananKamusPublik');
+const { ambilDetailKamus, ambilEntriAcak } = require('../../../services/publik/layananKamusPublik');
 const { ambilDetailTesaurus } = require('../../../services/publik/layananTesaurusPublik');
 const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
 const runtime = require('../../../services/sistem/layananSsrRuntime');
@@ -125,6 +126,7 @@ describe('services/sistem/layananSsrRuntime', () => {
       }],
       tesaurus: { sinonim: ['sinonim'], antonim: ['antonim'] },
     });
+    ambilEntriAcak.mockResolvedValue({ indeks: 'acak', url: '/kamus/detail/acak' });
     ambilDetailTesaurus.mockResolvedValue({ indeks: 'besar', sinonim: ['agung'], antonim: ['kecil'] });
     ModelGlosarium.cari.mockResolvedValue({ total: 2, data: [{ indonesia: 'istilah', asing: 'term' }] });
     ModelGlosarium.ambilPersisAsing.mockResolvedValue([{ id: 1, asing: 'bankrupt', indonesia: 'bangkrut' }]);
@@ -533,6 +535,24 @@ describe('services/sistem/layananSsrRuntime', () => {
     expect(response.text).toContain('<main>kamus-detail</main>');
     expect(response.text).toContain('<title>SSR kamus-detail</title>');
     expect(response.text).not.toContain('TemplateOG');
+  });
+
+  it('pasangFrontendRuntime me-redirect /kamus/acak sebelum SSR render', async () => {
+    const loader = jest.fn(async () => jest.fn(async () => ({
+      appHtml: '<main>tidak dipakai</main>',
+      headTags: '<title>SSR</title>',
+    })));
+    const prefetch = jest.fn(async () => ({ type: 'kamus-detail' }));
+    const app = createApp(loader, prefetch);
+
+    const response = await request(app).get('/kamus/acak');
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe('/kamus/detail/acak');
+    expect(response.headers['cache-control']).toBe('no-store');
+    expect(ambilEntriAcak).toHaveBeenCalledTimes(1);
+    expect(loader).not.toHaveBeenCalled();
+    expect(prefetch).not.toHaveBeenCalled();
   });
 
   it('pasangFrontendRuntime menambahkan header cache untuk halaman ejaan', async () => {

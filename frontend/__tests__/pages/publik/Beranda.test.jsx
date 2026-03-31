@@ -134,6 +134,7 @@ describe('Beranda', () => {
     expect(screen.getByText('Etimologi:', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('faal')).toContainHTML('<em>faal</em>');
     expect(screen.getByRole('link', { name: /lihat entri/i })).toHaveAttribute('href', '/kamus/detail/aktif');
+    expect(screen.getByRole('link', { name: /entri acak/i })).toHaveAttribute('href', '/kamus/acak');
     expect(screen.queryByRole('link', { name: 'Buka kuis' })).not.toBeInTheDocument();
     expect(screen.getByTestId('kuis-kata')).toBeInTheDocument();
   });
@@ -144,7 +145,7 @@ describe('Beranda', () => {
     render(<Beranda />);
 
     expect(screen.getByLabelText('Kata Hari Ini')).toHaveAttribute('aria-busy', 'true');
-    expect(screen.getByText('Lihat Entri')).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.getByText('Lihat entri')).toHaveAttribute('aria-hidden', 'true');
   });
 
   it('memotong frasa populer lebih dari dua kata dan menyimpan judul penuh di tooltip', async () => {
@@ -165,11 +166,11 @@ describe('Beranda', () => {
     const linkKamus = screen.getByRole('link', {
       name: 'acceleration program for government financial accountability',
     });
-    expect(linkKamus).toHaveTextContent('acceleration ...');
+    expect(linkKamus).toHaveTextContent('acceleration …');
     expect(linkKamus).toHaveAttribute('title', 'acceleration program for government financial accountability');
 
     const linkGlosarium = screen.getByRole('link', { name: 'istilah teknis umum' });
-    expect(linkGlosarium).toHaveTextContent('istilah ...');
+    expect(linkGlosarium).toHaveTextContent('istilah …');
     expect(linkGlosarium).toHaveAttribute('title', 'istilah teknis umum');
   });
 

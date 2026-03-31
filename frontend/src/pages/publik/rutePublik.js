@@ -8,6 +8,7 @@ function buatLazyNamedExport(loader, exportName) {
 }
 
 const Kamus = buatLazyNamedExport(() => import('./kamus'), 'Kamus');
+const KamusAcak = buatLazyNamedExport(() => import('./kamus'), 'KamusAcak');
 const KamusDetail = buatLazyNamedExport(() => import('./kamus'), 'KamusDetail');
 const Tesaurus = buatLazyNamedExport(() => import('./kamus'), 'Tesaurus');
 const Makna = buatLazyNamedExport(() => import('./kamus'), 'Makna');
@@ -55,6 +56,7 @@ const ruteGimInteraktif = katalogGim.map((item) => ({
 export const ruteHalamanPublik = [
   { path: '/', Component: Beranda },
   { path: '/kamus', Component: Kamus },
+  { path: '/kamus/acak', Component: KamusAcak },
   { path: '/kamus/cari/:kata', Component: Kamus },
   { path: '/kamus/kelas/:kelas', Component: Kamus },
   { path: '/kamus/tagar/:tagar', Component: Kamus },

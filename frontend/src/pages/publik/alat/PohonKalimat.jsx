@@ -19,7 +19,7 @@ import {
 } from './pohon-kalimat/pohonKalimatModel';
 
 const LEBAR_DROPDOWN_CONTOH = Math.max(
-  'Pilih contoh ...'.length,
+  'Pilih contoh …'.length,
   ...CONTOH.map((contoh) => contoh.judul.length),
 ) + 2;
 
@@ -88,7 +88,7 @@ function BlokKlausaAnak({ klausa, onChange, onUbahKonstituen, onTambahKonstituen
                 <input
                   type="text"
                   className="pohon-input"
-                  placeholder="Teks segmen ..."
+                  placeholder="Teks segmen …"
                   value={k.teks}
                   onChange={(e) => onUbahKonstituen(k.id, 'teks', e.target.value)}
                   aria-label="Teks segmen klausa anak"
@@ -460,7 +460,7 @@ function PohonKalimat() {
             <KontenMarkdownStatis
               src="/halaman/alat/pohon-kalimat.md"
               className="halaman-markdown-content"
-              loadingText="Memuat informasi alat ..."
+              loadingText="Memuat informasi alat …"
               errorText="Gagal memuat informasi alat."
             />
           </section>
@@ -486,7 +486,7 @@ function PohonKalimat() {
                 }}
                 aria-label="Pilih contoh pohon kalimat"
               >
-                <option value="">Pilih contoh ...</option>
+                <option value="">Pilih contoh …</option>
                 {CONTOH.map((contoh, indeks) => (
                   <option key={contoh.judul} value={String(indeks)}>{contoh.judul}</option>
                 ))}

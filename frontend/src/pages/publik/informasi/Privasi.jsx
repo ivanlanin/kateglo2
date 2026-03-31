@@ -13,7 +13,7 @@ function Privasi() {
     >
       <KontenMarkdownStatis
         src="/halaman/info/kebijakan-privasi.md"
-        loadingText="Memuat kebijakan privasi ..."
+        loadingText="Memuat kebijakan privasi …"
         errorText="Gagal memuat kebijakan privasi."
       />
     </HalamanPublik>

@@ -17,6 +17,7 @@ import {
   ambilEntriPerKategori,
   cariKamus,
   ambilDetailKamus,
+  ambilEntriAcakKamus,
   ambilKomentarKamus,
   simpanKomentarKamus,
   cariTesaurus,
@@ -97,6 +98,14 @@ describe('apiPublik', () => {
     expect(klien.get).toHaveBeenCalledWith('/api/publik/kamus/detail/anak%20ibu', {
       params: {},
     });
+  });
+
+  it('ambilEntriAcakKamus memanggil endpoint entri acak', async () => {
+    klien.get.mockResolvedValue({ data: { url: '/kamus/detail/acak' } });
+
+    await ambilEntriAcakKamus();
+
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/kamus/acak');
   });
 
   it('ambilDetailKamus mendukung paging glosarium pada endpoint detail', async () => {

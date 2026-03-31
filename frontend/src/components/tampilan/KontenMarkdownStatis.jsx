@@ -13,7 +13,7 @@ function hapusFrontmatter(markdownMentah = '') {
 function KontenMarkdownStatis({
   src,
   className = 'halaman-markdown-content',
-  loadingText = 'Memuat dokumen ...',
+  loadingText = 'Memuat dokumen …',
   errorText = 'Gagal memuat dokumen.',
   components,
 }) {

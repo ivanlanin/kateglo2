@@ -7,7 +7,7 @@ const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 const express = require('express');
 const logger = require('../../config/logger');
-const { ambilDetailKamus } = require('../publik/layananKamusPublik');
+const { ambilDetailKamus, ambilEntriAcak } = require('../publik/layananKamusPublik');
 const { ambilDetailTesaurus } = require('../publik/layananTesaurusPublik');
 const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
 
@@ -421,6 +421,15 @@ function pasangFrontendRuntime(app, options = {}) {
     try {
       if (isBypassPath(req.path) || isAssetRequest(req.path)) {
         return next();
+      }
+
+      if (req.path === '/kamus/acak' || req.path === '/kamus/acak/') {
+        const entriAcak = await ambilEntriAcak();
+
+        if (entriAcak?.url) {
+          res.set('Cache-Control', 'no-store');
+          return res.redirect(302, entriAcak.url);
+        }
       }
 
       const cacheControl = resolvePageCacheControl(req.path);

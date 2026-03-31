@@ -93,6 +93,11 @@ export async function ambilDetailKamus(indeks, glosariumPaging = null) {
   }
 }
 
+export async function ambilEntriAcakKamus() {
+  const response = await klien.get('/api/publik/kamus/acak');
+  return response.data;
+}
+
 export async function ambilKomentarKamus(indeks) {
   const response = await klien.get(`/api/publik/kamus/komentar/${encodeURIComponent(indeks)}`);
   return response.data;
