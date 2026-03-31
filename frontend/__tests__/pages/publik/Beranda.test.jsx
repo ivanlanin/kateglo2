@@ -30,6 +30,10 @@ vi.mock('../../../src/components/gim/KuisKata', () => ({
   default: () => <div data-testid="kuis-kata" />,
 }));
 
+vi.mock('../../../src/components/tombol/TombolLafal', () => ({
+  default: ({ kata, size }) => <div data-testid="tombol-lafal" data-kata={kata} data-size={size || 'default'} />,
+}));
+
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   useNavigate: () => mockNavigate,
@@ -119,11 +123,14 @@ describe('Beranda', () => {
     expect(screen.getByText('2', { selector: 'sup' })).toBeInTheDocument();
     expect(screen.getByText('Kata Hari Ini')).toBeInTheDocument();
     expect(screen.getByText('Kuis Kata')).toBeInTheDocument();
+    expect(screen.getByTestId('tombol-lafal')).toHaveAttribute('data-kata', 'aktif (2)');
+    expect(screen.getByTestId('tombol-lafal')).toHaveAttribute('data-size', 'large');
     expect(screen.queryByText('Lima soal singkat lintas kamus, tesaurus, glosarium, makna, dan rima.')).not.toBeInTheDocument();
     expect(screen.getByText((_, element) => (
       element?.classList.contains('beranda-sorotan-body')
       && element.textContent?.includes('(1) giat dalam bekerja: Ia sangat aktif di kelas.; (2) terlibat penuh: Warga aktif bergotong royong.')
     ))).toBeInTheDocument();
+    expect(screen.getAllByText(/Ia sangat aktif di kelas\.|Warga aktif bergotong royong\./i)[0].className).toContain('kamus-detail-def-sample');
     expect(screen.getByText('Etimologi:', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('faal')).toContainHTML('<em>faal</em>');
     expect(screen.getByRole('link', { name: /lihat entri/i })).toHaveAttribute('href', '/kamus/detail/aktif');

@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { ambilKataHariIni, ambilPencarianPopuler } from '../../api/apiPublik';
 import KotakCariPublik from '../../components/formulir/KotakCariPublik';
 import KuisKata from '../../components/gim/KuisKata';
+import TombolLafal from '../../components/tombol/TombolLafal';
 import { formatLemaHomonim } from '../../utils/formatUtils';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
 
@@ -105,7 +106,12 @@ function renderRingkasanMaknaKataHariIni(kataHariIni = null) {
     return (
       <>
         {daftarMakna[0].makna}
-        {daftarMakna[0].contoh ? `: ${daftarMakna[0].contoh}` : ''}
+        {daftarMakna[0].contoh ? (
+          <span>
+            {': '}
+            <span className="kamus-detail-def-sample">{daftarMakna[0].contoh}</span>
+          </span>
+        ) : null}
       </>
     );
   }
@@ -114,7 +120,12 @@ function renderRingkasanMaknaKataHariIni(kataHariIni = null) {
     <span key={`${item.makna}-${index}`}>
       {index > 0 ? '; ' : ''}
       {`(${index + 1}) ${item.makna}`}
-      {item.contoh ? `: ${item.contoh}` : ''}
+      {item.contoh ? (
+        <span>
+          {': '}
+          <span className="kamus-detail-def-sample">{item.contoh}</span>
+        </span>
+      ) : null}
     </span>
   ));
 }
@@ -177,6 +188,7 @@ function Beranda() {
   }, []);
 
   const lemaKataHariIni = bentukLemaKataHariIni(kataHariIni);
+  const kataLafalKataHariIni = String(kataHariIni?.entri || kataHariIni?.indeks || '').trim();
   const ringkasanMaknaKataHariIni = renderRingkasanMaknaKataHariIni(kataHariIni);
   const etimologiKataHariIni = renderEtimologiKataHariIni(kataHariIni);
 
@@ -221,11 +233,16 @@ function Beranda() {
           <div className="beranda-sorotan-header">
             <div>
               <p className="beranda-sorotan-kicker">Kata Hari Ini</p>
-              {statusKataHariIni === 'ready' && lemaKataHariIni ? (
-                <h2 className="beranda-sorotan-title">{formatLemaHomonim(lemaKataHariIni)}</h2>
-              ) : (
-                <div className="beranda-sorotan-placeholder-title" aria-hidden="true" />
-              )}
+              <div className="beranda-sorotan-title-row">
+                {statusKataHariIni === 'ready' && lemaKataHariIni ? (
+                  <h2 className="beranda-sorotan-title">{formatLemaHomonim(lemaKataHariIni)}</h2>
+                ) : (
+                  <div className="beranda-sorotan-placeholder-title" aria-hidden="true" />
+                )}
+                {statusKataHariIni === 'ready' && kataLafalKataHariIni ? (
+                  <TombolLafal kata={kataLafalKataHariIni} size="large" />
+                ) : null}
+              </div>
             </div>
           </div>
 
