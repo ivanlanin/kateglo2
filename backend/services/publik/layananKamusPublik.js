@@ -591,6 +591,23 @@ async function ambilKataHariIni({ tanggal = null } = {}) {
     return payloadTersimpan;
   }
 
+  return null;
+}
+
+async function generateKataHariIni({ tanggal = null } = {}) {
+  const tanggalReferensi = parseTanggalReferensi(tanggal);
+
+  const tersimpan = await ModelKataHariIni.ambilByTanggal(tanggalReferensi);
+  if (tersimpan) {
+    const detailTersimpan = await ambilDetailKamus(tersimpan.indeks);
+    const payloadTersimpan = bentukPayloadKataHariIni(detailTersimpan, tanggalReferensi, tersimpan.entri_id);
+    if (payloadTersimpan) {
+      const cacheKey = buatCacheKeyKataHariIni(tanggalReferensi);
+      await setJson(cacheKey, payloadTersimpan, getTtlSeconds());
+    }
+    return payloadTersimpan || null;
+  }
+
   const hasilOtomatis = await pilihKandidatKataHariIniOtomatis(tanggalReferensi);
   if (!hasilOtomatis) {
     return null;
@@ -603,6 +620,7 @@ async function ambilKataHariIni({ tanggal = null } = {}) {
   });
 
   const payloadFinal = hasilOtomatis.payload;
+  const cacheKey = buatCacheKeyKataHariIni(tanggalReferensi);
   await setJson(cacheKey, payloadFinal, getTtlSeconds());
   return payloadFinal;
 }
@@ -611,6 +629,7 @@ module.exports = {
   cariKamus,
   ambilDetailKamus,
   ambilKataHariIni,
+  generateKataHariIni,
   hapusCacheDetailKamus,
   hapusCacheKataHariIni,
   buatCacheKeyDetailKamus,

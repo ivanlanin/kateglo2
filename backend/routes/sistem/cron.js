@@ -4,6 +4,7 @@
 
 const express = require('express');
 const { jalankanPrefillSusunKataHarian, parseTanggal, parseTotalHari } = require('../../jobs/jobSusunKataHarian');
+const { jalankanPrefillKataHariIni, parseTanggal: parseTanggalKataHariIni, parseTotalHari: parseTotalHariKataHariIni } = require('../../jobs/jobKataHariIni');
 const { jalankanProsesWikipedia } = require('../../jobs/jobWikipedia');
 
 const router = express.Router();
@@ -48,6 +49,26 @@ router.post('/susun-kata/harian', autentikasiCron, async (req, res, next) => {
     return res.json({
       success: true,
       message: 'Job Susun Kata harian berhasil dijalankan',
+      data: {
+        tanggalMulai: hasil.tanggalMulai,
+        totalHari: hasil.totalHari,
+        jumlah: hasil.jumlah,
+      },
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.post('/kata-hari-ini', autentikasiCron, async (req, res, next) => {
+  try {
+    const tanggalMulai = parseTanggalKataHariIni(req.body?.tanggalMulai ?? req.query?.tanggalMulai);
+    const totalHari = parseTotalHariKataHariIni(req.body?.totalHari ?? req.query?.totalHari, 30);
+    const hasil = await jalankanPrefillKataHariIni({ tanggalMulai, totalHari });
+
+    return res.json({
+      success: true,
+      message: 'Job Kata Hari Ini berhasil dijalankan',
       data: {
         tanggalMulai: hasil.tanggalMulai,
         totalHari: hasil.totalHari,
