@@ -606,18 +606,18 @@ describe('routes/redaksi', () => {
   describe('kata hari ini redaksi', () => {
     it('GET /api/redaksi/kata-hari-ini mengembalikan daftar arsip', async () => {
       ModelKataHariIni.daftarAdmin.mockResolvedValue({
-        data: [{ id: 1, tanggal: '2026-03-31', indeks: 'aktif', entri: 'aktif', makna: 'giat' }],
+        data: [{ id: 1, tanggal: '2026-03-31', indeks: 'aktif', entri: 'aktif', sumber: 'admin' }],
         total: 1,
       });
 
-      const response = await callAsAdmin('get', '/api/redaksi/kata-hari-ini?q=aktif&mode_pemilihan=admin');
+      const response = await callAsAdmin('get', '/api/redaksi/kata-hari-ini?q=aktif&sumber=admin');
 
       expect(response.status).toBe(200);
       expect(ModelKataHariIni.daftarAdmin).toHaveBeenCalledWith({
         limit: 50,
         offset: 0,
         q: 'aktif',
-        modePemilihan: 'admin',
+        sumber: 'admin',
       });
       expect(response.body.total).toBe(1);
     });
@@ -644,16 +644,15 @@ describe('routes/redaksi', () => {
       ModelKataHariIni.simpanByTanggal.mockResolvedValue({ id: 1, tanggal: '2026-03-31', indeks: 'aktif' });
 
       const response = await callAsAdmin('post', '/api/redaksi/kata-hari-ini', {
-        body: { tanggal: '2026-03-31', indeks: 'aktif', mode_pemilihan: 'admin', catatan_admin: 'pilihan redaksi' },
+        body: { tanggal: '2026-03-31', indeks: 'aktif', sumber: 'admin', catatan: 'pilihan redaksi' },
       });
 
       expect(response.status).toBe(201);
       expect(ModelKataHariIni.simpanByTanggal).toHaveBeenCalledWith({
         tanggal: '2026-03-31',
         entriId: 7,
-        payload: expect.objectContaining({ indeks: 'aktif', makna: 'giat' }),
-        modePemilihan: 'admin',
-        catatanAdmin: 'pilihan redaksi',
+        sumber: 'admin',
+        catatan: 'pilihan redaksi',
       });
     });
 
@@ -664,9 +663,8 @@ describe('routes/redaksi', () => {
         entri_id: 7,
         indeks: 'aktif',
         entri: 'aktif',
-        makna: 'giat',
-        mode_pemilihan: 'auto',
-        catatan_admin: null,
+        sumber: 'auto',
+        catatan: null,
       });
       ambilDetailKamus.mockResolvedValue({ indeks: 'aktif', entri: [{ id: 7, entri: 'aktif' }] });
       kataHariIniUtils.ambilMaknaUtama.mockReturnValue({ entri: { id: 7 } });
@@ -676,19 +674,18 @@ describe('routes/redaksi', () => {
         entri: 'aktif',
         makna: 'giat',
       });
-      ModelKataHariIni.simpanByTanggal.mockResolvedValue({ id: 1, tanggal: '2026-03-31', indeks: 'aktif', makna: 'makna baru' });
+      ModelKataHariIni.simpanByTanggal.mockResolvedValue({ id: 1, tanggal: '2026-03-31', indeks: 'aktif', sumber: 'admin' });
 
       const response = await callAsAdmin('put', '/api/redaksi/kata-hari-ini/1', {
-        body: { makna: 'makna baru', mode_pemilihan: 'admin' },
+        body: { sumber: 'admin' },
       });
 
       expect(response.status).toBe(200);
       expect(ModelKataHariIni.simpanByTanggal).toHaveBeenCalledWith({
         tanggal: '2026-03-31',
         entriId: 7,
-        payload: expect.objectContaining({ makna: 'makna baru' }),
-        modePemilihan: 'admin',
-        catatanAdmin: null,
+        sumber: 'admin',
+        catatan: null,
       });
     });
 

@@ -168,7 +168,20 @@ function normalisasiCuplikan(value = '', maxLength = 180) {
   return `${text.slice(0, maxLength - 3).trimEnd()}...`;
 }
 
-function ambilMaknaUtama(entriList = []) {
+function ambilMaknaUtama(entriList = [], preferredEntriId = null) {
+  const preferredId = Number(preferredEntriId) || null;
+
+  if (preferredId) {
+    const entriPilihan = entriList.find((item) => Number(item?.id) === preferredId);
+    if (entriPilihan) {
+      for (const makna of entriPilihan?.makna || []) {
+        if (normalisasiCuplikan(makna?.makna, 1000)) {
+          return { entri: entriPilihan, makna };
+        }
+      }
+    }
+  }
+
   for (const entri of entriList) {
     for (const makna of entri?.makna || []) {
       if (normalisasiCuplikan(makna?.makna, 1000)) {
@@ -178,7 +191,7 @@ function ambilMaknaUtama(entriList = []) {
   }
 
   return {
-    entri: entriList[0] || null,
+    entri: entriList.find((item) => Number(item?.id) === preferredId) || entriList[0] || null,
     makna: null,
   };
 }
@@ -220,12 +233,12 @@ function ambilEtimologiUtama(entriList = [], entriUtama = null) {
   return null;
 }
 
-function bentukPayloadKataHariIni(detail = null, tanggal = null) {
+function bentukPayloadKataHariIni(detail = null, tanggal = null, preferredEntriId = null) {
   if (!detail || !Array.isArray(detail.entri) || detail.entri.length === 0) {
     return null;
   }
 
-  const { entri, makna } = ambilMaknaUtama(detail.entri);
+  const { entri, makna } = ambilMaknaUtama(detail.entri, preferredEntriId);
   if (!entri || !makna) return null;
 
   const contoh = ambilContohUtama(entri);
@@ -270,8 +283,8 @@ async function pilihKandidatKataHariIniOtomatis(tanggalReferensi) {
       }
 
       const kandidatUtama = ambilMaknaUtama(detail.entri);
-      const payload = bentukPayloadKataHariIni(detail, tanggalReferensi);
       const entriId = Number(kandidatUtama?.entri?.id) || null;
+      const payload = bentukPayloadKataHariIni(detail, tanggalReferensi, entriId);
 
       if (!payload || !entriId) {
         continue;
@@ -533,8 +546,14 @@ async function ambilKataHariIni({ tanggal = null } = {}) {
 
   const tersimpan = await ModelKataHariIni.ambilByTanggal(tanggalReferensi);
   if (tersimpan) {
-    await setJson(cacheKey, tersimpan, getTtlSeconds());
-    return tersimpan;
+    const detailTersimpan = await ambilDetailKamus(tersimpan.indeks);
+    const payloadTersimpan = bentukPayloadKataHariIni(detailTersimpan, tanggalReferensi, tersimpan.entri_id);
+    if (!payloadTersimpan) {
+      return null;
+    }
+
+    await setJson(cacheKey, payloadTersimpan, getTtlSeconds());
+    return payloadTersimpan;
   }
 
   const hasilOtomatis = await pilihKandidatKataHariIniOtomatis(tanggalReferensi);
@@ -542,14 +561,13 @@ async function ambilKataHariIni({ tanggal = null } = {}) {
     return null;
   }
 
-  const hasilSimpan = await ModelKataHariIni.simpanByTanggal({
+  await ModelKataHariIni.simpanByTanggal({
     tanggal: tanggalReferensi,
     entriId: hasilOtomatis.entriId,
-    payload: hasilOtomatis.payload,
-    modePemilihan: 'auto',
+    sumber: 'auto',
   });
 
-  const payloadFinal = hasilSimpan || hasilOtomatis.payload;
+  const payloadFinal = hasilOtomatis.payload;
   await setJson(cacheKey, payloadFinal, getTtlSeconds());
   return payloadFinal;
 }

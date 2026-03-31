@@ -582,12 +582,35 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
 
   it('ambilKataHariIni memakai data tabel saat arsip tanggal sudah ada', async () => {
     ModelKataHariIni.ambilByTanggal.mockResolvedValueOnce({
+      id: 1,
       tanggal: '2026-03-31',
+      entri_id: 1,
       indeks: 'aktif',
       entri: 'aktif',
-      makna: 'giat',
-      url: '/kamus/detail/aktif',
+      sumber: 'admin',
     });
+    ModelEntri.ambilEntriPerIndeks.mockResolvedValue([
+      {
+        id: 1,
+        entri: 'aktif',
+        indeks: 'aktif',
+        homonim: null,
+        jenis: 'dasar',
+        pemenggalan: 'ak.tif',
+        lafal: 'aktif',
+        varian: null,
+        jenis_rujuk: null,
+        entri_rujuk: null,
+      },
+    ]);
+    ModelEntri.ambilMakna.mockResolvedValue([{ id: 10, makna: 'giat', kelas_kata: 'a' }]);
+    ModelEntri.ambilContoh.mockResolvedValue([{ id: 100, makna_id: 10, contoh: 'Ia aktif.' }]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilBentukTidakBakuByRujukId.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
+    ModelEtimologi.ambilAktifPublikByEntriId.mockResolvedValue([{ bahasa: 'Arab', kata_asal: 'faal' }]);
+    ModelTesaurus.ambilDetail.mockResolvedValue(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
 
     const result = await ambilKataHariIni({ tanggal: '2026-03-31' });
 
@@ -599,6 +622,17 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
       entri: 'aktif',
       makna: 'giat',
       url: '/kamus/detail/aktif',
+      kelas_kata: 'a',
+      contoh: 'Ia aktif.',
+      pemenggalan: 'ak.tif',
+      lafal: 'aktif',
+      etimologi: {
+        bahasa: 'Arab',
+        bahasa_kode: null,
+        kata_asal: 'faal',
+        sumber: null,
+        sumber_kode: null,
+      },
     });
     expect(setJson).toHaveBeenCalledWith('kamus:kata-hari-ini:2026-03-31', expect.any(Object), 900);
   });
@@ -606,11 +640,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
   it('ambilKataHariIni memilih kandidat deterministik dan memakai detail kamus yang sudah ada', async () => {
     ModelEntri.hitungKandidatKataHariIni.mockResolvedValueOnce(5);
     ModelEntri.ambilKandidatKataHariIni.mockResolvedValueOnce({ indeks: 'aktif' });
-    ModelKataHariIni.simpanByTanggal.mockImplementation(async ({ tanggal, entriId, payload }) => ({
-      ...payload,
-      tanggal,
-      entri_id: entriId,
-    }));
+    ModelKataHariIni.simpanByTanggal.mockResolvedValue({ id: 1, tanggal: '2026-03-31', entri_id: 1, indeks: 'aktif', entri: 'aktif', sumber: 'auto' });
     ModelEntri.ambilEntriPerIndeks.mockResolvedValue([
       {
         id: 1,
@@ -644,11 +674,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     expect(ModelKataHariIni.simpanByTanggal).toHaveBeenCalledWith({
       tanggal: '2026-03-31',
       entriId: 1,
-      payload: expect.objectContaining({
-        indeks: 'aktif',
-        makna: 'giat',
-      }),
-      modePemilihan: 'auto',
+      sumber: 'auto',
     });
     expect(result).toMatchObject({
       tanggal: '2026-03-31',
@@ -665,11 +691,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
       .mockResolvedValueOnce(0)
       .mockResolvedValueOnce(2);
     ModelEntri.ambilKandidatKataHariIni.mockResolvedValueOnce({ indeks: 'uji' });
-    ModelKataHariIni.simpanByTanggal.mockImplementation(async ({ tanggal, entriId, payload }) => ({
-      ...payload,
-      tanggal,
-      entri_id: entriId,
-    }));
+    ModelKataHariIni.simpanByTanggal.mockResolvedValue({ id: 2, tanggal: '2026-04-01', entri_id: 2, indeks: 'uji', entri: 'uji', sumber: 'auto' });
     ModelEntri.ambilEntriPerIndeks.mockResolvedValue([
       {
         id: 2,

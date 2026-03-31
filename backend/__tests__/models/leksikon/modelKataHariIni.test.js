@@ -20,8 +20,8 @@ describe('ModelKataHariIni', () => {
     expect(__private.sanitizeText('  satu   dua  ')).toBe('satu dua');
     expect(__private.sanitizeText('', { required: false })).toBeNull();
     expect(() => __private.sanitizeText('', { required: true })).toThrow('Teks wajib diisi');
-    expect(__private.normalizeModePemilihan('admin')).toBe('admin');
-    expect(__private.normalizeModePemilihan('lain')).toBe('auto');
+    expect(__private.normalizeSumber('admin')).toBe('admin');
+    expect(__private.normalizeSumber('lain')).toBe('auto');
 
     expect(__private.mapRowToPayload({
       id: 1,
@@ -29,15 +29,8 @@ describe('ModelKataHariIni', () => {
       entri_id: 7,
       indeks: 'aktif',
       entri: 'aktif',
-      kelas_kata: 'a',
-      makna: 'giat',
-      contoh: 'Ia aktif.',
-      pemenggalan: 'ak.tif',
-      lafal: 'aktif',
-      etimologi_bahasa: 'Arab',
-      etimologi_kata_asal: 'faal',
-      mode_pemilihan: 'admin',
-      catatan_admin: 'pilihan redaksi',
+      sumber: 'admin',
+      catatan: 'pilihan redaksi',
     })).toEqual({
       id: 1,
       tanggal: '2026-03-31',
@@ -45,20 +38,8 @@ describe('ModelKataHariIni', () => {
       indeks: 'aktif',
       entri: 'aktif',
       url: '/kamus/detail/aktif',
-      kelas_kata: 'a',
-      makna: 'giat',
-      contoh: 'Ia aktif.',
-      pemenggalan: 'ak.tif',
-      lafal: 'aktif',
-      etimologi: {
-        bahasa: 'Arab',
-        bahasa_kode: null,
-        kata_asal: 'faal',
-        sumber: null,
-        sumber_kode: null,
-      },
-      mode_pemilihan: 'admin',
-      catatan_admin: 'pilihan redaksi',
+      sumber: 'admin',
+      catatan: 'pilihan redaksi',
       created_at: null,
       updated_at: null,
     });
@@ -78,15 +59,8 @@ describe('ModelKataHariIni', () => {
       entri_id: 7,
       indeks: 'aktif',
       entri: 'aktif',
-      kelas_kata: 'a',
-      makna: 'giat',
-      contoh: 'Ia aktif.',
-      pemenggalan: 'ak.tif',
-      lafal: 'aktif',
-      etimologi_bahasa: 'Arab',
-      etimologi_kata_asal: 'faal',
-      mode_pemilihan: 'auto',
-      catatan_admin: null,
+      sumber: 'auto',
+      catatan: null,
       created_at: '2026-03-31 10:00:00.000',
       updated_at: '2026-03-31 10:00:00.000',
     }] });
@@ -97,7 +71,7 @@ describe('ModelKataHariIni', () => {
     expect(result).toMatchObject({
       tanggal: '2026-03-31',
       indeks: 'aktif',
-      makna: 'giat',
+      sumber: 'auto',
       url: '/kamus/detail/aktif',
     });
   });
@@ -111,15 +85,8 @@ describe('ModelKataHariIni', () => {
         entri_id: 7,
         indeks: 'aktif',
         entri: 'aktif',
-        kelas_kata: 'a',
-        makna: 'giat',
-        contoh: 'Ia aktif.',
-        pemenggalan: 'ak.tif',
-        lafal: 'aktif',
-        etimologi_bahasa: 'Arab',
-        etimologi_kata_asal: 'faal',
-        mode_pemilihan: 'admin',
-        catatan_admin: 'catatan',
+        sumber: 'admin',
+        catatan: 'catatan',
         created_at: '2026-03-31 10:00:00.000',
         updated_at: '2026-03-31 10:00:00.000',
       }] })
@@ -130,15 +97,8 @@ describe('ModelKataHariIni', () => {
         entri_id: 7,
         indeks: 'aktif',
         entri: 'aktif',
-        kelas_kata: 'a',
-        makna: 'giat',
-        contoh: 'Ia aktif.',
-        pemenggalan: 'ak.tif',
-        lafal: 'aktif',
-        etimologi_bahasa: 'Arab',
-        etimologi_kata_asal: 'faal',
-        mode_pemilihan: 'admin',
-        catatan_admin: null,
+        sumber: 'admin',
+        catatan: null,
         created_at: '2026-03-31 10:00:00.000',
         updated_at: '2026-03-31 10:00:00.000',
       }] })
@@ -146,13 +106,13 @@ describe('ModelKataHariIni', () => {
 
     const total = await ModelKataHariIni.hitungTotal();
     const detail = await ModelKataHariIni.ambilDenganId(1);
-    const daftar = await ModelKataHariIni.daftarAdmin({ q: 'aktif', modePemilihan: 'admin', limit: 20, offset: 0 });
+    const daftar = await ModelKataHariIni.daftarAdmin({ q: 'aktif', sumber: 'admin', limit: 20, offset: 0 });
     const hapus = await ModelKataHariIni.hapus(1);
 
     expect(total).toBe(4);
     expect(detail).toMatchObject({ id: 1, indeks: 'aktif' });
     expect(daftar.total).toBe(1);
-    expect(daftar.data[0]).toMatchObject({ id: 1, mode_pemilihan: 'admin' });
+    expect(daftar.data[0]).toMatchObject({ id: 1, sumber: 'admin' });
     expect(hapus).toBe(true);
   });
 
@@ -163,15 +123,8 @@ describe('ModelKataHariIni', () => {
       entri_id: 7,
       indeks: 'aktif',
       entri: 'aktif',
-      kelas_kata: 'a',
-      makna: 'giat',
-      contoh: 'Ia aktif.',
-      pemenggalan: 'ak.tif',
-      lafal: 'aktif',
-      etimologi_bahasa: 'Arab',
-      etimologi_kata_asal: 'faal',
-      mode_pemilihan: 'auto',
-      catatan_admin: null,
+      sumber: 'auto',
+      catatan: null,
       created_at: '2026-03-31 10:00:00.000',
       updated_at: '2026-03-31 10:00:00.000',
     }] });
@@ -179,35 +132,23 @@ describe('ModelKataHariIni', () => {
     const result = await ModelKataHariIni.simpanByTanggal({
       tanggal: '2026-03-31',
       entriId: 7,
-      payload: {
-        indeks: 'aktif',
-        entri: 'aktif',
-        kelas_kata: 'a',
-        makna: 'giat',
-        contoh: 'Ia aktif.',
-        pemenggalan: 'ak.tif',
-        lafal: 'aktif',
-        etimologi: { bahasa: 'Arab', kata_asal: 'faal' },
-      },
-      modePemilihan: 'auto',
+      sumber: 'auto',
     });
 
     expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('ON CONFLICT (tanggal)'),
-      ['2026-03-31', 7, 'aktif', 'aktif', 'a', 'giat', 'Ia aktif.', 'ak.tif', 'aktif', 'Arab', 'faal', 'auto', null]
+      ['2026-03-31', 7, 'auto', null]
     );
     expect(result).toMatchObject({
       tanggal: '2026-03-31',
       entri_id: 7,
-      indeks: 'aktif',
-      makna: 'giat',
+      sumber: 'auto',
     });
   });
 
   it('simpanByTanggal memvalidasi input wajib', async () => {
-    await expect(ModelKataHariIni.simpanByTanggal({ tanggal: 'invalid', entriId: 1, payload: { indeks: 'a', entri: 'a', makna: 'b' } })).rejects.toThrow('Tanggal tidak valid');
-    await expect(ModelKataHariIni.simpanByTanggal({ tanggal: '2026-03-31', entriId: 0, payload: { indeks: 'a', entri: 'a', makna: 'b' } })).rejects.toThrow('entriId tidak valid');
-    await expect(ModelKataHariIni.simpanByTanggal({ tanggal: '2026-03-31', entriId: 1, payload: { indeks: '', entri: 'a', makna: 'b' } })).rejects.toThrow('Teks wajib diisi');
+    await expect(ModelKataHariIni.simpanByTanggal({ tanggal: 'invalid', entriId: 1 })).rejects.toThrow('Tanggal tidak valid');
+    await expect(ModelKataHariIni.simpanByTanggal({ tanggal: '2026-03-31', entriId: 0 })).rejects.toThrow('entriId tidak valid');
     expect(db.query).not.toHaveBeenCalled();
   });
 

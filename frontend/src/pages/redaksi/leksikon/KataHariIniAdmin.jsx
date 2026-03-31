@@ -39,25 +39,17 @@ function tanggalHariIni() {
 const nilaiAwal = {
   tanggal: tanggalHariIni(),
   indeks: '',
-  entri: '',
-  kelas_kata: '',
-  makna: '',
-  contoh: '',
-  pemenggalan: '',
-  lafal: '',
-  etimologi_bahasa: '',
-  etimologi_kata_asal: '',
-  mode_pemilihan: 'admin',
-  catatan_admin: '',
+  sumber: 'admin',
+  catatan: '',
 };
 
-const opsiMode = [
+const opsiSumber = [
   { value: 'admin', label: 'Admin' },
   { value: 'auto', label: 'Otomatis' },
 ];
 
-const opsiFilterMode = [
-  { value: '', label: '—Mode—' },
+const opsiFilterSumber = [
+  { value: '', label: '—Sumber—' },
   { value: 'admin', label: 'Admin' },
   { value: 'auto', label: 'Otomatis' },
 ];
@@ -67,18 +59,18 @@ const kolom = [
   { key: 'entri', label: 'Entri' },
   { key: 'indeks', label: 'Indeks' },
   {
-    key: 'mode_pemilihan',
-    label: 'Mode',
+    key: 'sumber',
+    label: 'Sumber',
     render: (item) => (
-      <span className={`inline-block rounded px-2 py-0.5 text-xs ${item.mode_pemilihan === 'admin' ? 'bg-blue-100 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-950/30 dark:text-amber-300'}`}>
-        {item.mode_pemilihan === 'admin' ? 'Admin' : 'Otomatis'}
+      <span className={`inline-block rounded px-2 py-0.5 text-xs ${item.sumber === 'admin' ? 'bg-blue-100 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-950/30 dark:text-amber-300'}`}>
+        {item.sumber === 'admin' ? 'Admin' : 'Otomatis'}
       </span>
     ),
   },
   {
-    key: 'makna',
-    label: 'Makna',
-    render: (item) => <span className="text-gray-600 dark:text-gray-400">{potongTeks(item.makna, 90)}</span>,
+    key: 'catatan',
+    label: 'Catatan',
+    render: (item) => <span className="text-gray-600 dark:text-gray-400">{potongTeks(item.catatan || '—', 90)}</span>,
   },
   {
     key: 'updated_at',
@@ -98,8 +90,8 @@ function KataHariIniAdmin() {
   const idDariPath = parsePositiveIntegerParam(idParam);
   const idEditTerbuka = useRef(null);
   const sedangMenutupDariPath = useRef(false);
-  const [filterModeDraft, setFilterModeDraft] = useState('');
-  const [filterMode, setFilterMode] = useState('');
+  const [filterSumberDraft, setFilterSumberDraft] = useState('');
+  const [filterSumber, setFilterSumber] = useState('');
   const [pesan, setPesan] = useState({ error: '', sukses: '' });
 
   const { data: resp, isLoading, isError } = useDaftarKataHariIniAdmin({
@@ -108,7 +100,7 @@ function KataHariIniAdmin() {
     direction,
     lastPage,
     q,
-    modePemilihan: filterMode,
+    sumber: filterSumber,
   });
   const { data: detailResp, isLoading: isDetailLoading, isError: isDetailError } = useDetailKataHariIniAdmin(idDariPath);
   const panel = useFormPanel(nilaiAwal);
@@ -132,9 +124,7 @@ function KataHariIniAdmin() {
     if (idEditTerbuka.current === detail.id) return;
     panel.bukaUntukSunting({
       ...detail,
-      etimologi_bahasa: detail.etimologi?.bahasa || '',
-      etimologi_kata_asal: detail.etimologi?.kata_asal || '',
-      catatan_admin: detail.catatan_admin || '',
+      catatan: detail.catatan || '',
     });
     idEditTerbuka.current = detail.id;
   }, [detailResp, idDariPath, isDetailError, isDetailLoading, panel]);
@@ -176,13 +166,13 @@ function KataHariIniAdmin() {
   };
 
   const handleCari = () => {
-    setFilterMode(filterModeDraft);
+    setFilterSumber(filterSumberDraft);
     kirimCari(cari);
   };
 
   const handleResetFilter = () => {
-    setFilterModeDraft('');
-    setFilterMode('');
+    setFilterSumberDraft('');
+    setFilterSumber('');
     hapusCari();
   };
 
@@ -230,11 +220,11 @@ function KataHariIniAdmin() {
         placeholder="Cari arsip kata …"
         filters={[
           {
-            key: 'mode_pemilihan',
-            value: filterModeDraft,
-            onChange: setFilterModeDraft,
-            options: opsiFilterMode,
-            ariaLabel: 'Filter mode pemilihan kata hari ini',
+            key: 'sumber',
+            value: filterSumberDraft,
+            onChange: setFilterSumberDraft,
+            options: opsiFilterSumber,
+            ariaLabel: 'Filter sumber kata hari ini',
           },
         ]}
       />
@@ -255,6 +245,9 @@ function KataHariIniAdmin() {
 
       <PanelGeser buka={panel.buka} onTutup={tutupPanel} judul={panel.modeTambah ? 'Tambah Kata Hari Ini' : 'Sunting Kata Hari Ini'}>
         <PesanForm error={pesan.error} sukses={pesan.sukses} />
+        <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+          Arsip hanya menyimpan tanggal, entri, sumber, dan catatan. Makna yang tampil di publik selalu mengikuti data kamus terkini.
+        </p>
         <InputField
           label="Tanggal"
           name="tanggal"
@@ -272,16 +265,8 @@ function KataHariIniAdmin() {
           placeholder="mis. aktif"
           required
         />
-        <InputField label="Entri" name="entri" value={panel.data.entri} onChange={panel.ubahField} placeholder="Opsional, akan diisi dari kamus bila kosong" />
-        <InputField label="Kelas Kata" name="kelas_kata" value={panel.data.kelas_kata} onChange={panel.ubahField} placeholder="mis. a, n, v" />
-        <TextareaField label="Makna" name="makna" value={panel.data.makna} onChange={panel.ubahField} rows={4} />
-        <TextareaField label="Contoh" name="contoh" value={panel.data.contoh} onChange={panel.ubahField} rows={3} />
-        <InputField label="Pemenggalan" name="pemenggalan" value={panel.data.pemenggalan} onChange={panel.ubahField} />
-        <InputField label="Lafal" name="lafal" value={panel.data.lafal} onChange={panel.ubahField} />
-        <InputField label="Etimologi Bahasa" name="etimologi_bahasa" value={panel.data.etimologi_bahasa} onChange={panel.ubahField} />
-        <InputField label="Etimologi Kata Asal" name="etimologi_kata_asal" value={panel.data.etimologi_kata_asal} onChange={panel.ubahField} />
-        <SelectField label="Mode Pemilihan" name="mode_pemilihan" value={panel.data.mode_pemilihan} onChange={panel.ubahField} options={opsiMode} />
-        <TextareaField label="Catatan Admin" name="catatan_admin" value={panel.data.catatan_admin} onChange={panel.ubahField} rows={3} />
+        <SelectField label="Sumber" name="sumber" value={panel.data.sumber} onChange={panel.ubahField} options={opsiSumber} />
+        <TextareaField label="Catatan" name="catatan" value={panel.data.catatan} onChange={panel.ubahField} rows={3} />
         <FormFooter
           onSimpan={handleSimpan}
           onBatal={tutupPanel}

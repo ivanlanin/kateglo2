@@ -4,23 +4,17 @@
 
 const db = require('../../db');
 
-const selectKataHariIniFields = `SELECT id,
-  to_char(tanggal, 'YYYY-MM-DD') AS tanggal,
-  entri_id,
-  indeks,
-  entri,
-  kelas_kata,
-  makna,
-  contoh,
-  pemenggalan,
-  lafal,
-  etimologi_bahasa,
-  etimologi_kata_asal,
-  mode_pemilihan,
-  catatan_admin,
-  to_char(created_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS created_at,
-  to_char(updated_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS updated_at
- FROM kata_hari_ini`;
+const selectKataHariIniFields = `SELECT khi.id,
+  to_char(khi.tanggal, 'YYYY-MM-DD') AS tanggal,
+  khi.entri_id,
+  e.indeks,
+  e.entri,
+  khi.sumber,
+  khi.catatan,
+  to_char(khi.created_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS created_at,
+  to_char(khi.updated_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS updated_at
+ FROM kata_hari_ini khi
+ JOIN entri e ON e.id = khi.entri_id`;
 
 function parseTanggal(value) {
   const raw = String(value || '').trim();
@@ -45,7 +39,7 @@ function sanitizeText(value, { required = false } = {}) {
   return text;
 }
 
-function normalizeModePemilihan(value) {
+function normalizeSumber(value) {
   const normalized = String(value || '').trim().toLowerCase();
   return normalized === 'admin' ? 'admin' : 'auto';
 }
@@ -66,11 +60,7 @@ function mapRowToPayload(row) {
   const tanggal = formatTanggalOutput(row.tanggal);
   const indeks = sanitizeText(row.indeks);
   const entri = sanitizeText(row.entri);
-  const makna = sanitizeText(row.makna);
-  if (!tanggal || !indeks || !entri || !makna) return null;
-
-  const etimologiBahasa = sanitizeText(row.etimologi_bahasa);
-  const etimologiKataAsal = sanitizeText(row.etimologi_kata_asal);
+  if (!tanggal || !indeks || !entri) return null;
 
   return {
     id: parsePositiveInteger(row.id),
@@ -79,22 +69,8 @@ function mapRowToPayload(row) {
     indeks,
     entri,
     url: `/kamus/detail/${encodeURIComponent(indeks)}`,
-    kelas_kata: sanitizeText(row.kelas_kata),
-    makna,
-    contoh: sanitizeText(row.contoh),
-    pemenggalan: sanitizeText(row.pemenggalan),
-    lafal: sanitizeText(row.lafal),
-    etimologi: etimologiBahasa || etimologiKataAsal
-      ? {
-        bahasa: etimologiBahasa,
-        bahasa_kode: null,
-        kata_asal: etimologiKataAsal,
-        sumber: null,
-        sumber_kode: null,
-      }
-      : null,
-    mode_pemilihan: normalizeModePemilihan(row.mode_pemilihan),
-    catatan_admin: sanitizeText(row.catatan_admin),
+    sumber: normalizeSumber(row.sumber),
+    catatan: sanitizeText(row.catatan),
     created_at: row.created_at || null,
     updated_at: row.updated_at || null,
   };
@@ -106,12 +82,12 @@ class ModelKataHariIni {
     return parsePositiveInteger(result.rows[0]?.total) || 0;
   }
 
-  static async daftarAdmin({ limit = 50, offset = 0, q = '', modePemilihan = '' } = {}) {
+  static async daftarAdmin({ limit = 50, offset = 0, q = '', sumber = '' } = {}) {
     const limitAman = Math.min(Math.max(Number(limit) || 50, 1), 200);
     const offsetAman = Math.max(Number(offset) || 0, 0);
     const qAman = sanitizeText(q, { required: false });
-    const modePemilihanAman = ['auto', 'admin'].includes(String(modePemilihan || '').trim().toLowerCase())
-      ? normalizeModePemilihan(modePemilihan)
+    const sumberAman = ['auto', 'admin'].includes(String(sumber || '').trim().toLowerCase())
+      ? normalizeSumber(sumber)
       : null;
 
     const params = [];
@@ -120,28 +96,29 @@ class ModelKataHariIni {
     if (qAman) {
       params.push(`%${qAman}%`);
       whereClauses.push(`(
-        to_char(tanggal, 'YYYY-MM-DD') ILIKE $${params.length}
-        OR indeks ILIKE $${params.length}
-        OR entri ILIKE $${params.length}
-        OR makna ILIKE $${params.length}
+        to_char(khi.tanggal, 'YYYY-MM-DD') ILIKE $${params.length}
+        OR e.indeks ILIKE $${params.length}
+        OR e.entri ILIKE $${params.length}
+        OR COALESCE(khi.catatan, '') ILIKE $${params.length}
       )`);
     }
 
-    if (modePemilihanAman) {
-      params.push(modePemilihanAman);
-      whereClauses.push(`mode_pemilihan = $${params.length}`);
+    if (sumberAman) {
+      params.push(sumberAman);
+      whereClauses.push(`khi.sumber = $${params.length}`);
     }
 
     const whereSql = whereClauses.length > 0 ? ` WHERE ${whereClauses.join(' AND ')}` : '';
     const countResult = await db.query(
       `SELECT COUNT(*) AS total
-       FROM kata_hari_ini${whereSql}`,
+       FROM kata_hari_ini khi
+       JOIN entri e ON e.id = khi.entri_id${whereSql}`,
       params
     );
 
     const dataResult = await db.query(
       `${selectKataHariIniFields}${whereSql}
-       ORDER BY tanggal DESC, id DESC
+       ORDER BY khi.tanggal DESC, khi.id DESC
        LIMIT $${params.length + 1}
        OFFSET $${params.length + 2}`,
       [...params, limitAman, offsetAman]
@@ -159,7 +136,7 @@ class ModelKataHariIni {
 
     const result = await db.query(
       `${selectKataHariIniFields}
-       WHERE id = $1
+       WHERE khi.id = $1
        LIMIT 1`,
       [idAman]
     );
@@ -173,7 +150,7 @@ class ModelKataHariIni {
 
     const result = await db.query(
       `${selectKataHariIniFields}
-       WHERE tanggal = $1::date
+       WHERE khi.tanggal = $1::date
        LIMIT 1`,
       [tanggalAman]
     );
@@ -184,9 +161,8 @@ class ModelKataHariIni {
   static async simpanByTanggal({
     tanggal,
     entriId,
-    payload,
-    modePemilihan = 'auto',
-    catatanAdmin = null,
+    sumber = 'auto',
+    catatan = null,
   } = {}) {
     const tanggalAman = parseTanggal(tanggal);
     if (!tanggalAman) {
@@ -198,93 +174,41 @@ class ModelKataHariIni {
       throw new Error('entriId tidak valid');
     }
 
-    const indeks = sanitizeText(payload?.indeks, { required: true });
-    const entri = sanitizeText(payload?.entri, { required: true });
-    const makna = sanitizeText(payload?.makna, { required: true });
-    const kelasKata = sanitizeText(payload?.kelas_kata);
-    const contoh = sanitizeText(payload?.contoh);
-    const pemenggalan = sanitizeText(payload?.pemenggalan);
-    const lafal = sanitizeText(payload?.lafal);
-    const etimologiBahasa = sanitizeText(payload?.etimologi?.bahasa);
-    const etimologiKataAsal = sanitizeText(payload?.etimologi?.kata_asal);
-    const modePemilihanAman = normalizeModePemilihan(modePemilihan);
-    const catatanAdminAman = sanitizeText(catatanAdmin);
+    const sumberAman = normalizeSumber(sumber);
+    const catatanAman = sanitizeText(catatan);
 
     const result = await db.query(
       `INSERT INTO kata_hari_ini (
          tanggal,
          entri_id,
-         indeks,
-         entri,
-         kelas_kata,
-         makna,
-         contoh,
-         pemenggalan,
-         lafal,
-         etimologi_bahasa,
-         etimologi_kata_asal,
-         mode_pemilihan,
-         catatan_admin
+         sumber,
+         catatan
        ) VALUES (
          $1::date,
          $2,
          $3,
-         $4,
-         $5,
-         $6,
-         $7,
-         $8,
-         $9,
-         $10,
-         $11,
-         $12,
-         $13
+         $4
        )
        ON CONFLICT (tanggal)
        DO UPDATE SET
          entri_id = EXCLUDED.entri_id,
-         indeks = EXCLUDED.indeks,
-         entri = EXCLUDED.entri,
-         kelas_kata = EXCLUDED.kelas_kata,
-         makna = EXCLUDED.makna,
-         contoh = EXCLUDED.contoh,
-         pemenggalan = EXCLUDED.pemenggalan,
-         lafal = EXCLUDED.lafal,
-         etimologi_bahasa = EXCLUDED.etimologi_bahasa,
-         etimologi_kata_asal = EXCLUDED.etimologi_kata_asal,
-         mode_pemilihan = EXCLUDED.mode_pemilihan,
-         catatan_admin = EXCLUDED.catatan_admin,
+         sumber = EXCLUDED.sumber,
+         catatan = EXCLUDED.catatan,
          updated_at = now()
        RETURNING id,
                  to_char(tanggal, 'YYYY-MM-DD') AS tanggal,
                  entri_id,
-                 indeks,
-                 entri,
-                 kelas_kata,
-                 makna,
-                 contoh,
-                 pemenggalan,
-                 lafal,
-                 etimologi_bahasa,
-                 etimologi_kata_asal,
-                 mode_pemilihan,
-                 catatan_admin,
+                 (SELECT indeks FROM entri WHERE id = entri_id) AS indeks,
+                 (SELECT entri FROM entri WHERE id = entri_id) AS entri,
+                 sumber,
+                 catatan,
                  to_char(created_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS created_at,
                  to_char(updated_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS updated_at`,
       [
         tanggalAman,
         entriIdAman,
-        indeks,
-        entri,
-        kelasKata,
-        makna,
-        contoh,
-        pemenggalan,
-        lafal,
-        etimologiBahasa,
-        etimologiKataAsal,
-        modePemilihanAman,
-        catatanAdminAman,
+        sumberAman,
+        catatanAman,
       ]
     );
 
@@ -310,7 +234,7 @@ module.exports.__private = {
   parseTanggal,
   parsePositiveInteger,
   sanitizeText,
-  normalizeModePemilihan,
+  normalizeSumber,
   formatTanggalOutput,
   mapRowToPayload,
 };

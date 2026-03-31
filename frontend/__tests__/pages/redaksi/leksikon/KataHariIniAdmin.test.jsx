@@ -47,7 +47,7 @@ describe('KataHariIniAdmin', () => {
       isError: false,
       data: {
         total: 1,
-        data: [{ id: 1, tanggal: '2026-03-31', indeks: 'aktif', entri: 'aktif', makna: 'giat', mode_pemilihan: 'admin', updated_at: '2026-03-31 10:00:00.000' }],
+        data: [{ id: 1, tanggal: '2026-03-31', indeks: 'aktif', entri: 'aktif', sumber: 'admin', catatan: 'pilihan redaksi', updated_at: '2026-03-31 10:00:00.000' }],
       },
     });
     mockUseDetailKataHariIniAdmin.mockReturnValue({ isLoading: false, isError: false, data: null });
@@ -95,10 +95,8 @@ describe('KataHariIniAdmin', () => {
           tanggal: '2026-03-31',
           indeks: 'aktif',
           entri: 'aktif',
-          makna: 'giat',
-          contoh: 'Ia aktif.',
-          mode_pemilihan: 'admin',
-          etimologi: { bahasa: 'Arab', kata_asal: 'faal' },
+          sumber: 'admin',
+          catatan: 'pilihan redaksi',
         },
       },
     });
@@ -129,7 +127,7 @@ describe('KataHariIniAdmin', () => {
 
     const panggilanTerakhir = mockUseDaftarKataHariIniAdmin.mock.calls.at(-1)?.[0] || {};
     expect(panggilanTerakhir.q).toBe('');
-    expect(panggilanTerakhir.modePemilihan).toBe('');
+    expect(panggilanTerakhir.sumber).toBe('');
   });
 
   it('mengarahkan ke daftar saat id invalid atau detail error', () => {

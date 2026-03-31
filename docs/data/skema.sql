@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-31T04:37:07.996Z
+-- Generated: 2026-03-31T05:57:14.074Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -460,27 +460,15 @@ create table kata_hari_ini (
   id serial primary key,
   tanggal date not null,
   entri_id integer references entri(id) on delete restrict on update cascade not null,
-  indeks text not null,
-  entri text not null,
-  kelas_kata text,
-  makna text not null,
-  contoh text,
-  pemenggalan text,
-  lafal text,
-  etimologi_bahasa text,
-  etimologi_kata_asal text,
-  mode_pemilihan text not null default 'auto'::text,
-  catatan_admin text,
+  sumber text not null default 'auto'::text,
+  catatan text,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
   constraint kata_hari_ini_tanggal_key unique (tanggal),
-  constraint kata_hari_ini_indeks_check check (TRIM(BOTH FROM indeks) <> ''::text),
-  constraint kata_hari_ini_makna_check check (TRIM(BOTH FROM makna) <> ''::text),
-  constraint kata_hari_ini_mode_pemilihan_check check (mode_pemilihan = ANY (ARRAY['auto'::text, 'admin'::text])),
-  constraint kata_hari_ini_entri_check check (TRIM(BOTH FROM entri) <> ''::text)
+  constraint kata_hari_ini_sumber_check check (sumber = ANY (ARRAY['auto'::text, 'admin'::text]))
 );
 create index idx_kata_hari_ini_entri_id on kata_hari_ini using btree (entri_id);
-create index idx_kata_hari_ini_mode_tanggal on kata_hari_ini using btree (mode_pemilihan, tanggal DESC);
+create index idx_kata_hari_ini_sumber_tanggal on kata_hari_ini using btree (sumber, tanggal DESC);
 create unique index kata_hari_ini_tanggal_key on kata_hari_ini using btree (tanggal);
 create trigger trg_set_timestamp_fields__kata_hari_ini
   before insert or update on kata_hari_ini

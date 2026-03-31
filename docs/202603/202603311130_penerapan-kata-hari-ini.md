@@ -8,14 +8,14 @@ Fitur Kata Hari Ini ditambahkan sebagai kartu ringkas di beranda Kateglo dan dil
 
 - `GET /api/publik/kamus/kata-hari-ini`
 
-Versi saat ini memakai tabel `kata_hari_ini` sebagai arsip dan sumber kebenaran. Jika tanggal yang diminta belum ada di tabel, backend memilih kandidat secara otomatis, menyimpan snapshot ringkasnya, lalu mengembalikan hasil yang sama untuk permintaan berikutnya.
+Versi saat ini memakai tabel `kata_hari_ini` sebagai arsip pemilihan kata per tanggal. Jika tanggal yang diminta belum ada di tabel, backend memilih kandidat secara otomatis, menyimpan referensi entrinya, lalu membentuk payload publik langsung dari data kamus terkini.
 
 ## Tujuan Implementasi
 
 - Menambah elemen engagement harian di beranda.
 - Memakai data kamus yang sudah kaya: makna, contoh kalimat, dan etimologi.
 - Menyediakan arsip tanggal yang stabil dan bisa diedit admin.
-- Menjaga payload publik tetap konsisten meskipun data entri berubah setelahnya.
+- Menjaga tabel tetap sederhana dengan hanya menyimpan referensi entri dan metadata editorial minimum.
 
 ## Perubahan Backend
 
@@ -33,25 +33,15 @@ Tabel `kata_hari_ini` menyimpan satu baris per tanggal dengan kolom inti berikut
 
 - `tanggal`
 - `entri_id`
-- `indeks`
-- `entri`
-- `kelas_kata`
-- `makna`
-- `contoh`
-- `pemenggalan`
-- `lafal`
-- `etimologi_bahasa`
-- `etimologi_kata_asal`
-- `mode_pemilihan`
-- `catatan_admin`
+- `sumber`
+- `catatan`
 - `created_at`
 - `updated_at`
 
 Constraint utama:
 
 - unique pada `tanggal`
-- `mode_pemilihan` hanya `auto` atau `admin`
-- `indeks`, `entri`, dan `makna` tidak boleh kosong
+- `sumber` hanya `auto` atau `admin`
 
 Tidak ada kolom `diubah_oleh`. Admin tetap bisa mengedit data melalui mekanisme administrasi berikutnya tanpa menyimpan identitas editor di tabel ini.
 
@@ -74,10 +64,10 @@ Pemilihan kandidat dilakukan di model entri dengan dua tingkat filter:
 Saat endpoint dipanggil, alurnya seperti ini:
 
 1. Cek `kata_hari_ini` berdasarkan tanggal.
-2. Jika ada, kembalikan snapshot yang tersimpan.
+2. Jika ada, ambil entri kamus terkini berdasarkan referensi yang tersimpan lalu bentuk payload publik.
 3. Jika belum ada, pilih kandidat otomatis dari data kamus.
-4. Simpan hasilnya ke `kata_hari_ini`.
-5. Kembalikan payload yang baru disimpan.
+4. Simpan referensi entri dan metadata editorialnya ke `kata_hari_ini`.
+5. Kembalikan payload yang dibentuk dari data kamus saat ini.
 
 Pemilihan otomatis masih memakai hash tanggal untuk menentukan offset kandidat:
 
@@ -87,7 +77,8 @@ Dengan pendekatan ini:
 
 - kata untuk tanggal yang sama akan tetap konsisten
 - hasil tanggal yang pernah diminta akan punya arsip persisten di database
-- admin bisa mengubah snapshot tanggal tertentu tanpa mengubah algoritme pemilihan otomatis
+- perubahan makna, contoh, atau etimologi di kamus akan otomatis tercermin di publik
+- admin bisa mengganti kata untuk tanggal tertentu tanpa menyimpan salinan snapshotnya
 
 ### Payload Respons
 
@@ -126,7 +117,7 @@ Header HTTP:
 
 - `Cache-Control: public, max-age=300, stale-while-revalidate=900`
 
-Cache tetap dipakai sebagai lapisan baca, tetapi sumber kebenaran utama sekarang adalah tabel `kata_hari_ini`.
+Cache tetap dipakai sebagai lapisan baca, tetapi sumber kebenaran pemilihan kata tetap tabel `kata_hari_ini`, sedangkan isi payload publik dibentuk ulang dari kamus saat dibaca.
 
 ## Perubahan Frontend
 
@@ -157,6 +148,7 @@ Jika API gagal atau data tidak tersedia, kartu tidak dirender agar beranda tetap
 - `backend/services/publik/layananKamusPublik.js`
 - `backend/routes/publik/leksikon/kamus.js`
 - `docs/202603/202603311215_tambah_tabel_kata_hari_ini.sql`
+- `docs/202603/202603311300_sederhanakan_tabel_kata_hari_ini.sql`
 - `frontend/src/api/apiPublik.js`
 - `frontend/src/pages/publik/Beranda.jsx`
 - `frontend/src/styles/index.css`

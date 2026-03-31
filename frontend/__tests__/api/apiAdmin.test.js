@@ -144,7 +144,7 @@ describe('apiAdmin', () => {
       direction: 'prev',
       lastPage: true,
       q: 'aktif',
-      modePemilihan: 'admin',
+      sumber: 'admin',
     });
     await daftarKataHariIni.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kata-hari-ini', {
@@ -154,7 +154,7 @@ describe('apiAdmin', () => {
         direction: 'prev',
         lastPage: '1',
         q: 'aktif',
-        mode_pemilihan: 'admin',
+        sumber: 'admin',
       },
     });
 
@@ -1539,10 +1539,10 @@ describe('apiAdmin', () => {
 
   it('mengonfigurasi mutation kata hari ini admin', async () => {
     const simpanKataHariIni = useSimpanKataHariIniAdmin();
-    await simpanKataHariIni.mutationFn({ id: 4, indeks: 'aktif', tanggal: '2026-03-31' });
-    await simpanKataHariIni.mutationFn({ indeks: 'uji', tanggal: '2026-04-01' });
-    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/kata-hari-ini/4', { id: 4, indeks: 'aktif', tanggal: '2026-03-31' });
-    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/kata-hari-ini', { indeks: 'uji', tanggal: '2026-04-01' });
+    await simpanKataHariIni.mutationFn({ id: 4, indeks: 'aktif', tanggal: '2026-03-31', sumber: 'admin', catatan: 'pilihan redaksi' });
+    await simpanKataHariIni.mutationFn({ indeks: 'uji', tanggal: '2026-04-01', sumber: 'auto' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/kata-hari-ini/4', { id: 4, indeks: 'aktif', tanggal: '2026-03-31', sumber: 'admin', catatan: 'pilihan redaksi' });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/kata-hari-ini', { indeks: 'uji', tanggal: '2026-04-01', sumber: 'auto' });
     simpanKataHariIni.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-kata-hari-ini'] });
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-kata-hari-ini-detail'] });

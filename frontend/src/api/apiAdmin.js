@@ -174,7 +174,7 @@ export function useDaftarKataHariIniAdmin({
   direction = 'next',
   lastPage = false,
   q = '',
-  modePemilihan = '',
+  sumber = '',
 } = {}) {
   return useDaftarAdmin('/api/redaksi/kata-hari-ini', 'admin-kata-hari-ini', {
     limit,
@@ -183,7 +183,7 @@ export function useDaftarKataHariIniAdmin({
     lastPage,
     q,
     includeAktif: false,
-    mode_pemilihan: modePemilihan,
+    sumber,
   });
 }
 
