@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-15T10:45:46.897Z
+-- Generated: 2026-03-31T04:37:07.996Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -456,6 +456,37 @@ create trigger trg_set_timestamp_fields__kandidat_entri
   for each row
   execute function set_timestamp_fields();
 
+create table kata_hari_ini (
+  id serial primary key,
+  tanggal date not null,
+  entri_id integer references entri(id) on delete restrict on update cascade not null,
+  indeks text not null,
+  entri text not null,
+  kelas_kata text,
+  makna text not null,
+  contoh text,
+  pemenggalan text,
+  lafal text,
+  etimologi_bahasa text,
+  etimologi_kata_asal text,
+  mode_pemilihan text not null default 'auto'::text,
+  catatan_admin text,
+  created_at timestamp without time zone not null default now(),
+  updated_at timestamp without time zone not null default now(),
+  constraint kata_hari_ini_tanggal_key unique (tanggal),
+  constraint kata_hari_ini_indeks_check check (TRIM(BOTH FROM indeks) <> ''::text),
+  constraint kata_hari_ini_makna_check check (TRIM(BOTH FROM makna) <> ''::text),
+  constraint kata_hari_ini_mode_pemilihan_check check (mode_pemilihan = ANY (ARRAY['auto'::text, 'admin'::text])),
+  constraint kata_hari_ini_entri_check check (TRIM(BOTH FROM entri) <> ''::text)
+);
+create index idx_kata_hari_ini_entri_id on kata_hari_ini using btree (entri_id);
+create index idx_kata_hari_ini_mode_tanggal on kata_hari_ini using btree (mode_pemilihan, tanggal DESC);
+create unique index kata_hari_ini_tanggal_key on kata_hari_ini using btree (tanggal);
+create trigger trg_set_timestamp_fields__kata_hari_ini
+  before insert or update on kata_hari_ini
+  for each row
+  execute function set_timestamp_fields();
+
 -- Komentar pengguna terhadap suatu indeks entri
 create table komentar (
   id serial primary key,
@@ -653,6 +684,20 @@ create trigger trg_set_timestamp_fields__peran_izin
   for each row
   execute function set_timestamp_fields();
 
+create table relasi_sinset (
+  id serial primary key,
+  sinset_asal text references sinset(id) on delete cascade not null,
+  sinset_tujuan text references sinset(id) on delete cascade not null,
+  tipe_relasi text references tipe_relasi(kode) not null,
+  sumber text not null default 'wn30'::text,
+  created_at timestamp without time zone not null default now(),
+  constraint relasi_sinset_unik unique (sinset_asal, sinset_tujuan, tipe_relasi)
+);
+create index idx_relasi_sinset_asal on relasi_sinset using btree (sinset_asal);
+create index idx_relasi_sinset_tipe on relasi_sinset using btree (tipe_relasi);
+create index idx_relasi_sinset_tujuan on relasi_sinset using btree (sinset_tujuan);
+create unique index relasi_sinset_unik on relasi_sinset using btree (sinset_asal, sinset_tujuan, tipe_relasi);
+
 -- Audit trail untuk setiap aksi redaksi terhadap kandidat kata
 create table riwayat_kurasi (
   id serial primary key,
@@ -668,6 +713,56 @@ create table riwayat_kurasi (
 create index idx_riwayat_created on riwayat_kurasi using btree (created_at DESC);
 create index idx_riwayat_kandidat on riwayat_kurasi using btree (kandidat_id);
 create index idx_riwayat_redaktur on riwayat_kurasi using btree (redaktur_id);
+
+create table sinset (
+  id text,
+  kelas_kata text not null,
+  ili_id text,
+  oewn_id text,
+  lema_en ARRAY,
+  definisi_en text,
+  contoh_en ARRAY,
+  definisi_id text,
+  contoh_id ARRAY,
+  status text not null default 'draf'::text,
+  sumber text not null default 'wn30'::text,
+  catatan text,
+  created_at timestamp without time zone not null default now(),
+  updated_at timestamp without time zone not null default now(),
+  constraint sinset_kelas_kata_check check (kelas_kata = ANY (ARRAY['n'::text, 'v'::text, 'a'::text, 'r'::text])),
+  constraint sinset_status_check check (status = ANY (ARRAY['draf'::text, 'tinjau'::text, 'terverifikasi'::text]))
+);
+create index idx_sinset_ili on sinset using btree (ili_id) WHERE (ili_id IS NOT NULL);
+create index idx_sinset_kelas_kata on sinset using btree (kelas_kata);
+create index idx_sinset_status on sinset using btree (status);
+create trigger trg_set_timestamp_fields__sinset
+  before insert or update on sinset
+  for each row
+  execute function set_timestamp_fields();
+
+create table sinset_lema (
+  id serial primary key,
+  sinset_id text references sinset(id) on delete cascade not null,
+  lema text not null,
+  entri_id integer references entri(id) on delete set null,
+  makna_id integer references makna(id) on delete set null,
+  urutan smallint not null default 0,
+  terverifikasi boolean not null default false,
+  sumber text not null default 'wordnetid'::text,
+  created_at timestamp without time zone not null default now(),
+  updated_at timestamp without time zone not null default now(),
+  constraint sinset_lema_unik unique (sinset_id, lema)
+);
+create index idx_sinset_lema_entri on sinset_lema using btree (entri_id) WHERE (entri_id IS NOT NULL);
+create index idx_sinset_lema_lema on sinset_lema using btree (lower(lema));
+create index idx_sinset_lema_makna on sinset_lema using btree (makna_id) WHERE (makna_id IS NOT NULL);
+create index idx_sinset_lema_sinset on sinset_lema using btree (sinset_id);
+create index idx_sinset_lema_verifikasi on sinset_lema using btree (terverifikasi, sinset_id);
+create unique index sinset_lema_unik on sinset_lema using btree (sinset_id, lema);
+create trigger trg_set_timestamp_fields__sinset_lema
+  before insert or update on sinset_lema
+  for each row
+  execute function set_timestamp_fields();
 
 -- Master sumber data untuk kamus, glosarium, tesaurus, dan etimologi
 create table sumber (
@@ -725,13 +820,15 @@ create table susun_kata (
   keterangan text, -- Catatan internal untuk soal
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
+  constraint susun_kata_kata_key unique (kata),
   constraint susun_kata_tanggal_panjang_key unique (tanggal, panjang),
-  constraint susun_kata_kata_check check (kata ~ '^[a-z]+$'::text),
   constraint susun_kata_kata_panjang_check check (char_length(kata) = panjang),
-  constraint susun_kata_panjang_check check ((panjang >= 4) AND (panjang <= 8))
+  constraint susun_kata_panjang_check check ((panjang >= 4) AND (panjang <= 8)),
+  constraint susun_kata_kata_check check (kata ~ '^[a-z]+$'::text)
 );
 create index idx_susun_kata_panjang_tanggal on susun_kata using btree (panjang, tanggal DESC);
 create index idx_susun_kata_tanggal on susun_kata using btree (tanggal DESC);
+create unique index susun_kata_kata_key on susun_kata using btree (kata);
 create unique index susun_kata_tanggal_panjang_key on susun_kata using btree (tanggal, panjang);
 create trigger trg_set_timestamp_fields__susun_kata
   before insert or update on susun_kata
@@ -825,5 +922,16 @@ create trigger trg_set_timestamp_fields__tesaurus
   before insert or update on tesaurus
   for each row
   execute function set_timestamp_fields();
+
+create table tipe_relasi (
+  kode text,
+  nama text not null,
+  nama_publik text not null,
+  kategori text not null,
+  kebalikan text references tipe_relasi(kode),
+  simetris boolean not null default false,
+  urutan smallint not null default 0,
+  constraint tipe_relasi_kategori_check check (kategori = ANY (ARRAY['hierarki'::text, 'leksikal'::text, 'morfologi'::text, 'verba'::text, 'domain'::text]))
+);
 
 -- Schema extraction completed successfully

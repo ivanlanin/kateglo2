@@ -242,7 +242,7 @@ function ItemRingkasan({ soal, pilihanUser }) {
   );
 }
 
-function KuisKata() {
+function KuisKata({ variant = 'default' } = {}) {
   const auth = useAuthOptional();
   const isAuthenticated = Boolean(auth?.isAuthenticated);
   const queryClient = useQueryClient();
@@ -387,7 +387,7 @@ function KuisKata() {
 
   if (isLoading) {
     return (
-      <div className="gim-kuis-kata">
+      <div className={`gim-kuis-kata${variant === 'beranda' ? ' gim-kuis-kata-beranda' : ''}`}>
         <div className="gim-muat">
           <span>Menyiapkan soal …</span>
         </div>
@@ -414,7 +414,7 @@ function KuisKata() {
     }
 
     return (
-      <div className="gim-kuis-kata">
+      <div className={`gim-kuis-kata${variant === 'beranda' ? ' gim-kuis-kata-beranda' : ''}`}>
         <div className="gim-ringkasan-atas">
           <div className="gim-ringkasan">
             <div className={`gim-ringkasan-skor-angka ${kelasSkor}`}>{jumlahBenar}/{ronde.length}</div>
@@ -437,7 +437,7 @@ function KuisKata() {
   if (!soalSaatIni) return null;
 
   return (
-    <div className="gim-kuis-kata">
+    <div className={`gim-kuis-kata${variant === 'beranda' ? ' gim-kuis-kata-beranda' : ''}`}>
       <div className="gim-header">
         <span className="gim-header-mode">{ikonMode(soalSaatIni.mode)} {labelMode[soalSaatIni.mode]}</span>
         <div className="gim-progress" aria-label={`Progres soal ${indeks + 1} dari ${ronde.length}`}>

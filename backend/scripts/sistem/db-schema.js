@@ -13,7 +13,7 @@
  * node backend/scripts/sistem/db-schema.js
  *
  * # Export dengan custom output
- * DB_OUTPUT_FILE=../docs/schema_backup.sql node backend/scripts/sistem/db-schema.js
+ * DB_OUTPUT_FILE=docs/schema_backup.sql node backend/scripts/sistem/db-schema.js
  * ```
  *
  * ENVIRONMENT VARIABLES:
@@ -22,7 +22,7 @@
  * - DB_ORDER_BY: Table ordering ('alphabetical' | 'dependency', default: 'alphabetical')
  * - DB_SYNTAX: Output syntax style ('verbose' | 'simplified', default: 'simplified')
  * - DB_INCLUDE_SCHEMA: Include schema prefix in names ('true' | 'false', default: 'false')
- * - DB_OUTPUT_FILE: Output file path relative to backend/ (default: '../docs/data/skema.sql')
+ * - DB_OUTPUT_FILE: Output file path relative to root repo, atau absolute path (default: 'docs/data/skema.sql')
  *
  * @requires pg
  * @version 1.0.0
@@ -54,7 +54,18 @@ const SCHEMA_NAME = process.env.DB_SCHEMA || 'public';
 const ORDER_BY = process.env.DB_ORDER_BY || 'alphabetical';
 const SYNTAX_STYLE = process.env.DB_SYNTAX || 'simplified';
 const INCLUDE_SCHEMA_PREFIX = process.env.DB_INCLUDE_SCHEMA === 'true';
-const OUTPUT_FILE = process.env.DB_OUTPUT_FILE || '../docs/data/skema.sql';
+const REPO_ROOT = path.resolve(__dirname, '..', '..', '..');
+const OUTPUT_FILE = process.env.DB_OUTPUT_FILE || 'docs/data/skema.sql';
+
+function resolveOutputPath(outputFile) {
+  if (!outputFile) {
+    return path.resolve(REPO_ROOT, 'docs', 'data', 'skema.sql');
+  }
+
+  return path.isAbsolute(outputFile)
+    ? outputFile
+    : path.resolve(REPO_ROOT, outputFile);
+}
 
 function formatSchemaComment(value) {
   return String(value).replace(/\r?\n+/g, ' ').trim();
@@ -624,7 +635,7 @@ if (require.main === module) {
   (async () => {
     try {
       const schemaOutput = await extractSchema();
-      const outputPath = path.resolve(__dirname, '..', OUTPUT_FILE);
+      const outputPath = resolveOutputPath(OUTPUT_FILE);
 
       // Ensure output directory exists
       const outputDir = path.dirname(outputPath);
@@ -653,4 +664,5 @@ module.exports = {
   getTableSequences,
   extractTriggerFunctions,
   extractNonTriggerRoutines,
+  resolveOutputPath,
 };

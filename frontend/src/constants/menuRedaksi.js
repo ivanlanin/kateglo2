@@ -35,6 +35,13 @@ export const kelompokMenuRedaksi = [
         statistik: { key: 'etimologi', label: 'Entri Etimologi', warna: 'text-indigo-600' },
       },
       {
+        path: '/redaksi/kata-hari-ini',
+        label: 'Kata Hari Ini',
+        dashboardLabel: 'Kata Hari Ini',
+        izin: 'edit_entri',
+        statistik: { key: 'kataHariIni', label: 'Arsip Kata', warna: 'text-sky-700' },
+      },
+      {
         path: '/redaksi/kandidat-kata',
         label: 'Kandidat Kata',
         dashboardLabel: 'Kandidat Kata',

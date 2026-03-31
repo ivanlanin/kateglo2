@@ -33,6 +33,47 @@ function normalisasiRagamVarian(value) {
   return ['cak', 'hor', 'kl', 'kas'].includes(normalized) ? normalized : null;
 }
 
+function buildKataHariIniCandidateWhereClause({ requireEtimologi = true } = {}) {
+  const clauses = [
+    'e.aktif = 1',
+    'e.induk IS NULL',
+    "e.jenis = 'dasar'",
+    'e.jenis_rujuk IS NULL',
+    "COALESCE(BTRIM(e.indeks), '') <> ''",
+    `EXISTS (
+      SELECT 1
+      FROM makna m
+      WHERE m.entri_id = e.id
+        AND m.aktif = TRUE
+        AND COALESCE(BTRIM(m.makna), '') <> ''
+    )`,
+    `EXISTS (
+      SELECT 1
+      FROM makna m
+      JOIN contoh c ON c.makna_id = m.id
+      WHERE m.entri_id = e.id
+        AND m.aktif = TRUE
+        AND c.aktif = TRUE
+        AND COALESCE(BTRIM(c.contoh), '') <> ''
+    )`,
+  ];
+
+  if (requireEtimologi) {
+    clauses.push(`EXISTS (
+      SELECT 1
+      FROM etimologi et
+      WHERE et.entri_id = e.id
+        AND et.aktif = TRUE
+        AND (
+          et.bahasa_id IS NOT NULL
+          OR NULLIF(BTRIM(COALESCE(et.kata_asal, '')), '') IS NOT NULL
+        )
+    )`);
+  }
+
+  return clauses.join('\n         AND ');
+}
+
 class ModelEntri {
   static async ambilKamusSusunKata({ panjang = 5, limit = 5000 } = {}) {
     const parsedPanjang = Number(panjang);
@@ -167,6 +208,43 @@ class ModelEntri {
       [cappedLimit]
     );
     return result.rows.map((r) => r.indeks);
+  }
+
+  static async hitungKandidatKataHariIni({ requireEtimologi = true } = {}) {
+    const whereClause = buildKataHariIniCandidateWhereClause({ requireEtimologi });
+    const result = await db.query(
+      `SELECT COUNT(*) AS total
+       FROM (
+         SELECT LOWER(TRIM(e.indeks)) AS indeks_norm
+         FROM entri e
+         WHERE ${whereClause}
+         GROUP BY LOWER(TRIM(e.indeks))
+       ) kandidat`,
+      []
+    );
+
+    return parseCount(result.rows[0]?.total);
+  }
+
+  static async ambilKandidatKataHariIni({ offset = 0, requireEtimologi = true } = {}) {
+    const offsetAman = Math.max(Number(offset) || 0, 0);
+    const whereClause = buildKataHariIniCandidateWhereClause({ requireEtimologi });
+    const result = await db.query(
+      `SELECT kandidat.indeks
+       FROM (
+         SELECT LOWER(TRIM(e.indeks)) AS indeks_norm,
+                MIN(TRIM(e.indeks)) AS indeks
+         FROM entri e
+         WHERE ${whereClause}
+         GROUP BY LOWER(TRIM(e.indeks))
+       ) kandidat
+       ORDER BY kandidat.indeks_norm ASC
+       OFFSET $1
+       LIMIT 1`,
+      [offsetAman]
+    );
+
+    return result.rows[0] || null;
   }
 
   /**

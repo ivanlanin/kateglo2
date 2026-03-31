@@ -27,6 +27,7 @@ describe('pages/redaksi index', () => {
     expect(redaksiPages.EtimologiAdmin).toBe(leksikonPages.EtimologiAdmin);
     expect(redaksiPages.GlosariumAdmin).toBe(leksikonPages.GlosariumAdmin);
     expect(redaksiPages.KamusAdmin).toBe(leksikonPages.KamusAdmin);
+    expect(redaksiPages.KataHariIniAdmin).toBe(leksikonPages.KataHariIniAdmin);
     expect(redaksiPages.TesaurusAdmin).toBe(leksikonPages.TesaurusAdmin);
     expect(redaksiPages.BahasaAdmin).toBe(masterPages.BahasaAdmin);
     expect(redaksiPages.BidangAdmin).toBe(masterPages.BidangAdmin);

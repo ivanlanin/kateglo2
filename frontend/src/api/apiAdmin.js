@@ -168,6 +168,47 @@ export function useStatistikAdmin({ enabled = true } = {}) {
   });
 }
 
+export function useDaftarKataHariIniAdmin({
+  limit = 50,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+  q = '',
+  modePemilihan = '',
+} = {}) {
+  return useDaftarAdmin('/api/redaksi/kata-hari-ini', 'admin-kata-hari-ini', {
+    limit,
+    cursor,
+    direction,
+    lastPage,
+    q,
+    includeAktif: false,
+    mode_pemilihan: modePemilihan,
+  });
+}
+
+export function useDetailKataHariIniAdmin(id) {
+  return useQuery({
+    queryKey: ['admin-kata-hari-ini-detail', id],
+    queryFn: () => klien.get(`/api/redaksi/kata-hari-ini/${id}`).then((r) => r.data),
+    enabled: Boolean(id),
+  });
+}
+
+export function useSimpanKataHariIniAdmin() {
+  return useSimpanAdmin({
+    path: '/api/redaksi/kata-hari-ini',
+    queryKeyPrefix: 'admin-kata-hari-ini',
+  });
+}
+
+export function useHapusKataHariIniAdmin() {
+  return useHapusAdmin({
+    path: '/api/redaksi/kata-hari-ini',
+    queryKeyPrefix: 'admin-kata-hari-ini',
+  });
+}
+
 export function useStatistikPencarianAdmin({
   domain = '',
   periode = 'hariini',

@@ -23,6 +23,10 @@ vi.mock('../../src/api/klien', () => ({
 import klien from '../../src/api/klien';
 import {
   useStatistikAdmin,
+  useDaftarKataHariIniAdmin,
+  useDetailKataHariIniAdmin,
+  useSimpanKataHariIniAdmin,
+  useHapusKataHariIniAdmin,
   useStatistikPencarianAdmin,
   useDaftarPencarianHitamAdmin,
   useDetailPencarianHitamAdmin,
@@ -133,6 +137,32 @@ describe('apiAdmin', () => {
     const statistik = useStatistikAdmin();
     await statistik.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/statistik');
+
+    const daftarKataHariIni = useDaftarKataHariIniAdmin({
+      limit: 12,
+      cursor: 'khi-1',
+      direction: 'prev',
+      lastPage: true,
+      q: 'aktif',
+      modePemilihan: 'admin',
+    });
+    await daftarKataHariIni.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kata-hari-ini', {
+      params: {
+        limit: 12,
+        cursor: 'khi-1',
+        direction: 'prev',
+        lastPage: '1',
+        q: 'aktif',
+        mode_pemilihan: 'admin',
+      },
+    });
+
+    const detailKataHariIni = useDetailKataHariIniAdmin(5);
+    expect(detailKataHariIni.enabled).toBe(true);
+    await detailKataHariIni.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kata-hari-ini/5');
+    expect(useDetailKataHariIniAdmin(null).enabled).toBe(false);
 
     const statistikPencarianDefault = useStatistikPencarianAdmin();
     await statistikPencarianDefault.queryFn();
@@ -1505,5 +1535,23 @@ describe('apiAdmin', () => {
     hapusHitam.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-pencarian-hitam'] });
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-pencarian-hitam-detail'] });
+  });
+
+  it('mengonfigurasi mutation kata hari ini admin', async () => {
+    const simpanKataHariIni = useSimpanKataHariIniAdmin();
+    await simpanKataHariIni.mutationFn({ id: 4, indeks: 'aktif', tanggal: '2026-03-31' });
+    await simpanKataHariIni.mutationFn({ indeks: 'uji', tanggal: '2026-04-01' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/kata-hari-ini/4', { id: 4, indeks: 'aktif', tanggal: '2026-03-31' });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/kata-hari-ini', { indeks: 'uji', tanggal: '2026-04-01' });
+    simpanKataHariIni.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-kata-hari-ini'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-kata-hari-ini-detail'] });
+
+    const hapusKataHariIni = useHapusKataHariIniAdmin();
+    await hapusKataHariIni.mutationFn(4);
+    expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/kata-hari-ini/4');
+    hapusKataHariIni.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-kata-hari-ini'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-kata-hari-ini-detail'] });
   });
 });

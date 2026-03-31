@@ -21,6 +21,7 @@ router.use('/kamus', require('./leksikon/kamus'));
 router.use('/komentar', require('./interaksi/komentar'));
 router.use('/tesaurus', require('./leksikon/tesaurus'));
 router.use('/etimologi', require('./leksikon/etimologi'));
+router.use('/kata-hari-ini', require('./leksikon/kataHariIni'));
 router.use('/audit-tagar', require('./audit/auditTagar'));
 router.use('/glosarium', require('./leksikon/glosarium'));
 router.use('/bidang', require('./master/bidang'));

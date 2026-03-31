@@ -59,6 +59,14 @@ jest.mock('../../../models/leksikon/modelGlosarium', () => ({
   hitungTotal: jest.fn(),
 }));
 
+jest.mock('../../../models/leksikon/modelKataHariIni', () => ({
+  hitungTotal: jest.fn(),
+  daftarAdmin: jest.fn(),
+  ambilDenganId: jest.fn(),
+  simpanByTanggal: jest.fn(),
+  hapus: jest.fn(),
+}));
+
 jest.mock('../../../models/master/modelOpsi', () => ({
   daftarLookupBidang: jest.fn(),
   daftarLookupBahasa: jest.fn(),
@@ -158,7 +166,12 @@ jest.mock('../../../models/wordnet/modelSinset', () => ({
 }));
 
 jest.mock('../../../services/publik/layananKamusPublik', () => ({
+  ambilDetailKamus: jest.fn(),
   hapusCacheDetailKamus: jest.fn(),
+  __private: {
+    ambilMaknaUtama: jest.fn(),
+    bentukPayloadKataHariIni: jest.fn(),
+  },
 }));
 
 jest.mock('../../../services/publik/layananGlosariumPublik', () => ({
@@ -170,6 +183,7 @@ const ModelLema = require('../../../models/leksikon/modelEntri');
 const ModelTesaurus = require('../../../models/leksikon/modelTesaurus');
 const ModelEtimologi = require('../../../models/leksikon/modelEtimologi');
 const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
+const ModelKataHariIni = require('../../../models/leksikon/modelKataHariIni');
 const ModelOpsi = require('../../../models/master/modelOpsi');
 const ModelLabel = require('../../../models/master/modelLabel');
 const ModelKomentar = require('../../../models/interaksi/modelKomentar');
@@ -183,7 +197,7 @@ const ModelPeran = require('../../../models/akses/modelPeran');
 const ModelIzin = require('../../../models/akses/modelIzin');
 const ModelKandidatEntri = require('../../../models/kadi/modelKandidatEntri');
 const ModelSinset = require('../../../models/wordnet/modelSinset');
-const { hapusCacheDetailKamus } = require('../../../services/publik/layananKamusPublik');
+const { ambilDetailKamus, hapusCacheDetailKamus, __private: kataHariIniUtils } = require('../../../services/publik/layananKamusPublik');
 const { invalidasiCacheDetailGlosarium } = require('../../../services/publik/layananGlosariumPublik');
 const rootRouter = require('../../../routes');
 
@@ -516,6 +530,7 @@ describe('routes/redaksi', () => {
       ModelPencarian.hitungTotalKataHarian.mockResolvedValue(90);
       ModelPencarianHitam.hitungTotal.mockResolvedValue(12);
       ModelSinset.hitungTotal.mockResolvedValue(110752);
+      ModelKataHariIni.hitungTotal.mockResolvedValue(31);
 
       const response = await callAsAdmin('get', '/api/redaksi/statistik');
 
@@ -543,6 +558,7 @@ describe('routes/redaksi', () => {
         pencarian: 90,
         pencarianHitam: 12,
         sinset: 110752,
+        kataHariIni: 31,
       });
     });
 
@@ -584,6 +600,105 @@ describe('routes/redaksi', () => {
 
       expect(response.status).toBe(500);
       expect(response.body.error).toBe('statistik pencarian gagal');
+    });
+  });
+
+  describe('kata hari ini redaksi', () => {
+    it('GET /api/redaksi/kata-hari-ini mengembalikan daftar arsip', async () => {
+      ModelKataHariIni.daftarAdmin.mockResolvedValue({
+        data: [{ id: 1, tanggal: '2026-03-31', indeks: 'aktif', entri: 'aktif', makna: 'giat' }],
+        total: 1,
+      });
+
+      const response = await callAsAdmin('get', '/api/redaksi/kata-hari-ini?q=aktif&mode_pemilihan=admin');
+
+      expect(response.status).toBe(200);
+      expect(ModelKataHariIni.daftarAdmin).toHaveBeenCalledWith({
+        limit: 50,
+        offset: 0,
+        q: 'aktif',
+        modePemilihan: 'admin',
+      });
+      expect(response.body.total).toBe(1);
+    });
+
+    it('GET /api/redaksi/kata-hari-ini/:id mengembalikan 404 bila tidak ada', async () => {
+      ModelKataHariIni.ambilDenganId.mockResolvedValue(null);
+
+      const response = await callAsAdmin('get', '/api/redaksi/kata-hari-ini/9');
+
+      expect(response.status).toBe(404);
+      expect(response.body.message).toBe('Arsip Kata Hari Ini tidak ditemukan');
+    });
+
+    it('POST /api/redaksi/kata-hari-ini membuat arsip baru dari indeks', async () => {
+      ambilDetailKamus.mockResolvedValue({ indeks: 'aktif', entri: [{ id: 7, entri: 'aktif' }] });
+      kataHariIniUtils.ambilMaknaUtama.mockReturnValue({ entri: { id: 7 } });
+      kataHariIniUtils.bentukPayloadKataHariIni.mockReturnValue({
+        tanggal: '2026-03-31',
+        indeks: 'aktif',
+        entri: 'aktif',
+        makna: 'giat',
+        contoh: 'Ia aktif.',
+      });
+      ModelKataHariIni.simpanByTanggal.mockResolvedValue({ id: 1, tanggal: '2026-03-31', indeks: 'aktif' });
+
+      const response = await callAsAdmin('post', '/api/redaksi/kata-hari-ini', {
+        body: { tanggal: '2026-03-31', indeks: 'aktif', mode_pemilihan: 'admin', catatan_admin: 'pilihan redaksi' },
+      });
+
+      expect(response.status).toBe(201);
+      expect(ModelKataHariIni.simpanByTanggal).toHaveBeenCalledWith({
+        tanggal: '2026-03-31',
+        entriId: 7,
+        payload: expect.objectContaining({ indeks: 'aktif', makna: 'giat' }),
+        modePemilihan: 'admin',
+        catatanAdmin: 'pilihan redaksi',
+      });
+    });
+
+    it('PUT /api/redaksi/kata-hari-ini/:id memperbarui arsip yang ada', async () => {
+      ModelKataHariIni.ambilDenganId.mockResolvedValue({
+        id: 1,
+        tanggal: '2026-03-31',
+        entri_id: 7,
+        indeks: 'aktif',
+        entri: 'aktif',
+        makna: 'giat',
+        mode_pemilihan: 'auto',
+        catatan_admin: null,
+      });
+      ambilDetailKamus.mockResolvedValue({ indeks: 'aktif', entri: [{ id: 7, entri: 'aktif' }] });
+      kataHariIniUtils.ambilMaknaUtama.mockReturnValue({ entri: { id: 7 } });
+      kataHariIniUtils.bentukPayloadKataHariIni.mockReturnValue({
+        tanggal: '2026-03-31',
+        indeks: 'aktif',
+        entri: 'aktif',
+        makna: 'giat',
+      });
+      ModelKataHariIni.simpanByTanggal.mockResolvedValue({ id: 1, tanggal: '2026-03-31', indeks: 'aktif', makna: 'makna baru' });
+
+      const response = await callAsAdmin('put', '/api/redaksi/kata-hari-ini/1', {
+        body: { makna: 'makna baru', mode_pemilihan: 'admin' },
+      });
+
+      expect(response.status).toBe(200);
+      expect(ModelKataHariIni.simpanByTanggal).toHaveBeenCalledWith({
+        tanggal: '2026-03-31',
+        entriId: 7,
+        payload: expect.objectContaining({ makna: 'makna baru' }),
+        modePemilihan: 'admin',
+        catatanAdmin: null,
+      });
+    });
+
+    it('DELETE /api/redaksi/kata-hari-ini/:id menghapus arsip', async () => {
+      ModelKataHariIni.hapus.mockResolvedValue(true);
+
+      const response = await callAsAdmin('delete', '/api/redaksi/kata-hari-ini/1');
+
+      expect(response.status).toBe(200);
+      expect(response.body.success).toBe(true);
     });
   });
 

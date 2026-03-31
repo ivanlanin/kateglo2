@@ -4,7 +4,7 @@
 
 const express = require('express');
 const { authenticate, authenticateOptional } = require('../../../middleware/auth');
-const { cariKamus, ambilDetailKamus } = require('../../../services/publik/layananKamusPublik');
+const { cariKamus, ambilDetailKamus, ambilKataHariIni } = require('../../../services/publik/layananKamusPublik');
 const ModelLabel = require('../../../models/master/modelLabel');
 const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
 const ModelTagar = require('../../../models/master/modelTagar');
@@ -31,6 +31,25 @@ function parsePeriodeTerpopuler(value) {
 function parseSumberPelacakan(value) {
   const normalized = String(value || '').trim().toLowerCase();
   return normalized === 'susun-kata' ? 'susun-kata' : null;
+}
+
+function parseTanggalReferensi(value) {
+  const raw = String(value || '').trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+
+  const formatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Jakarta',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+  return formatter.format(new Date());
+}
+
+function setCacheHeaders(res, maxAge = 300, staleWhileRevalidate = 900) {
+  const maxAgeAman = Math.max(Number(maxAge) || 0, 0);
+  const staleAman = Math.max(Number(staleWhileRevalidate) || 0, 0);
+  res.set('Cache-Control', `public, max-age=${maxAgeAman}, stale-while-revalidate=${staleAman}`);
 }
 
 router.get('/kategori', async (_req, res, next) => {
@@ -104,6 +123,26 @@ router.get('/terpopuler', async (req, res, next) => {
       limit,
       data,
     });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.get('/kata-hari-ini', async (req, res, next) => {
+  try {
+    const tanggal = parseTanggalReferensi(req.query.tanggal);
+    const data = await ambilKataHariIni({ tanggal });
+    setCacheHeaders(res);
+
+    if (!data) {
+      return res.status(404).json({
+        error: 'Tidak Ditemukan',
+        message: 'Kata Hari Ini belum tersedia',
+        tanggal,
+      });
+    }
+
+    return res.json(data);
   } catch (error) {
     return next(error);
   }

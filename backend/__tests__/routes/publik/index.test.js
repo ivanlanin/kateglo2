@@ -84,6 +84,7 @@ jest.mock('../../../models/akses/modelPengguna', () => ({
 jest.mock('../../../services/publik/layananKamusPublik', () => ({
   cariKamus: jest.fn(),
   ambilDetailKamus: jest.fn(),
+  ambilKataHariIni: jest.fn(),
 }));
 
 jest.mock('../../../services/publik/layananGlosariumPublik', () => ({
@@ -152,6 +153,18 @@ describe('routes backend', () => {
     ModelPengguna.ambilDenganId.mockResolvedValue(null);
     ModelPengguna.ambilPeranUntukAuth.mockResolvedValue({ kode: 'pengguna', akses_redaksi: false });
     ModelPengguna.ambilIzin.mockResolvedValue([]);
+    layananKamusPublik.ambilKataHariIni.mockResolvedValue({
+      tanggal: '2026-03-31',
+      indeks: 'aktif',
+      entri: 'aktif',
+      url: '/kamus/detail/aktif',
+      kelas_kata: 'a',
+      makna: 'giat dalam bekerja',
+      contoh: 'Ia sangat aktif di kelas.',
+      etimologi: { bahasa: 'Arab', kata_asal: 'faal' },
+      pemenggalan: 'ak.tif',
+      lafal: 'aktif',
+    });
     delete process.env.JWT_SECRET;
   });
 
@@ -629,6 +642,38 @@ describe('routes backend', () => {
 
     expect(response.status).toBe(500);
     expect(response.body.error).toBe('terpopuler gagal');
+  });
+
+  it('GET /api/publik/kamus/kata-hari-ini mengembalikan payload kata harian', async () => {
+    const response = await request(createApp()).get('/api/publik/kamus/kata-hari-ini?tanggal=2026-03-31');
+
+    expect(response.status).toBe(200);
+    expect(layananKamusPublik.ambilKataHariIni).toHaveBeenCalledWith({ tanggal: '2026-03-31' });
+    expect(response.headers['cache-control']).toContain('public');
+    expect(response.body).toMatchObject({
+      tanggal: '2026-03-31',
+      indeks: 'aktif',
+      entri: 'aktif',
+      makna: 'giat dalam bekerja',
+    });
+  });
+
+  it('GET /api/publik/kamus/kata-hari-ini memakai fallback tanggal Jakarta jika query tidak valid', async () => {
+    const response = await request(createApp()).get('/api/publik/kamus/kata-hari-ini?tanggal=invalid');
+
+    expect(response.status).toBe(200);
+    expect(layananKamusPublik.ambilKataHariIni).toHaveBeenCalledWith({
+      tanggal: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/),
+    });
+  });
+
+  it('GET /api/publik/kamus/kata-hari-ini mengembalikan 404 jika data belum tersedia', async () => {
+    layananKamusPublik.ambilKataHariIni.mockResolvedValueOnce(null);
+
+    const response = await request(createApp()).get('/api/publik/kamus/kata-hari-ini?tanggal=2026-03-31');
+
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe('Kata Hari Ini belum tersedia');
   });
 
   it('GET /api/publik/kamus/cari/:kata mengembalikan saran saat total 0', async () => {

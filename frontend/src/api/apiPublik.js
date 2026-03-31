@@ -187,6 +187,18 @@ export async function ambilPencarianPopuler({ tanggal = null } = {}) {
   return response.data;
 }
 
+export async function ambilKataHariIni({ tanggal = null } = {}) {
+  const tanggalRaw = String(tanggal || '').trim();
+  const params = /^\d{4}-\d{2}-\d{2}$/.test(tanggalRaw)
+    ? { tanggal: tanggalRaw }
+    : {};
+
+  const response = await klien.get('/api/publik/kamus/kata-hari-ini', {
+    params,
+  });
+  return response.data;
+}
+
 // === GIM: KUIS KATA ===
 
 export async function ambilRondeKuisKata({ riwayat = [] } = {}) {

@@ -3,6 +3,7 @@
  */
 
 const ModelEntri = require('../../models/leksikon/modelEntri');
+const ModelKataHariIni = require('../../models/leksikon/modelKataHariIni');
 const ModelTesaurus = require('../../models/leksikon/modelTesaurus');
 const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
 const ModelEtimologi = require('../../models/leksikon/modelEtimologi');
@@ -10,6 +11,7 @@ const ModelTagar = require('../../models/master/modelTagar');
 const { getJson, setJson, delKey, getTtlSeconds } = require('../sistem/layananCache');
 
 const cachePrefixDetailKamus = 'kamus:detail:';
+const cachePrefixKataHariIni = 'kamus:kata-hari-ini:';
 
 function bacaTeksEntri(item) {
   return item?.entri ?? '';
@@ -130,6 +132,159 @@ function unikTanpaBedaKapitalisasi(items) {
   }
 
   return hasil;
+}
+
+function tanggalHariIniJakarta() {
+  const formatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Jakarta',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+  return formatter.format(new Date());
+}
+
+function parseTanggalReferensi(value) {
+  const raw = String(value || '').trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(raw)) return tanggalHariIniJakarta();
+  return raw;
+}
+
+function buatCacheKeyKataHariIni(tanggal) {
+  return `${cachePrefixKataHariIni}${encodeURIComponent(parseTanggalReferensi(tanggal))}`;
+}
+
+function hashTanggal(value = '') {
+  return Array.from(String(value || '')).reduce(
+    (acc, karakter) => ((acc * 33) + karakter.charCodeAt(0)) >>> 0,
+    5381
+  );
+}
+
+function normalisasiCuplikan(value = '', maxLength = 180) {
+  const text = String(value || '').replace(/\s+/g, ' ').trim();
+  if (!text) return null;
+  if (text.length <= maxLength) return text;
+  return `${text.slice(0, maxLength - 3).trimEnd()}...`;
+}
+
+function ambilMaknaUtama(entriList = []) {
+  for (const entri of entriList) {
+    for (const makna of entri?.makna || []) {
+      if (normalisasiCuplikan(makna?.makna, 1000)) {
+        return { entri, makna };
+      }
+    }
+  }
+
+  return {
+    entri: entriList[0] || null,
+    makna: null,
+  };
+}
+
+function ambilContohUtama(entri = null) {
+  for (const makna of entri?.makna || []) {
+    for (const contoh of makna?.contoh || []) {
+      if (normalisasiCuplikan(contoh?.contoh, 1000)) {
+        return contoh;
+      }
+    }
+  }
+
+  return null;
+}
+
+function ambilEtimologiUtama(entriList = [], entriUtama = null) {
+  const daftarTarget = [
+    ...(entriUtama ? [entriUtama] : []),
+    ...entriList.filter((item) => item !== entriUtama),
+  ];
+
+  for (const entri of daftarTarget) {
+    for (const etimologi of entri?.etimologi || []) {
+      const bahasa = String(etimologi?.bahasa || '').trim();
+      const kataAsal = String(etimologi?.kata_asal || '').trim();
+      if (bahasa || kataAsal) {
+        return {
+          bahasa: bahasa || null,
+          bahasa_kode: etimologi?.bahasa_kode || null,
+          kata_asal: kataAsal || null,
+          sumber: etimologi?.sumber || null,
+          sumber_kode: etimologi?.sumber_kode || null,
+        };
+      }
+    }
+  }
+
+  return null;
+}
+
+function bentukPayloadKataHariIni(detail = null, tanggal = null) {
+  if (!detail || !Array.isArray(detail.entri) || detail.entri.length === 0) {
+    return null;
+  }
+
+  const { entri, makna } = ambilMaknaUtama(detail.entri);
+  if (!entri || !makna) return null;
+
+  const contoh = ambilContohUtama(entri);
+  const etimologi = ambilEtimologiUtama(detail.entri, entri);
+
+  return {
+    tanggal: parseTanggalReferensi(tanggal),
+    indeks: detail.indeks,
+    entri: entri.entri || detail.indeks,
+    url: `/kamus/detail/${encodeURIComponent(detail.indeks)}`,
+    kelas_kata: makna?.kelas_kata || null,
+    makna: normalisasiCuplikan(makna?.makna, 180),
+    contoh: normalisasiCuplikan(contoh?.contoh, 220),
+    pemenggalan: entri?.pemenggalan || null,
+    lafal: entri?.lafal || null,
+    etimologi,
+  };
+}
+
+async function pilihKandidatKataHariIniOtomatis(tanggalReferensi) {
+  const strategi = [true, false];
+
+  for (const requireEtimologi of strategi) {
+    const total = await ModelEntri.hitungKandidatKataHariIni({ requireEtimologi });
+    if (total <= 0) {
+      continue;
+    }
+
+    const offsetAwal = hashTanggal(tanggalReferensi) % total;
+    const batasPercobaan = Math.min(total, 7);
+
+    for (let langkah = 0; langkah < batasPercobaan; langkah += 1) {
+      const offset = (offsetAwal + langkah) % total;
+      const kandidat = await ModelEntri.ambilKandidatKataHariIni({ offset, requireEtimologi });
+      if (!kandidat?.indeks) {
+        continue;
+      }
+
+      const detail = await ambilDetailKamus(kandidat.indeks);
+      if (!detail || !Array.isArray(detail.entri) || detail.entri.length === 0) {
+        continue;
+      }
+
+      const kandidatUtama = ambilMaknaUtama(detail.entri);
+      const payload = bentukPayloadKataHariIni(detail, tanggalReferensi);
+      const entriId = Number(kandidatUtama?.entri?.id) || null;
+
+      if (!payload || !entriId) {
+        continue;
+      }
+
+      return {
+        entriId,
+        payload,
+      };
+    }
+  }
+
+  return null;
 }
 
 function buatCacheKeyDetailKamus(indeks, options) {
@@ -368,9 +523,41 @@ async function ambilDetailKamus(indeksAtauEntri, {
   return result;
 }
 
+async function ambilKataHariIni({ tanggal = null } = {}) {
+  const tanggalReferensi = parseTanggalReferensi(tanggal);
+  const cacheKey = buatCacheKeyKataHariIni(tanggalReferensi);
+  const cached = await getJson(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
+  const tersimpan = await ModelKataHariIni.ambilByTanggal(tanggalReferensi);
+  if (tersimpan) {
+    await setJson(cacheKey, tersimpan, getTtlSeconds());
+    return tersimpan;
+  }
+
+  const hasilOtomatis = await pilihKandidatKataHariIniOtomatis(tanggalReferensi);
+  if (!hasilOtomatis) {
+    return null;
+  }
+
+  const hasilSimpan = await ModelKataHariIni.simpanByTanggal({
+    tanggal: tanggalReferensi,
+    entriId: hasilOtomatis.entriId,
+    payload: hasilOtomatis.payload,
+    modePemilihan: 'auto',
+  });
+
+  const payloadFinal = hasilSimpan || hasilOtomatis.payload;
+  await setJson(cacheKey, payloadFinal, getTtlSeconds());
+  return payloadFinal;
+}
+
 module.exports = {
   cariKamus,
   ambilDetailKamus,
+  ambilKataHariIni,
   hapusCacheDetailKamus,
   buatCacheKeyDetailKamus,
 };
@@ -386,4 +573,14 @@ module.exports.__private = {
   kumpulkanKandidatTautanGlosarium,
   parseDaftarRelasi,
   unikTanpaBedaKapitalisasi,
+  tanggalHariIniJakarta,
+  parseTanggalReferensi,
+  buatCacheKeyKataHariIni,
+  hashTanggal,
+  normalisasiCuplikan,
+  ambilMaknaUtama,
+  ambilContohUtama,
+  ambilEtimologiUtama,
+  bentukPayloadKataHariIni,
+  pilihKandidatKataHariIniOtomatis,
 };

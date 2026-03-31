@@ -3,12 +3,14 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Beranda from '../../../src/pages/publik/Beranda';
 
 const mockAmbilPencarianPopuler = vi.fn();
+const mockAmbilKataHariIni = vi.fn();
 
 const mockNavigate = vi.fn();
 
 vi.mock('../../../src/api/apiPublik', () => ({
   autocomplete: vi.fn().mockResolvedValue([]),
   ambilPencarianPopuler: (...args) => mockAmbilPencarianPopuler(...args),
+  ambilKataHariIni: (...args) => mockAmbilKataHariIni(...args),
 }));
 
 vi.mock('../../../src/context/authContext', () => ({
@@ -25,7 +27,7 @@ vi.mock('../../../src/api/apiAuth', () => ({
 }));
 
 vi.mock('../../../src/components/gim/KuisKata', () => ({
-  default: () => null,
+  default: ({ variant }) => <div data-testid="kuis-kata" data-variant={variant || 'default'} />,
 }));
 
 vi.mock('react-router-dom', () => ({
@@ -38,6 +40,7 @@ describe('Beranda', () => {
   beforeEach(() => {
     mockNavigate.mockReset();
     mockAmbilPencarianPopuler.mockReset();
+    mockAmbilKataHariIni.mockReset();
     mockAmbilPencarianPopuler.mockResolvedValue({
       data: {
         kamus: 'air',
@@ -46,6 +49,18 @@ describe('Beranda', () => {
         makna: 'arti',
         rima: 'sajak',
       },
+    });
+    mockAmbilKataHariIni.mockResolvedValue({
+      tanggal: '2026-03-31',
+      indeks: 'aktif',
+      entri: 'aktif',
+      url: '/kamus/detail/aktif',
+      kelas_kata: 'a',
+      makna: 'giat dalam bekerja',
+      contoh: 'Ia sangat aktif di kelas.',
+      etimologi: { bahasa: 'Arab', kata_asal: 'faal' },
+      pemenggalan: 'ak.tif',
+      lafal: 'aktif',
     });
   });
 
@@ -89,6 +104,22 @@ describe('Beranda', () => {
     expect(screen.getByRole('link', { name: 'arti' })).toHaveAttribute('href', '/makna/cari/arti');
     expect(screen.getByRole('link', { name: 'sajak' })).toHaveAttribute('href', '/rima/cari/sajak');
     expect(screen.getByRole('link', { name: 'air' })).not.toHaveAttribute('title');
+    expect(mockAmbilKataHariIni).toHaveBeenCalledWith();
+  });
+
+  it('menampilkan kartu Kata Hari Ini saat API berhasil', async () => {
+    render(<Beranda />);
+
+    expect(await screen.findByRole('heading', { name: 'aktif' })).toBeInTheDocument();
+    expect(screen.getByText('Kata Hari Ini')).toBeInTheDocument();
+    expect(screen.getByText('Kuis Kata')).toBeInTheDocument();
+    expect(screen.getByText('a • ak.tif • aktif')).toBeInTheDocument();
+    expect(screen.getByText('giat dalam bekerja')).toBeInTheDocument();
+    expect(screen.getByText('"Ia sangat aktif di kelas."')).toBeInTheDocument();
+    expect(screen.getByText('Etimologi: Arab: faal')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Lihat entri' })).toHaveAttribute('href', '/kamus/detail/aktif');
+    expect(screen.getByRole('link', { name: 'Buka kuis' })).toHaveAttribute('href', '/gim/kuis-kata');
+    expect(screen.getByTestId('kuis-kata')).toHaveAttribute('data-variant', 'beranda');
   });
 
   it('memotong frasa populer lebih dari dua kata dan menyimpan judul penuh di tooltip', async () => {
@@ -141,5 +172,17 @@ describe('Beranda', () => {
     expect(screen.getByText('glosarium')).toBeInTheDocument();
     expect(screen.getByText('makna')).toBeInTheDocument();
     expect(screen.getByText('rima')).toBeInTheDocument();
+  });
+
+  it('tidak menampilkan kartu Kata Hari Ini saat API gagal', async () => {
+    mockAmbilKataHariIni.mockRejectedValueOnce(new Error('gagal'));
+
+    render(<Beranda />);
+
+    expect(await screen.findByText('Populer:')).toBeInTheDocument();
+    expect(screen.queryByText('Kata Hari Ini')).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Lihat entri' })).not.toBeInTheDocument();
+    expect(screen.getByText('Kuis Kata')).toBeInTheDocument();
+    expect(screen.getByTestId('kuis-kata')).toHaveAttribute('data-variant', 'beranda');
   });
 });

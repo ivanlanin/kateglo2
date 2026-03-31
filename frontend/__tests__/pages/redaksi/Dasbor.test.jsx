@@ -41,6 +41,13 @@ function buatKelompokMenuRedaksiFixture() {
           statistik: { key: 'etimologi', warna: 'text-indigo-600' },
         },
         {
+          path: '/redaksi/kata-hari-ini',
+          label: 'Kata Hari Ini',
+          dashboardLabel: 'Kata Hari Ini',
+          izin: 'edit_entri',
+          statistik: { key: 'kataHariIni', warna: 'text-sky-700' },
+        },
+        {
           path: '/redaksi/kandidat-kata',
           label: 'Kandidat Kata',
           dashboardLabel: 'Kandidat Kata',
@@ -238,7 +245,7 @@ describe('Dasbor', () => {
     );
 
     expect(screen.getByText('Dasbor')).toBeInTheDocument();
-    expect(screen.getAllByText('…')).toHaveLength(21);
+    expect(screen.getAllByText('…')).toHaveLength(22);
   });
 
   it('menampilkan statistik saat data tersedia', () => {
@@ -250,6 +257,7 @@ describe('Dasbor', () => {
           tesaurus: 200,
           glosarium: 50,
           etimologi: 70,
+          kataHariIni: 31,
           kandidatKata: 65,
           susunKataHarian: 77,
           susunKataBebas: 66,
@@ -280,6 +288,7 @@ describe('Dasbor', () => {
     expect(screen.getByText('1.000')).toBeInTheDocument();
     expect(screen.getByText('200')).toBeInTheDocument();
     expect(screen.getByText('50')).toBeInTheDocument();
+    expect(screen.getByText('31')).toBeInTheDocument();
     expect(screen.getByText('77')).toBeInTheDocument();
     expect(screen.getByText('66')).toBeInTheDocument();
     expect(screen.getByText('55')).toBeInTheDocument();
@@ -354,6 +363,7 @@ describe('Dasbor', () => {
           tesaurus: 20,
           glosarium: 30,
           etimologi: 0,
+          kataHariIni: 4,
           kandidatKata: 5,
           bidang: 7,
           bahasa: 9,

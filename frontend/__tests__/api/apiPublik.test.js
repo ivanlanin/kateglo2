@@ -26,6 +26,7 @@ import {
   cariRima,
   ambilContohRima,
   ambilPencarianPopuler,
+  ambilKataHariIni,
   ambilRondeKuisKata,
   submitRekapKuisKata,
   ambilKlasemenKuisKata,
@@ -239,6 +240,24 @@ describe('apiPublik', () => {
 
     expect(klien.get).toHaveBeenCalledWith('/api/publik/pencarian/populer', {
       params: { tanggal: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/) },
+    });
+  });
+
+  it('ambilKataHariIni mengirim tanggal hanya saat valid', async () => {
+    klien.get.mockResolvedValue({ data: { indeks: 'aktif' } });
+
+    await ambilKataHariIni({ tanggal: '2026-03-31' });
+    await ambilKataHariIni({ tanggal: 'invalid' });
+    await ambilKataHariIni();
+
+    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/kamus/kata-hari-ini', {
+      params: { tanggal: '2026-03-31' },
+    });
+    expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/kamus/kata-hari-ini', {
+      params: {},
+    });
+    expect(klien.get).toHaveBeenNthCalledWith(3, '/api/publik/kamus/kata-hari-ini', {
+      params: {},
     });
   });
 
