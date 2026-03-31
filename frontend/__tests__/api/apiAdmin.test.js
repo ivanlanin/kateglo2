@@ -25,6 +25,7 @@ import {
   useStatistikAdmin,
   useDaftarKataHariIniAdmin,
   useDetailKataHariIniAdmin,
+  useAutocompleteEntriKataHariIniAdmin,
   useSimpanKataHariIniAdmin,
   useHapusKataHariIniAdmin,
   useStatistikPencarianAdmin,
@@ -163,6 +164,26 @@ describe('apiAdmin', () => {
     await detailKataHariIni.queryFn();
     expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kata-hari-ini/5');
     expect(useDetailKataHariIniAdmin(null).enabled).toBe(false);
+
+    const autocompleteEntriKataHariIni = useAutocompleteEntriKataHariIniAdmin({ q: '  aktif ', limit: 7 });
+    expect(autocompleteEntriKataHariIni.enabled).toBe(true);
+    await autocompleteEntriKataHariIni.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kata-hari-ini/opsi-entri', {
+      params: {
+        q: 'aktif',
+        limit: 7,
+      },
+    });
+
+    const autocompleteEntriKataHariIniKosong = useAutocompleteEntriKataHariIniAdmin({ q: '   ' });
+    expect(autocompleteEntriKataHariIniKosong.enabled).toBe(false);
+    await autocompleteEntriKataHariIniKosong.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kata-hari-ini/opsi-entri', {
+      params: {
+        q: undefined,
+        limit: 8,
+      },
+    });
 
     const statistikPencarianDefault = useStatistikPencarianAdmin();
     await statistikPencarianDefault.queryFn();

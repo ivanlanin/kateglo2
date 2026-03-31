@@ -195,6 +195,23 @@ export function useDetailKataHariIniAdmin(id) {
   });
 }
 
+export function useAutocompleteEntriKataHariIniAdmin({ q = '', limit = 8 } = {}) {
+  const query = String(q || '').trim();
+  return useQuery({
+    queryKey: ['admin-kata-hari-ini-entri-autocomplete', { q: query, limit }],
+    queryFn: () =>
+      klien
+        .get('/api/redaksi/kata-hari-ini/opsi-entri', {
+          params: {
+            q: query || undefined,
+            limit,
+          },
+        })
+        .then((r) => r.data),
+    enabled: query.length >= 1,
+  });
+}
+
 export function useSimpanKataHariIniAdmin() {
   return useSimpanAdmin({
     path: '/api/redaksi/kata-hari-ini',

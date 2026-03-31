@@ -4,6 +4,7 @@
 
 const express = require('express');
 const { periksaIzin } = require('../../../middleware/authorization');
+const ModelEntri = require('../../../models/leksikon/modelEntri');
 const ModelKataHariIni = require('../../../models/leksikon/modelKataHariIni');
 const { ambilDetailKamus, __private: kataHariIniUtils } = require('../../../services/publik/layananKamusPublik');
 const {
@@ -21,8 +22,16 @@ function normalizeOptionalBodyValue(body, key, fallback = null) {
   return parseTrimmedString(body[key]) || null;
 }
 
-async function resolveEntriKataHariIni(indeks, tanggal) {
-  const indeksAman = parseTrimmedString(indeks);
+async function resolveEntriKataHariIni({ entriId, indeks, tanggal }) {
+  const entriIdAman = Number.parseInt(entriId, 10);
+  let indeksAman = parseTrimmedString(indeks);
+
+  if (Number.isInteger(entriIdAman) && entriIdAman > 0) {
+    const entri = await ModelEntri.ambilDenganId(entriIdAman);
+    if (!entri?.id || !entri?.indeks) return null;
+    indeksAman = entri.indeks;
+  }
+
   if (!indeksAman) return null;
 
   const detail = await ambilDetailKamus(indeksAman);
@@ -30,19 +39,34 @@ async function resolveEntriKataHariIni(indeks, tanggal) {
     return null;
   }
 
-  const kandidatUtama = kataHariIniUtils.ambilMaknaUtama(detail.entri);
-  const entriId = Number(kandidatUtama?.entri?.id) || null;
-  const payload = kataHariIniUtils.bentukPayloadKataHariIni(detail, tanggal, entriId);
+  const kandidatUtama = Number.isInteger(entriIdAman) && entriIdAman > 0
+    ? { entri: detail.entri.find((item) => Number(item?.id) === entriIdAman) || null }
+    : kataHariIniUtils.ambilMaknaUtama(detail.entri);
+  const entriIdFinal = Number(kandidatUtama?.entri?.id) || null;
+  const payload = kataHariIniUtils.bentukPayloadKataHariIni(detail, tanggal, entriIdFinal);
 
-  if (!payload || !entriId) {
+  if (!payload || !entriIdFinal) {
     return null;
   }
 
   return {
-    entriId,
+    entriId: entriIdFinal,
     detail,
   };
 }
+
+router.get('/opsi-entri', periksaIzin('edit_entri'), async (req, res, next) => {
+  try {
+    const q = parseSearchQuery(req.query.q);
+    const limit = Math.min(Math.max(Number(req.query.limit) || 8, 1), 20);
+    if (!q) return res.json({ success: true, data: [] });
+
+    const data = await ModelEntri.cariIndukAdmin(q, { limit });
+    return res.json({ success: true, data });
+  } catch (error) {
+    return next(error);
+  }
+});
 
 router.get('/', periksaIzin('edit_entri'), async (req, res, next) => {
   try {
@@ -86,14 +110,14 @@ router.get('/:id', periksaIzin('edit_entri'), async (req, res, next) => {
 router.post('/', periksaIzin('edit_entri'), async (req, res, next) => {
   try {
     const tanggal = parseTrimmedString(req.body.tanggal);
-    const indeks = parseTrimmedString(req.body.indeks);
+    const entriId = Number.parseInt(req.body.entri_id, 10);
 
     if (!tanggal) return res.status(400).json({ success: false, message: 'Tanggal wajib diisi' });
-    if (!indeks) return res.status(400).json({ success: false, message: 'Indeks wajib diisi' });
+    if (!Number.isInteger(entriId) || entriId <= 0) return res.status(400).json({ success: false, message: 'Entri wajib dipilih' });
 
-    const target = await resolveEntriKataHariIni(indeks, tanggal);
+    const target = await resolveEntriKataHariIni({ entriId, tanggal });
     if (!target) {
-      return res.status(400).json({ success: false, message: 'Indeks tidak ditemukan atau detail kamus belum siap' });
+      return res.status(400).json({ success: false, message: 'Entri tidak ditemukan atau detail kamus belum siap' });
     }
 
     const data = await ModelKataHariIni.simpanByTanggal({
@@ -117,10 +141,13 @@ router.put('/:id', periksaIzin('edit_entri'), async (req, res, next) => {
     }
 
     const tanggal = existing.tanggal;
-    const indeks = parseTrimmedString(req.body.indeks) || existing.indeks;
-    const target = await resolveEntriKataHariIni(indeks, tanggal);
+    const entriId = Number.parseInt(req.body.entri_id, 10);
+    const target = await resolveEntriKataHariIni({
+      entriId: Number.isInteger(entriId) && entriId > 0 ? entriId : existing.entri_id,
+      tanggal,
+    });
     if (!target) {
-      return res.status(400).json({ success: false, message: 'Indeks tidak ditemukan atau detail kamus belum siap' });
+      return res.status(400).json({ success: false, message: 'Entri tidak ditemukan atau detail kamus belum siap' });
     }
 
     const data = await ModelKataHariIni.simpanByTanggal({

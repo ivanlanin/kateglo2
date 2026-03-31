@@ -17,12 +17,14 @@ vi.mock('react-router-dom', async () => {
 
 const mockUseDaftarKataHariIniAdmin = vi.fn();
 const mockUseDetailKataHariIniAdmin = vi.fn();
+const mockUseAutocompleteEntriKataHariIniAdmin = vi.fn();
 const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
 
 vi.mock('../../../../src/api/apiAdmin', () => ({
   useDaftarKataHariIniAdmin: (...args) => mockUseDaftarKataHariIniAdmin(...args),
   useDetailKataHariIniAdmin: (...args) => mockUseDetailKataHariIniAdmin(...args),
+  useAutocompleteEntriKataHariIniAdmin: (...args) => mockUseAutocompleteEntriKataHariIniAdmin(...args),
   useSimpanKataHariIniAdmin: () => ({ mutate: mutateSimpan, isPending: false }),
   useHapusKataHariIniAdmin: () => ({ mutate: mutateHapus, isPending: false }),
 }));
@@ -51,6 +53,10 @@ describe('KataHariIniAdmin', () => {
       },
     });
     mockUseDetailKataHariIniAdmin.mockReturnValue({ isLoading: false, isError: false, data: null });
+    mockUseAutocompleteEntriKataHariIniAdmin.mockReturnValue({
+      data: { data: [{ id: 7, entri: 'aktif', indeks: 'aktif' }] },
+      isLoading: false,
+    });
   });
 
   it('menampilkan daftar, validasi simpan, dan alur sukses/error simpan', () => {
@@ -69,9 +75,10 @@ describe('KataHariIniAdmin', () => {
 
     fireEvent.click(screen.getByText('+ Tambah'));
     fireEvent.click(screen.getByText('Simpan'));
-    expect(screen.getByText('Indeks wajib diisi')).toBeInTheDocument();
+    expect(screen.getByText('Entri wajib diisi')).toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText('Indeks*'), { target: { value: 'aktif' } });
+    fireEvent.change(screen.getByLabelText('Entri*'), { target: { value: 'aktif' } });
+    fireEvent.click(screen.getByRole('button', { name: /aktif/i }));
     fireEvent.click(screen.getByText('Simpan'));
     expect(screen.getByText('Err simpan kata')).toBeInTheDocument();
 
@@ -93,6 +100,7 @@ describe('KataHariIniAdmin', () => {
         data: {
           id: 1,
           tanggal: '2026-03-31',
+          entri_id: 7,
           indeks: 'aktif',
           entri: 'aktif',
           sumber: 'admin',
@@ -107,7 +115,7 @@ describe('KataHariIniAdmin', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByLabelText('Indeks*')).toHaveValue('aktif');
+    expect(screen.getByLabelText('Entri*')).toHaveValue('aktif');
 
     global.confirm = vi.fn(() => false);
     fireEvent.click(screen.getByText('Hapus'));

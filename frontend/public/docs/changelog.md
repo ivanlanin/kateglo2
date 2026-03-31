@@ -3,6 +3,7 @@
 ## 2026-03-31 Selasa
 
 - Menambahkan pelafalan kata di halaman detail kamus dengan tombol audio dan notasi IPA
+- Menambahkan Kata Hari Ini (KTI)
 
 ## 2026-03-30 Senin
 

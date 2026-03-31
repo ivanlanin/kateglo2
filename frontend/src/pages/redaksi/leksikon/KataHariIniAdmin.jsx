@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import {
   useDaftarKataHariIniAdmin,
   useDetailKataHariIniAdmin,
+  useAutocompleteEntriKataHariIniAdmin,
   useSimpanKataHariIniAdmin,
   useHapusKataHariIniAdmin,
 } from '../../../api/apiAdmin';
@@ -38,6 +39,8 @@ function tanggalHariIni() {
 
 const nilaiAwal = {
   tanggal: tanggalHariIni(),
+  entri_id: '',
+  entri_teks: '',
   indeks: '',
   sumber: 'admin',
   catatan: '',
@@ -106,6 +109,10 @@ function KataHariIniAdmin() {
   const panel = useFormPanel(nilaiAwal);
   const simpan = useSimpanKataHariIniAdmin();
   const hapus = useHapusKataHariIniAdmin();
+  const [inputEntri, setInputEntri] = useState('');
+  const [tampilSaranEntri, setTampilSaranEntri] = useState(false);
+  const { data: respSaranEntri, isLoading: isSaranEntriLoading } = useAutocompleteEntriKataHariIniAdmin({ q: inputEntri });
+  const daftarSaranEntri = respSaranEntri?.data || [];
   const daftar = resp?.data || [];
   const total = resp?.total || 0;
 
@@ -124,10 +131,28 @@ function KataHariIniAdmin() {
     if (idEditTerbuka.current === detail.id) return;
     panel.bukaUntukSunting({
       ...detail,
+      entri_teks: detail.entri || '',
       catatan: detail.catatan || '',
     });
     idEditTerbuka.current = detail.id;
   }, [detailResp, idDariPath, isDetailError, isDetailLoading, panel]);
+
+  useEffect(() => {
+    if (!panel.buka) {
+      setInputEntri('');
+      setTampilSaranEntri(false);
+      return;
+    }
+
+    if (panel.data.entri_teks) {
+      setInputEntri(panel.data.entri_teks);
+      return;
+    }
+
+    if (!panel.data.entri_id) {
+      setInputEntri('');
+    }
+  }, [panel.buka, panel.data.entri_id, panel.data.entri_teks]);
 
   useEffect(() => {
     if (idDariPath) return;
@@ -181,7 +206,7 @@ function KataHariIniAdmin() {
 
     const pesanValidasi = validateRequiredFields(panel.data, [
       { name: 'tanggal', label: 'Tanggal' },
-      { name: 'indeks', label: 'Indeks' },
+      { name: 'entri_id', label: 'Entri' },
     ]);
     if (pesanValidasi) {
       setPesan({ error: pesanValidasi, sukses: '' });
@@ -197,6 +222,27 @@ function KataHariIniAdmin() {
         setPesan({ error: getApiErrorMessage(error, 'Gagal menyimpan arsip Kata Hari Ini.'), sukses: '' });
       },
     });
+  };
+
+  const pilihEntri = (item) => {
+    panel.ubahField('entri_id', item.id);
+    panel.ubahField('entri_teks', item.entri);
+    panel.ubahField('indeks', item.indeks || '');
+    setInputEntri(item.entri);
+    setTampilSaranEntri(false);
+  };
+
+  const handleUbahInputEntri = (value) => {
+    setInputEntri(value);
+    setTampilSaranEntri(true);
+    const trimmed = String(value).trim();
+    const entriAktif = panel.data.entri_teks || '';
+
+    if (!trimmed || (entriAktif && trimmed !== entriAktif)) {
+      panel.ubahField('entri_id', '');
+      panel.ubahField('entri_teks', '');
+      panel.ubahField('indeks', '');
+    }
   };
 
   const handleHapus = () => {
@@ -257,14 +303,44 @@ function KataHariIniAdmin() {
           disabled={!panel.modeTambah}
           required
         />
-        <InputField
-          label="Indeks"
-          name="indeks"
-          value={panel.data.indeks}
-          onChange={panel.ubahField}
-          placeholder="mis. aktif"
-          required
-        />
+        <div className="form-admin-group relative">
+          <label htmlFor="field-entri-autocomplete" className="form-admin-label">Entri<span className="text-red-500 ml-0.5">*</span></label>
+          <input
+            id="field-entri-autocomplete"
+            type="text"
+            value={inputEntri}
+            onChange={(e) => handleUbahInputEntri(e.target.value)}
+            onFocus={() => setTampilSaranEntri(true)}
+            onBlur={() => setTimeout(() => setTampilSaranEntri(false), 120)}
+            placeholder="Cari entri berdasarkan kata/indeks"
+            className="form-admin-input"
+          />
+          {panel.data.indeks ? <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Indeks terpilih: {panel.data.indeks}</p> : null}
+
+          {tampilSaranEntri && (
+            <div className="absolute z-20 mt-1 max-h-56 w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-dark-bg-elevated">
+              {isSaranEntriLoading ? (
+                <p className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">Mencari entri …</p>
+              ) : daftarSaranEntri.length === 0 ? (
+                <p className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">Tidak ada entri cocok</p>
+              ) : (
+                daftarSaranEntri.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onMouseDown={(event) => event.preventDefault()}
+                    onClick={() => pilihEntri(item)}
+                    className="block w-full px-3 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-dark-bg"
+                  >
+                    <span className="font-medium text-gray-800 dark:text-gray-100">{item.entri}</span>
+                    <span className="ml-2 text-gray-500 dark:text-gray-400">({item.indeks})</span>
+                    <span className="ml-2 text-gray-400 dark:text-gray-500">id: {item.id}</span>
+                  </button>
+                ))
+              )}
+            </div>
+          )}
+        </div>
         <SelectField label="Sumber" name="sumber" value={panel.data.sumber} onChange={panel.ubahField} options={opsiSumber} />
         <TextareaField label="Catatan" name="catatan" value={panel.data.catatan} onChange={panel.ubahField} rows={3} />
         <FormFooter
