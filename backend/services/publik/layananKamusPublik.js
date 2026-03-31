@@ -161,10 +161,14 @@ async function hapusCacheKataHariIni(tanggal) {
 }
 
 function hashTanggal(value = '') {
-  return Array.from(String(value || '')).reduce(
+  let h = Array.from(String(value || '')).reduce(
     (acc, karakter) => ((acc * 33) + karakter.charCodeAt(0)) >>> 0,
     5381
   );
+  h = Math.imul(h ^ (h >>> 16), 0x45d9f3b);
+  h = Math.imul(h ^ (h >>> 13), 0x45d9f3b);
+  h = (h ^ (h >>> 16)) >>> 0;
+  return h;
 }
 
 function normalisasiCuplikan(value = '', maxLength = 180) {
@@ -293,43 +297,59 @@ function bentukPayloadKataHariIni(detail = null, tanggal = null, preferredEntriI
   };
 }
 
-async function pilihKandidatKataHariIniOtomatis(tanggalReferensi) {
-  const strategi = [true, false];
+async function pilihKandidatRingan(tanggalReferensi) {
+  const total = await ModelEntri.hitungKandidatKataHariIni({ requireEtimologi: true });
+  if (total <= 0) {
+    return null;
+  }
 
-  for (const requireEtimologi of strategi) {
-    const total = await ModelEntri.hitungKandidatKataHariIni({ requireEtimologi });
-    if (total <= 0) {
+  const offsetAwal = hashTanggal(tanggalReferensi) % total;
+  const kandidat = await ModelEntri.ambilKandidatKataHariIni({ offset: offsetAwal, requireEtimologi: true });
+  if (!kandidat?.indeks) {
+    return null;
+  }
+
+  const entriId = Number(kandidat.entri_id) || null;
+  if (!entriId) {
+    return null;
+  }
+
+  return { entriId, indeks: kandidat.indeks };
+}
+
+async function pilihKandidatKataHariIniOtomatis(tanggalReferensi) {
+  const total = await ModelEntri.hitungKandidatKataHariIni({ requireEtimologi: true });
+  if (total <= 0) {
+    return null;
+  }
+
+  const offsetAwal = hashTanggal(tanggalReferensi) % total;
+  const batasPercobaan = Math.min(total, 7);
+
+  for (let langkah = 0; langkah < batasPercobaan; langkah += 1) {
+    const offset = (offsetAwal + langkah) % total;
+    const kandidat = await ModelEntri.ambilKandidatKataHariIni({ offset, requireEtimologi: true });
+    if (!kandidat?.indeks) {
       continue;
     }
 
-    const offsetAwal = hashTanggal(tanggalReferensi) % total;
-    const batasPercobaan = Math.min(total, 7);
-
-    for (let langkah = 0; langkah < batasPercobaan; langkah += 1) {
-      const offset = (offsetAwal + langkah) % total;
-      const kandidat = await ModelEntri.ambilKandidatKataHariIni({ offset, requireEtimologi });
-      if (!kandidat?.indeks) {
-        continue;
-      }
-
-      const detail = await ambilDetailKamus(kandidat.indeks);
-      if (!detail || !Array.isArray(detail.entri) || detail.entri.length === 0) {
-        continue;
-      }
-
-      const kandidatUtama = ambilMaknaUtama(detail.entri);
-      const entriId = Number(kandidatUtama?.entri?.id) || null;
-      const payload = bentukPayloadKataHariIni(detail, tanggalReferensi, entriId);
-
-      if (!payload || !entriId) {
-        continue;
-      }
-
-      return {
-        entriId,
-        payload,
-      };
+    const detail = await ambilDetailKamus(kandidat.indeks);
+    if (!detail || !Array.isArray(detail.entri) || detail.entri.length === 0) {
+      continue;
     }
+
+    const kandidatUtama = ambilMaknaUtama(detail.entri);
+    const entriId = Number(kandidatUtama?.entri?.id) || null;
+    const payload = bentukPayloadKataHariIni(detail, tanggalReferensi, entriId);
+
+    if (!payload || !entriId) {
+      continue;
+    }
+
+    return {
+      entriId,
+      payload,
+    };
   }
 
   return null;
@@ -599,30 +619,21 @@ async function generateKataHariIni({ tanggal = null } = {}) {
 
   const tersimpan = await ModelKataHariIni.ambilByTanggal(tanggalReferensi);
   if (tersimpan) {
-    const detailTersimpan = await ambilDetailKamus(tersimpan.indeks);
-    const payloadTersimpan = bentukPayloadKataHariIni(detailTersimpan, tanggalReferensi, tersimpan.entri_id);
-    if (payloadTersimpan) {
-      const cacheKey = buatCacheKeyKataHariIni(tanggalReferensi);
-      await setJson(cacheKey, payloadTersimpan, getTtlSeconds());
-    }
-    return payloadTersimpan || null;
+    return { tanggal: tanggalReferensi, indeks: tersimpan.indeks };
   }
 
-  const hasilOtomatis = await pilihKandidatKataHariIniOtomatis(tanggalReferensi);
-  if (!hasilOtomatis) {
+  const kandidat = await pilihKandidatRingan(tanggalReferensi);
+  if (!kandidat) {
     return null;
   }
 
   await ModelKataHariIni.simpanByTanggal({
     tanggal: tanggalReferensi,
-    entriId: hasilOtomatis.entriId,
+    entriId: kandidat.entriId,
     sumber: 'auto',
   });
 
-  const payloadFinal = hasilOtomatis.payload;
-  const cacheKey = buatCacheKeyKataHariIni(tanggalReferensi);
-  await setJson(cacheKey, payloadFinal, getTtlSeconds());
-  return payloadFinal;
+  return { tanggal: tanggalReferensi, indeks: kandidat.indeks };
 }
 
 module.exports = {

@@ -666,32 +666,10 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     expect(ModelEntri.hitungKandidatKataHariIni).not.toHaveBeenCalled();
   });
 
-  it('generateKataHariIni memilih kandidat deterministik dan memakai detail kamus yang sudah ada', async () => {
+  it('generateKataHariIni memilih kandidat deterministik dan menyimpan ke tabel', async () => {
     ModelEntri.hitungKandidatKataHariIni.mockResolvedValueOnce(5);
-    ModelEntri.ambilKandidatKataHariIni.mockResolvedValueOnce({ indeks: 'aktif' });
+    ModelEntri.ambilKandidatKataHariIni.mockResolvedValueOnce({ indeks: 'aktif', entri_id: 1 });
     ModelKataHariIni.simpanByTanggal.mockResolvedValue({ id: 1, tanggal: '2026-03-31', entri_id: 1, indeks: 'aktif', entri: 'aktif', sumber: 'auto' });
-    ModelEntri.ambilEntriPerIndeks.mockResolvedValue([
-      {
-        id: 1,
-        entri: 'aktif',
-        indeks: 'aktif',
-        homonim: null,
-        jenis: 'dasar',
-        pemenggalan: 'ak.tif',
-        lafal: 'aktif',
-        varian: null,
-        jenis_rujuk: null,
-        entri_rujuk: null,
-      },
-    ]);
-    ModelEntri.ambilMakna.mockResolvedValue([{ id: 10, makna: 'giat', kelas_kata: 'a' }]);
-    ModelEntri.ambilContoh.mockResolvedValue([{ id: 100, makna_id: 10, contoh: 'Ia sangat aktif.' }]);
-    ModelEntri.ambilSubentri.mockResolvedValue([]);
-    ModelEntri.ambilBentukTidakBakuByRujukId.mockResolvedValue([]);
-    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
-    ModelEtimologi.ambilAktifPublikByEntriId.mockResolvedValue([{ bahasa: 'Arab', kata_asal: 'faal' }]);
-    ModelTesaurus.ambilDetail.mockResolvedValue(null);
-    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
 
     const result = await generateKataHariIni({ tanggal: '2026-03-31' });
 
@@ -705,55 +683,20 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
       entriId: 1,
       sumber: 'auto',
     });
-    expect(result).toMatchObject({
+    expect(result).toEqual({
       tanggal: '2026-03-31',
       indeks: 'aktif',
-      entri: 'aktif',
-      makna: 'giat',
-      contoh: 'Ia sangat aktif.',
-      daftar_makna: [{ makna: 'giat', contoh: 'Ia sangat aktif.' }],
     });
-    expect(setJson).toHaveBeenCalledWith('kamus:kata-hari-ini:2026-03-31', expect.any(Object), 900);
   });
 
-  it('generateKataHariIni fallback ke kandidat tanpa etimologi jika kandidat lengkap kosong', async () => {
-    ModelEntri.hitungKandidatKataHariIni
-      .mockResolvedValueOnce(0)
-      .mockResolvedValueOnce(2);
-    ModelEntri.ambilKandidatKataHariIni.mockResolvedValueOnce({ indeks: 'uji' });
-    ModelKataHariIni.simpanByTanggal.mockResolvedValue({ id: 2, tanggal: '2026-04-01', entri_id: 2, indeks: 'uji', entri: 'uji', sumber: 'auto' });
-    ModelEntri.ambilEntriPerIndeks.mockResolvedValue([
-      {
-        id: 2,
-        entri: 'uji',
-        indeks: 'uji',
-        homonim: null,
-        jenis: 'dasar',
-        pemenggalan: null,
-        lafal: null,
-        varian: null,
-        jenis_rujuk: null,
-        entri_rujuk: null,
-      },
-    ]);
-    ModelEntri.ambilMakna.mockResolvedValue([{ id: 20, makna: 'percobaan', kelas_kata: 'n' }]);
-    ModelEntri.ambilContoh.mockResolvedValue([{ id: 200, makna_id: 20, contoh: 'Ini hanya uji.' }]);
-    ModelEntri.ambilSubentri.mockResolvedValue([]);
-    ModelEntri.ambilBentukTidakBakuByRujukId.mockResolvedValue([]);
-    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
-    ModelEtimologi.ambilAktifPublikByEntriId.mockResolvedValue([]);
-    ModelTesaurus.ambilDetail.mockResolvedValue(null);
-    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+  it('generateKataHariIni mengembalikan null jika tidak ada kandidat dengan etimologi', async () => {
+    ModelEntri.hitungKandidatKataHariIni.mockResolvedValueOnce(0);
 
     const result = await generateKataHariIni({ tanggal: '2026-04-01' });
 
-    expect(ModelEntri.hitungKandidatKataHariIni).toHaveBeenNthCalledWith(1, { requireEtimologi: true });
-    expect(ModelEntri.hitungKandidatKataHariIni).toHaveBeenNthCalledWith(2, { requireEtimologi: false });
-    expect(ModelEntri.ambilKandidatKataHariIni).toHaveBeenCalledWith({
-      offset: __private.hashTanggal('2026-04-01') % 2,
-      requireEtimologi: false,
-    });
-    expect(result).toMatchObject({ indeks: 'uji', makna: 'percobaan' });
+    expect(ModelEntri.hitungKandidatKataHariIni).toHaveBeenCalledWith({ requireEtimologi: true });
+    expect(ModelEntri.ambilKandidatKataHariIni).not.toHaveBeenCalled();
+    expect(result).toBeNull();
   });
 
   it('helper privat pilihKandidatKataHariIniOtomatis mengembalikan entriId dan payload', async () => {
@@ -794,13 +737,12 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
   });
 
   it('generateKataHariIni mengembalikan null jika tidak ada kandidat sama sekali', async () => {
-    ModelEntri.hitungKandidatKataHariIni
-      .mockResolvedValueOnce(0)
-      .mockResolvedValueOnce(0);
+    ModelEntri.hitungKandidatKataHariIni.mockResolvedValueOnce(0);
 
     const result = await generateKataHariIni({ tanggal: '2026-04-02' });
 
     expect(result).toBeNull();
+    expect(ModelEntri.hitungKandidatKataHariIni).toHaveBeenCalledTimes(1);
     expect(ModelEntri.ambilKandidatKataHariIni).not.toHaveBeenCalled();
   });
 

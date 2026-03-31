@@ -230,10 +230,11 @@ class ModelEntri {
     const offsetAman = Math.max(Number(offset) || 0, 0);
     const whereClause = buildKataHariIniCandidateWhereClause({ requireEtimologi });
     const result = await db.query(
-      `SELECT kandidat.indeks
+      `SELECT kandidat.indeks, kandidat.entri_id
        FROM (
          SELECT LOWER(TRIM(e.indeks)) AS indeks_norm,
-                MIN(TRIM(e.indeks)) AS indeks
+                MIN(TRIM(e.indeks)) AS indeks,
+                MIN(e.id) AS entri_id
          FROM entri e
          WHERE ${whereClause}
          GROUP BY LOWER(TRIM(e.indeks))
