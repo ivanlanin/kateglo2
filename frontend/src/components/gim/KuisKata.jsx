@@ -2,15 +2,17 @@
  * @fileoverview Komponen Kuis Kata untuk beranda dan halaman gim Kateglo.
  *
  * Lima domain per ronde: kamus, tesaurus, glosarium, makna, rima.
- * Skor hanya di memori sesi (Fase 1 — tanpa login).
+ * Skor awal pengguna login mengikuti rekap kumulatif hari ini.
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ambilRondeKuisKata, submitRekapKuisKata } from '../../api/apiPublik';
+import { ambilRondeKuisKata, ambilStatusKuisKata, submitRekapKuisKata } from '../../api/apiPublik';
 import { useAuthOptional } from '../../context/authContext';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
+
+const guestStatusStorageKey = 'kateglo-kuis-kata-guest-status';
 
 const labelMode = {
   kamus: 'Kamus',
@@ -109,6 +111,66 @@ function kelasSkorHeader(skor) {
   if (skor <= 0) return 'gim-header-skor-merah';
   if (skor >= 50) return 'gim-header-skor-hijau';
   return 'gim-header-skor-hijau-muda';
+}
+
+function tanggalJakartaHariIni() {
+  const formatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Jakarta',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+
+  const parts = formatter.formatToParts(new Date());
+  const year = parts.find((part) => part.type === 'year')?.value || '0000';
+  const month = parts.find((part) => part.type === 'month')?.value || '01';
+  const day = parts.find((part) => part.type === 'day')?.value || '01';
+  return `${year}-${month}-${day}`;
+}
+
+function bacaStatusTamuHariIni() {
+  const storage = globalThis?.localStorage;
+  if (!storage) {
+    return null;
+  }
+
+  try {
+    const raw = storage.getItem(guestStatusStorageKey);
+    if (!raw) {
+      return null;
+    }
+
+    const parsed = JSON.parse(raw);
+    if (!parsed || parsed.tanggal !== tanggalJakartaHariIni()) {
+      return null;
+    }
+
+    return {
+      tanggal: parsed.tanggal,
+      skor_total: Number(parsed.skor_total) || 0,
+      jumlah_main: Number(parsed.jumlah_main) || 0,
+    };
+  } catch (_error) {
+    return null;
+  }
+}
+
+function simpanStatusTamuHariIni({ tambahSkor = 0, tambahMain = 0 } = {}) {
+  const tanggal = tanggalJakartaHariIni();
+  const statusSebelumnya = bacaStatusTamuHariIni();
+  const statusBaru = {
+    tanggal,
+    skor_total: (Number(statusSebelumnya?.skor_total) || 0) + Math.max(Number(tambahSkor) || 0, 0),
+    jumlah_main: (Number(statusSebelumnya?.jumlah_main) || 0) + Math.max(Number(tambahMain) || 0, 0),
+  };
+
+  try {
+    globalThis?.localStorage?.setItem(guestStatusStorageKey, JSON.stringify(statusBaru));
+  } catch (_error) {
+    return statusBaru;
+  }
+
+  return statusBaru;
 }
 
 function buatPathRingkasan(soal) {
@@ -245,20 +307,32 @@ function ItemRingkasan({ soal, pilihanUser }) {
 function KuisKata() {
   const auth = useAuthOptional();
   const isAuthenticated = Boolean(auth?.isAuthenticated);
+  const hasToken = Boolean(auth?.token);
   const queryClient = useQueryClient();
   const rondeRef = useRef([]);
   const skorAwalRef = useRef(true);
   const rondeTerkirimRef = useRef(null);
+  const statusQueryKey = ['kuis-kata-status', auth?.token || 'guest'];
 
   const [rondeKey, setRondeKey] = useState(0);
   const [riwayatSoal, setRiwayatSoal] = useState([]);
-  const [totalSkor, setTotalSkor] = useState(0);
+  const [skorSesi, setSkorSesi] = useState(0);
   const [animasiSkor, setAnimasiSkor] = useState(false);
   const [indeks, setIndeks] = useState(0);
   const [jawabanUser, setJawabanUser] = useState([]);
   const [fase, setFase] = useState('soal'); // 'soal' | 'ringkasan'
   const [rondeMulaiAt, setRondeMulaiAt] = useState(Date.now());
   const [statusRekap, setStatusRekap] = useState(isAuthenticated ? 'idle' : 'guest');
+  const [statusTamu, setStatusTamu] = useState(() => bacaStatusTamuHariIni());
+  const [rondeDimulai, setRondeDimulai] = useState(false);
+
+  const statusKuis = useQuery({
+    queryKey: statusQueryKey,
+    queryFn: ambilStatusKuisKata,
+    enabled: hasToken,
+    staleTime: 30 * 1000,
+    retry: false,
+  });
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['kuis-kata', rondeKey, riwayatSoal.map((item) => `${item.mode}:${item.kunciSoal}`).join('|')],
@@ -268,13 +342,24 @@ function KuisKata() {
 
   const ronde = data?.ronde ?? [];
   const soalSaatIni = ronde[indeks];
+  const rekapHariIni = hasToken ? (statusKuis.data?.data ?? null) : statusTamu;
+  const jumlahMainPersisten = Number(rekapHariIni?.jumlah_main) || 0;
+  const jumlahMainHariIni = jumlahMainPersisten + (hasToken && rondeDimulai ? 1 : 0);
+  const skorPersisten = Number(rekapHariIni?.skor_total) || 0;
+  const totalSkor = skorPersisten + skorSesi;
 
   const kirimRekap = useMutation({
     mutationFn: (payload) => submitRekapKuisKata(payload),
     onMutate: () => {
       setStatusRekap('saving');
     },
-    onSuccess: () => {
+    onSuccess: (response, payload) => {
+      const skorRonde = Math.max(Number(payload?.jumlahBenar) || 0, 0) * 10;
+      queryClient.setQueryData(statusQueryKey, {
+        success: true,
+        data: response?.data ?? null,
+      });
+      setSkorSesi((prev) => Math.max(prev - skorRonde, 0));
       setStatusRekap('saved');
     },
     onError: () => {
@@ -290,7 +375,14 @@ function KuisKata() {
     rondeTerkirimRef.current = null;
     setRondeMulaiAt(Date.now());
     setStatusRekap(isAuthenticated ? 'idle' : 'guest');
+    setRondeDimulai(false);
   }, [isAuthenticated, rondeKey, ronde.length]);
+
+  useEffect(() => {
+    if (!hasToken) {
+      setStatusTamu(bacaStatusTamuHariIni());
+    }
+  }, [hasToken]);
 
   useEffect(() => {
     if (skorAwalRef.current) {
@@ -317,24 +409,38 @@ function KuisKata() {
 
   const sudahJawab = jawabanUser[indeks] !== undefined && jawabanUser[indeks] !== null;
 
+  const handleMulaiRonde = useCallback(() => {
+    if (rondeDimulai) {
+      return;
+    }
+
+    setRondeDimulai(true);
+
+    if (!hasToken) {
+      setStatusTamu(simpanStatusTamuHariIni({ tambahMain: 1 }));
+    }
+  }, [hasToken, rondeDimulai]);
+
   const handleLewati = useCallback(() => {
+    handleMulaiRonde();
     setJawabanUser((prev) => {
       const baru = [...prev];
       baru[indeks] = -1;
       return baru;
     });
-  }, [indeks]);
+  }, [handleMulaiRonde, indeks]);
 
   const handlePilih = useCallback((pilihanIndeks) => {
+    handleMulaiRonde();
     if (soalSaatIni && pilihanIndeks === soalSaatIni.jawaban) {
-      setTotalSkor((prev) => prev + 10);
+      setSkorSesi((prev) => prev + 10);
     }
     setJawabanUser((prev) => {
       const baru = [...prev];
       baru[indeks] = pilihanIndeks;
       return baru;
     });
-  }, [indeks, soalSaatIni]);
+  }, [handleMulaiRonde, indeks, soalSaatIni]);
 
   const handleRondeBaru = useCallback(() => {
     queryClient.removeQueries({ queryKey: ['kuis-kata', rondeKey] });
@@ -368,12 +474,21 @@ function KuisKata() {
       return;
     }
 
+    if (rondeTerkirimRef.current === rondeKey) {
+      return;
+    }
+
+    const skorRonde = jumlahBenar * 10;
+
     if (!isAuthenticated) {
+      rondeTerkirimRef.current = rondeKey;
+      setStatusTamu(simpanStatusTamuHariIni({ tambahSkor: skorRonde }));
+      setSkorSesi((prev) => Math.max(prev - skorRonde, 0));
       setStatusRekap('guest');
       return;
     }
 
-    if (rondeTerkirimRef.current === rondeKey || kirimRekap.isPending) {
+    if (kirimRekap.isPending) {
       return;
     }
 
@@ -435,6 +550,7 @@ function KuisKata() {
   }
 
   if (!soalSaatIni) return null;
+  const statusHeader = `${totalSkor}/${jumlahMainHariIni}x`;
 
   return (
     <div className="gim-kuis-kata">
@@ -458,7 +574,7 @@ function KuisKata() {
             return <span key={`${soal.mode}-${i}`} className={kelasBullet} aria-hidden="true" />;
           })}
         </div>
-        <span className={`gim-header-skor ${kelasSkorHeader(totalSkor)}${animasiSkor ? ' gim-header-skor-animasi' : ''}`}>{totalSkor}</span>
+        <span className={`gim-header-skor ${kelasSkorHeader(totalSkor)}${animasiSkor ? ' gim-header-skor-animasi' : ''}`}>{statusHeader}</span>
       </div>
 
       <p className="gim-soal">
@@ -519,6 +635,10 @@ export const __private = {
   teksPilihan,
   kelasSkorAkhir,
   kelasSkorHeader,
+  tanggalJakartaHariIni,
+  bacaStatusTamuHariIni,
+  simpanStatusTamuHariIni,
+  guestStatusStorageKey,
   buatPathRingkasan,
   TautanRingkasan,
   PertanyaanRingkasan,

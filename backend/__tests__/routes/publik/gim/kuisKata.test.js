@@ -12,6 +12,11 @@ jest.mock('../../../../middleware/auth', () => ({
     if (pid !== undefined) req.user = { pid };
     next();
   },
+  authenticateOptional: (req, _res, next) => {
+    const pid = req.headers['x-user-pid'];
+    if (pid !== undefined) req.user = { pid };
+    next();
+  },
 }));
 
 jest.mock('../../../../models/gim/modelKuisKata', () => ({
@@ -40,6 +45,7 @@ jest.mock('../../../../models/gim/modelKuisKata', () => ({
     if (Number.isNaN(parsed)) return fallback;
     return Math.min(Math.max(parsed, 0), 86400);
   }),
+  ambilSkorPenggunaHarian: jest.fn(),
   ambilKlasemenHarian: jest.fn(),
   simpanRekapHarian: jest.fn(),
 }));
@@ -60,6 +66,16 @@ function createApp() {
 describe('routes/publik/gim/kuisKata', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    ModelKuisKata.ambilSkorPenggunaHarian.mockResolvedValue({
+      id: 1,
+      pengguna_id: 9,
+      tanggal: '2026-03-15',
+      jumlah_benar: 4,
+      jumlah_pertanyaan: 5,
+      durasi_detik: 17,
+      jumlah_main: 1,
+      skor_total: 40,
+    });
     ModelKuisKata.ambilKlasemenHarian.mockResolvedValue([{ pengguna_id: 9, nama: 'A', skor_total: 40 }]);
     ModelKuisKata.simpanRekapHarian.mockResolvedValue({
       id: 1,
@@ -163,6 +179,45 @@ describe('routes/publik/gim/kuisKata', () => {
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({ error: 'db rusak' });
+  });
+
+  it('GET /status mengembalikan null untuk tamu dan rekap untuk pengguna login', async () => {
+    let response = await request(createApp()).get('/api/publik/gim/kuis-kata/status');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ success: true, data: null });
+    expect(ModelKuisKata.ambilSkorPenggunaHarian).not.toHaveBeenCalled();
+
+    response = await request(createApp())
+      .get('/api/publik/gim/kuis-kata/status')
+      .set('x-user-pid', '9');
+
+    expect(response.status).toBe(200);
+    expect(ModelKuisKata.ambilSkorPenggunaHarian).toHaveBeenCalledWith({ penggunaId: 9 });
+    expect(response.body).toEqual({
+      success: true,
+      data: {
+        id: 1,
+        pengguna_id: 9,
+        tanggal: '2026-03-15',
+        jumlah_benar: 4,
+        jumlah_pertanyaan: 5,
+        durasi_detik: 17,
+        jumlah_main: 1,
+        skor_total: 40,
+      },
+    });
+  });
+
+  it('GET /status meneruskan error ke middleware', async () => {
+    ModelKuisKata.ambilSkorPenggunaHarian.mockRejectedValueOnce(new Error('status gagal'));
+
+    const response = await request(createApp())
+      .get('/api/publik/gim/kuis-kata/status')
+      .set('x-user-pid', '9');
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('status gagal');
   });
 
   it('GET /klasemen mengembalikan klasemen harian', async () => {

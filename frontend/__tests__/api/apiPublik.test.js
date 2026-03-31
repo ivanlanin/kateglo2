@@ -28,6 +28,7 @@ import {
   ambilPencarianPopuler,
   ambilKataHariIni,
   ambilRondeKuisKata,
+  ambilStatusKuisKata,
   submitRekapKuisKata,
   ambilKlasemenKuisKata,
   ambilPuzzleSusunKata,
@@ -273,6 +274,14 @@ describe('apiPublik', () => {
     expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/gim/kuis-kata/ronde', {
       params: { riwayat: JSON.stringify([{ mode: 'kamus', kunciSoal: 'kata' }]) },
     });
+  });
+
+  it('ambilStatusKuisKata memanggil endpoint status harian', async () => {
+    klien.get.mockResolvedValue({ data: { success: true, data: null } });
+
+    await ambilStatusKuisKata();
+
+    expect(klien.get).toHaveBeenCalledWith('/api/publik/gim/kuis-kata/status');
   });
 
   it('submitRekapKuisKata dan ambilKlasemenKuisKata menormalkan payload kuis kata', async () => {

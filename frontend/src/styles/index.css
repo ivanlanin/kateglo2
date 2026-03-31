@@ -971,7 +971,7 @@ code {
   }
 
   .gim-header-skor {
-    @apply justify-self-end whitespace-nowrap text-xs font-semibold uppercase tracking-wide text-green-600 inline-block origin-center;
+    @apply justify-self-end whitespace-nowrap text-xs font-semibold normal-case tracking-wide text-green-600 inline-block origin-center;
   }
 
   .dark .gim-header-skor {

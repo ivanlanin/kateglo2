@@ -208,6 +208,11 @@ export async function ambilRondeKuisKata({ riwayat = [] } = {}) {
   return response.data;
 }
 
+export async function ambilStatusKuisKata() {
+  const response = await klien.get('/api/publik/gim/kuis-kata/status');
+  return response.data;
+}
+
 export async function submitRekapKuisKata({
   jumlahBenar = 0,
   jumlahPertanyaan = 5,

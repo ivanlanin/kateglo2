@@ -3,10 +3,12 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import KuisKata, { gabungRiwayat, __private } from '../../../src/components/gim/KuisKata';
 
 const mockRemoveQueries = vi.fn();
+const mockSetQueryData = vi.fn();
 const mockUseQuery = vi.fn();
 const mockMutate = vi.fn();
-const mockAuthState = { isAuthenticated: false };
+const mockAuthState = { isAuthenticated: false, token: '' };
 const mockMutationMode = { current: 'idle' };
+const mockAmbilStatusKuisKata = vi.fn();
 
 vi.mock('@tanstack/react-query', () => ({
   useQuery: (...args) => mockUseQuery(...args),
@@ -33,11 +35,12 @@ vi.mock('@tanstack/react-query', () => ({
     },
     isPending: mockMutationMode.current === 'pending',
   }),
-  useQueryClient: () => ({ removeQueries: mockRemoveQueries }),
+  useQueryClient: () => ({ removeQueries: mockRemoveQueries, setQueryData: mockSetQueryData }),
 }));
 
 vi.mock('../../../src/api/apiPublik', () => ({
   ambilRondeKuisKata: vi.fn(),
+  ambilStatusKuisKata: (...args) => mockAmbilStatusKuisKata(...args),
   submitRekapKuisKata: vi.fn(),
 }));
 
@@ -70,14 +73,41 @@ const rondeMock = [
 describe('KuisKata', () => {
   beforeEach(() => {
     vi.useFakeTimers();
+    const storageState = {};
+    globalThis.localStorage.getItem.mockImplementation((key) => (
+      Object.prototype.hasOwnProperty.call(storageState, key) ? storageState[key] : null
+    ));
+    globalThis.localStorage.setItem.mockImplementation((key, value) => {
+      storageState[key] = String(value);
+    });
+    globalThis.localStorage.removeItem.mockImplementation((key) => {
+      delete storageState[key];
+    });
+    globalThis.localStorage.clear.mockImplementation(() => {
+      Object.keys(storageState).forEach((key) => {
+        delete storageState[key];
+      });
+    });
+    globalThis.localStorage.clear();
     mockRemoveQueries.mockReset();
+    mockSetQueryData.mockReset();
     mockUseQuery.mockReset();
     mockMutate.mockReset();
+    mockAmbilStatusKuisKata.mockReset();
     mockAuthState.isAuthenticated = false;
+    mockAuthState.token = '';
     mockMutationMode.current = 'idle';
     mockUseQuery.mockImplementation((options) => {
+      const queryKey = Array.isArray(options?.queryKey) ? options.queryKey[0] : null;
       if (options?.queryFn) {
         options.queryFn();
+      }
+      if (queryKey === 'kuis-kata-status') {
+        return {
+          data: { success: true, data: null },
+          isLoading: false,
+          isError: false,
+        };
       }
       return {
         data: { ronde: rondeMock },
@@ -113,11 +143,24 @@ describe('KuisKata', () => {
     expect(__private.kelasSkorHeader(0)).toBe('gim-header-skor-merah');
     expect(__private.kelasSkorHeader(50)).toBe('gim-header-skor-hijau');
     expect(__private.kelasSkorHeader(10)).toBe('gim-header-skor-hijau-muda');
+    expect(__private.tanggalJakartaHariIni()).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     expect(__private.buatPathRingkasan({ mode: 'glosarium', soal: 'loan word' })).toBe('/glosarium/detail/loan%20word');
     expect(__private.buatPathRingkasan({ mode: 'tesaurus', soal: 'kata' })).toBe('/tesaurus/cari/kata');
     expect(__private.buatPathRingkasan({ mode: 'makna', soal: 'arti' })).toBe('/makna/cari/arti');
     expect(__private.buatPathRingkasan({ mode: 'rima', soal: 'nada' })).toBe('/rima/cari/nada');
     expect(__private.buatPathRingkasan({ mode: 'kamus', soal: 'kata' })).toBe('/kamus/detail/kata');
+  });
+
+  it('helper private membaca dan menyimpan status tamu harian di localStorage', () => {
+    expect(__private.bacaStatusTamuHariIni()).toBeNull();
+
+    const statusBaru = __private.simpanStatusTamuHariIni({ tambahSkor: 20, tambahMain: 1 });
+    expect(statusBaru).toEqual({
+      tanggal: __private.tanggalJakartaHariIni(),
+      skor_total: 20,
+      jumlah_main: 1,
+    });
+    expect(__private.bacaStatusTamuHariIni()).toEqual(statusBaru);
   });
 
   it('helper private merender pertanyaan untuk mode ringkasan dan mode soal', () => {
@@ -153,24 +196,93 @@ describe('KuisKata', () => {
   });
 
   it('menampilkan loading state dan null pada error, ronde kosong, atau soal aktif tak tersedia', () => {
-    mockUseQuery.mockReturnValueOnce({ data: null, isLoading: true, isError: false });
+    mockUseQuery.mockImplementation((options) => {
+      const queryKey = Array.isArray(options?.queryKey) ? options.queryKey[0] : null;
+      if (queryKey === 'kuis-kata-status') {
+        return { data: { success: true, data: null }, isLoading: false, isError: false };
+      }
+      return { data: null, isLoading: true, isError: false };
+    });
     const loadingView = render(<KuisKata />);
     expect(screen.getByText('Menyiapkan soal …')).toBeInTheDocument();
     loadingView.unmount();
 
-    mockUseQuery.mockReturnValueOnce({ data: null, isLoading: false, isError: true });
+    mockUseQuery.mockImplementation((options) => {
+      const queryKey = Array.isArray(options?.queryKey) ? options.queryKey[0] : null;
+      if (queryKey === 'kuis-kata-status') {
+        return { data: { success: true, data: null }, isLoading: false, isError: false };
+      }
+      return { data: null, isLoading: false, isError: true };
+    });
     const errorView = render(<KuisKata />);
     expect(errorView.container.firstChild).toBeNull();
     errorView.unmount();
 
-    mockUseQuery.mockReturnValueOnce({ data: { ronde: [] }, isLoading: false, isError: false });
+    mockUseQuery.mockImplementation((options) => {
+      const queryKey = Array.isArray(options?.queryKey) ? options.queryKey[0] : null;
+      if (queryKey === 'kuis-kata-status') {
+        return { data: { success: true, data: null }, isLoading: false, isError: false };
+      }
+      return { data: { ronde: [] }, isLoading: false, isError: false };
+    });
     const emptyView = render(<KuisKata />);
     expect(emptyView.container.firstChild).toBeNull();
     emptyView.unmount();
 
-    mockUseQuery.mockReturnValueOnce({ data: { ronde: [undefined] }, isLoading: false, isError: false });
+    mockUseQuery.mockImplementation((options) => {
+      const queryKey = Array.isArray(options?.queryKey) ? options.queryKey[0] : null;
+      if (queryKey === 'kuis-kata-status') {
+        return { data: { success: true, data: null }, isLoading: false, isError: false };
+      }
+      return { data: { ronde: [undefined] }, isLoading: false, isError: false };
+    });
     const noQuestionView = render(<KuisKata />);
     expect(noQuestionView.container.firstChild).toBeNull();
+  });
+
+  it('mengisi skor awal dari rekap kumulatif pengguna login dan menandai jumlah main hari ini', () => {
+    mockAuthState.isAuthenticated = true;
+    mockAuthState.token = 'token-aktif';
+    mockUseQuery.mockImplementation((options) => {
+      const queryKey = Array.isArray(options?.queryKey) ? options.queryKey[0] : null;
+      if (options?.queryFn) {
+        options.queryFn();
+      }
+      if (queryKey === 'kuis-kata-status') {
+        return {
+          data: {
+            success: true,
+            data: {
+              skor_total: 30,
+              jumlah_main: 1,
+            },
+          },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return {
+        data: { ronde: rondeMock },
+        isLoading: false,
+        isError: false,
+      };
+    });
+
+    render(<KuisKata />);
+
+    expect(screen.getByText('30/1x')).toBeInTheDocument();
+  });
+
+  it('memakai rekap tamu lokal dengan format yang sama', () => {
+    globalThis.localStorage.setItem(__private.guestStatusStorageKey, JSON.stringify({
+      tanggal: __private.tanggalJakartaHariIni(),
+      skor_total: 20,
+      jumlah_main: 2,
+    }));
+
+    render(<KuisKata />);
+
+    expect(screen.getByText('20/2x')).toBeInTheDocument();
   });
 
   it('langsung pindah ke soal berikutnya setelah jeda singkat', async () => {
@@ -180,12 +292,13 @@ describe('KuisKata', () => {
     expect(ambilSoal()).toHaveTextContent('Apa arti alpha?');
     expect(container.querySelector('strong')).not.toBeNull();
     expect(screen.queryByRole('button', { name: /lanjut/i })).not.toBeInTheDocument();
-    expect(screen.getByText('0')).toBeInTheDocument();
+    expect(screen.getByText('0/0x')).toBeInTheDocument();
     expect(screen.queryByText('Skor')).not.toBeInTheDocument();
     expect(container.querySelectorAll('.gim-progress-bullet')).toHaveLength(2);
     expect(screen.getByRole('button', { name: 'Lewati' })).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'arti alpha' }));
+    expect(screen.getByText('10/1x')).toBeInTheDocument();
     expect(screen.queryByText('alpha artinya: arti alpha.')).not.toBeInTheDocument();
 
     await act(async () => {
@@ -193,7 +306,7 @@ describe('KuisKata', () => {
     });
 
     expect(ambilSoal()).toHaveTextContent('Apa antonim beta?');
-    expect(screen.getByText('10')).toBeInTheDocument();
+    expect(screen.getByText('10/1x')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'padanan beta; imbangan beta; sanding beta' })).toBeInTheDocument();
   });
 
@@ -202,6 +315,7 @@ describe('KuisKata', () => {
     const ambilSoal = () => container.querySelector('.gim-soal');
 
     fireEvent.click(screen.getByRole('button', { name: 'Lewati' }));
+    expect(screen.getByText('0/1x')).toBeInTheDocument();
 
     expect(screen.queryByText('alpha artinya: arti alpha.')).not.toBeInTheDocument();
     expect(container.querySelector('.gim-progress-bullet-salah')).not.toBeNull();
@@ -211,7 +325,7 @@ describe('KuisKata', () => {
     });
 
     expect(ambilSoal()).toHaveTextContent('Apa antonim beta?');
-    expect(screen.getByText('0')).toBeInTheDocument();
+    expect(screen.getByText('0/1x')).toBeInTheDocument();
   });
 
   it('mempertahankan skor total antar ronde dan menampilkan opsi benar-salah di ringkasan', async () => {
@@ -240,7 +354,7 @@ describe('KuisKata', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Main lagi!' }));
 
-    expect(screen.getByText('10')).toBeInTheDocument();
+    expect(screen.getByText('10/1x')).toBeInTheDocument();
     expect(container.querySelector('.gim-soal')).toHaveTextContent('Apa arti alpha?');
   });
 
@@ -281,7 +395,7 @@ describe('KuisKata', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'arti alpha' }));
     fireEvent.click(screen.getByRole('button', { name: 'arti beta' }));
-    expect(screen.getByText('10')).toBeInTheDocument();
+    expect(screen.getByText('10/1x')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Lewati' })).not.toBeInTheDocument();
 
     await act(async () => {

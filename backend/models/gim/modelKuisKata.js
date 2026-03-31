@@ -26,6 +26,20 @@ function parseBilangan(value, { fallback = 0, min = 0, max = 1000 } = {}) {
   return Math.min(Math.max(parsed, min), max);
 }
 
+function mapRekapHarian(row = {}, { fallbackTanggal = undefined } = {}) {
+  return {
+    id: Number(row.id) || 0,
+    pengguna_id: Number(row.pengguna_id) || 0,
+    nama: row.nama,
+    tanggal: row.tanggal || fallbackTanggal,
+    jumlah_benar: Number(row.jumlah_benar) || 0,
+    jumlah_pertanyaan: Number(row.jumlah_pertanyaan) || 0,
+    durasi_detik: Number(row.durasi_detik) || 0,
+    jumlah_main: Number(row.jumlah_main) || 0,
+    skor_total: Number(row.skor_total) || ((Number(row.jumlah_benar) || 0) * 10),
+  };
+}
+
 async function queryAcak(sql, params = []) {
   const result = await db.query(sql, params);
   if (result.rows.length > 0) return result;
@@ -546,17 +560,38 @@ class ModelKuisKata {
       ]
     );
 
-    const row = result.rows[0] || {};
-    return {
-      id: Number(row.id) || 0,
-      pengguna_id: Number(row.pengguna_id) || 0,
-      tanggal: row.tanggal || tanggalAman,
-      jumlah_benar: Number(row.jumlah_benar) || 0,
-      jumlah_pertanyaan: Number(row.jumlah_pertanyaan) || 0,
-      durasi_detik: Number(row.durasi_detik) || 0,
-      jumlah_main: Number(row.jumlah_main) || 0,
-      skor_total: (Number(row.jumlah_benar) || 0) * 10,
-    };
+    return mapRekapHarian(result.rows[0], { fallbackTanggal: tanggalAman });
+  }
+
+  static async ambilSkorPenggunaHarian({ penggunaId, tanggal = null } = {}) {
+    const penggunaIdAman = parsePenggunaId(penggunaId);
+    if (!penggunaIdAman) return null;
+
+    const tanggalAman = parseTanggal(tanggal) || await this.ambilTanggalHariIniJakarta();
+    if (!tanggalAman) return null;
+
+    const result = await db.query(
+      `SELECT
+         kk.id,
+         kk.pengguna_id,
+         to_char(kk.tanggal, 'YYYY-MM-DD') AS tanggal,
+         kk.jumlah_benar,
+         kk.jumlah_pertanyaan,
+         kk.durasi_detik,
+         kk.jumlah_main,
+         (kk.jumlah_benar * 10) AS skor_total
+       FROM kuis_kata kk
+       WHERE kk.pengguna_id = $1
+         AND kk.tanggal = $2::date
+       LIMIT 1`,
+      [penggunaIdAman, tanggalAman]
+    );
+
+    if (!result.rows[0]) {
+      return null;
+    }
+
+    return mapRekapHarian(result.rows[0], { fallbackTanggal: tanggalAman });
   }
 
   static async ambilKlasemenHarian({ tanggal = null, limit = 10 } = {}) {
@@ -582,17 +617,7 @@ class ModelKuisKata {
       [tanggalAman, limitAman]
     );
 
-    return result.rows.map((row) => ({
-      id: Number(row.id) || 0,
-      pengguna_id: Number(row.pengguna_id) || 0,
-      nama: row.nama,
-      tanggal: row.tanggal,
-      jumlah_benar: Number(row.jumlah_benar) || 0,
-      jumlah_pertanyaan: Number(row.jumlah_pertanyaan) || 0,
-      durasi_detik: Number(row.durasi_detik) || 0,
-      jumlah_main: Number(row.jumlah_main) || 0,
-      skor_total: Number(row.skor_total) || 0,
-    }));
+    return result.rows.map((row) => mapRekapHarian(row));
   }
 
   static async hitungPesertaHarian({ tanggal = null } = {}) {
@@ -642,17 +667,7 @@ class ModelKuisKata {
       values
     );
 
-    return result.rows.map((row) => ({
-      id: Number(row.id) || 0,
-      pengguna_id: Number(row.pengguna_id) || 0,
-      nama: row.nama,
-      tanggal: row.tanggal,
-      jumlah_benar: Number(row.jumlah_benar) || 0,
-      jumlah_pertanyaan: Number(row.jumlah_pertanyaan) || 0,
-      durasi_detik: Number(row.durasi_detik) || 0,
-      jumlah_main: Number(row.jumlah_main) || 0,
-      skor_total: Number(row.skor_total) || 0,
-    }));
+    return result.rows.map((row) => mapRekapHarian(row));
   }
 }
 

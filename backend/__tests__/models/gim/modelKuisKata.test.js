@@ -422,6 +422,38 @@ describe('ModelKuisKata', () => {
     await expect(ModelKuisKata.ambilTanggalHariIniJakarta()).resolves.toBeNull();
   });
 
+  it('ambilSkorPenggunaHarian mengembalikan null untuk pengguna invalid atau baris kosong, lalu memetakan rekap pengguna', async () => {
+    await expect(ModelKuisKata.ambilSkorPenggunaHarian({ penggunaId: 'x' })).resolves.toBeNull();
+
+    db.query.mockResolvedValueOnce({ rows: [] });
+    await expect(ModelKuisKata.ambilSkorPenggunaHarian({ penggunaId: 7, tanggal: '2026-03-15' })).resolves.toBeNull();
+
+    db.query.mockResolvedValueOnce({
+      rows: [{
+        id: '5',
+        pengguna_id: '7',
+        tanggal: '2026-03-15',
+        jumlah_benar: '0',
+        jumlah_pertanyaan: '5',
+        durasi_detik: '18',
+        jumlah_main: '1',
+        skor_total: '0',
+      }],
+    });
+
+    await expect(ModelKuisKata.ambilSkorPenggunaHarian({ penggunaId: 7, tanggal: '2026-03-15' })).resolves.toEqual({
+      id: 5,
+      pengguna_id: 7,
+      nama: undefined,
+      tanggal: '2026-03-15',
+      jumlah_benar: 0,
+      jumlah_pertanyaan: 5,
+      durasi_detik: 18,
+      jumlah_main: 1,
+      skor_total: 0,
+    });
+  });
+
   it('simpanRekapHarian memvalidasi pengguna, tanggal, jumlah pertanyaan, dan jumlah benar', async () => {
     await expect(ModelKuisKata.simpanRekapHarian({ penggunaId: 'x', jumlahBenar: 1, jumlahPertanyaan: 1 })).rejects.toThrow('Pengguna tidak valid');
 

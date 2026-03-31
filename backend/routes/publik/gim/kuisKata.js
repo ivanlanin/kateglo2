@@ -3,7 +3,7 @@
  */
 
 const express = require('express');
-const { authenticate } = require('../../../middleware/auth');
+const { authenticate, authenticateOptional } = require('../../../middleware/auth');
 const ModelKuisKata = require('../../../models/gim/modelKuisKata');
 
 const router = express.Router();
@@ -63,6 +63,25 @@ router.get('/klasemen', async (req, res, next) => {
     const data = await ModelKuisKata.ambilKlasemenHarian({
       limit: parseLimit(req.query.limit, 10),
     });
+
+    return res.json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.get('/status', authenticateOptional, async (req, res, next) => {
+  try {
+    const penggunaId = ModelKuisKata.parsePenggunaId(req.user?.pid);
+
+    if (!penggunaId) {
+      return res.json({ success: true, data: null });
+    }
+
+    const data = await ModelKuisKata.ambilSkorPenggunaHarian({ penggunaId });
 
     return res.json({
       success: true,

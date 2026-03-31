@@ -4,6 +4,7 @@
 
 - Menambahkan pelafalan kata di halaman detail kamus dengan tombol audio dan notasi IPA
 - Menambahkan Kata Hari Ini (KTI)
+- Menampilkan skor kumulatif dan jumlah ronde harian di [Kuis Kata](/gim/kuis-kata)
 
 ## 2026-03-30 Senin
 
