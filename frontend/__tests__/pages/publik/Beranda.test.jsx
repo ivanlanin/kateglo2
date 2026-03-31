@@ -27,7 +27,7 @@ vi.mock('../../../src/api/apiAuth', () => ({
 }));
 
 vi.mock('../../../src/components/gim/KuisKata', () => ({
-  default: ({ variant }) => <div data-testid="kuis-kata" data-variant={variant || 'default'} />,
+  default: () => <div data-testid="kuis-kata" />,
 }));
 
 vi.mock('react-router-dom', () => ({
@@ -53,11 +53,16 @@ describe('Beranda', () => {
     mockAmbilKataHariIni.mockResolvedValue({
       tanggal: '2026-03-31',
       indeks: 'aktif',
-      entri: 'aktif',
+      entri: 'aktif (2)',
+      homonim: 2,
       url: '/kamus/detail/aktif',
       kelas_kata: 'a',
       makna: 'giat dalam bekerja',
       contoh: 'Ia sangat aktif di kelas.',
+      daftar_makna: [
+        { makna: 'giat dalam bekerja', contoh: 'Ia sangat aktif di kelas.' },
+        { makna: 'terlibat penuh', contoh: 'Warga aktif bergotong royong.' },
+      ],
       etimologi: { bahasa: 'Arab', kata_asal: 'faal' },
       pemenggalan: 'ak.tif',
       lafal: 'aktif',
@@ -110,16 +115,29 @@ describe('Beranda', () => {
   it('menampilkan kartu Kata Hari Ini saat API berhasil', async () => {
     render(<Beranda />);
 
-    expect(await screen.findByRole('heading', { name: 'aktif' })).toBeInTheDocument();
+    expect(await screen.findByText(/aktif/i, { selector: 'h2' })).toBeInTheDocument();
+    expect(screen.getByText('2', { selector: 'sup' })).toBeInTheDocument();
     expect(screen.getByText('Kata Hari Ini')).toBeInTheDocument();
     expect(screen.getByText('Kuis Kata')).toBeInTheDocument();
-    expect(screen.getByText('a • ak.tif • aktif')).toBeInTheDocument();
-    expect(screen.getByText('giat dalam bekerja')).toBeInTheDocument();
-    expect(screen.getByText('"Ia sangat aktif di kelas."')).toBeInTheDocument();
-    expect(screen.getByText('Etimologi: Arab: faal')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Lihat entri' })).toHaveAttribute('href', '/kamus/detail/aktif');
-    expect(screen.getByRole('link', { name: 'Buka kuis' })).toHaveAttribute('href', '/gim/kuis-kata');
-    expect(screen.getByTestId('kuis-kata')).toHaveAttribute('data-variant', 'beranda');
+    expect(screen.queryByText('Lima soal singkat lintas kamus, tesaurus, glosarium, makna, dan rima.')).not.toBeInTheDocument();
+    expect(screen.getByText((_, element) => (
+      element?.classList.contains('beranda-sorotan-body')
+      && element.textContent?.includes('(1) giat dalam bekerja: Ia sangat aktif di kelas.; (2) terlibat penuh: Warga aktif bergotong royong.')
+    ))).toBeInTheDocument();
+    expect(screen.getByText('Etimologi:', { exact: false })).toBeInTheDocument();
+    expect(screen.getByText('faal')).toContainHTML('<em>faal</em>');
+    expect(screen.getByRole('link', { name: /lihat entri/i })).toHaveAttribute('href', '/kamus/detail/aktif');
+    expect(screen.queryByRole('link', { name: 'Buka kuis' })).not.toBeInTheDocument();
+    expect(screen.getByTestId('kuis-kata')).toBeInTheDocument();
+  });
+
+  it('menampilkan placeholder Kata Hari Ini sebelum data selesai dimuat', () => {
+    mockAmbilKataHariIni.mockImplementationOnce(() => new Promise(() => {}));
+
+    render(<Beranda />);
+
+    expect(screen.getByLabelText('Kata Hari Ini')).toHaveAttribute('aria-busy', 'true');
+    expect(screen.getByText('Lihat Entri')).toHaveAttribute('aria-hidden', 'true');
   });
 
   it('memotong frasa populer lebih dari dua kata dan menyimpan judul penuh di tooltip', async () => {
@@ -174,15 +192,15 @@ describe('Beranda', () => {
     expect(screen.getByText('rima')).toBeInTheDocument();
   });
 
-  it('tidak menampilkan kartu Kata Hari Ini saat API gagal', async () => {
+  it('tetap menampilkan kartu Kata Hari Ini saat API gagal', async () => {
     mockAmbilKataHariIni.mockRejectedValueOnce(new Error('gagal'));
 
     render(<Beranda />);
 
     expect(await screen.findByText('Populer:')).toBeInTheDocument();
-    expect(screen.queryByText('Kata Hari Ini')).not.toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: 'Lihat entri' })).not.toBeInTheDocument();
+    expect(screen.getByText('Kata Hari Ini')).toBeInTheDocument();
+    expect(screen.getByText('Data kata hari ini belum tersedia.')).toBeInTheDocument();
     expect(screen.getByText('Kuis Kata')).toBeInTheDocument();
-    expect(screen.getByTestId('kuis-kata')).toHaveAttribute('data-variant', 'beranda');
+    expect(screen.getByTestId('kuis-kata')).toBeInTheDocument();
   });
 });

@@ -543,10 +543,14 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
       indeks: 'aktif',
       entri: [{
         entri: 'aktif',
+        homonim: 2,
         pemenggalan: 'ak.tif',
         lafal: 'aktif',
         etimologi: [{ bahasa: 'Arab', kata_asal: 'faal' }],
-        makna: [{ makna: 'giat', kelas_kata: 'a', contoh: [{ contoh: 'Ia aktif.' }] }],
+        makna: [
+          { makna: 'giat', kelas_kata: 'a', contoh: [{ contoh: 'Ia aktif.' }] },
+          { makna: 'terlibat', kelas_kata: 'a', contoh: [{ contoh: 'Ia aktif bermusyawarah.' }] },
+        ],
       }],
     }, '2026-03-31');
 
@@ -554,10 +558,15 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
       tanggal: '2026-03-31',
       indeks: 'aktif',
       entri: 'aktif',
+      homonim: 2,
       url: '/kamus/detail/aktif',
       kelas_kata: 'a',
       makna: 'giat',
       contoh: 'Ia aktif.',
+      daftar_makna: [
+        { makna: 'giat', contoh: 'Ia aktif.' },
+        { makna: 'terlibat', contoh: 'Ia aktif bermusyawarah.' },
+      ],
       pemenggalan: 'ak.tif',
       lafal: 'aktif',
       etimologi: {
@@ -568,6 +577,15 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
         sumber_kode: null,
       },
     });
+  });
+
+  it('hapusCacheKataHariIni no-op untuk tanggal kosong dan menghapus cache tanggal valid', async () => {
+    await __private.hapusCacheKataHariIni('   ');
+    await __private.hapusCacheKataHariIni(undefined);
+    await __private.hapusCacheKataHariIni('2026-03-31');
+
+    expect(delKey).toHaveBeenCalledTimes(1);
+    expect(delKey).toHaveBeenCalledWith('kamus:kata-hari-ini:2026-03-31');
   });
 
   it('ambilKataHariIni mengembalikan data dari cache saat tersedia', async () => {
@@ -620,10 +638,12 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
       tanggal: '2026-03-31',
       indeks: 'aktif',
       entri: 'aktif',
+      homonim: null,
       makna: 'giat',
       url: '/kamus/detail/aktif',
       kelas_kata: 'a',
       contoh: 'Ia aktif.',
+      daftar_makna: [{ makna: 'giat', contoh: 'Ia aktif.' }],
       pemenggalan: 'ak.tif',
       lafal: 'aktif',
       etimologi: {
@@ -682,6 +702,7 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
       entri: 'aktif',
       makna: 'giat',
       contoh: 'Ia sangat aktif.',
+      daftar_makna: [{ makna: 'giat', contoh: 'Ia sangat aktif.' }],
     });
     expect(setJson).toHaveBeenCalledWith('kamus:kata-hari-ini:2026-03-31', expect.any(Object), 900);
   });

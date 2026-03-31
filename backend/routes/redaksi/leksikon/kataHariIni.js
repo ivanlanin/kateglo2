@@ -6,7 +6,11 @@ const express = require('express');
 const { periksaIzin } = require('../../../middleware/authorization');
 const ModelEntri = require('../../../models/leksikon/modelEntri');
 const ModelKataHariIni = require('../../../models/leksikon/modelKataHariIni');
-const { ambilDetailKamus, __private: kataHariIniUtils } = require('../../../services/publik/layananKamusPublik');
+const {
+  ambilDetailKamus,
+  hapusCacheKataHariIni,
+  __private: kataHariIniUtils,
+} = require('../../../services/publik/layananKamusPublik');
 const {
   buildPaginatedResult,
   parsePagination,
@@ -20,6 +24,10 @@ const router = express.Router();
 function normalizeOptionalBodyValue(body, key, fallback = null) {
   if (!Object.prototype.hasOwnProperty.call(body || {}, key)) return fallback;
   return parseTrimmedString(body[key]) || null;
+}
+
+function isKataHariIniEntriConflict(error) {
+  return error?.code === '23505' && error?.constraint === 'kata_hari_ini_entri_id_key';
 }
 
 async function resolveEntriKataHariIni({ entriId, indeks, tanggal }) {
@@ -127,8 +135,13 @@ router.post('/', periksaIzin('edit_entri'), async (req, res, next) => {
       catatan: normalizeOptionalBodyValue(req.body, 'catatan', null),
     });
 
+    await hapusCacheKataHariIni(data?.tanggal || tanggal);
+
     return res.status(201).json({ success: true, data });
   } catch (error) {
+    if (isKataHariIniEntriConflict(error)) {
+      return res.status(409).json({ success: false, message: 'Entri ini sudah terdaftar sebagai Kata Hari Ini pada tanggal lain' });
+    }
     return next(error);
   }
 });
@@ -157,18 +170,30 @@ router.put('/:id', periksaIzin('edit_entri'), async (req, res, next) => {
       catatan: normalizeOptionalBodyValue(req.body, 'catatan', existing.catatan || null),
     });
 
+    await hapusCacheKataHariIni(data?.tanggal || tanggal);
+
     return res.json({ success: true, data });
   } catch (error) {
+    if (isKataHariIniEntriConflict(error)) {
+      return res.status(409).json({ success: false, message: 'Entri ini sudah terdaftar sebagai Kata Hari Ini pada tanggal lain' });
+    }
     return next(error);
   }
 });
 
 router.delete('/:id', periksaIzin('edit_entri'), async (req, res, next) => {
   try {
+    const existing = await ModelKataHariIni.ambilDenganId(parseIdParam(req.params.id));
+    if (!existing) {
+      return res.status(404).json({ success: false, message: 'Arsip Kata Hari Ini tidak ditemukan' });
+    }
+
     const deleted = await ModelKataHariIni.hapus(parseIdParam(req.params.id));
     if (!deleted) {
       return res.status(404).json({ success: false, message: 'Arsip Kata Hari Ini tidak ditemukan' });
     }
+
+    await hapusCacheKataHariIni(existing.tanggal);
 
     return res.json({ success: true });
   } catch (error) {

@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { ambilKataHariIni, ambilPencarianPopuler } from '../../api/apiPublik';
 import KotakCariPublik from '../../components/formulir/KotakCariPublik';
 import KuisKata from '../../components/gim/KuisKata';
+import { formatLemaHomonim } from '../../utils/formatUtils';
 import { buatPathDetailKamus } from '../../utils/paramUtils';
 
 const daftarDomain = [
@@ -49,32 +50,97 @@ function tanggalLokalBrowser() {
   return `${tahun}-${bulan}-${tanggal}`;
 }
 
-function formatInfoKataHariIni(kataHariIni = null) {
-  if (!kataHariIni || typeof kataHariIni !== 'object') {
-    return {
-      meta: [],
-      etimologi: null,
-    };
+function bentukLemaKataHariIni(kataHariIni = null) {
+  const entri = String(kataHariIni?.entri || kataHariIni?.indeks || '').trim();
+  const homonim = Number(kataHariIni?.homonim);
+
+  if (!entri) {
+    return '';
   }
 
-  const meta = [kataHariIni.kelas_kata, kataHariIni.pemenggalan, kataHariIni.lafal]
-    .map((item) => String(item || '').trim())
-    .filter(Boolean);
+  if (/\(\d+\)\s*$/.test(entri)) {
+    return entri;
+  }
 
-  const etimologi = [
-    String(kataHariIni.etimologi?.bahasa || '').trim(),
-    String(kataHariIni.etimologi?.kata_asal || '').trim(),
-  ].filter(Boolean).join(': ');
+  if (Number.isFinite(homonim) && homonim > 0) {
+    return `${entri} (${homonim})`;
+  }
 
-  return {
-    meta,
-    etimologi: etimologi || null,
-  };
+  return entri;
+}
+
+function ambilDaftarMaknaKataHariIni(kataHariIni = null) {
+  const daftarMakna = Array.isArray(kataHariIni?.daftar_makna)
+    ? kataHariIni.daftar_makna
+      .map((item) => ({
+        makna: String(item?.makna || '').trim(),
+        contoh: String(item?.contoh || '').trim(),
+      }))
+      .filter((item) => item.makna)
+    : [];
+
+  if (daftarMakna.length > 0) {
+    return daftarMakna;
+  }
+
+  const makna = String(kataHariIni?.makna || '').trim();
+  if (!makna) {
+    return [];
+  }
+
+  return [{
+    makna,
+    contoh: String(kataHariIni?.contoh || '').trim(),
+  }];
+}
+
+function renderRingkasanMaknaKataHariIni(kataHariIni = null) {
+  const daftarMakna = ambilDaftarMaknaKataHariIni(kataHariIni);
+
+  if (daftarMakna.length === 0) {
+    return null;
+  }
+
+  if (daftarMakna.length === 1) {
+    return (
+      <>
+        {daftarMakna[0].makna}
+        {daftarMakna[0].contoh ? `: ${daftarMakna[0].contoh}` : ''}
+      </>
+    );
+  }
+
+  return daftarMakna.map((item, index) => (
+    <span key={`${item.makna}-${index}`}>
+      {index > 0 ? '; ' : ''}
+      {`(${index + 1}) ${item.makna}`}
+      {item.contoh ? `: ${item.contoh}` : ''}
+    </span>
+  ));
+}
+
+function renderEtimologiKataHariIni(kataHariIni = null) {
+  const bahasa = String(kataHariIni?.etimologi?.bahasa || '').trim();
+  const kataAsal = String(kataHariIni?.etimologi?.kata_asal || '').trim();
+
+  if (!bahasa && !kataAsal) {
+    return null;
+  }
+
+  return (
+    <>
+      Etimologi:{' '}
+      {kataAsal ? <em>{kataAsal}</em> : null}
+      {kataAsal && bahasa ? ' ' : ''}
+      {bahasa ? (kataAsal ? `(${bahasa})` : bahasa) : ''}
+    </>
+  );
 }
 
 function Beranda() {
   const [dataPopuler, setDataPopuler] = useState(null);
   const [kataHariIni, setKataHariIni] = useState(null);
+  const [statusKataHariIni, setStatusKataHariIni] = useState('loading');
 
   useEffect(() => {
     document.title = 'Kateglo';
@@ -94,7 +160,13 @@ function Beranda() {
       }
 
       setDataPopuler(hasilPopuler.status === 'fulfilled' ? (hasilPopuler.value?.data || null) : null);
-      setKataHariIni(hasilKataHariIni.status === 'fulfilled' ? (hasilKataHariIni.value || null) : null);
+      if (hasilKataHariIni.status === 'fulfilled' && hasilKataHariIni.value) {
+        setKataHariIni(hasilKataHariIni.value);
+        setStatusKataHariIni('ready');
+      } else {
+        setKataHariIni(null);
+        setStatusKataHariIni('error');
+      }
     }
 
     muatBeranda();
@@ -104,7 +176,9 @@ function Beranda() {
     };
   }, []);
 
-  const infoKataHariIni = formatInfoKataHariIni(kataHariIni);
+  const lemaKataHariIni = bentukLemaKataHariIni(kataHariIni);
+  const ringkasanMaknaKataHariIni = renderRingkasanMaknaKataHariIni(kataHariIni);
+  const etimologiKataHariIni = renderEtimologiKataHariIni(kataHariIni);
 
   return (
     <div className="beranda-container">
@@ -143,42 +217,56 @@ function Beranda() {
         </div>
       </div>
       <div className="beranda-sorotan-grid">
-        {kataHariIni?.indeks && kataHariIni?.url && kataHariIni?.makna ? (
-          <section className="beranda-sorotan-card beranda-sorotan-card-kata" aria-label="Kata Hari Ini">
-            <div className="beranda-sorotan-header">
-              <div>
-                <p className="beranda-sorotan-kicker">Kata Hari Ini</p>
-                <h2 className="beranda-sorotan-title">{kataHariIni.entri || kataHariIni.indeks}</h2>
-              </div>
-              <Link to={kataHariIni.url} className="beranda-sorotan-link">
-                Lihat entri
-              </Link>
+        <section className="beranda-sorotan-card beranda-sorotan-card-kata" aria-label="Kata Hari Ini" aria-busy={statusKataHariIni === 'loading'}>
+          <div className="beranda-sorotan-header">
+            <div>
+              <p className="beranda-sorotan-kicker">Kata Hari Ini</p>
+              {statusKataHariIni === 'ready' && lemaKataHariIni ? (
+                <h2 className="beranda-sorotan-title">{formatLemaHomonim(lemaKataHariIni)}</h2>
+              ) : (
+                <div className="beranda-sorotan-placeholder-title" aria-hidden="true" />
+              )}
             </div>
-            {infoKataHariIni.meta.length > 0 ? (
-              <p className="beranda-sorotan-meta">{infoKataHariIni.meta.join(' • ')}</p>
-            ) : null}
-            <p className="beranda-sorotan-body">{kataHariIni.makna}</p>
-            {kataHariIni.contoh ? (
-              <p className="beranda-sorotan-example">&quot;{kataHariIni.contoh}&quot;</p>
-            ) : null}
-            {infoKataHariIni.etimologi ? (
-              <p className="beranda-sorotan-footnote">Etimologi: {infoKataHariIni.etimologi}</p>
-            ) : null}
-          </section>
-        ) : null}
+          </div>
+
+          {statusKataHariIni === 'ready' && ringkasanMaknaKataHariIni ? (
+            <p className="beranda-sorotan-body">{ringkasanMaknaKataHariIni}</p>
+          ) : null}
+
+          {statusKataHariIni === 'loading' ? (
+            <div className="beranda-sorotan-placeholder" aria-hidden="true">
+              <span className="beranda-sorotan-placeholder-line beranda-sorotan-placeholder-line-wide" />
+              <span className="beranda-sorotan-placeholder-line" />
+              <span className="beranda-sorotan-placeholder-line beranda-sorotan-placeholder-line-short" />
+            </div>
+          ) : null}
+
+          {statusKataHariIni === 'error' ? (
+            <p className="beranda-sorotan-meta">Data kata hari ini belum tersedia.</p>
+          ) : null}
+
+          {statusKataHariIni === 'ready' && etimologiKataHariIni ? (
+            <p className="beranda-sorotan-footnote">{etimologiKataHariIni}</p>
+          ) : null}
+
+          <div className="beranda-sorotan-actions">
+            {statusKataHariIni === 'ready' && kataHariIni?.url ? (
+              <Link to={kataHariIni.url} className="beranda-sorotan-link">
+                Lihat Entri
+              </Link>
+            ) : (
+              <span className="beranda-sorotan-link beranda-sorotan-link-disabled" aria-hidden="true">
+                Lihat Entri
+              </span>
+            )}
+          </div>
+        </section>
 
         <section className="beranda-sorotan-card beranda-sorotan-card-kuis" aria-label="Kuis Kata">
           <div className="beranda-sorotan-header">
-            <div>
-              <p className="beranda-sorotan-kicker">Gim Hari Ini</p>
-              <h2 className="beranda-sorotan-title">Kuis Kata</h2>
-            </div>
-            <Link to="/gim/kuis-kata" className="beranda-sorotan-link">
-              Buka kuis
-            </Link>
+            <p className="beranda-sorotan-kicker">Kuis Kata</p>
           </div>
-          <p className="beranda-sorotan-meta">Lima soal singkat lintas kamus, tesaurus, glosarium, makna, dan rima.</p>
-          <KuisKata variant="beranda" />
+          <KuisKata />
         </section>
       </div>
     </div>

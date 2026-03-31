@@ -168,6 +168,7 @@ jest.mock('../../../models/wordnet/modelSinset', () => ({
 jest.mock('../../../services/publik/layananKamusPublik', () => ({
   ambilDetailKamus: jest.fn(),
   hapusCacheDetailKamus: jest.fn(),
+  hapusCacheKataHariIni: jest.fn(),
   __private: {
     ambilMaknaUtama: jest.fn(),
     bentukPayloadKataHariIni: jest.fn(),
@@ -197,7 +198,12 @@ const ModelPeran = require('../../../models/akses/modelPeran');
 const ModelIzin = require('../../../models/akses/modelIzin');
 const ModelKandidatEntri = require('../../../models/kadi/modelKandidatEntri');
 const ModelSinset = require('../../../models/wordnet/modelSinset');
-const { ambilDetailKamus, hapusCacheDetailKamus, __private: kataHariIniUtils } = require('../../../services/publik/layananKamusPublik');
+const {
+  ambilDetailKamus,
+  hapusCacheDetailKamus,
+  hapusCacheKataHariIni,
+  __private: kataHariIniUtils,
+} = require('../../../services/publik/layananKamusPublik');
 const { invalidasiCacheDetailGlosarium } = require('../../../services/publik/layananGlosariumPublik');
 const rootRouter = require('../../../routes');
 
@@ -665,6 +671,30 @@ describe('routes/redaksi', () => {
         sumber: 'admin',
         catatan: 'pilihan redaksi',
       });
+      expect(hapusCacheKataHariIni).toHaveBeenCalledWith('2026-03-31');
+    });
+
+    it('POST /api/redaksi/kata-hari-ini mengembalikan 409 jika entri sudah dipakai tanggal lain', async () => {
+      ModelLema.ambilDenganId.mockResolvedValue({ id: 7, entri: 'aktif', indeks: 'aktif' });
+      ambilDetailKamus.mockResolvedValue({ indeks: 'aktif', entri: [{ id: 7, entri: 'aktif' }] });
+      kataHariIniUtils.ambilMaknaUtama.mockReturnValue({ entri: { id: 7 } });
+      kataHariIniUtils.bentukPayloadKataHariIni.mockReturnValue({
+        tanggal: '2026-04-01',
+        indeks: 'aktif',
+        entri: 'aktif',
+      });
+      ModelKataHariIni.simpanByTanggal.mockRejectedValue({
+        code: '23505',
+        constraint: 'kata_hari_ini_entri_id_key',
+      });
+
+      const response = await callAsAdmin('post', '/api/redaksi/kata-hari-ini', {
+        body: { tanggal: '2026-04-01', entri_id: 7, sumber: 'admin' },
+      });
+
+      expect(response.status).toBe(409);
+      expect(response.body.message).toBe('Entri ini sudah terdaftar sebagai Kata Hari Ini pada tanggal lain');
+      expect(hapusCacheKataHariIni).not.toHaveBeenCalled();
     });
 
     it('PUT /api/redaksi/kata-hari-ini/:id memperbarui arsip yang ada', async () => {
@@ -699,15 +729,56 @@ describe('routes/redaksi', () => {
         sumber: 'admin',
         catatan: null,
       });
+      expect(hapusCacheKataHariIni).toHaveBeenCalledWith('2026-03-31');
+    });
+
+    it('PUT /api/redaksi/kata-hari-ini/:id mengembalikan 409 jika entri sudah dipakai tanggal lain', async () => {
+      ModelKataHariIni.ambilDenganId.mockResolvedValue({
+        id: 1,
+        tanggal: '2026-03-31',
+        entri_id: 7,
+        indeks: 'aktif',
+        entri: 'aktif',
+        sumber: 'admin',
+        catatan: null,
+      });
+      ModelLema.ambilDenganId.mockResolvedValue({ id: 8, entri: 'aktif sekali', indeks: 'aktif-sekali' });
+      ambilDetailKamus.mockResolvedValue({ indeks: 'aktif-sekali', entri: [{ id: 8, entri: 'aktif sekali' }] });
+      kataHariIniUtils.ambilMaknaUtama.mockReturnValue({ entri: { id: 8 } });
+      kataHariIniUtils.bentukPayloadKataHariIni.mockReturnValue({
+        tanggal: '2026-03-31',
+        indeks: 'aktif-sekali',
+        entri: 'aktif sekali',
+      });
+      ModelKataHariIni.simpanByTanggal.mockRejectedValue({
+        code: '23505',
+        constraint: 'kata_hari_ini_entri_id_key',
+      });
+
+      const response = await callAsAdmin('put', '/api/redaksi/kata-hari-ini/1', {
+        body: { entri_id: 8, sumber: 'admin' },
+      });
+
+      expect(response.status).toBe(409);
+      expect(response.body.message).toBe('Entri ini sudah terdaftar sebagai Kata Hari Ini pada tanggal lain');
+      expect(hapusCacheKataHariIni).not.toHaveBeenCalled();
     });
 
     it('DELETE /api/redaksi/kata-hari-ini/:id menghapus arsip', async () => {
+      ModelKataHariIni.ambilDenganId.mockResolvedValue({
+        id: 1,
+        tanggal: '2026-03-31',
+        entri_id: 7,
+        indeks: 'aktif',
+        entri: 'aktif',
+      });
       ModelKataHariIni.hapus.mockResolvedValue(true);
 
       const response = await callAsAdmin('delete', '/api/redaksi/kata-hari-ini/1');
 
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
+      expect(hapusCacheKataHariIni).toHaveBeenCalledWith('2026-03-31');
     });
   });
 

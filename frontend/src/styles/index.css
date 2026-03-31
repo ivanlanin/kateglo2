@@ -679,7 +679,7 @@ code {
   }
 
   .beranda-sorotan-grid {
-    @apply mx-auto mt-6 grid max-w-6xl grid-cols-1 gap-5 xl:grid-cols-2;
+    @apply mx-auto mt-4 grid max-w-6xl grid-cols-1 gap-5 xl:grid-cols-2;
   }
 
   .beranda-sorotan-card {
@@ -687,7 +687,7 @@ code {
   }
 
   .beranda-sorotan-card-kata {
-    @apply border-amber-200 bg-gradient-to-br from-amber-50 via-white to-blue-50;
+    @apply border-blue-200 bg-gradient-to-br from-blue-50 via-white to-emerald-50;
   }
 
   .beranda-sorotan-card-kuis {
@@ -695,8 +695,8 @@ code {
   }
 
   .dark .beranda-sorotan-card-kata {
-    @apply border-amber-500/30 bg-dark-bg;
-    background-image: linear-gradient(135deg, rgba(120, 53, 15, 0.18), rgba(15, 23, 42, 0.9), rgba(30, 64, 175, 0.16));
+    @apply border-blue-500/30 bg-dark-bg;
+    background-image: linear-gradient(135deg, rgba(30, 64, 175, 0.18), rgba(15, 23, 42, 0.9), rgba(5, 150, 105, 0.14));
   }
 
   .dark .beranda-sorotan-card-kuis {
@@ -713,7 +713,7 @@ code {
   }
 
   .beranda-sorotan-card-kata .beranda-sorotan-kicker {
-    @apply text-amber-700;
+    @apply text-blue-700;
   }
 
   .beranda-sorotan-card-kuis .beranda-sorotan-kicker {
@@ -721,7 +721,7 @@ code {
   }
 
   .dark .beranda-sorotan-card-kata .beranda-sorotan-kicker {
-    @apply text-amber-300;
+    @apply text-blue-300;
   }
 
   .dark .beranda-sorotan-card-kuis .beranda-sorotan-kicker {
@@ -736,12 +736,24 @@ code {
     @apply text-dark-text;
   }
 
+  .beranda-sorotan-placeholder-title {
+    @apply mt-2 h-9 w-40 rounded-2xl bg-gray-200/90 animate-pulse;
+  }
+
+  .dark .beranda-sorotan-placeholder-title {
+    @apply bg-dark-bg-hover;
+  }
+
   .beranda-sorotan-link {
     @apply inline-flex items-center justify-center rounded-full border bg-white px-4 py-2 text-sm font-medium no-underline transition-colors;
   }
 
+  .beranda-sorotan-link-disabled {
+    @apply cursor-default opacity-60 pointer-events-none;
+  }
+
   .beranda-sorotan-card-kata .beranda-sorotan-link {
-    @apply border-amber-300 text-amber-800 hover:border-amber-400 hover:bg-amber-100;
+    @apply border-blue-300 text-blue-800 hover:border-blue-400 hover:bg-blue-100;
   }
 
   .beranda-sorotan-card-kuis .beranda-sorotan-link {
@@ -749,7 +761,7 @@ code {
   }
 
   .dark .beranda-sorotan-card-kata .beranda-sorotan-link {
-    @apply border-amber-400/50 bg-dark-bg-elevated text-amber-200 hover:bg-dark-bg-hover;
+    @apply border-blue-400/50 bg-dark-bg-elevated text-blue-200 hover:bg-dark-bg-hover;
   }
 
   .dark .beranda-sorotan-card-kuis .beranda-sorotan-link {
@@ -794,6 +806,30 @@ code {
 
   .dark .beranda-sorotan-card-kata .beranda-sorotan-footnote {
     @apply text-amber-200;
+  }
+
+  .beranda-sorotan-actions {
+    @apply mt-4 flex items-start;
+  }
+
+  .beranda-sorotan-placeholder {
+    @apply mt-4 flex flex-col gap-2.5;
+  }
+
+  .beranda-sorotan-placeholder-line {
+    @apply block h-4 rounded-full bg-gray-200/90 animate-pulse;
+  }
+
+  .beranda-sorotan-placeholder-line-wide {
+    @apply w-full;
+  }
+
+  .beranda-sorotan-placeholder-line-short {
+    @apply w-4/6;
+  }
+
+  .dark .beranda-sorotan-placeholder-line {
+    @apply bg-dark-bg-hover;
   }
 
   .beranda-feature-grid {
@@ -924,10 +960,6 @@ code {
 
   .gim-kuis-kata {
     @apply max-w-xl mx-auto mt-4 mb-2 px-1;
-  }
-
-  .gim-kuis-kata-beranda {
-    @apply max-w-none mx-0 mt-4 mb-0 px-0;
   }
 
   .gim-header {

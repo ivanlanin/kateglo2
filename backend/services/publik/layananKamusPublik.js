@@ -154,6 +154,12 @@ function buatCacheKeyKataHariIni(tanggal) {
   return `${cachePrefixKataHariIni}${encodeURIComponent(parseTanggalReferensi(tanggal))}`;
 }
 
+async function hapusCacheKataHariIni(tanggal) {
+  const tanggalAman = String(tanggal || '').trim();
+  if (!tanggalAman) return;
+  await delKey(buatCacheKeyKataHariIni(tanggalAman));
+}
+
 function hashTanggal(value = '') {
   return Array.from(String(value || '')).reduce(
     (acc, karakter) => ((acc * 33) + karakter.charCodeAt(0)) >>> 0,
@@ -208,6 +214,28 @@ function ambilContohUtama(entri = null) {
   return null;
 }
 
+function ambilRingkasanMakna(entri = null) {
+  const hasil = [];
+
+  for (const makna of entri?.makna || []) {
+    const teksMakna = normalisasiCuplikan(makna?.makna, 240);
+    if (!teksMakna) {
+      continue;
+    }
+
+    const contohUtama = (makna?.contoh || [])
+      .map((item) => normalisasiCuplikan(item?.contoh, 220))
+      .find(Boolean) || null;
+
+    hasil.push({
+      makna: teksMakna,
+      contoh: contohUtama,
+    });
+  }
+
+  return hasil;
+}
+
 function ambilEtimologiUtama(entriList = [], entriUtama = null) {
   const daftarTarget = [
     ...(entriUtama ? [entriUtama] : []),
@@ -241,17 +269,24 @@ function bentukPayloadKataHariIni(detail = null, tanggal = null, preferredEntriI
   const { entri, makna } = ambilMaknaUtama(detail.entri, preferredEntriId);
   if (!entri || !makna) return null;
 
+  const daftarMakna = ambilRingkasanMakna(entri);
   const contoh = ambilContohUtama(entri);
   const etimologi = ambilEtimologiUtama(detail.entri, entri);
+  const homonimRaw = entri?.homonim;
+  const homonim = homonimRaw === null || homonimRaw === undefined || String(homonimRaw).trim() === ''
+    ? null
+    : Number(homonimRaw);
 
   return {
     tanggal: parseTanggalReferensi(tanggal),
     indeks: detail.indeks,
     entri: entri.entri || detail.indeks,
+    homonim: Number.isFinite(homonim) ? homonim : null,
     url: `/kamus/detail/${encodeURIComponent(detail.indeks)}`,
     kelas_kata: makna?.kelas_kata || null,
     makna: normalisasiCuplikan(makna?.makna, 180),
     contoh: normalisasiCuplikan(contoh?.contoh, 220),
+    daftar_makna: daftarMakna,
     pemenggalan: entri?.pemenggalan || null,
     lafal: entri?.lafal || null,
     etimologi,
@@ -577,6 +612,7 @@ module.exports = {
   ambilDetailKamus,
   ambilKataHariIni,
   hapusCacheDetailKamus,
+  hapusCacheKataHariIni,
   buatCacheKeyDetailKamus,
 };
 
@@ -594,10 +630,12 @@ module.exports.__private = {
   tanggalHariIniJakarta,
   parseTanggalReferensi,
   buatCacheKeyKataHariIni,
+  hapusCacheKataHariIni,
   hashTanggal,
   normalisasiCuplikan,
   ambilMaknaUtama,
   ambilContohUtama,
+  ambilRingkasanMakna,
   ambilEtimologiUtama,
   bentukPayloadKataHariIni,
   pilihKandidatKataHariIniOtomatis,
