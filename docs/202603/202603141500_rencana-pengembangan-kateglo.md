@@ -1,6 +1,7 @@
 # Rencana Pengembangan Kateglo 2.0
 
 Tanggal: 14 Maret 2026
+Terakhir dimutakhirkan: 31 Maret 2026
 
 ## Ringkasan
 
@@ -10,7 +11,7 @@ Dokumen ini berisi analisis perbandingan fitur Kateglo dengan 10 kamus publik be
 
 ## 1. Analisis Menu Publik Saat Ini
 
-### Menu Navigasi Utama Kateglo (8 item)
+### Menu Navigasi Utama Kateglo (9 item per 31 Maret 2026)
 
 | No | Menu | Rute | Fungsi |
 |----|------|------|--------|
@@ -19,14 +20,15 @@ Dokumen ini berisi analisis perbandingan fitur Kateglo dengan 10 kamus publik be
 | 3 | Glosarium | `/glosarium` | Istilah teknis bilingual per bidang |
 | 4 | Makna | `/makna` | Kamus terbalik (cari berdasarkan definisi) |
 | 5 | Rima | `/rima` | Pencari rima akhir & aliterasi |
-| 6 | Ejaan | `/ejaan` | Panduan ejaan (EYD) |
-| 7 | Alat | `/alat` | Penghitung huruf, penganalisis teks |
-| 8 | Gim | `/gim` | Kuis kata, susun kata |
+| 6 | Gramatika | `/gramatika` | Tata bahasa TBBBI (ditambahkan Maret 2026) |
+| 7 | Ejaan | `/ejaan` | Panduan ejaan (EYD) |
+| 8 | Alat | `/alat` | Penghitung huruf, penganalisis teks, pohon kalimat |
+| 9 | Gim | `/gim` | Kuis kata, susun kata |
 
 ### Masalah
-- **8 item menu terlalu banyak** untuk navigasi utama — standar industri kamus besar: 4–6 item.
+- **9 item menu terlalu banyak** untuk navigasi utama — standar industri kamus besar: 4–6 item. (Bertambah dari 8 sejak Gramatika ditambahkan Maret 2026.)
 - **Makna** dan **Rima** adalah fitur pencarian khusus, bukan produk berdiri sendiri.
-- **Ejaan** bersifat referensi statis, bukan fitur kamus inti.
+- **Gramatika** dan **Ejaan** bersifat referensi statis, bukan fitur kamus inti.
 - **Alat** dan **Gim** bernilai tinggi tapi bukan fungsi utama kamus.
 
 ---
@@ -460,12 +462,12 @@ Legenda: ✅ = ada, ⚠️ = parsial, ❌ = tidak ada, — = tidak relevan/tidak
 | Pencarian sentral | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Kamus (definisi) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Tesaurus | ✅ | ✅ | ✅ | — | ✅ | — | ✅ | ✅ | ✅ | — | ✅ |
-| Kata Hari Ini | — | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ | — | ✅ | ❌ |
+| Kata Hari Ini | — | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ | — | ✅ | ✅ |
 | Gim & Kuis | — | ✅ | ✅ | — | ✅ | ✅ | ✅ | — | — | — | ✅ |
 | Tata Bahasa/Ejaan | — | ✅ | ✅ | ✅ | ✅ | — | ✅ | — | — | — | ✅ |
 | Jelajah A–Z | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ | ✅ | — | — | ✅ |
 | Pencarian Populer | — | ✅ | ✅ | — | ✅ | — | ✅ | — | — | — | ✅ |
-| Pengucapan/Audio | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ | — | — | ⚠️ |
+| Pengucapan/Audio | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ | — | — | ✅ |
 | Contoh Kalimat | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ |
 | Etimologi | ✅ | ✅ | — | — | ✅ | — | ✅ | ✅ | — | ✅ | ✅ |
 | Topik/Glosarium | — | ⚠️ | ✅ | ✅ | — | ✅ | — | ✅ | — | — | ✅ |
@@ -491,7 +493,9 @@ Legenda: ✅ = ada, ⚠️ = parsial, ❌ = tidak ada, — = tidak relevan/tidak
 1. **Menu utama ≤ 5 item** — lebih dari itu, pengguna kewalahan.
 2. **Fitur pencarian khusus** (Makna, Rima) masuk sub-fitur, bukan menu utama.
 3. **Alat** dan **Gim** digabung atau salah satu jadi sub-menu.
-4. **Ejaan** diturunkan ke sub-menu — jarang diakses dibanding kamus/tesaurus.
+4. **Gramatika** dan **Ejaan** digabung atau keduanya masuk sub-menu — jarang diakses dibanding kamus/tesaurus.
+
+_Catatan (31 Maret 2026): Menu saat ini 9 item — bertambah 1 sejak Gramatika ditambahkan pada 19 Maret 2026. Reorganisasi menjadi lebih mendesak._
 
 ### Struktur Menu Baru yang Diusulkan
 
@@ -510,6 +514,7 @@ Legenda: ✅ = ada, ⚠️ = parsial, ❌ = tidak ada, — = tidak relevan/tidak
 | 5 | **Lainnya** (⋯) | Submenu dropdown: | Baru — catch-all |
 | | | — Makna (kamus terbalik) | Pindah dari menu utama |
 | | | — Rima | Pindah dari menu utama |
+| | | — Gramatika (tata bahasa TBBBI) | Pindah dari menu utama |
 | | | — Ejaan (panduan EYD) | Pindah dari menu utama |
 | | | — Alat (penghitung huruf, dsb.) | Pindah dari menu utama |
 | | | — Sumber (bibliografi) | Sudah ada, bukan menu |
@@ -530,25 +535,27 @@ Berdasarkan gap analysis dengan kamus besar dunia, diurutkan berdasarkan **dampa
 
 ### Prioritas Tinggi (Dampak besar, usaha terkendali)
 
-#### 6.1 Kata Hari Ini (Word of the Day)
+#### 6.1 Kata Hari Ini (Word of the Day) ✅ SELESAI
 - **Apa:** Menampilkan satu kata menarik setiap hari dengan definisi, contoh, dan etimologi.
 - **Kenapa:** Fitur ini ada di **semua** kamus besar. Meningkatkan engagement harian, SEO, dan bisa jadi konten media sosial.
 - **Implementasi:**
-  - Pilih otomatis dari entri yang punya definisi lengkap + etimologi + contoh.
-  - Tampilkan di beranda (mengganti/melengkapi bagian populer).
-  - Endpoint API: `GET /api/publik/kata-hari-ini`
-  - Simpan riwayat agar tidak berulang.
+  - ~~Pilih otomatis dari entri yang punya definisi lengkap + etimologi + contoh.~~ ✅
+  - ~~Tampilkan di beranda (mengganti/melengkapi bagian populer).~~ ✅ Tampil di beranda di bawah pencarian.
+  - ~~Endpoint API: `GET /api/publik/kata-hari-ini`~~ ✅ Tersedia di `GET /api/publik/kamus/kata-hari-ini`
+  - ~~Simpan riwayat agar tidak berulang.~~ ✅ Tabel `kata_hari_ini` di database.
+  - Manajemen via redaksi: `GET/POST/PUT/DELETE /api/redaksi/kata-hari-ini` ✅
+  - **Belum selesai:** Halaman arsip/riwayat publik untuk melihat kata-kata sebelumnya.
   - Opsional: widget untuk embed di situs lain.
 
 #### 6.2 Reorganisasi Menu (seperti bagian 5)
-- **Apa:** Streamline navigasi dari 8 → 4–5 item.
+- **Apa:** Streamline navigasi dari 9 → 4–5 item. (Sekarang 9 menu setelah Gramatika ditambahkan.)
 - **Kenapa:** UX lebih bersih, pengguna tidak kewalahan.
 - **Implementasi:** Perubahan frontend saja (NavbarPublik + MenuUtama).
 
-#### 6.3 Halaman "Tentang Kateglo"
+#### 6.3 Halaman "Tentang Kateglo" ✅ SELESAI
 - **Apa:** Halaman statis yang menjelaskan misi, sumber data, tim, dan cara berkontribusi.
 - **Kenapa:** Semua kamus besar punya halaman ini. Penting untuk kredibilitas dan SEO.
-- **Implementasi:** Halaman markdown statis, mirip Ejaan.
+- **Implementasi:** ~~Halaman markdown statis, mirip Ejaan.~~ → Diimplementasikan sebagai halaman [Ihwal](/ihwal) (26 Maret 2026).
 
 ### Prioritas Sedang (Dampak besar, usaha lebih besar)
 
@@ -594,10 +601,10 @@ Berdasarkan gap analysis dengan kamus besar dunia, diurutkan berdasarkan **dampa
 - **Kenapa:** Merriam-Webster sangat sukses dengan newsletter harian.
 - **Implementasi:** Integrasi dengan layanan email (Mailchimp/Resend). Mulai setelah Kata Hari Ini jalan.
 
-#### 6.10 Pengucapan Audio
+#### 6.10 Pengucapan Audio ✅ SELESAI
 - **Apa:** Tombol play audio pengucapan kata.
 - **Kenapa:** Fitur standar di semua kamus besar. Data lafal sudah ada di Kateglo.
-- **Implementasi:** Text-to-speech API atau rekaman manual. Bisa pakai Web Speech API sebagai awal.
+- **Implementasi:** ~~Text-to-speech API atau rekaman manual. Bisa pakai Web Speech API sebagai awal.~~ → Diimplementasikan menggunakan Web Speech API (`TombolLafal`). Tersedia di halaman detail kamus dan widget Kata Hari Ini di beranda. Menampilkan notasi IPA jika tersedia (31 Maret 2026).
 
 #### 6.11 Daftar Kata Pribadi (Personal Word Lists)
 - **Apa:** Pengguna yang login bisa menyimpan kata ke daftar pribadi.
@@ -619,29 +626,45 @@ Berdasarkan gap analysis dengan kamus besar dunia, diurutkan berdasarkan **dampa
 
 ---
 
+## 6A. Fitur Baru yang Telah Dikembangkan (Tidak dalam Rencana Awal)
+
+Fitur-fitur berikut dikembangkan setelah dokumen ini ditulis (14 Maret 2026) dan tidak ada dalam rencana awal:
+
+| Fitur | Tanggal | Deskripsi |
+|-------|---------|-----------|
+| **Gramatika TBBBI** | 19–25 Mar 2026 | Tata bahasa Indonesia lengkap berdasarkan TBBBI: 14 subbab, daftar istilah (3.220 glosarium Kamus Linguistik), daftar tabel, daftar gambar, kotak pencarian, panel lipat |
+| **Pohon Kalimat** | 27 Mar 2026 | Alat analisis struktur kalimat visual di `/alat/pohon-kalimat` |
+| **Katalog Fitur** | 26 Mar 2026 | Sistem metadata terpusat (`katalogFiturData.json`) untuk alat dan gim — mendukung UI, SSR, dan sitemap |
+| **Open Graph dinamis** | 21 Mar 2026 | Gambar pratayang OG yang dihasilkan secara dinamis per halaman |
+| **Glosarium Linguistik** | 25 Mar 2026 | 3.220 entri glosarium dari Kamus Linguistik |
+| **Skor Kumulatif Kuis Kata** | 31 Mar 2026 | Skor kumulatif dan jumlah ronde harian di Kuis Kata |
+| **Soal Susun Kata Unik** | 30 Mar 2026 | Menjamin soal susun kata harian tidak berulang |
+
+---
+
 ## 7. Roadmap Usulan
 
-### Fase 1: Quick Wins (1–2 minggu)
-- [ ] Reorganisasi menu (8 → 5 item, dropdown Lainnya)
-- [ ] Halaman "Tentang Kateglo"
-- [ ] Kata Hari Ini — fitur dasar (pilih otomatis + tampilan di beranda)
+### Fase 1: Quick Wins — Status per 31 Maret 2026
+- [ ] Reorganisasi menu (9 → 5 item, dropdown Lainnya) — **belum dimulai**
+- [x] ~~Halaman "Tentang Kateglo"~~ — **selesai** (halaman Ihwal, 26 Maret 2026)
+- [x] ~~Kata Hari Ini — fitur dasar~~ — **selesai** (DB + API publik/redaksi + tampilan di beranda, 31 Maret 2026)
 
-### Fase 2: Konten & Detail (2–4 minggu)
-- [ ] Kata Hari Ini — riwayat + halaman arsip
-- [ ] Peningkatan halaman detail kamus (section terstruktur, tautan silang)
-- [ ] Contoh kalimat lebih menonjol
-- [ ] KADI: halaman publik usul kata
+### Fase 2: Konten & Detail
+- [ ] Kata Hari Ini — riwayat + halaman arsip — **belum dimulai** (backend & beranda sudah ada, perlu halaman arsip tersendiri)
+- [ ] Peningkatan halaman detail kamus (section terstruktur, tautan silang) — **sebagian** (lafal/IPA sudah ditambahkan)
+- [ ] Contoh kalimat lebih menonjol — **belum dimulai**
+- [ ] KADI: halaman publik usul kata — **belum dimulai** (backend redaksi sudah ada)
 
-### Fase 3: Engagement (1–2 bulan)
-- [ ] Konten editorial / blog bahasa (mulai 1 artikel/minggu)
-- [ ] 1–2 gim baru (Tebak Kata, Pasangkan Sinonim)
-- [ ] Kamus Tematik (dari data bidang + tagar)
+### Fase 3: Engagement
+- [ ] Konten editorial / blog bahasa (mulai 1 artikel/minggu) — **belum dimulai**
+- [ ] 1–2 gim baru (Tebak Kata, Pasangkan Sinonim) — **belum dimulai**
+- [ ] Kamus Tematik (dari data bidang + tagar) — **belum dimulai**
 
-### Fase 4: Platform (2–3 bulan)
-- [ ] API publik terdokumentasi
-- [ ] Pengucapan audio (Web Speech API)
-- [ ] Newsletter (Kata Hari Ini + ringkasan mingguan)
-- [ ] Daftar kata pribadi (butuh akun publik)
+### Fase 4: Platform
+- [ ] API publik terdokumentasi — **belum dimulai**
+- [x] ~~Pengucapan audio (Web Speech API)~~ — **selesai** (TombolLafal + notasi IPA di detail kamus & beranda KTI, 31 Maret 2026)
+- [ ] Newsletter (Kata Hari Ini + ringkasan mingguan) — **belum dimulai**
+- [ ] Daftar kata pribadi (butuh akun publik) — **belum dimulai**
 
 ---
 
@@ -657,6 +680,8 @@ Fitur yang **tidak dimiliki** kamus besar lain dan harus dipertahankan/diperkuat
 | **KADI** | Kamus Deskriptif berbasis korpus + kontribusi publik — inovatif |
 | **Pemenggalan Suku Kata** | Data pemenggalan suku kata — jarang ada |
 | **Tagar Morfologis** | Jelajah kata berdasarkan imbuhan — sangat berguna untuk pelajar |
+| **Gramatika TBBBI** | Tata bahasa Indonesia lengkap berdasarkan TBBBI — baru ditambahkan Maret 2026 |
+| **Pohon Kalimat** | Alat analisis struktur kalimat visual — unik untuk bahasa Indonesia |
 
 Fitur-fitur ini adalah **keunggulan kompetitif** Kateglo dan harus tetap mudah diakses walaupun dipindah dari menu utama ke sub-menu.
 
@@ -670,6 +695,6 @@ Fitur-fitur ini adalah **keunggulan kompetitif** Kateglo dan harus tetap mudah d
 - **Mobile first** — menu hamburger hanya menampilkan 4–5 item utama, bukan 8.
 
 ### Inspirasi Layout
-- **Beranda:** Hero search + Kata Hari Ini + Populer + Kuis cepat (seperti sekarang tapi dengan Kata Hari Ini).
+- **Beranda:** Hero search + Kata Hari Ini ✅ + Populer + Kuis cepat.
 - **Detail Kamus:** Definisi → Contoh → Tesaurus → Etimologi → Rima → Kata Terkait (semua di satu halaman, navigasi section).
 - **Glosarium:** Tetap terpisah karena audiens berbeda (penerjemah, profesional).
