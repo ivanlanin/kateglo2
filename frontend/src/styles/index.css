@@ -2109,11 +2109,32 @@ code {
   }
 
   .kamus-detail-btn-lafal {
-    @apply inline-flex items-center justify-center rounded-full p-1 text-gray-500 transition-colors hover:text-blue-600 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400;
+    @apply inline-flex items-center justify-center p-0.5 text-blue-600 transition-colors hover:text-blue-700 active:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2;
   }
 
   .dark .kamus-detail-btn-lafal {
-    @apply text-gray-400 hover:text-blue-300 hover:bg-blue-900/30;
+    @apply text-blue-400 hover:text-blue-300 active:text-blue-200 focus-visible:ring-offset-gray-900;
+  }
+
+  /* Wave animation: 0→33% hidden, 33→66% wave1, 66→100% wave1+wave2 */
+  .lafal-wave-1 {
+    animation: lafalWave1 0.9s steps(1) infinite;
+  }
+
+  .lafal-wave-2 {
+    animation: lafalWave2 0.9s steps(1) infinite;
+  }
+
+  @keyframes lafalWave1 {
+    0% { opacity: 0; }
+    33.33% { opacity: 1; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes lafalWave2 {
+    0% { opacity: 0; }
+    66.66% { opacity: 1; }
+    100% { opacity: 1; }
   }
 
   .kamus-detail-sekuens-nav {
