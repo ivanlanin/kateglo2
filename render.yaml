@@ -8,7 +8,7 @@ services:
     healthCheckPath: /health
     envVars:
       - key: NODE_VERSION
-        value: 20
+        value: 22
       - key: NODE_ENV
         value: production
       - key: TRUST_PROXY
@@ -41,3 +41,23 @@ services:
         sync: false
       - key: REDIS_URL
         sync: false
+      - key: R2_ACCOUNT_ID
+        sync: false
+      - key: R2_ACCESS_KEY_ID
+        sync: false
+      - key: R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: R2_ENDPOINT
+        sync: false
+      - key: R2_REGION
+        value: auto
+      - key: R2_BUCKET_PRIVATE
+        sync: false
+      - key: LEIPZIG_ACTIVE_CORPORA
+        sync: false
+      - key: LEIPZIG_R2_PREFIX
+        value: leipzig/sqlite
+      - key: LEIPZIG_SYNC_FROM_R2
+        value: "true"
+      - key: LEIPZIG_SYNC_REQUIRED
+        value: "false"

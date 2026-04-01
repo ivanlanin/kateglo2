@@ -354,9 +354,8 @@ function PenganalisisTeks() {
                 hidden={tabHasilAktif !== 'paragraf'}
                 className="alat-subpanel"
               >
-                <h3 id="alat-paragraph-title" className="alat-subpanel-title">Detail paragraf</h3>
                 {adaHasil ? (
-                  <ol className="alat-paragraph-list">
+                  <ol className="alat-paragraph-list alat-subpanel-body">
                     {hasil.paragraphDetails.map((detail, index) => (
                       <li key={detail.id} className="alat-paragraph-item">
                         <article className={getParagraphSummaryClass(detail.isLong)}>
@@ -393,7 +392,7 @@ function PenganalisisTeks() {
                     ))}
                   </ol>
                 ) : (
-                  <p className="alat-empty-text">Belum ada rincian paragraf yang ditampilkan.</p>
+                  <p className="alat-empty-text alat-subpanel-body">Belum ada rincian paragraf yang ditampilkan.</p>
                 )}
               </section>
 
@@ -404,9 +403,8 @@ function PenganalisisTeks() {
                 hidden={tabHasilAktif !== 'frekuensi'}
                 className="alat-subpanel"
               >
-                <h3 id="alat-frequency-title" className="alat-subpanel-title">Frekuensi kata</h3>
                 {adaHasil ? (
-                  <div className="alat-frequency-groups">
+                  <div className="alat-frequency-groups alat-subpanel-body">
                     {hasil.frequency.commonWordsMoreThanOnce.length ? (
                       <div className="alat-frequency-group">
                         <strong>Kata (&gt;1x)</strong>
@@ -433,7 +431,7 @@ function PenganalisisTeks() {
                     ) : null}
                   </div>
                 ) : (
-                  <p className="alat-empty-text">Belum ada frekuensi yang ditampilkan.</p>
+                  <p className="alat-empty-text alat-subpanel-body">Belum ada frekuensi yang ditampilkan.</p>
                 )}
               </section>
             </div>

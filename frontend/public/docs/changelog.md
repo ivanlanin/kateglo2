@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-04-01 Rabu
+
+- Merintis alat [Korpus Leipzig](/alat/korpus-leipzig)
+
 ## 2026-03-31 Selasa
 
 - Menambahkan pelafalan kata di halaman detail kamus dengan tombol audio dan notasi IPA

@@ -42,6 +42,7 @@ vi.mock('../src/pages/publik/glosarium', () => ({
 }));
 vi.mock('../src/pages/publik/alat', () => ({
   Alat: () => <div>Hal Alat</div>,
+  KorpusLeipzig: () => <div>Hal Korpus Leipzig</div>,
   PenghitungHuruf: () => <div>Hal Penghitung Huruf</div>,
   PenganalisisTeks: () => <div>Hal Penganalisis Teks</div>,
   PohonKalimat: () => <div>Hal Pohon Kalimat</div>,
@@ -327,6 +328,31 @@ describe('App', () => {
       </MemoryRouter>
     );
     expect(await screen.findByText('Hal Penganalisis Teks')).toBeInTheDocument();
+  });
+
+  it('mengalihkan route alat korpus leipzig untuk publik', async () => {
+    render(
+      <MemoryRouter initialEntries={['/alat/korpus-leipzig']}>
+        <App />
+      </MemoryRouter>
+    );
+    expect(await screen.findByText('Hal Alat')).toBeInTheDocument();
+  });
+
+  it('merender route alat korpus leipzig untuk redaksi', async () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      adalahRedaksi: true,
+      adalahAdmin: false,
+      isLoading: false,
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/alat/korpus-leipzig']}>
+        <App />
+      </MemoryRouter>
+    );
+    expect(await screen.findByText('Hal Korpus Leipzig')).toBeInTheDocument();
   });
 
   it('merender route alat penghitung huruf', async () => {

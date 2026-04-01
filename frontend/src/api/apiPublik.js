@@ -343,6 +343,86 @@ export async function ambilKlasemenSusunKataBebas({ limit = 10 } = {}) {
   return response.data;
 }
 
+// === ALAT: KORPUS LEIPZIG ===
+
+function buildLeipzigParams({ limit, offset } = {}) {
+  return {
+    ...(limit != null ? { limit: Math.min(Math.max(Number(limit) || 0, 1), 100) } : {}),
+    ...(offset != null ? { offset: Math.max(Number(offset) || 0, 0) } : {}),
+  };
+}
+
+function buildLeipzigRequestConfig({ limit, offset } = {}) {
+  const params = buildLeipzigParams({ limit, offset });
+
+  return {
+    timeout: 60000,
+    ...(Object.keys(params).length ? { params } : {}),
+  };
+}
+
+export async function ambilDaftarKorpusLeipzig() {
+  const response = await klien.get('/api/publik/leipzig/korpus', buildLeipzigRequestConfig());
+  return response.data;
+}
+
+export async function ambilInfoKataLeipzig(korpusId, kata) {
+  const response = await klien.get(
+    `/api/publik/leipzig/korpus/${encodeURIComponent(korpusId)}/kata/${encodeURIComponent(kata)}`,
+    buildLeipzigRequestConfig()
+  );
+  return response.data;
+}
+
+export async function ambilContohKataLeipzig(korpusId, kata, { limit = 8, offset = 0 } = {}) {
+  const response = await klien.get(
+    `/api/publik/leipzig/korpus/${encodeURIComponent(korpusId)}/kata/${encodeURIComponent(kata)}/contoh`,
+    buildLeipzigRequestConfig({ limit, offset })
+  );
+  return response.data;
+}
+
+export async function ambilKookurensiSekalimatLeipzig(korpusId, kata, { limit = 10, offset = 0 } = {}) {
+  const response = await klien.get(
+    `/api/publik/leipzig/korpus/${encodeURIComponent(korpusId)}/kata/${encodeURIComponent(kata)}/kookurensi-sekalimat`,
+    buildLeipzigRequestConfig({ limit, offset })
+  );
+  return response.data;
+}
+
+export async function ambilKookurensiTetanggaLeipzig(korpusId, kata, { limit = 8 } = {}) {
+  const response = await klien.get(
+    `/api/publik/leipzig/korpus/${encodeURIComponent(korpusId)}/kata/${encodeURIComponent(kata)}/kookurensi-tetangga`,
+    buildLeipzigRequestConfig({ limit })
+  );
+  return response.data;
+}
+
+export async function ambilGrafKataLeipzig(korpusId, kata, { limit = 10 } = {}) {
+  const response = await klien.get(
+    `/api/publik/leipzig/korpus/${encodeURIComponent(korpusId)}/kata/${encodeURIComponent(kata)}/graf`,
+    buildLeipzigRequestConfig({ limit })
+  );
+  return response.data;
+}
+
+export async function ambilMiripKonteksLeipzig(korpusId, kata, {
+  limit = 12,
+  minimumKonteksSama = null,
+} = {}) {
+  const response = await klien.get(
+    `/api/publik/leipzig/korpus/${encodeURIComponent(korpusId)}/kata/${encodeURIComponent(kata)}/mirip-konteks`,
+    {
+      ...buildLeipzigRequestConfig({ limit }),
+      params: {
+        ...buildLeipzigParams({ limit }),
+        ...(minimumKonteksSama != null ? { minimumKonteksSama: Math.min(Math.max(Number(minimumKonteksSama) || 0, 1), 20) } : {}),
+      },
+    }
+  );
+  return response.data;
+}
+
 export async function validasiKataSusunKata(kata, { panjang = 5 } = {}) {
   const kataAman = String(kata || '').trim().toLowerCase();
   const response = await klien.get(`/api/publik/gim/susun-kata/validasi/${encodeURIComponent(kataAman)}`, {

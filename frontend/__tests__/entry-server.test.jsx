@@ -222,6 +222,10 @@ describe('entry-server', () => {
     expect(pohonKalimat.title).toBe('Pohon Kalimat — Kateglo');
     expect(pohonKalimat.description).toContain('diagram pohon sintaksis');
 
+    const korpusLeipzig = __private.buildMetaForPath('/alat/korpus-leipzig', site);
+    expect(korpusLeipzig.title).toBe('Korpus Leipzig — Kateglo');
+    expect(korpusLeipzig.description).toContain('contoh kalimat');
+
     const gim = __private.buildMetaForPath('/gim', site);
     expect(gim.title).toBe('Gim — Kateglo');
     expect(gim.description).toContain('Kuis Kata');
@@ -353,6 +357,7 @@ describe('entry-server', () => {
     expect(__private.buildGenericSocialContext('/glosarium/sumber/pusba')).toEqual({ section: 'glosarium', context: 'Glosarium per Sumber' });
     expect(__private.buildGenericSocialContext('/alat')).toEqual({ section: 'alat', context: 'Perangkat Bahasa Indonesia' });
     expect(__private.buildGenericSocialContext('/alat/penghitung-huruf')).toEqual({ section: 'alat', context: 'Alat Bahasa Indonesia' });
+    expect(__private.buildGenericSocialContext('/alat/korpus-leipzig')).toEqual({ section: 'alat', context: 'Alat Bahasa Indonesia' });
     expect(__private.buildGenericSocialContext('/gim')).toEqual({ section: 'gim', context: 'Permainan Kata Bahasa Indonesia' });
     expect(__private.buildGenericSocialContext('/gim/kuis-kata')).toEqual({ section: 'gim', context: 'Permainan Bahasa Indonesia' });
     expect(__private.buildGenericSocialContext('/random')).toEqual({ section: 'default', context: 'Kamus, Tesaurus, dan Glosarium Bahasa Indonesia' });
@@ -430,6 +435,13 @@ describe('entry-server', () => {
     expect(appHtml).toContain('App SSR Mock');
     expect(headTags).toContain('Penghitung Huruf — Kateglo');
     expect(headTags).toContain('https://kateglo.org/alat/penghitung-huruf');
+  });
+
+  it('render menghasilkan canonical untuk route alat korpus leipzig', async () => {
+    const { appHtml, headTags } = await render('/alat/korpus-leipzig');
+    expect(appHtml).toContain('App SSR Mock');
+    expect(headTags).toContain('Korpus Leipzig — Kateglo');
+    expect(headTags).toContain('https://kateglo.org/alat/korpus-leipzig');
   });
 
   it('render menghasilkan canonical dan title SEO untuk route susun kata harian', async () => {

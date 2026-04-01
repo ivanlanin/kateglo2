@@ -50,6 +50,13 @@ import {
   ambilDaftarSumber,
   ambilSemuaTagar,
   cariEntriPerTagar,
+  ambilDaftarKorpusLeipzig,
+  ambilInfoKataLeipzig,
+  ambilContohKataLeipzig,
+  ambilKookurensiSekalimatLeipzig,
+  ambilKookurensiTetanggaLeipzig,
+  ambilGrafKataLeipzig,
+  ambilMiripKonteksLeipzig,
 } from '../../src/api/apiPublik';
 
 describe('apiPublik', () => {
@@ -219,6 +226,41 @@ describe('apiPublik', () => {
     expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/rima/contoh');
   });
 
+  it('API Leipzig memakai timeout khusus termasuk endpoint mirip konteks', async () => {
+    klien.get.mockResolvedValue({ data: { data: [] } });
+
+    await ambilDaftarKorpusLeipzig();
+    await ambilInfoKataLeipzig('ind_news_2024_10K', 'indonesia');
+    await ambilContohKataLeipzig('ind_news_2024_10K', 'indonesia', { limit: 8, offset: 0 });
+    await ambilKookurensiSekalimatLeipzig('ind_news_2024_10K', 'indonesia', { limit: 25, offset: 0 });
+    await ambilKookurensiTetanggaLeipzig('ind_news_2024_10K', 'indonesia', { limit: 25 });
+    await ambilGrafKataLeipzig('ind_news_2024_10K', 'indonesia', { limit: 10 });
+    await ambilMiripKonteksLeipzig('ind_news_2024_10K', 'indonesia', { limit: 12, minimumKonteksSama: 3 });
+
+    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/leipzig/korpus', { timeout: 60000 });
+    expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/leipzig/korpus/ind_news_2024_10K/kata/indonesia', { timeout: 60000 });
+    expect(klien.get).toHaveBeenNthCalledWith(3, '/api/publik/leipzig/korpus/ind_news_2024_10K/kata/indonesia/contoh', {
+      params: { limit: 8, offset: 0 },
+      timeout: 60000,
+    });
+    expect(klien.get).toHaveBeenNthCalledWith(4, '/api/publik/leipzig/korpus/ind_news_2024_10K/kata/indonesia/kookurensi-sekalimat', {
+      params: { limit: 25, offset: 0 },
+      timeout: 60000,
+    });
+    expect(klien.get).toHaveBeenNthCalledWith(5, '/api/publik/leipzig/korpus/ind_news_2024_10K/kata/indonesia/kookurensi-tetangga', {
+      params: { limit: 25 },
+      timeout: 60000,
+    });
+    expect(klien.get).toHaveBeenNthCalledWith(6, '/api/publik/leipzig/korpus/ind_news_2024_10K/kata/indonesia/graf', {
+      params: { limit: 10 },
+      timeout: 60000,
+    });
+    expect(klien.get).toHaveBeenNthCalledWith(7, '/api/publik/leipzig/korpus/ind_news_2024_10K/kata/indonesia/mirip-konteks', {
+      params: { limit: 12, minimumKonteksSama: 3 },
+      timeout: 60000,
+    });
+  });
+
   it('ambilPencarianPopuler memanggil endpoint populer dengan tanggal aman', async () => {
     klien.get.mockResolvedValue({ data: { data: {} } });
 
@@ -230,6 +272,36 @@ describe('apiPublik', () => {
     });
     expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/pencarian/populer', {
       params: { tanggal: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/) },
+    });
+  });
+
+  it('request Leipzig memakai timeout lebih longgar', async () => {
+    klien.get.mockResolvedValue({ data: { data: [] } });
+
+    await ambilDaftarKorpusLeipzig();
+    await ambilInfoKataLeipzig('ind_wikipedia_2021_1M', 'indonesia');
+    await ambilContohKataLeipzig('ind_wikipedia_2021_1M', 'indonesia', { limit: 8, offset: 0 });
+    await ambilKookurensiSekalimatLeipzig('ind_wikipedia_2021_1M', 'indonesia', { limit: 10, offset: 0 });
+    await ambilKookurensiTetanggaLeipzig('ind_wikipedia_2021_1M', 'indonesia', { limit: 8 });
+    await ambilGrafKataLeipzig('ind_wikipedia_2021_1M', 'indonesia', { limit: 10 });
+
+    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/leipzig/korpus', { timeout: 60000 });
+    expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/leipzig/korpus/ind_wikipedia_2021_1M/kata/indonesia', { timeout: 60000 });
+    expect(klien.get).toHaveBeenNthCalledWith(3, '/api/publik/leipzig/korpus/ind_wikipedia_2021_1M/kata/indonesia/contoh', {
+      timeout: 60000,
+      params: { limit: 8, offset: 0 },
+    });
+    expect(klien.get).toHaveBeenNthCalledWith(4, '/api/publik/leipzig/korpus/ind_wikipedia_2021_1M/kata/indonesia/kookurensi-sekalimat', {
+      timeout: 60000,
+      params: { limit: 10, offset: 0 },
+    });
+    expect(klien.get).toHaveBeenNthCalledWith(5, '/api/publik/leipzig/korpus/ind_wikipedia_2021_1M/kata/indonesia/kookurensi-tetangga', {
+      timeout: 60000,
+      params: { limit: 8 },
+    });
+    expect(klien.get).toHaveBeenNthCalledWith(6, '/api/publik/leipzig/korpus/ind_wikipedia_2021_1M/kata/indonesia/graf', {
+      timeout: 60000,
+      params: { limit: 10 },
     });
   });
 

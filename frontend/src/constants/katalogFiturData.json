@@ -50,6 +50,20 @@
         "sitemapPaths": [
           "/alat/pohon-kalimat"
         ]
+      },
+      {
+        "slug": "korpus-leipzig",
+        "judul": "Korpus Leipzig",
+        "deskripsi": "Telusuri frekuensi kata, contoh kalimat, tetangga leksikal, dan graf asosiasi dari korpus Leipzig bahasa Indonesia.",
+        "href": "/alat/korpus-leipzig",
+        "routePath": "/alat/korpus-leipzig",
+        "tampilPublik": false,
+        "seoJudul": "Korpus Leipzig",
+        "seoDeskripsi": "Alat untuk menelusuri frekuensi kata, contoh kalimat, dan asosiasi kata dari korpus Leipzig bahasa Indonesia di Kateglo.",
+        "canonicalPath": "/alat/korpus-leipzig",
+        "sitemapPaths": [
+          "/alat/korpus-leipzig"
+        ]
       }
     ]
   },

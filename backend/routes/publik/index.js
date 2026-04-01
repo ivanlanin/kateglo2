@@ -22,6 +22,7 @@ router.get('/health', (_req, res) => {
   });
 });
 
+router.use('/leipzig', require('./leipzig'));
 router.use('/', require('./leksikon'));
 router.use('/', require('./interaksi'));
 router.use('/gim', require('./gim'));

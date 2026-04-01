@@ -253,9 +253,8 @@ function PenghitungHuruf() {
                 hidden={tabHasilAktif !== 'tabel'}
                 className="alat-subpanel"
               >
-                <h3 className="alat-subpanel-title">Tabel frekuensi</h3>
                 {adaHasil ? (
-                  <div className="alat-table-wrap">
+                  <div className="alat-table-wrap alat-subpanel-body">
                     <table className="alat-data-table">
                       <thead>
                         <tr>
@@ -276,7 +275,7 @@ function PenghitungHuruf() {
                     </table>
                   </div>
                 ) : (
-                  <p className="alat-empty-text">Belum ada data huruf untuk ditampilkan.</p>
+                  <p className="alat-empty-text alat-subpanel-body">Belum ada data huruf untuk ditampilkan.</p>
                 )}
               </section>
 
@@ -287,12 +286,11 @@ function PenghitungHuruf() {
                 hidden={tabHasilAktif !== 'grafik'}
                 className="alat-subpanel"
               >
-                <h3 className="alat-subpanel-title">Grafik distribusi huruf</h3>
-                <div className="alat-chart-shell">
+                <div className="alat-chart-shell alat-subpanel-body">
                   {adaHasil ? (
                     <canvas ref={canvasRef} className="alat-chart-canvas" aria-label="Grafik frekuensi huruf" />
                   ) : (
-                    <p className="alat-empty-text">Belum ada grafik yang ditampilkan.</p>
+                    <p className="alat-empty-text alat-subpanel-body">Belum ada grafik yang ditampilkan.</p>
                   )}
                 </div>
               </section>
