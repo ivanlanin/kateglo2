@@ -15,6 +15,22 @@ function setCacheHeaders(res, maxAge = 300, staleWhileRevalidate = 900) {
   res.set('Cache-Control', `public, max-age=${maxAge}, stale-while-revalidate=${staleWhileRevalidate}`);
 }
 
+function handleLeipzigError(error, res, next) {
+  if (error.code === 'LEIPZIG_CORPUS_NOT_FOUND') {
+    return res.status(404).json({ error: 'Tidak Ditemukan', message: error.message });
+  }
+  if (error.code === 'LEIPZIG_CORPUS_NOT_READY') {
+    return res.status(503).json({ success: false, message: `${error.message}. Jalankan impor SQLite terlebih dahulu.` });
+  }
+  if (error.code === 'LEIPZIG_CORPUS_INVALID') {
+    return res.status(400).json({ success: false, message: error.message });
+  }
+  if (error.code === 'LEIPZIG_RUNTIME_UNSUPPORTED') {
+    return res.status(503).json({ success: false, message: error.message });
+  }
+  return next(error);
+}
+
 async function resolveKorpus(req, res) {
   const korpusId = String(req.params.korpusId || '').trim();
   const kata = decodeURIComponent(String(req.params.kata || '')).trim();
@@ -74,16 +90,7 @@ router.get('/korpus/:korpusId/kata/:kata', publicSearchLimiter, async (req, res,
     setCacheHeaders(res);
     return res.json({ success: true, korpus: resolved.korpus, ...hasil });
   } catch (error) {
-    if (error.code === 'LEIPZIG_CORPUS_NOT_FOUND') {
-      return res.status(404).json({ error: 'Tidak Ditemukan', message: error.message });
-    }
-    if (error.code === 'LEIPZIG_CORPUS_NOT_READY') {
-      return res.status(503).json({ success: false, message: `${error.message}. Jalankan impor SQLite terlebih dahulu.` });
-    }
-    if (error.code === 'LEIPZIG_CORPUS_INVALID') {
-      return res.status(400).json({ success: false, message: error.message });
-    }
-    return next(error);
+    return handleLeipzigError(error, res, next);
   }
 });
 
@@ -107,16 +114,7 @@ router.get('/korpus/:korpusId/kata/:kata/contoh', publicSearchLimiter, async (re
       ...hasil,
     });
   } catch (error) {
-    if (error.code === 'LEIPZIG_CORPUS_NOT_FOUND') {
-      return res.status(404).json({ error: 'Tidak Ditemukan', message: error.message });
-    }
-    if (error.code === 'LEIPZIG_CORPUS_NOT_READY') {
-      return res.status(503).json({ success: false, message: `${error.message}. Jalankan impor SQLite terlebih dahulu.` });
-    }
-    if (error.code === 'LEIPZIG_CORPUS_INVALID') {
-      return res.status(400).json({ success: false, message: error.message });
-    }
-    return next(error);
+    return handleLeipzigError(error, res, next);
   }
 });
 
@@ -136,7 +134,7 @@ router.get('/korpus/:korpusId/kata/:kata/kookurensi-sekalimat', publicSearchLimi
     setCacheHeaders(res);
     return res.json({ success: true, korpus: resolved.korpus, ...hasil });
   } catch (error) {
-    return next(error);
+    return handleLeipzigError(error, res, next);
   }
 });
 
@@ -156,7 +154,7 @@ router.get('/korpus/:korpusId/kata/:kata/kookurensi-tetangga', publicSearchLimit
     setCacheHeaders(res);
     return res.json({ success: true, korpus: resolved.korpus, ...hasil });
   } catch (error) {
-    return next(error);
+    return handleLeipzigError(error, res, next);
   }
 });
 
@@ -176,7 +174,7 @@ router.get('/korpus/:korpusId/kata/:kata/graf', publicSearchLimiter, async (req,
     setCacheHeaders(res);
     return res.json({ success: true, korpus: resolved.korpus, ...hasil });
   } catch (error) {
-    return next(error);
+    return handleLeipzigError(error, res, next);
   }
 });
 
@@ -196,7 +194,7 @@ router.get('/korpus/:korpusId/kata/:kata/mirip-konteks', publicSearchLimiter, as
     setCacheHeaders(res);
     return res.json({ success: true, korpus: resolved.korpus, ...hasil });
   } catch (error) {
-    return next(error);
+    return handleLeipzigError(error, res, next);
   }
 });
 

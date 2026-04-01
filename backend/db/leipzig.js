@@ -4,9 +4,11 @@
 
 const fs = require('fs');
 const path = require('path');
-const { DatabaseSync } = require('node:sqlite');
 
 const databaseCache = new Map();
+let cachedDatabaseSync = null;
+let cachedSqliteLoadError = null;
+
 const domainLabels = {
   news: 'News',
   wikipedia: 'Wikipedia',
@@ -158,6 +160,27 @@ function buildCorpusError(code, message) {
   return error;
 }
 
+function loadDatabaseSync() {
+  if (cachedDatabaseSync) return cachedDatabaseSync;
+  if (cachedSqliteLoadError) throw cachedSqliteLoadError;
+
+  try {
+    ({ DatabaseSync: cachedDatabaseSync } = require('node:sqlite'));
+    return cachedDatabaseSync;
+  } catch (error) {
+    if (error?.code === 'ERR_UNKNOWN_BUILTIN_MODULE' || error?.code === 'MODULE_NOT_FOUND') {
+      cachedSqliteLoadError = buildCorpusError(
+        'LEIPZIG_RUNTIME_UNSUPPORTED',
+        'Runtime Node.js ini belum mendukung node:sqlite. Gunakan Node 22 atau nonaktifkan fitur Leipzig berbasis SQLite.'
+      );
+      cachedSqliteLoadError.cause = error;
+      throw cachedSqliteLoadError;
+    }
+
+    throw error;
+  }
+}
+
 function openCorpusDatabase(corpusId) {
   const normalized = normalizeCorpusId(corpusId);
   if (!normalized) {
@@ -177,6 +200,7 @@ function openCorpusDatabase(corpusId) {
   }
 
   if (!databaseCache.has(databasePath)) {
+    const DatabaseSync = loadDatabaseSync();
     databaseCache.set(databasePath, new DatabaseSync(databasePath, { readOnly: true }));
   }
 
@@ -200,9 +224,19 @@ module.exports = {
   listAvailableCorpora,
   openCorpusDatabase,
   closeAllDatabases,
+  isSqliteRuntimeSupported() {
+    try {
+      loadDatabaseSync();
+      return true;
+    } catch (error) {
+      if (error?.code === 'LEIPZIG_RUNTIME_UNSUPPORTED') return false;
+      throw error;
+    }
+  },
   __private: {
     resolveConfiguredPath,
     readCorpusMeta,
     listCorpusCandidates,
+    loadDatabaseSync,
   },
 };

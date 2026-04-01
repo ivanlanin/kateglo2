@@ -94,4 +94,30 @@ describe('db/leipzig', () => {
     expect(() => LeipzigDb.openCorpusDatabase('ind_news_2024_10K')).toThrow(expect.objectContaining({ code: 'LEIPZIG_CORPUS_NOT_READY' }));
     expect(() => LeipzigDb.openCorpusDatabase('ind_web_2024_10K')).toThrow(expect.objectContaining({ code: 'LEIPZIG_CORPUS_NOT_FOUND' }));
   });
+
+  it('tidak gagal saat module di-load jika node:sqlite belum tersedia', () => {
+    const rootDir = makeTempDir();
+    const sqliteDir = path.join(rootDir, 'sqlite');
+    fs.mkdirSync(sqliteDir, { recursive: true });
+    fs.writeFileSync(path.join(sqliteDir, 'ind_news_2024_10K.sqlite'), Buffer.from('dummy'));
+
+    process.env.LEIPZIG_DATA_DIR = rootDir;
+    process.env.LEIPZIG_SQLITE_DIR = sqliteDir;
+
+    jest.doMock('node:sqlite', () => {
+      const error = new Error('No such built-in module: node:sqlite');
+      error.code = 'ERR_UNKNOWN_BUILTIN_MODULE';
+      throw error;
+    });
+
+    let LeipzigDb;
+    jest.isolateModules(() => {
+      LeipzigDb = require('../../db/leipzig');
+    });
+
+    expect(LeipzigDb.isSqliteRuntimeSupported()).toBe(false);
+    expect(() => LeipzigDb.openCorpusDatabase('ind_news_2024_10K')).toThrow(
+      expect.objectContaining({ code: 'LEIPZIG_RUNTIME_UNSUPPORTED' })
+    );
+  });
 });

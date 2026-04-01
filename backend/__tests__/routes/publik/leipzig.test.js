@@ -135,6 +135,19 @@ describe('routes/publik/leipzig', () => {
     expect(response.body.total).toBe(2);
   });
 
+  it('GET endpoint Leipzig mengembalikan 503 jika runtime SQLite tidak didukung', async () => {
+    ModelKorpus.ambilDetail.mockResolvedValue({ id: 'ind_news_2024_10K', hasSqlite: true, label: 'News 2024 (10K)' });
+    ModelKata.ambilInfoKata.mockRejectedValue({
+      code: 'LEIPZIG_RUNTIME_UNSUPPORTED',
+      message: 'Runtime Node.js ini belum mendukung node:sqlite. Gunakan Node 22 atau nonaktifkan fitur Leipzig berbasis SQLite.',
+    });
+
+    const response = await request(createApp()).get('/api/publik/leipzig/korpus/ind_news_2024_10K/kata/jika');
+
+    expect(response.status).toBe(503);
+    expect(response.body.message).toContain('belum mendukung node:sqlite');
+  });
+
   it('GET /korpus/:korpusId/kata/:kata/kookurensi-sekalimat, tetangga, dan graf mengembalikan data', async () => {
     ModelKorpus.ambilDetail.mockResolvedValue({ id: 'ind_news_2024_10K', hasSqlite: true, label: 'News 2024 (10K)' });
     ModelKookurensi.ambilSekalimat.mockResolvedValue({
