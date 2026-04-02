@@ -49,14 +49,14 @@ describe('db/leipzig', () => {
     expect(corpora).toEqual([
       expect.objectContaining({
         id: 'ind_news_2024_10K',
-        label: 'News 2024 (10K)',
+        label: 'Berita 2024',
         hasRawFiles: true,
         hasSqlite: true,
         stats: expect.objectContaining({ sentences: 10000, wordTypes: 28450, buildDate: '2025-02-13' }),
       }),
       expect.objectContaining({
         id: 'ind_wikipedia_2021_1M',
-        label: 'Wikipedia 2021 (1M)',
+        label: 'Wikipedia 2021',
         hasRawFiles: false,
         hasSqlite: true,
         stats: null,

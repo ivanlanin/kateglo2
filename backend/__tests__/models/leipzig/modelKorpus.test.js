@@ -15,8 +15,8 @@ describe('models/leipzig/modelKorpus', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     LeipzigDb.listAvailableCorpora.mockReturnValue([
-      { id: 'ind_news_2024_10K', label: 'News 2024 (10K)' },
-      { id: 'ind_wikipedia_2021_1M', label: 'Wikipedia 2021 (1M)' },
+      { id: 'ind_news_2024_10K', label: 'Berita 2024' },
+      { id: 'ind_wikipedia_2021_1M', label: 'Wikipedia 2021' },
     ]);
   });
 
@@ -27,7 +27,7 @@ describe('models/leipzig/modelKorpus', () => {
 
   it('mengembalikan detail korpus yang cocok', async () => {
     const result = await ModelKorpus.ambilDetail('ind_wikipedia_2021_1M');
-    expect(result).toEqual({ id: 'ind_wikipedia_2021_1M', label: 'Wikipedia 2021 (1M)' });
+    expect(result).toEqual({ id: 'ind_wikipedia_2021_1M', label: 'Wikipedia 2021' });
   });
 
   it('mengembalikan null jika id kosong atau tidak ditemukan', async () => {

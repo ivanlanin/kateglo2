@@ -15,7 +15,7 @@ function AlatIndex() {
   return (
     <HalamanPublik
       judul="Alat"
-      deskripsi="Kumpulan alat bahasa Indonesia di Kateglo. Saat ini tersedia Penganalisis Teks dan halaman ini siap menampung alat berikutnya."
+      deskripsi="Kumpulan alat bahasa Indonesia di Kateglo. Saat ini tersedia Analisis Teks dan halaman ini siap menampung alat berikutnya."
     >
       <div className="alat-page">
         <section className="alat-list-grid" aria-label="Daftar alat">

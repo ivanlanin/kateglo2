@@ -77,7 +77,7 @@ export function ambilPathSitemapFiturInteraktif() {
     }
 
     grup.items.forEach((item) => {
-      if (Array.isArray(item.sitemapPaths) && item.sitemapPaths.length) {
+      if (Array.isArray(item.sitemapPaths) && item.sitemapPaths.length && item.sitemap !== false && item.tampilPublik !== false) {
         paths.push(...item.sitemapPaths);
         return;
       }

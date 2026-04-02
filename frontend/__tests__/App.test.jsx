@@ -42,9 +42,9 @@ vi.mock('../src/pages/publik/glosarium', () => ({
 }));
 vi.mock('../src/pages/publik/alat', () => ({
   Alat: () => <div>Hal Alat</div>,
-  KorpusLeipzig: () => <div>Hal Korpus Leipzig</div>,
+  KorpusLeipzig: () => <div>Hal Analisis Korpus</div>,
   PenghitungHuruf: () => <div>Hal Penghitung Huruf</div>,
-  PenganalisisTeks: () => <div>Hal Penganalisis Teks</div>,
+  PenganalisisTeks: () => <div>Hal Analisis Teks</div>,
   PohonKalimat: () => <div>Hal Pohon Kalimat</div>,
 }));
 vi.mock('../src/pages/publik/gim', () => ({
@@ -321,38 +321,22 @@ describe('App', () => {
     expect(await screen.findByText('Hal Alat')).toBeInTheDocument();
   });
 
-  it('merender route alat penganalisis teks', async () => {
+  it('merender route alat analisis teks', async () => {
     render(
-      <MemoryRouter initialEntries={['/alat/penganalisis-teks']}>
+      <MemoryRouter initialEntries={['/alat/analisis-teks']}>
         <App />
       </MemoryRouter>
     );
-    expect(await screen.findByText('Hal Penganalisis Teks')).toBeInTheDocument();
+    expect(await screen.findByText('Hal Analisis Teks')).toBeInTheDocument();
   });
 
-  it('mengalihkan route alat korpus leipzig untuk publik', async () => {
+  it('merender route alat analisis korpus untuk publik', async () => {
     render(
-      <MemoryRouter initialEntries={['/alat/korpus-leipzig']}>
+      <MemoryRouter initialEntries={['/alat/analisis-korpus']}>
         <App />
       </MemoryRouter>
     );
-    expect(await screen.findByText('Hal Alat')).toBeInTheDocument();
-  });
-
-  it('merender route alat korpus leipzig untuk redaksi', async () => {
-    mockUseAuth.mockReturnValue({
-      isAuthenticated: true,
-      adalahRedaksi: true,
-      adalahAdmin: false,
-      isLoading: false,
-    });
-
-    render(
-      <MemoryRouter initialEntries={['/alat/korpus-leipzig']}>
-        <App />
-      </MemoryRouter>
-    );
-    expect(await screen.findByText('Hal Korpus Leipzig')).toBeInTheDocument();
+    expect(await screen.findByText('Hal Analisis Korpus')).toBeInTheDocument();
   });
 
   it('merender route alat penghitung huruf', async () => {

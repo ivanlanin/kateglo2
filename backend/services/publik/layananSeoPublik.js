@@ -346,7 +346,7 @@ function buildOgImagePayload({ section = 'default', slug = '', title = '', conte
               : sectionKey === 'rima'
                 ? 'Cari kata berdasarkan rima'
                 : sectionKey === 'alat'
-                  ? 'Penganalisis teks dan penghitung huruf'
+                    ? 'Analisis teks dan penghitung huruf'
                   : sectionKey === 'gim'
                     ? 'Kuis kata dan susun kata'
       : 'kateglo.org';
@@ -504,7 +504,7 @@ function ambilPathStatis() {
 
     (grup?.items || []).forEach((item) => {
       const sitemapPaths = Array.isArray(item.sitemapPaths) ? item.sitemapPaths : [];
-      if (sitemapPaths.length) {
+      if (sitemapPaths.length && item.sitemap !== false && item.tampilPublik !== false) {
         pathFiturInteraktif.push(...sitemapPaths);
         return;
       }

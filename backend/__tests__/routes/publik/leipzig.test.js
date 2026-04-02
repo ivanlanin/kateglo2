@@ -63,7 +63,7 @@ describe('routes/publik/leipzig', () => {
   });
 
   it('GET /korpus/:korpusId/kata/:kata mengembalikan info kata', async () => {
-    ModelKorpus.ambilDetail.mockResolvedValue({ id: 'ind_news_2024_10K', hasSqlite: true, label: 'News 2024 (10K)' });
+    ModelKorpus.ambilDetail.mockResolvedValue({ id: 'ind_news_2024_10K', hasSqlite: true, label: 'Berita 2024' });
     ModelKata.ambilInfoKata.mockResolvedValue({
       kata: 'jika',
       frekuensi: 42,
@@ -114,7 +114,7 @@ describe('routes/publik/leipzig', () => {
   });
 
   it('GET /korpus/:korpusId/kata/:kata/contoh mengembalikan payload sukses', async () => {
-    ModelKorpus.ambilDetail.mockResolvedValue({ id: 'ind_news_2024_10K', hasSqlite: true, label: 'News 2024 (10K)' });
+    ModelKorpus.ambilDetail.mockResolvedValue({ id: 'ind_news_2024_10K', hasSqlite: true, label: 'Berita 2024' });
     ModelKalimat.cariContohKata.mockResolvedValue({
       kata: 'indonesia',
       frekuensi: 13,
@@ -131,12 +131,12 @@ describe('routes/publik/leipzig', () => {
     expect(response.headers['cache-control']).toBe('public, max-age=300, stale-while-revalidate=900');
     expect(ModelKalimat.cariContohKata).toHaveBeenCalledWith('ind_news_2024_10K', 'indonesia', { limit: '10' });
     expect(response.body.success).toBe(true);
-    expect(response.body.korpus.label).toBe('News 2024 (10K)');
+    expect(response.body.korpus.label).toBe('Berita 2024');
     expect(response.body.total).toBe(2);
   });
 
   it('GET endpoint Leipzig mengembalikan 503 jika runtime SQLite tidak didukung', async () => {
-    ModelKorpus.ambilDetail.mockResolvedValue({ id: 'ind_news_2024_10K', hasSqlite: true, label: 'News 2024 (10K)' });
+    ModelKorpus.ambilDetail.mockResolvedValue({ id: 'ind_news_2024_10K', hasSqlite: true, label: 'Berita 2024' });
     ModelKata.ambilInfoKata.mockRejectedValue({
       code: 'LEIPZIG_RUNTIME_UNSUPPORTED',
       message: 'Runtime Node.js ini belum mendukung node:sqlite. Gunakan Node 22 atau nonaktifkan fitur Leipzig berbasis SQLite.',
@@ -149,7 +149,7 @@ describe('routes/publik/leipzig', () => {
   });
 
   it('GET /korpus/:korpusId/kata/:kata/kookurensi-sekalimat, tetangga, dan graf mengembalikan data', async () => {
-    ModelKorpus.ambilDetail.mockResolvedValue({ id: 'ind_news_2024_10K', hasSqlite: true, label: 'News 2024 (10K)' });
+    ModelKorpus.ambilDetail.mockResolvedValue({ id: 'ind_news_2024_10K', hasSqlite: true, label: 'Berita 2024' });
     ModelKookurensi.ambilSekalimat.mockResolvedValue({
       kata: 'jika',
       total: 2,
@@ -182,7 +182,7 @@ describe('routes/publik/leipzig', () => {
   });
 
   it('GET /korpus/:korpusId/kata/:kata/mirip-konteks mengembalikan data', async () => {
-    ModelKorpus.ambilDetail.mockResolvedValue({ id: 'ind_news_2024_10K', hasSqlite: true, label: 'News 2024 (10K)' });
+    ModelKorpus.ambilDetail.mockResolvedValue({ id: 'ind_news_2024_10K', hasSqlite: true, label: 'Berita 2024' });
     ModelKookurensi.ambilMiripKonteks.mockResolvedValue({
       kata: 'jika',
       limit: 12,

@@ -10,13 +10,11 @@ const mockApi = vi.hoisted(() => ({
   ambilContohKataLeipzig: vi.fn(),
   ambilKookurensiSekalimatLeipzig: vi.fn(),
   ambilKookurensiTetanggaLeipzig: vi.fn(),
-  ambilGrafKataLeipzig: vi.fn(),
-  ambilMiripKonteksLeipzig: vi.fn(),
 }));
 
 vi.mock('../../../../src/api/apiPublik', () => mockApi);
 
-function renderPage(initialEntry = '/alat/korpus-leipzig') {
+function renderPage(initialEntry = '/alat/analisis-korpus') {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: { retry: false },
@@ -27,7 +25,12 @@ function renderPage(initialEntry = '/alat/korpus-leipzig') {
     <QueryClientProvider client={queryClient}>
       <MemoryRouter initialEntries={[initialEntry]}>
         <Routes>
+          <Route path="/alat/analisis-korpus" element={<KorpusLeipzig />} />
+          <Route path="/alat/analisis-korpus/:kata" element={<KorpusLeipzig />} />
+          <Route path="/alat/analisis-korpus/:kata/:korpus" element={<KorpusLeipzig />} />
           <Route path="/alat/korpus-leipzig" element={<KorpusLeipzig />} />
+          <Route path="/alat/korpus-leipzig/:kata" element={<KorpusLeipzig />} />
+          <Route path="/alat/korpus-leipzig/:kata/:korpus" element={<KorpusLeipzig />} />
         </Routes>
       </MemoryRouter>
     </QueryClientProvider>
@@ -43,7 +46,7 @@ describe('KorpusLeipzig', () => {
     mockApi.ambilDaftarKorpusLeipzig.mockResolvedValue({
       data: [{
         id: 'ind_news_2024_10K',
-        label: 'News 2024 (10K)',
+        label: 'Berita 2024',
         domain: 'news',
         size: '10K',
         hasSqlite: true,
@@ -61,7 +64,7 @@ describe('KorpusLeipzig', () => {
       ],
     });
     mockApi.ambilContohKataLeipzig.mockResolvedValue({
-      limit: 8,
+      limit: 10,
       data: [{
         sentenceId: 1,
         sentence: 'Indonesia sedang dibahas dalam berita.',
@@ -78,36 +81,29 @@ describe('KorpusLeipzig', () => {
       kiri: [{ kata: 'tentang', frekuensi: 3 }],
       kanan: [{ kata: 'sedang', frekuensi: 2 }],
     });
-    mockApi.ambilGrafKataLeipzig.mockResolvedValue({
-      nodes: [
-        { id: 'indonesia', label: 'indonesia', weight: 7, isCenter: true },
-        { id: 'berita', label: 'berita', weight: 4, isCenter: false },
-      ],
-      edges: [{ source: 'indonesia', target: 'berita', weight: 4 }],
-    });
-    mockApi.ambilMiripKonteksLeipzig.mockResolvedValue({
-      jumlahKonteksAcuan: 14,
-      data: [{ kata: 'Malaysia', skorDice: 0.75, jumlahKonteksSama: 6 }],
-    });
+    renderPage('/alat/analisis-korpus/indonesia/ind_news_2024_10K');
 
-    renderPage('/alat/korpus-leipzig?korpus=ind_news_2024_10K&kata=indonesia');
-
-    expect(await screen.findByRole('heading', { name: 'Korpus Leipzig' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Analisis Korpus' })).toBeInTheDocument();
 
     expect(await screen.findByText('Contoh')).toBeInTheDocument();
+    expect(screen.getByText('Kata')).toBeInTheDocument();
     expect(screen.getByText('Kemunculan')).toBeInTheDocument();
-    expect(screen.getByText('Peringkat')).toBeInTheDocument();
-    expect(screen.getByText('Frekuensi')).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: 'Kolokasi' })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: 'Kiri' })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: 'Kanan' })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: 'Mirip' })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: 'Graf' })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: 'Kolokasi' })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByText('Urutan')).toBeInTheDocument();
+    expect(screen.queryByRole('tablist')).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Kata dalam Satu Kalimat' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Kata di Kiri' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Kata di Kanan' })).toBeInTheDocument();
     expect(screen.queryByText('Kata dengan konteks mirip')).not.toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'indonesia', level: 3 })).not.toBeInTheDocument();
-    expect(screen.getByText('#2')).toBeInTheDocument();
-    expect(screen.getByText('kelas 0')).toBeInTheDocument();
+    expect(screen.getByText('indonesia')).toBeInTheDocument();
+    expect(screen.getByText('13')).toBeInTheDocument();
+    expect(screen.getByText('2')).toBeInTheDocument();
+    expect(screen.queryByText('Lihat juga:')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Tampilkan sumber' })).toBeInTheDocument();
+    expect(screen.queryByText(/example.com/i)).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '+10' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '+25' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '+50' })).not.toBeInTheDocument();
     expect(screen.getByText('Contoh')).toBeInTheDocument();
     expect(screen.getByText((_, node) => {
       if (!node?.classList?.contains('korpus-leipzig-contoh-kalimat')) {
@@ -117,34 +113,28 @@ describe('KorpusLeipzig', () => {
       const teks = node.textContent?.replace(/\s+/g, ' ').trim() || '';
       return teks.includes('Indonesia sedang dibahas dalam berita.');
     })).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole('tab', { name: 'Kolokasi' }));
     expect(await screen.findByRole('button', { name: 'berita' })).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole('tab', { name: 'Kiri' }));
     expect(await screen.findByRole('button', { name: 'tentang' })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: 'sedang' })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('tab', { name: 'Mirip' }));
-    expect(await screen.findByRole('button', { name: /Malaysia/i })).toBeInTheDocument();
-    expect(screen.queryByText(/konteks signifikan dengan skor Dice/i)).not.toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole('tab', { name: 'Graf' }));
-    expect(await screen.findByLabelText('Graf asosiasi kata Leipzig')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Tampilkan sumber' }));
+    expect(await screen.findByText(/example.com/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Sembunyikan sumber' })).toBeInTheDocument();
 
     await waitFor(() => {
       expect(mockApi.ambilInfoKataLeipzig).toHaveBeenCalledWith('ind_news_2024_10K', 'indonesia');
-      expect(mockApi.ambilKookurensiSekalimatLeipzig).toHaveBeenCalledWith('ind_news_2024_10K', 'indonesia', { limit: 25, offset: 0 });
-      expect(mockApi.ambilKookurensiTetanggaLeipzig).toHaveBeenCalledWith('ind_news_2024_10K', 'indonesia', { limit: 25 });
-      expect(mockApi.ambilMiripKonteksLeipzig).toHaveBeenCalledWith('ind_news_2024_10K', 'indonesia', { limit: 12, minimumKonteksSama: 3 });
-      expect(mockApi.ambilGrafKataLeipzig).toHaveBeenCalledWith('ind_news_2024_10K', 'indonesia', { limit: 10 });
+      expect(mockApi.ambilKookurensiSekalimatLeipzig).toHaveBeenCalledWith('ind_news_2024_10K', 'indonesia', { limit: 20, offset: 0 });
+      expect(mockApi.ambilKookurensiTetanggaLeipzig).toHaveBeenCalledWith('ind_news_2024_10K', 'indonesia', { limit: 20 });
     });
 
-    expect(mockApi.ambilContohKataLeipzig).toHaveBeenCalledWith('ind_news_2024_10K', 'indonesia', { limit: 8, offset: 0 });
+    expect(mockApi.ambilContohKataLeipzig).toHaveBeenCalledWith('ind_news_2024_10K', 'indonesia', { limit: 10, offset: 0 });
   });
 
   it('helper privat merangkum statistik dan tata letak graf', () => {
     expect(__private.formatStatKorpus({ sentences: 12, wordTypes: 9, wordTokens: 100 })).toContain('12 kalimat');
     expect(__private.formatStatKorpus(null)).toBe('Statistik korpus belum tersedia');
+    expect(__private.formatKemunculanRingkas(12, { wordTokens: 100 })).toBe('12');
+    expect(__private.formatPersenKemunculan(12, { wordTokens: 100 })).toBe('12,0%');
     expect(__private.getKelasFrekuensiLabel(5)).toContain('Menengah');
     expect(__private.adalahGalat404({ response: { status: 404 } })).toBe(true);
     expect(__private.adalahTokenTampil('Indonesia')).toBe(true);
@@ -158,5 +148,36 @@ describe('KorpusLeipzig', () => {
     expect(layout).toHaveLength(2);
     expect(layout[0]).toMatchObject({ x: 360, y: 180 });
     expect(__private.formatTanggalAman('2024-03-05')).toContain('2024');
+    expect(__private.buildPathAnalisisKorpus('indonesia')).toBe('/alat/analisis-korpus/indonesia');
+  });
+
+  it('memakai korpus pertama saat path hanya memuat kata', async () => {
+    mockApi.ambilDaftarKorpusLeipzig.mockResolvedValue({
+      data: [{
+        id: 'ind_news_2024_10K',
+        label: 'Berita 2024',
+        domain: 'news',
+        size: '10K',
+        hasSqlite: true,
+        stats: { sentences: 10000 },
+      }],
+    });
+    mockApi.ambilInfoKataLeipzig.mockResolvedValue({
+      kata: 'indonesia',
+      frekuensi: 13,
+      rank: 2,
+      kelasFrekuensi: 0,
+      bentuk: [{ kata: 'Indonesia', frekuensi: 8, wordId: 2 }],
+    });
+    mockApi.ambilContohKataLeipzig.mockResolvedValue({ data: [], bentuk: [] });
+    mockApi.ambilKookurensiSekalimatLeipzig.mockResolvedValue({ data: [] });
+
+    renderPage('/alat/analisis-korpus/indonesia');
+
+    expect(await screen.findByRole('heading', { name: 'Analisis Korpus' })).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(mockApi.ambilInfoKataLeipzig).toHaveBeenCalledWith('ind_news_2024_10K', 'indonesia');
+    });
   });
 });

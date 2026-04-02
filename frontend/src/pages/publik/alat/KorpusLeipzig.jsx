@@ -1,5 +1,5 @@
 /**
- * @fileoverview Alat Korpus Leipzig untuk menelusuri kata, contoh kalimat, dan asosiasinya.
+ * @fileoverview Alat analisis korpus untuk menelusuri kata, contoh kalimat, dan asosiasinya.
  */
 
 import {
@@ -12,17 +12,15 @@ import {
 } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Info } from 'lucide-react';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import HalamanPublik from '../../../components/tampilan/HalamanPublik';
 import KontenMarkdownStatis from '../../../components/tampilan/KontenMarkdownStatis';
 import {
   ambilContohKataLeipzig,
   ambilDaftarKorpusLeipzig,
-  ambilGrafKataLeipzig,
   ambilInfoKataLeipzig,
   ambilKookurensiSekalimatLeipzig,
   ambilKookurensiTetanggaLeipzig,
-  ambilMiripKonteksLeipzig,
 } from '../../../api/apiPublik';
 
 const formatAngka = new Intl.NumberFormat('id-ID');
@@ -31,7 +29,11 @@ const formatTanggal = new Intl.DateTimeFormat('id-ID', {
   month: 'short',
   year: 'numeric',
 });
-const PILIHAN_TAMBAH_HASIL = [10, 25, 100];
+const formatPersen = new Intl.NumberFormat('id-ID', {
+  minimumFractionDigits: 1,
+  maximumFractionDigits: 1,
+});
+const PATH_ANALISIS_KORPUS = '/alat/analisis-korpus';
 
 function ambilPesanGalat(error, fallback = 'Terjadi kesalahan saat memuat data.') {
   return error?.response?.data?.message || fallback;
@@ -73,7 +75,23 @@ function getKelasFrekuensiLabel(value) {
 
 function formatKelasFrekuensiRingkas(value) {
   if (value == null) return 'N/A';
-  return `kelas ${value}`;
+  return `Kelas ${value}`;
+}
+
+function formatKemunculanRingkas(frekuensi) {
+  const jumlahKemunculan = Number(frekuensi) || 0;
+  return formatAngka.format(jumlahKemunculan);
+}
+
+function formatPersenKemunculan(frekuensi, stats = {}) {
+  const jumlahKemunculan = Number(frekuensi) || 0;
+  const totalToken = Number(stats?.wordTokens) || 0;
+
+  if (!totalToken) {
+    return 'N/A';
+  }
+
+  return `${formatPersen.format((jumlahKemunculan / totalToken) * 100)}%`;
 }
 
 function adalahTokenTampil(value = '') {
@@ -155,83 +173,6 @@ function bangunTataLetakGraf(nodes = [], width = 720, height = 360) {
   });
 }
 
-function GrafAsosiasi({ data }) {
-  const nodeLayout = useMemo(
-    () => bangunTataLetakGraf(saringTokenTampil(data?.nodes || []).filter((item) => item.isCenter || adalahTokenTampil(item.label))),
-    [data],
-  );
-  const nodeMap = useMemo(() => new Map(nodeLayout.map((item) => [item.id, item])), [nodeLayout]);
-  const edges = useMemo(
-    () => (data?.edges || []).filter((item) => nodeMap.has(item.source) && nodeMap.has(item.target)),
-    [data, nodeMap],
-  );
-  const bobotTepiMaks = Math.max(...edges.map((item) => Number(item?.weight) || 0), 1);
-
-  if (!nodeLayout.length) {
-    return <p className="alat-empty-text">Graf asosiasi belum tersedia untuk kata ini.</p>;
-  }
-
-  return (
-    <div className="korpus-leipzig-graph-shell">
-      <svg viewBox="0 0 720 360" className="korpus-leipzig-graph-svg" role="img" aria-label="Graf asosiasi kata Leipzig">
-        <defs>
-          <linearGradient id="korpus-leipzig-edge" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#1d4ed8" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="#0f766e" stopOpacity="0.55" />
-          </linearGradient>
-        </defs>
-
-        {edges.map((edge, index) => {
-          const source = nodeMap.get(edge.source);
-          const target = nodeMap.get(edge.target);
-          if (!source || !target) return null;
-
-          return (
-            <line
-              key={`${edge.source}-${edge.target}-${index}`}
-              x1={source.x}
-              y1={source.y}
-              x2={target.x}
-              y2={target.y}
-              stroke="url(#korpus-leipzig-edge)"
-              strokeWidth={1.25 + (((Number(edge.weight) || 0) / bobotTepiMaks) * 4)}
-              strokeLinecap="round"
-            />
-          );
-        })}
-
-        {nodeLayout.map((node) => {
-          const label = String(node.label || '');
-          const boxWidth = Math.max(node.isCenter ? 88 : 58, (label.length * (node.isCenter ? 8 : 7)) + 20);
-          const boxHeight = node.isCenter ? 34 : 28;
-
-          return (
-            <g key={node.id} transform={`translate(${node.x}, ${node.y})`}>
-              <rect
-                x={-boxWidth / 2}
-                y={-boxHeight / 2}
-                width={boxWidth}
-                height={boxHeight}
-                rx={node.isCenter ? 8 : 6}
-                className={node.isCenter ? 'korpus-leipzig-node-box korpus-leipzig-node-box-center' : 'korpus-leipzig-node-box'}
-              />
-              <text
-                x="0"
-                y="1"
-                textAnchor="middle"
-                dominantBaseline="middle"
-                className={node.isCenter ? 'korpus-leipzig-node-box-label korpus-leipzig-node-box-label-center' : 'korpus-leipzig-node-box-label'}
-              >
-                {label}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
-    </div>
-  );
-}
-
 function renderTokenList(items = [], emptyText, onSelect = null, getCountLabel = null) {
   const daftar = saringTokenTampil(items);
 
@@ -259,61 +200,6 @@ function renderTokenList(items = [], emptyText, onSelect = null, getCountLabel =
   );
 }
 
-function renderTambahHasilControls(currentLimit, total, onTambah) {
-  if (!total || currentLimit >= total) return null;
-
-  return (
-    <div className="korpus-leipzig-load-more-row">
-      {PILIHAN_TAMBAH_HASIL.map((step) => (
-        <button
-          key={step}
-          type="button"
-          className="korpus-leipzig-load-more-button"
-          onClick={() => onTambah(step)}
-          disabled={currentLimit >= total}
-        >
-          +{step}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-function renderMiripKonteksList(items = [], emptyText, onSelect) {
-  return renderTokenList(
-    items,
-    emptyText,
-    onSelect,
-    (item) => `${Math.round((Number(item.skorDice) || 0) * 100)}%`,
-  );
-}
-
-function renderBentukKata(items = [], onSelect) {
-  const daftar = saringTokenTampil(items);
-
-  if (!daftar.length) {
-    return null;
-  }
-
-  return (
-    <p className="korpus-leipzig-summary-links">
-      <span className="korpus-leipzig-summary-links-label">Lihat juga:</span>{' '}
-      {daftar.map((item, index) => (
-        <Fragment key={`${item.kata}-${item.wordId || item.frekuensi}-${index}`}>
-          <button
-            type="button"
-            className="korpus-leipzig-inline-link"
-            onClick={() => onSelect(item.kata)}
-          >
-            {item.kata}
-          </button>
-          {index < daftar.length - 1 ? ', ' : ''}
-        </Fragment>
-      ))}
-    </p>
-  );
-}
-
 function renderMetaContoh(item) {
   const host = formatHostSumber(item.sourceUrl);
   const tanggal = item.sourceDate ? formatTanggalAman(item.sourceDate) : null;
@@ -333,18 +219,32 @@ function renderMetaContoh(item) {
   );
 }
 
+function normalisasiSegmenPath(value = '') {
+  return String(value || '').trim();
+}
+
+function buildPathAnalisisKorpus(kata = '') {
+  const kataAman = normalisasiSegmenPath(kata);
+
+  if (!kataAman) return PATH_ANALISIS_KORPUS;
+  return `${PATH_ANALISIS_KORPUS}/${encodeURIComponent(kataAman)}`;
+}
+
 function KorpusLeipzig() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const params = useParams();
+  const queryParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const [panelInfoTerbuka, setPanelInfoTerbuka] = useState(false);
   const [pesanForm, setPesanForm] = useState('');
-  const [formKorpusId, setFormKorpusId] = useState(() => searchParams.get('korpus') || '');
-  const [formKata, setFormKata] = useState(() => searchParams.get('kata') || '');
-  const [contohLimit, setContohLimit] = useState(8);
-  const [sekalimatLimit, setSekalimatLimit] = useState(25);
-  const [tabHasilAktif, setTabHasilAktif] = useState('kolokasi');
+  const [tampilkanSumberContoh, setTampilkanSumberContoh] = useState(false);
+  const [formKorpusId, setFormKorpusId] = useState(() => normalisasiSegmenPath(params.korpus || queryParams.get('korpus')));
+  const [formKata, setFormKata] = useState(() => normalisasiSegmenPath(params.kata || queryParams.get('kata')));
+  const [contohLimit, setContohLimit] = useState(10);
+  const [sekalimatLimit, setSekalimatLimit] = useState(20);
 
-  const kataAktif = String(searchParams.get('kata') || '').trim();
-  const korpusAktif = String(searchParams.get('korpus') || '').trim();
+  const kataAktif = normalisasiSegmenPath(params.kata || queryParams.get('kata'));
+  const korpusAktif = normalisasiSegmenPath(params.korpus || queryParams.get('korpus'));
   const kataAktifDeferred = useDeferredValue(kataAktif);
 
   const korpusQuery = useQuery({
@@ -356,17 +256,38 @@ function KorpusLeipzig() {
 
   const daftarKorpus = Array.isArray(korpusQuery.data?.data) ? korpusQuery.data.data : [];
   const korpusDefault = daftarKorpus.find((item) => item.hasSqlite)?.id || daftarKorpus[0]?.id || '';
-  const korpusEfektif = korpusAktif || formKorpusId || korpusDefault;
+  const korpusEfektif = formKorpusId || korpusAktif || korpusDefault;
+  const pathKanonis = kataAktif
+    ? buildPathAnalisisKorpus(kataAktif)
+    : PATH_ANALISIS_KORPUS;
 
   useEffect(() => {
     setFormKata(kataAktif);
-    setFormKorpusId(korpusAktif || korpusDefault);
-  }, [kataAktif, korpusAktif, korpusDefault]);
+  }, [kataAktif]);
 
   useEffect(() => {
-    setContohLimit(8);
-    setSekalimatLimit(25);
-    setTabHasilAktif('kolokasi');
+    setFormKorpusId((current) => {
+      if (korpusAktif) return korpusAktif;
+      if (current) return current;
+      return korpusDefault;
+    });
+  }, [korpusAktif, korpusDefault]);
+
+  useEffect(() => {
+    const memakaiPathLama = location.pathname.startsWith('/alat/korpus-leipzig');
+    const adaQueryLegacy = Boolean(location.search);
+
+    if (!memakaiPathLama && !adaQueryLegacy && !params.korpus) return;
+    if (location.pathname === pathKanonis && !location.search) return;
+
+    startTransition(() => {
+      navigate(pathKanonis, { replace: true });
+    });
+  }, [location.pathname, location.search, navigate, params.korpus, pathKanonis]);
+
+  useEffect(() => {
+    setContohLimit(10);
+    setSekalimatLimit(20);
   }, [kataAktif, korpusEfektif]);
 
   const queryDasar = {
@@ -374,10 +295,6 @@ function KorpusLeipzig() {
     retry: false,
     staleTime: 60000,
   };
-  const aktifKolokasi = tabHasilAktif === 'kolokasi';
-  const aktifTetangga = tabHasilAktif === 'kiri' || tabHasilAktif === 'kanan';
-  const aktifMirip = tabHasilAktif === 'mirip';
-  const aktifGraf = tabHasilAktif === 'graf';
 
   const infoKataQuery = useQuery({
     queryKey: ['leipzig', 'kata', korpusEfektif, kataAktifDeferred],
@@ -395,28 +312,14 @@ function KorpusLeipzig() {
     queryKey: ['leipzig', 'sekalimat', korpusEfektif, kataAktifDeferred, sekalimatLimit],
     queryFn: () => ambilKookurensiSekalimatLeipzig(korpusEfektif, kataAktifDeferred, { limit: sekalimatLimit, offset: 0 }),
     ...queryDasar,
-    enabled: queryDasar.enabled && aktifKolokasi,
+    enabled: queryDasar.enabled,
   });
 
   const tetanggaQuery = useQuery({
     queryKey: ['leipzig', 'tetangga', korpusEfektif, kataAktifDeferred],
-    queryFn: () => ambilKookurensiTetanggaLeipzig(korpusEfektif, kataAktifDeferred, { limit: 25 }),
+    queryFn: () => ambilKookurensiTetanggaLeipzig(korpusEfektif, kataAktifDeferred, { limit: 20 }),
     ...queryDasar,
-    enabled: queryDasar.enabled && aktifTetangga,
-  });
-
-  const grafQuery = useQuery({
-    queryKey: ['leipzig', 'graf', korpusEfektif, kataAktifDeferred],
-    queryFn: () => ambilGrafKataLeipzig(korpusEfektif, kataAktifDeferred, { limit: 10 }),
-    ...queryDasar,
-    enabled: queryDasar.enabled && aktifGraf,
-  });
-
-  const miripKonteksQuery = useQuery({
-    queryKey: ['leipzig', 'mirip-konteks', korpusEfektif, kataAktifDeferred],
-    queryFn: () => ambilMiripKonteksLeipzig(korpusEfektif, kataAktifDeferred, { limit: 12, minimumKonteksSama: 3 }),
-    ...queryDasar,
-    enabled: queryDasar.enabled && aktifMirip,
+    enabled: queryDasar.enabled,
   });
 
   const sedangMemuatRingkasan = infoKataQuery.isLoading;
@@ -429,7 +332,6 @@ function KorpusLeipzig() {
   const sekalimatData = useMemo(() => saringTokenTampil(sekalimatQuery.data?.data || []), [sekalimatQuery.data?.data]);
   const tetanggaKiri = useMemo(() => saringTokenTampil(tetanggaQuery.data?.kiri || []), [tetanggaQuery.data?.kiri]);
   const tetanggaKanan = useMemo(() => saringTokenTampil(tetanggaQuery.data?.kanan || []), [tetanggaQuery.data?.kanan]);
-  const miripKonteksData = useMemo(() => saringTokenTampil(miripKonteksQuery.data?.data || []), [miripKonteksQuery.data?.data]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -448,7 +350,7 @@ function KorpusLeipzig() {
 
     setPesanForm('');
     startTransition(() => {
-      setSearchParams({ korpus: korpusAman, kata: kataAman });
+      navigate(buildPathAnalisisKorpus(kataAman));
     });
   };
 
@@ -456,11 +358,7 @@ function KorpusLeipzig() {
     setPesanForm('');
     setFormKata('');
     startTransition(() => {
-      if (formKorpusId || korpusDefault) {
-        setSearchParams({ korpus: formKorpusId || korpusDefault });
-        return;
-      }
-      setSearchParams({});
+      navigate(PATH_ANALISIS_KORPUS);
     });
   };
 
@@ -468,30 +366,19 @@ function KorpusLeipzig() {
     setPesanForm('');
     setFormKata(kataContoh);
     startTransition(() => {
-      setSearchParams({
-        korpus: formKorpusId || korpusDefault,
-        kata: kataContoh,
-      });
+      navigate(buildPathAnalisisKorpus(kataContoh));
     });
-  };
-
-  const handleTambahContoh = (step) => {
-    setContohLimit((current) => Math.min((contohQuery.data?.total || current + step), current + step));
-  };
-
-  const handleTambahSekalimat = (step) => {
-    setSekalimatLimit((current) => Math.min((sekalimatQuery.data?.total || current + step), current + step));
   };
 
   return (
     <HalamanPublik
-      judul="Korpus Leipzig"
+      judul="Analisis Korpus"
       deskripsi="Telusuri frekuensi kata, contoh kalimat, tetangga leksikal, dan graf asosiasi dari korpus Leipzig bahasa Indonesia."
       tampilkanJudul={false}
     >
       <div className="alat-page">
         <div className="alat-heading-row">
-          <h1 className="alat-page-heading">Korpus Leipzig</h1>
+          <h1 className="alat-page-heading">Analisis Korpus</h1>
           <button
             type="button"
             className="alat-heading-info-button"
@@ -505,7 +392,7 @@ function KorpusLeipzig() {
         {panelInfoTerbuka ? (
           <section className="alat-panel alat-info-panel">
             <KontenMarkdownStatis
-              src="/halaman/alat/korpus-leipzig.md"
+              src="/halaman/alat/analisis-korpus.md"
               loadingText="Memuat informasi alat ..."
               errorText="Gagal memuat informasi alat."
             />
@@ -562,8 +449,15 @@ function KorpusLeipzig() {
                 </section>
 
                 <section className="alat-panel korpus-leipzig-examples-panel" aria-labelledby="korpus-leipzig-contoh-title">
-                  <div className="alat-panel-header">
+                  <div className="alat-panel-header alat-panel-header-split">
                     <h2 id="korpus-leipzig-contoh-title" className="alat-panel-title">Contoh</h2>
+                    <button
+                      type="button"
+                      className="alat-link-secondary alat-panel-action-button"
+                      onClick={() => setTampilkanSumberContoh((value) => !value)}
+                    >
+                      {tampilkanSumberContoh ? 'Sembunyikan sumber' : 'Tampilkan sumber'}
+                    </button>
                   </div>
 
                   {!kataAktif ? (
@@ -582,12 +476,11 @@ function KorpusLeipzig() {
                             <span className="korpus-leipzig-contoh-bullet" aria-hidden="true">•</span>
                             <p className="korpus-leipzig-contoh-kalimat">
                               {sorotKataDalamKalimat(item.sentence, bentukKata)}
-                              {renderMetaContoh(item)}
+                              {tampilkanSumberContoh ? renderMetaContoh(item) : null}
                             </p>
                           </li>
                         ))}
                       </ul>
-                      {renderTambahHasilControls(contohLimit, contohQuery.data?.total, handleTambahContoh)}
                     </>
                   ) : (
                     <p className="alat-empty-text">Belum ada contoh kalimat yang tersedia.</p>
@@ -602,7 +495,7 @@ function KorpusLeipzig() {
 
                 {!kataAktif ? (
                   <div className="alat-panel-header">
-                    <p className="alat-panel-caption">Masukkan kata untuk melihat frekuensi, bentuk kata, contoh kalimat, dan hubungan leksikalnya.</p>
+                    <p className="alat-panel-caption">Masukkan kata untuk melihat kemunculan, peringkat, contoh kalimat, dan hubungan leksikalnya.</p>
                   </div>
                 ) : sedangMemuatRingkasan ? (
                   <div className="alat-panel-header">
@@ -616,149 +509,54 @@ function KorpusLeipzig() {
                   </div>
                 ) : (
                   <>
-                    <div className="alat-summary-stack" aria-label="Ringkasan hasil korpus Leipzig">
-                      <div className="alat-stat-grid-row">
+                    <div className="alat-summary-stack" aria-label="Ringkasan hasil analisis korpus">
+                      <div className="korpus-leipzig-stat-row">
+                        <article className="alat-stat-card">
+                          <span className="alat-stat-label">Kata</span>
+                          <strong className="alat-stat-value">{infoKataQuery.data?.kata || kataAktif || 'N/A'}</strong>
+                        </article>
                         <article className="alat-stat-card">
                           <span className="alat-stat-label">Kemunculan</span>
-                          <strong className="alat-stat-value">{formatAngka.format(infoKataQuery.data?.frekuensi || 0)}</strong>
+                          <strong className="alat-stat-value">{formatKemunculanRingkas(infoKataQuery.data?.frekuensi)}</strong>
                         </article>
                         <article className="alat-stat-card">
-                          <span className="alat-stat-label">Peringkat</span>
-                          <strong className="alat-stat-value">{infoKataQuery.data?.rank ? `#${formatAngka.format(infoKataQuery.data.rank)}` : 'N/A'}</strong>
-                        </article>
-                        <article className="alat-stat-card">
-                          <span className="alat-stat-label">Frekuensi</span>
-                          <strong className="alat-stat-value">{formatKelasFrekuensiRingkas(infoKataQuery.data?.kelasFrekuensi)}</strong>
+                          <span className="alat-stat-label">Urutan</span>
+                          <strong className="alat-stat-value">{infoKataQuery.data?.rank ? formatAngka.format(infoKataQuery.data.rank) : 'N/A'}</strong>
                         </article>
                       </div>
                     </div>
 
-                    {renderBentukKata(bentukKata, handlePilihContoh)}
+                    <div className="korpus-leipzig-section-stack">
+                      <section className="alat-subpanel korpus-leipzig-subpanel">
+                        <h3 className="korpus-leipzig-section-heading">Kata dalam Satu Kalimat</h3>
+                        {sekalimatQuery.isLoading ? (
+                          <p className="alat-panel-caption alat-subpanel-body">Memuat kata dalam satu kalimat ...</p>
+                        ) : sekalimatQuery.isError ? (
+                          <p className={adalahGalat404(sekalimatQuery.error) ? 'alat-empty-text' : 'alat-error-text'}>
+                            {ambilPesanGalat(sekalimatQuery.error, 'Kata dalam satu kalimat tidak dapat dimuat.')}
+                          </p>
+                        ) : (
+                          renderTokenList(sekalimatData, 'Kata pasangan sekalimat belum ditemukan.', handlePilihContoh)
+                        )}
+                      </section>
 
-                    <div className="alat-result-pills" role="tablist" aria-label="Kategori hasil korpus Leipzig">
-                      <button
-                        id="korpus-leipzig-tab-kolokasi"
-                        type="button"
-                        role="tab"
-                        aria-selected={tabHasilAktif === 'kolokasi'}
-                        aria-controls="korpus-leipzig-panel-kolokasi"
-                        className={`alat-pill-button ${tabHasilAktif === 'kolokasi' ? 'alat-pill-button-active' : ''}`}
-                        onClick={() => setTabHasilAktif('kolokasi')}
-                      >
-                        Kolokasi
-                      </button>
-                      <button
-                        id="korpus-leipzig-tab-kiri"
-                        type="button"
-                        role="tab"
-                        aria-selected={tabHasilAktif === 'kiri'}
-                        aria-controls="korpus-leipzig-panel-kiri"
-                        className={`alat-pill-button ${tabHasilAktif === 'kiri' ? 'alat-pill-button-active' : ''}`}
-                        onClick={() => setTabHasilAktif('kiri')}
-                      >
-                        Kiri
-                      </button>
-                      <button
-                        id="korpus-leipzig-tab-kanan"
-                        type="button"
-                        role="tab"
-                        aria-selected={tabHasilAktif === 'kanan'}
-                        aria-controls="korpus-leipzig-panel-kanan"
-                        className={`alat-pill-button ${tabHasilAktif === 'kanan' ? 'alat-pill-button-active' : ''}`}
-                        onClick={() => setTabHasilAktif('kanan')}
-                      >
-                        Kanan
-                      </button>
-                      <button
-                        id="korpus-leipzig-tab-mirip"
-                        type="button"
-                        role="tab"
-                        aria-selected={tabHasilAktif === 'mirip'}
-                        aria-controls="korpus-leipzig-panel-mirip"
-                        className={`alat-pill-button ${tabHasilAktif === 'mirip' ? 'alat-pill-button-active' : ''}`}
-                        onClick={() => setTabHasilAktif('mirip')}
-                      >
-                        Mirip
-                      </button>
-                      <button
-                        id="korpus-leipzig-tab-graf"
-                        type="button"
-                        role="tab"
-                        aria-selected={tabHasilAktif === 'graf'}
-                        aria-controls="korpus-leipzig-panel-graf"
-                        className={`alat-pill-button ${tabHasilAktif === 'graf' ? 'alat-pill-button-active' : ''}`}
-                        onClick={() => setTabHasilAktif('graf')}
-                      >
-                        Graf
-                      </button>
-                    </div>
+                      <section className="alat-subpanel korpus-leipzig-subpanel">
+                        <h3 className="korpus-leipzig-section-heading">Kata di Kiri</h3>
+                        {tetanggaQuery.isLoading
+                          ? <p className="alat-panel-caption alat-subpanel-body">Memuat kata di kiri ...</p>
+                          : tetanggaQuery.isError
+                          ? <p className={adalahGalat404(tetanggaQuery.error) ? 'alat-empty-text' : 'alat-error-text'}>{ambilPesanGalat(tetanggaQuery.error, 'Kata di kiri tidak dapat dimuat.')}</p>
+                          : renderTokenList(tetanggaKiri, 'Belum ada kata di kiri.', handlePilihContoh)}
+                      </section>
 
-                    <div className="alat-result-stack">
-                      {tabHasilAktif === 'kolokasi' ? (
-                        <section id="korpus-leipzig-panel-kolokasi" role="tabpanel" aria-labelledby="korpus-leipzig-tab-kolokasi" className="alat-subpanel korpus-leipzig-subpanel">
-
-                          {sekalimatQuery.isLoading ? (
-                            <p className="alat-panel-caption alat-subpanel-body">Memuat kolokasi ...</p>
-                          ) : sekalimatQuery.isError ? (
-                            <p className={adalahGalat404(sekalimatQuery.error) ? 'alat-empty-text' : 'alat-error-text'}>
-                              {ambilPesanGalat(sekalimatQuery.error, 'Kookurensi sekalimat tidak dapat dimuat.')}
-                            </p>
-                          ) : (
-                            <>
-                              {renderTokenList(sekalimatData, 'Kata pasangan sekalimat belum ditemukan.', handlePilihContoh)}
-                              {renderTambahHasilControls(sekalimatLimit, sekalimatQuery.data?.total, handleTambahSekalimat)}
-                            </>
-                          )}
-                        </section>
-                      ) : null}
-
-                      {tabHasilAktif === 'kiri' ? (
-                        <section id="korpus-leipzig-panel-kiri" role="tabpanel" aria-labelledby="korpus-leipzig-tab-kiri" className="alat-subpanel korpus-leipzig-subpanel">
-
-                          {tetanggaQuery.isLoading
-                            ? <p className="alat-panel-caption alat-subpanel-body">Memuat tetangga kiri ...</p>
-                            : tetanggaQuery.isError
-                            ? <p className={adalahGalat404(tetanggaQuery.error) ? 'alat-empty-text' : 'alat-error-text'}>{ambilPesanGalat(tetanggaQuery.error, 'Tetangga kiri tidak dapat dimuat.')}</p>
-                            : renderTokenList(tetanggaKiri, 'Belum ada tetangga kiri.', handlePilihContoh)}
-                        </section>
-                      ) : null}
-
-                      {tabHasilAktif === 'kanan' ? (
-                        <section id="korpus-leipzig-panel-kanan" role="tabpanel" aria-labelledby="korpus-leipzig-tab-kanan" className="alat-subpanel korpus-leipzig-subpanel">
-
-                          {tetanggaQuery.isLoading
-                            ? <p className="alat-panel-caption alat-subpanel-body">Memuat tetangga kanan ...</p>
-                            : tetanggaQuery.isError
-                            ? <p className={adalahGalat404(tetanggaQuery.error) ? 'alat-empty-text' : 'alat-error-text'}>{ambilPesanGalat(tetanggaQuery.error, 'Tetangga kanan tidak dapat dimuat.')}</p>
-                            : renderTokenList(tetanggaKanan, 'Belum ada tetangga kanan.', handlePilihContoh)}
-                        </section>
-                      ) : null}
-
-                      {tabHasilAktif === 'mirip' ? (
-                        <section id="korpus-leipzig-panel-mirip" role="tabpanel" aria-labelledby="korpus-leipzig-tab-mirip" className="alat-subpanel korpus-leipzig-subpanel">
-                          {miripKonteksQuery.isLoading ? (
-                            <p className="alat-panel-caption alat-subpanel-body">Memuat kata dengan konteks mirip ...</p>
-                          ) : miripKonteksQuery.isError ? (
-                            <p className={adalahGalat404(miripKonteksQuery.error) ? 'alat-empty-text' : 'alat-error-text'}>
-                              {ambilPesanGalat(miripKonteksQuery.error, 'Kata dengan konteks mirip tidak dapat dimuat.')}
-                            </p>
-                          ) : renderMiripKonteksList(miripKonteksData, 'Belum ada kata dengan konteks mirip untuk kata ini.', handlePilihContoh)}
-                        </section>
-                      ) : null}
-
-                      {tabHasilAktif === 'graf' ? (
-                        <section id="korpus-leipzig-panel-graf" role="tabpanel" aria-labelledby="korpus-leipzig-tab-graf" className="alat-subpanel korpus-leipzig-subpanel">
-                          {grafQuery.isLoading ? (
-                            <p className="alat-panel-caption alat-subpanel-body">Memuat graf asosiasi ...</p>
-                          ) : grafQuery.isError ? (
-                            <p className={adalahGalat404(grafQuery.error) ? 'alat-empty-text' : 'alat-error-text'}>
-                              {ambilPesanGalat(grafQuery.error, 'Graf asosiasi tidak dapat dimuat.')}
-                            </p>
-                          ) : (
-                            <GrafAsosiasi data={grafQuery.data} />
-                          )}
-                        </section>
-                      ) : null}
+                      <section className="alat-subpanel korpus-leipzig-subpanel">
+                        <h3 className="korpus-leipzig-section-heading">Kata di Kanan</h3>
+                        {tetanggaQuery.isLoading
+                          ? <p className="alat-panel-caption alat-subpanel-body">Memuat kata di kanan ...</p>
+                          : tetanggaQuery.isError
+                          ? <p className={adalahGalat404(tetanggaQuery.error) ? 'alat-empty-text' : 'alat-error-text'}>{ambilPesanGalat(tetanggaQuery.error, 'Kata di kanan tidak dapat dimuat.')}</p>
+                          : renderTokenList(tetanggaKanan, 'Belum ada kata di kanan.', handlePilihContoh)}
+                      </section>
                     </div>
                   </>
                 )}
@@ -776,12 +574,15 @@ export const __private = {
   adalahGalat404,
   formatTanggalAman,
   formatStatKorpus,
+  formatKemunculanRingkas,
+  formatPersenKemunculan,
   getKelasFrekuensiLabel,
   formatKelasFrekuensiRingkas,
   adalahTokenTampil,
   saringTokenTampil,
   sorotKataDalamKalimat,
   bangunTataLetakGraf,
+  buildPathAnalisisKorpus,
 };
 
 export default KorpusLeipzig;

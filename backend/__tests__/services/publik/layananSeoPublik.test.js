@@ -146,7 +146,7 @@ describe('layananSeoPublik.generateSitemapPaths', () => {
     expect(paths).toContain('/rima');
     expect(paths).toContain('/sumber');
     expect(paths).toContain('/alat');
-    expect(paths).toContain('/alat/penganalisis-teks');
+    expect(paths).toContain('/alat/analisis-teks');
     expect(paths).toContain('/alat/penghitung-huruf');
     expect(paths).not.toContain('/alat/pohon-kalimat');
     expect(paths).toContain('/gim');
@@ -422,7 +422,7 @@ describe('layananSeoPublik private helpers', () => {
     expect(buildOgImagePayload({ section: 'alat' })).toMatchObject({
       section: 'alat',
       sectionLabel: 'Alat',
-      context: 'Penganalisis teks dan penghitung huruf',
+      context: 'Analisis teks dan penghitung huruf',
     });
     expect(buildOgImagePayload({ section: 'gim' })).toMatchObject({
       section: 'gim',

@@ -227,13 +227,13 @@ function PenganalisisTeks() {
 
   return (
     <HalamanPublik
-      judul="Penganalisis Teks"
+      judul="Analisis Teks"
       deskripsi="Alat untuk menghitung jumlah paragraf, kalimat, kata, huruf rata-rata, serta rincian frekuensi teks bahasa Indonesia."
       tampilkanJudul={false}
     >
       <div className="alat-page">
         <div className="alat-heading-row">
-          <h1 className="alat-page-heading">Penganalisis Teks</h1>
+          <h1 className="alat-page-heading">Analisis Teks</h1>
           <button
             type="button"
             className="alat-heading-info-button"
@@ -247,7 +247,7 @@ function PenganalisisTeks() {
         {panelInfoTerbuka ? (
           <section className="alat-panel alat-info-panel">
             <KontenMarkdownStatis
-              src="/halaman/alat/penganalisis-teks.md"
+              src="/halaman/alat/analisis-teks.md"
               className="halaman-markdown-content"
               loadingText="Memuat informasi alat ..."
               errorText="Gagal memuat informasi alat."
@@ -286,7 +286,7 @@ function PenganalisisTeks() {
               <h2 id="alat-output-title" className="alat-panel-title">Hasil</h2>
             </div>
 
-            <div className="alat-summary-stack" aria-label="Ringkasan penganalisis teks">
+            <div className="alat-summary-stack" aria-label="Ringkasan analisis teks">
               <div className="alat-stat-grid-row">
                 <article className="alat-stat-card">
                   <span className="alat-stat-label">Paragraf</span>
@@ -321,7 +321,7 @@ function PenganalisisTeks() {
               </div>
             </div>
 
-            <div className="alat-result-pills" role="tablist" aria-label="Kategori hasil penganalisis teks">
+            <div className="alat-result-pills" role="tablist" aria-label="Kategori hasil analisis teks">
               <button
                 id="alat-pill-paragraf"
                 type="button"

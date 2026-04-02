@@ -11,11 +11,11 @@ let cachedSqliteLoadError = null;
 const corpusIdPattern = /^(?<language>[a-z]+)_(?<domain>[a-z]+)_(?<year>\d{4})_(?<size>[A-Za-z0-9]+)$/i;
 
 const domainLabels = {
-  news: 'News',
+  news: 'Berita',
   wikipedia: 'Wikipedia',
   web: 'Web',
   newscrawl: 'Newscrawl',
-  mixed: 'Mixed',
+  mixed: 'Campuran',
 };
 
 function getRepoRoot() {
@@ -75,7 +75,7 @@ function describeCorpusId(corpusId) {
 
   return {
     id: normalized,
-    label: `${domainLabel} ${year} (${sizeLabel})`,
+    label: `${domainLabel} ${year}`,
     language: String(language).toLowerCase(),
     domain: String(domain).toLowerCase(),
     year: Number.parseInt(year, 10),

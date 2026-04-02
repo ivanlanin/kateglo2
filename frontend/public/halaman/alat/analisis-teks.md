@@ -1,4 +1,4 @@
-Penganalisis Teks membantu menghitung paragraf, kalimat, kata, panjang rata-rata, dan kelompok frekuensi kata dari teks bahasa Indonesia.
+Analisis Teks membantu menghitung paragraf, kalimat, kata, panjang rata-rata, dan kelompok frekuensi kata dari teks bahasa Indonesia.
 
 ## Kegunaan
 

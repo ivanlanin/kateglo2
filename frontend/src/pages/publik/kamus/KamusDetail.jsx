@@ -5,6 +5,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { Network } from 'lucide-react';
 import { ambilDetailKamus, ambilKomentarKamus, simpanKomentarKamus, ambilKategoriKamus, cariGlosarium } from '../../../api/apiPublik';
 import { useAuth } from '../../../context/authContext';
 import PaginasiKursor from '../../../components/navigasi/PaginasiKursor';
@@ -126,6 +127,12 @@ function formatTitleCase(teks = '') {
     .filter(Boolean)
     .map((kata) => kata.charAt(0).toUpperCase() + kata.slice(1))
     .join(' ');
+}
+
+function buildTautanAnalisisKorpus(kata = '') {
+  const indeksKamus = normalisasiIndeksKamus(kata);
+  if (!indeksKamus) return '';
+  return `/alat/analisis-korpus/${encodeURIComponent(indeksKamus)}`;
 }
 
 function formatLabelPenyingkatanBadge(teks = '') {
@@ -433,6 +440,7 @@ function KamusDetail() {
   const notFound = isError || !data;
   const kataCari = decodeURIComponent(indeks || '');
   const indeksKamusFallback = normalisasiIndeksKamus(kataCari);
+  const tautanAnalisisKorpusFallback = buildTautanAnalisisKorpus(kataCari);
   const tautanRujukanKbbiFallback = indeksKamusFallback
     ? `https://kbbi.kemendikdasmen.go.id/entri/${encodeURIComponent(indeksKamusFallback)}`
     : '';
@@ -580,22 +588,35 @@ function KamusDetail() {
                 <h1 className="kamus-detail-heading">
                   <span className="kamus-detail-heading-main">{kataCari}</span>
                 </h1>
-                {tautanRujukanKbbiFallback && (
+                {(tautanAnalisisKorpusFallback || tautanRujukanKbbiFallback) && (
                   <div className="kamus-detail-admin-actions">
-                    <a
-                      href={tautanRujukanKbbiFallback}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="kamus-detail-reference-link"
-                      aria-label="Buka rujukan KBBI di tab baru"
-                      title="Buka rujukan KBBI (tab baru)"
-                    >
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-4 w-4">
-                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-                      </svg>
-                      <span className="sr-only">Rujukan KBBI</span>
-                    </a>
+                    {tautanAnalisisKorpusFallback && (
+                      <Link
+                        to={tautanAnalisisKorpusFallback}
+                        className="kamus-detail-reference-link"
+                        aria-label="Buka Analisis Korpus untuk kata ini"
+                        title="Buka Analisis Korpus"
+                      >
+                        <Network className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+                        <span className="sr-only">Analisis Korpus</span>
+                      </Link>
+                    )}
+                    {tautanRujukanKbbiFallback && (
+                      <a
+                        href={tautanRujukanKbbiFallback}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="kamus-detail-reference-link"
+                        aria-label="Buka rujukan KBBI di tab baru"
+                        title="Buka rujukan KBBI (tab baru)"
+                      >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-4 w-4">
+                          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                        </svg>
+                        <span className="sr-only">Rujukan KBBI</span>
+                      </a>
+                    )}
                   </div>
                 )}
               </div>
@@ -623,6 +644,7 @@ function KamusDetail() {
             const rantaiHeading = [...(entriItem.induk || []), { id: `current-${entriItem.id}`, entri: entriItem.entri, indeks: entriItem.indeks, current: true }];
             const infoWaktu = formatInfoWaktuEntri(entriItem.created_at, entriItem.updated_at);
             const indeksKamus = normalisasiIndeksKamus(entriItem.indeks || entriItem.entri);
+            const tautanAnalisisKorpus = buildTautanAnalisisKorpus(entriItem.indeks || entriItem.entri);
             const tautanRujukanKbbi = indeksKamus
               ? `https://kbbi.kemendikdasmen.go.id/entri/${encodeURIComponent(indeksKamus)}`
               : '';
@@ -718,8 +740,19 @@ function KamusDetail() {
                       </p>
                     )}
                   </div>
-                  {tautanRujukanKbbi && (
+                  {(tautanAnalisisKorpus || tautanRujukanKbbi) && (
                     <div className="kamus-detail-admin-actions">
+                      {tautanAnalisisKorpus && (
+                        <Link
+                          to={tautanAnalisisKorpus}
+                          className="kamus-detail-reference-link"
+                          aria-label="Buka Analisis Korpus untuk kata ini"
+                          title="Buka Analisis Korpus"
+                        >
+                          <Network className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+                          <span className="sr-only">Analisis Korpus</span>
+                        </Link>
+                      )}
                       {tautanRujukanKbbi && (
                         <a
                           href={tautanRujukanKbbi}

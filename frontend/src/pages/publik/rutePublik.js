@@ -30,9 +30,9 @@ const Privasi = buatLazyNamedExport(() => import('./informasi'), 'Privasi');
 const Sumber = buatLazyNamedExport(() => import('./informasi'), 'Sumber');
 
 const komponenAlat = {
-  'korpus-leipzig': KorpusLeipzig,
+  'analisis-korpus': KorpusLeipzig,
   'penghitung-huruf': PenghitungHuruf,
-  'penganalisis-teks': PenganalisisTeks,
+  'analisis-teks': PenganalisisTeks,
   'pohon-kalimat': PohonKalimat,
 };
 
@@ -41,7 +41,7 @@ const komponenGim = {
   'susun-kata': SusunKata,
 };
 
-const ruteAlatInteraktif = katalogAlat.map((item) => ({
+const ruteAlatInteraktif = katalogAlat.filter((item) => item.slug !== 'analisis-korpus').map((item) => ({
   path: item.routePath,
   Component: komponenAlat[item.slug],
   aksesPublik: aksesRuteInteraktif(item),
@@ -73,6 +73,37 @@ export const ruteHalamanPublik = [
   { path: '/gramatika', Component: Gramatika },
   { path: '/gramatika/:slug', Component: Gramatika },
   { path: '/alat', Component: Alat },
+  { path: '/alat/penganalisis-teks', element: createElement(Navigate, { to: '/alat/analisis-teks', replace: true }) },
+  {
+    path: '/alat/analisis-korpus',
+    Component: KorpusLeipzig,
+    aksesPublik: 'publik',
+    redirectTo: '/alat',
+  },
+  {
+    path: '/alat/analisis-korpus/:kata',
+    Component: KorpusLeipzig,
+    aksesPublik: 'publik',
+    redirectTo: '/alat',
+  },
+  {
+    path: '/alat/korpus-leipzig',
+    Component: KorpusLeipzig,
+    aksesPublik: 'publik',
+    redirectTo: '/alat',
+  },
+  {
+    path: '/alat/korpus-leipzig/:kata',
+    Component: KorpusLeipzig,
+    aksesPublik: 'publik',
+    redirectTo: '/alat',
+  },
+  {
+    path: '/alat/korpus-leipzig/:kata/:korpus',
+    Component: KorpusLeipzig,
+    aksesPublik: 'publik',
+    redirectTo: '/alat',
+  },
   ...ruteAlatInteraktif,
   { path: '/gim', Component: GimIndex },
   { path: '/gim/susun-kata', element: createElement(Navigate, { to: '/gim/susun-kata/harian', replace: true }) },

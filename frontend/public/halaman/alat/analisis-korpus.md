@@ -1,17 +1,26 @@
-## Korpus Leipzig
+Analisis Korpus membantu menelusuri pemakaian kata dalam [korpus 300 K Leipzig bahasa Indonesia](https://wortschatz-leipzig.de/en/download/ind)
 
-Alat ini menampilkan irisan data dari korpus Leipzig bahasa Indonesia yang sudah diimpor ke SQLite.
+## Kegunaan
 
-### Yang bisa dibaca
+Alat ini berguna untuk melihat seberapa sering sebuah kata muncul, di konteks seperti apa kata itu dipakai, dan kata lain apa yang cenderung hadir di sekitarnya.
 
-- Frekuensi total sebuah kata, termasuk variasi huruf besar-kecil.
-- Contoh kalimat nyata tempat kata itu muncul.
-- Kookurensi dalam kalimat yang sama.
-- Tetangga kata di posisi kiri dan kanan.
-- Graf asosiasi sederhana untuk eksplorasi cepat.
+## Cara Pakai
 
-### Catatan
+- Masukkan kata yang ingin ditelusuri.
+- Pilih korpus yang ingin dipakai.
+- Tekan tombol Telusuri untuk memuat hasil.
+- Hasil akan langsung ditampilkan di bawah ringkasan tanpa tab.
 
-- Data yang tampil bergantung pada korpus yang aktif dan artefak SQLite yang tersedia.
-- Jika korpus belum siap, berarti artefak SQLite belum diunduh atau belum diimpor pada lingkungan tersebut.
-- Graf asosiasi dimaksudkan sebagai tampilan ringkas, bukan visualisasi linguistik penuh.
+## Hasil yang Ditampilkan
+
+- Kata: kata yang sedang dianalisis.
+- Kemunculan: jumlah kemunculan kata dalam korpus aktif.
+- Urutan: peringkat kata berdasarkan frekuensi setelah variasi huruf besar-kecil digabungkan.
+- Contoh: kalimat nyata tempat kata itu muncul, beserta sumber jika tersedia.
+- Kata dalam Satu Kalimat: kata yang sering muncul bersama kata target dalam kalimat yang sama.
+- Kata di Kiri: kata yang sering muncul di sebelah kiri kata target.
+- Kata di Kanan: kata yang sering muncul di sebelah kanan kata target.
+
+## Catatan
+
+- Pencarian kata mengabaikan huruf besar-kecil.

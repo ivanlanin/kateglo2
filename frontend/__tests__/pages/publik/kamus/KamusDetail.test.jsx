@@ -864,6 +864,10 @@ describe('KamusDetail', () => {
     render(<KamusDetail />);
 
     expect(screen.getByLabelText('Sunting entri di Redaksi')).toHaveAttribute('href', '/redaksi/kamus/99');
+    expect(screen.getByLabelText('Buka Analisis Korpus untuk kata ini')).toHaveAttribute(
+      'href',
+      '/alat/analisis-korpus/kata'
+    );
     expect(screen.getByLabelText('Buka rujukan KBBI di tab baru')).toHaveAttribute(
       'href',
       'https://kbbi.kemendikdasmen.go.id/entri/kata'

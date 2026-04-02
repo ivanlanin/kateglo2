@@ -210,9 +210,10 @@ describe('entry-server', () => {
     expect(alat.title).toBe('Alat — Kateglo');
     expect(alat.description).toContain('Penghitung Huruf');
 
-    const penganalisisTeks = __private.buildMetaForPath('/alat/penganalisis-teks', site);
-    expect(penganalisisTeks.title).toBe('Penganalisis Teks — Kateglo');
-    expect(penganalisisTeks.description).toContain('paragraf');
+    const analisisTeks = __private.buildMetaForPath('/alat/analisis-teks', site);
+    expect(analisisTeks.title).toBe('Analisis Teks — Kateglo');
+    expect(analisisTeks.description).toContain('paragraf');
+    expect(__private.buildMetaForPath('/alat/penganalisis-teks', site).canonicalUrl).toBe('https://kateglo.org/alat/analisis-teks');
 
     const penghitungHuruf = __private.buildMetaForPath('/alat/penghitung-huruf', site);
     expect(penghitungHuruf.title).toBe('Penghitung Huruf — Kateglo');
@@ -222,9 +223,11 @@ describe('entry-server', () => {
     expect(pohonKalimat.title).toBe('Pohon Kalimat — Kateglo');
     expect(pohonKalimat.description).toContain('diagram pohon sintaksis');
 
-    const korpusLeipzig = __private.buildMetaForPath('/alat/korpus-leipzig', site);
-    expect(korpusLeipzig.title).toBe('Korpus Leipzig — Kateglo');
-    expect(korpusLeipzig.description).toContain('contoh kalimat');
+    const analisisKorpus = __private.buildMetaForPath('/alat/analisis-korpus', site);
+    expect(analisisKorpus.title).toBe('Analisis Korpus — Kateglo');
+    expect(analisisKorpus.description).toContain('contoh kalimat');
+    expect(__private.buildMetaForPath('/alat/analisis-korpus/indonesia/ind_news_2024_300K', site).title).toBe('Analisis Korpus — Kateglo');
+    expect(__private.buildMetaForPath('/alat/korpus-leipzig', site).canonicalUrl).toBe('https://kateglo.org/alat/analisis-korpus');
 
     const gim = __private.buildMetaForPath('/gim', site);
     expect(gim.title).toBe('Gim — Kateglo');
@@ -357,7 +360,7 @@ describe('entry-server', () => {
     expect(__private.buildGenericSocialContext('/glosarium/sumber/pusba')).toEqual({ section: 'glosarium', context: 'Glosarium per Sumber' });
     expect(__private.buildGenericSocialContext('/alat')).toEqual({ section: 'alat', context: 'Perangkat Bahasa Indonesia' });
     expect(__private.buildGenericSocialContext('/alat/penghitung-huruf')).toEqual({ section: 'alat', context: 'Alat Bahasa Indonesia' });
-    expect(__private.buildGenericSocialContext('/alat/korpus-leipzig')).toEqual({ section: 'alat', context: 'Alat Bahasa Indonesia' });
+    expect(__private.buildGenericSocialContext('/alat/analisis-korpus')).toEqual({ section: 'alat', context: 'Alat Bahasa Indonesia' });
     expect(__private.buildGenericSocialContext('/gim')).toEqual({ section: 'gim', context: 'Permainan Kata Bahasa Indonesia' });
     expect(__private.buildGenericSocialContext('/gim/kuis-kata')).toEqual({ section: 'gim', context: 'Permainan Bahasa Indonesia' });
     expect(__private.buildGenericSocialContext('/random')).toEqual({ section: 'default', context: 'Kamus, Tesaurus, dan Glosarium Bahasa Indonesia' });
@@ -397,7 +400,7 @@ describe('entry-server', () => {
       slug: 'slug-tidak-ada',
       notFound: true,
     }, 'Gramatika Tidak Ditemukan — Kateglo')).toBe('https://kateglo.org/og/default.png?title=Gramatika+Tidak+Ditemukan&context=Halaman+gramatika+yang+diminta+tidak+ditemukan+di+Kateglo.');
-    expect(__private.buildSocialImageUrl('/alat', 'https://kateglo.org', null, 'Alat — Kateglo')).toBe('https://kateglo.org/og/alat.png?title=Alat&context=Kumpulan+alat+bahasa+Indonesia+di+Kateglo%2C+termasuk+Penganalisis+Teks+dan+Penghitung+Huruf+untuk+analisis+cepat+langsung+di+peramban.');
+    expect(__private.buildSocialImageUrl('/alat', 'https://kateglo.org', null, 'Alat — Kateglo')).toBe('https://kateglo.org/og/alat.png?title=Alat&context=Kumpulan+alat+bahasa+Indonesia+di+Kateglo%2C+termasuk+Analisis+Teks+dan+Penghitung+Huruf+untuk+analisis+cepat+langsung+di+peramban.');
     expect(__private.buildSocialImageUrl('/gim/kuis-kata', 'https://kateglo.org', null, 'Kuis Kata — Kateglo')).toBe('https://kateglo.org/og/gim.png?title=Kuis+Kata&context=Mainkan+kuis+kata+pilihan+ganda+di+Kateglo+untuk+menebak+arti%2C+sinonim%2C+padanan%2C+makna%2C+dan+rima+dalam+satu+ronde+cepat.');
   });
 
@@ -423,11 +426,11 @@ describe('entry-server', () => {
     expect(headTags).toContain('https://kateglo.org/alat');
   });
 
-  it('render menghasilkan canonical untuk route alat penganalisis teks', async () => {
-    const { appHtml, headTags } = await render('/alat/penganalisis-teks');
+  it('render menghasilkan canonical untuk route alat analisis teks', async () => {
+    const { appHtml, headTags } = await render('/alat/analisis-teks');
     expect(appHtml).toContain('App SSR Mock');
-    expect(headTags).toContain('Penganalisis Teks — Kateglo');
-    expect(headTags).toContain('https://kateglo.org/alat/penganalisis-teks');
+    expect(headTags).toContain('Analisis Teks — Kateglo');
+    expect(headTags).toContain('https://kateglo.org/alat/analisis-teks');
   });
 
   it('render menghasilkan canonical untuk route alat penghitung huruf', async () => {
@@ -437,11 +440,11 @@ describe('entry-server', () => {
     expect(headTags).toContain('https://kateglo.org/alat/penghitung-huruf');
   });
 
-  it('render menghasilkan canonical untuk route alat korpus leipzig', async () => {
-    const { appHtml, headTags } = await render('/alat/korpus-leipzig');
+  it('render menghasilkan canonical untuk route alat analisis korpus', async () => {
+    const { appHtml, headTags } = await render('/alat/analisis-korpus');
     expect(appHtml).toContain('App SSR Mock');
-    expect(headTags).toContain('Korpus Leipzig — Kateglo');
-    expect(headTags).toContain('https://kateglo.org/alat/korpus-leipzig');
+    expect(headTags).toContain('Analisis Korpus — Kateglo');
+    expect(headTags).toContain('https://kateglo.org/alat/analisis-korpus');
   });
 
   it('render menghasilkan canonical dan title SEO untuk route susun kata harian', async () => {

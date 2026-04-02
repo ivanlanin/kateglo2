@@ -2,7 +2,7 @@
   "alat": {
     "index": {
       "judul": "Alat",
-      "deskripsi": "Kumpulan alat bahasa Indonesia di Kateglo, termasuk Penganalisis Teks dan Penghitung Huruf untuk analisis cepat langsung di peramban.",
+      "deskripsi": "Kumpulan alat bahasa Indonesia di Kateglo, termasuk Analisis Teks dan Penghitung Huruf untuk analisis cepat langsung di peramban.",
       "href": "/alat",
       "canonicalPath": "/alat",
       "sitemap": true,
@@ -10,17 +10,25 @@
     },
     "items": [
       {
-        "slug": "penganalisis-teks",
-        "judul": "Penganalisis Teks",
+        "slug": "analisis-teks",
+        "judul": "Analisis Teks",
         "deskripsi": "Hitung jumlah paragraf, kalimat, dan kata dari teks bahasa Indonesia secara cepat.",
-        "href": "/alat/penganalisis-teks",
-        "routePath": "/alat/penganalisis-teks",
+        "href": "/alat/analisis-teks",
+        "routePath": "/alat/analisis-teks",
         "tampilPublik": true,
-        "seoJudul": "Penganalisis Teks",
+        "seoJudul": "Analisis Teks",
         "seoDeskripsi": "Alat untuk menghitung jumlah paragraf, kalimat, dan kata dari teks bahasa Indonesia langsung di Kateglo.",
-        "canonicalPath": "/alat/penganalisis-teks",
+        "canonicalPath": "/alat/analisis-teks",
+        "seoAliases": [
+          {
+            "path": "/alat/penganalisis-teks",
+            "judul": "Analisis Teks",
+            "deskripsi": "Alat untuk menghitung jumlah paragraf, kalimat, dan kata dari teks bahasa Indonesia langsung di Kateglo.",
+            "canonicalPath": "/alat/analisis-teks"
+          }
+        ],
         "sitemapPaths": [
-          "/alat/penganalisis-teks"
+          "/alat/analisis-teks"
         ]
       },
       {
@@ -44,6 +52,7 @@
         "href": "/alat/pohon-kalimat",
         "routePath": "/alat/pohon-kalimat",
         "tampilPublik": true,
+        "sitemap": false,
         "seoJudul": "Pohon Kalimat",
         "seoDeskripsi": "Alat untuk menyusun diagram pohon sintaksis kalimat bahasa Indonesia secara interaktif di Kateglo.",
         "canonicalPath": "/alat/pohon-kalimat",
@@ -52,17 +61,31 @@
         ]
       },
       {
-        "slug": "korpus-leipzig",
-        "judul": "Korpus Leipzig",
+        "slug": "analisis-korpus",
+        "judul": "Analisis Korpus",
         "deskripsi": "Telusuri frekuensi kata, contoh kalimat, tetangga leksikal, dan graf asosiasi dari korpus Leipzig bahasa Indonesia.",
-        "href": "/alat/korpus-leipzig",
-        "routePath": "/alat/korpus-leipzig",
-        "tampilPublik": false,
-        "seoJudul": "Korpus Leipzig",
+        "href": "/alat/analisis-korpus",
+        "routePath": "/alat/analisis-korpus",
+        "tampilPublik": true,
+        "seoJudul": "Analisis Korpus",
         "seoDeskripsi": "Alat untuk menelusuri frekuensi kata, contoh kalimat, dan asosiasi kata dari korpus Leipzig bahasa Indonesia di Kateglo.",
-        "canonicalPath": "/alat/korpus-leipzig",
+        "canonicalPath": "/alat/analisis-korpus",
+        "seoAliases": [
+          {
+            "path": "/alat/korpus-leipzig",
+            "judul": "Analisis Korpus",
+            "deskripsi": "Alat untuk menelusuri frekuensi kata, contoh kalimat, dan asosiasi kata dari korpus Leipzig bahasa Indonesia di Kateglo.",
+            "canonicalPath": "/alat/analisis-korpus"
+          }
+        ],
+        "seoFallback": {
+          "pathPrefix": "/alat/analisis-korpus",
+          "judul": "Analisis Korpus",
+          "deskripsi": "Alat untuk menelusuri frekuensi kata, contoh kalimat, dan asosiasi kata dari korpus Leipzig bahasa Indonesia di Kateglo.",
+          "canonicalPath": "/alat/analisis-korpus"
+        },
         "sitemapPaths": [
-          "/alat/korpus-leipzig"
+          "/alat/analisis-korpus"
         ]
       }
     ]

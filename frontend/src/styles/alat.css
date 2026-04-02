@@ -678,8 +678,24 @@
     @apply min-w-0;
   }
 
+  .korpus-leipzig-stat-row {
+    @apply grid gap-3 md:grid-cols-3;
+  }
+
   .korpus-leipzig-examples-panel {
     @apply mt-0;
+  }
+
+  .korpus-leipzig-section-stack {
+    @apply mt-6 space-y-5;
+  }
+
+  .korpus-leipzig-section-heading {
+    @apply mb-3 mt-0 text-base font-semibold text-gray-900;
+  }
+
+  .dark .korpus-leipzig-section-heading {
+    @apply text-dark-text;
   }
 
   .korpus-leipzig-summary-card {
