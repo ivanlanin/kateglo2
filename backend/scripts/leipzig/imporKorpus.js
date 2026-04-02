@@ -245,6 +245,7 @@ async function importCorpus(corpusId) {
       CREATE INDEX idx_co_s_w1 ON co_s(w1_id, freq DESC);
       CREATE INDEX idx_co_s_w2 ON co_s(w2_id, freq DESC);
       CREATE INDEX idx_inv_w_word_sentence ON inv_w(w_id, s_id);
+      CREATE INDEX idx_inv_w_sentence_pos ON inv_w(s_id, pos);
       CREATE INDEX idx_inv_w_sentence ON inv_w(s_id);
       CREATE INDEX idx_inv_so_sentence ON inv_so(s_id);
     `);

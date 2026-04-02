@@ -121,6 +121,9 @@ describe('KorpusLeipzig', () => {
     fireEvent.click(screen.getByRole('tab', { name: 'Kolokasi' }));
     expect(await screen.findByRole('button', { name: 'berita' })).toBeInTheDocument();
 
+    fireEvent.click(screen.getByRole('tab', { name: 'Kiri' }));
+    expect(await screen.findByRole('button', { name: 'tentang' })).toBeInTheDocument();
+
     fireEvent.click(screen.getByRole('tab', { name: 'Mirip' }));
     expect(await screen.findByRole('button', { name: /Malaysia/i })).toBeInTheDocument();
     expect(screen.queryByText(/konteks signifikan dengan skor Dice/i)).not.toBeInTheDocument();
@@ -133,7 +136,10 @@ describe('KorpusLeipzig', () => {
       expect(mockApi.ambilKookurensiSekalimatLeipzig).toHaveBeenCalledWith('ind_news_2024_10K', 'indonesia', { limit: 25, offset: 0 });
       expect(mockApi.ambilKookurensiTetanggaLeipzig).toHaveBeenCalledWith('ind_news_2024_10K', 'indonesia', { limit: 25 });
       expect(mockApi.ambilMiripKonteksLeipzig).toHaveBeenCalledWith('ind_news_2024_10K', 'indonesia', { limit: 12, minimumKonteksSama: 3 });
+      expect(mockApi.ambilGrafKataLeipzig).toHaveBeenCalledWith('ind_news_2024_10K', 'indonesia', { limit: 10 });
     });
+
+    expect(mockApi.ambilContohKataLeipzig).toHaveBeenCalledWith('ind_news_2024_10K', 'indonesia', { limit: 8, offset: 0 });
   });
 
   it('helper privat merangkum statistik dan tata letak graf', () => {

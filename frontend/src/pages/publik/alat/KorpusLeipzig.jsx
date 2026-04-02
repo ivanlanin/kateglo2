@@ -374,6 +374,10 @@ function KorpusLeipzig() {
     retry: false,
     staleTime: 60000,
   };
+  const aktifKolokasi = tabHasilAktif === 'kolokasi';
+  const aktifTetangga = tabHasilAktif === 'kiri' || tabHasilAktif === 'kanan';
+  const aktifMirip = tabHasilAktif === 'mirip';
+  const aktifGraf = tabHasilAktif === 'graf';
 
   const infoKataQuery = useQuery({
     queryKey: ['leipzig', 'kata', korpusEfektif, kataAktifDeferred],
@@ -391,27 +395,31 @@ function KorpusLeipzig() {
     queryKey: ['leipzig', 'sekalimat', korpusEfektif, kataAktifDeferred, sekalimatLimit],
     queryFn: () => ambilKookurensiSekalimatLeipzig(korpusEfektif, kataAktifDeferred, { limit: sekalimatLimit, offset: 0 }),
     ...queryDasar,
+    enabled: queryDasar.enabled && aktifKolokasi,
   });
 
   const tetanggaQuery = useQuery({
     queryKey: ['leipzig', 'tetangga', korpusEfektif, kataAktifDeferred],
     queryFn: () => ambilKookurensiTetanggaLeipzig(korpusEfektif, kataAktifDeferred, { limit: 25 }),
     ...queryDasar,
+    enabled: queryDasar.enabled && aktifTetangga,
   });
 
   const grafQuery = useQuery({
     queryKey: ['leipzig', 'graf', korpusEfektif, kataAktifDeferred],
     queryFn: () => ambilGrafKataLeipzig(korpusEfektif, kataAktifDeferred, { limit: 10 }),
     ...queryDasar,
+    enabled: queryDasar.enabled && aktifGraf,
   });
 
   const miripKonteksQuery = useQuery({
     queryKey: ['leipzig', 'mirip-konteks', korpusEfektif, kataAktifDeferred],
     queryFn: () => ambilMiripKonteksLeipzig(korpusEfektif, kataAktifDeferred, { limit: 12, minimumKonteksSama: 3 }),
     ...queryDasar,
+    enabled: queryDasar.enabled && aktifMirip,
   });
 
-  const sedangMemuatHasil = infoKataQuery.isLoading || sekalimatQuery.isLoading || tetanggaQuery.isLoading || grafQuery.isLoading || miripKonteksQuery.isLoading;
+  const sedangMemuatRingkasan = infoKataQuery.isLoading;
   const sedangMemuatContoh = contohQuery.isLoading;
   const bentukKata = useMemo(
     () => saringTokenTampil(infoKataQuery.data?.bentuk || contohQuery.data?.bentuk || []),
@@ -596,9 +604,9 @@ function KorpusLeipzig() {
                   <div className="alat-panel-header">
                     <p className="alat-panel-caption">Masukkan kata untuk melihat frekuensi, bentuk kata, contoh kalimat, dan hubungan leksikalnya.</p>
                   </div>
-                ) : sedangMemuatHasil ? (
+                ) : sedangMemuatRingkasan ? (
                   <div className="alat-panel-header">
-                    <p className="alat-panel-caption">Memuat data kata, contoh kalimat, dan asosiasi dari korpus Leipzig ...</p>
+                    <p className="alat-panel-caption">Memuat ringkasan kata dari korpus Leipzig ...</p>
                   </div>
                 ) : infoKataQuery.isError ? (
                   <div className="alat-panel-header">
@@ -689,7 +697,9 @@ function KorpusLeipzig() {
                       {tabHasilAktif === 'kolokasi' ? (
                         <section id="korpus-leipzig-panel-kolokasi" role="tabpanel" aria-labelledby="korpus-leipzig-tab-kolokasi" className="alat-subpanel korpus-leipzig-subpanel">
 
-                          {sekalimatQuery.isError ? (
+                          {sekalimatQuery.isLoading ? (
+                            <p className="alat-panel-caption alat-subpanel-body">Memuat kolokasi ...</p>
+                          ) : sekalimatQuery.isError ? (
                             <p className={adalahGalat404(sekalimatQuery.error) ? 'alat-empty-text' : 'alat-error-text'}>
                               {ambilPesanGalat(sekalimatQuery.error, 'Kookurensi sekalimat tidak dapat dimuat.')}
                             </p>
@@ -705,7 +715,9 @@ function KorpusLeipzig() {
                       {tabHasilAktif === 'kiri' ? (
                         <section id="korpus-leipzig-panel-kiri" role="tabpanel" aria-labelledby="korpus-leipzig-tab-kiri" className="alat-subpanel korpus-leipzig-subpanel">
 
-                          {tetanggaQuery.isError
+                          {tetanggaQuery.isLoading
+                            ? <p className="alat-panel-caption alat-subpanel-body">Memuat tetangga kiri ...</p>
+                            : tetanggaQuery.isError
                             ? <p className={adalahGalat404(tetanggaQuery.error) ? 'alat-empty-text' : 'alat-error-text'}>{ambilPesanGalat(tetanggaQuery.error, 'Tetangga kiri tidak dapat dimuat.')}</p>
                             : renderTokenList(tetanggaKiri, 'Belum ada tetangga kiri.', handlePilihContoh)}
                         </section>
@@ -714,7 +726,9 @@ function KorpusLeipzig() {
                       {tabHasilAktif === 'kanan' ? (
                         <section id="korpus-leipzig-panel-kanan" role="tabpanel" aria-labelledby="korpus-leipzig-tab-kanan" className="alat-subpanel korpus-leipzig-subpanel">
 
-                          {tetanggaQuery.isError
+                          {tetanggaQuery.isLoading
+                            ? <p className="alat-panel-caption alat-subpanel-body">Memuat tetangga kanan ...</p>
+                            : tetanggaQuery.isError
                             ? <p className={adalahGalat404(tetanggaQuery.error) ? 'alat-empty-text' : 'alat-error-text'}>{ambilPesanGalat(tetanggaQuery.error, 'Tetangga kanan tidak dapat dimuat.')}</p>
                             : renderTokenList(tetanggaKanan, 'Belum ada tetangga kanan.', handlePilihContoh)}
                         </section>
@@ -722,7 +736,9 @@ function KorpusLeipzig() {
 
                       {tabHasilAktif === 'mirip' ? (
                         <section id="korpus-leipzig-panel-mirip" role="tabpanel" aria-labelledby="korpus-leipzig-tab-mirip" className="alat-subpanel korpus-leipzig-subpanel">
-                          {miripKonteksQuery.isError ? (
+                          {miripKonteksQuery.isLoading ? (
+                            <p className="alat-panel-caption alat-subpanel-body">Memuat kata dengan konteks mirip ...</p>
+                          ) : miripKonteksQuery.isError ? (
                             <p className={adalahGalat404(miripKonteksQuery.error) ? 'alat-empty-text' : 'alat-error-text'}>
                               {ambilPesanGalat(miripKonteksQuery.error, 'Kata dengan konteks mirip tidak dapat dimuat.')}
                             </p>
@@ -732,7 +748,9 @@ function KorpusLeipzig() {
 
                       {tabHasilAktif === 'graf' ? (
                         <section id="korpus-leipzig-panel-graf" role="tabpanel" aria-labelledby="korpus-leipzig-tab-graf" className="alat-subpanel korpus-leipzig-subpanel">
-                          {grafQuery.isError ? (
+                          {grafQuery.isLoading ? (
+                            <p className="alat-panel-caption alat-subpanel-body">Memuat graf asosiasi ...</p>
+                          ) : grafQuery.isError ? (
                             <p className={adalahGalat404(grafQuery.error) ? 'alat-empty-text' : 'alat-error-text'}>
                               {ambilPesanGalat(grafQuery.error, 'Graf asosiasi tidak dapat dimuat.')}
                             </p>

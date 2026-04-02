@@ -8,6 +8,7 @@ const path = require('path');
 const databaseCache = new Map();
 let cachedDatabaseSync = null;
 let cachedSqliteLoadError = null;
+const corpusIdPattern = /^(?<language>[a-z]+)_(?<domain>[a-z]+)_(?<year>\d{4})_(?<size>[A-Za-z0-9]+)$/i;
 
 const domainLabels = {
   news: 'News',
@@ -56,7 +57,7 @@ function toTitleCase(value) {
 
 function describeCorpusId(corpusId) {
   const normalized = normalizeCorpusId(corpusId);
-  const match = normalized.match(/^(?<language>[a-z]+)_(?<domain>[a-z]+)_(?<year>\d{4})_(?<size>[A-Za-z0-9]+)$/i);
+  const match = normalized.match(corpusIdPattern);
   if (!match || !match.groups) {
     return {
       id: normalized,
@@ -125,7 +126,7 @@ function listCorpusCandidates() {
     for (const entry of fs.readdirSync(rootDir, { withFileTypes: true })) {
       if (!entry.isDirectory() || entry.name === 'sqlite') continue;
       const normalized = normalizeCorpusId(entry.name);
-      if (normalized) corpusIds.add(normalized);
+      if (normalized && corpusIdPattern.test(normalized)) corpusIds.add(normalized);
     }
   }
 
@@ -133,7 +134,7 @@ function listCorpusCandidates() {
     for (const entry of fs.readdirSync(sqliteDir, { withFileTypes: true })) {
       if (!entry.isFile() || !entry.name.toLowerCase().endsWith('.sqlite')) continue;
       const normalized = normalizeCorpusId(entry.name.slice(0, -'.sqlite'.length));
-      if (normalized) corpusIds.add(normalized);
+      if (normalized && corpusIdPattern.test(normalized)) corpusIds.add(normalized);
     }
   }
 

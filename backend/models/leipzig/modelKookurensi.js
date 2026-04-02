@@ -299,34 +299,39 @@ class ModelKookurensi {
     const matchedForms = listMatchedForms(database, kataAman);
     if (matchedForms.length === 0) return buildEmptyTetangga(kataAman, limit);
 
+    const wordIds = matchedForms.map((row) => row.wordId).filter(Boolean);
+    const placeholders = buildPlaceholders(wordIds);
+
     const kiriRows = database.prepare(`
       SELECT related.w_id AS wordId, related.word AS kata, COUNT(*) AS frekuensi
-      FROM words matched
-      JOIN inv_w base ON base.w_id = matched.w_id
+      FROM inv_w base
       JOIN inv_w other ON other.s_id = base.s_id AND other.pos = base.pos - 1
       JOIN words related ON related.w_id = other.w_id
-      WHERE matched.word = ? COLLATE NOCASE
+      WHERE base.w_id IN (${placeholders})
       GROUP BY related.w_id, related.word
-    `).all(kataAman);
+      ORDER BY frekuensi DESC, related.word ASC
+      LIMIT ?
+    `).all(...wordIds, limit);
 
     const kananRows = database.prepare(`
       SELECT related.w_id AS wordId, related.word AS kata, COUNT(*) AS frekuensi
-      FROM words matched
-      JOIN inv_w base ON base.w_id = matched.w_id
+      FROM inv_w base
       JOIN inv_w other ON other.s_id = base.s_id AND other.pos = base.pos + 1
       JOIN words related ON related.w_id = other.w_id
-      WHERE matched.word = ? COLLATE NOCASE
+      WHERE base.w_id IN (${placeholders})
       GROUP BY related.w_id, related.word
-    `).all(kataAman);
+      ORDER BY frekuensi DESC, related.word ASC
+      LIMIT ?
+    `).all(...wordIds, limit);
 
     return {
       kata: kataAman,
       limit,
-      kiri: aggregateWordRows(kiriRows, kataAman).slice(0, limit).map((row) => ({
+      kiri: aggregateWordRows(kiriRows, kataAman).map((row) => ({
         kata: row.kata,
         frekuensi: row.frekuensi,
       })),
-      kanan: aggregateWordRows(kananRows, kataAman).slice(0, limit).map((row) => ({
+      kanan: aggregateWordRows(kananRows, kataAman).map((row) => ({
         kata: row.kata,
         frekuensi: row.frekuensi,
       })),
@@ -436,7 +441,7 @@ class ModelKookurensi {
     const limit = parseLimit(options.limit, { fallback: 12, max: 50 });
     const minimumKonteksSama = Math.min(Math.max(Number.parseInt(options.minimumKonteksSama, 10) || 3, 1), 20);
     const featureLimit = Math.min(Math.max(Number.parseInt(options.featureLimit, 10) || 80, 10), 240);
-    const candidatePoolLimit = Math.min(Math.max(Number.parseInt(options.candidatePoolLimit, 10) || (limit * 10), limit), 240);
+    const candidatePoolLimit = Math.min(Math.max(Number.parseInt(options.candidatePoolLimit, 10) || (limit * 6), limit), 240);
 
     if (!kataAman) return buildEmptyMiripKonteks('', limit, minimumKonteksSama);
 
@@ -462,9 +467,10 @@ class ModelKookurensi {
     const candidatePool = kumpulkanKandidatMirip(database, targetFeatures, targetWordIds, kataAman, { candidatePoolLimit });
     const targetFeatureKeys = targetFeatures.map((item) => item.featureKey);
     const targetFeatureMap = new Map(targetFeatures.map((item) => [item.featureKey, item]));
+    const eligibleCandidates = candidatePool.filter((candidate) => candidate.commonFeatureKeys.length >= minimumKonteksSama);
 
-    const ranked = candidatePool.map((candidate) => {
-      const candidateFeatures = ambilFiturKonteks(database, candidate.wordIds, [candidate.kata]);
+    const ranked = eligibleCandidates.map((candidate) => {
+      const candidateFeatures = ambilFiturKonteks(database, candidate.wordIds, [candidate.kata], { featureLimit });
       const candidateFeatureKeys = candidateFeatures.map((item) => item.featureKey);
       const commonFeatureKeys = candidate.commonFeatureKeys.filter((key) => targetFeatureMap.has(key));
       const skorDice = hitungDiceCoefficient(targetFeatureKeys, candidateFeatureKeys);
