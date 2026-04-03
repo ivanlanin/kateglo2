@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-03-31T07:37:45.632Z
+-- Generated: 2026-04-03T01:38:21.168Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -305,6 +305,8 @@ create index idx_entri_induk_aktif_jenis_entri on entri using btree (induk, akti
 create index idx_entri_jenis on entri using btree (jenis);
 create index idx_entri_lema_rujuk on entri using btree (lema_rujuk);
 create index idx_entri_lower on entri using btree (lower(entri));
+create index idx_entri_lower_indeks_detail_aktif on entri using btree (lower(indeks), homograf, homonim, entri, id) WHERE ((aktif = 1) AND (indeks <> ''::text));
+create index idx_entri_lower_indeks_label_aktif on entri using btree (lower(indeks), indeks) WHERE ((aktif = 1) AND (indeks <> ''::text));
 create index idx_entri_serupa_norm_aktif on entri using btree (lower(regexp_replace(replace(entri, '-'::text, ''::text), '\s*\([0-9]+\)\s*$'::text, ''::text))) WHERE (aktif = 1);
 create index idx_entri_sumber_id on entri using btree (sumber_id);
 create index idx_entri_trgm on entri using gin (entri gin_trgm_ops);
@@ -604,6 +606,20 @@ create table pencarian_202603 (
   constraint pencarian_jumlah_check check (jumlah >= 0)
 );
 create unique index pencarian_202603_tanggal_domain_kata_key on pencarian_202603 using btree (tanggal, domain, kata);
+
+create table pencarian_202604 (
+  tanggal date not null,
+  kata text not null,
+  jumlah integer not null default 0,
+  domain smallint not null default 1,
+  created_at timestamp without time zone not null default (now() AT TIME ZONE 'UTC'::text),
+  updated_at timestamp without time zone not null default (now() AT TIME ZONE 'UTC'::text),
+  constraint pencarian_202604_domain_check check (domain = ANY (ARRAY[1, 2, 3, 4, 5])),
+  constraint pencarian_202604_tanggal_check check ((tanggal >= '2026-04-01'::date) AND (tanggal < '2026-05-01'::date)),
+  constraint pencarian_domain_check check (domain = ANY (ARRAY[1, 2, 3, 4, 5])),
+  constraint pencarian_jumlah_check check (jumlah >= 0)
+);
+create unique index pencarian_202604_tanggal_domain_kata_key on pencarian_202604 using btree (tanggal, domain, kata);
 
 -- Daftar kata yang dikecualikan dari pencatatan statistik pencarian
 create table pencarian_hitam (

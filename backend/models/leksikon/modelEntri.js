@@ -470,8 +470,10 @@ class ModelEntri {
   }
 
   static async ambilEntriPerIndeks(indeks) {
-    const result = await db.query(
-            `SELECT e.id, e.legacy_eid, e.entri, e.indeks, e.homograf, e.homonim, e.jenis, e.induk, e.pemenggalan, e.lafal, e.varian,
+    const indeksAman = String(indeks || '').trim().toLowerCase();
+    if (!indeksAman) return [];
+
+    const selectClause = `SELECT e.id, e.legacy_eid, e.entri, e.indeks, e.homograf, e.homonim, e.jenis, e.induk, e.pemenggalan, e.lafal, e.varian,
               e.jenis_rujuk, e.lema_rujuk,
               (SELECT er.entri FROM entri er WHERE er.id = e.entri_rujuk) AS entri_rujuk,
               (SELECT er.indeks FROM entri er WHERE er.id = e.entri_rujuk) AS entri_rujuk_indeks,
@@ -481,16 +483,31 @@ class ModelEntri {
               to_char(e.created_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS created_at,
               to_char(e.updated_at, 'YYYY-MM-DD HH24:MI:SS.MS') AS updated_at
        FROM entri e
-       LEFT JOIN sumber s ON s.id = e.sumber_id
-       WHERE LOWER(e.indeks) = LOWER($1) AND e.aktif = 1
-       ORDER BY
+       LEFT JOIN sumber s ON s.id = e.sumber_id`;
+    const orderClause = `ORDER BY
          e.homograf ASC NULLS LAST,
          e.homonim ASC NULLS LAST,
          e.entri ASC,
-         e.id ASC`,
-      [indeks]
+         e.id ASC`;
+
+    const exactResult = await db.query(
+      `${selectClause}
+       WHERE e.indeks = $1 AND e.aktif = 1
+       ${orderClause}`,
+      [indeksAman]
     );
-    return result.rows;
+
+    if (exactResult.rows.length > 0) {
+      return exactResult.rows;
+    }
+
+    const fallbackResult = await db.query(
+      `${selectClause}
+       WHERE LOWER(e.indeks) = $1 AND e.aktif = 1
+       ${orderClause}`,
+      [indeksAman]
+    );
+    return fallbackResult.rows;
   }
 
   static async ambilIndeksValidBatch(indeksList = []) {
@@ -503,12 +520,12 @@ class ModelEntri {
     if (!daftarIndeks.length) return [];
 
     const result = await db.query(
-      `SELECT DISTINCT LOWER(TRIM(e.indeks)) AS indeks
+      `SELECT DISTINCT LOWER(e.indeks) AS indeks
        FROM entri e
        WHERE e.aktif = 1
-         AND COALESCE(TRIM(e.indeks), '') <> ''
-         AND LOWER(TRIM(e.indeks)) = ANY($1::text[])
-       ORDER BY LOWER(TRIM(e.indeks)) ASC`,
+         AND e.indeks <> ''
+         AND LOWER(e.indeks) = ANY($1::text[])
+       ORDER BY LOWER(e.indeks) ASC`,
       [daftarIndeks]
     );
 
@@ -523,39 +540,40 @@ class ModelEntri {
       return { prev: null, next: null };
     }
 
-    const baseCte = `
-      WITH indeks_unik AS (
-        SELECT LOWER(TRIM(e.indeks)) AS indeks_norm,
-               MIN(e.indeks) AS label
-        FROM entri e
-        WHERE e.aktif = 1
-          AND COALESCE(TRIM(e.indeks), '') <> ''
-        GROUP BY LOWER(TRIM(e.indeks))
-      )`;
+    const result = await db.query(
+      `WITH prev AS (
+         SELECT DISTINCT ON (LOWER(e.indeks))
+                LOWER(e.indeks) AS indeks,
+                e.indeks AS label
+         FROM entri e
+         WHERE e.aktif = 1
+           AND e.indeks <> ''
+           AND LOWER(e.indeks) < $1
+         ORDER BY LOWER(e.indeks) DESC, e.indeks ASC
+         LIMIT 1
+       ),
+       next AS (
+         SELECT DISTINCT ON (LOWER(e.indeks))
+                LOWER(e.indeks) AS indeks,
+                e.indeks AS label
+         FROM entri e
+         WHERE e.aktif = 1
+           AND e.indeks <> ''
+           AND LOWER(e.indeks) > $1
+         ORDER BY LOWER(e.indeks) ASC, e.indeks ASC
+         LIMIT 1
+       )
+       SELECT
+         (SELECT prev.indeks FROM prev) AS prev_indeks,
+         (SELECT prev.label FROM prev) AS prev_label,
+         (SELECT next.indeks FROM next) AS next_indeks,
+         (SELECT next.label FROM next) AS next_label`,
+      [indeksAman]
+    );
 
-    const [prevResult, nextResult] = await Promise.all([
-      db.query(
-        `${baseCte}
-         SELECT indeks_norm AS indeks, label
-         FROM indeks_unik
-         WHERE indeks_norm < $1
-         ORDER BY indeks_norm DESC
-         LIMIT 1`,
-        [indeksAman]
-      ),
-      db.query(
-        `${baseCte}
-         SELECT indeks_norm AS indeks, label
-         FROM indeks_unik
-         WHERE indeks_norm > $1
-         ORDER BY indeks_norm ASC
-         LIMIT 1`,
-        [indeksAman]
-      ),
-    ]);
-
-    const prev = prevResult.rows[0] || null;
-    const next = nextResult.rows[0] || null;
+    const row = result.rows[0] || {};
+    const prev = row.prev_indeks ? { indeks: row.prev_indeks, label: row.prev_label } : null;
+    const next = row.next_indeks ? { indeks: row.next_indeks, label: row.next_label } : null;
 
     return {
       prev,

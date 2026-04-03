@@ -193,9 +193,7 @@ class ModelGlosarium {
 
       if (aktifSaja) {
         conditions.push('g.aktif = TRUE');
-      }
-
-      if (aktif === '1') {
+      } else if (aktif === '1') {
         conditions.push('g.aktif = TRUE');
       } else if (aktif === '0') {
         conditions.push('g.aktif = FALSE');
@@ -1352,21 +1350,24 @@ class ModelGlosarium {
 
     const limit = legacyMode ? options : options?.limit;
     const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
+    const wholeWordFilterSql = `
+      to_tsvector('simple', g.indonesia) @@ plainto_tsquery('simple', $1)
+      AND LOWER(g.indonesia) ~ (
+        '(^|[^[:alnum:]_])' ||
+        regexp_replace(LOWER($1), '([.^$|()\\[\\]{}*+?\\\\-])', '\\\\\\1', 'g') ||
+        '([^[:alnum:]_]|$)'
+      )
+    `;
 
     if (legacyMode) {
       const result = await db.query(
         `SELECT DISTINCT g.indonesia, g.asing
          FROM glosarium g
          WHERE g.aktif = TRUE
-           AND LOWER(g.indonesia) LIKE ('%' || LOWER($1) || '%')
-           AND LOWER(g.indonesia) ~ (
-           '(^|[^[:alnum:]_])' ||
-           regexp_replace(LOWER($1), '([.^$|()\\[\\]{}*+?\\\\-])', '\\\\\\1', 'g') ||
-           '([^[:alnum:]_]|$)'
-         )
+           AND ${wholeWordFilterSql}
          ORDER BY g.indonesia ASC, g.asing ASC
          LIMIT $2`,
-        [trimmed, cappedLimit]
+        [token, cappedLimit]
       );
 
       return result.rows;
@@ -1386,37 +1387,12 @@ class ModelGlosarium {
         SELECT MIN(g.id) AS id, g.indonesia, g.asing
         FROM glosarium g
         WHERE g.aktif = TRUE
-          AND LOWER(g.indonesia) LIKE ('%' || LOWER($1) || '%')
-          AND LOWER(g.indonesia) ~ (
-          '(^|[^[:alnum:]_])' ||
-          regexp_replace(LOWER($1), '([.^$|()\\[\\]{}*+?\\\\-])', '\\\\\\1', 'g') ||
-          '([^[:alnum:]_]|$)'
-        )
+          AND ${wholeWordFilterSql}
         GROUP BY g.indonesia, g.asing
       )
     `;
 
-    let total = 0;
-    if (hitungTotal) {
-      const countResult = await db.query(
-        `${filteredCte}
-         SELECT COUNT(*) AS total FROM hasil`,
-        [trimmed]
-      );
-      total = parseCount(countResult.rows[0]?.total);
-      if (total === 0) {
-        return {
-          data: [],
-          total: 0,
-          hasPrev: false,
-          hasNext: false,
-          prevCursor: null,
-          nextCursor: null,
-        };
-      }
-    }
-
-    const params = [trimmed];
+    const params = [token];
     let cursorClause = '';
     if (cursorPayload) {
       params.push(String(cursorPayload.indonesia || ''), Number(cursorPayload.id) || 0);
@@ -1430,18 +1406,45 @@ class ModelGlosarium {
     params.push(cappedLimit + 1);
     const limitIdx = params.length;
 
-    const dataResult = await db.query(
-      `${filteredCte}
-       SELECT id, indonesia, asing
-       FROM hasil
-       ${cursorClause}
-       ORDER BY indonesia ${orderDesc ? 'DESC' : 'ASC'}, id ${orderDesc ? 'DESC' : 'ASC'}
-       LIMIT $${limitIdx}`,
-      params
-    );
+    const querySql = hitungTotal
+      ? `${filteredCte},
+         total_hasil AS (
+           SELECT COUNT(*)::int AS total FROM hasil
+         )
+         SELECT page.id, page.indonesia, page.asing, total_hasil.total
+         FROM total_hasil
+         LEFT JOIN LATERAL (
+           SELECT id, indonesia, asing
+           FROM hasil
+           ${cursorClause}
+           ORDER BY indonesia ${orderDesc ? 'DESC' : 'ASC'}, id ${orderDesc ? 'DESC' : 'ASC'}
+           LIMIT $${limitIdx}
+         ) page ON TRUE`
+      : `${filteredCte}
+         SELECT id, indonesia, asing
+         FROM hasil
+         ${cursorClause}
+         ORDER BY indonesia ${orderDesc ? 'DESC' : 'ASC'}, id ${orderDesc ? 'DESC' : 'ASC'}
+         LIMIT $${limitIdx}`;
 
-    const hasMore = dataResult.rows.length > cappedLimit;
-    let rows = hasMore ? dataResult.rows.slice(0, cappedLimit) : dataResult.rows;
+    const dataResult = await db.query(querySql, params);
+    const total = hitungTotal ? parseCount(dataResult.rows[0]?.total) : 0;
+    if (hitungTotal && total === 0) {
+      return {
+        data: [],
+        total: 0,
+        hasPrev: false,
+        hasNext: false,
+        prevCursor: null,
+        nextCursor: null,
+      };
+    }
+
+    const filteredRows = hitungTotal
+      ? dataResult.rows.filter((row) => row.id !== null && row.id !== undefined)
+      : dataResult.rows;
+    const hasMore = filteredRows.length > cappedLimit;
+    let rows = hasMore ? filteredRows.slice(0, cappedLimit) : filteredRows;
     if (orderDesc) {
       rows = rows.reverse();
     }

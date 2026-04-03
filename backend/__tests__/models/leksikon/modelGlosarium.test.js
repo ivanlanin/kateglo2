@@ -592,7 +592,7 @@ describe('ModelGlosarium', () => {
     const result = await ModelGlosarium.cariFrasaMengandungKataUtuh(' aktif ', 999);
 
     expect(db.query).toHaveBeenCalledWith(
-      expect.stringContaining('regexp_replace(LOWER($1)'),
+      expect.stringContaining("plainto_tsquery('simple', $1)"),
       ['aktif', 200]
     );
     expect(result).toEqual([{ indonesia: 'zat aktif', asing: 'active substance' }]);
@@ -609,7 +609,7 @@ describe('ModelGlosarium', () => {
   });
 
   it('cariFrasaMengandungKataUtuh mode cursor mengembalikan total 0 saat hitungTotal aktif', async () => {
-    db.query.mockResolvedValueOnce({ rows: [{ total: '0' }] });
+    db.query.mockResolvedValueOnce({ rows: [{ id: null, indonesia: null, asing: null, total: 0 }] });
 
     const result = await ModelGlosarium.cariFrasaMengandungKataUtuh('aktif', {
       limit: 5,
@@ -617,8 +617,8 @@ describe('ModelGlosarium', () => {
     });
 
     expect(db.query).toHaveBeenCalledWith(
-      expect.stringContaining('SELECT COUNT(*) AS total FROM hasil'),
-      ['aktif']
+      expect.stringContaining('LEFT JOIN LATERAL'),
+      ['aktif', 6]
     );
     expect(result).toEqual({
       data: [],
@@ -632,15 +632,13 @@ describe('ModelGlosarium', () => {
 
   it('cariFrasaMengandungKataUtuh mode cursor next mendukung cursor dan hasMore', async () => {
     const cursor = encodeCursor({ indonesia: 'kata aktif', id: 9 });
-    db.query
-      .mockResolvedValueOnce({ rows: [{ total: '5' }] })
-      .mockResolvedValueOnce({
-        rows: [
-          { id: 10, indonesia: 'zat aktif', asing: 'active substance' },
-          { id: 11, indonesia: 'prinsip aktif', asing: 'active principle' },
-          { id: 12, indonesia: 'unsur aktif', asing: 'active element' },
-        ],
-      });
+    db.query.mockResolvedValueOnce({
+      rows: [
+        { id: 10, indonesia: 'zat aktif', asing: 'active substance', total: 5 },
+        { id: 11, indonesia: 'prinsip aktif', asing: 'active principle', total: 5 },
+        { id: 12, indonesia: 'unsur aktif', asing: 'active element', total: 5 },
+      ],
+    });
 
     const result = await ModelGlosarium.cariFrasaMengandungKataUtuh('aktif', {
       limit: 2,
@@ -649,8 +647,7 @@ describe('ModelGlosarium', () => {
       hitungTotal: true,
     });
 
-    expect(db.query).toHaveBeenNthCalledWith(
-      2,
+    expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining('WHERE (indonesia, id) > ($2, $3)'),
       ['aktif', 'kata aktif', 9, 3]
     );

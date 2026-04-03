@@ -894,8 +894,29 @@ describe('ModelEntri', () => {
     const result = await ModelEntri.ambilEntriPerIndeks('aktif');
 
     expect(db.query).toHaveBeenCalledWith(
-      expect.stringContaining('WHERE LOWER(e.indeks) = LOWER($1) AND e.aktif = 1'),
+      expect.stringContaining('WHERE e.indeks = $1 AND e.aktif = 1'),
       ['aktif']
+    );
+    expect(result).toEqual(rows);
+  });
+
+  it('ambilEntriPerIndeks fallback ke lower(indeks) untuk data lama yang belum lowercase', async () => {
+    const rows = [{ id: 9, entri: 'Kalender', indeks: 'Kalender' }];
+    db.query
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows });
+
+    const result = await ModelEntri.ambilEntriPerIndeks('Kalender');
+
+    expect(db.query).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('WHERE e.indeks = $1 AND e.aktif = 1'),
+      ['kalender']
+    );
+    expect(db.query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('WHERE LOWER(e.indeks) = $1 AND e.aktif = 1'),
+      ['kalender']
     );
     expect(result).toEqual(rows);
   });
@@ -909,7 +930,7 @@ describe('ModelEntri', () => {
     db.query.mockResolvedValueOnce({ rows: [{ indeks: 'aktif' }, { indeks: 'zat aktif' }] });
 
     await expect(ModelEntri.ambilIndeksValidBatch([' Aktif ', 'aktif', '-Zat Aktif-', '', null])).resolves.toEqual(['aktif', 'zat aktif']);
-    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('LOWER(TRIM(e.indeks)) = ANY($1::text[])'), [['aktif', 'zat aktif']]);
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('LOWER(e.indeks) = ANY($1::text[])'), [['aktif', 'zat aktif']]);
 
     db.query.mockResolvedValueOnce({ rows: [{ indeks: null }, { indeks: 'aktif' }] });
     await expect(ModelEntri.ambilIndeksValidBatch(['aktif'])).resolves.toEqual(['aktif']);
@@ -920,21 +941,20 @@ describe('ModelEntri', () => {
     expect(db.query).not.toHaveBeenCalled();
   });
 
-  it('ambilNavigasiIndeks mengambil indeks sebelum dan sesudah secara paralel', async () => {
-    db.query
-      .mockResolvedValueOnce({ rows: [{ indeks: 'beta', label: 'Beta' }] })
-      .mockResolvedValueOnce({ rows: [{ indeks: 'delta', label: 'Delta' }] });
+  it('ambilNavigasiIndeks mengambil prev dan next dalam satu query', async () => {
+    db.query.mockResolvedValueOnce({
+      rows: [{
+        prev_indeks: 'beta',
+        prev_label: 'Beta',
+        next_indeks: 'delta',
+        next_label: 'Delta',
+      }],
+    });
 
     const result = await ModelEntri.ambilNavigasiIndeks('  Gamma ');
 
-    expect(db.query).toHaveBeenNthCalledWith(
-      1,
-      expect.stringContaining('WHERE indeks_norm < $1'),
-      ['gamma']
-    );
-    expect(db.query).toHaveBeenNthCalledWith(
-      2,
-      expect.stringContaining('WHERE indeks_norm > $1'),
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('WITH prev AS'),
       ['gamma']
     );
     expect(result).toEqual({
@@ -944,9 +964,7 @@ describe('ModelEntri', () => {
   });
 
   it('ambilNavigasiIndeks mengembalikan null untuk sisi yang tidak ada hasil', async () => {
-    db.query
-      .mockResolvedValueOnce({ rows: [] })
-      .mockResolvedValueOnce({ rows: [] });
+    db.query.mockResolvedValueOnce({ rows: [{}] });
 
     await expect(ModelEntri.ambilNavigasiIndeks('gamma')).resolves.toEqual({ prev: null, next: null });
   });
