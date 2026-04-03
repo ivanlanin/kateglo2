@@ -241,6 +241,8 @@ describe('KorpusLeipzig', () => {
       expect(mockApi.ambilInfoKataLeipzig).toHaveBeenNthCalledWith(2, 'ind_news_2024_10K', 'subyek');
       expect(screen.getByText('subjek').closest('article')?.className).toContain('korpus-leipzig-stat-card-winner');
       expect(screen.getByText('subyek').closest('article')?.className).toContain('korpus-leipzig-stat-card-loser');
+      expect(screen.getByText('subjek').className).toContain('korpus-leipzig-stat-value-word');
+      expect(screen.getByText('subyek').className).toContain('korpus-leipzig-stat-value-word');
     });
   });
 

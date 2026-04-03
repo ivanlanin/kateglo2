@@ -398,7 +398,7 @@ function BarisStatistik({ items = [] }) {
       {items.map((item) => (
         <article key={item.label} className={`alat-stat-card ${item.tone ? `korpus-leipzig-stat-card-${item.tone}` : ''}`.trim()}>
           <span className="alat-stat-label">{item.label}</span>
-          <strong className="alat-stat-value">{item.value}</strong>
+          <strong className={`alat-stat-value ${item.valueClassName || ''}`.trim()}>{item.value}</strong>
         </article>
       ))}
     </div>
@@ -702,12 +702,12 @@ function KorpusLeipzig() {
   };
 
   const barisBandingKata1 = [
-    { label: 'Kata 1', value: infoBandingKata1Query.data?.kata || kataBanding1Aktif || 'N/A', tone: ringkasanBanding?.rasio == null ? 'neutral' : ((Number(infoBandingKata1Query.data?.frekuensi) || 0) > (Number(infoBandingKata2Query.data?.frekuensi) || 0) ? 'winner' : ((Number(infoBandingKata1Query.data?.frekuensi) || 0) < (Number(infoBandingKata2Query.data?.frekuensi) || 0) ? 'loser' : 'neutral')) },
+    { label: 'Kata 1', value: infoBandingKata1Query.data?.kata || kataBanding1Aktif || 'N/A', valueClassName: 'korpus-leipzig-stat-value-word', tone: ringkasanBanding?.rasio == null ? 'neutral' : ((Number(infoBandingKata1Query.data?.frekuensi) || 0) > (Number(infoBandingKata2Query.data?.frekuensi) || 0) ? 'winner' : ((Number(infoBandingKata1Query.data?.frekuensi) || 0) < (Number(infoBandingKata2Query.data?.frekuensi) || 0) ? 'loser' : 'neutral')) },
     { label: 'Kemunculan', value: formatKemunculanRingkas(infoBandingKata1Query.data?.frekuensi), tone: ringkasanBanding?.rasio == null ? 'neutral' : ((Number(infoBandingKata1Query.data?.frekuensi) || 0) > (Number(infoBandingKata2Query.data?.frekuensi) || 0) ? 'winner' : ((Number(infoBandingKata1Query.data?.frekuensi) || 0) < (Number(infoBandingKata2Query.data?.frekuensi) || 0) ? 'loser' : 'neutral')) },
     { label: 'Urutan', value: infoBandingKata1Query.data?.rank ? formatAngka.format(infoBandingKata1Query.data.rank) : 'N/A', tone: ringkasanBanding?.rasio == null ? 'neutral' : ((Number(infoBandingKata1Query.data?.frekuensi) || 0) > (Number(infoBandingKata2Query.data?.frekuensi) || 0) ? 'winner' : ((Number(infoBandingKata1Query.data?.frekuensi) || 0) < (Number(infoBandingKata2Query.data?.frekuensi) || 0) ? 'loser' : 'neutral')) },
   ];
   const barisBandingKata2 = [
-    { label: 'Kata 2', value: infoBandingKata2Query.data?.kata || kataBanding2Aktif || 'N/A', tone: ringkasanBanding?.rasio == null ? 'neutral' : ((Number(infoBandingKata2Query.data?.frekuensi) || 0) > (Number(infoBandingKata1Query.data?.frekuensi) || 0) ? 'winner' : ((Number(infoBandingKata2Query.data?.frekuensi) || 0) < (Number(infoBandingKata1Query.data?.frekuensi) || 0) ? 'loser' : 'neutral')) },
+    { label: 'Kata 2', value: infoBandingKata2Query.data?.kata || kataBanding2Aktif || 'N/A', valueClassName: 'korpus-leipzig-stat-value-word', tone: ringkasanBanding?.rasio == null ? 'neutral' : ((Number(infoBandingKata2Query.data?.frekuensi) || 0) > (Number(infoBandingKata1Query.data?.frekuensi) || 0) ? 'winner' : ((Number(infoBandingKata2Query.data?.frekuensi) || 0) < (Number(infoBandingKata1Query.data?.frekuensi) || 0) ? 'loser' : 'neutral')) },
     { label: 'Kemunculan', value: formatKemunculanRingkas(infoBandingKata2Query.data?.frekuensi), tone: ringkasanBanding?.rasio == null ? 'neutral' : ((Number(infoBandingKata2Query.data?.frekuensi) || 0) > (Number(infoBandingKata1Query.data?.frekuensi) || 0) ? 'winner' : ((Number(infoBandingKata2Query.data?.frekuensi) || 0) < (Number(infoBandingKata1Query.data?.frekuensi) || 0) ? 'loser' : 'neutral')) },
     { label: 'Urutan', value: infoBandingKata2Query.data?.rank ? formatAngka.format(infoBandingKata2Query.data.rank) : 'N/A', tone: ringkasanBanding?.rasio == null ? 'neutral' : ((Number(infoBandingKata2Query.data?.frekuensi) || 0) > (Number(infoBandingKata1Query.data?.frekuensi) || 0) ? 'winner' : ((Number(infoBandingKata2Query.data?.frekuensi) || 0) < (Number(infoBandingKata1Query.data?.frekuensi) || 0) ? 'loser' : 'neutral')) },
   ];
@@ -893,7 +893,7 @@ function KorpusLeipzig() {
                       <div className="korpus-leipzig-stat-row">
                         <article className="alat-stat-card">
                           <span className="alat-stat-label">Kata</span>
-                          <strong className="alat-stat-value">{infoKataQuery.data?.kata || kataAktif || 'N/A'}</strong>
+                          <strong className="alat-stat-value korpus-leipzig-stat-value-word">{infoKataQuery.data?.kata || kataAktif || 'N/A'}</strong>
                         </article>
                         <article className="alat-stat-card">
                           <span className="alat-stat-label">Kemunculan</span>

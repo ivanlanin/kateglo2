@@ -220,7 +220,7 @@
   }
 
   .alat-stat-card {
-    @apply rounded-2xl border border-gray-200 bg-gray-50 px-4 py-4;
+    @apply min-w-0 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-4;
   }
 
   .dark .alat-stat-card {
@@ -688,6 +688,11 @@
 
   .korpus-leipzig-stat-row {
     @apply grid gap-3 md:grid-cols-3;
+  }
+
+  .korpus-leipzig-stat-value-word {
+    @apply leading-tight break-words;
+    overflow-wrap: anywhere;
   }
 
   .korpus-leipzig-stat-card-winner {
