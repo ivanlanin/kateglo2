@@ -12,6 +12,8 @@ const { getJson, setJson, delKey, getTtlSeconds } = require('../sistem/layananCa
 
 const cachePrefixDetailKamus = 'kamus:detail:';
 const cachePrefixKataHariIni = 'kamus:kata-hari-ini:';
+const candidatePoolCache = new Map();
+const candidatePoolPromises = new Map();
 
 function bacaTeksEntri(item) {
   return item?.entri ?? '';
@@ -171,6 +173,74 @@ function hashTanggal(value = '') {
   return h;
 }
 
+function buatCacheKeyKandidatAcak({ requireEtimologi = true } = {}) {
+  return requireEtimologi ? 'kamus:kandidat:dengan-etimologi' : 'kamus:kandidat:tanpa-etimologi';
+}
+
+function getCandidatePoolTtlMs() {
+  return Math.max(Math.min(getTtlSeconds(), 300), 30) * 1000;
+}
+
+function bacaCacheKandidatAcak({ requireEtimologi = true } = {}) {
+  const cacheKey = buatCacheKeyKandidatAcak({ requireEtimologi });
+  const entry = candidatePoolCache.get(cacheKey);
+  if (!entry) {
+    return null;
+  }
+
+  if (entry.expiresAt <= Date.now()) {
+    candidatePoolCache.delete(cacheKey);
+    return null;
+  }
+
+  return entry.items;
+}
+
+function simpanCacheKandidatAcak(items, { requireEtimologi = true } = {}) {
+  const daftar = Array.isArray(items) ? items : [];
+  candidatePoolCache.set(buatCacheKeyKandidatAcak({ requireEtimologi }), {
+    items: daftar,
+    expiresAt: Date.now() + getCandidatePoolTtlMs(),
+  });
+  return daftar;
+}
+
+function resetCacheKandidatAcak() {
+  candidatePoolCache.clear();
+  candidatePoolPromises.clear();
+}
+
+async function ambilPoolKandidatAcak({ requireEtimologi = true } = {}) {
+  const cached = bacaCacheKandidatAcak({ requireEtimologi });
+  if (cached) {
+    return cached;
+  }
+
+  const cacheKey = buatCacheKeyKandidatAcak({ requireEtimologi });
+  const pending = candidatePoolPromises.get(cacheKey);
+  if (pending) {
+    return pending;
+  }
+
+  const request = ModelEntri.ambilDaftarKandidatKataHariIni({ requireEtimologi })
+    .then((rows) => simpanCacheKandidatAcak(rows, { requireEtimologi }))
+    .finally(() => {
+      candidatePoolPromises.delete(cacheKey);
+    });
+
+  candidatePoolPromises.set(cacheKey, request);
+  return request;
+}
+
+function ambilKandidatDariPool(pool, offset = 0) {
+  if (!Array.isArray(pool) || pool.length === 0) {
+    return null;
+  }
+
+  const index = ((Number(offset) || 0) % pool.length + pool.length) % pool.length;
+  return pool[index] || null;
+}
+
 function normalisasiCuplikan(value = '', maxLength = 180) {
   const text = String(value || '').replace(/\s+/g, ' ').trim();
   if (!text) return null;
@@ -307,13 +377,14 @@ function bentukPayloadKataHariIni(detail = null, tanggal = null, preferredEntriI
 }
 
 async function pilihKandidatRingan(tanggalReferensi) {
-  const total = await ModelEntri.hitungKandidatKataHariIni({ requireEtimologi: true });
+  const pool = await ambilPoolKandidatAcak({ requireEtimologi: true });
+  const total = pool.length;
   if (total <= 0) {
     return null;
   }
 
   const offsetAwal = hashTanggal(tanggalReferensi) % total;
-  const kandidat = await ModelEntri.ambilKandidatKataHariIni({ offset: offsetAwal, requireEtimologi: true });
+  const kandidat = ambilKandidatDariPool(pool, offsetAwal);
   if (!kandidat?.indeks) {
     return null;
   }
@@ -327,7 +398,8 @@ async function pilihKandidatRingan(tanggalReferensi) {
 }
 
 async function pilihKandidatKataHariIniOtomatis(tanggalReferensi) {
-  const total = await ModelEntri.hitungKandidatKataHariIni({ requireEtimologi: true });
+  const pool = await ambilPoolKandidatAcak({ requireEtimologi: true });
+  const total = pool.length;
   if (total <= 0) {
     return null;
   }
@@ -337,7 +409,7 @@ async function pilihKandidatKataHariIniOtomatis(tanggalReferensi) {
 
   for (let langkah = 0; langkah < batasPercobaan; langkah += 1) {
     const offset = (offsetAwal + langkah) % total;
-    const kandidat = await ModelEntri.ambilKandidatKataHariIni({ offset, requireEtimologi: true });
+    const kandidat = ambilKandidatDariPool(pool, offset);
     if (!kandidat?.indeks) {
       continue;
     }
@@ -646,7 +718,8 @@ async function generateKataHariIni({ tanggal = null } = {}) {
 }
 
 async function ambilEntriAcak() {
-  const total = await ModelEntri.hitungKandidatKataHariIni({ requireEtimologi: false });
+  const pool = await ambilPoolKandidatAcak({ requireEtimologi: false });
+  const total = pool.length;
   if (total <= 0) {
     return null;
   }
@@ -656,10 +729,7 @@ async function ambilEntriAcak() {
 
   for (let langkah = 0; langkah < batasPercobaan; langkah += 1) {
     const offset = (offsetAwal + langkah) % total;
-    const kandidat = await ModelEntri.ambilKandidatKataHariIni({
-      offset,
-      requireEtimologi: false,
-    });
+    const kandidat = ambilKandidatDariPool(pool, offset);
     const indeks = normalisasiIndeksKamus(String(kandidat?.indeks || ''));
     const url = buatUrlDetailKamus(indeks);
 
@@ -703,6 +773,13 @@ module.exports.__private = {
   buatCacheKeyKataHariIni,
   hapusCacheKataHariIni,
   hashTanggal,
+  buatCacheKeyKandidatAcak,
+  getCandidatePoolTtlMs,
+  bacaCacheKandidatAcak,
+  simpanCacheKandidatAcak,
+  resetCacheKandidatAcak,
+  ambilPoolKandidatAcak,
+  ambilKandidatDariPool,
   normalisasiCuplikan,
   buatUrlDetailKamus,
   ambilMaknaUtama,

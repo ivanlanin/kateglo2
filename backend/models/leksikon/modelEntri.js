@@ -215,15 +215,31 @@ class ModelEntri {
     const result = await db.query(
       `SELECT COUNT(*) AS total
        FROM (
-         SELECT LOWER(TRIM(e.indeks)) AS indeks_norm
+         SELECT LOWER(e.indeks) AS indeks_norm
          FROM entri e
          WHERE ${whereClause}
-         GROUP BY LOWER(TRIM(e.indeks))
+         GROUP BY LOWER(e.indeks)
        ) kandidat`,
       []
     );
 
     return parseCount(result.rows[0]?.total);
+  }
+
+  static async ambilDaftarKandidatKataHariIni({ requireEtimologi = true } = {}) {
+    const whereClause = buildKataHariIniCandidateWhereClause({ requireEtimologi });
+    const result = await db.query(
+      `SELECT DISTINCT ON (LOWER(e.indeks))
+          LOWER(e.indeks) AS indeks_norm,
+          e.indeks AS indeks,
+          e.id AS entri_id
+       FROM entri e
+       WHERE ${whereClause}
+       ORDER BY LOWER(e.indeks) ASC, e.indeks ASC, e.id ASC`,
+      []
+    );
+
+    return result.rows;
   }
 
   static async ambilKandidatKataHariIni({ offset = 0, requireEtimologi = true } = {}) {
@@ -232,12 +248,12 @@ class ModelEntri {
     const result = await db.query(
       `SELECT kandidat.indeks, kandidat.entri_id
        FROM (
-         SELECT LOWER(TRIM(e.indeks)) AS indeks_norm,
-                MIN(TRIM(e.indeks)) AS indeks,
+      SELECT LOWER(e.indeks) AS indeks_norm,
+        MIN(e.indeks) AS indeks,
                 MIN(e.id) AS entri_id
          FROM entri e
          WHERE ${whereClause}
-         GROUP BY LOWER(TRIM(e.indeks))
+      GROUP BY LOWER(e.indeks)
        ) kandidat
        ORDER BY kandidat.indeks_norm ASC
        OFFSET $1

@@ -9,6 +9,7 @@ jest.mock('../../../models/leksikon/modelEntri', () => {
   const ambilEntriPerIndeks = jest.fn();
   const ambilIndeksValidBatch = jest.fn();
   const ambilNavigasiIndeks = jest.fn();
+  const ambilDaftarKandidatKataHariIni = jest.fn();
   const hitungKandidatKataHariIni = jest.fn();
   const ambilKandidatKataHariIni = jest.fn();
   return {
@@ -17,6 +18,7 @@ jest.mock('../../../models/leksikon/modelEntri', () => {
     ambilEntriPerIndeks,
     ambilIndeksValidBatch,
     ambilNavigasiIndeks,
+    ambilDaftarKandidatKataHariIni,
     hitungKandidatKataHariIni,
     ambilKandidatKataHariIni,
     ambilMakna: jest.fn(),
@@ -76,6 +78,7 @@ const {
 describe('layananKamusPublik.cariKamus', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    __private.resetCacheKandidatAcak();
     getJson.mockResolvedValue(null);
     setJson.mockResolvedValue(undefined);
     delKey.mockResolvedValue(undefined);
@@ -170,9 +173,11 @@ describe('layananKamusPublik.cariKamus', () => {
 describe('layananKamusPublik.ambilDetailKamus', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    __private.resetCacheKandidatAcak();
     getJson.mockResolvedValue(null);
     setJson.mockResolvedValue(undefined);
     delKey.mockResolvedValue(undefined);
+    ModelEntri.ambilDaftarKandidatKataHariIni.mockResolvedValue([]);
     ModelEntri.ambilIndeksValidBatch.mockResolvedValue([]);
     ModelEntri.ambilNavigasiIndeks.mockResolvedValue({ prev: null, next: null });
     ModelEntri.hitungKandidatKataHariIni.mockResolvedValue(0);
@@ -669,17 +674,18 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
   });
 
   it('generateKataHariIni memilih kandidat deterministik dan menyimpan ke tabel', async () => {
-    ModelEntri.hitungKandidatKataHariIni.mockResolvedValueOnce(5);
-    ModelEntri.ambilKandidatKataHariIni.mockResolvedValueOnce({ indeks: 'aktif', entri_id: 1 });
+    const offset = __private.hashTanggal('2026-03-31') % 5;
+    const kandidatPool = Array.from({ length: 5 }, (_, index) => (
+      index === offset
+        ? { indeks: 'aktif', entri_id: 1 }
+        : { indeks: `cadangan-${index}`, entri_id: index + 10 }
+    ));
+    ModelEntri.ambilDaftarKandidatKataHariIni.mockResolvedValueOnce(kandidatPool);
     ModelKataHariIni.simpanByTanggal.mockResolvedValue({ id: 1, tanggal: '2026-03-31', entri_id: 1, indeks: 'aktif', entri: 'aktif', sumber: 'auto' });
 
     const result = await generateKataHariIni({ tanggal: '2026-03-31' });
 
-    expect(ModelEntri.hitungKandidatKataHariIni).toHaveBeenCalledWith({ requireEtimologi: true });
-    expect(ModelEntri.ambilKandidatKataHariIni).toHaveBeenCalledWith({
-      offset: __private.hashTanggal('2026-03-31') % 5,
-      requireEtimologi: true,
-    });
+    expect(ModelEntri.ambilDaftarKandidatKataHariIni).toHaveBeenCalledWith({ requireEtimologi: true });
     expect(ModelKataHariIni.simpanByTanggal).toHaveBeenCalledWith({
       tanggal: '2026-03-31',
       entriId: 1,
@@ -692,18 +698,16 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
   });
 
   it('generateKataHariIni mengembalikan null jika tidak ada kandidat dengan etimologi', async () => {
-    ModelEntri.hitungKandidatKataHariIni.mockResolvedValueOnce(0);
+    ModelEntri.ambilDaftarKandidatKataHariIni.mockResolvedValueOnce([]);
 
     const result = await generateKataHariIni({ tanggal: '2026-04-01' });
 
-    expect(ModelEntri.hitungKandidatKataHariIni).toHaveBeenCalledWith({ requireEtimologi: true });
-    expect(ModelEntri.ambilKandidatKataHariIni).not.toHaveBeenCalled();
+    expect(ModelEntri.ambilDaftarKandidatKataHariIni).toHaveBeenCalledWith({ requireEtimologi: true });
     expect(result).toBeNull();
   });
 
   it('helper privat pilihKandidatKataHariIniOtomatis mengembalikan entriId dan payload', async () => {
-    ModelEntri.hitungKandidatKataHariIni.mockResolvedValueOnce(1);
-    ModelEntri.ambilKandidatKataHariIni.mockResolvedValueOnce({ indeks: 'aktif' });
+    ModelEntri.ambilDaftarKandidatKataHariIni.mockResolvedValueOnce([{ indeks: 'aktif' }]);
     ModelEntri.ambilEntriPerIndeks.mockResolvedValue([
       {
         id: 7,
@@ -739,27 +743,28 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
   });
 
   it('generateKataHariIni mengembalikan null jika tidak ada kandidat sama sekali', async () => {
-    ModelEntri.hitungKandidatKataHariIni.mockResolvedValueOnce(0);
+    ModelEntri.ambilDaftarKandidatKataHariIni.mockResolvedValueOnce([]);
 
     const result = await generateKataHariIni({ tanggal: '2026-04-02' });
 
     expect(result).toBeNull();
-    expect(ModelEntri.hitungKandidatKataHariIni).toHaveBeenCalledTimes(1);
-    expect(ModelEntri.ambilKandidatKataHariIni).not.toHaveBeenCalled();
+    expect(ModelEntri.ambilDaftarKandidatKataHariIni).toHaveBeenCalledTimes(1);
   });
 
   it('ambilEntriAcak memilih kandidat acak tanpa syarat etimologi', async () => {
     jest.spyOn(Math, 'random').mockReturnValueOnce(0.5);
-    ModelEntri.hitungKandidatKataHariIni.mockResolvedValueOnce(6);
-    ModelEntri.ambilKandidatKataHariIni.mockResolvedValueOnce({ indeks: 'Aktif (2)' });
+    ModelEntri.ambilDaftarKandidatKataHariIni.mockResolvedValueOnce([
+      { indeks: 'satu', entri_id: 1 },
+      { indeks: 'dua', entri_id: 2 },
+      { indeks: 'tiga', entri_id: 3 },
+      { indeks: 'Aktif (2)', entri_id: 4 },
+      { indeks: 'lima', entri_id: 5 },
+      { indeks: 'enam', entri_id: 6 },
+    ]);
 
     const result = await ambilEntriAcak();
 
-    expect(ModelEntri.hitungKandidatKataHariIni).toHaveBeenCalledWith({ requireEtimologi: false });
-    expect(ModelEntri.ambilKandidatKataHariIni).toHaveBeenCalledWith({
-      offset: 3,
-      requireEtimologi: false,
-    });
+    expect(ModelEntri.ambilDaftarKandidatKataHariIni).toHaveBeenCalledWith({ requireEtimologi: false });
     expect(result).toEqual({
       indeks: 'Aktif',
       url: '/kamus/detail/Aktif',
@@ -769,21 +774,15 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
 
   it('ambilEntriAcak mencoba offset berikutnya saat kandidat pertama kosong', async () => {
     jest.spyOn(Math, 'random').mockReturnValueOnce(0.25);
-    ModelEntri.hitungKandidatKataHariIni.mockResolvedValueOnce(4);
-    ModelEntri.ambilKandidatKataHariIni
-      .mockResolvedValueOnce(null)
-      .mockResolvedValueOnce({ indeks: 'acak' });
+    ModelEntri.ambilDaftarKandidatKataHariIni.mockResolvedValueOnce([
+      { indeks: 'nol', entri_id: 1 },
+      null,
+      { indeks: 'acak', entri_id: 3 },
+      { indeks: 'tiga', entri_id: 4 },
+    ]);
 
     const result = await ambilEntriAcak();
 
-    expect(ModelEntri.ambilKandidatKataHariIni).toHaveBeenNthCalledWith(1, {
-      offset: 1,
-      requireEtimologi: false,
-    });
-    expect(ModelEntri.ambilKandidatKataHariIni).toHaveBeenNthCalledWith(2, {
-      offset: 2,
-      requireEtimologi: false,
-    });
     expect(result).toEqual({
       indeks: 'acak',
       url: '/kamus/detail/acak',
@@ -792,12 +791,25 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
   });
 
   it('ambilEntriAcak mengembalikan null jika tidak ada kandidat', async () => {
-    ModelEntri.hitungKandidatKataHariIni.mockResolvedValueOnce(0);
+    ModelEntri.ambilDaftarKandidatKataHariIni.mockResolvedValueOnce([]);
 
     const result = await ambilEntriAcak();
 
     expect(result).toBeNull();
-    expect(ModelEntri.ambilKandidatKataHariIni).not.toHaveBeenCalled();
+    expect(ModelEntri.ambilDaftarKandidatKataHariIni).toHaveBeenCalledWith({ requireEtimologi: false });
+  });
+
+  it('ambilEntriAcak memakai cache pool kandidat antar panggilan', async () => {
+    jest.spyOn(Math, 'random').mockReturnValue(0);
+    ModelEntri.ambilDaftarKandidatKataHariIni.mockResolvedValueOnce([{ indeks: 'acak', entri_id: 1 }]);
+
+    const pertama = await ambilEntriAcak();
+    const kedua = await ambilEntriAcak();
+
+    expect(ModelEntri.ambilDaftarKandidatKataHariIni).toHaveBeenCalledTimes(1);
+    expect(pertama).toEqual({ indeks: 'acak', url: '/kamus/detail/acak' });
+    expect(kedua).toEqual({ indeks: 'acak', url: '/kamus/detail/acak' });
+    Math.random.mockRestore();
   });
 
   it('mengembalikan page info glosarium dari mode cursor object', async () => {

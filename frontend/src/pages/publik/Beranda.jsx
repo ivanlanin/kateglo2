@@ -255,9 +255,9 @@ function Beranda() {
                   Lihat entri
                 </span>
               )}
-              <Link to="/kamus/acak" className="alat-link-primary beranda-sorotan-action-button">
+              <a href="/kamus/acak" className="alat-link-primary beranda-sorotan-action-button">
                 Entri acak
-              </Link>
+              </a>
             </div>
           </div>
 

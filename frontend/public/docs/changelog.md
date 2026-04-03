@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-04-03 Jumat
+
+- Mengoptimalkan kueri detail kamus dan entri acak
+
 ## 2026-04-02 Kamis
 
 - Menyambungkan detail kamus dengan [Analisis Korpus](/alat/analisis-korpus)
