@@ -515,11 +515,11 @@ code {
   }
 
   .beranda-stats-link {
-    @apply text-blue-600 hover:underline;
+    @apply text-blue-600 no-underline transition-colors hover:text-blue-700 hover:no-underline;
   }
 
   .dark .beranda-stats-link {
-    @apply text-blue-400;
+    @apply text-blue-400 hover:text-blue-300;
   }
 
   /* ===== KotakCari (shared search box) ===== */

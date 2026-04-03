@@ -119,7 +119,7 @@ describe('Beranda', () => {
   it('menampilkan kartu Kata Hari Ini saat API berhasil', async () => {
     render(<Beranda />);
 
-    expect(await screen.findByText(/aktif/i, { selector: 'h2' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 2, name: /aktif/i })).toBeInTheDocument();
     expect(screen.getByText('2', { selector: 'sup' })).toBeInTheDocument();
     expect(screen.getByText('Kata Hari Ini')).toBeInTheDocument();
     expect(screen.getByText('Kuis Kata')).toBeInTheDocument();
@@ -133,7 +133,7 @@ describe('Beranda', () => {
     expect(screen.getAllByText(/Ia sangat aktif di kelas\.|Warga aktif bergotong royong\./i)[0].className).toContain('kamus-detail-def-sample');
     expect(screen.getByText('Etimologi:', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('faal')).toContainHTML('<em>faal</em>');
-    expect(screen.getByRole('link', { name: /lihat entri/i })).toHaveAttribute('href', '/kamus/detail/aktif');
+    expect(screen.getByRole('link', { name: /aktif/i })).toHaveAttribute('href', '/kamus/detail/aktif');
     expect(screen.getByRole('link', { name: /entri acak/i })).toHaveAttribute('href', '/kamus/acak');
     expect(screen.queryByRole('link', { name: 'Buka kuis' })).not.toBeInTheDocument();
     expect(screen.getByTestId('kuis-kata')).toBeInTheDocument();
@@ -145,7 +145,7 @@ describe('Beranda', () => {
     render(<Beranda />);
 
     expect(screen.getByLabelText('Kata Hari Ini')).toHaveAttribute('aria-busy', 'true');
-    expect(screen.getByText('Lihat entri')).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.queryByText('Lihat entri')).not.toBeInTheDocument();
   });
 
   it('memotong frasa populer lebih dari dua kata dan menyimpan judul penuh di tooltip', async () => {

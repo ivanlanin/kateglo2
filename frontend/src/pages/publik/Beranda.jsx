@@ -235,7 +235,15 @@ function Beranda() {
               <p className="beranda-sorotan-kicker">Kata Hari Ini</p>
               <div className="beranda-sorotan-title-row">
                 {statusKataHariIni === 'ready' && lemaKataHariIni ? (
-                  <h2 className="beranda-sorotan-title">{formatLemaHomonim(lemaKataHariIni)}</h2>
+                  <h2 className="beranda-sorotan-title">
+                    {kataHariIni?.url ? (
+                      <Link to={kataHariIni.url} className="beranda-stats-link">
+                        {formatLemaHomonim(lemaKataHariIni)}
+                      </Link>
+                    ) : (
+                      formatLemaHomonim(lemaKataHariIni)
+                    )}
+                  </h2>
                 ) : (
                   <div className="beranda-sorotan-placeholder-title" aria-hidden="true" />
                 )}
@@ -246,15 +254,6 @@ function Beranda() {
             </div>
 
             <div className="beranda-sorotan-actions">
-              {statusKataHariIni === 'ready' && kataHariIni?.url ? (
-                <Link to={kataHariIni.url} className="alat-link-primary beranda-sorotan-action-button">
-                  Lihat entri
-                </Link>
-              ) : (
-                <span className="alat-link-primary beranda-sorotan-action-button beranda-sorotan-link-disabled" aria-hidden="true">
-                  Lihat entri
-                </span>
-              )}
               <a href="/kamus/acak" className="alat-link-primary beranda-sorotan-action-button">
                 Entri acak
               </a>
