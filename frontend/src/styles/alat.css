@@ -744,7 +744,7 @@
   }
 
   .korpus-leipzig-ranking-word {
-    @apply cursor-pointer border-0 bg-transparent p-0 text-left text-base font-normal text-blue-700 transition-colors hover:text-blue-900;
+    @apply cursor-pointer border-0 bg-transparent p-0 text-left text-sm font-normal text-blue-700 transition-colors hover:text-blue-900;
   }
 
   .dark .korpus-leipzig-ranking-word {
