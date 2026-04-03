@@ -11,6 +11,7 @@ const {
   listMatchedForms,
   aggregateWordRows,
   pilihLabelAgregat,
+  bersihkanTokenAgregat,
 } = require('./utilsLeipzig');
 
 const RELASI_KONTEKS = [
@@ -54,6 +55,20 @@ function normalizeGraphEdgeKey(source = '', target = '') {
 
 function escapeSqlString(value = '') {
   return String(value || '').replace(/'/g, "''");
+}
+
+function escapeRegExp(value = '') {
+  return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function memuatKataUtuh(teks = '', kata = '') {
+  const teksBersih = bersihkanTokenAgregat(teks).toLowerCase();
+  const kataBersih = bersihkanTokenAgregat(kata).toLowerCase();
+
+  if (!teksBersih || !kataBersih) return false;
+
+  const pola = new RegExp(`(^|[^\\p{L}\\p{N}])${escapeRegExp(kataBersih)}(?=$|[^\\p{L}\\p{N}])`, 'u');
+  return pola.test(teksBersih);
 }
 
 function buildValuesCte(rows = [], columns = []) {
@@ -332,14 +347,16 @@ class ModelKookurensi {
       LIMIT ?
     `).all(...wordIds, limit);
 
+    const filterTetangga = (rows = []) => rows.filter((row) => !memuatKataUtuh(row.kata, kataAman));
+
     return {
       kata: kataAman,
       limit,
-      kiri: aggregateWordRows(kiriRows, kataAman).map((row) => ({
+      kiri: filterTetangga(aggregateWordRows(kiriRows, kataAman)).map((row) => ({
         kata: row.kata,
         frekuensi: row.frekuensi,
       })),
-      kanan: aggregateWordRows(kananRows, kataAman).map((row) => ({
+      kanan: filterTetangga(aggregateWordRows(kananRows, kataAman)).map((row) => ({
         kata: row.kata,
         frekuensi: row.frekuensi,
       })),

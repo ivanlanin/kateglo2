@@ -43,6 +43,25 @@ describe('KorpusLeipzig', () => {
     vi.clearAllMocks();
   });
 
+  it('menyembunyikan boks contoh saat belum ada kata aktif', async () => {
+    mockApi.ambilDaftarKorpusLeipzig.mockResolvedValue({
+      data: [{
+        id: 'ind_news_2024_10K',
+        label: 'Berita 2024',
+        domain: 'news',
+        size: '10K',
+        hasSqlite: true,
+        stats: { sentences: 10000, wordTypes: 8000, wordTokens: 190000 },
+      }],
+    });
+
+    renderPage('/alat/analisis-korpus');
+
+    expect(await screen.findByRole('heading', { name: 'Analisis Korpus' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Contoh' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Tampilkan sumber' })).not.toBeInTheDocument();
+  });
+
   it('merender hasil Leipzig setelah submit pencarian', async () => {
     mockApi.ambilDaftarKorpusLeipzig.mockResolvedValue({
       data: [{

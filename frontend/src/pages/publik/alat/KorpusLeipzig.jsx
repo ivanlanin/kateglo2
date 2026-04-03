@@ -586,6 +586,9 @@ function KorpusLeipzig() {
     () => saringTokenTampil(infoBandingKata2Query.data?.bentuk || contohBandingKata2Query.data?.bentuk || []),
     [infoBandingKata2Query.data?.bentuk, contohBandingKata2Query.data?.bentuk],
   );
+  const tampilkanPanelContohCari = modeAktif === MODE_TELUSURI && Boolean(kataAktif);
+  const tampilkanPanelContohBanding1 = modeAktif === MODE_BANDINGKAN && Boolean(kataBanding1Aktif);
+  const tampilkanPanelContohBanding2 = modeAktif === MODE_BANDINGKAN && Boolean(kataBanding2Aktif);
   const ringkasanBanding = useMemo(
     () => hitungRingkasanPerbandingan(infoBandingKata1Query.data, infoBandingKata2Query.data),
     [infoBandingKata1Query.data, infoBandingKata2Query.data],
@@ -842,7 +845,7 @@ function KorpusLeipzig() {
                   {korpusQuery.isError ? <p className="alat-error-text">{ambilPesanGalat(korpusQuery.error, 'Daftar korpus Leipzig gagal dimuat.')}</p> : null}
                 </section>
 
-                {modeAktif === MODE_TELUSURI ? (
+                {tampilkanPanelContohCari ? (
                   <section className="alat-panel korpus-leipzig-examples-panel" aria-labelledby="korpus-leipzig-contoh-title">
                     <div className="alat-panel-header alat-panel-header-split">
                       <h2 id="korpus-leipzig-contoh-title" className="alat-panel-title">Contoh</h2>
@@ -1005,46 +1008,50 @@ function KorpusLeipzig() {
               </section>
             </div>
 
-            {modeAktif === MODE_BANDINGKAN ? (
+            {tampilkanPanelContohBanding1 || tampilkanPanelContohBanding2 ? (
               <div className="korpus-leipzig-compare-examples-grid">
-                <section className="alat-panel korpus-leipzig-examples-panel" aria-labelledby="korpus-leipzig-contoh-kata-1-title">
-                  <div className="alat-panel-header alat-panel-header-split">
-                    <h2 id="korpus-leipzig-contoh-kata-1-title" className="alat-panel-title">{kataBanding1Aktif ? `Contoh "${kataBanding1Aktif}"` : 'Contoh "kata 1"'}</h2>
-                    <button
-                      type="button"
-                      className="alat-link-secondary alat-panel-action-button"
-                      onClick={() => setTampilkanSumberContohBanding1((value) => !value)}
-                    >
-                      {tampilkanSumberContohBanding1 ? 'Sembunyikan sumber' : 'Tampilkan sumber'}
-                    </button>
-                  </div>
-                  <PanelContohKata
-                    kataAktif={kataBanding1Aktif}
-                    query={contohBandingKata1Query}
-                    bentuk={bentukBandingKata1}
-                    tampilkanSumberContoh={tampilkanSumberContohBanding1}
-                    emptyText="Belum ada contoh untuk kata pertama."
-                  />
-                </section>
-                <section className="alat-panel korpus-leipzig-examples-panel" aria-labelledby="korpus-leipzig-contoh-kata-2-title">
-                  <div className="alat-panel-header alat-panel-header-split">
-                    <h2 id="korpus-leipzig-contoh-kata-2-title" className="alat-panel-title">{kataBanding2Aktif ? `Contoh "${kataBanding2Aktif}"` : 'Contoh "kata 2"'}</h2>
-                    <button
-                      type="button"
-                      className="alat-link-secondary alat-panel-action-button"
-                      onClick={() => setTampilkanSumberContohBanding2((value) => !value)}
-                    >
-                      {tampilkanSumberContohBanding2 ? 'Sembunyikan sumber' : 'Tampilkan sumber'}
-                    </button>
-                  </div>
-                  <PanelContohKata
-                    kataAktif={kataBanding2Aktif}
-                    query={contohBandingKata2Query}
-                    bentuk={bentukBandingKata2}
-                    tampilkanSumberContoh={tampilkanSumberContohBanding2}
-                    emptyText="Belum ada contoh untuk kata kedua."
-                  />
-                </section>
+                {tampilkanPanelContohBanding1 ? (
+                  <section className="alat-panel korpus-leipzig-examples-panel" aria-labelledby="korpus-leipzig-contoh-kata-1-title">
+                    <div className="alat-panel-header alat-panel-header-split">
+                      <h2 id="korpus-leipzig-contoh-kata-1-title" className="alat-panel-title">{`Contoh "${kataBanding1Aktif}"`}</h2>
+                      <button
+                        type="button"
+                        className="alat-link-secondary alat-panel-action-button"
+                        onClick={() => setTampilkanSumberContohBanding1((value) => !value)}
+                      >
+                        {tampilkanSumberContohBanding1 ? 'Sembunyikan sumber' : 'Tampilkan sumber'}
+                      </button>
+                    </div>
+                    <PanelContohKata
+                      kataAktif={kataBanding1Aktif}
+                      query={contohBandingKata1Query}
+                      bentuk={bentukBandingKata1}
+                      tampilkanSumberContoh={tampilkanSumberContohBanding1}
+                      emptyText="Belum ada contoh untuk kata pertama."
+                    />
+                  </section>
+                ) : null}
+                {tampilkanPanelContohBanding2 ? (
+                  <section className="alat-panel korpus-leipzig-examples-panel" aria-labelledby="korpus-leipzig-contoh-kata-2-title">
+                    <div className="alat-panel-header alat-panel-header-split">
+                      <h2 id="korpus-leipzig-contoh-kata-2-title" className="alat-panel-title">{`Contoh "${kataBanding2Aktif}"`}</h2>
+                      <button
+                        type="button"
+                        className="alat-link-secondary alat-panel-action-button"
+                        onClick={() => setTampilkanSumberContohBanding2((value) => !value)}
+                      >
+                        {tampilkanSumberContohBanding2 ? 'Sembunyikan sumber' : 'Tampilkan sumber'}
+                      </button>
+                    </div>
+                    <PanelContohKata
+                      kataAktif={kataBanding2Aktif}
+                      query={contohBandingKata2Query}
+                      bentuk={bentukBandingKata2}
+                      tampilkanSumberContoh={tampilkanSumberContohBanding2}
+                      emptyText="Belum ada contoh untuk kata kedua."
+                    />
+                  </section>
+                ) : null}
               </div>
             ) : null}
           </>

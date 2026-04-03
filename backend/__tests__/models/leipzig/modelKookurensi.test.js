@@ -33,7 +33,10 @@ function seedCorpusDatabase(filePath) {
       (9, 'negara', 8),
       (10, 'Asia', 6),
       (11, 'Filipina', 5),
-      (12, 'ekonomi', 4);
+      (12, 'ekonomi', 4),
+      (13, 'Republik Indonesia', 4),
+      (14, 'Bank Indonesia', 3),
+      (15, 'Indonesia Raya', 2);
 
     INSERT INTO inv_w (w_id, s_id, pos) VALUES
       (1, 10, 0),
@@ -41,7 +44,16 @@ function seedCorpusDatabase(filePath) {
       (4, 10, 2),
       (5, 11, 0),
       (2, 11, 1),
-      (7, 11, 2);
+      (7, 11, 2),
+      (13, 12, 0),
+      (1, 12, 1),
+      (3, 12, 2),
+      (14, 13, 0),
+      (2, 13, 1),
+      (7, 13, 2),
+      (9, 14, 0),
+      (1, 14, 1),
+      (15, 14, 2);
 
     INSERT INTO co_s (w1_id, w2_id, freq, sig) VALUES
       (1, 3, 20, 0.95),
@@ -112,11 +124,21 @@ describe('models/leipzig/modelKookurensi', () => {
       expect.objectContaining({ kata: 'bahasa', frekuensi: 18 }),
     ]));
 
-    expect(tetangga.kiri).toEqual([{ kata: 'Bahasa', frekuensi: 1 }]);
-    expect(tetangga.kanan).toEqual([
-      { kata: 'hebat', frekuensi: 1 },
-      { kata: 'maju', frekuensi: 1 },
+    expect(tetangga.kiri).toEqual([
+      { kata: 'Bahasa', frekuensi: 1 },
+      { kata: 'negara', frekuensi: 1 },
     ]);
+    expect(tetangga.kanan).toEqual([
+      { kata: 'hebat', frekuensi: 2 },
+      { kata: 'maju', frekuensi: 2 },
+    ]);
+    expect(tetangga.kiri).not.toEqual(expect.arrayContaining([
+      expect.objectContaining({ kata: 'Republik Indonesia' }),
+      expect.objectContaining({ kata: 'Bank Indonesia' }),
+    ]));
+    expect(tetangga.kanan).not.toEqual(expect.arrayContaining([
+      expect.objectContaining({ kata: 'Indonesia Raya' }),
+    ]));
 
     expect(graf.nodes[0]).toEqual(expect.objectContaining({ label: 'indonesia', isCenter: true }));
     expect(graf.nodes).toEqual(expect.arrayContaining([
