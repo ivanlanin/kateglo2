@@ -24,8 +24,7 @@ export function bacaPreferensiTema(runtimeWindow) {
   };
 }
 
-function HalamanDasar({ mode = 'publik', navbar, konten, adalahRedaksi = false }) {
-  const adalahAdmin = mode === 'admin';
+function HalamanDasar({ navbar, konten }) {
   const [modalTerbuka, setModalTerbuka] = useState(false);
   const [tabAktif, setTabAktif] = useState('changelog');
   const [sedangMemuat, setSedangMemuat] = useState(false);
@@ -100,12 +99,6 @@ function HalamanDasar({ mode = 'publik', navbar, konten, adalahRedaksi = false }
                 <Link to="/privasi" className="link-action">Privasi</Link>
                 {' · '}
                 <Link to="/sumber" className="link-action">Sumber</Link>
-                {adalahRedaksi && (
-                  <>{' · '}<Link to="/redaksi" className="link-action">Redaksi</Link></>
-                )}
-                {adalahAdmin && (
-                  <>{' · '}<Link to="/" className="link-action">Kateglo</Link></>
-                )}
               </span>
             </div>
           </div>

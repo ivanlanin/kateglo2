@@ -14,15 +14,27 @@ const durasiAnimasiDrawer = 260;
 
 export const menuItems = [
   { path: '/kamus', label: 'Kamus' },
-  { path: '/tesaurus', label: 'Tesaurus' },
   { path: '/glosarium', label: 'Glosarium' },
-  { path: '/makna', label: 'Makna' },
-  { path: '/rima', label: 'Rima', pemisahSetelah: true },
-  { path: '/gramatika', label: 'Gramatika' },
-  { path: '/ejaan', label: 'Ejaan', pemisahSetelah: true },
+  {
+    label: 'Referensi',
+    submenu: [
+      { path: '/gramatika', label: 'Gramatika' },
+      { path: '/ejaan', label: 'Ejaan' },
+    ],
+    pemisahSetelah: true,
+  },
   { path: '/alat', label: 'Alat' },
   { path: '/gim', label: 'Gim' },
 ];
+
+function buatInisial(nama = '') {
+  return String(nama || '')
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((kata) => kata[0]?.toUpperCase() || '')
+    .join('');
+}
 
 function hitungKebutuhanHamburger({
   lebarNavbar = 0,
@@ -52,11 +64,13 @@ function NavbarPublik() {
   const [gunakanHamburger, setGunakanHamburger] = useState(false);
   const [renderDrawer, setRenderDrawer] = useState(false);
   const [drawerAktif, setDrawerAktif] = useState(false);
+  const [avatarTerbuka, setAvatarTerbuka] = useState(false);
   const location = useLocation();
   const {
     isLoading,
     isAuthenticated,
     adalahRedaksi,
+    user,
     logout,
   } = useAuth();
   const navbarInnerRef = useRef(null);
@@ -65,6 +79,7 @@ function NavbarPublik() {
   const desktopMenuRef = useRef(null);
   const menuMeasureRef = useRef(null);
   const timerDrawerRef = useRef(null);
+  const refAvatar = useRef(null);
   const adalahBeranda = location.pathname === '/';
   const sedangMainSusunKata = location.pathname.startsWith('/gim/susun-kata');
   const tampilkanKotakCari = !adalahBeranda && !sedangMainSusunKata;
@@ -86,54 +101,83 @@ function NavbarPublik() {
   const renderMenu = ({
     containerClassName = '',
     linkClassName = '',
-    loadingClassName = '',
     onItemClick = () => {},
     tampilkanMenu = true,
-    tampilkanAutentikasi = true,
     tampilkanPemisah = false,
     forwardedRef = null,
   } = {}) => (
     <div ref={forwardedRef} className={containerClassName}>
       {tampilkanMenu && menuItems
         .filter((item) => !item.adminSaja || adalahRedaksi)
-        .map((item) => (
-          <Fragment key={item.path}>
-            <Link
-              to={item.path}
-              onClick={onItemClick}
-              className={`${linkClassName} ${isActive(item.path) ? 'navbar-menu-link-active' : ''}`.trim()}
-              aria-current={isActive(item.path) ? 'page' : undefined}
-            >
-              {item.label}
-            </Link>
-            {tampilkanPemisah && item.pemisahSetelah && (
-              <hr className="navbar-mobile-separator" aria-hidden="true" />
-            )}
-          </Fragment>
-        ))}
-
-      {tampilkanAutentikasi && (isLoading ? (
-        <span className={loadingClassName}>Memuat …</span>
-      ) : isAuthenticated ? (
-        <button
-          type="button"
-          onClick={() => handleLogoutClick(onItemClick)}
-          className={linkClassName}
-        >
-          Keluar
-        </button>
-      ) : (
-        <a
-          href={loginUrl}
-          onClick={() => {
-            handleLoginClick();
-            onItemClick();
-          }}
-          className={linkClassName}
-        >
-          Masuk
-        </a>
-      ))}
+        .map((item) => {
+          if (item.submenu) {
+            if (tampilkanPemisah) {
+              // Mobile: flat list tanpa label seksi, separator di atas
+              return (
+                <Fragment key={item.label}>
+                  <hr className="navbar-mobile-separator" aria-hidden="true" />
+                  {item.submenu.map((sub) => (
+                    <Link
+                      key={sub.path}
+                      to={sub.path}
+                      onClick={onItemClick}
+                      className={`${linkClassName} ${isActive(sub.path) ? 'navbar-menu-link-active' : ''}`.trim()}
+                      aria-current={isActive(sub.path) ? 'page' : undefined}
+                    >
+                      {sub.label}
+                    </Link>
+                  ))}
+                  {item.pemisahSetelah && (
+                    <hr className="navbar-mobile-separator" aria-hidden="true" />
+                  )}
+                </Fragment>
+              );
+            }
+            // Desktop: hover dropdown
+            const subAktif = item.submenu.some((sub) => isActive(sub.path));
+            return (
+              <div key={item.label} className="navbar-dropdown-wrapper">
+                <button
+                  type="button"
+                  className={`${linkClassName} navbar-dropdown-trigger ${subAktif ? 'navbar-menu-link-active' : ''}`.trim()}
+                >
+                  {item.label}
+                  <svg className="navbar-dropdown-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <div className="navbar-dropdown-panel">
+                  {item.submenu.map((sub) => (
+                    <Link
+                      key={sub.path}
+                      to={sub.path}
+                      onClick={onItemClick}
+                      className={`navbar-dropdown-link ${isActive(sub.path) ? 'navbar-dropdown-link-active' : ''}`.trim()}
+                      aria-current={isActive(sub.path) ? 'page' : undefined}
+                    >
+                      {sub.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            );
+          }
+          return (
+            <Fragment key={item.path}>
+              <Link
+                to={item.path}
+                onClick={onItemClick}
+                className={`${linkClassName} ${isActive(item.path) ? 'navbar-menu-link-active' : ''}`.trim()}
+                aria-current={isActive(item.path) ? 'page' : undefined}
+              >
+                {item.label}
+              </Link>
+              {tampilkanPemisah && item.pemisahSetelah && (
+                <hr className="navbar-mobile-separator" aria-hidden="true" />
+              )}
+            </Fragment>
+          );
+        })}
     </div>
   );
 
@@ -255,6 +299,21 @@ function NavbarPublik() {
     clearTimeout(timerDrawerRef.current);
   }, []);
 
+  useEffect(() => {
+    setAvatarTerbuka(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!avatarTerbuka) return undefined;
+    const handleClick = (event) => {
+      if (refAvatar.current && !refAvatar.current.contains(event.target)) {
+        setAvatarTerbuka(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [avatarTerbuka]);
+
   return (
     <nav className={`navbar-root ${adalahBeranda ? 'navbar-root-beranda' : ''}`}>
       <div className="navbar-container">
@@ -291,7 +350,6 @@ function NavbarPublik() {
             {renderMenu({
               containerClassName: 'navbar-menu-measure-inner',
               linkClassName: 'navbar-menu-link navbar-menu-link-measure',
-              loadingClassName: 'navbar-auth-loading',
             })}
           </div>
 
@@ -310,8 +368,51 @@ function NavbarPublik() {
             forwardedRef: desktopMenuRef,
             containerClassName: `navbar-menu-desktop ${gunakanHamburger ? 'navbar-menu-desktop-hidden' : 'navbar-menu-desktop-visible'}`,
             linkClassName: 'navbar-menu-link',
-            loadingClassName: 'navbar-auth-loading',
           })}
+
+          {/* Auth — selalu tampil */}
+          {isLoading ? (
+            <span className="navbar-auth-loading">Memuat …</span>
+          ) : isAuthenticated ? (
+            <div ref={refAvatar} className="navbar-avatar-wrapper">
+              <button
+                type="button"
+                className="navbar-avatar-btn"
+                aria-label={user?.name || 'Profil'}
+                onClick={() => setAvatarTerbuka((v) => !v)}
+              >
+                {buatInisial(user?.name) ? (
+                  <span className="navbar-avatar-fallback" aria-hidden="true">{buatInisial(user?.name)}</span>
+                ) : (
+                  <svg className="navbar-avatar-icon" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
+                  </svg>
+                )}
+                {user?.picture && (
+                  <img src={user.picture} alt="" className="navbar-avatar-img" referrerPolicy="no-referrer" />
+                )}
+              </button>
+              <div className={`navbar-dropdown-panel ${avatarTerbuka ? 'navbar-dropdown-panel-open' : ''}`}>
+                {user?.name && <span className="navbar-avatar-name">{user.name}</span>}
+                {adalahRedaksi && (
+                  <a href="/redaksi" className="navbar-dropdown-link">Redaksi</a>
+                )}
+                <button
+                  type="button"
+                  onClick={() => handleLogoutClick(() => { setAvatarTerbuka(false); setMenuTerbuka(false); })}
+                  className="navbar-dropdown-link"
+                >
+                  Keluar
+                </button>
+              </div>
+            </div>
+          ) : (
+            <a href={loginUrl} onClick={handleLoginClick} className="navbar-masuk-btn" aria-label="Masuk">
+              <svg className="navbar-avatar-icon" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
+              </svg>
+            </a>
+          )}
         </div>
 
         {/* Menu mobile */}
@@ -343,17 +444,8 @@ function NavbarPublik() {
               {renderMenu({
                 containerClassName: 'navbar-mobile-links',
                 linkClassName: 'navbar-mobile-link',
-                loadingClassName: 'navbar-auth-loading',
                 onItemClick: () => setMenuTerbuka(false),
-                tampilkanAutentikasi: false,
                 tampilkanPemisah: true,
-              })}
-              {renderMenu({
-                containerClassName: 'navbar-mobile-auth',
-                linkClassName: 'navbar-mobile-link',
-                loadingClassName: 'navbar-auth-loading',
-                onItemClick: () => setMenuTerbuka(false),
-                tampilkanMenu: false,
               })}
             </div>
           </div>

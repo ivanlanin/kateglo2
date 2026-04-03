@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ambilContohRima, cariRima } from '../../../api/apiPublik';
 import PaginasiKursor from '../../../components/navigasi/PaginasiKursor';
 import HalamanPublik from '../../../components/tampilan/HalamanPublik';
+import TabKamus from '../../../components/navigasi/TabKamus';
 import MuatData from '../../../components/status/MuatData';
 import { QueryFeedback } from '../../../components/status/StatusKonten';
 import { buatPathDetailKamus } from '../../../utils/paramUtils';
@@ -113,6 +114,8 @@ function Rima() {
 
   return (
     <HalamanPublik judul={judulHalaman} deskripsi={deskripsiHalaman}>
+      <TabKamus />
+
       <QueryFeedback
         isLoading={isLoading && !data}
         isError={isError}

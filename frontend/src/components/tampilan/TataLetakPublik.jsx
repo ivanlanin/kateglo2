@@ -5,14 +5,11 @@
 import { useEffect } from 'react';
 import { Outlet, useLocation, useNavigationType } from 'react-router-dom';
 import NavbarPublik from '../navigasi/NavbarPublik';
-import { useAuthOptional } from '../../context/authContext';
 import HalamanDasar from './HalamanDasar';
 
 function TataLetakPublik() {
   const location = useLocation();
   const navigationType = useNavigationType();
-  const auth = useAuthOptional();
-  const adalahRedaksi = Boolean(auth?.adalahRedaksi);
   const adalahBeranda = location.pathname === '/';
 
   useEffect(() => {
@@ -26,7 +23,6 @@ function TataLetakPublik() {
   return (
     <HalamanDasar
       mode="publik"
-      adalahRedaksi={adalahRedaksi}
       navbar={<NavbarPublik />}
       konten={(
           <main className={`kateglo-main-content ${adalahBeranda ? 'kateglo-main-content-beranda' : ''}`}>

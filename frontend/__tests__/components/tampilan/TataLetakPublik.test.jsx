@@ -170,12 +170,13 @@ describe('TataLetakPublik', () => {
     expect(main.className).toContain('kateglo-main-content-beranda');
   });
 
-  it('menampilkan tautan Redaksi di footer saat user adalah redaksi', () => {
+  it('tautan Redaksi tidak ada di footer saat user adalah redaksi (dipindah ke dropdown avatar)', () => {
     mockAuthOptional = { adalahRedaksi: true };
 
     render(<TataLetakPublik />);
 
-    expect(screen.getByRole('link', { name: 'Redaksi' })).toHaveAttribute('href', '/redaksi');
+    // Link Redaksi sudah dipindah ke dropdown avatar di NavbarPublik, tidak lagi di footer
+    expect(screen.queryByRole('link', { name: 'Redaksi' })).not.toBeInTheDocument();
   });
 
   it('dapat kembali ke tab Riwayat setelah tab Tugas', async () => {

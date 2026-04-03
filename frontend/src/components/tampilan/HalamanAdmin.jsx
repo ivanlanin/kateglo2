@@ -30,7 +30,6 @@ function HalamanAdmin({ judul, aksiJudul = null, children }) {
 
   return (
     <HalamanDasar
-      mode="admin"
       navbar={(
         <Suspense fallback={null}>
           <NavbarAdmin />

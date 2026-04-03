@@ -10,6 +10,7 @@ let mockAuth = { adalahAdmin: false };
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   useParams: () => mockParams,
+  useLocation: () => ({ pathname: '/tesaurus' }),
 }));
 
 vi.mock('@tanstack/react-query', () => ({

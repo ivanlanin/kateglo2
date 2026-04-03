@@ -12,6 +12,7 @@ import {
 } from '../../../api/apiPublik';
 import { useCursorPagination } from '../../../hooks/useCursorPagination';
 import HalamanPublik from '../../../components/tampilan/HalamanPublik';
+import TabKamus from '../../../components/navigasi/TabKamus';
 import HasilPencarian from '../../../components/data/HasilPencarian';
 import KartuKategori from '../../../components/data/KartuKategori';
 import { EmptyResultText, PesanTidakDitemukan, QueryFeedback } from '../../../components/status/StatusKonten';
@@ -308,6 +309,7 @@ function Kamus() {
       judulNoda={judulNodaPencarian}
       deskripsi={deskripsiHalaman}
     >
+      <TabKamus />
 
       <QueryFeedback
         isLoading={isLoading}

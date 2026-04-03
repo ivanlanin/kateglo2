@@ -2,11 +2,18 @@
  * @fileoverview Navbar admin/redaksi bersama
  */
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/authContext';
 import { filterKelompokMenuRedaksi } from '../../constants/menuRedaksi';
 import '../../styles/admin.css';
+
+function buatInisial(nama) {
+  if (!nama) return '';
+  const bagian = nama.trim().split(/\s+/);
+  if (bagian.length === 1) return bagian[0][0].toUpperCase();
+  return (bagian[0][0] + bagian[bagian.length - 1][0]).toUpperCase();
+}
 
 function NavbarAdmin() {
   const { logout, punyaIzin, user } = useAuth();
@@ -19,6 +26,8 @@ function NavbarAdmin() {
   const navigate = useNavigate();
   const location = useLocation();
   const [menuTerbuka, setMenuTerbuka] = useState(false);
+  const [avatarTerbuka, setAvatarTerbuka] = useState(false);
+  const refAvatar = useRef(null);
 
   const handleLogout = () => {
     logout();
@@ -26,6 +35,21 @@ function NavbarAdmin() {
   };
 
   const isActive = (item) => location.pathname === item.path || location.pathname.startsWith(`${item.path}/`);
+
+  useEffect(() => {
+    setAvatarTerbuka(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!avatarTerbuka) return undefined;
+    const handleClick = (event) => {
+      if (refAvatar.current && !refAvatar.current.contains(event.target)) {
+        setAvatarTerbuka(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [avatarTerbuka]);
 
   return (
     <header className="navbar-root">
@@ -50,13 +74,36 @@ function NavbarAdmin() {
             <Link to="/redaksi" className="navbar-logo">Redaksi Kateglo</Link>
           </div>
 
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="navbar-menu-link"
-          >
-            Keluar
-          </button>
+          <div ref={refAvatar} className="navbar-avatar-wrapper ml-auto">
+            <button
+              type="button"
+              className="navbar-avatar-btn"
+              aria-label={user?.name || 'Profil'}
+              onClick={() => setAvatarTerbuka((v) => !v)}
+            >
+              {buatInisial(user?.name) ? (
+                <span className="navbar-avatar-fallback" aria-hidden="true">{buatInisial(user?.name)}</span>
+              ) : (
+                <svg className="navbar-avatar-icon" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
+                </svg>
+              )}
+              {user?.picture && (
+                <img src={user.picture} alt="" className="navbar-avatar-img" referrerPolicy="no-referrer" />
+              )}
+            </button>
+            <div className={`navbar-dropdown-panel ${avatarTerbuka ? 'navbar-dropdown-panel-open' : ''}`}>
+              {user?.name && <span className="navbar-avatar-name">{user.name}</span>}
+              <a href="/" className="navbar-dropdown-link">Kateglo</a>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="navbar-dropdown-link"
+              >
+                Keluar
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -10,6 +10,7 @@ const mockHandleCursor = vi.fn();
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   useParams: () => mockParams,
+  useLocation: () => ({ pathname: '/makna' }),
 }));
 
 vi.mock('@tanstack/react-query', () => ({

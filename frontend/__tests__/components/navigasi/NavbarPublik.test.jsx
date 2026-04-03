@@ -155,8 +155,9 @@ describe('NavbarPublik', () => {
   it('menampilkan link menu navigasi', () => {
     render(<NavbarPublik />);
     expect(screen.getByRole('link', { name: 'Kamus' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Tesaurus' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Glosarium' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Gramatika' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Ejaan' })).toBeInTheDocument();
   });
 
   it('menyaring item adminSaja untuk non-admin dan menampilkannya untuk admin', () => {
@@ -269,9 +270,9 @@ describe('NavbarPublik', () => {
   it('menampilkan status loading auth saat isLoading true', () => {
     mockAuthState.isLoading = true;
 
-    const { container } = render(<NavbarPublik />);
+    render(<NavbarPublik />);
 
-    expect(container.querySelector('.navbar-menu-desktop-visible')).toHaveTextContent('Memuat …');
+    expect(screen.getByText('Memuat …')).toBeInTheDocument();
   });
 
   it('menampilkan status loading auth pada panel mobile saat menu dibuka', () => {
@@ -281,7 +282,8 @@ describe('NavbarPublik', () => {
     render(<NavbarPublik />);
     fireEvent.click(screen.getByLabelText('Toggle menu'));
 
-    expect(document.querySelector('.navbar-mobile-panel')).toHaveTextContent('Memuat …');
+    // Loading indicator tampil di navbar (always-visible, bukan di dalam mobile panel)
+    expect(screen.getByText('Memuat …')).toBeInTheDocument();
   });
 
   it('klik backdrop menutup drawer mobile', () => {
@@ -341,6 +343,20 @@ describe('NavbarPublik', () => {
     expect(logoutMock).toHaveBeenCalledTimes(1);
   });
 
+  it('menampilkan tautan Redaksi di dropdown avatar saat adalahRedaksi', () => {
+    mockAuthState.isAuthenticated = true;
+    mockAuthState.adalahRedaksi = true;
+    mockAuthState.user = { name: 'Admin', picture: null };
+
+    render(<NavbarPublik />);
+
+    const link = screen.getByRole('link', { name: 'Redaksi' });
+    expect(link).toHaveAttribute('href', '/redaksi');
+
+    mockAuthState.adalahRedaksi = false;
+    mockAuthState.user = null;
+  });
+
   it('klik menu Masuk menyimpan return path', () => {
     render(<NavbarPublik />);
 
@@ -352,11 +368,10 @@ describe('NavbarPublik', () => {
   it('klik menu Masuk di mobile menyimpan return path', () => {
     aturUkuranNavbar({ lebarNavbar: 720, lebarMenu: 620 });
 
-    const { container } = render(<NavbarPublik />);
+    render(<NavbarPublik />);
 
-    fireEvent.click(screen.getByLabelText('Toggle menu'));
-    const mobileLoginLink = container.querySelector('.navbar-mobile-auth a');
-    fireEvent.click(mobileLoginLink);
+    // Masuk link selalu tampil di navbar (always-visible), tidak perlu buka hamburger
+    fireEvent.click(screen.getByRole('link', { name: 'Masuk' }));
 
     expect(mockSimpanReturnTo).toHaveBeenCalledWith('/kamus');
   });
@@ -369,8 +384,10 @@ describe('NavbarPublik', () => {
 
     const { container } = render(<NavbarPublik />);
     fireEvent.click(screen.getByLabelText('Toggle menu'));
-    const mobileLogoutButton = container.querySelector('.navbar-mobile-auth button');
-    fireEvent.click(mobileLogoutButton);
+
+    // Buka avatar dropdown lalu klik Keluar
+    fireEvent.click(screen.getByRole('button', { name: 'Profil' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Keluar' }));
 
     expect(logoutMock).toHaveBeenCalledTimes(1);
 

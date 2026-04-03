@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { cariMakna, ambilContohMakna } from '../../../api/apiPublik';
 import { useCursorPagination } from '../../../hooks/useCursorPagination';
 import HalamanPublik from '../../../components/tampilan/HalamanPublik';
+import TabKamus from '../../../components/navigasi/TabKamus';
 import HasilPencarian from '../../../components/data/HasilPencarian';
 import { QueryFeedback } from '../../../components/status/StatusKonten';
 import { formatLemaHomonim } from '../../../utils/formatUtils';
@@ -87,6 +88,7 @@ function Makna() {
 
   return (
     <HalamanPublik judul={judulHalaman} deskripsi={deskripsiHalaman}>
+      <TabKamus />
 
       <QueryFeedback
         isLoading={isLoading}

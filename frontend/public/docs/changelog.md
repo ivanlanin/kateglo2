@@ -1,5 +1,10 @@
 # Riwayat Perubahan
 
+## 2026-04-04 Sabtu
+
+- Menggabung menu kamus, tesaurus, makna, dan rima serta gramatika dan ejaan
+- Menampilkan foto pengguna dari Google
+
 ## 2026-04-03 Jumat
 
 - Mengoptimalkan kueri detail kamus dan entri acak

@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ambilContohTesaurus, cariTesaurus } from '../../../api/apiPublik';
 import { useCursorPagination } from '../../../hooks/useCursorPagination';
 import HalamanPublik from '../../../components/tampilan/HalamanPublik';
+import TabKamus from '../../../components/navigasi/TabKamus';
 import HasilPencarian from '../../../components/data/HasilPencarian';
 import TombolSunting from '../../../components/tombol/TombolSunting';
 import { EmptyResultText, QueryFeedback } from '../../../components/status/StatusKonten';
@@ -87,6 +88,7 @@ function Tesaurus() {
 
   return (
     <HalamanPublik judul={metaHalaman.judul} deskripsi={metaHalaman.deskripsi}>
+      <TabKamus />
 
       <QueryFeedback
         isLoading={isLoading}
