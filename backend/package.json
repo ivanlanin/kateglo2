@@ -8,6 +8,7 @@
     "start:production": "node scripts/sistem/start-production.js",
     "dev": "nodemon index.js",
     "leipzig:import": "node scripts/leipzig/imporKorpus.js",
+    "leipzig:meta": "node scripts/leipzig/generateMeta.js",
     "leipzig:upload-r2": "node scripts/leipzig/uploadKorpusR2.js",
     "test": "jest --no-cache --detectOpenHandles",
     "test:watch": "jest --watch",

@@ -132,7 +132,7 @@ function formatTitleCase(teks = '') {
 function buildTautanAnalisisKorpus(kata = '') {
   const indeksKamus = normalisasiIndeksKamus(kata);
   if (!indeksKamus) return '';
-  return `/alat/analisis-korpus/${encodeURIComponent(indeksKamus)}`;
+  return `/alat/analisis-korpus?kata=${encodeURIComponent(indeksKamus)}`;
 }
 
 function formatLabelPenyingkatanBadge(teks = '') {

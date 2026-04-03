@@ -374,6 +374,14 @@ export async function ambilInfoKataLeipzig(korpusId, kata) {
   return response.data;
 }
 
+export async function ambilPeringkatKataLeipzig(korpusId, { limit = 25, offset = 0 } = {}) {
+  const response = await klien.get(
+    `/api/publik/leipzig/korpus/${encodeURIComponent(korpusId)}/peringkat`,
+    buildLeipzigRequestConfig({ limit, offset })
+  );
+  return response.data;
+}
+
 export async function ambilContohKataLeipzig(korpusId, kata, { limit = 8, offset = 0 } = {}) {
   const response = await klien.get(
     `/api/publik/leipzig/korpus/${encodeURIComponent(korpusId)}/kata/${encodeURIComponent(kata)}/contoh`,

@@ -7,6 +7,7 @@ import KorpusLeipzig, { __private } from '../../../../src/pages/publik/alat/Korp
 const mockApi = vi.hoisted(() => ({
   ambilDaftarKorpusLeipzig: vi.fn(),
   ambilInfoKataLeipzig: vi.fn(),
+  ambilPeringkatKataLeipzig: vi.fn(),
   ambilContohKataLeipzig: vi.fn(),
   ambilKookurensiSekalimatLeipzig: vi.fn(),
   ambilKookurensiTetanggaLeipzig: vi.fn(),
@@ -148,7 +149,12 @@ describe('KorpusLeipzig', () => {
     expect(layout).toHaveLength(2);
     expect(layout[0]).toMatchObject({ x: 360, y: 180 });
     expect(__private.formatTanggalAman('2024-03-05')).toContain('2024');
-    expect(__private.buildPathAnalisisKorpus('indonesia')).toBe('/alat/analisis-korpus/indonesia');
+    expect(__private.normalisasiMode('Bandingkan')).toBe('bandingkan');
+    expect(__private.buildPathAnalisisKorpus({ kata: 'indonesia', korpus: 'ind_news_2024_10K' })).toBe('/alat/analisis-korpus?korpus=ind_news_2024_10K&kata=indonesia');
+    expect(__private.hitungRingkasanPerbandingan({ kata: 'subjek', frekuensi: 10, rank: 5 }, { kata: 'subyek', frekuensi: 2, rank: 15 })).toMatchObject({
+      selisihFrekuensi: 8,
+      selisihRank: 10,
+    });
   });
 
   it('memakai korpus pertama saat path hanya memuat kata', async () => {
@@ -178,6 +184,70 @@ describe('KorpusLeipzig', () => {
 
     await waitFor(() => {
       expect(mockApi.ambilInfoKataLeipzig).toHaveBeenCalledWith('ind_news_2024_10K', 'indonesia');
+    });
+  });
+
+  it('merender mode bandingkan dengan dua query statistik kata', async () => {
+    mockApi.ambilDaftarKorpusLeipzig.mockResolvedValue({
+      data: [{
+        id: 'ind_news_2024_10K',
+        label: 'Berita 2024',
+        domain: 'news',
+        size: '10K',
+        hasSqlite: true,
+        stats: { sentences: 10000, wordTypes: 8000, wordTokens: 190000 },
+      }],
+    });
+    mockApi.ambilInfoKataLeipzig
+      .mockResolvedValueOnce({ kata: 'subjek', frekuensi: 12, rank: 10, kelasFrekuensi: 1, bentuk: [] })
+      .mockResolvedValueOnce({ kata: 'subyek', frekuensi: 4, rank: 80, kelasFrekuensi: 4, bentuk: [] });
+    mockApi.ambilContohKataLeipzig
+      .mockResolvedValueOnce({ data: [{ sentenceId: 1, sentence: 'Subjek penelitian dibahas.', sourceUrl: '', sourceDate: null }], bentuk: [] })
+      .mockResolvedValueOnce({ data: [{ sentenceId: 2, sentence: 'Ejaan subyek muncul pada naskah lama.', sourceUrl: '', sourceDate: null }], bentuk: [] });
+
+    renderPage('/alat/analisis-korpus?mode=bandingkan&korpus=ind_news_2024_10K&kata1=subjek&kata2=subyek');
+
+    expect(await screen.findByRole('heading', { name: 'Ringkasan Perbandingan' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Contoh subjek' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Contoh subyek' })).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(mockApi.ambilInfoKataLeipzig).toHaveBeenNthCalledWith(1, 'ind_news_2024_10K', 'subjek');
+      expect(mockApi.ambilInfoKataLeipzig).toHaveBeenNthCalledWith(2, 'ind_news_2024_10K', 'subyek');
+    });
+  });
+
+  it('merender mode peringkat dengan daftar frekuensi dan paging', async () => {
+    mockApi.ambilDaftarKorpusLeipzig.mockResolvedValue({
+      data: [{
+        id: 'ind_news_2024_10K',
+        label: 'Berita 2024',
+        domain: 'news',
+        size: '10K',
+        hasSqlite: true,
+        stats: { sentences: 10000, wordTypes: 8000, wordTokens: 190000 },
+      }],
+    });
+    mockApi.ambilPeringkatKataLeipzig.mockResolvedValue({
+      total: 40,
+      limit: 25,
+      offset: 0,
+      hasMore: true,
+      data: [
+        { kata: 'yang', frekuensi: 812, rank: 1, kelasFrekuensi: 0 },
+        { kata: 'dan', frekuensi: 700, rank: 2, kelasFrekuensi: 0 },
+      ],
+    });
+
+    renderPage('/alat/analisis-korpus?mode=peringkat&korpus=ind_news_2024_10K');
+
+    expect(await screen.findByRole('heading', { name: 'Peringkat Kata' })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: 'yang' })).toBeInTheDocument();
+    expect(screen.getByText('#1')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Berikutnya' })).toBeEnabled();
+
+    await waitFor(() => {
+      expect(mockApi.ambilPeringkatKataLeipzig).toHaveBeenCalledWith('ind_news_2024_10K', { limit: 25, offset: 0 });
     });
   });
 });

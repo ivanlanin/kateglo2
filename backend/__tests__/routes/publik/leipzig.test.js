@@ -13,6 +13,7 @@ jest.mock('../../../models/leipzig/modelKorpus', () => ({
 
 jest.mock('../../../models/leipzig/modelKata', () => ({
   ambilInfoKata: jest.fn(),
+  ambilPeringkat: jest.fn(),
 }));
 
 jest.mock('../../../models/leipzig/modelKalimat', () => ({
@@ -57,6 +58,8 @@ describe('routes/publik/leipzig', () => {
   });
 
   it('GET /korpus/:korpusId/kata/:kata/contoh validasi kata kosong', async () => {
+    ModelKorpus.ambilDetail.mockResolvedValue({ id: 'ind_news_2024_10K', hasSqlite: true });
+
     const response = await request(createApp()).get('/api/publik/leipzig/korpus/ind_news_2024_10K/kata/%20%20/contoh');
     expect(response.status).toBe(400);
     expect(response.body.message).toBe('Kata wajib diisi');
@@ -86,6 +89,27 @@ describe('routes/publik/leipzig', () => {
     const response = await request(createApp()).get('/api/publik/leipzig/korpus/ind_news_2024_10K/kata/tidak-ada');
     expect(response.status).toBe(404);
     expect(response.body.message).toBe('Kata tidak ditemukan pada korpus Leipzig');
+  });
+
+  it('GET /korpus/:korpusId/peringkat mengembalikan daftar frekuensi kata', async () => {
+    ModelKorpus.ambilDetail.mockResolvedValue({ id: 'ind_news_2024_10K', hasSqlite: true, label: 'Berita 2024' });
+    ModelKata.ambilPeringkat.mockResolvedValue({
+      total: 2,
+      limit: 25,
+      offset: 0,
+      hasMore: false,
+      data: [
+        { kata: 'jika', frekuensi: 42, rank: 1, kelasFrekuensi: 0 },
+        { kata: 'indonesia', frekuensi: 13, rank: 2, kelasFrekuensi: 1 },
+      ],
+    });
+
+    const response = await request(createApp()).get('/api/publik/leipzig/korpus/ind_news_2024_10K/peringkat?limit=25&offset=0');
+
+    expect(response.status).toBe(200);
+    expect(response.headers['cache-control']).toBe('no-store');
+    expect(response.body.data).toHaveLength(2);
+    expect(ModelKata.ambilPeringkat).toHaveBeenCalledWith('ind_news_2024_10K', { limit: '25', offset: '0' });
   });
 
   it('GET /korpus/:korpusId/kata/:kata/contoh mengembalikan 404 jika korpus tidak ada', async () => {
@@ -128,7 +152,7 @@ describe('routes/publik/leipzig', () => {
     const response = await request(createApp()).get('/api/publik/leipzig/korpus/ind_news_2024_10K/kata/indonesia/contoh?limit=10');
 
     expect(response.status).toBe(200);
-    expect(response.headers['cache-control']).toBe('public, max-age=300, stale-while-revalidate=900');
+    expect(response.headers['cache-control']).toBe('no-store');
     expect(ModelKalimat.cariContohKata).toHaveBeenCalledWith('ind_news_2024_10K', 'indonesia', { limit: '10' });
     expect(response.body.success).toBe(true);
     expect(response.body.korpus.label).toBe('Berita 2024');

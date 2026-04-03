@@ -117,6 +117,47 @@ function readCorpusMeta(corpusId) {
   return Object.keys(stats).length > 0 ? stats : null;
 }
 
+function readCorpusStatsFromSqlite(corpusId) {
+  try {
+    const database = openCorpusDatabase(corpusId);
+    const row = database.prepare(`
+      SELECT
+        (SELECT COUNT(*) FROM sentences) AS sentences,
+        (SELECT COUNT(*) FROM words) AS word_types,
+        (SELECT COALESCE(SUM(freq), 0) FROM words) AS word_tokens,
+        (SELECT COUNT(*) FROM sources) AS sources
+    `).get();
+
+    const stats = {
+      sentences: Number(row?.sentences) || 0,
+      wordTypes: Number(row?.word_types) || 0,
+      wordTokens: Number(row?.word_tokens) || 0,
+      sources: Number(row?.sources) || 0,
+    };
+
+    return Object.values(stats).some((value) => value > 0) ? stats : null;
+  } catch (error) {
+    if (
+      error?.code === 'LEIPZIG_RUNTIME_UNSUPPORTED'
+      || error?.code === 'LEIPZIG_CORPUS_NOT_READY'
+      || error?.code === 'LEIPZIG_CORPUS_NOT_FOUND'
+    ) {
+      return null;
+    }
+
+    throw error;
+  }
+}
+
+function gabungkanCorpusStats(metaStats = null, sqliteStats = null) {
+  const hasil = {
+    ...(sqliteStats && typeof sqliteStats === 'object' ? sqliteStats : {}),
+    ...(metaStats && typeof metaStats === 'object' ? metaStats : {}),
+  };
+
+  return Object.keys(hasil).length > 0 ? hasil : null;
+}
+
 function listCorpusCandidates() {
   const rootDir = getLeipzigRootDir();
   const sqliteDir = getLeipzigSqliteDir();
@@ -145,12 +186,14 @@ function listAvailableCorpora() {
   return listCorpusCandidates().map((corpusId) => {
     const rawDir = getCorpusRawDir(corpusId);
     const databasePath = getCorpusDatabasePath(corpusId);
+    const metaStats = readCorpusMeta(corpusId);
+    const sqliteStats = readCorpusStatsFromSqlite(corpusId);
 
     return {
       ...describeCorpusId(corpusId),
       hasRawFiles: fs.existsSync(rawDir),
       hasSqlite: fs.existsSync(databasePath),
-      stats: readCorpusMeta(corpusId),
+      stats: gabungkanCorpusStats(metaStats, sqliteStats),
     };
   });
 }
@@ -237,6 +280,8 @@ module.exports = {
   __private: {
     resolveConfiguredPath,
     readCorpusMeta,
+    readCorpusStatsFromSqlite,
+    gabungkanCorpusStats,
     listCorpusCandidates,
     loadDatabaseSync,
   },

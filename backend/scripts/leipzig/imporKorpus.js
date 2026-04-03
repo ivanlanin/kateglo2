@@ -87,9 +87,78 @@ function openWritableDatabase(outputPath) {
       attribute TEXT,
       value TEXT
     );
+
+    CREATE TABLE ranked_words (
+      normalized_word TEXT PRIMARY KEY,
+      display_word TEXT NOT NULL,
+      freq_total INTEGER NOT NULL,
+      rank INTEGER NOT NULL,
+      frequency_class INTEGER
+    );
   `);
 
   return database;
+}
+
+function hitungKelasFrekuensi(freqTertinggi = 0, freqKata = 0) {
+  if (!freqTertinggi || !freqKata) return null;
+  return Math.floor(Math.log2(freqTertinggi / freqKata));
+}
+
+function bangunRankingKata(database) {
+  console.log('  Menyusun ranking kata...');
+  const rows = database.prepare(`
+    WITH ranked_variants AS (
+      SELECT
+        LOWER(word) AS normalized_word,
+        word,
+        freq,
+        ROW_NUMBER() OVER (
+          PARTITION BY LOWER(word)
+          ORDER BY freq DESC, word ASC
+        ) AS variant_rank
+      FROM words
+    ),
+    aggregated AS (
+      SELECT LOWER(word) AS normalized_word, SUM(freq) AS total
+      FROM words
+      GROUP BY LOWER(word)
+    )
+    SELECT
+      aggregated.normalized_word AS normalizedWord,
+      aggregated.total AS frekuensi,
+      ranked_variants.word AS kata
+    FROM aggregated
+    JOIN ranked_variants
+      ON ranked_variants.normalized_word = aggregated.normalized_word
+      AND ranked_variants.variant_rank = 1
+    WHERE aggregated.normalized_word GLOB '*[0-9A-Za-z]*'
+    ORDER BY aggregated.total DESC, aggregated.normalized_word ASC
+  `).all();
+  const insert = database.prepare(`
+    INSERT INTO ranked_words (normalized_word, display_word, freq_total, rank, frequency_class)
+    VALUES (?, ?, ?, ?, ?)
+  `);
+  const frekuensiTertinggi = Number(rows[0]?.frekuensi) || 0;
+
+  database.exec('BEGIN');
+  try {
+    rows.forEach((row, index) => {
+      insert.run(
+        row.normalizedWord,
+        row.kata || row.normalizedWord,
+        Number(row.frekuensi) || 0,
+        index + 1,
+        hitungKelasFrekuensi(frekuensiTertinggi, Number(row.frekuensi) || 0),
+      );
+    });
+    database.exec('COMMIT');
+  } catch (error) {
+    database.exec('ROLLBACK');
+    throw error;
+  }
+
+  console.log(`  ranking: selesai ${rows.length.toLocaleString('id-ID')} baris`);
 }
 
 async function importTable({ database, filePath, label, statementSql, mapColumns }) {
@@ -237,9 +306,13 @@ async function importCorpus(corpusId) {
       });
     }
 
+    bangunRankingKata(database);
+
     console.log('  Membuat indeks SQLite...');
     database.exec(`
       CREATE INDEX idx_words_word_nocase ON words(word COLLATE NOCASE);
+      CREATE INDEX idx_ranked_words_rank ON ranked_words(rank);
+      CREATE INDEX idx_ranked_words_freq ON ranked_words(freq_total DESC);
       CREATE INDEX idx_co_n_w1 ON co_n(w1_id, freq DESC);
       CREATE INDEX idx_co_n_w2 ON co_n(w2_id, freq DESC);
       CREATE INDEX idx_co_s_w1 ON co_s(w1_id, freq DESC);
@@ -269,3 +342,10 @@ main().catch((error) => {
   console.error(error.message);
   process.exitCode = 1;
 });
+
+module.exports = {
+  __private: {
+    hitungKelasFrekuensi,
+    bangunRankingKata,
+  },
+};

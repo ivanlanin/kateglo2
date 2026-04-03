@@ -15,7 +15,14 @@ function makeTempDir() {
 function writeSqlite(filePath) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   const database = new DatabaseSync(filePath);
-  database.exec('CREATE TABLE words (w_id INTEGER PRIMARY KEY, word TEXT, freq INTEGER);');
+  database.exec(`
+    CREATE TABLE words (w_id INTEGER PRIMARY KEY, word TEXT, freq INTEGER);
+    CREATE TABLE sentences (s_id INTEGER PRIMARY KEY, sentence TEXT);
+    CREATE TABLE sources (so_id INTEGER PRIMARY KEY, source TEXT, date TEXT);
+    INSERT INTO words (w_id, word, freq) VALUES (1, 'jika', 20), (2, 'dan', 15);
+    INSERT INTO sentences (s_id, sentence) VALUES (1, 'Jika dan hanya jika.'), (2, 'Dan begitu.');
+    INSERT INTO sources (so_id, source, date) VALUES (1, 'https://contoh.test', '2024-01-01');
+  `);
   database.close();
 }
 
@@ -27,7 +34,7 @@ describe('db/leipzig', () => {
     jest.resetModules();
   });
 
-  it('mendaftar korpus dari raw dir dan sqlite sambil membaca metadata', () => {
+  it('mendaftar korpus dari raw dir dan sqlite sambil membaca metadata dan fallback SQLite', () => {
     const rootDir = makeTempDir();
     const rawDir = path.join(rootDir, 'ind_news_2024_10K');
     const sqliteDir = path.join(rootDir, 'sqlite');
@@ -59,9 +66,41 @@ describe('db/leipzig', () => {
         label: 'Wikipedia 2021',
         hasRawFiles: false,
         hasSqlite: true,
-        stats: null,
+        stats: expect.objectContaining({
+          sentences: 2,
+          wordTypes: 2,
+          wordTokens: 35,
+          sources: 1,
+        }),
       }),
     ]);
+  });
+
+  it('menggabungkan metadata file dengan fallback SQLite untuk field yang hilang', () => {
+    const rootDir = makeTempDir();
+    const rawDir = path.join(rootDir, 'ind_news_2024_10K');
+    const sqliteDir = path.join(rootDir, 'sqlite');
+    fs.mkdirSync(rawDir, { recursive: true });
+    fs.mkdirSync(sqliteDir, { recursive: true });
+    fs.writeFileSync(
+      path.join(rawDir, 'ind_news_2024_10K-meta.txt'),
+      ['1\tbuild date\t2025-02-13', '2\tSENTENCES\t10000'].join('\n')
+    );
+    writeSqlite(path.join(sqliteDir, 'ind_news_2024_10K.sqlite'));
+
+    process.env.LEIPZIG_DATA_DIR = rootDir;
+    process.env.LEIPZIG_SQLITE_DIR = sqliteDir;
+
+    const LeipzigDb = require('../../db/leipzig');
+    const corpora = LeipzigDb.listAvailableCorpora();
+
+    expect(corpora[0].stats).toEqual({
+      buildDate: '2025-02-13',
+      sentences: 10000,
+      wordTypes: 2,
+      wordTokens: 35,
+      sources: 1,
+    });
   });
 
   it('membuka database read-only dan memakai cache koneksi', () => {

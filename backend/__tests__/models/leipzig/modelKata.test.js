@@ -21,7 +21,9 @@ function seedCorpusDatabase(filePath) {
       (1, 'jika', 20),
       (2, 'Indonesia', 8),
       (3, 'indonesia', 5),
-      (4, 'bahasa', 4);
+      (4, 'bahasa', 4),
+      (5, '.', 100),
+      (6, ',', 90);
   `);
   database.close();
 }
@@ -89,5 +91,29 @@ describe('models/leipzig/modelKata', () => {
     });
     expect(ModelKata.__private.hitungKelasFrekuensi(0, 10)).toBeNull();
     expect(ModelKata.__private.hitungKelasFrekuensi(20, 0)).toBeNull();
+  });
+
+  it('mengembalikan daftar peringkat frekuensi kata', async () => {
+    const rootDir = makeTempDir();
+    const sqliteDir = path.join(rootDir, 'sqlite');
+    seedCorpusDatabase(path.join(sqliteDir, 'ind_news_2024_10K.sqlite'));
+    process.env.LEIPZIG_DATA_DIR = rootDir;
+    process.env.LEIPZIG_SQLITE_DIR = sqliteDir;
+
+    const ModelKata = require('../../../models/leipzig/modelKata');
+    const LeipzigDb = require('../../../db/leipzig');
+    const result = await ModelKata.ambilPeringkat('ind_news_2024_10K', { limit: '2', offset: '1' });
+
+    expect(result).toEqual({
+      total: 3,
+      limit: 2,
+      offset: 1,
+      hasMore: false,
+      data: [
+        { kata: 'Indonesia', frekuensi: 13, rank: 2, kelasFrekuensi: 0 },
+        { kata: 'bahasa', frekuensi: 4, rank: 3, kelasFrekuensi: 2 },
+      ],
+    });
+    LeipzigDb.closeAllDatabases();
   });
 });

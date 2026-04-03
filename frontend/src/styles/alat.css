@@ -577,7 +577,7 @@
   }
 
   .korpus-leipzig-tool-layout {
-    @apply xl:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.85fr)];
+    @apply xl:grid-cols-2;
   }
 
   .korpus-leipzig-form-grid {
@@ -585,7 +585,15 @@
   }
 
   .korpus-leipzig-form-row {
-    @apply grid gap-3 md:grid-cols-[minmax(0,1fr)_16rem];
+    @apply grid gap-3;
+  }
+
+  .korpus-leipzig-form-row-compact {
+    @apply md:grid-cols-2;
+  }
+
+  .korpus-leipzig-form-row-2 {
+    @apply md:grid-cols-2;
   }
 
   .korpus-leipzig-field {
@@ -597,7 +605,7 @@
   }
 
   .korpus-leipzig-field-select {
-    @apply w-full md:max-w-[16rem];
+    @apply w-full;
   }
 
   .korpus-leipzig-field-label {
@@ -667,7 +675,7 @@
   }
 
   .korpus-leipzig-main-layout {
-    @apply items-start;
+    @apply items-start xl:grid-cols-2;
   }
 
   .korpus-leipzig-left-column {
@@ -686,8 +694,62 @@
     @apply mt-0;
   }
 
+  .korpus-leipzig-example-stack {
+    @apply flex flex-col gap-4;
+  }
+
+  .korpus-leipzig-mode-caption {
+    @apply m-0;
+  }
+
   .korpus-leipzig-section-stack {
     @apply mt-6 space-y-5;
+  }
+
+  .korpus-leipzig-compare-grid {
+    @apply grid gap-4 md:grid-cols-2;
+  }
+
+  .korpus-leipzig-ranking-list {
+    @apply mt-4 flex flex-col gap-3;
+  }
+
+  .korpus-leipzig-ranking-item {
+    @apply grid items-center gap-3 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 md:grid-cols-[6rem_minmax(0,1fr)_8rem_6rem];
+  }
+
+  .dark .korpus-leipzig-ranking-item {
+    @apply border-dark-border bg-dark-bg-elevated;
+  }
+
+  .korpus-leipzig-ranking-rank {
+    @apply text-sm font-semibold text-gray-500;
+  }
+
+  .dark .korpus-leipzig-ranking-rank {
+    @apply text-dark-text-muted;
+  }
+
+  .korpus-leipzig-ranking-word {
+    @apply cursor-pointer border-0 bg-transparent p-0 text-left text-base font-semibold text-blue-700 transition-colors hover:text-blue-900;
+  }
+
+  .dark .korpus-leipzig-ranking-word {
+    @apply text-blue-300 hover:text-blue-200;
+  }
+
+  .korpus-leipzig-ranking-frequency,
+  .korpus-leipzig-ranking-percent {
+    @apply text-right text-sm text-gray-700;
+  }
+
+  .dark .korpus-leipzig-ranking-frequency,
+  .dark .korpus-leipzig-ranking-percent {
+    @apply text-dark-text-muted;
+  }
+
+  .korpus-leipzig-paging-row {
+    @apply mt-4 flex flex-wrap gap-3;
   }
 
   .korpus-leipzig-section-heading {

@@ -10,8 +10,14 @@ const ModelKookurensi = require('../../models/leipzig/modelKookurensi');
 const { publicSearchLimiter } = require('../../middleware/rateLimiter');
 
 const router = express.Router();
+const isProduction = process.env.NODE_ENV === 'production';
 
 function setCacheHeaders(res, maxAge = 300, staleWhileRevalidate = 900) {
+  if (!isProduction) {
+    res.set('Cache-Control', 'no-store');
+    return;
+  }
+
   res.set('Cache-Control', `public, max-age=${maxAge}, stale-while-revalidate=${staleWhileRevalidate}`);
 }
 
@@ -31,17 +37,11 @@ function handleLeipzigError(error, res, next) {
   return next(error);
 }
 
-async function resolveKorpus(req, res) {
+async function resolveKorpusOnly(req, res) {
   const korpusId = String(req.params.korpusId || '').trim();
-  const kata = decodeURIComponent(String(req.params.kata || '')).trim();
 
   if (!korpusId) {
     res.status(400).json({ success: false, message: 'ID korpus wajib diisi' });
-    return null;
-  }
-
-  if (!kata) {
-    res.status(400).json({ success: false, message: 'Kata wajib diisi' });
     return null;
   }
 
@@ -59,6 +59,22 @@ async function resolveKorpus(req, res) {
       success: false,
       message: 'Korpus Leipzig belum siap. Jalankan impor SQLite terlebih dahulu.',
     });
+    return null;
+  }
+
+  return korpus;
+}
+
+async function resolveKorpus(req, res) {
+  const korpus = await resolveKorpusOnly(req, res);
+  const kata = decodeURIComponent(String(req.params.kata || '')).trim();
+
+  if (!korpus) {
+    return null;
+  }
+
+  if (!kata) {
+    res.status(400).json({ success: false, message: 'Kata wajib diisi' });
     return null;
   }
 
@@ -89,6 +105,19 @@ router.get('/korpus/:korpusId/kata/:kata', publicSearchLimiter, async (req, res,
 
     setCacheHeaders(res);
     return res.json({ success: true, korpus: resolved.korpus, ...hasil });
+  } catch (error) {
+    return handleLeipzigError(error, res, next);
+  }
+});
+
+router.get('/korpus/:korpusId/peringkat', publicSearchLimiter, async (req, res, next) => {
+  try {
+    const korpus = await resolveKorpusOnly(req, res);
+    if (!korpus) return undefined;
+
+    const hasil = await ModelKata.ambilPeringkat(korpus.id, req.query);
+    setCacheHeaders(res);
+    return res.json({ success: true, korpus, ...hasil });
   } catch (error) {
     return handleLeipzigError(error, res, next);
   }
