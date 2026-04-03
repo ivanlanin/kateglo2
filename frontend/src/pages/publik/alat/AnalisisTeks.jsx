@@ -188,7 +188,7 @@ function analisisTeks(text = '') {
   };
 }
 
-function PenganalisisTeks() {
+function AnalisisTeks() {
   const [teksMasukan, setTeksMasukan] = useState('');
   const [teksAnalisis, setTeksAnalisis] = useState('');
   const [pesanGalat, setPesanGalat] = useState('');
@@ -456,4 +456,4 @@ export const __private = {
   getSentenceClass,
 };
 
-export default PenganalisisTeks;
+export default AnalisisTeks;

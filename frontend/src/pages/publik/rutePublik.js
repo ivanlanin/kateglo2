@@ -20,7 +20,7 @@ const GlosariumDetail = buatLazyNamedExport(() => import('./glosarium'), 'Glosar
 const Alat = buatLazyNamedExport(() => import('./alat'), 'Alat');
 const KorpusLeipzig = buatLazyNamedExport(() => import('./alat'), 'KorpusLeipzig');
 const PenghitungHuruf = buatLazyNamedExport(() => import('./alat'), 'PenghitungHuruf');
-const PenganalisisTeks = buatLazyNamedExport(() => import('./alat'), 'PenganalisisTeks');
+const AnalisisTeks = buatLazyNamedExport(() => import('./alat'), 'AnalisisTeks');
 const PohonKalimat = buatLazyNamedExport(() => import('./alat'), 'PohonKalimat');
 const GimIndex = buatLazyNamedExport(() => import('./gim'), 'GimIndex');
 const KuisKata = buatLazyNamedExport(() => import('./gim'), 'KuisKata');
@@ -32,7 +32,7 @@ const Sumber = buatLazyNamedExport(() => import('./informasi'), 'Sumber');
 const komponenAlat = {
   'analisis-korpus': KorpusLeipzig,
   'penghitung-huruf': PenghitungHuruf,
-  'analisis-teks': PenganalisisTeks,
+  'analisis-teks': AnalisisTeks,
   'pohon-kalimat': PohonKalimat,
 };
 

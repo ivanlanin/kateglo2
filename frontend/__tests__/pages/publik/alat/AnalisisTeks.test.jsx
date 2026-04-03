@@ -1,13 +1,13 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import PenganalisisTeks, { __private } from '../../../../src/pages/publik/alat/PenganalisisTeks';
+import AnalisisTeks, { __private } from '../../../../src/pages/publik/alat/AnalisisTeks';
 
 beforeEach(() => {
   vi.restoreAllMocks();
 });
 
-describe('PenganalisisTeks helpers', () => {
+describe('AnalisisTeks helpers', () => {
   it('analisisTeks dan kelompokkanFrekuensi menutup cabang preview kalimat dan grup angka', () => {
     const pendek = __private.analisisTeks('Halo dunia.');
     expect(pendek.paragraphDetails[0].sentenceList[0]).toMatchObject({
@@ -57,7 +57,7 @@ describe('PenganalisisTeks helpers', () => {
   });
 });
 
-describe('PenganalisisTeks', () => {
+describe('AnalisisTeks', () => {
   it('membuka panel informasi markdown alat', async () => {
     vi.spyOn(globalThis, 'fetch').mockResolvedValue({
       ok: true,
@@ -66,7 +66,7 @@ describe('PenganalisisTeks', () => {
 
     render(
       <MemoryRouter>
-        <PenganalisisTeks />
+        <AnalisisTeks />
       </MemoryRouter>
     );
 
@@ -80,7 +80,7 @@ describe('PenganalisisTeks', () => {
   it('menampilkan ringkasan langsung di panel hasil dan mengaktifkan tab detail paragraf setelah analisis', () => {
     render(
       <MemoryRouter>
-        <PenganalisisTeks />
+        <AnalisisTeks />
       </MemoryRouter>
     );
 
@@ -99,7 +99,7 @@ describe('PenganalisisTeks', () => {
   it('berpindah antar pill hasil, membuka rincian paragraf, dan membersihkan hasil', () => {
     render(
       <MemoryRouter>
-        <PenganalisisTeks />
+        <AnalisisTeks />
       </MemoryRouter>
     );
 
@@ -133,7 +133,7 @@ describe('PenganalisisTeks', () => {
   it('menampilkan pesan validasi saat teks kosong', () => {
     render(
       <MemoryRouter>
-        <PenganalisisTeks />
+        <AnalisisTeks />
       </MemoryRouter>
     );
 
@@ -144,7 +144,7 @@ describe('PenganalisisTeks', () => {
   it('menampilkan kelompok frekuensi angka dan nama, serta kalimat singkat tanpa tombol toggle', () => {
     render(
       <MemoryRouter>
-        <PenganalisisTeks />
+        <AnalisisTeks />
       </MemoryRouter>
     );
 
@@ -170,7 +170,7 @@ describe('PenganalisisTeks', () => {
   it('menyembunyikan grup kata satu kali saat seluruh kata muncul berulang', () => {
     render(
       <MemoryRouter>
-        <PenganalisisTeks />
+        <AnalisisTeks />
       </MemoryRouter>
     );
 

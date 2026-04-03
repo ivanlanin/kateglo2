@@ -19,7 +19,7 @@ describe('pages/publik index', () => {
     expect(publikPages.Glosarium).toBe(glosariumPages.Glosarium);
     expect(publikPages.GlosariumDetail).toBe(glosariumPages.GlosariumDetail);
     expect(publikPages.AlatIndex).toBe(alatPages.AlatIndex);
-    expect(publikPages.PenganalisisTeks).toBe(alatPages.PenganalisisTeks);
+    expect(publikPages.AnalisisTeks).toBe(alatPages.AnalisisTeks);
     expect(publikPages.PenghitungHuruf).toBe(alatPages.PenghitungHuruf);
     expect(publikPages.GimIndex).toBe(gimPages.GimIndex);
     expect(publikPages.KuisKata).toBe(gimPages.KuisKata);

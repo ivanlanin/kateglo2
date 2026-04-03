@@ -44,7 +44,7 @@ vi.mock('../src/pages/publik/alat', () => ({
   Alat: () => <div>Hal Alat</div>,
   KorpusLeipzig: () => <div>Hal Analisis Korpus</div>,
   PenghitungHuruf: () => <div>Hal Penghitung Huruf</div>,
-  PenganalisisTeks: () => <div>Hal Analisis Teks</div>,
+  AnalisisTeks: () => <div>Hal Analisis Teks</div>,
   PohonKalimat: () => <div>Hal Pohon Kalimat</div>,
 }));
 vi.mock('../src/pages/publik/gim', () => ({
