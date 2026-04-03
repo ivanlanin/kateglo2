@@ -11,6 +11,7 @@ function Paginasi({
   currentPage = 1,
   onNavigateCursor,
   maxOffset = 1000,
+  className = '',
 }) {
   const modeCursor = Boolean(onNavigateCursor);
   const halamanSaatIni = modeCursor ? currentPage : (Math.floor(offset / limit) + 1);
@@ -44,7 +45,7 @@ function Paginasi({
     : halamanSaatIni >= totalHalaman;
 
   return (
-    <div className="paginasi-container">
+    <div className={`paginasi-container ${className}`.trim()}>
       {navigasiAktif ? (
         <>
           <button

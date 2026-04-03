@@ -278,6 +278,7 @@ describe('KorpusLeipzig', () => {
     expect(screen.getByRole('columnheader', { name: '%Frekuensi' }).className).toContain('korpus-leipzig-ranking-col-number');
     expect(screen.queryByRole('heading', { name: 'Peringkat Kata' })).not.toBeInTheDocument();
     expect(screen.getByLabelText('Halaman berikutnya')).toBeEnabled();
+    expect(screen.getByText(/Halaman 1 \(1–25 dari 40 entri\)/).closest('div')?.className).toContain('korpus-leipzig-pagination');
 
     await waitFor(() => {
       expect(mockApi.ambilPeringkatKataLeipzig).toHaveBeenCalledWith('ind_news_2024_10K', { limit: 25, offset: 0 });

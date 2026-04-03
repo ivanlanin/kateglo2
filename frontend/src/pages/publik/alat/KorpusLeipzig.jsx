@@ -968,6 +968,7 @@ function KorpusLeipzig() {
                           offset={peringkatOffsetAktif}
                           onChange={handleGantiHalamanPeringkat}
                           maxOffset={null}
+                          className="korpus-leipzig-pagination"
                         />
                         <div className="alat-table-wrap korpus-leipzig-ranking-table-wrap">
                           <table className="alat-data-table">

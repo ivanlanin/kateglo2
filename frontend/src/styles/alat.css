@@ -755,6 +755,11 @@
     @apply mt-4;
   }
 
+  .korpus-leipzig-pagination .paginasi-info,
+  .korpus-leipzig-pagination .paginasi-btn {
+    @apply text-sm;
+  }
+
   .korpus-leipzig-ranking-col-rank {
     @apply w-px whitespace-nowrap;
   }
