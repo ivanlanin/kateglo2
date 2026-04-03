@@ -10,13 +10,18 @@ function Paginasi({
   pageInfo,
   currentPage = 1,
   onNavigateCursor,
+  maxOffset = 1000,
 }) {
   const modeCursor = Boolean(onNavigateCursor);
-  const maxOffset = 1000;
   const halamanSaatIni = modeCursor ? currentPage : (Math.floor(offset / limit) + 1);
   const totalHalamanData = Math.ceil(total / limit);
-  const totalHalamanMaksOffset = Math.floor(maxOffset / limit) + 1;
-  const totalHalaman = modeCursor ? totalHalamanData : Math.min(totalHalamanData, totalHalamanMaksOffset);
+  const memakaiBatasOffset = Number.isFinite(maxOffset);
+  const totalHalamanMaksOffset = memakaiBatasOffset
+    ? (Math.floor(maxOffset / limit) + 1)
+    : totalHalamanData;
+  const totalHalaman = modeCursor
+    ? totalHalamanData
+    : (memakaiBatasOffset ? Math.min(totalHalamanData, totalHalamanMaksOffset) : totalHalamanData);
   const navigasiAktif = totalHalaman > 1 || Boolean(pageInfo?.hasNext) || Boolean(pageInfo?.hasPrev);
 
   const mulai = total > 0 ? ((halamanSaatIni - 1) * limit) + 1 : 0;

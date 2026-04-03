@@ -10,6 +10,7 @@ const {
   buildPlaceholders,
   listMatchedForms,
   aggregateWordRows,
+  pilihLabelAgregat,
 } = require('./utilsLeipzig');
 
 const RELASI_KONTEKS = [
@@ -106,30 +107,33 @@ function agregasiFiturKonteks(rows = [], excludedWords = []) {
     if (excluded.has(normalized)) return;
 
     const key = `${jenis}:${normalized}`;
-    const previous = aggregated.get(key) || {
+    const previous = aggregated.get(key);
+    const labelTerpilih = pilihLabelAgregat(previous, kata, row.frekuensi);
+    const current = previous || {
       featureKey: key,
       jenis,
       kata,
       frekuensi: 0,
       signifikansi: Number(row.signifikansi) || 0,
       wordIds: new Set(),
+      preferHurufKecil: false,
+      frekuensiLabel: 0,
     };
 
     const frekuensi = Number(row.frekuensi) || 0;
     const signifikansi = Number(row.signifikansi) || 0;
 
-    if (frekuensi > previous.frekuensi || (frekuensi === previous.frekuensi && kata.localeCompare(previous.kata, 'id') < 0)) {
-      previous.kata = kata;
-    }
-
-    previous.frekuensi += frekuensi;
-    previous.signifikansi = Math.max(previous.signifikansi, signifikansi);
-    if (row.wordId) previous.wordIds.add(Number(row.wordId) || 0);
-    aggregated.set(key, previous);
+    current.kata = labelTerpilih.kata;
+    current.preferHurufKecil = labelTerpilih.preferHurufKecil;
+    current.frekuensiLabel = labelTerpilih.frekuensiLabel;
+    current.frekuensi += frekuensi;
+    current.signifikansi = Math.max(current.signifikansi, signifikansi);
+    if (row.wordId) current.wordIds.add(Number(row.wordId) || 0);
+    aggregated.set(key, current);
   });
 
   return Array.from(aggregated.values())
-    .map((item) => ({
+    .map(({ preferHurufKecil: _preferHurufKecil, frekuensiLabel: _frekuensiLabel, ...item }) => ({
       ...item,
       wordIds: Array.from(item.wordIds).filter(Boolean),
     }))
@@ -195,26 +199,30 @@ function kumpulkanKandidatMirip(database, targetFeatures = [], targetWordIds = [
       const featureKey = String(row.featureKey || '').trim();
       if (!targetFeatureMap.has(featureKey)) return;
 
-      const previous = candidates.get(normalized) || {
+      const previous = candidates.get(normalized);
+      const labelTerpilih = pilihLabelAgregat(previous, kata, row.frekuensi);
+      const current = previous || {
         kata,
         frekuensi: Number(row.frekuensi) || 0,
         wordIds: new Set(),
         commonFeatureKeys: new Set(),
+        preferHurufKecil: false,
+        frekuensiLabel: 0,
       };
 
       const frekuensi = Number(row.frekuensi) || 0;
-      if (frekuensi > previous.frekuensi || (frekuensi === previous.frekuensi && kata.localeCompare(previous.kata, 'id') < 0)) {
-        previous.kata = kata;
-        previous.frekuensi = frekuensi;
-      }
-
-      previous.wordIds.add(wordId);
-      previous.commonFeatureKeys.add(featureKey);
-      candidates.set(normalized, previous);
+      current.kata = labelTerpilih.kata;
+      current.preferHurufKecil = labelTerpilih.preferHurufKecil;
+      current.frekuensiLabel = labelTerpilih.frekuensiLabel;
+      current.frekuensi = Math.max(current.frekuensi, frekuensi);
+      current.wordIds.add(wordId);
+      current.commonFeatureKeys.add(featureKey);
+      candidates.set(normalized, current);
     });
   });
 
   return Array.from(candidates.values())
+    .map(({ preferHurufKecil: _preferHurufKecil, frekuensiLabel: _frekuensiLabel, ...item }) => item)
     .sort((left, right) => {
       if (right.commonFeatureKeys.size === left.commonFeatureKeys.size) {
         if (right.frekuensi === left.frekuensi) {

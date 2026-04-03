@@ -9,6 +9,7 @@ const {
   summarizeMatchedForms,
   parseLimit,
   parseOffset,
+  bersihkanTokenAgregat,
 } = require('./utilsLeipzig');
 
 function hitungKelasFrekuensi(freqTertinggi = 0, freqKata = 0) {
@@ -55,14 +56,26 @@ function ambilInfoRankingLangsung(database, kata) {
   if (!kataAman) return null;
 
   const row = database.prepare(`
-    SELECT display_word AS kata, freq_total AS frekuensi, rank, frequency_class AS kelasFrekuensi
+    SELECT
+      CASE
+        WHEN EXISTS (
+          SELECT 1
+          FROM words lower_variant
+          WHERE LOWER(lower_variant.word) = ranked_words.normalized_word
+            AND lower_variant.word = ranked_words.normalized_word
+        ) THEN ranked_words.normalized_word
+        ELSE ranked_words.display_word
+      END AS kata,
+      freq_total AS frekuensi,
+      rank,
+      frequency_class AS kelasFrekuensi
     FROM ranked_words
     WHERE normalized_word = ?
     LIMIT 1
   `).get(kataAman);
 
   return row ? {
-    kata: row.kata,
+    kata: bersihkanTokenAgregat(row.kata),
     frekuensi: Number(row.frekuensi) || 0,
     rank: Number(row.rank) || null,
     kelasFrekuensi: row.kelasFrekuensi == null ? null : Number(row.kelasFrekuensi),
@@ -137,7 +150,19 @@ class ModelKata {
     if (hasRankedWordsTable(database)) {
       const totalRow = database.prepare('SELECT COUNT(*) AS total FROM ranked_words').get();
       const rows = database.prepare(`
-        SELECT display_word AS kata, freq_total AS frekuensi, rank, frequency_class AS kelasFrekuensi
+        SELECT
+          CASE
+            WHEN EXISTS (
+              SELECT 1
+              FROM words lower_variant
+              WHERE LOWER(lower_variant.word) = ranked_words.normalized_word
+                AND lower_variant.word = ranked_words.normalized_word
+            ) THEN ranked_words.normalized_word
+            ELSE ranked_words.display_word
+          END AS kata,
+          freq_total AS frekuensi,
+          rank,
+          frequency_class AS kelasFrekuensi
         FROM ranked_words
         ORDER BY rank ASC
         LIMIT ? OFFSET ?
@@ -149,7 +174,7 @@ class ModelKata {
         offset,
         hasMore: offset + rows.length < (Number(totalRow?.total) || 0),
         data: rows.map((row) => ({
-          kata: row.kata,
+          kata: bersihkanTokenAgregat(row.kata),
           frekuensi: Number(row.frekuensi) || 0,
           rank: Number(row.rank) || 0,
           kelasFrekuensi: row.kelasFrekuensi == null ? null : Number(row.kelasFrekuensi),
@@ -176,7 +201,7 @@ class ModelKata {
           freq,
           ROW_NUMBER() OVER (
             PARTITION BY LOWER(word)
-            ORDER BY freq DESC, word ASC
+            ORDER BY CASE WHEN word = LOWER(word) THEN 0 ELSE 1 END, freq DESC, word ASC
           ) AS variant_rank
         FROM words
       ),
@@ -199,7 +224,7 @@ class ModelKata {
     `).all(limit, offset);
 
     const data = rows.map((row, index) => ({
-      kata: row.kata || row.normalizedWord,
+      kata: bersihkanTokenAgregat(row.kata || row.normalizedWord),
       frekuensi: Number(row.frekuensi) || 0,
       rank: offset + index + 1,
       kelasFrekuensi: hitungKelasFrekuensi(frekuensiTertinggi, Number(row.frekuensi) || 0),

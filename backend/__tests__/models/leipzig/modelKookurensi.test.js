@@ -109,7 +109,7 @@ describe('models/leipzig/modelKookurensi', () => {
     expect(sekalimat.total).toBe(3);
     expect(sekalimat.data[0]).toEqual(expect.objectContaining({ kata: 'maju', frekuensi: 20 }));
     expect(sekalimat.data).toEqual(expect.arrayContaining([
-      expect.objectContaining({ kata: 'Bahasa', frekuensi: 18 }),
+      expect.objectContaining({ kata: 'bahasa', frekuensi: 18 }),
     ]));
 
     expect(tetangga.kiri).toEqual([{ kata: 'Bahasa', frekuensi: 1 }]);
@@ -121,7 +121,7 @@ describe('models/leipzig/modelKookurensi', () => {
     expect(graf.nodes[0]).toEqual(expect.objectContaining({ label: 'indonesia', isCenter: true }));
     expect(graf.nodes).toEqual(expect.arrayContaining([
       expect.objectContaining({ label: 'maju' }),
-      expect.objectContaining({ label: 'Bahasa' }),
+      expect.objectContaining({ label: 'bahasa' }),
     ]));
     expect(graf.edges).toEqual(expect.arrayContaining([
       expect.objectContaining({ source: 'indonesia', target: 'maju', weight: 20 }),

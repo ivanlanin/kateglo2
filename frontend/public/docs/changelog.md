@@ -3,6 +3,7 @@
 ## 2026-04-03 Jumat
 
 - Mengoptimalkan kueri detail kamus dan entri acak
+- Menambahkan mode perbandingan dan pemeringkatan di [Analisis Korpus](/alat/analisis-korpus)
 
 ## 2026-04-02 Kamis
 

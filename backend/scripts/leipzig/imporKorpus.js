@@ -115,7 +115,7 @@ function bangunRankingKata(database) {
         freq,
         ROW_NUMBER() OVER (
           PARTITION BY LOWER(word)
-          ORDER BY freq DESC, word ASC
+          ORDER BY CASE WHEN word = LOWER(word) THEN 0 ELSE 1 END, freq DESC, word ASC
         ) AS variant_rank
       FROM words
     ),

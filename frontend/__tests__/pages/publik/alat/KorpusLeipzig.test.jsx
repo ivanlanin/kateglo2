@@ -87,7 +87,8 @@ describe('KorpusLeipzig', () => {
     expect(await screen.findByRole('heading', { name: 'Analisis Korpus' })).toBeInTheDocument();
 
     expect(await screen.findByText('Contoh')).toBeInTheDocument();
-    expect(screen.getByText('Kata')).toBeInTheDocument();
+    expect(screen.getByLabelText('Kata yang ingin ditelusuri')).toBeInTheDocument();
+    expect(screen.getAllByText('Kata')).toHaveLength(2);
     expect(screen.getByText('Kemunculan')).toBeInTheDocument();
     expect(screen.getByText('Urutan')).toBeInTheDocument();
     expect(screen.queryByRole('tablist')).not.toBeInTheDocument();
@@ -99,6 +100,8 @@ describe('KorpusLeipzig', () => {
     expect(screen.getByText('indonesia')).toBeInTheDocument();
     expect(screen.getByText('13')).toBeInTheDocument();
     expect(screen.getByText('2')).toBeInTheDocument();
+    expect(screen.queryByText(/Proporsi:/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Kelas frekuensi:/)).not.toBeInTheDocument();
     expect(screen.queryByText('Lihat juga:')).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Tampilkan sumber' })).toBeInTheDocument();
     expect(screen.queryByText(/example.com/i)).not.toBeInTheDocument();
@@ -207,13 +210,18 @@ describe('KorpusLeipzig', () => {
 
     renderPage('/alat/analisis-korpus?mode=bandingkan&korpus=ind_news_2024_10K&kata1=subjek&kata2=subyek');
 
-    expect(await screen.findByRole('heading', { name: 'Ringkasan Perbandingan' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Contoh subjek' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Contoh subyek' })).toBeInTheDocument();
+    expect(await screen.findAllByText('Kata 1')).toHaveLength(2);
+    expect(screen.getAllByText('Kata 2')).toHaveLength(2);
+    expect(screen.getByText('△ Frekuensi')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Contoh "subjek"' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Contoh "subyek"' })).toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: 'Tampilkan sumber' })).toHaveLength(2);
 
     await waitFor(() => {
       expect(mockApi.ambilInfoKataLeipzig).toHaveBeenNthCalledWith(1, 'ind_news_2024_10K', 'subjek');
       expect(mockApi.ambilInfoKataLeipzig).toHaveBeenNthCalledWith(2, 'ind_news_2024_10K', 'subyek');
+      expect(screen.getByText('subjek').closest('article')?.className).toContain('korpus-leipzig-stat-card-winner');
+      expect(screen.getByText('subyek').closest('article')?.className).toContain('korpus-leipzig-stat-card-loser');
     });
   });
 
@@ -241,10 +249,14 @@ describe('KorpusLeipzig', () => {
 
     renderPage('/alat/analisis-korpus?mode=peringkat&korpus=ind_news_2024_10K');
 
-    expect(await screen.findByRole('heading', { name: 'Peringkat Kata' })).toBeInTheDocument();
     expect(await screen.findByRole('button', { name: 'yang' })).toBeInTheDocument();
-    expect(screen.getByText('#1')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Berikutnya' })).toBeEnabled();
+    expect(screen.getByRole('columnheader', { name: '#' })).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: '1.' })).toBeInTheDocument();
+    expect(screen.getAllByText('0,4')).toHaveLength(2);
+    expect(screen.getByRole('columnheader', { name: 'Jumlah' }).className).toContain('korpus-leipzig-ranking-col-number');
+    expect(screen.getByRole('columnheader', { name: '%Frekuensi' }).className).toContain('korpus-leipzig-ranking-col-number');
+    expect(screen.queryByRole('heading', { name: 'Peringkat Kata' })).not.toBeInTheDocument();
+    expect(screen.getByLabelText('Halaman berikutnya')).toBeEnabled();
 
     await waitFor(() => {
       expect(mockApi.ambilPeringkatKataLeipzig).toHaveBeenCalledWith('ind_news_2024_10K', { limit: 25, offset: 0 });

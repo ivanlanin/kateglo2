@@ -110,7 +110,7 @@ describe('models/leipzig/modelKata', () => {
       offset: 1,
       hasMore: false,
       data: [
-        { kata: 'Indonesia', frekuensi: 13, rank: 2, kelasFrekuensi: 0 },
+        { kata: 'indonesia', frekuensi: 13, rank: 2, kelasFrekuensi: 0 },
         { kata: 'bahasa', frekuensi: 4, rank: 3, kelasFrekuensi: 2 },
       ],
     });

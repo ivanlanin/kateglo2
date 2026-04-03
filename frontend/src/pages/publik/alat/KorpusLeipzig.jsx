@@ -13,6 +13,7 @@ import {
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Info } from 'lucide-react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import Paginasi from '../../../components/navigasi/Paginasi';
 import HalamanPublik from '../../../components/tampilan/HalamanPublik';
 import KontenMarkdownStatis from '../../../components/tampilan/KontenMarkdownStatis';
 import {
@@ -111,6 +112,11 @@ function formatPersenKemunculan(frekuensi, stats = {}) {
   }
 
   return `${formatPersen.format((jumlahKemunculan / totalToken) * 100)}%`;
+}
+
+function formatPersenKemunculanTanpaSimbol(frekuensi, stats = {}) {
+  const persen = formatPersenKemunculan(frekuensi, stats);
+  return persen.endsWith('%') ? persen.slice(0, -1) : persen;
 }
 
 function adalahTokenTampil(value = '') {
@@ -353,6 +359,7 @@ function PanelContohKata({
   query,
   bentuk = [],
   tampilkanSumberContoh = false,
+  emptyText = 'Belum ada contoh kalimat yang tersedia.',
 }) {
   const contohData = Array.isArray(query?.data?.data) ? query.data.data : [];
 
@@ -379,88 +386,22 @@ function PanelContohKata({
           ))}
         </ul>
       ) : (
-        <p className="alat-empty-text">Belum ada contoh kalimat yang tersedia.</p>
+        <p className="alat-empty-text">{emptyText}</p>
       )}
     </>
   );
 }
 
-function RingkasanBandingKata({ title, info, queryError = null, isLoading = false, stats = {} }) {
-  if (isLoading) {
-    return (
-      <section className="alat-subpanel korpus-leipzig-subpanel">
-        <h3 className="korpus-leipzig-section-heading">{title}</h3>
-        <p className="alat-panel-caption alat-subpanel-body">Memuat statistik kata ...</p>
-      </section>
-    );
-  }
-
-  if (queryError) {
-    return (
-      <section className="alat-subpanel korpus-leipzig-subpanel">
-        <h3 className="korpus-leipzig-section-heading">{title}</h3>
-        <p className={adalahGalat404(queryError) ? 'alat-empty-text' : 'alat-error-text'}>
-          {ambilPesanGalat(queryError, 'Statistik kata tidak dapat dimuat.')}
-        </p>
-      </section>
-    );
-  }
-
+function BarisStatistik({ items = [] }) {
   return (
-    <section className="alat-subpanel korpus-leipzig-subpanel">
-      <h3 className="korpus-leipzig-section-heading">{title}</h3>
-      <div className="alat-summary-stack" aria-label={title}>
-        <div className="korpus-leipzig-stat-row">
-          <article className="alat-stat-card">
-            <span className="alat-stat-label">Kata</span>
-            <strong className="alat-stat-value">{info?.kata || 'N/A'}</strong>
-          </article>
-          <article className="alat-stat-card">
-            <span className="alat-stat-label">Kemunculan</span>
-            <strong className="alat-stat-value">{formatKemunculanRingkas(info?.frekuensi)}</strong>
-          </article>
-          <article className="alat-stat-card">
-            <span className="alat-stat-label">Urutan</span>
-            <strong className="alat-stat-value">{info?.rank ? formatAngka.format(info.rank) : 'N/A'}</strong>
-          </article>
-        </div>
-        <p className="korpus-leipzig-summary-line">
-          <span className="korpus-leipzig-summary-metric">Proporsi: {formatPersenKemunculan(info?.frekuensi, stats)}</span>
-          <span className="korpus-leipzig-summary-metric">Kelas frekuensi: {formatKelasFrekuensiRingkas(info?.kelasFrekuensi)}</span>
-        </p>
-      </div>
-    </section>
-  );
-}
-
-function RingkasanDeltaBanding({ summary, statsKiri = null, statsKanan = null, stats = {} }) {
-  return (
-    <section className="alat-subpanel korpus-leipzig-subpanel">
-      <h3 className="korpus-leipzig-section-heading">Ringkasan Perbandingan</h3>
-      <div className="korpus-leipzig-stat-row">
-        <article className="alat-stat-card">
-          <span className="alat-stat-label">△ Frekuensi</span>
-          <strong className="alat-stat-value">{formatKemunculanRingkas(summary?.selisihFrekuensi)}</strong>
+    <div className={`korpus-leipzig-stat-row ${items[0]?.tone ? `korpus-leipzig-stat-row-${items[0].tone}` : ''}`.trim()}>
+      {items.map((item) => (
+        <article key={item.label} className={`alat-stat-card ${item.tone ? `korpus-leipzig-stat-card-${item.tone}` : ''}`.trim()}>
+          <span className="alat-stat-label">{item.label}</span>
+          <strong className="alat-stat-value">{item.value}</strong>
         </article>
-        <article className="alat-stat-card">
-          <span className="alat-stat-label">Rasio</span>
-          <strong className="alat-stat-value">{summary?.rasio ? `${formatPersen.format(summary.rasio)}x` : 'N/A'}</strong>
-        </article>
-        <article className="alat-stat-card">
-          <span className="alat-stat-label">△ Urutan</span>
-          <strong className="alat-stat-value">{summary?.selisihRank ? formatAngka.format(summary.selisihRank) : 'N/A'}</strong>
-        </article>
-      </div>
-      <p className="korpus-leipzig-summary-line">
-        <span className="korpus-leipzig-summary-metric">{summary?.labelDominan}</span>
-      </p>
-      {(statsKiri?.kata || statsKanan?.kata) ? (
-        <p className="korpus-leipzig-summary-line">
-          <span className="korpus-leipzig-summary-metric">{statsKiri?.kata || 'Kata 1'}: {formatPersenKemunculan(statsKiri?.frekuensi, stats)}</span>
-          <span className="korpus-leipzig-summary-metric">{statsKanan?.kata || 'Kata 2'}: {formatPersenKemunculan(statsKanan?.frekuensi, stats)}</span>
-        </p>
-      ) : null}
-    </section>
+      ))}
+    </div>
   );
 }
 
@@ -480,7 +421,9 @@ function KorpusLeipzig() {
   const peringkatOffsetAktif = normalisasiOffset(queryParams.get('offset'));
   const [panelInfoTerbuka, setPanelInfoTerbuka] = useState(false);
   const [pesanForm, setPesanForm] = useState('');
-  const [tampilkanSumberContoh, setTampilkanSumberContoh] = useState(false);
+  const [tampilkanSumberContohCari, setTampilkanSumberContohCari] = useState(false);
+  const [tampilkanSumberContohBanding1, setTampilkanSumberContohBanding1] = useState(false);
+  const [tampilkanSumberContohBanding2, setTampilkanSumberContohBanding2] = useState(false);
   const [formMode, setFormMode] = useState(() => modeAktif);
   const [formKorpusId, setFormKorpusId] = useState(() => korpusAktif);
   const [formKata, setFormKata] = useState(() => kataAktif);
@@ -755,6 +698,22 @@ function KorpusLeipzig() {
     });
   };
 
+  const barisBandingKata1 = [
+    { label: 'Kata 1', value: infoBandingKata1Query.data?.kata || kataBanding1Aktif || 'N/A', tone: ringkasanBanding?.rasio == null ? 'neutral' : ((Number(infoBandingKata1Query.data?.frekuensi) || 0) > (Number(infoBandingKata2Query.data?.frekuensi) || 0) ? 'winner' : ((Number(infoBandingKata1Query.data?.frekuensi) || 0) < (Number(infoBandingKata2Query.data?.frekuensi) || 0) ? 'loser' : 'neutral')) },
+    { label: 'Kemunculan', value: formatKemunculanRingkas(infoBandingKata1Query.data?.frekuensi), tone: ringkasanBanding?.rasio == null ? 'neutral' : ((Number(infoBandingKata1Query.data?.frekuensi) || 0) > (Number(infoBandingKata2Query.data?.frekuensi) || 0) ? 'winner' : ((Number(infoBandingKata1Query.data?.frekuensi) || 0) < (Number(infoBandingKata2Query.data?.frekuensi) || 0) ? 'loser' : 'neutral')) },
+    { label: 'Urutan', value: infoBandingKata1Query.data?.rank ? formatAngka.format(infoBandingKata1Query.data.rank) : 'N/A', tone: ringkasanBanding?.rasio == null ? 'neutral' : ((Number(infoBandingKata1Query.data?.frekuensi) || 0) > (Number(infoBandingKata2Query.data?.frekuensi) || 0) ? 'winner' : ((Number(infoBandingKata1Query.data?.frekuensi) || 0) < (Number(infoBandingKata2Query.data?.frekuensi) || 0) ? 'loser' : 'neutral')) },
+  ];
+  const barisBandingKata2 = [
+    { label: 'Kata 2', value: infoBandingKata2Query.data?.kata || kataBanding2Aktif || 'N/A', tone: ringkasanBanding?.rasio == null ? 'neutral' : ((Number(infoBandingKata2Query.data?.frekuensi) || 0) > (Number(infoBandingKata1Query.data?.frekuensi) || 0) ? 'winner' : ((Number(infoBandingKata2Query.data?.frekuensi) || 0) < (Number(infoBandingKata1Query.data?.frekuensi) || 0) ? 'loser' : 'neutral')) },
+    { label: 'Kemunculan', value: formatKemunculanRingkas(infoBandingKata2Query.data?.frekuensi), tone: ringkasanBanding?.rasio == null ? 'neutral' : ((Number(infoBandingKata2Query.data?.frekuensi) || 0) > (Number(infoBandingKata1Query.data?.frekuensi) || 0) ? 'winner' : ((Number(infoBandingKata2Query.data?.frekuensi) || 0) < (Number(infoBandingKata1Query.data?.frekuensi) || 0) ? 'loser' : 'neutral')) },
+    { label: 'Urutan', value: infoBandingKata2Query.data?.rank ? formatAngka.format(infoBandingKata2Query.data.rank) : 'N/A', tone: ringkasanBanding?.rasio == null ? 'neutral' : ((Number(infoBandingKata2Query.data?.frekuensi) || 0) > (Number(infoBandingKata1Query.data?.frekuensi) || 0) ? 'winner' : ((Number(infoBandingKata2Query.data?.frekuensi) || 0) < (Number(infoBandingKata1Query.data?.frekuensi) || 0) ? 'loser' : 'neutral')) },
+  ];
+  const barisBandingDelta = [
+    { label: '△ Frekuensi', value: formatKemunculanRingkas(ringkasanBanding?.selisihFrekuensi), tone: 'delta' },
+    { label: 'Rasio', value: ringkasanBanding?.rasio ? `${formatPersen.format(ringkasanBanding.rasio)}x` : 'N/A', tone: 'delta' },
+    { label: '△ Urutan', value: ringkasanBanding?.selisihRank ? formatAngka.format(ringkasanBanding.selisihRank) : 'N/A', tone: 'delta' },
+  ];
+
   return (
     <HalamanPublik
       judul="Analisis Korpus"
@@ -830,7 +789,7 @@ function KorpusLeipzig() {
                     {formMode === MODE_TELUSURI ? (
                       <div className="korpus-leipzig-form-row">
                         <div className="korpus-leipzig-field korpus-leipzig-field-grow">
-                          <label htmlFor="korpus-leipzig-kata" className="korpus-leipzig-field-label">Kata 1</label>
+                          <label htmlFor="korpus-leipzig-kata" className="korpus-leipzig-field-label">Kata</label>
                           <input
                             id="korpus-leipzig-kata"
                             type="text"
@@ -883,48 +842,25 @@ function KorpusLeipzig() {
                   {korpusQuery.isError ? <p className="alat-error-text">{ambilPesanGalat(korpusQuery.error, 'Daftar korpus Leipzig gagal dimuat.')}</p> : null}
                 </section>
 
-                {(modeAktif === MODE_TELUSURI || modeAktif === MODE_BANDINGKAN) ? (
+                {modeAktif === MODE_TELUSURI ? (
                   <section className="alat-panel korpus-leipzig-examples-panel" aria-labelledby="korpus-leipzig-contoh-title">
                     <div className="alat-panel-header alat-panel-header-split">
                       <h2 id="korpus-leipzig-contoh-title" className="alat-panel-title">Contoh</h2>
                       <button
                         type="button"
                         className="alat-link-secondary alat-panel-action-button"
-                        onClick={() => setTampilkanSumberContoh((value) => !value)}
+                        onClick={() => setTampilkanSumberContohCari((value) => !value)}
                       >
-                        {tampilkanSumberContoh ? 'Sembunyikan sumber' : 'Tampilkan sumber'}
+                        {tampilkanSumberContohCari ? 'Sembunyikan sumber' : 'Tampilkan sumber'}
                       </button>
                     </div>
 
-                    {modeAktif === MODE_TELUSURI ? (
-                      <PanelContohKata
-                        kataAktif={kataAktif}
-                        query={contohQuery}
-                        bentuk={bentukKata}
-                        tampilkanSumberContoh={tampilkanSumberContoh}
-                      />
-                    ) : (
-                      <div className="korpus-leipzig-example-stack">
-                        <section className="alat-subpanel korpus-leipzig-subpanel">
-                          <h3 className="korpus-leipzig-section-heading">{kataBanding1Aktif ? `Contoh ${kataBanding1Aktif}` : 'Contoh Kata 1'}</h3>
-                          <PanelContohKata
-                            kataAktif={kataBanding1Aktif}
-                            query={contohBandingKata1Query}
-                            bentuk={bentukBandingKata1}
-                            tampilkanSumberContoh={tampilkanSumberContoh}
-                          />
-                        </section>
-                        <section className="alat-subpanel korpus-leipzig-subpanel">
-                          <h3 className="korpus-leipzig-section-heading">{kataBanding2Aktif ? `Contoh ${kataBanding2Aktif}` : 'Contoh Kata 2'}</h3>
-                          <PanelContohKata
-                            kataAktif={kataBanding2Aktif}
-                            query={contohBandingKata2Query}
-                            bentuk={bentukBandingKata2}
-                            tampilkanSumberContoh={tampilkanSumberContoh}
-                          />
-                        </section>
-                      </div>
-                    )}
+                    <PanelContohKata
+                      kataAktif={kataAktif}
+                      query={contohQuery}
+                      bentuk={bentukKata}
+                      tampilkanSumberContoh={tampilkanSumberContohCari}
+                    />
                   </section>
                 ) : null}
               </div>
@@ -965,10 +901,6 @@ function KorpusLeipzig() {
                           <strong className="alat-stat-value">{infoKataQuery.data?.rank ? formatAngka.format(infoKataQuery.data.rank) : 'N/A'}</strong>
                         </article>
                       </div>
-                      <p className="korpus-leipzig-summary-line">
-                        <span className="korpus-leipzig-summary-metric">Proporsi: {formatPersenKemunculan(infoKataQuery.data?.frekuensi, korpusTerpilih?.stats)}</span>
-                        <span className="korpus-leipzig-summary-metric">Kelas frekuensi: {getKelasFrekuensiLabel(infoKataQuery.data?.kelasFrekuensi)}</span>
-                      </p>
                     </div>
 
                     <div className="korpus-leipzig-section-stack">
@@ -1010,89 +942,111 @@ function KorpusLeipzig() {
                       <p className="alat-panel-caption">Masukkan dua kata untuk membandingkan frekuensi dan peringkatnya pada korpus yang sama.</p>
                     ) : (
                       <>
-                        <RingkasanBandingKata
-                          title={kataBanding1Aktif ? `Kata 1 · ${kataBanding1Aktif}` : 'Kata 1'}
-                          info={infoBandingKata1Query.data}
-                          queryError={infoBandingKata1Query.error}
-                          isLoading={infoBandingKata1Query.isLoading}
-                          stats={korpusTerpilih?.stats}
-                        />
-                        <RingkasanBandingKata
-                          title={kataBanding2Aktif ? `Kata 2 · ${kataBanding2Aktif}` : 'Kata 2'}
-                          info={infoBandingKata2Query.data}
-                          queryError={infoBandingKata2Query.error}
-                          isLoading={infoBandingKata2Query.isLoading}
-                          stats={korpusTerpilih?.stats}
-                        />
-                        <RingkasanDeltaBanding
-                          summary={ringkasanBanding}
-                          statsKiri={infoBandingKata1Query.data}
-                          statsKanan={infoBandingKata2Query.data}
-                          stats={korpusTerpilih?.stats}
-                        />
+                        {(infoBandingKata1Query.isLoading || infoBandingKata2Query.isLoading) ? <p className="alat-panel-caption">Memuat statistik kata ...</p> : null}
+                        {infoBandingKata1Query.isError ? <p className={adalahGalat404(infoBandingKata1Query.error) ? 'alat-empty-text' : 'alat-error-text'}>{ambilPesanGalat(infoBandingKata1Query.error, 'Statistik kata pertama tidak dapat dimuat.')}</p> : null}
+                        {infoBandingKata2Query.isError ? <p className={adalahGalat404(infoBandingKata2Query.error) ? 'alat-empty-text' : 'alat-error-text'}>{ambilPesanGalat(infoBandingKata2Query.error, 'Statistik kata kedua tidak dapat dimuat.')}</p> : null}
+                        <BarisStatistik items={barisBandingKata1} />
+                        <BarisStatistik items={barisBandingKata2} />
+                        <BarisStatistik items={barisBandingDelta} />
                       </>
                     )}
                   </div>
                 ) : (
                   <div className="korpus-leipzig-section-stack">
-                    <section className="alat-subpanel korpus-leipzig-subpanel">
-                      <h3 className="korpus-leipzig-section-heading">Peringkat Kata</h3>
-                      {peringkatQuery.isLoading ? (
-                        <p className="alat-panel-caption">Memuat daftar frekuensi kata ...</p>
-                      ) : peringkatQuery.isError ? (
-                        <p className="alat-error-text">{ambilPesanGalat(peringkatQuery.error, 'Daftar frekuensi kata tidak dapat dimuat.')}</p>
-                      ) : dataPeringkat.length ? (
-                        <>
-                          <div className="korpus-leipzig-summary-card">
-                            <p className="korpus-leipzig-summary-line">
-                              <span className="korpus-leipzig-summary-metric">{formatRentangData(peringkatQuery.data?.offset, dataPeringkat.length, peringkatQuery.data?.total)}</span>
-                            </p>
-                          </div>
-
-                          <div className="korpus-leipzig-ranking-list" role="list" aria-label="Daftar frekuensi kata korpus">
-                            {dataPeringkat.map((item) => (
-                              <article key={`${item.rank}-${item.kata}`} className="korpus-leipzig-ranking-item" role="listitem">
-                                <span className="korpus-leipzig-ranking-rank">#{formatAngka.format(item.rank)}</span>
-                                <button
-                                  type="button"
-                                  className="korpus-leipzig-ranking-word"
-                                  onClick={() => handlePilihContoh(item.kata)}
-                                >
-                                  {item.kata}
-                                </button>
-                                <span className="korpus-leipzig-ranking-frequency">{formatKemunculanRingkas(item.frekuensi)}</span>
-                                <span className="korpus-leipzig-ranking-percent">{formatPersenKemunculan(item.frekuensi, korpusTerpilih?.stats)}</span>
-                              </article>
-                            ))}
-                          </div>
-
-                          <div className="korpus-leipzig-paging-row">
-                            <button
-                              type="button"
-                              className="alat-link-secondary"
-                              onClick={() => handleGantiHalamanPeringkat(peringkatOffsetAktif - PERINGKAT_LIMIT)}
-                              disabled={peringkatOffsetAktif <= 0}
-                            >
-                              Sebelumnya
-                            </button>
-                            <button
-                              type="button"
-                              className="alat-link-secondary"
-                              onClick={() => handleGantiHalamanPeringkat(peringkatOffsetAktif + PERINGKAT_LIMIT)}
-                              disabled={!peringkatQuery.data?.hasMore}
-                            >
-                              Berikutnya
-                            </button>
-                          </div>
-                        </>
-                      ) : (
-                        <p className="alat-empty-text">Belum ada data frekuensi kata untuk korpus ini.</p>
-                      )}
-                    </section>
+                    {peringkatQuery.isLoading ? (
+                      <p className="alat-panel-caption">Memuat daftar frekuensi kata ...</p>
+                    ) : peringkatQuery.isError ? (
+                      <p className="alat-error-text">{ambilPesanGalat(peringkatQuery.error, 'Daftar frekuensi kata tidak dapat dimuat.')}</p>
+                    ) : dataPeringkat.length ? (
+                      <>
+                        <Paginasi
+                          total={peringkatQuery.data?.total || 0}
+                          limit={PERINGKAT_LIMIT}
+                          offset={peringkatOffsetAktif}
+                          onChange={handleGantiHalamanPeringkat}
+                          maxOffset={null}
+                        />
+                        <div className="alat-table-wrap korpus-leipzig-ranking-table-wrap">
+                          <table className="alat-data-table">
+                            <thead>
+                              <tr>
+                                <th className="korpus-leipzig-ranking-col-rank">#</th>
+                                <th>Kata</th>
+                                <th className="korpus-leipzig-ranking-col-number">Jumlah</th>
+                                <th className="korpus-leipzig-ranking-col-number">%Frekuensi</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {dataPeringkat.map((item) => (
+                                <tr key={`${item.rank}-${item.kata}`}>
+                                  <td className="korpus-leipzig-ranking-col-rank">{String(item.rank)}.</td>
+                                  <td>
+                                    <button
+                                      type="button"
+                                      className="korpus-leipzig-ranking-word"
+                                      onClick={() => handlePilihContoh(item.kata)}
+                                    >
+                                      {item.kata}
+                                    </button>
+                                  </td>
+                                  <td className="korpus-leipzig-ranking-col-number">{formatKemunculanRingkas(item.frekuensi)}</td>
+                                  <td className="korpus-leipzig-ranking-col-number">{formatPersenKemunculanTanpaSimbol(item.frekuensi, korpusTerpilih?.stats)}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </>
+                    ) : (
+                      <p className="alat-empty-text">Belum ada data frekuensi kata untuk korpus ini.</p>
+                    )}
                   </div>
                 )}
               </section>
             </div>
+
+            {modeAktif === MODE_BANDINGKAN ? (
+              <div className="korpus-leipzig-compare-examples-grid">
+                <section className="alat-panel korpus-leipzig-examples-panel" aria-labelledby="korpus-leipzig-contoh-kata-1-title">
+                  <div className="alat-panel-header alat-panel-header-split">
+                    <h2 id="korpus-leipzig-contoh-kata-1-title" className="alat-panel-title">{kataBanding1Aktif ? `Contoh "${kataBanding1Aktif}"` : 'Contoh "kata 1"'}</h2>
+                    <button
+                      type="button"
+                      className="alat-link-secondary alat-panel-action-button"
+                      onClick={() => setTampilkanSumberContohBanding1((value) => !value)}
+                    >
+                      {tampilkanSumberContohBanding1 ? 'Sembunyikan sumber' : 'Tampilkan sumber'}
+                    </button>
+                  </div>
+                  <PanelContohKata
+                    kataAktif={kataBanding1Aktif}
+                    query={contohBandingKata1Query}
+                    bentuk={bentukBandingKata1}
+                    tampilkanSumberContoh={tampilkanSumberContohBanding1}
+                    emptyText="Belum ada contoh untuk kata pertama."
+                  />
+                </section>
+                <section className="alat-panel korpus-leipzig-examples-panel" aria-labelledby="korpus-leipzig-contoh-kata-2-title">
+                  <div className="alat-panel-header alat-panel-header-split">
+                    <h2 id="korpus-leipzig-contoh-kata-2-title" className="alat-panel-title">{kataBanding2Aktif ? `Contoh "${kataBanding2Aktif}"` : 'Contoh "kata 2"'}</h2>
+                    <button
+                      type="button"
+                      className="alat-link-secondary alat-panel-action-button"
+                      onClick={() => setTampilkanSumberContohBanding2((value) => !value)}
+                    >
+                      {tampilkanSumberContohBanding2 ? 'Sembunyikan sumber' : 'Tampilkan sumber'}
+                    </button>
+                  </div>
+                  <PanelContohKata
+                    kataAktif={kataBanding2Aktif}
+                    query={contohBandingKata2Query}
+                    bentuk={bentukBandingKata2}
+                    tampilkanSumberContoh={tampilkanSumberContohBanding2}
+                    emptyText="Belum ada contoh untuk kata kedua."
+                  />
+                </section>
+              </div>
+            ) : null}
           </>
         )}
       </div>
@@ -1107,6 +1061,7 @@ export const __private = {
   formatStatKorpus,
   formatKemunculanRingkas,
   formatPersenKemunculan,
+  formatPersenKemunculanTanpaSimbol,
   getKelasFrekuensiLabel,
   formatKelasFrekuensiRingkas,
   adalahTokenTampil,

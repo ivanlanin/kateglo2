@@ -46,43 +46,97 @@ function summarizeMatchedForms(rows = []) {
   }));
 }
 
+function bersihkanTokenAgregat(kata = '') {
+  return String(kata || '').trim().replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, '');
+}
+
+function adalahVarianHurufKecil(kata = '') {
+  const teks = bersihkanTokenAgregat(kata);
+  if (!teks) return false;
+  return teks === teks.toLowerCase();
+}
+
+function pilihLabelAgregat(previous, kata, frekuensi) {
+  const kataBersih = bersihkanTokenAgregat(kata);
+  const frekuensiAman = Number(frekuensi) || 0;
+  const memakaiHurufKecil = adalahVarianHurufKecil(kataBersih);
+
+  if (!kataBersih) return previous || null;
+
+  if (!previous) {
+    return {
+      kata: kataBersih,
+      wordId: 0,
+      preferHurufKecil: memakaiHurufKecil,
+      frekuensiLabel: frekuensiAman,
+    };
+  }
+
+  if (memakaiHurufKecil && !previous.preferHurufKecil) {
+    return {
+      ...previous,
+      kata: kataBersih,
+      preferHurufKecil: true,
+      frekuensiLabel: frekuensiAman,
+    };
+  }
+
+  if (memakaiHurufKecil === previous.preferHurufKecil) {
+    if (frekuensiAman > previous.frekuensiLabel) {
+      return {
+        ...previous,
+        kata: kataBersih,
+        frekuensiLabel: frekuensiAman,
+      };
+    }
+
+    if (frekuensiAman === previous.frekuensiLabel && kataBersih.localeCompare(previous.kata, 'id') < 0) {
+      return {
+        ...previous,
+        kata: kataBersih,
+      };
+    }
+  }
+
+  return previous;
+}
+
 function aggregateWordRows(rows = [], excludedWord = '') {
-  const excluded = String(excludedWord || '').trim().toLowerCase();
+  const excluded = bersihkanTokenAgregat(excludedWord).toLowerCase();
   const aggregated = new Map();
 
   rows.forEach((row) => {
-    const kata = String(row.kata || row.word || '').trim();
+    const kata = bersihkanTokenAgregat(row.kata || row.word || '');
     if (!kata) return;
 
     const normalized = kata.toLowerCase();
     if (excluded && normalized === excluded) return;
 
-    const previous = aggregated.get(normalized) || {
-      kata,
-      frekuensi: 0,
-      signifikansi: null,
-      wordId: Number(row.wordId) || 0,
-    };
+    const previous = aggregated.get(normalized);
+    const labelTerpilih = pilihLabelAgregat(previous, kata, row.frekuensi);
+    if (!labelTerpilih) return;
 
     const frekuensiSaatIni = Number(row.frekuensi) || 0;
-    const frekuensiBaru = previous.frekuensi + frekuensiSaatIni;
+    const frekuensiBaru = Number(previous?.frekuensi) || 0;
     const signifikansiSaatIni = Number(row.signifikansi) || 0;
-    const signifikansiSebelumnya = previous.signifikansi ?? signifikansiSaatIni;
+    const signifikansiSebelumnya = previous?.signifikansi ?? signifikansiSaatIni;
     const signifikansiBaru = row.signifikansi == null
-      ? previous.signifikansi
+      ? previous?.signifikansi ?? null
       : Math.max(signifikansiSebelumnya, signifikansiSaatIni);
 
     aggregated.set(normalized, {
-      kata: previous.frekuensi >= frekuensiSaatIni ? previous.kata : kata,
-      frekuensi: frekuensiBaru,
+      ...labelTerpilih,
+      frekuensi: frekuensiBaru + frekuensiSaatIni,
       signifikansi: signifikansiBaru,
-      wordId: previous.frekuensi >= frekuensiSaatIni
-        ? previous.wordId
-        : (Number(row.wordId) || previous.wordId || 0),
+      wordId: labelTerpilih.frekuensiLabel === frekuensiSaatIni
+        && labelTerpilih.kata === kata
+        ? (Number(row.wordId) || previous?.wordId || 0)
+        : (previous?.wordId || 0),
     });
   });
 
   return Array.from(aggregated.values())
+    .map(({ preferHurufKecil: _preferHurufKecil, frekuensiLabel: _frekuensiLabel, ...item }) => item)
     .sort((left, right) => {
       if (right.frekuensi === left.frekuensi) {
         return left.kata.localeCompare(right.kata, 'id');
@@ -99,4 +153,7 @@ module.exports = {
   listMatchedForms,
   summarizeMatchedForms,
   aggregateWordRows,
+  bersihkanTokenAgregat,
+  adalahVarianHurufKecil,
+  pilihLabelAgregat,
 };

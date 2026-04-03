@@ -690,12 +690,40 @@
     @apply grid gap-3 md:grid-cols-3;
   }
 
+  .korpus-leipzig-stat-card-winner {
+    @apply border-green-200 bg-green-50;
+  }
+
+  .dark .korpus-leipzig-stat-card-winner {
+    @apply border-green-800/50 bg-green-950/30;
+  }
+
+  .korpus-leipzig-stat-card-loser {
+    @apply border-amber-200 bg-amber-50;
+  }
+
+  .dark .korpus-leipzig-stat-card-loser {
+    @apply border-amber-800/50 bg-amber-950/30;
+  }
+
+  .korpus-leipzig-stat-card-delta {
+    @apply border-blue-200 bg-blue-50;
+  }
+
+  .dark .korpus-leipzig-stat-card-delta {
+    @apply border-blue-800/50 bg-blue-950/30;
+  }
+
   .korpus-leipzig-examples-panel {
     @apply mt-0;
   }
 
   .korpus-leipzig-example-stack {
     @apply flex flex-col gap-4;
+  }
+
+  .korpus-leipzig-compare-examples-grid {
+    @apply mt-4 grid gap-4 md:grid-cols-2;
   }
 
   .korpus-leipzig-mode-caption {
@@ -710,46 +738,29 @@
     @apply grid gap-4 md:grid-cols-2;
   }
 
-  .korpus-leipzig-ranking-list {
-    @apply mt-4 flex flex-col gap-3;
-  }
-
-  .korpus-leipzig-ranking-item {
-    @apply grid items-center gap-3 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 md:grid-cols-[6rem_minmax(0,1fr)_8rem_6rem];
-  }
-
-  .dark .korpus-leipzig-ranking-item {
-    @apply border-dark-border bg-dark-bg-elevated;
-  }
-
-  .korpus-leipzig-ranking-rank {
-    @apply text-sm font-semibold text-gray-500;
-  }
-
-  .dark .korpus-leipzig-ranking-rank {
-    @apply text-dark-text-muted;
-  }
-
   .korpus-leipzig-ranking-word {
-    @apply cursor-pointer border-0 bg-transparent p-0 text-left text-base font-semibold text-blue-700 transition-colors hover:text-blue-900;
+    @apply cursor-pointer border-0 bg-transparent p-0 text-left text-base font-normal text-blue-700 transition-colors hover:text-blue-900;
   }
 
   .dark .korpus-leipzig-ranking-word {
     @apply text-blue-300 hover:text-blue-200;
   }
 
-  .korpus-leipzig-ranking-frequency,
-  .korpus-leipzig-ranking-percent {
-    @apply text-right text-sm text-gray-700;
+  .korpus-leipzig-ranking-table-wrap {
+    @apply mt-4;
   }
 
-  .dark .korpus-leipzig-ranking-frequency,
-  .dark .korpus-leipzig-ranking-percent {
-    @apply text-dark-text-muted;
+  .korpus-leipzig-ranking-col-rank {
+    @apply w-px whitespace-nowrap;
   }
 
-  .korpus-leipzig-paging-row {
-    @apply mt-4 flex flex-wrap gap-3;
+  .korpus-leipzig-ranking-col-number {
+    @apply text-right;
+  }
+
+  .alat-data-table thead th.korpus-leipzig-ranking-col-number,
+  .alat-data-table tbody td.korpus-leipzig-ranking-col-number {
+    @apply text-right;
   }
 
   .korpus-leipzig-section-heading {
