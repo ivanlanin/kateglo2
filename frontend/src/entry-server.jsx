@@ -308,7 +308,7 @@ function buildSocialImageUrl(pathname = '/', siteBaseUrl = 'https://kateglo.org'
 
   if (path === '/ejaan' || path === '/ejaan/') {
     return `${baseUrl}/og/ejaan.png${buildOgQueryString({
-      title: 'Panduan Ejaan Bahasa Indonesia',
+      title: 'Referensi Ejaan',
       context: meta.description,
     })}`;
   }
@@ -328,7 +328,7 @@ function buildSocialImageUrl(pathname = '/', siteBaseUrl = 'https://kateglo.org'
 
   if (path === '/gramatika' || path === '/gramatika/') {
     return `${baseUrl}/og/gramatika.png${buildOgQueryString({
-      title: 'Panduan Tata Bahasa Indonesia',
+      title: 'Referensi Tata Bahasa',
       context: meta.description,
     })}`;
   }

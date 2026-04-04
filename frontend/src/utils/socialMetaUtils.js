@@ -24,8 +24,13 @@ function resolveDomainLabel(pathname = '/') {
 }
 
 function buildSocialTitle(pathname = '/', fallbackTitle = '') {
+  const normalizedPath = decodeURIComponent(pathname || '/');
   const fallback = stripKategloSuffix(fallbackTitle) || 'Kateglo';
-  const domainLabel = resolveDomainLabel(pathname);
+  const domainLabel = resolveDomainLabel(normalizedPath);
+
+  if (normalizedPath === '/' || normalizedPath === '') {
+    return fallback;
+  }
 
   if (!domainLabel) return `${fallback} — Kateglo`;
 

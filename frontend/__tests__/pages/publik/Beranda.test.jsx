@@ -80,7 +80,7 @@ describe('Beranda', () => {
     expect(screen.getByText('Kateglo')).toBeInTheDocument();
     expect(screen.getByText(/Kamus, tesaurus, dan glosarium bahasa Indonesia/i)).toBeInTheDocument();
     expect(document.title).toBe('Kateglo');
-    expect(document.head.querySelector('meta[property="og:title"]')?.getAttribute('content')).toBe('Kateglo — Kateglo');
+    expect(document.head.querySelector('meta[property="og:title"]')?.getAttribute('content')).toBe('Kateglo');
     expect(screen.queryByText('Definisi dan makna kata')).not.toBeInTheDocument();
   });
 
