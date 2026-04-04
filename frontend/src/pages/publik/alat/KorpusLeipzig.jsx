@@ -10,7 +10,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Info } from 'lucide-react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Paginasi from '../../../components/navigasi/Paginasi';
@@ -40,6 +40,7 @@ const MODE_TELUSURI = 'telusuri';
 const MODE_BANDINGKAN = 'bandingkan';
 const MODE_PERINGKAT = 'peringkat';
 const PERINGKAT_LIMIT = 25;
+const KATA_BANDING_KEYS = ['kata1', 'kata2', 'kata3', 'kata4'];
 const DAFTAR_MODE = [
   { value: MODE_TELUSURI, label: 'Pencarian' },
   { value: MODE_BANDINGKAN, label: 'Perbandingan' },
@@ -112,6 +113,17 @@ function formatPersenKemunculan(frekuensi, stats = {}) {
   }
 
   return `${formatPersen.format((jumlahKemunculan / totalToken) * 100)}%`;
+}
+
+function formatPersenPerbandingan(frekuensi, totalFrekuensiBanding = 0) {
+  const jumlahKemunculan = Number(frekuensi) || 0;
+  const total = Number(totalFrekuensiBanding) || 0;
+
+  if (!total) {
+    return 'N/A';
+  }
+
+  return `${formatPersen.format((jumlahKemunculan / total) * 100)}%`;
 }
 
 function formatPersenKemunculanTanpaSimbol(frekuensi, stats = {}) {
@@ -254,19 +266,25 @@ function normalisasiOffset(value = '') {
   return Math.max(parsed, 0);
 }
 
+function ambilDaftarKataBanding(queryParams) {
+  return KATA_BANDING_KEYS.map((key) => normalisasiSegmenPath(queryParams.get(key)));
+}
+
 function buildPathAnalisisKorpus({
   mode = MODE_TELUSURI,
   korpus = '',
   kata = '',
   kata1 = '',
   kata2 = '',
+  kata3 = '',
+  kata4 = '',
+  kataBanding = [],
   offset = 0,
 } = {}) {
   const modeAman = normalisasiMode(mode);
   const korpusAman = normalisasiSegmenPath(korpus);
   const kataAman = normalisasiSegmenPath(kata);
-  const kata1Aman = normalisasiSegmenPath(kata1);
-  const kata2Aman = normalisasiSegmenPath(kata2);
+  const kataBandingAman = KATA_BANDING_KEYS.map((_, index) => normalisasiSegmenPath(kataBanding[index] || [kata1, kata2, kata3, kata4][index]));
   const offsetAman = normalisasiOffset(offset);
   const params = new URLSearchParams();
 
@@ -282,13 +300,11 @@ function buildPathAnalisisKorpus({
     params.set('kata', kataAman);
   }
 
-  if (kata1Aman) {
-    params.set('kata1', kata1Aman);
-  }
-
-  if (kata2Aman) {
-    params.set('kata2', kata2Aman);
-  }
+  kataBandingAman.forEach((value, index) => {
+    if (value) {
+      params.set(KATA_BANDING_KEYS[index], value);
+    }
+  });
 
   if (modeAman === MODE_PERINGKAT && offsetAman > 0) {
     params.set('offset', String(offsetAman));
@@ -392,19 +408,6 @@ function PanelContohKata({
   );
 }
 
-function BarisStatistik({ items = [] }) {
-  return (
-    <div className={`korpus-leipzig-stat-row ${items[0]?.tone ? `korpus-leipzig-stat-row-${items[0].tone}` : ''}`.trim()}>
-      {items.map((item) => (
-        <article key={item.label} className={`alat-stat-card ${item.tone ? `korpus-leipzig-stat-card-${item.tone}` : ''}`.trim()}>
-          <span className="alat-stat-label">{item.label}</span>
-          <strong className={`alat-stat-value ${item.valueClassName || ''}`.trim()}>{item.value}</strong>
-        </article>
-      ))}
-    </div>
-  );
-}
-
 function KorpusLeipzig() {
   const queryClient = useQueryClient();
   const location = useLocation();
@@ -415,26 +418,22 @@ function KorpusLeipzig() {
   const legacyKata = normalisasiSegmenPath(params.kata);
   const legacyKorpus = normalisasiSegmenPath(params.korpus);
   const kataAktif = normalisasiSegmenPath(queryParams.get('kata') || (modeAktif === MODE_TELUSURI ? legacyKata : ''));
-  const kataBanding1Aktif = normalisasiSegmenPath(queryParams.get('kata1'));
-  const kataBanding2Aktif = normalisasiSegmenPath(queryParams.get('kata2'));
+  const kataBandingAktifList = useMemo(() => ambilDaftarKataBanding(queryParams), [queryParams]);
   const korpusAktif = normalisasiSegmenPath(queryParams.get('korpus') || legacyKorpus);
   const peringkatOffsetAktif = normalisasiOffset(queryParams.get('offset'));
   const [panelInfoTerbuka, setPanelInfoTerbuka] = useState(false);
   const [pesanForm, setPesanForm] = useState('');
   const [tampilkanSumberContohCari, setTampilkanSumberContohCari] = useState(false);
-  const [tampilkanSumberContohBanding1, setTampilkanSumberContohBanding1] = useState(false);
-  const [tampilkanSumberContohBanding2, setTampilkanSumberContohBanding2] = useState(false);
+  const [tampilkanSumberContohBanding, setTampilkanSumberContohBanding] = useState(() => KATA_BANDING_KEYS.map(() => false));
   const [formMode, setFormMode] = useState(() => modeAktif);
   const [formKorpusId, setFormKorpusId] = useState(() => korpusAktif);
   const [formKata, setFormKata] = useState(() => kataAktif);
-  const [formKata1, setFormKata1] = useState(() => kataBanding1Aktif);
-  const [formKata2, setFormKata2] = useState(() => kataBanding2Aktif);
+  const [formKataBanding, setFormKataBanding] = useState(() => kataBandingAktifList);
   const [contohLimit, setContohLimit] = useState(10);
   const [contohBandingLimit, setContohBandingLimit] = useState(5);
   const [sekalimatLimit, setSekalimatLimit] = useState(20);
   const kataAktifDeferred = useDeferredValue(kataAktif);
-  const kataBanding1Deferred = useDeferredValue(kataBanding1Aktif);
-  const kataBanding2Deferred = useDeferredValue(kataBanding2Aktif);
+  const kataBandingDeferredList = useDeferredValue(kataBandingAktifList);
 
   const korpusQuery = useQuery({
     queryKey: ['leipzig', 'daftar-korpus'],
@@ -451,8 +450,7 @@ function KorpusLeipzig() {
     mode: modeAktif,
     korpus: korpusAktif,
     kata: kataAktif,
-    kata1: kataBanding1Aktif,
-    kata2: kataBanding2Aktif,
+    kataBanding: kataBandingAktifList,
     offset: peringkatOffsetAktif,
   });
 
@@ -465,12 +463,8 @@ function KorpusLeipzig() {
   }, [kataAktif]);
 
   useEffect(() => {
-    setFormKata1(kataBanding1Aktif);
-  }, [kataBanding1Aktif]);
-
-  useEffect(() => {
-    setFormKata2(kataBanding2Aktif);
-  }, [kataBanding2Aktif]);
+    setFormKataBanding(kataBandingAktifList);
+  }, [kataBandingAktifList]);
 
   useEffect(() => {
     setFormKorpusId((current) => {
@@ -496,7 +490,7 @@ function KorpusLeipzig() {
     setContohLimit(10);
     setContohBandingLimit(5);
     setSekalimatLimit(20);
-  }, [modeAktif, kataAktif, kataBanding1Aktif, kataBanding2Aktif, korpusDataAktif]);
+  }, [modeAktif, kataAktif, kataBandingAktifList, korpusDataAktif]);
 
   const queryDasar = {
     retry: false,
@@ -534,32 +528,22 @@ function KorpusLeipzig() {
     enabled: telusuriEnabled,
   });
 
-  const infoBandingKata1Query = useQuery({
-    queryKey: ['leipzig', 'bandingkan', 'kata-1', korpusDataAktif, kataBanding1Deferred],
-    queryFn: () => ambilInfoKataLeipzig(korpusDataAktif, kataBanding1Deferred),
-    ...queryDasar,
-    enabled: bandingkanEnabled && Boolean(kataBanding1Deferred),
+  const infoBandingQueries = useQueries({
+    queries: kataBandingDeferredList.map((kataBanding, index) => ({
+      queryKey: ['leipzig', 'bandingkan', 'kata', KATA_BANDING_KEYS[index], korpusDataAktif, kataBanding],
+      queryFn: () => ambilInfoKataLeipzig(korpusDataAktif, kataBanding),
+      ...queryDasar,
+      enabled: bandingkanEnabled && Boolean(kataBanding),
+    })),
   });
 
-  const infoBandingKata2Query = useQuery({
-    queryKey: ['leipzig', 'bandingkan', 'kata-2', korpusDataAktif, kataBanding2Deferred],
-    queryFn: () => ambilInfoKataLeipzig(korpusDataAktif, kataBanding2Deferred),
-    ...queryDasar,
-    enabled: bandingkanEnabled && Boolean(kataBanding2Deferred),
-  });
-
-  const contohBandingKata1Query = useQuery({
-    queryKey: ['leipzig', 'bandingkan', 'contoh-1', korpusDataAktif, kataBanding1Deferred, contohBandingLimit],
-    queryFn: () => ambilContohKataLeipzig(korpusDataAktif, kataBanding1Deferred, { limit: contohBandingLimit, offset: 0 }),
-    ...queryDasar,
-    enabled: bandingkanEnabled && Boolean(kataBanding1Deferred),
-  });
-
-  const contohBandingKata2Query = useQuery({
-    queryKey: ['leipzig', 'bandingkan', 'contoh-2', korpusDataAktif, kataBanding2Deferred, contohBandingLimit],
-    queryFn: () => ambilContohKataLeipzig(korpusDataAktif, kataBanding2Deferred, { limit: contohBandingLimit, offset: 0 }),
-    ...queryDasar,
-    enabled: bandingkanEnabled && Boolean(kataBanding2Deferred),
+  const contohBandingQueries = useQueries({
+    queries: kataBandingDeferredList.map((kataBanding, index) => ({
+      queryKey: ['leipzig', 'bandingkan', 'contoh', KATA_BANDING_KEYS[index], korpusDataAktif, kataBanding, contohBandingLimit],
+      queryFn: () => ambilContohKataLeipzig(korpusDataAktif, kataBanding, { limit: contohBandingLimit, offset: 0 }),
+      ...queryDasar,
+      enabled: bandingkanEnabled && Boolean(kataBanding),
+    })),
   });
 
   const peringkatQuery = useQuery({
@@ -578,22 +562,50 @@ function KorpusLeipzig() {
   const sekalimatData = useMemo(() => saringTokenTampil(sekalimatQuery.data?.data || []), [sekalimatQuery.data?.data]);
   const tetanggaKiri = useMemo(() => saringTokenTampil(tetanggaQuery.data?.kiri || []), [tetanggaQuery.data?.kiri]);
   const tetanggaKanan = useMemo(() => saringTokenTampil(tetanggaQuery.data?.kanan || []), [tetanggaQuery.data?.kanan]);
-  const bentukBandingKata1 = useMemo(
-    () => saringTokenTampil(infoBandingKata1Query.data?.bentuk || contohBandingKata1Query.data?.bentuk || []),
-    [infoBandingKata1Query.data?.bentuk, contohBandingKata1Query.data?.bentuk],
-  );
-  const bentukBandingKata2 = useMemo(
-    () => saringTokenTampil(infoBandingKata2Query.data?.bentuk || contohBandingKata2Query.data?.bentuk || []),
-    [infoBandingKata2Query.data?.bentuk, contohBandingKata2Query.data?.bentuk],
-  );
+  const bentukBandingList = kataBandingAktifList.map((_, index) => saringTokenTampil(infoBandingQueries[index]?.data?.bentuk || contohBandingQueries[index]?.data?.bentuk || []));
   const tampilkanPanelContohCari = modeAktif === MODE_TELUSURI && Boolean(kataAktif);
-  const tampilkanPanelContohBanding1 = modeAktif === MODE_BANDINGKAN && Boolean(kataBanding1Aktif);
-  const tampilkanPanelContohBanding2 = modeAktif === MODE_BANDINGKAN && Boolean(kataBanding2Aktif);
-  const ringkasanBanding = useMemo(
-    () => hitungRingkasanPerbandingan(infoBandingKata1Query.data, infoBandingKata2Query.data),
-    [infoBandingKata1Query.data, infoBandingKata2Query.data],
-  );
+  const tampilkanPanelContohBanding = modeAktif === MODE_BANDINGKAN
+    ? kataBandingAktifList.map((kata) => Boolean(kata))
+    : KATA_BANDING_KEYS.map(() => false);
   const dataPeringkat = useMemo(() => peringkatQuery.data?.data || [], [peringkatQuery.data?.data]);
+  const jumlahKataBandingAktif = kataBandingAktifList.filter(Boolean).length;
+  const sedangMemuatPerbandingan = infoBandingQueries.some((query) => query.isLoading);
+  const galatPerbandingan = kataBandingAktifList
+    .map((kata, index) => {
+      const query = infoBandingQueries[index];
+      if (!kata || !query?.isError) return null;
+
+      return {
+        kata,
+        error: query.error,
+      };
+    })
+    .filter(Boolean);
+  const dataPerbandingan = kataBandingAktifList
+    .map((kata, index) => {
+      const data = infoBandingQueries[index]?.data;
+      if (!kata || !data) return null;
+
+      return {
+        kataInput: kata,
+        kata: data.kata || kata,
+        frekuensi: Number(data.frekuensi) || 0,
+        rank: Number(data.rank) || null,
+      };
+    })
+    .filter(Boolean)
+    .sort((kiri, kanan) => {
+      if (kanan.frekuensi !== kiri.frekuensi) {
+        return kanan.frekuensi - kiri.frekuensi;
+      }
+
+      if ((kiri.rank || Number.MAX_SAFE_INTEGER) !== (kanan.rank || Number.MAX_SAFE_INTEGER)) {
+        return (kiri.rank || Number.MAX_SAFE_INTEGER) - (kanan.rank || Number.MAX_SAFE_INTEGER);
+      }
+
+      return kiri.kata.localeCompare(kanan.kata, 'id');
+    });
+  const totalFrekuensiPerbandingan = dataPerbandingan.reduce((total, item) => total + item.frekuensi, 0);
 
   useEffect(() => {
     if (!peringkatEnabled || !peringkatQuery.data?.hasMore || !korpusDataAktif) {
@@ -612,15 +624,24 @@ function KorpusLeipzig() {
     const modeBaru = normalisasiMode(value);
 
     if (modeBaru === MODE_TELUSURI) {
-      setFormKata(formKata1 || formKata2 || formKata);
+      setFormKata(formKataBanding.find((item) => String(item || '').trim()) || formKata);
     }
 
     if (modeBaru === MODE_BANDINGKAN) {
-      setFormKata1((current) => current || formKata);
-      setFormKata2((current) => current || '');
+      setFormKataBanding((current) => {
+        const berikutnya = [...current];
+        if (!berikutnya[0]) {
+          berikutnya[0] = formKata;
+        }
+        return berikutnya;
+      });
     }
 
     setFormMode(modeBaru);
+  };
+
+  const handleUbahKataBanding = (index, value) => {
+    setFormKataBanding((current) => current.map((item, itemIndex) => (itemIndex === index ? value : item)));
   };
 
   const handleSubmit = (event) => {
@@ -628,8 +649,8 @@ function KorpusLeipzig() {
     const modeAman = normalisasiMode(formMode);
     const korpusAman = String(formKorpusId || korpusDefault || '').trim();
     const kataAman = String(formKata || '').trim();
-    const kata1Aman = String(formKata1 || '').trim();
-    const kata2Aman = String(formKata2 || '').trim();
+    const kataBandingAman = formKataBanding.map((item) => String(item || '').trim());
+    const jumlahKataBanding = kataBandingAman.filter(Boolean).length;
 
     if (!korpusAman) {
       setPesanForm('Korpus belum tersedia.');
@@ -644,8 +665,8 @@ function KorpusLeipzig() {
     }
 
     if (modeAman === MODE_BANDINGKAN) {
-      if (!kata1Aman || !kata2Aman) {
-        setPesanForm('Masukkan dua kata yang ingin dibandingkan.');
+      if (jumlahKataBanding < 2) {
+        setPesanForm('Masukkan minimal dua kata yang ingin dibandingkan.');
         return;
       }
     }
@@ -656,8 +677,7 @@ function KorpusLeipzig() {
         mode: modeAman,
         korpus: korpusAman,
         kata: kataAman,
-        kata1: kata1Aman,
-        kata2: kata2Aman,
+        kataBanding: kataBandingAman,
         offset: 0,
       }));
     });
@@ -666,8 +686,7 @@ function KorpusLeipzig() {
   const handleBersihkan = () => {
     setPesanForm('');
     setFormKata('');
-    setFormKata1('');
-    setFormKata2('');
+    setFormKataBanding(KATA_BANDING_KEYS.map(() => ''));
     startTransition(() => {
       navigate(buildPathAnalisisKorpus({
         mode: formMode,
@@ -700,22 +719,6 @@ function KorpusLeipzig() {
       }));
     });
   };
-
-  const barisBandingKata1 = [
-    { label: 'Kata 1', value: infoBandingKata1Query.data?.kata || kataBanding1Aktif || 'N/A', valueClassName: 'korpus-leipzig-stat-value-word', tone: ringkasanBanding?.rasio == null ? 'neutral' : ((Number(infoBandingKata1Query.data?.frekuensi) || 0) > (Number(infoBandingKata2Query.data?.frekuensi) || 0) ? 'winner' : ((Number(infoBandingKata1Query.data?.frekuensi) || 0) < (Number(infoBandingKata2Query.data?.frekuensi) || 0) ? 'loser' : 'neutral')) },
-    { label: 'Kemunculan', value: formatKemunculanRingkas(infoBandingKata1Query.data?.frekuensi), tone: ringkasanBanding?.rasio == null ? 'neutral' : ((Number(infoBandingKata1Query.data?.frekuensi) || 0) > (Number(infoBandingKata2Query.data?.frekuensi) || 0) ? 'winner' : ((Number(infoBandingKata1Query.data?.frekuensi) || 0) < (Number(infoBandingKata2Query.data?.frekuensi) || 0) ? 'loser' : 'neutral')) },
-    { label: 'Urutan', value: infoBandingKata1Query.data?.rank ? formatAngka.format(infoBandingKata1Query.data.rank) : 'N/A', tone: ringkasanBanding?.rasio == null ? 'neutral' : ((Number(infoBandingKata1Query.data?.frekuensi) || 0) > (Number(infoBandingKata2Query.data?.frekuensi) || 0) ? 'winner' : ((Number(infoBandingKata1Query.data?.frekuensi) || 0) < (Number(infoBandingKata2Query.data?.frekuensi) || 0) ? 'loser' : 'neutral')) },
-  ];
-  const barisBandingKata2 = [
-    { label: 'Kata 2', value: infoBandingKata2Query.data?.kata || kataBanding2Aktif || 'N/A', valueClassName: 'korpus-leipzig-stat-value-word', tone: ringkasanBanding?.rasio == null ? 'neutral' : ((Number(infoBandingKata2Query.data?.frekuensi) || 0) > (Number(infoBandingKata1Query.data?.frekuensi) || 0) ? 'winner' : ((Number(infoBandingKata2Query.data?.frekuensi) || 0) < (Number(infoBandingKata1Query.data?.frekuensi) || 0) ? 'loser' : 'neutral')) },
-    { label: 'Kemunculan', value: formatKemunculanRingkas(infoBandingKata2Query.data?.frekuensi), tone: ringkasanBanding?.rasio == null ? 'neutral' : ((Number(infoBandingKata2Query.data?.frekuensi) || 0) > (Number(infoBandingKata1Query.data?.frekuensi) || 0) ? 'winner' : ((Number(infoBandingKata2Query.data?.frekuensi) || 0) < (Number(infoBandingKata1Query.data?.frekuensi) || 0) ? 'loser' : 'neutral')) },
-    { label: 'Urutan', value: infoBandingKata2Query.data?.rank ? formatAngka.format(infoBandingKata2Query.data.rank) : 'N/A', tone: ringkasanBanding?.rasio == null ? 'neutral' : ((Number(infoBandingKata2Query.data?.frekuensi) || 0) > (Number(infoBandingKata1Query.data?.frekuensi) || 0) ? 'winner' : ((Number(infoBandingKata2Query.data?.frekuensi) || 0) < (Number(infoBandingKata1Query.data?.frekuensi) || 0) ? 'loser' : 'neutral')) },
-  ];
-  const barisBandingDelta = [
-    { label: '△ Frekuensi', value: formatKemunculanRingkas(ringkasanBanding?.selisihFrekuensi), tone: 'delta' },
-    { label: 'Rasio', value: ringkasanBanding?.rasio ? `${formatPersen.format(ringkasanBanding.rasio)}x` : 'N/A', tone: 'delta' },
-    { label: '△ Urutan', value: ringkasanBanding?.selisihRank ? formatAngka.format(ringkasanBanding.selisihRank) : 'N/A', tone: 'delta' },
-  ];
 
   return (
     <HalamanPublik
@@ -807,31 +810,21 @@ function KorpusLeipzig() {
                     ) : null}
 
                     {formMode === MODE_BANDINGKAN ? (
-                      <div className="korpus-leipzig-form-row korpus-leipzig-form-row-2">
-                        <div className="korpus-leipzig-field korpus-leipzig-field-grow">
-                          <label htmlFor="korpus-leipzig-kata-1" className="korpus-leipzig-field-label">Kata 1</label>
-                          <input
-                            id="korpus-leipzig-kata-1"
-                            type="text"
-                            value={formKata1}
-                            className="korpus-leipzig-input"
-                            placeholder="Misalnya: subjek"
-                            aria-label="Kata pertama yang ingin dibandingkan"
-                            onChange={(event) => setFormKata1(event.target.value)}
-                          />
-                        </div>
-                        <div className="korpus-leipzig-field korpus-leipzig-field-grow">
-                          <label htmlFor="korpus-leipzig-kata-2" className="korpus-leipzig-field-label">Kata 2</label>
-                          <input
-                            id="korpus-leipzig-kata-2"
-                            type="text"
-                            value={formKata2}
-                            className="korpus-leipzig-input"
-                            placeholder="Misalnya: subyek"
-                            aria-label="Kata kedua yang ingin dibandingkan"
-                            onChange={(event) => setFormKata2(event.target.value)}
-                          />
-                        </div>
+                      <div className="korpus-leipzig-form-row korpus-leipzig-form-row-4">
+                        {formKataBanding.map((value, index) => (
+                          <div key={KATA_BANDING_KEYS[index]} className="korpus-leipzig-field korpus-leipzig-field-grow">
+                            <label htmlFor={`korpus-leipzig-${KATA_BANDING_KEYS[index]}`} className="korpus-leipzig-field-label">{`Kata ${index + 1}`}</label>
+                            <input
+                              id={`korpus-leipzig-${KATA_BANDING_KEYS[index]}`}
+                              type="text"
+                              value={value}
+                              className="korpus-leipzig-input"
+                              placeholder={index === 0 ? 'Misalnya: subjek' : index === 1 ? 'Misalnya: subyek' : 'Opsional'}
+                              aria-label={`Kata ke-${index + 1} yang ingin dibandingkan`}
+                              onChange={(event) => handleUbahKataBanding(index, event.target.value)}
+                            />
+                          </div>
+                        ))}
                       </div>
                     ) : null}
 
@@ -941,16 +934,53 @@ function KorpusLeipzig() {
                   </>
                 ) : modeAktif === MODE_BANDINGKAN ? (
                   <div className="korpus-leipzig-section-stack">
-                    {!kataBanding1Aktif && !kataBanding2Aktif ? (
-                      <p className="alat-panel-caption">Masukkan dua kata untuk membandingkan frekuensi dan peringkatnya pada korpus yang sama.</p>
+                    {jumlahKataBandingAktif < 2 ? (
+                      <p className="alat-panel-caption">Masukkan minimal dua kata untuk membandingkan frekuensi dan peringkatnya pada korpus yang sama.</p>
                     ) : (
                       <>
-                        {(infoBandingKata1Query.isLoading || infoBandingKata2Query.isLoading) ? <p className="alat-panel-caption">Memuat statistik kata ...</p> : null}
-                        {infoBandingKata1Query.isError ? <p className={adalahGalat404(infoBandingKata1Query.error) ? 'alat-empty-text' : 'alat-error-text'}>{ambilPesanGalat(infoBandingKata1Query.error, 'Statistik kata pertama tidak dapat dimuat.')}</p> : null}
-                        {infoBandingKata2Query.isError ? <p className={adalahGalat404(infoBandingKata2Query.error) ? 'alat-empty-text' : 'alat-error-text'}>{ambilPesanGalat(infoBandingKata2Query.error, 'Statistik kata kedua tidak dapat dimuat.')}</p> : null}
-                        <BarisStatistik items={barisBandingKata1} />
-                        <BarisStatistik items={barisBandingKata2} />
-                        <BarisStatistik items={barisBandingDelta} />
+                        {sedangMemuatPerbandingan ? <p className="alat-panel-caption">Memuat statistik kata ...</p> : null}
+                        {galatPerbandingan.map((item) => (
+                          <p key={item.kata} className={adalahGalat404(item.error) ? 'alat-empty-text' : 'alat-error-text'}>
+                            {ambilPesanGalat(item.error, `Statistik untuk "${item.kata}" tidak dapat dimuat.`)}
+                          </p>
+                        ))}
+                        {dataPerbandingan.length ? (
+                          <div className="alat-table-wrap korpus-leipzig-ranking-table-wrap">
+                            <table className="alat-data-table">
+                              <thead>
+                                <tr>
+                                  <th className="korpus-leipzig-ranking-col-rank">#</th>
+                                  <th>Kata</th>
+                                  <th className="korpus-leipzig-ranking-col-number">Kemunculan</th>
+                                  <th className="korpus-leipzig-ranking-col-number">Urutan</th>
+                                  <th className="korpus-leipzig-ranking-col-number">Persentase</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {dataPerbandingan.map((item, index) => (
+                                  <tr key={`${item.kataInput}-${item.kata}-${item.rank || index}`}>
+                                    <td className="korpus-leipzig-ranking-col-rank">{`${index + 1}.`}</td>
+                                    <td>
+                                      <button
+                                        type="button"
+                                        className="korpus-leipzig-ranking-word"
+                                        onClick={() => handlePilihContoh(item.kata)}
+                                      >
+                                        {item.kata}
+                                      </button>
+                                    </td>
+                                    <td className="korpus-leipzig-ranking-col-number">{formatKemunculanRingkas(item.frekuensi)}</td>
+                                    <td className="korpus-leipzig-ranking-col-number">{item.rank ? formatAngka.format(item.rank) : 'N/A'}</td>
+                                    <td className="korpus-leipzig-ranking-col-number">{formatPersenPerbandingan(item.frekuensi, totalFrekuensiPerbandingan)}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        ) : null}
+                        {!sedangMemuatPerbandingan && !dataPerbandingan.length && !galatPerbandingan.length ? (
+                          <p className="alat-empty-text">Belum ada data perbandingan yang dapat ditampilkan.</p>
+                        ) : null}
                       </>
                     )}
                   </div>
@@ -1009,50 +1039,29 @@ function KorpusLeipzig() {
               </section>
             </div>
 
-            {tampilkanPanelContohBanding1 || tampilkanPanelContohBanding2 ? (
+            {tampilkanPanelContohBanding.some(Boolean) ? (
               <div className="korpus-leipzig-compare-examples-grid">
-                {tampilkanPanelContohBanding1 ? (
-                  <section className="alat-panel korpus-leipzig-examples-panel" aria-labelledby="korpus-leipzig-contoh-kata-1-title">
+                {kataBandingAktifList.map((kataBanding, index) => (tampilkanPanelContohBanding[index] ? (
+                  <section key={KATA_BANDING_KEYS[index]} className="alat-panel korpus-leipzig-examples-panel" aria-labelledby={`korpus-leipzig-contoh-${KATA_BANDING_KEYS[index]}-title`}>
                     <div className="alat-panel-header alat-panel-header-split">
-                      <h2 id="korpus-leipzig-contoh-kata-1-title" className="alat-panel-title">{`Contoh "${kataBanding1Aktif}"`}</h2>
+                      <h2 id={`korpus-leipzig-contoh-${KATA_BANDING_KEYS[index]}-title`} className="alat-panel-title">{`Contoh "${kataBanding}"`}</h2>
                       <button
                         type="button"
                         className="alat-link-secondary alat-panel-action-button"
-                        onClick={() => setTampilkanSumberContohBanding1((value) => !value)}
+                        onClick={() => setTampilkanSumberContohBanding((current) => current.map((value, itemIndex) => (itemIndex === index ? !value : value)))}
                       >
-                        {tampilkanSumberContohBanding1 ? 'Sembunyikan sumber' : 'Tampilkan sumber'}
+                        {tampilkanSumberContohBanding[index] ? 'Sembunyikan sumber' : 'Tampilkan sumber'}
                       </button>
                     </div>
                     <PanelContohKata
-                      kataAktif={kataBanding1Aktif}
-                      query={contohBandingKata1Query}
-                      bentuk={bentukBandingKata1}
-                      tampilkanSumberContoh={tampilkanSumberContohBanding1}
-                      emptyText="Belum ada contoh untuk kata pertama."
+                      kataAktif={kataBanding}
+                      query={contohBandingQueries[index]}
+                      bentuk={bentukBandingList[index]}
+                      tampilkanSumberContoh={tampilkanSumberContohBanding[index]}
+                      emptyText={`Belum ada contoh untuk kata ${index + 1}.`}
                     />
                   </section>
-                ) : null}
-                {tampilkanPanelContohBanding2 ? (
-                  <section className="alat-panel korpus-leipzig-examples-panel" aria-labelledby="korpus-leipzig-contoh-kata-2-title">
-                    <div className="alat-panel-header alat-panel-header-split">
-                      <h2 id="korpus-leipzig-contoh-kata-2-title" className="alat-panel-title">{`Contoh "${kataBanding2Aktif}"`}</h2>
-                      <button
-                        type="button"
-                        className="alat-link-secondary alat-panel-action-button"
-                        onClick={() => setTampilkanSumberContohBanding2((value) => !value)}
-                      >
-                        {tampilkanSumberContohBanding2 ? 'Sembunyikan sumber' : 'Tampilkan sumber'}
-                      </button>
-                    </div>
-                    <PanelContohKata
-                      kataAktif={kataBanding2Aktif}
-                      query={contohBandingKata2Query}
-                      bentuk={bentukBandingKata2}
-                      tampilkanSumberContoh={tampilkanSumberContohBanding2}
-                      emptyText="Belum ada contoh untuk kata kedua."
-                    />
-                  </section>
-                ) : null}
+                ) : null))}
               </div>
             ) : null}
           </>
@@ -1069,6 +1078,7 @@ export const __private = {
   formatStatKorpus,
   formatKemunculanRingkas,
   formatPersenKemunculan,
+  formatPersenPerbandingan,
   formatPersenKemunculanTanpaSimbol,
   getKelasFrekuensiLabel,
   formatKelasFrekuensiRingkas,

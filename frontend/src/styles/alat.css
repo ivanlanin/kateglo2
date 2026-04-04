@@ -596,6 +596,10 @@
     @apply md:grid-cols-2;
   }
 
+  .korpus-leipzig-form-row-4 {
+    @apply md:grid-cols-4;
+  }
+
   .korpus-leipzig-field {
     @apply flex flex-col gap-2;
   }

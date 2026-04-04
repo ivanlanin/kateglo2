@@ -158,6 +158,7 @@ describe('KorpusLeipzig', () => {
     expect(__private.formatStatKorpus(null)).toBe('Statistik korpus belum tersedia');
     expect(__private.formatKemunculanRingkas(12, { wordTokens: 100 })).toBe('12');
     expect(__private.formatPersenKemunculan(12, { wordTokens: 100 })).toBe('12,0%');
+    expect(__private.formatPersenPerbandingan(12, 22)).toBe('54,5%');
     expect(__private.getKelasFrekuensiLabel(5)).toContain('Menengah');
     expect(__private.adalahGalat404({ response: { status: 404 } })).toBe(true);
     expect(__private.adalahTokenTampil('Indonesia')).toBe(true);
@@ -173,6 +174,7 @@ describe('KorpusLeipzig', () => {
     expect(__private.formatTanggalAman('2024-03-05')).toContain('2024');
     expect(__private.normalisasiMode('Bandingkan')).toBe('bandingkan');
     expect(__private.buildPathAnalisisKorpus({ kata: 'indonesia', korpus: 'ind_news_2024_10K' })).toBe('/alat/analisis-korpus?korpus=ind_news_2024_10K&kata=indonesia');
+    expect(__private.buildPathAnalisisKorpus({ korpus: 'ind_news_2024_10K', kataBanding: ['subjek', 'subyek', 'tema', 'topik'], mode: 'bandingkan' })).toBe('/alat/analisis-korpus?mode=bandingkan&korpus=ind_news_2024_10K&kata1=subjek&kata2=subyek&kata3=tema&kata4=topik');
     expect(__private.hitungRingkasanPerbandingan({ kata: 'subjek', frekuensi: 10, rank: 5 }, { kata: 'subyek', frekuensi: 2, rank: 15 })).toMatchObject({
       selisihFrekuensi: 8,
       selisihRank: 10,
@@ -229,9 +231,15 @@ describe('KorpusLeipzig', () => {
 
     renderPage('/alat/analisis-korpus?mode=bandingkan&korpus=ind_news_2024_10K&kata1=subjek&kata2=subyek');
 
-    expect(await screen.findAllByText('Kata 1')).toHaveLength(2);
-    expect(screen.getAllByText('Kata 2')).toHaveLength(2);
-    expect(screen.getByText('△ Frekuensi')).toBeInTheDocument();
+    expect(await screen.findByLabelText('Kata ke-1 yang ingin dibandingkan')).toHaveValue('subjek');
+    expect(screen.getByLabelText('Kata ke-2 yang ingin dibandingkan')).toHaveValue('subyek');
+    expect(screen.getByLabelText('Kata ke-3 yang ingin dibandingkan')).toHaveValue('');
+    expect(screen.getByLabelText('Kata ke-4 yang ingin dibandingkan')).toHaveValue('');
+    expect((await screen.findByRole('columnheader', { name: 'Kemunculan' })).className).toContain('korpus-leipzig-ranking-col-number');
+    expect(screen.getByRole('columnheader', { name: 'Urutan' }).className).toContain('korpus-leipzig-ranking-col-number');
+    expect(screen.getByRole('columnheader', { name: 'Persentase' }).className).toContain('korpus-leipzig-ranking-col-number');
+    expect(screen.getByRole('cell', { name: '1.' })).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: '2.' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Contoh "subjek"' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Contoh "subyek"' })).toBeInTheDocument();
     expect(screen.getAllByRole('button', { name: 'Tampilkan sumber' })).toHaveLength(2);
@@ -239,10 +247,12 @@ describe('KorpusLeipzig', () => {
     await waitFor(() => {
       expect(mockApi.ambilInfoKataLeipzig).toHaveBeenNthCalledWith(1, 'ind_news_2024_10K', 'subjek');
       expect(mockApi.ambilInfoKataLeipzig).toHaveBeenNthCalledWith(2, 'ind_news_2024_10K', 'subyek');
-      expect(screen.getByText('subjek').closest('article')?.className).toContain('korpus-leipzig-stat-card-winner');
-      expect(screen.getByText('subyek').closest('article')?.className).toContain('korpus-leipzig-stat-card-loser');
-      expect(screen.getByText('subjek').className).toContain('korpus-leipzig-stat-value-word');
-      expect(screen.getByText('subyek').className).toContain('korpus-leipzig-stat-value-word');
+      expect(screen.getAllByRole('button', { name: 'subjek' })).toHaveLength(1);
+      expect(screen.getAllByRole('button', { name: 'subyek' })).toHaveLength(1);
+      expect(screen.getByRole('cell', { name: '12' })).toBeInTheDocument();
+      expect(screen.getByRole('cell', { name: '4' })).toBeInTheDocument();
+      expect(screen.getByRole('cell', { name: '75,0%' })).toBeInTheDocument();
+      expect(screen.getByRole('cell', { name: '25,0%' })).toBeInTheDocument();
     });
   });
 
