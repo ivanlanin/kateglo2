@@ -113,4 +113,22 @@ describe('Artikel publik', () => {
 
     expect(screen.getByLabelText('Sunting artikel di Redaksi')).toHaveAttribute('href', '/redaksi/artikel/17');
   });
+
+  it('menyertakan query pencarian dalam key dan request daftar artikel', () => {
+    mockUseQuery.mockImplementation((options) => {
+      expect(options.queryKey).toEqual(['artikel-daftar', 'bahasa', 'serapan']);
+      options.queryFn();
+      return {
+        data: { data: [] },
+        isLoading: false,
+        isError: false,
+      };
+    });
+
+    render(
+      <MemoryRouter initialEntries={["/artikel?topik=bahasa&q=serapan"]}>
+        <Artikel />
+      </MemoryRouter>
+    );
+  });
 });

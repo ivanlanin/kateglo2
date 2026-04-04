@@ -248,6 +248,7 @@ function formatTitleFromSlug(value = '') {
 
 function normalizeOgSection(value = '') {
   const normalized = normalisasiSlug(value);
+  if (normalized === 'artikel') return normalized;
   if (Object.prototype.hasOwnProperty.call(ogSectionPalette, normalized)) return normalized;
   return 'default';
 }
@@ -304,6 +305,8 @@ function buildOgImagePayload({ section = 'default', slug = '', title = '', conte
           ? 'Tesaurus'
           : sectionKey === 'glosarium'
             ? 'Glosarium'
+            : sectionKey === 'artikel'
+              ? 'Artikel'
             : sectionKey === 'makna'
               ? 'Makna'
               : sectionKey === 'rima'
@@ -323,6 +326,8 @@ function buildOgImagePayload({ section = 'default', slug = '', title = '', conte
           ? 'Tesaurus Bahasa Indonesia'
           : sectionKey === 'glosarium'
             ? 'Glosarium Bahasa Indonesia'
+            : sectionKey === 'artikel'
+              ? 'Artikel Kebahasan'
             : sectionKey === 'makna'
               ? 'Pencarian Makna'
               : sectionKey === 'rima'
@@ -342,6 +347,8 @@ function buildOgImagePayload({ section = 'default', slug = '', title = '', conte
           ? 'Sinonim, antonim, dan relasi kata'
           : sectionKey === 'glosarium'
             ? 'Istilah dan padanan bidang ilmu'
+            : sectionKey === 'artikel'
+              ? 'Artikel bahasa Indonesia, linguistik, dan perkembangan Kateglo'
             : sectionKey === 'makna'
               ? 'Cari kata berdasarkan makna'
               : sectionKey === 'rima'

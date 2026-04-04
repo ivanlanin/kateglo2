@@ -25,6 +25,7 @@ import { ambilMetaFiturInteraktif } from './constants/katalogFitur';
 import { petaItemEjaanBySlug, formatJudulEjaanDariSlug } from './constants/ejaanData';
 import { petaItemGramatikaBySlug, formatJudulGramatikaDariSlug } from './constants/gramatikaData';
 import { stripInlineMarkdown } from './components/tampilan/TeksMarkdownInline';
+import { buildSocialTitle, stripKategloSuffix } from './utils/socialMetaUtils';
 
 function escapeHtml(value = '') {
   return String(value)
@@ -241,38 +242,6 @@ function buildSerializedSsrDataScript(prefetchedData = null) {
   return `<script>window.__KATEGLO_SSR_DATA__ = ${dataJson};</script>`;
 }
 
-function buildSocialTitle(pathname = '/', fallbackTitle = '') {
-  const path = decodeURIComponent(pathname || '/');
-  const fallback = stripKategloSuffix(fallbackTitle) || 'Kateglo';
-
-  const routeToDomainLabel = () => {
-    if (path === '/kamus' || path === '/kamus/' || path.startsWith('/kamus/')) return 'Kamus';
-    if (path === '/tesaurus' || path === '/tesaurus/' || path.startsWith('/tesaurus/')) return 'Tesaurus';
-    if (path === '/glosarium' || path === '/glosarium/' || path.startsWith('/glosarium/')) return 'Glosarium';
-    if (path === '/artikel' || path === '/artikel/' || path.startsWith('/artikel/')) return 'Artikel';
-    if (path === '/makna' || path === '/makna/' || path.startsWith('/makna/')) return 'Makna';
-    if (path === '/rima' || path === '/rima/' || path.startsWith('/rima/')) return 'Rima';
-    if (path === '/gramatika' || path === '/gramatika/' || path.startsWith('/gramatika/')) return 'Gramatika';
-    if (path === '/ejaan' || path === '/ejaan/' || path.startsWith('/ejaan/')) return 'Ejaan';
-    if (path === '/alat' || path === '/alat/' || path.startsWith('/alat/')) return 'Alat';
-    if (path === '/gim' || path === '/gim/' || path.startsWith('/gim/')) return 'Gim';
-    return '';
-  };
-
-  const domainLabel = routeToDomainLabel();
-  if (!domainLabel) return `${fallback} — Kateglo`;
-
-  if (!fallback || fallback.toLowerCase() === domainLabel.toLowerCase()) {
-    return `${domainLabel} — Kateglo`;
-  }
-
-  return `${fallback} — ${domainLabel} — Kateglo`;
-}
-
-function stripKategloSuffix(value = '') {
-  return String(value || '').replace(/\s+[—-]\s+Kateglo$/, '').trim();
-}
-
 function buildOgQueryString(params = {}) {
   const searchParams = new URLSearchParams();
 
@@ -322,6 +291,8 @@ function buildSocialImageUrl(pathname = '/', siteBaseUrl = 'https://kateglo.org'
   const baseUrl = stripTrailingSlash(siteBaseUrl || 'https://kateglo.org');
   const meta = buildMetaForPath(path, baseUrl, prefetchedData);
   const genericConfig = buildGenericSocialContext(path);
+  const artikelTopikAktif = String(prefetchedData?.topik || '').trim();
+  const artikelQueryAktif = String(prefetchedData?.q || '').trim();
   const defaultImageUrl = `${baseUrl}/og/default.png${buildOgQueryString({
     title: stripKategloSuffix(meta.title),
     context: meta.description,
@@ -358,6 +329,16 @@ function buildSocialImageUrl(pathname = '/', siteBaseUrl = 'https://kateglo.org'
   if (path === '/gramatika' || path === '/gramatika/') {
     return `${baseUrl}/og/gramatika.png${buildOgQueryString({
       title: 'Panduan Tata Bahasa Indonesia',
+      context: meta.description,
+    })}`;
+  }
+
+  if (
+    (path === '/artikel' || path === '/artikel/')
+    && (!prefetchedData || (!artikelTopikAktif && !artikelQueryAktif))
+  ) {
+    return `${baseUrl}/og/artikel.png${buildOgQueryString({
+      title: 'Artikel Kebahasan',
       context: meta.description,
     })}`;
   }

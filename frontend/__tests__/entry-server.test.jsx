@@ -365,6 +365,7 @@ describe('entry-server', () => {
     expect(__private.buildSocialTitle('/rima/cari/air', 'Rima — Kateglo')).toBe('Rima — Kateglo');
     expect(__private.buildSocialTitle('/alat/penghitung-huruf', 'Penghitung Huruf — Kateglo')).toBe('Penghitung Huruf — Alat — Kateglo');
     expect(__private.buildSocialTitle('/gim/kuis-kata', 'Kuis Kata — Kateglo')).toBe('Kuis Kata — Gim — Kateglo');
+    expect(__private.buildSocialTitle('/artikel', 'Artikel — Kateglo')).toBe('Artikel — Kateglo');
     expect(__private.buildSocialTitle('/artikel/efektivitas-atau-efektifitas', 'Efektivitas atau efektifitas? — Kateglo')).toBe('Efektivitas atau efektifitas? — Artikel — Kateglo');
     expect(__private.stripKategloSuffix('Preposisi — Kateglo')).toBe('Preposisi');
     expect(__private.buildOgQueryString({})).toBe('');
@@ -414,6 +415,13 @@ describe('entry-server', () => {
       type: 'glosarium-detail',
       persis: [{ id: 1, asing: 'accounting', indonesia: 'akuntansi' }],
     }, 'accounting — Kateglo')).toBe('https://kateglo.org/og/glosarium.png?title=accounting&context=Istilah+%22accounting%22+dalam+glosarium+bahasa+Indonesia+%E2%80%94+1+padanan+Indonesia+ditemukan.');
+    expect(__private.buildSocialImageUrl('/artikel', 'https://kateglo.org', {
+      type: 'artikel-daftar',
+      topik: '',
+      q: '',
+      data: [],
+      total: 0,
+    }, 'Artikel — Kateglo')).toBe('https://kateglo.org/og/artikel.png?title=Artikel+Kebahasan&context=Artikel-artikel+seputar+bahasa+Indonesia%2C+linguistik%2C+dan+perkembangan+Kateglo.');
     expect(__private.buildSocialImageUrl('/artikel/efektivitas-atau-efektifitas', 'https://kateglo.org', {
       type: 'artikel-detail',
       slug: 'efektivitas-atau-efektifitas',

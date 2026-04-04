@@ -21,7 +21,7 @@ import {
 
 const mockUseQuery = vi.fn();
 let mockParams = { indeks: 'kata' };
-let mockLocation = { state: null };
+let mockLocation = { pathname: '/kamus/detail/kata', state: null };
 const mockUseAuth = vi.fn(() => ({
   isAuthenticated: false,
   isLoading: false,
@@ -68,7 +68,7 @@ describe('KamusDetail', () => {
       loginDenganGoogle: vi.fn(),
     });
     mockParams = { indeks: 'kata' };
-    mockLocation = { state: null };
+    mockLocation = { pathname: '/kamus/detail/kata', state: null };
   });
 
   it('menampilkan loading state', () => {
@@ -217,6 +217,7 @@ describe('KamusDetail', () => {
     expect(document.head.querySelector('meta[property="og:description"]')).not.toBeNull();
     expect(document.head.querySelector('meta[name="twitter:title"]')).not.toBeNull();
     expect(document.head.querySelector('meta[name="twitter:description"]')).not.toBeNull();
+    expect(document.head.querySelector('meta[property="og:title"]')?.getAttribute('content')).toContain('Kamus — Kateglo');
   });
 
   it('upsertMetaTag membuat tag baru saat belum ada', () => {

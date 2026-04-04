@@ -24,6 +24,7 @@ import {
 } from '../../../utils/formatUtils';
 import { buatPathDetailKamus, normalisasiIndeksKamus } from '../../../utils/paramUtils';
 import { buildMetaDetailKamus } from '../../../utils/metaUtils';
+import { buildSocialTitle } from '../../../utils/socialMetaUtils';
 import useNavigasiMemuat from '../../../hooks/useNavigasiMemuat';
 
 const GLOSARIUM_LIMIT = 20;
@@ -391,14 +392,15 @@ function KamusDetail() {
   useEffect(() => {
     const metaDetail = buildMetaDetailKamus(indeks, data || null);
     const judulDokumen = `${metaDetail.judul} — Kateglo`;
+    const judulSosial = buildSocialTitle(location.pathname || '/', judulDokumen);
     document.title = judulDokumen;
 
     upsertMetaTag({ name: 'description', content: metaDetail.deskripsi });
-    upsertMetaTag({ property: 'og:title', content: judulDokumen });
+    upsertMetaTag({ property: 'og:title', content: judulSosial });
     upsertMetaTag({ property: 'og:description', content: metaDetail.deskripsi });
-    upsertMetaTag({ name: 'twitter:title', content: judulDokumen });
+    upsertMetaTag({ name: 'twitter:title', content: judulSosial });
     upsertMetaTag({ name: 'twitter:description', content: metaDetail.deskripsi });
-  }, [indeks, data]);
+  }, [indeks, data, location.pathname]);
 
   const petaKelasKata = buildLabelMap(kategoriKamus?.['kelas-kata'] || kategoriKamus?.kelas_kata || []);
   const petaRagam = buildLabelMap(kategoriKamus?.ragam || []);

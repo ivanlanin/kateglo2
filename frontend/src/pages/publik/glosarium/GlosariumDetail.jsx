@@ -3,7 +3,7 @@
  */
 
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ambilDetailGlosarium } from '../../../api/apiPublik';
 import HalamanPublik from '../../../components/tampilan/HalamanPublik';
@@ -14,6 +14,7 @@ import { EmptyResultText, QueryFeedback } from '../../../components/status/Statu
 import { buatPathDetailKamus, buatSlug, normalisasiIndeksKamus } from '../../../utils/paramUtils';
 import { renderEntriGlosariumTertaut } from '../../../utils/formatUtils';
 import { buildMetaDetailGlosarium } from '../../../utils/metaUtils';
+import { buildSocialTitle } from '../../../utils/socialMetaUtils';
 import useNavigasiMemuat from '../../../hooks/useNavigasiMemuat';
 import { useAuthOptional } from '../../../context/authContext';
 
@@ -185,6 +186,7 @@ function sortAlirEntriItems(items = [], { prioritizeIndonesia = false, sortByBid
 }
 
 function GlosariumDetail() {
+  const location = useLocation();
   const { asing } = useParams();
   const auth = useAuthOptional();
   const adalahAdmin = Boolean(auth?.adalahAdmin);
@@ -224,13 +226,14 @@ function GlosariumDetail() {
 
   useEffect(() => {
     const judul = `${meta.judul} — Kateglo`;
+    const judulSosial = buildSocialTitle(location.pathname || '/', judul);
     document.title = judul;
     upsertMetaTag({ name: 'description', content: meta.deskripsi });
-    upsertMetaTag({ property: 'og:title', content: judul });
+    upsertMetaTag({ property: 'og:title', content: judulSosial });
     upsertMetaTag({ property: 'og:description', content: meta.deskripsi });
-    upsertMetaTag({ name: 'twitter:title', content: judul });
+    upsertMetaTag({ name: 'twitter:title', content: judulSosial });
     upsertMetaTag({ name: 'twitter:description', content: meta.deskripsi });
-  }, [meta.judul, meta.deskripsi]);
+  }, [location.pathname, meta.judul, meta.deskripsi]);
 
   const handlePrevMengandung = () => {
     if (!mengandungPage.prevCursor) return;

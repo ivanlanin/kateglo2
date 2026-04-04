@@ -31,6 +31,7 @@ vi.mock('../../../../src/api/apiPublik', () => ({
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   useParams: () => mockParams,
+  useLocation: () => ({ pathname: '/glosarium' }),
 }));
 
 vi.mock('@tanstack/react-query', () => ({

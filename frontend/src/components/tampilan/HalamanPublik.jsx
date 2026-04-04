@@ -3,6 +3,8 @@
  */
 
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { buildSocialTitle } from '../../utils/socialMetaUtils';
 
 const DEFAULT_TITLE = 'Kateglo';
 const DEFAULT_DESCRIPTION = 'Kamus, Tesaurus, dan Glosarium Bahasa Indonesia';
@@ -22,18 +24,25 @@ function upsertMetaTag({ name, property, content }) {
 }
 
 function HalamanPublik({ judul, judulNoda, deskripsi, tampilkanJudul = true, children }) {
+  const location = useLocation();
+
   useEffect(() => {
     document.title = judul
       ? `${judul} — Kateglo`
       : DEFAULT_TITLE;
 
     const finalDescription = deskripsi || DEFAULT_DESCRIPTION;
+    const socialTitle = buildSocialTitle(
+      `${location.pathname || '/'}${location.search || ''}`,
+      document.title,
+    );
+
     upsertMetaTag({ name: 'description', content: finalDescription });
-    upsertMetaTag({ property: 'og:title', content: document.title });
+    upsertMetaTag({ property: 'og:title', content: socialTitle });
     upsertMetaTag({ property: 'og:description', content: finalDescription });
-    upsertMetaTag({ name: 'twitter:title', content: document.title });
+    upsertMetaTag({ name: 'twitter:title', content: socialTitle });
     upsertMetaTag({ name: 'twitter:description', content: finalDescription });
-  }, [judul, deskripsi]);
+  }, [judul, deskripsi, location.pathname, location.search]);
 
   return (
     <div className="halaman-dasar-container">

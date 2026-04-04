@@ -149,6 +149,23 @@ function renderEtimologiKataHariIni(kataHariIni = null) {
   );
 }
 
+import { buildSocialTitle } from '../../utils/socialMetaUtils';
+
+const defaultDescription = 'Kamus, Tesaurus, dan Glosarium Bahasa Indonesia';
+
+function upsertMetaTag({ name, property, content }) {
+  const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
+  let tag = document.head.querySelector(selector);
+
+  if (!tag) {
+    tag = document.createElement('meta');
+    if (name) tag.setAttribute('name', name);
+    if (property) tag.setAttribute('property', property);
+    document.head.appendChild(tag);
+  }
+
+  tag.setAttribute('content', content);
+}
 function Beranda() {
   const [dataPopuler, setDataPopuler] = useState(null);
   const [kataHariIni, setKataHariIni] = useState(null);
@@ -156,6 +173,11 @@ function Beranda() {
 
   useEffect(() => {
     document.title = 'Kateglo';
+    upsertMetaTag({ name: 'description', content: defaultDescription });
+    upsertMetaTag({ property: 'og:title', content: buildSocialTitle('/', 'Kateglo') });
+    upsertMetaTag({ property: 'og:description', content: defaultDescription });
+    upsertMetaTag({ name: 'twitter:title', content: buildSocialTitle('/', 'Kateglo') });
+    upsertMetaTag({ name: 'twitter:description', content: defaultDescription });
   }, []);
 
   useEffect(() => {

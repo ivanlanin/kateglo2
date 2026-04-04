@@ -539,9 +539,10 @@ export async function ambilTopikArtikel() {
   return response.data;
 }
 
-export async function ambilDaftarArtikel({ topik, cursor, direction, lastPage, limit = 20 } = {}) {
+export async function ambilDaftarArtikel({ topik, q, cursor, direction, lastPage, limit = 20 } = {}) {
   const params = buildCursorParams({ limit, cursor, direction, lastPage });
   if (topik) params.topik = topik;
+  if (q) params.q = q;
   const response = await klien.get('/api/publik/artikel', { params });
   return response.data;
 }

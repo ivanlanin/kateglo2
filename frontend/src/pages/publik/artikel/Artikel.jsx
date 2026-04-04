@@ -77,18 +77,22 @@ export function Artikel() {
   }, [qAktif, ssrPrefetch, topikAktif]);
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['artikel-daftar', topikAktif],
-    queryFn: () => ambilDaftarArtikel({ topik: topikAktif || undefined, limit: 30 }),
+    queryKey: ['artikel-daftar', topikAktif, qAktif],
+    queryFn: () => ambilDaftarArtikel({ topik: topikAktif || undefined, q: qAktif || undefined, limit: 30 }),
     initialData,
     staleTime: 60 * 1000,
   });
 
   const artikelList = data?.data || [];
+  const judulHalaman = topikAktif ? `Artikel Topik ${topikAktif}` : 'Artikel';
+  const deskripsiHalaman = topikAktif
+    ? `Artikel-artikel Kateglo dalam topik ${topikAktif} seputar bahasa Indonesia, linguistik, dan perkembangan Kateglo.`
+    : 'Artikel-artikel seputar bahasa Indonesia, linguistik, dan perkembangan Kateglo.';
 
   return (
     <HalamanPublik
-      judul="Artikel"
-      deskripsi="Artikel-artikel seputar bahasa Indonesia, linguistik, dan perkembangan Kateglo."
+      judul={judulHalaman}
+      deskripsi={deskripsiHalaman}
     >
       <div className="alat-page">
         <QueryFeedback

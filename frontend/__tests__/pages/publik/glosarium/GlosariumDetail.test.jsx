@@ -8,6 +8,7 @@ import { ambilDetailGlosarium } from '../../../../src/api/apiPublik';
 const mockUseQuery = vi.fn();
 let mockParams = { asing: 'zero%20sum' };
 let mockAuth = { adalahAdmin: false };
+let mockLocation = { pathname: '/glosarium/detail/zero%20sum' };
 let queryState = {
   data: undefined,
   isLoading: false,
@@ -27,6 +28,7 @@ vi.mock('@tanstack/react-query', () => ({
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   useParams: () => mockParams,
+  useLocation: () => mockLocation,
 }));
 
 vi.mock('../../../../src/context/authContext', () => ({
@@ -38,6 +40,7 @@ describe('GlosariumDetail', () => {
     mockUseQuery.mockReset();
     ambilDetailGlosarium.mockClear();
     mockParams = { asing: 'zero%20sum' };
+    mockLocation = { pathname: '/glosarium/detail/zero%20sum' };
     mockAuth = { adalahAdmin: false };
     queryState = {
       data: undefined,
@@ -357,6 +360,7 @@ describe('GlosariumDetail', () => {
     expect(document.head.querySelector('meta[name="description"]')?.getAttribute('content')).toContain('zero sum');
 
     mockParams = { asing: 'new%20term' };
+    mockLocation = { pathname: '/glosarium/detail/new%20term' };
     queryState = {
       ...queryState,
       data: { persis: [], mengandung: [], mirip: [] },
@@ -365,7 +369,7 @@ describe('GlosariumDetail', () => {
     rerender(<GlosariumDetail />);
 
     expect(document.title).toContain('new term — Kateglo');
-    expect(document.head.querySelector('meta[property="og:title"]')?.getAttribute('content')).toContain('new term — Kateglo');
+    expect(document.head.querySelector('meta[property="og:title"]')?.getAttribute('content')).toContain('new term — Glosarium — Kateglo');
     expect(document.head.querySelector('meta[name="twitter:description"]')?.getAttribute('content')).toContain('new term');
   });
 

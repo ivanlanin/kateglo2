@@ -409,6 +409,12 @@ describe('layananSeoPublik private helpers', () => {
       sectionLabel: 'Glosarium',
       context: 'Istilah dan padanan bidang ilmu',
     });
+    expect(buildOgImagePayload({ section: 'artikel' })).toMatchObject({
+      section: 'artikel',
+      sectionLabel: 'Artikel',
+      title: 'Artikel Kebahasan',
+      context: 'Artikel bahasa Indonesia, linguistik, dan perkembangan Kateglo',
+    });
     expect(buildOgImagePayload({ section: 'makna' })).toMatchObject({
       section: 'makna',
       sectionLabel: 'Makna',
