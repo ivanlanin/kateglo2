@@ -61,7 +61,7 @@ class ModelArtikel {
         p.nama AS penulis,
         p.nama AS penulis_nama,
         COALESCE(
-          (SELECT array_agg(at2.topik ORDER BY at2.topik) FROM artikel_topik at2 WHERE at2.artikel_id = a.id),
+          (SELECT array_agg(at2.topik ORDER BY at2.ctid) FROM artikel_topik at2 WHERE at2.artikel_id = a.id),
           '{}'
         ) AS topik
       FROM artikel a
@@ -91,7 +91,7 @@ class ModelArtikel {
         pn.nama AS penyunting,
         pn.nama AS penyunting_nama,
         COALESCE(
-          (SELECT array_agg(at2.topik ORDER BY at2.topik) FROM artikel_topik at2 WHERE at2.artikel_id = a.id),
+          (SELECT array_agg(at2.topik ORDER BY at2.ctid) FROM artikel_topik at2 WHERE at2.artikel_id = a.id),
           '{}'
         ) AS topik
       FROM artikel a
@@ -145,7 +145,7 @@ class ModelArtikel {
         p.id AS penulis_id, p.nama AS penulis, p.nama AS penulis_nama,
         pn.id AS penyunting_id, pn.nama AS penyunting, pn.nama AS penyunting_nama,
         COALESCE(
-          (SELECT array_agg(at2.topik ORDER BY at2.topik) FROM artikel_topik at2 WHERE at2.artikel_id = a.id),
+          (SELECT array_agg(at2.topik ORDER BY at2.ctid) FROM artikel_topik at2 WHERE at2.artikel_id = a.id),
           '{}'
         ) AS topik
       FROM artikel a
@@ -174,7 +174,7 @@ class ModelArtikel {
         p.id AS penulis_id, p.nama AS penulis, p.nama AS penulis_nama,
         pn.id AS penyunting_id, pn.nama AS penyunting, pn.nama AS penyunting_nama,
         COALESCE(
-          (SELECT array_agg(at2.topik ORDER BY at2.topik) FROM artikel_topik at2 WHERE at2.artikel_id = a.id),
+          (SELECT array_agg(at2.topik ORDER BY at2.ctid) FROM artikel_topik at2 WHERE at2.artikel_id = a.id),
           '{}'
         ) AS topik
       FROM artikel a

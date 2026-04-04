@@ -18,6 +18,7 @@ export const menuItems = [
   {
     label: 'Referensi',
     submenu: [
+      { path: '/artikel', label: 'Artikel' },
       { path: '/gramatika', label: 'Gramatika' },
       { path: '/ejaan', label: 'Ejaan' },
     ],

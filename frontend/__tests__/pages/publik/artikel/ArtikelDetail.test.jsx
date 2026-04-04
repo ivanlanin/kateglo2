@@ -1,7 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import { ArtikelDetail } from '../../../../src/pages/publik/artikel/ArtikelDetail';
+import { ArtikelDetail, __private } from '../../../../src/pages/publik/artikel/ArtikelDetail';
 
 const mockUseQuery = vi.fn();
 let mockParams = { slug: 'asal-kata-merdeka' };
@@ -51,7 +51,7 @@ describe('ArtikelDetail publik', () => {
               penyunting_nama: 'Editor Kateglo',
               diterbitkan_pada: '2026-04-04T10:45:00',
               cuplikan: 'Cuplikan artikel.',
-              konten: '# Huruf Miring\n\nIsi artikel.',
+              konten: '# Huruf Miring\n\nIsi artikel.\n\nLihat [halaman Gramatika](/gramatika/inversi) dan [sumber luar](https://contoh.org).',
             },
           },
           isLoading: false,
@@ -95,6 +95,8 @@ describe('ArtikelDetail publik', () => {
     expect(screen.getByText('Kata', { selector: 'em' })).toBeInTheDocument();
     expect(screen.queryByText('← Kembali ke semua artikel')).not.toBeInTheDocument();
     expect(screen.getByText('Isi artikel.')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'halaman Gramatika' })).toHaveAttribute('href', '/gramatika/inversi');
+    expect(screen.getByRole('link', { name: 'sumber luar' })).toHaveAttribute('target', '_blank');
     expect(screen.queryByLabelText('Sunting artikel di Redaksi')).not.toBeInTheDocument();
 
     const sidebar = screen.getByRole('complementary');
@@ -148,5 +150,10 @@ describe('ArtikelDetail publik', () => {
     );
 
     expect(screen.getByLabelText('Sunting artikel di Redaksi')).toHaveAttribute('href', '/redaksi/artikel/21');
+  });
+
+  it('helper private membedakan tautan internal artikel', () => {
+    expect(__private.isArtikelInternalHref('/gramatika/inversi')).toBe(true);
+    expect(__private.isArtikelInternalHref('https://contoh.org')).toBe(false);
   });
 });

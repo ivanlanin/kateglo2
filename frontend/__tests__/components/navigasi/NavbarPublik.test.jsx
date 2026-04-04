@@ -156,6 +156,7 @@ describe('NavbarPublik', () => {
     render(<NavbarPublik />);
     expect(screen.getByRole('link', { name: 'Kamus' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Glosarium' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Artikel' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Gramatika' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Ejaan' })).toBeInTheDocument();
   });

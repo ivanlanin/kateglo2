@@ -254,6 +254,30 @@ describe('entry-server', () => {
     expect(kuisKata.title).toBe('Kuis Kata — Kateglo');
     expect(kuisKata.description).toContain('pilihan ganda');
 
+    const artikelIndex = __private.buildMetaForPath('/artikel', site);
+    expect(artikelIndex.title).toBe('Artikel — Kateglo');
+    expect(artikelIndex.description).toContain('linguistik');
+
+    const artikelDetail = __private.buildMetaForPath('/artikel/efektivitas-atau-efektifitas', site, {
+      type: 'artikel-detail',
+      slug: 'efektivitas-atau-efektifitas',
+      notFound: false,
+      artikel: {
+        judul: '*Efektivitas* atau *efektifitas*?',
+        konten: 'Yang benar efektivitas. Kata itu diserap langsung dari bahasa Belanda.',
+      },
+    });
+    expect(artikelDetail.title).toBe('Efektivitas atau efektifitas? — Kateglo');
+    expect(artikelDetail.description).toContain('Yang benar efektivitas');
+
+    const artikelTidakAda = __private.buildMetaForPath('/artikel/tidak-ada', site, {
+      type: 'artikel-detail',
+      slug: 'tidak-ada',
+      notFound: true,
+      artikel: null,
+    });
+    expect(artikelTidakAda.title).toBe('Artikel Tidak Ditemukan — Kateglo');
+
     expect(__private.buildMetaForPath('/privasi', site).title).toBe('Kebijakan Privasi — Kateglo');
     expect(__private.buildMetaForPath('/privasi', site).canonicalUrl).toBe('https://kateglo.org/privasi');
     expect(__private.buildMetaForPath('/kebijakan-privasi', site).canonicalUrl).toBe('https://kateglo.org/privasi');
@@ -341,6 +365,7 @@ describe('entry-server', () => {
     expect(__private.buildSocialTitle('/rima/cari/air', 'Rima — Kateglo')).toBe('Rima — Kateglo');
     expect(__private.buildSocialTitle('/alat/penghitung-huruf', 'Penghitung Huruf — Kateglo')).toBe('Penghitung Huruf — Alat — Kateglo');
     expect(__private.buildSocialTitle('/gim/kuis-kata', 'Kuis Kata — Kateglo')).toBe('Kuis Kata — Gim — Kateglo');
+    expect(__private.buildSocialTitle('/artikel/efektivitas-atau-efektifitas', 'Efektivitas atau efektifitas? — Kateglo')).toBe('Efektivitas atau efektifitas? — Artikel — Kateglo');
     expect(__private.stripKategloSuffix('Preposisi — Kateglo')).toBe('Preposisi');
     expect(__private.buildOgQueryString({})).toBe('');
     expect(__private.buildOgQueryString({ title: 'Huruf Kapital', context: 'Penggunaan Huruf' })).toBe('?title=Huruf+Kapital&context=Penggunaan+Huruf');
@@ -358,6 +383,8 @@ describe('entry-server', () => {
     expect(__private.buildGenericSocialContext('/glosarium/bidang/biologi')).toEqual({ section: 'glosarium', context: 'Glosarium per Bidang' });
     expect(__private.buildGenericSocialContext('/glosarium')).toEqual({ section: 'glosarium', context: 'Istilah dan Padanan Bidang Ilmu' });
     expect(__private.buildGenericSocialContext('/glosarium/sumber/pusba')).toEqual({ section: 'glosarium', context: 'Glosarium per Sumber' });
+    expect(__private.buildGenericSocialContext('/artikel')).toEqual({ section: 'artikel', context: 'Artikel Bahasa Indonesia' });
+    expect(__private.buildGenericSocialContext('/artikel/efektivitas-atau-efektifitas')).toEqual({ section: 'artikel', context: 'Artikel Bahasa Indonesia' });
     expect(__private.buildGenericSocialContext('/alat')).toEqual({ section: 'alat', context: 'Perangkat Bahasa Indonesia' });
     expect(__private.buildGenericSocialContext('/alat/penghitung-huruf')).toEqual({ section: 'alat', context: 'Alat Bahasa Indonesia' });
     expect(__private.buildGenericSocialContext('/alat/analisis-korpus')).toEqual({ section: 'alat', context: 'Alat Bahasa Indonesia' });
@@ -387,6 +414,15 @@ describe('entry-server', () => {
       type: 'glosarium-detail',
       persis: [{ id: 1, asing: 'accounting', indonesia: 'akuntansi' }],
     }, 'accounting — Kateglo')).toBe('https://kateglo.org/og/glosarium.png?title=accounting&context=Istilah+%22accounting%22+dalam+glosarium+bahasa+Indonesia+%E2%80%94+1+padanan+Indonesia+ditemukan.');
+    expect(__private.buildSocialImageUrl('/artikel/efektivitas-atau-efektifitas', 'https://kateglo.org', {
+      type: 'artikel-detail',
+      slug: 'efektivitas-atau-efektifitas',
+      notFound: false,
+      artikel: {
+        judul: '*Efektivitas* atau *efektifitas*?',
+        konten: 'Yang benar efektivitas. Kata itu diserap langsung dari bahasa Belanda.',
+      },
+    }, 'Efektivitas atau efektifitas? — Kateglo')).toBe('https://kateglo.org/og/artikel.png?title=Efektivitas+atau+efektifitas%3F&context=Yang+benar+efektivitas.+Kata+itu+diserap+langsung+dari+bahasa+Belanda.');
     expect(__private.buildSocialImageUrl('/random', 'https://kateglo.org', null, 'Kamus — Kateglo')).toBe('https://kateglo.org/og/default.png?title=Kateglo&context=Kamus%2C+Tesaurus%2C+dan+Glosarium+Bahasa+Indonesia');
     expect(__private.buildSocialImageUrl('/ejaan/slug-tidak-ada', 'https://kateglo.org', {
       type: 'static-markdown',
@@ -409,7 +445,36 @@ describe('entry-server', () => {
     expect(__private.buildSerializedSsrDataScript({ html: '<script>' })).toContain('\\u003cscript\\u003e');
     expect(__private.resolveSsrStatusCode()).toBe(200);
     expect(__private.resolveSsrStatusCode({ type: 'static-markdown', notFound: true })).toBe(404);
+    expect(__private.resolveSsrStatusCode({ type: 'artikel-detail', notFound: true })).toBe(404);
     expect(__private.shouldSkipSsr('/redaksi')).toBe(true);
+  });
+
+  it('render menghasilkan meta SSR artikel dan status 404 untuk artikel yang tidak ditemukan', async () => {
+    const hasilDetail = await render('/artikel/efektivitas-atau-efektifitas', {
+      type: 'artikel-detail',
+      slug: 'efektivitas-atau-efektifitas',
+      notFound: false,
+      artikel: {
+        id: 1,
+        slug: 'efektivitas-atau-efektifitas',
+        judul: '*Efektivitas* atau *efektifitas*?',
+        konten: 'Yang benar efektivitas. Kata itu diserap langsung dari bahasa Belanda.',
+      },
+      artikelLain: [],
+    });
+
+    const hasilTidakAda = await render('/artikel/tidak-ada', {
+      type: 'artikel-detail',
+      slug: 'tidak-ada',
+      notFound: true,
+      artikel: null,
+      artikelLain: [],
+    });
+
+    expect(hasilDetail.headTags).toContain('Efektivitas atau efektifitas? — Kateglo');
+    expect(hasilDetail.headTags).toContain('https://kateglo.org/og/artikel.png?title=Efektivitas+atau+efektifitas%3F&amp;context=Yang+benar+efektivitas.+Kata+itu+diserap+langsung+dari+bahasa+Belanda.');
+    expect(hasilTidakAda.statusCode).toBe(404);
+    expect(hasilTidakAda.headTags).toContain('Artikel Tidak Ditemukan');
   });
 
   it('render melewati SSR untuk route redaksi agar hydrasi client yang mengelola auth', async () => {

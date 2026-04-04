@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import ArtikelAdmin from '../../../../src/pages/redaksi/artikel/ArtikelAdmin';
+import ArtikelAdmin, { __private } from '../../../../src/pages/redaksi/artikel/ArtikelAdmin';
 
 const mockNavigate = vi.fn();
 let mockParams = {};
@@ -18,6 +18,11 @@ vi.mock('react-router-dom', async () => {
 
 vi.mock('@tiptap/starter-kit', () => ({ default: {} }));
 vi.mock('@tiptap/extension-image', () => ({ default: {} }));
+vi.mock('@tiptap/extension-link', () => ({
+  default: {
+    configure: vi.fn((options) => ({ options })),
+  },
+}));
 vi.mock('tiptap-markdown', () => ({
   Markdown: {
     configure: vi.fn(() => ({})),
@@ -25,6 +30,10 @@ vi.mock('tiptap-markdown', () => ({
 }));
 
 vi.mock('@tiptap/react', () => {
+  let selectionEmpty = false;
+  let currentLinkHref = '';
+  let insertedContent = null;
+
   const editor = {
     chain: () => ({
       focus: () => ({
@@ -36,9 +45,34 @@ vi.mock('@tiptap/react', () => {
         toggleBlockquote: () => ({ run: vi.fn() }),
         toggleCodeBlock: () => ({ run: vi.fn() }),
         setHorizontalRule: () => ({ run: vi.fn() }),
+        extendMarkRange: () => ({
+          setLink: ({ href }) => ({
+            run: () => {
+              currentLinkHref = href;
+            },
+          }),
+          unsetLink: () => ({
+            run: () => {
+              currentLinkHref = '';
+            },
+          }),
+        }),
+        insertContent: (value) => ({
+          run: () => {
+            insertedContent = value;
+          },
+        }),
       }),
     }),
-    isActive: () => false,
+    isActive: (name) => name === 'link' && Boolean(currentLinkHref),
+    getAttributes: () => ({ href: currentLinkHref }),
+    state: {
+      selection: {
+        get empty() {
+          return selectionEmpty;
+        },
+      },
+    },
     commands: {
       setContent: (value) => {
         editorValue = value || '';
@@ -53,6 +87,19 @@ vi.mock('@tiptap/react', () => {
   };
 
   return {
+    __editorMock: {
+      setSelectionEmpty(value) {
+        selectionEmpty = Boolean(value);
+      },
+      getInsertedContent() {
+        return insertedContent;
+      },
+      reset() {
+        selectionEmpty = false;
+        currentLinkHref = '';
+        insertedContent = null;
+      },
+    },
     useEditor: ({ content, onUpdate }) => {
       editorValue = content || '';
       editor.__onUpdate = onUpdate;
@@ -78,6 +125,7 @@ const mutateSimpan = vi.fn();
 const mutateHapus = vi.fn();
 const mutateTerbitkan = vi.fn();
 const mutateUnggah = vi.fn();
+const promptMock = vi.fn();
 
 vi.mock('../../../../src/api/apiAdmin', () => ({
   useDaftarArtikelAdmin: (...args) => mockUseDaftarArtikelAdmin(...args),
@@ -167,6 +215,7 @@ describe('ArtikelAdmin', () => {
     mockParams = {};
     editorValue = '';
     global.confirm = vi.fn(() => true);
+    global.prompt = promptMock;
     mockUseDaftarArtikelAdmin.mockReturnValue({
       isLoading: false,
       isError: false,
@@ -280,5 +329,84 @@ describe('ArtikelAdmin', () => {
 
     const panggilanTerakhir = mockUseDaftarArtikelAdmin.mock.calls.at(-1)?.[0] || {};
     expect(panggilanTerakhir.status).toBe('draf');
+  });
+
+  it('menyamakan tanggal terbit daftar dan formulir saat backend mengirim ISO UTC', () => {
+    mockParams = { id: '1' };
+    mockUseDaftarArtikelAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        total: 1,
+        data: [{
+          id: 1,
+          judul: 'Efektivitas atau efektifitas?',
+          slug: 'efektivitas-atau-efektifitas',
+          penulis_nama: 'Ivan Lanin',
+          topik: ['kata baku'],
+          diterbitkan: true,
+          diterbitkan_pada: '2026-04-04T23:44:00.000Z',
+        }],
+      },
+    });
+    mockUseDetailArtikelAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          judul: 'Efektivitas atau efektifitas?',
+          slug: 'efektivitas-atau-efektifitas',
+          konten: 'Isi artikel.',
+          penulis_id: 7,
+          penyunting_id: null,
+          topik: ['kata baku'],
+          diterbitkan: true,
+          diterbitkan_pada: '2026-04-04T23:44:00.000Z',
+        },
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <ArtikelAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('04 Apr 2026 23.44')).toBeInTheDocument();
+    expect(screen.getByLabelText('Terbit')).toHaveValue('2026-04-04T23:44');
+  });
+
+  it('helper private menormalkan tautan artikel', () => {
+    expect(__private.isInternalArticleHref('/gramatika/inversi')).toBe(true);
+    expect(__private.isInternalArticleHref('https://kateglo.org')).toBe(false);
+    expect(__private.normalizeArtikelHref(' contoh.org/halaman ')).toBe('https://contoh.org/halaman');
+    expect(__private.normalizeArtikelHref('/gramatika/inversi')).toBe('/gramatika/inversi');
+  });
+
+  it('menyisipkan tautan internal dari toolbar editor saat tidak ada seleksi', async () => {
+    const { __editorMock } = await import('@tiptap/react');
+    __editorMock.reset();
+    __editorMock.setSelectionEmpty(true);
+    promptMock
+      .mockReturnValueOnce('/gramatika/inversi')
+      .mockReturnValueOnce('halaman Gramatika');
+
+    render(
+      <MemoryRouter>
+        <ArtikelAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    fireEvent.click(screen.getByRole('button', { name: 'Link' }));
+
+    expect(promptMock).toHaveBeenNthCalledWith(1, 'Masukkan URL tautan. Gunakan /... untuk tautan internal.', '');
+    expect(promptMock).toHaveBeenNthCalledWith(2, 'Masukkan teks tautan.', '');
+    expect(__editorMock.getInsertedContent()).toEqual({
+      type: 'text',
+      text: 'halaman Gramatika',
+      marks: [{ type: 'link', attrs: { href: '/gramatika/inversi' } }],
+    });
   });
 });

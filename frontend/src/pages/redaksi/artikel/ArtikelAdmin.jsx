@@ -7,6 +7,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
+import LinkExtension from '@tiptap/extension-link';
 import { Markdown } from 'tiptap-markdown';
 import {
   useDaftarArtikelAdmin,
@@ -33,7 +34,7 @@ import {
 } from '../../../components/formulir/FormulirAdmin';
 import usePencarianAdmin from '../../../hooks/usePencarianAdmin';
 import { getApiErrorMessage, potongTeks, validateRequiredFields } from '../../../utils/adminUtils';
-import { formatLocalDateTime } from '../../../utils/formatUtils';
+import { formatWallClockDateTime, normalizeLocalDateTimeValue } from '../../../utils/formatUtils';
 import { parsePositiveIntegerParam } from '../../../utils/paramUtils';
 
 const nilaiAwal = {
@@ -78,6 +79,35 @@ function normalizeTopikArtikel(topik) {
   return unikValid;
 }
 
+function isInternalArticleHref(href = '') {
+  return String(href || '').trim().startsWith('/');
+}
+
+function normalizeArtikelHref(href = '') {
+  const trimmed = String(href || '').trim();
+  if (!trimmed) return '';
+  if (trimmed.startsWith('/') || trimmed.startsWith('#')) return trimmed;
+  if (/^(?:https?:|mailto:|tel:)/i.test(trimmed)) return trimmed;
+  if (/^[\w.-]+\.[a-z]{2,}(?:[/?#].*)?$/i.test(trimmed)) return `https://${trimmed}`;
+  return trimmed;
+}
+
+function buildArtikelLinkExtension() {
+  return LinkExtension.configure({
+    openOnClick: false,
+    autolink: false,
+    linkOnPaste: true,
+    HTMLAttributes: {
+      rel: 'noopener noreferrer',
+    },
+    isAllowedUri: (url, ctx) => {
+      if (isInternalArticleHref(url)) return true;
+      if (String(url || '').startsWith('#')) return true;
+      return ctx.defaultValidate(url);
+    },
+  });
+}
+
 const opsiFilterStatus = [
   { value: '', label: '—Status—' },
   { value: 'diterbitkan', label: 'Terbit' },
@@ -88,7 +118,7 @@ const kolom = [
   {
     key: 'diterbitkan_pada',
     label: 'Terbit',
-    render: (item) => <span className="text-gray-700 dark:text-gray-300">{formatLocalDateTime(item.diterbitkan_pada, { fallback: '—' })}</span>,
+    render: (item) => <span className="text-gray-700 dark:text-gray-300">{formatWallClockDateTime(item.diterbitkan_pada, { fallback: '—' })}</span>,
   },
   {
     key: 'judul',
@@ -146,7 +176,7 @@ const kolom = [
 
 function EditorArtikel({ value, onChange, onUnggahGambar }) {
   const editor = useEditor({
-    extensions: [StarterKit, Image, Markdown.configure({ transformCopiedText: true })],
+    extensions: [StarterKit, Image, buildArtikelLinkExtension(), Markdown.configure({ transformCopiedText: true })],
     content: value || '',
     onUpdate({ editor: editorInstance }) {
       onChange('konten', editorInstance.storage.markdown.getMarkdown());
@@ -167,6 +197,38 @@ function EditorArtikel({ value, onChange, onUnggahGambar }) {
 
   if (!editor) return null;
 
+  const aktifLink = editor.isActive('link');
+
+  const handleLinkAction = () => {
+    const currentHref = editor.getAttributes('link')?.href || '';
+    const inputHref = window.prompt('Masukkan URL tautan. Gunakan /... untuk tautan internal.', currentHref);
+    if (inputHref === null) return;
+
+    const href = normalizeArtikelHref(inputHref);
+    if (!href) {
+      editor.chain().focus().extendMarkRange('link').unsetLink().run();
+      return;
+    }
+
+    const selectionEmpty = Boolean(editor.state?.selection?.empty);
+    if (selectionEmpty) {
+      const labelTautan = window.prompt('Masukkan teks tautan.', '');
+      if (labelTautan === null) return;
+
+      const text = String(labelTautan || '').trim();
+      if (!text) return;
+
+      editor.chain().focus().insertContent({
+        type: 'text',
+        text,
+        marks: [{ type: 'link', attrs: { href } }],
+      }).run();
+      return;
+    }
+
+    editor.chain().focus().extendMarkRange('link').setLink({ href }).run();
+  };
+
   return (
     <div className="form-admin-group">
       <label className="form-admin-label">Konten<span className="ml-0.5 text-red-500">*</span></label>
@@ -180,6 +242,7 @@ function EditorArtikel({ value, onChange, onUnggahGambar }) {
         <button type="button" onClick={() => editor.chain().focus().toggleBlockquote().run()} className={editor.isActive('blockquote') ? 'aktif' : ''} title="Kutipan">&ldquo;&rdquo;</button>
         <button type="button" onClick={() => editor.chain().focus().toggleCodeBlock().run()} className={editor.isActive('codeBlock') ? 'aktif' : ''} title="Blok kode">&lt;/&gt;</button>
         <button type="button" onClick={() => editor.chain().focus().setHorizontalRule().run()} title="Garis pembatas">&#8212;</button>
+        <button type="button" onClick={handleLinkAction} className={aktifLink ? 'aktif' : ''} title="Sisipkan atau ubah tautan">Link</button>
         {onUnggahGambar && (
           <label className="editor-toolbar-btn" title="Sisipkan gambar">
             Gambar
@@ -193,6 +256,12 @@ function EditorArtikel({ value, onChange, onUnggahGambar }) {
     </div>
   );
 }
+
+export const __private = {
+  isInternalArticleHref,
+  normalizeArtikelHref,
+  buildArtikelLinkExtension,
+};
 
 function InputTopik({ topik, onChange }) {
   const topikTerpilih = normalizeTopikArtikel(topik);
@@ -342,6 +411,7 @@ function ArtikelAdmin() {
     panel.bukaUntukSunting({
       ...detail,
       topik: normalizeTopikArtikel(detail.topik),
+      diterbitkan_pada: normalizeLocalDateTimeValue(detail.diterbitkan_pada),
     });
     idEditTerbuka.current = detail.id;
   }, [detailResp, idDariPath, isDetailError, isDetailLoading, panel]);
@@ -407,6 +477,7 @@ function ArtikelAdmin() {
     simpan.mutate({
       ...panel.data,
       topik: normalizeTopikArtikel(panel.data.topik),
+      diterbitkan_pada: normalizeLocalDateTimeValue(panel.data.diterbitkan_pada),
     }, {
       onSuccess: () => {
         setPesan({ error: '', sukses: 'Artikel tersimpan.' });
@@ -437,7 +508,10 @@ function ArtikelAdmin() {
     terbitkan.mutate({ id: panel.data.id, diterbitkan: diterbitkanBaru }, {
       onSuccess: (res) => {
         panel.ubahField('diterbitkan', res.data?.diterbitkan ?? diterbitkanBaru);
-        panel.ubahField('diterbitkan_pada', res.data?.diterbitkan_pada ?? panel.data.diterbitkan_pada);
+        panel.ubahField(
+          'diterbitkan_pada',
+          normalizeLocalDateTimeValue(res.data?.diterbitkan_pada) ?? panel.data.diterbitkan_pada
+        );
         setPesan({ error: '', sukses: diterbitkanBaru ? 'Artikel diterbitkan.' : 'Artikel dijadikan draf.' });
       },
       onError: (error) => {

@@ -2,6 +2,7 @@
  * @fileoverview Halaman daftar artikel publik dengan filter topik.
  */
 
+import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ambilDaftarArtikel } from '../../../api/apiPublik';
@@ -10,6 +11,7 @@ import HalamanPublik from '../../../components/tampilan/HalamanPublik';
 import { QueryFeedback } from '../../../components/status/StatusKonten';
 import TeksMarkdownInline from '../../../components/tampilan/TeksMarkdownInline';
 import { useAuthOptional } from '../../../context/authContext';
+import { useSsrPrefetch } from '../../../context/ssrPrefetchContext';
 import '../../../styles/referensi.css';
 
 function bersihkanCuplikan(teks) {
@@ -54,13 +56,30 @@ function KartuArtikel({ artikel, tampilkanEdit = false }) {
 
 export function Artikel() {
   const auth = useAuthOptional();
+  const ssrPrefetch = useSsrPrefetch();
   const adalahAdmin = Boolean(auth?.adalahAdmin);
   const [searchParams] = useSearchParams();
   const topikAktif = searchParams.get('topik') || '';
+  const qAktif = searchParams.get('q') || '';
+
+  const initialData = useMemo(() => {
+    if (ssrPrefetch?.type !== 'artikel-daftar') return undefined;
+    if (String(ssrPrefetch.topik || '') !== topikAktif) return undefined;
+    if (String(ssrPrefetch.q || '') !== qAktif) return undefined;
+
+    return {
+      success: true,
+      data: ssrPrefetch.data || [],
+      total: ssrPrefetch.total || 0,
+      limit: 30,
+      offset: 0,
+    };
+  }, [qAktif, ssrPrefetch, topikAktif]);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['artikel-daftar', topikAktif],
     queryFn: () => ambilDaftarArtikel({ topik: topikAktif || undefined, limit: 30 }),
+    initialData,
     staleTime: 60 * 1000,
   });
 

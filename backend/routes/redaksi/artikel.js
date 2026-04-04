@@ -7,6 +7,7 @@ const express = require('express');
 const multer = require('multer');
 const { periksaIzin } = require('../../middleware/authorization');
 const ModelArtikel = require('../../models/artikel/modelArtikel');
+const { invalidasiCacheArtikelPublik } = require('../../services/publik/layananArtikelPublik');
 const { unggahGambarArtikel } = require('../../services/sistem/layananGambarR2');
 const {
   buildPaginatedResult,
@@ -123,6 +124,8 @@ router.post('/', periksaIzin('tulis_artikel'), async (req, res, next) => {
       diterbitkan_pada: req.body.diterbitkan_pada || null,
     });
 
+    await invalidasiCacheArtikelPublik(data?.slug ? [data.slug] : []);
+
     return res.status(201).json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -160,6 +163,7 @@ router.put('/:id', periksaIzin('tulis_artikel'), async (req, res, next) => {
     }
 
     const data = await ModelArtikel.perbarui(id, updateData, req.user.pid);
+    await invalidasiCacheArtikelPublik([existing.slug, data?.slug]);
     return res.json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -178,6 +182,7 @@ router.put('/:id/terbitkan', periksaIzin('terbitkan_artikel'), async (req, res, 
 
     const diterbitkan = req.body.diterbitkan !== undefined ? Boolean(req.body.diterbitkan) : !existing.diterbitkan;
     const data = await ModelArtikel.terbitkan(id, diterbitkan);
+    await invalidasiCacheArtikelPublik([existing.slug, data?.slug]);
     return res.json({ success: true, data });
   } catch (error) {
     return next(error);
@@ -195,6 +200,7 @@ router.delete('/:id', periksaIzin('tulis_artikel'), async (req, res, next) => {
     if (!existing) return res.status(404).json({ success: false, message: 'Artikel tidak ditemukan' });
 
     await ModelArtikel.hapus(id);
+    await invalidasiCacheArtikelPublik([existing.slug]);
     return res.json({ success: true, message: 'Artikel berhasil dihapus' });
   } catch (error) {
     return next(error);

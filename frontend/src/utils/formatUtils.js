@@ -35,6 +35,32 @@ function formatLocalDateTime(value, { fallback = '-', separator = ' ' } = {}) {
   return dayjs(date).format(`DD MMM YYYY${separator}HH.mm`);
 }
 
+function normalizeLocalDateTimeValue(value, { fallback = null } = {}) {
+  if (!value) return fallback;
+
+  if (value instanceof Date) {
+    if (Number.isNaN(value.getTime())) return fallback;
+    return dayjs(value).format('YYYY-MM-DDTHH:mm:ss');
+  }
+
+  const text = String(value).trim();
+  if (!text) return fallback;
+
+  const normalized = text.includes(' ') ? text.replace(' ', 'T') : text;
+  const match = normalized.match(/^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})(?::(\d{2}))?/);
+  if (!match) return fallback;
+
+  return `${match[1]}T${match[2]}:${match[3] || '00'}`;
+}
+
+function formatWallClockDateTime(value, { fallback = '-', separator = ' ' } = {}) {
+  const normalized = normalizeLocalDateTimeValue(value, { fallback: null });
+  if (!normalized) return fallback;
+
+  const parsed = dayjs(normalized);
+  return parsed.isValid() ? parsed.format(`DD MMM YYYY${separator}HH.mm`) : fallback;
+}
+
 function formatBilanganRibuan(value, { fallback = '0' } = {}) {
   if (value === null || value === undefined || value === '') return fallback;
   const angka = Number(value);
@@ -161,6 +187,8 @@ function renderEntriGlosariumTertaut(value = '', renderTautan = null) {
 export {
   parseUtcDate,
   formatLocalDateTime,
+  normalizeLocalDateTimeValue,
+  formatWallClockDateTime,
   formatBilanganRibuan,
   pisahNomorHomonim,
   formatLemaHomonim,

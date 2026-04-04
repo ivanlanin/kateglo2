@@ -7,6 +7,10 @@ const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 const express = require('express');
 const logger = require('../../config/logger');
+const {
+  ambilDaftarArtikelPublik,
+  ambilDetailArtikelPublik,
+} = require('../publik/layananArtikelPublik');
 const { ambilDetailKamus, ambilEntriAcak } = require('../publik/layananKamusPublik');
 const { ambilDetailTesaurus } = require('../publik/layananTesaurusPublik');
 const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
@@ -272,7 +276,10 @@ function validateRendererModule(ssrModule) {
  * Mengembalikan objek data atau null jika route tidak memerlukan prefetch.
  */
 async function prefetchSsrData(pathname = '/') {
-  const decoded = decodeURIComponent(pathname);
+  const parsedUrl = new URL(String(pathname || '/'), 'https://kateglo.org');
+  const decoded = decodeURIComponent(parsedUrl.pathname);
+  const topikArtikel = parsedUrl.searchParams.get('topik') || undefined;
+  const qArtikel = parsedUrl.searchParams.get('q') || undefined;
 
   try {
     if (/^\/ejaan\/[^/]+\/?$/.test(decoded)) {
@@ -392,6 +399,52 @@ async function prefetchSsrData(pathname = '/') {
       }
       return { type: 'kamus-cari', kata, semuaMakna };
     }
+
+    if (decoded === '/artikel' || decoded === '/artikel/') {
+      const daftarArtikel = await ambilDaftarArtikelPublik({
+        topik: topikArtikel ? [topikArtikel] : undefined,
+        q: qArtikel,
+        limit: 30,
+        offset: 0,
+      });
+
+      return {
+        type: 'artikel-daftar',
+        topik: topikArtikel || '',
+        q: qArtikel || '',
+        data: daftarArtikel.data || [],
+        total: daftarArtikel.total || 0,
+      };
+    }
+
+    if (decoded.startsWith('/artikel/')) {
+      const slug = decoded.replace('/artikel/', '').trim().replace(/\/+$/, '');
+      if (!slug) return null;
+
+      const artikel = await ambilDetailArtikelPublik(slug);
+      if (!artikel) {
+        return {
+          type: 'artikel-detail',
+          slug,
+          notFound: true,
+          artikel: null,
+          artikelLain: [],
+        };
+      }
+
+      const daftarSidebar = await ambilDaftarArtikelPublik({ limit: 11, offset: 0 });
+      const artikelLain = (daftarSidebar.data || [])
+        .filter((item) => item?.slug && item.slug !== slug)
+        .slice(0, 10);
+
+      return {
+        type: 'artikel-detail',
+        slug,
+        notFound: false,
+        artikel,
+        artikelLain,
+      };
+    }
   } catch (err) {
     logger.warn(`prefetchSsrData gagal untuk ${pathname}: ${err.message}`);
     return null;
@@ -442,7 +495,7 @@ function pasangFrontendRuntime(app, options = {}) {
       }
 
       const render = await loadRenderer();
-      const prefetchedData = await prefetchData(req.path);
+      const prefetchedData = await prefetchData(req.originalUrl);
       const rendered = await render(req.originalUrl, prefetchedData);
       const appHtml = rendered?.appHtml || '';
       const headTags = rendered?.headTags || '';

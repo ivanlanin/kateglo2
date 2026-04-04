@@ -1,5 +1,9 @@
 # Riwayat Perubahan
 
+## 2026-04-05 Minggu
+
+- Mengaktifkan menu [Artikel](/artikel)
+
 ## 2026-04-04 Sabtu
 
 - Menggabung menu kamus, tesaurus, makna, dan rima serta gramatika dan ejaan

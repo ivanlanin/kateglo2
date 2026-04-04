@@ -2,6 +2,7 @@
  * @fileoverview Halaman detail artikel publik — merender konten markdown.
  */
 
+import { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import ReactMarkdown from 'react-markdown';
@@ -12,17 +13,62 @@ import HalamanPublik from '../../../components/tampilan/HalamanPublik';
 import { QueryFeedback } from '../../../components/status/StatusKonten';
 import TeksMarkdownInline, { stripInlineMarkdown } from '../../../components/tampilan/TeksMarkdownInline';
 import { useAuthOptional } from '../../../context/authContext';
+import { useSsrPrefetch } from '../../../context/ssrPrefetchContext';
 import '../../../styles/referensi.css';
+
+function bersihkanCuplikan(teks) {
+  if (!teks) return '';
+  return teks.replace(/[#*_`>[\]!()-]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function isArtikelInternalHref(href = '') {
+  return String(href || '').trim().startsWith('/');
+}
+
+function RenderArtikelMarkdownLink({ node: _node, href = '', children, ...props }) {
+  if (isArtikelInternalHref(href)) {
+    return <Link to={href}>{children}</Link>;
+  }
+
+  const isExternalHttp = /^https?:\/\//i.test(String(href || '').trim());
+  return (
+    <a
+      href={href}
+      target={isExternalHttp ? '_blank' : undefined}
+      rel={isExternalHttp ? 'noopener noreferrer' : undefined}
+      {...props}
+    >
+      {children}
+    </a>
+  );
+}
 
 export function ArtikelDetail() {
   const auth = useAuthOptional();
+  const ssrPrefetch = useSsrPrefetch();
   const adalahAdmin = Boolean(auth?.adalahAdmin);
   const { slug } = useParams();
+
+  const initialDetailData = useMemo(() => {
+    if (ssrPrefetch?.type !== 'artikel-detail') return undefined;
+    if (String(ssrPrefetch.slug || '') !== String(slug || '')) return undefined;
+    if (!ssrPrefetch.artikel) return { success: true, data: null };
+
+    return { success: true, data: ssrPrefetch.artikel };
+  }, [slug, ssrPrefetch]);
+
+  const initialSidebarData = useMemo(() => {
+    if (ssrPrefetch?.type !== 'artikel-detail') return undefined;
+    if (String(ssrPrefetch.slug || '') !== String(slug || '')) return undefined;
+
+    return { success: true, data: ssrPrefetch.artikelLain || [] };
+  }, [slug, ssrPrefetch]);
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['artikel-detail', slug],
     queryFn: () => ambilDetailArtikel(slug),
     enabled: Boolean(slug),
+    initialData: initialDetailData,
     staleTime: 5 * 60 * 1000,
   });
 
@@ -30,6 +76,7 @@ export function ArtikelDetail() {
     queryKey: ['artikel-daftar-sidebar', slug],
     queryFn: () => ambilDaftarArtikel({ limit: 11 }),
     enabled: Boolean(slug),
+    initialData: initialSidebarData,
     staleTime: 60 * 1000,
   });
 
@@ -38,8 +85,8 @@ export function ArtikelDetail() {
     .filter((item) => item?.slug && item.slug !== slug)
     .slice(0, 10);
 
-  const cuplikan = artikel?.cuplikan
-    ? artikel.cuplikan.replace(/[#*_`>[\]!]/g, '').replace(/\s+/g, ' ').trim().slice(0, 160)
+  const cuplikan = artikel
+    ? bersihkanCuplikan(artikel.cuplikan || artikel.konten || '').slice(0, 160)
     : undefined;
 
   return (
@@ -101,7 +148,7 @@ export function ArtikelDetail() {
             </header>
 
             <div className="mt-6 artikel-detail-konten ref-markdown-content ref-gramatika-content">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              <ReactMarkdown remarkPlugins={[remarkGfm]} components={{ a: RenderArtikelMarkdownLink }}>
                 {artikel.konten || ''}
               </ReactMarkdown>
             </div>
@@ -128,3 +175,8 @@ export function ArtikelDetail() {
     </HalamanPublik>
   );
 }
+
+export const __private = {
+  isArtikelInternalHref,
+  RenderArtikelMarkdownLink,
+};

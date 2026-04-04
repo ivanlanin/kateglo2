@@ -24,6 +24,7 @@ import {
 import { ambilMetaFiturInteraktif } from './constants/katalogFitur';
 import { petaItemEjaanBySlug, formatJudulEjaanDariSlug } from './constants/ejaanData';
 import { petaItemGramatikaBySlug, formatJudulGramatikaDariSlug } from './constants/gramatikaData';
+import { stripInlineMarkdown } from './components/tampilan/TeksMarkdownInline';
 
 function escapeHtml(value = '') {
   return String(value)
@@ -84,6 +85,66 @@ function buildMetaRima(kata = '') {
   return {
     judul: `Hasil Pencarian Rima "${kataAman}"`,
     deskripsi: `Kata-kata yang berima dengan "${kataAman}" di kamus Kateglo.`,
+  };
+}
+
+function bersihkanTeksArtikel(text = '') {
+  return stripInlineMarkdown(String(text || ''))
+    .replace(/[#*_`>[\]!()-]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function buildMetaBrowseArtikel(prefetchedData = null) {
+  const topik = String(prefetchedData?.topik || '').trim();
+
+  if (topik) {
+    return {
+      judul: `Artikel Topik ${topik}`,
+      deskripsi: `Artikel-artikel Kateglo dalam topik ${topik} seputar bahasa Indonesia, linguistik, dan perkembangan Kateglo.`,
+    };
+  }
+
+  return {
+    judul: 'Artikel',
+    deskripsi: 'Artikel-artikel seputar bahasa Indonesia, linguistik, dan perkembangan Kateglo.',
+  };
+}
+
+function buildMetaDetailArtikel(slug = '', prefetchedData = null) {
+  const slugAman = String(slug || '').trim().replace(/\/+$/, '');
+  const dataArtikel = prefetchedData?.type === 'artikel-detail' && prefetchedData.slug === slugAman
+    ? prefetchedData
+    : null;
+
+  if (!slugAman) {
+    return buildMetaBrowseArtikel();
+  }
+
+  if (dataArtikel?.notFound) {
+    return {
+      judul: 'Artikel Tidak Ditemukan',
+      deskripsi: 'Artikel yang diminta tidak ditemukan di Kateglo.',
+    };
+  }
+
+  const artikel = dataArtikel?.artikel;
+  if (!artikel) {
+    return {
+      judul: 'Artikel',
+      deskripsi: 'Artikel-artikel seputar bahasa Indonesia, linguistik, dan perkembangan Kateglo.',
+    };
+  }
+
+  const judulBersih = bersihkanTeksArtikel(artikel.judul) || formatJudulEjaanDariSlug(slugAman) || 'Artikel';
+  const ringkasan = truncate(
+    bersihkanTeksArtikel(artikel.cuplikan || artikel.konten || ''),
+    155,
+  );
+
+  return {
+    judul: judulBersih,
+    deskripsi: ringkasan || `${judulBersih} — artikel Kateglo tentang bahasa Indonesia.`,
   };
 }
 
@@ -188,6 +249,7 @@ function buildSocialTitle(pathname = '/', fallbackTitle = '') {
     if (path === '/kamus' || path === '/kamus/' || path.startsWith('/kamus/')) return 'Kamus';
     if (path === '/tesaurus' || path === '/tesaurus/' || path.startsWith('/tesaurus/')) return 'Tesaurus';
     if (path === '/glosarium' || path === '/glosarium/' || path.startsWith('/glosarium/')) return 'Glosarium';
+    if (path === '/artikel' || path === '/artikel/' || path.startsWith('/artikel/')) return 'Artikel';
     if (path === '/makna' || path === '/makna/' || path.startsWith('/makna/')) return 'Makna';
     if (path === '/rima' || path === '/rima/' || path.startsWith('/rima/')) return 'Rima';
     if (path === '/gramatika' || path === '/gramatika/' || path.startsWith('/gramatika/')) return 'Gramatika';
@@ -239,6 +301,9 @@ function buildGenericSocialContext(pathname = '/') {
   if (path.startsWith('/glosarium/bidang/')) return { section: 'glosarium', context: 'Glosarium per Bidang' };
   if (path.startsWith('/glosarium/sumber/')) return { section: 'glosarium', context: 'Glosarium per Sumber' };
   if (path.startsWith('/glosarium')) return { section: 'glosarium', context: 'Istilah dan Padanan Bidang Ilmu' };
+
+  if (path.startsWith('/artikel/')) return { section: 'artikel', context: 'Artikel Bahasa Indonesia' };
+  if (path === '/artikel' || path === '/artikel/') return { section: 'artikel', context: 'Artikel Bahasa Indonesia' };
 
   if (path.startsWith('/makna')) return { section: 'makna', context: 'Cari Kata Berdasarkan Makna' };
   if (path.startsWith('/rima')) return { section: 'rima', context: 'Cari Kata Berdasarkan Rima' };
@@ -318,6 +383,10 @@ function buildSocialImageUrl(pathname = '/', siteBaseUrl = 'https://kateglo.org'
 
 function resolveSsrStatusCode(prefetchedData = null) {
   if (prefetchedData?.type === 'static-markdown' && prefetchedData.notFound) {
+    return 404;
+  }
+
+  if (prefetchedData?.type === 'artikel-detail' && prefetchedData.notFound) {
     return 404;
   }
 
@@ -455,6 +524,14 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
 
   if (path.startsWith('/gramatika/')) {
     return titled(buildMetaGramatika(seg('/gramatika/'), prefetchedData));
+  }
+
+  if (path === '/artikel' || path === '/artikel/') {
+    return titled(buildMetaBrowseArtikel(dataFor('artikel-daftar')));
+  }
+
+  if (path.startsWith('/artikel/')) {
+    return titled(buildMetaDetailArtikel(seg('/artikel/'), dataFor('artikel-detail')));
   }
 
   const metaInteraktif = ambilMetaFiturInteraktif(path);

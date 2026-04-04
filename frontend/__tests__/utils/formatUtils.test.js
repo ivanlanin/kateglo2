@@ -5,7 +5,9 @@ import {
   formatBilanganRibuan,
   formatLemaHomonim,
   formatLocalDateTime,
+  formatWallClockDateTime,
   formatNamaBidang,
+  normalizeLocalDateTimeValue,
   parseEntriGlosarium,
   parseUtcDate,
   tokenizeKurung,
@@ -50,6 +52,17 @@ describe('formatUtils.test.js', () => {
     expect(parseUtcDate('2026-02-17T09:49:10Z')).toBeInstanceOf(Date);
     expect(parseUtcDate('2026-02-17T09:49:10+07:00')).toBeInstanceOf(Date);
     expect(parseUtcDate('   ')).toBeNull();
+  });
+
+  it('normalizeLocalDateTimeValue mempertahankan jam mentah tanpa konversi zona waktu', () => {
+    expect(normalizeLocalDateTimeValue('2026-04-04T23:44:00.000Z')).toBe('2026-04-04T23:44:00');
+    expect(normalizeLocalDateTimeValue('2026-04-04 23:44:00')).toBe('2026-04-04T23:44:00');
+    expect(normalizeLocalDateTimeValue('')).toBeNull();
+  });
+
+  it('formatWallClockDateTime memformat waktu lokal-naif tanpa geser UTC', () => {
+    expect(formatWallClockDateTime('2026-04-04T23:44:00.000Z')).toBe('04 Apr 2026 23.44');
+    expect(formatWallClockDateTime('2026-04-04 23:44:00')).toBe('04 Apr 2026 23.44');
   });
 
   it('menerima objek Date valid dan menolak Date invalid', () => {
