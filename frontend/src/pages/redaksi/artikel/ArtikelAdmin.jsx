@@ -3,7 +3,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
@@ -19,6 +19,7 @@ import {
 } from '../../../api/apiAdmin';
 import { useAuth } from '../../../context/authContext';
 import HalamanAdmin from '../../../components/tampilan/HalamanAdmin';
+import TeksMarkdownInline from '../../../components/tampilan/TeksMarkdownInline';
 import FilterCariAdmin from '../../../components/formulir/FilterCariAdmin';
 import TabelAdmin from '../../../components/data/TabelAdmin';
 import TombolAksiAdmin from '../../../components/tombol/TombolAksiAdmin';
@@ -45,27 +46,36 @@ const nilaiAwal = {
   diterbitkan_pada: null,
 };
 
-const opsiTopikArtikel = [
-  { value: 'tanya-jawab', label: 'Tanya Jawab' },
-  { value: 'asal-kata', label: 'Asal Kata' },
-  { value: 'kata-baru', label: 'Kata Baru' },
-  { value: 'kesalahan-umum', label: 'Kesalahan Umum' },
-  { value: 'lainnya', label: 'Lainnya' },
-];
+function buatTimestampLokalSekarang() {
+  const sekarang = new Date();
+  const pad2 = (nilai) => String(nilai).padStart(2, '0');
 
-const labelTopikArtikel = Object.fromEntries(opsiTopikArtikel.map((opsi) => [opsi.value, opsi.label]));
+  return `${sekarang.getFullYear()}-${pad2(sekarang.getMonth() + 1)}-${pad2(sekarang.getDate())}T${pad2(sekarang.getHours())}:${pad2(sekarang.getMinutes())}:00`;
+}
 
-function normalizeTopikArtikel(topik, { fallback = true } = {}) {
+function buatNilaiAwalArtikel(penggunaId = null) {
+  return {
+    ...nilaiAwal,
+    penulis_id: penggunaId,
+    diterbitkan_pada: buatTimestampLokalSekarang(),
+  };
+}
+
+function normalizeTopikArtikel(topik) {
   const daftar = Array.isArray(topik) ? topik : (topik ? [topik] : []);
   const unikValid = [];
+  const seen = new Set();
 
   daftar.forEach((nilai) => {
-    if (!labelTopikArtikel[nilai] || unikValid.includes(nilai)) return;
-    unikValid.push(nilai);
+    const bersih = String(nilai || '').trim().replace(/\s+/g, ' ');
+    if (!bersih) return;
+    const key = bersih.toLowerCase();
+    if (seen.has(key)) return;
+    seen.add(key);
+    unikValid.push(bersih);
   });
 
-  if (unikValid.length > 0) return unikValid;
-  return fallback ? ['lainnya'] : [];
+  return unikValid;
 }
 
 const opsiFilterStatus = [
@@ -83,7 +93,22 @@ const kolom = [
   {
     key: 'judul',
     label: 'Judul',
-    render: (item) => <span className="font-medium text-gray-900 dark:text-gray-100">{potongTeks(item.judul, 60)}</span>,
+    render: (item) => {
+      const judul = potongTeks(item.judul, 60);
+      if (!item.slug) {
+        return <TeksMarkdownInline className="text-gray-900 dark:text-gray-100" text={judul} />;
+      }
+
+      return (
+        <Link
+          to={`/artikel/${item.slug}`}
+          onClick={(event) => event.stopPropagation()}
+          className="text-sky-700 hover:underline dark:text-sky-300"
+        >
+          <TeksMarkdownInline className="text-inherit" text={judul} />
+        </Link>
+      );
+    },
   },
   {
     key: 'penulis_nama',
@@ -94,9 +119,9 @@ const kolom = [
     key: 'topik',
     label: 'Topik',
     render: (item) => {
-      const topik = normalizeTopikArtikel(item.topik, { fallback: false });
+      const topik = normalizeTopikArtikel(item.topik);
       return topik.length > 0 ? (
-        <span className="text-gray-600 dark:text-gray-400">{topik.map((nilai) => labelTopikArtikel[nilai] || nilai).join(', ')}</span>
+        <span className="text-gray-600 dark:text-gray-400">{topik.join(', ')}</span>
       ) : (
         <span className="text-gray-400 dark:text-gray-500">—</span>
       );
@@ -170,94 +195,74 @@ function EditorArtikel({ value, onChange, onUnggahGambar }) {
 }
 
 function InputTopik({ topik, onChange }) {
-  const topikTerpilih = normalizeTopikArtikel(topik, { fallback: false });
+  const topikTerpilih = normalizeTopikArtikel(topik);
   const [queryInput, setQueryInput] = useState('');
-  const [tampilDropdown, setTampilDropdown] = useState(false);
 
-  const topikTersedia = opsiTopikArtikel.filter((opsi) => !topikTerpilih.includes(opsi.value));
-  const topikFiltered = queryInput
-    ? topikTersedia.filter((opsi) => {
-        const kataKunci = queryInput.toLowerCase();
-        return opsi.label.toLowerCase().includes(kataKunci) || opsi.value.toLowerCase().includes(kataKunci);
-      })
-    : topikTersedia;
-
-  const tambahTopik = (nilai) => {
-    if (!nilai || topikTerpilih.includes(nilai)) return;
-    const berikutnya = [...topikTerpilih.filter((item) => item !== 'lainnya' || nilai === 'lainnya'), nilai];
-    onChange('topik', berikutnya.length > 0 ? berikutnya : ['lainnya']);
+  const tambahTopik = () => {
+    const nilai = String(queryInput || '').trim().replace(/\s+/g, ' ');
+    if (!nilai) return;
+    const sudahAda = topikTerpilih.some((item) => item.toLowerCase() === nilai.toLowerCase());
+    if (sudahAda) {
+      setQueryInput('');
+      return;
+    }
+    onChange('topik', [...topikTerpilih, nilai]);
     setQueryInput('');
   };
 
   const hapusTopik = (nilai) => {
-    const berikutnya = topikTerpilih.filter((item) => item !== nilai);
-    onChange('topik', berikutnya.length > 0 ? berikutnya : ['lainnya']);
+    onChange('topik', topikTerpilih.filter((item) => item !== nilai));
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter' && topikFiltered.length > 0) {
+    if (event.key === 'Enter' || event.key === ',') {
       event.preventDefault();
-      tambahTopik(topikFiltered[0].value);
+      tambahTopik();
     }
   };
 
   return (
     <div className="form-admin-group">
       <label className="form-admin-label">Topik</label>
-      <div className="relative">
-        <div className="artikel-admin-topik-input-wrap">
-          {topikTerpilih.map((nilai) => (
-            <span key={nilai} className="artikel-admin-topik-chip">
-              {labelTopikArtikel[nilai] || nilai}
-              <button
-                type="button"
-                onClick={() => hapusTopik(nilai)}
-                className="opacity-60 hover:opacity-100"
-                aria-label={`Hapus topik ${labelTopikArtikel[nilai] || nilai}`}
-              >
-                ×
-              </button>
-            </span>
-          ))}
-          <input
-            type="text"
-            aria-label="Cari topik artikel"
-            value={queryInput}
-            onChange={(event) => setQueryInput(event.target.value)}
-            onKeyDown={handleKeyDown}
-            onFocus={() => setTampilDropdown(true)}
-            onBlur={() => setTimeout(() => setTampilDropdown(false), 120)}
-            placeholder={topikTerpilih.length === 0 ? 'Tambah topik …' : ''}
-            className="artikel-admin-topik-input"
-          />
-        </div>
-        {tampilDropdown && topikFiltered.length > 0 && (
-          <div className="artikel-admin-topik-dropdown">
-            {topikFiltered.map((opsi) => (
-              <button
-                key={opsi.value}
-                type="button"
-                onMouseDown={() => tambahTopik(opsi.value)}
-                className="artikel-admin-topik-dropdown-item"
-              >
-                {opsi.label}
-              </button>
-            ))}
-          </div>
-        )}
+      <div className="artikel-admin-topik-input-wrap">
+        {topikTerpilih.map((nilai) => (
+          <span key={nilai} className="artikel-admin-topik-chip">
+            {nilai}
+            <button
+              type="button"
+              onClick={() => hapusTopik(nilai)}
+              className="opacity-60 hover:opacity-100"
+              aria-label={`Hapus topik ${nilai}`}
+            >
+              ×
+            </button>
+          </span>
+        ))}
+        <input
+          type="text"
+          aria-label="Input topik artikel"
+          value={queryInput}
+          onChange={(event) => setQueryInput(event.target.value)}
+          onKeyDown={handleKeyDown}
+          onBlur={tambahTopik}
+          placeholder={topikTerpilih.length === 0 ? 'Tambah topik …' : ''}
+          className="artikel-admin-topik-input"
+        />
       </div>
+      <p className="artikel-admin-status-bantuan">Tekan Enter atau koma untuk menambahkan topik.</p>
     </div>
   );
 }
 
 function StatusArtikelField({ data, modeTambah, bolehTerbitkan, isPending, onToggle }) {
-  const bisaUbah = !modeTambah && bolehTerbitkan;
+  const bisaUbah = bolehTerbitkan;
 
   return (
     <div className="form-admin-group">
       <label className="form-admin-label">Status</label>
       <button
         type="button"
+        aria-label="Status artikel"
         onClick={() => bisaUbah && onToggle(!data.diterbitkan)}
         disabled={!bisaUbah || isPending}
         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
@@ -273,7 +278,6 @@ function StatusArtikelField({ data, modeTambah, bolehTerbitkan, isPending, onTog
       <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
         {data.diterbitkan ? 'Terbit' : 'Draf'}
       </span>
-      {modeTambah && <p className="artikel-admin-status-bantuan">Artikel baru dibuat sebagai draf. Status bisa diubah setelah tersimpan.</p>}
       {!modeTambah && !bolehTerbitkan && <p className="artikel-admin-status-bantuan">Status hanya dapat diubah oleh pengguna dengan izin penerbitan.</p>}
     </div>
   );
@@ -282,8 +286,9 @@ function StatusArtikelField({ data, modeTambah, bolehTerbitkan, isPending, onTog
 function ArtikelAdmin() {
   const navigate = useNavigate();
   const { id: idParam } = useParams();
-  const { punyaIzin } = useAuth();
+  const { punyaIzin, user } = useAuth();
   const bolehTerbitkan = punyaIzin('terbitkan_artikel');
+  const penggunaIdAktif = Number(user?.pid || user?.id || 0) || null;
 
   const {
     cari, setCari, q, offset, setOffset,
@@ -336,7 +341,7 @@ function ArtikelAdmin() {
     if (idEditTerbuka.current === detail.id) return;
     panel.bukaUntukSunting({
       ...detail,
-      topik: normalizeTopikArtikel(detail.topik, { fallback: false }),
+      topik: normalizeTopikArtikel(detail.topik),
     });
     idEditTerbuka.current = detail.id;
   }, [detailResp, idDariPath, isDetailError, isDetailLoading, panel]);
@@ -368,7 +373,7 @@ function ArtikelAdmin() {
       sedangMenutupDariPath.current = true;
       navigate('/redaksi/artikel', { replace: true });
     }
-    panel.bukaUntukTambah();
+    panel.bukaUntukTambah(buatNilaiAwalArtikel(penggunaIdAktif));
   };
 
   const bukaSuntingDariDaftar = (item) => {
@@ -424,11 +429,11 @@ function ArtikelAdmin() {
   };
 
   const handleTerbitkan = (diterbitkanBaru) => {
-    if (!panel.data.id) return;
-    const konfirmasi = diterbitkanBaru
-      ? 'Terbitkan artikel ini ke publik?'
-      : 'Tarik artikel ini dari publik (jadikan draf)?';
-    if (!confirm(konfirmasi)) return;
+    if (!panel.data.id) {
+      panel.ubahField('diterbitkan', diterbitkanBaru);
+      return;
+    }
+
     terbitkan.mutate({ id: panel.data.id, diterbitkan: diterbitkanBaru }, {
       onSuccess: (res) => {
         panel.ubahField('diterbitkan', res.data?.diterbitkan ?? diterbitkanBaru);
@@ -531,15 +536,14 @@ function ArtikelAdmin() {
 
         <div className="artikel-admin-grid-dua-kolom">
           <div className="form-admin-group">
-            <label className="form-admin-label">Terbit</label>
+            <label htmlFor="field-diterbitkan-pada-artikel" className="form-admin-label">Terbit</label>
             <input
+              id="field-diterbitkan-pada-artikel"
               type="datetime-local"
               value={panel.data.diterbitkan_pada ? panel.data.diterbitkan_pada.slice(0, 16) : ''}
               onChange={(e) => panel.ubahField('diterbitkan_pada', e.target.value ? `${e.target.value}:00` : null)}
-              disabled={panel.modeTambah}
               className="form-admin-input"
             />
-            {panel.modeTambah && <p className="artikel-admin-status-bantuan">Tanggal terbit tersedia setelah artikel pertama kali disimpan.</p>}
           </div>
 
           <StatusArtikelField

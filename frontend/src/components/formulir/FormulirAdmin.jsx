@@ -16,8 +16,18 @@ export function useFormPanel(nilaiAwal = {}) {
   const [data, setData] = useState(nilaiAwal);
   const [modeTambah, setModeTambah] = useState(true);
 
-  const bukaUntukTambah = useCallback(() => {
-    setData({ ...nilaiAwal });
+  const bukaUntukTambah = useCallback((overrideNilaiAwal = null) => {
+    const isOverrideObject = Boolean(
+      overrideNilaiAwal
+      && typeof overrideNilaiAwal === 'object'
+      && !('nativeEvent' in overrideNilaiAwal)
+      && !('target' in overrideNilaiAwal)
+      && !('currentTarget' in overrideNilaiAwal)
+    );
+    const nextNilaiAwal = isOverrideObject
+      ? overrideNilaiAwal
+      : nilaiAwal;
+    setData({ ...nextNilaiAwal });
     setModeTambah(true);
     setBuka(true);
   }, [nilaiAwal]);

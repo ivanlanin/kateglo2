@@ -112,15 +112,15 @@ router.post('/', periksaIzin('tulis_artikel'), async (req, res, next) => {
     const topikInput = req.body.topik;
     const topik = Array.isArray(topikInput)
       ? topikInput
-      : (topikInput ? [topikInput] : ['lainnya']);
-    const topikValid = topik.filter((t) => ModelArtikel.topikValid.includes(t));
-    if (topikValid.length === 0) topikValid.push('lainnya');
+      : (topikInput ? [topikInput] : []);
 
     const data = await ModelArtikel.buat({
       judul,
       konten: parseTrimmedString(req.body.konten),
-      topik: topikValid,
+      topik,
       penulis_id: Number(req.body.penulis_id) > 0 ? Number(req.body.penulis_id) : req.user.pid,
+      diterbitkan: req.body.diterbitkan !== undefined ? Boolean(req.body.diterbitkan) : false,
+      diterbitkan_pada: req.body.diterbitkan_pada || null,
     });
 
     return res.status(201).json({ success: true, data });
@@ -144,8 +144,7 @@ router.put('/:id', periksaIzin('tulis_artikel'), async (req, res, next) => {
     if (req.body.konten !== undefined) updateData.konten = req.body.konten;
     if (req.body.topik !== undefined) {
       const t = Array.isArray(req.body.topik) ? req.body.topik : [req.body.topik];
-      updateData.topik = t.filter((v) => ModelArtikel.topikValid.includes(v));
-      if (updateData.topik.length === 0) updateData.topik = ['lainnya'];
+      updateData.topik = t;
     }
     if (req.body.penulis_id !== undefined) {
       const penulisId = Number(req.body.penulis_id);

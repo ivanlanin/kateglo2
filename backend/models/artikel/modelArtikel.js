@@ -4,8 +4,6 @@
 
 const db = require('../../db');
 
-const TOPIK_VALID = ['tanya-jawab', 'asal-kata', 'kata-baru', 'kesalahan-umum', 'lainnya'];
-
 function buatSlugDariJudul(judul) {
   return judul
     .toLowerCase()
@@ -18,10 +16,6 @@ function buatSlugDariJudul(judul) {
 }
 
 class ModelArtikel {
-  static get topikValid() {
-    return TOPIK_VALID;
-  }
-
   static async buatSlug(judul, { excludeId } = {}) {
     const basis = buatSlugDariJudul(judul) || 'artikel';
     const params = [basis, `${basis}-%`];
@@ -192,18 +186,21 @@ class ModelArtikel {
     return result.rows[0] || null;
   }
 
-  static async buat({ judul, konten, topik, penulis_id }) {
+  static async buat({ judul, konten, topik, penulis_id, diterbitkan, diterbitkan_pada }) {
     const slug = await ModelArtikel.buatSlug(judul);
-    const topikArr = (Array.isArray(topik) ? topik : [topik]).filter((t) => TOPIK_VALID.includes(t));
+    const statusTerbit = Boolean(diterbitkan);
+    const topikArr = [...new Set((Array.isArray(topik) ? topik : [topik])
+      .map((item) => String(item || '').trim().replace(/\s+/g, ' '))
+      .filter(Boolean))];
 
     const client = await db.pool.connect();
     try {
       await client.query('BEGIN');
       const result = await client.query(
-        `INSERT INTO artikel (judul, slug, konten, penulis_id)
-         VALUES ($1, $2, $3, $4)
-         RETURNING id, judul, slug, konten, diterbitkan, created_at, updated_at`,
-        [judul, slug, konten || '', penulis_id]
+        `INSERT INTO artikel (judul, slug, konten, penulis_id, diterbitkan, diterbitkan_pada)
+         VALUES ($1, $2, $3, $4, $5, $6)
+         RETURNING id, judul, slug, konten, diterbitkan, diterbitkan_pada, created_at, updated_at`,
+        [judul, slug, konten || '', penulis_id, statusTerbit, diterbitkan_pada || null]
       );
       const artikel = result.rows[0];
       if (topikArr.length > 0) {
@@ -259,7 +256,9 @@ class ModelArtikel {
         );
       }
       if (topik !== undefined) {
-        const topikArr = (Array.isArray(topik) ? topik : [topik]).filter((t) => TOPIK_VALID.includes(t));
+        const topikArr = [...new Set((Array.isArray(topik) ? topik : [topik])
+          .map((item) => String(item || '').trim().replace(/\s+/g, ' '))
+          .filter(Boolean))];
         await client.query('DELETE FROM artikel_topik WHERE artikel_id = $1', [id]);
         if (topikArr.length > 0) {
           await client.query(

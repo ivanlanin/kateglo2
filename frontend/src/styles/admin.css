@@ -239,22 +239,6 @@
     @apply min-w-24 flex-1 bg-transparent text-sm outline-none;
   }
 
-  .artikel-admin-topik-dropdown {
-    @apply absolute left-0 right-0 top-full z-20 mt-1 max-h-60 overflow-y-auto rounded border border-gray-200 bg-white shadow-lg;
-  }
-
-  .dark .artikel-admin-topik-dropdown {
-    @apply border-gray-600 bg-gray-800;
-  }
-
-  .artikel-admin-topik-dropdown-item {
-    @apply w-full px-3 py-1.5 text-left text-sm hover:bg-gray-100;
-  }
-
-  .dark .artikel-admin-topik-dropdown-item {
-    @apply hover:bg-gray-700;
-  }
-
   .artikel-admin-status-bantuan {
     @apply mt-2 text-sm text-gray-500;
   }

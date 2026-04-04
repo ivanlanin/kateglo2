@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import ArtikelAdmin from '../../../../src/pages/redaksi/artikel/ArtikelAdmin';
 
@@ -90,7 +90,10 @@ vi.mock('../../../../src/api/apiAdmin', () => ({
 }));
 
 vi.mock('../../../../src/context/authContext', () => ({
-  useAuth: () => ({ punyaIzin: (izin) => izin === 'terbitkan_artikel' }),
+  useAuth: () => ({
+    user: { pid: 7, id: 7, nama: 'Ivan Lanin' },
+    punyaIzin: (izin) => izin === 'terbitkan_artikel',
+  }),
 }));
 
 vi.mock('../../../../src/components/tampilan/HalamanAdmin', () => ({
@@ -159,6 +162,8 @@ vi.mock('../../../../src/components/panel/PanelGeser', () => ({
 describe('ArtikelAdmin', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-04-04T10:45:00'));
     mockParams = {};
     editorValue = '';
     global.confirm = vi.fn(() => true);
@@ -170,6 +175,7 @@ describe('ArtikelAdmin', () => {
         data: [{
           id: 1,
           judul: 'Asal Kata Merdeka',
+          slug: 'asal-kata-merdeka',
           penulis_nama: 'Ivan Lanin',
           topik: ['asal-kata', 'kata-baru'],
           diterbitkan: true,
@@ -188,7 +194,28 @@ describe('ArtikelAdmin', () => {
     });
   });
 
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('menampilkan kolom daftar sesuai urutan baru dan nama penulis', () => {
+    mockUseDaftarArtikelAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        total: 1,
+        data: [{
+          id: 1,
+          judul: 'Asal *Kata* Merdeka',
+          slug: 'asal-kata-merdeka',
+          penulis_nama: 'Ivan Lanin',
+          topik: ['linguistik', 'etimologi'],
+          diterbitkan: true,
+          diterbitkan_pada: '2026-04-03 09:00:00',
+        }],
+      },
+    });
+
     render(
       <MemoryRouter>
         <ArtikelAdmin />
@@ -198,7 +225,9 @@ describe('ArtikelAdmin', () => {
     const headers = screen.getAllByRole('columnheader').map((cell) => cell.textContent);
     expect(headers).toEqual(['Terbit', 'Judul', 'Penulis', 'Topik', 'Status']);
     expect(screen.getByText('Ivan Lanin')).toBeInTheDocument();
-    expect(screen.getByText('Asal Kata, Kata Baru')).toBeInTheDocument();
+    expect(screen.getByText('linguistik, etimologi')).toBeInTheDocument();
+    expect(screen.getByText('Kata', { selector: 'em' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Asal Kata Merdeka' })).toHaveAttribute('href', '/artikel/asal-kata-merdeka');
     expect(screen.getAllByText('Terbit').length).toBeGreaterThan(0);
   });
 
@@ -214,18 +243,18 @@ describe('ArtikelAdmin', () => {
     fireEvent.click(screen.getByText('+ Tambah'));
     expect(screen.getByText('Tambah Artikel')).toBeInTheDocument();
     expect(screen.queryByText('Slug')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Penulis' })).toHaveTextContent('Ivan Lanin');
+    expect(screen.getByLabelText('Terbit')).toHaveValue('2026-04-04T10:45');
+    expect(screen.getByRole('button', { name: 'Status artikel' })).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText('Judul*'), { target: { value: 'Topik Ganda' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Status artikel' }));
+    expect(global.confirm).not.toHaveBeenCalled();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Penulis' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Ivan Lanin' }));
-
-    fireEvent.focus(screen.getByLabelText('Cari topik artikel'));
-    fireEvent.change(screen.getByLabelText('Cari topik artikel'), { target: { value: 'asal' } });
-    fireEvent.mouseDown(screen.getByRole('button', { name: 'Asal Kata' }));
-    fireEvent.focus(screen.getByLabelText('Cari topik artikel'));
-    fireEvent.change(screen.getByLabelText('Cari topik artikel'), { target: { value: 'kata' } });
-    fireEvent.mouseDown(screen.getByRole('button', { name: 'Kata Baru' }));
+    fireEvent.change(screen.getByLabelText('Input topik artikel'), { target: { value: 'linguistik' } });
+    fireEvent.keyDown(screen.getByLabelText('Input topik artikel'), { key: 'Enter' });
+    fireEvent.change(screen.getByLabelText('Input topik artikel'), { target: { value: 'etimologi' } });
+    fireEvent.keyDown(screen.getByLabelText('Input topik artikel'), { key: 'Enter' });
 
     fireEvent.change(screen.getByLabelText('Konten editor'), { target: { value: 'Isi artikel uji' } });
     fireEvent.click(screen.getByText('Simpan'));
@@ -233,8 +262,10 @@ describe('ArtikelAdmin', () => {
     const payload = mutateSimpan.mock.calls.at(-1)?.[0];
     expect(payload).toBeTruthy();
     expect(payload.penulis_id).toBe(7);
-    expect(payload.topik).toEqual(['asal-kata', 'kata-baru']);
-    expect(payload.topik).not.toContain('lainnya');
+    expect(payload.diterbitkan).toBe(true);
+    expect(payload.diterbitkan_pada).toBe('2026-04-04T10:45:00');
+    expect(payload.topik).toEqual(['linguistik', 'etimologi']);
+    expect(mutateTerbitkan).not.toHaveBeenCalled();
   });
 
   it('menggunakan filter status draf ke hook daftar', () => {
