@@ -3,6 +3,7 @@
  */
 
 import { Link } from 'react-router-dom';
+import '../../../styles/gim.css';
 import HalamanPublik from '../../../components/tampilan/HalamanPublik';
 import { useAuthOptional } from '../../../context/authContext';
 import { ambilDaftarGim } from '../../../constants/katalogFitur';

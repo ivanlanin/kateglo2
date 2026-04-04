@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { ambilKataHariIni, ambilPencarianPopuler } from '../../api/apiPublik';
 import KotakCariPublik from '../../components/formulir/KotakCariPublik';
 import KuisKata from '../../components/gim/KuisKata';
+import '../../styles/gim.css';
 import TombolLafal from '../../components/tombol/TombolLafal';
 import { formatLemaHomonim } from '../../utils/formatUtils';
 import { buatPathDetailKamus } from '../../utils/paramUtils';

@@ -23,7 +23,7 @@ import { useAuth } from '../../../context/authContext';
 import TombolMasuk from '../../../components/tombol/TombolMasuk';
 import PesanMunculan from '../../../components/status/PesanMunculan';
 import { buatPathDetailKamus } from '../../../utils/paramUtils';
-import '../../../styles/susunKata.css';
+import '../../../styles/gim.css';
 
 const MAKS_PERCOBAAN = 6;
 const PANJANG_DEFAULT = 5;
