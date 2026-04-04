@@ -1,359 +1,359 @@
-/* ===== Gramatika / Ejaan: layout + daftar bab ===== */
+﻿/* ===== Gramatika / Ejaan: layout + daftar bab ===== */
 
-.ejaan-layout {
+.ref-layout {
   @apply grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px];
 }
 
-.ejaan-kategori-grid {
+.ref-kategori-grid {
   @apply grid grid-cols-1 md:grid-cols-2 gap-4;
 }
 
-.ejaan-kategori-card {
+.ref-kategori-card {
   @apply p-5;
 }
 
-.ejaan-kategori-title {
+.ref-kategori-title {
   @apply text-base font-semibold text-gray-900 text-center mb-3;
 }
 
-.dark .ejaan-kategori-title {
+.dark .ref-kategori-title {
   @apply text-dark-text;
 }
 
-.ejaan-kategori-list {
+.ref-kategori-list {
   @apply list-none p-0 m-0 space-y-1;
 }
 
-.ejaan-kategori-item {
+.ref-kategori-item {
   @apply m-0;
 }
 
-.ejaan-kategori-link {
+.ref-kategori-link {
   @apply text-sm text-blue-700 hover:underline;
 }
 
-.dark .ejaan-kategori-link {
+.dark .ref-kategori-link {
   @apply text-blue-300;
 }
 
 /* ===== Gramatika / Ejaan: sidebar navigasi ===== */
 
-.ejaan-panel-wrap {
+.ref-panel-wrap {
   @apply space-y-3;
 }
 
-.ejaan-sekuens-nav {
+.ref-sekuens-nav {
   @apply flex items-center justify-between gap-2 flex-nowrap mt-6;
 }
 
-.gramatika-heading-toggle {
+.ref-heading-toggle {
   @apply inline-flex items-center justify-center rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-sm font-medium leading-5 text-blue-800 transition-colors hover:border-blue-300 hover:bg-blue-100 hover:text-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2;
 }
 
-.dark .gramatika-heading-toggle {
+.dark .ref-heading-toggle {
   @apply border-blue-500/70 bg-gray-700 text-blue-100 hover:border-blue-400 hover:bg-gray-600 hover:text-blue-50;
 }
 
-.ejaan-sekuens-link,
-.ejaan-sidebar-pill {
+.ref-sekuens-link,
+.ref-sidebar-pill {
   @apply inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm leading-5 text-blue-800 no-underline transition-colors hover:border-blue-300 hover:bg-blue-100 hover:text-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2;
 }
 
-.ejaan-sekuens-link-prev {
+.ref-sekuens-link-prev {
   @apply justify-start text-left;
 }
 
-.ejaan-sekuens-link-next {
+.ref-sekuens-link-next {
   @apply justify-end text-right;
 }
 
-.ejaan-sekuens-label {
+.ref-sekuens-label {
   @apply block truncate;
 }
 
-.ejaan-sekuens-arrow {
+.ref-sekuens-arrow {
   @apply shrink-0;
 }
 
-.ejaan-sidebar-pill-grid {
+.ref-sidebar-pill-grid {
   @apply grid grid-cols-2 gap-2 list-none p-0 m-0;
 }
 
-.ejaan-sidebar-pill-item {
+.ref-sidebar-pill-item {
   @apply flex justify-center;
 }
 
-.ejaan-sidebar-pill {
+.ref-sidebar-pill {
   @apply w-full text-center justify-center;
 }
 
-.ejaan-sidebar-pill-active {
+.ref-sidebar-pill-active {
   @apply w-full text-center inline-flex items-center justify-center rounded-full border border-blue-300 bg-blue-100 px-3 py-1 text-sm leading-5 text-blue-900 font-medium cursor-default no-underline;
 }
 
-a.ejaan-sidebar-pill-active {
+a.ref-sidebar-pill-active {
   @apply cursor-pointer;
 }
 
-.dark .ejaan-sidebar-pill,
-.dark .ejaan-sekuens-link,
-.dark .ejaan-sidebar-pill-active,
-.dark .ejaan-sidebar-pill-active:hover {
+.dark .ref-sidebar-pill,
+.dark .ref-sekuens-link,
+.dark .ref-sidebar-pill-active,
+.dark .ref-sidebar-pill-active:hover {
   @apply border-blue-500/70 bg-gray-700 text-blue-100;
 }
 
-.dark .ejaan-sidebar-pill:hover,
-.dark .ejaan-sekuens-link:hover {
+.dark .ref-sidebar-pill:hover,
+.dark .ref-sekuens-link:hover {
   @apply border-blue-400 bg-gray-600 text-blue-50;
 }
 
-.ejaan-panel-list {
+.ref-panel-list {
   @apply list-none p-0 m-0 space-y-1;
 }
 
-.ejaan-panel-link {
+.ref-panel-link {
   @apply block text-sm text-blue-700 hover:underline;
 }
 
-.dark .ejaan-panel-link {
+.dark .ref-panel-link {
   @apply text-blue-300;
 }
 
-.ejaan-panel-link-active {
+.ref-panel-link-active {
   @apply font-semibold text-gray-900;
 }
 
-.dark .ejaan-panel-link-active {
+.dark .ref-panel-link-active {
   @apply text-dark-text;
 }
 
-.ejaan-nav-panel {
+.ref-nav-panel {
   @apply rounded-xl border border-gray-200 bg-white p-4 h-fit sticky top-20;
 }
 
-.dark .ejaan-nav-panel {
+.dark .ref-nav-panel {
   @apply border-dark-border bg-dark-bg;
 }
 
-.ejaan-nav-group + .ejaan-nav-group {
+.ref-nav-group + .ref-nav-group {
   @apply mt-5 pt-5 border-t border-gray-200;
 }
 
-.dark .ejaan-nav-group + .ejaan-nav-group {
+.dark .ref-nav-group + .ref-nav-group {
   @apply border-dark-border;
 }
 
-.ejaan-nav-title {
+.ref-nav-title {
   @apply text-sm font-semibold text-gray-700 m-0;
 }
 
-.dark .ejaan-nav-title {
+.dark .ref-nav-title {
   @apply text-dark-text;
 }
 
-.ejaan-nav-list {
+.ref-nav-list {
   @apply mt-2 flex flex-col gap-1 list-none m-0 p-0;
 }
 
-.ejaan-nav-item {
+.ref-nav-item {
   @apply m-0;
 }
 
-.ejaan-nav-link {
+.ref-nav-link {
   @apply block w-full text-left rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-100;
 }
 
-.dark .ejaan-nav-link {
+.dark .ref-nav-link {
   @apply text-dark-text-muted hover:bg-dark-bg-hover;
 }
 
-.ejaan-nav-link-active {
+.ref-nav-link-active {
   @apply bg-blue-100 text-blue-700 font-medium;
 }
 
-.dark .ejaan-nav-link-active {
+.dark .ref-nav-link-active {
   @apply bg-blue-900/40 text-blue-300;
 }
 
 /* ===== Gramatika / Ejaan: konten markdown ===== */
 
-.ejaan-markdown-content > :first-child {
+.ref-markdown-content > :first-child {
   margin-top: 0;
 }
 
-.ejaan-markdown-content p {
+.ref-markdown-content p {
   @apply mb-3 text-gray-700 leading-relaxed;
 }
 
-.dark .ejaan-markdown-content p {
+.dark .ref-markdown-content p {
   @apply text-dark-text;
 }
 
-.ejaan-markdown-content h1 {
+.ref-markdown-content h1 {
   @apply text-xl font-bold mt-8 mb-3 text-gray-900;
 }
 
-.dark .ejaan-markdown-content h1 {
+.dark .ref-markdown-content h1 {
   @apply text-dark-text;
 }
 
-.ejaan-markdown-content h2 {
+.ref-markdown-content h2 {
   @apply text-lg font-semibold mt-7 mb-3 text-gray-900;
 }
 
-.dark .ejaan-markdown-content h2 {
+.dark .ref-markdown-content h2 {
   @apply text-dark-text;
 }
 
-.ejaan-markdown-content h3 {
+.ref-markdown-content h3 {
   @apply text-base font-medium mt-6 mb-2 text-gray-900;
 }
 
-.dark .ejaan-markdown-content h3 {
+.dark .ref-markdown-content h3 {
   @apply text-dark-text;
 }
 
-.ejaan-markdown-content h4 {
+.ref-markdown-content h4 {
   @apply text-sm font-medium mt-5 mb-2 text-gray-800;
 }
 
-.dark .ejaan-markdown-content h4 {
+.dark .ref-markdown-content h4 {
   @apply text-dark-text-muted;
 }
 
-.ejaan-markdown-content code {
+.ref-markdown-content code {
   @apply text-sm px-1 py-0.5 rounded bg-gray-100 text-gray-800;
 }
 
-.dark .ejaan-markdown-content code {
+.dark .ref-markdown-content code {
   @apply bg-dark-bg-input text-dark-text;
 }
 
-.ejaan-markdown-content pre {
+.ref-markdown-content pre {
   @apply p-4 rounded-lg bg-gray-100 overflow-x-auto mb-4;
 }
 
-.dark .ejaan-markdown-content pre {
+.dark .ref-markdown-content pre {
   @apply bg-dark-bg-input;
 }
 
-.ejaan-markdown-content pre code {
+.ref-markdown-content pre code {
   @apply bg-transparent p-0;
 }
 
-.ejaan-markdown-content a {
+.ref-markdown-content a {
   @apply text-blue-600 hover:text-blue-700 underline;
 }
 
-.dark .ejaan-markdown-content a {
+.dark .ref-markdown-content a {
   @apply text-blue-400 hover:text-blue-300;
 }
 
-.gramatika-markdown-content a {
+.ref-gramatika-content a {
   @apply no-underline;
 }
 
-.gramatika-markdown-content a:hover {
+.ref-gramatika-content a:hover {
   @apply no-underline;
 }
 
-.ejaan-markdown-content .status-symbol-yes {
+.ref-markdown-content .status-symbol-yes {
   @apply text-emerald-600 font-semibold;
 }
 
-.dark .ejaan-markdown-content .status-symbol-yes {
+.dark .ref-markdown-content .status-symbol-yes {
   @apply text-emerald-400;
 }
 
-.ejaan-markdown-content .status-symbol-no {
+.ref-markdown-content .status-symbol-no {
   @apply text-red-600 font-semibold;
 }
 
-.dark .ejaan-markdown-content .status-symbol-no {
+.dark .ref-markdown-content .status-symbol-no {
   @apply text-red-400;
 }
 
-.ejaan-markdown-content img {
+.ref-markdown-content img {
   @apply my-5 block max-w-full h-auto rounded-lg border border-gray-200 bg-white;
 }
 
-.dark .ejaan-markdown-content img {
+.dark .ref-markdown-content img {
   @apply border-dark-border bg-dark-bg-elevated;
 }
 
-.ejaan-markdown-content table {
+.ref-markdown-content table {
   @apply my-4 w-full text-sm border-separate border-spacing-0 border border-gray-300 rounded-lg overflow-hidden;
   display: table;
   table-layout: fixed;
 }
 
-.ejaan-markdown-content thead th {
+.ref-markdown-content thead th {
   @apply bg-gray-100 text-gray-800 font-semibold px-3 py-2 text-center border-b border-gray-300;
 }
 
-.ejaan-markdown-content tbody td {
+.ref-markdown-content tbody td {
   @apply px-3 py-2 align-top text-center text-gray-700 border-b border-gray-300;
 }
 
-.ejaan-markdown-content th,
-.ejaan-markdown-content td {
+.ref-markdown-content th,
+.ref-markdown-content td {
   word-break: break-word;
   overflow-wrap: anywhere;
 }
 
-.ejaan-markdown-content th + th,
-.ejaan-markdown-content td + td {
+.ref-markdown-content th + th,
+.ref-markdown-content td + td {
   @apply border-l border-gray-300;
 }
 
-.ejaan-markdown-content tbody tr:nth-child(even) {
+.ref-markdown-content tbody tr:nth-child(even) {
   @apply bg-gray-50;
 }
 
-.ejaan-markdown-content tbody tr:hover {
+.ref-markdown-content tbody tr:hover {
   @apply bg-gray-100/70;
 }
 
-.dark .ejaan-markdown-content table {
+.dark .ref-markdown-content table {
   @apply border-dark-border;
 }
 
-.dark .ejaan-markdown-content thead th {
+.dark .ref-markdown-content thead th {
   @apply bg-dark-bg-hover text-white border-dark-border;
 }
 
-.dark .ejaan-markdown-content tbody td {
+.dark .ref-markdown-content tbody td {
   @apply text-dark-text border-dark-border;
 }
 
-.dark .ejaan-markdown-content th + th,
-.dark .ejaan-markdown-content td + td {
+.dark .ref-markdown-content th + th,
+.dark .ref-markdown-content td + td {
   @apply border-dark-border;
 }
 
-.dark .ejaan-markdown-content tbody tr:nth-child(even) {
+.dark .ref-markdown-content tbody tr:nth-child(even) {
   @apply bg-dark-bg-elevated;
 }
 
-.dark .ejaan-markdown-content tbody tr:hover {
+.dark .ref-markdown-content tbody tr:hover {
   @apply bg-dark-bg-hover;
 }
 
-.ejaan-markdown-content blockquote,
-.ejaan-markdown-content blockquote p,
-.ejaan-markdown-content blockquote li {
+.ref-markdown-content blockquote,
+.ref-markdown-content blockquote p,
+.ref-markdown-content blockquote li {
   @apply font-normal leading-relaxed text-base;
 }
 
-.ejaan-markdown-content blockquote + blockquote {
+.ref-markdown-content blockquote + blockquote {
   @apply border-t border-gray-300 pt-3 mt-3;
 }
 
-.dark .ejaan-markdown-content blockquote + blockquote {
+.dark .ref-markdown-content blockquote + blockquote {
   @apply border-dark-border;
 }
 
-.ejaan-markdown-content ul {
+.ref-markdown-content ul {
   @apply columns-1 md:columns-2 gap-8 mb-3;
   list-style-type: disc;
   list-style-position: outside;
@@ -361,11 +361,11 @@ a.ejaan-sidebar-pill-active {
   margin-left: 0;
 }
 
-.gramatika-markdown-content ul {
+.ref-gramatika-content ul {
   @apply columns-1;
 }
 
-.ejaan-markdown-content ol {
+.ref-markdown-content ol {
   list-style-type: decimal;
   list-style-position: outside;
   padding-left: 1.25rem;
@@ -373,40 +373,40 @@ a.ejaan-sidebar-pill-active {
   margin-bottom: 0.75rem;
 }
 
-.ejaan-markdown-content li > ol,
-.ejaan-markdown-content li > ul {
+.ref-markdown-content li > ol,
+.ref-markdown-content li > ul {
   margin-top: 0.25rem;
   margin-bottom: 0;
 }
 
-.ejaan-markdown-content li {
+.ref-markdown-content li {
   @apply text-gray-700;
   text-indent: 0;
   padding-left: 0;
   break-inside: avoid;
 }
 
-.dark .ejaan-markdown-content li {
+.dark .ref-markdown-content li {
   @apply text-dark-text;
 }
 
-.ejaan-markdown-content li > p {
+.ref-markdown-content li > p {
   display: inline;
   margin: 0;
 }
 
-.ejaan-markdown-content li > p + p {
+.ref-markdown-content li > p + p {
   display: block;
   margin-top: 0.5rem;
 }
 
 /* ===== Collapsible headings (details/summary) ===== */
 
-.ejaan-markdown-content details {
+.ref-markdown-content details {
   /* spacing from heading margins is preserved */
 }
 
-.ejaan-markdown-content summary {
+.ref-markdown-content summary {
   @apply cursor-pointer select-none;
   display: flex;
   align-items: center;
@@ -414,12 +414,12 @@ a.ejaan-sidebar-pill-active {
   list-style: none;
 }
 
-.ejaan-markdown-content summary::-webkit-details-marker {
+.ref-markdown-content summary::-webkit-details-marker {
   display: none;
 }
 
 /* Triangle toggle indicator */
-.ejaan-markdown-content summary::before {
+.ref-markdown-content summary::before {
   content: '▶';
   flex-shrink: 0;
   font-size: 0.5em;
@@ -428,22 +428,22 @@ a.ejaan-sidebar-pill-active {
   padding-top: 1px;
 }
 
-.dark .ejaan-markdown-content summary::before {
+.dark .ref-markdown-content summary::before {
   @apply text-gray-500;
 }
 
-.ejaan-markdown-content details[open] > summary::before {
+.ref-markdown-content details[open] > summary::before {
   transform: rotate(90deg);
 }
 
-.ejaan-markdown-content details[open] > summary {
+.ref-markdown-content details[open] > summary {
   @apply mb-3;
 }
 
 /* Remove vertical margin from heading inside summary (summary provides spacing) */
-.ejaan-markdown-content summary > h2,
-.ejaan-markdown-content summary > h3,
-.ejaan-markdown-content summary > h4 {
+.ref-markdown-content summary > h2,
+.ref-markdown-content summary > h3,
+.ref-markdown-content summary > h4 {
   margin-top: 0;
   margin-bottom: 0;
   flex: 1;

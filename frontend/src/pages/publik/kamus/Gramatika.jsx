@@ -1,8 +1,8 @@
-/**
+﻿/**
  * @fileoverview Halaman tunggal kaidah gramatika berbasis markdown statis di public/gramatika
  */
 
-import '../../../styles/gramatika.css';
+import '../../../styles/referensi.css';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
@@ -74,31 +74,31 @@ function DaftarIsiPanel({ aktifSlug = '', aktifSlugSebagaiTautan = '' }) {
             terbukaAwal={kategoriAktif}
             aksen={true}
           >
-            <ul className="ejaan-sidebar-pill-grid">
-              <li key={`${bab.slug}-ikhtisar`} className="ejaan-sidebar-pill-item">
+            <ul className="ref-sidebar-pill-grid">
+              <li key={`${bab.slug}-ikhtisar`} className="ref-sidebar-pill-item">
                 {aktifSlug === bab.slug ? (
-                  <span className="ejaan-sidebar-pill ejaan-sidebar-pill-active" aria-current="page">
+                  <span className="ref-sidebar-pill ref-sidebar-pill-active" aria-current="page">
                     Ikhtisar Bab
                   </span>
                 ) : (
                   <Link
                     to={`/gramatika/${bab.slug}`}
-                    className="ejaan-sidebar-pill"
+                    className="ref-sidebar-pill"
                   >
                     Ikhtisar Bab
                   </Link>
                 )}
               </li>
               {bab.items.map((item) => (
-                <li key={item.slug} className="ejaan-sidebar-pill-item">
+                <li key={item.slug} className="ref-sidebar-pill-item">
                   {aktifSlug === item.slug ? (
-                    <span className="ejaan-sidebar-pill ejaan-sidebar-pill-active" aria-current="page">
+                    <span className="ref-sidebar-pill ref-sidebar-pill-active" aria-current="page">
                       {item.judul}
                     </span>
                   ) : aktifSlugSebagaiTautan === item.slug ? (
                     <Link
                       to={`/gramatika/${item.slug}`}
-                      className="ejaan-sidebar-pill ejaan-sidebar-pill-active"
+                      className="ref-sidebar-pill ref-sidebar-pill-active"
                       aria-current="page"
                     >
                       {item.judul}
@@ -106,7 +106,7 @@ function DaftarIsiPanel({ aktifSlug = '', aktifSlugSebagaiTautan = '' }) {
                   ) : (
                     <Link
                       to={`/gramatika/${item.slug}`}
-                      className="ejaan-sidebar-pill"
+                      className="ref-sidebar-pill"
                     >
                       {item.judul}
                     </Link>
@@ -124,15 +124,15 @@ function DaftarIsiPanel({ aktifSlug = '', aktifSlugSebagaiTautan = '' }) {
 function DaftarReferensiPanel({ aktifSlug = '' }) {
   return (
     <PanelLipat judul="Daftar" terbukaAwal={true} aksen={true}>
-      <ul className="ejaan-sidebar-pill-grid">
+      <ul className="ref-sidebar-pill-grid">
         {daftarHalamanReferensiGramatika.map((item) => (
-          <li key={item.slug} className="ejaan-sidebar-pill-item">
+          <li key={item.slug} className="ref-sidebar-pill-item">
             {aktifSlug === item.slug ? (
-              <span className="ejaan-sidebar-pill ejaan-sidebar-pill-active" aria-current="page">
+              <span className="ref-sidebar-pill ref-sidebar-pill-active" aria-current="page">
                 {item.judul}
               </span>
             ) : (
-              <Link to={`/gramatika/${item.slug}`} className="ejaan-sidebar-pill">
+              <Link to={`/gramatika/${item.slug}`} className="ref-sidebar-pill">
                 {item.judul}
               </Link>
             )}
@@ -401,7 +401,7 @@ function Gramatika() {
               <button
                 type="button"
                 onClick={toggleSemuaHeading}
-                className="gramatika-heading-toggle"
+                className="ref-heading-toggle"
                 aria-pressed={!semuaHeadingTerbuka}
               >
                 {semuaHeadingTerbuka ? 'Ciutkan' : 'Luaskan'}
@@ -416,7 +416,7 @@ function Gramatika() {
             {!sedangMemuat && !galat && (
               <div
                 ref={markdownContainerRef}
-                className="ejaan-markdown-content gramatika-markdown-content"
+                className="ref-markdown-content ref-gramatika-content"
               >
                 <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[[rehypeCollapsibleHeadings, { defaultOpen: true }], rehypeStatusSymbols]}>
                   {isiMarkdown}
@@ -425,26 +425,26 @@ function Gramatika() {
             )}
 
             {!sedangMemuat && !galat && (dokumenSebelumnya || dokumenSesudah) && (
-              <nav className="ejaan-sekuens-nav" aria-label="Navigasi gramatika">
+              <nav className="ref-sekuens-nav" aria-label="Navigasi gramatika">
                 {dokumenSebelumnya && (
                   <Link
                     to={`/gramatika/${dokumenSebelumnya.slug}`}
-                    className="ejaan-sekuens-link ejaan-sekuens-link-prev"
+                    className="ref-sekuens-link ref-sekuens-link-prev"
                     aria-label={`‹ ${dokumenSebelumnya.judul}`}
                   >
-                    <span className="ejaan-sekuens-arrow" aria-hidden="true">{'‹'}</span>
-                    <span className="ejaan-sekuens-label">{dokumenSebelumnya.judul}</span>
+                    <span className="ref-sekuens-arrow" aria-hidden="true">{'‹'}</span>
+                    <span className="ref-sekuens-label">{dokumenSebelumnya.judul}</span>
                   </Link>
                 )}
 
                 {dokumenSesudah && (
                   <Link
                     to={`/gramatika/${dokumenSesudah.slug}`}
-                    className="ejaan-sekuens-link ejaan-sekuens-link-next"
+                    className="ref-sekuens-link ref-sekuens-link-next"
                     aria-label={`${dokumenSesudah.judul} ›`}
                   >
-                    <span className="ejaan-sekuens-label">{dokumenSesudah.judul}</span>
-                    <span className="ejaan-sekuens-arrow" aria-hidden="true">{'›'}</span>
+                    <span className="ref-sekuens-label">{dokumenSesudah.judul}</span>
+                    <span className="ref-sekuens-arrow" aria-hidden="true">{'›'}</span>
                   </Link>
                 )}
               </nav>

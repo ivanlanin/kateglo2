@@ -1,8 +1,8 @@
-/**
+﻿/**
  * @fileoverview Halaman tunggal kaidah ejaan berbasis markdown statis di public/ejaan
  */
 
-import '../../../styles/gramatika.css';
+import '../../../styles/referensi.css';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
@@ -48,17 +48,17 @@ function DaftarIsiPanel({ aktifSlug = '' }) {
             terbukaAwal={kategoriAktif}
             aksen={true}
           >
-            <ul className="ejaan-sidebar-pill-grid">
+            <ul className="ref-sidebar-pill-grid">
               {bab.items.map((item) => (
-                <li key={item.slug} className="ejaan-sidebar-pill-item">
+                <li key={item.slug} className="ref-sidebar-pill-item">
                   {aktifSlug === item.slug ? (
-                    <span className="ejaan-sidebar-pill ejaan-sidebar-pill-active" aria-current="page">
+                    <span className="ref-sidebar-pill ref-sidebar-pill-active" aria-current="page">
                       {item.judul}
                     </span>
                   ) : (
                     <Link
                       to={`/ejaan/${item.slug}`}
-                      className="ejaan-sidebar-pill"
+                      className="ref-sidebar-pill"
                     >
                       {item.judul}
                     </Link>
@@ -242,7 +242,7 @@ function Ejaan() {
             {!sedangMemuat && galat && <p className="secondary-text">{galat}</p>}
 
             {!sedangMemuat && !galat && (
-              <div className="ejaan-markdown-content">
+              <div className="ref-markdown-content">
                 <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeCollapsibleHeadings, rehypeStatusSymbols]}>
                   {isiMarkdown}
                 </ReactMarkdown>
@@ -250,26 +250,26 @@ function Ejaan() {
             )}
 
             {!sedangMemuat && !galat && (dokumenSebelumnya || dokumenSesudah) && (
-              <nav className="ejaan-sekuens-nav" aria-label="Navigasi bab ejaan">
+              <nav className="ref-sekuens-nav" aria-label="Navigasi bab ejaan">
                 {dokumenSebelumnya && (
                   <Link
                     to={`/ejaan/${dokumenSebelumnya.slug}`}
-                    className="ejaan-sekuens-link ejaan-sekuens-link-prev"
+                    className="ref-sekuens-link ref-sekuens-link-prev"
                     aria-label={`‹ ${dokumenSebelumnya.judul}`}
                   >
-                    <span className="ejaan-sekuens-arrow" aria-hidden="true">{'‹'}</span>
-                    <span className="ejaan-sekuens-label">{dokumenSebelumnya.judul}</span>
+                    <span className="ref-sekuens-arrow" aria-hidden="true">{'‹'}</span>
+                    <span className="ref-sekuens-label">{dokumenSebelumnya.judul}</span>
                   </Link>
                 )}
 
                 {dokumenSesudah && (
                   <Link
                     to={`/ejaan/${dokumenSesudah.slug}`}
-                    className="ejaan-sekuens-link ejaan-sekuens-link-next"
+                    className="ref-sekuens-link ref-sekuens-link-next"
                     aria-label={`${dokumenSesudah.judul} ›`}
                   >
-                    <span className="ejaan-sekuens-label">{dokumenSesudah.judul}</span>
-                    <span className="ejaan-sekuens-arrow" aria-hidden="true">{'›'}</span>
+                    <span className="ref-sekuens-label">{dokumenSesudah.judul}</span>
+                    <span className="ref-sekuens-arrow" aria-hidden="true">{'›'}</span>
                   </Link>
                 )}
               </nav>
