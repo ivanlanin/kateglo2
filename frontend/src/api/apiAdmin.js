@@ -1513,6 +1513,12 @@ export function useDaftarArtikelAdmin({
   topik = '',
   status = '',
 } = {}) {
+  const diterbitkan = status === 'diterbitkan'
+    ? 'true'
+    : status === 'draf'
+      ? 'false'
+      : undefined;
+
   return useDaftarAdmin('/api/redaksi/artikel', 'admin-artikel', {
     limit,
     cursor,
@@ -1521,7 +1527,7 @@ export function useDaftarArtikelAdmin({
     q,
     includeAktif: false,
     topik: topik || undefined,
-    status: status || undefined,
+    diterbitkan,
   });
 }
 

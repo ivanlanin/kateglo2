@@ -22,12 +22,19 @@ class ModelArtikel {
     return TOPIK_VALID;
   }
 
-  static async buatSlug(judul) {
+  static async buatSlug(judul, { excludeId } = {}) {
     const basis = buatSlugDariJudul(judul) || 'artikel';
-    const result = await db.query(
-      'SELECT slug FROM artikel WHERE slug = $1 OR slug LIKE $2 ORDER BY slug',
-      [basis, `${basis}-%`]
-    );
+    const params = [basis, `${basis}-%`];
+    let sql = 'SELECT slug FROM artikel WHERE (slug = $1 OR slug LIKE $2)';
+
+    if (excludeId) {
+      params.push(excludeId);
+      sql += ` AND id <> $${params.length}`;
+    }
+
+    sql += ' ORDER BY slug';
+
+    const result = await db.query(sql, params);
     const slugExisting = new Set(result.rows.map((r) => r.slug));
     if (!slugExisting.has(basis)) return basis;
     let i = 2;
@@ -58,6 +65,7 @@ class ModelArtikel {
         a.id, a.judul, a.slug, a.diterbitkan_pada,
         LEFT(a.konten, 200) AS cuplikan,
         p.nama AS penulis,
+        p.nama AS penulis_nama,
         COALESCE(
           (SELECT array_agg(at2.topik ORDER BY at2.topik) FROM artikel_topik at2 WHERE at2.artikel_id = a.id),
           '{}'
@@ -85,7 +93,9 @@ class ModelArtikel {
       `SELECT
         a.id, a.judul, a.slug, a.konten, a.diterbitkan_pada, a.updated_at,
         p.nama AS penulis,
+        p.nama AS penulis_nama,
         pn.nama AS penyunting,
+        pn.nama AS penyunting_nama,
         COALESCE(
           (SELECT array_agg(at2.topik ORDER BY at2.topik) FROM artikel_topik at2 WHERE at2.artikel_id = a.id),
           '{}'
@@ -138,8 +148,8 @@ class ModelArtikel {
       SELECT
         a.id, a.judul, a.slug, a.diterbitkan, a.diterbitkan_pada, a.updated_at,
         LEFT(a.konten, 200) AS cuplikan,
-        p.id AS penulis_id, p.nama AS penulis,
-        pn.id AS penyunting_id, pn.nama AS penyunting,
+        p.id AS penulis_id, p.nama AS penulis, p.nama AS penulis_nama,
+        pn.id AS penyunting_id, pn.nama AS penyunting, pn.nama AS penyunting_nama,
         COALESCE(
           (SELECT array_agg(at2.topik ORDER BY at2.topik) FROM artikel_topik at2 WHERE at2.artikel_id = a.id),
           '{}'
@@ -148,7 +158,7 @@ class ModelArtikel {
       JOIN pengguna p ON p.id = a.penulis_id
       LEFT JOIN pengguna pn ON pn.id = a.penyunting_id
       ${where}
-      ORDER BY a.updated_at DESC
+      ORDER BY a.diterbitkan_pada DESC NULLS LAST, a.updated_at DESC
       LIMIT $${params.length - 1} OFFSET $${params.length}
     `;
 
@@ -167,8 +177,8 @@ class ModelArtikel {
     const result = await db.query(
       `SELECT
         a.id, a.judul, a.slug, a.konten, a.diterbitkan, a.diterbitkan_pada, a.created_at, a.updated_at,
-        p.id AS penulis_id, p.nama AS penulis,
-        pn.id AS penyunting_id, pn.nama AS penyunting,
+        p.id AS penulis_id, p.nama AS penulis, p.nama AS penulis_nama,
+        pn.id AS penyunting_id, pn.nama AS penyunting, pn.nama AS penyunting_nama,
         COALESCE(
           (SELECT array_agg(at2.topik ORDER BY at2.topik) FROM artikel_topik at2 WHERE at2.artikel_id = a.id),
           '{}'
@@ -218,7 +228,13 @@ class ModelArtikel {
     const setClauses = [];
     const params = [];
 
-    if (judul !== undefined) { params.push(judul); setClauses.push(`judul = $${params.length}`); }
+    if (judul !== undefined) {
+      params.push(judul);
+      setClauses.push(`judul = $${params.length}`);
+      const slugBaru = await ModelArtikel.buatSlug(judul, { excludeId: id });
+      params.push(slugBaru);
+      setClauses.push(`slug = $${params.length}`);
+    }
     if (konten !== undefined) { params.push(konten); setClauses.push(`konten = $${params.length}`); }
     if (penulis_id !== undefined && penulis_id !== null) { params.push(penulis_id); setClauses.push(`penulis_id = $${params.length}`); }
 

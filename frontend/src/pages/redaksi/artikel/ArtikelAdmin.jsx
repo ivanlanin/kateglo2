@@ -45,32 +45,62 @@ const nilaiAwal = {
   diterbitkan_pada: null,
 };
 
+const opsiTopikArtikel = [
+  { value: 'tanya-jawab', label: 'Tanya Jawab' },
+  { value: 'asal-kata', label: 'Asal Kata' },
+  { value: 'kata-baru', label: 'Kata Baru' },
+  { value: 'kesalahan-umum', label: 'Kesalahan Umum' },
+  { value: 'lainnya', label: 'Lainnya' },
+];
+
+const labelTopikArtikel = Object.fromEntries(opsiTopikArtikel.map((opsi) => [opsi.value, opsi.label]));
+
+function normalizeTopikArtikel(topik, { fallback = true } = {}) {
+  const daftar = Array.isArray(topik) ? topik : (topik ? [topik] : []);
+  const unikValid = [];
+
+  daftar.forEach((nilai) => {
+    if (!labelTopikArtikel[nilai] || unikValid.includes(nilai)) return;
+    unikValid.push(nilai);
+  });
+
+  if (unikValid.length > 0) return unikValid;
+  return fallback ? ['lainnya'] : [];
+}
+
 const opsiFilterStatus = [
   { value: '', label: '—Status—' },
-  { value: 'diterbitkan', label: 'Diterbitkan' },
+  { value: 'diterbitkan', label: 'Terbit' },
   { value: 'draf', label: 'Draf' },
 ];
 
 const kolom = [
+  {
+    key: 'diterbitkan_pada',
+    label: 'Terbit',
+    render: (item) => <span className="text-gray-700 dark:text-gray-300">{formatLocalDateTime(item.diterbitkan_pada, { fallback: '—' })}</span>,
+  },
   {
     key: 'judul',
     label: 'Judul',
     render: (item) => <span className="font-medium text-gray-900 dark:text-gray-100">{potongTeks(item.judul, 60)}</span>,
   },
   {
-    key: 'topik',
-    label: 'Topik',
-    render: (item) =>
-      item.topik?.length > 0 ? (
-        <span className="text-gray-600 dark:text-gray-400">{item.topik.join(', ')}</span>
-      ) : (
-        <span className="text-gray-400 dark:text-gray-500">—</span>
-      ),
-  },
-  {
     key: 'penulis_nama',
     label: 'Penulis',
-    render: (item) => <span className="text-gray-700 dark:text-gray-300">{item.penulis_nama || '—'}</span>,
+    render: (item) => <span className="text-gray-700 dark:text-gray-300">{item.penulis_nama || item.penulis || '—'}</span>,
+  },
+  {
+    key: 'topik',
+    label: 'Topik',
+    render: (item) => {
+      const topik = normalizeTopikArtikel(item.topik, { fallback: false });
+      return topik.length > 0 ? (
+        <span className="text-gray-600 dark:text-gray-400">{topik.map((nilai) => labelTopikArtikel[nilai] || nilai).join(', ')}</span>
+      ) : (
+        <span className="text-gray-400 dark:text-gray-500">—</span>
+      );
+    },
   },
   {
     key: 'diterbitkan',
@@ -83,33 +113,21 @@ const kolom = [
             : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
         }`}
       >
-        {item.diterbitkan ? 'Diterbitkan' : 'Draf'}
+        {item.diterbitkan ? 'Terbit' : 'Draf'}
       </span>
     ),
   },
-  {
-    key: 'updated_at',
-    label: 'Diperbarui',
-    render: (item) => formatLocalDateTime(item.updated_at, { fallback: '—' }),
-  },
 ];
-
-// ─── Editor Tiptap ───────────────────────────────────────────────────────────
 
 function EditorArtikel({ value, onChange, onUnggahGambar }) {
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Image,
-      Markdown.configure({ transformCopiedText: true }),
-    ],
+    extensions: [StarterKit, Image, Markdown.configure({ transformCopiedText: true })],
     content: value || '',
-    onUpdate({ editor: e }) {
-      onChange('konten', e.storage.markdown.getMarkdown());
+    onUpdate({ editor: editorInstance }) {
+      onChange('konten', editorInstance.storage.markdown.getMarkdown());
     },
   });
 
-  // Sync external value changes (e.g. when switching articles)
   const prevValue = useRef(value);
   useEffect(() => {
     if (!editor) return;
@@ -126,7 +144,7 @@ function EditorArtikel({ value, onChange, onUnggahGambar }) {
 
   return (
     <div className="form-admin-group">
-      <label className="form-admin-label">Konten<span className="text-red-500 ml-0.5">*</span></label>
+      <label className="form-admin-label">Konten<span className="ml-0.5 text-red-500">*</span></label>
       <div className="editor-toolbar">
         <button type="button" onClick={() => editor.chain().focus().toggleBold().run()} className={editor.isActive('bold') ? 'aktif' : ''} title="Tebal"><strong>B</strong></button>
         <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()} className={editor.isActive('italic') ? 'aktif' : ''} title="Miring"><i>I</i></button>
@@ -151,60 +169,115 @@ function EditorArtikel({ value, onChange, onUnggahGambar }) {
   );
 }
 
-// ─── Input Topik ─────────────────────────────────────────────────────────────
-
 function InputTopik({ topik, onChange }) {
-  const [inputVal, setInputVal] = useState('');
+  const topikTerpilih = normalizeTopikArtikel(topik, { fallback: false });
+  const [queryInput, setQueryInput] = useState('');
+  const [tampilDropdown, setTampilDropdown] = useState(false);
 
-  const tambahTopik = () => {
-    const val = inputVal.trim();
-    if (!val) return;
-    if (topik.includes(val)) {
-      setInputVal('');
-      return;
-    }
-    onChange('topik', [...topik, val]);
-    setInputVal('');
+  const topikTersedia = opsiTopikArtikel.filter((opsi) => !topikTerpilih.includes(opsi.value));
+  const topikFiltered = queryInput
+    ? topikTersedia.filter((opsi) => {
+        const kataKunci = queryInput.toLowerCase();
+        return opsi.label.toLowerCase().includes(kataKunci) || opsi.value.toLowerCase().includes(kataKunci);
+      })
+    : topikTersedia;
+
+  const tambahTopik = (nilai) => {
+    if (!nilai || topikTerpilih.includes(nilai)) return;
+    const berikutnya = [...topikTerpilih.filter((item) => item !== 'lainnya' || nilai === 'lainnya'), nilai];
+    onChange('topik', berikutnya.length > 0 ? berikutnya : ['lainnya']);
+    setQueryInput('');
   };
 
-  const hapusTopik = (t) => {
-    onChange('topik', topik.filter((x) => x !== t));
+  const hapusTopik = (nilai) => {
+    const berikutnya = topikTerpilih.filter((item) => item !== nilai);
+    onChange('topik', berikutnya.length > 0 ? berikutnya : ['lainnya']);
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' || e.key === ',') {
-      e.preventDefault();
-      tambahTopik();
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && topikFiltered.length > 0) {
+      event.preventDefault();
+      tambahTopik(topikFiltered[0].value);
     }
   };
 
   return (
     <div className="form-admin-group">
       <label className="form-admin-label">Topik</label>
-      <div className="flex flex-wrap gap-1 mb-2">
-        {topik.map((t) => (
-          <span key={t} className="badge-topik-admin">
-            {t}
-            <button type="button" onClick={() => hapusTopik(t)} className="ml-1 text-gray-500 hover:text-red-500" aria-label={`Hapus topik ${t}`}>×</button>
-          </span>
-        ))}
-      </div>
-      <div className="flex gap-2">
-        <input
-          type="text"
-          value={inputVal}
-          onChange={(e) => setInputVal(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Ketik topik lalu Enter"
-          className="form-admin-input flex-1"
-        />
-        <button type="button" onClick={tambahTopik} className="form-admin-btn-batal px-3">Tambah</button>
+      <div className="relative">
+        <div className="artikel-admin-topik-input-wrap">
+          {topikTerpilih.map((nilai) => (
+            <span key={nilai} className="artikel-admin-topik-chip">
+              {labelTopikArtikel[nilai] || nilai}
+              <button
+                type="button"
+                onClick={() => hapusTopik(nilai)}
+                className="opacity-60 hover:opacity-100"
+                aria-label={`Hapus topik ${labelTopikArtikel[nilai] || nilai}`}
+              >
+                ×
+              </button>
+            </span>
+          ))}
+          <input
+            type="text"
+            aria-label="Cari topik artikel"
+            value={queryInput}
+            onChange={(event) => setQueryInput(event.target.value)}
+            onKeyDown={handleKeyDown}
+            onFocus={() => setTampilDropdown(true)}
+            onBlur={() => setTimeout(() => setTampilDropdown(false), 120)}
+            placeholder={topikTerpilih.length === 0 ? 'Tambah topik …' : ''}
+            className="artikel-admin-topik-input"
+          />
+        </div>
+        {tampilDropdown && topikFiltered.length > 0 && (
+          <div className="artikel-admin-topik-dropdown">
+            {topikFiltered.map((opsi) => (
+              <button
+                key={opsi.value}
+                type="button"
+                onMouseDown={() => tambahTopik(opsi.value)}
+                className="artikel-admin-topik-dropdown-item"
+              >
+                {opsi.label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-// ─── Halaman Utama ───────────────────────────────────────────────────────────
+function StatusArtikelField({ data, modeTambah, bolehTerbitkan, isPending, onToggle }) {
+  const bisaUbah = !modeTambah && bolehTerbitkan;
+
+  return (
+    <div className="form-admin-group">
+      <label className="form-admin-label">Status</label>
+      <button
+        type="button"
+        onClick={() => bisaUbah && onToggle(!data.diterbitkan)}
+        disabled={!bisaUbah || isPending}
+        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+          data.diterbitkan ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'
+        }`}
+      >
+        <span
+          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+            data.diterbitkan ? 'translate-x-6' : 'translate-x-1'
+          }`}
+        />
+      </button>
+      <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
+        {data.diterbitkan ? 'Terbit' : 'Draf'}
+      </span>
+      {modeTambah && <p className="artikel-admin-status-bantuan">Artikel baru dibuat sebagai draf. Status bisa diubah setelah tersimpan.</p>}
+      {!modeTambah && !bolehTerbitkan && <p className="artikel-admin-status-bantuan">Status hanya dapat diubah oleh pengguna dengan izin penerbitan.</p>}
+    </div>
+  );
+}
 
 function ArtikelAdmin() {
   const navigate = useNavigate();
@@ -245,7 +318,7 @@ function ArtikelAdmin() {
   const total = resp?.total || 0;
   const opsiPengguna = (penggunaResp?.data || []).map((p) => ({
     value: String(p.id),
-    label: `${p.nama} (${p.surel})`,
+    label: p.nama,
   }));
 
   useEffect(() => {
@@ -263,7 +336,7 @@ function ArtikelAdmin() {
     if (idEditTerbuka.current === detail.id) return;
     panel.bukaUntukSunting({
       ...detail,
-      topik: Array.isArray(detail.topik) ? detail.topik : [],
+      topik: normalizeTopikArtikel(detail.topik, { fallback: false }),
     });
     idEditTerbuka.current = detail.id;
   }, [detailResp, idDariPath, isDetailError, isDetailLoading, panel]);
@@ -326,7 +399,10 @@ function ArtikelAdmin() {
       setPesan({ error: pesanValidasi, sukses: '' });
       return;
     }
-    simpan.mutate(panel.data, {
+    simpan.mutate({
+      ...panel.data,
+      topik: normalizeTopikArtikel(panel.data.topik),
+    }, {
       onSuccess: () => {
         setPesan({ error: '', sukses: 'Artikel tersimpan.' });
         setTimeout(() => tutupPanel(), 600);
@@ -420,15 +496,6 @@ function ArtikelAdmin() {
       <PanelGeser buka={panel.buka} onTutup={tutupPanel} judul={judulPanel} lebar="lebar">
         <PesanForm error={pesan.error} sukses={pesan.sukses} />
 
-        {!panel.modeTambah && panel.data.slug && (
-          <div className="form-admin-group">
-            <label className="form-admin-label">Slug</label>
-            <p className="form-admin-input bg-gray-50 dark:bg-dark-bg text-gray-500 dark:text-gray-400 select-all">
-              {panel.data.slug}
-            </p>
-          </div>
-        )}
-
         <InputField
           label="Judul"
           name="judul"
@@ -437,74 +504,58 @@ function ArtikelAdmin() {
           required
         />
 
-        <SearchableSelectField
-          label="Penulis"
-          name="penulis_id"
-          value={String(panel.data.penulis_id ?? '')}
-          onChange={(name, val) => panel.ubahField(name, val ? Number(val) : null)}
-          options={opsiPengguna}
-          placeholder="Pilih penulis…"
-          searchPlaceholder="Ketik nama atau surel…"
-          required
-        />
+        <div className="artikel-admin-grid-dua-kolom">
+          <SearchableSelectField
+            label="Penulis"
+            name="penulis_id"
+            value={String(panel.data.penulis_id ?? '')}
+            onChange={(name, val) => panel.ubahField(name, val ? Number(val) : null)}
+            options={opsiPengguna}
+            placeholder="Pilih penulis…"
+            searchPlaceholder="Ketik nama atau surel…"
+            required
+          />
 
-        <SearchableSelectField
-          label="Penyunting"
-          name="penyunting_id"
-          value={String(panel.data.penyunting_id ?? '')}
-          onChange={(name, val) => panel.ubahField(name, val ? Number(val) : null)}
-          options={[{ value: '', label: '— Tidak ada —' }, ...opsiPengguna]}
-          placeholder="Pilih penyunting…"
-          searchPlaceholder="Ketik nama atau surel…"
-        />
+          <SearchableSelectField
+            label="Penyunting"
+            name="penyunting_id"
+            value={String(panel.data.penyunting_id ?? '')}
+            onChange={(name, val) => panel.ubahField(name, val ? Number(val) : null)}
+            options={[{ value: '', label: '— Tidak ada —' }, ...opsiPengguna]}
+            placeholder="Pilih penyunting…"
+            searchPlaceholder="Ketik nama atau surel…"
+          />
+        </div>
 
-        <InputTopik
-          topik={panel.data.topik || []}
-          onChange={panel.ubahField}
-        />
+        <InputTopik topik={panel.data.topik || []} onChange={panel.ubahField} />
+
+        <div className="artikel-admin-grid-dua-kolom">
+          <div className="form-admin-group">
+            <label className="form-admin-label">Terbit</label>
+            <input
+              type="datetime-local"
+              value={panel.data.diterbitkan_pada ? panel.data.diterbitkan_pada.slice(0, 16) : ''}
+              onChange={(e) => panel.ubahField('diterbitkan_pada', e.target.value ? `${e.target.value}:00` : null)}
+              disabled={panel.modeTambah}
+              className="form-admin-input"
+            />
+            {panel.modeTambah && <p className="artikel-admin-status-bantuan">Tanggal terbit tersedia setelah artikel pertama kali disimpan.</p>}
+          </div>
+
+          <StatusArtikelField
+            data={panel.data}
+            modeTambah={panel.modeTambah}
+            bolehTerbitkan={bolehTerbitkan}
+            isPending={terbitkan.isPending}
+            onToggle={handleTerbitkan}
+          />
+        </div>
 
         <EditorArtikel
           value={panel.data.konten}
           onChange={panel.ubahField}
           onUnggahGambar={handleUnggahGambar}
         />
-
-        {!panel.modeTambah && bolehTerbitkan && (
-          <div className="form-admin-group">
-            <label className="form-admin-label">Diterbitkan</label>
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => handleTerbitkan(!panel.data.diterbitkan)}
-                disabled={terbitkan.isPending}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  panel.data.diterbitkan ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'
-                }`}
-              >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    panel.data.diterbitkan ? 'translate-x-6' : 'translate-x-1'
-                  }`}
-                />
-              </button>
-              <span className="text-sm text-gray-600 dark:text-gray-400">
-                {panel.data.diterbitkan ? 'Diterbitkan' : 'Draf'}
-              </span>
-            </div>
-          </div>
-        )}
-
-        {!panel.modeTambah && (
-          <div className="form-admin-group">
-            <label className="form-admin-label">Diterbitkan pada</label>
-            <input
-              type="datetime-local"
-              value={panel.data.diterbitkan_pada ? panel.data.diterbitkan_pada.slice(0, 16) : ''}
-              onChange={(e) => panel.ubahField('diterbitkan_pada', e.target.value ? `${e.target.value}:00` : null)}
-              className="form-admin-input"
-            />
-          </div>
-        )}
 
         <FormFooter
           onSimpan={handleSimpan}

@@ -215,6 +215,54 @@
     @apply bg-green-900/20 border-green-800 text-green-400;
   }
 
+  .artikel-admin-grid-dua-kolom {
+    @apply grid grid-cols-1 gap-4 md:grid-cols-2;
+  }
+
+  .artikel-admin-topik-input-wrap {
+    @apply flex min-h-[2.5rem] flex-wrap gap-1.5 rounded border border-gray-300 bg-white p-2;
+  }
+
+  .dark .artikel-admin-topik-input-wrap {
+    @apply border-gray-600 bg-gray-800;
+  }
+
+  .artikel-admin-topik-chip {
+    @apply inline-flex items-center gap-1 rounded bg-blue-100 px-2 py-0.5 text-sm text-blue-800;
+  }
+
+  .dark .artikel-admin-topik-chip {
+    @apply bg-blue-900 text-blue-200;
+  }
+
+  .artikel-admin-topik-input {
+    @apply min-w-24 flex-1 bg-transparent text-sm outline-none;
+  }
+
+  .artikel-admin-topik-dropdown {
+    @apply absolute left-0 right-0 top-full z-20 mt-1 max-h-60 overflow-y-auto rounded border border-gray-200 bg-white shadow-lg;
+  }
+
+  .dark .artikel-admin-topik-dropdown {
+    @apply border-gray-600 bg-gray-800;
+  }
+
+  .artikel-admin-topik-dropdown-item {
+    @apply w-full px-3 py-1.5 text-left text-sm hover:bg-gray-100;
+  }
+
+  .dark .artikel-admin-topik-dropdown-item {
+    @apply hover:bg-gray-700;
+  }
+
+  .artikel-admin-status-bantuan {
+    @apply mt-2 text-sm text-gray-500;
+  }
+
+  .dark .artikel-admin-status-bantuan {
+    @apply text-gray-400;
+  }
+
   /* ── Editor TipTap ─────────────────────────────────────────── */
 
   .editor-toolbar {

@@ -63,7 +63,13 @@ router.get('/', periksaIzin('tulis_artikel'), async (req, res, next) => {
     const topik = req.query.topik
       ? (Array.isArray(req.query.topik) ? req.query.topik : [req.query.topik])
       : undefined;
-    const diterbitkan = parseTrimmedString(req.query.diterbitkan);
+    const status = parseTrimmedString(req.query.status);
+    let diterbitkan = parseTrimmedString(req.query.diterbitkan);
+
+    if (!diterbitkan && status) {
+      if (status === 'diterbitkan' || status === 'terbit') diterbitkan = 'true';
+      if (status === 'draf') diterbitkan = 'false';
+    }
 
     const { data, total } = await ModelArtikel.ambilDaftarRedaksi({
       topik,
