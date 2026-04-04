@@ -237,6 +237,33 @@ class ModelPengguna {
 
     return pengguna;
   }
+
+  /**
+   * Daftar ringkas pengguna untuk autocomplete (id, nama, surel).
+   * Hanya pengguna aktif dengan akses_redaksi.
+   * @param {string} q - Kata kunci pencarian (nama atau surel)
+   * @returns {Promise<Array>}
+   */
+  static async autocomplete(q = '') {
+    const params = [];
+    let where = `p.aktif = 1 AND pr.akses_redaksi = TRUE`;
+
+    if (q) {
+      params.push(`%${q}%`);
+      where += ` AND (p.nama ILIKE $${params.length} OR p.surel ILIKE $${params.length})`;
+    }
+
+    const result = await db.query(
+      `SELECT p.id, p.nama, p.surel
+       FROM pengguna p
+       JOIN peran pr ON pr.id = p.peran_id
+       WHERE ${where}
+       ORDER BY p.nama
+       LIMIT 100`,
+      params
+    );
+    return result.rows;
+  }
 }
 
 module.exports = ModelPengguna;

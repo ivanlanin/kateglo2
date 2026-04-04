@@ -1,6 +1,6 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
--- Generated: 2026-04-03T01:38:21.168Z
+-- Generated: 2026-04-04T04:31:18.972Z
 
 -- ============================================
 -- TRIGGER FUNCTIONS (Standalone Procedures)
@@ -154,6 +154,33 @@ $function$
 -- ============================================
 -- TABLES
 -- ============================================
+
+create table artikel (
+  id serial primary key,
+  judul text not null,
+  slug text not null,
+  konten text not null default ''::text,
+  penulis_id integer references pengguna(id) not null,
+  penyunting_id integer references pengguna(id),
+  diterbitkan boolean not null default false,
+  created_at timestamp without time zone not null default now(),
+  updated_at timestamp without time zone not null default now(),
+  diterbitkan_pada timestamp without time zone,
+  constraint artikel_slug_key unique (slug)
+);
+create unique index artikel_slug_key on artikel using btree (slug);
+create index idx_artikel_diterbitkan on artikel using btree (diterbitkan, diterbitkan_pada DESC);
+create index idx_artikel_penulis on artikel using btree (penulis_id);
+create trigger trg_set_timestamp_fields__artikel
+  before insert or update on artikel
+  for each row
+  execute function set_timestamp_fields();
+
+create table artikel_topik (
+  artikel_id integer references artikel(id) on delete cascade,
+  topik text
+);
+create index idx_artikel_topik_topik on artikel_topik using btree (topik);
 
 -- Bukti penggunaan kata dari sumber nyata (kutipan + metadata)
 create table atestasi (

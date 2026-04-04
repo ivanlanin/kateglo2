@@ -174,6 +174,18 @@ export const kelompokMenuRedaksi = [
     ],
   },
   {
+    judul: 'Konten',
+    items: [
+      {
+        path: '/redaksi/artikel',
+        label: 'Artikel',
+        dashboardLabel: 'Artikel',
+        izin: 'tulis_artikel',
+        statistik: { key: 'artikel', label: 'Total Artikel', warna: 'text-sky-600' },
+      },
+    ],
+  },
+  {
     judul: 'Akses',
     items: [
       {

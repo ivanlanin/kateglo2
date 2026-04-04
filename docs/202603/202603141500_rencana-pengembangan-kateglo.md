@@ -547,10 +547,10 @@ Berdasarkan gap analysis dengan kamus besar dunia, diurutkan berdasarkan **dampa
   - **Belum selesai:** Halaman arsip/riwayat publik untuk melihat kata-kata sebelumnya.
   - Opsional: widget untuk embed di situs lain.
 
-#### 6.2 Reorganisasi Menu (seperti bagian 5)
+#### 6.2 Reorganisasi Menu ✅ SELESAI
 - **Apa:** Streamline navigasi dari 9 → 4–5 item. (Sekarang 9 menu setelah Gramatika ditambahkan.)
 - **Kenapa:** UX lebih bersih, pengguna tidak kewalahan.
-- **Implementasi:** Perubahan frontend saja (NavbarPublik + MenuUtama).
+- **Implementasi:** Dilaksanakan April 2026 — menu kamus, makna, tesaurus, dan rima digabungkan; ejaan dan gramatika masuk dropdown **Referensi**. NavbarPublik diperbarui; menu utama menjadi: Kamus, Glosarium, Gim, Referensi, dan Lainnya.
 
 #### 6.3 Halaman "Tentang Kateglo" ✅ SELESAI
 - **Apa:** Halaman statis yang menjelaskan misi, sumber data, tim, dan cara berkontribusi.
@@ -559,14 +559,10 @@ Berdasarkan gap analysis dengan kamus besar dunia, diurutkan berdasarkan **dampa
 
 ### Prioritas Sedang (Dampak besar, usaha lebih besar)
 
-#### 6.4 Konten Editorial / Blog Bahasa
+#### 6.4 Konten Editorial / Blog Bahasa ✅ SELESAI
 - **Apa:** Artikel pendek tentang bahasa Indonesia — asal-usul kata, kesalahan umum, kata baru, idiom menarik.
 - **Kenapa:** Merriam-Webster (Wordplay, Grammar), Cambridge (Blog), Oxford (Spread the Word) semua punya konten editorial. Meningkatkan SEO, engagement, dan waktu di situs.
-- **Implementasi:**
-  - Format markdown di `frontend/public/artikel/` atau CMS sederhana.
-  - Halaman daftar artikel + halaman baca artikel.
-  - Kategori: Asal Kata, Kesalahan Umum, Kata Baru, Bahasa Daerah.
-  - Bisa dimulai dari konten Ejaan yang sudah ada.
+- **Implementasi:** Diimplementasikan 4 April 2026 sebagai sistem artikel editorial berbasis database PostgreSQL (bukan file markdown statis). Fitur lengkap: editor WYSIWYG TipTap, sistem topik multi-pilih, penulis dan penyunting via autocomplete pengguna redaksi, status terbit/draf, unggah gambar ke R2, sitemap otomatis dari slug terbit. Area redaksi aktif di `/redaksi/artikel`; menu publik disembunyikan sementara sampai konten siap.
 
 #### 6.5 Contoh Kalimat yang Lebih Menonjol
 - **Apa:** Menampilkan contoh kalimat penggunaan kata secara lebih prominan di halaman detail kamus.
@@ -639,13 +635,14 @@ Fitur-fitur berikut dikembangkan setelah dokumen ini ditulis (14 Maret 2026) dan
 | **Glosarium Linguistik** | 25 Mar 2026 | 3.220 entri glosarium dari Kamus Linguistik |
 | **Skor Kumulatif Kuis Kata** | 31 Mar 2026 | Skor kumulatif dan jumlah ronde harian di Kuis Kata |
 | **Soal Susun Kata Unik** | 30 Mar 2026 | Menjamin soal susun kata harian tidak berulang |
+| **Artikel Editorial** | 4 Apr 2026 | Sistem artikel berbasis DB PostgreSQL: editor WYSIWYG TipTap, topik multi-pilih, penulis/penyunting autocomplete, status terbit/draf, unggah gambar ke R2, sitemap otomatis |
 
 ---
 
 ## 7. Roadmap Usulan
 
 ### Fase 1: Quick Wins — Status per 31 Maret 2026
-- [ ] Reorganisasi menu (9 → 5 item, dropdown Lainnya) — **belum dimulai**
+- [x] ~~Reorganisasi menu (9 → 5 item, dropdown Lainnya)~~ — **selesai** (April 2026; kamus/tesaurus/makna/rima digabung, ejaan/gramatika dalam dropdown Referensi)
 - [x] ~~Halaman "Tentang Kateglo"~~ — **selesai** (halaman Ihwal, 26 Maret 2026)
 - [x] ~~Kata Hari Ini — fitur dasar~~ — **selesai** (DB + API publik/redaksi + tampilan di beranda, 31 Maret 2026)
 
@@ -656,7 +653,7 @@ Fitur-fitur berikut dikembangkan setelah dokumen ini ditulis (14 Maret 2026) dan
 - [ ] KADI: halaman publik usul kata — **belum dimulai** (backend redaksi sudah ada)
 
 ### Fase 3: Engagement
-- [ ] Konten editorial / blog bahasa (mulai 1 artikel/minggu) — **belum dimulai**
+- [x] ~~Konten editorial / blog bahasa (mulai 1 artikel/minggu)~~ — **selesai** (4 April 2026; sistem artikel berbasis database, area redaksi aktif, menu publik disembunyikan sampai konten siap)
 - [ ] 1–2 gim baru (Tebak Kata, Pasangkan Sinonim) — **belum dimulai**
 - [ ] Kamus Tematik (dari data bidang + tagar) — **belum dimulai**
 

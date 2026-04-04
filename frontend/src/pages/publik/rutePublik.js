@@ -25,6 +25,8 @@ const PohonKalimat = buatLazyNamedExport(() => import('./alat'), 'PohonKalimat')
 const GimIndex = buatLazyNamedExport(() => import('./gim'), 'GimIndex');
 const KuisKata = buatLazyNamedExport(() => import('./gim'), 'KuisKata');
 const SusunKata = buatLazyNamedExport(() => import('./gim'), 'SusunKata');
+const Artikel = buatLazyNamedExport(() => import('./artikel'), 'Artikel');
+const ArtikelDetail = buatLazyNamedExport(() => import('./artikel'), 'ArtikelDetail');
 const Ihwal = buatLazyNamedExport(() => import('./informasi'), 'Ihwal');
 const Privasi = buatLazyNamedExport(() => import('./informasi'), 'Privasi');
 const Sumber = buatLazyNamedExport(() => import('./informasi'), 'Sumber');
@@ -115,6 +117,8 @@ export const ruteHalamanPublik = [
   { path: '/glosarium/detail/:asing', Component: GlosariumDetail },
   { path: '/glosarium/bidang/:bidang', Component: Glosarium },
   { path: '/glosarium/sumber/:sumber', Component: Glosarium },
+  { path: '/artikel', Component: Artikel },
+  { path: '/artikel/:slug', Component: ArtikelDetail },
   { path: '/ihwal', Component: Ihwal },
   { path: '/privasi', Component: Privasi },
   { path: '/kebijakan-privasi', Component: Privasi },

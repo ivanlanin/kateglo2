@@ -1493,3 +1493,73 @@ export function useSimpanTagarEntri() {
     },
   });
 }
+
+// === ARTIKEL ===
+
+export function useAutocompletePengguna(q = '') {
+  return useQuery({
+    queryKey: ['admin-pengguna-autocomplete', q],
+    queryFn: () => klien.get('/api/redaksi/pengguna/autocomplete', { params: { q } }).then((r) => r.data),
+    staleTime: 60_000,
+  });
+}
+
+export function useDaftarArtikelAdmin({
+  limit = 50,
+  cursor = null,
+  direction = 'next',
+  lastPage = false,
+  q = '',
+  topik = '',
+  status = '',
+} = {}) {
+  return useDaftarAdmin('/api/redaksi/artikel', 'admin-artikel', {
+    limit,
+    cursor,
+    direction,
+    lastPage,
+    q,
+    includeAktif: false,
+    topik: topik || undefined,
+    status: status || undefined,
+  });
+}
+
+export function useDetailArtikelAdmin(id) {
+  return useQuery({
+    queryKey: ['admin-artikel-detail', id],
+    queryFn: () => klien.get(`/api/redaksi/artikel/${id}`).then((r) => r.data),
+    enabled: Boolean(id),
+  });
+}
+
+export function useSimpanArtikelAdmin() {
+  return useSimpanAdmin({ path: '/api/redaksi/artikel', queryKeyPrefix: 'admin-artikel' });
+}
+
+export function useHapusArtikelAdmin() {
+  return useHapusAdmin({ path: '/api/redaksi/artikel', queryKeyPrefix: 'admin-artikel' });
+}
+
+export function useTerbitkanArtikelAdmin() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, diterbitkan }) =>
+      klien.put(`/api/redaksi/artikel/${id}/terbitkan`, { diterbitkan }).then((r) => r.data),
+    onSuccess: () => {
+      invalidateQueryKeys(qc, ['admin-artikel', 'admin-artikel-detail']);
+    },
+  });
+}
+
+export function useUnggahGambarArtikelAdmin() {
+  return useMutation({
+    mutationFn: (file) => {
+      const form = new FormData();
+      form.append('gambar', file);
+      return klien.post('/api/redaksi/artikel/unggah-gambar', form, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }).then((r) => r.data);
+    },
+  });
+}

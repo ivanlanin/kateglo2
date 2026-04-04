@@ -26,6 +26,7 @@ router.use('/leipzig', require('./leipzig'));
 router.use('/', require('./leksikon'));
 router.use('/', require('./interaksi'));
 router.use('/gim', require('./gim'));
+router.use('/artikel', require('./artikel'));
 router.use('/auth', tandaiAuthPublikDeprecated, require('../sistem/authPengguna'));
 
 module.exports = router;

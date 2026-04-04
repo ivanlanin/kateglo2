@@ -531,3 +531,22 @@ export async function cariEntriPerTagar(kode, {
   });
   return response.data;
 }
+
+// === ARTIKEL ===
+
+export async function ambilTopikArtikel() {
+  const response = await klien.get('/api/publik/artikel/topik');
+  return response.data;
+}
+
+export async function ambilDaftarArtikel({ topik, cursor, direction, lastPage, limit = 20 } = {}) {
+  const params = buildCursorParams({ limit, cursor, direction, lastPage });
+  if (topik) params.topik = topik;
+  const response = await klien.get('/api/publik/artikel', { params });
+  return response.data;
+}
+
+export async function ambilDetailArtikel(slug) {
+  const response = await klien.get(`/api/publik/artikel/${encodeURIComponent(slug)}`);
+  return response.data;
+}

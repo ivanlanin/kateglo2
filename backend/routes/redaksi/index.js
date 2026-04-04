@@ -41,4 +41,7 @@ router.use('/kandidat-kata', require('./kadi/kandidatKata'));
 // WordNet — Kurasi sinset
 router.use('/sinset', require('./wordnet/sinset'));
 
+// Artikel
+router.use('/artikel', require('./artikel'));
+
 module.exports = router;

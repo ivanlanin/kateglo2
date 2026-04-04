@@ -1,4 +1,5 @@
 import {
+  ArtikelAdmin,
   AuditMaknaAdmin,
   AuditTagarAdmin,
   BahasaAdmin,
@@ -66,4 +67,6 @@ export const ruteHalamanRedaksi = [
   { path: '/redaksi/kandidat-kata/:id', Component: KandidatKataAdmin, izinDibutuhkan: ['lihat_kandidat'] },
   { path: '/redaksi/sinset', Component: SinsetAdmin, izinDibutuhkan: ['kelola_sinset'] },
   { path: '/redaksi/sinset/:id', Component: SinsetAdmin, izinDibutuhkan: ['kelola_sinset'] },
+  { path: '/redaksi/artikel', Component: ArtikelAdmin, izinDibutuhkan: ['tulis_artikel'] },
+  { path: '/redaksi/artikel/:id', Component: ArtikelAdmin, izinDibutuhkan: ['tulis_artikel'] },
 ];

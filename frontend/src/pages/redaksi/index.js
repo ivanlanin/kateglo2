@@ -7,3 +7,4 @@ export * from './kadi';
 export * from './leksikon';
 export * from './master';
 export * from './wordnet';
+export * from './artikel';

@@ -4,6 +4,7 @@
 
 - Menggabung menu kamus, tesaurus, makna, dan rima serta gramatika dan ejaan
 - Menampilkan foto pengguna dari Google
+- Merintis halaman [Artikel](/artikel)
 
 ## 2026-04-03 Jumat
 

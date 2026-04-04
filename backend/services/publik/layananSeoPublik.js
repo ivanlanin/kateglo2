@@ -7,6 +7,7 @@ const path = require('node:path');
 
 const ModelLabel = require('../../models/master/modelLabel');
 const ModelGlosarium = require('../../models/leksikon/modelGlosarium');
+const ModelArtikel = require('../../models/artikel/modelArtikel');
 
 const rootDir = path.resolve(__dirname, '..', '..', '..');
 const katalogFiturData = require(path.join(rootDir, 'frontend', 'src', 'constants', 'katalogFiturData.json'));
@@ -527,6 +528,7 @@ function ambilPathStatis() {
     '/rima',
     '/ejaan',
     '/gramatika',
+    '/artikel',
     '/privasi',
     '/kebijakan-privasi',
   ];
@@ -608,10 +610,20 @@ async function ambilPathGlosariumKategori() {
   return [...bidangPaths, ...sumberPaths].filter(Boolean);
 }
 
+async function ambilPathArtikel() {
+  try {
+    const slugs = await ModelArtikel.ambilSlugTerbit();
+    return slugs.map((slug) => `/artikel/${encodePathSegment(slug)}`);
+  } catch {
+    return [];
+  }
+}
+
 async function generateSitemapPaths() {
-  const [kamusKategori, glosariumKategori] = await Promise.all([
+  const [kamusKategori, glosariumKategori, artikelPaths] = await Promise.all([
     ambilPathKamusKategori(),
     ambilPathGlosariumKategori(),
+    ambilPathArtikel(),
   ]);
 
   const ejaanPaths = ambilPathEjaan();
@@ -623,6 +635,7 @@ async function generateSitemapPaths() {
     ...glosariumKategori,
     ...ejaanPaths,
     ...gramatikaPaths,
+    ...artikelPaths,
   ];
 }
 
@@ -654,6 +667,7 @@ module.exports = {
     ambilPathGlosariumKategori,
     ambilPathEjaan,
     ambilPathGramatika,
+    ambilPathArtikel,
     escapeXml,
     splitOgTextIntoLines,
     renderSvgTextLines,

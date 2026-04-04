@@ -4,3 +4,4 @@ export * from './glosarium';
 export * from './alat';
 export * from './gim';
 export * from './informasi';
+export * from './artikel';

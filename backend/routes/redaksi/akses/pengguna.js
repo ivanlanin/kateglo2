@@ -54,6 +54,21 @@ router.get('/peran', periksaIzin('kelola_peran'), async (req, res, next) => {
 });
 
 /**
+ * GET /api/redaksi/pengguna/autocomplete
+ * Daftar ringkas pengguna redaksi untuk autocomplete penulis/penyunting artikel.
+ * Izin: tulis_artikel atau kelola_pengguna
+ */
+router.get('/autocomplete', periksaIzin('tulis_artikel', 'kelola_pengguna'), async (req, res, next) => {
+  try {
+    const q = parseSearchQuery(req.query.q);
+    const data = await ModelPengguna.autocomplete(q);
+    return res.json({ success: true, data });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+/**
  * GET /api/redaksi/pengguna/:id
  * Ambil detail pengguna untuk penyuntingan
  */
