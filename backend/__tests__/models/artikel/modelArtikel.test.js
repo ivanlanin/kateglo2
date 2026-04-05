@@ -12,6 +12,13 @@ describe('models/artikel/modelArtikel', () => {
     db.pool.connect.mockReset();
   });
 
+  it('hitungTotal mengembalikan jumlah artikel', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ total: 4 }] });
+
+    await expect(ModelArtikel.hitungTotal()).resolves.toBe(4);
+    expect(db.query).toHaveBeenCalledWith('SELECT COUNT(*)::int AS total FROM artikel');
+  });
+
   it('query pembacaan topik memakai urutan simpan, bukan abjad', async () => {
     db.query
       .mockResolvedValueOnce({ rows: [{ id: 1, topik: ['zeta', 'alpha'] }] })

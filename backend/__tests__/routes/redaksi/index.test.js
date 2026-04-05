@@ -48,6 +48,10 @@ jest.mock('../../../models/leksikon/modelEtimologi', () => ({
   hitungTotal: jest.fn(),
 }));
 
+jest.mock('../../../models/artikel/modelArtikel', () => ({
+  hitungTotal: jest.fn(),
+}));
+
 jest.mock('../../../models/leksikon/modelGlosarium', () => ({
   cari: jest.fn(),
   ambilDenganId: jest.fn(),
@@ -183,6 +187,7 @@ const ModelPengguna = require('../../../models/akses/modelPengguna');
 const ModelLema = require('../../../models/leksikon/modelEntri');
 const ModelTesaurus = require('../../../models/leksikon/modelTesaurus');
 const ModelEtimologi = require('../../../models/leksikon/modelEtimologi');
+const ModelArtikel = require('../../../models/artikel/modelArtikel');
 const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
 const ModelKataHariIni = require('../../../models/leksikon/modelKataHariIni');
 const ModelOpsi = require('../../../models/master/modelOpsi');
@@ -518,6 +523,7 @@ describe('routes/redaksi', () => {
       ModelGlosarium.hitungTotal.mockResolvedValue(20);
       ModelTesaurus.hitungTotal.mockResolvedValue(30);
       ModelEtimologi.hitungTotal.mockResolvedValue(35);
+      ModelArtikel.hitungTotal.mockResolvedValue(41);
       ModelSusunKata.hitungPesertaHarian.mockResolvedValue(15);
       ModelSusunKata.hitungPesertaBebasHarian.mockResolvedValue(25);
       ModelKuisKata.hitungPesertaHarian.mockResolvedValue(17);
@@ -546,6 +552,7 @@ describe('routes/redaksi', () => {
         glosarium: 20,
         tesaurus: 30,
         etimologi: 35,
+        artikel: 41,
         susunKataHarian: 15,
         susunKataBebas: 25,
         kuisKata: 17,

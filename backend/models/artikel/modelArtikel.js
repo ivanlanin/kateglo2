@@ -16,6 +16,11 @@ function buatSlugDariJudul(judul) {
 }
 
 class ModelArtikel {
+  static async hitungTotal() {
+    const result = await db.query('SELECT COUNT(*)::int AS total FROM artikel');
+    return result.rows[0]?.total ?? 0;
+  }
+
   static async buatSlug(judul, { excludeId } = {}) {
     const basis = buatSlugDariJudul(judul) || 'artikel';
     const params = [basis, `${basis}-%`];

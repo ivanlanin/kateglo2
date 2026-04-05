@@ -8,6 +8,7 @@ const ModelEntri = require('../../../models/leksikon/modelEntri');
 const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
 const ModelTesaurus = require('../../../models/leksikon/modelTesaurus');
 const ModelEtimologi = require('../../../models/leksikon/modelEtimologi');
+const ModelArtikel = require('../../../models/artikel/modelArtikel');
 const ModelLabel = require('../../../models/master/modelLabel');
 const ModelPengguna = require('../../../models/akses/modelPengguna');
 const ModelKomentar = require('../../../models/interaksi/modelKomentar');
@@ -40,6 +41,7 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
       glosarium,
       tesaurus,
       etimologi,
+      artikel,
       susunKataHarian,
       susunKataBebas,
       kuisKata,
@@ -64,6 +66,7 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
       ModelGlosarium.hitungTotal(),
       ModelTesaurus.hitungTotal(),
       ModelEtimologi.hitungTotal(),
+      ModelArtikel.hitungTotal(),
       ModelSusunKata.hitungPesertaHarian(),
       ModelSusunKata.hitungPesertaBebasHarian(),
       ModelKuisKata.hitungPesertaHarian(),
@@ -92,6 +95,7 @@ router.get('/', periksaIzin('lihat_statistik'), async (req, res, next) => {
         glosarium,
         tesaurus,
         etimologi,
+        artikel,
         susunKataHarian,
         susunKataBebas,
         kuisKata,
