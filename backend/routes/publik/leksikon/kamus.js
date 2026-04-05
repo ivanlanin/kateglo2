@@ -302,3 +302,6 @@ router.get('/detail/:indeks', authenticateOptional, async (req, res, next) => {
 });
 
 module.exports = router;
+module.exports.__private = {
+  setCacheHeaders,
+};

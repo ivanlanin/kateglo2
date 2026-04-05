@@ -332,6 +332,18 @@ describe('ModelPengguna', () => {
     expect(db.query).toHaveBeenNthCalledWith(2, 'UPDATE pengguna SET peran_id = $1 WHERE id = $2', [1, 9]);
     expect(result.peran_id).toBe(1);
   });
+
+  it('autocomplete mengembalikan daftar pengguna redaksi dengan dan tanpa query', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ id: 1, nama: 'Ivan', surel: 'ivan@example.com' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 2, nama: 'Admin', surel: 'admin@example.com' }] });
+
+    await expect(ModelPengguna.autocomplete('iva')).resolves.toEqual([{ id: 1, nama: 'Ivan', surel: 'ivan@example.com' }]);
+    await expect(ModelPengguna.autocomplete()).resolves.toEqual([{ id: 2, nama: 'Admin', surel: 'admin@example.com' }]);
+
+    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('p.nama ILIKE $1 OR p.surel ILIKE $1'), ['%iva%']);
+    expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('WHERE p.aktif = 1 AND pr.akses_redaksi = TRUE'), []);
+  });
 });
 
 

@@ -20,6 +20,8 @@ const {
   ambilDaftarArtikelPublik,
   ambilDetailArtikelPublik,
   invalidasiCacheArtikelPublik,
+  invalidasiCacheDaftarArtikel,
+  invalidasiCacheDetailArtikel,
   buatCacheKeyDaftarArtikel,
   buatCacheKeyDetailArtikel,
   __private,
@@ -37,22 +39,44 @@ describe('layananArtikelPublik', () => {
     expect(buatCacheKeyDaftarArtikel({ q: '  Kata ', topik: ['Sintaksis', 'bahasa'], limit: 15, offset: 5 }, 9))
       .toBe('artikel:browse:v-9:l-15:o-5:q-Kata:t-bahasa%7Csintaksis');
     expect(buatCacheKeyDetailArtikel('Artikel Satu', 12)).toBe('artikel:detail:artikel%20satu:v-12');
+    expect(buatCacheKeyDaftarArtikel({}, 'x')).toBe('artikel:browse:v-0:l-20:o-0:q-:t-');
+    expect(buatCacheKeyDetailArtikel('', 'x')).toBe('artikel:detail::v-0');
   });
 
   it('helper private menormalisasi nilai cache artikel', async () => {
     getJson.mockResolvedValueOnce('abc').mockResolvedValueOnce('17');
 
     expect(__private.normalisasiSlug(' Artikel%20Dua ')).toBe('artikel dua');
+    expect(__private.normalisasiSlug()).toBe('');
     expect(__private.normalisasiTopikFilter([' Sintaksis ', 'bahasa', 'sintaksis'])).toEqual(['bahasa', 'sintaksis']);
+    expect(__private.normalisasiTopikFilter(' Semantik ')).toEqual(['semantik']);
     expect(__private.normalisasiTopikFilter()).toEqual([]);
     expect(__private.normalisasiLimit('0')).toBe(20);
     expect(__private.normalisasiLimit('50')).toBe(50);
+    expect(__private.normalisasiLimit('abc', 14)).toBe(14);
     expect(__private.normalisasiOffset('-1')).toBe(0);
     expect(__private.normalisasiOffset('7')).toBe(7);
+    expect(__private.normalisasiQueryTeks()).toBe('');
     expect(__private.normalisasiQueryTeks('  uji  ')).toBe('uji');
     expect(__private.buatCacheKeyVersiDetailArtikel('Artikel Satu')).toBe('artikel:detail:version:artikel%20satu');
     await expect(__private.ambilVersiCacheDaftarArtikel()).resolves.toBe(0);
     await expect(__private.ambilVersiCacheDetailArtikel('Artikel Satu')).resolves.toBe(17);
+  });
+
+  it('helper private menutup branch default parameter untuk key dan slug cache', async () => {
+    getJson.mockResolvedValueOnce('5');
+
+    expect(__private.normalisasiTopikFilter([null, ' Bahasa '])).toEqual(['bahasa']);
+    expect(__private.buatCacheKeyVersiDetailArtikel()).toBe('artikel:detail:version:');
+    expect(buatCacheKeyDaftarArtikel()).toBe('artikel:browse:v-0:l-20:o-0:q-:t-');
+    expect(buatCacheKeyDetailArtikel()).toBe('artikel:detail::v-0');
+    await expect(__private.ambilVersiCacheDetailArtikel()).resolves.toBe(5);
+  });
+
+  it('helper private mengembalikan versi 0 saat cache detail tidak numerik', async () => {
+    getJson.mockResolvedValueOnce('bukan-angka');
+
+    await expect(__private.ambilVersiCacheDetailArtikel('artikel-tiga')).resolves.toBe(0);
   });
 
   it('ambilDaftarArtikelPublik memakai cache saat tersedia', async () => {
@@ -83,6 +107,21 @@ describe('layananArtikelPublik', () => {
     expect(hasil).toEqual({ total: 2, data: [{ slug: 'artikel-satu' }] });
   });
 
+  it('ambilDaftarArtikelPublik memakai default query saat parameter kosong', async () => {
+    ModelArtikel.ambilDaftarPublik.mockResolvedValueOnce({ total: 0, data: [] });
+
+    const hasil = await ambilDaftarArtikelPublik();
+
+    expect(ModelArtikel.ambilDaftarPublik).toHaveBeenCalledWith({
+      topik: [],
+      q: undefined,
+      limit: 20,
+      offset: 0,
+    });
+    expect(setJson).toHaveBeenCalledWith('artikel:browse:v-0:l-20:o-0:q-:t-', { total: 0, data: [] }, 300);
+    expect(hasil).toEqual({ total: 0, data: [] });
+  });
+
   it('ambilDetailArtikelPublik memakai cache saat tersedia dan tidak cache miss null', async () => {
     getJson.mockResolvedValueOnce(4).mockResolvedValueOnce({ slug: 'artikel-satu' });
 
@@ -97,6 +136,12 @@ describe('layananArtikelPublik', () => {
     const kosong = await ambilDetailArtikelPublik('artikel-kosong');
     expect(kosong).toBeNull();
     expect(setJson).not.toHaveBeenCalled();
+
+    const slugKosong = await ambilDetailArtikelPublik('   ');
+    expect(slugKosong).toBeNull();
+
+    const tanpaArgumen = await ambilDetailArtikelPublik();
+    expect(tanpaArgumen).toBeNull();
   });
 
   it('ambilDetailArtikelPublik menyimpan hasil model ke cache saat miss', async () => {
@@ -118,6 +163,43 @@ describe('layananArtikelPublik', () => {
     expect(setJson).toHaveBeenNthCalledWith(1, 'artikel:browse:version', 123456, 3600);
     expect(setJson).toHaveBeenNthCalledWith(2, 'artikel:detail:version:artikel-satu', 123456, 3600);
     expect(setJson).toHaveBeenNthCalledWith(3, 'artikel:detail:version:artikel-dua', 123456, 3600);
+    nowSpy.mockRestore();
+  });
+
+  it('invalidasiCacheArtikelPublik menerima slug tunggal dan mengabaikan slug kosong', async () => {
+    const nowSpy = jest.spyOn(Date, 'now').mockReturnValue(321321);
+
+    await invalidasiCacheArtikelPublik(' Artikel-Tiga ');
+    await invalidasiCacheArtikelPublik(['', '   ']);
+
+    expect(setJson).toHaveBeenNthCalledWith(1, 'artikel:browse:version', 321321, 3600);
+    expect(setJson).toHaveBeenNthCalledWith(2, 'artikel:detail:version:artikel-tiga', 321321, 3600);
+    expect(setJson).toHaveBeenNthCalledWith(3, 'artikel:browse:version', 321321, 3600);
+    nowSpy.mockRestore();
+  });
+
+  it('invalidator cache detail/daftar menangani slug kosong dan TTL minimum', async () => {
+    const nowSpy = jest.spyOn(Date, 'now').mockReturnValue(555);
+    getTtlSeconds.mockReturnValue(10);
+
+    await invalidasiCacheDaftarArtikel();
+    await invalidasiCacheDetailArtikel('   ');
+    await invalidasiCacheDetailArtikel(' Artikel Baru ');
+
+    expect(setJson).toHaveBeenNthCalledWith(1, 'artikel:browse:version', 555, 3600);
+    expect(setJson).toHaveBeenNthCalledWith(2, 'artikel:detail:version:artikel%20baru', 555, 3600);
+    expect(setJson).toHaveBeenCalledTimes(2);
+    nowSpy.mockRestore();
+  });
+
+  it('invalidator cache menangani pemanggilan tanpa argumen', async () => {
+    const nowSpy = jest.spyOn(Date, 'now').mockReturnValue(888);
+
+    await invalidasiCacheArtikelPublik();
+    await invalidasiCacheDetailArtikel();
+
+    expect(setJson).toHaveBeenCalledTimes(1);
+    expect(setJson).toHaveBeenCalledWith('artikel:browse:version', 888, 3600);
     nowSpy.mockRestore();
   });
 });

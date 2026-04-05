@@ -692,6 +692,36 @@ describe('ModelGlosarium', () => {
     expect(result.hasNext).toBe(true);
   });
 
+  it('cariFrasaMengandungKataUtuh mode cursor prev dengan hitungTotal memakai ORDER BY desc pada query total', async () => {
+    const cursor = encodeCursor({ indonesia: 'zeta', id: 22 });
+    db.query.mockResolvedValueOnce({
+      rows: [
+        { id: 21, indonesia: 'gamma aktif', asing: 'gamma active', total: 5 },
+        { id: 20, indonesia: 'beta aktif', asing: 'beta active', total: 5 },
+        { id: 19, indonesia: 'alpha aktif', asing: 'alpha active', total: 5 },
+      ],
+    });
+
+    const result = await ModelGlosarium.cariFrasaMengandungKataUtuh('aktif', {
+      limit: 2,
+      cursor,
+      direction: 'prev',
+      hitungTotal: true,
+    });
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('ORDER BY indonesia DESC, id DESC'),
+      ['aktif', 'zeta', 22, 3]
+    );
+    expect(result.total).toBe(5);
+    expect(result.data).toEqual([
+      { indonesia: 'beta aktif', asing: 'beta active' },
+      { indonesia: 'gamma aktif', asing: 'gamma active' },
+    ]);
+    expect(result.hasPrev).toBe(true);
+    expect(result.hasNext).toBe(true);
+  });
+
   it('cariFrasaMengandungKataUtuh mode cursor next tanpa cursor memakai hasPrev false dan hasNext false', async () => {
     db.query.mockResolvedValueOnce({
       rows: [

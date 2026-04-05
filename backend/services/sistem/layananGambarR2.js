@@ -79,4 +79,15 @@ async function unggahGambarArtikel(buffer, originalname, mimeType) {
   return { url, key: objectKey };
 }
 
-module.exports = { unggahGambarArtikel, isR2Configured };
+module.exports = {
+  unggahGambarArtikel,
+  isR2Configured,
+  __private: {
+    getR2Config,
+    getS3Client,
+    ekstensiBerdasarkanTipe,
+    resetCachedClient() {
+      cachedClient = null;
+    },
+  },
+};

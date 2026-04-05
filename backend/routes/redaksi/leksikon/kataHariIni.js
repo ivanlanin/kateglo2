@@ -202,3 +202,8 @@ router.delete('/:id', periksaIzin('edit_entri'), async (req, res, next) => {
 });
 
 module.exports = router;
+module.exports.__private = {
+  normalizeOptionalBodyValue,
+  isKataHariIniEntriConflict,
+  resolveEntriKataHariIni,
+};

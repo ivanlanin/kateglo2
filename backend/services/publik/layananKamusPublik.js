@@ -787,5 +787,6 @@ module.exports.__private = {
   ambilRingkasanMakna,
   ambilEtimologiUtama,
   bentukPayloadKataHariIni,
+  pilihKandidatRingan,
   pilihKandidatKataHariIniOtomatis,
 };

@@ -1476,6 +1476,7 @@ module.exports.__private = {
   normalisasiIndeks,
   parseNullableInteger,
   normalisasiRagamVarian,
+  buildKataHariIniCandidateWhereClause,
   normalizeBoolean,
 };
 

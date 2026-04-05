@@ -423,7 +423,11 @@ describe('ModelKuisKata', () => {
   });
 
   it('ambilSkorPenggunaHarian mengembalikan null untuk pengguna invalid atau baris kosong, lalu memetakan rekap pengguna', async () => {
+    await expect(ModelKuisKata.ambilSkorPenggunaHarian()).resolves.toBeNull();
     await expect(ModelKuisKata.ambilSkorPenggunaHarian({ penggunaId: 'x' })).resolves.toBeNull();
+
+    jest.spyOn(ModelKuisKata, 'ambilTanggalHariIniJakarta').mockResolvedValueOnce(null);
+    await expect(ModelKuisKata.ambilSkorPenggunaHarian({ penggunaId: 7 })).resolves.toBeNull();
 
     db.query.mockResolvedValueOnce({ rows: [] });
     await expect(ModelKuisKata.ambilSkorPenggunaHarian({ penggunaId: 7, tanggal: '2026-03-15' })).resolves.toBeNull();

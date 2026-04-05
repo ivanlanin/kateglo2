@@ -279,6 +279,7 @@ module.exports = {
   },
   __private: {
     resolveConfiguredPath,
+    toTitleCase,
     readCorpusMeta,
     readCorpusStatsFromSqlite,
     gabungkanCorpusStats,

@@ -89,6 +89,8 @@ describe('models/leipzig/modelKookurensi', () => {
   afterEach(() => {
     process.env = { ...originalEnv };
     jest.resetModules();
+    jest.unmock('../../../db/leipzig');
+    jest.unmock('../../../models/leipzig/utilsLeipzig');
   });
 
   it('mengembalikan sekalimat kosong jika kata kosong atau tidak ditemukan', async () => {
@@ -101,7 +103,177 @@ describe('models/leipzig/modelKookurensi', () => {
       data: [],
     });
     expect(ModelKookurensi.__private.normalizeGraphEdgeKey('B', 'a')).toBe('a::b');
+    expect(ModelKookurensi.__private.escapeSqlString("o'reilly")).toBe("o''reilly");
+    expect(ModelKookurensi.__private.escapeRegExp('a.b[c]')).toBe('a\\.b\\[c\\]');
     expect(ModelKookurensi.__private.hitungDiceCoefficient(['a', 'b'], ['b', 'c'])).toBeCloseTo(0.5, 5);
+    expect(ModelKookurensi.__private.hitungDiceCoefficient([], ['a'])).toBe(0);
+    expect(ModelKookurensi.__private.hitungDiceCoefficient(['a'], ['z'])).toBe(0);
+    expect(ModelKookurensi.__private.buildEmptyMiripKonteks()).toEqual({
+      kata: '',
+      limit: 12,
+      minimumKonteksSama: 3,
+      jumlahKonteksAcuan: 0,
+      total: 0,
+      data: [],
+    });
+    expect(ModelKookurensi.__private.memuatKataUtuh('Republik Indonesia', 'Indonesia')).toBe(true);
+    expect(ModelKookurensi.__private.memuatKataUtuh('Indonesiaku', 'Indonesia')).toBe(false);
+    expect(ModelKookurensi.__private.buildValuesCte([], ['featureId', 'featureKey'])).toBe('SELECT NULL AS featureId, NULL AS featureKey WHERE 0');
+    expect(ModelKookurensi.__private.ambilBarisRelasiSignifikan({ prepare: jest.fn() }, 'co_s', [], 'kalimat')).toEqual([]);
+  });
+
+  it('helper agregasi fitur dan kandidat mirip memakai tie-break alfabetis saat nilai sama', () => {
+    const ModelKookurensi = require('../../../models/leipzig/modelKookurensi');
+    const fitur = ModelKookurensi.__private.agregasiFiturKonteks([
+      { wordId: 1, kata: 'beta', jenis: 'kalimat', frekuensi: 5, signifikansi: 0.8 },
+      { wordId: 2, kata: 'alfa', jenis: 'kalimat', frekuensi: 5, signifikansi: 0.8 },
+    ]);
+
+    expect(fitur.map((item) => item.kata)).toEqual(['alfa', 'beta']);
+
+    const database = {
+      prepare: jest.fn(() => ({
+        all: jest.fn(() => [
+          { wordId: 11, kata: 'beta', frekuensi: 5, featureKey: 'kalimat:fitur' },
+          { wordId: 12, kata: 'alfa', frekuensi: 5, featureKey: 'kalimat:fitur' },
+        ]),
+      })),
+    };
+
+    const kandidat = ModelKookurensi.__private.kumpulkanKandidatMirip(
+      database,
+      [{ featureKey: 'kalimat:fitur', jenis: 'kalimat', kata: 'fitur', wordIds: [1], frekuensi: 1, signifikansi: 0.5 }],
+      [],
+      'pusat',
+      { candidatePoolLimit: 20 },
+    );
+
+    expect(kandidat.map((item) => item.kata)).toEqual(['alfa', 'beta']);
+    const kandidatTersaring = ModelKookurensi.__private.kumpulkanKandidatMirip(
+      {
+        prepare: jest.fn(() => ({
+          all: jest.fn(() => [
+            { wordId: 0, kata: 'nol', frekuensi: 1, featureKey: 'kalimat:fitur' },
+            { wordId: 20, kata: 'pusat', frekuensi: 1, featureKey: 'kalimat:fitur' },
+            { wordId: 21, kata: 'valid', frekuensi: 2, featureKey: '' },
+            { wordId: 22, kata: 'valid', frekuensi: 3, featureKey: 'kalimat:fitur' },
+            { wordId: 23, kata: 'Valid', frekuensi: 4, featureKey: 'kalimat:fitur' },
+          ]),
+        })),
+      },
+      [{ featureKey: 'kalimat:fitur', jenis: 'kalimat', kata: 'fitur', wordIds: [1], frekuensi: 1, signifikansi: 0.5 }],
+      [20],
+      'pusat',
+      { candidatePoolLimit: 20 },
+    );
+
+    expect(kandidatTersaring).toEqual([
+      expect.objectContaining({
+        kata: 'valid',
+        frekuensi: 4,
+        commonFeatureKeys: ['kalimat:fitur'],
+        wordIds: [22, 23],
+      }),
+    ]);
+    expect(ModelKookurensi.__private.compareSharedContext(
+      { kata: 'alfa', frekuensi: 3, signifikansi: 0.8 },
+      { kata: 'beta', frekuensi: 5, signifikansi: 0.8 },
+    )).toBeGreaterThan(0);
+    expect(ModelKookurensi.__private.compareSharedContext(
+      { kata: 'alfa', frekuensi: 5, signifikansi: 0.8 },
+      { kata: 'beta', frekuensi: 5, signifikansi: 0.8 },
+    )).toBeLessThan(0);
+    expect(ModelKookurensi.__private.compareMiripKonteksRank(
+      { kata: 'alfa', skorDice: 0.7, jumlahKonteksSama: 2, frekuensi: 4 },
+      { kata: 'beta', skorDice: 0.7, jumlahKonteksSama: 3, frekuensi: 4 },
+    )).toBeGreaterThan(0);
+    expect(ModelKookurensi.__private.compareMiripKonteksRank(
+      { kata: 'alfa', skorDice: 0.7, jumlahKonteksSama: 3, frekuensi: 4 },
+      { kata: 'beta', skorDice: 0.7, jumlahKonteksSama: 3, frekuensi: 5 },
+    )).toBeGreaterThan(0);
+    expect(ModelKookurensi.__private.compareMiripKonteksRank(
+      { kata: 'alfa', skorDice: 0.7, jumlahKonteksSama: 3, frekuensi: 5 },
+      { kata: 'beta', skorDice: 0.7, jumlahKonteksSama: 3, frekuensi: 5 },
+    )).toBeLessThan(0);
+  });
+
+  it('helper agregasi menormalkan entri campuran dan values cte berisi union', () => {
+    const ModelKookurensi = require('../../../models/leipzig/modelKookurensi');
+
+    const sql = ModelKookurensi.__private.buildValuesCte([
+      { featureId: 1, featureKey: "kalimat:o'reilly" },
+      { featureId: null, featureKey: 'kalimat:x.y' },
+    ], ['featureId', 'featureKey']);
+
+    expect(sql).toContain("SELECT 1 AS featureId, 'kalimat:o''reilly' AS featureKey");
+    expect(sql).toContain("UNION ALL SELECT NULL AS featureId, 'kalimat:x.y' AS featureKey");
+
+    const fitur = ModelKookurensi.__private.agregasiFiturKonteks([
+      { wordId: 1, kata: '', jenis: 'kalimat', frekuensi: 3, signifikansi: 0.2 },
+      { wordId: 2, kata: 'abaikan', jenis: '', frekuensi: 3, signifikansi: 0.2 },
+      { wordId: 3, kata: 'Larangan', jenis: 'kalimat', frekuensi: 4, signifikansi: 0.4 },
+      { wordId: 4, kata: 'uji', jenis: 'kalimat', frekuensi: 2, signifikansi: 0.3 },
+      { wordId: 5, kata: 'Uji', jenis: 'kalimat', frekuensi: 5, signifikansi: 0.8 },
+    ], ['larangan']);
+
+    expect(fitur).toEqual([
+      {
+        featureKey: 'kalimat:uji',
+        jenis: 'kalimat',
+        kata: 'uji',
+        frekuensi: 7,
+        signifikansi: 0.8,
+        wordIds: [4, 5],
+      },
+    ]);
+    expect(fitur[0].preferHurufKecil).toBeUndefined();
+    expect(fitur[0].frekuensiLabel).toBeUndefined();
+  });
+
+  it('helper private mendukung default argument dan short-circuit dasar', () => {
+    const ModelKookurensi = require('../../../models/leipzig/modelKookurensi');
+    const database = { prepare: jest.fn(() => ({ all: jest.fn(() => []) })) };
+
+    expect(ModelKookurensi.__private.buildEmptyResult()).toEqual({
+      kata: '',
+      total: 0,
+      limit: 25,
+      offset: 0,
+      data: [],
+    });
+    expect(ModelKookurensi.__private.buildEmptyTetangga()).toEqual({
+      kata: '',
+      limit: 25,
+      kiri: [],
+      kanan: [],
+    });
+    expect(ModelKookurensi.__private.buildEmptyMiripKonteks()).toEqual({
+      kata: '',
+      limit: 12,
+      minimumKonteksSama: 3,
+      jumlahKonteksAcuan: 0,
+      total: 0,
+      data: [],
+    });
+    expect(ModelKookurensi.__private.normalizeGraphEdgeKey()).toBe('::');
+    expect(ModelKookurensi.__private.escapeSqlString()).toBe('');
+    expect(ModelKookurensi.__private.escapeRegExp()).toBe('');
+    expect(ModelKookurensi.__private.memuatKataUtuh()).toBe(false);
+    expect(ModelKookurensi.__private.buildValuesCte()).toBe('SELECT  WHERE 0');
+    expect(ModelKookurensi.__private.ambilBarisRelasiSignifikan(database, 'co_s')).toEqual([]);
+    expect(ModelKookurensi.__private.agregasiFiturKonteks()).toEqual([]);
+    expect(ModelKookurensi.__private.ambilFiturKonteks(database)).toEqual([]);
+    expect(ModelKookurensi.__private.ambilFiturKonteks(database, [], [], { featureLimit: Number.NaN })).toEqual([]);
+    expect(ModelKookurensi.__private.kumpulkanKandidatMirip(database)).toEqual([]);
+    expect(ModelKookurensi.__private.hitungDiceCoefficient()).toBe(0);
+    expect(ModelKookurensi.__private.compareSharedContext(
+      { kata: 'rendah', frekuensi: 1, signifikansi: 0.1 },
+      { kata: 'tinggi', frekuensi: 1, signifikansi: 0.9 },
+    )).toBeGreaterThan(0);
+    expect(ModelKookurensi.__private.compareMiripKonteksRank(
+      { kata: 'rendah', skorDice: 0.1, jumlahKonteksSama: 2, frekuensi: 1 },
+      { kata: 'tinggi', skorDice: 0.9, jumlahKonteksSama: 2, frekuensi: 1 },
+    )).toBeGreaterThan(0);
   });
 
   it('mengembalikan kookurensi sekalimat, tetangga, dan graf', async () => {
@@ -173,6 +345,148 @@ describe('models/leipzig/modelKookurensi', () => {
       nodes: [],
       edges: [],
     });
+    expect(await ModelKookurensi.ambilSekalimat('ind_news_2024_10K', 'tidak-ada', { limit: 0, offset: -2 })).toEqual({
+      kata: 'tidak-ada',
+      total: 0,
+      limit: 1,
+      offset: 0,
+      data: [],
+    });
+  });
+
+  it('mengembalikan graf kosong saat kata kosong dan node pusat saja saat sekalimat kosong', async () => {
+    const rootDir = makeTempDir();
+    const sqliteDir = path.join(rootDir, 'sqlite');
+    seedCorpusDatabase(path.join(sqliteDir, 'ind_news_2024_10K.sqlite'));
+    process.env.LEIPZIG_DATA_DIR = rootDir;
+    process.env.LEIPZIG_SQLITE_DIR = sqliteDir;
+
+    const ModelKookurensi = require('../../../models/leipzig/modelKookurensi');
+    const LeipzigDb = require('../../../db/leipzig');
+    const originalAmbilSekalimat = ModelKookurensi.ambilSekalimat;
+
+    await expect(ModelKookurensi.ambilGraf('ind_news_2024_10K', '   ')).resolves.toEqual({
+      kata: '',
+      nodes: [],
+      edges: [],
+    });
+
+    ModelKookurensi.ambilSekalimat = jest.fn().mockResolvedValue({ data: [] });
+    await expect(ModelKookurensi.ambilGraf('ind_news_2024_10K', 'indonesia', { limit: 4 })).resolves.toEqual({
+      kata: 'indonesia',
+      nodes: [{ id: 'indonesia', label: 'indonesia', weight: 1, isCenter: true }],
+      edges: [],
+    });
+
+    ModelKookurensi.ambilSekalimat = originalAmbilSekalimat;
+    LeipzigDb.closeAllDatabases();
+  });
+
+  it('mengagregasi edge graf duplikat dan mengabaikan edge tidak valid', async () => {
+    jest.doMock('../../../db/leipzig', () => ({
+      openCorpusDatabase: jest.fn(() => ({
+        prepare: jest.fn(() => ({
+          all: jest.fn(() => [
+            { sourceWord: 'MajU', targetWord: 'RaKyaT', frekuensi: 1 },
+            { sourceWord: 'rakyat', targetWord: 'MAJU', frekuensi: 2 },
+            { sourceWord: null, targetWord: 'abaikan', frekuensi: 9 },
+            { sourceWord: 'maju', targetWord: '', frekuensi: 9 },
+          ]),
+        })),
+      })),
+    }));
+    jest.doMock('../../../models/leipzig/utilsLeipzig', () => ({
+      normalizeSearchWord: jest.fn(() => 'indonesia'),
+      parseLimit: jest.fn(() => 4),
+      parseOffset: jest.fn(() => 0),
+      buildPlaceholders: jest.fn(() => '?, ?'),
+      listMatchedForms: jest.fn(() => [{ wordId: 1, word: 'indonesia' }]),
+      aggregateWordRows: jest.fn((rows) => rows),
+      pilihLabelAgregat: jest.fn((previous, kata, frekuensi) => previous || { kata, preferHurufKecil: false, frekuensiLabel: Number(frekuensi) || 0 }),
+      bersihkanTokenAgregat: jest.fn((value) => value),
+    }));
+
+    const ModelKookurensi = require('../../../models/leipzig/modelKookurensi');
+    const originalAmbilSekalimat = ModelKookurensi.ambilSekalimat;
+
+    ModelKookurensi.ambilSekalimat = jest.fn().mockResolvedValue({
+      data: [
+        { kata: 'MajU', frekuensi: 5 },
+        { kata: 'RaKyaT', frekuensi: 3 },
+      ],
+    });
+
+    await expect(ModelKookurensi.ambilGraf('ind_news_2024_10K', 'indonesia', { limit: 4 })).resolves.toEqual({
+      kata: 'indonesia',
+      nodes: [
+        { id: 'indonesia', label: 'indonesia', weight: 5, isCenter: true },
+        { id: 'maju', label: 'MajU', weight: 5, isCenter: false },
+        { id: 'rakyat', label: 'RaKyaT', weight: 3, isCenter: false },
+      ],
+      edges: [
+        { source: 'indonesia', target: 'maju', weight: 5 },
+        { source: 'indonesia', target: 'rakyat', weight: 3 },
+        { source: 'maju', target: 'rakyat', weight: 3 },
+      ],
+    });
+
+    ModelKookurensi.ambilSekalimat = originalAmbilSekalimat;
+  });
+
+  it('mengembalikan mirip konteks kosong saat fitur target tidak ada', async () => {
+    jest.doMock('../../../db/leipzig', () => ({
+      openCorpusDatabase: jest.fn(() => ({
+        prepare: jest.fn(() => ({ all: jest.fn(() => []), get: jest.fn(() => undefined) })),
+      })),
+    }));
+    jest.doMock('../../../models/leipzig/utilsLeipzig', () => ({
+      normalizeSearchWord: jest.fn(() => 'uji'),
+      parseLimit: jest.fn(() => 12),
+      parseOffset: jest.fn(() => 0),
+      buildPlaceholders: jest.fn(() => '?'),
+      listMatchedForms: jest.fn(() => [{ wordId: 1, word: 'uji' }]),
+      aggregateWordRows: jest.fn((rows) => rows),
+      pilihLabelAgregat: jest.fn((previous, kata, frekuensi) => previous || { kata, preferHurufKecil: false, frekuensiLabel: Number(frekuensi) || 0 }),
+      bersihkanTokenAgregat: jest.fn((value) => value),
+    }));
+
+    const ModelKookurensi = require('../../../models/leipzig/modelKookurensi');
+
+    await expect(ModelKookurensi.ambilMiripKonteks('ind_news_2024_10K', 'uji')).resolves.toEqual({
+      kata: 'uji',
+      limit: 12,
+      minimumKonteksSama: 3,
+      jumlahKonteksAcuan: 0,
+      total: 0,
+      data: [],
+    });
+  });
+
+  it('mengembalikan mirip konteks kosong untuk kata kosong atau tidak ditemukan', async () => {
+    const rootDir = makeTempDir();
+    const sqliteDir = path.join(rootDir, 'sqlite');
+    seedCorpusDatabase(path.join(sqliteDir, 'ind_news_2024_10K.sqlite'));
+    process.env.LEIPZIG_DATA_DIR = rootDir;
+    process.env.LEIPZIG_SQLITE_DIR = sqliteDir;
+
+    const ModelKookurensi = require('../../../models/leipzig/modelKookurensi');
+
+    await expect(ModelKookurensi.ambilMiripKonteks('ind_news_2024_10K', '   ', { candidatePoolLimit: 1 })).resolves.toEqual({
+      kata: '',
+      limit: 12,
+      minimumKonteksSama: 3,
+      jumlahKonteksAcuan: 0,
+      total: 0,
+      data: [],
+    });
+    await expect(ModelKookurensi.ambilMiripKonteks('ind_news_2024_10K', 'tidak-ada', { limit: 1, minimumKonteksSama: 0 })).resolves.toEqual({
+      kata: 'tidak-ada',
+      limit: 1,
+      minimumKonteksSama: 3,
+      jumlahKonteksAcuan: 0,
+      total: 0,
+      data: [],
+    });
   });
 
   it('mengembalikan kata dengan konteks mirip berdasarkan himpunan kookurensi signifikan', async () => {
@@ -202,5 +516,97 @@ describe('models/leipzig/modelKookurensi', () => {
       expect.objectContaining({ kata: 'maju' }),
       expect.objectContaining({ kata: 'rakyat' }),
     ]));
+  });
+
+  it('menyaring kandidat mirip konteks yang tidak lolos skor atau minimum dan membatasi konteks bersama', async () => {
+    const targetFeatureRows = [
+      { wordId: 101, kata: 'fita', frekuensi: 10, signifikansi: 0.9 },
+      { wordId: 102, kata: 'fitb', frekuensi: 9, signifikansi: 0.85 },
+      { wordId: 103, kata: 'fitc', frekuensi: 8, signifikansi: 0.8 },
+      { wordId: 104, kata: 'fitd', frekuensi: 7, signifikansi: 0.75 },
+      { wordId: 105, kata: 'fite', frekuensi: 6, signifikansi: 0.7 },
+      { wordId: 106, kata: 'fitf', frekuensi: 5, signifikansi: 0.65 },
+    ];
+
+    const database = {
+      prepare: jest.fn((sql) => ({
+        all: jest.fn((...args) => {
+          if (sql.includes('WITH target_features')) {
+            return [
+              { wordId: 21, kata: 'baik', frekuensi: 9, featureKey: 'kalimat:fita' },
+              { wordId: 21, kata: 'baik', frekuensi: 9, featureKey: 'kalimat:fitb' },
+              { wordId: 21, kata: 'baik', frekuensi: 9, featureKey: 'kalimat:fitc' },
+              { wordId: 21, kata: 'baik', frekuensi: 9, featureKey: 'kalimat:fitd' },
+              { wordId: 21, kata: 'baik', frekuensi: 9, featureKey: 'kalimat:fite' },
+              { wordId: 21, kata: 'baik', frekuensi: 9, featureKey: 'kalimat:fitf' },
+              { wordId: 22, kata: 'nol', frekuensi: 7, featureKey: 'kalimat:fita' },
+              { wordId: 22, kata: 'nol', frekuensi: 7, featureKey: 'kalimat:fitb' },
+              { wordId: 23, kata: 'sedikit', frekuensi: 6, featureKey: 'kalimat:fita' },
+            ];
+          }
+
+          if (sql.includes('FROM co_s relation') && args[0] === 1) return targetFeatureRows;
+          if (sql.includes('FROM co_n relation') && args[0] === 1) return [];
+
+          if (sql.includes('FROM co_s relation') && args[0] === 21) return targetFeatureRows;
+          if (sql.includes('FROM co_n relation') && args[0] === 21) return [];
+
+          if (sql.includes('FROM co_s relation') && args[0] === 22) return [];
+          if (sql.includes('FROM co_n relation') && args[0] === 22) return [];
+
+          if (sql.includes('FROM co_s relation') && args[0] === 23) {
+            return [{ wordId: 101, kata: 'fita', frekuensi: 10, signifikansi: 0.9 }];
+          }
+          if (sql.includes('FROM co_n relation') && args[0] === 23) return [];
+
+          return [];
+        }),
+      })),
+    };
+
+    jest.doMock('../../../db/leipzig', () => ({
+      openCorpusDatabase: jest.fn(() => database),
+    }));
+    jest.doMock('../../../models/leipzig/utilsLeipzig', () => ({
+      normalizeSearchWord: jest.fn(() => 'target'),
+      parseLimit: jest.fn(() => 3),
+      parseOffset: jest.fn(() => 0),
+      buildPlaceholders: jest.fn(() => '?'),
+      listMatchedForms: jest.fn(() => [{ wordId: 1, word: 'target' }]),
+      aggregateWordRows: jest.fn((rows) => rows),
+      pilihLabelAgregat: jest.fn((previous, kata, frekuensi) => previous || { kata, preferHurufKecil: false, frekuensiLabel: Number(frekuensi) || 0 }),
+      bersihkanTokenAgregat: jest.fn((value) => value),
+    }));
+
+    const ModelKookurensi = require('../../../models/leipzig/modelKookurensi');
+    const hasil = await ModelKookurensi.ambilMiripKonteks('ind_news_2024_10K', 'target', {
+      limit: 3,
+      minimumKonteksSama: 2,
+      featureLimit: 10,
+      candidatePoolLimit: 20,
+    });
+
+    expect(hasil).toEqual({
+      kata: 'target',
+      limit: 3,
+      minimumKonteksSama: 2,
+      jumlahKonteksAcuan: 6,
+      total: 1,
+      data: [
+        {
+          kata: 'baik',
+          frekuensi: 9,
+          skorDice: 1,
+          jumlahKonteksSama: 6,
+          konteksBersama: [
+            { kata: 'fita', jenis: 'kalimat', frekuensi: 10, signifikansi: 0.9 },
+            { kata: 'fitb', jenis: 'kalimat', frekuensi: 9, signifikansi: 0.85 },
+            { kata: 'fitc', jenis: 'kalimat', frekuensi: 8, signifikansi: 0.8 },
+            { kata: 'fitd', jenis: 'kalimat', frekuensi: 7, signifikansi: 0.75 },
+            { kata: 'fite', jenis: 'kalimat', frekuensi: 6, signifikansi: 0.7 },
+          ],
+        },
+      ],
+    });
   });
 });

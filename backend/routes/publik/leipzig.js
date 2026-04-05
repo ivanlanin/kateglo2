@@ -228,3 +228,9 @@ router.get('/korpus/:korpusId/kata/:kata/mirip-konteks', publicSearchLimiter, as
 });
 
 module.exports = router;
+module.exports.__private = {
+  setCacheHeaders,
+  handleLeipzigError,
+  resolveKorpusOnly,
+  resolveKorpus,
+};

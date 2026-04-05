@@ -32,11 +32,22 @@ const ModelKata = require('../../../models/leipzig/modelKata');
 const ModelKalimat = require('../../../models/leipzig/modelKalimat');
 const ModelKookurensi = require('../../../models/leipzig/modelKookurensi');
 const router = require('../../../routes/publik/leipzig');
+const { __private } = router;
 
 function createApp() {
   const app = express();
   app.use(express.json());
   app.use('/api/publik/leipzig', router);
+  app.use((err, _req, res, _next) => {
+    res.status(500).json({ success: false, message: err.message });
+  });
+  return app;
+}
+
+function createAppWithRouter(customRouter) {
+  const app = express();
+  app.use(express.json());
+  app.use('/api/publik/leipzig', customRouter);
   app.use((err, _req, res, _next) => {
     res.status(500).json({ success: false, message: err.message });
   });
@@ -57,12 +68,49 @@ describe('routes/publik/leipzig', () => {
     expect(response.body).toEqual({ success: true, data: [{ id: 'ind_news_2024_10K' }] });
   });
 
+  it('GET /korpus meneruskan error ke error handler', async () => {
+    ModelKorpus.ambilDaftarTersedia.mockRejectedValueOnce(new Error('daftar gagal'));
+
+    const response = await request(createApp()).get('/api/publik/leipzig/korpus');
+
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe('daftar gagal');
+  });
+
+  it('GET /korpus/:korpusId/peringkat memvalidasi korpusId kosong setelah trim', async () => {
+    const response = await request(createApp()).get('/api/publik/leipzig/korpus/%20/peringkat');
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('ID korpus wajib diisi');
+  });
+
   it('GET /korpus/:korpusId/kata/:kata/contoh validasi kata kosong', async () => {
     ModelKorpus.ambilDetail.mockResolvedValue({ id: 'ind_news_2024_10K', hasSqlite: true });
 
     const response = await request(createApp()).get('/api/publik/leipzig/korpus/ind_news_2024_10K/kata/%20%20/contoh');
     expect(response.status).toBe(400);
     expect(response.body.message).toBe('Kata wajib diisi');
+  });
+
+  it('GET endpoint berbasis kata memvalidasi kata kosong sebelum memanggil model', async () => {
+    ModelKorpus.ambilDetail.mockResolvedValue({ id: 'ind_news_2024_10K', hasSqlite: true });
+
+    const info = await request(createApp()).get('/api/publik/leipzig/korpus/ind_news_2024_10K/kata/%20%20');
+    const sekalimat = await request(createApp()).get('/api/publik/leipzig/korpus/ind_news_2024_10K/kata/%20%20/kookurensi-sekalimat');
+    const tetangga = await request(createApp()).get('/api/publik/leipzig/korpus/ind_news_2024_10K/kata/%20%20/kookurensi-tetangga');
+    const graf = await request(createApp()).get('/api/publik/leipzig/korpus/ind_news_2024_10K/kata/%20%20/graf');
+    const mirip = await request(createApp()).get('/api/publik/leipzig/korpus/ind_news_2024_10K/kata/%20%20/mirip-konteks');
+
+    for (const response of [info, sekalimat, tetangga, graf, mirip]) {
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe('Kata wajib diisi');
+    }
+
+    expect(ModelKata.ambilInfoKata).not.toHaveBeenCalled();
+    expect(ModelKookurensi.ambilSekalimat).not.toHaveBeenCalled();
+    expect(ModelKookurensi.ambilTetangga).not.toHaveBeenCalled();
+    expect(ModelKookurensi.ambilGraf).not.toHaveBeenCalled();
+    expect(ModelKookurensi.ambilMiripKonteks).not.toHaveBeenCalled();
   });
 
   it('GET /korpus/:korpusId/kata/:kata mengembalikan info kata', async () => {
@@ -112,6 +160,19 @@ describe('routes/publik/leipzig', () => {
     expect(ModelKata.ambilPeringkat).toHaveBeenCalledWith('ind_news_2024_10K', { limit: '25', offset: '0' });
   });
 
+  it('GET /korpus/:korpusId/peringkat menangani error korpus belum siap dari model', async () => {
+    ModelKorpus.ambilDetail.mockResolvedValue({ id: 'ind_news_2024_10K', hasSqlite: true });
+    ModelKata.ambilPeringkat.mockRejectedValueOnce({
+      code: 'LEIPZIG_CORPUS_NOT_READY',
+      message: 'Korpus Leipzig belum siap',
+    });
+
+    const response = await request(createApp()).get('/api/publik/leipzig/korpus/ind_news_2024_10K/peringkat');
+
+    expect(response.status).toBe(503);
+    expect(response.body.message).toContain('Jalankan impor SQLite terlebih dahulu');
+  });
+
   it('GET /korpus/:korpusId/kata/:kata/contoh mengembalikan 404 jika korpus tidak ada', async () => {
     ModelKorpus.ambilDetail.mockResolvedValue(null);
 
@@ -157,6 +218,19 @@ describe('routes/publik/leipzig', () => {
     expect(response.body.success).toBe(true);
     expect(response.body.korpus.label).toBe('Berita 2024');
     expect(response.body.total).toBe(2);
+  });
+
+  it('GET /korpus/:korpusId/kata/:kata/contoh menangani error korpus invalid dari model', async () => {
+    ModelKorpus.ambilDetail.mockResolvedValue({ id: 'ind_news_2024_10K', hasSqlite: true });
+    ModelKalimat.cariContohKata.mockRejectedValueOnce({
+      code: 'LEIPZIG_CORPUS_INVALID',
+      message: 'ID korpus tidak valid',
+    });
+
+    const response = await request(createApp()).get('/api/publik/leipzig/korpus/ind_news_2024_10K/kata/indonesia/contoh');
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('ID korpus tidak valid');
   });
 
   it('GET endpoint Leipzig mengembalikan 503 jika runtime SQLite tidak didukung', async () => {
@@ -245,6 +319,92 @@ describe('routes/publik/leipzig', () => {
     expect(tetangga.status).toBe(404);
     expect(graf.status).toBe(404);
     expect(miripKonteks.status).toBe(404);
+  });
+
+  it('GET endpoint kookurensi menangani error Leipzig terpetakan di semua route terkait', async () => {
+    ModelKorpus.ambilDetail.mockResolvedValue({ id: 'ind_news_2024_10K', hasSqlite: true });
+    ModelKookurensi.ambilSekalimat.mockRejectedValueOnce({
+      code: 'LEIPZIG_CORPUS_INVALID',
+      message: 'Parameter korpus invalid',
+    });
+    ModelKookurensi.ambilTetangga.mockRejectedValueOnce({
+      code: 'LEIPZIG_CORPUS_NOT_FOUND',
+      message: 'Korpus tidak ada',
+    });
+    ModelKookurensi.ambilGraf.mockRejectedValueOnce({
+      code: 'LEIPZIG_CORPUS_NOT_READY',
+      message: 'Korpus belum siap',
+    });
+    ModelKookurensi.ambilMiripKonteks.mockRejectedValueOnce({
+      code: 'LEIPZIG_CORPUS_INVALID',
+      message: 'Permintaan tidak valid',
+    });
+
+    const sekalimat = await request(createApp()).get('/api/publik/leipzig/korpus/ind_news_2024_10K/kata/jika/kookurensi-sekalimat');
+    const tetangga = await request(createApp()).get('/api/publik/leipzig/korpus/ind_news_2024_10K/kata/jika/kookurensi-tetangga');
+    const graf = await request(createApp()).get('/api/publik/leipzig/korpus/ind_news_2024_10K/kata/jika/graf');
+    const miripKonteks = await request(createApp()).get('/api/publik/leipzig/korpus/ind_news_2024_10K/kata/jika/mirip-konteks');
+
+    expect(sekalimat.status).toBe(400);
+    expect(sekalimat.body.message).toBe('Parameter korpus invalid');
+    expect(tetangga.status).toBe(404);
+    expect(tetangga.body.message).toBe('Korpus tidak ada');
+    expect(graf.status).toBe(503);
+    expect(graf.body.message).toContain('Jalankan impor SQLite terlebih dahulu');
+    expect(miripKonteks.status).toBe(400);
+    expect(miripKonteks.body.message).toBe('Permintaan tidak valid');
+  });
+
+  it('GET /korpus/:korpusId/peringkat memakai cache publik di mode production', async () => {
+    const previousEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'production';
+    jest.resetModules();
+
+    const ModelKorpusProd = require('../../../models/leipzig/modelKorpus');
+    const ModelKataProd = require('../../../models/leipzig/modelKata');
+    const prodRouter = require('../../../routes/publik/leipzig');
+
+    ModelKorpusProd.ambilDetail.mockResolvedValue({ id: 'ind_news_2024_10K', hasSqlite: true, label: 'Berita 2024' });
+    ModelKataProd.ambilPeringkat.mockResolvedValue({ total: 0, limit: 25, offset: 0, hasMore: false, data: [] });
+
+    const response = await request(createAppWithRouter(prodRouter)).get('/api/publik/leipzig/korpus/ind_news_2024_10K/peringkat');
+
+    expect(response.status).toBe(200);
+    expect(response.headers['cache-control']).toBe('public, max-age=300, stale-while-revalidate=900');
+
+    process.env.NODE_ENV = previousEnv;
+    jest.resetModules();
+  });
+
+  it('helper resolveKorpusOnly dan resolveKorpus menangani parameter yang hilang', async () => {
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    };
+
+    await expect(__private.resolveKorpusOnly({ params: {} }, res)).resolves.toBeNull();
+    await expect(__private.resolveKorpus({ params: { korpusId: 'ind_news_2024_10K' } }, res)).resolves.toBeNull();
+
+    expect(res.status).toHaveBeenNthCalledWith(1, 400);
+    expect(res.json).toHaveBeenNthCalledWith(1, { success: false, message: 'ID korpus wajib diisi' });
+    expect(res.status).toHaveBeenNthCalledWith(2, 400);
+    expect(res.json).toHaveBeenNthCalledWith(2, { success: false, message: 'Kata wajib diisi' });
+  });
+
+  it('helper resolveKorpus mengembalikan null saat resolveKorpusOnly gagal lebih dulu', async () => {
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    };
+    ModelKorpus.ambilDetail.mockResolvedValueOnce(null);
+
+    await expect(__private.resolveKorpus({ params: { korpusId: 'ind_news_2024_10K', kata: 'jika' } }, res)).resolves.toBeNull();
+
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({
+      error: 'Tidak Ditemukan',
+      message: 'Korpus Leipzig tidak ditemukan',
+    });
   });
 
   it('meneruskan error tak dikenal ke error handler', async () => {

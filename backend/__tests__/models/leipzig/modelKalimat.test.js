@@ -113,4 +113,45 @@ describe('models/leipzig/modelKalimat', () => {
     expect(sliced.data[0].sentenceId).toBe(11);
     LeipzigDb.closeAllDatabases();
   });
+
+  it('memakai fallback numerik dan null saat metadata contoh tidak lengkap', async () => {
+    const prepare = jest.fn()
+      .mockReturnValueOnce({ get: jest.fn(() => undefined) })
+      .mockReturnValueOnce({
+        all: jest.fn(() => [{
+          sentenceId: null,
+          sentence: 'Kalimat tanpa metadata sumber.',
+          sourceUrl: '',
+          sourceDate: '',
+          firstPosition: null,
+          matchCount: null,
+        }]),
+      });
+
+    jest.doMock('../../../db/leipzig', () => ({
+      openCorpusDatabase: jest.fn(() => ({ prepare })),
+    }));
+    jest.doMock('../../../models/leipzig/utilsLeipzig', () => ({
+      normalizeSearchWord: jest.fn(() => 'indonesia'),
+      parseLimit: jest.fn(() => 10),
+      parseOffset: jest.fn(() => 0),
+      listMatchedForms: jest.fn(() => [{ wordId: 1, kata: 'indonesia', freq: 0 }]),
+      summarizeMatchedForms: jest.fn(() => [{ kata: 'indonesia', frekuensi: 0, wordId: 1 }]),
+    }));
+
+    const ModelKalimat = require('../../../models/leipzig/modelKalimat');
+    const result = await ModelKalimat.cariContohKata('ind_news_2024_10K', 'indonesia');
+
+    expect(result.total).toBe(0);
+    expect(result.data).toEqual([
+      {
+        sentenceId: 0,
+        sentence: 'Kalimat tanpa metadata sumber.',
+        sourceUrl: null,
+        sourceDate: null,
+        firstPosition: 0,
+        matchCount: 0,
+      },
+    ]);
+  });
 });

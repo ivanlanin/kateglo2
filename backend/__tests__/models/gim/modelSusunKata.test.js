@@ -80,6 +80,53 @@ describe('ModelSusunKata', () => {
     expect(index).toBeLessThan(4);
   });
 
+  it('pilihKataUnik menyesuaikan step saat gcd awal tidak relatif prima', () => {
+    const kamus = ['alfa', 'beta', 'gama', 'delta'];
+    const indexAwal = __private.pilihIndexKata({ panjang: 4, offsetHari: 0, totalKamus: 4 });
+    const indeksTarget = (indexAwal + 3) % 4;
+    const target = kamus[indeksTarget];
+    const sudahTerpakai = new Set(kamus.filter((kata) => kata !== target));
+
+    const hasil = ModelSusunKata.pilihKataUnik({
+      kamus,
+      sudahTerpakai,
+      panjang: 4,
+      offsetHari: 0,
+    });
+
+    expect(hasil).toBe(target);
+  });
+
+  it('pilihKataUnik fallback ke pilihan awal saat semua kata sudah terpakai', () => {
+    const kamus = ['alfa', 'beta', 'gama', 'delta'];
+    const indexAwal = __private.pilihIndexKata({ panjang: 4, offsetHari: 0, totalKamus: 4 });
+
+    const hasil = ModelSusunKata.pilihKataUnik({
+      kamus,
+      sudahTerpakai: new Set(kamus),
+      panjang: 4,
+      offsetHari: 0,
+    });
+
+    expect(hasil).toBe(kamus[indexAwal]);
+  });
+
+  it('pilihKataUnik mengembalikan null untuk kamus kosong dan string kosong saat kandidat fallback kosong', () => {
+    expect(ModelSusunKata.pilihKataUnik({
+      kamus: [],
+      sudahTerpakai: new Set(),
+      panjang: 4,
+      offsetHari: 0,
+    })).toBeNull();
+
+    expect(ModelSusunKata.pilihKataUnik({
+      kamus: ['', undefined, '   ', null],
+      sudahTerpakai: new Set(['']),
+      panjang: 4,
+      offsetHari: 0,
+    })).toBe('');
+  });
+
   it('ambilProgresPenggunaHarian validasi id dan mengembalikan baris', async () => {
     await expect(ModelSusunKata.ambilProgresPenggunaHarian({ susunKataId: 'x', penggunaId: 1 })).resolves.toBeNull();
     await expect(ModelSusunKata.ambilProgresPenggunaHarian({ susunKataId: 1, penggunaId: 0 })).resolves.toBeNull();
@@ -129,6 +176,15 @@ describe('ModelSusunKata', () => {
       .mockResolvedValueOnce(['baru']);
     ModelEntri.ambilArtiSusunKataByIndeks.mockResolvedValueOnce('arti baru');
     await expect(ModelSusunKata.ambilPuzzleBebas({})).resolves.toEqual(expect.objectContaining({ target: 'baru', arti: 'arti baru' }));
+  });
+
+  it('ambilKataSudahTerpakai mengembalikan Set kata terpakai dengan panjang fallback aman', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ kata: 'kartu' }, { kata: 'sajak' }] });
+
+    const hasil = await ModelSusunKata.ambilKataSudahTerpakai({ panjang: 'abc' });
+
+    expect(db.query).toHaveBeenCalledWith(expect.stringContaining('SELECT kata FROM susun_kata WHERE panjang = $1'), [5]);
+    expect(hasil).toEqual(new Set(['kartu', 'sajak']));
   });
 
   it('simpanSkorBebas menormalisasi payload dan mengembalikan null saat tanpa baris', async () => {
@@ -445,6 +501,10 @@ describe('ModelSusunKata', () => {
     ModelEntri.cekKataSusunKataValid.mockResolvedValueOnce(true);
     db.query.mockResolvedValueOnce({ rows: [{ id: 99, tanggal: '2026-01-15' }] }); // duplicate found
     await expect(ModelSusunKata.simpanHarianAdmin({ tanggal: '2026-03-02', panjang: 5, kata: 'kartu', penggunaId: 1 })).rejects.toThrow('sudah digunakan');
+
+    ModelEntri.cekKataSusunKataValid.mockResolvedValueOnce(true);
+    db.query.mockResolvedValueOnce({ rows: [{ id: 100, tanggal: new Date('2026-01-16T00:00:00.000Z') }] });
+    await expect(ModelSusunKata.simpanHarianAdmin({ tanggal: '2026-03-02', panjang: 5, kata: 'kartu', penggunaId: 1 })).rejects.toThrow('2026-01-16');
   });
 
   it('ambilSkorPenggunaHarian validasi id dan mengembalikan baris', async () => {

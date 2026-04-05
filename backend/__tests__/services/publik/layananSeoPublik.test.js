@@ -22,8 +22,13 @@ jest.mock('../../../models/leksikon/modelGlosarium', () => ({
   ambilDaftarSumber: jest.fn(),
 }));
 
+jest.mock('../../../models/artikel/modelArtikel', () => ({
+  ambilSlugTerbit: jest.fn(),
+}));
+
 const ModelLabel = require('../../../models/master/modelLabel');
 const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
+const ModelArtikel = require('../../../models/artikel/modelArtikel');
 const {
   resolveSiteBaseUrl,
   buildRobotsTxt,
@@ -122,6 +127,7 @@ describe('layananSeoPublik.resolveSiteBaseUrl', () => {
 describe('layananSeoPublik.generateSitemapPaths', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    ModelArtikel.ambilSlugTerbit.mockResolvedValue([]);
   });
 
   it('menggabungkan path statis + kategori kamus + kategori glosarium', async () => {
@@ -216,6 +222,42 @@ describe('layananSeoPublik private helpers', () => {
     expect(paths).toHaveLength(1);
   });
 
+  it('ambilPathStatisDariKatalog memakai fallback href dan mengabaikan item tanpa path', () => {
+    const paths = __private.ambilPathStatisDariKatalog({
+      alat: {
+        index: { href: '/alat-kecil', sitemap: true },
+        items: [
+          { href: '/alat/href-only', tampilPublik: true },
+          { canonicalPath: '/alat/canonical', tampilPublik: true },
+          { tampilPublik: true },
+          { href: '/alat/tersembunyi', sitemap: false, tampilPublik: true },
+        ],
+      },
+      gim: {
+        index: { href: '/gim-kecil', sitemap: false },
+        items: [
+          { href: '/gim/main', canonicalPath: '', tampilPublik: true },
+        ],
+      },
+    });
+
+    expect(paths).toEqual(expect.arrayContaining([
+      '/alat-kecil',
+      '/alat/href-only',
+      '/alat/canonical',
+      '/gim/main',
+    ]));
+    expect(paths).not.toContain('/alat/tersembunyi');
+  });
+
+  it('ambilPathStatisDariKatalog menangani katalog bawaan dan grup tanpa index/items', () => {
+    const defaultPaths = __private.ambilPathStatisDariKatalog();
+    const minimalPaths = __private.ambilPathStatisDariKatalog({ alat: null, gim: {} });
+
+    expect(defaultPaths).toEqual(expect.arrayContaining(['/kamus', '/tesaurus', '/artikel']));
+    expect(minimalPaths).toEqual(expect.arrayContaining(['/', '/kamus', '/artikel']));
+  });
+
   it('ambilPathGlosariumKategori memakai fallback bidang/sumber/nama', async () => {
     ModelGlosarium.ambilDaftarBidang.mockResolvedValue([
       { kode: 'eko', nama: 'Ekonomi', slug: 'ekonomi' },
@@ -304,6 +346,21 @@ describe('layananSeoPublik private helpers', () => {
     expect(paths).not.toContain('/gramatika/');
     readdirSpy.mockRestore();
     existsSpy.mockRestore();
+  });
+
+  it('ambilPathArtikel mengembalikan array kosong saat model artikel gagal', async () => {
+    ModelArtikel.ambilSlugTerbit.mockRejectedValueOnce(new Error('gagal artikel'));
+
+    await expect(__private.ambilPathArtikel()).resolves.toEqual([]);
+  });
+
+  it('ambilPathArtikel memetakan slug artikel terbit ke path publik', async () => {
+    ModelArtikel.ambilSlugTerbit.mockResolvedValueOnce(['artikel-satu', 'artikel-dua']);
+
+    await expect(__private.ambilPathArtikel()).resolves.toEqual([
+      '/artikel/artikel-satu',
+      '/artikel/artikel-dua',
+    ]);
   });
 
   it('helper og image menormalisasi input dan membagi baris judul', () => {

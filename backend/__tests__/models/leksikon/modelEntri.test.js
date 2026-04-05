@@ -14,6 +14,7 @@ const {
   normalisasiIndeks,
   parseNullableInteger,
   normalisasiRagamVarian,
+  buildKataHariIniCandidateWhereClause,
 } = require('../../../models/leksikon/modelEntri').__private;
 
 describe('ModelEntri', () => {
@@ -1836,6 +1837,88 @@ describe('ModelEntri', () => {
     expect(normalisasiRagamVarian('KLASIK')).toBe('kl');
     expect(normalisasiRagamVarian('tidak-ada')).toBeNull();
     expect(normalisasiRagamVarian('')).toBeNull();
+  });
+
+  it('helper private buildKataHariIniCandidateWhereClause menyalakan dan mematikan syarat etimologi', () => {
+    const defaultClause = buildKataHariIniCandidateWhereClause();
+    const tanpaEtimologi = buildKataHariIniCandidateWhereClause({ requireEtimologi: false });
+
+    expect(defaultClause).toContain('FROM etimologi et');
+    expect(tanpaEtimologi).not.toContain('FROM etimologi et');
+    expect(tanpaEtimologi).toContain("e.jenis = 'dasar'");
+  });
+
+  it('method kandidat kata hari ini memakai filter etimologi yang sesuai dan clamp offset', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ total: '3' }] })
+      .mockResolvedValueOnce({ rows: [{ indeks_norm: 'aktif', indeks: 'aktif', entri_id: 7 }] })
+      .mockResolvedValueOnce({ rows: [{ indeks: 'baru', entri_id: 9 }] });
+
+    const total = await ModelEntri.hitungKandidatKataHariIni();
+    const daftar = await ModelEntri.ambilDaftarKandidatKataHariIni({ requireEtimologi: false });
+    const satu = await ModelEntri.ambilKandidatKataHariIni({ offset: -5, requireEtimologi: false });
+
+    expect(total).toBe(3);
+    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('FROM etimologi et'), []);
+    expect(daftar).toEqual([{ indeks_norm: 'aktif', indeks: 'aktif', entri_id: 7 }]);
+    expect(db.query).toHaveBeenNthCalledWith(2, expect.not.stringContaining('FROM etimologi et'), []);
+    expect(satu).toEqual({ indeks: 'baru', entri_id: 9 });
+    expect(db.query).toHaveBeenNthCalledWith(3, expect.not.stringContaining('FROM etimologi et'), [0]);
+  });
+
+  it('method kandidat kata hari ini memakai requireEtimologi default saat argumen tidak diberikan', async () => {
+    db.query
+      .mockResolvedValueOnce({ rows: [{ indeks_norm: 'aktif', indeks: 'aktif', entri_id: 7 }] })
+      .mockResolvedValueOnce({ rows: [{ indeks: 'aktif', entri_id: 7 }] });
+
+    await expect(ModelEntri.ambilDaftarKandidatKataHariIni()).resolves.toEqual([{ indeks_norm: 'aktif', indeks: 'aktif', entri_id: 7 }]);
+    await expect(ModelEntri.ambilKandidatKataHariIni()).resolves.toEqual({ indeks: 'aktif', entri_id: 7 });
+
+    expect(db.query).toHaveBeenNthCalledWith(1, expect.stringContaining('FROM etimologi et'), []);
+    expect(db.query).toHaveBeenNthCalledWith(2, expect.stringContaining('FROM etimologi et'), [0]);
+  });
+
+  it('ambilKandidatKataHariIni mengembalikan null saat tidak ada baris', async () => {
+    db.query.mockResolvedValueOnce({ rows: [] });
+
+    await expect(ModelEntri.ambilKandidatKataHariIni({ offset: 2 })).resolves.toBeNull();
+  });
+
+  it('ambilEntriPerIndeks mengembalikan kosong saat indeks falsy', async () => {
+    await expect(ModelEntri.ambilEntriPerIndeks('')).resolves.toEqual([]);
+    await expect(ModelEntri.ambilEntriPerIndeks()).resolves.toEqual([]);
+    expect(db.query).not.toHaveBeenCalled();
+  });
+
+  it('ambilNavigasiIndeks mengembalikan sisi yang ada saja', async () => {
+    db.query.mockResolvedValueOnce({
+      rows: [{ prev_indeks: 'beta', prev_label: 'Beta', next_indeks: null, next_label: null }],
+    });
+
+    await expect(ModelEntri.ambilNavigasiIndeks('gamma')).resolves.toEqual({
+      prev: { indeks: 'beta', label: 'Beta' },
+      next: null,
+    });
+  });
+
+  it('ambilNavigasiIndeks mengembalikan next tanpa prev saat hanya sisi berikutnya tersedia', async () => {
+    db.query.mockResolvedValueOnce({
+      rows: [{ prev_indeks: null, prev_label: null, next_indeks: 'delta', next_label: 'Delta' }],
+    });
+
+    await expect(ModelEntri.ambilNavigasiIndeks('gamma')).resolves.toEqual({
+      prev: null,
+      next: { indeks: 'delta', label: 'Delta' },
+    });
+  });
+
+  it('ambilNavigasiIndeks mengembalikan null/null saat query tidak mengembalikan baris', async () => {
+    db.query.mockResolvedValueOnce({ rows: [] });
+
+    await expect(ModelEntri.ambilNavigasiIndeks('gamma')).resolves.toEqual({
+      prev: null,
+      next: null,
+    });
   });
 
   it('ambilKamusSusunKata dan cekKataSusunKataValid memakai fallback panjang default saat non-finite', async () => {

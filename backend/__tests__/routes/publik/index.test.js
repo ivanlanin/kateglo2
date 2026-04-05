@@ -113,6 +113,7 @@ const ModelPengguna = require('../../../models/akses/modelPengguna');
 const layananKamusPublik = require('../../../services/publik/layananKamusPublik');
 const layananGlosariumPublik = require('../../../services/publik/layananGlosariumPublik');
 const layananTesaurusPublik = require('../../../services/publik/layananTesaurusPublik');
+const kamusRouter = require('../../../routes/publik/leksikon/kamus');
 const rootRouter = require('../../../routes');
 
 function createApp() {
@@ -209,6 +210,34 @@ describe('routes backend', () => {
       error: 'Tidak Ditemukan',
       message: 'Entri acak belum tersedia',
     });
+  });
+
+  it('helper cache route kamus menormalkan max-age dan stale-while-revalidate', () => {
+    const res = { set: jest.fn() };
+
+    kamusRouter.__private.setCacheHeaders(res, 'abc', -5);
+    kamusRouter.__private.setCacheHeaders(res, 10, 'abc');
+
+    expect(res.set).toHaveBeenCalledWith('Cache-Control', 'public, max-age=0, stale-while-revalidate=0');
+    expect(res.set).toHaveBeenCalledWith('Cache-Control', 'public, max-age=10, stale-while-revalidate=0');
+  });
+
+  it('GET /api/publik/kamus/acak meneruskan error service ke middleware', async () => {
+    layananKamusPublik.ambilEntriAcak.mockRejectedValueOnce(new Error('acak gagal'));
+
+    const response = await request(createApp()).get('/api/publik/kamus/acak');
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ error: 'acak gagal' });
+  });
+
+  it('GET /api/publik/kamus/kata-hari-ini meneruskan error service ke middleware', async () => {
+    layananKamusPublik.ambilKataHariIni.mockRejectedValueOnce(new Error('kata hari ini gagal'));
+
+    const response = await request(createApp()).get('/api/publik/kamus/kata-hari-ini');
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ error: 'kata hari ini gagal' });
   });
 
   it('GET /api/redaksi/health mengembalikan status ok dengan token admin', async () => {

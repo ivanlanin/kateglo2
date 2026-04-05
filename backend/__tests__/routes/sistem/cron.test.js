@@ -20,6 +20,20 @@ jest.mock('../../../jobs/jobSusunKataHarian', () => ({
   }),
 }));
 
+jest.mock('../../../jobs/jobKataHariIni', () => ({
+  jalankanPrefillKataHariIni: jest.fn(),
+  parseTanggal: jest.fn((value) => {
+    const raw = String(value || '').trim();
+    if (!raw) return null;
+    return /^\d{4}-\d{2}-\d{2}$/.test(raw) ? raw : null;
+  }),
+  parseTotalHari: jest.fn((value, fallback = 30) => {
+    const parsed = Number.parseInt(value, 10);
+    if (Number.isNaN(parsed)) return fallback;
+    return Math.min(Math.max(parsed, 1), 365);
+  }),
+}));
+
 jest.mock('../../../jobs/jobWikipedia', () => ({
   jalankanProsesWikipedia: jest.fn(),
 }));
@@ -27,6 +41,7 @@ jest.mock('../../../jobs/jobWikipedia', () => ({
 const router = require('../../../routes/sistem/cron');
 const { __private } = router;
 const { jalankanPrefillSusunKataHarian } = require('../../../jobs/jobSusunKataHarian');
+const { jalankanPrefillKataHariIni } = require('../../../jobs/jobKataHariIni');
 const { jalankanProsesWikipedia } = require('../../../jobs/jobWikipedia');
 
 function createApp() {
@@ -47,6 +62,12 @@ describe('routes/sistem/cron', () => {
       tanggalMulai: '2026-03-12',
       totalHari: 30,
       jumlah: 30,
+      data: [],
+    });
+    jalankanPrefillKataHariIni.mockResolvedValue({
+      tanggalMulai: '2026-03-12',
+      totalHari: 14,
+      jumlah: 14,
       data: [],
     });
     jalankanProsesWikipedia.mockResolvedValue({ artikelDiproses: 5, kandidatBaru: 2 });
@@ -118,6 +139,35 @@ describe('routes/sistem/cron', () => {
 
     expect(response.status).toBe(500);
     expect(response.body.message).toBe('job gagal');
+  });
+
+  it('POST /cron/kata-hari-ini menjalankan job dengan body json dan x-cron-secret', async () => {
+    const response = await request(createApp())
+      .post('/cron/kata-hari-ini')
+      .set('X-Cron-Secret', 'cron-secret-test')
+      .send({ tanggalMulai: '2026-03-21', totalHari: 14 });
+
+    expect(response.status).toBe(200);
+    expect(jalankanPrefillKataHariIni).toHaveBeenCalledWith({
+      tanggalMulai: '2026-03-21',
+      totalHari: 14,
+    });
+    expect(response.body.data).toEqual({
+      tanggalMulai: '2026-03-12',
+      totalHari: 14,
+      jumlah: 14,
+    });
+  });
+
+  it('POST /cron/kata-hari-ini meneruskan error job', async () => {
+    jalankanPrefillKataHariIni.mockRejectedValueOnce(new Error('kata hari ini gagal'));
+
+    const response = await request(createApp())
+      .post('/cron/kata-hari-ini')
+      .set('Authorization', 'Bearer cron-secret-test');
+
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe('kata hari ini gagal');
   });
 
   it('POST /cron/kadi/wikipedia menjalankan job wikipedia dengan clamp batas artikel', async () => {

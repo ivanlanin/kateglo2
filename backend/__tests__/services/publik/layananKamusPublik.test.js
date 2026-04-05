@@ -63,7 +63,7 @@ const ModelGlosarium = require('../../../models/leksikon/modelGlosarium');
 const ModelEtimologi = require('../../../models/leksikon/modelEtimologi');
 const ModelKataHariIni = require('../../../models/leksikon/modelKataHariIni');
 const ModelTagar = require('../../../models/master/modelTagar');
-const { getJson, setJson, delKey } = require('../../../services/sistem/layananCache');
+const { getJson, setJson, delKey, getTtlSeconds } = require('../../../services/sistem/layananCache');
 const {
   cariKamus,
   ambilDetailKamus,
@@ -160,6 +160,9 @@ describe('layananKamusPublik.cariKamus', () => {
       { text: '(beta)', isKurung: true },
       { text: ' gamma', isKurung: false },
     ]);
+    expect(__private.tokenizeKurung('gamma')).toEqual([
+      { text: 'gamma', isKurung: false },
+    ]);
     expect(__private.kumpulkanKandidatTautanGlosarium()).toEqual([]);
     expect(__private.kumpulkanKandidatTautanGlosarium([{}])).toEqual([]);
     expect(__private.kumpulkanKandidatTautanGlosarium([{ indonesia: 'kata (cak); dua kata' }])).toEqual(['kata', 'dua kata']);
@@ -167,6 +170,167 @@ describe('layananKamusPublik.cariKamus', () => {
     expect(__private.parseDaftarRelasi('a; b; ')).toEqual(['a', 'b']);
     expect(__private.unikTanpaBedaKapitalisasi(['Kata', 'kata', 'Lawan'])).toEqual(['Kata', 'Lawan']);
     expect(__private.unikTanpaBedaKapitalisasi([])).toEqual([]);
+    expect(__private.ambilRingkasanMakna({
+      makna: [
+        { makna: '   ', contoh: [{ contoh: 'abaikan' }] },
+        { makna: 'isi', contoh: [{ contoh: 'contoh isi' }] },
+      ],
+    })).toEqual([{ makna: 'isi', contoh: 'contoh isi' }]);
+    expect(__private.ambilContohUtama({ makna: [{ contoh: [{ contoh: '   ' }] }] })).toBeNull();
+    expect(__private.ambilEtimologiUtama([{ etimologi: [{ bahasa: ' ', kata_asal: '' }] }], null)).toBeNull();
+    expect(__private.bentukPayloadKataHariIni(null, '2026-03-31')).toBeNull();
+    expect(__private.ambilKandidatDariPool([], 0)).toBeNull();
+  });
+
+  it('helper cache kandidat menghapus entry kedaluwarsa dan memakai promise yang sedang berjalan', async () => {
+    const now = Date.now();
+    __private.simpanCacheKandidatAcak([{ indeks: 'lama' }], { requireEtimologi: false });
+    jest.spyOn(Date, 'now').mockReturnValue(now + 10 ** 6);
+    expect(__private.bacaCacheKandidatAcak({ requireEtimologi: false })).toBeNull();
+    Date.now.mockRestore();
+
+    let releaseRequest;
+    ModelEntri.ambilDaftarKandidatKataHariIni.mockImplementationOnce(() => new Promise((resolve) => {
+      releaseRequest = resolve;
+    }));
+
+    const first = __private.ambilPoolKandidatAcak({ requireEtimologi: false });
+    const second = __private.ambilPoolKandidatAcak({ requireEtimologi: false });
+
+    expect(ModelEntri.ambilDaftarKandidatKataHariIni).toHaveBeenCalledTimes(1);
+
+    releaseRequest([{ indeks: 'baru' }]);
+    await expect(first).resolves.toEqual([{ indeks: 'baru' }]);
+    await expect(second).resolves.toEqual([{ indeks: 'baru' }]);
+  });
+
+  it('helper privat menutup fallback optional chaining dan default parameter', async () => {
+    expect(__private.ambilContohUtama()).toBeNull();
+    expect(__private.ambilContohUtama({ makna: [{}] })).toBeNull();
+    expect(__private.ambilRingkasanMakna()).toEqual([]);
+    expect(__private.ambilRingkasanMakna({
+      makna: [{ makna: 'isi', contoh: null }],
+    })).toEqual([{ makna: 'isi', contoh: null }]);
+
+    expect(__private.ambilEtimologiUtama([
+      { etimologi: null },
+      { etimologi: [{ bahasa: 'Sanskerta', kata_asal: '' }] },
+    ], null)).toEqual({
+      bahasa: 'Sanskerta',
+      bahasa_kode: null,
+      kata_asal: null,
+      sumber: null,
+      sumber_kode: null,
+    });
+
+    expect(__private.ambilEtimologiUtama([
+      { etimologi: [{ bahasa: '', kata_asal: 'mula' }] },
+    ], null)).toEqual({
+      bahasa: null,
+      bahasa_kode: null,
+      kata_asal: 'mula',
+      sumber: null,
+      sumber_kode: null,
+    });
+
+    expect(__private.bentukPayloadKataHariIni({ indeks: 'aktif', entri: [] }, '2026-03-31')).toBeNull();
+    expect(__private.bentukPayloadKataHariIni({
+      indeks: 'aktif',
+      entri: [{
+        homonim: 'abc',
+        entri: '',
+        makna: [{ makna: 'giat', contoh: [] }],
+      }],
+    }, '2026-03-31')).toEqual(expect.objectContaining({
+      entri: 'aktif',
+      homonim: null,
+      kelas_kata: null,
+    }));
+
+    ModelKataHariIni.ambilByTanggal.mockResolvedValueOnce(null);
+    await expect(ambilKataHariIni()).resolves.toBeNull();
+
+    ModelKataHariIni.ambilByTanggal.mockResolvedValueOnce({ tanggal: '2026-04-08', indeks: 'lama' });
+    await expect(generateKataHariIni()).resolves.toEqual(expect.objectContaining({ indeks: 'lama' }));
+  });
+
+  it('helper privat kandidat acak menutup branch TTL, cache valid, dan fallback nilai default', async () => {
+    expect(__private.hashTanggal()).toBeGreaterThanOrEqual(0);
+    expect(__private.buatCacheKeyKandidatAcak()).toBe('kamus:kandidat:dengan-etimologi');
+    expect(__private.buatCacheKeyKandidatAcak({ requireEtimologi: false })).toBe('kamus:kandidat:tanpa-etimologi');
+
+    getTtlSeconds.mockReturnValueOnce(10);
+    expect(__private.getCandidatePoolTtlMs()).toBe(30000);
+    getTtlSeconds.mockReturnValueOnce(120);
+    expect(__private.getCandidatePoolTtlMs()).toBe(120000);
+
+    expect(__private.simpanCacheKandidatAcak('bukan-array')).toEqual([]);
+    expect(__private.bacaCacheKandidatAcak()).toEqual([]);
+
+    __private.resetCacheKandidatAcak();
+    __private.simpanCacheKandidatAcak([{ indeks: 'aktif' }], { requireEtimologi: false });
+    expect(__private.bacaCacheKandidatAcak({ requireEtimologi: false })).toEqual([{ indeks: 'aktif' }]);
+
+    __private.resetCacheKandidatAcak();
+    ModelEntri.ambilDaftarKandidatKataHariIni.mockResolvedValueOnce([{ indeks: 'cache-hit' }]);
+    await expect(__private.ambilPoolKandidatAcak()).resolves.toEqual([{ indeks: 'cache-hit' }]);
+    await expect(__private.ambilPoolKandidatAcak()).resolves.toEqual([{ indeks: 'cache-hit' }]);
+    expect(ModelEntri.ambilDaftarKandidatKataHariIni).toHaveBeenCalledTimes(1);
+  });
+
+  it('helper privat pemilihan kandidat dan payload menutup fallback URL, offset, dan makna utama', () => {
+    expect(__private.ambilKandidatDariPool()).toBeNull();
+    expect(__private.ambilKandidatDariPool([null], 0)).toBeNull();
+    expect(__private.ambilKandidatDariPool([{ indeks: 'b' }, { indeks: 'c' }], -1)).toEqual({ indeks: 'c' });
+    expect(__private.normalisasiCuplikan()).toBeNull();
+    expect(__private.buatUrlDetailKamus()).toBeNull();
+    expect(__private.buatUrlDetailKamus('   ')).toBeNull();
+
+    expect(__private.ambilMaknaUtama()).toEqual({ entri: null, makna: null });
+    expect(__private.ambilMaknaUtama([], null)).toEqual({ entri: null, makna: null });
+    expect(__private.ambilMaknaUtama([
+      { id: 1, makna: [{ makna: '  ' }] },
+      { id: 2, makna: [{ makna: 'isi kedua' }] },
+    ], 9)).toEqual({
+      entri: { id: 2, makna: [{ makna: 'isi kedua' }] },
+      makna: { makna: 'isi kedua' },
+    });
+
+    expect(__private.ambilMaknaUtama([
+      { id: 3, makna: [] },
+      { id: 4, makna: [{ makna: 'fallback' }] },
+    ], 3)).toEqual({
+      entri: { id: 4, makna: [{ makna: 'fallback' }] },
+      makna: { makna: 'fallback' },
+    });
+
+    expect(__private.ambilMaknaUtama([
+      { id: 5, makna: null },
+      { id: 6, makna: [{ makna: 'isi keenam' }] },
+    ], 5)).toEqual({
+      entri: { id: 6, makna: [{ makna: 'isi keenam' }] },
+      makna: { makna: 'isi keenam' },
+    });
+
+    expect(__private.ambilMaknaUtama([
+      { id: 9, makna: [{ makna: '   ' }] },
+      { id: 10, makna: [{ makna: 'isi kesepuluh' }] },
+    ], 9)).toEqual({
+      entri: { id: 10, makna: [{ makna: 'isi kesepuluh' }] },
+      makna: { makna: 'isi kesepuluh' },
+    });
+
+    expect(__private.ambilMaknaUtama([
+      { id: 7, makna: [{ makna: 'pilihan utama' }] },
+      { id: 8, makna: [{ makna: 'cadangan' }] },
+    ], 7)).toEqual({
+      entri: { id: 7, makna: [{ makna: 'pilihan utama' }] },
+      makna: { makna: 'pilihan utama' },
+    });
+
+    expect(__private.ambilEtimologiUtama()).toBeNull();
+    expect(__private.bentukPayloadKataHariIni()).toBeNull();
+    expect(__private.bentukPayloadKataHariIni({ indeks: 'aktif', entri: 'bukan-array' }, '2026-03-31')).toBeNull();
   });
 });
 
@@ -673,6 +837,38 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     expect(ModelEntri.hitungKandidatKataHariIni).not.toHaveBeenCalled();
   });
 
+  it('ambilKataHariIni mengembalikan null jika arsip ada tetapi payload detail gagal dibentuk', async () => {
+    ModelKataHariIni.ambilByTanggal.mockResolvedValueOnce({
+      tanggal: '2026-03-31',
+      entri_id: 1,
+      indeks: 'aktif',
+    });
+    ModelEntri.ambilEntriPerIndeks.mockResolvedValueOnce([
+      {
+        id: 1,
+        entri: 'aktif',
+        indeks: 'aktif',
+        homonim: null,
+        jenis: 'dasar',
+        pemenggalan: null,
+        lafal: null,
+        varian: null,
+        jenis_rujuk: null,
+        entri_rujuk: null,
+      },
+    ]);
+    ModelEntri.ambilMakna.mockResolvedValueOnce([]);
+    ModelEntri.ambilContoh.mockResolvedValueOnce([]);
+    ModelEntri.ambilSubentri.mockResolvedValueOnce([]);
+    ModelEntri.ambilBentukTidakBakuByRujukId.mockResolvedValueOnce([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValueOnce([]);
+    ModelTesaurus.ambilDetail.mockResolvedValueOnce(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValueOnce([]);
+
+    await expect(ambilKataHariIni({ tanggal: '2026-03-31' })).resolves.toBeNull();
+    expect(setJson).not.toHaveBeenCalledWith('kamus:kata-hari-ini:2026-03-31', expect.anything(), expect.anything());
+  });
+
   it('generateKataHariIni memilih kandidat deterministik dan menyimpan ke tabel', async () => {
     const offset = __private.hashTanggal('2026-03-31') % 5;
     const kandidatPool = Array.from({ length: 5 }, (_, index) => (
@@ -695,6 +891,20 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
       tanggal: '2026-03-31',
       indeks: 'aktif',
     });
+  });
+
+  it('generateKataHariIni mengembalikan arsip yang sudah ada tanpa menghitung kandidat baru', async () => {
+    ModelKataHariIni.ambilByTanggal.mockResolvedValueOnce({
+      tanggal: '2026-04-07',
+      indeks: 'arsip-lama',
+    });
+
+    await expect(generateKataHariIni({ tanggal: '2026-04-07' })).resolves.toEqual({
+      tanggal: '2026-04-07',
+      indeks: 'arsip-lama',
+    });
+
+    expect(ModelEntri.ambilDaftarKandidatKataHariIni).not.toHaveBeenCalled();
   });
 
   it('generateKataHariIni mengembalikan null jika tidak ada kandidat dengan etimologi', async () => {
@@ -742,6 +952,84 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
     });
   });
 
+  it('helper privat pilihKandidatRingan mengembalikan null untuk kandidat tanpa indeks atau entri_id valid', async () => {
+    ModelEntri.ambilDaftarKandidatKataHariIni.mockResolvedValueOnce([{ entri_id: 9 }]);
+
+    await expect(__private.pilihKandidatRingan('2026-03-31')).resolves.toBeNull();
+
+    __private.resetCacheKandidatAcak();
+    ModelEntri.ambilDaftarKandidatKataHariIni.mockResolvedValueOnce([{ indeks: 'aktif', entri_id: 0 }]);
+
+    await expect(__private.pilihKandidatRingan('2026-03-31')).resolves.toBeNull();
+  });
+
+  it('helper privat pilihKandidatKataHariIniOtomatis mengembalikan null saat pool kosong', async () => {
+    ModelEntri.ambilDaftarKandidatKataHariIni.mockResolvedValueOnce([]);
+
+    await expect(__private.pilihKandidatKataHariIniOtomatis('2026-04-03')).resolves.toBeNull();
+  });
+
+  it('helper privat pilihKandidatKataHariIniOtomatis melewati kandidat invalid sampai habis', async () => {
+    ModelEntri.ambilDaftarKandidatKataHariIni.mockResolvedValueOnce([
+      null,
+      { indeks: 'kosong-detail', entri_id: 2 },
+      { indeks: 'tanpa-makna', entri_id: 3 },
+    ]);
+    ModelEntri.ambilEntriPerIndeks
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([
+        {
+          id: 30,
+          entri: 'tanpa-makna',
+          indeks: 'tanpa-makna',
+          homonim: null,
+          jenis: 'dasar',
+          pemenggalan: null,
+          lafal: null,
+          varian: null,
+          jenis_rujuk: null,
+          entri_rujuk: null,
+        },
+      ]);
+    ModelEntri.ambilMakna.mockResolvedValueOnce([]);
+    ModelEntri.ambilContoh.mockResolvedValue([]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilBentukTidakBakuByRujukId.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
+    ModelTesaurus.ambilDetail.mockResolvedValue(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+
+    await expect(__private.pilihKandidatKataHariIniOtomatis('2026-04-04')).resolves.toBeNull();
+  });
+
+  it('helper privat pilihKandidatKataHariIniOtomatis melewati payload valid tanpa entriId', async () => {
+    ModelEntri.ambilDaftarKandidatKataHariIni.mockResolvedValueOnce([
+      { indeks: 'tanpa-id', entri_id: 3 },
+    ]);
+    ModelEntri.ambilEntriPerIndeks.mockResolvedValueOnce([
+      {
+        entri: '',
+        indeks: 'tanpa-id',
+        homonim: null,
+        jenis: 'dasar',
+        pemenggalan: null,
+        lafal: null,
+        varian: null,
+        jenis_rujuk: null,
+        entri_rujuk: null,
+      },
+    ]);
+    ModelEntri.ambilMakna.mockResolvedValueOnce([{ makna: 'ada makna', kelas_kata: null }]);
+    ModelEntri.ambilContoh.mockResolvedValue([]);
+    ModelEntri.ambilSubentri.mockResolvedValue([]);
+    ModelEntri.ambilBentukTidakBakuByRujukId.mockResolvedValue([]);
+    ModelEntri.ambilRantaiInduk.mockResolvedValue([]);
+    ModelTesaurus.ambilDetail.mockResolvedValue(null);
+    ModelGlosarium.cariFrasaMengandungKataUtuh.mockResolvedValue([]);
+
+    await expect(__private.pilihKandidatKataHariIniOtomatis('2026-04-05')).resolves.toBeNull();
+  });
+
   it('generateKataHariIni mengembalikan null jika tidak ada kandidat sama sekali', async () => {
     ModelEntri.ambilDaftarKandidatKataHariIni.mockResolvedValueOnce([]);
 
@@ -787,6 +1075,18 @@ describe('layananKamusPublik.ambilDetailKamus', () => {
       indeks: 'acak',
       url: '/kamus/detail/acak',
     });
+    Math.random.mockRestore();
+  });
+
+  it('ambilEntriAcak mengembalikan null jika semua percobaan menghasilkan indeks tidak valid', async () => {
+    jest.spyOn(Math, 'random').mockReturnValueOnce(0);
+    ModelEntri.ambilDaftarKandidatKataHariIni.mockResolvedValueOnce([
+      { indeks: '', entri_id: 1 },
+      { indeks: '   ', entri_id: 2 },
+      null,
+    ]);
+
+    await expect(ambilEntriAcak()).resolves.toBeNull();
     Math.random.mockRestore();
   });
 

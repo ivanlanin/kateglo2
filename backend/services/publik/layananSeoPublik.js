@@ -501,12 +501,12 @@ function buildSitemapXml(baseUrl, paths = []) {
   ].join('\n');
 }
 
-function ambilPathStatis() {
+function ambilPathStatisDariKatalog(katalog = katalogFiturData) {
   const pathFiturInteraktif = [];
 
-  [katalogFiturData.alat, katalogFiturData.gim].forEach((grup) => {
+  [katalog?.alat, katalog?.gim].forEach((grup) => {
     if (grup?.index?.sitemap !== false) {
-      const indexPath = grup.index.canonicalPath || grup.index.href;
+      const indexPath = grup?.index?.canonicalPath || grup?.index?.href;
       if (indexPath) pathFiturInteraktif.push(indexPath);
     }
 
@@ -539,6 +539,10 @@ function ambilPathStatis() {
     '/privasi',
     '/kebijakan-privasi',
   ];
+}
+
+function ambilPathStatis() {
+  return ambilPathStatisDariKatalog(katalogFiturData);
 }
 
 function ambilPathEjaan() {
@@ -669,6 +673,7 @@ module.exports = {
     stripRepeatedOgContextTitle,
     normalizeOgContext,
     ambilPathStatis,
+    ambilPathStatisDariKatalog,
     buildPathKamusKategori,
     ambilPathKamusKategori,
     ambilPathGlosariumKategori,

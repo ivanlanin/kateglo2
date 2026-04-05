@@ -270,6 +270,29 @@ function hitungDiceCoefficient(targetFeatureKeys = [], candidateFeatureKeys = []
   return (2 * common) / (targetSet.size + candidateSet.size);
 }
 
+function compareSharedContext(left, right) {
+  if (right.signifikansi === left.signifikansi) {
+    if (right.frekuensi === left.frekuensi) {
+      return left.kata.localeCompare(right.kata, 'id');
+    }
+    return right.frekuensi - left.frekuensi;
+  }
+  return right.signifikansi - left.signifikansi;
+}
+
+function compareMiripKonteksRank(left, right) {
+  if (right.skorDice === left.skorDice) {
+    if (right.jumlahKonteksSama === left.jumlahKonteksSama) {
+      if (right.frekuensi === left.frekuensi) {
+        return left.kata.localeCompare(right.kata, 'id');
+      }
+      return right.frekuensi - left.frekuensi;
+    }
+    return right.jumlahKonteksSama - left.jumlahKonteksSama;
+  }
+  return right.skorDice - left.skorDice;
+}
+
 class ModelKookurensi {
   static async ambilSekalimat(corpusId, kata, options = {}) {
     const kataAman = normalizeSearchWord(kata);
@@ -508,12 +531,7 @@ class ModelKookurensi {
         konteksBersama: commonFeatureKeys
           .map((key) => targetFeatureMap.get(key))
           .filter(Boolean)
-          .sort((left, right) => {
-            if (right.signifikansi === left.signifikansi) {
-              return right.frekuensi - left.frekuensi;
-            }
-            return right.signifikansi - left.signifikansi;
-          })
+          .sort(compareSharedContext)
           .slice(0, 5)
           .map((item) => ({
             kata: item.kata,
@@ -523,18 +541,7 @@ class ModelKookurensi {
           })),
       };
     }).filter((item) => item.jumlahKonteksSama >= minimumKonteksSama && item.skorDice > 0)
-      .sort((left, right) => {
-        if (right.skorDice === left.skorDice) {
-          if (right.jumlahKonteksSama === left.jumlahKonteksSama) {
-            if (right.frekuensi === left.frekuensi) {
-              return left.kata.localeCompare(right.kata, 'id');
-            }
-            return right.frekuensi - left.frekuensi;
-          }
-          return right.jumlahKonteksSama - left.jumlahKonteksSama;
-        }
-        return right.skorDice - left.skorDice;
-      });
+      .sort(compareMiripKonteksRank);
 
     return {
       kata: kataAman,
@@ -553,9 +560,15 @@ module.exports.__private = {
   buildEmptyTetangga,
   buildEmptyMiripKonteks,
   normalizeGraphEdgeKey,
+  escapeSqlString,
+  escapeRegExp,
+  memuatKataUtuh,
+  buildValuesCte,
   ambilBarisRelasiSignifikan,
   agregasiFiturKonteks,
   ambilFiturKonteks,
   kumpulkanKandidatMirip,
   hitungDiceCoefficient,
+  compareSharedContext,
+  compareMiripKonteksRank,
 };

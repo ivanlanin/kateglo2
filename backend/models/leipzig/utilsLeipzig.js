@@ -114,7 +114,6 @@ function aggregateWordRows(rows = [], excludedWord = '') {
 
     const previous = aggregated.get(normalized);
     const labelTerpilih = pilihLabelAgregat(previous, kata, row.frekuensi);
-    if (!labelTerpilih) return;
 
     const frekuensiSaatIni = Number(row.frekuensi) || 0;
     const frekuensiBaru = Number(previous?.frekuensi) || 0;

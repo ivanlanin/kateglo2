@@ -332,6 +332,7 @@ describe('services/sistem/layananSsrRuntime', () => {
   it('prefetchSsrData menutup semua route branch + catch error', async () => {
     ModelGlosarium.resolveSlugBidang.mockResolvedValue({ id: 2, kode: 'Bio', nama: 'Biologi' });
     expect(await runtime.__private.prefetchSsrData()).toBeNull();
+    expect(await runtime.__private.prefetchSsrData('')).toBeNull();
 
     const ejaanDetail = await runtime.__private.prefetchSsrData('/ejaan/huruf-kapital');
     const gramatikaDetail = await runtime.__private.prefetchSsrData('/gramatika/preposisi');
@@ -412,6 +413,28 @@ describe('services/sistem/layananSsrRuntime', () => {
       artikel: null,
       artikelLain: [],
     });
+
+    ambilDaftarArtikelPublik.mockResolvedValueOnce({});
+    const artikelDaftarKosong = await runtime.__private.prefetchSsrData('/artikel?q=arsip');
+    expect(artikelDaftarKosong).toEqual({
+      type: 'artikel-daftar',
+      topik: '',
+      q: 'arsip',
+      data: [],
+      total: 0,
+    });
+
+    expect(await runtime.__private.prefetchSsrData('/artikel/%20')).toBeNull();
+
+    ambilDetailArtikelPublik.mockResolvedValueOnce({
+      id: 9,
+      slug: 'artikel-satu',
+      judul: 'Artikel Satu',
+      konten: 'Isi artikel satu.',
+    });
+    ambilDaftarArtikelPublik.mockResolvedValueOnce({});
+    const artikelTanpaSidebar = await runtime.__private.prefetchSsrData('/artikel/artikel-satu');
+    expect(artikelTanpaSidebar.artikelLain).toEqual([]);
 
     const ejaanTidakAda = await runtime.__private.prefetchSsrData('/ejaan/slug-tidak-ada');
     expect(ejaanTidakAda.notFound).toBe(true);
@@ -589,6 +612,24 @@ describe('services/sistem/layananSsrRuntime', () => {
     expect(ambilEntriAcak).toHaveBeenCalledTimes(1);
     expect(loader).not.toHaveBeenCalled();
     expect(prefetch).not.toHaveBeenCalled();
+  });
+
+  it('pasangFrontendRuntime melanjutkan SSR bila entri acak tidak punya URL redirect', async () => {
+    ambilEntriAcak.mockResolvedValueOnce({ indeks: 'acak' });
+    const renderFn = jest.fn(async () => ({
+      appHtml: '<main>lanjut</main>',
+      headTags: '<title>Lanjut</title>',
+    }));
+    const loader = jest.fn(async () => renderFn);
+    const prefetch = jest.fn(async () => ({ type: 'kamus-detail' }));
+    const app = createApp(loader, prefetch);
+
+    const response = await request(app).get('/kamus/acak/');
+
+    expect(response.status).toBe(200);
+    expect(loader).toHaveBeenCalled();
+    expect(prefetch).toHaveBeenCalledWith('/kamus/acak/');
+    expect(renderFn).toHaveBeenCalledWith('/kamus/acak/', { type: 'kamus-detail' });
   });
 
   it('pasangFrontendRuntime menambahkan header cache untuk halaman ejaan', async () => {
