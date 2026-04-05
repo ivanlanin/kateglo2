@@ -354,6 +354,123 @@ describe('models/leipzig/modelKookurensi', () => {
     });
   });
 
+  it('mengembalikan tetangga kosong saat kata kosong', async () => {
+    const ModelKookurensi = require('../../../models/leipzig/modelKookurensi');
+
+    await expect(ModelKookurensi.ambilTetangga('ind_news_2024_10K', '   ')).resolves.toEqual({
+      kata: '',
+      limit: 25,
+      kiri: [],
+      kanan: [],
+    });
+  });
+
+  it('menangani hasil agregasi tetangga yang kosong atau undefined', async () => {
+    jest.doMock('../../../db/leipzig', () => ({
+      openCorpusDatabase: jest.fn(() => ({
+        prepare: jest.fn(() => ({
+          all: jest.fn(() => [
+            { wordId: 2, kata: 'tetap', frekuensi: 1 },
+            { wordId: 3, kata: 'Indonesia Raya', frekuensi: 3 },
+          ]),
+        })),
+      })),
+    }));
+    jest.doMock('../../../models/leipzig/utilsLeipzig', () => ({
+      normalizeSearchWord: jest.fn(() => 'indonesia'),
+      parseLimit: jest.fn(() => 2),
+      parseOffset: jest.fn(() => 0),
+      buildPlaceholders: jest.fn(() => '?'),
+      listMatchedForms: jest.fn(() => [{ wordId: 1, word: 'indonesia' }]),
+      aggregateWordRows: jest.fn()
+        .mockImplementationOnce(() => undefined)
+        .mockImplementationOnce(() => [
+          { kata: 'tetap', frekuensi: 1 },
+          { kata: 'Indonesia Raya', frekuensi: 3 },
+        ]),
+      pilihLabelAgregat: jest.fn((previous, kata, frekuensi) => previous || { kata, preferHurufKecil: false, frekuensiLabel: Number(frekuensi) || 0 }),
+      bersihkanTokenAgregat: jest.fn((value) => value),
+    }));
+
+    const ModelKookurensi = require('../../../models/leipzig/modelKookurensi');
+
+    await expect(ModelKookurensi.ambilTetangga('ind_news_2024_10K', 'indonesia', { limit: 2 })).resolves.toEqual({
+      kata: 'indonesia',
+      limit: 2,
+      kiri: [],
+      kanan: [{ kata: 'tetap', frekuensi: 1 }],
+    });
+  });
+
+  it('menutup cabang helper fitur dan kandidat yang memakai fallback nilai', () => {
+    const ModelKookurensi = require('../../../models/leipzig/modelKookurensi');
+    const databaseFitur = {
+      prepare: jest.fn(() => ({
+        all: jest.fn(() => [
+          { wordId: 14, kata: 'asing', frekuensi: 1, signifikansi: null },
+        ]),
+      })),
+    };
+
+    expect(ModelKookurensi.__private.agregasiFiturKonteks([
+      { wordId: 0, kata: '  ', jenis: 'kalimat', frekuensi: 'abc', signifikansi: '' },
+      { wordId: 0, kata: 'Saring', jenis: 'kalimat', frekuensi: 1, signifikansi: 0.2 },
+      { wordId: 0, kata: 'fitur', jenis: 'kalimat', frekuensi: 0, signifikansi: 0 },
+      { wordId: 9, kata: 'fitur', jenis: 'kalimat', frekuensi: 'bukan-angka', signifikansi: undefined },
+      { wordId: 'abc', kata: 'fitur', jenis: 'kalimat', frekuensi: 1, signifikansi: 0.1 },
+    ], [null, ' saring '])).toEqual([
+      {
+        featureKey: 'kalimat:fitur',
+        jenis: 'kalimat',
+        kata: 'fitur',
+        frekuensi: 1,
+        signifikansi: 0.1,
+        wordIds: [9],
+      },
+    ]);
+
+    expect(ModelKookurensi.__private.ambilFiturKonteks(databaseFitur, [1], [], { featureLimit: 0 })).toEqual([
+      {
+        featureKey: 'kalimat:asing',
+        jenis: 'kalimat',
+        kata: 'asing',
+        frekuensi: 1,
+        signifikansi: 0,
+        wordIds: [14],
+      },
+    ]);
+
+    const databaseKandidat = {
+      prepare: jest.fn(() => ({
+        all: jest.fn(() => [
+          { wordId: 0, kata: 'kosong-id', frekuensi: 1, featureKey: 'kalimat:fitur' },
+          { wordId: 12, kata: '', frekuensi: 1, featureKey: 'kalimat:fitur' },
+          { wordId: 13, kata: 'pusat', frekuensi: 1, featureKey: 'kalimat:fitur' },
+          { wordId: 16, kata: 'pusat', frekuensi: 1, featureKey: 'kalimat:fitur' },
+          { wordId: 14, kata: 'asing', frekuensi: 1, featureKey: 'kalimat:tak-cocok' },
+          { wordId: 15, kata: 'valid', frekuensi: 'abc', featureKey: 'kalimat:fitur' },
+        ]),
+      })),
+    };
+
+    expect(ModelKookurensi.__private.kumpulkanKandidatMirip(
+      databaseKandidat,
+      [{ featureKey: 'kalimat:fitur', jenis: 'kalimat', kata: 'fitur', wordIds: [1], frekuensi: 1, signifikansi: 0.5 }],
+      ['13', null],
+      'pusat',
+      { candidatePoolLimit: 0 },
+    )).toEqual([
+      {
+        kata: 'valid',
+        frekuensi: 0,
+        wordIds: [15],
+        commonFeatureKeys: ['kalimat:fitur'],
+      },
+    ]);
+    expect(databaseFitur.prepare).toHaveBeenCalled();
+    expect(databaseKandidat.prepare).toHaveBeenCalled();
+  });
+
   it('mengembalikan graf kosong saat kata kosong dan node pusat saja saat sekalimat kosong', async () => {
     const rootDir = makeTempDir();
     const sqliteDir = path.join(rootDir, 'sqlite');
@@ -389,6 +506,7 @@ describe('models/leipzig/modelKookurensi', () => {
           all: jest.fn(() => [
             { sourceWord: 'MajU', targetWord: 'RaKyaT', frekuensi: 1 },
             { sourceWord: 'rakyat', targetWord: 'MAJU', frekuensi: 2 },
+            { sourceWord: 'rakyat', targetWord: 'maju', frekuensi: null },
             { sourceWord: null, targetWord: 'abaikan', frekuensi: 9 },
             { sourceWord: 'maju', targetWord: '', frekuensi: 9 },
           ]),
