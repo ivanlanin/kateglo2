@@ -70,6 +70,10 @@ code {
     @apply text-xl font-bold text-blue-700 shrink-0;
   }
 
+  .navbar-logo-collapsed {
+    @apply absolute opacity-0 pointer-events-none select-none;
+  }
+
   .dark .navbar-logo {
     @apply text-blue-300;
   }
@@ -83,7 +87,7 @@ code {
   }
 
   .navbar-search-desktop-collapsed {
-    @apply flex-1 min-w-0 mx-3;
+    @apply flex-1 min-w-0 mx-2 sm:mx-3;
   }
 
   .navbar-search-desktop-expanded .kotak-cari,
@@ -92,7 +96,7 @@ code {
   }
 
   .navbar-search-desktop-collapsed .kotak-cari-select {
-    @apply w-24 shrink-0;
+    @apply w-20 shrink-0 sm:w-24;
   }
 
   .navbar-search-desktop-collapsed .kotak-cari-input-wrapper {
@@ -219,8 +223,16 @@ code {
     @apply text-sm font-semibold uppercase tracking-[0.18em] text-gray-500;
   }
 
+  .navbar-mobile-brand {
+    @apply text-xl font-bold text-blue-700;
+  }
+
   .dark .navbar-mobile-title {
     @apply text-dark-text-muted;
+  }
+
+  .dark .navbar-mobile-brand {
+    @apply text-blue-300;
   }
 
   .navbar-mobile-close {

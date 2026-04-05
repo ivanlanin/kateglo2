@@ -3,6 +3,7 @@
 ## 2026-04-05 Minggu
 
 - Mengaktifkan menu [Artikel](/artikel)
+- Memindahkan logo Kateglo ke menu hamburger untuk memperluas ruang kotak cari di layar sempit
 
 ## 2026-04-04 Sabtu
 

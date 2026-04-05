@@ -342,7 +342,13 @@ function NavbarPublik() {
 
           {/* Logo */}
           {!adalahBeranda && (
-            <Link ref={logoRef} to="/" className="navbar-logo">
+            <Link
+              ref={logoRef}
+              to="/"
+              className={`navbar-logo ${gunakanHamburger ? 'navbar-logo-collapsed' : ''}`.trim()}
+              aria-hidden={gunakanHamburger ? 'true' : undefined}
+              tabIndex={gunakanHamburger ? -1 : undefined}
+            >
               Kateglo
             </Link>
           )}
@@ -430,7 +436,13 @@ function NavbarPublik() {
               aria-label="Menu navigasi"
             >
               <div className="navbar-mobile-panel-header">
-                <span className="navbar-mobile-title">Menu</span>
+                <Link
+                  to="/"
+                  className="navbar-mobile-brand"
+                  onClick={() => setMenuTerbuka(false)}
+                >
+                  Kateglo
+                </Link>
                 <button
                   type="button"
                   className="navbar-mobile-close"

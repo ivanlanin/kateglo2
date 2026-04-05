@@ -234,6 +234,8 @@ describe('NavbarPublik', () => {
 
     expect(document.querySelector('.navbar-mobile-panel')).toBeInTheDocument();
     expect(document.querySelector('.navbar-mobile-overlay')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Kateglo' })).toHaveClass('navbar-mobile-brand');
+    expect(screen.queryByText('Menu')).not.toBeInTheDocument();
   });
 
   it('klik link mobile menutup menu', () => {
