@@ -1735,7 +1735,7 @@ code {
   }
 
   .glosarium-edit-link-inline {
-    @apply inline-flex align-middle items-center justify-center ml-1 h-4 w-4 rounded border border-blue-300 text-blue-600 hover:text-blue-700 hover:border-blue-400;
+    @apply inline-flex align-middle items-center justify-center ml-1 h-4 w-4 rounded-md text-gray-400 opacity-60 transition-colors transition-opacity hover:bg-blue-50 hover:text-blue-600 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white;
   }
 
   .dark .glosarium-result-original {
@@ -1755,7 +1755,7 @@ code {
   }
 
   .dark .glosarium-edit-link-inline {
-    @apply border-blue-600 text-blue-300 hover:text-blue-200 hover:border-blue-500;
+    @apply text-gray-500 opacity-70 hover:bg-blue-950/60 hover:text-blue-300 hover:opacity-100 focus-visible:ring-offset-gray-900;
   }
 
   .dark .glosarium-result-badge {
@@ -1956,7 +1956,7 @@ code {
   }
 
   .kamus-detail-edit-link {
-    @apply inline-flex items-center justify-center h-8 w-8 rounded-md border border-blue-300 text-blue-600 hover:text-blue-700 hover:border-blue-400;
+    @apply inline-flex items-center justify-center h-8 w-8 rounded-md text-gray-400 opacity-60 transition-colors transition-opacity hover:bg-blue-50 hover:text-blue-600 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white;
   }
 
   .kamus-detail-reference-link {
@@ -1968,7 +1968,7 @@ code {
   }
 
   .dark .kamus-detail-edit-link {
-    @apply border-blue-600 text-blue-300 hover:text-blue-200 hover:border-blue-500;
+    @apply text-gray-500 opacity-70 hover:bg-blue-950/60 hover:text-blue-300 hover:opacity-100 focus-visible:ring-offset-gray-900;
   }
 
   .dark .kamus-detail-reference-link {

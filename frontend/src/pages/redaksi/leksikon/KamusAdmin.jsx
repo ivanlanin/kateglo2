@@ -251,7 +251,7 @@ function ItemContoh({
           )}
         </div>
         <BadgeStatus aktif={contoh.aktif ?? 1} />
-        {bisaEditContoh && <button onClick={() => setEdit(true)} className="text-xs text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity">sunting</button>}
+        {bisaEditContoh && <button type="button" onClick={() => setEdit(true)} className="kamus-admin-inline-edit-button">sunting</button>}
         {bisaHapusContoh && <button onClick={handleHapus} disabled={isPending} className="text-xs text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">hapus</button>}
       </div>
     );
