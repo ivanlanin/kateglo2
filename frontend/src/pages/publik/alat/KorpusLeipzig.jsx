@@ -270,6 +270,45 @@ function ambilDaftarKataBanding(queryParams) {
   return KATA_BANDING_KEYS.map((key) => normalisasiSegmenPath(queryParams.get(key)));
 }
 
+function resolveFormKorpusId(current = '', korpusAktif = '', korpusDefault = '') {
+  if (korpusAktif) return korpusAktif;
+  if (current) return current;
+  return korpusDefault;
+}
+
+function perluRedirectLegacyPath(pathname = '', paramKata = '', paramKorpus = '', urlSaatIni = '', pathKanonis = '') {
+  const memakaiPathLama = pathname.startsWith('/alat/korpus-leipzig') || Boolean(paramKata) || Boolean(paramKorpus);
+  return memakaiPathLama && urlSaatIni !== pathKanonis;
+}
+
+function resolveBentukKata(infoBentuk, contohBentuk) {
+  return saringTokenTampil(infoBentuk || contohBentuk || []);
+}
+
+function resolveKataTampil(infoData, kataAktif = '') {
+  return infoData?.kata || kataAktif || 'N/A';
+}
+
+function resolveKorpusTujuan(formKorpusId = '', korpusDefault = '') {
+  return formKorpusId || korpusDefault;
+}
+
+function resolveTotalPeringkat(data) {
+  return data?.total || 0;
+}
+
+function compareDataPerbandingan(kiri, kanan) {
+  if (kanan.frekuensi !== kiri.frekuensi) {
+    return kanan.frekuensi - kiri.frekuensi;
+  }
+
+  if ((kiri.rank || Number.MAX_SAFE_INTEGER) !== (kanan.rank || Number.MAX_SAFE_INTEGER)) {
+    return (kiri.rank || Number.MAX_SAFE_INTEGER) - (kanan.rank || Number.MAX_SAFE_INTEGER);
+  }
+
+  return kiri.kata.localeCompare(kanan.kata, 'id');
+}
+
 function buildPathAnalisisKorpus({
   mode = MODE_TELUSURI,
   korpus = '',
@@ -467,19 +506,12 @@ function KorpusLeipzig() {
   }, [kataBandingAktifList]);
 
   useEffect(() => {
-    setFormKorpusId((current) => {
-      if (korpusAktif) return korpusAktif;
-      if (current) return current;
-      return korpusDefault;
-    });
+    setFormKorpusId((current) => resolveFormKorpusId(current, korpusAktif, korpusDefault));
   }, [korpusAktif, korpusDefault]);
 
   useEffect(() => {
     const urlSaatIni = `${location.pathname}${location.search}`;
-    const memakaiPathLama = location.pathname.startsWith('/alat/korpus-leipzig') || Boolean(params.kata) || Boolean(params.korpus);
-
-    if (!memakaiPathLama) return;
-    if (urlSaatIni === pathKanonis) return;
+    if (!perluRedirectLegacyPath(location.pathname, params.kata, params.korpus, urlSaatIni, pathKanonis)) return;
 
     startTransition(() => {
       navigate(pathKanonis, { replace: true });
@@ -556,7 +588,7 @@ function KorpusLeipzig() {
 
   const sedangMemuatRingkasan = infoKataQuery.isLoading;
   const bentukKata = useMemo(
-    () => saringTokenTampil(infoKataQuery.data?.bentuk || contohQuery.data?.bentuk || []),
+    () => resolveBentukKata(infoKataQuery.data?.bentuk, contohQuery.data?.bentuk),
     [infoKataQuery.data?.bentuk, contohQuery.data?.bentuk],
   );
   const sekalimatData = useMemo(() => saringTokenTampil(sekalimatQuery.data?.data || []), [sekalimatQuery.data?.data]);
@@ -594,17 +626,7 @@ function KorpusLeipzig() {
       };
     })
     .filter(Boolean)
-    .sort((kiri, kanan) => {
-      if (kanan.frekuensi !== kiri.frekuensi) {
-        return kanan.frekuensi - kiri.frekuensi;
-      }
-
-      if ((kiri.rank || Number.MAX_SAFE_INTEGER) !== (kanan.rank || Number.MAX_SAFE_INTEGER)) {
-        return (kiri.rank || Number.MAX_SAFE_INTEGER) - (kanan.rank || Number.MAX_SAFE_INTEGER);
-      }
-
-      return kiri.kata.localeCompare(kanan.kata, 'id');
-    });
+    .sort(compareDataPerbandingan);
   const totalFrekuensiPerbandingan = dataPerbandingan.reduce((total, item) => total + item.frekuensi, 0);
 
   useEffect(() => {
@@ -690,7 +712,7 @@ function KorpusLeipzig() {
     startTransition(() => {
       navigate(buildPathAnalisisKorpus({
         mode: formMode,
-        korpus: formKorpusId || korpusDefault,
+        korpus: resolveKorpusTujuan(formKorpusId, korpusDefault),
         offset: 0,
       }));
     });
@@ -886,7 +908,7 @@ function KorpusLeipzig() {
                       <div className="korpus-leipzig-stat-row">
                         <article className="alat-stat-card">
                           <span className="alat-stat-label">Kata</span>
-                          <strong className="alat-stat-value korpus-leipzig-stat-value-word">{infoKataQuery.data?.kata || kataAktif || 'N/A'}</strong>
+                          <strong className="alat-stat-value korpus-leipzig-stat-value-word">{resolveKataTampil(infoKataQuery.data, kataAktif)}</strong>
                         </article>
                         <article className="alat-stat-card">
                           <span className="alat-stat-label">Kemunculan</span>
@@ -993,7 +1015,7 @@ function KorpusLeipzig() {
                     ) : dataPeringkat.length ? (
                       <>
                         <Paginasi
-                          total={peringkatQuery.data?.total || 0}
+                          total={resolveTotalPeringkat(peringkatQuery.data)}
                           limit={PERINGKAT_LIMIT}
                           offset={peringkatOffsetAktif}
                           onChange={handleGantiHalamanPeringkat}
@@ -1072,24 +1094,39 @@ function KorpusLeipzig() {
 }
 
 export const __private = {
+  ambilDaftarKataBanding,
   ambilPesanGalat,
   adalahGalat404,
+  escapeRegExp,
+  buildPathAnalisisKorpus,
+  perluRedirectLegacyPath,
+  formatHostSumber,
   formatTanggalAman,
   formatStatKorpus,
   formatKemunculanRingkas,
   formatPersenKemunculan,
   formatPersenPerbandingan,
   formatPersenKemunculanTanpaSimbol,
+  formatRentangData,
   getKelasFrekuensiLabel,
+  getLabelTombolSubmit,
   formatKelasFrekuensiRingkas,
   adalahTokenTampil,
   saringTokenTampil,
   sorotKataDalamKalimat,
   bangunTataLetakGraf,
   normalisasiMode,
+  normalisasiSegmenPath,
   normalisasiOffset,
-  buildPathAnalisisKorpus,
-  formatRentangData,
+  resolveBentukKata,
+  compareDataPerbandingan,
+  resolveFormKorpusId,
+  resolveKataTampil,
+  resolveKorpusTujuan,
+  resolveTotalPeringkat,
+  PanelContohKata,
+  renderMetaContoh,
+  renderTokenList,
   hitungRingkasanPerbandingan,
 };
 

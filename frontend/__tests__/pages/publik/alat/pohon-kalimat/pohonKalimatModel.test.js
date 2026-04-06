@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
   CONTOH,
+  buatKlausaAnak,
   buatKonstituen,
   buatKlausa,
   buatPohon,
   buatStateAwal,
   buatStateMajemuk,
+  buatStateTunggal,
 } from '../../../../../src/pages/publik/alat/pohon-kalimat/pohonKalimatModel';
 
 describe('pohonKalimatModel', () => {
@@ -20,6 +22,13 @@ describe('pohonKalimatModel', () => {
     const majemuk = buatStateMajemuk();
     expect(majemuk.segmen.filter((segmen) => segmen.tipe === 'klausa')).toHaveLength(2);
     expect(majemuk.segmen.filter((segmen) => segmen.tipe === 'konjungsi')).toHaveLength(1);
+
+    const tunggal = buatStateTunggal();
+    expect(tunggal.segmen).toHaveLength(1);
+
+    const klausaAnak = buatKlausaAnak();
+    expect(klausaAnak.label).toBe('Klausa Subordinatif');
+    expect(klausaAnak.konstituen).toHaveLength(2);
   });
 
   it('single klausa renders flat like tunggal', () => {
@@ -55,6 +64,18 @@ describe('pohonKalimatModel', () => {
     expect(rootTunggal.label).toBe('Kalimat');
     expect(rootTunggal.anak).toHaveLength(2);
     expect(rootTunggal.anak[0].label).toBe('S');
+
+    const rootDenganKlausaUtama = buatPohon({
+      jenis: 'tunggal',
+      klausaUtama: true,
+      konstituen: [
+        buatKonstituen({ peran: 'S', jenisFrasa: 'FN', teks: 'Pancasila' }),
+        buatKonstituen({ peran: 'P', jenisFrasa: 'FV', teks: 'berkembang' }),
+      ],
+    });
+
+    expect(rootDenganKlausaUtama.anak[0].label).toBe('Klausa Utama');
+    expect(rootDenganKlausaUtama.anak[0].anak).toHaveLength(2);
   });
 
   it('membentuk pohon majemuk dari contoh', () => {
@@ -65,5 +86,105 @@ describe('pohonKalimatModel', () => {
     expect(rootMajemuk.anak[1].label).toBe('Konj');
     expect(rootMajemuk.anak[1].anak[0].anak[0].anak[0].label).toBe('dan');
     expect(rootMajemuk.anak[2].label).toBe('Klausa Utama');
+  });
+
+  it('mendukung konstituen berklausa, konjungsi kosong, dan frasa langsung', () => {
+    const state = {
+      segmen: [
+        {
+          tipe: 'klausa',
+          ...buatKlausa('Klausa Utama'),
+          konstituen: [
+            buatKonstituen({ peran: 'S', jenisFrasa: 'FN', teks: 'Rina' }),
+            buatKonstituen({
+              peran: 'O',
+              jenisFrasa: 'FN',
+              teks: '',
+              realisasi: 'klausa',
+              klausaAnak: buatKlausaAnak('Klausa Subordinatif'),
+            }),
+          ],
+        },
+        { tipe: 'konjungsi', id: 'konj-kosong', teks: '   ' },
+        {
+          tipe: 'klausa',
+          id: 'klausa-2',
+          label: 'Klausa Utama',
+          konstituen: [
+            buatKonstituen({ peran: 'Konj', jenisFrasa: '—', teks: 'tetapi' }),
+            buatKonstituen({ peran: 'P', jenisFrasa: '—', teks: 'datang' }),
+          ],
+        },
+      ],
+    };
+
+    const root = buatPohon(state);
+    expect(root.anak[0].anak[1].label).toBe('O');
+    expect(root.anak[0].anak[1].anak[0].label).toBe('Klausa Subordinatif');
+    expect(root.anak[1].label).toBe('Konj');
+    expect(root.anak[1].anak).toHaveLength(0);
+    expect(root.anak[2].anak[0].label).toBe('Konj');
+    expect(root.anak[2].anak[0].anak[0].anak[0].label).toBe('tetapi');
+    expect(root.anak[2].anak[1].label).toBe('P');
+    expect(root.anak[2].anak[1].anak[0].label).toBe('datang');
+  });
+
+  it('menghasilkan nodus konjungsi kosong ketika konjungsi di dalam klausa belum diisi', () => {
+    const root = buatPohon({
+      segmen: [
+        {
+          tipe: 'klausa',
+          id: 'klausa-konj-kosong',
+          label: 'Klausa Utama',
+          konstituen: [
+            buatKonstituen({ peran: 'Konj', jenisFrasa: '—', teks: '   ' }),
+            buatKonstituen({ peran: 'P', jenisFrasa: 'FV', teks: 'hadir' }),
+          ],
+        },
+      ],
+    });
+
+    expect(root.anak[0].label).toBe('Konj');
+    expect(root.anak[0].anak).toHaveLength(0);
+  });
+
+  it('menghasilkan warna netral saat mode tidak berwarna dipakai', () => {
+    const root = buatPohon({
+      segmen: [
+        {
+          tipe: 'klausa',
+          id: 'klausa-netral',
+          label: 'Klausa Utama',
+          konstituen: [
+            buatKonstituen({ peran: 'S', jenisFrasa: 'FN', teks: 'Rina' }),
+            buatKonstituen({ peran: 'X', jenisFrasa: 'FV', teks: 'hadir' }),
+          ],
+        },
+      ],
+    }, false);
+
+    expect(root.anak[0].warna).toBe('#111827');
+    expect(root.anak[0].anak[0].warna).toBe('#111827');
+    expect(root.anak[1].warna).toBe('#111827');
+    expect(root.anak[1].anak[0].warna).toBe('#111827');
+  });
+
+  it('menggunakan fallback warna netral untuk peran yang tidak dikenal saat mode berwarna aktif', () => {
+    const root = buatPohon({
+      segmen: [
+        {
+          tipe: 'klausa',
+          id: 'klausa-asing',
+          label: 'Klausa Utama',
+          konstituen: [
+            buatKonstituen({ peran: 'X', jenisFrasa: 'FN', teks: 'Rina' }),
+            buatKonstituen({ peran: 'P', jenisFrasa: 'FV', teks: 'hadir' }),
+          ],
+        },
+      ],
+    }, true);
+
+    expect(root.anak[0].warna).toBe('#111827');
+    expect(root.anak[1].warna).toBe('#16a34a');
   });
 });

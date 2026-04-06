@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  __private,
   daftarIsiGramatika,
   daftarItemGramatika,
   daftarAnchorHalamanGramatika,
@@ -54,6 +55,16 @@ describe('constants/gramatikaData', () => {
       nomorBagianBuku: '2.2.3.3',
       halamanBuku: 33,
       halamanPdf: 57,
+    });
+
+    expect(__private.buatAnchorHalamanGramatika('slug-uji', 1, '1.1', null)).toEqual({
+      slug: 'slug-uji',
+      nomorBabBuku: 1,
+      nomorBagianBuku: '1.1',
+      halamanBuku: null,
+      halamanBukuLabel: null,
+      halamanPdf: null,
+      halamanPdfLabel: null,
     });
   });
 
@@ -126,6 +137,14 @@ describe('constants/gramatikaData', () => {
     expect(cariItemGramatikaDariNomorBagianBuku('10.2.3.12')?.slug).toBe('hubungan-atributif');
     expect(cariItemGramatikaDariNomorBagianBuku('7.9')).toBeNull();
     expect(cariItemGramatikaDariNomorBagianBuku('')).toBeNull();
+
+    expect(ambilAnchorHalamanGramatika()).toBeNull();
+    expect(ambilAnchorHalamanGramatika(' slug-tidak-ada ')).toBeNull();
+
+    const itemAsli = petaItemGramatikaBySlug['kata-para'];
+    delete petaItemGramatikaBySlug['kata-para'];
+    expect(cariItemGramatikaDariNomorBagianBuku('7.4.2')).toBeNull();
+    petaItemGramatikaBySlug['kata-para'] = itemAsli;
   });
 
   it('mencari item gramatika terdekat dari nomor halaman buku', () => {
@@ -134,5 +153,11 @@ describe('constants/gramatikaData', () => {
     expect(cariItemGramatikaTerdekatDariHalamanBuku(366)?.slug).toBe('frasa-numeral');
     expect(cariItemGramatikaTerdekatDariHalamanBuku(10)?.slug).toBe('pembakuan-bahasa');
     expect(cariItemGramatikaTerdekatDariHalamanBuku('abc')).toBeNull();
+    expect(cariItemGramatikaTerdekatDariHalamanBuku(0)).toBeNull();
+
+    const itemTerdekatAsli = petaItemGramatikaBySlug['pembakuan-bahasa'];
+    delete petaItemGramatikaBySlug['pembakuan-bahasa'];
+    expect(cariItemGramatikaTerdekatDariHalamanBuku(10)).toBeNull();
+    petaItemGramatikaBySlug['pembakuan-bahasa'] = itemTerdekatAsli;
   });
 });

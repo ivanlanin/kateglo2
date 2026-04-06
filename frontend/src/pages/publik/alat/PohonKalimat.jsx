@@ -285,6 +285,23 @@ function BlokKlausa({
   );
 }
 
+function hapusKlausaDariSegmen(segmenAwal, id) {
+  const idx = segmenAwal.findIndex((s) => s.id === id);
+  if (idx === -1) return segmenAwal;
+  const segmen = [...segmenAwal];
+  const hapusIdx = idx > 0 && segmen[idx - 1].tipe === 'konjungsi' ? idx - 1 : idx;
+  segmen.splice(hapusIdx, hapusIdx === idx - 1 ? 2 : 1);
+  return segmen;
+}
+
+export const __private = {
+  BarisPilihan,
+  BlokKlausaAnak,
+  BarisKonstituen,
+  BlokKlausa,
+  hapusKlausaDariSegmen,
+};
+
 // ─── Halaman utama ────────────────────────────────────────────────────────────
 
 function PohonKalimat() {
@@ -332,13 +349,8 @@ function PohonKalimat() {
 
   const hapusKlausa = (id) => {
     setState((prev) => {
-      const idx = prev.segmen.findIndex((s) => s.id === id);
-      if (idx === -1) return prev;
-      const segmen = [...prev.segmen];
-      const hapusIdx = idx > 0 && segmen[idx - 1].tipe === 'konjungsi' ? idx - 1 : idx;
-      segmen.splice(hapusIdx, hapusIdx === idx - 1 ? 2 : 1);
       // Relabel back to Klausa when going down to 1
-      return { ...prev, segmen };
+      return { ...prev, segmen: hapusKlausaDariSegmen(prev.segmen, id) };
     });
   };
 

@@ -1,6 +1,6 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Beranda from '../../../src/pages/publik/Beranda';
+import Beranda, { __private } from '../../../src/pages/publik/Beranda';
 
 const mockAmbilPencarianPopuler = vi.fn();
 const mockAmbilKataHariIni = vi.fn();
@@ -212,5 +212,102 @@ describe('Beranda', () => {
     expect(screen.getByText('Data kata hari ini belum tersedia.')).toBeInTheDocument();
     expect(screen.getByText('Kuis Kata')).toBeInTheDocument();
     expect(screen.getByTestId('kuis-kata')).toBeInTheDocument();
+  });
+
+  it('helper private beranda menutup cabang formatter dan renderer ringkasan', () => {
+    expect(__private.buatPathPopuler({ path: '/makna/cari/' }, 'arti luas')).toBe('/makna/cari/arti%20luas');
+    expect(__private.formatLabelPopuler('satu dua')).toEqual({ teks: 'satu dua', judul: undefined });
+    expect(__private.tanggalLokalBrowser()).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(__private.bentukLemaKataHariIni({ entri: 'aktif', homonim: 2 })).toBe('aktif (2)');
+    expect(__private.bentukLemaKataHariIni({ entri: 'aktif (3)', homonim: 1 })).toBe('aktif (3)');
+    expect(__private.bentukLemaKataHariIni({ indeks: 'aktif' })).toBe('aktif');
+    expect(__private.bentukLemaKataHariIni({})).toBe('');
+
+    expect(__private.ambilDaftarMaknaKataHariIni({ makna: 'tunggal', contoh: 'contoh tunggal' })).toEqual([
+      { makna: 'tunggal', contoh: 'contoh tunggal' },
+    ]);
+    expect(__private.ambilDaftarMaknaKataHariIni({ makna: '' })).toEqual([]);
+    expect(__private.ambilDaftarMaknaKataHariIni({ daftar_makna: [null, { makna: ' valid ', contoh: null }] })).toEqual([
+      { makna: 'valid', contoh: '' },
+    ]);
+
+    const satuMakna = render(<div>{__private.renderRingkasanMaknaKataHariIni({ makna: 'tunggal', contoh: 'contoh tunggal' })}</div>);
+    expect(screen.getByText('tunggal')).toBeInTheDocument();
+    expect(screen.getByText('contoh tunggal').className).toContain('kamus-detail-def-sample');
+    satuMakna.unmount();
+
+    const satuMaknaTanpaContoh = render(<div>{__private.renderRingkasanMaknaKataHariIni({ makna: 'tanpa contoh' })}</div>);
+    expect(screen.getByText('tanpa contoh')).toBeInTheDocument();
+    satuMaknaTanpaContoh.unmount();
+
+    const banyakMaknaCampuran = render(<div>{__private.renderRingkasanMaknaKataHariIni({ daftar_makna: [{ makna: 'pertama', contoh: '' }, { makna: 'kedua', contoh: 'contoh kedua' }] })}</div>);
+    expect(banyakMaknaCampuran.container.textContent).toContain('(1) pertama');
+    expect(screen.getByText('contoh kedua').className).toContain('kamus-detail-def-sample');
+    banyakMaknaCampuran.unmount();
+
+    const etimologiBahasa = render(<div>{__private.renderEtimologiKataHariIni({ etimologi: { bahasa: 'Arab' } })}</div>);
+    expect(screen.getByText('Etimologi:', { exact: false })).toBeInTheDocument();
+    expect(etimologiBahasa.container.textContent).toContain('Arab');
+    etimologiBahasa.unmount();
+
+    const etimologiKataAsal = render(<div>{__private.renderEtimologiKataHariIni({ etimologi: { kata_asal: 'faal' } })}</div>);
+    expect(screen.getByText('faal')).toBeInTheDocument();
+    etimologiKataAsal.unmount();
+
+    expect(__private.renderRingkasanMaknaKataHariIni({ makna: '' })).toBeNull();
+    expect(__private.renderEtimologiKataHariIni({})).toBeNull();
+  });
+
+  it('menampilkan kata hari ini tanpa tautan saat url tidak tersedia dan mengabaikan hasil setelah unmount', async () => {
+    let resolvePopuler;
+    let resolveKataHariIni;
+    const populerPromise = new Promise((resolve) => {
+      resolvePopuler = resolve;
+    });
+    const kataHariIniPromise = new Promise((resolve) => {
+      resolveKataHariIni = resolve;
+    });
+
+    mockAmbilPencarianPopuler.mockReturnValueOnce(populerPromise);
+    mockAmbilKataHariIni.mockReturnValueOnce(kataHariIniPromise);
+
+    const { unmount } = render(<Beranda />);
+    unmount();
+
+    await act(async () => {
+      resolvePopuler({ data: { kamus: 'air' } });
+      resolveKataHariIni({ entri: 'aktif', makna: 'giat', contoh: '', url: '' });
+      await Promise.resolve();
+    });
+
+    mockAmbilPencarianPopuler.mockResolvedValueOnce({ data: { kamus: 'air' } });
+    mockAmbilKataHariIni.mockResolvedValueOnce({
+      entri: 'aktif',
+      makna: 'giat',
+      contoh: '',
+      daftar_makna: [{ makna: 'giat', contoh: '' }],
+      url: '',
+    });
+
+    render(<Beranda />);
+
+    expect(await screen.findByRole('heading', { level: 2, name: /aktif/i })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /aktif/i })).not.toBeInTheDocument();
+  });
+
+  it('memakai indeks sebagai fallback lafal saat entri kosong', async () => {
+    mockAmbilKataHariIni.mockResolvedValueOnce({
+      indeks: 'aktif',
+      entri: '',
+      makna: 'giat',
+      contoh: '',
+      daftar_makna: [{ makna: 'giat', contoh: '' }],
+      url: '',
+    });
+
+    render(<Beranda />);
+
+    expect(await screen.findByRole('heading', { level: 2, name: /aktif/i })).toBeInTheDocument();
+    expect(screen.getByTestId('tombol-lafal')).toHaveAttribute('data-kata', 'aktif');
   });
 });

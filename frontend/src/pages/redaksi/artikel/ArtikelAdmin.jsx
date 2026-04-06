@@ -108,6 +108,26 @@ function buildArtikelLinkExtension() {
   });
 }
 
+function resolvePenggunaIdAktif(user) {
+  return Number(user?.pid || user?.id || 0) || null;
+}
+
+function parseOptionalNumericValue(value) {
+  return value ? Number(value) : null;
+}
+
+function normalizeTanggalTerbitFieldValue(value) {
+  return value ? `${value}:00` : null;
+}
+
+function resolveNilaiDiterbitkan(resData, diterbitkanBaru) {
+  return resData?.diterbitkan ?? diterbitkanBaru;
+}
+
+function buildKontenGambarMarkdown(konten, url) {
+  return `${konten || ''}\n\n![gambar](${url})\n`;
+}
+
 const opsiFilterStatus = [
   { value: '', label: '—Status—' },
   { value: 'diterbitkan', label: 'Terbit' },
@@ -258,6 +278,15 @@ function EditorArtikel({ value, onChange, onUnggahGambar }) {
 }
 
 export const __private = {
+  EditorArtikel,
+  InputTopik,
+  StatusArtikelField,
+  buildKontenGambarMarkdown,
+  normalizeTanggalTerbitFieldValue,
+  normalizeTopikArtikel,
+  parseOptionalNumericValue,
+  resolveNilaiDiterbitkan,
+  resolvePenggunaIdAktif,
   isInternalArticleHref,
   normalizeArtikelHref,
   buildArtikelLinkExtension,
@@ -357,7 +386,7 @@ function ArtikelAdmin() {
   const { id: idParam } = useParams();
   const { punyaIzin, user } = useAuth();
   const bolehTerbitkan = punyaIzin('terbitkan_artikel');
-  const penggunaIdAktif = Number(user?.pid || user?.id || 0) || null;
+  const penggunaIdAktif = resolvePenggunaIdAktif(user);
 
   const {
     cari, setCari, q, offset, setOffset,
@@ -507,7 +536,7 @@ function ArtikelAdmin() {
 
     terbitkan.mutate({ id: panel.data.id, diterbitkan: diterbitkanBaru }, {
       onSuccess: (res) => {
-        panel.ubahField('diterbitkan', res.data?.diterbitkan ?? diterbitkanBaru);
+        panel.ubahField('diterbitkan', resolveNilaiDiterbitkan(res.data, diterbitkanBaru));
         panel.ubahField(
           'diterbitkan_pada',
           normalizeLocalDateTimeValue(res.data?.diterbitkan_pada) ?? panel.data.diterbitkan_pada
@@ -527,7 +556,7 @@ function ArtikelAdmin() {
       onSuccess: (res) => {
         const url = res.data?.url;
         if (url) {
-          panel.ubahField('konten', `${panel.data.konten || ''}\n\n![gambar](${url})\n`);
+          panel.ubahField('konten', buildKontenGambarMarkdown(panel.data.konten, url));
         }
       },
       onError: (error) => {
@@ -588,7 +617,7 @@ function ArtikelAdmin() {
             label="Penulis"
             name="penulis_id"
             value={String(panel.data.penulis_id ?? '')}
-            onChange={(name, val) => panel.ubahField(name, val ? Number(val) : null)}
+            onChange={(name, val) => panel.ubahField(name, parseOptionalNumericValue(val))}
             options={opsiPengguna}
             placeholder="Pilih penulis…"
             searchPlaceholder="Ketik nama atau surel…"
@@ -599,7 +628,7 @@ function ArtikelAdmin() {
             label="Penyunting"
             name="penyunting_id"
             value={String(panel.data.penyunting_id ?? '')}
-            onChange={(name, val) => panel.ubahField(name, val ? Number(val) : null)}
+            onChange={(name, val) => panel.ubahField(name, parseOptionalNumericValue(val))}
             options={[{ value: '', label: '— Tidak ada —' }, ...opsiPengguna]}
             placeholder="Pilih penyunting…"
             searchPlaceholder="Ketik nama atau surel…"
@@ -615,7 +644,7 @@ function ArtikelAdmin() {
               id="field-diterbitkan-pada-artikel"
               type="datetime-local"
               value={panel.data.diterbitkan_pada ? panel.data.diterbitkan_pada.slice(0, 16) : ''}
-              onChange={(e) => panel.ubahField('diterbitkan_pada', e.target.value ? `${e.target.value}:00` : null)}
+              onChange={(e) => panel.ubahField('diterbitkan_pada', normalizeTanggalTerbitFieldValue(e.target.value))}
               className="form-admin-input"
             />
           </div>

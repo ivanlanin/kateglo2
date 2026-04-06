@@ -2075,3 +2075,7 @@ export {
   cariItemGramatikaDariNomorBagianBuku,
   cariItemGramatikaTerdekatDariHalamanBuku,
 };
+
+export const __private = {
+  buatAnchorHalamanGramatika,
+};

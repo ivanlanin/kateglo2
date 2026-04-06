@@ -96,6 +96,14 @@ function bersihkanTeksArtikel(text = '') {
     .trim();
 }
 
+function buildDeskripsiMetaGramatikaDaftar(metadata = {}, deskripsiSpesifik = '') {
+  return deskripsiSpesifik || metadata.deskripsi || `Rujukan ${metadata.judul} dalam panduan tata bahasa Indonesia di Kateglo.`;
+}
+
+function resolveCanonicalMetaInteraktif(metaInteraktif = null, siteBaseUrl = '') {
+  return metaInteraktif?.canonicalPath ? `${siteBaseUrl}${metaInteraktif.canonicalPath}` : undefined;
+}
+
 function buildMetaBrowseArtikel(prefetchedData = null) {
   const topik = String(prefetchedData?.topik || '').trim();
 
@@ -225,7 +233,7 @@ function buildMetaGramatika(slug = '', prefetchedData = null) {
   if (metadata.tipe === 'daftar') {
     return {
       judul: metadata.judul,
-      deskripsi: deskripsiSpesifik || metadata.deskripsi || `Rujukan ${metadata.judul} dalam panduan tata bahasa Indonesia di Kateglo.`,
+      deskripsi: buildDeskripsiMetaGramatikaDaftar(metadata, deskripsiSpesifik),
     };
   }
 
@@ -519,7 +527,7 @@ function buildMetaForPath(pathname = '/', siteBaseUrl = 'https://kateglo.org', p
   if (metaInteraktif) {
     return {
       ...titled(metaInteraktif),
-      canonicalUrl: metaInteraktif.canonicalPath ? `${siteBaseUrl}${metaInteraktif.canonicalPath}` : undefined,
+        canonicalUrl: resolveCanonicalMetaInteraktif(metaInteraktif, siteBaseUrl),
     };
   }
 
@@ -654,17 +662,23 @@ export const __private = {
   escapeJsonForHtml,
   stripTrailingSlash,
   truncate,
+  bersihkanTeksArtikel,
   stripKategloSuffix,
   buildOgQueryString,
   buildGenericSocialContext,
   buildKamusDescription: buildDeskripsiDetailKamus,
   buildTesaurusDescription: buildDeskripsiPencarianTesaurus,
   buildGlosariumCariDescription: buildDeskripsiPencarianGlosarium,
+  buildMetaBrowseArtikel,
+  buildMetaDetailArtikel,
   buildMetaEjaan,
   buildMetaGramatika,
+  buildMetaIhwal,
+  buildDeskripsiMetaGramatikaDaftar,
   buildSocialTitle,
   buildSocialImageUrl,
   buildSerializedSsrDataScript,
+  resolveCanonicalMetaInteraktif,
   resolveSsrStatusCode,
   buildMetaForPath,
   shouldSkipSsr,

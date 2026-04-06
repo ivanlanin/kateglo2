@@ -31,6 +31,8 @@ describe('entry-server', () => {
     expect(__private.escapeHtml(`<a>&"'</a>`)).toBe('&lt;a&gt;&amp;&quot;&#39;&lt;/a&gt;');
     expect(__private.stripTrailingSlash('https://kateglo.org///')).toBe('https://kateglo.org');
     expect(__private.stripTrailingSlash()).toBe('');
+    expect(__private.bersihkanTeksArtikel(`**Halo**
+    _dunia_`)).toBe('Halo dunia');
 
     expect(__private.truncate('pendek', 10)).toBe('pendek');
     expect(__private.truncate('ini kalimat sangat panjang sekali untuk dipotong', 20)).toMatch(/\s…$/);
@@ -201,6 +203,10 @@ describe('entry-server', () => {
     expect(gramatikaDetail.title).toBe('Preposisi — Kateglo');
     expect(gramatikaDetail.description).toContain('Kata Tugas');
 
+    const gramatikaDaftar = __private.buildMetaForPath('/gramatika/daftar-istilah', site);
+    expect(gramatikaDaftar.title).toBe('Daftar Istilah — Kateglo');
+    expect(gramatikaDaftar.description).toContain('Istilah-istilah pokok');
+
     const gramatikaDetailUnknown = __private.buildMetaForPath('/gramatika/klausa-baru', site);
     expect(gramatikaDetailUnknown.title).toBe('Klausa Baru — Kateglo');
     const gramatikaDetailKosong = __private.buildMetaForPath('/gramatika/---', site);
@@ -258,6 +264,30 @@ describe('entry-server', () => {
     expect(artikelIndex.title).toBe('Artikel — Kateglo');
     expect(artikelIndex.description).toContain('linguistik');
 
+    const artikelTopik = __private.buildMetaForPath('/artikel', site, {
+      type: 'artikel-daftar',
+      topik: 'Fonologi',
+      q: '',
+      data: [],
+      total: 0,
+    });
+    expect(artikelTopik.title).toBe('Artikel Topik Fonologi — Kateglo');
+    expect(artikelTopik.description).toContain('topik Fonologi');
+
+    const artikelKosong = __private.buildMetaForPath('/artikel/%20', site);
+    expect(artikelKosong.title).toBe('Artikel — Kateglo');
+
+    const artikelTanpaKonten = __private.buildMetaForPath('/artikel/slug-belum-ada', site, {
+      type: 'artikel-detail',
+      slug: 'slug-lain',
+      notFound: false,
+      artikel: {
+        judul: 'Artikel lain',
+        konten: 'Tidak cocok dengan slug aktif.',
+      },
+    });
+    expect(artikelTanpaKonten.title).toBe('Artikel — Kateglo');
+
     const artikelDetail = __private.buildMetaForPath('/artikel/efektivitas-atau-efektifitas', site, {
       type: 'artikel-detail',
       slug: 'efektivitas-atau-efektifitas',
@@ -281,6 +311,10 @@ describe('entry-server', () => {
     expect(__private.buildMetaForPath('/privasi', site).title).toBe('Kebijakan Privasi — Kateglo');
     expect(__private.buildMetaForPath('/privasi', site).canonicalUrl).toBe('https://kateglo.org/privasi');
     expect(__private.buildMetaForPath('/kebijakan-privasi', site).canonicalUrl).toBe('https://kateglo.org/privasi');
+
+    const ihwal = __private.buildMetaForPath('/ihwal', site);
+    expect(ihwal.title).toBe('Ihwal Kateglo — Kateglo');
+    expect(ihwal.description).toContain('cakupan layanan');
 
     const defaultMeta = __private.buildMetaForPath('/random', site);
     expect(defaultMeta.title).toBe('Kateglo');
@@ -446,11 +480,37 @@ describe('entry-server', () => {
     }, 'Gramatika Tidak Ditemukan — Kateglo')).toBe('https://kateglo.org/og/default.png?title=Gramatika+Tidak+Ditemukan&context=Halaman+gramatika+yang+diminta+tidak+ditemukan+di+Kateglo.');
     expect(__private.buildSocialImageUrl('/alat', 'https://kateglo.org', null, 'Alat — Kateglo')).toBe('https://kateglo.org/og/alat.png?title=Alat&context=Kumpulan+alat+bahasa+Indonesia+di+Kateglo%2C+termasuk+Analisis+Teks+dan+Penghitung+Huruf+untuk+analisis+cepat+langsung+di+peramban.');
     expect(__private.buildSocialImageUrl('/gim/kuis-kata', 'https://kateglo.org', null, 'Kuis Kata — Kateglo')).toBe('https://kateglo.org/og/gim.png?title=Kuis+Kata&context=Mainkan+kuis+kata+pilihan+ganda+di+Kateglo+untuk+menebak+arti%2C+sinonim%2C+padanan%2C+makna%2C+dan+rima+dalam+satu+ronde+cepat.');
+    expect(__private.resolveCanonicalMetaInteraktif({ canonicalPath: '/alat/analisis-teks' }, 'https://kateglo.org')).toBe('https://kateglo.org/alat/analisis-teks');
+    expect(__private.resolveCanonicalMetaInteraktif({ canonicalPath: '' }, 'https://kateglo.org')).toBeUndefined();
   });
 
   it('helper SSR menutup cabang serialisasi, status code, dan skip SSR', () => {
     expect(__private.buildSerializedSsrDataScript(null)).toBe('');
     expect(__private.buildSerializedSsrDataScript({ html: '<script>' })).toContain('\\u003cscript\\u003e');
+    expect(__private.buildMetaBrowseArtikel({ topik: 'Fonologi' }).judul).toBe('Artikel Topik Fonologi');
+    expect(__private.buildMetaDetailArtikel('huruf-kapital', {
+      type: 'artikel-detail',
+      slug: 'huruf-kapital',
+      notFound: false,
+      artikel: { judul: '***', konten: '' },
+    })).toEqual({
+      judul: 'Huruf Kapital',
+      deskripsi: 'Huruf Kapital — artikel Kateglo tentang bahasa Indonesia.',
+    });
+    expect(__private.buildMetaDetailArtikel('artikel-uji', {
+      type: 'artikel-detail',
+      slug: 'artikel-uji',
+      notFound: false,
+      artikel: { judul: 'Artikel Uji', konten: 'Ringkasan langsung dipakai untuk meta artikel.' },
+    }).deskripsi).toContain('Ringkasan langsung dipakai');
+    expect(__private.buildMetaDetailArtikel('---', {
+      type: 'artikel-detail',
+      slug: '---',
+      notFound: false,
+      artikel: { judul: '***', konten: '' },
+    }).judul).toBe('Artikel');
+    expect(__private.buildMetaIhwal().judul).toBe('Ihwal Kateglo');
+    expect(__private.buildDeskripsiMetaGramatikaDaftar({ judul: 'Daftar Baru' }, '')).toBe('Rujukan Daftar Baru dalam panduan tata bahasa Indonesia di Kateglo.');
     expect(__private.resolveSsrStatusCode()).toBe(200);
     expect(__private.resolveSsrStatusCode({ type: 'static-markdown', notFound: true })).toBe(404);
     expect(__private.resolveSsrStatusCode({ type: 'artikel-detail', notFound: true })).toBe(404);

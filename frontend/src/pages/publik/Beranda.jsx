@@ -315,4 +315,15 @@ function Beranda() {
   );
 }
 
+export const __private = {
+  buatPathPopuler,
+  formatLabelPopuler,
+  tanggalLokalBrowser,
+  bentukLemaKataHariIni,
+  ambilDaftarMaknaKataHariIni,
+  renderRingkasanMaknaKataHariIni,
+  renderEtimologiKataHariIni,
+  upsertMetaTag,
+};
+
 export default Beranda;
