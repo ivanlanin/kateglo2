@@ -79,6 +79,25 @@ describe('GlosariumDetail', () => {
     expect(screen.getByText('Gagal mengambil data.')).toBeInTheDocument();
   });
 
+  it('memakai fallback pathname root saat lokasi kosong saat menyusun metadata sosial', () => {
+    mockLocation = { pathname: '' };
+    queryState = {
+      isLoading: false,
+      isFetching: false,
+      isError: false,
+      error: null,
+      data: {
+        persis: [{ id: 1, indonesia: 'jumlah nol' }],
+        mengandung: [],
+        mirip: [],
+      },
+    };
+
+    render(<GlosariumDetail />);
+
+    expect(document.head.querySelector('meta[property="og:title"]')?.getAttribute('content')).toBe('zero sum');
+  });
+
   it('helper sortAlirEntriItems mengurutkan bidang lalu label dengan fallback kosong', () => {
     const sorted = __private.sortAlirEntriItems([
       { id: 3, bidang: '', asing: 'zeta', indonesia: 'zeta' },

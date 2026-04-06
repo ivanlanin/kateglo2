@@ -5,7 +5,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, vi, beforeEach, expect } from 'vitest';
 import { MemoryRouter, Outlet, Route, Routes } from 'react-router-dom';
-import App, { RuteIzin, RutePublikTerkendali } from '../src/App';
+import App, { __private, RuteIzin, RutePublikTerkendali } from '../src/App';
 
 const mockUseAuth = vi.fn();
 
@@ -496,5 +496,54 @@ describe('App', () => {
     );
 
     expect(await screen.findByText('Konten internal')).toBeInTheDocument();
+  });
+
+  it('RutePublikTerkendali menampilkan loading saat auth publik terkendali masih dimuat', () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: false,
+      adalahRedaksi: false,
+      adalahAdmin: false,
+      isLoading: true,
+    });
+
+    render(
+      <MemoryRouter>
+        <RutePublikTerkendali redirectTo="/alat"><div>Konten internal</div></RutePublikTerkendali>
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Memuat …')).toBeInTheDocument();
+  });
+
+  it('merender route publik berbasis element dan route internal yang dibungkus kontrol akses', async () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      adalahRedaksi: true,
+      adalahAdmin: false,
+      isLoading: false,
+    });
+
+    render(
+      <MemoryRouter>
+        {__private.renderRutePublik({
+          Component: () => <div>Konten internal publik</div>,
+          aksesPublik: 'admin',
+          redirectTo: '/alat',
+        })}
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByText('Konten internal publik')).toBeInTheDocument();
+
+    render(
+      <MemoryRouter>
+        {__private.renderRutePublik({
+          Component: () => <div>Tidak dipakai</div>,
+          element: <div>Element eksplisit</div>,
+        })}
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Element eksplisit')).toBeInTheDocument();
   });
 });

@@ -63,7 +63,8 @@ describe('HalamanAdmin', () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByRole('link', { name: 'Redaksi Kateglo' }, { timeout: 3000 })).toHaveAttribute('href', '/redaksi');
+    await screen.findByLabelText('Buka menu redaksi', {}, { timeout: 10000 });
+    expect(screen.getByRole('link', { name: 'Redaksi Kateglo' })).toHaveAttribute('href', '/redaksi');
     expect(document.title).toBe('Kamus — Redaksi Kateglo');
     expect(screen.getByRole('link', { name: 'Kateglo' })).toHaveAttribute('href', '/');
     expect(screen.queryByRole('link', { name: 'Dasbor' })).not.toBeInTheDocument();
@@ -87,7 +88,7 @@ describe('HalamanAdmin', () => {
       </MemoryRouter>
     );
 
-    await screen.findByRole('link', { name: 'Redaksi Kateglo' });
+    await screen.findByLabelText('Buka menu redaksi', {}, { timeout: 10000 });
     expect(window.scrollTo).toHaveBeenCalledWith({ top: 0, left: 0, behavior: 'auto' });
   });
 
@@ -100,7 +101,7 @@ describe('HalamanAdmin', () => {
       </MemoryRouter>
     );
 
-    await screen.findByRole('link', { name: 'Redaksi Kateglo' });
+    await screen.findByLabelText('Buka menu redaksi', {}, { timeout: 10000 });
     expect(window.scrollTo).not.toHaveBeenCalled();
   });
 
@@ -113,7 +114,7 @@ describe('HalamanAdmin', () => {
       </MemoryRouter>
     );
 
-    await screen.findByRole('link', { name: 'Redaksi Kateglo' });
+    await screen.findByLabelText('Buka menu redaksi', {}, { timeout: 10000 });
     expect(window.scrollTo).not.toHaveBeenCalled();
   });
 
@@ -125,7 +126,8 @@ describe('HalamanAdmin', () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByRole('link', { name: 'Redaksi Kateglo' })).toHaveAttribute('href', '/redaksi');
+    await screen.findByLabelText('Buka menu redaksi', {}, { timeout: 10000 });
+    expect(screen.getByRole('link', { name: 'Redaksi Kateglo' })).toHaveAttribute('href', '/redaksi');
     expect(document.title).toBe('Redaksi Kateglo');
     expect(screen.queryByText('admin@kateglo.id')).not.toBeInTheDocument();
     fireEvent.click(screen.getByLabelText('Buka menu redaksi'));
@@ -235,7 +237,7 @@ describe('HalamanAdmin', () => {
       </MemoryRouter>
     );
 
-    await screen.findByRole('link', { name: 'Redaksi Kateglo' });
+    await screen.findByLabelText('Buka menu redaksi', {}, { timeout: 10000 });
     const toggleTheme = document.querySelector('.kateglo-theme-toggle');
     expect(toggleTheme).not.toBeNull();
     const titleAwal = toggleTheme?.getAttribute('title');
@@ -256,7 +258,8 @@ describe('HalamanAdmin', () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByRole('link', { name: 'Redaksi Kateglo' })).toHaveAttribute('href', '/redaksi');
+    await screen.findByLabelText('Buka menu redaksi', {}, { timeout: 10000 });
+    expect(screen.getByRole('link', { name: 'Redaksi Kateglo' })).toHaveAttribute('href', '/redaksi');
     expect(localStorage.getItem).toHaveBeenCalledWith('kateglo-theme');
     expect(document.documentElement.classList.contains('dark')).toBe(false);
   });

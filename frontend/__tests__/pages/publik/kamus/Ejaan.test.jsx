@@ -90,7 +90,7 @@ describe('Ejaan', () => {
     expect(screen.queryByText('title: Huruf Kapital')).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Tanpa Dokumen ›' })).toHaveAttribute('href', '/ejaan/tanpa-dok');
     expect(screen.queryByText(/‹/)).not.toBeInTheDocument();
-    expect(document.querySelector('.ejaan-sidebar-pill-active')).toHaveTextContent('Huruf Kapital');
+    expect(document.querySelector('.ref-sidebar-pill-active')).toHaveTextContent('Huruf Kapital');
   });
 
   it('mode detail memakai markdown dari SSR tanpa fetch ulang', async () => {
@@ -253,10 +253,10 @@ describe('Ejaan', () => {
     renderHalaman('/ejaan/huruf-miring');
 
     await waitFor(() => {
-      expect(document.querySelector('.ejaan-sidebar-pill-active')).toHaveTextContent('Huruf Miring');
+      expect(document.querySelector('.ref-sidebar-pill-active')).toHaveTextContent('Huruf Miring');
     });
 
-    const current = document.querySelector('.ejaan-sidebar-pill-active');
+    const current = document.querySelector('.ref-sidebar-pill-active');
     expect(current).toHaveAttribute('aria-current', 'page');
     expect(screen.getByRole('link', { name: 'Huruf Kapital' })).toHaveAttribute('href', '/ejaan/huruf-kapital');
     expect(screen.queryByRole('link', { name: 'Huruf Miring ›' })).not.toBeInTheDocument();

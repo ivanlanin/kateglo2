@@ -47,18 +47,21 @@ function normalizeLocalDateTimeValue(value, { fallback = null } = {}) {
   if (!text) return fallback;
 
   const normalized = text.includes(' ') ? text.replace(' ', 'T') : text;
-  const match = normalized.match(/^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})(?::(\d{2}))?/);
+  const match = normalized.match(/^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})(?::(\d{2}))?(?:\.\d+)?(?:Z)?$/);
   if (!match) return fallback;
 
-  return `${match[1]}T${match[2]}:${match[3] || '00'}`;
+  const normalizedValue = `${match[1]}T${match[2]}:${match[3] || '00'}`;
+  const parsed = dayjs(normalizedValue);
+  if (parsed.format('YYYY-MM-DDTHH:mm:ss') !== normalizedValue) return fallback;
+
+  return normalizedValue;
 }
 
 function formatWallClockDateTime(value, { fallback = '-', separator = ' ' } = {}) {
   const normalized = normalizeLocalDateTimeValue(value, { fallback: null });
   if (!normalized) return fallback;
 
-  const parsed = dayjs(normalized);
-  return parsed.isValid() ? parsed.format(`DD MMM YYYY${separator}HH.mm`) : fallback;
+  return dayjs(normalized).format(`DD MMM YYYY${separator}HH.mm`);
 }
 
 function formatBilanganRibuan(value, { fallback = '0' } = {}) {

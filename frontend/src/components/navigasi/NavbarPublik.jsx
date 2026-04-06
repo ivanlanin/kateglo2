@@ -102,7 +102,7 @@ function NavbarPublik() {
   const renderMenu = ({
     containerClassName = '',
     linkClassName = '',
-    onItemClick = () => {},
+    onItemClick = undefined,
     tampilkanMenu = true,
     tampilkanPemisah = false,
     forwardedRef = null,

@@ -9,9 +9,14 @@ vi.mock('../../../../src/api/apiPublik', () => ({
   ambilEntriAcakKamus: (...args) => mockAmbilEntriAcakKamus(...args),
 }));
 
-vi.mock('react-router-dom', () => ({
-  useNavigate: () => mockNavigate,
-}));
+vi.mock('react-router-dom', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+    useLocation: () => ({ pathname: '/kamus/acak', search: '' }),
+  };
+});
 
 describe('KamusAcak', () => {
   beforeEach(() => {
@@ -40,6 +45,31 @@ describe('KamusAcak', () => {
     await waitFor(() => {
       expect(screen.getByText('Entri acak belum tersedia.')).toBeInTheDocument();
     });
+    expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
+  it('menampilkan pesan gagal saat API melempar error', async () => {
+    mockAmbilEntriAcakKamus.mockRejectedValueOnce(new Error('gagal'));
+
+    render(<KamusAcak />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Entri acak belum tersedia.')).toBeInTheDocument();
+    });
+    expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
+  it('tidak menavigasi saat komponen sudah unmount sebelum respons selesai', async () => {
+    let resolveResponse;
+    mockAmbilEntriAcakKamus.mockReturnValueOnce(new Promise((resolve) => {
+      resolveResponse = resolve;
+    }));
+
+    const view = render(<KamusAcak />);
+    view.unmount();
+    resolveResponse({ url: '/kamus/detail/terlambat' });
+
+    await Promise.resolve();
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 });

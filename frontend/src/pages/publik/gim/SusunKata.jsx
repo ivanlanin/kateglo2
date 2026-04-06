@@ -112,26 +112,28 @@ export function parseRiwayatDariSkor(tebakanRaw, panjang) {
     .slice(0, MAKS_PERCOBAAN);
 }
 
+function StrongInfoBadge({ children, ...props }) {
+  const label = Array.isArray(children) ? children.join('') : String(children || '');
+  const labelBersih = label.trim().toLowerCase();
+
+  if (labelBersih === 'hijau') {
+    return <span {...props} className="susun-kata-info-badge susun-kata-info-badge-benar">{children}</span>;
+  }
+
+  if (labelBersih === 'kuning') {
+    return <span {...props} className="susun-kata-info-badge susun-kata-info-badge-ada">{children}</span>;
+  }
+
+  if (labelBersih === 'abu-abu') {
+    return <span {...props} className="susun-kata-info-badge susun-kata-info-badge-salah">{children}</span>;
+  }
+
+  return <strong {...props}>{children}</strong>;
+}
+
 function PanelInfoSusunKata() {
   const komponenMarkdown = {
-    strong: ({ children, ...props }) => {
-      const label = Array.isArray(children) ? children.join('') : String(children || '');
-      const labelBersih = label.trim().toLowerCase();
-
-      if (labelBersih === 'hijau') {
-        return <span {...props} className="susun-kata-info-badge susun-kata-info-badge-benar">{children}</span>;
-      }
-
-      if (labelBersih === 'kuning') {
-        return <span {...props} className="susun-kata-info-badge susun-kata-info-badge-ada">{children}</span>;
-      }
-
-      if (labelBersih === 'abu-abu') {
-        return <span {...props} className="susun-kata-info-badge susun-kata-info-badge-salah">{children}</span>;
-      }
-
-      return <strong {...props}>{children}</strong>;
-    },
+    strong: StrongInfoBadge,
   };
 
   return (
@@ -676,3 +678,6 @@ function SusunKata() {
 }
 
 export default SusunKata;
+export const __private = {
+  StrongInfoBadge,
+};

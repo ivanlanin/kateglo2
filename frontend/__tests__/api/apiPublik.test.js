@@ -58,6 +58,9 @@ import {
   ambilKookurensiTetanggaLeipzig,
   ambilGrafKataLeipzig,
   ambilMiripKonteksLeipzig,
+  ambilTopikArtikel,
+  ambilDaftarArtikel,
+  ambilDetailArtikel,
 } from '../../src/api/apiPublik';
 
 describe('apiPublik', () => {
@@ -263,6 +266,37 @@ describe('apiPublik', () => {
     });
     expect(klien.get).toHaveBeenNthCalledWith(8, '/api/publik/leipzig/korpus/ind_news_2024_10K/kata/indonesia/mirip-konteks', {
       params: { limit: 12, minimumKonteksSama: 3 },
+      timeout: 60000,
+    });
+  });
+
+  it('API Leipzig menormalkan limit nol dan minimumKonteksSama saat opsional atau melewati batas', async () => {
+    klien.get.mockResolvedValue({ data: { data: [] } });
+
+    await ambilKookurensiTetanggaLeipzig('ind_news_2024_10K', 'indonesia', { limit: 0 });
+    await ambilGrafKataLeipzig('ind_news_2024_10K', 'indonesia', { limit: 'abc' });
+    await ambilMiripKonteksLeipzig('ind_news_2024_10K', 'indonesia');
+    await ambilMiripKonteksLeipzig('ind_news_2024_10K', 'indonesia', { minimumKonteksSama: 0 });
+    await ambilMiripKonteksLeipzig('ind_news_2024_10K', 'indonesia', { limit: 0, minimumKonteksSama: 99 });
+
+    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/leipzig/korpus/ind_news_2024_10K/kata/indonesia/kookurensi-tetangga', {
+      params: { limit: 1 },
+      timeout: 60000,
+    });
+    expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/leipzig/korpus/ind_news_2024_10K/kata/indonesia/graf', {
+      params: { limit: 1 },
+      timeout: 60000,
+    });
+    expect(klien.get).toHaveBeenNthCalledWith(3, '/api/publik/leipzig/korpus/ind_news_2024_10K/kata/indonesia/mirip-konteks', {
+      params: { limit: 12 },
+      timeout: 60000,
+    });
+    expect(klien.get).toHaveBeenNthCalledWith(4, '/api/publik/leipzig/korpus/ind_news_2024_10K/kata/indonesia/mirip-konteks', {
+      params: { limit: 12, minimumKonteksSama: 1 },
+      timeout: 60000,
+    });
+    expect(klien.get).toHaveBeenNthCalledWith(5, '/api/publik/leipzig/korpus/ind_news_2024_10K/kata/indonesia/mirip-konteks', {
+      params: { limit: 1, minimumKonteksSama: 20 },
       timeout: 60000,
     });
   });
@@ -827,6 +861,31 @@ describe('apiPublik', () => {
     await ambilDaftarSumber();
     expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/glosarium/bidang');
     expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/glosarium/sumber');
+  });
+
+  it('endpoint artikel publik memanggil topik, daftar, dan detail dengan parameter yang benar', async () => {
+    klien.get.mockResolvedValue({ data: { data: [] } });
+
+    await ambilTopikArtikel();
+    await ambilDaftarArtikel({ topik: 'bahasa', q: 'serapan', cursor: 'art-1', direction: 'prev', lastPage: true, limit: 12 });
+    await ambilDaftarArtikel();
+    await ambilDetailArtikel('kata serapan');
+
+    expect(klien.get).toHaveBeenNthCalledWith(1, '/api/publik/artikel/topik');
+    expect(klien.get).toHaveBeenNthCalledWith(2, '/api/publik/artikel', {
+      params: {
+        limit: 12,
+        cursor: 'art-1',
+        direction: 'prev',
+        lastPage: 1,
+        topik: 'bahasa',
+        q: 'serapan',
+      },
+    });
+    expect(klien.get).toHaveBeenNthCalledWith(3, '/api/publik/artikel', {
+      params: { limit: 20 },
+    });
+    expect(klien.get).toHaveBeenNthCalledWith(4, '/api/publik/artikel/kata%20serapan');
   });
 
 });

@@ -2,10 +2,12 @@ import { render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { ArtikelDetail, __private } from '../../../../src/pages/publik/artikel/ArtikelDetail';
+import { ambilDaftarArtikel, ambilDetailArtikel } from '../../../../src/api/apiPublik';
 
 const mockUseQuery = vi.fn();
 let mockParams = { slug: 'asal-kata-merdeka' };
 let mockAuth = null;
+let mockSsrPrefetch = null;
 
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -28,11 +30,16 @@ vi.mock('../../../../src/context/authContext', () => ({
   useAuthOptional: () => mockAuth,
 }));
 
+vi.mock('../../../../src/context/ssrPrefetchContext', () => ({
+  useSsrPrefetch: () => mockSsrPrefetch,
+}));
+
 describe('ArtikelDetail publik', () => {
   beforeEach(() => {
     mockUseQuery.mockReset();
     mockParams = { slug: 'asal-kata-merdeka' };
     mockAuth = null;
+    mockSsrPrefetch = null;
   });
 
   it('menampilkan detail sederhana dengan sidebar artikel lain maksimal 10 item', () => {
@@ -155,5 +162,247 @@ describe('ArtikelDetail publik', () => {
   it('helper private membedakan tautan internal artikel', () => {
     expect(__private.isArtikelInternalHref('/gramatika/inversi')).toBe(true);
     expect(__private.isArtikelInternalHref('https://contoh.org')).toBe(false);
+  });
+
+  it('helper private membersihkan cuplikan dan memetakan initial data SSR detail/sidebar', () => {
+    expect(__private.bersihkanCuplikan('  #Cuplikan* (uji)!  ')).toBe('Cuplikan uji');
+    expect(__private.bersihkanCuplikan('')).toBe('');
+
+    expect(__private.resolveInitialDetailData(null, 'slug')).toBeUndefined();
+    expect(__private.resolveInitialDetailData({ type: 'lain' }, 'slug')).toBeUndefined();
+    expect(__private.resolveInitialDetailData({ type: 'artikel-detail', slug: 'lain' }, 'slug')).toBeUndefined();
+    expect(__private.resolveInitialDetailData({ type: 'artikel-detail' }, '')).toEqual({ success: true, data: null });
+    expect(__private.resolveInitialDetailData({ type: 'artikel-detail', slug: 'slug', artikel: null }, 'slug')).toEqual({ success: true, data: null });
+    expect(__private.resolveInitialDetailData({ type: 'artikel-detail', slug: 'slug', artikel: { id: 1 } }, 'slug')).toEqual({ success: true, data: { id: 1 } });
+
+    expect(__private.resolveInitialSidebarData(null, 'slug')).toBeUndefined();
+    expect(__private.resolveInitialSidebarData({ type: 'lain' }, 'slug')).toBeUndefined();
+    expect(__private.resolveInitialSidebarData({ type: 'artikel-detail', slug: 'lain' }, 'slug')).toBeUndefined();
+    expect(__private.resolveInitialSidebarData({ type: 'artikel-detail' }, '')).toEqual({ success: true, data: [] });
+    expect(__private.resolveInitialSidebarData({ type: 'artikel-detail', slug: 'slug' }, 'slug')).toEqual({ success: true, data: [] });
+    expect(__private.resolveInitialSidebarData({ type: 'artikel-detail', slug: 'slug', artikelLain: [{ slug: 'lain' }] }, 'slug')).toEqual({ success: true, data: [{ slug: 'lain' }] });
+  });
+
+  it('helper private merender tautan markdown internal dan non-http tanpa target baru', () => {
+    const internalView = render(
+      <MemoryRouter>
+        <__private.RenderArtikelMarkdownLink href="/artikel/uji">Buka</__private.RenderArtikelMarkdownLink>
+      </MemoryRouter>
+    );
+
+    expect(screen.getByRole('link', { name: 'Buka' })).toHaveAttribute('href', '/artikel/uji');
+    internalView.unmount();
+
+    expect(__private.isArtikelInternalHref()).toBe(false);
+
+    render(
+      <MemoryRouter>
+        <__private.RenderArtikelMarkdownLink href="mailto:redaksi@kateglo.com">Email</__private.RenderArtikelMarkdownLink>
+      </MemoryRouter>
+    );
+
+    expect(screen.getByRole('link', { name: 'Email' })).not.toHaveAttribute('target');
+    expect(screen.getByRole('link', { name: 'Email' })).not.toHaveAttribute('rel');
+
+    const mailView = screen.getByRole('link', { name: 'Email' });
+    expect(mailView).toHaveAttribute('href', 'mailto:redaksi@kateglo.com');
+
+    render(
+      <MemoryRouter>
+        <__private.RenderArtikelMarkdownLink>No href</__private.RenderArtikelMarkdownLink>
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('No href').closest('a')).toHaveAttribute('href', '');
+  });
+
+  it('memakai initialData SSR null saat detail artikel tidak tersedia dan menampilkan fallback tidak ditemukan', () => {
+    mockSsrPrefetch = {
+      type: 'artikel-detail',
+      slug: 'asal-kata-merdeka',
+      artikel: null,
+      artikelLain: [],
+    };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options.queryKey?.[0] === 'artikel-detail') {
+        expect(options.initialData).toEqual({ success: true, data: null });
+        return { data: options.initialData, isLoading: false, isError: false, error: null };
+      }
+
+      expect(options.initialData).toEqual({ success: true, data: [] });
+      return { data: options.initialData, isLoading: false, isError: false, error: null };
+    });
+
+    render(
+      <MemoryRouter>
+        <ArtikelDetail />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Artikel tidak ditemukan.')).toBeInTheDocument();
+  });
+
+  it('memakai initialData SSR saat detail artikel tersedia', () => {
+    mockSsrPrefetch = {
+      type: 'artikel-detail',
+      slug: 'asal-kata-merdeka',
+      artikel: {
+        id: 44,
+        slug: 'asal-kata-merdeka',
+        judul: 'Judul SSR',
+        topik: ['linguistik'],
+        cuplikan: 'Cuplikan SSR.',
+        konten: 'Konten SSR.',
+      },
+      artikelLain: [{ id: 45, slug: 'artikel-lain', judul: 'Artikel Lain' }],
+    };
+
+    mockUseQuery.mockImplementation((options) => {
+      if (options.queryKey?.[0] === 'artikel-detail') {
+        expect(options.initialData).toEqual({
+          success: true,
+          data: mockSsrPrefetch.artikel,
+        });
+        return { data: options.initialData, isLoading: false, isError: false, error: null };
+      }
+
+      expect(options.initialData).toEqual({
+        success: true,
+        data: mockSsrPrefetch.artikelLain,
+      });
+      return { data: options.initialData, isLoading: false, isError: false, error: null };
+    });
+
+    render(
+      <MemoryRouter>
+        <ArtikelDetail />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByRole('heading', { name: 'Judul SSR' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Artikel Lain' })).toHaveAttribute('href', '/artikel/artikel-lain');
+  });
+
+  it('menjalankan queryFn detail dan sidebar saat initialData tidak tersedia', () => {
+    mockSsrPrefetch = null;
+
+    mockUseQuery.mockImplementation((options) => {
+      options.queryFn?.();
+      if (options.queryKey?.[0] === 'artikel-detail') {
+        return {
+          data: { data: null },
+          isLoading: false,
+          isError: false,
+          error: null,
+        };
+      }
+
+      return {
+        data: { data: [] },
+        isLoading: false,
+        isError: false,
+        error: null,
+      };
+    });
+
+    render(
+      <MemoryRouter>
+        <ArtikelDetail />
+      </MemoryRouter>
+    );
+
+    expect(ambilDetailArtikel).toHaveBeenCalledWith('asal-kata-merdeka');
+    expect(ambilDaftarArtikel).toHaveBeenCalledWith({ limit: 11 });
+  });
+
+  it('memakai konten sebagai fallback deskripsi saat cuplikan kosong', () => {
+    mockUseQuery.mockImplementation((options) => {
+      const key = options?.queryKey?.[0];
+
+      if (key === 'artikel-detail') {
+        return {
+          data: {
+            data: {
+              id: 2,
+              slug: 'asal-kata-merdeka',
+              judul: 'Judul Artikel',
+              topik: [],
+              cuplikan: '',
+              konten: 'Isi artikel tanpa cuplikan.',
+            },
+          },
+          isLoading: false,
+          isError: false,
+          error: null,
+        };
+      }
+
+      return { data: { data: [] }, isLoading: false, isError: false, error: null };
+    });
+
+    render(
+      <MemoryRouter>
+        <ArtikelDetail />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Isi artikel tanpa cuplikan.')).toBeInTheDocument();
+  });
+
+  it('merender artikel tanpa konten dan tanpa sidebar untuk fallback judul/deskripsi kosong', () => {
+    mockUseQuery.mockImplementation((options) => {
+      const key = options?.queryKey?.[0];
+
+      if (key === 'artikel-detail') {
+        return {
+          data: {
+            data: {
+              id: 3,
+              slug: 'asal-kata-merdeka',
+              judul: 'Judul Saja',
+              topik: [],
+              cuplikan: '',
+            },
+          },
+          isLoading: false,
+          isError: false,
+          error: null,
+        };
+      }
+
+      return { data: { data: [{ id: 4 }, { id: 5, slug: 'asal-kata-merdeka' }] }, isLoading: false, isError: false, error: null };
+    });
+
+    render(
+      <MemoryRouter>
+        <ArtikelDetail />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByRole('heading', { name: 'Judul Saja' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Artikel lain' })).not.toBeInTheDocument();
+  });
+
+  it('tidak memakai initialData SSR saat slug tidak cocok', () => {
+    mockSsrPrefetch = {
+      type: 'artikel-detail',
+      slug: 'slug-lain',
+      artikel: { id: 99, slug: 'slug-lain', judul: 'Lain' },
+      artikelLain: [{ id: 100, slug: 'lain', judul: 'Lain juga' }],
+    };
+
+    mockUseQuery.mockImplementation((options) => {
+      expect(options.initialData).toBeUndefined();
+      return { data: { data: null }, isLoading: false, isError: false, error: null };
+    });
+
+    render(
+      <MemoryRouter>
+        <ArtikelDetail />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Artikel tidak ditemukan.')).toBeInTheDocument();
   });
 });

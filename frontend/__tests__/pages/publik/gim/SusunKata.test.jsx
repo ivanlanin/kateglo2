@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import SusunKata, { buatPetaKeyboard, parseRiwayatDariSkor } from '../../../../src/pages/publik/gim/SusunKata';
+import SusunKata, { buatPetaKeyboard, parseRiwayatDariSkor, __private } from '../../../../src/pages/publik/gim/SusunKata';
 import {
   ambilKlasemenSusunKata,
   ambilKlasemenSusunKataBebas,
@@ -203,6 +203,43 @@ describe('SusunKata', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Masuk untuk Bermain' }));
     expect(loginDenganGoogle).toHaveBeenCalledWith('/gim/susun-kata/harian');
     expect(ambilPuzzleSusunKata).not.toHaveBeenCalled();
+  });
+
+  it('panel petunjuk memetakan badge warna dan strong biasa dari markdown', async () => {
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: false,
+      isLoading: false,
+      loginDenganGoogle,
+    });
+    global.fetch.mockResolvedValueOnce({
+      ok: true,
+      text: vi.fn().mockResolvedValue([
+        '**Hijau**',
+        '**Kuning**',
+        '**Abu-abu**',
+        '**Catatan**',
+      ].join('\n\n')),
+    });
+
+    renderSusunKata();
+
+    expect((await screen.findByText('Hijau')).className).toContain('susun-kata-info-badge-benar');
+    expect(screen.getByText('Kuning').className).toContain('susun-kata-info-badge-ada');
+    expect(screen.getByText('Abu-abu').className).toContain('susun-kata-info-badge-salah');
+    expect(screen.getByText('Catatan').tagName).toBe('STRONG');
+  });
+
+  it('helper badge info menerima children berbentuk array', () => {
+    render(<__private.StrongInfoBadge>{['Hijau']}</__private.StrongInfoBadge>);
+
+    expect(screen.getByText('Hijau').className).toContain('susun-kata-info-badge-benar');
+  });
+
+  it('helper badge info menangani children kosong', () => {
+    const { container } = render(<__private.StrongInfoBadge />);
+
+    expect(container.querySelector('strong')).not.toBeNull();
+    expect(container.querySelector('strong')).toHaveTextContent('');
   });
 
   it('kibor layar bisa diklik untuk mengisi kata', () => {

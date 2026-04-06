@@ -8,6 +8,7 @@ const mockUseQuery = vi.fn();
 const mockMutate = vi.fn();
 const mockAuthState = { isAuthenticated: false, token: '' };
 const mockMutationMode = { current: 'idle' };
+const mockMutationResponse = { current: { ok: true } };
 const mockAmbilStatusKuisKata = vi.fn();
 
 vi.mock('@tanstack/react-query', () => ({
@@ -24,7 +25,7 @@ vi.mock('@tanstack/react-query', () => ({
 
       if (mockMutationMode.current === 'success') {
         config.onMutate?.(payload);
-        config.onSuccess?.({ ok: true }, payload, undefined);
+        config.onSuccess?.(mockMutationResponse.current, payload, undefined);
         return;
       }
 
@@ -97,6 +98,7 @@ describe('KuisKata', () => {
     mockAuthState.isAuthenticated = false;
     mockAuthState.token = '';
     mockMutationMode.current = 'idle';
+    mockMutationResponse.current = { ok: true };
     mockUseQuery.mockImplementation((options) => {
       const queryKey = Array.isArray(options?.queryKey) ? options.queryKey[0] : null;
       if (options?.queryFn) {
@@ -161,6 +163,58 @@ describe('KuisKata', () => {
       jumlah_main: 1,
     });
     expect(__private.bacaStatusTamuHariIni()).toEqual(statusBaru);
+  });
+
+  it('helper private menangani localStorage tidak ada, data rusak, data kedaluwarsa, dan kegagalan simpan', () => {
+    const storageAsli = globalThis.localStorage;
+
+    delete globalThis.localStorage;
+    expect(__private.bacaStatusTamuHariIni()).toBeNull();
+
+    globalThis.localStorage = storageAsli;
+    globalThis.localStorage.setItem(__private.guestStatusStorageKey, '{bukan-json');
+    expect(__private.bacaStatusTamuHariIni()).toBeNull();
+
+    globalThis.localStorage.setItem(__private.guestStatusStorageKey, JSON.stringify({
+      tanggal: '2000-01-01',
+      skor_total: 99,
+      jumlah_main: 3,
+    }));
+    expect(__private.bacaStatusTamuHariIni()).toBeNull();
+
+    globalThis.localStorage.setItem.mockImplementationOnce(() => {
+      throw new Error('gagal simpan');
+    });
+    expect(__private.simpanStatusTamuHariIni({ tambahSkor: 5, tambahMain: 1 })).toEqual({
+      tanggal: __private.tanggalJakartaHariIni(),
+      skor_total: 5,
+      jumlah_main: 1,
+    });
+  });
+
+  it('helper private menormalkan nilai status tamu nonnumerik menjadi nol', () => {
+    globalThis.localStorage.setItem(__private.guestStatusStorageKey, JSON.stringify({
+      tanggal: __private.tanggalJakartaHariIni(),
+      skor_total: 'bukan-angka',
+      jumlah_main: undefined,
+    }));
+
+    expect(__private.bacaStatusTamuHariIni()).toEqual({
+      tanggal: __private.tanggalJakartaHariIni(),
+      skor_total: 0,
+      jumlah_main: 0,
+    });
+  });
+
+  it('helper private tanggal Jakarta memakai fallback default saat part formatter tidak lengkap', () => {
+    const formatterAsli = Intl.DateTimeFormat;
+    Intl.DateTimeFormat = vi.fn(() => ({
+      formatToParts: () => [],
+    }));
+
+    expect(__private.tanggalJakartaHariIni()).toBe('0000-01-01');
+
+    Intl.DateTimeFormat = formatterAsli;
   });
 
   it('helper private merender pertanyaan untuk mode ringkasan dan mode soal', () => {
@@ -433,7 +487,7 @@ describe('KuisKata', () => {
     mockMutationMode.current = 'saving';
     const savingView = render(<KuisKata />);
     await mainkanSampaiRingkasan();
-    expect(screen.getByText('Menyimpan skor harian…')).toBeInTheDocument();
+    expect(screen.getByText('Menyimpan skor harian …')).toBeInTheDocument();
     savingView.unmount();
 
     mockAuthState.isAuthenticated = true;
@@ -448,5 +502,77 @@ describe('KuisKata', () => {
     render(<KuisKata />);
     await mainkanSampaiRingkasan();
     expect(screen.getByText('Skor harian belum tersimpan.')).toBeInTheDocument();
+  });
+
+  it('menghitung ronde autentikasi dengan skor nol dan jumlah main fallback dari status parsial', async () => {
+    mockAuthState.isAuthenticated = true;
+    mockAuthState.token = 'token-aktif';
+    mockMutationMode.current = 'success';
+    mockUseQuery.mockImplementation((options) => {
+      const queryKey = Array.isArray(options?.queryKey) ? options.queryKey[0] : null;
+      if (options?.queryFn) {
+        options.queryFn();
+      }
+      if (queryKey === 'kuis-kata-status') {
+        return {
+          data: { success: true, data: { skor_total: 5 } },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return {
+        data: { ronde: rondeMock },
+        isLoading: false,
+        isError: false,
+      };
+    });
+
+    render(<KuisKata />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'arti beta' }));
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1900);
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'padanan beta; imbangan beta; sanding beta' }));
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1900);
+    });
+
+    expect(mockSetQueryData).toHaveBeenCalledWith(['kuis-kata-status', 'token-aktif'], {
+      success: true,
+      data: null,
+    });
+    expect(screen.getByText('Skor harian tersimpan.')).toBeInTheDocument();
+  });
+
+  it('menyimpan data status kuis dari respons mutasi saat tersedia', async () => {
+    mockAuthState.isAuthenticated = true;
+    mockAuthState.token = 'token-aktif';
+    mockMutationMode.current = 'success';
+    mockMutationResponse.current = {
+      data: {
+        skor_total: 20,
+        jumlah_main: 3,
+      },
+    };
+
+    render(<KuisKata />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'arti alpha' }));
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1900);
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'lawan beta' }));
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1900);
+    });
+
+    expect(mockSetQueryData).toHaveBeenCalledWith(['kuis-kata-status', 'token-aktif'], {
+      success: true,
+      data: {
+        skor_total: 20,
+        jumlah_main: 3,
+      },
+    });
   });
 });

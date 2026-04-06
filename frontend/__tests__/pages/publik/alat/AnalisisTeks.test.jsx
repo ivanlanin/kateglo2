@@ -184,4 +184,19 @@ describe('AnalisisTeks', () => {
     expect(screen.queryByText('Kata (1x)')).not.toBeInTheDocument();
   });
 
+  it('menampilkan pesan kosong saat paragraf tidak memiliki kalimat yang bisa dihitung', () => {
+    render(
+      <MemoryRouter>
+        <AnalisisTeks />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText('Teks untuk dianalisis'), {
+      target: { value: '...' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Analisis' }));
+
+    expect(screen.getByText('Belum ada kalimat yang terdeteksi pada paragraf ini.')).toBeInTheDocument();
+  });
+
 });

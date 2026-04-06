@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import TombolLafal from '../../../src/components/tombol/TombolLafal';
 
@@ -71,5 +71,73 @@ describe('TombolLafal', () => {
 
     expect(speechSynthesisMock.cancel).toHaveBeenCalledTimes(1);
     expect(speechSynthesisMock.speak).not.toHaveBeenCalled();
+  });
+
+  it('mengembalikan null saat kata kosong atau speech synthesis tidak didukung', () => {
+    const kosong = render(<TombolLafal kata="" />);
+    expect(kosong.container.firstChild).toBeNull();
+    kosong.unmount();
+
+    delete window.speechSynthesis;
+
+    const unsupported = render(<TombolLafal kata="uji" />);
+    expect(unsupported.container.firstChild).toBeNull();
+  });
+
+  it('callback ucapkan langsung keluar saat kata kosong', async () => {
+    let capturedCallback = null;
+    vi.resetModules();
+    vi.doMock('react', async () => {
+      const actual = await vi.importActual('react');
+      return {
+        ...actual,
+        useCallback: (callback) => {
+          capturedCallback = callback;
+          return callback;
+        },
+      };
+    });
+
+    const { default: TombolLafalIsolated } = await import('../../../src/components/tombol/TombolLafal');
+
+    const view = render(<TombolLafalIsolated kata="" />);
+
+    expect(view.container.firstChild).toBeNull();
+    expect(typeof capturedCallback).toBe('function');
+    capturedCallback();
+    expect(speechSynthesisMock.speak).not.toHaveBeenCalled();
+
+    vi.doUnmock('react');
+    vi.resetModules();
+  });
+
+  it('memakai fallback tanpa voice id, memperbarui status bicara, dan membersihkan saat unmount', () => {
+    speechSynthesisMock.getVoices.mockReturnValueOnce([]);
+    const { unmount } = render(<TombolLafal kata="uji" />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Dengarkan pelafalan uji' }));
+
+    const utterance = speechSynthesisMock.speak.mock.calls[0][0];
+    expect(utterance.voice).toBeNull();
+
+    act(() => {
+      utterance.onstart();
+    });
+    expect(screen.getByRole('button', { name: 'Hentikan pelafalan' })).toBeInTheDocument();
+
+    act(() => {
+      utterance.onerror();
+    });
+    expect(screen.getByRole('button', { name: 'Dengarkan pelafalan uji' })).toBeInTheDocument();
+
+    act(() => {
+      utterance.onstart();
+      utterance.onend();
+    });
+    expect(screen.getByRole('button', { name: 'Dengarkan pelafalan uji' })).toBeInTheDocument();
+
+    speechSynthesisMock.speaking = true;
+    unmount();
+    expect(speechSynthesisMock.cancel).toHaveBeenCalled();
   });
 });

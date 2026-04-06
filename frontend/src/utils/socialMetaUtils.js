@@ -45,3 +45,7 @@ export {
   stripKategloSuffix,
   buildSocialTitle,
 };
+
+export const __private = {
+  resolveDomainLabel,
+};

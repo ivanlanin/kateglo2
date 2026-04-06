@@ -4,14 +4,25 @@ import { MemoryRouter } from 'react-router-dom';
 import AlatIndex from '../../../../src/pages/publik/alat/AlatIndex';
 
 const mockUseAuthOptional = vi.fn();
+const mockAmbilDaftarAlat = vi.fn();
 
 vi.mock('../../../../src/context/authContext', () => ({
   useAuthOptional: () => mockUseAuthOptional(),
 }));
 
+vi.mock('../../../../src/constants/katalogFitur', () => ({
+  ambilDaftarAlat: (...args) => mockAmbilDaftarAlat(...args),
+}));
+
 describe('AlatIndex', () => {
   beforeEach(() => {
     mockUseAuthOptional.mockReturnValue(null);
+    mockAmbilDaftarAlat.mockImplementation(() => [
+      { slug: 'analisis-teks', judul: 'Analisis Teks', deskripsi: 'Analisis teks.', href: '/alat/analisis-teks', tampilPublik: true },
+      { slug: 'penghitung-huruf', judul: 'Penghitung Huruf', deskripsi: 'Hitung huruf.', href: '/alat/penghitung-huruf', tampilPublik: true },
+      { slug: 'pohon-kalimat', judul: 'Pohon Kalimat', deskripsi: 'Pohon sintaksis.', href: '/alat/pohon-kalimat', tampilPublik: true },
+      { slug: 'analisis-korpus', judul: 'Analisis Korpus', deskripsi: 'Analisis korpus.', href: '/alat/analisis-korpus', tampilPublik: true },
+    ]);
   });
 
   it('menampilkan daftar alat yang tersedia', () => {
@@ -58,5 +69,21 @@ describe('AlatIndex', () => {
       '/alat/pohon-kalimat',
       '/alat/analisis-korpus',
     ]);
+  });
+
+  it('menampilkan badge internal saat admin melihat alat nonpublik', () => {
+    mockUseAuthOptional.mockReturnValue({ adalahRedaksi: false, adalahAdmin: true });
+    mockAmbilDaftarAlat.mockImplementation(() => [
+      { slug: 'alat-internal', judul: 'Alat Internal', deskripsi: 'Khusus admin.', href: '/alat/internal', tampilPublik: false },
+    ]);
+
+    render(
+      <MemoryRouter>
+        <AlatIndex />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Internal')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Buka alat' })).toHaveAttribute('href', '/alat/internal');
   });
 });

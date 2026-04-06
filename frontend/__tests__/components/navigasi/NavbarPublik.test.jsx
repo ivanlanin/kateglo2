@@ -323,6 +323,20 @@ describe('NavbarPublik', () => {
     });
   });
 
+  it('klik merek Kateglo di header mobile menutup drawer', () => {
+    aturUkuranNavbar({ lebarNavbar: 720, lebarMenu: 620 });
+
+    const { container } = render(<NavbarPublik />);
+    fireEvent.click(screen.getByLabelText('Toggle menu'));
+
+    const brandMobile = screen.getAllByRole('link', { name: 'Kateglo' }).find((link) => link.classList.contains('navbar-mobile-brand'));
+    fireEvent.click(brandMobile);
+
+    return waitFor(() => {
+      expect(container.querySelector('.navbar-mobile-panel')).not.toBeInTheDocument();
+    });
+  });
+
   it('tombol Escape menutup drawer mobile', () => {
     aturUkuranNavbar({ lebarNavbar: 720, lebarMenu: 620 });
 
@@ -397,6 +411,67 @@ describe('NavbarPublik', () => {
     return waitFor(() => {
       expect(container.querySelector('.navbar-mobile-panel')).not.toBeInTheDocument();
     });
+  });
+
+  it('menutup dropdown avatar saat klik luar dan menampilkan gambar avatar', async () => {
+    mockAuthState.isAuthenticated = true;
+    mockAuthState.user = { name: 'Admin Publik', picture: 'https://contoh.test/avatar.png' };
+
+    const { container } = render(<NavbarPublik />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Admin Publik' }));
+    expect(container.querySelector('img.navbar-avatar-img')).toHaveAttribute('src', 'https://contoh.test/avatar.png');
+    expect(container.querySelector('.navbar-dropdown-panel-open')).toBeInTheDocument();
+
+    fireEvent.mouseDown(document.body);
+
+    await waitFor(() => {
+      expect(container.querySelector('.navbar-dropdown-panel-open')).not.toBeInTheDocument();
+    });
+  });
+
+  it('menampilkan separator mobile untuk item biasa yang meminta pemisah', () => {
+    const originalItems = [...menuItems];
+    menuItems.length = 0;
+    menuItems.push(
+      { path: '/kamus', label: 'Kamus' },
+      { path: '/alat', label: 'Alat', pemisahSetelah: true },
+      { path: '/gim', label: 'Gim' },
+    );
+    aturUkuranNavbar({ lebarNavbar: 720, lebarMenu: 620 });
+
+    const { container } = render(<NavbarPublik />);
+    fireEvent.click(screen.getByLabelText('Toggle menu'));
+
+    expect(container.querySelectorAll('.navbar-mobile-separator').length).toBeGreaterThan(0);
+
+    menuItems.length = 0;
+    menuItems.push(...originalItems);
+  });
+
+  it('menandai submenu referensi aktif pada mode desktop', () => {
+    mockLocation.pathname = '/artikel/detail/uji';
+
+    render(<NavbarPublik />);
+
+    expect(screen.getByRole('button', { name: /Referensi/i })).toHaveClass('navbar-menu-link-active');
+
+    const artikelDesktop = screen.getAllByRole('link', { name: 'Artikel' })[0];
+    expect(artikelDesktop).toHaveClass('navbar-dropdown-link-active');
+    expect(artikelDesktop).toHaveAttribute('aria-current', 'page');
+  });
+
+  it('menandai submenu referensi aktif pada mode mobile dan merender separator penutup submenu', () => {
+    mockLocation.pathname = '/artikel/detail/uji';
+    aturUkuranNavbar({ lebarNavbar: 720, lebarMenu: 620 });
+
+    const { container } = render(<NavbarPublik />);
+    fireEvent.click(screen.getByLabelText('Toggle menu'));
+
+    const artikelMobile = screen.getAllByRole('link', { name: 'Artikel' }).at(-1);
+    expect(artikelMobile).toHaveClass('navbar-menu-link-active');
+    expect(artikelMobile).toHaveAttribute('aria-current', 'page');
+    expect(container.querySelectorAll('.navbar-mobile-separator').length).toBeGreaterThanOrEqual(2);
   });
 
   it('tetap stabil saat ResizeObserver tidak tersedia dan lebar navbar nol', () => {

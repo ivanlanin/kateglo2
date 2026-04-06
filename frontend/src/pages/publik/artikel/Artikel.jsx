@@ -19,6 +19,20 @@ function bersihkanCuplikan(teks) {
   return teks.replace(/[#*_`>[\]!]/g, '').replace(/\s+/g, ' ').trim();
 }
 
+function resolveInitialArtikelData(ssrPrefetch, topikAktif, qAktif) {
+  if (ssrPrefetch?.type !== 'artikel-daftar') return undefined;
+  if (String(ssrPrefetch.topik || '') !== topikAktif) return undefined;
+  if (String(ssrPrefetch.q || '') !== qAktif) return undefined;
+
+  return {
+    success: true,
+    data: ssrPrefetch.data || [],
+    total: ssrPrefetch.total || 0,
+    limit: 30,
+    offset: 0,
+  };
+}
+
 function KartuArtikel({ artikel, tampilkanEdit = false }) {
   const cuplikan = bersihkanCuplikan(artikel.cuplikan)?.slice(0, 150);
 
@@ -63,17 +77,7 @@ export function Artikel() {
   const qAktif = searchParams.get('q') || '';
 
   const initialData = useMemo(() => {
-    if (ssrPrefetch?.type !== 'artikel-daftar') return undefined;
-    if (String(ssrPrefetch.topik || '') !== topikAktif) return undefined;
-    if (String(ssrPrefetch.q || '') !== qAktif) return undefined;
-
-    return {
-      success: true,
-      data: ssrPrefetch.data || [],
-      total: ssrPrefetch.total || 0,
-      limit: 30,
-      offset: 0,
-    };
+    return resolveInitialArtikelData(ssrPrefetch, topikAktif, qAktif);
   }, [qAktif, ssrPrefetch, topikAktif]);
 
   const { data, isLoading, isError } = useQuery({
@@ -119,3 +123,8 @@ export function Artikel() {
     </HalamanPublik>
   );
 }
+
+export const __private = {
+  bersihkanCuplikan,
+  resolveInitialArtikelData,
+};

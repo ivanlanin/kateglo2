@@ -21,6 +21,21 @@ function bersihkanCuplikan(teks) {
   return teks.replace(/[#*_`>[\]!()-]/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
+function resolveInitialDetailData(ssrPrefetch, slug) {
+  if (ssrPrefetch?.type !== 'artikel-detail') return undefined;
+  if (String(ssrPrefetch.slug || '') !== String(slug || '')) return undefined;
+  if (!ssrPrefetch.artikel) return { success: true, data: null };
+
+  return { success: true, data: ssrPrefetch.artikel };
+}
+
+function resolveInitialSidebarData(ssrPrefetch, slug) {
+  if (ssrPrefetch?.type !== 'artikel-detail') return undefined;
+  if (String(ssrPrefetch.slug || '') !== String(slug || '')) return undefined;
+
+  return { success: true, data: ssrPrefetch.artikelLain || [] };
+}
+
 function isArtikelInternalHref(href = '') {
   return String(href || '').trim().startsWith('/');
 }
@@ -50,18 +65,11 @@ export function ArtikelDetail() {
   const { slug } = useParams();
 
   const initialDetailData = useMemo(() => {
-    if (ssrPrefetch?.type !== 'artikel-detail') return undefined;
-    if (String(ssrPrefetch.slug || '') !== String(slug || '')) return undefined;
-    if (!ssrPrefetch.artikel) return { success: true, data: null };
-
-    return { success: true, data: ssrPrefetch.artikel };
+    return resolveInitialDetailData(ssrPrefetch, slug);
   }, [slug, ssrPrefetch]);
 
   const initialSidebarData = useMemo(() => {
-    if (ssrPrefetch?.type !== 'artikel-detail') return undefined;
-    if (String(ssrPrefetch.slug || '') !== String(slug || '')) return undefined;
-
-    return { success: true, data: ssrPrefetch.artikelLain || [] };
+    return resolveInitialSidebarData(ssrPrefetch, slug);
   }, [slug, ssrPrefetch]);
 
   const { data, isLoading, isError, error } = useQuery({
@@ -177,6 +185,9 @@ export function ArtikelDetail() {
 }
 
 export const __private = {
+  bersihkanCuplikan,
   isArtikelInternalHref,
   RenderArtikelMarkdownLink,
+  resolveInitialDetailData,
+  resolveInitialSidebarData,
 };

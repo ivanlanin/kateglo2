@@ -60,7 +60,15 @@ vi.mock('../../../../src/constants/gramatikaData', () => {
     },
   ];
 
-  const daftarHalamanReferensiGramatika = [];
+  const daftarHalamanReferensiGramatika = [
+    {
+      judul: 'Daftar Istilah',
+      slug: 'daftar-istilah',
+      dokumen: 'daftar-istilah.md',
+      tipe: 'daftar',
+      deskripsi: 'Daftar istilah gramatika.',
+    },
+  ];
 
   return {
     daftarIsiGramatika,
@@ -161,6 +169,10 @@ describe('Gramatika', () => {
 
     expect(__private.buildBreadcrumbGramatika(null)).toEqual([{ label: 'Gramatika', to: '/gramatika' }]);
     expect(__private.buildBreadcrumbGramatika({ tipe: 'bab', judul: 'Kata Tugas', babSlug: 'kata-tugas' })).toEqual([{ label: 'Gramatika', to: '/gramatika' }]);
+    expect(__private.buildBreadcrumbGramatika({ tipe: 'daftar', judul: 'Daftar Istilah' })).toEqual([
+      { label: 'Gramatika', to: '/gramatika' },
+      { label: 'Daftar', to: null },
+    ]);
     expect(__private.buildBreadcrumbGramatika({
       tipe: 'subitem',
       judulBab: 'Kata Tugas',
@@ -310,7 +322,7 @@ describe('Gramatika', () => {
       expect(screen.getByRole('heading', { name: 'Kata Tugas' })).toBeInTheDocument();
     });
 
-    const konten = document.querySelector('.gramatika-markdown-content');
+    const konten = document.querySelector('.ref-markdown-content');
     const daftarTingkatAtas = konten?.querySelector('ol');
     const itemPreposisi = within(konten).getByRole('link', { name: 'Preposisi' });
     const itemPreposisiDasar = within(konten).getByRole('link', { name: 'Preposisi Dasar' });
@@ -415,5 +427,47 @@ describe('Gramatika', () => {
       .find((element) => element.getAttribute('aria-current') === 'page');
     expect(tautanPreposisi).toBeDefined();
     expect(tautanPreposisi).toHaveAttribute('href', '/gramatika/preposisi');
+
+    rerender(
+      <MemoryRouter>
+        <__private.DaftarReferensiPanel aktifSlug="daftar-istilah" />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Daftar Istilah')).toHaveAttribute('aria-current', 'page');
+  });
+
+  it('halaman referensi daftar memakai metadata daftar, breadcrumb current page, dan tidak fetch ulang saat SSR cocok', async () => {
+    renderHalaman('/gramatika/daftar-istilah', {
+      type: 'static-markdown',
+      section: 'gramatika',
+      slug: 'daftar-istilah',
+      markdown: '# Daftar Istilah\n\nDaftar istilah gramatika.',
+      description: 'Deskripsi daftar dari SSR.',
+      notFound: false,
+    });
+
+    await waitFor(() => {
+      expect(screen.getAllByRole('heading', { name: 'Daftar Istilah' }).length).toBeGreaterThan(0);
+    });
+
+    const breadcrumb = screen.getByRole('navigation', { name: 'Breadcrumb gramatika' });
+    expect(within(breadcrumb).getByText('Daftar')).toHaveAttribute('aria-current', 'page');
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
+  it('halaman referensi daftar memakai deskripsi metadata saat deskripsi SSR kosong', async () => {
+    renderHalaman('/gramatika/daftar-istilah', {
+      type: 'static-markdown',
+      section: 'gramatika',
+      slug: 'daftar-istilah',
+      markdown: '# Daftar Istilah',
+      description: '',
+      notFound: false,
+    });
+
+    await waitFor(() => {
+      expect(document.querySelector('meta[name="description"]')).toHaveAttribute('content', 'Daftar istilah gramatika.');
+    });
   });
 });

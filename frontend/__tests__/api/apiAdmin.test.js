@@ -127,6 +127,13 @@ import {
   useSimpanSinset,
   useSimpanPemetaanLema,
   useTambahLemaSinset,
+  useAutocompletePengguna,
+  useDaftarArtikelAdmin,
+  useDetailArtikelAdmin,
+  useSimpanArtikelAdmin,
+  useHapusArtikelAdmin,
+  useTerbitkanArtikelAdmin,
+  useUnggahGambarArtikelAdmin,
 } from '../../src/api/apiAdmin';
 
 describe('apiAdmin', () => {
@@ -182,6 +189,16 @@ describe('apiAdmin', () => {
       params: {
         q: undefined,
         limit: 8,
+      },
+    });
+
+    const autocompleteEntriKataHariIniNull = useAutocompleteEntriKataHariIniAdmin({ q: null, limit: 5 });
+    expect(autocompleteEntriKataHariIniNull.enabled).toBe(false);
+    await autocompleteEntriKataHariIniNull.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/kata-hari-ini/opsi-entri', {
+      params: {
+        q: undefined,
+        limit: 5,
       },
     });
 
@@ -1574,5 +1591,101 @@ describe('apiAdmin', () => {
     hapusKataHariIni.onSuccess();
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-kata-hari-ini'] });
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-kata-hari-ini-detail'] });
+  });
+
+  it('mengonfigurasi query dan mutation artikel admin', async () => {
+    const autocompletePengguna = useAutocompletePengguna('editor');
+    await autocompletePengguna.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/pengguna/autocomplete', {
+      params: { q: 'editor' },
+    });
+
+    const daftarArtikelTerbit = useDaftarArtikelAdmin({
+      limit: 15,
+      cursor: 'art-1',
+      direction: 'prev',
+      lastPage: true,
+      q: 'serapan',
+      topik: 'bahasa',
+      status: 'diterbitkan',
+    });
+    await daftarArtikelTerbit.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/artikel', {
+      params: {
+        limit: 15,
+        cursor: 'art-1',
+        direction: 'prev',
+        lastPage: '1',
+        q: 'serapan',
+        topik: 'bahasa',
+        diterbitkan: 'true',
+      },
+    });
+
+    const daftarArtikelDraf = useDaftarArtikelAdmin({ status: 'draf' });
+    await daftarArtikelDraf.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/artikel', {
+      params: {
+        limit: 50,
+        cursor: undefined,
+        direction: 'next',
+        lastPage: undefined,
+        q: undefined,
+        topik: undefined,
+        diterbitkan: 'false',
+      },
+    });
+
+    const daftarArtikelSemua = useDaftarArtikelAdmin({ status: '' });
+    await daftarArtikelSemua.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/artikel', {
+      params: {
+        limit: 50,
+        cursor: undefined,
+        direction: 'next',
+        lastPage: undefined,
+        q: undefined,
+        topik: undefined,
+        diterbitkan: undefined,
+      },
+    });
+
+    const detailArtikel = useDetailArtikelAdmin(17);
+    expect(detailArtikel.enabled).toBe(true);
+    await detailArtikel.queryFn();
+    expect(klien.get).toHaveBeenCalledWith('/api/redaksi/artikel/17');
+    expect(useDetailArtikelAdmin(null).enabled).toBe(false);
+
+    const simpanArtikel = useSimpanArtikelAdmin();
+    await simpanArtikel.mutationFn({ judul: 'Artikel Baru' });
+    expect(klien.post).toHaveBeenCalledWith('/api/redaksi/artikel', { judul: 'Artikel Baru' });
+    await simpanArtikel.mutationFn({ id: 17, judul: 'Artikel Revisi' });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/artikel/17', { id: 17, judul: 'Artikel Revisi' });
+    simpanArtikel.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-artikel'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-artikel-detail'] });
+
+    const hapusArtikel = useHapusArtikelAdmin();
+    await hapusArtikel.mutationFn(17);
+    expect(klien.delete).toHaveBeenCalledWith('/api/redaksi/artikel/17');
+    hapusArtikel.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-artikel'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-artikel-detail'] });
+
+    const terbitkanArtikel = useTerbitkanArtikelAdmin();
+    await terbitkanArtikel.mutationFn({ id: 17, diterbitkan: true });
+    expect(klien.put).toHaveBeenCalledWith('/api/redaksi/artikel/17/terbitkan', { diterbitkan: true });
+    terbitkanArtikel.onSuccess();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-artikel'] });
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['admin-artikel-detail'] });
+
+    const unggahGambar = useUnggahGambarArtikelAdmin();
+    const file = new File(['isi'], 'gambar.png', { type: 'image/png' });
+    await unggahGambar.mutationFn(file);
+    expect(klien.post).toHaveBeenCalledWith(
+      '/api/redaksi/artikel/unggah-gambar',
+      expect.any(FormData),
+      { headers: { 'Content-Type': 'multipart/form-data' } }
+    );
   });
 });

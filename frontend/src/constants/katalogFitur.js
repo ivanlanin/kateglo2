@@ -106,3 +106,8 @@ export function ambilDaftarGim(adalahAdmin = false) {
 export function aksesRuteInteraktif(item) {
   return item?.tampilPublik === false ? 'admin' : 'publik';
 }
+
+export const __private = {
+  normalizePath,
+  buildMetaInteraktif,
+};

@@ -93,7 +93,7 @@ describe('KuisKataPage', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: 'Lihat klasemen harian' }));
-    expect(screen.getByText('Memuat klasemen harian…')).toBeInTheDocument();
+    expect(screen.getByText('Memuat klasemen harian …')).toBeInTheDocument();
     loadingView.unmount();
 
     const errorClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });

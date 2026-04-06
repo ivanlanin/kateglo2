@@ -57,12 +57,32 @@ describe('formatUtils.test.js', () => {
   it('normalizeLocalDateTimeValue mempertahankan jam mentah tanpa konversi zona waktu', () => {
     expect(normalizeLocalDateTimeValue('2026-04-04T23:44:00.000Z')).toBe('2026-04-04T23:44:00');
     expect(normalizeLocalDateTimeValue('2026-04-04 23:44:00')).toBe('2026-04-04T23:44:00');
+    expect(normalizeLocalDateTimeValue('2026-04-04T23:44')).toBe('2026-04-04T23:44:00');
+    expect(normalizeLocalDateTimeValue('   ', { fallback: 'kosong' })).toBe('kosong');
+    expect(normalizeLocalDateTimeValue('2026/04/04', { fallback: 'invalid' })).toBe('invalid');
     expect(normalizeLocalDateTimeValue('')).toBeNull();
+  });
+
+  it('normalizeLocalDateTimeValue menerima Date valid dan menolak Date invalid', () => {
+    const value = new Date('2026-04-04T23:44:00.000Z');
+    const expected = [
+      value.getFullYear(),
+      String(value.getMonth() + 1).padStart(2, '0'),
+      String(value.getDate()).padStart(2, '0'),
+    ].join('-') + [
+      String(value.getHours()).padStart(2, '0'),
+      String(value.getMinutes()).padStart(2, '0'),
+      String(value.getSeconds()).padStart(2, '0'),
+    ].join(':').replace(/^/, 'T');
+
+    expect(normalizeLocalDateTimeValue(value)).toBe(expected);
+    expect(normalizeLocalDateTimeValue(new Date('invalid'), { fallback: 'fallback' })).toBe('fallback');
   });
 
   it('formatWallClockDateTime memformat waktu lokal-naif tanpa geser UTC', () => {
     expect(formatWallClockDateTime('2026-04-04T23:44:00.000Z')).toBe('04 Apr 2026 23.44');
     expect(formatWallClockDateTime('2026-04-04 23:44:00')).toBe('04 Apr 2026 23.44');
+    expect(formatWallClockDateTime('2026-99-99 25:61:00', { fallback: 'tidak-valid' })).toBe('tidak-valid');
   });
 
   it('menerima objek Date valid dan menolak Date invalid', () => {
@@ -104,6 +124,12 @@ describe('formatUtils.test.js', () => {
   it('formatBilanganRibuan mengembalikan fallback saat nilai bukan angka valid', () => {
     expect(formatBilanganRibuan('abc')).toBe('0');
     expect(formatBilanganRibuan('abc', { fallback: '-' })).toBe('-');
+    expect(formatBilanganRibuan('', { fallback: '-' })).toBe('-');
+  });
+
+  it('formatBilanganRibuan memformat dan memotong pecahan ke ribuan lokal', () => {
+    expect(formatBilanganRibuan(12345.9)).toBe('12.345');
+    expect(formatBilanganRibuan(-9876.4)).toBe('-9.876');
   });
 
   it('parseEntriGlosarium memecah entri per titik koma', () => {

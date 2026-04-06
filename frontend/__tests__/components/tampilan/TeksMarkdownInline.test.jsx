@@ -13,5 +13,15 @@ describe('TeksMarkdownInline', () => {
 
   it('menghapus penanda italic untuk metadata teks polos', () => {
     expect(stripInlineMarkdown('Asal *Kata* dan _Makna_')).toBe('Asal Kata dan Makna');
+    expect(stripInlineMarkdown(null)).toBe('');
+  });
+
+  it('menjaga teks ekor setelah token italic dan memakai wrapper default', () => {
+    const { container } = render(<TeksMarkdownInline text="Awal *Tengah* akhir" className="inline-kustom" />);
+
+    const wrapper = container.querySelector('span.inline-kustom');
+    expect(wrapper).not.toBeNull();
+    expect(wrapper).toHaveTextContent('Awal Tengah akhir');
+    expect(screen.getByText('Tengah', { selector: 'em' })).toBeInTheDocument();
   });
 });

@@ -166,6 +166,7 @@ function analisisTeks(text = '') {
       words: paragraphWords.length,
       avgWordsPerSentenceRaw,
       preview,
+      previewText: preview,
       isLong: avgWordsPerSentenceRaw > THRESHOLD,
       sentenceList,
       previewData: escapeSingleQuotes(preview),
@@ -367,7 +368,7 @@ function AnalisisTeks() {
                               <span className="alat-paragraph-metric">{formatDesimal.format(detail.avgWordsPerSentenceRaw)} kata/kalimat</span>
                             </div>
                           </div>
-                          <p className="alat-paragraph-preview">{detail.preview || 'Paragraf belum memuat kata yang dapat dihitung.'}</p>
+                          <p className="alat-paragraph-preview">{detail.previewText}</p>
                         </article>
 
                         {detail.sentenceList.length ? (

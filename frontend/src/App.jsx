@@ -124,4 +124,7 @@ function App() {
 
 export default App;
 export { RuteIzin, RutePublikTerkendali };
+export const __private = {
+  renderRutePublik,
+};
 

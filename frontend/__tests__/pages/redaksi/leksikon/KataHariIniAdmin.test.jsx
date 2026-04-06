@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, createEvent, fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import KataHariIniAdmin from '../../../../src/pages/redaksi/leksikon/KataHariIniAdmin';
@@ -155,5 +155,232 @@ describe('KataHariIniAdmin', () => {
       </MemoryRouter>
     );
     expect(mockNavigate).toHaveBeenCalledWith('/redaksi/kata-hari-ini', { replace: true });
+  });
+
+  it('menutup edit dari path saat tambah diklik dan membuka sunting saat baris tabel dipilih', () => {
+    mockParams = { id: '1' };
+    mockUseDetailKataHariIniAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        data: {
+          id: 1,
+          tanggal: '2026-03-31',
+          entri_id: 7,
+          indeks: 'aktif',
+          entri: 'aktif',
+          sumber: 'admin',
+          catatan: 'pilihan redaksi',
+        },
+      },
+    });
+
+    const { rerender } = render(
+      <MemoryRouter>
+        <KataHariIniAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/kata-hari-ini', { replace: true });
+
+    mockParams = {};
+    rerender(
+      <MemoryRouter>
+        <KataHariIniAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('2026-03-31'));
+    expect(mockNavigate).toHaveBeenCalledWith('/redaksi/kata-hari-ini/1');
+  });
+
+  it('menerapkan filter cari, mengosongkan entri terpilih saat input berubah, serta menampilkan status saran loading dan kosong', () => {
+    mockUseAutocompleteEntriKataHariIniAdmin.mockReturnValue({
+      data: { data: [] },
+      isLoading: true,
+    });
+
+    const { rerender } = render(
+      <MemoryRouter>
+        <KataHariIniAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByPlaceholderText('Cari arsip kata …'), { target: { value: 'otomatis' } });
+    fireEvent.change(screen.getByLabelText('Filter sumber kata hari ini'), { target: { value: 'auto' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Cari' }));
+
+    let panggilanTerakhir = mockUseDaftarKataHariIniAdmin.mock.calls.at(-1)?.[0] || {};
+    expect(panggilanTerakhir.q).toBe('otomatis');
+    expect(panggilanTerakhir.sumber).toBe('auto');
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    const inputEntri = screen.getByLabelText('Entri*');
+    fireEvent.focus(inputEntri);
+    expect(screen.getByText('Mencari entri …')).toBeInTheDocument();
+
+    mockUseAutocompleteEntriKataHariIniAdmin.mockReturnValue({
+      data: { data: [{ id: 7, entri: 'aktif', indeks: 'aktif' }] },
+      isLoading: false,
+    });
+    rerender(
+      <MemoryRouter>
+        <KataHariIniAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText('Entri*'), { target: { value: 'aktif' } });
+    fireEvent.click(screen.getByRole('button', { name: /aktif/i }));
+    expect(screen.getByText('Indeks terpilih: aktif')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText('Entri*'), { target: { value: 'baru' } });
+    expect(screen.queryByText('Indeks terpilih: aktif')).not.toBeInTheDocument();
+
+    mockUseAutocompleteEntriKataHariIniAdmin.mockReturnValue({
+      data: { data: [] },
+      isLoading: false,
+    });
+    rerender(
+      <MemoryRouter>
+        <KataHariIniAdmin />
+      </MemoryRouter>
+    );
+    fireEvent.focus(screen.getByLabelText('Entri*'));
+    expect(screen.getByText('Tidak ada entri cocok')).toBeInTheDocument();
+  });
+
+  it('menampilkan badge otomatis dan fallback daftar/saran saat respons kosong', () => {
+    mockUseDaftarKataHariIniAdmin.mockReturnValueOnce({
+      isLoading: false,
+      isError: false,
+      data: {
+        total: 1,
+        data: [{ id: 2, tanggal: '2026-04-01', indeks: 'otomatis', entri: 'otomatis', sumber: 'auto', catatan: '', updated_at: null }],
+      },
+    }).mockReturnValueOnce({
+      isLoading: false,
+      isError: false,
+      data: null,
+    });
+    mockUseAutocompleteEntriKataHariIniAdmin.mockReturnValue({ data: null, isLoading: false });
+
+    const { rerender } = render(
+      <MemoryRouter>
+        <KataHariIniAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.getAllByText('Otomatis').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('—').length).toBeGreaterThan(0);
+
+    rerender(
+      <MemoryRouter>
+        <KataHariIniAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Tidak ada data.')).toBeInTheDocument();
+    fireEvent.click(screen.getByText('+ Tambah'));
+    fireEvent.focus(screen.getByLabelText('Entri*'));
+    expect(screen.getByText('Tidak ada entri cocok')).toBeInTheDocument();
+  });
+
+  it('mengabaikan detail tanpa id, memakai fallback entri kosong, dan tidak menavigasi saat baris tanpa id dipilih', () => {
+    mockParams = { id: '1' };
+    mockUseDetailKataHariIniAdmin
+      .mockReturnValueOnce({
+        isLoading: false,
+        isError: false,
+        data: { data: { tanggal: '2026-03-31' } },
+      })
+      .mockReturnValueOnce({
+        isLoading: false,
+        isError: false,
+        data: { data: { id: 1, tanggal: '2026-03-31', entri_id: 7, indeks: '', entri: undefined, sumber: 'admin', catatan: undefined } },
+      });
+    mockUseDaftarKataHariIniAdmin.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        total: 1,
+        data: [{ tanggal: '2026-04-02', entri: 'tanpa-id', indeks: 'tanpa-id', sumber: 'admin', catatan: '' }],
+      },
+    });
+
+    const { rerender } = render(
+      <MemoryRouter>
+        <KataHariIniAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByLabelText('Entri*')).not.toBeInTheDocument();
+
+    rerender(
+      <MemoryRouter>
+        <KataHariIniAdmin />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByLabelText('Entri*')).toHaveValue('');
+    expect(screen.getByLabelText('Catatan')).toHaveValue('');
+
+    mockParams = {};
+    rerender(
+      <MemoryRouter>
+        <KataHariIniAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('2026-04-02'));
+    expect(mockNavigate).not.toHaveBeenCalledWith('/redaksi/kata-hari-ini/undefined');
+  });
+
+  it('memilih saran tanpa indeks menyimpan entri tetapi membiarkan indeks kosong', () => {
+    mockUseAutocompleteEntriKataHariIniAdmin.mockReturnValue({
+      data: { data: [{ id: 8, entri: 'baru' }] },
+      isLoading: false,
+    });
+
+    render(
+      <MemoryRouter>
+        <KataHariIniAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    fireEvent.change(screen.getByLabelText('Entri*'), { target: { value: 'baru' } });
+    fireEvent.click(screen.getByRole('button', { name: /baru/i }));
+
+    expect(screen.getByLabelText('Entri*')).toHaveValue('baru');
+    expect(screen.queryByText(/Indeks terpilih:/i)).not.toBeInTheDocument();
+  });
+
+  it('menutup daftar saran pada blur tertunda dan mencegah default saat mousedown item saran', () => {
+    vi.useFakeTimers();
+
+    render(
+      <MemoryRouter>
+        <KataHariIniAdmin />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('+ Tambah'));
+    const inputEntri = screen.getByLabelText('Entri*');
+    fireEvent.change(inputEntri, { target: { value: 'aktif' } });
+
+    const tombolSaran = screen.getByRole('button', { name: /aktif/i });
+    const mouseDownEvent = createEvent.mouseDown(tombolSaran);
+    mouseDownEvent.preventDefault = vi.fn();
+    fireEvent(tombolSaran, mouseDownEvent);
+    expect(mouseDownEvent.preventDefault).toHaveBeenCalled();
+
+    fireEvent.blur(inputEntri);
+    act(() => {
+      vi.advanceTimersByTime(130);
+    });
+
+    expect(screen.queryByRole('button', { name: /aktif/i })).not.toBeInTheDocument();
+    vi.useRealTimers();
   });
 });
