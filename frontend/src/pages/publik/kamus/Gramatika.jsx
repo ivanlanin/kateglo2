@@ -122,8 +122,11 @@ function DaftarIsiPanel({ aktifSlug = '', aktifSlugSebagaiTautan = '' }) {
 }
 
 function DaftarReferensiPanel({ aktifSlug = '' }) {
+  const kategoriAktif = daftarHalamanReferensiGramatika
+    .some((item) => item.slug === aktifSlug);
+
   return (
-    <PanelLipat judul="Daftar" terbukaAwal={true} aksen={true}>
+    <PanelLipat key={`daftar-${aktifSlug || 'kosong'}`} judul="Daftar" terbukaAwal={kategoriAktif} aksen={true}>
       <ul className="ref-sidebar-pill-grid">
         {daftarHalamanReferensiGramatika.map((item) => (
           <li key={item.slug} className="ref-sidebar-pill-item">

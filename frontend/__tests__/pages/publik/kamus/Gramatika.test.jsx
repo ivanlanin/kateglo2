@@ -430,6 +430,14 @@ describe('Gramatika', () => {
 
     rerender(
       <MemoryRouter>
+        <__private.DaftarReferensiPanel aktifSlug="preposisi" />
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByText('Daftar Istilah')).not.toBeInTheDocument();
+
+    rerender(
+      <MemoryRouter>
         <__private.DaftarReferensiPanel aktifSlug="daftar-istilah" />
       </MemoryRouter>
     );
