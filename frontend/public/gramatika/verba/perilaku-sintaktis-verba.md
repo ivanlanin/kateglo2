@@ -18,3 +18,5 @@ Ketransitifan verba itu ditentukan oleh dua faktor: (1) adanya nomina atau frasa
 5. [Verba Taktransitif Berpelengkap](/gramatika/verba-taktransitif-berpelengkap)
 
 6. [Verba Taktransitif Berpelengkap Nomina dengan Preposisi Tetap](/gramatika/verba-taktransitif-berpelengkap-nomina-dengan-preposisi-tetap)
+
+7. [Verba Perakit](/gramatika/verba-perakit)

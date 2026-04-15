@@ -7,6 +7,7 @@
    4. [Verba Taktransitif Takberpelengkap](/gramatika/verba-taktransitif-takberpelengkap)
    5. [Verba Taktransitif Berpelengkap](/gramatika/verba-taktransitif-berpelengkap)
    6. [Verba Taktransitif Berpelengkap Nomina dengan Preposisi Tetap](/gramatika/verba-taktransitif-berpelengkap-nomina-dengan-preposisi-tetap)
+   7. [Verba Perakit](/gramatika/verba-perakit)
 4. [Bentuk Verba](/gramatika/bentuk-verba)
    1. [Verba Dasar](/gramatika/verba-dasar)
       1. [Verba Dasar Bebas](/gramatika/verba-dasar-bebas)

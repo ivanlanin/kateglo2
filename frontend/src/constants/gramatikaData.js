@@ -328,6 +328,7 @@ const daftarIsiGramatika = [
           { judul: 'Verba Taktransitif Takberpelengkap', slug: 'verba-taktransitif-takberpelengkap' },
           { judul: 'Verba Taktransitif Berpelengkap', slug: 'verba-taktransitif-berpelengkap' },
           { judul: 'Verba Taktransitif Berpelengkap Nomina dengan Preposisi Tetap', slug: 'verba-taktransitif-berpelengkap-nomina-dengan-preposisi-tetap' },
+          { judul: 'Verba Perakit', slug: 'verba-perakit' },
         ],
       },
       {
